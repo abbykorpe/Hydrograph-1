@@ -1,7 +1,9 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.operational;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -38,6 +40,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
+import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructure.property.OperationField;
 import com.bitwise.app.common.datastructure.property.OperationSystemProperties;
 import com.bitwise.app.common.datastructure.property.PropertyField;
@@ -89,6 +92,8 @@ public class TransformDialog extends Dialog {
 	private Composite container;
 	private CellEditor[] editors; 
 	protected ControlDecoration fieldNameDecorator;
+	
+	Map<Text,Button> opClassMap = new LinkedHashMap<Text, Button>();
 
 	private static final String[] NAME_VALUE_COLUMN = {PROPERTY_NAME, PROPERTY_VALUE};
 	
@@ -107,16 +112,13 @@ public class TransformDialog extends Dialog {
 	private TableViewer outerKeyValueTabViewer;
 	private TableViewer	outerOpTabViewer;
 	private CheckboxTableViewer opSystemPropertiesTabViewer;
-	
-	private Text fileName;
 	private Button applyButton;
 	private ExpandBar expandBar = null;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
-	private Button btnCheckButton;
 	private ValidationStatus validationStatus;
 	private TransformPropertyGrid transformPropertyGrid;
 
-
+	private OperationClassProperty operationClassProperty;
 	// Operational class label.
 	AbstractELTWidget fieldError = new ELTDefaultLable(Messages.FIELDNAMEERROR).lableWidth(250);
 	/**
@@ -415,16 +417,17 @@ public class TransformDialog extends Dialog {
 		
 		AbstractELTWidget fileNameText = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(150);
 		AbstractELTWidget isParameterCheckbox = new ELTDefaultCheckBox("IsParam").checkBoxLableWidth(100);
-		
 
 		FilterOperationClassUtility.createOperationalClass(fileSelectionComposite, propertyDialogButtonBar, fileNameText, isParameterCheckbox, validationStatus, null);
-		
-		//Creating operational class widget.
-		//FilterOperationClassUtility.createOperationalClass(fileSelectionComposite, propertyDialogButtonBar, fileNameText, isParameterCheckbox, validationStatus);
 
-		fileName=(Text)fileNameText.getSWTWidgetControl(); 
-		btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl();
-		
+		Text fileName=(Text)fileNameText.getSWTWidgetControl(); 
+		Button btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl(); 
+		if(!transformOperation.getOpClassProperty().getOperationClassPath().equalsIgnoreCase(""))
+		{
+				fileName.setText(transformOperation.getOpClassProperty().getOperationClassPath()); 
+				btnCheckButton.setSelection(transformOperation.getOpClassProperty().isParameter()); 
+		} 		
+
 		Composite nameValueInnerComposite = new Composite(composite_4, SWT.NONE);
 		innerKeyValueTabViewer = createTableViewer(nameValueInnerComposite, NAME_VALUE_COLUMN, new TransformGridContentProvider(),new PropertyLabelProvider());
 		innerKeyValueTabViewer.setCellModifier(new PropertyGridCellModifier(innerKeyValueTabViewer));
@@ -457,7 +460,8 @@ public class TransformDialog extends Dialog {
 		opOutputFieldComposite.setLayoutData(new RowData(570, 200)); 
 		
 		eltFixedWidget.setSchemaGridRowList(transformOperation.getSchemaGridRowList());
-		TableViewer innerOpOutputTabViewer=	eltFixedWidget.createSchemaGrid(opOutputFieldComposite); 
+		TableViewer innerOpOutputTabViewer=	eltFixedWidget.createSchemaGrid(opOutputFieldComposite);
+		
 		DragDropUtility.INSTANCE.applyDragFromTableViewer(innerOpOutputTabViewer.getTable());  
 		expandBarScrolledComposite.setContent(expandBar);
 		expandBarScrolledComposite.setMinSize(expandBar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -479,8 +483,11 @@ public class TransformDialog extends Dialog {
 			addInnerPropValueButton.attachListener(ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),propertyDialogButtonBar, helperPropertyValue, innerKeyValueTabViewer.getTable());
 			deleteInnerPropValueButton.attachListener(ListenerFactory.Listners.GRID_DELETE_SELECTION.getListener(),propertyDialogButtonBar, helperPropertyValue, innerKeyValueTabViewer.getTable());
 			eltPropValueTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),	propertyDialogButtonBar, helperPropertyValue, innerKeyValueTabViewer.getTable());
+
+			opClassMap.put(fileName, btnCheckButton);
+			
 			transformOperation.setSchemaGridRowList((List)innerOpOutputTabViewer.getInput()); 
-			transformOperationList.add(transformOperation);
+			transformOperationList.add(transformOperation); 
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -578,7 +585,6 @@ public class TransformDialog extends Dialog {
 				transformPropertyGrid.setNameValueProps(opOuterClassProperty); 
 				transformPropertyGrid.setOperation(transformOperationList); 
 				transformPropertyGrid.setOpSysProperties(operationSystemProperties); 
-			//	OperationClassProperty operationClassProperty = new OperationClassProperty(this.operationClassProperty.getOperationClassPath(),this.operationClassProperty.isParameter());
 				transformPropertyGrid.setOutputTreeFields(opOutputOuterFields);
 				this.transformPropertyGrid=transformPropertyGrid;
 				return transformPropertyGrid;
@@ -640,15 +646,13 @@ public class TransformDialog extends Dialog {
 
 			@Override
 			protected void okPressed() {
-				transformPropertyGrid= getTransformProperty();
+				updateOperationClassProperty();
 				super.okPressed();
 			}
 
 			@Override
 			protected void buttonPressed(int buttonId) {
 				if(buttonId == 3){
-//					operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getSelection());
-					transformPropertyGrid= getTransformProperty();
 					applyButton.setEnabled(false);
 				}else{
 					super.buttonPressed(buttonId);
@@ -658,5 +662,21 @@ public class TransformDialog extends Dialog {
 			protected void setDecorator() {
 				fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAMEERROR);
 			}
-		
+
+			
+			public void updateOperationClassProperty(){
+				int i=0;
+				List<OperationClassProperty> operationClassProperties= new ArrayList<>();
+				for (Map.Entry<Text, Button> entry : opClassMap.entrySet())
+				{
+				    OperationClassProperty operationClassProperty = new OperationClassProperty(entry.getKey().getText(), entry.getValue().getSelection());
+				    operationClassProperties.add(operationClassProperty);
+				}
+				for (TransformOperation transformOperation : transformOperationList) 
+				{
+					transformOperation.setOpClassProperty(operationClassProperties.get(i));
+					i++;
+				}
+
+			}
 }

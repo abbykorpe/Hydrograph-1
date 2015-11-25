@@ -34,6 +34,8 @@ public class TransformComponentConverter extends TransformConverter {
 	public void prepareForXML() throws PhaseException, SchemaException {
 		logger.debug("Generating XML for :{}", properties.get(NAME));
 		super.prepareForXML();
+		Transform transform = (Transform) baseComponent;
+		transform.getOperation().addAll(getOperations());
 	}
 	
 	@Override

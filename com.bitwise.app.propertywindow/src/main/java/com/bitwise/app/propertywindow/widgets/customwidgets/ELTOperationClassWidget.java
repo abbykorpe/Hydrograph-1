@@ -7,7 +7,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
 
-import com.bitwise.app.propertywindow.datastructures.filter.OperationClassProperty;
+import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;

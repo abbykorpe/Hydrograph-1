@@ -16,8 +16,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 
+import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructures.tooltip.TootlTipErrorMessage;
-import com.bitwise.app.propertywindow.datastructures.filter.OperationClassProperty;
 import com.bitwise.app.propertywindow.messagebox.ConfirmCancelMessageBox;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
