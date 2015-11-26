@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TransformOperation {
+	private long operationId=1;
 	private List<OperationField> inputFields;
 	private OperationClassProperty opClassProperty;
 	private List<NameValueProperty> nameValueProps;
@@ -41,6 +42,14 @@ public class TransformOperation {
 	}
 	public void setOpClassProperty(OperationClassProperty opClassProperty) {
 		this.opClassProperty = opClassProperty;
+	}
+
+	public long getOperationId() {
+		return operationId;
+	}
+
+	public void setOperationId(long operationId) {
+		this.operationId = operationId;
 	}
 	
 	

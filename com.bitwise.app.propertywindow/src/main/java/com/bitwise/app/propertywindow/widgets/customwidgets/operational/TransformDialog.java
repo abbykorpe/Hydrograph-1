@@ -48,6 +48,7 @@ import com.bitwise.app.common.datastructure.property.OperationSystemProperties;
 import com.bitwise.app.common.datastructure.property.PropertyField;
 import com.bitwise.app.common.datastructure.property.TransformOperation;
 import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
+import com.bitwise.app.common.datastructures.tooltip.TootlTipErrorMessage;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.fixedwidthschema.ELTFixedWidget;
@@ -91,6 +92,7 @@ public class TransformDialog extends Dialog {
 	public static final String OPERATIONAL_SYSTEM_FIELD = "Operation System Fields";
 	private static final String ADD_ICON = XMLConfigUtil.CONFIG_FILES_PATH + "/icons/add.png";
 	private static final String DELETE_ICON = XMLConfigUtil.CONFIG_FILES_PATH + "/icons/delete.png";
+	private long operationId=1;
 	private Composite container;
 	private CellEditor[] editors; 
 	protected ControlDecoration fieldNameDecorator;
@@ -123,6 +125,9 @@ public class TransformDialog extends Dialog {
 	private OperationClassProperty operationClassProperty;
 	// Operational class label.
 	AbstractELTWidget fieldError = new ELTDefaultLable(Messages.FIELDNAMEERROR).lableWidth(250);
+	
+	private TootlTipErrorMessage tootlTipErrorMessage = new TootlTipErrorMessage();
+
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -253,7 +258,7 @@ public class TransformDialog extends Dialog {
 		Button btnAddOperation = new Button(topAddButtonComposite, SWT.NONE);
 		
 		btnAddOperation.setImage(SWTResourceManager.getImage(ADD_ICON));
-		btnAddOperation.setBounds(731, 10, 36, 25);
+		btnAddOperation.setBounds(689, 10, 36, 25);
 			
 		final ScrolledComposite expandBarScrolledComposite = new ScrolledComposite(middleContainerComposite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		expandBarScrolledComposite.setVisible(true);
@@ -319,7 +324,9 @@ public class TransformDialog extends Dialog {
 					expandItem.setExpanded(false);
 				}
 				ELTFixedWidget eltFixedWidget = new ELTFixedWidget(propertyDialogButtonBar);
-				addExpandItem(container, expandBarScrolledComposite,new TransformOperation(),eltFixedWidget);
+				TransformOperation transformOperation = new TransformOperation();
+				transformOperation.setOperationId(++operationId);
+				addExpandItem(container, expandBarScrolledComposite,transformOperation,eltFixedWidget);
 			}
 		}); 
 		
@@ -373,7 +380,7 @@ public class TransformDialog extends Dialog {
 		
 		ExpandItem expandItem = new ExpandItem(expandBar, SWT.V_SCROLL);
 		expandItem.setExpanded(true);
-		expandItem.setText("Operation"); 
+		expandItem.setText("Operation :"+transformOperation.getOperationId()); 
 		expandItem.setHeight(300);
 		
 		Composite expandItemContainerComposite = new Composite(expandBar, SWT.NONE);
@@ -427,7 +434,7 @@ public class TransformDialog extends Dialog {
 		AbstractELTWidget fileNameText = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(150);
 		AbstractELTWidget isParameterCheckbox = new ELTDefaultCheckBox("IsParam").checkBoxLableWidth(100);
 
-		FilterOperationClassUtility.createOperationalClass(fileSelectionComposite, propertyDialogButtonBar, fileNameText, isParameterCheckbox, validationStatus, null);
+		FilterOperationClassUtility.createOperationalClass(fileSelectionComposite, propertyDialogButtonBar, fileNameText, isParameterCheckbox, validationStatus, tootlTipErrorMessage);
 
 		Text fileName=(Text)fileNameText.getSWTWidgetControl(); 
 		Button btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl(); 
@@ -441,7 +448,7 @@ public class TransformDialog extends Dialog {
 		innerKeyValueTabViewer = createTableViewer(nameValueInnerComposite, NAME_VALUE_COLUMN, new TransformGridContentProvider(),new PropertyLabelProvider());
 		innerKeyValueTabViewer.setCellModifier(new PropertyGridCellModifier(innerKeyValueTabViewer));
 		innerKeyValueTabViewer.setInput(transformOperation.getNameValueProps());  
-		innerKeyValueTabViewer.getTable().setBounds(8, 17, 200, 97);
+		innerKeyValueTabViewer.getTable().setBounds(12, 25, 300, 120);
 		ELTDefaultSubgroupComposite defaultnameValueInnerComposite = new ELTDefaultSubgroupComposite(nameValueInnerComposite);
 		defaultnameValueInnerComposite.createContainerWidget(); 
 		
@@ -456,12 +463,12 @@ public class TransformDialog extends Dialog {
 		defaultnameValueInnerComposite.attachWidget(deleteInnerPropValueButton);
 		Button btnInnerPropValueAddButton=(Button) addInnerPropValueButton.getSWTWidgetControl();
 		btnInnerPropValueAddButton.setParent(nameValueInnerComposite);
-		btnInnerPropValueAddButton.setBounds(286,0, 18, 18);
+		btnInnerPropValueAddButton.setBounds(200,0, 18, 18);
 		btnInnerPropValueAddButton.setImage(SWTResourceManager.getImage(ADD_ICON));
 		
 		Button btnInnerPropValueDeleteButton=(Button) deleteInnerPropValueButton.getSWTWidgetControl();
 		btnInnerPropValueDeleteButton.setParent(nameValueInnerComposite);
-		btnInnerPropValueDeleteButton.setBounds(310, 0, 18, 18);
+		btnInnerPropValueDeleteButton.setBounds(220, 0, 18, 18);
 		btnInnerPropValueDeleteButton.setImage(SWTResourceManager.getImage(DELETE_ICON));
 
 		Composite opOutputFieldComposite = new Composite(composite_4, SWT.NONE);
@@ -698,4 +705,9 @@ public class TransformDialog extends Dialog {
 		    	
 		    }
 
+			public String getTootlTipErrorMessage() {
+				return tootlTipErrorMessage.getErrorMessage();
+			}
+
+		    
 }
