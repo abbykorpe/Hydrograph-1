@@ -19,6 +19,8 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -186,11 +188,14 @@ public class ParameterGridDialog extends Dialog {
 		Map<String, String> parameterMap = parameterFileManager.getParameterMap();
 		
 		if(parameterFile != null){
-			if(parameterFile.contains(":"))
+			if(parameterFile.contains(":")){
 				if(parameterFile.startsWith("/"))
 				paramterFileTextBox.setText(parameterFile.replaceFirst("/", ""));
+			}
 			else
+			{
 				paramterFileTextBox.setText(parameterFile);
+			}	
 		}
 			
 		
@@ -300,7 +305,7 @@ public class ParameterGridDialog extends Dialog {
 
 	private void addFileParameterFileBrowser(Composite container){
 		Composite composite = new Composite(container, SWT.NONE);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(4, false));
 		
 		Label lblFile = new Label(composite, SWT.NONE);
 		lblFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -311,6 +316,39 @@ public class ParameterGridDialog extends Dialog {
 		gd_text.widthHint = 179;
 		paramterFileTextBox.setLayoutData(gd_text);
 		
+		
+		/*paramterFileTextBox.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.keyCode == SWT.CR){
+					parameterFile = paramterFileTextBox.getText();
+					getComponentCanvas().setCurrentParameterFilePath(parameterFile);
+					loadParameterFile();
+				}
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});*/
+		
+		final Button btnReloadParameterFile = new Button(composite, SWT.NONE);
+		btnReloadParameterFile.setText("Reload File");
+		btnReloadParameterFile.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				super.widgetSelected(e);
+				parameterFile = paramterFileTextBox.getText();
+				getComponentCanvas().setCurrentParameterFilePath(parameterFile);
+				loadParameterFile();
+			}
+			
+		});
+		
 		final Button btnNewButton = new Button(composite, SWT.NONE);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -319,8 +357,13 @@ public class ParameterGridDialog extends Dialog {
 		        fd.setText("Open");
 		        Path path = Paths.get(parameterFile.replaceFirst("/", ""));
 		        
-		        fd.setFilterPath(path.getParent().toString());
-		        
+		        if(path.getParent() != null)
+		        	fd.setFilterPath(path.getParent().toString());
+		        else{
+		        	fd.setFilterPath(path.toAbsolutePath().getParent().toString());
+		        }
+		        	
+		        		        
 		        String[] filterExt = { "*.properties" };
 		        fd.setFilterExtensions(filterExt);
 		        String selected = fd.open();
@@ -419,9 +462,28 @@ public class ParameterGridDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		boolean error=false;
-		textGrid.clearSelections();
+		
 		
 		//ParameterFileManager parameterFileManager = new ParameterFileManager(getComponentCanvas().getParameterFile());
+		if(!paramterFileTextBox.getText().equals(parameterFile)){
+			
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK | SWT.CANCEL );	        
+	        messageBox.setText("Error");
+	        messageBox.setMessage("The file " + paramterFileTextBox.getText() + " is not loded in grid\n" +
+	        		"Pressing OK will override the existing file if any \n"
+	        		+ "Press Reload Button to load the file in grid");
+	        int buttonID = messageBox.open();
+			if(buttonID == SWT.OK){
+				parameterFile = paramterFileTextBox.getText();
+				getComponentCanvas().setCurrentParameterFilePath(parameterFile);
+			}else{
+				return;
+			}
+			
+		}
+		
+		textGrid.clearSelections();
+		
 		ParameterFileManager parameterFileManager = new ParameterFileManager(parameterFile);
 		Map<String,String> dataMap = new LinkedHashMap<>();
 		int rowId=0;
