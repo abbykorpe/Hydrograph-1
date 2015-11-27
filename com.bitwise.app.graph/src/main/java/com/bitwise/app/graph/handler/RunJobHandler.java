@@ -96,6 +96,7 @@ public class RunJobHandler extends AbstractHandler {
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			logger.error(ex.getMessage());
 		}
 
 		return null;

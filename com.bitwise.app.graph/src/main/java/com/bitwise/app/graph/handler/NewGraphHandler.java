@@ -8,7 +8,9 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.editor.ELTGraphicalEditorInput;
 
@@ -17,15 +19,17 @@ import com.bitwise.app.graph.editor.ELTGraphicalEditorInput;
  */
 public class NewGraphHandler extends AbstractHandler {
 	private int graphCounter=1; 
+	private Logger logger = LogFactory.INSTANCE.getLogger(NewGraphHandler.class);
+	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
 		IWorkbenchPage page = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage();
+		       logger.debug("Job " +graphCounter+ " Created");
 		try {
 			ELTGraphicalEditorInput input = new ELTGraphicalEditorInput("Job_"+ graphCounter++);
 			page.openEditor(input, ELTGraphicalEditor.ID, false);
-			
 			//For selecting the created editor so it will trigger the event to activate and load the Palette
 			IWorkbench workbench = PlatformUI.getWorkbench();
 		    IWorkbenchWindow activeWindow = workbench.getActiveWorkbenchWindow();
@@ -35,8 +39,9 @@ public class NewGraphHandler extends AbstractHandler {
 		            activePage.activate(activePage.findEditor(input));
 		        }
 		    }
+		    
 		} catch (PartInitException e) {
-			//TODO : add logger
+          logger.error(e.getMessage());			
 		}
 		return null;
 	}
