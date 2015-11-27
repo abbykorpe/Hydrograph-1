@@ -21,7 +21,7 @@ import com.bitwiseglobal.graph.straightpulltypes.Clone;
  */
 public class CloneConverter extends StraightPullConverter {
 
-	Logger LOGGER = LogFactory.INSTANCE.getLogger(CloneConverter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(CloneConverter.class);
 
 	public CloneConverter(Component component) {
 		super();
@@ -32,14 +32,14 @@ public class CloneConverter extends StraightPullConverter {
 
 	@Override
 	public void prepareForXML() {
-		LOGGER.debug("Genrating XML for :{}", properties.get(Constants.PARAM_NAME));
+		logger.debug("Genrating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 
 	}
 
 	@Override
 	protected List<TypeStraightPullOutSocket> getOutSocket() {
-		LOGGER.debug(
+		logger.debug(
 				"getOutSocket - Genrating TypeStraightPullOutSocket data for :{}",
 				properties.get(Constants.PARAM_NAME));
 		List<TypeStraightPullOutSocket> outSockectList = new ArrayList<TypeStraightPullOutSocket>();
@@ -60,8 +60,9 @@ public class CloneConverter extends StraightPullConverter {
 		return outSockectList;
 	}
 
+	@Override
 	public List<TypeBaseInSocket> getInSocket() {
-		LOGGER.debug("Genrating TypeBaseInSocket data for :{}", component
+		logger.debug("Genrating TypeBaseInSocket data for :{}", component
 				.getProperties().get(Constants.PARAM_NAME));
 		List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {

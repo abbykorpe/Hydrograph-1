@@ -25,7 +25,7 @@ import com.bitwiseglobal.graph.itfd.TypeInputDelimitedOutSocket;
 
 public class InputFileDelimitedConverter extends InputConverter {
 
-	Logger LOGGER = LogFactory.INSTANCE.getLogger(InputFileDelimitedConverter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputFileDelimitedConverter.class);
 	
 	public InputFileDelimitedConverter(Component component) {
 		super();
@@ -36,7 +36,7 @@ public class InputFileDelimitedConverter extends InputConverter {
 	
 	@Override
 	public void prepareForXML(){
-		LOGGER.debug("Genrating XML for {}", properties.get(Constants.PARAM_NAME));	
+		logger.debug("Genrating XML for {}", properties.get(Constants.PARAM_NAME));	
 		super.prepareForXML();
 		TextFileDelimited fileDelimited = (TextFileDelimited) baseComponent;
 		TextFileDelimited.Path path = new TextFileDelimited.Path();
@@ -56,7 +56,7 @@ public class InputFileDelimitedConverter extends InputConverter {
 
 	@Override
 	protected List<TypeInputOutSocket> getInOutSocket(){
-		LOGGER.debug("Genrating TypeInputOutSocket data for {}", properties.get(Constants.PARAM_NAME));
+		logger.debug("Genrating TypeInputOutSocket data for {}", properties.get(Constants.PARAM_NAME));
 		List<TypeInputOutSocket> outSockets = new ArrayList<>();
 		for (Link link : component.getSourceConnections()) {
 			TypeInputDelimitedOutSocket outSocket = new TypeInputDelimitedOutSocket();
@@ -71,7 +71,7 @@ public class InputFileDelimitedConverter extends InputConverter {
 
 	@Override
 	protected List<TypeBaseField> getFieldOrRecord() {
-		LOGGER.debug("Genrating data for {} for property {}", new Object[]{properties.get(Constants.PARAM_NAME),PropertyNameConstants.SCHEMA.value()});
+		logger.debug("Genrating data for {} for property {}", new Object[]{properties.get(Constants.PARAM_NAME),PropertyNameConstants.SCHEMA.value()});
 		List<SchemaGrid> schemaList = (List) properties.get(PropertyNameConstants.SCHEMA.value());
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
 		if(schemaList!=null){
@@ -93,7 +93,7 @@ public class InputFileDelimitedConverter extends InputConverter {
 				}
 			}
 			catch (Exception exception) {
-				LOGGER.warn("Exception while creating schema for component : {}{}", new Object[]{properties.get(Constants.PARAM_NAME),exception});
+				logger.warn("Exception while creating schema for component : {}{}", new Object[]{properties.get(Constants.PARAM_NAME),exception});
 				
 			}
 		}

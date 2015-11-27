@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.converter.Converter;
 import com.bitwise.app.engine.converter.ConverterFactory;
-import com.bitwise.app.engine.exceptions.EngineException;
 import com.bitwise.app.engine.xpath.ComponentXpath;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
@@ -32,7 +31,7 @@ public class ConverterUtil {
 		
 	}
 	
-	public void convertToXML(Container container, boolean validate, IFile outPutFile) throws EngineException,Exception{
+	public void convertToXML(Container container, boolean validate, IFile outPutFile) throws Exception{
 		LOGGER.debug("Creating converter based on component");
 		
 			Graph graph = new ObjectFactory().createGraph();

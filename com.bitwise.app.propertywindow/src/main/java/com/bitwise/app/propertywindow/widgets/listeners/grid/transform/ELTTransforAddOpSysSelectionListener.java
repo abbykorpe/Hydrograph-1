@@ -26,7 +26,7 @@ public class ELTTransforAddOpSysSelectionListener extends GridWidgetCommonBuilde
 			Label errorLabel) {
 		OperationSystemProperties opSystemProperties = new OperationSystemProperties();
 		opSystemProperties.setChecked(false);
-		opSystemProperties.setOpSysValue("Test");
+		opSystemProperties.setOpSysValue("");
  		if(!grids.contains(opSystemProperties)){
 			grids.add(opSystemProperties);  
 			tableViewer.setInput(grids);

@@ -21,7 +21,7 @@ import com.bitwiseglobal.graph.straightpulltypes.UnionAll;
  */
 public class UnionAllConverter extends StraightPullConverter {
 
-	Logger LOGGER = LogFactory.INSTANCE.getLogger(UnionAllConverter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(UnionAllConverter.class);
 
 	public UnionAllConverter(Component component) {
 		super();
@@ -32,13 +32,13 @@ public class UnionAllConverter extends StraightPullConverter {
 
 	@Override
 	public void prepareForXML() {
-		LOGGER.debug("Genrating XML for : {}", properties.get(Constants.PARAM_NAME));
+		logger.debug("Genrating XML for : {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 	}
 
 	@Override
 	protected List<TypeStraightPullOutSocket> getOutSocket() {
-		LOGGER.debug("Genrating TypeStraightPullOutSocket data for : {}",
+		logger.debug("Genrating TypeStraightPullOutSocket data for : {}",
 				properties.get(Constants.PARAM_NAME));
 		List<TypeStraightPullOutSocket> outSockectList = new ArrayList<TypeStraightPullOutSocket>();
 		for (Link link : component.getSourceConnections()) {
@@ -57,7 +57,7 @@ public class UnionAllConverter extends StraightPullConverter {
 
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
-		LOGGER.debug("Genrating TypeBaseInSocket data for :{}", component
+		logger.debug("Genrating TypeBaseInSocket data for :{}", component
 				.getProperties().get(Constants.PARAM_NAME));
 		List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
 		int inSocketCounter = 0;

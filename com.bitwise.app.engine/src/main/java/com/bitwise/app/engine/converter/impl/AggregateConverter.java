@@ -12,8 +12,6 @@ import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.converter.TransformConverter;
-import com.bitwise.app.engine.exceptions.PhaseException;
-import com.bitwise.app.engine.exceptions.SchemaException;
 import com.bitwise.app.engine.helper.ConverterHelper;
 import com.bitwise.app.graph.model.Component;
 import com.bitwiseglobal.graph.aggregate.TypePrimaryKeyFields;
@@ -41,7 +39,7 @@ public class AggregateConverter extends TransformConverter {
 	}
 	
 	@Override
-	public void prepareForXML() throws PhaseException, SchemaException {
+	public void prepareForXML(){
 		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		

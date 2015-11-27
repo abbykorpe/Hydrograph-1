@@ -1,5 +1,6 @@
 package com.bitwise.app.propertywindow.widgets.listeners;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -56,43 +57,40 @@ public class ELTEmptyTextModifyListener implements IELTListener {
 		fieldNameMustJava = WidgetUtility.addDecorator(
 				(Text) widgetList[0], Messages.INVALID_FILE);
 		
+		if(StringUtils.isEmpty(((Text) widgetList[0]).getText())){
+			((Button) widgetList[1]).setEnabled(false);
+		}
+		
 		tootlTipErrorMessage.setErrorMessage(Messages.OperationClassBlank);
 		//validationStatus.setIsValid(true);
 		Listener listener = new Listener() {
 			@Override
 			public void handleEvent(Event event) {
 				if (!((Button) widgetList[2]).getSelection()) {
-					if (((Text) widgetList[0]).getText().trim().isEmpty()) {
+					//Text box is empty
+					if(StringUtils.isEmpty(((Text) widgetList[0]).getText())){
+						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
+						//Disable the edit button
+						((Button) widgetList[1]).setEnabled(false);
 						fieldNameDecorator.show();
 						fieldNameMustJava.hide();
-						((Button) widgetList[1]).setEnabled(false);
-						((Text) widgetList[0]).setBackground(new Color(Display
-								.getDefault(), 255, 255, 204));
 						validationStatus.setIsValid(false);
-					} else {
-						fieldNameDecorator.hide();
-						fieldNameMustJava.hide();
-						((Button) widgetList[1]).setEnabled(true);
-						validationStatus.setIsValid(true);
-					} 
-					if (!WidgetUtility.isFileExtention(
-							(((Text) widgetList[0]).getText()).trim(), ".java")
-							&& !(((Text) widgetList[0]).getText().trim()
-									.isEmpty())) {
-						fieldNameMustJava.show();
-						fieldNameDecorator.hide();
-						((Text) widgetList[0]).setBackground(new Color(Display
-								.getDefault(), 255, 255, 204));
-						validationStatus.setIsValid(false);
-					} else {
-						((Text) widgetList[0]).setBackground(new Color(Display
-								.getDefault(), 255, 255, 255));
-						fieldNameMustJava.hide();
-						validationStatus.setIsValid(true);
+					}else{
+						//File has java extension
+						if(WidgetUtility.isFileExtention((((Text) widgetList[0]).getText()).trim(), ".java")){
+							((Button) widgetList[1]).setEnabled(true);
+							fieldNameDecorator.hide();
+							fieldNameMustJava.hide();
+							validationStatus.setIsValid(true);
+						}
+						else{
+							fieldNameDecorator.show();
+							validationStatus.setIsValid(false);
+							((Button) widgetList[1]).setEnabled(false);
+						}
 					}
 				}
-				else
-				{
+				else{
 					fieldNameDecorator.hide();
 					fieldNameMustJava.hide();
 					validationStatus.setIsValid(true);

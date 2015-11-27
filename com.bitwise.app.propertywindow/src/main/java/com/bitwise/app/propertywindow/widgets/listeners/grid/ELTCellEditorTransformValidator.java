@@ -6,7 +6,10 @@ import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.swt.widgets.Table;
 
+import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.OperationField;
+import com.bitwise.app.common.datastructure.property.OperationSystemProperties;
+import com.bitwise.app.common.datastructure.property.PropertyField;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 
 // TODO: Auto-generated Javadoc
@@ -21,7 +24,8 @@ public class ELTCellEditorTransformValidator implements ICellEditorValidator {
 	private List grids;
 	private ControlDecoration fieldNameDecorator;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
-	
+	private boolean isSingleColumn;
+
 	/**
 	 * Instantiates a new ELT cell editor field validator.
 	 * 
@@ -35,32 +39,45 @@ public class ELTCellEditorTransformValidator implements ICellEditorValidator {
 	 *            the property dialog button bar
 	 */
 	public ELTCellEditorTransformValidator(Table table, List grids,
-			ControlDecoration fieldNameDecorator,PropertyDialogButtonBar propertyDialogButtonBar) {
+			ControlDecoration fieldNameDecorator,
+			PropertyDialogButtonBar propertyDialogButtonBar,
+			boolean isSingleColumn) {
 		super();
 		this.table = table;
 		this.grids = grids;
 		this.fieldNameDecorator = fieldNameDecorator;
-		this.propertyDialogButtonBar=propertyDialogButtonBar;
+		this.propertyDialogButtonBar = propertyDialogButtonBar;
+		this.isSingleColumn = isSingleColumn;
 	}
 
 	@Override
 	public String isValid(Object value) {
-		String selectedGrid = table.getItem(table.getSelectionIndex()).getText();
-		for (int i = 0; i < grids.size(); i++) {
-			OperationField operationField = (OperationField)grids.get(i);
-				String stringValue = (String) value;
-				if ((operationField.getName().equalsIgnoreCase(stringValue) &&
-						!selectedGrid.equalsIgnoreCase(stringValue))) {
-				fieldNameDecorator.show();
-				/*propertyDialogButtonBar.enableOKButton(false);
-				propertyDialogButtonBar.enableApplyButton(false);*/
-				return "Error";
-			} else{ 
-				fieldNameDecorator.hide();
-				/*propertyDialogButtonBar.enableOKButton(true);
-				propertyDialogButtonBar.enableApplyButton(true);*/
+		String selectedGrid = table.getItem(table.getSelectionIndex())
+				.getText();
+		String validValue = (String) value;
+		PropertyField propertyField;
+		if (isSingleColumn) {
+			if (grids.get(0) instanceof OperationSystemProperties) {
+				OperationSystemProperties opSProperties = new OperationSystemProperties();
+				opSProperties.setOpSysValue(validValue);
+				propertyField=opSProperties;
+			} else {
+				OperationField opField = new OperationField();
+				opField.setName(validValue);
+				propertyField = opField;
 			}
+		} else { 
+			NameValueProperty nameValueProperty = new NameValueProperty();
+			nameValueProperty.setPropertyName(validValue);
+			propertyField = nameValueProperty;
+
 		}
+		if (grids.contains(propertyField)) {
+			fieldNameDecorator.show();
+			return "error";
+		} else
+			fieldNameDecorator.hide();
+		
 		return null;
 	}
 

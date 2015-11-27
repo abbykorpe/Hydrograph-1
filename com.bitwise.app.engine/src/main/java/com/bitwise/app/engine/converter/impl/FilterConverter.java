@@ -13,8 +13,6 @@ import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.TransformConverter;
-import com.bitwise.app.engine.exceptions.PhaseException;
-import com.bitwise.app.engine.exceptions.SchemaException;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
@@ -30,7 +28,7 @@ import com.bitwiseglobal.graph.operationstypes.Filter;
  */
 public class FilterConverter extends TransformConverter {
 	private static final String FILTER_OPERATION_ID="opt";
-	Logger LOGGER = LogFactory.INSTANCE.getLogger(FilterConverter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConverter.class);
 	
 	public FilterConverter(Component component) {
 		super();	
@@ -40,8 +38,8 @@ public class FilterConverter extends TransformConverter {
 	}
 
 	@Override
-	public void prepareForXML() throws PhaseException, SchemaException {
-		LOGGER.debug("Genrating XML for :{}", properties.get(Constants.PARAM_NAME));
+	public void prepareForXML(){
+		logger.debug("Genrating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		Filter filter=(Filter)baseComponent;
 		filter.getOperation().addAll(getOperations());
@@ -50,11 +48,9 @@ public class FilterConverter extends TransformConverter {
 
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
-		LOGGER.debug("Genrating TypeStraightPullOutSocket data for : {}",
+		logger.debug("Genrating TypeStraightPullOutSocket data for : {}",
 				properties.get(Constants.PARAM_NAME));
 		List<TypeOperationsOutSocket> outSockectList = new ArrayList<TypeOperationsOutSocket>();
-		String temp,temp2;
-		int outSocketCounter=1;
 		for (Link link : component.getSourceConnections()) {
 			TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();
 			TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
@@ -67,14 +63,13 @@ public class FilterConverter extends TransformConverter {
 			
 			outSocket.getOtherAttributes();
 			outSockectList.add(outSocket);
-			outSocketCounter++;
 		}
 		return outSockectList;
 	}
 
 	@Override
 	protected List<TypeTransformOperation> getOperations() {
-		LOGGER.debug("Genrating TypeTransformOperation data :{}", properties.get(Constants.PARAM_NAME));
+		logger.debug("Genrating TypeTransformOperation data :{}", properties.get(Constants.PARAM_NAME));
 		List<TypeTransformOperation> operationList = new ArrayList<>();
 		TypeTransformOperation operation = new TypeTransformOperation();
 		TypeOperationInputFields operationInputFields=new TypeOperationInputFields();
@@ -88,7 +83,7 @@ public class FilterConverter extends TransformConverter {
 	}
 
 	private List<TypeInputField> getOperationField() {
-		LOGGER.debug("Genrating TypeInputField data :{}", properties.get(Constants.PARAM_NAME));
+		logger.debug("Genrating TypeInputField data :{}", properties.get(Constants.PARAM_NAME));
 		List<TypeInputField> operationFiledList=new ArrayList<>();
 		Set<String> componentOperationFileds = (HashSet<String>) component.getProperties().get(PropertyNameConstants.OPERATION_FILEDS.value());
 		if(componentOperationFileds!=null){
@@ -104,7 +99,7 @@ public class FilterConverter extends TransformConverter {
 
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
-			LOGGER.debug("Genrating TypeBaseInSocket data for :{}", component
+			logger.debug("Genrating TypeBaseInSocket data for :{}", component
 					.getProperties().get(Constants.PARAM_NAME));
 			List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
 			for (Link link : component.getTargetConnections()) {

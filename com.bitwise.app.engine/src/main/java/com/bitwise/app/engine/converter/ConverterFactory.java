@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.exceptions.ConverterNotFoundException;
-import com.bitwise.app.engine.exceptions.EngineException;
 import com.bitwise.app.graph.model.Component;
 
 /**
@@ -21,7 +20,7 @@ public class ConverterFactory {
 	private ConverterFactory() {
 	}
 
-	public Converter getConverter(Component component) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, EngineException {
+	public Converter getConverter(Component component) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try{
 		logger.debug("Getting converter for :{}", component.getProperties().get(Constants.PARAM_NAME));
 			return (Converter) Class.forName(component.getConverter()).getDeclaredConstructor(Component.class).newInstance(component);
