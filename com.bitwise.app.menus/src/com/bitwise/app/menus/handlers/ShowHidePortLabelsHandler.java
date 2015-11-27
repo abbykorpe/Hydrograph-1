@@ -33,7 +33,9 @@ public class ShowHidePortLabelsHandler extends AbstractHandler implements IHandl
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		if(editor instanceof ELTGraphicalEditor)
+		if(editor==null)
+			element.setChecked(false);
+		if(editor!=null && editor instanceof ELTGraphicalEditor)
 		{
 			GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
 			for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); 
