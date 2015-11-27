@@ -29,13 +29,14 @@ public class DragDropTransformOpImp implements DragDropOperation {
 		 if(isSingleColumn){
 	        	OperationField field = new OperationField();
 	        	field.setName(result);
-	        	listOfFields.add(field);
+	        	if(!listOfFields.contains(field))
+	        		listOfFields.add(field);
 	        }
 	        else{
-	        	System.out.println(listOfFields);
 	        	NameValueProperty field = new NameValueProperty();
 	        	field.setPropertyName(result);
-	        	listOfFields.add(field);
+	        	if(!listOfFields.contains(field))
+	        		listOfFields.add(field);
 	        }
 		 tableViewer.refresh();
 		

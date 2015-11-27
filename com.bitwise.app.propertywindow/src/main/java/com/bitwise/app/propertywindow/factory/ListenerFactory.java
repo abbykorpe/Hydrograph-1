@@ -27,6 +27,7 @@ import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridDeleteAllSel
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridDeleteSelectionListener;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridMouseDoubleClickListener;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridMouseDownListener;
+import com.bitwise.app.propertywindow.widgets.listeners.grid.transform.ELTTransformDeleteSelectionListener;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -67,11 +68,11 @@ public class ListenerFactory {
 		GRID_DELETE_ALL(ELTGridDeleteAllSelectionListener.class),
 		MODIFY(ELTModifyListener.class), 
 		NORMAL_FOCUS_OUT(ELTNormalFocusOutListener.class),
-		NORMAL_FOCUS_IN(FocusInListener.class);
-		
+		TRANSFORM_DELETE_SELECTION(ELTTransformDeleteSelectionListener.class),
+		NORMAL_FOCUS_IN(FocusInListener.class);		
 		Class<?> clazz = null;
 		private Listners(Class<?> clazz) {
-			this.clazz = clazz;
+			this.clazz = clazz; 
 		}
 		public IELTListener getListener(){
 			try {

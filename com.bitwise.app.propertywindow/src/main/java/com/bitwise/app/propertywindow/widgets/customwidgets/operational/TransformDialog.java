@@ -95,7 +95,6 @@ public class TransformDialog extends Dialog {
 	private long operationId=1;
 	private Composite container;
 	private CellEditor[] editors; 
-	protected ControlDecoration fieldNameDecorator;
 	
 	Map<Text,Button> opClassMap = new LinkedHashMap<Text, Button>();
 
@@ -122,7 +121,6 @@ public class TransformDialog extends Dialog {
 	private ValidationStatus validationStatus;
 	private TransformPropertyGrid transformPropertyGrid;
 
-	private OperationClassProperty operationClassProperty;
 	// Operational class label.
 	AbstractELTWidget fieldError = new ELTDefaultLable(Messages.FIELDNAMEERROR).lableWidth(250);
 	
@@ -220,9 +218,9 @@ public class TransformDialog extends Dialog {
 			table.getColumn(columnIndex).pack();
 		}  
 
-		CellEditor[] editors = null; 
-		editors =createCellEditorList(table,new String[]{OPERATIONAL_SYSTEM_FIELD}.length); 
-		opSystemPropertiesTabViewer.setCellEditors(editors);
+		CellEditor[] editors_opSys = null; 
+		editors_opSys =createCellEditorList(table,new String[]{OPERATIONAL_SYSTEM_FIELD}.length); 
+		opSystemPropertiesTabViewer.setCellEditors(editors_opSys);
 	    
 		opSystemPropertiesTabViewer.setInput(operationSystemProperties); 
 		for (OperationSystemProperties opSystemProperty : operationSystemProperties) {
@@ -235,7 +233,10 @@ public class TransformDialog extends Dialog {
 
 		ELTTable eltOpSysOuterTable = new ELTTable(opSystemPropertiesTabViewer);
 		leftContainerComposite1.attachWidget(eltOpSysOuterTable);
-
+		editors=editors_opSys;
+		ControlDecoration errorDecorator = setDecorator("Property name should not be same or blank");
+		editors[0].setValidator(new ELTCellEditorTransformValidator((Table)eltOpSysOuterTable.getSWTWidgetControl(), operationSystemProperties, errorDecorator,propertyDialogButtonBar,true));
+		
 		DragDropUtility.INSTANCE.applyDragFromTableViewer(opSystemPropertiesTabViewer.getTable()); 	
 		Composite rightContainerComposite = new Composite(container, SWT.NONE);
 		rightContainerComposite.setLocation(737, -315);
@@ -296,6 +297,7 @@ public class TransformDialog extends Dialog {
 		outerKeyValueTabViewer.setInput(opOuterClassProperty); 
 		
 		outerKeyValueTabViewer.getTable().setBounds(72, 10, 397, 132);
+		
 		DragDropUtility.INSTANCE.applyDrop(outerKeyValueTabViewer,new DragDropTransformOpImp(opOuterClassProperty, false,outerKeyValueTabViewer));
 		ELTDefaultSubgroupComposite defaultnameValueComposite = new ELTDefaultSubgroupComposite(nameValueComposite);
 	
@@ -304,6 +306,9 @@ public class TransformDialog extends Dialog {
 		ELTTable eltPropOuterTable = new ELTTable(outerKeyValueTabViewer);
 		defaultnameValueComposite.attachWidget(eltPropOuterTable);
 	
+		ControlDecoration errorPropValDecorator = setDecorator("Property name should not be same or blank");
+		editors[0].setValidator(new ELTCellEditorTransformValidator((Table)eltPropOuterTable.getSWTWidgetControl(), opOuterClassProperty, errorPropValDecorator,propertyDialogButtonBar,false));
+
 		
 		  if(transformPropertyGrid!=null)  
 		  {
@@ -421,8 +426,8 @@ public class TransformDialog extends Dialog {
 		 
 		eltSuDefaultSubgroupComposite2.attachWidget(eltOpInTable);
 		innerOpInputTabViewer.getTable().setBounds(1, 20, 160, 200);
-		setDecorator();
-		editors[0].setValidator(new ELTCellEditorTransformValidator((Table)eltOpInTable.getSWTWidgetControl(), transformOperation.getInputFields(), fieldNameDecorator,propertyDialogButtonBar));
+		 ControlDecoration errorDecorator = setDecorator("Operation input field should not be same or blank");
+		 editors[0].setValidator(new ELTCellEditorTransformValidator((Table)eltOpInTable.getSWTWidgetControl(), transformOperation.getInputFields(), errorDecorator,propertyDialogButtonBar,true));
 
 		
 		Composite composite_4 = new Composite(expandItemContainerComposite, SWT.NONE);
@@ -457,6 +462,10 @@ public class TransformDialog extends Dialog {
 		
 		ELTTable eltPropValueTable = new ELTTable(innerKeyValueTabViewer);
 		defaultnameValueInnerComposite.attachWidget(eltPropValueTable);
+		
+		ControlDecoration errorPropValDecorator = setDecorator("Property name should not be same or blank");
+		editors[0].setValidator(new ELTCellEditorTransformValidator((Table)eltPropValueTable.getSWTWidgetControl(), transformOperation.getNameValueProps(), errorPropValDecorator,propertyDialogButtonBar,false));
+
 		
 		
 		AbstractELTWidget addInnerPropValueButton = getButton("");
@@ -493,14 +502,14 @@ public class TransformDialog extends Dialog {
 			 * Listener attached for operational input and operation output grid
 			 */
 			addButton.attachListener(ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),propertyDialogButtonBar, helperOpIn, innerOpInputTabViewer.getTable());
-			deleteButton.attachListener(ListenerFactory.Listners.GRID_DELETE_SELECTION.getListener(),propertyDialogButtonBar, helperOpIn, innerOpInputTabViewer.getTable());
+			deleteButton.attachListener(ListenerFactory.Listners.TRANSFORM_DELETE_SELECTION.getListener(),propertyDialogButtonBar, helperOpIn, innerOpInputTabViewer.getTable());
 			eltOpInTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),	propertyDialogButtonBar, helperOpIn, innerOpInputTabViewer.getTable());
 
 			/*
 			 * Listener attached for property name value inner grid
 			 */
 			addInnerPropValueButton.attachListener(ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),propertyDialogButtonBar, helperPropertyValue, innerKeyValueTabViewer.getTable());
-			deleteInnerPropValueButton.attachListener(ListenerFactory.Listners.GRID_DELETE_SELECTION.getListener(),propertyDialogButtonBar, helperPropertyValue, innerKeyValueTabViewer.getTable());
+			deleteInnerPropValueButton.attachListener(ListenerFactory.Listners.TRANSFORM_DELETE_SELECTION.getListener(),propertyDialogButtonBar, helperPropertyValue, innerKeyValueTabViewer.getTable());
 			eltPropValueTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),	propertyDialogButtonBar, helperPropertyValue, innerKeyValueTabViewer.getTable());
 
 			opClassMap.put(fileName, btnCheckButton);
@@ -676,8 +685,9 @@ public class TransformDialog extends Dialog {
 				}
 			}
 
-			protected void setDecorator() {
-				fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAMEERROR);
+			protected  ControlDecoration setDecorator(String errorMessage) {
+				ControlDecoration errorDecorator = WidgetUtility.addDecorator(editors[0].getControl(),errorMessage);
+				return errorDecorator;
 			}
 
 			
