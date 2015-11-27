@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.Viewport;
@@ -78,7 +79,7 @@ public class CustomPaletteViewer extends PaletteViewer {
 				createPaletteContainers(paletteRoot, categoryPaletteConatiner, editor);
 				String searchedString = (currentText.substring(0, e.start) + e.text + currentText.substring(e.end))
 						.toUpperCase();
-					if (searchedString.isEmpty() || "".equals(searchedString)) {
+					if (StringUtils.isEmpty(searchedString)) {
 						showAllContainers(paletteRoot, editor, categoryPaletteConatiner, componentsConfig);
 					} else {
 						matchFound = collectMatchingContainers(editor, categoryPaletteConatiner, componentsConfig,
