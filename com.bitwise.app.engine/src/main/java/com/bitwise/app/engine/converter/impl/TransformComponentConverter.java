@@ -19,6 +19,7 @@ import com.bitwiseglobal.graph.operationstypes.Transform;
 public class TransformComponentConverter extends TransformConverter {
 	Logger logger = LogFactory.INSTANCE.getLogger(TransformComponentConverter.class);
 	TransformPropertyGrid transformPropertyGrid;
+	ConverterHelper converterHelper;
 	
 	public TransformComponentConverter(Component component){
 		super();	
@@ -26,26 +27,29 @@ public class TransformComponentConverter extends TransformConverter {
 		this.component = component;
 		this.properties = component.getProperties();
 		transformPropertyGrid = (TransformPropertyGrid) properties.get("operation") ;
+		converterHelper = new ConverterHelper(component); 
 	}
 	
 	@Override
 	public void prepareForXML() throws PhaseException, SchemaException {
 		logger.debug("Generating XML for :{}", properties.get(NAME));
 		super.prepareForXML();
+		Transform transform = (Transform) baseComponent;
+		transform.getOperation().addAll(getOperations());
 	}
 	
 	@Override
 	protected List<TypeTransformOperation> getOperations() {
-		return ConverterHelper.INSTANCE.getOperations(transformPropertyGrid);
+		return converterHelper.getOperations(transformPropertyGrid);
 	}
 	
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
-		return ConverterHelper.INSTANCE.getOutSocket(transformPropertyGrid);
+		return converterHelper.getOutSocket(transformPropertyGrid);
 	}
 	
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
-		return ConverterHelper.INSTANCE.getInSocket();
+		return converterHelper.getInSocket();
 	}
 }

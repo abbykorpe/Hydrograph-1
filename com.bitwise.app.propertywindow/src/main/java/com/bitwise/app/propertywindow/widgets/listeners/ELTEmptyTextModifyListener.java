@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
+import com.bitwise.app.common.datastructures.tooltip.TootlTipErrorMessage;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
@@ -27,7 +28,11 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
  */
 public class ELTEmptyTextModifyListener implements IELTListener {
 	private ValidationStatus validationStatus;
+	private TootlTipErrorMessage tootlTipErrorMessage;
+
 	
+	private ControlDecoration fieldNameDecorator;
+	private ControlDecoration fieldNameMustJava;
 	@Override
 	public int getListenerType() {
 
@@ -41,14 +46,18 @@ public class ELTEmptyTextModifyListener implements IELTListener {
 		
 		if (helpers != null) {
 			validationStatus = (ValidationStatus) helpers.get(HelperType.VALIDATION_STATUS); 
+			tootlTipErrorMessage = (TootlTipErrorMessage)helpers.get(HelperType.TOOLTIP_ERROR_MESSAGE); 
 		}
 		
 		final Widget[] widgetList = widgets;
-		final ControlDecoration fieldNameDecorator = WidgetUtility
+		fieldNameDecorator = WidgetUtility
 				.addDecorator((Text) widgetList[0],
 						Messages.OperationClassBlank);
-		final ControlDecoration fieldNameMustJava = WidgetUtility.addDecorator(
+		fieldNameMustJava = WidgetUtility.addDecorator(
 				(Text) widgetList[0], Messages.INVALID_FILE);
+		
+		tootlTipErrorMessage.setErrorMessage(Messages.OperationClassBlank);
+		//validationStatus.setIsValid(true);
 		Listener listener = new Listener() {
 			@Override
 			public void handleEvent(Event event) {
@@ -88,11 +97,23 @@ public class ELTEmptyTextModifyListener implements IELTListener {
 					fieldNameMustJava.hide();
 					validationStatus.setIsValid(true);
 				}
-
+				setToolTipErrorMessage(fieldNameDecorator,fieldNameMustJava);
 			}
 
 		};
+		//setToolTipErrorMessage(fieldNameDecorator,fieldNameMustJava);
 		return listener;
 	}
-
+	
+	private void setToolTipErrorMessage(ControlDecoration fieldNameDecorator, ControlDecoration fieldNameMustJava){
+		String errmsg=null;
+		if(fieldNameMustJava.isVisible())
+			errmsg = fieldNameMustJava.getDescriptionText();
+		
+		if(fieldNameDecorator.isVisible())
+			errmsg = errmsg + "\n" + fieldNameDecorator.getDescriptionText();
+		
+		tootlTipErrorMessage.setErrorMessage(errmsg);
+		
+	}
 }

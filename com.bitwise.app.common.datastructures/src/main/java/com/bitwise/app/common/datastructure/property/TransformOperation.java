@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TransformOperation {
+	private long operationId=1;
 	private List<OperationField> inputFields;
-	private List<OperationField> outputFields;
 	private OperationClassProperty opClassProperty;
 	private List<NameValueProperty> nameValueProps;
 	private List schemaGridRowList;
 	
 	public TransformOperation() {
 		inputFields=new ArrayList<>();
-		outputFields=new ArrayList<>();
 		opClassProperty=new OperationClassProperty("", false);
 		nameValueProps=new ArrayList<>();
 		schemaGridRowList= new ArrayList<>();
@@ -38,17 +37,19 @@ public class TransformOperation {
 	public void setInputFields(List<OperationField> inputFields) {
 		this.inputFields = inputFields;
 	}
-	public List<OperationField> getOutputFields() {
-		return outputFields;
-	}
-	public void setOutputFields(List<OperationField> outputFields) {
-		this.outputFields = outputFields;
-	}
 	public OperationClassProperty getOpClassProperty() {
 		return opClassProperty;
 	}
 	public void setOpClassProperty(OperationClassProperty opClassProperty) {
 		this.opClassProperty = opClassProperty;
+	}
+
+	public long getOperationId() {
+		return operationId;
+	}
+
+	public void setOperationId(long operationId) {
+		this.operationId = operationId;
 	}
 	
 	

@@ -1,7 +1,9 @@
 package com.bitwise.app.engine.helper;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 
@@ -12,9 +14,9 @@ import com.bitwise.app.common.datastructure.property.TransformOperation;
 import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
-import com.bitwise.app.engine.converter.Converter;
 import com.bitwise.app.engine.converter.PortTypeConstant;
 import com.bitwise.app.engine.converter.TransformConverter;
+import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.propertywindow.fixedwidthschema.FixedWidthGridRow;
 import com.bitwiseglobal.graph.commontypes.FieldDataTypes;
@@ -35,11 +37,16 @@ import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 /**
  * This is a helper class for converter implementation. Contains the helper methods for conversion. 
  */
-public class ConverterHelper extends Converter{
-	public static final ConverterHelper INSTANCE = new ConverterHelper();
+public class ConverterHelper{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ConverterHelper.class);
+	protected Map<String, Object> properties = new LinkedHashMap<String, Object>();
+	protected Component component = null;
+	protected String componentName = null;
 	
-	private ConverterHelper() {
+	public ConverterHelper(Component component) {
+		this.component = component;
+		this.properties = component.getProperties();
+		this.componentName = (String) properties.get(Constants.NAME);
 	}
 	
 	public List<TypeTransformOperation> getOperations(TransformPropertyGrid transformPropertyGrid) {
@@ -116,18 +123,13 @@ public class ConverterHelper extends Converter{
 
 	public List<TypeOperationsOutSocket> getOutSocket(TransformPropertyGrid transformPropertyGrid) {
 		logger.debug("Generating TypeOperationsOutSocket data for : {}", properties.get(Constants.NAME));
+		if(component.getSourceConnections() == null || component.getSourceConnections().isEmpty()){
+			return null;
+		}
 		List<TypeOperationsOutSocket> outSocketList = new ArrayList<TypeOperationsOutSocket>();
-
 		for (Link link : component.getSourceConnections()) {
 			TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();
-			setOutSocketProperties(outSocket, transformPropertyGrid);
-			TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
-			outSocketAsInsocket.setInSocketId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
-			
-			outSocket.setCopyOfInsocket(outSocketAsInsocket);
-		
-			outSocket.setId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());
-			outSocket.setType(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort()));
+			setOutSocketProperties(outSocket, transformPropertyGrid, link);
 			
 			outSocket.getOtherAttributes();
 			outSocketList.add(outSocket);
@@ -135,13 +137,17 @@ public class ConverterHelper extends Converter{
 		return outSocketList;
 	}
 	
-	private void setOutSocketProperties(TypeOperationsOutSocket outSocket, TransformPropertyGrid transformPropertyGrid) {
-		outSocket.setCopyOfInsocket(null);
-		outSocket.setId("");
-		outSocket.setType("");
-		outSocket.getPassThroughfieldOrOperationFieldOrMapField().add(addPassThroughFields(transformPropertyGrid));
-		outSocket.getPassThroughfieldOrOperationFieldOrMapField().add(addMapFields(transformPropertyGrid));
-		outSocket.getPassThroughfieldOrOperationFieldOrMapField().add(addOperationFields(transformPropertyGrid));
+	private void setOutSocketProperties(TypeOperationsOutSocket outSocket, TransformPropertyGrid transformPropertyGrid, Link link) {
+		
+		TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
+		outSocketAsInsocket.setInSocketId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
+		
+		outSocket.setCopyOfInsocket(outSocketAsInsocket);
+		outSocket.setId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());
+		outSocket.setType(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort()));
+		outSocket.getPassThroughfieldOrOperationFieldOrMapField().addAll(addPassThroughFields(transformPropertyGrid));
+		outSocket.getPassThroughfieldOrOperationFieldOrMapField().addAll(addMapFields(transformPropertyGrid));
+		outSocket.getPassThroughfieldOrOperationFieldOrMapField().addAll(addOperationFields(transformPropertyGrid));
 	}
 
 	private List<TypeInputField> addPassThroughFields(TransformPropertyGrid transformPropertyGrid) {
@@ -166,21 +172,20 @@ public class ConverterHelper extends Converter{
 		}
 	}
 
-	private List<NameValueProperty> addMapFields(TransformPropertyGrid transformPropertyGrid) {
+	private List<TypeMapField> addMapFields(TransformPropertyGrid transformPropertyGrid) {
 		if(transformPropertyGrid != null){
-			List<NameValueProperty> nameValuePropertyList = null;
+			List<TypeMapField> typeMapFieldList = new ArrayList<>();
 			if(transformPropertyGrid.getNameValueProps() != null &&
 					!transformPropertyGrid.getNameValueProps().isEmpty()){
-				nameValuePropertyList = new ArrayList<>();
 				for(NameValueProperty nameValueProperty : transformPropertyGrid.getNameValueProps()){
 					TypeMapField mapField = new TypeMapField();
 					mapField.setSourceName(nameValueProperty.getPropertyName());
 					mapField.setName(nameValueProperty.getPropertyValue());
 					mapField.setInSocketId(TransformConverter.DEFAULT_IN_SOCKET_ID);
-					nameValuePropertyList.add(nameValueProperty);
+					typeMapFieldList.add(mapField);
 				}
 			}
-			return nameValuePropertyList;
+			return typeMapFieldList;
 		}
 		else{
 			return new ArrayList<>();
@@ -194,11 +199,11 @@ public class ConverterHelper extends Converter{
 			if(operations != null && !operations.isEmpty()){
 				typeOperationFieldList = new ArrayList<>();
 				for(TransformOperation operation : operations){
-					List<OperationField> outputFields = operation.getOutputFields();
+					List<FixedWidthGridRow> outputFields = operation.getSchemaGridRowList();
 					if(outputFields != null && !outputFields.isEmpty()){
-						for (OperationField operationField : outputFields) {
+						for (FixedWidthGridRow fixedWidthGridRow : outputFields) {
 							TypeOperationField typeOperationField = new TypeOperationField();
-							typeOperationField.setName(operationField.getName());
+							typeOperationField.setName(fixedWidthGridRow.getFieldName());
 							typeOperationField.setOperationId("");
 							typeOperationFieldList.add(typeOperationField);
 						}
@@ -214,6 +219,9 @@ public class ConverterHelper extends Converter{
 	
 	public List<TypeBaseInSocket> getInSocket() {
 		logger.debug("Generating TypeBaseInSocket data for :{}", component.getProperties().get(Constants.NAME));
+		if(component.getTargetConnections() == null || component.getTargetConnections().isEmpty()){
+			return null;
+		}
 		List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {
 			TypeBaseInSocket inSocket = new TypeBaseInSocket();

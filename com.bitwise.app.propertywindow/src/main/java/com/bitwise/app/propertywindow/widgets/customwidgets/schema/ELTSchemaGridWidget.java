@@ -40,8 +40,6 @@ import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridDetails;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.GridChangeListener;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTSchemaGridWidget.
  * 
@@ -73,6 +71,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private Shell shell;
 
+	public ELTSchemaGridWidget() {
+	}
 	/**
 	 * Instantiates a new ELT schema grid widget.
 	 * 
@@ -139,7 +139,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 		
-		createSchemaGrid(container.getContainerControl(),schemaGridRowList);
+		createSchemaGrid(container.getContainerControl());
 		
 
 	}
@@ -265,7 +265,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		return button;
 	}
 
-	private ListenerHelper getListenerHelper(List schemaGridRowList) {
+	private ListenerHelper getListenerHelper() {
 		if (helper == null) {
 			helper = new ListenerHelper();
 			ELTGridDetails value = new ELTGridDetails(schemaGridRowList, tableViewer, 
@@ -278,7 +278,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		return helper;
 	}
 	
-	public TableViewer createSchemaGrid(Composite container,List schemaGridRowList){
+	public TableViewer createSchemaGrid(Composite container){
 		
 		ListenerFactory listenerFactory = new ListenerFactory();
 		
@@ -317,7 +317,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		addValidators();
 
-		helper = getListenerHelper(schemaGridRowList); 
+		helper = getListenerHelper(); 
 		try {
 			eltTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),
 					propertyDialogButtonBar, helper, table);
@@ -336,6 +336,12 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		gridListener(editors);
 		populateWidget(); 
 		return tableViewer;
+	}
+	public List getSchemaGridRowList() {
+		return schemaGridRowList;
+	}
+	public void setSchemaGridRowList(List schemaGridRowList) {
+		this.schemaGridRowList = schemaGridRowList;
 	}
 	
 	

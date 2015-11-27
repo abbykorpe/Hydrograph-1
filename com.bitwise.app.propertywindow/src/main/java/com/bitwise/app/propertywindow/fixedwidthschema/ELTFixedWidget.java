@@ -17,6 +17,10 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
  */
 public class ELTFixedWidget extends ELTSchemaGridWidget{
 
+	
+	public ELTFixedWidget(PropertyDialogButtonBar propertyDialogButtonBar) {
+		this.propertyDialogButtonBar=propertyDialogButtonBar;
+		}
 	/**
 	 * Instantiates a new ELT fixed widget.
 	 * 

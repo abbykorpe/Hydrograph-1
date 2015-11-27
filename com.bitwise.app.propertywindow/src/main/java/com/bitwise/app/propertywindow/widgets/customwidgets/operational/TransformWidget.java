@@ -7,7 +7,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 
 import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
-import com.bitwise.app.propertywindow.fixedwidthschema.ELTFixedWidget;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -80,8 +79,7 @@ public class TransformWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				ELTFixedWidget eltFixedWidget = new ELTFixedWidget(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
-				transformDialog = new TransformDialog(transformComposite.getContainerControl().getShell(), propertyDialogButtonBar,transformPropertyGrid,eltFixedWidget);
+				transformDialog = new TransformDialog(transformComposite.getContainerControl().getShell(), propertyDialogButtonBar,transformPropertyGrid);
 				transformDialog.setValidationStatus(validationStatus);
 				transformDialog.open();
 					transformPropertyGrid = transformDialog.getTransformProperty();

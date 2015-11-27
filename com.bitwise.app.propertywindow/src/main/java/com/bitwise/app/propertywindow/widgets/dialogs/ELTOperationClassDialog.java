@@ -16,7 +16,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 
-import com.bitwise.app.propertywindow.datastructures.filter.OperationClassProperty;
+import com.bitwise.app.common.datastructure.property.OperationClassProperty;
+import com.bitwise.app.common.datastructures.tooltip.TootlTipErrorMessage;
 import com.bitwise.app.propertywindow.messagebox.ConfirmCancelMessageBox;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
@@ -40,7 +41,9 @@ public class ELTOperationClassDialog extends Dialog {
 	private OperationClassProperty operationClassProperty;
 	private PropertyDialogButtonBar eltOperationClassDialogButtonBar;
 	private ValidationStatus validationStatus;
+	private TootlTipErrorMessage tootlTipErrorMessage = new TootlTipErrorMessage();
 	
+
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -96,7 +99,7 @@ public class ELTOperationClassDialog extends Dialog {
 		AbstractELTWidget fileNameText = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(150);
 		AbstractELTWidget isParameterCheckbox = new ELTDefaultCheckBox("Is Parameter").checkBoxLableWidth(100);
 		
-		FilterOperationClassUtility.createOperationalClass(composite, eltOperationClassDialogButtonBar, fileNameText, isParameterCheckbox, validationStatus);
+		FilterOperationClassUtility.createOperationalClass(composite, eltOperationClassDialogButtonBar, fileNameText, isParameterCheckbox, validationStatus,tootlTipErrorMessage);
 		fileName=(Text)fileNameText.getSWTWidgetControl();
 		btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl();
 		populateWidget();
@@ -198,5 +201,9 @@ public class ELTOperationClassDialog extends Dialog {
 	
 	public ValidationStatus getValidationStatus() {
 		return validationStatus;
+	}
+	
+	public String getTootlTipErrorMessage() {
+		return tootlTipErrorMessage.getErrorMessage();
 	}
 }

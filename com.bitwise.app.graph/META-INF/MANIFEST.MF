@@ -19,16 +19,16 @@ Require-Bundle: org.eclipse.ui,
  com.bitwise.app.xstream;bundle-version="0.0.1",
  com.bitwise.app.engine;bundle-version="0.0.1",
  org.slf4j.api,
- org.eclipse.buildship.branding;bundle-version="1.0.5",
- org.eclipse.buildship.core;bundle-version="1.0.5",
- org.eclipse.buildship.ui;bundle-version="1.0.5",
  com.bitwise.app.common.datastructures;bundle-version="0.0.1",
  org.eclipse.ui.console;bundle-version="3.5.100",
  com.bitwise.app.common.interfaces;bundle-version="0.0.1",
  com.bitwise.app.tooltip;bundle-version="0.0.1",
  com.bitwise.app.parametergrid;bundle-version="0.0.1",
  org.apache.commons.lang,
- com.bitwise.app.project.structure;bundle-version="0.0.1"
+ com.bitwise.app.project.structure;bundle-version="0.0.1",
+ org.eclipse.buildship.branding;bundle-version="1.0.6",
+ org.eclipse.buildship.core;bundle-version="1.0.5",
+ org.eclipse.buildship.ui;bundle-version="1.0.5"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: com.bitwise.app.graph.model,

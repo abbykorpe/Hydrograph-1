@@ -21,7 +21,8 @@ public class ListenerHelper {
 	public enum HelperType{
 		CONTROL_DECORATION,
 		VALIDATION_STATUS,
-		SCHEMA_GRID;
+		SCHEMA_GRID,
+		TOOLTIP_ERROR_MESSAGE;
 	}
 	
 	private Map<HelperType, Object> helpers;

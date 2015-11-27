@@ -25,7 +25,7 @@
         <repository>
  			<id>gradle-plugins</id>
  			  <layout>p2</layout> 
-            <url>http://download.eclipse.org/buildship/updates/e37/milestones/1.0/</url>
+            <url>http://download.eclipse.org/buildship/updates/e45/milestones/1.0</url>
         </repository>
         
 

@@ -27,6 +27,10 @@ public abstract class AbstractWidget {
 	protected WidgetConfig widgetConfig;
 	private String toolTipErrorMessage =  null;
 	
+	public AbstractWidget() {
+	
+	}
+	
 	/**
 	 * Instantiates a new abstract widget.
 	 * 

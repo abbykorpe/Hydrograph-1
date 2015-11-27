@@ -29,6 +29,7 @@ import com.bitwiseglobal.graph.operationstypes.Aggregate;
 public class AggregateConverter extends TransformConverter {
 	Logger logger = LogFactory.INSTANCE.getLogger(AggregateConverter.class);
 	TransformPropertyGrid transformPropertyGrid;
+	ConverterHelper converterHelper;
 	
 	public AggregateConverter(Component component){
 		super();	
@@ -36,6 +37,7 @@ public class AggregateConverter extends TransformConverter {
 		this.component = component;
 		this.properties = component.getProperties();
 		transformPropertyGrid = (TransformPropertyGrid) properties.get("operation");
+		converterHelper = new ConverterHelper(component); 
 	}
 	
 	@Override
@@ -44,23 +46,24 @@ public class AggregateConverter extends TransformConverter {
 		super.prepareForXML();
 		
 		Aggregate aggregate = (Aggregate) baseComponent;
+		aggregate.getOperation().addAll(getOperations());
 		setPrimaryKeys(aggregate);
 		setSecondaryKeys(aggregate);
 	}
 	
 	@Override
 	protected List<TypeTransformOperation> getOperations() {
-		return ConverterHelper.INSTANCE.getOperations(transformPropertyGrid);
+		return converterHelper.getOperations(transformPropertyGrid);
 	}
 	
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
-		return ConverterHelper.INSTANCE.getOutSocket(transformPropertyGrid);
+		return converterHelper.getOutSocket(transformPropertyGrid);
 	}
 	
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
-		return ConverterHelper.INSTANCE.getInSocket();
+		return converterHelper.getInSocket();
 	}
 	
 	

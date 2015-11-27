@@ -709,10 +709,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			logger.debug("Sucessfully converted JAVA Object from XML Data");
 			xml.close();
 		} catch (Exception e) {
-			
-			MessageDialog
-			.openError(new Shell(), "Error", "Invalid graph file.");
-
+			logger.error("Failed to convert from XML to Graph due to : {}", e);
+			MessageDialog.openError(new Shell(), "Error", "Invalid graph file.");
 		}
 		return obj;
 	}

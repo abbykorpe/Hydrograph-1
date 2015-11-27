@@ -7,7 +7,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
 
-import com.bitwise.app.propertywindow.datastructures.filter.OperationClassProperty;
+import com.bitwise.app.common.datastructure.property.OperationClassProperty;
+import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -76,7 +77,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		runtimeComposite.attachWidget(eltDefaultButton);
 
 		//populateWidget();
-		
+		setToolTipMessage(Messages.OperationClassBlank);
 		((Button)eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -89,6 +90,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 					operationClassProperty = eltOperationClassDialog.getOperationClassProperty();
 					propertyDialogButtonBar.enableApplyButton(true);
 				}
+				setToolTipMessage(eltOperationClassDialog.getTootlTipErrorMessage());
 				super.widgetSelected(e);
 			}
 			
