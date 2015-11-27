@@ -22,7 +22,7 @@ import com.bitwiseglobal.graph.outputtypes.TextFileDelimited;
 
 public class OutputFileDelimitedConverter extends OutputConverter {
 	
-	Logger LOGGER = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
 	
 	public OutputFileDelimitedConverter(Component component) {
 		super();
@@ -33,7 +33,7 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 	
 	@Override
 	public void prepareForXML(){
-		LOGGER.debug("Genrating XML data for {}", properties.get(Constants.PARAM_NAME));
+		logger.debug("Genrating XML data for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		
 		TextFileDelimited fileDelimited = (TextFileDelimited) baseComponent;
@@ -57,7 +57,7 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 
 	@Override
 	protected List<TypeOutputInSocket> getOutInSocket(){
-		LOGGER.debug("Genrating TypeOutputInSocket data");
+		logger.debug("Genrating TypeOutputInSocket data");
 		List<TypeOutputInSocket> outputinSockets = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {
 			TypeOutputDelimitedInSocket outInSocket = new TypeOutputDelimitedInSocket();
@@ -74,7 +74,7 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 
 	@Override
 	protected List<TypeBaseField> getFieldOrRecord() {
-		LOGGER.debug("Genrating data for {} for property {}", new Object[]{properties.get(Constants.PARAM_NAME),PropertyNameConstants.SCHEMA.value()});
+		logger.debug("Genrating data for {} for property {}", new Object[]{properties.get(Constants.PARAM_NAME),PropertyNameConstants.SCHEMA.value()});
 		List<SchemaGrid> schemaList = (List) properties.get(PropertyNameConstants.SCHEMA.value());
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
 		if(schemaList!=null){
@@ -96,7 +96,7 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 				}
 			}
 			catch (Exception exception) {
-				LOGGER.warn("Exception while creating schema for component : {}{}", new Object[]{properties.get(Constants.PARAM_NAME),exception});
+				logger.warn("Exception while creating schema for component : {}{}", new Object[]{properties.get(Constants.PARAM_NAME),exception});
 				
 			}
 		}

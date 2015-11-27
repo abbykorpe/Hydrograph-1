@@ -13,8 +13,6 @@ import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.PortTypeConstant;
 import com.bitwise.app.engine.converter.TransformConverter;
-import com.bitwise.app.engine.exceptions.PhaseException;
-import com.bitwise.app.engine.exceptions.SchemaException;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
@@ -27,7 +25,7 @@ import com.bitwiseglobal.graph.operationstypes.Join;
 
 public class JoinConverter extends TransformConverter{
 	private static final String JOIN_OPERATION_ID="join";
-	Logger LOGGER = LogFactory.INSTANCE.getLogger(JoinConverter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(JoinConverter.class);
 	
 	public JoinConverter(Component component) {
 		super();	
@@ -37,8 +35,8 @@ public class JoinConverter extends TransformConverter{
 	}
 	
 	@Override
-	public void prepareForXML() throws PhaseException, SchemaException {
-		LOGGER.debug("Genrating XML for :{}", properties.get(Constants.PARAM_NAME));
+	public void prepareForXML(){
+		logger.debug("Genrating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 	}
 
@@ -78,7 +76,7 @@ public class JoinConverter extends TransformConverter{
 	}
 	
 	private List<TypeInputField> getOperationField() {
-		LOGGER.debug("Genrating TypeInputField data :{}", properties.get(Constants.PARAM_NAME));
+		logger.debug("Genrating TypeInputField data :{}", properties.get(Constants.PARAM_NAME));
 		List<TypeInputField> operationFiledList=new ArrayList<>();
 		Set<String> componentOperationFileds = (HashSet<String>) component.getProperties().get(PropertyNameConstants.OPERATION_FILEDS.value());
 		if(componentOperationFileds!=null){
@@ -94,7 +92,7 @@ public class JoinConverter extends TransformConverter{
 
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
-		LOGGER.debug("Genrating TypeBaseInSocket data for :{}", component
+		logger.debug("Genrating TypeBaseInSocket data for :{}", component
 				.getProperties().get(Constants.PARAM_NAME));
 		List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {

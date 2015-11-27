@@ -31,8 +31,7 @@ import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
  * 
  */
 public abstract class Converter {
-	private static final Logger LOGGER = LogFactory.INSTANCE
-			.getLogger(Converter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(Converter.class);
 
 	protected static final String ID = "$id";
 	protected Map<String, Object> properties = new LinkedHashMap<String, Object>();
@@ -54,8 +53,8 @@ public abstract class Converter {
 			baseComponent.setPhase(new BigInteger((String) properties
 					.get(Constants.PARAM_PHASE)));
 		} catch (NullPointerException | NumberFormatException nfe) {
-			LOGGER.warn("Phase id Empty or Invalid for : {}",
-					baseComponent.getId());
+			logger.error("Phase id Empty or Invalid for : {}, {}",
+					new Object[]{baseComponent.getId(), nfe});
 		}
 	}
 
@@ -66,7 +65,7 @@ public abstract class Converter {
 	 * @return {@link BooleanValueType}
 	 */
 	protected BooleanValueType getBoolean(String propertyName) {
-		LOGGER.debug("Getting boolean Value for {}={}", new Object[] {
+		logger.debug("Getting boolean Value for {}={}", new Object[] {
 				propertyName, properties.get(propertyName) });
 		if (properties.get(propertyName) != null) {
 			BooleanValueType booleanValue = new BooleanValueType();
@@ -95,7 +94,7 @@ public abstract class Converter {
 	 * @return {@link StandardCharsets}
 	 */
 	protected StandardCharsets getCharset() {
-		LOGGER.debug("Getting StandardCharsets for {}", properties.get(Constants.PARAM_NAME));
+		logger.debug("Getting StandardCharsets for {}", properties.get(Constants.PARAM_NAME));
 		String charset = (String) properties.get(PropertyNameConstants.CHAR_SET
 				.value());
 		StandardCharsets targetCharset = null;
@@ -118,7 +117,7 @@ public abstract class Converter {
 	 * @return {@link TypeDependsOn}
 	 */
 	protected TypeDependsOn getDependsOn() {
-		LOGGER.debug("Getting DependsOn for {}", properties.get(Constants.PARAM_NAME));
+		logger.debug("Getting DependsOn for {}", properties.get(Constants.PARAM_NAME));
 		if (properties.get(Constants.PARAM_DEPENDS_ON) != null) {
 			TypeDependsOn dependsOn = new TypeDependsOn();
 			dependsOn.setComponentId((String) properties.get(Constants.PARAM_DEPENDS_ON));
