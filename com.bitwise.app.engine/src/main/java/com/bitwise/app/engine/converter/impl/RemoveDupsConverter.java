@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ import com.bitwiseglobal.graph.straightpulltypes.RemoveDups.Keep;
 
 public class RemoveDupsConverter extends StraightPullConverter {
 
-	Logger LOGGER = LogFactory.INSTANCE.getLogger(RemoveDupsConverter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(RemoveDupsConverter.class);
 
 	public RemoveDupsConverter(Component component) {
 		super();
@@ -40,7 +41,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 
 	@Override
 	public void prepareForXML(){
-		LOGGER.debug("Genrating XML for : {}", properties.get(Constants.PARAM_NAME));
+		logger.debug("Genrating XML for : {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		RemoveDups dedup = (RemoveDups) baseComponent;
 		dedup.setKeep(getKeep());
@@ -50,7 +51,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 
 	private TypePrimaryKeyFields getPrimaryKeys() {
 
-		HashSet<String> fieldValueSet = ((HashSet<String>) properties.get(PropertyNameConstants.DEDUP_FILEDS.value()));
+		Set<String> fieldValueSet = (HashSet<String>) properties.get(PropertyNameConstants.DEDUP_FILEDS.value());
 
 		TypePrimaryKeyFields typePrimaryKeyFields = null;
 		if (fieldValueSet != null) {
@@ -68,7 +69,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 	
 	private TypeSecondaryKeyFields getSecondaryKeys() {
 
-		TreeMap<String,String> fieldValueMap = ((TreeMap<String,String>) properties.get(PropertyNameConstants.SECONDARY_COLUMN_KEYS.value()));
+		Map<String,String> fieldValueMap = (TreeMap<String,String>) properties.get(PropertyNameConstants.SECONDARY_COLUMN_KEYS.value());
 
 		TypeSecondaryKeyFields  typeSecondaryKeyFields= null;
 		if (fieldValueMap != null) {
@@ -85,7 +86,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 	}
 
 	private Keep getKeep() {
-		LOGGER.debug("Genrating Retention Logic for ::{}", componentName);
+		logger.debug("Genrating Retention Logic for ::{}", componentName);
 		String keepValue = properties.get(
 				PropertyNameConstants.RETENTION_LOGIC_KEEP.value()).toString();
 		Keep keep = new Keep();
@@ -97,10 +98,10 @@ public class RemoveDupsConverter extends StraightPullConverter {
 
 	@Override
 	protected List<TypeStraightPullOutSocket> getOutSocket() {
-		LOGGER.debug("Genrating TypeStraightPullOutSocket data for : {}",
+		logger.debug("Genrating TypeStraightPullOutSocket data for : {}",
 				properties.get(Constants.PARAM_NAME));
 		List<TypeStraightPullOutSocket> outSockectList = new ArrayList<TypeStraightPullOutSocket>();
-		int outSocketCounter=1;
+		
 		for (Link link : component.getSourceConnections()) {
 			TypeStraightPullOutSocket outSocket = new TypeStraightPullOutSocket();
 			TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
@@ -111,14 +112,13 @@ public class RemoveDupsConverter extends StraightPullConverter {
 			outSocket.setType(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort()));
 			outSocket.getOtherAttributes();
 			outSockectList.add(outSocket);
-			outSocketCounter++;
 		}
 		return outSockectList;
 	}
 
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
-		LOGGER.debug("Genrating TypeBaseInSocket data for :{}", component
+		logger.debug("Genrating TypeBaseInSocket data for :{}", component
 				.getProperties().get(Constants.PARAM_NAME));
 		List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {

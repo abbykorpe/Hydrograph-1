@@ -15,7 +15,7 @@ import com.bitwiseglobal.graph.commontypes.TypeOutputInSocket;
 
 public abstract class OutputConverter extends Converter {
 	
-	Logger LOGGER = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
 	@Override
 	public void prepareForXML(){
 		super.prepareForXML();
@@ -34,7 +34,7 @@ public abstract class OutputConverter extends Converter {
 	 * @throws SchemaException
 	 */
 	protected TypeBaseRecord getSchema(){
-		LOGGER.debug("Genrating TypeBaseRecord data for {}", properties.get(Constants.PARAM_NAME));
+		logger.debug("Genrating TypeBaseRecord data for {}", properties.get(Constants.PARAM_NAME));
 		TypeBaseRecord typeBaseRecord = new TypeBaseRecord();
 		typeBaseRecord.setName("");
 		typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().addAll(getFieldOrRecord());		

@@ -74,7 +74,7 @@ public class ComponentXpath {
 			transformer.transform(source, result);
 			getXpathMap().clear();
 		} catch (ParserConfigurationException |SAXException|IOException|XPathExpressionException|TransformerException e) {
-			LOGGER.error("Exception occurred while parametrizing the XML");
+			LOGGER.error("Exception occurred while parametrizing the XML", e);
 		}
 		
 		return out;

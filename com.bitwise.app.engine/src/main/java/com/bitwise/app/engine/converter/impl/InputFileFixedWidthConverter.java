@@ -24,7 +24,7 @@ import com.bitwiseglobal.graph.itffw.TypeInputFixedwidthOutSocket;
 
 public class InputFileFixedWidthConverter extends InputConverter {
 
-	Logger LOGGER = LogFactory.INSTANCE.getLogger(InputFileFixedWidthConverter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputFileFixedWidthConverter.class);
 
 	public InputFileFixedWidthConverter(Component component) {
 		super();
@@ -35,7 +35,7 @@ public class InputFileFixedWidthConverter extends InputConverter {
 	
 	@Override
 	public void prepareForXML(){
-		LOGGER.debug("prepareForXML - Genrating XML data for "+component);
+		logger.debug("prepareForXML - Genrating XML data for "+component);
 		super.prepareForXML();
 		TextFileFixedWidth fileFixedWidth = (TextFileFixedWidth) baseComponent;
 		TextFileFixedWidth.Path path = new TextFileFixedWidth.Path();
@@ -51,7 +51,7 @@ public class InputFileFixedWidthConverter extends InputConverter {
 	}
 	@Override
 	protected List<TypeInputOutSocket> getInOutSocket(){
-		LOGGER.debug("getInOutSocket - Genrating TypeInputOutSocket data for "+component);
+		logger.debug("getInOutSocket - Genrating TypeInputOutSocket data for "+component);
 		List<TypeInputOutSocket> outSockets = new ArrayList<>();
 		for (Link link : component.getSourceConnections()) {
 			TypeInputFixedwidthOutSocket outSocket = new TypeInputFixedwidthOutSocket();
@@ -66,37 +66,34 @@ public class InputFileFixedWidthConverter extends InputConverter {
 
 	@Override
 	protected List<TypeBaseField> getFieldOrRecord() {
-		{
-			LOGGER.debug("Genrating data for {} for property {}", new Object[]{properties.get(Constants.PARAM_NAME),PropertyNameConstants.SCHEMA.value()});
-			List<FixedWidthGridRow> schemaList = (List) properties.get(PropertyNameConstants.SCHEMA.value());
-			List<TypeBaseField> typeBaseFields = new ArrayList<>();
-			if(schemaList!=null){
-				try{
-					for (FixedWidthGridRow object : schemaList ) {
-						TypeBaseField typeBaseField = new TypeBaseField();
-						typeBaseField.setName(object.getFieldName());
-						typeBaseField.setFormat(object.getDateFormat());
-						if(!object.getScale().trim().isEmpty())
-							typeBaseField.setScale(Integer.parseInt(object.getScale()));
-						typeBaseField.setScaleType(ScaleTypeList.IMPLICIT );
-						for(FieldDataTypes fieldDataType:FieldDataTypes.values()){
-							if(fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
-								typeBaseField.setType(fieldDataType);
-						}
-						if(object.getLength()!=null)
-						{
-							typeBaseField.getOtherAttributes().put(new QName("length"), object.getLength());
-						}
-						typeBaseFields.add(typeBaseField);
+		logger.debug("Genrating data for {} for property {}", new Object[]{properties.get(Constants.PARAM_NAME),PropertyNameConstants.SCHEMA.value()});
+		List<FixedWidthGridRow> schemaList = (List) properties.get(PropertyNameConstants.SCHEMA.value());
+		List<TypeBaseField> typeBaseFields = new ArrayList<>();
+		if(schemaList!=null){
+			try{
+				for (FixedWidthGridRow object : schemaList ) {
+					TypeBaseField typeBaseField = new TypeBaseField();
+					typeBaseField.setName(object.getFieldName());
+					typeBaseField.setFormat(object.getDateFormat());
+					if(!object.getScale().trim().isEmpty())
+						typeBaseField.setScale(Integer.parseInt(object.getScale()));
+					typeBaseField.setScaleType(ScaleTypeList.IMPLICIT );
+					for(FieldDataTypes fieldDataType:FieldDataTypes.values()){
+						if(fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
+							typeBaseField.setType(fieldDataType);
 					}
-				}
-				catch (Exception exception) {
-					LOGGER.warn("Exception while creating schema for component : {}{}", new Object[]{properties.get(Constants.PARAM_NAME),exception});
-					
+					if(object.getLength()!=null){
+						typeBaseField.getOtherAttributes().put(new QName("length"), object.getLength());
+					}
+					typeBaseFields.add(typeBaseField);
 				}
 			}
-			return typeBaseFields;
+			catch (Exception exception) {
+				logger.warn("Exception while creating schema for component : {}{}", new Object[]{properties.get(Constants.PARAM_NAME),exception});
+				
+			}
 		}
+		return typeBaseFields;
 	}
 
 }
