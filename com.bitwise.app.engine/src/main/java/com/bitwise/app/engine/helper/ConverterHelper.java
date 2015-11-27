@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
@@ -46,30 +47,29 @@ public class ConverterHelper{
 	public ConverterHelper(Component component) {
 		this.component = component;
 		this.properties = component.getProperties();
-		this.componentName = (String) properties.get(Constants.NAME);
+		this.componentName = (String) properties.get(Constants.PARAM_NAME);
 	}
 	
 	public List<TypeTransformOperation> getOperations(TransformPropertyGrid transformPropertyGrid) {
-		logger.debug("Generating TypeTransformOperation data :{}", properties.get(Constants.NAME));
+		logger.debug("Generating TypeTransformOperation data :{}", properties.get(Constants.PARAM_NAME));
+		List<TypeTransformOperation> operationList = new ArrayList<>();
 		if(transformPropertyGrid != null){
 			List<TransformOperation> transformOperations = transformPropertyGrid.getOperation();
-			List<TypeTransformOperation> operationList = new ArrayList<>();
-			for (TransformOperation transformOperation : transformOperations) {
-				operationList.add(getOperation(transformOperation));
+			if(transformOperations != null){
+				for (TransformOperation transformOperation : transformOperations) {
+					operationList.add(getOperation(transformOperation));
+				}
 			}
-			return operationList;
 		}
-		else{
-			return new ArrayList<>();
-		}
+		return operationList;
 	}
 	
 	private TypeTransformOperation getOperation(TransformOperation transformOperation){
 		TypeTransformOperation operation = new TypeTransformOperation();
 		operation.setInputFields(getOperationInputFields(transformOperation.getInputFields()));
 		operation.setProperties(getProperties(transformOperation.getNameValueProps()));
-		operation.setOutputFields(getOperationOutputFields(null));//TODO: transformOperation.getOutputFields()));
-		operation.setId(""/*FILTER_OPERATION_ID*/);
+		operation.setOutputFields(getOperationOutputFields(transformOperation.getSchemaGridRowList()));
+		operation.setId(String.valueOf(transformOperation.getOperationId()));
 		operation.setClazz(transformOperation.getOpClassProperty().getOperationClassPath());
 		return operation;
 	}
@@ -109,12 +109,14 @@ public class ConverterHelper{
 			for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGrid) {
 				 TypeBaseField typeBaseField = new TypeBaseField();
 				 typeBaseField.setName(fixedWidthGridRow.getFieldName());
-				 //typeBaseField.setDescription(fixedWidthGridRow.get);
 				 typeBaseField.setFormat(fixedWidthGridRow.getDateFormat());
-				 //typeBaseField.setPrecision(fixedWidthGridRow.get);
-				 typeBaseField.setScale(Integer.valueOf(fixedWidthGridRow.getScale()));
+				 if(StringUtils.isNotEmpty(fixedWidthGridRow.getScale())){
+					 typeBaseField.setScale(Integer.valueOf(fixedWidthGridRow.getScale()));
+				 }
 				 typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
-				 typeBaseField.setType(FieldDataTypes.valueOf(fixedWidthGridRow.getDataTypeValue()));
+				 if(StringUtils.isNotEmpty(fixedWidthGridRow.getDataTypeValue())){
+					 typeBaseField.setType(FieldDataTypes.fromValue(fixedWidthGridRow.getDataTypeValue()));
+				 }
 				 outputFields.getField().add(typeBaseField);
 			}
 		}
@@ -122,17 +124,16 @@ public class ConverterHelper{
 	}
 
 	public List<TypeOperationsOutSocket> getOutSocket(TransformPropertyGrid transformPropertyGrid) {
-		logger.debug("Generating TypeOperationsOutSocket data for : {}", properties.get(Constants.NAME));
-		if(component.getSourceConnections() == null || component.getSourceConnections().isEmpty()){
-			return null;
-		}
+		logger.debug("Generating TypeOperationsOutSocket data for : {}", properties.get(Constants.PARAM_NAME));
 		List<TypeOperationsOutSocket> outSocketList = new ArrayList<TypeOperationsOutSocket>();
-		for (Link link : component.getSourceConnections()) {
-			TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();
-			setOutSocketProperties(outSocket, transformPropertyGrid, link);
-			
-			outSocket.getOtherAttributes();
-			outSocketList.add(outSocket);
+		if(component.getSourceConnections() != null && !component.getSourceConnections().isEmpty()){
+			for (Link link : component.getSourceConnections()) {
+				TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();
+				setOutSocketProperties(outSocket, transformPropertyGrid, link);
+				
+				outSocket.getOtherAttributes();
+				outSocketList.add(outSocket);
+			}
 		}
 		return outSocketList;
 	}
@@ -151,11 +152,9 @@ public class ConverterHelper{
 	}
 
 	private List<TypeInputField> addPassThroughFields(TransformPropertyGrid transformPropertyGrid) {
-		if(transformPropertyGrid != null){
-			List<TypeInputField> typeOperationFieldsList = null; 
-			if(transformPropertyGrid.getOpSysProperties() != null &&
+		List<TypeInputField> typeOperationFieldsList = new ArrayList<>(); 
+		if(transformPropertyGrid != null && transformPropertyGrid.getOpSysProperties() != null &&
 					!transformPropertyGrid.getOpSysProperties().isEmpty()){
-				typeOperationFieldsList = new ArrayList<>();
 				for(OperationSystemProperties systemProperties : transformPropertyGrid.getOpSysProperties()){
 					if(systemProperties.isChecked()){
 						TypeInputField typeInputField = new TypeInputField(); 
@@ -164,18 +163,13 @@ public class ConverterHelper{
 						typeOperationFieldsList.add(typeInputField);
 					}
 				}
-			}
-			return typeOperationFieldsList;
 		}
-		else{
-			return new ArrayList<>();
-		}
+		return typeOperationFieldsList;
 	}
 
 	private List<TypeMapField> addMapFields(TransformPropertyGrid transformPropertyGrid) {
-		if(transformPropertyGrid != null){
-			List<TypeMapField> typeMapFieldList = new ArrayList<>();
-			if(transformPropertyGrid.getNameValueProps() != null &&
+		List<TypeMapField> typeMapFieldList = new ArrayList<>();
+		if(transformPropertyGrid != null && transformPropertyGrid.getNameValueProps() != null &&
 					!transformPropertyGrid.getNameValueProps().isEmpty()){
 				for(NameValueProperty nameValueProperty : transformPropertyGrid.getNameValueProps()){
 					TypeMapField mapField = new TypeMapField();
@@ -184,53 +178,44 @@ public class ConverterHelper{
 					mapField.setInSocketId(TransformConverter.DEFAULT_IN_SOCKET_ID);
 					typeMapFieldList.add(mapField);
 				}
-			}
-			return typeMapFieldList;
 		}
-		else{
-			return new ArrayList<>();
-		}
+		return typeMapFieldList;
 	}
 
 	private List<TypeOperationField> addOperationFields(TransformPropertyGrid transformPropertyGrid) {
+		List<TypeOperationField> typeOperationFieldList = new ArrayList<>();
 		if(transformPropertyGrid != null){
 			List<TransformOperation> operations = transformPropertyGrid.getOperation();
-			List<TypeOperationField> typeOperationFieldList = null;
 			if(operations != null && !operations.isEmpty()){
-				typeOperationFieldList = new ArrayList<>();
 				for(TransformOperation operation : operations){
 					List<FixedWidthGridRow> outputFields = operation.getSchemaGridRowList();
 					if(outputFields != null && !outputFields.isEmpty()){
 						for (FixedWidthGridRow fixedWidthGridRow : outputFields) {
 							TypeOperationField typeOperationField = new TypeOperationField();
 							typeOperationField.setName(fixedWidthGridRow.getFieldName());
-							typeOperationField.setOperationId("");
+							typeOperationField.setOperationId(String.valueOf(operation.getOperationId()));
 							typeOperationFieldList.add(typeOperationField);
 						}
 					}
 				}
 			}
-			return typeOperationFieldList;
 		}
-		else{
-			return new ArrayList<>();
-		}
+		return typeOperationFieldList;
 	}
 	
 	public List<TypeBaseInSocket> getInSocket() {
-		logger.debug("Generating TypeBaseInSocket data for :{}", component.getProperties().get(Constants.NAME));
-		if(component.getTargetConnections() == null || component.getTargetConnections().isEmpty()){
-			return null;
-		}
+		logger.debug("Generating TypeBaseInSocket data for :{}", component.getProperties().get(Constants.PARAM_NAME));
 		List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
-		for (Link link : component.getTargetConnections()) {
-			TypeBaseInSocket inSocket = new TypeBaseInSocket();
-			inSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.NAME));
-			inSocket.setFromSocketId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());
-			inSocket.setId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
-			inSocket.setType(PortTypeConstant.getPortType(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort()));
-			inSocket.getOtherAttributes();
-			inSocketsList.add(inSocket);
+		if(component.getTargetConnections() != null || !component.getTargetConnections().isEmpty()){
+			for (Link link : component.getTargetConnections()) {
+				TypeBaseInSocket inSocket = new TypeBaseInSocket();
+				inSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
+				inSocket.setFromSocketId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());
+				inSocket.setId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
+				inSocket.setType(PortTypeConstant.getPortType(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort()));
+				inSocket.getOtherAttributes();
+				inSocketsList.add(inSocket);
+			}
 		}
 		return inSocketsList;
 	}

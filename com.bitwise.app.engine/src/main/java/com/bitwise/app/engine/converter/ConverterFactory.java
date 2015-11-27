@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.exceptions.ConverterNotFoundException;
 import com.bitwise.app.engine.exceptions.EngineException;
@@ -22,12 +23,12 @@ public class ConverterFactory {
 
 	public Converter getConverter(Component component) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, EngineException {
 		try{
-		logger.debug("Getting converter for :{}", component.getProperties().get(Converter.NAME));
+		logger.debug("Getting converter for :{}", component.getProperties().get(Constants.PARAM_NAME));
 			return (Converter) Class.forName(component.getConverter()).getDeclaredConstructor(Component.class).newInstance(component);
 		}
 		catch (ClassNotFoundException exception) {
 			logger.error("Exception Occured getting Converter for {}, {}:", 
-					new Object[]{component.getProperties().get(Converter.NAME),exception});
+					new Object[]{component.getProperties().get(Constants.PARAM_NAME),exception});
 			throw new ConverterNotFoundException(component.getPrefix(), exception);
 		}
 	}

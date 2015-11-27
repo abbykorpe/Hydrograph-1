@@ -8,6 +8,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
@@ -40,7 +41,7 @@ public class FilterConverter extends TransformConverter {
 
 	@Override
 	public void prepareForXML() throws PhaseException, SchemaException {
-		LOGGER.debug("Genrating XML for :{}", properties.get(NAME));
+		LOGGER.debug("Genrating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		Filter filter=(Filter)baseComponent;
 		filter.getOperation().addAll(getOperations());
@@ -50,7 +51,7 @@ public class FilterConverter extends TransformConverter {
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
 		LOGGER.debug("Genrating TypeStraightPullOutSocket data for : {}",
-				properties.get(NAME));
+				properties.get(Constants.PARAM_NAME));
 		List<TypeOperationsOutSocket> outSockectList = new ArrayList<TypeOperationsOutSocket>();
 		String temp,temp2;
 		int outSocketCounter=1;
@@ -73,7 +74,7 @@ public class FilterConverter extends TransformConverter {
 
 	@Override
 	protected List<TypeTransformOperation> getOperations() {
-		LOGGER.debug("Genrating TypeTransformOperation data :{}", properties.get(NAME));
+		LOGGER.debug("Genrating TypeTransformOperation data :{}", properties.get(Constants.PARAM_NAME));
 		List<TypeTransformOperation> operationList = new ArrayList<>();
 		TypeTransformOperation operation = new TypeTransformOperation();
 		TypeOperationInputFields operationInputFields=new TypeOperationInputFields();
@@ -87,7 +88,7 @@ public class FilterConverter extends TransformConverter {
 	}
 
 	private List<TypeInputField> getOperationField() {
-		LOGGER.debug("Genrating TypeInputField data :{}", properties.get(NAME));
+		LOGGER.debug("Genrating TypeInputField data :{}", properties.get(Constants.PARAM_NAME));
 		List<TypeInputField> operationFiledList=new ArrayList<>();
 		Set<String> componentOperationFileds = (HashSet<String>) component.getProperties().get(PropertyNameConstants.OPERATION_FILEDS.value());
 		if(componentOperationFileds!=null){
@@ -104,12 +105,12 @@ public class FilterConverter extends TransformConverter {
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
 			LOGGER.debug("Genrating TypeBaseInSocket data for :{}", component
-					.getProperties().get(NAME));
+					.getProperties().get(Constants.PARAM_NAME));
 			List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
 			for (Link link : component.getTargetConnections()) {
 				TypeBaseInSocket inSocket = new TypeBaseInSocket();
 				inSocket.setFromComponentId((String) link.getSource()
-						.getProperties().get(NAME));
+						.getProperties().get(Constants.PARAM_NAME));
 				inSocket.setFromSocketId(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort())+link.getLinkNumber());
 				inSocket.setId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
 				inSocket.setType(PortTypeConstant.getPortType(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort()));

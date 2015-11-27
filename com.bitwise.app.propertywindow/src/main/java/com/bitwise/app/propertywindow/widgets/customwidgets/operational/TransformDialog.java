@@ -294,8 +294,11 @@ public class TransformDialog extends Dialog {
 		outerKeyValueTabViewer = createTableViewer(nameValueComposite, NAME_VALUE_COLUMN, new TransformGridContentProvider(),new PropertyLabelProvider());
 		outerKeyValueTabViewer.setCellModifier(new PropertyGridCellModifier(outerKeyValueTabViewer));
 		outerKeyValueTabViewer.setInput(opOuterClassProperty); 
+		
+		outerKeyValueTabViewer.getTable().setBounds(72, 10, 397, 132);
 		DragDropUtility.INSTANCE.applyDrop(outerKeyValueTabViewer,new DragDropTransformOpImp(opOuterClassProperty, false,outerKeyValueTabViewer));
 		ELTDefaultSubgroupComposite defaultnameValueComposite = new ELTDefaultSubgroupComposite(nameValueComposite);
+	
 		defaultnameValueComposite.createContainerWidget();
 
 		ELTTable eltPropOuterTable = new ELTTable(outerKeyValueTabViewer);
@@ -389,7 +392,7 @@ public class TransformDialog extends Dialog {
 		expandItemContainerComposite.setLayout(new RowLayout(SWT.VERTICAL));
 		
 		Composite OpInputFieldComposite = new Composite(expandItemContainerComposite,SWT.NONE);
-		OpInputFieldComposite.setLayoutData(new RowData(170, 142));
+		OpInputFieldComposite.setLayoutData(new RowData(170, 500));
 		OpInputFieldComposite.setSize(new Point(200, 0));
 		OpInputFieldComposite.setVisible(true);
 
@@ -417,7 +420,7 @@ public class TransformDialog extends Dialog {
 		ELTTable eltOpInTable = new ELTTable(innerOpInputTabViewer);
 		 
 		eltSuDefaultSubgroupComposite2.attachWidget(eltOpInTable);
-		innerOpInputTabViewer.getTable().setBounds(1, 20, 160, 475);
+		innerOpInputTabViewer.getTable().setBounds(1, 20, 160, 200);
 		setDecorator();
 		editors[0].setValidator(new ELTCellEditorTransformValidator((Table)eltOpInTable.getSWTWidgetControl(), transformOperation.getInputFields(), fieldNameDecorator,propertyDialogButtonBar));
 
@@ -708,6 +711,4 @@ public class TransformDialog extends Dialog {
 			public String getTootlTipErrorMessage() {
 				return tootlTipErrorMessage.getErrorMessage();
 			}
-
-		    
 }

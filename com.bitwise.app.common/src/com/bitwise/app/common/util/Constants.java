@@ -6,7 +6,6 @@ package com.bitwise.app.common.util;
  * @author Bitwise
  */
 public class Constants {
-	public static final String NAME = "name";
 	public static final String DELIMITER = "Delimiter";
 	public static final String CHARACTER_SET = "Character Set";
 	public static final String PHASE = "Phase";
@@ -14,6 +13,12 @@ public class Constants {
 	public static final String HAS_HEADER = "Has Header";
 	public static final String SAFE_PROPERTY = "Safe Property ";	
 	public static final String INPUT_COUNT = "Input Count";
+	
+	public static final String PARAM_OPERATION = "operation";
+	public static final String PARAM_NAME = "name";
+	public static final String PARAM_PHASE = "phase";
+	public static final String PARAM_DEPENDS_ON = "dependsOn";
+	public static final String PARAM_PROPERTY_NAME = "propertyName";
 
 	public static final String PARAMETER = "Parameter";
 	public static final String UTF_16 = "UTF-16";

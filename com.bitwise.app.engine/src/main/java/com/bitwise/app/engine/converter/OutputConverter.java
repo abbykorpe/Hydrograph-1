@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.converter.impl.OutputFileDelimitedConverter;
 import com.bitwise.app.engine.exceptions.SchemaException;
@@ -33,7 +34,7 @@ public abstract class OutputConverter extends Converter {
 	 * @throws SchemaException
 	 */
 	protected TypeBaseRecord getSchema(){
-		LOGGER.debug("Genrating TypeBaseRecord data for {}", properties.get(NAME));
+		LOGGER.debug("Genrating TypeBaseRecord data for {}", properties.get(Constants.PARAM_NAME));
 		TypeBaseRecord typeBaseRecord = new TypeBaseRecord();
 		typeBaseRecord.setName("");
 		typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().addAll(getFieldOrRecord());		
