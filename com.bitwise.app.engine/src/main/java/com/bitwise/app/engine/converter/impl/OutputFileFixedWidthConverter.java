@@ -7,6 +7,7 @@ import javax.xml.namespace.QName;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
@@ -59,7 +60,7 @@ public class OutputFileFixedWidthConverter extends OutputConverter {
 			outInSocket.setType(PortTypeConstant.getPortType(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort()));
 			outInSocket.setSchema(getSchema());
 			outInSocket.getOtherAttributes();
-			outInSocket.setFromComponentId((String) link.getSource().getProperties().get(NAME));
+			outInSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
 			outputinSockets.add(outInSocket);
 		}
 		return outputinSockets;
@@ -68,7 +69,7 @@ public class OutputFileFixedWidthConverter extends OutputConverter {
 	@Override
 	protected List<TypeBaseField> getFieldOrRecord() {
 		{
-			LOGGER.debug("Genrating data for {} for property {}", new Object[]{properties.get(NAME),PropertyNameConstants.SCHEMA.value()});
+			LOGGER.debug("Genrating data for {} for property {}", new Object[]{properties.get(Constants.PARAM_NAME),PropertyNameConstants.SCHEMA.value()});
 			List<FixedWidthGridRow> schemaList = (List) properties.get(PropertyNameConstants.SCHEMA.value());
 			List<TypeBaseField> typeBaseFields = new ArrayList<>();
 			if(schemaList!=null){
@@ -93,7 +94,7 @@ public class OutputFileFixedWidthConverter extends OutputConverter {
 					}
 				}
 				catch (Exception exception) {
-					LOGGER.warn("Exception while creating schema for component : {}{}", new Object[]{properties.get(NAME),exception});
+					LOGGER.warn("Exception while creating schema for component : {}{}", new Object[]{properties.get(Constants.PARAM_NAME),exception});
 					
 				}
 			}

@@ -27,7 +27,7 @@ import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.operationstypes.Aggregate;
 
 public class AggregateConverter extends TransformConverter {
-	Logger logger = LogFactory.INSTANCE.getLogger(AggregateConverter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(AggregateConverter.class);
 	TransformPropertyGrid transformPropertyGrid;
 	ConverterHelper converterHelper;
 	
@@ -36,13 +36,13 @@ public class AggregateConverter extends TransformConverter {
 		this.baseComponent = new Aggregate();
 		this.component = component;
 		this.properties = component.getProperties();
-		transformPropertyGrid = (TransformPropertyGrid) properties.get("operation");
+		transformPropertyGrid = (TransformPropertyGrid) properties.get(Constants.PARAM_OPERATION);
 		converterHelper = new ConverterHelper(component); 
 	}
 	
 	@Override
 	public void prepareForXML() throws PhaseException, SchemaException {
-		logger.debug("Generating XML for :{}", properties.get(NAME));
+		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		
 		Aggregate aggregate = (Aggregate) baseComponent;

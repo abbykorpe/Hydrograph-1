@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.converter.StraightPullConverter;
@@ -31,14 +32,14 @@ public class UnionAllConverter extends StraightPullConverter {
 
 	@Override
 	public void prepareForXML() {
-		LOGGER.debug("Genrating XML for : {}", properties.get(NAME));
+		LOGGER.debug("Genrating XML for : {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 	}
 
 	@Override
 	protected List<TypeStraightPullOutSocket> getOutSocket() {
 		LOGGER.debug("Genrating TypeStraightPullOutSocket data for : {}",
-				properties.get(NAME));
+				properties.get(Constants.PARAM_NAME));
 		List<TypeStraightPullOutSocket> outSockectList = new ArrayList<TypeStraightPullOutSocket>();
 		for (Link link : component.getSourceConnections()) {
 			TypeStraightPullOutSocket outSocket = new TypeStraightPullOutSocket();
@@ -57,12 +58,12 @@ public class UnionAllConverter extends StraightPullConverter {
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
 		LOGGER.debug("Genrating TypeBaseInSocket data for :{}", component
-				.getProperties().get(NAME));
+				.getProperties().get(Constants.PARAM_NAME));
 		List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
 		int inSocketCounter = 0;
 		for (Link link : component.getTargetConnections()) {
 			TypeBaseInSocket inSocket = new TypeBaseInSocket();
-			inSocket.setFromComponentId((String) link.getSource().getProperties().get(NAME));
+			inSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
 			inSocket.setFromSocketId(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort())+link.getLinkNumber());
 			inSocket.setId(PortTypeConstant.getPortType(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort())+ inSocketCounter);
 			inSocket.setType(PortTypeConstant.getPortType(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort()));

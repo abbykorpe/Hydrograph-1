@@ -133,7 +133,7 @@ public class ComponentCreateCommand extends Command {
 	private Map<String, Object> prepareComponentProperties(String componentName) {
 		boolean componentHasRequiredValues = Boolean.TRUE;
 		Map<String, Object> properties = ComponentCacheUtil.INSTANCE.getProperties(componentName);
-		properties.put(Constants.NAME, componentName);
+		properties.put(Constants.PARAM_NAME, componentName);
 		
 		com.bitwise.app.common.component.config.Component component = XMLConfigUtil.INSTANCE.getComponent(componentName);
 		for (Property configProperty : component.getProperty()) {

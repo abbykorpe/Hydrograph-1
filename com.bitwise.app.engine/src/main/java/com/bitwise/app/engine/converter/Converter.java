@@ -8,6 +8,7 @@ import java.util.TreeMap;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.exceptions.PhaseException;
@@ -34,10 +35,6 @@ public abstract class Converter {
 			.getLogger(Converter.class);
 
 	protected static final String ID = "$id";
-	protected static final String PROPERTY_NAME = "propertyName";
-	protected static final String DEPENDS_ON = "dependsOn";
-	protected static final String PHASE = "phase";
-	protected static final String NAME = "name";
 	protected Map<String, Object> properties = new LinkedHashMap<String, Object>();
 	protected Component component = null;
 	protected TypeBaseComponent baseComponent = null;
@@ -50,12 +47,12 @@ public abstract class Converter {
 	 * @throws SchemaException
 	 */
 	public void prepareForXML() {
-		componentName = (String) properties.get(NAME);
+		componentName = (String) properties.get(Constants.PARAM_NAME);
 		baseComponent.setId(componentName);
 
 		try {
 			baseComponent.setPhase(new BigInteger((String) properties
-					.get(PHASE)));
+					.get(Constants.PARAM_PHASE)));
 		} catch (NullPointerException | NumberFormatException nfe) {
 			LOGGER.warn("Phase id Empty or Invalid for : {}",
 					baseComponent.getId());
@@ -81,7 +78,7 @@ public abstract class Converter {
 				ComponentXpath.INSTANCE
 						.getXpathMap()
 						.put((ComponentXpathConstants.COMPONENT_XPATH_BOOLEAN.value().replace(
-								ID, componentName)).replace(PROPERTY_NAME,
+								ID, componentName)).replace(Constants.PARAM_PROPERTY_NAME,
 								propertyName),
 								properties.get(propertyName).toString());
 				return booleanValue;
@@ -98,7 +95,7 @@ public abstract class Converter {
 	 * @return {@link StandardCharsets}
 	 */
 	protected StandardCharsets getCharset() {
-		LOGGER.debug("Getting StandardCharsets for {}", properties.get(NAME));
+		LOGGER.debug("Getting StandardCharsets for {}", properties.get(Constants.PARAM_NAME));
 		String charset = (String) properties.get(PropertyNameConstants.CHAR_SET
 				.value());
 		StandardCharsets targetCharset = null;
@@ -121,10 +118,10 @@ public abstract class Converter {
 	 * @return {@link TypeDependsOn}
 	 */
 	protected TypeDependsOn getDependsOn() {
-		LOGGER.debug("Getting DependsOn for {}", properties.get(NAME));
-		if (properties.get(DEPENDS_ON) != null) {
+		LOGGER.debug("Getting DependsOn for {}", properties.get(Constants.PARAM_NAME));
+		if (properties.get(Constants.PARAM_DEPENDS_ON) != null) {
 			TypeDependsOn dependsOn = new TypeDependsOn();
-			dependsOn.setComponentId((String) properties.get(DEPENDS_ON));
+			dependsOn.setComponentId((String) properties.get(Constants.PARAM_DEPENDS_ON));
 			return dependsOn;
 		}
 		return null;

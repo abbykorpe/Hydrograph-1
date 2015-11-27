@@ -8,6 +8,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.PortTypeConstant;
@@ -37,7 +38,7 @@ public class JoinConverter extends TransformConverter{
 	
 	@Override
 	public void prepareForXML() throws PhaseException, SchemaException {
-		LOGGER.debug("Genrating XML for :{}", properties.get(NAME));
+		LOGGER.debug("Genrating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 	}
 
@@ -77,7 +78,7 @@ public class JoinConverter extends TransformConverter{
 	}
 	
 	private List<TypeInputField> getOperationField() {
-		LOGGER.debug("Genrating TypeInputField data :{}", properties.get(NAME));
+		LOGGER.debug("Genrating TypeInputField data :{}", properties.get(Constants.PARAM_NAME));
 		List<TypeInputField> operationFiledList=new ArrayList<>();
 		Set<String> componentOperationFileds = (HashSet<String>) component.getProperties().get(PropertyNameConstants.OPERATION_FILEDS.value());
 		if(componentOperationFileds!=null){
@@ -94,12 +95,12 @@ public class JoinConverter extends TransformConverter{
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
 		LOGGER.debug("Genrating TypeBaseInSocket data for :{}", component
-				.getProperties().get(NAME));
+				.getProperties().get(Constants.PARAM_NAME));
 		List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {
 			TypeBaseInSocket inSocket = new TypeBaseInSocket();
 			inSocket.setFromComponentId((String) link.getSource()
-					.getProperties().get(NAME));
+					.getProperties().get(Constants.PARAM_NAME));
 			inSocket.setFromSocketId(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort())+link.getLinkNumber());
 			inSocket.setId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
 			inSocket.setType(PortTypeConstant.getPortType(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort()));
