@@ -382,7 +382,7 @@
             </command>
             <command
                   commandId="com.bitwise.window.portLabels.showHide"
-                  label="Show/Hide port labels"
+                  label="Show/Hide Port Labels"
                   style="toggle">
               
             </command>
