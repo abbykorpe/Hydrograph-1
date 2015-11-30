@@ -83,7 +83,7 @@ public class InputFileDelimitedConverter extends InputConverter {
 					typeBaseField.setFormat(object.getDateFormat());
 					if(!object.getScale().trim().isEmpty())
 						typeBaseField.setScale(Integer.parseInt(object.getScale()));
-					typeBaseField.setScaleType(ScaleTypeList.IMPLICIT );
+					typeBaseField.setScaleType(ScaleTypeList.EXPLICIT );
 					for(FieldDataTypes fieldDataType:FieldDataTypes.values()){
 						if(fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
 							typeBaseField.setType(fieldDataType);
