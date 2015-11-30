@@ -2,6 +2,9 @@ package com.bitwise.app.engine.ui.converter;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 
@@ -50,7 +53,7 @@ public abstract class UIConverter {
 		{
 			return "True";
 		}
-		else{  stringValue=getValue(propertyName,String.valueOf(value.isValue()));
+		else{  stringValue=getValue(propertyName);
 			if(stringValue!=null);
 			{
 				return (String)stringValue;
@@ -60,8 +63,8 @@ public abstract class UIConverter {
 		
 	}
 	
-	protected Object getValue(String propertyName,String value) {
-		if(value!=null){
+	protected Object getValue(String propertyName) {
+	
 		List<ParameterData> parameterList=UIComponentRepo.INSTANCE.getParammeterFactory().get(COMPONENT_NAME);
 		if(parameterList!=null)
 		{
@@ -73,9 +76,22 @@ public abstract class UIConverter {
 				}
 			}
 		}
-		}
+		
 		return null;	
 	}
+	
+	protected boolean isParameter(String parameter) {
+		String Regex="[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}";
+		Matcher matchs = Pattern.compile(Regex).matcher(parameter);
+		if(matchs.matches())
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	protected abstract TreeMap getRuntimeProperties();
+	
 	
 
 }

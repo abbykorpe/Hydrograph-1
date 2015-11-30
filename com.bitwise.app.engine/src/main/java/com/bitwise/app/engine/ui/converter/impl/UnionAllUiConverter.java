@@ -1,13 +1,11 @@
 package com.bitwise.app.engine.ui.converter.impl;
 
 import java.util.LinkedHashMap;
-import java.util.TreeMap;
 
-import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsPort;
 import com.bitwise.app.engine.ui.converter.LinkingData;
-import com.bitwise.app.engine.ui.converter.StraightfullUiConverter;
+import com.bitwise.app.engine.ui.converter.StraightfullUIConverter;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.components.UnionallComponent;
@@ -16,7 +14,7 @@ import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeStraightPullComponent;
 import com.bitwiseglobal.graph.straightpulltypes.UnionAll;
 
-public class UnionAllUiConverter extends StraightfullUiConverter {
+public class UnionAllUiConverter extends StraightfullUIConverter {
 
 	private UnionAll unionAll;
 	private static final String COMPONENT_NAME_SUFFIX = "UnionAll";
@@ -35,8 +33,7 @@ public class UnionAllUiConverter extends StraightfullUiConverter {
 		super.prepareUIXML();
 
 		unionAll = (UnionAll) typeBaseComponent;
-		propertyMap.put(PropertyNameConstants.RUNTIME_PROPERTIES.value(),
-				new TreeMap<>());
+	
 		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(),
 				UIComponentsConstants.VALID.value());
 		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY
@@ -68,5 +65,6 @@ public class UnionAllUiConverter extends StraightfullUiConverter {
 			}
 		}
 	}
+
 
 }

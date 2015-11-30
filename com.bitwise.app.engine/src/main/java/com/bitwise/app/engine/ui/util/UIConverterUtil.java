@@ -116,10 +116,10 @@ public class UIConverterUtil {
 	}
 	
 	public void createLink() {
-
+		preProcessLinkData();
 		Processor pc=new Processor();
 		pc.processLinks();
-				preProcessLinkData();
+				
 		for(LinkingData linkingData:UIComponentRepo.INSTANCE.getComponentLinkList())
 		{
 			Component sourceComponent=UIComponentRepo.INSTANCE.getComponentUiFactory().get(linkingData.getSourceComponentId());
@@ -131,7 +131,7 @@ public class UIConverterUtil {
 				link.setTarget(targetComponent);
 				sourceComponent.connectOutput(link);
 				targetComponent.connectInput(link);
-//				System.out.println(linkingData);
+				System.out.println(linkingData);
 		}
 		
 	}

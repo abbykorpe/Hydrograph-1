@@ -1,14 +1,20 @@
 package com.bitwise.app.engine.ui.converter;
 
+import java.util.List;
+import java.util.TreeMap;
+
 import org.eclipse.draw2d.geometry.Dimension;
 
+import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsPort;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
+import com.bitwiseglobal.graph.commontypes.TypeProperties;
+import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
 import com.bitwiseglobal.graph.commontypes.TypeStraightPullComponent;
 import com.bitwiseglobal.graph.commontypes.TypeStraightPullOutSocket;
 
-public class StraightfullUiConverter extends UIConverter {
+public abstract class StraightfullUIConverter extends UIConverter {
 
 	@Override
 	public void prepareUIXML() {
@@ -16,6 +22,7 @@ public class StraightfullUiConverter extends UIConverter {
 		super.prepareUIXML();
 		getInPort((TypeStraightPullComponent) typeBaseComponent);
 		getOutPort((TypeStraightPullComponent) typeBaseComponent);
+		propertyMap.put(PropertyNameConstants.RUNTIME_PROPERTIES.value(),getRuntimeProperties());
 	}
 
 	protected void getInPort(TypeStraightPullComponent straightPullComponent) {
@@ -48,5 +55,19 @@ public class StraightfullUiConverter extends UIConverter {
 				portCounter++;
 			}
 		}
+	}
+	
+	@Override
+	protected TreeMap<String,String> getRuntimeProperties()
+	{
+		TreeMap<String,String> runtimeMap=null;
+		List<TypeProperties> typeProperties = ((TypeStraightPullComponent)typeBaseComponent).getRuntimeProperties();
+		if(typeProperties!=null && typeProperties.size()!=0){
+			runtimeMap=new TreeMap<>();
+					for(Property runtimeProperty:typeProperties.get(0).getProperty()){
+						runtimeMap.put(runtimeProperty.getName(), runtimeProperty.getValue());
+					}
+		}
+		return runtimeMap;
 	}
 }

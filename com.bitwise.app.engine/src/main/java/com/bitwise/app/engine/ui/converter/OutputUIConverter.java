@@ -1,17 +1,19 @@
 package com.bitwise.app.engine.ui.converter;
 
+import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsPort;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeOutputComponent;
 
-public class OutputUIConverter extends UIConverter {
+public abstract class OutputUIConverter extends UIConverter {
 
 	@Override
 	public void prepareUIXML() {
 
 		super.prepareUIXML();
 		getInPort((TypeOutputComponent) typeBaseComponent);
+		propertyMap.put(PropertyNameConstants.RUNTIME_PROPERTIES.value(),getRuntimeProperties());
 	}
 
 	protected void getInPort(TypeOutputComponent typeOutputComponent) {
@@ -47,4 +49,7 @@ public class OutputUIConverter extends UIConverter {
 			}
 		}
 	}
+
+	
+	protected abstract Object getSchema() ;
 }

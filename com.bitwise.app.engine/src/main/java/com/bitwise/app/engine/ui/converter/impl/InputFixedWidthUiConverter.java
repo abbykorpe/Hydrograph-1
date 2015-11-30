@@ -1,6 +1,5 @@
 package com.bitwise.app.engine.ui.converter.impl;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.TreeMap;
@@ -11,6 +10,8 @@ import com.bitwise.app.engine.ui.converter.InputUIConverter;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.components.IFixedWidth;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
+import com.bitwiseglobal.graph.commontypes.TypeProperties;
+import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
 import com.bitwiseglobal.graph.inputtypes.TextFileFixedWidth;
 public class InputFixedWidthUiConverter extends InputUIConverter {
 	List<String> schemaLst;
@@ -31,11 +32,10 @@ public class InputFixedWidthUiConverter extends InputUIConverter {
 		TextFileFixedWidth fileFixedWidth=(TextFileFixedWidth)typeBaseComponent;
 		
 		propertyMap.put(PropertyNameConstants.PATH.value(), fileFixedWidth.getPath().getUri());
-		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), fileFixedWidth.getCharset().getValue().value());
-		
-		propertyMap.put(PropertyNameConstants.RUNTIME_PROPERTIES.value(),new TreeMap<>());
+		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
+		propertyMap.put(PropertyNameConstants.STRICT.value(), convertBooleanVlaue(fileFixedWidth.getStrict(),PropertyNameConstants.STRICT.value()));
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(), convertBooleanVlaue(fileFixedWidth.getSafe(),PropertyNameConstants.IS_SAFE.value()));
-		propertyMap.put(PropertyNameConstants.SCHEMA.value(),new ArrayList<>());
+		propertyMap.put(PropertyNameConstants.SCHEMA.value(),getSchema());
 		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(), UIComponentsConstants.VALID.value());
 		
 		uiComponent.setType(UIComponentsConstants.FILE_FIXEDWIDTH.value());
@@ -44,4 +44,36 @@ public class InputFixedWidthUiConverter extends InputUIConverter {
 		container.getComponentNames().add(fileFixedWidth.getId());
 		uiComponent.setProperties(propertyMap);
 	
-	}}
+	}
+
+	private Object getCharSet() {
+		TextFileFixedWidth fileFixedWidth=(TextFileFixedWidth)typeBaseComponent;
+		Object value=fileFixedWidth.getCharset().getValue();
+		if(value!=null)	{
+			return	fileFixedWidth.getCharset().getValue().value();
+		}else{
+			value = getValue(PropertyNameConstants.CHAR_SET.value());			
+		}
+		return value;
+	}
+
+	@Override
+	protected Object getSchema() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected TreeMap getRuntimeProperties()
+	{
+		TreeMap<String,String> runtimeMap=null;
+		TypeProperties typeProperties = ((TextFileFixedWidth)typeBaseComponent).getRuntimeProperties();
+		if(typeProperties!=null){
+			runtimeMap=new TreeMap<>();
+					for(Property runtimeProperty:typeProperties.getProperty()){
+						runtimeMap.put(runtimeProperty.getName(), runtimeProperty.getValue());
+					}
+		}
+		return runtimeMap;
+	}
+}

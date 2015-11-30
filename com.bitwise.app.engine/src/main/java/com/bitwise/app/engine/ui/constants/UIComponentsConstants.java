@@ -11,7 +11,12 @@ public enum UIComponentsConstants {
 	STRAIGHTPULL_CATEGORY("STRAIGHTPULL"),
 	CLONE("Clone"), 
 	UNION_ALL("Union All"), 
-	REMOVE_DUPS("Remove Dups");
+	REMOVE_DUPS("Remove Dups"),
+	TRANSFORM_CATEGORY("TRANSFORM"),
+	AGGREGATE("Aggregate"),
+	TRANSFORM("Transform"),
+	JOIN("Join"),
+	FILTER("Filter");
 	
 	private final String value;
 

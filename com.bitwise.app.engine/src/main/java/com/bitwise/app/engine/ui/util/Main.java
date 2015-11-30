@@ -8,7 +8,7 @@ import com.bitwise.app.engine.exceptions.EngineException;
 public class Main {
 	
 	public static void main(String[] args) {
-		File InPutFile= new File("C:\\WorkSpace\\runtime-com.bitwise.app.perspective.product\\UI_VS_TARGET\\Job_1.xml");
+		File InPutFile= new File("C:\\WorkSpace\\runtime-com.bitwise.app.perspective.product\\UI_VS_TARGET\\test.xml");
 		UIConverterUtil uiConverterUtil=new UIConverterUtil(); 
 		
 		try {
@@ -17,7 +17,7 @@ public class Main {
 		} catch (InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | EngineException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
