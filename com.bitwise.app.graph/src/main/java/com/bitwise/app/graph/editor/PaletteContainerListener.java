@@ -10,6 +10,7 @@ import org.eclipse.gef.requests.SimpleFactory;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseTrackListener;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.LogFactory;
@@ -27,7 +28,7 @@ import com.bitwise.app.graph.model.Container;
  * 
  * @see PaletteContainerEvent
  */
-public class PaletteContainerListener implements MouseListener {
+public class PaletteContainerListener implements MouseListener, MouseTrackListener {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(PaletteContainerListener.class);
 	private final PaletteViewer viewer;
@@ -48,8 +49,12 @@ public class PaletteContainerListener implements MouseListener {
 		this.viewer = viewer;
 	}
 
+	
+	
+	
 	@Override
 	public void mouseUp(MouseEvent e) {
+		System.out.println("+++ This is mouse click");
 	}
 
 	@Override
@@ -113,5 +118,47 @@ public class PaletteContainerListener implements MouseListener {
 						.getSize()));
 
 		graphViewer.getEditDomain().getCommandStack().execute(createComponent);
+	}
+
+
+
+
+	@Override
+	public void mouseEnter(MouseEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println("+++ This is mouse Enter");
+	}
+
+
+
+
+	@Override
+	public void mouseExit(MouseEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println("+++ This is mouse Exit");
+	}
+
+
+
+
+	@Override
+	public void mouseHover(MouseEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println("+++ This is mouse Hover");
+		EditPart paletteInternalController = viewer.findObjectAt(new Point(
+				e.x, e.y));
+
+		CombinedTemplateCreationEntry addedPaletteTool = (CombinedTemplateCreationEntry) paletteInternalController
+				.getModel();
+
+		CreateRequest componentRequest = new CreateRequest();
+		componentRequest.setFactory(new SimpleFactory((Class) addedPaletteTool
+				.getTemplate()));
+
+		genericComponent = (Component) componentRequest
+				.getNewObject();
+
+		//setComponentRequestParams(componentRequest);
+		System.out.println("This is mouse hover on " + genericComponent.getComponentLabel());
 	}
 }

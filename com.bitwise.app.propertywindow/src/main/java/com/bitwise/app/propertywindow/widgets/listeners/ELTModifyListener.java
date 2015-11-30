@@ -48,6 +48,7 @@ public class ELTModifyListener implements IELTListener{
 					if(StringUtils.isBlank(string)){
 						//txtDecorator.setDescriptionText(Messages.EMPTYFIELDMESSAGE);
 						txtDecorator.show();
+						((Text) widgetList[0]).setToolTipText(txtDecorator.getDescriptionText());
 						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
 						setValidationStatus(false);
 					}else{

@@ -15,7 +15,7 @@ import com.bitwise.app.common.datastructure.property.TransformOperation;
 import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
-import com.bitwise.app.engine.converter.PortTypeConstant;
+import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;

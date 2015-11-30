@@ -45,18 +45,32 @@ public class Processor {
 		Component uiComponent;
 		int x=0;
 		int y=0;
+		int counter=1;
+		System.out.println("Genrating Coordinates");
 		for(Entry<String, List<String>> entry :mapData.entrySet() )
-		{
+		{ 	if(counter==1)
+			{
+			
+			}
 			for(String componentId:mapData.get(entry.getKey()))
 			{
 				uiComponent=UIComponentRepo.INSTANCE.componentUiFactory.get(componentId);
 				Point newLocation=new Point();
-				//uiComponent.setLocation();
+				newLocation.x=x;
+				newLocation.y=y;
+				uiComponent.setLocation(newLocation);
+				System.out.println(componentId+"["+x+"]"+"["+y+"]");
+				y=y+40;
+				
 			}
-		
+			
+			x=x+40;
+			
 		}
 	}
 
+
+	
 	private void intializeMap() {
 		ArrayList<String> tempLst = new ArrayList<>();
 		mapData.put(NODE, tempLst);

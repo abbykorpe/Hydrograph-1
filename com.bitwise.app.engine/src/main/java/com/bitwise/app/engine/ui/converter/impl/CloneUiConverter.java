@@ -1,12 +1,10 @@
 package com.bitwise.app.engine.ui.converter.impl;
 
 import java.util.LinkedHashMap;
-import java.util.TreeMap;
 
-import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsPort;
-import com.bitwise.app.engine.ui.converter.StraightfullUiConverter;
+import com.bitwise.app.engine.ui.converter.StraightfullUIConverter;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.components.CloneComponent;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
@@ -14,7 +12,7 @@ import com.bitwiseglobal.graph.commontypes.TypeStraightPullComponent;
 import com.bitwiseglobal.graph.commontypes.TypeStraightPullOutSocket;
 import com.bitwiseglobal.graph.straightpulltypes.Clone;
 
-public class CloneUiConverter extends StraightfullUiConverter {
+public class CloneUiConverter extends StraightfullUIConverter {
 
 	private Clone clone;
 	private static final String COMPONENT_NAME_SUFFIX = "Clone";
@@ -33,9 +31,9 @@ public class CloneUiConverter extends StraightfullUiConverter {
 		super.prepareUIXML();
 
 		clone = (Clone) typeBaseComponent;
-		propertyMap.put(PropertyNameConstants.RUNTIME_PROPERTIES.value(),new TreeMap<>());
+	
 		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(),UIComponentsConstants.VALID.value());
-		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY	.value());
+//		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY	.value());
 	
 		
 		container.getComponentNextNameSuffixes().put(COMPONENT_NAME_SUFFIX, 0);
@@ -58,6 +56,8 @@ public class CloneUiConverter extends StraightfullUiConverter {
 		}
 		}
 	}
+
+	
 	
 	
 	

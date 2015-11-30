@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/transform_palette.png"
 		canvasIconPath="/icons/transform_canvas.png" name="Transform"
-		nameInPalette="Transform" defaultNamePrefix="Transform">
+		nameInPalette="Transform" defaultNamePrefix="Transform" description="This is Transform component. some more text">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification>

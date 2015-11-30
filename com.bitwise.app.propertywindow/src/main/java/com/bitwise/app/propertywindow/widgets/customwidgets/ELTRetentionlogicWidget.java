@@ -99,8 +99,17 @@ public class ELTRetentionlogicWidget extends AbstractWidget{
 			case "First":
 				((Button) First.getSWTWidgetControl()).setSelection(true);
 				break;
+			case "first":
+				((Button) First.getSWTWidgetControl()).setSelection(true);
+				break;
+			case "last":
+				((Button) Last.getSWTWidgetControl()).setSelection(true); 
+				break;
 			case "Last":
 				((Button) Last.getSWTWidgetControl()).setSelection(true); 
+				break;
+			case "uniqueonly":
+				((Button) Unique.getSWTWidgetControl()).setSelection(true);  
 				break;
 			case "Unique":
 				((Button) Unique.getSWTWidgetControl()).setSelection(true);  
