@@ -49,7 +49,7 @@ public class RunJobHandler extends AbstractHandler {
 		
 		ParameterGridDialog parameterGrid = new ParameterGridDialog(Display.getDefault().getActiveShell());
 		parameterGrid.open();
-		if(parameterGrid.canRunGraph()){
+		if(parameterGrid.canRunGraph() == false){
 			logger.debug("Not running graph");
 			return null;
 		}

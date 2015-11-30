@@ -164,10 +164,18 @@ public class ParameterGridDialog extends Dialog {
 		
 		addGridHeader();
 		
-		if(getComponentCanvas().getCurrentParameterFilePath() ==null)
-			parameterFile = getComponentCanvas().getParameterFile();
-		else
+		if(getComponentCanvas().getCurrentParameterFilePath() ==null){
+			if(getComponentCanvas().getParameterFile().startsWith("/")){
+				parameterFile = getComponentCanvas().getParameterFile().replaceFirst("/", "");	
+			}else{
+				parameterFile = getComponentCanvas().getParameterFile();
+			}
+			
+		}	
+		else{
 			parameterFile = getComponentCanvas().getCurrentParameterFilePath();
+		}
+			
 			
 		loadGridData();
 		
@@ -190,7 +198,9 @@ public class ParameterGridDialog extends Dialog {
 		if(parameterFile != null){
 			if(parameterFile.contains(":")){
 				if(parameterFile.startsWith("/"))
-				paramterFileTextBox.setText(parameterFile.replaceFirst("/", ""));
+					paramterFileTextBox.setText(parameterFile.replaceFirst("/", ""));
+				else
+					paramterFileTextBox.setText(parameterFile);
 			}
 			else
 			{
@@ -497,6 +507,7 @@ public class ParameterGridDialog extends Dialog {
 		}
 		if(error == false){
 			parameterFileManager.storeParameters(dataMap);
+			runGraph=true;
 			super.okPressed();
 		}else{
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK | SWT.CANCEL );
@@ -513,6 +524,15 @@ public class ParameterGridDialog extends Dialog {
 	            break;
 	        }
 		}		
+	}
+
+	
+	
+	@Override
+	protected void cancelPressed() {
+		// TODO Auto-generated method stub
+		runGraph = false;
+		super.cancelPressed();
 	}
 
 	public boolean canRunGraph(){
