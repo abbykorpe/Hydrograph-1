@@ -23,7 +23,7 @@
 		<attribute name="defaultNamePrefix" type="string" use="required"></attribute>
 		<attribute name="paletteIconPath" type="string" use="required"></attribute>
 		<attribute name="canvasIconPath" type="string" use="required"></attribute>
-
+		<attribute name="description" type="string" use="required"></attribute>
 	</complexType>
 
 

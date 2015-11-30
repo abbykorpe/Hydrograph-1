@@ -2,7 +2,7 @@
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/replicate_palette.png" canvasIconPath="/icons/replicate_canvas.png"
-		name="CloneComponent" nameInPalette="Clone" defaultNamePrefix="Clone">
+		name="CloneComponent" nameInPalette="Clone" defaultNamePrefix="Clone" description="This is CloneComponent component. some more text">
 		<tns:category>STRAIGHTPULL</tns:category>
 		<tns:port>
 			<tns:portSpecification>

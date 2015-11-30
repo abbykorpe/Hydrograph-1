@@ -294,6 +294,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						viewer));
 				viewer.getControl().addMouseListener(
 						new PaletteContainerListener(viewer, getGraphicalViewer()));
+				viewer.getControl().addMouseTrackListener(new PaletteContainerListener(viewer, getGraphicalViewer()));
 			}
 			@Override
 			public PaletteViewer createPaletteViewer(Composite parent) {
@@ -355,8 +356,22 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			Class<?> clazz = DynamicClassProcessor.INSTANCE
 					.createClass(componentConfig);
 
+			
+			
+			/*CombinedTemplateCreationEntry component = new CombinedTemplateCreationEntry(
+					componentConfig.getNameInPalette(), componentConfig.getDescription(), clazz,
+					new SimpleFactory(clazz),
+					ImageDescriptor
+					.createFromURL(prepareIconPathURL(componentConfig
+							.getPaletteIconPath())),
+							ImageDescriptor
+							.createFromURL(prepareIconPathURL(componentConfig
+									.getPaletteIconPath())));
+			categoryPaletteConatiner.get(componentConfig.getCategory().name())
+			.add(component);*/
+			
 			CombinedTemplateCreationEntry component = new CombinedTemplateCreationEntry(
-					componentConfig.getNameInPalette(), "Component", clazz,
+					componentConfig.getNameInPalette(), null, clazz,
 					new SimpleFactory(clazz),
 					ImageDescriptor
 					.createFromURL(prepareIconPathURL(componentConfig

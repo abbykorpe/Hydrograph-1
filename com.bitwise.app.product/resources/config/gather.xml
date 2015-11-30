@@ -2,7 +2,7 @@
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/gather_palette.png" canvasIconPath="/icons/gather_canvas.png"
-		name="UnionallComponent" nameInPalette="Union All" defaultNamePrefix="Unionall">
+		name="UnionallComponent" nameInPalette="Union All" defaultNamePrefix="Unionall" description="This is Unionall component. some more text">
 		<tns:category>STRAIGHTPULL</tns:category>
 		<tns:port>
 			<tns:portSpecification>
