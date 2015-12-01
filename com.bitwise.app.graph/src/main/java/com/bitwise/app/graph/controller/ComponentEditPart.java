@@ -50,6 +50,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 		NodeEditPart, PropertyChangeListener {
 	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ComponentEditPart.class);
+	
 
 	/**
 	 * Upon activation, attach to the model element as a property change
@@ -298,20 +299,31 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 							+ getCastedModel().getSize().width);
 			adjustComponentFigure(getCastedModel(), getComponentFigure());
 			getCastedModel().setComponentLabel((String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue()));
-			updateComponentStatus();
-			refreshVisuals();
+			String newPortCount =   (String)getCastedModel().getProperties().get("input_count");
+			int n = Integer.parseInt(newPortCount);
+		
+			getCastedModel().changePortSettings(n);
 			
-			List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
-			PortEditPart portEditPart = null;
-			for(AbstractGraphicalEditPart part:childrenEditParts)
-			{
-				
-				if(part instanceof PortEditPart){
-					portEditPart = (PortEditPart) part;
-					portEditPart.adjustPortFigure(getCastedModel().getLocation());
-				}
-			}
-			portEditPart.adjustPortFigure(getCastedModel().getLocation());
+			ComponentFigure compFig = (ComponentFigure)getFigure();
+			compFig.setHeight(n, 1);
+			Dimension newSize = new Dimension(compFig.getSize().width, ((n+1)*25)+15);
+			getCastedModel().setSize(newSize);
+			
+			
+			updateComponentStatus();			
+			refresh();
+			
+			//List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
+			//PortEditPart portEditPart = null;
+//			for(AbstractGraphicalEditPart part:childrenEditParts)
+//			{
+//				
+//				if(part instanceof PortEditPart){ 
+//					portEditPart = (PortEditPart) part;
+//					portEditPart.adjustPortFigure(getCastedModel().getLocation());
+//				}
+//			}
+			//portEditPart.adjustPortFigure(getCastedModel().getLocation());
 
 			ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 			if(eltPropertyWindow.isPropertyChanged()){

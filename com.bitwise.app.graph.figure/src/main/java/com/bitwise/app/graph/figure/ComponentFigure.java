@@ -165,7 +165,7 @@ public class ComponentFigure extends Figure implements Validator{
 		
 	}
 	
-	private void setHeight(int totalPortsofInType, int totalPortsOfOutType) {
+	public void setHeight(int totalPortsofInType, int totalPortsOfOutType) {
 		int heightFactor=totalPortsofInType > totalPortsOfOutType ? totalPortsofInType : totalPortsOfOutType;
 		this.height = (heightFactor+1)*25;
 	}

@@ -505,4 +505,36 @@ public abstract class Component extends Model {
 		setPropertyValue(Component.Props.NAME_PROP.getValue(), label);
 		componentLabel.setLabelContents(label);
 	}
+	
+	
+	public void changePortSettings(int newPortCount){
+		
+		
+		Port firstPort= ports.get("in1");
+		firstPort.setNumberOfPortsOfThisType(newPortCount);
+		
+		Port secondPort= ports.get("in2");
+		secondPort.setNumberOfPortsOfThisType(newPortCount);
+		
+		
+		Port outport1 =  ports.get("out1");
+		
+		 ports.clear();
+		 ports.put("in1", firstPort);
+		 ports.put("in2", secondPort);
+		 ports.put("out1", outport1);
+		
+		for(int i=0; i< (newPortCount-2); i++){
+			 
+			Port port = new Port("in"+(i+2) , "in"+(i+2), "in"+(i+3), this, newPortCount, "in", (i+3));
+			ports.put("in"+(i+3), port);
+			firePropertyChange("in"+(i+2), null, port );
+		}
+		
+		
+//		Port port = new Port("new", "new", "new", this, 3, "in", 3);
+//		//Port port = new Port(p.getNameOfPort(),p.getLabelOfPort(),"new", this, p.getNumberOfPorts(), p.getTypeOfPort(), p.getSequenceOfPort());
+//		ports.put("new", port);
+//		firePropertyChange("newport", null, port );
+	}
 }
