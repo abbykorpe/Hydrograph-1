@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.graph.Messages;
+import com.bitwise.app.graph.utility.OSValidator;
 import com.bitwise.app.parametergrid.dialog.ParameterGridDialog;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 /**
@@ -134,22 +135,24 @@ public class RunJobHandler extends AbstractHandler {
 	private Process executeRunJob(String XML_PATH,String paramFile) throws IOException{
 		String projectName = XML_PATH.split("/", 2)[0];
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-
-		String[] command = {
-				Messages.CMD,
-				"/c",
-				Messages.GRADLE_RUN + " " + Messages.XMLPATH + "="
-						+ XML_PATH.split("/", 2)[1] + " "
-						+ Messages.PARAM_FILE
-						+"="+paramFile};
-		
-		String commandx = "";
-		for(int i=0 ;i<command.length ; i++){
-			commandx = commandx + " " + command[i];
+		String[] runCommand=new String[3];
+		if (OSValidator.isWindows()) {
+			logger.info("This is windows.");
+			String[] command = {Messages.CMD,"/c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "="+ XML_PATH.split("/", 2)[1] + " "+ Messages.PARAM_FILE+"="+paramFile};
+			runCommand=command;
+		} else if (OSValidator.isMac()) {
+			logger.debug("This is Mac.");
+			String[] command = {"/usr/bin/bash","-c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "="+ XML_PATH.split("/", 2)[1] + " "+ Messages.PARAM_FILE+"="+paramFile};
+			runCommand=command;
+		} else if (OSValidator.isUnix()) {
+			logger.debug("This is Unix or Linux");
+		} else if (OSValidator.isSolaris()) {
+			logger.debug("This is Solaris");
+		} else {
+			logger.debug("Your OS is not support!!");
 		}
-		System.out.println("+++ executing: " + commandx);
 		
-		ProcessBuilder pb = new ProcessBuilder(command);
+		ProcessBuilder pb = new ProcessBuilder(runCommand);
 		pb.directory(new File(project.getLocation().toOSString()));
 		pb.redirectErrorStream(true);
 		Process process = pb.start();
