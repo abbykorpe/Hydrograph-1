@@ -44,6 +44,7 @@ public class Messages extends NLS {
 	public static String INVALID_SORT_ORDER;
 	public static String ALLOWED_CHARACTERS;
 	public static String INVALID_CHARACTERS;
+	public static String PORT_VALUE;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

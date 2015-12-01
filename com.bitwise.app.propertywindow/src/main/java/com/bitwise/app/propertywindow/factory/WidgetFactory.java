@@ -15,7 +15,6 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.ELTComponentBaseType
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTComponentNameWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTComponentType;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTFilePathWidget;
-import com.bitwise.app.propertywindow.widgets.customwidgets.ELTInputCountWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTOperationClassWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTRetentionlogicWidget;
@@ -67,7 +66,7 @@ public class WidgetFactory {
 		RUNTIME_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class),
 		SECONDARY_COLUMN_KEYS_WIDGET(SecondaryColumnKeysWidget.class),
 		TRANSFORM_WIDGET(TransformWidget.class),
-		INPUT_COUNT_WIDGET(ELTInputCountWidget.class,WidgetHelper.INSTANCE.getInputCountWidgetConfig()),
+		INPUT_COUNT_WIDGET(TextBoxWithLabelWidget.class,WidgetHelper.INSTANCE.getInputCountWidgetConfig()),
 		JOIN_TYPE_WIDGET(ELTJoinWidget.class);
 		
 		private Class<?> clazz = null;

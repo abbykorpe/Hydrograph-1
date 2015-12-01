@@ -12,6 +12,7 @@ import com.bitwise.app.propertywindow.widgets.listeners.ELTEventChangeListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTFileDialogSelectionListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTFocusGainedListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTFocusOutListener;
+import com.bitwise.app.propertywindow.widgets.listeners.ELTInputCountListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTModifyListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTNormalFocusOutListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTOpenFileEditorListener;
@@ -69,7 +70,8 @@ public class ListenerFactory {
 		MODIFY(ELTModifyListener.class), 
 		NORMAL_FOCUS_OUT(ELTNormalFocusOutListener.class),
 		TRANSFORM_DELETE_SELECTION(ELTTransformDeleteSelectionListener.class),
-		NORMAL_FOCUS_IN(FocusInListener.class);		
+		NORMAL_FOCUS_IN(FocusInListener.class),
+		JOIN_INPUT_COUNT(ELTInputCountListener.class);
 		Class<?> clazz = null;
 		private Listners(Class<?> clazz) {
 			this.clazz = clazz; 
