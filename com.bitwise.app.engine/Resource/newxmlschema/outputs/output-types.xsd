@@ -1,179 +1,198 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="http://www.bitwiseglobal.com/graph/outputtypes"
-  xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:otffw="http://www.bitwiseglobal.com/graph/otffw"
-  xmlns:otfd="http://www.bitwiseglobal.com/graph/otfd"  xmlns:otdiscard="http://www.bitwiseglobal.com/graph/otdiscard"
-   xmlns:ofparquet="http://www.bitwiseglobal.com/graph/ofparquet"  xmlns:ohiveparquet="http://www.bitwiseglobal.com/graph/ohiveparquet" 
-  xmlns:ofMixedScheme="http://www.bitwiseglobal.com/graph/ofmixedscheme"
-  xmlns:ofsubgraph="http://www.bitwiseglobal.com/graph/ofsubgraph"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  targetNamespace="http://www.bitwiseglobal.com/graph/outputtypes"
-  elementFormDefault="unqualified"
->
-  <xs:import schemaLocation="../common/common-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/commontypes" />
-  <xs:import schemaLocation="./text-file-fixed-width/output-text-file-fixed-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/otffw" />
-  <xs:import schemaLocation="./text-file-delimited/output-text-file-delimited-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/otfd" />
-   <xs:import schemaLocation="./discard/output-discard-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/otdiscard" />   
-   <xs:import schemaLocation="./parquet-file/output-file-parquet-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/ofparquet" /> 
-   <xs:import schemaLocation="./parquet-hive-file/output-hive-parquet-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/ohiveparquet" /> 
-   <xs:import schemaLocation="./text-file-mixedScheme/output-file-mixedScheme-text-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/ofmixedscheme" />
-    <xs:import schemaLocation="./subgraph/output-subgraph-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/ofsubgraph" /> 
-    
-  <xs:complexType name="text-file-delimited">
-    <xs:complexContent>
-      <xs:extension base="otfd:type-output-file-delimited-base">
-        <xs:sequence>
-          <xs:element name="path">
-            <xs:complexType>
-              <xs:attribute name="uri" type="xs:string" use="required" />
-            </xs:complexType>
-          </xs:element>
-           <xs:element name="safe" type="cmn:boolean-value-type"
-            minOccurs="0" />
-          <xs:element name="strict" type="cmn:boolean-value-type"
-            minOccurs="0" />
-          <xs:element name="delimiter">
-            <xs:complexType>
-              <xs:attribute name="value" type="xs:string" use="required" />
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="has_header" type="cmn:boolean-value-type"
-            minOccurs="0" />
-          <xs:element name="charset" minOccurs="0">
-            <xs:complexType>
-              <xs:attribute name="value" type="cmn:standard-charsets"
-                use="required" />
-            </xs:complexType>
-            </xs:element>
-             <xs:element name="runtime_properties" type="cmn:type-properties" minOccurs="0" />
-            <xs:element name="quote" minOccurs="0" >
-               <xs:complexType>
-                <xs:attribute name="value" type="xs:string" />
-               </xs:complexType>
-           </xs:element>
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
+	xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:otffw="http://www.bitwiseglobal.com/graph/otffw"
+	xmlns:otfd="http://www.bitwiseglobal.com/graph/otfd" xmlns:otdiscard="http://www.bitwiseglobal.com/graph/otdiscard"
+	xmlns:ofparquet="http://www.bitwiseglobal.com/graph/ofparquet"
+	xmlns:ohiveparquet="http://www.bitwiseglobal.com/graph/ohiveparquet"
+	xmlns:ofMixedScheme="http://www.bitwiseglobal.com/graph/ofmixedscheme"
+	xmlns:ofsubgraph="http://www.bitwiseglobal.com/graph/ofsubgraph"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwiseglobal.com/graph/outputtypes"
+	elementFormDefault="unqualified">
+	<xs:import schemaLocation="../common/common-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/commontypes" />
+	<xs:import schemaLocation="./text-file-fixed-width/output-text-file-fixed-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/otffw" />
+	<xs:import schemaLocation="./text-file-delimited/output-text-file-delimited-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/otfd" />
+	<xs:import schemaLocation="./discard/output-discard-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/otdiscard" />
+	<xs:import schemaLocation="./parquet-file/output-file-parquet-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/ofparquet" />
+	<xs:import schemaLocation="./parquet-hive-file/output-hive-parquet-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/ohiveparquet" />
+	<xs:import
+		schemaLocation="./text-file-mixedScheme/output-file-mixedScheme-text-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/ofmixedscheme" />
+	<xs:import schemaLocation="./subgraph/output-subgraph-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/ofsubgraph" />
 
-  <xs:complexType name="text-file-fixed-width">
-    <xs:complexContent>
-      <xs:extension base="otffw:type-fixed-width-base">
-        <xs:sequence>
-          <xs:element name="path">
-            <xs:complexType>
-              <xs:attribute name="uri" type="xs:string" use="required" />
-            </xs:complexType>
-          </xs:element>
-           <xs:element name="safe" type="cmn:boolean-value-type"
-            minOccurs="0" />
-          <xs:element name="strict" type="cmn:boolean-value-type"
-            minOccurs="0" />
-          <xs:element name="charset" minOccurs="0">
-            <xs:complexType>
-              <xs:attribute name="value" type="cmn:standard-charsets"
-                use="required" />
-            </xs:complexType>
-          </xs:element>
-           <xs:element name="runtime_properties" type="cmn:type-properties" minOccurs="0" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
+	<xs:complexType name="textFileDelimited">
+		<xs:complexContent>
+			<xs:extension base="otfd:type-output-file-delimited-base">
+				<xs:sequence>
+					<xs:element name="path">
+						<xs:complexType>
+							<xs:attribute name="uri" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="safe" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="strict" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="delimiter">
+						<xs:complexType>
+							<xs:attribute name="value" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="hasHeader" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="charset" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute name="value" type="cmn:standard-charsets"
+								use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+					<xs:element name="quote" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute name="value" type="xs:string" />
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-
-
-  <xs:complexType name="discard">
-
-    <xs:complexContent>
-      <xs:restriction base="cmn:type-output-component">
-        <xs:sequence>
-          <xs:element name="inSocket" type="otdiscard:type-output-inSocket-ino"
-            minOccurs="1" maxOccurs="1" />
-        </xs:sequence>
-      </xs:restriction>
-    </xs:complexContent>
-  </xs:complexType>
+	<xs:complexType name="textFileFixedWidth">
+		<xs:complexContent>
+			<xs:extension base="otffw:type-fixed-width-base">
+				<xs:sequence>
+					<xs:element name="path">
+						<xs:complexType>
+							<xs:attribute name="uri" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="safe" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="strict" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="charset" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute name="value" type="cmn:standard-charsets"
+								use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
 
 
-  <xs:complexType name="parquet-file">
-    <xs:complexContent>
-      <xs:extension base="ofparquet:type-output-file-delimited-base">
-        <xs:sequence>
-          <xs:element name="path">
-            <xs:complexType>
-              <xs:attribute name="uri" type="xs:string" use="required" />
-            </xs:complexType>
-          </xs:element>
-             <xs:element name="runtime_properties" type="cmn:type-properties" minOccurs="0" />
-         </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
- 
-  <xs:complexType name="parquet-hive-file">
-    <xs:complexContent>
-      <xs:extension base="ohiveparquet:type-output-file-delimited-base">
-        <xs:sequence>
-              <xs:element name="partition_keys" type="ohiveparquet:hive_partition_fields_type"
-								minOccurs="0" maxOccurs="1" />
-		    <xs:element name="database_name" type="ohiveparquet:hive_type"
-								minOccurs="1" maxOccurs="1" />
-		     <xs:element name="table_name" type="ohiveparquet:hive_type"
-								minOccurs="1" maxOccurs="1" />		
-             <xs:element name="runtime_properties" type="cmn:type-properties" minOccurs="0" />
-         </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  
-  
-   <xs:complexType name="text-file-mixedScheme">
-    <xs:complexContent>
-      <xs:extension base="ofMixedScheme:type-mixed-base">
-        <xs:sequence>
-          <xs:element name="path">
-            <xs:complexType>
-              <xs:attribute name="uri" type="xs:string" use="required" />
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="strict" type="cmn:boolean-value-type"
-            minOccurs="0" />
-             <xs:element name="safe" type="cmn:boolean-value-type"
-            minOccurs="0" />
-          <xs:element name="charset" minOccurs="0">
-            <xs:complexType>
-              <xs:attribute name="value" type="cmn:standard-charsets"
-                use="required" />
-            </xs:complexType>
-          </xs:element>
-           <xs:element name="runtime_properties" type="cmn:type-properties" minOccurs="0" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
+	<xs:complexType name="discard">
 
-  <xs:complexType name="subgraph">
-    <xs:complexContent>
-      <xs:extension base="ofsubgraph:type-subgraph-base">
-        <xs:sequence>
-          <xs:element name="path">
-            <xs:complexType>
-              <xs:attribute name="uri" type="xs:string" use="required" />
-            </xs:complexType>
-          </xs:element>
-             <xs:element name="runtime_properties" type="cmn:type-properties" minOccurs="0" />
-         </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-           
+		<xs:complexContent>
+			<xs:restriction base="cmn:type-output-component">
+				<xs:sequence>
+					<xs:element name="inSocket" type="otdiscard:type-output-inSocket-ino"
+						minOccurs="1" maxOccurs="1" />
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+
+	<xs:complexType name="parquetFile">
+		<xs:complexContent>
+			<xs:extension base="ofparquet:type-output-file-delimited-base">
+				<xs:sequence>
+					<xs:element name="path">
+						<xs:complexType>
+							<xs:attribute name="uri" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="parquetHiveFile">
+		<xs:complexContent>
+			<xs:extension base="ohiveparquet:type-output-file-delimited-base">
+				<xs:sequence>
+					<xs:element name="partitionKeys"
+						type="ohiveparquet:hive_partition_fields_type" minOccurs="0"
+						maxOccurs="1" />
+					<xs:element name="databaseName" type="ohiveparquet:hive_type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="tableName" type="ohiveparquet:hive_type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+	<xs:complexType name="textFileMixedScheme">
+		<xs:complexContent>
+			<xs:extension base="ofMixedScheme:type-mixed-base">
+				<xs:sequence>
+					<xs:element name="path">
+						<xs:complexType>
+							<xs:attribute name="uri" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="strict" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="safe" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="charset" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute name="value" type="cmn:standard-charsets"
+								use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="subgraph">
+		<xs:complexContent>
+			<xs:extension base="ofsubgraph:type-output-file-delimited-base">
+				<xs:sequence>
+					<xs:element name="path">
+						<xs:complexType>
+							<xs:attribute name="uri" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+					<xs:element name="subgraphParameter" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="subgraphOutput">
+		<xs:complexContent>
+			<xs:extension base="ofsubgraph:type-output-file-delimited-subgraph">
+				<xs:sequence>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 </xs:schema>

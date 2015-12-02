@@ -1,178 +1,200 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="http://www.bitwiseglobal.com/graph/inputtypes"
-  xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:itffw="http://www.bitwiseglobal.com/graph/itffw"
-  xmlns:itfd="http://www.bitwiseglobal.com/graph/itfd" xmlns:igr="http://www.bitwiseglobal.com/graph/igr"
-  xmlns:ifparquet="http://www.bitwiseglobal.com/graph/ifparquet"  xmlns:ihiveparquet="http://www.bitwiseglobal.com/graph/ihiveparquet" 
-  xmlns:ifMixedScheme="http://www.bitwiseglobal.com/graph/ifmixedscheme"
-  xmlns:ifsubgraph="http://www.bitwiseglobal.com/graph/ifsubgraph" 
-  xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwiseglobal.com/graph/inputtypes"
-  elementFormDefault="unqualified"
->
-  <xs:import schemaLocation="../common/common-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/commontypes" />
-  <xs:import schemaLocation="./text-file-fixed-width/text-file-fixed-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/itffw" />
-  <xs:import schemaLocation="./text-file-delimited/text-file-delimited-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/itfd" />
-  <xs:import schemaLocation="./generate-record/generate-record-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/igr" />
-  <xs:import schemaLocation="./parquet-file/input-file-parquet-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/ifparquet" />
-  <xs:import schemaLocation="./parquet-hive-file/input-hive-parquet-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/ihiveparquet" />
-<xs:import schemaLocation="./text-file-mixedScheme/input-file-mixedScheme-text-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/ifmixedscheme" />
-    <xs:import schemaLocation="./subgraph/input-subgraph-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/ifsubgraph" />
+	xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:itffw="http://www.bitwiseglobal.com/graph/itffw"
+	xmlns:itfd="http://www.bitwiseglobal.com/graph/itfd" xmlns:igr="http://www.bitwiseglobal.com/graph/igr"
+	xmlns:ifparquet="http://www.bitwiseglobal.com/graph/ifparquet"
+	xmlns:ihiveparquet="http://www.bitwiseglobal.com/graph/ihiveparquet"
+	xmlns:ifMixedScheme="http://www.bitwiseglobal.com/graph/ifmixedscheme"
+	xmlns:ifsubgraph="http://www.bitwiseglobal.com/graph/ifsubgraph"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwiseglobal.com/graph/inputtypes"
+	elementFormDefault="unqualified">
+	<xs:import schemaLocation="../common/common-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/commontypes" />
+	<xs:import schemaLocation="./text-file-fixed-width/text-file-fixed-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/itffw" />
+	<xs:import schemaLocation="./text-file-delimited/text-file-delimited-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/itfd" />
+	<xs:import schemaLocation="./generate-record/generate-record-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/igr" />
+	<xs:import schemaLocation="./parquet-file/input-file-parquet-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/ifparquet" />
+	<xs:import schemaLocation="./parquet-hive-file/input-hive-parquet-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/ihiveparquet" />
+	<xs:import
+		schemaLocation="./text-file-mixedScheme/input-file-mixedScheme-text-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/ifmixedscheme" />
+	<xs:import schemaLocation="./subgraph/input-subgraph-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/ifsubgraph" />
 
-  <xs:complexType name="text-file-delimited">
-    <xs:complexContent>
-      <xs:extension base="itfd:type-input-file-delimited-base">
-        <xs:sequence>
-          <xs:element name="path">
-            <xs:complexType>
-              <xs:attribute name="uri" type="xs:string" use="required" />
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="delimiter">
-            <xs:complexType>
-              <xs:attribute name="value" type="xs:string" use="required" />
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="has_header" type="cmn:boolean-value-type"
-            minOccurs="0" />
-          <xs:element name="safe" type="cmn:boolean-value-type"
-            minOccurs="0" />
-          <xs:element name="strict" type="cmn:boolean-value-type"
-            minOccurs="0" />
-          <xs:element name="charset" minOccurs="0">
-            <xs:complexType>
-              <xs:attribute name="value" type="cmn:standard-charsets"
-                use="required" />
-            </xs:complexType>
-          </xs:element>
-           <xs:element name="runtime_properties" type="cmn:type-properties" minOccurs="0" />
-          <xs:element name="quote" minOccurs="0" >
-          <xs:complexType>
-              <xs:attribute name="value" type="xs:string" />
-           </xs:complexType>
-           </xs:element>
-         </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
+	<xs:complexType name="textFileDelimited">
+		<xs:complexContent>
+			<xs:extension base="itfd:type-input-file-delimited-base">
+				<xs:sequence>
+					<xs:element name="path">
+						<xs:complexType>
+							<xs:attribute name="uri" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="delimiter">
+						<xs:complexType>
+							<xs:attribute name="value" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="hasHeader" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="safe" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="strict" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="charset" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute name="value" type="cmn:standard-charsets"
+								use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+					<xs:element name="quote" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute name="value" type="xs:string" />
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-  <xs:complexType name="text-file-fixed-width">
-    <xs:complexContent>
-      <xs:extension base="itffw:type-fixed-width-base">
-        <xs:sequence>
-          <xs:element name="path">
-            <xs:complexType>
-              <xs:attribute name="uri" type="xs:string" use="required" />
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="safe" type="cmn:boolean-value-type"
-            minOccurs="0" />
-          <xs:element name="strict" type="cmn:boolean-value-type"
-            minOccurs="0" />
-          <xs:element name="charset" minOccurs="0">
-            <xs:complexType>
-              <xs:attribute name="value" type="cmn:standard-charsets"
-                use="required" />
-            </xs:complexType>
-          </xs:element>
-           <xs:element name="runtime_properties" type="cmn:type-properties" minOccurs="0" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
+	<xs:complexType name="textFileFixedWidth">
+		<xs:complexContent>
+			<xs:extension base="itffw:type-fixed-width-base">
+				<xs:sequence>
+					<xs:element name="path">
+						<xs:complexType>
+							<xs:attribute name="uri" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="safe" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="strict" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="charset" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute name="value" type="cmn:standard-charsets"
+								use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-  <xs:complexType name="generate-record">
-    <xs:complexContent>
-      <xs:extension base="igr:type-generate-record-base">
-        <xs:sequence>
-        <xs:element name="runtime_properties" type="cmn:type-properties" minOccurs="0" />
-          <xs:element name="record_count">
-            <xs:complexType>
-              <xs:attribute name="value" type="xs:int" />
-            </xs:complexType>
-          </xs:element>
-         </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  
-  
-  <xs:complexType name="parquet-file">
-    <xs:complexContent>
-      <xs:extension base="ifparquet:type-input-file-delimited-base">
-        <xs:sequence>
-          <xs:element name="path">
-            <xs:complexType>
-              <xs:attribute name="uri" type="xs:string" use="required" />
-            </xs:complexType>
-          </xs:element>
-           <xs:element name="runtime_properties" type="cmn:type-properties" minOccurs="0" />
-         </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  
-  
-   <xs:complexType name="parquet-hive-file">
-    <xs:complexContent>
-      <xs:extension base="ihiveparquet:type-input-file-delimited-base">
-        <xs:sequence>
-          <xs:element name="partition_keys" type="ihiveparquet:hive_partition_fields_type"
-								minOccurs="0" maxOccurs="1" />
-            <xs:element name="database_name" type="ihiveparquet:hive_type"
-								minOccurs="1" maxOccurs="1" />
-			<xs:element name="table_name" type="ihiveparquet:hive_type"
-								minOccurs="1" maxOccurs="1" />								
-           <xs:element name="runtime_properties" type="cmn:type-properties" minOccurs="0" />
-         </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-    
-<xs:complexType name="text-file-mixedScheme">
-    <xs:complexContent>
-      <xs:extension base="ifMixedScheme:type-mixed-base">
-        <xs:sequence>
-          <xs:element name="path">
-            <xs:complexType>
-              <xs:attribute name="uri" type="xs:string" use="required" />
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="safe" type="cmn:boolean-value-type"
-            minOccurs="0" />
-          <xs:element name="strict" type="cmn:boolean-value-type"
-            minOccurs="0" />
-          <xs:element name="charset" minOccurs="0">
-            <xs:complexType>
-              <xs:attribute name="value" type="cmn:standard-charsets"
-                use="required" />
-            </xs:complexType>
-          </xs:element>
-           <xs:element name="runtime_properties" type="cmn:type-properties" minOccurs="0" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
+	<xs:complexType name="generateRecord">
+		<xs:complexContent>
+			<xs:extension base="igr:type-generate-record-base">
+				<xs:sequence>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+					<xs:element name="recordCount">
+						<xs:complexType>
+							<xs:attribute name="value" type="xs:int" />
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-  <xs:complexType name="subgraph">
-    <xs:complexContent>
-      <xs:extension base="ifsubgraph:type-input-file-delimited-base">
-        <xs:sequence>
-          <xs:element name="path">
-            <xs:complexType>
-              <xs:attribute name="uri" type="xs:string" use="required" />
-            </xs:complexType>
-          </xs:element>
-           <xs:element name="runtime_properties" type="cmn:type-properties" minOccurs="0" />
-         </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  
+
+	<xs:complexType name="parquetFile">
+		<xs:complexContent>
+			<xs:extension base="ifparquet:type-input-file-delimited-base">
+				<xs:sequence>
+					<xs:element name="path">
+						<xs:complexType>
+							<xs:attribute name="uri" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+	<xs:complexType name="parquetHiveFile">
+		<xs:complexContent>
+			<xs:extension base="ihiveparquet:type-input-file-delimited-base">
+				<xs:sequence>
+					<xs:element name="partitionKeys"
+						type="ihiveparquet:hive_partition_fields_type" minOccurs="0"
+						maxOccurs="1" />
+					<xs:element name="databaseName" type="ihiveparquet:hive_type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="tableName" type="ihiveparquet:hive_type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="textFileMixedScheme">
+		<xs:complexContent>
+			<xs:extension base="ifMixedScheme:type-mixed-base">
+				<xs:sequence>
+					<xs:element name="path">
+						<xs:complexType>
+							<xs:attribute name="uri" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="safe" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="strict" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="charset" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute name="value" type="cmn:standard-charsets"
+								use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="subgraph">
+		<xs:complexContent>
+			<xs:extension base="ifsubgraph:type-input-file-delimited-base">
+				<xs:sequence>
+					<xs:element name="path">
+						<xs:complexType>
+							<xs:attribute name="uri" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+					<xs:element name="subgraphParameter" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="subgraphInput">
+		<xs:complexContent>
+			<xs:extension base="ifsubgraph:type-input-file-delimited-subgraph">
+				<xs:sequence>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
 </xs:schema>

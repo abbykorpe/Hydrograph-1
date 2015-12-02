@@ -59,7 +59,19 @@ public class OutputFileDelimitedUiConverter extends OutputUIConverter {
 
 	@Override
 	protected Object getSchema() {
-		// TODO Auto-generated method stub
+//		List<SchemaGrid> schemaData=null;
+//		TextFileDelimited fileDelimited=(TextFileDelimited)typeBaseComponent;
+//		if(fileDelimited.getInSocket()!=null && fileDelimited.getInSocket().size()!=0){
+//			for(TypeOutputInSocket typeOutputInSocket:fileDelimited.getInSocket())
+//			{	TypeBaseField typeBaseFiled=typeOutputInSocket.getSchema();
+//				if(!=null){
+//					SchemaGrid schemaGrid=new SchemaGrid();
+//					schemaGrid.setDataType(typeOutputInSocket.getSchema())
+//				}
+//				
+//			}
+//		}
+		
 		return null;
 	}
 

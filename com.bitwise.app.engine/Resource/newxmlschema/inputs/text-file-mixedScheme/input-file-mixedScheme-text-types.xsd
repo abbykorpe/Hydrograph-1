@@ -22,6 +22,7 @@
         <xs:choice maxOccurs="unbounded" minOccurs="1">
           <xs:element name="field" type="type-mixed-field" />
           <xs:element name="record" type="type-mixed-record" />
+          <xs:element name="includeExternalSchema" type="cmn:type-external-schema" minOccurs="0" />
         </xs:choice>
         <xs:attribute name="name" type="xs:string" use="required" />
       </xs:restriction>

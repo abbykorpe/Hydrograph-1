@@ -47,15 +47,15 @@
 		<xs:choice maxOccurs="unbounded" minOccurs="1">
 			<xs:element name="field" type="type-base-field" />
 			<xs:element name="record" type="type-base-record" />
-			<xs:element name="include_external_schema" minOccurs="0" >
-			  <xs:complexType>
-		        <xs:attribute name="uri" type="xs:string" use="required" />
-	          </xs:complexType>
-			</xs:element>
+			<xs:element name="includeExternalSchema" type="type-external-schema" minOccurs="0" />
 		</xs:choice>
 		<xs:attribute name="name" type="xs:string" use="required" />
 	</xs:complexType>
 	
+	
+	<xs:complexType name="type-external-schema">
+		 <xs:attribute name="uri" type="xs:string" use="required" />
+	</xs:complexType>
 
 	<!--*******************Fields and data types ends********************** -->
 
@@ -133,8 +133,8 @@
 						minOccurs="1" maxOccurs="unbounded" />
 					<xs:element name="outSocket" type="type-straight-pull-out-socket"
 						minOccurs="1" maxOccurs="unbounded" />
-					<xs:element name="runtime_properties" type="type-properties"
-						minOccurs="0" maxOccurs="unbounded" />		
+					<xs:element name="runtimeProperties" type="type-properties"
+						minOccurs="0" maxOccurs="1" />		
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -151,7 +151,7 @@
 						minOccurs="0" maxOccurs="unbounded" />
 					<xs:element name="outSocket" type="type-operations-out-socket"
 						minOccurs="1" maxOccurs="unbounded" />
-					<xs:element name="runtime_properties" type="type-properties"
+					<xs:element name="runtimeProperties" type="type-properties"
                         minOccurs="0" maxOccurs="1" />
 				</xs:sequence>
 			</xs:extension>
@@ -276,7 +276,7 @@
 	</xs:simpleType>
 
 	<xs:complexType name="type-properties">
-		<xs:sequence maxOccurs="unbounded" minOccurs="0">
+		<xs:sequence maxOccurs="unbounded" minOccurs="1">
 			<xs:element name="property">
 				<xs:complexType>
 					<xs:attribute name="name" type="xs:string" use="required" />
@@ -326,7 +326,7 @@
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="first" />
 			<xs:enumeration value="last" />
-			<xs:enumeration value="uniqueonly" />
+			<xs:enumeration value="unique" />
 		</xs:restriction>
 	</xs:simpleType>
 
@@ -334,7 +334,7 @@
 
 	<xs:complexType name="keyfield_description_type">
 		<xs:sequence>
-			<xs:element name="key_fields">
+			<xs:element name="keyFields">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="field" maxOccurs="unbounded">
