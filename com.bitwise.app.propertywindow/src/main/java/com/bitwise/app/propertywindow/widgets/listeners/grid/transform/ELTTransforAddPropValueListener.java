@@ -29,7 +29,6 @@ public class ELTTransforAddPropValueListener extends GridWidgetCommonBuilder {
 		nameValueProperty.setPropertyValue("");
  		if(!grids.contains(nameValueProperty)){
 			grids.add(nameValueProperty);
-			tableViewer.setInput(grids);
 			tableViewer.refresh(); 
 		}	 
 	}
