@@ -1,5 +1,6 @@
 package com.bitwise.app.propertywindow.widgets.listeners;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
@@ -33,7 +34,7 @@ public class ELTInputCountListener implements IELTListener{
 				String string=((Text) widgetList[0]).getText().trim();
 				
 				if(event.type == SWT.Modify){
-					if((Integer.parseInt(string)) < 2){
+					if(StringUtils.isNotEmpty(string) && (Integer.parseInt(string)) < 2){
 					
 						txtDecorator.setDescriptionText(Messages.PORT_VALUE);
 						txtDecorator.show();

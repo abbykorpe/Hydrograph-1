@@ -40,6 +40,8 @@
 						minOccurs="1" maxOccurs="unbounded" />
 					<xs:element name="outSocket" type="type-out-socket"
 						minOccurs="1" maxOccurs="unbounded" />
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" maxOccurs="1" />
 				</xs:sequence>
 			</xs:restriction>
 		</xs:complexContent>

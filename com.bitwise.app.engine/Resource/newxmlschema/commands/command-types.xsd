@@ -7,7 +7,7 @@
   <xs:import schemaLocation="../common/common-types.xsd"
     namespace="http://www.bitwiseglobal.com/graph/commontypes" />
 
-  <xs:complexType name="ftp-in">
+  <xs:complexType name="ftpIn">
     <xs:complexContent>
       <xs:extension base="cmn:type-command-component">
         <xs:sequence>

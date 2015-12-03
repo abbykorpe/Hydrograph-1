@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.TextUtilities;
@@ -300,19 +301,19 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 			adjustComponentFigure(getCastedModel(), getComponentFigure());
 			getCastedModel().setComponentLabel((String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue()));
 			String newPortCount =   (String)getCastedModel().getProperties().get("input_count");
-			int n = Integer.parseInt(newPortCount);
-		
-			getCastedModel().changePortSettings(n);
-			
-			ComponentFigure compFig = (ComponentFigure)getFigure();
-			compFig.setHeight(n, 1);
-			Dimension newSize = new Dimension(compFig.getSize().width, ((n+1)*25)+15);
-			getCastedModel().setSize(newSize);
-			
-			
+			int numOfPort=0;
+			if(StringUtils.isNotEmpty(newPortCount)){
+				numOfPort = Integer.parseInt(newPortCount);
+				getCastedModel().changePortSettings(numOfPort);
+				
+				ComponentFigure compFig = (ComponentFigure)getFigure();
+				compFig.setHeight(numOfPort, 1);
+				Dimension newSize = new Dimension(compFig.getSize().width, ((numOfPort+1)*25)+15);
+				getCastedModel().setSize(newSize);
+			}
+
 			updateComponentStatus();			
 			refresh();
-			
 			//List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
 			//PortEditPart portEditPart = null;
 //			for(AbstractGraphicalEditPart part:childrenEditParts)

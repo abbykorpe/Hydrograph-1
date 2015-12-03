@@ -131,7 +131,7 @@ public class UIConverterUtil {
 				link.setTarget(targetComponent);
 				sourceComponent.connectOutput(link);
 				targetComponent.connectInput(link);
-				System.out.println(linkingData);
+//				System.out.println(linkingData);
 		}
 		
 	}

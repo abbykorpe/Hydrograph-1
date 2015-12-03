@@ -52,7 +52,7 @@ public class Activator extends AbstractUIPlugin {
 				System.getProperty("os.version"));
 		logger.info("Operating System Architecture : {}",
 				System.getProperty("os.arch"));
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		/*Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double width = screenSize.getWidth();
 		logger.debug("Screen Width : {}", Double.toString(width));
 		double height = screenSize.getHeight();
@@ -60,7 +60,7 @@ public class Activator extends AbstractUIPlugin {
 
 		int resolution = Toolkit.getDefaultToolkit().getScreenResolution();
 		logger.debug("Screen Resolution :{}", Integer.toString(resolution)
-				.concat(" dpi"));
+				.concat(" dpi"));*/
 
 		Runtime runtime = Runtime.getRuntime();
 
