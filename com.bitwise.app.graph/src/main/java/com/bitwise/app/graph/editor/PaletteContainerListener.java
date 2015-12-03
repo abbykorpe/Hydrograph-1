@@ -58,7 +58,6 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 	
 	@Override
 	public void mouseUp(MouseEvent e) {
-		System.out.println("+++ This is mouse click");
 		hidePaletteToolTip();
 	}
 
@@ -141,7 +140,6 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 	private void hidePaletteToolTip(){
 		if(paletteToolTip!=null){
 			java.awt.Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-			System.out.println("+++ In hide : " + paletteToolTip.getBounds() + "    " +mouseLocation );
 			if(!paletteToolTip.getBounds().contains(mouseLocation.x, mouseLocation.y)){
 				paletteToolTip.setVisible(false);
 			}	
@@ -181,7 +179,8 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 					java.awt.Point mouseLocation2 = MouseInfo.getPointerInfo().getLocation();
 					
 					if(mouseLocation1.equals(mouseLocation2)){
-						showPaletteToolTip(genericComponent.getComponentLabel().getLabelContents());
+						//showPaletteToolTip(genericComponent.getComponentLabel().getLabelContents());
+						showPaletteToolTip(genericComponent.getComponentDescription());
 					}
 					
                 }
@@ -193,11 +192,13 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 	}
 	@Override
 	public void mouseMove(MouseEvent e) {
-		org.eclipse.swt.graphics.Rectangle tooltipBounds = paletteToolTip.getBounds();
-		org.eclipse.swt.graphics.Rectangle newBounds = new org.eclipse.swt.graphics.Rectangle(tooltipBounds.x -5, tooltipBounds.y-5, tooltipBounds.width, tooltipBounds.height);
-		java.awt.Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-		if(!newBounds.contains(mouseLocation.x,mouseLocation.y))
-			hidePaletteToolTip();
+		if(paletteToolTip!=null){
+			org.eclipse.swt.graphics.Rectangle tooltipBounds = paletteToolTip.getBounds();
+			org.eclipse.swt.graphics.Rectangle newBounds = new org.eclipse.swt.graphics.Rectangle(tooltipBounds.x -5, tooltipBounds.y-5, tooltipBounds.width, tooltipBounds.height);
+			java.awt.Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+			if(!newBounds.contains(mouseLocation.x,mouseLocation.y))
+				hidePaletteToolTip();
+		}
 	}
 
 	

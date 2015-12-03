@@ -97,6 +97,9 @@ public abstract class Component extends Model {
 	
 	//@XStreamOmitField
 	private Map<String,String> toolTipErrorMessages; //<propertyName,ErrorMessage>
+	
+	/*@XStreamOmitField
+	private Map<String,PropertyToolTipInformation> paletteTooltipMessage;*/
 
 	/**
 	 * Instantiates a new component.
@@ -506,6 +509,10 @@ public abstract class Component extends Model {
 		componentLabel.setLabelContents(label);
 	}
 	
+	
+	public String getComponentDescription(){
+		return XMLConfigUtil.INSTANCE.getComponent(componentName).getDescription();
+	}
 	
 	public void changePortSettings(int newPortCount){
 		

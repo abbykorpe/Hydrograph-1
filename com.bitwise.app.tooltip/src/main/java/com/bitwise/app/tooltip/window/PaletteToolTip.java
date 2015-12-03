@@ -26,7 +26,8 @@ public class PaletteToolTip extends Shell {
 	}
 	
 	public void setToolTipText(String text){
-		toolTipText.setText(text);
+		toolTipText.setText(text.replace("\\n", "\n"));
+		setSize(this.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 	
 	/**
