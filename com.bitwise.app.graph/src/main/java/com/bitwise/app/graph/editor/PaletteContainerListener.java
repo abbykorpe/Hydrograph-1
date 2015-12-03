@@ -1,5 +1,7 @@
 package com.bitwise.app.graph.editor;
 
+import java.awt.MouseInfo;
+
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
@@ -10,13 +12,16 @@ import org.eclipse.gef.requests.SimpleFactory;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;
+import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.graph.command.ComponentCreateCommand;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
+import com.bitwise.app.tooltip.window.PaletteToolTip;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -28,13 +33,15 @@ import com.bitwise.app.graph.model.Container;
  * 
  * @see PaletteContainerEvent
  */
-public class PaletteContainerListener implements MouseListener, MouseTrackListener {
+public class PaletteContainerListener implements MouseListener, MouseTrackListener , MouseMoveListener {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(PaletteContainerListener.class);
 	private final PaletteViewer viewer;
 	private Point defaultComponentLocation = new Point(0, 0);
 	private Component genericComponent;
 	private GraphicalViewer graphicalViewer;
+	private PaletteToolTip paletteToolTip;
+	private static final int TOOLTIP_SHOW_DELAY=600;
 	
 	/**
 	 * Instantiates a new palette container listener.
@@ -48,13 +55,11 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 		this.graphicalViewer = graphicalViewer;
 		this.viewer = viewer;
 	}
-
-	
-	
 	
 	@Override
 	public void mouseUp(MouseEvent e) {
 		System.out.println("+++ This is mouse click");
+		hidePaletteToolTip();
 	}
 
 	@Override
@@ -120,13 +125,9 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 		graphViewer.getEditDomain().getCommandStack().execute(createComponent);
 	}
 
-
-
-
 	@Override
 	public void mouseEnter(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("+++ This is mouse Enter");
+		// Do Nothing
 	}
 
 
@@ -134,31 +135,70 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 
 	@Override
 	public void mouseExit(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("+++ This is mouse Exit");
+		hidePaletteToolTip();
 	}
 
-
+	private void hidePaletteToolTip(){
+		if(paletteToolTip!=null){
+			java.awt.Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+			System.out.println("+++ In hide : " + paletteToolTip.getBounds() + "    " +mouseLocation );
+			if(!paletteToolTip.getBounds().contains(mouseLocation.x, mouseLocation.y)){
+				paletteToolTip.setVisible(false);
+			}	
+		}
+	}
+	
+	private void showPaletteToolTip(String toolTipMessage) {
+		paletteToolTip = new PaletteToolTip(Display.getDefault());
+		java.awt.Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+		paletteToolTip.setLocation(mouseLocation.x +5 , mouseLocation.y +5);
+		paletteToolTip.setToolTipText(toolTipMessage);
+		paletteToolTip.setVisible(true);
+	}
 
 
 	@Override
 	public void mouseHover(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("+++ This is mouse Hover");
+		final java.awt.Point mouseLocation1 = MouseInfo.getPointerInfo().getLocation();
 		EditPart paletteInternalController = viewer.findObjectAt(new Point(
 				e.x, e.y));
 
-		CombinedTemplateCreationEntry addedPaletteTool = (CombinedTemplateCreationEntry) paletteInternalController
-				.getModel();
+		if(paletteInternalController.getModel() instanceof CombinedTemplateCreationEntry){
+			CombinedTemplateCreationEntry addedPaletteTool = (CombinedTemplateCreationEntry) paletteInternalController
+					.getModel();
 
-		CreateRequest componentRequest = new CreateRequest();
-		componentRequest.setFactory(new SimpleFactory((Class) addedPaletteTool
-				.getTemplate()));
+			CreateRequest componentRequest = new CreateRequest();
+			componentRequest.setFactory(new SimpleFactory((Class) addedPaletteTool
+					.getTemplate()));
 
-		genericComponent = (Component) componentRequest
-				.getNewObject();
+			genericComponent = (Component) componentRequest
+					.getNewObject();
 
-		//setComponentRequestParams(componentRequest);
-		System.out.println("This is mouse hover on " + genericComponent.getComponentLabel());
+			hidePaletteToolTip();
+			
+			Display.getDefault().timerExec(TOOLTIP_SHOW_DELAY, new Runnable() {
+				public void run() {
+					java.awt.Point mouseLocation2 = MouseInfo.getPointerInfo().getLocation();
+					
+					if(mouseLocation1.equals(mouseLocation2)){
+						showPaletteToolTip(genericComponent.getComponentLabel().getLabelContents());
+					}
+					
+                }
+			});
+			
+			
+			
+		}
 	}
+	@Override
+	public void mouseMove(MouseEvent e) {
+		org.eclipse.swt.graphics.Rectangle tooltipBounds = paletteToolTip.getBounds();
+		org.eclipse.swt.graphics.Rectangle newBounds = new org.eclipse.swt.graphics.Rectangle(tooltipBounds.x -5, tooltipBounds.y-5, tooltipBounds.width, tooltipBounds.height);
+		java.awt.Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+		if(!newBounds.contains(mouseLocation.x,mouseLocation.y))
+			hidePaletteToolTip();
+	}
+
+	
 }
