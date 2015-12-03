@@ -56,6 +56,7 @@ import com.bitwise.app.propertywindow.messagebox.ConfirmCancelMessageBox;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultCheckBox;
@@ -85,11 +86,11 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 public class TransformDialog extends Dialog {
 
 	
-	public static final String PROPERTY_NAME = "Property Name";
-	public static final String PROPERTY_VALUE = "Property Values";
+	public static final String PROPERTY_NAME = "Source";
+	public static final String PROPERTY_VALUE = "Target";
 	public static final String OPERATIONAL_INPUT_FIELD = "Operation Input Fields";
-	public static final String OPERATIONAL_OUTPUT_FIELD = "Operation Output Fields";
-	public static final String OPERATIONAL_SYSTEM_FIELD = "Operation System Fields";
+	public static final String OPERATIONAL_OUTPUT_FIELD = "Output Fields";
+	public static final String OPERATIONAL_SYSTEM_FIELD = "Input Fields";
 	private static final String ADD_ICON = XMLConfigUtil.CONFIG_FILES_PATH + "/icons/add.png";
 	private static final String DELETE_ICON = XMLConfigUtil.CONFIG_FILES_PATH + "/icons/delete.png";
 	private long operationId=1;
@@ -110,9 +111,8 @@ public class TransformDialog extends Dialog {
     private List<TransformOperation> transformOperationList = new ArrayList<>();
 	
     private TableViewer innerOpInputTabViewer; 
-//	private TableViewer innerOpOutputTabViewer;
 	private TableViewer innerKeyValueTabViewer;
-	private TableViewer outerKeyValueTabViewer;
+	private TableViewer outerKeyValueTabViewer; 
 	private TableViewer	outerOpTabViewer;
 	private CheckboxTableViewer opSystemPropertiesTabViewer;
 	private Button applyButton;
@@ -120,6 +120,7 @@ public class TransformDialog extends Dialog {
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private ValidationStatus validationStatus;
 	private TransformPropertyGrid transformPropertyGrid;
+	private WidgetConfig widgetConfig;
 
 	// Operational class label.
 	AbstractELTWidget fieldError = new ELTDefaultLable(Messages.FIELDNAMEERROR).lableWidth(250);
@@ -131,10 +132,11 @@ public class TransformDialog extends Dialog {
 	 * @param parentShell
 	 * @param operationClassProperty 
 	 */
-	public TransformDialog(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar,TransformPropertyGrid transformPropertyGrid) {
+	public TransformDialog(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar,TransformPropertyGrid transformPropertyGrid,WidgetConfig widgetConfig) {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.transformPropertyGrid = transformPropertyGrid;
+		this.widgetConfig=widgetConfig;
 	}
 
 	/**
@@ -170,8 +172,31 @@ public class TransformDialog extends Dialog {
 		fd_leftContainerComposite_1.right = new FormAttachment(100, -1067);
 		fd_leftContainerComposite_1.bottom = new FormAttachment(100, -10);
 		leftContainerComposite.setLayoutData(fd_leftContainerComposite_1);
+
+		Composite inpuComposite = new Composite(container, SWT.NONE);
+		FormData fd_composite = new FormData();
+		fd_composite.top = new FormAttachment(middleContainerComposite, 1, SWT.TOP);
+		fd_composite.bottom = new FormAttachment(leftContainerComposite, -6);
+		fd_composite.right = new FormAttachment(middleContainerComposite, -1);
+		inpuComposite.setLayoutData(fd_composite);
 		
-			
+		ELTDefaultSubgroupComposite inputDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(inpuComposite);
+		inputDefaultSubgroupComposite.createContainerWidget();
+		
+		AbstractELTWidget addButtonInput = getButton("");
+		AbstractELTWidget deleteButtonInput = getButton(""); 
+		inputDefaultSubgroupComposite.attachWidget(addButtonInput);
+		inputDefaultSubgroupComposite.attachWidget(deleteButtonInput);
+		Button addOutKeyValueButtonIn=(Button) addButtonInput.getSWTWidgetControl();
+		addOutKeyValueButtonIn.setParent(inpuComposite);
+		addOutKeyValueButtonIn.setBounds(25, 0, 18, 18); 
+		addOutKeyValueButtonIn.setImage(SWTResourceManager.getImage(ADD_ICON));
+		
+		Button deleteOutKeyValueButtonIn = (Button) deleteButtonInput.getSWTWidgetControl();
+		deleteOutKeyValueButtonIn.setParent(inpuComposite);
+		deleteOutKeyValueButtonIn.setBounds(48, 0, 18, 18);
+		deleteOutKeyValueButtonIn.setImage(SWTResourceManager.getImage(DELETE_ICON));	
+		
 		opSystemPropertiesTabViewer = CheckboxTableViewer.newCheckList(
 	    		leftContainerComposite, SWT.BORDER);
 	    opSystemPropertiesTabViewer.setContentProvider(new TransformGridContentProvider());
@@ -215,7 +240,7 @@ public class TransformDialog extends Dialog {
 		
 		createTableColumns(table,new String[]{OPERATIONAL_SYSTEM_FIELD});
 		for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
-			table.getColumn(columnIndex).pack();
+			table.getColumn(columnIndex).setWidth(155);
 		}  
 
 		CellEditor[] editors_opSys = null; 
@@ -240,18 +265,41 @@ public class TransformDialog extends Dialog {
 		DragDropUtility.INSTANCE.applyDragFromTableViewer(opSystemPropertiesTabViewer.getTable()); 	
 		
 		Composite rightContainerComposite = new Composite(container, SWT.NONE);
-		fd_middleContainerComposite.right = new FormAttachment(rightContainerComposite);
-		rightContainerComposite.setLocation(737, -315);
+		fd_middleContainerComposite.right = new FormAttachment(100, -149);
 		FormData fd_rightContainerComposite = new FormData();
-		fd_rightContainerComposite.top = new FormAttachment(0, 10);
-		fd_rightContainerComposite.bottom = new FormAttachment(100, -10);
+		fd_rightContainerComposite.top = new FormAttachment(leftContainerComposite, 0, SWT.TOP);
+		fd_rightContainerComposite.left = new FormAttachment(middleContainerComposite);
+		fd_rightContainerComposite.bottom = new FormAttachment(100, -64);
 		fd_rightContainerComposite.right = new FormAttachment(100);
-		fd_rightContainerComposite.left = new FormAttachment(0, 1088);
 		rightContainerComposite.setLayoutData(fd_rightContainerComposite);
+
+		
+		Composite outputComposite = new Composite(container, SWT.NONE);
+		FormData fd_compositeOutput = new FormData();
+		fd_compositeOutput.right = new FormAttachment(100);
+		fd_compositeOutput.top = new FormAttachment(middleContainerComposite, 0, SWT.TOP);
+		fd_compositeOutput.bottom = new FormAttachment(outputComposite, 0, SWT.BOTTOM);
+		outputComposite.setLayoutData(fd_compositeOutput);
+		
+		ELTDefaultSubgroupComposite outputDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(outputComposite);
+		outputDefaultSubgroupComposite.createContainerWidget();
+		
+		AbstractELTWidget deleteButtonOutput = getButton(""); 
+		outputDefaultSubgroupComposite.attachWidget(deleteButtonOutput); 
+
+		Button deleteButtonOut = (Button) deleteButtonOutput.getSWTWidgetControl();
+		deleteButtonOut.setParent(outputComposite);
+		deleteButtonOut.setBounds(31, 0, 23, 25);
+		deleteButtonOut.setImage(SWTResourceManager.getImage(DELETE_ICON));	
+		
 		outerOpTabViewer = createTableViewer(rightContainerComposite, new String[]{OPERATIONAL_OUTPUT_FIELD},new TransformGridContentProvider(),new OperationLabelProvider());
 		outerOpTabViewer.setCellModifier(new OperationGridCellModifier(outerOpTabViewer));
 		outerOpTabViewer.setInput(opOutputOuterFields); 
-		outerOpTabViewer.getTable().setBounds(10, 10, 700, 366);
+		outerOpTabViewer.getTable().setBounds(10, 10, 150, 445);
+		rightContainerComposite.setLocation(737, -315);
+		for (int columnIndex = 0, n = outerOpTabViewer.getTable().getColumnCount(); columnIndex < n; columnIndex++) {
+			outerOpTabViewer.getTable().getColumn(columnIndex).setWidth(145);
+		}    
 		DragDropUtility.INSTANCE.applyDrop(outerOpTabViewer,new DragDropTransformOpImp(opOutputOuterFields, true,outerOpTabViewer) );
 		
 		Composite topAddButtonComposite = new Composite(middleContainerComposite, SWT.NONE);
@@ -267,11 +315,10 @@ public class TransformDialog extends Dialog {
 		expandBarScrolledComposite.setBounds(10, 41, 902, 278);
 		expandBarScrolledComposite.setExpandHorizontal(true);
 		expandBarScrolledComposite.setExpandVertical(true); 
-		
-		expandBar = new ExpandBar(expandBarScrolledComposite,  SWT.H_SCROLL);
-		expandBar.setBounds(10, 41, 920, 278);
+		expandBarScrolledComposite.setAlwaysShowScrollBars(true);
+		expandBar = new ExpandBar(expandBarScrolledComposite, SWT.NONE);
+		expandBar.setBounds(10, 41, 902, 278); 
 		expandBar.setVisible(true); 
-		
 		Composite addDeleteButtonComposite = new Composite(middleContainerComposite, SWT.NONE);
 		addDeleteButtonComposite.setBounds(10, 351, 720, 19);
 		
@@ -294,6 +341,15 @@ public class TransformDialog extends Dialog {
 		deleteOutKeyValueButton.setBounds(700, 0, 18, 18);
 		deleteOutKeyValueButton.setImage(SWTResourceManager.getImage(DELETE_ICON));	
 		
+		
+		AbstractELTWidget mapFieldLableWidget = new ELTDefaultLable("Map Fields").lableWidth(250);
+		eltSuDefaultSubgroupComposite2.attachWidget(mapFieldLableWidget);
+		Label mapFieldLable=(Label) mapFieldLableWidget.getSWTWidgetControl();
+		mapFieldLable.setParent(addDeleteButtonComposite);
+		mapFieldLable.setBounds(300, 0, 100, 18);
+
+		addOutKeyValueButton.setParent(addDeleteButtonComposite);
+
 		nameValueComposite.setBounds(10, 372, 720, 163);  
 		
 		outerKeyValueTabViewer = createTableViewer(nameValueComposite, NAME_VALUE_COLUMN, new TransformGridContentProvider(),new PropertyLabelProvider());
@@ -303,9 +359,9 @@ public class TransformDialog extends Dialog {
 		
 		
 		for (int columnIndex = 0, n = outerKeyValueTabViewer.getTable().getColumnCount(); columnIndex < n; columnIndex++) {
-			outerKeyValueTabViewer.getTable().getColumn(columnIndex).setWidth(340);
+			outerKeyValueTabViewer.getTable().getColumn(columnIndex).setWidth(347);
 		}
-		DragDropUtility.INSTANCE.applyDragFromTableViewerOuter(outerKeyValueTabViewer.getTable()); 	
+		DragDropUtility.INSTANCE.applyDragFromTableViewerOuter(outerKeyValueTabViewer); 	
 		DragDropUtility.INSTANCE.applyDrop(outerKeyValueTabViewer,new DragDropTransformOpImp(opOuterClassProperty, false,outerKeyValueTabViewer));
 		ELTDefaultSubgroupComposite defaultnameValueComposite = new ELTDefaultSubgroupComposite(nameValueComposite);	
 		defaultnameValueComposite.createContainerWidget();
@@ -347,17 +403,21 @@ public class TransformDialog extends Dialog {
 		
 		ListenerHelper helperPropertyValue=getListenerHelper(opOuterClassProperty, outerKeyValueTabViewer, fieldError,eltTransforAddPropValueListener);
 		ListenerHelper helperInputOuter=getListenerHelper(operationSystemProperties, opSystemPropertiesTabViewer, fieldError,opSysSelectionListener);
+		ListenerHelper helperOutputOuter=getListenerHelper(opOutputOuterFields, outerOpTabViewer, fieldError,opSysSelectionListener);
 
-
+ 
 		/* 
 		 * Listener attached for property name value Outer main grid
 		 */
 			try {
 				addButton.attachListener(ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),propertyDialogButtonBar, helperPropertyValue, outerKeyValueTabViewer.getTable());
 				deleteButton.attachListener(ListenerFactory.Listners.TRANSFORM_DELETE_SELECTION.getListener(),propertyDialogButtonBar, helperPropertyValue, outerKeyValueTabViewer.getTable());
-				eltPropOuterTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),	propertyDialogButtonBar, helperPropertyValue, outerKeyValueTabViewer.getTable());
-				eltOpSysOuterTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),	propertyDialogButtonBar, helperInputOuter, opSystemPropertiesTabViewer.getTable());
- 
+				addButtonInput.attachListener(ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),propertyDialogButtonBar, helperInputOuter, opSystemPropertiesTabViewer.getTable());
+				deleteButtonInput.attachListener(ListenerFactory.Listners.TRANSFORM_DELETE_SELECTION.getListener(),propertyDialogButtonBar, helperInputOuter, opSystemPropertiesTabViewer.getTable());
+				deleteButtonOutput.attachListener(ListenerFactory.Listners.TRANSFORM_DELETE_SELECTION.getListener(),propertyDialogButtonBar, helperOutputOuter, outerOpTabViewer.getTable());
+				eltPropOuterTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),	propertyDialogButtonBar, helperPropertyValue, outerKeyValueTabViewer.getTable());				
+				eltOpSysOuterTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),	propertyDialogButtonBar, helperInputOuter, opSystemPropertiesTabViewer.getTable()); 
+				
 		
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
@@ -374,13 +434,12 @@ public class TransformDialog extends Dialog {
 		fd_middleContainerComposite.top = new FormAttachment(0, 10);
 		fd_middleContainerComposite.bottom = new FormAttachment(100, -10);
 		middleContainerComposite.setLayoutData(fd_middleContainerComposite);
-		
 		Composite leftContainerComposite = new Composite(shell, SWT.NONE);
 		fd_middleContainerComposite.left = new FormAttachment(leftContainerComposite, 6);
 		FormData fd_leftContainerComposite = new FormData();
 		fd_leftContainerComposite.top = new FormAttachment(0, 10);
 		fd_leftContainerComposite.bottom = new FormAttachment(100, -10);
-		fd_leftContainerComposite.right = new FormAttachment(0, 112);
+		fd_leftContainerComposite.right = new FormAttachment(0, 1400);
 		fd_leftContainerComposite.left = new FormAttachment(0, 20);
 		leftContainerComposite.setLayoutData(fd_leftContainerComposite);
 
@@ -393,16 +452,14 @@ public class TransformDialog extends Dialog {
 		fd_rightContainerComposite.left = new FormAttachment(0, 914);
 		rightContainerComposite.setLayoutData(fd_rightContainerComposite);
 		
-		ExpandItem expandItem = new ExpandItem(expandBar, SWT.V_SCROLL);
+		ExpandItem expandItem = new ExpandItem(expandBar, SWT.V_SCROLL | SWT.H_SCROLL);
 		expandItem.setExpanded(true);
 		expandItem.setText("Operation :"+transformOperation.getOperationId()); 
-		expandItem.setHeight(350);
-		
+		expandItem.setHeight(350); 
 		Composite expandItemContainerComposite = new Composite(expandBar, SWT.NONE);
 		expandItemContainerComposite.setVisible(true);
 		expandItem.setControl(expandItemContainerComposite);
 		expandItemContainerComposite.setLayout(new RowLayout(SWT.VERTICAL));
-		
 		Composite OpInputFieldComposite = new Composite(expandItemContainerComposite,SWT.NONE);
 		OpInputFieldComposite.setLayoutData(new RowData(170, 500));
 		OpInputFieldComposite.setSize(new Point(200, 0));
@@ -434,7 +491,7 @@ public class TransformDialog extends Dialog {
 		eltSuDefaultSubgroupComposite2.attachWidget(eltOpInTable);
 		innerOpInputTabViewer.getTable().setBounds(1, 20, 160, 200);
 		for (int columnIndex = 0, n = innerOpInputTabViewer.getTable().getColumnCount(); columnIndex < n; columnIndex++) {
-			innerOpInputTabViewer.getTable().getColumn(columnIndex).setWidth(150);
+			innerOpInputTabViewer.getTable().getColumn(columnIndex).setWidth(156);
 		}
 
 		
@@ -454,7 +511,7 @@ public class TransformDialog extends Dialog {
 		AbstractELTWidget fileNameText = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(150);
 		AbstractELTWidget isParameterCheckbox = new ELTDefaultCheckBox("IsParam").checkBoxLableWidth(100);
 
-		FilterOperationClassUtility.createOperationalClass(fileSelectionComposite, propertyDialogButtonBar, fileNameText, isParameterCheckbox, validationStatus, tootlTipErrorMessage);
+		FilterOperationClassUtility.createOperationalClass(fileSelectionComposite, propertyDialogButtonBar, fileNameText, isParameterCheckbox, validationStatus, tootlTipErrorMessage, widgetConfig);
 
 		Text fileName=(Text)fileNameText.getSWTWidgetControl(); 
 		Button btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl(); 
@@ -505,7 +562,6 @@ public class TransformDialog extends Dialog {
 		
 		eltFixedWidget.setSchemaGridRowList(transformOperation.getSchemaGridRowList());
 		TableViewer innerOpOutputTabViewer=	eltFixedWidget.createSchemaGrid(opOutputFieldComposite);
-		
 		DragDropUtility.INSTANCE.applyDragFromTableViewer(innerOpOutputTabViewer.getTable());  
 		expandBarScrolledComposite.setContent(expandBar);
 		expandBarScrolledComposite.setMinSize(expandBar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -550,7 +606,6 @@ public class TransformDialog extends Dialog {
 			table.setVisible(true);
 			table.setLinesVisible(true);
 			table.setHeaderVisible(true);
-			table.setBounds(0, 4, 10, 10);
 			createTableColumns(table,prop);
 			editors =createCellEditorList(table,prop.length); 
 			tableViewer.setCellEditors(editors);

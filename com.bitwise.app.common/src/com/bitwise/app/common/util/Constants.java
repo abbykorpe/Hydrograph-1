@@ -37,7 +37,10 @@ public class Constants {
 	public static final String SECONDARY_KEYS2 = "Secondary Keys ";
 	public static final String SECONDARY_KEYS = "Secondary\n Keys";
 	
-	
 	public static final String PROPERTY_COLUMN_NAME = "column_name";
 	public static final String PROPERTY_SECONDARY_COLUMN_KEYS = "secondary_column_keys";
+	
+	public static final String FILTER = "FILTER";
+	public static final String TRANSFORM = "TRANSFORM";
+	public static final String AGGREGATE = "AGGREGATE";
 }

@@ -45,6 +45,10 @@ public class Messages extends NLS {
 	public static String ALLOWED_CHARACTERS;
 	public static String INVALID_CHARACTERS;
 	public static String PORT_VALUE;
+	public static String FILTER_TEMPLATE;
+	public static String TRANSFORM_TEMPLATE;
+	public static String AGGREGATE_TEMPLATE;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

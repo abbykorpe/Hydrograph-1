@@ -44,7 +44,7 @@
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
 			
-		<tns:property dataType="string" name="operation" renderer="TRANSFORM_WIDGET" type="USER"
+		<tns:property dataType="string" name="operation" renderer="AGGREGATE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="OPTIONAL"/>			
 			
