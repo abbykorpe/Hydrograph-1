@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://www.bitwiseglobal.com/graph/partition-by-expression" xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwiseglobal.com/graph/partition-by-expression"
+<xs:schema xmlns="http://www.bitwiseglobal.com/graph/partitionByExpression" xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwiseglobal.com/graph/partitionByExpression"
   elementFormDefault="unqualified"
 >
   <xs:import schemaLocation="../../common/common-types.xsd"
@@ -46,7 +46,7 @@
             minOccurs="1" maxOccurs="1" />
           <xs:element name="outSocket" type="type-out-socket"
             minOccurs="1" maxOccurs="1" />
-           <xs:element name="runtime_properties" type="cmn:type-properties"
+           <xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" maxOccurs="1" />	 
         </xs:sequence>
       </xs:restriction>

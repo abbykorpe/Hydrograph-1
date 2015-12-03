@@ -59,7 +59,7 @@
           <xs:element name="inSocket" type="type-limit-in-socket"
             minOccurs="1" maxOccurs="1" />
            <xs:element name="outSocket" type="type-out-socket" />
-           <xs:element name="runtime_properties" type="cmn:type-properties"
+           <xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" maxOccurs="1" />	
         </xs:sequence>
       </xs:restriction>

@@ -1,6 +1,5 @@
 package com.bitwise.app.engine.ui.converter;
 
-import java.util.List;
 import java.util.TreeMap;
 
 import org.eclipse.draw2d.geometry.Dimension;
@@ -59,14 +58,13 @@ public abstract class StraightfullUIConverter extends UIConverter {
 	
 	@Override
 	protected TreeMap<String,String> getRuntimeProperties()
-	{
-		TreeMap<String,String> runtimeMap=null;
-		List<TypeProperties> typeProperties = ((TypeStraightPullComponent)typeBaseComponent).getRuntimeProperties();
-		if(typeProperties!=null && typeProperties.size()!=0){
+	{	TreeMap<String,String> runtimeMap=null;
+		TypeProperties typeProperties = ((TypeStraightPullComponent)typeBaseComponent).getRuntimeProperties();
+		if(typeProperties!=null ){
 			runtimeMap=new TreeMap<>();
-					for(Property runtimeProperty:typeProperties.get(0).getProperty()){
-						runtimeMap.put(runtimeProperty.getName(), runtimeProperty.getValue());
-					}
+				for(Property runtimeProperty:typeProperties.getProperty()){
+					runtimeMap.put(runtimeProperty.getName(), runtimeProperty.getValue());
+				}
 		}
 		return runtimeMap;
 	}

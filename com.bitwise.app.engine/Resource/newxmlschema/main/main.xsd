@@ -23,6 +23,9 @@
 
   <xs:element name="graph">
     <xs:complexType>
+     <xs:sequence>
+     <xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
       <xs:choice maxOccurs="unbounded" minOccurs="0">
 
         <xs:element name="inputs" type="cmn:type-input-component">
@@ -41,7 +44,7 @@
         </xs:element>
 
 
-        <xs:element name="straight-pulls" type="cmn:type-straight-pull-component">
+        <xs:element name="straightPulls" type="cmn:type-straight-pull-component">
           <xs:key name="straight-pull-keyInSocketId">
             <xs:selector xpath="./inSocket" />
             <xs:field xpath="@id" />
@@ -85,20 +88,25 @@
         </xs:element>
 
       </xs:choice>
+      </xs:sequence>
     </xs:complexType>
     <xs:key name="keyComponentID">
-      <xs:selector xpath="input|output|straight-pull|operations|command" />
+      <xs:selector xpath="inputs|outputs|straightPulls|operations|commands" />
       <xs:field xpath="@id" />
     </xs:key>
 
     <xs:key name="keyDependentComponentId">
-      <xs:selector xpath="output|command" />
+      <xs:selector xpath="outputs|commands|inputs"/>
       <xs:field xpath="@id" />
     </xs:key>
 
     <xs:keyref name="keyDependentComponentIdRef" refer="keyDependentComponentId">
-      <xs:selector xpath="input/dependsOn|command/dependsOn" />
+      <xs:selector xpath="inputs/dependsOn|commands/dependsOn" />
       <xs:field xpath="@componentId" />
     </xs:keyref>
+  
+    
   </xs:element>
+   
+  
 </xs:schema>

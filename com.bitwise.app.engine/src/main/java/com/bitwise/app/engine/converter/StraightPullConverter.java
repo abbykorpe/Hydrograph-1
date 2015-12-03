@@ -14,7 +14,7 @@ public abstract class StraightPullConverter extends Converter {
 	@Override
 	public void prepareForXML(){
 		super.prepareForXML();
-		((TypeStraightPullComponent) baseComponent).getRuntimeProperties().add(getRuntimeProperties());
+		((TypeStraightPullComponent) baseComponent).setRuntimeProperties(getRuntimeProperties());
 		((TypeStraightPullComponent) baseComponent).getInSocket().addAll(getInSocket());
 		((TypeStraightPullComponent) baseComponent).getOutSocket().addAll(getOutSocket());
 	}
