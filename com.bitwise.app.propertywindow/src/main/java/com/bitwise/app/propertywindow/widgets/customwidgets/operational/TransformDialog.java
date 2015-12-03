@@ -125,8 +125,6 @@ public class TransformDialog extends Dialog {
 	AbstractELTWidget fieldError = new ELTDefaultLable(Messages.FIELDNAMEERROR).lableWidth(250);
 	
 	private TootlTipErrorMessage tootlTipErrorMessage = new TootlTipErrorMessage();
-	private Table table_1;
-	private Table table_2;
 
 	/**
 	 * Create the dialog.
@@ -268,10 +266,11 @@ public class TransformDialog extends Dialog {
 		expandBarScrolledComposite.setVisible(true);
 		expandBarScrolledComposite.setBounds(10, 41, 902, 278);
 		expandBarScrolledComposite.setExpandHorizontal(true);
-		expandBarScrolledComposite.setExpandVertical(true);
+		expandBarScrolledComposite.setExpandVertical(true); 
 		
-		expandBar = new ExpandBar(expandBarScrolledComposite, SWT.NONE);
-		expandBar.setVisible(true);
+		expandBar = new ExpandBar(expandBarScrolledComposite,  SWT.H_SCROLL);
+		expandBar.setBounds(10, 41, 920, 278);
+		expandBar.setVisible(true); 
 		
 		Composite addDeleteButtonComposite = new Composite(middleContainerComposite, SWT.NONE);
 		addDeleteButtonComposite.setBounds(10, 351, 720, 19);
@@ -306,11 +305,11 @@ public class TransformDialog extends Dialog {
 		for (int columnIndex = 0, n = outerKeyValueTabViewer.getTable().getColumnCount(); columnIndex < n; columnIndex++) {
 			outerKeyValueTabViewer.getTable().getColumn(columnIndex).setWidth(340);
 		}
-
+		DragDropUtility.INSTANCE.applyDragFromTableViewerOuter(outerKeyValueTabViewer.getTable()); 	
 		DragDropUtility.INSTANCE.applyDrop(outerKeyValueTabViewer,new DragDropTransformOpImp(opOuterClassProperty, false,outerKeyValueTabViewer));
 		ELTDefaultSubgroupComposite defaultnameValueComposite = new ELTDefaultSubgroupComposite(nameValueComposite);	
 		defaultnameValueComposite.createContainerWidget();
-
+  
 		ELTTable eltPropOuterTable = new ELTTable(outerKeyValueTabViewer);
 		defaultnameValueComposite.attachWidget(eltPropOuterTable);
 	
@@ -355,7 +354,7 @@ public class TransformDialog extends Dialog {
 		 */
 			try {
 				addButton.attachListener(ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),propertyDialogButtonBar, helperPropertyValue, outerKeyValueTabViewer.getTable());
-				deleteButton.attachListener(ListenerFactory.Listners.GRID_DELETE_SELECTION.getListener(),propertyDialogButtonBar, helperPropertyValue, outerKeyValueTabViewer.getTable());
+				deleteButton.attachListener(ListenerFactory.Listners.TRANSFORM_DELETE_SELECTION.getListener(),propertyDialogButtonBar, helperPropertyValue, outerKeyValueTabViewer.getTable());
 				eltPropOuterTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),	propertyDialogButtonBar, helperPropertyValue, outerKeyValueTabViewer.getTable());
 				eltOpSysOuterTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),	propertyDialogButtonBar, helperInputOuter, opSystemPropertiesTabViewer.getTable());
  

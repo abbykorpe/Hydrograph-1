@@ -81,11 +81,13 @@ public abstract class UIConverter {
 	}
 	
 	protected boolean isParameter(String parameter) {
+		if(parameter!=null){
 		String Regex="[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}";
 		Matcher matchs = Pattern.compile(Regex).matcher(parameter);
 		if(matchs.matches())
 		{
 			return true;
+		}
 		}
 		return false;
 	}

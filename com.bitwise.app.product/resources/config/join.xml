@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig ComponentConfig.xsd ">
-	<tns:component paletteIconPath="/icons/joinimg.png" canvasIconPath="/icons/join_canvas.png"
+	<tns:component paletteIconPath="/icons/join_palette.png" canvasIconPath="/icons/join_canvas.png"
 		name="Join" nameInPalette="Join" defaultNamePrefix="Join" description="This is Join component. some more text">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>

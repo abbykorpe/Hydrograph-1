@@ -63,6 +63,39 @@ public class DragDropUtility {
 	    });
 
 	}
+	
+	public void applyDragFromTableViewerOuter(Control sourceControl){
+	    Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
+
+	    int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK;
+	    final Table table =(Table)sourceControl;
+	     DragSource source = new DragSource(table, operations);
+	    source.setTransfer(types);
+	    final String[] columnData = new String[1];
+	    source.addDragListener(new DragSourceListener() {
+	      public void dragStart(DragSourceEvent event) {
+	      TableItem[] selection = table.getSelection();
+	      
+	        if (selection[0].getText().length()>0) { 
+	          event.doit = true;
+	          columnData[0] = selection[0].getText();
+	        } else {
+	          event.doit = false;
+	        }
+	      }; 
+
+	      public void dragSetData(DragSourceEvent event) {
+	        event.data = columnData[0];
+	      }
+
+	      public void dragFinished(DragSourceEvent event) {
+	        if (event.detail == DND.DROP_COPY){
+	        	columnData[0]=null;
+	        }
+	      }
+	    });
+
+	}
 }
 
 class DradDropUtilityListener extends DropTargetAdapter{

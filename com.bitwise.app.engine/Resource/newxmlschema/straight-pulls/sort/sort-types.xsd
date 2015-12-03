@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.bitwiseglobal.com/graph/sort"
+	xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bitwiseglobal.com/graph/sort"
+	elementFormDefault="unqualified">
+	<xs:import schemaLocation="../../common/common-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/commontypes" />
+
+	<xs:complexType name="type-outSocket-as-inSocket-in0">
+		<xs:complexContent>
+			<xs:restriction base="cmn:type-outSocket-as-inSocket">
+				<xs:attribute name="inSocketId" type="xs:string" fixed="in0"
+					use="required" />
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="type-primary-key-fields-attributes">
+		<xs:complexContent>
+			<xs:extension base="cmn:type-field-name">
+				<xs:attribute name="order" type="cmn:type-sort-order"
+					default="Asc" use="optional" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="type-primary-key-fields">
+		<xs:sequence>
+			<xs:element name="field" maxOccurs="unbounded"
+				type="type-primary-key-fields-attributes" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="type-seconday-key-fields-attributes">
+		<xs:complexContent>
+			<xs:extension base="cmn:type-field-name">
+				<xs:attribute name="order" type="cmn:type-sort-order"
+					default="Asc" use="optional" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="type-secondary-key-fields">
+		<xs:sequence>
+			<xs:element name="field" maxOccurs="unbounded"
+				type="type-seconday-key-fields-attributes" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="type-out-socket">
+		<xs:complexContent>
+			<xs:restriction base="cmn:type-straight-pull-out-socket">
+				<xs:sequence maxOccurs="1" minOccurs="1">
+					<xs:element name="copyOfInsocket" type="type-outSocket-as-inSocket-in0" />
+				</xs:sequence>
+				<xs:attribute name="id" type="xs:string" use="required"
+					fixed="out0" />
+				<xs:attribute name="type" type="xs:string" fixed="out"
+					use="optional" />
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="sort-base">
+		<xs:complexContent>
+			<xs:restriction base="cmn:type-straight-pull-component">
+				<xs:sequence>
+					<xs:element name="inSocket" type="cmn:type-base-inSocket-fixed-in0"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="outSocket" type="type-out-socket"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="runtime_properties" type="cmn:type-properties"
+						minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>
