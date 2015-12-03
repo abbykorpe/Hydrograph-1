@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig ComponentConfig.xsd ">
-	<tns:component paletteIconPath="/icons/join_palette.png" canvasIconPath="/icons/join_canvas.png"
-		name="Join" nameInPalette="Join" defaultNamePrefix="Join" description="This is Join component. some more text">
+	<tns:component paletteIconPath="/icons/lookup_palette.png" canvasIconPath="/icons/lookup_canvas.png"
+		name="Lookup" nameInPalette="Lookup" defaultNamePrefix="Lookup" description="This is Lookup component. some more text">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification>
@@ -38,22 +38,14 @@
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
-			
-		<tns:property dataType="string" name="input_count" value="2" renderer="INPUT_COUNT_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED"/>
-			
-		<tns:property dataType="string" name="join_type" renderer="JOIN_TYPE_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="REQUIRED"/>
-			
-		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED"/>
 		
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL"/>
 		
+		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED"/>
+			
 	</tns:component>
 </tns:Config>
