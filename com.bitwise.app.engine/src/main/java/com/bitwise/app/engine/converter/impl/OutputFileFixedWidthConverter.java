@@ -25,7 +25,7 @@ import com.bitwiseglobal.graph.outputtypes.TextFileFixedWidth;
 public class OutputFileFixedWidthConverter extends OutputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
-	
+	private static final String LENGTH_QNAME="length";
 	public OutputFileFixedWidthConverter(Component component) {
 		super();
 		this.component = component;
@@ -76,18 +76,26 @@ public class OutputFileFixedWidthConverter extends OutputConverter {
 				for (FixedWidthGridRow object : schemaList ) {
 					TypeBaseField typeBaseField = new TypeBaseField();
 					typeBaseField.setName(object.getFieldName());
-					typeBaseField.setDescription("");
-					typeBaseField.setFormat(object.getDateFormat());
+					
+					if(object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())&& !object.getDateFormat().trim().isEmpty() )
+						typeBaseField.setFormat(object.getDateFormat());
+				
 					if(!object.getScale().trim().isEmpty())
 						typeBaseField.setScale(Integer.parseInt(object.getScale()));
-					typeBaseField.setScaleType(ScaleTypeList.EXPLICIT );
+				
+					if(object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())||object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value()))
+					{	typeBaseField.setScaleType(ScaleTypeList.EXPLICIT );
+						if(!object.getScale().trim().isEmpty())
+							typeBaseField.setScale(Integer.parseInt(object.getScale()));
+					}
+										
 					for(FieldDataTypes fieldDataType:FieldDataTypes.values()){
 						if(fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
 							typeBaseField.setType(fieldDataType);
 					}
-					if(object.getLength()!=null)
+					if(object.getLength()!=null && !object.getLength().trim().isEmpty() )
 					{
-						typeBaseField.getOtherAttributes().put(new QName("length"), object.getLength());
+						typeBaseField.getOtherAttributes().put(new QName(LENGTH_QNAME), object.getLength());
 					}
 					typeBaseFields.add(typeBaseField);
 				}
