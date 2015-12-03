@@ -2,7 +2,7 @@
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/filter_palette.png" canvasIconPath="/icons/filter_canvas.png"
-		name="Filter" nameInPalette="Filter" defaultNamePrefix="Filter" description="This is Filter component. some more text">
+		name="Filter" nameInPalette="Filter" defaultNamePrefix="Filter" description="This is Filter component.\nsome more text">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification>
