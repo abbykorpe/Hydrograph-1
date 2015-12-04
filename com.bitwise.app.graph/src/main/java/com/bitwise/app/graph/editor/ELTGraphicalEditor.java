@@ -292,9 +292,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				// @see ShapesEditor#createTransferDropTargetListener()
 				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(
 						viewer));
-				viewer.getControl().addMouseListener(
-						new PaletteContainerListener(viewer, getGraphicalViewer()));
-				viewer.getControl().addMouseTrackListener(new PaletteContainerListener(viewer, getGraphicalViewer()));
+				
+				PaletteContainerListener paletteContainerListener = new PaletteContainerListener(viewer, getGraphicalViewer());
+				
+				viewer.getControl().addMouseListener(paletteContainerListener);
+				viewer.getControl().addMouseTrackListener(paletteContainerListener);
+				viewer.getControl().addMouseMoveListener(paletteContainerListener);
+				
 			}
 			@Override
 			public PaletteViewer createPaletteViewer(Composite parent) {
