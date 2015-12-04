@@ -116,6 +116,7 @@ public class ELTOperationClassDialog extends Dialog {
         if (!operationClassProperty.getOperationClassPath().equalsIgnoreCase("")) {
               fileName.setText(operationClassProperty.getOperationClassPath());
               btnCheckButton.setSelection(operationClassProperty.isParameter());
+              fileName.setData("path", operationClassProperty.getOperationClassFullPath());
         }
   }
 
@@ -179,14 +180,14 @@ public class ELTOperationClassDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-        operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getSelection());
+        operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getSelection(),(String)fileName.getData("path"));
 		super.okPressed();
 	}
 
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if(buttonId == 3){
-			operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getSelection());
+			operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getSelection(),(String)fileName.getData("path"));
 			applyButton.setEnabled(false);
 		}else{
 			super.buttonPressed(buttonId);
@@ -194,7 +195,7 @@ public class ELTOperationClassDialog extends Dialog {
 	}
 	
 	public OperationClassProperty getOperationClassProperty() {
-		OperationClassProperty operationClassProperty = new OperationClassProperty(this.operationClassProperty.getOperationClassPath(),this.operationClassProperty.isParameter());
+		OperationClassProperty operationClassProperty = new OperationClassProperty(this.operationClassProperty.getOperationClassPath(),this.operationClassProperty.isParameter(),this.operationClassProperty.getOperationClassFullPath());
 		return operationClassProperty;
 	}
 

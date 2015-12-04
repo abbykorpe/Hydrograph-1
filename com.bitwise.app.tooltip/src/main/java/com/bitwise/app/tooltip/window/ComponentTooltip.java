@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
+import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
 import com.bitwise.app.common.util.WordUtils;
 import com.bitwise.app.propertywindow.messages.Messages;
@@ -109,7 +110,7 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 							String propertyNameCapitalized = WordUtils.capitalize(propertyName.toLowerCase(), '_').replace("_", " ");
 							
 							String tempText= propertyNameCapitalized + " : <a>" + propertyInfo.getPropertyValue().toString() + "</a>";
-							final String filePath = propertyInfo.getPropertyValue().toString();
+							final OperationClassProperty filePath = (OperationClassProperty) propertyInfo.getPropertyValue();
 							link.setText(tempText);
 							link.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 							
@@ -118,7 +119,7 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 								public void widgetSelected(SelectionEvent e) {
 									// TODO Auto-generated method stub
 									super.widgetSelected(e);
-									boolean flag = FilterOperationClassUtility.openFileEditor(filePath);
+									boolean flag = FilterOperationClassUtility.openFileEditor(null,filePath.getOperationClassFullPath());
 									if (!flag) {
 										WidgetUtility.errorMessage("File Not Found"); 
 									} else {

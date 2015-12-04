@@ -10,6 +10,7 @@ public class OperationClassProperty implements Cloneable{
 	
 	private String operationClassPath;
 	private boolean isParameter;
+	private String operationClassFullPath;
 	
 	/**
 	 * Instantiates a new operation class property.
@@ -19,9 +20,10 @@ public class OperationClassProperty implements Cloneable{
 	 * @param isParameter
 	 *            the is parameter
 	 */
-	public OperationClassProperty(String operationClassPath, boolean isParameter) {
+	public OperationClassProperty(String operationClassPath, boolean isParameter,String operationClassFullPath) {
 		this.operationClassPath = operationClassPath;
 		this.isParameter = isParameter;
+		this.operationClassFullPath=operationClassFullPath;
 	}
 	public String getOperationClassPath() {
 		return operationClassPath;
@@ -30,9 +32,15 @@ public class OperationClassProperty implements Cloneable{
 		return isParameter;
 	}
 		
+	public String getOperationClassFullPath() {
+		return operationClassFullPath;
+	}
+	public void setOperationClassFullPath(String operationClassFullPath) {
+		this.operationClassFullPath = operationClassFullPath;
+	}
 	@Override
 	public OperationClassProperty clone(){
-		return new OperationClassProperty(operationClassPath,isParameter);
+		return new OperationClassProperty(operationClassPath,isParameter,operationClassFullPath);
 	}
 
 	@Override

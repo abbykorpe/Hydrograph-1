@@ -48,8 +48,6 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
  * @author Bitwise
  */
 public class FilterOperationClassUtility {
-	private static String filePath = "";
-
 	/**
 	 * Creates the new class wizard.
 	 * 
@@ -76,8 +74,10 @@ public class FilterOperationClassUtility {
 		page.setSuperInterfaces(interfaceList, true);  
 		wizard.setConfiguredWizardPage(page);
 		wizard.run();
-		if (page.isPageComplete())
-			fileName.setText("/" + page.getPackageFragmentRootText() + "/"
+		if (page.isPageComplete()) 
+			fileName.setText(page.getPackageText()+"."
+					+ page.getTypeName());
+			fileName.setData("path", "/" + page.getPackageFragmentRootText() + "/"
 					+ page.getPackageText().replace(".", "/") + "/"
 					+ page.getTypeName() + ".java");
 	}
@@ -95,7 +95,7 @@ public class FilterOperationClassUtility {
 				"Project", "Select Java Class (.java)", new String[] { filterExtension });
 		if (dialog.open() == IDialogConstants.OK_ID) {
 			IResource resource = (IResource) dialog.getFirstResult();
-			filePath = resource.getRawLocation().toOSString();
+			String filePath = resource.getRawLocation().toOSString();
 			java.nio.file.Path path =Paths.get(filePath); 
 			String classFile=path.getFileName().toString();
 			String name = "";
@@ -112,6 +112,9 @@ public class FilterOperationClassUtility {
 				e.printStackTrace();
 			}
 			fileName.setText(name.trim());
+			filePath = resource.getRawLocation().toOSString();
+			fileName.setData("path", resource.getFullPath().toOSString());
+
 		}
 	} 
 
@@ -122,18 +125,25 @@ public class FilterOperationClassUtility {
 	 *            the file name
 	 * @return true, if successful
 	 */
-	public static boolean openFileEditor(String fileName) {
+	public static boolean openFileEditor(Text filePath,String pathFile) {
 		try {
+			String fileFullPath;
+			String fileName;
+			if(filePath!=null)
+				fileName= (String) filePath.getData("path");
+			else
+				fileName=pathFile;
+			
 			File fileToOpen = new File(fileName);
 			if(!fileToOpen.isFile())
 			{
 			Path path = new Path(fileName);
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-			filePath = file.getRawLocation().toOSString();
+			fileFullPath = file.getRawLocation().toOSString();
 			}
 			else
-			filePath=fileName;
-			File fileToEditor = new File(filePath);
+			fileFullPath=fileName;
+			File fileToEditor = new File(fileFullPath);
 			if (fileToEditor.exists()) {
 				IFileStore fileStore = EFS.getLocalFileSystem().getStore(
 						fileToEditor.toURI());
@@ -205,7 +215,7 @@ public static OperationClassProperty createOperationalClass(Composite composite,
 		// TODO Auto-generated catch block
 		e1.printStackTrace(); 
 	} 
-	OperationClassProperty operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getEnabled());
+	OperationClassProperty operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getEnabled(),(String)fileName.getData("path"));
 	return operationClassProperty;
 }
 	

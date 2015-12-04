@@ -73,18 +73,11 @@ public class ELTEmptyTextModifyListener implements IELTListener {
 						validationStatus.setIsValid(false);
 						((Text) widgetList[0]).setToolTipText(fieldNameDecorator.getDescriptionText());
 					}else{
-						//File has java extension
-						if(WidgetUtility.isFileExtention((((Text) widgetList[0]).getText()).trim(), ".java")){
 							((Button) widgetList[1]).setEnabled(true);
 							fieldNameDecorator.hide();
 							validationStatus.setIsValid(true);
 						}
-						else{
-							fieldNameDecorator.hide();
-								validationStatus.setIsValid(false);
-							((Button) widgetList[1]).setEnabled(false);
-						}
-					}
+					
 				}
 				else{
 					fieldNameDecorator.hide();

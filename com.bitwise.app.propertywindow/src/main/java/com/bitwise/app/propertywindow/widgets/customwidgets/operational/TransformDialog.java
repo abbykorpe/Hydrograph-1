@@ -88,7 +88,11 @@ public class TransformDialog extends Dialog {
 	
 	public static final String PROPERTY_NAME = "Source";
 	public static final String PROPERTY_VALUE = "Target";
+	public static final String PROPERTY_NAME_INNER = "Property Name";
+	public static final String PROPERTY_VALUE_INNER = "Property Value";
+
 	public static final String OPERATIONAL_INPUT_FIELD = "Operation Input Fields";
+	public static final String OPERATIONAL_OUTPUT_INNER_FIELD = "Operation Output Fields";
 	public static final String OPERATIONAL_OUTPUT_FIELD = "Output Fields";
 	public static final String OPERATIONAL_SYSTEM_FIELD = "Input Fields";
 	private static final String ADD_ICON = XMLConfigUtil.CONFIG_FILES_PATH + "/icons/add.png";
@@ -100,6 +104,7 @@ public class TransformDialog extends Dialog {
 	Map<Text,Button> opClassMap = new LinkedHashMap<Text, Button>();
 
 	private static final String[] NAME_VALUE_COLUMN = {PROPERTY_NAME, PROPERTY_VALUE};
+	private static final String[] NAME_VALUE_COLUMN_INNER = {PROPERTY_NAME_INNER, PROPERTY_VALUE_INNER};
 	
 	private ELTTransforAddSelectionListener eltTransforAddSelectionListener = new ELTTransforAddSelectionListener();
 	private ELTTransforAddOpSysSelectionListener opSysSelectionListener = new ELTTransforAddOpSysSelectionListener();
@@ -289,7 +294,7 @@ public class TransformDialog extends Dialog {
 
 		Button deleteButtonOut = (Button) deleteButtonOutput.getSWTWidgetControl();
 		deleteButtonOut.setParent(outputComposite);
-		deleteButtonOut.setBounds(31, 0, 23, 25);
+		deleteButtonOut.setBounds(0, 5, 18, 18);
 		deleteButtonOut.setImage(SWTResourceManager.getImage(DELETE_ICON));	
 		
 		outerOpTabViewer = createTableViewer(rightContainerComposite, new String[]{OPERATIONAL_OUTPUT_FIELD},new TransformGridContentProvider(),new OperationLabelProvider());
@@ -479,7 +484,7 @@ public class TransformDialog extends Dialog {
 		Button btnNewButton_5 = (Button) deleteButton.getSWTWidgetControl();
 		btnNewButton_5.setParent(OpInputFieldComposite);
 		btnNewButton_5.setBounds(145, 0, 18, 18);
-		btnNewButton_5.setImage(SWTResourceManager.getImage(DELETE_ICON));		 
+		btnNewButton_5.setImage(SWTResourceManager.getImage(DELETE_ICON));	
 		
 		innerOpInputTabViewer = createTableViewer(OpInputFieldComposite, new String[]{OPERATIONAL_INPUT_FIELD},new TransformGridContentProvider(),new OperationLabelProvider());
 		innerOpInputTabViewer.setCellModifier(new OperationGridCellModifier(innerOpInputTabViewer));
@@ -517,15 +522,16 @@ public class TransformDialog extends Dialog {
 		Button btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl(); 
 		if(!transformOperation.getOpClassProperty().getOperationClassPath().equalsIgnoreCase(""))
 		{
-				fileName.setText(transformOperation.getOpClassProperty().getOperationClassPath()); 
+				fileName.setText(transformOperation.getOpClassProperty().getOperationClassPath());  
 				btnCheckButton.setSelection(transformOperation.getOpClassProperty().isParameter()); 
+				fileName.setData("path", transformOperation.getOpClassProperty().getOperationClassFullPath());
 		} 		
 
 		Composite nameValueInnerComposite = new Composite(composite_4, SWT.NONE);
-		innerKeyValueTabViewer = createTableViewer(nameValueInnerComposite, NAME_VALUE_COLUMN, new TransformGridContentProvider(),new PropertyLabelProvider());
-		innerKeyValueTabViewer.setCellModifier(new PropertyGridCellModifier(innerKeyValueTabViewer));
+		innerKeyValueTabViewer = createTableViewer(nameValueInnerComposite, NAME_VALUE_COLUMN_INNER, new TransformGridContentProvider(),new PropertyLabelProvider());
+		innerKeyValueTabViewer.setCellModifier(new PropertyGridInnerCellModifier(innerKeyValueTabViewer)); 
 		innerKeyValueTabViewer.setInput(transformOperation.getNameValueProps());  
-		innerKeyValueTabViewer.getTable().setBounds(12, 25, 300, 200);
+		innerKeyValueTabViewer.getTable().setBounds(12, 25, 300, 200); 
 		for (int columnIndex = 0, n = innerKeyValueTabViewer.getTable().getColumnCount(); columnIndex < n; columnIndex++) {
 			innerKeyValueTabViewer.getTable().getColumn(columnIndex).setWidth(148);
 		}
@@ -555,10 +561,28 @@ public class TransformDialog extends Dialog {
 		btnInnerPropValueDeleteButton.setParent(nameValueInnerComposite);
 		btnInnerPropValueDeleteButton.setBounds(270, 0, 18, 18);
 		btnInnerPropValueDeleteButton.setImage(SWTResourceManager.getImage(DELETE_ICON));
+		
+		AbstractELTWidget mapFieldLableWidget = new ELTDefaultLable("Properties").lableWidth(250);
+		eltSuDefaultSubgroupComposite2.attachWidget(mapFieldLableWidget);
+		Label mapFieldLable=(Label) mapFieldLableWidget.getSWTWidgetControl();
+		mapFieldLable.setParent(nameValueInnerComposite);
+		mapFieldLable.setBounds(100, 0, 60, 18); 
 
+
+		Composite opOutputFieldComposite1 = new Composite(composite_4, SWT.NONE);
+		opOutputFieldComposite1.setLayout(new RowLayout(SWT.HORIZONTAL));
+		opOutputFieldComposite1.setLayoutData(new RowData(30, 10)); 
+		
+		Label opOutputFieldLable = new Label(opOutputFieldComposite1, SWT.NONE);
+		opOutputFieldLable.setText(OPERATIONAL_OUTPUT_INNER_FIELD);
+		opOutputFieldLable.setBounds(0, 0, 30, 18);   
+
+		
 		Composite opOutputFieldComposite = new Composite(composite_4, SWT.NONE);
 		opOutputFieldComposite.setLayout(new RowLayout(SWT.HORIZONTAL));
 		opOutputFieldComposite.setLayoutData(new RowData(600, 400)); 
+		
+		
 		
 		eltFixedWidget.setSchemaGridRowList(transformOperation.getSchemaGridRowList());
 		TableViewer innerOpOutputTabViewer=	eltFixedWidget.createSchemaGrid(opOutputFieldComposite);
@@ -764,7 +788,7 @@ public class TransformDialog extends Dialog {
 				List<OperationClassProperty> operationClassProperties= new ArrayList<>();
 				for (Map.Entry<Text, Button> entry : opClassMap.entrySet())
 				{
-				    OperationClassProperty operationClassProperty = new OperationClassProperty(entry.getKey().getText(), entry.getValue().getSelection());
+				    OperationClassProperty operationClassProperty = new OperationClassProperty(entry.getKey().getText(), entry.getValue().getSelection(),(String)entry.getKey().getData("path"));
 				    operationClassProperties.add(operationClassProperty);
 				}
 				for (TransformOperation transformOperation : transformOperationList) 

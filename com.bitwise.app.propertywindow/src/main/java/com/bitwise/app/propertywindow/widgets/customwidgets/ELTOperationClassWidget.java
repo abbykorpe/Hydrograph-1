@@ -55,7 +55,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 
 		this.operationClassProperty = (OperationClassProperty) componentConfigrationProperty.getPropertyValue();
 		if(operationClassProperty == null){
-			operationClassProperty = new OperationClassProperty("", false);
+			operationClassProperty = new OperationClassProperty("", false,null);
 		}
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 	}
