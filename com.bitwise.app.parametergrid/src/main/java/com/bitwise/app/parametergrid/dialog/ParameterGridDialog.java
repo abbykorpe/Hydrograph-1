@@ -13,18 +13,27 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
@@ -45,6 +54,10 @@ import com.bitwise.app.parametergrid.textgridwidget.TextGrid;
 import com.bitwise.app.parametergrid.textgridwidget.columns.TextGridColumnLayout;
 import com.bitwise.app.parametergrid.textgridwidget.columns.TextGridRowLayout;
 import com.bitwise.app.parametergrid.utils.ParameterFileManager;
+import com.bitwise.app.propertywindow.messages.Messages;
+import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
+
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 
@@ -55,6 +68,8 @@ public class ParameterGridDialog extends Dialog {
 	private Button headerCompositeCheckBox;
 	private Text paramterFileTextBox;
 	private String parameterFile;
+	private ControlDecoration txtDecorator;
+	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -63,6 +78,7 @@ public class ParameterGridDialog extends Dialog {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		runGraph=false;
+		
 	}
 
 	/**
@@ -114,8 +130,44 @@ public class ParameterGridDialog extends Dialog {
 					}
 					
 				});
-				
-				
+				for(Composite row:textGrid.getGrid()){
+					 final Text text=((Text)row.getChildren()[1]);
+					 txtDecorator=WidgetUtility.addDecorator(text,Messages.CHARACTERSET);
+					 txtDecorator.hide();
+					text.addVerifyListener(new VerifyListener() {
+						@Override
+						public void verifyText(VerifyEvent e) {
+							txtDecorator.hide();
+							String currentText = ((Text) e.widget).getText();
+							String newName = (currentText.substring(0, e.start) + e.text + currentText.substring(e.end));
+							Matcher matchName = Pattern.compile("[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*").matcher(newName);
+								if(!matchName.matches()){
+								text.setToolTipText(Messages.CHARACTERSET);
+								txtDecorator=WidgetUtility.addDecorator(text,Messages.CHARACTERSET);
+								txtDecorator.setDescriptionText(Messages.CHARACTERSET);
+								txtDecorator.show();
+								e.doit=false;
+							}
+							else
+							{
+								text.setToolTipText("");
+								text.setMessage("");
+								txtDecorator.hide();
+							}
+						}
+					});
+					
+				text.addFocusListener(new FocusListener() {
+					@Override
+					public void focusLost(FocusEvent e) {
+						 txtDecorator.hide();
+					}
+					@Override
+					public void focusGained(FocusEvent e) {
+						// TODO Auto-generated method stub
+					}
+				}); 
+				}
 				textGrid.refresh();
 				textGrid.scrollToLastRow();
 			}
@@ -185,6 +237,8 @@ public class ParameterGridDialog extends Dialog {
 				textGrid.setHeight(container.getParent().getBounds().height - 150);
 			}
 		});
+		
+		
 		
 		
 		
@@ -565,4 +619,9 @@ public class ParameterGridDialog extends Dialog {
 	protected Point getInitialSize() {
 		return new Point(450, 423);
 	}
+
+	public TextGrid getTextGrid() {
+		return textGrid;
+	}
+	
 }
