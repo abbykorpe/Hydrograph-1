@@ -97,6 +97,9 @@ public abstract class Component extends Model {
 	
 	//@XStreamOmitField
 	private Map<String,String> toolTipErrorMessages; //<propertyName,ErrorMessage>
+	
+	/*@XStreamOmitField
+	private Map<String,PropertyToolTipInformation> paletteTooltipMessage;*/
 
 	/**
 	 * Instantiates a new component.
@@ -507,34 +510,81 @@ public abstract class Component extends Model {
 	}
 	
 	
+	public String getComponentDescription(){
+		return XMLConfigUtil.INSTANCE.getComponent(componentName).getDescription();
+	}
+	
 	public void changePortSettings(int newPortCount){
-		
-		
+
+		int prevPortCount = ports.size()-1;
+
+		if (prevPortCount < newPortCount){
+			incrementPortCount(newPortCount);
+		}else{
+			decrementPortCount(newPortCount);
+		}
+	}
+
+	public void incrementPortCount(int newPortCount){
+
+
 		Port firstPort= ports.get("in1");
 		firstPort.setNumberOfPortsOfThisType(newPortCount);
-		
+
 		Port secondPort= ports.get("in2");
 		secondPort.setNumberOfPortsOfThisType(newPortCount);
-		
-		
+
+
 		Port outport1 =  ports.get("out1");
-		
-		 ports.clear();
-		 ports.put("in1", firstPort);
-		 ports.put("in2", secondPort);
-		 ports.put("out1", outport1);
-		
+
+		ports.clear();
+		ports.put("in1", firstPort);
+		ports.put("in2", secondPort);
+		ports.put("out1", outport1);
+
 		for(int i=0; i< (newPortCount-2); i++){
-			 
+
 			Port port = new Port("in"+(i+2) , "in"+(i+2), "in"+(i+3), this, newPortCount, "in", (i+3));
 			ports.put("in"+(i+3), port);
 			firePropertyChange("in"+(i+2), null, port );
 		}
+	}
+
+	private void decrementPortCount(int newPortCount){
+		int keyCount = newPortCount;
+		List<String> oldKeys = new ArrayList<>();
+		List<String> newKeys = new ArrayList<>();
+		List<String> keysToBeRemoved = new ArrayList<>();
 		
+		oldKeys.addAll(ports.keySet());
+
+		for(int i=1; i<=keyCount; i++)
+		{
+			newKeys.add("in"+i);
+		}
+		newKeys.add("out1");
 		
-//		Port port = new Port("new", "new", "new", this, 3, "in", 3);
-//		//Port port = new Port(p.getNameOfPort(),p.getLabelOfPort(),"new", this, p.getNumberOfPorts(), p.getTypeOfPort(), p.getSequenceOfPort());
-//		ports.put("new", port);
-//		firePropertyChange("newport", null, port );
+
+		for (String key : oldKeys) {
+			if(!newKeys.contains(key))
+				keysToBeRemoved.add(key);
+		}
+		for(int i=0; i<keysToBeRemoved.size(); i++){
+			String portToBeRemoved = (String) keysToBeRemoved.get(i);
+				for(int j=0; j< inputLinks.size(); j++){
+					Link l = inputLinks.get(j);
+					if(l.getTargetTerminal().equals(portToBeRemoved)){
+						
+						l.detachSource();
+						l.detachTarget();
+						l.getSource().freeOutputPort(l.getSourceTerminal());
+						l.getTarget().freeInputPort(l.getTargetTerminal());
+					}
+				}
+			
+			firePropertyChange(portToBeRemoved, ports.get(portToBeRemoved) , null);
+			ports.remove(portToBeRemoved);
+		}
+
 	}
 }

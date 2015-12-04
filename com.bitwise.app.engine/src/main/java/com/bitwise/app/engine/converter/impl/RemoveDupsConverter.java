@@ -90,8 +90,6 @@ public class RemoveDupsConverter extends StraightPullConverter {
 		String keepValue = properties.get(
 				PropertyNameConstants.RETENTION_LOGIC_KEEP.value()).toString();
 		Keep keep = new Keep();
-		if(keepValue.toLowerCase().contains("unique"))
-			keepValue="uniqueonly";
 		keep.setValue(KeepValue.fromValue(keepValue.toLowerCase()));
 		return keep;
 	}
