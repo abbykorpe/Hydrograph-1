@@ -149,7 +149,7 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 	private void showPaletteToolTip(String toolTipMessage) {
 		paletteToolTip = new PaletteToolTip(Display.getDefault());
 		java.awt.Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-		paletteToolTip.setLocation(mouseLocation.x +5 , mouseLocation.y +5);
+		paletteToolTip.setLocation(mouseLocation.x+11 , mouseLocation.y+7);
 		paletteToolTip.setToolTipText(toolTipMessage);
 		paletteToolTip.setVisible(true);
 	}
@@ -194,7 +194,7 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 	public void mouseMove(MouseEvent e) {
 		if(paletteToolTip!=null){
 			org.eclipse.swt.graphics.Rectangle tooltipBounds = paletteToolTip.getBounds();
-			org.eclipse.swt.graphics.Rectangle newBounds = new org.eclipse.swt.graphics.Rectangle(tooltipBounds.x -5, tooltipBounds.y-5, tooltipBounds.width, tooltipBounds.height);
+			org.eclipse.swt.graphics.Rectangle newBounds = new org.eclipse.swt.graphics.Rectangle(tooltipBounds.x-11, tooltipBounds.y-7, tooltipBounds.width, tooltipBounds.height);
 			java.awt.Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
 			if(!newBounds.contains(mouseLocation.x,mouseLocation.y))
 				hidePaletteToolTip();
