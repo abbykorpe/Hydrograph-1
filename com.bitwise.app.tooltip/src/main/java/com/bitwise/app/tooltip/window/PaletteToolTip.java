@@ -1,5 +1,8 @@
 package com.bitwise.app.tooltip.window;
 
+import java.nio.CharBuffer;
+import java.util.ArrayList;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseTrackListener;
@@ -18,6 +21,8 @@ public class PaletteToolTip extends Shell {
 	private PaletteToolTip thisTestPaletteToolTip;
 	private Composite toolTipComposite;
 	private Label toolTipText;
+	private String blankCharacters;
+	private Link helpLink;
 	
 	public Rectangle getFullToolTipBounds(){
 		Point tooltipSize = toolTipComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT);
@@ -25,7 +30,20 @@ public class PaletteToolTip extends Shell {
 		return bounds;
 	}
 	
+	private void setblankCharacters(String text){
+		String[] lines = text.split("\\n");
+		int maxLength=0;		
+		for(int i=0;i<lines.length;i++){
+			if(lines[i].length() > maxLength){
+				maxLength = lines[i].length();
+			}
+		}
+		blankCharacters=CharBuffer.allocate( maxLength + 5).toString().replace( '\0', ' ' );
+		helpLink.setText(blankCharacters + "<a>help</a> ");
+	}
+	
 	public void setToolTipText(String text){
+		setblankCharacters(text);
 		toolTipText.setText(text.replace("\\n", "\n"));
 		setSize(this.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
@@ -86,11 +104,11 @@ public class PaletteToolTip extends Shell {
 		Label label = new Label(toolTipComposite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
-		Link link = new Link(toolTipComposite, SWT.NONE);
-		link.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		link.setText("<a>Help</a>");
-		link.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-		link.addMouseTrackListener(new MouseTrackListener() {
+		helpLink = new Link(toolTipComposite, SWT.NONE);
+		helpLink.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		helpLink.setText("<a>Help</a>");
+		helpLink.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+		helpLink.addMouseTrackListener(new MouseTrackListener() {
 			
 			@Override
 			public void mouseHover(MouseEvent e) {

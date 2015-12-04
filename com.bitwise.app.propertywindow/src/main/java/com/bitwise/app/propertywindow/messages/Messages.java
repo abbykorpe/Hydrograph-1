@@ -43,6 +43,7 @@ public class Messages extends NLS {
 	public static String EMPTY_FIELD;
 	public static String INVALID_SORT_ORDER;
 	public static String ALLOWED_CHARACTERS;
+	public static String PROPERTY_NAME_ALLOWED_CHARACTERS;
 	public static String INVALID_CHARACTERS;
 	public static String PORT_VALUE;
 	static {
