@@ -37,14 +37,14 @@ public class TextGridRowBuilder {
 	public Composite addHeader(){
 		Composite composite = new Composite(container, SWT.NONE);
 		GridLayout gl_composite = new GridLayout(textGridRow.getNumberOfColumn() + 1, false);
-		gl_composite.horizontalSpacing = 1;
+		gl_composite.horizontalSpacing = 7;
 		gl_composite.marginWidth = 1;
 		gl_composite.marginHeight = 0;
 		gl_composite.verticalSpacing = 1;
 		composite.setLayout(gl_composite);
 			
 		Button rowSelection = new Button(composite, SWT.CHECK);
-		rowSelection.setText(" ");
+	//	rowSelection.setText(" ");
 		//rowSelection.setEnabled(enabled);
 		
 		Map<Integer, TextGridColumnLayout> columns = textGridRow.getTextGridColumns();
@@ -85,14 +85,14 @@ public class TextGridRowBuilder {
 	public Composite addRaw(){
 		Composite composite = new Composite(container, SWT.NONE);
 		GridLayout gl_composite = new GridLayout(textGridRow.getNumberOfColumn() + 1, false);
-		gl_composite.horizontalSpacing = 1;
+		gl_composite.horizontalSpacing = 7;
 		gl_composite.marginWidth = 1;
 		gl_composite.marginHeight = 0;
 		gl_composite.verticalSpacing = 1;
 		composite.setLayout(gl_composite);
 			
 		Button rowSelection = new Button(composite, SWT.CHECK);
-		rowSelection.setText(" ");
+		//rowSelection.setText(" ");
 		rowSelection.setEnabled(enabled);
 		
 		Map<Integer, TextGridColumnLayout> columns = textGridRow.getTextGridColumns();
