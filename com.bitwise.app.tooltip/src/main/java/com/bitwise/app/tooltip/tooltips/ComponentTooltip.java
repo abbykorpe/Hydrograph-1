@@ -1,4 +1,4 @@
-package com.bitwise.app.tooltip.window;
+package com.bitwise.app.tooltip.tooltips;
 
 import java.util.Map;
 
