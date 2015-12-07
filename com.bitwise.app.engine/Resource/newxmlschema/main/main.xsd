@@ -1,112 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://www.bitwiseglobal.com/graph/main" xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes"
-  targetNamespace="http://www.bitwiseglobal.com/graph/main" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  elementFormDefault="unqualified"
->
-  <xs:import schemaLocation="../common/common-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/commontypes" />
+<xs:schema xmlns="http://www.bitwiseglobal.com/graph/main"
+	xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes"
+	targetNamespace="http://www.bitwiseglobal.com/graph/main" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="unqualified">
+	<xs:import schemaLocation="../common/common-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/commontypes" />
 
-  <xs:import schemaLocation="../inputs/input-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/inputtypes" />
+	<xs:import schemaLocation="../inputs/input-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/inputtypes" />
 
-  <xs:import schemaLocation="../outputs/output-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/outputtypes" />
+	<xs:import schemaLocation="../outputs/output-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/outputtypes" />
 
-  <xs:import schemaLocation="../straight-pulls/straight-pull-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/straightpulltypes" />
+	<xs:import schemaLocation="../straight-pulls/straight-pull-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/straightpulltypes" />
 
-  <xs:import schemaLocation="../operations/operations-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/operationstypes" />
+	<xs:import schemaLocation="../operations/operations-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/operationstypes" />
 
-  <xs:import schemaLocation="../commands/command-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/commandtypes" />
+	<xs:import schemaLocation="../commands/command-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/commandtypes" />
 
-  <xs:element name="graph">
-    <xs:complexType>
-     <xs:sequence>
-     <xs:element name="runtimeProperties" type="cmn:type-properties"
-						minOccurs="0" />
-      <xs:choice maxOccurs="unbounded" minOccurs="0">
+	<xs:element name="graph">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="runtimeProperties" type="cmn:type-properties"
+					minOccurs="0" />
+				<xs:choice maxOccurs="unbounded" minOccurs="0">
 
-        <xs:element name="inputs" type="cmn:type-input-component">
-          <xs:key name="input-keyOutSocketId">
-            <xs:selector xpath="./outSocket" />
-            <xs:field xpath="@id" />
-          </xs:key>
-        </xs:element>
-
-
-        <xs:element name="outputs" type="cmn:type-output-component">
-          <xs:key name="output-keyInSocketId">
-            <xs:selector xpath="./inSocket" />
-            <xs:field xpath="@id" />
-          </xs:key>
-        </xs:element>
+					<xs:element name="inputs" type="cmn:type-input-component">
+						<xs:key name="input-keyOutSocketId">
+							<xs:selector xpath="./outSocket" />
+							<xs:field xpath="@id" />
+						</xs:key>
+					</xs:element>
 
 
-        <xs:element name="straightPulls" type="cmn:type-straight-pull-component">
-          <xs:key name="straight-pull-keyInSocketId">
-            <xs:selector xpath="./inSocket" />
-            <xs:field xpath="@id" />
-          </xs:key>
-          <xs:keyref name="straight-pull-keyInSocketRef" refer="straight-pull-keyInSocketId">
-            <xs:selector xpath=".//*" />
-            <xs:field xpath="@inSocketId" />
-          </xs:keyref>
-          <xs:key name="straight-pull-keyOutSocketId">
-            <xs:selector xpath="./outSocket" />
-            <xs:field xpath="@id" />
-          </xs:key>
-        </xs:element>
+					<xs:element name="outputs" type="cmn:type-output-component">
+						<xs:key name="output-keyInSocketId">
+							<xs:selector xpath="./inSocket" />
+							<xs:field xpath="@id" />
+						</xs:key>
+					</xs:element>
 
 
-        <xs:element name="operations" type="cmn:type-operations-component">
-          <xs:key name="operations-keyInSocketId">
-            <xs:selector xpath="./inSocket" />
-            <xs:field xpath="@id" />
-          </xs:key>
-          <xs:keyref name="operations-keyInSocketRef" refer="operations-keyInSocketId">
-            <xs:selector xpath=".//*" />
-            <xs:field xpath="@inSocketId" />
-          </xs:keyref>
-          <xs:key name="operations-keyOutSocketId">
-            <xs:selector xpath="./outSocket" />
-            <xs:field xpath="@id" />
-          </xs:key>
-          <xs:key name="operations-keyOperationId">
-            <xs:selector xpath="./operation" />
-            <xs:field xpath="@id" />
-          </xs:key>
-          <xs:keyref name="operations-keyOperationIdRef" refer="operations-keyOperationId">
-            <xs:selector xpath=".//*" />
-            <xs:field xpath="@operationId" />
-          </xs:keyref>
-         </xs:element>
+					<xs:element name="straightPulls" type="cmn:type-straight-pull-component">
+						<xs:key name="straight-pull-keyInSocketId">
+							<xs:selector xpath="./inSocket" />
+							<xs:field xpath="@id" />
+						</xs:key>
+						<xs:keyref name="straight-pull-keyInSocketRef" refer="straight-pull-keyInSocketId">
+							<xs:selector xpath=".//*" />
+							<xs:field xpath="@inSocketId" />
+						</xs:keyref>
+						<xs:key name="straight-pull-keyOutSocketId">
+							<xs:selector xpath="./outSocket" />
+							<xs:field xpath="@id" />
+						</xs:key>
+					</xs:element>
 
 
-        <xs:element name="commands" type="cmn:type-command-component">
-        </xs:element>
+					<xs:element name="operations" type="cmn:type-operations-component">
+						<xs:key name="operations-keyInSocketId">
+							<xs:selector xpath="./inSocket" />
+							<xs:field xpath="@id" />
+						</xs:key>
+						<xs:keyref name="operations-keyInSocketRef" refer="operations-keyInSocketId">
+							<xs:selector xpath=".//*" />
+							<xs:field xpath="@inSocketId" />
+						</xs:keyref>
+						<xs:key name="operations-keyOutSocketId">
+							<xs:selector xpath="./outSocket" />
+							<xs:field xpath="@id" />
+						</xs:key>
+						<xs:key name="operations-keyOperationId">
+							<xs:selector xpath="./operation" />
+							<xs:field xpath="@id" />
+						</xs:key>
+						<xs:keyref name="operations-keyOperationIdRef" refer="operations-keyOperationId">
+							<xs:selector xpath=".//*" />
+							<xs:field xpath="@operationId" />
+						</xs:keyref>
+					</xs:element>
 
-      </xs:choice>
-      </xs:sequence>
-    </xs:complexType>
-    <xs:key name="keyComponentID">
-      <xs:selector xpath="inputs|outputs|straightPulls|operations|commands" />
-      <xs:field xpath="@id" />
-    </xs:key>
 
-    <xs:key name="keyDependentComponentId">
-      <xs:selector xpath="outputs|commands|inputs"/>
-      <xs:field xpath="@id" />
-    </xs:key>
+					<xs:element name="commands" type="cmn:type-command-component">
+					</xs:element>
 
-    <xs:keyref name="keyDependentComponentIdRef" refer="keyDependentComponentId">
-      <xs:selector xpath="inputs/dependsOn|commands/dependsOn" />
-      <xs:field xpath="@componentId" />
-    </xs:keyref>
-  
-    
-  </xs:element>
-   
-  
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required" />
+		</xs:complexType>
+		<xs:key name="keyComponentID">
+			<xs:selector xpath="inputs|outputs|straightPulls|operations|commands" />
+			<xs:field xpath="@id" />
+		</xs:key>
+
+		<xs:key name="keyDependentComponentId">
+			<xs:selector xpath="outputs|commands" />
+			<xs:field xpath="@id" />
+		</xs:key>
+
+		<xs:keyref name="keyDependentComponentIdRef" refer="keyDependentComponentId">
+			<xs:selector xpath="inputs/dependsOn|commands/dependsOn" />
+			<xs:field xpath="@componentId" />
+		</xs:keyref>
+
+
+	</xs:element>
+
+
 </xs:schema>
