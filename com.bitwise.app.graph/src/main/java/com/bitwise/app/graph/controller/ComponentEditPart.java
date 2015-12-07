@@ -304,18 +304,24 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 			int numOfPort=0;
 			if(StringUtils.isNotEmpty(newPortCount)){
 				numOfPort = Integer.parseInt(newPortCount);
-				getCastedModel().changePortSettings(numOfPort);
+				
 				
 				ComponentFigure compFig = (ComponentFigure)getFigure();
 				compFig.setHeight(numOfPort, 1);
 				Dimension newSize = new Dimension(compFig.getSize().width, ((numOfPort+1)*25)+15);
 				getCastedModel().setSize(newSize);
+				
+				getCastedModel().clearPorts();
+				((ComponentFigure)getFigure()).clearAnchors(numOfPort);
+				refresh();
+				
+				getCastedModel().changePortSettings(numOfPort);
 			}
 
 			updateComponentStatus();			
 			refresh();
-			//List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
-			//PortEditPart portEditPart = null;
+			List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
+			PortEditPart portEditPart = null;
 //			for(AbstractGraphicalEditPart part:childrenEditParts)
 //			{
 //				

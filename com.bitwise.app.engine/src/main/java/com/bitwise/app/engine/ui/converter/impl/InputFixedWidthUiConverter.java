@@ -48,12 +48,14 @@ public class InputFixedWidthUiConverter extends InputUIConverter {
 
 	private Object getCharSet() {
 		TextFileFixedWidth fileFixedWidth=(TextFileFixedWidth)typeBaseComponent;
-		Object value=fileFixedWidth.getCharset().getValue();
+		Object value=null;
+		if(fileFixedWidth.getCharset()!=null){
+			value=fileFixedWidth.getCharset().getValue();
 		if(value!=null)	{
 			return	fileFixedWidth.getCharset().getValue().value();
 		}else{
 			value = getValue(PropertyNameConstants.CHAR_SET.value());			
-		}
+		}}
 		return value;
 	}
 

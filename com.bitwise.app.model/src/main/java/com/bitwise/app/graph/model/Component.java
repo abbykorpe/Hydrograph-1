@@ -1,6 +1,7 @@
 package com.bitwise.app.graph.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -85,18 +86,19 @@ public abstract class Component extends Model {
 	private String type;
 	private String prefix;
 	private String category;
-	private Hashtable<String, Port> ports;
+	private HashMap<String, Port> ports;
 	private String componentName;
 	List<PortSpecification> portSpecification;
 	
 	private ComponentLabel componentLabel;
 	private int componentLabelMargin;
-	
+		
 	@XStreamOmitField
 	private Map<String,PropertyToolTipInformation> tooltipInformation;
 	
 	//@XStreamOmitField
 	private Map<String,String> toolTipErrorMessages; //<propertyName,ErrorMessage>
+	
 	
 	/*@XStreamOmitField
 	private Map<String,PropertyToolTipInformation> paletteTooltipMessage;*/
@@ -138,7 +140,7 @@ public abstract class Component extends Model {
 		
 		portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
 		
-		ports = new Hashtable<String, Port>();
+		ports = new HashMap<String, Port>();
 		
 		for(PortSpecification p:portSpecification)
 		{ 	
@@ -516,75 +518,60 @@ public abstract class Component extends Model {
 	
 	public void changePortSettings(int newPortCount){
 
-		int prevPortCount = ports.size()-1;
-
-		if (prevPortCount < newPortCount){
-			incrementPortCount(newPortCount);
-		}else{
-			decrementPortCount(newPortCount);
+		for(PortSpecification p:portSpecification)
+		{ 	
+			String portTerminal = p.getTypeOfPort() + p.getSequenceOfPort();
+			Port port = new Port(p.getNameOfPort(), p.getLabelOfPort(), portTerminal, this, p.getNumberOfPorts(), p.getTypeOfPort(), p.getSequenceOfPort());
+			if(p.getTypeOfPort().equals("in")){
+				port.setNumberOfPortsOfThisType(newPortCount);
+			}
+			ports.put(portTerminal, port);
 		}
-	}
-
-	public void incrementPortCount(int newPortCount){
-
-
-		Port firstPort= ports.get("in1");
-		firstPort.setNumberOfPortsOfThisType(newPortCount);
-
-		Port secondPort= ports.get("in2");
-		secondPort.setNumberOfPortsOfThisType(newPortCount);
-
-
-		Port outport1 =  ports.get("out1");
-
-		ports.clear();
-		ports.put("in1", firstPort);
-		ports.put("in2", secondPort);
-		ports.put("out1", outport1);
-
+		
 		for(int i=0; i< (newPortCount-2); i++){
 
 			Port port = new Port("in"+(i+2) , "in"+(i+2), "in"+(i+3), this, newPortCount, "in", (i+3));
 			ports.put("in"+(i+3), port);
-			firePropertyChange("in"+(i+2), null, port );
+			firePropertyChange("Component:add", null, port );
+		}
+	}
+	
+	public void clearPorts(){
+
+		deleteInputLinks();
+		deleteOutputLinks();
+		ports.clear();
+
+		firePropertyChange("Component:remove", ports.values(), null );
+	}
+	private void deleteInputLinks(){
+		if(inputLinks.size() > 0){
+			Link[] inLinks = new Link[inputLinks.size()];
+			inputLinks.toArray(inLinks);
+			for (Link l: inLinks){
+				l.detachSource();
+				l.detachTarget();
+				l.getSource().freeOutputPort(l.getSourceTerminal());
+				l.getTarget().freeInputPort(l.getTargetTerminal());
+				l.setTarget(null);
+				l.setSource(null);
+			}
+		}
+	}
+	private void deleteOutputLinks(){
+		if(outputLinks.size() > 0){
+			Link[] outLinks = new Link[outputLinks.size()];
+			outputLinks.toArray(outLinks);
+			for (Link l: outLinks){
+				l.detachSource();
+				l.detachTarget();
+				l.getSource().freeOutputPort(l.getSourceTerminal());
+				l.getTarget().freeInputPort(l.getTargetTerminal());
+				l.setTarget(null);
+				l.setSource(null);
+			}
 		}
 	}
 
-	private void decrementPortCount(int newPortCount){
-		int keyCount = newPortCount;
-		List<String> oldKeys = new ArrayList<>();
-		List<String> newKeys = new ArrayList<>();
-		List<String> keysToBeRemoved = new ArrayList<>();
-		
-		oldKeys.addAll(ports.keySet());
-
-		for(int i=1; i<=keyCount; i++)
-		{
-			newKeys.add("in"+i);
-		}
-		newKeys.add("out1");
-		
-
-		for (String key : oldKeys) {
-			if(!newKeys.contains(key))
-				keysToBeRemoved.add(key);
-		}
-		for(int i=0; i<keysToBeRemoved.size(); i++){
-			String portToBeRemoved = (String) keysToBeRemoved.get(i);
-				for(int j=0; j< inputLinks.size(); j++){
-					Link l = inputLinks.get(j);
-					if(l.getTargetTerminal().equals(portToBeRemoved)){
-						
-						l.detachSource();
-						l.detachTarget();
-						l.getSource().freeOutputPort(l.getSourceTerminal());
-						l.getTarget().freeInputPort(l.getTargetTerminal());
-					}
-				}
-			
-			firePropertyChange(portToBeRemoved, ports.get(portToBeRemoved) , null);
-			ports.remove(portToBeRemoved);
-		}
-
-	}
+	
 }
