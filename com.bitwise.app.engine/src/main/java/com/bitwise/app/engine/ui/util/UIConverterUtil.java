@@ -19,7 +19,7 @@ import com.bitwise.app.engine.ui.converter.LinkingData;
 import com.bitwise.app.engine.ui.converter.UIConverter;
 import com.bitwise.app.engine.ui.converter.UIConverterFactory;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
-import com.bitwise.app.engine.ui.xygenration.Processor;
+import com.bitwise.app.engine.ui.xygenration.CoordinateProcessor;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.Link;
@@ -29,9 +29,9 @@ import com.bitwiseglobal.graph.main.Graph;
 import com.thoughtworks.xstream.XStream;
 
 public class UIConverterUtil {
-	private static final Logger LOGGER = LogFactory.INSTANCE
-			.getLogger(UIConverterUtil.class);
+	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(UIConverterUtil.class);
 	public static final UIConverterUtil INSTANCE = new UIConverterUtil();
+	private static final String FIXED_OUT_PORT="out0";
 
 	public void convertToUiXML(File InPutFile) throws InstantiationException,
 			IllegalAccessException, IllegalArgumentException,
@@ -40,7 +40,7 @@ public class UIConverterUtil {
 		LOGGER.debug("Creating converter based on component");
 
 		Graph graph = unMarshall(InPutFile);
-		loadClass();
+		loadClass();// Remove
 		Container container = new Container();
 		List<TypeBaseComponent> children = graph.getInputsOrOutputsOrStraightPulls();
 		if (children != null && !children.isEmpty()) {
@@ -117,7 +117,7 @@ public class UIConverterUtil {
 	
 	public void createLink() {
 		preProcessLinkData();
-		Processor pc=new Processor();
+		CoordinateProcessor pc=new CoordinateProcessor();
 		pc.processLinks();
 				
 		for(LinkingData linkingData:UIComponentRepo.INSTANCE.getComponentLinkList())
@@ -141,7 +141,7 @@ public class UIConverterUtil {
 		for(LinkingData linkingData:UIComponentRepo.INSTANCE.getComponentLinkList()){
 			isMultiplePortAllowed=UIComponentRepo.INSTANCE.getComponentUiFactory().get(linkingData.getSourceComponentId()).getPortSpecification().get(0).isAllowMultipleLinks();
 			if (isMultiplePortAllowed) {
-				linkingData.setSourceTerminal("out0");
+				linkingData.setSourceTerminal(FIXED_OUT_PORT);
 			}
 		}
 	}
