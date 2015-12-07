@@ -11,6 +11,13 @@
 openFile
 --launcher.XXMaxPermSize
 256M</programArgs>
+      <programArgsMac>-startup
+../Eclipse/plugins/org.eclipse.equinox.launcher_1.2.0.v20110502.jar
+--launcher.library
+../Eclipse/plugins/
+org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
+-vm
+/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home/jre/lib/jli/libjli.dylib</programArgsMac>
       <vmArgs>-Xms256m
 -Xmx1024m</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>

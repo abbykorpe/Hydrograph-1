@@ -19,7 +19,7 @@
 		<xs:complexContent>
 			<xs:extension base="cmn:type-field-name">
 				<xs:attribute name="order" type="cmn:type-sort-order"
-					default="Asc" use="optional" />
+					default="asc" use="optional" />
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -35,7 +35,7 @@
 		<xs:complexContent>
 			<xs:extension base="cmn:type-field-name">
 				<xs:attribute name="order" type="cmn:type-sort-order"
-					default="Asc" use="optional" />
+					default="asc" use="optional" />
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -61,15 +61,15 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="sort-base">
+	<xs:complexType name="type-sort-base">
 		<xs:complexContent>
 			<xs:restriction base="cmn:type-straight-pull-component">
 				<xs:sequence>
-					<xs:element name="inSocket" type="cmn:type-base-inSocket-fixed-in0"
+					<xs:element name="inSocket" type="cmn:type-base-inSocket"
 						minOccurs="1" maxOccurs="1" />
 					<xs:element name="outSocket" type="type-out-socket"
 						minOccurs="1" maxOccurs="1" />
-					<xs:element name="runtime_properties" type="cmn:type-properties"
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" maxOccurs="1" />
 				</xs:sequence>
 			</xs:restriction>

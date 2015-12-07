@@ -426,7 +426,7 @@ public class ComponentFigure extends Figure implements Validator{
 	}
 	
 
-	public void setAnchors(FixedConnectionAnchor fCAnchor) {		
+	public void setAnchors(FixedConnectionAnchor fCAnchor) {
 		connectionAnchors.put(fCAnchor.getType()+fCAnchor.getSequence(), fCAnchor);
 		if(("out").equalsIgnoreCase(fCAnchor.getType()))
 			outputConnectionAnchors.add(fCAnchor);
@@ -434,6 +434,11 @@ public class ComponentFigure extends Figure implements Validator{
 			inputConnectionAnchors.add(fCAnchor);
 	}
 	
+	public void clearAnchors(int newPortCount){
+		outputConnectionAnchors.clear();
+		inputConnectionAnchors.clear();
+		connectionAnchors.clear();
+	}
 		
 	@Override
 	protected void paintFigure(Graphics graphics) {

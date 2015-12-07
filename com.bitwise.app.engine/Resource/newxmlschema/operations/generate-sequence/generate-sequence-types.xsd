@@ -56,7 +56,7 @@
         <xs:choice maxOccurs="1" minOccurs="1">
           <xs:element name="copyOfInsocket" type="cmn:type-outSocket-as-inSocket"/>
           <xs:choice maxOccurs="unbounded" minOccurs="1">
-            <xs:element name="passThroughfield" type="type-passthrough-input-field" />
+            <xs:element name="passThroughField" type="type-passthrough-input-field" />
             <xs:element name="operationField" type="cmn:type-operation-field" />
            </xs:choice>
         </xs:choice>

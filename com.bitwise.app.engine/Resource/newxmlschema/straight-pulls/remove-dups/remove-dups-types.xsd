@@ -28,7 +28,7 @@
     <xs:complexType name="type-seconday-key-fields-attributes">
      <xs:complexContent>
            <xs:extension base="cmn:type-field-name">
-               <xs:attribute name="order" type="cmn:type-sort-order" default="Asc" use="optional" />
+               <xs:attribute name="order" type="cmn:type-sort-order" default="asc" use="optional" />
             </xs:extension>
      </xs:complexContent>
   </xs:complexType>

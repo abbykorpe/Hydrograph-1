@@ -17,7 +17,7 @@
 		<outSocket id="out0">
 			<schema name="klk">
 				<field name="l;l;" type="java.lang.String" format="" scale="4"
-					scale_type="explicit" length="4" />
+					scaleType="explicit" length="4" />
 				<field name="ddfs" type="java.lang.String" length="4" />
 			</schema>
 		</outSocket>
@@ -69,8 +69,6 @@
 		<quote value="asd" />
 	</inputs>
 
-
-
 	<inputs id="sfdsdsd" phase="1" xsi:type="it:textFileDelimited">
 		<outSocket id="out0">
 			<schema name="external">
@@ -85,7 +83,6 @@
 		<charset value="ISO-8859-1" />
 		<quote value="asd" />
 	</inputs>
-
 
 	<inputs id="parquetfile" phase="1" xsi:type="it:parquetFile">
 		<outSocket id="out0">
@@ -123,11 +120,11 @@
 		<outSocket id="out0">
 			<schema name="newscheme">
 				<field name="asdff" type="java.lang.String" format="" scale="4"
-					scale_type="explicit" length="6" />
+					scaleType="explicit" length="6" />
 				<field name="afdfa" type="java.lang.String" format="" scale="6"
-					scale_type="implicit" delimiter="|" />
+					scaleType="implicit" delimiter="|" />
 				<field name="sdfdsaf" type="java.lang.String" format="" scale="4"
-					scale_type="implicit" delimiter="," />
+					scaleType="implicit" delimiter="," />
 			</schema>
 		</outSocket>
 		<dependsOn componentId="ll" />
@@ -140,8 +137,6 @@
 			<property name="fsdf" value="dsf" />
 		</runtimeProperties>
 	</inputs>
-
-
 
 	<outputs id="ll" xsi:type="ot:textFileDelimited">
 		<inSocket fromComponentId="sdf" fromSocketId="out0" id="in0">
@@ -159,7 +154,6 @@
 		<quote value="asd" />
 	</outputs>
 
-
 	<outputs id="parquetoutput" xsi:type="ot:parquetFile">
 		<inSocket fromComponentId="sdfsadf" fromSocketId="out0" id="in0">
 			<schema name="kj">
@@ -171,7 +165,6 @@
 			<property name="fsdf" value="dsf" />
 		</runtimeProperties>
 	</outputs>
-
 
 	<outputs id="hiveparquetoutput" xsi:type="ot:parquetHiveFile">
 		<inSocket fromComponentId="addhh" fromSocketId="out0" id="in0">
@@ -191,16 +184,15 @@
 		</runtimeProperties>
 	</outputs>
 
-
 	<outputs id="mixed_schema" xsi:type="ot:textFileMixedScheme">
 		<inSocket fromComponentId="addhh" fromSocketId="out0" id="in0">
 			<schema name="kj">
 				<field name="asdff" type="java.lang.String" format="" scale="5"
-					scale_type="explicit" length="4" />
+					scaleType="explicit" length="4" />
 				<field name="afdfa" type="java.lang.String" format="" scale="4"
-					scale_type="implicit" delimiter="|" />
+					scaleType="implicit" delimiter="|" />
 				<field name="sdfdsaf" type="java.lang.String" format="" scale="6"
-					scale_type="explicit" length="4" />
+					scaleType="explicit" length="4" />
 			</schema>
 		</inSocket>
 		<path uri="kasjdk" />
@@ -211,8 +203,6 @@
 		</runtimeProperties>
 
 	</outputs>
-
-
 
 	<outputs id="kjgk" xsi:type="ot:textFileFixedWidth">
 		<inSocket fromComponentId="sdf" fromSocketId="out0" id="in0">
@@ -353,7 +343,7 @@
 			</properties>
 		</operation>
 		<outSocket id="out0">
-			<passThroughfield name="axd" inSocketId="in0" />
+			<passThroughField name="axd" inSocketId="in0" />
 			<mapField sourceName="as" name="new" inSocketId="in0" />
 			<operationField name="hula" operationId="opt" />
 		</outSocket>
@@ -386,7 +376,7 @@
 			</properties>
 		</operation>
 		<outSocket id="out0">
-			<passThroughfield name="axd" inSocketId="in0" />
+			<passThroughField name="axd" inSocketId="in0" />
 			<mapField sourceName="as" name="new" inSocketId="in0" />
 			<operationField name="hula" operationId="opt" />
 		</outSocket>
@@ -397,8 +387,8 @@
 			<field name="abc" />
 		</primaryKeys>
 		<secondaryKeys>
-			<field name="dd" order="Asc" />
-			<field name="cc" order="Desc" />
+			<field name="dd" order="asc" />
+			<field name="cc" order="desc" />
 		</secondaryKeys>
 	</operations>
 
@@ -407,7 +397,7 @@
 		<inSocket fromComponentId="reformat" fromSocketId="out0" id="in0" />
 		<inSocket fromComponentId="aggregate" fromSocketId="out0" id="in1" />
 		<outSocket id="out0" type="out">
-			<passThroughfield name="axd" inSocketId="in0" />
+			<passThroughField name="axd" inSocketId="in0" />
 			<mapField sourceName="as" name="new" inSocketId="in0" />
 		</outSocket>
 		<outSocket id="unused0" type="unused">
@@ -431,7 +421,8 @@
 	</commands>
 
 	<commands id="asf" xsi:type="ct:subgraph">
-		<dependsOn componentId="asdf" />
+		<dependsOn componentId="asd" />
+		<path uri="asdffas"/>
 	</commands>
 
 	<operations id="filter" phase="1" xsi:type="op:filter">
@@ -456,7 +447,6 @@
 		</runtimeProperties>
 	</operations>
 
-
 	<straightPulls id="dedup" phase="1" xsi:type="spt:removeDups">
 		<inSocket id="in0" fromComponentId="filter" fromSocketId="out0" />
 		<outSocket id="out0" type="out">
@@ -473,12 +463,10 @@
 			<field name="abc" />
 		</primaryKeys>
 		<secondaryKeys>
-			<field name="dd" order="Asc" />
-			<field name="cc" order="Desc" />
+			<field name="dd" order="asc" />
+			<field name="cc" order="desc" />
 		</secondaryKeys>
 	</straightPulls>
-
-
 
 	<operations id="unique1" phase="1" xsi:type="op:generateSequence">
 		<inSocket id="in0" fromComponentId="dedup" fromSocketId="out0" />
@@ -488,7 +476,7 @@
 			</outputFields>
 		</operation>
 		<outSocket id="out0">
-			<passThroughfield name="*" inSocketId="in0" />
+			<passThroughField name="*" inSocketId="in0" />
 			<operationField name="seq2" operationId="opt" />
 		</outSocket>
 		<runtimeProperties>
@@ -504,16 +492,14 @@
 			</outputFields>
 		</operation>
 		<outSocket id="out0">
-			<passThroughfield name="col1" inSocketId="in0" />
-			<passThroughfield name="col3" inSocketId="in0" />
+			<passThroughField name="col1" inSocketId="in0" />
+			<passThroughField name="col3" inSocketId="in0" />
 			<operationField name="seq2" operationId="opt" />
 		</outSocket>
 		<runtimeProperties>
 			<property name="fsdf" value="dsf" />
 		</runtimeProperties>
 	</operations>
-
-
 
 	<operations id="scan" xsi:type="op:cumulate">
 		<inSocket id="in0" fromComponentId="unique2" fromSocketId="out0" />
@@ -530,8 +516,8 @@
 			</properties>
 		</operation>
 		<outSocket id="out0">
-			<passThroughfield name="acct_id" inSocketId="in0" />
-			<passThroughfield name="sor_src_id" inSocketId="in0" />
+			<passThroughField name="acct_id" inSocketId="in0" />
+			<passThroughField name="sor_src_id" inSocketId="in0" />
 			<operationField name="extrnl_agt_id_prev" operationId="opt" />
 			<operationField name="extrnl_agt_id_orig" operationId="opt" />
 		</outSocket>
@@ -543,19 +529,18 @@
 			<field name="abc" />
 		</primaryKeys>
 		<secondaryKeys>
-			<field name="xyz" order="Asc" />
-			<field name="pqr" order="Desc" />
+			<field name="xyz" order="asc" />
+			<field name="pqr" order="desc" />
 		</secondaryKeys>
 	</operations>
-	
-	
+
 	<operations id="lookup" xsi:type="op:hashJoin">
 		<inSocket fromComponentId="reformat" fromSocketId="out0" id="in0" />
 		<inSocket fromComponentId="aggregate" fromSocketId="out0" id="in1" />
 		<outSocket id="out0" type="out">
-			<passThroughfield name="c1" inSocketId="in0" />
-			<passThroughfield name="c2" inSocketId="in0" />
-			<passThroughfield name="c3" inSocketId="in1" />
+			<passThroughField name="c1" inSocketId="in0" />
+			<passThroughField name="c2" inSocketId="in0" />
+			<passThroughField name="c3" inSocketId="in1" />
 			<mapField sourceName="c4" name="c4new" inSocketId="in0" />
 			<mapField sourceName="c4" name="c5new" inSocketId="in1" />
 		</outSocket>
@@ -571,7 +556,6 @@
 
 	</operations>
 
-
 	<operations id="normalize" xsi:type="op:normalize">
 		<inSocket fromComponentId="reformat" fromSocketId="out0" id="in0" />
 		<operation id="opt" class="someclass">
@@ -586,7 +570,7 @@
 			</properties>
 		</operation>
 		<outSocket id="out0">
-			<passThroughfield name="account_no" inSocketId="in0" />
+			<passThroughField name="account_no" inSocketId="in0" />
 			<operationField name="newfield" operationId="opt" />
 			<mapField sourceName="c4" name="c4new" inSocketId="in0" />
 		</outSocket>
@@ -594,7 +578,6 @@
 			<property name="fsdf" value="dsf" />
 		</runtimeProperties>
 	</operations>
-
 
 	<straightPulls id="partitionByExpression" phase="1"
 		xsi:type="spt:partitionByExpression">
@@ -615,11 +598,8 @@
 		<noOfPartitions value="2" />
 	</straightPulls>
 
-
 	<outputs id="trash" phase="1" xsi:type="ot:discard">
 		<inSocket fromComponentId="sdf" fromSocketId="out0" id="in0" />
 	</outputs>
-
-
 
 </p:graph>
