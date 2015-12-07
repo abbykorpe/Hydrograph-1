@@ -13,7 +13,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.forms;bundle-version="3.5.101",
  com.bitwise.app.common.datastructures;bundle-version="0.0.1",
  com.bitwise.app.propertywindow;bundle-version="0.0.1",
- com.bitwise.app.common;bundle-version="0.0.1"
+ com.bitwise.app.common;bundle-version="0.0.1",
+ org.slf4j.api;bundle-version="1.7.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: com.bitwise.app.tooltip.window
+Export-Package: com.bitwise.app.tooltip.tooltips

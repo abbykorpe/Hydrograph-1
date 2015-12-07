@@ -107,7 +107,7 @@ import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 import com.bitwise.app.parametergrid.utils.ParameterFileManager;
 import com.bitwise.app.project.structure.CustomMessages;
-import com.bitwise.app.tooltip.window.ComponentTooltip;
+import com.bitwise.app.tooltip.tooltips.ComponentTooltip;
 import com.thoughtworks.xstream.XStream;
 
 // TODO: Auto-generated Javadoc
