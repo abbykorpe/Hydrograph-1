@@ -40,7 +40,7 @@ import com.bitwise.app.common.interfaces.tooltip.ComponentCanvas;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Component.ValidityStatus;
-import com.bitwise.app.tooltip.window.ComponentTooltip;
+import com.bitwise.app.tooltip.tooltips.ComponentTooltip;
 
 /**
  * The Class ComponentFigure.

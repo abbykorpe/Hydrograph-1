@@ -21,7 +21,7 @@ import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.graph.command.ComponentCreateCommand;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
-import com.bitwise.app.tooltip.window.PaletteToolTip;
+import com.bitwise.app.tooltip.tooltips.PaletteToolTip;
 
 // TODO: Auto-generated Javadoc
 /**

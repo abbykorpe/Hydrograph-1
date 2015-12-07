@@ -1,32 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="http://www.bitwiseglobal.com/graph/commandtypes"
-  xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  targetNamespace="http://www.bitwiseglobal.com/graph/commandtypes"
-  elementFormDefault="unqualified"
->
-  <xs:import schemaLocation="../common/common-types.xsd"
-    namespace="http://www.bitwiseglobal.com/graph/commontypes" />
+	xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bitwiseglobal.com/graph/commandtypes"
+	elementFormDefault="unqualified">
+	<xs:import schemaLocation="../common/common-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/commontypes" />
 
-  <xs:complexType name="ftpIn">
-    <xs:complexContent>
-      <xs:extension base="cmn:type-command-component">
-        <xs:sequence>
-          <xs:element name="host">
-            <xs:complexType>
-              <xs:attribute name="name" use="required" type="xs:string" />
-            </xs:complexType>
-          </xs:element>
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  
-  <xs:complexType name="subgraph">
-    <xs:complexContent>
-      <xs:extension base="cmn:type-command-component">
-        
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
+	<xs:complexType name="ftpIn">
+		<xs:complexContent>
+			<xs:extension base="cmn:type-command-component">
+				<xs:sequence>
+					<xs:element name="host">
+						<xs:complexType>
+							<xs:attribute name="name" use="required" type="xs:string" />
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="subgraph">
+		<xs:complexContent>
+			<xs:extension base="cmn:type-command-component">
+				<xs:sequence>
+					<xs:element name="path">
+						<xs:complexType>
+							<xs:attribute name="uri" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+					<xs:element name="subgraphParameter" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
 </xs:schema>
