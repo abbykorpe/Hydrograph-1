@@ -524,12 +524,13 @@ private void createIcons(Composite composite){
 			if (!temp.getPropertyName().trim().isEmpty()&& !temp.getPropertyValue().trim().isEmpty()) {
 				String Regex="[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
 				Matcher matchName = Pattern.compile(Regex).matcher(temp.getPropertyName());
-				Matcher matchValue = Pattern.compile(Regex).matcher(temp.getPropertyValue());
-				if(!matchName.matches() || !matchValue.matches())
+				//Matcher matchValue = Pattern.compile(Regex).matcher(temp.getPropertyValue());
+				//if(!matchName.matches() || !matchValue.matches())
+				if(!matchName.matches())
 				{
 					table.setSelection(propertyCounter);
 					lblPropertyError.setVisible(true);
-					lblPropertyError.setText(Messages.ALLOWED_CHARACTERS);
+					lblPropertyError.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
 					//disableButtons();
 					return false;
 				}
