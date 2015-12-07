@@ -31,7 +31,11 @@
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="delimiter"
 			value="|" renderer="DELIMETER_WIDGET" type="USER" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
-		
+			
+		<tns:property dataType="boolean" name="safe" renderer="SAFE_PROPERTY_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL"/>
+			
 		<tns:property dataType="boolean" group="GENERAL" subGroup="CONFIGURATION" name="has_header"
 			renderer="HAS_HEADER_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL"/>
@@ -51,6 +55,7 @@
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
+		
 			
 	</tns:component>
 </tns:Config>
