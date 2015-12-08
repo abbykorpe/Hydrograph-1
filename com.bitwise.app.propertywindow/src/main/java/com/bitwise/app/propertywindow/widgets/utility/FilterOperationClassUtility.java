@@ -19,6 +19,7 @@ import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
@@ -28,6 +29,7 @@ import org.eclipse.ui.ide.IDE;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructures.tooltip.TootlTipErrorMessage;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -58,7 +60,7 @@ public class FilterOperationClassUtility {
 	public static void createNewClassWizard(Text fileName, WidgetConfig widgetConfig) {
 		OpenNewClassWizardAction wizard = new OpenNewClassWizardAction();
 		wizard.setOpenEditorOnFinish(false);
-		NewClassWizardPage page = new NewClassWizardPage();
+		final NewClassWizardPage page = new NewClassWizardPage();
 		page.setSuperClass("java.lang.Object", true);
 		page.setMethodStubSelection(false, false, true, true);
 		List<String> interfaceList = new ArrayList<String>();
@@ -73,6 +75,15 @@ public class FilterOperationClassUtility {
 		
 		page.setSuperInterfaces(interfaceList, true);  
 		wizard.setConfiguredWizardPage(page);
+		if(OSValidator.isMac()){
+			Display.getDefault().timerExec(0, new Runnable() {
+				
+				@Override
+				public void run() {
+					page.getControl().forceFocus();					
+				}
+			});
+		}
 		wizard.run();
 		if (page.isPageComplete()) 
 			fileName.setText(page.getPackageText()+"."
