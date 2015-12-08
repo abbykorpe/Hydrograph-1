@@ -92,6 +92,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 		this.properties = componentConfigrationProperty.getPropertyValue();
+		
 	}
 
 	protected abstract String[] getPropertiesToShow();
@@ -140,8 +141,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 		
 		createSchemaGrid(container.getContainerControl());
-		
-
 	}
 
 	private void addButtonsAndRegisterListners(
@@ -248,10 +247,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		if (this.properties != null) {
 			List<GridRow> tempGrid = new ArrayList<>();
 			tempGrid = (List<GridRow>) this.properties;
-
+			
 			for (GridRow gridRow : tempGrid) {
-				schemaGridRowList.add(gridRow.copy());
-			}
+					schemaGridRowList.add(gridRow.copy());
+			} 
 
 			property.put(propertyName, schemaGridRowList);
 			tableViewer.setInput(schemaGridRowList);
@@ -271,7 +270,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			ELTGridDetails value = new ELTGridDetails(schemaGridRowList, tableViewer, 
 					(Label) fieldError.getSWTWidgetControl(), gridWidgetBuilder);
 			helper.put(HelperType.SCHEMA_GRID, value);
-			//TODO : temporary change it
 			validationStatus.setIsValid(true);
 			helper.put(HelperType.VALIDATION_STATUS, validationStatus);
 		}
@@ -343,6 +341,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public void setSchemaGridRowList(List schemaGridRowList) {
 		this.schemaGridRowList = schemaGridRowList;
 	}
+	
 	
 	
 }
