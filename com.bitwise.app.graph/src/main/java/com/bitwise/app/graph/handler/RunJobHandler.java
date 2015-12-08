@@ -11,7 +11,10 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.ConsolePlugin;
@@ -21,6 +24,7 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.graph.Messages;
 import com.bitwise.app.graph.utility.OSValidator;
@@ -37,6 +41,14 @@ public class RunJobHandler extends AbstractHandler {
 
 	/** The logger. */
 	private Logger logger = LogFactory.INSTANCE.getLogger(RunJobHandler.class);
+	
+	private DefaultGEFCanvas getComponentCanvas() {		
+		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
+			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		else
+			return null;
+	}
+	
 	/*
 	 * 
 	 * Execute command to run the job.
@@ -47,6 +59,15 @@ public class RunJobHandler extends AbstractHandler {
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+		
+		if(getComponentCanvas().getParameterFile() == null){
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
+
+			messageBox.setText("Error");
+			messageBox.setMessage("Could not run the graph. \nPlease save the graph file.");
+			messageBox.open();
+			return null;
+		}
 		
 		ParameterGridDialog parameterGrid = new ParameterGridDialog(Display.getDefault().getActiveShell());
 		parameterGrid.open();
