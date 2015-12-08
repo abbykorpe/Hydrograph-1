@@ -8,14 +8,12 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-
-
 public class ValidateTargetXML {
 
 static	String XSDPATH="Resource/newxmlschema/main/main.xsd";
 
-
 static String XMLPATH="C:\\WorkSpace\\runtime-com.bitwise.app.perspective.product\\Test2\\Job_1.xml";
+				// replace above path with generated XML.
 	
 	
 	public static void main(String[] args) {
@@ -24,8 +22,7 @@ static String XMLPATH="C:\\WorkSpace\\runtime-com.bitwise.app.perspective.produc
 		System.out.println(b);
 		
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				e.printStackTrace();
 		}
 	}
 	

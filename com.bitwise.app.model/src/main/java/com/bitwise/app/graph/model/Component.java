@@ -549,12 +549,14 @@ public abstract class Component extends Model {
 			Link[] inLinks = new Link[inputLinks.size()];
 			inputLinks.toArray(inLinks);
 			for (Link l: inLinks){
-				l.detachSource();
-				l.detachTarget();
-				l.getSource().freeOutputPort(l.getSourceTerminal());
-				l.getTarget().freeInputPort(l.getTargetTerminal());
-				l.setTarget(null);
-				l.setSource(null);
+				//if(!l.getTargetTerminal().equals("in1")){
+					l.detachSource();
+					l.detachTarget();
+					l.getSource().freeOutputPort(l.getSourceTerminal());
+					l.getTarget().freeInputPort(l.getTargetTerminal());
+					l.setTarget(null);
+					l.setSource(null);
+				//}
 			}
 		}
 	}

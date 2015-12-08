@@ -428,7 +428,7 @@ public class ComponentFigure extends Figure implements Validator{
 
 	public void setAnchors(FixedConnectionAnchor fCAnchor) {
 		connectionAnchors.put(fCAnchor.getType()+fCAnchor.getSequence(), fCAnchor);
-		if(("out").equalsIgnoreCase(fCAnchor.getType()))
+		if(("out").equalsIgnoreCase(fCAnchor.getType()) || ("unused").equalsIgnoreCase(fCAnchor.getType()))
 			outputConnectionAnchors.add(fCAnchor);
 		else
 			inputConnectionAnchors.add(fCAnchor);
