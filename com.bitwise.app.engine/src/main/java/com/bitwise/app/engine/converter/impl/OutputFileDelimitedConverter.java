@@ -51,6 +51,7 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 		fileDelimited.setDelimiter(delimiter);
 		fileDelimited.setStrict(getBoolean(PropertyNameConstants.STRICT.value()));
 		fileDelimited.setHasHeader(getBoolean(PropertyNameConstants.HAS_HEADER.value()));
+		fileDelimited.setSafe(getBoolean(PropertyNameConstants.IS_SAFE.value()));
 		fileDelimited.setCharset(charset);
 		fileDelimited.setRuntimeProperties(getRuntimeProperties());
 	}

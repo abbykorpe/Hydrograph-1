@@ -1,4 +1,4 @@
-package com.bitwise.app.graph.utility;
+package com.bitwise.app.common.util;
 /**
  * OS Validate find and validate OS.
  * @author bitwise

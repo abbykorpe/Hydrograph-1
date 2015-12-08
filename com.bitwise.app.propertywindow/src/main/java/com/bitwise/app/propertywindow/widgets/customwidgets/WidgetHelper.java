@@ -19,10 +19,6 @@ public class WidgetHelper {
 		return populateSingleColumnGridConfig(Constants.COLUMN_NAME, Constants.COLUMN_NAME2);
 	}
 
-	public WidgetConfig getSecondaryKeysConfig(){
-		return populateSingleColumnGridConfig(Constants.SECONDARY_KEYS, Constants.SECONDARY_KEYS2);
-	}
-
 	public WidgetConfig getOperationFieldsConfig(){
 		return populateSingleColumnGridConfig(Constants.OPERATION_FIELDS, Constants.OPERATION_FIELD);
 	}
