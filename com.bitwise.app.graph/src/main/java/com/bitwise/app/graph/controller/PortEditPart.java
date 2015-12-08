@@ -61,11 +61,16 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 
 		if(type.equalsIgnoreCase("in")){
 			xLocation=0;
+			yLocation=portOffset*sequence - 4 + margin;
 		}
 		else if(type.equalsIgnoreCase("out")){
 			xLocation=width-27;
+			yLocation=portOffset*sequence - 4 + margin;
+		}else if (type.equalsIgnoreCase("unused")){
+			xLocation = 28;
+			yLocation=height + ELTFigureConstants.componentOneLineLabelMargin- 4 - 3;
 		}
-		yLocation=portOffset*sequence - 4 + margin;
+		
 		p=new Point(xLocation, yLocation);
 		return p;
 	}
