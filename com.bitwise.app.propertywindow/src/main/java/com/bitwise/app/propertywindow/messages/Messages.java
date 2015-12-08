@@ -48,6 +48,9 @@ public class Messages extends NLS {
 	public static String FILTER_TEMPLATE;
 	public static String TRANSFORM_TEMPLATE;
 	public static String AGGREGATE_TEMPLATE;
+	public static String PROPERTY_NAME;
+	public static String PROPERTY_VALUE;
+	
 
 	static {
 		// initialize resource bundle
