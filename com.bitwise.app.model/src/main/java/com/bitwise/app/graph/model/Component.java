@@ -522,7 +522,7 @@ public abstract class Component extends Model {
 		{ 	
 			String portTerminal = p.getTypeOfPort() + p.getSequenceOfPort();
 			Port port = new Port(p.getNameOfPort(), p.getLabelOfPort(), portTerminal, this, p.getNumberOfPorts(), p.getTypeOfPort(), p.getSequenceOfPort());
-			if(p.getTypeOfPort().equals("in")){
+			if(p.getTypeOfPort().equals("in") || p.getTypeOfPort().equals("unused")){
 				port.setNumberOfPortsOfThisType(newPortCount);
 			}
 			ports.put(portTerminal, port);
@@ -530,9 +530,13 @@ public abstract class Component extends Model {
 		
 		for(int i=0; i< (newPortCount-2); i++){
 
-			Port port = new Port("in"+(i+2) , "in"+(i+2), "in"+(i+3), this, newPortCount, "in", (i+3));
-			ports.put("in"+(i+3), port);
-			firePropertyChange("Component:add", null, port );
+			Port inPort = new Port("in"+(i+2) , "in"+(i+2), "in"+(i+3), this, newPortCount, "in", (i+3));
+			ports.put("in"+(i+3), inPort);
+			firePropertyChange("Component:add", null, inPort );
+			
+			Port unusedPort = new Port("unused"+(i+2) , "un"+(i+2), "unused"+(i+3), this, newPortCount, "unused", (i+3));
+			ports.put("unused"+(i+3), unusedPort);
+			firePropertyChange("Component:add", null, unusedPort );
 		}
 	}
 	

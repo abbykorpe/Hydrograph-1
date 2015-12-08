@@ -308,7 +308,8 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 				
 				ComponentFigure compFig = (ComponentFigure)getFigure();
 				compFig.setHeight(numOfPort, 1);
-				Dimension newSize = new Dimension(compFig.getSize().width, ((numOfPort+1)*25)+15);
+				compFig.setWidth(numOfPort);
+				Dimension newSize = new Dimension((numOfPort+1)*33, ((numOfPort+1)*25)+15);
 				getCastedModel().setSize(newSize);
 				
 				getCastedModel().clearPorts();
@@ -330,7 +331,6 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 //					portEditPart.adjustPortFigure(getCastedModel().getLocation());
 //				}
 //			}
-			//portEditPart.adjustPortFigure(getCastedModel().getLocation());
 
 			ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 			if(eltPropertyWindow.isPropertyChanged()){
