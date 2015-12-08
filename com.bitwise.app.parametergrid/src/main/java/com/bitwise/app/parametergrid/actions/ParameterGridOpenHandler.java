@@ -25,10 +25,15 @@ public class ParameterGridOpenHandler extends AbstractHandler{
 			return null;
 	}
 	
+	private boolean isDirtyEditor(){
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty();
+	}
+	
+	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
-		if(getComponentCanvas().getParameterFile() == null){
+		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
 
 			messageBox.setText("Error");

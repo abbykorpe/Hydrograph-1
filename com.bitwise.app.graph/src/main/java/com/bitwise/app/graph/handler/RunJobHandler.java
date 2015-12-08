@@ -49,6 +49,9 @@ public class RunJobHandler extends AbstractHandler {
 			return null;
 	}
 	
+	private boolean isDirtyEditor(){
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty();
+	}
 	/*
 	 * 
 	 * Execute command to run the job.
@@ -60,7 +63,7 @@ public class RunJobHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
-		if(getComponentCanvas().getParameterFile() == null){
+		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
 
 			messageBox.setText("Error");
