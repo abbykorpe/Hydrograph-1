@@ -17,12 +17,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.ViewportAwareConnectionLayerClippingStrategy;
@@ -76,7 +79,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.commands.ActionHandler;
 import org.eclipse.ui.dialogs.SaveAsDialog;
@@ -130,6 +135,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private Rectangle toolTipComponentBounds;
 	private String parameterFilePath;
 	private String currentParameterFilePath=null;
+	private IPath parameterFileIPath;
 	
 	/**
 	 * Instantiates a new ETL graphical editor.
@@ -567,12 +573,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(getEditorInput(), this);
 			
-			//List<String> parameterListBeforeSave = getLatestParameterList();
-			//System.out.println();
 			genrateContainerData.storeContainerData();
 			parameterFilePath = container.getFullParameterFilePath();
 			container.setParameterFileName(getPartName().replace(".job", ".properties"));
-			//System.out.println("+++ This is file path: " + container.getFullParameterFilePath());
 			if(container.getParameterFileDirectory() !=null)
 				saveParameters();
 
@@ -605,8 +608,29 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		
 		ParameterFileManager parameterFileManager = new ParameterFileManager(parameterFilePath);
 		parameterFileManager.storeParameters(newParameterMap);		
+		
+		if(parameterFileIPath==null){
+			parameterFileIPath = getParameterFileIPath();
+		}
+		IFile file=ResourcesPlugin.getWorkspace().getRoot().getFile(parameterFileIPath);
+		try {
+			file.refreshLocal(IResource.DEPTH_ZERO, null);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 
+	private IPath getParameterFileIPath(){
+		IFileEditorInput input = (IFileEditorInput)this.getEditorInput() ;
+	    IFile file = input.getFile();
+	    IProject activeProject = file.getProject();
+	    String activeProjectName = activeProject.getName();
+	    
+	    IPath parameterFileIPath =new Path("/"+activeProjectName+"/param/"+container.getParameterFileName());
+	    
+		return parameterFileIPath;
+	}
+	
 	@Override
 	public List<String> getLatestParameterList() {
 		String canvasData =getXMLString();		
@@ -680,8 +704,19 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private void setParameterFileLocationInfo(IFile file) {
 		if(file!=null){
+			
+			String fileName = file.getName().replace("job", "properties");
+			
 			container.setParameterFileDirectory(file.getPathVariableManager().getURIValue("PROJECT_LOC").getPath() + "/" +  CustomMessages.ProjectSupport_PARAM + "/");
-			container.setParameterFileName(file.getName().replace("job", "properties"));
+			container.setParameterFileName(fileName);
+			
+			
+			//PlatformUI.getWorkbench().getActiveWorkbenchWindow().get
+			
+			
+			String projectName=file.getFullPath().segment(0);
+						
+			parameterFileIPath =new Path("/"+projectName+"/param/"+fileName);
 		}
 		
 	}
