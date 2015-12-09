@@ -61,12 +61,14 @@ public class WidgetFactory {
 
 		FILTER_PROPERTY_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getOperationFieldsConfig()),
 		COLUMN_NAME_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getColumnNameConfig()),
-		SECONDARY_KEYS_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getSecondaryKeysConfig()),
+
 		OPERATIONAL_CLASS_WIDGET(ELTOperationClassWidget.class, WidgetHelper.INSTANCE.getOperationClassForFilterWidgetConfig()),
 		RUNTIME_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class),
 		SECONDARY_COLUMN_KEYS_WIDGET(SecondaryColumnKeysWidget.class),
+		
 		TRANSFORM_WIDGET(TransformWidget.class,WidgetHelper.INSTANCE.getOperationClassForTransformWidgetConfig()),
 		AGGREGATE_WIDGET(TransformWidget.class,WidgetHelper.INSTANCE.getOperationClassForAggregateWidgetConfig()),
+		
 		INPUT_COUNT_WIDGET(TextBoxWithLabelWidget.class,WidgetHelper.INSTANCE.getInputCountWidgetConfig()),
 		JOIN_TYPE_WIDGET(ELTJoinWidget.class);
 		

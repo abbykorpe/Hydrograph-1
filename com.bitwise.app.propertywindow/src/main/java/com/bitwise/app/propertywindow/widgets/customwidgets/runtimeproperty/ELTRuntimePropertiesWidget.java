@@ -1,10 +1,13 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.runtimeproperty;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.TreeMap;
+import java.util.Map;
 
 import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
@@ -16,53 +19,39 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTC
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ELTRuntimePropertiesWidget.
+ * Creates the Property window for Runtime Properties
  * 
  * @author Bitwise
  */
 public class ELTRuntimePropertiesWidget extends AbstractWidget {
-	
-	private TreeMap<String, String> InstializeMap;
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTRuntimePropertiesWidget.class);
+	private Map<String, String> initialMap;
 	private String propertyName;
 	private Shell shell;
 	private String componentName;
-
-	/*public ELTRuntimePropertiesWidget() {
-		super();
-		tempPropertyMap = new LinkedHashMap<String, Object>();
-	}*/
 	
 	/**
 	 * Instantiates a new ELT runtime properties widget.
 	 * 
-	 * @param componentConfigrationProperty
+	 * @param componentConfigProp
 	 *            the component configration property
-	 * @param componentMiscellaneousProperties
+	 * @param componentMiscProps
 	 *            the component miscellaneous properties
-	 * @param propertyDialogButtonBar
+	 * @param propDialogButtonBar
 	 *            the property dialog button bar
 	 */
-	public ELTRuntimePropertiesWidget(
-			ComponentConfigrationProperty componentConfigrationProperty,
-			ComponentMiscellaneousProperties componentMiscellaneousProperties,
-			PropertyDialogButtonBar propertyDialogButtonBar) {
-		super(componentConfigrationProperty, componentMiscellaneousProperties,
-				propertyDialogButtonBar);
+	public ELTRuntimePropertiesWidget(ComponentConfigrationProperty componentConfigProp,
+			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propDialogButtonBar) {
+		super(componentConfigProp, componentMiscProps, propDialogButtonBar);
 
-		this.propertyName = componentConfigrationProperty.getPropertyName();
-		this.InstializeMap = (TreeMap<String, String>) componentConfigrationProperty.getPropertyValue();
+		this.propertyName = componentConfigProp.getPropertyName();
+		this.initialMap = (Map<String, String>) componentConfigProp.getPropertyValue();
 		
-		tempPropertyMap = new LinkedHashMap<String, Object>();
 		//since this window does all the validation 
 		//we can assume that it is valid always
 		validationStatus.setIsValid(true);
 	}
-	
-
-	private LinkedHashMap<String, Object> tempPropertyMap;
-
 	
 	/**
 	 * @wbp.parser.entryPoint
@@ -80,63 +69,37 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 		runtimeComposite.attachWidget(defaultLable1);
 		
 		
-		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(
-				"Edit");
+		ELTDefaultButton eltDefaultButton = new ELTDefaultButton("Edit");
 		
 		runtimeComposite.attachWidget(eltDefaultButton);
 
 		try {
 			eltDefaultButton.attachListener(ListenerFactory.Listners.RUNTIME_BUTTON_CLICK.getListener(),
-					propertyDialogButtonBar, new ListenerHelper(this.getClass()
-							.getName(), this), eltDefaultButton
-							.getSWTWidgetControl());
+					propertyDialogButtonBar, new ListenerHelper(this.getClass().getName(), this), eltDefaultButton.getSWTWidgetControl());
 
-		} catch (Exception e1) {
-
-			e1.printStackTrace();
+		} catch (Exception exception) {
+			logger.error("Error occured while attaching listener to Runtime Properties window", exception);
 		}
-
 	}
-
 	
-	/**
-	 * Sets the properties.
-	 * 
-	 * @param propertyName
-	 *            the property name
-	 * @param properties
-	 *            the properties
-	 */
-	public void setProperties(String propertyName, Object properties) {
-		this.propertyName = propertyName;
-		this.InstializeMap = (TreeMap<String, String>) properties;
-	}
-
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-
-		tempPropertyMap.put(this.propertyName, this.InstializeMap);
-		return (tempPropertyMap);
+		LinkedHashMap<String, Object> tempPropertyMap = new LinkedHashMap<>();
+		tempPropertyMap.put(this.propertyName, this.initialMap);
+		return tempPropertyMap;
 	}
-
-	
 
 	/**
 	 * New window launcher.
 	 */
 	public void newWindowLauncher() {
-		RunTimePropertyWizard runTimeWizardObj = new RunTimePropertyWizard();
-		runTimeWizardObj.setComponentName(componentName);
 		if (getProperties().get(propertyName) == null) {
-			setProperties(propertyName, new TreeMap<String, String>());
-
+			initialMap = new HashMap<String, String>();
 		}
+		RunTimePropertyWizard runTimeWizardObj = new RunTimePropertyWizard();
+		runTimeWizardObj.setRuntimePropertyMap((Map<String, String>) getProperties().get(propertyName));
 
-		runTimeWizardObj
-				.setRuntimePropertyMap((TreeMap<String, String>) getProperties()
-						.get(propertyName));
-		setProperties(propertyName, runTimeWizardObj.launchRuntimeWindow(shell,propertyDialogButtonBar));
-
+		Map<String, String> updatedMap = runTimeWizardObj.launchRuntimeWindow(shell,propertyDialogButtonBar);
+		initialMap =  updatedMap;
 	}
-
 }
