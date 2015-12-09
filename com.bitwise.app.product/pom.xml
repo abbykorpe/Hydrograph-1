@@ -40,6 +40,17 @@
             </goals>
           </execution>
         </executions>
+       <configuration> 
+      <products>
+      <product>
+      <id>com.bitwise.app.perspective.ID</id>
+      <rootFolders>
+        <macosx>ELTTool.app</macosx>
+      </rootFolders>
+    </product>
+  </products>
+  </configuration> 
+     
       </plugin>
 	  <plugin>
         <artifactId>maven-resources-plugin</artifactId>
@@ -98,10 +109,29 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-             <outputDirectory>target\products\com.bitwise.app.perspective.ID\macosx\cocoa\x86_64</outputDirectory>
+             <outputDirectory>target\products\com.bitwise.app.perspective.ID\macosx\cocoa\x86_64\ELTTool.app\Contents\Eclipse</outputDirectory>
               <resources>          
                 <resource>
                   <directory>resources</directory>
+                </resource>
+              </resources>              
+            </configuration>            
+          </execution>
+               <execution>
+            <id>copy-resources-5</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+             <outputDirectory>target\products\com.bitwise.app.perspective.ID\macosx\cocoa\x86_64\ELTTool.app\Contents\MacOS</outputDirectory>
+              
+              <resources>          
+                <resource>
+                  <directory>target\products\com.bitwise.app.perspective.ID\macosx\cocoa\x86_64\ELTTool.app\Contents\Eclipse</directory>
+                        <includes>
+                            <include>eclipse.ini</include>
+                        </includes>
                 </resource>
               </resources>              
             </configuration>            
