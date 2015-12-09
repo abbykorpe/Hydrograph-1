@@ -1,5 +1,6 @@
 package com.bitwise.app.propertywindow.widgets.listeners.grid;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Widget;
 
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -17,6 +18,13 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
  * @see ELTGridAddSelectionEvent
  */
 public class ELTGridAddSelectionListener extends ELTSelectionTaskListener{
+	
+	
+	@Override
+	public int getListenerType() {
+      return SWT.MouseUp;
+	}
+	
 
 	@Override
 	public void selectionListenerAction(PropertyDialogButtonBar propertyDialogButtonBar, ListenerHelper helpers, Widget... widgets) {
