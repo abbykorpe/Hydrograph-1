@@ -12,6 +12,7 @@ import com.bitwise.app.graph.figure.ComponentFigure;
 import com.bitwise.app.graph.figure.ELTColorConstants;
 import com.bitwise.app.graph.figure.ELTFigureConstants;
 import com.bitwise.app.graph.figure.PortFigure;
+import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Port;
 /**
  * The Class PortEditPart.
@@ -27,16 +28,19 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 	protected IFigure createFigure() {
 		
 		ComponentFigure componentFigure = ((ComponentEditPart) getParent()).getComponentFigure();
+		Component component = ((ComponentEditPart) getParent()).getCastedModel();
 		PortFigure port = null;
 		
 		Color borderColor = ELTColorConstants.componentBorder;
 		Point portPoint = null;
-		int height = componentFigure.getHeight();
-		int width = componentFigure.getWidth();
+		
+		int height = component.getSize().height-ELTFigureConstants.componentOneLineLabelMargin;
+		int width = component.getSize().width;
+		
+		
 		int margin = componentFigure.getComponentLabelMargin();
 		port =  new PortFigure(borderColor, getCastedModel().getPortType(), getCastedModel().getSequence(), getCastedModel().getNumberOfPortsOfThisType(),getCastedModel().getNameOfPort(),getCastedModel().getLabelOfPort());	
 		
-		//Calling getNameOfPort() method form Port Model
 		String toolTipText = getCastedModel().getNameOfPort();
 		port.getToolTipFigure().setMessage(toolTipText);
 		
