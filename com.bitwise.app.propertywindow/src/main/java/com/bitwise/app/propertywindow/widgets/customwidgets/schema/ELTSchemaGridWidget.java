@@ -270,7 +270,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			ELTGridDetails value = new ELTGridDetails(schemaGridRowList, tableViewer, 
 					(Label) fieldError.getSWTWidgetControl(), gridWidgetBuilder);
 			helper.put(HelperType.SCHEMA_GRID, value);
-			validationStatus.setIsValid(true);
+			if(((List)(getProperties().get(propertyName))).size()!=0)
+				validationStatus.setIsValid(true);
+			else
+				validationStatus.setIsValid(false);
 			helper.put(HelperType.VALIDATION_STATUS, validationStatus);
 		}
 		return helper;
@@ -314,7 +317,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		setDecorator();
 
 		addValidators();
-
+		populateWidget(); 
 		helper = getListenerHelper(); 
 		try {
 			eltTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),
@@ -332,7 +335,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 
 		gridListener(editors);
-		populateWidget(); 
+		
 		return tableViewer;
 	}
 	public List getSchemaGridRowList() {
