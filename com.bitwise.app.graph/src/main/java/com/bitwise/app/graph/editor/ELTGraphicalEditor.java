@@ -84,7 +84,6 @@ import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.statushandlers.StatusManager;
-import org.junit.internal.matchers.SubstringMatcher;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -654,8 +653,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void doSaveAs() {
-		System.out.println("here");
-
 		IFile file=opeSaveAsDialog();
 		//getParameterFile();
 		setParameterFileLocationInfo(file);
