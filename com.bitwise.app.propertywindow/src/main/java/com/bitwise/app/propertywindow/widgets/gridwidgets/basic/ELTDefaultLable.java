@@ -1,9 +1,12 @@
 package com.bitwise.app.propertywindow.widgets.gridwidgets.basic;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -29,7 +32,17 @@ public class ELTDefaultLable extends AbstractELTWidget{
 	public ELTDefaultLable(String lableText){
 		this.lableText = lableText;
 	}
-	
+    
+	public void addMouseUpListener(MouseListener listener)
+	{
+	defaultELTLable.addMouseListener(listener);
+	}
+    
+	public void setImage(String img)
+	{
+		
+		defaultELTLable.setImage(new Image(null,img));
+	}
 	@Override
 	public void attachWidget(Composite container) {
 		defaultELTLable = new Label(container, SWT.NONE);
