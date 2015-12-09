@@ -718,10 +718,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 	private void validateLengthOfJobName(SaveAsDialog obj) {
-		String jobName=obj.getResult().toString().substring(6,obj.getResult().toString().length()-4);
+		String jobName=obj.getResult().removeFileExtension().lastSegment();
 		while(jobName.length()>50)
 		{
-			jobName=obj.getResult().toString().substring(6,obj.getResult().toString().length()-4);
+			jobName=obj.getResult().removeFileExtension().lastSegment();
 			if(jobName.length()>50)
 			{
 				MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
