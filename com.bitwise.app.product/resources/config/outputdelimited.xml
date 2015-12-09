@@ -36,7 +36,7 @@
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL"/>
 			
-		<tns:property dataType="boolean" group="GENERAL" subGroup="CONFIGURATION" name="has_header"
+		<tns:property dataType="boolean" group="GENERAL" subGroup="CONFIGURATION" name="hasHeader"
 			renderer="HAS_HEADER_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL"/>
 		
