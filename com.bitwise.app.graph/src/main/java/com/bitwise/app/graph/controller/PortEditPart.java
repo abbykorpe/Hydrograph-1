@@ -44,7 +44,7 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 				getCastedModel().getSequence(), height, width, margin);
 		
 		Point  tmpPoint = new Point(componentFigure.getLocation().x+portPoint.x , componentFigure.getLocation().y+portPoint.y);
-		componentFigure.translateToAbsolute(tmpPoint);
+		
 		port.setLocation(tmpPoint);
 		componentFigure.setAnchors(port.getAnchor());
 		return port;
@@ -55,7 +55,6 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 	private Point getPortLocation(int totalPortsOfThisType, String type, int sequence, int height, int width, int margin) {
 
 		Point p = null ;
-		//int width = 100;
 		int portOffsetFactor = totalPortsOfThisType+1;
 		int portHeightOffset=height/portOffsetFactor;
 		int portWidthOffset=width/portOffsetFactor;
@@ -77,7 +76,6 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 			}
 			
 		}
-		
 		p=new Point(xLocation, yLocation);
 		return p;
 	}
