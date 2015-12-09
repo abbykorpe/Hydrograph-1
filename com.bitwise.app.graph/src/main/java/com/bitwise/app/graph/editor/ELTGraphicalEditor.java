@@ -72,6 +72,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -702,11 +703,36 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		obj.open();
 
 		if (obj.getReturnCode() == 0) {
+			validateLengthOfJobName(obj);
+		}
+		if(obj.getResult()!=null&&obj.getReturnCode()!=1)
+		{
 			IPath filePath = obj.getResult().removeFileExtension().addFileExtension("job");
 			file= ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
 		}
 		return file;
 	}
+	private void validateLengthOfJobName(SaveAsDialog obj) {
+		String jobName=obj.getResult().removeFileExtension().lastSegment();
+		while(jobName.length()>50)
+		{
+			jobName=obj.getResult().removeFileExtension().lastSegment();
+			if(jobName.length()>50)
+			{
+				MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+				messageBox.setText("Error");
+				messageBox.setMessage("File Name Too Long");
+				if(messageBox.open()==SWT.OK)
+				{
+					obj.setOriginalName(jobName+".job");
+					obj.open();
+					if(obj.getReturnCode()==1)
+						break;
+				}
+			}
+		}
+	}
+
 
 
 	/**
