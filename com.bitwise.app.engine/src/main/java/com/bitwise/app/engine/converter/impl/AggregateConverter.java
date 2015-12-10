@@ -89,7 +89,7 @@ public class AggregateConverter extends TransformConverter {
 		List<TypeSecondayKeyFieldsAttributes> field = secondaryKeyFields.getField();
 			for(Entry<String, String> gridRowEntry : gridRow.entrySet()){
 				TypeSecondayKeyFieldsAttributes fieldsAttributes = new TypeSecondayKeyFieldsAttributes();
-				TypeSortOrder order = TypeSortOrder.fromValue(gridRowEntry.getValue());
+				TypeSortOrder order = TypeSortOrder.fromValue(gridRowEntry.getValue().toLowerCase());
 				fieldsAttributes.setName(gridRowEntry.getKey());
 				fieldsAttributes.setOrder(order);
 				field.add(fieldsAttributes);

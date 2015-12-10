@@ -44,7 +44,7 @@ public class OutputFileFixedWidthConverter extends OutputConverter {
 		charset.setValue(getCharset());
 		fileFixedWidth.setSafe(getBoolean(PropertyNameConstants.IS_SAFE.value()));
 		fileFixedWidth.setPath(path);
-		fileFixedWidth.setStrict(getBoolean(PropertyNameConstants.HAS_HEADER.value()));
+		fileFixedWidth.setStrict(getBoolean(PropertyNameConstants.STRICT.value()));
 	    fileFixedWidth.setCharset(charset);
 		fileFixedWidth.setRuntimeProperties(getRuntimeProperties());
 	}

@@ -78,7 +78,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 			for (Map.Entry<String, String> entry : fieldValueMap.entrySet()) {
 				TypeSecondayKeyFieldsAttributes field = new TypeSecondayKeyFieldsAttributes();
 				field.setName(entry.getKey());
-				field.setOrder(TypeSortOrder.fromValue(entry.getValue()));
+				field.setOrder(TypeSortOrder.fromValue(entry.getValue().toLowerCase()));
 				fieldNameList.add(field);
 			}
 		}
