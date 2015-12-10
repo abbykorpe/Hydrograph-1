@@ -8,9 +8,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
@@ -80,7 +83,6 @@ public class SecondaryColumnKeysWidgetWizard {
 
 	// Add New Property After Validating old properties
 	private void addNewProperty(TableViewer tv) {
-
 		isAnyUpdatePerformed = true;
 		SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
 		if (propertyLst.size() != 0) {
@@ -90,12 +92,13 @@ public class SecondaryColumnKeysWidgetWizard {
 			p.setPropertyValue("Asc"); //$NON-NLS-1$
 			propertyLst.add(p);
 			tv.refresh();
-
+			tableViewer.editElement(tableViewer.getElementAt(propertyLst.size() - 1), 0);
 		} else {
 			p.setPropertyName(""); //$NON-NLS-1$
 			p.setPropertyValue("Asc"); //$NON-NLS-1$
 			propertyLst.add(p);
 			tv.refresh();
+			tableViewer.editElement(tableViewer.getElementAt(0), 0);
 		}
 		enableButtons();
 	}
@@ -191,6 +194,10 @@ public class SecondaryColumnKeysWidgetWizard {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
+		//enables the tab functionality
+		TableViewerEditor.create(tableViewer, new ColumnViewerEditorActivationStrategy(tableViewer), 
+				ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.TABBING_HORIZONTAL | 
+				ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL);
 	}
 
 	/**
