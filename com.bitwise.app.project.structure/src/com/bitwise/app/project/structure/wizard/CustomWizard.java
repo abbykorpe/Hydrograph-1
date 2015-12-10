@@ -2,6 +2,7 @@ package com.bitwise.app.project.structure.wizard;
 
 import java.net.URI;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
@@ -46,9 +47,12 @@ public class CustomWizard extends Wizard implements INewWizard, IExecutableExten
 		if(!pageOne.useDefaults()){
 			location = pageOne.getLocationURI();
 		}
-		ProjectStructureCreator.INSTANCE.createProject(projectName, location);
+		IProject project=null;
+		if(project==null||project!=null)
+		project=ProjectStructureCreator.INSTANCE.createProject(projectName, location);
 	    BasicNewProjectResourceWizard.updatePerspective(configurationElement);
-		return true;
+	    return project!=null?true:false;
+	    
 	}
 
 	@Override
