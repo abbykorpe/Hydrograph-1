@@ -30,12 +30,12 @@ public class ELTTransforAddSelectionListener extends GridWidgetCommonBuilder {
 			grids.add(operationField);  
 			tableViewer.setInput(grids);
 			tableViewer.refresh();
+			tableViewer.editElement(tableViewer.getElementAt(grids.size() == 0 ? grids.size() : grids.size() - 1), 0);
 		}	 
 	} 
 
 	@Override
 	public CellEditor[] createCellEditorList(Table table, int size) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -6,10 +6,13 @@ import java.util.List;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -313,6 +316,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		editors = gridWidgetBuilder.createCellEditorList(table, PROPS.length);
 		tableViewer.setCellEditors(editors);
 
+		//enables the tab functionality
+		TableViewerEditor.create(tableViewer, new ColumnViewerEditorActivationStrategy(tableViewer), 
+				ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.TABBING_HORIZONTAL | 
+				ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL);
+		
 		// Adding the decorator to show error message when field name same.
 		setDecorator();
 

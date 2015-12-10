@@ -10,9 +10,12 @@ import java.util.regex.Pattern;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
@@ -92,11 +95,12 @@ public class ELTFilterPropertyWizard {
 			filter.setPropertyname(""); //$NON-NLS-1$
 			propertyLst.add(filter);
 			tv.refresh();
-
+			tableViewer.editElement(tableViewer.getElementAt(propertyLst.size() - 1), 0);
 		} else {
 			filter.setPropertyname("");//$NON-NLS-1$
 			propertyLst.add(filter);
 			tv.refresh();
+			tableViewer.editElement(tableViewer.getElementAt(0), 0);
 		}
 	}
 
@@ -179,6 +183,12 @@ public class ELTFilterPropertyWizard {
 		tc1.setWidth(460);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+		
+		//enables the tab functionality
+		TableViewerEditor.create(tableViewer, new ColumnViewerEditorActivationStrategy(tableViewer), 
+				ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.TABBING_HORIZONTAL | 
+				ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL);
+		
 	}
 
 	/**
