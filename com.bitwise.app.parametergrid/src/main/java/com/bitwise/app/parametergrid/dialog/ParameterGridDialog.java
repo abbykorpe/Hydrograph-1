@@ -13,6 +13,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -39,6 +45,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
@@ -523,6 +530,20 @@ public class ParameterGridDialog extends Dialog {
 		return gridControlButtonLayout;
 	}
 
+	private IPath getParameterFileIPath(){
+		IFileEditorInput input = (IFileEditorInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput() ;
+	    IFile file = input.getFile();
+	    IProject activeProject = file.getProject();
+	    String activeProjectName = activeProject.getName();
+	    
+	    //java.nio.file.Path path= java.nio.file.Path(parameterFile)
+	    Path filePath = Paths.get(parameterFile, "");
+	    
+	    IPath parameterFileIPath =new org.eclipse.core.runtime.Path("/"+activeProjectName+"/param/"+filePath.getFileName().toString().replace("job", "properties"));
+	    
+		return parameterFileIPath;
+	}
+	
 	@Override
 	protected void okPressed() {
 		boolean error=false;
@@ -578,6 +599,13 @@ public class ParameterGridDialog extends Dialog {
 				break;
 			}
 		}		
+		
+		IFile file=ResourcesPlugin.getWorkspace().getRoot().getFile(getParameterFileIPath());
+		try {
+				file.refreshLocal(IResource.DEPTH_ZERO, null);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
 	}
 
 
