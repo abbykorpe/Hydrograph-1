@@ -143,7 +143,7 @@ public class ConverterHelper{
 		TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
 		outSocketAsInsocket.setInSocketId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
 		
-		
+		outSocket.setId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());
 		outSocket.setType(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort()));
 		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addPassThroughFields(transformPropertyGrid));
 		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addMapFields(transformPropertyGrid));
@@ -152,7 +152,7 @@ public class ConverterHelper{
 				&& outSocket.getPassThroughFieldOrOperationFieldOrMapField().size()==0
 					&& outSocket.getPassThroughFieldOrOperationFieldOrMapField().size()==0)
 		{	outSocket.setCopyOfInsocket(outSocketAsInsocket);
-			outSocket.setId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());
+			
 		}
 	}
 
