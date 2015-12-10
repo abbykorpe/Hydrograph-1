@@ -34,7 +34,7 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 		Color borderColor = ELTColorConstants.componentBorder;
 		Point portPoint = null;
 		
-		int height = component.getSize().height-ELTFigureConstants.componentOneLineLabelMargin;
+		int height = component.getSize().height-componentFigure.getComponentLabelMargin();
 		int width = component.getSize().width;
 		
 		
@@ -73,11 +73,11 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 		}else if (type.equalsIgnoreCase("unused")){
 			if(totalPortsOfThisType == 1){
 				xLocation = 27;
-				yLocation=height + ELTFigureConstants.componentOneLineLabelMargin - 4 - 4;
+				
 			}else if(totalPortsOfThisType > 1){
 				xLocation = portWidthOffset*sequence-23;
-				yLocation=height + ELTFigureConstants.componentOneLineLabelMargin - 4 - 5;
 			}
+			yLocation=height + margin - 4 - 4;
 			
 		}
 		p=new Point(xLocation, yLocation);
@@ -99,17 +99,17 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 	public void adjustPortFigure(Point componentLocation) { 
 		
 		ComponentFigure componentFigure = ((ComponentEditPart) getParent()).getComponentFigure();
-		int height = componentFigure.getHeight();
-		int width = componentFigure.getWidth();
+		Component component = ((ComponentEditPart) getParent()).getCastedModel();
+		
+		int height = component.getSize().height-componentFigure.getComponentLabelMargin();
+		int width = component.getSize().width;
+		
 		int margin = componentFigure.getComponentLabelMargin(); 
 		Point portPoint = getPortLocation(getCastedModel().getNumberOfPortsOfThisType(), getCastedModel().getPortType(),
 				getCastedModel().getSequence(), height, width, margin);
 		
 		Point newPortLoc = new Point(portPoint.x+componentLocation.x, portPoint.y+componentLocation.y);
-		
-		System.out.println("newPortLoc: "+newPortLoc.x +", "+newPortLoc.y);
-		componentFigure.translateToAbsolute(newPortLoc);
-		
+				
 		getFigure().setLocation(newPortLoc);
 	}
 	public PortFigure getPortFigure() {

@@ -309,7 +309,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 				ComponentFigure compFig = (ComponentFigure)getFigure();
 				compFig.setHeight(numOfPort, 1);
 				compFig.setWidth(numOfPort);
-				Dimension newSize = new Dimension((numOfPort+1)*33, ((numOfPort+1)*25)+15);
+				Dimension newSize = new Dimension((numOfPort+1)*33, ((numOfPort+1)*25)+ELTFigureConstants.componentOneLineLabelMargin);
 				getCastedModel().setSize(newSize);
 				
 				getCastedModel().clearPorts();
@@ -323,14 +323,14 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 			refresh();
 			List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
 			PortEditPart portEditPart = null;
-//			for(AbstractGraphicalEditPart part:childrenEditParts)
-//			{
-//				
-//				if(part instanceof PortEditPart){ 
-//					portEditPart = (PortEditPart) part;
-//					portEditPart.adjustPortFigure(getCastedModel().getLocation());
-//				}
-//			}
+			for(AbstractGraphicalEditPart part:childrenEditParts)
+			{
+				
+				if(part instanceof PortEditPart){ 
+					portEditPart = (PortEditPart) part;
+					portEditPart.adjustPortFigure(getCastedModel().getLocation());
+				}
+			}
 
 			ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 			if(eltPropertyWindow.isPropertyChanged()){
@@ -351,14 +351,14 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 		int labelLength = TextUtilities.INSTANCE.getStringExtents(label, font).width;
 		component.setComponentLabel(label);
 		if(labelLength >= ELTFigureConstants.compLabelOneLineLengthLimit && !componentFigure.isIncrementedHeight()){
-			component.setSize(new Dimension(component.getSize().width, component.getSize().height +15));
-			componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height +15));
+			component.setSize(new Dimension(component.getSize().width, component.getSize().height +ELTFigureConstants.compLabelOneLineLengthLimit));
+			componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height +ELTFigureConstants.compLabelOneLineLengthLimit));
 			componentFigure.setIncrementedHeight(true);
 			component.setComponentLabelMargin(ELTFigureConstants.componentTwoLineLabelMargin);
 			componentFigure.setComponentLabelMargin(ELTFigureConstants.componentTwoLineLabelMargin);
 		}else if(labelLength < ELTFigureConstants.compLabelOneLineLengthLimit && componentFigure.isIncrementedHeight()){
-			component.setSize(new Dimension(component.getSize().width, component.getSize().height-15));
-			componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height -15));
+			component.setSize(new Dimension(component.getSize().width, component.getSize().height-ELTFigureConstants.compLabelOneLineLengthLimit));
+			componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height -ELTFigureConstants.compLabelOneLineLengthLimit));
 			componentFigure.setIncrementedHeight(false);
 			component.setComponentLabelMargin(ELTFigureConstants.componentOneLineLabelMargin);
 			componentFigure.setComponentLabelMargin(ELTFigureConstants.componentOneLineLabelMargin);
