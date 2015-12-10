@@ -351,14 +351,15 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 		int labelLength = TextUtilities.INSTANCE.getStringExtents(label, font).width;
 		component.setComponentLabel(label);
 		if(labelLength >= ELTFigureConstants.compLabelOneLineLengthLimit && !componentFigure.isIncrementedHeight()){
-			component.setSize(new Dimension(component.getSize().width, component.getSize().height +ELTFigureConstants.compLabelOneLineLengthLimit));
-			componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height +ELTFigureConstants.compLabelOneLineLengthLimit));
+			component.setSize(new Dimension(component.getSize().width, component.getSize().height +ELTFigureConstants.componentOneLineLabelMargin));
+			component.setSize(new Dimension(100, 82));
+			componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height +ELTFigureConstants.componentOneLineLabelMargin));
 			componentFigure.setIncrementedHeight(true);
 			component.setComponentLabelMargin(ELTFigureConstants.componentTwoLineLabelMargin);
 			componentFigure.setComponentLabelMargin(ELTFigureConstants.componentTwoLineLabelMargin);
 		}else if(labelLength < ELTFigureConstants.compLabelOneLineLengthLimit && componentFigure.isIncrementedHeight()){
-			component.setSize(new Dimension(component.getSize().width, component.getSize().height-ELTFigureConstants.compLabelOneLineLengthLimit));
-			componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height -ELTFigureConstants.compLabelOneLineLengthLimit));
+			component.setSize(new Dimension(component.getSize().width, component.getSize().height-ELTFigureConstants.componentOneLineLabelMargin));
+			componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height -ELTFigureConstants.componentOneLineLabelMargin));
 			componentFigure.setIncrementedHeight(false);
 			component.setComponentLabelMargin(ELTFigureConstants.componentOneLineLabelMargin);
 			componentFigure.setComponentLabelMargin(ELTFigureConstants.componentOneLineLabelMargin);
