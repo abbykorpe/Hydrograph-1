@@ -78,6 +78,9 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 				"Component is positioned at respective x and y location"
 						+ defaultComponentLocation.getCopy().x + 20 + " and "
 						+ defaultComponentLocation.getCopy().y + 20);
+		
+		viewer.getEditDomain().loadDefaultTool();
+		graphicalViewer.getEditDomain().loadDefaultTool();
 
 	}
 
