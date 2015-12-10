@@ -23,7 +23,7 @@ configurations {
 }
   
 dependencies {
-  compile(group: 'engine', name: 'bhs', version: '1.0.2')
+  compile(group: 'engine', name: 'bhs', version: '1.0.3')
   compile group: 'cascading', name: 'cascading-core', version: cascadingVersion
   compile group: 'cascading', name: 'cascading-hadoop2-mr1', version: cascadingVersion //required for plunger
   compile group: 'cascading', name: 'cascading-local', version: cascadingVersion //required for plunger
