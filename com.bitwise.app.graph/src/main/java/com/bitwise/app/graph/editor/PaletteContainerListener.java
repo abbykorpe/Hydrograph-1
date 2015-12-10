@@ -1,7 +1,14 @@
 package com.bitwise.app.graph.editor;
 
 import java.awt.MouseInfo;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
@@ -15,6 +22,8 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.LogFactory;
@@ -42,6 +51,149 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 	private GraphicalViewer graphicalViewer;
 	private PaletteToolTip paletteToolTip;
 	private static final int TOOLTIP_SHOW_DELAY=600;
+		
+	public static LinkedHashMap<String, Point> compoLocationList;
+	static{
+		compoLocationList = new LinkedHashMap<>();
+	}
+	
+	/**
+	 * Get all components from Job canvas and populate/update componentLocationList
+	 */
+	public List<Component> getCanvasCompAndUpdateCompList(){
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		List<Component> compListFromCanvas = ((ELTGraphicalEditor) page.getActiveEditor()).getContainer().getChildren();
+		logger.debug("Existing components from Job canvas");
+		for (int i=0; i<compListFromCanvas.size(); i++){
+			String currentCompLabel = compListFromCanvas.get(i).getComponentLabel().getLabelContents();
+			Point currentCompLocation = compListFromCanvas.get(i).getLocation();
+			compoLocationList.put(currentCompLabel, currentCompLocation);
+			logger.debug("Added/updated component '" + currentCompLabel + "' at location: (" + currentCompLocation.x + "," + currentCompLocation.y + ")");
+		}
+		return compListFromCanvas;
+	}
+	
+	/**
+	 * Remove the component from compoLocationList if it is removed
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void updateComponentListForDeletedComponents(List<Component> compListFromCanvas){
+		if (compoLocationList.size() <= 0)
+			return;
+		
+		Iterator iterator = ((HashMap<String, Point>) compoLocationList.clone()).entrySet().iterator();
+		while (iterator.hasNext()){
+			boolean compFound = false;
+			Map.Entry entry = (Map.Entry)iterator.next();
+			for (int i=0; i<compListFromCanvas.size(); i++){
+				String currentCompLabel = compListFromCanvas.get(i).getComponentLabel().getLabelContents();
+				if (entry.getKey().equals(currentCompLabel)){
+					compFound = true;
+					break;
+				}
+			}
+			if (! compFound){
+				logger.debug("Removing component:" + entry.getKey());
+				compoLocationList.remove(entry.getKey());
+			}
+		}
+	}
+	
+	/**
+	 * Return last added component from job canvas
+	 * @return
+	 */
+	public Entry<String, Point> getLastAddedComponentFromCanvas(){
+		Entry<String, Point> lastAddedCompEntry = null;
+		Iterator<Entry<String, Point>> i = compoLocationList.entrySet().iterator();
+		while (i.hasNext()){
+			lastAddedCompEntry = i.next();
+		}
+		
+		return lastAddedCompEntry;
+	}
+	
+	/**
+	 * Iterate all components and compare the possible position to make sure that
+	 * it is not overlapping any of the existing component
+	 * 
+	 * @param calculatedPoint
+	 * @param compListFromCanvas
+	 * @param isStop
+	 * @return
+	 */
+	public Point getFinalLocationForComponent(Point calculatedPoint, List<Component> compListFromCanvas, boolean isStop){		
+		if (compListFromCanvas.size() == 0)
+			return calculatedPoint;
+		
+		boolean compOverlapping = false;
+		List<Component> subCompList = null;
+		Component currentComponent = null;
+		for (int j=0; j<compListFromCanvas.size(); j++){
+			Rectangle existingDimension = new Rectangle(compListFromCanvas.get(j).getLocation(), compListFromCanvas.get(j).getSize());
+			Rectangle newDimention = new Rectangle(calculatedPoint, new Dimension(calculatedPoint.x, calculatedPoint.y));
+			subCompList = compListFromCanvas.subList(j+1, compListFromCanvas.size());
+			currentComponent = compListFromCanvas.get(j);
+			if (! existingDimension.intersects(newDimention)){
+				logger.debug("Component " + compListFromCanvas.get(j).getComponentLabel().getLabelContents() + " is not overlapping ");
+			}else{
+				logger.debug("Component " + compListFromCanvas.get(j).getComponentLabel().getLabelContents() + " is Overlapping");
+				compOverlapping = true;
+				break;
+			}
+			
+		}
+		if (compOverlapping){
+			calculatedPoint = new  Point(currentComponent.getLocation().x + 5, currentComponent.getLocation().y + currentComponent.getSize().height + 5);
+		}
+		return getFinalLocationForComponent(calculatedPoint, subCompList, false);
+	}
+	
+	public Point calculateNewComponentLocation(Entry<String, Point> lastAddedComp, List<Component> compListFromCanvas){
+		
+		/**
+		 * Initialize the X and Y coordinate to zero for first component on job canvas
+		 */
+		int LastCompXPoint = 0;
+		int LastCompYPoint = 0;
+		if (lastAddedComp != null){
+			/**
+			 * If there are components on job canvas then initialize X and Y coordinate.
+			 */
+			String lastAddedCompLabel = lastAddedComp.getKey();
+			Point lastAdeddCompLocation = lastAddedComp.getValue();
+			LastCompXPoint = lastAdeddCompLocation.x;
+			LastCompYPoint = lastAdeddCompLocation.y;
+			logger.debug("Last added component: " + lastAddedCompLabel + " Location: (" + LastCompXPoint + "," + LastCompYPoint + ")");
+		}
+		
+		/**
+		 * Populate the X and Y coordinate for new component to have it just below the last component which was added in job canvas.
+		 * This is not final position of new component as there is posibility that rectangle of new component may overlap on existing component.
+		 */
+		int newCompYPoint = (LastCompYPoint == 0 && lastAddedComp == null)? LastCompYPoint : (LastCompYPoint + genericComponent.getSize().height + 5);
+		int newCompXPoint = (LastCompXPoint == 0 && lastAddedComp == null)? LastCompXPoint : (LastCompXPoint +5);
+		logger.debug(" New component's possible location: (" + newCompXPoint + "," + newCompYPoint + ")");
+		
+		/**
+		 * Finalize and return the position of new component
+		 */
+		Point newCompLocation = new Point(newCompXPoint , newCompYPoint);
+		logger.debug("Checking is possible position is overlapping with any of the existing component");
+		newCompLocation = getFinalLocationForComponent(newCompLocation, compListFromCanvas, false);
+		compoLocationList.put(genericComponent.getComponentLabel().getLabelContents(), newCompLocation);
+		logger.debug("Final position of new component = (" + newCompLocation.x + "," + newCompLocation.y + ")");
+		return newCompLocation;
+	}
+	
+	public Point getLocationForNewComponent(){
+		List<Component> compListFromCanvas = getCanvasCompAndUpdateCompList();
+		updateComponentListForDeletedComponents(compListFromCanvas);
+		Entry<String, Point> lastAddedComponent = getLastAddedComponentFromCanvas();
+		Point calculatedNewCompPosition = calculateNewComponentLocation(lastAddedComponent, compListFromCanvas);
+		
+		return calculatedNewCompPosition;
+	}
 	
 	/**
 	 * Instantiates a new palette container listener.
@@ -70,14 +222,14 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 		CreateRequest componentRequest = getComponentRequest(mouseEvent);
 		placeComponentOnCanvasByDoubleClickOnPalette(componentRequest);
 
-		logger.info(
+		/*logger.info(
 				"Component is positioned at respective x and y location"
 						+ defaultComponentLocation.getCopy().x + 20 + " and "
 						+ defaultComponentLocation.getCopy().y + 20);
 		logger.info(
 				"Component is positioned at respective x and y location"
 						+ defaultComponentLocation.getCopy().x + 20 + " and "
-						+ defaultComponentLocation.getCopy().y + 20);
+						+ defaultComponentLocation.getCopy().y + 20);*/
 
 	}
 
@@ -103,9 +255,12 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 	private void setComponentRequestParams(CreateRequest componentRequest) {
 		componentRequest.setSize(genericComponent.getSize());
 
-		defaultComponentLocation.setLocation(
+		Point newCompDefaultLocation = getLocationForNewComponent();
+		defaultComponentLocation.setLocation(newCompDefaultLocation.x, newCompDefaultLocation.y);
+		
+		/*defaultComponentLocation.setLocation(
 				defaultComponentLocation.getCopy().x + 20,
-				defaultComponentLocation.getCopy().y + 20);
+				defaultComponentLocation.getCopy().y + 20);*/
 
 		componentRequest.setLocation(defaultComponentLocation);
 	}
