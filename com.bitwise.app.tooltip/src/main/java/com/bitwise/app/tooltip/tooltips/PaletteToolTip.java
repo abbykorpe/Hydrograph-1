@@ -46,7 +46,7 @@ public class PaletteToolTip extends Shell {
 	 */
 	private Point getToolTipWidthHeight() {
 		Point tooltipSize = toolTipComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-		logger.debug("PaletteToolTip.getToolTipWidthHeight: Computed Width=" + tooltipSize.x + "Height=" + tooltipSize.y);
+		logger.debug("Computed Width=" + tooltipSize.x + "Height=" + tooltipSize.y);
 		return tooltipSize;
 	}
 	
@@ -59,7 +59,7 @@ public class PaletteToolTip extends Shell {
 	public Rectangle getToolTipBounds(){
 		Point tooltipSize = getToolTipWidthHeight();
 		Rectangle bounds = new Rectangle(0, 0, tooltipSize.x, tooltipSize.y);
-		logger.debug("PaletteToolTip.getToolTipBounds: tooltip bounds=" + bounds);
+		logger.debug("tooltip bounds=" + bounds);
 		return bounds;
 	}
 
@@ -71,7 +71,7 @@ public class PaletteToolTip extends Shell {
 	private void addSpacesBeforeHelpLink(int numberOfSpaces){		
 		blankCharacters=CharBuffer.allocate( numberOfSpaces + 5).toString().replace( '\0', ' ' );
 		helpLink.setText(blankCharacters + "<a>help</a> ");
-		logger.debug("PaletteToolTip.addSpacesBeforeHelpLink: added " + numberOfSpaces + " before \"Help\" link");
+		logger.debug("added " + numberOfSpaces + " before \"Help\" link");
 	}
 
 	
@@ -86,7 +86,7 @@ public class PaletteToolTip extends Shell {
 		addSpacesBeforeHelpLink(maxLength);		
 		toolTipText.setText(text.replace("\\n", "\n"));
 		setSize(this.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		logger.debug("PaletteToolTip.setToolTipText: set tooltip text - " + text);
+		logger.debug("set tooltip text - " + text);
 	}
 	
 	
@@ -100,17 +100,17 @@ public class PaletteToolTip extends Shell {
 				
 		setLayoutToOuterMostContainer();
 		addToolTipComposite();
-		logger.debug("PaletteToolTip.PaletteToolTip: created tooltip box");
+		logger.debug("created tooltip box");
 		
 		addToolTipTextArea();
-		logger.debug("PaletteToolTip.PaletteToolTip: added tooltip textarea");
+		logger.debug("added tooltip textarea");
 		addSeparator();
-		logger.debug("PaletteToolTip.PaletteToolTip: added separator");
+		logger.debug("added separator");
 		addHelpLink();
-		logger.debug("PaletteToolTip.PaletteToolTip: added help link");
+		logger.debug("added help link");
 		
 		addListenersToHideToolTip();
-		logger.debug("PaletteToolTip.PaletteToolTip: tooltip hide listener");
+		logger.debug("tooltip hide listener");
 		
 		createContents();
 	}
@@ -123,6 +123,7 @@ public class PaletteToolTip extends Shell {
 		helpLink.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		helpLink.setText("<a>Help</a>");
 		helpLink.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+		logger.debug("Added help link");
 	}
 
 	/**
@@ -131,6 +132,7 @@ public class PaletteToolTip extends Shell {
 	private void addSeparator() {
 		Label label = new Label(toolTipComposite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		logger.debug("Added help link-tooltip text separator");
 	}
 
 	/**
@@ -139,15 +141,16 @@ public class PaletteToolTip extends Shell {
 	private void addToolTipTextArea() {
 		toolTipText = new Label(toolTipComposite, SWT.NONE);
 		toolTipText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		toolTipText.setText("This is test description\n");
-		toolTipComposite.setSize(toolTipComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		toolTipComposite.setSize(toolTipComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));		
+		toolTipText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 		
-		toolTipText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_INFO_BACKGROUND));	
+		logger.debug("Initialized Tooltip text area");
 	}
 
 	private void addListenersToHideToolTip() {
 		addToolTipTextAreaMouseTrackListener();
 		addToolTipHelpLinkMouseTrackListener();
+		logger.debug("added listeners to hide tooltip");
 	}
 
 	/**

@@ -32,7 +32,6 @@ import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.tooltip.tooltips.PaletteToolTip;
 
-// TODO: Auto-generated Javadoc
 /**
  * The listener interface for receiving paletteContainer events. The class that is interested in processing a
  * paletteContainer event implements this interface, and the object created with that class is registered with a
@@ -68,7 +67,7 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 			String currentCompLabel = compListFromCanvas.get(i).getComponentLabel().getLabelContents();
 			Point currentCompLocation = compListFromCanvas.get(i).getLocation();
 			compoLocationList.put(currentCompLabel, currentCompLocation);
-			logger.debug("Added/updated component '" + currentCompLabel + "' at location: (" + currentCompLocation.x + "," + currentCompLocation.y + ")");
+			logger.debug("Added/updated component {} at location: ({},{})", new Object[]{currentCompLabel, currentCompLocation.x, currentCompLocation.y});
 		}
 		return compListFromCanvas;
 	}
@@ -173,7 +172,7 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 		 */
 		int newCompYPoint = (LastCompYPoint == 0 && lastAddedComp == null)? LastCompYPoint : (LastCompYPoint + genericComponent.getSize().height + 5);
 		int newCompXPoint = (LastCompXPoint == 0 && lastAddedComp == null)? LastCompXPoint : (LastCompXPoint +5);
-		logger.debug(" New component's possible location: (" + newCompXPoint + "," + newCompYPoint + ")");
+		logger.debug("New component's possible location: (" + newCompXPoint + "," + newCompYPoint + ")");
 		
 		/**
 		 * Finalize and return the position of new component
@@ -210,6 +209,7 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 	
 	@Override
 	public void mouseUp(MouseEvent e) {
+		logger.debug("Hiding tooltip");
 		hidePaletteToolTip();
 	}
 
@@ -221,47 +221,34 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 	public void mouseDoubleClick(MouseEvent mouseEvent) {
 		CreateRequest componentRequest = getComponentRequest(mouseEvent);
 		placeComponentOnCanvasByDoubleClickOnPalette(componentRequest);
-
-		/*logger.info(
-				"Component is positioned at respective x and y location"
-						+ defaultComponentLocation.getCopy().x + 20 + " and "
-						+ defaultComponentLocation.getCopy().y + 20);
-		logger.info(
-				"Component is positioned at respective x and y location"
-						+ defaultComponentLocation.getCopy().x + 20 + " and "
-						+ defaultComponentLocation.getCopy().y + 20);*/
-
 	}
 
+	/**
+	 * 
+	 * Create component request
+	 * 
+	 * @param mouseEvent
+	 * @return
+	 */
 	private CreateRequest getComponentRequest(MouseEvent mouseEvent) {
 		EditPart paletteInternalController = viewer.findObjectAt(new Point(
 				mouseEvent.x, mouseEvent.y));
 
-		CombinedTemplateCreationEntry addedPaletteTool = (CombinedTemplateCreationEntry) paletteInternalController
-				.getModel();
-
-		CreateRequest componentRequest = new CreateRequest();
-		componentRequest.setFactory(new SimpleFactory((Class) addedPaletteTool
-				.getTemplate()));
-
-		genericComponent = (Component) componentRequest
-				.getNewObject();
+		CreateRequest componentRequest = setGenericComponent(paletteInternalController);
 
 		setComponentRequestParams(componentRequest);
 
 		return componentRequest;
 	}
 
+	
+	
 	private void setComponentRequestParams(CreateRequest componentRequest) {
 		componentRequest.setSize(genericComponent.getSize());
 
 		Point newCompDefaultLocation = getLocationForNewComponent();
 		defaultComponentLocation.setLocation(newCompDefaultLocation.x, newCompDefaultLocation.y);
 		
-		/*defaultComponentLocation.setLocation(
-				defaultComponentLocation.getCopy().x + 20,
-				defaultComponentLocation.getCopy().y + 20);*/
-
 		componentRequest.setLocation(defaultComponentLocation);
 	}
 
@@ -284,23 +271,34 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 		// Do Nothing
 	}
 
-
-
-
 	@Override
 	public void mouseExit(MouseEvent e) {
+		logger.debug("Hiding tooltip");
 		hidePaletteToolTip();
 	}
 
+	/**
+	 * Hide Tooltip
+	 */
 	private void hidePaletteToolTip(){
 		if(paletteToolTip!=null){
 			java.awt.Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
 			if(!paletteToolTip.getBounds().contains(mouseLocation.x, mouseLocation.y)){
-				paletteToolTip.setVisible(false);
-			}	
+				logger.debug("hiding tooltip");
+				paletteToolTip.setVisible(false);				
+			}else{
+				logger.debug("Not hiding tooltip as mouse pointer is on tooltip");			
+			}
 		}
 	}
 	
+	
+	/**
+	 * 
+	 * Show tooltip
+	 * 
+	 * @param toolTipMessage - text message to be display on tooltip
+	 */
 	private void showPaletteToolTip(String toolTipMessage) {
 		paletteToolTip = new PaletteToolTip(Display.getDefault());
 		java.awt.Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
@@ -317,44 +315,82 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 				e.x, e.y));
 
 		if(paletteInternalController.getModel() instanceof CombinedTemplateCreationEntry){
-			CombinedTemplateCreationEntry addedPaletteTool = (CombinedTemplateCreationEntry) paletteInternalController
-					.getModel();
+			setGenericComponent(paletteInternalController);
 
-			CreateRequest componentRequest = new CreateRequest();
-			componentRequest.setFactory(new SimpleFactory((Class) addedPaletteTool
-					.getTemplate()));
-
-			genericComponent = (Component) componentRequest
-					.getNewObject();
-
+			// Hide tooltip if already showing
 			hidePaletteToolTip();
 			
-			Display.getDefault().timerExec(TOOLTIP_SHOW_DELAY, new Runnable() {
-				public void run() {
-					java.awt.Point mouseLocation2 = MouseInfo.getPointerInfo().getLocation();
-					
-					if(mouseLocation1.equals(mouseLocation2)){
-						//showPaletteToolTip(genericComponent.getComponentLabel().getLabelContents());
-						showPaletteToolTip(genericComponent.getComponentDescription());
-					}
-					
-                }
-			});
-			
-			
-			
-		}
-	}
-	@Override
-	public void mouseMove(MouseEvent e) {
-		if(paletteToolTip!=null){
-			org.eclipse.swt.graphics.Rectangle tooltipBounds = paletteToolTip.getBounds();
-			org.eclipse.swt.graphics.Rectangle newBounds = new org.eclipse.swt.graphics.Rectangle(tooltipBounds.x - 11, tooltipBounds.y - 7, tooltipBounds.width, tooltipBounds.height);
-			java.awt.Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-			if(!newBounds.contains(mouseLocation.x,mouseLocation.y))
-				hidePaletteToolTip();
+			showToolTipWithDelay(mouseLocation1);
 		}
 	}
 
+	/**
+	 * 
+	 * set genericComponent to selected/hovered component in palette
+	 * 
+	 * @param paletteInternalController
+	 * @return
+	 */
+	private CreateRequest setGenericComponent(EditPart paletteInternalController) {
+		CombinedTemplateCreationEntry addedPaletteTool = (CombinedTemplateCreationEntry) paletteInternalController
+				.getModel();
+
+		CreateRequest componentRequest = new CreateRequest();
+		componentRequest.setFactory(new SimpleFactory((Class) addedPaletteTool
+				.getTemplate()));
+
+		genericComponent = (Component) componentRequest
+				.getNewObject();
+		
+		logger.debug("genericComponent - " + genericComponent.toString());
+		
+		return componentRequest;
+	}
+
+	/**
+	 * 
+	 * Show tooltip with some delay
+	 * 
+	 * @param mouseLocation1 - to check if mouse is not moved between the delay
+	 */
+	private void showToolTipWithDelay(final java.awt.Point mouseLocation1) {
+		Display.getDefault().timerExec(TOOLTIP_SHOW_DELAY, new Runnable() {
+			public void run() {
+				java.awt.Point mouseLocation2 = MouseInfo.getPointerInfo().getLocation();
+				
+				if(mouseLocation1.equals(mouseLocation2)){
+					showPaletteToolTip(genericComponent.getComponentDescription());
+				}
+				
+		    }
+		});
+	}
 	
+	@Override
+	public void mouseMove(MouseEvent e) {		
+		if(paletteToolTip!=null){			
+			org.eclipse.swt.graphics.Rectangle newBounds = getToolTipBoundsFromMouseLocation();
+			java.awt.Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+			if(!newBounds.contains(mouseLocation.x,mouseLocation.y)){
+				hidePaletteToolTip();
+			}else{
+				logger.debug("Near tooltip area");
+			}
+				
+		}else{
+			logger.debug("PaletteToolTip= null");
+		}
+	}
+
+	/**
+	 * 
+	 * Calculate tooltip bounds from mouse location to prevent hiding tooltip from mouseMove event on palette
+	 * 
+	 * @return
+	 */
+	private org.eclipse.swt.graphics.Rectangle getToolTipBoundsFromMouseLocation() {
+		org.eclipse.swt.graphics.Rectangle tooltipBounds = paletteToolTip.getBounds();
+		org.eclipse.swt.graphics.Rectangle newBounds = new org.eclipse.swt.graphics.Rectangle(tooltipBounds.x - 11, tooltipBounds.y - 7, tooltipBounds.width, tooltipBounds.height);
+		return newBounds;
+	}	
 }
