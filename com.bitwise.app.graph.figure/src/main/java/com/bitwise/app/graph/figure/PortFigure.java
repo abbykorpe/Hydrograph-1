@@ -43,7 +43,7 @@ public class PortFigure extends Figure {
 				portSeq);
 		this.labelOfPort=labelOfPort;
 		this.portType=portType;
-		getBounds().setSize(new Dimension(27,8));
+		getBounds().setSize(new Dimension(27,10));
 
 		tooltipFigure = new TooltipFigure();
 		setToolTip(tooltipFigure);
@@ -100,12 +100,12 @@ public class PortFigure extends Figure {
 		if("in".equalsIgnoreCase(portType))
 		{
 			graphics.fillRectangle(getBounds().getLocation().x-20, getBounds()
-					.getLocation().y, r.width, r.height);
+					.getLocation().y-1, r.width, r.height-2);
 		}
 		else
 		{
 			graphics.fillRectangle(getBounds().getLocation().x+20, getBounds()
-					.getLocation().y, r.width, r.height);
+					.getLocation().y-1, r.width, r.height-2);
 		}
 		if(getToggleValue())
 		{
