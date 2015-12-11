@@ -309,7 +309,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 				ComponentFigure compFig = (ComponentFigure)getFigure();
 				compFig.setHeight(numOfPort, 1);
 				compFig.setWidth(numOfPort);
-				Dimension newSize = new Dimension((numOfPort+1)*33, ((numOfPort+1)*25)+ELTFigureConstants.componentOneLineLabelMargin);
+				Dimension newSize = new Dimension((numOfPort+1)*33, ((numOfPort+1)*25)+getCastedModel().getComponentLabelMargin());
 				getCastedModel().setSize(newSize);
 				
 				getCastedModel().clearPorts();
@@ -352,7 +352,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 		component.setComponentLabel(label);
 		if(labelLength >= ELTFigureConstants.compLabelOneLineLengthLimit && !componentFigure.isIncrementedHeight()){
 			component.setSize(new Dimension(component.getSize().width, component.getSize().height +ELTFigureConstants.componentOneLineLabelMargin));
-			component.setSize(new Dimension(100, 82));
+			//component.setSize(new Dimension(100, 82));
 			componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height +ELTFigureConstants.componentOneLineLabelMargin));
 			componentFigure.setIncrementedHeight(true);
 			component.setComponentLabelMargin(ELTFigureConstants.componentTwoLineLabelMargin);
