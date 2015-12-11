@@ -3,39 +3,42 @@ package com.bitwise.app.engine.ui.xygenration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.ui.converter.LinkingData;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwise.app.graph.model.Component;
 
 public class CoordinateProcessor {
-	
-	List<Node> nodeList=new ArrayList<>();
-	LinkedHashMap<String,Node> nodeMap=new LinkedHashMap<>();
-	public  LinkedHashMap<String, Component> tempUiFactory = new LinkedHashMap<>();
+	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(CoordinateProcessor.class);
+	private List<Node> nodeList=new ArrayList<>();
+	private Map<String,Node> nodeMap=new LinkedHashMap<>();
+	private  Map<String, Component> tempUiComponentFactory = new LinkedHashMap<>();
 	private static final int HORIZONTAL_SPACING=130;
 	private static final int VERTICAL_SPACING=80;
 	
-
-	public void processLinks() {
-		Node sNode=null;
-		Node dNode=null;
-		tempUiFactory.putAll(UIComponentRepo.INSTANCE.componentUiFactory);
+	public void initiateCoordinateGenration() {
+		LOGGER.debug("Processing link-data for creating individual nodes");
+		Node sourceNode=null;
+		Node destinationNode=null;
+		tempUiComponentFactory.putAll(UIComponentRepo.INSTANCE.getComponentUiFactory());
 		for (LinkingData linkingData : UIComponentRepo.INSTANCE.getComponentLinkList()) {
 			if(nodeMap.get(linkingData.getSourceComponentId())==null)
-				{	sNode=new Node(linkingData.getSourceComponentId());
-					nodeMap.put(linkingData.getSourceComponentId(),sNode);
-					nodeList.add(sNode);
-					tempUiFactory.remove(linkingData.getSourceComponentId());
+				{	sourceNode=new Node(linkingData.getSourceComponentId());
+					nodeMap.put(linkingData.getSourceComponentId(),sourceNode);
+					nodeList.add(sourceNode);
+					tempUiComponentFactory.remove(linkingData.getSourceComponentId());
 				}
 			if(nodeMap.get(linkingData.getTargetComponentId())==null)
-				{	dNode=new Node(linkingData.getTargetComponentId());
-					nodeMap.put(linkingData.getTargetComponentId(),dNode);
-					nodeList.add(dNode);
-					tempUiFactory.remove(linkingData.getTargetComponentId());
+				{	destinationNode=new Node(linkingData.getTargetComponentId());
+					nodeMap.put(linkingData.getTargetComponentId(),destinationNode);
+					nodeList.add(destinationNode);
+					tempUiComponentFactory.remove(linkingData.getTargetComponentId());
 				}
 			nodeMap.get(linkingData.getSourceComponentId()).getDestinationNodes().add(nodeMap.get(linkingData.getTargetComponentId()));
 			nodeMap.get(linkingData.getTargetComponentId()).getSourceNodes().add(nodeMap.get(linkingData.getSourceComponentId()));
@@ -46,7 +49,8 @@ public class CoordinateProcessor {
 	}
 	
 	private void genrateExtraComponents() {
-		for(Entry<String, Component> entry :tempUiFactory.entrySet() )
+		LOGGER.debug("Generating nodes of non-connected UI-Components");
+		for(Entry<String, Component> entry :tempUiComponentFactory.entrySet() )
 		{
 			nodeList.add(new Node(entry.getKey()));
 		}
@@ -54,20 +58,19 @@ public class CoordinateProcessor {
 	}
 	
 	private  void processNodes() {
-		
+		LOGGER.debug("Process individual links");
 		genrateYCoordinate();		
 		for(Node node : nodeList){
 			Point point=new Point();
 			point.x=node.gethPosition();
 			point.y=node.getvPosition();
-			UIComponentRepo.INSTANCE.componentUiFactory.get(node.name).setLocation(point);
-			System.out.println(node);
+			UIComponentRepo.INSTANCE.getComponentUiFactory().get(node.name).setLocation(point);
 		}
 	}
 	
 	private void genrateYCoordinate()
 	{
-	
+		LOGGER.debug("Generating Y coordinates for all UI-Components");
 		LinkedHashMap<Integer, Integer> ycoordinate=new LinkedHashMap<>();
 		for(Node node : nodeList){
 			if(ycoordinate.get(node.gethPosition())==null)
@@ -85,6 +88,7 @@ public class CoordinateProcessor {
 	
 	
 	private void caculateXY() {
+		LOGGER.debug("Calculating logical Linking and positioning of Nodes");
 		int position = 1;
 		List<Node> noSource = new ArrayList<>(); 
 		List<Node> noDestination = new ArrayList<>(); 
@@ -105,7 +109,7 @@ public class CoordinateProcessor {
 	}
 
 	private void calculate(Node node, int position){
-				
+		LOGGER.debug("Applying X coordinates for UI-Components");
 		node.sethPosition(position);
 		if(node.getDestinationNodes().isEmpty()){
 				return;

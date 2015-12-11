@@ -18,8 +18,8 @@ static String XMLPATH="C:\\WorkSpace\\runtime-com.bitwise.app.perspective.produc
 	
 	public static void main(String[] args) {
 		try {
-			boolean b=validateXMLSchema(XSDPATH,XMLPATH);
-		System.out.println(b);
+			boolean result=validateXMLSchema(XSDPATH,XMLPATH);
+			System.out.println(result);
 		
 		} catch (Exception e) {
 				e.printStackTrace();

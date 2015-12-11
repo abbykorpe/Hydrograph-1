@@ -117,7 +117,19 @@ public abstract class GridWidgetCommonBuilder {
 			
 	}
 
-
+	public static Integer getDataTypeByValue(String value) {
+			int i;
+			String schemaList = Messages.DATATYPELIST;
+			String[] dataTypeList = schemaList.split(",");
+			for (i=0;i<dataTypeList.length;i++) {
+				String[] data = dataTypeList[i].split("#");
+					if(value.equalsIgnoreCase(data[1]))
+						return i;
+			}
+		
+			return 0;
+	}
+	
 	public static String[] getDataTypeValue() {
 		if(dataTypeValue!=null){
 			return dataTypeValue;

@@ -5,7 +5,7 @@ import com.bitwise.app.engine.ui.constants.UIComponentsPort;
 import com.bitwiseglobal.graph.commontypes.TypeInputComponent;
 import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
 
-public abstract class InputUIConverter extends UIConverter {
+public abstract class InputUiConverter extends UiConverter {
 		
 		@Override
 		public void prepareUIXML() {
@@ -18,6 +18,7 @@ public abstract class InputUIConverter extends UIConverter {
 		int portCounter = 1;
 		if (inputComponent.getOutSocket() != null) {
 			for (TypeInputOutSocket outSocket : inputComponent.getOutSocket()) {
+				if(outSocket.getSchema()!=null)
 				uiComponent.engageOutputPort((UIComponentsPort.getPortType(outSocket.getType())) + portCounter);
 				portCounter++;
 			}
@@ -25,5 +26,5 @@ public abstract class InputUIConverter extends UIConverter {
 	}
 	                  
 	
-	protected abstract Object getSchema() ;
+	protected abstract Object getSchema(TypeInputOutSocket outSocket) ;
 }

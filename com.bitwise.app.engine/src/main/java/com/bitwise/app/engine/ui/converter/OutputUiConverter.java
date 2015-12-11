@@ -5,8 +5,9 @@ import com.bitwise.app.engine.ui.constants.UIComponentsPort;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeOutputComponent;
+import com.bitwiseglobal.graph.commontypes.TypeOutputInSocket;
 
-public abstract class OutputUIConverter extends UIConverter {
+public abstract class OutputUiConverter extends UiConverter {
 
 	@Override
 	public void prepareUIXML() {
@@ -19,7 +20,9 @@ public abstract class OutputUIConverter extends UIConverter {
 	protected void getInPort(TypeOutputComponent typeOutputComponent) {
 		int portCounter = 1;
 		if (typeOutputComponent.getInSocket() != null) {
-			for (TypeBaseInSocket inSocket : typeOutputComponent.getInSocket()) {
+			for (TypeOutputInSocket inSocket : typeOutputComponent.getInSocket()) {
+				if(inSocket.getSchema()!=null)
+					getSchema(inSocket);						
 				uiComponent.engageInputPort((UIComponentsPort.getPortType(inSocket.getType())) + portCounter);
 				UIComponentRepo.INSTANCE.getComponentLinkList().add(
 						new LinkingData(inSocket.getFromComponentId(),
@@ -32,24 +35,6 @@ public abstract class OutputUIConverter extends UIConverter {
 		}
 	}
 	
-	protected void getInPortFromSingleOutPort(TypeOutputComponent typeOutputComponent) {
-		int portCounter = 1;
-		int linkCounter = 1;
-		if (typeOutputComponent.getInSocket() != null) {
-			for (TypeBaseInSocket inSocket : typeOutputComponent.getInSocket()) {
-				uiComponent.engageInputPort((UIComponentsPort.getPortType(inSocket.getType())) + portCounter);
-				
-				UIComponentRepo.INSTANCE.getComponentLinkList().add(
-						new LinkingData(inSocket.getFromComponentId(),
-								typeOutputComponent.getId(),
-								typeOutputComponent.getInSocket().get(0).getFromSocketType(), 
-								typeOutputComponent.getInSocket().get(0).getId()
-								
-								));
-			}
-		}
-	}
-
 	
-	protected abstract Object getSchema() ;
+	protected abstract Object getSchema(TypeOutputInSocket inSocket) ;
 }

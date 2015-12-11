@@ -13,7 +13,7 @@ import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
 import com.bitwiseglobal.graph.commontypes.TypeProperties;
 import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
 
-public abstract class TransformUIConverter extends UIConverter {
+public abstract class TransformUiConverter extends UiConverter {
 
 	@Override
 	public void prepareUIXML() {

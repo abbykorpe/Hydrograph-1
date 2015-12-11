@@ -13,7 +13,7 @@ import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
 import com.bitwiseglobal.graph.commontypes.TypeStraightPullComponent;
 import com.bitwiseglobal.graph.commontypes.TypeStraightPullOutSocket;
 
-public abstract class StraightfullUIConverter extends UIConverter {
+public abstract class StraightfullUiConverter extends UiConverter {
 
 	@Override
 	public void prepareUIXML() {

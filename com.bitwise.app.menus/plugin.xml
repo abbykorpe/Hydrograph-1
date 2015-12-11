@@ -445,5 +445,22 @@
             sequence="M1+M3+S">
       </key>
    </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="com.bitwise.app.menus.importEngineXmlCategory"
+            name="ELT Project">
+      </category>
+      <wizard
+            category="com.bitwise.app.menus.importEngineXmlCategory"
+            class="com.bitwise.app.menus.importWizards.ImportEngineXmlWizard"
+            icon="icons/import_engine_xml.png"
+            id="com.bitwise.app.menus.importWizards.ImportEngineXmlWizard"
+            name="Import Engine Xml">
+         <description>
+            Import Engine XML file from the local file system into the workspace.
+         </description>
+      </wizard>
+   </extension>
 
 </plugin>

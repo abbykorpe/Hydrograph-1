@@ -2,7 +2,7 @@ package com.bitwise.app.engine.ui.converter;
 
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.TreeMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,7 +18,7 @@ import com.bitwise.app.graph.model.Link;
 import com.bitwiseglobal.graph.commontypes.BooleanValueType;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 
-public abstract class UIConverter {
+public abstract class UiConverter {
 	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(Converter.class);
 	protected Container container;
@@ -92,8 +92,15 @@ public abstract class UIConverter {
 		return false;
 	}
 	
-	protected abstract TreeMap getRuntimeProperties();
+	protected abstract Map<String,String> getRuntimeProperties();
 	
 	
-
+	protected String getStringValue(String value)
+	{ String emptyString="";
+		if(value==null || value.equals("null"))
+			return emptyString;
+		else
+			return value;
+	}
+	
 }
