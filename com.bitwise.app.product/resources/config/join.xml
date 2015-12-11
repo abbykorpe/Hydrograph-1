@@ -61,8 +61,11 @@
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
 			
-		<tns:property dataType="string" name="join_type" renderer="JOIN_TYPE_WIDGET" type="USER"
+		<tns:property dataType="string" name="join_config" renderer="JOIN_TYPE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="REQUIRED"/>
+		<tns:property dataType="string" name="join_type"  renderer="JOIN_MAPPING_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
 			
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"

@@ -98,6 +98,10 @@
 			<enumeration value="TRANSFORM_WIDGET"/>
 			<enumeration value="INPUT_COUNT_WIDGET"/>
 			<enumeration value="JOIN_TYPE_WIDGET"/>
+			<enumeration value="JOIN_MAPPING_WIDGET"/>
+			<enumeration value="HASH_JOIN_WIDGET"/>
+			<enumeration value="HASH_JOIN_MAPPING_WIDGET"/>
+			
 		</restriction>
 	</simpleType>
 

@@ -46,5 +46,12 @@
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
 			
+		<tns:property dataType="string" name="hash_join"   renderer="HASH_JOIN_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED"/>
+		
+		<tns:property dataType="string" name="hash_join"   renderer="HASH_JOIN_MAPPING_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED"/>
 	</tns:component>
 </tns:Config>
