@@ -289,7 +289,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			@Override
 			protected void configurePaletteViewer(final PaletteViewer viewer) {
 				super.configurePaletteViewer(viewer);
-				viewer.setEditPartFactory(new CustomPaletteEditPartFactory(palatteBackgroundColor));
+				//viewer.setEditPartFactory(new CustomPaletteEditPartFactory(palatteBackgroundColor));
 				// create a drag source listener for this palette viewer
 				// together with an appropriate transfer drop target listener,
 				// this will enable
