@@ -101,7 +101,7 @@ public class ELTFilePathWidget extends AbstractWidget{
 			}
 		});
 		
-		AbstractELTWidget eltDefaultButton = new ELTDefaultButton("...").buttonWidth(20);
+		AbstractELTWidget eltDefaultButton = new ELTDefaultButton("...").buttonWidth(35);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
 		button=(Button)eltDefaultButton.getSWTWidgetControl();
 		
