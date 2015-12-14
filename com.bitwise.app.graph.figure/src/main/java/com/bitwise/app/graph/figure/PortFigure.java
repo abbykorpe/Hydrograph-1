@@ -102,11 +102,17 @@ public class PortFigure extends Figure {
 			graphics.fillRectangle(getBounds().getLocation().x-20, getBounds()
 					.getLocation().y-1, r.width, r.height-2);
 		}
-		else
+		else if("out".equalsIgnoreCase(portType))
 		{
 			graphics.fillRectangle(getBounds().getLocation().x+20, getBounds()
 					.getLocation().y-1, r.width, r.height-2);
+		}else if("unused".equalsIgnoreCase(portType))
+		{
+			graphics.fillRectangle(getBounds().getLocation().x+20, getBounds()
+					.getLocation().y-1, r.width, r.height);
 		}
+			
+			
 		if(getToggleValue())
 		{
 			if("in".equalsIgnoreCase(portType))

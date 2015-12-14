@@ -122,6 +122,7 @@ public abstract class Component extends Model {
 				.getClazzName(this.getClass());
 		
 		componentLabel = new ComponentLabel(componentName);
+		componentLabelMargin = 16;
 		
 		prefix = XMLConfigUtil.INSTANCE.getComponent(componentName).getDefaultNamePrefix();
 		initPortSettings();
