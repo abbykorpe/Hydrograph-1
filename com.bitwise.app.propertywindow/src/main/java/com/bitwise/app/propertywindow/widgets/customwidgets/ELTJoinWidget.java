@@ -29,7 +29,7 @@ import com.bitwise.app.propertywindow.widgets.joinproperty.JoinDialog;
 public class ELTJoinWidget extends AbstractWidget{
 	
 	private LinkedHashMap<String, Object> property=new LinkedHashMap<>();
-	private Shell shell;
+	 
 	
 	
 	public ELTJoinWidget(
@@ -49,7 +49,7 @@ public class ELTJoinWidget extends AbstractWidget{
 		
 		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(container.getContainerControl());
 		eltSuDefaultSubgroupComposite.createContainerWidget();
-		//shell =eltSuDefaultSubgroupComposite.getContainerControl().getShell();
+		 
 		
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Join\nConfiguration");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
