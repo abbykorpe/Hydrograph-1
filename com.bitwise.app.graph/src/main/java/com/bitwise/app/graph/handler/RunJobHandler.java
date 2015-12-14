@@ -162,7 +162,7 @@ public class RunJobHandler extends AbstractHandler {
 		String[] runCommand=new String[3];
 		if (OSValidator.isWindows()) {
 			logger.info("This is windows.");
-			String[] command = {Messages.CMD,"/c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "="+ XML_PATH.split("/", 2)[1] + " "+ Messages.PARAM_FILE+"=\""+paramFile+"\""};
+			String[] command = {Messages.CMD,"/c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "=\""+ XML_PATH.split("/", 2)[1] + "\" "+ Messages.PARAM_FILE+"=\""+paramFile+"\""};
 			runCommand=command;
 		} else if (OSValidator.isMac()) {
 			logger.debug("This is Mac.");
