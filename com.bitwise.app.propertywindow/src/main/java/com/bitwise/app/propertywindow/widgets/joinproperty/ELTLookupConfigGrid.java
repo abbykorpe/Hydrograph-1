@@ -60,18 +60,7 @@ public class ELTLookupConfigGrid extends Dialog {
 	public Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new FillLayout(SWT.HORIZONTAL));
-		shell.addListener(SWT.Close, new Listener() {
-			
-			@Override
-			public void handleEvent(Event event) {
-				int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
-				MessageBox messageBox = new MessageBox(shell, style);
-				messageBox.setText("Information"); //$NON-NLS-1$
-				messageBox.setMessage(Messages.MessageBeforeClosingWindow);
-				event.doit = messageBox.open() == SWT.YES;
-				
-			}
-		});
+		 
 		
 		Composite composite = new Composite(container, SWT.BORDER);
 		composite.setLayout(new RowLayout(SWT.VERTICAL));
