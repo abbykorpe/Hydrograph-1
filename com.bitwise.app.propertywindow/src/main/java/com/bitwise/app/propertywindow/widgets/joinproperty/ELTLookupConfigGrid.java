@@ -18,7 +18,10 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -32,7 +35,8 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
 public class ELTLookupConfigGrid extends Dialog {
-	 
+	
+	private Shell shell;
 	private Text drivenText;
 	private Text lookupText;
 	private Map<String, String> propertyMap = new LinkedHashMap<>();
@@ -45,7 +49,7 @@ public class ELTLookupConfigGrid extends Dialog {
 	 */
 	public ELTLookupConfigGrid(Shell parentShell) {
 		super(parentShell);
-		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
+		setShellStyle(SWT.CLOSE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
 	}
 
 	/**
@@ -56,6 +60,18 @@ public class ELTLookupConfigGrid extends Dialog {
 	public Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new FillLayout(SWT.HORIZONTAL));
+		shell.addListener(SWT.Close, new Listener() {
+			
+			@Override
+			public void handleEvent(Event event) {
+				int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
+				MessageBox messageBox = new MessageBox(shell, style);
+				messageBox.setText("Information"); //$NON-NLS-1$
+				messageBox.setMessage(Messages.MessageBeforeClosingWindow);
+				event.doit = messageBox.open() == SWT.YES;
+				
+			}
+		});
 		
 		Composite composite = new Composite(container, SWT.BORDER);
 		composite.setLayout(new RowLayout(SWT.VERTICAL));
