@@ -724,7 +724,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private IFile opeSaveAsDialog() {
 		logger.debug("opeSaveAsDialog - Opening SaveAs dialog box.");
-		SaveAsDialog obj = new SaveAsDialog(new Shell());
+		SaveAsDialog obj = new SaveAsDialog(Display.getDefault().getActiveShell());
 		IFile file=null;
 		if (getEditorInput().getName().endsWith(".job"))
 		{
@@ -733,7 +733,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		else
 			obj.setOriginalName(getEditorInput().getName() + ".job");
 		obj.open();
-
 		if (obj.getReturnCode() == 0) {
 			validateLengthOfJobName(obj);
 		}
@@ -742,6 +741,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			IPath filePath = obj.getResult().removeFileExtension().addFileExtension("job");
 			file= ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
 		}
+	
 		return file;
 	}
 
