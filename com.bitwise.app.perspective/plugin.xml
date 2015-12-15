@@ -15,7 +15,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="com.bitwise.app.perspective.Perspective"
-            icon="icons/etlperspective.ico"
+            icon="icons/ELT.png"
             id="com.bitwise.app.perspective.ETLPerspective"
             name="ELT">
       </perspective>

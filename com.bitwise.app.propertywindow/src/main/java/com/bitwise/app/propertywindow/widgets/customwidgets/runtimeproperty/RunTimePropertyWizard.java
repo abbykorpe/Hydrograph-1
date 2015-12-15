@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
@@ -79,8 +80,8 @@ public class RunTimePropertyWizard {
 	private Label lblHeader;
 	private Label lblPropertyError;
 	private TableViewer tableViewer;
-	private Button addButton, okButton, deleteButton, cacelButton, upButton, downButton;
-
+	private Button okButton,cacelButton;
+	private Label addButton, deleteButton, upButton, downButton;
 	/**
 	 * Instantiates a new run time property wizard.
 	 */
@@ -281,104 +282,163 @@ public class RunTimePropertyWizard {
 		
 	private void createIcons(Composite composite){
 		new Label(composite, SWT.SEPARATOR|SWT.HORIZONTAL).setBounds(0, 41, 513, 60);
-		addButton = new Button(composite, SWT.PUSH);
-		String addIconPath = XMLConfigUtil.CONFIG_FILES_PATH + ICONS_ADD_PNG;
-		addButton.setImage(new Image(null, addIconPath));
+		addButton = new Label(composite, SWT.None);
+		addButton.setImage(new Image(null,
+				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
 		addButton.setBounds(388, 10, 20, 20);
-		addButton.addSelectionListener(new SelectionAdapter() {
+		addButton.addMouseListener(new MouseListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				addNewProperty(tableViewer);
+			public void mouseDoubleClick(MouseEvent e) {
+				// TODO Auto-generated method stub
+
 			}
-		});
-		
-		
-		deleteButton = new Button(composite, SWT.PUSH);
-		// deleteButton.setText("X");
-		String deleteIonPath = XMLConfigUtil.CONFIG_FILES_PATH + ICONS_DELETE_PNG;
-		deleteButton.setImage(new Image(null, deleteIonPath));
-		deleteButton.setBounds(407, 10, 25, 20);
-		deleteButton.addSelectionListener(new SelectionAdapter() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent e) {				
-				IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
-				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();){
-				   Object selectedObject = iterator.next();
-				   tableViewer.remove(selectedObject);
-				   propertyList.remove(selectedObject);
-				}
-				isAnyUpdatePerformed = true;
-			}
-		});
-		
-		upButton = new Button(composite, SWT.PUSH);
-		String upIonPath = XMLConfigUtil.CONFIG_FILES_PATH + ICONS_UP_PNG;
-		upButton.setImage(new Image(null, upIonPath));
-		upButton.setBounds(431, 10, 20, 20);
-		
-		upButton.addSelectionListener(new SelectionAdapter() {
-			int index1=0,index2=0;
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				addNewProperty(tableViewer);
+
+			}
+
+		});
+
+		deleteButton = new Label(composite, SWT.PUSH);
+		deleteButton
+				.setImage(new Image(null,
+						XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
+								+ "/icons/delete.png"));
+		deleteButton.setBounds(407, 10, 25, 20);
+		deleteButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				IStructuredSelection selection = (IStructuredSelection) tableViewer
+						.getSelection();
+				for (Iterator<?> iterator = selection.iterator(); iterator
+						.hasNext();) {
+					Object selectedObject = iterator.next();
+					tableViewer.remove(selectedObject);
+					propertyList.remove(selectedObject);
+				}
+				isAnyUpdatePerformed = true;
+
+			}
+
+		});
+
+		upButton = new Label(composite, SWT.PUSH);
+		upButton.setImage(new Image(null,
+				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png"));
+		upButton.setBounds(431, 10, 20, 20);
+		upButton.addMouseListener(new MouseListener() {
+			int index1 = 0, index2 = 0;
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
 				index1 = table.getSelectionIndex();
-				
-				if(index1 > 0){
-					String text1 = tableViewer.getTable().getItem(index1).getText(0);
-					String value1 = tableViewer.getTable().getItem(index1).getText(1);
+
+				if (index1 > 0) {
+					String text = tableViewer.getTable().getItem(index1)
+							.getText(0);
+					String text1 = tableViewer.getTable().getItem(index1)
+							.getText(1);
 					index2 = index1 - 1;
-					String text2 = tableViewer.getTable().getItem(index2).getText(0);
-					String value2 = tableViewer.getTable().getItem(index2).getText(1);
-					
-					RuntimeProperties property = new RuntimeProperties();
-					property.setPropertyName(text2);
-					property.setPropertyValue(value2);
-					propertyList.set(index1, property);
-					
-					property = new RuntimeProperties();
-					property.setPropertyName(text1);
-					property.setPropertyValue(value1);
-					propertyList.set(index2, property);
+					String data = tableViewer.getTable().getItem(index2)
+							.getText(0);
+					String data2 = tableViewer.getTable().getItem(index2)
+							.getText(1);
+
+					RuntimeProperties p = new RuntimeProperties();
+					p.setPropertyName(data);
+					p.setPropertyValue(data2);
+					propertyList.set(index1, p);
+
+					p = new RuntimeProperties();
+					p.setPropertyName(text);
+					p.setPropertyValue(text1);
+					propertyList.set(index2, p);
 					tableViewer.refresh();
 					table.setSelection(index1 - 1);
-					
 				}
 			}
 		});
-		
-		downButton = new Button(composite, SWT.PUSH);
-		String downIonPath = XMLConfigUtil.CONFIG_FILES_PATH + ICONS_DOWN_PNG;
-		downButton.setImage(new Image(null, downIonPath));
+
+		downButton = new Label(composite, SWT.PUSH);
+		downButton.setImage(new Image(null,
+				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png"));
 		downButton.setBounds(450, 10, 25, 20);
-		downButton.addSelectionListener(new SelectionAdapter() {
-			int index1=0,index2=0;
-				
+		downButton.addMouseListener(new MouseListener() {
+			int index1 = 0, index2 = 0;
+
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				index1=table.getSelectionIndex();
-				
-				if(index1 < propertyList.size()-1){
-					String text1 = tableViewer.getTable().getItem(index1).getText(0);
-					String value1 = tableViewer.getTable().getItem(index1).getText(1);
-					
+			public void mouseDoubleClick(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				index1 = table.getSelectionIndex();
+
+				if (index1 < propertyList.size() - 1) {
+					String text = tableViewer.getTable().getItem(index1)
+							.getText(0);
+					String text1 = tableViewer.getTable().getItem(index1)
+							.getText(1);
+
 					index2 = index1 + 1;
-					
-					String text2=tableViewer.getTable().getItem(index2).getText(0);
-					String value2=tableViewer.getTable().getItem(index2).getText(1);
-					
-					RuntimeProperties property = new RuntimeProperties();
-					property.setPropertyName(text2);
-					property.setPropertyValue(value2);
-					propertyList.set(index1, property);
-					
-					property = new RuntimeProperties();
-					property.setPropertyName(text1);
-					property.setPropertyValue(value1);
-					propertyList.set(index2, property);
+
+					String data = tableViewer.getTable().getItem(index2)
+							.getText(0);
+					String data1 = tableViewer.getTable().getItem(index2)
+							.getText(1);
+
+					RuntimeProperties p = new RuntimeProperties();
+					p.setPropertyName(data);
+					p.setPropertyValue(data1);
+					propertyList.set(index1, p);
+
+					p = new RuntimeProperties();
+					p.setPropertyName(text);
+					p.setPropertyValue(text1);
+					propertyList.set(index2, p);
 					tableViewer.refresh();
 					table.setSelection(index1 + 1);
-				}	
+				}
 			}
 		});
 	}

@@ -13,6 +13,8 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -43,6 +45,7 @@ import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridDetails;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.GridChangeListener;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
+
 /**
  * The Class ELTSchemaGridWidget.
  * 
@@ -73,9 +76,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private Button button;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private Shell shell;
+	private ELTDefaultLable upButton, downButton, addButton, deleteButton;
 
 	public ELTSchemaGridWidget() {
 	}
+
 	/**
 	 * Instantiates a new ELT schema grid widget.
 	 * 
@@ -95,7 +100,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 		this.properties = componentConfigrationProperty.getPropertyValue();
-		
+
 	}
 
 	protected abstract String[] getPropertiesToShow();
@@ -135,114 +140,39 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	}
 
 	// Operational class label.
-	AbstractELTWidget fieldError = new ELTDefaultLable(Messages.FIELDNAMEERROR).lableWidth(250);
+	AbstractELTWidget fieldError = new ELTDefaultLable(Messages.FIELDNAMEERROR)
+			.lableWidth(250);
 
 	/**
 	 * @wbp.parser.entryPoint
 	 */
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
-		
+
 		createSchemaGrid(container.getContainerControl());
 	}
 
-	private void addButtonsAndRegisterListners(
-			Composite container, ListenerFactory listenerFactory,AbstractELTWidget addButton,AbstractELTWidget deleteButton) {
-
-		ELTSchemaSubgroupComposite buttonSubGroup = new ELTSchemaSubgroupComposite(
-				container);
-		buttonSubGroup.createContainerWidget();
-
-		try {
-
-			AbstractELTWidget upButton = getButton("");
-			AbstractELTWidget downButton = getButton("");
-			
-			buttonSubGroup.attachWidget(addButton);
-			buttonSubGroup.attachWidget(deleteButton);
-			buttonSubGroup.attachWidget(upButton);
-			buttonSubGroup.attachWidget(downButton);
-			
-			String addIconPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png";
-			((Button) addButton.getSWTWidgetControl()).setImage(new Image(null, addIconPath));
-			
-			String deleteIconPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png";
-			((Button) deleteButton.getSWTWidgetControl()).setImage(new Image(null, deleteIconPath));
-			
-			String upIconPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png";
-			((Button) upButton.getSWTWidgetControl()).setImage(new Image(null, upIconPath));
-			((Button) upButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
-				int index = 0, index2 = 0;
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					index = table.getSelectionIndex();
-					
-					if(index > 0){
-						index2 = index-1;
-						String text1 = tableViewer.getTable().getItem(index).getText(0);
-						String text2 = tableViewer.getTable().getItem(index2).getText(0);
-						
-						swap(index, index2, text1, text2);
-						 
-						tableViewer.refresh(); 
-						table.setSelection(index-1);
-					}
-					
-				}
-			});
-			
-			
-			String downIconPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png";
-			((Button) downButton.getSWTWidgetControl()).setImage(new Image(null, downIconPath));
-			((Button) downButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
-				int index = 0, index2 = 0;
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					index = table.getSelectionIndex();
-					
-					
-					if(index < schemaGridRowList.size()-1){
-						String text1 = tableViewer.getTable().getItem(index).getText(0);
-						index2 = index+1;
-						String text2 = tableViewer.getTable().getItem(index2).getText(0);
-						
-						swap(index, index2, text1, text2);
-						tableViewer.refresh(); 
-						table.setSelection(index+1);
-					}
-				}
-			});
-			
-			
-		} catch (Exception e) {
-			// TODO add logger
-			throw new RuntimeException("Failed to attach listener to buttons",
-					e);
-		}
-
-
-	}
-	
-	private void swap(int index1, int index2, String text1, String text2){
+	private void swap(int index1, int index2, String text1, String text2) {
 		GridRow swap1 = null;
 		GridRow swap2 = null;
-		for(int i=0; i< schemaGridRowList.size() ; i++){
-			GridRow grid=(GridRow) schemaGridRowList.get(i);
-			if(grid.getFieldName().equalsIgnoreCase(text1)){
+		for (int i = 0; i < schemaGridRowList.size(); i++) {
+			GridRow grid = (GridRow) schemaGridRowList.get(i);
+			if (grid.getFieldName().equalsIgnoreCase(text1)) {
 				swap1 = grid;
 			}
-			if(grid.getFieldName().equalsIgnoreCase(text2)){
+			if (grid.getFieldName().equalsIgnoreCase(text2)) {
 				swap2 = grid;
 			}
 		}
-		
-		schemaGridRowList.set(index2,swap1);
-		schemaGridRowList.set(index1, swap2); 
+
+		schemaGridRowList.set(index2, swap1);
+		schemaGridRowList.set(index1, swap2);
 	}
-	
-	private void gridListener(CellEditor[] cellEditors){
-		
-		GridChangeListener gridChangeListener = new GridChangeListener(cellEditors, propertyDialogButtonBar);
+
+	private void gridListener(CellEditor[] cellEditors) {
+
+		GridChangeListener gridChangeListener = new GridChangeListener(
+				cellEditors, propertyDialogButtonBar);
 		gridChangeListener.attachCellChangeListener();
 	}
 
@@ -250,10 +180,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		if (this.properties != null) {
 			List<GridRow> tempGrid = new ArrayList<>();
 			tempGrid = (List<GridRow>) this.properties;
-			
+
 			for (GridRow gridRow : tempGrid) {
-					schemaGridRowList.add(gridRow.copy());
-			} 
+				schemaGridRowList.add(gridRow.copy());
+			}
 
 			property.put(propertyName, schemaGridRowList);
 			tableViewer.setInput(schemaGridRowList);
@@ -263,17 +193,19 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private AbstractELTWidget getButton(String displayName) {
 		// Create browse button.
-		AbstractELTWidget button = new ELTDefaultButton(displayName).buttonWidth(18).buttonHeight(18);
+		AbstractELTWidget button = new ELTDefaultButton(displayName)
+				.buttonWidth(18).buttonHeight(18);
 		return button;
 	}
 
 	private ListenerHelper getListenerHelper() {
 		if (helper == null) {
 			helper = new ListenerHelper();
-			ELTGridDetails value = new ELTGridDetails(schemaGridRowList, tableViewer, 
-					(Label) fieldError.getSWTWidgetControl(), gridWidgetBuilder);
+			ELTGridDetails value = new ELTGridDetails(schemaGridRowList,
+					tableViewer, (Label) fieldError.getSWTWidgetControl(),
+					gridWidgetBuilder);
 			helper.put(HelperType.SCHEMA_GRID, value);
-			if(((List)(getProperties().get(propertyName))).size()!=0)
+			if (((List) (getProperties().get(propertyName))).size() != 0)
 				validationStatus.setIsValid(true);
 			else
 				validationStatus.setIsValid(false);
@@ -281,20 +213,108 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 		return helper;
 	}
-	
-	public TableViewer createSchemaGrid(Composite container){
-		
-		ListenerFactory listenerFactory = new ListenerFactory();
-		
-		AbstractELTWidget addButton = getButton("");
-		AbstractELTWidget deleteButton = getButton(""); 
-		addButtonsAndRegisterListners(container, listenerFactory,addButton,deleteButton);
-		
-		ELTSchemaTableComposite gridSubGroup = new ELTSchemaTableComposite(container);
-		gridSubGroup.createContainerWidget();
-		
 
-		AbstractELTWidget eltTableViewer = new ELTTableViewer(getContentProvider(), getLableProvider());
+	public TableViewer createSchemaGrid(Composite container) {
+
+		ListenerFactory listenerFactory = new ListenerFactory();
+
+		ELTSchemaSubgroupComposite buttonSubGroup = new ELTSchemaSubgroupComposite(
+				container);
+		buttonSubGroup.createContainerWidget();
+
+		downButton = new ELTDefaultLable("");
+		downButton.lableWidth(25);
+		buttonSubGroup.attachWidget(downButton);
+		downButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
+				+ "/icons/down.png");
+
+		downButton.addMouseUpListener(new MouseListener() {
+			int index = 0, index2 = 0;
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				index = table.getSelectionIndex();
+
+				if (index < schemaGridRowList.size() - 1) {
+					String text1 = tableViewer.getTable().getItem(index)
+							.getText(0);
+					index2 = index + 1;
+					String text2 = tableViewer.getTable().getItem(index2)
+							.getText(0);
+
+					swap(index, index2, text1, text2);
+					tableViewer.refresh();
+					table.setSelection(index + 1);
+				}
+
+			}
+		});
+
+		upButton = new ELTDefaultLable("");
+		upButton.lableWidth(25);
+		buttonSubGroup.attachWidget(upButton);
+		upButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
+				+ "/icons/up.png");
+		upButton.addMouseUpListener(new MouseListener() {
+			int index = 0, index2 = 0;
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+
+				index = table.getSelectionIndex();
+
+				if (index > 0) {
+					index2 = index - 1;
+					String text1 = tableViewer.getTable().getItem(index)
+							.getText(0);
+					String text2 = tableViewer.getTable().getItem(index2)
+							.getText(0);
+
+					swap(index, index2, text1, text2);
+
+					tableViewer.refresh();
+					table.setSelection(index - 1);
+
+				}
+			}
+		});
+
+		deleteButton = new ELTDefaultLable("");
+		deleteButton.lableWidth(25);
+		buttonSubGroup.attachWidget(deleteButton);
+		deleteButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
+				+ "/icons/delete.png");
+
+		addButton = new ELTDefaultLable("");
+		addButton.lableWidth(25);
+		buttonSubGroup.attachWidget(addButton);
+		addButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
+				+ "/icons/add.png");
+
+		ELTSchemaTableComposite gridSubGroup = new ELTSchemaTableComposite(
+				container);
+		gridSubGroup.createContainerWidget();
+
+		AbstractELTWidget eltTableViewer = new ELTTableViewer(
+				getContentProvider(), getLableProvider());
 		gridSubGroup.attachWidget(eltTableViewer);
 
 		// eltTableViewer.getSWTWidgetControl().
@@ -316,26 +336,35 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		editors = gridWidgetBuilder.createCellEditorList(table, PROPS.length);
 		tableViewer.setCellEditors(editors);
 
-		//enables the tab functionality
-		TableViewerEditor.create(tableViewer, new ColumnViewerEditorActivationStrategy(tableViewer), 
-				ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.TABBING_HORIZONTAL | 
-				ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL);
-		
+		// enables the tab functionality
+		TableViewerEditor.create(tableViewer,
+				new ColumnViewerEditorActivationStrategy(tableViewer),
+				ColumnViewerEditor.KEYBOARD_ACTIVATION
+						| ColumnViewerEditor.TABBING_HORIZONTAL
+						| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
+						| ColumnViewerEditor.TABBING_VERTICAL);
+
 		// Adding the decorator to show error message when field name same.
 		setDecorator();
 
 		addValidators();
-		populateWidget(); 
-		helper = getListenerHelper(); 
+		populateWidget();
+		helper = getListenerHelper();
 		try {
-			eltTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),
-					propertyDialogButtonBar, helper, table);
-			eltTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOWN.getListener(),
+			eltTable.attachListener(
+					ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK
+							.getListener(), propertyDialogButtonBar, helper,
+					table);
+			eltTable.attachListener(
+					ListenerFactory.Listners.GRID_MOUSE_DOWN.getListener(),
 					propertyDialogButtonBar, helper, editors[0].getControl());
-			addButton.attachListener(ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),
+			addButton.attachListener(
+					ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),
 					propertyDialogButtonBar, helper, table);
-			deleteButton.attachListener(ListenerFactory.Listners.GRID_DELETE_SELECTION.getListener(),
-					propertyDialogButtonBar, helper, table);
+			deleteButton.attachListener(
+					ListenerFactory.Listners.GRID_DELETE_SELECTION
+							.getListener(), propertyDialogButtonBar, helper,
+					table);
 
 		} catch (Exception e) {
 			// TODO add logger
@@ -343,16 +372,16 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 
 		gridListener(editors);
-		
+
 		return tableViewer;
 	}
+
 	public List getSchemaGridRowList() {
 		return schemaGridRowList;
 	}
+
 	public void setSchemaGridRowList(List schemaGridRowList) {
 		this.schemaGridRowList = schemaGridRowList;
 	}
-	
-	
-	
+
 }

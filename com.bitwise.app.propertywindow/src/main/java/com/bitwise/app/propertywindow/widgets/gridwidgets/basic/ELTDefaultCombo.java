@@ -11,20 +11,23 @@ import org.eclipse.swt.widgets.Composite;
  * 
  * @author Bitwise
  */
-public class ELTDefaultCombo extends AbstractELTWidget{
+public class ELTDefaultCombo extends AbstractELTWidget {
 	private Combo defaultELTcom;
-	private int textboxWidth=65;
+	private int textboxWidth = 65;
 	private String[] defaultTextMessage;
+
 	@Override
 	public void attachWidget(Composite container) {
-		defaultELTcom = new Combo(container,SWT.READ_ONLY);
+		defaultELTcom = new Combo(container, SWT.READ_ONLY);
 		defaultELTcom.setItems(defaultTextMessage);
-		//defaultELTcom.setItems(new String[] {"True","false"});
-		//defaultELTcom.setItem(0, "");
-		GridData gd_defaultELTTextBox = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		// defaultELTcom.setItems(new String[] {"True","false"});
+		// defaultELTcom.setItem(0, "");
+		GridData gd_defaultELTTextBox = new GridData(SWT.FILL, SWT.FILL, false,
+				false, 1, 1);
 		gd_defaultELTTextBox.widthHint = textboxWidth;
 		defaultELTcom.setLayoutData(gd_defaultELTTextBox);
-		
+		gd_defaultELTTextBox.horizontalIndent = -2;
+
 		widget = defaultELTcom;
 	}
 
@@ -35,11 +38,11 @@ public class ELTDefaultCombo extends AbstractELTWidget{
 	 *            the default text message
 	 * @return the ELT default combo
 	 */
-	public ELTDefaultCombo defaultText(String[] defaultTextMessage){
+	public ELTDefaultCombo defaultText(String[] defaultTextMessage) {
 		this.defaultTextMessage = defaultTextMessage;
 		return this;
 	}
-	
+
 	/**
 	 * Grab excess horizontal space.
 	 * 
@@ -47,10 +50,10 @@ public class ELTDefaultCombo extends AbstractELTWidget{
 	 *            the grab excess space
 	 * @return the ELT default combo
 	 */
-	public ELTDefaultCombo grabExcessHorizontalSpace(boolean grabExcessSpace){
+	public ELTDefaultCombo grabExcessHorizontalSpace(boolean grabExcessSpace) {
 		return this;
 	}
-	
+
 	/**
 	 * Combo box width.
 	 * 
@@ -58,7 +61,7 @@ public class ELTDefaultCombo extends AbstractELTWidget{
 	 *            the textbox width
 	 * @return the ELT default combo
 	 */
-	public ELTDefaultCombo comboBoxWidth(int textboxWidth){
+	public ELTDefaultCombo comboBoxWidth(int textboxWidth) {
 		this.textboxWidth = textboxWidth;
 		return this;
 	}
