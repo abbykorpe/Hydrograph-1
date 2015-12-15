@@ -301,22 +301,26 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 			adjustComponentFigure(getCastedModel(), getComponentFigure());
 			getCastedModel().setComponentLabel((String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue()));
 			String newPortCount =   (String)getCastedModel().getProperties().get("input_count");
+			
+			int prevPortCount = getCastedModel().getPort("in1").getNumberOfPortsOfThisType();
 			int numOfPort=0;
 			if(StringUtils.isNotEmpty(newPortCount)){
 				numOfPort = Integer.parseInt(newPortCount);
-				
-				
-				ComponentFigure compFig = (ComponentFigure)getFigure();
-				compFig.setHeight(numOfPort, 1);
-				compFig.setWidth(numOfPort);
-				Dimension newSize = new Dimension((numOfPort+1)*33, ((numOfPort+1)*25)+getCastedModel().getComponentLabelMargin());
-				getCastedModel().setSize(newSize);
-				
-				getCastedModel().clearPorts();
-				((ComponentFigure)getFigure()).clearAnchors(numOfPort);
-				refresh();
-				
-				getCastedModel().changePortSettings(numOfPort);
+
+				if(prevPortCount != numOfPort){
+
+					ComponentFigure compFig = (ComponentFigure)getFigure();
+					compFig.setHeight(numOfPort, 1);
+					compFig.setWidth(numOfPort);
+					Dimension newSize = new Dimension((numOfPort+1)*33, ((numOfPort+1)*25)+getCastedModel().getComponentLabelMargin());
+					getCastedModel().setSize(newSize);
+
+					getCastedModel().clearPorts();
+					((ComponentFigure)getFigure()).clearAnchors(numOfPort);
+					refresh();
+
+					getCastedModel().changePortSettings(numOfPort);
+				}
 			}
 
 			updateComponentStatus();			
