@@ -36,8 +36,6 @@ public class ELTEventChangeListener implements IELTListener {
 			public void handleEvent(Event event) {
 				if (event.type == SWT.CHANGED) {
 					propertyDialogButtonBar.enableApplyButton(true);
-					/*((Text) wigetList[0]).setBackground(new Color(Display
-							.getDefault(), 255, 255, 255));*/
 				}
 			}
 		};

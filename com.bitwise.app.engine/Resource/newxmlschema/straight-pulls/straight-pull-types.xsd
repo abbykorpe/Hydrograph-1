@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="http://www.bitwiseglobal.com/graph/straightpulltypes"
 	xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:limit="http://www.bitwiseglobal.com/graph/limit"
-	xmlns:clone="http://www.bitwiseglobal.com/graph/clone" xmlns:removedups="http://www.bitwiseglobal.com/graph/removedups"
-	 xmlns:pbe="http://www.bitwiseglobal.com/graph/partitionByExpression"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwiseglobal.com/graph/straightpulltypes"
+	xmlns:clone="http://www.bitwiseglobal.com/graph/clone"
+	xmlns:removedups="http://www.bitwiseglobal.com/graph/removedups"
+	xmlns:pbe="http://www.bitwiseglobal.com/graph/partitionByExpression"
+	xmlns:sort="http://www.bitwiseglobal.com/graph/sort" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bitwiseglobal.com/graph/straightpulltypes"
 	elementFormDefault="unqualified">
 	<xs:import schemaLocation="../common/common-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/commontypes" />
@@ -13,8 +15,11 @@
 		namespace="http://www.bitwiseglobal.com/graph/clone" />
 	<xs:import schemaLocation="./remove-dups/remove-dups-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/removedups" />
-	<xs:import schemaLocation="./partition-by-expression/partition-by-expression-types.xsd"
+	<xs:import
+		schemaLocation="./partition-by-expression/partition-by-expression-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/partitionByExpression" />
+	<xs:import schemaLocation="./sort/sort-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/sort" />
 
 	<xs:complexType name="limit">
 		<xs:complexContent>
@@ -30,8 +35,6 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-
-
 	<xs:complexType name="removeDups">
 		<xs:complexContent>
 			<xs:extension base="removedups:type-removedups-base">
@@ -42,14 +45,13 @@
 								use="required" />
 						</xs:complexType>
 					</xs:element>
-					    <xs:element name="primaryKeys" type="removedups:type-primary-key-fields" />
-                        <xs:element name="secondaryKeys" type="removedups:type-secondary-key-fields" minOccurs="0"/>
+					<xs:element name="primaryKeys" type="removedups:type-primary-key-fields" />
+					<xs:element name="secondaryKeys" type="removedups:type-secondary-key-fields"
+						minOccurs="0" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-
-
 
 	<xs:complexType name="unionAll">
 		<xs:complexContent>
@@ -60,7 +62,7 @@
 					<xs:element name="outSocket" type="cmn:type-straight-pull-out-socket"
 						minOccurs="1" maxOccurs="1" />
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
-						minOccurs="0" maxOccurs="1" />	
+						minOccurs="0" maxOccurs="1" />
 				</xs:sequence>
 			</xs:restriction>
 		</xs:complexContent>
@@ -75,47 +77,59 @@
 					<xs:element name="outSocket" type="clone:type-clone-out-socket"
 						minOccurs="2" maxOccurs="unbounded" />
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
-						minOccurs="0" maxOccurs="1" />		
+						minOccurs="0" maxOccurs="1" />
 				</xs:sequence>
 			</xs:restriction>
 		</xs:complexContent>
 	</xs:complexType>
 
-
-<xs:complexType name="partitionByExpression">
+	<xs:complexType name="partitionByExpression">
 		<xs:complexContent>
 			<xs:extension base="pbe:type-partition-by-expression-base">
 				<xs:sequence>
 					<xs:element name="operation" minOccurs="1" maxOccurs="1">
 						<xs:complexType>
-						<xs:sequence>
-			               <xs:element name="inputFields">
-			                  <xs:complexType>
-			                   <xs:sequence>
-			                       <xs:element name="field" maxOccurs="unbounded" >
-			               		    	 <xs:complexType>
-			               		   		  <xs:attribute name="name" type="xs:string" use="required" />
-		                           		 <xs:attribute name="inSocketId" type="xs:string" use="required" fixed="in0" />
-		                            		</xs:complexType>
-		                             </xs:element> 
-		                        </xs:sequence>
-		                       </xs:complexType>     
-			               </xs:element>
-		                 </xs:sequence>
-		                 <xs:attribute name="id" type="xs:string" use="required" />
-		                 <xs:attribute name="class" type="xs:string" use="required" />
-					</xs:complexType>
+							<xs:sequence>
+								<xs:element name="inputFields">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="field" maxOccurs="unbounded">
+												<xs:complexType>
+													<xs:attribute name="name" type="xs:string"
+														use="required" />
+													<xs:attribute name="inSocketId" type="xs:string"
+														use="required" fixed="in0" />
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+							<xs:attribute name="id" type="xs:string" use="required" />
+							<xs:attribute name="class" type="xs:string" use="required" />
+						</xs:complexType>
 					</xs:element>
-
-					<xs:element name="noOfPartitions" minOccurs="1" maxOccurs="1">
-					      <xs:complexType>
+					<xs:element name="noOfPartitions" minOccurs="1"
+						maxOccurs="1">
+						<xs:complexType>
 							<xs:attribute name="value" type="xs:long" use="required" />
-						  </xs:complexType>
+						</xs:complexType>
 					</xs:element>
-				
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	
-	</xs:schema>
+
+	<xs:complexType name="sort">
+		<xs:complexContent>
+			<xs:extension base="sort:type-sort-base">
+				<xs:sequence>
+					<xs:element name="primaryKeys" type="sort:type-primary-key-fields"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="secondaryKeys" type="sort:type-secondary-key-fields"
+						minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

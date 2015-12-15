@@ -78,7 +78,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 			for (Map.Entry<String, String> entry : fieldValueMap.entrySet()) {
 				TypeSecondayKeyFieldsAttributes field = new TypeSecondayKeyFieldsAttributes();
 				field.setName(entry.getKey());
-				field.setOrder(TypeSortOrder.fromValue(entry.getValue()));
+				field.setOrder(TypeSortOrder.fromValue(entry.getValue().toLowerCase()));
 				fieldNameList.add(field);
 			}
 		}
@@ -90,8 +90,6 @@ public class RemoveDupsConverter extends StraightPullConverter {
 		String keepValue = properties.get(
 				PropertyNameConstants.RETENTION_LOGIC_KEEP.value()).toString();
 		Keep keep = new Keep();
-		if(keepValue.toLowerCase().contains("unique"))
-			keepValue="uniqueonly";
 		keep.setValue(KeepValue.fromValue(keepValue.toLowerCase()));
 		return keep;
 	}

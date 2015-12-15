@@ -33,6 +33,7 @@ public class ShowHidePortLabelsHandler extends AbstractHandler implements IHandl
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IEditorPart editor = HandlerUtil.getActiveEditor(event);
+		boolean toggleValue=false;
 		if(editor==null)
 			element.setChecked(false);
 		if(editor!=null && editor instanceof ELTGraphicalEditor)
@@ -45,7 +46,17 @@ public class ShowHidePortLabelsHandler extends AbstractHandler implements IHandl
 				if(editPart instanceof PortEditPart) 
 				{
 					PortFigure portFigure=((PortEditPart)editPart).getPortFigure();
-					portFigure.setToggleValue(!portFigure.getToggleValue());
+					toggleValue=portFigure.getToggleValue();
+				}
+			}
+			for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); 
+					ite.hasNext();)
+			{
+				EditPart editPart = (EditPart) ite.next();
+				if(editPart instanceof PortEditPart) 
+				{
+					PortFigure portFigure=((PortEditPart)editPart).getPortFigure();
+					portFigure.setToggleValue(!toggleValue);
 					element.setChecked(portFigure.getToggleValue());
 					portFigure.repaint();
 				}

@@ -143,12 +143,17 @@ public class ConverterHelper{
 		TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
 		outSocketAsInsocket.setInSocketId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
 		
-		outSocket.setCopyOfInsocket(outSocketAsInsocket);
 		outSocket.setId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());
 		outSocket.setType(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort()));
-		outSocket.getPassThroughfieldOrOperationFieldOrMapField().addAll(addPassThroughFields(transformPropertyGrid));
-		outSocket.getPassThroughfieldOrOperationFieldOrMapField().addAll(addMapFields(transformPropertyGrid));
-		outSocket.getPassThroughfieldOrOperationFieldOrMapField().addAll(addOperationFields(transformPropertyGrid));
+		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addPassThroughFields(transformPropertyGrid));
+		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addMapFields(transformPropertyGrid));
+		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addOperationFields(transformPropertyGrid));
+		if(outSocket.getPassThroughFieldOrOperationFieldOrMapField().size()==0
+				&& outSocket.getPassThroughFieldOrOperationFieldOrMapField().size()==0
+					&& outSocket.getPassThroughFieldOrOperationFieldOrMapField().size()==0)
+		{	outSocket.setCopyOfInsocket(outSocketAsInsocket);
+			
+		}
 	}
 
 	private List<TypeInputField> addPassThroughFields(TransformPropertyGrid transformPropertyGrid) {

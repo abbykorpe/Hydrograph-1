@@ -5,6 +5,7 @@ import java.util.List;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.factory.ListenerFactory.Listners;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.DropDownConfig;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.SingleColumnGridConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.TextBoxWithLableConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
@@ -16,10 +17,6 @@ public class WidgetHelper {
 
 	public WidgetConfig getColumnNameConfig(){
 		return populateSingleColumnGridConfig(Constants.COLUMN_NAME, Constants.COLUMN_NAME2);
-	}
-
-	public WidgetConfig getSecondaryKeysConfig(){
-		return populateSingleColumnGridConfig(Constants.SECONDARY_KEYS, Constants.SECONDARY_KEYS2);
 	}
 
 	public WidgetConfig getOperationFieldsConfig(){
@@ -85,6 +82,26 @@ public class WidgetHelper {
 		return dropDownConfig;
 	}
 
+	public WidgetConfig getOperationClassForFilterWidgetConfig() {
+		OperationClassConfig operationClassConfig = new OperationClassConfig();
+		operationClassConfig.setComponentName(Constants.FILTER);
+		return operationClassConfig;
+	}
+	
+	public WidgetConfig getOperationClassForTransformWidgetConfig() {
+		OperationClassConfig operationClassConfig = new OperationClassConfig();
+		operationClassConfig.setComponentName(Constants.TRANSFORM);
+		return operationClassConfig;
+	}
+	
+	public WidgetConfig getOperationClassForAggregateWidgetConfig() {
+		OperationClassConfig operationClassConfig = new OperationClassConfig();
+		operationClassConfig.setComponentName(Constants.AGGREGATE);
+		return operationClassConfig;
+	}
+	
+	
+	
 	private SingleColumnGridConfig populateSingleColumnGridConfig(String lable, String componentName) {
 		SingleColumnGridConfig gridConfig = new SingleColumnGridConfig();
 		gridConfig.setLabelName(lable);

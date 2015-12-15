@@ -4,9 +4,6 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
-
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class RunTimePropertyCellModifier.
  * 
@@ -51,11 +48,11 @@ public class RunTimePropertyCellModifier implements ICellModifier {
 	public Object getValue(Object element, String property) {
 		RuntimeProperties p = (RuntimeProperties) element;
 		
-		if (RunTimePropertyWizard.RUNTIMEPROPNAME.equals(property)) {
+		if (RunTimePropertyWizard.PROPERTY_NAME.equals(property)) {
 
 			return p.getPropertyName();
 
-		} else if (RunTimePropertyWizard.RUNTIMEPROPVALUE.equals(property))
+		} else if (RunTimePropertyWizard.PROPERTY_VALUE.equals(property))
 			return p.getPropertyValue();
 		else
 			return null;
@@ -78,10 +75,10 @@ public class RunTimePropertyCellModifier implements ICellModifier {
 
 		RuntimeProperties p = (RuntimeProperties) element;
 		
-		if (RunTimePropertyWizard.RUNTIMEPROPNAME.equals(property))
+		if (RunTimePropertyWizard.PROPERTY_NAME.equals(property))
 			p.setPropertyName(((String) value));
 
-		else if (RunTimePropertyWizard.RUNTIMEPROPVALUE.equals(property))
+		else if (RunTimePropertyWizard.PROPERTY_VALUE.equals(property))
 			p.setPropertyValue((String) value);
 		// Force the viewer to refresh
 		viewer.refresh();

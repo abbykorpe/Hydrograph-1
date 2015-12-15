@@ -47,6 +47,7 @@ public class FixedWidthGridWidgetBuilder extends GridWidgetCommonBuilder {
 		if(!grids.contains(fixedGrid)){
 			grids.add(fixedGrid);  
 			tableViewer.refresh();
+			tableViewer.editElement(tableViewer.getElementAt(grids.size() == 0 ? grids.size() : grids.size() - 1), 0);
 		}
 	}
 }

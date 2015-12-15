@@ -55,7 +55,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 
 		this.operationClassProperty = (OperationClassProperty) componentConfigrationProperty.getPropertyValue();
 		if(operationClassProperty == null){
-			operationClassProperty = new OperationClassProperty("", false);
+			operationClassProperty = new OperationClassProperty("", false,null);
 		}
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 	}
@@ -83,7 +83,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				eltOperationClassDialog = new ELTOperationClassDialog(runtimeComposite.getContainerControl().getShell(), propertyDialogButtonBar,operationClassProperty.clone());
+				eltOperationClassDialog = new ELTOperationClassDialog(runtimeComposite.getContainerControl().getShell(), propertyDialogButtonBar,operationClassProperty.clone(), widgetConfig);
 				eltOperationClassDialog.setValidationStatus(validationStatus);
 				eltOperationClassDialog.open();
 				if(!eltOperationClassDialog.getOperationClassProperty().equals(operationClassProperty)){
@@ -102,7 +102,6 @@ public class ELTOperationClassWidget extends AbstractWidget {
 	public LinkedHashMap<String, Object> getProperties() {		
 		//operationClassProperty = eltOperationClassDialog.getOperationClassProperty();
 		property.put(propertyName, operationClassProperty);
-		
 		return property;
 	}
 

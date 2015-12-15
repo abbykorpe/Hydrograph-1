@@ -40,7 +40,7 @@ public class ELTOpenFileEditorListener implements IELTListener{
 				if (((Text)widgetList[0]).getText().startsWith("$")) {
 					((Text)widgetList[0]).setText(Messages.path);
 				} 
-				boolean flag = FilterOperationClassUtility.openFileEditor(((Text)widgetList[0]).getText());
+				boolean flag = FilterOperationClassUtility.openFileEditor(((Text)widgetList[0]),null);
 				if (!flag) {
 					WidgetUtility.errorMessage("File Not Found"); 
 				} else {

@@ -17,8 +17,8 @@ public class ProjectExplorerView extends CommonNavigator {
 	@Override
 	public void createPartControl(Composite aParent) {
 		super.createPartControl(aParent);
-		setCSSID(getCommonViewer().getControl(), "projectExplorer");
-		setCSSID(getCommonViewer().getTree(), "treeColor");
+		//setCSSID(getCommonViewer().getControl(), "projectExplorer");
+		//setCSSID(getCommonViewer().getTree(), "treeColor");
 		
 	}
 

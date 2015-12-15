@@ -51,6 +51,7 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 		fileDelimited.setDelimiter(delimiter);
 		fileDelimited.setStrict(getBoolean(PropertyNameConstants.STRICT.value()));
 		fileDelimited.setHasHeader(getBoolean(PropertyNameConstants.HAS_HEADER.value()));
+		fileDelimited.setSafe(getBoolean(PropertyNameConstants.IS_SAFE.value()));
 		fileDelimited.setCharset(charset);
 		fileDelimited.setRuntimeProperties(getRuntimeProperties());
 	}
@@ -82,11 +83,19 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 				for (SchemaGrid object : schemaList ) {
 					TypeBaseField typeBaseField = new TypeBaseField();
 					typeBaseField.setName(object.getFieldName());
-					typeBaseField.setDescription("");
-					typeBaseField.setFormat(object.getDateFormat());
-					if(!object.getScale().trim().isEmpty())
-						typeBaseField.setScale(Integer.parseInt(object.getScale()));
-					typeBaseField.setScaleType(ScaleTypeList.EXPLICIT );
+				
+				if(object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())&& !object.getDateFormat().trim().isEmpty() )
+						typeBaseField.setFormat(object.getDateFormat());
+				
+				if(!object.getScale().trim().isEmpty())
+					typeBaseField.setScale(Integer.parseInt(object.getScale()));
+				
+				if(object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())||object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value()))
+					{	typeBaseField.setScaleType(ScaleTypeList.EXPLICIT );
+						if(!object.getScale().trim().isEmpty())
+							typeBaseField.setScale(Integer.parseInt(object.getScale()));
+					}
+					
 					for(FieldDataTypes fieldDataType:FieldDataTypes.values()){
 						if(fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
 							typeBaseField.setType(fieldDataType);

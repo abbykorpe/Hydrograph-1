@@ -128,14 +128,6 @@
                id="org.eclipse.ui.workbench.INACTIVE_TAB_TEXT_COLOR"
                value="255,255,255">
          </colorOverride>
-          <colorOverride
-               id="org.eclipse.debug.ui.console.background"
-               value="45,45,48">
-         </colorOverride>
-         <colorOverride
-               id="org.eclipse.debug.ui.console.stream.out"
-               value="86, 156, 214">
-         </colorOverride>
       </theme>
    </extension>
    

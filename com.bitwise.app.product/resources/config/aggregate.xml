@@ -2,7 +2,7 @@
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/aggregate_palette.png" canvasIconPath="/icons/aggregate_canvas.png"
-		name="Aggregate" nameInPalette="Aggregate" defaultNamePrefix="Aggregate" description="This is Aggregate component. some more text">
+		name="Aggregate" nameInPalette="Aggregate" defaultNamePrefix="Aggregate" description="This is Aggregate component.\n some more text">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification>
@@ -44,7 +44,7 @@
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
 			
-		<tns:property dataType="string" name="operation" renderer="TRANSFORM_WIDGET" type="USER"
+		<tns:property dataType="string" name="operation" renderer="AGGREGATE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="OPTIONAL"/>			
 			

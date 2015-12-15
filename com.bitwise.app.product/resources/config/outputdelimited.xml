@@ -2,7 +2,7 @@
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/output_palette.png" canvasIconPath="/icons/output_canvas.png"
-		name="OFDelimited" nameInPalette="File Delimited" defaultNamePrefix="OFDelimited" description="This is OFDelimited component. some more text">
+		name="OFDelimited" nameInPalette="File Delimited" defaultNamePrefix="OFDelimited" description="This is OFDelimited component.\nsome more text">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification>
@@ -32,7 +32,11 @@
 			value="|" renderer="DELIMETER_WIDGET" type="USER" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
 		
-		<tns:property dataType="boolean" group="GENERAL" subGroup="CONFIGURATION" name="has_header"
+		<tns:property dataType="boolean" name="safe" renderer="SAFE_PROPERTY_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL"/>
+		
+		<tns:property dataType="boolean" group="GENERAL" subGroup="CONFIGURATION" name="hasHeader"
 			renderer="HAS_HEADER_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL"/>
 		
@@ -52,5 +56,6 @@
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
 			
+					
 	</tns:component>
 </tns:Config>

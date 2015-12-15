@@ -30,7 +30,7 @@ public class TransformWidget extends AbstractWidget {
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private TransformPropertyGrid transformPropertyGrid;
 	private TransformDialog transformDialog;
-	private Object properties;
+	private Object properties; 
 
 	/**
 	 * Instantiates a new ELT operation class widget.
@@ -79,7 +79,7 @@ public class TransformWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				transformDialog = new TransformDialog(transformComposite.getContainerControl().getShell(), propertyDialogButtonBar,transformPropertyGrid);
+				transformDialog = new TransformDialog(transformComposite.getContainerControl().getShell(), propertyDialogButtonBar,transformPropertyGrid,widgetConfig);
 				transformDialog.setValidationStatus(validationStatus);
 				transformDialog.open();
 					transformPropertyGrid = transformDialog.getTransformProperty();

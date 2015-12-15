@@ -50,7 +50,7 @@ public class FilterUiConverter extends TransformUIConverter{
 		String clazz=null;
 		if(filter.getOperation()!=null && filter.getOperation().size()!=0){
 			clazz=filter.getOperation().get(0).getClazz();
-			operationClassProperty=new OperationClassProperty(clazz, isParameter(clazz));
+			operationClassProperty=new OperationClassProperty(clazz, isParameter(clazz),null);
 		}
 		return operationClassProperty;
 	}

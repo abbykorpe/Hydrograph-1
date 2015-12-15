@@ -24,7 +24,7 @@
 			<xs:restriction base="cmn:type-input-component">
 				<xs:sequence>
 					<xs:element name="outSocket" type="type-input-delimited-out-socket"
-						minOccurs="1" maxOccurs="1" />
+						minOccurs="1" maxOccurs="unbounded" />
 					<xs:element name="dependsOn" type="cmn:type-depends-on"
 						minOccurs="0" maxOccurs="unbounded" />
 				</xs:sequence>

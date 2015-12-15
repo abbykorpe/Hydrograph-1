@@ -96,6 +96,7 @@
 			<enumeration value="SECONDARY_COLUMN_KEYS_WIDGET"/>
 			<enumeration value="SECONDARY_KEYS_WIDGET"/>
 			<enumeration value="TRANSFORM_WIDGET"/>
+			<enumeration value="AGGREGATE_WIDGET"/>
 			<enumeration value="INPUT_COUNT_WIDGET"/>
 			<enumeration value="JOIN_TYPE_WIDGET"/>
 		</restriction>

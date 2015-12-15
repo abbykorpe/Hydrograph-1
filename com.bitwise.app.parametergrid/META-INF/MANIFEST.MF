@@ -10,8 +10,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.forms;bundle-version="3.5.101",
  org.junit,
  com.bitwise.app.common.interfaces;bundle-version="0.0.1",
- com.bitwise.app.common;bundle-version="0.0.1"
+ com.bitwise.app.common;bundle-version="0.0.1",
+ org.eclipse.core.resources;bundle-version="3.7.101",
+ org.eclipse.ui.ide;bundle-version="3.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.bitwise.app.parametergrid.dialog,
  com.bitwise.app.parametergrid.utils
+Import-Package: com.bitwise.app.propertywindow.messages,
+ com.bitwise.app.propertywindow.widgets.utility

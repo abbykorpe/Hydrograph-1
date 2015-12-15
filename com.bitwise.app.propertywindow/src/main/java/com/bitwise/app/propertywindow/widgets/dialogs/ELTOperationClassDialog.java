@@ -21,6 +21,7 @@ import com.bitwise.app.common.datastructures.tooltip.TootlTipErrorMessage;
 import com.bitwise.app.propertywindow.messagebox.ConfirmCancelMessageBox;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultCheckBox;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
@@ -42,17 +43,19 @@ public class ELTOperationClassDialog extends Dialog {
 	private PropertyDialogButtonBar eltOperationClassDialogButtonBar;
 	private ValidationStatus validationStatus;
 	private TootlTipErrorMessage tootlTipErrorMessage = new TootlTipErrorMessage();
-	
+	private WidgetConfig widgetConfig; 
 
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 * @param operationClassProperty 
+	 * @param widgetConfig 
 	 */
-	public ELTOperationClassDialog(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar, OperationClassProperty operationClassProperty) {
+	public ELTOperationClassDialog(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar, OperationClassProperty operationClassProperty, WidgetConfig widgetConfig) {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.operationClassProperty = operationClassProperty;
+		this.widgetConfig = widgetConfig;
 	}
 
 	/**
@@ -99,7 +102,7 @@ public class ELTOperationClassDialog extends Dialog {
 		AbstractELTWidget fileNameText = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(150);
 		AbstractELTWidget isParameterCheckbox = new ELTDefaultCheckBox("Is Parameter").checkBoxLableWidth(100);
 		
-		FilterOperationClassUtility.createOperationalClass(composite, eltOperationClassDialogButtonBar, fileNameText, isParameterCheckbox, validationStatus,tootlTipErrorMessage);
+		FilterOperationClassUtility.createOperationalClass(composite, eltOperationClassDialogButtonBar, fileNameText, isParameterCheckbox, validationStatus,tootlTipErrorMessage, widgetConfig);
 		fileName=(Text)fileNameText.getSWTWidgetControl();
 		btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl();
 		populateWidget();
@@ -113,6 +116,7 @@ public class ELTOperationClassDialog extends Dialog {
         if (!operationClassProperty.getOperationClassPath().equalsIgnoreCase("")) {
               fileName.setText(operationClassProperty.getOperationClassPath());
               btnCheckButton.setSelection(operationClassProperty.isParameter());
+              fileName.setData("path", operationClassProperty.getOperationClassFullPath());
         }
   }
 
@@ -176,14 +180,14 @@ public class ELTOperationClassDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-        operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getSelection());
+        operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getSelection(),(String)fileName.getData("path"));
 		super.okPressed();
 	}
 
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if(buttonId == 3){
-			operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getSelection());
+			operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getSelection(),(String)fileName.getData("path"));
 			applyButton.setEnabled(false);
 		}else{
 			super.buttonPressed(buttonId);
@@ -191,7 +195,7 @@ public class ELTOperationClassDialog extends Dialog {
 	}
 	
 	public OperationClassProperty getOperationClassProperty() {
-		OperationClassProperty operationClassProperty = new OperationClassProperty(this.operationClassProperty.getOperationClassPath(),this.operationClassProperty.isParameter());
+		OperationClassProperty operationClassProperty = new OperationClassProperty(this.operationClassProperty.getOperationClassPath(),this.operationClassProperty.isParameter(),this.operationClassProperty.getOperationClassFullPath());
 		return operationClassProperty;
 	}
 

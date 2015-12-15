@@ -22,7 +22,8 @@ public class ListenerHelper {
 		CONTROL_DECORATION,
 		VALIDATION_STATUS,
 		SCHEMA_GRID,
-		TOOLTIP_ERROR_MESSAGE;
+		TOOLTIP_ERROR_MESSAGE,
+		WIDGET_CONFIG;
 	}
 	
 	private Map<HelperType, Object> helpers;

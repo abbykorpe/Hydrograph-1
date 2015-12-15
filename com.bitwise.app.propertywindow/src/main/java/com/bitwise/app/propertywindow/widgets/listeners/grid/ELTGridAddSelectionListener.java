@@ -1,8 +1,10 @@
 package com.bitwise.app.propertywindow.widgets.listeners.grid;
 
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.widgets.Widget;
 
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTSelectionTaskListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
@@ -17,10 +19,19 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
  * @see ELTGridAddSelectionEvent
  */
 public class ELTGridAddSelectionListener extends ELTSelectionTaskListener{
-
+	private ValidationStatus validationStatus; 
 	@Override
 	public void selectionListenerAction(PropertyDialogButtonBar propertyDialogButtonBar, ListenerHelper helpers, Widget... widgets) {
+		if(helpers != null){
+			validationStatus = (ValidationStatus) helpers.get(HelperType.VALIDATION_STATUS);
+		}
 		ELTGridDetails eltGridDetails = (ELTGridDetails)helpers.get(HelperType.SCHEMA_GRID);
 		eltGridDetails.getGridWidgetCommonBuilder().createDefaultSchema(eltGridDetails.getGrids(), eltGridDetails.getTableViewer(), eltGridDetails.getLabel());
+		setValidationStatus(true);
+	}
+	private void setValidationStatus(boolean status) {
+		if(validationStatus != null){
+			validationStatus.setIsValid(status);
+		}
 	}
 }

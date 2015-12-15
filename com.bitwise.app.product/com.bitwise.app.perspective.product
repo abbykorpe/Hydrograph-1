@@ -180,7 +180,7 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="org.eclipse.jdt.junit.runtime"/>
       <plugin id="org.eclipse.jdt.junit4.runtime"/>
       <plugin id="org.eclipse.jdt.launching"/>
-      <plugin id="org.eclipse.jdt.launching.macosx"/>
+      <plugin id="org.eclipse.jdt.launching.macosx" fragment=""/>
       <plugin id="org.eclipse.jdt.ui"/>
       <plugin id="org.eclipse.jem.util"/>
       <plugin id="org.eclipse.jface"/>

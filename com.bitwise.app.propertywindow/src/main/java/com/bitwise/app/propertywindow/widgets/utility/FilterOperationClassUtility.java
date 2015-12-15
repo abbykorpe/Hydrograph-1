@@ -1,6 +1,10 @@
 package com.bitwise.app.propertywindow.widgets.utility;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +19,8 @@ import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -22,9 +28,14 @@ import org.eclipse.ui.ide.IDE;
 
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructures.tooltip.TootlTipErrorMessage;
+import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
+import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.OperationClassConfig;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -39,27 +50,45 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
  * @author Bitwise
  */
 public class FilterOperationClassUtility {
-	private static String filePath = "";
-
 	/**
 	 * Creates the new class wizard.
 	 * 
 	 * @param fileName
 	 *            the file name
+	 * @param widgetConfig 
 	 */
-	public static void createNewClassWizard(Text fileName) {
+	public static void createNewClassWizard(Text fileName, WidgetConfig widgetConfig) {
 		OpenNewClassWizardAction wizard = new OpenNewClassWizardAction();
 		wizard.setOpenEditorOnFinish(false);
-		NewClassWizardPage page = new NewClassWizardPage();
+		final NewClassWizardPage page = new NewClassWizardPage();
 		page.setSuperClass("java.lang.Object", true);
 		page.setMethodStubSelection(false, false, true, true);
 		List<String> interfaceList = new ArrayList<String>();
-		interfaceList.add("com.bitwiseglobal.bhse.userfunctions.base.FilterBase");
+		OperationClassConfig operationClassConfig = (OperationClassConfig) widgetConfig;
+		
+		if (operationClassConfig.getComponentName().equalsIgnoreCase(Constants.FILTER))
+			interfaceList.add(Messages.FILTER_TEMPLATE);
+		else if (operationClassConfig.getComponentName().equalsIgnoreCase(Constants.AGGREGATE))
+			interfaceList.add(Messages.AGGREGATE_TEMPLATE);
+		else if (operationClassConfig.getComponentName().equalsIgnoreCase(Constants.TRANSFORM))
+			interfaceList.add(Messages.TRANSFORM_TEMPLATE);
+		
 		page.setSuperInterfaces(interfaceList, true);  
 		wizard.setConfiguredWizardPage(page);
+		if(OSValidator.isMac()){
+			Display.getDefault().timerExec(0, new Runnable() {
+				
+				@Override
+				public void run() {
+					page.getControl().forceFocus();					
+				}
+			});
+		}
 		wizard.run();
-		if (page.isPageComplete())
-			fileName.setText("/" + page.getPackageFragmentRootText() + "/"
+		if (page.isPageComplete()) 
+			fileName.setText(page.getPackageText()+"."
+					+ page.getTypeName());
+			fileName.setData("path", "/" + page.getPackageFragmentRootText() + "/"
 					+ page.getPackageText().replace(".", "/") + "/"
 					+ page.getTypeName() + ".java");
 	}
@@ -77,9 +106,26 @@ public class FilterOperationClassUtility {
 				"Project", "Select Java Class (.java)", new String[] { filterExtension });
 		if (dialog.open() == IDialogConstants.OK_ID) {
 			IResource resource = (IResource) dialog.getFirstResult();
+			String filePath = resource.getRawLocation().toOSString();
+			java.nio.file.Path path =Paths.get(filePath); 
+			String classFile=path.getFileName().toString();
+			String name = "";
+			 try { 
+				BufferedReader r = new BufferedReader(new FileReader(filePath));
+				String arg= r.readLine();
+				name= arg.replace("package", "").replace(";", ""); 
+				if(!name.equalsIgnoreCase(""))
+				name=name+"."+classFile.substring(0, classFile.lastIndexOf('.'));
+				else
+					name=classFile.substring(0, classFile.lastIndexOf('.'));
+			} catch (IOException e) { 
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			fileName.setText(name.trim());
 			filePath = resource.getRawLocation().toOSString();
-			String arg = resource.getFullPath().toOSString();
-			fileName.setText(arg);
+			fileName.setData("path", resource.getFullPath().toOSString());
+
 		}
 	} 
 
@@ -90,18 +136,25 @@ public class FilterOperationClassUtility {
 	 *            the file name
 	 * @return true, if successful
 	 */
-	public static boolean openFileEditor(String fileName) {
+	public static boolean openFileEditor(Text filePath,String pathFile) {
 		try {
+			String fileFullPath;
+			String fileName;
+			if(filePath!=null)
+				fileName= (String) filePath.getData("path");
+			else
+				fileName=pathFile;
+			
 			File fileToOpen = new File(fileName);
 			if(!fileToOpen.isFile())
 			{
 			Path path = new Path(fileName);
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-			filePath = file.getRawLocation().toOSString();
+			fileFullPath = file.getRawLocation().toOSString();
 			}
 			else
-			filePath=fileName;
-			File fileToEditor = new File(filePath);
+			fileFullPath=fileName;
+			File fileToEditor = new File(fileFullPath);
 			if (fileToEditor.exists()) {
 				IFileStore fileStore = EFS.getLocalFileSystem().getStore(
 						fileToEditor.toURI());
@@ -119,7 +172,7 @@ public class FilterOperationClassUtility {
 
 public static OperationClassProperty createOperationalClass(Composite composite,
 											PropertyDialogButtonBar eltOperationClassDialogButtonBar,AbstractELTWidget fileNameText
-											,AbstractELTWidget isParameterCheckbox,ValidationStatus validationStatus,TootlTipErrorMessage tootlTipErrorMessage ){
+											,AbstractELTWidget isParameterCheckbox,ValidationStatus validationStatus,TootlTipErrorMessage tootlTipErrorMessage, WidgetConfig widgetConfig ){
 	
 	ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(composite);
 	eltSuDefaultSubgroupComposite.createContainerWidget();
@@ -160,6 +213,7 @@ public static OperationClassProperty createOperationalClass(Composite composite,
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.VALIDATION_STATUS, validationStatus);
 		helper.put(HelperType.TOOLTIP_ERROR_MESSAGE, tootlTipErrorMessage);
+		helper.put(HelperType.WIDGET_CONFIG, widgetConfig);
 	try { 						
 		
 		fileNameText.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(),eltOperationClassDialogButtonBar, null,fileName);
@@ -172,7 +226,7 @@ public static OperationClassProperty createOperationalClass(Composite composite,
 		// TODO Auto-generated catch block
 		e1.printStackTrace(); 
 	} 
-	OperationClassProperty operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getEnabled());
+	OperationClassProperty operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getEnabled(),(String)fileName.getData("path"));
 	return operationClassProperty;
 }
 	

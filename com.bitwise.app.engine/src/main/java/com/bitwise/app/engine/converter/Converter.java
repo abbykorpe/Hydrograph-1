@@ -132,7 +132,7 @@ public abstract class Converter {
 			typeProperties = new TypeProperties();
 			List<TypeProperties.Property> runtimePropertyList = typeProperties
 					.getProperty();
-			for (Map.Entry<String, String> entry : ((TreeMap<String, String>) properties
+			for (Map.Entry<String, String> entry : ((Map<String, String>) properties
 					.get(PropertyNameConstants.RUNTIME_PROPERTIES.value()))
 					.entrySet()) {
 				Property runtimeProperty = new Property();

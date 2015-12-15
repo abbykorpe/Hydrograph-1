@@ -37,7 +37,7 @@
 		<xs:attribute name="format" type="xs:string" use="optional" />
 		<xs:attribute name="precision" type="xs:int" use="optional" />
 		<xs:attribute name="scale" type="xs:int" use="optional" />
-		<xs:attribute name="scale_type" type="scale-type-list"
+		<xs:attribute name="scaleType" type="scale-type-list"
 			use="optional" />
 		<xs:attribute name="description" type="xs:string" use="optional" />
 	</xs:attributeGroup>
@@ -247,7 +247,7 @@
 				<xs:choice maxOccurs="1" minOccurs="0">
 					<xs:element name="copyOfInsocket" type="type-outSocket-as-inSocket" />
 					<xs:choice maxOccurs="unbounded" minOccurs="1">
-						<xs:element name="passThroughfield" type="type-input-field" />
+						<xs:element name="passThroughField" type="type-input-field" />
 						<xs:element name="operationField" type="type-operation-field" />
 						<xs:element name="mapField" type="type-map-field" />
 					</xs:choice>
@@ -288,8 +288,8 @@
 
 	<xs:simpleType name="type-sort-order">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="Asc" />
-			<xs:enumeration value="Desc" />
+			<xs:enumeration value="asc" />
+			<xs:enumeration value="desc" />
 		</xs:restriction>
 	</xs:simpleType>
 
