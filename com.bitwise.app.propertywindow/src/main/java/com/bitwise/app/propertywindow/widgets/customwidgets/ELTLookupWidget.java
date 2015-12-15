@@ -16,11 +16,11 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTC
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import com.bitwise.app.propertywindow.widgets.joinproperty.ELTLookupConfigGrid;
 
-public class ELTHasJoinWidget extends AbstractWidget{
+public class ELTLookupWidget extends AbstractWidget{
 	private LinkedHashMap< String, String> temp = new LinkedHashMap<>();
  
 	
-	public ELTHasJoinWidget(ComponentConfigrationProperty componentConfigrationProperty,
+	public ELTLookupWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar){
 		super(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);

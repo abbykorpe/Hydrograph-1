@@ -56,7 +56,6 @@ public class ELTLookupConfigGrid extends Dialog {
 		super(parentShell);
 		
 		setShellStyle(SWT.CLOSE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
-		parentShell.setText("Yo");
 		
 	}
 
@@ -72,6 +71,8 @@ public class ELTLookupConfigGrid extends Dialog {
 		
 		Composite composite = new Composite(container, SWT.BORDER);
 		composite.setLayout(new RowLayout(SWT.VERTICAL));
+		
+		container.getShell().setText("Lookup Configuration");
 		
 		Label lblNewLabel = new Label(composite, SWT.CENTER);
 		lblNewLabel.setLayoutData(new RowData(137, 21));

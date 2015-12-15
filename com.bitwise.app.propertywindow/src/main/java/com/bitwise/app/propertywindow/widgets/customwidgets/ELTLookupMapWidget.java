@@ -17,9 +17,9 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSu
 import com.bitwise.app.propertywindow.widgets.joinproperty.ELTLookupConfigGrid;
 import com.bitwise.app.propertywindow.widgets.joinproperty.ELTLookupMapWizard;
 
-public class ELTHashJoinMapWidget extends AbstractWidget{
+public class ELTLookupMapWidget extends AbstractWidget{
 
-	public ELTHashJoinMapWidget(ComponentConfigrationProperty componentConfigrationProperty,
+	public ELTLookupMapWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar){
 		super(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
