@@ -17,7 +17,7 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSu
 import com.bitwise.app.propertywindow.widgets.joinproperty.ELTLookupConfigGrid;
 
 public class ELTHasJoinWidget extends AbstractWidget{
-	
+	private LinkedHashMap< String, String> temp = new LinkedHashMap<>();
  
 	
 	public ELTHasJoinWidget(ComponentConfigrationProperty componentConfigrationProperty,
@@ -42,16 +42,19 @@ public class ELTHasJoinWidget extends AbstractWidget{
 		((Button)eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 			 @Override
 				public void widgetSelected(SelectionEvent e) {
-				 ELTLookupConfigGrid grid = new ELTLookupConfigGrid( ((Button)eltDefaultButton.getSWTWidgetControl()).getShell() );
+				 ELTLookupConfigGrid grid = new ELTLookupConfigGrid( ((Button)eltDefaultButton.getSWTWidgetControl()).getShell());
 				 grid.open();
 
 			 }
 		});
 	}
 
+	private void setProperties(String name, String value){
+		 
+	}
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		// TODO Auto-generated method stub
+	  
 		return null;
 	}
 

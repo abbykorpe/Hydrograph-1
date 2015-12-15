@@ -132,9 +132,7 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 
 		}
 
-		runTimeWizardObj
-				.setRuntimePropertyMap((TreeMap<String, String>) getProperties()
-						.get(propertyName));
+		runTimeWizardObj.setRuntimePropertyMap((TreeMap<String, String>) getProperties().get(propertyName));
 		setProperties(propertyName, runTimeWizardObj.launchRuntimeWindow(shell,propertyDialogButtonBar));
 
 	}

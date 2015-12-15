@@ -126,6 +126,12 @@ public class PortFigure extends Figure {
 						.getLocation().y-3));
 			}
 		}
+		
+		if ("lkp".equals(labelOfPort)){
+			
+			//Changes to show Lookup port.
+		}
+		
 	}
 
 	@Override

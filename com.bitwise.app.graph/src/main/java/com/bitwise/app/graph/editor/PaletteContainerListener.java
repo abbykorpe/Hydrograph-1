@@ -215,6 +215,8 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 
 	@Override
 	public void mouseDown(MouseEvent e) {
+		viewer.getEditDomain().getActiveTool().deactivate();
+		graphicalViewer.getEditDomain().getActiveTool().deactivate();
 	}
 
 	@Override
