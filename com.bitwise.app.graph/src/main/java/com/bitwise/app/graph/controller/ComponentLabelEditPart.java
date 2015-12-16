@@ -37,7 +37,7 @@ public class ComponentLabelEditPart extends AbstractGraphicalEditPart implements
 	protected IFigure createFigure() {
 		ComponentLabelFigure label = new ComponentLabelFigure(1);
 		Component component = ((ComponentEditPart) getParent()).getCastedModel();
-		String compLabel = component.getLogicLabel().getLabelContents();
+		String compLabel = component.getComponentLabel().getLabelContents();
 		
 		label.setText(compLabel);
 		label.setLocation(new Point(1, 1));

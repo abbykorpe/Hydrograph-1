@@ -300,26 +300,30 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 							+ getCastedModel().getSize().width);
 			adjustComponentFigure(getCastedModel(), getComponentFigure());
 			getCastedModel().setComponentLabel((String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue()));
-			String newPortCount =   (String)getCastedModel().getProperties().get("input_count");
 			
-			int prevPortCount = getCastedModel().getPort("in1").getNumberOfPortsOfThisType();
-			int numOfPort=0;
-			if(StringUtils.isNotEmpty(newPortCount)){
-				numOfPort = Integer.parseInt(newPortCount);
+			if(getCastedModel().getComponentName().equalsIgnoreCase("join")){
 
-				if(prevPortCount != numOfPort){
+				String newPortCount =   (String)getCastedModel().getProperties().get("input_count");
 
-					ComponentFigure compFig = (ComponentFigure)getFigure();
-					compFig.setHeight(numOfPort, 1);
-					compFig.setWidth(numOfPort);
-					Dimension newSize = new Dimension((numOfPort+1)*33, ((numOfPort+1)*25)+getCastedModel().getComponentLabelMargin());
-					getCastedModel().setSize(newSize);
+				int prevPortCount = getCastedModel().getPort("in1").getNumberOfPortsOfThisType();
+				int numOfPort=0;
+				if(StringUtils.isNotEmpty(newPortCount)){
+					numOfPort = Integer.parseInt(newPortCount);
 
-					getCastedModel().clearPorts();
-					((ComponentFigure)getFigure()).clearAnchors(numOfPort);
-					refresh();
+					if(prevPortCount != numOfPort){
 
-					getCastedModel().changePortSettings(numOfPort);
+						ComponentFigure compFig = (ComponentFigure)getFigure();
+						compFig.setHeight(numOfPort, 1);
+						compFig.setWidth(numOfPort);
+						Dimension newSize = new Dimension((numOfPort+1)*33, ((numOfPort+1)*25)+getCastedModel().getComponentLabelMargin());
+						getCastedModel().setSize(newSize);
+
+						getCastedModel().clearPorts();
+						((ComponentFigure)getFigure()).clearAnchors(numOfPort);
+						refresh();
+
+						getCastedModel().changePortSettings(numOfPort);
+					}
 				}
 			}
 

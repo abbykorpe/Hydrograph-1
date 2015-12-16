@@ -327,8 +327,8 @@ public abstract class Component extends Model {
 		//tooltipInformation.get(propertyId).setPropertyValue(value);
 	}
 
-	public ComponentLabel getLogicLabel() {
-		return componentLabel;
+	public String getComponentName() {
+		return componentName;
 	}
 
 	public ComponentLabel getComponentLabel() {
