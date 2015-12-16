@@ -21,12 +21,13 @@ public class ELTDefaultCheckBox extends AbstractELTWidget {
 	@Override
 	public void attachWidget(Composite container) {
 		defaultELTCheckBox = new Button(container, SWT.CHECK);
-		GridData gd_defaultELTCheckBox = new GridData(SWT.FILL, SWT.CENTER, grabExcessSpace, false, 1, 1);
+		GridData gd_defaultELTCheckBox = new GridData(SWT.FILL, SWT.CENTER,
+				grabExcessSpace, false, 1, 1);
 		gd_defaultELTCheckBox.widthHint = checkBoxWidth;
 		defaultELTCheckBox.setLayoutData(gd_defaultELTCheckBox);
-		
+
 		defaultELTCheckBox.setText(checkBoxLable);
-		widget=defaultELTCheckBox; 
+		widget = defaultELTCheckBox;
 	}
 
 	/**
@@ -47,11 +48,11 @@ public class ELTDefaultCheckBox extends AbstractELTWidget {
 	 *            the width
 	 * @return the ELT default check box
 	 */
-	public ELTDefaultCheckBox checkBoxLableWidth(int width){
+	public ELTDefaultCheckBox checkBoxLableWidth(int width) {
 		checkBoxWidth = width;
 		return this;
 	}
-	
+
 	/**
 	 * Grab excess horizontal space.
 	 * 
@@ -59,7 +60,7 @@ public class ELTDefaultCheckBox extends AbstractELTWidget {
 	 *            the grab excess space
 	 * @return the ELT default check box
 	 */
-	public ELTDefaultCheckBox grabExcessHorizontalSpace(boolean grabExcessSpace){
+	public ELTDefaultCheckBox grabExcessHorizontalSpace(boolean grabExcessSpace) {
 		this.grabExcessSpace = grabExcessSpace;
 		return this;
 	}

@@ -18,14 +18,10 @@ public class ELTSchemaSubgroupComposite extends AbstractELTContainerWidget{
 	public void createContainerWidget() {
 		composite = new Composite(inputContainer, SWT.NONE);
 		GridLayout layout = new GridLayout(4, false);
-		layout.horizontalSpacing = 2;
-		layout.marginTop = 0;
-		layout.marginLeft = 300;
-		layout.marginHeight = -1;
-		
+		layout.horizontalSpacing = -45;
+		layout.marginLeft = 350;
 		composite.setLayout(layout);
 		super.outputContainer = composite;	
-		
 	}
 
 	@Override

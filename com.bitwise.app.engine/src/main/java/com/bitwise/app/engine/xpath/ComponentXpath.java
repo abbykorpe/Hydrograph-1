@@ -51,6 +51,7 @@ public class ComponentXpath {
 			
 			doc = dBuilder.parse(new ByteArrayInputStream(out.toByteArray()));
 			doc.getDocumentElement().normalize();
+			Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 			XPath xPath = XPathFactory.newInstance().newXPath();
 			LOGGER.debug("GENRATED COMPONENTS XPATH {}", getXpathMap().toString());
 			for(Map.Entry<String, String> entry: getXpathMap().entrySet()){

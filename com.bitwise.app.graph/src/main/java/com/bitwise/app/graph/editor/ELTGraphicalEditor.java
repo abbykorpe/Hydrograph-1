@@ -729,7 +729,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private IFile opeSaveAsDialog() {
 		logger.debug("opeSaveAsDialog - Opening SaveAs dialog box.");
-		SaveAsDialog obj = new SaveAsDialog(new Shell());
+		SaveAsDialog obj = new SaveAsDialog(Display.getDefault().getActiveShell());
 		IFile file=null;
 		if (getEditorInput().getName().endsWith(".job"))
 			obj.setOriginalName(getEditorInput().getName());
