@@ -6,6 +6,10 @@
   <xs:import schemaLocation="../../common/common-types.xsd"
     namespace="http://www.bitwiseglobal.com/graph/commontypes" />
 
+  	<xs:complexType name="hive_path_type">
+		<xs:attribute name="uri" type="xs:string" use="required" />
+	</xs:complexType>
+  	
   	<xs:complexType name="hive_partition_fields_type">
 		<xs:sequence maxOccurs="unbounded" minOccurs="1">
 			<xs:element name="field" type="field_basic_type">
