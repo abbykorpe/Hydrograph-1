@@ -134,9 +134,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private ComponentTooltip componentTooltip;
 	private Rectangle toolTipComponentBounds;
-	private String parameterFilePath;
+	//private String parameterFilePath;
 	private String currentParameterFilePath=null;
-	private IPath parameterFileIPath;
+	//private IPath parameterFileIPath;
 	
 	/**
 	 * Instantiates a new ETL graphical editor.
@@ -572,9 +572,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(getEditorInput(), this);
 			genrateContainerData.storeContainerData();
-			parameterFilePath = container.getFullParameterFilePath();
-			container.setParameterFileName(getPartName().replace(".job", ".properties"));
-			if(container.getParameterFileDirectory() !=null)
+			//parameterFilePath = container.getFullParameterFilePath();
+			//container.setParameterFileName(getPartName().replace(".job", ".properties"));
+			//if(container.getParameterFileDirectory() !=null)
 				saveParameters();
 
 		} catch (CoreException | IOException ce) {
@@ -604,29 +604,35 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			newParameterMap.put(parameterName, currentParameterMap.get(parameterName));
 		}
 
-		ParameterFileManager parameterFileManager = new ParameterFileManager(parameterFilePath);
+		ParameterFileManager parameterFileManager = new ParameterFileManager(getParameterFile());
 		parameterFileManager.storeParameters(newParameterMap);	
-		
-		if(parameterFileIPath==null){
-				parameterFileIPath = getParameterFileIPath();
-			}
-			IFile file=ResourcesPlugin.getWorkspace().getRoot().getFile(parameterFileIPath);
-			try {
-				file.refreshLocal(IResource.DEPTH_ZERO, null);
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
+				
+		refreshParameterFileInProjectExplorer();
+	}
+
+	private void refreshParameterFileInProjectExplorer() {
+		IFile file=ResourcesPlugin.getWorkspace().getRoot().getFile(getParameterFileIPath());
+		try {
+			file.refreshLocal(IResource.DEPTH_ZERO, null);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private IPath getParameterFileIPath(){
-		IFileEditorInput input = (IFileEditorInput)this.getEditorInput() ;
-	    IFile file = input.getFile();
-	    IProject activeProject = file.getProject();
-	    String activeProjectName = activeProject.getName();
-	    
-	    IPath parameterFileIPath =new Path("/"+activeProjectName+"/param/"+container.getParameterFileName());
-	    
-		return parameterFileIPath;
+		if(getEditorInput() instanceof IFileEditorInput){
+			IFileEditorInput input = (IFileEditorInput)getEditorInput() ;
+		    IFile file = input.getFile();
+		    IProject activeProject = file.getProject();
+		    String activeProjectName = activeProject.getName();
+		    
+		    IPath parameterFileIPath =new Path("/"+activeProjectName+"/param/"+ getPartName().replace(".job", ".properties"));
+		    
+			return parameterFileIPath;
+		}else{
+			return null;
+		}
+		
 	}
 	
 	@Override
@@ -638,7 +644,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private Map<String, String> getCurrentParameterMap() {
 
-		File parameterFile = new File(parameterFilePath);
+		File parameterFile = new File(getParameterFile());
 		//destinationFile.create(new FileInputStream(sourceFile), true, null);
 		if(!parameterFile.exists()){
 			try {
@@ -649,7 +655,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			}
 		}
 
-		ParameterFileManager parameterFileManager = new ParameterFileManager(parameterFilePath);
+		ParameterFileManager parameterFileManager = new ParameterFileManager(getParameterFile());
 		//System.out.println(parameterFileManager.getParameterMap().toString());
 
 		return parameterFileManager.getParameterMap();
@@ -676,7 +682,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void doSaveAs() {
 		IFile file=opeSaveAsDialog();
 		//getParameterFile();
-		setParameterFileLocationInfo(file);
+		//setParameterFileLocationInfo(file);
 
 		if(file!=null){
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -699,7 +705,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 	}
 
-	private void setParameterFileLocationInfo(IFile file) {
+	/*private void setParameterFileLocationInfo(IFile file) {
 		if(file!=null){
 
 			String fileName = file.getName().replace("job", "properties");
@@ -710,7 +716,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			parameterFileIPath =new Path("/"+projectName+"/param/"+fileName);
 		}
 
-	}
+	}*/
 
 	@Override
 	public boolean isSaveAsAllowed() {
@@ -903,14 +909,24 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		return fromObjectToXML(getContainer());	
 	}
 
+	private String getCurrentProjectDirectory(){
+		IPath jobFileRelativePath =new Path(getTitleToolTip());
+		IPath currentProjectDirectory = ( (FileEditorInput)getEditorInput()).getPath().removeLastSegments(jobFileRelativePath.segmentCount());
+		return currentProjectDirectory.toString();
+	}
+	
 	@Override
-	public String getParameterFile(){
-		return container.getFullParameterFilePath();
+	public String getParameterFile(){		
+		IPath paramterFileRelativePath=getParameterFileIPath();
+		
+		if(paramterFileRelativePath!=null)
+			return getCurrentProjectDirectory() + paramterFileRelativePath.toFile().getPath().replace("\\", "/");
+		else
+			return null;
 	}
 
 	@Override
 	public String getCurrentParameterFilePath() {
-		// TODO Auto-generated method stub
 		return currentParameterFilePath;
 	}
 

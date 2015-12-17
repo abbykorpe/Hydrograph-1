@@ -45,8 +45,8 @@ public class UiConverterUtil {
 		loadClass();
 		Graph graph = unMarshall(sourceXML);
 		Container container = new Container();
-		container.setParameterFileName(parameterFile.getFullPath().lastSegment());
-		container.setParameterFileDirectory(parameterFile.getPathVariableManager().getURIValue("PROJECT_LOC").getPath() + "/" + PARAMETER_FOLDER + "/");
+		//container.setParameterFileName(parameterFile.getFullPath().lastSegment());
+		//container.setParameterFileDirectory(parameterFile.getPathVariableManager().getURIValue("PROJECT_LOC").getPath() + "/" + PARAMETER_FOLDER + "/");
 		List<TypeBaseComponent> children = graph.getInputsOrOutputsOrStraightPulls();
 		if (children != null && !children.isEmpty()) {
 			for (TypeBaseComponent typeBaseComponent : children) {
