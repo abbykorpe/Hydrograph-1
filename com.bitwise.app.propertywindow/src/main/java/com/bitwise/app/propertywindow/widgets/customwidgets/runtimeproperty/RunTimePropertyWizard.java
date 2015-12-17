@@ -317,6 +317,7 @@ public class RunTimePropertyWizard {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
+				table.getParent().setFocus();
 				addNewProperty(tableViewer);
 
 			}

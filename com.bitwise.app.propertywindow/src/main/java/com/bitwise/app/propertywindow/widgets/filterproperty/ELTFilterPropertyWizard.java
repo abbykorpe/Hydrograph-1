@@ -312,6 +312,7 @@ public class ELTFilterPropertyWizard {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
+				table.getParent().setFocus();
 				addNewProperty(tableViewer);
 
 			}

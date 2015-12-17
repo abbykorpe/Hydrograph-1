@@ -1,6 +1,7 @@
 package com.bitwise.app.propertywindow.widgets.listeners.grid;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Widget;
 
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -21,7 +22,7 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
 public class ELTGridAddSelectionListener extends ELTSelectionTaskListener{
 
 	private ValidationStatus validationStatus; 
-	
+	private Table table;
 
 	@Override
 	public int getListenerType() {
@@ -30,6 +31,11 @@ public class ELTGridAddSelectionListener extends ELTSelectionTaskListener{
 	
 	@Override
 	public void selectionListenerAction(PropertyDialogButtonBar propertyDialogButtonBar, ListenerHelper helpers, Widget... widgets) {
+		for(Widget widget:widgets)
+		{
+			table=(Table)widget;
+			table.getParent().getShell().setFocus();
+		}
 		if(helpers != null){
 			validationStatus = (ValidationStatus) helpers.get(HelperType.VALIDATION_STATUS);
 		}
