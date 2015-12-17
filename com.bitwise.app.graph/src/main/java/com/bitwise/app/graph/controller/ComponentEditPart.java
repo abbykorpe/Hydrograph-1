@@ -300,31 +300,45 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 							+ getCastedModel().getSize().width);
 			adjustComponentFigure(getCastedModel(), getComponentFigure());
 			getCastedModel().setComponentLabel((String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue()));
-			String newPortCount =   (String)getCastedModel().getProperties().get("input_count");
-			int numOfPort=0;
-			if(StringUtils.isNotEmpty(newPortCount)){
-				numOfPort = Integer.parseInt(newPortCount);
-				getCastedModel().changePortSettings(numOfPort);
-				
-				ComponentFigure compFig = (ComponentFigure)getFigure();
-				compFig.setHeight(numOfPort, 1);
-				Dimension newSize = new Dimension(compFig.getSize().width, ((numOfPort+1)*25)+15);
-				getCastedModel().setSize(newSize);
+			
+			if(getCastedModel().getComponentName().equalsIgnoreCase("join")){
+
+				String newPortCount =   (String)getCastedModel().getProperties().get("input_count");
+
+				int prevPortCount = getCastedModel().getPort("in1").getNumberOfPortsOfThisType();
+				int numOfPort=0;
+				if(StringUtils.isNotEmpty(newPortCount)){
+					numOfPort = Integer.parseInt(newPortCount);
+
+					if(prevPortCount != numOfPort){
+
+						ComponentFigure compFig = (ComponentFigure)getFigure();
+						compFig.setHeight(numOfPort, 1);
+						compFig.setWidth(numOfPort);
+						Dimension newSize = new Dimension((numOfPort+1)*33, ((numOfPort+1)*25)+getCastedModel().getComponentLabelMargin());
+						getCastedModel().setSize(newSize);
+
+						getCastedModel().clearPorts();
+						((ComponentFigure)getFigure()).clearAnchors(numOfPort);
+						refresh();
+
+						getCastedModel().changePortSettings(numOfPort);
+					}
+				}
 			}
 
 			updateComponentStatus();			
 			refresh();
-			//List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
-			//PortEditPart portEditPart = null;
-//			for(AbstractGraphicalEditPart part:childrenEditParts)
-//			{
-//				
-//				if(part instanceof PortEditPart){ 
-//					portEditPart = (PortEditPart) part;
-//					portEditPart.adjustPortFigure(getCastedModel().getLocation());
-//				}
-//			}
-			//portEditPart.adjustPortFigure(getCastedModel().getLocation());
+			List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
+			PortEditPart portEditPart = null;
+			for(AbstractGraphicalEditPart part:childrenEditParts)
+			{
+				
+				if(part instanceof PortEditPart){ 
+					portEditPart = (PortEditPart) part;
+					portEditPart.adjustPortFigure(getCastedModel().getLocation());
+				}
+			}
 
 			ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 			if(eltPropertyWindow.isPropertyChanged()){
@@ -345,14 +359,15 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 		int labelLength = TextUtilities.INSTANCE.getStringExtents(label, font).width;
 		component.setComponentLabel(label);
 		if(labelLength >= ELTFigureConstants.compLabelOneLineLengthLimit && !componentFigure.isIncrementedHeight()){
-			component.setSize(new Dimension(component.getSize().width, component.getSize().height +15));
-			componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height +15));
+			component.setSize(new Dimension(component.getSize().width, component.getSize().height +ELTFigureConstants.componentOneLineLabelMargin));
+			//component.setSize(new Dimension(100, 82));
+			componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height +ELTFigureConstants.componentOneLineLabelMargin));
 			componentFigure.setIncrementedHeight(true);
 			component.setComponentLabelMargin(ELTFigureConstants.componentTwoLineLabelMargin);
 			componentFigure.setComponentLabelMargin(ELTFigureConstants.componentTwoLineLabelMargin);
 		}else if(labelLength < ELTFigureConstants.compLabelOneLineLengthLimit && componentFigure.isIncrementedHeight()){
-			component.setSize(new Dimension(component.getSize().width, component.getSize().height-15));
-			componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height -15));
+			component.setSize(new Dimension(component.getSize().width, component.getSize().height-ELTFigureConstants.componentOneLineLabelMargin));
+			componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height -ELTFigureConstants.componentOneLineLabelMargin));
 			componentFigure.setIncrementedHeight(false);
 			component.setComponentLabelMargin(ELTFigureConstants.componentOneLineLabelMargin);
 			componentFigure.setComponentLabelMargin(ELTFigureConstants.componentOneLineLabelMargin);

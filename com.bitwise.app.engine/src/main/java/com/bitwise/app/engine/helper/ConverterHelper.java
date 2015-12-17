@@ -141,9 +141,9 @@ public class ConverterHelper{
 	private void setOutSocketProperties(TypeOperationsOutSocket outSocket, TransformPropertyGrid transformPropertyGrid, Link link) {
 		
 		TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
+
 		outSocketAsInsocket.setInSocketId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
-		
-		outSocket.setId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());
+		outSocket.setId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());		
 		outSocket.setType(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort()));
 		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addPassThroughFields(transformPropertyGrid));
 		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addMapFields(transformPropertyGrid));

@@ -16,7 +16,7 @@ import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.parametergrid.dialog.ParameterGridDialog;
 
 public class ParameterGridOpenHandler extends AbstractHandler{
-
+	
 	private DefaultGEFCanvas getComponentCanvas() {		
 		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
 			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -27,6 +27,7 @@ public class ParameterGridOpenHandler extends AbstractHandler{
 	private boolean isDirtyEditor(){
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty();
 	}
+	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		

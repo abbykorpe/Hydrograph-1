@@ -36,6 +36,7 @@ public class Constants {
 	public static final String COLUMN_NAME = "Column\n Name";
 	public static final String SECONDARY_KEYS2 = "Secondary Keys ";
 	public static final String SECONDARY_KEYS = "Secondary\n Keys";
+	public static final String REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
 	
 	public static final String PROPERTY_COLUMN_NAME = "column_name";
 	public static final String PROPERTY_SECONDARY_COLUMN_KEYS = "secondary_column_keys";

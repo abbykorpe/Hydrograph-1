@@ -529,7 +529,7 @@ public class ParameterGridDialog extends Dialog {
 		gridControlButtonLayout.heightHint = 19;
 		return gridControlButtonLayout;
 	}
-
+	
 	private IPath getParameterFileIPath(){
 		IFileEditorInput input = (IFileEditorInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput() ;
 	    IFile file = input.getFile();
@@ -543,7 +543,7 @@ public class ParameterGridDialog extends Dialog {
 	    
 		return parameterFileIPath;
 	}
-	
+
 	@Override
 	protected void okPressed() {
 		boolean error=false;

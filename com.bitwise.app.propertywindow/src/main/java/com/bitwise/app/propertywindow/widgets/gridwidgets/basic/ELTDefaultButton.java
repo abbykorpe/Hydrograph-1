@@ -38,6 +38,7 @@ public class ELTDefaultButton extends AbstractELTWidget{
 		gd_defaultELTButton.widthHint = buttonWidth;
 		gd_defaultELTButton.horizontalIndent=-3;
 		gd_defaultELTButton.heightHint = buttonHeight;
+		gd_defaultELTButton.horizontalIndent=-3;
 		defaultELTButton.setLayoutData(gd_defaultELTButton);
 		defaultELTButton.setText(buttonText);
 		

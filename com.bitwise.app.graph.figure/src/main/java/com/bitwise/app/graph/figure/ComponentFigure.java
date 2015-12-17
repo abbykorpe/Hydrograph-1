@@ -40,7 +40,7 @@ import com.bitwise.app.common.interfaces.tooltip.ComponentCanvas;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Component.ValidityStatus;
-import com.bitwise.app.tooltip.window.ComponentTooltip;
+import com.bitwise.app.tooltip.tooltips.ComponentTooltip;
 
 /**
  * The Class ComponentFigure.
@@ -51,14 +51,14 @@ public class ComponentFigure extends Figure implements Validator{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ComponentFigure.class);
 	
 	private final XYLayout layout;
-	private int height=0;
+	private int height=0, width=0;
 	
 	private HashMap<String, FixedConnectionAnchor> connectionAnchors;
 	private List<FixedConnectionAnchor> inputConnectionAnchors;
 	private List<FixedConnectionAnchor> outputConnectionAnchors;
 	private List<PortSpecification> portspecification;
 	
-	private int totalPortsofInType=0, totalPortsOfOutType=0;
+	private int totalPortsofInType=0, totalPortsOfOutType=0, totalPortsOfUnusedType=0;
 	
 	private Color borderColor;
 	private Color selectedBorderColor;	
@@ -118,6 +118,7 @@ public class ComponentFigure extends Figure implements Validator{
 		{
 			setPortCount(p);
 			setHeight(totalPortsofInType, totalPortsOfOutType);
+			setWidth(totalPortsOfUnusedType);
 		}
 		
 		componentCanvas = getComponentCanvas();
@@ -159,8 +160,11 @@ public class ComponentFigure extends Figure implements Validator{
 		if(("in").equalsIgnoreCase(p.getTypeOfPort())){
 			totalPortsofInType=p.getNumberOfPorts();
 		}
-		else{
+		else if(("out").equalsIgnoreCase(p.getTypeOfPort())){
 			totalPortsOfOutType=p.getNumberOfPorts();
+		}
+		else if(("unused").equalsIgnoreCase(p.getTypeOfPort())){
+			totalPortsOfUnusedType=p.getNumberOfPorts();
 		}
 		
 	}
@@ -169,9 +173,21 @@ public class ComponentFigure extends Figure implements Validator{
 		int heightFactor=totalPortsofInType > totalPortsOfOutType ? totalPortsofInType : totalPortsOfOutType;
 		this.height = (heightFactor+1)*25;
 	}
+
+	public int getHeight() {
+		return height;
+	}
 	
+	public void setWidth(int totalPortsofUnusedType) {
+		int widthFactor=totalPortsofUnusedType;
+		this.width=100;
+		if(widthFactor > 1)
+			this.width = (widthFactor+1)*33;
+	}
 	
-	
+	public int getWidth(){
+		return width;
+	}
 	
 	public Color getBorderColor() {
 		return borderColor;
@@ -419,21 +435,19 @@ public class ComponentFigure extends Figure implements Validator{
 
 	
 
-	
-
-	public int getHeight() {
-		return height;
-	}
-	
-
-	public void setAnchors(FixedConnectionAnchor fCAnchor) {		
+	public void setAnchors(FixedConnectionAnchor fCAnchor) {
 		connectionAnchors.put(fCAnchor.getType()+fCAnchor.getSequence(), fCAnchor);
-		if(("out").equalsIgnoreCase(fCAnchor.getType()))
+		if(("out").equalsIgnoreCase(fCAnchor.getType()) || ("unused").equalsIgnoreCase(fCAnchor.getType()))
 			outputConnectionAnchors.add(fCAnchor);
 		else
 			inputConnectionAnchors.add(fCAnchor);
 	}
 	
+	public void clearAnchors(int newPortCount){
+		outputConnectionAnchors.clear();
+		inputConnectionAnchors.clear();
+		connectionAnchors.clear();
+	}
 		
 	@Override
 	protected void paintFigure(Graphics graphics) {

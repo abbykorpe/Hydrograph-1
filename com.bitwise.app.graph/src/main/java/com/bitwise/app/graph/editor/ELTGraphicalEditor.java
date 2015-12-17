@@ -111,7 +111,7 @@ import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 import com.bitwise.app.parametergrid.utils.ParameterFileManager;
 import com.bitwise.app.project.structure.CustomMessages;
-import com.bitwise.app.tooltip.window.ComponentTooltip;
+import com.bitwise.app.tooltip.tooltips.ComponentTooltip;
 import com.thoughtworks.xstream.XStream;
 
 // TODO: Auto-generated Javadoc
@@ -131,7 +131,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private final Point defaultComponentLocation = new Point(0, 0);
 
 	private GraphicalViewer viewer;
-	
+
 	private ComponentTooltip componentTooltip;
 	private Rectangle toolTipComponentBounds;
 	private String parameterFilePath;
@@ -183,25 +183,25 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			toolTipComponentBounds=null;
 		}
 	}
-	
+
 	public void attachCanvasMouseListeners(){
-		
+
 		viewer.getControl().addKeyListener(new KeyListener() {
-			
+
 			@Override
 			public void keyReleased(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void keyPressed(KeyEvent e) {
 				hideToolTip();
 			}
 		});
-		
+
 		viewer.getControl().addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseUp(MouseEvent e) {
 				if(toolTipComponentBounds !=null && componentTooltip != null){
@@ -211,35 +211,35 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					}
 				}				
 			}
-			
+
 			@Override
 			public void mouseDown(MouseEvent e) {
 				// Do nothing
 			}
-			
+
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				// Do nothing
 			}
 		});
-		
+
 		viewer.getControl().addMouseMoveListener(new MouseMoveListener() {
-			
+
 			@Override
 			public void mouseMove(MouseEvent e) {
-					if(toolTipComponentBounds !=null && componentTooltip != null){
-						if(!componentTooltip.hasToolBarManager()){
-							org.eclipse.swt.graphics.Point point = new org.eclipse.swt.graphics.Point(e.x, e.y);
-							if(!toolTipComponentBounds.contains(point)){
-								hideToolTip();
-							}
+				if(toolTipComponentBounds !=null && componentTooltip != null){
+					if(!componentTooltip.hasToolBarManager()){
+						org.eclipse.swt.graphics.Point point = new org.eclipse.swt.graphics.Point(e.x, e.y);
+						if(!toolTipComponentBounds.contains(point)){
+							hideToolTip();
 						}
 					}
+				}
 			}
 		});
-		
+
 		viewer.getControl().addMouseTrackListener(new MouseTrackListener() {
-			
+
 			@Override
 			public void mouseHover(MouseEvent e) {
 				if(toolTipComponentBounds !=null && componentTooltip != null){
@@ -251,19 +251,19 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					}
 				}
 			}
-			
+
 			@Override
 			public void mouseExit(MouseEvent e) {
 				// Do nothing				
 			}
-			
+
 			@Override
 			public void mouseEnter(MouseEvent e) {
 				// Do nothing				
 			}
 		});
 	}
-	
+
 	/**
 	 * Configure the graphical viewer with
 	 * <ul>
@@ -297,25 +297,23 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				// CombinatedTemplateCreationEntries
 				// from the palette into the editor
 				// @see ShapesEditor#createTransferDropTargetListener()
-				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(
-						viewer));
 				
+				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
 				PaletteContainerListener paletteContainerListener = new PaletteContainerListener(viewer, getGraphicalViewer());
-				
 				viewer.getControl().addMouseListener(paletteContainerListener);
 				viewer.getControl().addMouseTrackListener(paletteContainerListener);
 				viewer.getControl().addMouseMoveListener(paletteContainerListener);
-				
 			}
+			
 			@Override
 			public PaletteViewer createPaletteViewer(Composite parent) {
 				CustomPaletteViewer pViewer = new CustomPaletteViewer();
 				CustomFigureCanvas figureCanvas=new CustomFigureCanvas(parent,pViewer.getLightweightSys(),pViewer, getPalettesRoot(),editor);
 				pViewer.setFigureCanvas(figureCanvas);
-					configurePaletteViewer(pViewer);
-					hookPaletteViewer(pViewer);
-					return pViewer;
-				}
+				configurePaletteViewer(pViewer);
+				hookPaletteViewer(pViewer);
+				return pViewer;
+			}
 		};
 	}
 
@@ -367,8 +365,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			Class<?> clazz = DynamicClassProcessor.INSTANCE
 					.createClass(componentConfig);
 
-			
-			
+
+
 			/*CombinedTemplateCreationEntry component = new CombinedTemplateCreationEntry(
 					componentConfig.getNameInPalette(), componentConfig.getDescription(), clazz,
 					new SimpleFactory(clazz),
@@ -380,7 +378,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 									.getPaletteIconPath())));
 			categoryPaletteConatiner.get(componentConfig.getCategory().name())
 			.add(component);*/
-			
+
 			CombinedTemplateCreationEntry component = new CombinedTemplateCreationEntry(
 					componentConfig.getNameInPalette(), null, clazz,
 					new SimpleFactory(clazz),
@@ -401,9 +399,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		PaletteToolbar toolbar = new PaletteToolbar("Tools");
 
 		// Add a selection tool to the group
-//		ToolEntry tool = new PanningSelectionToolEntry();
-//		toolbar.add(tool);
-//		palette.setDefaultEntry(tool);
+		//		ToolEntry tool = new PanningSelectionToolEntry();
+		//		toolbar.add(tool);
+		//		palette.setDefaultEntry(tool);
 
 		palette.add(toolbar);
 	}
@@ -468,7 +466,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		keyHandler.put(KeyStroke.getPressed((char) ('x' - 'a' + 1), 'x', SWT.CTRL), getActionRegistry().getAction(ActionFactory.CUT.getId()));
 		viewer.setKeyHandler(keyHandler);
 	}
-	
+
 	@Override
 	public void createActions() {
 		super.createActions();
@@ -476,20 +474,20 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		// ...
 		IAction pasteAction;
 		pasteAction = new PasteAction(this);
-		 registry.registerAction(pasteAction);
-		 getSelectionActions().add(pasteAction.getId());
-		 
-		 IAction action;
-		 action=new CopyAction(this, pasteAction);
+		registry.registerAction(pasteAction);
+		getSelectionActions().add(pasteAction.getId());
+
+		IAction action;
+		action=new CopyAction(this, pasteAction);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
-		
-		 action=new CutAction(this, pasteAction);
-		 registry.registerAction(action);
+
+		action=new CutAction(this, pasteAction);
+		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 	}
-		
-		
+
+
 
 	private void configureViewer(GraphicalViewer viewer) {
 		viewer.setEditPartFactory(new ComponentsEditPartFactory());
@@ -553,7 +551,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	@Override
 	public void setInput(IEditorInput input) {
 		super.setInput(input);
-		
+
 		try {
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(input, this);
@@ -562,18 +560,17 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			logger.error(ce.getMessage());
 		}
 	}
-	
+
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		String METHOD_NAME = "doSave -";
 		logger.debug(METHOD_NAME);
 		//getParameterFile();
-		
+
 		firePropertyChange(PROP_DIRTY);
 		try {
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(getEditorInput(), this);
-			
 			genrateContainerData.storeContainerData();
 			parameterFilePath = container.getFullParameterFilePath();
 			container.setParameterFileName(getPartName().replace(".job", ".properties"));
@@ -587,40 +584,40 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 	private void saveParameters() {
-	
+
 		//get map from file
 		Map<String,String> currentParameterMap = getCurrentParameterMap();
 		List<String> letestParameterList = getLatestParameterList();
-		
+
 		Map<String,String> newParameterMap = new LinkedHashMap<>();
-		
+
 		for(int i=0;i<letestParameterList.size();i++){
 			newParameterMap.put(letestParameterList.get(i), "");
 		}
-		
+
 		/*for(String parameterName : letestParameterList){
 			if(currentParameterMap.containsKey(parameterName))
 				newParameterMap.put(parameterName, currentParameterMap.get(parameterName));
 		}*/
-		
+
 		for(String parameterName : currentParameterMap.keySet()){
 			newParameterMap.put(parameterName, currentParameterMap.get(parameterName));
 		}
-		
+
 		ParameterFileManager parameterFileManager = new ParameterFileManager(parameterFilePath);
-		parameterFileManager.storeParameters(newParameterMap);		
+		parameterFileManager.storeParameters(newParameterMap);	
 		
 		if(parameterFileIPath==null){
-			parameterFileIPath = getParameterFileIPath();
-		}
-		IFile file=ResourcesPlugin.getWorkspace().getRoot().getFile(parameterFileIPath);
-		try {
-			file.refreshLocal(IResource.DEPTH_ZERO, null);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
+				parameterFileIPath = getParameterFileIPath();
+			}
+			IFile file=ResourcesPlugin.getWorkspace().getRoot().getFile(parameterFileIPath);
+			try {
+				file.refreshLocal(IResource.DEPTH_ZERO, null);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
 	}
-
+	
 	private IPath getParameterFileIPath(){
 		IFileEditorInput input = (IFileEditorInput)this.getEditorInput() ;
 	    IFile file = input.getFile();
@@ -640,7 +637,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 	private Map<String, String> getCurrentParameterMap() {
-		
+
 		File parameterFile = new File(parameterFilePath);
 		//destinationFile.create(new FileInputStream(sourceFile), true, null);
 		if(!parameterFile.exists()){
@@ -651,10 +648,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				e.printStackTrace();
 			}
 		}
-		
+
 		ParameterFileManager parameterFileManager = new ParameterFileManager(parameterFilePath);
 		//System.out.println(parameterFileManager.getParameterMap().toString());
-		
+
 		return parameterFileManager.getParameterMap();
 	}
 
@@ -667,7 +664,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public void createOutputStream(OutputStream out) throws IOException {
-		
+
 		out.write(fromObjectToXML(getContainer()).getBytes());
 	}
 
@@ -677,11 +674,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void doSaveAs() {
-		
 		IFile file=opeSaveAsDialog();
 		//getParameterFile();
 		setParameterFileLocationInfo(file);
-		
+
 		if(file!=null){
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			try {
@@ -696,7 +692,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				genrateTargetXml(file);
 				getCommandStack().markSaveLocation();
 			} catch (CoreException  | IOException ce) {
-				
+
 				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n"+ce.getMessage());
 			}
 			setDirty(false);
@@ -705,23 +701,17 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private void setParameterFileLocationInfo(IFile file) {
 		if(file!=null){
-			
+
 			String fileName = file.getName().replace("job", "properties");
-			
 			container.setParameterFileDirectory(file.getPathVariableManager().getURIValue("PROJECT_LOC").getPath() + "/" +  CustomMessages.ProjectSupport_PARAM + "/");
 			container.setParameterFileName(fileName);
 			
-			
-			//PlatformUI.getWorkbench().getActiveWorkbenchWindow().get
-			
-			
 			String projectName=file.getFullPath().segment(0);
-						
 			parameterFileIPath =new Path("/"+projectName+"/param/"+fileName);
 		}
-		
+
 	}
-	
+
 	@Override
 	public boolean isSaveAsAllowed() {
 		return true;
@@ -732,11 +722,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		SaveAsDialog obj = new SaveAsDialog(Display.getDefault().getActiveShell());
 		IFile file=null;
 		if (getEditorInput().getName().endsWith(".job"))
+		{
 			obj.setOriginalName(getEditorInput().getName());
+		}
 		else
 			obj.setOriginalName(getEditorInput().getName() + ".job");
 		obj.open();
-
 		if (obj.getReturnCode() == 0) {
 			validateLengthOfJobName(obj);
 		}
@@ -745,8 +736,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			IPath filePath = obj.getResult().removeFileExtension().addFileExtension("job");
 			file= ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
 		}
+	
 		return file;
 	}
+
 	private void validateLengthOfJobName(SaveAsDialog obj) {
 		String jobName=obj.getResult().removeFileExtension().lastSegment();
 		while(jobName.length()>50)
@@ -778,9 +771,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 * @return the object
 	 */
 	public Object fromXMLToObject(InputStream xml) {
-		
+
 		Object obj = null;
-		
+
 		XStream xs = new XStream();
 		xs.autodetectAnnotations(true);
 		try {
@@ -803,9 +796,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 * @return the string
 	 */
 	public String fromObjectToXML(Serializable object) {
-		
+
 		String str = "<!-- It is recommended to avoid changes to xml data -->\n\n";
-		
+
 		XStream xs = new XStream();
 		xs.autodetectAnnotations(true);
 		try {
@@ -824,7 +817,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 *            the ifile
 	 */
 	public void genrateTargetXml(IFile ifile) {
-		
+
 		logger.debug("Genrating target XML");
 		IFile outPutFile = ResourcesPlugin.getWorkspace().getRoot().getFile(ifile.getFullPath().removeFileExtension().addFileExtension("xml"));
 		try {
@@ -867,7 +860,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 	public void deleteSelection() {
 		//getActionRegistry().getAction(DeleteAction.ID).run();
-	     getActionRegistry().getAction(ActionFactory.DELETE.getId()).run();
+		getActionRegistry().getAction(ActionFactory.DELETE.getId()).run();
 	}
 
 	public void copySelection() {
@@ -886,7 +879,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 	public void selectAllSelection() {
-	 getActionRegistry().getAction(ActionFactory.SELECT_ALL.getId()).run();	
+		getActionRegistry().getAction(ActionFactory.SELECT_ALL.getId()).run();	
 	}
 
 	@Override
@@ -909,7 +902,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public String getXMLString() {
 		return fromObjectToXML(getContainer());	
 	}
-	
+
 	@Override
 	public String getParameterFile(){
 		return container.getFullParameterFilePath();

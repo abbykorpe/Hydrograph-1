@@ -11,10 +11,10 @@ import com.bitwiseglobal.graph.main.Graph;
 
 public class UIComponentRepo {
 
-	public  LinkedHashMap<String, Class> componentFactory = new LinkedHashMap<>();
-	public  LinkedHashMap<String, Component> componentUiFactory = new LinkedHashMap<>();
-	public  LinkedHashMap<String, List<ParameterData>> parammeterFactory = new LinkedHashMap<>();
-	List<LinkingData> componentLinkList=new ArrayList<LinkingData>();
+	private  LinkedHashMap<String, Class> componentFactory = new LinkedHashMap<>();
+	private  LinkedHashMap<String, Component> componentUiFactory = new LinkedHashMap<>();
+	private  LinkedHashMap<String, List<ParameterData>> parammeterFactory = new LinkedHashMap<>();
+	private List<LinkingData> componentLinkList=new ArrayList<LinkingData>();
 	
 	public static final UIComponentRepo INSTANCE = new UIComponentRepo();
 	
@@ -41,4 +41,11 @@ public class UIComponentRepo {
 	public LinkedHashMap<String, List<ParameterData>> getParammeterFactory() {
 		return parammeterFactory;
 	}
+
+	public void flusRepository() {
+		componentFactory.clear();
+		componentUiFactory.clear();
+		parammeterFactory.clear();
+		componentLinkList.clear();
+		}
 }

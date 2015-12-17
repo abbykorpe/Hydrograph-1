@@ -33,6 +33,7 @@ public class ELTEmptyTextModifyListener implements IELTListener {
 
 	
 	private ControlDecoration fieldNameDecorator;
+	private ControlDecoration fieldNameMustJava;
 	@Override
 	public int getListenerType() {
 
@@ -53,9 +54,13 @@ public class ELTEmptyTextModifyListener implements IELTListener {
 		fieldNameDecorator = WidgetUtility
 				.addDecorator((Text) widgetList[0],
 						Messages.OperationClassBlank);
-		
+		fieldNameMustJava = WidgetUtility.addDecorator(
+				(Text) widgetList[0], Messages.INVALID_FILE);
 		if(StringUtils.isEmpty(((Text) widgetList[0]).getText())){
-			((Button) widgetList[1]).setEnabled(false);
+			changeBehaviour(widgetList, false, true, false, false, fieldNameDecorator.getDescriptionText(), new Color(Display.getDefault(), 255, 255, 204));
+		}
+		else if(!WidgetUtility.isFileExtention((((Text) widgetList[0]).getText()).trim(), ".java")){
+			changeBehaviour(widgetList, false, false, true, false, fieldNameMustJava.getDescriptionText(), new Color(Display.getDefault(), 255, 255, 204));
 		}
 		
 		tootlTipErrorMessage.setErrorMessage(Messages.OperationClassBlank);
@@ -66,32 +71,52 @@ public class ELTEmptyTextModifyListener implements IELTListener {
 				if (!((Button) widgetList[2]).getSelection()) {
 					//Text box is empty
 					if(StringUtils.isEmpty(((Text) widgetList[0]).getText())){
-						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
-						//Disable the edit button
-						((Button) widgetList[1]).setEnabled(false);
-						fieldNameDecorator.show();
-						validationStatus.setIsValid(false);
-						((Text) widgetList[0]).setToolTipText(fieldNameDecorator.getDescriptionText());
+						changeBehaviour(widgetList, false, true, false, false, fieldNameDecorator.getDescriptionText(), new Color(Display.getDefault(), 255, 255, 204));
 					}else{
-							((Button) widgetList[1]).setEnabled(true);
-							fieldNameDecorator.hide();
-							validationStatus.setIsValid(true);
+						//File has java extension
+						if(WidgetUtility.isFileExtention((((Text) widgetList[0]).getText()).trim(), ".java")){
+							changeBehaviour(widgetList, true, false, false, true, "", new Color(Display.getDefault(), 255, 255, 255));
 						}
-					
+						else{
+							changeBehaviour(widgetList, false, false, true, false, fieldNameMustJava.getDescriptionText(), new Color(Display.getDefault(), 255, 255, 204));
+						}
+					}
 				}
 				else{
-					fieldNameDecorator.hide();
-					validationStatus.setIsValid(true);
+					changeBehaviour(widgetList, true, false, false, true, "", new Color(Display.getDefault(), 255, 255, 255));
 				}
+				setToolTipErrorMessage(fieldNameDecorator,fieldNameMustJava);
 			}
 
 		};
-		setToolTipErrorMessage(fieldNameDecorator);
+		//setToolTipErrorMessage(fieldNameDecorator,fieldNameMustJava);
 		return listener;
 	}
 	
-	private void setToolTipErrorMessage(ControlDecoration fieldNameDecorator){
-		String errmsg=null;	
+	private void changeBehaviour(Widget[] widgetList, boolean enableEditButton, boolean enableFieldNameDecorator,
+			boolean enableJavaDecorator, boolean validStatus, String toolTip, Color textColor){
+		((Button) widgetList[1]).setEnabled(enableEditButton);
+		if(enableFieldNameDecorator){
+			fieldNameDecorator.show();
+		}else{
+			fieldNameDecorator.hide();
+		}
+		if(enableJavaDecorator){
+			fieldNameMustJava.show();
+		}else{
+			fieldNameMustJava.hide();
+		}
+		
+		validationStatus.setIsValid(validStatus);
+		((Text) widgetList[0]).setToolTipText(toolTip);
+		((Text) widgetList[0]).setBackground(textColor);
+	}
+	
+	private void setToolTipErrorMessage(ControlDecoration fieldNameDecorator, ControlDecoration fieldNameMustJava){
+		String errmsg=null;
+		if(fieldNameMustJava.isVisible())
+			errmsg = fieldNameMustJava.getDescriptionText();
+		
 		if(fieldNameDecorator.isVisible())
 			errmsg = errmsg + "\n" + fieldNameDecorator.getDescriptionText();
 		

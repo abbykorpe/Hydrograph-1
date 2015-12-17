@@ -39,6 +39,9 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
  */
 public class RunJobHandler extends AbstractHandler {
 
+	/** The logger. */
+	private Logger logger = LogFactory.INSTANCE.getLogger(RunJobHandler.class);
+
 	private DefaultGEFCanvas getComponentCanvas() {		
 		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
 			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -50,8 +53,7 @@ public class RunJobHandler extends AbstractHandler {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty();
 	}
 	
-	/** The logger. */
-	private Logger logger = LogFactory.INSTANCE.getLogger(RunJobHandler.class);
+	
 	/*
 	 * 
 	 * Execute command to run the job.
@@ -68,6 +70,15 @@ public class RunJobHandler extends AbstractHandler {
 
 			messageBox.setText("Error");
 			messageBox.setMessage("Could not run the job. \nPlease save the job file.");
+			messageBox.open();
+			return null;
+		}
+		
+		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
+
+			messageBox.setText("Error");
+			messageBox.setMessage("Could not run the graph. \nPlease save the graph file.");
 			messageBox.open();
 			return null;
 		}

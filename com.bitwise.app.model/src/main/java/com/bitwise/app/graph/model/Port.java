@@ -122,6 +122,7 @@ public class Port extends Model{
 		int result = 17;
 	 
 		result = 31 * result + sequence;
+		result = 31 * result + terminal.hashCode();
 		result = 31 * result + portType.hashCode();
 		result = 31 * result + parent.hashCode();
 		result = 31 * result + nameOfPort.hashCode();

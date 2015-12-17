@@ -26,7 +26,7 @@ import com.bitwiseglobal.graph.main.ObjectFactory;
 public class ConverterUtil {
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ConverterUtil.class);
 	public static final ConverterUtil INSTANCE = new ConverterUtil();
-	
+	private static final String GRAPH_NAME="Graph_1";
 	private ConverterUtil(){
 		
 	}
@@ -35,6 +35,7 @@ public class ConverterUtil {
 		LOGGER.debug("Creating converter based on component");
 		
 			Graph graph = new ObjectFactory().createGraph();
+			graph.setName(GRAPH_NAME);
 			List<Component> children = container.getChildren();
 			if(children != null && !children.isEmpty()){
 				for (Component component : children) {

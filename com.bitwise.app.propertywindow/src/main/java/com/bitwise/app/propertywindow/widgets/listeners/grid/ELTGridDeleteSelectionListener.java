@@ -1,6 +1,5 @@
 package com.bitwise.app.propertywindow.widgets.listeners.grid;
 
-import java.awt.List;
 import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
@@ -27,13 +26,13 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 public class ELTGridDeleteSelectionListener extends ELTSelectionTaskListener{
 	private ValidationStatus validationStatus; 
 	
+
+	
 	@Override
- 
 	public int getListenerType() {
- 	    return SWT.MouseUp;
-    }
-	
-	
+      return SWT.MouseUp;
+	}
+
 	@Override
 	public void selectionListenerAction(
 			PropertyDialogButtonBar propertyDialogButtonBar,

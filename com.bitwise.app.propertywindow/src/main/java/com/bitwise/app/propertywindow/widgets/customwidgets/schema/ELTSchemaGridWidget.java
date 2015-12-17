@@ -21,6 +21,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 
@@ -73,7 +74,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private Object properties;
 	private String propertyName;
 	private ListenerHelper helper;
-	private Button button;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private Shell shell;
 	private ELTDefaultLable upButton, downButton, addButton, deleteButton;
@@ -348,7 +348,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		setDecorator();
 
 		addValidators();
-		populateWidget();
+
 		helper = getListenerHelper();
 		try {
 			eltTable.attachListener(
@@ -373,6 +373,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		gridListener(editors);
 
+		populateWidget();
 		return tableViewer;
 	}
 
