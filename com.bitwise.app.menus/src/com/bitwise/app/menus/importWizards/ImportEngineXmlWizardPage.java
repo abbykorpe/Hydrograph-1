@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
+import javax.xml.bind.JAXBException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -23,7 +25,9 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.slf4j.Logger;
 
@@ -176,9 +180,13 @@ public class ImportEngineXmlWizardPage extends WizardNewFileCreationPage {
 			LOGGER.debug("Successfully created *job,*properties files in workspace");
 		} catch (InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException | EngineException exception) {
+				| NoSuchMethodException | SecurityException | EngineException | JAXBException exception) {
 			
 			LOGGER.error("Error occurred while creating new files in workspace", exception);
+			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_ERROR);
+		    messageBox.setMessage(exception.getMessage());
+		    messageBox.open();
+		    return null;
 		}
 		LOGGER.debug("Importing *xml file");
 		return super.createNewFile();

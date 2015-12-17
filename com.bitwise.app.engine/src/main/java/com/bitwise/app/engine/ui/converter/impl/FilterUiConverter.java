@@ -12,11 +12,16 @@ import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 import com.bitwiseglobal.graph.commontypes.TypeInputField;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.operationstypes.Filter;
-
+/**
+ * The class FilterUiConverter
+ * 
+ * @author Bitwise
+ * 
+ */
 public class FilterUiConverter extends TransformUiConverter{
 
 	private Filter filter;
-	private static final String COMPONENT_NAME_SUFFIX = "Filter_";
+	private static final String NAME_SUFFIX = "Filter_";
 
 	public FilterUiConverter(TypeBaseComponent typeBaseComponent,Container container) {
 		this.container = container;
@@ -37,8 +42,8 @@ public class FilterUiConverter extends TransformUiConverter{
 		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(),UIComponentsConstants.VALID.value());
 		
 		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY	.value());
-		container.getComponentNextNameSuffixes().put(COMPONENT_NAME_SUFFIX, 0);
-		container.getComponentNames().add(COMPONENT_NAME);
+		container.getComponentNextNameSuffixes().put(NAME_SUFFIX, 0);
+		container.getComponentNames().add(componentName);
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.REMOVE_DUPS.value());
 		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY.value());
@@ -50,7 +55,7 @@ public class FilterUiConverter extends TransformUiConverter{
 		String clazz=null;
 		if(filter.getOperation()!=null && filter.getOperation().size()!=0){
 			clazz=filter.getOperation().get(0).getClazz();
-			operationClassProperty=new OperationClassProperty(clazz, isParameter(clazz),null);
+			operationClassProperty=new OperationClassProperty(clazz, isParameter(clazz));
 		}
 		return operationClassProperty;
 	}

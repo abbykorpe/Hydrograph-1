@@ -9,36 +9,49 @@ import com.bitwise.app.engine.ui.converter.impl.FilterUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.InputFileDelimitedUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.InputFixedWidthUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.JoinComponentUiConverter;
+import com.bitwise.app.engine.ui.converter.impl.LookupUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.OutputFileDelimitedUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.OutputFixedWidthUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.RemoveDupsUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.TransformComponentUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.UnionAllUiConverter;
 import com.bitwise.app.graph.model.Container;
+import com.bitwise.app.graph.model.components.Lookup;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 import com.bitwiseglobal.graph.inputtypes.TextFileDelimited;
 import com.bitwiseglobal.graph.inputtypes.TextFileFixedWidth;
 import com.bitwiseglobal.graph.operationstypes.Aggregate;
 import com.bitwiseglobal.graph.operationstypes.Filter;
+import com.bitwiseglobal.graph.operationstypes.HashJoin;
 import com.bitwiseglobal.graph.operationstypes.Join;
 import com.bitwiseglobal.graph.operationstypes.Transform;
 import com.bitwiseglobal.graph.straightpulltypes.Clone;
 import com.bitwiseglobal.graph.straightpulltypes.RemoveDups;
 import com.bitwiseglobal.graph.straightpulltypes.UnionAll;
-
 /**
+ * The class UiConverterFactory
  * Factory class for creating Converter instances for particular component
  * 
+ * @author Bitwise
+ * 
  */
+
 public class UiConverterFactory {
 	public static final UiConverterFactory INSTANCE = new UiConverterFactory();
-	private static final Logger logger = LogFactory.INSTANCE
+	private static final Logger LOGGER = LogFactory.INSTANCE
 			.getLogger(UiConverterFactory.class);
 
 	private UiConverterFactory() {
 
 	}
 
+	/**Instantiate specific ui-converter.
+	 * @param typeBaseComponent
+	 *
+	 * @param container
+	 * 
+	 * @return UiConverter, specific ui-converter.
+	 */
 	public UiConverter getUiConverter(TypeBaseComponent typeBaseComponent,Container container) {
 		
 		if((com.bitwiseglobal.graph.outputtypes.TextFileDelimited.class).isAssignableFrom(typeBaseComponent.getClass())){
@@ -73,6 +86,9 @@ public class UiConverterFactory {
 		}
 		if((Join.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new JoinComponentUiConverter(typeBaseComponent,container);
+		}
+		if((HashJoin.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new LookupUiConverter(typeBaseComponent,container);
 		}
 		return null;
 	}

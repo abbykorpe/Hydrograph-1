@@ -37,7 +37,7 @@ public class JoinConverter extends TransformConverter{
 	
 	@Override
 	public void prepareForXML(){
-		logger.debug("Genrating XML for :{}", properties.get(Constants.PARAM_NAME));
+		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 	}
 
