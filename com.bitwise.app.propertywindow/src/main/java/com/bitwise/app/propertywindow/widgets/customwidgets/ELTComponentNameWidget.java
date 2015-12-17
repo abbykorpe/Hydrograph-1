@@ -81,7 +81,7 @@ public class ELTComponentNameWidget extends AbstractWidget {
 
 		text = (Text) eltDefaultTextBox.getSWTWidgetControl();
 		text.setFocus();
-		text.setTextLimit(30);
+		text.setTextLimit(256);
 		firstTextWidget = text;
 		txtDecorator = WidgetUtility.addDecorator(text, Messages.FIELD_LABEL_ERROR);
 		ListenerHelper listenerHelper = new ListenerHelper();

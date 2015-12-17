@@ -1,6 +1,7 @@
 package com.bitwise.app.graph.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -85,19 +86,19 @@ public abstract class Component extends Model {
 	private String type;
 	private String prefix;
 	private String category;
-	private Hashtable<String, Port> ports;
+	private HashMap<String, Port> ports;
 	private String componentName;
 	List<PortSpecification> portSpecification;
 	
 	private ComponentLabel componentLabel;
 	private int componentLabelMargin;
-	
+		
 	@XStreamOmitField
 	private Map<String,PropertyToolTipInformation> tooltipInformation;
 	
 	//@XStreamOmitField
 	private Map<String,String> toolTipErrorMessages; //<propertyName,ErrorMessage>
-	
+
 	/*@XStreamOmitField
 	private Map<String,PropertyToolTipInformation> paletteTooltipMessage;*/
 
@@ -120,6 +121,7 @@ public abstract class Component extends Model {
 				.getClazzName(this.getClass());
 		
 		componentLabel = new ComponentLabel(componentName);
+		componentLabelMargin = 16;
 		
 		prefix = XMLConfigUtil.INSTANCE.getComponent(componentName).getDefaultNamePrefix();
 		initPortSettings();
@@ -138,7 +140,7 @@ public abstract class Component extends Model {
 		
 		portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
 		
-		ports = new Hashtable<String, Port>();
+		ports = new HashMap<String, Port>();
 		
 		for(PortSpecification p:portSpecification)
 		{ 	
@@ -324,8 +326,8 @@ public abstract class Component extends Model {
 		//tooltipInformation.get(propertyId).setPropertyValue(value);
 	}
 
-	public ComponentLabel getLogicLabel() {
-		return componentLabel;
+	public String getComponentName() {
+		return componentName;
 	}
 
 	public ComponentLabel getComponentLabel() {
@@ -515,33 +517,67 @@ public abstract class Component extends Model {
 	}
 	
 	public void changePortSettings(int newPortCount){
-		
-		
-		Port firstPort= ports.get("in1");
-		firstPort.setNumberOfPortsOfThisType(newPortCount);
-		
-		Port secondPort= ports.get("in2");
-		secondPort.setNumberOfPortsOfThisType(newPortCount);
-		
-		
-		Port outport1 =  ports.get("out1");
-		
-		 ports.clear();
-		 ports.put("in1", firstPort);
-		 ports.put("in2", secondPort);
-		 ports.put("out1", outport1);
-		
-		for(int i=0; i< (newPortCount-2); i++){
-			 
-			Port port = new Port("in"+(i+2) , "in"+(i+2), "in"+(i+3), this, newPortCount, "in", (i+3));
-			ports.put("in"+(i+3), port);
-			firePropertyChange("in"+(i+2), null, port );
+
+		for(PortSpecification p:portSpecification)
+		{ 	
+			String portTerminal = p.getTypeOfPort() + p.getSequenceOfPort();
+			Port port = new Port(p.getNameOfPort(), p.getLabelOfPort(), portTerminal, this, p.getNumberOfPorts(), p.getTypeOfPort(), p.getSequenceOfPort());
+			if(p.getTypeOfPort().equals("in") || p.getTypeOfPort().equals("unused")){
+				port.setNumberOfPortsOfThisType(newPortCount);
+			}
+			ports.put(portTerminal, port);
 		}
 		
-		
-//		Port port = new Port("new", "new", "new", this, 3, "in", 3);
-//		//Port port = new Port(p.getNameOfPort(),p.getLabelOfPort(),"new", this, p.getNumberOfPorts(), p.getTypeOfPort(), p.getSequenceOfPort());
-//		ports.put("new", port);
-//		firePropertyChange("newport", null, port );
+		for(int i=0; i< (newPortCount-2); i++){
+
+			Port inPort = new Port("in"+(i+2) , "in"+(i+2), "in"+(i+3), this, newPortCount, "in", (i+3));
+			ports.put("in"+(i+3), inPort);
+			firePropertyChange("Component:add", null, inPort );
+			
+			Port unusedPort = new Port("unused"+(i+2) , "un"+(i+2), "unused"+(i+3), this, newPortCount, "unused", (i+3));
+			ports.put("unused"+(i+3), unusedPort);
+			firePropertyChange("Component:add", null, unusedPort );
+		}
 	}
+	
+	public void clearPorts(){
+
+		deleteInputLinks();
+		deleteOutputLinks();
+		ports.clear();
+
+		firePropertyChange("Component:remove", ports.values(), null );
+	}
+	private void deleteInputLinks(){
+		if(inputLinks.size() > 0){
+			Link[] inLinks = new Link[inputLinks.size()];
+			inputLinks.toArray(inLinks);
+			for (Link l: inLinks){
+				//if(!l.getTargetTerminal().equals("in1")){
+					l.detachSource();
+					l.detachTarget();
+					l.getSource().freeOutputPort(l.getSourceTerminal());
+					l.getTarget().freeInputPort(l.getTargetTerminal());
+					l.setTarget(null);
+					l.setSource(null);
+				//}
+			}
+		}
+	}
+	private void deleteOutputLinks(){
+		if(outputLinks.size() > 0){
+			Link[] outLinks = new Link[outputLinks.size()];
+			outputLinks.toArray(outLinks);
+			for (Link l: outLinks){
+				l.detachSource();
+				l.detachTarget();
+				l.getSource().freeOutputPort(l.getSourceTerminal());
+				l.getTarget().freeInputPort(l.getTargetTerminal());
+				l.setTarget(null);
+				l.setSource(null);
+			}
+		}
+	}
+
+	
 }

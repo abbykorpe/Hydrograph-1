@@ -5,9 +5,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+
+import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
-import com.bitwise.app.engine.ui.converter.StraightfullUIConverter;
+import com.bitwise.app.engine.ui.converter.StraightfullUiConverter;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.components.RemovedupsComponent;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
@@ -17,10 +20,11 @@ import com.bitwiseglobal.graph.removedups.TypeSecondaryKeyFields;
 import com.bitwiseglobal.graph.removedups.TypeSecondayKeyFieldsAttributes;
 import com.bitwiseglobal.graph.straightpulltypes.RemoveDups;
 
-public class RemoveDupsUiConverter extends StraightfullUIConverter {
+public class RemoveDupsUiConverter extends StraightfullUiConverter {
 		private RemoveDups removeDups;
 		private static final String COMPONENT_NAME_SUFFIX = "RemoveDups_";
-
+		private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(RemoveDupsUiConverter.class);
+		
 		public RemoveDupsUiConverter(TypeBaseComponent typeBaseComponent,
 				Container container) {
 			this.container = container;
@@ -33,7 +37,7 @@ public class RemoveDupsUiConverter extends StraightfullUIConverter {
 		public void prepareUIXML() {
 
 			super.prepareUIXML();
-
+			LOGGER.debug("Fetching RemoveDups-Properties for -{}",COMPONENT_NAME);
 			removeDups = (RemoveDups) typeBaseComponent;
 			
 			propertyMap.put(PropertyNameConstants.RETENTION_LOGIC_KEEP.value(),removeDups.getKeep().getValue().value());
@@ -50,7 +54,8 @@ public class RemoveDupsUiConverter extends StraightfullUIConverter {
 		
 		}
 
-		private Map getSecondaryKeys() {
+		private Map<String,String> getSecondaryKeys() {
+			LOGGER.debug("Fetching RemoveDups-Secondary-Keys-Properties for -{}",COMPONENT_NAME);
 			Map<String,String> secondaryKeyMap=null;
 			removeDups = (RemoveDups) typeBaseComponent;
 			TypeSecondaryKeyFields  typeSecondaryKeyFields=removeDups.getSecondaryKeys() ;
@@ -67,6 +72,7 @@ public class RemoveDupsUiConverter extends StraightfullUIConverter {
 		}
 
 		private HashSet<String> getPrimaryKeys() {
+			LOGGER.debug("Fetching RemoveDups-Primary-Keys-Properties for -{}",COMPONENT_NAME);
 			HashSet<String> primaryKeySet =null;
 			removeDups = (RemoveDups) typeBaseComponent;
 			TypePrimaryKeyFields typePrimaryKeyFields = removeDups.getPrimaryKeys();

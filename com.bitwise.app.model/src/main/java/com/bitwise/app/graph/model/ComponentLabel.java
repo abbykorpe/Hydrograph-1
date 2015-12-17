@@ -13,7 +13,7 @@ public class ComponentLabel extends Model{
 
 	static final long serialVersionUID = 1;
 	private String text;
-	private Dimension size = new Dimension(-1, 15);;
+	private Dimension size = new Dimension(-1, 16);;
 
 	private static int count;
 

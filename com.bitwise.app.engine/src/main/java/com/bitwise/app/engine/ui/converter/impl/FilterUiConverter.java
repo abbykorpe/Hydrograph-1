@@ -6,14 +6,14 @@ import java.util.LinkedHashMap;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
-import com.bitwise.app.engine.ui.converter.TransformUIConverter;
+import com.bitwise.app.engine.ui.converter.TransformUiConverter;
 import com.bitwise.app.graph.model.Container;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 import com.bitwiseglobal.graph.commontypes.TypeInputField;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.operationstypes.Filter;
 
-public class FilterUiConverter extends TransformUIConverter{
+public class FilterUiConverter extends TransformUiConverter{
 
 	private Filter filter;
 	private static final String COMPONENT_NAME_SUFFIX = "Filter_";

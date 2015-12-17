@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Node {
 	String name;
-	private List<Node> sourceNodes = new ArrayList();
-	private List<Node> destinationNodes = new ArrayList();
+	private List<Node> sourceNodes = new ArrayList<Node>();
+	private List<Node> destinationNodes = new ArrayList<Node>();
 	private int hPosition = 0;
 	private int vPosition = 0;
 	

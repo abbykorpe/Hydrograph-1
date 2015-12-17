@@ -3,11 +3,15 @@ package com.bitwise.app.engine.ui.converter.impl;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
-import com.bitwise.app.engine.ui.converter.TransformUIConverter;
+import com.bitwise.app.engine.ui.converter.TransformUiConverter;
 import com.bitwise.app.graph.model.Container;
 import com.bitwiseglobal.graph.aggregate.TypePrimaryKeyFields;
 import com.bitwiseglobal.graph.aggregate.TypeSecondaryKeyFields;
@@ -16,11 +20,12 @@ import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 import com.bitwiseglobal.graph.commontypes.TypeFieldName;
 import com.bitwiseglobal.graph.operationstypes.Aggregate;
 
-public class AggregateUiConverter extends TransformUIConverter{
+public class AggregateUiConverter extends TransformUiConverter{
 
 	private Aggregate aggregate;
 	private static final String COMPONENT_NAME_SUFFIX = "Aggregate_";
-
+	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(AggregateUiConverter.class);
+	
 	public AggregateUiConverter(TypeBaseComponent typeBaseComponent,
 			Container container) {
 		this.container = container;
@@ -33,7 +38,7 @@ public class AggregateUiConverter extends TransformUIConverter{
 	public void prepareUIXML() {
 
 		super.prepareUIXML();
-
+		LOGGER.debug("Fetching Aggregate-Properties for -{}",COMPONENT_NAME);
 		aggregate = (Aggregate) typeBaseComponent;
 		
 	
@@ -50,7 +55,8 @@ public class AggregateUiConverter extends TransformUIConverter{
 	
 	}
 
-	private Map getSecondaryKeys() {
+	private Map<String,String> getSecondaryKeys() {
+		LOGGER.debug("Fetching Aggregate-Secondary-Key-Properties for -{}",COMPONENT_NAME);
 		Map<String,String> secondaryKeyMap=null;
 		aggregate = (Aggregate) typeBaseComponent;
 		TypeSecondaryKeyFields  typeSecondaryKeyFields=aggregate.getSecondaryKeys();
@@ -66,7 +72,8 @@ public class AggregateUiConverter extends TransformUIConverter{
 		return secondaryKeyMap;
 	}
 
-	private HashSet<String> getPrimaryKeys() {
+	private Set<String> getPrimaryKeys() {
+		LOGGER.debug("Fetching Aggregate-Primary-Key-Properties for -{}",COMPONENT_NAME);
 		HashSet<String> primaryKeySet =null;
 		aggregate = (Aggregate) typeBaseComponent;
 		TypePrimaryKeyFields typePrimaryKeyFields = aggregate.getPrimaryKeys();

@@ -30,16 +30,16 @@ import com.bitwiseglobal.graph.straightpulltypes.UnionAll;
  * Factory class for creating Converter instances for particular component
  * 
  */
-public class UIConverterFactory {
-	public static final UIConverterFactory INSTANCE = new UIConverterFactory();
+public class UiConverterFactory {
+	public static final UiConverterFactory INSTANCE = new UiConverterFactory();
 	private static final Logger logger = LogFactory.INSTANCE
-			.getLogger(UIConverterFactory.class);
+			.getLogger(UiConverterFactory.class);
 
-	private UIConverterFactory() {
+	private UiConverterFactory() {
 
 	}
 
-	public UIConverter getUiConverter(TypeBaseComponent typeBaseComponent,Container container) {
+	public UiConverter getUiConverter(TypeBaseComponent typeBaseComponent,Container container) {
 		
 		if((com.bitwiseglobal.graph.outputtypes.TextFileDelimited.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new OutputFileDelimitedUiConverter(typeBaseComponent,container);

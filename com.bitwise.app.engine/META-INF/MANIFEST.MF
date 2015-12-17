@@ -16,6 +16,8 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.bitwise.app.engine.exceptions,
+ com.bitwise.app.engine.ui.util,
  com.bitwise.app.engine.util
-Import-Package: org.eclipse.core.resources,
+Import-Package: com.bitwise.app.parametergrid.utils,
+ org.eclipse.core.resources,
  org.eclipse.draw2d.geometry

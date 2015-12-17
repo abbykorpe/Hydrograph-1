@@ -24,8 +24,6 @@ public class Processor {
 		Node sNode=null;
 		Node dNode=null;
 		for (LinkingData linkingData : UIComponentRepo.INSTANCE.getComponentLinkList()) {
-//			if(!linkingData.getTargetComponentId().equals(linkingData.getSourceComponentId()))
-			{
 			if(nodeMap.get(linkingData.getSourceComponentId())==null)
 				{	sNode=new Node(linkingData.getSourceComponentId());
 					nodeMap.put(linkingData.getSourceComponentId(),sNode);
@@ -39,7 +37,6 @@ public class Processor {
 			
 			nodeMap.get(linkingData.getSourceComponentId()).getDestinationNodes().add(nodeMap.get(linkingData.getTargetComponentId()));
 			nodeMap.get(linkingData.getTargetComponentId()).getSourceNodes().add(nodeMap.get(linkingData.getSourceComponentId()));
-			}
 		}
 		caculateXY();
 		processNodes();
@@ -51,14 +48,13 @@ public class Processor {
 			Point point=new Point();
 			point.x=node.gethPosition();
 			point.y=node.getvPosition();
-			UIComponentRepo.INSTANCE.componentUiFactory.get(node.name).setLocation(point);
+			UIComponentRepo.INSTANCE.getComponentUiFactory().get(node.name).setLocation(point);
 			System.out.println(node);
 		}
 	}
 	
 	private void genrateYCoordinate()
 	{
-		Component component=null;
 		LinkedHashMap<Integer, Integer> ycoordinate=new LinkedHashMap<>();
 		for(Node node : nodeList){
 			if(ycoordinate.get(node.gethPosition())==null)

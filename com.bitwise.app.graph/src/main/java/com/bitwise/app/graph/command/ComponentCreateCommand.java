@@ -60,24 +60,29 @@ public class ComponentCreateCommand extends Command {
 		}
 		component.setTooltipInformation(tooltipInformation);
 		
-		int totalPortsofInType=0, totalPortsOfOutType=0;
+		int totalPortsofInType=0, totalPortsOfOutType=0, totalPortsOfUnusedType=0;
 		List<PortSpecification> portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
 		for(PortSpecification p:portSpecification)
 		{	
 			if(p.getTypeOfPort().equalsIgnoreCase("in")){
 				totalPortsofInType=p.getNumberOfPorts();
-			}
-			else{
+			}else if(p.getTypeOfPort().equalsIgnoreCase("out")){
 				totalPortsOfOutType=p.getNumberOfPorts();
+			}else if(p.getTypeOfPort().equalsIgnoreCase("unused")){
+				totalPortsOfUnusedType=p.getNumberOfPorts();
 			}
 		}
 		int heightFactor=totalPortsofInType > totalPortsOfOutType ? totalPortsofInType : totalPortsOfOutType;
 		int height = (heightFactor+1)*25;
 		
+		int widthFactor = totalPortsOfUnusedType;
+		int width = 100;
+		if(widthFactor > 1)
+			width =(widthFactor+1)*33;
 
 		setupComponent(component);		
 
-		Dimension newSize = new Dimension(component.getSize().width, height + ELTFigureConstants.componentOneLineLabelMargin);
+		Dimension newSize = new Dimension(width, height + ELTFigureConstants.componentOneLineLabelMargin);
 
 		this.component = component;
 		this.parent = parent;

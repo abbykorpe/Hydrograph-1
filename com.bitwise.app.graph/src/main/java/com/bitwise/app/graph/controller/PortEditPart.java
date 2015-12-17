@@ -12,6 +12,7 @@ import com.bitwise.app.graph.figure.ComponentFigure;
 import com.bitwise.app.graph.figure.ELTColorConstants;
 import com.bitwise.app.graph.figure.ELTFigureConstants;
 import com.bitwise.app.graph.figure.PortFigure;
+import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Port;
 /**
  * The Class PortEditPart.
@@ -27,20 +28,24 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 	protected IFigure createFigure() {
 		
 		ComponentFigure componentFigure = ((ComponentEditPart) getParent()).getComponentFigure();
+		Component component = ((ComponentEditPart) getParent()).getCastedModel();
 		PortFigure port = null;
 		
 		Color borderColor = ELTColorConstants.componentBorder;
 		Point portPoint = null;
-		int height = componentFigure.getHeight();
+		
+		int height = component.getSize().height-componentFigure.getComponentLabelMargin();
+		int width = component.getSize().width;
+		
+		
 		int margin = componentFigure.getComponentLabelMargin();
 		port =  new PortFigure(borderColor, getCastedModel().getPortType(), getCastedModel().getSequence(), getCastedModel().getNumberOfPortsOfThisType(),getCastedModel().getNameOfPort(),getCastedModel().getLabelOfPort());	
 		
-		//Calling getNameOfPort() method form Port Model
 		String toolTipText = getCastedModel().getNameOfPort();
 		port.getToolTipFigure().setMessage(toolTipText);
 		
 		portPoint = getPortLocation(getCastedModel().getNumberOfPortsOfThisType(), getCastedModel().getPortType(),
-				getCastedModel().getSequence(), height, margin);
+				getCastedModel().getSequence(), height, width, margin);
 		
 		Point  tmpPoint = new Point(componentFigure.getLocation().x+portPoint.x , componentFigure.getLocation().y+portPoint.y);
 		port.setLocation(tmpPoint);
@@ -50,21 +55,30 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 
 	
 
-	private Point getPortLocation(int totalPortsOfThisType, String type, int sequence, int height, int margin) {
+	private Point getPortLocation(int totalPortsOfThisType, String type, int sequence, int height, int width, int margin) {
 
 		Point p = null ;
-		int width = 100;
 		int portOffsetFactor = totalPortsOfThisType+1;
-		int portOffset=height/portOffsetFactor;
+		int portHeightOffset=height/portOffsetFactor;
+		int portWidthOffset=width/portOffsetFactor;
 		int xLocation=0, yLocation=0;
 
 		if(type.equalsIgnoreCase("in")){
 			xLocation=0;
-		}
-		else if(type.equalsIgnoreCase("out")){
+			yLocation=portHeightOffset*sequence - 4 + margin;
+		}else if(type.equalsIgnoreCase("out")){
 			xLocation=width-27;
+			yLocation=portHeightOffset*sequence - 4 + margin;
+		}else if (type.equalsIgnoreCase("unused")){
+			if(totalPortsOfThisType == 1){
+				xLocation = 27;
+				
+			}else if(totalPortsOfThisType > 1){
+				xLocation = portWidthOffset*sequence-23;
+			}
+			yLocation=height + margin - 4 - 4;
+			
 		}
-		yLocation=portOffset*sequence - 4 + margin;
 		p=new Point(xLocation, yLocation);
 		return p;
 	}
@@ -84,16 +98,17 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 	public void adjustPortFigure(Point componentLocation) { 
 		
 		ComponentFigure componentFigure = ((ComponentEditPart) getParent()).getComponentFigure();
-		int height = componentFigure.getHeight();
+		Component component = ((ComponentEditPart) getParent()).getCastedModel();
+		
+		int height = component.getSize().height-componentFigure.getComponentLabelMargin();
+		int width = component.getSize().width;
+		
 		int margin = componentFigure.getComponentLabelMargin(); 
 		Point portPoint = getPortLocation(getCastedModel().getNumberOfPortsOfThisType(), getCastedModel().getPortType(),
-				getCastedModel().getSequence(), height, margin);
+				getCastedModel().getSequence(), height, width, margin);
 		
 		Point newPortLoc = new Point(portPoint.x+componentLocation.x, portPoint.y+componentLocation.y);
-		
-		System.out.println("newPortLoc: "+newPortLoc.x +", "+newPortLoc.y);
-		componentFigure.translateToAbsolute(newPortLoc);
-		
+				
 		getFigure().setLocation(newPortLoc);
 	}
 	public PortFigure getPortFigure() {

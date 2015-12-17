@@ -577,7 +577,7 @@ public class ELTFilterPropertyWizard {
 	 */
 	void enableButtons() {
 		okButton.setEnabled(true);
-		addButton.setEnabled(true);
+
 	}
 
 	public void imageShell(Shell shell) {

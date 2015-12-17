@@ -5,8 +5,10 @@ public class ParameterData {
 	private String propertyName;
 	private String parameterName;
 	
-	private ParameterData()
-	{}
+	@SuppressWarnings("unused")
+	private ParameterData(){}
+	
+	
 	public ParameterData(String propertyName,String parameterName)
 	{
 		this.parameterName=parameterName;
@@ -24,12 +26,12 @@ public class ParameterData {
 		return parameterName;
 	}
 	public void setParameterName(String parameterName) {
-		this.parameterName = parameterName;
+		this.parameterName = parameterName.replace("{", "").replace("}", "").replace("@", "");
 	}
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
+		
 		return "Property Name:"+propertyName+
 				"Parameter Name:"+parameterName;
 	}

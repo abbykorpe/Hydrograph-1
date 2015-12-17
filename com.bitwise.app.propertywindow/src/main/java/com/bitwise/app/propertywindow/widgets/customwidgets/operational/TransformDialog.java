@@ -661,7 +661,6 @@ public class TransformDialog extends Dialog {
 		opOutputLable.setText("Operation Output Fields");
 		opOutputLable.setBounds(100, 10, 60, 18); 
 
-		eltFixedWidget.setSchemaGridRowList(transformOperation.getSchemaGridRowList());
 		TableViewer innerOpOutputTabViewer=	eltFixedWidget.createSchemaGrid(innerOpOutputComposite);
 		DragDropUtility.INSTANCE.applyDragFromTableViewer(innerOpOutputTabViewer.getTable());  
 		innerOpOutputTabViewer.getTable().setBounds(0, 10, 402, 310); 

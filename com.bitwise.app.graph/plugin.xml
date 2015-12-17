@@ -205,7 +205,7 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+M3+J">
       </key>
-        <key
+      <key
             commandId="com.bitwise.app.graph.command.runjob"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
