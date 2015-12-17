@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Propertywindow
-Bundle-SymbolicName: com.bitwise.app.propertywindow
+Bundle-SymbolicName: com.bitwise.app.propertywindow;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-Activator: com.bitwise.app.propertywindow.Activator
 Bundle-Vendor: BITWISE
@@ -37,7 +37,6 @@ Export-Package: com.bitwise.app.propertywindow,
  com.bitwise.app.propertywindow.messages,
  com.bitwise.app.propertywindow.property,
  com.bitwise.app.propertywindow.propertydialog,
- com.bitwise.app.propertywindow.runconfig,
  com.bitwise.app.propertywindow.utils,
  com.bitwise.app.propertywindow.widgets.customwidgets,
  com.bitwise.app.propertywindow.widgets.customwidgets.runtimeproperty,
