@@ -118,6 +118,7 @@ public class ParameterGridDialog extends Dialog {
 				textGridRowLayout.addColumn(new TextGridColumnLayout.Builder().columnWidth(90).editable(true).build());
 				textGridRowLayout.addColumn(new TextGridColumnLayout.Builder().grabHorizantalAccessSpace(true).editable(true).build());
 				Composite emptyRow = textGrid.addEmptyRow(textGridRowLayout);
+				((Text)emptyRow.getChildren()[1]).setFocus();
 				headerCompositeCheckBox.setSelection(false);
 				((Button)emptyRow.getChildren()[0]).addSelectionListener(new SelectionAdapter() {
 
