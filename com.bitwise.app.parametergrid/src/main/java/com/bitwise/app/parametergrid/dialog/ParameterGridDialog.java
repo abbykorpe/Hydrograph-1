@@ -1,6 +1,7 @@
 package com.bitwise.app.parametergrid.dialog;
 
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -254,7 +255,15 @@ public class ParameterGridDialog extends Dialog {
 
 	private void loadGridData() {
 		ParameterFileManager parameterFileManager = new ParameterFileManager(parameterFile);
-		Map<String, String> parameterMap = parameterFileManager.getParameterMap();
+		
+		Map<String, String> parameterMap=new LinkedHashMap<>();
+		
+		try {
+			parameterMap = parameterFileManager.getParameterMap();
+		} catch (IOException e) {
+			//isValidParameterFile = false;
+			e.printStackTrace();
+		}
 
 		if(parameterFile != null){
 			if(parameterFile.contains(":")){
@@ -581,7 +590,15 @@ public class ParameterGridDialog extends Dialog {
 			rowId++;
 		}
 		if(error == false){
-			parameterFileManager.storeParameters(dataMap);
+			try {
+				parameterFileManager.storeParameters(dataMap);
+			} catch (IOException e) {
+				MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
+
+				messageBox.setText("Error");
+				messageBox.setMessage("Unable to store parameters to the file - \n" + e.getMessage());
+				messageBox.open();
+			}
 			runGraph=true;
 			super.okPressed();
 		}else{

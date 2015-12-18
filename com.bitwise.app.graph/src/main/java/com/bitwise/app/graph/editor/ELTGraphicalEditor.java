@@ -605,7 +605,15 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 
 		ParameterFileManager parameterFileManager = new ParameterFileManager(getParameterFile());
-		parameterFileManager.storeParameters(newParameterMap);	
+		try {
+			parameterFileManager.storeParameters(newParameterMap);
+		} catch (IOException e) {
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
+
+			messageBox.setText("Error");
+			messageBox.setMessage("Unable to store parameters to the file - \n" + e.getMessage());
+			messageBox.open();
+		}	
 				
 		refreshParameterFileInProjectExplorer();
 	}
@@ -655,10 +663,19 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			}
 		}
 
-		ParameterFileManager parameterFileManager = new ParameterFileManager(getParameterFile());
-		//System.out.println(parameterFileManager.getParameterMap().toString());
-
-		return parameterFileManager.getParameterMap();
+		Map<String, String> parameters=new LinkedHashMap<>();
+		ParameterFileManager parameterFileManager = new ParameterFileManager(getParameterFile());		
+		try{
+			parameters = parameterFileManager.getParameterMap();
+		} catch (IOException e) {
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
+		
+			messageBox.setText("Error");
+			messageBox.setMessage("Unable to load parameter file - \n" + e.getMessage());
+			messageBox.open();
+		}	
+		
+		return parameters;
 	}
 
 	/**
