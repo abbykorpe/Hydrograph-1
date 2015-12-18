@@ -4,7 +4,7 @@
 	xmlns:spt="http://www.bitwiseglobal.com/graph/straightpulltypes"
 	xmlns:op="http://www.bitwiseglobal.com/graph/operationstypes" xmlns:ct="http://www.bitwiseglobal.com/graph/commandtypes"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.bitwiseglobal.com/graph/main ./main/main.xsd ">
+	xsi:schemaLocation="http://www.bitwiseglobal.com/graph/main ./main/main.xsd" name="graph_test">
 
 	<runtimeProperties>
 		<property name="sdf" value="dsf" />
@@ -14,13 +14,17 @@
 	</runtimeProperties>
 
 	<inputs id="sdf" phase="1" xsi:type="it:textFileFixedWidth">
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true" >
 			<schema name="klk">
 				<field name="l;l;" type="java.lang.String" format="" scale="4"
 					scaleType="explicit" length="4" />
 				<field name="ddfs" type="java.lang.String" length="4" />
 			</schema>
+			
 		</outSocket>
+		
+		
+		
 		<dependsOn componentId="ll" />
 		<dependsOn componentId="ftpin" />
 		<path uri="kasjdk" />
@@ -33,7 +37,7 @@
 	</inputs>
 
 	<inputs id="ksjdk" phase="1" xsi:type="it:textFileDelimited">
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<schema name="timepass">
 				<field name="sunlo" type="java.lang.String" />
 			</schema>
@@ -52,7 +56,7 @@
 
 	<inputs id="inputFile_record_schema" phase="1"
 		xsi:type="it:textFileDelimited">
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<schema name="timepass">
 				<record name="das">
 					<field name="c1" type="java.lang.String" />
@@ -70,7 +74,7 @@
 	</inputs>
 
 	<inputs id="sfdsdsd" phase="1" xsi:type="it:textFileDelimited">
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<schema name="external">
 				<includeExternalSchema uri="XML/Schema1.xml" />
 			</schema>
@@ -85,7 +89,7 @@
 	</inputs>
 
 	<inputs id="parquetfile" phase="1" xsi:type="it:parquetFile">
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<schema name="timepass">
 				<field name="sunlo" type="java.lang.String" />
 			</schema>
@@ -98,7 +102,7 @@
 	</inputs>
 
 	<inputs id="hive_parquet" phase="1" xsi:type="it:parquetHiveFile">
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<schema name="timepass">
 				<field name="sunlo" type="java.lang.String" />
 			</schema>
@@ -110,6 +114,7 @@
 		</partitionKeys>
 		<databaseName value="D1" />
 		<tableName value="T1" />
+		<external_table_path uri="kasjdk" />
 		<runtimeProperties>
 			<property name="fsdf" value="dsf" />
 		</runtimeProperties>
@@ -117,7 +122,7 @@
 
 	<inputs id="input_mixedScheme_text" phase="1"
 		xsi:type="it:textFileMixedScheme">
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<schema name="newscheme">
 				<field name="asdff" type="java.lang.String" format="" scale="4"
 					scaleType="explicit" length="6" />
@@ -155,11 +160,12 @@
 	</outputs>
 
 	<outputs id="parquetoutput" xsi:type="ot:parquetFile">
-		<inSocket fromComponentId="sdfsadf" fromSocketId="out0" id="in0">
+		<inSocket fromComponentId="sdfsadf" fromSocketId="out0" id="in0" >
 			<schema name="kj">
 				<field name="kjkj" type="java.lang.String" />
 			</schema>
 		</inSocket>
+			<overWrite value="true"/>
 		<path uri="sdsa" />
 		<runtimeProperties>
 			<property name="fsdf" value="dsf" />
@@ -178,6 +184,7 @@
 		</partitionKeys>
 		<databaseName value="D1" />
 		<tableName value="T1" />
+		<external_table_path uri="kasjdk" />
 		<runtimeProperties>
 			<property name="fsdf" value="dsf" />
 			<property name="fsdasdff" value="dsdfsf" />
@@ -195,6 +202,7 @@
 					scaleType="explicit" length="4" />
 			</schema>
 		</inSocket>
+		<overWrite value="true"/>
 		<path uri="kasjdk" />
 		<strict value="true" />
 		<charset value="ISO-8859-1" />
@@ -210,6 +218,7 @@
 				<field name="kjkj" type="java.lang.String" length="2" />
 			</schema>
 		</inSocket>
+		<overWrite value="true"/>
 		<path uri="sdsa" />
 		<safe value="true" />
 		<strict value="true" />
@@ -226,6 +235,7 @@
 				<field name="kjkj" type="java.lang.String" length="2" />
 			</schema>
 		</inSocket>
+		<overWrite value="true"/>
 		<path uri="sdsa" />
 		<safe value="true" />
 		<strict value="true" />
@@ -236,7 +246,7 @@
 	</outputs>
 
 	<inputs id="ksjdf" phase="1" xsi:type="it:generateRecord">
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<schema name="timepass">
 				<field name="sunlo" type="java.lang.String" />
 			</schema>
@@ -248,7 +258,7 @@
 	</inputs>
 
 	<inputs id="asdf" phase="1" xsi:type="it:subgraph">
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<schema name="ads">
 
 			</schema>
@@ -260,7 +270,7 @@
 	</inputs>
 
 	<inputs id="dffdd" phase="1" xsi:type="it:subgraphInput">
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<schema name="ads">
 
 			</schema>
@@ -296,7 +306,7 @@
 
 	<straightPulls id="limit" phase="1" xsi:type="spt:limit">
 		<inSocket fromComponentId="ksjdf" fromSocketId="out0" id="in0" />
-		<outSocket id="out0" type="out">
+		<outSocket id="out0" type="out" viewData="true">
 			<copyOfInsocket inSocketId="in0" />
 		</outSocket>
 		<runtimeProperties>
@@ -308,7 +318,7 @@
 	<straightPulls id="gather" xsi:type="spt:unionAll">
 		<inSocket id="dfg" fromComponentId="limit" fromSocketId="out0" />
 		<inSocket id="dfg1" fromComponentId="ksjdk" fromSocketId="out0" />
-		<outSocket id="sdf">
+		<outSocket id="sdf" viewData="true" >
 			<copyOfInsocket inSocketId="dfg" />
 		</outSocket>
 		<runtimeProperties>
@@ -318,7 +328,7 @@
 
 	<straightPulls id="replicate" xsi:type="spt:clone">
 		<inSocket id="in0" fromComponentId="limit" fromSocketId="out0" />
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<copyOfInsocket inSocketId="in0" />
 		</outSocket>
 		<outSocket id="out1">
@@ -327,6 +337,7 @@
 		<runtimeProperties>
 			<property name="fsdf" value="dsf" />
 		</runtimeProperties>
+		
 	</straightPulls>
 
 	<operations id="reformat" xsi:type="op:transform">
@@ -342,7 +353,7 @@
 				<property name="kjk" value="dlk" />
 			</properties>
 		</operation>
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<passThroughField name="axd" inSocketId="in0" />
 			<mapField sourceName="as" name="new" inSocketId="in0" />
 			<operationField name="hula" operationId="opt" />
@@ -354,7 +365,7 @@
 
 	<operations id="adf" xsi:type="op:subgraph">
 		<inSocket fromComponentId="asdf" fromSocketId="out0" id="in0" />
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 		</outSocket>
 		<path uri="asdf" />
 		<subgraphParameter>
@@ -375,7 +386,7 @@
 				<property name="kjk" value="dlk" />
 			</properties>
 		</operation>
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<passThroughField name="axd" inSocketId="in0" />
 			<mapField sourceName="as" name="new" inSocketId="in0" />
 			<operationField name="hula" operationId="opt" />
@@ -396,7 +407,7 @@
 	<operations id="join" xsi:type="op:join">
 		<inSocket fromComponentId="reformat" fromSocketId="out0" id="in0" />
 		<inSocket fromComponentId="aggregate" fromSocketId="out0" id="in1" />
-		<outSocket id="out0" type="out">
+		<outSocket id="out0" type="out" viewData="true">
 			<passThroughField name="axd" inSocketId="in0" />
 			<mapField sourceName="as" name="new" inSocketId="in0" />
 		</outSocket>
@@ -436,7 +447,7 @@
 			</properties>
 		</operation>
 
-		<outSocket id="out0" type="out">
+		<outSocket id="out0" type="out" viewData="true">
 			<copyOfInsocket inSocketId="in0" />
 		</outSocket>
 		<outSocket id="unused0" type="unused">
@@ -452,7 +463,7 @@
 		<outSocket id="out0" type="out">
 			<copyOfInsocket inSocketId="in0" />
 		</outSocket>
-		<outSocket id="unused1" type="unused">
+		<outSocket id="unused1" type="unused" viewData="true">
 			<copyOfInsocket inSocketId="in0" />
 		</outSocket>
 		<runtimeProperties>
@@ -475,7 +486,7 @@
 				<field name="sequence ids" type="java.lang.String" />
 			</outputFields>
 		</operation>
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<passThroughField name="*" inSocketId="in0" />
 			<operationField name="seq2" operationId="opt" />
 		</outSocket>
@@ -491,7 +502,7 @@
 				<field name="sequence ids" type="java.lang.String" />
 			</outputFields>
 		</operation>
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<passThroughField name="col1" inSocketId="in0" />
 			<passThroughField name="col3" inSocketId="in0" />
 			<operationField name="seq2" operationId="opt" />
@@ -515,7 +526,7 @@
 				<property name="kjk" value="dlk" />
 			</properties>
 		</operation>
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<passThroughField name="acct_id" inSocketId="in0" />
 			<passThroughField name="sor_src_id" inSocketId="in0" />
 			<operationField name="extrnl_agt_id_prev" operationId="opt" />
@@ -537,12 +548,8 @@
 	<operations id="lookup" xsi:type="op:hashJoin">
 		<inSocket fromComponentId="reformat" fromSocketId="out0" id="in0" />
 		<inSocket fromComponentId="aggregate" fromSocketId="out0" id="in1" />
-		<outSocket id="out0" type="out">
-			<passThroughField name="c1" inSocketId="in0" />
-			<passThroughField name="c2" inSocketId="in0" />
-			<passThroughField name="c3" inSocketId="in1" />
-			<mapField sourceName="c4" name="c4new" inSocketId="in0" />
-			<mapField sourceName="c4" name="c5new" inSocketId="in1" />
+		<outSocket id="out0" type="out" viewData="true">
+			<copyOfInsocket inSocketId="in0" />
 		</outSocket>
 		<runtimeProperties>
 			<property name="mapred.reduce.tasks" value="1" />
@@ -569,7 +576,7 @@
 				<property name="regex" value="and" />
 			</properties>
 		</operation>
-		<outSocket id="out0">
+		<outSocket id="out0" viewData="true">
 			<passThroughField name="account_no" inSocketId="in0" />
 			<operationField name="newfield" operationId="opt" />
 			<mapField sourceName="c4" name="c4new" inSocketId="in0" />
@@ -579,27 +586,35 @@
 		</runtimeProperties>
 	</operations>
 
-	<straightPulls id="partitionByExpression" phase="1"
-		xsi:type="spt:partitionByExpression">
+	<operations id="partitionByExpression" phase="1"
+		xsi:type="op:partitionByExpression">
 		<inSocket fromComponentId="ksjdf" fromSocketId="out0" id="in0" />
-		<outSocket id="out0" type="out">
+		
+		<operation id="opt"	class="com.bitwiseglobal.functions.PartitionExpressionTransaction">
+			<inputFields>
+				<field name="xyz" inSocketId="in0" />
+			</inputFields>
+			<properties>
+				<property name="regex" value="and" />
+			</properties>
+		</operation>
+         <outSocket id="out0" type="out" viewData="true">
+			<copyOfInsocket inSocketId="in0" />
+		</outSocket>
+		<outSocket id="out1" type="out">
 			<copyOfInsocket inSocketId="in0" />
 		</outSocket>
 		<runtimeProperties>
 			<property name="fsdf" value="dsf" />
 		</runtimeProperties>
-		<operation id="opt"
-			class="com.bitwiseglobal.functions.PartitionExpressionTransaction">
-			<inputFields>
-				<field name="xyz" inSocketId="in0" />
-			</inputFields>
-		</operation>
-
 		<noOfPartitions value="2" />
-	</straightPulls>
+	</operations>
 
 	<outputs id="trash" phase="1" xsi:type="ot:discard">
 		<inSocket fromComponentId="sdf" fromSocketId="out0" id="in0" />
 	</outputs>
+
+    
+   
 
 </p:graph>

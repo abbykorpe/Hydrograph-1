@@ -10,6 +10,7 @@ import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.OutputConverter;
+import com.bitwise.app.engine.helper.ConverterHelper;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.SchemaGrid;
@@ -23,17 +24,19 @@ import com.bitwiseglobal.graph.outputtypes.TextFileDelimited;
 public class OutputFileDelimitedConverter extends OutputConverter {
 	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
+	private ConverterHelper converterHelper;
 	
 	public OutputFileDelimitedConverter(Component component) {
 		super();
 		this.component = component;
 		this.properties = component.getProperties();
 		this.baseComponent = new TextFileDelimited();
+		converterHelper = new ConverterHelper(component);
 	}
 	
 	@Override
 	public void prepareForXML(){
-		logger.debug("Genrating XML data for {}", properties.get(Constants.PARAM_NAME));
+		logger.debug("Generating XML data for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		
 		TextFileDelimited fileDelimited = (TextFileDelimited) baseComponent;
@@ -58,7 +61,7 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 
 	@Override
 	protected List<TypeOutputInSocket> getOutInSocket(){
-		logger.debug("Genrating TypeOutputInSocket data");
+		logger.debug("Generating TypeOutputInSocket data");
 		List<TypeOutputInSocket> outputinSockets = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {
 			TypeOutputDelimitedInSocket outInSocket = new TypeOutputDelimitedInSocket();
@@ -75,40 +78,14 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 
 	@Override
 	protected List<TypeBaseField> getFieldOrRecord() {
-		logger.debug("Genrating data for {} for property {}", new Object[]{properties.get(Constants.PARAM_NAME),PropertyNameConstants.SCHEMA.value()});
+		logger.debug("Generating data for {} for property {}", new Object[]{properties.get(Constants.PARAM_NAME),PropertyNameConstants.SCHEMA.value()});
 		List<SchemaGrid> schemaList = (List) properties.get(PropertyNameConstants.SCHEMA.value());
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
 		if(schemaList!=null){
-			try{
-				for (SchemaGrid object : schemaList ) {
-					TypeBaseField typeBaseField = new TypeBaseField();
-					typeBaseField.setName(object.getFieldName());
-				
-				if(object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())&& !object.getDateFormat().trim().isEmpty() )
-						typeBaseField.setFormat(object.getDateFormat());
-				
-				if(!object.getScale().trim().isEmpty())
-					typeBaseField.setScale(Integer.parseInt(object.getScale()));
-				
-				if(object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())||object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value()))
-					{	typeBaseField.setScaleType(ScaleTypeList.EXPLICIT );
-						if(!object.getScale().trim().isEmpty())
-							typeBaseField.setScale(Integer.parseInt(object.getScale()));
-					}
-					
-					for(FieldDataTypes fieldDataType:FieldDataTypes.values()){
-						if(fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
-							typeBaseField.setType(fieldDataType);
-					}
-					
-					typeBaseFields.add(typeBaseField);
-				}
-			}
-			catch (Exception exception) {
-				logger.warn("Exception while creating schema for component : {}{}", new Object[]{properties.get(Constants.PARAM_NAME),exception});
+				for (SchemaGrid object : schemaList ) 
+					typeBaseFields.add(converterHelper.getSchemaGridTargetData(object));
 				
 			}
-		}
 		return typeBaseFields;
 	}
 }

@@ -40,7 +40,7 @@ public class LookupConverter extends TransformConverter{
 	
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
-		logger.debug("Genrating TypeStraightPullOutSocket data for : {}",
+		logger.debug("Generating TypeStraightPullOutSocket data for : {}",
 				properties.get(Constants.PARAM_NAME));
 		List<TypeOperationsOutSocket> outSockectList = new ArrayList<TypeOperationsOutSocket>();
 		for (Link link : component.getSourceConnections()) {
@@ -67,7 +67,7 @@ public class LookupConverter extends TransformConverter{
 
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
-		logger.debug("Genrating TypeBaseInSocket data for :{}", component
+		logger.debug("Generating TypeBaseInSocket data for :{}", component
 				.getProperties().get(Constants.PARAM_NAME));
 		List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
 		int inSocketCounter = 0;

@@ -16,6 +16,7 @@ public enum UIComponentsConstants {
 	AGGREGATE("Aggregate"),
 	TRANSFORM("Transform"),
 	JOIN("Join"),
+	LOOKUP("Lookup"),
 	FILTER("Filter");
 	
 	private final String value;
