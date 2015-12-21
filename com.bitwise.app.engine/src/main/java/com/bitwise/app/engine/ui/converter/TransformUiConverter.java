@@ -219,8 +219,10 @@ public abstract class TransformUiConverter extends UiConverter {
 	private List<FixedWidthGridRow> getFixedWidthSchemaList(TypeTransformOperation transformOperation) {
 		List<FixedWidthGridRow> fixedWidthGridRowsList = new ArrayList<>();
 		ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
+		if(transformOperation.getOutputFields()!=null){
 		for (TypeBaseField field : transformOperation.getOutputFields().getField()) {
 			fixedWidthGridRowsList.add(converterUiHelper.getFixedWidthSchema(field));
+		}
 		}
 		return fixedWidthGridRowsList;
 	}
