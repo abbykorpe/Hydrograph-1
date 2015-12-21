@@ -23,10 +23,8 @@ public class NewGraphHandler extends AbstractHandler {
 	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
-		IWorkbenchPage page = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getActivePage();
-		       logger.debug("Job " +graphCounter+ " Created");
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		logger.debug("Job " +graphCounter+ " Created");
 		try {
 			ELTGraphicalEditorInput input = new ELTGraphicalEditorInput("Job_"+ graphCounter++);
 			page.openEditor(input, ELTGraphicalEditor.ID, false);
@@ -39,9 +37,8 @@ public class NewGraphHandler extends AbstractHandler {
 		            activePage.activate(activePage.findEditor(input));
 		        }
 		    }
-		    
 		} catch (PartInitException e) {
-          logger.error(e.getMessage());			
+          logger.error("Failed to open editor", e);			
 		}
 		return null;
 	}

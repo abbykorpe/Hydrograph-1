@@ -10,7 +10,9 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
@@ -22,7 +24,6 @@ import com.bitwise.app.propertywindow.property.Property;
 import com.bitwise.app.propertywindow.property.PropertyTreeBuilder;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialog;
 
-// TODO: Auto-generated Javadoc
 /**
  * 
  * @author Bitwise
@@ -31,7 +32,8 @@ import com.bitwise.app.propertywindow.propertydialog.PropertyDialog;
  */
 
 public class ELTPropertyWindow implements IELTPropertyWindow{
-
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTPropertyWindow.class);
+	
 	Object componenetModel;
 	ELTComponenetProperties eltComponenetProperties;
 	Component component;
@@ -105,6 +107,7 @@ public class ELTPropertyWindow implements IELTPropertyWindow{
 			propertyChanged = propertyDialog.isPropertyChanged();
 			
 		} catch (ELTComponentPropertyAdapter.EmptyComponentPropertiesException e) {
+			logger.error("Failed in transforming properties", e);
 			e.printStackTrace();
 		}
 	}

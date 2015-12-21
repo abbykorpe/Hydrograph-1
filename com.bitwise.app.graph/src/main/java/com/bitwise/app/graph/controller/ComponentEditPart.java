@@ -47,8 +47,7 @@ import com.bitwise.app.graph.propertywindow.ELTPropertyWindow;
  * The Class ComponentEditPart.
  * @author Bitwise
  */
-public class ComponentEditPart extends AbstractGraphicalEditPart implements
-		NodeEditPart, PropertyChangeListener {
+public class ComponentEditPart extends AbstractGraphicalEditPart implements NodeEditPart, PropertyChangeListener {
 	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ComponentEditPart.class);
 	
@@ -79,17 +78,15 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 
 	@Override
 	protected void createEditPolicies() {
-		String componentName = DynamicClassProcessor.INSTANCE
-				.getClazzName(getModel().getClass());
+		String componentName = DynamicClassProcessor.INSTANCE.getClazzName(getModel().getClass());
 		try {
-			for (com.bitwise.app.common.component.config.Component component : XMLConfigUtil.INSTANCE
-					.getComponentConfig()) {
+			for (com.bitwise.app.common.component.config.Component component : XMLConfigUtil.INSTANCE.getComponentConfig()) {
 				if (component.getName().equalsIgnoreCase(componentName)) {
 					applyGeneralPolicy(component);
 				}
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Error while creating edit policies", e);
 		} 
 	}
 
@@ -105,15 +102,12 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 			com.bitwise.app.common.component.config.Component component)
 			throws Exception {
 
-		for (Policy generalPolicy : XMLConfigUtil.INSTANCE
-				.getPoliciesForComponent(component)) {
+		for (Policy generalPolicy : XMLConfigUtil.INSTANCE.getPoliciesForComponent(component)) {
 			try {
-				AbstractEditPolicy editPolicy = (AbstractEditPolicy) Class
-						.forName(generalPolicy.getValue()).newInstance();
+				AbstractEditPolicy editPolicy = (AbstractEditPolicy) Class.forName(generalPolicy.getValue()).newInstance();
 				installEditPolicy(generalPolicy.getName(), editPolicy);
 			} catch (Exception exception) {
-				// TODO : add logger
-				logger.error(exception.getMessage());
+				logger.error("Failed to apply policies", exception);
 				throw exception;
 			}
 		}
@@ -278,15 +272,14 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements
 	}
 
 	private void addTooltipInfoToComponent() {
-		// TODO Auto-generated method stub
 		String componentName = DynamicClassProcessor.INSTANCE.getClazzName(getModel().getClass());
 		com.bitwise.app.common.component.config.Component components = XMLConfigUtil.INSTANCE.getComponent(componentName);
 		//attach tooltip information to component
-				Map<String,PropertyToolTipInformation> tooltipInformation = new LinkedHashMap<>();
-				for(Property property : components.getProperty()){
-					tooltipInformation.put(property.getName(),new PropertyToolTipInformation(property.getName(), property.getShowAsTooltip().value(), property.getTooltipDataType().value()));
-				}
-				getCastedModel().setTooltipInformation(tooltipInformation);
+		Map<String,PropertyToolTipInformation> tooltipInformation = new LinkedHashMap<>();
+		for(Property property : components.getProperty()){
+			tooltipInformation.put(property.getName(),new PropertyToolTipInformation(property.getName(), property.getShowAsTooltip().value(), property.getTooltipDataType().value()));
+		}
+		getCastedModel().setTooltipInformation(tooltipInformation);
 	}
 
 	@Override
