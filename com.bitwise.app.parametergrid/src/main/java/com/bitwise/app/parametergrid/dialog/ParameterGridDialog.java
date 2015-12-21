@@ -50,8 +50,10 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
+import org.slf4j.Logger;
 
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
+import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.parametergrid.textgridwidget.TextGrid;
 import com.bitwise.app.parametergrid.textgridwidget.columns.TextGridColumnLayout;
@@ -62,6 +64,8 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
 public class ParameterGridDialog extends Dialog {
 
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(ParameterGridDialog.class);
+	
 	private TextGrid textGrid;
 	private boolean runGraph;
 	private Button headerCompositeCheckBox;
@@ -77,7 +81,6 @@ public class ParameterGridDialog extends Dialog {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		runGraph=false;
-
 	}
 
 	/**
@@ -86,107 +89,71 @@ public class ParameterGridDialog extends Dialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		final Composite container = (Composite) super.createDialogArea(parent);
-		ColumnLayout cl_container = new ColumnLayout();
-		cl_container.verticalSpacing = 0;
-		cl_container.maxNumColumns = 1;
-		container.setLayout(cl_container);
-
-		container.getShell().setText("Parameter Grid");
-
-		Composite composite = new Composite(container, SWT.NONE);
-		composite.setLayout(new GridLayout(4, false));
-		ColumnLayoutData cld_composite = new ColumnLayoutData();
-		cld_composite.horizontalAlignment = ColumnLayoutData.RIGHT;
-		cld_composite.heightHint = 30;
-		composite.setLayoutData(cld_composite);
-
-		addFileParameterFileBrowser(container);
-
-
-		textGrid = new TextGrid(container);
-		textGrid.clear();
-
-		Label btnAdd = new Label(composite, SWT.NONE);
-		GridData gd_btnAdd = getGridControlButtonLayout();
-		btnAdd.setLayoutData(gd_btnAdd);
-		btnAdd.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-				TextGridRowLayout textGridRowLayout = new TextGridRowLayout();
-				textGridRowLayout.addColumn(new TextGridColumnLayout.Builder().columnWidth(90).editable(true).build());
-				textGridRowLayout.addColumn(new TextGridColumnLayout.Builder().grabHorizantalAccessSpace(true).editable(true).build());
-				Composite emptyRow = textGrid.addEmptyRow(textGridRowLayout);
-				((Text)emptyRow.getChildren()[1]).setFocus();
-				headerCompositeCheckBox.setSelection(false);
-				((Button)emptyRow.getChildren()[0]).addSelectionListener(new SelectionAdapter() {
-
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						// TODO Auto-generated method stub
-						super.widgetSelected(e);
-						changeHeaderCheckboxSelection();
-					}
-
-				});
-				for(Composite row:textGrid.getGrid()){
-					final Text text=((Text)row.getChildren()[1]);
-					txtDecorator=WidgetUtility.addDecorator(text,Messages.CHARACTERSET);
-					txtDecorator.hide();
-					validateName(text);
-					checkFocus(text); 
-				}
-				textGrid.refresh();
-				textGrid.scrollToLastRow();
-			}
-
-
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		btnAdd.setText("");
-		btnAdd.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
-
-		Label btnRemove = new Label(composite, SWT.NONE);
-		btnRemove.setLayoutData(getGridControlButtonLayout());
-		btnRemove.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-				// TODO Auto-generated method stub
-				textGrid.removeSelectedRows();
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-
-		btnRemove.setText("");
-		btnRemove.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
-
+		final Composite container = createBaseContainer(parent);
+		logger.debug("Created base container");
+		
+		Composite composite = attachButtonContainer(container);
+		logger.debug("attached button container");
+		
+		attachFileParameterFileBrowser(container);
+		logger.debug("added file browser");
+		
+		attachTextGrid(container);
+		logger.debug("attached TextGrid");
 
 		addGridHeader();
+		logger.debug("attached remove button");
+		
+		attachAddRowButton(composite);
+		logger.debug("attached add row button");
 
+		attachRemoveRowButton(composite);
+		logger.debug("attached remove button");
+
+		/*addGridHeader();
+		logger.debug("attached remove button");*/
+
+		fetchParameterFilePath();
+		logger.debug("Retrived parameter file path");
+
+		loadGridData();
+		logger.debug("loaded grid data");
+
+		addBaseContainerListeners(container);
+		logger.debug("added listeners to base container");
+		
+		return container;
+	}
+
+	/**
+	 * Add listeners to base container
+	 * 
+	 * @param container
+	 */
+	private void addBaseContainerListeners(final Composite container) {
+		addControlListener(container);
+		logger.debug("Added control listener");
+	}
+
+	/**
+	 * Resizes base container on outer shell resize
+	 * 
+	 * @param container
+	 */
+	private void addControlListener(final Composite container) {
+		container.getParent().addControlListener(new ControlAdapter() {
+			@Override
+			public void controlResized(ControlEvent e) {
+				textGrid.setHeight(container.getParent().getBounds().height - 150);
+			}
+		});
+	}
+
+	/**
+	 * populate parameterFile field variable
+	 * 
+	 */
+	private void fetchParameterFilePath() {
 		if(getComponentCanvas().getCurrentParameterFilePath() ==null){
 			if(getComponentCanvas().getParameterFile().startsWith("/")){
 				parameterFile = getComponentCanvas().getParameterFile().replaceFirst("/", "");	
@@ -194,29 +161,138 @@ public class ParameterGridDialog extends Dialog {
 				parameterFile = getComponentCanvas().getParameterFile();
 			}
 
-		}	
-		else{
+		}else{
 			parameterFile = getComponentCanvas().getCurrentParameterFilePath();
 		}
+	}
 
+	
+	private void attachRemoveRowButton(Composite composite) {
+		Label btnRemove = new Label(composite, SWT.NONE);
+		btnRemove.setLayoutData(getGridControlButtonLayout());
+		btnRemove.setText("");
+		btnRemove.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
+		addRemoveRowButtonListener(btnRemove);
+		
+	}
 
-		loadGridData();
+	private void addRemoveRowButtonListener(Label btnRemove) {
+		btnRemove.addMouseListener(new MouseListener() {
 
-		container.getParent().addControlListener(new ControlAdapter() {
 			@Override
-			public void controlResized(ControlEvent e) {
-				textGrid.setHeight(container.getParent().getBounds().height - 150);
+			public void mouseUp(MouseEvent e) {
+				textGrid.removeSelectedRows();
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				//Do Nothing
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				//Do Nothing
 			}
 		});
+	}
 
+	private void attachAddRowButton(Composite composite) {
+		Label btnAdd = new Label(composite, SWT.NONE);
+		GridData gd_btnAdd = getGridControlButtonLayout();
+		btnAdd.setLayoutData(gd_btnAdd);
+		btnAdd.setText("");
+		btnAdd.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
+		
+		attachAddRowButtonListener(btnAdd);
+	}
+	
+	
+	// +++ Code Refactoring is in progress
+	private void attachAddRowButtonListener(Label btnAdd) {
+		btnAdd.addMouseListener(new MouseListener() {
 
+			@Override
+			public void mouseUp(MouseEvent e) {
+				TextGridRowLayout textGridRowLayout = getTextGridRowLayout();
+				
+				Composite emptyRow = textGrid.addEmptyRow(textGridRowLayout);
+				
+				((Text)emptyRow.getChildren()[1]).setFocus();
+				addRowCheckBoxListener(emptyRow);
+				
+				headerCompositeCheckBox.setSelection(false);
+				
+				for(Composite row:textGrid.getGrid()){
+					final Text text=((Text)row.getChildren()[1]);
+					txtDecorator=WidgetUtility.addDecorator(text,Messages.CHARACTERSET);
+					txtDecorator.hide();
+					attachKeyValidator(text);
+					attachKeyFocusListener(text); 
+				}
+				
+				textGrid.refresh();
+				textGrid.scrollToLastRow();
+			}
+			
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// Do Nothing
+			}
 
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// Do Nothing
+			}
+		});
+	}
 
+	
+	private TextGridRowLayout getTextGridRowLayout() {
+		TextGridRowLayout textGridRowLayout = new TextGridRowLayout();
+		textGridRowLayout.addColumn(new TextGridColumnLayout.Builder().columnWidth(90).editable(true).build());
+		textGridRowLayout.addColumn(new TextGridColumnLayout.Builder().grabHorizantalAccessSpace(true).editable(true).build());
+		return textGridRowLayout;
+	}
 
+	private void addRowCheckBoxListener(Composite emptyRow) {
+		((Button)emptyRow.getChildren()[0]).addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				super.widgetSelected(e);
+				changeHeaderCheckboxSelection();
+			}
+
+		});
+	}
+	
+	private void attachTextGrid(final Composite container) {
+		textGrid = new TextGrid(container);
+		textGrid.clear();
+	}
+
+	private Composite attachButtonContainer(final Composite container) {
+		Composite composite = new Composite(container, SWT.NONE);
+		composite.setLayout(new GridLayout(4, false));
+		ColumnLayoutData cld_composite = new ColumnLayoutData();
+		cld_composite.horizontalAlignment = ColumnLayoutData.RIGHT;
+		cld_composite.heightHint = 30;
+		composite.setLayoutData(cld_composite);
+		return composite;
+	}
+
+	private Composite createBaseContainer(Composite parent) {
+		final Composite container = (Composite) super.createDialogArea(parent);
+		ColumnLayout cl_container = new ColumnLayout();
+		cl_container.verticalSpacing = 0;
+		cl_container.maxNumColumns = 1;
+		container.setLayout(cl_container);
+		container.getShell().setText("Parameter Grid");
 		return container;
 	}
 
-	private void checkFocus(final Text text) {
+	private void attachKeyFocusListener(final Text text) {
 		text.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -229,7 +305,7 @@ public class ParameterGridDialog extends Dialog {
 		});
 	}
 
-	private void validateName(final Text text) {
+	private void attachKeyValidator(final Text text) {
 		text.addVerifyListener(new VerifyListener() {
 			@Override
 			public void verifyText(VerifyEvent e) {
@@ -384,7 +460,7 @@ public class ParameterGridDialog extends Dialog {
 		return isValidParameterFile;
 	}
 
-	private void addFileParameterFileBrowser(Composite container){
+	private void attachFileParameterFileBrowser(Composite container){
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayout(new GridLayout(4, false));
 
@@ -396,25 +472,7 @@ public class ParameterGridDialog extends Dialog {
 		GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_text.widthHint = 179;
 		paramterFileTextBox.setLayoutData(gd_text);
-
-
-		/*paramterFileTextBox.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if(e.keyCode == SWT.CR){
-					parameterFile = paramterFileTextBox.getText();
-					getComponentCanvas().setCurrentParameterFilePath(parameterFile);
-					loadParameterFile();
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});*/
+		
 
 		final Button btnReloadParameterFile = new Button(composite, SWT.NONE);
 		btnReloadParameterFile.setText("Reload File");
