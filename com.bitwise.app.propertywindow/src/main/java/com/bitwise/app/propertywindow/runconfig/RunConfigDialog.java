@@ -38,7 +38,9 @@ public class RunConfigDialog extends Dialog {
 	private Text textEdgeNode;
 	private Text textUser;
 	private Text textPassword;
-	
+
+	private boolean runGraph;
+
 	Composite compositeServerDetails;
 	Button btnLocalMode, btnRemoteMode;
 
@@ -48,6 +50,7 @@ public class RunConfigDialog extends Dialog {
 	 */
 	public RunConfigDialog(Shell parentShell) {
 		super(parentShell);
+		this.runGraph = true;
 	}
 
 	/**
@@ -166,45 +169,48 @@ public class RunConfigDialog extends Dialog {
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 	}
-	
+
 	@Override
 	protected void okPressed() {
-		
+
 		ContainerSelectionDialog containerSelectionDialog=new ContainerSelectionDialog(Display.getCurrent().getActiveShell(), null, true, null);
 		containerSelectionDialog.open();
 		Object[] projectName = containerSelectionDialog.getResult();
-		
-		if (projectName.length == 1) {
-			System.out.println("result[0] "+projectName[0].toString()+"//"+"build.properties");
-		}
-		
-		IPath iPath=new Path("/"+projectName[0].toString()+"/build.properties");
-		IFile iFile=ResourcesPlugin.getWorkspace().getRoot().getFile(iPath);		
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-	
-		try {
-			if(btnLocalMode.getSelection()==true)
-				out.write(("Local: "+btnLocalMode.getSelection()).getBytes());
-			else{
-				out.write(("Remote: "+btnRemoteMode.getSelection()).getBytes());
-				out.write(("\nEdge node: "+textEdgeNode.getText()).getBytes());
-				out.write(("\nUser: "+textUser.getText()).getBytes());
-				out.write(("\nPassword: "+textPassword.getText()).getBytes());
+
+		if(projectName!=null){
+
+			IPath iPath=new Path("/"+projectName[0].toString()+"/build.properties");
+			IFile iFile=ResourcesPlugin.getWorkspace().getRoot().getFile(iPath);		
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+			try {
+				if(btnLocalMode.getSelection()==true){
+					out.write(("Local: "+btnLocalMode.getSelection()).getBytes());
+					out.write(("\nRemote: "+btnRemoteMode.getSelection()).getBytes());
+				}
+				else{
+					out.write(("Local: "+btnLocalMode.getSelection()).getBytes());
+					out.write(("\nRemote: "+btnRemoteMode.getSelection()).getBytes());
+					out.write(("\nEdge node: "+textEdgeNode.getText()).getBytes());
+					out.write(("\nUser: "+textUser.getText()).getBytes());
+					out.write(("\nPassword: "+textPassword.getText()).getBytes());
+				}
+
+				out.close();
+
+				iFile.setContents(new ByteArrayInputStream(out.toByteArray()), true, false, null);
+			} catch (IOException |CoreException e) {
+				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving run configuration file -\n"+e.getMessage());
 			}
 
-			out.close();
 
-			iFile.setContents(new ByteArrayInputStream(out.toByteArray()), true, false, null);
-		} catch (IOException |CoreException e) {
-			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving run configuration file -\n"+e.getMessage());
 		}
-		
 		super.okPressed();
 	}
-	
+
 	@Override
 	protected void cancelPressed() {
-		System.out.println("Cancel");
+		runGraph=false;
 		super.cancelPressed();
 	}
 
@@ -234,6 +240,10 @@ public class RunConfigDialog extends Dialog {
 
 		};
 	};
+
+	public boolean proceedToRunGraph(){
+		return runGraph;
+	}
 
 	public static void main(String[] args) {
 		Display dis = new Display();
