@@ -8,7 +8,7 @@ import org.eclipse.osgi.util.NLS;
  * @author Bitwise
  */
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "com.bitwise.app.propertywindow.messages.messages";
+	private static final String BUNDLE_NAME = "resources.messages";
 	public static String RUNTIME_WINDOW_NAME;
 	public static String RUNTIME_HEADER;
 	public static String LENGTHERROR;
@@ -51,6 +51,12 @@ public class Messages extends NLS {
 	public static String AGGREGATE_TEMPLATE;
 	public static String PROPERTY_NAME;
 	public static String PROPERTY_VALUE;
+	public static String PROPERTY_DECORATOR;
+	public static String PROPERTIES;
+	public static String INNER_OPERATION_INPUT_FIELD;
+	public static String INNER_OPERATION_OUTPUT_FIELD;
+	public static String OPERATIONAL_OUTPUT_FIELD;
+	public static String OPERATIONAL_SYSTEM_FIELD;
 	
 
 	static {

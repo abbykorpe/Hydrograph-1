@@ -44,4 +44,7 @@ public class Constants {
 	public static final String FILTER = "FILTER";
 	public static final String TRANSFORM = "TRANSFORM";
 	public static final String AGGREGATE = "AGGREGATE";
+	public static final String AGGREGATE_DISPLAYNAME = "Aggregate";
+	public static final String TRANSFORM_DISPLAYNAME = "Transform";
+	
 }

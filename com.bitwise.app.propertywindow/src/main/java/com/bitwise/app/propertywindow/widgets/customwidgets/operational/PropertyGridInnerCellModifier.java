@@ -5,6 +5,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
+import com.bitwise.app.propertywindow.messages.Messages;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -51,9 +52,9 @@ public class PropertyGridInnerCellModifier implements ICellModifier {
   public Object getValue(Object element, String property) {
 	  NameValueProperty p = (NameValueProperty) element;
 	  
-    if (TransformDialog.PROPERTY_NAME_INNER.equals(property))
+    if (Messages.PROPERTY_NAME.equals(property))
         return p.getPropertyName();
-    else if (TransformDialog.PROPERTY_VALUE_INNER.equals(property))
+    else if (Messages.PROPERTY_VALUE.equals(property))
         return p.getPropertyValue();
     else
         return null;
@@ -75,9 +76,9 @@ public class PropertyGridInnerCellModifier implements ICellModifier {
       element = ((Item) element).getData();
  
     NameValueProperty p = (NameValueProperty) element;
-    if (TransformDialog.PROPERTY_NAME_INNER.equals(property))
+    if (Messages.PROPERTY_NAME.equals(property))
       p.setPropertyName(((String) value).trim());
-    if (TransformDialog.PROPERTY_VALUE_INNER.equals(property))
+    if (Messages.PROPERTY_VALUE.equals(property))
         p.setPropertyValue(((String) value).trim());
     viewer.refresh();
   }

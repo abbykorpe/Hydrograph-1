@@ -97,25 +97,7 @@ public class TransformDialog extends Dialog {
 	
 	/** The Constant PROPERTY_VALUE. */
 	public static final String PROPERTY_VALUE = "Target";
-	
-	/** The Constant PROPERTY_NAME_INNER. */
-	public static final String PROPERTY_NAME_INNER = "Property Name";
-	
-	/** The Constant PROPERTY_VALUE_INNER. */
-	public static final String PROPERTY_VALUE_INNER = "Property Value";
-
-	/** The Constant OPERATIONAL_INPUT_FIELD. */
-	public static final String OPERATIONAL_INPUT_FIELD = "Operation Input Fields";
-	
-	/** The Constant OPERATIONAL_OUTPUT_INNER_FIELD. */
-	public static final String OPERATIONAL_OUTPUT_INNER_FIELD = "Operation Output Fields";
-	
-	/** The Constant OPERATIONAL_OUTPUT_FIELD. */
-	public static final String OPERATIONAL_OUTPUT_FIELD = "Output Fields";
-	
-	/** The Constant OPERATIONAL_SYSTEM_FIELD. */
-	public static final String OPERATIONAL_SYSTEM_FIELD = "Input Fields";
-	
+		
 	/** The Constant ADD_ICON. */
 	private static final String ADD_ICON = XMLConfigUtil.CONFIG_FILES_PATH + "/icons/add.png";
 	
@@ -138,7 +120,7 @@ public class TransformDialog extends Dialog {
 	private static final String[] NAME_VALUE_COLUMN = {PROPERTY_NAME, PROPERTY_VALUE};
 	
 	/** The Constant NAME_VALUE_COLUMN_INNER. */
-	private static final String[] NAME_VALUE_COLUMN_INNER = {PROPERTY_NAME_INNER, PROPERTY_VALUE_INNER};
+	private static final String[] NAME_VALUE_COLUMN_INNER = {Messages.PROPERTY_NAME, Messages.PROPERTY_VALUE};
 	
 	/** The elt transfor add selection listener. */
 	private ELTTransforAddSelectionListener eltTransforAddSelectionListener = new ELTTransforAddSelectionListener();
@@ -195,7 +177,6 @@ public class TransformDialog extends Dialog {
 	private WidgetConfig widgetConfig;
 
 	/** The field error. */
-	// Operational class label.
 	AbstractELTWidget fieldError = new ELTDefaultLable(Messages.FIELDNAMEERROR).lableWidth(250);
 	
 	/** The tootl tip error message. */
@@ -267,12 +248,15 @@ public class TransformDialog extends Dialog {
 		fd_composite_1.bottom = new FormAttachment(100);
 		fd_composite_1.left = new FormAttachment(0, 10);
 		leftOpInputComposite.setLayoutData(fd_composite_1);
-		
+
+		/**
+		 * Operation System properties table viewer.
+		 */
 		opSystemPropertiesTabViewer = CheckboxTableViewer.newCheckList(
 				leftOpInputComposite, SWT.BORDER);
 	    opSystemPropertiesTabViewer.setContentProvider(new TransformGridContentProvider());
 	    opSystemPropertiesTabViewer.setLabelProvider( new OperationSystemLabelProvider());
-	    opSystemPropertiesTabViewer.setColumnProperties(new String[]{OPERATIONAL_SYSTEM_FIELD}); 
+	    opSystemPropertiesTabViewer.setColumnProperties(new String[]{Messages.OPERATIONAL_SYSTEM_FIELD}); 
 	    opSystemPropertiesTabViewer.setCellModifier(new OperationSystemCellModifier(opSystemPropertiesTabViewer));
 	    
 	    Table table = opSystemPropertiesTabViewer.getTable();
@@ -309,16 +293,17 @@ public class TransformDialog extends Dialog {
 	      });
 
 		
-		createTableColumns(table,new String[]{OPERATIONAL_SYSTEM_FIELD});
+		createTableColumns(table,new String[]{Messages.OPERATIONAL_SYSTEM_FIELD});
 		for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
 			table.getColumn(columnIndex).setWidth(117);
 		}  
 
 		CellEditor[] editors_opSys = null; 
-		editors_opSys =createCellEditorList(table,new String[]{OPERATIONAL_SYSTEM_FIELD}.length); 
+		editors_opSys =createCellEditorList(table,new String[]{Messages.OPERATIONAL_SYSTEM_FIELD}.length); 
 		opSystemPropertiesTabViewer.setCellEditors(editors_opSys);
-	    
-		opSystemPropertiesTabViewer.setInput(operationSystemProperties); 
+		opSystemPropertiesTabViewer.setInput(operationSystemProperties);
+		
+		//Auto populate the tableviwer with checked status.
 		for (OperationSystemProperties opSystemProperty : operationSystemProperties) {
 			opSystemPropertiesTabViewer.setChecked(opSystemProperty, opSystemProperty.isChecked());
 
@@ -330,11 +315,13 @@ public class TransformDialog extends Dialog {
 		ELTTable eltOpSysOuterTable = new ELTTable(opSystemPropertiesTabViewer);
 		leftContainerSubgroupComposite.attachWidget(eltOpSysOuterTable);
 		editors=editors_opSys;
-		ControlDecoration errorDecorator = setDecorator("Property name should not be same or blank");
+		
+		//Error Decorator validator 
+		ControlDecoration errorDecorator = setDecorator(Messages.PROPERTY_DECORATOR);
 		editors[0].setValidator(new ELTCellEditorTransformValidator((Table)eltOpSysOuterTable.getSWTWidgetControl(), operationSystemProperties, errorDecorator,propertyDialogButtonBar,true));
 		
+		//Apply drag on tableviewer.
 		DragDropUtility.INSTANCE.applyDragFromTableViewer(opSystemPropertiesTabViewer.getTable()); 	
-//----------------------------------------------		
 		
 		Composite outputButtonComposite = new Composite(container, SWT.NONE);
 		FormData fdOutputButtoncomposite = new FormData();
@@ -366,14 +353,20 @@ public class TransformDialog extends Dialog {
 		fd_OutputComposite.bottom = new FormAttachment(100);
 		rightOpOutputComposite.setLayoutData(fd_OutputComposite);
 
-		outerOpTabViewer = createTableViewer(rightOpOutputComposite, new String[]{OPERATIONAL_OUTPUT_FIELD},new TransformGridContentProvider(),new OperationLabelProvider());
+		/*
+		 * Create Output Field TableViewer.
+		 */
+		outerOpTabViewer = createTableViewer(rightOpOutputComposite, new String[]{Messages.OPERATIONAL_OUTPUT_FIELD},new TransformGridContentProvider(),new OperationLabelProvider());
 		outerOpTabViewer.setCellModifier(new OperationGridCellModifier(outerOpTabViewer));
 		outerOpTabViewer.setInput(opOutputOuterFields); 
 		outerOpTabViewer.getTable().setBounds(10, 10, 123, 557);
-//		rightOpOutputComposite.setLocation(737, -315);
+
+		// Set the Column Width
 		for (int columnIndex = 0, n = outerOpTabViewer.getTable().getColumnCount(); columnIndex < n; columnIndex++) {
 			outerOpTabViewer.getTable().getColumn(columnIndex).setWidth(117);
 		}    
+		
+		//Apply Drop on Tableviewer.
 		DragDropUtility.INSTANCE.applyDrop(outerOpTabViewer,new DragDropTransformOpImp(opOutputOuterFields, true,outerOpTabViewer) );
 		
 		Composite topAddButtonComposite = new Composite(container, SWT.NONE);
@@ -428,17 +421,24 @@ public class TransformDialog extends Dialog {
 
 		addOutKeyValueButton.setParent(outerNameValueComposite);
 		
+		/*
+		 * Map Field TableViewer.
+		 */
 		outerKeyValueTabViewer = createTableViewer(outerNameValueComposite, NAME_VALUE_COLUMN, new TransformGridContentProvider(),new PropertyLabelProvider());
 		outerKeyValueTabViewer.setCellModifier(new PropertyGridCellModifier(outerKeyValueTabViewer));
 		outerKeyValueTabViewer.setInput(opOuterClassProperty); 
 		outerKeyValueTabViewer.getTable().setBounds(200, 28, 600, 160);			
 		
-
+		// Set the Column Width
 		for (int columnIndex = 0, n = outerKeyValueTabViewer.getTable().getColumnCount(); columnIndex < n; columnIndex++) {
 			outerKeyValueTabViewer.getTable().getColumn(columnIndex).setWidth(295);
 		}
-		DragDropUtility.INSTANCE.applyDragFromTableViewerOuter(outerKeyValueTabViewer); 	
+		//Apply Drag on Tableviewer.
+		DragDropUtility.INSTANCE.applyDragFromTableViewerOuter(outerKeyValueTabViewer);
+		
+		//Apply Drop on Tableviewer.
 		DragDropUtility.INSTANCE.applyDrop(outerKeyValueTabViewer,new DragDropTransformOpImp(opOuterClassProperty, false,outerKeyValueTabViewer));
+		
 		ELTDefaultSubgroupComposite defaultnameValueComposite = new ELTDefaultSubgroupComposite(outerNameValueComposite);	
 		defaultnameValueComposite.createContainerWidget();
   
@@ -455,6 +455,9 @@ public class TransformDialog extends Dialog {
 		btnAddOperation.setBounds(863, 0, 25, 25);
 		middleComposite.setLayoutData(fd_middleComposite);
 		
+		/*
+		 * Outer Scrolled Composite for expandbar horizontal scroll.
+		 */
 		final ScrolledComposite scrolledComposite = new ScrolledComposite(middleComposite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		ColumnLayoutData cld_scrolledComposite = new ColumnLayoutData();
 		cld_scrolledComposite.widthHint = 525;
@@ -463,12 +466,16 @@ public class TransformDialog extends Dialog {
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
 		
+		//Expandbar composite
 		final Composite expandBarOuterComposite = new Composite(scrolledComposite, SWT.NONE);
 		ColumnLayout columnLayout= new ColumnLayout();
 		expandBarOuterComposite.setLayout(columnLayout);
 		expandBar = new ExpandBar(expandBarOuterComposite, SWT.NONE);
 	
 		
+		/*
+		 * Repopulate all added operation fields. 
+		 */
 		  if(transformPropertyGrid!=null)  
 		  {
 			  if(transformPropertyGrid.getOperation()!=null) {
@@ -484,6 +491,7 @@ public class TransformDialog extends Dialog {
 			  }
 		  }
 		 
+		// Add new operation listener  
 		btnAddOperation.addSelectionListener(new SelectionAdapter() {
 			@Override 
 			public void widgetSelected(SelectionEvent e) {
@@ -496,7 +504,10 @@ public class TransformDialog extends Dialog {
 				addExpandItem(expandBarOuterComposite,scrolledComposite, transformOperation, eltFixedWidget ) ;
 			}
 		}); 
-		
+	
+		/*
+		 * Listener Helper
+		 */
 		ListenerHelper helperPropertyValue=getListenerHelper(opOuterClassProperty, outerKeyValueTabViewer, fieldError,eltTransforAddPropValueListener);
 		ListenerHelper helperInputOuter=getListenerHelper(operationSystemProperties, opSystemPropertiesTabViewer, fieldError,opSysSelectionListener);
 		ListenerHelper helperOutputOuter=getListenerHelper(opOutputOuterFields, outerOpTabViewer, fieldError,opSysSelectionListener);
@@ -534,13 +545,11 @@ public class TransformDialog extends Dialog {
 	 */
 	private void addExpandItem(Composite expandBarOuterComposite,ScrolledComposite scrolledComposite,TransformOperation transformOperation,ELTFixedWidget eltFixedWidget ) {
 		
-		Button btnCheckButton_1 = new Button(scrolledComposite, SWT.CHECK);
-		btnCheckButton_1.setBounds(10, 10, 10, 16);
-		btnCheckButton_1.setText("Check Button");
-
 		ExpandItem expandItem = new ExpandItem(expandBar, SWT.CHECK);
 		expandItem.setExpanded(true);
 		expandItem.setText("Operation :"+transformOperation.getOperationId()); 
+		
+		//Inner scrolled composite for expand items.
 		ScrolledComposite expandItemScrolledComposite = new ScrolledComposite(expandBar, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		expandItem.setControl(expandItemScrolledComposite);
 		expandItemScrolledComposite.setExpandHorizontal(true);
@@ -567,15 +576,22 @@ public class TransformDialog extends Dialog {
 		innerOpDeleteButton.setBounds(116, 5, 18, 18);
 		innerOpDeleteButton.setImage(SWTResourceManager.getImage(DELETE_ICON));	
 		
-		innerOpInputTabViewer = createTableViewer(innerOpInputComposite, new String[]{OPERATIONAL_INPUT_FIELD},new TransformGridContentProvider(),new OperationLabelProvider());
+		/*
+		 * Inner operation property fileds tableviewer.
+		 */
+		innerOpInputTabViewer = createTableViewer(innerOpInputComposite, new String[]{Messages.INNER_OPERATION_INPUT_FIELD},new TransformGridContentProvider(),new OperationLabelProvider());
 		innerOpInputTabViewer.setCellModifier(new OperationGridCellModifier(innerOpInputTabViewer));
 		innerOpInputTabViewer.setInput(transformOperation.getInputFields());
-			
+		
+		//apply drop on table 
 		DragDropUtility.INSTANCE.applyDrop(innerOpInputTabViewer,new DragDropTransformOpImp(transformOperation.getInputFields(), true,innerOpInputTabViewer));
+		
 		ELTTable eltOpInTable = new ELTTable(innerOpInputTabViewer);
 		 
 		innerOpInputSubgroupComposite.attachWidget(eltOpInTable);
 		innerOpInputTabViewer.getTable().setBounds(0, 30, 135, 300);
+		
+		//Set column width
 		for (int columnIndex = 0, n = innerOpInputTabViewer.getTable().getColumnCount(); columnIndex < n; columnIndex++) {
 			innerOpInputTabViewer.getTable().getColumn(columnIndex).setWidth(130);
 		}
@@ -592,6 +608,9 @@ public class TransformDialog extends Dialog {
 		scrolledComposite.setContent(expandBarOuterComposite);
 		scrolledComposite.setMinSize(expandBarOuterComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		
+		/**
+		 * Create operation
+		 */
 		AbstractELTWidget fileNameText = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(150);
 		AbstractELTWidget isParameterCheckbox = new ELTDefaultCheckBox("IsParam").checkBoxLableWidth(100);
 		FilterOperationClassUtility.createOperationalClass(innerOperationComposite, propertyDialogButtonBar, fileNameText, isParameterCheckbox, validationStatus, tootlTipErrorMessage, widgetConfig);
@@ -611,6 +630,8 @@ public class TransformDialog extends Dialog {
 		Composite innerNameValueComposite = new Composite(innerMainComposite, SWT.NONE);
 		innerNameValueComposite.setBounds(140, 125, 342, 261);
 		
+		// inner Property fields table viewer. 
+		
 		innerKeyValueTabViewer = createTableViewer(innerNameValueComposite, NAME_VALUE_COLUMN_INNER, new TransformGridContentProvider(),new PropertyLabelProvider());
 		innerKeyValueTabViewer.setCellModifier(new PropertyGridInnerCellModifier(innerKeyValueTabViewer)); 
 		innerKeyValueTabViewer.setInput(transformOperation.getNameValueProps());  
@@ -625,7 +646,7 @@ public class TransformDialog extends Dialog {
 		ELTTable eltPropValueTable = new ELTTable(innerKeyValueTabViewer);
 		defaultnameValueInnerComposite.attachWidget(eltPropValueTable);
 		
-		ControlDecoration errorPropValDecorator = setDecorator("Property name should not be same or blank");
+		ControlDecoration errorPropValDecorator = setDecorator(Messages.PROPERTY_DECORATOR);
 		editors[0].setValidator(new ELTCellEditorTransformValidator((Table)eltPropValueTable.getSWTWidgetControl(), transformOperation.getNameValueProps(), errorPropValDecorator,propertyDialogButtonBar,false));
 
 		
@@ -645,26 +666,29 @@ public class TransformDialog extends Dialog {
 		btnInnerPropValueDeleteButton.setBounds(310, 0, 18, 18);
 		btnInnerPropValueDeleteButton.setImage(SWTResourceManager.getImage(DELETE_ICON));
 		
-		AbstractELTWidget mapFieldLableWidget = new ELTDefaultLable("Properties").lableWidth(250);
-		innerOpInputSubgroupComposite.attachWidget(mapFieldLableWidget);
-		Label mapFieldLable=(Label) mapFieldLableWidget.getSWTWidgetControl();
-		mapFieldLable.setParent(innerNameValueComposite);
-		mapFieldLable.setBounds(130, 0, 60, 18); 
-		
-		//---------------------------------
+		//Inner name Value label
+		AbstractELTWidget innerPropertyNameValue = new ELTDefaultLable(Messages.PROPERTIES).lableWidth(250);
+		innerOpInputSubgroupComposite.attachWidget(innerPropertyNameValue);
+		Label innerNameValueLable=(Label) innerPropertyNameValue.getSWTWidgetControl();
+		innerNameValueLable.setParent(innerNameValueComposite);
+		innerNameValueLable.setBounds(130, 0, 60, 18); 
+
 		Composite innerOpOutputComposite = new Composite(innerMainComposite, SWT.NONE);
 		innerOpOutputComposite.setBounds(480, 10, 402, 320);
 		innerOpOutputComposite.setLayout(new RowLayout(SWT.HORIZONTAL));
 		innerOpOutputComposite.setLayoutData(new RowData(400, 400)); 	
 	
 		Label opOutputLable= new Label(innerOpOutputComposite, SWT.NONE);
-		opOutputLable.setText("Operation Output Fields");
+		opOutputLable.setText(Messages.INNER_OPERATION_OUTPUT_FIELD);
 		opOutputLable.setBounds(100, 10, 60, 18); 
 
+		//Create Operation Output fields same as Fixed width.
+		eltFixedWidget.setSchemaGridRowList(transformOperation.getSchemaGridRowList());
 		TableViewer innerOpOutputTabViewer=	eltFixedWidget.createSchemaGrid(innerOpOutputComposite);
 		DragDropUtility.INSTANCE.applyDragFromTableViewer(innerOpOutputTabViewer.getTable());  
 		innerOpOutputTabViewer.getTable().setBounds(0, 10, 402, 310); 
-		innerOpOutputComposite.setSize(innerOpOutputComposite.computeSize(400, 400)); 
+		innerOpOutputComposite.setSize(innerOpOutputComposite.computeSize(400, 400));
+		innerOpOutputTabViewer.refresh();
 	
 		ListenerHelper helperOpIn=getListenerHelper(transformOperation.getInputFields(), innerOpInputTabViewer, fieldError,eltTransforAddSelectionListener);  
 		ListenerHelper helperPropertyValue=getListenerHelper(transformOperation.getNameValueProps(), innerKeyValueTabViewer, fieldError,eltTransforAddPropValueListener);

@@ -5,6 +5,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
 import com.bitwise.app.common.datastructure.property.OperationField;
+import com.bitwise.app.propertywindow.messages.Messages;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -51,7 +52,7 @@ public class OperationGridCellModifier implements ICellModifier {
   public Object getValue(Object element, String property) {
 	  OperationField p = (OperationField) element;
 	  
-    if (TransformDialog.OPERATIONAL_INPUT_FIELD.equals(property) ||TransformDialog.OPERATIONAL_OUTPUT_FIELD.equals(property) )
+    if (Messages.INNER_OPERATION_INPUT_FIELD.equals(property) ||Messages.INNER_OPERATION_OUTPUT_FIELD.equals(property) )
         return p.getName();
       else
         return null;
@@ -73,7 +74,7 @@ public class OperationGridCellModifier implements ICellModifier {
       element = ((Item) element).getData();
  
     OperationField p = (OperationField) element;
-    if (TransformDialog.OPERATIONAL_INPUT_FIELD.equals(property) ||TransformDialog.OPERATIONAL_OUTPUT_FIELD.equals(property) )
+    if (Messages.INNER_OPERATION_INPUT_FIELD.equals(property) ||Messages.INNER_OPERATION_OUTPUT_FIELD.equals(property) )
       p.setName(((String) value).trim());
 
     viewer.refresh();
