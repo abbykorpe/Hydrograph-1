@@ -155,7 +155,7 @@ public class ParameterGridDialog extends Dialog {
 	 */
 	private void fetchParameterFilePath() {
 		if(getComponentCanvas().getCurrentParameterFilePath() ==null){
-			if(getComponentCanvas().getParameterFile().startsWith("/")){
+			if(getComponentCanvas().getParameterFile().startsWith("/") && getComponentCanvas().getParameterFile().contains(":")){
 				parameterFile = getComponentCanvas().getParameterFile().replaceFirst("/", "");	
 			}else{
 				parameterFile = getComponentCanvas().getParameterFile();
