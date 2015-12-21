@@ -6,12 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -42,8 +39,7 @@ import com.bitwise.app.common.component.policyconfig.PolicyConfig;
  */
 public class XMLConfigUtil {
 	private Logger logger=LogFactory.INSTANCE.getLogger(XMLConfigUtil.class);
-	public static XMLConfigUtil INSTANCE = new XMLConfigUtil();
-	private XMLConfigUtil() {}
+	public static final XMLConfigUtil INSTANCE = new XMLConfigUtil();
 	
 	private static HashMap<String, Component> map = new HashMap<>();
 	private static final String SEPARATOR = "/";
@@ -52,8 +48,10 @@ public class XMLConfigUtil {
 	public final static String COMPONENT_CONFIG_XSD_PATH = Platform.getInstallLocation().getURL().getPath()+Messages.XMLConfigUtil_COMPONENTCONFIG_XSD_PATH;
 	public final static String POLICY_CONFIG_XSD_PATH = Platform.getInstallLocation().getURL().getPath()+Messages.XMLConfigUtil_POLICYCONFIG_XSD_PATH;
 	public final static List<Component> componentList = new ArrayList<>();
-	public static PolicyConfig policyConfig ;
+	public PolicyConfig policyConfig ;
 	
+	private XMLConfigUtil() {}
+
 	/** Reads the xml configuration files stored under the platform installation.
 	 * 	These files contain the configuration required to create the component on UI. 
 	 * @return see {@link Component}
@@ -87,37 +85,10 @@ public class XMLConfigUtil {
 		}
 	}
 
-	/*public List<Property> getUserProperties(Component component){
-		return getPropertiesByType(PropertyType.USER);
-	}
-	
-	public List<Property> getSystemProperties(Component component){
-		return getPropertiesByType(PropertyType.CONFIG);
-	}
-	
-	private List<Property> getPropertiesByType(PropertyType propertyType){
-
-		return null;
-	}*/
-	
 	public Component getComponent(String componentName){
 			return map.get(componentName);
 	}
 	
-	private void validateAndFillComponentConfigList(List<Component> componentList) {
-		for (Component component : componentList) {
-			if(map.containsKey(component.getName())){
-				Status status = new Status(IStatus.ERROR, "com.bitwise.app.common", 
-						"One or more configuration files have similar names, reconfigure the files", null);
-				StatusManager.getManager().handle(status, StatusManager.BLOCK);
-				//remove all component configuration from list
-				componentList.clear();
-				throw new RuntimeException("One or more Component names are similar");
-			}
-			map.put(component.getName(), component);	
-		}		
-	}
-
 
 	/** Filters out the files as per the applied filter and 
 	 *  returns the file names array
@@ -237,5 +208,19 @@ public class XMLConfigUtil {
 		     
 		}
         return true;
+	}
+	
+	private void validateAndFillComponentConfigList(List<Component> componentList) {
+		for (Component component : componentList) {
+			if(map.containsKey(component.getName())){
+				Status status = new Status(IStatus.ERROR, "com.bitwise.app.common", 
+						"One or more configuration files have similar names, reconfigure the files", null);
+				StatusManager.getManager().handle(status, StatusManager.BLOCK);
+				//remove all component configuration from list
+				componentList.clear();
+				throw new RuntimeException("One or more Component names are similar");
+			}
+			map.put(component.getName(), component);	
+		}		
 	}
 }

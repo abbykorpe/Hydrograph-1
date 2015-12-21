@@ -390,11 +390,11 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 			if(!newBounds.contains(mouseLocation.x,mouseLocation.y)){
 				hidePaletteToolTip();
 			}else{
-				logger.debug("Near tooltip area");
+				logger.trace("Near tooltip area");
 			}
 				
 		}else{
-			logger.debug("PaletteToolTip= null");
+			logger.trace("PaletteToolTip= null");
 		}
 	}
 
