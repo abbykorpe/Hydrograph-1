@@ -45,7 +45,6 @@ public class WidgetFactory {
 	public enum Widgets{
 		SCHEMA_WIDGET(ELTGenericSchemaGridWidget.class),
 		FIXED_WIDGET(ELTFixedWidget.class),
-		FIELD_SEQUENCE_WIDGET(ELTGenericSchemaGridWidget.class),
 
 		FILE_PATH_WIDGET(ELTFilePathWidget.class),
 		COMPONENT_NAME_WIDGET(ELTComponentNameWidget.class),
