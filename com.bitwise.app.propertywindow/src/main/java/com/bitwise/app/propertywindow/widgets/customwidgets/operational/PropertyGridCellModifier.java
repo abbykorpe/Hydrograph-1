@@ -76,9 +76,9 @@ public class PropertyGridCellModifier implements ICellModifier {
  
     NameValueProperty p = (NameValueProperty) element;
     if (TransformDialog.PROPERTY_NAME.equals(property))
-      p.setPropertyName((String) value);
+      p.setPropertyName(((String) value).trim());
     if (TransformDialog.PROPERTY_VALUE.equals(property))
-        p.setPropertyValue((String) value);
+        p.setPropertyValue(((String) value).trim());
     viewer.refresh();
   }
   

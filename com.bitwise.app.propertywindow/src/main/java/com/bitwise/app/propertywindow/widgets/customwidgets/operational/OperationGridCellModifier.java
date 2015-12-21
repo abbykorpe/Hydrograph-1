@@ -74,7 +74,7 @@ public class OperationGridCellModifier implements ICellModifier {
  
     OperationField p = (OperationField) element;
     if (TransformDialog.OPERATIONAL_INPUT_FIELD.equals(property) ||TransformDialog.OPERATIONAL_OUTPUT_FIELD.equals(property) )
-      p.setName((String) value);
+      p.setName(((String) value).trim());
 
     viewer.refresh();
   }

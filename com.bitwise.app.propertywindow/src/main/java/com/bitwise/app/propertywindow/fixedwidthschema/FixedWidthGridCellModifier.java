@@ -90,16 +90,16 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 
 		FixedWidthGridRow p = (FixedWidthGridRow) element;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
-			p.setFieldName((String) value);
+			p.setFieldName(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
-			p.setDateFormat(value.toString());
+			p.setDateFormat(((String) value).trim());
 		else if (ELTSchemaGridWidget.SCALE.equals(property))
-			p.setScale(value.toString());
+			p.setScale(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)) {
 			p.setDataType((Integer) value);
 			p.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]); 
 		} else if (ELTSchemaGridWidget.LENGTH.equals(property)) {
-			p.setLength(value.toString());
+			p.setLength(((String) value).trim());
 		}
 		viewer.refresh();
 	}

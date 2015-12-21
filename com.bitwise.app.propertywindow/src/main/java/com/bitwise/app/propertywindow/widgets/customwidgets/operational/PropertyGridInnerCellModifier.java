@@ -76,9 +76,9 @@ public class PropertyGridInnerCellModifier implements ICellModifier {
  
     NameValueProperty p = (NameValueProperty) element;
     if (TransformDialog.PROPERTY_NAME_INNER.equals(property))
-      p.setPropertyName((String) value);
+      p.setPropertyName(((String) value).trim());
     if (TransformDialog.PROPERTY_VALUE_INNER.equals(property))
-        p.setPropertyValue((String) value);
+        p.setPropertyValue(((String) value).trim());
     viewer.refresh();
   }
   

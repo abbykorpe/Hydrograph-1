@@ -74,7 +74,7 @@ public class OperationSystemCellModifier implements ICellModifier {
  
     OperationSystemProperties p = (OperationSystemProperties) element;
     if (TransformDialog.OPERATIONAL_SYSTEM_FIELD.equals(property) ||TransformDialog.OPERATIONAL_SYSTEM_FIELD.equals(property) )
-      p.setOpSysValue((String) value);
+      p.setOpSysValue(((String) value).trim());
 
     viewer.refresh();
   }
