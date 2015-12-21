@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.ViewportAwareConnectionLayerClippingStrategy;
@@ -101,6 +102,7 @@ import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.engine.exceptions.EngineException;
 import com.bitwise.app.engine.util.ConverterUtil;
+import com.bitwise.app.graph.Messages;
 import com.bitwise.app.graph.action.CopyAction;
 import com.bitwise.app.graph.action.CutAction;
 import com.bitwise.app.graph.action.PasteAction;
@@ -334,7 +336,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public PaletteDrawer createPaletteContainer(String CategoryName) {
 		String name = CategoryName.substring(0, 1).toUpperCase()
 				+ CategoryName.substring(1).toLowerCase();
-		PaletteDrawer p = new PaletteDrawer(name);
+		PaletteDrawer p = new PaletteDrawer(name, ImageDescriptor.createFromURL(prepareIconPathURL("/icons/"+ name + "_categoryIcon.png")));
 		p.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
 		return p;
 	}
