@@ -92,6 +92,9 @@ public class ProjectStructureCreator {
 
 				copyBuildFile(installLocation + CustomMessages.ProjectSupport_CONFIG_FOLDER + "/" + CustomMessages.ProjectSupport_GRADLE+"/build", 
 						project);
+				
+				copyBuildFile(installLocation + CustomMessages.ProjectSupport_CONFIG_FOLDER + "/" + CustomMessages.ProjectSupport_GRADLE+"/properties", 
+						project);
 
 				//Add gradle prefs file to the project .setting folder. Has information regarding gradle home and args.
 				generateGradlePrefsFile(project.getFolder(CustomMessages.ProjectSupport_Settings),project.getLocation().toOSString());

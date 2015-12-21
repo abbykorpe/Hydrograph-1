@@ -30,6 +30,7 @@ import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.graph.Messages;
 import com.bitwise.app.parametergrid.dialog.ParameterGridDialog;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
+import com.bitwise.app.propertywindow.runconfig.*;
 /**
  * Handler use to run the job using gradle command.
  * 
@@ -80,6 +81,12 @@ public class RunJobHandler extends AbstractHandler {
 			messageBox.setText("Error");
 			messageBox.setMessage("Could not run the graph. \nPlease save the graph file.");
 			messageBox.open();
+			return null;
+		}
+		
+		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell());
+		runConfigDialog.open();
+		if(!runConfigDialog.proceedToRunGraph()){
 			return null;
 		}
 		

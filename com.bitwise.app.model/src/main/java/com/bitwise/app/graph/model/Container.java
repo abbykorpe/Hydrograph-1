@@ -27,33 +27,10 @@ public class Container extends Model {
 	private final Hashtable<String, Integer> componentNextNameSuffixes = new Hashtable<>();
 	private ArrayList<String> componentNames = new ArrayList<>();
 	//@XStreamOmitField
-	private String parameterFileName;
+	//private String parameterFileName;
 	//@XStreamOmitField
-	private String parameterFileDirectory;
-	
-	public String getParameterFileDirectory() {
-		return parameterFileDirectory;
-	}
-
-	public void setParameterFileDirectory(String parameterFilePath) {
-		this.parameterFileDirectory = parameterFilePath;
-	}
-
-	public String getParameterFileName() {
-		return parameterFileName;
-	}
-	
-	public String getFullParameterFilePath(){
-		if(parameterFileDirectory == null || parameterFileName==null)
-			return null;
-					
-		return parameterFileDirectory + parameterFileName;
-	}
-
-	public void setParameterFileName(String parameterFileName) {
-		this.parameterFileName = parameterFileName;
-	}
-
+	//private String parameterFileDirectory;
+		
 	private List<String> parameterList;
 	
 	public void addParameter(String parameterName){
@@ -62,9 +39,6 @@ public class Container extends Model {
 		}
 		parameterList.add(parameterName);
 	}
-	
-	
-
 	
 	/**
 	 * Add a component to this graph.

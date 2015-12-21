@@ -1,4 +1,4 @@
-package com.bitwise.app.menus.handlers;
+package com.bitwise.app.propertywindow.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;

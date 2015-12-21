@@ -4,7 +4,13 @@ package com.bitwise.app.common.datastructure.property;
 public class OperationField extends PropertyField{
 	
 	private String name;
-
+	public OperationField() {
+		
+	}
+	
+	public OperationField(String name) {
+		this.name=name;
+	}
 	public String getName() {
 		return name;
 	}

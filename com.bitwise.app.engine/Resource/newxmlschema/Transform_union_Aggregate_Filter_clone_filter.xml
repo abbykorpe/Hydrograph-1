@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:graph name="JoinExample" xmlns:p="http://www.bitwiseglobal.com/graph/main"
+	xmlns:it="http://www.bitwiseglobal.com/graph/inputtypes" xmlns:ot="http://www.bitwiseglobal.com/graph/outputtypes"
+	xmlns:spt="http://www.bitwiseglobal.com/graph/straightpulltypes"
+	xmlns:op="http://www.bitwiseglobal.com/graph/operationstypes" xmlns:tt="http://www.bitwiseglobal.com/graph/transformtypes"
+	xmlns:ct="http://www.bitwiseglobal.com/graph/commandtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bitwiseglobal.com/graph/main ./main/main.xsd  ">
+
+
+ <inputs xmlns:ns4="http://www.bitwiseglobal.com/graph/inputtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="IFDelimited_01" phase="1" xsi:type="ns4:textFileDelimited">
+        <outSocket xmlns:ns5="http://www.bitwiseglobal.com/graph/itfd" id="out0" type="out" xsi:type="ns5:type-input-delimited-out-socket">
+            <schema name="">
+                <field name="id" type="java.lang.Integer"/>
+                <field name="fname" type="java.lang.String"/>
+                <field name="lname" type="java.lang.String"/>
+                <field name="salary" scaleType="explicit" type="java.math.BigDecimal"/>
+            </schema>
+        </outSocket>
+        <path uri="C:\Users\kishorb\Desktop\TestDataIntegrationtesting\Source1-delimited.txt"/>
+        <delimiter value=","/>
+        <hasHeader value="false"/>
+        <safe value="false"/>
+        <strict value="false"/>
+        <charset value="UTF-8"/>
+    </inputs>
+    <outputs xmlns:ns4="http://www.bitwiseglobal.com/graph/outputtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="OFDelimited_01" phase="8" xsi:type="ns4:textFileDelimited">
+        <inSocket xmlns:ns5="http://www.bitwiseglobal.com/graph/otfd" fromComponentId="Transform_01" fromSocketId="out0" id="in0" type="in" xsi:type="ns5:type-output-delimited-in-socket">
+            <schema name="">
+                <field name="id" type="java.lang.String"/>
+                <field name="fname" type="java.lang.String"/>
+                <field name="lname" type="java.lang.String"/>
+                <field name="salary" scaleType="explicit" type="java.math.BigDecimal"/>
+                <field name="totalsalary" scaleType="explicit" type="java.lang.String"/>
+                <field name="name" type="java.lang.String"/>
+            </schema>
+        </inSocket>
+        <path uri="C:\Users\kishorb\Desktop\TestDataIntegrationtesting\output9"/>
+        <delimiter value="|"/>
+        <hasHeader value="true"/>
+        <safe value="false"/>
+        <strict value="false"/>
+        <charset value="UTF-8"/>
+    </outputs>
+    <inputs xmlns:ns4="http://www.bitwiseglobal.com/graph/inputtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="IFixedWidth_01" phase="1" xsi:type="ns4:textFileFixedWidth">
+        <outSocket xmlns:ns5="http://www.bitwiseglobal.com/graph/itffw" id="out0" type="out" xsi:type="ns5:type-input-fixedwidth-out-socket">
+            <schema name="">
+                <field length="2" name="id" type="java.lang.Integer"/>
+                <field length="3" name="fname" type="java.lang.String"/>
+                <field length="5" name="lname" type="java.lang.String"/>
+                <field length="6" name="salary" scale="2" scaleType="explicit" type="java.math.BigDecimal"/>
+            </schema>
+        </outSocket>
+        <path uri="C:\Users\kishorb\Desktop\TestDataIntegrationtesting\Source2-Fixed.txt"/>
+        <safe value="false"/>
+        <strict value="false"/>
+        <charset value="UTF-8"/>
+    </inputs>
+    <outputs xmlns:ns4="http://www.bitwiseglobal.com/graph/outputtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="OFixedWidth_01" phase="8" xsi:type="ns4:textFileFixedWidth">
+        <inSocket xmlns:ns5="http://www.bitwiseglobal.com/graph/otffw" fromComponentId="Clone_03" fromSocketId="out0" id="in0" type="in" xsi:type="ns5:type-output-fixedwidth-in-socket">
+            <schema name="">
+                <field length="2" name="id" type="java.lang.Integer"/>
+                <field length="3" name="fname" type="java.lang.String"/>
+                <field length="5" name="lname" type="java.lang.String"/>
+                <field length="6" name="salary" scale="2" scaleType="explicit" type="java.math.BigDecimal"/>
+            </schema>
+        </inSocket>
+        <path uri="C:\Users\kishorb\Desktop\TestDataIntegrationtesting\output8"/>
+        <safe value="false"/>
+        <charset value="UTF-8"/>
+    </outputs>
+    <straightPulls xmlns:ns4="http://www.bitwiseglobal.com/graph/straightpulltypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Unionall_01" phase="1" xsi:type="ns4:unionAll">
+        <inSocket fromComponentId="IFDelimited_01" fromSocketId="out0" id="in0" type="in"/>
+        <inSocket fromComponentId="IFixedWidth_01" fromSocketId="out0" id="in1" type="in"/>
+        <outSocket id="out0" type="out">
+            <copyOfInsocket inSocketId="in0"/>
+        </outSocket>
+    </straightPulls>
+    <straightPulls xmlns:ns4="http://www.bitwiseglobal.com/graph/straightpulltypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Clone_03" phase="1" xsi:type="ns4:clone">
+        <inSocket fromComponentId="Unionall_01" fromSocketId="out0" id="in0" type="in"/>
+        <outSocket id="out0" type="out">
+            <copyOfInsocket inSocketId="in0"/>
+        </outSocket>
+        <outSocket id="out1" type="out">
+            <copyOfInsocket inSocketId="in0"/>
+        </outSocket>
+    </straightPulls>
+    <operations xmlns:ns4="http://www.bitwiseglobal.com/graph/operationstypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Filter_02" phase="1" xsi:type="ns4:filter">
+        <inSocket fromComponentId="Clone_03" fromSocketId="out1" id="in0" type="in"/>
+        <operation class="com.bitwisegloabal.bhse.userfuntions.Filter" id="opt">
+            <inputFields>
+                <field inSocketId="in0" name="fname"/>
+            </inputFields>
+        </operation>
+        <outSocket id="out0" type="out">
+            <copyOfInsocket inSocketId="in0"/>
+        </outSocket>
+    </operations>
+    <operations xmlns:ns4="http://www.bitwiseglobal.com/graph/operationstypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Aggregate_01" phase="1" xsi:type="ns4:aggregate">
+        <inSocket fromComponentId="Filter_02" fromSocketId="out0" id="in0" type="in"/>
+        <operation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Count" id="1">
+            <inputFields>
+                <field inSocketId="in0" name="salary"/>
+            </inputFields>
+            <outputFields>
+                <field format="" name="totalsalary" scale="2" scaleType="explicit" type="java.math.BigDecimal"/>
+            </outputFields>
+        </operation>
+        <outSocket type="out" id="out0">
+            <passThroughField name="id" inSocketId="in0" />
+            <passThroughField name="fname" inSocketId="in0" />
+            <passThroughField name="lname" inSocketId="in0" />
+            <passThroughField name="salary" inSocketId="in0" />
+            <operationField name="totalsalary" operationId="1"/>
+        </outSocket>
+        <primaryKeys>
+            <field name="id"/>
+        </primaryKeys>
+      
+    </operations>
+    <operations xmlns:ns4="http://www.bitwiseglobal.com/graph/operationstypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Transform_01" phase="1" xsi:type="ns4:transform">
+        <inSocket fromComponentId="Aggregate_01" fromSocketId="out0" id="in0" type="in"/>
+        
+        <outSocket type="out" id="out0">
+             <passThroughField name="id" inSocketId="in0" />
+            <passThroughField name="fname" inSocketId="in0" />
+            <passThroughField name="lname" inSocketId="in0" />
+            <passThroughField name="salary" inSocketId="in0" />
+            <operationField name="totalsalary" operationId="1"/>
+            <mapField inSocketId="in0" name="name" sourceName="fname"/>
+        </outSocket>
+    </operations>
+
+</p:graph>

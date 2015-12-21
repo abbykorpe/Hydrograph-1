@@ -8,6 +8,7 @@
 	xmlns:cumulate="http://www.bitwiseglobal.com/graph/cumulate"
 	xmlns:hashjoin="http://www.bitwiseglobal.com/graph/hashjoin"
 	xmlns:normalize="http://www.bitwiseglobal.com/graph/normalize"
+	xmlns:pbe="http://www.bitwiseglobal.com/graph/partitionByExpression"
 	xmlns:subgraph="http://www.bitwiseglobal.com/graph/subgraph" xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://www.bitwiseglobal.com/graph/operationstypes"
 	elementFormDefault="unqualified">
@@ -31,6 +32,9 @@
 		namespace="http://www.bitwiseglobal.com/graph/normalize" />
 	<xs:import schemaLocation="./subgraph/subgraph-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/subgraph" />
+	<xs:import
+		schemaLocation="./partition-by-expression/partition-by-expression-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/partitionByExpression" />
 
 	<xs:complexType name="transform">
 		<xs:complexContent>
@@ -53,7 +57,7 @@
 		<xs:complexContent>
 			<xs:extension base="subgraph:subgraph-base">
 				<xs:sequence>
-				<xs:element name="path">
+					<xs:element name="path">
 						<xs:complexType>
 							<xs:attribute name="uri" type="xs:string" use="required" />
 						</xs:complexType>
@@ -165,5 +169,21 @@
 			</xs:restriction>
 		</xs:complexContent>
 	</xs:complexType>
+
+	<xs:complexType name="partitionByExpression">
+		<xs:complexContent>
+			<xs:extension base="pbe:partitionByExpression-base">
+				<xs:sequence>
+					<xs:element name="noOfPartitions" minOccurs="1"
+						maxOccurs="1">
+						<xs:complexType>
+							<xs:attribute name="value" type="xs:long" use="required" />
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
 
 </xs:schema>

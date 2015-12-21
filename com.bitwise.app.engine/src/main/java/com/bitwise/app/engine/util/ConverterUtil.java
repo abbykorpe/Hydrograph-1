@@ -53,7 +53,7 @@ public class ConverterUtil {
 	
 	
 	private void marshall(Graph graph, boolean validate,IFile outPutFile) {
-		LOGGER.debug("Marshling genrated object into target XML");
+		LOGGER.debug("Marshaling generated object into target XML");
 		ByteArrayOutputStream out = null;
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(graph.getClass());
@@ -70,7 +70,7 @@ public class ConverterUtil {
 			out.close();
 			
 		} catch (Exception exception) {
-			LOGGER.error("Failed in marshall", exception);
+			LOGGER.error("Failed in marshal", exception);
 		}finally{
 			if(out != null){
 				try {

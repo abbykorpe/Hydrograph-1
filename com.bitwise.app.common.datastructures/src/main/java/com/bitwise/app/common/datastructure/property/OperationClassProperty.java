@@ -20,6 +20,10 @@ public class OperationClassProperty implements Cloneable{
 	 * @param isParameter
 	 *            the is parameter
 	 */
+	public OperationClassProperty(String operationClassPath, boolean isParameter) {
+		this.operationClassPath = operationClassPath;
+		this.isParameter = isParameter;
+	}
 	public OperationClassProperty(String operationClassPath, boolean isParameter,String operationClassFullPath) {
 		this.operationClassPath = operationClassPath;
 		this.isParameter = isParameter;

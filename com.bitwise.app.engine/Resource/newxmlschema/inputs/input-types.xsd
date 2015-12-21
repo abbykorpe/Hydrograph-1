@@ -135,6 +135,7 @@
 						minOccurs="1" maxOccurs="1" />
 					<xs:element name="tableName" type="ihiveparquet:hive_type"
 						minOccurs="1" maxOccurs="1" />
+					<xs:element name="external_table_path" type="ihiveparquet:hive_path_type" maxOccurs="1" minOccurs="0"/>
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" />
 				</xs:sequence>
