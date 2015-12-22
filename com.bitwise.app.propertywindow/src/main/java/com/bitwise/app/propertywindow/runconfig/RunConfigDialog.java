@@ -38,6 +38,7 @@ public class RunConfigDialog extends Dialog {
 	private Text textEdgeNode;
 	private Text textUser;
 	private Text textPassword;
+	private Shell shell;
 
 	private boolean runGraph;
 
@@ -102,7 +103,8 @@ public class RunConfigDialog extends Dialog {
 		new Label(container, SWT.NONE);
 
 		btnLocalMode.addSelectionListener(selectionListener);
-
+		
+		
 		btnRemoteMode = new Button(compositeRunMode, SWT.RADIO);
 		btnRemoteMode.setBounds(109, 43, 76, 16);
 		formToolkit.adapt(btnRemoteMode, true, true);
@@ -185,15 +187,15 @@ public class RunConfigDialog extends Dialog {
 
 			try {
 				if(btnLocalMode.getSelection()==true){
-					out.write(("Local: "+btnLocalMode.getSelection()).getBytes());
-					out.write(("\nRemote: "+btnRemoteMode.getSelection()).getBytes());
+					out.write(("local="+btnLocalMode.getSelection()).getBytes());
+					out.write(("\nremote="+btnRemoteMode.getSelection()).getBytes());
 				}
 				else{
-					out.write(("Local: "+btnLocalMode.getSelection()).getBytes());
-					out.write(("\nRemote: "+btnRemoteMode.getSelection()).getBytes());
-					out.write(("\nEdge node: "+textEdgeNode.getText()).getBytes());
-					out.write(("\nUser: "+textUser.getText()).getBytes());
-					out.write(("\nPassword: "+textPassword.getText()).getBytes());
+					out.write(("local="+btnLocalMode.getSelection()).getBytes());
+					out.write(("\nremote="+btnRemoteMode.getSelection()).getBytes());
+					out.write(("\nhost="+textEdgeNode.getText()).getBytes());
+					out.write(("\nuserName="+textUser.getText()).getBytes());
+					out.write(("\npassword="+textPassword.getText()).getBytes());
 				}
 
 				out.close();
@@ -232,8 +234,9 @@ public class RunConfigDialog extends Dialog {
 			if(button.getText().equals("Local")){
 
 				compositeServerDetails.setVisible(false);
+				
 			}else if(button.getText().equals("Remote")){
-
+				
 				compositeServerDetails.setVisible(true);
 			}
 

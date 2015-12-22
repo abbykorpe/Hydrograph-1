@@ -11,6 +11,7 @@ import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
@@ -67,8 +68,9 @@ public class TransformWidget extends AbstractWidget {
 		final ELTDefaultSubgroupComposite transformComposite = new ELTDefaultSubgroupComposite(
 				container.getContainerControl());
 		transformComposite.createContainerWidget();
-		ELTDefaultLable defaultLable1 = new ELTDefaultLable("Transform"); 
-		transformComposite.attachWidget(defaultLable1);
+		OperationClassConfig operationClassConfig = (OperationClassConfig) widgetConfig;
+		ELTDefaultLable defaultLable1 = new ELTDefaultLable(operationClassConfig.getComponentDisplayName()); 
+		transformComposite.attachWidget(defaultLable1); 
 		
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(
 				"Edit").grabExcessHorizontalSpace(false);

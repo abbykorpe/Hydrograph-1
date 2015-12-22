@@ -91,12 +91,14 @@ public class WidgetHelper {
 	public WidgetConfig getOperationClassForTransformWidgetConfig() {
 		OperationClassConfig operationClassConfig = new OperationClassConfig();
 		operationClassConfig.setComponentName(Constants.TRANSFORM);
+		operationClassConfig.setComponentDisplayName(Constants.TRANSFORM_DISPLAYNAME);
 		return operationClassConfig;
 	}
 	
 	public WidgetConfig getOperationClassForAggregateWidgetConfig() {
 		OperationClassConfig operationClassConfig = new OperationClassConfig();
 		operationClassConfig.setComponentName(Constants.AGGREGATE);
+		operationClassConfig.setComponentDisplayName(Constants.AGGREGATE_DISPLAYNAME);
 		return operationClassConfig;
 	}
 	

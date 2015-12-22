@@ -10,14 +10,13 @@ import org.eclipse.ui.console.IConsoleConstants;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.LogFactory;
-import com.bitwise.app.common.util.XMLConfigUtil;
 /**
  *Creates Console Handler 
  * @author Bitwise
  *
  */
 public class ConsoleHandler extends AbstractHandler implements IHandler {
-	private Logger logger=LogFactory.INSTANCE.getLogger(ConsoleHandler.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(ConsoleHandler.class);
 	/**
 	 * open console view
 	 * @param event
@@ -27,10 +26,9 @@ public class ConsoleHandler extends AbstractHandler implements IHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 	
 		try {
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-			.showView(IConsoleConstants.ID_CONSOLE_VIEW);
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(IConsoleConstants.ID_CONSOLE_VIEW);
 		} catch (PartInitException e) {
-		logger.error(e.getMessage());
+			logger.error("Failed to show view : ", e);
 		}
 		return null;
 	}

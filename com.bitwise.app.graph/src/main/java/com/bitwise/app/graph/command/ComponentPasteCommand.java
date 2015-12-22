@@ -3,6 +3,7 @@ package com.bitwise.app.graph.command;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
@@ -26,7 +27,7 @@ public class ComponentPasteCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		ArrayList<Component> bList = (ArrayList<Component>) Clipboard.getDefault().getContents();
+		List<Component> bList = (ArrayList<Component>) Clipboard.getDefault().getContents();
 		if (bList == null || bList.isEmpty())
 			return false;
 		Iterator<Component> it = bList.iterator();
@@ -59,7 +60,7 @@ public class ComponentPasteCommand extends Command {
 					list.put(node,clonedComponent);
 			
 			} catch (CloneNotSupportedException e) {
-				log.error("Object could not cloned ");
+				log.error("Object could not cloned", e);
 				
 			}
 		}

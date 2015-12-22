@@ -5,6 +5,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
 import com.bitwise.app.common.datastructure.property.OperationSystemProperties;
+import com.bitwise.app.propertywindow.messages.Messages;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -51,7 +52,7 @@ public class OperationSystemCellModifier implements ICellModifier {
   public Object getValue(Object element, String property) {
 	  OperationSystemProperties p = (OperationSystemProperties) element;
 	  
-    if (TransformDialog.OPERATIONAL_SYSTEM_FIELD.equals(property) ||TransformDialog.OPERATIONAL_SYSTEM_FIELD.equals(property) )
+    if (Messages.OPERATIONAL_SYSTEM_FIELD.equals(property) ||Messages.OPERATIONAL_SYSTEM_FIELD.equals(property) )
         return p.getOpSysValue();
       else
         return null;
@@ -73,8 +74,8 @@ public class OperationSystemCellModifier implements ICellModifier {
       element = ((Item) element).getData();
  
     OperationSystemProperties p = (OperationSystemProperties) element;
-    if (TransformDialog.OPERATIONAL_SYSTEM_FIELD.equals(property) ||TransformDialog.OPERATIONAL_SYSTEM_FIELD.equals(property) )
-      p.setOpSysValue((String) value);
+    if (Messages.OPERATIONAL_SYSTEM_FIELD.equals(property) ||Messages.OPERATIONAL_SYSTEM_FIELD.equals(property) )
+      p.setOpSysValue(((String) value).trim());
 
     viewer.refresh();
   }

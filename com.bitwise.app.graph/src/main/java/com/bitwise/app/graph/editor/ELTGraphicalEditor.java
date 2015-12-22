@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.ViewportAwareConnectionLayerClippingStrategy;
@@ -83,7 +82,6 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.commands.ActionHandler;
 import org.eclipse.ui.dialogs.SaveAsDialog;
@@ -102,21 +100,17 @@ import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.engine.exceptions.EngineException;
 import com.bitwise.app.engine.util.ConverterUtil;
-import com.bitwise.app.graph.Messages;
 import com.bitwise.app.graph.action.CopyAction;
 import com.bitwise.app.graph.action.CutAction;
 import com.bitwise.app.graph.action.PasteAction;
 import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
-import com.bitwise.app.graph.factory.CustomPaletteEditPartFactory;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 import com.bitwise.app.parametergrid.utils.ParameterFileManager;
-import com.bitwise.app.project.structure.CustomMessages;
 import com.bitwise.app.tooltip.tooltips.ComponentTooltip;
 import com.thoughtworks.xstream.XStream;
 
-// TODO: Auto-generated Javadoc
 /**
  * Responsible to render the palette and container.
  * 
@@ -559,7 +553,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			genrateContainerData.setEditorInput(input, this);
 			container = genrateContainerData.getContainerData();
 		} catch (CoreException | IOException ce) {
-			logger.error(ce.getMessage());
+			logger.error("Exception while setting input", ce);
 		}
 	}
 
@@ -610,8 +604,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		try {
 			parameterFileManager.storeParameters(newParameterMap);
 		} catch (IOException e) {
+			logger.error("Unable to store parameters to the file", e);
+			
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
-
 			messageBox.setText("Error");
 			messageBox.setMessage("Unable to store parameters to the file - \n" + e.getMessage());
 			messageBox.open();
@@ -625,7 +620,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		try {
 			file.refreshLocal(IResource.DEPTH_ZERO, null);
 		} catch (CoreException e) {
-			e.printStackTrace();
+			logger.error("Error in refreshing the parameters in file", e);
 		}
 	}
 	
@@ -660,8 +655,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			try {
 				parameterFile.createNewFile();
 			} catch (IOException e) {
-				System.out.println("Add logger");
-				e.printStackTrace();
+				logger.error("Failed while creating file", e);
 			}
 		}
 
@@ -670,8 +664,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		try{
 			parameters = parameterFileManager.getParameterMap();
 		} catch (IOException e) {
+			logger.error("Failed to load parameters from the file", e);
+			
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
-		
 			messageBox.setText("Error");
 			messageBox.setMessage("Unable to load parameter file - \n" + e.getMessage());
 			messageBox.open();
@@ -717,7 +712,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				genrateTargetXml(file);
 				getCommandStack().markSaveLocation();
 			} catch (CoreException  | IOException ce) {
-
+				logger.error("Failed to Save the file : ", ce);
 				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n"+ce.getMessage());
 			}
 			setDirty(false);
@@ -830,7 +825,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			str = str + xs.toXML(object);
 			logger.debug( "Sucessfully converted XML from JAVA Object");
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed to convert from Object to XML", e);
 		}
 		return str;
 	}

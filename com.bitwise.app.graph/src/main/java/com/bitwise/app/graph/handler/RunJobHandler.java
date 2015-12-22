@@ -31,6 +31,7 @@ import com.bitwise.app.graph.Messages;
 import com.bitwise.app.parametergrid.dialog.ParameterGridDialog;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 import com.bitwise.app.propertywindow.runconfig.*;
+
 /**
  * Handler use to run the job using gradle command.
  * 
@@ -128,7 +129,7 @@ public class RunJobHandler extends AbstractHandler {
 									try {
 										reader.close();
 									} catch (IOException e) {
-										// ignore
+										logger.error("Ignore the exception", e);
 									}
 								}
 							}
@@ -138,8 +139,7 @@ public class RunJobHandler extends AbstractHandler {
 					WidgetUtility.errorMessage("Please open a graph to run.");
 			
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			logger.error(ex.getMessage());
+			logger.error("Error in Run Job",ex);
 		}
 
 		return null;

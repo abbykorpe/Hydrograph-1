@@ -19,31 +19,12 @@ public class LogFactory {
     private static final Logger loggers = LoggerFactory.getLogger(LogFactory.class);
     public static final LogFactory INSTANCE = new LogFactory();
     
-    private Logger logger;
-    
     private LogFactory(){
     	writeLogsOnFileAndConsole();
     }
     
     public Logger getLogger(Class<?> clazz){
     	return LoggerFactory.getLogger(clazz.getName());
-    }
-    
-    /**
-     * Use Logger logger = LogFactory.INSTANCE.getLogger(Class<?> clazz)
-     */
-    @Deprecated
-    public LogFactory(String className) {
-    	logger = LoggerFactory.getLogger(className);
-    	writeLogsOnFileAndConsole();
-	}
-    
-    /**
-     * Use Logger logger = LogFactory.INSTANCE.getLogger(Class<?> clazz)
-     */
-    @Deprecated
-    public Logger getLogger(){
-    	return logger;
     }
     
 	private void writeLogsOnFileAndConsole() {
@@ -61,8 +42,8 @@ public class LogFactory {
 	                lc.start();
             }
             loggers.debug("****Logger Configured Successfully****");
-        } catch(Exception e){
-        	loggers.error("Failed to configure the logger {}", e.getMessage());
+        } catch(Exception exception){
+        	loggers.error("Failed to configure the logger {}", exception);
         }
     }
 
