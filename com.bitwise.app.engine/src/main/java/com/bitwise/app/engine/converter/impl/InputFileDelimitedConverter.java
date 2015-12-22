@@ -14,6 +14,8 @@ import com.bitwise.app.engine.helper.ConverterHelper;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.propertywindow.fixedwidthschema.FixedWidthGridRow;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GridRow;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.Schema;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.SchemaGrid;
 import com.bitwiseglobal.graph.commontypes.FieldDataTypes;
 import com.bitwiseglobal.graph.commontypes.ScaleTypeList;
@@ -72,15 +74,15 @@ public class InputFileDelimitedConverter extends InputConverter {
 		}
 		return outSockets;
 	}
-
+ 
 	@Override
-	protected List<TypeBaseField> getFieldOrRecord() {
+	protected List<TypeBaseField> getFieldOrRecord(List<GridRow> gridList) {
 		logger.debug("Generating data for {} for property {}", new Object[] { properties.get(Constants.PARAM_NAME),
 				PropertyNameConstants.SCHEMA.value() });
-		List<SchemaGrid> schemaList = (List) properties.get(PropertyNameConstants.SCHEMA.value());
+		
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
-		if (schemaList != null) {
-			for (SchemaGrid object : schemaList) {
+		if (gridList != null && gridList.size()!=0) {
+			for (GridRow object : gridList) {
 				typeBaseFields.add(converterHelper.getSchemaGridTargetData(object));
 			}
 		}

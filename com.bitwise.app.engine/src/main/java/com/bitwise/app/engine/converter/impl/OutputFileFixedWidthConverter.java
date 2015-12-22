@@ -16,6 +16,7 @@ import com.bitwise.app.engine.helper.ConverterHelper;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.propertywindow.fixedwidthschema.FixedWidthGridRow;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GridRow;
 import com.bitwiseglobal.graph.commontypes.FieldDataTypes;
 import com.bitwiseglobal.graph.commontypes.ScaleTypeList;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
@@ -73,16 +74,14 @@ public class OutputFileFixedWidthConverter extends OutputConverter {
 	}
 
 	@Override
-	protected List<TypeBaseField> getFieldOrRecord() {
+	protected List<TypeBaseField> getFieldOrRecord(List<GridRow> gridList) {
 		logger.debug("Generating data for {} for property {}", new Object[] { properties.get(Constants.PARAM_NAME),
 				PropertyNameConstants.SCHEMA.value() });
-		List<FixedWidthGridRow> schemaList = (List) properties.get(PropertyNameConstants.SCHEMA.value());
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
-		if (schemaList != null) {
-			for (FixedWidthGridRow object : schemaList)
-				typeBaseFields.add(converterHelper.getFixedWidthTargetData(object));
+		if (gridList != null && gridList.size()!=0) {
+			for (GridRow object : gridList)
+				typeBaseFields.add(converterHelper.getFixedWidthTargetData((FixedWidthGridRow) object));
 		}
 		return typeBaseFields;
-
 	}
 }

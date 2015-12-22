@@ -75,7 +75,7 @@ public class Activator extends AbstractUIPlugin {
 				.toString((freeMemory + (maxMemory - allocatedMemory)) / 1024));
 		long used = Runtime.getRuntime().totalMemory()
 				- Runtime.getRuntime().freeMemory();
-		logger.debug("Used Menory : {}", Long.toString(used));
+		logger.debug("Used Memory : {}", Long.toString(used));
 	}
 
 	/*
