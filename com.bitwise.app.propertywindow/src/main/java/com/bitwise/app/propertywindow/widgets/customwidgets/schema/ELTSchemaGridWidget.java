@@ -346,9 +346,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		// Adding the decorator to show error message when field name same.
 		setDecorator();
-
 		addValidators();
-
+		populateWidget(); 
 		helper = getListenerHelper();
 		try {
 			eltTable.attachListener(
@@ -372,8 +371,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 
 		gridListener(editors);
-
-		populateWidget();
 		return tableViewer;
 	}
 
