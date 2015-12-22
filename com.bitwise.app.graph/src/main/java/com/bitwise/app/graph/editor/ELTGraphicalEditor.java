@@ -773,6 +773,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				if(messageBox.open()==SWT.OK)
 				{
 					obj.setOriginalName(jobName+".job");
+					IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(obj.getResult());
+					obj.setOriginalFile(file);
 					obj.open();
 					if(obj.getReturnCode()==1)
 						break;
