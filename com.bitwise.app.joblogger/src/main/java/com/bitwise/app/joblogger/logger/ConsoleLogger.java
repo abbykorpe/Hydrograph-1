@@ -22,7 +22,7 @@ public class ConsoleLogger extends AbstractJobLogger{
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ConsoleLogger.class);
 	
-	private final String CONSOLE_NAME="Gradle Console";
+	private static final String CONSOLE_NAME="Gradle Console";
 	private MessageConsoleStream messageConsoleStream;
 	
 	public ConsoleLogger(String projectName, String jobName) {
@@ -107,7 +107,7 @@ public class ConsoleLogger extends AbstractJobLogger{
 		for (int i = 0; i < existing.length; i++) {
 			if (CONSOLE_NAME.equals(existing[i].getName())){
 				messageConsole=(MessageConsole) existing[i];
-				logger.debug("We have an message console");
+				logger.debug("We have a message console");
 				break;
 			}	
 		}
@@ -147,8 +147,7 @@ public class ConsoleLogger extends AbstractJobLogger{
 		try {
 			messageConsoleStream.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.debug("Unable to close message console stream " + e.getMessage());
 		}
 	}
 

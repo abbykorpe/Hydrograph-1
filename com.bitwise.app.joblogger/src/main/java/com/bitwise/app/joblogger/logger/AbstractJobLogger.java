@@ -9,7 +9,7 @@ import com.bitwise.app.joblogger.utils.JobLoggerUtils;
  * 
  * Abstract job logger. Each job logger must extend this class
  * 
- * @author shrirangk
+ * @author Bitwise
  *
  */
 public abstract class AbstractJobLogger {
