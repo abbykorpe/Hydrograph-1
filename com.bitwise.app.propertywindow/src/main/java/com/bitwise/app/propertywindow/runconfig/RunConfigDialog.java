@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -28,8 +29,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 
 
@@ -38,11 +43,10 @@ public class RunConfigDialog extends Dialog {
 	private Text textEdgeNode;
 	private Text textUser;
 	private Text textPassword;
-	private Shell shell;
 
 	private boolean runGraph;
 
-	Composite compositeServerDetails;
+	Composite compositeServerDetails, compositePathConfig;
 	Button btnLocalMode, btnRemoteMode;
 
 	/**
@@ -85,12 +89,13 @@ public class RunConfigDialog extends Dialog {
 		Composite compositeRunMode = new Composite(container, SWT.BORDER);
 		GridData gd_compositeRunMode = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_compositeRunMode.heightHint = 80;
-		gd_compositeRunMode.widthHint = 343;
+		gd_compositeRunMode.widthHint = 351;
 		compositeRunMode.setLayoutData(gd_compositeRunMode);
 		formToolkit.adapt(compositeRunMode);
 		formToolkit.paintBordersFor(compositeRunMode);
 
 		Label lblRunMode = new Label(compositeRunMode, SWT.NONE);
+		lblRunMode.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
 		lblRunMode.setBounds(22, 21, 76, 15);
 		formToolkit.adapt(lblRunMode, true, true);
 		lblRunMode.setText("Run Mode");
@@ -113,12 +118,9 @@ public class RunConfigDialog extends Dialog {
 
 		btnRemoteMode.addSelectionListener(selectionListener);
 
-
-
-
 		compositeServerDetails = new Composite(container, SWT.BORDER);
 		GridData gd_compositeServerDetails = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_compositeServerDetails.widthHint = 345;
+		gd_compositeServerDetails.widthHint = 350;
 		gd_compositeServerDetails.heightHint = 162;
 		compositeServerDetails.setLayoutData(gd_compositeServerDetails);
 		formToolkit.adapt(compositeServerDetails);
@@ -156,6 +158,59 @@ public class RunConfigDialog extends Dialog {
 		textPassword = new Text(compositeServerDetails, SWT.PASSWORD|SWT.BORDER);
 		textPassword.setBounds(110, 116, 206, 21);
 		formToolkit.adapt(textPassword, true, true);
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
+		
+		compositePathConfig = new Composite(container, SWT.BORDER);
+		GridData gd_compositePathConfig = new GridData(SWT.CENTER, SWT.BOTTOM, false, false, 1, 1);
+		gd_compositePathConfig.heightHint = 300;
+		gd_compositePathConfig.widthHint = 349;
+		compositePathConfig.setLayoutData(gd_compositePathConfig);
+		formToolkit.adapt(compositePathConfig);
+		formToolkit.paintBordersFor(compositePathConfig);
+		
+		Label lblRunUtility = new Label(compositePathConfig, SWT.NONE);
+		lblRunUtility.setText("Run Utility");
+		lblRunUtility.setBounds(24, 60, 70, 15);
+		formToolkit.adapt(lblRunUtility, true, true);
+		
+		textRunUtility = new Text(compositePathConfig, SWT.BORDER);
+		textRunUtility.setBounds(110, 54, 206, 21);
+		formToolkit.adapt(textRunUtility, true, true);
+		
+		Label lblJobXml = new Label(compositePathConfig, SWT.NONE);
+		lblJobXml.setText("Job XML");
+		lblJobXml.setBounds(24, 98, 70, 15);
+		formToolkit.adapt(lblJobXml, true, true);
+		
+		textJobXML = new Text(compositePathConfig, SWT.BORDER);
+		textJobXML.setBounds(110, 92, 206, 21);
+		formToolkit.adapt(textJobXML, true, true);
+		
+		Label lblJarFiles = new Label(compositePathConfig, SWT.NONE);
+		lblJarFiles.setText("Jar Files");
+		lblJarFiles.setBounds(24, 138, 70, 15);
+		formToolkit.adapt(lblJarFiles, true, true);
+		
+		textJarFiles = new Text(compositePathConfig, SWT.BORDER);
+		textJarFiles.setBounds(110, 132, 206, 21);
+		formToolkit.adapt(textJarFiles, true, true);
+		
+		Label lblParamFiles = new Label(compositePathConfig, SWT.NONE);
+		lblParamFiles.setText("Param Files");
+		lblParamFiles.setBounds(24, 175, 70, 15);
+		formToolkit.adapt(lblParamFiles, true, true);
+		
+		textParamFiles = new Text(compositePathConfig, SWT.BORDER);
+		textParamFiles.setBounds(110, 169, 206, 21);
+		formToolkit.adapt(textParamFiles, true, true);
+		
+		Label lblPathConfiguration = new Label(compositePathConfig, SWT.NONE);
+		lblPathConfiguration.setText("Path Configuration");
+		lblPathConfiguration.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
+		lblPathConfiguration.setBounds(24, 22, 113, 15);
+		formToolkit.adapt(lblPathConfiguration, true, true);
 
 		return container;
 	}
@@ -174,15 +229,20 @@ public class RunConfigDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		
+		IWorkbenchPage page = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage();
+		
+		if(page.getActiveEditor()!=null){
+			IFileEditorInput input=(IFileEditorInput) page.getActiveEditor().getEditorInput();
 
-		ContainerSelectionDialog containerSelectionDialog=new ContainerSelectionDialog(Display.getCurrent().getActiveShell(), null, true, null);
-		containerSelectionDialog.open();
-		Object[] projectName = containerSelectionDialog.getResult();
+			IFile file = input.getFile();
+			IProject activeProject = file.getProject();
+			String activeProjectName = activeProject.getName();
 
-		if(projectName!=null){
+			IPath bldPropPath =new Path("/"+activeProjectName+ "/build.properties");
 
-			IPath iPath=new Path("/"+projectName[0].toString()+"/build.properties");
-			IFile iFile=ResourcesPlugin.getWorkspace().getRoot().getFile(iPath);		
+			IFile iFile=ResourcesPlugin.getWorkspace().getRoot().getFile(bldPropPath);		
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 			try {
@@ -196,6 +256,10 @@ public class RunConfigDialog extends Dialog {
 					out.write(("\nhost="+textEdgeNode.getText()).getBytes());
 					out.write(("\nuserName="+textUser.getText()).getBytes());
 					out.write(("\npassword="+textPassword.getText()).getBytes());
+					out.write(("\nrunUtility="+textRunUtility.getText()).getBytes());
+					out.write(("\njobXML="+textJobXML.getText()).getBytes());
+					out.write(("\njarFiles="+textJarFiles.getText()).getBytes());
+					out.write(("\nparamFile="+textParamFiles.getText()).getBytes());
 				}
 
 				out.close();
@@ -204,9 +268,9 @@ public class RunConfigDialog extends Dialog {
 			} catch (IOException |CoreException e) {
 				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving run configuration file -\n"+e.getMessage());
 			}
+		}else
+			MessageDialog.openError(new Shell(), "Error", "No active Job present in workbench");
 
-
-		}
 		super.okPressed();
 	}
 
@@ -221,7 +285,7 @@ public class RunConfigDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(424, 426);
+		return new Point(424, 724);
 	}
 
 
@@ -234,18 +298,29 @@ public class RunConfigDialog extends Dialog {
 			if(button.getText().equals("Local")){
 
 				compositeServerDetails.setVisible(false);
+				compositePathConfig.setVisible(false);
 				
 			}else if(button.getText().equals("Remote")){
 				
 				compositeServerDetails.setVisible(true);
+				compositePathConfig.setVisible(true);
 			}
 
 
 		};
 	};
+	private Text textRunUtility;
+	private Text textJobXML;
+	private Text textJarFiles;
+	private Text textParamFiles;
 
 	public boolean proceedToRunGraph(){
 		return runGraph;
+	}
+	
+	public void loadRunConfigurationsInWindow(){
+		
+		
 	}
 
 	public static void main(String[] args) {
@@ -254,4 +329,6 @@ public class RunConfigDialog extends Dialog {
 		RunConfigDialog dia = new RunConfigDialog(sh);
 		dia.open();
 	}
+	
+	
 }
