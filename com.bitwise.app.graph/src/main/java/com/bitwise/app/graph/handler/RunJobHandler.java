@@ -28,6 +28,7 @@ import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.graph.Messages;
+import com.bitwise.app.joblogger.JobLogger;
 import com.bitwise.app.parametergrid.dialog.ParameterGridDialog;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 import com.bitwise.app.propertywindow.runconfig.*;
@@ -98,9 +99,10 @@ public class RunJobHandler extends AbstractHandler {
 			return null;
 		}
 		logger.debug("property File :"+parameterGrid.getParameterFile());
+		final JobLogger joblogger = new JobLogger(getComponentCanvas().getActiveProject(), getComponentCanvas().getJobName());
+		joblogger.logJobStartInfo();
+		joblogger.logSystemInformation();
 		try {
-			MessageConsole messageConsole = findConsole(Messages.CONSOLE_NAME);
-			final MessageConsoleStream out = messageConsole.newMessageStream();
 			IEditorPart iEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 			String XML_PATH = "";
 			if (iEditorPart != null) {
@@ -120,7 +122,7 @@ public class RunJobHandler extends AbstractHandler {
 										new InputStreamReader(stream));
 								String line = null;
 								while ((line = reader.readLine()) != null) {
-									out.println(line);
+									joblogger.logMessage(line);
 								}
 							} catch (Exception e) {
 								logger.info("Error occured while reading run job log.");
@@ -133,10 +135,15 @@ public class RunJobHandler extends AbstractHandler {
 									}
 								}
 							}
+							joblogger.logJobEndInfo();
+							joblogger.close();
 						}
+						
 					}).start();
 				} else
 					WidgetUtility.errorMessage("Please open a graph to run.");
+			
+			
 			
 		} catch (Exception ex) {
 			logger.error("Error in Run Job",ex);

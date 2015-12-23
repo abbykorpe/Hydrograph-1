@@ -640,6 +640,26 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		
 	}
 	
+	public String getActiveProject(){
+		if(getEditorInput() instanceof IFileEditorInput){
+			IFileEditorInput input = (IFileEditorInput)getEditorInput() ;
+		    IFile file = input.getFile();
+		    IProject activeProject = file.getProject();
+		    String activeProjectName = activeProject.getName();
+		    
+			return activeProjectName;
+		}else{
+			return null;
+		}
+		
+	}
+	
+	
+	public String getJobName(){
+		return getPartName().replace(".job", "");
+	}
+	
+	
 	@Override
 	public List<String> getLatestParameterList() {
 		String canvasData =getXMLString();		

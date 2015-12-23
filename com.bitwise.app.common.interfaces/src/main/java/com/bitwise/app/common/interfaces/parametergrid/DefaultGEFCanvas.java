@@ -8,4 +8,6 @@ public interface DefaultGEFCanvas {
 	public List<String> getLatestParameterList();
 	public String getCurrentParameterFilePath();
 	public void setCurrentParameterFilePath(String currentParameterFilePath);
+	public String getActiveProject();
+	public String getJobName();
 }

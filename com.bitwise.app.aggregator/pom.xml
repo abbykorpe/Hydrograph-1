@@ -32,6 +32,7 @@
 		<module>../com.bitwise.app.tooltip</module>
 		<module>../com.bitwise.app.common.interfaces</module>
 		<module>../com.bitwise.app.xstream.annotations</module>
-		<module>../com.bitwise.app.parametergrid</module>		
+		<module>../com.bitwise.app.parametergrid</module>
+		<module>../com.bitwise.app.joblogger</module>		
 	</modules>
 </project>
