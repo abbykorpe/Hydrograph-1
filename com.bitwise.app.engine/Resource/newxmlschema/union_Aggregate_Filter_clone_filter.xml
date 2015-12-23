@@ -113,6 +113,5 @@
         <primaryKeys>
             <field name="id"/>
         </primaryKeys>
-       
     </operations>
 </p:graph>

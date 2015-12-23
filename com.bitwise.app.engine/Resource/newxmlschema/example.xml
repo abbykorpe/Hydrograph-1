@@ -316,13 +316,13 @@
 	</straightPulls>
 
 	<straightPulls id="gather" xsi:type="spt:unionAll">
-		<inSocket id="dfg" fromComponentId="limit" fromSocketId="out0" />
-		<inSocket id="dfg1" fromComponentId="ksjdk" fromSocketId="out0" />
-		<outSocket id="sdf" viewData="true" >
-			<copyOfInsocket inSocketId="dfg" />
+		<inSocket id="in0" fromComponentId="limit" fromSocketId="out0" />
+		<inSocket id="in1" fromComponentId="ksjdk" fromSocketId="out0" />
+		<outSocket id="in2" viewData="true" >
+			<copyOfInsocket inSocketId="in0" />
 		</outSocket>
 		<runtimeProperties>
-			<property name="fsdf" value="dsf" />
+			<property name="sdfsf" value="dsf" />
 		</runtimeProperties>
 	</straightPulls>
 
@@ -436,7 +436,7 @@
 		<path uri="asdffas"/>
 	</commands>
 
-	<operations id="filter" phase="1" xsi:type="op:filter">
+	<operations id="filter" phase="0" xsi:type="op:filter">
 		<inSocket fromComponentId="join" fromSocketId="unused0" id="in0" />
 		<operation id="opt" class="someclass">
 			<inputFields>

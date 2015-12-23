@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="http://www.bitwiseglobal.com/graph/inputtypes"
 	xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:itffw="http://www.bitwiseglobal.com/graph/itffw"
-	xmlns:itfd="http://www.bitwiseglobal.com/graph/itfd" xmlns:igr="http://www.bitwiseglobal.com/graph/igr"
+	xmlns:itfd="http://www.bitwiseglobal.com/graph/itfd" xmlns:itfs="http://www.bitwiseglobal.com/graph/itfs" xmlns:igr="http://www.bitwiseglobal.com/graph/igr"
 	xmlns:ifparquet="http://www.bitwiseglobal.com/graph/ifparquet"
 	xmlns:ihiveparquet="http://www.bitwiseglobal.com/graph/ihiveparquet"
 	xmlns:ifMixedScheme="http://www.bitwiseglobal.com/graph/ifmixedscheme"
@@ -14,6 +14,8 @@
 		namespace="http://www.bitwiseglobal.com/graph/itffw" />
 	<xs:import schemaLocation="./text-file-delimited/text-file-delimited-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/itfd" />
+	<xs:import schemaLocation="./sequence-file/input-sequence-file-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/itfs" />
 	<xs:import schemaLocation="./generate-record/generate-record-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/igr" />
 	<xs:import schemaLocation="./parquet-file/input-file-parquet-types.xsd"
@@ -64,6 +66,22 @@
 		</xs:complexContent>
 	</xs:complexType>
 
+	<xs:complexType name="sequenceInputFile">
+		<xs:complexContent>
+			<xs:extension base="itfs:type-input-file-sequence-base">
+				<xs:sequence>
+					<xs:element name="path">
+						<xs:complexType>
+							<xs:attribute name="uri" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
 	<xs:complexType name="textFileFixedWidth">
 		<xs:complexContent>
 			<xs:extension base="itffw:type-fixed-width-base">
