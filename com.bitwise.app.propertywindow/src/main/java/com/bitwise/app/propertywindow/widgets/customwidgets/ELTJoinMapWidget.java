@@ -14,21 +14,36 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import com.bitwise.app.propertywindow.widgets.joinproperty.JoinMapGrid;
 
 public class ELTJoinMapWidget extends AbstractWidget{
 
+	private Object properties;
+	public static String value;
+	private String propertyName;
+	
 	public ELTJoinMapWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties,
 				propertyDialogButtonBar);
-		
+		this.propertyName = componentConfigrationProperty.getPropertyName();
+		this.properties =  componentConfigrationProperty.getPropertyValue();
+				
 	}
 	
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget subGroup) {
 		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(subGroup.getContainerControl());
 		eltSuDefaultSubgroupComposite.createContainerWidget();
+		
+		LinkedHashMap<String, Object> map = allComponenetProperties.getComponentConfigurationProperties();
+		for(String key : map.keySet()){
+			if(key.equalsIgnoreCase("input_count")){
+				value=(String)map.get(key);
+				
+			}
+		}
 		
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Component\n Mapping");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
@@ -40,7 +55,9 @@ public class ELTJoinMapWidget extends AbstractWidget{
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
+				JoinMapGrid grid = new JoinMapGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell());
+				grid.open();
+				grid.setInputPortValue(Integer.parseInt(value));
 			}
 			
 		});

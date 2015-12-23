@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
+import com.bitwise.app.propertywindow.property.ELTComponenetProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
@@ -25,6 +26,7 @@ public abstract class AbstractWidget {
 	protected ValidationStatus validationStatus = new ValidationStatus();
 	protected Text firstTextWidget=null;
 	protected WidgetConfig widgetConfig;
+	protected ELTComponenetProperties allComponenetProperties;
 	private String toolTipErrorMessage =  null;
 	
 	public AbstractWidget() {
@@ -101,6 +103,15 @@ public abstract class AbstractWidget {
 	
 	public String getPropertyName(){
 		return componentConfigrationProperty.getPropertyName();
+	}
+	
+	public ELTComponenetProperties getEltComponenetProperties() {
+		return allComponenetProperties;
+	}
+
+	public void setEltComponenetProperties(
+			ELTComponenetProperties eltComponenetProperties) {
+		this.allComponenetProperties = eltComponenetProperties;
 	}
 
 }
