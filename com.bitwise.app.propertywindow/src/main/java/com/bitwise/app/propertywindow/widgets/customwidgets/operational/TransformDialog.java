@@ -500,7 +500,7 @@ public class TransformDialog extends Dialog {
 				}
 				ELTFixedWidget eltFixedWidget = new ELTFixedWidget(propertyDialogButtonBar);
 				TransformOperation transformOperation = new TransformOperation();
-				transformOperation.setOperationId(++operationId);
+				transformOperation.setOperationId(String.valueOf(++operationId)); 
 				addExpandItem(expandBarOuterComposite,scrolledComposite, transformOperation, eltFixedWidget ) ;
 			}
 		}); 

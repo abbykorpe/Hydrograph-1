@@ -145,7 +145,7 @@ public abstract class TransformUiConverter extends UiConverter {
 			transformPropertyGrid.setOperation(new ArrayList<TransformOperation>());
 			for (TypeTransformOperation transformOperation : typeTransformOperationlist) {
 				TransformOperation uITransformOperation = new TransformOperation();
-				uITransformOperation.setOperationId(Long.parseLong(transformOperation.getId()));
+				uITransformOperation.setOperationId(transformOperation.getId());
 				uITransformOperation.setOpClassProperty(new OperationClassProperty(transformOperation.getClazz(),
 						isParameter(transformOperation.getClazz())));
 				uITransformOperation.setSchemaGridRowList(getFixedWidthSchemaList(transformOperation));
