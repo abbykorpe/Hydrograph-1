@@ -96,7 +96,7 @@ public class JobLogger {
 	private void logSystemProperties(AbstractJobLogger jobLogger) {
 		jobLogger.logWithNoTimeStamp("Operating System : " +  System.getProperty("os.name"));
 		jobLogger.logWithNoTimeStamp("JVM : " + System.getProperty("java.vm.name"));
-		jobLogger.logWithNoTimeStamp("java specification version : " +
+		jobLogger.logWithNoTimeStamp("Java specification version : " +
 				System.getProperty("java.specification.version"));
 		jobLogger.logWithNoTimeStamp("Java Version : " + System.getProperty("java.version"));
 		jobLogger.logWithNoTimeStamp("Osgi OS : " +  System.getProperty("osgi.os"));

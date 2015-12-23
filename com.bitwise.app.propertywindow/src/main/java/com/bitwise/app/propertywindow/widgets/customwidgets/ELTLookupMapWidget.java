@@ -6,6 +6,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 
+import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -19,10 +20,20 @@ import com.bitwise.app.propertywindow.widgets.joinproperty.ELTLookupMapWizard;
 
 public class ELTLookupMapWidget extends AbstractWidget{
 
+	private String propertyName;
+	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
+	private ELTLookupMapWizard eltLookupMapWizard;
+	private LookupPropertyGrid lookupPropertyGrid;
+	
 	public ELTLookupMapWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar){
 		super(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
+		this.lookupPropertyGrid = (LookupPropertyGrid) componentConfigrationProperty.getPropertyValue();
+		if(lookupPropertyGrid == null){
+			lookupPropertyGrid = new LookupPropertyGrid();
+		}
+		this.propertyName = componentConfigrationProperty.getPropertyName();
 	}
 	
 	@Override
@@ -39,8 +50,10 @@ public class ELTLookupMapWidget extends AbstractWidget{
 		((Button)eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 			 @Override
 				public void widgetSelected(SelectionEvent e) {
-				 ELTLookupMapWizard grid = new ELTLookupMapWizard( ((Button)eltDefaultButton.getSWTWidgetControl()).getShell() );
-				 	grid.open();
+				 eltLookupMapWizard = new ELTLookupMapWizard(((Button)eltDefaultButton.getSWTWidgetControl()).getShell(), lookupPropertyGrid);
+				 eltLookupMapWizard.open();
+				 lookupPropertyGrid = eltLookupMapWizard.getLookupPropertyGrid();
+				 propertyDialogButtonBar.enableApplyButton(true);
 
 			 }
 		});
@@ -48,8 +61,9 @@ public class ELTLookupMapWidget extends AbstractWidget{
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		// TODO Auto-generated method stub
-		return null;
+		property.put(propertyName, lookupPropertyGrid);
+		
+		return property;
 	}
 
 }

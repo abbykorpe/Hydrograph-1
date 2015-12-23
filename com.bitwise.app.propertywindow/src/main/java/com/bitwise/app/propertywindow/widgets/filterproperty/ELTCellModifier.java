@@ -4,6 +4,9 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
+import com.bitwise.app.common.datastructure.property.FilterProperties;
+import com.bitwise.app.propertywindow.widgets.joinproperty.ELTLookupMapWizard;
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -32,11 +35,12 @@ public class ELTCellModifier implements ICellModifier{
 
 	@Override
 	public Object getValue(Object element, String property) {
-		ELTFilterProperties filter = (ELTFilterProperties) element;
+		FilterProperties filter = (FilterProperties) element;
 		if(ELTFilterPropertyWizard.FilterInputFieldName.equals(property))
-
 		return filter.getPropertyname();
-		else
+		else if(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD.equals(property)){
+			return filter.getPropertyname();
+		}
 		return null;
 	}
 
@@ -45,10 +49,13 @@ public class ELTCellModifier implements ICellModifier{
 		if (element instanceof Item)
 			element = ((Item) element).getData();
 
-		ELTFilterProperties p = (ELTFilterProperties) element;
+		FilterProperties p = (FilterProperties) element;
 		
 			if(ELTFilterPropertyWizard.FilterInputFieldName.equals(property))
 					p.setPropertyname((String)value);
+			else if(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD.equals(property)){
+				  p.setPropertyname((String)value);
+			}
 		// Force the viewer to refresh
 		viewer.refresh();
 		
