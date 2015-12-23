@@ -14,6 +14,7 @@ public class UIComponentRepo {
 	private  LinkedHashMap<String, Class> componentFactory = new LinkedHashMap<>();
 	private  LinkedHashMap<String, Component> componentUiFactory = new LinkedHashMap<>();
 	private  LinkedHashMap<String, List<ParameterData>> parammeterFactory = new LinkedHashMap<>();
+	private  LinkedHashMap<String, List<InSocketDetail>> inSocketMap = new LinkedHashMap<>();
 	private List<LinkingData> componentLinkList=new ArrayList<LinkingData>();
 	
 	public static final UIComponentRepo INSTANCE = new UIComponentRepo();
@@ -30,6 +31,11 @@ public class UIComponentRepo {
 		return componentFactory;
 	}
 
+	public LinkedHashMap<String, List<InSocketDetail>> getInsocketMap()
+	{
+		return inSocketMap;
+	}
+	
 	public  LinkedHashMap<String, Component> getComponentUiFactory() {
 		return componentUiFactory;
 	}
@@ -47,5 +53,6 @@ public class UIComponentRepo {
 		componentUiFactory.clear();
 		parammeterFactory.clear();
 		componentLinkList.clear();
+		inSocketMap.clear();
 		}
 }

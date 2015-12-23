@@ -23,7 +23,7 @@ import com.bitwiseglobal.graph.straightpulltypes.RemoveDups;
 
 public class RemoveDupsUiConverter extends StraightpullUiConverter {
 	private RemoveDups removeDups;
-	private static final String NAME_SUFFIX = "RemoveDups_";
+	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(RemoveDupsUiConverter.class);
 
 	public RemoveDupsUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
@@ -41,16 +41,15 @@ public class RemoveDupsUiConverter extends StraightpullUiConverter {
 		removeDups = (RemoveDups) typeBaseComponent;
 
 		propertyMap.put(PropertyNameConstants.RETENTION_LOGIC_KEEP.value(), removeDups.getKeep().getValue().value());
-		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(), UIComponentsConstants.VALID.value());
 		propertyMap.put(PropertyNameConstants.DEDUP_FILEDS.value(), getPrimaryKeys());
 		propertyMap.put(PropertyNameConstants.SECONDARY_COLUMN_KEYS.value(), getSecondaryKeys());
 
-		container.getComponentNextNameSuffixes().put(NAME_SUFFIX, 0);
+		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(componentName);
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.REMOVE_DUPS.value());
 		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY.value());
-
+		validateComponentProperties(propertyMap);
 	}
 
 	private Map<String, String> getSecondaryKeys() {

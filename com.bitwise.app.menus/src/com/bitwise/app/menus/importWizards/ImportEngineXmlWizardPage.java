@@ -4,10 +4,12 @@ package com.bitwise.app.menus.importWizards;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
@@ -30,6 +32,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.slf4j.Logger;
+import org.xml.sax.SAXException;
 
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.exceptions.EngineException;
@@ -180,7 +183,7 @@ public class ImportEngineXmlWizardPage extends WizardNewFileCreationPage {
 			LOGGER.debug("Successfully created *job,*properties files in workspace");
 		} catch (InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException | EngineException | JAXBException exception) {
+				| NoSuchMethodException | SecurityException | EngineException | JAXBException | ParserConfigurationException | SAXException | IOException exception) {
 			
 			LOGGER.error("Error occurred while creating new files in workspace", exception);
 			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_ERROR);

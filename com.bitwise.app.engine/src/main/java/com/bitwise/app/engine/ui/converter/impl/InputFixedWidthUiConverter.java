@@ -31,7 +31,7 @@ import com.bitwiseglobal.graph.inputtypes.TextFileFixedWidth;
 
 public class InputFixedWidthUiConverter extends InputUiConverter {
 
-	private static final String NAME_SUFFIX = "IFixedWidth";
+
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(InputFixedWidthUiConverter.class);
 
 	public InputFixedWidthUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
@@ -55,14 +55,13 @@ public class InputFixedWidthUiConverter extends InputUiConverter {
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
 				convertBooleanVlaue(fileFixedWidth.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 
-		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(), UIComponentsConstants.VALID.value());
-
+		
 		uiComponent.setType(UIComponentsConstants.FILE_FIXEDWIDTH.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
-		container.getComponentNextNameSuffixes().put(NAME_SUFFIX, 0);
+		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(fileFixedWidth.getId());
 		uiComponent.setProperties(propertyMap);
-
+		validateComponentProperties(propertyMap);
 	}
 
 	private Object getCharSet() {

@@ -11,10 +11,12 @@ import java.util.Properties;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.slf4j.Logger;
+import org.xml.sax.SAXException;
 
 import com.bitwise.app.common.util.CanvasDataAdpater;
 import com.bitwise.app.common.util.LogFactory;
@@ -41,12 +43,15 @@ import com.thoughtworks.xstream.XStream;
  * 
  */
 public class UiConverterUtil {
-	private static final Logger LOGGER = LogFactory.INSTANCE
-			.getLogger(UiConverterUtil.class);
-	public static final UiConverterUtil INSTANCE = new UiConverterUtil();
+	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(UiConverterUtil.class);
+	
 	private static final String FIXED_OUTPUT_PORT = "out0";
-	private static final String PARAMETER_FOLDER = "param";
 
+	
+	public UiConverterUtil() {
+		UIComponentRepo.INSTANCE.flusRepository();
+	}
+	
 	/**
 	 * Initiates the conversion process of source xml into graph
 	 * 
@@ -64,33 +69,36 @@ public class UiConverterUtil {
 	 * @throws SecurityException
 	 * @throws EngineException
 	 * @throws JAXBException
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws ParserConfigurationException
 	 */
-	public void convertToUiXML(File sourceXML, IFile jobFile,
-			IFile parameterFile) throws InstantiationException,
-			IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, NoSuchMethodException,
-			SecurityException, EngineException, JAXBException {
+	public void convertToUiXML(File sourceXML, IFile jobFile, IFile parameterFile) throws InstantiationException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
+			SecurityException, EngineException, JAXBException, ParserConfigurationException, SAXException, IOException {
 		LOGGER.debug("Creating UI-Converter based on component");
 		loadClass();
 		Graph graph = unMarshall(sourceXML);
-		Container container = new Container();
+		// if(graph!=null && cahcheInSocketDetails(sourceXML))
+		{
 
-		List<TypeBaseComponent> children = graph
-				.getInputsOrOutputsOrStraightPulls();
-		if (children != null && !children.isEmpty()) {
-			for (TypeBaseComponent typeBaseComponent : children) {
-				UiConverter uiConverter = UiConverterFactory.INSTANCE
-						.getUiConverter(typeBaseComponent, container);
-				uiConverter.prepareUIXML();
-				Component component = uiConverter.getComponent();
-				container.getChildren().add(component);
+			Container container = new Container();
+
+			List<TypeBaseComponent> children = graph.getInputsOrOutputsOrStraightPulls();
+			if (children != null && !children.isEmpty()) {
+				for (TypeBaseComponent typeBaseComponent : children) {
+					UiConverter uiConverter = UiConverterFactory.INSTANCE.getUiConverter(typeBaseComponent, container);
+					uiConverter.prepareUIXML();
+					Component component = uiConverter.getComponent();
+					container.getChildren().add(component);
+				}
+				createLinks();
 			}
-			createLinks();
+			genrateUIXML(container, jobFile, parameterFile);
 		}
-		genrateUIXML(container, jobFile, parameterFile);
-
 	}
 
+	
 	/**
 	 * Creates the job file based for the container object.
 	 * 
@@ -98,8 +106,7 @@ public class UiConverterUtil {
 	 * @param jobFile
 	 * @param parameterFile
 	 */
-	private void genrateUIXML(Container container, IFile jobFile,
-			IFile parameterFile) {
+	private void genrateUIXML(Container container, IFile jobFile, IFile parameterFile) {
 		LOGGER.debug("Generating UI-XML");
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		String jobXmlData = null;
@@ -108,23 +115,22 @@ public class UiConverterUtil {
 			xs.autodetectAnnotations(true);
 			jobXmlData = xs.toXML(container);
 			storeParameterData(parameterFile, jobXmlData);
-			jobFile.create(new ByteArrayInputStream(jobXmlData.getBytes()),
-					true, null);
+			jobFile.create(new ByteArrayInputStream(jobXmlData.getBytes()), true, null);
 
 		} catch (Exception e) {
-			LOGGER.error("Exception occurred while creating UI-XML");
+			LOGGER.error("Exception occurred while creating UI-XML", e);
 		} finally {
 			UIComponentRepo.INSTANCE.flusRepository();
 			try {
 				out.close();
 			} catch (IOException ioe) {
-				LOGGER.error(
-						"IOException occurred while closing output stream", ioe);
+				LOGGER.error("IOException occurred while closing output stream", ioe);
 			}
 		}
 	}
 
-	private Graph unMarshall(File inputFile) throws JAXBException {
+	private Graph unMarshall(File inputFile) throws JAXBException, ParserConfigurationException, SAXException,
+			IOException {
 		LOGGER.debug("Un-Marshaling generated object into target XML");
 		JAXBContext jaxbContext;
 		Graph graph = null;
@@ -140,14 +146,13 @@ public class UiConverterUtil {
 		return graph;
 	}
 
-	private void parseXML(File inputFile) {
+	private void parseXML(File inputFile) throws ParserConfigurationException, SAXException, IOException {
 		XMLParser xmlParser = new XMLParser();
 		xmlParser.parseXML(inputFile);
 	}
 
 	/**
-	 * Load classes for all component classes. i.e. creates a logical palette
-	 * into memory.
+	 * Load classes for all component classes. i.e. creates a logical palette into memory.
 	 */
 	public void loadClass() {
 		LOGGER.debug("Loading class from component's XML");
@@ -174,14 +179,11 @@ public class UiConverterUtil {
 		preProcessLinkData();
 		CoordinateProcessor pc = new CoordinateProcessor();
 		pc.initiateCoordinateGenration();
-		for (LinkingData linkingData : UIComponentRepo.INSTANCE
-				.getComponentLinkList()) {
-			Component sourceComponent = UIComponentRepo.INSTANCE
-					.getComponentUiFactory().get(
-							linkingData.getSourceComponentId());
-			Component targetComponent = UIComponentRepo.INSTANCE
-					.getComponentUiFactory().get(
-							linkingData.getTargetComponentId());
+		for (LinkingData linkingData : UIComponentRepo.INSTANCE.getComponentLinkList()) {
+			Component sourceComponent = UIComponentRepo.INSTANCE.getComponentUiFactory().get(
+					linkingData.getSourceComponentId());
+			Component targetComponent = UIComponentRepo.INSTANCE.getComponentUiFactory().get(
+					linkingData.getTargetComponentId());
 			Link link = new Link();
 			link.setSourceTerminal(linkingData.getSourceTerminal());
 			link.setTargetTerminal(linkingData.getTargetTerminal());
@@ -197,21 +199,20 @@ public class UiConverterUtil {
 	private void preProcessLinkData() {
 		LOGGER.debug("Process links data for one to many port generation");
 		boolean isMultiplePortAllowed;
-		for (LinkingData linkingData : UIComponentRepo.INSTANCE
-				.getComponentLinkList()) {
-			isMultiplePortAllowed = UIComponentRepo.INSTANCE
-					.getComponentUiFactory()
-					.get(linkingData.getSourceComponentId())
-					.getPortSpecification().get(0).isAllowMultipleLinks();
-			if (isMultiplePortAllowed) {
-				linkingData.setSourceTerminal(FIXED_OUTPUT_PORT);
+		for (LinkingData linkingData : UIComponentRepo.INSTANCE.getComponentLinkList()) {
+			LOGGER.debug("Process links data for one to many port generation : {}", linkingData);
+			if (UIComponentRepo.INSTANCE.getComponentUiFactory().get(linkingData.getSourceComponentId()) != null) {
+				isMultiplePortAllowed = UIComponentRepo.INSTANCE.getComponentUiFactory()
+						.get(linkingData.getSourceComponentId()).getPortSpecification().get(0).isAllowMultipleLinks();
+				if (isMultiplePortAllowed) {
+					linkingData.setSourceTerminal(FIXED_OUTPUT_PORT);
+				}
 			}
 		}
 	}
 
 	private void storeParameterData(IFile parameterFile, String jobXmlData) {
-		LOGGER.debug("Creating Parameter(i.e *properties) File at {}",
-				parameterFile.getFullPath());
+		LOGGER.debug("Creating Parameter(i.e *properties) File at {}", parameterFile.getFullPath());
 		CanvasDataAdpater canvasDataAdpater = new CanvasDataAdpater(jobXmlData);
 		String defaultParameterValue = "";
 		Properties properties = new Properties();
@@ -222,18 +223,14 @@ public class UiConverterUtil {
 		}
 		try {
 			properties.store(out, null);
-			parameterFile.create(new ByteArrayInputStream(out.toByteArray()),
-					true, null);
+			parameterFile.create(new ByteArrayInputStream(out.toByteArray()), true, null);
 		} catch (IOException | CoreException e) {
-			LOGGER.error("Exception occurred while creating parameter file -",
-					e);
+			LOGGER.error("Exception occurred while creating parameter file -", e);
 		} finally {
 			try {
 				out.close();
 			} catch (IOException e) {
-				LOGGER.error(
-						"Exception occurred while closing parameter file's out stream -",
-						e);
+				LOGGER.error("Exception occurred while closing parameter file's out stream -", e);
 			}
 		}
 	}

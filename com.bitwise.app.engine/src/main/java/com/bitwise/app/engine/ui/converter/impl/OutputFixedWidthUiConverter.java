@@ -25,8 +25,8 @@ import com.bitwiseglobal.graph.outputtypes.TextFileFixedWidth;
 
 
 public class OutputFixedWidthUiConverter extends OutputUiConverter {
-	private static final String LENGTH_QNAME="length";
-	private static final String componentName_SUFFIX="OFixedWidth";	
+	
+		
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(OutputFixedWidthUiConverter.class);
 	
 	public OutputFixedWidthUiConverter(TypeBaseComponent typeBaseComponent,Container container) {
@@ -47,14 +47,14 @@ public class OutputFixedWidthUiConverter extends OutputUiConverter {
 		propertyMap.put(PropertyNameConstants.RUNTIME_PROPERTIES.value(),getRuntimeProperties());
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(), convertBooleanVlaue(fileFixedWidth.getSafe(),PropertyNameConstants.IS_SAFE.value()));
 		propertyMap.put(PropertyNameConstants.STRICT.value(), convertBooleanVlaue(fileFixedWidth.getStrict(),PropertyNameConstants.STRICT.value()));
-		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(), UIComponentsConstants.VALID.value());
+		
 		
 		uiComponent.setType(UIComponentsConstants.FILE_FIXEDWIDTH.value());
 		uiComponent.setCategory(UIComponentsConstants.OUTPUT_CATEGORY.value());
-		container.getComponentNextNameSuffixes().put(componentName_SUFFIX, 0);
+		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(fileFixedWidth.getId());
 		uiComponent.setProperties(propertyMap);
-		
+		validateComponentProperties(propertyMap);
 	
 	}
 
