@@ -96,6 +96,7 @@ import com.bitwise.app.common.component.config.Component;
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.common.interfaces.tooltip.ComponentCanvas;
 import com.bitwise.app.common.util.CanvasDataAdpater;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.engine.exceptions.EngineException;
@@ -351,6 +352,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			throws RuntimeException, SAXException, IOException {
 		Map<String, PaletteDrawer> categoryPaletteConatiner = new HashMap<>();
 		for (CategoryType category : CategoryType.values()) {
+			if(category.name().equalsIgnoreCase(Constants.DUMMY_COMPONENT_CATEGORY))
+				continue;
 			PaletteDrawer p = createPaletteContainer(category.name());
 			addContainerToPalette(palette, p);
 			categoryPaletteConatiner.put(category.name(), p);
@@ -361,8 +364,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			Class<?> clazz = DynamicClassProcessor.INSTANCE
 					.createClass(componentConfig);
 
-
-
+			
+			if(componentConfig.getName().equalsIgnoreCase(Constants.DUMMY_COMPONENT))
+				continue;
+			
 			/*CombinedTemplateCreationEntry component = new CombinedTemplateCreationEntry(
 					componentConfig.getNameInPalette(), componentConfig.getDescription(), clazz,
 					new SimpleFactory(clazz),
@@ -793,6 +798,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				if(messageBox.open()==SWT.OK)
 				{
 					obj.setOriginalName(jobName+".job");
+					IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(obj.getResult());
+					obj.setOriginalFile(file);
 					obj.open();
 					if(obj.getReturnCode()==1)
 						break;

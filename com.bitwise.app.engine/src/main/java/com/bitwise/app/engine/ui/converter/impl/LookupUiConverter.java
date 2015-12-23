@@ -15,7 +15,7 @@ public class LookupUiConverter extends TransformUiConverter {
 
 
 	private HashJoin lookup;
-	private static final String componentName_SUFFIX = "Lookup_";
+	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(LookupUiConverter.class);
 		
 	
@@ -34,15 +34,15 @@ public class LookupUiConverter extends TransformUiConverter {
 		lookup = (HashJoin) typeBaseComponent;
 		
 		
-		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(), UIComponentsConstants.VALID.value());
+		
 
-		container.getComponentNextNameSuffixes().put(componentName_SUFFIX, 0);
+		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(componentName);
 
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.LOOKUP.value());
 		uiComponent.setCategory(UIComponentsConstants.TRANSFORM_CATEGORY.value());
-
+		validateComponentProperties(propertyMap);
 	}
 
 	

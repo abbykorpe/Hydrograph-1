@@ -148,6 +148,7 @@
 			<enumeration value="OUTPUT" />
 			<enumeration value="TRANSFORM" />
 			<enumeration value="STRAIGHTPULL" />
+			<enumeration value="DUMMY" />
 		</restriction>
 	</simpleType>
 	

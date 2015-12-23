@@ -13,12 +13,21 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
@@ -30,9 +39,12 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
+import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
+import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTRadioButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTTable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTTableViewer;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
+import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTSchemaSubgroupComposite;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTSchemaTableComposite;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
@@ -65,12 +77,37 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	protected GridWidgetCommonBuilder gridWidgetBuilder = getGridWidgetBuilder();
 	protected final String[] PROPS = getPropertiesToShow();
-
+	private boolean isExternal;
 	private Object properties;
 	private String propertyName;
 	private ListenerHelper helper;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
+	private Shell shell;
 	private ELTDefaultLable upButton, downButton, addButton, deleteButton;
+	private Button button;
+	AbstractELTWidget internalSchema, externalSchema;
+	private Text textBox;
+	private ControlDecoration txtDecorator, decorator;
+
+	protected abstract String[] getPropertiesToShow();
+
+	protected abstract GridWidgetCommonBuilder getGridWidgetBuilder();
+
+	protected abstract IStructuredContentProvider getContentProvider();
+
+	protected abstract ITableLabelProvider getLableProvider();
+
+	protected abstract ICellModifier getCellModifier();
+
+	/**
+	 * Adds the validators.
+	 */
+	protected abstract void addValidators();
+
+	/**
+	 * Sets the decorator.
+	 */
+	protected abstract void setDecorator();
 
 	public ELTSchemaGridWidget() {
 	}
@@ -97,39 +134,29 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	}
 
-	protected abstract String[] getPropertiesToShow();
-
-	protected abstract GridWidgetCommonBuilder getGridWidgetBuilder();
-
-	protected abstract IStructuredContentProvider getContentProvider();
-
-	protected abstract ITableLabelProvider getLableProvider();
-
-	protected abstract ICellModifier getCellModifier();
-
-	/**
-	 * Adds the validators.
-	 */
-	protected abstract void addValidators();
-
-	/**
-	 * Sets the decorator.
-	 */
-	protected abstract void setDecorator();
-
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
 		List<GridRow> tempGrid = new ArrayList<>();
+		if (schemaGridRowList != null && !schemaGridRowList.isEmpty()) {
+			for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
+				tempGrid.add(gridRow.copy());
+			}
 
-		for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
-			tempGrid.add(gridRow.copy());
+			if (!schemaGridRowList.equals(this.properties)) {
+				propertyDialogButtonBar.enableApplyButton(true);
+			}
 		}
-
-		if (!schemaGridRowList.equals(this.properties)) {
-			propertyDialogButtonBar.enableApplyButton(true);
+		Schema schema = new Schema();
+		if (isExternal) {
+			schema.setIsExternal(true);
+			schema.setGridRow(new ArrayList());
+			schema.setExternalSchemaPath(textBox.getText());
+		} else {
+			schema.setIsExternal(false);
+			schema.setGridRow(tempGrid);
+			schema.setExternalSchemaPath("");
 		}
-
-		property.put(propertyName, tempGrid);
+		property.put(propertyName, schema);
 		return property;
 	}
 
@@ -142,10 +169,147 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 */
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
-
+		createSchemaType(container.getContainerControl());
 		createSchemaGrid(container.getContainerControl());
+		createExternalSchema(container.getContainerControl());
+		populateSchemaTypeWidget();
 	}
 
+	// Adds the browse button
+	private void createExternalSchema(Composite containerControl) {
+		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(
+				containerControl);
+		eltSuDefaultSubgroupComposite.createContainerWidget();
+
+		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(
+				"External Schema");
+		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
+
+		AbstractELTWidget eltDefaultTextBox = new ELTDefaultTextBox()
+				.grabExcessHorizontalSpace(true).textBoxWidth(200);
+		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultTextBox);
+
+		textBox = (Text) eltDefaultTextBox.getSWTWidgetControl();
+
+		decorator = WidgetUtility.addDecorator(textBox,
+				Messages.EMPTYFIELDMESSAGE);
+		decorator.hide();
+		textBox.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (textBox.getText().isEmpty()) {
+					decorator.show();
+					textBox.setBackground(new Color(Display.getDefault(), 255,
+							255, 204));
+				} else {
+					decorator.hide();
+				}
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				decorator.hide();
+				textBox.setBackground(new Color(Display.getDefault(), 255, 255,
+						255));
+			}
+		});
+
+		AbstractELTWidget eltDefaultButton = new ELTDefaultButton("...")
+				.buttonWidth(20);
+		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
+		button = (Button) eltDefaultButton.getSWTWidgetControl();
+
+		button.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				decorator.hide();
+				textBox.setBackground(new Color(Display.getDefault(), 255, 255,
+						255));
+
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+			}
+
+		});
+
+		txtDecorator = WidgetUtility.addDecorator(textBox,
+				Messages.CHARACTERSET);
+		txtDecorator.hide();
+
+		ListenerHelper helper = new ListenerHelper();
+		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
+		helper.put(HelperType.VALIDATION_STATUS, validationStatus);
+
+		try {
+			eltDefaultTextBox.attachListener(
+					ListenerFactory.Listners.EVENT_CHANGE.getListener(),
+					propertyDialogButtonBar, null,
+					eltDefaultTextBox.getSWTWidgetControl());
+			eltDefaultTextBox.attachListener(
+					ListenerFactory.Listners.MODIFY.getListener(),
+					propertyDialogButtonBar, helper,
+					eltDefaultTextBox.getSWTWidgetControl());
+			eltDefaultButton.attachListener(
+					ListenerFactory.Listners.FILE_DIALOG_SELECTION
+							.getListener(), propertyDialogButtonBar, helper,
+					eltDefaultButton.getSWTWidgetControl(), eltDefaultTextBox
+							.getSWTWidgetControl());
+
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		populateWidgetExternalSchema();
+
+	}
+    //Adds the Radio buttons
+	private void createSchemaType(Composite containerControl) {
+		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(
+				containerControl);
+		eltSuDefaultSubgroupComposite.createContainerWidget();
+		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(4);
+
+		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Schema Types");
+		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
+
+		// Radio button listener
+		internalSchema = new ELTRadioButton("Internal Schema");
+		eltSuDefaultSubgroupComposite.attachWidget(internalSchema);
+		((Button) internalSchema.getSWTWidgetControl())
+				.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						propertyDialogButtonBar.enableApplyButton(true);
+						toggleTextBox(false);
+						toggleTable(true);
+						isExternal = false;
+						decorator.hide();
+						txtDecorator.hide();
+					}
+				});
+
+		externalSchema = new ELTRadioButton("External Schema");
+		eltSuDefaultSubgroupComposite.attachWidget(externalSchema);
+		((Button) externalSchema.getSWTWidgetControl())
+				.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						propertyDialogButtonBar.enableApplyButton(true);
+						toggleTextBox(true);
+						toggleTable(false);
+						isExternal = true;
+						decorator.show();
+						txtDecorator.show();
+					}
+				});
+
+		populateSchemaTypeWidget();
+	}
+	
 	private void swap(int index1, int index2, String text1, String text2) {
 		GridRow swap1 = null;
 		GridRow swap2 = null;
@@ -172,21 +336,79 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private void populateWidget() {
 		if (this.properties != null) {
-			List<GridRow> tempGrid = new ArrayList<>();
-			tempGrid = (List<GridRow>) this.properties;
+			Schema schema = (Schema) this.properties;
 
-			for (GridRow gridRow : tempGrid) {
-				schemaGridRowList.add(gridRow.copy());
+			if (!schema.getIsExternal()) {
+				if (tableViewer != null) {
+					schemaGridRowList = schema.getGridRow();
+					tableViewer.setInput(schemaGridRowList);
+					tableViewer.refresh();
+					isExternal = false;
+					toggleTextBox(true);
+				}
 			}
+		}
+	}
 
-			property.put(propertyName, schemaGridRowList);
-			tableViewer.setInput(schemaGridRowList);
-			tableViewer.refresh();
+	private void populateWidgetExternalSchema() {
+		if (this.properties != null) {
+			Schema schema = (Schema) this.properties;
+			if (schema.getIsExternal()) {
+				if (textBox != null) {
+					textBox.setText(schema.getExternalSchemaPath());
+					schemaGridRowList = schema.getGridRow();
+					tableViewer.setInput(schemaGridRowList);
+					tableViewer.refresh();
+					decorator.hide();
+					isExternal = true;
+					toggleTable(false);
+					toggleTextBox(true);
+				}
+			}
+		}
+	}
+	
+	private void populateSchemaTypeWidget() {
+		if (this.properties != null) {
+			Schema schema = (Schema) this.properties;
+			if (schema.getIsExternal()) {
+				toggleRadioButton(true);
+			} else {
+				toggleRadioButton(false);
+				toggleTextBox(false);
+			}
+		} else {
+			toggleRadioButton(false);
+			toggleTable(true);
+			toggleTextBox(false);
+		}
+	}
+	
+	private void toggleTable(boolean enableInternalSchemaTable){
+		if(table != null){
+			table.setEnabled(enableInternalSchemaTable);
+		/*	addButton.setEnabled(enableInternalSchemaTable);
+			deleteButton.setEnabled(enableInternalSchemaTable);
+			upButton.setEnabled(enableInternalSchemaTable);
+			downButton.setEnabled(enableInternalSchemaTable);*/
+		}
+	}
+	
+	private void toggleRadioButton(boolean enableExternalSchemaRadioButton) {
+		((Button) externalSchema.getSWTWidgetControl())
+				.setSelection(enableExternalSchemaRadioButton);
+		((Button) internalSchema.getSWTWidgetControl())
+				.setSelection(!enableExternalSchemaRadioButton);
+	}
+
+	private void toggleTextBox(boolean enableExternalSchemaTextBox) {
+		if (textBox != null) {
+			textBox.setEnabled(enableExternalSchemaTextBox);
+			button.setEnabled(enableExternalSchemaTextBox);
 		}
 	}
 
 	private AbstractELTWidget getButton(String displayName) {
-		// Create browse button.
 		AbstractELTWidget button = new ELTDefaultButton(displayName)
 				.buttonWidth(18).buttonHeight(18);
 		return button;
@@ -195,15 +417,23 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private ListenerHelper getListenerHelper() {
 		if (helper == null) {
 			helper = new ListenerHelper();
+			if (this.properties != null) {
+				Schema schema = (Schema) this.properties;
+				schemaGridRowList = schema.getGridRow();
+			}
 			ELTGridDetails value = new ELTGridDetails(schemaGridRowList,
 					tableViewer, (Label) fieldError.getSWTWidgetControl(),
 					gridWidgetBuilder);
 			helper.put(HelperType.SCHEMA_GRID, value);
-			if (((List) (getProperties().get(propertyName))).size() != 0)
+			validationStatus.setIsValid(true);
+			helper.put(HelperType.VALIDATION_STATUS, validationStatus);
+			
+			if (((Schema) (getProperties().get(propertyName))).getGridRow().size() != 0)
 				validationStatus.setIsValid(true);
 			else
 				validationStatus.setIsValid(false);
 			helper.put(HelperType.VALIDATION_STATUS, validationStatus);
+		
 		}
 		return helper;
 	}
@@ -340,8 +570,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		// Adding the decorator to show error message when field name same.
 		setDecorator();
+
 		addValidators();
-		populateWidget(); 
+       // populateWidget();
 		helper = getListenerHelper();
 		try {
 			eltTable.attachListener(
@@ -365,6 +596,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 
 		gridListener(editors);
+
+		populateWidget();
 		return tableViewer;
 	}
 

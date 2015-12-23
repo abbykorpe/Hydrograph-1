@@ -42,6 +42,13 @@
       <handler
             class="com.bitwise.app.propertywindow.handlers.RunConfigHandler"
             commandId="com.bitwise.app.propertywindow.runconfig">
+         <activeWhen>
+            <with
+                  variable="activeEditorId">
+               <equals
+                     value="com.bitwise.app.graph.etlgraphicaleditor">
+               </equals>
+            </with></activeWhen>
       </handler>
    </extension>
 

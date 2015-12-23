@@ -23,7 +23,7 @@ import com.bitwiseglobal.graph.straightpulltypes.Clone;
 public class CloneUiConverter extends StraightpullUiConverter {
 
 	private Clone clone;
-	private static final String NAME_SUFFIX = "Clone";
+	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(CloneUiConverter.class);
 
 	public CloneUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
@@ -40,14 +40,14 @@ public class CloneUiConverter extends StraightpullUiConverter {
 		LOGGER.debug("Fetching Straight-Pull-Properties for -{}", componentName);
 		clone = (Clone) typeBaseComponent;
 
-		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(), UIComponentsConstants.VALID.value());
+		
 
-		container.getComponentNextNameSuffixes().put(NAME_SUFFIX, 0);
+		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(clone.getId());
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.CLONE.value());
 		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY.value());
-
+		validateComponentProperties(propertyMap);
 	}
 
 	protected void getOutPort(TypeStraightPullComponent straightPullComponent) {
@@ -55,7 +55,7 @@ public class CloneUiConverter extends StraightpullUiConverter {
 		int portCounter = 1;
 		if (straightPullComponent.getOutSocket() != null) {
 			for (TypeStraightPullOutSocket outSocket : straightPullComponent.getOutSocket()) {
-				uiComponent.engageOutputPort(outSocket.getType() + portCounter);
+				uiComponent.engageOutputPort(getOutputSocketType(outSocket) + portCounter);
 			}
 		}
 	}

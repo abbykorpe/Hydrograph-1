@@ -21,7 +21,7 @@ import com.bitwiseglobal.graph.operationstypes.Join;
 public class JoinComponentUiConverter extends TransformUiConverter {
 
 	private Join join;
-	private static final String NAME_SUFFIX = "Join_";
+	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(JoinComponentUiConverter.class);
 	private int inPortCounter = 1;
 
@@ -40,15 +40,13 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 		join = (Join) typeBaseComponent;
 		propertyMap.put("input_count", getSize());
 
-		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(), UIComponentsConstants.VALID.value());
-
-		container.getComponentNextNameSuffixes().put(NAME_SUFFIX, 0);
+		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(componentName);
 
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.JOIN.value());
 		uiComponent.setCategory(UIComponentsConstants.TRANSFORM_CATEGORY.value());
-
+		validateComponentProperties(propertyMap);
 	}
 
 	private String getSize() {
@@ -61,7 +59,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 		LOGGER.debug("Generating InPut Ports for -{}", componentName);
 		if (operationsComponent.getInSocket() != null) {
 			for (TypeBaseInSocket inSocket : operationsComponent.getInSocket()) {
-				uiComponent.engageInputPort(inSocket.getType() + inPortCounter);
+				uiComponent.engageInputPort(getInputSocketType(inSocket) + inPortCounter);
 				UIComponentRepo.INSTANCE.getComponentLinkList().add(
 						new LinkingData(inSocket.getFromComponentId(), operationsComponent.getId(), inSocket
 								.getFromSocketId(), inSocket.getId()));
@@ -78,13 +76,13 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 	protected void getOutPort(TypeOperationsComponent operationsComponent) {
 		LOGGER.debug("Generating OutPut Ports for -{}", componentName);
 		int portCounter = 0;
-		int unusedportCounter = 0;
+		int unusedPortsCounter = 0;
 		if (operationsComponent.getOutSocket() != null) {
 			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
-				if (outSocket.getType().equals("unused"))
-					uiComponent.engageOutputPort(outSocket.getType() + (++unusedportCounter));
+				if (getOutputSocketType(outSocket).equals("unused"))
+					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (++unusedPortsCounter));
 				else
-					uiComponent.engageOutputPort(outSocket.getType() + (++portCounter));
+					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (++portCounter));
 
 			}
 

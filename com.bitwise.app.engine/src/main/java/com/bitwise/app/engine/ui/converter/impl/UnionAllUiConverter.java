@@ -19,7 +19,7 @@ import com.bitwiseglobal.graph.straightpulltypes.UnionAll;
 public class UnionAllUiConverter extends StraightpullUiConverter {
 
 	private UnionAll unionAll;
-	private static final String NAME_SUFFIX = "UnionAll";
+	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(UnionAllUiConverter.class);
 
 	public UnionAllUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
@@ -35,15 +35,13 @@ public class UnionAllUiConverter extends StraightpullUiConverter {
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Union-All-Properties for -{}", componentName);
 		unionAll = (UnionAll) typeBaseComponent;
-
-		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(), UIComponentsConstants.VALID.value());
 		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY.value());
-		container.getComponentNextNameSuffixes().put(NAME_SUFFIX, 0);
+		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(unionAll.getId());
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.CLONE.value());
 		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY.value());
-
+		validateComponentProperties(propertyMap);
 	}
 
 	protected void getInPort(TypeStraightPullComponent straightPullComponent) {
@@ -52,7 +50,7 @@ public class UnionAllUiConverter extends StraightpullUiConverter {
 		String fixedInsocket = "in0";
 		if (straightPullComponent.getInSocket() != null) {
 			for (TypeBaseInSocket inSocket : straightPullComponent.getInSocket()) {
-				uiComponent.engageInputPort(inSocket.getType() + portCounter);
+				uiComponent.engageInputPort(getInputSocketType(inSocket)+ portCounter);
 				UIComponentRepo.INSTANCE.getComponentLinkList().add(
 						new LinkingData(inSocket.getFromComponentId(), straightPullComponent.getId(), inSocket
 								.getFromSocketId(), fixedInsocket

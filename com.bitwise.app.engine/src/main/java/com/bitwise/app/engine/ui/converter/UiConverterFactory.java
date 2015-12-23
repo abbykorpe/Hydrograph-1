@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.ui.converter.impl.AggregateUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.CloneUiConverter;
+import com.bitwise.app.engine.ui.converter.impl.DummyUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.FilterUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.InputFileDelimitedUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.InputFixedWidthUiConverter;
@@ -16,7 +17,6 @@ import com.bitwise.app.engine.ui.converter.impl.RemoveDupsUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.TransformComponentUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.UnionAllUiConverter;
 import com.bitwise.app.graph.model.Container;
-import com.bitwise.app.graph.model.components.Lookup;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 import com.bitwiseglobal.graph.inputtypes.TextFileDelimited;
 import com.bitwiseglobal.graph.inputtypes.TextFileFixedWidth;
@@ -53,7 +53,7 @@ public class UiConverterFactory {
 	 * @return UiConverter, specific ui-converter.
 	 */
 	public UiConverter getUiConverter(TypeBaseComponent typeBaseComponent,Container container) {
-		
+		LOGGER.debug("Getting Ui-Converter for component:{}",typeBaseComponent.getClass());
 		if((com.bitwiseglobal.graph.outputtypes.TextFileDelimited.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new OutputFileDelimitedUiConverter(typeBaseComponent,container);
 		}
@@ -90,6 +90,7 @@ public class UiConverterFactory {
 		if((HashJoin.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new LookupUiConverter(typeBaseComponent,container);
 		}
-		return null;
+		
+		return new DummyUiConverter(typeBaseComponent,container);
 	}
 }

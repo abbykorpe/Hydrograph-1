@@ -15,7 +15,7 @@ import com.bitwiseglobal.graph.operationstypes.Transform;
 public class TransformComponentUiConverter extends TransformUiConverter {
 
 	private Transform transform;
-	private static final String NAME_SUFFIX = "Transform_";
+	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(TransformComponentUiConverter.class);
 	
 	public TransformComponentUiConverter(TypeBaseComponent typeBaseComponent,
@@ -33,15 +33,15 @@ public class TransformComponentUiConverter extends TransformUiConverter {
 		LOGGER.debug("Fetching Transform-Properties for -{}",componentName);
 		transform = (Transform) typeBaseComponent;
 		propertyMap.put(Constants.PARAM_OPERATION, createTransformPropertyGrid());
-		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(),UIComponentsConstants.VALID.value());
+	
 	
 		
-		container.getComponentNextNameSuffixes().put(NAME_SUFFIX, 0);
+		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(componentName);
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.TRANSFORM.value());
 		uiComponent.setCategory(UIComponentsConstants.TRANSFORM_CATEGORY.value());
-	
+		validateComponentProperties(propertyMap);
 	}
 
 

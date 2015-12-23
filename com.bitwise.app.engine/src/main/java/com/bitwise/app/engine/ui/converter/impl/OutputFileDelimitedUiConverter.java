@@ -28,7 +28,7 @@ import com.bitwiseglobal.graph.outputtypes.TextFileDelimited;
 public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(OutputFileDelimitedUiConverter.class);
-	private static final String NAME_SUFFIX = "OFDelimited";
+	
 
 	public OutputFileDelimitedUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;
@@ -52,26 +52,30 @@ public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
 				convertBooleanVlaue(fileDelimited.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
-		propertyMap.put(PropertyNameConstants.DELIMITER.value(), fileDelimited.getDelimiter().getValue());
-		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(), UIComponentsConstants.VALID.value());
+		if (fileDelimited.getDelimiter() != null)
+			propertyMap.put(PropertyNameConstants.DELIMITER.value(), fileDelimited.getDelimiter().getValue());
 
 		uiComponent.setType(UIComponentsConstants.FILE_DELIMITED.value());
 		uiComponent.setCategory(UIComponentsConstants.OUTPUT_CATEGORY.value());
-		container.getComponentNextNameSuffixes().put(NAME_SUFFIX, 0);
+		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(fileDelimited.getId());
 		uiComponent.setProperties(propertyMap);
-
+		validateComponentProperties(propertyMap);
 	}
 
 	private Object getCharSet() {
 		TextFileDelimited fileDelimited = (TextFileDelimited) typeBaseComponent;
-		Object value = fileDelimited.getCharset().getValue();
-		if (value != null) {
-			return fileDelimited.getCharset().getValue().value();
-		} else {
-			value = getValue(PropertyNameConstants.CHAR_SET.value());
+		Object value = null;
+		if (fileDelimited.getCharset() != null) {
+			value = fileDelimited.getCharset().getValue();
+			if (value != null) {
+				return fileDelimited.getCharset().getValue().value();
+			} else {
+				value = getValue(PropertyNameConstants.CHAR_SET.value());
+			}
 		}
 		return value;
+
 	}
 
 	@Override

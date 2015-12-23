@@ -21,6 +21,8 @@ import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.propertywindow.fixedwidthschema.FixedWidthGridRow;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GridRow;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.Schema;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.SchemaGrid;
 import com.bitwiseglobal.graph.commontypes.FieldDataTypes;
 import com.bitwiseglobal.graph.commontypes.ScaleTypeList;
@@ -248,7 +250,7 @@ public class ConverterHelper {
 		return typeBaseField;
 	}
 
-	public TypeBaseField getSchemaGridTargetData(SchemaGrid object) {
+	public TypeBaseField getSchemaGridTargetData(GridRow object) {
 		TypeBaseField typeBaseField = new TypeBaseField();
 		typeBaseField.setName(object.getFieldName());
 		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())

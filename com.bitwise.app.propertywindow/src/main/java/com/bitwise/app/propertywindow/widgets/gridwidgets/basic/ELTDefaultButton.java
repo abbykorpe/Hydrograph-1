@@ -1,6 +1,7 @@
 package com.bitwise.app.propertywindow.widgets.gridwidgets.basic;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -20,6 +21,7 @@ public class ELTDefaultButton extends AbstractELTWidget{
 	private int buttonWidth=92;
 	private int buttonHeight=25;
 	private boolean grabExcessSpace=false;
+
 	
 	/**
 	 * Instantiates a new ELT default button.
@@ -81,6 +83,17 @@ public class ELTDefaultButton extends AbstractELTWidget{
 	 */
 	public void visible(boolean visiblity){
 		defaultELTButton.setVisible(visiblity);
+	}
+
+	public void setImage(String img) {
+		defaultELTButton.setImage(new Image(null, img));
+		
+	}
+
+	public ELTDefaultButton lableWidth(int buttonWidth) {
+		this.buttonWidth = buttonWidth;
+		return this;
+		
 	}
 	
 }

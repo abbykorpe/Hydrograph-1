@@ -11,7 +11,7 @@ public enum ComponentXpathConstants {
 		this.value = value;
 	}
 
-	public String value() {
+	public String value() { 
 		return value;
 	}
 

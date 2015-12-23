@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig ComponentConfig.xsd ">
+	<tns:component paletteIconPath="/icons/gather_palette.png" canvasIconPath="/icons/dummy-canvas.png"
+		name="DummyComponent" nameInPalette="Dummy" defaultNamePrefix="Dummy" description="This is Default component.\nsome more text">
+		<tns:category>DUMMY</tns:category>
+		<tns:port>
+			<tns:portSpecification>
+				<tns:typeOfPort>out</tns:typeOfPort>
+				<tns:numberOfPorts>1</tns:numberOfPorts>
+				<tns:sequenceOfPort>1</tns:sequenceOfPort>
+				<tns:allowMultipleLinks>true</tns:allowMultipleLinks>
+				<tns:linkMandatory>true</tns:linkMandatory>
+				<tns:nameOfPort>out0</tns:nameOfPort>
+				<tns:labelOfPort>out0</tns:labelOfPort>
+			</tns:portSpecification>
+			<tns:portSpecification>
+				<tns:typeOfPort>unused</tns:typeOfPort>
+				<tns:numberOfPorts>1</tns:numberOfPorts>
+				<tns:sequenceOfPort>1</tns:sequenceOfPort>
+				<tns:allowMultipleLinks>true</tns:allowMultipleLinks>
+				<tns:linkMandatory>false</tns:linkMandatory>
+				<tns:nameOfPort>unused0</tns:nameOfPort>
+				<tns:labelOfPort>un0</tns:labelOfPort>
+			</tns:portSpecification>
+			<tns:portSpecification>
+				<tns:typeOfPort>in</tns:typeOfPort>
+				<tns:numberOfPorts>1</tns:numberOfPorts>
+				<tns:sequenceOfPort>1</tns:sequenceOfPort>
+				<tns:allowMultipleLinks>true</tns:allowMultipleLinks>
+				<tns:linkMandatory>true</tns:linkMandatory>
+				<tns:nameOfPort>in0</tns:nameOfPort>
+				<tns:labelOfPort>in0</tns:labelOfPort>
+			</tns:portSpecification>
+		</tns:port>
+		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
+			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED"/>
+		
+		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED"/>
+		
+		
+	</tns:component>
+</tns:Config>

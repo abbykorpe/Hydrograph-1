@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.eclipse.draw2d.geometry.Dimension;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
@@ -89,10 +88,10 @@ public abstract class TransformUiConverter extends UiConverter {
 		int unusedPortsCounter = 0;
 		if (operationsComponent.getOutSocket() != null) {
 			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
-				if (outSocket.getType().equals("unused"))
-					uiComponent.engageOutputPort(outSocket.getType() + (++unusedPortsCounter));
+				if (getOutputSocketType(outSocket).equals("unused"))
+					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (++unusedPortsCounter));
 				else
-					uiComponent.engageOutputPort(outSocket.getType() + (++portCounter));
+					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (++portCounter));
 				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null)
 					propertyMap.put(Constants.PARAM_OPERATION,
 							getUiPassThroughOrOperationFieldsOrMapFieldGrid(outSocket));
@@ -145,7 +144,7 @@ public abstract class TransformUiConverter extends UiConverter {
 			transformPropertyGrid.setOperation(new ArrayList<TransformOperation>());
 			for (TypeTransformOperation transformOperation : typeTransformOperationlist) {
 				TransformOperation uITransformOperation = new TransformOperation();
-				uITransformOperation.setOperationId(Long.parseLong(transformOperation.getId()));
+				uITransformOperation.setOperationId(transformOperation.getId());
 				uITransformOperation.setOpClassProperty(new OperationClassProperty(transformOperation.getClazz(),
 						isParameter(transformOperation.getClazz())));
 				uITransformOperation.setSchemaGridRowList(getFixedWidthSchemaList(transformOperation));
@@ -219,10 +218,10 @@ public abstract class TransformUiConverter extends UiConverter {
 	private List<FixedWidthGridRow> getFixedWidthSchemaList(TypeTransformOperation transformOperation) {
 		List<FixedWidthGridRow> fixedWidthGridRowsList = new ArrayList<>();
 		ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
-		if(transformOperation.getOutputFields()!=null){
-		for (TypeBaseField field : transformOperation.getOutputFields().getField()) {
-			fixedWidthGridRowsList.add(converterUiHelper.getFixedWidthSchema(field));
-		}
+		if (transformOperation.getOutputFields() != null) {
+			for (TypeBaseField field : transformOperation.getOutputFields().getField()) {
+				fixedWidthGridRowsList.add(converterUiHelper.getFixedWidthSchema(field));
+			}
 		}
 		return fixedWidthGridRowsList;
 	}
