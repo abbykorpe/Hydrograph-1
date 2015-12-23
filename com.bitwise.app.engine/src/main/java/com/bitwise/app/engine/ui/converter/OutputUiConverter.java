@@ -48,11 +48,10 @@ public abstract class OutputUiConverter extends UiConverter {
 				if (inSocket.getSchema() != null) {
 					propertyMap.put(PropertyNameConstants.SCHEMA.value(), getSchema(inSocket));
 				}
-				uiComponent.engageInputPort(inSocket.getType() + portCounter);
+				uiComponent.engageInputPort(getInputSocketType(inSocket) + portCounter);
 				UIComponentRepo.INSTANCE.getComponentLinkList().add(
-						new LinkingData(inSocket.getFromComponentId(), typeOutputComponent.getId(), typeOutputComponent
-								.getInSocket().get(0).getFromSocketId(), typeOutputComponent.getInSocket().get(0)
-								.getId()
+						new LinkingData(inSocket.getFromComponentId(), typeOutputComponent.getId(), inSocket
+								.getFromSocketId(), inSocket.getId()
 
 						));
 			}

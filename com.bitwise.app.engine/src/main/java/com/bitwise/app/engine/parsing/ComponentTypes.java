@@ -7,7 +7,7 @@ public enum ComponentTypes {
 	INPUTS("inputs"),
 	OUTPUTS("outputs"),
 	OPERATIONS("operations"),
-	STRAIGHT_PULLS("straight-pulls");
+	STRAIGHT_PULLS("straightPulls");
 	
 	private final String value;
 

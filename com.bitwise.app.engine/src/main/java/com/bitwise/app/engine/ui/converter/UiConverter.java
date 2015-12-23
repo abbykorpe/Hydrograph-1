@@ -8,13 +8,19 @@ import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.component.config.Property;
+import com.bitwise.app.common.component.config.Usage;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.engine.ui.repository.ParameterData;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
 import com.bitwiseglobal.graph.commontypes.BooleanValueType;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
+import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
+import com.bitwiseglobal.graph.commontypes.TypeBaseOutSocket;
 
 /**
  * The class UiConverter
@@ -33,12 +39,14 @@ public abstract class UiConverter {
 	protected static final String PHASE = "phase";
 	protected static final String NAME = "name";
 	protected String componentName;
+	protected String name_suffix;
 
 	/**
 	 * Generate basic properties that are common in all components.
 	 */
 	public void prepareUIXML() {
 		componentName = typeBaseComponent.getId();
+		name_suffix = uiComponent.getComponentName() + "_";
 		LOGGER.debug("Preparing basic properties for component {}", componentName);
 		propertyMap.put(NAME, componentName);
 		propertyMap.put(PHASE, typeBaseComponent.getPhase().toString());
@@ -70,8 +78,7 @@ public abstract class UiConverter {
 			return "True";
 		} else {
 			stringValue = getValue(propertyName);
-			if (stringValue != null)
-			{
+			if (stringValue != null) {
 				return (String) stringValue;
 			}
 
@@ -124,4 +131,36 @@ public abstract class UiConverter {
 	 */
 	protected abstract Map<String, String> getRuntimeProperties();
 
+	protected Map<String, Object> validateComponentProperties(Map<String, Object> properties) {
+		boolean componentHasRequiredValues = Boolean.TRUE;
+		com.bitwise.app.common.component.config.Component component = XMLConfigUtil.INSTANCE.getComponent(uiComponent
+				.getComponentName());
+		for (Property configProperty : component.getProperty()) {
+			Object propertyValue = properties.get(configProperty.getName());
+			if (configProperty.getUsage() != null && Usage.REQUIRED.equals(configProperty.getUsage())
+					&& propertyValue == null) {
+				componentHasRequiredValues = Boolean.FALSE;
+				LOGGER.debug("Mandatory parameter for {} does not have default value for {} parameter", new Object[] {
+						component.getName(), configProperty.getName() });
+			}
+		}
+		if (!componentHasRequiredValues) {
+			properties.put(Component.Props.VALIDITY_STATUS.getValue(), Component.ValidityStatus.WARN.name());
+		}
+		return properties;
+	}
+
+	protected String getInputSocketType(TypeBaseInSocket inSocket) {
+		if (inSocket.getType() != null)
+			return inSocket.getType();
+
+		return Constants.INPUT_SOCKET_TYPE;
+	}
+
+	protected String getOutputSocketType(TypeBaseOutSocket outSocket) {
+		if (outSocket.getType() != null)
+			return outSocket.getType();
+
+		return Constants.OUTPUT_SOCKET_TYPE;
+	}
 }

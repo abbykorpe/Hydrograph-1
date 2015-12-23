@@ -21,7 +21,7 @@ import com.bitwiseglobal.graph.operationstypes.Filter;
 public class FilterUiConverter extends TransformUiConverter{
 
 	private Filter filter;
-	private static final String NAME_SUFFIX = "Filter_";
+	
 
 	public FilterUiConverter(TypeBaseComponent typeBaseComponent,Container container) {
 		this.container = container;
@@ -39,10 +39,10 @@ public class FilterUiConverter extends TransformUiConverter{
 		
 		propertyMap.put(PropertyNameConstants.OPERATION_CLASS.value(),getOperationClass());
 		propertyMap.put(PropertyNameConstants.OPERATION_FILEDS.value(), getOperationFileds());
-		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(),UIComponentsConstants.VALID.value());
+		
 		
 		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY	.value());
-		container.getComponentNextNameSuffixes().put(NAME_SUFFIX, 0);
+		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(componentName);
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.REMOVE_DUPS.value());

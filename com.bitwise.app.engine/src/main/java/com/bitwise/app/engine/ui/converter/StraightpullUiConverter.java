@@ -52,11 +52,10 @@ public abstract class StraightpullUiConverter extends UiConverter {
 		int portCounter = 1;
 		if (straightPullComponent.getInSocket() != null) {
 			for (TypeBaseInSocket inSocket : straightPullComponent.getInSocket()) {
-				uiComponent.engageInputPort(inSocket.getType() + portCounter);
+				uiComponent.engageInputPort(getInputSocketType(inSocket) + portCounter);
 				UIComponentRepo.INSTANCE.getComponentLinkList().add(
 						new LinkingData(inSocket.getFromComponentId(), straightPullComponent.getId(),
-								straightPullComponent.getInSocket().get(0).getFromSocketId(), straightPullComponent
-										.getInSocket().get(0).getId()));
+								inSocket.getFromSocketId(), inSocket.getId()));
 				portCounter++;
 			}
 		}
@@ -75,11 +74,10 @@ public abstract class StraightpullUiConverter extends UiConverter {
 		int unusedportCounter = 0;
 		if (straightPullComponent.getOutSocket() != null) {
 			for (TypeStraightPullOutSocket outSocket : straightPullComponent.getOutSocket()) {
-				if (outSocket.getType().equals("unused"))
-					uiComponent.engageOutputPort(outSocket.getType() + (++unusedportCounter));
+				if (getOutputSocketType(outSocket).equals("unused"))
+					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (++unusedportCounter));
 				else
-					uiComponent.engageOutputPort(outSocket.getType() + (++portCounter));
-
+					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (++portCounter));
 			}
 
 		}

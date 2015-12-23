@@ -137,6 +137,7 @@ public class CoordinateProcessor {
 	}
 
 	private int incrementXPosition(Node node, int position) {
+		LOGGER.debug("Applying X cordinate for component:{}"+node.getName());
 		int width = UIComponentRepo.INSTANCE.getComponentUiFactory().get(node.getName()).getSize().width();
 		if (width > 100)
 			position = position + (width - 100);

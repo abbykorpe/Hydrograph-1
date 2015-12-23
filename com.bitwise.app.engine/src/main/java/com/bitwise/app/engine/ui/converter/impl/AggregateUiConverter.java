@@ -33,7 +33,7 @@ import com.bitwiseglobal.graph.operationstypes.Aggregate;
 public class AggregateUiConverter extends TransformUiConverter {
 
 	private Aggregate aggregate;
-	private static final String NAME_SUFFIX = "Aggregate_";
+	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(AggregateUiConverter.class);
 
 	public AggregateUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
@@ -53,17 +53,17 @@ public class AggregateUiConverter extends TransformUiConverter {
 		LOGGER.debug("Fetching Aggregate-Properties for -{}", componentName);
 		aggregate = (Aggregate) typeBaseComponent;
 
-		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(), UIComponentsConstants.VALID.value());
+		
 		propertyMap.put(Constants.PROPERTY_COLUMN_NAME, getPrimaryKeys());
 		propertyMap.put(Constants.PROPERTY_SECONDARY_COLUMN_KEYS, getSecondaryKeys());
 		propertyMap.put(Constants.PARAM_OPERATION, createTransformPropertyGrid());
 
-		container.getComponentNextNameSuffixes().put(NAME_SUFFIX, 0);
+		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(componentName);
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.AGGREGATE.value());
 		uiComponent.setCategory(UIComponentsConstants.TRANSFORM_CATEGORY.value());
-
+		validateComponentProperties(propertyMap);
 	}
 
 	private Map<String, String> getSecondaryKeys() {

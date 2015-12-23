@@ -2,7 +2,7 @@ package com.bitwise.app.engine.ui.constants;
 
 
 public enum UIComponentsConstants {
-	VALID("VALID"),
+	
 	FILE_DELIMITED("File Delimited"),
 	VALIDITY_STATUS("validityStatus"),
 	INPUT_CATEGORY("INPUT"),
