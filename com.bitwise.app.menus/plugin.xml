@@ -28,6 +28,14 @@
             id="com.bitwise.window.portLabels.showHide"
             name="ShowHidePortLabels">
       </command>
+        <command
+            id="com.bitwise.help.helpcontent"
+            name="Help content">
+      </command>
+     <command
+	         id="com.bitwise.help.aboutaccelero"
+            name="About Accelero">
+     </command>
    </extension>
 	  <extension
          point="org.eclipse.ui.handlers">
@@ -195,6 +203,10 @@
             class="com.bitwise.app.menus.handlers.ShowHidePortLabelsHandler"
             commandId="com.bitwise.window.portLabels.showHide">
       </handler>
+       <handler
+            class="com.bitwise.app.menus.handlers.AboutActionHandler"
+            commandId="com.bitwise.help.aboutaccelero">
+       </handler>
    </extension>
    		
    <extension
@@ -399,8 +411,13 @@
                id="com.bitwise.app.menus.HelpMenu"
                label="Help">
             <command
-                  commandId="com.bitwise.menuBar.command18"
-                  label="About "
+                  commandId="org.eclipse.ui.help.displayHelp"
+                 label="Help content"
+                  style="push">
+           </command>
+          <command
+                  commandId="com.bitwise.help.aboutaccelero"
+                 label="About Accelero"
                   style="push">
             </command>
          </menu>
@@ -444,6 +461,12 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+M3+S">
       </key>
+       <key
+             commandId="org.eclipse.ui.help.displayHelp"
+             contextId="org.eclipse.ui.contexts.window"
+             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+             sequence="f1">
+       </key>
    </extension>
    <extension
          point="org.eclipse.ui.importWizards">

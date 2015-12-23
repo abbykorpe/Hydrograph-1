@@ -5,6 +5,8 @@ import java.nio.CharBuffer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseTrackListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -17,6 +19,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.component.help.ComponentHelp;
+import com.bitwise.app.component.help.ComponentHelpFactory;
 import com.bitwise.app.tooltip.utils.ToolTipUtils;
 
 /**
@@ -35,7 +39,8 @@ public class PaletteToolTip extends Shell {
 	private Composite toolTipComposite;
 	private Label toolTipText;
 	private String blankCharacters;
-	private Link helpLink;		
+	private Link helpLink;	
+	private String tooltipContent;
 	
 	/**
 	 * 
@@ -86,6 +91,7 @@ public class PaletteToolTip extends Shell {
 		addSpacesBeforeHelpLink(maxLength);		
 		toolTipText.setText(text.replace("\\n", "\n"));
 		setSize(this.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		tooltipContent=text;
 		logger.debug("set tooltip text - " + text);
 	}
 	
@@ -123,6 +129,22 @@ public class PaletteToolTip extends Shell {
 		helpLink.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		helpLink.setText("<a>Help</a>");
 		helpLink.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+		helpLink.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String[] strs = tooltipContent.replaceAll("[.]", "").split("\\s+");
+				ComponentHelp componentHelp=new ComponentHelpFactory().getComponent(strs[2]);
+				componentHelp.HelpContentofComponent();
+				
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		logger.debug("Added help link");
 	}
 
@@ -213,8 +235,9 @@ public class PaletteToolTip extends Shell {
 			
 			@Override
 			public void mouseEnter(MouseEvent e) {
-				//Do Nothing
-				
+//			String[] strs = tooltipContent.replaceAll("[.]", "").split("\\s+");
+//			ComponentHelp componentHelp=new ComponentHelpFactory().getComponent(strs[2]);
+//			componentHelp.HelpContentofComponent();
 			}
 		});
 	}
