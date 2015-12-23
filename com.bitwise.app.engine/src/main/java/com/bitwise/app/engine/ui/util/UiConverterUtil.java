@@ -26,6 +26,7 @@ import com.bitwise.app.engine.parsing.XMLParser;
 import com.bitwise.app.engine.ui.converter.LinkingData;
 import com.bitwise.app.engine.ui.converter.UiConverter;
 import com.bitwise.app.engine.ui.converter.UiConverterFactory;
+import com.bitwise.app.engine.ui.exceptions.ComponentNotFoundException;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwise.app.engine.ui.xygenration.CoordinateProcessor;
 import com.bitwise.app.graph.model.Component;
@@ -75,7 +76,7 @@ public class UiConverterUtil {
 	 */
 	public void convertToUiXML(File sourceXML, IFile jobFile, IFile parameterFile) throws InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
-			SecurityException, EngineException, JAXBException, ParserConfigurationException, SAXException, IOException {
+			SecurityException, EngineException, JAXBException, ParserConfigurationException, SAXException, IOException,ComponentNotFoundException {
 		LOGGER.debug("Creating UI-Converter based on component");
 		loadClass();
 		Graph graph = unMarshall(sourceXML);
@@ -174,7 +175,7 @@ public class UiConverterUtil {
 	/**
 	 * Create links between the components based on there
 	 */
-	public void createLinks() {
+	public void createLinks() throws ComponentNotFoundException{
 		LOGGER.debug("Creating UI-Links between Components");
 		preProcessLinkData();
 		CoordinateProcessor pc = new CoordinateProcessor();
@@ -184,6 +185,7 @@ public class UiConverterUtil {
 					linkingData.getSourceComponentId());
 			Component targetComponent = UIComponentRepo.INSTANCE.getComponentUiFactory().get(
 					linkingData.getTargetComponentId());
+			
 			Link link = new Link();
 			link.setSourceTerminal(linkingData.getSourceTerminal());
 			link.setTargetTerminal(linkingData.getTargetTerminal());

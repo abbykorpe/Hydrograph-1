@@ -14,8 +14,6 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-import com.bitwise.app.propertywindow.widgets.joinproperty.ELTJoinConfigGrid;
-import com.bitwise.app.propertywindow.widgets.joinproperty.ELTJoinMapGrid;
 
 public class ELTJoinMapWidget extends AbstractWidget{
 
@@ -42,8 +40,7 @@ public class ELTJoinMapWidget extends AbstractWidget{
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ELTJoinMapGrid grid = new ELTJoinMapGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell());
-				grid.open();
+				
 			}
 			
 		});

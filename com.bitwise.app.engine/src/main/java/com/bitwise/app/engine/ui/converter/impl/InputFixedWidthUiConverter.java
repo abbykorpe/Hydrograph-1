@@ -1,14 +1,10 @@
 package com.bitwise.app.engine.ui.converter.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
-
-import javax.xml.namespace.QName;
 
 import org.slf4j.Logger;
 
@@ -19,10 +15,9 @@ import com.bitwise.app.engine.ui.converter.InputUiConverter;
 import com.bitwise.app.engine.ui.helper.ConverterUiHelper;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.components.IFixedWidth;
-import com.bitwise.app.propertywindow.fixedwidthschema.FixedWidthGridRow;
-import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GridRow;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.Schema;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;
 import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
 import com.bitwiseglobal.graph.commontypes.TypeProperties;
@@ -30,7 +25,6 @@ import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
 import com.bitwiseglobal.graph.inputtypes.TextFileFixedWidth;
 
 public class InputFixedWidthUiConverter extends InputUiConverter {
-
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(InputFixedWidthUiConverter.class);
 
@@ -47,15 +41,14 @@ public class InputFixedWidthUiConverter extends InputUiConverter {
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Input-Fixed-Width-Properties for {}", componentName);
 		TextFileFixedWidth fileFixedWidth = (TextFileFixedWidth) typeBaseComponent;
-
-		propertyMap.put(PropertyNameConstants.PATH.value(), fileFixedWidth.getPath().getUri());
+		if(fileFixedWidth.getPath()!=null)
+			propertyMap.put(PropertyNameConstants.PATH.value(), fileFixedWidth.getPath().getUri());
 		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
 				convertBooleanVlaue(fileFixedWidth.getStrict(), PropertyNameConstants.STRICT.value()));
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
 				convertBooleanVlaue(fileFixedWidth.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 
-		
 		uiComponent.setType(UIComponentsConstants.FILE_FIXEDWIDTH.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
@@ -95,11 +88,21 @@ public class InputFixedWidthUiConverter extends InputUiConverter {
 	@Override
 	protected Object getSchema(TypeInputOutSocket outSocket) {
 		LOGGER.debug("Generating UI-Schema data for {}", componentName);
-		List<FixedWidthGridRow> schemaList = new ArrayList<>();
+		Schema schema = new Schema();
+		List<GridRow> gridRow = new ArrayList<>();
 		ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
-		for (Object record : outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema())
-			schemaList.add(converterUiHelper.getFixedWidthSchema(record));
-		return schemaList;
+		for (Object record : outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema()) {
+			if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
+				schema.setIsExternal(true);
+				if (((TypeExternalSchema) record).getUri() != null)
+					schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
+			} else {
+				gridRow.add(converterUiHelper.getFixedWidthSchema(record));
+				schema.setGridRow(gridRow);
+				schema.setIsExternal(false);
+			}
+		}
+		return schema;
 	}
 
 }

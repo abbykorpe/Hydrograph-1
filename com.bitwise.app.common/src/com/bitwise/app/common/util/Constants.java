@@ -40,6 +40,8 @@ public class Constants {
 	
 	public static final String PROPERTY_COLUMN_NAME = "column_name";
 	public static final String PROPERTY_SECONDARY_COLUMN_KEYS = "secondary_column_keys";
+	public static final String INNER = "Inner";
+	public static final String OUTER = "Outer";
 	
 	public static final String FILTER = "FILTER";
 	public static final String TRANSFORM = "TRANSFORM";
@@ -51,5 +53,9 @@ public class Constants {
 	public static final String UNUSED_SOCKET_TYPE = "unused";
 	public static final String DUMMY_COMPONENT_CATEGORY = "DUMMY";
 	public static final String DUMMY_COMPONENT = "DummyComponent";
+	
+	public static final String LOOKUP_CONFIG_FIELD = "hash_join_config";
+	public static final String LOOKUP_MAP_FIELD = "hash_join_map";
+	public static final String UNKNOWN_COMPONENT_TYPE = "UNKNOWN";
 	
 }

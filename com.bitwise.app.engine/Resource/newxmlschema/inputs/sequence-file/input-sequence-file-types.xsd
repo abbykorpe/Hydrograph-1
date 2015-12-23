@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.bitwiseglobal.com/graph/itfs" xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwiseglobal.com/graph/itfs"
+  elementFormDefault="unqualified"
+>
+  <xs:import schemaLocation="../../common/common-types.xsd"
+    namespace="http://www.bitwiseglobal.com/graph/commontypes" />
+
+  <xs:complexType name="type-input-sequence-out-socket">
+    <xs:complexContent>
+      <xs:restriction base="cmn:type-input-outSocket">
+        <xs:sequence>
+          <xs:element name="schema" type="cmn:type-base-record" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"
+          fixed="out0" />
+        <xs:attribute name="type" type="xs:string" fixed="out" use="optional" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="type-input-file-sequence-base">
+    <xs:complexContent>
+      <xs:restriction base="cmn:type-input-component">
+        <xs:sequence>
+          <xs:element name="outSocket" type="type-input-sequence-out-socket"
+            minOccurs="1" maxOccurs="1" />
+          <xs:element name="dependsOn" type="cmn:type-depends-on"
+            minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+
+</xs:schema>

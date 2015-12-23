@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="http://www.bitwiseglobal.com/graph/outputtypes"
 	xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:otffw="http://www.bitwiseglobal.com/graph/otffw"
-	xmlns:otfd="http://www.bitwiseglobal.com/graph/otfd" xmlns:otdiscard="http://www.bitwiseglobal.com/graph/otdiscard"
+	xmlns:otfd="http://www.bitwiseglobal.com/graph/otfd" xmlns:otfs="http://www.bitwiseglobal.com/graph/otfs" xmlns:otdiscard="http://www.bitwiseglobal.com/graph/otdiscard"
 	xmlns:ofparquet="http://www.bitwiseglobal.com/graph/ofparquet"
 	xmlns:ohiveparquet="http://www.bitwiseglobal.com/graph/ohiveparquet"
 	xmlns:ofMixedScheme="http://www.bitwiseglobal.com/graph/ofmixedscheme"
@@ -14,6 +14,8 @@
 		namespace="http://www.bitwiseglobal.com/graph/otffw" />
 	<xs:import schemaLocation="./text-file-delimited/output-text-file-delimited-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/otfd" />
+	<xs:import schemaLocation="./sequence-file/output-sequence-file-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/otfs" />
 	<xs:import schemaLocation="./discard/output-discard-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/otdiscard" />
 	<xs:import schemaLocation="./parquet-file/output-file-parquet-types.xsd"
@@ -64,6 +66,22 @@
 		</xs:complexContent>
 	</xs:complexType>
 
+	<xs:complexType name="sequenceOutputFile">
+			<xs:complexContent>
+				<xs:extension base="otfs:type-output-file-sequence-base">
+					<xs:sequence>
+						<xs:element name="path">
+							<xs:complexType>
+								<xs:attribute name="uri" type="xs:string" use="required" />
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="runtimeProperties" type="cmn:type-properties"
+							minOccurs="0" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	
 	<xs:complexType name="textFileFixedWidth">
 		<xs:complexContent>
 			<xs:extension base="otffw:type-fixed-width-base">

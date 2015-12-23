@@ -17,7 +17,8 @@ public class Messages extends NLS {
 	public static String NEW_FILE_LABEL_TEXT;
 	public static String SELECT_FILE_LABEL_TEXT;
 	public static String IMPORT_WINDOW_TITLE_TEXT;
-		
+	public static String INVALID_TARGET_FILE_ERROR;
+	public static String EXCEPTION_OCCURED;	
 	
 	static {
 		// initialize resource bundle

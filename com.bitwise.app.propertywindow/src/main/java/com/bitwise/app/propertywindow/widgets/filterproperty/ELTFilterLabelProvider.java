@@ -10,6 +10,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+import com.bitwise.app.common.datastructure.property.FilterProperties;
+
 /**
  * The Class ELTFilterLabelProvider.
  * 
@@ -57,7 +59,7 @@ public class ELTFilterLabelProvider implements ITableLabelProvider, ITableColorP
 
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
-		ELTFilterProperties filter = (ELTFilterProperties) element;
+		FilterProperties filter = (FilterProperties) element;
 		return filter.getPropertyname();
 	}
 

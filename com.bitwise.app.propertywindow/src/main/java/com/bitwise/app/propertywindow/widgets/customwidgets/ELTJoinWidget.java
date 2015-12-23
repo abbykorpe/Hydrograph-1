@@ -5,8 +5,6 @@ import java.util.LinkedHashMap;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
@@ -16,8 +14,6 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-import com.bitwise.app.propertywindow.widgets.joinproperty.ELTJoinConfigGrid;
-import com.bitwise.app.propertywindow.widgets.joinproperty.JoinDialog;
 
 
 
@@ -61,8 +57,7 @@ public class ELTJoinWidget extends AbstractWidget{
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ELTJoinConfigGrid grid = new ELTJoinConfigGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell());
-				grid.open();
+				
 			}
 			
 		});
