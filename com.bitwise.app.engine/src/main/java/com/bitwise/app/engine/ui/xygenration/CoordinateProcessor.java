@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.ui.converter.LinkingData;
+import com.bitwise.app.engine.ui.exceptions.ComponentNotFoundException;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwise.app.graph.model.Component;
 
@@ -32,7 +33,7 @@ public class CoordinateProcessor {
 	/**
 	 * Initiate X-Y coordinate generation process and creates node structure for each component.
 	 */
-	public void initiateCoordinateGenration() {
+	public void initiateCoordinateGenration() throws ComponentNotFoundException{
 		LOGGER.debug("Processing link-data for creating individual nodes");
 		Node sourceNode = null;
 		Node destinationNode = null;
@@ -101,7 +102,7 @@ public class CoordinateProcessor {
 		}
 	}
 
-	private void caculateXY() {
+	private void caculateXY()throws ComponentNotFoundException {
 		LOGGER.debug("Calculating logical Linking and positioning of Nodes");
 		int position = 1;
 		List<Node> noSource = new ArrayList<>();
@@ -122,7 +123,7 @@ public class CoordinateProcessor {
 		}
 	}
 
-	private void calculate(Node node, int position) {
+	private void calculate(Node node, int position) throws ComponentNotFoundException{
 		LOGGER.debug("Applying X coordinates for UI-Components");
 		node.sethPosition(position);
 		position = incrementXPosition(node, position);
@@ -136,12 +137,15 @@ public class CoordinateProcessor {
 		}
 	}
 
-	private int incrementXPosition(Node node, int position) {
-		LOGGER.debug("Applying X cordinate for component:{}"+node.getName());
-		int width = UIComponentRepo.INSTANCE.getComponentUiFactory().get(node.getName()).getSize().width();
-		if (width > 100)
-			position = position + (width - 100);
-		return position;
+	private int incrementXPosition(Node node, int position)throws ComponentNotFoundException {
+		LOGGER.debug("Applying X cordinate for component:{}" + node.getName());
+		if (UIComponentRepo.INSTANCE.getComponentUiFactory().get(node.getName()) != null) {
+			int width = UIComponentRepo.INSTANCE.getComponentUiFactory().get(node.getName()).getSize().width();
+			if (width > 100)
+				position = position + (width - 100);
+			return position;
+		} else
+			throw new ComponentNotFoundException(node.getName(), null);
 	}
 
 	private int incrementYPosition(Node node) {
