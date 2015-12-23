@@ -166,7 +166,7 @@ public class ELTLookupMapWizard extends Dialog {
 		gd_composite_1.widthHint = 400;
 		composite_1.setLayoutData(gd_composite_1);
 		
-		labelWidget(composite_1, SWT.None, new int[]{0, 6, 100, 18}, "Output Mapping");
+		labelWidget(composite_1, SWT.None, new int[]{0, 6, 100, 18}, "Output Mapping",null);
 		outputTableViewer = widget.createTableViewer(composite_1, COLUMN_NAME,new int[]{0, 30, 398, 538}, 196, new JoinContentProvider(), new LookupLabelProvider());
 		outputTableViewer.getTable().addMouseListener(new MouseAdapter() {
 	    	@Override
@@ -232,7 +232,7 @@ public class ELTLookupMapWizard extends Dialog {
 		comGrid.setLayout(new RowLayout(SWT.VERTICAL));
 		comGrid.setBounds(15, y, 233, 268);
 		
-		labelWidget(comGrid, SWT.LEFT, new int[]{0, 5, 90, 20}, "Input Index : in"+tableViewerIndex);
+		labelWidget(comGrid, SWT.LEFT, new int[]{0, 5, 90, 20}, "Input Index : in"+tableViewerIndex, null);
 		
 		inputTableViewer[tableViewerIndex] = widget.createTableViewer(comGrid, INPUT_COLUMN_NAME, new int[]{0, 30, 229, 232}, 224, new ELTFilterContentProvider(), new ELTFilterLabelProvider());
 		inputTableViewer[tableViewerIndex].getTable().addMouseListener(new MouseAdapter() {
@@ -261,8 +261,9 @@ public class ELTLookupMapWizard extends Dialog {
 	private void addButton(Composite parent, int[] bounds, final TableViewer viewer, final List<FilterProperties> joinInputList){
 		
 		Button bt = new Button(parent, SWT.PUSH);
-		bt.setText("+");
-		//bt.setImage(new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
+		//bt.setText("+");
+		bt.setImage(new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
+		bt.setImage(new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
 		bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		//viewer.editElement(viewer.getElementAt(joinInputList.size() == 0 ? joinInputList.size() : joinInputList.size() - 1), 0);
 		bt.addSelectionListener(new SelectionAdapter() {
@@ -275,7 +276,7 @@ public class ELTLookupMapWizard extends Dialog {
 	
 	private void createLabel(Composite parent){	
 		
-		Button button = buttonWidget(parent, SWT.CENTER|SWT.PUSH, new int[]{0, 0, 25, 20}, "+");
+		Button button = buttonWidget(parent, SWT.CENTER|SWT.PUSH, new int[]{0, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
 		ELTGridAddSelectionListener listener = new ELTGridAddSelectionListener();
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -284,7 +285,7 @@ public class ELTLookupMapWizard extends Dialog {
 			}
 		});	 
 		 
-		Label delete = labelWidget(parent, SWT.CENTER|SWT.BORDER, new int[]{25, 0, 25, 20}, "*");
+		Label delete = labelWidget(parent, SWT.CENTER|SWT.BORDER, new int[]{25, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
 		delete.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -303,7 +304,7 @@ public class ELTLookupMapWizard extends Dialog {
 			public void mouseDoubleClick(MouseEvent e) {}
 		});
 		 
-		Label upLabel = labelWidget(parent, SWT.CENTER|SWT.BORDER, new int[]{50, 0, 25, 20}, "^");
+		Label upLabel = labelWidget(parent, SWT.CENTER|SWT.BORDER, new int[]{50, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png"));
 		upLabel.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -343,7 +344,7 @@ public class ELTLookupMapWizard extends Dialog {
 			public void mouseDoubleClick(MouseEvent e) {}
 		});
 		 
-		Label downLabel = labelWidget(parent, SWT.CENTER|SWT.BORDER, new int[]{74, 0, 25, 20}, "|");
+		Label downLabel = labelWidget(parent, SWT.CENTER|SWT.BORDER, new int[]{74, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png"));
 		downLabel.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -443,20 +444,20 @@ public class ELTLookupMapWizard extends Dialog {
 				
 				return lookupPropertyGrid;
 			}
-	public Button buttonWidget(Composite parent, int style, int[] bounds, String value){
+	public Button buttonWidget(Composite parent, int style, int[] bounds, String value, Image image){
 		Button button = new Button(parent, style);
 			button.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 			button.setText(value);
-			//button.setImage(image);
+			button.setImage(image);
 		
 		return button;
 	}
 
-	public Label labelWidget(Composite parent, int style, int[] bounds, String value){
+	public Label labelWidget(Composite parent, int style, int[] bounds, String value, Image image){
 		Label label = new Label(parent, style);
 		label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		label.setText(value);
-		//label.setImage(image);
+		label.setImage(image);
 		
 		return label;
 	}
