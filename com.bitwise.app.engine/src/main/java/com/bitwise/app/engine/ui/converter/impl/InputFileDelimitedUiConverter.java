@@ -15,10 +15,9 @@ import com.bitwise.app.engine.ui.converter.InputUiConverter;
 import com.bitwise.app.engine.ui.helper.ConverterUiHelper;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.components.IFDelimited;
-import com.bitwise.app.propertywindow.widgets.customwidgets.schema.SchemaGrid;
-import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GridRow;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.Schema;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;
 import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
 import com.bitwiseglobal.graph.commontypes.TypeProperties;
@@ -29,7 +28,6 @@ public class InputFileDelimitedUiConverter extends InputUiConverter {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(InputFileDelimitedUiConverter.class);
 	private TextFileDelimited fileDelimited;
-	
 
 	public InputFileDelimitedUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;
@@ -45,7 +43,8 @@ public class InputFileDelimitedUiConverter extends InputUiConverter {
 		fileDelimited = (TextFileDelimited) typeBaseComponent;
 		propertyMap.put(PropertyNameConstants.HAS_HEADER.value(),
 				convertBooleanVlaue(fileDelimited.getHasHeader(), PropertyNameConstants.HAS_HEADER.value()));
-		propertyMap.put(PropertyNameConstants.PATH.value(), fileDelimited.getPath().getUri());
+		if (fileDelimited.getPath() != null)
+			propertyMap.put(PropertyNameConstants.PATH.value(), fileDelimited.getPath().getUri());
 		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
 				convertBooleanVlaue(fileDelimited.getStrict(), PropertyNameConstants.STRICT.value()));
@@ -93,13 +92,21 @@ public class InputFileDelimitedUiConverter extends InputUiConverter {
 	@Override
 	protected Object getSchema(TypeInputOutSocket outSocket) {
 		LOGGER.debug("Generating UI-Schema data for {}", componentName);
-		List<SchemaGrid> schemaList = new ArrayList<>();
+		Schema schema = new Schema();
+		List<GridRow> gridRow = new ArrayList<>();
 		ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
 		for (Object record : outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema()) {
-			schemaList.add(converterUiHelper.getSchema(record));
+			if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
+				schema.setIsExternal(true);
+				if (((TypeExternalSchema) record).getUri() != null)
+					schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
+			} else {
+				gridRow.add(converterUiHelper.getSchema(record));
+				schema.setGridRow(gridRow);
+				schema.setIsExternal(false);
+			}
 		}
-		return schemaList;
+		return schema;
 
 	}
-
 }

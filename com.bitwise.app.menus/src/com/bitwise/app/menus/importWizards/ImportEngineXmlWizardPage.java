@@ -210,11 +210,11 @@ public class ImportEngineXmlWizardPage extends WizardNewFileCreationPage {
 				parameterFilePath=createParameterFilePath(fileName);
 				jobFilePath = getContainerFullPath().append(fileName).removeFileExtension().addFileExtension(JOB_FILE_EXTENTION);
 					if (isFilesAvailable(parameterFilePath)) {
-							setErrorMessage(parameterFilePath+Messages.ALREADY_EXISTS_ERROR_MESSAGE);
+							setErrorMessage(parameterFilePath+" "+Messages.ALREADY_EXISTS_ERROR_MESSAGE);
 								valid= false;
 						}
 					if (isFilesAvailable(jobFilePath)) {
-							setErrorMessage(jobFilePath+Messages.ALREADY_EXISTS_ERROR_MESSAGE);
+							setErrorMessage(jobFilePath+" "+Messages.ALREADY_EXISTS_ERROR_MESSAGE);
 								valid= false;
 					  }
 			}

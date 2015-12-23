@@ -56,5 +56,6 @@ public class Constants {
 	
 	public static final String LOOKUP_CONFIG_FIELD = "hash_join_config";
 	public static final String LOOKUP_MAP_FIELD = "hash_join_map";
+	public static final String UNKNOWN_COMPONENT_TYPE = "UNKNOWN";
 	
 }
