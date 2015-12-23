@@ -1,4 +1,4 @@
-package com.bitwise.app.propertywindow.widgets.joinproperty;
+package com.bitwise.app.propertywindow.widgets.joinlookupproperty;
 
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableColorProvider;
@@ -8,9 +8,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
-import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
+import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 
-public class ELTJoinLabelProvider implements ITableLabelProvider, ITableColorProvider{
+public class LookupLabelProvider implements ITableLabelProvider , ITableColorProvider{
 
 	@Override
 	public void addListener(ILabelProviderListener listener) {
@@ -54,16 +54,15 @@ public class ELTJoinLabelProvider implements ITableLabelProvider, ITableColorPro
 
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
-		JoinConfigProperty join = (JoinConfigProperty) element;
-		switch (columnIndex) {
-		case 0:
-			return join.getPort_index();
-		case 1:
-			return join.getJoin_type();
-		case 2:
-			return JoinKey.INSTANCES[join.getJoin_key().intValue()];	
-		}
-		return null;
+		LookupMapProperty operation = (LookupMapProperty) element;
+	    switch (columnIndex) {
+	    case 0:
+	      return operation.getSource_Field();
+	    case 1:
+	        return operation.getOutput_Field();
+
+	    }
+	    return null;
 	}
 
 }

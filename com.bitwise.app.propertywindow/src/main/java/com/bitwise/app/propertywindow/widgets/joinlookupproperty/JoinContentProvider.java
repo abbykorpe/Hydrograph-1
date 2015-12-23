@@ -1,5 +1,4 @@
-package com.bitwise.app.propertywindow.widgets.joinproperty;
-
+package com.bitwise.app.propertywindow.widgets.joinlookupproperty;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;

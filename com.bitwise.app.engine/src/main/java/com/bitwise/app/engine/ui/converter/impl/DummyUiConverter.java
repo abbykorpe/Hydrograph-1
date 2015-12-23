@@ -1,9 +1,7 @@
 package com.bitwise.app.engine.ui.converter.impl;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 
@@ -28,6 +26,7 @@ public class DummyUiConverter extends UiConverter {
 		this.typeBaseComponent = typeBaseComponent;
 		this.uiComponent = new DummyComponent();
 		this.propertyMap = new LinkedHashMap<>();
+		
 	}
 
 	@Override
@@ -40,6 +39,8 @@ public class DummyUiConverter extends UiConverter {
 			container.getComponentNextNameSuffixes().put(name_suffix, 0);
 			container.getComponentNames().add(componentName);
 			uiComponent.setProperties(propertyMap);
+			uiComponent.setCategory(Constants.UNKNOWN_COMPONENT_TYPE);
+			uiComponent.setType(typeBaseComponent.getClass().getSimpleName());
 			
 		}
 		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(),"ERROR");

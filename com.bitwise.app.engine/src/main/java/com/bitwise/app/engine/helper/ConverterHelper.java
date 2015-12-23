@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.LookupMapProperty;
+import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.OperationField;
 import com.bitwise.app.common.datastructure.property.OperationSystemProperties;
@@ -22,8 +25,6 @@ import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.propertywindow.fixedwidthschema.FixedWidthGridRow;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GridRow;
-import com.bitwise.app.propertywindow.widgets.customwidgets.schema.Schema;
-import com.bitwise.app.propertywindow.widgets.customwidgets.schema.SchemaGrid;
 import com.bitwiseglobal.graph.commontypes.FieldDataTypes;
 import com.bitwiseglobal.graph.commontypes.ScaleTypeList;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
@@ -273,5 +274,32 @@ public class ConverterHelper {
 		}
 
 		return typeBaseField;
+	}
+	
+	public List<Object> getLookuporJoinOutputMaping(LookupPropertyGrid lookupPropertyGrid) {
+		List<Object> passThroughFieldorMapFieldList = null;
+		if (lookupPropertyGrid != null) {
+			passThroughFieldorMapFieldList = new ArrayList<>();
+			TypeInputField typeInputField = null;
+			TypeMapField mapField = null;
+			for (LookupMapProperty entry : lookupPropertyGrid.getLookupMapProperties()) {
+				String[] sourceNameValue = entry.getSource_Field().split(Pattern.quote("."));
+				
+				if (sourceNameValue[1].equalsIgnoreCase(entry.getOutput_Field())) {
+					typeInputField = new TypeInputField();
+					typeInputField.setName(sourceNameValue[1]);
+					typeInputField.setInSocketId(sourceNameValue[0]);
+					passThroughFieldorMapFieldList.add(typeInputField);
+				} else {
+					mapField = new TypeMapField();
+					mapField.setSourceName(sourceNameValue[1]);
+					mapField.setName(entry.getOutput_Field());
+					mapField.setInSocketId(sourceNameValue[0]);
+					passThroughFieldorMapFieldList.add(mapField);
+				}
+
+			}
+		}
+		return passThroughFieldorMapFieldList;
 	}
 }
