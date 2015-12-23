@@ -6,6 +6,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 
+import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -21,6 +22,7 @@ public class ELTJoinMapWidget extends AbstractWidget{
 	private Object properties;
 	public static String value;
 	private String propertyName;
+	private LookupPropertyGrid lookupPropertyGrid;
 	
 	public ELTJoinMapWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
@@ -55,9 +57,10 @@ public class ELTJoinMapWidget extends AbstractWidget{
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				JoinMapGrid grid = new JoinMapGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell());
-				grid.open();
-				grid.setInputPortValue(Integer.parseInt(value));
+				JoinMapGrid joinMapGrid = new JoinMapGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), lookupPropertyGrid);
+				joinMapGrid.open();
+				joinMapGrid.setInputPortValue(Integer.parseInt(value));
+				joinMapGrid.getJoinPropertyGrid();
 			}
 			
 		});

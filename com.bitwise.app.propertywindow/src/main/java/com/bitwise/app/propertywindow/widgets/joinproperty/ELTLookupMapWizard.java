@@ -74,8 +74,8 @@ public class ELTLookupMapWizard extends Dialog {
 	private static List<LookupMapProperty> joinOutputList  = new ArrayList<>();
 	private List<FilterProperties> joinInputList1  = new ArrayList<>();
 	private List<FilterProperties> joinInputList2  = new ArrayList<>();
-	private List<List<FilterProperties>> joinInputList  = new ArrayList<>();
-	private ELTSWTWidgets widget = new ELTSWTWidgets();
+	private static List<List<FilterProperties>> joinInputList  = new ArrayList<>();
+	private ELTSWTWidgets eltswtWidgets = new ELTSWTWidgets();
 	private LookupPropertyGrid lookupPropertyGrid;
 	/**
 	 * Create the dialog.
@@ -90,7 +90,7 @@ public class ELTLookupMapWizard extends Dialog {
 	private void joinInputUpProperty(TableViewer viewer, List<FilterProperties> joinInputList){
 		FilterProperties join = new FilterProperties();
 		if(joinInputList.size() != 0){
-			if(!validation())
+			if(!inputTabvalidation())
 				return;
 			join.setPropertyname("");
 			joinInputList.add(join);
@@ -101,6 +101,7 @@ public class ELTLookupMapWizard extends Dialog {
 			viewer.refresh();
 		}
 	}
+	
 	
 	private  void joinOutputProperty(TableViewer tv){
 		LookupMapProperty property = new LookupMapProperty();
@@ -166,8 +167,8 @@ public class ELTLookupMapWizard extends Dialog {
 		gd_composite_1.widthHint = 400;
 		composite_1.setLayoutData(gd_composite_1);
 		
-		labelWidget(composite_1, SWT.None, new int[]{0, 6, 100, 18}, "Output Mapping",null);
-		outputTableViewer = widget.createTableViewer(composite_1, COLUMN_NAME,new int[]{0, 30, 398, 538}, 196, new JoinContentProvider(), new LookupLabelProvider());
+		labelWidget(composite_1, SWT.None, new int[]{0, 6, 100, 18}, "Output Mapping");
+		outputTableViewer = eltswtWidgets.createTableViewer(composite_1, COLUMN_NAME,new int[]{0, 30, 398, 538}, 196, new JoinContentProvider(), new LookupLabelProvider());
 		outputTableViewer.getTable().addMouseListener(new MouseAdapter() {
 	    	@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -177,10 +178,10 @@ public class ELTLookupMapWizard extends Dialog {
 			public void mouseDown(MouseEvent e) {
 			}
 		});
-	    widget.createTableColumns(outputTableViewer.getTable(), COLUMN_NAME, 196);
-	    CellEditor[] editors = widget.createCellEditorList(outputTableViewer.getTable(),2);
+		eltswtWidgets.createTableColumns(outputTableViewer.getTable(), COLUMN_NAME, 196);
+	    CellEditor[] editors = eltswtWidgets.createCellEditorList(outputTableViewer.getTable(),2);
 	    for(int i = 0; i<editors.length;i++){
-	    	//editors[0].setValidator(nameEditorValidation(outputTableViewer.getTable(),Messages.EmptyNameNotification));
+	    	editors[0].setValidator(valueEditorValidation(Messages.EmptyNameNotification,outputTableViewer));
 	    	editors[1].setValidator(valueEditorValidation(Messages.EmptyValueNotification, outputTableViewer));
 	    }
 	    outputTableViewer.setColumnProperties(COLUMN_NAME);
@@ -210,19 +211,22 @@ public class ELTLookupMapWizard extends Dialog {
 	  			ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.TABBING_HORIZONTAL | 
 	  			ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL);
 		
-		propertyError = new Label(composite_1, SWT.BORDER);
+		propertyError = new Label(composite_1, SWT.None);
 	    propertyError.setBounds(0, 572, 350, 25);
 	    propertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-	    propertyError.setVisible(true);
+	    propertyError.setVisible(false);
 		
 	    
-		Composite composite_2 = new Composite(composite_1, SWT.BORDER);
+		Composite composite_2 = new Composite(composite_1, SWT.None);
 		composite_2.setBounds(276, 4, 110, 24);
 		createLabel(composite_2);
 		
 		new Label(container, SWT.NONE);
 	
+		populateWidget();
+		if(joinOutputList!=null){
 		DragDropUtility.INSTANCE.applyDrop(outputTableViewer, new DragDropLookupImp(joinOutputList, false, outputTableViewer));
+		}
 		return container;
 	}
 	
@@ -232,9 +236,9 @@ public class ELTLookupMapWizard extends Dialog {
 		comGrid.setLayout(new RowLayout(SWT.VERTICAL));
 		comGrid.setBounds(15, y, 233, 268);
 		
-		labelWidget(comGrid, SWT.LEFT, new int[]{0, 5, 90, 20}, "Input Index : in"+tableViewerIndex, null);
+		labelWidget(comGrid, SWT.LEFT, new int[]{0, 5, 90, 20}, "Input Index : in"+tableViewerIndex);
 		
-		inputTableViewer[tableViewerIndex] = widget.createTableViewer(comGrid, INPUT_COLUMN_NAME, new int[]{0, 30, 229, 232}, 224, new ELTFilterContentProvider(), new ELTFilterLabelProvider());
+		inputTableViewer[tableViewerIndex] = eltswtWidgets.createTableViewer(comGrid, INPUT_COLUMN_NAME, new int[]{0, 30, 229, 232}, 224, new ELTFilterContentProvider(), new ELTFilterLabelProvider());
 		inputTableViewer[tableViewerIndex].getTable().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -244,15 +248,15 @@ public class ELTLookupMapWizard extends Dialog {
 			public void mouseDown(MouseEvent e) {
 			}
 		});
-		widget.createTableColumns(inputTableViewer[tableViewerIndex].getTable(), INPUT_COLUMN_NAME, 224);
-	    CellEditor[] editors =widget.createCellEditorList(inputTableViewer[tableViewerIndex].getTable(),1);
+		eltswtWidgets.createTableColumns(inputTableViewer[tableViewerIndex].getTable(), INPUT_COLUMN_NAME, 224);
+	    CellEditor[] editors =eltswtWidgets.createCellEditorList(inputTableViewer[tableViewerIndex].getTable(),1);
 	    editors[0].setValidator(valueEditorValidation(Messages.EMPTYFIELDMESSAGE, inputTableViewer[tableViewerIndex]));
 	    inputTableViewer[tableViewerIndex].setCellModifier(new ELTCellModifier(inputTableViewer[tableViewerIndex]));
 	    inputTableViewer[tableViewerIndex].setColumnProperties(INPUT_COLUMN_NAME);
 	    inputTableViewer[tableViewerIndex].setCellEditors(editors);
 	    inputTableViewer[tableViewerIndex].setInput(joinInputList);
 	
-	    widget.applyDragFromTableViewer(inputTableViewer[tableViewerIndex].getTable(), tableViewerIndex);
+	    eltswtWidgets.applyDragFromTableViewer(inputTableViewer[tableViewerIndex].getTable(), tableViewerIndex);
 		addButton(comGrid, new int[]{200, 8, 25, 20}, inputTableViewer[tableViewerIndex],joinInputList);
 		
 		return inputTableViewer[tableViewerIndex]; 
@@ -262,7 +266,6 @@ public class ELTLookupMapWizard extends Dialog {
 		
 		Button bt = new Button(parent, SWT.PUSH);
 		//bt.setText("+");
-		bt.setImage(new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
 		bt.setImage(new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
 		bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		//viewer.editElement(viewer.getElementAt(joinInputList.size() == 0 ? joinInputList.size() : joinInputList.size() - 1), 0);
@@ -285,7 +288,7 @@ public class ELTLookupMapWizard extends Dialog {
 			}
 		});	 
 		 
-		Label delete = labelWidget(parent, SWT.CENTER|SWT.BORDER, new int[]{25, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
+		Label delete = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[]{25, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
 		delete.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -304,7 +307,7 @@ public class ELTLookupMapWizard extends Dialog {
 			public void mouseDoubleClick(MouseEvent e) {}
 		});
 		 
-		Label upLabel = labelWidget(parent, SWT.CENTER|SWT.BORDER, new int[]{50, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png"));
+		Label upLabel = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[]{50, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png"));
 		upLabel.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -344,7 +347,7 @@ public class ELTLookupMapWizard extends Dialog {
 			public void mouseDoubleClick(MouseEvent e) {}
 		});
 		 
-		Label downLabel = labelWidget(parent, SWT.CENTER|SWT.BORDER, new int[]{74, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png"));
+		Label downLabel = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[]{74, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png"));
 		downLabel.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -397,7 +400,7 @@ public class ELTLookupMapWizard extends Dialog {
 				if(!match.matches()){
 					outputTableViewer.getTable().setSelection(propertycount);
 					propertyError.setVisible(true);
-					///propertyError.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
+					propertyError.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
 					/*txtDecorator.setDescriptionText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
 					txtDecorator.show();*/
 					return false;
@@ -414,6 +417,30 @@ public class ELTLookupMapWizard extends Dialog {
 		return true;
 	}
 	
+	private boolean inputTabvalidation(){
+		int propertycount = 0;
+		for(FilterProperties join : joinInputList.get(0)){
+			if(!join.getPropertyname().trim().isEmpty()){
+				Matcher match = Pattern.compile(Constants.REGEX).matcher(join.getPropertyname());
+				if(!match.matches()){
+					outputTableViewer.getTable().setSelection(propertycount);
+					propertyError.setVisible(true);
+					propertyError.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
+					/*txtDecorator.setDescriptionText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
+					txtDecorator.show();*/
+					return false;
+				}
+				}else{
+					outputTableViewer.getTable().setSelection(propertycount);
+					propertyError.setVisible(true);
+					propertyError.setText(Messages.EmptyNameNotification);
+					return false;
+				}
+				
+			propertycount++;
+		}
+		return true;
+	}
 	// Creates Value Validator for table's cells
 			private ICellEditorValidator  valueEditorValidation(final String ErrorMessage,final TableViewer viewer) {
 				ICellEditorValidator propertyValidator = new ICellEditorValidator() {
@@ -421,12 +448,16 @@ public class ELTLookupMapWizard extends Dialog {
 					public String isValid(Object value) {
 						viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
 						String valueToValidate = String.valueOf(value).trim();
+						Matcher match = Pattern.compile(Constants.REGEX).matcher(valueToValidate);
 						if (valueToValidate.isEmpty()) {
 							propertyError.setText(ErrorMessage);
 							propertyError.setVisible(true);
 							return "ERROR"; //$NON-NLS-1$
-						} else {
-							 
+						} else if(!match.matches()){
+							//outputTableViewer.getTable().setSelection(propertycount);
+							propertyError.setVisible(true);
+							propertyError.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
+						}else{
 							propertyError.setVisible(false);
 						}
 						return null;
@@ -436,6 +467,14 @@ public class ELTLookupMapWizard extends Dialog {
 				return propertyValidator;
 			}
 
+			public void populateWidget(){
+				if(lookupPropertyGrid != null){
+					inputTableViewer[0].refresh();
+					inputTableViewer[1].refresh();
+					outputTableViewer.refresh();
+				}
+			}
+			
 			public LookupPropertyGrid getLookupPropertyGrid(){
 				LookupPropertyGrid lookupPropertyGrid = new LookupPropertyGrid();
 				lookupPropertyGrid.setLookupInputProperties(joinInputList);
@@ -444,6 +483,7 @@ public class ELTLookupMapWizard extends Dialog {
 				
 				return lookupPropertyGrid;
 			}
+			
 	public Button buttonWidget(Composite parent, int style, int[] bounds, String value, Image image){
 		Button button = new Button(parent, style);
 			button.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
@@ -453,11 +493,11 @@ public class ELTLookupMapWizard extends Dialog {
 		return button;
 	}
 
-	public Label labelWidget(Composite parent, int style, int[] bounds, String value, Image image){
+	public Label labelWidget(Composite parent, int style, int[] bounds, String value){
 		Label label = new Label(parent, style);
 		label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		label.setText(value);
-		label.setImage(image);
+		//label.setImage(image);
 		
 		return label;
 	}
