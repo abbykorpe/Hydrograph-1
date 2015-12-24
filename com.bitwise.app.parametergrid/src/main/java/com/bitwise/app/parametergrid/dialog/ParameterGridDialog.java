@@ -28,10 +28,14 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Image;
@@ -43,6 +47,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -72,6 +77,7 @@ public class ParameterGridDialog extends Dialog {
 	private Text paramterFileTextBox;
 	private String parameterFile;
 	private ControlDecoration txtDecorator;
+	private TraverseListener lastRowLastColumnTraverseListener;
 
 	/**
 	 * Create the dialog.
@@ -81,6 +87,17 @@ public class ParameterGridDialog extends Dialog {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		runGraph=false;
+		
+		
+		lastRowLastColumnTraverseListener=new TraverseListener() {
+			
+			@Override
+			public void keyTraversed(TraverseEvent e) {
+				if(e.detail == SWT.TRAVERSE_TAB_NEXT)
+					addRowToTextGrid();
+			}
+		};
+		
 	}
 
 	/**
@@ -110,9 +127,6 @@ public class ParameterGridDialog extends Dialog {
 		attachRemoveRowButton(composite);
 		logger.debug("attached remove button");
 
-		/*addGridHeader();
-		logger.debug("attached remove button");*/
-
 		fetchParameterFilePath();
 		logger.debug("Retrived parameter file path");
 
@@ -121,6 +135,10 @@ public class ParameterGridDialog extends Dialog {
 
 		addBaseContainerListeners(container);
 		logger.debug("added listeners to base container");
+		
+		if(textGrid.getLastAddedRow() != null){
+			((Text)textGrid.getLastAddedRow().getChildren()[2]).addTraverseListener(lastRowLastColumnTraverseListener);
+		}
 		
 		return container;
 	}
@@ -207,33 +225,44 @@ public class ParameterGridDialog extends Dialog {
 	}
 	
 	
+	
+	private void addRowToTextGrid() {
+		
+		if(textGrid.getLastAddedRow() != null){
+			((Text)textGrid.getLastAddedRow().getChildren()[2]).removeTraverseListener(lastRowLastColumnTraverseListener);
+		}
+		
+		TextGridRowLayout textGridRowLayout = getTextGridRowLayout();
+		
+		Composite emptyRow = textGrid.addEmptyRow(textGridRowLayout);
+		
+		((Text)emptyRow.getChildren()[1]).setFocus();
+		addRowCheckBoxListener(emptyRow);
+		
+		headerCompositeCheckBox.setSelection(false);
+		
+		for(Composite row:textGrid.getGrid()){
+			final Text text=((Text)row.getChildren()[1]);
+			txtDecorator=WidgetUtility.addDecorator(text,Messages.CHARACTERSET);
+			txtDecorator.hide();
+			attachKeyValidator(text);
+			attachKeyFocusListener(text); 
+		}
+		
+		((Text)textGrid.getLastAddedRow().getChildren()[2]).addTraverseListener(lastRowLastColumnTraverseListener);
+		
+		textGrid.refresh();
+		textGrid.scrollToLastRow();
+	}
+	
 	// +++ Code Refactoring is in progress
 	private void attachAddRowButtonListener(Label btnAdd) {
 		btnAdd.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				TextGridRowLayout textGridRowLayout = getTextGridRowLayout();
-				
-				Composite emptyRow = textGrid.addEmptyRow(textGridRowLayout);
-				
-				((Text)emptyRow.getChildren()[1]).setFocus();
-				addRowCheckBoxListener(emptyRow);
-				
-				headerCompositeCheckBox.setSelection(false);
-				
-				for(Composite row:textGrid.getGrid()){
-					final Text text=((Text)row.getChildren()[1]);
-					txtDecorator=WidgetUtility.addDecorator(text,Messages.CHARACTERSET);
-					txtDecorator.hide();
-					attachKeyValidator(text);
-					attachKeyFocusListener(text); 
-				}
-				
-				textGrid.refresh();
-				textGrid.scrollToLastRow();
+				addRowToTextGrid();
 			}
-			
 			
 			@Override
 			public void mouseDown(MouseEvent e) {

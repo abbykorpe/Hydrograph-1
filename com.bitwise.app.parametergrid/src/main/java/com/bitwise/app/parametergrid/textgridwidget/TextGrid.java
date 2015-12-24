@@ -110,10 +110,8 @@ public class TextGrid {
 		List<List<String>> gridData = new LinkedList<>();
 		for(int i=0;i<textGrid.size();i++){
 			Control[] rowColumns = textGrid.get(i).getChildren();
-			//String[] rowData = new String[rowColumns.length];
 			List<String> rowData = new LinkedList<>();
 			for(int j=1;j<rowColumns.length;j++){
-					//rowData[j] = ((Text)rowColumns[j]).getText();
 				rowData.add(((Text)rowColumns[j]).getText());
 			}
 			
@@ -173,5 +171,9 @@ public class TextGrid {
 		
 		textGrid.clear();
 		refresh();
+	}
+	
+	public Composite getLastAddedRow(){
+		return lastAddedRow;
 	}
 }
