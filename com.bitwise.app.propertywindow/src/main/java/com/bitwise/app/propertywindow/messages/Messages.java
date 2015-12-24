@@ -57,6 +57,11 @@ public class Messages extends NLS {
 	public static String INNER_OPERATION_OUTPUT_FIELD;
 	public static String OPERATIONAL_OUTPUT_FIELD;
 	public static String OPERATIONAL_SYSTEM_FIELD;
+	public static String EXTERNAL_SCHEMA;
+	public static String SCHEMA_TYPES;
+	public static String INTERNAL_SCHEMA_TYPE;
+	public static String EXTERNAL_SCHEMA_TYPE;
+	public static String BROWSE_BUTTON;
 	
 
 	static {

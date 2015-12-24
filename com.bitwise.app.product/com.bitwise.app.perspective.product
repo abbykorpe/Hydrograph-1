@@ -48,6 +48,7 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="com.bitwise.app.engine"/>
       <plugin id="com.bitwise.app.graph"/>
       <plugin id="com.bitwise.app.graph.figure"/>
+      <plugin id="com.bitwise.app.help"/>
       <plugin id="com.bitwise.app.joblogger"/>
       <plugin id="com.bitwise.app.menus"/>
       <plugin id="com.bitwise.app.model"/>

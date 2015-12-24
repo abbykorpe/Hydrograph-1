@@ -83,17 +83,20 @@ public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 		Schema schema = new Schema();
 		List<GridRow> gridRow = new ArrayList<>();
 		ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
-		for (Object record : inSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema()) {
-			if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
-				schema.setIsExternal(true);
-				if (((TypeExternalSchema) record).getUri() != null)
-					schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
-			} else {
-				gridRow.add(converterUiHelper.getSchema(record));
-				schema.setGridRow(gridRow);
-				schema.setIsExternal(false);
+		if (inSocket.getSchema() != null && inSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema().size() != 0) {
+			for (Object record : inSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema()) {
+				if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
+					schema.setIsExternal(true);
+					if (((TypeExternalSchema) record).getUri() != null)
+						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
+				} else {
+					gridRow.add(converterUiHelper.getSchema(record));
+					schema.setGridRow(gridRow);
+					schema.setIsExternal(false);
+				}
 			}
-		}
+		}else
+			schema.setIsExternal(false);
 		return schema;
 	}
 

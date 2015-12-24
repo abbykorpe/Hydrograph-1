@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 public class ComponentConfigrationProperty {
 	private String propertyName;
 	private Object propertyValue;
+	private ELTComponenetProperties eltComponenetProperties;
 		
 	private ComponentConfigrationProperty(){
 		
@@ -38,5 +39,13 @@ public class ComponentConfigrationProperty {
 		return propertyValue;
 	}
 	
+	public ELTComponenetProperties getEltComponenetProperties() {
+		return eltComponenetProperties;
+	}
+
+	public void setEltComponenetProperties(
+			ELTComponenetProperties eltComponenetProperties) {
+		this.eltComponenetProperties = eltComponenetProperties;
+	}
 	
 }

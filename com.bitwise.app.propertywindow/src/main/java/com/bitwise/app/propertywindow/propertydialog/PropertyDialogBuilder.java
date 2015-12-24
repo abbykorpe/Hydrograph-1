@@ -144,6 +144,9 @@ public class PropertyDialogBuilder {
 
 		AbstractWidget eltWidget = WidgetFactory.INSTANCE.getWidget(property.getPropertyRenderer(),componentConfigrationProperty,
 				componentMiscellaneousProperties,propertyDialogButtonBar);
+		if(property.getPropertyName().equalsIgnoreCase("join_config"));
+		eltWidget.setEltComponenetProperties(eltComponenetProperties);
+		
 		eltWidget.attachToPropertySubGroup(subGroupContainer);
 		return eltWidget;
 	}

@@ -33,6 +33,7 @@
 		<module>../com.bitwise.app.common.interfaces</module>
 		<module>../com.bitwise.app.xstream.annotations</module>
 		<module>../com.bitwise.app.parametergrid</module>
-		<module>../com.bitwise.app.joblogger</module>		
+		<module>../com.bitwise.app.joblogger</module>
+	    <module>../com.bitwise.app.help</module>
 	</modules>
 </project>

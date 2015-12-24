@@ -1,6 +1,7 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.schema;
 
 import java.util.ArrayList;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -28,7 +29,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
+import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
@@ -60,6 +63,7 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
  * @author Bitwise
  */
 public abstract class ELTSchemaGridWidget extends AbstractWidget {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTSchemaGridWidget.class);
 	// Table column names/properties
 	public static final String FIELDNAME = Messages.FIELDNAME;
 	public static final String DATEFORMAT = Messages.DATEFORMAT;
@@ -169,20 +173,19 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 */
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
-		createSchemaType(container.getContainerControl());
-		createSchemaGrid(container.getContainerControl());
-		createExternalSchema(container.getContainerControl());
+		createSchemaTypesSection(container.getContainerControl());
+		createSchemaGridSection(container.getContainerControl());
+		createExternalSchemaSection(container.getContainerControl());
 		populateSchemaTypeWidget();
 	}
 
 	// Adds the browse button
-	private void createExternalSchema(Composite containerControl) {
+	private void createExternalSchemaSection(Composite containerControl) {
 		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(
 				containerControl);
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 
-		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(
-				"External Schema");
+		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.EXTERNAL_SCHEMA);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
 		AbstractELTWidget eltDefaultTextBox = new ELTDefaultTextBox()
@@ -190,7 +193,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultTextBox);
 
 		textBox = (Text) eltDefaultTextBox.getSWTWidgetControl();
-
+        textBox.setToolTipText(Messages.CHARACTERSET);
 		decorator = WidgetUtility.addDecorator(textBox,
 				Messages.EMPTYFIELDMESSAGE);
 		decorator.hide();
@@ -200,8 +203,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			public void focusLost(FocusEvent e) {
 				if (textBox.getText().isEmpty()) {
 					decorator.show();
-					textBox.setBackground(new Color(Display.getDefault(), 255,
-							255, 204));
+					textBox.setBackground(new Color(Display.getDefault(),250,250,250));
 				} else {
 					decorator.hide();
 				}
@@ -214,9 +216,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						255));
 			}
 		});
+		
+		
 
-		AbstractELTWidget eltDefaultButton = new ELTDefaultButton("...")
-				.buttonWidth(20);
+		AbstractELTWidget eltDefaultButton = new ELTDefaultButton(Messages.BROWSE_BUTTON).buttonWidth(20);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
 		button = (Button) eltDefaultButton.getSWTWidgetControl();
 
@@ -267,17 +270,17 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	}
     //Adds the Radio buttons
-	private void createSchemaType(Composite containerControl) {
+	private void createSchemaTypesSection(Composite containerControl) {
 		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(
 				containerControl);
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(4);
 
-		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Schema Types");
+		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.SCHEMA_TYPES);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
 		// Radio button listener
-		internalSchema = new ELTRadioButton("Internal Schema");
+		internalSchema = new ELTRadioButton(Messages.INTERNAL_SCHEMA_TYPE);
 		eltSuDefaultSubgroupComposite.attachWidget(internalSchema);
 		((Button) internalSchema.getSWTWidgetControl())
 				.addSelectionListener(new SelectionAdapter() {
@@ -292,7 +295,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					}
 				});
 
-		externalSchema = new ELTRadioButton("External Schema");
+		externalSchema = new ELTRadioButton(Messages.EXTERNAL_SCHEMA_TYPE);
 		eltSuDefaultSubgroupComposite.attachWidget(externalSchema);
 		((Button) externalSchema.getSWTWidgetControl())
 				.addSelectionListener(new SelectionAdapter() {
@@ -402,7 +405,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	}
 
 	private void toggleTextBox(boolean enableExternalSchemaTextBox) {
-		if (textBox != null) {
+		if (textBox != null && button != null) {
 			textBox.setEnabled(enableExternalSchemaTextBox);
 			button.setEnabled(enableExternalSchemaTextBox);
 		}
@@ -438,7 +441,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		return helper;
 	}
 
-	public TableViewer createSchemaGrid(Composite container) {
+	public TableViewer createSchemaGridSection(Composite container) {
 
 		ListenerFactory listenerFactory = new ListenerFactory();
 
@@ -608,5 +611,4 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public void setSchemaGridRowList(List schemaGridRowList) {
 		this.schemaGridRowList = schemaGridRowList;
 	}
-
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 
 /**
- * The Class Schema.
+ * This Schema class contains accessors methods.
  * 
  * @author Bitwise
  */

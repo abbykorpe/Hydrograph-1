@@ -41,7 +41,7 @@ public class InputFixedWidthUiConverter extends InputUiConverter {
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Input-Fixed-Width-Properties for {}", componentName);
 		TextFileFixedWidth fileFixedWidth = (TextFileFixedWidth) typeBaseComponent;
-		if(fileFixedWidth.getPath()!=null)
+		if (fileFixedWidth.getPath() != null)
 			propertyMap.put(PropertyNameConstants.PATH.value(), fileFixedWidth.getPath().getUri());
 		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
@@ -91,17 +91,21 @@ public class InputFixedWidthUiConverter extends InputUiConverter {
 		Schema schema = new Schema();
 		List<GridRow> gridRow = new ArrayList<>();
 		ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
-		for (Object record : outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema()) {
-			if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
-				schema.setIsExternal(true);
-				if (((TypeExternalSchema) record).getUri() != null)
-					schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
-			} else {
-				gridRow.add(converterUiHelper.getFixedWidthSchema(record));
-				schema.setGridRow(gridRow);
-				schema.setIsExternal(false);
+		if (outSocket.getSchema() != null
+				&& outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema().size() != 0) {
+			for (Object record : outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema()) {
+				if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
+					schema.setIsExternal(true);
+					if (((TypeExternalSchema) record).getUri() != null)
+						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
+				} else {
+					gridRow.add(converterUiHelper.getFixedWidthSchema(record));
+					schema.setGridRow(gridRow);
+					schema.setIsExternal(false);
+				}
 			}
-		}
+		} else
+			schema.setIsExternal(false);
 		return schema;
 	}
 
