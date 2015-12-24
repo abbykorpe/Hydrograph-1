@@ -45,6 +45,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="JOIN_MAPPING_WIDGET"/>
  *     &lt;enumeration value="HASH_JOIN_WIDGET"/>
  *     &lt;enumeration value="HASH_JOIN_MAPPING_WIDGET"/>
+ *     &lt;enumeration value="XML_CONTENT_WIDGET"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -78,6 +79,7 @@ public enum PropertyRenderer {
     JOIN_TYPE_WIDGET,
     JOIN_MAPPING_WIDGET,
     HASH_JOIN_WIDGET,
+    XML_CONTENT_WIDGET,
     HASH_JOIN_MAPPING_WIDGET;
 
     public String value() {

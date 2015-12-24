@@ -102,7 +102,7 @@
 			<enumeration value="JOIN_MAPPING_WIDGET"/>
 			<enumeration value="HASH_JOIN_WIDGET"/>
 			<enumeration value="HASH_JOIN_MAPPING_WIDGET"/>
-			
+			<enumeration value="XML_CONTENT_WIDGET"/>
 		</restriction>
 	</simpleType>
 

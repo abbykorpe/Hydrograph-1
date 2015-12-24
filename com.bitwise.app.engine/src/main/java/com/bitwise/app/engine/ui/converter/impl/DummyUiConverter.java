@@ -1,7 +1,12 @@
 package com.bitwise.app.engine.ui.converter.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.slf4j.Logger;
 
@@ -15,10 +20,11 @@ import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.components.DummyComponent;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
+import com.bitwiseglobal.graph.main.Graph;
+import com.thoughtworks.xstream.XStream;
 
 public class DummyUiConverter extends UiConverter {
 
-	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(DummyUiConverter.class);
 
 	public DummyUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
@@ -26,7 +32,7 @@ public class DummyUiConverter extends UiConverter {
 		this.typeBaseComponent = typeBaseComponent;
 		this.uiComponent = new DummyComponent();
 		this.propertyMap = new LinkedHashMap<>();
-		
+
 	}
 
 	@Override
@@ -34,17 +40,19 @@ public class DummyUiConverter extends UiConverter {
 
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Straight-Pull-Properties for -{}", componentName);
-		
+
+		LOGGER.info("Converting TYPEBASE TO XML STRING");
+		propertyMap.put("xml_properties_content", marshall());
 		if (getInPort() && getOutPort()) {
 			container.getComponentNextNameSuffixes().put(name_suffix, 0);
 			container.getComponentNames().add(componentName);
 			uiComponent.setProperties(propertyMap);
 			uiComponent.setCategory(Constants.UNKNOWN_COMPONENT_TYPE);
 			uiComponent.setType(typeBaseComponent.getClass().getSimpleName());
-			
+
 		}
-		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(),"ERROR");
-		
+		propertyMap.put(UIComponentsConstants.VALIDITY_STATUS.value(), "ERROR");
+
 	}
 
 	private boolean getOutPort() {
@@ -61,8 +69,8 @@ public class DummyUiConverter extends UiConverter {
 		String fixedInsocket = "in0";
 		if (UIComponentRepo.INSTANCE.getInsocketMap().get(componentName) != null) {
 			for (InSocketDetail inSocketDetail : UIComponentRepo.INSTANCE.getInsocketMap().get(componentName)) {
-				if(inSocketDetail.getInSocketType()!=null)
-				uiComponent.engageInputPort(inSocketDetail.getInSocketType() + portCounter);
+				if (inSocketDetail.getInSocketType() != null)
+					uiComponent.engageInputPort(inSocketDetail.getInSocketType() + portCounter);
 				else
 					uiComponent.engageInputPort(Constants.INPUT_SOCKET_TYPE + portCounter);
 				UIComponentRepo.INSTANCE.getComponentLinkList().add(
@@ -81,4 +89,24 @@ public class DummyUiConverter extends UiConverter {
 		return null;
 	}
 
+	public String marshall() {
+		String properties = null;
+		ByteArrayOutputStream out = null;
+		Graph graph = new Graph();
+		graph.getInputsOrOutputsOrStraightPulls().add(typeBaseComponent);
+		JAXBContext jaxbContext;
+		try {
+			jaxbContext = JAXBContext.newInstance(graph.getClass());
+			Marshaller marshaller = jaxbContext.createMarshaller();
+			out = new ByteArrayOutputStream();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.marshal(graph, out);
+			properties = out.toString();
+		} catch (JAXBException e) {
+
+			LOGGER.error("ERROR OCCURED", e);
+		}
+
+		return properties;
+	}
 }
