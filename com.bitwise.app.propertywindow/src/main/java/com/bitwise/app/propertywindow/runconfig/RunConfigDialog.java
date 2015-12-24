@@ -48,7 +48,7 @@ public class RunConfigDialog extends Dialog {
 	private Text textPassword;
 	private Text textRunUtility;
 	private Text textJobXML;
-	private Text textJarFiles;
+	private Text textLibs;
 	private Text textParamFiles;
 
 	private boolean runGraph;
@@ -208,15 +208,15 @@ public class RunConfigDialog extends Dialog {
 		formToolkit.adapt(textJobXML, true, true);
 		textBoxes.put("jobXML", textJobXML);
 
-		Label lblJarFiles = new Label(compositePathConfig, SWT.NONE);
-		lblJarFiles.setText("Jar Files");
-		lblJarFiles.setBounds(24, 138, 70, 15);
-		formToolkit.adapt(lblJarFiles, true, true);
+		Label lblLibs = new Label(compositePathConfig, SWT.NONE);
+		lblLibs.setText("Jar Files");
+		lblLibs.setBounds(24, 138, 70, 15);
+		formToolkit.adapt(lblLibs, true, true);
 
-		textJarFiles = new Text(compositePathConfig, SWT.BORDER);
-		textJarFiles.setBounds(110, 132, 206, 21);
-		formToolkit.adapt(textJarFiles, true, true);
-		textBoxes.put("jarFiles", textJarFiles);
+		textLibs = new Text(compositePathConfig, SWT.BORDER);
+		textLibs.setBounds(110, 132, 206, 21);
+		formToolkit.adapt(textLibs, true, true);
+		textBoxes.put("libs", textLibs);
 
 		Label lblParamFiles = new Label(compositePathConfig, SWT.NONE);
 		lblParamFiles.setText("Param Files");
@@ -253,7 +253,7 @@ public class RunConfigDialog extends Dialog {
 			MessageDialog.openError(new Shell(), "Error", "Exception occured while loading build properties from file -\n"+e.getMessage());
 		}
 		
-		Enumeration e = buildProps.propertyNames();
+		Enumeration<?> e = buildProps.propertyNames();
 		populateTextBoxes(e);
 	    
 		
@@ -311,7 +311,7 @@ public class RunConfigDialog extends Dialog {
 				buildProps.put("password", textPassword.getText());
 				buildProps.put("runUtility", textRunUtility.getText());
 				buildProps.put("jobXML", textJobXML.getText());
-				buildProps.put("jarFiles", textJarFiles.getText());
+				buildProps.put("libs", textLibs.getText());
 				buildProps.put("paramFile", textParamFiles.getText());
 				
 				
