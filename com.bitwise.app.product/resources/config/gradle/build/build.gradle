@@ -28,7 +28,7 @@ sourceSets {
 */
 Properties properties = new Properties()
 def buildProperty=project.projectDir.path+'\\build.properties'
-File propertiesFile = new File(patht)
+File propertiesFile = new File(buildProperty)
 	propertiesFile.withInputStream {
     		properties.load(propertiesFile.newDataInputStream())
 }	
@@ -70,7 +70,7 @@ if(properties.remote == "true"){
     	def password = properties.password
     	def runUtility=properties.runUtility
     	def jobXML=properties.jobXML
-    	def lib=properties.lib
+    	def lib=properties.libs
     	def paramFile=properties.paramFile
 
         ant.taskdef(
@@ -94,7 +94,7 @@ if(properties.remote == "true"){
  		}
       	 ant.scp(
  			    file: jarFiles,
-                todir: "${user}@${host}:~/"+jarFiles,
+                todir: "${user}@${host}:~/"+lib,
                 password: password,
                 trust: true,
         )

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.CellEditor;
@@ -43,6 +44,7 @@ import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
+import com.bitwise.app.propertywindow.widgets.customwidgets.runtimeproperty.RuntimeProperties;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTCellModifier;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
@@ -180,10 +182,9 @@ public class ELTLookupMapWizard extends Dialog {
 		});
 		eltswtWidgets.createTableColumns(outputTableViewer.getTable(), COLUMN_NAME, 196);
 	    CellEditor[] editors = eltswtWidgets.createCellEditorList(outputTableViewer.getTable(),2);
-	    for(int i = 0; i<editors.length;i++){
-	    	editors[0].setValidator(valueEditorValidation(Messages.EmptyNameNotification,outputTableViewer));
-	    	editors[1].setValidator(valueEditorValidation(Messages.EmptyValueNotification, outputTableViewer));
-	    }
+	    	//editors[0].setValidator(valueEditorValidation(Messages.EmptyNameNotification,outputTableViewer));
+	    	editors[1].setValidator(createNameEditorValidator(outputTableViewer));
+	    
 	    outputTableViewer.setColumnProperties(COLUMN_NAME);
 	    outputTableViewer.setCellModifier(new LookupCellModifier(outputTableViewer));
 	    outputTableViewer.setCellEditors(editors);
@@ -265,7 +266,6 @@ public class ELTLookupMapWizard extends Dialog {
 	private void addButton(Composite parent, int[] bounds, final TableViewer viewer, final List<FilterProperties> joinInputList){
 		
 		Button bt = new Button(parent, SWT.PUSH);
-		//bt.setText("+");
 		bt.setImage(new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
 		bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		//viewer.editElement(viewer.getElementAt(joinInputList.size() == 0 ? joinInputList.size() : joinInputList.size() - 1), 0);
@@ -394,25 +394,23 @@ public class ELTLookupMapWizard extends Dialog {
 	
 	private boolean validation(){
 		int propertycount = 0;
+		int propertyValuecount = 0;
 		for(LookupMapProperty join : joinOutputList){
-			if(!join.getSource_Field().trim().isEmpty() && !join.getSource_Field().trim().isEmpty()){
-				Matcher match = Pattern.compile(Constants.REGEX).matcher(join.getSource_Field());
-				if(!match.matches()){
-					outputTableViewer.getTable().setSelection(propertycount);
-					propertyError.setVisible(true);
-					propertyError.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
-					/*txtDecorator.setDescriptionText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
-					txtDecorator.show();*/
-					return false;
-				}
-				}else{
+			if(join.getSource_Field().trim().isEmpty()){
 					outputTableViewer.getTable().setSelection(propertycount);
 					propertyError.setVisible(true);
 					propertyError.setText(Messages.EmptyNameNotification);
 					return false;
+				}else if(join.getOutput_Field().trim().isEmpty()){
+					outputTableViewer.getTable().setSelection(propertyValuecount);
+					propertyError.setVisible(true);
+					propertyError.setText(Messages.EmptyValueNotification);
+				}else{
+					propertyError.setVisible(false);
 				}
 				
 			propertycount++;
+			propertyValuecount++;
 		}
 		return true;
 	}
@@ -482,6 +480,34 @@ public class ELTLookupMapWizard extends Dialog {
 				this.lookupPropertyGrid = lookupPropertyGrid;
 				
 				return lookupPropertyGrid;
+			}
+			
+			// Creates CellValue Validator for table's cells
+			private ICellEditorValidator createNameEditorValidator(final TableViewer viewer) {
+				ICellEditorValidator propertyValidator = new ICellEditorValidator() {
+					@Override
+					public String isValid(Object value) {
+						String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
+						String valueToValidate = String.valueOf(value).trim();
+						if (StringUtils.isEmpty(valueToValidate)) {
+							propertyError.setText(Messages.PROPERTY_VALUE);
+							propertyError.setVisible(true);
+						}
+						for (LookupMapProperty temp : joinOutputList) {
+							if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)&& 
+									temp.getOutput_Field().equalsIgnoreCase(valueToValidate)) {
+								propertyError.setText(Messages.RuntimePropertAlreadyExists);
+								propertyError.setVisible(true);
+								
+							} 
+							else{
+								propertyError.setVisible(false);
+							}
+						}
+						return null;
+					}
+				};
+				return propertyValidator;
 			}
 			
 	public Button buttonWidget(Composite parent, int style, int[] bounds, String value, Image image){

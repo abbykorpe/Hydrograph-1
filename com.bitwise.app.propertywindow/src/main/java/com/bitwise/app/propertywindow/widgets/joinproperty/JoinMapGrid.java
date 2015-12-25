@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.CellEditor;
@@ -43,9 +44,11 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.layout.RowData;
 
+import com.bitwise.app.common.datastructure.property.Filter;
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
+import com.bitwise.app.common.datastructure.property.TransformOperation;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
@@ -70,6 +73,7 @@ public class JoinMapGrid extends Dialog {
 	private Label errorLabel;
 	private TableViewer outputTableViewer;
 	private TableViewer[] inputTableViewer = new TableViewer[inputPortValue];
+	private Composite expandItemComposite;
 	
 	public static final String OPERATIONAL_INPUT_FIELD = "Field Name";
 	public static String PROPERTY_NAME = "Source Field";
@@ -77,13 +81,13 @@ public class JoinMapGrid extends Dialog {
 	private String[] COLUMN_NAME = {PROPERTY_NAME, PROPERTY_VALUE};
 	private String[] INPUT_COLUMN_NAME = {OPERATIONAL_INPUT_FIELD};
 	
-	
+	private List<Filter> filterInputList = new ArrayList<>();
 	private static List<LookupMapProperty> joinOutputList  = new ArrayList<>();
 	private Map<String, String> joinPropertyMap = new TreeMap<>();
 	private static List<List<FilterProperties>> joinInputList = new ArrayList<>();
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
 	private LookupPropertyGrid lookupPropertyGrid;
-
+	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -172,22 +176,18 @@ public class JoinMapGrid extends Dialog {
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);	
 			
-
 		final ExpandBar expandBar = new ExpandBar(scrolledComposite, SWT.NONE);
 				expandBar.setLayoutData(new RowData(200, 550));
 				
 		for(int i = 0; i<inputPortValue;i++){
-			ExpandItem xpndtmItem = new ExpandItem(expandBar, SWT.NONE);
-			xpndtmItem.setText("Input index : in"+i);
-			ArrayList<FilterProperties> inputList = new ArrayList<>();
-			
-			
-			Composite com = (Composite) createComposite(expandBar, 40, inputList, i);
-			joinInputList.add(inputList);
-			
-			xpndtmItem.setHeight(270);
-			xpndtmItem.setControl(com);
-			xpndtmItem.setExpanded(false);
+				if(lookupPropertyGrid!=null){
+					if(lookupPropertyGrid.getFilterList()!=null){
+						expandItemComposite = (Composite) createComposite(expandBar, lookupPropertyGrid.getFilterList().get(i), i);	
+					}
+				}	 
+				else{
+						expandItemComposite = (Composite) createComposite(expandBar, new Filter(), i);
+			}
 		}	
 		
 			expandBar.getItem(0).setExpanded(true);
@@ -241,7 +241,6 @@ public class JoinMapGrid extends Dialog {
 		    lblNewLabel.setBounds(10, 11, 92, 15);
 		    lblNewLabel.setText("Output Mapping");
 		    
-		    
 		    outputTableViewer.getTable().addMouseListener(new MouseAdapter() {
 		    	@Override
 				public void mouseDoubleClick(MouseEvent e) {
@@ -253,10 +252,8 @@ public class JoinMapGrid extends Dialog {
 			});
 		    widget.createTableColumns(outputTableViewer.getTable(), COLUMN_NAME, 196);
 		    CellEditor[] editors =widget.createCellEditorList(outputTableViewer.getTable(),2);
-		    for(int i = 0; i<editors.length;i++){
-		    	editors[0].setValidator(valueEditorValidation(Messages.EmptyNameNotification, outputTableViewer));
-		    	editors[1].setValidator(valueEditorValidation(Messages.EmptyValueNotification, outputTableViewer));
-		    }
+		    	//editors[0].setValidator(valueEditorValidation(Messages.EmptyNameNotification, outputTableViewer));
+		    	editors[1].setValidator(createValueEditorValidator(outputTableViewer));
 		    outputTableViewer.setColumnProperties(COLUMN_NAME);
 		    outputTableViewer.setCellModifier(new LookupCellModifier(outputTableViewer));
 		    outputTableViewer.setCellEditors(editors);
@@ -266,16 +263,15 @@ public class JoinMapGrid extends Dialog {
 				@Override
 				public void handleEvent(Event event) {
 					String[] data = (((TableItem)event.item).getText()).split(Pattern.quote("."));
-		
 					if(data != null && data.length == 2){
 						FilterProperties filter =new FilterProperties();
 						filter.setPropertyname(data[1]);
 						
 						for(int i=0;i<inputPortValue;i++){
-							if(joinInputList.get(i).contains(filter)){
+							if(filterInputList.contains(filter)){
 								ExpandItem item =expandBar.getItem(i);
 								item.setExpanded(true);
-								inputTableViewer[i].getTable().setSelection(joinInputList.get(i).indexOf(filter));
+								inputTableViewer[i].getTable().setSelection(filterInputList.indexOf(filter));
 								
 							}
 						}
@@ -336,33 +332,41 @@ public class JoinMapGrid extends Dialog {
 		return container;
 	}
 	
-	private Control createComposite(Composite parent, int y, final List<FilterProperties> joinInputList, final int tableViewerIndex){	
-		Composite comGrid = new Composite(parent, SWT.BORDER);
+	private Control createComposite(ExpandBar expandBar, final Filter filterList, final int tableViewerIndex){	
+		ExpandItem	xpndtmItem = new ExpandItem(expandBar, SWT.NONE);
+		xpndtmItem.setText("Input index : in"+tableViewerIndex);
+
+		Composite comGrid = new Composite(expandBar, SWT.BORDER);
 		//comGrid.setLayout(new RowLayout(SWT.VERTICAL));
-		comGrid.setBounds(15, y, 226, 200);
+		comGrid.setBounds(15, 0, 226, 200);
 		
-		labelWidget(comGrid, SWT.LEFT, new int[]{2, 5, 90, 20}, "Input Index : in"+tableViewerIndex,null);
+		xpndtmItem.setControl(comGrid);
+		xpndtmItem.setHeight(270);
+		xpndtmItem.setExpanded(false);
+		labelWidget(comGrid, SWT.LEFT, new int[]{2, 5, 90, 20}, "Input Index : in"+tableViewerIndex);
 		
 		inputTableViewer[tableViewerIndex] = widget.createTableViewer(comGrid, INPUT_COLUMN_NAME, new int[]{2, 30, 229, 232}, 224, new ELTFilterContentProvider(), new ELTFilterLabelProvider());
 		inputTableViewer[tableViewerIndex].getTable().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				joinInputUpProperty(inputTableViewer[tableViewerIndex],joinInputList);
+				joinInputUpProperty(inputTableViewer[tableViewerIndex],filterList.getFilterList());
 			}
 			@Override
 			public void mouseDown(MouseEvent e) {
 			}
 		});
 		widget.createTableColumns(inputTableViewer[tableViewerIndex].getTable(), INPUT_COLUMN_NAME, 224);
-	    CellEditor[] editors =widget.createCellEditorList(inputTableViewer[tableViewerIndex].getTable(),1);
+	    CellEditor[] editors = widget.createCellEditorList(inputTableViewer[tableViewerIndex].getTable(),1);
 	    editors[0].setValidator(valueEditorValidation(Messages.EmptyNameNotification, inputTableViewer[tableViewerIndex]));
 	    inputTableViewer[tableViewerIndex].setCellModifier(new ELTCellModifier(inputTableViewer[tableViewerIndex]));
 	    inputTableViewer[tableViewerIndex].setColumnProperties(INPUT_COLUMN_NAME);
 	    inputTableViewer[tableViewerIndex].setCellEditors(editors);
-	    inputTableViewer[tableViewerIndex].setInput(joinInputList);
+	    inputTableViewer[tableViewerIndex].setInput(filterList.getFilterList());
 	
-		addButton(comGrid, new int[]{200, 8, 25, 20}, inputTableViewer[tableViewerIndex],joinInputList);
+		addButton(comGrid, new int[]{200, 8, 25, 20}, inputTableViewer[tableViewerIndex],filterList.getFilterList());
 		widget.applyDragFromTableViewer(inputTableViewer[tableViewerIndex].getTable(), tableViewerIndex);
+		filterList.setFilterList((List)inputTableViewer[tableViewerIndex].getInput());
+		filterInputList.add(filterList);
 		return comGrid;
 	}
 		
@@ -397,7 +401,7 @@ public class JoinMapGrid extends Dialog {
 		});
 				 
 	 
-		Label delete = labelWidget(parent, SWT.CENTER, new int[]{25, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
+		Label delete = widget.labelWidget(parent, SWT.CENTER, new int[]{25, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
 		delete.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -416,7 +420,7 @@ public class JoinMapGrid extends Dialog {
 			public void mouseDoubleClick(MouseEvent e) {}
 		});
 	 
-		Label upLabel = labelWidget(parent, SWT.CENTER, new int[]{50, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png"));
+		Label upLabel = widget.labelWidget(parent, SWT.CENTER, new int[]{50, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png"));
 		upLabel.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -457,7 +461,7 @@ public class JoinMapGrid extends Dialog {
 		});
 		 
 	 
-		Label downLabel = labelWidget(parent, SWT.CENTER, new int[]{74, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png"));
+		Label downLabel = widget.labelWidget(parent, SWT.CENTER, new int[]{74, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png"));
 		downLabel.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -504,18 +508,18 @@ public class JoinMapGrid extends Dialog {
 
 	public LookupPropertyGrid getJoinPropertyGrid(){
 		LookupPropertyGrid lookupPropertyGrid = new LookupPropertyGrid();
-		lookupPropertyGrid.setLookupInputProperties(joinInputList);
+		lookupPropertyGrid.setFilterList(filterInputList);
 		lookupPropertyGrid.setLookupMapProperties(joinOutputList);
 		this.lookupPropertyGrid = lookupPropertyGrid;
 		
 		return lookupPropertyGrid;
 	}
 	
-	public Label labelWidget(Composite parent, int style, int[] bounds, String value, Image image){
+	public Label labelWidget(Composite parent, int style, int[] bounds, String value){
 		Label label = new Label(parent, style);
 		label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		label.setText(value);
-		label.setImage(image);
+		//label.setImage(image);
 		
 		return label;
 	}
@@ -596,6 +600,32 @@ public class JoinMapGrid extends Dialog {
 							}
 							return null;
 
+						}
+					};
+					return propertyValidator;
+				}
+				
+				// Creates CellValue Validator for table's cells
+				private ICellEditorValidator createValueEditorValidator(final TableViewer viewer) {
+					ICellEditorValidator propertyValidator = new ICellEditorValidator() {
+						@Override
+						public String isValid(Object value) {
+							String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
+							String valueToValidate = String.valueOf(value).trim();
+							if (StringUtils.isEmpty(valueToValidate)) {
+								errorLabel.setText(Messages.EmptyNameNotification);
+								errorLabel.setVisible(true);
+							}
+							for (LookupMapProperty temp : joinOutputList) {
+								if (!temp.getOutput_Field().equalsIgnoreCase(valueToValidate)) {
+									errorLabel.setText(Messages.RuntimePropertAlreadyExists);
+									errorLabel.setVisible(true);
+								} 
+								else{
+									errorLabel.setVisible(false);
+								}
+							}
+							return null;
 						}
 					};
 					return propertyValidator;

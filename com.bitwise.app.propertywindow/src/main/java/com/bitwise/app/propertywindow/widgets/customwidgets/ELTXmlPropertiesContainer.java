@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Display;
 
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
@@ -14,28 +15,22 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-import com.bitwise.app.propertywindow.widgets.joinproperty.ELTJoinConfigGrid;
+import com.bitwise.app.propertywindow.widgets.xmlPropertiesContainer.XMLTextContainer;
 
-
-
-
-/**
- * @author vibhort
- *
- */
-public class ELTJoinWidget extends AbstractWidget{
+public class ELTXmlPropertiesContainer extends AbstractWidget{
 	
-	private String propertyName;
-	private LinkedHashMap<String, Object> property = new LinkedHashMap<>(); 
+	private LinkedHashMap<String, Object> property=new LinkedHashMap<>();
+	 private String propertyName;
+	private String xmlContent=null;
 	
-	
-	public ELTJoinWidget(
+	public ELTXmlPropertiesContainer(
 			ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
-		super(componentConfigrationProperty, componentMiscellaneousProperties,
-				propertyDialogButtonBar);
+		super(componentConfigrationProperty, componentMiscellaneousProperties,propertyDialogButtonBar);
 		this.propertyName = componentConfigrationProperty.getPropertyName();
+		this.xmlContent=(String) componentConfigrationProperty.getPropertyValue();
+
 	}
 	
 	/* (non-Javadoc)
@@ -48,7 +43,7 @@ public class ELTJoinWidget extends AbstractWidget{
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 		 
 		
-		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Join\nConfiguration");
+		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Properties");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 		
 		
@@ -58,8 +53,10 @@ public class ELTJoinWidget extends AbstractWidget{
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ELTJoinConfigGrid configGrid = new ELTJoinConfigGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell());
-				configGrid.open();
+				XMLTextContainer xmlTextContainer=new XMLTextContainer();
+				if(xmlContent!=null)
+					xmlTextContainer.setXmlText(xmlContent);
+				xmlContent=xmlTextContainer.launchXMLTextContainerWindow();
 			}
 			
 		});
@@ -68,8 +65,10 @@ public class ELTJoinWidget extends AbstractWidget{
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		return property;
+		 property.put(this.propertyName,xmlContent );
+	return property;
 	}
+	
 
 
 	

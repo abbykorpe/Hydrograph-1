@@ -6,8 +6,15 @@ public class LookupPropertyGrid {
 	
 	private List<LookupMapProperty> lookupMapProperties;
 	private List<List<FilterProperties>> lookupInputProperties;
+	private List<Filter> filterList;
 	
 	
+	public List<Filter> getFilterList() {
+		return filterList;
+	}
+	public void setFilterList(List<Filter> filterList) {
+		this.filterList = filterList;
+	}
 	public List<LookupMapProperty> getLookupMapProperties() {
 		return lookupMapProperties;
 	}

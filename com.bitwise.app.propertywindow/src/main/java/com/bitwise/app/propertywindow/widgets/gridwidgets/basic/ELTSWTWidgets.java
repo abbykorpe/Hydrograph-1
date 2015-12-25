@@ -32,14 +32,13 @@ public class ELTSWTWidgets {
 	}
 	
 	public TableViewer createTableViewer(Composite composite,String[] prop, int[] bounds, int columnWidth,IStructuredContentProvider iStructuredContentProvider,ITableLabelProvider iTableLabelProvider){
-		final TableViewer tableViewer= new TableViewer(composite, SWT.BORDER |SWT.MULTI);
-	    tableViewer.setContentProvider(iStructuredContentProvider);
+		final TableViewer tableViewer= new TableViewer(composite, SWT.BORDER |SWT.MULTI | SWT.FULL_SELECTION);
+	    	
+		Table table = tableViewer.getTable();
+		table.setBounds(bounds[0],bounds[1],bounds[2],bounds[3]);
+		tableViewer.setContentProvider(iStructuredContentProvider);
 	    tableViewer.setLabelProvider( iTableLabelProvider);
 		tableViewer.setColumnProperties(prop); 
-	
-		Table table = tableViewer.getTable();
-	 
-		
 		tableViewer.getTable().addTraverseListener(new TraverseListener() {
 
 			@Override
@@ -60,7 +59,6 @@ public class ELTSWTWidgets {
 		table.setVisible(true);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
-		table.setBounds(bounds[0],bounds[1],bounds[2],bounds[3]);
 		/*createTableColumns(table,prop, columnWidth);
 		CellEditor[] editors =createCellEditorList(table,1); 
 		tableViewer.setCellEditors(editors);*/
@@ -68,7 +66,7 @@ public class ELTSWTWidgets {
 		return tableViewer;
 	}
 	
-	public static  void createTableColumns(Table table,String[] fields, int width){
+	public  void createTableColumns(Table table,String[] fields, int width){
 		for (String field : fields) {
 			TableColumn tableColumn= new TableColumn(table, SWT.CENTER);
 			tableColumn.setText(field);
@@ -80,7 +78,7 @@ public class ELTSWTWidgets {
 		
 	}
 	
-	public static   CellEditor[] createCellEditorList(Table table,int size){
+	public  CellEditor[] createCellEditorList(Table table,int size){
 		CellEditor[] cellEditor = new CellEditor[size];
 		for(int i=0;i<size;i++)
 		addTextEditor(table,cellEditor, i);
@@ -88,7 +86,7 @@ public class ELTSWTWidgets {
 		return cellEditor;
 	}
 	
-	protected static void addTextEditor(Table table, CellEditor[] cellEditor, int position){
+	protected void addTextEditor(Table table, CellEditor[] cellEditor, int position){
 		cellEditor[position]=new TextCellEditor(table, SWT.COLOR_GREEN);
 	}
 	

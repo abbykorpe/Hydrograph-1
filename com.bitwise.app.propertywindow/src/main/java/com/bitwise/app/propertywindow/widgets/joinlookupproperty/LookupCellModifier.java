@@ -39,10 +39,13 @@ public class LookupCellModifier  implements ICellModifier{
 		      element = ((Item) element).getData();
 		 
 		LookupMapProperty mapp = (LookupMapProperty) element;
-		    if (ELTLookupMapWizard.PROPERTY_NAME.equals(property))
+		
+		   /* if (ELTLookupMapWizard.PROPERTY_NAME.equals(property)){
 		      mapp.setSource_Field((String)value);
-		    if (ELTLookupMapWizard.PROPERTY_VALUE.equals(property))
+		    
+		    }*/  if (ELTLookupMapWizard.PROPERTY_VALUE.equals(property))
 		        mapp.setOutput_Field((String)value);
+		    
 		    viewer.refresh();
 		
 	}
