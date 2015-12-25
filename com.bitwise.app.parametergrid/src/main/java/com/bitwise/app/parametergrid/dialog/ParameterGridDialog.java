@@ -28,8 +28,6 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -47,7 +45,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -60,6 +57,8 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
+import com.bitwise.app.parametergrid.constants.ErrorMessages;
+import com.bitwise.app.parametergrid.constants.MessageType;
 import com.bitwise.app.parametergrid.textgridwidget.TextGrid;
 import com.bitwise.app.parametergrid.textgridwidget.columns.TextGridColumnLayout;
 import com.bitwise.app.parametergrid.textgridwidget.columns.TextGridRowLayout;
@@ -457,19 +456,23 @@ public class ParameterGridDialog extends Dialog {
 						isValidParameterFile = false;
 						MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
 
-						messageBox.setText("Error");
+						/*messageBox.setText("Error");
 						messageBox.setMessage("Unable to load parameter file.\nPlease Check file contents.\nContent should be in key=value format" +
-								"\nEach line should have single key=value pair");
+								"\nEach line should have single key=value pair");*/
+						messageBox.setText(MessageType.ERROR.toString());
+						messageBox.setMessage(ErrorMessages.UNABLE_TO_LOAD_PARAM_FILE1);
 						messageBox.open();
 					}else{
 						if(keyvalue[0].trim().contains(" ")){
 							isValidParameterFile = false;
 							MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
 
-							messageBox.setText("Error");
+							/*messageBox.setText("Error");
 							messageBox.setMessage("Unable to load parameter file.\nPlease Check file contents.\nContent should be in key=value format" +
 									"\nEach line should have single key=value pair" +
-									"\nParameter key should not contain spaces");
+									"\nParameter key should not contain spaces");*/
+							messageBox.setText(MessageType.ERROR.toString());
+							messageBox.setMessage(ErrorMessages.UNABLE_TO_LOAD_PARAM_FILE2);
 							messageBox.open();
 						}
 					}
@@ -480,8 +483,12 @@ public class ParameterGridDialog extends Dialog {
 			isValidParameterFile=false;
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
 
-			messageBox.setText("Error");
-			messageBox.setMessage("Unable to load parameter file.\nPlease Check file format.\nExpected file format - US-ASCII");
+			/*messageBox.setText("Error");
+			messageBox.setMessage("Unable to load parameter file.\nPlease Check file format.\nExpected file format - US-ASCII");*/
+			//ErrorMessage as;
+			
+			messageBox.setText(MessageType.ERROR.toString());
+			messageBox.setMessage(ErrorMessages.UNABLE_TO_LOAD_PARAM_FILE3);
 			messageBox.open();
 		}
 
@@ -511,8 +518,11 @@ public class ParameterGridDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				super.widgetSelected(e);
 				parameterFile = paramterFileTextBox.getText();
-				getComponentCanvas().setCurrentParameterFilePath(parameterFile);
-				loadParameterFile();
+				if(isValidParameterFile(parameterFile)){
+					getComponentCanvas().setCurrentParameterFilePath(parameterFile);
+					loadParameterFile();
+				}
+				
 			}
 
 		});
@@ -523,8 +533,12 @@ public class ParameterGridDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fd = new FileDialog(btnNewButton.getShell(), SWT.OPEN);
 				fd.setText("Open");
-				Path path = Paths.get(parameterFile.replaceFirst("/", ""));
-
+				Path path;
+				if(parameterFile.contains(":"))
+					path = Paths.get(parameterFile.replaceFirst("/", ""));
+				else
+					path = Paths.get(parameterFile);
+				
 				if(path.getParent() != null)
 					fd.setFilterPath(path.getParent().toString());
 				else{
@@ -649,11 +663,13 @@ public class ParameterGridDialog extends Dialog {
 		//ParameterFileManager parameterFileManager = new ParameterFileManager(getComponentCanvas().getParameterFile());
 		if(!paramterFileTextBox.getText().equals(parameterFile)){
 
-			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK | SWT.CANCEL );	        
-			messageBox.setText("Error");
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL );	        
+			/*messageBox.setText("Error");
 			messageBox.setMessage("The file " + paramterFileTextBox.getText() + " is not loded in grid\n" +
 					"Pressing OK will override the existing file if any \n"
-					+ "Press Reload Button to load the file in grid");
+					+ "Press Reload Button to load the file in grid");*/
+			messageBox.setText(MessageType.WARNING.toString());
+			messageBox.setMessage(ErrorMessages.PARAMETER_FILE_NOT_LOADED.replace("{@}", paramterFileTextBox.getText()));
 			int buttonID = messageBox.open();
 			if(buttonID == SWT.OK){
 				parameterFile = paramterFileTextBox.getText();
@@ -683,8 +699,11 @@ public class ParameterGridDialog extends Dialog {
 			} catch (IOException e) {
 				MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
 
-				messageBox.setText("Error");
-				messageBox.setMessage("Unable to store parameters to the file - \n" + e.getMessage());
+				/*messageBox.setText("Error");
+				messageBox.setMessage("Unable to store parameters to the file - \n" + e.getMessage());*/
+				
+				messageBox.setText(MessageType.ERROR.toString());
+				messageBox.setMessage(ErrorMessages.UNABLE_TO_STORE_PARAMETERS);
 				messageBox.open();
 			}
 			runGraph=true;
@@ -692,8 +711,10 @@ public class ParameterGridDialog extends Dialog {
 		}else{
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK | SWT.CANCEL );
 
-			messageBox.setText("Error");
-			messageBox.setMessage("Parameter name can not be blank..please correct selected rows");
+			/*messageBox.setText("Error");
+			messageBox.setMessage("Parameter name can not be blank..please correct selected rows");*/
+			messageBox.setText(MessageType.ERROR.toString());
+			messageBox.setMessage(ErrorMessages.PARAMETER_NAME_CAN_NOT_BE_BLANK);
 			int buttonID = messageBox.open();
 			switch(buttonID) {
 			case SWT.OK:
