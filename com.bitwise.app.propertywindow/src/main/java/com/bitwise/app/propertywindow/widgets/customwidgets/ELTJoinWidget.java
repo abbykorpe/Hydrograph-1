@@ -14,6 +14,7 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import com.bitwise.app.propertywindow.widgets.joinproperty.ELTJoinConfigGrid;
 
 
 
@@ -24,8 +25,8 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSu
  */
 public class ELTJoinWidget extends AbstractWidget{
 	
-	private LinkedHashMap<String, Object> property=new LinkedHashMap<>();
-	 
+	private String propertyName;
+	private LinkedHashMap<String, Object> property = new LinkedHashMap<>(); 
 	
 	
 	public ELTJoinWidget(
@@ -34,7 +35,7 @@ public class ELTJoinWidget extends AbstractWidget{
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties,
 				propertyDialogButtonBar);
-
+		this.propertyName = componentConfigrationProperty.getPropertyName();
 	}
 	
 	/* (non-Javadoc)
@@ -57,7 +58,8 @@ public class ELTJoinWidget extends AbstractWidget{
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
+				ELTJoinConfigGrid configGrid = new ELTJoinConfigGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell());
+				configGrid.open();
 			}
 			
 		});

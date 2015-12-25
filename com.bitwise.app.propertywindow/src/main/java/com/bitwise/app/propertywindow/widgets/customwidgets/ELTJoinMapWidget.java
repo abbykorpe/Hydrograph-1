@@ -23,6 +23,7 @@ public class ELTJoinMapWidget extends AbstractWidget{
 	public static String value;
 	private String propertyName;
 	private LookupPropertyGrid lookupPropertyGrid;
+	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	
 	public ELTJoinMapWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
@@ -43,7 +44,6 @@ public class ELTJoinMapWidget extends AbstractWidget{
 		for(String key : map.keySet()){
 			if(key.equalsIgnoreCase("input_count")){
 				value=(String)map.get(key);
-				
 			}
 		}
 		
@@ -59,8 +59,10 @@ public class ELTJoinMapWidget extends AbstractWidget{
 			public void widgetSelected(SelectionEvent e) {
 				JoinMapGrid joinMapGrid = new JoinMapGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), lookupPropertyGrid);
 				joinMapGrid.open();
+				if(Integer.parseInt(value) >= 2){
 				joinMapGrid.setInputPortValue(Integer.parseInt(value));
-				joinMapGrid.getJoinPropertyGrid();
+				}
+				lookupPropertyGrid = joinMapGrid.getJoinPropertyGrid();
 			}
 			
 		});
@@ -68,9 +70,9 @@ public class ELTJoinMapWidget extends AbstractWidget{
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-
-
-		return null;
+		property.put(propertyName, lookupPropertyGrid);
+		
+		return property;
 	}
 
 }

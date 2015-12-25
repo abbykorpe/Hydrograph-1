@@ -301,8 +301,9 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				int prevPortCount = getCastedModel().getPort("in1").getNumberOfPortsOfThisType();
 				int numOfPort=0;
 				if(StringUtils.isNotEmpty(newPortCount)){
+					if(Integer.parseInt(newPortCount) >=2){
 					numOfPort = Integer.parseInt(newPortCount);
-
+					}
 					if(prevPortCount != numOfPort){
 
 						ComponentFigure compFig = (ComponentFigure)getFigure();
