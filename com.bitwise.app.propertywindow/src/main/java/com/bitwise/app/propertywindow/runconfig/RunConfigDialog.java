@@ -37,8 +37,8 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.bitwise.app.common.util.SWTResourceManager;
 
 
 public class RunConfigDialog extends Dialog {

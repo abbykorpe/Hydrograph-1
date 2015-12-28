@@ -8,7 +8,7 @@
  * Contributors:
  *    Google, Inc. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.wb.swt;
+package com.bitwise.app.common.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,6 +27,7 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
+import org.slf4j.Logger;
 
 /**
  * Utility class for managing OS resources associated with SWT controls such as colors, fonts, images, etc.
@@ -41,6 +42,7 @@ import org.eclipse.swt.widgets.Display;
  * @author Dan Rubel
  */
 public class SWTResourceManager {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(SWTResourceManager.class);
 	////////////////////////////////////////////////////////////////////////////
 	//
 	// Color
@@ -139,8 +141,9 @@ public class SWTResourceManager {
 				image = getImage(new FileInputStream(path));
 				m_imageMap.put(path, image);
 			} catch (Exception e) {
+				logger.error("Failed to get image ", e); 
 				image = getMissingImage();
-				m_imageMap.put(path, image);
+				m_imageMap.put(path, image);				
 			}
 		}
 		return image;
@@ -162,6 +165,7 @@ public class SWTResourceManager {
 				image = getImage(clazz.getResourceAsStream(path));
 				m_imageMap.put(key, image);
 			} catch (Exception e) {
+				logger.error("Failed to get image ", e);
 				image = getMissingImage();
 				m_imageMap.put(key, image);
 			}
@@ -354,8 +358,8 @@ public class SWTResourceManager {
 							logFontClass.getField("lfUnderline").set(logFont, Byte.valueOf((byte) 1)); //$NON-NLS-1$
 						}
 					}
-				} catch (Throwable e) {
-					System.err.println("Unable to set underline or strikeout" + " (probably on a non-Windows platform). " + e); //$NON-NLS-1$ //$NON-NLS-2$
+				} catch (Exception  e) { // Changed "Throwable" to "Exception" - to fix sonar qube blocker issue.
+					logger.error("Unable to set underline or strikeout (probably on a non-Windows platform).", e); 
 				}
 			}
 			font = new Font(Display.getCurrent(), fontData);

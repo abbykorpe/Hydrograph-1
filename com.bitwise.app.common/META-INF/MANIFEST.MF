@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.core.runtime,
  ch.qos.logback.classic,
  ch.qos.logback.core,
  org.slf4j.api,
- org.eclipse.ui.workbench;bundle-version="3.7.1"
+ org.eclipse.ui.workbench;bundle-version="3.7.1",
+ org.eclipse.swt;bundle-version="3.7.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.bitwise.app.common.component.config,

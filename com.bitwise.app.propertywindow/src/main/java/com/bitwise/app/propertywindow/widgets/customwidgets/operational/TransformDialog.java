@@ -56,6 +56,7 @@ import com.bitwise.app.common.datastructure.property.TransformOperation;
 import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
 import com.bitwise.app.common.datastructures.tooltip.TootlTipErrorMessage;
 import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.common.util.SWTResourceManager;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.fixedwidthschema.ELTFixedWidget;
@@ -81,7 +82,6 @@ import com.bitwise.app.propertywindow.widgets.listeners.grid.transform.ELTTransf
 import com.bitwise.app.propertywindow.widgets.utility.DragDropUtility;
 import com.bitwise.app.propertywindow.widgets.utility.FilterOperationClassUtility;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
-import com.bitwise.app.propertywindow.widgets.utility.SWTResourceManager;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
 // TODO: Auto-generated Javadoc

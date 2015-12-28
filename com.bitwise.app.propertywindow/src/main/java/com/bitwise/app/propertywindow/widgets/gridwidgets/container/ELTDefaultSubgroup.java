@@ -7,8 +7,8 @@ import org.eclipse.ui.forms.widgets.ColumnLayout;
 
 //import org.eclipse.wb.swt.*;
 
+import com.bitwise.app.common.util.SWTResourceManager;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
-import com.bitwise.app.propertywindow.widgets.utility.SWTResourceManager;
 
 // TODO: Auto-generated Javadoc
 /**
