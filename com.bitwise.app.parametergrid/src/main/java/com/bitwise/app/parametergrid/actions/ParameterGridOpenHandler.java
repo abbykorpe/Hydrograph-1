@@ -28,7 +28,7 @@ public class ParameterGridOpenHandler extends AbstractHandler{
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
-		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
+		if(getComponentCanvas().getParameterFile() == null ){
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
 
 			messageBox.setText("Error");

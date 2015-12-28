@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.propertywindow.adapters.ELTComponentPropertyAdapter;
 import com.bitwise.app.propertywindow.factory.WidgetFactory.Widgets;
 import com.bitwise.app.propertywindow.property.ELTComponenetProperties;
@@ -145,7 +146,14 @@ public class TestWindow extends ApplicationWindow {
 					IPropertyTreeBuilder propertyTreeBuilder = new PropertyTreeBuilder(componentProperties);
 
 					PropertyDialog propertyDialog = new PropertyDialog(shell, propertyTreeBuilder.getPropertyTree(),
-							eltComponenetProperties,null);
+							eltComponenetProperties,null,new Component() {
+								
+								@Override
+								public String getConverter() {
+									// TODO Auto-generated method stub
+									return null;
+								}
+							});
 					propertyDialog.open();
 
 

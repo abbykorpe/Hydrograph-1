@@ -69,21 +69,7 @@ public class RunJobHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
 		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
-			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
-
-			messageBox.setText("Error");
-			messageBox.setMessage("Could not run the job. \nPlease save the job file.");
-			messageBox.open();
-			return null;
-		}
-		
-		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
-			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
-
-			messageBox.setText("Error");
-			messageBox.setMessage("Could not run the graph. \nPlease save the graph file.");
-			messageBox.open();
-			return null;
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 		}
 		
 		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell());
@@ -93,6 +79,7 @@ public class RunJobHandler extends AbstractHandler {
 		}
 		
 		ParameterGridDialog parameterGrid = new ParameterGridDialog(Display.getDefault().getActiveShell());
+		parameterGrid.setVisibleParameterGridNote(false);
 		parameterGrid.open();
 		if(parameterGrid.canRunGraph() == false){
 			logger.debug("Not running graph");

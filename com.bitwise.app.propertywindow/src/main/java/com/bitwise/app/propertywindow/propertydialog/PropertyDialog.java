@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
+import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.propertywindow.constants.ELTProperties;
 import com.bitwise.app.propertywindow.messagebox.ConfirmCancelMessageBox;
 import com.bitwise.app.propertywindow.property.ELTComponenetProperties;
@@ -55,18 +56,21 @@ public class PropertyDialog extends Dialog {
 	
 	private Map<String,String> toolTipErrorMessages;
 	
+	private Component component;
+	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 * @param propertyTree 
+	 * @param component 
 	 * @param ComponentProperties 
 	 */
-	public PropertyDialog(Shell parentShell, LinkedHashMap<String, LinkedHashMap<String, ArrayList<Property>>> propertyTree,ELTComponenetProperties eltComponenetProperties,Map<String, String> toolTipErrorMessages) {		
+	public PropertyDialog(Shell parentShell, LinkedHashMap<String, LinkedHashMap<String, ArrayList<Property>>> propertyTree,ELTComponenetProperties eltComponenetProperties,Map<String, String> toolTipErrorMessages, Component component) {		
 		super(parentShell);
 		this.propertyTree = propertyTree;
 		this.eltComponenetProperties = eltComponenetProperties;
 		componentName = (String) this.eltComponenetProperties.getComponentConfigurationProperty(ELTProperties.NAME_PROPERTY.propertyName());
-
+		this.component = component;
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		/**
 		 * 	Initialize it with true, if any one of the property is invalid then mark this status as false
@@ -85,7 +89,7 @@ public class PropertyDialog extends Dialog {
 		createPropertyDialogContainer(parent);
 		propertyDialogButtonBar = new PropertyDialogButtonBar(container);
 
-		propertyDialogBuilder = new PropertyDialogBuilder(container,propertyTree,eltComponenetProperties,propertyDialogButtonBar);
+		propertyDialogBuilder = new PropertyDialogBuilder(container,propertyTree,eltComponenetProperties,propertyDialogButtonBar,component);
 		propertyDialogBuilder.buildPropertyWindow();
 
 		return container;

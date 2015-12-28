@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 
+import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.propertywindow.factory.WidgetFactory;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
@@ -41,6 +42,7 @@ public class PropertyDialogBuilder {
 	private ArrayList<AbstractWidget> eltWidgetList;
 	private ELTComponenetProperties eltComponenetProperties;
 	private PropertyDialogButtonBar propertyDialogButtonBar;	
+	private Component component;
 
 	/**
 	 * Instantiates a new property dialog builder.
@@ -53,14 +55,15 @@ public class PropertyDialogBuilder {
 	 *            the elt componenet properties
 	 * @param propertyDialogButtonBar
 	 *            the property dialog button bar
+	 * @param component 
 	 */
 	public PropertyDialogBuilder(Composite container, LinkedHashMap<String,LinkedHashMap<String,ArrayList<Property>>> propertyTree, 
-			ELTComponenetProperties eltComponenetProperties,PropertyDialogButtonBar propertyDialogButtonBar){
+			ELTComponenetProperties eltComponenetProperties,PropertyDialogButtonBar propertyDialogButtonBar, Component component){
 		this.container = container;
 		this.propertyTree = propertyTree;
 		this.eltComponenetProperties = eltComponenetProperties;
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
-
+		this.component = component;
 		eltWidgetList= new ArrayList<>();
 	}
 	
@@ -147,7 +150,9 @@ public class PropertyDialogBuilder {
 		if(property.getPropertyName().equalsIgnoreCase("join_config"));
 		eltWidget.setEltComponenetProperties(eltComponenetProperties);
 		
+		eltWidget.setComponent(component);
 		eltWidget.attachToPropertySubGroup(subGroupContainer);
+		
 		return eltWidget;
 	}
 

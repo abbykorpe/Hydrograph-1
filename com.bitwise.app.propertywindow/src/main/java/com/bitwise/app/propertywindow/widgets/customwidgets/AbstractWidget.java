@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 
 import org.eclipse.swt.widgets.Text;
 
+import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.property.ELTComponenetProperties;
@@ -28,7 +29,16 @@ public abstract class AbstractWidget {
 	protected WidgetConfig widgetConfig;
 	protected ELTComponenetProperties allComponenetProperties;
 	private String toolTipErrorMessage =  null;
+	private Component component;
 	
+	protected Component getComponent() {
+		return component;
+	}
+
+	public void setComponent(Component component) {
+		this.component = component;
+	}
+
 	public AbstractWidget() {
 	
 	}

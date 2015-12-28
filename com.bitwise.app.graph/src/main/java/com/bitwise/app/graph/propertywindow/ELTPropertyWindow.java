@@ -99,7 +99,7 @@ public class ELTPropertyWindow implements IELTPropertyWindow{
 			IPropertyTreeBuilder propertyTreeBuilder = new PropertyTreeBuilder(componentProperties);
 
 			PropertyDialog propertyDialog = new PropertyDialog(shell, propertyTreeBuilder.getPropertyTree(),
-					eltComponenetProperties,toolTipErrorMessages);
+					eltComponenetProperties,toolTipErrorMessages,component);
 			propertyDialog.open();
 
 			//component.setSize(getNewComponentSize());

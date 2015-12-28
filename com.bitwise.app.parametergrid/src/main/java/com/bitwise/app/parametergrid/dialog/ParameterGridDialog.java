@@ -36,6 +36,8 @@ import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -77,6 +79,8 @@ public class ParameterGridDialog extends Dialog {
 	private String parameterFile;
 	private ControlDecoration txtDecorator;
 	private TraverseListener lastRowLastColumnTraverseListener;
+	
+	private boolean visibleParameterGirdNote=true;
 
 	/**
 	 * Create the dialog.
@@ -117,6 +121,13 @@ public class ParameterGridDialog extends Dialog {
 		attachTextGrid(container);
 		logger.debug("attached TextGrid");
 
+		Label separator1 = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
+		separator1.setVisible(false);
+		Label separator2 = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
+		separator2.setVisible(false);
+		
+		attachNote(container);
+		
 		addGridHeader();
 		logger.debug("attached remove button");
 		
@@ -142,6 +153,22 @@ public class ParameterGridDialog extends Dialog {
 		return container;
 	}
 
+	private void attachNote(final Composite container) {
+		Label lblParameterGridNote=new Label(container, SWT.NONE);
+		FontData fontData = lblParameterGridNote.getFont().getFontData()[0];
+		Font font = new Font(lblParameterGridNote.getDisplay(), new FontData(fontData.getName(), fontData
+		    .getHeight(), SWT.ITALIC));
+		lblParameterGridNote.setText("Note - New parameters will be visible only after you save the job.");
+		lblParameterGridNote.setFont(font);
+		
+		if(!visibleParameterGirdNote)
+			lblParameterGridNote.setVisible(false);
+	}
+	
+	public void setVisibleParameterGridNote(boolean visibleParameterGirdNote){
+		this.visibleParameterGirdNote=visibleParameterGirdNote;
+	}
+
 	/**
 	 * Add listeners to base container
 	 * 
@@ -161,7 +188,8 @@ public class ParameterGridDialog extends Dialog {
 		container.getParent().addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
-				textGrid.setHeight(container.getParent().getBounds().height - 150);
+				//textGrid.setHeight(container.getParent().getBounds().height - 150);
+				textGrid.setHeight(container.getParent().getBounds().height - 165);
 			}
 		});
 	}
@@ -772,6 +800,7 @@ public class ParameterGridDialog extends Dialog {
 	@Override
 	protected Point getInitialSize() {
 		return new Point(450, 423);
+		//return new Point(450, 430);
 	}
 
 	public TextGrid getTextGrid() {
