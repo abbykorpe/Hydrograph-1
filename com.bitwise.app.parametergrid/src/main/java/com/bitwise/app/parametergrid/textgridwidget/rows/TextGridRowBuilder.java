@@ -44,8 +44,6 @@ public class TextGridRowBuilder {
 		composite.setLayout(gl_composite);
 			
 		Button rowSelection = new Button(composite, SWT.CHECK);
-	//	rowSelection.setText(" ");
-		//rowSelection.setEnabled(enabled);
 		
 		Map<Integer, TextGridColumnLayout> columns = textGridRow.getTextGridColumns();
 		for(int columnNumber:columns.keySet()){
@@ -55,26 +53,20 @@ public class TextGridRowBuilder {
 				gd_text.widthHint = columns.get(columnNumber).getColumnWidth();
 				text.setLayoutData(gd_text);
 				
-				//text.setEditable(columns.get(columnNumber).isEditable());
 				text.setEditable(false);
 				text.setForeground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				text.setBackground(SWTResourceManager.getColor(SWT.COLOR_LIST_SELECTION));
-				//text.setEnabled(columns.get(columnNumber).isEnabled());
 			}else{
-				//Text text = new Text(composite, SWT.BORDER);
 				text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 				text.setBounds(0, 0, 76, 21);
 				text.setFocus();
 				
-				//text.setEditable(columns.get(columnNumber).isEditable());
 				text.setEditable(false);
 				text.setForeground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-				text.setBackground(SWTResourceManager.getColor(SWT.COLOR_LIST_SELECTION));
-				//text.setEnabled(columns.get(columnNumber).isEnabled());
-				
+				text.setBackground(SWTResourceManager.getColor(SWT.COLOR_LIST_SELECTION));				
 			}
 			
-			//---- set data
+
 			if(rowData!=null)
 				text.setText(rowData.get(columnNumber));
 		}
@@ -92,7 +84,6 @@ public class TextGridRowBuilder {
 		composite.setLayout(gl_composite);
 			
 		Button rowSelection = new Button(composite, SWT.CHECK);
-		//rowSelection.setText(" ");
 		rowSelection.setEnabled(enabled);
 		
 		Map<Integer, TextGridColumnLayout> columns = textGridRow.getTextGridColumns();
@@ -106,7 +97,6 @@ public class TextGridRowBuilder {
 				text.setEditable(columns.get(columnNumber).isEditable());
 				text.setEnabled(columns.get(columnNumber).isEnabled());
 			}else{
-				//Text text = new Text(composite, SWT.BORDER);
 				text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 				text.setBounds(0, 0, 76, 21);
 				text.setFocus();
@@ -115,7 +105,6 @@ public class TextGridRowBuilder {
 				text.setEnabled(columns.get(columnNumber).isEnabled());
 			}
 			
-			//---- set data
 			if(rowData!=null)
 				text.setText(rowData.get(columnNumber));
 		}

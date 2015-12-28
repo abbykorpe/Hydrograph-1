@@ -2,6 +2,13 @@ package com.bitwise.app.parametergrid.constants;
 
 import org.eclipse.osgi.util.NLS;
 
+/**
+ * 
+ * Class for error messages
+ * 
+ * @author Bitwise
+ *
+ */
 public class ErrorMessages extends NLS{
 
 	private static final String BUNDLE_NAME = "com.bitwise.app.parametergrid.constants.ErrorMessages"; //$NON-NLS-1$
