@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -46,17 +47,17 @@ public class ELTLookupConfigGrid extends Dialog {
 	private Map<String, String> propertyMap = new LinkedHashMap<>();
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private ControlDecoration txtDecorator;
-	 String lookupPort;
+	private String lookupPort;
+	
 	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
 	public ELTLookupConfigGrid(Shell parentShell) {
-		super(parentShell);
-		
+		super(parentShell);		
 		setShellStyle(SWT.CLOSE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
-		
+	
 	}
 
 	/**
@@ -100,12 +101,10 @@ public class ELTLookupConfigGrid extends Dialog {
 	    		if(radio[1].equals(button)){
 	    			radio[1].setSelection(true);
 	    			radio[0].setSelection(false);
-	    			//Set lookup port as in1 in model and driver as in0
 	    			lookupPort="in0";
 	    		}else{
 	    			radio[0].setSelection(true);
 	    			radio[1].setSelection(false);
-	    			//Set lookup port as in0 in model and driver as in1
 	    			lookupPort="in1";
 	    		}
 	    	}
@@ -131,13 +130,13 @@ public class ELTLookupConfigGrid extends Dialog {
 		
 		ListenerHelper helper = new ListenerHelper();
 		
-		txtDecorator = WidgetUtility.addDecorator(drivenText, Messages.CHARACTERSET);
+		txtDecorator = WidgetUtility.addDecorator(drivenText, Messages.EMPTYFIELDMESSAGE);
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
 		ELTVerifyTextListener list = new ELTVerifyTextListener();
 		drivenText.addListener(SWT.Verify, list.getListener(propertyDialogButtonBar, helper, drivenText));
 		
 		ListenerHelper help = new ListenerHelper();
-		help.put(HelperType.CONTROL_DECORATION, WidgetUtility.addDecorator(lookupText, Messages.CHARACTERSET));
+		help.put(HelperType.CONTROL_DECORATION, WidgetUtility.addDecorator(lookupText, Messages.EMPTYFIELDMESSAGE));
 		ELTVerifyTextListener listener = new ELTVerifyTextListener();
 		lookupText.addListener(SWT.Verify, listener.getListener(propertyDialogButtonBar, help, lookupText));
 		
@@ -170,6 +169,8 @@ public class ELTLookupConfigGrid extends Dialog {
 		
 		return label;
 	}
+	
+	
 	/**
 	 * Create contents of the button bar.
 	 * @param parent
@@ -193,17 +194,6 @@ public class ELTLookupConfigGrid extends Dialog {
 	@Override
 	protected Point getInitialSize() {
 		return new Point(470, 420);
-	}
-	
-	public void  setProperties() {
-	
-		 
-	}
-	public Map<String, String>  getProperties() {
-		propertyMap.put("driver", drivenText.getText());
-		propertyMap.put("lookup", lookupText.getText());
-		propertyMap.put("lookupPort", lookupPort);
-		return propertyMap;
 	}
 
 	public static void main(String[] args) {

@@ -66,12 +66,13 @@ import com.bitwise.app.propertywindow.widgets.utility.DragDropUtility;
 
 public class JoinMapGrid extends Dialog {
 	
-	private int inputPortValue = Integer.parseInt(ELTJoinMapWidget.value);
+	
 	private Text text;
 	private Text text_1;
 	private Text text_2;
 	private Label errorLabel;
 	private TableViewer outputTableViewer;
+	private int inputPortValue = ELTJoinMapWidget.value;
 	private TableViewer[] inputTableViewer = new TableViewer[inputPortValue];
 	private Composite expandItemComposite;
 	
@@ -96,16 +97,7 @@ public class JoinMapGrid extends Dialog {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE |SWT.RESIZE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.lookupPropertyGrid = lookupPropertyGrid;
-	}
 
-	
-	public int getInputPortValue() {
-		return inputPortValue;
-	}
-
-
-	public void setInputPortValue(int inputPortValue) {
-		this.inputPortValue = inputPortValue;
 	}
 
 
@@ -191,7 +183,6 @@ public class JoinMapGrid extends Dialog {
 		}	
 		
 			expandBar.getItem(0).setExpanded(true);
-		
 			expandBar.setBackground(new Color(Display.getDefault(), new RGB(250, 250, 250)));
 			 Listener updateScrolledSize = new Listener()
 		    {

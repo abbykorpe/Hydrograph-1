@@ -145,9 +145,7 @@ public class ConverterHelper {
 		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addPassThroughFields(transformPropertyGrid));
 		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addMapFields(transformPropertyGrid));
 		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addOperationFields(transformPropertyGrid));
-		if (outSocket.getPassThroughFieldOrOperationFieldOrMapField().size() == 0
-				&& outSocket.getPassThroughFieldOrOperationFieldOrMapField().size() == 0
-				&& outSocket.getPassThroughFieldOrOperationFieldOrMapField().size() == 0) {
+		if (outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()){
 			outSocket.setCopyOfInsocket(outSocketAsInsocket);
 
 		}
@@ -275,7 +273,7 @@ public class ConverterHelper {
 
 		return typeBaseField;
 	}
-	
+
 	public List<Object> getLookuporJoinOutputMaping(LookupPropertyGrid lookupPropertyGrid) {
 		List<Object> passThroughFieldorMapFieldList = null;
 		if (lookupPropertyGrid != null) {
@@ -284,7 +282,7 @@ public class ConverterHelper {
 			TypeMapField mapField = null;
 			for (LookupMapProperty entry : lookupPropertyGrid.getLookupMapProperties()) {
 				String[] sourceNameValue = entry.getSource_Field().split(Pattern.quote("."));
-				
+
 				if (sourceNameValue[1].equalsIgnoreCase(entry.getOutput_Field())) {
 					typeInputField = new TypeInputField();
 					typeInputField.setName(sourceNameValue[1]);

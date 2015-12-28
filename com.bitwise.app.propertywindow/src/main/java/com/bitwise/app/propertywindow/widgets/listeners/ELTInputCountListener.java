@@ -15,7 +15,7 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
 public class ELTInputCountListener implements IELTListener{
 	
 	private ControlDecoration txtDecorator;
-
+	private int value;
 	@Override
 	public int getListenerType() {
 		return SWT.Modify;
@@ -31,11 +31,31 @@ public class ELTInputCountListener implements IELTListener{
 		Listener listener=new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				String string=((Text) widgetList[0]).getText().trim();
+				//((Text) widgetList[0]).setTextLimit(2);
+				String string =((Text) widgetList[0]).getText().trim();	
+				char[] chars = string.toCharArray();
+					 for(int i=0;i<chars.length;i++){
+						 if(event.type == SWT.Verify){
+						 if(chars.length > 2){
+							 txtDecorator.setDescriptionText(Messages.PORT_VALUE);
+								txtDecorator.show();
+								propertyDialogButtonBar.enableOKButton(false);
+								propertyDialogButtonBar.enableApplyButton(false);  
+						 }
+						 }else{
+							 txtDecorator.hide();
+								propertyDialogButtonBar.enableOKButton(true);
+								propertyDialogButtonBar.enableApplyButton(true);
+						 }
+					 }
+			
 				
-				if(event.type == SWT.Modify){
-					if(StringUtils.isNotEmpty(string) && (Integer.parseInt(string)) < 2){
-					
+				
+				if(StringUtils.isNotEmpty(string)){
+					value = Integer.parseInt(string);
+					}
+					if(event.type == SWT.Modify){
+						if(value < 2 || value > 25 ){
 						txtDecorator.setDescriptionText(Messages.PORT_VALUE);
 						txtDecorator.show();
 						propertyDialogButtonBar.enableOKButton(false);

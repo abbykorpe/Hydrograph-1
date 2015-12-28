@@ -19,8 +19,8 @@ import com.bitwise.app.propertywindow.widgets.joinproperty.JoinMapGrid;
 
 public class ELTJoinMapWidget extends AbstractWidget{
 
+	public static int value;
 	private Object properties;
-	public static String value;
 	private String propertyName;
 	private LookupPropertyGrid lookupPropertyGrid;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
@@ -43,7 +43,12 @@ public class ELTJoinMapWidget extends AbstractWidget{
 		LinkedHashMap<String, Object> map = allComponenetProperties.getComponentConfigurationProperties();
 		for(String key : map.keySet()){
 			if(key.equalsIgnoreCase("input_count")){
-				value=(String)map.get(key);
+				String data=(String)map.get(key);
+				if(Integer.parseInt(data)>=2){
+					value = Integer.parseInt(data);
+				}else{
+					value = 2;
+				}
 			}
 		}
 		
@@ -59,9 +64,6 @@ public class ELTJoinMapWidget extends AbstractWidget{
 			public void widgetSelected(SelectionEvent e) {
 				JoinMapGrid joinMapGrid = new JoinMapGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), lookupPropertyGrid);
 				joinMapGrid.open();
-				if(Integer.parseInt(value) >= 2){
-				joinMapGrid.setInputPortValue(Integer.parseInt(value));
-				}
 				lookupPropertyGrid = joinMapGrid.getJoinPropertyGrid();
 			}
 			
