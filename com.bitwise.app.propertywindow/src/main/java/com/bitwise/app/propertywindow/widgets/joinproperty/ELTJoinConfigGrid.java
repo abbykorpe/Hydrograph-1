@@ -7,6 +7,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -68,8 +69,8 @@ public class ELTJoinConfigGrid extends Dialog {
 		composite_2.setLayoutData(gd_composite_2);
 		
 		labelWidget(composite_2, SWT.None, new int[]{6, 0, 102, 15}, "Join configuration");
-		labelWidget(composite_2, SWT.BORDER|SWT.CENTER, new int[]{496, 0, 20, 15}, "+");
-		labelWidget(composite_2, SWT.BORDER|SWT.CENTER, new int[]{523, 0, 20, 15}, "*");
+		/*addButton = labelWidget(composite_2, SWT.BORDER|SWT.CENTER, new int[]{496, 0, 20, 15}, "+");
+		deleteButton = labelWidget(composite_2, SWT.BORDER|SWT.CENTER, new int[]{523, 0, 20, 15}, "*");*/
 		
 		Composite composite = new Composite(container, SWT.BORDER);
 		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);

@@ -6,6 +6,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 
+import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
+import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -18,11 +20,17 @@ import com.bitwise.app.propertywindow.widgets.joinproperty.ELTLookupConfigGrid;
 
 public class ELTLookupConfigWidget extends AbstractWidget{
 	
+	private Object properties;
+	private String propertyName;
+	private LinkedHashMap<String, Object> property = new LinkedHashMap<>(); 
+	private LookupConfigProperty lookupConfigProperty;
 	
 	public ELTLookupConfigWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar){
 		super(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
+		this.propertyName = componentConfigrationProperty.getPropertyName();
+		this.properties =  componentConfigrationProperty.getPropertyValue();
 	}
 
 	@Override
@@ -41,17 +49,22 @@ public class ELTLookupConfigWidget extends AbstractWidget{
 		((Button)eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 			 @Override
 				public void widgetSelected(SelectionEvent e) {
-				 ELTLookupConfigGrid grid = new ELTLookupConfigGrid( ((Button)eltDefaultButton.getSWTWidgetControl()).getShell() );
-				 grid.open();
-
+				 if((LookupConfigProperty)properties == null){
+					 lookupConfigProperty=new LookupConfigProperty();
+				 }else{
+					 lookupConfigProperty = (LookupConfigProperty) properties;
+				 }
+				 ELTLookupConfigGrid eltLookupConfigGrid = new ELTLookupConfigGrid( ((Button)eltDefaultButton.getSWTWidgetControl()).getShell(), lookupConfigProperty);
+				 eltLookupConfigGrid.open();
+				 
 			 }
 		});
 	}
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		// TODO Auto-generated method stub
-		return null;
+		property.put(propertyName, lookupConfigProperty);
+		return property;
 	}
 
 }
