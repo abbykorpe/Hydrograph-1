@@ -45,15 +45,14 @@ import com.thoughtworks.xstream.XStream;
  */
 public class UiConverterUtil {
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(UiConverterUtil.class);
-	
-	private static final String FIXED_OUTPUT_PORT = "out0";
-	private static final String FIXED_UNUSED_PORT="unused0";
 
-	
+	private static final String FIXED_OUTPUT_PORT = "out0";
+	private static final String FIXED_UNUSED_PORT = "unused0";
+
 	public UiConverterUtil() {
 		UIComponentRepo.INSTANCE.flusRepository();
 	}
-	
+
 	/**
 	 * Initiates the conversion process of source xml into graph
 	 * 
@@ -77,30 +76,27 @@ public class UiConverterUtil {
 	 */
 	public void convertToUiXML(File sourceXML, IFile jobFile, IFile parameterFile) throws InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
-			SecurityException, EngineException, JAXBException, ParserConfigurationException, SAXException, IOException,ComponentNotFoundException {
+			SecurityException, EngineException, JAXBException, ParserConfigurationException, SAXException, IOException,
+			ComponentNotFoundException {
 		LOGGER.debug("Creating UI-Converter based on component");
 		loadClass();
 		Graph graph = unMarshall(sourceXML);
-		// if(graph!=null && cahcheInSocketDetails(sourceXML))
-		{
+		Container container = new Container();
 
-			Container container = new Container();
-
-			List<TypeBaseComponent> children = graph.getInputsOrOutputsOrStraightPulls();
-			if (children != null && !children.isEmpty()) {
-				for (TypeBaseComponent typeBaseComponent : children) {
-					UiConverter uiConverter = UiConverterFactory.INSTANCE.getUiConverter(typeBaseComponent, container);
-					uiConverter.prepareUIXML();
-					Component component = uiConverter.getComponent();
-					container.getChildren().add(component);
-				}
-				createLinks();
+		List<TypeBaseComponent> children = graph.getInputsOrOutputsOrStraightPulls();
+		if (children != null && !children.isEmpty()) {
+			for (TypeBaseComponent typeBaseComponent : children) {
+				UiConverter uiConverter = UiConverterFactory.INSTANCE.getUiConverter(typeBaseComponent, container);
+				uiConverter.prepareUIXML();
+				Component component = uiConverter.getComponent();
+				container.getChildren().add(component);
 			}
-			genrateUIXML(container, jobFile, parameterFile);
+			createLinks();
 		}
+		genrateUIXML(container, jobFile, parameterFile);
+
 	}
 
-	
 	/**
 	 * Creates the job file based for the container object.
 	 * 
@@ -176,7 +172,7 @@ public class UiConverterUtil {
 	/**
 	 * Create links between the components based on there
 	 */
-	public void createLinks() throws ComponentNotFoundException{
+	public void createLinks() throws ComponentNotFoundException {
 		LOGGER.debug("Creating UI-Links between Components");
 		preProcessLinkData();
 		CoordinateProcessor pc = new CoordinateProcessor();
@@ -186,7 +182,7 @@ public class UiConverterUtil {
 					linkingData.getSourceComponentId());
 			Component targetComponent = UIComponentRepo.INSTANCE.getComponentUiFactory().get(
 					linkingData.getTargetComponentId());
-			
+
 			Link link = new Link();
 			link.setSourceTerminal(linkingData.getSourceTerminal());
 			link.setTargetTerminal(linkingData.getTargetTerminal());
@@ -208,9 +204,9 @@ public class UiConverterUtil {
 				isMultiplePortAllowed = UIComponentRepo.INSTANCE.getComponentUiFactory()
 						.get(linkingData.getSourceComponentId()).getPortSpecification().get(0).isAllowMultipleLinks();
 				if (isMultiplePortAllowed) {
-					if(linkingData.getSourceTerminal().contains("out"))
+					if (linkingData.getSourceTerminal().contains("out"))
 						linkingData.setSourceTerminal(FIXED_OUTPUT_PORT);
-					else if(linkingData.getSourceTerminal().contains("unused"))
+					else if (linkingData.getSourceTerminal().contains("unused"))
 						linkingData.setSourceTerminal(FIXED_UNUSED_PORT);
 				}
 			}

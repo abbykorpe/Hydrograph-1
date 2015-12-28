@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 
@@ -97,11 +98,11 @@ public class LookupConverter extends TransformConverter {
 			TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();
 			TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
 
-			if (outSocket.equals(obj)) {
+			/*if (outSocket.equals(obj)) {
 				outSocket.setCopyOfInsocket(outSocketAsInsocket);
 			} else {
 				// outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(setInputProperty(obj));
-			}
+			}*/
 			outSocketAsInsocket.setInSocketId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
 			outSocketAsInsocket.getOtherAttributes();
 			outSocket.setCopyOfInsocket(outSocketAsInsocket);
@@ -150,14 +151,16 @@ public class LookupConverter extends TransformConverter {
 			TypeMapField mapField = new TypeMapField();
 
 			for (Entry<String, String> entry : mapFields.entrySet()) {
+				String[] value = entry.getKey().split(Pattern.quote("."));
 				if (entry.getKey().equalsIgnoreCase(entry.getValue())) {
+					 
 					typeInputField.setName(entry.getKey());
-					typeInputField.setInSocketId("");
+					typeInputField.setInSocketId(value[0]);
 
 				} else {
 					mapField.setSourceName(entry.getKey());
 					mapField.setName(entry.getValue());
-					mapField.setInSocketId("");
+					mapField.setInSocketId(value[0]);
 				}
 			}
 		}
