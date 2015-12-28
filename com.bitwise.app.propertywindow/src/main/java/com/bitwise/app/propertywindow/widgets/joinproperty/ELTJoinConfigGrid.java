@@ -36,6 +36,7 @@ public class ELTJoinConfigGrid extends Dialog {
 
 	private int inputPortValue = ELTJoinMapWidget.value;
 	private Text keyText;
+	private Label addButton, deleteButton;
 	private Combo combo;
 	private String[] ITEMS = new String[]{Constants.INNER, Constants.OUTER, Constants.PARAMETER};
 	private List list = new ArrayList<>();
@@ -58,14 +59,17 @@ public class ELTJoinConfigGrid extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
-		container.setLayout(new GridLayout(2, false));
-		//new Label(container, SWT.NONE);
+		container.setLayout(new GridLayout(1, false));
 		
-		Label label =new Label(container, SWT.None);
-		label.setBounds(0, 0, 100, 15);
-		label.setText("Join Configuration");
+		Composite composite_2 = new Composite(container, SWT.NONE);
+		GridData gd_composite_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_composite_2.heightHint = 16;
+		gd_composite_2.widthHint = 548;
+		composite_2.setLayoutData(gd_composite_2);
 		
-		new Label(container, SWT.NONE);
+		labelWidget(composite_2, SWT.None, new int[]{6, 0, 102, 15}, "Join configuration");
+		labelWidget(composite_2, SWT.BORDER|SWT.CENTER, new int[]{496, 0, 20, 15}, "+");
+		labelWidget(composite_2, SWT.BORDER|SWT.CENTER, new int[]{523, 0, 20, 15}, "*");
 		
 		Composite composite = new Composite(container, SWT.BORDER);
 		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -113,7 +117,6 @@ public class ELTJoinConfigGrid extends Dialog {
 		}
 		
 		scrolledComposite.setMinSize(composite_1.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		new Label(container, SWT.NONE);
 		return container;
 	}
 
@@ -145,6 +148,15 @@ public class ELTJoinConfigGrid extends Dialog {
 		return new Point(566, 351);
 	}
 
+	public Label labelWidget(Composite parent, int style, int[] bounds, String value){
+		Label label = new Label(parent, style);
+		label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
+		label.setText(value);
+		//label.setImage(image);
+		
+		return label;
+	}
+	
 	public Text textBoxWidget(Composite parent, int style,int[] bounds, Object text, boolean value){
 		Text textWidget = new Text(parent, style);
 		textWidget.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);

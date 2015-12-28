@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,8 +85,7 @@ public class JoinMapGrid extends Dialog {
 	
 	private List<Filter> filterInputList = new ArrayList<>();
 	private static List<LookupMapProperty> joinOutputList  = new ArrayList<>();
-	private Map<String, String> joinPropertyMap = new TreeMap<>();
-	private static List<List<FilterProperties>> joinInputList = new ArrayList<>();
+ 
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
 	private LookupPropertyGrid lookupPropertyGrid;
 	
@@ -259,11 +259,12 @@ public class JoinMapGrid extends Dialog {
 						filter.setPropertyname(data[1]);
 						
 						for(int i=0;i<inputPortValue;i++){
-							if(filterInputList.contains(filter)){
+							if(filterInputList!= null){
+							if(filterInputList.get(i).getFilterList().contains(filter)){
 								ExpandItem item =expandBar.getItem(i);
 								item.setExpanded(true);
-								inputTableViewer[i].getTable().setSelection(filterInputList.indexOf(filter));
-								
+								inputTableViewer[i].getTable().setSelection(filterInputList.get(i).getFilterList().indexOf(filter));
+							}
 							}
 						}
 					}
@@ -639,10 +640,4 @@ public class JoinMapGrid extends Dialog {
 		return new Point(870, 757);
 	}
 	
-	public static void main(String[] args) {
-		Display dis= new Display();
-		Shell sh = new Shell(dis);
-		JoinMapGrid test = new JoinMapGrid(sh, null);
-		test.open();
-	}
 }
