@@ -41,12 +41,12 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTFilterPropertyWizard.
  * 
@@ -60,7 +60,7 @@ public class ELTFilterPropertyWizard {
 	private Table table;
 
 	private Shell shell;
-	private final List<ELTFilterProperties> propertyLst;
+	private final List<FilterProperties> propertyLst;
 	public static final String FilterInputFieldName = "Component Name"; //$NON-NLS-1$
 	private Set<String> filterSet;
 	private String componentName;
@@ -81,7 +81,7 @@ public class ELTFilterPropertyWizard {
 	 * Instantiates a new ELT filter property wizard.
 	 */
 	public ELTFilterPropertyWizard() {
-		propertyLst = new ArrayList<ELTFilterProperties>();
+		propertyLst = new ArrayList<FilterProperties>();
 		filterSet = new HashSet<String>();
 	}
 
@@ -89,15 +89,14 @@ public class ELTFilterPropertyWizard {
 	private void addNewProperty(TableViewer tv) {
 
 		isAnyUpdatePerformed = true;
-		ELTFilterProperties filter = new ELTFilterProperties();
+		FilterProperties filter = new FilterProperties();
 		if (propertyLst.size() != 0) {
 			if (!validate())
 				return;
 			filter.setPropertyname(""); //$NON-NLS-1$
 			propertyLst.add(filter);
 			tv.refresh();
-			tableViewer.editElement(
-					tableViewer.getElementAt(propertyLst.size() - 1), 0);
+			tableViewer.editElement(tableViewer.getElementAt(propertyLst.size() - 1), 0);
 		} else {
 			filter.setPropertyname("");//$NON-NLS-1$
 			propertyLst.add(filter);
@@ -123,7 +122,7 @@ public class ELTFilterPropertyWizard {
 
 		if (filterSet != null && !filterSet.isEmpty()) {
 			for (String key : filterSet) {
-				ELTFilterProperties filter = new ELTFilterProperties();
+				FilterProperties filter = new FilterProperties();
 				if (validateBeforeLoad(key)) {
 					filter.setPropertyname(key);
 					propertyLst.add(filter);
@@ -384,11 +383,11 @@ public class ELTFilterPropertyWizard {
 					String data2 = tableViewer.getTable().getItem(index2)
 							.getText();
 
-					ELTFilterProperties filter = new ELTFilterProperties();
+					FilterProperties filter = new FilterProperties();
 					filter.setPropertyname(data2);
 					propertyLst.set(index1, filter);
 
-					filter = new ELTFilterProperties();
+					filter = new FilterProperties();
 					filter.setPropertyname(data);
 					propertyLst.set(index2, filter);
 					tableViewer.refresh();
@@ -429,11 +428,11 @@ public class ELTFilterPropertyWizard {
 					String data2 = tableViewer.getTable().getItem(index2)
 							.getText();
 
-					ELTFilterProperties filter = new ELTFilterProperties();
+					FilterProperties filter = new FilterProperties();
 					filter.setPropertyname(data2);
 					propertyLst.set(index1, filter);
 
-					filter = new ELTFilterProperties();
+					filter = new FilterProperties();
 					filter.setPropertyname(data);
 					propertyLst.set(index2, filter);
 					tableViewer.refresh();
@@ -455,7 +454,7 @@ public class ELTFilterPropertyWizard {
 				if (validate()) {
 					filterSet.clear();
 					isOkPressed = true;
-					for (ELTFilterProperties temp : propertyLst) {
+					for (FilterProperties temp : propertyLst) {
 						filterSet.add(temp.getPropertyname());
 					}
 
@@ -490,7 +489,7 @@ public class ELTFilterPropertyWizard {
 
 		int propertyCounter = 0;
 
-		for (ELTFilterProperties temp : propertyLst) {
+		for (FilterProperties temp : propertyLst) {
 			if (!temp.getPropertyname().trim().isEmpty()) {
 				String Regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
 				Matcher matchs = Pattern.compile(Regex).matcher(
@@ -545,7 +544,7 @@ public class ELTFilterPropertyWizard {
 					enableButtons();
 				}
 
-				for (ELTFilterProperties temp : propertyLst) {
+				for (FilterProperties temp : propertyLst) {
 					if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)
 							&& temp.getPropertyname().trim()
 									.equalsIgnoreCase(valueToValidate)) {
