@@ -7,8 +7,16 @@ public class LookupPropertyGrid {
 	private List<LookupMapProperty> lookupMapProperties;
 	private List<List<FilterProperties>> lookupInputProperties;
 	private List<Filter> filterList;
+	private List<JoinConfigTextProperty> joinConfigText;
 	
 	
+	
+	public List<JoinConfigTextProperty> getJoinConfigText() {
+		return joinConfigText;
+	}
+	public void setJoinConfigText(List<JoinConfigTextProperty> joinConfigText) {
+		this.joinConfigText = joinConfigText;
+	}
 	public List<Filter> getFilterList() {
 		return filterList;
 	}

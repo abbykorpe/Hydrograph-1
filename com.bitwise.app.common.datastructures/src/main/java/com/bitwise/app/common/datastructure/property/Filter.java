@@ -5,11 +5,23 @@ import java.util.List;
 
 public class Filter {
 	 
-	List<FilterProperties> filterList;
+	private List<FilterProperties> filterList;
+	private List proprtyList;
 	
 	public Filter(){
 		filterList = new ArrayList<>();
 	}
+
+	
+	public List getProprtyList() {
+		return proprtyList;
+	}
+
+
+	public void setProprtyList(List proprtyList) {
+		this.proprtyList = proprtyList;
+	}
+
 
 	public List<FilterProperties> getFilterList() {
 		return filterList;
