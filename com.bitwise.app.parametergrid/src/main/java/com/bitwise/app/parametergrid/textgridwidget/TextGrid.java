@@ -174,6 +174,9 @@ public class TextGrid {
 	}
 	
 	public Composite getLastAddedRow(){
-		return lastAddedRow;
+		if(textGrid.size()>0)
+			return textGrid.get(textGrid.size()-1);
+		else
+			return null;
 	}
 }
