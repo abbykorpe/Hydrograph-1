@@ -129,7 +129,7 @@ public class ParameterGridDialog extends Dialog {
 		attachNote(container);
 		
 		addGridHeader();
-		logger.debug("attached remove button");
+		logger.debug("attached Grid header");
 		
 		attachAddRowButton(composite);
 		logger.debug("attached add row button");
@@ -218,7 +218,6 @@ public class ParameterGridDialog extends Dialog {
 		btnRemove.setText("");
 		btnRemove.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
 		addRemoveRowButtonListener(btnRemove);
-		
 	}
 
 	private void addRemoveRowButtonListener(Label btnRemove) {
@@ -226,7 +225,18 @@ public class ParameterGridDialog extends Dialog {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
+				if(textGrid.getLastAddedRow() != null){
+					((Text)textGrid.getLastAddedRow().getChildren()[2]).removeTraverseListener(lastRowLastColumnTraverseListener);
+				}
 				textGrid.removeSelectedRows();
+				if(textGrid.getLastAddedRow() != null){
+					((Text)textGrid.getLastAddedRow().getChildren()[2]).addTraverseListener(lastRowLastColumnTraverseListener);
+					if(((Text)textGrid.getLastAddedRow().getChildren()[1]).getEditable()){
+						((Text)textGrid.getLastAddedRow().getChildren()[1]).setFocus();
+					}else{
+						((Text)textGrid.getLastAddedRow().getChildren()[2]).setFocus();						
+					}
+				}	
 			}
 
 			@Override
