@@ -47,6 +47,7 @@ public class UiConverterUtil {
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(UiConverterUtil.class);
 	
 	private static final String FIXED_OUTPUT_PORT = "out0";
+	private static final String FIXED_UNUSED_PORT="unused0";
 
 	
 	public UiConverterUtil() {
@@ -207,7 +208,10 @@ public class UiConverterUtil {
 				isMultiplePortAllowed = UIComponentRepo.INSTANCE.getComponentUiFactory()
 						.get(linkingData.getSourceComponentId()).getPortSpecification().get(0).isAllowMultipleLinks();
 				if (isMultiplePortAllowed) {
-					linkingData.setSourceTerminal(FIXED_OUTPUT_PORT);
+					if(linkingData.getSourceTerminal().contains("out"))
+						linkingData.setSourceTerminal(FIXED_OUTPUT_PORT);
+					else if(linkingData.getSourceTerminal().contains("unused"))
+						linkingData.setSourceTerminal(FIXED_UNUSED_PORT);
 				}
 			}
 		}
