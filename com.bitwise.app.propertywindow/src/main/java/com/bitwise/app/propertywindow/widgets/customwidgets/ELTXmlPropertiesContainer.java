@@ -17,12 +17,23 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTC
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import com.bitwise.app.propertywindow.widgets.xmlPropertiesContainer.XMLTextContainer;
 
+/**
+ * @author Bitwise
+ * 
+ * This class is used to launch property window which shows XML content of component
+ *
+ */
 public class ELTXmlPropertiesContainer extends AbstractWidget{
 	
 	private LinkedHashMap<String, Object> property=new LinkedHashMap<>();
 	 private String propertyName;
 	private String xmlContent=null;
 	
+	/**
+	 * @param componentConfigrationProperty
+	 * @param componentMiscellaneousProperties
+	 * @param propertyDialogButtonBar
+	 */
 	public ELTXmlPropertiesContainer(
 			ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,

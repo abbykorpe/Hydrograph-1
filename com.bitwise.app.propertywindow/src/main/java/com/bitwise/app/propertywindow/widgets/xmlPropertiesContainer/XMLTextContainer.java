@@ -9,48 +9,52 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
 
-public class XMLTextContainer{
+/**
+ * @author Bitwise
+ * 
+ * This class is used to display XML content of dummy components on property window.
+ *  
+ */
+public class XMLTextContainer {
 	private Text text;
 	private String xmlText;
+	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(XMLTextContainer.class);
 
 	/**
-	 * Launch the application.
+	 * Launches the component property editor window for dummy components. It is used to display XML content of dummy
+	 * components on property window.
 	 * 
-	 * @param args
+	 * @return XML content of component. 
 	 */
-	public static void main(String args[]) {
-		XMLTextContainer obj = new XMLTextContainer();
-		obj.launchXMLTextContainerWindow();
-	}
-
+	
 	public String launchXMLTextContainerWindow() {
 		try {
-			String str=this.xmlText;
-			Shell shell = new Shell(Display.getDefault().getActiveShell(), SWT.WRAP | SWT.APPLICATION_MODAL);
-			
+			String str = this.xmlText;
+			Shell shell = new Shell(Display.getDefault().getActiveShell(), SWT.WRAP | SWT.MAX | SWT.APPLICATION_MODAL);
+
 			shell.setLayout(new GridLayout(1, false));
 			shell.setText("XML Content");
 			shell.setSize(439, 432);
 			text = new Text(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 			text.setEditable(false);
-			text.setBackground(new Color(shell.getDisplay(), 255, 255, 255));
-			if (this.xmlText != null){
-				str = str.substring(str.indexOf('\n')+1);
-				str = str.substring(str.indexOf('\n')+1,str.lastIndexOf('\n')-13);
-				
+			text.setBackground(new Color(shell.getDisplay(), 250, 250, 250));
+			if (this.xmlText != null) {
+				str = str.substring(str.indexOf('\n') + 1);
+				str = str.substring(str.indexOf('\n') + 1, str.lastIndexOf('\n') - 13);
+
 				text.setText(str);
-			}
-			else
+			} else
 				text.setText(Messages.EMPTY_XML_CONTENT);
 			GridData gd_text = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 			gd_text.widthHint = 360;
 			gd_text.heightHint = 360;
 			text.setLayoutData(gd_text);
-			
-			
+
 			Monitor primary = shell.getDisplay().getPrimaryMonitor();
 			Rectangle bounds = primary.getBounds();
 			Rectangle rect = shell.getBounds();
@@ -67,12 +71,11 @@ public class XMLTextContainer{
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error occurred while creating XML text container widget", e);
 		}
 		return getXmlText();
 	}
 
-	
 	public String getXmlText() {
 		return this.xmlText;
 	}
