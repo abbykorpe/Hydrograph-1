@@ -8,15 +8,15 @@ public class LookupPropertyGrid {
 	private List<List<FilterProperties>> lookupInputProperties;
 	private List<Filter> filterList;
 	private List<JoinConfigTextProperty> joinConfigText;
-	private List<LookupConfigProperty> lookupConfigProperties;
+	private LookupConfigProperty lookupConfigProperty;
 	
 	
-	public List<LookupConfigProperty> getLookupConfigProperties() {
-		return lookupConfigProperties;
+	
+	public LookupConfigProperty getLookupConfigProperty() {
+		return lookupConfigProperty;
 	}
-	public void setLookupConfigProperties(
-			List<LookupConfigProperty> lookupConfigProperties) {
-		this.lookupConfigProperties = lookupConfigProperties;
+	public void setLookupConfigProperty(LookupConfigProperty lookupConfigProperty) {
+		this.lookupConfigProperty = lookupConfigProperty;
 	}
 	public List<JoinConfigTextProperty> getJoinConfigText() {
 		return joinConfigText;

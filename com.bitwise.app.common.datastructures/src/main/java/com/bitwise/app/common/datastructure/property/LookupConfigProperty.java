@@ -5,7 +5,13 @@ public class LookupConfigProperty {
 	
 	private boolean isSelected;
 	private String driverKey;
+	private String lookupPort;
 	private String lookupKey;
+	
+	public LookupConfigProperty()
+	{
+		lookupPort="in0";
+	}
 	
 	public boolean isSelected() {
 		return isSelected;
@@ -26,6 +32,12 @@ public class LookupConfigProperty {
 		this.lookupKey = lookupKey;
 	}
 	
+	public String getLookupPort() {
+		return lookupPort;
+	}
+	public void setLookupPort(String lookupPort) {
+		this.lookupPort = lookupPort;
+	}
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

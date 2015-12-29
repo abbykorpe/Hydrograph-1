@@ -20,17 +20,17 @@ import com.bitwise.app.propertywindow.widgets.joinproperty.ELTLookupConfigGrid;
 
 public class ELTLookupConfigWidget extends AbstractWidget{
 	
-	private Object properties;
+	private LookupConfigProperty properties;
 	private String propertyName;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>(); 
-	private LookupConfigProperty lookupConfigProperty;
+	
 	
 	public ELTLookupConfigWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar){
 		super(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
 		this.propertyName = componentConfigrationProperty.getPropertyName();
-		this.properties =  componentConfigrationProperty.getPropertyValue();
+		this.properties =  (LookupConfigProperty) componentConfigrationProperty.getPropertyValue();
 	}
 
 	@Override
@@ -49,22 +49,26 @@ public class ELTLookupConfigWidget extends AbstractWidget{
 		((Button)eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 			 @Override
 				public void widgetSelected(SelectionEvent e) {
-				 if((LookupConfigProperty)properties == null){
-					 lookupConfigProperty=new LookupConfigProperty();
-				 }else{
-					 lookupConfigProperty = (LookupConfigProperty) properties;
+				 if(properties == null){
+					 properties=new LookupConfigProperty();
+					 properties.setDriverKey("");
+					 properties.setLookupKey("");
+					 properties.isSelected();
 				 }
-				 ELTLookupConfigGrid eltLookupConfigGrid = new ELTLookupConfigGrid( ((Button)eltDefaultButton.getSWTWidgetControl()).getShell(), lookupConfigProperty);
+				 ELTLookupConfigGrid eltLookupConfigGrid = new ELTLookupConfigGrid( ((Button)eltDefaultButton.getSWTWidgetControl()).getShell(), properties);
 				 eltLookupConfigGrid.open();
-				 
+	
+				
 			 }
 		});
 	}
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		property.put(propertyName, lookupConfigProperty);
+		property.put(propertyName, properties);
 		return property;
 	}
+
+	
 
 }
