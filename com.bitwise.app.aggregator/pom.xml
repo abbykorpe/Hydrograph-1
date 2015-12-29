@@ -35,5 +35,6 @@
 		<module>../com.bitwise.app.parametergrid</module>
 		<module>../com.bitwise.app.joblogger</module>
 	    <module>../com.bitwise.app.help</module>
+	    <module>../com.bitwise.app.platformspecificplugins</module>
 	</modules>
 </project>
