@@ -285,6 +285,10 @@ public class RunConfigDialog extends Dialog {
 		return "/"+activeProjectName+ "/build.properties";
 	}
 
+	public String getClusterPassword(){
+		return buildProps.getProperty("password");
+	}
+	
 	/**
 	 * Create contents of the button bar.
 	 * @param parent

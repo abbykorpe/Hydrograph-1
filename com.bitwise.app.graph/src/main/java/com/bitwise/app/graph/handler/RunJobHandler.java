@@ -78,6 +78,9 @@ public class RunJobHandler extends AbstractHandler {
 			return null;
 		}
 		
+		String password = runConfigDialog.getClusterPassword();
+		logger.debug("Cluster Password: "+ password);
+		
 		ParameterGridDialog parameterGrid = new ParameterGridDialog(Display.getDefault().getActiveShell());
 		parameterGrid.setVisibleParameterGridNote(false);
 		parameterGrid.open();
