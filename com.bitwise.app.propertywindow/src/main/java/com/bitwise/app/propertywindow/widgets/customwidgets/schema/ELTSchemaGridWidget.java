@@ -305,8 +305,12 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						toggleTextBox(true);
 						toggleTable(false);
 						isExternal = true;
-						decorator.show();
-						txtDecorator.show();
+						
+						if (textBox.getText().isEmpty()) {
+							decorator.show();
+						} else {
+							decorator.hide();
+						}
 					}
 				});
 

@@ -54,6 +54,8 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 			public void handleEvent(Event event) {
 				if(event.type==SWT.Selection){
 					FileDialog filedialog=new FileDialog(button.getShell(),SWT.None);
+					 filedialog.setFilterExtensions(new String [] {"*.xml"});
+					  // filedialog.setFilterPath("c:\\temp");
 					String path=filedialog.open();
 					if(StringUtils.isNotEmpty(path)){
 						File file= new File(path);
