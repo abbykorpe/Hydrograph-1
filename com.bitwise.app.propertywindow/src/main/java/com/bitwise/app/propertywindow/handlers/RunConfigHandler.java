@@ -25,7 +25,7 @@ public class RunConfigHandler extends AbstractHandler implements IHandler {
 			try{
 				runConfig.open();
 			}catch(Exception e){
-				MessageDialog.openError(new Shell(), "Error", "Exception occured while opening run configuration -\n"+e.getMessage());
+				MessageDialog.openWarning(new Shell(), "Warning", "Please save the graph before setting the run configuration.");
 			}
 		return null;
 	}
