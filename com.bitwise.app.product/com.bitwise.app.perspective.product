@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="ETL UI Tool" uid="com.bitwise.app.perspective.ID" id="com.bitwise.app.perspective.productId" application="com.bitwise.app.perspective.application" version="0.0.1" useFeatures="false" includeLaunchers="true">
+<product name="Accelero" uid="com.bitwise.app.perspective.ID" id="com.bitwise.app.perspective.productId" application="com.bitwise.app.perspective.application" version="0.0.1" useFeatures="false" includeLaunchers="true">
+
 
    <configIni use="default">
    </configIni>
@@ -34,6 +35,7 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       </win>
    </launcher>
 
+
    <vm>
    </vm>
 
@@ -64,6 +66,7 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="com.ning.async-http-client"/>
       <plugin id="javax.annotation"/>
       <plugin id="javax.inject"/>
+      <plugin id="javax.servlet" version="2.5.0.v201103041518"/>
       <plugin id="javax.xml"/>
       <plugin id="org.apache.batik.css"/>
       <plugin id="org.apache.batik.util"/>

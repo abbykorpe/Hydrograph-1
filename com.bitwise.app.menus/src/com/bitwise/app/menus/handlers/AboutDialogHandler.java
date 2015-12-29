@@ -6,9 +6,11 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.bitwise.app.menus.aboutDialog.CustomAboutDialog;
+import com.bitwise.app.help.aboutDialog.CustomAboutDialog;
 
-public class AboutActionHandler extends AbstractHandler implements IHandler {
+
+
+public class AboutDialogHandler extends AbstractHandler implements IHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
