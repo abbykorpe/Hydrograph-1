@@ -1,43 +1,27 @@
 package com.bitwise.app.propertywindow.widgets.joinproperty;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
-import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
-import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTRadioButton;
-import com.bitwise.app.propertywindow.widgets.listeners.ELTSelectionListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTVerifyTextListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
@@ -47,17 +31,17 @@ public class ELTLookupConfigGrid extends Dialog {
 	
 	private static final String IN1 = "in1";
 	private static final String IN0 = "in0";
-	private Shell shell;
 	private Text drivenText;
 	private Text lookupText;
 	private boolean islookup;
 	private Button[] radio = new Button[2];
 	private LookupConfigProperty configProperty = new LookupConfigProperty();
-	private List<LookupConfigProperty> propertyList = new ArrayList<>();
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private ControlDecoration txtDecorator;
-	private String lookupPort;
-	HashMap<String, Text> hashMap;
+ 
+	 
+	 
+	
 	
 	/**
 	 * Create the dialog.
@@ -68,6 +52,7 @@ public class ELTLookupConfigGrid extends Dialog {
 		super(parentShell);		
 		setShellStyle(SWT.CLOSE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
 		configProperty = lookupConfigProperty;
+	 
 	}
 
 	/**
@@ -107,14 +92,14 @@ public class ELTLookupConfigGrid extends Dialog {
 	    	@Override
 			public void widgetSelected(SelectionEvent event) {
 	    		Button button = (Button)event.widget;
-	    		if(button.getText().equals(IN0)){
-	    			radio[0].setSelection(true);
-	    			radio[1].setSelection(false);
-	    			lookupPort=IN0;
-	    		}else{
-	    			radio[1].setSelection(true);
+	    		if(configProperty.isSelected()){
 	    			radio[0].setSelection(false);
-	    			lookupPort=IN1;
+	    			radio[1].setSelection(true);
+	    		 
+	    		}else{
+	    			radio[1].setSelection(false);
+	    			radio[0].setSelection(true);
+	    		 
 	    		}
 	    	}
 		});
@@ -130,10 +115,10 @@ public class ELTLookupConfigGrid extends Dialog {
 		 
 		textBoxWidget(keyComposite, new int[]{10, 31, 175, 21}, "driver", false);
 		textBoxWidget(keyComposite, new int[]{10, 58, 175, 21}, "lookup", false);
-	
-		drivenText = textBoxWidget(keyComposite, new int[]{191, 31, 235, 21}, "", true);
-		lookupText = textBoxWidget(keyComposite, new int[]{191, 58, 235, 21}, "", true);
-		 
+		
+
+			 drivenText = textBoxWidget(keyComposite, new int[]{191, 31, 235, 21},"", true);
+			 lookupText = textBoxWidget(keyComposite, new int[]{191, 58, 235, 21}, "", true);
 		
 		ListenerHelper helper = new ListenerHelper();
 		txtDecorator = WidgetUtility.addDecorator(drivenText, Messages.EMPTYFIELDMESSAGE);
@@ -141,30 +126,36 @@ public class ELTLookupConfigGrid extends Dialog {
 		ELTVerifyTextListener list = new ELTVerifyTextListener();
 		drivenText.addListener(SWT.Verify, list.getListener(propertyDialogButtonBar, helper, drivenText));
 		
+		drivenText.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				configProperty.setDriverKey(((Text)e.widget).getText());
+			}
+		});
+		
 		ListenerHelper help = new ListenerHelper();
 		help.put(HelperType.CONTROL_DECORATION, WidgetUtility.addDecorator(lookupText, Messages.EMPTYFIELDMESSAGE));
 		ELTVerifyTextListener listener = new ELTVerifyTextListener();
 		lookupText.addListener(SWT.Verify, listener.getListener(propertyDialogButtonBar, help, lookupText));
-	 
-	 
+		lookupText.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				configProperty.setLookupKey(((Text)e.widget).getText());
+			}
+		});
 		populateWidget();
 		return container;
 	}
 	
 	public void populateWidget(){
-		if(configProperty!=null){
-		drivenText.setText(configProperty.getDriverKey());
-		lookupText.setText(configProperty.getLookupKey());
-		 if(IN0.equals(radio[0].getText())){
-			 radio[0].setSelection(true);
-			 radio[1].setSelection(false);
-		 }
-		 else{
-			 radio[0].setSelection(false);
-			 radio[1].setSelection(true);
-		 }
-		 }
-	}
+		if (configProperty.getDriverKey() != null)
+			drivenText.setText(configProperty.getDriverKey());
+		if (configProperty.getLookupKey() != null)
+			lookupText.setText(configProperty.getLookupKey());
+		
+		}
 	
 	public Button buttonWidget(Composite parent, int style, int[] bounds, String value){
 		Button button = new Button(parent, style);
@@ -202,7 +193,9 @@ public class ELTLookupConfigGrid extends Dialog {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				configProperty.setDriverKey(drivenText.getText());
+				
+				
+				
 			}
 		});
 		createButton(parent, IDialogConstants.CANCEL_ID,
@@ -217,5 +210,15 @@ public class ELTLookupConfigGrid extends Dialog {
 		return new Point(470, 420);
 	}
 
+	public LookupConfigProperty getConfigProperty() {
+		return configProperty;
+	}
+
+	public void setConfigProperty(LookupConfigProperty configProperty) {
+		this.configProperty = configProperty;
+	}
+
+	
+	
 }
  
