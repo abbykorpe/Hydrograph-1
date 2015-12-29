@@ -52,6 +52,8 @@ public class RunConfigDialog extends Dialog {
 	private Text textParamFiles;
 
 	private boolean runGraph;
+	
+	private String password;
 
 	Composite compositeServerDetails, compositePathConfig;
 	Button btnLocalMode, btnRemoteMode;
@@ -172,7 +174,6 @@ public class RunConfigDialog extends Dialog {
 		textPassword = new Text(compositeServerDetails, SWT.PASSWORD|SWT.BORDER);
 		textPassword.setBounds(110, 116, 206, 21);
 		formToolkit.adapt(textPassword, true, true);
-		textBoxes.put("password", textPassword);
 		
 		compositeServerDetails.setVisible(false);
 		
@@ -286,7 +287,7 @@ public class RunConfigDialog extends Dialog {
 	}
 
 	public String getClusterPassword(){
-		return buildProps.getProperty("password");
+		return this.password;
 	}
 	
 	/**
@@ -306,30 +307,30 @@ public class RunConfigDialog extends Dialog {
 
 		IFile iFile;
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-			try {
-				
-				buildProps.put("local", String.valueOf(btnLocalMode.getSelection()));
-				buildProps.put("remote", String.valueOf(btnRemoteMode.getSelection()));
-				buildProps.put("host", textEdgeNode.getText());
-				buildProps.put("userName", textUser.getText());
-				buildProps.put("password", textPassword.getText());
-				buildProps.put("runUtility", textRunUtility.getText());
-				buildProps.put("jobXML", textJobXML.getText());
-				buildProps.put("libs", textLibs.getText());
-				buildProps.put("paramFile", textParamFiles.getText());
-				
-				
-				buildProps.store(out, null);
-				
-				String buildPropFilePath = buildPropFilePath();
-				
-				IPath bldPropPath =new Path(buildPropFilePath);
-				iFile=ResourcesPlugin.getWorkspace().getRoot().getFile(bldPropPath);	
-				iFile.setContents(new ByteArrayInputStream(out.toByteArray()), true, false, null);
-				
-			} catch (IOException |CoreException  e) {
-				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving run configuration file -\n"+e.getMessage());
-			}
+		try {
+
+			buildProps.put("local", String.valueOf(btnLocalMode.getSelection()));
+			buildProps.put("remote", String.valueOf(btnRemoteMode.getSelection()));
+			buildProps.put("host", textEdgeNode.getText());
+			buildProps.put("userName", textUser.getText());
+			buildProps.put("runUtility", textRunUtility.getText());
+			buildProps.put("jobXML", textJobXML.getText());
+			buildProps.put("libs", textLibs.getText());
+			buildProps.put("paramFile", textParamFiles.getText());
+
+
+			buildProps.store(out, null);
+
+			String buildPropFilePath = buildPropFilePath();
+
+			IPath bldPropPath =new Path(buildPropFilePath);
+			iFile=ResourcesPlugin.getWorkspace().getRoot().getFile(bldPropPath);	
+			iFile.setContents(new ByteArrayInputStream(out.toByteArray()), true, false, null);
+
+		} catch (IOException |CoreException  e) {
+			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving run configuration file -\n"+e.getMessage());
+		}
+		this.password = textPassword.getText();
 		super.okPressed();
 	}
 

@@ -51,6 +51,7 @@ if(properties.remote == "true"){
 	def xmlFileName
 	def paramFileName
 	def jarName;
+	def clusterPassword
 
 		if (project.hasProperty("xmlpath")) {
 			xmlFilePath=xmlpath
@@ -60,14 +61,16 @@ if(properties.remote == "true"){
 			paramFilePath=paramFiles
 			paramFileName =paramFiles.substring(paramFiles.lastIndexOf("/")+1);
 			}
-
+			if (project.hasProperty("clusterPassword")) {
+			clusterPassword=clusterPassword
+			}
 		/**
 		*Remote server hostname and credentials.
 		**/
 
     	def user = properties.userName
     	def host = properties.host
-    	def password = properties.password
+    	def password = clusterPassword
     	def runUtility=properties.runUtility
     	def jobXML=properties.jobXML
     	def lib=properties.libs

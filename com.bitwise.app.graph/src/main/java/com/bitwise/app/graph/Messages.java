@@ -12,6 +12,7 @@ public class Messages extends NLS {
 	public static String JOBEXTENSION;
 	public static String XMLEXTENSION;
 	public static String CMD;
+	public static String CLUSTER_PASSWORD;
 
 	static {
 		// initialize resource bundle

@@ -78,9 +78,8 @@ public class RunJobHandler extends AbstractHandler {
 			return null;
 		}
 		
-		String password = runConfigDialog.getClusterPassword();
-		logger.debug("Cluster Password: "+ password);
-		
+		String clusterPassword = runConfigDialog.getClusterPassword()!=null ? runConfigDialog.getClusterPassword():"";
+
 		ParameterGridDialog parameterGrid = new ParameterGridDialog(Display.getDefault().getActiveShell());
 		parameterGrid.setVisibleParameterGridNote(false);
 		parameterGrid.open();
@@ -97,7 +96,7 @@ public class RunJobHandler extends AbstractHandler {
 			String XML_PATH = "";
 			if (iEditorPart != null) {
 				XML_PATH = iEditorPart.getEditorInput().getToolTipText().replace(Messages.JOBEXTENSION, Messages.XMLEXTENSION);
-				Process process=executeRunJob(XML_PATH,parameterGrid.getParameterFile());
+				Process process=executeRunJob(XML_PATH,parameterGrid.getParameterFile(),clusterPassword);
 				final InputStream stream = process.getInputStream();
 
 				/**
@@ -171,17 +170,17 @@ public class RunJobHandler extends AbstractHandler {
 	 * @return the process
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	private Process executeRunJob(String XML_PATH,String paramFile) throws IOException{
+	private Process executeRunJob(String XML_PATH,String paramFile,String clusterPassword) throws IOException{
 		String projectName = XML_PATH.split("/", 2)[0];
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		String[] runCommand=new String[3];
 		if (OSValidator.isWindows()) {
 			logger.info("This is windows.");
-			String[] command = {Messages.CMD,"/c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "=\""+ XML_PATH.split("/", 2)[1] + "\" "+ Messages.PARAM_FILE+"=\""+paramFile+"\""};
+			String[] command = {Messages.CMD,"/c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "=\""+ XML_PATH.split("/", 2)[1] + "\" "+ Messages.PARAM_FILE+"=\""+paramFile+"\" "+ Messages.CLUSTER_PASSWORD+"=\""+clusterPassword+"\""};
 			runCommand=command;
 		} else if (OSValidator.isMac()) {
 			logger.debug("This is Mac.");
-			String[] command = {"/usr/bin/bash","-c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "="+ XML_PATH.split("/", 2)[1] + " "+ Messages.PARAM_FILE+"="+paramFile};
+			String[] command = {"bash","-c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "="+ XML_PATH.split("/", 2)[1] + " "+ Messages.PARAM_FILE+"="+paramFile+"\" "+ Messages.CLUSTER_PASSWORD+"=\""+clusterPassword+"\""};
 			runCommand=command;
 		} else if (OSValidator.isUnix()) {
 			logger.debug("This is Unix or Linux");
