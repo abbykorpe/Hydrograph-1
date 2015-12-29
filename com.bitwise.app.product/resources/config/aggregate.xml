@@ -8,7 +8,7 @@
 			<tns:portSpecification>
 				<tns:typeOfPort>in</tns:typeOfPort>
 				<tns:numberOfPorts>1</tns:numberOfPorts>
-				<tns:sequenceOfPort>1</tns:sequenceOfPort>
+				<tns:sequenceOfPort>0</tns:sequenceOfPort>
 				<tns:allowMultipleLinks>false</tns:allowMultipleLinks>
 				<tns:linkMandatory>true</tns:linkMandatory>
 				<tns:nameOfPort>in0</tns:nameOfPort>
@@ -17,7 +17,7 @@
 			<tns:portSpecification>
 				<tns:typeOfPort>out</tns:typeOfPort>
 				<tns:numberOfPorts>1</tns:numberOfPorts>
-				<tns:sequenceOfPort>1</tns:sequenceOfPort>
+				<tns:sequenceOfPort>0</tns:sequenceOfPort>
 				<tns:allowMultipleLinks>false</tns:allowMultipleLinks>
 				<tns:linkMandatory>true</tns:linkMandatory>
 				<tns:nameOfPort>out0</tns:nameOfPort>

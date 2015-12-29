@@ -530,12 +530,12 @@ public abstract class Component extends Model {
 		
 		for(int i=0; i< (newPortCount-2); i++){
 
-			Port inPort = new Port("in"+(i+2) , "in"+(i+2), "in"+(i+3), this, newPortCount, "in", (i+3));
-			ports.put("in"+(i+3), inPort);
+			Port inPort = new Port("in"+(i+2) , "in"+(i+2), "in"+(i+2), this, newPortCount, "in", (i+2));
+			ports.put("in"+(i+2), inPort);
 			firePropertyChange("Component:add", null, inPort );
 			
-			Port unusedPort = new Port("unused"+(i+2) , "un"+(i+2), "unused"+(i+3), this, newPortCount, "unused", (i+3));
-			ports.put("unused"+(i+3), unusedPort);
+			Port unusedPort = new Port("unused"+(i+2) , "un"+(i+2), "unused"+(i+2), this, newPortCount, "unused", (i+2));
+			ports.put("unused"+(i+2), unusedPort);
 			firePropertyChange("Component:add", null, unusedPort );
 		}
 	}
