@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -24,27 +25,26 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.RowLayout;
 
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
-import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
+import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
-import com.bitwise.app.propertywindow.widgets.customwidgets.runtimeproperty.RuntimeProperties;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTCellModifier;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
@@ -55,8 +55,6 @@ import com.bitwise.app.propertywindow.widgets.joinlookupproperty.LookupCellModif
 import com.bitwise.app.propertywindow.widgets.joinlookupproperty.LookupLabelProvider;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridAddSelectionListener;
 import com.bitwise.app.propertywindow.widgets.utility.DragDropUtility;
-
-import org.eclipse.swt.layout.RowData;
 
 public class ELTLookupMapWizard extends Dialog {
 
@@ -73,59 +71,21 @@ public class ELTLookupMapWizard extends Dialog {
 	private String[] INPUT_COLUMN_NAME = {OPERATIONAL_INPUT_FIELD};
 	private String[] COLUMN_NAME = {PROPERTY_NAME, PROPERTY_VALUE};
 	
-	private static List<LookupMapProperty> joinOutputList  = new ArrayList<>();
-	private List<FilterProperties> joinInputList1  = new ArrayList<>();
-	private List<FilterProperties> joinInputList2  = new ArrayList<>();
-	private static List<List<FilterProperties>> joinInputList  = new ArrayList<>();
+	private List<LookupMapProperty> joinOutputList;
+	private List<FilterProperties> joinInputList1;
+	private List<FilterProperties> joinInputList2;
+	private List<List<FilterProperties>> joinInputList  = new ArrayList<>();
 	private ELTSWTWidgets eltswtWidgets = new ELTSWTWidgets();
-	private LookupPropertyGrid lookupPropertyGrid;
+	private LookupMappingGrid lookupPropertyGrid;
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
-	public ELTLookupMapWizard(Shell parentShell, LookupPropertyGrid lookupPropertyGrid) {
+	public ELTLookupMapWizard(Shell parentShell, LookupMappingGrid lookupPropertyGrid) {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.lookupPropertyGrid = lookupPropertyGrid;
 	}
-	
-	private void joinInputUpProperty(TableViewer viewer, List<FilterProperties> joinInputList){
-		FilterProperties join = new FilterProperties();
-		if(joinInputList.size() != 0){
-			if(!inputTabvalidation())
-				return;
-			join.setPropertyname("");
-			joinInputList.add(join);
-			viewer.refresh();
-		} else {
-			join.setPropertyname("");
-			joinInputList.add(join);
-			viewer.refresh();
-		}
-	}
-	
-	
-	private  void joinOutputProperty(TableViewer tv){
-		LookupMapProperty property = new LookupMapProperty();
-		
-		if(joinOutputList.size() != 0){
-			if(!validation())
-				return;
-		property.setSource_Field("");
-		property.setOutput_Field("");
-		joinOutputList.add(property);
-		tv.refresh();
-		
-		} else {
-			
-			property.setSource_Field("");
-			property.setOutput_Field("");
-				
-			joinOutputList.add(property);
-			tv.refresh();
-		}
-	}
-
 	/**
 	 * Create contents of the dialog.
 	 * @param parent
@@ -146,21 +106,29 @@ public class ELTLookupMapWizard extends Dialog {
 		gd_composite.widthHint = 257;
 		composite.setLayoutData(gd_composite);
 		
-		if(lookupPropertyGrid!=null){
-	    	if(lookupPropertyGrid.getLookupInputProperties()!=null){
-	    		viewer1= createComposite(composite,10,lookupPropertyGrid.getLookupInputProperties().get(0), 0);
-	    		viewer2 = createComposite(composite, 290,lookupPropertyGrid.getLookupInputProperties().get(1), 1);
+		if(lookupPropertyGrid != null){
+	    	if(lookupPropertyGrid.getLookupInputProperties()!= null && !lookupPropertyGrid.getLookupInputProperties().isEmpty()){
+	    		joinInputList1 = lookupPropertyGrid.getLookupInputProperties().get(0);
+	    		joinInputList2 = lookupPropertyGrid.getLookupInputProperties().get(1);
 	    	}
 	    	 else{
-	     		viewer1= createComposite(composite,10,joinInputList1, 0);
-	     		viewer2 = createComposite(composite, 290,joinInputList2, 1);
-
+	    		 joinInputList1 = new ArrayList<>();
+	    		 joinInputList2 = new ArrayList<>();
 	 	    }
+	    	viewer1= createComposite(composite,10,joinInputList1, 0);
+	    	viewer2 = createComposite(composite, 290,joinInputList2, 1);
+	    	
+	    	if(lookupPropertyGrid.getLookupMapProperties() != null && !lookupPropertyGrid.getLookupMapProperties().isEmpty()){
+	    		joinOutputList = lookupPropertyGrid.getLookupMapProperties();
+	    	}
+	    	else{
+	    		joinOutputList = new ArrayList<>();
+	    	}
 	    }
 	  
 	    if(joinInputList != null){
-	    joinInputList.add(joinInputList1);
-	    joinInputList.add(joinInputList2);
+	    	joinInputList.add(joinInputList1);
+	    	joinInputList.add(joinInputList2);
 	    }
 		
 		Composite composite_1 = new Composite(container, SWT.None);
@@ -182,7 +150,7 @@ public class ELTLookupMapWizard extends Dialog {
 		});
 		eltswtWidgets.createTableColumns(outputTableViewer.getTable(), COLUMN_NAME, 196);
 	    CellEditor[] editors = eltswtWidgets.createCellEditorList(outputTableViewer.getTable(),2);
-	    	//editors[0].setValidator(valueEditorValidation(Messages.EmptyNameNotification,outputTableViewer));
+	    	editors[0].setValidator(valueEditorValidation(Messages.EmptyNameNotification,outputTableViewer));
 	    	editors[1].setValidator(createNameEditorValidator(outputTableViewer));
 	    
 	    outputTableViewer.setColumnProperties(COLUMN_NAME);
@@ -226,7 +194,7 @@ public class ELTLookupMapWizard extends Dialog {
 	
 		populateWidget();
 		if(joinOutputList!=null){
-		DragDropUtility.INSTANCE.applyDrop(outputTableViewer, new DragDropLookupImp(joinOutputList, false, outputTableViewer));
+			DragDropUtility.INSTANCE.applyDrop(outputTableViewer, new DragDropLookupImp(joinOutputList, false, outputTableViewer));
 		}
 		return container;
 	}
@@ -243,7 +211,7 @@ public class ELTLookupMapWizard extends Dialog {
 		inputTableViewer[tableViewerIndex].getTable().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				joinInputUpProperty(inputTableViewer[tableViewerIndex],joinInputList);
+				addRowToTable(inputTableViewer[tableViewerIndex],joinInputList);
 			}
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -272,7 +240,7 @@ public class ELTLookupMapWizard extends Dialog {
 		bt.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				joinInputUpProperty(viewer,joinInputList);
+				addRowToTable(viewer,joinInputList);
 			}
 		});
 	}
@@ -440,75 +408,46 @@ public class ELTLookupMapWizard extends Dialog {
 		return true;
 	}
 	// Creates Value Validator for table's cells
-			private ICellEditorValidator  valueEditorValidation(final String ErrorMessage,final TableViewer viewer) {
-				ICellEditorValidator propertyValidator = new ICellEditorValidator() {
-					@Override
-					public String isValid(Object value) {
-						viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
-						String valueToValidate = String.valueOf(value).trim();
-						Matcher match = Pattern.compile(Constants.REGEX).matcher(valueToValidate);
-						if (valueToValidate.isEmpty()) {
-							propertyError.setText(ErrorMessage);
-							propertyError.setVisible(true);
-							return "ERROR"; //$NON-NLS-1$
-						} else if(!match.matches()){
-							//outputTableViewer.getTable().setSelection(propertycount);
-							propertyError.setVisible(true);
-							propertyError.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
-						}else{
-							propertyError.setVisible(false);
-						}
-						return null;
-
-					}
-				};
-				return propertyValidator;
-			}
-
-			public void populateWidget(){
-				if(lookupPropertyGrid != null){
-					inputTableViewer[0].refresh();
-					inputTableViewer[1].refresh();
-					outputTableViewer.refresh();
+	private ICellEditorValidator  valueEditorValidation(final String ErrorMessage,final TableViewer viewer) {
+		ICellEditorValidator propertyValidator = new ICellEditorValidator() {
+			@Override
+			public String isValid(Object value) {
+				viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
+				String valueToValidate = String.valueOf(value).trim();
+				Matcher match = Pattern.compile(Constants.REGEX).matcher(valueToValidate);
+				if (valueToValidate.isEmpty()) {
+					propertyError.setText(ErrorMessage);
+					propertyError.setVisible(true);
+					return "ERROR"; //$NON-NLS-1$
+				} else if(!match.matches()){
+					//outputTableViewer.getTable().setSelection(propertycount);
+					propertyError.setVisible(true);
+					propertyError.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
+				}else{
+					propertyError.setVisible(false);
 				}
+				return null;
+
 			}
-			
-			public LookupPropertyGrid getLookupPropertyGrid(){
-				LookupPropertyGrid lookupPropertyGrid = new LookupPropertyGrid();
-				lookupPropertyGrid.setLookupInputProperties(joinInputList);
-				lookupPropertyGrid.setLookupMapProperties(joinOutputList);
-				this.lookupPropertyGrid = lookupPropertyGrid;
-				
-				return lookupPropertyGrid;
+		};
+		return propertyValidator;
+	}
+
+		public void populateWidget(){
+			if(lookupPropertyGrid != null){
+				inputTableViewer[0].refresh();
+				inputTableViewer[1].refresh();
+				outputTableViewer.refresh();
 			}
-			
-			// Creates CellValue Validator for table's cells
-			private ICellEditorValidator createNameEditorValidator(final TableViewer viewer) {
-				ICellEditorValidator propertyValidator = new ICellEditorValidator() {
-					@Override
-					public String isValid(Object value) {
-						String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
-						String valueToValidate = String.valueOf(value).trim();
-						if (StringUtils.isEmpty(valueToValidate)) {
-							propertyError.setText(Messages.PROPERTY_VALUE);
-							propertyError.setVisible(true);
-						}
-						for (LookupMapProperty temp : joinOutputList) {
-							if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)&& 
-									temp.getOutput_Field().equalsIgnoreCase(valueToValidate)) {
-								propertyError.setText(Messages.RuntimePropertAlreadyExists);
-								propertyError.setVisible(true);
-								
-							} 
-							else{
-								propertyError.setVisible(false);
-							}
-						}
-						return null;
-					}
-				};
-				return propertyValidator;
-			}
+		}
+		
+		public LookupMappingGrid getLookupPropertyGrid(){
+			lookupPropertyGrid.setLookupInputProperties(joinInputList);
+			lookupPropertyGrid.setLookupMapProperties(joinOutputList);
+			return lookupPropertyGrid;
+		}
+		
+		
 			
 	public Button buttonWidget(Composite parent, int style, int[] bounds, String value, Image image){
 		Button button = new Button(parent, style);
@@ -548,10 +487,63 @@ public class ELTLookupMapWizard extends Dialog {
 		return new Point(700, 719);
 	}
 	
-	public static void main(String[] args) {
-		Display dis = new Display();
-		Shell shell = new Shell(dis);
-		ELTLookupMapWizard lookupMapWizard = new ELTLookupMapWizard(shell, null);
-		lookupMapWizard.open();
+	// Creates CellValue Validator for table's cells
+	private ICellEditorValidator createNameEditorValidator(final TableViewer viewer) {
+		ICellEditorValidator propertyValidator = new ICellEditorValidator() {
+			@Override
+			public String isValid(Object value) {
+				String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
+				String valueToValidate = String.valueOf(value).trim();
+				if (StringUtils.isEmpty(valueToValidate)) {
+					propertyError.setText(Messages.PROPERTY_VALUE);
+					propertyError.setVisible(true);
+				}
+				for (LookupMapProperty temp : joinOutputList) {
+					if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)&& 
+							temp.getOutput_Field().equalsIgnoreCase(valueToValidate)) {
+						propertyError.setText(Messages.RuntimePropertAlreadyExists);
+						propertyError.setVisible(true);
+						
+					} 
+					else{
+						propertyError.setVisible(false);
+					}
+				}
+				return null;
+			}
+		};
+		return propertyValidator;
+	}
+			
+	private  void joinOutputProperty(TableViewer tv){
+		LookupMapProperty property = new LookupMapProperty();
+		if(joinOutputList.size() != 0){
+			if(!validation())
+				return;
+		property.setSource_Field("");
+		property.setOutput_Field("");
+		joinOutputList.add(property);
+		tv.refresh();
+		} else {
+			property.setSource_Field("");
+			property.setOutput_Field("");
+			joinOutputList.add(property);
+			tv.refresh();
+		}
+	}
+	
+	private void addRowToTable(TableViewer viewer, List<FilterProperties> joinInputList){
+		FilterProperties join = new FilterProperties();
+		if(joinInputList.size() != 0){
+			if(!inputTabvalidation())
+				return;
+			join.setPropertyname("");
+			joinInputList.add(join);
+			viewer.refresh();
+		} else {
+			join.setPropertyname("");
+			joinInputList.add(join);
+			viewer.refresh();
+		}
 	}
 }

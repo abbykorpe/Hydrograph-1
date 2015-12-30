@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
+import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
@@ -33,14 +33,14 @@ public class JoinConverter extends TransformConverter{
 	private static final String JOIN_OPERATION_ID="join";
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(JoinConverter.class);
 	private ConverterHelper converterHelper;
-	private LookupPropertyGrid lookupPropertyGrid;
+	private LookupMappingGrid lookupPropertyGrid;
 	
 	public JoinConverter(Component component) {
 		super();	
 		this.baseComponent = new Join();
 		this.component = component;
 		this.properties = component.getProperties();
-		lookupPropertyGrid = (LookupPropertyGrid) properties.get(Constants.JOIN_MAP_FIELD);
+		lookupPropertyGrid = (LookupMappingGrid) properties.get(Constants.JOIN_MAP_FIELD);
 		converterHelper = new ConverterHelper(component);
 	}
 	

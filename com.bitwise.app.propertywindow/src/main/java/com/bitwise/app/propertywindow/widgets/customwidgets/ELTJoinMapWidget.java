@@ -6,7 +6,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 
-import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
+import com.bitwise.app.common.datastructure.property.JoinMappingGrid;
+import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -22,7 +23,7 @@ public class ELTJoinMapWidget extends AbstractWidget{
 	public static int value;
 	private Object properties;
 	private String propertyName;
-	private LookupPropertyGrid lookupPropertyGrid;
+	private JoinMappingGrid joinPropertyGrid;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	
 	public ELTJoinMapWidget(ComponentConfigrationProperty componentConfigrationProperty,
@@ -62,9 +63,9 @@ public class ELTJoinMapWidget extends AbstractWidget{
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				JoinMapGrid joinMapGrid = new JoinMapGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), lookupPropertyGrid);
+				JoinMapGrid joinMapGrid = new JoinMapGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), joinPropertyGrid);
 				joinMapGrid.open();
-				lookupPropertyGrid = joinMapGrid.getJoinPropertyGrid();
+				joinPropertyGrid = joinMapGrid.getJoinPropertyGrid();
 			}
 			
 		});
@@ -72,7 +73,7 @@ public class ELTJoinMapWidget extends AbstractWidget{
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		property.put(propertyName, lookupPropertyGrid);
+		property.put(propertyName, joinPropertyGrid);
 		
 		return property;
 	}

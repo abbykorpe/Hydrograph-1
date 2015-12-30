@@ -1,7 +1,6 @@
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,8 +9,7 @@ import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
-import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
+import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PortTypeConstant;
@@ -32,7 +30,7 @@ import com.bitwiseglobal.graph.operationstypes.HashJoin;
 public class LookupConverter extends TransformConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConverter.class);
-	private LookupPropertyGrid lookupPropertyGrid;
+	private LookupMappingGrid lookupPropertyGrid;
 	private ConverterHelper converterHelper;
 
 	public LookupConverter(Component component) {
@@ -40,7 +38,7 @@ public class LookupConverter extends TransformConverter {
 		this.baseComponent = new HashJoin();
 		this.component = component;
 		this.properties = component.getProperties();
-		lookupPropertyGrid = (LookupPropertyGrid) properties.get(Constants.LOOKUP_MAP_FIELD);
+		lookupPropertyGrid = (LookupMappingGrid) properties.get(Constants.LOOKUP_MAP_FIELD);
 		converterHelper = new ConverterHelper(component); 
 	}
 

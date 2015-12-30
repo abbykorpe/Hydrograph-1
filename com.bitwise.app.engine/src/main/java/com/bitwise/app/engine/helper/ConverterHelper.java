@@ -11,7 +11,7 @@ import javax.xml.namespace.QName;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
-import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
+import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.OperationField;
 import com.bitwise.app.common.datastructure.property.OperationSystemProperties;
@@ -274,7 +274,7 @@ public class ConverterHelper {
 		return typeBaseField;
 	}
 
-	public List<Object> getLookuporJoinOutputMaping(LookupPropertyGrid lookupPropertyGrid) {
+	public List<Object> getLookuporJoinOutputMaping(LookupMappingGrid lookupPropertyGrid) {
 		List<Object> passThroughFieldorMapFieldList = null;
 		if (lookupPropertyGrid != null) {
 			passThroughFieldorMapFieldList = new ArrayList<>();

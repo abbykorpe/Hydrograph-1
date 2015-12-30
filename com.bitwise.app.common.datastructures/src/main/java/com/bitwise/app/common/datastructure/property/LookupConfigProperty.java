@@ -3,20 +3,20 @@ package com.bitwise.app.common.datastructure.property;
 
 public class LookupConfigProperty {
 	
-	private boolean isSelected;
+	private Boolean isSelected;
 	private String driverKey;
 	private String lookupPort;
 	private String lookupKey;
 	
-	public LookupConfigProperty()
-	{
+	public LookupConfigProperty(){
 		lookupPort="in0";
+		isSelected = Boolean.FALSE;
 	}
 	
-	public boolean isSelected() {
+	public Boolean isSelected() {
 		return isSelected;
 	}
-	public void setSelected(boolean isSelected) {
+	public void setSelected(Boolean isSelected) {
 		this.isSelected = isSelected;
 	}
 	public String getDriverKey() {

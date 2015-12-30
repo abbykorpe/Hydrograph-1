@@ -7,28 +7,28 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
+import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
+import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinMapWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
-import com.bitwise.app.propertywindow.widgets.listeners.ELTVerifyTextListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
@@ -36,19 +36,20 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 public class ELTJoinConfigGrid extends Dialog {
 
 	private int inputPortValue = ELTJoinMapWidget.value;
-	private Text keyText;
+	private Text keyText, portIndex;
 	private Label addButton, deleteButton;
 	private Combo combo;
 	private String[] ITEMS = new String[]{Constants.INNER, Constants.OUTER, Constants.PARAMETER};
-	private List list = new ArrayList<>();
+	private JoinConfigProperty joinConfigProperty = new JoinConfigProperty();
+	private List<JoinConfigProperty> configPropertyList = new ArrayList<>();
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private ELTSWTWidgets eltswtWidgets = new ELTSWTWidgets();
-	private LookupPropertyGrid lookupPropertyGrid;
+	private LookupMappingGrid lookupPropertyGrid;
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
-	public ELTJoinConfigGrid(Shell parentShell, LookupPropertyGrid lookupPropertyGrid) {
+	public ELTJoinConfigGrid(Shell parentShell, LookupMappingGrid lookupPropertyGrid) {
 		super(parentShell);
 		this.lookupPropertyGrid = lookupPropertyGrid;
 	}
@@ -91,40 +92,46 @@ public class ELTJoinConfigGrid extends Dialog {
 		scrolledComposite.setContent(composite_1);
 		
 		for(int i=0,j=0;i<inputPortValue;i++,j++){
-			eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER, new int[]{0, 28+j, 142, 23}, "in"+i, false);
+			portIndex = eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER, new int[]{0, 28+j, 142, 23}, "in"+i, false);
+			keyText = eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER|SWT.READ_ONLY, new int[]{144, 28+j, 190, 23}, "", true);
 			
-			if(lookupPropertyGrid!=null){
-				if(lookupPropertyGrid.getJoinConfigText()!=null){
-			keyText = eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER|SWT.READ_ONLY, new int[]{144, 28+j, 190, 23}, (String)(list.get(i)), true);
-			}
-			}else{
-				keyText = eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER|SWT.READ_ONLY, new int[]{144, 28+j, 190, 23}, "", true);
-			}
 			ListenerHelper help = new ListenerHelper();
 			help.put(HelperType.CONTROL_DECORATION, WidgetUtility.addDecorator(keyText, Messages.EMPTYFIELDMESSAGE));
-			ELTVerifyTextListener listener = new ELTVerifyTextListener();
-			keyText.addListener(SWT.Verify, listener.getListener(propertyDialogButtonBar, help, keyText));
+			keyText.addListener(SWT.Verify, ListenerFactory.Listners.VERIFY_TEXT.getListener().getListener(propertyDialogButtonBar, help, keyText));
+			keyText.addModifyListener(new ModifyListener() {				
+				@Override
+				public void modifyText(ModifyEvent e) {	
+					joinConfigProperty.setJoin_key(((Text)e.widget).getText());
+					configPropertyList.add(joinConfigProperty);
+				}
+			});
+			
 			combo = eltswtWidgets.comboWidget(composite_1, SWT.BORDER, new int[]{337, 28+j, 205, 23}, ITEMS, 0);
 			combo.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					String string = combo.getText();
-					list.add(string);
-					
+					//String string = combo.getText();
 				}
 			}); 
 		 
 			j=j+26;
 		}
 		
+		populate();
 		scrolledComposite.setMinSize(composite_1.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		return container;
 	}
 
 	
-	public LookupPropertyGrid getLookupPropertyGrid(){
-		LookupPropertyGrid lookupPropertyGrid = new LookupPropertyGrid();
-		lookupPropertyGrid.setJoinConfigText(list);
+	public void populate(){
+		/*for (JoinConfigProperty property : configPropertyList) {
+			keyText.setText(property.getJoin_key());
+		}*/
+	}
+	
+	public LookupMappingGrid getJoinPropertyGrid(){
+		LookupMappingGrid lookupPropertyGrid = new LookupMappingGrid();
+		lookupPropertyGrid.setJoinConfigProperties(configPropertyList);
 		this.lookupPropertyGrid = lookupPropertyGrid;
 		
 		return lookupPropertyGrid;
@@ -165,11 +172,5 @@ public class ELTJoinConfigGrid extends Dialog {
 		textWidget.setEditable(value);
 		
 		return textWidget;
-	}
-	public static void main(String[] args) {
-		Display dis =new Display();
-		Shell sh = new Shell(dis);
-		ELTJoinConfigGrid configGrid = new ELTJoinConfigGrid(sh, null);
-		configGrid.open();
 	}
 }
