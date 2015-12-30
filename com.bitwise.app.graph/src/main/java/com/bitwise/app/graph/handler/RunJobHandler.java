@@ -66,7 +66,9 @@ public class RunJobHandler extends AbstractHandler {
 	 * .ExecutionEvent)
 	 */
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(ExecutionEvent event) {
+		
+		setBaseEnabled(false);
 		
 		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
@@ -75,6 +77,7 @@ public class RunJobHandler extends AbstractHandler {
 		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell());
 		runConfigDialog.open();
 		if(!runConfigDialog.proceedToRunGraph()){
+			setBaseEnabled(true);
 			return null;
 		}
 		
@@ -85,6 +88,7 @@ public class RunJobHandler extends AbstractHandler {
 		parameterGrid.open();
 		if(parameterGrid.canRunGraph() == false){
 			logger.debug("Not running graph");
+			setBaseEnabled(true);
 			return null;
 		}
 		logger.debug("property File :"+parameterGrid.getParameterFile());
@@ -123,9 +127,10 @@ public class RunJobHandler extends AbstractHandler {
 										logger.error("Ignore the exception", e);
 									}
 								}
-							}
+							}							
 							joblogger.logJobEndInfo();
 							joblogger.close();
+							setBaseEnabled(true);
 						}
 						
 					}).start();
@@ -138,6 +143,7 @@ public class RunJobHandler extends AbstractHandler {
 			logger.error("Error in Run Job",ex);
 		}
 
+		//setBaseEnabled(true);
 		return null;
 	}
 
