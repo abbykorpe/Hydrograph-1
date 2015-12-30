@@ -258,7 +258,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					propertyDialogButtonBar, helper,
 					eltDefaultTextBox.getSWTWidgetControl());
 			eltDefaultButton.attachListener(
-					ListenerFactory.Listners.FILE_DIALOG_SELECTION
+					ListenerFactory.Listners.SCHEMA_DIALOG_SELECTION
 							.getListener(), propertyDialogButtonBar, helper,
 					eltDefaultButton.getSWTWidgetControl(), eltDefaultTextBox
 							.getSWTWidgetControl());

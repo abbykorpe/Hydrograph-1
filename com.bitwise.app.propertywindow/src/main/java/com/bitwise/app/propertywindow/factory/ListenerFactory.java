@@ -17,6 +17,7 @@ import com.bitwise.app.propertywindow.widgets.listeners.ELTModifyListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTNormalFocusOutListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTOpenFileEditorListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTRuntimeButtonClickListener;
+import com.bitwise.app.propertywindow.widgets.listeners.ELTSchemaDialogSelectionListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTSelectionListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTVerifyComponentNameListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTVerifyNumbericListener;
@@ -53,6 +54,7 @@ public class ListenerFactory {
 		VERIFY_COMPONENT_NAME(ELTVerifyComponentNameListener.class),
 		RUNTIME_BUTTON_CLICK(ELTRuntimeButtonClickListener.class),
 		FILE_DIALOG_SELECTION(ELTFileDialogSelectionListener.class),
+		SCHEMA_DIALOG_SELECTION(ELTSchemaDialogSelectionListener.class),
 		FOCUS_OUT(ELTFocusOutListener.class),
 		FOCUS_IN(ELTFocusGainedListener.class),
 		EMPTY_TEXT_MODIFY(ELTEmptyTextModifyListener.class),

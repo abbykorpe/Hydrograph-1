@@ -1,6 +1,5 @@
 package com.bitwise.app.propertywindow.widgets.listeners;
 
-
 import java.io.File;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,23 +12,12 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
-import org.eclipse.swt.widgets.FileDialog;
 
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
-/**
- * The listener interface for receiving ELTFileDialogSelection events. The class that is interested in processing a
- * ELTFileDialogSelection event implements this interface, and the object created with that class is registered with a
- * component using the component's <code>addELTFileDialogSelectionListener<code> method. When
- * the ELTFileDialogSelection event occurs, that object's appropriate
- * method is invoked.
- * 
- * @see ELTFileDialogSelectionEvent
- */
-public class ELTFileDialogSelectionListener implements IELTListener{
-
+public class ELTSchemaDialogSelectionListener implements IELTListener {
 	Shell shell;
 	private ValidationStatus validationStatus; 
 	private ControlDecoration txtDecorator;
@@ -54,6 +42,7 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 			public void handleEvent(Event event) {
 				if(event.type==SWT.Selection){
 					FileDialog filedialog=new FileDialog(button.getShell(),SWT.None);
+					 filedialog.setFilterExtensions(new String [] {"*.xml"});
 					String path=filedialog.open();
 					if(StringUtils.isNotEmpty(path)){
 						File file= new File(path);
@@ -74,3 +63,5 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 		}
 	}
 }
+
+
