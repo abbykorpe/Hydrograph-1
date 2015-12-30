@@ -42,8 +42,7 @@ public class LinkingData {
 	}
 
 	public void setSourceTerminal(String sourceTerminal) {
-		int i=Integer.parseInt(sourceTerminal.substring(sourceTerminal.length()-1));
-		this.sourceTerminal=sourceTerminal.replace(sourceTerminal.substring(sourceTerminal.length()-1), String.valueOf(++i));	
+		this.sourceTerminal=sourceTerminal;	
 	}
 	
 	public String getTargetTerminal() {
@@ -51,8 +50,7 @@ public class LinkingData {
 	}
 
 	public void setTargetTerminal(String targetTerminal) {
-		int i=Integer.parseInt(targetTerminal.substring(targetTerminal.length()-1));
-		this.targetTerminal =targetTerminal.replace(targetTerminal.substring(targetTerminal.length()-1), String.valueOf(++i));
+		this.targetTerminal=targetTerminal;
 	
 	}
 
