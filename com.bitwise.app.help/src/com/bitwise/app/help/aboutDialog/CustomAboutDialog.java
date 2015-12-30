@@ -1,4 +1,4 @@
-package com.bitwise.app.menus.aboutDialog;
+package com.bitwise.app.help.aboutDialog;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,7 +28,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -42,8 +41,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.IWorkbenchHelpContextIds;
-import org.eclipse.ui.internal.ProductProperties;
 import org.eclipse.ui.internal.WorkbenchMessages;
 import org.eclipse.ui.internal.about.AboutBundleGroupData;
 import org.eclipse.ui.internal.about.AboutFeaturesButtonManager;
@@ -66,7 +63,6 @@ public class CustomAboutDialog extends TrayDialog {
 
 	    private IProduct product;
 
-	    private AboutBundleGroupData[] bundleGroupInfos;
 
 	    private ArrayList images = new ArrayList();
 
@@ -86,26 +82,13 @@ public class CustomAboutDialog extends TrayDialog {
 	        super(parentShell);
 
 	        product = Platform.getProduct();
+	       
 	        if (product != null) {
 				productName = product.getName();
 			}
 	        if (productName == null) {
 				productName = WorkbenchMessages.AboutDialog_defaultProductName;
 			}
-
-	        // create a descriptive object for each BundleGroup
-	        IBundleGroupProvider[] providers = Platform.getBundleGroupProviders();
-	        LinkedList groups = new LinkedList();
-	        if (providers != null) {
-				for (int i = 0; i < providers.length; ++i) {
-	                IBundleGroup[] bundleGroups = providers[i].getBundleGroups();
-	                for (int j = 0; j < bundleGroups.length; ++j) {
-						groups.add(new AboutBundleGroupData(bundleGroups[j]));
-					}
-	            }
-			}
-	        bundleGroupInfos = (AboutBundleGroupData[]) groups
-	                .toArray(new AboutBundleGroupData[0]);
 	    }
 
 	    /*
@@ -145,8 +128,7 @@ public class CustomAboutDialog extends TrayDialog {
 	    protected void configureShell(Shell newShell) {
 	        super.configureShell(newShell);
 	        newShell.setText(NLS.bind(WorkbenchMessages.AboutDialog_shellTitle,productName ));
-	        PlatformUI.getWorkbench().getHelpSystem().setHelp(newShell,
-					IWorkbenchHelpContextIds.ABOUT_DIALOG);
+
 	    }
 
 	    /**
@@ -157,21 +139,21 @@ public class CustomAboutDialog extends TrayDialog {
 	     * @param parent
 	     *            the button bar composite
 	     */
-	    protected void createButtonsForButtonBar(Composite parent) {
-	        parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-	        createButton(parent, DETAILS_ID, WorkbenchMessages.AboutDialog_DetailsButton, false); 
-
-	        Label l = new Label(parent, SWT.NONE);
-	        l.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-	        GridLayout layout = (GridLayout) parent.getLayout();
-	        layout.numColumns++;
-	        layout.makeColumnsEqualWidth = false;
-
-	        Button b = createButton(parent, IDialogConstants.OK_ID,
-	                IDialogConstants.OK_LABEL, true);
-	        b.setFocus();
-	    }
+//	    protected void createButtonsForButtonBar(Composite parent) {
+//	        parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//
+//	        createButton(parent, DETAILS_ID, WorkbenchMessages.AboutDialog_DetailsButton, false); 
+//
+//	        Label l = new Label(parent, SWT.NONE);
+//	        l.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//	        GridLayout layout = (GridLayout) parent.getLayout();
+//	        layout.numColumns++;
+//	        layout.makeColumnsEqualWidth = false;
+//
+//	        Button b = createButton(parent, IDialogConstants.OK_ID,
+//	                IDialogConstants.OK_LABEL, true);
+//	        b.setFocus();
+//	    }
 
 	    /**
 	     * Creates and returns the contents of the upper part 
@@ -187,17 +169,17 @@ public class CustomAboutDialog extends TrayDialog {
 	        Image aboutImage = null;
 			item = null;
 	        if (product != null) {
-	            ImageDescriptor imageDescriptor = ProductProperties
-	                    .getAboutImage(product);
-	            if (imageDescriptor != null) {
-					aboutImage = imageDescriptor.createImage();
-				}
+	        	 Bundle bundle = Platform.getBundle("com.bitwise.app.perspective");
+	        	 URL fullPathString = BundleUtility.find(bundle, "icons/alt_about.gif");
+	 	         aboutImage=ImageDescriptor.createFromURL(fullPathString).createImage();
 
 	            // if the about image is small enough, then show the text
 	            if (aboutImage == null
 	                    || aboutImage.getBounds().width <= MAX_IMAGE_WIDTH_FOR_TEXT) {
-	               // String aboutText = ProductProperties.getAboutText(product);
-	                String aboutText = ProductProperties.getAboutText(product);
+	            	String aboutText="Accelero for ETL Developers\n\n Version: Accelero Service Release 1\n\n (c) Copyright Accelero contributors.  All rights reserved.\n" +
+	            			"Visit http://Accelero.org/";
+	            			
+	            					
 	                if (aboutText != null) {
 						item = AboutTextManager.scan(aboutText);
 					}
@@ -416,62 +398,16 @@ public class CustomAboutDialog extends TrayDialog {
 	        GridData data = new GridData();
 	        data.horizontalAlignment = GridData.FILL;
 	        featureContainer.setLayoutData(data);
-
-	        for (int i = 0; i < bundleGroupInfos.length; i++) {
-			//	createFeatureButton(featureContainer, bundleGroupInfos[i]);
-			}
 	        //add image on about dialog
-	        Bundle bundle = Platform.getBundle("com.bitwise.app.menus");
-	        URL fullPathString = BundleUtility.find(bundle, "icons/sample.gif");
-	        Button button = new Button(parent, SWT.FLAT | SWT.PUSH);
+	        Bundle bundle = Platform.getBundle("com.bitwise.app.perspective");
+	        URL fullPathString = BundleUtility.find(bundle, "icons/app_icon.gif");
+	        Button button = new Button(featureContainer, SWT.FLAT | SWT.PUSH);
 	        Image image=ImageDescriptor.createFromURL(fullPathString).createImage();
 	        button.setImage(image);
 	        images.add(image);
 	    }
 
-	    private Button createFeatureButton(Composite parent,
-	            final AboutBundleGroupData info) {
-	    	
-	        if (!buttonManager.add(info)) {
-				return null;
-			}
-
-	        ImageDescriptor desc = info.getFeatureImage();
-	        System.out.println("****"+info.getFeatureImageUrl());
-	        Image featureImage = null;
-
-	        Button button = new Button(parent, SWT.FLAT | SWT.PUSH);
-	        button.setData(info);
-	        featureImage = desc.createImage();
-	       
-	        images.add(featureImage);
-	        button.setImage(featureImage);
-	        button.setToolTipText(info.getProviderName());
-	        
-	        button.getAccessible().addAccessibleListener(new AccessibleAdapter(){
-	        	/* (non-Javadoc)
-				 * @see org.eclipse.swt.accessibility.AccessibleAdapter#getName(org.eclipse.swt.accessibility.AccessibleEvent)
-				 */
-				public void getName(AccessibleEvent e) {
-					e.result = info.getProviderName();
-				}
-	        });
-	        button.addSelectionListener(new SelectionAdapter() {
-	            public void widgetSelected(SelectionEvent event) {
-	                AboutBundleGroupData[] groupInfos = buttonManager
-	                        .getRelatedInfos(info);
-	                AboutBundleGroupData selection = (AboutBundleGroupData) event.widget
-	                        .getData();
-
-	                AboutFeaturesDialog d = new AboutFeaturesDialog(getShell(),
-	                        productName, groupInfos, selection);
-	                d.open();
-	            }
-	        });
-
-	        return button;
-	    }
-
+	 
 		/*
 		 * (non-Javadoc)
 		 * 

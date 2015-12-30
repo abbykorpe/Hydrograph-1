@@ -12,3 +12,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.equinox.http.jetty
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Export-Package: com.bitwise.app.help.aboutDialog

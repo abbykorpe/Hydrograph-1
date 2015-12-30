@@ -28,10 +28,6 @@
             id="com.bitwise.window.portLabels.showHide"
             name="ShowHidePortLabels">
       </command>
-        <command
-            id="com.bitwise.help.helpcontent"
-            name="Help content">
-      </command>
      <command
 	         id="com.bitwise.help.aboutaccelero"
             name="About Accelero">
@@ -204,7 +200,7 @@
             commandId="com.bitwise.window.portLabels.showHide">
       </handler>
        <handler
-            class="com.bitwise.app.menus.handlers.AboutActionHandler"
+            class="com.bitwise.app.menus.handlers.AboutDialogHandler"
             commandId="com.bitwise.help.aboutaccelero">
        </handler>
    </extension>
