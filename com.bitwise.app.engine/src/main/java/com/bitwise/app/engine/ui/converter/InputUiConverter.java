@@ -44,7 +44,7 @@ public abstract class InputUiConverter extends UiConverter {
 		int portCounter = 1;
 		if (inputComponent.getOutSocket() != null) {
 			for (TypeInputOutSocket outSocket : inputComponent.getOutSocket()) {
-				uiComponent.engageOutputPort(getOutputSocketType(outSocket) + portCounter);
+				uiComponent.engageOutputPort(outSocket.getId());
 				if (outSocket.getSchema() != null) {
 					propertyMap.put(PropertyNameConstants.SCHEMA.value(), getSchema(outSocket));
 				}

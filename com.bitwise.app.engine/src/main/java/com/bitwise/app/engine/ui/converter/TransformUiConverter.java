@@ -65,7 +65,7 @@ public abstract class TransformUiConverter extends UiConverter {
 
 		if (operationsComponent.getInSocket() != null) {
 			for (TypeBaseInSocket inSocket : operationsComponent.getInSocket()) {
-				uiComponent.engageInputPort(inSocket.getType() + portCounter);
+				uiComponent.engageInputPort(inSocket.getId());
 				UIComponentRepo.INSTANCE.getComponentLinkList().add(
 						new LinkingData(inSocket.getFromComponentId(), operationsComponent.getId(), inSocket
 								.getFromSocketId(), inSocket.getId()));
@@ -89,9 +89,9 @@ public abstract class TransformUiConverter extends UiConverter {
 		if (operationsComponent.getOutSocket() != null) {
 			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
 				if (getOutputSocketType(outSocket).equals("unused"))
-					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (++unusedPortsCounter));
+					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (unusedPortsCounter++));
 				else
-					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (++portCounter));
+					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (portCounter++));
 				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null)
 					propertyMap.put(Constants.PARAM_OPERATION,
 							getUiPassThroughOrOperationFieldsOrMapFieldGrid(outSocket));

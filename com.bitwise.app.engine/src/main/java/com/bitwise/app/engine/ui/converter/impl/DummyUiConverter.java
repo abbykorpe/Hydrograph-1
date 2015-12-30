@@ -65,7 +65,7 @@ public class DummyUiConverter extends UiConverter {
 
 	private boolean getInPort() {
 		LOGGER.debug("Generating default-component inputport for -{}", componentName);
-		int portCounter = 1;
+		int portCounter = 0;
 		String fixedInsocket = "in0";
 		if (UIComponentRepo.INSTANCE.getInsocketMap().get(componentName) != null) {
 			for (InSocketDetail inSocketDetail : UIComponentRepo.INSTANCE.getInsocketMap().get(componentName)) {

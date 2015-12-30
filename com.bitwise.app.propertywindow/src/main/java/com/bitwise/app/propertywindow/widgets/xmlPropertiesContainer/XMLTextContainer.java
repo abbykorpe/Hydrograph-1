@@ -34,7 +34,7 @@ public class XMLTextContainer {
 	
 	public String launchXMLTextContainerWindow() {
 		try {
-			String str = this.xmlText;
+			String xmlText = this.xmlText;
 			Shell shell = new Shell(Display.getDefault().getActiveShell(), SWT.WRAP | SWT.MAX | SWT.APPLICATION_MODAL);
 
 			shell.setLayout(new GridLayout(1, false));
@@ -44,10 +44,10 @@ public class XMLTextContainer {
 			text.setEditable(false);
 			text.setBackground(new Color(shell.getDisplay(), 250, 250, 250));
 			if (this.xmlText != null) {
-				str = str.substring(str.indexOf('\n') + 1);
-				str = str.substring(str.indexOf('\n') + 1, str.lastIndexOf('\n') - 13);
+				xmlText = xmlText.substring(xmlText.indexOf('\n') + 1);
+				xmlText = xmlText.substring(xmlText.indexOf('\n') + 1, xmlText.lastIndexOf('\n') - 13);
 
-				text.setText(str);
+				text.setText(xmlText);
 			} else
 				text.setText(Messages.EMPTY_XML_CONTENT);
 			GridData gd_text = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
