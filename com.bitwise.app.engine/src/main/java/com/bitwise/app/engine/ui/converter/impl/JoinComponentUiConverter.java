@@ -23,7 +23,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 	private Join join;
 	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(JoinComponentUiConverter.class);
-	private int inPortCounter = 1;
+	private int inPortCounter = 0;
 
 	public JoinComponentUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;
@@ -52,7 +52,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 	private String getSize() {
 		Dimension newSize = uiComponent.getSize();
 		uiComponent.setSize(newSize.expand(inPortCounter * 10, inPortCounter * 10));
-		return String.valueOf(inPortCounter - 1);
+		return String.valueOf(inPortCounter );
 	}
 
 	protected void getInPort(TypeOperationsComponent operationsComponent) {
@@ -80,9 +80,9 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 		if (operationsComponent.getOutSocket() != null) {
 			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
 				if (getOutputSocketType(outSocket).equals("unused"))
-					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (++unusedPortsCounter));
+					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (unusedPortsCounter++));
 				else
-					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (++portCounter));
+					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (portCounter++));
 
 			}
 

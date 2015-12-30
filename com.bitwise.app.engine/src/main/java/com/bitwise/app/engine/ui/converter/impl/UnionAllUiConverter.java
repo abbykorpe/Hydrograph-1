@@ -46,11 +46,10 @@ public class UnionAllUiConverter extends StraightpullUiConverter {
 
 	protected void getInPort(TypeStraightPullComponent straightPullComponent) {
 		LOGGER.debug("Generating Union-All-Input-Port for -{}", componentName);
-		int portCounter = 1;
 		String fixedInsocket = "in0";
 		if (straightPullComponent.getInSocket() != null) {
 			for (TypeBaseInSocket inSocket : straightPullComponent.getInSocket()) {
-				uiComponent.engageInputPort(getInputSocketType(inSocket)+ portCounter);
+				uiComponent.engageInputPort(fixedInsocket);
 				UIComponentRepo.INSTANCE.getComponentLinkList().add(
 						new LinkingData(inSocket.getFromComponentId(), straightPullComponent.getId(), inSocket
 								.getFromSocketId(), fixedInsocket
