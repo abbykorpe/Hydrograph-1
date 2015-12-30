@@ -441,10 +441,9 @@ public class ELTLookupMapWizard extends Dialog {
 			}
 		}
 		
-		public LookupMappingGrid getLookupPropertyGrid(){
+		public void getLookupPropertyGrid(){
 			lookupPropertyGrid.setLookupInputProperties(joinInputList);
 			lookupPropertyGrid.setLookupMapProperties(joinOutputList);
-			return lookupPropertyGrid;
 		}
 		
 		

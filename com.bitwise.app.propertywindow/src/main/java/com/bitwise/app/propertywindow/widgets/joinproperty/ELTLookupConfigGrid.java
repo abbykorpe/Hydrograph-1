@@ -124,8 +124,8 @@ public class ELTLookupConfigGrid extends Dialog {
 		ListenerHelper helper = new ListenerHelper();
 		txtDecorator = WidgetUtility.addDecorator(drivenText, Messages.EMPTYFIELDMESSAGE);
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
-		drivenText.addListener(SWT.FocusIn, ListenerFactory.Listners.FOCUS_IN.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
-		drivenText.addListener(SWT.FocusOut, ListenerFactory.Listners.FOCUS_OUT.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
+		drivenText.addListener(SWT.FocusIn, ListenerFactory.Listners.NORMAL_FOCUS_IN.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
+		drivenText.addListener(SWT.FocusOut, ListenerFactory.Listners.NORMAL_FOCUS_OUT.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
 		drivenText.addListener(SWT.Verify, ListenerFactory.Listners.VERIFY_TEXT.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
 		drivenText.addListener(SWT.Modify, ListenerFactory.Listners.MODIFY.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
 		
@@ -139,8 +139,8 @@ public class ELTLookupConfigGrid extends Dialog {
 		ListenerHelper help = new ListenerHelper();
 		txtDecorator = WidgetUtility.addDecorator(lookupText, Messages.EMPTYFIELDMESSAGE);
 		help.put(HelperType.CONTROL_DECORATION, txtDecorator);
-		lookupText.addListener(SWT.FocusIn, ListenerFactory.Listners.FOCUS_IN.getListener().getListener(propertyDialogButtonBar, help, lookupText));
-		lookupText.addListener(SWT.FocusOut, ListenerFactory.Listners.FOCUS_OUT.getListener().getListener(propertyDialogButtonBar, help, lookupText));
+		lookupText.addListener(SWT.FocusIn, ListenerFactory.Listners.NORMAL_FOCUS_IN.getListener().getListener(propertyDialogButtonBar, help, lookupText));
+		lookupText.addListener(SWT.FocusOut, ListenerFactory.Listners.NORMAL_FOCUS_OUT.getListener().getListener(propertyDialogButtonBar, help, lookupText));
 		lookupText.addListener(SWT.Verify, ListenerFactory.Listners.VERIFY_TEXT.getListener().getListener(propertyDialogButtonBar, help, lookupText));
 		lookupText.addListener(SWT.Modify, ListenerFactory.Listners.MODIFY.getListener().getListener(propertyDialogButtonBar, help, lookupText));
 		

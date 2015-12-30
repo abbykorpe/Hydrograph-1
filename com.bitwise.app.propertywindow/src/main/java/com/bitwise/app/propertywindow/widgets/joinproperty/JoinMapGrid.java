@@ -3,9 +3,6 @@ package com.bitwise.app.propertywindow.widgets.joinproperty;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,6 +13,8 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -25,6 +24,10 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -32,25 +35,15 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.layout.RowData;
 
-import com.bitwise.app.common.datastructure.property.Filter;
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.JoinMappingGrid;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
-import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
-import com.bitwise.app.common.datastructure.property.TransformOperation;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
@@ -84,11 +77,11 @@ public class JoinMapGrid extends Dialog {
 	private String[] COLUMN_NAME = {PROPERTY_NAME, PROPERTY_VALUE};
 	private String[] INPUT_COLUMN_NAME = {OPERATIONAL_INPUT_FIELD};
 	
-	private List<Filter> filterInputList;
-	private static List<LookupMapProperty> joinOutputList  = new ArrayList<>();
- 
+	private List<FilterProperties> joinInputList = new ArrayList<>();
+	private List<LookupMapProperty> joinOutputList  = new ArrayList<>();
+	private List<List<FilterProperties>> joinSchemaList  = new ArrayList<>();
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
-	private JoinMappingGrid joinPropertyGrid;
+	private JoinMappingGrid joinMappingGrid;
 	
 	/**
 	 * Create the dialog.
@@ -97,47 +90,15 @@ public class JoinMapGrid extends Dialog {
 	public JoinMapGrid(Shell parentShell, JoinMappingGrid joinPropertyGrid) {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE |SWT.RESIZE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
-		this.joinPropertyGrid = joinPropertyGrid;
+		this.joinMappingGrid = joinPropertyGrid;
 
 	}
 
-
-	private void joinInputUpProperty(TableViewer viewer, List<FilterProperties> joinInputList){
-		FilterProperties join = new FilterProperties();
-		if(joinInputList.size() != 0){
-			if(!inputSchemavalidate(joinInputList,viewer))
-				return;
-			join.setPropertyname("");
-			joinInputList.add(join);
-			viewer.refresh();
-		} else {
-			join.setPropertyname("");
-			joinInputList.add(join);
-			viewer.refresh();
-		}
+	public void getJoinPropertyGrid(){
+		joinMappingGrid.setLookupInputProperties(joinSchemaList);
+		joinMappingGrid.setLookupMapProperties(joinOutputList);
 	}
 	
-	private  void joinOutputProperty(TableViewer tv){
-		LookupMapProperty property = new LookupMapProperty();
-		
-		if(joinOutputList.size() != 0){
-			if(!validation())
-				return;
-		property.setSource_Field("");
-		property.setOutput_Field("");
-		joinOutputList.add(property);
-		tv.refresh();
-		
-		} else {
-			
-			property.setSource_Field("");
-			property.setOutput_Field("");
-				
-			joinOutputList.add(property);
-			tv.refresh();
-		}
-	}
-
 	/**
 	 * Create contents of the dialog.
 	 * @param parent
@@ -173,18 +134,19 @@ public class JoinMapGrid extends Dialog {
 				expandBar.setLayoutData(new RowData(200, 550));
 				
 		for(int i = 0; i<inputPortValue;i++){
-				if(joinPropertyGrid!=null){
-					if(joinPropertyGrid.getLookupInputProperties()!=null && !joinPropertyGrid.getLookupInputProperties().isEmpty()){
-						expandItemComposite = (Composite) createComposite(expandBar, joinPropertyGrid.getLookupInputProperties().get(i), i);	
-					}else{
-						
-					}
-				}	 
-				else{
-						expandItemComposite = (Composite) createComposite(expandBar, new Filter(), i);
-			}
+			if(joinMappingGrid!=null){
+				if(joinMappingGrid.getLookupInputProperties()!=null && !joinMappingGrid.getLookupInputProperties().isEmpty()){
+					expandItemComposite = (Composite) createComposite(expandBar, joinMappingGrid.getLookupInputProperties().get(i), i);	
+				}else{
+					joinInputList = new ArrayList<>();
+				}
+				expandItemComposite = (Composite) createComposite(expandBar, joinInputList, i);
+			}	 
 		}	
 		
+		if(joinSchemaList!=null){
+			joinSchemaList.add(joinInputList);
+		}
 			expandBar.getItem(0).setExpanded(true);
 			expandBar.setBackground(new Color(Display.getDefault(), new RGB(250, 250, 250)));
 			 Listener updateScrolledSize = new Listener()
@@ -262,12 +224,10 @@ public class JoinMapGrid extends Dialog {
 						filter.setPropertyname(data[1]);
 						
 						for(int i=0;i<inputPortValue;i++){
-							if(filterInputList!= null){
-							if(filterInputList.get(i).getFilterList().contains(filter)){
-								ExpandItem item =expandBar.getItem(i);
+							if(joinInputList != null && joinInputList.contains(filter)){
+								ExpandItem item = expandBar.getItem(i);
 								item.setExpanded(true);
-								inputTableViewer[i].getTable().setSelection(filterInputList.get(i).getFilterList().indexOf(filter));
-							}
+								inputTableViewer[i].getTable().setSelection(joinInputList.indexOf(filter));
 							}
 						}
 					}
@@ -326,7 +286,7 @@ public class JoinMapGrid extends Dialog {
 		return container;
 	}
 	
-	private Control createComposite(ExpandBar expandBar, final Filter filterList, final int tableViewerIndex){	
+	private Control createComposite(ExpandBar expandBar, final List<FilterProperties> joinInputList, final int tableViewerIndex){	
 		ExpandItem	xpndtmItem = new ExpandItem(expandBar, SWT.NONE);
 		xpndtmItem.setText("Input index : in"+tableViewerIndex);
 
@@ -342,7 +302,7 @@ public class JoinMapGrid extends Dialog {
 		inputTableViewer[tableViewerIndex].getTable().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				joinInputUpProperty(inputTableViewer[tableViewerIndex],filterList.getFilterList());
+				addRowToTable(inputTableViewer[tableViewerIndex],joinInputList);
 			}
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -354,12 +314,11 @@ public class JoinMapGrid extends Dialog {
 	    inputTableViewer[tableViewerIndex].setCellModifier(new ELTCellModifier(inputTableViewer[tableViewerIndex]));
 	    inputTableViewer[tableViewerIndex].setColumnProperties(INPUT_COLUMN_NAME);
 	    inputTableViewer[tableViewerIndex].setCellEditors(editors);
-	    inputTableViewer[tableViewerIndex].setInput(filterList.getFilterList());
+	    inputTableViewer[tableViewerIndex].setInput(joinInputList);
 	
-		addButton(comGrid, new int[]{200, 8, 25, 20}, inputTableViewer[tableViewerIndex],filterList.getFilterList());
+		addButton(comGrid, new int[]{200, 8, 25, 20}, inputTableViewer[tableViewerIndex],joinInputList);
 		widget.applyDragFromTableViewer(inputTableViewer[tableViewerIndex].getTable(), tableViewerIndex);
-		filterList.setFilterList((List)inputTableViewer[tableViewerIndex].getInput());
-		filterInputList.add(filterList);
+		
 		return comGrid;
 	}
 		
@@ -376,7 +335,7 @@ public class JoinMapGrid extends Dialog {
 		bt.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				joinInputUpProperty(viewer,joinInputList);
+				addRowToTable(viewer,joinInputList);
 			}
 		});
 	}
@@ -632,14 +591,38 @@ public class JoinMapGrid extends Dialog {
 	}
 	
 
-	public JoinMappingGrid getJoinPropertyGrid(){
-		JoinMappingGrid joinPropertyGrid = new JoinMappingGrid();
-		joinPropertyGrid.setLookupInputProperties(filterInputList);
-		joinPropertyGrid.setLookupMapProperties(joinOutputList);
-		this.joinPropertyGrid = joinPropertyGrid;
+	private void addRowToTable(TableViewer viewer, List<FilterProperties> joinInputList){
+		FilterProperties join = new FilterProperties();
 		
-		return joinPropertyGrid;
+		if(joinInputList!=null && joinInputList.size() != 0){
+			if(!inputSchemavalidate(joinInputList,viewer))
+				return;
+			join.setPropertyname("");
+			joinInputList.add(join);
+			viewer.refresh();
+		} else {
+			join.setPropertyname("");
+			joinInputList.add(join);
+			viewer.refresh();
+		}
 	}
 	
-	
+	private  void joinOutputProperty(TableViewer tv){
+		LookupMapProperty property = new LookupMapProperty();
+		
+		if(joinOutputList.size() != 0){
+			if(!validation())
+				return;
+			property.setSource_Field("");
+			property.setOutput_Field("");
+			joinOutputList.add(property);
+			tv.refresh();
+		} else {
+			property.setSource_Field("");
+			property.setOutput_Field("");
+				
+			joinOutputList.add(property);
+			tv.refresh();
+		}
+	}
 }

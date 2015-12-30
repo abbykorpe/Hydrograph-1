@@ -7,7 +7,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
-import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
 import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;

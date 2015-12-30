@@ -54,7 +54,7 @@ public class Constants {
 	public static final String DUMMY_COMPONENT_CATEGORY = "DUMMY";
 	public static final String DUMMY_COMPONENT = "DummyComponent";
 	
-	public static final String LOOKUP_CONFIG_FIELD = "hash_join_config";
+	public static final String LOOKUP_CONFIG_FIELD = "hash_join";
 	public static final String LOOKUP_MAP_FIELD = "hash_join_map";
 	
 	public static final String JOIN_CONFIG_FIELD = "join_config";

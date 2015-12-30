@@ -5,17 +5,17 @@ import java.util.List;
 
 public class JoinMappingGrid {
 	private List<LookupMapProperty> lookupMapProperties; //right side grid
-	private List<Filter> lookupInputProperties;   //join left side
+	private List<List<FilterProperties>> lookupInputProperties;   //join left side
 	
 	public JoinMappingGrid() {
 		lookupMapProperties = new ArrayList<>();
 		lookupInputProperties = new ArrayList<>();
 	}
 	
-	public List<Filter> getLookupInputProperties() {
+	public List<List<FilterProperties>> getLookupInputProperties() {
 		return lookupInputProperties;
 	}
-	public void setLookupInputProperties(List<Filter> lookupInputProperties) {
+	public void setLookupInputProperties(List<List<FilterProperties>> lookupInputProperties) {
 		this.lookupInputProperties = lookupInputProperties;
 	}
 	public List<LookupMapProperty> getLookupMapProperties() {
