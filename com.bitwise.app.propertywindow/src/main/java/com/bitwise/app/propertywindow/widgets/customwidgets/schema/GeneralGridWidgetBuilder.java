@@ -17,7 +17,6 @@ import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 public class GeneralGridWidgetBuilder extends GridWidgetCommonBuilder {
 	
 	public static GeneralGridWidgetBuilder INSTANCE = new GeneralGridWidgetBuilder();
-	
 	private GeneralGridWidgetBuilder() {}
 	
 	public CellEditor[] createCellEditorList(Table table,int size){
@@ -36,16 +35,25 @@ public class GeneralGridWidgetBuilder extends GridWidgetCommonBuilder {
 	 */
 	@Override
 	public void createDefaultSchema(List grids, TableViewer tableViewer, Label errorLabel) {
+		int rowSequence = getRowSequence();
 		SchemaGrid schemaGrid = new SchemaGrid();
-		schemaGrid.setFieldName("");
+		schemaGrid.setFieldName("DefaultField" + rowSequence);
 		schemaGrid.setDateFormat(""); 
 		schemaGrid.setScale("");
 		schemaGrid.setDataType(Integer.valueOf("0"));
 		schemaGrid.setDataTypeValue(getDataTypeValue()[Integer.valueOf("0")]);
- 		if(!grids.contains(schemaGrid)){
-			grids.add(schemaGrid);  
-			tableViewer.refresh();
-			tableViewer.editElement(tableViewer.getElementAt(grids.size() == 0 ? grids.size() : grids.size() - 1), 0);
-		}
+		
+		int numberOfRows=grids.size();
+		do{
+			if(!grids.contains(schemaGrid)){
+				grids.add(schemaGrid);  
+				tableViewer.refresh();
+				tableViewer.editElement(tableViewer.getElementAt(grids.size() == 0 ? grids.size() : grids.size() - 1), 0);
+				break;
+			}
+			schemaGrid.setFieldName("DefaultField" + rowSequence++);
+			numberOfRows--;
+		}while(numberOfRows>=-1);
+ 		
 	}
 }

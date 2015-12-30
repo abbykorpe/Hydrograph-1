@@ -36,18 +36,27 @@ public class FixedWidthGridWidgetBuilder extends GridWidgetCommonBuilder {
 	 */
 	@Override
 	public void createDefaultSchema(List grids, TableViewer tableViewer, Label errorLabel) {
+		int rowSequence = getRowSequence();
+		
 		FixedWidthGridRow fixedGrid = new FixedWidthGridRow();
-		fixedGrid.setFieldName("");
+		fixedGrid.setFieldName("DefaultField" + rowSequence++);
 		fixedGrid.setDateFormat("");
 		fixedGrid.setScale("");
 		fixedGrid.setDataType(Integer.valueOf("0"));
 		fixedGrid.setDataTypeValue(getDataTypeValue()[Integer.valueOf("0")]); 
 		fixedGrid.setLength("0");
 		
-		if(!grids.contains(fixedGrid)){
-			grids.add(fixedGrid);  
-			tableViewer.refresh();
-			tableViewer.editElement(tableViewer.getElementAt(grids.size() == 0 ? grids.size() : grids.size() - 1), 0);
-		}
+		int numberOfRows=grids.size();
+		do{
+			if(!grids.contains(fixedGrid)){
+				grids.add(fixedGrid);  
+				tableViewer.refresh();
+				tableViewer.editElement(tableViewer.getElementAt(grids.size() == 0 ? grids.size() : grids.size() - 1), 0);
+				break;
+			}
+			fixedGrid.setFieldName("DefaultField" + rowSequence++);
+			numberOfRows--;
+		}while(numberOfRows>=-1);
+		
 	}
 }

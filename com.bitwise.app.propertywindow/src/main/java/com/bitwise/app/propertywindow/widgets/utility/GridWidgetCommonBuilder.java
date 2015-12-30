@@ -20,6 +20,16 @@ import com.bitwise.app.propertywindow.messages.Messages;
  */
 public abstract class GridWidgetCommonBuilder {
 	
+	private int rowSequence=0; 
+	
+	protected int getRowSequence() {
+		return rowSequence;
+	}
+
+	public void setRowSequence(int rowSequence) {
+		this.rowSequence = rowSequence;
+	}
+
 	/**
 	 * Creates the default schema.
 	 * 
@@ -29,6 +39,7 @@ public abstract class GridWidgetCommonBuilder {
 	 *            the table viewer
 	 * @param errorLabel
 	 *            the error label
+	 * @param rowSequence 
 	 */
 	public abstract void createDefaultSchema(List grids,TableViewer tableViewer,Label errorLabel);
 	
@@ -149,4 +160,6 @@ public abstract class GridWidgetCommonBuilder {
 			return dataTypeKey;
 		}
 	}
+	
+	
 }

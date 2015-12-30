@@ -9,6 +9,7 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.Valid
 import com.bitwise.app.propertywindow.widgets.listeners.ELTSelectionTaskListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 /**
  * The listener interface for receiving ELTGridAddSelection events. The class that is interested in processing a
@@ -23,7 +24,7 @@ public class ELTGridAddSelectionListener extends ELTSelectionTaskListener{
 
 	private ValidationStatus validationStatus; 
 	private Table table;
-
+	private int rowSequence=1;
 	@Override
 	public int getListenerType() {
       return SWT.MouseUp;
@@ -40,8 +41,11 @@ public class ELTGridAddSelectionListener extends ELTSelectionTaskListener{
 			validationStatus = (ValidationStatus) helpers.get(HelperType.VALIDATION_STATUS);
 		}
 		ELTGridDetails eltGridDetails = (ELTGridDetails)helpers.get(HelperType.SCHEMA_GRID);
-		eltGridDetails.getGridWidgetCommonBuilder().createDefaultSchema(eltGridDetails.getGrids(), eltGridDetails.getTableViewer(), eltGridDetails.getLabel());
+		GridWidgetCommonBuilder gridCommonBuilder = eltGridDetails.getGridWidgetCommonBuilder();
+		gridCommonBuilder.setRowSequence(rowSequence);
+		gridCommonBuilder.createDefaultSchema(eltGridDetails.getGrids(), eltGridDetails.getTableViewer(), eltGridDetails.getLabel());
 		setValidationStatus(true);
+		rowSequence++;
 	}
 	private void setValidationStatus(boolean status) {
 		if(validationStatus != null){
