@@ -186,7 +186,7 @@ public class RunJobHandler extends AbstractHandler {
 			runCommand=command;
 		} else if (OSValidator.isMac()) {
 			logger.debug("This is Mac.");
-			String[] command = {"bash","-c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "="+ XML_PATH.split("/", 2)[1] + " "+ Messages.PARAM_FILE+"="+paramFile+"\" "+ Messages.CLUSTER_PASSWORD+"=\""+clusterPassword+"\""};
+			String[] command = {"bash","-c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "=\""+ XML_PATH.split("/", 2)[1] + "\" "+ Messages.PARAM_FILE+"=\""+paramFile+"\" "+ Messages.CLUSTER_PASSWORD+"=\""+clusterPassword+"\""};
 			runCommand=command;
 		} else if (OSValidator.isUnix()) {
 			logger.debug("This is Unix or Linux");
