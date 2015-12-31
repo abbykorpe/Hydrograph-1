@@ -51,7 +51,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 
 	private String getSize() {
 		Dimension newSize = uiComponent.getSize();
-		uiComponent.setSize(newSize.expand(inPortCounter * 10, inPortCounter * 10));
+		uiComponent.setSize(newSize.expand(inPortCounter * 15, inPortCounter * 15));
 		return String.valueOf(inPortCounter);
 	}
 
@@ -63,11 +63,12 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 				UIComponentRepo.INSTANCE.getComponentLinkList().add(
 						new LinkingData(inSocket.getFromComponentId(), operationsComponent.getId(), inSocket
 								.getFromSocketId(), inSocket.getId()));
-				inPortCounter++;
+				
 			}
 
+			inPortCounter++;
 			if (inPortCounter > 2) {
-				uiComponent.changePortSettings(inPortCounter);
+				uiComponent.importPortSettings(inPortCounter);
 			}
 		}
 

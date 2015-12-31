@@ -2,6 +2,7 @@ package com.bitwise.app.graph.controller;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -297,29 +298,51 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			if(getCastedModel().getComponentName().equalsIgnoreCase("join")){
 
 				String newPortCount =   (String)getCastedModel().getProperties().get("input_count");
-
 				int prevPortCount = getCastedModel().getPort("in1").getNumberOfPortsOfThisType();
 				int numOfPort=0;
 				if(StringUtils.isNotEmpty(newPortCount)){
 					int i = Integer.parseInt(newPortCount);
-					if(i >= 2 || i <= 25){
-					numOfPort = Integer.parseInt(newPortCount);
+					if(i >= 2 && i <= 25){
+						numOfPort = Integer.parseInt(newPortCount);
+						if(prevPortCount != numOfPort){
+							ComponentFigure compFig = (ComponentFigure)getFigure();
+							compFig.setHeight(numOfPort, 1);
+							compFig.setWidth(numOfPort);
+							Dimension newSize = new Dimension((numOfPort+1)*33, ((numOfPort+1)*25)+getCastedModel().getComponentLabelMargin());
+							getCastedModel().setSize(newSize);
+							refresh();
+
+							if(prevPortCount < numOfPort){
+								//Increment the ports
+
+								getCastedModel().changePortCount(numOfPort);
+
+								List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
+								PortEditPart portEditPart = null;
+								for(AbstractGraphicalEditPart part:childrenEditParts)
+								{
+
+									if(part instanceof PortEditPart){ 
+										portEditPart = (PortEditPart) part;
+										portEditPart.adjustPortFigure(getCastedModel().getLocation());
+									}
+								}
+								getCastedModel().incrementPorts(numOfPort, prevPortCount);
+
+							}else if(prevPortCount > numOfPort){
+								//decrement the ports
+
+								List<String> portsToBeRemoved = populatePortsToBeRemoved(prevPortCount, numOfPort);
+
+								getCastedModel().decrementPorts(portsToBeRemoved);
+								((ComponentFigure)getFigure()).decrementAnchors(portsToBeRemoved);
+
+								getCastedModel().changePortCount(numOfPort);
+
+							}
+						}
 					}else{
 						numOfPort = 2;
-					}
-					if(prevPortCount != numOfPort){
-
-						ComponentFigure compFig = (ComponentFigure)getFigure();
-						compFig.setHeight(numOfPort, 1);
-						compFig.setWidth(numOfPort);
-						Dimension newSize = new Dimension((numOfPort+1)*33, ((numOfPort+1)*25)+getCastedModel().getComponentLabelMargin());
-						getCastedModel().setSize(newSize);
-
-						getCastedModel().clearPorts();
-						((ComponentFigure)getFigure()).clearAnchors(numOfPort);
-						refresh();
-
-						getCastedModel().changePortSettings(numOfPort);
 					}
 				}
 			}
@@ -345,6 +368,27 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			
 			super.performRequest(req);
 		}
+	}
+	
+	private List<String> populatePortsToBeRemoved(int prevCount, int newCount){
+		int keyCount = newCount;
+        List<String> oldKeys = new ArrayList<>();
+        List<String> newKeys = new ArrayList<>();
+        List<String> keysToBeRemoved = new ArrayList<>();
+        
+        oldKeys.addAll(getCastedModel().getPorts().keySet());
+
+        for(int i=0; i<keyCount; i++)
+        {
+              newKeys.add("in"+i);
+              newKeys.add("unused"+i);
+        }
+        newKeys.add("out0");
+        for (String key : oldKeys) {
+              if(!newKeys.contains(key))
+                    keysToBeRemoved.add(key);
+        }
+        return keysToBeRemoved;
 	}
 	
 	private void adjustComponentFigure(Component component, ComponentFigure componentFigure){
