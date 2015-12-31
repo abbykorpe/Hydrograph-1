@@ -400,7 +400,7 @@ public class CustomAboutDialog extends TrayDialog {
 	        featureContainer.setLayoutData(data);
 	        //add image on about dialog
 	        Bundle bundle = Platform.getBundle("com.bitwise.app.perspective");
-	        URL fullPathString = BundleUtility.find(bundle, "icons/app_icon.gif");
+	        URL fullPathString = BundleUtility.find(bundle, "icons/app_icon.png");
 	        Button button = new Button(featureContainer, SWT.FLAT | SWT.PUSH);
 	        Image image=ImageDescriptor.createFromURL(fullPathString).createImage();
 	        button.setImage(image);
