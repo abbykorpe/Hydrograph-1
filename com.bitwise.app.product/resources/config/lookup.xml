@@ -37,7 +37,11 @@
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
-		
+			
+		<tns:property dataType="string" name="schema" renderer="SCHEMA_WIDGET" type="USER"
+			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="REQUIRED"/>
+			
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL"/>
@@ -50,7 +54,7 @@
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
 		
-		<tns:property dataType="string" name="hash_join"   renderer="HASH_JOIN_MAPPING_WIDGET" type="USER"
+		<tns:property dataType="string" name="hash_join_map"   renderer="HASH_JOIN_MAPPING_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
 	</tns:component>

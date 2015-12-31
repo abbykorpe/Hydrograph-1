@@ -6,7 +6,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 
-import com.bitwise.app.common.datastructure.property.LookupPropertyGrid;
+import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
+import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -27,10 +28,10 @@ import com.bitwise.app.propertywindow.widgets.joinproperty.ELTJoinConfigGrid;
 public class ELTJoinWidget extends AbstractWidget{
 	
 	public static int value;
-	private Object properties;
+	private JoinConfigProperty properties;
 	private String propertyName;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>(); 
-	private LookupPropertyGrid lookupPropertyGrid;
+	private LookupMappingGrid lookupPropertyGrid;
 	
 	
 	public ELTJoinWidget(
@@ -39,8 +40,12 @@ public class ELTJoinWidget extends AbstractWidget{
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties,
 				propertyDialogButtonBar);
+		if(lookupPropertyGrid == null){
+			lookupPropertyGrid = new LookupMappingGrid();
+		}
 		this.propertyName = componentConfigrationProperty.getPropertyName();
-		this.properties =  componentConfigrationProperty.getPropertyValue();
+		
+		//this.properties =  (JoinConfigProperty)componentConfigrationProperty.getPropertyValue();
 	}
 	
 	/* (non-Javadoc)
@@ -74,8 +79,13 @@ public class ELTJoinWidget extends AbstractWidget{
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ELTJoinConfigGrid configGrid = new ELTJoinConfigGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), lookupPropertyGrid);
-				configGrid.open();
+				if(properties == null){
+					 properties=new JoinConfigProperty();
+					 properties.setJoin_key("");
+				 }
+				ELTJoinConfigGrid eltJoinConfigGrid = new ELTJoinConfigGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), lookupPropertyGrid);
+				eltJoinConfigGrid.open();
+				lookupPropertyGrid = eltJoinConfigGrid.getJoinPropertyGrid();
 			}
 			
 		});

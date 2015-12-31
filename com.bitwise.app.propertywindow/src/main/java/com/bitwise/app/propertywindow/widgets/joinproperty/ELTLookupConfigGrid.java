@@ -1,5 +1,6 @@
 package com.bitwise.app.propertywindow.widgets.joinproperty;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -20,6 +21,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
+import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTVerifyTextListener;
@@ -31,6 +33,7 @@ public class ELTLookupConfigGrid extends Dialog {
 	
 	private static final String IN1 = "in1";
 	private static final String IN0 = "in0";
+	private boolean isSelected;
 	private Text drivenText;
 	private Text lookupText;
 	private boolean islookup;
@@ -79,10 +82,7 @@ public class ELTLookupConfigGrid extends Dialog {
 		portComposite.setBounds(10, 10, 200, 100);
 		
 		labelWidget(portComposite, SWT.CENTER|SWT.READ_ONLY, new int[]{5, 5, 100, 20}, "Lookup Port");
-		
-		
 	    radio[0] = buttonWidget(portComposite, SWT.RADIO, new int[]{105, 5, 90, 20}, IN0);
-	    radio[0].setSelection(true);
 	    radio[1] = buttonWidget(portComposite, SWT.RADIO, new int[]{105, 25, 90, 20}, IN1); 
 	    
 	   
@@ -92,14 +92,15 @@ public class ELTLookupConfigGrid extends Dialog {
 	    	@Override
 			public void widgetSelected(SelectionEvent event) {
 	    		Button button = (Button)event.widget;
-	    		if(configProperty.isSelected()){
+	    		if(button.getText().equalsIgnoreCase("in1")){
 	    			radio[0].setSelection(false);
-	    			radio[1].setSelection(true);
+	    			 radio[1].setSelection(true);	    		
+	    			configProperty.setSelected(false);
 	    		 
 	    		}else{
 	    			radio[1].setSelection(false);
-	    			radio[0].setSelection(true);
-	    		 
+	    			radio[0].setSelection(true);	    	 
+	    			configProperty.setSelected(true);
 	    		}
 	    	}
 		});
@@ -123,11 +124,12 @@ public class ELTLookupConfigGrid extends Dialog {
 		ListenerHelper helper = new ListenerHelper();
 		txtDecorator = WidgetUtility.addDecorator(drivenText, Messages.EMPTYFIELDMESSAGE);
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
-		ELTVerifyTextListener list = new ELTVerifyTextListener();
-		drivenText.addListener(SWT.Verify, list.getListener(propertyDialogButtonBar, helper, drivenText));
+		drivenText.addListener(SWT.FocusIn, ListenerFactory.Listners.NORMAL_FOCUS_IN.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
+		drivenText.addListener(SWT.FocusOut, ListenerFactory.Listners.NORMAL_FOCUS_OUT.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
+		drivenText.addListener(SWT.Verify, ListenerFactory.Listners.VERIFY_TEXT.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
+		drivenText.addListener(SWT.Modify, ListenerFactory.Listners.MODIFY.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
 		
-		drivenText.addModifyListener(new ModifyListener() {
-			
+		drivenText.addModifyListener(new ModifyListener() {			
 			@Override
 			public void modifyText(ModifyEvent e) {
 				configProperty.setDriverKey(((Text)e.widget).getText());
@@ -135,9 +137,13 @@ public class ELTLookupConfigGrid extends Dialog {
 		});
 		
 		ListenerHelper help = new ListenerHelper();
-		help.put(HelperType.CONTROL_DECORATION, WidgetUtility.addDecorator(lookupText, Messages.EMPTYFIELDMESSAGE));
-		ELTVerifyTextListener listener = new ELTVerifyTextListener();
-		lookupText.addListener(SWT.Verify, listener.getListener(propertyDialogButtonBar, help, lookupText));
+		txtDecorator = WidgetUtility.addDecorator(lookupText, Messages.EMPTYFIELDMESSAGE);
+		help.put(HelperType.CONTROL_DECORATION, txtDecorator);
+		lookupText.addListener(SWT.FocusIn, ListenerFactory.Listners.NORMAL_FOCUS_IN.getListener().getListener(propertyDialogButtonBar, help, lookupText));
+		lookupText.addListener(SWT.FocusOut, ListenerFactory.Listners.NORMAL_FOCUS_OUT.getListener().getListener(propertyDialogButtonBar, help, lookupText));
+		lookupText.addListener(SWT.Verify, ListenerFactory.Listners.VERIFY_TEXT.getListener().getListener(propertyDialogButtonBar, help, lookupText));
+		lookupText.addListener(SWT.Modify, ListenerFactory.Listners.MODIFY.getListener().getListener(propertyDialogButtonBar, help, lookupText));
+		
 		lookupText.addModifyListener(new ModifyListener() {
 			
 			@Override
@@ -150,13 +156,16 @@ public class ELTLookupConfigGrid extends Dialog {
 	}
 	
 	public void populateWidget(){
-		if (configProperty.getDriverKey() != null)
+		if (StringUtils.isNotBlank(configProperty.getDriverKey())){
 			drivenText.setText(configProperty.getDriverKey());
-		if (configProperty.getLookupKey() != null)
-			lookupText.setText(configProperty.getLookupKey());
-		
 		}
-	
+		if (StringUtils.isNotBlank(configProperty.getLookupKey())){
+			lookupText.setText(configProperty.getLookupKey());	
+		}
+		radio[0].setSelection(configProperty.isSelected() ? true : false);
+		radio[1].setSelection(configProperty.isSelected() ? false : true);		
+	}
+		
 	public Button buttonWidget(Composite parent, int style, int[] bounds, String value){
 		Button button = new Button(parent, style);
 			button.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);

@@ -61,16 +61,12 @@ public abstract class TransformUiConverter extends UiConverter {
 	 */
 	protected void getInPort(TypeOperationsComponent operationsComponent) {
 		LOGGER.debug("Generating InPut Ports for -{}", componentName);
-		int portCounter = 1;
-
 		if (operationsComponent.getInSocket() != null) {
 			for (TypeBaseInSocket inSocket : operationsComponent.getInSocket()) {
 				uiComponent.engageInputPort(inSocket.getId());
 				UIComponentRepo.INSTANCE.getComponentLinkList().add(
 						new LinkingData(inSocket.getFromComponentId(), operationsComponent.getId(), inSocket
 								.getFromSocketId(), inSocket.getId()));
-
-				portCounter++;
 			}
 		}
 	}
@@ -84,14 +80,9 @@ public abstract class TransformUiConverter extends UiConverter {
 	 */
 	protected void getOutPort(TypeOperationsComponent operationsComponent) {
 		LOGGER.debug("Generating OutPut Ports for -{}", componentName);
-		int portCounter = 0;
-		int unusedPortsCounter = 0;
 		if (operationsComponent.getOutSocket() != null) {
 			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
-				if (getOutputSocketType(outSocket).equals("unused"))
-					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (unusedPortsCounter++));
-				else
-					uiComponent.engageOutputPort(getOutputSocketType(outSocket) + (portCounter++));
+				uiComponent.engageOutputPort(outSocket.getId());
 				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null)
 					propertyMap.put(Constants.PARAM_OPERATION,
 							getUiPassThroughOrOperationFieldsOrMapFieldGrid(outSocket));

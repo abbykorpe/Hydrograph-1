@@ -42,7 +42,6 @@ public abstract class OutputUiConverter extends UiConverter {
 	 */
 	protected void getInPort(TypeOutputComponent typeOutputComponent) {
 		LOGGER.debug("Generating Input Ports for -{}", componentName);
-		int portCounter = 1;
 		if (typeOutputComponent.getInSocket() != null) {
 			for (TypeOutputInSocket inSocket : typeOutputComponent.getInSocket()) {
 				if (inSocket.getSchema() != null) {

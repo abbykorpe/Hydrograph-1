@@ -41,14 +41,13 @@ public abstract class InputUiConverter extends UiConverter {
 	 */
 	protected void getOutPort(TypeInputComponent inputComponent) {
 		LOGGER.debug("Generating OutPut ports for " + componentName);
-		int portCounter = 1;
 		if (inputComponent.getOutSocket() != null) {
 			for (TypeInputOutSocket outSocket : inputComponent.getOutSocket()) {
 				uiComponent.engageOutputPort(outSocket.getId());
 				if (outSocket.getSchema() != null) {
 					propertyMap.put(PropertyNameConstants.SCHEMA.value(), getSchema(outSocket));
 				}
-				portCounter++;
+				
 			}
 		}
 	}

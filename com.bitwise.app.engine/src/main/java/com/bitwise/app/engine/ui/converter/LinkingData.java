@@ -43,6 +43,7 @@ public class LinkingData {
 
 	public void setSourceTerminal(String sourceTerminal) {
 		this.sourceTerminal=sourceTerminal;
+
 	}
 	
 	public String getTargetTerminal() {

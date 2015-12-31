@@ -53,7 +53,6 @@ public class UnionAllUiConverter extends StraightpullUiConverter {
 				UIComponentRepo.INSTANCE.getComponentLinkList().add(
 						new LinkingData(inSocket.getFromComponentId(), straightPullComponent.getId(), inSocket
 								.getFromSocketId(), fixedInsocket
-
 						));
 
 			}
