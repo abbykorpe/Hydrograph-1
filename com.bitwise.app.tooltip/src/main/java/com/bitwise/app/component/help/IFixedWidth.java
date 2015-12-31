@@ -7,7 +7,7 @@ public class IFixedWidth implements ComponentHelp{
 	@Override
 	public void HelpContentofComponent() {
 		PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(
-				   "/com.bitwise.app.help/html/concepts/subtopic.html");
+				   "/com.bitwise.app.help/html/Components/InputFixedWidth.html");
 	}
 
 }

@@ -7,7 +7,7 @@ public class IFDelimited implements ComponentHelp {
 	@Override
 	public void HelpContentofComponent() {
 		PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(
-				   "/com.bitwise.app.help/html/concepts/maintopic.html");
+				   "/com.bitwise.app.help/html/Components/InputFileDelimited.html");
 	}
 
 }
