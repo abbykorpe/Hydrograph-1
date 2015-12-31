@@ -71,7 +71,13 @@ public class RunJobHandler extends AbstractHandler {
 		setBaseEnabled(false);
 		
 		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
+			try{
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
+			}catch(Exception e){
+				logger.debug("Unable to save graph ", e);
+				setBaseEnabled(true);
+			}
+			
 		}
 		
 		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell());
