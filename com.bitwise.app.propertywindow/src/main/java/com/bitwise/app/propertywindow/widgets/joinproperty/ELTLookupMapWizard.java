@@ -211,7 +211,7 @@ public class ELTLookupMapWizard extends Dialog {
 		inputTableViewer[tableViewerIndex].getTable().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				addRowToTable(inputTableViewer[tableViewerIndex],joinInputList);
+				addRowToTable(inputTableViewer[tableViewerIndex], joinInputList);
 			}
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -226,7 +226,7 @@ public class ELTLookupMapWizard extends Dialog {
 	    inputTableViewer[tableViewerIndex].setInput(joinInputList);
 	
 	    eltswtWidgets.applyDragFromTableViewer(inputTableViewer[tableViewerIndex].getTable(), tableViewerIndex);
-		addButton(comGrid, new int[]{200, 8, 25, 20}, inputTableViewer[tableViewerIndex],joinInputList);
+		addButton(comGrid, new int[]{200, 8, 25, 20}, inputTableViewer[tableViewerIndex], joinInputList);
 		
 		return inputTableViewer[tableViewerIndex]; 
 	}

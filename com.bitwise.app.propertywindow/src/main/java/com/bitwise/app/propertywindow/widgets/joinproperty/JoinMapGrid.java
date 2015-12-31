@@ -77,9 +77,9 @@ public class JoinMapGrid extends Dialog {
 	private String[] COLUMN_NAME = {PROPERTY_NAME, PROPERTY_VALUE};
 	private String[] INPUT_COLUMN_NAME = {OPERATIONAL_INPUT_FIELD};
 	
-	private List<FilterProperties> joinInputList = new ArrayList<>();
-	private List<LookupMapProperty> joinOutputList  = new ArrayList<>();
-	private List<List<FilterProperties>> joinSchemaList  = new ArrayList<>();
+	private List<FilterProperties> joinInputList;
+	private List<LookupMapProperty> joinOutputList;
+	private List<List<FilterProperties>> joinSchemaList = new ArrayList<>();
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
 	private JoinMappingGrid joinMappingGrid;
 	
@@ -136,17 +136,25 @@ public class JoinMapGrid extends Dialog {
 		for(int i = 0; i<inputPortValue;i++){
 			if(joinMappingGrid!=null){
 				if(joinMappingGrid.getLookupInputProperties()!=null && !joinMappingGrid.getLookupInputProperties().isEmpty()){
-					expandItemComposite = (Composite) createComposite(expandBar, joinMappingGrid.getLookupInputProperties().get(i), i);	
-				}else{
+					joinInputList = joinMappingGrid.getLookupInputProperties().get(i);
+				}
+				else{
 					joinInputList = new ArrayList<>();
 				}
-				expandItemComposite = (Composite) createComposite(expandBar, joinInputList, i);
-			}	 
+			}
+			if(joinSchemaList!=null){
+				joinSchemaList.add(joinInputList);
+			}
+			expandItemComposite = (Composite) createComposite(expandBar, joinInputList, i);
 		}	
+				
+		if(joinMappingGrid.getLookupMapProperties() != null && !joinMappingGrid.getLookupMapProperties().isEmpty()){
+    		joinOutputList = joinMappingGrid.getLookupMapProperties();
+    	}
+    	else{
+    		joinOutputList = new ArrayList<>();
+    	}
 		
-		if(joinSchemaList!=null){
-			joinSchemaList.add(joinInputList);
-		}
 			expandBar.getItem(0).setExpanded(true);
 			expandBar.setBackground(new Color(Display.getDefault(), new RGB(250, 250, 250)));
 			 Listener updateScrolledSize = new Listener()
@@ -191,6 +199,7 @@ public class JoinMapGrid extends Dialog {
 		    composite_5.setBounds(290, 4, 100, 24);
 		    createLabel(composite_5);
 		    
+		    
 		    outputTableViewer = widget.createTableViewer(composite_1, COLUMN_NAME,new int[]{0, 30, 398, 538}, 196, new JoinContentProvider(), new LookupLabelProvider());
 		    
 		    Label lblNewLabel = new Label(composite_1, SWT.NONE);
@@ -208,7 +217,7 @@ public class JoinMapGrid extends Dialog {
 			});
 		    widget.createTableColumns(outputTableViewer.getTable(), COLUMN_NAME, 196);
 		    CellEditor[] editors =widget.createCellEditorList(outputTableViewer.getTable(),2);
-		    	//editors[0].setValidator(valueEditorValidation(Messages.EmptyNameNotification, outputTableViewer));
+		    editors[0].setValidator(valueEditorValidation(Messages.EmptyNameNotification, outputTableViewer));
 		    editors[1].setValidator(createValueEditorValidator(outputTableViewer));
 		    outputTableViewer.setColumnProperties(COLUMN_NAME);
 		    outputTableViewer.setCellModifier(new LookupCellModifier(outputTableViewer));
@@ -316,7 +325,7 @@ public class JoinMapGrid extends Dialog {
 	    inputTableViewer[tableViewerIndex].setCellEditors(editors);
 	    inputTableViewer[tableViewerIndex].setInput(joinInputList);
 	
-		addButton(comGrid, new int[]{200, 8, 25, 20}, inputTableViewer[tableViewerIndex],joinInputList);
+		addButton(comGrid, new int[]{200, 8, 25, 20}, inputTableViewer[tableViewerIndex], joinInputList);
 		widget.applyDragFromTableViewer(inputTableViewer[tableViewerIndex].getTable(), tableViewerIndex);
 		
 		return comGrid;

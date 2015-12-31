@@ -10,20 +10,13 @@ public class LookupMappingGrid {
 	
 	//TODO
 	private List<Filter> filterList; 							
-	private List<JoinConfigProperty> joinConfigProperties;
+
 	
 	public LookupMappingGrid() {
 		lookupInputProperties = new ArrayList<>();
 		lookupMapProperties = new ArrayList<>();
 	}
 	
-	public List<JoinConfigProperty> getJoinConfigProperties() {
-		return joinConfigProperties;
-	}
-	public void setJoinConfigProperties(
-			List<JoinConfigProperty> joinConfigProperties) {
-		this.joinConfigProperties = joinConfigProperties;
-	}
 	public List<Filter> getFilterList() {
 		return filterList;
 	}
@@ -53,8 +46,8 @@ public class LookupMappingGrid {
 		builder.append(lookupInputProperties);
 		builder.append(", filterList=");
 		builder.append(filterList);
-		builder.append(", joinConfigProperties=");
-		builder.append(joinConfigProperties);
+	/*	builder.append(", joinConfigProperties=");
+		builder.append(joinConfigProperties);*/
 		builder.append("]");
 		return builder.toString();
 	}

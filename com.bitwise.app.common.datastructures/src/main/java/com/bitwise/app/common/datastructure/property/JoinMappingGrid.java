@@ -6,12 +6,21 @@ import java.util.List;
 public class JoinMappingGrid {
 	private List<LookupMapProperty> lookupMapProperties; //right side grid
 	private List<List<FilterProperties>> lookupInputProperties;   //join left side
+	private List<JoinConfigProperty> joinConfigProperties;
 	
 	public JoinMappingGrid() {
 		lookupMapProperties = new ArrayList<>();
 		lookupInputProperties = new ArrayList<>();
 	}
 	
+	
+	public List<JoinConfigProperty> getJoinConfigProperties() {
+		return joinConfigProperties;
+	}
+	public void setJoinConfigProperties(
+			List<JoinConfigProperty> joinConfigProperties) {
+		this.joinConfigProperties = joinConfigProperties;
+	}
 	public List<List<FilterProperties>> getLookupInputProperties() {
 		return lookupInputProperties;
 	}
