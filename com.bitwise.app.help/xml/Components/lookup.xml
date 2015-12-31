@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Lookup" link_to="xml\Components\components.xml#Lookup"> 
+	<topic label="All properties for Lookup"  href="html/concepts/maintopic.html"> 
+	</topic>
+ <topic href="html/concepts/maintopic.html" label="Validations applied">
+ </topic>
+</toc>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Introduction">
+   <anchor id="Overview"/>
+   <anchor id="WhatIsAccelero"/>
+   <anchor id="HowItWorks"/>
+   <anchor id="GettingStarted"/>
+   <anchor id="GlossaryTerminology"/>
+</toc>
