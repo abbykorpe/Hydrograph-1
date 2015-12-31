@@ -2,7 +2,7 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Overview" link_to="xml/Introduction/introduction.xml#Overview">
-   <topic href="html/gettingstarted/Overview.html" label="Overview">
+   <topic href="html/Introduction/Overview.html" label="Overview">
    </topic> 
 	
 </toc>
