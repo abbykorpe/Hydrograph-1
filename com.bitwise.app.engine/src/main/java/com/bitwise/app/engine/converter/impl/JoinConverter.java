@@ -98,7 +98,7 @@ public class JoinConverter extends TransformConverter{
 		}
 		
 		if (StringUtils.isNotBlank(entry.getParamValue()))
-			ComponentXpath.INSTANCE.getXpathMap().put(ComponentXpathConstants.COMPONENT_JOIN_TYPE_XPATH.value().replace(ID, componentName).replace("$inSocketId", entry.getJoinKey()), entry.getParamValue());
+			ComponentXpath.INSTANCE.getXpathMap().put(ComponentXpathConstants.COMPONENT_JOIN_TYPE_XPATH.value().replace(ID, componentName).replace("$inSocketId", entry.getPortIndex()), entry.getParamValue());
 		return targetJoinType;
 	}
 	@Override
