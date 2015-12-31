@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.FocusListener;
@@ -40,7 +41,6 @@ public class ELTJoinConfigGrid extends Dialog {
 	private int inputPortValue = ELTJoinMapWidget.value;
 	/*private Text keyText, portIndex;*/
 	private Label addButton, deleteButton;
-	private Combo joinTypeCombo;
 	private List<String> ITEMS = Arrays.asList(Constants.INNER, Constants.OUTER, Constants.PARAMETER);
 	private List<JoinConfigProperty> configPropertyList;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
@@ -76,11 +76,11 @@ public class ELTJoinConfigGrid extends Dialog {
 		Composite composite = new Composite(container, SWT.BORDER);
 		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_composite.heightHint = 212;
-		gd_composite.widthHint = 546;
+		gd_composite.widthHint = 767;
 		composite.setLayoutData(gd_composite);
 		
 		ScrolledComposite scrolledComposite = new ScrolledComposite(composite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		scrolledComposite.setBounds(0, 0, 546, 212);
+		scrolledComposite.setBounds(0, 0, 767, 212);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
 		
@@ -89,6 +89,7 @@ public class ELTJoinConfigGrid extends Dialog {
 		eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER, new int[]{0, 2, 142, 23}, "PortIndex", false);
 		eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER, new int[]{144, 2, 190, 23}, "Join key(s)", false);
 		eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER, new int[]{337, 2, 205, 23}, "Join Type", false);
+		eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER, new int[]{544, 2, 190, 23}, "Parameter", false);
 		scrolledComposite.setContent(composite_1);
 		
 		if(configPropertyList != null && configPropertyList.isEmpty()){
@@ -110,7 +111,7 @@ public class ELTJoinConfigGrid extends Dialog {
 					
 				}
 			});*/
-			final Text keyText = eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER|SWT.READ_ONLY, new int[]{144, 28+j, 190, 23}, "", true);
+			Text keyText = eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER|SWT.READ_ONLY, new int[]{144, 28+j, 190, 23}, "", true);
 			
 			ListenerHelper help = new ListenerHelper();
 			help.put(HelperType.CONTROL_DECORATION, WidgetUtility.addDecorator(keyText, Messages.EMPTYFIELDMESSAGE));
@@ -122,13 +123,34 @@ public class ELTJoinConfigGrid extends Dialog {
 				}
 			});
 			
-			joinTypeCombo = eltswtWidgets.comboWidget(composite_1, SWT.BORDER, new int[]{337, 28+j, 205, 23}, (String[])ITEMS.toArray(), 0);
+			final Text paramText = eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER|SWT.READ_ONLY, new int[]{544, 28+j, 190, 23}, "", true);
+			
+			ListenerHelper helper = new ListenerHelper();
+			ControlDecoration txtDecorator = WidgetUtility.addDecorator(paramText, Messages.EMPTYFIELDMESSAGE);
+			helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
+			paramText.addListener(SWT.FocusIn, ListenerFactory.Listners.FOCUS_IN.getListener().getListener(propertyDialogButtonBar, helper, paramText));
+			paramText.addListener(SWT.FocusOut,ListenerFactory.Listners.FOCUS_OUT.getListener().getListener(propertyDialogButtonBar, helper, paramText));
+			paramText.addListener(SWT.Modify,ListenerFactory.Listners.MODIFY.getListener().getListener(propertyDialogButtonBar, helper, paramText));
+			paramText.addModifyListener(new ModifyListener() {				
+				@Override
+				public void modifyText(ModifyEvent e) {	
+					joinConfigProperty.setParamValue(((Text)e.widget).getText());					
+				}
+			});
+			
+			Combo joinTypeCombo = eltswtWidgets.comboWidget(composite_1, SWT.BORDER, new int[]{337, 28+j, 205, 23}, (String[])ITEMS.toArray(), 0);
 			joinTypeCombo.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					String comboText = ((Combo)e.widget).getText();
 					joinConfigProperty.setJoinType(ITEMS.indexOf(comboText));
-
+					if(Constants.PARAMETER.equalsIgnoreCase(comboText)){
+						paramText.setVisible(true);
+					}
+					else{
+						paramText.setText("");
+						paramText.setVisible(false);
+					}
 					/*ListenerHelper help = new ListenerHelper();
 					help.put(HelperType.CONTROL_DECORATION, WidgetUtility.addDecorator(keyText, Messages.EMPTYFIELDMESSAGE));
 					Listener focusIn = ListenerFactory.Listners.FOCUS_IN.getListener().getListener(propertyDialogButtonBar, help, keyText);
@@ -147,7 +169,7 @@ public class ELTJoinConfigGrid extends Dialog {
 			//configPropertyList.add(joinConfigProperty);
 			j=j+26;
 			if(configPropertyList != null && !configPropertyList.isEmpty()){
-				populate(i, portIndex, keyText);
+				populate(i, portIndex, keyText, joinTypeCombo,paramText);
 			}
 		}
 		
@@ -155,10 +177,16 @@ public class ELTJoinConfigGrid extends Dialog {
 		return container;
 	}
 
-	public void populate(int i, Text portIndex, Text keyText){
+	public void populate(int i, Text portIndex, Text keyText, Combo joinTypeCombo, Text paramText){
 		portIndex.setText(configPropertyList.get(i).getPortIndex());
 		keyText.setText(configPropertyList.get(i).getJoinKey());
 		joinTypeCombo.select(configPropertyList.get(i).getJoinType());
+		if(configPropertyList.get(i).getJoinType() == 2){
+			String portIndexText = configPropertyList.get(i).getParamValue();
+			paramText.setText(StringUtils.isBlank(portIndexText) ? "" : portIndexText);
+		}else{
+			paramText.setVisible(false);
+		}
 		/*String portIndexText = configPropertyList.get(i).getPortIndex();
 		portIndex.setText(StringUtils.isBlank(portIndexText) ? "" : portIndexText);
 		String joinKey = configPropertyList.get(i).getJoinKey();
@@ -184,7 +212,7 @@ public class ELTJoinConfigGrid extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(566, 351);
+		return new Point(787, 351);
 	}
 
 	public Label labelWidget(Composite parent, int style, int[] bounds, String value){
