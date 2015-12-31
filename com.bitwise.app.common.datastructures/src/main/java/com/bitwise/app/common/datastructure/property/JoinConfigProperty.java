@@ -2,27 +2,33 @@ package com.bitwise.app.common.datastructure.property;
 
 public class JoinConfigProperty {
 
-	private String port_index;
-	private String join_key;
-	private Integer join_type;
+	private String portIndex;
+	private String joinKey;
+	private Integer joinType;
 	
-	public String getPort_index() {
-		return port_index;
+	public JoinConfigProperty() {
+		portIndex = "";
+		joinKey = "";
+		joinType = 0;
 	}
-	public void setPort_index(String port_index) {
-		this.port_index = port_index;
+	
+	public String getPortIndex() {
+		return portIndex;
 	}
-	public String getJoin_key() {
-		return join_key;
+	public void setPortIndex(String portIndex) {
+		this.portIndex = portIndex;
 	}
-	public void setJoin_key(String join_key) {
-		this.join_key = join_key;
+	public String getJoinKey() {
+		return joinKey;
 	}
-	public Integer getJoin_type() {
-		return join_type;
+	public void setJoinKey(String joinKey) {
+		this.joinKey = joinKey;
 	}
-	public void setJoin_type(Integer join_type) {
-		this.join_type = join_type;
+	public Integer getJoinType() {
+		return joinType;
+	}
+	public void setJoinType(Integer joinType) {
+		this.joinType = joinType;
 	}
 	
 	@Override
@@ -30,11 +36,11 @@ public class JoinConfigProperty {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((join_key == null) ? 0 : join_key.hashCode());
+				+ ((joinKey == null) ? 0 : joinKey.hashCode());
 		result = prime * result
-				+ ((join_type == null) ? 0 : join_type.hashCode());
+				+ ((joinType == null) ? 0 : joinType.hashCode());
 		result = prime * result
-				+ ((port_index == null) ? 0 : port_index.hashCode());
+				+ ((portIndex == null) ? 0 : portIndex.hashCode());
 		return result;
 	}
 	
@@ -47,20 +53,20 @@ public class JoinConfigProperty {
 		if (getClass() != obj.getClass())
 			return false;
 		JoinConfigProperty other = (JoinConfigProperty) obj;
-		if (join_key == null) {
-			if (other.join_key != null)
+		if (joinKey == null) {
+			if (other.joinKey != null)
 				return false;
-		} else if (!join_key.equals(other.join_key))
+		} else if (!joinKey.equals(other.joinKey))
 			return false;
-		if (join_type == null) {
-			if (other.join_type != null)
+		if (joinType == null) {
+			if (other.joinType != null)
 				return false;
-		} else if (!join_type.equals(other.join_type))
+		} else if (!joinType.equals(other.joinType))
 			return false;
-		if (port_index == null) {
-			if (other.port_index != null)
+		if (portIndex == null) {
+			if (other.portIndex != null)
 				return false;
-		} else if (!port_index.equals(other.port_index))
+		} else if (!portIndex.equals(other.portIndex))
 			return false;
 		return true;
 	}

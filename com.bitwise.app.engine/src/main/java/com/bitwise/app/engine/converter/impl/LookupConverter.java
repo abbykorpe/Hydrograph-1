@@ -164,8 +164,7 @@ public class LookupConverter extends TransformConverter {
 
 	private void setInputProperty(HashJoin hashJoin) {
 		List<TypeBaseInSocket> inputField = new ArrayList<>();
-		Map<String, String> mapFields = (TreeMap<String, String>) properties
-				.get(Constants.LOOKUP_MAP_FIELD);
+		Map<String, String> mapFields = (TreeMap<String, String>) properties.get(Constants.LOOKUP_MAP_FIELD);
 		if (mapFields != null) {
 			TypeInputField typeInputField = new TypeInputField();
 			TypeMapField mapField = new TypeMapField();

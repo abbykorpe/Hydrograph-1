@@ -1,13 +1,14 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
-import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -18,34 +19,32 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTC
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import com.bitwise.app.propertywindow.widgets.joinproperty.ELTJoinConfigGrid;
 
-
-
-
 /**
- * @author vibhort
+ * @author 
  *
  */
 public class ELTJoinWidget extends AbstractWidget{
 	
 	public static int value;
-	private JoinConfigProperty properties;
+	private Object properties;
 	private String propertyName;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>(); 
-	private LookupMappingGrid lookupPropertyGrid;
-	
+	//private JoinMappingGrid lookupPropertyGrid;
+	private List<JoinConfigProperty> configProperty;
 	
 	public ELTJoinWidget(
-			ComponentConfigrationProperty componentConfigrationProperty,
-			ComponentMiscellaneousProperties componentMiscellaneousProperties,
+			ComponentConfigrationProperty componentConfigProp, ComponentMiscellaneousProperties componentMiscProps,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
-		super(componentConfigrationProperty, componentMiscellaneousProperties,
-				propertyDialogButtonBar);
-		if(lookupPropertyGrid == null){
-			lookupPropertyGrid = new LookupMappingGrid();
+		super(componentConfigProp, componentMiscProps, propertyDialogButtonBar);
+		this.properties =  (List<JoinConfigProperty>)componentConfigrationProperty.getPropertyValue();
+		if(properties == null){
+			configProperty = new ArrayList<>();
 		}
-		this.propertyName = componentConfigrationProperty.getPropertyName();
+		else{
+			configProperty = (List<JoinConfigProperty>) properties;
+		}
+		this.propertyName = componentConfigProp.getPropertyName();
 		
-		//this.properties =  (JoinConfigProperty)componentConfigrationProperty.getPropertyValue();
 	}
 	
 	/* (non-Javadoc)
@@ -79,13 +78,8 @@ public class ELTJoinWidget extends AbstractWidget{
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(properties == null){
-					 properties=new JoinConfigProperty();
-					 properties.setJoin_key("");
-				 }
-				ELTJoinConfigGrid eltJoinConfigGrid = new ELTJoinConfigGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), lookupPropertyGrid);
+				ELTJoinConfigGrid eltJoinConfigGrid = new ELTJoinConfigGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), configProperty);
 				eltJoinConfigGrid.open();
-				lookupPropertyGrid = eltJoinConfigGrid.getJoinPropertyGrid();
 			}
 			
 		});
@@ -94,7 +88,7 @@ public class ELTJoinWidget extends AbstractWidget{
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		property.put(propertyName, lookupPropertyGrid);
+		property.put(propertyName, configProperty);
 		return property;
 	}
 
