@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -588,6 +589,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 		//get map from file
 		Map<String,String> currentParameterMap = getCurrentParameterMap();
+		if(currentParameterMap == null) return;
 		List<String> letestParameterList = getLatestParameterList();
 
 		Map<String,String> newParameterMap = new LinkedHashMap<>();
@@ -674,7 +676,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private Map<String, String> getCurrentParameterMap() {
 
-		File parameterFile = new File(getParameterFile());
+		File parameterFile;
+		String fileName = getParameterFile();
+		if(StringUtils.isNotBlank(fileName)){
+			parameterFile = new File(fileName);
+		}else return null;
 		//destinationFile.create(new FileInputStream(sourceFile), true, null);
 		if(!parameterFile.exists()){
 			try {
