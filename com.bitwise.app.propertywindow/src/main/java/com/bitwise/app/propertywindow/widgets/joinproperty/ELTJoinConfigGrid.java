@@ -31,6 +31,7 @@ import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinMapWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
@@ -45,13 +46,16 @@ public class ELTJoinConfigGrid extends Dialog {
 	private List<JoinConfigProperty> configPropertyList;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private ELTSWTWidgets eltswtWidgets = new ELTSWTWidgets();
+	private ValidationStatus validationStatus;
 	/**
 	 * Create the dialog.
 	 * @param parentShell
+	 * @param validationStatus 
 	 */
-	public ELTJoinConfigGrid(Shell parentShell, List<JoinConfigProperty> configProperty) {
+	public ELTJoinConfigGrid(Shell parentShell, List<JoinConfigProperty> configProperty, ValidationStatus validationStatus) {
 		super(parentShell);
 		this.configPropertyList = configProperty;
+		this.validationStatus = validationStatus;
 	}
 
 	/**
@@ -115,6 +119,7 @@ public class ELTJoinConfigGrid extends Dialog {
 			
 			ListenerHelper help = new ListenerHelper();
 			help.put(HelperType.CONTROL_DECORATION, WidgetUtility.addDecorator(keyText, Messages.EMPTYFIELDMESSAGE));
+			help.put(HelperType.VALIDATION_STATUS, validationStatus);
 			keyText.addListener(SWT.Verify, ListenerFactory.Listners.VERIFY_TEXT.getListener().getListener(propertyDialogButtonBar, help, keyText));
 			keyText.addModifyListener(new ModifyListener() {				
 				@Override
@@ -128,6 +133,7 @@ public class ELTJoinConfigGrid extends Dialog {
 			ListenerHelper helper = new ListenerHelper();
 			ControlDecoration txtDecorator = WidgetUtility.addDecorator(paramText, Messages.EMPTYFIELDMESSAGE);
 			helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
+			helper.put(HelperType.VALIDATION_STATUS, validationStatus);
 			paramText.addListener(SWT.FocusIn, ListenerFactory.Listners.FOCUS_IN.getListener().getListener(propertyDialogButtonBar, helper, paramText));
 			paramText.addListener(SWT.FocusOut,ListenerFactory.Listners.FOCUS_OUT.getListener().getListener(propertyDialogButtonBar, helper, paramText));
 			paramText.addListener(SWT.Modify,ListenerFactory.Listners.MODIFY.getListener().getListener(propertyDialogButtonBar, helper, paramText));

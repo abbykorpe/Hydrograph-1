@@ -290,9 +290,9 @@ public class JoinMapGrid extends Dialog {
 		    	}
 			});
 		    }
-
+		    if(joinOutputList!=null){
 		    DragDropUtility.INSTANCE.applyDrop(outputTableViewer, new DragDropLookupImp(joinOutputList, false, outputTableViewer));
-		    
+		    }
 		return container;
 	}
 	
@@ -578,24 +578,22 @@ public class JoinMapGrid extends Dialog {
 				
 				// Creates CellValue Validator for table's cells
 				private ICellEditorValidator createValueEditorValidator(final TableViewer viewer) {
+					final List duplicate = new ArrayList<>();
 					ICellEditorValidator propertyValidator = new ICellEditorValidator() {
 						@Override
 						public String isValid(Object value) {
-							String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
-							String valueToValidate = String.valueOf(value).trim();
-							if (StringUtils.isEmpty(valueToValidate)) {
-								errorLabel.setText(Messages.EmptyNameNotification);
-								errorLabel.setVisible(true);
-							}
 							for (LookupMapProperty temp : joinOutputList) {
-								if (!temp.getOutput_Field().equalsIgnoreCase(valueToValidate)) {
-									errorLabel.setText(Messages.RuntimePropertAlreadyExists);
-									errorLabel.setVisible(true);
-								} 
-								else{
+								String outputField = temp.getOutput_Field();
+								if (!duplicate.contains(outputField)) {
 									errorLabel.setVisible(false);
+									duplicate.add(outputField);
+								}else{
+									errorLabel.setText(Messages.RuntimePropertAlreadyExists);
+									errorLabel.setVisible(true);							
 								}
+								
 							}
+							errorLabel.setVisible(false);
 							return null;
 						}
 					};

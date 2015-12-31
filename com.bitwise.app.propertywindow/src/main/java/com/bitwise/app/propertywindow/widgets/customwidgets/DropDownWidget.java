@@ -17,6 +17,7 @@ import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.DropDownConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
@@ -44,6 +45,7 @@ public class DropDownWidget extends AbstractWidget{
 	private String propertyName;
 	private String properties;
 	private ComboBoxParameter comboBoxParameter=new ComboBoxParameter();
+	private ValidationStatus validationStatus = new ValidationStatus();
 	private ControlDecoration txtDecorator;
 	private DropDownConfig dropDownConfig;
 	
