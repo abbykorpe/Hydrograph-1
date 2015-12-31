@@ -2,9 +2,9 @@ package com.bitwise.app.engine.xpath;
 
 public enum ComponentXpathConstants {
 	COMPONENT_CHARSET_XPATH("/graph/*[@id='$id']/charset"),
-	COMPONENT_JOIN_TYPE_XPATH("/graph/*[@id='$id']/*[@id='$inSocketId']/joinType"),
+	COMPONENT_JOIN_TYPE_XPATH("graph/operations/keys[2]@joinType"),
 	COMPONENT_XPATH_BOOLEAN("/graph/*[@id='$id']/propertyName");
-
+	///graph/*[@id='$id']/*[@id='$inSocketId']/joinType
 	private final String value;
 
 	ComponentXpathConstants(String value) {

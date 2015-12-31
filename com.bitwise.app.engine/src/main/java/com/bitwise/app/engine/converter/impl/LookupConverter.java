@@ -49,8 +49,9 @@ public class LookupConverter extends TransformConverter {
 	public void prepareForXML() {
 		super.prepareForXML();
 		HashJoin hashJoin = (HashJoin) baseComponent;
-		if (properties.get(Constants.LOOKUP_CONFIG_FIELD) != null)
+		if (properties.get(Constants.LOOKUP_CONFIG_FIELD) != null){
 			hashJoin.getKeys().addAll(getLookupConfigKeys());
+		}
 	}
 
 	private List<TypeKeyFields> getLookupConfigKeys() {
