@@ -87,19 +87,6 @@ public class RunConfigDialog extends Dialog {
 
 		new Label(container, SWT.NONE);
 
-		Label lblRunConfigSettings = new Label(container, SWT.CENTER);
-
-		FontDescriptor boldDescriptor = FontDescriptor.createFrom(lblRunConfigSettings.getFont()).setStyle(SWT.BOLD);
-		Font boldFont = boldDescriptor.createFont(lblRunConfigSettings.getDisplay());
-		lblRunConfigSettings.setFont( boldFont );
-
-		GridData gd_lblNewLabel = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_lblNewLabel.widthHint = 249;
-		lblRunConfigSettings.setLayoutData(gd_lblNewLabel);
-		formToolkit.adapt(lblRunConfigSettings, true, true);
-		lblRunConfigSettings.setText("Run Configuration settings");
-		new Label(container, SWT.NONE);
-
 		Composite compositeRunMode = new Composite(container, SWT.BORDER);
 		GridData gd_compositeRunMode = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_compositeRunMode.heightHint = 80;
@@ -141,6 +128,11 @@ public class RunConfigDialog extends Dialog {
 		formToolkit.paintBordersFor(compositeServerDetails);
 
 		Label lblServerDetails = new Label(compositeServerDetails, SWT.NONE);
+		
+		FontDescriptor boldDescriptor = FontDescriptor.createFrom(lblServerDetails.getFont()).setStyle(SWT.BOLD);
+		Font boldFont = boldDescriptor.createFont(lblServerDetails.getDisplay());
+		lblServerDetails.setFont( boldFont );
+		
 		lblServerDetails.setFont(boldFont);
 		lblServerDetails.setBounds(24, 10, 84, 15);
 		formToolkit.adapt(lblServerDetails, true, true);
