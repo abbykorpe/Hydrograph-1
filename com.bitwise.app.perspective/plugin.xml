@@ -40,7 +40,7 @@
    </property>
           <property
                 name="windowImages"
-                value="icons/app_icon.gif">
+                value="icons/app_icon.png">
           </property>
       </product>
    </extension>

@@ -5,10 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 import java.util.Set;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.JoinMappingGrid;
+import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.util.Constants;
@@ -21,6 +24,7 @@ import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeInputField;
+import com.bitwiseglobal.graph.commontypes.TypeMapField;
 import com.bitwiseglobal.graph.commontypes.TypeOperationInputFields;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
 import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
@@ -33,14 +37,14 @@ public class JoinConverter extends TransformConverter{
 	private static final String JOIN_OPERATION_ID="join";
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(JoinConverter.class);
 	private ConverterHelper converterHelper;
-	private LookupMappingGrid lookupPropertyGrid;
+	private JoinMappingGrid joinupPropertyGrid;
 	
 	public JoinConverter(Component component) {
 		super();	
 		this.baseComponent = new Join();
 		this.component = component;
 		this.properties = component.getProperties();
-		lookupPropertyGrid = (LookupMappingGrid) properties.get(Constants.JOIN_MAP_FIELD);
+		joinupPropertyGrid = (JoinMappingGrid) properties.get(Constants.JOIN_MAP_FIELD);
 		converterHelper = new ConverterHelper(component);
 	}
 	
@@ -85,7 +89,7 @@ public class JoinConverter extends TransformConverter{
 			outSocketList.add(outSocket);
 				
 				if(properties.get(Constants.JOIN_MAP_FIELD) != null)
-				outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(converterHelper.getLookuporJoinOutputMaping(lookupPropertyGrid));
+				outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(getLookuporJoinOutputMaping(joinupPropertyGrid));
 				
 		}
 			
@@ -136,6 +140,33 @@ public class JoinConverter extends TransformConverter{
 			inSocketsList.add(inSocket);
 		}
 		return inSocketsList;
+	}
+	
+	public List<Object> getLookuporJoinOutputMaping(JoinMappingGrid lookupPropertyGrid) {
+		List<Object> passThroughFieldorMapFieldList = null;
+		if (lookupPropertyGrid != null) {
+			passThroughFieldorMapFieldList = new ArrayList<>();
+			TypeInputField typeInputField = null;
+			TypeMapField mapField = null;
+			for (LookupMapProperty entry : lookupPropertyGrid.getLookupMapProperties()) {
+				String[] sourceNameValue = entry.getSource_Field().split(Pattern.quote("."));
+
+				if (sourceNameValue[1].equalsIgnoreCase(entry.getOutput_Field())) {
+					typeInputField = new TypeInputField();
+					typeInputField.setName(sourceNameValue[1]);
+					typeInputField.setInSocketId(sourceNameValue[0]);
+					passThroughFieldorMapFieldList.add(typeInputField);
+				} else {
+					mapField = new TypeMapField();
+					mapField.setSourceName(sourceNameValue[1]);
+					mapField.setName(entry.getOutput_Field());
+					mapField.setInSocketId(sourceNameValue[0]);
+					passThroughFieldorMapFieldList.add(mapField);
+				}
+
+			}
+		}
+		return passThroughFieldorMapFieldList;
 	}
 
 }

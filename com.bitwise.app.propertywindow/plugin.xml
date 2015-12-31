@@ -24,7 +24,7 @@
             <command
                   commandId="com.bitwise.app.propertywindow.runconfig"
                   icon="icons/run_config.png"
-                  label="Run configuration settings"
+                  label="Run Configuration Settings"
                   style="push">
             </command>
          </toolbar>

@@ -256,12 +256,14 @@ public class RunConfigDialog extends Dialog {
 		      String key = (String) e.nextElement();
 		      if(key.equals("local") && buildProps.getProperty(key).equals("true")){
 		    	  btnLocalMode.setSelection(true);
+		    	  btnRemoteMode.setSelection(false);
 		      }else if(key.equals("remote") && buildProps.getProperty(key).equals("true")){
 		    	  btnRemoteMode.setSelection(true);
-		      }else if(!(key.equals("remote") || key.equals("local"))){
-		    	  textBoxes.get(key).setText(buildProps.getProperty(key));
+		    	  btnLocalMode.setSelection(false);
 		    	  compositeServerDetails.setVisible(true);
 		    	  compositePathConfig.setVisible(true);
+		      }else if(!(key.equals("remote") || key.equals("local"))){
+		    	  textBoxes.get(key).setText(buildProps.getProperty(key));  
 		      }
 		    }
 	}

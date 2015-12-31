@@ -5,23 +5,183 @@
    <extension
          point="org.eclipse.help.toc">
       <toc
-            file="toc.xml"
+            file="xml/Introduction/introduction.xml"
             primary="true">
       </toc>
       <toc
-            file="tocconcepts.xml">
+            file="xml/Introduction/WhatIsAccelero.xml">
       </toc>
       <toc
-            file="tocgettingstarted.xml">
+            file="xml/Introduction/howItWorks.xml">
       </toc>
       <toc
-            file="tocreference.xml">
+            file="xml/Introduction/gettingStarted.xml">
       </toc>
       <toc
-            file="tocsamples.xml">
+            file="xml/Introduction/GlossaryTerminology.xml">
       </toc>
       <toc
-            file="toctasks.xml">
+            file="xml/Installation and Configuration/installation.xml"
+            primary="true">
+      </toc>
+      <toc
+            file="xml/Installation and Configuration/prerequisites.xml">
+      </toc>
+      <toc
+            file="xml/Installation and Configuration/stepsToInstall.xml">
+      </toc>
+      <toc
+            file="xml/User Interface/userInterface.xml"
+            primary="true">
+      </toc>
+      <toc
+            file="xml/User Interface/componentPalette.xml">
+      </toc>
+      <toc
+            file="xml/User Interface/console.xml">
+      </toc>
+      <toc
+            file="xml/User Interface/jobCanvas.xml">
+      </toc>
+      <toc
+            file="xml/User Interface/menuBarToolBar.xml">
+      </toc>
+      <toc
+            file="xml/User Interface/projectExplorer.xml">
+      </toc>
+      <toc
+            file="xml/User Interface/runConfiguration.xml">
+      </toc>
+      <toc
+            file="xml/Components/components.xml"
+            primary="true">
+      </toc>
+      <toc
+            file="xml/Components/transform.xml">
+      </toc>
+      <toc
+            file="xml/Components/inputFileDelimited.xml">
+      </toc>
+      <toc
+            file="xml/Components/components.xml"
+            primary="true">
+      </toc>
+      <toc
+            file="xml/Components/aggregate.xml">
+      </toc>
+      <toc
+            file="xml/Components/clone.xml">
+      </toc>
+      <toc
+            file="xml/Components/filter.xml">
+      </toc>
+      <toc
+            file="xml/Components/inputFileDelimited.xml">
+      </toc>
+      <toc
+            file="xml/Components/inputFileFixedWidth.xml">
+      </toc>
+      <toc
+            file="xml/Components/inputFileFixedWidth.xml">
+      </toc>
+      <toc
+            file="xml/Components/join.xml">
+      </toc>
+      <toc
+            file="xml/Components/lookup.xml">
+      </toc>
+      <toc
+            file="xml/Components/outputFileDelimited.xml">
+      </toc>
+      <toc
+            file="xml/Components/outputFileFixedWidth.xml">
+      </toc>
+      <toc
+            file="xml/Components/removeDups.xml">
+      </toc>
+      <toc
+            file="xml/Components/transform.xml">
+      </toc>
+      <toc
+            file="xml/Components/unionAll.xml">
+      </toc>
+      <toc
+            file="xml/Introduction/overview.xml">
+      </toc>
+      <toc
+            file="xml/Operation Class/operationClass.xml"
+            primary="true">
+      </toc>
+      <toc
+            file="xml/Operation Class/filterOperation.xml">
+      </toc>
+      <toc
+            file="xml/Operation Class/aggregateOperation.xml">
+      </toc>
+      <toc
+            file="xml/Operation Class/transformOperation.xml">
+      </toc>
+      <toc
+            file="xml/How To Steps/howToSteps.xml"
+            primary="true">
+      </toc>
+      <toc
+            file="xml/How To Steps/howToCheckinJobsProject.xml">
+      </toc>
+      <toc
+            file="xml/How To Steps/howToCheckoutProject.xml">
+      </toc>
+      <toc
+            file="xml/How To Steps/howToCreateAJob.xml">
+      </toc>
+      <toc
+            file="xml/How To Steps/howToCreateAProject.xml">
+      </toc>
+      <toc
+            file="xml/How To Steps/howToImportAProject.xml">
+      </toc>
+      <toc
+            file="xml/How To Steps/howToImportEngineXMLToUI.xml">
+      </toc>
+      <toc
+            file="xml/How To Steps/howToParameterizeComponentProperties.xml">
+      </toc>
+      <toc
+            file="xml/How To Steps/howToPassHadoopPropertiesToComponent.xml">
+      </toc>
+      <toc
+            file="xml/How To Steps/howToPassParametersToOperationClass.xml">
+      </toc>
+      <toc
+            file="xml/How To Steps/howToRunAJobLocally.xml">
+      </toc>
+      <toc
+            file="xml/How To Steps/howToRunAJobOnCluster.xml">
+      </toc>
+      <toc
+            file="xml/References/references.xml"
+            primary="true">
+      </toc>
+      <toc
+            file="xml/References/FAQs.xml">
+      </toc>
+      <toc
+            file="xml/References/dosandDonts.xml">
+      </toc>
+      <toc
+            file="xml/References/jobExamples.xml">
+      </toc>
+      <toc
+            file="xml/References/operationExamples.xml">
+      </toc>
+      <toc
+            file="xml/References/referenceURLs.xml">
+      </toc>
+      <toc
+            file="xml/References/releaseNotes.xml">
+      </toc>
+      <toc
+            file="xml/References/whenShouldIUseHashJoinVsCoJoin.xml">
       </toc>
    </extension>
 

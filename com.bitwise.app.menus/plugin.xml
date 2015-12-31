@@ -408,7 +408,7 @@
                label="Help">
             <command
                   commandId="org.eclipse.ui.help.displayHelp"
-                 label="Help content"
+                 label="Help Content"
                   style="push">
            </command>
           <command
@@ -473,7 +473,7 @@
       <wizard
             category="com.bitwise.app.menus.importEngineXmlCategory"
             class="com.bitwise.app.menus.importWizards.ImportEngineXmlWizard"
-            icon="icons/import_engine_xml.png"
+            icon="icons/import_xml_option.png"
             id="com.bitwise.app.menus.importWizards.ImportEngineXmlWizard"
             name="Import Engine Xml">
          <description>

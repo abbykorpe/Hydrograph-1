@@ -37,16 +37,16 @@ public abstract class Component extends Model {
 		INPUTS("inputs"),
 		OUTPUTS("outputs"),
 		VALIDITY_STATUS("validityStatus");
-		
+
 		private String value;
 		private Props(String value){
 			this.value = value;
 		}
-		
+
 		public String getValue(){
 			return this.value;
 		}
-		
+
 		/**
 		 * Eq.
 		 * 
@@ -58,7 +58,7 @@ public abstract class Component extends Model {
 			return this.value.equals(property);
 		}
 	}
-	
+
 	/**
 	 * The Enum ValidityStatus.
 	 * 
@@ -69,17 +69,17 @@ public abstract class Component extends Model {
 		ERROR,
 		VALID;
 	}
-	
+
 	private final Point location;
 	private final Dimension size;
 	private Map<String, Object> properties;
 	private Container parent;
 	private String validityStatus;
-	
+
 	private final Hashtable<String, ArrayList<Link>> inputLinksHash;
 	private final Hashtable<String, ArrayList<Link>> outputLinksHash;
-    private ArrayList<Link> inputLinks = new ArrayList<Link>();
-    private ArrayList<Link> outputLinks = new ArrayList<Link>();
+	private ArrayList<Link> inputLinks = new ArrayList<Link>();
+	private ArrayList<Link> outputLinks = new ArrayList<Link>();
 	private final List<String> inputportTerminals;
 	private final List<String> outputPortTerminals;
 	private boolean newInstance;
@@ -89,13 +89,13 @@ public abstract class Component extends Model {
 	private HashMap<String, Port> ports;
 	private String componentName;
 	List<PortSpecification> portSpecification;
-	
+
 	private ComponentLabel componentLabel;
 	private int componentLabelMargin;
-		
+
 	@XStreamOmitField
 	private Map<String,PropertyToolTipInformation> tooltipInformation;
-	
+
 	//@XStreamOmitField
 	private Map<String,String> toolTipErrorMessages; //<propertyName,ErrorMessage>
 
@@ -119,15 +119,15 @@ public abstract class Component extends Model {
 		validityStatus = ValidityStatus.WARN.name();
 		componentName = DynamicClassProcessor.INSTANCE
 				.getClazzName(this.getClass());
-		
+
 		componentLabel = new ComponentLabel(componentName);
 		componentLabelMargin = 16;
-		
+
 		prefix = XMLConfigUtil.INSTANCE.getComponent(componentName).getDefaultNamePrefix();
 		initPortSettings();
 		toolTipErrorMessages = new LinkedHashMap<>();
 	}
-	
+
 	public Map<String, String> getToolTipErrorMessages() {
 		return toolTipErrorMessages;
 	}
@@ -137,11 +137,11 @@ public abstract class Component extends Model {
 	}
 
 	private void initPortSettings(){
-		
+
 		portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
-		
+
 		ports = new HashMap<String, Port>();
-		
+
 		for(PortSpecification p:portSpecification)
 		{ 	
 			String portTerminal = p.getTypeOfPort() + p.getSequenceOfPort();
@@ -149,9 +149,13 @@ public abstract class Component extends Model {
 			ports.put(portTerminal, port);
 		}
 	}
-	
+
 	public List<PortSpecification> getPortSpecification() {
 		return portSpecification;
+	}
+
+	public HashMap<String, Port> getPorts() {
+		return ports;
 	}
 
 	/**
@@ -164,20 +168,20 @@ public abstract class Component extends Model {
 	public Port getPort(String terminal) {
 		return ports.get(terminal);
 	}
-	
+
 	public List<Model> getChildren() {	
-		
+
 		List<Model> children = new ArrayList<Model>(ports.values());
 		children.add(componentLabel);
-		
+
 		return children;
-		
+
 	}
-	
+
 	private void updateConnectionProperty(String prop, Object newValue) {
 		firePropertyChange(prop, null,newValue);
 	}
-	
+
 	/**
 	 * Connect input.
 	 * 
@@ -205,7 +209,7 @@ public abstract class Component extends Model {
 		outputLinksHash.put(c.getSourceTerminal(), outputLinks);
 		updateConnectionProperty(Props.OUTPUTS.getValue(), c);
 	}
-	
+
 	/**
 	 * Disconnect input.
 	 * 
@@ -229,7 +233,7 @@ public abstract class Component extends Model {
 		outputLinksHash.remove(c.getSourceTerminal());
 		updateConnectionProperty(Props.OUTPUTS.getValue(), c);
 	}
-	
+
 	/* add comments as function called by gef*/
 	public List<Link> getSourceConnections() {
 		return outputLinks;
@@ -239,7 +243,7 @@ public abstract class Component extends Model {
 		return inputLinks;
 	}
 
-	
+
 	/**
 	 * Engage input port.
 	 * 
@@ -269,10 +273,10 @@ public abstract class Component extends Model {
 	 */
 	public boolean isInputPortEngaged(String terminal) {
 		return inputportTerminals.contains(terminal);
-		
+
 	}
 
-	
+
 	/**
 	 * Engage output port.
 	 * 
@@ -360,7 +364,7 @@ public abstract class Component extends Model {
 		if(newLocation.x < 0 ){
 			newLocation.x = 0;			
 		}
-		
+
 		if(newLocation.y < 0){
 			newLocation.y = 0;
 		}
@@ -405,7 +409,7 @@ public abstract class Component extends Model {
 		this.componentLabelMargin = componentLabelMargin;
 		firePropertyChange("componentLabelMargin", null, componentLabelMargin);
 	}
-	
+
 	public Container getParent() {
 		return parent;
 	}
@@ -417,7 +421,7 @@ public abstract class Component extends Model {
 	public LinkedHashMap<String, Object> getProperties() {
 		return (LinkedHashMap<String, Object>) properties;
 	}
-	
+
 	private class PropertyNotAvailableException extends RuntimeException {
 		private static final long serialVersionUID = -7978238880803956846L;
 
@@ -438,7 +442,7 @@ public abstract class Component extends Model {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
 	public String getPrefix() {
 		return prefix;
 	}
@@ -454,18 +458,18 @@ public abstract class Component extends Model {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	
+
 	public String getValidityStatus() {
 		return validityStatus;
 	}
-	
+
 	public void setValidityStatus(String validityStatus) {
 		this.validityStatus = validityStatus;
 	}
-	
+
 	//For Target XML
 	public abstract String getConverter();
-	
+
 	@Override
 	public Component clone() throws CloneNotSupportedException {
 		Component component = null;
@@ -480,9 +484,9 @@ public abstract class Component extends Model {
 		component.setParent(getParent());
 		component.setProperties((Map<String, Object>) getProperties().clone());
 		component.setPropertyValue("name", getPrefix());
-	    component.setSize(getSize());
-	    component.setLocation(getLocation());	
-	    return component;
+		component.setSize(getSize());
+		component.setLocation(getLocation());	
+		return component;
 	}
 
 	public void setTooltipInformation(
@@ -505,79 +509,107 @@ public abstract class Component extends Model {
 			}	
 		}		
 	}
-	
+
 	public void setComponentLabel(String label) {
 		setPropertyValue(Component.Props.NAME_PROP.getValue(), label);
 		componentLabel.setLabelContents(label);
 	}
-	
-	
+
+
 	public String getComponentDescription(){
 		return XMLConfigUtil.INSTANCE.getComponent(componentName).getDescription();
 	}
-	
-	public void changePortSettings(int newPortCount){
 
-		for(PortSpecification p:portSpecification)
-		{ 	
-			String portTerminal = p.getTypeOfPort() + p.getSequenceOfPort();
-			Port port = new Port(p.getNameOfPort(), p.getLabelOfPort(), portTerminal, this, p.getNumberOfPorts(), p.getTypeOfPort(), p.getSequenceOfPort());
-			if(p.getTypeOfPort().equals("in") || p.getTypeOfPort().equals("unused")){
-				port.setNumberOfPortsOfThisType(newPortCount);
-			}
-			ports.put(portTerminal, port);
-		}
-		
+	public void importPortSettings(int newPortCount){
+
+		changePortCount(newPortCount);
+
 		for(int i=0; i< (newPortCount-2); i++){
 
 			Port inPort = new Port("in"+(i+2) , "in"+(i+2), "in"+(i+2), this, newPortCount, "in", (i+2));
 			ports.put("in"+(i+2), inPort);
 			firePropertyChange("Component:add", null, inPort );
-			
+
 			Port unusedPort = new Port("unused"+(i+2) , "un"+(i+2), "unused"+(i+2), this, newPortCount, "unused", (i+2));
 			ports.put("unused"+(i+2), unusedPort);
 			firePropertyChange("Component:add", null, unusedPort );
 		}
 	}
-	
-	public void clearPorts(){
 
-		deleteInputLinks();
-		deleteOutputLinks();
-		ports.clear();
+	public void incrementPorts(int newPortCount, int oldPortCount){
 
-		firePropertyChange("Component:remove", ports.values(), null );
+		for(int i=oldPortCount; i<newPortCount; i++){
+			Port inPort = new Port("in"+i , "in"+i, "in"+i, this, newPortCount, "in", i);
+			ports.put("in"+i, inPort);
+			firePropertyChange("Component:add", null, inPort );
+
+			Port unusedPort = new Port("unused"+i , "un"+i, "unused"+i, this, newPortCount, "unused", i);
+			ports.put("unused"+i, unusedPort);
+			firePropertyChange("Component:add", null, unusedPort );
+		}
 	}
-	private void deleteInputLinks(){
+
+	public void changePortCount(int newPortCount){
+
+		List<String> portTerminals = new ArrayList<>();
+		portTerminals.addAll(ports.keySet());
+		for (String key : portTerminals) {
+			if(key.contains("in") || key.contains("unused")){
+				ports.get(key).setNumberOfPortsOfThisType(newPortCount);
+			}
+		}
+	}
+
+	public void decrementPorts(List<String> portsToBeRemoved){
+
+		deleteInputLinks(portsToBeRemoved);
+		deleteOutputLinks(portsToBeRemoved);
+		removePorts(portsToBeRemoved);
+	}
+	
+	private void deleteInputLinks(List<String> portsToBeRemoved){
 		if(inputLinks.size() > 0){
 			Link[] inLinks = new Link[inputLinks.size()];
 			inputLinks.toArray(inLinks);
-			for (Link l: inLinks){
-				//if(!l.getTargetTerminal().equals("in1")){
-					l.detachSource();
-					l.detachTarget();
-					l.getSource().freeOutputPort(l.getSourceTerminal());
-					l.getTarget().freeInputPort(l.getTargetTerminal());
-					l.setTarget(null);
-					l.setSource(null);
-				//}
+			for(String portRemove: portsToBeRemoved){
+
+				for (Link l: inLinks){
+					if(l.getTargetTerminal().equals(portRemove)){
+						l.detachSource();
+						l.detachTarget();
+						l.getSource().freeOutputPort(l.getSourceTerminal());
+						l.getTarget().freeInputPort(l.getTargetTerminal());
+						l.setTarget(null);
+						l.setSource(null);
+					}
+				}
 			}
 		}
 	}
-	private void deleteOutputLinks(){
+	private void deleteOutputLinks(List<String> portsToBeRemoved){
 		if(outputLinks.size() > 0){
 			Link[] outLinks = new Link[outputLinks.size()];
 			outputLinks.toArray(outLinks);
-			for (Link l: outLinks){
-				l.detachSource();
-				l.detachTarget();
-				l.getSource().freeOutputPort(l.getSourceTerminal());
-				l.getTarget().freeInputPort(l.getTargetTerminal());
-				l.setTarget(null);
-				l.setSource(null);
+			for(String portRemove: portsToBeRemoved){
+				for (Link l: outLinks){
+					if(l.getSourceTerminal().equals(portRemove)){
+						l.detachSource();
+						l.detachTarget();
+						l.getSource().freeOutputPort(l.getSourceTerminal());
+						l.getTarget().freeInputPort(l.getTargetTerminal());
+						l.setTarget(null);
+						l.setSource(null);
+					}
+				}
 			}
 		}
 	}
 
-	
+	private void removePorts(List<String> portsToBeRemoved){
+		for(String portRemove: portsToBeRemoved){
+			ports.remove(portRemove);
+		}
+
+	}
+
 }

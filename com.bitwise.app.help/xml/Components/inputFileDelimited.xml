@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Input File Delimited" link_to="xml\Components\components.xml#InputFileDelimited"> 
+	<topic label="All properties for Input  File Delimited"  href="html/Components/InputFileDelimited.html"> 
+	</topic>
+ <topic href="html/concepts/maintopic.html" label="Validations applied">
+ </topic>
+</toc>
