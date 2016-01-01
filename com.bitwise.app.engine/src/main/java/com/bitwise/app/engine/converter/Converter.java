@@ -16,6 +16,7 @@ import com.bitwise.app.engine.exceptions.SchemaException;
 import com.bitwise.app.engine.helper.ConverterHelper;
 import com.bitwise.app.engine.xpath.ComponentXpath;
 import com.bitwise.app.engine.xpath.ComponentXpathConstants;
+import com.bitwise.app.engine.xpath.ComponentsAttributeAndValue;
 import com.bitwise.app.graph.model.Component;
 import com.bitwiseglobal.graph.commontypes.BooleanValueType;
 import com.bitwiseglobal.graph.commontypes.StandardCharsets;
@@ -79,7 +80,7 @@ public abstract class Converter {
 						.put((ComponentXpathConstants.COMPONENT_XPATH_BOOLEAN.value().replace(
 								ID, componentName)).replace(Constants.PARAM_PROPERTY_NAME,
 								propertyName),
-								properties.get(propertyName).toString());
+								new ComponentsAttributeAndValue(null, properties.get(propertyName).toString()));
 				return booleanValue;
 			} else {
 				return booleanValue;
@@ -107,7 +108,7 @@ public abstract class Converter {
 		if (charset != null)
 			ComponentXpath.INSTANCE.getXpathMap().put(
 					ComponentXpathConstants.COMPONENT_CHARSET_XPATH.value()
-							.replace(ID, componentName), charset);
+							.replace(ID, componentName), new ComponentsAttributeAndValue(null, charset));
 		return targetCharset;
 	}
 

@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.converter.LinkingData;
@@ -21,7 +20,7 @@ import com.bitwiseglobal.graph.operationstypes.Join;
 public class JoinComponentUiConverter extends TransformUiConverter {
 
 	private Join join;
-	
+
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(JoinComponentUiConverter.class);
 	private int inPortCounter = 0;
 
@@ -63,10 +62,9 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 				UIComponentRepo.INSTANCE.getComponentLinkList().add(
 						new LinkingData(inSocket.getFromComponentId(), operationsComponent.getId(), inSocket
 								.getFromSocketId(), inSocket.getId()));
-				
+				inPortCounter++;
 			}
 
-			inPortCounter++;
 			if (inPortCounter > 2) {
 				uiComponent.importPortSettings(inPortCounter);
 			}
@@ -78,8 +76,8 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 		LOGGER.debug("Generating OutPut Ports for -{}", componentName);
 		if (operationsComponent.getOutSocket() != null) {
 			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
-					uiComponent.engageOutputPort(outSocket.getId());
-				
+				uiComponent.engageOutputPort(outSocket.getId());
+
 			}
 
 		}

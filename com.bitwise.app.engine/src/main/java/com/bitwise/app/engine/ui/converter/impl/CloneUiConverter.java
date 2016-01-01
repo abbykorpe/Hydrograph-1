@@ -52,7 +52,7 @@ public class CloneUiConverter extends StraightpullUiConverter {
 
 	protected void getOutPort(TypeStraightPullComponent straightPullComponent) {
 		LOGGER.debug("Fetching Straight-Pull Output port for -{}", componentName);
-		int portCounter = 1;
+		int portCounter = 0;
 		if (straightPullComponent.getOutSocket() != null) {
 			for (TypeStraightPullOutSocket outSocket : straightPullComponent.getOutSocket()) {
 				uiComponent.engageOutputPort(getOutputSocketType(outSocket) + portCounter);

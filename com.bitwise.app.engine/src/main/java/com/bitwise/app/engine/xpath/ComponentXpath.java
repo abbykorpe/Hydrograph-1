@@ -32,15 +32,14 @@ import com.bitwise.app.engine.util.ConverterUtil;
 
 public class ComponentXpath {
 
-	private static final String VALUE = "value";
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ConverterUtil.class);
 	public static final ComponentXpath INSTANCE = new ComponentXpath();
-	private Map<String, String> xpathMap;
+	private Map<String, ComponentsAttributeAndValue> xpathMap;
 	private Document doc;
 
-	public Map<String, String> getXpathMap() {
+	public Map<String, ComponentsAttributeAndValue> getXpathMap() {
 		if (xpathMap == null) {
-			xpathMap = new HashMap<String, String>();
+			xpathMap = new HashMap<String, ComponentsAttributeAndValue>();
 		}
 		return xpathMap;
 	}
@@ -50,7 +49,7 @@ public class ComponentXpath {
 		try {
 			XPath xPath = createXPathInstance(inputStream, null);
 			LOGGER.debug("GENRATED COMPONENTS XPATH {}", getXpathMap().toString());
-			for (Map.Entry<String, String> entry : getXpathMap().entrySet()) {
+			for (Map.Entry<String, ComponentsAttributeAndValue> entry : getXpathMap().entrySet()) {
 				NodeList nodeList = (NodeList) xPath.compile(entry.getKey()).evaluate(doc, XPathConstants.NODESET);
 
 				for (int i = 0; i < nodeList.getLength(); i++) {
@@ -58,7 +57,7 @@ public class ComponentXpath {
 
 					if (Node.ELEMENT_NODE == nNode.getNodeType()) {
 						Element eElement = (Element) nNode;
-						eElement.setAttribute(VALUE, entry.getValue());
+						eElement.setAttribute(entry.getValue().getAttributeName(), entry.getValue().getAttributeValue());
 					}
 				}
 			}
