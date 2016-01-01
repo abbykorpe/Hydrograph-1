@@ -101,7 +101,13 @@ public class ELTJoinConfigGrid extends Dialog {
 				configPropertyList.add(new JoinConfigProperty());
 			}
 		}
-				
+		
+		if(inputPortValue > configPropertyList.size()){
+			for(int i = configPropertyList.size(); i <= inputPortValue; i++){
+				configPropertyList.add(new JoinConfigProperty());
+			}
+		}
+		
 		for(int i=0,j=0;i<inputPortValue;i++,j++){
 			final JoinConfigProperty joinConfigProperty = configPropertyList.get(i);
 		

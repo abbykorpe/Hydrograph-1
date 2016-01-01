@@ -47,7 +47,7 @@ public class FilterUiConverter extends TransformUiConverter{
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.REMOVE_DUPS.value());
 		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY.value());
-	
+		validateComponentProperties(propertyMap);
 	}
 
 	private OperationClassProperty getOperationClass() {
