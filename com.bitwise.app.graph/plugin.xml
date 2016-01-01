@@ -255,5 +255,19 @@
               
       </perspectiveExtension>
    </extension>
-
+	<extension
+         point="org.eclipse.ltk.core.refactoring.renameParticipants">
+      <renameParticipant
+            class="com.bitwise.app.graph.editor.RenameJobParticipant"
+            id="com.bitwise.app.graph.editor.RenameJobParticipant"
+            name="RenameJobRelatedFiles">
+         <enablement>
+            <and>
+               <instanceof
+                     value="org.eclipse.core.resources.IFile">
+               </instanceof>
+            </and>
+         </enablement>
+      </renameParticipant>
+   </extension>
 </plugin>
