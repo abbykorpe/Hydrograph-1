@@ -60,7 +60,7 @@ public class LinkReconnectSourceCommand extends Command {
 				.getPort().getPortSpecification();
 
 		for (PortSpecification p : portspecification) {
-			String portName = p.getTypeOfPort() + p.getSequenceOfPort();
+			String portName = p.getTypeOfPort().value() + p.getSequenceOfPort();
 			if (portName.equals(newSourceTerminal)) {
 				if (p.isAllowMultipleLinks()
 						|| !newSource.isOutputPortEngaged(newSourceTerminal)) {

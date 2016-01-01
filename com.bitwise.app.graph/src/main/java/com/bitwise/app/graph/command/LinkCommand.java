@@ -73,7 +73,7 @@ public class LinkCommand extends Command{
 
 			for (PortSpecification p:portspecification)
 			{
-				String portName=p.getTypeOfPort()+p.getSequenceOfPort();
+				String portName=p.getTypeOfPort().value()+p.getSequenceOfPort();
 				if(portName.equals(sourceTerminal)){
 					if(p.isAllowMultipleLinks() || 
 							!source.isOutputPortEngaged(sourceTerminal)){
@@ -95,7 +95,7 @@ public class LinkCommand extends Command{
 			portspecification=XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
 			for (PortSpecification p:portspecification)
 			{
-				String portName=p.getTypeOfPort()+p.getSequenceOfPort();
+				String portName=p.getTypeOfPort().value()+p.getSequenceOfPort();
 				if(portName.equals(targetTerminal)){
 					if(p.isAllowMultipleLinks() ||
 							!target.isInputPortEngaged(targetTerminal)){

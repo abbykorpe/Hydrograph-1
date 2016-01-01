@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig ComponentConfig.xsd ">
+	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/join_palette.png" canvasIconPath="/icons/join_canvas.png"
-		name="Join" nameInPalette="Join" defaultNamePrefix="Join" description="This is Join component.\nsome more text">
+		name="Join" nameInPalette="Join" defaultNamePrefix="Join" description="This is Join component.\nsome more text" >
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification>
@@ -52,6 +52,9 @@
 			</tns:portSpecification>
 			
 		</tns:port>
+		
+		<tns:changeInPortsDynamically>true</tns:changeInPortsDynamically>
+		<tns:changeUnusedPortsDynamically>true</tns:changeUnusedPortsDynamically>
 		
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"

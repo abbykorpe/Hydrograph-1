@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig ComponentConfig.xsd ">
+	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/input_fixwidth_palette.png" canvasIconPath="/icons/input_fixwidth_canvas.png"
 		name="IFixedWidth" nameInPalette="File Fixed Width" defaultNamePrefix="IFixedWidth" description="This is IFixedWidth component.\nsome more text">
 		<tns:category>INPUT</tns:category>

@@ -9,43 +9,53 @@
 package com.bitwise.app.common.component.config;
 
 import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for category_type.
+ * <p>Java class for PortType.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="category_type">
+ * &lt;simpleType name="PortType">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="INPUT"/>
- *     &lt;enumeration value="OUTPUT"/>
- *     &lt;enumeration value="TRANSFORM"/>
- *     &lt;enumeration value="STRAIGHTPULL"/>
- *     &lt;enumeration value="DUMMY"/>
+ *     &lt;enumeration value="in"/>
+ *     &lt;enumeration value="out"/>
+ *     &lt;enumeration value="unused"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "category_type")
+@XmlType(name = "PortType")
 @XmlEnum
-public enum CategoryType {
+public enum PortType {
 
-    INPUT,
-    OUTPUT,
-    TRANSFORM,
-    STRAIGHTPULL,
-    DUMMY;
+    @XmlEnumValue("in")
+    IN("in"),
+    @XmlEnumValue("out")
+    OUT("out"),
+    @XmlEnumValue("unused")
+    UNUSED("unused");
+    private final String value;
 
-    public String value() {
-        return name();
+    PortType(String v) {
+        value = v;
     }
 
-    public static CategoryType fromValue(String v) {
-        return valueOf(v);
+    public String value() {
+        return value;
+    }
+
+    public static PortType fromValue(String v) {
+        for (PortType c: PortType.values()) {
+            if (c.value.equals(v)) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException(v);
     }
 
 }

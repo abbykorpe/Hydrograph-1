@@ -64,11 +64,11 @@ public class ComponentCreateCommand extends Command {
 		List<PortSpecification> portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
 		for(PortSpecification p:portSpecification)
 		{	
-			if(p.getTypeOfPort().equalsIgnoreCase("in")){
+			if(p.getTypeOfPort().value().equalsIgnoreCase("in")){
 				totalPortsofInType=p.getNumberOfPorts();
-			}else if(p.getTypeOfPort().equalsIgnoreCase("out")){
+			}else if(p.getTypeOfPort().value().equalsIgnoreCase("out")){
 				totalPortsOfOutType=p.getNumberOfPorts();
-			}else if(p.getTypeOfPort().equalsIgnoreCase("unused")){
+			}else if(p.getTypeOfPort().value().equalsIgnoreCase("unused")){
 				totalPortsOfUnusedType=p.getNumberOfPorts();
 			}
 		}

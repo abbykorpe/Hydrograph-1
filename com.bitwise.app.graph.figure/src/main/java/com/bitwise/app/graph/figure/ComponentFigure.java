@@ -157,13 +157,13 @@ public class ComponentFigure extends Figure implements Validator{
 	}
 
 	private void setPortCount(PortSpecification p) {
-		if(("in").equalsIgnoreCase(p.getTypeOfPort())){
+		if(("in").equalsIgnoreCase(p.getTypeOfPort().value())){
 			totalPortsofInType=p.getNumberOfPorts();
 		}
-		else if(("out").equalsIgnoreCase(p.getTypeOfPort())){
+		else if(("out").equalsIgnoreCase(p.getTypeOfPort().value())){
 			totalPortsOfOutType=p.getNumberOfPorts();
 		}
-		else if(("unused").equalsIgnoreCase(p.getTypeOfPort())){
+		else if(("unused").equalsIgnoreCase(p.getTypeOfPort().value())){
 			totalPortsOfUnusedType=p.getNumberOfPorts();
 		}
 

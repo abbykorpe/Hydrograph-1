@@ -54,7 +54,7 @@ public class LinkReconnectTargetCommand extends Command{
 			portspecification=XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
 			for (PortSpecification p:portspecification)
 			{
-				String portName=p.getTypeOfPort()+p.getSequenceOfPort();
+				String portName=p.getTypeOfPort().value()+p.getSequenceOfPort();
 				if(portName.equals(newTargetTerminal)){
 					if(p.isAllowMultipleLinks() ||
 							!newTarget.isInputPortEngaged(newTargetTerminal)){
