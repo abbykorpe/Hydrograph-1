@@ -62,7 +62,7 @@ public class AggregateUiConverter extends TransformUiConverter {
 		container.getComponentNames().add(componentName);
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.AGGREGATE.value());
-		uiComponent.setCategory(UIComponentsConstants.TRANSFORM_CATEGORY.value());
+		
 		validateComponentProperties(propertyMap);
 	}
 

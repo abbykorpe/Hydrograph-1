@@ -46,7 +46,7 @@ public class CloneUiConverter extends StraightpullUiConverter {
 		container.getComponentNames().add(clone.getId());
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.CLONE.value());
-		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY.value());
+	
 		validateComponentProperties(propertyMap);
 	}
 

@@ -41,7 +41,6 @@ public class LookupUiConverter extends TransformUiConverter {
 
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.LOOKUP.value());
-		uiComponent.setCategory(UIComponentsConstants.TRANSFORM_CATEGORY.value());
 		validateComponentProperties(propertyMap);
 	}
 

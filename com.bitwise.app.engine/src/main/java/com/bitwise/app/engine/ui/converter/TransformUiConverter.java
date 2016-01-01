@@ -16,6 +16,7 @@ import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
+import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.helper.ConverterUiHelper;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwise.app.propertywindow.fixedwidthschema.FixedWidthGridRow;
@@ -49,6 +50,7 @@ public abstract class TransformUiConverter extends UiConverter {
 		LOGGER.debug("Fetching common properties for -{}", componentName);
 		getInPort((TypeOperationsComponent) typeBaseComponent);
 		getOutPort((TypeOperationsComponent) typeBaseComponent);
+		uiComponent.setCategory(UIComponentsConstants.TRANSFORM_CATEGORY.value());
 		propertyMap.put(PropertyNameConstants.RUNTIME_PROPERTIES.value(), getRuntimeProperties());
 	}
 
