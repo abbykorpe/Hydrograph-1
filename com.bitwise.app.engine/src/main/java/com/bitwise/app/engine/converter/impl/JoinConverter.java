@@ -1,6 +1,7 @@
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +9,10 @@ import java.util.Map.Entry;
 import java.util.regex.Pattern;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
 import com.bitwise.app.common.datastructure.property.JoinMappingGrid;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
@@ -20,21 +23,28 @@ import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
+import com.bitwise.app.engine.xpath.ComponentXpath;
+import com.bitwise.app.engine.xpath.ComponentXpathConstants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
+import com.bitwiseglobal.graph.commontypes.StandardCharsets;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
+import com.bitwiseglobal.graph.commontypes.TypeFieldName;
 import com.bitwiseglobal.graph.commontypes.TypeInputField;
 import com.bitwiseglobal.graph.commontypes.TypeMapField;
 import com.bitwiseglobal.graph.commontypes.TypeOperationInputFields;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
 import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
+import com.bitwiseglobal.graph.join.JoinType;
 import com.bitwiseglobal.graph.join.TypeKeyFields;
 import com.bitwiseglobal.graph.operationstypes.Join;
 
 
 public class JoinConverter extends TransformConverter{
 	private static final String JOIN_OPERATION_ID="join";
+	private List<String> ITEMS = Arrays.asList(StringUtils.lowerCase(Constants.INNER), StringUtils.lowerCase(Constants.OUTER));
+	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(JoinConverter.class);
 	private ConverterHelper converterHelper;
 	private JoinMappingGrid joinupPropertyGrid;
@@ -53,22 +63,43 @@ public class JoinConverter extends TransformConverter{
 		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		Join join = (Join)baseComponent;
+		if (properties.get(Constants.JOIN_CONFIG_FIELD) != null){
+			join.getKeys().addAll(getJoinConfigKeys());
+		}
 	}
 
 	private  List<TypeKeyFields> getJoinConfigKeys(){
 		List<TypeKeyFields> typeKeyFieldsList = null;
-		TypeKeyFields typeKeyField = null;
-		Map<String, String> keyFields = (Map<String, String>) properties.get(Constants.JOIN_CONFIG_FIELD);
-		if (keyFields != null && !keyFields.isEmpty()) {
-			typeKeyFieldsList = new ArrayList<>();
-			typeKeyField = new TypeKeyFields();
-			for (Entry<String, String> entry : keyFields.entrySet()) {
-			typeKeyField.setInSocketId(entry.getKey());
-			//typeKeyField.setJoinType(entry.getValue());
+		List<JoinConfigProperty> keyFields = (List<JoinConfigProperty>) properties.get(Constants.JOIN_CONFIG_FIELD);
+		typeKeyFieldsList = new ArrayList<>();
+		if (keyFields != null ) {
+			for (JoinConfigProperty entry : keyFields) {
+				TypeKeyFields typeKeyField = new TypeKeyFields();
+				TypeFieldName fieldName = new TypeFieldName();
+				fieldName.setName(entry.getJoinKey());
+				typeKeyField.setInSocketId(entry.getPortIndex());
+				typeKeyField.setJoinType(getParamValue(entry));
+				typeKeyField.getField().add(fieldName);
+				typeKeyFieldsList.add(typeKeyField);
 			}
 		}			
-		
 		return typeKeyFieldsList;
+	}
+	protected JoinType getParamValue(JoinConfigProperty entry) {
+		logger.debug("Getting JoinType for {}", properties.get(Constants.PARAM_NAME));
+		JoinType targetJoinType = null;
+		if(entry.getJoinType() <= 1){
+			for (JoinType type : JoinType.values()) {
+				if (type.value().equalsIgnoreCase(ITEMS.get(entry.getJoinType()))) {
+					targetJoinType = type;
+					break;
+				}
+			}
+		}
+		
+		if (StringUtils.isNotBlank(entry.getParamValue()))
+			ComponentXpath.INSTANCE.getXpathMap().put(ComponentXpathConstants.COMPONENT_JOIN_TYPE_XPATH.value().replace(ID, componentName).replace("$inSocketId", entry.getPortIndex()), entry.getParamValue());
+		return targetJoinType;
 	}
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {

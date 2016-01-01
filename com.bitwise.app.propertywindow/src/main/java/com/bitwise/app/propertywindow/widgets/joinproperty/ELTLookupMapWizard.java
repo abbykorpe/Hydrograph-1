@@ -151,7 +151,7 @@ public class ELTLookupMapWizard extends Dialog {
 		eltswtWidgets.createTableColumns(outputTableViewer.getTable(), COLUMN_NAME, 196);
 	    CellEditor[] editors = eltswtWidgets.createCellEditorList(outputTableViewer.getTable(),2);
 	    	editors[0].setValidator(valueEditorValidation(Messages.EmptyNameNotification,outputTableViewer));
-	    	editors[1].setValidator(createNameEditorValidator(outputTableViewer));
+	    	editors[1].setValidator(createValueEditorValidator(outputTableViewer));
 	    
 	    outputTableViewer.setColumnProperties(COLUMN_NAME);
 	    outputTableViewer.setCellModifier(new LookupCellModifier(outputTableViewer));
@@ -226,8 +226,8 @@ public class ELTLookupMapWizard extends Dialog {
 	    inputTableViewer[tableViewerIndex].setInput(joinInputList);
 	
 	    eltswtWidgets.applyDragFromTableViewer(inputTableViewer[tableViewerIndex].getTable(), tableViewerIndex);
-		addButton(comGrid, new int[]{200, 8, 25, 20}, inputTableViewer[tableViewerIndex], joinInputList);
-		
+		addButton(comGrid, new int[]{170, 8, 25, 20}, inputTableViewer[tableViewerIndex], joinInputList);
+		deleteButton(comGrid,new int[]{200, 8, 25, 20}, inputTableViewer[tableViewerIndex], joinInputList);
 		return inputTableViewer[tableViewerIndex]; 
 	}
 	
@@ -245,6 +245,24 @@ public class ELTLookupMapWizard extends Dialog {
 		});
 	}
 	
+	private void deleteButton(Composite parent, int[] bounds, final TableViewer viewer, final List<FilterProperties> joinInputList){
+			
+			Button bt = new Button(parent, SWT.PUSH);
+			bt.setImage(new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
+			bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
+			//viewer.editElement(viewer.getElementAt(joinInputList.size() == 0 ? joinInputList.size() : joinInputList.size() - 1), 0);
+			bt.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+					for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
+						Object selectedObject = iterator.next();
+						viewer.remove(selectedObject);
+						joinInputList.remove(selectedObject);
+					}
+				}
+			});
+		}
 	private void createLabel(Composite parent){	
 		
 		Button button = buttonWidget(parent, SWT.CENTER|SWT.PUSH, new int[]{0, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
@@ -487,27 +505,23 @@ public class ELTLookupMapWizard extends Dialog {
 	}
 	
 	// Creates CellValue Validator for table's cells
-	private ICellEditorValidator createNameEditorValidator(final TableViewer viewer) {
+	private ICellEditorValidator createValueEditorValidator(final TableViewer viewer) {
+		final List duplicate = new ArrayList<>();
 		ICellEditorValidator propertyValidator = new ICellEditorValidator() {
 			@Override
 			public String isValid(Object value) {
-				String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
-				String valueToValidate = String.valueOf(value).trim();
-				if (StringUtils.isEmpty(valueToValidate)) {
-					propertyError.setText(Messages.PROPERTY_VALUE);
-					propertyError.setVisible(true);
-				}
 				for (LookupMapProperty temp : joinOutputList) {
-					if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)&& 
-							temp.getOutput_Field().equalsIgnoreCase(valueToValidate)) {
-						propertyError.setText(Messages.RuntimePropertAlreadyExists);
-						propertyError.setVisible(true);
-						
-					} 
-					else{
+					String outputField = temp.getOutput_Field();
+					if (!duplicate.contains(outputField)) {
 						propertyError.setVisible(false);
+						duplicate.add(outputField);
+					}else{
+						propertyError.setText(Messages.RuntimePropertAlreadyExists);
+						propertyError.setVisible(true);							
 					}
+					
 				}
+				propertyError.setVisible(false);
 				return null;
 			}
 		};

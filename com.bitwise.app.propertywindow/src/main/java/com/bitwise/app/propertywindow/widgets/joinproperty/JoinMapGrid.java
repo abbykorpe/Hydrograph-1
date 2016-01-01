@@ -58,6 +58,7 @@ import com.bitwise.app.propertywindow.widgets.joinlookupproperty.LookupCellModif
 import com.bitwise.app.propertywindow.widgets.joinlookupproperty.LookupLabelProvider;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridAddSelectionListener;
 import com.bitwise.app.propertywindow.widgets.utility.DragDropUtility;
+import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
 public class JoinMapGrid extends Dialog {
 	
@@ -205,7 +206,7 @@ public class JoinMapGrid extends Dialog {
 		    Label lblNewLabel = new Label(composite_1, SWT.NONE);
 		    lblNewLabel.setBounds(10, 11, 92, 15);
 		    lblNewLabel.setText("Output Mapping");
-		    
+		    //WidgetUtility.addDecorator(outputTableViewer, Messages.EMPTYFIELDMESSAGE);
 		    outputTableViewer.getTable().addMouseListener(new MouseAdapter() {
 		    	@Override
 				public void mouseDoubleClick(MouseEvent e) {
@@ -289,9 +290,9 @@ public class JoinMapGrid extends Dialog {
 		    	}
 			});
 		    }
-
+		    if(joinOutputList!=null){
 		    DragDropUtility.INSTANCE.applyDrop(outputTableViewer, new DragDropLookupImp(joinOutputList, false, outputTableViewer));
-		    
+		    }
 		return container;
 	}
 	
@@ -325,7 +326,8 @@ public class JoinMapGrid extends Dialog {
 	    inputTableViewer[tableViewerIndex].setCellEditors(editors);
 	    inputTableViewer[tableViewerIndex].setInput(joinInputList);
 	
-		addButton(comGrid, new int[]{200, 8, 25, 20}, inputTableViewer[tableViewerIndex], joinInputList);
+		addButton(comGrid, new int[]{170, 8, 25, 20}, inputTableViewer[tableViewerIndex], joinInputList);
+		deleteButton(comGrid,new int[]{200, 8, 25, 20}, inputTableViewer[tableViewerIndex], joinInputList);
 		widget.applyDragFromTableViewer(inputTableViewer[tableViewerIndex].getTable(), tableViewerIndex);
 		
 		return comGrid;
@@ -349,6 +351,24 @@ public class JoinMapGrid extends Dialog {
 		});
 	}
 	
+	private void deleteButton(Composite parent, int[] bounds, final TableViewer viewer, final List<FilterProperties> joinInputList){
+		
+		Button bt = new Button(parent, SWT.PUSH);
+		bt.setImage(new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
+		bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
+		//viewer.editElement(viewer.getElementAt(joinInputList.size() == 0 ? joinInputList.size() : joinInputList.size() - 1), 0);
+		bt.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
+					Object selectedObject = iterator.next();
+					viewer.remove(selectedObject);
+					joinInputList.remove(selectedObject);
+				}
+			}
+		});
+	}
 	private void createLabel(Composite parent){	
 		 
 		Button button = buttonWidget(parent, SWT.CENTER|SWT.PUSH, new int[]{0, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
@@ -558,24 +578,22 @@ public class JoinMapGrid extends Dialog {
 				
 				// Creates CellValue Validator for table's cells
 				private ICellEditorValidator createValueEditorValidator(final TableViewer viewer) {
+					final List duplicate = new ArrayList<>();
 					ICellEditorValidator propertyValidator = new ICellEditorValidator() {
 						@Override
 						public String isValid(Object value) {
-							String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
-							String valueToValidate = String.valueOf(value).trim();
-							if (StringUtils.isEmpty(valueToValidate)) {
-								errorLabel.setText(Messages.EmptyNameNotification);
-								errorLabel.setVisible(true);
-							}
 							for (LookupMapProperty temp : joinOutputList) {
-								if (!temp.getOutput_Field().equalsIgnoreCase(valueToValidate)) {
-									errorLabel.setText(Messages.RuntimePropertAlreadyExists);
-									errorLabel.setVisible(true);
-								} 
-								else{
+								String outputField = temp.getOutput_Field();
+								if (!duplicate.contains(outputField)) {
 									errorLabel.setVisible(false);
+									duplicate.add(outputField);
+								}else{
+									errorLabel.setText(Messages.RuntimePropertAlreadyExists);
+									errorLabel.setVisible(true);							
 								}
+								
 							}
+							errorLabel.setVisible(false);
 							return null;
 						}
 					};

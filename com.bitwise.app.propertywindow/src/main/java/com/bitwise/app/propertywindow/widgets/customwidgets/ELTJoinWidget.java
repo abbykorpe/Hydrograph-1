@@ -12,6 +12,7 @@ import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -29,6 +30,7 @@ public class ELTJoinWidget extends AbstractWidget{
 	private Object properties;
 	private String propertyName;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>(); 
+	
 	//private JoinMappingGrid lookupPropertyGrid;
 	private List<JoinConfigProperty> configProperty;
 	
@@ -78,7 +80,7 @@ public class ELTJoinWidget extends AbstractWidget{
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ELTJoinConfigGrid eltJoinConfigGrid = new ELTJoinConfigGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), configProperty);
+				ELTJoinConfigGrid eltJoinConfigGrid = new ELTJoinConfigGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), configProperty, validationStatus);
 				eltJoinConfigGrid.open();
 			}
 			

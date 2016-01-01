@@ -131,8 +131,12 @@ public class RunConfigDialog extends Dialog {
 		
 		
 		Label lblServerDetails = new Label(compositeServerDetails, SWT.NONE);
+		
 		FontDescriptor boldDescriptor = FontDescriptor.createFrom(lblServerDetails.getFont()).setStyle(SWT.BOLD);
 		Font boldFont = boldDescriptor.createFont(lblServerDetails.getDisplay());
+		lblServerDetails.setFont( boldFont );
+		
+
 		lblServerDetails.setFont(boldFont);
 		lblServerDetails.setBounds(24, 10, 84, 15);
 		formToolkit.adapt(lblServerDetails, true, true);

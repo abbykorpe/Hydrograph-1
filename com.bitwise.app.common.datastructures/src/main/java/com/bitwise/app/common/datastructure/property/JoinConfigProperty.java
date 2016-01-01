@@ -5,13 +5,23 @@ public class JoinConfigProperty {
 	private String portIndex;
 	private String joinKey;
 	private Integer joinType;
+	private String paramValue;
 	
 	public JoinConfigProperty() {
 		portIndex = "";
 		joinKey = "";
 		joinType = 0;
+		paramValue = "";
 	}
 	
+	
+	public String getParamValue() {
+		return paramValue;
+	}
+	public void setParamValue(String paramValue) {
+		this.paramValue = paramValue;
+	}
+
 	public String getPortIndex() {
 		return portIndex;
 	}
