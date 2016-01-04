@@ -139,7 +139,9 @@ public class JoinMapGrid extends Dialog {
 			if(joinMappingGrid!=null){
 				if(joinMappingGrid.getLookupInputProperties()!=null && !joinMappingGrid.getLookupInputProperties().isEmpty()){
 					if(i<joinMappingGrid.getLookupInputProperties().size()) 
-					joinInputList = joinMappingGrid.getLookupInputProperties().get(i);
+						joinInputList = joinMappingGrid.getLookupInputProperties().get(i);
+					else
+						joinInputList = new ArrayList<>();
 				}
 				else{
 					joinInputList = new ArrayList<>();
