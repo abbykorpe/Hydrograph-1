@@ -45,7 +45,7 @@ public class DropDownWidget extends AbstractWidget{
 	private String propertyName;
 	private String properties;
 	private ComboBoxParameter comboBoxParameter=new ComboBoxParameter();
-	private ValidationStatus validationStatus = new ValidationStatus();
+	
 	private ControlDecoration txtDecorator;
 	private DropDownConfig dropDownConfig;
 	
