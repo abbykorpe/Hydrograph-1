@@ -42,6 +42,10 @@
                 name="windowImages"
                 value="icons/app_icon.png">
           </property>
+          <property
+                name="preferenceCustomization"
+                value="plugin_customization.ini">
+          </property>
       </product>
    </extension>
    <extension

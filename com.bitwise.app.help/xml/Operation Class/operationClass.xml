@@ -3,6 +3,6 @@
 
 <toc label="Operation Class">
    <anchor id="AggregateOperation"/>
-   <anchor id="TransformOperation"/>
    <anchor id="FilterOperation"/>
+   <anchor id="TransformOperation"/>
 </toc>
