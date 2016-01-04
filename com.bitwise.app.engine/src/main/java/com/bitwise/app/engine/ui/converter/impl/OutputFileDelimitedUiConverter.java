@@ -80,10 +80,11 @@ public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 	@Override
 	protected Object getSchema(TypeOutputInSocket inSocket) {
 		LOGGER.debug("Generating UI-Schema data for OutPut-Delimited-Component - {}", componentName);
-		Schema schema = new Schema();
+		Schema schema = null;
 		List<GridRow> gridRow = new ArrayList<>();
 		ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
 		if (inSocket.getSchema() != null && inSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema().size() != 0) {
+			schema=new Schema();
 			for (Object record : inSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema()) {
 				if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
 					schema.setIsExternal(true);
@@ -95,8 +96,7 @@ public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 					schema.setIsExternal(false);
 				}
 			}
-		}else
-			schema.setIsExternal(false);
+		}
 		return schema;
 	}
 

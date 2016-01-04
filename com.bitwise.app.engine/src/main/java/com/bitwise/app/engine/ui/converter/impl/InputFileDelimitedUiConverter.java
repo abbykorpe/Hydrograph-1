@@ -92,11 +92,12 @@ public class InputFileDelimitedUiConverter extends InputUiConverter {
 	@Override
 	protected Object getSchema(TypeInputOutSocket outSocket) {
 		LOGGER.debug("Generating UI-Schema data for {}", componentName);
-		Schema schema = new Schema();
+		Schema schema = null;
 		List<GridRow> gridRow = new ArrayList<>();
 		ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
 		if (outSocket.getSchema() != null
 				&& outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema().size() != 0) {
+			schema = new Schema();
 			for (Object record : outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema()) {
 				if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
 					schema.setIsExternal(true);
@@ -108,8 +109,7 @@ public class InputFileDelimitedUiConverter extends InputUiConverter {
 					schema.setIsExternal(false);
 				}
 			}
-		} else
-			schema.setIsExternal(false);
+		} 
 		return schema;
 
 	}
