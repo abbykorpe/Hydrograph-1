@@ -83,7 +83,7 @@ public class JoinMapGrid extends Dialog {
 	private List<LookupMapProperty> joinOutputList;
 	private List<List<FilterProperties>> joinSchemaList = new ArrayList<>();
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
-	private JoinMappingGrid joinMappingGrid = new JoinMappingGrid();
+	private JoinMappingGrid joinMappingGrid;
 	
 	/**
 	 * Create the dialog.
@@ -287,13 +287,12 @@ public class JoinMapGrid extends Dialog {
 		    		Button button = (Button)event.widget;
 		    		if(!radio[0].equals(button)){
 		    			outputTableViewer.getTable().setEnabled(false);
-		    			joinMappingGrid.setButtonText(button.getText());
-		    			joinMappingGrid.setIsSelected(true);
+		    		
 		    		 
 		    		}else{
-		    			joinMappingGrid.setButtonText(button.getText());
+		    			
 		    			outputTableViewer.getTable().setEnabled(true);
-		    			joinMappingGrid.setIsSelected(false);
+		    			
 		    		}
 		    	}
 			});
@@ -304,13 +303,7 @@ public class JoinMapGrid extends Dialog {
 		return container;
 	}
 	
-	private void populate(){
-		/*for(int i=0;i<inputPortValue;i++){
-			if(radio[i].getText().equalsIgnoreCase(joinMappingGrid.getButtonText())){
-				radio[i].setSelection(joinMappingGrid.isSelected());
-			}
-		}*/
-	}
+	
 	
 	private Control createComposite(ExpandBar expandBar, final List<FilterProperties> joinInputList, final int tableViewerIndex){	
 		ExpandItem	xpndtmItem = new ExpandItem(expandBar, SWT.NONE);
