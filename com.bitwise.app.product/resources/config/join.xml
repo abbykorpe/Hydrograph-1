@@ -54,6 +54,9 @@
 		</tns:port>
 		
 		<tns:changeInPortsDynamically>true</tns:changeInPortsDynamically>
+		
+		<tns:changeOutPortsDynamically>false</tns:changeOutPortsDynamically>
+		
 		<tns:changeUnusedPortsDynamically>true</tns:changeUnusedPortsDynamically>
 		
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"

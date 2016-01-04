@@ -15,9 +15,9 @@
 		<sequence>
 			<element name="category" type="tns:category_type" maxOccurs="1" minOccurs="0" />
 			<element name="port" type="tns:IOPort" maxOccurs="1" minOccurs="1" />
-			<element name="changeInPortsDynamically" type="boolean" maxOccurs="1" minOccurs="0" />
-			<element name="changeoutPortsDynamically" type="boolean" maxOccurs="1" minOccurs="0" />
-			<element name="changeUnusedPortsDynamically" type="boolean" maxOccurs="1" minOccurs="0" />
+			<element name="changeInPortsDynamically" type="boolean" maxOccurs="1" minOccurs="0" default="false"/>
+			<element name="changeOutPortsDynamically" type="boolean" maxOccurs="1" minOccurs="0" default="false"/>
+			<element name="changeUnusedPortsDynamically" type="boolean" maxOccurs="1" minOccurs="0" default="false"/>
 			<element name="property" type="tns:Property" maxOccurs="unbounded" minOccurs="0" />
 			<element name="policy" type="tns:Policy" maxOccurs="unbounded" minOccurs="0" /> 
 		</sequence>

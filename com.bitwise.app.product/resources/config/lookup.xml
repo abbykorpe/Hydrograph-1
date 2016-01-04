@@ -34,6 +34,10 @@
 			</tns:portSpecification>
 		</tns:port>
 		
+		<tns:changeInPortsDynamically/>
+		<tns:changeOutPortsDynamically/>
+		<tns:changeUnusedPortsDynamically/>
+		
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
