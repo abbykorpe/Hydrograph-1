@@ -61,6 +61,16 @@ public class RunConfigDialog extends Dialog {
 	Properties buildProps;
 	
 	HashMap<String, Text> textBoxes;
+	
+	private final String LOCAL_MODE="local";
+	private final String REMOTE_MODE="remote";
+	private final String HOST="host";
+	private final String USER_NAME="userName";
+	private final String RUN_UTILITY="runUtility";
+	private final String JOB_XML="jobXML";
+	private final String LIB_PATH="libs";
+	private final String PARAM_FILE="paramFile";
+	
 
 	/**
 	 * Create the dialog.
@@ -258,15 +268,15 @@ public class RunConfigDialog extends Dialog {
 	public void populateTextBoxes(Enumeration e){
 		while (e.hasMoreElements()) {
 		      String key = (String) e.nextElement();
-		      if(key.equals("local") && buildProps.getProperty(key).equals("true")){
+		      if(key.equals(LOCAL_MODE) && buildProps.getProperty(key).equals("true")){
 		    	  btnLocalMode.setSelection(true);
 		    	  btnRemoteMode.setSelection(false);
-		      }else if(key.equals("remote") && buildProps.getProperty(key).equals("true")){
+		      }else if(key.equals(REMOTE_MODE) && buildProps.getProperty(key).equals("true")){
 		    	  btnRemoteMode.setSelection(true);
 		    	  btnLocalMode.setSelection(false);
 		    	  compositeServerDetails.setVisible(true);
 		    	  compositePathConfig.setVisible(true);
-		      }else if(!(key.equals("remote") || key.equals("local"))){
+		      }else if(!(key.equals(LOCAL_MODE) || key.equals(REMOTE_MODE))){
 		    	  textBoxes.get(key).setText(buildProps.getProperty(key));  
 		      }
 		    }
@@ -307,14 +317,14 @@ public class RunConfigDialog extends Dialog {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
 
-			buildProps.put("local", String.valueOf(btnLocalMode.getSelection()));
-			buildProps.put("remote", String.valueOf(btnRemoteMode.getSelection()));
-			buildProps.put("host", textEdgeNode.getText());
-			buildProps.put("userName", textUser.getText());
-			buildProps.put("runUtility", textRunUtility.getText());
-			buildProps.put("jobXML", textJobXML.getText());
-			buildProps.put("libs", textLibs.getText());
-			buildProps.put("paramFile", textParamFiles.getText());
+			buildProps.put(LOCAL_MODE, String.valueOf(btnLocalMode.getSelection()));
+			buildProps.put(REMOTE_MODE, String.valueOf(btnRemoteMode.getSelection()));
+			buildProps.put(HOST, textEdgeNode.getText());
+			buildProps.put(USER_NAME, textUser.getText());
+			buildProps.put(RUN_UTILITY, textRunUtility.getText());
+			buildProps.put(JOB_XML, textJobXML.getText());
+			buildProps.put(LIB_PATH, textLibs.getText());
+			buildProps.put(PARAM_FILE, textParamFiles.getText());
 
 
 			buildProps.store(out, null);
