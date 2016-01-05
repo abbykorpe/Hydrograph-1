@@ -65,6 +65,7 @@ public class ELTLookupConfigGrid extends Dialog {
 	@Override
 	public Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
+		container.getShell().setText("Lookup Configuration");
 		container.setLayout(new FillLayout(SWT.VERTICAL));
 		
 		
@@ -145,7 +146,6 @@ public class ELTLookupConfigGrid extends Dialog {
 		lookupText.addListener(SWT.Modify, ListenerFactory.Listners.MODIFY.getListener().getListener(propertyDialogButtonBar, help, lookupText));
 		
 		lookupText.addModifyListener(new ModifyListener() {
-			
 			@Override
 			public void modifyText(ModifyEvent e) {
 				configProperty.setLookupKey(((Text)e.widget).getText());

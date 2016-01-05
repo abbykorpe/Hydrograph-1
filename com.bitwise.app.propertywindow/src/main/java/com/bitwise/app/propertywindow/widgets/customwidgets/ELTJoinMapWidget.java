@@ -43,7 +43,7 @@ public class ELTJoinMapWidget extends AbstractWidget{
 		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(subGroup.getContainerControl());
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 		
-		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Component\n Mapping");
+		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Join\n Mapping");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 		
 		

@@ -93,6 +93,7 @@ public class ELTLookupMapWizard extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
+		container.getShell().setText("Lookup Mapping");
 		container.setLayout(new GridLayout(4, false));
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
@@ -159,7 +160,6 @@ public class ELTLookupMapWizard extends Dialog {
 	    outputTableViewer.setInput(joinOutputList);
 	    
 	    outputTableViewer.getTable().addListener(SWT.Selection, new Listener() {
-			
 			@Override
 			public void handleEvent(Event event) {
 				String[] data = (((TableItem)event.item).getText()).split(Pattern.quote("."));
@@ -171,6 +171,25 @@ public class ELTLookupMapWizard extends Dialog {
 					}
 					else if(joinInputList2.indexOf(filter) >= 0){
 						inputTableViewer[1].getTable().setSelection(joinInputList2.indexOf(filter));
+					}
+				}
+			}
+		});
+	    
+	    outputTableViewer.getTable().addListener(SWT.FocusIn, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				List<String> tempList = new ArrayList<>();
+				for (LookupMapProperty mapProperty : joinOutputList) {
+					String outputField = mapProperty.getOutput_Field();
+					if (!tempList.contains(outputField)) {
+						propertyError.setVisible(false);
+						tempList.add(outputField);
+					} 
+					else{
+						propertyError.setVisible(true);
+						propertyError.setText(Messages.RuntimePropertAlreadyExists);
+						outputTableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(mapProperty)), 1);
 					}
 				}
 			}

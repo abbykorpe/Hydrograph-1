@@ -63,6 +63,7 @@ public class Messages extends NLS {
 	public static String INTERNAL_SCHEMA_TYPE;
 	public static String EXTERNAL_SCHEMA_TYPE;
 	public static String BROWSE_BUTTON;
+	public static String OUTPUT_FIELD_EXISTS;
 	
 
 	static {

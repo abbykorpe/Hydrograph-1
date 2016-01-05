@@ -39,8 +39,6 @@ public class DragDropLookupImp implements DragDropOperation{
 				}
 			}
 			
-			
-			
 		tableViewer.refresh();
 	}
 

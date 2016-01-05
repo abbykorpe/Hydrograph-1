@@ -32,7 +32,7 @@ public class ELTSWTWidgets {
 	}
 	
 	public TableViewer createTableViewer(Composite composite,String[] prop, int[] bounds, int columnWidth,IStructuredContentProvider iStructuredContentProvider,ITableLabelProvider iTableLabelProvider){
-		final TableViewer tableViewer= new TableViewer(composite, SWT.BORDER |SWT.MULTI | SWT.FULL_SELECTION);
+		final TableViewer tableViewer= new TableViewer(composite, SWT.BORDER |SWT.MULTI | SWT.FULL_SELECTION | SWT.VIRTUAL);
 	    	
 		Table table = tableViewer.getTable();
 		table.setBounds(bounds[0],bounds[1],bounds[2],bounds[3]);

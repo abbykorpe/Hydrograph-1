@@ -62,6 +62,7 @@ public class ELTJoinConfigGrid extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
+		container.getShell().setText("Join Configuration");
 		container.setLayout(new GridLayout(1, false));
 		
 		Composite composite_2 = new Composite(container, SWT.NONE);
@@ -71,8 +72,6 @@ public class ELTJoinConfigGrid extends Dialog {
 		composite_2.setLayoutData(gd_composite_2);
 		
 		labelWidget(composite_2, SWT.None, new int[]{6, 0, 102, 15}, "Join configuration");
-		/*addButton = labelWidget(composite_2, SWT.BORDER|SWT.CENTER, new int[]{496, 0, 20, 15}, "+");
-		deleteButton = labelWidget(composite_2, SWT.BORDER|SWT.CENTER, new int[]{523, 0, 20, 15}, "*");*/
 		
 		Composite composite = new Composite(container, SWT.BORDER);
 		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -160,28 +159,13 @@ public class ELTJoinConfigGrid extends Dialog {
 						paramText.setText("");
 						paramText.setVisible(false);
 					}
-					/*ListenerHelper help = new ListenerHelper();
-					help.put(HelperType.CONTROL_DECORATION, WidgetUtility.addDecorator(keyText, Messages.EMPTYFIELDMESSAGE));
-					Listener focusIn = ListenerFactory.Listners.FOCUS_IN.getListener().getListener(propertyDialogButtonBar, help, keyText);
-					Listener focusOut = ListenerFactory.Listners.FOCUS_OUT.getListener().getListener(propertyDialogButtonBar, help, keyText);
-					if(Constants.PARAMETER.equalsIgnoreCase(comboText)){
-						keyText.addListener(SWT.FocusIn, focusIn);
-						keyText.addListener(SWT.FocusOut, focusOut);
-					}
-					else{
-						keyText.removeFocusListener((FocusListener) focusIn);
-						keyText.removeFocusListener((FocusListener) focusOut);
-					}*/
 				}
 			}); 
-		 
-			//configPropertyList.add(joinConfigProperty);
 			j=j+26;
 			if(configPropertyList != null && !configPropertyList.isEmpty()){
 				populate(i, portIndex, keyText, joinTypeCombo,paramText);
 			}
 		}
-		
 		scrolledComposite.setMinSize(composite_1.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		return container;
 	}
