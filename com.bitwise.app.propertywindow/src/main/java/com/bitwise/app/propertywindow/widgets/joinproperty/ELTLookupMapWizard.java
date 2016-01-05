@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.CellEditor;
@@ -60,6 +59,7 @@ public class ELTLookupMapWizard extends Dialog {
 
 	private Label propertyError;
 	private TableViewer outputTableViewer;
+	private Button okButton;
 	private TableViewer viewer1 = null;
     private TableViewer viewer2 = null;
 	private TableViewer[] inputTableViewer = new TableViewer[2];
@@ -150,7 +150,7 @@ public class ELTLookupMapWizard extends Dialog {
 		});
 		eltswtWidgets.createTableColumns(outputTableViewer.getTable(), COLUMN_NAME, 196);
 	    CellEditor[] editors = eltswtWidgets.createCellEditorList(outputTableViewer.getTable(),2);
-	    	editors[0].setValidator(valueEditorValidation(Messages.EmptyNameNotification,outputTableViewer));
+	    	//editors[0].setValidator(valueEditorValidation(joinOutputList,Messages.EmptyNameNotification,outputTableViewer));
 	    	editors[1].setValidator(createValueEditorValidator(outputTableViewer));
 	    
 	    outputTableViewer.setColumnProperties(COLUMN_NAME);
@@ -219,7 +219,7 @@ public class ELTLookupMapWizard extends Dialog {
 		});
 		eltswtWidgets.createTableColumns(inputTableViewer[tableViewerIndex].getTable(), INPUT_COLUMN_NAME, 224);
 	    CellEditor[] editors =eltswtWidgets.createCellEditorList(inputTableViewer[tableViewerIndex].getTable(),1);
-	    editors[0].setValidator(valueEditorValidation(Messages.EMPTYFIELDMESSAGE, inputTableViewer[tableViewerIndex]));
+	    editors[0].setValidator(valueEditorValidation(joinInputList ,Messages.EMPTYFIELDMESSAGE, inputTableViewer[tableViewerIndex]));
 	    inputTableViewer[tableViewerIndex].setCellModifier(new ELTCellModifier(inputTableViewer[tableViewerIndex]));
 	    inputTableViewer[tableViewerIndex].setColumnProperties(INPUT_COLUMN_NAME);
 	    inputTableViewer[tableViewerIndex].setCellEditors(editors);
@@ -236,7 +236,7 @@ public class ELTLookupMapWizard extends Dialog {
 		Button bt = new Button(parent, SWT.PUSH);
 		bt.setImage(new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
 		bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
-		//viewer.editElement(viewer.getElementAt(joinInputList.size() == 0 ? joinInputList.size() : joinInputList.size() - 1), 0);
+		
 		bt.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -250,7 +250,6 @@ public class ELTLookupMapWizard extends Dialog {
 			Button bt = new Button(parent, SWT.PUSH);
 			bt.setImage(new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
 			bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
-			//viewer.editElement(viewer.getElementAt(joinInputList.size() == 0 ? joinInputList.size() : joinInputList.size() - 1), 0);
 			bt.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -378,6 +377,16 @@ public class ELTLookupMapWizard extends Dialog {
 
 	}
 	
+	/**
+	 * Create contents of the button bar.
+	 * @param parent
+	 */
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,	true);
+		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
+	}
+	
 	private boolean validation(){
 		int propertycount = 0;
 		int propertyValuecount = 0;
@@ -386,11 +395,13 @@ public class ELTLookupMapWizard extends Dialog {
 					outputTableViewer.getTable().setSelection(propertycount);
 					propertyError.setVisible(true);
 					propertyError.setText(Messages.EmptyNameNotification);
+					okButton.setEnabled(false);
 					return false;
 				}else if(join.getOutput_Field().trim().isEmpty()){
 					outputTableViewer.getTable().setSelection(propertyValuecount);
 					propertyError.setVisible(true);
 					propertyError.setText(Messages.EmptyValueNotification);
+					okButton.setEnabled(false);
 				}else{
 					propertyError.setVisible(false);
 				}
@@ -410,14 +421,14 @@ public class ELTLookupMapWizard extends Dialog {
 					outputTableViewer.getTable().setSelection(propertycount);
 					propertyError.setVisible(true);
 					propertyError.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
-					/*txtDecorator.setDescriptionText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
-					txtDecorator.show();*/
+					okButton.setEnabled(false);
 					return false;
 				}
 				}else{
 					outputTableViewer.getTable().setSelection(propertycount);
 					propertyError.setVisible(true);
 					propertyError.setText(Messages.EmptyNameNotification);
+					okButton.setEnabled(false);
 					return false;
 				}
 				
@@ -426,11 +437,11 @@ public class ELTLookupMapWizard extends Dialog {
 		return true;
 	}
 	// Creates Value Validator for table's cells
-	private ICellEditorValidator  valueEditorValidation(final String ErrorMessage,final TableViewer viewer) {
+	private ICellEditorValidator  valueEditorValidation(final List<FilterProperties> joinInputList, final String ErrorMessage,final TableViewer viewer) {
 		ICellEditorValidator propertyValidator = new ICellEditorValidator() {
 			@Override
 			public String isValid(Object value) {
-				viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
+				String selectedField = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
 				String valueToValidate = String.valueOf(value).trim();
 				Matcher match = Pattern.compile(Constants.REGEX).matcher(valueToValidate);
 				if (valueToValidate.isEmpty()) {
@@ -438,14 +449,26 @@ public class ELTLookupMapWizard extends Dialog {
 					propertyError.setVisible(true);
 					return "ERROR"; //$NON-NLS-1$
 				} else if(!match.matches()){
-					//outputTableViewer.getTable().setSelection(propertycount);
 					propertyError.setVisible(true);
 					propertyError.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
+					okButton.setEnabled(false);
 				}else{
 					propertyError.setVisible(false);
+					//okButton.setEnabled(true);
 				}
+				
+				for(FilterProperties property :joinInputList){
+					if(!selectedField.equalsIgnoreCase(valueToValidate) && property.getPropertyname().trim().equalsIgnoreCase(valueToValidate)){
+						propertyError.setVisible(true);
+						propertyError.setText(Messages.RuntimePropertAlreadyExists);
+						okButton.setEnabled(false);
+					}else{
+						propertyError.setVisible(false);
+						//okButton.setEnabled(true);
+					}
+				}
+				
 				return null;
-
 			}
 		};
 		return propertyValidator;
@@ -483,19 +506,6 @@ public class ELTLookupMapWizard extends Dialog {
 		
 		return label;
 	}
-
-	/**
-	 * Create contents of the button bar.
-	 * @param parent
-	 */
-	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
-	}
-
 	/**
 	 * Return the initial size of the dialog.
 	 */
@@ -528,7 +538,7 @@ public class ELTLookupMapWizard extends Dialog {
 		return propertyValidator;
 	}
 			
-	private  void joinOutputProperty(TableViewer tv){
+	private  void joinOutputProperty(TableViewer viewer){
 		LookupMapProperty property = new LookupMapProperty();
 		if(joinOutputList.size() != 0){
 			if(!validation())
@@ -536,12 +546,13 @@ public class ELTLookupMapWizard extends Dialog {
 		property.setSource_Field("");
 		property.setOutput_Field("");
 		joinOutputList.add(property);
-		tv.refresh();
+		viewer.refresh();
+		viewer.editElement(viewer.getElementAt(joinOutputList.size()-1), 0);
 		} else {
 			property.setSource_Field("");
 			property.setOutput_Field("");
 			joinOutputList.add(property);
-			tv.refresh();
+			viewer.refresh();
 		}
 	}
 	
@@ -553,10 +564,12 @@ public class ELTLookupMapWizard extends Dialog {
 			join.setPropertyname("");
 			joinInputList.add(join);
 			viewer.refresh();
+			viewer.editElement(viewer.getElementAt(joinInputList.size() - 1), 0);
 		} else {
 			join.setPropertyname("");
 			joinInputList.add(join);
 			viewer.refresh();
+			viewer.editElement(join, 0);
 		}
 	}
 }

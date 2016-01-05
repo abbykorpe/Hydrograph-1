@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.CellEditor;
@@ -39,7 +38,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.JoinMappingGrid;
@@ -47,7 +45,7 @@ import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
-import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinMapWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinWidget;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTCellModifier;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
@@ -58,17 +56,13 @@ import com.bitwise.app.propertywindow.widgets.joinlookupproperty.LookupCellModif
 import com.bitwise.app.propertywindow.widgets.joinlookupproperty.LookupLabelProvider;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridAddSelectionListener;
 import com.bitwise.app.propertywindow.widgets.utility.DragDropUtility;
-import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
 public class JoinMapGrid extends Dialog {
 	
 	
-	private Text text;
-	private Text text_1;
-	private Text text_2;
 	private Label errorLabel;
 	private TableViewer outputTableViewer;
-	private int inputPortValue = ELTJoinMapWidget.value;
+	private int inputPortValue = ELTJoinWidget.value;
 	private TableViewer[] inputTableViewer = new TableViewer[inputPortValue];
 	private Button[] radio = new Button[inputPortValue+1];
 	private Composite expandItemComposite;
@@ -107,7 +101,7 @@ public class JoinMapGrid extends Dialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		Composite container = (Composite) super.createDialogArea(parent);
+		final Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(6, false));
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
@@ -116,6 +110,20 @@ public class JoinMapGrid extends Dialog {
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
+		
+		container.addListener(SWT.Close, new Listener() {
+			@Override
+			public void handleEvent(Event event) {				
+			/*	if ((isAnyUpdatePerformed && !isOkPressed) && (table.getItemCount() != 0)) {
+					int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
+					MessageBox messageBox = new MessageBox(container.getShell(), style);
+					messageBox.setText("Information"); //$NON-NLS-1$
+					messageBox.setMessage(Messages.MessageBeforeClosingWindow);
+					event.doit = messageBox.open() == SWT.YES;
+				}*/
+
+			}
+		});
 		
 		Composite composite = new Composite(container, SWT.None);
 		composite.setLayout(new GridLayout(1, false));
@@ -353,7 +361,6 @@ public class JoinMapGrid extends Dialog {
 		Button bt = new Button(parent, SWT.PUSH);
 		bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		bt.setImage(new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
-		//viewer.editElement(viewer.getElementAt(joinInputList.size() == 0 ? joinInputList.size() : joinInputList.size() - 1), 0);
 		bt.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -367,7 +374,6 @@ public class JoinMapGrid extends Dialog {
 		Button bt = new Button(parent, SWT.PUSH);
 		bt.setImage(new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
 		bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
-		//viewer.editElement(viewer.getElementAt(joinInputList.size() == 0 ? joinInputList.size() : joinInputList.size() - 1), 0);
 		bt.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -638,36 +644,37 @@ public class JoinMapGrid extends Dialog {
 
 	private void addRowToTable(TableViewer viewer, List<FilterProperties> joinInputList){
 		FilterProperties join = new FilterProperties();
-		
 		if(joinInputList!=null && joinInputList.size() != 0){
 			if(!inputSchemavalidate(joinInputList,viewer))
 				return;
 			join.setPropertyname("");
 			joinInputList.add(join);
 			viewer.refresh();
+			viewer.editElement(viewer.getElementAt(joinInputList.size() - 1), 0);
 		} else {
 			join.setPropertyname("");
 			joinInputList.add(join);
 			viewer.refresh();
+			viewer.editElement(join, 0);
 		}
 	}
 	
-	private  void joinOutputProperty(TableViewer tv){
+	private  void joinOutputProperty(TableViewer viewer){
 		LookupMapProperty property = new LookupMapProperty();
-		
 		if(joinOutputList.size() != 0){
 			if(!validation())
 				return;
 			property.setSource_Field("");
 			property.setOutput_Field("");
 			joinOutputList.add(property);
-			tv.refresh();
+			viewer.refresh();
+			viewer.editElement(viewer.getElementAt(joinOutputList.size() - 1), 0);
 		} else {
 			property.setSource_Field("");
 			property.setOutput_Field("");
-				
 			joinOutputList.add(property);
-			tv.refresh();
+			viewer.refresh();
+			viewer.editElement(property, 0);
 		}
 	}
 }
