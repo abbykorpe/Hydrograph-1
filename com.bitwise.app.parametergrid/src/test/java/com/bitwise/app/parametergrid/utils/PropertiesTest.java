@@ -7,8 +7,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+
+import com.bitwise.app.common.util.LogFactory;
 
 public class PropertiesTest {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(PropertiesTest.class);
+	
 	@Test
 	public void setPropertyByKeyValueTest(){		
 		//Given		
@@ -54,16 +59,14 @@ public class PropertiesTest {
 		try {
 			inputProperties.store("testfile.properties");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.debug("Unable to store properties ", e);
 		}
 		
 		Properties outputProperties = new Properties();
 		try {
 			outputProperties.load("testfile.properties");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.debug("Unable to load properties ", e);
 		}
 		
 		

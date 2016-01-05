@@ -326,7 +326,7 @@ public class PropertyDialog extends Dialog {
 			Image shellImage = new Image(newShell.getDisplay(), imagePath);
 			newShell.setImage(shellImage);
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.debug("Unable to access image" , e);
 		}
 	}
 

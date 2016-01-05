@@ -108,7 +108,6 @@ public class ELTPropertyWindow implements IELTPropertyWindow{
 			
 		} catch (ELTComponentPropertyAdapter.EmptyComponentPropertiesException e) {
 			logger.error("Failed in transforming properties", e);
-			e.printStackTrace();
 		}
 	}
 
