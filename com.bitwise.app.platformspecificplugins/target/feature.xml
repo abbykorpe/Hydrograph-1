@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.bitwise.app.platformspecificplugins"
+      label="Platformspecificplugins"
+      version="0.0.1.201601041318"
+      provider-name="BITWISE">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <plugin
+         id="org.eclipse.jdt.launching.macosx"
+         os="macosx"
+         ws="cocoa"
+         arch="x86_64"
+         download-size="17"
+         install-size="29"
+         version="3.2.100.v20111006_r372"
+         unpack="false"/>
+
+</feature>

@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Export-Package: com.bitwise.app.joblogger,com.bitwise.app.joblogger.lo
+ gger
+Require-Bundle: org.eclipse.core.runtime,com.bitwise.app.common;bundle
+ -version="0.0.1",ch.qos.logback.classic,ch.qos.logback.core,org.slf4j
+ .api,org.junit,org.eclipse.ui.console;bundle-version="3.5.100",org.ec
+ lipse.ui;bundle-version="3.7.0",org.eclipse.ui.ide;bundle-version="3.
+ 7.0"
+Bundle-Vendor: BITWISE
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 0.0.1.201601041318
+Bundle-Name: Joblogger
+Bundle-Activator: com.bitwise.app.joblogger.Activator
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: com.bitwise.app.joblogger
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+
