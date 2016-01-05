@@ -9,9 +9,11 @@ import java.util.Map;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.slf4j.Logger;
 
 import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
+import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -23,6 +25,8 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
  * @author Bitwise
  */
 public abstract class Component extends Model {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(Component.class);
+	
 	private static final long serialVersionUID = 2587870876576884352L;
 
 	/**
@@ -476,8 +480,7 @@ public abstract class Component extends Model {
 		try {
 			component = this.getClass().newInstance();
 		} catch (Exception e) {
-			//TODO : add logger
-			e.printStackTrace();
+			logger.debug("Unable to clone Component ", e);
 		} 
 		component.setType(getType());
 		component.setCategory(getCategory());

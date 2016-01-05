@@ -19,12 +19,17 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
+import org.slf4j.Logger;
+
+import com.bitwise.app.common.util.LogFactory;
 
 /**
  * @author Bitwise
  */
 public class ResourceFileSelectionDialog extends ElementTreeSelectionDialog {
 
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(ResourceFileSelectionDialog.class);
+	
     private String[] extensions;
 
     private static ITreeContentProvider contentProvider = new ITreeContentProvider() {
@@ -118,7 +123,7 @@ public class ResourceFileSelectionDialog extends ElementTreeSelectionDialog {
             try {
                 projects[i].refreshLocal(IResource.DEPTH_INFINITE, null);
             } catch (CoreException e) {
-                e.printStackTrace();
+            	logger.debug("Unable to refresh local file");
             }
         }
 

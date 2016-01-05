@@ -8,10 +8,14 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.project.structure.CustomMessages;
 
 public class ResourceChangeUtil {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(ResourceChangeUtil.class);
+	
 	private ResourceChangeUtil() {
 		
 	}
@@ -27,8 +31,7 @@ public class ResourceChangeUtil {
 				}
 			}
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.debug("Unable to add members to list " , e);
 		}
 	}
 	
