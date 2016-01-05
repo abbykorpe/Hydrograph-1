@@ -27,7 +27,7 @@ sourceSets {
 *Load Build property file.
 */
 Properties properties = new Properties()
-def buildProperty=project.projectDir.path+'\\build.properties'
+def buildProperty=project.projectDir.path+'/build.properties'
 File propertiesFile = new File(buildProperty)
 	propertiesFile.withInputStream {
     		properties.load(propertiesFile.newDataInputStream())
@@ -51,7 +51,7 @@ if(properties.remote == "true"){
 	def xmlFileName
 	def paramFileName
 	def jarName;
-	def clusterPassword
+	def clusterPass
 
 		if (project.hasProperty("xmlpath")) {
 			xmlFilePath=xmlpath
@@ -62,7 +62,7 @@ if(properties.remote == "true"){
 			paramFileName =paramFiles.substring(paramFiles.lastIndexOf("/")+1);
 			}
 			if (project.hasProperty("clusterPassword")) {
-			clusterPassword=clusterPassword
+			clusterPass=clusterPassword
 			}
 		/**
 		*Remote server hostname and credentials.
@@ -70,7 +70,7 @@ if(properties.remote == "true"){
 
     	def user = properties.userName
     	def host = properties.host
-    	def password = clusterPassword
+    	def password = clusterPass
     	def runUtility=properties.runUtility
     	def jobXML=properties.jobXML
     	def lib=properties.libs
