@@ -43,18 +43,6 @@ public class ELTJoinMapWidget extends AbstractWidget{
 		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(subGroup.getContainerControl());
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 		
-		LinkedHashMap<String, Object> map = allComponenetProperties.getComponentConfigurationProperties();
-		for(String key : map.keySet()){
-			if(key.equalsIgnoreCase("input_count")){
-				String data=(String)map.get(key);
-				if(Integer.parseInt(data)>=2){
-					value = Integer.parseInt(data);
-				}else{
-					value = 2;
-				}
-			}
-		}
-		
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Component\n Mapping");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 		
