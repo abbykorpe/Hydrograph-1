@@ -62,9 +62,9 @@ public class CopyAction extends SelectionAction {
 			if (ep instanceof ComponentEditPart) {
 				node = (Component) ((EditPart)ep).getModel();
 			}
-			if (!copyCommand.isCopyableNode(node))
-				return null;
-			copyCommand.addElement(node);
+			if (copyCommand.isCopyableNode(node)){
+				copyCommand.addElement(node);
+			}
 		}
 		return copyCommand;
 	}

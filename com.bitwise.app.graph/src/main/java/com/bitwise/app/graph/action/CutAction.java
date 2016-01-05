@@ -65,9 +65,9 @@ public class CutAction extends SelectionAction{
 			if (ep instanceof ComponentEditPart) {
 				node = (Component) ((EditPart)ep).getModel();
 			}
-			if (!cutCommand.isCutNode(node))
-				return null;
+			if (cutCommand.isCutNode(node)){
 			cutCommand.addElement(node);
+			}
 		}
 		return cutCommand;
 	}
