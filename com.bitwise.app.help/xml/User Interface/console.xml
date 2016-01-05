@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Console" link_to="xml/User Interface/userInterface.xml#Console" topic="html/gettingstarted/maintopic.html">
-   <topic href="html/gettingstarted/maintopic.html" label="Console">
+<toc label="Console" link_to="xml/User Interface/userInterface.xml#Console">
+   <topic href="html/User Interface/Job_Console.html" label="Console">
    </topic> 
 	
 </toc>

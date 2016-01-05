@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
+import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeProperties;
@@ -37,6 +38,7 @@ public abstract class StraightpullUiConverter extends UiConverter {
 		LOGGER.debug("Fetching common properties for -{}", componentName);
 		getInPort((TypeStraightPullComponent) typeBaseComponent);
 		getOutPort((TypeStraightPullComponent) typeBaseComponent);
+		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY.value());
 		propertyMap.put(PropertyNameConstants.RUNTIME_PROPERTIES.value(), getRuntimeProperties());
 	}
 

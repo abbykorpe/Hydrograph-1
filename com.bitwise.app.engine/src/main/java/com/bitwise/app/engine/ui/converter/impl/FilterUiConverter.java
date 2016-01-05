@@ -41,13 +41,13 @@ public class FilterUiConverter extends TransformUiConverter{
 		propertyMap.put(PropertyNameConstants.OPERATION_FILEDS.value(), getOperationFileds());
 		
 		
-		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY	.value());
+		
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(componentName);
 		uiComponent.setProperties(propertyMap);
-		uiComponent.setType(UIComponentsConstants.REMOVE_DUPS.value());
-		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY.value());
-	
+		uiComponent.setType(UIComponentsConstants.FILTER.value());
+		
+		validateComponentProperties(propertyMap);
 	}
 
 	private OperationClassProperty getOperationClass() {

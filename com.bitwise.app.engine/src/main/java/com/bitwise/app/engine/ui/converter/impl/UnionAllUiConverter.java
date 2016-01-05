@@ -39,8 +39,7 @@ public class UnionAllUiConverter extends StraightpullUiConverter {
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(unionAll.getId());
 		uiComponent.setProperties(propertyMap);
-		uiComponent.setType(UIComponentsConstants.CLONE.value());
-		uiComponent.setCategory(UIComponentsConstants.STRAIGHTPULL_CATEGORY.value());
+		uiComponent.setType(UIComponentsConstants.UNION_ALL.value());
 		validateComponentProperties(propertyMap);
 	}
 

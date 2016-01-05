@@ -70,6 +70,7 @@ public class JoinMapGrid extends Dialog {
 	private TableViewer outputTableViewer;
 	private int inputPortValue = ELTJoinMapWidget.value;
 	private TableViewer[] inputTableViewer = new TableViewer[inputPortValue];
+	private Button[] radio = new Button[inputPortValue+1];
 	private Composite expandItemComposite;
 	
 	public static final String OPERATIONAL_INPUT_FIELD = "Field Name";
@@ -134,10 +135,13 @@ public class JoinMapGrid extends Dialog {
 		final ExpandBar expandBar = new ExpandBar(scrolledComposite, SWT.NONE);
 				expandBar.setLayoutData(new RowData(200, 550));
 				
-		for(int i = 0; i<inputPortValue;i++){
+		for(int i = 0; i < inputPortValue;i++){
 			if(joinMappingGrid!=null){
 				if(joinMappingGrid.getLookupInputProperties()!=null && !joinMappingGrid.getLookupInputProperties().isEmpty()){
-					joinInputList = joinMappingGrid.getLookupInputProperties().get(i);
+					if(i<joinMappingGrid.getLookupInputProperties().size()) 
+						joinInputList = joinMappingGrid.getLookupInputProperties().get(i);
+					else
+						joinInputList = new ArrayList<>();
 				}
 				else{
 					joinInputList = new ArrayList<>();
@@ -218,7 +222,7 @@ public class JoinMapGrid extends Dialog {
 			});
 		    widget.createTableColumns(outputTableViewer.getTable(), COLUMN_NAME, 196);
 		    CellEditor[] editors =widget.createCellEditorList(outputTableViewer.getTable(),2);
-		    editors[0].setValidator(valueEditorValidation(Messages.EmptyNameNotification, outputTableViewer));
+		    //editors[0].setValidator(valueEditorValidation(Messages.EmptyNameNotification, outputTableViewer));
 		    editors[1].setValidator(createValueEditorValidator(outputTableViewer));
 		    outputTableViewer.setColumnProperties(COLUMN_NAME);
 		    outputTableViewer.setCellModifier(new LookupCellModifier(outputTableViewer));
@@ -263,7 +267,7 @@ public class JoinMapGrid extends Dialog {
 		    Composite composite_3 = new Composite(scrolledComposite_1, SWT.BORDER);
 		    composite_3.setLayout(new RowLayout(SWT.VERTICAL));
 		    
-		    final Button[] radio = new Button[inputPortValue+1];
+		  
 		    radio[0] = widget.buttonWidget(composite_3, SWT.RADIO, new int[]{0, 0, 90, 20}, "None");
 		    radio[0].setSelection(true);
 		    int j=20;
@@ -277,6 +281,7 @@ public class JoinMapGrid extends Dialog {
 		    scrolledComposite_1.setExpandVertical(true);
 		   
 		    scrolledComposite_1.setMinSize(composite_3.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		  
 		    for(int i=0; i<radio.length;i++){
 		    radio[i].addSelectionListener(new SelectionAdapter() {
 		    	@Override
@@ -284,8 +289,12 @@ public class JoinMapGrid extends Dialog {
 		    		Button button = (Button)event.widget;
 		    		if(!radio[0].equals(button)){
 		    			outputTableViewer.getTable().setEnabled(false);
+		    		
+		    		 
 		    		}else{
+		    			
 		    			outputTableViewer.getTable().setEnabled(true);
+		    			
 		    		}
 		    	}
 			});
@@ -295,6 +304,8 @@ public class JoinMapGrid extends Dialog {
 		    }
 		return container;
 	}
+	
+	
 	
 	private Control createComposite(ExpandBar expandBar, final List<FilterProperties> joinInputList, final int tableViewerIndex){	
 		ExpandItem	xpndtmItem = new ExpandItem(expandBar, SWT.NONE);
@@ -557,9 +568,8 @@ public class JoinMapGrid extends Dialog {
 					ICellEditorValidator propertyValidator = new ICellEditorValidator() {
 						@Override
 						public String isValid(Object value) {
-							viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
+							String selectedField = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
 							String valueToValidate = String.valueOf(value).trim();
-							
 							if (!valueToValidate.isEmpty()) {
 								Matcher match = Pattern.compile(Constants.REGEX).matcher(valueToValidate);
 								if(!match.matches()){
@@ -568,6 +578,15 @@ public class JoinMapGrid extends Dialog {
 								}
 							}else{
 								errorLabel.setVisible(false);
+							}
+							
+							for(FilterProperties property : joinInputList){
+								if(selectedField.equalsIgnoreCase(valueToValidate)){
+									errorLabel.setVisible(true);
+									errorLabel.setText(Messages.RuntimePropertAlreadyExists);
+								}else{
+									errorLabel.setVisible(false);
+								}
 							}
 							return null;
 
@@ -590,8 +609,7 @@ public class JoinMapGrid extends Dialog {
 								}else{
 									errorLabel.setText(Messages.RuntimePropertAlreadyExists);
 									errorLabel.setVisible(true);							
-								}
-								
+								}								
 							}
 							errorLabel.setVisible(false);
 							return null;

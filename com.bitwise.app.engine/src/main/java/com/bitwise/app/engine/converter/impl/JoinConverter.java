@@ -25,6 +25,7 @@ import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
 import com.bitwise.app.engine.xpath.ComponentXpath;
 import com.bitwise.app.engine.xpath.ComponentXpathConstants;
+import com.bitwise.app.engine.xpath.ComponentsAttributeAndValue;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwiseglobal.graph.commontypes.StandardCharsets;
@@ -98,7 +99,7 @@ public class JoinConverter extends TransformConverter{
 		}
 		
 		if (StringUtils.isNotBlank(entry.getParamValue()))
-			ComponentXpath.INSTANCE.getXpathMap().put(ComponentXpathConstants.COMPONENT_JOIN_TYPE_XPATH.value().replace(ID, componentName).replace("$inSocketId", entry.getPortIndex()), entry.getParamValue());
+			ComponentXpath.INSTANCE.getXpathMap().put(ComponentXpathConstants.COMPONENT_JOIN_TYPE_XPATH.value().replace(ID, componentName).replace("$inSocketId", entry.getPortIndex()), new ComponentsAttributeAndValue(Constants.JOIN_TYPE_ATTRIBUTE_NAME,entry.getParamValue()));
 		return targetJoinType;
 	}
 	@Override

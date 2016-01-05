@@ -2,11 +2,11 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="References">
-   <anchor id="ReferenceURLs"/>
-   <anchor id="ReleaseNotes"/>
+   <anchor id="dosandDonts"/>
    <anchor id="JobExamples"/>
    <anchor id="OperationExamples"/>
-   <anchor id="dosandDonts"/>
+   <anchor id="ReferenceURLs"/>
+   <anchor id="ReleaseNotes"/>
    <topic label="FAQs">
       <anchor id="FAQs"/>
    </topic>

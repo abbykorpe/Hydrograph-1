@@ -40,7 +40,6 @@ public class TransformComponentUiConverter extends TransformUiConverter {
 		container.getComponentNames().add(componentName);
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.TRANSFORM.value());
-		uiComponent.setCategory(UIComponentsConstants.TRANSFORM_CATEGORY.value());
 		validateComponentProperties(propertyMap);
 	}
 

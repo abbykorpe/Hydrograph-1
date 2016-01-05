@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.slf4j.Logger;
-
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
 import com.bitwise.app.common.datastructure.property.JoinMappingGrid;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
