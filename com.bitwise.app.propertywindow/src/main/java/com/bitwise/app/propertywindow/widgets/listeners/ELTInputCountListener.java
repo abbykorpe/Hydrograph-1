@@ -52,10 +52,10 @@ public class ELTInputCountListener implements IELTListener{
 				
 				
 				if(StringUtils.isNotEmpty(string)){
-					value = Integer.parseInt(string);
+					
 					}
 					if(event.type == SWT.Modify){
-						if(value < 2 || value > 25 ){
+						if(Integer.parseInt(string) < 2 || Integer.parseInt(string) > 25 ){
 						txtDecorator.setDescriptionText(Messages.PORT_VALUE);
 						txtDecorator.show();
 						propertyDialogButtonBar.enableOKButton(false);
@@ -65,6 +65,7 @@ public class ELTInputCountListener implements IELTListener{
 						txtDecorator.hide();
 						propertyDialogButtonBar.enableOKButton(true);
 						propertyDialogButtonBar.enableApplyButton(true);
+						value = Integer.parseInt(string);
 					}
 				}
 				

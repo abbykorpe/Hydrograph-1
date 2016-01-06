@@ -32,9 +32,9 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
  */
 public class TextBoxWithLabelWidget extends AbstractWidget{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(TextBoxWithLabelWidget.class);
-	private Text textBox;
-	private String properties;
-	private String propertyName;
+	protected Text textBox;
+	private String propertyValue;
+	protected String propertyName;
 	private ControlDecoration txtDecorator;
 	private TextBoxWithLableConfig textBoxConfig;
 	
@@ -52,10 +52,10 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propDialogButtonBar);
 		this.propertyName = componentConfigProp.getPropertyName();
-		this.properties =  (String) componentConfigProp.getPropertyValue();
+		this.propertyValue =  String.valueOf(componentConfigProp.getPropertyValue());
 	}
 
-	private void setToolTipErrorMessage(){
+	protected void setToolTipErrorMessage(){
 		String toolTipErrorMessage = null;
 				
 		if(txtDecorator.isVisible())
@@ -117,7 +117,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 	
 	private void populateWidget(){
 		logger.debug("Populating {} textbox", textBoxConfig.getName());
-		String property = properties;
+		String property = propertyValue;
 		if(StringUtils.isNotBlank(property)){
 			textBox.setText(property);
 			txtDecorator.hide();

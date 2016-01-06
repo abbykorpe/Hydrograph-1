@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
 import com.bitwise.app.common.datastructure.property.FilterProperties;
-import com.bitwise.app.propertywindow.widgets.joinproperty.ELTLookupMapWizard;
+import com.bitwise.app.propertywindow.widgets.customwidgets.lookupproperty.ELTLookupMapWizard;
 
 
 // TODO: Auto-generated Javadoc

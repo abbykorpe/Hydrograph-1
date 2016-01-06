@@ -295,70 +295,20 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			adjustComponentFigure(getCastedModel(), getComponentFigure());
 			getCastedModel().setComponentLabel((String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue()));
 			
-			if(getCastedModel().getComponentName().equalsIgnoreCase("join")){
-
-				String newPortCount =   (String)getCastedModel().getProperties().get("input_count");
-				int prevPortCount = getCastedModel().getPort("in1").getNumberOfPortsOfThisType();
-				int numOfPort=0;
-				if(StringUtils.isNotEmpty(newPortCount)){
-					int i = Integer.parseInt(newPortCount);
-					if(i >= 2 && i <= 25){
-						numOfPort = Integer.parseInt(newPortCount);
-						if(prevPortCount != numOfPort){
-							ComponentFigure compFig = (ComponentFigure)getFigure();
-							compFig.setHeight(numOfPort, 1);
-							compFig.setWidth(numOfPort);
-							Dimension newSize = new Dimension((numOfPort+1)*33, ((numOfPort+1)*25)+getCastedModel().getComponentLabelMargin());
-							getCastedModel().setSize(newSize);
-							refresh();
-
-							if(prevPortCount < numOfPort){
-								//Increment the ports
-
-								getCastedModel().changePortCount(numOfPort);
-
-								List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
-								PortEditPart portEditPart = null;
-								for(AbstractGraphicalEditPart part:childrenEditParts)
-								{
-
-									if(part instanceof PortEditPart){ 
-										portEditPart = (PortEditPart) part;
-										portEditPart.adjustPortFigure(getCastedModel().getLocation());
-									}
-								}
-								getCastedModel().incrementPorts(numOfPort, prevPortCount);
-
-							}else if(prevPortCount > numOfPort){
-								//decrement the ports
-
-								List<String> portsToBeRemoved = populatePortsToBeRemoved(prevPortCount, numOfPort);
-
-								getCastedModel().decrementPorts(portsToBeRemoved);
-								((ComponentFigure)getFigure()).decrementAnchors(portsToBeRemoved);
-
-								getCastedModel().changePortCount(numOfPort);
-
-							}
-						}
-					}else{
-						numOfPort = 2;
-					}
-				}
+			if(getCastedModel().isChangeInPortsCntDynamically()){
+				setInPortsCountDynamically();
 			}
-
+			if(getCastedModel().isChangeOutPortsCntDynamically()){
+				setOutPortsCountDynamically();
+			}
+			if(getCastedModel().isChangeUnusedPortsCntDynamically()){
+				setUnusedPortsCountDynamically();
+			}
+			
 			updateComponentStatus();			
 			refresh();
-			List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
-			PortEditPart portEditPart = null;
-			for(AbstractGraphicalEditPart part:childrenEditParts)
-			{
-				
-				if(part instanceof PortEditPart){ 
-					portEditPart = (PortEditPart) part;
-					portEditPart.adjustPortFigure(getCastedModel().getLocation());
-				}
-			}
+			
+			adjustExistingPorts();
 
 			ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 			if(eltPropertyWindow.isPropertyChanged()){
@@ -370,25 +320,192 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		}
 	}
 	
-	private List<String> populatePortsToBeRemoved(int prevCount, int newCount){
-		int keyCount = newCount;
-        List<String> oldKeys = new ArrayList<>();
-        List<String> newKeys = new ArrayList<>();
-        List<String> keysToBeRemoved = new ArrayList<>();
-        
-        oldKeys.addAll(getCastedModel().getPorts().keySet());
+	
+	private void setInPortsCountDynamically(){
+		int prevInPortCount = getCastedModel().getInPortCount();
 
-        for(int i=0; i<keyCount; i++)
-        {
-              newKeys.add("in"+i);
-              newKeys.add("unused"+i);
-        }
-        newKeys.add("out0");
-        for (String key : oldKeys) {
-              if(!newKeys.contains(key))
-                    keysToBeRemoved.add(key);
-        }
-        return keysToBeRemoved;
+		int newInPortCount=Integer.parseInt((String)getCastedModel().getProperties().get("inPortCount"));
+		int outPortCount=Integer.parseInt((String)getCastedModel().getProperties().get("outPortCount"));
+		int inPortCountToBeApplied = newInPortCount!=prevInPortCount ? newInPortCount : prevInPortCount;
+
+		ComponentFigure compFig = (ComponentFigure)getFigure();
+		compFig.setHeight(inPortCountToBeApplied, outPortCount);
+
+		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight()+getCastedModel().getComponentLabelMargin());
+		getCastedModel().setSize(newSize);
+		refresh();
+
+		if(prevInPortCount != newInPortCount){
+
+			if(prevInPortCount < newInPortCount){
+				//Increment the ports
+				getCastedModel().changeInPortCount(newInPortCount);
+				adjustExistingPorts();
+				getCastedModel().incrementInPorts(newInPortCount, prevInPortCount);
+
+			}else if(prevInPortCount > newInPortCount){
+				//decrement the ports
+				List<String> portsToBeRemoved = populateInPortsToBeRemoved(prevInPortCount, newInPortCount);
+				getCastedModel().decrementPorts(portsToBeRemoved);
+				((ComponentFigure)getFigure()).decrementAnchors(portsToBeRemoved);
+				getCastedModel().changeInPortCount(newInPortCount);
+
+			}
+		}	
+	}
+	
+
+	private void setOutPortsCountDynamically(){
+		int prevOutPortCount = getCastedModel().getOutPortCount();
+
+		int inPortCount=Integer.parseInt((String)getCastedModel().getProperties().get("inPortCount"));
+		int newOutPortCount=Integer.parseInt((String)getCastedModel().getProperties().get("outPortCount"));
+
+		int outPortCountToBeApplied = newOutPortCount!=prevOutPortCount ? newOutPortCount : prevOutPortCount;
+
+		ComponentFigure compFig = (ComponentFigure)getFigure();
+		compFig.setHeight(inPortCount, outPortCountToBeApplied);
+
+		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight()+getCastedModel().getComponentLabelMargin());
+		getCastedModel().setSize(newSize);
+		refresh();
+		
+		if(prevOutPortCount != newOutPortCount){
+
+			if(prevOutPortCount < newOutPortCount){
+				//Increment the ports
+				getCastedModel().changeOutPortCount(newOutPortCount);
+				adjustExistingPorts();
+				getCastedModel().incrementUnusedPorts(newOutPortCount, prevOutPortCount);
+
+			}else if(prevOutPortCount > newOutPortCount){
+				//decrement the ports
+				List<String> portsToBeRemoved = populateOutPortsToBeRemoved(prevOutPortCount, newOutPortCount);
+				getCastedModel().decrementPorts(portsToBeRemoved);
+				((ComponentFigure)getFigure()).decrementAnchors(portsToBeRemoved);
+				getCastedModel().changeOutPortCount(newOutPortCount);
+
+			}
+		}
+	}
+	
+	private void setUnusedPortsCountDynamically(){
+		
+		int prevUnusedportCount = getCastedModel().getUnusedPortCount();
+		int newUnunsedPortCount=Integer.parseInt((String)getCastedModel().getProperties().get("unusedPortCount"));
+		
+		int unusedPortCountToBeApplied = newUnunsedPortCount!=prevUnusedportCount ? newUnunsedPortCount : prevUnusedportCount;		
+
+		ComponentFigure compFig = (ComponentFigure)getFigure();
+		compFig.setWidth(unusedPortCountToBeApplied);
+
+		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight()+getCastedModel().getComponentLabelMargin());
+		getCastedModel().setSize(newSize);
+		refresh();
+		
+		if(prevUnusedportCount != newUnunsedPortCount){
+
+			if(prevUnusedportCount < newUnunsedPortCount){
+				//Increment the ports
+				getCastedModel().changeUnusedPortCount(newUnunsedPortCount);
+				adjustExistingPorts();
+				getCastedModel().incrementUnusedPorts(newUnunsedPortCount, prevUnusedportCount);
+			}else if(prevUnusedportCount > newUnunsedPortCount){
+				//decrement the ports
+				List<String> portsToBeRemoved = populateUnusedPortsToBeRemoved(prevUnusedportCount, newUnunsedPortCount);
+				getCastedModel().decrementPorts(portsToBeRemoved);
+				((ComponentFigure)getFigure()).decrementAnchors(portsToBeRemoved);
+				getCastedModel().changeUnusedPortCount(newUnunsedPortCount);
+
+			}
+		}
+	}
+	
+	public void adjustExistingPorts(){
+		List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
+		PortEditPart portEditPart = null;
+		for(AbstractGraphicalEditPart part:childrenEditParts)
+		{
+			if(part instanceof PortEditPart){ 
+				portEditPart = (PortEditPart) part;
+				portEditPart.adjustPortFigure(getCastedModel().getLocation());
+			}
+		}
+	}
+	
+	private List<String> populateInPortsToBeRemoved(int prevCount, int newCount){
+		int keyCount = newCount;
+		List<String> oldKeys = new ArrayList<>();
+		List<String> oldInKeys = new ArrayList<>();
+		List<String> newInKeys = new ArrayList<>();
+		List<String> inKeysToBeRemoved = new ArrayList<>();
+
+		oldKeys.addAll(getCastedModel().getPorts().keySet());
+
+		for (String key : oldKeys) {
+			if(key.contains("in"))
+				oldInKeys.add(key);
+		}
+
+		for(int i=0; i<keyCount; i++)
+		{
+			newInKeys.add("in"+i);
+		}
+		for (String key : oldInKeys) {
+			if(!newInKeys.contains(key))
+				inKeysToBeRemoved.add(key);
+		}
+		return inKeysToBeRemoved;
+	}
+	
+	private List<String> populateOutPortsToBeRemoved(int prevCount, int newCount){
+		int keyCount = newCount;
+		List<String> oldKeys = new ArrayList<>();
+		List<String> oldOutKeys = new ArrayList<>();
+		List<String> newOutKeys = new ArrayList<>();
+		List<String> outKeysToBeRemoved = new ArrayList<>();
+
+		oldKeys.addAll(getCastedModel().getPorts().keySet());
+
+		for (String key : oldKeys) {
+			if(key.contains("out"))
+				oldOutKeys.add(key);
+		}
+
+		for(int i=0; i<keyCount; i++)
+		{
+			newOutKeys.add("out"+i);
+		}
+		for (String key : oldOutKeys) {
+			if(!newOutKeys.contains(key))
+				outKeysToBeRemoved.add(key);
+		}
+		return outKeysToBeRemoved;
+	}
+	
+	private List<String> populateUnusedPortsToBeRemoved(int prevCount, int newCount){
+		int keyCount = newCount;
+		List<String> oldKeys = new ArrayList<>();
+		List<String> oldUnusedKeys = new ArrayList<>();
+		List<String> newUnusedKeys = new ArrayList<>();
+		List<String> unusedKeysToBeRemoved = new ArrayList<>();
+
+		oldKeys.addAll(getCastedModel().getPorts().keySet());
+
+		for (String key : oldKeys) {
+			if(key.contains("unused"))
+				oldUnusedKeys.add(key);
+		}
+
+		for(int i=0; i<keyCount; i++)
+		{
+			newUnusedKeys.add("unused"+i);
+		}
+		for (String key : oldUnusedKeys) {
+			if(!newUnusedKeys.contains(key))
+				unusedKeysToBeRemoved.add(key);
+		}
+		return unusedKeysToBeRemoved;
 	}
 	
 	private void adjustComponentFigure(Component component, ComponentFigure componentFigure){

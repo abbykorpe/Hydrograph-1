@@ -129,13 +129,14 @@ public class ComponentCreateCommand extends Command {
 	private void setupComponent(Component component) {
 		String componentName = DynamicClassProcessor.INSTANCE.getClazzName(component.getClass());
 		com.bitwise.app.common.component.config.Component componentConfig = XMLConfigUtil.INSTANCE.getComponent(componentName);
-		component.setProperties(prepareComponentProperties(componentName));
+		LinkedHashMap<String, Object> propertiesFromConstructor = component.getProperties();
+		component.setProperties(prepareComponentProperties(componentName, propertiesFromConstructor));
 		component.setType(componentConfig.getNameInPalette());
 		component.setCategory(componentConfig.getCategory().value());
 		component.setPrefix(componentConfig.getDefaultNamePrefix());
 	}
 	
-	private Map<String, Object> prepareComponentProperties(String componentName) {
+	private Map<String, Object> prepareComponentProperties(String componentName, LinkedHashMap<String, Object> propertiesFromConstructor) {
 		boolean componentHasRequiredValues = Boolean.TRUE;
 		Map<String, Object> properties = ComponentCacheUtil.INSTANCE.getProperties(componentName);
 		properties.put(Constants.PARAM_NAME, componentName);
@@ -153,6 +154,7 @@ public class ComponentCreateCommand extends Command {
 		if(!componentHasRequiredValues){
 			properties.put(Component.Props.VALIDITY_STATUS.getValue(), Component.ValidityStatus.WARN.name());
 		}
+		properties.putAll(propertiesFromConstructor);
 		return properties;
 	}
 }

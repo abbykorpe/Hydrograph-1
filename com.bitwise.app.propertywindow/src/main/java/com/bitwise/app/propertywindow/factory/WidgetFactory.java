@@ -26,6 +26,7 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.SingleColumnWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.TextBoxWithLabelWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.WidgetHelper;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import com.bitwise.app.propertywindow.widgets.customwidgets.joinproperty.ELTJoinPortCount;
 import com.bitwise.app.propertywindow.widgets.customwidgets.operational.TransformWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.runtimeproperty.ELTRuntimePropertiesWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
@@ -72,7 +73,7 @@ public class WidgetFactory {
 		TRANSFORM_WIDGET(TransformWidget.class,WidgetHelper.INSTANCE.getOperationClassForTransformWidgetConfig()),
 		AGGREGATE_WIDGET(TransformWidget.class,WidgetHelper.INSTANCE.getOperationClassForAggregateWidgetConfig()),
 		XML_CONTENT_WIDGET(ELTXmlPropertiesContainer.class),
-		INPUT_COUNT_WIDGET(TextBoxWithLabelWidget.class,WidgetHelper.INSTANCE.getInputCountWidgetConfig()),
+		INPUT_COUNT_WIDGET(ELTJoinPortCount.class,WidgetHelper.INSTANCE.getInputCountWidgetConfig()),
 		JOIN_TYPE_WIDGET(ELTJoinWidget.class),
 		JOIN_MAPPING_WIDGET(ELTJoinMapWidget.class),
 		HASH_JOIN_WIDGET(ELTLookupConfigWidget.class),

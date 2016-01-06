@@ -94,6 +94,14 @@ public abstract class Component extends Model {
 	private String componentName;
 	List<PortSpecification> portSpecification;
 
+	private int inPortCount;
+	private int outPortCount;
+	private int unusedPortCount;
+	
+	private boolean changeInPortsCntDynamically;
+	private boolean changeOutPortsCntDynamically;
+	private boolean changeUnusedPortsCntDynamically;
+	
 	private ComponentLabel componentLabel;
 	private int componentLabelMargin;
 
@@ -129,6 +137,7 @@ public abstract class Component extends Model {
 
 		prefix = XMLConfigUtil.INSTANCE.getComponent(componentName).getDefaultNamePrefix();
 		initPortSettings();
+		initDynamicPortFlags();
 		toolTipErrorMessages = new LinkedHashMap<>();
 	}
 
@@ -148,14 +157,134 @@ public abstract class Component extends Model {
 
 		for(PortSpecification p:portSpecification)
 		{ 	
+			setPortCount(p.getTypeOfPort().value(), p.getNumberOfPorts());
 			String portTerminal = p.getTypeOfPort().value() + p.getSequenceOfPort();
 			Port port = new Port(p.getNameOfPort(),p.getLabelOfPort(),portTerminal, this, p.getNumberOfPorts(), p.getTypeOfPort().value(), p.getSequenceOfPort());
 			ports.put(portTerminal, port);
 		}
 	}
+	
+	private void setPortCount(String portType, int portCount){
+		if(portType.equals("in")){
+			inPortCount=portCount;
+			properties.put("inPortCount", String.valueOf(portCount));
+		}
+		else if(portType.equals("out")){
+			outPortCount=portCount;
+			properties.put("outPortCount", String.valueOf(portCount));
+		}
+		else if (portType.equals("unused")){
+			unusedPortCount=portCount;
+			properties.put("unusedPortCount", String.valueOf(portCount));
+		}
+	}
 
+	
+	public int getInPortCount() {
+		return inPortCount;
+	}
+
+	public void setInPortCount(int inPortCount) {
+		this.inPortCount = inPortCount;
+	}
+
+	public int getOutPortCount() {
+		return outPortCount;
+	}
+
+	public void setOutPortCount(int outPortCount) {
+		this.outPortCount = outPortCount;
+	}
+
+	public int getUnusedPortCount() {
+		return unusedPortCount;
+	}
+
+	public void setUnusedPortCount(int unusedPortCount) {
+		this.unusedPortCount = unusedPortCount;
+	}
 	public List<PortSpecification> getPortSpecification() {
 		return portSpecification;
+	}
+	
+	private void initDynamicPortFlags(){
+		changeInPortsCntDynamically=XMLConfigUtil.INSTANCE.getComponent(componentName).isChangeInPortsDynamically();
+		changeOutPortsCntDynamically=XMLConfigUtil.INSTANCE.getComponent(componentName).isChangeOutPortsDynamically();
+		changeUnusedPortsCntDynamically=XMLConfigUtil.INSTANCE.getComponent(componentName).isChangeUnusedPortsDynamically();
+	}
+	
+	public boolean isChangeInPortsCntDynamically() {
+		return changeInPortsCntDynamically;
+	}
+
+	public boolean isChangeOutPortsCntDynamically() {
+		return changeOutPortsCntDynamically;
+	}
+
+	public boolean isChangeUnusedPortsCntDynamically() {
+		return changeUnusedPortsCntDynamically;
+	}
+
+	
+	public void incrementInPorts(int newPortCount, int oldPortCount){
+
+		for(int i=oldPortCount; i<newPortCount; i++){
+			Port inPort = new Port("in"+i , "in"+i, "in"+i, this, newPortCount, "in", i);
+			ports.put("in"+i, inPort);
+			firePropertyChange("Component:add", null, inPort );
+		}
+	}
+	
+	public void incrementOutPorts(int newPortCount, int oldPortCount){
+		for(int i=oldPortCount; i<newPortCount; i++){
+			Port unusedPort = new Port("out"+i , "out"+i, "out"+i, this, newPortCount, "out", i);
+			ports.put("unused"+i, unusedPort);
+			firePropertyChange("Component:add", null, unusedPort );
+		}
+	}
+	
+	public void incrementUnusedPorts(int newPortCount, int oldPortCount){
+		for(int i=oldPortCount; i<newPortCount; i++){
+			Port unusedPort = new Port("unused"+i , "un"+i, "unused"+i, this, newPortCount, "unused", i);
+			ports.put("unused"+i, unusedPort);
+			firePropertyChange("Component:add", null, unusedPort );
+		}
+	}
+
+	public void changeInPortCount(int newPortCount){
+
+		List<String> portTerminals = new ArrayList<>();
+		portTerminals.addAll(ports.keySet());
+		for (String key : portTerminals) {
+			if(key.contains("in") ){
+				ports.get(key).setNumberOfPortsOfThisType(newPortCount);
+			}
+		}
+		setInPortCount(newPortCount);
+	}
+	
+	public void changeUnusedPortCount(int newPortCount){
+
+		List<String> portTerminals = new ArrayList<>();
+		portTerminals.addAll(ports.keySet());
+		for (String key : portTerminals) {
+			if(key.contains("unused")){
+				ports.get(key).setNumberOfPortsOfThisType(newPortCount);
+			}
+		}
+		setUnusedPortCount(newPortCount);
+	}
+	
+	public void changeOutPortCount(int newPortCount){
+
+		List<String> portTerminals = new ArrayList<>();
+		portTerminals.addAll(ports.keySet());
+		for (String key : portTerminals) {
+			if(key.contains("out")){
+				ports.get(key).setNumberOfPortsOfThisType(newPortCount);
+			}
+		}
+		setOutPortCount(newPortCount);
 	}
 
 	public HashMap<String, Port> getPorts() {
