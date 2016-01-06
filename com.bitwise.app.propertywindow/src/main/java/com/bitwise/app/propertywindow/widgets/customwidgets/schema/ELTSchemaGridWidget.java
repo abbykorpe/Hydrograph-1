@@ -577,10 +577,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		// Adding the decorator to show error message when field name same.
 		setDecorator();
-
-		addValidators();
-       // populateWidget();
 		helper = getListenerHelper();
+		addValidators();
 		try {
 			eltTable.attachListener(
 					ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK
