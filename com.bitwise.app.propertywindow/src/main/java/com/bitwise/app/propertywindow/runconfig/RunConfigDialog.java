@@ -70,7 +70,7 @@ public class RunConfigDialog extends Dialog {
 	private final String JOB_XML="jobXML";
 	private final String LIB_PATH="libs";
 	private final String PARAM_FILE="paramFile";
-	
+	private Composite container;
 
 	/**
 	 * Create the dialog.
@@ -91,7 +91,7 @@ public class RunConfigDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		
-		Composite container = (Composite) super.createDialogArea(parent);
+		container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(2, false));
 
 		container.getShell().setText("Run Configuration Settings");
@@ -244,7 +244,7 @@ public class RunConfigDialog extends Dialog {
 		compositePathConfig.setVisible(false);
 
 		loadbuildProperties();
-	    
+	
 		return container;
 	}
 	
@@ -353,7 +353,7 @@ public class RunConfigDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(424, 671);
+		return new Point(424, 171);
 	}
 
 	public boolean proceedToRunGraph(){
@@ -364,15 +364,16 @@ public class RunConfigDialog extends Dialog {
 
 		@Override
 		public void widgetSelected(SelectionEvent event) {
+
 			Button button = ((Button) event.widget);
 
 			if(button.getText().equals("Local")){
-
+				container.getShell().setSize(424,671-500);
 				compositeServerDetails.setVisible(false);
 				compositePathConfig.setVisible(false);
 
 			}else if(button.getText().equals("Remote")){
-
+				container.getShell().setSize(424, 671);
 				compositeServerDetails.setVisible(true);
 				compositePathConfig.setVisible(true);
 			}
