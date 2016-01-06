@@ -30,8 +30,7 @@ import com.bitwiseglobal.graph.operationstypes.HashJoin;
 
 public class LookupConverter extends TransformConverter {
 
-	private static final Logger logger = LogFactory.INSTANCE
-			.getLogger(FilterConverter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConverter.class);
 	private LookupMappingGrid lookupPropertyGrid;
 	private ConverterHelper converterHelper;
 
@@ -40,8 +39,7 @@ public class LookupConverter extends TransformConverter {
 		this.baseComponent = new HashJoin();
 		this.component = component;
 		this.properties = component.getProperties();
-		lookupPropertyGrid = (LookupMappingGrid) properties
-				.get(Constants.LOOKUP_MAP_FIELD);
+		lookupPropertyGrid = (LookupMappingGrid) properties.get(Constants.LOOKUP_MAP_FIELD);
 		converterHelper = new ConverterHelper(component);
 	}
 
@@ -49,7 +47,7 @@ public class LookupConverter extends TransformConverter {
 	public void prepareForXML() {
 		super.prepareForXML();
 		HashJoin hashJoin = (HashJoin) baseComponent;
-		if (properties.get(Constants.LOOKUP_CONFIG_FIELD) != null){
+		if (properties.get(Constants.LOOKUP_CONFIG_FIELD) != null) {
 			hashJoin.getKeys().addAll(getLookupConfigKeys());
 		}
 	}
@@ -57,23 +55,20 @@ public class LookupConverter extends TransformConverter {
 	private List<TypeKeyFields> getLookupConfigKeys() {
 		List<TypeKeyFields> typeKeyFieldsList = null;
 		TypeKeyFields typeKeyField = null;
-		LookupConfigProperty keyFields = (LookupConfigProperty) properties
-				.get(Constants.LOOKUP_CONFIG_FIELD);
+		LookupConfigProperty keyFields = (LookupConfigProperty) properties.get(Constants.LOOKUP_CONFIG_FIELD);
 		if (keyFields != null) {
 			typeKeyFieldsList = new ArrayList<>();
 
 			if (keyFields.getDriverKey() != null) {
 				typeKeyField = new TypeKeyFields();
 				typeKeyField.setInSocketId("in0");
-				typeKeyField.getField().addAll(
-				getTypeFieldName(keyFields.getDriverKey()));
+				typeKeyField.getField().addAll(getTypeFieldName(keyFields.getDriverKey()));
 				typeKeyFieldsList.add(typeKeyField);
-			} 
+			}
 			if (keyFields.getLookupKey() != null) {
 				typeKeyField = new TypeKeyFields();
 				typeKeyField.setInSocketId("in1");
-				typeKeyField.getField().addAll(
-						getTypeFieldName(keyFields.getLookupKey()));
+				typeKeyField.getField().addAll(getTypeFieldName(keyFields.getLookupKey()));
 				typeKeyFieldsList.add(typeKeyField);
 			}
 
@@ -83,12 +78,12 @@ public class LookupConverter extends TransformConverter {
 
 	private List<TypeFieldName> getTypeFieldName(String keyData) {
 		List<TypeFieldName> typeFieldNameList = null;
-		TypeFieldName typeFieldName=null;
+		TypeFieldName typeFieldName = null;
 		if (keyData != null) {
 			typeFieldNameList = new ArrayList<>();
 			String keyList[] = keyData.split(",");
 			for (String key : keyList) {
-				typeFieldName=new TypeFieldName();
+				typeFieldName = new TypeFieldName();
 				typeFieldName.setName(key);
 				typeFieldNameList.add(typeFieldName);
 			}
@@ -100,8 +95,7 @@ public class LookupConverter extends TransformConverter {
 
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
-		logger.debug("Genrating TypeStraightPullOutSocket data for : {}",
-				properties.get(Constants.PARAM_NAME));
+		logger.debug("Genrating TypeStraightPullOutSocket data for : {}", properties.get(Constants.PARAM_NAME));
 		TypeBaseInSocket inSocketsList = new TypeBaseInSocket();
 		Object obj = properties.get(Constants.LOOKUP_MAP_FIELD);
 		List<TypeOperationsOutSocket> outSockectList = new ArrayList<TypeOperationsOutSocket>();
@@ -109,29 +103,17 @@ public class LookupConverter extends TransformConverter {
 			TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();
 			TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
 
-			/*
-			 * if (outSocket.equals(obj)) {
-			 * outSocket.setCopyOfInsocket(outSocketAsInsocket); } else { //
-			 * outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(
-			 * setInputProperty(obj)); }
-			 */
-			outSocketAsInsocket.setInSocketId(link.getTarget()
-					.getPort(link.getTargetTerminal()).getNameOfPort());
+			outSocketAsInsocket.setInSocketId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
 			outSocketAsInsocket.getOtherAttributes();
-			outSocket.setCopyOfInsocket(outSocketAsInsocket);
+			//outSocket.setCopyOfInsocket(outSocketAsInsocket);
 
-			outSocket.setId(link.getSource().getPort(link.getSourceTerminal())
-					.getNameOfPort());
-			outSocket.setType(PortTypeConstant.getPortType(link.getSource()
-					.getPort(link.getSourceTerminal()).getNameOfPort()));
+			outSocket.setId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());
+			outSocket.setType(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort()));
 
 			outSocket.getOtherAttributes();
 			outSockectList.add(outSocket);
 			if (properties.get(Constants.LOOKUP_MAP_FIELD) != null)
-				outSocket
-						.getPassThroughFieldOrOperationFieldOrMapField()
-						.addAll(converterHelper
-								.getLookuporJoinOutputMaping(lookupPropertyGrid));
+				outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(converterHelper.getLookuporJoinOutputMaping(lookupPropertyGrid));
 
 		}
 		return outSockectList;
@@ -139,23 +121,16 @@ public class LookupConverter extends TransformConverter {
 
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
-		logger.debug("Genrating TypeBaseInSocket data for :{}", component
-				.getProperties().get(Constants.PARAM_NAME));
+		logger.debug("Genrating TypeBaseInSocket data for :{}", component.getProperties().get(Constants.PARAM_NAME));
 		List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
 		int inSocketCounter = 0;
 		for (Link link : component.getTargetConnections()) {
 			TypeBaseInSocket inSocket = new TypeBaseInSocket();
-			inSocket.setFromComponentId((String) link.getSource()
-					.getProperties().get(Constants.PARAM_NAME));
-			inSocket.setFromSocketId(PortTypeConstant.getPortType(link
-					.getSource().getPort(link.getSourceTerminal())
-					.getNameOfPort())
+			inSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
+			inSocket.setFromSocketId(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort())
 					+ link.getLinkNumber());
-			inSocket.setId(PortTypeConstant.getPortType(link.getTarget()
-					.getPort(link.getTargetTerminal()).getNameOfPort())
-					+ inSocketCounter);
-			inSocket.setType(PortTypeConstant.getPortType(link.getTarget()
-					.getPort(link.getTargetTerminal()).getNameOfPort()));
+			inSocket.setId(PortTypeConstant.getPortType(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort()) + inSocketCounter);
+			inSocket.setType(PortTypeConstant.getPortType(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort()));
 			inSocket.getOtherAttributes();
 			inSocketsList.add(inSocket);
 			inSocketCounter++;

@@ -16,7 +16,8 @@ public class ValidateTargetXML {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ValidateTargetXML.class);
 static	String XSDPATH="Resource/newxmlschema/main/main.xsd";
 
-static String XMLPATH="C:\\WorkSpace\\runtime-com.bitwise.app.perspective.product\\Test2\\Job_1.xml";
+static String XMLPATH="C:\\Users\\vibhort\\Desktop\\Job_1.xml";
+
 				// replace above path with generated XML.
 	
 	
