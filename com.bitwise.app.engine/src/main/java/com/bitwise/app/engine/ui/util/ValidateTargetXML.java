@@ -8,8 +8,12 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-public class ValidateTargetXML {
+import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.LogFactory;
+
+public class ValidateTargetXML {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(ValidateTargetXML.class);
 static	String XSDPATH="Resource/newxmlschema/main/main.xsd";
 
 static String XMLPATH="C:\\WorkSpace\\runtime-com.bitwise.app.perspective.product\\Test2\\Job_1.xml";
@@ -22,7 +26,7 @@ static String XMLPATH="C:\\WorkSpace\\runtime-com.bitwise.app.perspective.produc
 			System.out.println(result);
 		
 		} catch (Exception e) {
-				e.printStackTrace();
+			logger.debug("Unable to validate XML schema" , e);
 		}
 	}
 	

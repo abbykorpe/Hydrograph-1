@@ -25,10 +25,12 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructures.tooltip.TootlTipErrorMessage;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
@@ -50,6 +52,9 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
  * @author Bitwise
  */
 public class FilterOperationClassUtility {
+	
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterOperationClassUtility.class);
+	
 	/**
 	 * Creates the new class wizard.
 	 * 
@@ -119,8 +124,7 @@ public class FilterOperationClassUtility {
 				else
 					name=classFile.substring(0, classFile.lastIndexOf('.'));
 			} catch (IOException e) { 
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.debug("Unable to read file " + filePath,e );
 			}
 			fileName.setText(name.trim());
 			filePath = resource.getRawLocation().toOSString();

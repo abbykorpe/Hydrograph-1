@@ -47,12 +47,9 @@ public class ELTComponentPropertyAdapterTest {
 		//Given
 		
 		//when
-		//try{
+		
 			ELTComponentPropertyAdapter eltComponentPropertyAdapter = new ELTComponentPropertyAdapter(null);
 			eltComponentPropertyAdapter.transform();	
-		/*}catch(Exception e){
-			e.printStackTrace();
-		}*/
 		
 		
 		//Then - expect EmptyComponentPropertiesException

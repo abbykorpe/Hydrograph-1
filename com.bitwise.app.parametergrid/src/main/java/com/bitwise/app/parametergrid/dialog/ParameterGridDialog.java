@@ -405,7 +405,7 @@ public class ParameterGridDialog extends Dialog {
 			parameterMap = parameterFileManager.getParameterMap();
 		} catch (IOException e) {
 			//isValidParameterFile = false;
-			e.printStackTrace();
+			logger.debug("Unable to get parameter Map ", e);
 		}
 
 		if(parameterFile != null){
@@ -768,7 +768,7 @@ public class ParameterGridDialog extends Dialog {
 		try {
 				file.refreshLocal(IResource.DEPTH_ZERO, null);
 			} catch (CoreException e) {
-				e.printStackTrace();
+				logger.debug("Unable to refresh parameter file ", e);
 			}
 	}
 
