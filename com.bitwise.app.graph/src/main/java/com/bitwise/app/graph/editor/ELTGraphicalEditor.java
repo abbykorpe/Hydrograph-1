@@ -98,6 +98,7 @@ import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.common.interfaces.tooltip.ComponentCanvas;
 import com.bitwise.app.common.util.CanvasDataAdpater;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ContributionItemManager;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.engine.exceptions.EngineException;
@@ -172,6 +173,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		// listener for selection on canvas
 		viewer.addSelectionChangedListener(createISelectionChangedListener());
 		attachCanvasMouseListeners();
+		setUndoRedoStatus();
 	}
 
 	private void hideToolTip(){
@@ -188,12 +190,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
+				setUndoRedoStatus();
 
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
+				setUndoRedoStatus();
 				hideToolTip();
 			}
 		});
@@ -207,17 +210,18 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					if(!toolTipComponentBounds.contains(point)){
 						hideToolTip();
 					}
-				}				
+				}
+				setUndoRedoStatus();
 			}
 
 			@Override
 			public void mouseDown(MouseEvent e) {
-				// Do nothing
+				setUndoRedoStatus();
 			}
 
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				// Do nothing
+				setUndoRedoStatus();
 			}
 		});
 
@@ -233,6 +237,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						}
 					}
 				}
+				setUndoRedoStatus();
 			}
 		});
 
@@ -251,13 +256,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			}
 
 			@Override
-			public void mouseExit(MouseEvent e) {
-				// Do nothing				
+			public void mouseExit(MouseEvent e) {		
 			}
 
 			@Override
-			public void mouseEnter(MouseEvent e) {
-				// Do nothing				
+			public void mouseEnter(MouseEvent e) {		
 			}
 		});
 	}
@@ -301,6 +304,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				viewer.getControl().addMouseListener(paletteContainerListener);
 				viewer.getControl().addMouseTrackListener(paletteContainerListener);
 				viewer.getControl().addMouseMoveListener(paletteContainerListener);
+				setUndoRedoStatus();
 			}
 			
 			@Override
@@ -317,6 +321,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void commandStackChanged(EventObject event) {		
+		setUndoRedoStatus();
 		setDirty(true);
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 		super.commandStackChanged(event);
@@ -980,5 +985,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	@Override
 	public void setCurrentParameterFilePath(String currentParameterFilePath) {
 		this.currentParameterFilePath = currentParameterFilePath;
+	}
+	
+	public void setUndoRedoStatus(){
+		ContributionItemManager.UndoRedoCustomToolBarManager.changeUndoRedoStatus(viewer);
 	}
 }
