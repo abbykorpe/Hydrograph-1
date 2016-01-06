@@ -46,8 +46,8 @@ public class ShapesXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	
 	@Override 
 	protected EditPolicy createChildEditPolicy(EditPart child) { 
-		//return new ComponentResizableEditPolicy();
-		return new NonResizableEditPolicy(); 
+		return new ComponentResizableEditPolicy();
+		//return new NonResizableEditPolicy(); 
 	} 
 	
 }
