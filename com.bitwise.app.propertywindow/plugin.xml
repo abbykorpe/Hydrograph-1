@@ -11,7 +11,7 @@
                label="Run">
             <command
                   commandId="com.bitwise.app.propertywindow.runconfig"
-                  label="Run configuration settings"
+                  label="Run Configuration Settings"
                   style="push">
             </command>
          </menu>
