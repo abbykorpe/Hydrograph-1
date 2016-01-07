@@ -277,6 +277,7 @@ public class RunConfigDialog extends Dialog {
 		      }else if(key.equals(REMOTE_MODE) && buildProps.getProperty(key).equals("true")){
 		    	  btnRemoteMode.setSelection(true);
 		    	  btnLocalMode.setSelection(false);
+		    	  container.getShell().setSize(380,730);
 		    	  compositeServerDetails.setVisible(true);
 		    	  compositePathConfig.setVisible(true);
 		      }else if(!(key.equals(LOCAL_MODE) || key.equals(REMOTE_MODE))){
@@ -357,7 +358,7 @@ public class RunConfigDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(380, 171);
+		return new Point(424, 171);
 	}
 
 	public boolean proceedToRunGraph(){
@@ -372,12 +373,12 @@ public class RunConfigDialog extends Dialog {
 			Button button = ((Button) event.widget);
 
 			if(button.getText().equals("Local")){
-				container.getShell().setSize(424,671-500);
+				container.getShell().setSize(380,171);
 				compositeServerDetails.setVisible(false);
 				compositePathConfig.setVisible(false);
 
 			}else if(button.getText().equals("Remote")){
-				container.getShell().setSize(424, 671);
+				container.getShell().setSize(380,671);
 				compositeServerDetails.setVisible(true);
 				compositePathConfig.setVisible(true);
 			}
