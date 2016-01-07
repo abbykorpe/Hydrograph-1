@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.GridRow;
+import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.impl.OutputFileDelimitedConverter;
 import com.bitwise.app.engine.exceptions.SchemaException;
-import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GridRow;
-import com.bitwise.app.propertywindow.widgets.customwidgets.schema.Schema;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeBaseRecord;
 import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;

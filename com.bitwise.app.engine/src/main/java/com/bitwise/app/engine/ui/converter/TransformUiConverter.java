@@ -7,6 +7,7 @@ import java.util.TreeMap;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructure.property.OperationField;
@@ -19,7 +20,6 @@ import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.helper.ConverterUiHelper;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
-import com.bitwise.app.propertywindow.fixedwidthschema.FixedWidthGridRow;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeInputField;

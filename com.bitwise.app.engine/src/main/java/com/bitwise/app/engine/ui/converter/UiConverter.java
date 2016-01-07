@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.component.config.Property;
 import com.bitwise.app.common.component.config.Usage;
+import com.bitwise.app.common.util.ComponentCacheUtil;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
@@ -17,6 +18,7 @@ import com.bitwise.app.engine.ui.repository.ParameterData;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
+import com.bitwise.app.validators.impl.IValidator;
 import com.bitwiseglobal.graph.commontypes.BooleanValueType;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
@@ -133,15 +135,26 @@ public abstract class UiConverter {
 
 	protected Map<String, Object> validateComponentProperties(Map<String, Object> properties) {
 		boolean componentHasRequiredValues = Boolean.TRUE;
-		com.bitwise.app.common.component.config.Component component = XMLConfigUtil.INSTANCE.getComponent(uiComponent
-				.getComponentName());
+		com.bitwise.app.common.component.config.Component component = XMLConfigUtil.INSTANCE.getComponent(uiComponent.getComponentName());
+		
 		for (Property configProperty : component.getProperty()) {
 			Object propertyValue = properties.get(configProperty.getName());
-			if (configProperty.getUsage() != null && Usage.REQUIRED.equals(configProperty.getUsage())
-					&& propertyValue == null) {
-				componentHasRequiredValues = Boolean.FALSE;
-				LOGGER.debug("Mandatory parameter for {} does not have default value for {} parameter", new Object[] {
-						component.getName(), configProperty.getName() });
+			
+			List<String> validators = ComponentCacheUtil.INSTANCE.getValidatorsForProperty(uiComponent.getComponentName(), configProperty.getName());
+			
+			IValidator validator = null;
+			for (String validatorName : validators) {
+				try {
+					validator = (IValidator) Class.forName(Constants.VALIDATOR_PACKAGE_PREFIX + validatorName).newInstance();
+				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+					LOGGER.error("Failed to create validator", e);
+					throw new RuntimeException("Failed to create validator", e);
+				}
+				boolean status = validator.validate(propertyValue, configProperty.getName());
+				//NOTE : here if any of the property is not valid then whole component is not valid 
+				if(status == false){
+					componentHasRequiredValues = Boolean.FALSE;
+				}
 			}
 		}
 		if (!componentHasRequiredValues) {

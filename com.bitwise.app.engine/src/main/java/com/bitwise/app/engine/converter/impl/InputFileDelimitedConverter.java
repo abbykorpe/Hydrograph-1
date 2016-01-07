@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PortTypeConstant;
@@ -13,12 +14,6 @@ import com.bitwise.app.engine.converter.InputConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
-import com.bitwise.app.propertywindow.fixedwidthschema.FixedWidthGridRow;
-import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GridRow;
-import com.bitwise.app.propertywindow.widgets.customwidgets.schema.Schema;
-import com.bitwise.app.propertywindow.widgets.customwidgets.schema.SchemaGrid;
-import com.bitwiseglobal.graph.commontypes.FieldDataTypes;
-import com.bitwiseglobal.graph.commontypes.ScaleTypeList;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
 import com.bitwiseglobal.graph.inputtypes.TextFileDelimited;

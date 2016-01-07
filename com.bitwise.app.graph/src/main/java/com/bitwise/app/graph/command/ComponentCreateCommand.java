@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.component.config.Property;
-import com.bitwise.app.common.component.config.Usage;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
 import com.bitwise.app.common.util.ComponentCacheUtil;
 import com.bitwise.app.common.util.Constants;
@@ -22,6 +21,7 @@ import com.bitwise.app.graph.figure.ELTFigureConstants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
+import com.bitwise.app.validators.impl.IValidator;
 
 /**
  * The Class ComponentCreateCommand.
@@ -129,14 +129,13 @@ public class ComponentCreateCommand extends Command {
 	private void setupComponent(Component component) {
 		String componentName = DynamicClassProcessor.INSTANCE.getClazzName(component.getClass());
 		com.bitwise.app.common.component.config.Component componentConfig = XMLConfigUtil.INSTANCE.getComponent(componentName);
-		LinkedHashMap<String, Object> propertiesFromConstructor = component.getProperties();
-		component.setProperties(prepareComponentProperties(componentName, propertiesFromConstructor));
+		component.setProperties(prepareComponentProperties(componentName, component.getProperties()));
 		component.setType(componentConfig.getNameInPalette());
 		component.setCategory(componentConfig.getCategory().value());
 		component.setPrefix(componentConfig.getDefaultNamePrefix());
 	}
 	
-	private Map<String, Object> prepareComponentProperties(String componentName, LinkedHashMap<String, Object> propertiesFromConstructor) {
+	private Map<String, Object> prepareComponentProperties(String componentName, Map<String, Object> existingProperties) {
 		boolean componentHasRequiredValues = Boolean.TRUE;
 		Map<String, Object> properties = ComponentCacheUtil.INSTANCE.getProperties(componentName);
 		properties.put(Constants.PARAM_NAME, componentName);
@@ -144,17 +143,28 @@ public class ComponentCreateCommand extends Command {
 		com.bitwise.app.common.component.config.Component component = XMLConfigUtil.INSTANCE.getComponent(componentName);
 		for (Property configProperty : component.getProperty()) {
 			Object propertyValue = properties.get(configProperty.getName());
-			if(configProperty.getUsage() != null && Usage.REQUIRED.equals(configProperty.getUsage()) &&
-				propertyValue == null){
-				componentHasRequiredValues = Boolean.FALSE;
-				logger.debug("Mandatory parameter for {} does not have default value for {} parameter", 
-						new Object[]{component.getName(), configProperty.getName()});
+			
+			List<String> validators = ComponentCacheUtil.INSTANCE.getValidatorsForProperty(componentName, configProperty.getName());
+			
+			IValidator validator = null;
+			for (String validatorName : validators) {
+				try {
+					validator = (IValidator) Class.forName(Constants.VALIDATOR_PACKAGE_PREFIX + validatorName).newInstance();
+				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+					logger.error("Failed to create validator", e);
+					throw new RuntimeException("Failed to create validator", e);
+				}
+				boolean status = validator.validate(propertyValue, configProperty.getName());
+				//NOTE : here if any of the property is not valid then whole component is not valid 
+				if(status == false){
+					componentHasRequiredValues = Boolean.FALSE;
+				}
 			}
 		}
 		if(!componentHasRequiredValues){
 			properties.put(Component.Props.VALIDITY_STATUS.getValue(), Component.ValidityStatus.WARN.name());
 		}
-		properties.putAll(propertiesFromConstructor);
+		properties.putAll(existingProperties);
 		return properties;
 	}
 }

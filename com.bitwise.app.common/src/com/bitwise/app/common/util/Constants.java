@@ -6,6 +6,8 @@ package com.bitwise.app.common.util;
  * @author Bitwise
  */
 public class Constants {
+	public static final String VALIDATOR_PACKAGE_PREFIX = "com.bitwise.app.validators.impl.";
+	
 	public static final String DELIMITER = "Delimiter";
 	public static final String CHARACTER_SET = "Character Set";
 	public static final String PHASE = "Phase";
@@ -61,4 +63,9 @@ public class Constants {
 	public static final String JOIN_MAP_FIELD = "join_mapping";
 	public static final String UNKNOWN_COMPONENT_TYPE = "UNKNOWN";
 	public static final String JOIN_TYPE_ATTRIBUTE_NAME="joinType";
+	
+	public static final String COMPONENT_ORIGINAL_NAME = "componentOriginalName";
+	public static final String COMPONENT_TYPE = "componentType";
+	public static final String COMPONENT_BASE_TYPE = "componentBaseType";
+	public static final String COMPONENT_NAMES = "componentNames";
 }

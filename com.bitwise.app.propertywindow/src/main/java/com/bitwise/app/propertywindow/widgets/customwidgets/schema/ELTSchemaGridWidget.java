@@ -1,7 +1,6 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.schema;
 
 import java.util.ArrayList;
-
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -31,6 +30,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.GridRow;
+import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;

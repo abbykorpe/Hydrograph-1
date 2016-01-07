@@ -40,15 +40,21 @@
 		
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED"/>
+			usage="REQUIRED">
+			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+		</tns:property>
 		
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED"/>
+			usage="REQUIRED">
+			<tns:validator>INTEGER_VALIDATOR</tns:validator>
+		</tns:property>
 		
 		<tns:property dataType="string" name="OPERATION_CLASS" renderer="OPERATIONAL_CLASS_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
-			usage="REQUIRED"/>
+			usage="REQUIRED">
+			<tns:validator>CLASS_NAME_VALIDATOR</tns:validator>
+		</tns:property>
 		
 		<tns:property dataType="string" name="filter" renderer="FILTER_PROPERTY_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"

@@ -7,6 +7,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 
+import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 /**

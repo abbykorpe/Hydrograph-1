@@ -1,5 +1,7 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.schema;
 
+import com.bitwise.app.common.datastructure.property.GridRow;
+
 
 
 /**

@@ -10,6 +10,8 @@ import javax.xml.namespace.QName;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
+import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
@@ -23,8 +25,6 @@ import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
-import com.bitwise.app.propertywindow.fixedwidthschema.FixedWidthGridRow;
-import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GridRow;
 import com.bitwiseglobal.graph.commontypes.FieldDataTypes;
 import com.bitwiseglobal.graph.commontypes.ScaleTypeList;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;

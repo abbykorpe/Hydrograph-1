@@ -2,6 +2,7 @@ package com.bitwise.app.propertywindow.propertydialog;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -20,6 +21,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.ComponentCacheUtil;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Component;
@@ -28,16 +31,15 @@ import com.bitwise.app.propertywindow.messagebox.ConfirmCancelMessageBox;
 import com.bitwise.app.propertywindow.property.ELTComponenetProperties;
 import com.bitwise.app.propertywindow.property.Property;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget;
+import com.bitwise.app.validators.impl.IValidator;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * 
  * @author Bitwise
  * Sep 07, 2015
  * 
  */
-
 public class PropertyDialog extends Dialog {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(PropertyDialog.class);
 	private Composite container;
@@ -47,7 +49,7 @@ public class PropertyDialog extends Dialog {
 	private final String componentName;
 	private Button applyButton;
 	private boolean propertyChanged=false;	
-	private final ELTComponenetProperties eltComponenetProperties;
+	private final ELTComponenetProperties componentProperties;
 	private   final String DIALOG_FONT_DATA = "DIALOG_FONT_NAME"; //$NON-NLS-1$
 	private   final String DIALOG_WIDTH = "DIALOG_WIDTH"; //$NON-NLS-1$
 	private   final String DIALOG_HEIGHT = "DIALOG_HEIGHT";
@@ -68,8 +70,8 @@ public class PropertyDialog extends Dialog {
 	public PropertyDialog(Shell parentShell, LinkedHashMap<String, LinkedHashMap<String, ArrayList<Property>>> propertyTree,ELTComponenetProperties eltComponenetProperties,Map<String, String> toolTipErrorMessages, Component component) {		
 		super(parentShell);
 		this.propertyTree = propertyTree;
-		this.eltComponenetProperties = eltComponenetProperties;
-		componentName = (String) this.eltComponenetProperties.getComponentConfigurationProperty(ELTProperties.NAME_PROPERTY.propertyName());
+		this.componentProperties = eltComponenetProperties;
+		componentName = (String) this.componentProperties.getComponentConfigurationProperty(ELTProperties.NAME_PROPERTY.propertyName());
 		this.component = component;
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		/**
@@ -89,7 +91,7 @@ public class PropertyDialog extends Dialog {
 		createPropertyDialogContainer(parent);
 		propertyDialogButtonBar = new PropertyDialogButtonBar(container);
 
-		propertyDialogBuilder = new PropertyDialogBuilder(container,propertyTree,eltComponenetProperties,propertyDialogButtonBar,component);
+		propertyDialogBuilder = new PropertyDialogBuilder(container,propertyTree,componentProperties,propertyDialogButtonBar,component);
 		propertyDialogBuilder.buildPropertyWindow();
 
 		return container;
@@ -165,27 +167,29 @@ public class PropertyDialog extends Dialog {
 		else{
 			statusString = "ERROR";
 		}
-		eltComponenetProperties.getComponentConfigurationProperties().put("validityStatus", statusString);
+		componentProperties.getComponentConfigurationProperties().put("validityStatus", statusString);
 	}
 
 	private void applyButtonAction() {
+		boolean windowValidityStaus = Boolean.TRUE;
 		for(AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()){
 			if(customWidget.getProperties() != null){
-				if(Boolean.FALSE.equals(customWidget.isDataValid())){
-					isPropertyWindowValid = false;
-					logger.debug("{} is not valid ", customWidget);
+				if(customWidget.getProperties() != null){
+					windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
+					savePropertiesInComponentModel(customWidget);
 				}
-				savePropertiesInComponentModel(customWidget);
-				toolTipErrorMessages.put(customWidget.getPropertyName(), customWidget.getToolTipErrorMessage());
 			}
 		}
+		isPropertyWindowValid = windowValidityStaus;
+		updateComponentValidityStatus();
+		
 		propertyChanged=true;
 		disableApplyButton();
 	}
 
 	private void savePropertiesInComponentModel(AbstractWidget eltWidget) {
 		LinkedHashMap<String, Object> tempPropert = eltWidget.getProperties();
-		LinkedHashMap<String, Object> componentConfigurationProperties = eltComponenetProperties.getComponentConfigurationProperties();
+		LinkedHashMap<String, Object> componentConfigurationProperties = componentProperties.getComponentConfigurationProperties();
 		for(String propName : tempPropert.keySet()){
 			componentConfigurationProperties.put(propName, tempPropert.get(propName));
 		}
@@ -276,33 +280,31 @@ public class PropertyDialog extends Dialog {
 	
 	@Override
 	protected void okPressed() {
-		
+		boolean windowValidityStaus = Boolean.TRUE;
 		for(AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()){
 			if(customWidget.getProperties() != null){
-				if(Boolean.FALSE.equals(customWidget.isDataValid())){
-					logger.debug("{} is not valid ", customWidget);
-					isPropertyWindowValid = false;
-				}
+				windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
 				savePropertiesInComponentModel(customWidget);
-				toolTipErrorMessages.put(customWidget.getPropertyName(), customWidget.getToolTipErrorMessage());
 			}
 		}
 		if(applyButton.isEnabled())
 			propertyChanged=true;
 		
+		isPropertyWindowValid = windowValidityStaus;
 		updateComponentValidityStatus();
 		super.okPressed();
 	}
 
 	@Override
 	protected void cancelPressed(){
+		boolean windowValidityStaus = Boolean.TRUE;
 		for(AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()){
-			if(Boolean.FALSE.equals(customWidget.isDataValid())){
-				logger.debug("{} is not valid ", customWidget);
-				isPropertyWindowValid = false;
-				break;
+			if(customWidget.getProperties() != null){
+				windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
+				savePropertiesInComponentModel(customWidget);
 			}
 		}
+		isPropertyWindowValid = windowValidityStaus;
 		updateComponentValidityStatus();
 		if(applyButton.isEnabled()){
 			ConfirmCancelMessageBox confirmCancelMessageBox = new ConfirmCancelMessageBox(container);
@@ -335,4 +337,37 @@ public class PropertyDialog extends Dialog {
 		return propertyChanged;
 	}
 
+	
+	private boolean validateWidget(Boolean windowValidityStaus, AbstractWidget customWidget) {
+		List<String> validators = ComponentCacheUtil.INSTANCE.getValidatorsForProperty(
+				(String) this.componentProperties.getComponentMiscellaneousProperty(Constants.COMPONENT_ORIGINAL_NAME), 
+				customWidget.getPropertyName());
+		
+		IValidator validator = null;
+		for (String validatorName : validators) {
+			try {
+				validator = (IValidator) Class.forName(Constants.VALIDATOR_PACKAGE_PREFIX + validatorName).newInstance();
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+				logger.error("Failed to create validator", e);
+				throw new RuntimeException("Failed to create validator", e);
+			}
+			boolean status = validator.validateMap(customWidget.getProperties(), customWidget.getPropertyName());
+			//NOTE : here if any of the property is not valid then whole component is not valid 
+			if(status == false){
+				windowValidityStaus = Boolean.FALSE;
+				logger.debug("{} is not valid", customWidget.getPropertyName());
+			}
+			appendErrorMessage(customWidget, validator);
+		}
+		return windowValidityStaus;
+	}
+
+	private void appendErrorMessage(AbstractWidget customWidget, IValidator validator) {
+		if(toolTipErrorMessages.containsKey(customWidget.getPropertyName())){
+			String errorMessage = toolTipErrorMessages.get(customWidget.getPropertyName());
+			errorMessage = errorMessage + "\n" + validator.getErrorMessage(); 
+		}else{
+			toolTipErrorMessages.put(customWidget.getPropertyName(), validator.getErrorMessage());
+		}
+	}
 }

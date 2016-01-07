@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Component;
@@ -33,6 +34,13 @@ import com.bitwise.app.propertywindow.propertydialog.PropertyDialog;
 
 public class ELTPropertyWindow implements IELTPropertyWindow{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTPropertyWindow.class);
+
+	private static final String STRING = "String";
+	private static final String TYPE = "Type";
+	private static final String BASE_TYPE = "Base Type";
+	private static final String DISPLAY = "DISPLAY";
+	private static final String GENERAL = "GENERAL";
+
 	
 	Object componenetModel;
 	ELTComponenetProperties eltComponenetProperties;
@@ -69,19 +77,22 @@ public class ELTPropertyWindow implements IELTPropertyWindow{
 	private LinkedHashMap<String, Object> getComponentMiscellaneousProperties() {
 		LinkedHashMap<String, Object> ComponentMiscellaneousProperties = new LinkedHashMap<>();
 		
-		ComponentMiscellaneousProperties.put("componentNames", component.getParent().getComponentNames());
-		ComponentMiscellaneousProperties.put("componentBaseType", component.getCategory());
-		ComponentMiscellaneousProperties.put("componentType", component.getType());
+		ComponentMiscellaneousProperties.put(Constants.COMPONENT_NAMES, component.getParent().getComponentNames());
+		ComponentMiscellaneousProperties.put(Constants.COMPONENT_BASE_TYPE, component.getCategory());
+		ComponentMiscellaneousProperties.put(Constants.COMPONENT_TYPE, component.getType());
+		ComponentMiscellaneousProperties.put(Constants.COMPONENT_ORIGINAL_NAME, DynamicClassProcessor.INSTANCE.getClazzName(component.getClass()));
 		return ComponentMiscellaneousProperties;
 	}
 	
 	private Property getComponentBaseTypeProperty(){
-		Property property = new Property.Builder("String", "Base Type", Widgets.COMPONENT_BASETYPE_WIDGET.name()).group("GENERAL").subGroup("DISPLAY").build();
+		Property property = new Property.Builder(STRING, BASE_TYPE, Widgets.COMPONENT_BASETYPE_WIDGET.name())
+									.group(GENERAL).subGroup(DISPLAY).build();
 		return property;
 	}
 	
 	private Property getComponentTypeProperty(){
-		Property property = new Property.Builder("String", "Type", Widgets.COMPONENT_TYPE_WIDGET.name()).group("GENERAL").subGroup("DISPLAY").build();
+		Property property = new Property.Builder(STRING, TYPE, Widgets.COMPONENT_TYPE_WIDGET.name())
+									.group(GENERAL).subGroup(DISPLAY).build();
 		return property;
 	}
 	

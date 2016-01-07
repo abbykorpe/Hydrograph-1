@@ -3,7 +3,6 @@
 
 <product name="Accelero" uid="com.bitwise.app.perspective.ID" id="com.bitwise.app.perspective.productId" application="com.bitwise.app.perspective.application" version="0.0.1" useFeatures="false" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -35,7 +34,6 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       </win>
    </launcher>
 
-
    <vm>
    </vm>
 
@@ -59,6 +57,7 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="com.bitwise.app.project.structure"/>
       <plugin id="com.bitwise.app.propertywindow"/>
       <plugin id="com.bitwise.app.tooltip"/>
+      <plugin id="com.bitwise.app.validators"/>
       <plugin id="com.bitwise.app.xstream"/>
       <plugin id="com.bitwise.app.xstream.annotations"/>
       <plugin id="com.ibm.icu"/>
@@ -71,7 +70,7 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="org.apache.batik.css"/>
       <plugin id="org.apache.batik.util"/>
       <plugin id="org.apache.batik.util.gui"/>
-      <plugin id="org.apache.commons.beanutils" fragment=""/>
+      <plugin id="org.apache.commons.beanutils"/>
       <plugin id="org.apache.commons.el"/>
       <plugin id="org.apache.commons.logging"/>
       <plugin id="org.apache.jasper"/>

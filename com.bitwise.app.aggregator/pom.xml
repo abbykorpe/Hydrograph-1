@@ -36,5 +36,6 @@
 		<module>../com.bitwise.app.joblogger</module>
 	    <module>../com.bitwise.app.help</module>
 	    <module>../com.bitwise.app.platformspecificplugins</module>
+	    <module>../com.bitwise.app.validators</module>
 	</modules>
 </project>

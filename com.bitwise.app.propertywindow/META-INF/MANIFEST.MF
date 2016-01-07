@@ -22,7 +22,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.slf4j.api,
  org.apache.commons.lang,
  com.bitwise.app.common.datastructures;bundle-version="0.0.1",
- com.bitwise.app.model;bundle-version="0.0.1"
+ com.bitwise.app.model;bundle-version="0.0.1",
+ com.bitwise.app.validators;bundle-version="0.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.core.databinding,

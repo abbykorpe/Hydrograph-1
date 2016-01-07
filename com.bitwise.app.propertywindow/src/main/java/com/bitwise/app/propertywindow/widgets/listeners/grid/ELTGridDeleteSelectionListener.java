@@ -6,9 +6,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Widget;
 
+import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
-import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GridRow;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTSelectionTaskListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;

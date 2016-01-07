@@ -8,6 +8,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 /**

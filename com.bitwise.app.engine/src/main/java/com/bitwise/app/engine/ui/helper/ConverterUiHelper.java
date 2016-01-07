@@ -6,12 +6,9 @@ import java.util.Map.Entry;
 
 import javax.xml.namespace.QName;
 
-import org.slf4j.Logger;
-
+import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.graph.model.Component;
-import com.bitwise.app.propertywindow.fixedwidthschema.FixedWidthGridRow;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.SchemaGrid;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;

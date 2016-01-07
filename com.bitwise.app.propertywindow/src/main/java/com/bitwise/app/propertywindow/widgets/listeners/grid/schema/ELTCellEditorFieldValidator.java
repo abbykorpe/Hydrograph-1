@@ -6,10 +6,9 @@ import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.swt.widgets.Table;
 
+import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GridRow;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTCellEditorFieldValidator.
  * 
