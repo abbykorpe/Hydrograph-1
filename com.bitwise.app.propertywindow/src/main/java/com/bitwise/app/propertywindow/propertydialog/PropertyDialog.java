@@ -176,7 +176,8 @@ public class PropertyDialog extends Dialog {
 			if(customWidget.getProperties() != null){
 				if(customWidget.getProperties() != null){
 					windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
-					savePropertiesInComponentModel(customWidget);
+					if(customWidget.isDataValid())
+						savePropertiesInComponentModel(customWidget);
 				}
 			}
 		}
@@ -284,7 +285,8 @@ public class PropertyDialog extends Dialog {
 		for(AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()){
 			if(customWidget.getProperties() != null){
 				windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
-				savePropertiesInComponentModel(customWidget);
+				if(customWidget.isDataValid())
+					savePropertiesInComponentModel(customWidget);
 			}
 		}
 		if(applyButton.isEnabled())
@@ -301,7 +303,6 @@ public class PropertyDialog extends Dialog {
 		for(AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()){
 			if(customWidget.getProperties() != null){
 				windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
-				savePropertiesInComponentModel(customWidget);
 			}
 		}
 		isPropertyWindowValid = windowValidityStaus;
