@@ -8,7 +8,6 @@ import org.eclipse.swt.widgets.Widget;
 
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTSelectionTaskListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
@@ -24,9 +23,6 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
  * @see ELTGridDeleteSelectionEvent
  */
 public class ELTGridDeleteSelectionListener extends ELTSelectionTaskListener{
-	private ValidationStatus validationStatus; 
-	
-
 	
 	@Override
 	public int getListenerType() {
@@ -37,9 +33,6 @@ public class ELTGridDeleteSelectionListener extends ELTSelectionTaskListener{
 	public void selectionListenerAction(
 			PropertyDialogButtonBar propertyDialogButtonBar,
 			ListenerHelper helpers, Widget... widgets) {
-		if(helpers != null){
-			validationStatus = (ValidationStatus) helpers.get(HelperType.VALIDATION_STATUS);
-		}
 		ELTGridDetails gridDetails = (ELTGridDetails) helpers.get(HelperType.SCHEMA_GRID);
 		Table table =gridDetails.getTableViewer().getTable();
 		int temp = table.getSelectionIndex();
@@ -54,20 +47,6 @@ public class ELTGridDeleteSelectionListener extends ELTSelectionTaskListener{
 				tempList.add(test);
 			}
 			 gridDetails.getGrids().removeAll(tempList);
-			 setValidationStatus(true);
-			 if(gridDetails.getGrids().isEmpty())
-			 {
-				 setValidationStatus(false);
-			 }
-			
-			
 		}		
 	}
-	private void setValidationStatus(boolean status) {
-		if(validationStatus != null){
-			validationStatus.setIsValid(status);
-		}
-	}
-
-	
 }

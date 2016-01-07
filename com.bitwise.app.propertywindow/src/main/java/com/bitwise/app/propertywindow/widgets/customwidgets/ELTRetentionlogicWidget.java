@@ -51,7 +51,6 @@ public class ELTRetentionlogicWidget extends AbstractWidget{
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 		this.properties =  (String)componentConfigrationProperty.getPropertyValue();
 		// This will be valid always as one of the value will be selected
-		validationStatus.setIsValid(true);
 	}
 
 	@Override

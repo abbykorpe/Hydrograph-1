@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 /**
@@ -36,7 +35,6 @@ public class ELTVerifyComponentNameListener implements IELTListener {
 	private String oldName;
 	
 	private ControlDecoration txtDecorator;
-	private ValidationStatus validationStatus; 
 	
 	@Override
 	public int getListenerType() {
@@ -49,7 +47,6 @@ public class ELTVerifyComponentNameListener implements IELTListener {
 		final Text text = (Text) widgetList[0];
 		
 		if(helpers != null){
-			validationStatus = (ValidationStatus) helpers.get(HelperType.VALIDATION_STATUS); 
 			if (helpers != null) {
 				txtDecorator = (ControlDecoration) helpers.get(HelperType.CONTROL_DECORATION);
 				txtDecorator.hide();
@@ -75,13 +72,11 @@ public class ELTVerifyComponentNameListener implements IELTListener {
 						propertyDialogButtonBar.enableApplyButton(false);
 						txtDecorator.setDescriptionText(Messages.FIELD_LABEL_ERROR);
 						txtDecorator.show();
-						setValidationStatus(false);
 					}else if(!matchName.matches()){
 						text.setToolTipText(Messages.INVALID_CHARACTERS);
 						txtDecorator.setDescriptionText(Messages.INVALID_CHARACTERS);
 						txtDecorator.show();
 						e.doit=false;
-						setValidationStatus(false);
 					} else if(!newName.equalsIgnoreCase(oldName) && !isUniqueCompName(newName)) {
 						text.setBackground(new Color(Display.getDefault(),255,255,204));
 						text.setToolTipText(Messages.FIELD_LABEL_ERROR);
@@ -89,15 +84,14 @@ public class ELTVerifyComponentNameListener implements IELTListener {
 						propertyDialogButtonBar.enableApplyButton(false);
 						txtDecorator.setDescriptionText(Messages.FIELD_LABEL_ERROR);
 						txtDecorator.show();
-						setValidationStatus(false);}
-						else{
+					}
+					else{
 						text.setBackground(null);
 						text.setToolTipText("");
 						text.setMessage("");
 						propertyDialogButtonBar.enableOKButton(true);
 						propertyDialogButtonBar.enableApplyButton(true);
 						txtDecorator.hide();
-						setValidationStatus(true);
 					}
 				}
 			}
@@ -133,11 +127,5 @@ public class ELTVerifyComponentNameListener implements IELTListener {
 
 	public void setOldName(String oldName) {
 		this.oldName = oldName;
-	}
-
-	private void setValidationStatus(boolean status) {
-		if(validationStatus != null){
-			validationStatus.setIsValid(status);
-		}
 	}
 }

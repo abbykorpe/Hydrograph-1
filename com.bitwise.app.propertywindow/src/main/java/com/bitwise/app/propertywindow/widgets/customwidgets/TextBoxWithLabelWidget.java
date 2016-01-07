@@ -100,8 +100,8 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 				IELTListener listener = listenerNameConstant.getListener();
 				textBoxWidget.attachListener(listener, propertyDialogButtonBar, helper, textBoxWidget.getSWTWidgetControl());
 			}
-		} catch (Exception e1) {
-			logger.error("Failed in attaching listeners to {}", textBoxConfig.getName());
+		} catch (Exception exception) {
+			logger.error("Failed in attaching listeners to {}, {}", textBoxConfig.getName(), exception);
 		}
 		
 		populateWidget();
@@ -111,7 +111,6 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 	private ListenerHelper prepareListenerHelper() {
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
-		helper.put(HelperType.VALIDATION_STATUS, validationStatus);
 		return helper;
 	}
 	

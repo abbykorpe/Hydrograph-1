@@ -247,7 +247,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
-		helper.put(HelperType.VALIDATION_STATUS, validationStatus);
 
 		try {
 			eltDefaultTextBox.attachListener(
@@ -433,15 +432,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					tableViewer, (Label) fieldError.getSWTWidgetControl(),
 					gridWidgetBuilder);
 			helper.put(HelperType.SCHEMA_GRID, value);
-			validationStatus.setIsValid(true);
-			helper.put(HelperType.VALIDATION_STATUS, validationStatus);
 			
-			if (((Schema) (getProperties().get(propertyName))).getGridRow().size() != 0)
-				validationStatus.setIsValid(true);
-			else
-				validationStatus.setIsValid(false);
-			helper.put(HelperType.VALIDATION_STATUS, validationStatus);
-		
 		}
 		return helper;
 	}

@@ -11,7 +11,7 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.config.TextBoxWithLa
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 
 public class WidgetHelper {
-	public static WidgetHelper INSTANCE = new WidgetHelper();
+	public static final WidgetHelper INSTANCE = new WidgetHelper();
 	private WidgetHelper(){
 	}
 

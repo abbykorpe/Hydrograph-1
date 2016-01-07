@@ -18,7 +18,6 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTOperationClassWidget.
  * 
@@ -84,7 +83,6 @@ public class ELTOperationClassWidget extends AbstractWidget {
 			public void widgetSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
 				eltOperationClassDialog = new ELTOperationClassDialog(runtimeComposite.getContainerControl().getShell(), propertyDialogButtonBar,operationClassProperty.clone(), widgetConfig);
-				eltOperationClassDialog.setValidationStatus(validationStatus);
 				eltOperationClassDialog.open();
 				if(!eltOperationClassDialog.getOperationClassProperty().equals(operationClassProperty)){
 					operationClassProperty = eltOperationClassDialog.getOperationClassProperty();

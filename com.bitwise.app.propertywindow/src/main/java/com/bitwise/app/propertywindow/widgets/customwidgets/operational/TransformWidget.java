@@ -17,7 +17,6 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTOperationClassWidget.
  * 
@@ -82,7 +81,6 @@ public class TransformWidget extends AbstractWidget {
 			public void widgetSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
 				transformDialog = new TransformDialog(transformComposite.getContainerControl().getShell(), propertyDialogButtonBar,transformPropertyGrid,widgetConfig);
-				transformDialog.setValidationStatus(validationStatus);
 				transformDialog.open();
 					transformPropertyGrid = transformDialog.getTransformProperty();
 					propertyDialogButtonBar.enableApplyButton(true);

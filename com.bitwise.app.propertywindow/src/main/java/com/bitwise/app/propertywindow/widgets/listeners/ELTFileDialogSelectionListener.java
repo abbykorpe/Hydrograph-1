@@ -13,10 +13,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
-import org.eclipse.swt.widgets.FileDialog;
 
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 /**
@@ -31,7 +29,6 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
 public class ELTFileDialogSelectionListener implements IELTListener{
 
 	Shell shell;
-	private ValidationStatus validationStatus; 
 	private ControlDecoration txtDecorator;
 	
 	@Override
@@ -45,7 +42,6 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 		final Button button = ((Button)widgets[0]);
 		button.getShell();
 		if(helpers != null){
-			validationStatus = (ValidationStatus) helpers.get(HelperType.VALIDATION_STATUS);
 			txtDecorator = (ControlDecoration) helpers.get(HelperType.CONTROL_DECORATION);
 		}
 		
@@ -59,18 +55,11 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 						File file= new File(path);
 						((Text)widgets[1]).setText(file.getAbsolutePath());
 						propertyDialogButtonBar.enableApplyButton(true);
-						setValidationStatus(true);
 						txtDecorator.hide();
 					} 
 				}
 			}
 		};
 		return listener;
-	}
-	
-	private void setValidationStatus(boolean status) {
-		if(validationStatus != null){
-			validationStatus.setIsValid(status);
-		}
 	}
 }

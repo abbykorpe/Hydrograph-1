@@ -25,7 +25,6 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTComponentNameWidget.
  * 
@@ -85,7 +84,6 @@ public class ELTComponentNameWidget extends AbstractWidget {
 		firstTextWidget = text;
 		txtDecorator = WidgetUtility.addDecorator(text, Messages.FIELD_LABEL_ERROR);
 		ListenerHelper listenerHelper = new ListenerHelper();
-		listenerHelper.put(HelperType.VALIDATION_STATUS, validationStatus);
 		listenerHelper.put(HelperType.CONTROL_DECORATION, txtDecorator);
 		
 		
