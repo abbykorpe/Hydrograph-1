@@ -16,6 +16,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -44,7 +50,6 @@ import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
-import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.DragDropLookupImp;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.JoinContentProvider;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.LookupCellModifier;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.LookupLabelProvider;
@@ -53,7 +58,6 @@ import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterContentPro
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridAddSelectionListener;
-import com.bitwise.app.propertywindow.widgets.utility.DragDropUtility;
 
 public class ELTLookupMapWizard extends Dialog {
 
@@ -126,7 +130,6 @@ public class ELTLookupMapWizard extends Dialog {
 	    		joinOutputList = new ArrayList<>();
 	    	}
 	    }
-	  
 	    if(joinInputList != null){
 	    	joinInputList.add(joinInputList1);
 	    	joinInputList.add(joinInputList2);
@@ -146,8 +149,7 @@ public class ELTLookupMapWizard extends Dialog {
 	    		joinOutputProperty(outputTableViewer);
 			}
 			@Override
-			public void mouseDown(MouseEvent e) {
-			}
+			public void mouseDown(MouseEvent e) {}
 		});
 		eltswtWidgets.createTableColumns(outputTableViewer.getTable(), COLUMN_NAME, 196);
 	    CellEditor[] editors = eltswtWidgets.createCellEditorList(outputTableViewer.getTable(),2);
@@ -175,26 +177,6 @@ public class ELTLookupMapWizard extends Dialog {
 				}
 			}
 		});
-	    
-	    outputTableViewer.getTable().addListener(SWT.FocusIn, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				List<String> tempList = new ArrayList<>();
-				for (LookupMapProperty mapProperty : joinOutputList) {
-					String outputField = mapProperty.getOutput_Field();
-					if (!tempList.contains(outputField)) {
-						propertyError.setVisible(false);
-						tempList.add(outputField);
-					} 
-					else{
-						propertyError.setVisible(true);
-						propertyError.setText(Messages.RuntimePropertAlreadyExists);
-						outputTableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(mapProperty)), 1);
-					}
-				}
-			}
-		});
-	    
 	  		TableViewerEditor.create(outputTableViewer, new ColumnViewerEditorActivationStrategy(outputTableViewer), 
 	  			ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.TABBING_HORIZONTAL | 
 	  			ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL);
@@ -212,9 +194,10 @@ public class ELTLookupMapWizard extends Dialog {
 		new Label(container, SWT.NONE);
 	
 		populateWidget();
-		if(joinOutputList!=null){
-			DragDropUtility.INSTANCE.applyDrop(outputTableViewer, new DragDropLookupImp(joinOutputList, false, outputTableViewer));
-		}
+		//if(joinOutputList!=null){
+			//DragDropUtility.INSTANCE.applyDrop(outputTableViewer, new DragDropLookupImp(joinOutputList, false, outputTableViewer));
+			dropData(outputTableViewer, joinOutputList, true);
+		//}
 		return container;
 	}
 	
@@ -590,5 +573,52 @@ public class ELTLookupMapWizard extends Dialog {
 			viewer.refresh();
 			viewer.editElement(join, 0);
 		}
+	}
+	
+	public void dropData(final TableViewer tableViewer, final List<LookupMapProperty> listOfFields, final boolean isSingleColumn){
+		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
+		int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK;
+		DropTarget target = new DropTarget(tableViewer.getTable(), operations);
+		target.setTransfer(types);
+		target.addDropListener(new DropTargetAdapter() {
+		      public void dragOver(DropTargetEvent event) {
+		    	  event.feedback = DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL; 
+		      }
+		      public void drop(DropTargetEvent event) {
+		        if (event.data == null) {
+		        	event.detail = DND.DROP_NONE;
+		        	return;
+		        }
+		        if(isSingleColumn){
+		        	List<String> tempList = new ArrayList<>();
+		        	
+		        	LookupMapProperty field = new LookupMapProperty();
+		        	String[] data = ((String)event.data).split(Pattern.quote("."));
+		        	if(!data[1].isEmpty()){
+		        		Matcher match = Pattern.compile(Constants.REGEX).matcher(data[1]);
+						if(match.matches()){
+							field.setSource_Field((String)event.data);
+							field.setOutput_Field(data[1]);	
+							
+							if(!listOfFields.contains(field))
+								listOfFields.add(field);
+							
+							for(LookupMapProperty lookupMapProperty : joinOutputList){
+								String outputField = lookupMapProperty.getOutput_Field();
+								if(!tempList.contains(outputField)){
+									propertyError.setVisible(false);
+									tempList.add(outputField);
+								}else{
+									propertyError.setVisible(true);
+									propertyError.setText(Messages.OUTPUT_FIELD_EXISTS);
+									//outputTableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
+								}
+							}
+		        	}
+		        	}
+		        	tableViewer.refresh(); 
+		        }
+		      } 
+		});
 	}
 }

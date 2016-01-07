@@ -15,6 +15,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -47,20 +53,16 @@ import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinWidget;
-import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.DragDropLookupImp;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.JoinContentProvider;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.LookupCellModifier;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.LookupLabelProvider;
-import com.bitwise.app.propertywindow.widgets.customwidgets.runtimeproperty.RuntimeProperties;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTCellModifier;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridAddSelectionListener;
-import com.bitwise.app.propertywindow.widgets.utility.DragDropUtility;
 
 public class JoinMapGrid extends Dialog {
-	
 	
 	private Label errorLabel;
 	private TableViewer outputTableViewer;
@@ -106,6 +108,7 @@ public class JoinMapGrid extends Dialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		System.out.println("JoinMapGrid: createDialogArea**************");
 		final Composite container = (Composite) super.createDialogArea(parent);
 		container.getShell().setText("Join Mapping");
 		container.setLayout(new GridLayout(6, false));
@@ -227,7 +230,6 @@ public class JoinMapGrid extends Dialog {
 		    outputTableViewer.setCellEditors(editors);
 		    outputTableViewer.setInput(joinOutputList);
 		    outputTableViewer.getTable().addListener(SWT.Selection, new Listener() {
-				
 				@Override
 				public void handleEvent(Event event) {
 					String[] data = (((TableItem)event.item).getText()).split(Pattern.quote("."));
@@ -240,24 +242,6 @@ public class JoinMapGrid extends Dialog {
 								item.setExpanded(true);
 								inputTableViewer[i].getTable().setSelection(joinInputList.indexOf(filter));
 							}
-						}
-					}
-				}
-			});
-		    outputTableViewer.getTable().addListener(SWT.FocusIn, new Listener() {
-				@Override
-				public void handleEvent(Event event) {
-					List<String> tempList = new ArrayList<>();
-					for (LookupMapProperty mapProperty : joinOutputList) {
-						String outputField = mapProperty.getOutput_Field();
-						if (!tempList.contains(outputField)) {
-							errorLabel.setText(Messages.OUTPUT_FIELD_EXISTS);
-							errorLabel.setVisible(false);
-							tempList.add(outputField);
-						} 
-						else{
-							errorLabel.setVisible(true);
-							outputTableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(mapProperty)), 1);
 						}
 					}
 				}
@@ -291,7 +275,6 @@ public class JoinMapGrid extends Dialog {
 		    scrolledComposite_1.setContent(composite_3);
 		    scrolledComposite_1.setExpandHorizontal(true);
 		    scrolledComposite_1.setExpandVertical(true);
-		   
 		    scrolledComposite_1.setMinSize(composite_3.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		  
 		    for(int i=0; i<radio.length;i++){
@@ -310,7 +293,8 @@ public class JoinMapGrid extends Dialog {
 			});
 		    }
 		    if(joinOutputList!=null){
-		    DragDropUtility.INSTANCE.applyDrop(outputTableViewer, new DragDropLookupImp(joinOutputList, false, outputTableViewer));
+		    //DragDropUtility.INSTANCE.applyDrop(outputTableViewer, new DragDropLookupImp(joinOutputList, false, outputTableViewer));
+		    	//dropData(outputTableViewer, joinOutputList, true);
 		    }
 		return container;
 	}
@@ -683,5 +667,51 @@ public class JoinMapGrid extends Dialog {
 			viewer.refresh();
 			viewer.editElement(property, 0);
 		}
+	}
+	
+	public void dropData(final TableViewer tableViewer, final List<LookupMapProperty> listOfFields, final boolean isSingleColumn){
+		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
+		int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK;
+		DropTarget target = new DropTarget(tableViewer.getTable(), operations);
+		target.setTransfer(types);
+		target.addDropListener(new DropTargetAdapter() {
+		      public void dragOver(DropTargetEvent event) {
+		    	  event.feedback = DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL; 
+		      }
+		      public void drop(DropTargetEvent event) {
+		        if (event.data == null) {
+		        	event.detail = DND.DROP_NONE;
+		        	return;
+		        }
+		        if(isSingleColumn){
+		        	List<String> tempList = new ArrayList<>();
+		        	LookupMapProperty field = new LookupMapProperty();
+		        	String[] data = ((String)event.data).split(Pattern.quote("."));
+		        	if(!data[1].isEmpty()){
+		        		Matcher match = Pattern.compile(Constants.REGEX).matcher(data[1]);
+						if(match.matches()){
+							field.setSource_Field((String)event.data);
+							field.setOutput_Field(data[1]);	
+							
+						/*	if(!listOfFields.contains(field))
+								listOfFields.add(field);*/
+							
+							/*for(LookupMapProperty lookupMapProperty : joinOutputList){
+								String outputField = lookupMapProperty.getOutput_Field();
+								if(!tempList.contains(outputField)){
+									errorLabel.setText(Messages.OUTPUT_FIELD_EXISTS);
+									errorLabel.setVisible(false);
+									tempList.add(outputField);
+								}else{
+									errorLabel.setVisible(true);
+									//outputTableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
+								}
+							}*/
+		        	}
+						tableViewer.refresh(); 
+		        	}
+		        }
+		      } 
+		});
 	}
 }
