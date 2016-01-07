@@ -294,7 +294,7 @@ public class JoinMapGrid extends Dialog {
 		    }
 		    if(joinOutputList!=null){
 		    //DragDropUtility.INSTANCE.applyDrop(outputTableViewer, new DragDropLookupImp(joinOutputList, false, outputTableViewer));
-		    	//dropData(outputTableViewer, joinOutputList, true);
+		    	dropData(outputTableViewer, joinOutputList, true);
 		    }
 		return container;
 	}
@@ -693,10 +693,10 @@ public class JoinMapGrid extends Dialog {
 							field.setSource_Field((String)event.data);
 							field.setOutput_Field(data[1]);	
 							
-						/*	if(!listOfFields.contains(field))
-								listOfFields.add(field);*/
+							if(!listOfFields.contains(field))
+								listOfFields.add(field);
 							
-							/*for(LookupMapProperty lookupMapProperty : joinOutputList){
+							for(LookupMapProperty lookupMapProperty : joinOutputList){
 								String outputField = lookupMapProperty.getOutput_Field();
 								if(!tempList.contains(outputField)){
 									errorLabel.setText(Messages.OUTPUT_FIELD_EXISTS);
@@ -704,9 +704,10 @@ public class JoinMapGrid extends Dialog {
 									tempList.add(outputField);
 								}else{
 									errorLabel.setVisible(true);
+									errorLabel.setText(Messages.OUTPUT_FIELD_EXISTS);
 									//outputTableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
 								}
-							}*/
+							}
 		        	}
 						tableViewer.refresh(); 
 		        	}
