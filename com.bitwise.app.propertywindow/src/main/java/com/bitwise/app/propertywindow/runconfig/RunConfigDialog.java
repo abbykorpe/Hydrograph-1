@@ -358,7 +358,7 @@ public class RunConfigDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(424, 171);
+		return new Point(380, 171);
 	}
 
 	public boolean proceedToRunGraph(){
