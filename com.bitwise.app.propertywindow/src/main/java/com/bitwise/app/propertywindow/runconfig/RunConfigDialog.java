@@ -78,7 +78,7 @@ public class RunConfigDialog extends Dialog {
 	 */
 	public RunConfigDialog(Shell parentShell) {
 		super(parentShell);
-		this.runGraph = true;
+		this.runGraph = false;
 		buildProps = new Properties();
 		textBoxes= new HashMap<>();
 		
@@ -171,6 +171,9 @@ public class RunConfigDialog extends Dialog {
 		textEdgeNode.setBounds(110, 31, 206, 21);
 		formToolkit.adapt(textEdgeNode, true, true);
 		textBoxes.put("host", textEdgeNode);
+		
+		//textEdgeNode.addSelectionListener(listener)
+		
 
 		textUser = new Text(compositeServerDetails, SWT.BORDER);
 		textUser.setBounds(110, 73, 206, 21);
@@ -339,6 +342,7 @@ public class RunConfigDialog extends Dialog {
 			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving run configuration file -\n"+e.getMessage());
 		}
 		this.password = textPassword.getText();
+		this.runGraph = true;
 		super.okPressed();
 	}
 
