@@ -173,7 +173,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		// listener for selection on canvas
 		viewer.addSelectionChangedListener(createISelectionChangedListener());
 		attachCanvasMouseListeners();
-		setUndoRedoStatus();
+		setDefaultToolUndoRedoStatus();
 	}
 
 	private void hideToolTip(){
@@ -190,13 +190,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				setUndoRedoStatus();
+				setCustomToolUndoRedoStatus();
 
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				setUndoRedoStatus();
+				setCustomToolUndoRedoStatus();
 				hideToolTip();
 			}
 		});
@@ -211,17 +211,17 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						hideToolTip();
 					}
 				}
-				setUndoRedoStatus();
+				setCustomToolUndoRedoStatus();
 			}
 
 			@Override
 			public void mouseDown(MouseEvent e) {
-				setUndoRedoStatus();
+				setCustomToolUndoRedoStatus();
 			}
 
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				setUndoRedoStatus();
+				setCustomToolUndoRedoStatus();
 			}
 		});
 
@@ -237,7 +237,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						}
 					}
 				}
-				setUndoRedoStatus();
+				setCustomToolUndoRedoStatus();
 			}
 		});
 
@@ -304,7 +304,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				viewer.getControl().addMouseListener(paletteContainerListener);
 				viewer.getControl().addMouseTrackListener(paletteContainerListener);
 				viewer.getControl().addMouseMoveListener(paletteContainerListener);
-				setUndoRedoStatus();
+				setDefaultToolUndoRedoStatus();
 			}
 			
 			@Override
@@ -321,7 +321,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void commandStackChanged(EventObject event) {		
-		setUndoRedoStatus();
+		setCustomToolUndoRedoStatus();
 		setDirty(true);
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 		super.commandStackChanged(event);
@@ -987,7 +987,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		this.currentParameterFilePath = currentParameterFilePath;
 	}
 	
-	public void setUndoRedoStatus(){
+	public void setCustomToolUndoRedoStatus(){
 		ContributionItemManager.UndoRedoCustomToolBarManager.changeUndoRedoStatus(viewer);
+		ContributionItemManager.UndoRedoCustomMenuBarManager.changeUndoRedoStatus(viewer);
 	}
+	public void setDefaultToolUndoRedoStatus(){
+		ContributionItemManager.UndoRedoDefaultBarManager.changeUndoRedoStatus(viewer);		
+	}	
 }
