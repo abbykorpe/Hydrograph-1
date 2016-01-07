@@ -63,7 +63,6 @@ import com.bitwise.app.propertywindow.fixedwidthschema.ELTFixedWidget;
 import com.bitwise.app.propertywindow.messagebox.ConfirmCancelMessageBox;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
@@ -84,7 +83,6 @@ import com.bitwise.app.propertywindow.widgets.utility.FilterOperationClassUtilit
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class TransformDialog.
  */
@@ -166,9 +164,6 @@ public class TransformDialog extends Dialog {
 	
 	/** The property dialog button bar. */
 	private PropertyDialogButtonBar propertyDialogButtonBar;
-	
-	/** The validation status. */
-	private ValidationStatus validationStatus;
 	
 	/** The transform property grid. */
 	private TransformPropertyGrid transformPropertyGrid;
@@ -613,7 +608,7 @@ public class TransformDialog extends Dialog {
 		 */
 		AbstractELTWidget fileNameText = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(150);
 		AbstractELTWidget isParameterCheckbox = new ELTDefaultCheckBox("IsParam").checkBoxLableWidth(100);
-		FilterOperationClassUtility.createOperationalClass(innerOperationComposite, propertyDialogButtonBar, fileNameText, isParameterCheckbox, validationStatus, tootlTipErrorMessage, widgetConfig);
+		FilterOperationClassUtility.createOperationalClass(innerOperationComposite, propertyDialogButtonBar, fileNameText, isParameterCheckbox, tootlTipErrorMessage, widgetConfig);
 
 		Text fileName=(Text)fileNameText.getSWTWidgetControl(); 
 		Button btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl(); 
@@ -862,25 +857,6 @@ public class TransformDialog extends Dialog {
 		        
 		  }
 		   
-			/**
-			 * Sets the validation status.
-			 *
-			 * @param validationStatus the new validation status
-			 */
-			public void setValidationStatus(ValidationStatus validationStatus) {
-				this.validationStatus = validationStatus;
-			}
-
-			/**
-			 * Gets the validation status.
-			 *
-			 * @return the validation status
-			 */
-			public ValidationStatus getValidationStatus() {
-				return validationStatus;
-			}
-
-			
 			/**
 			 * Gets the transform property.
 			 *

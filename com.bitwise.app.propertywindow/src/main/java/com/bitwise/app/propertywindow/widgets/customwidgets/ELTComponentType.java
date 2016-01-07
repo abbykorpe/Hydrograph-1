@@ -13,7 +13,6 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBo
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTComponentType.
  * 
@@ -39,8 +38,6 @@ public class ELTComponentType extends AbstractWidget{
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties,
 				propertyDialogButtonBar);
-		//Component type is not editable so it is valid always
-		validationStatus.setIsValid(true);
 	}
 	
 	@Override

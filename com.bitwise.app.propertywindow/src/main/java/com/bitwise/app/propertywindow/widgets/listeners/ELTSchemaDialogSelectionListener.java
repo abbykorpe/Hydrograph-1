@@ -14,12 +14,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 public class ELTSchemaDialogSelectionListener implements IELTListener {
 	Shell shell;
-	private ValidationStatus validationStatus; 
 	private ControlDecoration txtDecorator;
 	
 	@Override
@@ -33,7 +31,6 @@ public class ELTSchemaDialogSelectionListener implements IELTListener {
 		final Button button = ((Button)widgets[0]);
 		button.getShell();
 		if(helpers != null){
-			validationStatus = (ValidationStatus) helpers.get(HelperType.VALIDATION_STATUS);
 			txtDecorator = (ControlDecoration) helpers.get(HelperType.CONTROL_DECORATION);
 		}
 		
@@ -48,7 +45,6 @@ public class ELTSchemaDialogSelectionListener implements IELTListener {
 						File file= new File(path);
 						((Text)widgets[1]).setText(file.getAbsolutePath());
 						propertyDialogButtonBar.enableApplyButton(true);
-						setValidationStatus(true);
 						txtDecorator.hide();
 					} 
 				}
@@ -57,11 +53,6 @@ public class ELTSchemaDialogSelectionListener implements IELTListener {
 		return listener;
 	}
 	
-	private void setValidationStatus(boolean status) {
-		if(validationStatus != null){
-			validationStatus.setIsValid(status);
-		}
-	}
 }
 
 

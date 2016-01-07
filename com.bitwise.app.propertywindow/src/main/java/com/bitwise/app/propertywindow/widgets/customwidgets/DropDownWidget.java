@@ -17,7 +17,6 @@ import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.DropDownConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
@@ -91,7 +90,6 @@ public class DropDownWidget extends AbstractWidget{
 		
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
-		helper.put(HelperType.VALIDATION_STATUS, validationStatus);
 		
 		
 		try {
@@ -104,8 +102,8 @@ public class DropDownWidget extends AbstractWidget{
 				IELTListener listener = listenerNameConstant.getListener();
 				eltDefaultTextBox.attachListener(listener, propertyDialogButtonBar, helper,eltDefaultTextBox.getSWTWidgetControl());
 			}
-		} catch (Exception e1) {
-			logger.error("Failed in attaching listeners to {}", dropDownConfig.getName());
+		} catch (Exception exception) {
+			logger.error("Failed in attaching listeners to {}, {}", dropDownConfig.getName(), exception);
 		}
 		
 		 populateWidget();

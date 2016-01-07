@@ -20,7 +20,6 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -35,7 +34,6 @@ import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
@@ -45,7 +43,6 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSu
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FilterOperationClassUtility.
  * 
@@ -176,7 +173,7 @@ public class FilterOperationClassUtility {
 
 public static OperationClassProperty createOperationalClass(Composite composite,
 											PropertyDialogButtonBar eltOperationClassDialogButtonBar,AbstractELTWidget fileNameText
-											,AbstractELTWidget isParameterCheckbox,ValidationStatus validationStatus,TootlTipErrorMessage tootlTipErrorMessage, WidgetConfig widgetConfig ){
+											,AbstractELTWidget isParameterCheckbox, TootlTipErrorMessage tootlTipErrorMessage, WidgetConfig widgetConfig ){
 	
 	ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(composite);
 	eltSuDefaultSubgroupComposite.createContainerWidget();
@@ -215,7 +212,6 @@ public static OperationClassProperty createOperationalClass(Composite composite,
 	Button btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl();
 	
 		ListenerHelper helper = new ListenerHelper();
-		helper.put(HelperType.VALIDATION_STATUS, validationStatus);
 		helper.put(HelperType.TOOLTIP_ERROR_MESSAGE, tootlTipErrorMessage);
 		helper.put(HelperType.WIDGET_CONFIG, widgetConfig);
 	try { 						

@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 /**
@@ -25,7 +24,6 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
  */
 public class ELTModifyListener implements IELTListener{
 	private ControlDecoration txtDecorator;
-	private ValidationStatus validationStatus;
 	
 	@Override
 	public int getListenerType() {
@@ -37,7 +35,6 @@ public class ELTModifyListener implements IELTListener{
 		final Widget[] widgetList = widgets;
 		if (helper != null) {
 			txtDecorator = (ControlDecoration) helper.get(HelperType.CONTROL_DECORATION);
-			validationStatus = (ValidationStatus) helper.get(HelperType.VALIDATION_STATUS); 
 		}
 		Listener listener=new Listener() {
 			
@@ -50,29 +47,20 @@ public class ELTModifyListener implements IELTListener{
 						txtDecorator.show();
 						((Text) widgetList[0]).setToolTipText(txtDecorator.getDescriptionText());
 						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
-						setValidationStatus(false);
 					}else{
 						//txtDecorator.setDescriptionText(Messages.EMPTYFIELDMESSAGE);
 						txtDecorator.hide();
 						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
-						setValidationStatus(true);
 					}
 					
 				}else{
 					//txtDecorator.setDescriptionText(Messages.EMPTYFIELDMESSAGE);
 					txtDecorator.hide();
 					((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
-					setValidationStatus(true);
 				}
 			}		
 		};
 		
 		return listener;
-	}
-	
-	private void setValidationStatus(boolean status) {
-		if(validationStatus != null){
-			validationStatus.setIsValid(status);
-		}
 	}
 }

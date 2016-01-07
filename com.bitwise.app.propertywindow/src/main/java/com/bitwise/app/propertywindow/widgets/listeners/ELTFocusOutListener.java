@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Widget;
 
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 /**
@@ -26,7 +25,6 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
 public class ELTFocusOutListener implements IELTListener {
 
 	ControlDecoration txtDecorator;
-	private ValidationStatus validationStatus; 
 	
 	@Override
 	public int getListenerType() {
@@ -38,7 +36,6 @@ public class ELTFocusOutListener implements IELTListener {
 		final Widget[] widgetList = widgets;
 		if (helper != null) {
 			txtDecorator = (ControlDecoration) helper.get(HelperType.CONTROL_DECORATION);
-			validationStatus = (ValidationStatus) helper.get(HelperType.VALIDATION_STATUS); 
 		}
 
 		Listener listener = new Listener() {
@@ -53,30 +50,21 @@ public class ELTFocusOutListener implements IELTListener {
 						txtDecorator.show();
 						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
 						((Text) widgetList[0]).setToolTipText(Messages.EMPTYFIELDMESSAGE);
-						setValidationStatus(false);
 					} else {
 						txtDecorator.hide();
 						((Text) widgetList[0]).setText(charSet.replace("@{", "").replace("}", ""));
 						((Text) widgetList[0]).setText("@{"+((Text) widgetList[0]).getText()+"}");
 						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
-						setValidationStatus(true);
 					}
 
 				} else {
 					txtDecorator.hide();
 					((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
-					setValidationStatus(true);
 				}
 
 			}
 		};
 
 		return listener;
-	}
-	
-	private void setValidationStatus(boolean status) {
-		if(validationStatus != null){
-			validationStatus.setIsValid(status);
-		}
 	}
 }

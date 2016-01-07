@@ -41,7 +41,6 @@ import com.bitwise.app.project.structure.Activator;
 import com.bitwise.app.project.structure.CustomMessages;
 import com.bitwise.app.project.structure.natures.ProjectNature;
 
-// TODO: Auto-generated Javadoc
 /**
  * Class to create the Custom Project Structure.
  *
@@ -50,9 +49,10 @@ public class ProjectStructureCreator {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ProjectStructureCreator.class);
 
-	public static final ProjectStructureCreator INSTANCE = new ProjectStructureCreator();
 	public static final String [] paths = {CustomMessages.ProjectSupport_Settings,CustomMessages.ProjectSupport_JOBS,CustomMessages.ProjectSupport_SRC,  
 		CustomMessages.ProjectSupport_SCRIPTS,CustomMessages.ProjectSupport_PARAM,CustomMessages.ProjectSupport_SCHEMA,CustomMessages.ProjectSupport_LIB};
+
+	public static final ProjectStructureCreator INSTANCE = new ProjectStructureCreator();
 
 	private ProjectStructureCreator(){
 	}
@@ -105,7 +105,8 @@ public class ProjectStructureCreator {
 				javaProject.setRawClasspath(setSourceFolderInClassPath(project, javaProject), null);
 			}
 		} catch (CoreException e) {
-			logger.debug("Failed to create Project with parameters as projectName : {} location : {}", new Object[]{projectName, location});
+			logger.debug("Failed to create Project with parameters as projectName : {} location : {}, exception : {}", 
+					new Object[]{projectName, location, e});
 			project = null;
 		}
 
@@ -210,7 +211,7 @@ public class ProjectStructureCreator {
 				description.setNatureIds(newNatures);
 				project.setDescription(description, null);
 			}
-			logger.debug("Project nature added"); //TODO : remove
+			logger.debug("Project nature added"); 
 		}
 	}
 
@@ -263,7 +264,7 @@ public class ProjectStructureCreator {
 				if (!newProject.isOpen()) {
 					newProject.open(null);
 				}
-				logger.debug("Project base structure created"); //TODO : remove
+				logger.debug("Project base structure created"); 
 			} catch (CoreException exception) {
 				logger.debug("Project base structure creation failed");
 				throw exception;
@@ -276,8 +277,7 @@ public class ProjectStructureCreator {
 		MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 		messageBox.setText("Error");
 		messageBox.setMessage(errorMessage);
-		if(messageBox.open()==SWT.OK)
-		{
+		if(messageBox.open()==SWT.OK){
 			newProject=null;
 		}
 		return newProject;
@@ -299,7 +299,7 @@ public class ProjectStructureCreator {
 					destinationFile.create(new FileInputStream(sourceFile), true, null);
 					entries.add(JavaCore.newLibraryEntry(new Path(destinationFile.getLocation().toOSString()), null, null));
 				} catch (FileNotFoundException | CoreException exception) {
-					logger.debug("Copy external library files operation failed");
+					logger.debug("Copy external library files operation failed", exception);
 					throw new CoreException(new MultiStatus(Activator.PLUGIN_ID, 101, "Copy external library files operation failed", exception));
 				}
 			}
@@ -316,7 +316,8 @@ public class ProjectStructureCreator {
 		/**
 		 * 
 		 */
-		private static final long serialVersionUID = -6194407190206545086L;}
+		private static final long serialVersionUID = -6194407190206545086L;
+	}
 
 
 
@@ -351,7 +352,7 @@ public class ProjectStructureCreator {
 			}
 
 		} catch (Exception e) {
-			logger.error("Error while generating gradle prefs file.");
+			logger.error("Error while generating gradle prefs file.", e);
 		}
 	}
 

@@ -20,14 +20,12 @@ import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructures.tooltip.TootlTipErrorMessage;
 import com.bitwise.app.propertywindow.messagebox.ConfirmCancelMessageBox;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultCheckBox;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
 import com.bitwise.app.propertywindow.widgets.utility.FilterOperationClassUtility;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTOperationClassDialog.
  * 
@@ -41,7 +39,6 @@ public class ELTOperationClassDialog extends Dialog {
 	private Composite container;
 	private OperationClassProperty operationClassProperty;
 	private PropertyDialogButtonBar eltOperationClassDialogButtonBar;
-	private ValidationStatus validationStatus;
 	private TootlTipErrorMessage tootlTipErrorMessage = new TootlTipErrorMessage();
 	private WidgetConfig widgetConfig; 
 
@@ -102,7 +99,7 @@ public class ELTOperationClassDialog extends Dialog {
 		AbstractELTWidget fileNameText = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(150);
 		AbstractELTWidget isParameterCheckbox = new ELTDefaultCheckBox("Is Parameter").checkBoxLableWidth(100);
 		
-		FilterOperationClassUtility.createOperationalClass(composite, eltOperationClassDialogButtonBar, fileNameText, isParameterCheckbox, validationStatus,tootlTipErrorMessage, widgetConfig);
+		FilterOperationClassUtility.createOperationalClass(composite, eltOperationClassDialogButtonBar, fileNameText, isParameterCheckbox, tootlTipErrorMessage, widgetConfig);
 		fileName=(Text)fileNameText.getSWTWidgetControl();
 		btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl();
 		populateWidget();
@@ -174,8 +171,6 @@ public class ELTOperationClassDialog extends Dialog {
 		}else{
 			super.close();
 		}
-		
-		//super.cancelPressed();
 	}
 
 	@Override
@@ -199,14 +194,6 @@ public class ELTOperationClassDialog extends Dialog {
 		return operationClassProperty;
 	}
 
-	public void setValidationStatus(ValidationStatus validationStatus) {
-		this.validationStatus = validationStatus;
-	}
-	
-	public ValidationStatus getValidationStatus() {
-		return validationStatus;
-	}
-	
 	public String getTootlTipErrorMessage() {
 		return tootlTipErrorMessage.getErrorMessage();
 	}
