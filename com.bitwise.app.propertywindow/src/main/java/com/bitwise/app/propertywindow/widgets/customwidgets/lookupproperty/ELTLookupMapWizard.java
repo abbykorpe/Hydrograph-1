@@ -602,17 +602,19 @@ public class ELTLookupMapWizard extends Dialog {
 							
 							if(!listOfFields.contains(field))
 								listOfFields.add(field);
+								tableViewer.refresh(); 
 							
 							for(LookupMapProperty lookupMapProperty : joinOutputList){
 								String outputField = lookupMapProperty.getOutput_Field();
 								if(!tempList.contains(outputField)){
 									propertyError.setVisible(false);
 									tempList.add(outputField);
+									tableViewer.refresh(); 
 								}else{
 									propertyError.setVisible(true);
 									propertyError.setText(Messages.OUTPUT_FIELD_EXISTS);
-									//tableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
-									//tableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
+									outputTableViewer.refresh();
+									outputTableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
 								}
 							}
 		        	}
