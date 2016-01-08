@@ -2,12 +2,10 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Filter" link_to="xml\Components\components.xml#Filter"> 
-	<topic label="All properties for Filter"  href="html/concepts/maintopic.html"> 
+	<topic label="Properties"  href="html/concepts/maintopic.html"> 
 	</topic>
- <topic href="html/concepts/maintopic.html" label="Component Mapping View">
+ <topic href="html/concepts/maintopic.html" label="Operation Class">
  </topic>
- <topic href="html/concepts/maintopic.html" label="Link to Operation Class">
- </topic>
- <topic href="html/concepts/maintopic.html" label="Validations applied">
+ <topic href="html/concepts/maintopic.html" label="Validations">
  </topic>
 </toc>

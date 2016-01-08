@@ -2,8 +2,8 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Output File Fixed Width" link_to="xml\Components\components.xml#OutputFileFixedWidth"> 
-	<topic label="All properties for Output File Fixed Width"  href="html/concepts/maintopic.html"> 
+	<topic label="Properties"  href="html/concepts/maintopic.html"> 
 	</topic>
- <topic href="html/concepts/maintopic.html" label="Validations applied">
+ <topic href="html/concepts/maintopic.html" label="Validations">
  </topic>
 </toc>
