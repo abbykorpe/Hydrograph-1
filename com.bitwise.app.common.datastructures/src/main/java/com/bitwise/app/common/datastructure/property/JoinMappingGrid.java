@@ -13,6 +13,7 @@ public class JoinMappingGrid {
 	public JoinMappingGrid() {
 		lookupMapProperties = new ArrayList<>();
 		lookupInputProperties = new ArrayList<>();
+		isSelected = Boolean.FALSE;
 	}	
 	
 	public String getButtonText() {

@@ -110,21 +110,23 @@ public class JoinConverter extends TransformConverter {
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
 		int inSocketCounter=0;
-		Object obj = properties.get(Constants.JOIN_MAP_FIELD);
+		JoinMappingGrid joinMappingGrid = (JoinMappingGrid) properties.get(Constants.JOIN_MAP_FIELD);
 		List<TypeOperationsOutSocket> outSocketList = new ArrayList<TypeOperationsOutSocket>();
 		for (Link link : component.getSourceConnections()) {
 
 			TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();
 			if (PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort()).equalsIgnoreCase("out")) {
-				if (properties.get(Constants.JOIN_MAP_FIELD) != null) {
+				if (joinMappingGrid!= null && !joinMappingGrid.isSelected() ) {
 					outSocket.setId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());
 					outSocket.setType(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort()));
 					outSocketList.add(outSocket);
 					outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(getLookuporJoinOutputMaping(joinupPropertyGrid));
 				} else {
 					TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
+					outSocketAsInsocket.setInSocketId(joinMappingGrid.getButtonText().substring(8));
+					outSocket.setId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());
 					outSocket.setCopyOfInsocket(outSocketAsInsocket);
-					outSocketAsInsocket.setInSocketId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
+					outSocketList.add(outSocket);
 				}
 			} else if (PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort()).equalsIgnoreCase("unused")) {
 				TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
@@ -136,8 +138,7 @@ public class JoinConverter extends TransformConverter {
 			}
 		}
 		return outSocketList;
-	}
-
+	}	
 	private String getInsocket(String nameOfUnusedPort) {
 		String unusedPortNo = nameOfUnusedPort.substring(6);
 		String inSocket="in"+unusedPortNo;

@@ -403,9 +403,9 @@ public class ELTLookupMapWizard extends Dialog {
 					outputTableViewer.getTable().setSelection(propertyValuecount);
 					propertyError.setVisible(true);
 					propertyError.setText(Messages.EmptyValueNotification);
-					okButton.setEnabled(false);
 				}else{
 					propertyError.setVisible(false);
+					okButton.setEnabled(true);
 				}
 				
 			propertycount++;
@@ -611,7 +611,8 @@ public class ELTLookupMapWizard extends Dialog {
 								}else{
 									propertyError.setVisible(true);
 									propertyError.setText(Messages.OUTPUT_FIELD_EXISTS);
-									//outputTableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
+									//tableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
+									//tableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
 								}
 							}
 		        	}
