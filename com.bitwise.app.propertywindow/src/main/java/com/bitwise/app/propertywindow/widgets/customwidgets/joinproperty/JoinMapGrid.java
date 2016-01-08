@@ -270,7 +270,6 @@ public class JoinMapGrid extends Dialog {
 		composite_3.setLayout(new RowLayout(SWT.VERTICAL));
 
 		radio[0] = widget.buttonWidget(composite_3, SWT.RADIO, new int[]{0, 0, 90, 20}, NONE);
-		radio[0].setSelection(true);
 		for(int i=1,k=0;i<radio.length;i++,k++){
 			radio[i] = widget.buttonWidget(composite_3, SWT.RADIO, new int[]{0, j, 90, 20}, "Copy of in"+k);
 			j=j+20;
@@ -309,15 +308,28 @@ public class JoinMapGrid extends Dialog {
 		return container;
 	}
 	private void populate(){
+		Boolean radioButtonSelected = false;
+		
 		for(int i=0;i<radio.length;i++){
-			if(joinMappingGrid.getButtonText() != null){
+			if(StringUtils.isNotBlank(joinMappingGrid.getButtonText())){
 				if(joinMappingGrid.getButtonText().equalsIgnoreCase(radio[i].getText()))
-					radio[i].setSelection(joinMappingGrid.isSelected() ? true : false);
-					radio[0].setSelection(joinMappingGrid.isSelected() ? false : true);
-			}else{
-					radio[0].setSelection(!joinMappingGrid.isSelected() ? true : false);
-			}
-		}
+					if(joinMappingGrid.getButtonText().equalsIgnoreCase("None")){
+						radio[0].setSelection(true);
+						outputTableViewer.getTable().setEnabled(true);
+					}else{
+					radio[i].setSelection(true);
+					outputTableViewer.getTable().setEnabled(false);
+					radioButtonSelected = true;
+					}
+					}else{
+							radio[i].setSelection(false);
+					}
+				}
+				if(!radioButtonSelected){
+					radio[0].setSelection(true);
+					outputTableViewer.getTable().setEnabled(true);
+				}
+		
 	}
 
 	private Control createComposite(ExpandBar expandBar, final List<FilterProperties> joinInputList, final int tableViewerIndex){	
@@ -734,7 +746,7 @@ public class JoinMapGrid extends Dialog {
 								}else{
 									errorLabel.setVisible(true);
 									errorLabel.setText(Messages.OUTPUT_FIELD_EXISTS);
-									//outputTableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
+									outputTableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
 								}
 							}
 						}
