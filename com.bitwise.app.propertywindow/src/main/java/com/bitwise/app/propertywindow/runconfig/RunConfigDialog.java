@@ -40,6 +40,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.bitwise.app.common.util.SWTResourceManager;
+import com.bitwise.app.propertywindow.factory.ListenerFactory;
 
 
 public class RunConfigDialog extends Dialog {
@@ -172,6 +173,7 @@ public class RunConfigDialog extends Dialog {
 		textEdgeNode.setBounds(110, 31, 206, 21);
 		formToolkit.adapt(textEdgeNode, true, true);
 		textBoxes.put("host", textEdgeNode);
+		
 
 		textUser = new Text(compositeServerDetails, SWT.BORDER);
 		textUser.setBounds(110, 73, 206, 21);
@@ -307,7 +309,8 @@ public class RunConfigDialog extends Dialog {
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		Button okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
+				false);
+		okButton.setEnabled(false);
 		
 		EmptyTextListener emptyTextListener = new EmptyTextListener(okButton);
 		textEdgeNode.addModifyListener(emptyTextListener);
@@ -338,7 +341,6 @@ public class RunConfigDialog extends Dialog {
 			buildProps.put(JOB_XML, textJobXML.getText());
 			buildProps.put(LIB_PATH, textLibs.getText());
 			buildProps.put(PARAM_FILE, textParamFiles.getText());
-
 
 			buildProps.store(out, null);
 
@@ -395,5 +397,4 @@ public class RunConfigDialog extends Dialog {
 
 		};
 	};
-
 }
