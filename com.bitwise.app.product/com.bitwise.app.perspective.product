@@ -41,7 +41,6 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="ch.qos.logback.classic"/>
       <plugin id="ch.qos.logback.core"/>
       <plugin id="ch.qos.logback.slf4j" fragment="true"/>
-      <plugin id="com.bitwise.app.asm"/>
       <plugin id="com.bitwise.app.common"/>
       <plugin id="com.bitwise.app.common.datastructures"/>
       <plugin id="com.bitwise.app.common.interfaces"/>

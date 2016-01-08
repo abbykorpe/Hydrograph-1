@@ -7,6 +7,7 @@ package com.bitwise.app.common.util;
  */
 public class Constants {
 	public static final String VALIDATOR_PACKAGE_PREFIX = "com.bitwise.app.validators.impl.";
+	public static final String COMPONENT_PACKAGE_PREFIX = "com.bitwise.app.graph.model.components.";
 	
 	public static final String DELIMITER = "Delimiter";
 	public static final String CHARACTER_SET = "Character Set";

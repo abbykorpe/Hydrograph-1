@@ -10,7 +10,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.gef;bundle-version="3.7.2",
  org.eclipse.ui.ide;bundle-version="3.7.0",
  org.eclipse.core.resources;bundle-version="3.7.101",
- com.bitwise.app.asm;bundle-version="0.0.1",
  com.bitwise.app.common;bundle-version="0.0.1",
  com.bitwise.app.graph.figure;bundle-version="0.0.1",
  org.junit,
@@ -31,7 +30,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.buildship.ui;bundle-version="1.0.5",
  com.bitwise.app.joblogger;bundle-version="0.0.1",
  org.eclipse.ltk.core.refactoring,
-  com.bitwise.app.validators;bundle-version="0.0.1"
+ com.bitwise.app.validators;bundle-version="0.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: com.bitwise.app.graph.model,

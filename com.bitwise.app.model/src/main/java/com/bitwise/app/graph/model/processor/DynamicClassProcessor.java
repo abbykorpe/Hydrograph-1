@@ -2,17 +2,19 @@ package com.bitwise.app.graph.model.processor;
 
 import java.util.Hashtable;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
+import org.slf4j.Logger;
 
 import com.bitwise.app.common.component.config.Component;
+import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.LogFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class DynamicClassProcessor.
  */
-public class DynamicClassProcessor extends ClassLoader implements Opcodes{
-	public static DynamicClassProcessor INSTANCE = new DynamicClassProcessor(); 
+public class DynamicClassProcessor{
+	public static final DynamicClassProcessor INSTANCE = new DynamicClassProcessor(); 
+
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(DynamicClassProcessor.class);
 	private Hashtable<String, Class<?>> classMapStringToClass = new Hashtable<String, Class<?>>();
 	private Hashtable<Class<?>, String> classMapClassToString = new Hashtable<Class<?>, String>();
 	
@@ -66,13 +68,6 @@ public class DynamicClassProcessor extends ClassLoader implements Opcodes{
 	}
 	
 	/**
-	 * Instantiates a new dynamic class processor.
-	 */
-	public DynamicClassProcessor(){
-        super(DynamicClassProcessor.class.getClassLoader());
-    }
-	
-	/**
 	 * Creates the class.
 	 * 
 	 * @param componentConfig
@@ -84,43 +79,15 @@ public class DynamicClassProcessor extends ClassLoader implements Opcodes{
 			return getClazz(componentConfig.getName());
 		}
 		else{
-//			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-//	        //create class structure ex. public Class NewClass extends InputComponent 
-//			cw.visit(V1_7, ACC_PUBLIC, componentConfig.getName(), null, getParentClassName(componentConfig), null);
-//	
-//	        // creates a GeneratorAdapter for the (implicit) constructor
-//	        Method defaultConstructor = Method.getMethod("void <init> ()");
-//	        GeneratorAdapter mg = new GeneratorAdapter(ACC_PUBLIC, defaultConstructor, null, null, cw);
-//	        mg.loadThis();
-//	        mg.invokeConstructor(Type.getType(getParentClass(componentConfig)), defaultConstructor);
-//	        mg.returnValue();
-//	        mg.endMethod();
-//	
-//	        cw.visitEnd();
-//	
-//	        byte[]  code = cw.toByteArray();
-//	        Class<?> clazz = INSTANCE.defineClass(componentConfig.getName(), code, 0, code.length);
-//	        INSTANCE.put(componentConfig.getName(), clazz);
-//	        return clazz;
-			
 			Class<?> clazz;
 			try {
-				clazz = this.getClass().getClassLoader().loadClass("com.bitwise.app.graph.model.components." + componentConfig.getName());
-			} catch (ClassNotFoundException e) {
+				clazz = this.getClass().getClassLoader().loadClass(Constants.COMPONENT_PACKAGE_PREFIX + componentConfig.getName());
+			} catch (ClassNotFoundException exception) {
+				logger.error("Failed to load component {} due to {}", componentConfig.getName(), exception);
 				throw new RuntimeException();
-				//TODO : add logger
 			}
 			INSTANCE.put(componentConfig.getName(), clazz);
 			return clazz;
 		}
-	}
-
-
-	private String getParentClassName(Component componentConfig) {
-		return Type.getInternalName(getParentClass(componentConfig));
-	}
-
-	private Class<?> getParentClass(Component componentConfig) {
-		return ComponentCategoryRepository.INSTANCE.getClassByCategotyType(componentConfig.getCategory());
 	}
 }
