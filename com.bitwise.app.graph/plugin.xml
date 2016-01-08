@@ -43,6 +43,7 @@
          <command
                commandId="com.bitwise.app.graph.newGraphcommand"
                label="Job"
+               mnemonic="J"
                style="push">
          </command>
       </menuContribution>

@@ -213,15 +213,18 @@
          <menu
                commandId="com.bitwise.menuBar.open"
                id="com.bitwise.app.menus.FileMenu"
-               label="File">
+               label="File"
+                mnemonic ="F">
             <menu
                   id="com.bitwise.app.menus.NewMenu"
-                  label="New">
+                  label="New"
+                   mnemonic ="N">
                 <command
                      commandId="org.eclipse.ui.newWizard"
                      id="com.bitwise.app.menus.NewMenu.Class"
                      label="Class"
-                     style="push">
+                     style="push"
+                     mnemonic ="C">
                   <parameter
                         name="newWizardId"
                         value="org.eclipse.jdt.ui.wizards.NewClassCreationWizard">
@@ -231,7 +234,8 @@
                      commandId="org.eclipse.ui.newWizard"
                      id="com.bitwise.app.menus.NewMenu.XmlFile"
                      label="Xml File..."
-                     style="push">
+                     style="push"
+                      mnemonic ="M">
                   <parameter
                         name="newWizardId"
                         value="org.eclipse.wst.xml.ui.internal.wizards.NewXMLWizard">
@@ -240,7 +244,8 @@
                <command
                      commandId="org.eclipse.ui.newWizard"
                      label="File"
-                     style="push">
+                     style="push"
+                      mnemonic ="F">
                   <parameter
                         name="newWizardId"
                         value="org.eclipse.ui.wizards.new.file">
@@ -249,7 +254,7 @@
                <command
                      commandId="org.eclipse.ui.newWizard"
                      label="ELT Project"
-                     mnemonic="&amp;E"
+                    mnemonic="P"
                      style="push">
                   <parameter
                         name="newWizardId"
@@ -262,60 +267,71 @@
                </separator>
                <command
                      commandId="org.eclipse.ui.newWizard"
-                     label="&amp;Other...">
+                     label="&amp;Other..."
+                      mnemonic ="R">
                </command>
             </menu>
             <command
                   commandId="org.eclipse.ui.edit.text.openLocalFile"
                   id="com.bitwise.app.menus.FileMenu.OpenFile"
-                  label="Open File...">
+                  label="Open File..."
+                  mnemonic="e">
             </command>
             <command
                   commandId="org.eclipse.ui.file.save"
                   id="com.bitwise.app.menus.FileMenu.SaveFile"
                   label="Save"
-                  style="push">
+                  style="push"
+                     mnemonic ="S">
             </command>
             <command
                   commandId="org.eclipse.ui.file.saveAs"
                   id="com.bitwise.app.menus.FileMenu.SaveAs"
                   label="Save As..."
-                  style="push">
+                  style="push"
+                  mnemonic ="A">
             </command>
             <command
                   commandId="org.eclipse.ui.file.import"
                   label="Import"
-                  style="push">
+                  style="push"
+                  mnemonic ="I">
             </command>
             <command
                   commandId="org.eclipse.ui.file.export"
                   label="Export"
-                  style="push">
+                  style="push"
+                  mnemonic ="o">
             </command>
             <command
                   commandId="org.eclipse.ui.file.close"
                   id="bitwise.close.id"
                   label="Close"
-                  style="push">
+                  style="push"
+                  mnemonic ="C">
             </command>
             <command
                   commandId="org.eclipse.ui.file.closeAll"
                   label="Close All"
-                  style="push">
+                  style="push"
+                  mnemonic ="l">
             </command>
             <command
                   commandId="org.eclipse.ui.file.exit"
                   label="Exit"
-                  style="push">
+                  style="push"
+                  mnemonic ="x">
             </command>
          </menu>
          <menu
                id="com.bitwsie.edit.menu"
-               label="Edit">
+               label="Edit"
+               mnemonic ="E">
             <command
                   commandId="org.eclipse.ui.edit.undo"
                   label="Undo"
-                  style="push">
+                  style="push"
+                  mnemonic ="U">
                <visibleWhen>
                   <with
                         variable="selection">
@@ -328,93 +344,112 @@
             <command
                   commandId="org.eclipse.ui.edit.redo"
                   label="Redo"
-                  style="push">
+                  style="push"
+                  mnemonic ="R">
             </command>
             <command
                   commandId="org.eclipse.ui.edit.cut"
                   label="Cut"
-                  style="push">
+                  style="push"
+                  mnemonic ="t">
             </command>
             <command
                   commandId="org.eclipse.ui.edit.copy"
                   label="Copy"
-                  style="push">
+                  style="push"
+                  mnemonic ="C">
             </command>
             <command
                   commandId="org.eclipse.ui.edit.paste"
                   label="Paste"
-                  style="push">
+                  style="push"
+                  mnemonic ="P">
             </command>
             <command
                   commandId="org.eclipse.ui.edit.delete"
                   label="Delete"
-                  style="push">
+                  style="push"
+                  mnemonic ="D">
             </command>
             <command
                   commandId="org.eclipse.ui.edit.selectAll"
                   label="Select All"
-                  style="push">
+                  style="push"
+                   mnemonic ="A">
             </command>
          </menu>
          <menu
                id="com.bitwise.app.menus.WindowMenu"
-               label="Window">
+               label="Window"
+               mnemonic ="W" >
             <command
                   commandId="com.bitwise.window.console"
                   label="Console"
-                  style="push">
+                  style="push"
+                  mnemonic ="C">
             </command>
             <command
                   commandId="com.bitwise.window.outline"
                   label="Outline"
-                  style="push">
+                  style="push"
+                  mnemonic ="l">
             </command>
             <command
                   commandId="com.bitwise.window.ETLNavigator"
                   label="Project Explorer"
-                  style="push">
+                  style="push"
+                  mnemonic ="E">
             </command>
             <command
                   commandId="com.bitwise.window.properties"
                   label="Properties"
-                  style="push">
+                  style="push"
+                  mnemonic ="P">
             </command>
             <command
                   commandId="com.bitwise.window.palette"
-                  label="Palette">
+                  label="Palette"
+                  mnemonic ="t">
             </command>
             <command
                   commandId="org.eclipse.ui.window.preferences"
                   label="Preferences"
-                  style="push">
+                  style="push"
+                  mnemonic ="f">
             </command>
             <command
                   commandId="com.bitwise.window.portLabels.showHide"
                   label="Show/Hide Port Labels"
-                  style="toggle">
+                  style="toggle"
+                  mnemonic ="S">
               
             </command>
             <menu
-                  label="Show View">
+                  label="Show View"
+                  mnemonic ="V">
                <command
                      commandId="org.eclipse.ui.views.showView"
                      label="Others..."
-                     style="push">
+                     style="push"
+                     mnemonic ="O">
                </command>
             </menu>
          </menu>
          <menu
                id="com.bitwise.app.menus.HelpMenu"
-               label="Help">
+               label="Help"
+               mnemonic ="H">
             <command
                   commandId="org.eclipse.ui.help.displayHelp"
                  label="Help Content"
-                  style="push">
+                  style="push"
+                   mnemonic ="H">
            </command>
           <command
                   commandId="com.bitwise.help.aboutaccelero"
                  label="About Accelero"
-                  style="push">
+                  style="push"
+                  mnemonic ="A">
             </command>
          </menu>
       </menuContribution>
