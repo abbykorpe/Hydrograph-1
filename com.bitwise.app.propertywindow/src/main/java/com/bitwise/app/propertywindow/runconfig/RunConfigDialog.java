@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IFileEditorInput;
@@ -171,9 +172,6 @@ public class RunConfigDialog extends Dialog {
 		textEdgeNode.setBounds(110, 31, 206, 21);
 		formToolkit.adapt(textEdgeNode, true, true);
 		textBoxes.put("host", textEdgeNode);
-		
-		//textEdgeNode.addSelectionListener(listener)
-		
 
 		textUser = new Text(compositeServerDetails, SWT.BORDER);
 		textUser.setBounds(110, 73, 206, 21);
@@ -308,11 +306,22 @@ public class RunConfigDialog extends Dialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+		Button okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
+		
+		EmptyTextListener emptyTextListener = new EmptyTextListener(okButton);
+		textEdgeNode.addModifyListener(emptyTextListener);
+		textUser.addModifyListener(emptyTextListener);
+		textPassword.addModifyListener(emptyTextListener);
+		textRunUtility.addModifyListener(emptyTextListener);
+		textJobXML.addModifyListener(emptyTextListener);
+		textLibs.addModifyListener(emptyTextListener);
+		textParamFiles.addModifyListener(emptyTextListener);
+		
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 	}
+	
 	
 	@Override
 	protected void okPressed() {
