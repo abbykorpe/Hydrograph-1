@@ -83,7 +83,7 @@ public class JoinMapGrid extends Dialog {
 
 	private List<FilterProperties> joinInputList;
 	private List<LookupMapProperty> joinOutputList;
-	private List<List<FilterProperties>> joinSchemaList = new ArrayList<>();
+	private List<List<FilterProperties>> joinInputSchemaList = new ArrayList<>();
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
 	private JoinMappingGrid joinMappingGrid;
 
@@ -99,7 +99,7 @@ public class JoinMapGrid extends Dialog {
 	}
 
 	public void getJoinPropertyGrid(){
-		joinMappingGrid.setLookupInputProperties(joinSchemaList);
+		joinMappingGrid.setLookupInputProperties(joinInputSchemaList);
 		joinMappingGrid.setLookupMapProperties(joinOutputList);
 	}
 
@@ -151,8 +151,8 @@ public class JoinMapGrid extends Dialog {
 					joinInputList = new ArrayList<>();
 				}
 			}
-			if(joinSchemaList!=null){
-				joinSchemaList.add(joinInputList);
+			if(joinInputSchemaList!=null){
+				joinInputSchemaList.add(joinInputList);
 			}
 			expandItemComposite = (Composite) createComposite(expandBar, joinInputList, i);
 		}	
@@ -238,10 +238,12 @@ public class JoinMapGrid extends Dialog {
 					FilterProperties filter =new FilterProperties();
 					filter.setPropertyname(data[1]);
 					for(int i=0;i<inputPortValue;i++){
-						if(joinInputList != null && joinInputList.contains(filter)){
-							ExpandItem item = expandBar.getItem(i);
-							item.setExpanded(true);
-							inputTableViewer[i].getTable().setSelection(joinInputList.indexOf(filter));
+						if(joinInputSchemaList != null){
+							if(joinInputSchemaList.get(i).contains(filter)){
+								ExpandItem item = expandBar.getItem(i);
+								item.setExpanded(true);
+								inputTableViewer[i].getTable().setSelection(joinInputSchemaList.get(i).indexOf(filter));
+							}
 						}
 					}
 				}
@@ -328,7 +330,6 @@ public class JoinMapGrid extends Dialog {
 		xpndtmItem.setControl(comGrid);
 		xpndtmItem.setHeight(270);
 		xpndtmItem.setExpanded(false);
-		//labelWidget(comGrid, SWT.LEFT, new int[]{2, 5, 90, 20}, "Input Index : in"+tableViewerIndex);
 
 		inputTableViewer[tableViewerIndex] = widget.createTableViewer(comGrid, INPUT_COLUMN_NAME, new int[]{2, 30, 229, 232}, 224, new ELTFilterContentProvider(), new ELTFilterLabelProvider());
 		inputTableViewer[tableViewerIndex].getTable().addMouseListener(new MouseAdapter() {
