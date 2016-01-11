@@ -69,4 +69,5 @@ public class Constants {
 	public static final String COMPONENT_TYPE = "componentType";
 	public static final String COMPONENT_BASE_TYPE = "componentBaseType";
 	public static final String COMPONENT_NAMES = "componentNames";
+	public static final String SCHEMA_TO_PROPAGATE="output_schema";
 }
