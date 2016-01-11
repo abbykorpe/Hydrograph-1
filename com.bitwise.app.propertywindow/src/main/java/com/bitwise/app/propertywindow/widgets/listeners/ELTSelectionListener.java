@@ -10,7 +10,6 @@ import org.eclipse.swt.widgets.Widget;
 
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 /**
@@ -24,7 +23,6 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
  */
 public class ELTSelectionListener implements IELTListener {
 	private ControlDecoration txtDecorator;
-	private ValidationStatus validationStatus;
 	
 	@Override
 	public int getListenerType() {
@@ -38,9 +36,6 @@ public class ELTSelectionListener implements IELTListener {
 
 		if (helper != null) {
 			txtDecorator = (ControlDecoration) helper.get(HelperType.CONTROL_DECORATION);
-			validationStatus = (ValidationStatus) helper.get(HelperType.VALIDATION_STATUS);
-			//since this is dropdown, so set it to true as it is valid
-			setValidationStatus(true);
 		}
 
 		Listener listener = new Listener() {
@@ -50,21 +45,13 @@ public class ELTSelectionListener implements IELTListener {
 					((Text) widgetList[1]).setVisible(true);
 					((Text) widgetList[1]).setFocus();
 					txtDecorator.hide();
-					setValidationStatus(false);
 				} else {
 					((Text) widgetList[1]).setVisible(false);
 					txtDecorator.hide();
-					setValidationStatus(true);
 				}
 				propertyDialogButtonBar.enableApplyButton(true);
 			}
 		};
 		return listener;
-	}
-	
-	private void setValidationStatus(boolean status) {
-		if(validationStatus != null){
-			validationStatus.setIsValid(status);
-		}
 	}
 }

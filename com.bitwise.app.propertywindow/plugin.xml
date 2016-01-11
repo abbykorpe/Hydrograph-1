@@ -8,10 +8,12 @@
             locationURI="menu:org.eclipse.ui.main.menu?after=com.bitwsie.edit.menu">
          <menu
                id="com.bitwise.app.menus.RunMenu"
-               label="Run">
+               label="Run"
+               mnemonic="R">
             <command
                   commandId="com.bitwise.app.propertywindow.runconfig"
                   label="Run Configuration Settings"
+                  mnemonic="R"
                   style="push">
             </command>
          </menu>

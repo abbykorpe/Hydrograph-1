@@ -5,7 +5,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Widget;
 
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTSelectionTaskListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
@@ -22,7 +21,6 @@ import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
  */
 public class ELTGridAddSelectionListener extends ELTSelectionTaskListener{
 
-	private ValidationStatus validationStatus; 
 	private Table table;
 	private int rowSequence=1;
 	@Override
@@ -32,24 +30,14 @@ public class ELTGridAddSelectionListener extends ELTSelectionTaskListener{
 	
 	@Override
 	public void selectionListenerAction(PropertyDialogButtonBar propertyDialogButtonBar, ListenerHelper helpers, Widget... widgets) {
-		for(Widget widget:widgets)
-		{
+		for(Widget widget:widgets){
 			table=(Table)widget;
 			table.getParent().getShell().setFocus();
-		}
-		if(helpers != null){
-			validationStatus = (ValidationStatus) helpers.get(HelperType.VALIDATION_STATUS);
 		}
 		ELTGridDetails eltGridDetails = (ELTGridDetails)helpers.get(HelperType.SCHEMA_GRID);
 		GridWidgetCommonBuilder gridCommonBuilder = eltGridDetails.getGridWidgetCommonBuilder();
 		gridCommonBuilder.setRowSequence(rowSequence);
 		gridCommonBuilder.createDefaultSchema(eltGridDetails.getGrids(), eltGridDetails.getTableViewer(), eltGridDetails.getLabel());
-		setValidationStatus(true);
 		rowSequence++;
-	}
-	private void setValidationStatus(boolean status) {
-		if(validationStatus != null){
-			validationStatus.setIsValid(status);
-		}
 	}
 }

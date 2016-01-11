@@ -31,14 +31,11 @@ import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridMouseDoubleC
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridMouseDownListener;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.transform.ELTTransformDeleteSelectionListener;
 
-// TODO: Auto-generated Javadoc
 /**
- * 
+ * Factory class for widget listeners
  * @author Bitwise
  * Sep 18, 2015
- * 
  */
-
 public class ListenerFactory {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ListenerFactory.class);
 	
@@ -82,7 +79,7 @@ public class ListenerFactory {
 			try {
 				return (IELTListener) clazz.newInstance();
 			} catch (InstantiationException | IllegalAccessException exception) {
-				logger.error("Failed to create listener for class : {}", clazz.getName());
+				logger.error("Failed to create listener for class : {}, {}", clazz.getName(), exception);
 				throw new RuntimeException("Failed to instantiate the Listner " + clazz.getName());
 			}
 		}

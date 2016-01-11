@@ -50,7 +50,6 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 		
 		//since this window does all the validation 
 		//we can assume that it is valid always
-		validationStatus.setIsValid(true);
 	}
 	
 	/**

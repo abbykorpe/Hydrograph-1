@@ -55,15 +55,18 @@
             locationURI="menu:com.bitwise.app.menus.WindowMenu?after=com.bitwise.window.palette">
          <menu
                id="com.bitwise.app.menus.WindowMenu.Perspective"
-               label="Perspective">
+               label="Perspective"
+               mnemonic="r">
             <command
                   commandId="org.eclipse.ui.perspectives.showPerspective"
                   label="Open perspective"
+                  mnemonic="O"
                   style="push">
             </command>
             <command
                   commandId="org.eclipse.ui.window.resetPerspective"
                   label="Reset Perspective"
+                  mnemonic="R"
                   style="radio">
             </command>
             <separator
@@ -73,21 +76,25 @@
             <command
                   commandId="org.eclipse.ui.window.customizePerspective"
                   label="Customize Perspective.."
+                  mnemonic="C"
                   style="push">
             </command>
             <command
                   commandId="org.eclipse.ui.window.savePerspective"
                   label="Save Perspective As.."
+                  mnemonic="S"
                   style="push">
             </command>
             <command
                   commandId="org.eclipse.ui.window.closePerspective"
                   label="Close Perspective"
+                  mnemonic="C"
                   style="push">
             </command>
             <command
                   commandId="org.eclipse.ui.window.closeAllPerspectives"
                   label="Close All Perspectives"
+                  mnemonic="L"
                   style="push">
             </command>
          </menu>

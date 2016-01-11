@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IFileEditorInput;
@@ -39,6 +40,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.bitwise.app.common.util.SWTResourceManager;
+import com.bitwise.app.propertywindow.factory.ListenerFactory;
 
 
 public class RunConfigDialog extends Dialog {
@@ -78,7 +80,7 @@ public class RunConfigDialog extends Dialog {
 	 */
 	public RunConfigDialog(Shell parentShell) {
 		super(parentShell);
-		this.runGraph = true;
+		this.runGraph = false;
 		buildProps = new Properties();
 		textBoxes= new HashMap<>();
 		
@@ -171,6 +173,7 @@ public class RunConfigDialog extends Dialog {
 		textEdgeNode.setBounds(110, 31, 206, 21);
 		formToolkit.adapt(textEdgeNode, true, true);
 		textBoxes.put("host", textEdgeNode);
+		
 
 		textUser = new Text(compositeServerDetails, SWT.BORDER);
 		textUser.setBounds(110, 73, 206, 21);
@@ -274,6 +277,7 @@ public class RunConfigDialog extends Dialog {
 		      }else if(key.equals(REMOTE_MODE) && buildProps.getProperty(key).equals("true")){
 		    	  btnRemoteMode.setSelection(true);
 		    	  btnLocalMode.setSelection(false);
+		    	  container.getShell().setSize(380,730);
 		    	  compositeServerDetails.setVisible(true);
 		    	  compositePathConfig.setVisible(true);
 		      }else if(!(key.equals(LOCAL_MODE) || key.equals(REMOTE_MODE))){
@@ -304,11 +308,23 @@ public class RunConfigDialog extends Dialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
+		Button okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+				false);
+		okButton.setEnabled(false);
+		
+		EmptyTextListener emptyTextListener = new EmptyTextListener(okButton);
+		textEdgeNode.addModifyListener(emptyTextListener);
+		textUser.addModifyListener(emptyTextListener);
+		textPassword.addModifyListener(emptyTextListener);
+		textRunUtility.addModifyListener(emptyTextListener);
+		textJobXML.addModifyListener(emptyTextListener);
+		textLibs.addModifyListener(emptyTextListener);
+		textParamFiles.addModifyListener(emptyTextListener);
+		
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 	}
+	
 	
 	@Override
 	protected void okPressed() {
@@ -326,7 +342,6 @@ public class RunConfigDialog extends Dialog {
 			buildProps.put(LIB_PATH, textLibs.getText());
 			buildProps.put(PARAM_FILE, textParamFiles.getText());
 
-
 			buildProps.store(out, null);
 
 			String buildPropFilePath = buildPropFilePath();
@@ -339,6 +354,7 @@ public class RunConfigDialog extends Dialog {
 			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving run configuration file -\n"+e.getMessage());
 		}
 		this.password = textPassword.getText();
+		this.runGraph = true;
 		super.okPressed();
 	}
 
@@ -353,7 +369,7 @@ public class RunConfigDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(424, 171);
+		return new Point(380, 171);
 	}
 
 	public boolean proceedToRunGraph(){
@@ -368,12 +384,12 @@ public class RunConfigDialog extends Dialog {
 			Button button = ((Button) event.widget);
 
 			if(button.getText().equals("Local")){
-				container.getShell().setSize(424,671-500);
+				container.getShell().setSize(380,171);
 				compositeServerDetails.setVisible(false);
 				compositePathConfig.setVisible(false);
 
 			}else if(button.getText().equals("Remote")){
-				container.getShell().setSize(424, 671);
+				container.getShell().setSize(380,671);
 				compositeServerDetails.setVisible(true);
 				compositePathConfig.setVisible(true);
 			}
@@ -381,5 +397,4 @@ public class RunConfigDialog extends Dialog {
 
 		};
 	};
-
 }

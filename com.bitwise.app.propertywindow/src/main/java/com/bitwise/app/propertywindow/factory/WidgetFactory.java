@@ -112,7 +112,7 @@ public class WidgetFactory {
 		
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
 				InvocationTargetException | NoSuchMethodException | SecurityException exception) {
-			logger.error("Failed to create widget for class : {}", widgetName);
+			logger.error("Failed to create widget for class : {}, {}", widgetName, exception);
 			throw new RuntimeException("Failed to instantiate the Listner {}" + widgetName);
 		}
 	}

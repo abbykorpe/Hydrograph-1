@@ -12,7 +12,6 @@ import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 
-// TODO: Auto-generated Javadoc
 /**
  * 
  * @author Bitwise 
@@ -24,7 +23,6 @@ public abstract class AbstractWidget {
 	protected ComponentConfigrationProperty componentConfigrationProperty;
 	protected ComponentMiscellaneousProperties componentMiscellaneousProperties;
 	protected PropertyDialogButtonBar propertyDialogButtonBar;
-	protected ValidationStatus validationStatus = new ValidationStatus();
 	protected Text firstTextWidget=null;
 	protected WidgetConfig widgetConfig;
 	protected ELTComponenetProperties allComponenetProperties;
@@ -73,24 +71,6 @@ public abstract class AbstractWidget {
 
 	public abstract LinkedHashMap<String, Object> getProperties();
 	
-	/**
-	 * Indicates if all the mandatory data is available and valid in the property window. 
-	 */
-	public class ValidationStatus{
-		private Boolean isValid = false;
-		
-		public void setIsValid(Boolean isValid) {
-			this.isValid = isValid;
-		}
-		
-		public boolean getIsValid() {
-			return isValid;
-		}
-	}
-	
-	public boolean isDataValid() {
-		return validationStatus.isValid;
-	}
 	public Text getFirstTextWidget(){
 		return firstTextWidget;
 	}

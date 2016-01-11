@@ -14,7 +14,6 @@ import org.eclipse.swt.widgets.Widget;
 import com.bitwise.app.common.datastructures.tooltip.TootlTipErrorMessage;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget.ValidationStatus;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
@@ -28,7 +27,6 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
  * @see ELTEmptyTextModifyEvent
  */
 public class ELTEmptyTextModifyListener implements IELTListener {
-	private ValidationStatus validationStatus;
 	private TootlTipErrorMessage tootlTipErrorMessage;
 
 	
@@ -45,7 +43,6 @@ public class ELTEmptyTextModifyListener implements IELTListener {
 			ListenerHelper helpers, Widget... widgets) {
 		
 		if (helpers != null) {
-			validationStatus = (ValidationStatus) helpers.get(HelperType.VALIDATION_STATUS); 
 			tootlTipErrorMessage = (TootlTipErrorMessage)helpers.get(HelperType.TOOLTIP_ERROR_MESSAGE); 
 		}
 		
@@ -70,18 +67,15 @@ public class ELTEmptyTextModifyListener implements IELTListener {
 						//Disable the edit button
 						((Button) widgetList[1]).setEnabled(false);
 						fieldNameDecorator.show();
-						validationStatus.setIsValid(false);
 						((Text) widgetList[0]).setToolTipText(fieldNameDecorator.getDescriptionText());
 					}else{
 							((Button) widgetList[1]).setEnabled(true);
 							fieldNameDecorator.hide();
-							validationStatus.setIsValid(true);
 						}
 					
 				}
 				else{
 					fieldNameDecorator.hide();
-					validationStatus.setIsValid(true);
 				}
 				setToolTipErrorMessage(fieldNameDecorator);
 			}

@@ -29,7 +29,6 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTFilePathWidget.
  * 
@@ -127,7 +126,6 @@ public class ELTFilePathWidget extends AbstractWidget{
 		
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
-		helper.put(HelperType.VALIDATION_STATUS, validationStatus);
 
 		try {
 			eltDefaultTextBox.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(), propertyDialogButtonBar,  null,eltDefaultTextBox.getSWTWidgetControl());

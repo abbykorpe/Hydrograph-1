@@ -2,8 +2,8 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Output File Delimited" link_to="xml\Components\components.xml#OutputFileDelimited"> 
-	<topic label="All properties for Output File Delimited"  href="html/concepts/maintopic.html"> 
+	<topic label="Properties"  href="html/concepts/maintopic.html"> 
 	</topic>
- <topic href="html/concepts/maintopic.html" label="Validations applied">
+ <topic href="html/concepts/maintopic.html" label="Validations">
  </topic>
 </toc>

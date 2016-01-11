@@ -16,7 +16,6 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTC
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTRuntimePropertiesWidget.
  * 
@@ -55,9 +54,6 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 		this.InstializeMap = (TreeMap<String, String>) componentConfigrationProperty.getPropertyValue();
 		
 		tempPropertyMap = new LinkedHashMap<String, Object>();
-		//since this window does all the validation 
-		//we can assume that it is valid always
-		validationStatus.setIsValid(true);
 	}
 	
 
