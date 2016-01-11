@@ -16,6 +16,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
@@ -67,8 +68,8 @@ public class PropertyDialog extends Dialog {
 	 * @param component 
 	 * @param ComponentProperties 
 	 */
-	public PropertyDialog(Shell parentShell, LinkedHashMap<String, LinkedHashMap<String, ArrayList<Property>>> propertyTree,ELTComponenetProperties eltComponenetProperties,Map<String, String> toolTipErrorMessages, Component component) {		
-		super(parentShell);
+	public PropertyDialog(LinkedHashMap<String, LinkedHashMap<String, ArrayList<Property>>> propertyTree,ELTComponenetProperties eltComponenetProperties,Map<String, String> toolTipErrorMessages, Component component) {		
+		super(Display.getCurrent().getActiveShell());
 		this.propertyTree = propertyTree;
 		this.componentProperties = eltComponenetProperties;
 		componentName = (String) this.componentProperties.getComponentConfigurationProperty(ELTProperties.NAME_PROPERTY.propertyName());
