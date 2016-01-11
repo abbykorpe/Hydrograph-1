@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -17,6 +20,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -31,7 +35,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IFileEditorInput;
@@ -40,7 +43,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.bitwise.app.common.util.SWTResourceManager;
-import com.bitwise.app.propertywindow.factory.ListenerFactory;
+import com.bitwise.app.propertywindow.messages.Messages;
+import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
 
 public class RunConfigDialog extends Dialog {
@@ -57,12 +61,12 @@ public class RunConfigDialog extends Dialog {
 	
 	private String password;
 
-	Composite compositeServerDetails, compositePathConfig;
-	Button btnLocalMode, btnRemoteMode;
+	private Composite compositeServerDetails, compositePathConfig;
+	private Button btnLocalMode, btnRemoteMode;
 	
-	Properties buildProps;
+	private Properties buildProps;
 	
-	HashMap<String, Text> textBoxes;
+	private HashMap<String, Text> textBoxes;
 	
 	private final String LOCAL_MODE="local";
 	private final String REMOTE_MODE="remote";
@@ -183,6 +187,7 @@ public class RunConfigDialog extends Dialog {
 		textPassword = new Text(compositeServerDetails, SWT.PASSWORD|SWT.BORDER);
 		textPassword.setBounds(110, 116, 206, 21);
 		formToolkit.adapt(textPassword, true, true);
+		textBoxes.put("password", textPassword);
 		
 		compositeServerDetails.setVisible(false);
 		
@@ -251,7 +256,7 @@ public class RunConfigDialog extends Dialog {
 		return container;
 	}
 	
-	public void loadbuildProperties(){
+	private void loadbuildProperties(){
 		String buildPropFilePath = buildPropFilePath();
 		IPath bldPropPath =new Path(buildPropFilePath);
 		IFile iFile=ResourcesPlugin.getWorkspace().getRoot().getFile(bldPropPath);
@@ -265,15 +270,18 @@ public class RunConfigDialog extends Dialog {
 		
 		Enumeration<?> e = buildProps.propertyNames();
 		populateTextBoxes(e);
+		
+		validateLoadedTextBoxes();
 	    
 		
 	}
-	public void populateTextBoxes(Enumeration e){
+	private void populateTextBoxes(Enumeration e){
 		while (e.hasMoreElements()) {
 		      String key = (String) e.nextElement();
 		      if(key.equals(LOCAL_MODE) && buildProps.getProperty(key).equals("true")){
 		    	  btnLocalMode.setSelection(true);
 		    	  btnRemoteMode.setSelection(false);
+		    	  
 		      }else if(key.equals(REMOTE_MODE) && buildProps.getProperty(key).equals("true")){
 		    	  btnRemoteMode.setSelection(true);
 		    	  btnLocalMode.setSelection(false);
@@ -281,13 +289,25 @@ public class RunConfigDialog extends Dialog {
 		    	  compositeServerDetails.setVisible(true);
 		    	  compositePathConfig.setVisible(true);
 		      }else if(!(key.equals(LOCAL_MODE) || key.equals(REMOTE_MODE))){
-		    	  textBoxes.get(key).setText(buildProps.getProperty(key));  
+		    	  textBoxes.get(key).setText(buildProps.getProperty(key)); 
 		      }
 		    }
 	}
 	
+	private void validateLoadedTextBoxes(){
+		Iterator it = textBoxes.entrySet().iterator();
+		ControlDecoration errorDecorator;
+	    while (it.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it.next();
+	        //System.out.println(pair.getKey() + " = " + pair.getValue());
+	        //errorDecorator = WidgetUtility.addDecorator((Text)pair.getValue(),Messages.EMPTY_FIELD);
+	        //Generate 'Modify' event.
+	        	
+	    }
+	}
+	
 
-	public String buildPropFilePath(){
+	private String buildPropFilePath(){
 		IWorkbenchPage page = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage();
 		IFileEditorInput input=(IFileEditorInput) page.getActiveEditor().getEditorInput();
@@ -309,8 +329,8 @@ public class RunConfigDialog extends Dialog {
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		Button okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				false);
-		okButton.setEnabled(false);
+				true);
+		okButton.setEnabled(true);
 		
 		EmptyTextListener emptyTextListener = new EmptyTextListener(okButton);
 		textEdgeNode.addModifyListener(emptyTextListener);
