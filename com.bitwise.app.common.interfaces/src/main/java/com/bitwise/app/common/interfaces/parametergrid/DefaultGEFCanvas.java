@@ -10,4 +10,6 @@ public interface DefaultGEFCanvas {
 	public void setCurrentParameterFilePath(String currentParameterFilePath);
 	public String getActiveProject();
 	public String getJobName();
+	public void disableRunningJobResource();
+	public void enableRunningJobResource();
 }

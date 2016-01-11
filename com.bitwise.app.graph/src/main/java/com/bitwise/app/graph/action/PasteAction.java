@@ -7,6 +7,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
+import com.bitwise.app.common.util.ContributionItemManager;
 import com.bitwise.app.graph.command.ComponentPasteCommand;
 
 // TODO: Auto-generated Javadoc
@@ -47,7 +48,9 @@ public class PasteAction extends SelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		Command command = createPasteCommand();
-		return command != null && command.canExecute();
+		boolean status = command != null && command.canExecute();
+		ContributionItemManager.PASTE.setEnable(status);	
+		return status;
 	}
 
 	@Override

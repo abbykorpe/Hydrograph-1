@@ -12,6 +12,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
+import com.bitwise.app.common.util.ContributionItemManager;
 import com.bitwise.app.graph.command.ComponentCopyCommand;
 import com.bitwise.app.graph.command.ComponentCutCommand;
 import com.bitwise.app.graph.controller.ComponentEditPart;
@@ -65,19 +66,26 @@ public class CutAction extends SelectionAction{
 			if (ep instanceof ComponentEditPart) {
 				node = (Component) ((EditPart)ep).getModel();
 			}
-			if (cutCommand.isCutNode(node)){
+			if (!cutCommand.isCutNode(node)){
+				return null;
+			}
+				
 			cutCommand.addElement(node);
 			}
-		}
 		return cutCommand;
 	}
 
 	@Override
 	protected boolean calculateEnabled() {
 		Command cmd = createCutCommand(getSelectedObjects());
-		if (cmd == null)
-		return false;
-		return true;
+		if (cmd == null){
+			ContributionItemManager.CUT.setEnable(false);			
+			return false;
+		}else{
+			ContributionItemManager.CUT.setEnable(true);			
+			return true;
+		}
+
 	}
 
 	@Override
