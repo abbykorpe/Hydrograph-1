@@ -8,6 +8,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+import com.bitwise.app.common.datastructure.property.SchemaGrid;
+
 /**
  * 
  * @author Bitwise

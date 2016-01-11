@@ -22,17 +22,16 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
  * @author Bitwise
  */
 public class SecondaryColumnKeysWidget extends AbstractWidget {
-	
+
 	private TreeMap<String, String> InstializeMap;
 	private String propertyName;
 	private Shell shell;
 	private String componentName;
 
-	/*public ELTRuntimePropertiesWidget() {
-		super();
-		tempPropertyMap = new LinkedHashMap<String, Object>();
-	}*/
-	
+	/*
+	 * public ELTRuntimePropertiesWidget() { super(); tempPropertyMap = new LinkedHashMap<String, Object>(); }
+	 */
+
 	/**
 	 * Instantiates a new ELT runtime properties widget.
 	 * 
@@ -43,49 +42,40 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 	 * @param propertyDialogButtonBar
 	 *            the property dialog button bar
 	 */
-	public SecondaryColumnKeysWidget(
-			ComponentConfigrationProperty componentConfigrationProperty,
+	public SecondaryColumnKeysWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
-		super(componentConfigrationProperty, componentMiscellaneousProperties,
-				propertyDialogButtonBar);
+		super(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
 
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 		this.InstializeMap = (TreeMap<String, String>) componentConfigrationProperty.getPropertyValue();
-		
+
 		tempPropertyMap = new LinkedHashMap<String, Object>();
 	}
-	
 
 	private LinkedHashMap<String, Object> tempPropertyMap;
 
-	
 	/**
 	 * @wbp.parser.entryPoint
 	 */
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 
-		ELTDefaultSubgroupComposite runtimeComposite = new ELTDefaultSubgroupComposite(
-				container.getContainerControl());
+		ELTDefaultSubgroupComposite runtimeComposite = new ELTDefaultSubgroupComposite(container.getContainerControl());
 		runtimeComposite.createContainerWidget();
 		shell = runtimeComposite.getContainerControl().getShell();
 
-		
-		ELTDefaultLable defaultLable1 = new ELTDefaultLable("Secondary\nKeys"); 
+		ELTDefaultLable defaultLable1 = new ELTDefaultLable("Secondary\nKeys");
 		runtimeComposite.attachWidget(defaultLable1);
-		
-		
-		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(
-				"Edit");
-		
+
+		ELTDefaultButton eltDefaultButton = new ELTDefaultButton("Edit");
+
 		runtimeComposite.attachWidget(eltDefaultButton);
 
 		try {
 			eltDefaultButton.attachListener(ListenerFactory.Listners.RUNTIME_BUTTON_CLICK.getListener(),
-					propertyDialogButtonBar, new ListenerHelper(this.getClass()
-							.getName(), this), eltDefaultButton
-							.getSWTWidgetControl());
+					propertyDialogButtonBar, new ListenerHelper(this.getClass().getName(), this),
+					eltDefaultButton.getSWTWidgetControl());
 
 		} catch (Exception e1) {
 
@@ -94,7 +84,6 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 
 	}
 
-	
 	/**
 	 * Sets the properties.
 	 * 
@@ -115,8 +104,6 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 		return (tempPropertyMap);
 	}
 
-	
-
 	/**
 	 * New window launcher.
 	 */
@@ -128,10 +115,8 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 
 		}
 
-		runTimeWizardObj
-				.setRuntimePropertyMap((TreeMap<String, String>) getProperties()
-						.get(propertyName));
-		setProperties(propertyName, runTimeWizardObj.launchRuntimeWindow(shell,propertyDialogButtonBar));
+		runTimeWizardObj.setRuntimePropertyMap((TreeMap<String, String>) getProperties().get(propertyName));
+		setProperties(propertyName, runTimeWizardObj.launchRuntimeWindow(shell, propertyDialogButtonBar));
 
 	}
 

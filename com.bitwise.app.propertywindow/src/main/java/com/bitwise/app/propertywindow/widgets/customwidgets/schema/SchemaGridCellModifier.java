@@ -4,6 +4,8 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
+import com.bitwise.app.common.datastructure.property.SchemaGrid;
+
 // TODO: Auto-generated Javadoc
 /**
  * @author Bitwise

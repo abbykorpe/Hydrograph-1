@@ -7,9 +7,9 @@ import java.util.Map.Entry;
 import javax.xml.namespace.QName;
 
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
+import com.bitwise.app.common.datastructure.property.SchemaGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.Component;
-import com.bitwise.app.propertywindow.widgets.customwidgets.schema.SchemaGrid;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;
@@ -17,7 +17,7 @@ import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;
 /**
  * The class ConverterUiHelper
  * 
- * @author Bitwise
+ * @author Bitwise	a
  * 
  * This is a helper class for converter implementation. Contains the helper methods for conversion.
  */
