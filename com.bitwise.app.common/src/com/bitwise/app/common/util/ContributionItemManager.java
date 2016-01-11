@@ -46,18 +46,18 @@ public enum ContributionItemManager {
 				boolean undoStatus, boolean redoStatus) {
 
 			for (MenuItem item : menuItems) {
-				if ("menuitem {edit}".equalsIgnoreCase(item.toString())) {
+				if (menuList.contains(item.toString().toLowerCase())) {
 					menu = item.getMenu();
 					for (MenuItem menuItem : menu.getItems()) {
 						if (menuItemsList.contains(menuItem.getText()
 								.toLowerCase())) {
 							menuItem.setEnabled(false);
 						} else {
-							if ("undo	ctrl+z".contains(menuItem.getText()
+							if (undoRedoItemsList.get(0).contains(menuItem.getText()
 									.toLowerCase())) {
 								menuItem.setEnabled(undoStatus);
 							}
-							if ("redo	ctrl+y".contains(menuItem.getText()
+							if (undoRedoItemsList.get(1).contains(menuItem.getText()
 									.toLowerCase())) {
 								menuItem.setEnabled(redoStatus);
 							}
@@ -94,21 +94,21 @@ public enum ContributionItemManager {
 	UndoRedoCustomMenuBarManager {
 		public void changeUndoRedoStatus(GraphicalViewer viewer) {
 			UndoRedoCustomMenuBarManager.initializeViewerResource(viewer);
+
 			changeMenuControl(menuItems, undoStatus, redoStatus);
 		}
 
 		private void changeMenuControl(MenuItem[] menuItems,
 				boolean undoStatus, boolean redoStatus) {
-
 			for (MenuItem item : menuItems) {
-				if ("menuitem {edit}".equalsIgnoreCase(item.toString())) {
+				if (menuList.contains(item.toString().toLowerCase())) {
 					menu = item.getMenu();
 					for (MenuItem menuItem : menu.getItems()) {
-						if ("undo	ctrl+z".contains(menuItem.getText()
+						if (undoRedoItemsList.get(0).contains(menuItem.getText()
 								.toLowerCase())) {
 							menuItem.setEnabled(undoStatus);
 						}
-						if ("redo	ctrl+y".contains(menuItem.getText()
+						if (undoRedoItemsList.get(1).contains(menuItem.getText()
 								.toLowerCase())) {
 							menuItem.setEnabled(redoStatus);
 						}
@@ -148,6 +148,8 @@ public enum ContributionItemManager {
 	MenuItem[] menuItems = null;
 	Menu menu = null;
 	ArrayList<String> menuItemsList = null;
+	ArrayList<String> undoRedoItemsList = null;
+	ArrayList<String> menuList = null;
 
 	private ContributionItemManager() {
 		workbenchWindow = (WorkbenchWindow) PlatformUI.getWorkbench()
@@ -155,7 +157,11 @@ public enum ContributionItemManager {
 		controls = workbenchWindow.getCoolBarManager().getControl()
 				.getChildren();
 		menuItems = workbenchWindow.getMenuBarManager().getMenu().getItems();
-		menuItemsList = ContributionItems.MenuBarItemsManageList
+		menuItemsList = ContributionItems.MENU_BAR_ITEMS_LIST
+				.getRequiredItems();
+		undoRedoItemsList = ContributionItems.UNDO_REDO_ITEMS_LIST
+				.getRequiredItems();	
+		menuList = ContributionItems.MENU_LIST
 				.getRequiredItems();
 	}
 
@@ -174,7 +180,7 @@ public enum ContributionItemManager {
 
 	private void setMenuItemStatus(String menuItemName, boolean status) {
 		for (MenuItem item : menuItems) {
-			if ("menuitem {edit}".equalsIgnoreCase(item.toString())) {
+			if ("menuitem {&edit}".equalsIgnoreCase(item.toString())) {
 				menu = item.getMenu();
 				for (MenuItem menuItem : menu.getItems()) {
 					if (menuItemName.contains(menuItem.getText().toLowerCase())) {

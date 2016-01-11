@@ -4,25 +4,34 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public enum ContributionItems {
-	MenuBarItemsManageList {
+	MENU_BAR_ITEMS_LIST {
 		public ArrayList<String> getRequiredItems() {
 			ArrayList<String> requiredToolItems = new ArrayList<>();
-			requiredToolItems.add("cut	ctrl+x");
-			requiredToolItems.add("copy	ctrl+c");
-			requiredToolItems.add("paste	ctrl+v");
+			requiredToolItems.add("cu&t	ctrl+x");
+			requiredToolItems.add("&copy	ctrl+c");
+			requiredToolItems.add("&paste	ctrl+v");
+			requiredToolItems.add("&delete	delete");			
+			requiredToolItems.add("select &all	ctrl+a");
 
 			return requiredToolItems;
 		}
 	},
-	UndoRedoItemsList {
+	UNDO_REDO_ITEMS_LIST {
 		public ArrayList<String> getRequiredItems() {
 			ArrayList<String> requiredToolItems = new ArrayList<>();
-			requiredToolItems.add("undo	ctrl+z");
-			requiredToolItems.add("redo	ctrl+y");
+			requiredToolItems.add("&undo	ctrl+z");
+			requiredToolItems.add("&redo	ctrl+y");
 			return requiredToolItems;
 		}
 	},
-	ToolBarItemManageList {
+	MENU_LIST{
+		public ArrayList<String> getRequiredItems() {
+			ArrayList<String> requiredToolItems = new ArrayList<>();
+			requiredToolItems.add("menuitem {&edit}");
+			return requiredToolItems;
+		}
+	},
+	TOOL_BAR_ITEMS_LIST {
 		public ArrayList<String> getRequiredItems() {
 			ArrayList<String> requiredToolItems = new ArrayList<>();
 
