@@ -19,34 +19,34 @@ public class TransformComponentConverter extends TransformConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(TransformComponentConverter.class);
 	TransformPropertyGrid transformPropertyGrid;
 	ConverterHelper converterHelper;
-	
-	public TransformComponentConverter(Component component){
-		super();	
+
+	public TransformComponentConverter(Component component) {
+		super();
 		this.baseComponent = new Transform();
 		this.component = component;
 		this.properties = component.getProperties();
-		transformPropertyGrid = (TransformPropertyGrid) properties.get(Constants.PARAM_OPERATION) ;
-		converterHelper = new ConverterHelper(component); 
+		transformPropertyGrid = (TransformPropertyGrid) properties.get(Constants.PARAM_OPERATION);
+		converterHelper = new ConverterHelper(component);
 	}
-	
+
 	@Override
-	public void prepareForXML(){
+	public void prepareForXML() {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		Transform transform = (Transform) baseComponent;
 		transform.getOperation().addAll(getOperations());
 	}
-	
+
 	@Override
 	protected List<TypeTransformOperation> getOperations() {
 		return converterHelper.getOperations(transformPropertyGrid);
 	}
-	
+
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
 		return converterHelper.getOutSocket(transformPropertyGrid);
 	}
-	
+
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
 		return converterHelper.getInSocket();
