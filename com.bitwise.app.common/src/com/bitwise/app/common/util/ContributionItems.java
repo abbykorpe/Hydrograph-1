@@ -1,36 +1,46 @@
 package com.bitwise.app.common.util;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public enum ContributionItems {
-	MenuBarItemsManageList {
-		public HashSet<String> getRequiredItems() {
-			HashSet<String> requiredToolItems = new HashSet<>();
-			requiredToolItems.add("cut	ctrl+x");
-			requiredToolItems.add("copy	ctrl+c");
-			requiredToolItems.add("paste	ctrl+v");
+	MENU_BAR_ITEMS_LIST {
+		public ArrayList<String> getRequiredItems() {
+			ArrayList<String> requiredToolItems = new ArrayList<>();
+			requiredToolItems.add("cu&t	ctrl+x");
+			requiredToolItems.add("&copy	ctrl+c");
+			requiredToolItems.add("&paste	ctrl+v");
+			requiredToolItems.add("&delete	delete");			
+			requiredToolItems.add("select &all	ctrl+a");
 
 			return requiredToolItems;
 		}
 	},
-	UndoRedoItemsList {
-		public HashSet<String> getRequiredItems() {
-			HashSet<String> requiredToolItems = new HashSet<>();
-			requiredToolItems.add("undo	ctrl+z");
-			requiredToolItems.add("redo	ctrl+y");
+	UNDO_REDO_ITEMS_LIST {
+		public ArrayList<String> getRequiredItems() {
+			ArrayList<String> requiredToolItems = new ArrayList<>();
+			requiredToolItems.add("&undo	ctrl+z");
+			requiredToolItems.add("&redo	ctrl+y");
 			return requiredToolItems;
 		}
 	},
-	ToolBarItemManageList {
-		public HashSet<String> getRequiredItems() {
-			HashSet<String> requiredToolItems = new HashSet<>();
+	MENU_LIST{
+		public ArrayList<String> getRequiredItems() {
+			ArrayList<String> requiredToolItems = new ArrayList<>();
+			requiredToolItems.add("menuitem {&edit}");
+			return requiredToolItems;
+		}
+	},
+	TOOL_BAR_ITEMS_LIST {
+		public ArrayList<String> getRequiredItems() {
+			ArrayList<String> requiredToolItems = new ArrayList<>();
 
 			return requiredToolItems;
 		}
 	};
 
-	public HashSet<String> getRequiredItems() {
-		HashSet<String> requiredToolItems = new HashSet<>();
+	public ArrayList<String> getRequiredItems() {
+		ArrayList<String> requiredToolItems = new ArrayList<>();
 
 		return requiredToolItems;
 	}

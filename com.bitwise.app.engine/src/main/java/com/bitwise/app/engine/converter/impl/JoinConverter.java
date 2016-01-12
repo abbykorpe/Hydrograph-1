@@ -122,11 +122,13 @@ public class JoinConverter extends TransformConverter {
 					outSocketList.add(outSocket);
 					outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(getLookuporJoinOutputMaping(joinupPropertyGrid));
 				} else {
+					if(joinMappingGrid != null){
 					TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
 					outSocketAsInsocket.setInSocketId(joinMappingGrid.getButtonText().substring(8));
 					outSocket.setId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());
 					outSocket.setCopyOfInsocket(outSocketAsInsocket);
 					outSocketList.add(outSocket);
+					}
 				}
 			} else if (PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort()).equalsIgnoreCase("unused")) {
 				TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();

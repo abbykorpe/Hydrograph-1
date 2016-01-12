@@ -101,7 +101,7 @@ public class ELTPropertyWindow implements IELTPropertyWindow{
 	public void open() {
 		List<com.bitwise.app.common.component.config.Property> rowProperties = getComponentPropertiesFromComponentXML();		
 		try {			
-			Shell shell = getParentShellForPropertyWindow();
+			
 				
 			ArrayList<Property> componentProperties = transformToPropertyWindowFormat(rowProperties);
 			componentProperties.add(getComponentBaseTypeProperty());
@@ -109,7 +109,7 @@ public class ELTPropertyWindow implements IELTPropertyWindow{
 			
 			IPropertyTreeBuilder propertyTreeBuilder = new PropertyTreeBuilder(componentProperties);
 
-			PropertyDialog propertyDialog = new PropertyDialog(shell, propertyTreeBuilder.getPropertyTree(),
+			PropertyDialog propertyDialog = new PropertyDialog(propertyTreeBuilder.getPropertyTree(),
 					eltComponenetProperties,toolTipErrorMessages,component);
 			propertyDialog.open();
 
@@ -126,21 +126,7 @@ public class ELTPropertyWindow implements IELTPropertyWindow{
 			return propertyChanged;
 	}
 	
-	private Shell getParentShellForPropertyWindow() {
-		Display display = Display.getDefault();
-		Shell shell = new Shell(display.getActiveShell(), SWT.WRAP | SWT.APPLICATION_MODAL);
-		Monitor primary = shell.getDisplay().getPrimaryMonitor();
-		Rectangle bounds = primary.getBounds();
-		Rectangle rect = shell.getBounds();
-
-		int x = bounds.x + (bounds.width - rect.width) / 2;
-		int y = bounds.y + (bounds.height - rect.height) / 2;
-
-		shell.setLocation(x, y);
-		return shell;
-	}
-
-	private ArrayList<Property> transformToPropertyWindowFormat(
+   private ArrayList<Property> transformToPropertyWindowFormat(
 			List<com.bitwise.app.common.component.config.Property> rowProperties) throws ELTComponentPropertyAdapter.EmptyComponentPropertiesException {
 		ELTComponentPropertyAdapter eltComponentPropertyAdapter = new ELTComponentPropertyAdapter(rowProperties);
 		eltComponentPropertyAdapter.transform();

@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.ResourceAttributes;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -651,6 +652,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 		
 	}
+
+	
 	
 	public String getActiveProject(){
 		if(getEditorInput() instanceof IFileEditorInput){
@@ -992,6 +995,60 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		ContributionItemManager.UndoRedoCustomMenuBarManager.changeUndoRedoStatus(viewer);
 	}
 	public void setDefaultToolUndoRedoStatus(){
-		ContributionItemManager.UndoRedoDefaultBarManager.changeUndoRedoStatus(viewer);		
+		ContributionItemManager.UndoRedoDefaultBarManager.changeUndoRedoStatus(viewer);	
+	}
+
+	@Override
+	public void disableRunningJobResource() {
+		viewer.getControl().setEnabled(false);
+		disableRunningGraphResource(getEditorInput(), getPartName());
+		
+	}
+	private void disableRunningGraphResource(IEditorInput editorInput,String partName){
+		if(editorInput instanceof IFileEditorInput){
+			IFileEditorInput input = (IFileEditorInput)editorInput ;
+		    IFile fileJob = input.getFile();
+		    IPath xmlFileIPath =new Path(input.getFile().getFullPath().toOSString().replace(".job", ".xml"));
+		    IFile fileXml = ResourcesPlugin.getWorkspace().getRoot().getFile(xmlFileIPath);
+		    ResourceAttributes attributes = new ResourceAttributes();
+		    attributes.setReadOnly(true);
+		    attributes.setExecutable(true);
+
+			try {
+				fileJob.setResourceAttributes(attributes);
+				fileXml.setResourceAttributes(attributes);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		    
+		}
+		
+	}
+
+	@Override
+	public void enableRunningJobResource() {
+		viewer.getControl().setEnabled(true);
+		enableRunningGraphResource(getEditorInput(), getPartName());
+		
+	}
+	
+
+	private void enableRunningGraphResource(IEditorInput editorInput,
+			String partName) {
+		IFileEditorInput input = (IFileEditorInput)editorInput ;
+	    IFile fileJob = input.getFile();
+	    IPath xmlFileIPath =new Path(input.getFile().getFullPath().toOSString().replace(".job", ".xml"));
+	    IFile fileXml = ResourcesPlugin.getWorkspace().getRoot().getFile(xmlFileIPath);
+	    ResourceAttributes attributes = new ResourceAttributes();
+	    attributes.setReadOnly(false);
+	    attributes.setExecutable(true);
+
+		try {
+			fileJob.setResourceAttributes(attributes);
+			fileXml.setResourceAttributes(attributes);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		
 	}	
 }

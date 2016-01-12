@@ -736,6 +736,7 @@ public class JoinMapGrid extends Dialog {
 
 							if(!listOfFields.contains(field))
 								listOfFields.add(field);
+								tableViewer.refresh(); 
 
 							for(LookupMapProperty lookupMapProperty : joinOutputList){
 								String outputField = lookupMapProperty.getOutput_Field();
@@ -743,14 +744,16 @@ public class JoinMapGrid extends Dialog {
 									errorLabel.setText(Messages.OUTPUT_FIELD_EXISTS);
 									errorLabel.setVisible(false);
 									tempList.add(outputField);
+									tableViewer.refresh();
 								}else{
 									errorLabel.setVisible(true);
 									errorLabel.setText(Messages.OUTPUT_FIELD_EXISTS);
+									outputTableViewer.refresh(); 
 									outputTableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
 								}
 							}
 						}
-						tableViewer.refresh(); 
+						
 					}
 				}
 			} 

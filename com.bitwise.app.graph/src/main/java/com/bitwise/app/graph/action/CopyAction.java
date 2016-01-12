@@ -12,6 +12,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
+import com.bitwise.app.common.util.ContributionItemManager;
 import com.bitwise.app.graph.command.ComponentCopyCommand;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.model.Component;
@@ -62,9 +63,10 @@ public class CopyAction extends SelectionAction {
 			if (ep instanceof ComponentEditPart) {
 				node = (Component) ((EditPart)ep).getModel();
 			}
-			if (copyCommand.isCopyableNode(node)){
-				copyCommand.addElement(node);
+			if (!copyCommand.isCopyableNode(node)){
+				return null;
 			}
+				copyCommand.addElement(node);
 		}
 		return copyCommand;
 	}
@@ -72,9 +74,13 @@ public class CopyAction extends SelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		Command cmd = createCopyCommand(getSelectedObjects());
-		if (cmd == null)
-		return false;
-		return true;
+		if (cmd == null){
+			ContributionItemManager.COPY.setEnable(false);
+			return false;
+		}else{
+			ContributionItemManager.COPY.setEnable(true);
+			return true;
+		}
 	}
 
 	@Override
