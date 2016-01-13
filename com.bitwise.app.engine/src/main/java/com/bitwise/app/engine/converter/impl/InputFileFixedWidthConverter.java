@@ -9,7 +9,6 @@ import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
-import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.InputConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
@@ -32,31 +31,32 @@ public class InputFileFixedWidthConverter extends InputConverter {
 		this.properties = component.getProperties();
 		converterHelper = new ConverterHelper(component);
 	}
-	
+
 	@Override
-	public void prepareForXML(){
-		logger.debug("prepareForXML - Generating XML data for "+component);
+	public void prepareForXML() {
+		logger.debug("prepareForXML - Generating XML data for " + component);
 		super.prepareForXML();
 		TextFileFixedWidth fileFixedWidth = (TextFileFixedWidth) baseComponent;
 		TextFileFixedWidth.Path path = new TextFileFixedWidth.Path();
 		path.setUri((String) properties.get(PropertyNameConstants.PATH.value()));
 		TextFileFixedWidth.Charset charset = new TextFileFixedWidth.Charset();
 		charset.setValue(getCharset());
-		
+
 		fileFixedWidth.setPath(path);
 		fileFixedWidth.setStrict(getBoolean(PropertyNameConstants.STRICT.value()));
 		fileFixedWidth.setSafe(getBoolean(PropertyNameConstants.IS_SAFE.value()));
 		fileFixedWidth.setCharset(charset);
 		fileFixedWidth.setRuntimeProperties(getRuntimeProperties());
 	}
+
 	@Override
-	protected List<TypeInputOutSocket> getInOutSocket(){
-		logger.debug("getInOutSocket - Generating TypeInputOutSocket data for "+component);
+	protected List<TypeInputOutSocket> getInOutSocket() {
+		logger.debug("getInOutSocket - Generating TypeInputOutSocket data for " + component);
 		List<TypeInputOutSocket> outSockets = new ArrayList<>();
 		for (Link link : component.getSourceConnections()) {
 			TypeInputFixedwidthOutSocket outSocket = new TypeInputFixedwidthOutSocket();
-			outSocket.setId(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort()) + link.getLinkNumber());
-			outSocket.setType(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort()));
+			outSocket.setId(link.getSourceTerminal());
+			outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
 			outSocket.setSchema(getSchema());
 			outSocket.getOtherAttributes();
 			outSockets.add(outSocket);
@@ -66,16 +66,16 @@ public class InputFileFixedWidthConverter extends InputConverter {
 
 	@Override
 	protected List<TypeBaseField> getFieldOrRecord(List<GridRow> gridList) {
-		logger.debug("Generating data for {} for property {}", new Object[]{properties.get(Constants.PARAM_NAME),PropertyNameConstants.SCHEMA.value()});
-	
+		logger.debug("Generating data for {} for property {}", new Object[] { properties.get(Constants.PARAM_NAME),
+				PropertyNameConstants.SCHEMA.value() });
+
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
-		
-		if(gridList!=null && gridList.size()!=0){
-				for (GridRow object : gridList ) 
-					typeBaseFields.add(converterHelper.getFixedWidthTargetData((FixedWidthGridRow) object));
+
+		if (gridList != null && gridList.size() != 0) {
+			for (GridRow object : gridList)
+				typeBaseFields.add(converterHelper.getFixedWidthTargetData((FixedWidthGridRow) object));
 		}
 		return typeBaseFields;
 	}
-
 
 }

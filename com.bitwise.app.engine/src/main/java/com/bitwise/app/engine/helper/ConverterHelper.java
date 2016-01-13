@@ -10,6 +10,7 @@ import javax.xml.namespace.QName;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
@@ -138,14 +139,13 @@ public class ConverterHelper {
 			Link link) {
 
 		TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
-		outSocket.setId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());
-		outSocketAsInsocket.setInSocketId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
-		outSocket.setType(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal())
-				.getNameOfPort()));
+		outSocket.setId(link.getSourceTerminal());
+		outSocketAsInsocket.setInSocketId(link.getTargetTerminal());
+		outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
 		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addPassThroughFields(transformPropertyGrid));
 		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addMapFields(transformPropertyGrid));
 		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addOperationFields(transformPropertyGrid));
-		if (outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()){
+		if (outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()) {
 			outSocket.setCopyOfInsocket(outSocketAsInsocket);
 
 		}
@@ -210,10 +210,13 @@ public class ConverterHelper {
 			for (Link link : component.getTargetConnections()) {
 				TypeBaseInSocket inSocket = new TypeBaseInSocket();
 				inSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
-				inSocket.setFromSocketId(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort());
-				inSocket.setId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
-				inSocket.setType(PortTypeConstant.getPortType(link.getTarget().getPort(link.getTargetTerminal())
-						.getNameOfPort()));
+				if (isMultipleLinkAllowed(link.getSource(), link.getSourceTerminal()))
+					inSocket.setFromSocketId(link.getSource().getPort(link.getSourceTerminal()).getPortType()
+							+ link.getLinkNumber());
+				else
+					inSocket.setFromSocketId(link.getSourceTerminal());
+				inSocket.setId(link.getTargetTerminal());
+				inSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 				inSocket.getOtherAttributes();
 				inSocketsList.add(inSocket);
 			}
@@ -299,5 +302,15 @@ public class ConverterHelper {
 			}
 		}
 		return passThroughFieldorMapFieldList;
+	}
+
+	public boolean isMultipleLinkAllowed(Component sourceComponent, String portName) {
+		logger.debug("Getting port specification for port" + portName);
+		for (PortSpecification portSpecification : sourceComponent.getPortSpecification()) {
+			if (portSpecification.getNameOfPort().equals(portName)) {
+				return portSpecification.isAllowMultipleLinks();
+			}
+		}
+		return false;
 	}
 }

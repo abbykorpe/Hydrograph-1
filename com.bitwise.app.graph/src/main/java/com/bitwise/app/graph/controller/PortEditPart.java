@@ -71,12 +71,12 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 			yLocation=portHeightOffset*(sequence+1) - 4 + margin;
 		}else if (type.equalsIgnoreCase("unused")){
 			if(totalPortsOfThisType == 1){
-				xLocation = 27;
+				xLocation = 43;
 				
 			}else if(totalPortsOfThisType > 1){
-				xLocation = portWidthOffset*(sequence+1) - 23;
+				xLocation = portWidthOffset*(sequence+1) - 6;
 			}
-			yLocation=height + margin - 4 - 4;
+			yLocation=height  + margin - 8 - 8;
 			
 		}
 		p=new Point(xLocation, yLocation);

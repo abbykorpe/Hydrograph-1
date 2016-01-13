@@ -108,6 +108,7 @@ public class WidgetFactory {
 					ComponentMiscellaneousProperties.class,	PropertyDialogButtonBar.class).
 					newInstance(componentConfigProperty, componentMiscProperties, propertyDialogButtonBar);
 			abstractWidget.setWidgetConfig(widget.getWidgetConfig());
+			if(1==1) throw new InstantiationException();
 			return abstractWidget;
 		
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException |

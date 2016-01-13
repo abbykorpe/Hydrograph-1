@@ -2,6 +2,7 @@ package com.bitwise.app.graph.figure;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -43,7 +44,8 @@ public class PortFigure extends Figure {
 				portSeq);
 		this.labelOfPort=labelOfPort;
 		this.portType=portType;
-		getBounds().setSize(new Dimension(27,10));
+		////to define the height and width of in, out and unused port 
+		setPortDimension();
 
 		tooltipFigure = new TooltipFigure();
 		setToolTip(tooltipFigure);
@@ -74,6 +76,18 @@ public class PortFigure extends Figure {
 		});
 
 	}
+	  //to define the height and width of in, out and unused port 
+		private void setPortDimension() {
+			if("in".equalsIgnoreCase(portType)){
+				getBounds().setSize(new Dimension(27,10));
+			}
+			else if("out".equalsIgnoreCase(portType)){
+				getBounds().setSize(new Dimension(27,10));
+			}
+			else if("unused".equalsIgnoreCase(portType)){
+				getBounds().setSize(new Dimension(24,16));
+			}		
+		}
 	public Color getPortColor() {
 		return portColor;
 	}
@@ -108,8 +122,8 @@ public class PortFigure extends Figure {
 					.getLocation().y-1, r.width, r.height-2);
 		}else if("unused".equalsIgnoreCase(portType))
 		{
-			graphics.fillRectangle(getBounds().getLocation().x+20, getBounds()
-					.getLocation().y-1, r.width, r.height);
+			graphics.fillRectangle(getBounds().getLocation().x-16, getBounds()
+					.getLocation().y+10, r.width,r.height);
 		}
 			
 			
@@ -120,11 +134,16 @@ public class PortFigure extends Figure {
 				graphics.drawText(labelOfPort,new Point(getBounds().getLocation().x+8,getBounds()
 						.getLocation().y-3));
 			}
-			else
+			else if("out".equalsIgnoreCase(portType))
 			{
 				graphics.drawText(labelOfPort,new Point(getBounds().getLocation().x,getBounds()
 						.getLocation().y-3));
 			}
+	       else if("unused".equalsIgnoreCase(portType))
+			{
+				graphics.drawText(labelOfPort,new Point(getBounds().getLocation().x,getBounds()
+						.getLocation().y-2));
+			}	
 		}
 		
 		if ("lkp".equals(labelOfPort)){

@@ -9,7 +9,6 @@ import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
-import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.OutputConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
@@ -56,11 +55,12 @@ public class OutputFileFixedWidthConverter extends OutputConverter {
 		for (Link link : component.getTargetConnections()) {
 			TypeOutputFixedwidthInSocket outInSocket = new TypeOutputFixedwidthInSocket();
 			outInSocket.setId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
-			outInSocket.setFromSocketId(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal())
-					.getNameOfPort())
-					+ link.getLinkNumber());
-			outInSocket.setType(PortTypeConstant.getPortType(link.getTarget().getPort(link.getTargetTerminal())
-					.getNameOfPort()));
+			if (converterHelper.isMultipleLinkAllowed(link.getSource(), link.getSourceTerminal()))
+				outInSocket.setFromSocketId(link.getSource().getPort(link.getSourceTerminal()).getPortType()
+						+ link.getLinkNumber());
+			else
+				outInSocket.setFromSocketId(link.getSourceTerminal());
+			outInSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 			outInSocket.setSchema(getSchema());
 			outInSocket.getOtherAttributes();
 			outInSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
@@ -74,7 +74,7 @@ public class OutputFileFixedWidthConverter extends OutputConverter {
 		logger.debug("Generating data for {} for property {}", new Object[] { properties.get(Constants.PARAM_NAME),
 				PropertyNameConstants.SCHEMA.value() });
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
-		if (gridList != null && gridList.size()!=0) {
+		if (gridList != null && gridList.size() != 0) {
 			for (GridRow object : gridList)
 				typeBaseFields.add(converterHelper.getFixedWidthTargetData((FixedWidthGridRow) object));
 		}
