@@ -109,7 +109,6 @@ public class JoinMapGrid extends Dialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		System.out.println("JoinMapGrid: createDialogArea**************");
 		final Composite container = (Composite) super.createDialogArea(parent);
 		container.getShell().setText("Join Mapping");
 		container.setLayout(new GridLayout(6, false));
@@ -551,6 +550,7 @@ public class JoinMapGrid extends Dialog {
 				errorLabel.setText(Messages.EmptyNameNotification);
 				return false;
 			}
+			
 			propertyCounter++;
 
 		}
@@ -570,6 +570,7 @@ public class JoinMapGrid extends Dialog {
 				outputTableViewer.getTable().setSelection(propertyValuecount);
 				errorLabel.setVisible(true);
 				errorLabel.setText(Messages.EmptyValueNotification);
+				return false;
 			}else{
 				errorLabel.setVisible(false);
 			}
@@ -586,53 +587,16 @@ public class JoinMapGrid extends Dialog {
 			public String isValid(Object value) {
 				String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
 				String valueToValidate = String.valueOf(value).trim();
-				if (StringUtils.isEmpty(valueToValidate)) {
-					errorLabel.setText(errorMessage);
-					errorLabel.setVisible(true);
-					return ERROR;
-				}
 				for (FilterProperties temp : joinInputList) {
 					if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)&& temp.getPropertyname().equalsIgnoreCase(valueToValidate)) {
 						errorLabel.setText(Messages.RuntimePropertAlreadyExists);
 						errorLabel.setVisible(true);
 						okButton.setEnabled(false);
-						return ERROR;
+						return "ERROR";
 					} 
-					else{
+					else
 						errorLabel.setVisible(false);
 						okButton.setEnabled(true);
-					}
-				}
-				return null;
-			}
-		};
-		return propertyValidator;
-	}
-
-	// Creates CellValue Validator for table's cells
-	private ICellEditorValidator outputFieldEditorValidator(final TableViewer viewer, final String errorMessage, final List<LookupMapProperty> propertyList) {
-		ICellEditorValidator propertyValidator = new ICellEditorValidator() {
-			@Override
-			public String isValid(Object value) {
-				String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
-				String valueToValidate = String.valueOf(value).trim();
-				if (StringUtils.isEmpty(valueToValidate)) {
-					errorLabel.setText(errorMessage);
-					errorLabel.setVisible(true);
-					okButton.setEnabled(false);
-					return ERROR;
-				}else{okButton.setEnabled(true);}
-				for (LookupMapProperty temp : propertyList) {
-					if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)&& temp.getOutput_Field().equalsIgnoreCase(valueToValidate)) {
-						errorLabel.setText(Messages.RuntimePropertAlreadyExists);
-						errorLabel.setVisible(true);
-						okButton.setEnabled(false);
-						return ERROR;
-					} 
-					else{
-						errorLabel.setVisible(false);
-						okButton.setEnabled(true);
-					}
 				}
 				return null;
 			}
@@ -659,14 +623,14 @@ public class JoinMapGrid extends Dialog {
 					errorLabel.setText(errorMessage);
 					errorLabel.setVisible(true);
 					okButton.setEnabled(false);
-					return ERROR;
+					return "ERROR";
 				}else{okButton.setEnabled(true);}
 				for (LookupMapProperty temp : propertyList) {
 					if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)&& temp.getSource_Field().equalsIgnoreCase(valueToValidate)) {
 						errorLabel.setText(Messages.RuntimePropertAlreadyExists);
 						errorLabel.setVisible(true);
 						okButton.setEnabled(false);
-						return ERROR;
+						return "ERROR";
 					} 
 					else{
 						errorLabel.setVisible(false);
@@ -678,6 +642,37 @@ public class JoinMapGrid extends Dialog {
 		};
 		return propertyValidator;
 	}
+
+	// Creates CellValue Validator for table's cells
+		private ICellEditorValidator outputFieldEditorValidator(final TableViewer viewer, final String errorMessage, final List<LookupMapProperty> propertyList) {
+			ICellEditorValidator propertyValidator = new ICellEditorValidator() {
+				@Override
+				public String isValid(Object value) {
+					String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
+					String valueToValidate = String.valueOf(value).trim();
+					if (StringUtils.isEmpty(valueToValidate)) {
+						errorLabel.setText(errorMessage);
+						errorLabel.setVisible(true);
+						okButton.setEnabled(false);
+						return "ERROR";
+					}else{okButton.setEnabled(true);}
+					for (LookupMapProperty temp : propertyList) {
+						if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)&& temp.getOutput_Field().equalsIgnoreCase(valueToValidate)) {
+							errorLabel.setText(Messages.RuntimePropertAlreadyExists);
+							errorLabel.setVisible(true);
+							okButton.setEnabled(false);
+							return "ERROR";
+						} 
+						else{
+							errorLabel.setVisible(false);
+							okButton.setEnabled(true);
+						}
+					}
+					return null;
+				}
+			};
+			return propertyValidator;
+		}
 	private void addRowToTable(TableViewer viewer, List<FilterProperties> joinInputList){
 		FilterProperties join = new FilterProperties();
 		if(joinInputList!=null && joinInputList.size() != 0){
@@ -757,7 +752,6 @@ public class JoinMapGrid extends Dialog {
 								}
 							}
 						}
-						
 					}
 				}
 			} 
