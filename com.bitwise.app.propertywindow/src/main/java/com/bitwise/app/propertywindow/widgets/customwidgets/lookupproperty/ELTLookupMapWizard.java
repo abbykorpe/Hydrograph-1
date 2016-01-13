@@ -154,7 +154,7 @@ public class ELTLookupMapWizard extends Dialog {
 		});
 		eltswtWidgets.createTableColumns(outputTableViewer.getTable(), COLUMN_NAME, 196);
 	    CellEditor[] editors = eltswtWidgets.createCellEditorList(outputTableViewer.getTable(),2);
-	    	//editors[0].setValidator(valueEditorValidation(joinOutputList,Messages.EmptyNameNotification,outputTableViewer));
+	    	editors[0].setValidator(sourceEditorValidator(outputTableViewer, Messages.EmptyNameNotification, joinOutputList));
 	    	editors[1].setValidator(createValueEditorValidator(outputTableViewer));
 	    
 	    outputTableViewer.setColumnProperties(COLUMN_NAME);
@@ -408,6 +408,7 @@ public class ELTLookupMapWizard extends Dialog {
 					outputTableViewer.getTable().setSelection(propertyValuecount);
 					propertyError.setVisible(true);
 					propertyError.setText(Messages.EmptyValueNotification);
+					return false;
 				}else{
 					propertyError.setVisible(false);
 					okButton.setEnabled(true);
@@ -459,9 +460,10 @@ public class ELTLookupMapWizard extends Dialog {
 					propertyError.setVisible(true);
 					propertyError.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
 					okButton.setEnabled(false);
+					return "ERROR";
 				}else{
 					propertyError.setVisible(false);
-					//okButton.setEnabled(true);
+					okButton.setEnabled(true);
 				}
 				
 				for(FilterProperties property :joinInputList){
@@ -469,9 +471,10 @@ public class ELTLookupMapWizard extends Dialog {
 						propertyError.setVisible(true);
 						propertyError.setText(Messages.RuntimePropertAlreadyExists);
 						okButton.setEnabled(false);
+						return "ERROR";
 					}else{
 						propertyError.setVisible(false);
-						//okButton.setEnabled(true);
+						okButton.setEnabled(true);
 					}
 				}
 				
@@ -521,6 +524,36 @@ public class ELTLookupMapWizard extends Dialog {
 		return new Point(700, 719);
 	}
 	
+	// Creates CellNAme Validator for table's cells
+		private ICellEditorValidator sourceEditorValidator(final TableViewer viewer, final String errorMessage, final List<LookupMapProperty> propertyList) {
+			ICellEditorValidator propertyValidator = new ICellEditorValidator() {
+				@Override
+				public String isValid(Object value) {
+					String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
+					String valueToValidate = String.valueOf(value).trim();
+					if (StringUtils.isEmpty(valueToValidate)) {
+						propertyError.setText(errorMessage);
+						propertyError.setVisible(true);
+						okButton.setEnabled(false);
+						return "ERROR";
+					}else{okButton.setEnabled(true);}
+					for (LookupMapProperty temp : propertyList) {
+						if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)&& temp.getSource_Field().equalsIgnoreCase(valueToValidate)) {
+							propertyError.setText(Messages.RuntimePropertAlreadyExists);
+							propertyError.setVisible(true);
+							okButton.setEnabled(false);
+							return "ERROR";
+						} 
+						else{
+							propertyError.setVisible(false);
+							okButton.setEnabled(true);
+						}
+					}
+					return null;
+				}
+			};
+			return propertyValidator;
+		}
 	// Creates CellValue Validator for table's cells
 	private ICellEditorValidator createValueEditorValidator(final TableViewer viewer) {
 		final List duplicate = new ArrayList<>();
@@ -534,7 +567,8 @@ public class ELTLookupMapWizard extends Dialog {
 						duplicate.add(outputField);
 					}else{
 						propertyError.setText(Messages.RuntimePropertAlreadyExists);
-						propertyError.setVisible(true);							
+						propertyError.setVisible(true);	
+						return "ERROR";
 					}
 					
 				}
