@@ -26,7 +26,7 @@ public enum ContributionItemManager {
 		private void changeToolControl(Control[] controls, boolean undoStatus,
 				boolean redoStatus) {
 			for (Control control : controls) {
-				if (control instanceof ToolBar) {
+				if (control instanceof ToolBar && (!control.isDisposed())) {
 					if (((ToolBar) control).getItems().length > 5) {
 						toolItems = ((ToolBar) control).getItems();
 						toolItems[4].setEnabled(undoStatus);
@@ -77,7 +77,7 @@ public enum ContributionItemManager {
 		private void changeToolControl(Control[] controls, boolean undoStatus,
 				boolean redoStatus) {
 			for (Control control : controls) {
-				if (control instanceof ToolBar) {
+				if (control instanceof ToolBar && (!control.isDisposed())) {
 					if (((ToolBar) control).getItemCount() > 5) {
 						ToolItem[] toolItems = ((ToolBar) control).getItems();
 						toolItems[4].setEnabled(undoStatus);
@@ -194,7 +194,7 @@ public enum ContributionItemManager {
 
 	private void setToolItemStatus(int toolItemNumber, boolean status) {
 		for (Control control : controls) {
-			if (control instanceof ToolBar) {
+			if (control instanceof ToolBar && (!control.isDisposed())) {
 				if (((ToolBar) control).getItems().length > 5) {
 					toolItems = ((ToolBar) control).getItems();
 					toolItems[toolItemNumber].setEnabled(status);

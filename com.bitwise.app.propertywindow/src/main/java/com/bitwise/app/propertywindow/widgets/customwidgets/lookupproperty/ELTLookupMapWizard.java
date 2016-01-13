@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.CellEditor;
@@ -164,15 +165,19 @@ public class ELTLookupMapWizard extends Dialog {
 	    outputTableViewer.getTable().addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				String[] data = (((TableItem)event.item).getText()).split(Pattern.quote("."));
-				if(data != null && data.length == 2){
-					FilterProperties filter =new FilterProperties();
-					filter.setPropertyname(data[1]);
-					if(joinInputList1.indexOf(filter) >= 0){
-						inputTableViewer[0].getTable().setSelection(joinInputList1.indexOf(filter));
+				if(((TableItem)event.item) != null){
+					if(StringUtils.isNotBlank(((TableItem)event.item).getText())){	
+					String[] data = (((TableItem)event.item).getText()).split(Pattern.quote("."));
+					if(data != null && data.length == 2){
+						FilterProperties filter =new FilterProperties();
+						filter.setPropertyname(data[1]);
+						if(joinInputList1.indexOf(filter) >= 0){
+							inputTableViewer[0].getTable().setSelection(joinInputList1.indexOf(filter));
+						}
+						else if(joinInputList2.indexOf(filter) >= 0){
+							inputTableViewer[1].getTable().setSelection(joinInputList2.indexOf(filter));
+						}
 					}
-					else if(joinInputList2.indexOf(filter) >= 0){
-						inputTableViewer[1].getTable().setSelection(joinInputList2.indexOf(filter));
 					}
 				}
 			}

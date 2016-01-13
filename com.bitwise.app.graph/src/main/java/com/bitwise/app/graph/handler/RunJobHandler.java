@@ -9,15 +9,14 @@ import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.SWT;
+
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
@@ -25,8 +24,9 @@ import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
-import org.eclipse.ui.console.MessageConsoleStream;
-import org.eclipse.ui.handlers.HandlerUtil;
+
+
+
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
@@ -35,8 +35,8 @@ import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.graph.Messages;
 import com.bitwise.app.joblogger.JobLogger;
 import com.bitwise.app.parametergrid.dialog.ParameterGridDialog;
+import com.bitwise.app.propertywindow.runconfig.RunConfigDialog;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
-import com.bitwise.app.propertywindow.runconfig.*;
 
 /**
  * Handler use to run the job using gradle command.
@@ -74,6 +74,10 @@ public class RunJobHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) {
 		
 		setBaseEnabled(false);
+		DefaultGEFCanvas gefCanvas = getComponentCanvas();
+		gefCanvas.disableRunningJobResource();
+		
+		
 		
 		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 			try{
@@ -81,6 +85,7 @@ public class RunJobHandler extends AbstractHandler {
 			}catch(Exception e){
 				logger.debug("Unable to save graph ", e);
 				setBaseEnabled(true);
+				gefCanvas.enableRunningJobResource();
 			}
 			
 		}
@@ -89,6 +94,7 @@ public class RunJobHandler extends AbstractHandler {
 		runConfigDialog.open();
 		if(!runConfigDialog.proceedToRunGraph()){
 			setBaseEnabled(true);
+			gefCanvas.enableRunningJobResource();
 			return null;
 		}
 		
@@ -100,6 +106,7 @@ public class RunJobHandler extends AbstractHandler {
 		if(parameterGrid.canRunGraph() == false){
 			logger.debug("Not running graph");
 			setBaseEnabled(true);
+			gefCanvas.enableRunningJobResource();
 			return null;
 		}
 		logger.debug("property File :"+parameterGrid.getParameterFile());
@@ -152,6 +159,7 @@ public class RunJobHandler extends AbstractHandler {
 						}
 						
 					}).start();
+					gefCanvas.enableRunningJobResource();
 				} else
 					WidgetUtility.errorMessage("Please open a graph to run.");
 			
@@ -161,7 +169,8 @@ public class RunJobHandler extends AbstractHandler {
 			logger.error("Error in Run Job",ex);
 		}
 
-		//setBaseEnabled(true);
+		setBaseEnabled(true);
+		gefCanvas.enableRunningJobResource();
 		return null;
 	}
 

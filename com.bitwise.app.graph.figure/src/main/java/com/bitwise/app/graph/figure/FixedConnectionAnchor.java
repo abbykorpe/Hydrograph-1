@@ -63,7 +63,7 @@ public class FixedConnectionAnchor extends AbstractConnectionAnchor {
 			 xLocation=getOwner().getBounds().getTopRight().x-1;
 			 yLocation=getOwner().getBounds().getTopRight().y+4;
 		}else if(("unused").equalsIgnoreCase(this.type)){
-			 xLocation=getOwner().getBounds().getBottomRight().x-4;
+			 xLocation=getOwner().getBounds().getBottomRight().x-20;
 			 yLocation=getOwner().getBounds().getBottomRight().y-2;
 		}
 		

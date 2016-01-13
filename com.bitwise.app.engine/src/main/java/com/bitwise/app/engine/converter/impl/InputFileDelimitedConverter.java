@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
-import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.InputConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
@@ -58,25 +57,22 @@ public class InputFileDelimitedConverter extends InputConverter {
 		List<TypeInputOutSocket> outSockets = new ArrayList<>();
 		for (Link link : component.getSourceConnections()) {
 			TypeInputDelimitedOutSocket outSocket = new TypeInputDelimitedOutSocket();
-			outSocket.setId(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal())
-					.getNameOfPort())
-					+ link.getLinkNumber());
-			outSocket.setType(PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal())
-					.getNameOfPort()));
+			outSocket.setId(link.getSourceTerminal());
+			outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
 			outSocket.setSchema(getSchema());
 			outSocket.getOtherAttributes();
 			outSockets.add(outSocket);
 		}
 		return outSockets;
 	}
- 
+
 	@Override
 	protected List<TypeBaseField> getFieldOrRecord(List<GridRow> gridList) {
 		logger.debug("Generating data for {} for property {}", new Object[] { properties.get(Constants.PARAM_NAME),
 				PropertyNameConstants.SCHEMA.value() });
-		
+
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
-		if (gridList != null && gridList.size()!=0) {
+		if (gridList != null && gridList.size() != 0) {
 			for (GridRow object : gridList) {
 				typeBaseFields.add(converterHelper.getSchemaGridTargetData(object));
 			}

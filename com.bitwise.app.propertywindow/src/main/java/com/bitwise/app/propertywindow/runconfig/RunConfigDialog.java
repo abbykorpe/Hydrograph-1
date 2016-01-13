@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
@@ -20,7 +18,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -43,12 +40,10 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.bitwise.app.common.util.SWTResourceManager;
-import com.bitwise.app.propertywindow.messages.Messages;
-import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
-
 
 public class RunConfigDialog extends Dialog {
-	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
+	private final FormToolkit formToolkit = new FormToolkit(
+			Display.getDefault());
 	private Text textEdgeNode;
 	private Text textUser;
 	private Text textPassword;
@@ -58,45 +53,53 @@ public class RunConfigDialog extends Dialog {
 	private Text textParamFiles;
 
 	private boolean runGraph;
-	
+
 	private String password;
 
 	private Composite compositeServerDetails, compositePathConfig;
-	private Button btnLocalMode, btnRemoteMode;
-	
+	private Button btnLocalMode, btnRemoteMode, okButton;
+
 	private Properties buildProps;
-	
+
 	private HashMap<String, Text> textBoxes;
-	
-	private final String LOCAL_MODE="local";
-	private final String REMOTE_MODE="remote";
-	private final String HOST="host";
-	private final String USER_NAME="userName";
-	private final String RUN_UTILITY="runUtility";
-	private final String JOB_XML="jobXML";
-	private final String LIB_PATH="libs";
-	private final String PARAM_FILE="paramFile";
+
+	private final String LOCAL_MODE = "local";
+	private final String REMOTE_MODE = "remote";
+	private final String HOST = "host";
+	private final String USER_NAME = "userName";
+
+	private final String RUN_UTILITY = "runUtility";
+	private final String DEFAULT_RUN_UTILITY = "Default runUtility path";
+	private final String JOB_XML = "jobXML";
+	private final String DEFAULT_JOB_XML = "Default jobXML path";
+	private final String LIB_PATH = "libs";
+	private final String DEFAULT_LIB_PATH = "Default libs path";
+	private final String PARAM_FILE = "paramFile";
+	private final String DEFAULT_PARAM_FILE = "Default paramFile path";
+
 	private Composite container;
 
 	/**
 	 * Create the dialog.
+	 * 
 	 * @param parentShell
 	 */
 	public RunConfigDialog(Shell parentShell) {
 		super(parentShell);
 		this.runGraph = false;
 		buildProps = new Properties();
-		textBoxes= new HashMap<>();
-		
+		textBoxes = new HashMap<>();
+
 	}
 
 	/**
 	 * Create contents of the dialog.
+	 * 
 	 * @param parent
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		
+
 		container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(2, false));
 
@@ -105,7 +108,8 @@ public class RunConfigDialog extends Dialog {
 		new Label(container, SWT.NONE);
 
 		Composite compositeRunMode = new Composite(container, SWT.BORDER);
-		GridData gd_compositeRunMode = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData gd_compositeRunMode = new GridData(SWT.LEFT, SWT.CENTER,
+				false, false, 1, 1);
 		gd_compositeRunMode.heightHint = 80;
 		gd_compositeRunMode.widthHint = 351;
 		compositeRunMode.setLayoutData(gd_compositeRunMode);
@@ -127,7 +131,6 @@ public class RunConfigDialog extends Dialog {
 
 		btnLocalMode.addSelectionListener(selectionListener);
 
-
 		btnRemoteMode = new Button(compositeRunMode, SWT.RADIO);
 		btnRemoteMode.setBounds(109, 43, 76, 16);
 		formToolkit.adapt(btnRemoteMode, true, true);
@@ -137,21 +140,21 @@ public class RunConfigDialog extends Dialog {
 		btnRemoteMode.addSelectionListener(selectionListener);
 
 		compositeServerDetails = new Composite(container, SWT.BORDER);
-		GridData gd_compositeServerDetails = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData gd_compositeServerDetails = new GridData(SWT.LEFT, SWT.CENTER,
+				false, false, 1, 1);
 		gd_compositeServerDetails.widthHint = 350;
 		gd_compositeServerDetails.heightHint = 162;
 		compositeServerDetails.setLayoutData(gd_compositeServerDetails);
 		formToolkit.adapt(compositeServerDetails);
 		formToolkit.paintBordersFor(compositeServerDetails);
 
-		
-		
 		Label lblServerDetails = new Label(compositeServerDetails, SWT.NONE);
-		
-		FontDescriptor boldDescriptor = FontDescriptor.createFrom(lblServerDetails.getFont()).setStyle(SWT.BOLD);
-		Font boldFont = boldDescriptor.createFont(lblServerDetails.getDisplay());
-		lblServerDetails.setFont( boldFont );
-		
+
+		FontDescriptor boldDescriptor = FontDescriptor.createFrom(
+				lblServerDetails.getFont()).setStyle(SWT.BOLD);
+		Font boldFont = boldDescriptor
+				.createFont(lblServerDetails.getDisplay());
+		lblServerDetails.setFont(boldFont);
 
 		lblServerDetails.setFont(boldFont);
 		lblServerDetails.setBounds(24, 10, 84, 15);
@@ -175,28 +178,35 @@ public class RunConfigDialog extends Dialog {
 
 		textEdgeNode = new Text(compositeServerDetails, SWT.BORDER);
 		textEdgeNode.setBounds(110, 31, 206, 21);
+		EmptyTextListener textEdgeNodeListener = new EmptyTextListener();
+		textEdgeNode.addModifyListener(textEdgeNodeListener);
 		formToolkit.adapt(textEdgeNode, true, true);
 		textBoxes.put("host", textEdgeNode);
-		
 
 		textUser = new Text(compositeServerDetails, SWT.BORDER);
 		textUser.setBounds(110, 73, 206, 21);
+		EmptyTextListener textUserListener = new EmptyTextListener();
+		textUser.addModifyListener(textUserListener);
 		formToolkit.adapt(textUser, true, true);
 		textBoxes.put("userName", textUser);
 
-		textPassword = new Text(compositeServerDetails, SWT.PASSWORD|SWT.BORDER);
+		textPassword = new Text(compositeServerDetails, SWT.PASSWORD
+				| SWT.BORDER);
 		textPassword.setBounds(110, 116, 206, 21);
+		EmptyTextListener textPasswordListener = new EmptyTextListener();
+		textPassword.addModifyListener(textPasswordListener);
 		formToolkit.adapt(textPassword, true, true);
 		textBoxes.put("password", textPassword);
-		
+
 		compositeServerDetails.setVisible(false);
-		
+
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 
 		compositePathConfig = new Composite(container, SWT.BORDER);
-		GridData gd_compositePathConfig = new GridData(SWT.CENTER, SWT.BOTTOM, false, false, 1, 1);
+		GridData gd_compositePathConfig = new GridData(SWT.CENTER, SWT.BOTTOM,
+				false, false, 1, 1);
 		gd_compositePathConfig.heightHint = 256;
 		gd_compositePathConfig.widthHint = 349;
 		compositePathConfig.setLayoutData(gd_compositePathConfig);
@@ -245,107 +255,93 @@ public class RunConfigDialog extends Dialog {
 
 		Label lblPathConfiguration = new Label(compositePathConfig, SWT.NONE);
 		lblPathConfiguration.setText("Path Configuration");
-		lblPathConfiguration.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
+		lblPathConfiguration.setFont(SWTResourceManager.getFont("Segoe UI", 9,
+				SWT.BOLD));
 		lblPathConfiguration.setBounds(24, 22, 113, 15);
 		formToolkit.adapt(lblPathConfiguration, true, true);
-		
+
 		compositePathConfig.setVisible(false);
 
 		loadbuildProperties();
-	
+
 		return container;
 	}
-	
-	private void loadbuildProperties(){
+
+	private void loadbuildProperties() {
 		String buildPropFilePath = buildPropFilePath();
-		IPath bldPropPath =new Path(buildPropFilePath);
-		IFile iFile=ResourcesPlugin.getWorkspace().getRoot().getFile(bldPropPath);
+		IPath bldPropPath = new Path(buildPropFilePath);
+		IFile iFile = ResourcesPlugin.getWorkspace().getRoot()
+				.getFile(bldPropPath);
 		try {
 			InputStream reader = iFile.getContents();
 			buildProps.load(reader);
-			
+
 		} catch (CoreException | IOException e) {
-			MessageDialog.openError(new Shell(), "Error", "Exception occured while loading build properties from file -\n"+e.getMessage());
+			MessageDialog.openError(new Shell(), "Error",
+					"Exception occured while loading build properties from file -\n"
+							+ e.getMessage());
 		}
-		
+
 		Enumeration<?> e = buildProps.propertyNames();
 		populateTextBoxes(e);
-		
-		validateLoadedTextBoxes();
-	    
-		
-	}
-	private void populateTextBoxes(Enumeration e){
-		while (e.hasMoreElements()) {
-		      String key = (String) e.nextElement();
-		      if(key.equals(LOCAL_MODE) && buildProps.getProperty(key).equals("true")){
-		    	  btnLocalMode.setSelection(true);
-		    	  btnRemoteMode.setSelection(false);
-		    	  
-		      }else if(key.equals(REMOTE_MODE) && buildProps.getProperty(key).equals("true")){
-		    	  btnRemoteMode.setSelection(true);
-		    	  btnLocalMode.setSelection(false);
-		    	  container.getShell().setSize(380,730);
-		    	  compositeServerDetails.setVisible(true);
-		    	  compositePathConfig.setVisible(true);
-		      }else if(!(key.equals(LOCAL_MODE) || key.equals(REMOTE_MODE))){
-		    	  textBoxes.get(key).setText(buildProps.getProperty(key)); 
-		      }
-		    }
-	}
-	
-	private void validateLoadedTextBoxes(){
-		Iterator it = textBoxes.entrySet().iterator();
-		ControlDecoration errorDecorator;
-	    while (it.hasNext()) {
-	        Map.Entry pair = (Map.Entry)it.next();
-	        //System.out.println(pair.getKey() + " = " + pair.getValue());
-	        //errorDecorator = WidgetUtility.addDecorator((Text)pair.getValue(),Messages.EMPTY_FIELD);
-	        //Generate 'Modify' event.
-	        	
-	    }
-	}
-	
 
-	private String buildPropFilePath(){
+	}
+
+	private String buildPropFilePath() {
 		IWorkbenchPage page = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage();
-		IFileEditorInput input=(IFileEditorInput) page.getActiveEditor().getEditorInput();
+		IFileEditorInput input = (IFileEditorInput) page.getActiveEditor()
+				.getEditorInput();
 
 		IFile file = input.getFile();
 		IProject activeProject = file.getProject();
 		String activeProjectName = activeProject.getName();
-		return "/"+activeProjectName+ "/build.properties";
-	}
-
-	public String getClusterPassword(){
-		return this.password;
+		return "/" + activeProjectName + "/build.properties";
 	}
 	
+	private void populateTextBoxes(Enumeration e) {
+		while (e.hasMoreElements()) {
+			String key = (String) e.nextElement();
+			if (key.equals(LOCAL_MODE)
+					&& buildProps.getProperty(key).equals("true")) {
+				btnLocalMode.setSelection(true);
+				btnRemoteMode.setSelection(false);
+
+			} else if (key.equals(REMOTE_MODE)
+					&& buildProps.getProperty(key).equals("true")) {
+				btnRemoteMode.setSelection(true);
+				btnLocalMode.setSelection(false);
+				container.getShell().setSize(380, 730);
+				compositeServerDetails.setVisible(true);
+				compositePathConfig.setVisible(true);
+			} else if (!(key.equals(LOCAL_MODE) || key.equals(REMOTE_MODE))) {
+				textBoxes.get(key).setText(buildProps.getProperty(key));
+			}
+		}
+	}
+
+	
+
+	public String getClusterPassword() {
+		return this.password;
+	}
+
 	/**
 	 * Create contents of the button bar.
+	 * 
 	 * @param parent
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		Button okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
+		okButton = createButton(parent, IDialogConstants.OK_ID,
+				IDialogConstants.OK_LABEL, true);
 		okButton.setEnabled(true);
-		
-		EmptyTextListener emptyTextListener = new EmptyTextListener(okButton);
-		textEdgeNode.addModifyListener(emptyTextListener);
-		textUser.addModifyListener(emptyTextListener);
-		textPassword.addModifyListener(emptyTextListener);
-		textRunUtility.addModifyListener(emptyTextListener);
-		textJobXML.addModifyListener(emptyTextListener);
-		textLibs.addModifyListener(emptyTextListener);
-		textParamFiles.addModifyListener(emptyTextListener);
-		
+
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
+
 	}
-	
-	
+
 	@Override
 	protected void okPressed() {
 
@@ -353,34 +349,66 @@ public class RunConfigDialog extends Dialog {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
 
-			buildProps.put(LOCAL_MODE, String.valueOf(btnLocalMode.getSelection()));
-			buildProps.put(REMOTE_MODE, String.valueOf(btnRemoteMode.getSelection()));
+			buildProps.put(LOCAL_MODE,
+					String.valueOf(btnLocalMode.getSelection()));
+			buildProps.put(REMOTE_MODE,
+					String.valueOf(btnRemoteMode.getSelection()));
 			buildProps.put(HOST, textEdgeNode.getText());
 			buildProps.put(USER_NAME, textUser.getText());
-			buildProps.put(RUN_UTILITY, textRunUtility.getText());
-			buildProps.put(JOB_XML, textJobXML.getText());
-			buildProps.put(LIB_PATH, textLibs.getText());
-			buildProps.put(PARAM_FILE, textParamFiles.getText());
+
+			buildProps.put(RUN_UTILITY, (!StringUtils.isEmpty(textRunUtility
+					.getText()) ? textRunUtility.getText()
+					: DEFAULT_RUN_UTILITY));
+			buildProps.put(
+					JOB_XML,
+					(!StringUtils.isEmpty(textJobXML.getText()) ? textJobXML
+							.getText() : DEFAULT_JOB_XML));
+			buildProps.put(
+					LIB_PATH,
+					(!StringUtils.isEmpty(textLibs.getText()) ? textLibs
+							.getText() : DEFAULT_LIB_PATH));
+			buildProps
+					.put(PARAM_FILE, (!StringUtils.isEmpty(textParamFiles
+							.getText()) ? textParamFiles.getText()
+							: DEFAULT_PARAM_FILE));
 
 			buildProps.store(out, null);
 
 			String buildPropFilePath = buildPropFilePath();
 
-			IPath bldPropPath =new Path(buildPropFilePath);
-			iFile=ResourcesPlugin.getWorkspace().getRoot().getFile(bldPropPath);	
-			iFile.setContents(new ByteArrayInputStream(out.toByteArray()), true, false, null);
+			IPath bldPropPath = new Path(buildPropFilePath);
+			iFile = ResourcesPlugin.getWorkspace().getRoot()
+					.getFile(bldPropPath);
+			iFile.setContents(new ByteArrayInputStream(out.toByteArray()),
+					true, false, null);
 
-		} catch (IOException |CoreException  e) {
-			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving run configuration file -\n"+e.getMessage());
+		} catch (IOException | CoreException e) {
+			MessageDialog.openError(new Shell(), "Error",
+					"Exception occured while saving run configuration file -\n"
+							+ e.getMessage());
 		}
 		this.password = textPassword.getText();
-		this.runGraph = true;
-		super.okPressed();
+
+		// Check build properties in case of 'Remote' mode.
+		if (btnRemoteMode.getSelection()) {
+			try {
+				checkBuildProperties();
+				this.runGraph = true;
+				super.okPressed();
+			} catch (IllegalArgumentException e) {
+				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
+						e.getMessage());
+				this.runGraph = false;
+			}
+		} else{
+			this.runGraph = true;
+			super.okPressed();
+		}
 	}
 
 	@Override
 	protected void cancelPressed() {
-		runGraph=false;
+		runGraph = false;
 		super.cancelPressed();
 	}
 
@@ -392,28 +420,47 @@ public class RunConfigDialog extends Dialog {
 		return new Point(380, 171);
 	}
 
-	public boolean proceedToRunGraph(){
+	private void checkBuildProperties() {
+		if (validation().hasErrors())
+			throw new IllegalArgumentException(validation().errorMessage());
+	}
+
+	private Notification validation() {
+		Notification note = new Notification();
+
+		if (StringUtils.isEmpty(textEdgeNode.getText()))
+			note.addError("Edge Node value not specified");
+
+		if (StringUtils.isEmpty(textUser.getText()))
+			note.addError("User value not specified");
+
+		if (StringUtils.isEmpty(textPassword.getText()))
+			note.addError("Password not specified");
+
+		return note;
+	}
+
+	public boolean proceedToRunGraph() {
 		return runGraph;
 	}
-	
-	SelectionListener selectionListener = new SelectionAdapter () {
+
+	SelectionListener selectionListener = new SelectionAdapter() {
 
 		@Override
 		public void widgetSelected(SelectionEvent event) {
 
 			Button button = ((Button) event.widget);
 
-			if(button.getText().equals("Local")){
-				container.getShell().setSize(380,171);
+			if (button.getText().equals("Local")) {
+				container.getShell().setSize(380, 171);
 				compositeServerDetails.setVisible(false);
 				compositePathConfig.setVisible(false);
 
-			}else if(button.getText().equals("Remote")){
-				container.getShell().setSize(380,671);
+			} else if (button.getText().equals("Remote")) {
+				container.getShell().setSize(380, 671);
 				compositeServerDetails.setVisible(true);
 				compositePathConfig.setVisible(true);
 			}
-
 
 		};
 	};
