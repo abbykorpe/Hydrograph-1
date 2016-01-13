@@ -233,20 +233,24 @@ public class JoinMapGrid extends Dialog {
 		outputTableViewer.getTable().addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				String[] data = (((TableItem)event.item).getText()).split(Pattern.quote("."));
-				if(data != null && data.length == 2){
-					FilterProperties filter =new FilterProperties();
-					filter.setPropertyname(data[1]);
-					for(int i=0;i<inputPortValue;i++){
-						if(joinInputSchemaList != null){
-							if(joinInputSchemaList.get(i).contains(filter)){
-								ExpandItem item = expandBar.getItem(i);
-								item.setExpanded(true);
-								inputTableViewer[i].getTable().setSelection(joinInputSchemaList.get(i).indexOf(filter));
+			if(((TableItem)event.item) != null){
+				if(StringUtils.isNotBlank(((TableItem)event.item).getText())){
+					String[] data = (((TableItem)event.item).getText()).split(Pattern.quote("."));
+					if(data != null && data.length == 2){
+						FilterProperties filter =new FilterProperties();
+						filter.setPropertyname(data[1]);
+						for(int i=0;i<inputPortValue;i++){
+							if(joinInputSchemaList != null){
+								if(joinInputSchemaList.get(i).contains(filter)){
+									ExpandItem item = expandBar.getItem(i);
+									item.setExpanded(true);
+									inputTableViewer[i].getTable().setSelection(joinInputSchemaList.get(i).indexOf(filter));
+								}
 							}
 						}
 					}
 				}
+					}
 			}
 		});
 		errorLabel = new Label(composite_1, SWT.None);
