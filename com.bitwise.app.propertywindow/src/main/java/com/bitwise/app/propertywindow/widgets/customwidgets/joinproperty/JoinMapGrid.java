@@ -390,12 +390,16 @@ public class JoinMapGrid extends Dialog {
 		bt.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				int index = 0;
 				IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 					Object selectedObject = iterator.next();
+					index = joinInputList.indexOf(selectedObject);
 					viewer.remove(selectedObject);
 					joinInputList.remove(selectedObject);
 				}
+				viewer.refresh();
+				viewer.editElement(viewer.getElementAt(index-1), 0);
 			}
 		});
 	}
@@ -414,12 +418,16 @@ public class JoinMapGrid extends Dialog {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
+				int index=0;
 				IStructuredSelection selection = (IStructuredSelection) outputTableViewer.getSelection();
 				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 					Object selectedObject = iterator.next();
+					index = joinOutputList.indexOf(selectedObject);
 					outputTableViewer.remove(selectedObject);
 					joinOutputList.remove(selectedObject);
 				}
+				outputTableViewer.refresh();
+				outputTableViewer.editElement(outputTableViewer.getElementAt(index-1), 0);
 			}
 			@Override
 			public void mouseDown(MouseEvent e) {}

@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -97,7 +98,7 @@ public class ELTLookupMapWizard extends Dialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		Composite container = (Composite) super.createDialogArea(parent);
+		final Composite container = (Composite) super.createDialogArea(parent);
 		container.getShell().setText("Lookup Mapping");
 		container.setLayout(new GridLayout(4, false));
 		new Label(container, SWT.NONE);
@@ -260,12 +261,16 @@ public class ELTLookupMapWizard extends Dialog {
 			bt.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
+					int index = 0;
 					IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 					for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 						Object selectedObject = iterator.next();
+						index = joinInputList.indexOf(selectedObject);
 						viewer.remove(selectedObject);
 						joinInputList.remove(selectedObject);
 					}
+					viewer.refresh();
+					viewer.editElement(viewer.getElementAt(index-1), 0);
 				}
 			});
 		}
@@ -285,12 +290,16 @@ public class ELTLookupMapWizard extends Dialog {
 			
 			@Override
 			public void mouseUp(MouseEvent e) {
+				int index = 0;
 				IStructuredSelection selection = (IStructuredSelection) outputTableViewer.getSelection();
 				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 					Object selectedObject = iterator.next();
+					index = joinOutputList.indexOf(selectedObject);
 					outputTableViewer.remove(selectedObject);
 					joinOutputList.remove(selectedObject);
 				}
+				outputTableViewer.refresh();
+				outputTableViewer.editElement(outputTableViewer.getElementAt(index-1), 0);
 			}
 			@Override
 			public void mouseDown(MouseEvent e) {}
