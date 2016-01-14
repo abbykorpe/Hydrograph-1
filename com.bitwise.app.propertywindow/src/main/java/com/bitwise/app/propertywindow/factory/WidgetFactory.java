@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.propertywindow.fixedwidthschema.ELTFixedWidget;
+import com.bitwise.app.propertywindow.fixedwidthschema.ELTJoinFixedWidthSchemaWidget;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -46,7 +47,7 @@ public class WidgetFactory {
 	public enum Widgets{
 		SCHEMA_WIDGET(ELTGenericSchemaGridWidget.class),
 		FIXED_WIDGET(ELTFixedWidget.class),
-
+		JOIN_FIXED_WIDTH_SCHEMA_WIDGET(ELTJoinFixedWidthSchemaWidget.class),
 		FILE_PATH_WIDGET(ELTFilePathWidget.class),
 		COMPONENT_NAME_WIDGET(ELTComponentNameWidget.class),
 		

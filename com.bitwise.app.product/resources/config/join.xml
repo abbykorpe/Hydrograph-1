@@ -63,7 +63,7 @@
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
 			
-		<tns:property dataType="string" name="schema" renderer="FIXED_WIDGET" type="USER"
+		<tns:property dataType="string" name="schema" renderer="JOIN_FIXED_WIDTH_SCHEMA_WIDGET" type="USER"
 			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="REQUIRED">
 			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>

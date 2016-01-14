@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;simpleType name="property_renderer">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *     &lt;enumeration value="JOIN_FIXED_WIDTH_SCHEMA_WIDGET"/>
  *     &lt;enumeration value="SCHEMA_WIDGET"/>
  *     &lt;enumeration value="FIELD_SEQUENCE_WIDGET"/>
  *     &lt;enumeration value="FIXED_WIDGET"/>
@@ -55,6 +56,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum PropertyRenderer {
 
+	JOIN_FIXED_WIDTH_SCHEMA_WIDGET,
     SCHEMA_WIDGET,
     FIELD_SEQUENCE_WIDGET,
     FIXED_WIDGET,
