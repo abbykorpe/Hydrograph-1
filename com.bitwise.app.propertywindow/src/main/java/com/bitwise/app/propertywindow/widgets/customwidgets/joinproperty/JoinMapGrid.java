@@ -399,6 +399,7 @@ public class JoinMapGrid extends Dialog {
 					joinInputList.remove(selectedObject);
 				}
 				viewer.refresh();
+				if(index !=0)
 				viewer.editElement(viewer.getElementAt(index-1), 0);
 			}
 		});
@@ -427,6 +428,7 @@ public class JoinMapGrid extends Dialog {
 					joinOutputList.remove(selectedObject);
 				}
 				outputTableViewer.refresh();
+				if(index !=0)
 				outputTableViewer.editElement(outputTableViewer.getElementAt(index-1), 0);
 			}
 			@Override
