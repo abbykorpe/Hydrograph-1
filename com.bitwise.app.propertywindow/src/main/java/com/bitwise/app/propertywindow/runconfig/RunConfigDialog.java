@@ -69,13 +69,9 @@ public class RunConfigDialog extends Dialog {
 	private final String USER_NAME = "userName";
 
 	private final String RUN_UTILITY = "runUtility";
-	private final String DEFAULT_RUN_UTILITY = "Default runUtility path";
 	private final String JOB_XML = "jobXML";
-	private final String DEFAULT_JOB_XML = "Default jobXML path";
 	private final String LIB_PATH = "libs";
-	private final String DEFAULT_LIB_PATH = "Default libs path";
 	private final String PARAM_FILE = "paramFile";
-	private final String DEFAULT_PARAM_FILE = "Default paramFile path";
 
 	private Composite container;
 
@@ -349,28 +345,14 @@ public class RunConfigDialog extends Dialog {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
 
-			buildProps.put(LOCAL_MODE,
-					String.valueOf(btnLocalMode.getSelection()));
-			buildProps.put(REMOTE_MODE,
-					String.valueOf(btnRemoteMode.getSelection()));
+			buildProps.put(LOCAL_MODE, String.valueOf(btnLocalMode.getSelection()));
+			buildProps.put(REMOTE_MODE, String.valueOf(btnRemoteMode.getSelection()));
 			buildProps.put(HOST, textEdgeNode.getText());
 			buildProps.put(USER_NAME, textUser.getText());
-
-			buildProps.put(RUN_UTILITY, (!StringUtils.isEmpty(textRunUtility
-					.getText()) ? textRunUtility.getText()
-					: DEFAULT_RUN_UTILITY));
-			buildProps.put(
-					JOB_XML,
-					(!StringUtils.isEmpty(textJobXML.getText()) ? textJobXML
-							.getText() : DEFAULT_JOB_XML));
-			buildProps.put(
-					LIB_PATH,
-					(!StringUtils.isEmpty(textLibs.getText()) ? textLibs
-							.getText() : DEFAULT_LIB_PATH));
-			buildProps
-					.put(PARAM_FILE, (!StringUtils.isEmpty(textParamFiles
-							.getText()) ? textParamFiles.getText()
-							: DEFAULT_PARAM_FILE));
+			buildProps.put(RUN_UTILITY, textRunUtility.getText());
+			buildProps.put(JOB_XML, textJobXML);
+			buildProps.put(LIB_PATH, textLibs.getText() );
+			buildProps.put(PARAM_FILE, textParamFiles.getText());
 
 			buildProps.store(out, null);
 
@@ -436,7 +418,7 @@ public class RunConfigDialog extends Dialog {
 
 		if (StringUtils.isEmpty(textPassword.getText()))
 			note.addError("Password not specified");
-
+		
 		return note;
 	}
 
