@@ -316,13 +316,13 @@
 	</straightPulls>
 
 	<straightPulls id="gather" xsi:type="spt:unionAll">
-		<inSocket id="in0" fromComponentId="limit" fromSocketId="out0" />
-		<inSocket id="in1" fromComponentId="ksjdk" fromSocketId="out0" />
-		<outSocket id="in2" viewData="true" >
-			<copyOfInsocket inSocketId="in0" />
+		<inSocket id="dfg" fromComponentId="limit" fromSocketId="out0" />
+		<inSocket id="dfg1" fromComponentId="ksjdk" fromSocketId="out0" />
+		<outSocket id="sdf" viewData="true" >
+			<copyOfInsocket inSocketId="dfg" />
 		</outSocket>
 		<runtimeProperties>
-			<property name="sdfsf" value="dsf" />
+			<property name="fsdf" value="dsf" />
 		</runtimeProperties>
 	</straightPulls>
 
@@ -411,8 +411,11 @@
 			<passThroughField name="axd" inSocketId="in0" />
 			<mapField sourceName="as" name="new" inSocketId="in0" />
 		</outSocket>
-		<outSocket id="unused0" type="unused">
+		<outSocket id="df" type="unused">
 			<copyOfInsocket inSocketId="in0" />
+		</outSocket>
+		<outSocket id="cv" type="unused">
+			<copyOfInsocket inSocketId="in1" />
 		</outSocket>
 		<runtimeProperties>
 			<property name="fsdf" value="dsf" />
@@ -436,7 +439,7 @@
 		<path uri="asdffas"/>
 	</commands>
 
-	<operations id="filter" phase="0" xsi:type="op:filter">
+	<operations id="filter" phase="1" xsi:type="op:filter">
 		<inSocket fromComponentId="join" fromSocketId="unused0" id="in0" />
 		<operation id="opt" class="someclass">
 			<inputFields>
@@ -545,11 +548,35 @@
 		</secondaryKeys>
 	</operations>
 
-	<operations id="lookup" xsi:type="op:hashJoin">
+	<operations id="lookup" xsi:type="op:lookup">
+		<inSocket fromComponentId="reformat" fromSocketId="out0" id="in0" type="driver"/>
+		<inSocket fromComponentId="aggregate" fromSocketId="out0" id="in1" type="lookup"/>
+		<outSocket id="out0" type="out" viewData="true">
+			<passThroughField name="f1" inSocketId="in0"/>
+			<passThroughField name="f2" inSocketId="in0"/>
+			<passThroughField name="f3" inSocketId="in1"/>
+			<passThroughField name="f3" inSocketId="in1"/>
+			<mapField sourceName="f4" name="f4new" inSocketId="in1"/>
+		</outSocket>
+		<keys inSocketId="in0">
+			<field name="c4" />
+		</keys>
+		<keys inSocketId="in1">
+			<field name="c4" />
+		</keys>
+		<match value="first"/>
+	</operations>
+
+
+	<operations id="hashJoin" xsi:type="op:hashJoin">
 		<inSocket fromComponentId="reformat" fromSocketId="out0" id="in0" />
 		<inSocket fromComponentId="aggregate" fromSocketId="out0" id="in1" />
-		<outSocket id="out0" type="out" viewData="true">
-			<copyOfInsocket inSocketId="in0" />
+		<outSocket id="out0" type="out">
+			<passThroughField name="c1" inSocketId="in0" />
+			<passThroughField name="c2" inSocketId="in0" />
+			<passThroughField name="c3" inSocketId="in1" />
+			<mapField sourceName="c4" name="c4new" inSocketId="in0" />
+			<mapField sourceName="c4" name="c5new" inSocketId="in1" />
 		</outSocket>
 		<runtimeProperties>
 			<property name="mapred.reduce.tasks" value="1" />
@@ -560,9 +587,10 @@
 		<keys inSocketId="in1">
 			<field name="c4" />
 		</keys>
-
+		<match value="first"/>
 	</operations>
-
+	
+	
 	<operations id="normalize" xsi:type="op:normalize">
 		<inSocket fromComponentId="reformat" fromSocketId="out0" id="in0" />
 		<operation id="opt" class="someclass">

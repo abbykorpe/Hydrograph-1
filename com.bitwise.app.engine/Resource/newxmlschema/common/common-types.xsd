@@ -26,6 +26,13 @@
 		</xs:restriction>
 	</xs:simpleType>
 
+	<xs:simpleType name="type-lookup-insocket">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="driver" />
+			<xs:enumeration value="lookup" />
+		</xs:restriction>
+	</xs:simpleType>
+	
 	<xs:complexType name="type-base-field">
 		<xs:attributeGroup ref="grp-attr-base-field" />
 		<xs:anyAttribute />
@@ -98,7 +105,7 @@
 	<xs:complexType name="type-base-component">
 		<xs:attribute name="id" type="xs:string" use="required" />
 		<xs:attribute name="phase" type="xs:nonNegativeInteger" use="optional"
-			default="1" />
+			default="0" />
 	</xs:complexType>
 
 	<xs:complexType name="type-input-component" abstract="true">
@@ -333,7 +340,13 @@
 		</xs:restriction>
 	</xs:simpleType>
 
-
+	<xs:simpleType name="match_value">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="first" />
+			<xs:enumeration value="last" />
+			<xs:enumeration value="all" />
+		</xs:restriction>
+	</xs:simpleType>
 
 	<xs:complexType name="keyfield_description_type">
 		<xs:sequence>

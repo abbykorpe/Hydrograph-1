@@ -6,6 +6,7 @@
 	xmlns:join="http://www.bitwiseglobal.com/graph/join" xmlns:filter="http://www.bitwiseglobal.com/graph/filter"
 	xmlns:gen_seq="http://www.bitwiseglobal.com/graph/generatesequence"
 	xmlns:cumulate="http://www.bitwiseglobal.com/graph/cumulate"
+	xmlns:lookup="http://www.bitwiseglobal.com/graph/lookup"
 	xmlns:hashjoin="http://www.bitwiseglobal.com/graph/hashjoin"
 	xmlns:normalize="http://www.bitwiseglobal.com/graph/normalize"
 	xmlns:pbe="http://www.bitwiseglobal.com/graph/partitionByExpression"
@@ -26,12 +27,14 @@
 		namespace="http://www.bitwiseglobal.com/graph/generatesequence" />
 	<xs:import schemaLocation="./cumulate/cumulate-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/cumulate" />
-	<xs:import schemaLocation="./hashjoin/hashjoin-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/hashjoin" />
+	<xs:import schemaLocation="./lookup/lookup-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/lookup" />
 	<xs:import schemaLocation="./normalize/normalize-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/normalize" />
 	<xs:import schemaLocation="./subgraph/subgraph-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/subgraph" />
+			<xs:import schemaLocation="./hashjoin/hashjoin-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/hashjoin" />
 	<xs:import
 		schemaLocation="./partition-by-expression/partition-by-expression-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/partitionByExpression" />
@@ -141,12 +144,36 @@
 	</xs:complexType>
 
 
+	<xs:complexType name="lookup">
+		<xs:complexContent>
+			<xs:extension base="lookup:lookup-base">
+				<xs:sequence>
+					<xs:element name="keys" type="lookup:type-key-fields"
+						minOccurs="2" maxOccurs="unbounded" />
+					<xs:element name="match" minOccurs="1" maxOccurs="1" >
+						<xs:complexType>
+							<xs:attribute name="value" type="cmn:match_value"
+								 default="first" />
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
 	<xs:complexType name="hashJoin">
 		<xs:complexContent>
 			<xs:extension base="hashjoin:hashjoin-base">
 				<xs:sequence>
 					<xs:element name="keys" type="hashjoin:type-key-fields"
 						minOccurs="2" maxOccurs="unbounded" />
+					<xs:element name="match" minOccurs="1" maxOccurs="1" >
+						<xs:complexType>
+							<xs:attribute name="value" type="cmn:match_value"
+								 default="first" />
+						</xs:complexType>
+					</xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
