@@ -202,7 +202,7 @@ public class TransformDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		
-		Composite container = (Composite) super.createDialogArea(parent);
+		container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new FormLayout());
 		
 		
