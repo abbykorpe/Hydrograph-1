@@ -3,13 +3,21 @@ package com.bitwise.app.common.datastructure.property;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LookupMappingGrid {
-	
+import org.slf4j.Logger;
+
+import com.bitwise.app.cloneableinterface.CloneObject;
+import com.bitwise.app.common.util.LogFactory;
+
+public class LookupMappingGrid  implements CloneObject{
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(LookupMappingGrid.class);
 	private List<List<FilterProperties>> lookupInputProperties;   //left side
+	private List<List<FilterProperties>> clonedLookupInputProperties; 
+	private List<FilterProperties> clonedInnerLookupInputProperties;
 	private List<LookupMapProperty> lookupMapProperties; //right side grid
+	private List<LookupMapProperty> clonedLookupMapProperties;
 	
 	//TODO
-	private List<Filter> filterList; 							
+
 
 	
 	public LookupMappingGrid() {
@@ -17,12 +25,6 @@ public class LookupMappingGrid {
 		lookupMapProperties = new ArrayList<>();
 	}
 	
-	public List<Filter> getFilterList() {
-		return filterList;
-	}
-	public void setFilterList(List<Filter> filterList) {
-		this.filterList = filterList;
-	}
 	public List<LookupMapProperty> getLookupMapProperties() {
 		return lookupMapProperties;
 	}
@@ -36,7 +38,37 @@ public class LookupMappingGrid {
 	public void setLookupInputProperties(List<List<FilterProperties>> lookupInputProperties) {
 		this.lookupInputProperties = lookupInputProperties;
 	}
+	@Override
+	public LookupMappingGrid clone()
+	{
+		clonedLookupMapProperties=new ArrayList<>();
+		LookupMappingGrid lookupMappingGrid=null;
+		clonedLookupInputProperties=new ArrayList<>();
+		try {
+			lookupMappingGrid=this.getClass().newInstance();
+		} catch (Exception e) {
+			logger.debug("Unable to instantiate cloning object",e);
+		}
+		for(int i=0;i<lookupInputProperties.size();i++)
+		{
+			clonedInnerLookupInputProperties=new ArrayList<>();
+			for(int j=0;j<lookupInputProperties.get(i).size();j++)
+			{
+				clonedInnerLookupInputProperties.add(lookupInputProperties.get(i).get(j).clone());
+			}
+			clonedLookupInputProperties.add(clonedInnerLookupInputProperties);
+		
+		}
+		for(int i=0;i<lookupMapProperties.size();i++)
+		{
+			clonedLookupMapProperties.add(lookupMapProperties.get(i).clone());
+			
+		}	
 	
+		lookupMappingGrid.setLookupInputProperties(clonedLookupInputProperties);
+		lookupMappingGrid.setLookupMapProperties(clonedLookupMapProperties);
+	    return lookupMappingGrid;
+	}
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -45,7 +77,7 @@ public class LookupMappingGrid {
 		builder.append(", lookupInputProperties=");
 		builder.append(lookupInputProperties);
 		builder.append(", filterList=");
-		builder.append(filterList);
+		
 	/*	builder.append(", joinConfigProperties=");
 		builder.append(joinConfigProperties);*/
 		builder.append("]");

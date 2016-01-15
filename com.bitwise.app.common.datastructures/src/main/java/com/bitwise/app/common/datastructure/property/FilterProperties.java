@@ -1,9 +1,17 @@
 package com.bitwise.app.common.datastructure.property;
 
-public class FilterProperties {
 
+
+import org.slf4j.Logger;
+
+import com.bitwise.app.cloneableinterface.CloneObject;
+import com.bitwise.app.common.util.LogFactory;
+
+
+
+public class FilterProperties implements CloneObject {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterProperties.class);
 	String propertyname;
-
 	public String getPropertyname() {
 		return propertyname;
 	}
@@ -37,6 +45,17 @@ public class FilterProperties {
 		return true;
 	}
 
+	@Override
+	public FilterProperties clone(){
+		FilterProperties filterProperties=null;
+	    try {
+	    	filterProperties=this.getClass().newInstance();
+		} catch (Exception e) {
+			logger.debug("Unable to instantiate cloning object",e);
+		}
+		filterProperties.setPropertyname(getPropertyname());
+		return filterProperties;
+	};
 	@Override
 	public String toString() {
 		return "FilterProperties [propertyname=" + propertyname + "]";

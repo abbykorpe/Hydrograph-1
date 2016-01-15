@@ -1,7 +1,11 @@
 package com.bitwise.app.common.datastructure.property;
 
-public class JoinConfigProperty {
+import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.LogFactory;
+
+public class JoinConfigProperty implements Cloneable{
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(JoinConfigGrid.class);
 	private String portIndex;
 	private String joinKey;
 	private Integer joinType;
@@ -53,6 +57,23 @@ public class JoinConfigProperty {
 				+ ((portIndex == null) ? 0 : portIndex.hashCode());
 		return result;
 	}
+	
+	@Override
+	public JoinConfigProperty clone()
+	{  JoinConfigProperty joinConfigProperty=null;
+		try {
+			joinConfigProperty=this.getClass().newInstance();
+		} catch (Exception e) {
+			logger.debug("Unable to instantiate cloning object",e);
+		}
+		joinConfigProperty.setJoinKey(getJoinKey());
+		joinConfigProperty.setJoinType(getJoinType());
+		joinConfigProperty.setParamValue(getParamValue());
+		joinConfigProperty.setPortIndex(getPortIndex());
+		return joinConfigProperty;
+	}
+	
+	
 	
 	@Override
 	public boolean equals(Object obj) {

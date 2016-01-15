@@ -1,13 +1,17 @@
 package com.bitwise.app.common.datastructure.property;
 
+import org.slf4j.Logger;
+
+import com.bitwise.app.cloneableinterface.CloneObject;
+import com.bitwise.app.common.util.LogFactory;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class OperationClassProperty.
  * 
  * @author Bitwise
  */
-public class OperationClassProperty implements Cloneable{
-	
+public class OperationClassProperty implements CloneObject{
 	private String operationClassPath;
 	private boolean isParameter;
 	private String operationClassFullPath;
@@ -43,7 +47,7 @@ public class OperationClassProperty implements Cloneable{
 		this.operationClassFullPath = operationClassFullPath;
 	}
 	@Override
-	public OperationClassProperty clone(){
+	public OperationClassProperty clone() {
 		return new OperationClassProperty(operationClassPath,isParameter,operationClassFullPath);
 	}
 

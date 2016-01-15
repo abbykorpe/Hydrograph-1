@@ -1,8 +1,13 @@
 package com.bitwise.app.common.datastructure.property;
 
+import org.slf4j.Logger;
 
-public class LookupConfigProperty {
-	
+import com.bitwise.app.cloneableinterface.CloneObject;
+import com.bitwise.app.common.util.LogFactory;
+
+
+public class LookupConfigProperty implements CloneObject{
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(LookupConfigProperty.class);
 	private Boolean isSelected;
 	private String driverKey;
 	private String lookupPort;
@@ -38,6 +43,23 @@ public class LookupConfigProperty {
 	public void setLookupPort(String lookupPort) {
 		this.lookupPort = lookupPort;
 	}
+	
+	@Override
+	public Object clone() 
+	{
+		LookupConfigProperty lookupConfigProperty=null;
+		try {
+			lookupConfigProperty=this.getClass().newInstance();
+		} catch (Exception e) {
+		logger.debug("Unable to instantiate cloning object",e);
+		}
+		lookupConfigProperty.setDriverKey(getDriverKey());
+		lookupConfigProperty.setLookupKey(getLookupKey());
+		lookupConfigProperty.setLookupPort(getLookupPort());
+		lookupConfigProperty.setSelected(isSelected());
+		return lookupConfigProperty;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

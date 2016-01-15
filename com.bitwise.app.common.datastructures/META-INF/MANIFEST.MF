@@ -5,8 +5,11 @@ Bundle-SymbolicName: com.bitwise.app.common.datastructures;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-Activator: com.bitwise.app.common.activator.Activator
 Bundle-Vendor: BITWISE
-Require-Bundle: org.eclipse.core.runtime
+Require-Bundle: org.eclipse.core.runtime,
+ com.bitwise.app.common;bundle-version="0.0.1",
+ org.slf4j.api
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: com.bitwise.app.common.datastructure.property,
+Export-Package: com.bitwise.app.cloneableinterface,
+ com.bitwise.app.common.datastructure.property,
  com.bitwise.app.common.datastructures.tooltip

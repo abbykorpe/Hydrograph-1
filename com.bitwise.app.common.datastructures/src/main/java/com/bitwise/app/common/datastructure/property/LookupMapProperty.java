@@ -1,7 +1,13 @@
 package com.bitwise.app.common.datastructure.property;
 
+import org.slf4j.Logger;
+
+import com.bitwise.app.cloneableinterface.CloneObject;
+import com.bitwise.app.common.util.LogFactory;
+
 	
-public class LookupMapProperty {
+public class LookupMapProperty implements CloneObject {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(LookupMapProperty.class);
 	private String Source_Field;
 	private String Output_Field;
 	
@@ -26,6 +32,21 @@ public class LookupMapProperty {
 		result = prime * result
 				+ ((Source_Field == null) ? 0 : Source_Field.hashCode());
 		return result;
+	}
+	
+	@Override
+	public LookupMapProperty clone() 
+	{
+		LookupMapProperty lookupMapProperty=null;	
+		try {
+		  lookupMapProperty=this.getClass().newInstance();
+		} 
+		catch (Exception e) {
+		logger.debug("Unable to instantiate cloning object",e);
+		}
+		lookupMapProperty.setOutput_Field(getOutput_Field());
+		lookupMapProperty.setSource_Field(getSource_Field());
+		return lookupMapProperty;
 	}
 	@Override
 	public boolean equals(Object obj) {

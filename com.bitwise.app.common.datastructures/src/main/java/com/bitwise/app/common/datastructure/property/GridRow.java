@@ -1,13 +1,19 @@
 package com.bitwise.app.common.datastructure.property;
 
+import org.slf4j.Logger;
+
+import com.bitwise.app.cloneableinterface.CloneObject;
+import com.bitwise.app.common.util.LogFactory;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class GridRow.
  * 
  * @author Bitwise
  */
-public class GridRow {
-
+public class GridRow implements CloneObject {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(GridRow.class);
+       
 		private String fieldName;
 
 		private String dateFormat;
@@ -58,6 +64,22 @@ public class GridRow {
 			this.dataType = dataType;
 		}
 		
+		@Override
+		public GridRow clone() 
+		{  
+		    GridRow gridRow=null;
+			try {
+				gridRow=this.getClass().newInstance();
+			} catch (Exception e) {
+				logger.debug("Unable to instantiate cloning object",e);
+				}
+			gridRow.setFieldName(getFieldName());
+			gridRow.setDataType(getDataType());
+			gridRow.setDataTypeValue(getDataTypeValue());
+			gridRow.setDateFormat(getDateFormat());
+			gridRow.setScale(getScale());
+			return gridRow; 
+		}
 		
 		//NOTE: DO NOT CHANGE THIS METHOD UNLESS YOU KNOW WHAT YOU ARE DOING
 		@Override
