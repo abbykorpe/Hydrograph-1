@@ -81,12 +81,6 @@ public class ELTCellEditorFieldValidator implements ICellEditorValidator {
 	}
 
 	private boolean isFieldNameAlphanumeric(String fieldName){
-		if(!fieldName.matches("[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*")){     
-			return false;
-		}else{  
-			return true; 
-
-		}
-
+     return (!fieldName.matches("[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*"))?false:true;
 	}
 }
