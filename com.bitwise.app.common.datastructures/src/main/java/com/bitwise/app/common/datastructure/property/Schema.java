@@ -60,7 +60,11 @@ public class Schema implements CloneObject{
         	
         	 for(int i=0;i<gridRow.size();i++)
         	 {
-        	 clonedGridRow.add(gridRow.get(i).clone());
+             if(gridRow.get(i)instanceof FixedWidthGridRow )
+             clonedGridRow.add(((FixedWidthGridRow)gridRow.get(i)).copy()); 
+             else
+             clonedGridRow.add(gridRow.get(i).clone());
+        	 
         	 }		 
         	 schema.setExternalSchemaPath(getExternalSchemaPath());
         	 schema.setGridRow(clonedGridRow);
