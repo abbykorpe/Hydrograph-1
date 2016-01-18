@@ -19,8 +19,9 @@ public class ELTCellEditorFieldValidator implements ICellEditorValidator {
 	private Table table;
 	private List schemaGrids;
 	private ControlDecoration fieldNameDecorator;
+	private ControlDecoration isFieldNameAlphanumericDecorator;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
-	
+
 	/**
 	 * Instantiates a new ELT cell editor field validator.
 	 * 
@@ -34,31 +35,37 @@ public class ELTCellEditorFieldValidator implements ICellEditorValidator {
 	 *            the property dialog button bar
 	 */
 	public ELTCellEditorFieldValidator(Table table, List schemaGrids,
-			ControlDecoration fieldNameDecorator,PropertyDialogButtonBar propertyDialogButtonBar) {
+			ControlDecoration fieldNameDecorator,ControlDecoration isFieldNameAlphanumericDecorator,PropertyDialogButtonBar propertyDialogButtonBar) {
 		super();
 		this.table = table;
 		this.schemaGrids = schemaGrids;
 		this.fieldNameDecorator = fieldNameDecorator;
+		this.isFieldNameAlphanumericDecorator = isFieldNameAlphanumericDecorator;
 		this.propertyDialogButtonBar=propertyDialogButtonBar;
 	}
 
 	@Override
 	public String isValid(Object value) {
 		String fieldName=(String) value;
-		if(fieldName.equals("") || !fieldName.matches("[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*")){     
+		if(fieldName.equals("")){     
 			fieldNameDecorator.show();   
-		return "Error";   
-	}else{  
-		fieldNameDecorator.hide(); 
-		    
-	}
+			return "Error";   
+		}else{  
+			fieldNameDecorator.hide(); 
+			if(isFieldNameAlphanumeric(fieldName))
+				isFieldNameAlphanumericDecorator.hide();
+			else{
+				isFieldNameAlphanumericDecorator.show();
+				return "Error";
+			}
+		}
 		String selectedGrid = table.getItem(table.getSelectionIndex()).getText();
 		for (int i = 0; i < schemaGrids.size(); i++) {
-				GridRow schemaGrid = (GridRow)schemaGrids.get(i);
-				String stringValue = (String) value;
-				if ((schemaGrid.getFieldName().equalsIgnoreCase(stringValue) &&
-						!selectedGrid.equalsIgnoreCase(stringValue))) {
-					
+			GridRow schemaGrid = (GridRow)schemaGrids.get(i);
+			String stringValue = (String) value;
+			if ((schemaGrid.getFieldName().equalsIgnoreCase(stringValue) &&
+					!selectedGrid.equalsIgnoreCase(stringValue))) {
+
 				fieldNameDecorator.show();
 				/*propertyDialogButtonBar.enableOKButton(false);
 				propertyDialogButtonBar.enableApplyButton(false);*/
@@ -73,4 +80,13 @@ public class ELTCellEditorFieldValidator implements ICellEditorValidator {
 		return null;
 	}
 
+	private boolean isFieldNameAlphanumeric(String fieldName){
+		if(!fieldName.matches("[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*")){     
+			return false;
+		}else{  
+			return true; 
+
+		}
+
+	}
 }

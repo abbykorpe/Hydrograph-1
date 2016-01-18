@@ -73,6 +73,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String LENGTH = Messages.LENGTH;
 
 	protected ControlDecoration fieldNameDecorator;
+	protected ControlDecoration isFieldNameAlphanumericDecorator;
 	protected ControlDecoration scaleDecorator;
 	protected ControlDecoration lengthDecorator;
 	protected TableViewer tableViewer;
