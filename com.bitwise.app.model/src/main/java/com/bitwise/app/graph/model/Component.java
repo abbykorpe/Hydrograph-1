@@ -13,11 +13,9 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.slf4j.Logger;
 
-import com.bitwise.app.cloneableinterface.CloneObject;
+import com.bitwise.app.cloneableinterface.IDataStructure;
 import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
-import com.bitwise.app.common.datastructure.property.JoinMappingGrid;
-import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
@@ -654,7 +652,7 @@ public abstract class Component extends Model {
 						
 					else  if(entry.getValue()!=null)
 					{   
-						CloneObject c=(CloneObject) entry.getValue();
+						IDataStructure c=(IDataStructure) entry.getValue();
 						clonedHashMap.put(entry.getKey(), c.clone());
 					}
 				}

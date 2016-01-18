@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.cloneableinterface.CloneObject;
+import com.bitwise.app.cloneableinterface.IDataStructure;
 import com.bitwise.app.common.util.LogFactory;
 
 
@@ -16,7 +16,7 @@ import com.bitwise.app.common.util.LogFactory;
  * @author Bitwise
  */
 
-public class Schema implements CloneObject{
+public class Schema implements IDataStructure{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(Schema.class);
 	private String externalSchemaPath;
 	private Boolean isExternal;

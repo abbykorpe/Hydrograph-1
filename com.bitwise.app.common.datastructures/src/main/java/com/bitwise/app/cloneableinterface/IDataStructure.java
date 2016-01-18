@@ -1,5 +1,5 @@
 package com.bitwise.app.cloneableinterface;
 
-public interface CloneObject extends Cloneable{
+public interface IDataStructure extends Cloneable{
 	public Object clone();
 }

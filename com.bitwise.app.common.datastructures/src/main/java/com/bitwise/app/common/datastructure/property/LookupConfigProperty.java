@@ -2,11 +2,11 @@ package com.bitwise.app.common.datastructure.property;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.cloneableinterface.CloneObject;
+import com.bitwise.app.cloneableinterface.IDataStructure;
 import com.bitwise.app.common.util.LogFactory;
 
 
-public class LookupConfigProperty implements CloneObject{
+public class LookupConfigProperty implements IDataStructure{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(LookupConfigProperty.class);
 	private Boolean isSelected;
 	private String driverKey;

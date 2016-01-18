@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.cloneableinterface.CloneObject;
+import com.bitwise.app.cloneableinterface.IDataStructure;
 import com.bitwise.app.common.util.LogFactory;
 
 
-public class JoinConfigGrid implements CloneObject {
+public class JoinConfigGrid implements IDataStructure {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(JoinConfigGrid.class);
 	private List<JoinConfigProperty> joinConfigProperties;
 	private List<JoinConfigProperty> clonedJoinConfigProperty;

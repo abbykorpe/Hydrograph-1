@@ -7,11 +7,11 @@ import org.slf4j.Logger;
 
 
 
-import com.bitwise.app.cloneableinterface.CloneObject;
+import com.bitwise.app.cloneableinterface.IDataStructure;
 import com.bitwise.app.common.util.LogFactory;
 
 
-public class JoinMappingGrid implements CloneObject{
+public class JoinMappingGrid implements IDataStructure{
 	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(JoinMappingGrid.class);
 	private Boolean isSelected;
