@@ -2,8 +2,8 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Input File Fixed Width" link_to="xml\Components\components.xml#InputFileFixedWidth"> 
-	<topic label="All properties for Input File Fixed Width"  href="html/Components/InputFixedWidth.html"> 
+	<topic label="Properties"  href="html/Components/Input_File_Fixed_Width_Properties.html"> 
 	</topic>
- <topic href="html/concepts/maintopic.html" label="Validations applied">
+ <topic href="html/concepts/maintopic.html" label="Validations">
  </topic>
 </toc>

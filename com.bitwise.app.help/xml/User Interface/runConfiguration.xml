@@ -2,7 +2,7 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Run Configuration" link_to="xml/User Interface/userInterface.xml#RunConfiguration" topic="html/gettingstarted/maintopic.html">
-   <topic href="html/gettingstarted/maintopic.html" label="Run Configuration">
+   <topic href="html/User Interface/Run_Configuration.html" label="Run Configuration">
    </topic> 
 	
 </toc>

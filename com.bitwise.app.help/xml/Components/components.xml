@@ -2,40 +2,40 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Components">
-   <topic label="Aggregate">
+   <topic href="html/Components/Aggregate.html" label="Aggregate">
       <anchor id="Aggregate"/>
    </topic>
-   <topic label="Clone">
+   <topic href="html/Components/Clone.html" label="Clone">
       <anchor id="Clone"/>
    </topic>
-   <topic label="Filter">
+   <topic href="html/Components/Filter.html" label="Filter">
       <anchor id="Filter"/>
    </topic>
-   <topic label="Input File Delimited">
+   <topic href="html/Components/Input_File_Delimited.html" label="Input File Delimited">
       <anchor id="InputFileDelimited"/>
    </topic>
-   <topic label="Input File Fixed Width">
+   <topic href="html/Components/Input_File_Fixed_Width.html" label="Input File Fixed Width">
       <anchor id="InputFileFixedWidth"/>
    </topic>
-   <topic label="Join">
+   <topic href="html/Components/Join.html" label="Join">
       <anchor id="Join"/>
    </topic>
-   <topic label="Lookup">
+   <topic href="html/Components/Lookup.html" label="Lookup">
       <anchor id="Lookup"/>
    </topic>
-   <topic label="Output File Delimited">
+   <topic href="html/Components/Output_File_Delimited.html" label="Output File Delimited">
       <anchor id="OutputFileDelimited"/>
    </topic>
-   <topic label="Output File Fixed Width">
+   <topic href="html/Components/Output_File_Fixed_Width.html" label="Output File Fixed Width">
       <anchor id="OutputFileFixedWidth"/>
    </topic>
-   <topic label="Remove Dups">
+   <topic href="html/Components/Remove_Dups.html" label="Remove Dups">
       <anchor id="RemoveDups"/>
    </topic>
-   <topic label="Transform">
+   <topic href="html/Components/Transform.html" label="Transform">
       <anchor id="Transform"/>
    </topic>
-   <topic label="Union All">
+   <topic href="html/Components/Union_All.html" label="Union All">
       <anchor id="UnionAll"/>
    </topic>
 </toc>

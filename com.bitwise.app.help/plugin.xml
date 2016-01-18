@@ -183,6 +183,9 @@
       <toc
             file="xml/References/whenShouldIUseHashJoinVsCoJoin.xml">
       </toc>
+      <toc
+            file="xml/User Interface/parameterGrid.xml">
+      </toc>
    </extension>
 
 </plugin>

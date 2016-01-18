@@ -2,8 +2,10 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Join" link_to="xml\Components\components.xml#Join"> 
-	<topic label="All properties for Join"  href="html/concepts/maintopic.html"> 
+	<topic label="Properties"  href="html/concepts/maintopic.html"> 
 	</topic>
- <topic href="html/concepts/maintopic.html" label="Validations applied">
+ <topic href="html/concepts/maintopic.html" label="Mapping View">
+ </topic>
+ <topic href="html/concepts/maintopic.html" label="Validations">
  </topic>
 </toc>
