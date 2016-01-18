@@ -4,12 +4,12 @@ package com.bitwise.app.common.datastructure.property;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.cloneableinterface.CloneObject;
+import com.bitwise.app.cloneableinterface.IDataStructure;
 import com.bitwise.app.common.util.LogFactory;
 
 
 
-public class FilterProperties implements CloneObject {
+public class FilterProperties implements IDataStructure {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterProperties.class);
 	String propertyname;
 	public String getPropertyname() {

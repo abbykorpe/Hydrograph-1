@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.cloneableinterface.CloneObject;
+import com.bitwise.app.cloneableinterface.IDataStructure;
 import com.bitwise.app.common.util.LogFactory;
 
-public class LookupMappingGrid  implements CloneObject{
+public class LookupMappingGrid  implements IDataStructure{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(LookupMappingGrid.class);
 	private List<List<FilterProperties>> lookupInputProperties;   //left side
 	private List<List<FilterProperties>> clonedLookupInputProperties; 
