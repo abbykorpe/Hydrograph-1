@@ -44,17 +44,27 @@ public class ELTCellEditorFieldValidator implements ICellEditorValidator {
 
 	@Override
 	public String isValid(Object value) {
+		String fieldName=(String) value;
+		if(fieldName.equals("") || !fieldName.matches("[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*")){     
+			fieldNameDecorator.show();   
+		return "Error";   
+	}else{  
+		fieldNameDecorator.hide(); 
+		    
+	}
 		String selectedGrid = table.getItem(table.getSelectionIndex()).getText();
 		for (int i = 0; i < schemaGrids.size(); i++) {
 				GridRow schemaGrid = (GridRow)schemaGrids.get(i);
 				String stringValue = (String) value;
 				if ((schemaGrid.getFieldName().equalsIgnoreCase(stringValue) &&
 						!selectedGrid.equalsIgnoreCase(stringValue))) {
+					
 				fieldNameDecorator.show();
 				/*propertyDialogButtonBar.enableOKButton(false);
 				propertyDialogButtonBar.enableApplyButton(false);*/
 				return "Error";
-			} else{ 
+			}
+			else{ 
 				fieldNameDecorator.hide();
 				/*propertyDialogButtonBar.enableOKButton(true);
 				propertyDialogButtonBar.enableApplyButton(true);*/
