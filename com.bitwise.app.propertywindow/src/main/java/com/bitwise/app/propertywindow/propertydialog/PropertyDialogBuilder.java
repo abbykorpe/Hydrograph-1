@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 
+import com.bitwise.app.cloneableinterface.IDataStructure;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.propertywindow.factory.WidgetFactory;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
@@ -137,23 +138,27 @@ public class PropertyDialogBuilder {
 		}
 	}
 
-	private AbstractWidget addCustomWidgetInGroupWidget(
-			AbstractELTContainerWidget subGroupContainer, Property property) {
+	private AbstractWidget addCustomWidgetInGroupWidget(AbstractELTContainerWidget subGroupContainer, Property property) {
 		
-		ComponentConfigrationProperty componentConfigrationProperty = new ComponentConfigrationProperty(property.getPropertyName(), 
-				eltComponenetProperties.getComponentConfigurationProperty(property.getPropertyName()));
+		Object object = eltComponenetProperties.getComponentConfigurationProperty(property.getPropertyName());
+		if(object != null && IDataStructure.class.isAssignableFrom(object.getClass())){
+			object = ((IDataStructure)object).clone();
+		}
+		ComponentConfigrationProperty componentConfigProp = new ComponentConfigrationProperty(property.getPropertyName(), 
+				object);
+		
 		ComponentMiscellaneousProperties componentMiscellaneousProperties = new ComponentMiscellaneousProperties(
 				eltComponenetProperties.getComponentMiscellaneousProperties());
 
-		AbstractWidget eltWidget = WidgetFactory.INSTANCE.getWidget(property.getPropertyRenderer(),componentConfigrationProperty,
+		AbstractWidget widget = WidgetFactory.INSTANCE.getWidget(property.getPropertyRenderer(),componentConfigProp,
 				componentMiscellaneousProperties,propertyDialogButtonBar);
 		if(property.getPropertyName().equalsIgnoreCase("join_config"));
-		eltWidget.setEltComponenetProperties(eltComponenetProperties);
+		widget.setEltComponenetProperties(eltComponenetProperties);
 		
-		eltWidget.setComponent(component);
-		eltWidget.attachToPropertySubGroup(subGroupContainer);
+		widget.setComponent(component);
+		widget.attachToPropertySubGroup(subGroupContainer);
 		
-		return eltWidget;
+		return widget;
 	}
 
 	/**
