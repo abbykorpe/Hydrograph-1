@@ -15,6 +15,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.bitwise.app.common.util.ContributionItemManager;
 import com.bitwise.app.graph.command.ComponentCopyCommand;
 import com.bitwise.app.graph.controller.ComponentEditPart;
+import com.bitwise.app.graph.controller.PortEditPart;
 import com.bitwise.app.graph.model.Component;
 
 // TODO: Auto-generated Javadoc
@@ -58,17 +59,28 @@ public class CopyAction extends SelectionAction {
 		}
 		Component node = null;
 		Iterator<Object> it = selectedObjects.iterator();
-		while (it.hasNext()) {
-			Object ep = it.next();
-			if (ep instanceof ComponentEditPart) {
-				node = (Component) ((EditPart)ep).getModel();
-			}
-			if (!copyCommand.isCopyableNode(node)){
-				return null;
-			}
+		boolean enabled=false;
+		for(Object obj:selectedObjects)
+		{
+			if(obj instanceof ComponentEditPart)
+			{
+				enabled=true;
+				break;
+			}	
+		}
+		if(enabled)
+		{	
+		for(Object obj:selectedObjects)
+		{
+			if (obj instanceof ComponentEditPart) {
+				node = (Component) ((EditPart)obj).getModel();
 				copyCommand.addElement(node);
+			}
 		}
 		return copyCommand;
+		}
+		else 
+		return null;	
 	}
 
 	@Override
