@@ -26,7 +26,7 @@ public class PortFigure extends Figure {
 	private TooltipFigure tooltipFigure;
 	private String labelOfPort;
 	private String portType;
-	private static boolean toggleValue;
+	private static boolean displayPortLabels;
 	/**
 	 * Instantiates a new port figure.
 	 * 
@@ -97,15 +97,18 @@ public class PortFigure extends Figure {
 	public String getLabelOfPort() {
 		return labelOfPort;
 	}
+	public void setLabelOfPort(String label) {
+		this.labelOfPort=label;
+	}
 	public String getPortType() {
 		return portType;
 	}
 	
-	public boolean getToggleValue() {
-		return toggleValue;
+	public boolean isDisplayPortlabels() {
+		return displayPortLabels;
 	}
-	public void setToggleValue(boolean toggleValue) {
-		this.toggleValue = toggleValue;
+	public void setDisplayPortlabels(boolean toggleValue) {
+		this.displayPortLabels = toggleValue;
 	}
 	@Override
 	protected void paintFigure(Graphics graphics) {
@@ -127,7 +130,7 @@ public class PortFigure extends Figure {
 		}
 			
 			
-		if(getToggleValue())
+		if(isDisplayPortlabels())
 		{
 			if("in".equalsIgnoreCase(portType))
 			{
@@ -145,12 +148,6 @@ public class PortFigure extends Figure {
 						.getLocation().y-2));
 			}	
 		}
-		
-		if ("lkp".equals(labelOfPort)){
-			
-			//Changes to show Lookup port.
-		}
-		
 	}
 
 	@Override

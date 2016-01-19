@@ -16,7 +16,7 @@ public class Port extends Model{
 	private final int sequence;
 	private final Component parent;
 	private final String nameOfPort;
-	private final String labelOfPort;
+	private String labelOfPort;
 	
 	/**
 	 * Instantiates a new port.
@@ -47,6 +47,10 @@ public class Port extends Model{
 
 	public String getLabelOfPort() {
 		return labelOfPort;
+	}
+	
+	public void setLabelOfPort(String label) {
+		this.labelOfPort=label;
 	}
 
 	public Component getParent() {

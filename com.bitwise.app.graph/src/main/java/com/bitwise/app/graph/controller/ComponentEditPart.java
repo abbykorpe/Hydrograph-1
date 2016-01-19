@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.TextUtilities;
@@ -31,6 +30,7 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.component.config.Policy;
 import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.component.config.Property;
+import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
@@ -38,6 +38,7 @@ import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.figure.ComponentBorder;
 import com.bitwise.app.graph.figure.ComponentFigure;
 import com.bitwise.app.graph.figure.ELTFigureConstants;
+import com.bitwise.app.graph.figure.PortFigure;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.ComponentLabel;
 import com.bitwise.app.graph.model.Link;
@@ -248,11 +249,17 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
 		if (!childrenEditParts.isEmpty()){
 			ComponentLabelEditPart lLabelEditPart = null;
+			PortEditPart portEditPart = null;
 			for(AbstractGraphicalEditPart part:childrenEditParts)
 			{
 				if(part instanceof ComponentLabelEditPart){
 					lLabelEditPart = (ComponentLabelEditPart) part;
 					lLabelEditPart.refreshVisuals();
+				}
+				
+				if(part instanceof PortEditPart){
+					portEditPart = (PortEditPart) part;
+					portEditPart.refreshVisuals();
 				}
 			}
 			
@@ -305,6 +312,18 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				setUnusedPortsCountDynamically();
 			}
 			
+
+			if(getCastedModel().getComponentName().equalsIgnoreCase("lookup")){
+				LookupConfigProperty lookup_in0 = (LookupConfigProperty)getCastedModel().getProperties().get("hash_join");
+				if(!lookup_in0.isSelected()){
+					getCastedModel().getPorts().get("in1").setLabelOfPort("lkp");
+					getCastedModel().getPorts().get("in0").setLabelOfPort("drv");
+				}else{
+					getCastedModel().getPorts().get("in1").setLabelOfPort("drv");
+					getCastedModel().getPorts().get("in0").setLabelOfPort("lkp");
+				}
+			}
+			
 			updateComponentStatus();			
 			refresh();
 			
@@ -320,7 +339,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		}
 	}
 	
-	
+
 	private void setInPortsCountDynamically(){
 		int prevInPortCount = getCastedModel().getInPortCount();
 
@@ -421,7 +440,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		}
 	}
 	
-	public void adjustExistingPorts(){
+	private void adjustExistingPorts(){
 		List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
 		PortEditPart portEditPart = null;
 		for(AbstractGraphicalEditPart part:childrenEditParts)

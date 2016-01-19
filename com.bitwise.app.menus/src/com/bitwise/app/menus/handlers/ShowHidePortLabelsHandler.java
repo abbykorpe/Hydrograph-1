@@ -46,7 +46,7 @@ public class ShowHidePortLabelsHandler extends AbstractHandler implements IHandl
 				if(editPart instanceof PortEditPart) 
 				{
 					PortFigure portFigure=((PortEditPart)editPart).getPortFigure();
-					toggleValue=portFigure.getToggleValue();
+					toggleValue=portFigure.isDisplayPortlabels();
 				}
 			}
 			for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); 
@@ -56,8 +56,8 @@ public class ShowHidePortLabelsHandler extends AbstractHandler implements IHandl
 				if(editPart instanceof PortEditPart) 
 				{
 					PortFigure portFigure=((PortEditPart)editPart).getPortFigure();
-					portFigure.setToggleValue(!toggleValue);
-					element.setChecked(portFigure.getToggleValue());
+					portFigure.setDisplayPortlabels(!toggleValue);
+					element.setChecked(portFigure.isDisplayPortlabels());
 					portFigure.repaint();
 				}
 			}
