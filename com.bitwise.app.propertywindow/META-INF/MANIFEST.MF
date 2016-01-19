@@ -26,7 +26,8 @@ Require-Bundle: org.eclipse.core.runtime,
  com.bitwise.app.validators;bundle-version="0.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.core.databinding,
+Import-Package: com.bitwise.app.common.util,
+ org.eclipse.core.databinding,
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.observable.value,
  org.eclipse.ui.forms.widgets
