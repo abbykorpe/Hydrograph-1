@@ -1,13 +1,10 @@
 package com.bitwise.app.common.datastructure.property;
 
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-
 import com.bitwise.app.cloneableinterface.IDataStructure;
-import com.bitwise.app.common.util.LogFactory;
+
 
 
 /**
@@ -17,7 +14,6 @@ import com.bitwise.app.common.util.LogFactory;
  */
 
 public class Schema implements IDataStructure{
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(Schema.class);
 	private String externalSchemaPath;
 	private Boolean isExternal;
 	private List<GridRow> gridRow;
@@ -50,20 +46,14 @@ public class Schema implements IDataStructure{
 	@Override
 	public Schema clone()
          { 
-		     Schema schema=null;	
+		     Schema schema=new Schema();	
 		     clonedGridRow=new ArrayList<>();
-        	 try {
-				schema=this.getClass().newInstance();
-			} catch ( Exception e) {
-				logger.debug("Unable to instantiate cloning object",e);
-			}
-        	
         	 for(int i=0;i<gridRow.size();i++)
         	 {
              if(gridRow.get(i)instanceof FixedWidthGridRow )
              clonedGridRow.add(((FixedWidthGridRow)gridRow.get(i)).copy()); 
              else
-             clonedGridRow.add(gridRow.get(i).clone());
+             clonedGridRow.add(((SchemaGrid)gridRow.get(i)).copy());
         	 
         	 }		 
         	 schema.setExternalSchemaPath(getExternalSchemaPath());

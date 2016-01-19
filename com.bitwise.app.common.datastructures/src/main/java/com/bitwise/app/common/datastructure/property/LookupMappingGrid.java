@@ -2,14 +2,10 @@ package com.bitwise.app.common.datastructure.property;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-
 import com.bitwise.app.cloneableinterface.IDataStructure;
-import com.bitwise.app.common.util.LogFactory;
+
 
 public class LookupMappingGrid  implements IDataStructure{
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(LookupMappingGrid.class);
 	private List<List<FilterProperties>> lookupInputProperties;   //left side
 	private List<List<FilterProperties>> clonedLookupInputProperties; 
 	private List<FilterProperties> clonedInnerLookupInputProperties;
@@ -42,13 +38,8 @@ public class LookupMappingGrid  implements IDataStructure{
 	public LookupMappingGrid clone()
 	{
 		clonedLookupMapProperties=new ArrayList<>();
-		LookupMappingGrid lookupMappingGrid=null;
+		LookupMappingGrid lookupMappingGrid=new LookupMappingGrid();
 		clonedLookupInputProperties=new ArrayList<>();
-		try {
-			lookupMappingGrid=this.getClass().newInstance();
-		} catch (Exception e) {
-			logger.debug("Unable to instantiate cloning object",e);
-		}
 		for(int i=0;i<lookupInputProperties.size();i++)
 		{
 			clonedInnerLookupInputProperties=new ArrayList<>();
