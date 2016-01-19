@@ -350,7 +350,7 @@ public class RunConfigDialog extends Dialog {
 			buildProps.put(HOST, textEdgeNode.getText());
 			buildProps.put(USER_NAME, textUser.getText());
 			buildProps.put(RUN_UTILITY, textRunUtility.getText());
-			buildProps.put(JOB_XML, textJobXML);
+			buildProps.put(JOB_XML, textJobXML.getText());
 			buildProps.put(LIB_PATH, textLibs.getText() );
 			buildProps.put(PARAM_FILE, textParamFiles.getText());
 
