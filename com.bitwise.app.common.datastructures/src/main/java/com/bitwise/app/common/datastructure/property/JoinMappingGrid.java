@@ -2,18 +2,11 @@ package com.bitwise.app.common.datastructure.property;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-
-
-
 import com.bitwise.app.cloneableinterface.IDataStructure;
-import com.bitwise.app.common.util.LogFactory;
 
 
 public class JoinMappingGrid implements IDataStructure{
 	
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(JoinMappingGrid.class);
 	private Boolean isSelected;
 	private String buttonText;
 	private List<LookupMapProperty> lookupMapProperties; //right side grid
@@ -59,15 +52,7 @@ public class JoinMappingGrid implements IDataStructure{
 		
 		clonedLookupMapProperties=new ArrayList<>();
 		clonedLookupInputProperties=new ArrayList<>();
-		JoinMappingGrid joinMappingGrid=null;
-		try {
-			joinMappingGrid=this.getClass().newInstance();
-			
-		} catch (Exception e) {
-			logger.debug("Unable to instantiate cloning object",e);
-		}
-		
-		
+		JoinMappingGrid joinMappingGrid=new JoinMappingGrid();
 		for(int i=0;i<lookupMapProperties.size();i++)
 		{
 			clonedLookupMapProperties.add(lookupMapProperties.get(i).clone());

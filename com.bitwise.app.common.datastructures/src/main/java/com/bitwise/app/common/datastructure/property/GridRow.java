@@ -1,9 +1,6 @@
 package com.bitwise.app.common.datastructure.property;
-
-import org.slf4j.Logger;
-
 import com.bitwise.app.cloneableinterface.IDataStructure;
-import com.bitwise.app.common.util.LogFactory;
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -12,8 +9,6 @@ import com.bitwise.app.common.util.LogFactory;
  * @author Bitwise
  */
 public class GridRow implements IDataStructure {
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(GridRow.class);
-       
 		private String fieldName;
 
 		private String dateFormat;
@@ -67,12 +62,7 @@ public class GridRow implements IDataStructure {
 		@Override
 		public GridRow clone() 
 		{  
-		    GridRow gridRow=null;
-			try {
-				gridRow=this.getClass().newInstance();
-			} catch (Exception e) {
-				logger.debug("Unable to instantiate cloning object",e);
-				}
+		    GridRow gridRow =new GridRow();
 			gridRow.setFieldName(getFieldName());
 			gridRow.setDataType(getDataType());
 			gridRow.setDataTypeValue(getDataTypeValue());
