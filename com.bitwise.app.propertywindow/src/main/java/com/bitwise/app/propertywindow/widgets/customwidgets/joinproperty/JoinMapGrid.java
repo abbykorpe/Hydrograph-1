@@ -658,7 +658,7 @@ public class JoinMapGrid extends Dialog {
 			ICellEditorValidator propertyValidator = new ICellEditorValidator() {
 				@Override
 				public String isValid(Object value) {
-					String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
+					String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText(1);
 					String valueToValidate = String.valueOf(value).trim();
 					if (StringUtils.isEmpty(valueToValidate)) {
 						errorLabel.setText(errorMessage);

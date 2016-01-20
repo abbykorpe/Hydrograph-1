@@ -114,5 +114,13 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 	public PortFigure getPortFigure() {
 		return (PortFigure) getFigure();
 	}
+	
+
+	@Override
+	protected void refreshVisuals() {
+		super.refreshVisuals();
+		((PortFigure)getFigure()).setLabelOfPort(getCastedModel().getLabelOfPort());
+		getFigure().repaint();
+	}
 
 }

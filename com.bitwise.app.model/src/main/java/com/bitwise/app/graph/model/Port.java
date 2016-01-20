@@ -7,16 +7,16 @@ package com.bitwise.app.graph.model;
  * 
  * @author Bitwise
  */
-public class Port extends Model{
+public class Port extends Model implements Cloneable{
 	
 	private static final long serialVersionUID = 302760655288792415L;
-	private final String terminal;
+	private String terminal;
 	private int numberOfPortsOfThisType;
-	private final String portType;
-	private final int sequence;
-	private final Component parent;
-	private final String nameOfPort;
-	private final String labelOfPort;
+	private String portType;
+	private int sequence;
+	private Component parent;
+	private String nameOfPort;
+	private String labelOfPort;
 	
 	/**
 	 * Instantiates a new port.
@@ -48,11 +48,21 @@ public class Port extends Model{
 	public String getLabelOfPort() {
 		return labelOfPort;
 	}
+	
+	public void setLabelOfPort(String label) {
+		this.labelOfPort=label;
+	}
 
 	public Component getParent() {
 		return parent;
 	}
 	
+	public void setParent(Component parent) {
+		this.parent = parent;
+	}
+
+
+
 	public String getTerminal() {
 		return terminal;
 	}
@@ -131,6 +141,19 @@ public class Port extends Model{
 		return result;
 		
 		
+	}
+	
+	@Override
+	protected Port clone() throws CloneNotSupportedException {
+		Port clonedPort = (Port) super.clone();
+		clonedPort.terminal = terminal;
+		clonedPort.numberOfPortsOfThisType = numberOfPortsOfThisType;
+		clonedPort.portType = portType;
+		clonedPort.sequence = sequence;
+		clonedPort.nameOfPort = nameOfPort;
+		clonedPort.labelOfPort = labelOfPort;
+		
+		return clonedPort;
 	}
 	
 }

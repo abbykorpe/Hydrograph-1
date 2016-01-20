@@ -7,6 +7,7 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.swt.widgets.Table;
 
 import com.bitwise.app.common.datastructure.property.GridRow;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 
 /**
@@ -81,6 +82,6 @@ public class ELTCellEditorFieldValidator implements ICellEditorValidator {
 	}
 
 	private boolean isFieldNameAlphanumeric(String fieldName){
-     return (!fieldName.matches("[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*"))?false:true;
+		return (!fieldName.matches(Constants.REGEX))?false:true;
 	}
 }

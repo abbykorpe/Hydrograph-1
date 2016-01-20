@@ -169,8 +169,8 @@ public class RunJobHandler extends AbstractHandler {
 			logger.error("Error in Run Job",ex);
 		}
 
-		setBaseEnabled(true);
-		gefCanvas.enableRunningJobResource();
+		//setBaseEnabled(true);
+		//gefCanvas.enableRunningJobResource();
 		return null;
 	}
 
