@@ -86,6 +86,9 @@ public class ELTLookupMapWidget extends AbstractWidget {
 				listofFiledNameList.add(filedNameList);
 			}
 		}
+		if(listofFiledNameList.size()==1)	
+			listofFiledNameList.add(new ArrayList<FilterProperties>());
+		
 		lookupMappingGrid.setLookupInputProperties(listofFiledNameList);
 	}
 
