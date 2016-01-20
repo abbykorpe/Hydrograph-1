@@ -9,6 +9,7 @@
 			<enumeration value="TRANSFORM" />
 			<enumeration value="STRAIGHTPULL" />
 			<enumeration value="DUMMY" />
+			<enumeration value="SUBGRAPH" />
 		</restriction>
 	</simpleType>
 	

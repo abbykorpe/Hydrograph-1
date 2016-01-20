@@ -108,8 +108,10 @@ public class SubGraphAction extends SelectionAction{
 		Container containerOld=((ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()).getContainer(); 
 	   	execute(createCutCommand(getSelectedObjects())); 
     	List bList = (ArrayList) Clipboard.getDefault().getContents();
-    	int count=1;
-    	int port=1;
+    	int inCount=1;
+    	int outCount=1;
+    	int inPort=1;
+    	int outPort=1;
        	SubgraphComponent subgraphComponent= new SubgraphComponent();
     	for (Object object : bList) {
 			Component component = (Component)object;
@@ -117,28 +119,46 @@ public class SubGraphAction extends SelectionAction{
 			List<Link> links= component.getTargetConnections();
 			for(int i=0;i<links.size();i++){
 				if (!bList.contains(links.get(i).getSource())) {
-					count++;
+					inCount++;
 					Component oldTarget=links.get(i).getTarget();
 					Link link = links.get(i);
 					link.detachTarget();
 					link.getTarget().freeInputPort(link.getTargetTerminal());
 					
 					link.setTarget(subgraphComponent);
-					link.setTargetTerminal("in"+port);
+					link.setTargetTerminal("in"+inPort);
 								
 					oldTarget.freeInputPort(link.getTargetTerminal());
 					oldTarget.disconnectInput(link);
 
 					link.attachTarget();
-					subgraphComponent.engageInputPort("in"+port);
+					subgraphComponent.engageInputPort("in"+inPort);
+					inPort++;
 				}
-				 port++;
+				else if (!bList.contains(links.get(i).getTarget())) {
+					outCount++;
+					Component oldSource=links.get(i).getSource();
+					Link link = links.get(i);
+					link.detachSource();
+					link.getSource().freeOutputPort(link.getTargetTerminal());
+					
+					link.setSource(subgraphComponent);
+					link.setSourceTerminal("out"+outPort);
+								
+					oldSource.freeOutputPort(link.getSourceTerminal());
+					oldSource.disconnectOutput(link);
+
+					link.attachSource();
+					subgraphComponent.engageOutputPort("out"+outPort);
+					outPort++;
+				}
+				 
 			}   
 			}  
 		}
     	
-    	subgraphComponent.inputPortSettings(count);
-    	subgraphComponent.outputPortSettings(count);
+    	subgraphComponent.inputPortSettings(inCount);
+    	subgraphComponent.outputPortSettings(outCount);
 		ComponentCreateCommand createComponent = new ComponentCreateCommand(subgraphComponent,containerOld,new Rectangle(((Component)bList.get(0)).getLocation(),((Component)bList.get(0)).getSize()));
 		createComponent.execute(); 
 	}
