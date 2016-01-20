@@ -5,6 +5,7 @@ import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
+import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTCellEditorIsNumericValidator;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
@@ -71,7 +72,12 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 		scaleDecorator = WidgetUtility.addDecorator(editors[3].getControl(),Messages.SCALEERROR);
 		lengthDecorator = WidgetUtility.addDecorator(editors[4].getControl(),Messages.LENGTHERROR);
 		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);	
-
 	}
-	
+
+	@Override
+	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
+		if (!ELTJoinFixedWidthSchemaWidget.class.isAssignableFrom(this.getClass()))
+			schemaFromConnectedLinks();
+		super.attachToPropertySubGroup(container);
+	}
 }
