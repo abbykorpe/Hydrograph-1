@@ -76,6 +76,7 @@ public class ELTFilterPropertyWizard {
 	private Button okButton, cacelButton;
 	private boolean isAnyUpdatePerformed;
 	private Label addButton, deleteButton, upButton, downButton;
+	private Table table_1;
 
 	/**
 	 * Instantiates a new ELT filter property wizard.
@@ -173,14 +174,14 @@ public class ELTFilterPropertyWizard {
 			}
 		});
 
-		table.setBounds(10, 70, 465, 400);
+		table.setBounds(196, 70, 279, 400);
 		tableViewer.setContentProvider(new ELTFilterContentProvider());
 		tableViewer.setLabelProvider(new ELTFilterLabelProvider());
 		tableViewer.setInput(propertyLst);
 
 		TableColumn tc1 = new TableColumn(table, SWT.CENTER);
 		tc1.setText("Field Name");
-		tc1.setWidth(460);
+		tc1.setWidth(275);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
@@ -208,6 +209,11 @@ public class ELTFilterPropertyWizard {
 		shell.setLayout(null);
 		shell.setText("Properties");
 		imageShell(shell);
+		
+		table_1 = new Table(shell, SWT.BORDER | SWT.FULL_SELECTION);
+		table_1.setBounds(10, 70, 173, 400);
+		table_1.setHeaderVisible(true);
+		table_1.setLinesVisible(true);
 		lblHeader = new Label(shell, SWT.NONE);
 		lblHeader.setBounds(10, 14, 450, 15);
 		if (getComponentName() != null) {
