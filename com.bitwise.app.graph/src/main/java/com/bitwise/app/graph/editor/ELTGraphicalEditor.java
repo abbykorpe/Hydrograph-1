@@ -107,6 +107,7 @@ import com.bitwise.app.engine.util.ConverterUtil;
 import com.bitwise.app.graph.action.CopyAction;
 import com.bitwise.app.graph.action.CutAction;
 import com.bitwise.app.graph.action.PasteAction;
+import com.bitwise.app.graph.action.SubGraphAction;
 import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
 import com.bitwise.app.graph.model.Container;
@@ -130,7 +131,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private Container container;
 	private final Point defaultComponentLocation = new Point(0, 0);
 
-	private GraphicalViewer viewer;
+	public GraphicalViewer viewer;
 
 	private ComponentTooltip componentTooltip;
 	private Rectangle toolTipComponentBounds;
@@ -434,7 +435,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 * 
 	 * @see #createPaletteViewerProvider()
 	 */
-	private TransferDropTargetListener createTransferDropTargetListener() {
+	public TransferDropTargetListener createTransferDropTargetListener() {
 		return new TemplateTransferDropTargetListener(getGraphicalViewer()) {
 			@Override
 			protected CreationFactory getFactory(Object template) {
@@ -443,7 +444,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		};
 	}
 
-	private ISelectionChangedListener createISelectionChangedListener() {
+	public ISelectionChangedListener createISelectionChangedListener() {
 		return new ISelectionChangedListener() {
 
 			@Override
@@ -493,6 +494,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		action=new CutAction(this, pasteAction);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
+		
+		action=new SubGraphAction(this, pasteAction);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
+		
 	}
 
 

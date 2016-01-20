@@ -75,7 +75,9 @@ public class Constants {
 			"Visit http://Accelero.org/";
 	public static final String ABOUT_DIALOG_IMAGE_PATH="icons/alt_about.gif";
 	public static final String ABOUT_DIALOG_FEATURE_IMAGE_PATH="icons/app_icon.png";
-	public static final String ABOUT_DIALOG_IMAGE_BUNDLE_NAME="com.bitwise.app.perspective";
+	public static final String ABOUT_DIALOG_IMAGE_BUNDLE_NAME="com.bitwise.app.help";
+	public static final String ABOUT_DIALOG_FEATURE_IMAGE_BUNDLE_NAME="com.bitwise.app.perspective";
 	public static final String IFDELIMITED="IFDelimited";
 	public static final String IFIXEDWIDTH="IFixedWidth";
+	public static final String SUBGRAPH_COMPONENT_CATEGORY = "SUBGRAPH";
 }

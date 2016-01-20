@@ -21,10 +21,13 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.AbstractEditPolicy;
 import org.eclipse.gef.requests.DropRequest;
+import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.component.config.Policy;
@@ -32,15 +35,16 @@ import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.component.config.Property;
 import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.figure.ComponentBorder;
 import com.bitwise.app.graph.figure.ComponentFigure;
 import com.bitwise.app.graph.figure.ELTFigureConstants;
-import com.bitwise.app.graph.figure.PortFigure;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.ComponentLabel;
+import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 import com.bitwise.app.graph.propertywindow.ELTPropertyWindow;
@@ -293,7 +297,38 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	@Override
 	public void performRequest(Request req) {
 		// Opens Property Window only on Double click.
-		if (req.getType().equals(RequestConstants.REQ_OPEN)) {
+		IWorkbenchPage page = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage();
+		if (((Component) getModel()).getCategory().equalsIgnoreCase(
+				Constants.SUBGRAPH_COMPONENT_CATEGORY)) {
+			List bList = (ArrayList) Clipboard
+					.getDefault().getContents();
+			IHandlerService handlerService = (IHandlerService) PlatformUI
+					.getWorkbench().getService(IHandlerService.class);
+			try {
+				handlerService.executeCommand(
+						"com.bitwise.app.graph.newGraphcommand", null);
+			} catch (Exception ex) {
+				throw new RuntimeException(
+						"com.bitwise.app.graph.newGraphcommand not found");
+
+			}
+			Container container = ((ELTGraphicalEditor) page.getActiveEditor())
+					.getContainer(); 
+			ELTGraphicalEditor editor=	(ELTGraphicalEditor) page.getActiveEditor();
+			editor.viewer.setContents(container);
+			
+			editor.viewer.addDropTargetListener(editor.createTransferDropTargetListener());
+			// listener for selection on canvas
+			editor.viewer.addSelectionChangedListener(editor.createISelectionChangedListener());
+			 
+			if (bList != null) {
+				container.getChildren().addAll(bList);
+ 
+			}
+			super.performRequest(req); 
+
+		} else if (req.getType().equals(RequestConstants.REQ_OPEN)) {
 			ELTPropertyWindow eltPropertyWindow = new ELTPropertyWindow(getModel());
 			eltPropertyWindow.open();
 			

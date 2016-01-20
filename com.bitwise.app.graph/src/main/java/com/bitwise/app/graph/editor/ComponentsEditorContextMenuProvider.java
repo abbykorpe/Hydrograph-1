@@ -49,7 +49,7 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.CUT.getId()));
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.COPY.getId()));
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.PASTE.getId()));
-		
+		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction("SubGraph"));   
 	}
 
 	private IAction getAction(String actionId) {

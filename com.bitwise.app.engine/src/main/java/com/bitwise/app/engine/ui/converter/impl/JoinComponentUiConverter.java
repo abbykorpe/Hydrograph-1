@@ -116,7 +116,8 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 			}
 
 			if (inPortCounter > 2) {
-				uiComponent.importPortSettings(inPortCounter);
+				uiComponent.inputPortSettings(inPortCounter);
+				uiComponent.unusedPortSettings(inPortCounter);
 			}
 		}
 

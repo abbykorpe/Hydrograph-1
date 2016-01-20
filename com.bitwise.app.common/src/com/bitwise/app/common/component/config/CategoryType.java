@@ -38,7 +38,8 @@ public enum CategoryType {
     OUTPUT,
     TRANSFORM,
     STRAIGHTPULL,
-    DUMMY;
+    DUMMY,
+    SUBGRAPH; 
 
     public String value() {
         return name();
