@@ -87,9 +87,17 @@ public class FilterOperationClassUtility {
 			});
 		}
 		wizard.run();
-		if (page.isPageComplete()) 
+		if (page.isPageComplete()) {
+			if(!page.getPackageText().equalsIgnoreCase("")){
+				fileName.setText(page.getPackageText()+"."
+						+ page.getTypeName());
+			}else{
+				fileName.setText(page.getTypeName());
+			}
+		}
+		/*if (page.isPageComplete())
 			fileName.setText(page.getPackageText()+"."
-					+ page.getTypeName());
+					+ page.getTypeName());*/
 			fileName.setData("path", "/" + page.getPackageFragmentRootText() + "/"
 					+ page.getPackageText().replace(".", "/") + "/"
 					+ page.getTypeName() + ".java");

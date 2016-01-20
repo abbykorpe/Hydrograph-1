@@ -10,4 +10,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.bitwise.app.cloneableinterface,
  com.bitwise.app.common.datastructure.property,
+ com.bitwise.app.common.datastructure.property.mapping,
  com.bitwise.app.common.datastructures.tooltip

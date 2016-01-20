@@ -8,7 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.InputField;
+import com.bitwise.app.common.datastructure.property.mapping.InputField;
 
 public class InputFieldColumnLabelProvider extends ColumnLabelProvider{
 	

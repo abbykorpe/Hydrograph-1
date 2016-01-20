@@ -1,5 +1,8 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.mappingtable;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.eclipse.jface.viewers.TableViewer;
@@ -32,14 +35,28 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.bitwise.app.common.datastructure.property.OperationClassProperty;
+import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
+import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.RowData;
+import com.bitwise.app.propertywindow.widgets.dialogs.ELTOperationClassDialog;
 
 
 public class MappingTable {
 	private Table table;
 	private TableViewer tableViewer;
 	
+	private WidgetConfig widgetConfig;
+	private PropertyDialogButtonBar propertyDialogButtonBar;
+	
 	private boolean validTable=true;
+	
+	
+	public MappingTable(WidgetConfig widgetConfig, PropertyDialogButtonBar propertyDialogButtonBar){
+		this.widgetConfig = widgetConfig;
+		this.propertyDialogButtonBar = propertyDialogButtonBar;
+	}
 	
 	public void createTable(Composite mappingTableComposite){
 		createButtonPanel(mappingTableComposite);
@@ -185,19 +202,38 @@ public class MappingTable {
 	      
 	      
 	      editor = new TableEditor(table);
-	      Text column2Txt = new Text(table, SWT.MULTI | SWT.WRAP | SWT.BORDER);
+	      final Text column2Txt = new Text(table, SWT.MULTI | SWT.WRAP | SWT.BORDER);
 	      editor.grabHorizontal = true;
 	      editor.setEditor(column2Txt, tableItem, 1);
 	      editor.grabVertical=true;
 	      
 	      editor = new TableEditor(table);		      
-	      Button button = new Button(table, SWT.NONE);
+	      final Button button = new Button(table, SWT.NONE);
 	      button.setText("Edit");
 	      button.pack();
 	      editor.minimumWidth = button.getSize().x;
 	      editor.horizontalAlignment = SWT.LEFT;
 	      editor.setEditor(button, tableItem, 2);
 	      editor.grabVertical=true;
+	      button.addSelectionListener(new SelectionAdapter() {
+	    	  @Override
+	    	public void widgetSelected(SelectionEvent e) {
+	    		  
+	    		  OperationClassProperty operationClassProperty = new OperationClassProperty("", false);
+				ELTOperationClassDialog eltOperationClassDialog = new ELTOperationClassDialog(button.getShell(), propertyDialogButtonBar,operationClassProperty.clone(), widgetConfig);
+					eltOperationClassDialog.open();
+					if(!eltOperationClassDialog.getOperationClassProperty().equals(operationClassProperty)){
+						operationClassProperty = eltOperationClassDialog.getOperationClassProperty();
+						//propertyDialogButtonBar.enableApplyButton(true);
+						column2Txt.setText(operationClassProperty.getOperationClassPath());
+					} 
+	    		  
+	    		super.widgetSelected(e);
+	    		//FilterOperationClassUtility.createNewClassWizard(column2Txt,widgetConfig);
+	    		
+	    	}
+	      });
+	      
 	      
 	      editor = new TableEditor(table);	
 	      final Text column3Txt = new Text(table, SWT.WRAP  | SWT.MULTI  | SWT.BORDER);
@@ -320,6 +356,32 @@ public class MappingTable {
 	
 	public boolean isValidTable(){
 		return validTable;
+	}
+
+	public List<MappingSheetRow> getData() {
+		
+		List<MappingSheetRow> mappingSheetRows = new LinkedList<>();
+		
+		for(TableItem item : table.getItems()){
+			String input = ((Text)item.getData("in")).getText();
+			String operationClass = ((Text)item.getData("OpClass")).getText();
+			String output = ((Text)item.getData("out")).getText();
+			
+			MappingSheetRow mappingSheetRow = new MappingSheetRow(Arrays.asList(input.split(",")), operationClass, Arrays.asList(output.split(",")));
+			mappingSheetRows.add(mappingSheetRow);
+		}
+		
+		return mappingSheetRows;
+	}
+	
+	public void setData(List<MappingSheetRow> mappingSheetRows){
+		for(MappingSheetRow mappingSheetRow : mappingSheetRows){
+			TableItem item = addRow(table);
+			
+			((Text)item.getData("in")).setText(mappingSheetRow.getImputFields().toString().replace("[", "").replace("]", ""));
+			((Text)item.getData("OpClass")).setText(mappingSheetRow.getOperationClass().toString());
+			((Text)item.getData("out")).setText(mappingSheetRow.getOutputList().toString().replace("[", "").replace("]", ""));
+		}
 	}
 }
 

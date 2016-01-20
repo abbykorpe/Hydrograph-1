@@ -1,7 +1,9 @@
-package com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures;
+package com.bitwise.app.common.datastructure.property.mapping;
+
+import com.bitwise.app.cloneableinterface.IDataStructure;
 
 
-public class ErrorObject {
+public class ErrorObject implements IDataStructure {
 	boolean hasError;
 	String errorMessage;
 	
@@ -25,6 +27,17 @@ public class ErrorObject {
 
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
+	}
+	
+	@Override
+	public Object clone() {
+		return new ErrorObject(hasError, errorMessage);
+	}
+
+	@Override
+	public String toString() {
+		return "ErrorObject [hasError=" + hasError + ", errorMessage="
+				+ errorMessage + "]";
 	}
 	
 	

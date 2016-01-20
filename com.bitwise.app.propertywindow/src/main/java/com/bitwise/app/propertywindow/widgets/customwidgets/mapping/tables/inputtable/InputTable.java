@@ -2,6 +2,8 @@ package com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.inpu
 
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -27,8 +29,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.InputField;
-
+import com.bitwise.app.common.datastructure.property.mapping.InputField;
 
 public class InputTable {
 	private Table table;
@@ -151,5 +152,18 @@ public class InputTable {
 		
 		return valid;
 	}
-	
+
+	public List<InputField> getData(){
+		List<InputField> data = new LinkedList<>();
+		
+		for(int i=0; i< table.getItems().length ;i++){
+			data.add((InputField) ((InputField)tableViewer.getElementAt(i)).clone());
+		}
+		
+		return data;
+	}
+
+	public void setData(List<InputField> inputFields) {
+		tableViewer.setInput(inputFields);
+	}
 }

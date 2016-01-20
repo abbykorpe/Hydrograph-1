@@ -5,13 +5,16 @@ import java.util.LinkedHashMap;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Shell;
 
 import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
+import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.OperationClassConfig;
+import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.MappingDialog;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
@@ -28,10 +31,10 @@ public class TransformWidget extends AbstractWidget {
 
 	private String propertyName;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-	private TransformPropertyGrid transformPropertyGrid;
-	private TransformDialog transformDialog;
-	private Object properties; 
-
+	private ATMapping atMapping ;
+	//private TransformPropertyGrid transformPropertyGrid;
+	//private TransformDialog transformDialog;
+	
 	/**
 	 * Instantiates a new ELT operation class widget.
 	 * 
@@ -49,11 +52,16 @@ public class TransformWidget extends AbstractWidget {
 		super(componentConfigrationProperty, componentMiscellaneousProperties,
 				propertyDialogButtonBar);
 		
+		
+		this.atMapping = (ATMapping) componentConfigrationProperty.getPropertyValue();
+		if(atMapping == null){
+			atMapping = new ATMapping();
+		}
 
-		this.transformPropertyGrid = (TransformPropertyGrid) componentConfigrationProperty.getPropertyValue();
+		/*this.transformPropertyGrid = (TransformPropertyGrid) componentConfigrationProperty.getPropertyValue();
 		if(transformPropertyGrid == null){
 			transformPropertyGrid = new TransformPropertyGrid();
-		}
+		}*/
 		this.propertyName = componentConfigrationProperty.getPropertyName(); 
 
 	}
@@ -80,10 +88,15 @@ public class TransformWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				transformDialog = new TransformDialog(transformComposite.getContainerControl().getShell(), propertyDialogButtonBar,transformPropertyGrid,widgetConfig);
+				/*transformDialog = new TransformDialog(transformComposite.getContainerControl().getShell(), propertyDialogButtonBar,transformPropertyGrid,widgetConfig);
 				transformDialog.open();
 					transformPropertyGrid = transformDialog.getTransformProperty();
-					propertyDialogButtonBar.enableApplyButton(true);
+					propertyDialogButtonBar.enableApplyButton(true);*/
+				
+				MappingDialog mappingDialog = new MappingDialog(transformComposite.getContainerControl().getShell(), propertyDialogButtonBar,atMapping,widgetConfig);
+				mappingDialog.open();
+				
+				atMapping = mappingDialog.getATMapping();
 				super.widgetSelected(e);
 			}
 			
@@ -95,7 +108,7 @@ public class TransformWidget extends AbstractWidget {
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {		
 		//operationClassProperty = eltOperationClassDialog.getOperationClassProperty();
-		property.put(propertyName, transformPropertyGrid);
+		property.put(propertyName, atMapping);
 		
 		return property;
 	}

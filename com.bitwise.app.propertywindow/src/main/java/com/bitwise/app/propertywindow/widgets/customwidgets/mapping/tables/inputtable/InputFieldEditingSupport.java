@@ -6,8 +6,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Text;
 
-import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.InputField;
-
+import com.bitwise.app.common.datastructure.property.mapping.InputField;
 
 public class InputFieldEditingSupport extends EditingSupport{
 

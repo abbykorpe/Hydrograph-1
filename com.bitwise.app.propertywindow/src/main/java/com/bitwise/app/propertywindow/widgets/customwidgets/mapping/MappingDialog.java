@@ -13,17 +13,38 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
+import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.inputtable.InputTable;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.mappingtable.MappingTable;
 
 public class MappingDialog extends Dialog {
-	InputTable inputTable;
+	private InputTable inputTable;
+	private MappingTable mappingTable;
+	
+	private PropertyDialogButtonBar propertyDialogButtonBar;
+	private ATMapping atMapping;
+	private WidgetConfig widgetConfig;
+		
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
 	public MappingDialog(Shell parentShell) {
 		super(parentShell);
+	}
+
+	public MappingDialog(Shell shell,
+			PropertyDialogButtonBar propertyDialogButtonBar,
+			ATMapping atMapping,
+			WidgetConfig widgetConfig) {
+		super(shell);
+		
+		this.propertyDialogButtonBar = propertyDialogButtonBar;
+		this.atMapping = atMapping;
+		this.widgetConfig = widgetConfig;
+		
 	}
 
 	/**
@@ -39,21 +60,25 @@ public class MappingDialog extends Dialog {
 		composite.setLayout(new GridLayout(2, false));
 		
 		inputTable = createInputTable(composite);
+		inputTable.setData(atMapping.getInputFields());
 		
-		createMappingTable(composite);
+		mappingTable = createMappingTable(composite);
+		mappingTable.setData(atMapping.getMappingSheetRows());
 
 		return container;
 	}
 
-	private void createMappingTable(Composite composite) {
+	private MappingTable createMappingTable(Composite composite) {
 		Composite composite_2 = new Composite(composite, SWT.NONE);
 		composite_2.setLayout(new GridLayout(1, false));
 		GridData gd_composite_2 = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_composite_2.widthHint = 597;
 		composite_2.setLayoutData(gd_composite_2);
 		
-		MappingTable mappingTable = new MappingTable();
+		MappingTable mappingTable = new MappingTable(widgetConfig,propertyDialogButtonBar);
 		mappingTable.createTable(composite_2);
+		
+		return mappingTable;
 
 	}
 	
@@ -93,19 +118,25 @@ public class MappingDialog extends Dialog {
 	
 	@Override
 	protected void okPressed() {
-/*
-		System.out.println(table_1.getData());
-		TableItem[] items = table_1.getItems();
-		
-		
-		for(TableItem item : items){
-			RowData data = (RowData)item.getData();
-			System.out.println(data);	
+		if(mappingTable.isValidTable() && inputTable.isValidTable()){
+			System.out.println("Input Table validation : " + inputTable.isValidTable());
+			System.out.println("Mapping Table validation : " + mappingTable.isValidTable());
+			
+			//atMapping.setInputFields(inputFields)
+			
+			//List<String> inputTableInputFields = new LinkedList<>();
+			
+			//System.out.println("+++ inputTableInputFields: " + inputTable.getData());
+			//System.out.println("+++ MapingTableData: " + mappingTable.getData());
+			
+			atMapping = new ATMapping(inputTable.getData(), mappingTable.getData());
+			super.okPressed();
 		}
 		
-		*/
-		System.out.println("Table validation : " + inputTable.isValidTable());
-		super.okPressed();
+	}
+
+	public ATMapping getATMapping() {
+		return atMapping;
 	}
 	
 }
