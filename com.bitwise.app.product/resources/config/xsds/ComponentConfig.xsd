@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwise.com/ComponentConfig"
-	xmlns:tns="http://www.bitwise.com/ComponentConfig" elementFormDefault="qualified" 
-	xmlns:cnst="http://www.bitwise.com/constant">
-	
-	<import schemaLocation="Common.xsd"
-		namespace="http://www.bitwise.com/constant" />
-		
+	xmlns:tns="http://www.bitwise.com/ComponentConfig" elementFormDefault="qualified">
+	<include schemaLocation=""></include>
 	<element name="Config">
 		<complexType>
 			<sequence>
@@ -17,7 +13,7 @@
 
 	<complexType name="Component">
 		<sequence>
-			<element name="category" type="cnst:category_type" maxOccurs="1" minOccurs="0" />
+			<element name="category" type="tns:category_type" maxOccurs="1" minOccurs="0" />
 			<element name="port" type="tns:IOPort" maxOccurs="1" minOccurs="1" />
 			<element name="changeInPortsDynamically" type="boolean" maxOccurs="1" minOccurs="0" default="false"/>
 			<element name="changeOutPortsDynamically" type="boolean" maxOccurs="1" minOccurs="0" default="false"/>
@@ -36,18 +32,25 @@
 
 	<complexType name="Property">
 		<sequence>
-			<element name="validator" type="cnst:validators" maxOccurs="unbounded" minOccurs="0"/>
+			<element name="validation" type="tns:Validation" maxOccurs="unbounded" minOccurs="0"/>
 		</sequence>
-		<attribute name="type" type="cnst:property_type" use="required" />
-		<attribute name="renderer" type="cnst:property_renderer" use="required" />
-		<attribute name="dataType" type="cnst:data_type" use="required" />
+		<attribute name="type" type="tns:property_type" use="required" />
+		<attribute name="renderer" type="tns:property_renderer" use="required" />
+		<attribute name="dataType" type="tns:data_type" use="required" />
 		<attribute name="name" type="string" use="required" />
 		<attribute name="value" type="string" use="optional" />
-		<attribute name="group" type="cnst:group" use="required" />
-		<attribute name="subGroup" type="cnst:sub_group" use="required" /> 
-		<attribute name="showAsTooltip" type="cnst:showAsTooltip" use="required" />
-		<attribute name="tooltipDataType" type="cnst:tooltipDataType" use="required" />  
-		<attribute name="usage" type="cnst:usage" use="optional" />  
+		<attribute name="group" type="tns:group" use="required" />
+		<attribute name="subGroup" type="tns:sub_group" use="required" /> 
+		<attribute name="showAsTooltip" type="tns:showAsTooltip" use="required" />
+		<attribute name="tooltipDataType" type="tns:tooltipDataType" use="required" />  
+		<attribute name="usage" type="tns:usage" use="optional" />  
+	</complexType>
+
+	<complexType name="Validation">
+		<sequence>
+			<element name="expression" type="string" maxOccurs="1" minOccurs="1" />
+			<element name="message" type="string" maxOccurs="1" minOccurs="1" />
+		</sequence>
 	</complexType>
 
 	<complexType name="IOPort">
@@ -56,9 +59,17 @@
 		</sequence>
 	</complexType>
 
+	<simpleType name="PortType">
+		<restriction base="string">
+			<enumeration value="in" />
+			<enumeration value="out" />
+			<enumeration value="unused"/>
+		</restriction>
+	</simpleType>
+
  <complexType name="PortSpecification">
 		<sequence>
-		    <element name="typeOfPort" type="cnst:PortType" maxOccurs="1" minOccurs="1"/>
+		    <element name="typeOfPort" type="tns:PortType" maxOccurs="1" minOccurs="1"/>
 			<element name="numberOfPorts" type="int" maxOccurs="1" minOccurs="1" />
 			<element name="sequenceOfPort" type="int" maxOccurs="1" minOccurs="1" />
 			<element name="allowMultipleLinks" type="boolean" maxOccurs="1" minOccurs="0" />
@@ -74,4 +85,99 @@
 			<element name="value" type="string" maxOccurs="1" minOccurs="0" />
 		</sequence>
 	</complexType>
+
+	<simpleType name="property_renderer">
+		<restriction base="string">
+			<enumeration value="SCHEMA_WIDGET" />
+			<enumeration value="FIELD_SEQUENCE_WIDGET" />
+			<enumeration value="FIXED_WIDGET"/>
+			<enumeration value="RUNTIME_PROPERTIES_WIDGET" />
+			<enumeration value="FILE_PATH_WIDGET" />
+			<enumeration value="CHARACTER_SET_WIDGET" />
+			<enumeration value="DELIMETER_WIDGET" />
+			<enumeration value="PHASE_WIDGET" />
+			<enumeration value="HAS_HEADER_WIDGET" />
+			<enumeration value="SAFE_PROPERTY_WIDGET" />
+			<enumeration value="COMPONENT_NAME_WIDGET" />
+			<enumeration value="FILTER_PROPERTY_WIDGET" />
+			<enumeration value="OPERATIONAL_CLASS_WIDGET" />
+			<enumeration value="STRICT_CLASS_WIDGET" />
+			<enumeration value="RETENTION_LOGIC_WIDGET"/>
+			<enumeration value="COLUMN_NAME_WIDGET"/>
+			<enumeration value="SECONDARY_COLUMN_KEYS_WIDGET"/>
+			<enumeration value="SECONDARY_KEYS_WIDGET"/>
+			<enumeration value="TRANSFORM_WIDGET"/>
+			<enumeration value="AGGREGATE_WIDGET"/>
+			<enumeration value="INPUT_COUNT_WIDGET"/>
+			<enumeration value="JOIN_TYPE_WIDGET"/>
+			<enumeration value="JOIN_MAPPING_WIDGET"/>
+			<enumeration value="HASH_JOIN_WIDGET"/>
+			<enumeration value="HASH_JOIN_MAPPING_WIDGET"/>
+			<enumeration value="XML_CONTENT_WIDGET"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="usage">
+		<restriction base="string">
+			<enumeration value="REQUIRED" />
+			<enumeration value="OPTIONAL" />
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="property_type">
+		<restriction base="string">
+			<enumeration value="CONFIG" />
+			<enumeration value="USER" />
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="group">
+		<restriction base="string">
+			<enumeration value="GENERAL" />
+			<enumeration value="SCHEMA" />
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="sub_group">
+		<restriction base="string">
+			<enumeration value="DISPLAY" />
+			<enumeration value="CONFIGURATION" />
+			<enumeration value="RECORD_STRUCTURE_DETAILS" />
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="data_type">
+		<restriction base="string">
+			<enumeration value="string" />
+			<enumeration value="boolean" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="category_type">
+		<restriction base="string">
+			<enumeration value="INPUT" />
+			<enumeration value="OUTPUT" />
+			<enumeration value="TRANSFORM" />
+			<enumeration value="STRAIGHTPULL" />
+			<enumeration value="DUMMY" />
+			<enumeration value="SUBGRAPH" />
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="tooltipDataType">
+		<restriction base="string">
+			<enumeration value="TEXT"></enumeration>
+			<enumeration value="MAP"></enumeration>
+			<enumeration value="LIST"></enumeration>
+			<enumeration value="LINK"></enumeration>
+			<enumeration value="NONE"></enumeration>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="showAsTooltip">
+		<restriction base="string">
+			<enumeration value="TRUE"></enumeration>
+			<enumeration value="FALSE"></enumeration>
+		</restriction>
+	</simpleType>
 </schema>
