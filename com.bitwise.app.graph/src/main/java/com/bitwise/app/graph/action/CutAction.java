@@ -60,19 +60,28 @@ public class CutAction extends SelectionAction{
 			return null;
 		}
 		Component node = null;
-		Iterator<Object> it = selectedObjects.iterator();
-		while (it.hasNext()) {
-			Object ep = it.next();
-			if (ep instanceof ComponentEditPart) {
-				node = (Component) ((EditPart)ep).getModel();
+		boolean enabled=false;
+		for(Object obj:selectedObjects)
+		{
+			if(obj instanceof ComponentEditPart)
+			{
+				enabled=true;
+				break;
+			}	
+		}
+		if(enabled)
+		{	
+		for(Object obj:selectedObjects)
+		{
+			if (obj instanceof ComponentEditPart) {
+				node = (Component) ((EditPart)obj).getModel();
+				cutCommand.addElement(node);
 			}
-			if (!cutCommand.isCutNode(node)){
-				return null;
-			}
-				
-			cutCommand.addElement(node);
-			}
+		}
 		return cutCommand;
+		}
+		else 
+    	return null;	
 	}
 
 	@Override
