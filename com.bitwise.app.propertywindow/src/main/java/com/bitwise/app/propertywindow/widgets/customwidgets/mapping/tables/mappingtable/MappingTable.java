@@ -46,6 +46,7 @@ import com.bitwise.app.propertywindow.widgets.dialogs.ELTOperationClassDialog;
 public class MappingTable {
 	private Table table;
 	private TableViewer tableViewer;
+	private int inputFieldCounter=0;
 	
 	private WidgetConfig widgetConfig;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
@@ -147,7 +148,7 @@ public class MappingTable {
 		
 		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(tableViewer_1, SWT.NONE);
 		TableColumn tblclmnEditOpsclass = tableViewerColumn_3.getColumn();
-		tblclmnEditOpsclass.setWidth(32);
+		tblclmnEditOpsclass.setWidth(21);
 	    tblclmnEditOpsclass.setResizable(false);
 		
 		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(tableViewer_1, SWT.NONE);
@@ -206,10 +207,12 @@ public class MappingTable {
 	      editor.grabHorizontal = true;
 	      editor.setEditor(column2Txt, tableItem, 1);
 	      editor.grabVertical=true;
+	      column2Txt.setEnabled(false);
+	      
 	      
 	      editor = new TableEditor(table);		      
 	      final Button button = new Button(table, SWT.NONE);
-	      button.setText("Edit");
+	      button.setText("...");
 	      button.pack();
 	      editor.minimumWidth = button.getSize().x;
 	      editor.horizontalAlignment = SWT.LEFT;
@@ -219,18 +222,20 @@ public class MappingTable {
 	    	  @Override
 	    	public void widgetSelected(SelectionEvent e) {
 	    		  
-	    		  OperationClassProperty operationClassProperty = new OperationClassProperty("", false);
+	    		  OperationClassProperty operationClassProperty = (OperationClassProperty) column2Txt.getData()  ;
+	    		  
+	    		if(operationClassProperty == null){
+	    			operationClassProperty = new OperationClassProperty("", false, "");
+	    		}
 				ELTOperationClassDialog eltOperationClassDialog = new ELTOperationClassDialog(button.getShell(), propertyDialogButtonBar,operationClassProperty.clone(), widgetConfig);
 					eltOperationClassDialog.open();
 					if(!eltOperationClassDialog.getOperationClassProperty().equals(operationClassProperty)){
 						operationClassProperty = eltOperationClassDialog.getOperationClassProperty();
-						//propertyDialogButtonBar.enableApplyButton(true);
 						column2Txt.setText(operationClassProperty.getOperationClassPath());
+						column2Txt.setData(operationClassProperty);
 					} 
 	    		  
-	    		super.widgetSelected(e);
-	    		//FilterOperationClassUtility.createNewClassWizard(column2Txt,widgetConfig);
-	    		
+	    		super.widgetSelected(e);	    		
 	    	}
 	      });
 	      
@@ -364,7 +369,8 @@ public class MappingTable {
 		
 		for(TableItem item : table.getItems()){
 			String input = ((Text)item.getData("in")).getText();
-			String operationClass = ((Text)item.getData("OpClass")).getText();
+			OperationClassProperty operationClass =(OperationClassProperty)((Text)item.getData("OpClass")).getData();
+			
 			String output = ((Text)item.getData("out")).getText();
 			
 			MappingSheetRow mappingSheetRow = new MappingSheetRow(Arrays.asList(input.split(",")), operationClass, Arrays.asList(output.split(",")));
@@ -379,7 +385,8 @@ public class MappingTable {
 			TableItem item = addRow(table);
 			
 			((Text)item.getData("in")).setText(mappingSheetRow.getImputFields().toString().replace("[", "").replace("]", ""));
-			((Text)item.getData("OpClass")).setText(mappingSheetRow.getOperationClass().toString());
+			((Text)item.getData("OpClass")).setText(mappingSheetRow.getOperationClassProperty().getOperationClassPath());
+			((Text)item.getData("OpClass")).setData(mappingSheetRow.getOperationClassProperty());
 			((Text)item.getData("out")).setText(mappingSheetRow.getOutputList().toString().replace("[", "").replace("]", ""));
 		}
 	}

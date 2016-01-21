@@ -47,14 +47,23 @@ public class InputFieldColumnLabelProvider extends ColumnLabelProvider{
 		  Pattern pattern = Pattern.compile("^[a-zA-Z0-9 _]*$");
 			
 			if (!pattern.matcher(((InputField)cell.getElement()).getFieldName()).matches()) {
-				item.setBackground(cell.getControl().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+				  item.setBackground(cell.getControl().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 				  item.setForeground(cell.getControl().getDisplay().getSystemColor(SWT.COLOR_RED));
 				  ((InputField)cell.getElement()).getErrorObject().setErrorMessage("Input field should match regular expression- \"^[a-zA-Z0-9_]*$\" ");
 				  ((InputField)cell.getElement()).getErrorObject().setHasError(true);
 		    }else{
-		    	item.setBackground(cell.getControl().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-				  item.setForeground(cell.getControl().getDisplay().getSystemColor(SWT.COLOR_BLACK));
-				  ((InputField)cell.getElement()).getErrorObject().setHasError(false);
+		    	
+		    	if(((InputField)cell.getElement()).getFieldName().trim().equalsIgnoreCase("")){
+		    		item.setBackground(cell.getControl().getDisplay().getSystemColor(SWT.COLOR_RED));
+		    		((InputField)cell.getElement()).getErrorObject().setErrorMessage("Input field should not be empty");
+					  ((InputField)cell.getElement()).getErrorObject().setHasError(true);
+		    	}else{
+		    		item.setBackground(cell.getControl().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+					  item.setForeground(cell.getControl().getDisplay().getSystemColor(SWT.COLOR_BLACK));
+					  ((InputField)cell.getElement()).getErrorObject().setHasError(false);
+		    	}
+		    	
+		    	
 		    }
 		super.update(cell);
 	}
