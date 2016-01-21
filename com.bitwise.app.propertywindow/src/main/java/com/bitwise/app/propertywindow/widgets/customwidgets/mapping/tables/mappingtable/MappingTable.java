@@ -21,6 +21,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
@@ -28,8 +29,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -39,24 +38,25 @@ import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.MappingDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.RowData;
 import com.bitwise.app.propertywindow.widgets.dialogs.ELTOperationClassDialog;
 
 
 public class MappingTable {
 	private Table table;
-	private TableViewer tableViewer;
-	private int inputFieldCounter=0;
-	
+	private TableViewer tableViewer;	
 	private WidgetConfig widgetConfig;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
+	private MappingDialogButtonBar mappingDialogButtonBar;
 	
 	private boolean validTable=true;
 	
 	
-	public MappingTable(WidgetConfig widgetConfig, PropertyDialogButtonBar propertyDialogButtonBar){
+	public MappingTable(WidgetConfig widgetConfig, PropertyDialogButtonBar propertyDialogButtonBar, MappingDialogButtonBar mappingDialogButtonBar){
 		this.widgetConfig = widgetConfig;
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
+		this.mappingDialogButtonBar = mappingDialogButtonBar;
 	}
 	
 	public void createTable(Composite mappingTableComposite){
@@ -96,43 +96,21 @@ public class MappingTable {
 		      final String data = (String) event.data;
 
 		      Point pt = new Point(event.x, event.y);
-		      TableItem item = table.getItem(table.toControl(pt));
-		       
-		      //System.out.println("+++ table Bounds " + table.getBounds() + " " + item + " " + MouseInfo.getPointerInfo().getLocation() + " " + table.toControl(pt));
+		      TableItem item = table.getItem(table.toControl(pt)); 
 		      
 		      if(item==null){
 		    	  item=addRow(table);
 			      ((RowData)item.getData()).setIn(data);
 			      ((RowData)item.getData()).setOut(data);
-			      //((RowData)item.getData()).setClazz(data);
 		      }else{
 		    	  ((RowData)item.getData()).setIn(((RowData)item.getData()).getIn().getText() +  data);
 		    	  ((RowData)item.getData()).setOut(((RowData)item.getData()).getOut().getText() + data);
 		      }
 		      
-		      validateTextField(((RowData)item.getData()).getIn());
-		      validateTextField(((RowData)item.getData()).getOut());
-		      
-			  
+			  validateRow((RowData)item.getData());
 		    }
 		  }
 		});
-	}
-
-	private void validateTextField(Text text){
-		Pattern pattern = Pattern.compile("^[a-zA-Z0-9_, \r\n]*$");
-		String tmp=text.getText();
-		if (!pattern.matcher(text.getText()).matches()) {
-			text.setForeground(text.getDisplay().getSystemColor(SWT.COLOR_RED));
-		}else{
-			text.setForeground(text.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-		}
-		
-		if(text.getText().startsWith(","))					
-			text.setText(text.getText().replaceFirst(",", ""));
-		
-		if(text.getText().endsWith(","))
-			text.setText(text.getText().substring(0,text.getText().length()-1));
 	}
 	
 	private void addColumns(final TableViewer tableViewer_1) {
@@ -199,8 +177,6 @@ public class MappingTable {
 	      editor.grabHorizontal = true;
 	      editor.setEditor(column1Txt,tableItem, 0);	      
 	      editor.grabVertical=true;
-	      attachMappingTableInputOutputFieldListeners(column1Txt);
-	      
 	      
 	      editor = new TableEditor(table);
 	      final Text column2Txt = new Text(table, SWT.MULTI | SWT.WRAP | SWT.BORDER);
@@ -246,118 +222,237 @@ public class MappingTable {
 	      editor.grabHorizontal = true;
 	      editor.setEditor(column3Txt, tableItem, 3);
 	      editor.grabVertical=true;		
-	      attachMappingTableInputOutputFieldListeners(column3Txt);
+
 	      
 	      tableItem.setData("in", column1Txt);
 	      tableItem.setData("OpClass", column2Txt);
 	      tableItem.setData("out", column3Txt);
 	      
-	      RowData rowData = new RowData(column1Txt, column3Txt, column2Txt);
-	      
+	      RowData rowData = new RowData(column1Txt, column3Txt, column2Txt);	      
 	      tableItem.setData(rowData);
+	      
+	      column1Txt.setData("rowData",rowData);
+	      column2Txt.setData("rowData",rowData);
+	      column3Txt.setData("rowData",rowData);
+	      
+	      
+	      attachFieldValidators(column1Txt,column2Txt,column3Txt);
+	      
+	      validateRow(rowData);
+	      
 	      return tableItem;
 	      
 	}
 
-	private void attachMappingTableInputOutputFieldListeners(final Text column3Txt) {
-		column3Txt.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {		
-				/*if(!column3Txt.getText().endsWith("\r\n")){
-					column3Txt.setText(column3Txt.getText() + "\r\n");
-				}*/
-				int width=column3Txt.getSize().x;
-				Point size = column3Txt.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-				
-				if(size.y < table.getSize().y - 100)
-					column3Txt.setSize(width, size.y);
-				else
-					column3Txt.setSize(width, table.getSize().y - 100);
-			}
-		});
-	      
-	      column3Txt.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseUp(MouseEvent e) {			
-				int width=column3Txt.getSize().x;				
-				Point size = column3Txt.computeSize(SWT.DEFAULT, SWT.DEFAULT);				
-				//column3Txt.setSize(width, size.y);
-				if(size.y < table.getSize().y - 100)
-					column3Txt.setSize(width, size.y);
-				else
-					column3Txt.setSize(width, table.getSize().y - 100);
-			}
-			
-			@Override
-			public void mouseDown(MouseEvent e) {
-				//Do Nothing
-				
-			}
-			
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				//Do Nothing
-			}
-		});
-	      	      
-	      column3Txt.addFocusListener(new FocusListener() {
+	private void attachFieldValidators(final Text column1Txt, final Text column2Txt,
+			final Text column3Txt) {
+		
+		// TODO Listeners
+		attachTextModifyListener(column1Txt);
+		attachTextModifyListener(column3Txt);
+		
+		attachTextMouseListener(column1Txt);
+		attachTextMouseListener(column3Txt);
+		
+		attachFocusListener(column1Txt);
+		attachFocusListener(column3Txt);
+		
+		attachOpeartionClassModifyListener(column2Txt, column3Txt);
+		
+	}
+	
+	private void attachFocusListener(final Text columnText) {
+		
+		columnText.addFocusListener(new FocusListener() {
 			
 			@Override
 			public void focusLost(FocusEvent e) {
-				
-				String tmpx = column3Txt.getText();
-				column3Txt.setText(column3Txt.getText().replace(",\r\n", ","));
-				
-				column3Txt.setBackground(column3Txt.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-				Pattern pattern = Pattern.compile("^[a-zA-Z0-9_, \r\n]*$");
-				String tmp=column3Txt.getText();
-				if (!pattern.matcher(column3Txt.getText()).matches()) {
-					column3Txt.setForeground(column3Txt.getDisplay().getSystemColor(SWT.COLOR_RED));
-				}else{
-					column3Txt.setForeground(column3Txt.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-				}
-				
-				if(column3Txt.getText().startsWith(","))					
-					column3Txt.setText(column3Txt.getText().replaceFirst(",", ""));
-				
-				if(column3Txt.getText().endsWith(","))
-					column3Txt.setText(column3Txt.getText().substring(0,column3Txt.getText().length()-1));
+				RowData rowData = (RowData)columnText.getData("rowData");
+				validateRow(rowData);
 			}
 			
 			@Override
 			public void focusGained(FocusEvent e) {
+				autoFormatText(columnText);
+			}
+		});		
+	}
+
+	
+	private void validateRow(RowData rowData){
+		boolean emptyInClass = true;
+		boolean emptyOut = true;
+		Text txtIn = (Text)rowData.getIn();
+		Text txtClazz = (Text)rowData.getClazz();
+		Text txtOut = (Text)rowData.getOut();
+		
+		txtIn.setBackground(txtIn.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		txtClazz.setBackground(txtIn.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		txtOut.setBackground(txtIn.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		txtIn.setToolTipText(null);
+		txtClazz.setToolTipText(null);
+		txtOut.setToolTipText(null);
+		
+		if(txtIn.getText().replace(",", "").replace("\t\n", "").trim().equalsIgnoreCase("") &&
+		   txtClazz.getText().replace(",", "").replace("\t\n", "").trim().equalsIgnoreCase("")){
+			if(txtOut.getToolTipText() == null)
+				txtOut.setToolTipText("Input fields and Opeartion class, both can not be blank at the same time");
+			else
+				txtOut.setToolTipText("- " + txtOut.getToolTipText() + "\n- " + "Input fields and Opeartion class, both can not be blank at the same time");
+			
+			emptyInClass = false;
+		}
+
+		if(txtOut.getText().replace(",", "").replace("\t\n", "").trim().equalsIgnoreCase("")){
+			
+			if(txtOut.getToolTipText() == null)
+				txtOut.setToolTipText("Output field can't be blank");
+			else
+				txtOut.setToolTipText("- " + txtOut.getToolTipText() + "\n- " + "Output field can't be blank");
+			
+			emptyOut = false;
+		}
+
+		//validateInputOutputMapping(txtIn,txtClazz,txtOut);
+		
+		boolean in = validateInputText(txtIn); 
+		boolean out = validateInputText(txtOut);
+		
+		if(emptyOut && emptyInClass){
+			txtOut.setBackground(txtOut.getDisplay().getSystemColor(SWT.COLOR_WHITE));			
+		}else{
+			txtOut.setBackground(com.bitwise.app.common.util.SWTResourceManager.getColor(250, 128, 114));
+		}
+		
+		if(in && out && emptyOut && emptyInClass){
+			validTable = true;
+			validateInputOutputMapping(txtIn, txtClazz, txtOut);
+		}else{
+			validTable = false;
+		}	
+		
+	}
+	
+	private void validateInputOutputMapping(Text txtIn, Text txtClazz,
+			Text txtOut) {
+		if(txtClazz.getText().trim().equalsIgnoreCase("")){
+			if(txtIn.getText().split(",").length != txtOut.getText().split(",").length){
+				txtIn.setBackground(com.bitwise.app.common.util.SWTResourceManager.getColor(250, 128, 114));
+				txtOut.setBackground(com.bitwise.app.common.util.SWTResourceManager.getColor(250, 128, 114));
 				
-//				column3Txt.setText(column3Txt.getText().replace(",", ",\r\n"));
-				String text=column3Txt.getText().replace("\r\n", "");
-				text=text.replace(", ", ",");
-				text=text.replace(",", ", ");
-				column3Txt.setText(text.replace(",", ",\r\n"));
 				
-				int width=column3Txt.getSize().x;				
-				Point size = column3Txt.computeSize(SWT.DEFAULT, SWT.DEFAULT);				
-				//column3Txt.setSize(width, size.y);
-				if(size.y < table.getSize().y - 100)
-					column3Txt.setSize(width, size.y);
+				if(txtIn.getToolTipText() == null)
+					txtIn.setToolTipText("In case of NO Operation class, number of input and number of output fields should be same");
 				else
-					column3Txt.setSize(width, table.getSize().y - 100);
+					txtIn.setToolTipText("- " + txtIn.getToolTipText() + "\n- " + "In case of NO Operation class, number of input and number of output fields should be same");
 				
-				column3Txt.setBackground(column3Txt.getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-				column3Txt.setSelection(0);
+				
+				if(txtOut.getToolTipText() == null)
+					txtOut.setToolTipText("In case of NO Operation class, number of input and number of output fields should be same");
+				//else
+					//txtOut.setToolTipText("- " + txtOut.getToolTipText() + "\n- " + "In case of NO Operation class, number of input and number of output fields should be same");
+				
+				validTable = false;
+			}
+		}
+	}
+
+	private void attachOpeartionClassModifyListener(Text column2Txt, final Text column3Txt){
+		column2Txt.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				column3Txt.setText("");
+				column3Txt.setBackground(com.bitwise.app.common.util.SWTResourceManager.getColor(250, 128, 114));
 			}
 		});
-	      
-	      column3Txt.addListener(SWT.MeasureItem, new Listener() {
-		        public void handleEvent(Event event) {
-		        	Point size = event.gc.textExtent(column3Txt.getText());
-		        	System.out.println(size.x);
-		        	if(size.x > 180){
-		        		column3Txt.setText(column3Txt.getText() + "\\n");
-		        		System.out.println("Addingh \\n");
-		        	}
-		        }
-		    });
 	}
+	
+	private void resizeTextBoxBasedOnUserInput(final Text columnText) {
+		int width=columnText.getSize().x;
+		Point size = columnText.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+		
+		if(size.y < table.getSize().y - 100)
+			columnText.setSize(width, size.y);
+		else
+			columnText.setSize(width, table.getSize().y - 100);
+	}
+
+	
+	private void attachTextModifyListener(final Text columnText){
+		columnText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {		
+				resizeTextBoxBasedOnUserInput(columnText);
+			}
+		});
+	}
+	
+	
+	private void attachTextMouseListener(final Text columnText){
+		columnText.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseUp(MouseEvent e) {			
+					resizeTextBoxBasedOnUserInput(columnText);
+				}
+				
+				@Override
+				public void mouseDown(MouseEvent e) {
+					//Do Nothing
+					
+				}
+				
+				@Override
+				public void mouseDoubleClick(MouseEvent e) {
+					//Do Nothing
+				}
+			});
+	}
+	
+	
+	
+	
+	private boolean validateInputText(final Text columnText) {
+		boolean valid = true;
+		columnText.setText(columnText.getText().replace(",\r\n", ","));
+		
+		columnText.setBackground(columnText.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		Pattern pattern = Pattern.compile("^[a-zA-Z0-9_, \r\n]*$");
+		if (!pattern.matcher(columnText.getText()).matches()) {
+			columnText.setForeground(columnText.getDisplay().getSystemColor(SWT.COLOR_RED));
+			if(columnText.getToolTipText() == null)
+				columnText.setToolTipText("The text field should match \"^[a-zA-Z0-9_, \\r\\n]*\"");
+			else
+				columnText.setToolTipText("- " + columnText.getToolTipText() + "\n- " + "The text field should match \"^[a-zA-Z0-9_, \\r\\n]*\"");
+			
+			valid = false;			
+		}else{
+			columnText.setForeground(columnText.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+			//columnText.setToolTipText(null);
+		}
+		
+		if(columnText.getText().startsWith(","))					
+			columnText.setText(columnText.getText().replaceFirst(",", ""));
+		
+		if(columnText.getText().endsWith(","))
+			columnText.setText(columnText.getText().substring(0,columnText.getText().length()-1));
+		
+		return valid;
+	}
+	
+	private void autoFormatText(final Text columnText) {
+		String text=columnText.getText().replace("\r\n", "");
+		text=text.replace(", ", ",");
+		text=text.replace(",", ", ");
+		columnText.setText(text.replace(",", ",\r\n"));
+		
+		resizeTextBoxBasedOnUserInput(columnText);
+		
+		columnText.setBackground(columnText.getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+		columnText.setSelection(0);
+	}
+	
 	
 	public boolean isValidTable(){
 		return validTable;
@@ -385,9 +480,13 @@ public class MappingTable {
 			TableItem item = addRow(table);
 			
 			((Text)item.getData("in")).setText(mappingSheetRow.getImputFields().toString().replace("[", "").replace("]", ""));
-			((Text)item.getData("OpClass")).setText(mappingSheetRow.getOperationClassProperty().getOperationClassPath());
-			((Text)item.getData("OpClass")).setData(mappingSheetRow.getOperationClassProperty());
+			if(mappingSheetRow.getOperationClassProperty() != null){
+				((Text)item.getData("OpClass")).setText(mappingSheetRow.getOperationClassProperty().getOperationClassPath());
+				((Text)item.getData("OpClass")).setData(mappingSheetRow.getOperationClassProperty());
+			}			
 			((Text)item.getData("out")).setText(mappingSheetRow.getOutputList().toString().replace("[", "").replace("]", ""));
+			
+			validateRow((RowData)((Text)item.getData("out")).getData("rowData"));
 		}
 	}
 }

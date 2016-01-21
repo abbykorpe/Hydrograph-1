@@ -54,7 +54,9 @@ public class MappingSheetRow implements IDataStructure {
 		
 		inputFields.addAll(this.inputFields);
 		outputList.addAll(this.outputList);
-		operationClass = this.operationClass.clone();
+		if(this.operationClass != null)
+			operationClass = this.operationClass.clone();
+		
 		MappingSheetRow mappingSheetRow = new MappingSheetRow(inputFields, operationClass, outputList);
 		
 		return mappingSheetRow;
