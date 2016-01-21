@@ -7,7 +7,10 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Shell;
-
+import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
+import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
+import com.bitwise.app.graph.model.Link;
+import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -56,7 +59,7 @@ public class SingleColumnWidget extends AbstractWidget {
 				if (getProperties().get(propertyName) == null) {
 					setProperties(propertyName, new HashSet<String>());
 				}
-				filterWizardObj.setRuntimePropertySet((HashSet<String>) getProperties().get(propertyName));
+				filterWizardObj.setRuntimePropertySet(getPropagatedSchema());
 				setProperties(propertyName, filterWizardObj.launchRuntimeWindow(shell, propertyDialogButtonBar));
 
 			}
@@ -79,5 +82,19 @@ public class SingleColumnWidget extends AbstractWidget {
 
 	public void setWidgetConfig(WidgetConfig widgetConfig) {
 		gridConfig = (SingleColumnGridConfig) widgetConfig;
+	}
+
+	private HashSet<String> getPropagatedSchema() {
+		HashSet<String> genratedProperty = new HashSet<String>();
+		ComponentsOutputSchema outputSchema =null ;
+		for (Link link : getComponent().getTargetConnections()) {
+			 {outputSchema= SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+			 if(outputSchema!=null)
+				for (FixedWidthGridRow row :outputSchema.getFixedWidthGridRowsOutputFields())
+					genratedProperty.add(row.getFieldName());
+			}
+
+		}
+		return genratedProperty;
 	}
 }

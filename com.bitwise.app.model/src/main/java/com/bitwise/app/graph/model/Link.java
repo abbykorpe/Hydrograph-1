@@ -2,6 +2,10 @@ package com.bitwise.app.graph.model;
 
 import org.eclipse.draw2d.Graphics;
 
+import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
+import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Link.
@@ -15,55 +19,59 @@ public class Link extends Model {
 	private int lineStyle = Graphics.LINE_SOLID;
 	private int linkNumber;
 	/**
-	 * Used for indicating that a Connection with solid line style should be
-	 * created.
+	 * Used for indicating that a Connection with solid line style should be created.
 	 */
 	public static final Integer SOLID_CONNECTION = new Integer(Graphics.LINE_SOLID);
 	/** Property ID to use when the line style of this connection is modified. */
 	public static final String LINESTYLE_PROP = "LineStyle";
-	
+
 	/** True, if the connection is attached to its endpoints. */
 	private boolean isConnected;
-	
+
 	/** Connection's source endpoint. */
 	private Component source;
-	
+
 	/** Connection's target endpoint. */
 	private Component target;
-	
+
 	private String sourceTerminal, targetTerminal;
-	
-	
-	
-	
+
 	/**
 	 * Instantiates a new link.
 	 */
 	public Link() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	/**
 	 * Attach source.
 	 */
 	public void attachSource() {
-		if (getSource() == null
-				|| getSource().getSourceConnections().contains(this))
+		if (getSource() == null || getSource().getSourceConnections().contains(this))
 			return;
-		
+
 		getSource().connectOutput(this);
+		if(this.getTarget()!=null)
+		propagateSchema(this.getSource());
 	}
 
 	/**
 	 * Attach target.
 	 */
 	public void attachTarget() {
-		if (getTarget() == null
-				|| getTarget().getTargetConnections().contains(this))
+		if (getTarget() == null || getTarget().getTargetConnections().contains(this))
 			return;
 		getTarget().connectInput(this);
+		propagateSchema(this.getSource());
 	}
-	
+
+	private void propagateSchema(Component sourceComponent) {
+		if (sourceComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE) != null)
+			SchemaPropagation.INSTANCE.continuousSchemaPropagation(sourceComponent,
+					(ComponentsOutputSchema) sourceComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
+
+	}
+
 	/**
 	 * Detach source.
 	 */
@@ -72,7 +80,7 @@ public class Link extends Model {
 			return;
 		getSource().disconnectOutput(this);
 	}
-	
+
 	/**
 	 * Detach target.
 	 */
@@ -81,7 +89,7 @@ public class Link extends Model {
 			return;
 		getTarget().disconnectInput(this);
 	}
-	
+
 	public Component getSource() {
 		return source;
 	}
@@ -89,7 +97,7 @@ public class Link extends Model {
 	public String getSourceTerminal() {
 		return sourceTerminal;
 	}
-	
+
 	public Component getTarget() {
 		return target;
 	}
@@ -97,12 +105,13 @@ public class Link extends Model {
 	public String getTargetTerminal() {
 		return targetTerminal;
 	}
-	
+
 	public void setSource(Component e) {
 		Object old = source;
 		source = e;
 		firePropertyChange("source", old, source);
 	}
+
 	public void setSourceTerminal(String s) {
 		Object old = sourceTerminal;
 		sourceTerminal = s;
@@ -120,6 +129,7 @@ public class Link extends Model {
 		targetTerminal = s;
 		firePropertyChange("targetTerminal", old, targetTerminal);
 	}
+
 	/**
 	 * Returns the line drawing style of this connection.
 	 * 
@@ -128,11 +138,12 @@ public class Link extends Model {
 	public int getLineStyle() {
 		return lineStyle;
 	}
-	
-		
+
 	/**
 	 * Set the line drawing style of this connection.
-	 * @param lineStyle one of following values: Graphics.LINE_SOLID
+	 * 
+	 * @param lineStyle
+	 *            one of following values: Graphics.LINE_SOLID
 	 * @see Graphics#LINE_SOLID
 	 * @throws IllegalArgumentException
 	 *             if lineStyle does not have one of the above values
@@ -144,7 +155,7 @@ public class Link extends Model {
 		this.lineStyle = lineStyle;
 		firePropertyChange(LINESTYLE_PROP, null, new Integer(this.lineStyle));
 	}
-	
+
 	public int getLinkNumber() {
 		return linkNumber;
 	}
@@ -156,15 +167,15 @@ public class Link extends Model {
 	/**
 	 * Reconnect.
 	 */
-	public void reconnect(){
-		if(!isConnected){
+	public void reconnect() {
+		if (!isConnected) {
 			source.connectOutput(this);
 			source.engageOutputPort(sourceTerminal);
-			
-			isConnected=true;
+
+			isConnected = true;
 		}
 	}
-	
+
 	/**
 	 * Reconnect.
 	 * 
@@ -173,14 +184,23 @@ public class Link extends Model {
 	 * @param sourceTerminal
 	 *            the source terminal
 	 */
-	//Reconnect to different Source or Target
-	public void reconnect(Component newSource,String sourceTerminal){
-		if(newSource==null && sourceTerminal==null){
+	// Reconnect to different Source or Target
+	public void reconnect(Component newSource, String sourceTerminal) {
+		if (newSource == null && sourceTerminal == null) {
 			throw new IllegalArgumentException();
 		}
 		detachSource();
-		this.source=newSource;
-		this.sourceTerminal=sourceTerminal;
+		this.source = newSource;
+		this.sourceTerminal = sourceTerminal;
 		reconnect();
+	}
+
+	private void applySchemaToTarget(Component sourceComponent, Component targetComponent) {
+
+		if (targetComponent.getComponentName().equalsIgnoreCase("CloneComponent")
+				|| targetComponent.getComponentName().equalsIgnoreCase("UnionallComponent")) {
+			targetComponent.getProperties().put(Constants.SCHEMA_TO_PROPAGATE,
+					sourceComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
+		}
 	}
 }

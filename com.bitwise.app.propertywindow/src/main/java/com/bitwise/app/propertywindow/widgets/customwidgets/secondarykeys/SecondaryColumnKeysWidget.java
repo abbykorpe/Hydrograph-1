@@ -1,10 +1,14 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.secondarykeys;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.TreeMap;
+import java.util.List;
 
 import org.eclipse.swt.widgets.Shell;
 
+import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
+import com.bitwise.app.graph.model.Link;
+import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
@@ -23,7 +27,7 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
  */
 public class SecondaryColumnKeysWidget extends AbstractWidget {
 
-	private TreeMap<String, String> InstializeMap;
+	private LinkedHashMap<String, String> InstializeMap;
 	private String propertyName;
 	private Shell shell;
 	private String componentName;
@@ -42,13 +46,14 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 	 * @param propertyDialogButtonBar
 	 *            the property dialog button bar
 	 */
+	@SuppressWarnings("unchecked")
 	public SecondaryColumnKeysWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
 
 		this.propertyName = componentConfigrationProperty.getPropertyName();
-		this.InstializeMap = (TreeMap<String, String>) componentConfigrationProperty.getPropertyValue();
+		this.InstializeMap = (LinkedHashMap<String, String>) componentConfigrationProperty.getPropertyValue();
 
 		tempPropertyMap = new LinkedHashMap<String, Object>();
 	}
@@ -94,7 +99,7 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 	 */
 	public void setProperties(String propertyName, Object properties) {
 		this.propertyName = propertyName;
-		this.InstializeMap = (TreeMap<String, String>) properties;
+		this.InstializeMap = (LinkedHashMap<String, String>) properties;
 	}
 
 	@Override
@@ -108,16 +113,29 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 	 * New window launcher.
 	 */
 	public void newWindowLauncher() {
-		SecondaryColumnKeysWidgetWizard runTimeWizardObj = new SecondaryColumnKeysWidgetWizard();
-		runTimeWizardObj.setComponentName(componentName);
+		SecondaryColumnKeysWidgetWizard secondaryColumnKeyWizard = new SecondaryColumnKeysWidgetWizard();
+		secondaryColumnKeyWizard.setComponentName(componentName);
 		if (getProperties().get(propertyName) == null) {
-			setProperties(propertyName, new TreeMap<String, String>());
+			setProperties(propertyName, new LinkedHashMap<String, String>());
 
 		}
+		secondaryColumnKeyWizard.setRuntimePropertyMap((LinkedHashMap<String, String>) getProperties().get(propertyName));
+		secondaryColumnKeyWizard.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
+		setProperties(propertyName, secondaryColumnKeyWizard.launchRuntimeWindow(shell, propertyDialogButtonBar));
 
-		runTimeWizardObj.setRuntimePropertyMap((TreeMap<String, String>) getProperties().get(propertyName));
-		setProperties(propertyName, runTimeWizardObj.launchRuntimeWindow(shell, propertyDialogButtonBar));
+	}
 
+	private List<String> getPropagatedSchema() {
+		List<String> fieldNameList = new ArrayList<>();
+		for (Link link : getComponent().getTargetConnections()) {
+			{
+				for (FixedWidthGridRow row : SchemaPropagation.INSTANCE.getComponentsOutputSchema(link)
+						.getFixedWidthGridRowsOutputFields())
+					fieldNameList.add(row.getFieldName());
+			}
+
+		}
+		return fieldNameList;
 	}
 
 }

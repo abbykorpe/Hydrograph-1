@@ -30,11 +30,17 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
+import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
+import com.bitwise.app.graph.model.Link;
+import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
+import com.bitwise.app.propertywindow.fixedwidthschema.ELTFixedWidget;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
@@ -140,10 +146,12 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
+		ComponentsOutputSchema componentsOutputSchema = new ComponentsOutputSchema();
 		List<GridRow> tempGrid = new ArrayList<>();
 		if (schemaGridRowList != null && !schemaGridRowList.isEmpty()) {
 			for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
 				tempGrid.add(gridRow.copy());
+				componentsOutputSchema.addSchemaFields(gridRow);
 			}
 
 			if (!schemaGridRowList.equals(this.properties)) {
@@ -159,8 +167,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			schema.setIsExternal(false);
 			schema.setGridRow(tempGrid);
 			schema.setExternalSchemaPath("");
+			property.put(Constants.SCHEMA_TO_PROPAGATE, componentsOutputSchema);
 		}
 		property.put(propertyName, schema);
+		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), componentsOutputSchema);
+
 		return property;
 	}
 
@@ -176,6 +187,38 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		createSchemaGridSection(container.getContainerControl());
 		createExternalSchemaSection(container.getContainerControl());
 		populateSchemaTypeWidget();
+	}
+
+	protected Schema getPropagatedSchema(Link link) {
+		ComponentsOutputSchema componentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+		Schema schema = null;
+		schema = new Schema();
+		schema.setExternalSchemaPath("");
+		schema.setIsExternal(false);
+		schema.setGridRow(new ArrayList<GridRow>());
+		if (componentsOutputSchema != null) {
+			if (this.getClass().isAssignableFrom(ELTFixedWidget.class)) {
+				for (FixedWidthGridRow gridRow : componentsOutputSchema.getFixedWidthGridRowsOutputFields()) {
+					schema.getGridRow().add(gridRow);
+				}
+			} else if (this.getClass().equals(ELTGenericSchemaGridWidget.class)) {
+				for (FixedWidthGridRow gridRow : componentsOutputSchema.getFixedWidthGridRowsOutputFields()) {
+					schema.getGridRow().add(componentsOutputSchema.convertFixedWidthSchemaToSchemaGridRow(gridRow));
+				}
+			}
+		}
+		return schema;
+	}
+
+	protected void schemaFromConnectedLinks() {
+		for (Link link : getComponent().getTargetConnections()) {
+			this.properties = getPropagatedSchema(link);
+			// if (link.getSource().getPort(link.getSourceTerminal()).equals(Constants.UNUSED_SOCKET_TYPE)) {
+			//
+			// } else if (link.getSource().getProperties().get(Constants.SCHEMA_TO_PROPAGATE) != null) {
+			// this.properties = getPropagatedSchema(link);
+			// }
+		}
 	}
 
 	// Adds the browse button

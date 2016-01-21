@@ -78,4 +78,6 @@ public class Constants {
 	public static final String ABOUT_DIALOG_IMAGE_BUNDLE_NAME="com.bitwise.app.perspective";
 	public static final String IFDELIMITED="IFDelimited";
 	public static final String IFIXEDWIDTH="IFixedWidth";
+	public static final String ASCENDING_SORT_ORDER = "Asc";
+	public static final String DESCENDING_SORT_ORDER="Desc";
 }
