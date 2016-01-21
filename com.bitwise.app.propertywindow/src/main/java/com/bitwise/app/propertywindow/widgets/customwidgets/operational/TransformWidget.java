@@ -93,11 +93,13 @@ public class TransformWidget extends AbstractWidget {
 				 * propertyDialogButtonBar.enableApplyButton(true);
 				 */
 				getPropagatedSChema();
+				
 				MappingDialog mappingDialog = new MappingDialog(transformComposite.getContainerControl().getShell(),
 						propertyDialogButtonBar, atMapping, widgetConfig);
 				mappingDialog.open();
 
 				atMapping = mappingDialog.getATMapping();
+				atMapping.getInputFields().clear();
 				super.widgetSelected(e);
 			}
 
