@@ -2,10 +2,10 @@ package com.bitwise.app.engine.converter.impl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.slf4j.Logger;
 
@@ -71,7 +71,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 
 	private TypeSecondaryKeyFields getSecondaryKeys() {
 
-		Map<String, String> fieldValueMap = (TreeMap<String, String>) properties
+		Map<String, String> fieldValueMap = (LinkedHashMap<String, String>) properties
 				.get(PropertyNameConstants.SECONDARY_COLUMN_KEYS.value());
 
 		TypeSecondaryKeyFields typeSecondaryKeyFields = null;
