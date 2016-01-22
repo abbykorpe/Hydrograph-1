@@ -156,6 +156,23 @@ public abstract class Component extends Model {
 		this.toolTipErrorMessages = toolTipErrorMessages;
 	}
 
+	public void importPortSettings(int newPortCount) {
+
+		changePortCount(newPortCount);
+
+		for (int i = 0; i < (newPortCount - 2); i++) {
+
+			Port inPort = new Port("in" + (i + 2), "in" + (i + 2), "in"
+					+ (i + 2), this, newPortCount, "in", (i + 2));
+			ports.put("in" + (i + 2), inPort);
+			firePropertyChange("Component:add", null, inPort);
+
+			Port unusedPort = new Port("unused" + (i + 2), "un" + (i + 2),
+					"unused" + (i + 2), this, newPortCount, "unused", (i + 2));
+			ports.put("unused" + (i + 2), unusedPort);
+			firePropertyChange("Component:add", null, unusedPort);
+		}
+	}
 	private void initPortSettings() {
 
 		portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName)
@@ -720,10 +737,10 @@ public abstract class Component extends Model {
 
 		changePortCount(newPortCount);
 
-		for (int i = 0; i < (newPortCount - 2); i++) {
-			Port inPort = new Port("in" + (i + 2), "in" + (i + 2), "in"
-					+ (i + 2), this, newPortCount, "in", (i + 2));
-			ports.put("in" + (i + 2), inPort);
+		for (int i = 0; i < (newPortCount - 1); i++) {
+			Port inPort = new Port("in" + (i + 1), "in" + (i + 1), "in"
+					+ (i + 1), this, newPortCount, "in", (i + 1));
+			ports.put("in" + (i + 1), inPort);
 			firePropertyChange("Component:add", null, inPort);
 		}
 	}

@@ -806,7 +806,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		return file;
 	}
 
-	private void validateLengthOfJobName(SaveAsDialog obj) {
+	public void validateLengthOfJobName(SaveAsDialog obj) {
 		String jobName=obj.getResult().removeFileExtension().lastSegment();
 		while(jobName.length()>50)
 		{
@@ -1057,5 +1057,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			e.printStackTrace();
 		}
 		
-	}	
+	}
+	
+	
 }

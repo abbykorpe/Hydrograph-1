@@ -7,6 +7,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.TextUtilities;
@@ -25,9 +29,14 @@ import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.part.FileEditorInput;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.component.config.Policy;
@@ -301,20 +310,29 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				.getActiveWorkbenchWindow().getActivePage();
 		if (((Component) getModel()).getCategory().equalsIgnoreCase(
 				Constants.SUBGRAPH_COMPONENT_CATEGORY)) {
-			List bList = (ArrayList) Clipboard
+				List bList = (ArrayList) Clipboard
 					.getDefault().getContents();
 			IHandlerService handlerService = (IHandlerService) PlatformUI
 					.getWorkbench().getService(IHandlerService.class);
 			try {
-				handlerService.executeCommand(
-						"com.bitwise.app.graph.newGraphcommand", null);
-			} catch (Exception ex) {
-				throw new RuntimeException(
-						"com.bitwise.app.graph.newGraphcommand not found");
-
+				IPath jobFilePath=new Path(((Component) getModel()).getProperties().get("name").toString());
+				IFile jobFile = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath);
+				IFileEditorInput input = new FileEditorInput(jobFile);  
+				page.openEditor(input, ELTGraphicalEditor.ID, false);
+				//For selecting the created editor so it will trigger the event to activate and load the Palette
+				IWorkbench workbench = PlatformUI.getWorkbench();
+			    IWorkbenchWindow activeWindow = workbench.getActiveWorkbenchWindow();
+			    if (activeWindow != null) {
+			        final IWorkbenchPage activePage = activeWindow.getActivePage();
+			        if (activePage != null) {
+			            activePage.activate(activePage.findEditor(input));
+			        }
+			    }  
+			} catch (PartInitException e) {
+	          logger.error("Failed to open editor", e);			
 			}
 			Container container = ((ELTGraphicalEditor) page.getActiveEditor())
-					.getContainer(); 
+					.getContainer();  
 			ELTGraphicalEditor editor=	(ELTGraphicalEditor) page.getActiveEditor();
 			editor.viewer.setContents(container);
 			
@@ -322,9 +340,11 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			// listener for selection on canvas
 			editor.viewer.addSelectionChangedListener(editor.createISelectionChangedListener());
 			 
-			if (bList != null) {
-				container.getChildren().addAll(bList);
- 
+			if(container.getChildren().size()==0){
+				for(Object l:bList)
+				{
+					container.addChild((Component) l);
+				}
 			}
 			super.performRequest(req); 
 
