@@ -5,20 +5,10 @@
 		name="IFixedWidth" nameInPalette="File Fixed Width" defaultNamePrefix="IFixedWidth" description="This is IFixedWidth component.\nsome more text">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
-			<tns:portSpecification>
-				<tns:typeOfPort>out</tns:typeOfPort>
-				<tns:numberOfPorts>1</tns:numberOfPorts>
-				<tns:sequenceOfPort>0</tns:sequenceOfPort>
-				<tns:allowMultipleLinks>false</tns:allowMultipleLinks>
-				<tns:linkMandatory>true</tns:linkMandatory>
-				<tns:nameOfPort>out0</tns:nameOfPort>
-				<tns:labelOfPort>out0</tns:labelOfPort>
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="out0" nameOfPort="out0" allowMultipleLinks="false"/>
 			</tns:portSpecification>
 		</tns:port>
-		
-		<tns:changeInPortsDynamically/>
-		<tns:changeOutPortsDynamically/>
-		<tns:changeUnusedPortsDynamically/>
 		
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"

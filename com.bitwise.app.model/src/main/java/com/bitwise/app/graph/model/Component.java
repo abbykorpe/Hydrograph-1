@@ -14,6 +14,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.slf4j.Logger;
 
 import com.bitwise.app.cloneableinterface.IDataStructure;
+import com.bitwise.app.common.component.config.PortInfo;
 import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
@@ -142,7 +143,7 @@ public abstract class Component extends Model {
 		prefix = XMLConfigUtil.INSTANCE.getComponent(componentName)
 				.getDefaultNamePrefix();
 		initPortSettings();
-		initDynamicPortFlags();
+		//initDynamicPortFlags();
 		toolTipErrorMessages = new LinkedHashMap<>();
 	}
 
@@ -162,26 +163,30 @@ public abstract class Component extends Model {
 		ports = new HashMap<String, Port>();
 
 		for (PortSpecification p : portSpecification) {
-			setPortCount(p.getTypeOfPort().value(), p.getNumberOfPorts());
-			String portTerminal = p.getTypeOfPort().value()
-					+ p.getSequenceOfPort();
-			Port port = new Port(p.getNameOfPort(), p.getLabelOfPort(),
-					portTerminal, this, p.getNumberOfPorts(), p.getTypeOfPort()
-							.value(), p.getSequenceOfPort());
-			ports.put(portTerminal, port);
+			setPortCount(p.getTypeOfPort().value(), p.getNumberOfPorts(), p.isChangePortCountDynamically());
+			for(PortInfo portInfo :p.getPort()){
+				String portTerminal = p.getTypeOfPort().value() + portInfo.getSequenceOfPort();
+				Port port = new Port(portInfo.getNameOfPort(), portInfo.getLabelOfPort(),
+						portTerminal, this, p.getNumberOfPorts(), p.getTypeOfPort()
+								.value(), portInfo.getSequenceOfPort());
+				ports.put(portTerminal, port);
+			}
 		}
 	}
 
-	private void setPortCount(String portType, int portCount) {
+	private void setPortCount(String portType, int portCount, boolean changePortCount) {
 		if (portType.equals("in")) {
 			inPortCount = portCount;
 			properties.put("inPortCount", String.valueOf(portCount));
+			changeInPortsCntDynamically=changePortCount;
 		} else if (portType.equals("out")) {
 			outPortCount = portCount;
 			properties.put("outPortCount", String.valueOf(portCount));
+			changeOutPortsCntDynamically=changePortCount;
 		} else if (portType.equals("unused")) {
 			unusedPortCount = portCount;
 			properties.put("unusedPortCount", String.valueOf(portCount));
+			changeUnusedPortsCntDynamically=changePortCount;
 		}
 	}
 
@@ -240,14 +245,14 @@ public abstract class Component extends Model {
 		return portSpecification;
 	}
 
-	private void initDynamicPortFlags() {
-		changeInPortsCntDynamically = XMLConfigUtil.INSTANCE.getComponent(
-				componentName).isChangeInPortsDynamically();
-		changeOutPortsCntDynamically = XMLConfigUtil.INSTANCE.getComponent(
-				componentName).isChangeOutPortsDynamically();
-		changeUnusedPortsCntDynamically = XMLConfigUtil.INSTANCE.getComponent(
-				componentName).isChangeUnusedPortsDynamically();
-	}
+//	private void initDynamicPortFlags() {
+//		changeInPortsCntDynamically = XMLConfigUtil.INSTANCE.getComponent(
+//				componentName).isChangeInPortsDynamically();
+//		changeOutPortsCntDynamically = XMLConfigUtil.INSTANCE.getComponent(
+//				componentName).isChangeOutPortsDynamically();
+//		changeUnusedPortsCntDynamically = XMLConfigUtil.INSTANCE.getComponent(
+//				componentName).isChangeUnusedPortsDynamically();
+//	}
 
 	public boolean isChangeInPortsCntDynamically() {
 		return changeInPortsCntDynamically;

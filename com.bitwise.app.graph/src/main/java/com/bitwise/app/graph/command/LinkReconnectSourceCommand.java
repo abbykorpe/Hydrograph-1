@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.gef.commands.Command;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.component.config.PortInfo;
 import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
@@ -60,15 +61,18 @@ public class LinkReconnectSourceCommand extends Command {
 				.getPort().getPortSpecification();
 
 		for (PortSpecification p : portspecification) {
-			String portName = p.getTypeOfPort().value() + p.getSequenceOfPort();
-			if (portName.equals(newSourceTerminal)) {
-				if (p.isAllowMultipleLinks()
-						|| !newSource.isOutputPortEngaged(newSourceTerminal)) {
+			for(PortInfo portInfo:p.getPort()){
+				String portName = p.getTypeOfPort().value() + portInfo.getSequenceOfPort();
+				if (portName.equals(newSourceTerminal)) {
+					if (portInfo.isAllowMultipleLinks()
+							|| !newSource.isOutputPortEngaged(newSourceTerminal)) {
 
-				} else{
-					return false;
+					} else{
+						return false;
+					}
 				}
 			}
+			
 		}
 		return true;
 	}

@@ -5,38 +5,14 @@
 		name="Lookup" nameInPalette="Lookup" defaultNamePrefix="Lookup" description="This is Lookup component.\nsome more text">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
-			<tns:portSpecification>
-				<tns:typeOfPort>in</tns:typeOfPort>
-				<tns:numberOfPorts>2</tns:numberOfPorts>
-				<tns:sequenceOfPort>0</tns:sequenceOfPort>
-				<tns:allowMultipleLinks>false</tns:allowMultipleLinks>
-				<tns:linkMandatory>true</tns:linkMandatory>
-				<tns:nameOfPort>in0</tns:nameOfPort>
-				<tns:labelOfPort>drv</tns:labelOfPort>
+			<tns:portSpecification typeOfPort="in" numberOfPorts="2" changePortCountDynamically="false">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="drv" nameOfPort="in0" allowMultipleLinks="false"/>
+				<tns:port sequenceOfPort="1" linkMandatory="true" labelOfPort="lkp" nameOfPort="in1" allowMultipleLinks="false"/>
 			</tns:portSpecification>
-			<tns:portSpecification>
-				<tns:typeOfPort>in</tns:typeOfPort>
-				<tns:numberOfPorts>2</tns:numberOfPorts>
-				<tns:sequenceOfPort>1</tns:sequenceOfPort>
-				<tns:allowMultipleLinks>false</tns:allowMultipleLinks>
-				<tns:linkMandatory>true</tns:linkMandatory>
-				<tns:nameOfPort>in1</tns:nameOfPort>
-				<tns:labelOfPort>lkp</tns:labelOfPort>
-			</tns:portSpecification>
-			<tns:portSpecification>
-				<tns:typeOfPort>out</tns:typeOfPort>
-				<tns:numberOfPorts>1</tns:numberOfPorts>
-				<tns:sequenceOfPort>0</tns:sequenceOfPort>
-				<tns:allowMultipleLinks>false</tns:allowMultipleLinks>
-				<tns:linkMandatory>false</tns:linkMandatory>
-				<tns:nameOfPort>out0</tns:nameOfPort>
-				<tns:labelOfPort>out0</tns:labelOfPort>
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="out0" nameOfPort="out0" allowMultipleLinks="false"/>
 			</tns:portSpecification>
 		</tns:port>
-		
-		<tns:changeInPortsDynamically/>
-		<tns:changeOutPortsDynamically/>
-		<tns:changeUnusedPortsDynamically/>
 		
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
