@@ -80,14 +80,13 @@ public class SecondaryColumnKeysWidgetWizard {
 	private String SORT_ORDER_BLANK_ERROR = Messages.EmptySortOrderNotification;
 	private Label lblPropertyError;
 	private boolean isOkPressed;
-	private TableViewer tableViewer;
+	private TableViewer targetTableViewer;
 	private Button addButton, okButton, deleteButton, cacelButton, upButton, downButton;
 	private boolean isAnyUpdatePerformed;
 	private Table sourceTable;
 	private DragSource dragSource;
 	private DropTarget dropTarget;
 	private List<String> sourceFieldsList;
-	private TableItem tableItem;
 
 	// private boolean firstTimeEdit;
 
@@ -105,7 +104,7 @@ public class SecondaryColumnKeysWidgetWizard {
 	private void addNewProperty(TableViewer tv, String fieldName) {
 		isAnyUpdatePerformed = true;
 		SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
-		if (fieldName == null) 
+		if (fieldName == null)
 			fieldName = "";
 		if (propertyLst.size() != 0) {
 			if (!validate())
@@ -114,18 +113,16 @@ public class SecondaryColumnKeysWidgetWizard {
 			p.setPropertyValue(Constants.ASCENDING_SORT_ORDER); //$NON-NLS-1$
 			propertyLst.add(p);
 			tv.refresh();
-			tableViewer.editElement(tableViewer.getElementAt(propertyLst.size() - 1), 0);
+			targetTableViewer.editElement(targetTableViewer.getElementAt(propertyLst.size() - 1), 0);
 		} else {
 			p.setPropertyName(fieldName); //$NON-NLS-1$
 			p.setPropertyValue(Constants.ASCENDING_SORT_ORDER); //$NON-NLS-1$
 			propertyLst.add(p);
 			tv.refresh();
-			tableViewer.editElement(tableViewer.getElementAt(0), 0);
+			targetTableViewer.editElement(targetTableViewer.getElementAt(0), 0);
 		}
 		enableButtons();
 	}
-
-	
 
 	public void setRuntimePropertyMap(LinkedHashMap<String, String> runtimePropertyMap) {
 		this.runtimePropertyMap = runtimePropertyMap;
@@ -169,12 +166,12 @@ public class SecondaryColumnKeysWidgetWizard {
 	// Method for creating Table
 	private void createTable() {
 
-		tableViewer = new TableViewer(shell, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
-		targetTable = tableViewer.getTable();
+		targetTableViewer = new TableViewer(shell, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
+		targetTable = targetTableViewer.getTable();
 		targetTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				addNewProperty(tableViewer,null);
+				addNewProperty(targetTableViewer, null);
 			}
 
 			@Override
@@ -183,7 +180,7 @@ public class SecondaryColumnKeysWidgetWizard {
 
 			}
 		});
-		tableViewer.getTable().addTraverseListener(new TraverseListener() {
+		targetTableViewer.getTable().addTraverseListener(new TraverseListener() {
 
 			@Override
 			public void keyTraversed(TraverseEvent e) {
@@ -201,25 +198,25 @@ public class SecondaryColumnKeysWidgetWizard {
 		});
 		// table.setBounds(10, 50, 465, 365);
 		targetTable.setBounds(210, 68, 339, 400);
-		tableViewer.setContentProvider(new SecondaryColumnKeysContentProvider());
-		tableViewer.setLabelProvider(new SecondaryColumnKeysLabelProvider());
-		tableViewer.setInput(propertyLst);
+		targetTableViewer.setContentProvider(new SecondaryColumnKeysContentProvider());
+		targetTableViewer.setLabelProvider(new SecondaryColumnKeysLabelProvider());
+		targetTableViewer.setInput(propertyLst);
 
-		TableColumn tc1 = new TableColumn(targetTable, SWT.CENTER);
-		tc1.setText("Column Name"); //$NON-NLS-1$
-		TableColumn tc2 = new TableColumn(targetTable, SWT.LEFT_TO_RIGHT);
-		tc2.setText("Sort Order"); //$NON-NLS-1$
+		TableColumn targetTableColumnFieldName = new TableColumn(targetTable, SWT.CENTER);
+		targetTableColumnFieldName.setText("Column Name"); //$NON-NLS-1$
+		TableColumn targetTableColumnSortOrder = new TableColumn(targetTable, SWT.LEFT_TO_RIGHT);
+		targetTableColumnSortOrder.setText("Sort Order"); //$NON-NLS-1$
 
 		for (int i = 0, n = targetTable.getColumnCount(); i < n; i++) {
 			targetTable.getColumn(i).pack();
 		}
-		tc1.setWidth(269);
-		tc2.setWidth(66);
+		targetTableColumnFieldName.setWidth(168);
+		targetTableColumnSortOrder.setWidth(166);
 		targetTable.setHeaderVisible(true);
 		targetTable.setLinesVisible(true);
 
 		// enables the tab functionality
-		TableViewerEditor.create(tableViewer, new ColumnViewerEditorActivationStrategy(tableViewer),
+		TableViewerEditor.create(targetTableViewer, new ColumnViewerEditorActivationStrategy(targetTableViewer),
 				ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.TABBING_HORIZONTAL
 						| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL);
 	}
@@ -231,7 +228,7 @@ public class SecondaryColumnKeysWidgetWizard {
 	 */
 	public Map<String, String> launchRuntimeWindow(Shell parentShell,
 			final PropertyDialogButtonBar propertyDialogButtonBar) {
-		
+
 		shell = new Shell(parentShell, SWT.WRAP | SWT.APPLICATION_MODAL);
 		isOkPressed = false;
 		isAnyUpdatePerformed = false;
@@ -243,9 +240,9 @@ public class SecondaryColumnKeysWidgetWizard {
 		sourceTable.setBounds(10, 68, 194, 400);
 		sourceTable.setHeaderVisible(true);
 		sourceTable.setLinesVisible(true);
-		TableColumn tc1 = new TableColumn(sourceTable, SWT.CENTER);
-		tc1.setWidth(190);
-		tc1.setText(Messages.AVAILABLE_FIELDS_HEADER); 
+		TableColumn sourceTableColumnFieldName = new TableColumn(sourceTable, SWT.CENTER);
+		sourceTableColumnFieldName.setWidth(190);
+		sourceTableColumnFieldName.setText(Messages.AVAILABLE_FIELDS_HEADER);
 		getSourceFieldsFromPropagatedSchema(sourceTable);
 		dragSource = new DragSource(sourceTable, DND.DROP_MOVE);
 		dragSource.setTransfer(new Transfer[] { TextTransfer.getInstance() });
@@ -299,24 +296,21 @@ public class SecondaryColumnKeysWidgetWizard {
 
 		final CellEditor propertyNameeditor = new TextCellEditor(targetTable);
 
-		
-		
 		ComboBoxViewerCellEditor propertyValueeditor = new ComboBoxViewerCellEditor(targetTable, SWT.READ_ONLY);
 		propertyValueeditor.setContentProvider(new ArrayContentProvider());
 		propertyValueeditor.setLabelProvider(new LabelProvider());
-		propertyValueeditor.setInput(new String[]{Constants.ASCENDING_SORT_ORDER,Constants.DESCENDING_SORT_ORDER});
+		propertyValueeditor.setInput(new String[] { Constants.ASCENDING_SORT_ORDER, Constants.DESCENDING_SORT_ORDER });
 
-		
 		CellEditor[] editors = new CellEditor[] { propertyNameeditor, propertyValueeditor };
 
 		propertyNameeditor.setValidator(createNameEditorValidator(COLUMN_NAME_BLANK_ERROR));
 		propertyValueeditor.setValidator(createValueEditorValidator(SORT_ORDER_BLANK_ERROR));
 
-		tableViewer.setColumnProperties(PROPS);
-		tableViewer.setCellModifier(new SecondaryColumnKeysWidgetCellModifier(tableViewer));
-		tableViewer.setCellEditors(editors);
+		targetTableViewer.setColumnProperties(PROPS);
+		targetTableViewer.setCellModifier(new SecondaryColumnKeysWidgetCellModifier(targetTableViewer));
+		targetTableViewer.setCellEditors(editors);
 
-		loadProperties(tableViewer);
+		loadProperties(targetTableViewer);
 
 		dropTarget = new DropTarget(targetTable, DND.DROP_MOVE);
 		dropTarget.setTransfer(new Transfer[] { TextTransfer.getInstance() });
@@ -324,7 +318,7 @@ public class SecondaryColumnKeysWidgetWizard {
 			public void drop(DropTargetEvent event) {
 				for (String fieldName : getformatedData((String) event.data))
 					if (!isPropertyAlreadyExists(fieldName))
-						addNewProperty(tableViewer, fieldName);
+						addNewProperty(targetTableViewer, fieldName);
 			}
 		});
 		disableButtons();
@@ -368,7 +362,7 @@ public class SecondaryColumnKeysWidgetWizard {
 		addButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				addNewProperty(tableViewer, null);
+				addNewProperty(targetTableViewer, null);
 			}
 		});
 
@@ -387,10 +381,10 @@ public class SecondaryColumnKeysWidgetWizard {
 				 * }else {
 				 */
 
-				IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
+				IStructuredSelection selection = (IStructuredSelection) targetTableViewer.getSelection();
 				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 					Object selectedObject = iterator.next();
-					tableViewer.remove(selectedObject);
+					targetTableViewer.remove(selectedObject);
 					propertyLst.remove(selectedObject);
 				}
 				isAnyUpdatePerformed = true;
@@ -410,13 +404,13 @@ public class SecondaryColumnKeysWidgetWizard {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				index1 = targetTable.getSelectionIndex();
-				String text = tableViewer.getTable().getItem(index1).getText(0);
-				String text1 = tableViewer.getTable().getItem(index1).getText(1);
+				String text = targetTableViewer.getTable().getItem(index1).getText(0);
+				String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
 
 				if (index1 > 0) {
 					index2 = index1 - 1;
-					String data = tableViewer.getTable().getItem(index2).getText(0);
-					String data2 = tableViewer.getTable().getItem(index2).getText(1);
+					String data = targetTableViewer.getTable().getItem(index2).getText(0);
+					String data2 = targetTableViewer.getTable().getItem(index2).getText(1);
 
 					SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
 					p.setPropertyName(data);
@@ -427,7 +421,7 @@ public class SecondaryColumnKeysWidgetWizard {
 					p.setPropertyName(text);
 					p.setPropertyValue(text1);
 					propertyLst.set(index2, p);
-					tableViewer.refresh();
+					targetTableViewer.refresh();
 					targetTable.setSelection(index1 - 1);
 
 				}
@@ -445,14 +439,14 @@ public class SecondaryColumnKeysWidgetWizard {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				index1 = targetTable.getSelectionIndex();
-				String text = tableViewer.getTable().getItem(index1).getText(0);
-				String text1 = tableViewer.getTable().getItem(index1).getText(1);
+				String text = targetTableViewer.getTable().getItem(index1).getText(0);
+				String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
 
 				if (index1 < propertyLst.size()) {
 					index2 = index1 + 1;
 
-					String data = tableViewer.getTable().getItem(index2).getText(0);
-					String data1 = tableViewer.getTable().getItem(index2).getText(1);
+					String data = targetTableViewer.getTable().getItem(index2).getText(0);
+					String data1 = targetTableViewer.getTable().getItem(index2).getText(1);
 
 					SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
 					p.setPropertyName(data);
@@ -463,7 +457,7 @@ public class SecondaryColumnKeysWidgetWizard {
 					p.setPropertyName(text);
 					p.setPropertyValue(text1);
 					propertyLst.set(index2, p);
-					tableViewer.refresh();
+					targetTableViewer.refresh();
 					targetTable.setSelection(index1 + 1);
 				}
 			}
@@ -558,8 +552,8 @@ public class SecondaryColumnKeysWidgetWizard {
 					// disableButtons();
 					return false;
 				}
-				if (!(temp.getPropertyValue().trim().equalsIgnoreCase(Constants.ASCENDING_SORT_ORDER) || temp.getPropertyValue().trim()
-						.equalsIgnoreCase(Constants.DESCENDING_SORT_ORDER))) {
+				if (!(temp.getPropertyValue().trim().equalsIgnoreCase(Constants.ASCENDING_SORT_ORDER) || temp
+						.getPropertyValue().trim().equalsIgnoreCase(Constants.DESCENDING_SORT_ORDER))) {
 					targetTable.setSelection(propertyCounter);
 					lblPropertyError.setVisible(true);
 					lblPropertyError.setText(Messages.INVALID_SORT_ORDER);
@@ -662,9 +656,9 @@ public class SecondaryColumnKeysWidgetWizard {
 
 	}
 
-	private String formatDataToTransfer(TableItem[] selection) {
+	private String formatDataToTransfer(TableItem[] selectedTableItems) {
 		StringBuffer buffer = new StringBuffer();
-		for (TableItem tableItem : selection) {
+		for (TableItem tableItem : selectedTableItems) {
 			buffer.append(tableItem.getText() + "#");
 		}
 		return buffer.toString();
@@ -684,7 +678,6 @@ public class SecondaryColumnKeysWidgetWizard {
 				return true;
 		return false;
 	}
-
 
 	/*
 	 * public void imageShell(Shell shell){ String image = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH +

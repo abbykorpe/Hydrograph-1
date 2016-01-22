@@ -66,30 +66,47 @@ public class ELTLookupMapWidget extends AbstractWidget {
 		});
 	}
 
+
+	
 	private void getPropagatedSchema() {
+		List<List<FilterProperties>> sorceFieldList=arrangedLinks();
+		if(sorceFieldList!=null)
+		lookupMappingGrid.setLookupInputProperties(sorceFieldList);
+	}
+
+	private List<List<FilterProperties>> arrangedLinks() {
+		String targetTerminal = "in";
+		int inputPortCount=2;
+		List<List<FilterProperties>> listofFiledNameList = new ArrayList<>();
+		
+		if(getComponent().getProperties().get("inPortCount")!=null)
+			inputPortCount=Integer.parseInt((String)getComponent().getProperties().get("inPortCount"));
+		for (int i = 0; i < inputPortCount; i++) {
+			listofFiledNameList.add(getSchemaFieldForTargetTerminal(targetTerminal + i));
+		}
+		return listofFiledNameList;
+	}
+
+	private List<FilterProperties> getSchemaFieldForTargetTerminal(String targetTerminal) {
 		FilterProperties filedName = null;
 		ComponentsOutputSchema schema = null;
-		List<List<FilterProperties>> listofFiledNameList = new ArrayList<>();
-		List<FilterProperties> filedNameList = null;
+		List<FilterProperties> filedNameList = new ArrayList<>();
 		for (Link link : getComponent().getTargetConnections()) {
-			{
+
+			if (link.getTargetTerminal().equals(targetTerminal)) {
 				schema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
-				filedNameList = new ArrayList<>();
+				
 				if (schema != null) {
 					for (FixedWidthGridRow row : schema.getFixedWidthGridRowsOutputFields()) {
 						filedName = new FilterProperties();
 						filedName.setPropertyname(row.getFieldName());
 						filedNameList.add(filedName);
 					}
-					
 				}
-				listofFiledNameList.add(filedNameList);
+
 			}
 		}
-		if(listofFiledNameList.size()==1)	
-			listofFiledNameList.add(new ArrayList<FilterProperties>());
-		
-		lookupMappingGrid.setLookupInputProperties(listofFiledNameList);
+		return filedNameList;
 	}
 
 	@Override
