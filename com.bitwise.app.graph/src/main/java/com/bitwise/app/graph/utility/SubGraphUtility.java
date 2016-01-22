@@ -3,23 +3,37 @@ package com.bitwise.app.graph.utility;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SaveAsDialog;
-import org.eclipse.ui.part.FileEditorInput;
 
+import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
+import com.bitwise.app.graph.figure.ComponentFigure;
+import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
+import com.bitwise.app.graph.model.Link;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SubGraphUtility.
+ */
 public class SubGraphUtility {
 	
+	/**
+	 * Open sub graph save dialog.
+	 *
+	 * @return the i file
+	 */
 	public static IFile openSubGraphSaveDialog() {
 
 		SaveAsDialog obj = new SaveAsDialog(Display.getDefault().getActiveShell());
@@ -40,10 +54,20 @@ public class SubGraphUtility {
 		return file;
 	}
 
+	/**
+	 * Gets the current editor.
+	 *
+	 * @return the current editor
+	 */
 	private static ELTGraphicalEditor getCurrentEditor(){
 		return (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 	}
 	
+	/**
+	 * Do save as sub graph.
+	 *
+	 * @return the i file
+	 */
 	public static IFile doSaveAsSubGraph(){
 		
 		IFile file=openSubGraphSaveDialog();
@@ -64,4 +88,77 @@ public class SubGraphUtility {
 		return file;
 
 }
+	
+	/**
+	 * Creates the dynamic input port.
+	 *
+	 * @param inLinks the in links
+	 * @param edComponentEditPart the ed component edit part
+	 */
+	public static void createDynamicInputPort(List< Link> inLinks,ComponentEditPart edComponentEditPart){
+		for(int i=0;i<inLinks.size();i++){
+			Component oldTarget=inLinks.get(i).getTarget();
+			inLinks.get(i).getSource();
+			Link link = inLinks.get(i);
+			link.detachTarget();
+			
+	
+			link.setTarget(edComponentEditPart.getCastedModel());
+			link.setTargetTerminal("in"+i);
+						
+			oldTarget.freeInputPort(link.getTargetTerminal());
+			oldTarget.disconnectInput(link); 
+
+			link.attachTarget();
+			edComponentEditPart.getCastedModel().engageInputPort("in"+i);
+			edComponentEditPart.refresh();  
+		}
+
+	}
+	
+	/**
+	 * Creates the dynamic output port.
+	 *
+	 * @param outLinks the out links
+	 * @param edComponentEditPart the ed component edit part
+	 */
+	public static void createDynamicOutputPort(List< Link> outLinks,ComponentEditPart edComponentEditPart){
+		for(int i=0;i<outLinks.size();i++){
+			Component oldSource=outLinks.get(i).getSource();
+			Link link = outLinks.get(i);
+			link.detachSource();
+			link.getSource().freeOutputPort(link.getSourceTerminal());
+			
+			link.setSource(edComponentEditPart.getCastedModel());
+			link.setSourceTerminal("out"+i);
+			oldSource.freeOutputPort(link.getTargetTerminal());
+			oldSource.disconnectOutput(link); 
+			
+			link.attachSource();
+			edComponentEditPart.getCastedModel().engageOutputPort("out"+i);
+			edComponentEditPart.refresh();  
+		}
+
+	}
+	
+	/**
+	 * Update sub graph model properties.
+	 *
+	 * @param edComponentEditPart the ed component edit part
+	 * @param inPort the in port
+	 * @param outPort the out port
+	 * @param file the file
+	 */
+	public static void updateSubGraphModelProperties(ComponentEditPart edComponentEditPart,int inPort,int outPort,IFile file){
+	   	ComponentFigure compFig = (ComponentFigure)edComponentEditPart.getFigure();
+		compFig.setHeight(inPort, outPort);			
+		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight()+edComponentEditPart.getCastedModel().getComponentLabelMargin());
+		
+		edComponentEditPart.getCastedModel().setSize(newSize);
+		edComponentEditPart.getCastedModel().setComponentLabel(file.getName());
+		edComponentEditPart.getCastedModel().getProperties().put("name", file.getFullPath().toOSString());
+		edComponentEditPart.getCastedModel().inputPortSettings(inPort); 
+		edComponentEditPart.getCastedModel().outputPortSettings(outPort);
+	}
+	
 }

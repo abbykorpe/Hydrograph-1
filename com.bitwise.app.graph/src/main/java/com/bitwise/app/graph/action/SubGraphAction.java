@@ -112,23 +112,25 @@ public class SubGraphAction extends SelectionAction{
  
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.action.Action#run()
+	 */
 	@Override  
 	public void run() { 
+		
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		Container containerOld=editor.getContainer(); 
 	   	execute(createCutCommand(getSelectedObjects())); 
     	List bList = (ArrayList) Clipboard.getDefault().getContents();
-    	int inCount=1;
-    	int outCount=1;
-    	int inPort=0;
-    	int outPort=0;
+     	
     	IFile file =SubGraphUtility.doSaveAsSubGraph();
-       	SubgraphComponent subgraphComponent= new SubgraphComponent();
+       	
+    	SubgraphComponent subgraphComponent= new SubgraphComponent();
 		ComponentCreateCommand createComponent = new ComponentCreateCommand(subgraphComponent,containerOld,new Rectangle(((Component)bList.get(0)).getLocation(),((Component)bList.get(0)).getSize()));
 		createComponent.execute(); 
+		
 		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
-		for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); 
-				ite.hasNext();)
+		for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();)
 		{
 			EditPart editPart = (EditPart) ite.next();
 			if(editPart instanceof ComponentEditPart) 
@@ -138,73 +140,31 @@ public class SubGraphAction extends SelectionAction{
 				}
 			} 
 		}
+		
 		List< Link> inLinks = new ArrayList<>();
-	   	for (Object object : bList) {
+		List< Link> outLinks = new ArrayList<>();
+		
+		for (Object object : bList) {
 				Component component = (Component)object;
 				if(component!= null){
-				List<Link> links= component.getTargetConnections();
-				for(int i=0;i<links.size();i++){
-					if (!bList.contains(links.get(i).getSource())) {
-						inCount++;
-						inLinks.add(links.get(i));
-						/*Component oldTarget=links.get(i).getTarget();
-						Link link = links.get(i);
-						link.detachTarget();
-						link.getTarget().freeInputPort(link.getTargetTerminal());
-						
-						link.setTarget(subgraphComponent);
-						link.setTargetTerminal("in"+inPort);
-									
-						oldTarget.freeInputPort(link.getTargetTerminal());
-						oldTarget.disconnectInput(link); 
-
-						link.attachTarget();
-						subgraphComponent.engageInputPort("in"+inPort);
-						*/
-						inPort++;
+					List<Link> tarLinks= component.getTargetConnections();
+					for(int i=0;i<tarLinks.size();i++){
+						if (!bList.contains(tarLinks.get(i).getSource())) {
+							inLinks.add(tarLinks.get(i));
+						}
 					}
-					else if (!bList.contains(links.get(i).getTarget())) {
-						outCount++;
-						Component oldSource=links.get(i).getSource();
-						Link link = links.get(i);
-						link.detachSource();
-						link.getSource().freeOutputPort(link.getSourceTerminal());
-						
-						link.setSource(subgraphComponent);
-						link.setSourceTerminal("out"+outPort);
-						
-						link.attachSource();
-						subgraphComponent.engageOutputPort("out"+outPort);
-						outPort++;
+					List<Link> sourLinks= component.getSourceConnections();
+					for(int i=0;i<sourLinks.size();i++){
+						if (!bList.contains(sourLinks.get(i).getTarget())) {
+							outLinks.add(sourLinks.get(i)); 
+						}
 					}
 					   
 				}   
-				}  
-			}
+		}  
 	   	
-	   	ComponentFigure compFig = (ComponentFigure)edComponentEditPart.getFigure();
-		compFig.setHeight(inCount, outCount);			
-		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight()+edComponentEditPart.getCastedModel().getComponentLabelMargin());
-		edComponentEditPart.getCastedModel().setSize(newSize);
-		edComponentEditPart.getCastedModel().setComponentLabel(file.getName());
-		edComponentEditPart.getCastedModel().getProperties().put("name", file.getFullPath().toOSString());
-		edComponentEditPart.getCastedModel().inputPortSettings(inPort); 
-		for(int i=0;i<inLinks.size();i++){
-			Component oldTarget=inLinks.get(i).getTarget();
-			Link link = inLinks.get(i);
-			link.detachTarget();
-			link.getTarget().freeInputPort(link.getTargetTerminal());
-			
-			link.setTarget(edComponentEditPart.getCastedModel());
-			link.setTargetTerminal("in"+i);
-						
-			oldTarget.freeInputPort(link.getTargetTerminal());
-			oldTarget.disconnectInput(link); 
-
-			link.attachTarget();
-			edComponentEditPart.getCastedModel().engageInputPort("in"+i);
-		}
-		edComponentEditPart.refresh();  
-		
+		SubGraphUtility.updateSubGraphModelProperties(edComponentEditPart, inLinks.size(), outLinks.size(), file);
+		SubGraphUtility.createDynamicInputPort(inLinks, edComponentEditPart);
+		SubGraphUtility.createDynamicOutputPort(outLinks, edComponentEditPart)	;
 	}
    }

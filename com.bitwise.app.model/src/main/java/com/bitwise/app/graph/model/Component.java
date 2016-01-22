@@ -749,14 +749,14 @@ public abstract class Component extends Model {
 
 		changePortCount(newPortCount);
 
-		for (int i = 0; i < (newPortCount - 2); i++) {
+		for (int i = 0; i < (newPortCount - 1); i++) {
 
-			Port outPort = new Port("out" + (i + 2), "out" + (i + 2), "out"
-					+ (i + 2), this, newPortCount, "out", (i + 2));
-			ports.put("out" + (i + 2), outPort);
+			Port outPort = new Port("out" + (i + 1), "out" + (i + 1), "out"
+					+ (i + 1), this, newPortCount, "out", (i + 1));
+			ports.put("out" + (i + 1), outPort);
 			firePropertyChange("Component:add", null, outPort);
 		}
-	}
+	} 
 
 
 	public void incrementPorts(int newPortCount, int oldPortCount) {
