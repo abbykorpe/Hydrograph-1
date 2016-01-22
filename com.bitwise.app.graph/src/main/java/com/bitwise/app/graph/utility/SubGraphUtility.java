@@ -106,8 +106,8 @@ public class SubGraphUtility {
 			link.setTarget(edComponentEditPart.getCastedModel());
 			link.setTargetTerminal("in"+i);
 						
-			oldTarget.freeInputPort(link.getTargetTerminal());
-			oldTarget.disconnectInput(link); 
+		/*	oldTarget.freeInputPort(link.getTargetTerminal());
+			oldTarget.disconnectInput(link); */
 
 			link.attachTarget();
 			edComponentEditPart.getCastedModel().engageInputPort("in"+i);
@@ -131,8 +131,8 @@ public class SubGraphUtility {
 			
 			link.setSource(edComponentEditPart.getCastedModel());
 			link.setSourceTerminal("out"+i);
-			oldSource.freeOutputPort(link.getTargetTerminal());
-			oldSource.disconnectOutput(link); 
+			/*oldSource.freeOutputPort(link.getTargetTerminal());
+			oldSource.disconnectOutput(link); */
 			
 			link.attachSource();
 			edComponentEditPart.getCastedModel().engageOutputPort("out"+i);
@@ -150,15 +150,17 @@ public class SubGraphUtility {
 	 * @param file the file
 	 */
 	public static void updateSubGraphModelProperties(ComponentEditPart edComponentEditPart,int inPort,int outPort,IFile file){
-	   	ComponentFigure compFig = (ComponentFigure)edComponentEditPart.getFigure();
-		compFig.setHeight(inPort, outPort);			
-		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight()+edComponentEditPart.getCastedModel().getComponentLabelMargin());
-		
-		edComponentEditPart.getCastedModel().setSize(newSize);
-		edComponentEditPart.getCastedModel().setComponentLabel(file.getName());
-		edComponentEditPart.getCastedModel().getProperties().put("name", file.getFullPath().toOSString());
-		edComponentEditPart.getCastedModel().inputPortSettings(inPort); 
-		edComponentEditPart.getCastedModel().outputPortSettings(outPort);
+			edComponentEditPart.getCastedModel().inputPortSettings(inPort); 
+			edComponentEditPart.getCastedModel().outputPortSettings(outPort);
+			ComponentFigure compFig = (ComponentFigure)edComponentEditPart.getFigure();
+			compFig.setHeight(inPort, outPort);			
+			Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight()+edComponentEditPart.getCastedModel().getComponentLabelMargin());
+			
+			edComponentEditPart.getCastedModel().setSize(newSize);
+			edComponentEditPart.getCastedModel().setComponentLabel(file.getName());
+			edComponentEditPart.getCastedModel().getProperties().put("name", file.getFullPath().toOSString());
+
+		edComponentEditPart.refresh();
 	}
 	
 }

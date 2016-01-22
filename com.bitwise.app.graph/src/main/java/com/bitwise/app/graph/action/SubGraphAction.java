@@ -60,8 +60,8 @@ public class SubGraphAction extends SelectionAction{
 		super.init();
 		
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setText("SubGraph"); 
-		setId("SubGraph");
+		setText("create"); 
+		setId("create");
 		setHoverImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT_DISABLED));
