@@ -1,9 +1,12 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.mappingtable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import javax.swing.text.TabExpander;
 
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -114,6 +117,12 @@ public class MappingTable {
 	}
 	
 	private void addColumns(final TableViewer tableViewer_1) {
+		
+		TableViewerColumn tableViewerColumn_0 = new TableViewerColumn(tableViewer_1, SWT.NONE);
+		TableColumn tblclmnInputFields_0 = tableViewerColumn_0.getColumn();
+		tblclmnInputFields_0.setWidth(20);
+		//tblclmnInputFields_0.setText("");
+		
 		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer_1, SWT.NONE);
 		TableColumn tblclmnInputFields_1 = tableViewerColumn_1.getColumn();
 		tblclmnInputFields_1.setWidth(180);
@@ -136,11 +145,15 @@ public class MappingTable {
 	}
 
 	private TableViewer createTableViewer(Composite mappingTableComposite) {
-		final TableViewer tableViewer_1 = new TableViewer(mappingTableComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		final TableViewer tableViewer_1 = new TableViewer(mappingTableComposite, SWT.BORDER | SWT.FULL_SELECTION );
 		table = tableViewer_1.getTable();
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		
+		
+		
 		return tableViewer_1;
 	}
 
@@ -167,21 +180,51 @@ public class MappingTable {
 		Button btnRemove = new Button(composite_1, SWT.NONE);
 		btnRemove.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		btnRemove.setText("Remove");
+		btnRemove.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub				
+				int index=0;
+				for(TableItem item : table.getItems()){
+					if(((Button)item.getData("chk")).getSelection()){
+						((Button)table.getItem(index).getData("chk")).dispose();
+						((Text)table.getItem(index).getData("in")).dispose();
+						((Text)table.getItem(index).getData("OpClass")).dispose();
+						((Button)table.getItem(index).getData("edit")).dispose();
+						((Text)table.getItem(index).getData("out")).dispose();
+						table.remove(index);
+						index--;
+						
+					}
+					index++;					
+				}
+				table.getColumns()[0].setWidth(21);
+				table.getColumns()[0].setWidth(20);
+			}
+		});
 	}
 	
 	protected TableItem addRow(final Table table) {
 		TableItem tableItem = new TableItem(table, SWT.NONE);
 		
-		TableEditor editor = new TableEditor(table);
+		TableEditor editor = new TableEditor(table);		      
+	      final Button buttonChk = new Button(table, SWT.CHECK);
+	      buttonChk.pack();
+	      editor.minimumWidth = buttonChk.getSize().x;
+	      editor.horizontalAlignment = SWT.LEFT;
+	      editor.setEditor(buttonChk, tableItem, 0);
+	      editor.grabVertical=true;
+		
+		  editor = new TableEditor(table);
 	      Text column1Txt = new Text(table, SWT.MULTI | SWT.WRAP | SWT.BORDER);
 	      editor.grabHorizontal = true;
-	      editor.setEditor(column1Txt,tableItem, 0);	      
+	      editor.setEditor(column1Txt,tableItem, 1);	      
 	      editor.grabVertical=true;
 	      
 	      editor = new TableEditor(table);
 	      final Text column2Txt = new Text(table, SWT.MULTI | SWT.WRAP | SWT.BORDER);
 	      editor.grabHorizontal = true;
-	      editor.setEditor(column2Txt, tableItem, 1);
+	      editor.setEditor(column2Txt, tableItem, 2);
 	      editor.grabVertical=true;
 	      column2Txt.setEnabled(false);
 	      
@@ -192,7 +235,7 @@ public class MappingTable {
 	      button.pack();
 	      editor.minimumWidth = button.getSize().x;
 	      editor.horizontalAlignment = SWT.LEFT;
-	      editor.setEditor(button, tableItem, 2);
+	      editor.setEditor(button, tableItem, 3);
 	      editor.grabVertical=true;
 	      button.addSelectionListener(new SelectionAdapter() {
 	    	  @Override
@@ -220,13 +263,16 @@ public class MappingTable {
 	      final Text column3Txt = new Text(table, SWT.WRAP  | SWT.MULTI  | SWT.BORDER);
 	      editor.grabVertical = true;
 	      editor.grabHorizontal = true;
-	      editor.setEditor(column3Txt, tableItem, 3);
+	      editor.setEditor(column3Txt, tableItem, 4);
 	      editor.grabVertical=true;		
 
 	      
+	      tableItem.setData("chk", buttonChk);
 	      tableItem.setData("in", column1Txt);
 	      tableItem.setData("OpClass", column2Txt);
+	      tableItem.setData("edit", button);
 	      tableItem.setData("out", column3Txt);
+	      
 	      
 	      RowData rowData = new RowData(column1Txt, column3Txt, column2Txt);	      
 	      tableItem.setData(rowData);
@@ -455,6 +501,11 @@ public class MappingTable {
 	
 	
 	public boolean isValidTable(){
+		
+		if(table.getItemCount() == 0){
+			return true;
+		}
+		
 		return validTable;
 	}
 

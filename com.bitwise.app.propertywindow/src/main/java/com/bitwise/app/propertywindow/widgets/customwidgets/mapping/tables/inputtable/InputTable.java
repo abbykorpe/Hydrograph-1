@@ -36,7 +36,7 @@ public class InputTable {
 	private TableViewer tableViewer;
 	
 	public void createTable(Composite inputTableComposite){
-		createButtonPanel(inputTableComposite);		
+		//createButtonPanel(inputTableComposite);		
 		tableViewer = createTableViewer(inputTableComposite);		
 		addColumns(tableViewer);
 		setDragSource();
@@ -67,7 +67,7 @@ public class InputTable {
 		tblclmnInputFields.setWidth(208);
 		tblclmnInputFields.setText("Input Fields");
 		tableViewerColumn.setLabelProvider(new InputFieldColumnLabelProvider());		
-		tableViewerColumn.setEditingSupport(new InputFieldEditingSupport(tableViewer));
+		//tableViewerColumn.setEditingSupport(new InputFieldEditingSupport(tableViewer));
 		
 		
 	}
@@ -79,7 +79,7 @@ public class InputTable {
 		table.setHeaderVisible(true);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tableViewer.setContentProvider(new TableContenetProvider());		
-		addKeyListener(tableViewer);	
+		//addKeyListener(tableViewer);	
 		ColumnViewerToolTipSupport.enableFor(tableViewer, ToolTip.NO_RECREATE); 
 		return tableViewer;
 	}
