@@ -1,11 +1,9 @@
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 
@@ -53,7 +51,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 
 	private TypePrimaryKeyFields getPrimaryKeys() {
 
-		Set<String> fieldValueSet = (HashSet<String>) properties.get(PropertyNameConstants.DEDUP_FILEDS.value());
+		List<String> fieldValueSet = (List<String>) properties.get(PropertyNameConstants.DEDUP_FILEDS.value());
 
 		TypePrimaryKeyFields typePrimaryKeyFields = null;
 		if (fieldValueSet != null) {

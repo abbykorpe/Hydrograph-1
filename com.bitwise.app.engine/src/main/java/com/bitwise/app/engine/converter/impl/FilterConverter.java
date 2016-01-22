@@ -86,7 +86,7 @@ public class FilterConverter extends TransformConverter {
 	private List<TypeInputField> getOperationField() {
 		logger.debug("Generating TypeInputField data :{}", properties.get(Constants.PARAM_NAME));
 		List<TypeInputField> operationFiledList = new ArrayList<>();
-		Set<String> componentOperationFileds = (HashSet<String>) component.getProperties().get(
+		List<String> componentOperationFileds = (List<String>) component.getProperties().get(
 				PropertyNameConstants.OPERATION_FILEDS.value());
 		if (componentOperationFileds != null) {
 			for (String object : componentOperationFileds) {
