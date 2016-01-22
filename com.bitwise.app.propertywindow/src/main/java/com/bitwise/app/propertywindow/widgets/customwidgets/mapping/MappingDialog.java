@@ -12,6 +12,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
@@ -68,7 +69,7 @@ public class MappingDialog extends Dialog {
 		inputTable.setData(atMapping.getInputFields());
 		
 		mappingTable = createMappingTable(composite);
-		mappingTable.setData(atMapping.getMappingSheetRows());
+		mappingTable.setData(atMapping.getMappingSheetRows(),atMapping.getInputFields());
 
 		return container;
 	}
@@ -133,6 +134,11 @@ public class MappingDialog extends Dialog {
 			System.out.println("Mapping Table validation : " + mappingTable.isValidTable());			
 			atMapping = new ATMapping(inputTable.getData(), mappingTable.getData());
 			super.okPressed();
+		}else{
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
+			messageBox.setText("Could not save mapping sheet");
+			messageBox.setMessage("Invalid mapping");
+			messageBox.open();
 		}
 		
 	}

@@ -2,11 +2,11 @@ package com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.mapp
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
-
-import javax.swing.text.TabExpander;
 
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -24,7 +24,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
@@ -36,8 +35,10 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
+import com.bitwise.app.common.datastructure.property.mapping.InputField;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
@@ -52,7 +53,7 @@ public class MappingTable {
 	private WidgetConfig widgetConfig;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private MappingDialogButtonBar mappingDialogButtonBar;
-	
+	private List<InputField> inputTableFieldList;
 	private boolean validTable=true;
 	
 	
@@ -150,10 +151,7 @@ public class MappingTable {
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		
-		
-		
-		
+				
 		return tableViewer_1;
 	}
 
@@ -326,6 +324,8 @@ public class MappingTable {
 
 	
 	private void validateRow(RowData rowData){
+		//TODO - validate row
+		
 		boolean emptyInClass = true;
 		boolean emptyOut = true;
 		Text txtIn = (Text)rowData.getIn();
@@ -339,6 +339,8 @@ public class MappingTable {
 		txtClazz.setToolTipText(null);
 		txtOut.setToolTipText(null);
 		
+		
+		//---------------- Validation - Input fields and Opeartion class, both can not be blank at the same time
 		if(txtIn.getText().replace(",", "").replace("\t\n", "").trim().equalsIgnoreCase("") &&
 		   txtClazz.getText().replace(",", "").replace("\t\n", "").trim().equalsIgnoreCase("")){
 			if(txtOut.getToolTipText() == null)
@@ -349,6 +351,8 @@ public class MappingTable {
 			emptyInClass = false;
 		}
 
+		
+		//---------------- Validation - Output field can't be blank
 		if(txtOut.getText().replace(",", "").replace("\t\n", "").trim().equalsIgnoreCase("")){
 			
 			if(txtOut.getToolTipText() == null)
@@ -358,25 +362,119 @@ public class MappingTable {
 			
 			emptyOut = false;
 		}
-
-		//validateInputOutputMapping(txtIn,txtClazz,txtOut);
 		
+		//--------------- Text Validation on input fields and output fields
 		boolean in = validateInputText(txtIn); 
 		boolean out = validateInputText(txtOut);
 		
+		
+		//-------------- validate - if the row has input field from input table
+		boolean validInputFields = true;
+		if(!txtIn.getText().replace(",", "").replace("\t\n", "").trim().equalsIgnoreCase("")){
+			List<String> mTableInputFieldListTmp = Arrays.asList(txtIn.getText().split(","));
+			List<String> mTableInputFieldList = new LinkedList<>();
+			for(int index =0 ;index < mTableInputFieldListTmp.size();index++){
+				mTableInputFieldList.add(mTableInputFieldListTmp.get(index).trim());
+			}
+			if(!getInputTableFieldList().containsAll(mTableInputFieldList)){
+				validInputFields = false;
+				txtIn.setForeground(txtIn.getDisplay().getSystemColor(SWT.COLOR_RED));
+				if(txtIn.getToolTipText() == null)
+					txtIn.setToolTipText("Invalid input fields");
+				else
+					txtIn.setToolTipText("- " + txtIn.getToolTipText() + "\n- " + "Invalid input fields");
+			}
+		}
+		
+		
+		//-------------- validate - check if mapping table input fields has duplicates
+		boolean validUniqInputFields = true;
+		if(!txtIn.getText().replace(",", "").replace("\t\n", "").trim().equalsIgnoreCase("")){
+			List<String> mTableInputFieldListTmp = Arrays.asList(txtIn.getText().split(","));
+			List<String> mTableInputFieldList = new LinkedList<>();
+			for(int index =0 ;index < mTableInputFieldListTmp.size();index++){
+				mTableInputFieldList.add(mTableInputFieldListTmp.get(index).trim());
+			}
+			
+			Set<String> set = new HashSet<String>(mTableInputFieldList);
+
+			if(set.size() < mTableInputFieldList.size()){
+				txtIn.setForeground(txtIn.getDisplay().getSystemColor(SWT.COLOR_RED));
+				validUniqInputFields = false;
+				if(txtIn.getToolTipText() == null)
+					txtIn.setToolTipText("Duplicate fields");
+				else
+					txtIn.setToolTipText("- " + txtIn.getToolTipText() + "\n- " + "Duplicate fields");
+			}
+		}
+		
+		
+		//-------------- validate - check if mapping table input fields has duplicates
+				boolean validUniqOutputFields = true;
+				if(!txtOut.getText().replace(",", "").replace("\t\n", "").trim().equalsIgnoreCase("")){
+					List<String> mTableInputFieldListTmp = Arrays.asList(txtOut.getText().split(","));
+					List<String> mTableInputFieldList = new LinkedList<>();
+					for(int index =0 ;index < mTableInputFieldListTmp.size();index++){
+						mTableInputFieldList.add(mTableInputFieldListTmp.get(index).trim());
+					}
+					
+					Set<String> set = new HashSet<String>(mTableInputFieldList);
+
+					if(set.size() < mTableInputFieldList.size()){
+						txtOut.setForeground(txtIn.getDisplay().getSystemColor(SWT.COLOR_RED));
+						validUniqOutputFields = false;
+						if(txtOut.getToolTipText() == null)
+							txtOut.setToolTipText("Duplicate fields");
+						else
+							txtOut.setToolTipText("- " + txtOut.getToolTipText() + "\n- " + "Duplicate fields");
+					}
+				}
+				
+				
+		//--------------- calculating result
 		if(emptyOut && emptyInClass){
 			txtOut.setBackground(txtOut.getDisplay().getSystemColor(SWT.COLOR_WHITE));			
 		}else{
 			txtOut.setBackground(com.bitwise.app.common.util.SWTResourceManager.getColor(250, 128, 114));
 		}
 		
-		if(in && out && emptyOut && emptyInClass){
+		boolean validUniqOutputColumns=validateDuplicatesInOutputColumn();
+		if(in && out && emptyOut && emptyInClass && validInputFields && validUniqInputFields && validUniqOutputFields && validUniqOutputColumns){
 			validTable = true;
-			validateInputOutputMapping(txtIn, txtClazz, txtOut);
+			validateInputOutputMapping(txtIn, txtClazz, txtOut);			
 		}else{
 			validTable = false;
 		}	
 		
+	}
+
+	private boolean validateDuplicatesInOutputColumn() {
+		//------------- validate duplicates in output columns
+		boolean validUniqOutputColumns = true;
+		List<String> mTableOutputFieldList = new ArrayList<>();
+		for(TableItem item : table.getItems()){
+			mTableOutputFieldList.add(((Text)item.getData("out")).getText());				
+		}
+		
+		for(int i=0;i<mTableOutputFieldList.size();i++){
+			int counter=0;
+			for(int j=0;j<mTableOutputFieldList.size();j++){
+				if(i!=j && i<j){
+					if(mTableOutputFieldList.get(i).equalsIgnoreCase(mTableOutputFieldList.get(j))){
+						((Text)table.getItem(j).getData("out")).setForeground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_RED));
+						validUniqOutputColumns = false;		
+						if(((Text)table.getItem(j).getData("out")).getToolTipText() == null)
+							((Text)table.getItem(j).getData("out")).setToolTipText("Duplicate output");
+						else{
+							if(!((Text)table.getItem(j).getData("out")).getToolTipText().contains("Duplicate output"))
+								((Text)table.getItem(j).getData("out")).setToolTipText("- " + ((Text)table.getItem(j).getData("out")).getToolTipText() + "\n- " + "Duplicate output");
+						}
+							
+					}
+				}
+			}
+		}
+		return validUniqOutputColumns;
 	}
 	
 	private void validateInputOutputMapping(Text txtIn, Text txtClazz,
@@ -526,7 +624,19 @@ public class MappingTable {
 		return mappingSheetRows;
 	}
 	
-	public void setData(List<MappingSheetRow> mappingSheetRows){
+	
+	private List<String> getInputTableFieldList(){
+		List<String> list = new LinkedList<>();
+		for(InputField inputField: inputTableFieldList){
+			list.add(inputField.getFieldName());
+		}
+		return list;
+	}
+	
+	public void setData(List<MappingSheetRow> mappingSheetRows, List<InputField> list){
+		
+		inputTableFieldList = list;
+		
 		for(MappingSheetRow mappingSheetRow : mappingSheetRows){
 			TableItem item = addRow(table);
 			
