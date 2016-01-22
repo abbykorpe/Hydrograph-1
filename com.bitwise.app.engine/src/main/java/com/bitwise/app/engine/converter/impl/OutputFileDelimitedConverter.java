@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
+import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
@@ -78,7 +80,8 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 	}
 
 	@Override
-	protected List<TypeBaseField> getFieldOrRecord(List<GridRow> gridList) {
+	protected List<TypeBaseField> getFieldOrRecord(ComponentsOutputSchema outputSchema) {
+		List<FixedWidthGridRow> gridList=outputSchema.getFixedWidthGridRowsOutputFields();
 		logger.debug("Generating data for {} for property {}", new Object[] { properties.get(Constants.PARAM_NAME),
 				PropertyNameConstants.SCHEMA.value() });
 

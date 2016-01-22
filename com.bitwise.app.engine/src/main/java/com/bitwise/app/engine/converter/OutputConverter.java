@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.datastructure.property.GridRow;
+import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
@@ -18,47 +18,61 @@ import com.bitwiseglobal.graph.commontypes.TypeOutputComponent;
 import com.bitwiseglobal.graph.commontypes.TypeOutputInSocket;
 
 public abstract class OutputConverter extends Converter {
-	
+
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
+
 	@Override
-	public void prepareForXML(){
+	public void prepareForXML() {
 		super.prepareForXML();
-		((TypeOutputComponent)baseComponent).getInSocket().addAll(getOutInSocket());
+		((TypeOutputComponent) baseComponent).getInSocket().addAll(getOutInSocket());
 	}
-	
+
 	/**
 	 * Returs the {@link List} of classes of type {@link TypeOutputInSocket}
+	 * 
 	 * @return {@link TypeOutputInSocket}
 	 * @throws SchemaException
 	 */
-	protected abstract List<TypeOutputInSocket> getOutInSocket() ;
+	protected abstract List<TypeOutputInSocket> getOutInSocket();
 
-	/** Converts String value to {@link TypeBaseRecord}
+	/**
+	 * Converts String value to {@link TypeBaseRecord}
+	 * 
 	 * @return {@link TypeBaseRecord}
 	 * @throws SchemaException
 	 */
-	protected TypeBaseRecord getSchema(){
+	protected TypeBaseRecord getSchema() {
 		logger.debug("Genrating TypeBaseRecord data for {}", properties.get(Constants.PARAM_NAME));
 		TypeBaseRecord typeBaseRecord = new TypeBaseRecord();
-		Schema schema=  (Schema) properties.get(PropertyNameConstants.SCHEMA.value());
-		if(schema!=null){
-		if(schema.getIsExternal()){
-			TypeExternalSchema typeExternalSchema=new TypeExternalSchema();
-			typeExternalSchema.setUri(schema.getExternalSchemaPath());
-			typeBaseRecord.setName("External");
-			typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().add(typeExternalSchema);
-		} else{
-			typeBaseRecord.setName("Internal");
-			typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().addAll(getFieldOrRecord(schema.getGridRow()));	
-		}}
-      	return typeBaseRecord;
+		Schema schema = (Schema) properties.get(PropertyNameConstants.SCHEMA.value());
+		if (schema != null) {
+			if (schema.getIsExternal()) {
+				TypeExternalSchema typeExternalSchema = new TypeExternalSchema();
+				typeExternalSchema.setUri(schema.getExternalSchemaPath());
+				typeBaseRecord.setName("External");
+				typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().add(typeExternalSchema);
+			} else
+				typeBaseRecord.setName("Internal");
+		}
+		if (fetchPropagatedSchema() != null)
+			typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().addAll(getFieldOrRecord(fetchPropagatedSchema()));
+
+		return typeBaseRecord;
+	}
+
+	protected ComponentsOutputSchema fetchPropagatedSchema() {
+		ComponentsOutputSchema componentsOutputSchema = null;
+		if (properties.get(Constants.SCHEMA_TO_PROPAGATE) != null)
+			componentsOutputSchema = (ComponentsOutputSchema) properties.get(Constants.SCHEMA_TO_PROPAGATE);
+		return componentsOutputSchema;
 	}
 
 	/**
 	 * Prepare the Fields/Records for shcema
-	 * @param list 
+	 * 
+	 * @param componentsOutputSchema
 	 * @return {@link List}
-	 *
+	 * 
 	 */
-	protected abstract List<TypeBaseField> getFieldOrRecord(List<GridRow> list);
+	protected abstract List<TypeBaseField> getFieldOrRecord(ComponentsOutputSchema componentsOutputSchema);
 }
