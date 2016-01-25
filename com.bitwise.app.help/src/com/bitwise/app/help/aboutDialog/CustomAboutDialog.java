@@ -44,7 +44,7 @@ import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.osgi.framework.Bundle;
 
-import com.bitwise.app.common.util.Constants;
+
 /**
  *Creates Custom AboutDialog of Application
  * @author Bitwise
@@ -61,7 +61,7 @@ public class CustomAboutDialog extends TrayDialog {
 	private IProduct product;
 
 
-	private ArrayList images = new ArrayList();
+	private ArrayList<Image> images = new ArrayList<Image>();
 
 	private AboutFeaturesButtonManager buttonManager = new AboutFeaturesButtonManager();
 

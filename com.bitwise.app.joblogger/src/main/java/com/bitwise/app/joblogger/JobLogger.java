@@ -6,11 +6,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.joblogger.logger.AbstractJobLogger;
 import com.bitwise.app.joblogger.logger.ConsoleLogger;
 import com.bitwise.app.joblogger.logger.FileLogger;
 import com.bitwise.app.joblogger.utils.JobLoggerUtils;
+import com.bitwise.app.joblogger.utils.LogFactory;
 
 /**
  * 

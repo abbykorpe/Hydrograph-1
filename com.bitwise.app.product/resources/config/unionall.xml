@@ -2,32 +2,18 @@
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/gather_palette.png" canvasIconPath="/icons/gather_canvas.png"
-		name="UnionallComponent" nameInPalette="Union All" defaultNamePrefix="Unionall" description="This is Unionall component.\nsome more text">
+		name="UnionallComponent" nameInPalette="Union All" defaultNamePrefix="Unionall" 
+		description="This is Unionall component.\nsome more text"
+		helpFilePath="/com.bitwise.app.help/html/Components/Union_All.html">
 		<tns:category>STRAIGHTPULL</tns:category>
 		<tns:port>
-			<tns:portSpecification>
-				<tns:typeOfPort>in</tns:typeOfPort>
-				<tns:numberOfPorts>1</tns:numberOfPorts>
-				<tns:sequenceOfPort>0</tns:sequenceOfPort>
-				<tns:allowMultipleLinks>true</tns:allowMultipleLinks>
-				<tns:linkMandatory>true</tns:linkMandatory>
-				<tns:nameOfPort>in0</tns:nameOfPort>
-				<tns:labelOfPort>in0</tns:labelOfPort>
+			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="in0" nameOfPort="in0" allowMultipleLinks="true"/>
 			</tns:portSpecification>
-			<tns:portSpecification>
-				<tns:typeOfPort>out</tns:typeOfPort>
-				<tns:numberOfPorts>1</tns:numberOfPorts>
-				<tns:sequenceOfPort>0</tns:sequenceOfPort>
-				<tns:allowMultipleLinks>false</tns:allowMultipleLinks>
-				<tns:linkMandatory>true</tns:linkMandatory>
-				<tns:nameOfPort>out0</tns:nameOfPort>
-				<tns:labelOfPort>out0</tns:labelOfPort>
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="out0" nameOfPort="out0" allowMultipleLinks="false"/>
 			</tns:portSpecification>
 		</tns:port>
-		
-		<tns:changeInPortsDynamically/>
-		<tns:changeOutPortsDynamically/>
-		<tns:changeUnusedPortsDynamically/>
 		
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"

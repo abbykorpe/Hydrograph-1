@@ -6,7 +6,6 @@ Bundle-Version: 0.0.1.qualifier
 Bundle-Activator: com.bitwise.app.joblogger.Activator
 Bundle-Vendor: BITWISE
 Require-Bundle: org.eclipse.core.runtime,
- com.bitwise.app.common;bundle-version="0.0.1",
  ch.qos.logback.classic,
  ch.qos.logback.core,
  org.slf4j.api,
