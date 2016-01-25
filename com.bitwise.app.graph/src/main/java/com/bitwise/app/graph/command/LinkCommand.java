@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.component.config.PortInfo;
 import com.bitwise.app.common.component.config.PortSpecification;
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;

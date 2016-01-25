@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.converter.InputUiConverter;

@@ -11,7 +11,7 @@ import javax.xml.bind.Marshaller;
 import org.eclipse.core.resources.IFile;
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.engine.converter.Converter;
 import com.bitwise.app.engine.converter.ConverterFactory;
 import com.bitwise.app.engine.xpath.ComponentXpath;

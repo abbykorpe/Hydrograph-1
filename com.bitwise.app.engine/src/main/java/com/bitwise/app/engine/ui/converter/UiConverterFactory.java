@@ -2,7 +2,6 @@ package com.bitwise.app.engine.ui.converter;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.ui.converter.impl.AggregateUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.CloneUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.DummyUiConverter;
@@ -17,6 +16,7 @@ import com.bitwise.app.engine.ui.converter.impl.RemoveDupsUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.TransformComponentUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.UnionAllUiConverter;
 import com.bitwise.app.graph.model.Container;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 import com.bitwiseglobal.graph.inputtypes.TextFileDelimited;
 import com.bitwiseglobal.graph.inputtypes.TextFileFixedWidth;

@@ -28,6 +28,7 @@ import com.bitwise.app.common.component.config.Config;
 import com.bitwise.app.common.component.config.Policy;
 import com.bitwise.app.common.component.policyconfig.CategoryPolicies;
 import com.bitwise.app.common.component.policyconfig.PolicyConfig;
+import com.bitwise.app.logging.factory.LogFactory;
 
 
 /**

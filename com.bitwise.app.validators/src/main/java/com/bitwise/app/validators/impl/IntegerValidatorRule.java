@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 
 public class IntegerValidatorRule implements IValidator{
 

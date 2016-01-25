@@ -25,7 +25,8 @@ Require-Bundle: org.eclipse.ui,
  com.gradleware.tooling.utils;bundle-version="0.6.0",
  org.eclipse.buildship.branding;bundle-version="1.0.6",
  org.eclipse.buildship.core;bundle-version="1.0.5",
- org.eclipse.buildship.ui;bundle-version="1.0.5"
+ org.eclipse.buildship.ui;bundle-version="1.0.5",
+ com.bitwise.app.logging;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.bitwise.app.project.structure

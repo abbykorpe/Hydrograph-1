@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.converter.StraightpullUiConverter;

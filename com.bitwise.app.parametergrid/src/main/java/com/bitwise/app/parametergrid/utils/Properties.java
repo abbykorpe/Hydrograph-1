@@ -14,7 +14,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 
 /**
  * 

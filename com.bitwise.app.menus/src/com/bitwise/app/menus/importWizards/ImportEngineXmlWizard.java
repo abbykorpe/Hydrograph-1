@@ -7,7 +7,7 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.menus.messages.Messages;
 
 public class ImportEngineXmlWizard extends Wizard implements IImportWizard {

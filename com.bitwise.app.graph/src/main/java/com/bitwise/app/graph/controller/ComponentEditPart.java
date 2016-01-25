@@ -32,18 +32,17 @@ import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.component.config.Property;
 import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
-import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.figure.ComponentBorder;
 import com.bitwise.app.graph.figure.ComponentFigure;
 import com.bitwise.app.graph.figure.ELTFigureConstants;
-import com.bitwise.app.graph.figure.PortFigure;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.ComponentLabel;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 import com.bitwise.app.graph.propertywindow.ELTPropertyWindow;
+import com.bitwise.app.logging.factory.LogFactory;
 
 /**
  * The Class ComponentEditPart.

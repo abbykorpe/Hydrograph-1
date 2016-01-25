@@ -30,7 +30,7 @@ import org.eclipse.ui.console.MessageConsole;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.graph.Messages;
 import com.bitwise.app.joblogger.JobLogger;

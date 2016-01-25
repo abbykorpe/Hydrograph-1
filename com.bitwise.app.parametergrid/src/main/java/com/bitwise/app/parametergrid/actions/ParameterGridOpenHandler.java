@@ -11,7 +11,7 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.parametergrid.dialog.ParameterGridDialog;
 /**
  * 

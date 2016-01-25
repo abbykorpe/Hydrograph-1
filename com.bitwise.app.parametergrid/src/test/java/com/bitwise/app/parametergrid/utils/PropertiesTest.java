@@ -9,7 +9,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 
 public class PropertiesTest {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(PropertiesTest.class);

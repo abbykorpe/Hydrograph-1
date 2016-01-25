@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.fixedwidthschema.ELTFixedWidget;
 import com.bitwise.app.propertywindow.fixedwidthschema.ELTJoinFixedWidthSchemaWidget;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;

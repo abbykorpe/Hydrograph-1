@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import org.eclipse.draw2d.geometry.Point;
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.engine.ui.converter.LinkingData;
 import com.bitwise.app.engine.ui.exceptions.ComponentNotFoundException;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;

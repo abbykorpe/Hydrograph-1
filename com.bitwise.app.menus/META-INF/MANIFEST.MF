@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.ui,
  org.slf4j.api;bundle-version="1.7.2",
  com.bitwise.app.graph;bundle-version="0.0.1",
  com.bitwise.app.common.interfaces;bundle-version="0.0.1",
- com.bitwise.app.engine;bundle-version="0.0.1"
+ com.bitwise.app.engine;bundle-version="0.0.1",
+ com.bitwise.app.logging;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Import-Package: com.bitwise.app.graph.figure,
  com.bitwise.app.graph.model,

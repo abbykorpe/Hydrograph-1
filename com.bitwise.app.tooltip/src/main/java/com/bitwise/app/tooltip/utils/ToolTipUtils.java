@@ -2,7 +2,7 @@ package com.bitwise.app.tooltip.utils;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 
 /**
  * 

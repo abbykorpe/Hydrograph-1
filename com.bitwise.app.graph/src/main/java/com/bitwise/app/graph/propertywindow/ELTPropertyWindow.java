@@ -5,18 +5,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Monitor;
-import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.adapters.ELTComponentPropertyAdapter;
 import com.bitwise.app.propertywindow.factory.WidgetFactory.Widgets;
 import com.bitwise.app.propertywindow.property.ELTComponenetProperties;

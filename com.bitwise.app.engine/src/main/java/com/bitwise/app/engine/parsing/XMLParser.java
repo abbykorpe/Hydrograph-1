@@ -10,13 +10,8 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
-/**
- * The class XMLParser
- * 
- * @author Bitwise
- * 
- */
-import com.bitwise.app.common.util.LogFactory;
+
+import com.bitwise.app.logging.factory.LogFactory;
 public class XMLParser {
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(XMLParser.class);
 	

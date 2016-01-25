@@ -33,7 +33,7 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.engine.exceptions.EngineException;
 import com.bitwise.app.engine.ui.exceptions.ComponentNotFoundException;
 import com.bitwise.app.engine.ui.util.UiConverterUtil;

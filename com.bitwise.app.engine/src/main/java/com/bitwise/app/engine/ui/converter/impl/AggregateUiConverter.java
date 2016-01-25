@@ -9,18 +9,15 @@ import java.util.TreeMap;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.converter.TransformUiConverter;
-import com.bitwise.app.engine.ui.converter.UiConverter;
 import com.bitwise.app.graph.model.Container;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.aggregate.TypePrimaryKeyFields;
 import com.bitwiseglobal.graph.aggregate.TypeSecondaryKeyFields;
 import com.bitwiseglobal.graph.aggregate.TypeSecondayKeyFieldsAttributes;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 import com.bitwiseglobal.graph.commontypes.TypeFieldName;
-import com.bitwiseglobal.graph.commontypes.TypeOperationsComponent;
-import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
 import com.bitwiseglobal.graph.operationstypes.Aggregate;
 
 /**

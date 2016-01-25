@@ -5,10 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.exceptions.ConverterNotFoundException;
 import com.bitwise.app.engine.exceptions.DummyComponentException;
 import com.bitwise.app.graph.model.Component;
+import com.bitwise.app.logging.factory.LogFactory;
 
 /**
  * Factory class for creating Converter instances for particular component

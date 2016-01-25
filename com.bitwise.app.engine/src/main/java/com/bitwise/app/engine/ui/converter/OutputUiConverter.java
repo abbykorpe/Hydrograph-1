@@ -2,9 +2,9 @@ package com.bitwise.app.engine.ui.converter;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.commontypes.TypeOutputComponent;
 import com.bitwiseglobal.graph.commontypes.TypeOutputInSocket;
 

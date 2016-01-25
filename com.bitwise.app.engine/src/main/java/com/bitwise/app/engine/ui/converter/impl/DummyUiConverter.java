@@ -11,7 +11,7 @@ import javax.xml.bind.Marshaller;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.converter.LinkingData;
 import com.bitwise.app.engine.ui.converter.UiConverter;

@@ -51,7 +51,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.FilterProperties;
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;

@@ -10,10 +10,10 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.ui.repository.InSocketDetail;
 import com.bitwise.app.engine.ui.repository.ParameterData;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
+import com.bitwise.app.logging.factory.LogFactory;
 
 /**
  * The class XMLHandler

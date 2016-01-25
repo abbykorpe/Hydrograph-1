@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.project.structure.Activator;
 import com.bitwise.app.project.structure.CustomMessages;
 import com.bitwise.app.project.structure.natures.ProjectNature;

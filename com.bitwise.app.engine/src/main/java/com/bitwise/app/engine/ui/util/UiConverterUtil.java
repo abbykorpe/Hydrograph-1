@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.bitwise.app.common.util.CanvasDataAdpater;
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.engine.exceptions.EngineException;
 import com.bitwise.app.engine.parsing.XMLParser;

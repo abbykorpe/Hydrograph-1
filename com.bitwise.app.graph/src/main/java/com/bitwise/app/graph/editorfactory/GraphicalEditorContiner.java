@@ -3,7 +3,7 @@ package com.bitwise.app.graph.editorfactory;
 import org.eclipse.ui.IEditorInput;
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.editor.ELTGraphicalEditorInput;
 import com.bitwise.app.graph.model.Container;

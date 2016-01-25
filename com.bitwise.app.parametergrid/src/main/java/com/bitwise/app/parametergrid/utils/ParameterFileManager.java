@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 /**
  * 
  * Class to load and store property maps to given file

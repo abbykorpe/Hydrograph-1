@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.ui,
  com.bitwise.app.tooltip;bundle-version="0.0.1",
  org.eclipse.jface.text;bundle-version="3.7.2",
  com.bitwise.app.common.interfaces;bundle-version="0.0.1",
- org.apache.commons.lang
+ org.apache.commons.lang,
+ com.bitwise.app.logging;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.bitwise.app.graph.figure

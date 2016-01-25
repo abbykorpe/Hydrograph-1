@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.component.config.Component;
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 
 /**
  * The Class DynamicClassProcessor.

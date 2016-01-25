@@ -4,7 +4,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.controller.ComponentLabelEditPart;
 import com.bitwise.app.graph.controller.ContainerEditPart;

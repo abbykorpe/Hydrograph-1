@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.datastructures.ComboBoxParameter;
 import com.bitwise.app.propertywindow.factory.ListenerFactory.Listners;
 import com.bitwise.app.propertywindow.messages.Messages;

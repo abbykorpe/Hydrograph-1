@@ -10,10 +10,10 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
 import com.bitwise.app.graph.model.Component;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.aggregate.TypePrimaryKeyFields;
 import com.bitwiseglobal.graph.aggregate.TypeSecondaryKeyFields;
 import com.bitwiseglobal.graph.aggregate.TypeSecondayKeyFieldsAttributes;

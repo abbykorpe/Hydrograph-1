@@ -29,6 +29,8 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 
+import com.bitwise.app.logging.factory.LogFactory;
+
 /**
  * Utility class for managing OS resources associated with SWT controls such as colors, fonts, images, etc.
  * <p>

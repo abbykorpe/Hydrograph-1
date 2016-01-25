@@ -1,14 +1,11 @@
 package com.bitwise.app.perspective;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 
 // TODO: Auto-generated Javadoc
 /**

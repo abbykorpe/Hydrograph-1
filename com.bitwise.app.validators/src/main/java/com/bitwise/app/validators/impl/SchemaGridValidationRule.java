@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 
 public class SchemaGridValidationRule implements IValidator {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(SchemaGridValidationRule.class); 

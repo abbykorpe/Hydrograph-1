@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.common.util.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.converter.TransformUiConverter;
 import com.bitwise.app.graph.model.Container;
