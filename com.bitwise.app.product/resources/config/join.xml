@@ -10,7 +10,7 @@
 				<tns:port sequenceOfPort="1" linkMandatory="true" labelOfPort="in1" nameOfPort="in1" allowMultipleLinks="false"/>
 			</tns:portSpecification>
 			<tns:portSpecification typeOfPort="unused" numberOfPorts="2" changePortCountDynamically="true">
-				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="un0" nameOfPort="un1" allowMultipleLinks="false"/>
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="un0" nameOfPort="un0" allowMultipleLinks="false"/>
 				<tns:port sequenceOfPort="1" linkMandatory="true" labelOfPort="un1" nameOfPort="un1" allowMultipleLinks="false"/>
 			</tns:portSpecification>
 			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
