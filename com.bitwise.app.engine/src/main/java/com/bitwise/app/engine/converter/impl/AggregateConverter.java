@@ -1,6 +1,7 @@
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -8,7 +9,10 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
+import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
+import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.engine.converter.TransformConverter;
@@ -26,7 +30,8 @@ import com.bitwiseglobal.graph.operationstypes.Aggregate;
 
 public class AggregateConverter extends TransformConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(AggregateConverter.class);
-	TransformPropertyGrid transformPropertyGrid;
+	private ATMapping atMapping;
+	private List<FixedWidthGridRow> fixedWidthGridRows;
 	ConverterHelper converterHelper;
 
 	public AggregateConverter(Component component) {
@@ -34,10 +39,23 @@ public class AggregateConverter extends TransformConverter {
 		this.baseComponent = new Aggregate();
 		this.component = component;
 		this.properties = component.getProperties();
-		transformPropertyGrid = (TransformPropertyGrid) properties.get(Constants.PARAM_OPERATION);
+		atMapping = (ATMapping) properties.get(Constants.PARAM_OPERATION);
 		converterHelper = new ConverterHelper(component);
+		initFixedWidthGridRows();
 	}
 
+	
+	private void initFixedWidthGridRows(){
+		fixedWidthGridRows = new LinkedList<>();
+		ComponentsOutputSchema componentsOutputSchema  = (ComponentsOutputSchema) properties.get(Constants.SCHEMA_TO_PROPAGATE);
+		List<FixedWidthGridRow> gridRows = componentsOutputSchema.getFixedWidthGridRowsOutputFields();
+		
+		for(FixedWidthGridRow row : gridRows){
+			fixedWidthGridRows.add((FixedWidthGridRow) row.copy());
+		}	
+	}
+	
+	
 	@Override
 	public void prepareForXML() {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
@@ -51,12 +69,12 @@ public class AggregateConverter extends TransformConverter {
 
 	@Override
 	protected List<TypeTransformOperation> getOperations() {
-		return converterHelper.getOperations(transformPropertyGrid);
+		return converterHelper.getOperations(atMapping,fixedWidthGridRows);
 	}
 
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
-		return converterHelper.getOutSocket(transformPropertyGrid);
+		return converterHelper.getOutSocket(atMapping,fixedWidthGridRows);
 	}
 
 	@Override
