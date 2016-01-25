@@ -36,7 +36,7 @@ public class InputTable {
 	private TableViewer tableViewer;
 	
 	public void createTable(Composite inputTableComposite){
-		createButtonPanel(inputTableComposite);		
+		//createButtonPanel(inputTableComposite);		
 		tableViewer = createTableViewer(inputTableComposite);		
 		addColumns(tableViewer);
 		setDragSource();
@@ -67,7 +67,7 @@ public class InputTable {
 		tblclmnInputFields.setWidth(208);
 		tblclmnInputFields.setText("Input Fields");
 		tableViewerColumn.setLabelProvider(new InputFieldColumnLabelProvider());		
-		tableViewerColumn.setEditingSupport(new InputFieldEditingSupport(tableViewer));
+		//tableViewerColumn.setEditingSupport(new InputFieldEditingSupport(tableViewer));
 		
 		
 	}
@@ -79,7 +79,7 @@ public class InputTable {
 		table.setHeaderVisible(true);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tableViewer.setContentProvider(new TableContenetProvider());		
-		addKeyListener(tableViewer);	
+		//addKeyListener(tableViewer);	
 		ColumnViewerToolTipSupport.enableFor(tableViewer, ToolTip.NO_RECREATE); 
 		return tableViewer;
 	}
@@ -96,15 +96,36 @@ public class InputTable {
 			public void keyPressed(KeyEvent e) {
 				if ((e.stateMask & SWT.SHIFT) != 0){
 					if(e.keyCode == 97){
-						Object obj=new InputField("Hello");
+						
+						String defaultFieldName = getDefaultFieldName(tableViewer);
+						
+						Object obj=new InputField(defaultFieldName);
 						tableViewer.add(obj);
 						tableViewer.getTable().showItem(tableViewer.getTable().getItem(tableViewer.getTable().getItems().length-1));
 					}
 				}	
 			}
+
+			
 		});
 	}
 
+	private String getDefaultFieldName(final TableViewer tableViewer) {
+		int inputFieldCounter=0;
+		String defaultFieldName = "DefaultInputField" + inputFieldCounter;
+		
+		List<String> currentFieldNameList = new ArrayList<>();
+		for(int i=0 ;i < tableViewer.getTable().getItems().length ; i++){
+			currentFieldNameList.add(((InputField)tableViewer.getElementAt(i)).getFieldName());							
+		}						
+		
+		while(currentFieldNameList.contains(defaultFieldName)){
+			defaultFieldName = "DefaultInputField" + inputFieldCounter;
+			inputFieldCounter++;
+		}
+		return defaultFieldName;
+	}
+	
 	private void createButtonPanel(Composite inputTableComposite) {
 		Composite composite_2 = new Composite(inputTableComposite, SWT.NONE);
 		GridLayout gl_composite_2 = new GridLayout(2, false);
@@ -130,7 +151,7 @@ public class InputTable {
 	}
 	
 	private void addInputField() {		
-		InputField inputField = new InputField("Hello");
+		InputField inputField = new InputField(getDefaultFieldName(tableViewer));
 		tableViewer.add(inputField);
 	}
 	
@@ -140,12 +161,12 @@ public class InputTable {
 	
 	public boolean isValidTable(){
 		boolean valid = true;
-		
-		//table.getItems()[0].getText(0)
-
 		Pattern pattern = Pattern.compile("^[a-zA-Z0-9_ ]*$");
 		for(TableItem item : table.getItems()){		
 			if (!pattern.matcher(item.getText(0)).matches()) {
+				valid=false;
+			}
+			if(item.getText(0).equalsIgnoreCase("")){
 				valid=false;
 			}
 		}

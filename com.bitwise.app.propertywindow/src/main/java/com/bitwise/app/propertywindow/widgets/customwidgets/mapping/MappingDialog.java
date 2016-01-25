@@ -9,13 +9,16 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.MappingDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.inputtable.InputTable;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.mappingtable.MappingTable;
 
@@ -26,6 +29,9 @@ public class MappingDialog extends Dialog {
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private ATMapping atMapping;
 	private WidgetConfig widgetConfig;
+	private MappingDialogButtonBar mappingDialogButtonBar;
+	/*private Button okButton;
+	private Button cancelButton;*/
 		
 	/**
 	 * Create the dialog.
@@ -63,7 +69,7 @@ public class MappingDialog extends Dialog {
 		inputTable.setData(atMapping.getInputFields());
 		
 		mappingTable = createMappingTable(composite);
-		mappingTable.setData(atMapping.getMappingSheetRows());
+		mappingTable.setData(atMapping.getMappingSheetRows(),atMapping.getInputFields());
 
 		return container;
 	}
@@ -75,7 +81,7 @@ public class MappingDialog extends Dialog {
 		gd_composite_2.widthHint = 597;
 		composite_2.setLayoutData(gd_composite_2);
 		
-		MappingTable mappingTable = new MappingTable(widgetConfig,propertyDialogButtonBar);
+		MappingTable mappingTable = new MappingTable(widgetConfig,propertyDialogButtonBar,mappingDialogButtonBar);
 		mappingTable.createTable(composite_2);
 		
 		return mappingTable;
@@ -102,10 +108,15 @@ public class MappingDialog extends Dialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+		Button okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
+		Button cancelButton = createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
+		
+		mappingDialogButtonBar = new MappingDialogButtonBar();
+		
+		mappingDialogButtonBar.setOkButton(okButton);
+		mappingDialogButtonBar.setCancelButton(cancelButton);
 	}
 
 	/**
@@ -120,17 +131,14 @@ public class MappingDialog extends Dialog {
 	protected void okPressed() {
 		if(mappingTable.isValidTable() && inputTable.isValidTable()){
 			System.out.println("Input Table validation : " + inputTable.isValidTable());
-			System.out.println("Mapping Table validation : " + mappingTable.isValidTable());
-			
-			//atMapping.setInputFields(inputFields)
-			
-			//List<String> inputTableInputFields = new LinkedList<>();
-			
-			//System.out.println("+++ inputTableInputFields: " + inputTable.getData());
-			//System.out.println("+++ MapingTableData: " + mappingTable.getData());
-			
+			System.out.println("Mapping Table validation : " + mappingTable.isValidTable());			
 			atMapping = new ATMapping(inputTable.getData(), mappingTable.getData());
 			super.okPressed();
+		}else{
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
+			messageBox.setText("Could not save mapping sheet");
+			messageBox.setMessage("Invalid mapping");
+			messageBox.open();
 		}
 		
 	}

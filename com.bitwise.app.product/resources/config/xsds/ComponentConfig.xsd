@@ -19,9 +19,6 @@
 		<sequence>
 			<element name="category" type="cnst:category_type" maxOccurs="1" minOccurs="0" />
 			<element name="port" type="tns:IOPort" maxOccurs="1" minOccurs="1" />
-			<element name="changeInPortsDynamically" type="boolean" maxOccurs="1" minOccurs="0" default="false"/>
-			<element name="changeOutPortsDynamically" type="boolean" maxOccurs="1" minOccurs="0" default="false"/>
-			<element name="changeUnusedPortsDynamically" type="boolean" maxOccurs="1" minOccurs="0" default="false"/>
 			<element name="property" type="tns:Property" maxOccurs="unbounded" minOccurs="0" />
 			<element name="policy" type="tns:Policy" maxOccurs="unbounded" minOccurs="0" /> 
 		</sequence>
@@ -52,22 +49,27 @@
 
 	<complexType name="IOPort">
 		<sequence>
-		<element name="portSpecification" type="tns:PortSpecification" maxOccurs="unbounded" minOccurs="1"/>
+			<element name="portSpecification" type="tns:PortSpecification" maxOccurs="unbounded" minOccurs="1"/>
 		</sequence>
 	</complexType>
 
- <complexType name="PortSpecification">
-		<sequence>
-		    <element name="typeOfPort" type="cnst:PortType" maxOccurs="1" minOccurs="1"/>
-			<element name="numberOfPorts" type="int" maxOccurs="1" minOccurs="1" />
-			<element name="sequenceOfPort" type="int" maxOccurs="1" minOccurs="1" />
-			<element name="allowMultipleLinks" type="boolean" maxOccurs="1" minOccurs="0" />
-			<element name="linkMandatory" type="boolean" maxOccurs="1" minOccurs="0" />
-			<element name="nameOfPort" type="string" maxOccurs="1" minOccurs="1"/>
-			<element name="labelOfPort" type="string" maxOccurs="1" minOccurs="1"/>
+ 	<complexType name="PortSpecification">
+ 		<sequence>
+			<element name="port" type="tns:PortInfo" maxOccurs="unbounded" minOccurs="0" />
 		</sequence>
+		<attribute name="typeOfPort" type="cnst:PortType" use="required" />
+		<attribute name="numberOfPorts" type="int" use="required" />	
+		<attribute name="changePortCountDynamically" type="boolean" use="optional" default="false"/>		
 	</complexType>
 	
+	<complexType name="PortInfo">
+		<attribute name="sequenceOfPort" type="int" use="required" />
+		<attribute name="allowMultipleLinks" type="boolean" use="required" />
+		<attribute name="linkMandatory" type="boolean" use="required"/>
+		<attribute name="nameOfPort" type="string" use="required"/>
+		<attribute name="labelOfPort" type="string" use="required"/>	
+	</complexType>	
+
 	 <complexType name="Policy">
 		<sequence>
 			<element name="name" type="string" maxOccurs="1" minOccurs="0" />

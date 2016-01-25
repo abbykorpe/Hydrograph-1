@@ -10,6 +10,7 @@ import javax.xml.namespace.QName;
 
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.component.config.PortInfo;
 import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
@@ -22,7 +23,6 @@ import com.bitwise.app.common.datastructure.property.TransformOperation;
 import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.LogFactory;
-import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
@@ -307,8 +307,10 @@ public class ConverterHelper {
 	public boolean isMultipleLinkAllowed(Component sourceComponent, String portName) {
 		logger.debug("Getting port specification for port" + portName);
 		for (PortSpecification portSpecification : sourceComponent.getPortSpecification()) {
-			if (portSpecification.getNameOfPort().equals(portName)) {
-				return portSpecification.isAllowMultipleLinks();
+			for(PortInfo portInfo:portSpecification.getPort()){
+				if (portInfo.getNameOfPort().equals(portName)) {
+					return portInfo.isAllowMultipleLinks();
+				}
 			}
 		}
 		return false;

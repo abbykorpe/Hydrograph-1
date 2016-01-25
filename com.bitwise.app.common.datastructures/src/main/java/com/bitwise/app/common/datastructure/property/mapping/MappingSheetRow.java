@@ -5,14 +5,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.bitwise.app.cloneableinterface.IDataStructure;
+import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 
 public class MappingSheetRow implements IDataStructure {
 
 	private List<String> inputFields;
-	private String operationClass;
+	private OperationClassProperty operationClass;
 	private List<String> outputList;
 	
-	public MappingSheetRow(List<String> imputFields, String operationClass,
+	public MappingSheetRow(List<String> imputFields, OperationClassProperty operationClass,
 			List<String> outputList) {
 		this.inputFields = imputFields;
 		this.operationClass = operationClass;
@@ -26,12 +27,16 @@ public class MappingSheetRow implements IDataStructure {
 	public void setImputFields(List<String> imputFields) {
 		this.inputFields = imputFields;
 	}
-	public String getOperationClass() {
+	
+	public OperationClassProperty getOperationClassProperty() {
 		return operationClass;
 	}
-	public void setOperationClass(String operationClass) {
+
+	public void setOperationClassProperty(
+			OperationClassProperty operationClass) {
 		this.operationClass = operationClass;
 	}
+
 	public List<String> getOutputList() {
 		return outputList;
 	}
@@ -44,12 +49,14 @@ public class MappingSheetRow implements IDataStructure {
 	public Object clone(){
 		
 		List<String> inputFields = new LinkedList<>();
-		String operationClass="" ;
+		OperationClassProperty operationClass = new OperationClassProperty("", false, "");
 		List<String> outputList = new LinkedList<>();		
 		
 		inputFields.addAll(this.inputFields);
 		outputList.addAll(this.outputList);
-		operationClass = this.operationClass;
+		if(this.operationClass != null)
+			operationClass = this.operationClass.clone();
+		
 		MappingSheetRow mappingSheetRow = new MappingSheetRow(inputFields, operationClass, outputList);
 		
 		return mappingSheetRow;

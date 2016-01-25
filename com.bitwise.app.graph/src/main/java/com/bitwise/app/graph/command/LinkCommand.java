@@ -6,6 +6,7 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.gef.commands.Command;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.component.config.PortInfo;
 import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.util.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
@@ -73,16 +74,19 @@ public class LinkCommand extends Command{
 
 			for (PortSpecification p:portspecification)
 			{
-				String portName=p.getTypeOfPort().value()+p.getSequenceOfPort();
-				if(portName.equals(sourceTerminal)){
-					if(p.isAllowMultipleLinks() || 
-							!source.isOutputPortEngaged(sourceTerminal)){
-						
-					}else{
-						
-						return false;
+				for(PortInfo portInfo:p.getPort()){
+					String portName=p.getTypeOfPort().value()+portInfo.getSequenceOfPort();
+					if(portName.equals(sourceTerminal)){
+						if(portInfo.isAllowMultipleLinks() || 
+								!source.isOutputPortEngaged(sourceTerminal)){
+							
+						}else{
+							
+							return false;
+						}
 					}
 				}
+				
 			}
 
 		}	
@@ -95,16 +99,19 @@ public class LinkCommand extends Command{
 			portspecification=XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
 			for (PortSpecification p:portspecification)
 			{
-				String portName=p.getTypeOfPort().value()+p.getSequenceOfPort();
-				if(portName.equals(targetTerminal)){
-					if(p.isAllowMultipleLinks() ||
-							!target.isInputPortEngaged(targetTerminal)){
-						
-					}else{
-						
-						return false;
+				for(PortInfo portInfo:p.getPort()){
+					String portName=p.getTypeOfPort().value()+portInfo.getSequenceOfPort();
+					if(portName.equals(targetTerminal)){
+						if(portInfo.isAllowMultipleLinks() ||
+								!target.isInputPortEngaged(targetTerminal)){
+							
+						}else{
+							
+							return false;
+						}
 					}
 				}
+				
 			}
 		}
 

@@ -1,7 +1,8 @@
 package com.bitwise.app.engine.ui.converter.impl;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
@@ -61,12 +62,12 @@ public class FilterUiConverter extends TransformUiConverter{
 	}
 
 
-	private HashSet<String> getOperationFileds() {
-		HashSet<String> componentOperationFileds=null;
+	private List<String> getOperationFileds() {
+		List<String> componentOperationFileds=null;
 		
 			for(TypeTransformOperation transformOperation:filter.getOperation())
 			{	if(transformOperation.getInputFields()!=null){
-					componentOperationFileds=new HashSet<>();
+					componentOperationFileds=new ArrayList<>();
 						for(TypeInputField inputFileds:transformOperation.getInputFields().getField()){
 							componentOperationFileds.add(inputFileds.getName());
 				}

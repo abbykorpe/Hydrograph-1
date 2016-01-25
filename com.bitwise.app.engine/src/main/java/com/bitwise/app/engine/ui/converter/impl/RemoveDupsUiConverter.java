@@ -1,10 +1,9 @@
 package com.bitwise.app.engine.ui.converter.impl;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 import org.slf4j.Logger;
 
@@ -58,7 +57,7 @@ public class RemoveDupsUiConverter extends StraightpullUiConverter {
 		TypeSecondaryKeyFields typeSecondaryKeyFields = removeDups.getSecondaryKeys();
 
 		if (typeSecondaryKeyFields != null) {
-			secondaryKeyMap = new TreeMap<String, String>();
+			secondaryKeyMap = new LinkedHashMap<String, String>();
 			for (TypeSecondayKeyFieldsAttributes secondayKeyFieldsAttributes : typeSecondaryKeyFields.getField()) {
 				secondaryKeyMap.put(secondayKeyFieldsAttributes.getName(), secondayKeyFieldsAttributes.getOrder()
 						.value());
@@ -69,14 +68,14 @@ public class RemoveDupsUiConverter extends StraightpullUiConverter {
 		return secondaryKeyMap;
 	}
 
-	private Set<String> getPrimaryKeys() {
+	private List<String> getPrimaryKeys() {
 		LOGGER.debug("Fetching RemoveDups-Primary-Keys-Properties for -{}", componentName);
-		HashSet<String> primaryKeySet = null;
+		List<String> primaryKeySet = null;
 		removeDups = (RemoveDups) typeBaseComponent;
 		TypePrimaryKeyFields typePrimaryKeyFields = removeDups.getPrimaryKeys();
 		if (typePrimaryKeyFields != null) {
 
-			primaryKeySet = new HashSet<String>();
+			primaryKeySet = new ArrayList<String>();
 			for (TypeFieldName fieldName : typePrimaryKeyFields.getField()) {
 				primaryKeySet.add(fieldName.getName());
 			}

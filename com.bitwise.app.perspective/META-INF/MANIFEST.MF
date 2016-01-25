@@ -26,6 +26,8 @@ Require-Bundle: org.eclipse.ui,
  org.w3c.dom.svg;bundle-version="1.1.0",
  org.apache.batik.css;bundle-version="1.6.0",
  com.bitwise.app.common;bundle-version="0.0.1",
- org.slf4j.api;bundle-version="1.7.2"
+ org.slf4j.api;bundle-version="1.7.2",
+ org.junit,
+ org.junit
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.ui.console
