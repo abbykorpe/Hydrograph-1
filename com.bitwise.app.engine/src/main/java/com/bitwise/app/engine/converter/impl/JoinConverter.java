@@ -111,8 +111,7 @@ public class JoinConverter extends TransformConverter {
 		for (Link link : component.getSourceConnections()) {
 
 			TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();
-			if (PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort())
-					.equalsIgnoreCase("out")) {
+			if (PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getPortType()).equalsIgnoreCase("out")) {
 				if (joinMappingGrid != null && !joinMappingGrid.isSelected()) {
 					outSocket.setId(link.getSourceTerminal());
 					outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
@@ -129,7 +128,7 @@ public class JoinConverter extends TransformConverter {
 						outSocketList.add(outSocket);
 					}
 				}
-			} else if (PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getNameOfPort())
+			} else if (PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getPortType())
 					.equalsIgnoreCase("unused")) {
 				TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
 				outSocketAsInsocket.setInSocketId(getInsocket(link.getSourceTerminal()));
