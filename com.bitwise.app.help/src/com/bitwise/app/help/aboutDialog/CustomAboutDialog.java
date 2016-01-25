@@ -44,7 +44,7 @@ import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.osgi.framework.Bundle;
 
-import com.bitwise.app.common.util.Constants;
+
 /**
  *Creates Custom AboutDialog of Application
  * @author Bitwise
