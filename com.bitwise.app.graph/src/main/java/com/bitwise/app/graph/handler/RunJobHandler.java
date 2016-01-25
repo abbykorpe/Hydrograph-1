@@ -82,9 +82,10 @@ public class RunJobHandler extends AbstractHandler {
 		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 			try{
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
+				setBaseEnabled(true);
 			}catch(Exception e){
 				logger.debug("Unable to save graph ", e);
-				setBaseEnabled(true);
+					setBaseEnabled(true);
 				gefCanvas.enableRunningJobResource();
 			}
 			
@@ -93,6 +94,7 @@ public class RunJobHandler extends AbstractHandler {
 		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell());
 		runConfigDialog.open();
 		if(!runConfigDialog.proceedToRunGraph()){
+			
 			setBaseEnabled(true);
 			gefCanvas.enableRunningJobResource();
 			return null;
