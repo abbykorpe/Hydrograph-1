@@ -61,7 +61,7 @@ public class CustomAboutDialog extends TrayDialog {
 	private IProduct product;
 
 
-	private ArrayList images = new ArrayList();
+	private ArrayList<Image> images = new ArrayList<Image>();
 
 	private AboutFeaturesButtonManager buttonManager = new AboutFeaturesButtonManager();
 

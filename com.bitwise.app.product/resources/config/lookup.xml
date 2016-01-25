@@ -2,7 +2,9 @@
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/lookup_palette.png" canvasIconPath="/icons/lookup_canvas.png"
-		name="Lookup" nameInPalette="Lookup" defaultNamePrefix="Lookup" description="This is Lookup component.\nsome more text">
+		name="Lookup" nameInPalette="Lookup" defaultNamePrefix="Lookup" 
+		description="This is Lookup component.\nsome more text"
+		helpFilePath="/com.bitwise.app.help/html/Components/Lookup.html">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="2" changePortCountDynamically="false">

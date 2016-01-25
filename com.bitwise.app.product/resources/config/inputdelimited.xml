@@ -2,7 +2,9 @@
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/input_delimited_palette.png" canvasIconPath="/icons/input_delimited_canvas.png"
-		name="IFDelimited" nameInPalette="File Delimited" defaultNamePrefix="IFDelimited" description="This is IFDelimited component.\nsome more text">
+		name="IFDelimited" nameInPalette="File Delimited" defaultNamePrefix="IFDelimited" 
+		description="This is IFDelimited component.\nsome more text"
+		helpFilePath="/com.bitwise.app.help/html/Components/Input_File_Delimited.html">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
@@ -65,6 +67,5 @@
 			usage="REQUIRED">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
-			
 	</tns:component>
 </tns:Config>

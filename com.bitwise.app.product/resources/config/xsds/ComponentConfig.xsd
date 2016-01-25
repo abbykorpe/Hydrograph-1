@@ -17,7 +17,7 @@
 
 	<complexType name="Component">
 		<sequence>
-			<element name="category" type="cnst:category_type" maxOccurs="1" minOccurs="0" />
+			<element name="category" type="cnst:category_type" maxOccurs="1" minOccurs="1" />
 			<element name="port" type="tns:IOPort" maxOccurs="1" minOccurs="1" />
 			<element name="property" type="tns:Property" maxOccurs="unbounded" minOccurs="0" />
 			<element name="policy" type="tns:Policy" maxOccurs="unbounded" minOccurs="0" /> 
@@ -28,6 +28,7 @@
 		<attribute name="paletteIconPath" type="string" use="required"></attribute>
 		<attribute name="canvasIconPath" type="string" use="required"></attribute>
 		<attribute name="description" type="string" use="required"></attribute>
+		<attribute name="helpFilePath" type="string" use="required"></attribute>
 	</complexType>
 
 
