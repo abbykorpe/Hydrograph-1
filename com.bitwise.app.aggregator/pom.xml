@@ -19,6 +19,7 @@
 		<module>../com.bitwise.app.perspective</module>
 		<module>../com.bitwise.app.menus</module>
 		<module>../com.bitwise.app.project.structure</module>
+		<module>../com.bitwise.app.logging</module>
 		<module>../com.bitwise.app.common</module>
         <module>../com.bitwise.app.graph</module>
 		<module>../com.bitwise.app.product</module>
@@ -36,5 +37,6 @@
 	    <module>../com.bitwise.app.help</module>
 	    <module>../com.bitwise.app.platformspecificplugins</module>
 	    <module>../com.bitwise.app.validators</module>
+	   
 	</modules>
 </project>
