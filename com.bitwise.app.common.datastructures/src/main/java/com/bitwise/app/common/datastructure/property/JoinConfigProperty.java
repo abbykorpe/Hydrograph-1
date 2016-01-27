@@ -16,6 +16,12 @@ public class JoinConfigProperty implements Cloneable{
 		paramValue = "";
 	}
 	
+	public JoinConfigProperty(String portIndex,String joinKey, Integer joinType,String paramValue) {
+		this.portIndex =portIndex;
+		this.joinKey=joinKey;
+		this.joinType = joinType;
+		this.paramValue = paramValue;
+	}
 	
 	public String getParamValue() {
 		return paramValue;

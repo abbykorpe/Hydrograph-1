@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
+import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterPropertyWizard;
 
@@ -43,8 +44,8 @@ public class ELTLookupConfigGrid extends Dialog {
 	private ControlDecoration txtDecorator;
 	private String drivenKeys,lookupKey;
 	private Label driverEditLableAsButton,lookupEditLableAsButton;
-	 private Map<String,List<String>> propagatedFiledNames;
-	
+	private Map<String,List<String>> propagatedFiledNames;
+	private String editImageIconPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/editImage.png";
 	
 	/**
 	 * Create the dialog.
@@ -129,7 +130,7 @@ public class ELTLookupConfigGrid extends Dialog {
 			 labelWidget(keyComposite, SWT.CENTER|SWT.READ_ONLY, new int[]{10, 10, 175, 15}, "Port Type");
 			 
 			 driverEditLableAsButton= labelWidget(keyComposite, SWT.CENTER|SWT.READ_ONLY, new int[]{415, 28, 20, 20}, "Insert Image");
-			 driverEditLableAsButton.setImage(new Image(null,"C://Users//niting//Desktop//pencil.png"));
+			 driverEditLableAsButton.setImage(new Image(null,editImageIconPath));
 			 
 			 driverEditLableAsButton.addMouseListener(new MouseListener() {
 					@Override
@@ -155,7 +156,7 @@ public class ELTLookupConfigGrid extends Dialog {
 				});
 			 
 			 lookupEditLableAsButton= labelWidget(keyComposite, SWT.CENTER|SWT.READ_ONLY, new int[]{415, 58, 20, 20}, "");
-			 lookupEditLableAsButton.setImage(new Image(null,"C://Users//niting//Desktop//pencil.png"));
+			 lookupEditLableAsButton.setImage(new Image(null,editImageIconPath));
 			 
 			 lookupEditLableAsButton.addMouseListener(new MouseListener() {
 					@Override
