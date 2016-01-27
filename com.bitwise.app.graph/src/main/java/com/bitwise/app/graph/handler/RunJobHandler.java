@@ -170,7 +170,6 @@ public class RunJobHandler extends AbstractHandler {
 						}
 						
 					}).start();
-					gefCanvas.enableRunningJobResource();
 				} else
 					WidgetUtility.errorMessage("Please open a graph to run.");
 			
