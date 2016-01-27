@@ -26,6 +26,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -41,6 +42,7 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructure.property.mapping.InputField;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
+import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
@@ -58,7 +60,8 @@ public class MappingTable {
 	private List<InputField> inputTableFieldList;
 	private boolean validTable=true;
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(MappingTable.class);
-	
+	private boolean rowChecked = false;
+	private Image checkedImage,uncheckedImage;
 	public MappingTable(WidgetConfig widgetConfig, PropertyDialogButtonBar propertyDialogButtonBar, MappingDialogButtonBar mappingDialogButtonBar){
 		this.widgetConfig = widgetConfig;
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
@@ -66,6 +69,7 @@ public class MappingTable {
 	}
 	
 	public void createTable(Composite mappingTableComposite){
+		createImageObjects();
 		createButtonPanel(mappingTableComposite);
 		
 		tableViewer = createTableViewer(mappingTableComposite);		 
@@ -120,11 +124,44 @@ public class MappingTable {
 		});
 	}
 	
+	private void createImageObjects(){
+		String imagePath = XMLConfigUtil.CONFIG_FILES_PATH + "/icons/uncheckall.png" ;  
+		uncheckedImage = new Image(null,imagePath);		
+		
+		imagePath = XMLConfigUtil.CONFIG_FILES_PATH + "/icons/checkall.png" ;  
+		checkedImage = new Image(null,imagePath);		
+	}
+	
 	private void addColumns(final TableViewer tableViewer_1) {
 		
 		TableViewerColumn tableViewerColumn_0 = new TableViewerColumn(tableViewer_1, SWT.NONE);
-		TableColumn tblclmnInputFields_0 = tableViewerColumn_0.getColumn();
-		tblclmnInputFields_0.setWidth(20);
+		final TableColumn tblclmnInputFields_0 = tableViewerColumn_0.getColumn();
+		tblclmnInputFields_0.setWidth(30);
+
+		tblclmnInputFields_0.setImage(uncheckedImage);
+		tblclmnInputFields_0.setAlignment(SWT.LEFT);
+		
+		tblclmnInputFields_0.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("column selected");
+				
+				if(rowChecked){	
+					tblclmnInputFields_0.setImage(uncheckedImage);
+					rowChecked = false;
+				}					
+				else{		
+					tblclmnInputFields_0.setImage(checkedImage);
+					rowChecked = true;
+				}
+				selectRows(rowChecked);
+			}
+			
+		});
+		
+		
 		//tblclmnInputFields_0.setText("");
 		
 		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer_1, SWT.NONE);
@@ -146,6 +183,12 @@ public class MappingTable {
 		TableColumn tblclmnOutputFields = tableViewerColumn_4.getColumn();
 		tblclmnOutputFields.setWidth(180);
 		tblclmnOutputFields.setText("Output fields");
+	}
+
+	protected void selectRows(boolean rowChecked) {
+		for(TableItem item : table.getItems()){
+			((Button)item.getData("chk")).setSelection(rowChecked);	
+		}
 	}
 
 	private TableViewer createTableViewer(Composite mappingTableComposite) {
@@ -202,8 +245,8 @@ public class MappingTable {
 					//validateRow((RowData) ((Text)table.getItem(index).getData("out")).getData("rowData"));
 					
 				}
-				table.getColumns()[0].setWidth(21);
-				table.getColumns()[0].setWidth(20);
+				table.getColumns()[0].setWidth(31);
+				table.getColumns()[0].setWidth(30);
 				validateDuplicatesInOutputColumn();
 			}
 		});
@@ -216,7 +259,7 @@ public class MappingTable {
 	      final Button buttonChk = new Button(table, SWT.CHECK);
 	      buttonChk.pack();
 	      editor.minimumWidth = buttonChk.getSize().x;
-	      editor.horizontalAlignment = SWT.LEFT;
+	      editor.horizontalAlignment = SWT.CENTER;
 	      editor.setEditor(buttonChk, tableItem, 0);
 	      editor.grabVertical=true;
 		
