@@ -107,6 +107,8 @@ import com.bitwise.app.engine.util.ConverterUtil;
 import com.bitwise.app.graph.action.CopyAction;
 import com.bitwise.app.graph.action.CutAction;
 import com.bitwise.app.graph.action.PasteAction;
+import com.bitwise.app.graph.action.SubGraphAction;
+import com.bitwise.app.graph.action.SubGraphOpenAction;
 import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
 import com.bitwise.app.graph.model.Container;
@@ -130,7 +132,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private Container container;
 	private final Point defaultComponentLocation = new Point(0, 0);
 
-	private GraphicalViewer viewer;
+	public GraphicalViewer viewer;
 
 	private ComponentTooltip componentTooltip;
 	private Rectangle toolTipComponentBounds;
@@ -359,7 +361,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			throws RuntimeException, SAXException, IOException {
 		Map<String, PaletteDrawer> categoryPaletteConatiner = new HashMap<>();
 		for (CategoryType category : CategoryType.values()) {
-			if(category.name().equalsIgnoreCase(Constants.DUMMY_COMPONENT_CATEGORY))
+			if(category.name().equalsIgnoreCase(Constants.DUMMY_COMPONENT_CATEGORY) || category.name().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY))
 				continue;
 			PaletteDrawer p = createPaletteContainer(category.name());
 			addContainerToPalette(palette, p);
@@ -434,7 +436,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 * 
 	 * @see #createPaletteViewerProvider()
 	 */
-	private TransferDropTargetListener createTransferDropTargetListener() {
+	public TransferDropTargetListener createTransferDropTargetListener() {
 		return new TemplateTransferDropTargetListener(getGraphicalViewer()) {
 			@Override
 			protected CreationFactory getFactory(Object template) {
@@ -443,7 +445,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		};
 	}
 
-	private ISelectionChangedListener createISelectionChangedListener() {
+	public ISelectionChangedListener createISelectionChangedListener() {
 		return new ISelectionChangedListener() {
 
 			@Override
@@ -493,6 +495,16 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		action=new CutAction(this, pasteAction);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
+		
+		action=new SubGraphAction(this, pasteAction);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
+		action=new SubGraphOpenAction(this, pasteAction);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
+		
 	}
 
 
@@ -799,7 +811,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		return file;
 	}
 
-	private void validateLengthOfJobName(SaveAsDialog obj) {
+	public void validateLengthOfJobName(SaveAsDialog obj) {
 		String jobName=obj.getResult().removeFileExtension().lastSegment();
 		while(jobName.length()>50)
 		{
@@ -1050,5 +1062,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			e.printStackTrace();
 		}
 		
-	}	
+	}
+	
+	
 }

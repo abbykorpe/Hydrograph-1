@@ -9,6 +9,7 @@
 			<enumeration value="TRANSFORM" />
 			<enumeration value="STRAIGHTPULL" />
 			<enumeration value="DUMMY" />
+			<enumeration value="SUBGRAPH" />
 		</restriction>
 	</simpleType>
 	
@@ -58,6 +59,7 @@
 			<enumeration value="HASH_JOIN_WIDGET"/>
 			<enumeration value="HASH_JOIN_MAPPING_WIDGET"/>
 			<enumeration value="XML_CONTENT_WIDGET"/>
+			<enumeration value="SUBGRAPH_PROPERTIES_WIDGET" />
 		</restriction>
 	</simpleType>
 
