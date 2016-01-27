@@ -4,7 +4,7 @@
 	<tns:component paletteIconPath="/icons/replicate_palette.png" canvasIconPath="/icons/replicate_canvas.png"
 		name="CloneComponent" nameInPalette="Clone" defaultNamePrefix="Clone" 
 		description="This is CloneComponent component.\nsome more text"
-		helpFilePath="/com.bitwise.app.help/html/Components/Input_File_Delimited.html">
+		helpFilePath="/com.bitwise.app.help/html/Components/Clone.html">
 		<tns:category>STRAIGHTPULL</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">

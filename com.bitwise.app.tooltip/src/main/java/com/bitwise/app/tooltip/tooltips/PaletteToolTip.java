@@ -19,8 +19,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
-import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.common.component.config.Component;
 import com.bitwise.app.common.util.XMLConfigUtil;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.tooltip.utils.ToolTipUtils;
 
 /**
@@ -41,6 +42,7 @@ public class PaletteToolTip extends Shell {
 	private String blankCharacters;
 	private Link helpLink;	
 	private String tooltipContent;
+	private String componentName;
 	
 	/**
 	 * 
@@ -133,10 +135,7 @@ public class PaletteToolTip extends Shell {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String[] strs = tooltipContent.replaceAll("[.]", "").split("\\s+");
-				//ComponentHelp componentHelp=new ComponentHelpFactory().getComponent(strs[2]);
-				//componentHelp.HelpContentofComponent();
-				String helpFilePath = XMLConfigUtil.INSTANCE.getComponent(strs[2]).getHelpFilePath();
+				String helpFilePath = XMLConfigUtil.INSTANCE.getComponent(componentName).getHelpFilePath();
 				PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(
 						helpFilePath);
 				
@@ -238,9 +237,7 @@ public class PaletteToolTip extends Shell {
 			
 			@Override
 			public void mouseEnter(MouseEvent e) {
-//			String[] strs = tooltipContent.replaceAll("[.]", "").split("\\s+");
-//			ComponentHelp componentHelp=new ComponentHelpFactory().getComponent(strs[2]);
-//			componentHelp.HelpContentofComponent();
+
 			}
 		});
 	}
@@ -268,6 +265,14 @@ public class PaletteToolTip extends Shell {
 		gridLayout.marginHeight = 0;
 		gridLayout.horizontalSpacing = 0;
 		setLayout(gridLayout);
+	}
+
+	public String getComponentName() {
+		return componentName;
+	}
+
+	public void setComponentName(String name) {
+		this.componentName = name;
 	}
 
 	/**
