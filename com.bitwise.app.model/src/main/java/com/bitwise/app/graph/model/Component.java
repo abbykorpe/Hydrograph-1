@@ -88,8 +88,8 @@ public abstract class Component extends Model {
 	private final Hashtable<String, ArrayList<Link>> outputLinksHash;
 	private ArrayList<Link> inputLinks = new ArrayList<Link>();
 	private ArrayList<Link> outputLinks = new ArrayList<Link>();
-	private final List<String> inputportTerminals;
-	private final List<String> outputPortTerminals;
+	private  List<String> inputportTerminals;
+	private  List<String> outputPortTerminals;
 	private boolean newInstance;
 	private String type;
 	private String prefix;
@@ -209,6 +209,33 @@ public abstract class Component extends Model {
 		}
 	}
 
+	public List<String> getInputportTerminals() {
+		return inputportTerminals;
+	}
+	public void setInputportTerminals(List<String> portTerminals){
+		this.inputportTerminals=portTerminals;
+	}
+
+	public List<String> getOutputPortTerminals() {
+		return outputPortTerminals;
+	}
+	public void setOutputPortTerminals(List<String> portTerminals) {
+		this.outputPortTerminals=portTerminals;
+	}
+	public void setChangeInPortsCntDynamically(boolean changeInPortsCntDynamically) {
+		this.changeInPortsCntDynamically = changeInPortsCntDynamically;
+	}
+
+	public void setChangeOutPortsCntDynamically(boolean changeOutPortsCntDynamically) {
+		this.changeOutPortsCntDynamically = changeOutPortsCntDynamically;
+	}
+
+	public void setChangeUnusedPortsCntDynamically(
+			boolean changeUnusedPortsCntDynamically) {
+		this.changeUnusedPortsCntDynamically = changeUnusedPortsCntDynamically;
+	}
+
+	
 	public int getInPortCount() {
 		return inPortCount;
 	}
@@ -236,7 +263,10 @@ public abstract class Component extends Model {
 	public List<PortSpecification> getPortSpecification() {
 		return portSpecification;
 	}
-
+	public void setPorts(HashMap<String, Port> ports) {
+		this.ports = ports;
+	}
+	
 //	private void initDynamicPortFlags() {
 //		changeInPortsCntDynamically = XMLConfigUtil.INSTANCE.getComponent(
 //				componentName).isChangeInPortsDynamically();
@@ -690,6 +720,27 @@ public abstract class Component extends Model {
 		component.setPropertyValue("name", getPrefix());
 		component.setSize(getSize());
 		component.setLocation(getLocation());
+		HashMap<String, Port> clonedPorts=new HashMap<String, Port>();
+		
+	    for (Map.Entry<String, Port> entry : ports.entrySet()) {
+	    	Port p = entry.getValue();
+	    	Port clonedPort  = p.clone();
+	    	clonedPort.setParent(component);
+	    	clonedPorts.put(entry.getKey(), clonedPort);
+	    }
+		
+		component.setPorts(clonedPorts);
+		
+		component.setInputportTerminals(new ArrayList<>(inputportTerminals));
+		component.setOutputPortTerminals(new ArrayList<>(outputPortTerminals));
+		component.setValidityStatus(validityStatus);
+		component.setChangeInPortsCntDynamically(changeInPortsCntDynamically);
+		component.setChangeOutPortsCntDynamically(changeOutPortsCntDynamically);
+		component.setChangeUnusedPortsCntDynamically(changeUnusedPortsCntDynamically);
+		component.setInPortCount(inPortCount);
+		component.setOutPortCount(outPortCount);
+		component.setUnusedPortCount(unusedPortCount);
+		
 		return component;
 	}
 

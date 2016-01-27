@@ -5,45 +5,22 @@
 	<tns:component paletteIconPath="/icons/subgraph_palette.png"
 		canvasIconPath="/icons/subgraph-canvas.png" name="SubgraphComponent"
 		nameInPalette="Subgraph" defaultNamePrefix="Subgraph"
-		description="This is Default component.\nsome more text">
+		description="This is Default component.\nsome more text"
+		helpFilePath="/com.bitwise.app.help/html/Components/Dummy.html">
 		<tns:category>SUBGRAPH</tns:category>
-		<tns:port>
-			<tns:portSpecification>
-				<tns:typeOfPort>out</tns:typeOfPort>
-				<tns:numberOfPorts>1</tns:numberOfPorts>
-				<tns:sequenceOfPort>0</tns:sequenceOfPort>
-				<tns:allowMultipleLinks>true</tns:allowMultipleLinks>
-				<tns:linkMandatory>true</tns:linkMandatory>
-				<tns:nameOfPort>out0</tns:nameOfPort>
-				<tns:labelOfPort>out0</tns:labelOfPort>
+			<tns:port>
+			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="true">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="in0" nameOfPort="in0" allowMultipleLinks="false"/>
 			</tns:portSpecification>
-			<tns:portSpecification>
-				<tns:typeOfPort>unused</tns:typeOfPort>
-				<tns:numberOfPorts>1</tns:numberOfPorts>
-				<tns:sequenceOfPort>0</tns:sequenceOfPort>
-				<tns:allowMultipleLinks>true</tns:allowMultipleLinks>
-				<tns:linkMandatory>false</tns:linkMandatory>
-				<tns:nameOfPort>unused0</tns:nameOfPort>
-				<tns:labelOfPort>un0</tns:labelOfPort>
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="true">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="out0" nameOfPort="out0" allowMultipleLinks="false"/>
 			</tns:portSpecification>
-			<tns:portSpecification>
-				<tns:typeOfPort>in</tns:typeOfPort>
-				<tns:numberOfPorts>1</tns:numberOfPorts>
-				<tns:sequenceOfPort>0</tns:sequenceOfPort>
-				<tns:allowMultipleLinks>true</tns:allowMultipleLinks>
-				<tns:linkMandatory>true</tns:linkMandatory>
-				<tns:nameOfPort>in0</tns:nameOfPort>
-				<tns:labelOfPort>in0</tns:labelOfPort>
+			<tns:portSpecification typeOfPort="unused" numberOfPorts="1" changePortCountDynamically="true">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="un0" nameOfPort="un0" allowMultipleLinks="false"/>
 			</tns:portSpecification>
 		</tns:port>
 		
-		<tns:changeInPortsDynamically>true</tns:changeInPortsDynamically>
-		
-		<tns:changeOutPortsDynamically>true</tns:changeOutPortsDynamically>
-		
-		<tns:changeUnusedPortsDynamically>true</tns:changeUnusedPortsDynamically>
-		
-		<tns:property dataType="string" name="name"
+			<tns:property dataType="string" name="name"
 			renderer="COMPONENT_NAME_WIDGET" type="USER" group="GENERAL"
 			subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" />
 
