@@ -1,19 +1,16 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.secondarykeys;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.eclipse.swt.widgets.Shell;
 
-import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
-import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
-import com.bitwise.app.graph.model.Link;
-import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -128,18 +125,8 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 	}
 
 	private List<String> getPropagatedSchema() {
-		List<String> fieldNameList = new ArrayList<>();
-		ComponentsOutputSchema outputSchema = null;
-		for (Link link : getComponent().getTargetConnections()) {
-			{
-				outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
-				if (outputSchema != null) {
-					for (FixedWidthGridRow row : outputSchema.getFixedWidthGridRowsOutputFields())
-						fieldNameList.add(row.getFieldName());
-				}
-			}
-		}
-		return fieldNameList;
+		return SchemaPropagationHelper.INSTANCE.getFieldsForFilterWidget(getComponent()).get(
+				Constants.INPUT_SOCKET_TYPE + 0);
 	}
 
 }

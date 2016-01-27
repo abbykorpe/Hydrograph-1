@@ -75,7 +75,6 @@ public class RunJobHandler extends AbstractHandler {
 		
 		setBaseEnabled(false);
 		final DefaultGEFCanvas gefCanvas = getComponentCanvas();
-		gefCanvas.disableRunningJobResource();
 		
 		
 		
@@ -83,10 +82,12 @@ public class RunJobHandler extends AbstractHandler {
 			try{
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 				setBaseEnabled(true);
+				if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
+					return null;
+				}
 			}catch(Exception e){
 				logger.debug("Unable to save graph ", e);
 					setBaseEnabled(true);
-				gefCanvas.enableRunningJobResource();
 			}
 			
 		}
@@ -96,7 +97,6 @@ public class RunJobHandler extends AbstractHandler {
 		if(!runConfigDialog.proceedToRunGraph()){
 			
 			setBaseEnabled(true);
-			gefCanvas.enableRunningJobResource();
 			return null;
 		}
 		
@@ -108,7 +108,6 @@ public class RunJobHandler extends AbstractHandler {
 		if(parameterGrid.canRunGraph() == false){
 			logger.debug("Not running graph");
 			setBaseEnabled(true);
-			gefCanvas.enableRunningJobResource();
 			return null;
 		}
 		logger.debug("property File :"+parameterGrid.getParameterFile());
@@ -128,6 +127,7 @@ public class RunJobHandler extends AbstractHandler {
 					 * Read the log in new thread and redirect it to product
 					 * console.
 					 */
+				gefCanvas.disableRunningJobResource();
 					new Thread(new Runnable() {
 						public void run() {
 							BufferedReader reader = null;
@@ -170,7 +170,6 @@ public class RunJobHandler extends AbstractHandler {
 						}
 						
 					}).start();
-					gefCanvas.enableRunningJobResource();
 				} else
 					WidgetUtility.errorMessage("Please open a graph to run.");
 			
@@ -181,7 +180,6 @@ public class RunJobHandler extends AbstractHandler {
 		}
 
 		//setBaseEnabled(true);
-		//gefCanvas.enableRunningJobResource();
 		return null;
 	}
 

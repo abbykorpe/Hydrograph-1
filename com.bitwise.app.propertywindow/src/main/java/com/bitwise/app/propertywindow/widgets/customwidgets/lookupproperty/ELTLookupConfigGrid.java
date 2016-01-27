@@ -1,14 +1,19 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.lookupproperty;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowData;
@@ -21,13 +26,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
-import com.bitwise.app.propertywindow.factory.ListenerFactory;
-import com.bitwise.app.propertywindow.messages.Messages;
+import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
-import com.bitwise.app.propertywindow.widgets.listeners.ELTVerifyTextListener;
-import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
-import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
-import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
+import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterPropertyWizard;
 
 public class ELTLookupConfigGrid extends Dialog {
 	
@@ -41,21 +42,24 @@ public class ELTLookupConfigGrid extends Dialog {
 	private LookupConfigProperty configProperty = new LookupConfigProperty();
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private ControlDecoration txtDecorator;
- 
-	 
-	 
-	
+	private String drivenKeys,lookupKey;
+	private Label driverEditLableAsButton,lookupEditLableAsButton;
+	private Map<String,List<String>> propagatedFiledNames;
+	private String editImageIconPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/editImage.png";
 	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
+	 * @param propertyDialogButtonBar2 
 	 * @param lookupConfigProperty 
 	 */
-	public ELTLookupConfigGrid(Shell parentShell, LookupConfigProperty lookupConfigProperty) {
+	public ELTLookupConfigGrid(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar, LookupConfigProperty lookupConfigProperty) {
 		super(parentShell);		
 		setShellStyle(SWT.CLOSE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
 		configProperty = lookupConfigProperty;
-	 
+		drivenKeys=configProperty.getDriverKey();
+		lookupKey=configProperty.getLookupKey();
+		this.propertyDialogButtonBar=propertyDialogButtonBar;
 	}
 
 	/**
@@ -119,38 +123,94 @@ public class ELTLookupConfigGrid extends Dialog {
 		textBoxWidget(keyComposite, new int[]{10, 58, 175, 21}, "lookup", false);
 		
 
-			 drivenText = textBoxWidget(keyComposite, new int[]{191, 31, 235, 21},"", true);
-			 lookupText = textBoxWidget(keyComposite, new int[]{191, 58, 235, 21}, "", true);
+			 drivenText = textBoxWidget(keyComposite, new int[]{191, 31, 220, 21},"", false);
+			 lookupText = textBoxWidget(keyComposite, new int[]{191, 58, 220, 21}, "", false);
+			 drivenText.setBackground(new Color(null,255,255,255));
+			 lookupText.setBackground(new Color(null,255,255,255));
+			 labelWidget(keyComposite, SWT.CENTER|SWT.READ_ONLY, new int[]{10, 10, 175, 15}, "Port Type");
+			 
+			 driverEditLableAsButton= labelWidget(keyComposite, SWT.CENTER|SWT.READ_ONLY, new int[]{415, 28, 20, 20}, "Insert Image");
+			 driverEditLableAsButton.setImage(new Image(null,editImageIconPath));
+			 
+			 driverEditLableAsButton.addMouseListener(new MouseListener() {
+					@Override
+					public void mouseDoubleClick(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mouseDown(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					
+					@Override
+					public void mouseUp(MouseEvent e) {
+						drivenKeys=launchDialogToSelectFields(drivenKeys,"in0");
+						drivenText.setText(drivenKeys);
+						
+					}
+
+				});
+			 
+			 lookupEditLableAsButton= labelWidget(keyComposite, SWT.CENTER|SWT.READ_ONLY, new int[]{415, 58, 20, 20}, "");
+			 lookupEditLableAsButton.setImage(new Image(null,editImageIconPath));
+			 
+			 lookupEditLableAsButton.addMouseListener(new MouseListener() {
+					@Override
+					public void mouseDoubleClick(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mouseDown(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mouseUp(MouseEvent e) {
+						lookupKey=launchDialogToSelectFields(lookupKey,"in1");
+						lookupText.setText(lookupKey);
+						
+
+					}
+
+				});
+			 
+//		ListenerHelper helper = new ListenerHelper();
+//		txtDecorator = WidgetUtility.addDecorator(drivenText, Messages.EMPTYFIELDMESSAGE);
+//		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
+//		drivenText.addListener(SWT.FocusIn, ListenerFactory.Listners.NORMAL_FOCUS_IN.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
+//		drivenText.addListener(SWT.FocusOut, ListenerFactory.Listners.NORMAL_FOCUS_OUT.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
+//		drivenText.addListener(SWT.Verify, ListenerFactory.Listners.VERIFY_TEXT.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
+//		drivenText.addListener(SWT.Modify, ListenerFactory.Listners.MODIFY.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
 		
-		ListenerHelper helper = new ListenerHelper();
-		txtDecorator = WidgetUtility.addDecorator(drivenText, Messages.EMPTYFIELDMESSAGE);
-		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
-		drivenText.addListener(SWT.FocusIn, ListenerFactory.Listners.NORMAL_FOCUS_IN.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
-		drivenText.addListener(SWT.FocusOut, ListenerFactory.Listners.NORMAL_FOCUS_OUT.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
-		drivenText.addListener(SWT.Verify, ListenerFactory.Listners.VERIFY_TEXT.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
-		drivenText.addListener(SWT.Modify, ListenerFactory.Listners.MODIFY.getListener().getListener(propertyDialogButtonBar, helper, drivenText));
+//		drivenText.addModifyListener(new ModifyListener() {			
+//			@Override
+//			public void modifyText(ModifyEvent e) {
+//				configProperty.setDriverKey(((Text)e.widget).getText());
+//			}
+//		});
 		
-		drivenText.addModifyListener(new ModifyListener() {			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				configProperty.setDriverKey(((Text)e.widget).getText());
-			}
-		});
+//		ListenerHelper help = new ListenerHelper();
+//		txtDecorator = WidgetUtility.addDecorator(lookupText, Messages.EMPTYFIELDMESSAGE);
+//		help.put(HelperType.CONTROL_DECORATION, txtDecorator);
+//		lookupText.addListener(SWT.FocusIn, ListenerFactory.Listners.NORMAL_FOCUS_IN.getListener().getListener(propertyDialogButtonBar, help, lookupText));
+//		lookupText.addListener(SWT.FocusOut, ListenerFactory.Listners.NORMAL_FOCUS_OUT.getListener().getListener(propertyDialogButtonBar, help, lookupText));
+//		lookupText.addListener(SWT.Verify, ListenerFactory.Listners.VERIFY_TEXT.getListener().getListener(propertyDialogButtonBar, help, lookupText));
+//		lookupText.addListener(SWT.Modify, ListenerFactory.Listners.MODIFY.getListener().getListener(propertyDialogButtonBar, help, lookupText));
 		
-		ListenerHelper help = new ListenerHelper();
-		txtDecorator = WidgetUtility.addDecorator(lookupText, Messages.EMPTYFIELDMESSAGE);
-		help.put(HelperType.CONTROL_DECORATION, txtDecorator);
-		lookupText.addListener(SWT.FocusIn, ListenerFactory.Listners.NORMAL_FOCUS_IN.getListener().getListener(propertyDialogButtonBar, help, lookupText));
-		lookupText.addListener(SWT.FocusOut, ListenerFactory.Listners.NORMAL_FOCUS_OUT.getListener().getListener(propertyDialogButtonBar, help, lookupText));
-		lookupText.addListener(SWT.Verify, ListenerFactory.Listners.VERIFY_TEXT.getListener().getListener(propertyDialogButtonBar, help, lookupText));
-		lookupText.addListener(SWT.Modify, ListenerFactory.Listners.MODIFY.getListener().getListener(propertyDialogButtonBar, help, lookupText));
-		
-		lookupText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				configProperty.setLookupKey(((Text)e.widget).getText());
-			}
-		});
+//		
+//		lookupText.addModifyListener(new ModifyListener() {
+//			@Override
+//			public void modifyText(ModifyEvent e) {
+//				configProperty.setLookupKey(((Text)e.widget).getText());
+//			}
+//		});
 		populateWidget();
 		return container;
 	}
@@ -227,7 +287,32 @@ public class ELTLookupConfigGrid extends Dialog {
 		this.configProperty = configProperty;
 	}
 
+	public static void main(String[] args) {
+		 ELTLookupConfigGrid eltLookupConfigGrid = new ELTLookupConfigGrid(new Shell(),null,new LookupConfigProperty());
+		 eltLookupConfigGrid.open();
+	}
 	
 	
+	private String launchDialogToSelectFields(String availableValues,String socketId)
+	{
+		ELTFilterPropertyWizard filterWizardObj = new ELTFilterPropertyWizard();
+		filterWizardObj.setPropertyFromCommaSepratedString(availableValues);
+		filterWizardObj.setSourceFieldsFromPropagatedSchema(propagatedFiledNames.get(socketId));
+		filterWizardObj.launchRuntimeWindow(new Shell(), propertyDialogButtonBar);
+		return filterWizardObj.getResultAsCommaSeprated();
+	}
+
+	public void setPropagatedFieldProperty(Map<String, List<String>> propagatedFiledNames)
+	{
+		this.propagatedFiledNames=propagatedFiledNames;
+	}
+	
+	
+@Override
+protected void okPressed() {
+	configProperty.setLookupKey(lookupKey);
+	configProperty.setDriverKey(drivenKeys);
+	super.okPressed();
+}
 }
  

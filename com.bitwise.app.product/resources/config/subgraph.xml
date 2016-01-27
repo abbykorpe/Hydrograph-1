@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
+	<tns:component paletteIconPath="/icons/subgraph_palette.png"
+		canvasIconPath="/icons/subgraph-canvas.png" name="SubgraphComponent"
+		nameInPalette="Subgraph" defaultNamePrefix="Subgraph"
+		description="This is Default component.\nsome more text"
+		helpFilePath="/com.bitwise.app.help/html/Components/Dummy.html">
+		<tns:category>SUBGRAPH</tns:category>
+			<tns:port>
+			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="true">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="in0" nameOfPort="in0" allowMultipleLinks="false"/>
+			</tns:portSpecification>
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="true">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="out0" nameOfPort="out0" allowMultipleLinks="false"/>
+			</tns:portSpecification>
+			<tns:portSpecification typeOfPort="unused" numberOfPorts="1" changePortCountDynamically="true">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="un0" nameOfPort="un0" allowMultipleLinks="false"/>
+			</tns:portSpecification>
+		</tns:port>
+		
+			<tns:property dataType="string" name="name"
+			renderer="COMPONENT_NAME_WIDGET" type="USER" group="GENERAL"
+			subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" />
+
+		<tns:property dataType="string" name="path" renderer="FILE_PATH_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
+			usage="REQUIRED">
+			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+		</tns:property>
+
+	</tns:component>
+</tns:Config>

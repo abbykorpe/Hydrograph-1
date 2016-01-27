@@ -30,6 +30,7 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinproperty.ELTJoinPortCount;
 import com.bitwise.app.propertywindow.widgets.customwidgets.operational.TransformWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.runtimeproperty.ELTRuntimePropertiesWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.runtimeproperty.SubGraphPropertiesWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.secondarykeys.SecondaryColumnKeysWidget;
 
@@ -69,6 +70,7 @@ public class WidgetFactory {
 
 		OPERATIONAL_CLASS_WIDGET(ELTOperationClassWidget.class, WidgetHelper.INSTANCE.getOperationClassForFilterWidgetConfig()),
 		RUNTIME_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class),
+		SUBGRAPH_PROPERTIES_WIDGET(SubGraphPropertiesWidget.class),
 		SECONDARY_COLUMN_KEYS_WIDGET(SecondaryColumnKeysWidget.class),
 		
 		TRANSFORM_WIDGET(TransformWidget.class,WidgetHelper.INSTANCE.getOperationClassForTransformWidgetConfig()),
