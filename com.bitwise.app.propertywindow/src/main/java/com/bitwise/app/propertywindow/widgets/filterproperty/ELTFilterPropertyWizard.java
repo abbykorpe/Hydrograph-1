@@ -70,7 +70,7 @@ public class ELTFilterPropertyWizard {
 	private Shell shell;
 	private final List<FilterProperties> propertyLst;
 	public static final String FilterInputFieldName = "Component Name"; //$NON-NLS-1$
-	private List<String> filterSet;
+	private List<String> fieldNameList;
 	private String componentName;
 	private Label lblHeader;
 	private final String PROPERTY_EXISTS_ERROR = Messages.RuntimePropertAlreadyExists;
@@ -79,7 +79,8 @@ public class ELTFilterPropertyWizard {
 	private Label lblPropertyError;
 	private boolean isOkPressed;
 	private TableViewer targetTableViewer;
-	// private ControlDecoration decorator;
+	private ControlDecoration decorator;
+	private List<ControlDecoration> decoratorList;
 	public ControlDecoration scaleDecorator;
 	private Button okButton, cacelButton;
 	private boolean isAnyUpdatePerformed;
@@ -96,7 +97,7 @@ public class ELTFilterPropertyWizard {
 	 */
 	public ELTFilterPropertyWizard() {
 		propertyLst = new ArrayList<FilterProperties>();
-		filterSet = new ArrayList<String>();
+		fieldNameList = new ArrayList<String>();
 	}
 
 	// Add New Property After Validating old properties
@@ -122,7 +123,7 @@ public class ELTFilterPropertyWizard {
 	}
 
 	public void setRuntimePropertySet(List<String> runtimePropertySet) {
-		this.filterSet = runtimePropertySet;
+		this.fieldNameList = runtimePropertySet;
 	}
 
 	public String getComponentName() {
@@ -136,8 +137,8 @@ public class ELTFilterPropertyWizard {
 	// Loads Already Saved Properties..
 	private void loadProperties(TableViewer tv) {
 
-		if (filterSet != null && !filterSet.isEmpty()) {
-			for (String key : filterSet) {
+		if (fieldNameList != null && !fieldNameList.isEmpty()) {
+			for (String key : fieldNameList) {
 				FilterProperties filter = new FilterProperties();
 				if (validateBeforeLoad(key)) {
 					filter.setPropertyname(key);
@@ -325,7 +326,7 @@ public class ELTFilterPropertyWizard {
 				shell.getDisplay().sleep();
 		}
 
-		return filterSet;
+		return fieldNameList;
 	}
 
 	private void createIcons(Composite composite) {
@@ -478,10 +479,10 @@ public class ELTFilterPropertyWizard {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (validate()) {
-					filterSet.clear();
+					fieldNameList.clear();
 					isOkPressed = true;
 					for (FilterProperties temp : propertyLst) {
-						filterSet.add(temp.getPropertyname());
+						fieldNameList.add(temp.getPropertyname());
 					}
 
 					shell.close();
@@ -635,9 +636,41 @@ public class ELTFilterPropertyWizard {
 
 	}
 
+	/**
+	 * @param fieldNameList
+	 */
 	public void setSourceFieldsFromPropagatedSchema(List<String> fieldNameList) {
 		this.sourceFieldsList = fieldNameList;
 
 	}
 
+	/**
+	 * @return String,
+	 * 			String having comma separated field names 
+	 */
+	public String getResultAsCommaSeprated() {
+		StringBuffer result = new StringBuffer();
+		for (String fieldName : fieldNameList)
+			result.append(fieldName + ",");
+		if (result.lastIndexOf(",") != -1)
+			result = result.deleteCharAt(result.lastIndexOf(","));
+		return result.toString();
+	}
+
+	/**
+	 * This method sets the property from comma separated String
+	 * 
+	 * @param commaSeperatedString,
+	 * 					Comma separated string, 
+	 * 
+	 */
+	public void setPropertyFromCommaSepratedString(String commaSeperatedString) {
+		String[] fieldNameArray = null;
+		if (commaSeperatedString != null) {
+			fieldNameArray = commaSeperatedString.split(",");
+			for (String fieldName : fieldNameArray) {
+				fieldNameList.add(fieldName);
+			}
+		}
+	}
 }
