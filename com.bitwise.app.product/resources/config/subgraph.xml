@@ -47,13 +47,11 @@
 			renderer="COMPONENT_NAME_WIDGET" type="USER" group="GENERAL"
 			subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" />
 
-		<tns:property dataType="string" name="phase" value="0"
-			renderer="PHASE_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
-			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" />
-
-		<tns:property dataType="string" name="xml_properties_content"
-			renderer="XML_CONTENT_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
-			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" />
+		<tns:property dataType="string" name="path" renderer="FILE_PATH_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
+			usage="REQUIRED">
+			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+		</tns:property>
 
 	</tns:component>
 </tns:Config>

@@ -306,49 +306,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	@Override
 	public void performRequest(Request req) {
 		// Opens Property Window only on Double click.
-		IWorkbenchPage page = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getActivePage();
-		if (((Component) getModel()).getCategory().equalsIgnoreCase(
-				Constants.SUBGRAPH_COMPONENT_CATEGORY)) {
-				List bList = (ArrayList) Clipboard
-					.getDefault().getContents();
-			IHandlerService handlerService = (IHandlerService) PlatformUI
-					.getWorkbench().getService(IHandlerService.class);
-			try {
-				IPath jobFilePath=new Path(((Component) getModel()).getProperties().get("name").toString());
-				IFile jobFile = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath);
-				IFileEditorInput input = new FileEditorInput(jobFile);  
-				page.openEditor(input, ELTGraphicalEditor.ID, false);
-				//For selecting the created editor so it will trigger the event to activate and load the Palette
-				IWorkbench workbench = PlatformUI.getWorkbench();
-			    IWorkbenchWindow activeWindow = workbench.getActiveWorkbenchWindow();
-			    if (activeWindow != null) {
-			        final IWorkbenchPage activePage = activeWindow.getActivePage();
-			        if (activePage != null) {
-			            activePage.activate(activePage.findEditor(input));
-			        }
-			    }  
-			} catch (PartInitException e) {
-	          logger.error("Failed to open editor", e);			
-			}
-			Container container = ((ELTGraphicalEditor) page.getActiveEditor())
-					.getContainer();  
-			ELTGraphicalEditor editor=	(ELTGraphicalEditor) page.getActiveEditor();
-			editor.viewer.setContents(container);
-			
-			editor.viewer.addDropTargetListener(editor.createTransferDropTargetListener());
-			// listener for selection on canvas
-			editor.viewer.addSelectionChangedListener(editor.createISelectionChangedListener());
-			 
-			if(container.getChildren().size()==0){
-				for(Object l:bList)
-				{
-					container.addChild((Component) l);
-				}
-			}
-			super.performRequest(req); 
-
-		} else if (req.getType().equals(RequestConstants.REQ_OPEN)) {
+		if (req.getType().equals(RequestConstants.REQ_OPEN)) {
 			ELTPropertyWindow eltPropertyWindow = new ELTPropertyWindow(getModel());
 			eltPropertyWindow.open();
 			

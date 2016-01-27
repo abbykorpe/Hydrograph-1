@@ -12,7 +12,7 @@ public class SubgraphComponent extends SubgraphCategory{
 	@Override
 	public String getConverter() {
 		// TODO Auto-generated method stub
-		return "com.bitwise.app.engine.converter.impl.DummyConverter";
+		return "com.bitwise.app.engine.converter.impl.SubGraphConverter";
 	}
 
 }

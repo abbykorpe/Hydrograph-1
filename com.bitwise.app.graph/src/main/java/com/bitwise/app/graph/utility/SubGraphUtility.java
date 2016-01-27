@@ -158,7 +158,7 @@ public class SubGraphUtility {
 			
 			edComponentEditPart.getCastedModel().setSize(newSize);
 			edComponentEditPart.getCastedModel().setComponentLabel(file.getName());
-			edComponentEditPart.getCastedModel().getProperties().put("name", file.getFullPath().toOSString());
+			edComponentEditPart.getCastedModel().getProperties().put("path", file.getFullPath().toOSString());
 
 		edComponentEditPart.refresh();
 	}

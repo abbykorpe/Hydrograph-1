@@ -14,6 +14,8 @@ import com.bitwise.app.engine.ui.converter.impl.LookupUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.OutputFileDelimitedUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.OutputFixedWidthUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.RemoveDupsUiConverter;
+import com.bitwise.app.engine.ui.converter.impl.SubGraphInputTypeUiConverter;
+import com.bitwise.app.engine.ui.converter.impl.SubGraphOperationTypeUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.TransformComponentUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.UnionAllUiConverter;
 import com.bitwise.app.graph.model.Container;
@@ -24,6 +26,7 @@ import com.bitwiseglobal.graph.operationstypes.Aggregate;
 import com.bitwiseglobal.graph.operationstypes.Filter;
 import com.bitwiseglobal.graph.operationstypes.HashJoin;
 import com.bitwiseglobal.graph.operationstypes.Join;
+import com.bitwiseglobal.graph.operationstypes.Subgraph;
 import com.bitwiseglobal.graph.operationstypes.Transform;
 import com.bitwiseglobal.graph.straightpulltypes.Clone;
 import com.bitwiseglobal.graph.straightpulltypes.RemoveDups;
@@ -89,6 +92,12 @@ public class UiConverterFactory {
 		}
 		if((HashJoin.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new LookupUiConverter(typeBaseComponent,container);
+		}
+		if((Subgraph.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new SubGraphInputTypeUiConverter(typeBaseComponent,container);
+		}
+		if((Subgraph.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new SubGraphOperationTypeUiConverter(typeBaseComponent,container);
 		}
 		
 		return new DummyUiConverter(typeBaseComponent,container);

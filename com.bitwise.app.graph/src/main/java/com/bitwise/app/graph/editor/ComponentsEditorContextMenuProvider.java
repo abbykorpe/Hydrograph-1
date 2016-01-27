@@ -44,10 +44,10 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		// Add standard action groups to the menu
 		GEFActionConstants.addStandardActionGroups(menu);
 		
-		IAction[] actions = new IAction[1];
+		IAction[] actions = new IAction[2];
         actions[0] = getAction("create");
-//        actions[1] = getAction("open");
-         SubMenuAction s=new SubMenuAction( actions, "SubGraph", "Path operations",true);
+        actions[1] = getAction("open");
+         SubMenuAction subGraphMenu=new SubMenuAction( actions, "SubGraph", "Path operations",true);
 		// Add actions to the menu
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, // target group id
 				getAction(ActionFactory.UNDO.getId())); // action to add
@@ -57,7 +57,7 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.CUT.getId()));
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.COPY.getId()));
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.PASTE.getId()));
-	    menu.appendToGroup(GEFActionConstants.GROUP_COPY, s);
+	    menu.appendToGroup(GEFActionConstants.GROUP_COPY, subGraphMenu);
 		
 		
 	}
