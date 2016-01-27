@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.ConnectionAnchor;
@@ -377,9 +378,11 @@ public class ComponentFigure extends Figure implements Validator{
 
 				//showStatusToolTip(location);
 				componentCanvas = getComponentCanvas();
-				componentCanvas.getCanvasControl().getShell().getDisplay().timerExec(TOOLTIP_SHOW_DELAY, new Runnable() {
-					public void run() {
-						//if(componentCanvas.isToolTipTimerRunning())
+				try {
+					TimeUnit.MILLISECONDS.sleep(TOOLTIP_SHOW_DELAY);
+				} catch (InterruptedException e) {
+					logger.error(e.getMessage(),e);
+				}
 						java.awt.Point mouseLocation2 = MouseInfo.getPointerInfo().getLocation();
 						org.eclipse.swt.graphics.Point location2 = new org.eclipse.swt.graphics.Point(mouseLocation2.x, mouseLocation2.y);
 
@@ -389,9 +392,6 @@ public class ComponentFigure extends Figure implements Validator{
 							showStatusToolTip(perfectToolTipLocation);
 							//showStatusToolTip(location);
 						}
-
-					}
-				});
 			}
 
 			@Override

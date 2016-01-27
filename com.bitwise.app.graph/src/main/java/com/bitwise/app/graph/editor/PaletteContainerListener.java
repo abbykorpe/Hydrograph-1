@@ -376,6 +376,7 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 				
 				if(mouseLocation1.equals(mouseLocation2)){
 					showPaletteToolTip(genericComponent.getComponentDescription());
+					paletteToolTip.setComponentName(genericComponent.getComponentName());
 				}
 				
 		    }

@@ -74,7 +74,7 @@ public class RunJobHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) {
 		
 		setBaseEnabled(false);
-		DefaultGEFCanvas gefCanvas = getComponentCanvas();
+		final DefaultGEFCanvas gefCanvas = getComponentCanvas();
 		gefCanvas.disableRunningJobResource();
 		
 		
@@ -152,6 +152,15 @@ public class RunJobHandler extends AbstractHandler {
 							joblogger.logJobEndInfo();
 							joblogger.close();
 							setBaseEnabled(true);
+							setBaseEnabled(true);
+							Display.getDefault().syncExec(new Runnable() {
+								
+								@Override
+								public void run() {
+									gefCanvas.enableRunningJobResource();
+									
+								}
+							});
 							IProject iProject=ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 							try {
 								iProject.refreshLocal(IResource.DEPTH_INFINITE, null);
@@ -161,7 +170,6 @@ public class RunJobHandler extends AbstractHandler {
 						}
 						
 					}).start();
-					gefCanvas.enableRunningJobResource();
 				} else
 					WidgetUtility.errorMessage("Please open a graph to run.");
 			
