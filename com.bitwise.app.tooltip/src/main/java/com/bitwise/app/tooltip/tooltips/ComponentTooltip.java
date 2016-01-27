@@ -12,7 +12,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -24,8 +23,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
-import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.common.util.WordUtils;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.widgets.utility.FilterOperationClassUtility;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 

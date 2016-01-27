@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -19,12 +18,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.common.util.ContributionItemManager;
 import com.bitwise.app.graph.command.ComponentCreateCommand;
 import com.bitwise.app.graph.command.SubGraphCommand;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
-import com.bitwise.app.graph.figure.ComponentFigure;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.Link;

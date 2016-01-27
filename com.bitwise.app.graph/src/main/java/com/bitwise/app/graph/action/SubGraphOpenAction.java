@@ -1,21 +1,14 @@
 package com.bitwise.app.graph.action;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.gef.ui.actions.SelectionAction;
-import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISharedImages;
@@ -29,17 +22,10 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.common.util.ContributionItemManager;
-import com.bitwise.app.graph.command.ComponentCreateCommand;
-import com.bitwise.app.graph.command.SubGraphCommand;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
-import com.bitwise.app.graph.figure.ComponentFigure;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
-import com.bitwise.app.graph.model.Link;
-import com.bitwise.app.graph.model.components.SubgraphComponent;
-import com.bitwise.app.graph.utility.SubGraphUtility;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -12,10 +12,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
-import com.bitwise.app.common.util.ContributionItemManager;
 import com.bitwise.app.graph.command.ComponentCopyCommand;
 import com.bitwise.app.graph.controller.ComponentEditPart;
-import com.bitwise.app.graph.controller.PortEditPart;
 import com.bitwise.app.graph.model.Component;
 
 // TODO: Auto-generated Javadoc

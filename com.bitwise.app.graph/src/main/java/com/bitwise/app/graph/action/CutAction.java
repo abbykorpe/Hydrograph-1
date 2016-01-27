@@ -1,6 +1,5 @@
 package com.bitwise.app.graph.action;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
@@ -12,8 +11,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
-import com.bitwise.app.common.util.ContributionItemManager;
-import com.bitwise.app.graph.command.ComponentCopyCommand;
 import com.bitwise.app.graph.command.ComponentCutCommand;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.model.Component;

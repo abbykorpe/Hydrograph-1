@@ -1,12 +1,9 @@
-package com.bitwise.app.common.util;
+package com.bitwise.app.graph.action;
+
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
