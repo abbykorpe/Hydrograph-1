@@ -3,7 +3,7 @@ package com.bitwise.app.joblogger.logger;
 import org.slf4j.Logger;
 
 import com.bitwise.app.joblogger.utils.JobLoggerUtils;
-import com.bitwise.app.joblogger.utils.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 
 /**
  * 

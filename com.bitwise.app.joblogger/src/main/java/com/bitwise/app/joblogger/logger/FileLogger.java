@@ -9,7 +9,7 @@ import java.util.Date;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.joblogger.utils.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 
 /**
  * 

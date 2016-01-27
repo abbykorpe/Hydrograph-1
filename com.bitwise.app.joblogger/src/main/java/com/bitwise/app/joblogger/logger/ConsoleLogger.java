@@ -9,7 +9,7 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.slf4j.Logger;
 
-import com.bitwise.app.joblogger.utils.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 
 /**
  * 

@@ -3,6 +3,8 @@ package com.bitwise.app.joblogger.utils;
 import java.sql.Timestamp;
 
 import org.slf4j.Logger;
+
+import com.bitwise.app.logging.factory.LogFactory;
 /**
  * 
  * Job logger utility class

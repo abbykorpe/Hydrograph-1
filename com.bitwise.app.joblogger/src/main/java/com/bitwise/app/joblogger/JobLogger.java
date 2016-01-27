@@ -10,7 +10,7 @@ import com.bitwise.app.joblogger.logger.AbstractJobLogger;
 import com.bitwise.app.joblogger.logger.ConsoleLogger;
 import com.bitwise.app.joblogger.logger.FileLogger;
 import com.bitwise.app.joblogger.utils.JobLoggerUtils;
-import com.bitwise.app.joblogger.utils.LogFactory;
+import com.bitwise.app.logging.factory.LogFactory;
 
 /**
  * 
