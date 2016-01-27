@@ -36,10 +36,12 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructure.property.mapping.InputField;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.MappingDialogButtonBar;
@@ -55,7 +57,7 @@ public class MappingTable {
 	private MappingDialogButtonBar mappingDialogButtonBar;
 	private List<InputField> inputTableFieldList;
 	private boolean validTable=true;
-	
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(MappingTable.class);
 	
 	public MappingTable(WidgetConfig widgetConfig, PropertyDialogButtonBar propertyDialogButtonBar, MappingDialogButtonBar mappingDialogButtonBar){
 		this.widgetConfig = widgetConfig;
@@ -104,13 +106,14 @@ public class MappingTable {
 		      
 		      if(item==null){
 		    	  item=addRow(table);
-			      ((RowData)item.getData()).setIn(data);
-			      ((RowData)item.getData()).setOut(data);
+			      ((RowData)item.getData()).setIn(data.trim());
+			      ((RowData)item.getData()).setOut(data.trim());			      
 		      }else{
 		    	  ((RowData)item.getData()).setIn(((RowData)item.getData()).getIn().getText() +  data);
 		    	  ((RowData)item.getData()).setOut(((RowData)item.getData()).getOut().getText() + data);
 		      }
-		      
+		      autoFormatText(((RowData)item.getData()).getIn());
+		      autoFormatText(((RowData)item.getData()).getOut());
 			  validateRow((RowData)item.getData());
 		    }
 		  }
@@ -194,10 +197,14 @@ public class MappingTable {
 						index--;
 						
 					}
-					index++;					
+					index++;		
+					
+					//validateRow((RowData) ((Text)table.getItem(index).getData("out")).getData("rowData"));
+					
 				}
 				table.getColumns()[0].setWidth(21);
 				table.getColumns()[0].setWidth(20);
+				validateDuplicatesInOutputColumn();
 			}
 		});
 	}
@@ -283,6 +290,7 @@ public class MappingTable {
 	      attachFieldValidators(column1Txt,column2Txt,column3Txt);
 	      
 	      validateRow(rowData);
+	      //validateNewRow(rowData);
 	      
 	      return tableItem;
 	      
@@ -321,7 +329,8 @@ public class MappingTable {
 			}
 		});		
 	}
-
+	
+	
 	
 	private void validateRow(RowData rowData){
 		//TODO - validate row
@@ -409,7 +418,7 @@ public class MappingTable {
 		}
 		
 		
-		//-------------- validate - check if mapping table input fields has duplicates
+		//-------------- validate - check if mapping table output fields has duplicates
 				boolean validUniqOutputFields = true;
 				if(!txtOut.getText().replace(",", "").replace("\t\n", "").trim().equalsIgnoreCase("")){
 					List<String> mTableInputFieldListTmp = Arrays.asList(txtOut.getText().split(","));
@@ -438,7 +447,8 @@ public class MappingTable {
 			txtOut.setBackground(com.bitwise.app.common.util.SWTResourceManager.getColor(250, 128, 114));
 		}
 		
-		boolean validUniqOutputColumns=validateDuplicatesInOutputColumn();
+		//boolean validUniqOutputColumns=validateDuplicatesInOutputColumn();
+		boolean validUniqOutputColumns = validateDuplicatesInOutputColumn();
 		if(in && out && emptyOut && emptyInClass && validInputFields && validUniqInputFields && validUniqOutputFields && validUniqOutputColumns){
 			validTable = true;
 			validateInputOutputMapping(txtIn, txtClazz, txtOut);			
@@ -448,15 +458,100 @@ public class MappingTable {
 		
 	}
 
+	private Set<String> findDuplicates(List<String> listContainingDuplicates) {
+		 
+		final Set<String> setToReturn = new HashSet<String>();
+		final Set<String> set1 = new HashSet<String>();
+ 
+		for (String yourInt : listContainingDuplicates) {
+			if (!set1.add(yourInt)) {
+				setToReturn.add(yourInt);
+			}
+		}
+		return setToReturn;
+	}
+	
 	private boolean validateDuplicatesInOutputColumn() {
+		
+				
 		//------------- validate duplicates in output columns
 		boolean validUniqOutputColumns = true;
-		List<String> mTableOutputFieldList = new ArrayList<>();
+		List<String> mTableOutputFieldList = new LinkedList<>();
 		for(TableItem item : table.getItems()){
-			mTableOutputFieldList.add(((Text)item.getData("out")).getText());				
+			if(!((Text)item.getData("out")).getText().trim().equalsIgnoreCase(""))
+				mTableOutputFieldList.add(((Text)item.getData("out")).getText());			
 		}
 		
-		for(int i=0;i<mTableOutputFieldList.size();i++){
+		
+		List<String> allOutputField = new LinkedList<>();
+		for(String outputField : mTableOutputFieldList){
+			allOutputField.addAll(Arrays.asList(outputField.split(",")));			
+		}
+		
+		Set<String> duplicateFieldSet = findDuplicates(allOutputField);
+		
+		for(TableItem item : table.getItems()){
+			if(!((Text)item.getData("out")).getText().trim().equalsIgnoreCase("")){
+				if(((Text)item.getData("out")).getToolTipText() != null){
+					if(((Text)item.getData("out")).getToolTipText().contains("Duplicate output")){
+						((Text)item.getData("out")).setBackground(((Text)item.getData("out")).getDisplay().getSystemColor(SWT.COLOR_WHITE));
+						
+						String tooltip="";
+						List<String> tooltipLines = Arrays.asList(((Text)item.getData("out")).getToolTipText().split(System.getProperty("line.separator")));
+						for(String tooltipLine : tooltipLines){
+							if(!tooltipLine.contains("Duplicate output")){
+								tooltip = tooltip + tooltipLine + "\n";
+							}
+						}
+						
+						if(tooltip.equalsIgnoreCase("")){
+							((Text)item.getData("out")).setToolTipText(null);
+						}else{
+							((Text)item.getData("out")).setToolTipText(tooltip);
+						}
+						
+					}
+				}
+			}
+							
+		}
+		/*for(String field : duplicateFieldSet){
+			for(TableItem item : table.getItems()){				
+				if(!((Text)item.getData("out")).getText().trim().equalsIgnoreCase("")){
+					List<String> outputCell = Arrays.asList(((Text)item.getData("out")).getText().split(","));
+					if(outputCell.contains(field)){	
+						if(((Text)item.getData("out")).getToolTipText() != null){
+							((Text)item.getData("out")).getToolTipText().contains("Duplicate output");
+						}
+						((Text)item.getData("out")).setBackground(((Text)item.getData("out")).getDisplay().getSystemColor(SWT.COLOR_WHITE));
+					}
+				}			
+			}
+		}*/
+		
+		
+		for(String field : duplicateFieldSet){
+			for(TableItem item : table.getItems()){
+				
+				if(!((Text)item.getData("out")).getText().trim().equalsIgnoreCase("")){
+					List<String> outputCell = Arrays.asList(((Text)item.getData("out")).getText().split(","));
+					if(outputCell.contains(field)){
+						validUniqOutputColumns = false;		
+						if(((Text)item.getData("out")).getToolTipText() == null)
+							((Text)item.getData("out")).setToolTipText("Duplicate output");
+						else{
+							if(!((Text)item.getData("out")).getToolTipText().contains("Duplicate output"))
+								((Text)item.getData("out")).setToolTipText("- " + ((Text)item.getData("out")).getToolTipText() + "\n- " + "Duplicate output");
+						}
+						((Text)item.getData("out")).setBackground(com.bitwise.app.common.util.SWTResourceManager.getColor(250, 128, 114));
+					}
+				}			
+			}
+		}
+		
+		
+		
+		/*for(int i=0;i<mTableOutputFieldList.size();i++){
 			int counter=0;
 			for(int j=0;j<mTableOutputFieldList.size();j++){
 				if(i!=j && i<j){
@@ -473,7 +568,8 @@ public class MappingTable {
 					}
 				}
 			}
-		}
+		}*/
+		//return validUniqOutputColumns;
 		return validUniqOutputColumns;
 	}
 	
@@ -562,13 +658,13 @@ public class MappingTable {
 		columnText.setText(columnText.getText().replace(",\r\n", ","));
 		
 		columnText.setBackground(columnText.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		Pattern pattern = Pattern.compile("^[a-zA-Z0-9_, \r\n]*$");
+		Pattern pattern = Pattern.compile("^[a-zA-Z0-9_,\r\n]*$");
 		if (!pattern.matcher(columnText.getText()).matches()) {
 			columnText.setForeground(columnText.getDisplay().getSystemColor(SWT.COLOR_RED));
 			if(columnText.getToolTipText() == null)
-				columnText.setToolTipText("The text field should match \"^[a-zA-Z0-9_, \\r\\n]*\"");
+				columnText.setToolTipText("The text field should match \"^[a-zA-Z0-9_,\\r\\n]*\"");
 			else
-				columnText.setToolTipText("- " + columnText.getToolTipText() + "\n- " + "The text field should match \"^[a-zA-Z0-9_, \\r\\n]*\"");
+				columnText.setToolTipText("- " + columnText.getToolTipText() + "\n- " + "The text field should match \"^[a-zA-Z0-9_,\\r\\n]*\"");
 			
 			valid = false;			
 		}else{
@@ -587,8 +683,9 @@ public class MappingTable {
 	
 	private void autoFormatText(final Text columnText) {
 		String text=columnText.getText().replace("\r\n", "");
-		text=text.replace(", ", ",");
-		text=text.replace(",", ", ");
+		text=text.replace(" ", "");
+		//text=text.replace(", ", ",");
+		//text=text.replace(",", ", ");
 		columnText.setText(text.replace(",", ",\r\n"));
 		
 		resizeTextBoxBasedOnUserInput(columnText);
@@ -640,12 +737,12 @@ public class MappingTable {
 		for(MappingSheetRow mappingSheetRow : mappingSheetRows){
 			TableItem item = addRow(table);
 			
-			((Text)item.getData("in")).setText(mappingSheetRow.getImputFields().toString().replace("[", "").replace("]", ""));
+			((Text)item.getData("in")).setText(mappingSheetRow.getImputFields().toString().replace("[","").replace("]", ""));
 			if(mappingSheetRow.getOperationClassProperty() != null){
 				((Text)item.getData("OpClass")).setText(mappingSheetRow.getOperationClassProperty().getOperationClassPath());
 				((Text)item.getData("OpClass")).setData(mappingSheetRow.getOperationClassProperty());
 			}			
-			((Text)item.getData("out")).setText(mappingSheetRow.getOutputList().toString().replace("[", "").replace("]", ""));
+			((Text)item.getData("out")).setText(mappingSheetRow.getOutputList().toString().replace("[","").replace("]", ""));
 			
 			validateRow((RowData)((Text)item.getData("out")).getData("rowData"));
 		}
