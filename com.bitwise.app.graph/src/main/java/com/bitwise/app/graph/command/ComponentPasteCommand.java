@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
@@ -15,6 +16,8 @@ import org.slf4j.Logger;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.model.Component;
+import com.bitwise.app.graph.model.Link;
+import com.bitwise.app.graph.model.Model;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -23,16 +26,16 @@ import com.bitwise.app.graph.model.Component;
 public class ComponentPasteCommand extends Command {
 	private static final Logger log = LogFactory.INSTANCE.getLogger(ComponentPasteCommand.class);
 	private int pasteCounter=0;
-	private HashMap<Component, Component> list = new HashMap<Component, Component>();
+	private Map list = new HashMap();
 
 	@Override
 	public boolean canExecute() {
-		List<Component> bList = (ArrayList<Component>) Clipboard.getDefault().getContents();
+		List bList = (ArrayList) Clipboard.getDefault().getContents();
 		if (bList == null || bList.isEmpty())
 			return false;
-		Iterator<Component> it = bList.iterator();
+		Iterator it = bList.iterator();
 		while (it.hasNext()) {
-			Component node = it.next();
+			Model node = (Model) it.next();
 			if (isPastableNode(node)) {
 				list.put(node, null);
 			}
@@ -101,8 +104,10 @@ public class ComponentPasteCommand extends Command {
 	 *            the node
 	 * @return true, if is pastable node
 	 */
-	public boolean isPastableNode(Component node) {
+	public boolean isPastableNode(Model node) {
 		if (node instanceof Component)
+			return true;
+		if (node instanceof Link)
 			return true;
 		return false;
 	}

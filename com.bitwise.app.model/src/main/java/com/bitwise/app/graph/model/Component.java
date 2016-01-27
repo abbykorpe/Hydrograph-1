@@ -80,14 +80,16 @@ public abstract class Component extends Model {
 	private Map<String, Object> properties;
 	private Container parent;
 	private String validityStatus;
-    private Map<String, Object> clonedHashMap;
+
+	private Map<String, Object> clonedHashMap;
+	
 	private ArrayList<JoinConfigProperty>  clonedArrayList;
 	private final Hashtable<String, ArrayList<Link>> inputLinksHash;
 	private final Hashtable<String, ArrayList<Link>> outputLinksHash;
 	private ArrayList<Link> inputLinks = new ArrayList<Link>();
 	private ArrayList<Link> outputLinks = new ArrayList<Link>();
-	private List<String> inputportTerminals;
-	private List<String> outputPortTerminals;
+	private  List<String> inputportTerminals;
+	private  List<String> outputPortTerminals;
 	private boolean newInstance;
 	private String type;
 	private String prefix;
@@ -155,6 +157,23 @@ public abstract class Component extends Model {
 		this.toolTipErrorMessages = toolTipErrorMessages;
 	}
 
+	public void importPortSettings(int newPortCount) {
+
+		changePortCount(newPortCount);
+
+		for (int i = 0; i < (newPortCount - 2); i++) {
+
+			Port inPort = new Port("in" + (i + 2), "in" + (i + 2), "in"
+					+ (i + 2), this, newPortCount, "in", (i + 2));
+			ports.put("in" + (i + 2), inPort);
+			firePropertyChange("Component:add", null, inPort);
+
+			Port unusedPort = new Port("unused" + (i + 2), "un" + (i + 2),
+					"unused" + (i + 2), this, newPortCount, "unused", (i + 2));
+			ports.put("unused" + (i + 2), unusedPort);
+			firePropertyChange("Component:add", null, unusedPort);
+		}
+	}
 	private void initPortSettings() {
 
 		portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName)
@@ -203,7 +222,6 @@ public abstract class Component extends Model {
 	public void setOutputPortTerminals(List<String> portTerminals) {
 		this.outputPortTerminals=portTerminals;
 	}
-
 	public void setChangeInPortsCntDynamically(boolean changeInPortsCntDynamically) {
 		this.changeInPortsCntDynamically = changeInPortsCntDynamically;
 	}
@@ -217,6 +235,7 @@ public abstract class Component extends Model {
 		this.changeUnusedPortsCntDynamically = changeUnusedPortsCntDynamically;
 	}
 
+	
 	public int getInPortCount() {
 		return inPortCount;
 	}
@@ -244,7 +263,10 @@ public abstract class Component extends Model {
 	public List<PortSpecification> getPortSpecification() {
 		return portSpecification;
 	}
-
+	public void setPorts(HashMap<String, Port> ports) {
+		this.ports = ports;
+	}
+	
 //	private void initDynamicPortFlags() {
 //		changeInPortsCntDynamically = XMLConfigUtil.INSTANCE.getComponent(
 //				componentName).isChangeInPortsDynamically();
@@ -332,10 +354,6 @@ public abstract class Component extends Model {
 
 	public HashMap<String, Port> getPorts() {
 		return ports;
-	}
-
-	public void setPorts(HashMap<String, Port> ports) {
-		this.ports = ports;
 	}
 
 	/**
@@ -700,9 +718,8 @@ public abstract class Component extends Model {
 		component.setParent(getParent());
 		component.setProperties(clonedHashMap);
 		component.setPropertyValue("name", getPrefix());
-		component.setSize(new Dimension(getSize()));
-		component.setLocation(new Point(getLocation()));
-		
+		component.setSize(getSize());
+		component.setLocation(getLocation());
 		HashMap<String, Port> clonedPorts=new HashMap<String, Port>();
 		
 	    for (Map.Entry<String, Port> entry : ports.entrySet()) {
@@ -723,7 +740,6 @@ public abstract class Component extends Model {
 		component.setInPortCount(inPortCount);
 		component.setOutPortCount(outPortCount);
 		component.setUnusedPortCount(unusedPortCount);
-		
 		
 		return component;
 	}
@@ -761,23 +777,43 @@ public abstract class Component extends Model {
 				.getDescription();
 	}
 
-	public void importPortSettings(int newPortCount) {
+	public void unusedPortSettings(int newPortCount) {
 
 		changePortCount(newPortCount);
 
 		for (int i = 0; i < (newPortCount - 2); i++) {
-
-			Port inPort = new Port("in" + (i + 2), "in" + (i + 2), "in"
-					+ (i + 2), this, newPortCount, "in", (i + 2));
-			ports.put("in" + (i + 2), inPort);
-			firePropertyChange("Component:add", null, inPort);
-
 			Port unusedPort = new Port("unused" + (i + 2), "un" + (i + 2),
 					"unused" + (i + 2), this, newPortCount, "unused", (i + 2));
 			ports.put("unused" + (i + 2), unusedPort);
 			firePropertyChange("Component:add", null, unusedPort);
 		}
 	}
+	
+	public void inputPortSettings(int newPortCount) {
+
+		changePortCount(newPortCount);
+
+		for (int i = 0; i < (newPortCount - 1); i++) {
+			Port inPort = new Port("in" + (i + 1), "in" + (i + 1), "in"
+					+ (i + 1), this, newPortCount, "in", (i + 1));
+			ports.put("in" + (i + 1), inPort);
+			firePropertyChange("Component:add", null, inPort);
+		}
+	}
+	
+	public void outputPortSettings(int newPortCount) {
+
+		changePortCount(newPortCount);
+
+		for (int i = 0; i < (newPortCount - 1); i++) {
+
+			Port outPort = new Port("out" + (i + 1), "out" + (i + 1), "out"
+					+ (i + 1), this, newPortCount, "out", (i + 1));
+			ports.put("out" + (i + 1), outPort);
+			firePropertyChange("Component:add", null, outPort);
+		}
+	} 
+
 
 	public void incrementPorts(int newPortCount, int oldPortCount) {
 
@@ -859,5 +895,3 @@ public abstract class Component extends Model {
 	}
 
 }
-
-
