@@ -11,11 +11,13 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.SingleColumnGridConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterPropertyWizard;
@@ -88,17 +90,7 @@ public class SingleColumnWidget extends AbstractWidget {
 	}
 
 	private List<String> getPropagatedSchema() {
-		List<String> genratedProperty = new ArrayList<String>();
-		ComponentsOutputSchema outputSchema = null;
-		for (Link link : getComponent().getTargetConnections()) {
-			{
-				outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
-				if (outputSchema != null)
-					for (FixedWidthGridRow row : outputSchema.getFixedWidthGridRowsOutputFields())
-						genratedProperty.add(row.getFieldName());
-			}
-
-		}
-		return genratedProperty;
+			return SchemaPropagationHelper.INSTANCE.getFieldsForFilterWidget(getComponent()).get(
+				Constants.INPUT_SOCKET_TYPE + 0);
 	}
 }

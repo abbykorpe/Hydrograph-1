@@ -18,6 +18,7 @@ import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinproperty.JoinMapGrid;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
@@ -75,43 +76,10 @@ public class ELTJoinMapWidget extends AbstractWidget {
 	}
 
 	private void getPropagatedSchema() {
-		List<List<FilterProperties>> sorceFieldList=arrangedLinks();
-		if(sorceFieldList!=null)
-		joinMappingGrid.setLookupInputProperties(sorceFieldList);
+		List<List<FilterProperties>> sorceFieldList = SchemaPropagationHelper.INSTANCE
+				.sortedFiledNamesBySocketId(getComponent());
+		if (sorceFieldList != null)
+			joinMappingGrid.setLookupInputProperties(sorceFieldList);
 	}
 
-	private List<List<FilterProperties>> arrangedLinks() {
-		String targetTerminal = "in";
-		int inputPortCount=2;
-		List<List<FilterProperties>> listofFiledNameList = new ArrayList<>();
-		
-		if(getComponent().getProperties().get("inPortCount")!=null)
-			inputPortCount=Integer.parseInt((String)getComponent().getProperties().get("inPortCount"));
-		for (int i = 0; i < inputPortCount; i++) {
-			listofFiledNameList.add(getSchemaFieldForTargetTerminal(targetTerminal + i));
-		}
-		return listofFiledNameList;
-	}
-
-	private List<FilterProperties> getSchemaFieldForTargetTerminal(String targetTerminal) {
-		FilterProperties filedName = null;
-		ComponentsOutputSchema schema = null;
-		List<FilterProperties> filedNameList = new ArrayList<>();
-		for (Link link : getComponent().getTargetConnections()) {
-
-			if (link.getTargetTerminal().equals(targetTerminal)) {
-				schema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
-				
-				if (schema != null) {
-					for (FixedWidthGridRow row : schema.getFixedWidthGridRowsOutputFields()) {
-						filedName = new FilterProperties();
-						filedName.setPropertyname(row.getFieldName());
-						filedNameList.add(filedName);
-					}
-				}
-
-			}
-		}
-		return filedNameList;
-	}
 }
