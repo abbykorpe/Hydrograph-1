@@ -159,8 +159,13 @@ public class SubGraphUtility {
 			edComponentEditPart.getCastedModel().setSize(newSize);
 			edComponentEditPart.getCastedModel().setComponentLabel(file.getName());
 			edComponentEditPart.getCastedModel().getProperties().put("path", file.getFullPath().toOSString());
-
-		edComponentEditPart.refresh();
+			if(inPort!=0 && outPort!=0)
+			edComponentEditPart.getCastedModel().getProperties().put("type", "operation");
+			if(inPort!=0 && outPort==0)
+			edComponentEditPart.getCastedModel().getProperties().put("type", "output");
+			if(inPort==0 && outPort!=0)
+			edComponentEditPart.getCastedModel().getProperties().put("type", "input");			
+			edComponentEditPart.refresh();
 	}
 	
 }
