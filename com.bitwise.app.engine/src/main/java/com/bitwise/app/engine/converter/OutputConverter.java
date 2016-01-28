@@ -53,7 +53,9 @@ public abstract class OutputConverter extends Converter {
 				typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().add(typeExternalSchema);
 			} else
 				typeBaseRecord.setName("Internal");
-		}
+		}else
+			typeBaseRecord.setName("Internal");
+		
 		if (fetchPropagatedSchema() != null)
 			typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().addAll(getFieldOrRecord(fetchPropagatedSchema()));
 

@@ -8,11 +8,20 @@ public class SubgraphComponent extends SubgraphCategory{
 	 * 
 	 */
 	private static final long serialVersionUID = 2406782326279531800L;
+	
 
 	@Override
 	public String getConverter() {
-		// TODO Auto-generated method stub
+		String type =(String) this.getProperties().get("type");
+		if(type.equalsIgnoreCase("input"))
 		return "com.bitwise.app.engine.converter.impl.InputSubGraphConverter";
+		if(type.equalsIgnoreCase("output"))
+		return "com.bitwise.app.engine.converter.impl.OutputSubGraphConverter";
+		if(type.equalsIgnoreCase("operation"))
+		return "com.bitwise.app.engine.converter.impl.OperationSubGraphConverter";
+		
+		return "com.bitwise.app.engine.converter.impl.InputSubGraphConverter";
+
 	}
 
 }
