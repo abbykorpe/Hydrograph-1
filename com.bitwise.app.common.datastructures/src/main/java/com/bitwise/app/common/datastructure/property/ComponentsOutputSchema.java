@@ -99,4 +99,12 @@ public class ComponentsOutputSchema {
 	public List<FixedWidthGridRow> getFixedWidthGridRowsOutputFields() {
 		return fixedWidthGridRowsOutputFields;
 	}
+
+	public List<SchemaGrid> getSchemaGridOutputFields() {
+		List<SchemaGrid> schemaGrid = new ArrayList<>();
+		for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
+				schemaGrid.add(convertFixedWidthSchemaToSchemaGridRow(fixedWidthGridRow));
+		}
+		return schemaGrid;
+	}
 }

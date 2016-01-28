@@ -78,6 +78,8 @@ public class ComponentFigure extends Figure implements Validator{
 	private ComponentTooltip componentToolTip;
 	org.eclipse.swt.graphics.Rectangle componentBounds;
 	private static final int TOOLTIP_SHOW_DELAY=800;
+	private Display display;
+	private Runnable timer;
 	/**
 	 * Instantiates a new component figure.
 	 * 
@@ -375,14 +377,11 @@ public class ComponentFigure extends Figure implements Validator{
 				final org.eclipse.swt.graphics.Point location1 = new org.eclipse.swt.graphics.Point(arg0.x, arg0.y);
 				java.awt.Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
 				final org.eclipse.swt.graphics.Point location = new org.eclipse.swt.graphics.Point(mouseLocation.x, mouseLocation.y);
-
-				//showStatusToolTip(location);
 				componentCanvas = getComponentCanvas();
-				try {
-					TimeUnit.MILLISECONDS.sleep(TOOLTIP_SHOW_DELAY);
-				} catch (InterruptedException e) {
-					logger.error(e.getMessage(),e);
-				}
+				display=componentCanvas.getCanvasControl().getShell().getDisplay();
+				timer=new Runnable() {
+					public void run() {
+						//if(componentCanvas.isToolTipTimerRunning())
 						java.awt.Point mouseLocation2 = MouseInfo.getPointerInfo().getLocation();
 						org.eclipse.swt.graphics.Point location2 = new org.eclipse.swt.graphics.Point(mouseLocation2.x, mouseLocation2.y);
 
@@ -392,7 +391,13 @@ public class ComponentFigure extends Figure implements Validator{
 							showStatusToolTip(perfectToolTipLocation);
 							//showStatusToolTip(location);
 						}
+
+					}
+				};
+				display.timerExec(TOOLTIP_SHOW_DELAY, timer);
+				
 			}
+			
 
 			@Override
 			public void mouseExited(org.eclipse.draw2d.MouseEvent arg0) {
@@ -602,6 +607,10 @@ public class ComponentFigure extends Figure implements Validator{
 
 	public void setComponentLabelMargin(int componentLabelMargin) {
 		this.componentLabelMargin = componentLabelMargin;
+	}
+
+	public void terminateToolTipTimer() {
+		display.timerExec(-1,timer);
 	}
 
 }

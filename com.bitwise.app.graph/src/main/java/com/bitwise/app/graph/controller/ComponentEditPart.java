@@ -37,6 +37,7 @@ import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.figure.ComponentBorder;
 import com.bitwise.app.graph.figure.ComponentFigure;
 import com.bitwise.app.graph.figure.ELTFigureConstants;
+import com.bitwise.app.graph.figure.PortFigure;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.ComponentLabel;
 import com.bitwise.app.graph.model.Link;
@@ -293,6 +294,8 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	public void performRequest(Request req) {
 		// Opens Property Window only on Double click.
 		if (req.getType().equals(RequestConstants.REQ_OPEN)) {
+			ComponentFigure componentFigure=((ComponentEditPart)this).getComponentFigure();
+			componentFigure.terminateToolTipTimer();
 			ELTPropertyWindow eltPropertyWindow = new ELTPropertyWindow(getModel());
 			eltPropertyWindow.open();
 			

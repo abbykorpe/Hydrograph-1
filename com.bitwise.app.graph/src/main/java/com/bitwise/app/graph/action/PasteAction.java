@@ -7,7 +7,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
-import com.bitwise.app.common.util.ContributionItemManager;
 import com.bitwise.app.graph.command.ComponentPasteCommand;
 
 // TODO: Auto-generated Javadoc

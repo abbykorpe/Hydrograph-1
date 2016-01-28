@@ -1,19 +1,18 @@
 package com.bitwise.app.engine.ui.converter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
-import com.bitwise.app.common.datastructure.property.NameValueProperty;
+import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
-import com.bitwise.app.common.datastructure.property.OperationField;
-import com.bitwise.app.common.datastructure.property.OperationSystemProperties;
-import com.bitwise.app.common.datastructure.property.TransformOperation;
-import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
+import com.bitwise.app.common.datastructure.property.Schema;
+import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
+import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
@@ -24,7 +23,6 @@ import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeInputField;
 import com.bitwiseglobal.graph.commontypes.TypeMapField;
-import com.bitwiseglobal.graph.commontypes.TypeOperationInputFields;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsComponent;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
 import com.bitwiseglobal.graph.commontypes.TypeProperties;
@@ -38,10 +36,13 @@ import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
  * 
  */
 public abstract class TransformUiConverter extends UiConverter {
-	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(TransformUiConverter.class);
+	private static final Logger LOGGER = LogFactory.INSTANCE
+			.getLogger(TransformUiConverter.class);
+	private Schema schema;
 
 	/**
-	 * Generate common properties of transform-component that will appear in property window.
+	 * Generate common properties of transform-component that will appear in
+	 * property window.
 	 * 
 	 */
 	@Override
@@ -50,8 +51,10 @@ public abstract class TransformUiConverter extends UiConverter {
 		LOGGER.debug("Fetching common properties for -{}", componentName);
 		getInPort((TypeOperationsComponent) typeBaseComponent);
 		getOutPort((TypeOperationsComponent) typeBaseComponent);
-		uiComponent.setCategory(UIComponentsConstants.TRANSFORM_CATEGORY.value());
-		propertyMap.put(PropertyNameConstants.RUNTIME_PROPERTIES.value(), getRuntimeProperties());
+		uiComponent.setCategory(UIComponentsConstants.TRANSFORM_CATEGORY
+				.value());
+		propertyMap.put(PropertyNameConstants.RUNTIME_PROPERTIES.value(),
+				getRuntimeProperties());
 	}
 
 	/**
@@ -67,8 +70,9 @@ public abstract class TransformUiConverter extends UiConverter {
 			for (TypeBaseInSocket inSocket : operationsComponent.getInSocket()) {
 				uiComponent.engageInputPort(inSocket.getId());
 				UIComponentRepo.INSTANCE.getComponentLinkList().add(
-						new LinkingData(inSocket.getFromComponentId(), operationsComponent.getId(), inSocket
-								.getFromSocketId(), inSocket.getId()));
+						new LinkingData(inSocket.getFromComponentId(),
+								operationsComponent.getId(), inSocket
+										.getFromSocketId(), inSocket.getId()));
 			}
 		}
 	}
@@ -83,11 +87,13 @@ public abstract class TransformUiConverter extends UiConverter {
 	protected void getOutPort(TypeOperationsComponent operationsComponent) {
 		LOGGER.debug("Generating OutPut Ports for -{}", componentName);
 		if (operationsComponent.getOutSocket() != null) {
-			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
+			for (TypeOperationsOutSocket outSocket : operationsComponent
+					.getOutSocket()) {
 				uiComponent.engageOutputPort(outSocket.getId());
 				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null)
-					propertyMap.put(Constants.PARAM_OPERATION,
-							getUiPassThroughOrOperationFieldsOrMapFieldGrid(outSocket));
+					propertyMap
+							.put(Constants.PARAM_OPERATION,
+									getUiPassThroughOrOperationFieldsOrMapFieldGrid(outSocket));
 			}
 
 		}
@@ -99,155 +105,101 @@ public abstract class TransformUiConverter extends UiConverter {
 	 * @param TypeOperationsOutSocket
 	 *            the outSocket
 	 * 
-	 * @return TransformPropertyGrid, transformPropertyGrid object which is responsible to display transform grid.
+	 * @return TransformPropertyGrid, transformPropertyGrid object which is
+	 *         responsible to display transform grid.
 	 */
-	protected TransformPropertyGrid getUiPassThroughOrOperationFieldsOrMapFieldGrid(TypeOperationsOutSocket outSocket) {
-		LOGGER.debug("Generating out-socket related UI-Grid for -{}", componentName);
-		TransformPropertyGrid transformPropertyGrid = new TransformPropertyGrid();
-		transformPropertyGrid.setNameValueProps(new ArrayList<NameValueProperty>());
-		transformPropertyGrid.setOpSysProperties(new ArrayList<OperationSystemProperties>());
-		transformPropertyGrid.setOutputTreeFields(new ArrayList<OperationField>());
-		for (Object property : outSocket.getPassThroughFieldOrOperationFieldOrMapField()) {
+	protected ATMapping getUiPassThroughOrOperationFieldsOrMapFieldGrid(
+			TypeOperationsOutSocket outSocket) {
+		ATMapping atMapping = new ATMapping();
+		List<MappingSheetRow> mappingSheetRows = new LinkedList<>();
+
+		for (Object property : outSocket
+				.getPassThroughFieldOrOperationFieldOrMapField()) {
+			MappingSheetRow mappingSheetRow = null;
 			if (property instanceof TypeInputField) {
-				transformPropertyGrid.getOpSysProperties().add(getOperationSystemProperties((TypeInputField) property));
-				transformPropertyGrid.getOutputTreeFields().add(
-						new OperationField(((TypeInputField) property).getName()));
-			} else if (property instanceof TypeMapField)
-				transformPropertyGrid.getNameValueProps().add(getNameValueProps((TypeMapField) property));
+
+				List inputFieldList = new LinkedList<>();
+				inputFieldList.add(((TypeInputField) property).getName());
+
+				List outputFieldList = new LinkedList<>();
+				outputFieldList.add(((TypeInputField) property).getName());
+
+				mappingSheetRow = new MappingSheetRow(inputFieldList, null,
+						outputFieldList);
+				mappingSheetRows.add(mappingSheetRow);
+
+			} else if (property instanceof TypeMapField) {
+				List inputFieldList = new LinkedList<>();
+				inputFieldList.add(((TypeMapField) property).getSourceName());
+
+				List outputFieldList = new LinkedList<>();
+				outputFieldList.add(((TypeMapField) property).getName());
+
+				mappingSheetRow = new MappingSheetRow(inputFieldList, null,
+						outputFieldList);
+				mappingSheetRows.add(mappingSheetRow);
+			}
+
 		}
-		return transformPropertyGrid;
+		atMapping.setMappingSheetRows(mappingSheetRows);
+		return atMapping;
+
 	}
 
-	/**
-	 * Create transform property grid for transform component.
-	 * 
-	 * @return TransformPropertyGrid, transformPropertyGrid object which is responsible to display transform grid.
-	 */
-	protected TransformPropertyGrid createTransformPropertyGrid() {
-		LOGGER.debug("Generating UI-Grid for -{}", componentName);
-		TransformPropertyGrid transformPropertyGrid = null;
-		List<TypeTransformOperation> typeTransformOperationlist = ((TypeOperationsComponent) typeBaseComponent)
+	private void getOperationData(ATMapping atMapping) {
+		List<TypeTransformOperation> xsdOpertaionList = ((TypeOperationsComponent) typeBaseComponent)
 				.getOperation();
-		if (propertyMap.get(Constants.PARAM_OPERATION) != null)
-			transformPropertyGrid = (TransformPropertyGrid) propertyMap.get(Constants.PARAM_OPERATION);
-		else
-			transformPropertyGrid = new TransformPropertyGrid();
 
-		if (typeTransformOperationlist != null && typeTransformOperationlist.size() != 0) {
-			transformPropertyGrid.setOperation(new ArrayList<TransformOperation>());
-			for (TypeTransformOperation transformOperation : typeTransformOperationlist) {
-				TransformOperation uITransformOperation = new TransformOperation();
-				uITransformOperation.setOperationId(transformOperation.getId());
-				uITransformOperation.setOpClassProperty(new OperationClassProperty(transformOperation.getClazz(),
-						isParameter(transformOperation.getClazz())));
-				uITransformOperation.setSchemaGridRowList(getFixedWidthSchemaList(transformOperation));
-				uITransformOperation.setNameValueProps(getNameValueProperty(transformOperation.getProperties()));
-				uITransformOperation.setInputFields(getInputFields(transformOperation.getInputFields()));
-				transformPropertyGrid.getOperation().add(uITransformOperation);
-			}
-		}
-		return transformPropertyGrid;
-	}
+		List<MappingSheetRow> mappingSheetRows = atMapping
+				.getMappingSheetRows();
+		for (TypeTransformOperation item : xsdOpertaionList) {
 
-	/**
-	 * Create input field property of transform property grid for transform component.
-	 * 
-	 * @param TypeOperationInputFields
-	 *            the inputFields
-	 * 
-	 * @return List<OperationField>, list of input-field's object which is responsible to display input-fields under
-	 *         transform grid.
-	 */
-	private List<OperationField> getInputFields(TypeOperationInputFields inputFields) {
-		LOGGER.debug("Fetching Input-Fields property of UI-Grid for -{}", componentName);
-		List<OperationField> operationFieldList = null;
-		OperationField operationField = null;
-		if (inputFields != null && inputFields.getField().size() != 0) {
-			operationFieldList = new ArrayList<>();
-			for (TypeInputField typeInputField : inputFields.getField()) {
-				operationField = new OperationField();
-				operationField.setName(typeInputField.getName());
-				operationFieldList.add(operationField);
-			}
+			mappingSheetRows.add(new MappingSheetRow(getInputFieldList(item),
+					new OperationClassProperty(item.getClazz(),
+							isParameter(item.getClazz()), item.getClazz()),
+					getOutputFieldList(item)));
 		}
 
-		return operationFieldList;
 	}
 
-	/**
-	 * Create name-value property of transform property grid for transform component.
-	 * 
-	 * @param TypeProperties
-	 *            the properties
-	 * 
-	 * @return List<NameValueProperty>, list of NameValueProperty object which is responsible to display name-value
-	 *         property under transform grid.
-	 */
-	private List<NameValueProperty> getNameValueProperty(TypeProperties properties) {
-		LOGGER.debug("Fetching Name-Value property of UI-Grid for -{}", componentName);
-		List<NameValueProperty> nameValuePropertyList = null;
-		NameValueProperty nameValueProperty = null;
-		if (properties != null && properties.getProperty().size() != 0) {
-			nameValuePropertyList = new ArrayList<>();
-			for (Property property : properties.getProperty()) {
-				nameValueProperty = new NameValueProperty();
-				nameValueProperty.setPropertyName(property.getName());
-				nameValueProperty.setPropertyValue(property.getValue());
-				nameValuePropertyList.add(nameValueProperty);
-			}
-		}
-		return nameValuePropertyList;
-	}
-
-	/**
-	 * Create fixed-width-schema property for transform component.
-	 * 
-	 * @param TypeTransformOperation
-	 *            the transformOperation
-	 * 
-	 * @return List<FixedWidthGridRow>, list of FixedWidthGridRow object which is responsible to display fixed-width
-	 *         schema under transform grid.
-	 */
-	private List<FixedWidthGridRow> getFixedWidthSchemaList(TypeTransformOperation transformOperation) {
-		List<FixedWidthGridRow> fixedWidthGridRowsList = new ArrayList<>();
+	private List<String> getOutputFieldList(TypeTransformOperation item) {
+		List<String> outputFieldList = new LinkedList<>();
 		ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
-		if (transformOperation.getOutputFields() != null) {
-			for (TypeBaseField field : transformOperation.getOutputFields().getField()) {
-				fixedWidthGridRowsList.add(converterUiHelper.getFixedWidthSchema(field));
+		List<GridRow> gridRow = new ArrayList<>();
+		if (item.getOutputFields() != null) {
+			if (schema == null) {
+				schema = new Schema();
+				schema.setGridRow(gridRow);
+				schema.setIsExternal(false);
 			}
+			
+			for (TypeBaseField record : item.getOutputFields().getField()) {
+				gridRow.add(converterUiHelper.getFixedWidthSchema(record));
+				outputFieldList.add(record.getName());
+			}
+
 		}
-		return fixedWidthGridRowsList;
+		propertyMap.put("schema",schema);
+		return outputFieldList;
 	}
 
-	/**
-	 * Create single name-value property.
-	 * 
-	 * @param TypeMapField
-	 *            the property
-	 * 
-	 * @return NameValueProperty
-	 */
-	private NameValueProperty getNameValueProps(TypeMapField property) {
-		NameValueProperty nameValueProperty = new NameValueProperty();
-		nameValueProperty.setPropertyName(property.getSourceName());
-		nameValueProperty.setPropertyValue(property.getName());
-		return nameValueProperty;
+	private List<String> getInputFieldList(TypeTransformOperation item) {
+		List<String> inputfieldList = new LinkedList<>();
+		for (TypeInputField inputField : item.getInputFields().getField()) {
+			inputfieldList.add(inputField.getName());
+		}
+		return inputfieldList;
 	}
 
-	/**
-	 * Create single System operation property.
-	 * 
-	 * @param TypeInputField
-	 *            the property
-	 * 
-	 * @return OperationSystemProperties
-	 */
-	private OperationSystemProperties getOperationSystemProperties(TypeInputField property) {
-		OperationSystemProperties operationSystemProperty = new OperationSystemProperties();
-		operationSystemProperty.setChecked(true);
-		operationSystemProperty.setOpSysValue(property.getName());
-		return operationSystemProperty;
+	protected Object createTransformPropertyGrid() {
+		ATMapping atMapping = null;
+		if (propertyMap.get(Constants.PARAM_OPERATION) != null)
+			atMapping = (ATMapping) propertyMap.get(Constants.PARAM_OPERATION);
+		else
+			atMapping = new ATMapping();
 
+		getOperationData(atMapping);
+		return atMapping;
 	}
 
 	/**
@@ -259,11 +211,13 @@ public abstract class TransformUiConverter extends UiConverter {
 	protected Map<String, String> getRuntimeProperties() {
 		LOGGER.debug("Generating Runtime Properties for -{}", componentName);
 		TreeMap<String, String> runtimeMap = null;
-		TypeProperties typeProperties = ((TypeOperationsComponent) typeBaseComponent).getRuntimeProperties();
+		TypeProperties typeProperties = ((TypeOperationsComponent) typeBaseComponent)
+				.getRuntimeProperties();
 		if (typeProperties != null) {
 			runtimeMap = new TreeMap<>();
 			for (Property runtimeProperty : typeProperties.getProperty()) {
-				runtimeMap.put(runtimeProperty.getName(), runtimeProperty.getValue());
+				runtimeMap.put(runtimeProperty.getName(),
+						runtimeProperty.getValue());
 			}
 		}
 		return runtimeMap;
