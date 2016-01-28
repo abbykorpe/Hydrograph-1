@@ -114,13 +114,15 @@ public class SubGraphAction extends SelectionAction{
 	 */
 	@Override  
 	public void run() { 
-		
+		IFile file =SubGraphUtility.doSaveAsSubGraph();
+		if(file!=null)
+		{	
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		Container containerOld=editor.getContainer(); 
 	   	execute(createCutCommand(getSelectedObjects())); 
     	List bList = (ArrayList) Clipboard.getDefault().getContents();
      	
-    	IFile file =SubGraphUtility.doSaveAsSubGraph();
+    	
        	
     	SubgraphComponent subgraphComponent= new SubgraphComponent();
 		ComponentCreateCommand createComponent = new ComponentCreateCommand(subgraphComponent,containerOld,new Rectangle(((Component)bList.get(0)).getLocation(),((Component)bList.get(0)).getSize()));
@@ -163,5 +165,6 @@ public class SubGraphAction extends SelectionAction{
 		SubGraphUtility.updateSubGraphModelProperties(edComponentEditPart, inLinks.size(), outLinks.size(), file);
 		SubGraphUtility.createDynamicInputPort(inLinks, edComponentEditPart);
 		SubGraphUtility.createDynamicOutputPort(outLinks, edComponentEditPart)	;
+		}
 	}
    }
