@@ -84,5 +84,7 @@ public class Constants {
 	public static final String IFDELIMITED="IFDelimited";
 	public static final String IFIXEDWIDTH="IFixedWidth";
 	public static final String SUBGRAPH_COMPONENT_CATEGORY = "SUBGRAPH";
+	public static final String SUBGRAPH_COMPONENT = "SubgraphComponent"; 
+
 
 }

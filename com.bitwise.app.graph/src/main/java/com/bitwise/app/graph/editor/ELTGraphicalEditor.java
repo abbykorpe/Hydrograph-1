@@ -374,7 +374,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					.createClass(componentConfig);
 
 			
-			if(componentConfig.getName().equalsIgnoreCase(Constants.DUMMY_COMPONENT))
+			if(componentConfig.getName().equalsIgnoreCase(Constants.DUMMY_COMPONENT)|| componentConfig.getName().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT))
 				continue;
 			
 			/*CombinedTemplateCreationEntry component = new CombinedTemplateCreationEntry(
