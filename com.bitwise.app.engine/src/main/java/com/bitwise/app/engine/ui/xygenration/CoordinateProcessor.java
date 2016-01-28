@@ -27,8 +27,8 @@ public class CoordinateProcessor {
 	private List<Node> nodeList = new ArrayList<>();
 	private Map<String, Node> nodeMap = new LinkedHashMap<>();
 	private Map<String, Component> tempUiComponentFactory = new LinkedHashMap<>();
-	private static final int HORIZONTAL_SPACING = 130;
-	private static final int VERTICAL_SPACING = 80;
+	private static final int HORIZONTAL_SPACING = 200;
+	private static final int VERTICAL_SPACING = 200;
 
 	/**
 	 * Initiate X-Y coordinate generation process and creates node structure for each component.
