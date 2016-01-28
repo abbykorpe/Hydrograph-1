@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.bitwiseglobal.com/graph/lookup"
+	xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bitwiseglobal.com/graph/lookup"
+	elementFormDefault="unqualified">
+	<xs:import schemaLocation="../../common/common-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/commontypes" />
+
+
+
+	<xs:complexType name="type-key-fields">
+		<xs:sequence>
+			<xs:element name="field" maxOccurs="unbounded" type="cmn:type-field-name" />
+		</xs:sequence>
+		<xs:attribute name="inSocketId" use="required" type="xs:string" />
+	</xs:complexType>
+
+
+	<xs:complexType name="type-out-socket">
+		<xs:complexContent>
+			<xs:restriction base="cmn:type-operations-out-socket">
+				<xs:choice maxOccurs="1" minOccurs="1">
+			        <xs:element name="copyOfInsocket" type="cmn:type-outSocket-as-inSocket" />
+					<xs:choice maxOccurs="unbounded" minOccurs="1">
+						<xs:element name="passThroughField" type="cmn:type-input-field" />
+						<xs:element name="mapField" type="cmn:type-map-field" />
+					</xs:choice>
+				</xs:choice>
+				<xs:attribute name="id" type="xs:string" use="required" />
+				<xs:attribute name="type" type="xs:string" use="required"
+					fixed="out" />
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="type-in-socket">
+		<xs:complexContent>
+			<xs:restriction base="cmn:type-base-inSocket">
+				<xs:attribute name="id" type="xs:string" use="required" />
+				<xs:attribute name="type" type="cmn:type-lookup-insocket" use="required" />
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="lookup-base">
+		<xs:complexContent>
+			<xs:restriction base="cmn:type-operations-component">
+				<xs:sequence>
+					<xs:element name="inSocket" type="type-in-socket"
+						minOccurs="2" maxOccurs="2" />
+					<xs:element name="outSocket" type="type-out-socket"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" maxOccurs="1" />	
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>
