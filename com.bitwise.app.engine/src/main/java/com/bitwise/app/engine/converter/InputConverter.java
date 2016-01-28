@@ -53,7 +53,8 @@ public abstract class InputConverter extends Converter {
 		}else{
 			typeBaseRecord.setName("Internal");
 			typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().addAll(getFieldOrRecord(schema.getGridRow()));	
-		}}
+		}}else
+			typeBaseRecord.setName("Internal");
 		return typeBaseRecord;
 	}
 
