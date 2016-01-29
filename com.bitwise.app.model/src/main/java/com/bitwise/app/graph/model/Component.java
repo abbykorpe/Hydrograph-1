@@ -411,6 +411,11 @@ public abstract class Component extends Model {
 	public List<Link> getSourceConnections() {
 		return outputLinks;
 	}
+	
+	/* add comments as function called by gef */
+	public void  setSourceConnections(List<Link> links) {
+		 outputLinks=(ArrayList<Link>) links;
+	}
 
 	public List<Link> getTargetConnections() {
 		return inputLinks;
