@@ -1,9 +1,11 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import org.eclipse.swt.widgets.Text;
 
+import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
@@ -28,7 +30,7 @@ public abstract class AbstractWidget {
 	protected ELTComponenetProperties allComponenetProperties;
 	private String toolTipErrorMessage =  null;
 	private Component component;
-	
+	private Schema schemaForInternalPapogation;
 	protected Component getComponent() {
 		return component;
 	}
@@ -41,6 +43,15 @@ public abstract class AbstractWidget {
 	
 	}
 	
+	
+	public Schema getSchemaForInternalPapogation() {
+		return schemaForInternalPapogation;
+	}
+
+	public void setSchemaForInternalPapogation(Schema schemaForInternalPapogation) {
+		this.schemaForInternalPapogation = schemaForInternalPapogation;
+	}
+
 	/**
 	 * Instantiates a new abstract widget.
 	 * 
@@ -104,4 +115,7 @@ public abstract class AbstractWidget {
 		this.allComponenetProperties = eltComponenetProperties;
 	}
 
+	public void refresh(){
+				
+	}
 }

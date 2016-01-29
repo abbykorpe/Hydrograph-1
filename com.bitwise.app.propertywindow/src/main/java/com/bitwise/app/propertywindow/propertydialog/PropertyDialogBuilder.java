@@ -2,12 +2,16 @@ package com.bitwise.app.propertywindow.propertydialog;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
@@ -17,6 +21,8 @@ import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 
 import com.bitwise.app.cloneableinterface.IDataStructure;
+import com.bitwise.app.common.datastructure.property.GridRow;
+import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.propertywindow.factory.WidgetFactory;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
@@ -25,6 +31,7 @@ import com.bitwise.app.propertywindow.property.ELTComponenetProperties;
 import com.bitwise.app.propertywindow.property.Property;
 import com.bitwise.app.propertywindow.utils.WordUtils;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroup;
 
@@ -44,6 +51,8 @@ public class PropertyDialogBuilder {
 	private ELTComponenetProperties eltComponenetProperties;
 	private PropertyDialogButtonBar propertyDialogButtonBar;	
 	private Component component;
+	private AbstractWidget schemaWidget;
+	private Schema setSchemaForInternalPapogation;
 
 	/**
 	 * Instantiates a new property dialog builder.
@@ -66,6 +75,16 @@ public class PropertyDialogBuilder {
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
 		this.component = component;
 		eltWidgetList= new ArrayList<>();
+		
+		initSchemaObject();
+	}
+
+	private void initSchemaObject() {
+		setSchemaForInternalPapogation = new Schema();
+		setSchemaForInternalPapogation.setIsExternal(false);
+		List<GridRow> gridRows = new ArrayList<>();
+		setSchemaForInternalPapogation.setGridRow(gridRows);
+		setSchemaForInternalPapogation.setExternalSchemaPath("");
 	}
 	
 	/**
@@ -75,6 +94,16 @@ public class PropertyDialogBuilder {
 		TabFolder tabFolder = addTabFolderToPropertyWindow();
         addTabsInTabFolder(tabFolder);
       
+        tabFolder.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			
+				if(schemaWidget!=null){
+					schemaWidget.refresh();
+				}
+			}
+		});
 		
 	}
 
@@ -155,8 +184,13 @@ public class PropertyDialogBuilder {
 		if(property.getPropertyName().equalsIgnoreCase("join_config"));
 		widget.setEltComponenetProperties(eltComponenetProperties);
 		
+		widget.setSchemaForInternalPapogation(setSchemaForInternalPapogation);
 		widget.setComponent(component);
 		widget.attachToPropertySubGroup(subGroupContainer);
+		
+		if(widget instanceof ELTSchemaGridWidget){
+			schemaWidget = widget;
+		}
 		
 		return widget;
 	}
