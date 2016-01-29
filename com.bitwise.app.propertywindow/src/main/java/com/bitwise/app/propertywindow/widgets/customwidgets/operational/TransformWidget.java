@@ -140,7 +140,7 @@ public class TransformWidget extends AbstractWidget {
 			addMapFieldsToSchema(mapFields);
 			
 		}
-		
+		System.out.println(getSchemaForInternalPapogation());
 	}
 	
 	
