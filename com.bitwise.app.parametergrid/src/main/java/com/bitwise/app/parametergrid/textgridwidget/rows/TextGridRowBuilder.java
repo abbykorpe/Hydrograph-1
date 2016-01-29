@@ -10,9 +10,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import com.bitwise.app.common.util.SWTResourceManager;
 import com.bitwise.app.parametergrid.textgridwidget.columns.TextGridColumnLayout;
 import com.bitwise.app.parametergrid.textgridwidget.columns.TextGridRowLayout;
+import com.bitwise.app.parametergrid.utils.SWTResourceManager;
 
 public class TextGridRowBuilder {
 	private TextGridRowLayout textGridRow;
