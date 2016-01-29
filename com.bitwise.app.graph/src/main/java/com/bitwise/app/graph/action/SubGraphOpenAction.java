@@ -1,12 +1,14 @@
 package com.bitwise.app.graph.action;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.action.IAction;
@@ -22,10 +24,13 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.graph.command.ComponentCreateCommand;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
+import com.bitwise.app.graph.model.Link;
+import com.bitwise.app.graph.model.components.SubgraphComponent;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -112,9 +117,69 @@ public class SubGraphOpenAction extends SelectionAction{
 				editor.viewer.addSelectionChangedListener(editor.createISelectionChangedListener());
 				 
 				if(container.getChildren().size()==0 && bList.size()!=0){
+				   	SubgraphComponent subgraphComponent= new SubgraphComponent();
+				   	
+/*					ComponentCreateCommand createComponent = new ComponentCreateCommand(subgraphComponent,container,new Rectangle(((Component)bList.get(0)).getLocation(),((Component)bList.get(0)).getSize()));
+					createComponent.execute(); 
+*/				Component component=null;
+				String type =(((ComponentEditPart) obj).getCastedModel()).getProperties().get("type").toString();
+				int i=0;
+					if (type.equalsIgnoreCase("input")) { 
 					for(Object l:bList)
-					{
+					{						
+						component=(Component) l;
+						List<Link> links = ((Component) l).getSourceConnections();
+						if(links.size()<=0){
+								Link linkNew = new Link();
+								linkNew.setSource(component);
+								linkNew.setTarget(subgraphComponent);
+								linkNew.setSourceTerminal("out0");
+								linkNew.setTargetTerminal("out"+i);
+								component.connectOutput(linkNew);
+								subgraphComponent.connectInput(linkNew);
+								i++;
+							}
+								
+//						((Component) l).setSourceConnections(newLinks); 
 						container.addChild((Component) l);
+					}
+				   	subgraphComponent.setProperties(new LinkedHashMap<String,Object>());
+				   	subgraphComponent.getProperties().put("name", "XYZ");
+				   	subgraphComponent.setComponentLabel("XYZ");
+				   	subgraphComponent.getProperties().put("type", "outputsubgraph");			
+					subgraphComponent.outputPortSettings(i);				   	
+					subgraphComponent.setParent(container);
+					container.addChild(subgraphComponent);
+
+					} 
+					
+					if (type.equalsIgnoreCase("output")) { 
+					for(Object l:bList)
+					{						
+						component=(Component) l;
+						List<Link> links = ((Component) l).getTargetConnections();
+						if(links.size()<=0){
+								Link linkNew = new Link();
+								linkNew.setTarget(component);
+								linkNew.setSource(subgraphComponent);
+								linkNew.setTargetTerminal("in0");
+								linkNew.setSourceTerminal("in"+i);
+								component.connectInput(linkNew);
+								subgraphComponent.connectOutput(linkNew);
+								i++;
+							}
+								
+//						((Component) l).setSourceConnections(newLinks); 
+						container.addChild((Component) l);
+					}
+				   	subgraphComponent.setProperties(new LinkedHashMap<String,Object>());
+				   	subgraphComponent.getProperties().put("name", "XYZ");
+				   	subgraphComponent.setComponentLabel("XYZ");
+				   	subgraphComponent.getProperties().put("type", "inputsubgraph");			
+					subgraphComponent.inputPortSettings(i);				   	
+					subgraphComponent.setParent(container);
+					container.addChild(subgraphComponent);
+
 					}
 				}
 

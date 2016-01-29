@@ -106,8 +106,8 @@ public class SubGraphUtility {
 			link.setTarget(edComponentEditPart.getCastedModel());
 			link.setTargetTerminal("in"+i);
 						
-		/*	oldTarget.freeInputPort(link.getTargetTerminal());
-			oldTarget.disconnectInput(link); */
+			oldTarget.freeInputPort(link.getTargetTerminal());
+			oldTarget.disconnectInput(link); 
 
 			link.attachTarget();
 			edComponentEditPart.getCastedModel().engageInputPort("in"+i);
@@ -127,13 +127,12 @@ public class SubGraphUtility {
 			Component oldSource=outLinks.get(i).getSource();
 			Link link = outLinks.get(i);
 			link.detachSource();
-			link.getSource().freeOutputPort(link.getSourceTerminal());
-			
+	
 			link.setSource(edComponentEditPart.getCastedModel());
 			link.setSourceTerminal("out"+i);
-			/*oldSource.freeOutputPort(link.getTargetTerminal());
-			oldSource.disconnectOutput(link); */
-			
+			oldSource.freeOutputPort(link.getTargetTerminal());
+			oldSource.disconnectOutput(link); 
+	
 			link.attachSource();
 			edComponentEditPart.getCastedModel().engageOutputPort("out"+i);
 			edComponentEditPart.refresh();  
