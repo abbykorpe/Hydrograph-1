@@ -24,7 +24,6 @@ public class CanvasDataAdpater {
 		Matcher matcher = parameterPattren.matcher(canvasData);
 		while (matcher.find()) {
 		    String parameter = matcher.group(1);
-		    //System.out.println(parameter);
 		    parameterList.add(parameter);
 		}
 	}
