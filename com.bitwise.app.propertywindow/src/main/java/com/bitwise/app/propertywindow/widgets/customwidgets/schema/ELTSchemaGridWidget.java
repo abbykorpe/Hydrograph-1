@@ -607,6 +607,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	}
 	@Override
 	public void refresh() {
+		
 		Schema schema = getSchemaForInternalPapogation();
 		if (this.properties != null) {
 			Schema originalSchema = (Schema) this.properties;
@@ -628,21 +629,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					originalSchema.getGridRow().add(row.copy());
 				}
 				
-				
-				
-				/*if(!existingFields.contains(row)){
-					originalSchema.getGridRow().add(row.copy());
-				}else{
-					if(existingFieldNames.contains(row.getFieldName().trim())){						
-						for(int index=0;index < originalSchema.getGridRow().size();index++){
-							if(originalSchema.getGridRow().get(index).getFieldName().equals(row.getFieldName().trim())){
-								originalSchema.getGridRow().set(index, row.copy());
-							}
-						}
-					}
-				}*/
-				/*if(!existingFields.contains(row.getFieldName().trim()))
-					originalSchema.getGridRow().add(row.copy());*/
 			}
 			table.clearAll();
 			if (!originalSchema.getIsExternal()) {
@@ -656,17 +642,20 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 			
 		}else{
-			this.properties = schema.clone();
-			table.clearAll();
-			if (!schema.getIsExternal()) {
-				if (tableViewer != null) {
-					schemaGridRowList = schema.getGridRow();
-					tableViewer.setInput(schemaGridRowList);
-					tableViewer.refresh();
-					isExternal = false;
-					toggleTextBox(true);
+			//this.properties = schema.clone();
+			if(schema.getGridRow().size()!=0){
+				table.clearAll();
+				if (!schema.getIsExternal()) {
+					if (tableViewer != null) {
+						schemaGridRowList = schema.getGridRow();
+						tableViewer.setInput(schemaGridRowList);
+						tableViewer.refresh();
+						isExternal = false;
+						toggleTextBox(true);
+					}
 				}
 			}
+			
 		}
 	}
 
