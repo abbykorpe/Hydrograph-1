@@ -8,7 +8,7 @@
  * Contributors:
  *    Google, Inc. - initial API and implementation
  *******************************************************************************/
-package com.bitwise.app.common.util;
+package com.bitwise.app.propertywindow.utils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
