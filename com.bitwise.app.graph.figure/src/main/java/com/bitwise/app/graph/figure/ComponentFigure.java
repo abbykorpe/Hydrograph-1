@@ -613,6 +613,7 @@ public class ComponentFigure extends Figure implements Validator{
 		if(display != null && timer != null){
 			display.timerExec(-1,timer);
 		}
+
 	}
 
 }
