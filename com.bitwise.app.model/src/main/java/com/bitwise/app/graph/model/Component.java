@@ -764,21 +764,21 @@ public abstract class Component extends Model {
 	
 	public void inputPortSettings(int newPortCount) {
        changeInPortCount(newPortCount);
-		for (int i = 0; i < (newPortCount - 1); i++) {
-			Port inPort = new Port("in" + (i + 1), "in" + (i + 1), "in"
-					+ (i + 1), this, newPortCount, "in", (i + 1));
-			ports.put("in" + (i + 1), inPort);
+		for (int i = 0; i < (newPortCount); i++) {
+			Port inPort = new Port("in" + (i), "in" + (i), "in"
+					+ (i), this, newPortCount, "in", (i));
+			ports.put("in" + (i), inPort);
 			firePropertyChange("Component:add", null, inPort);
 		}
 	}
 	
 	public void outputPortSettings(int newPortCount) {
   changeOutPortCount(newPortCount);
-		for (int i = 0; i < (newPortCount - 1); i++) {
+		for (int i = 0; i < (newPortCount); i++) {
 
-			Port outPort = new Port("out" + (i + 1), "out" + (i + 1), "out"
-					+ (i + 1), this, newPortCount, "out", (i + 1));
-			ports.put("out" + (i + 1), outPort);
+			Port outPort = new Port("out" + (i), "out" + (i), "out"
+					+ (i), this, newPortCount, "out", (i));
+			ports.put("out" + (i), outPort);
 			firePropertyChange("Component:add", null, outPort);
 		}
 	} 
