@@ -2,8 +2,9 @@ package com.bitwise.app.engine.ui.converter.impl;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.slf4j.Logger;
@@ -81,14 +82,14 @@ public class AggregateUiConverter extends TransformUiConverter {
 		return secondaryKeyMap;
 	}
 
-	private Set<String> getPrimaryKeys() {
+	private List<String> getPrimaryKeys() {
 		LOGGER.debug("Fetching Aggregate-Primary-Key-Properties for -{}", componentName);
-		HashSet<String> primaryKeySet = null;
+		List<String> primaryKeySet = null;
 		aggregate = (Aggregate) typeBaseComponent;
 		TypePrimaryKeyFields typePrimaryKeyFields = aggregate.getPrimaryKeys();
 		if (typePrimaryKeyFields != null) {
 
-			primaryKeySet = new HashSet<String>();
+			primaryKeySet = new LinkedList<String>();
 			for (TypeFieldName fieldName : typePrimaryKeyFields.getField()) {
 				primaryKeySet.add(fieldName.getName());
 			}
