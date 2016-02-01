@@ -148,10 +148,12 @@ public class ELTLookupMapWizard extends Dialog {
 		outputTableViewer.getTable().addMouseListener(new MouseAdapter() {
 	    	@Override
 			public void mouseDoubleClick(MouseEvent e) {
-	    		joinOutputProperty(outputTableViewer);
+	    		joinOutputProperty(outputTableViewer,null);
 			}
 			@Override
-			public void mouseDown(MouseEvent e) {}
+			public void mouseDown(MouseEvent e) {
+				validateDuplicatesInOutputField();
+			}
 		});
 		eltswtWidgets.createTableColumns(outputTableViewer.getTable(), COLUMN_NAME, 196);
 	    CellEditor[] editors = eltswtWidgets.createCellEditorList(outputTableViewer.getTable(),2);
@@ -282,7 +284,7 @@ public class ELTLookupMapWizard extends Dialog {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				joinOutputProperty(outputTableViewer);
+				joinOutputProperty(outputTableViewer,null);
 			}
 		});	 
 		 
@@ -405,7 +407,7 @@ public class ELTLookupMapWizard extends Dialog {
 		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
 	}
 	
-	private boolean validation(){
+	private boolean validation(String outFieldValue, String str){
 		int propertycount = 0;
 		int propertyValuecount = 0;
 		for(LookupMapProperty join : joinOutputList){
@@ -427,6 +429,11 @@ public class ELTLookupMapWizard extends Dialog {
 				
 			propertycount++;
 			propertyValuecount++;
+		}
+		for (LookupMapProperty join : joinOutputList) {
+			if (join.getSource_Field().equalsIgnoreCase(str)) {
+				return false;
+			}
 		}
 		return true;
 	}
@@ -488,7 +495,7 @@ public class ELTLookupMapWizard extends Dialog {
 						okButton.setEnabled(true);
 					}
 				}
-				
+				validateDuplicatesInOutputField();
 				return null;
 			}
 		};
@@ -584,6 +591,7 @@ public class ELTLookupMapWizard extends Dialog {
 								propertyError.setText(Messages.OUTPUT_FIELD_EXISTS);
 								propertyError.setVisible(true);
 								okButton.setEnabled(false);
+								validateDuplicatesInOutputField();
 								return "ERROR";
 							} 
 							else{
@@ -591,30 +599,92 @@ public class ELTLookupMapWizard extends Dialog {
 								okButton.setEnabled(true);
 							}
 						}
+						validateDuplicatesInOutputField();
 						return null;
 					}
 				};
+				validateDuplicatesInOutputField();
 				return propertyValidator;
 			}
 			
-	private  void joinOutputProperty(TableViewer viewer){
-		LookupMapProperty property = new LookupMapProperty();
-		if(joinOutputList.size() != 0){
-			if(!validation())
-				return;
-		property.setSource_Field("");
-		property.setOutput_Field("");
-		joinOutputList.add(property);
-		viewer.refresh();
-		viewer.editElement(viewer.getElementAt(joinOutputList.size()-1), 0);
-		} else {
-			property.setSource_Field("");
-			property.setOutput_Field("");
-			joinOutputList.add(property);
-			viewer.refresh();
-			viewer.editElement(property, 0);
-		}
-	}
+//	private  void joinOutputProperty(TableViewer viewer){
+//		LookupMapProperty property = new LookupMapProperty();
+//		if(joinOutputList.size() != 0){
+//			if(!validation())
+//				return;
+//		property.setSource_Field("");
+//		property.setOutput_Field("");
+//		joinOutputList.add(property);
+//		viewer.refresh();
+//		viewer.editElement(viewer.getElementAt(joinOutputList.size()-1), 0);
+//		} else {
+//			property.setSource_Field("");
+//			property.setOutput_Field("");
+//			joinOutputList.add(property);
+//			viewer.refresh();
+//			viewer.editElement(property, 0);
+//		}
+//	}
+			
+			private void joinOutputProperty(TableViewer viewer, String sourceFieldValue) {
+
+				String outputFieldValue = null;
+				if (sourceFieldValue == null) {
+					sourceFieldValue = "";
+					outputFieldValue = "";
+				} else {
+					outputFieldValue = sourceFieldValue.split("\\.")[1];
+				}
+				LookupMapProperty property = new LookupMapProperty();
+
+				if (joinOutputList.size() != 0) {
+					if (!validation(outputFieldValue, sourceFieldValue))
+						return;
+					property.setSource_Field(sourceFieldValue);
+					property.setOutput_Field(outputFieldValue);
+					joinOutputList.add(property);
+					viewer.refresh();
+					viewer.editElement(viewer.getElementAt(joinOutputList.size() - 1),
+							0);
+				} else {
+					property.setSource_Field(sourceFieldValue);
+					property.setOutput_Field(outputFieldValue);
+					joinOutputList.add(property);
+					viewer.refresh();
+					viewer.editElement(property, 0);
+				}
+			}
+			private void validateDuplicatesInOutputField()
+			{
+				int flag=0;
+				TableItem[] items = outputTableViewer.getTable().getItems();
+				LookupMapProperty[] objectsInGui = new LookupMapProperty[items.length];
+				for (int i = 0; i < items.length; i++) {
+					objectsInGui[i] = (LookupMapProperty) items[i].getData();
+					for(int j = i+1; j < items.length;j++)
+					{
+						if(i!=j &&((LookupMapProperty) items[i].getData()).getOutput_Field().equalsIgnoreCase(((LookupMapProperty) items[j].getData()).getOutput_Field()))
+						{
+							flag=1;
+							break; 
+						}
+					}
+
+				}
+				if(flag==1)
+				{
+					okButton.setEnabled(false);
+					propertyError.setText(Messages.OUTPUT_FIELD_EXISTS);
+					propertyError.setVisible(true);
+				}else
+				{
+					if(okButton!=null&&propertyError!=null)
+					{
+					okButton.setEnabled(true);
+					propertyError.setVisible(false);
+					}
+				}
+			}
 	
 	private void addRowToTable(TableViewer viewer, List<FilterProperties> joinInputList){
 		FilterProperties join = new FilterProperties();
@@ -648,37 +718,13 @@ public class ELTLookupMapWizard extends Dialog {
 		        	return;
 		        }
 		        if(isSingleColumn){
-		        	List<String> tempList = new ArrayList<>();
-		        	
-		        	LookupMapProperty field = new LookupMapProperty();
-		        	String[] data = ((String)event.data).split(Pattern.quote("."));
-		        	if(!data[1].isEmpty()){
-		        		Matcher match = Pattern.compile(Constants.REGEX).matcher(data[1]);
-						if(match.matches()){
-							field.setSource_Field((String)event.data);
-							field.setOutput_Field(data[1]);	
-							
-							if(!listOfFields.contains(field))
-								listOfFields.add(field);
-								tableViewer.refresh(); 
-							
-							for(LookupMapProperty lookupMapProperty : joinOutputList){
-								String outputField = lookupMapProperty.getOutput_Field();
-								if(!tempList.contains(outputField)){
-									propertyError.setVisible(false);
-									tempList.add(outputField);
-									tableViewer.refresh(); 
-								}else{
-									propertyError.setVisible(true);
-									propertyError.setText(Messages.OUTPUT_FIELD_EXISTS);
-									outputTableViewer.refresh();
-									outputTableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
-								}
-							}
-		        	}
-		        	}
+		        	String[] dropData = ((String) event.data).split(Pattern.quote("#"));
+					for (String data : dropData)
+						joinOutputProperty(tableViewer, data);
+					validateDuplicatesInOutputField();
 		        }
 		      } 
 		});
 	}
+	
 }
