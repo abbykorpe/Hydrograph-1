@@ -71,7 +71,7 @@ public class SubGraphUtility {
 	public static IFile doSaveAsSubGraph(){
 		
 		IFile file=openSubGraphSaveDialog();
-
+       
 		if(file!=null){
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			try {
@@ -80,6 +80,7 @@ public class SubGraphUtility {
 					file.setContents(new ByteArrayInputStream(out.toByteArray()), true,	false, null);
 				else
 					file.create(new ByteArrayInputStream(out.toByteArray()),true, null);
+				    getCurrentEditor().genrateTargetXml(file);
 			} catch (CoreException  | IOException ce) {
 				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n"+ce.getMessage());
 			}
