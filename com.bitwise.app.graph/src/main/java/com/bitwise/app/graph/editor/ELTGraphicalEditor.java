@@ -1030,7 +1030,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				fileJob.setResourceAttributes(attributes);
 				fileXml.setResourceAttributes(attributes);
 			} catch (CoreException e) {
-				e.printStackTrace();
+				logger.error("Unable to disable running job resources", e);
 			}
 		    
 		}
@@ -1059,7 +1059,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			fileJob.setResourceAttributes(attributes);
 			fileXml.setResourceAttributes(attributes);
 		} catch (CoreException e) {
-			e.printStackTrace();
+			logger.error("Unable to enable locked job resources",e);
 		}
 		
 	}

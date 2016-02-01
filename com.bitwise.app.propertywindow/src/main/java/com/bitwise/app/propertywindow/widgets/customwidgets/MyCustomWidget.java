@@ -80,15 +80,6 @@ public class MyCustomWidget extends AbstractWidget{
 		
 		ListenerHelper listenerHelper = new ListenerHelper("WordUtils", wordUtils);
 		
-		//enableOkButton(false);
-		try {
-			/*eltDefaultButton.attachListener(listenerFactory.getListener("ELTHelloTestListener"),propertyDialogButtonBar, null,eltDefaultTextBox.getSWTWidgetControl(),eltDefaultButton.getSWTWidgetControl());
-			eltDefaultButton.attachListener(listenerFactory.getListener("ELTHiTestListener"), propertyDialogButtonBar,  null);
-			eltDefaultTextBox.attachListener(listenerFactory.getListener("MyCustomWidgetTextChange"),propertyDialogButtonBar,  listenerHelper,eltDefaultTextBox.getSWTWidgetControl());*/
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 	}
 
 	private void populateWidget(){	
@@ -97,12 +88,10 @@ public class MyCustomWidget extends AbstractWidget{
 			textBox.setText((String) properties);
 		else
 			textBox.setText("");
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		// TODO Auto-generated method stub
 		LinkedHashMap<String, Object> property=new LinkedHashMap<>();
 		property.put(propertyName, textBox.getText());
 		return property;

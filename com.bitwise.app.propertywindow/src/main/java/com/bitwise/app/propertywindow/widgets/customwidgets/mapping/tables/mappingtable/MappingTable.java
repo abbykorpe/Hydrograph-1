@@ -144,9 +144,7 @@ public class MappingTable {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				System.out.println("column selected");
-				
+				logger.debug("column selected");
 				if(rowChecked){	
 					tblclmnInputFields_0.setImage(uncheckedImage);
 					rowChecked = false;
@@ -779,12 +777,12 @@ public class MappingTable {
 		for(MappingSheetRow mappingSheetRow : mappingSheetRows){
 			TableItem item = addRow(table);
 			
-			((Text)item.getData("in")).setText(mappingSheetRow.getImputFields().toString().replace("[","").replace("]", ""));
+			((Text)item.getData("in")).setText(mappingSheetRow.getImputFields().toString().replace("[","").replace("]", "").replace(" ", ""));
 			if(mappingSheetRow.getOperationClassProperty() != null){
 				((Text)item.getData("OpClass")).setText(mappingSheetRow.getOperationClassProperty().getOperationClassPath());
 				((Text)item.getData("OpClass")).setData(mappingSheetRow.getOperationClassProperty());
 			}			
-			((Text)item.getData("out")).setText(mappingSheetRow.getOutputList().toString().replace("[","").replace("]", ""));
+			((Text)item.getData("out")).setText(mappingSheetRow.getOutputList().toString().replace("[","").replace("]", "").replace(" ", ""));
 			
 			validateRow((RowData)((Text)item.getData("out")).getData("rowData"));
 		}

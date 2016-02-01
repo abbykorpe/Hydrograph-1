@@ -8,7 +8,6 @@ import com.bitwise.app.cloneableinterface.IDataStructure;
 public class ATMapping implements IDataStructure{
 	private List<InputField> inputFields;
 	private List<MappingSheetRow> mappingSheetRows;
-	
 	public ATMapping() {
 		inputFields = new LinkedList<>();
 		mappingSheetRows = new LinkedList<>();
