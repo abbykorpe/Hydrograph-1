@@ -27,18 +27,22 @@ import org.eclipse.swt.widgets.Text;
 
 public class ELTSWTWidgets {
 
-	public ELTSWTWidgets(){
+	public ELTSWTWidgets() {
 
 	}
 
-	public TableViewer createTableViewer(Composite composite,String[] prop, int[] bounds, int columnWidth,IStructuredContentProvider iStructuredContentProvider,ITableLabelProvider iTableLabelProvider){
-		final TableViewer tableViewer= new TableViewer(composite, SWT.BORDER |SWT.MULTI | SWT.FULL_SELECTION | SWT.VIRTUAL);
+	public TableViewer createTableViewer(Composite composite, String[] prop,
+			int[] bounds, int columnWidth,
+			IStructuredContentProvider iStructuredContentProvider,
+			ITableLabelProvider iTableLabelProvider) {
+		final TableViewer tableViewer = new TableViewer(composite, SWT.BORDER
+				| SWT.MULTI | SWT.FULL_SELECTION | SWT.VIRTUAL);
 
 		Table table = tableViewer.getTable();
-		table.setBounds(bounds[0],bounds[1],bounds[2],bounds[3]);
+		table.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		tableViewer.setContentProvider(iStructuredContentProvider);
-		tableViewer.setLabelProvider( iTableLabelProvider);
-		tableViewer.setColumnProperties(prop); 
+		tableViewer.setLabelProvider(iTableLabelProvider);
+		tableViewer.setColumnProperties(prop);
 		tableViewer.getTable().addTraverseListener(new TraverseListener() {
 
 			@Override
@@ -59,38 +63,41 @@ public class ELTSWTWidgets {
 		table.setVisible(true);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
-		/*createTableColumns(table,prop, columnWidth);
-		CellEditor[] editors =createCellEditorList(table,1); 
-		tableViewer.setCellEditors(editors);*/
+		/*
+		 * createTableColumns(table,prop, columnWidth); CellEditor[] editors
+		 * =createCellEditorList(table,1); tableViewer.setCellEditors(editors);
+		 */
 
 		return tableViewer;
 	}
 
-	public  void createTableColumns(Table table,String[] fields, int width){
+	public void createTableColumns(Table table, String[] fields, int width) {
 		for (String field : fields) {
-			TableColumn tableColumn= new TableColumn(table, SWT.CENTER);
+			TableColumn tableColumn = new TableColumn(table, SWT.CENTER);
 			tableColumn.setText(field);
 			tableColumn.setWidth(width);
-			//tableColumn.pack();
+			// tableColumn.pack();
 		}
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
 	}
 
-	public  CellEditor[] createCellEditorList(Table table,int size){
+	public CellEditor[] createCellEditorList(Table table, int size) {
 		CellEditor[] cellEditor = new CellEditor[size];
-		for(int i=0;i<size;i++)
-			addTextEditor(table,cellEditor, i);
+		for (int i = 0; i < size; i++)
+			addTextEditor(table, cellEditor, i);
 
 		return cellEditor;
 	}
 
-	protected void addTextEditor(Table table, CellEditor[] cellEditor, int position){
-		cellEditor[position]=new TextCellEditor(table, SWT.COLOR_GREEN);
+	protected void addTextEditor(Table table, CellEditor[] cellEditor,
+			int position) {
+		cellEditor[position] = new TextCellEditor(table, SWT.COLOR_GREEN);
 	}
 
-	public Label labelWidget(Composite parent, int style, int[] bounds, String value, Image image){
+	public Label labelWidget(Composite parent, int style, int[] bounds,
+			String value, Image image) {
 		Label label = new Label(parent, style);
 		label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		label.setText(value);
@@ -99,7 +106,8 @@ public class ELTSWTWidgets {
 		return label;
 	}
 
-	public Button buttonWidget(Composite parent, int style, int[] bounds, String value){
+	public Button buttonWidget(Composite parent, int style, int[] bounds,
+			String value) {
 		Button button = new Button(parent, style);
 		button.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		button.setText(value);
@@ -107,7 +115,8 @@ public class ELTSWTWidgets {
 		return button;
 	}
 
-	public Text textBoxWidget(Composite parent, int style,int[] bounds, String text, boolean value){
+	public Text textBoxWidget(Composite parent, int style, int[] bounds,
+			String text, boolean value) {
 		Text textWidget = new Text(parent, style);
 		textWidget.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		textWidget.setText(text);
@@ -116,38 +125,39 @@ public class ELTSWTWidgets {
 		return textWidget;
 	}
 
-	public Combo comboWidget(Composite parent, int style, int[] bounds, String[] items, int selectionIndex){
+	public Combo comboWidget(Composite parent, int style, int[] bounds,
+			String[] items, int selectionIndex) {
 		Combo comboBox = new Combo(parent, style);
 		comboBox.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		comboBox.setItems(items);
 		comboBox.select(selectionIndex);
 
-		return comboBox;		
+		return comboBox;
 	}
 
-	public void applyDragFromTableViewer(Control sourceControl, int index){
+	public void applyDragFromTableViewer(Control sourceControl, int index) {
 		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
 		final String portLabel = "in" + index + ".";
 		int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK;
-		final Table table =(Table)sourceControl;
+		final Table table = (Table) sourceControl;
 		DragSource source = new DragSource(table, operations);
 		source.setTransfer(types);
 		final String[] columnData = new String[1];
 		source.addDragListener(new DragSourceAdapter() {
 			public void dragSetData(DragSourceEvent event) {
 				// Set the data to be the first selected item's text
-				event.data = formatDataToTransfer(portLabel,table.getSelection());
+				event.data = dataFormatter(portLabel, table.getSelection());
 			}
 		});
 
 	}
-	private String formatDataToTransfer(String portLabel, TableItem[] selectedTableItems) {
+
+	private String dataFormatter(String portLabel, TableItem[] selectedTableItems) {
 		StringBuffer buffer = new StringBuffer();
 		for (TableItem tableItem : selectedTableItems) {
-			buffer.append(portLabel+tableItem.getText() + "#");
+			buffer.append(portLabel + tableItem.getText() + "#");
 		}
 		return buffer.toString();
 	}
-
 
 }
