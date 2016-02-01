@@ -610,9 +610,9 @@ public class ComponentFigure extends Figure implements Validator{
 	}
 
 	public void terminateToolTipTimer() {
-
-		if(display!=null && timer!=null)
-		display.timerExec(-1,timer);
+		if(display != null && timer != null){
+			display.timerExec(-1,timer);
+		}
 	}
 
 }
