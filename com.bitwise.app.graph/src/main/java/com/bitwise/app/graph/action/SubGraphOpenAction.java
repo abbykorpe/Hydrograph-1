@@ -144,8 +144,8 @@ public class SubGraphOpenAction extends SelectionAction{
 						container.addChild((Component) l);
 					}
 				   	subgraphComponent.setProperties(new LinkedHashMap<String,Object>());
-				   	subgraphComponent.getProperties().put("name", "XYZ");
-				   	subgraphComponent.setComponentLabel("XYZ");
+				   	subgraphComponent.getProperties().put("name", "subgraph");
+				   	subgraphComponent.setComponentLabel("subgraph");
 				   	subgraphComponent.getProperties().put("type", "outputsubgraph");			
 					subgraphComponent.outputPortSettings(i);				   	
 					subgraphComponent.setParent(container);
@@ -173,8 +173,8 @@ public class SubGraphOpenAction extends SelectionAction{
 						container.addChild((Component) l);
 					}
 				   	subgraphComponent.setProperties(new LinkedHashMap<String,Object>());
-				   	subgraphComponent.getProperties().put("name", "XYZ");
-				   	subgraphComponent.setComponentLabel("XYZ");
+				   	subgraphComponent.getProperties().put("name", "subgraph");
+				   	subgraphComponent.setComponentLabel("subgraph");
 				   	subgraphComponent.getProperties().put("type", "inputsubgraph");			
 					subgraphComponent.inputPortSettings(i);				   	
 					subgraphComponent.setParent(container);
