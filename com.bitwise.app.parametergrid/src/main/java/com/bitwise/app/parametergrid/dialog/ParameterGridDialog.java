@@ -485,7 +485,6 @@ public class ParameterGridDialog extends Dialog {
 	private boolean isValidParameterFile(String newParameterFile) {
 		boolean isValidParameterFile = true;
 		try{
-			//System.out.println(getAllLines().toString());
 			List<String> fileContents = getAllLines(newParameterFile);
 			for(String line: fileContents){
 				if(!line.startsWith("#") && !line.isEmpty()){
