@@ -44,7 +44,6 @@ public class ATMapping implements IDataStructure{
 		inputFields.addAll(this.inputFields);
 		
 		for(MappingSheetRow mappingSheetRow : this.mappingSheetRows){
-			//System.out.println((MappingSheetRow) mappingSheetRow.clone());
 			if(this.mappingSheetRows!=null)
 			mappingSheetRows.add((MappingSheetRow) mappingSheetRow.clone());
 		}
