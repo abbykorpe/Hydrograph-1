@@ -67,33 +67,38 @@ public class ELTLookupMapWizard extends Dialog {
 	private TableViewer outputTableViewer;
 	private Button okButton;
 	private TableViewer viewer1 = null;
-    private TableViewer viewer2 = null;
+	private TableViewer viewer2 = null;
 	private TableViewer[] inputTableViewer = new TableViewer[2];
-	
+
 	public static String PROPERTY_NAME = "Source Field";
 	public static String PROPERTY_VALUE = "Output Field";
 	public static final String OPERATIONAL_INPUT_FIELD = "Field Name";
-	
-	private String[] INPUT_COLUMN_NAME = {OPERATIONAL_INPUT_FIELD};
-	private String[] COLUMN_NAME = {PROPERTY_NAME, PROPERTY_VALUE};
-	
+
+	private String[] INPUT_COLUMN_NAME = { OPERATIONAL_INPUT_FIELD };
+	private String[] COLUMN_NAME = { PROPERTY_NAME, PROPERTY_VALUE };
+
 	private List<LookupMapProperty> joinOutputList;
 	private List<FilterProperties> joinInputList1;
 	private List<FilterProperties> joinInputList2;
-	private List<List<FilterProperties>> joinInputList  = new ArrayList<>();
+	private List<List<FilterProperties>> joinInputList = new ArrayList<>();
 	private ELTSWTWidgets eltswtWidgets = new ELTSWTWidgets();
 	private LookupMappingGrid lookupPropertyGrid;
+
 	/**
 	 * Create the dialog.
+	 * 
 	 * @param parentShell
 	 */
-	public ELTLookupMapWizard(Shell parentShell, LookupMappingGrid lookupPropertyGrid) {
+	public ELTLookupMapWizard(Shell parentShell,
+			LookupMappingGrid lookupPropertyGrid) {
 		super(parentShell);
-		setShellStyle(SWT.CLOSE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
+		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.lookupPropertyGrid = lookupPropertyGrid;
 	}
+
 	/**
 	 * Create contents of the dialog.
+	 * 
 	 * @param parent
 	 */
 	@Override
@@ -106,213 +111,277 @@ public class ELTLookupMapWizard extends Dialog {
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
-		
+
 		Composite composite = new Composite(container, SWT.None);
-		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false,
+				false, 1, 1);
 		gd_composite.heightHint = 574;
 		gd_composite.widthHint = 257;
 		composite.setLayoutData(gd_composite);
-		
-		if(lookupPropertyGrid != null){
-	    	if(lookupPropertyGrid.getLookupInputProperties()!= null && !lookupPropertyGrid.getLookupInputProperties().isEmpty()){
-	    		joinInputList1 = lookupPropertyGrid.getLookupInputProperties().get(0);
-	    		joinInputList2 = lookupPropertyGrid.getLookupInputProperties().get(1);
-	    	}
-	    	 else{
-	    		 joinInputList1 = new ArrayList<>();
-	    		 joinInputList2 = new ArrayList<>();
-	 	    }
-	    	viewer1= createComposite(composite,10,joinInputList1, 0);
-	    	viewer2 = createComposite(composite, 290,joinInputList2, 1);
-	    	
-	    	if(lookupPropertyGrid.getLookupMapProperties() != null && !lookupPropertyGrid.getLookupMapProperties().isEmpty()){
-	    		joinOutputList = lookupPropertyGrid.getLookupMapProperties();
-	    	}
-	    	else{
-	    		joinOutputList = new ArrayList<>();
-	    	}
-	    }
-	    if(joinInputList != null){
-	    	joinInputList.add(joinInputList1);
-	    	joinInputList.add(joinInputList2);
-	    }
-		
+
+		if (lookupPropertyGrid != null) {
+			if (lookupPropertyGrid.getLookupInputProperties() != null
+					&& !lookupPropertyGrid.getLookupInputProperties().isEmpty()) {
+				joinInputList1 = lookupPropertyGrid.getLookupInputProperties()
+						.get(0);
+				joinInputList2 = lookupPropertyGrid.getLookupInputProperties()
+						.get(1);
+			} else {
+				joinInputList1 = new ArrayList<>();
+				joinInputList2 = new ArrayList<>();
+			}
+			viewer1 = createComposite(composite, 10, joinInputList1, 0);
+			viewer2 = createComposite(composite, 290, joinInputList2, 1);
+
+			if (lookupPropertyGrid.getLookupMapProperties() != null
+					&& !lookupPropertyGrid.getLookupMapProperties().isEmpty()) {
+				joinOutputList = lookupPropertyGrid.getLookupMapProperties();
+			} else {
+				joinOutputList = new ArrayList<>();
+			}
+		}
+		if (joinInputList != null) {
+			joinInputList.add(joinInputList1);
+			joinInputList.add(joinInputList2);
+		}
+
 		Composite composite_1 = new Composite(container, SWT.None);
-		GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.CENTER, false,
+				false, 1, 1);
 		gd_composite_1.heightHint = 600;
 		gd_composite_1.widthHint = 400;
 		composite_1.setLayoutData(gd_composite_1);
-		
-		labelWidget(composite_1, SWT.None, new int[]{0, 6, 100, 18}, "Output Mapping");
-		outputTableViewer = eltswtWidgets.createTableViewer(composite_1, COLUMN_NAME,new int[]{0, 30, 398, 538}, 196, new JoinContentProvider(), new LookupLabelProvider());
+
+		labelWidget(composite_1, SWT.None, new int[] { 0, 6, 100, 18 },
+				"Output Mapping");
+		outputTableViewer = eltswtWidgets.createTableViewer(composite_1,
+				COLUMN_NAME, new int[] { 0, 30, 398, 538 }, 196,
+				new JoinContentProvider(), new LookupLabelProvider());
 		outputTableViewer.getTable().addMouseListener(new MouseAdapter() {
-	    	@Override
-			public void mouseDoubleClick(MouseEvent e) {
-	    		joinOutputProperty(outputTableViewer);
-			}
 			@Override
-			public void mouseDown(MouseEvent e) {}
+			public void mouseDoubleClick(MouseEvent e) {
+				joinOutputProperty(outputTableViewer, null);
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				validateDuplicatesInOutputField();
+			}
 		});
-		eltswtWidgets.createTableColumns(outputTableViewer.getTable(), COLUMN_NAME, 196);
-	    CellEditor[] editors = eltswtWidgets.createCellEditorList(outputTableViewer.getTable(),2);
-	    	editors[0].setValidator(sourceEditorValidator(outputTableViewer, Messages.EmptyNameNotification, joinOutputList));
-	    	editors[1].setValidator(outputFieldEditorValidator(outputTableViewer, Messages.EmptyNameNotification, joinOutputList));
-	    
-	    outputTableViewer.setColumnProperties(COLUMN_NAME);
-	    outputTableViewer.setCellModifier(new LookupCellModifier(outputTableViewer));
-	    outputTableViewer.setCellEditors(editors);
-	    outputTableViewer.setInput(joinOutputList);
-	    
-	    outputTableViewer.getTable().addListener(SWT.Selection, new Listener() {
+		eltswtWidgets.createTableColumns(outputTableViewer.getTable(),
+				COLUMN_NAME, 196);
+		CellEditor[] editors = eltswtWidgets.createCellEditorList(
+				outputTableViewer.getTable(), 2);
+		editors[0].setValidator(sourceEditorValidator(outputTableViewer,
+				Messages.EmptyNameNotification, joinOutputList));
+		editors[1].setValidator(outputFieldEditorValidator(outputTableViewer,
+				Messages.EmptyNameNotification, joinOutputList));
+
+		outputTableViewer.setColumnProperties(COLUMN_NAME);
+		outputTableViewer.setCellModifier(new LookupCellModifier(
+				outputTableViewer));
+		outputTableViewer.setCellEditors(editors);
+		outputTableViewer.setInput(joinOutputList);
+
+		outputTableViewer.getTable().addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				if(((TableItem)event.item) != null){
-					if(StringUtils.isNotBlank(((TableItem)event.item).getText())){	
-					String[] data = (((TableItem)event.item).getText()).split(Pattern.quote("."));
-					if(data != null && data.length == 2){
-						FilterProperties filter =new FilterProperties();
-						filter.setPropertyname(data[1]);
-						if(joinInputList1.indexOf(filter) >= 0){
-							inputTableViewer[0].getTable().setSelection(joinInputList1.indexOf(filter));
+				if (((TableItem) event.item) != null) {
+					if (StringUtils.isNotBlank(((TableItem) event.item)
+							.getText())) {
+						String[] data = (((TableItem) event.item).getText())
+								.split(Pattern.quote("."));
+						if (data != null && data.length == 2) {
+							FilterProperties filter = new FilterProperties();
+							filter.setPropertyname(data[1]);
+							if (joinInputList1.indexOf(filter) >= 0) {
+								inputTableViewer[0].getTable().setSelection(
+										joinInputList1.indexOf(filter));
+							} else if (joinInputList2.indexOf(filter) >= 0) {
+								inputTableViewer[1].getTable().setSelection(
+										joinInputList2.indexOf(filter));
+							}
 						}
-						else if(joinInputList2.indexOf(filter) >= 0){
-							inputTableViewer[1].getTable().setSelection(joinInputList2.indexOf(filter));
-						}
-					}
 					}
 				}
 			}
 		});
-	  		TableViewerEditor.create(outputTableViewer, new ColumnViewerEditorActivationStrategy(outputTableViewer), 
-	  			ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.TABBING_HORIZONTAL | 
-	  			ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL);
-		
+		TableViewerEditor.create(outputTableViewer,
+				new ColumnViewerEditorActivationStrategy(outputTableViewer),
+				ColumnViewerEditor.KEYBOARD_ACTIVATION
+						| ColumnViewerEditor.TABBING_HORIZONTAL
+						| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
+						| ColumnViewerEditor.TABBING_VERTICAL);
+
 		propertyError = new Label(composite_1, SWT.None);
-	    propertyError.setBounds(0, 572, 350, 25);
-	    propertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-	    propertyError.setVisible(false);
-		
-	    
+		propertyError.setBounds(0, 572, 350, 25);
+		propertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		propertyError.setVisible(false);
+
 		Composite composite_2 = new Composite(composite_1, SWT.None);
 		composite_2.setBounds(276, 4, 110, 24);
 		createLabel(composite_2);
-		
+
 		new Label(container, SWT.NONE);
-	
+
 		populateWidget();
-		//if(joinOutputList!=null){
-			//DragDropUtility.INSTANCE.applyDrop(outputTableViewer, new DragDropLookupImp(joinOutputList, false, outputTableViewer));
-			dropData(outputTableViewer, joinOutputList, true);
-		//}
+		// if(joinOutputList!=null){
+		// DragDropUtility.INSTANCE.applyDrop(outputTableViewer, new
+		// DragDropLookupImp(joinOutputList, false, outputTableViewer));
+		dropData(outputTableViewer, joinOutputList, true);
+		// }
 		return container;
 	}
-	
-	private TableViewer createComposite(Composite parent, int y, final List<FilterProperties> joinInputList, final int tableViewerIndex){	
+
+	private TableViewer createComposite(Composite parent, int y,
+			final List<FilterProperties> joinInputList,
+			final int tableViewerIndex) {
 		Composite comGrid = new Composite(parent, SWT.BORDER);
 		comGrid.setLayoutData(new RowData(267, 136));
 		comGrid.setLayout(new RowLayout(SWT.VERTICAL));
 		comGrid.setBounds(15, y, 233, 268);
-		
-		labelWidget(comGrid, SWT.LEFT, new int[]{0, 5, 90, 20}, "Input Index : in"+tableViewerIndex);
-		
-		inputTableViewer[tableViewerIndex] = eltswtWidgets.createTableViewer(comGrid, INPUT_COLUMN_NAME, new int[]{0, 30, 229, 232}, 224, new ELTFilterContentProvider(), new ELTFilterLabelProvider());
-		inputTableViewer[tableViewerIndex].getTable().addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				addRowToTable(inputTableViewer[tableViewerIndex], joinInputList);
-			}
-			@Override
-			public void mouseDown(MouseEvent e) {
-			}
-		});
-		eltswtWidgets.createTableColumns(inputTableViewer[tableViewerIndex].getTable(), INPUT_COLUMN_NAME, 224);
-	    CellEditor[] editors =eltswtWidgets.createCellEditorList(inputTableViewer[tableViewerIndex].getTable(),1);
-	    editors[0].setValidator(valueEditorValidation(joinInputList ,Messages.EMPTYFIELDMESSAGE, inputTableViewer[tableViewerIndex]));
-	    inputTableViewer[tableViewerIndex].setCellModifier(new ELTCellModifier(inputTableViewer[tableViewerIndex]));
-	    inputTableViewer[tableViewerIndex].setColumnProperties(INPUT_COLUMN_NAME);
-	    inputTableViewer[tableViewerIndex].setCellEditors(editors);
-	    inputTableViewer[tableViewerIndex].setInput(joinInputList);
-	
-	    eltswtWidgets.applyDragFromTableViewer(inputTableViewer[tableViewerIndex].getTable(), tableViewerIndex);
-		addButton(comGrid, new int[]{170, 8, 25, 20}, inputTableViewer[tableViewerIndex], joinInputList);
-		deleteButton(comGrid,new int[]{200, 8, 25, 20}, inputTableViewer[tableViewerIndex], joinInputList);
-		return inputTableViewer[tableViewerIndex]; 
+
+		labelWidget(comGrid, SWT.LEFT, new int[] { 0, 5, 90, 20 },
+				"Input Index : in" + tableViewerIndex);
+
+		inputTableViewer[tableViewerIndex] = eltswtWidgets.createTableViewer(
+				comGrid, INPUT_COLUMN_NAME, new int[] { 0, 30, 229, 232 }, 224,
+				new ELTFilterContentProvider(), new ELTFilterLabelProvider());
+		inputTableViewer[tableViewerIndex].getTable().addMouseListener(
+				new MouseAdapter() {
+					@Override
+					public void mouseDoubleClick(MouseEvent e) {
+						addRowToTable(inputTableViewer[tableViewerIndex],
+								joinInputList);
+					}
+
+					@Override
+					public void mouseDown(MouseEvent e) {
+					}
+				});
+		eltswtWidgets.createTableColumns(
+				inputTableViewer[tableViewerIndex].getTable(),
+				INPUT_COLUMN_NAME, 224);
+		CellEditor[] editors = eltswtWidgets.createCellEditorList(
+				inputTableViewer[tableViewerIndex].getTable(), 1);
+		editors[0]
+				.setValidator(valueEditorValidation(joinInputList,
+						Messages.EMPTYFIELDMESSAGE,
+						inputTableViewer[tableViewerIndex]));
+		inputTableViewer[tableViewerIndex].setCellModifier(new ELTCellModifier(
+				inputTableViewer[tableViewerIndex]));
+		inputTableViewer[tableViewerIndex]
+				.setColumnProperties(INPUT_COLUMN_NAME);
+		inputTableViewer[tableViewerIndex].setCellEditors(editors);
+		inputTableViewer[tableViewerIndex].setInput(joinInputList);
+
+		eltswtWidgets
+				.applyDragFromTableViewer(
+						inputTableViewer[tableViewerIndex].getTable(),
+						tableViewerIndex);
+		addButton(comGrid, new int[] { 170, 8, 25, 20 },
+				inputTableViewer[tableViewerIndex], joinInputList);
+		deleteButton(comGrid, new int[] { 200, 8, 25, 20 },
+				inputTableViewer[tableViewerIndex], joinInputList);
+		return inputTableViewer[tableViewerIndex];
 	}
-	
-	private void addButton(Composite parent, int[] bounds, final TableViewer viewer, final List<FilterProperties> joinInputList){
-		
+
+	private void addButton(Composite parent, int[] bounds,
+			final TableViewer viewer, final List<FilterProperties> joinInputList) {
+
 		Button bt = new Button(parent, SWT.PUSH);
-		bt.setImage(new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
+		bt.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
+				+ "/icons/add.png"));
 		bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
-		
+
 		bt.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				addRowToTable(viewer,joinInputList);
+				addRowToTable(viewer, joinInputList);
 			}
 		});
 	}
-	
-	private void deleteButton(Composite parent, int[] bounds, final TableViewer viewer, final List<FilterProperties> joinInputList){
-			
-			Button bt = new Button(parent, SWT.PUSH);
-			bt.setImage(new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
-			bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
-			bt.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					int index = 0;
-					IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
-					for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
-						Object selectedObject = iterator.next();
-						index = joinInputList.indexOf(selectedObject);
-						viewer.remove(selectedObject);
-						joinInputList.remove(selectedObject);
-					}
-					viewer.refresh();
-					if(index !=0)
-					viewer.editElement(viewer.getElementAt(index-1), 0);
+
+	private void deleteButton(Composite parent, int[] bounds,
+			final TableViewer viewer, final List<FilterProperties> joinInputList) {
+
+		Button bt = new Button(parent, SWT.PUSH);
+		bt.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
+				+ "/icons/delete.png"));
+		bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
+		bt.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int index = 0;
+				IStructuredSelection selection = (IStructuredSelection) viewer
+						.getSelection();
+				for (Iterator<?> iterator = selection.iterator(); iterator
+						.hasNext();) {
+					Object selectedObject = iterator.next();
+					index = joinInputList.indexOf(selectedObject);
+					viewer.remove(selectedObject);
+					joinInputList.remove(selectedObject);
 				}
-			});
-		}
-	private void createLabel(Composite parent){	
-		
-		Button button = buttonWidget(parent, SWT.CENTER|SWT.PUSH, new int[]{0, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
+				viewer.refresh();
+				if (index != 0)
+					viewer.editElement(viewer.getElementAt(index - 1), 0);
+			}
+		});
+	}
+
+	private void createLabel(Composite parent) {
+
+		Button button = buttonWidget(parent, SWT.CENTER | SWT.PUSH, new int[] {
+				0, 0, 25, 20 }, "", new Image(null,
+				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
 		ELTGridAddSelectionListener listener = new ELTGridAddSelectionListener();
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				joinOutputProperty(outputTableViewer);
+				joinOutputProperty(outputTableViewer, null);
 			}
-		});	 
-		 
-		Label delete = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[]{25, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
+		});
+
+		Label delete = eltswtWidgets
+				.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 },
+						"", new Image(null,
+								XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
+										+ "/icons/delete.png"));
 		delete.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseUp(MouseEvent e) {
 				int index = 0;
-				IStructuredSelection selection = (IStructuredSelection) outputTableViewer.getSelection();
-				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
+				IStructuredSelection selection = (IStructuredSelection) outputTableViewer
+						.getSelection();
+				for (Iterator<?> iterator = selection.iterator(); iterator
+						.hasNext();) {
 					Object selectedObject = iterator.next();
 					index = joinOutputList.indexOf(selectedObject);
 					outputTableViewer.remove(selectedObject);
 					joinOutputList.remove(selectedObject);
 				}
 				outputTableViewer.refresh();
-				if(index !=0)
-				outputTableViewer.editElement(outputTableViewer.getElementAt(index-1), 0);
+				if (index != 0)
+					outputTableViewer.editElement(
+							outputTableViewer.getElementAt(index - 1), 0);
 			}
+
 			@Override
-			public void mouseDown(MouseEvent e) {}
-			
+			public void mouseDown(MouseEvent e) {
+			}
+
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {}
+			public void mouseDoubleClick(MouseEvent e) {
+			}
 		});
-		 
-		Label upLabel = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[]{50, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png"));
+
+		Label upLabel = eltswtWidgets.labelWidget(parent, SWT.CENTER,
+				new int[] { 50, 0, 25, 20 }, "", new Image(null,
+						XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
+								+ "/icons/up.png"));
 		upLabel.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseUp(MouseEvent e) {
 				int index2 = 0;
@@ -342,22 +411,27 @@ public class ELTLookupMapWizard extends Dialog {
 					outputTableViewer.getTable().setSelection(index1 - 1);
 				}
 			}
-			
+
 			@Override
-			public void mouseDown(MouseEvent e) {}
-			
+			public void mouseDown(MouseEvent e) {
+			}
+
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {}
+			public void mouseDoubleClick(MouseEvent e) {
+			}
 		});
-		 
-		Label downLabel = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[]{74, 0, 25, 20}, "",new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png"));
+
+		Label downLabel = eltswtWidgets.labelWidget(parent, SWT.CENTER,
+				new int[] { 74, 0, 25, 20 }, "", new Image(null,
+						XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
+								+ "/icons/down.png"));
 		downLabel.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseUp(MouseEvent e) {
 				int index1 = outputTableViewer.getTable().getSelectionIndex();
 				int index2 = 0;
-				
+
 				if (index1 < joinOutputList.size() - 1) {
 					String text = outputTableViewer.getTable().getItem(index1)
 							.getText(0);
@@ -382,151 +456,174 @@ public class ELTLookupMapWizard extends Dialog {
 					joinOutputList.set(index2, p);
 					outputTableViewer.refresh();
 					outputTableViewer.getTable().setSelection(index1 + 1);
-				
-			}
-			}
-			@Override
-			public void mouseDown(MouseEvent e) {  
+
 				}
-			
+			}
+
 			@Override
-			public void mouseDoubleClick(MouseEvent e) { }
+			public void mouseDown(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+			}
 		});
 
 	}
-	
+
 	/**
 	 * Create contents of the button bar.
+	 * 
 	 * @param parent
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,	true);
-		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
+		okButton = createButton(parent, IDialogConstants.OK_ID,
+				IDialogConstants.OK_LABEL, true);
+		createButton(parent, IDialogConstants.CANCEL_ID,
+				IDialogConstants.CANCEL_LABEL, false);
 	}
-	
-	private boolean validation(){
+
+	private boolean validation(String outputFieldValue, String sourceFieldValue) {
 		int propertycount = 0;
 		int propertyValuecount = 0;
-		for(LookupMapProperty join : joinOutputList){
-			if(join.getSource_Field().trim().isEmpty()){
-					outputTableViewer.getTable().setSelection(propertycount);
-					propertyError.setVisible(true);
-					propertyError.setText(Messages.EmptyNameNotification);
-					okButton.setEnabled(false);
-					return false;
-				}else if(join.getOutput_Field().trim().isEmpty()){
-					outputTableViewer.getTable().setSelection(propertyValuecount);
-					propertyError.setVisible(true);
-					propertyError.setText(Messages.EmptyValueNotification);
-					return false;
-				}else{
-					propertyError.setVisible(false);
-					okButton.setEnabled(true);
-				}
-				
+		for (LookupMapProperty join : joinOutputList) {
+			if (join.getSource_Field().trim().isEmpty()) {
+				outputTableViewer.getTable().setSelection(propertycount);
+				propertyError.setVisible(true);
+				propertyError.setText(Messages.EmptyNameNotification);
+				okButton.setEnabled(false);
+				return false;
+			} else if (join.getOutput_Field().trim().isEmpty()) {
+				outputTableViewer.getTable().setSelection(propertyValuecount);
+				propertyError.setVisible(true);
+				propertyError.setText(Messages.EmptyValueNotification);
+				return false;
+			} else {
+				propertyError.setVisible(false);
+				okButton.setEnabled(true);
+			}
+
 			propertycount++;
 			propertyValuecount++;
 		}
+		for (LookupMapProperty join : joinOutputList) {
+			if (join.getSource_Field() != null && join.getSource_Field().equalsIgnoreCase(sourceFieldValue)) {
+				return false;
+			}
+		}
 		return true;
 	}
-	
-	private boolean inputTabvalidation(){
+
+	private boolean inputTabvalidation() {
 		int propertycount = 0;
-		for(FilterProperties join : joinInputList.get(0)){
-			if(!join.getPropertyname().trim().isEmpty()){
-				Matcher match = Pattern.compile(Constants.REGEX).matcher(join.getPropertyname());
-				if(!match.matches()){
+		for (FilterProperties join : joinInputList.get(0)) {
+			if (!join.getPropertyname().trim().isEmpty()) {
+				Matcher match = Pattern.compile(Constants.REGEX).matcher(
+						join.getPropertyname());
+				if (!match.matches()) {
 					outputTableViewer.getTable().setSelection(propertycount);
 					propertyError.setVisible(true);
-					propertyError.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
+					propertyError
+							.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
 					okButton.setEnabled(false);
 					return false;
 				}
-				}else{
-					outputTableViewer.getTable().setSelection(propertycount);
-					propertyError.setVisible(true);
-					propertyError.setText(Messages.EmptyNameNotification);
-					okButton.setEnabled(false);
-					return false;
-				}
-				
+			} else {
+				outputTableViewer.getTable().setSelection(propertycount);
+				propertyError.setVisible(true);
+				propertyError.setText(Messages.EmptyNameNotification);
+				okButton.setEnabled(false);
+				return false;
+			}
+
 			propertycount++;
 		}
 		return true;
 	}
+
 	// Creates Value Validator for table's cells
-	private ICellEditorValidator  valueEditorValidation(final List<FilterProperties> joinInputList, final String ErrorMessage,final TableViewer viewer) {
+	private ICellEditorValidator valueEditorValidation(
+			final List<FilterProperties> joinInputList,
+			final String ErrorMessage, final TableViewer viewer) {
 		ICellEditorValidator propertyValidator = new ICellEditorValidator() {
 			@Override
 			public String isValid(Object value) {
-				String selectedField = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
+				String selectedField = viewer.getTable()
+						.getItem(viewer.getTable().getSelectionIndex())
+						.getText();
 				String valueToValidate = String.valueOf(value).trim();
-				Matcher match = Pattern.compile(Constants.REGEX).matcher(valueToValidate);
+				Matcher match = Pattern.compile(Constants.REGEX).matcher(
+						valueToValidate);
 				if (valueToValidate.isEmpty()) {
 					propertyError.setText(ErrorMessage);
 					propertyError.setVisible(true);
 					return "ERROR"; //$NON-NLS-1$
-				} else if(!match.matches()){
+				} else if (!match.matches()) {
 					propertyError.setVisible(true);
-					propertyError.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
+					propertyError
+							.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
 					okButton.setEnabled(false);
 					return "ERROR";
-				}else{
+				} else {
 					propertyError.setVisible(false);
 					okButton.setEnabled(true);
 				}
-				
-				for(FilterProperties property :joinInputList){
-					if(!selectedField.equalsIgnoreCase(valueToValidate) && property.getPropertyname().trim().equalsIgnoreCase(valueToValidate)){
+
+				for (FilterProperties property : joinInputList) {
+					if (!selectedField.equalsIgnoreCase(valueToValidate)
+							&& property.getPropertyname().trim()
+									.equalsIgnoreCase(valueToValidate)) {
 						propertyError.setVisible(true);
-						propertyError.setText(Messages.RuntimePropertAlreadyExists);
+						propertyError
+								.setText(Messages.RuntimePropertAlreadyExists);
 						okButton.setEnabled(false);
 						return "ERROR";
-					}else{
+					} else {
 						propertyError.setVisible(false);
 						okButton.setEnabled(true);
 					}
 				}
-				
+				validateDuplicatesInOutputField();
 				return null;
 			}
 		};
 		return propertyValidator;
 	}
 
-		public void populateWidget(){
-			if(lookupPropertyGrid != null){
-				inputTableViewer[0].refresh();
-				inputTableViewer[1].refresh();
-				outputTableViewer.refresh();
-			}
+	public void populateWidget() {
+		if (lookupPropertyGrid != null) {
+			inputTableViewer[0].refresh();
+			inputTableViewer[1].refresh();
+			outputTableViewer.refresh();
 		}
-		
-		public void getLookupPropertyGrid(){
-			lookupPropertyGrid.setLookupInputProperties(joinInputList);
-			lookupPropertyGrid.setLookupMapProperties(joinOutputList);
-		}
-		
-		
-			
-	public Button buttonWidget(Composite parent, int style, int[] bounds, String value, Image image){
+	}
+
+	public void getLookupPropertyGrid() {
+		lookupPropertyGrid.setLookupInputProperties(joinInputList);
+		lookupPropertyGrid.setLookupMapProperties(joinOutputList);
+	}
+
+	public Button buttonWidget(Composite parent, int style, int[] bounds,
+			String value, Image image) {
 		Button button = new Button(parent, style);
-			button.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
-			button.setText(value);
-			button.setImage(image);
-		
+		button.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
+		button.setText(value);
+		button.setImage(image);
+
 		return button;
 	}
 
-	public Label labelWidget(Composite parent, int style, int[] bounds, String value){
+	public Label labelWidget(Composite parent, int style, int[] bounds,
+			String value) {
 		Label label = new Label(parent, style);
 		label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		label.setText(value);
-		//label.setImage(image);
-		
+		// label.setImage(image);
+
 		return label;
 	}
+
 	/**
 	 * Return the initial size of the dialog.
 	 */
@@ -534,92 +631,150 @@ public class ELTLookupMapWizard extends Dialog {
 	protected Point getInitialSize() {
 		return new Point(700, 719);
 	}
-	
+
 	// Creates CellNAme Validator for table's cells
-		private ICellEditorValidator sourceEditorValidator(final TableViewer viewer, final String errorMessage, final List<LookupMapProperty> propertyList) {
-			ICellEditorValidator propertyValidator = new ICellEditorValidator() {
-				@Override
-				public String isValid(Object value) {
-					String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText();
-					String valueToValidate = String.valueOf(value).trim();
-					if (StringUtils.isEmpty(valueToValidate)) {
-						propertyError.setText(errorMessage);
+	private ICellEditorValidator sourceEditorValidator(
+			final TableViewer viewer, final String errorMessage,
+			final List<LookupMapProperty> propertyList) {
+		ICellEditorValidator propertyValidator = new ICellEditorValidator() {
+			@Override
+			public String isValid(Object value) {
+				String currentSelectedFld = viewer.getTable()
+						.getItem(viewer.getTable().getSelectionIndex())
+						.getText();
+				String valueToValidate = String.valueOf(value).trim();
+				if (StringUtils.isEmpty(valueToValidate)) {
+					propertyError.setText(errorMessage);
+					propertyError.setVisible(true);
+					okButton.setEnabled(false);
+					return "ERROR";
+				} else {
+					okButton.setEnabled(true);
+				}
+				for (LookupMapProperty temp : propertyList) {
+					if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)
+							&& temp.getSource_Field().equalsIgnoreCase(
+									valueToValidate)) {
+						propertyError
+								.setText(Messages.RuntimePropertAlreadyExists);
 						propertyError.setVisible(true);
 						okButton.setEnabled(false);
 						return "ERROR";
-					}else{okButton.setEnabled(true);}
-					for (LookupMapProperty temp : propertyList) {
-						if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)&& temp.getSource_Field().equalsIgnoreCase(valueToValidate)) {
-							propertyError.setText(Messages.RuntimePropertAlreadyExists);
-							propertyError.setVisible(true);
-							okButton.setEnabled(false);
-							return "ERROR";
-						} 
-						else{
-							propertyError.setVisible(false);
-							okButton.setEnabled(true);
-						}
+					} else {
+						propertyError.setVisible(false);
+						okButton.setEnabled(true);
 					}
-					return null;
 				}
-			};
-			return propertyValidator;
-		}
-
-		// Creates CellValue Validator for table's cells
-			private ICellEditorValidator outputFieldEditorValidator(final TableViewer viewer, final String errorMessage, final List<LookupMapProperty> propertyList) {
-				ICellEditorValidator propertyValidator = new ICellEditorValidator() {
-					@Override
-					public String isValid(Object value) {
-						String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText(1);
-						String valueToValidate = String.valueOf(value).trim();
-						if (StringUtils.isEmpty(valueToValidate)) {
-							propertyError.setText(errorMessage);
-							propertyError.setVisible(true);
-							okButton.setEnabled(false);
-							return "ERROR";
-						}else{okButton.setEnabled(true);}
-						for (LookupMapProperty temp : propertyList) {
-							if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)&& temp.getOutput_Field().equalsIgnoreCase(valueToValidate)) {
-								propertyError.setText(Messages.OUTPUT_FIELD_EXISTS);
-								propertyError.setVisible(true);
-								okButton.setEnabled(false);
-								return "ERROR";
-							} 
-							else{
-								propertyError.setVisible(false);
-								okButton.setEnabled(true);
-							}
-						}
-						return null;
-					}
-				};
-				return propertyValidator;
+				return null;
 			}
-			
-	private  void joinOutputProperty(TableViewer viewer){
-		LookupMapProperty property = new LookupMapProperty();
-		if(joinOutputList.size() != 0){
-			if(!validation())
-				return;
-		property.setSource_Field("");
-		property.setOutput_Field("");
-		joinOutputList.add(property);
-		viewer.refresh();
-		viewer.editElement(viewer.getElementAt(joinOutputList.size()-1), 0);
+		};
+		return propertyValidator;
+	}
+
+	// Creates CellValue Validator for table's cells
+	private ICellEditorValidator outputFieldEditorValidator(
+			final TableViewer viewer, final String errorMessage,
+			final List<LookupMapProperty> propertyList) {
+		ICellEditorValidator propertyValidator = new ICellEditorValidator() {
+			@Override
+			public String isValid(Object value) {
+				String currentSelectedFld = viewer.getTable()
+						.getItem(viewer.getTable().getSelectionIndex())
+						.getText(1);
+				String valueToValidate = String.valueOf(value).trim();
+				if (StringUtils.isEmpty(valueToValidate)) {
+					propertyError.setText(errorMessage);
+					propertyError.setVisible(true);
+					okButton.setEnabled(false);
+					return "ERROR";
+				} else {
+					okButton.setEnabled(true);
+				}
+				for (LookupMapProperty temp : propertyList) {
+					if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)
+							&& temp.getOutput_Field().equalsIgnoreCase(
+									valueToValidate)) {
+						propertyError.setText(Messages.OUTPUT_FIELD_EXISTS);
+						propertyError.setVisible(true);
+						okButton.setEnabled(false);
+						validateDuplicatesInOutputField();
+						return "ERROR";
+					} else {
+						propertyError.setVisible(false);
+						okButton.setEnabled(true);
+					}
+				}
+				validateDuplicatesInOutputField();
+				return null;
+			}
+		};
+		validateDuplicatesInOutputField();
+		return propertyValidator;
+	}
+
+	private void joinOutputProperty(TableViewer viewer, String sourceFieldValue) {
+
+		String outputFieldValue = null;
+		if (sourceFieldValue == null) {
+			sourceFieldValue = "";
+			outputFieldValue = "";
 		} else {
-			property.setSource_Field("");
-			property.setOutput_Field("");
+			outputFieldValue = sourceFieldValue.split("\\.")[1];
+		}
+		LookupMapProperty property = new LookupMapProperty();
+
+		if (joinOutputList.size() != 0) {
+			if (!validation(outputFieldValue, sourceFieldValue))
+				return;
+			property.setSource_Field(sourceFieldValue);
+			property.setOutput_Field(outputFieldValue);
+			joinOutputList.add(property);
+			viewer.refresh();
+			viewer.editElement(viewer.getElementAt(joinOutputList.size() - 1),
+					0);
+		} else {
+			property.setSource_Field(sourceFieldValue);
+			property.setOutput_Field(outputFieldValue);
 			joinOutputList.add(property);
 			viewer.refresh();
 			viewer.editElement(property, 0);
 		}
 	}
-	
-	private void addRowToTable(TableViewer viewer, List<FilterProperties> joinInputList){
+
+	private void validateDuplicatesInOutputField() {
+		boolean duplicateFound = false;
+		TableItem[] items = outputTableViewer.getTable().getItems();
+		LookupMapProperty[] objectsInGui = new LookupMapProperty[items.length];
+		for (int i = 0; i < items.length; i++) {
+			objectsInGui[i] = (LookupMapProperty) items[i].getData();
+			for (int j = i + 1; j < items.length; j++) {
+				if (((LookupMapProperty) items[i].getData()).getOutput_Field().equalsIgnoreCase(
+						((LookupMapProperty) items[j].getData()).getOutput_Field())) {
+					duplicateFound = true;
+					break;
+				}
+			}
+			if (duplicateFound)
+				break;
+
+		}
+		if (duplicateFound) {
+			okButton.setEnabled(false);
+			propertyError.setText(Messages.OUTPUT_FIELD_EXISTS);
+			propertyError.setVisible(true);
+		} else {
+			if (okButton != null && propertyError != null) {
+				okButton.setEnabled(true);
+				propertyError.setVisible(false);
+			}
+		}
+	}
+
+	private void addRowToTable(TableViewer viewer,
+			List<FilterProperties> joinInputList) {
 		FilterProperties join = new FilterProperties();
-		if(joinInputList.size() != 0){
-			if(!inputTabvalidation())
+		if (joinInputList.size() != 0) {
+			if (!inputTabvalidation())
 				return;
 			join.setPropertyname("");
 			joinInputList.add(join);
@@ -632,53 +787,33 @@ public class ELTLookupMapWizard extends Dialog {
 			viewer.editElement(join, 0);
 		}
 	}
-	
-	public void dropData(final TableViewer tableViewer, final List<LookupMapProperty> listOfFields, final boolean isSingleColumn){
+
+	public void dropData(final TableViewer tableViewer,
+			final List<LookupMapProperty> listOfFields,
+			final boolean isSingleColumn) {
 		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
 		int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK;
 		DropTarget target = new DropTarget(tableViewer.getTable(), operations);
 		target.setTransfer(types);
 		target.addDropListener(new DropTargetAdapter() {
-		      public void dragOver(DropTargetEvent event) {
-		    	  event.feedback = DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL; 
-		      }
-		      public void drop(DropTargetEvent event) {
-		        if (event.data == null) {
-		        	event.detail = DND.DROP_NONE;
-		        	return;
-		        }
-		        if(isSingleColumn){
-		        	List<String> tempList = new ArrayList<>();
-		        	
-		        	LookupMapProperty field = new LookupMapProperty();
-		        	String[] data = ((String)event.data).split(Pattern.quote("."));
-		        	if(!data[1].isEmpty()){
-		        		Matcher match = Pattern.compile(Constants.REGEX).matcher(data[1]);
-						if(match.matches()){
-							field.setSource_Field((String)event.data);
-							field.setOutput_Field(data[1]);	
-							
-							if(!listOfFields.contains(field))
-								listOfFields.add(field);
-								tableViewer.refresh(); 
-							
-							for(LookupMapProperty lookupMapProperty : joinOutputList){
-								String outputField = lookupMapProperty.getOutput_Field();
-								if(!tempList.contains(outputField)){
-									propertyError.setVisible(false);
-									tempList.add(outputField);
-									tableViewer.refresh(); 
-								}else{
-									propertyError.setVisible(true);
-									propertyError.setText(Messages.OUTPUT_FIELD_EXISTS);
-									outputTableViewer.refresh();
-									outputTableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
-								}
-							}
-		        	}
-		        	}
-		        }
-		      } 
+			public void dragOver(DropTargetEvent event) {
+				event.feedback = DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
+			}
+
+			public void drop(DropTargetEvent event) {
+				if (event.data == null) {
+					event.detail = DND.DROP_NONE;
+					return;
+				}
+				if (isSingleColumn) {
+					String[] dropData = ((String) event.data).split(Pattern.quote("#"));
+					for (String data : dropData) {
+						joinOutputProperty(tableViewer, data);
+					}
+					validateDuplicatesInOutputField();
+				}
+			}
 		});
 	}
+
 }
