@@ -146,13 +146,13 @@ public class ELTSWTWidgets {
 		source.addDragListener(new DragSourceAdapter() {
 			public void dragSetData(DragSourceEvent event) {
 				// Set the data to be the first selected item's text
-				event.data = dataFormatter(portLabel, table.getSelection());
+				event.data = addDelimeter(portLabel, table.getSelection());
 			}
 		});
 
 	}
 
-	private String dataFormatter(String portLabel, TableItem[] selectedTableItems) {
+	private String addDelimeter(String portLabel, TableItem[] selectedTableItems) {
 		StringBuffer buffer = new StringBuffer();
 		for (TableItem tableItem : selectedTableItems) {
 			buffer.append(portLabel + tableItem.getText() + "#");
