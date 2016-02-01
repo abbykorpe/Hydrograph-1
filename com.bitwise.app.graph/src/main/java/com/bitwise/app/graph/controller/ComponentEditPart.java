@@ -317,7 +317,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 
 			if(getCastedModel().getComponentName().equalsIgnoreCase("lookup")){
 				LookupConfigProperty lookup_in0 = (LookupConfigProperty)getCastedModel().getProperties().get("hash_join");
-				if(!lookup_in0.isSelected()){
+				if(lookup_in0 != null && !lookup_in0.isSelected()){
 					getCastedModel().getPorts().get("in1").setLabelOfPort("lkp");
 					getCastedModel().getPorts().get("in0").setLabelOfPort("drv");
 				}else{

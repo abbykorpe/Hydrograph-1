@@ -1,6 +1,5 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.mappingtable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -36,7 +35,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
@@ -45,6 +43,7 @@ import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.utils.SWTResourceManager;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.MappingDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.RowData;
@@ -487,7 +486,7 @@ public class MappingTable {
 		if(emptyOut && emptyInClass){
 			txtOut.setBackground(txtOut.getDisplay().getSystemColor(SWT.COLOR_WHITE));			
 		}else{
-			txtOut.setBackground(com.bitwise.app.common.util.SWTResourceManager.getColor(250, 128, 114));
+			txtOut.setBackground(SWTResourceManager.getColor(250, 128, 114));
 		}
 		
 		//boolean validUniqOutputColumns=validateDuplicatesInOutputColumn();
@@ -586,7 +585,7 @@ public class MappingTable {
 							if(!((Text)item.getData("out")).getToolTipText().contains("Duplicate output"))
 								((Text)item.getData("out")).setToolTipText("- " + ((Text)item.getData("out")).getToolTipText() + "\n- " + "Duplicate output");
 						}
-						((Text)item.getData("out")).setBackground(com.bitwise.app.common.util.SWTResourceManager.getColor(250, 128, 114));
+						((Text)item.getData("out")).setBackground(SWTResourceManager.getColor(250, 128, 114));
 					}
 				}			
 			}
@@ -620,8 +619,8 @@ public class MappingTable {
 			Text txtOut) {
 		if(txtClazz.getText().trim().equalsIgnoreCase("")){
 			if(txtIn.getText().split(",").length != txtOut.getText().split(",").length){
-				txtIn.setBackground(com.bitwise.app.common.util.SWTResourceManager.getColor(250, 128, 114));
-				txtOut.setBackground(com.bitwise.app.common.util.SWTResourceManager.getColor(250, 128, 114));
+				txtIn.setBackground(SWTResourceManager.getColor(250, 128, 114));
+				txtOut.setBackground(SWTResourceManager.getColor(250, 128, 114));
 				
 				
 				if(txtIn.getToolTipText() == null)
@@ -646,7 +645,7 @@ public class MappingTable {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				column3Txt.setText("");
-				column3Txt.setBackground(com.bitwise.app.common.util.SWTResourceManager.getColor(250, 128, 114));
+				column3Txt.setBackground(SWTResourceManager.getColor(250, 128, 114));
 			}
 		});
 	}

@@ -39,7 +39,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.bitwise.app.common.util.SWTResourceManager;
+import com.bitwise.app.propertywindow.utils.SWTResourceManager;
 
 public class RunConfigDialog extends Dialog {
 	private final FormToolkit formToolkit = new FormToolkit(

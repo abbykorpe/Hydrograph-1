@@ -164,30 +164,34 @@ public abstract class TransformUiConverter extends UiConverter {
 
 	private List<String> getOutputFieldList(TypeTransformOperation item) {
 		List<String> outputFieldList = new LinkedList<>();
-		ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
-		List<GridRow> gridRow = new ArrayList<>();
-		if (item.getOutputFields() != null) {
-			if (schema == null) {
-				schema = new Schema();
-				schema.setGridRow(gridRow);
-				schema.setIsExternal(false);
-			}
-			
-			for (TypeBaseField record : item.getOutputFields().getField()) {
-				gridRow.add(converterUiHelper.getFixedWidthSchema(record));
-				outputFieldList.add(record.getName());
-			}
+		if(item !=null ){
+			ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
+			List<GridRow> gridRow = new ArrayList<>();
+			if (item.getOutputFields() != null) {
+				if (schema == null) {
+					schema = new Schema();
+					schema.setGridRow(gridRow);
+					schema.setIsExternal(false);
+				}
+				
+				for (TypeBaseField record : item.getOutputFields().getField()) {
+					gridRow.add(converterUiHelper.getFixedWidthSchema(record));
+					outputFieldList.add(record.getName());
+				}
 
+			}
+			propertyMap.put("schema",schema);
 		}
-		propertyMap.put("schema",schema);
 		return outputFieldList;
 	}
 
 	private List<String> getInputFieldList(TypeTransformOperation item) {
 		List<String> inputfieldList = new LinkedList<>();
-		for (TypeInputField inputField : item.getInputFields().getField()) {
-			inputfieldList.add(inputField.getName());
-		}
+		if(item != null){
+			for (TypeInputField inputField : item.getInputFields().getField()) {
+				inputfieldList.add(inputField.getName());
+			}
+		}		
 		return inputfieldList;
 	}
 

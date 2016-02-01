@@ -157,7 +157,9 @@ public class SubGraphUtility {
 			
 			edComponentEditPart.getCastedModel().setSize(newSize);
 			edComponentEditPart.getCastedModel().setComponentLabel(file.getName());
-			edComponentEditPart.getCastedModel().getProperties().put("path", file.getFullPath().toOSString());
+			
+			String subGraphFilePath = file.getFullPath().toOSString();
+			edComponentEditPart.getCastedModel().getProperties().put("path",subGraphFilePath);
 			if(inPort!=0 && outPort!=0)
 			edComponentEditPart.getCastedModel().getProperties().put("type", "operation");
 			if(inPort!=0 && outPort==0)

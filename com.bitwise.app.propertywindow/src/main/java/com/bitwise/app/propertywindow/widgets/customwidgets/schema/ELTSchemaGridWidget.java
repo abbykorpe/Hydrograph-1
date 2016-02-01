@@ -380,6 +380,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 		}
 	}
+	
 
 	private void populateWidgetExternalSchema() {
 		if (this.properties != null) {
@@ -493,7 +494,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					tableViewer.refresh();
 					table.setSelection(index + 1);
 				}
-
 			}
 		});
 
@@ -604,5 +604,76 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	public void setSchemaGridRowList(List schemaGridRowList) {
 		this.schemaGridRowList = schemaGridRowList;
+	}
+	@Override
+	public void refresh() {
+		
+		Schema schema = getSchemaForInternalPapogation();
+		if (this.properties != null) {
+			Schema originalSchema = (Schema) this.properties;
+			List<FixedWidthGridRow> existingFields = getExitingSchemaFields(originalSchema);
+			
+			List<String> existingFieldNames = getExitingSchemaFieldNames(originalSchema);
+			
+			
+			for(GridRow row: schema.getGridRow()){				
+				if(existingFieldNames.contains(row.getFieldName().trim())){		
+					if(!existingFields.contains(row)){
+						for(int index=0;index < originalSchema.getGridRow().size();index++){
+							if(originalSchema.getGridRow().get(index).getFieldName().equals(row.getFieldName().trim())){
+								originalSchema.getGridRow().set(index, row.copy());
+							}
+						}
+					}
+				}else{
+					originalSchema.getGridRow().add(row.copy());
+				}
+				
+			}
+			table.clearAll();
+			if (!originalSchema.getIsExternal()) {
+				if (tableViewer != null) {
+					schemaGridRowList = originalSchema.getGridRow();
+					tableViewer.setInput(schemaGridRowList);
+					tableViewer.refresh();
+					isExternal = false;
+					toggleTextBox(true);
+				}
+			}
+			
+		}else{
+			//this.properties = schema.clone();
+			if(schema.getGridRow().size()!=0){
+				table.clearAll();
+				if (!schema.getIsExternal()) {
+					if (tableViewer != null) {
+						schemaGridRowList = schema.getGridRow();
+						tableViewer.setInput(schemaGridRowList);
+						tableViewer.refresh();
+						isExternal = false;
+						toggleTextBox(true);
+					}
+				}
+			}
+			
+		}
+	}
+
+	private List<String> getExitingSchemaFieldNames(Schema originalSchema) {
+		List<String> list = new ArrayList<>();
+		
+		for(GridRow row: originalSchema.getGridRow()){
+			list.add(row.getFieldName());
+		}
+		return list;
+	}
+
+	private List<FixedWidthGridRow> getExitingSchemaFields(Schema originalSchema) {
+		List<FixedWidthGridRow> list = new ArrayList<>();
+		
+		for(GridRow row: originalSchema.getGridRow()){
+			list.add((FixedWidthGridRow)row.copy());
+		}
+		return list;
 	}
 }

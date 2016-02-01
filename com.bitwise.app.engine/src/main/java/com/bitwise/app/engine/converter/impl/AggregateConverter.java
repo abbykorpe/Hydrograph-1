@@ -84,7 +84,7 @@ public class AggregateConverter extends TransformConverter {
 
 	private void setPrimaryKeys(Aggregate aggregate) {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PROPERTY_COLUMN_NAME));
-		Set<String> columnNameProperties = (HashSet<String>) component.getProperties().get(
+		List<String> columnNameProperties = (List<String>) component.getProperties().get(
 				Constants.PROPERTY_COLUMN_NAME);
 		if (columnNameProperties != null) {
 			TypePrimaryKeyFields primaryKeyFields = new TypePrimaryKeyFields();

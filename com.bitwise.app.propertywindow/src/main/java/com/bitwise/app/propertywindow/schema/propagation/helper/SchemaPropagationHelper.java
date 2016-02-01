@@ -65,4 +65,21 @@ public class SchemaPropagationHelper {
 		}
 		return filedNameList;
 	}
+	
+
+	public FixedWidthGridRow createFixedWidthGridRow(String fieldName) {
+
+		FixedWidthGridRow fixedWidthGridRow = null;
+		if (fieldName != null) {
+			fixedWidthGridRow = new FixedWidthGridRow();
+			fixedWidthGridRow.setFieldName(fieldName);
+			fixedWidthGridRow.setDataType(0);
+			fixedWidthGridRow.setDataTypeValue("java.lang.String");
+			fixedWidthGridRow.setScale("");
+			fixedWidthGridRow.setLength("0");
+			fixedWidthGridRow.setDateFormat("");
+			
+		}
+		return fixedWidthGridRow;
+	}
 }
