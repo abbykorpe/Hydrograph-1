@@ -78,9 +78,9 @@ public class JoinMapGrid extends Dialog {
 	protected static final String ERROR = null;
 	public static String PROPERTY_NAME = "Source Field";
 	public static String PROPERTY_VALUE = "Output Field";
-	private String[] COLUMN_NAME = {PROPERTY_NAME, PROPERTY_VALUE};
-	private String[] INPUT_COLUMN_NAME = {OPERATIONAL_INPUT_FIELD};
-
+	private String[] COLUMN_NAME = { PROPERTY_NAME, PROPERTY_VALUE };
+	private String[] INPUT_COLUMN_NAME = { OPERATIONAL_INPUT_FIELD };
+	private String previousRadioButtonSelection =NONE;
 	private List<FilterProperties> joinInputList;
 	private List<LookupMapProperty> joinOutputList;
 	private List<List<FilterProperties>> joinInputSchemaList = new ArrayList<>();
@@ -215,10 +215,11 @@ public class JoinMapGrid extends Dialog {
 		outputTableViewer.getTable().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				joinOutputProperty(outputTableViewer);
+				joinOutputProperty(outputTableViewer,null);
 			}
 			@Override
 			public void mouseDown(MouseEvent e) {
+				validateDuplicatesInOutputField();
 			}
 		});
 		widget.createTableColumns(outputTableViewer.getTable(), COLUMN_NAME, 196);
@@ -232,24 +233,24 @@ public class JoinMapGrid extends Dialog {
 		outputTableViewer.getTable().addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-			if(((TableItem)event.item) != null){
-				if(StringUtils.isNotBlank(((TableItem)event.item).getText())){
-					String[] data = (((TableItem)event.item).getText()).split(Pattern.quote("."));
-					if(data != null && data.length == 2){
-						FilterProperties filter =new FilterProperties();
-						filter.setPropertyname(data[1]);
-						for(int i=0;i<inputPortValue;i++){
-							if(joinInputSchemaList != null){
-								if(joinInputSchemaList.get(i).contains(filter)){
-									ExpandItem item = expandBar.getItem(i);
-									item.setExpanded(true);
-									inputTableViewer[i].getTable().setSelection(joinInputSchemaList.get(i).indexOf(filter));
+				if(((TableItem)event.item) != null){
+					if(StringUtils.isNotBlank(((TableItem)event.item).getText())){
+						String[] data = (((TableItem)event.item).getText()).split(Pattern.quote("."));
+						if(data != null && data.length == 2){
+							FilterProperties filter =new FilterProperties();
+							filter.setPropertyname(data[1]);
+							for(int i=0;i<inputPortValue;i++){
+								if(joinInputSchemaList != null){
+									if(joinInputSchemaList.get(i).contains(filter)){
+										ExpandItem item = expandBar.getItem(i);
+										item.setExpanded(true);
+										inputTableViewer[i].getTable().setSelection(joinInputSchemaList.get(i).indexOf(filter));
+									}
 								}
 							}
 						}
 					}
 				}
-					}
 			}
 		});
 		errorLabel = new Label(composite_1, SWT.None);
@@ -282,7 +283,8 @@ public class JoinMapGrid extends Dialog {
 		scrolledComposite_1.setExpandVertical(true);
 		scrolledComposite_1.setMinSize(composite_3.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
-		for(int i=0; i<radio.length;i++){
+		for (int i = 0; i < radio.length; i++) {
+			final int inPortIndex = i;
 			radio[i].addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent event) {
@@ -294,11 +296,18 @@ public class JoinMapGrid extends Dialog {
 							outputTableViewer.getTable().setEnabled(true);
 							joinMappingGrid.setButtonText(button.getText());
 							joinMappingGrid.setIsSelected(false);
-						}else{
+							if (!NONE.equals(previousRadioButtonSelection)) {
+								joinOutputList.clear();
+								outputTableViewer.refresh();
+							}
+							previousRadioButtonSelection=NONE;
+						} else {
+							
 							radio[0].setSelection(false);
 							outputTableViewer.getTable().setEnabled(false);  
 							joinMappingGrid.setButtonText(button.getText());
 							joinMappingGrid.setIsSelected(true);
+							addAllFieldsFromSocketId(inPortIndex - 1);
 						}
 					}
 				}
@@ -310,9 +319,26 @@ public class JoinMapGrid extends Dialog {
 		}
 		return container;
 	}
-	private void populate(){
+
+	private void addAllFieldsFromSocketId(int inSocketIndex) {
+		List<FilterProperties> inputFieldList = joinInputSchemaList.get(inSocketIndex);
+		LookupMapProperty property = null;
+		if (inputFieldList != null && !inputFieldList.isEmpty()) {
+			joinOutputList.clear();
+			previousRadioButtonSelection = Constants.INPUT_SOCKET_TYPE + inSocketIndex;
+			for (FilterProperties properties : inputFieldList) {
+				property = new LookupMapProperty();
+				property.setSource_Field(previousRadioButtonSelection + "." + properties.getPropertyname());
+				property.setOutput_Field(properties.getPropertyname());
+				joinOutputList.add(property);
+				outputTableViewer.refresh();
+			}
+		}
+	}
+
+	private void populate() {
 		Boolean radioButtonSelected = false;
-		
+
 		for(int i=0;i<radio.length;i++){
 			if(StringUtils.isNotBlank(joinMappingGrid.getButtonText())){
 				if(joinMappingGrid.getButtonText().equalsIgnoreCase(radio[i].getText()))
@@ -320,19 +346,19 @@ public class JoinMapGrid extends Dialog {
 						radio[0].setSelection(true);
 						outputTableViewer.getTable().setEnabled(true);
 					}else{
-					radio[i].setSelection(true);
-					outputTableViewer.getTable().setEnabled(false);
-					radioButtonSelected = true;
+						radio[i].setSelection(true);
+						outputTableViewer.getTable().setEnabled(false);
+						radioButtonSelected = true;
 					}
-					}else{
-							radio[i].setSelection(false);
-					}
-				}
-				if(!radioButtonSelected){
-					radio[0].setSelection(true);
-					outputTableViewer.getTable().setEnabled(true);
-				}
-		
+			}else{
+				radio[i].setSelection(false);
+			}
+		}
+		if(!radioButtonSelected){
+			radio[0].setSelection(true);
+			outputTableViewer.getTable().setEnabled(true);
+		}
+
 	}
 
 	private Control createComposite(ExpandBar expandBar, final List<FilterProperties> joinInputList, final int tableViewerIndex){	
@@ -400,7 +426,7 @@ public class JoinMapGrid extends Dialog {
 				}
 				viewer.refresh();
 				if(index !=0)
-				viewer.editElement(viewer.getElementAt(index-1), 0);
+					viewer.editElement(viewer.getElementAt(index-1), 0);
 			}
 		});
 	}
@@ -410,7 +436,7 @@ public class JoinMapGrid extends Dialog {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				joinOutputProperty(outputTableViewer);
+				joinOutputProperty(outputTableViewer,null);
 			}
 		});
 
@@ -429,7 +455,7 @@ public class JoinMapGrid extends Dialog {
 				}
 				outputTableViewer.refresh();
 				if(index !=0)
-				outputTableViewer.editElement(outputTableViewer.getElementAt(index-1), 0);
+					outputTableViewer.editElement(outputTableViewer.getElementAt(index-1), 0);
 			}
 			@Override
 			public void mouseDown(MouseEvent e) {}
@@ -560,14 +586,14 @@ public class JoinMapGrid extends Dialog {
 				errorLabel.setText(Messages.EmptyNameNotification);
 				return false;
 			}
-			
+
 			propertyCounter++;
 
 		}
 		return true;
 	}
 
-	private boolean validateOutputSchema(){
+	private boolean validateOutputSchema(String outFieldValue, String str){
 		int propertycount = 0;
 		int propertyValuecount = 0;
 		for(LookupMapProperty join : joinOutputList){
@@ -587,7 +613,41 @@ public class JoinMapGrid extends Dialog {
 			propertycount++;
 			propertyValuecount++;
 		}
+		for (LookupMapProperty join : joinOutputList) {
+			if (join.getSource_Field().equalsIgnoreCase(str)) {
+				return false;
+			}
+		}
 		return true;
+	}
+	private void validateDuplicatesInOutputField()
+	{
+		int flag=0;
+		TableItem[] items = outputTableViewer.getTable().getItems();
+		LookupMapProperty[] objectsInGui = new LookupMapProperty[items.length];
+		for (int i = 0; i < items.length; i++) {
+			objectsInGui[i] = (LookupMapProperty) items[i].getData();
+			for(int j = i+1; j < items.length;j++)
+			{
+				if(i!=j &&((LookupMapProperty) items[i].getData()).getOutput_Field().equalsIgnoreCase(((LookupMapProperty) items[j].getData()).getOutput_Field()))
+				{
+					flag=1;
+					break; 
+				}
+			}
+
+		}
+		if(flag==1)
+		{
+			okButton.setEnabled(false);
+			errorLabel.setText(Messages.OUTPUT_FIELD_EXISTS);
+			errorLabel.setVisible(true);
+		}else
+		{
+			if(okButton!=null)
+				okButton.setEnabled(true);
+			errorLabel.setVisible(false);
+		}
 	}
 
 	// Creates Value Validator for table's cells
@@ -606,8 +666,9 @@ public class JoinMapGrid extends Dialog {
 					} 
 					else
 						errorLabel.setVisible(false);
-						okButton.setEnabled(true);
+					okButton.setEnabled(true);
 				}
+				validateDuplicatesInOutputField();
 				return null;
 			}
 		};
@@ -654,35 +715,38 @@ public class JoinMapGrid extends Dialog {
 	}
 
 	// Creates CellValue Validator for table's cells
-		private ICellEditorValidator outputFieldEditorValidator(final TableViewer viewer, final String errorMessage, final List<LookupMapProperty> propertyList) {
-			ICellEditorValidator propertyValidator = new ICellEditorValidator() {
-				@Override
-				public String isValid(Object value) {
-					String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText(1);
-					String valueToValidate = String.valueOf(value).trim();
-					if (StringUtils.isEmpty(valueToValidate)) {
-						errorLabel.setText(errorMessage);
+	private ICellEditorValidator outputFieldEditorValidator(final TableViewer viewer, final String errorMessage, final List<LookupMapProperty> propertyList) {
+		ICellEditorValidator propertyValidator = new ICellEditorValidator() {
+			@Override
+			public String isValid(Object value) {
+				String currentSelectedFld = viewer.getTable().getItem(viewer.getTable().getSelectionIndex()).getText(1);
+				String valueToValidate = String.valueOf(value).trim();
+				if (StringUtils.isEmpty(valueToValidate)) {
+					errorLabel.setText(errorMessage);
+					errorLabel.setVisible(true);
+					okButton.setEnabled(false);
+					return "ERROR";
+				}else{okButton.setEnabled(true);}
+				for (LookupMapProperty temp : propertyList) {
+					if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)&& temp.getOutput_Field().equalsIgnoreCase(valueToValidate)) {
+						errorLabel.setText(Messages.RuntimePropertAlreadyExists);
 						errorLabel.setVisible(true);
 						okButton.setEnabled(false);
+						validateDuplicatesInOutputField();
 						return "ERROR";
-					}else{okButton.setEnabled(true);}
-					for (LookupMapProperty temp : propertyList) {
-						if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)&& temp.getOutput_Field().equalsIgnoreCase(valueToValidate)) {
-							errorLabel.setText(Messages.RuntimePropertAlreadyExists);
-							errorLabel.setVisible(true);
-							okButton.setEnabled(false);
-							return "ERROR";
-						} 
-						else{
-							errorLabel.setVisible(false);
-							okButton.setEnabled(true);
-						}
+					} 
+					else{
+						errorLabel.setVisible(false);
+						okButton.setEnabled(true);
 					}
-					return null;
 				}
-			};
-			return propertyValidator;
-		}
+				validateDuplicatesInOutputField();
+				return null;
+			}
+		};
+		validateDuplicatesInOutputField();
+		return propertyValidator;
+	}
 	private void addRowToTable(TableViewer viewer, List<FilterProperties> joinInputList){
 		FilterProperties join = new FilterProperties();
 		if(joinInputList!=null && joinInputList.size() != 0){
@@ -700,19 +764,29 @@ public class JoinMapGrid extends Dialog {
 		}
 	}
 
-	private  void joinOutputProperty(TableViewer viewer){
+	private void joinOutputProperty(TableViewer viewer, String sourceFieldValue) {
+
+		String outputFieldValue = null;
+		if (sourceFieldValue == null) {
+			sourceFieldValue = "";
+			outputFieldValue = "";
+		} else {
+			outputFieldValue = sourceFieldValue.split("\\.")[1];
+		}
 		LookupMapProperty property = new LookupMapProperty();
-		if(joinOutputList.size() != 0){
-			if(!validateOutputSchema())
+
+		if (joinOutputList.size() != 0) {
+			if (!validateOutputSchema(outputFieldValue, sourceFieldValue))
 				return;
-			property.setSource_Field("");
-			property.setOutput_Field("");
+			property.setSource_Field(sourceFieldValue);
+			property.setOutput_Field(outputFieldValue);
 			joinOutputList.add(property);
 			viewer.refresh();
-			viewer.editElement(viewer.getElementAt(joinOutputList.size() - 1), 0);
+			viewer.editElement(viewer.getElementAt(joinOutputList.size() - 1),
+					0);
 		} else {
-			property.setSource_Field("");
-			property.setOutput_Field("");
+			property.setSource_Field(sourceFieldValue);
+			property.setOutput_Field(outputFieldValue);
 			joinOutputList.add(property);
 			viewer.refresh();
 			viewer.editElement(property, 0);
@@ -734,35 +808,10 @@ public class JoinMapGrid extends Dialog {
 					return;
 				}
 				if(isSingleColumn){
-					List<String> tempList = new ArrayList<>();
-					LookupMapProperty field = new LookupMapProperty();
-					String[] data = ((String)event.data).split(Pattern.quote("."));
-					if(!data[1].isEmpty()){
-						Matcher match = Pattern.compile(Constants.REGEX).matcher(data[1]);
-						if(match.matches()){
-							field.setSource_Field((String)event.data);
-							field.setOutput_Field(data[1]);	
-
-							if(!listOfFields.contains(field))
-								listOfFields.add(field);
-								tableViewer.refresh(); 
-
-							for(LookupMapProperty lookupMapProperty : joinOutputList){
-								String outputField = lookupMapProperty.getOutput_Field();
-								if(!tempList.contains(outputField)){
-									errorLabel.setText(Messages.OUTPUT_FIELD_EXISTS);
-									errorLabel.setVisible(false);
-									tempList.add(outputField);
-									tableViewer.refresh();
-								}else{
-									errorLabel.setVisible(true);
-									errorLabel.setText(Messages.OUTPUT_FIELD_EXISTS);
-									outputTableViewer.refresh(); 
-									outputTableViewer.editElement(outputTableViewer.getElementAt(joinOutputList.indexOf(lookupMapProperty)), 1);
-								}
-							}
-						}
-					}
+					String[] dropData = ((String) event.data).split(Pattern.quote("#"));
+					for (String data : dropData)
+						joinOutputProperty(tableViewer, data);
+					validateDuplicatesInOutputField();
 				}
 			} 
 		});
