@@ -806,8 +806,7 @@ public class ELTLookupMapWizard extends Dialog {
 					return;
 				}
 				if (isSingleColumn) {
-					String[] dropData = ((String) event.data).split(Pattern
-							.quote("#"));
+					String[] dropData = ((String) event.data).split(Pattern.quote("#"));
 					for (String data : dropData)
 						joinOutputProperty(tableViewer, data);
 					validateDuplicatesInOutputField();
