@@ -607,25 +607,6 @@ public class ELTLookupMapWizard extends Dialog {
 				return propertyValidator;
 			}
 			
-//	private  void joinOutputProperty(TableViewer viewer){
-//		LookupMapProperty property = new LookupMapProperty();
-//		if(joinOutputList.size() != 0){
-//			if(!validation())
-//				return;
-//		property.setSource_Field("");
-//		property.setOutput_Field("");
-//		joinOutputList.add(property);
-//		viewer.refresh();
-//		viewer.editElement(viewer.getElementAt(joinOutputList.size()-1), 0);
-//		} else {
-//			property.setSource_Field("");
-//			property.setOutput_Field("");
-//			joinOutputList.add(property);
-//			viewer.refresh();
-//			viewer.editElement(property, 0);
-//		}
-//	}
-			
 			private void joinOutputProperty(TableViewer viewer, String sourceFieldValue) {
 
 				String outputFieldValue = null;
