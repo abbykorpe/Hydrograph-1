@@ -12,7 +12,6 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
@@ -56,6 +55,7 @@ public class PropertyDialogBuilder {
 	private Schema setSchemaForInternalPapogation;
 	private List<String> operationFieldList;
 
+
 	/**
 	 * Instantiates a new property dialog builder.
 	 * 
@@ -88,6 +88,7 @@ public class PropertyDialogBuilder {
 		setSchemaForInternalPapogation.setGridRow(gridRows);
 		setSchemaForInternalPapogation.setExternalSchemaPath("");
 		operationFieldList = new LinkedList<>();
+
 	}
 	
 	/**
@@ -189,6 +190,7 @@ public class PropertyDialogBuilder {
 		
 		widget.setSchemaForInternalPapogation(setSchemaForInternalPapogation);
 		widget.setOperationFieldList(operationFieldList);
+
 		widget.setComponent(component);
 		widget.attachToPropertySubGroup(subGroupContainer);
 		

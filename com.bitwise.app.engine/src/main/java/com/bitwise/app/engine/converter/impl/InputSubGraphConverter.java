@@ -38,7 +38,10 @@ public class InputSubGraphConverter extends InputConverter {
 		super.prepareForXML();
 		Subgraph subgraph = (Subgraph) baseComponent;
 		Subgraph.Path path = new Subgraph.Path();
-		path.setUri(((String)properties.get("path")).replace(".job", ".xml"));
+		String[] temp;
+		String subGraphFilePath=	((String)properties.get("path")).replace(".job", ".xml");
+		temp = subGraphFilePath.split("\\\\",3);
+		path.setUri(temp[temp.length-1].replaceAll("\\\\", "/"));
 		subgraph.setPath(path);
 		subgraph.setRuntimeProperties(getRuntimeProperties());
 		

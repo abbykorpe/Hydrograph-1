@@ -33,6 +33,7 @@ public abstract class AbstractWidget {
 	private Component component;
 	private Schema schemaForInternalPapogation;
 	private List<String> operationFieldList;
+
 	protected Component getComponent() {
 		return component;
 	}
@@ -53,8 +54,6 @@ public abstract class AbstractWidget {
 	public void setSchemaForInternalPapogation(Schema schemaForInternalPapogation) {
 		this.schemaForInternalPapogation = schemaForInternalPapogation;
 	}
-
-	
 	public List<String> getOperationFieldList() {
 		return operationFieldList;
 	}
