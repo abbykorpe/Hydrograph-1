@@ -70,14 +70,19 @@ public class JoinConverter extends TransformConverter {
 		List<JoinConfigProperty> keyFields = (List<JoinConfigProperty>) properties.get(Constants.JOIN_CONFIG_FIELD);
 		typeKeyFieldsList = new ArrayList<>();
 		if (keyFields != null) {
+			
 			for (JoinConfigProperty entry : keyFields) {
 				TypeKeyFields typeKeyField = new TypeKeyFields();
 				TypeFieldName fieldName = new TypeFieldName();
-				fieldName.setName(entry.getJoinKey());
+				String[] data = entry.getJoinKey().split(",");
+				for(String key : data){
+				fieldName.setName(key);
+				typeKeyField.getField().add(fieldName);
+				}
 				typeKeyField.setInSocketId(entry.getPortIndex());
 				typeKeyField.setJoinType(getParamValue(entry));
-				typeKeyField.getField().add(fieldName);
 				typeKeyFieldsList.add(typeKeyField);
+				
 			}
 		}
 		return typeKeyFieldsList;
@@ -117,7 +122,7 @@ public class JoinConverter extends TransformConverter {
 					outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
 					outSocketList.add(outSocket);
 					outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(
-							getLookuporJoinOutputMaping(joinupPropertyGrid));
+							getLookupOrJoinOutputMaping(joinupPropertyGrid));
 				} else {
 					if (joinMappingGrid != null) {
 						TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
@@ -199,7 +204,7 @@ public class JoinConverter extends TransformConverter {
 		return inSocketsList;
 	}
 
-	public List<Object> getLookuporJoinOutputMaping(JoinMappingGrid joinPropertyGrid) {
+	public List<Object> getLookupOrJoinOutputMaping(JoinMappingGrid joinPropertyGrid) {
 		List<Object> passThroughFieldorMapFieldList = null;
 		if (joinPropertyGrid != null) {
 			passThroughFieldorMapFieldList = new ArrayList<>();

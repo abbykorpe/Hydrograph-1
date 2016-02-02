@@ -18,6 +18,7 @@ import com.bitwise.app.engine.helper.ConverterHelper;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwiseglobal.graph.commontypes.MatchValue;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeFieldName;
 import com.bitwiseglobal.graph.commontypes.TypeInputField;
@@ -27,12 +28,15 @@ import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.hashjoin.TypeKeyFields;
 import com.bitwiseglobal.graph.operationstypes.HashJoin;
+import com.bitwiseglobal.graph.operationstypes.HashJoin.Match;
+
 
 public class LookupConverter extends TransformConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConverter.class);
 	private LookupMappingGrid lookupPropertyGrid;
 	private ConverterHelper converterHelper;
+	private String data ="first";
 
 	public LookupConverter(Component component) {
 		super();
@@ -41,6 +45,7 @@ public class LookupConverter extends TransformConverter {
 		this.properties = component.getProperties();
 		lookupPropertyGrid = (LookupMappingGrid) properties.get(Constants.LOOKUP_MAP_FIELD);
 		converterHelper = new ConverterHelper(component);
+		
 	}
 
 	@Override
@@ -50,6 +55,13 @@ public class LookupConverter extends TransformConverter {
 		if (properties.get(Constants.LOOKUP_CONFIG_FIELD) != null) {
 			hashJoin.getKeys().addAll(getLookupConfigKeys());
 		}
+		hashJoin.setMatch(getMatchValueFromUi());
+	}
+
+	private Match getMatchValueFromUi() {
+		Match match = new Match();
+		match.setValue(MatchValue.FIRST);
+		return match;
 	}
 
 	private List<TypeKeyFields> getLookupConfigKeys() {
@@ -98,6 +110,7 @@ public class LookupConverter extends TransformConverter {
 		logger.debug("Generating TypeStraightPullOutSocket data for : {}", properties.get(Constants.PARAM_NAME));
 		TypeBaseInSocket inSocketsList = new TypeBaseInSocket();
 		Object obj = properties.get(Constants.LOOKUP_MAP_FIELD);
+		
 		List<TypeOperationsOutSocket> outSockectList = new ArrayList<TypeOperationsOutSocket>();
 		for (Link link : component.getSourceConnections()) {
 			TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();
