@@ -129,9 +129,7 @@ public class MappingDialog extends Dialog {
 	
 	@Override
 	protected void okPressed() {
-		if(mappingTable.isValidTable() && inputTable.isValidTable()){
-			System.out.println("Input Table validation : " + inputTable.isValidTable());
-			System.out.println("Mapping Table validation : " + mappingTable.isValidTable());			
+		if(mappingTable.isValidTable() && inputTable.isValidTable()){			
 			atMapping = new ATMapping(inputTable.getData(), mappingTable.getData());
 			super.okPressed();
 		}else{

@@ -2,6 +2,7 @@ package com.bitwise.app.propertywindow.widgets.customwidgets.schema;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -71,7 +72,7 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
  */
 public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTSchemaGridWidget.class);
-	// Table column names/properties
+
 	public static final String FIELDNAME = Messages.FIELDNAME;
 	public static final String DATEFORMAT = Messages.DATEFORMAT;
 	public static final String DATATYPE = Messages.DATATYPE;
@@ -144,6 +145,17 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	}
 
+	private List<String> getSchemaFields(List<GridRow> schemaGridRowList2){
+		List<String> schemaFields = new LinkedList<>();
+		if(schemaGridRowList2!=null){								
+			for(GridRow gridRow : schemaGridRowList2){
+				GridRow fixedWidthGridRow = (GridRow)gridRow;
+				schemaFields.add(fixedWidthGridRow.getFieldName());
+			}
+		}
+		return schemaFields;
+	}
+	
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
 		ComponentsOutputSchema componentsOutputSchema = new ComponentsOutputSchema();
@@ -154,18 +166,43 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				componentsOutputSchema.getMapFields().putAll(previousOutputSchema.getMapFields());
 			if (!previousOutputSchema.getPassthroughFields().isEmpty())
 				componentsOutputSchema.getPassthroughFields().addAll(previousOutputSchema.getPassthroughFields());
-		}
+		}//
 		List<GridRow> tempGrid = new ArrayList<>();
-		if (schemaGridRowList != null && !schemaGridRowList.isEmpty()) {
-			for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
-				tempGrid.add(gridRow.copy());
-				componentsOutputSchema.addSchemaFields(gridRow);
+		List<String> oprationFieldList = getOperationFieldList();
+		if (schemaGridRowList != null ) {
+			
+			if(getSchemaForInternalPapogation()!=null){
+				Schema internalSchema = getSchemaForInternalPapogation().clone();
+				List<String> schemaFields = getSchemaFields(schemaGridRowList);
+				for(GridRow internalSchemaRow : internalSchema.getGridRow()){
+					int index=0;
+					if(schemaFields.contains(internalSchemaRow.getFieldName())){
+						for(Object schemaGridRow :schemaGridRowList){							
+							if(internalSchemaRow.getFieldName().equals(((GridRow)schemaGridRow).getFieldName())){
+								if(!oprationFieldList.contains(internalSchemaRow.getFieldName()))
+									schemaGridRowList.set(index, internalSchemaRow.copy());
+							}
+							index++;
+						}
+					}else{
+						schemaGridRowList.add(internalSchemaRow.copy());
+					}
+				}
 			}
+			
+			if(!schemaGridRowList.isEmpty()){
+				for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
+					tempGrid.add(gridRow.copy());
+					componentsOutputSchema.addSchemaFields(gridRow);
+				}
 
-			if (!schemaGridRowList.equals(this.properties)) {
-				propertyDialogButtonBar.enableApplyButton(true);
+				if (!schemaGridRowList.equals(this.properties)) {
+					propertyDialogButtonBar.enableApplyButton(true);
+				}
 			}
+			
 		}
+		
 		Schema schema = new Schema();
 		if (isExternal) {
 			schema.setIsExternal(true);
@@ -175,10 +212,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			schema.setIsExternal(false);
 			schema.setGridRow(tempGrid);
 			schema.setExternalSchemaPath("");
-			property.put(Constants.SCHEMA_TO_PROPAGATE, componentsOutputSchema);
+			property.put(Constants.SCHEMA_TO_PROPAGATE, componentsOutputSchema);//
 		}
 		property.put(propertyName, schema);
-		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), componentsOutputSchema);
+		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), componentsOutputSchema);//
 
 		return property;
 	}
@@ -619,16 +656,18 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		Schema schema = getSchemaForInternalPapogation();
 		if (this.properties != null) {
 			Schema originalSchema = (Schema) this.properties;
-			List<FixedWidthGridRow> existingFields = getExitingSchemaFields(originalSchema);
+			List<GridRow> existingFields = getExitingSchemaFields(originalSchema);
 
 			List<String> existingFieldNames = getExitingSchemaFieldNames(originalSchema);
 
+			List<String> operationFieldList = getOperationFieldList();
 			for (GridRow row : schema.getGridRow()) {
 				if (existingFieldNames.contains(row.getFieldName().trim())) {
 					if (!existingFields.contains(row)) {
 						for (int index = 0; index < originalSchema.getGridRow().size(); index++) {
 							if (originalSchema.getGridRow().get(index).getFieldName().equals(row.getFieldName().trim())) {
-								originalSchema.getGridRow().set(index, row.copy());
+								if(!operationFieldList.contains(row.getFieldName()))
+									originalSchema.getGridRow().set(index, row.copy());
 							}
 						}
 					}
@@ -675,11 +714,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		return list;
 	}
 
-	private List<FixedWidthGridRow> getExitingSchemaFields(Schema originalSchema) {
-		List<FixedWidthGridRow> list = new ArrayList<>();
+	private List<GridRow> getExitingSchemaFields(Schema originalSchema) {
+		List<GridRow> list = new ArrayList<>();
 
 		for (GridRow row : originalSchema.getGridRow()) {
-			list.add((FixedWidthGridRow) row.copy());
+			list.add((GridRow) row.copy());
 		}
 		return list;
 	}

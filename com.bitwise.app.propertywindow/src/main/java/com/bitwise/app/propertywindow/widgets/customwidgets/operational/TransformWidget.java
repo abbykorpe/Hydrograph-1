@@ -46,8 +46,6 @@ public class TransformWidget extends AbstractWidget {
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private ATMapping atMapping;
 
-	// private TransformPropertyGrid transformPropertyGrid;
-	// private TransformDialog transformDialog;
 
 	/**
 	 * Instantiates a new ELT operation class widget.
@@ -68,11 +66,7 @@ public class TransformWidget extends AbstractWidget {
 		if (atMapping == null) {
 			atMapping = new ATMapping();
 		}
-
-		/*
-		 * this.transformPropertyGrid = (TransformPropertyGrid) componentConfigrationProperty.getPropertyValue();
-		 * if(transformPropertyGrid == null){ transformPropertyGrid = new TransformPropertyGrid(); }
-		 */
+		
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 
 	}
@@ -97,13 +91,7 @@ public class TransformWidget extends AbstractWidget {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				/*
-				 * transformDialog = new TransformDialog(transformComposite.getContainerControl().getShell(),
-				 * propertyDialogButtonBar,transformPropertyGrid,widgetConfig); transformDialog.open();
-				 * transformPropertyGrid = transformDialog.getTransformProperty();
-				 * propertyDialogButtonBar.enableApplyButton(true);
-				 */
+				
 				getPropagatedSChema();
 
 				MappingDialog mappingDialog = new MappingDialog(transformComposite.getContainerControl().getShell(),
@@ -124,25 +112,47 @@ public class TransformWidget extends AbstractWidget {
 		// prapogateOuputFieldsToSchemaTab();
 	}
 
+	private void initSchemaObject() {
+		Schema schemaForInternalPapogation = new Schema();
+		schemaForInternalPapogation.setIsExternal(false);
+		List<GridRow> gridRows = new ArrayList<>();
+		schemaForInternalPapogation.setGridRow(gridRows);
+		schemaForInternalPapogation.setExternalSchemaPath("");
+		setSchemaForInternalPapogation(schemaForInternalPapogation);
+	}
+	
 	private void prapogateOuputFieldsToSchemaTabFromTransformWidget() {
+		
 		if (atMapping == null || atMapping.getMappingSheetRows() == null)
 			return;
+		
+	
+		getSchemaForInternalPapogation().getGridRow().clear();
+		getOperationFieldList().clear();
+		
 		List<String> finalPassThroughFields=new LinkedList<String>();
 		Map<String, String> finalMapFields=new LinkedHashMap<String, String>();
+		
+		List<String> operationFieldList=new LinkedList<String>();
+		
 		for (MappingSheetRow mappingSheetRow : atMapping.getMappingSheetRows()) {
 			List<String> operationFields = getOpeartionFields(mappingSheetRow);
 			List<String> passThroughFields = getPassThroughFields(mappingSheetRow);
 			Map<String, String> mapFields = getMapFields(mappingSheetRow);
 			finalMapFields.putAll(mapFields);
 			finalPassThroughFields.addAll(passThroughFields);
+			operationFieldList.addAll(operationFields);
 			addOperationFieldsToSchema(operationFields);
 			addPassthroughFieldsToSchema(passThroughFields);
 			addMapFieldsToSchema(mapFields);
 
 		}
 		addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(finalMapFields, finalPassThroughFields);
-		System.out.println(getSchemaForInternalPapogation());
+		getOperationFieldList().addAll(operationFieldList);
 	}
+	
+	
+	
 
 	private void addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(Map<String, String> mapFields,
 			List<String> passThroughFields) {
@@ -195,7 +205,6 @@ public class TransformWidget extends AbstractWidget {
 	}
 
 	private void addMapFieldsToSchema(Map<String, String> mapFields) {
-		// List<String> schemaFields = getCurrentSchemaFields();
 		Schema schema = getSchemaForInternalPapogation();
 		List<String> currentFieldsInProppogatedSchemaObject = new LinkedList<>();
 		for (GridRow gridRow : schema.getGridRow()) {
@@ -216,12 +225,7 @@ public class TransformWidget extends AbstractWidget {
 				}
 			}
 		}
-
-		/*
-		 * for(String inputField : mapFields.keySet()){ if(!schemaFields.contains(inputField)){ FixedWidthGridRow
-		 * fixedWidthGridRow = (FixedWidthGridRow) getFieldSchema(inputField).copy();
-		 * fixedWidthGridRow.setFieldName(mapFields.get(inputField)); schema.getGridRow().add(fixedWidthGridRow); } }
-		 */
+		
 	}
 
 	private void addPassthroughFieldsToSchema(List<String> passThroughFields) {
@@ -324,7 +328,6 @@ public class TransformWidget extends AbstractWidget {
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		// operationClassProperty = eltOperationClassDialog.getOperationClassProperty();
 		atMapping.getInputFields().clear();
 		property.put(propertyName, atMapping);
 

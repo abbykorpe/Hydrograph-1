@@ -2,6 +2,7 @@ package com.bitwise.app.propertywindow.propertydialog;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -53,6 +54,7 @@ public class PropertyDialogBuilder {
 	private Component component;
 	private AbstractWidget schemaWidget;
 	private Schema setSchemaForInternalPapogation;
+	private List<String> operationFieldList;
 
 	/**
 	 * Instantiates a new property dialog builder.
@@ -85,6 +87,7 @@ public class PropertyDialogBuilder {
 		List<GridRow> gridRows = new ArrayList<>();
 		setSchemaForInternalPapogation.setGridRow(gridRows);
 		setSchemaForInternalPapogation.setExternalSchemaPath("");
+		operationFieldList = new LinkedList<>();
 	}
 	
 	/**
@@ -185,6 +188,7 @@ public class PropertyDialogBuilder {
 		widget.setEltComponenetProperties(eltComponenetProperties);
 		
 		widget.setSchemaForInternalPapogation(setSchemaForInternalPapogation);
+		widget.setOperationFieldList(operationFieldList);
 		widget.setComponent(component);
 		widget.attachToPropertySubGroup(subGroupContainer);
 		
