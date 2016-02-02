@@ -42,7 +42,6 @@ public class ELTFilePathWidget extends AbstractWidget{
 	private ControlDecoration txtDecorator;
 	private ControlDecoration decorator;
 	private Button button;
-	
 
 	/**
 	 * Instantiates a new ELT file path widget.
