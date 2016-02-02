@@ -2,6 +2,7 @@ package com.bitwise.app.propertywindow.widgets.customwidgets;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.eclipse.swt.widgets.Text;
 
@@ -31,6 +32,7 @@ public abstract class AbstractWidget {
 	private String toolTipErrorMessage =  null;
 	private Component component;
 	private Schema schemaForInternalPapogation;
+	private List<String> operationFieldList;
 	protected Component getComponent() {
 		return component;
 	}
@@ -50,6 +52,15 @@ public abstract class AbstractWidget {
 
 	public void setSchemaForInternalPapogation(Schema schemaForInternalPapogation) {
 		this.schemaForInternalPapogation = schemaForInternalPapogation;
+	}
+
+	
+	public List<String> getOperationFieldList() {
+		return operationFieldList;
+	}
+
+	public void setOperationFieldList(List<String> operationFieldList) {
+		this.operationFieldList = operationFieldList;
 	}
 
 	/**

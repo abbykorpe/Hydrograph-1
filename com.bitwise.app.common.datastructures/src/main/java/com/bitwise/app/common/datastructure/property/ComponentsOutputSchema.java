@@ -1,22 +1,36 @@
 package com.bitwise.app.common.datastructure.property;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
-import com.bitwise.app.common.datastructure.property.GridRow;
-import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.cloneableinterface.IDataStructure;
 
 /**
- * This class holds output schema of each component in FixedWidth format.
+ * This class stores output schema of each component in FixedWidth format.
  * 
  * @author Bitwise
  * 
  */
-public class ComponentsOutputSchema {
+public class ComponentsOutputSchema implements IDataStructure {
 
 	private String fromSocketId;
 	private List<FixedWidthGridRow> fixedWidthGridRowsOutputFields = new ArrayList<>();
+	private List<String> passthroughFields = new LinkedList<>();
+	private Map<String, String> mapFields = new LinkedHashMap<>();
+
+	public List<String> getPassthroughFields() {
+
+		return passthroughFields;
+	}
+
+	public Map<String, String> getMapFields() {
+
+		return mapFields;
+	}
 
 	/**
 	 * This method adds grid row object as fixed width object
@@ -103,8 +117,59 @@ public class ComponentsOutputSchema {
 	public List<SchemaGrid> getSchemaGridOutputFields() {
 		List<SchemaGrid> schemaGrid = new ArrayList<>();
 		for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
-				schemaGrid.add(convertFixedWidthSchemaToSchemaGridRow(fixedWidthGridRow));
+			schemaGrid.add(convertFixedWidthSchemaToSchemaGridRow(fixedWidthGridRow));
 		}
 		return schemaGrid;
+	}
+
+	@Override
+	public ComponentsOutputSchema clone() {
+		return new ComponentsOutputSchema();
+
+	}
+
+	public void updatePassthroughFieldsSchema(ComponentsOutputSchema sourceOutputSchema) {
+		FixedWidthGridRow targetFixedWidthGridRow;
+		FixedWidthGridRow sourceFixedWidthGridRow;
+		for (String fieldName : passthroughFields) {
+			targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(fieldName);
+			if (targetFixedWidthGridRow != null) {
+				sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(fieldName);
+				if (sourceFixedWidthGridRow != null) {
+					targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
+					targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
+					targetFixedWidthGridRow.setLength(sourceFixedWidthGridRow.getLength());
+					targetFixedWidthGridRow.setScale(sourceFixedWidthGridRow.getScale());
+					targetFixedWidthGridRow.setDateFormat(sourceFixedWidthGridRow.getDateFormat());
+				}
+			}
+		}
+	}
+
+	private FixedWidthGridRow getFixedWidthGridRowForFieldName(String fieldName) {
+		for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
+			if (fixedWidthGridRow.getFieldName().equals(fieldName))
+
+				return fixedWidthGridRow;
+		}
+		return null;
+	}
+
+	public void updateMapFieldSchema(ComponentsOutputSchema sourceOutputSchema) {
+		FixedWidthGridRow targetFixedWidthGridRow;
+		FixedWidthGridRow sourceFixedWidthGridRow;
+		for (Entry<String, String> entry : mapFields.entrySet()) {
+			targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(entry.getValue());
+			if (targetFixedWidthGridRow != null) {
+				sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(entry.getKey());
+				if (sourceFixedWidthGridRow != null) {
+					targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
+					targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
+					targetFixedWidthGridRow.setLength(sourceFixedWidthGridRow.getLength());
+					targetFixedWidthGridRow.setScale(sourceFixedWidthGridRow.getScale());
+					targetFixedWidthGridRow.setDateFormat(sourceFixedWidthGridRow.getDateFormat());
+				}
+			}
+		}
 	}
 }

@@ -52,8 +52,9 @@ public class SchemaPropagation {
 		}
 
 		for (Link link : destinationComponent.getSourceConnections()) {
-			if ((!(link.getTarget().getCategory().equals("TRANSFORM") & !link.getTarget().getComponentName()
-					.equals("Filter")) && !link.getTarget().getProperties().containsValue(componentsOutputSchema)))
+			if ((!(link.getTarget().getCategory().equals(Constants.TRANSFORM) & !link.getTarget().getComponentName()
+					.equalsIgnoreCase(Constants.FILTER)) && !link.getTarget().getProperties()
+					.containsValue(componentsOutputSchema)))
 				if (!checkUnusedSocketAsSourceTerminal(link))
 					applySchemaToTargetComponents(link.getTarget(), componentsOutputSchema);
 				else {
@@ -62,13 +63,34 @@ public class SchemaPropagation {
 				}
 			else {
 				for (Link link2 : link.getTarget().getSourceConnections()) {
-					if (checkUnusedSocketAsSourceTerminal(link2) && isMainLinkChecked(link2)
-							&& getComponentsOutputSchema(link2) != null) {
-						applySchemaToTargetComponents(link2.getTarget(), this.componentsOutputSchema);
-					}
+					if (!isMainLinkChecked(link2)) {
+						if (checkUnusedSocketAsSourceTerminal(link2) && getComponentsOutputSchema(link2) != null) {
+							applySchemaToTargetComponents(link2.getTarget(), this.componentsOutputSchema);
+						} else
+							propagatePassThroughAndMapFields(link);
+					} else
+						break;
 				}
 			}
 		}
+	}
+
+	private void propagatePassThroughAndMapFields(Link link2) {
+		boolean toPropagate = false;
+		ComponentsOutputSchema sourceOutputSchema = (ComponentsOutputSchema) link2.getSource().getProperties()
+				.get(Constants.SCHEMA_TO_PROPAGATE);
+		ComponentsOutputSchema targetOutputSchema = (ComponentsOutputSchema) link2.getTarget().getProperties()
+				.get(Constants.SCHEMA_TO_PROPAGATE);
+		if (targetOutputSchema != null && !targetOutputSchema.getPassthroughFields().isEmpty()) {
+			targetOutputSchema.updatePassthroughFieldsSchema(sourceOutputSchema);
+			toPropagate = true;
+		}
+		if (targetOutputSchema != null && !targetOutputSchema.getMapFields().isEmpty()) {
+			targetOutputSchema.updateMapFieldSchema(sourceOutputSchema);
+			toPropagate = true;
+		}
+		if (toPropagate)
+			applySchemaToTargetComponents(link2.getTarget(), targetOutputSchema);
 	}
 
 	/**
@@ -81,7 +103,7 @@ public class SchemaPropagation {
 		LOGGER.debug("Getting Source Output Schema for component.");
 		this.componentsOutputSchema = null;
 		getSourceSchemaForUnusedPorts(link);
-		flushLinkLists();
+		componentsLinkList.clear();
 		return this.componentsOutputSchema;
 	}
 
@@ -114,7 +136,6 @@ public class SchemaPropagation {
 
 	private boolean isMainLinkChecked(Link link) {
 		if (mainLinkList.contains(link)) {
-			mainLinkList.clear();
 			return true;
 		}
 		mainLinkList.add(link);
@@ -123,7 +144,7 @@ public class SchemaPropagation {
 
 	private String getInSocketForUnusedSocket(String unusedSocketId) {
 		String unusedPortNo = unusedSocketId.substring(6);
-		String inSocket = "in" + unusedPortNo;
+		String inSocket = Constants.INPUT_SOCKET_TYPE + unusedPortNo;
 		return inSocket;
 	}
 

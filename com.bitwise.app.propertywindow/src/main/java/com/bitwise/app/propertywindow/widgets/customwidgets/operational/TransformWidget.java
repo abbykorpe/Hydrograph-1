@@ -35,7 +35,6 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 
-
 /**
  * The Class ELTOperationClassWidget.
  * 
@@ -47,8 +46,6 @@ public class TransformWidget extends AbstractWidget {
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private ATMapping atMapping;
 
-	// private TransformPropertyGrid transformPropertyGrid;
-	// private TransformDialog transformDialog;
 
 	/**
 	 * Instantiates a new ELT operation class widget.
@@ -69,11 +66,7 @@ public class TransformWidget extends AbstractWidget {
 		if (atMapping == null) {
 			atMapping = new ATMapping();
 		}
-
-		/*
-		 * this.transformPropertyGrid = (TransformPropertyGrid) componentConfigrationProperty.getPropertyValue();
-		 * if(transformPropertyGrid == null){ transformPropertyGrid = new TransformPropertyGrid(); }
-		 */
+		
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 
 	}
@@ -98,23 +91,17 @@ public class TransformWidget extends AbstractWidget {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				/*
-				 * transformDialog = new TransformDialog(transformComposite.getContainerControl().getShell(),
-				 * propertyDialogButtonBar,transformPropertyGrid,widgetConfig); transformDialog.open();
-				 * transformPropertyGrid = transformDialog.getTransformProperty();
-				 * propertyDialogButtonBar.enableApplyButton(true);
-				 */
-				getPropagatedSChema();
 				
+				getPropagatedSChema();
+
 				MappingDialog mappingDialog = new MappingDialog(transformComposite.getContainerControl().getShell(),
 						propertyDialogButtonBar, atMapping, widgetConfig);
 				mappingDialog.open();
 
 				atMapping = mappingDialog.getATMapping();
-				
+
 				prapogateOuputFieldsToSchemaTabFromTransformWidget();
-				
+
 				atMapping.getInputFields().clear();
 				super.widgetSelected(e);
 			}
@@ -122,53 +109,88 @@ public class TransformWidget extends AbstractWidget {
 		});
 
 		prapogateOuputFieldsToSchemaTabFromTransformWidget();
-		//prapogateOuputFieldsToSchemaTab();
+		// prapogateOuputFieldsToSchemaTab();
+	}
+
+	private void initSchemaObject() {
+		Schema schemaForInternalPapogation = new Schema();
+		schemaForInternalPapogation.setIsExternal(false);
+		List<GridRow> gridRows = new ArrayList<>();
+		schemaForInternalPapogation.setGridRow(gridRows);
+		schemaForInternalPapogation.setExternalSchemaPath("");
+		setSchemaForInternalPapogation(schemaForInternalPapogation);
 	}
 	
-	
-	private void prapogateOuputFieldsToSchemaTabFromTransformWidget(){
-		if(atMapping==null || atMapping.getMappingSheetRows() == null)
+	private void prapogateOuputFieldsToSchemaTabFromTransformWidget() {
+		
+		if (atMapping == null || atMapping.getMappingSheetRows() == null)
 			return;
 		
-		for(MappingSheetRow mappingSheetRow : atMapping.getMappingSheetRows()){
+	
+		getSchemaForInternalPapogation().getGridRow().clear();
+		getOperationFieldList().clear();
+		
+		List<String> finalPassThroughFields=new LinkedList<String>();
+		Map<String, String> finalMapFields=new LinkedHashMap<String, String>();
+		
+		List<String> operationFieldList=new LinkedList<String>();
+		
+		for (MappingSheetRow mappingSheetRow : atMapping.getMappingSheetRows()) {
 			List<String> operationFields = getOpeartionFields(mappingSheetRow);
 			List<String> passThroughFields = getPassThroughFields(mappingSheetRow);
-			Map<String,String> mapFields = getMapFields(mappingSheetRow);
-			
+			Map<String, String> mapFields = getMapFields(mappingSheetRow);
+			finalMapFields.putAll(mapFields);
+			finalPassThroughFields.addAll(passThroughFields);
+			operationFieldList.addAll(operationFields);
 			addOperationFieldsToSchema(operationFields);
 			addPassthroughFieldsToSchema(passThroughFields);
 			addMapFieldsToSchema(mapFields);
-			
+
 		}
-		System.out.println(getSchemaForInternalPapogation());
+		addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(finalMapFields, finalPassThroughFields);
+		getOperationFieldList().addAll(operationFieldList);
 	}
 	
 	
+	
 
-	private List<String> getCurrentSchemaFields(){
+	private void addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(Map<String, String> mapFields,
+			List<String> passThroughFields) {
+		ComponentsOutputSchema componentsOutputSchema = (ComponentsOutputSchema) getComponent().getProperties().get(
+				Constants.SCHEMA_TO_PROPAGATE);
+		if (componentsOutputSchema == null)
+			componentsOutputSchema = new ComponentsOutputSchema();
+		else {
+			componentsOutputSchema.getPassthroughFields().clear();
+			componentsOutputSchema.getMapFields().clear();
+		}
+		componentsOutputSchema.getPassthroughFields().addAll(passThroughFields);
+		componentsOutputSchema.getMapFields().putAll(mapFields);
+	}
+
+	private List<String> getCurrentSchemaFields() {
 		Component component = getComponent();
 		Schema schema = (Schema) component.getProperties().get("schema");
 		List<String> schemaFields = new LinkedList<>();
-		if(schema!=null){								
-			for(GridRow gridRow : schema.getGridRow()){
-				FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow)gridRow;
+		if (schema != null) {
+			for (GridRow gridRow : schema.getGridRow()) {
+				FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) gridRow;
 				schemaFields.add(fixedWidthGridRow.getFieldName());
 			}
 		}
 		return schemaFields;
 	}
-	
-	
-	private FixedWidthGridRow getFieldSchema(String fieldName){
+
+	private FixedWidthGridRow getFieldSchema(String fieldName) {
 		List<FixedWidthGridRow> fixedWidthGridRows = getInputFieldSchema();
-		for(FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRows){
-			if(fixedWidthGridRow.getFieldName().equals(fieldName)){
+		for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRows) {
+			if (fixedWidthGridRow.getFieldName().equals(fieldName)) {
 				return fixedWidthGridRow;
 			}
 		}
 		return null;
 	}
-	
+
 	private List<FixedWidthGridRow> getInputFieldSchema() {
 		ComponentsOutputSchema outputSchema = null;
 		List<FixedWidthGridRow> fixedWidthGridRows = new LinkedList<>();
@@ -181,56 +203,48 @@ public class TransformWidget extends AbstractWidget {
 		}
 		return fixedWidthGridRows;
 	}
-	
+
 	private void addMapFieldsToSchema(Map<String, String> mapFields) {
-		//List<String> schemaFields = getCurrentSchemaFields();
-		Schema schema = getSchemaForInternalPapogation();	
+		Schema schema = getSchemaForInternalPapogation();
 		List<String> currentFieldsInProppogatedSchemaObject = new LinkedList<>();
-		for(GridRow gridRow : schema.getGridRow()){
+		for (GridRow gridRow : schema.getGridRow()) {
 			currentFieldsInProppogatedSchemaObject.add(gridRow.getFieldName());
 		}
-		
-		for(String inputField : mapFields.keySet()){
+
+		for (String inputField : mapFields.keySet()) {
 			FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) getFieldSchema(inputField).copy();
 			fixedWidthGridRow.setFieldName(mapFields.get(inputField));
-			
-			if(!currentFieldsInProppogatedSchemaObject.contains(mapFields.get(inputField))){
+
+			if (!currentFieldsInProppogatedSchemaObject.contains(mapFields.get(inputField))) {
 				schema.getGridRow().add(fixedWidthGridRow);
-			}else{
-				for(int index=0;index<schema.getGridRow().size();index++){
-					if(schema.getGridRow().get(index).getFieldName().equals(mapFields.get(inputField))){
-						schema.getGridRow().set(index, fixedWidthGridRow);	
+			} else {
+				for (int index = 0; index < schema.getGridRow().size(); index++) {
+					if (schema.getGridRow().get(index).getFieldName().equals(mapFields.get(inputField))) {
+						schema.getGridRow().set(index, fixedWidthGridRow);
 					}
 				}
 			}
 		}
 		
-		/*for(String inputField : mapFields.keySet()){
-			if(!schemaFields.contains(inputField)){
-				FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) getFieldSchema(inputField).copy();
-				fixedWidthGridRow.setFieldName(mapFields.get(inputField));
-				schema.getGridRow().add(fixedWidthGridRow);
-			}
-		}*/
 	}
 
-	private void addPassthroughFieldsToSchema(List<String> passThroughFields) {	
-		Schema schema = getSchemaForInternalPapogation();		
+	private void addPassthroughFieldsToSchema(List<String> passThroughFields) {
+		Schema schema = getSchemaForInternalPapogation();
 		List<String> currentFieldsInProppogatedSchemaObject = new LinkedList<>();
-		for(GridRow gridRow : schema.getGridRow()){
+		for (GridRow gridRow : schema.getGridRow()) {
 			currentFieldsInProppogatedSchemaObject.add(gridRow.getFieldName());
 		}
-		
-		for(String passThroughField : passThroughFields){
-			
+
+		for (String passThroughField : passThroughFields) {
+
 			FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) getFieldSchema(passThroughField).copy();
-			
-			if(!currentFieldsInProppogatedSchemaObject.contains(passThroughField)){
+
+			if (!currentFieldsInProppogatedSchemaObject.contains(passThroughField)) {
 				schema.getGridRow().add(fixedWidthGridRow);
-			}else{
-				for(int index=0;index<schema.getGridRow().size();index++){
-					if(schema.getGridRow().get(index).getFieldName().equals(passThroughField)){
-						schema.getGridRow().set(index, fixedWidthGridRow);	
+			} else {
+				for (int index = 0; index < schema.getGridRow().size(); index++) {
+					if (schema.getGridRow().get(index).getFieldName().equals(passThroughField)) {
+						schema.getGridRow().set(index, fixedWidthGridRow);
 					}
 				}
 			}
@@ -238,83 +252,82 @@ public class TransformWidget extends AbstractWidget {
 	}
 
 	private void addOperationFieldsToSchema(List<String> operationFields) {
-		Schema schema = getSchemaForInternalPapogation();		
+		Schema schema = getSchemaForInternalPapogation();
 		List<String> currentFieldsInProppogatedSchemaObject = new LinkedList<>();
-		for(GridRow gridRow : schema.getGridRow()){
+		for (GridRow gridRow : schema.getGridRow()) {
 			currentFieldsInProppogatedSchemaObject.add(gridRow.getFieldName());
 		}
-		
+
 		SchemaPropagationHelper schemaPropagationHelper = new SchemaPropagationHelper();
-		
-		for(String operationField : operationFields){
-			
+
+		for (String operationField : operationFields) {
+
 			FixedWidthGridRow fixedWidthGridRow = schemaPropagationHelper.createFixedWidthGridRow(operationField);
-			if(!currentFieldsInProppogatedSchemaObject.contains(operationField)){
+			if (!currentFieldsInProppogatedSchemaObject.contains(operationField)) {
 				schema.getGridRow().add(fixedWidthGridRow);
-			}else{
-				for(int index=0;index<schema.getGridRow().size();index++){
-					if(schema.getGridRow().get(index).getFieldName().equals(operationField)){
-						schema.getGridRow().set(index, fixedWidthGridRow);	
+			} else {
+				for (int index = 0; index < schema.getGridRow().size(); index++) {
+					if (schema.getGridRow().get(index).getFieldName().equals(operationField)) {
+						schema.getGridRow().set(index, fixedWidthGridRow);
+
 					}
 				}
 			}
-		}	
+		}
 	}
 
-	private Map<String, String> getMapFields(
-			MappingSheetRow mappingSheetRow) {
-		
+	private Map<String, String> getMapFields(MappingSheetRow mappingSheetRow) {
+
 		Map<String, String> mapFields = new LinkedHashMap<>();
-		if( mappingSheetRow.getOperationClassProperty() ==null || mappingSheetRow.getOperationClassProperty().getOperationClassPath() == null || 
-				mappingSheetRow.getOperationClassProperty().getOperationClassPath().trim().equals("")){
-				
+		if (mappingSheetRow.getOperationClassProperty() == null
+				|| mappingSheetRow.getOperationClassProperty().getOperationClassPath() == null
+				|| mappingSheetRow.getOperationClassProperty().getOperationClassPath().trim().equals("")) {
+
 			List<String> inputFields = mappingSheetRow.getImputFields();
 			List<String> outputFields = mappingSheetRow.getOutputList();
 			int index = 0;
-			for(String inputField : inputFields){
-				if(!inputField.trim().equals(outputFields.get(index).trim())){
+			for (String inputField : inputFields) {
+				if (!inputField.trim().equals(outputFields.get(index).trim())) {
 					mapFields.put(inputField.trim(), outputFields.get(index).trim());
 				}
 				index++;
 			}
-		}		
+		}
 		return mapFields;
-		
+
 	}
 
 	private List<String> getPassThroughFields(MappingSheetRow mappingSheetRow) {
 		List<String> passThroughFields = new LinkedList<>();
-		if( mappingSheetRow.getOperationClassProperty() ==null || mappingSheetRow.getOperationClassProperty().getOperationClassPath() == null || 
-				mappingSheetRow.getOperationClassProperty().getOperationClassPath().trim().equals("")){
-				
+		if (mappingSheetRow.getOperationClassProperty() == null
+				|| mappingSheetRow.getOperationClassProperty().getOperationClassPath() == null
+				|| mappingSheetRow.getOperationClassProperty().getOperationClassPath().trim().equals("")) {
+
 			List<String> inputFields = mappingSheetRow.getImputFields();
 			List<String> outputFields = mappingSheetRow.getOutputList();
 			int index = 0;
-			for(String inputField : inputFields){
-				if(inputField.trim().equals(outputFields.get(index).trim())){
+			for (String inputField : inputFields) {
+				if (inputField.trim().equals(outputFields.get(index).trim())) {
 					passThroughFields.add(inputField.trim());
 				}
 				index++;
 			}
-		}		
+		}
 		return passThroughFields;
 	}
 
 	private List<String> getOpeartionFields(MappingSheetRow mappingSheetRow) {
 		List<String> operationFields = new LinkedList<>();
-		if(mappingSheetRow.getOperationClassProperty() != null && 
-		   mappingSheetRow.getOperationClassProperty().getOperationClassPath()!=null &&
-		   !mappingSheetRow.getOperationClassProperty().getOperationClassPath().equalsIgnoreCase("")){
+		if (mappingSheetRow.getOperationClassProperty() != null
+				&& mappingSheetRow.getOperationClassProperty().getOperationClassPath() != null
+				&& !mappingSheetRow.getOperationClassProperty().getOperationClassPath().equalsIgnoreCase("")) {
 			operationFields.addAll(mappingSheetRow.getOutputList());
 		}
 		return operationFields;
 	}
 
-	
-
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		// operationClassProperty = eltOperationClassDialog.getOperationClassProperty();
 		atMapping.getInputFields().clear();
 		property.put(propertyName, atMapping);
 
