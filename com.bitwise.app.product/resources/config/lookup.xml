@@ -47,5 +47,9 @@
 			usage="REQUIRED">
 			<tns:validator>LOOKUP_MAPPING_VALIDATOR</tns:validator>
 		</tns:property>
-	</tns:component>
+			
+		<tns:property dataType="string" name="match_value"   renderer="MATCH_PROPERTY_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED"/>
+		</tns:component>
 </tns:Config>

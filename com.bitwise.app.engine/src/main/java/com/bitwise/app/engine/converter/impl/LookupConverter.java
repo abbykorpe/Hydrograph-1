@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
 import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
+import com.bitwise.app.common.datastructure.property.MatchValueProperty;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.converter.TransformConverter;
@@ -37,6 +38,7 @@ public class LookupConverter extends TransformConverter {
 	private LookupMappingGrid lookupPropertyGrid;
 	private ConverterHelper converterHelper;
 	private String data ="first";
+	private String[] matchData = new String[]{Constants.FIRST, Constants.LAST, Constants.ALL}; 
 
 	public LookupConverter(Component component) {
 		super();
@@ -60,7 +62,20 @@ public class LookupConverter extends TransformConverter {
 
 	private Match getMatchValueFromUi() {
 		Match match = new Match();
-		match.setValue(MatchValue.FIRST);
+		MatchValueProperty matchValueProperty =  (MatchValueProperty) properties.get(Constants.MATCH_PROPERTY_WIDGET);
+	 
+		if(matchValueProperty != null){
+			if(matchValueProperty.getMatchValue().equalsIgnoreCase("Last")){
+				match.setValue(MatchValue.LAST);
+				return match;
+			}else if(matchValueProperty.getMatchValue().equalsIgnoreCase("All")){
+				match.setValue(MatchValue.ALL);
+				return match;
+			}else{
+				match.setValue(MatchValue.FIRST);
+				return match;
+			}
+		}
 		return match;
 	}
 

@@ -20,6 +20,7 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinMapWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTLookupConfigWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTLookupMapWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.ELTMatchValue;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTOperationClassWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTRetentionlogicWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTXmlPropertiesContainer;
@@ -80,7 +81,8 @@ public class WidgetFactory {
 		JOIN_TYPE_WIDGET(ELTJoinWidget.class),
 		JOIN_MAPPING_WIDGET(ELTJoinMapWidget.class),
 		HASH_JOIN_WIDGET(ELTLookupConfigWidget.class),
-		HASH_JOIN_MAPPING_WIDGET(ELTLookupMapWidget.class);
+		HASH_JOIN_MAPPING_WIDGET(ELTLookupMapWidget.class),
+		MATCH_PROPERTY_WIDGET(ELTMatchValue.class);
 		
 		private Class<?> clazz = null;
 		private WidgetConfig widgetConfig = null;
