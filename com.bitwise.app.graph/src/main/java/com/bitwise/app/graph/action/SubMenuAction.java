@@ -1,17 +1,15 @@
 package com.bitwise.app.graph.action;
 import org.eclipse.jface.action.Action;
- import org.eclipse.jface.action.IAction;
- import org.eclipse.jface.action.IMenuCreator;
- import org.eclipse.jface.resource.ImageDescriptor;
- import org.eclipse.swt.SWT;
- import org.eclipse.swt.events.SelectionEvent;
- import org.eclipse.swt.events.SelectionListener;
-  import org.eclipse.swt.widgets.Control;
-  import org.eclipse.swt.widgets.Menu;
-  import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 public class SubMenuAction extends Action implements SelectionListener
   {
-      // / Who to inform when this action is fired (meaning display the submenu)
       private SelectionListener actionInstance;
    
       // the list of actions that are contained within this action
@@ -37,7 +35,6 @@ public class SubMenuAction extends Action implements SelectionListener
        */
       public SubMenuAction(IAction[] subactions, String text, String toolTip, boolean hideDisabledActions)
       {
-          // indicate that this is a secondary fly-out menu.
           super("", IAction.AS_DROP_DOWN_MENU);
    
           this.actionInstance = this;
@@ -64,24 +61,11 @@ public class SubMenuAction extends Action implements SelectionListener
                   // fill it with our actions
                   for (int i = 0; i < actions.length; i++)
                   {
-                      // skip the disabled ones if necessary (or null actions)
-                     /* if (actions[i] == null || !actions[i].isEnabled() && hideDisabled)
-                          continue;*/
-
-                    // create the submenu item
                     MenuItem item = new MenuItem(menu, SWT.NONE);
- 
-                    // memorize the index
                     item.setData(new Integer(i));
- 
-                    // identify it
                     item.setText(actions[i].getText());
- 
-                    // create its image
                     if (actions[i].getImageDescriptor() != null)
-                        item.setImage(actions[i].getImageDescriptor().createImage());
- 
-                    // inform us when something is selected.
+                        item.setImage(actions[i].getImageDescriptor().createImage()); 
                     item.addSelectionListener(actionInstance);
                 }
                 return menu;
@@ -95,7 +79,7 @@ public class SubMenuAction extends Action implements SelectionListener
      }
   
      /**
-      * Returns how many items are enabled in the flyout. Useful to hide the
+      * Returns how many items are enabled in the menu. Useful to hide the
       * submenu when none are enabled.
       * 
       * @return the number of currently enabled menu items.

@@ -1,40 +1,28 @@
 package com.bitwise.app.graph.action;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.handlers.IHandlerService;
-import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.ide.IDE;
+import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.graph.command.ComponentCreateCommand;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
-import com.bitwise.app.graph.model.Component;
-import com.bitwise.app.graph.model.Container;
-import com.bitwise.app.graph.model.Link;
-import com.bitwise.app.graph.model.components.SubgraphComponent;
+import com.bitwise.app.logging.factory.LogFactory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class CutAction.
+ * The Class SubGraphOpenAction use to open sub graph.
  * 
  * @author Bitwise
  */
@@ -42,6 +30,7 @@ public class SubGraphOpenAction extends SelectionAction{
 	PasteAction pasteAction;
 	ComponentEditPart edComponentEditPart;
 	
+	Logger logger = LogFactory.INSTANCE.getLogger(SubGraphOpenAction.class);
 	/**
 	 * Instantiates a new cut action.
 	 * 
@@ -71,133 +60,33 @@ public class SubGraphOpenAction extends SelectionAction{
 
 
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.action.Action#run()
+	/*
+	 * Open the sub graph that saved in sub graph component path property.
 	 */
 	@Override  
 	public void run() { 
-	List<Object> selectedObjects =getSelectedObjects();
-	
-	if (selectedObjects != null || !selectedObjects.isEmpty()) {
-		for(Object obj:selectedObjects)
-		{
-			if(obj instanceof ComponentEditPart)
+		List<Object> selectedObjects =getSelectedObjects();
+		if (selectedObjects != null || !selectedObjects.isEmpty()) {
+			for(Object obj:selectedObjects)
 			{
-				if (((ComponentEditPart) obj).getCastedModel().getCategory().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY)) {
-				
-					IWorkbenchPage page = PlatformUI.getWorkbench()
-							.getActiveWorkbenchWindow().getActivePage();
-				List bList = (ArrayList) Clipboard
-						.getDefault().getContents();
-				IHandlerService handlerService = (IHandlerService) PlatformUI
-						.getWorkbench().getService(IHandlerService.class);
-				try {
-					IPath jobFilePath=new Path((((ComponentEditPart) obj).getCastedModel()).getProperties().get("path").toString());
-					IFile jobFile = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath);
-					IFileEditorInput input = new FileEditorInput(jobFile);  
-					page.openEditor(input, ELTGraphicalEditor.ID, false);
-					//For selecting the created editor so it will trigger the event to activate and load the Palette
-					IWorkbench workbench = PlatformUI.getWorkbench();
-				    IWorkbenchWindow activeWindow = workbench.getActiveWorkbenchWindow();
-				    if (activeWindow != null) {
-				        final IWorkbenchPage activePage = activeWindow.getActivePage();
-				        if (activePage != null) {
-				            activePage.activate(activePage.findEditor(input));
-				        }
-				    }  
-				} catch (PartInitException e) {
+				if(obj instanceof ComponentEditPart)
+				{
+					if (((ComponentEditPart) obj).getCastedModel().getCategory().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY)) {
+						IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();						
+						IPath jobFilePath=new Path((((ComponentEditPart) obj).getCastedModel()).getProperties().get("path").toString());
+						IFile jobFile = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath);
+						try {
+							IDE.openEditor(page, jobFile, ELTGraphicalEditor.ID);
+						} catch (PartInitException e) {
+							logger.error("Unable to open subgraph");
+						}
+	
 				}
-				Container container = ((ELTGraphicalEditor) page.getActiveEditor())
-						.getContainer();  
-				ELTGraphicalEditor editor=	(ELTGraphicalEditor) page.getActiveEditor();
-				editor.viewer.setContents(container);
-				
-				editor.viewer.addDropTargetListener(editor.createTransferDropTargetListener());
-				// listener for selection on canvas
-				editor.viewer.addSelectionChangedListener(editor.createISelectionChangedListener());
-				 
-				if(container.getChildren().size()==0 && bList.size()!=0){
-				   	
-/*					ComponentCreateCommand createComponent = new ComponentCreateCommand(subgraphComponent,container,new Rectangle(((Component)bList.get(0)).getLocation(),((Component)bList.get(0)).getSize()));
-					createComponent.execute(); 
-*/				Component component=null;
-				String type =(((ComponentEditPart) obj).getCastedModel()).getProperties().get("type").toString();
-					if (type.equalsIgnoreCase("input")|| type.equalsIgnoreCase("operation") || type.equalsIgnoreCase("output")) { 
-						int outPort=0;
-						int inPort=0;
-					   	SubgraphComponent subgraphComponent= new SubgraphComponent();
-					   	
-						for (Object object : bList) {
-							Component subComponent = (Component)object;
-							if(subComponent!= null){
-								List<Link> tarLinks= subComponent.getTargetConnections();
-								for (int in=0;in< tarLinks.size();in++) {
-									if (tarLinks.get(in).getTarget() instanceof SubgraphComponent) {
-										for(int j=0;j<subComponent.getInPortCount();j++) {
-											Link linkTar=tarLinks.get(in);
-											Component oldSource=linkTar.getSource();
-											linkTar.detachSource(); 
-											Link linkNew = new Link();
-											linkNew.setTarget(component);
-											linkNew.setSource(subgraphComponent);
-											linkNew.setTargetTerminal("in"+j);
-											linkNew.setSourceTerminal("in"+inPort);
-											oldSource.freeOutputPort(linkTar.getSourceTerminal());
-											oldSource.disconnectOutput(linkTar);
-											subComponent.connectInput(linkNew);
-											subgraphComponent.connectOutput(linkNew);
-											inPort++; 
-											}	
-									}
-								} 
-
-								
-								List<Link> sourLinks= subComponent.getSourceConnections();
-								List<Link> t = new ArrayList<>();
-								for(int k=0;k<sourLinks.size();k++) {
-									if (sourLinks.get(k).getSource() instanceof SubgraphComponent) {
-										Link linkNew = new Link();
-										linkNew.setSource(subComponent);
-										linkNew.setTarget(subgraphComponent);
-										linkNew.setSourceTerminal("out0");
-										linkNew.setTargetTerminal("out"+outPort);
-										subComponent.connectOutput(linkNew);
-										subgraphComponent.connectInput(linkNew);
-										t.add(linkNew);
-										outPort++;
-									}
-								}
-								container.addChild((Component) subComponent);
-							   
-
-
-								   
-							}    
-					}
-						subgraphComponent.setProperties(new LinkedHashMap<String,Object>());
-					   	subgraphComponent.getProperties().put("name", "subgraph");
-					   	subgraphComponent.setComponentLabel("subgraph");
-					   	subgraphComponent.getProperties().put("type", "inputsubgraph");			
-						subgraphComponent.inputPortSettings(inPort);	
-						subgraphComponent.outputPortSettings(outPort);
-						subgraphComponent.setParent(container); 
-						container.addChild(subgraphComponent);
-
-
-				}
-
-				
-			}	
+			}
 		}
-
-			}
-		
-			}
-			}
+		}
 	}
 	
-	
-
 	@Override
 	protected boolean calculateEnabled() {
 		// TODO Auto-generated method stub

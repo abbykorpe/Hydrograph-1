@@ -135,7 +135,7 @@ public class SubGraphUtility {
 	 * Creates the dynamic output port.
 	 *
 	 * @param outLinks the out links
-	 * @param edComponentEditPart the ed component edit part
+	 * @param edComponentEditPart the component edit part
 	 */
 	public List<Component> createDynamicOutputPort(List< Link> outLinks,ComponentEditPart edComponentEditPart){
 		for(int i=0;i<outLinks.size();i++){
@@ -185,111 +185,53 @@ public class SubGraphUtility {
 			edComponentEditPart.refresh();
 	}
 
-	public List<Component> getCacheInputSubgraphComp() {
-		return cacheInputSubgraphComp;
-	}
-
-	public void setCacheInputSubgraphComp(List<Component> cacheInputSubgraphComp) {
-		this.cacheInputSubgraphComp = cacheInputSubgraphComp;
-	}
-
-	public List<Component> getCacheOutSubgraphComp() {
-		return cacheOutSubgraphComp;
-	}
-
-	public void setCacheOutSubgraphComp(List<Component> cacheOutSubgraphComp) {
-		this.cacheOutSubgraphComp = cacheOutSubgraphComp;
-	}
-
-	public void createSubGraphXml(ComponentEditPart componentEditPart){
+	/**
+	 * Create sub graph xml and open the subgraph in new editor.
+	 * @param componentEditPart
+	 */
+	public void createSubGraphXml(ComponentEditPart componentEditPart,List clipboardList ){
 		
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IHandlerService handlerService = (IHandlerService) PlatformUI.getWorkbench().getService(IHandlerService.class);
-		try {
-			IPath jobFilePath=new Path((((ComponentEditPart) componentEditPart).getCastedModel()).getProperties().get("path").toString());
-			IFile jobFile = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath);
-			IFileEditorInput input = new FileEditorInput(jobFile);  
-			page.openEditor(input, ELTGraphicalEditor.ID, false);
-			//For selecting the created editor so it will trigger the event to activate and load the Palette
-			IWorkbench workbench = PlatformUI.getWorkbench();
-			IWorkbenchWindow activeWindow = workbench.getActiveWorkbenchWindow();
-			if (activeWindow != null) {
-				final IWorkbenchPage activePage = activeWindow.getActivePage();
-				if (activePage != null) {
-					activePage.activate(activePage.findEditor(input));
-	        }
-	    }  
-	} catch (PartInitException e) {
-	}
-	Container container = ((ELTGraphicalEditor) page.getActiveEditor())
-			.getContainer();  
-	ELTGraphicalEditor editor=	(ELTGraphicalEditor) page.getActiveEditor();
-	editor.viewer.setContents(container);
-	
-	editor.viewer.addDropTargetListener(editor.createTransferDropTargetListener());
-	// listener for selection on canvas
-	editor.viewer.addSelectionChangedListener(editor.createISelectionChangedListener());
-	List bList = (ArrayList) Clipboard.getDefault().getContents();
-			
-		   	int inPort=0;
-		   	int outPort=0;
-		   	SubgraphComponent inputSubComponent=new SubgraphComponent();
-		   	SubgraphComponent outSubComponent=new SubgraphComponent();
-		   	for (Component com : cacheInputSubgraphComp) {
-		   		inputSubComponent.setProperties(new LinkedHashMap<String,Object>());
-						for(int j=com.getTargetConnections().size();j<com.getInPortCount();j++) {
-							Link linkNew = new Link();
-							linkNew.setTarget(com);
-							linkNew.setSource(inputSubComponent); 
-							linkNew.setTargetTerminal("in"+j);
-							linkNew.setSourceTerminal("in"+inPort);
-							com.connectInput(linkNew);
-							inputSubComponent.connectOutput(linkNew);
-							inPort++; 
-							}	
-						
-						inputSubComponent.getProperties().put("type", "inputsubgraph");							   	
-					   	container.addChild((Component) com);
-					   	bList.remove(com);						
-					}
-		   	if(cacheInputSubgraphComp.size()>0){
-		   		inputSubComponent.getProperties().put("name", "subgraph");
-		   		inputSubComponent.setComponentLabel("subgraph");
-		   		inputSubComponent.inputPortSettings(inPort);	
-		   		inputSubComponent.outputPortSettings(outPort);
-		   		inputSubComponent.setParent(container); 
-		   		container.addChild(inputSubComponent);
-		   	}
-
-		   	for (Component com : cacheOutSubgraphComp) {
-		   		outSubComponent.setProperties(new LinkedHashMap<String,Object>());
-							Link linkNew = new Link();
-							linkNew.setSource(com);
-							linkNew.setTarget(outSubComponent);
-							linkNew.setSourceTerminal("out0");
-							linkNew.setTargetTerminal("out"+outPort);
-							com.connectOutput(linkNew);
-							outSubComponent.connectInput(linkNew);
-							outSubComponent.getProperties().put("type", "outputsubgraph");			
-							outPort++;
-							if(!cacheInputSubgraphComp.contains(com)){
-							container.addChild((Component) com);
-							bList.remove(com);
-							}
-					}
-		   	if(cacheOutSubgraphComp.size()>0){
-		   		outSubComponent.getProperties().put("name", "subgraph");
-		   		outSubComponent.setComponentLabel("subgraph");
-		   		outSubComponent.inputPortSettings(inPort);	
-		   		outSubComponent.outputPortSettings(outPort);
-		   		outSubComponent.setParent(container); 
-		   		container.addChild(outSubComponent);
-		   	}
-
-			for (Object object : bList) {
-				container.addChild((Component)object); 
-			}
+			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			IHandlerService handlerService = (IHandlerService) PlatformUI.getWorkbench().getService(IHandlerService.class);
+			IFile jobFile=null;
+			try {
+					IPath jobFilePath=new Path((((ComponentEditPart) componentEditPart).getCastedModel()).getProperties().get("path").toString());
+					jobFile = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath);
+					IFileEditorInput input = new FileEditorInput(jobFile);  
+					page.openEditor(input, ELTGraphicalEditor.ID, false);
+					//For selecting the created editor so it will trigger the event to activate and load the Palette
+					IWorkbench workbench = PlatformUI.getWorkbench();
+					IWorkbenchWindow activeWindow = workbench.getActiveWorkbenchWindow();
+					if (activeWindow != null) {
+						final IWorkbenchPage activePage = activeWindow.getActivePage();
+						if (activePage != null) {
+							activePage.activate(activePage.findEditor(input));
+						}
+					}  
+				} catch (PartInitException e) {
+				}
+		
+				Container container = ((ELTGraphicalEditor) page.getActiveEditor()).getContainer();  
+				ELTGraphicalEditor editor=	(ELTGraphicalEditor) page.getActiveEditor();
+				editor.viewer.setContents(container);
+				editor.viewer.addDropTargetListener(editor.createTransferDropTargetListener());
+				// 	listener for selection on canvas
+				editor.viewer.addSelectionChangedListener(editor.createISelectionChangedListener());
 					
+				   	/*
+					 * Add sub graph join component in subgraph that use to link main graph with sub graph.
+					 */
+					SubGraphPortUtil.addInputSubGraphComponentAndLink(container, cacheInputSubgraphComp, clipboardList);
+					SubGraphPortUtil.addOutputSubGraphComponentAndLink(container, cacheInputSubgraphComp, cacheOutSubgraphComp, clipboardList);
+
+					/*
+					 * Add all remaining component those not linked with main graph.
+					 */
+					for (Object object : clipboardList) {
+						container.addChild((Component)object); 
+					}
+					
+					editor.genrateTargetXml(jobFile);
 				   
 	}
 	
