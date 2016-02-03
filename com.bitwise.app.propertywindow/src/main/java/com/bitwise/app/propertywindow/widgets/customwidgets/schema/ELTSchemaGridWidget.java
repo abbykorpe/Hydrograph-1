@@ -142,7 +142,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 		this.properties = componentConfigrationProperty.getPropertyValue();
-
 	}
 
 	private List<String> getSchemaFields(List<GridRow> schemaGridRowList2){
@@ -189,18 +188,12 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					}
 				}
 			}
-			
 			if(!schemaGridRowList.isEmpty()){
 				for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
 					tempGrid.add(gridRow.copy());
 					componentsOutputSchema.addSchemaFields(gridRow);
 				}
-
-				if (!schemaGridRowList.equals(this.properties)) {
-					propertyDialogButtonBar.enableApplyButton(true);
-				}
 			}
-			
 		}
 		
 		Schema schema = new Schema();
@@ -527,6 +520,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
+				propertyDialogButtonBar.enableApplyButton(true);
 				index = table.getSelectionIndex();
 
 				if (index < schemaGridRowList.size() - 1) {
@@ -560,7 +554,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-
+             propertyDialogButtonBar.enableApplyButton(true);
 				index = table.getSelectionIndex();
 
 				if (index > 0) {

@@ -22,6 +22,7 @@ public class ELTGridDeleteAllSelectionListener extends ELTSelectionTaskListener{
 
 	@Override
 	public void selectionListenerAction(PropertyDialogButtonBar propertyDialogButtonBar, ListenerHelper helpers, Widget... widgets) {
+		propertyDialogButtonBar.enableApplyButton(true);
 		Table table = (Table) widgets[0];
 		boolean userAns = WidgetUtility.eltConfirmMessage("Do you really want to delete all properties?");
 		if (userAns) {
