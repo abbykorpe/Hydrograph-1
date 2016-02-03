@@ -37,9 +37,8 @@ import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.model.components.SubgraphComponent;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class SubGraphUtility.
+ * The Class SubGraphUtility contain business logic to create sub graph.
  */
 public class SubGraphUtility {
 	
@@ -221,8 +220,8 @@ public class SubGraphUtility {
 				   	/*
 					 * Add sub graph join component in subgraph that use to link main graph with sub graph.
 					 */
-					SubGraphPortUtil.addInputSubGraphComponentAndLink(container, cacheInputSubgraphComp, clipboardList);
-					SubGraphPortUtil.addOutputSubGraphComponentAndLink(container, cacheInputSubgraphComp, cacheOutSubgraphComp, clipboardList);
+					SubGraphPortLinkUtilty.addInputSubGraphComponentAndLink(container, cacheInputSubgraphComp, clipboardList);
+					SubGraphPortLinkUtilty.addOutputSubGraphComponentAndLink(container, cacheInputSubgraphComp, cacheOutSubgraphComp, clipboardList);
 
 					/*
 					 * Add all remaining component those not linked with main graph.

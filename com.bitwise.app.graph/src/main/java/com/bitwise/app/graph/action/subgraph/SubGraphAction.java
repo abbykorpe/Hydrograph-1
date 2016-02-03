@@ -1,4 +1,4 @@
-package com.bitwise.app.graph.action;
+package com.bitwise.app.graph.action.subgraph;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,6 +18,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.graph.action.ContributionItemManager;
+import com.bitwise.app.graph.action.PasteAction;
 import com.bitwise.app.graph.command.ComponentCreateCommand;
 import com.bitwise.app.graph.command.SubGraphCommand;
 import com.bitwise.app.graph.controller.ComponentEditPart;

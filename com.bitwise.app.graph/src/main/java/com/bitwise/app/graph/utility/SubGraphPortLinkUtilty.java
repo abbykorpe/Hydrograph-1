@@ -8,7 +8,12 @@ import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.model.components.SubgraphComponent;
 
-public class SubGraphPortUtil {
+/**
+ * Class SubGraphPortLinkUtilty has business logic to link the port in sub graph component.
+ * @author Bitwise
+ *
+ */
+public class SubGraphPortLinkUtilty {
 	
 	public static void addInputSubGraphComponentAndLink(Container container,List<Component> cacheInputSubgraphComp,List clipboardList){
 	 int inPort=0;

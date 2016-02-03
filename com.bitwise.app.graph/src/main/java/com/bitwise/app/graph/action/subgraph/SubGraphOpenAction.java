@@ -1,4 +1,4 @@
-package com.bitwise.app.graph.action;
+package com.bitwise.app.graph.action.subgraph;
 
 import java.util.List;
 
@@ -17,6 +17,7 @@ import org.eclipse.ui.ide.IDE;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.graph.action.PasteAction;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.logging.factory.LogFactory;
