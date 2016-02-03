@@ -332,7 +332,8 @@ public class JoinMapGrid extends Dialog {
 							}
 							previousRadioButtonSelection = NONE;
 						} else {
-
+							okButton.setEnabled(true);
+							errorLabel.setVisible(false);
 							radio[0].setSelection(false);
 							outputTableViewer.getTable().setEnabled(false);
 							joinMappingGrid.setButtonText(button.getText());

@@ -33,6 +33,7 @@ public class ELTGridDeleteSelectionListener extends ELTSelectionTaskListener{
 	public void selectionListenerAction(
 			PropertyDialogButtonBar propertyDialogButtonBar,
 			ListenerHelper helpers, Widget... widgets) {
+		propertyDialogButtonBar.enableApplyButton(true);
 		ELTGridDetails gridDetails = (ELTGridDetails) helpers.get(HelperType.SCHEMA_GRID);
 		Table table =gridDetails.getTableViewer().getTable();
 		int temp = table.getSelectionIndex();

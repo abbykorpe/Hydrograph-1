@@ -19,6 +19,7 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
 public class ELTGridMouseDoubleClickListener extends ELTMouseDoubleClickListener{
 	@Override
 	public void mouseDoubleClickAction(PropertyDialogButtonBar propertyDialogButtonBar,ListenerHelper helpers, Widget... widgets){
+		propertyDialogButtonBar.enableApplyButton(true);
 		ELTGridDetails gridDetails = (ELTGridDetails) helpers.get(HelperType.SCHEMA_GRID);
 		gridDetails.getGridWidgetCommonBuilder().createDefaultSchema(gridDetails.getGrids(), gridDetails.getTableViewer(), gridDetails.getLabel());
 	}

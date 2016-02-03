@@ -30,6 +30,7 @@ public class ELTGridAddSelectionListener extends ELTSelectionTaskListener{
 	
 	@Override
 	public void selectionListenerAction(PropertyDialogButtonBar propertyDialogButtonBar, ListenerHelper helpers, Widget... widgets) {
+		propertyDialogButtonBar.enableApplyButton(true);
 		for(Widget widget:widgets){
 			table=(Table)widget;
 			table.getParent().getShell().setFocus();
