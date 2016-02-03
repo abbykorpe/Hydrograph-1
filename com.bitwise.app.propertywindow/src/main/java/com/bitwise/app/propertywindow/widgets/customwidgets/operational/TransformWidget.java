@@ -158,8 +158,10 @@ public class TransformWidget extends AbstractWidget {
 			List<String> passThroughFields) {
 		ComponentsOutputSchema componentsOutputSchema = (ComponentsOutputSchema) getComponent().getProperties().get(
 				Constants.SCHEMA_TO_PROPAGATE);
-		if (componentsOutputSchema == null)
+		if (componentsOutputSchema == null){
 			componentsOutputSchema = new ComponentsOutputSchema();
+			getComponent().getProperties().put(Constants.SCHEMA_TO_PROPAGATE, componentsOutputSchema);
+		}
 		else {
 			componentsOutputSchema.getPassthroughFields().clear();
 			componentsOutputSchema.getMapFields().clear();
@@ -236,8 +238,9 @@ public class TransformWidget extends AbstractWidget {
 		}
 
 		for (String passThroughField : passThroughFields) {
-
-			FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) getFieldSchema(passThroughField).copy();
+			FixedWidthGridRow tempFixedWidthGridRow= getFieldSchema(passThroughField);
+			if(tempFixedWidthGridRow!=null){
+			FixedWidthGridRow fixedWidthGridRow =(FixedWidthGridRow) tempFixedWidthGridRow.copy();
 
 			if (!currentFieldsInProppogatedSchemaObject.contains(passThroughField)) {
 				schema.getGridRow().add(fixedWidthGridRow);
@@ -248,7 +251,7 @@ public class TransformWidget extends AbstractWidget {
 					}
 				}
 			}
-		}
+		}}
 	}
 
 	private void addOperationFieldsToSchema(List<String> operationFields) {

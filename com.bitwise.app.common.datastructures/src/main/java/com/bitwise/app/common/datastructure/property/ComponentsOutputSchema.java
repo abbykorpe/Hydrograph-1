@@ -128,6 +128,11 @@ public class ComponentsOutputSchema implements IDataStructure {
 
 	}
 
+	/**
+	 * It updates the current schema as per its pass-through fields mapping
+	 * 
+	 * @param sourceOutputSchema
+	 */
 	public void updatePassthroughFieldsSchema(ComponentsOutputSchema sourceOutputSchema) {
 		FixedWidthGridRow targetFixedWidthGridRow;
 		FixedWidthGridRow sourceFixedWidthGridRow;
@@ -155,6 +160,11 @@ public class ComponentsOutputSchema implements IDataStructure {
 		return null;
 	}
 
+	/**
+	 * It updates the current schema as per its map-fields mapping
+	 * 
+	 * @param sourceOutputSchema
+	 */
 	public void updateMapFieldSchema(ComponentsOutputSchema sourceOutputSchema) {
 		FixedWidthGridRow targetFixedWidthGridRow;
 		FixedWidthGridRow sourceFixedWidthGridRow;
