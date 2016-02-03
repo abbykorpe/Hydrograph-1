@@ -20,9 +20,9 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinMapWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTLookupConfigWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTLookupMapWidget;
-import com.bitwise.app.propertywindow.widgets.customwidgets.ELTMatchValue;
+import com.bitwise.app.propertywindow.widgets.customwidgets.ELTMatchValueWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTOperationClassWidget;
-import com.bitwise.app.propertywindow.widgets.customwidgets.ELTRetentionlogicWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.ELTRetaintionLogicWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTXmlPropertiesContainer;
 import com.bitwise.app.propertywindow.widgets.customwidgets.SingleColumnWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.TextBoxWithLabelWidget;
@@ -56,7 +56,7 @@ public class WidgetFactory {
 		COMPONENT_BASETYPE_WIDGET(ELTComponentBaseType.class),
 		COMPONENT_TYPE_WIDGET(ELTComponentType.class),
 
-		RETENTION_LOGIC_WIDGET(ELTRetentionlogicWidget.class),
+		RETENTION_LOGIC_WIDGET(ELTRetaintionLogicWidget.class),
 
 		STRICT_CLASS_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getStrictWidgetConfig()),
 		SAFE_PROPERTY_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getSafeWidgetConfig()),
@@ -82,7 +82,7 @@ public class WidgetFactory {
 		JOIN_MAPPING_WIDGET(ELTJoinMapWidget.class),
 		HASH_JOIN_WIDGET(ELTLookupConfigWidget.class),
 		HASH_JOIN_MAPPING_WIDGET(ELTLookupMapWidget.class),
-		MATCH_PROPERTY_WIDGET(ELTMatchValue.class);
+		MATCH_PROPERTY_WIDGET(ELTMatchValueWidget.class);
 		
 		private Class<?> clazz = null;
 		private WidgetConfig widgetConfig = null;

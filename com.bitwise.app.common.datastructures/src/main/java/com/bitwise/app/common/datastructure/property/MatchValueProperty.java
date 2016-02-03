@@ -1,12 +1,16 @@
 package com.bitwise.app.common.datastructure.property;
 
+/**
+ * @author vibhort
+ *
+ */
 public class MatchValueProperty {
 
-	Boolean isSelected;
-	String matchValue;
+	private Boolean radioButtonSelection;
+	private String matchValue;
 
 	public MatchValueProperty() {
-		isSelected = Boolean.FALSE;
+		radioButtonSelection = Boolean.FALSE;
 	}
 	public String getMatchValue() {
 		return matchValue;
@@ -17,11 +21,11 @@ public class MatchValueProperty {
 	}
 
 	public Boolean isSelected() {
-		return isSelected;
+		return radioButtonSelection;
 	}
 	 
 	public void setIsSelected(Boolean isSelected) {
-		this.isSelected = isSelected;
+		this.radioButtonSelection = isSelected;
 	}
 	@Override
 	public String toString() {

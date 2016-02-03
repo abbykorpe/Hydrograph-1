@@ -32,13 +32,15 @@ import com.bitwiseglobal.graph.operationstypes.HashJoin;
 import com.bitwiseglobal.graph.operationstypes.HashJoin.Match;
 
 
+/**
+ * @author vibhort
+ *
+ */
 public class LookupConverter extends TransformConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConverter.class);
 	private LookupMappingGrid lookupPropertyGrid;
 	private ConverterHelper converterHelper;
-	private String data ="first";
-	private String[] matchData = new String[]{Constants.FIRST, Constants.LAST, Constants.ALL}; 
 
 	public LookupConverter(Component component) {
 		super();
@@ -47,7 +49,7 @@ public class LookupConverter extends TransformConverter {
 		this.properties = component.getProperties();
 		lookupPropertyGrid = (LookupMappingGrid) properties.get(Constants.LOOKUP_MAP_FIELD);
 		converterHelper = new ConverterHelper(component);
-		
+
 	}
 
 	@Override
@@ -63,12 +65,12 @@ public class LookupConverter extends TransformConverter {
 	private Match getMatchValueFromUi() {
 		Match match = new Match();
 		MatchValueProperty matchValueProperty =  (MatchValueProperty) properties.get(Constants.MATCH_PROPERTY_WIDGET);
-	 
+
 		if(matchValueProperty != null){
-			if(matchValueProperty.getMatchValue().equalsIgnoreCase("Last")){
+			if(Constants.LAST.equalsIgnoreCase(matchValueProperty.getMatchValue())){
 				match.setValue(MatchValue.LAST);
 				return match;
-			}else if(matchValueProperty.getMatchValue().equalsIgnoreCase("All")){
+			}else if(Constants.ALL.equalsIgnoreCase(matchValueProperty.getMatchValue())){
 				match.setValue(MatchValue.ALL);
 				return match;
 			}else{
@@ -125,7 +127,7 @@ public class LookupConverter extends TransformConverter {
 		logger.debug("Generating TypeStraightPullOutSocket data for : {}", properties.get(Constants.PARAM_NAME));
 		TypeBaseInSocket inSocketsList = new TypeBaseInSocket();
 		Object obj = properties.get(Constants.LOOKUP_MAP_FIELD);
-		
+
 		List<TypeOperationsOutSocket> outSockectList = new ArrayList<TypeOperationsOutSocket>();
 		for (Link link : component.getSourceConnections()) {
 			TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();

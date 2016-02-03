@@ -24,8 +24,8 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSu
  * 
  * @author Bitwise
  */
-public class ELTRetentionlogicWidget extends AbstractWidget{
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTRetentionlogicWidget.class);
+public class ELTRetaintionLogicWidget extends AbstractWidget{
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTRetaintionLogicWidget.class);
 	
 	private final String propertyName;
 	private final  LinkedHashMap<String, Object> property=new LinkedHashMap<>();
@@ -42,7 +42,7 @@ public class ELTRetentionlogicWidget extends AbstractWidget{
 	 * @param propertyDialogButtonBar
 	 *            the property dialog button bar
 	 */
-	public ELTRetentionlogicWidget(
+	public ELTRetaintionLogicWidget(
 			ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar) {

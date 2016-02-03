@@ -122,7 +122,7 @@ public class JoinConverter extends TransformConverter {
 					outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
 					outSocketList.add(outSocket);
 					outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(
-							getLookupOrJoinOutputMaping(joinupPropertyGrid));
+							getLookupOrJoinOutputMapping(joinupPropertyGrid));
 				} else {
 					if (joinMappingGrid != null) {
 						TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
@@ -204,7 +204,7 @@ public class JoinConverter extends TransformConverter {
 		return inSocketsList;
 	}
 
-	public List<Object> getLookupOrJoinOutputMaping(JoinMappingGrid joinPropertyGrid) {
+	public List<Object> getLookupOrJoinOutputMapping(JoinMappingGrid joinPropertyGrid) {
 		List<Object> passThroughFieldorMapFieldList = null;
 		if (joinPropertyGrid != null) {
 			passThroughFieldorMapFieldList = new ArrayList<>();
