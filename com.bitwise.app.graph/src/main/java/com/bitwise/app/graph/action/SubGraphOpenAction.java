@@ -117,79 +117,86 @@ public class SubGraphOpenAction extends SelectionAction{
 				editor.viewer.addSelectionChangedListener(editor.createISelectionChangedListener());
 				 
 				if(container.getChildren().size()==0 && bList.size()!=0){
-				   	SubgraphComponent subgraphComponent= new SubgraphComponent();
 				   	
 /*					ComponentCreateCommand createComponent = new ComponentCreateCommand(subgraphComponent,container,new Rectangle(((Component)bList.get(0)).getLocation(),((Component)bList.get(0)).getSize()));
 					createComponent.execute(); 
 */				Component component=null;
 				String type =(((ComponentEditPart) obj).getCastedModel()).getProperties().get("type").toString();
-				int i=0;
-					if (type.equalsIgnoreCase("input")) { 
-					for(Object l:bList)
-					{						
-						component=(Component) l;
-						List<Link> links = ((Component) l).getSourceConnections();
-						if(links.size()<=0){
-								Link linkNew = new Link();
-								linkNew.setSource(component);
-								linkNew.setTarget(subgraphComponent);
-								linkNew.setSourceTerminal("out0");
-								linkNew.setTargetTerminal("out"+i);
-								component.connectOutput(linkNew);
-								subgraphComponent.connectInput(linkNew);
-								i++;
-							}
-								
-//						((Component) l).setSourceConnections(newLinks); 
-						container.addChild((Component) l);
-					}
-				   	subgraphComponent.setProperties(new LinkedHashMap<String,Object>());
-				   	subgraphComponent.getProperties().put("name", "subgraph");
-				   	subgraphComponent.setComponentLabel("subgraph");
-				   	subgraphComponent.getProperties().put("type", "outputsubgraph");			
-					subgraphComponent.outputPortSettings(i);				   	
-					subgraphComponent.setParent(container);
-					container.addChild(subgraphComponent);
+					if (type.equalsIgnoreCase("input")|| type.equalsIgnoreCase("operation") || type.equalsIgnoreCase("output")) { 
+						int outPort=0;
+						int inPort=0;
+					   	SubgraphComponent subgraphComponent= new SubgraphComponent();
+					   	
+						for (Object object : bList) {
+							Component subComponent = (Component)object;
+							if(subComponent!= null){
+								List<Link> tarLinks= subComponent.getTargetConnections();
+								for (int in=0;in< tarLinks.size();in++) {
+									if (tarLinks.get(in).getTarget() instanceof SubgraphComponent) {
+										for(int j=0;j<subComponent.getInPortCount();j++) {
+											Link linkTar=tarLinks.get(in);
+											Component oldSource=linkTar.getSource();
+											linkTar.detachSource(); 
+											Link linkNew = new Link();
+											linkNew.setTarget(component);
+											linkNew.setSource(subgraphComponent);
+											linkNew.setTargetTerminal("in"+j);
+											linkNew.setSourceTerminal("in"+inPort);
+											oldSource.freeOutputPort(linkTar.getSourceTerminal());
+											oldSource.disconnectOutput(linkTar);
+											subComponent.connectInput(linkNew);
+											subgraphComponent.connectOutput(linkNew);
+											inPort++; 
+											}	
+									}
+								} 
 
-					} 
-					
-					if (type.equalsIgnoreCase("output")) { 
-					for(Object l:bList)
-					{						
-						component=(Component) l;
-						List<Link> links = ((Component) l).getTargetConnections();
-						if(links.size()<=0){
-								Link linkNew = new Link();
-								linkNew.setTarget(component);
-								linkNew.setSource(subgraphComponent);
-								linkNew.setTargetTerminal("in0");
-								linkNew.setSourceTerminal("in"+i);
-								component.connectInput(linkNew);
-								subgraphComponent.connectOutput(linkNew);
-								i++;
-							}
 								
-//						((Component) l).setSourceConnections(newLinks); 
-						container.addChild((Component) l);
-					}
-				   	subgraphComponent.setProperties(new LinkedHashMap<String,Object>());
-				   	subgraphComponent.getProperties().put("name", "subgraph");
-				   	subgraphComponent.setComponentLabel("subgraph");
-				   	subgraphComponent.getProperties().put("type", "inputsubgraph");			
-					subgraphComponent.inputPortSettings(i);				   	
-					subgraphComponent.setParent(container);
-					container.addChild(subgraphComponent);
+								List<Link> sourLinks= subComponent.getSourceConnections();
+								List<Link> t = new ArrayList<>();
+								for(int k=0;k<sourLinks.size();k++) {
+									if (sourLinks.get(k).getSource() instanceof SubgraphComponent) {
+										Link linkNew = new Link();
+										linkNew.setSource(subComponent);
+										linkNew.setTarget(subgraphComponent);
+										linkNew.setSourceTerminal("out0");
+										linkNew.setTargetTerminal("out"+outPort);
+										subComponent.connectOutput(linkNew);
+										subgraphComponent.connectInput(linkNew);
+										t.add(linkNew);
+										outPort++;
+									}
+								}
+								container.addChild((Component) subComponent);
+							   
 
+
+								   
+							}    
 					}
+						subgraphComponent.setProperties(new LinkedHashMap<String,Object>());
+					   	subgraphComponent.getProperties().put("name", "subgraph");
+					   	subgraphComponent.setComponentLabel("subgraph");
+					   	subgraphComponent.getProperties().put("type", "inputsubgraph");			
+						subgraphComponent.inputPortSettings(inPort);	
+						subgraphComponent.outputPortSettings(outPort);
+						subgraphComponent.setParent(container); 
+						container.addChild(subgraphComponent);
+
+
 				}
 
 				
 			}	
 		}
 
+			}
+		
+			}
+			}
 	}
-	}
-	}
+	
+	
 
 	@Override
 	protected boolean calculateEnabled() {

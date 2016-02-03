@@ -85,9 +85,6 @@ public class SubGraphCommand extends Command {
 			Model node = (Model) it.next();
 			if(node instanceof Component)
 			wasRemoved = ((Component)node).getParent().removeChild((Component)node);
-/*			if(node instanceof Link)
-			wasRemoved = ((Link)node).getParent().removeChild((Link)node);
-*/
 		}
 	}
 

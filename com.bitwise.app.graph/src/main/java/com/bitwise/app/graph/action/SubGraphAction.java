@@ -37,7 +37,6 @@ import com.bitwise.app.graph.utility.SubGraphUtility;
 public class SubGraphAction extends SelectionAction{
 	PasteAction pasteAction;
 	ComponentEditPart edComponentEditPart;
-	
 	/**
 	 * Instantiates a new cut action.
 	 * 
@@ -71,7 +70,6 @@ public class SubGraphAction extends SelectionAction{
 			return null;
 		}
 		Component node = null;
-		Link link=null;
 		boolean enabled=false;
 		for(Object obj:selectedObjects)
 		{
@@ -121,9 +119,7 @@ public class SubGraphAction extends SelectionAction{
 		Container containerOld=editor.getContainer(); 
 	   	execute(createCutCommand(getSelectedObjects())); 
     	List bList = (ArrayList) Clipboard.getDefault().getContents();
-     	
-    	
-       	
+
     	SubgraphComponent subgraphComponent= new SubgraphComponent();
 		ComponentCreateCommand createComponent = new ComponentCreateCommand(subgraphComponent,containerOld,new Rectangle(((Component)bList.get(0)).getLocation(),((Component)bList.get(0)).getSize()));
 		createComponent.execute(); 
@@ -142,7 +138,8 @@ public class SubGraphAction extends SelectionAction{
 		
 		List< Link> inLinks = new ArrayList<>();
 		List< Link> outLinks = new ArrayList<>();
-		
+
+		SubGraphUtility subGraphUtility = new SubGraphUtility();
 		for (Object object : bList) {
 				Component component = (Component)object;
 				if(component!= null){
@@ -161,10 +158,10 @@ public class SubGraphAction extends SelectionAction{
 					   
 				}   
 		}  
-	   	
 		SubGraphUtility.updateSubGraphModelProperties(edComponentEditPart, inLinks.size(), outLinks.size(), file);
-		SubGraphUtility.createDynamicInputPort(inLinks, edComponentEditPart);
-		SubGraphUtility.createDynamicOutputPort(outLinks, edComponentEditPart)	;
+		subGraphUtility.createDynamicInputPort(inLinks, edComponentEditPart);
+		subGraphUtility.createDynamicOutputPort(outLinks, edComponentEditPart)	;
+		subGraphUtility.createSubGraphXml(edComponentEditPart);
 		}
 	}
    }
