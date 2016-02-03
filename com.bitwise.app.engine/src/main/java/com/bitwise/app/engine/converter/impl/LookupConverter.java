@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
 import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
+import com.bitwise.app.common.datastructure.property.MatchValueProperty;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.converter.TransformConverter;
@@ -18,6 +19,7 @@ import com.bitwise.app.engine.helper.ConverterHelper;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwiseglobal.graph.commontypes.MatchValue;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeFieldName;
 import com.bitwiseglobal.graph.commontypes.TypeInputField;
@@ -27,7 +29,13 @@ import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.hashjoin.TypeKeyFields;
 import com.bitwiseglobal.graph.operationstypes.HashJoin;
+import com.bitwiseglobal.graph.operationstypes.HashJoin.Match;
 
+
+/**
+ * @author vibhort
+ *
+ */
 public class LookupConverter extends TransformConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConverter.class);
@@ -41,6 +49,7 @@ public class LookupConverter extends TransformConverter {
 		this.properties = component.getProperties();
 		lookupPropertyGrid = (LookupMappingGrid) properties.get(Constants.LOOKUP_MAP_FIELD);
 		converterHelper = new ConverterHelper(component);
+
 	}
 
 	@Override
@@ -50,6 +59,26 @@ public class LookupConverter extends TransformConverter {
 		if (properties.get(Constants.LOOKUP_CONFIG_FIELD) != null) {
 			hashJoin.getKeys().addAll(getLookupConfigKeys());
 		}
+		hashJoin.setMatch(getMatchValueFromUi());
+	}
+
+	private Match getMatchValueFromUi() {
+		Match match = new Match();
+		MatchValueProperty matchValueProperty =  (MatchValueProperty) properties.get(Constants.MATCH_PROPERTY_WIDGET);
+
+		if(matchValueProperty != null){
+			if(Constants.LAST.equalsIgnoreCase(matchValueProperty.getMatchValue())){
+				match.setValue(MatchValue.LAST);
+				return match;
+			}else if(Constants.ALL.equalsIgnoreCase(matchValueProperty.getMatchValue())){
+				match.setValue(MatchValue.ALL);
+				return match;
+			}else{
+				match.setValue(MatchValue.FIRST);
+				return match;
+			}
+		}
+		return match;
 	}
 
 	private List<TypeKeyFields> getLookupConfigKeys() {
@@ -98,6 +127,7 @@ public class LookupConverter extends TransformConverter {
 		logger.debug("Generating TypeStraightPullOutSocket data for : {}", properties.get(Constants.PARAM_NAME));
 		TypeBaseInSocket inSocketsList = new TypeBaseInSocket();
 		Object obj = properties.get(Constants.LOOKUP_MAP_FIELD);
+
 		List<TypeOperationsOutSocket> outSockectList = new ArrayList<TypeOperationsOutSocket>();
 		for (Link link : component.getSourceConnections()) {
 			TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();

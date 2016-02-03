@@ -46,6 +46,12 @@ public class Constants {
 	public static final String INNER = "Inner";
 	public static final String OUTER = "Outer";
 	
+	public static final String MATCH_PROPERTY_WIDGET = "match_value";
+	public static final String MATCH = "Match";
+	public static final String FIRST = "First";
+	public static final String LAST = "Last";
+	public static final String ALL = "All";
+	
 	public static final String FILTER = "FILTER";
 	public static final String TRANSFORM = "TRANSFORM";
 	public static final String AGGREGATE = "AGGREGATE";
