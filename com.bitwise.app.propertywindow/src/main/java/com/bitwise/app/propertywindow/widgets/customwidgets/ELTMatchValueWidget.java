@@ -3,16 +3,13 @@ package com.bitwise.app.propertywindow.widgets.customwidgets;
 import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
-import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.MatchValueProperty;
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -23,7 +20,7 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTC
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 
 /**
- * @author vibhort
+ * @author Bitwise
  *
  */
 public class ELTMatchValueWidget extends AbstractWidget {
@@ -69,7 +66,7 @@ public class ELTMatchValueWidget extends AbstractWidget {
 				Button button = ((Button) event.widget);
 
 				matchValue.setMatchValue(button.getText());
-				matchValue.setIsSelected(true);
+				matchValue.setRadioButtonSelected(true);
 				propertyDialogButtonBar.enableApplyButton(true);
 			}
 		};

@@ -22,7 +22,7 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.ELTLookupConfigWidge
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTLookupMapWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTMatchValueWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTOperationClassWidget;
-import com.bitwise.app.propertywindow.widgets.customwidgets.ELTRetaintionLogicWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.ELTRetentionLogicWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTXmlPropertiesContainer;
 import com.bitwise.app.propertywindow.widgets.customwidgets.SingleColumnWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.TextBoxWithLabelWidget;
@@ -56,7 +56,7 @@ public class WidgetFactory {
 		COMPONENT_BASETYPE_WIDGET(ELTComponentBaseType.class),
 		COMPONENT_TYPE_WIDGET(ELTComponentType.class),
 
-		RETENTION_LOGIC_WIDGET(ELTRetaintionLogicWidget.class),
+		RETENTION_LOGIC_WIDGET(ELTRetentionLogicWidget.class),
 
 		STRICT_CLASS_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getStrictWidgetConfig()),
 		SAFE_PROPERTY_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getSafeWidgetConfig()),
