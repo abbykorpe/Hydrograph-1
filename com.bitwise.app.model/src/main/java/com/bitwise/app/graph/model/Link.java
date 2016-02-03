@@ -51,8 +51,8 @@ public class Link extends Model {
 			return;
 
 		getSource().connectOutput(this);
-		if(this.getTarget()!=null)
-		propagateSchema(this.getSource());
+		if(this.getTarget()!=null && !getSource().getCategory().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY))
+			propagateSchema(this.getSource());
 	}
 
 	/**
@@ -62,7 +62,8 @@ public class Link extends Model {
 		if (getTarget() == null || getTarget().getTargetConnections().contains(this))
 			return;
 		getTarget().connectInput(this);
-		propagateSchema(this.getSource());
+		if(!getTarget().getCategory().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY))
+			propagateSchema(this.getSource());
 	}
 
 	private void propagateSchema(Component sourceComponent) {
