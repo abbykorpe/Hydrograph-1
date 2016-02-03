@@ -1,11 +1,9 @@
 package com.bitwise.app.engine.ui.converter.impl;
 
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.slf4j.Logger;
 
@@ -71,7 +69,7 @@ public class AggregateUiConverter extends TransformUiConverter {
 		TypeSecondaryKeyFields typeSecondaryKeyFields = aggregate.getSecondaryKeys();
 
 		if (typeSecondaryKeyFields != null) {
-			secondaryKeyMap = new TreeMap<String, String>();
+			secondaryKeyMap = new LinkedHashMap<String, String>();
 			for (TypeSecondayKeyFieldsAttributes secondayKeyFieldsAttributes : typeSecondaryKeyFields.getField()) {
 				secondaryKeyMap.put(secondayKeyFieldsAttributes.getName(), secondayKeyFieldsAttributes.getOrder()
 						.value());

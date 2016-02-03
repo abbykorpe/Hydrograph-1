@@ -48,11 +48,13 @@ public class AggregateConverter extends TransformConverter {
 	private void initFixedWidthGridRows(){
 		fixedWidthGridRows = new LinkedList<>();
 		ComponentsOutputSchema componentsOutputSchema  = (ComponentsOutputSchema) properties.get(Constants.SCHEMA_TO_PROPAGATE);
+		if(componentsOutputSchema!=null){
 		List<FixedWidthGridRow> gridRows = componentsOutputSchema.getFixedWidthGridRowsOutputFields();
 		
 		for(FixedWidthGridRow row : gridRows){
 			fixedWidthGridRows.add((FixedWidthGridRow) row.copy());
 		}	
+		}
 	}
 	
 	
