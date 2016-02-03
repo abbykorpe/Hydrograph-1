@@ -75,22 +75,22 @@ public class SchemaPropagation {
 		}
 	}
 
-	private void propagatePassThroughAndMapFields(Link link2) {
+	private void propagatePassThroughAndMapFields(Link link) {
 		boolean toPropagate = false;
-		ComponentsOutputSchema sourceOutputSchema = (ComponentsOutputSchema) link2.getSource().getProperties()
+		ComponentsOutputSchema sourceOutputSchema = (ComponentsOutputSchema) link.getSource().getProperties()
 				.get(Constants.SCHEMA_TO_PROPAGATE);
-		ComponentsOutputSchema targetOutputSchema = (ComponentsOutputSchema) link2.getTarget().getProperties()
+		ComponentsOutputSchema targetOutputSchema = (ComponentsOutputSchema) link.getTarget().getProperties()
 				.get(Constants.SCHEMA_TO_PROPAGATE);
 		if (targetOutputSchema != null && !targetOutputSchema.getPassthroughFields().isEmpty()) {
 			targetOutputSchema.updatePassthroughFieldsSchema(sourceOutputSchema);
 			toPropagate = true;
 		}
 		if (targetOutputSchema != null && !targetOutputSchema.getMapFields().isEmpty()) {
-			targetOutputSchema.updateMapFieldSchema(sourceOutputSchema);
+			targetOutputSchema.updateMapFieldsSchema(sourceOutputSchema);
 			toPropagate = true;
 		}
 		if (toPropagate)
-			applySchemaToTargetComponents(link2.getTarget(), targetOutputSchema);
+			applySchemaToTargetComponents(link.getTarget(), targetOutputSchema);
 	}
 
 	/**

@@ -127,7 +127,7 @@
              <outputDirectory>target\products\com.bitwise.app.perspective.ID\macosx\cocoa\x86_64\ELTTool.app\Contents\MacOS\</outputDirectory>
               <resources>          
                 <resource>
-                  <directory>target\products\com.bitwise.app.perspective.ID\macosx\cocoa\x86_64\ELTTool.app\Contents\Eclipse\</directory>
+                  <directory>target/products/com.bitwise.app.perspective.ID/macosx/cocoa/x86_64/ELTTool.app/Contents/Eclipse</directory>
                         <includes>
                             <include>eclipse.ini</include>
                         </includes>
