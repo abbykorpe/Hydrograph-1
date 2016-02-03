@@ -165,7 +165,7 @@ public class ComponentsOutputSchema implements IDataStructure {
 	 * 
 	 * @param sourceOutputSchema
 	 */
-	public void updateMapFieldSchema(ComponentsOutputSchema sourceOutputSchema) {
+	public void updateMapFieldsSchema(ComponentsOutputSchema sourceOutputSchema) {
 		FixedWidthGridRow targetFixedWidthGridRow;
 		FixedWidthGridRow sourceFixedWidthGridRow;
 		for (Entry<String, String> entry : mapFields.entrySet()) {
