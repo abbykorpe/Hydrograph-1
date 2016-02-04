@@ -17,9 +17,13 @@ import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeOutputInSocket;
-import com.bitwiseglobal.graph.otffw.TypeOutputFixedwidthInSocket;
 import com.bitwiseglobal.graph.outputtypes.Subgraph;
 
+/**
+ * Output type subgraph converter.
+ * @author Bitwise
+ *
+ */
 public class OutputSubGraphConverter extends OutputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputSubGraphConverter.class);

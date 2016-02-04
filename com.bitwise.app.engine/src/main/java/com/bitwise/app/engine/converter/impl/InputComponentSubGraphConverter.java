@@ -8,25 +8,26 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.engine.converter.InputConverter;
-import com.bitwise.app.engine.helper.ConverterHelper;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
 import com.bitwiseglobal.graph.inputtypes.SubgraphInput;
-
+/**
+ * 
+ * @author Bitwise
+ * SubGraph mapping input component converter that use to map main graph. 
+ */
 public class InputComponentSubGraphConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputComponentSubGraphConverter.class);
-	private ConverterHelper converterHelper;
 
 	public InputComponentSubGraphConverter(Component component) {
 		super();
 		this.baseComponent = new SubgraphInput();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

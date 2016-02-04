@@ -22,9 +22,9 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SaveAsDialog;
-import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.figure.ComponentFigure;
@@ -44,11 +44,11 @@ public class SubGraphUtility {
 	 *
 	 * @return the i file
 	 */
-	public static IFile openSubGraphSaveDialog() {
+	private IFile openSubGraphSaveDialog() {
 
 		SaveAsDialog obj = new SaveAsDialog(Display.getDefault().getActiveShell());
 		IFile file=null;
-			obj.setOriginalName("subgraph.job");
+			obj.setOriginalName(Constants.SUBGRAPH_NAME);
 		obj.open();
 		
 		if (obj.getReturnCode() == 0) {
@@ -78,7 +78,7 @@ public class SubGraphUtility {
 	 *
 	 * @return the i file
 	 */
-	public static IFile doSaveAsSubGraph(){
+	public IFile doSaveAsSubGraph(){
 		
 		IFile file=openSubGraphSaveDialog();
        
@@ -158,7 +158,7 @@ public class SubGraphUtility {
 	 * @param outPort the out port
 	 * @param file the file
 	 */
-	public static void updateSubGraphModelProperties(ComponentEditPart edComponentEditPart,int inPort,int outPort,IFile file){
+	public void updateSubGraphModelProperties(ComponentEditPart edComponentEditPart,int inPort,int outPort,IFile file){
 			edComponentEditPart.getCastedModel().inputPortSettings(inPort); 
 			edComponentEditPart.getCastedModel().outputPortSettings(outPort);
 			ComponentFigure compFig = (ComponentFigure)edComponentEditPart.getFigure();
@@ -169,13 +169,13 @@ public class SubGraphUtility {
 			edComponentEditPart.getCastedModel().setComponentLabel(file.getName());
 			
 			String subGraphFilePath = file.getFullPath().toOSString();
-			edComponentEditPart.getCastedModel().getProperties().put("path",subGraphFilePath);
+			edComponentEditPart.getCastedModel().getProperties().put(Constants.PATH,subGraphFilePath);
 			if(inPort!=0 && outPort!=0)
-			edComponentEditPart.getCastedModel().getProperties().put("type", "operation");
+			edComponentEditPart.getCastedModel().getProperties().put(Constants.TYPE, Constants.OPERATION);
 			if(inPort!=0 && outPort==0)
-			edComponentEditPart.getCastedModel().getProperties().put("type", "output");
+			edComponentEditPart.getCastedModel().getProperties().put(Constants.TYPE, Constants.OUTPUT);
 			if(inPort==0 && outPort!=0)
-			edComponentEditPart.getCastedModel().getProperties().put("type", "input");			
+			edComponentEditPart.getCastedModel().getProperties().put(Constants.TYPE, Constants.INPUT);			
 			edComponentEditPart.refresh();
 	}
 
@@ -186,7 +186,6 @@ public class SubGraphUtility {
 	public void createSubGraphXml(ComponentEditPart componentEditPart,List clipboardList ){
 		
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			IHandlerService handlerService = (IHandlerService) PlatformUI.getWorkbench().getService(IHandlerService.class);
 			IFile jobFile=null;
 			try {
 					IPath jobFilePath=new Path((((ComponentEditPart) componentEditPart).getCastedModel()).getProperties().get("path").toString());
@@ -203,6 +202,7 @@ public class SubGraphUtility {
 						}
 					}  
 				} catch (PartInitException e) {
+					
 				}
 		
 				Container container = ((ELTGraphicalEditor) page.getActiveEditor()).getContainer();  
@@ -222,7 +222,7 @@ public class SubGraphUtility {
 					 * Add all remaining component those not linked with main graph.
 					 */
 					for (Object object : clipboardList) {
-						container.addChild((Component)object); 
+						container.addSubGraphChild((Component)object); 
 					}
 					
 					editor.genrateTargetXml(jobFile);

@@ -17,13 +17,18 @@ import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
 import com.bitwiseglobal.graph.inputtypes.Subgraph;
-import com.bitwiseglobal.graph.itfd.TypeInputDelimitedOutSocket;
-
+/**
+ * 
+ * @author Bitwise
+ *Input type sub graph converter.
+ */
 public class InputSubGraphConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputSubGraphConverter.class);
 	private ConverterHelper converterHelper;
-
+	private String JOBPATH="path";
+	private String JOBEXTENSION=".job";
+	private String XMLEXTENSION=".xml";
 	public InputSubGraphConverter(Component component) {
 		super();
 		this.baseComponent = new Subgraph();
@@ -39,7 +44,7 @@ public class InputSubGraphConverter extends InputConverter {
 		Subgraph subgraph = (Subgraph) baseComponent;
 		Subgraph.Path path = new Subgraph.Path();
 		String[] temp;
-		String subGraphFilePath=	((String)properties.get("path")).replace(".job", ".xml");
+		String subGraphFilePath=	((String)properties.get(JOBPATH)).replace(JOBEXTENSION, XMLEXTENSION);
 		temp = subGraphFilePath.split("\\\\",3);
 		path.setUri(temp[temp.length-1].replaceAll("\\\\", "/"));
 		subgraph.setPath(path);

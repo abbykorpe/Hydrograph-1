@@ -16,7 +16,11 @@ import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeOutputInSocket;
 import com.bitwiseglobal.graph.outputtypes.SubgraphOutput;
 
-
+/**
+ * SubGraph mapping output component converter that use to map main graph.
+ * @author Bitwise
+ *
+ */
 public class OutputComponentSubGraphConverter extends OutputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputComponentSubGraphConverter.class);

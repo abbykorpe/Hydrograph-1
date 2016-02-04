@@ -3,6 +3,7 @@ package com.bitwise.app.graph.utility;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.Link;
@@ -32,17 +33,17 @@ public class SubGraphPortLinkUtilty {
 						inPort++; 
 						}	
 					
-					inputSubComponent.getProperties().put("type", "inputsubgraph");							   	
-				   	container.addChild((Component) com);
+					inputSubComponent.getProperties().put(Constants.TYPE, Constants.INPUTSUBGRAPH);							   	
+				   	container.addSubGraphChild((Component) com);
 				   	clipboardList.remove(com);						
 				}
 	   	if(cacheInputSubgraphComp.size()>0){
-	   		inputSubComponent.getProperties().put("name", "subgraph");
-	   		inputSubComponent.setComponentLabel("subgraph");
+	   		inputSubComponent.getProperties().put(Constants.NAME, Constants.INPUTSUBGRAPH);
+	   		inputSubComponent.setComponentLabel(Constants.INPUTSUBGRAPH);
 	   		inputSubComponent.inputPortSettings(inPort);	
 	   		inputSubComponent.outputPortSettings(outPort);
 	   		inputSubComponent.setParent(container); 
-	   		container.addChild(inputSubComponent);
+	   		container.addSubGraphChild(inputSubComponent);
 	   	}
 	}
 
@@ -60,20 +61,20 @@ public class SubGraphPortLinkUtilty {
 							linkNew.setTargetTerminal("out"+outPort);
 							com.connectOutput(linkNew);
 							outSubComponent.connectInput(linkNew);
-							outSubComponent.getProperties().put("type", "outputsubgraph");			
+							outSubComponent.getProperties().put(Constants.TYPE, Constants.OUTPUTSUBGRAPH);			
 							outPort++;
 							if(!cacheInputSubgraphComp.contains(com)){
-							container.addChild((Component) com);
+							container.addSubGraphChild((Component) com);
 							clipboardList.remove(com);
 							}
 					}
 		   	if(cacheOutSubgraphComp.size()>0){
-		   		outSubComponent.getProperties().put("name", "subgraph");
-		   		outSubComponent.setComponentLabel("subgraph");
+		   		outSubComponent.getProperties().put(Constants.NAME,Constants.OUTPUTSUBGRAPH);
+		   		outSubComponent.setComponentLabel(Constants.OUTPUTSUBGRAPH);
 		   		outSubComponent.inputPortSettings(inPort);	
 		   		outSubComponent.outputPortSettings(outPort);
 		   		outSubComponent.setParent(container); 
-		   		container.addChild(outSubComponent);
+		   		container.addSubGraphChild(outSubComponent);
 		   	}
 		}
 	

@@ -112,7 +112,9 @@ public class SubGraphAction extends SelectionAction{
 	 */
 	@Override  
 	public void run() { 
-		IFile file =SubGraphUtility.doSaveAsSubGraph();
+		SubGraphUtility subGraphUtility = new SubGraphUtility();
+	
+		IFile file =subGraphUtility.doSaveAsSubGraph();
 		if(file!=null)
 		{	
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -142,7 +144,6 @@ public class SubGraphAction extends SelectionAction{
 		List< Link> inLinks = new ArrayList<>();
 		List< Link> outLinks = new ArrayList<>();
 
-		SubGraphUtility subGraphUtility = new SubGraphUtility();
 		for (Object object : clipboardList) {
 				Component component = (Component)object;
 				if(component!= null){
@@ -164,7 +165,7 @@ public class SubGraphAction extends SelectionAction{
 		/*
 		 * Update main sub graph component size and properties
 		 */
-		SubGraphUtility.updateSubGraphModelProperties(edComponentEditPart, inLinks.size(), outLinks.size(), file);
+		subGraphUtility.updateSubGraphModelProperties(edComponentEditPart, inLinks.size(), outLinks.size(), file);
 		
 		/*
 		 * Create Input port in main sub graph component.

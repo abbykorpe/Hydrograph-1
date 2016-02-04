@@ -83,8 +83,21 @@ public class Constants {
 	public static final String ABOUT_DIALOG_FEATURE_IMAGE_BUNDLE_NAME="com.bitwise.app.perspective";
 	public static final String IFDELIMITED="IFDelimited";
 	public static final String IFIXEDWIDTH="IFixedWidth";
+	/*
+	 * Sub graph required constants 
+	 */
 	public static final String SUBGRAPH_COMPONENT_CATEGORY = "SUBGRAPH";
-	public static final String SUBGRAPH_COMPONENT = "SubgraphComponent"; 
+	public static final String SUBGRAPH_COMPONENT = "SubgraphComponent";
+	public static final String PATH = "path";
+	public static final String TYPE = "type";
+	public static final String OPERATION = "operation";
+	public static final String OUTPUT = "output";
+	public static final String INPUT = "input";
+	public static final String INPUTSUBGRAPH = "inputsubgraph";
+	public static final String OUTPUTSUBGRAPH = "outputsubgraph";
+	public static final String NAME = "name";
+	public static final String SUBGRAPH_NAME = "subgraph.job";
+
 
 
 }

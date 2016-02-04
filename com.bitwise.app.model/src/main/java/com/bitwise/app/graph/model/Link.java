@@ -62,7 +62,7 @@ public class Link extends Model {
 		if (getTarget() == null || getTarget().getTargetConnections().contains(this))
 			return;
 		getTarget().connectInput(this);
-		if(!getTarget().getCategory().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY))
+		if(!Constants.SUBGRAPH_COMPONENT_CATEGORY.equalsIgnoreCase(getTarget().getCategory()))
 			propagateSchema(this.getSource());
 	}
 

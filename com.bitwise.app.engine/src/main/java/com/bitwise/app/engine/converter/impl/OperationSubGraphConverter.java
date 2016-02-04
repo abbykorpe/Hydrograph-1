@@ -17,19 +17,29 @@ import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.operationstypes.Subgraph;
 
+/**
+ * Operation type sub graph converter
+ * @author Bitwise
+ *
+ */
 public class OperationSubGraphConverter extends TransformConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OperationSubGraphConverter.class);
-	private ConverterHelper converterHelper;
+	private String JOBPATH="path";
+	private String JOBEXTENSION=".job";
+	private String XMLEXTENSION=".xml";
 
 	public OperationSubGraphConverter(Component component) {
 		super();
 		this.baseComponent = new Subgraph();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
+	/*
+	 * 
+	 *Prepare Operation type sub graph.
+	 */
 	@Override
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
@@ -37,7 +47,7 @@ public class OperationSubGraphConverter extends TransformConverter {
 		Subgraph subgraph = (Subgraph) baseComponent;
 		Subgraph.Path path = new Subgraph.Path();
 		String[] temp;
-		String subGraphFilePath=	((String)properties.get("path")).replace(".job", ".xml");
+		String subGraphFilePath=	((String)properties.get(JOBPATH)).replace(JOBEXTENSION, XMLEXTENSION);
 		temp = subGraphFilePath.split("\\\\",3);
 		path.setUri(temp[temp.length-1].replaceAll("\\\\", "/"));
 		subgraph.setPath(path);
@@ -65,7 +75,6 @@ public class OperationSubGraphConverter extends TransformConverter {
 
 	@Override
 	protected List<TypeTransformOperation> getOperations() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -61,6 +61,20 @@ public class Container extends Model {
 	}
 
 	/**
+	 * Add a component to this graph.
+	 * @return true, if the component was added, false otherwise
+	 */
+	public boolean addSubGraphChild(Component component) {
+		if (component != null && components.add(component)) {
+			component.setParent(this);
+			firePropertyChange(CHILD_ADDED_PROP, null, component);
+			return true;
+		}
+		return false;
+	}
+
+	
+	/**
 	 * Return a List of Components in this graph. The returned List should not be
 	 * modified.
 	 */
