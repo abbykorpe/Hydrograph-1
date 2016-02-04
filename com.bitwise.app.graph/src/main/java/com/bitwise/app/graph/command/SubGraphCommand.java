@@ -19,7 +19,6 @@ import com.bitwise.app.graph.model.Model;
  */
 public class SubGraphCommand extends Command {
 	private ArrayList list = new ArrayList();
-	private List links = new ArrayList();
 
 	private boolean wasRemoved;
  
@@ -46,14 +45,14 @@ public class SubGraphCommand extends Command {
 		return false;
 	}
 	
-	public boolean addElementLink(Link link) {
+/*	public boolean addElementLink(Link link) {
 		if (!links.contains(link)) {
 
 			return links.add(link);
 		}
 		return false;
 	}
-
+*/
 
 	@Override
 	public void undo() {
@@ -85,15 +84,11 @@ public class SubGraphCommand extends Command {
 			Model node = (Model) it.next();
 			if(node instanceof Component)
 			wasRemoved = ((Component)node).getParent().removeChild((Component)node);
-/*			if(node instanceof Link)
-			wasRemoved = ((Link)node).getParent().removeChild((Link)node);
-*/
 		}
 	}
 
 	@Override
 	public void execute() {
-		list.addAll(links);
 		Clipboard.getDefault().setContents(list);
 		redo();
 	}
@@ -101,8 +96,7 @@ public class SubGraphCommand extends Command {
 	/**
 	 * Checks if is copyable node.
 	 * 
-	 * @param node
-	 *            the node
+	 * @param node the node
 	 * @return true, if is copyable node
 	 */
 	public boolean isCutNode(Component node) {

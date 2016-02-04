@@ -418,6 +418,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 		}
 	}
+	
 
 	private void populateWidgetExternalSchema() {
 		if (this.properties != null) {
@@ -668,7 +669,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				} else {
 					originalSchema.getGridRow().add(row.copy());
 				}
-
 			}
 			table.clearAll();
 			if (!originalSchema.getIsExternal()) {
@@ -695,13 +695,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					}
 				}
 			}
-
 		}
 	}
 
 	private List<String> getExitingSchemaFieldNames(Schema originalSchema) {
 		List<String> list = new ArrayList<>();
-
 		for (GridRow row : originalSchema.getGridRow()) {
 			list.add(row.getFieldName());
 		}

@@ -1,4 +1,4 @@
-package com.bitwise.app.graph.action;
+package com.bitwise.app.graph.action.subgraph;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,6 +18,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.graph.action.ContributionItemManager;
+import com.bitwise.app.graph.action.PasteAction;
 import com.bitwise.app.graph.command.ComponentCreateCommand;
 import com.bitwise.app.graph.command.SubGraphCommand;
 import com.bitwise.app.graph.controller.ComponentEditPart;
@@ -27,17 +29,14 @@ import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.model.components.SubgraphComponent;
 import com.bitwise.app.graph.utility.SubGraphUtility;
-
-// TODO: Auto-generated Javadoc
 /**
- * The Class CutAction.
+ * The Class SubGraphAction use to create sub graph.
  * 
  * @author Bitwise
  */
 public class SubGraphAction extends SelectionAction{
 	PasteAction pasteAction;
 	ComponentEditPart edComponentEditPart;
-	
 	/**
 	 * Instantiates a new cut action.
 	 * 
@@ -65,13 +64,12 @@ public class SubGraphAction extends SelectionAction{
 		setEnabled(false);
 	}
 
-	private Command createCutCommand(List<Object> selectedObjects) {
+	private Command createSubGraphCommand(List<Object> selectedObjects) {
 		SubGraphCommand cutCommand =new SubGraphCommand();
 		if (selectedObjects == null || selectedObjects.isEmpty()) {
 			return null;
 		}
 		Component node = null;
-		Link link=null;
 		boolean enabled=false;
 		for(Object obj:selectedObjects)
 		{
@@ -98,7 +96,7 @@ public class SubGraphAction extends SelectionAction{
 
 	@Override
 	protected boolean calculateEnabled() {
-		Command cmd = createCutCommand(getSelectedObjects());
+		Command cmd = createSubGraphCommand(getSelectedObjects());
 		if (cmd == null){
 			ContributionItemManager.CUT.setEnable(false);			
 			return false;
@@ -109,21 +107,23 @@ public class SubGraphAction extends SelectionAction{
  
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.action.Action#run()
+	/* 
+	 * Create sub graph
 	 */
 	@Override  
 	public void run() { 
-		
+		SubGraphUtility subGraphUtility = new SubGraphUtility();
+	
+		IFile file =subGraphUtility.doSaveAsSubGraph();
+		if(file!=null)
+		{	
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		Container containerOld=editor.getContainer(); 
-	   	execute(createCutCommand(getSelectedObjects())); 
-    	List bList = (ArrayList) Clipboard.getDefault().getContents();
-     	
-    	IFile file =SubGraphUtility.doSaveAsSubGraph();
-       	
+	   	execute(createSubGraphCommand(getSelectedObjects())); 
+    	List clipboardList = (ArrayList) Clipboard.getDefault().getContents();
+
     	SubgraphComponent subgraphComponent= new SubgraphComponent();
-		ComponentCreateCommand createComponent = new ComponentCreateCommand(subgraphComponent,containerOld,new Rectangle(((Component)bList.get(0)).getLocation(),((Component)bList.get(0)).getSize()));
+		ComponentCreateCommand createComponent = new ComponentCreateCommand(subgraphComponent,containerOld,new Rectangle(((Component)clipboardList.get(0)).getLocation(),((Component)clipboardList.get(0)).getSize()));
 		createComponent.execute(); 
 		
 		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
@@ -137,31 +137,48 @@ public class SubGraphAction extends SelectionAction{
 				}
 			} 
 		}
-		
+
+		/*
+		 * Collect all input and output links for missing target or source. 
+		 */
 		List< Link> inLinks = new ArrayList<>();
 		List< Link> outLinks = new ArrayList<>();
-		
-		for (Object object : bList) {
+
+		for (Object object : clipboardList) {
 				Component component = (Component)object;
 				if(component!= null){
 					List<Link> tarLinks= component.getTargetConnections();
 					for(int i=0;i<tarLinks.size();i++){
-						if (!bList.contains(tarLinks.get(i).getSource())) {
+						if (!clipboardList.contains(tarLinks.get(i).getSource())) {
 							inLinks.add(tarLinks.get(i));
 						}
 					}
 					List<Link> sourLinks= component.getSourceConnections();
 					for(int i=0;i<sourLinks.size();i++){
-						if (!bList.contains(sourLinks.get(i).getTarget())) {
+						if (!clipboardList.contains(sourLinks.get(i).getTarget())) {
 							outLinks.add(sourLinks.get(i)); 
 						}
 					}
 					   
 				}   
 		}  
-	   	
-		SubGraphUtility.updateSubGraphModelProperties(edComponentEditPart, inLinks.size(), outLinks.size(), file);
-		SubGraphUtility.createDynamicInputPort(inLinks, edComponentEditPart);
-		SubGraphUtility.createDynamicOutputPort(outLinks, edComponentEditPart)	;
+		/*
+		 * Update main sub graph component size and properties
+		 */
+		subGraphUtility.updateSubGraphModelProperties(edComponentEditPart, inLinks.size(), outLinks.size(), file);
+		
+		/*
+		 * Create Input port in main sub graph component.
+		 */
+		subGraphUtility.createDynamicInputPort(inLinks, edComponentEditPart);
+		/*
+		 * Create output port in main subgraph component.
+		 */
+		subGraphUtility.createDynamicOutputPort(outLinks, edComponentEditPart)	;
+		/*
+		 * Generate subgraph target xml.
+		 */
+		subGraphUtility.createSubGraphXml(edComponentEditPart,clipboardList);
+		}
 	}
    }

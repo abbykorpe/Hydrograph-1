@@ -9,8 +9,8 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
-import com.bitwise.app.graph.action.SubGraphAction;
-import com.bitwise.app.graph.action.SubMenuAction;
+import com.bitwise.app.graph.action.subgraph.SubGraphAction;
+import com.bitwise.app.graph.action.subgraph.SubMenuAction;
 
 // TODO: Auto-generated Javadoc
 /**
