@@ -1,10 +1,14 @@
 package com.bitwise.app.common.datastructure.property;
 
+import com.bitwise.app.cloneableinterface.IDataStructure;
+
 /**
+ * THE Class MatchValueProperty
+ * 
  * @author Bitwise
  *
  */
-public class MatchValueProperty {
+public class MatchValueProperty implements IDataStructure{
 
 	private Boolean radioButtonSelected;
 	private String matchValue;
@@ -26,6 +30,14 @@ public class MatchValueProperty {
 	 
 	public void setRadioButtonSelected(Boolean radioButtonSelected) {
 		this.radioButtonSelected = radioButtonSelected;
+	}
+	
+	@Override
+	public MatchValueProperty clone() {
+		MatchValueProperty matchValueProperty = new MatchValueProperty();
+		matchValueProperty.setMatchValue(getMatchValue());
+		
+		return matchValueProperty;
 	}
 	@Override
 	public String toString() {
