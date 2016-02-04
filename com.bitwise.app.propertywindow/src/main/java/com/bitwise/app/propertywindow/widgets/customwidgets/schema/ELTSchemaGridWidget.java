@@ -165,6 +165,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				componentsOutputSchema.getMapFields().putAll(previousOutputSchema.getMapFields());
 			if (!previousOutputSchema.getPassthroughFields().isEmpty())
 				componentsOutputSchema.getPassthroughFields().addAll(previousOutputSchema.getPassthroughFields());
+			if (!previousOutputSchema.getPassthroughFieldsPortInfo().isEmpty())
+				componentsOutputSchema.getPassthroughFieldsPortInfo().putAll(previousOutputSchema.getPassthroughFieldsPortInfo());
+			if (!previousOutputSchema.getMapFieldsPortInfo().isEmpty())
+				componentsOutputSchema.getMapFieldsPortInfo().putAll(previousOutputSchema.getMapFieldsPortInfo());
 		}//
 		List<GridRow> tempGrid = new ArrayList<>();
 		List<String> oprationFieldList = getOperationFieldList();
