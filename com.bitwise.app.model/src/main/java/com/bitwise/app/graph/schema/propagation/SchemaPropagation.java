@@ -82,11 +82,11 @@ public class SchemaPropagation {
 		ComponentsOutputSchema targetOutputSchema = (ComponentsOutputSchema) link.getTarget().getProperties()
 				.get(Constants.SCHEMA_TO_PROPAGATE);
 		if (targetOutputSchema != null && !targetOutputSchema.getPassthroughFields().isEmpty()) {
-			targetOutputSchema.updatePassthroughFieldsSchema(sourceOutputSchema);
+			targetOutputSchema.updatePassthroughFieldsSchema(sourceOutputSchema,link.getTargetTerminal());
 			toPropagate = true;
 		}
 		if (targetOutputSchema != null && !targetOutputSchema.getMapFields().isEmpty()) {
-			targetOutputSchema.updateMapFieldsSchema(sourceOutputSchema);
+			targetOutputSchema.updateMapFieldsSchema(sourceOutputSchema,link.getTargetTerminal());
 			toPropagate = true;
 		}
 		if (toPropagate)

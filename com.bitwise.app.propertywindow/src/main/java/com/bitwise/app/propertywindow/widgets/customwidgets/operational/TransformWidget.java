@@ -100,7 +100,7 @@ public class TransformWidget extends AbstractWidget {
 
 				atMapping = mappingDialog.getATMapping();
 
-				prapogateOuputFieldsToSchemaTabFromTransformWidget();
+				propagateOuputFieldsToSchemaTabFromTransformWidget();
 
 				atMapping.getInputFields().clear();
 				super.widgetSelected(e);
@@ -108,7 +108,7 @@ public class TransformWidget extends AbstractWidget {
 
 		});
 
-		prapogateOuputFieldsToSchemaTabFromTransformWidget();
+		propagateOuputFieldsToSchemaTabFromTransformWidget();
 		// prapogateOuputFieldsToSchemaTab();
 	}
 
@@ -121,7 +121,7 @@ public class TransformWidget extends AbstractWidget {
 		setSchemaForInternalPapogation(schemaForInternalPapogation);
 	}
 	
-	private void prapogateOuputFieldsToSchemaTabFromTransformWidget() {
+	private void propagateOuputFieldsToSchemaTabFromTransformWidget() {
 		
 		if (atMapping == null || atMapping.getMappingSheetRows() == null)
 			return;
