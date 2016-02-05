@@ -71,9 +71,8 @@ public class ELTJoinMapWidget extends AbstractWidget {
 				JoinMapGrid joinMapGrid = new JoinMapGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
 						joinMappingGrid);
 				joinMapGrid.open();
-				joinMapGrid.getJoinPropertyGrid();
-				
 				propagateInternalSchema();
+				propertyDialogButtonBar.enableApplyButton(true);
 			}
 		});
 		

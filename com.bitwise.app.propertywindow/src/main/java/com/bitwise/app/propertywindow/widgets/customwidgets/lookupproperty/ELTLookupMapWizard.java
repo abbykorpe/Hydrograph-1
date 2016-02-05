@@ -1,6 +1,7 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.lookupproperty;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -83,6 +84,9 @@ public class ELTLookupMapWizard extends Dialog {
 	private List<List<FilterProperties>> joinInputList = new ArrayList<>();
 	private ELTSWTWidgets eltswtWidgets = new ELTSWTWidgets();
 	private LookupMappingGrid lookupPropertyGrid;
+	private static final String INFORMATION = "Information";
+	private TableItem[] previousItems;
+	private TableItem[] currentItems;
 
 	/**
 	 * Create the dialog.
@@ -230,9 +234,15 @@ public class ELTLookupMapWizard extends Dialog {
 		// DragDropLookupImp(joinOutputList, false, outputTableViewer));
 		dropData(outputTableViewer, joinOutputList, true);
 		// }
+		populatePreviousItemsOfTable();
 		return container;
 	}
 
+	private void populatePreviousItemsOfTable() {
+		if (outputTableViewer.getTable().getItems() != null) {
+			previousItems = outputTableViewer.getTable().getItems();
+		}
+	}
 	private TableViewer createComposite(Composite parent, int y,
 			final List<FilterProperties> joinInputList,
 			final int tableViewerIndex) {
@@ -602,6 +612,42 @@ public class ELTLookupMapWizard extends Dialog {
 	public void getLookupPropertyGrid() {
 		lookupPropertyGrid.setLookupInputProperties(joinInputList);
 		lookupPropertyGrid.setLookupMapProperties(joinOutputList);
+	}
+
+	@Override
+	protected void okPressed() {
+		getLookupPropertyGrid();
+		super.okPressed();
+	}
+
+	@Override
+	protected void cancelPressed() {
+		if (outputTableViewer.getTable().getItems() != null) {
+			currentItems = outputTableViewer.getTable().getItems();
+		}
+		if (currentItems.length == 0 && previousItems.length == 0) {
+			super.close();
+		} else {
+			if (!Arrays.equals(currentItems, previousItems)) {
+				int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
+				MessageBox messageBox = new MessageBox(new Shell(), style);
+				messageBox.setText(INFORMATION);
+				messageBox.setMessage(Messages.MessageBeforeClosingWindow);
+				if (messageBox.open() == SWT.YES) {
+					joinOutputList.clear();
+					LookupMapProperty[] lookupMapPropertyObjects = new LookupMapProperty[previousItems.length];
+					for (int i = 0; i < previousItems.length; i++) {
+						lookupMapPropertyObjects[i] = (LookupMapProperty) previousItems[i].getData();
+						joinOutputList.add(lookupMapPropertyObjects[i]);
+					}
+					getLookupPropertyGrid();
+					super.close();
+				}
+			} else {
+				super.close();
+			}
+		}
+
 	}
 
 	public Button buttonWidget(Composite parent, int style, int[] bounds,
