@@ -11,7 +11,7 @@ import org.eclipse.osgi.util.NLS;
  */
 public class ErrorMessages extends NLS{
 
-	private static final String BUNDLE_NAME = "com.bitwise.app.parametergrid.constants.ErrorMessages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "resources.ErrorMessages"; //$NON-NLS-1$
 	
 	public static String UNABLE_TO_LOAD_PARAM_FILE1;
 	public static String UNABLE_TO_LOAD_PARAM_FILE2;

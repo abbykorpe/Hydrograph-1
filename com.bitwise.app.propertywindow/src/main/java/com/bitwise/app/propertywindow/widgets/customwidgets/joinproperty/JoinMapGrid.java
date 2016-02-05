@@ -54,6 +54,7 @@ import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
+import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.JoinContentProvider;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.LookupCellModifier;
@@ -91,18 +92,21 @@ public class JoinMapGrid extends Dialog {
 	private static final String INFORMATION = "Information";
 	private TableItem[] previousItems;
 	private TableItem[] currentItems;
+	private PropertyDialogButtonBar propertyDialogButtonBar;
 	
 
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param parentShell
+	 * @param propertyDialogButtonBar 
 	 */
-	public JoinMapGrid(Shell parentShell, JoinMappingGrid joinPropertyGrid) {
+	public JoinMapGrid(Shell parentShell, JoinMappingGrid joinPropertyGrid, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP
 				| SWT.APPLICATION_MODAL);
 		this.joinMappingGrid = joinPropertyGrid;
+		this.propertyDialogButtonBar=propertyDialogButtonBar;
 	}
 	public void getJoinPropertyGrid() {
 		joinMappingGrid.setLookupInputProperties(joinInputSchemaList);
@@ -672,6 +676,7 @@ public class JoinMapGrid extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		propertyDialogButtonBar.enableApplyButton(true);
 		getJoinPropertyGrid();
 		super.okPressed();
 	}

@@ -53,6 +53,7 @@ import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
+import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.JoinContentProvider;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.LookupCellModifier;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.LookupLabelProvider;
@@ -87,17 +88,20 @@ public class ELTLookupMapWizard extends Dialog {
 	private static final String INFORMATION = "Information";
 	private TableItem[] previousItems;
 	private TableItem[] currentItems;
+	private PropertyDialogButtonBar propertyDialogButtonBar;
 
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param parentShell
+	 * @param propertyDialogButtonBar 
 	 */
 	public ELTLookupMapWizard(Shell parentShell,
-			LookupMappingGrid lookupPropertyGrid) {
+			LookupMappingGrid lookupPropertyGrid, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.lookupPropertyGrid = lookupPropertyGrid;
+		this.propertyDialogButtonBar=propertyDialogButtonBar;
 	}
 
 	/**
@@ -616,6 +620,7 @@ public class ELTLookupMapWizard extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		propertyDialogButtonBar.enableApplyButton(true);
 		getLookupPropertyGrid();
 		super.okPressed();
 	}
