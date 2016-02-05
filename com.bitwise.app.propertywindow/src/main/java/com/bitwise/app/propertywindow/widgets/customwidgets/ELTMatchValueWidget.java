@@ -40,7 +40,7 @@ public class ELTMatchValueWidget extends AbstractWidget {
 		super(componentConfigrationProp, componentMiscellaneousProperties,
 				propertyDialogButtonBar);
 		this.propertyName = componentConfigrationProperty.getPropertyName();
-		this.properties = componentConfigrationProperty.getPropertyValue();
+		//this.properties = componentConfigrationProperty.getPropertyValue();
 		if (componentConfigrationProperty.getPropertyValue() == null) {
 			matchValue = new MatchValueProperty();
 		} else {
