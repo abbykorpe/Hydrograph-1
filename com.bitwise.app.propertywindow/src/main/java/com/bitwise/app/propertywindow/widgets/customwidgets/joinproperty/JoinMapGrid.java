@@ -353,11 +353,11 @@ public class JoinMapGrid extends Dialog {
 		if (joinOutputList != null) {
 			dropData(outputTableViewer, joinOutputList, true);
 		}
-		getPreviousItemsOfTable();
+		populatePreviousItemsOfTable();
 		return container;
 	}
 
-	private void getPreviousItemsOfTable() {
+	private void populatePreviousItemsOfTable() {
 		if (outputTableViewer.getTable().getItems() != null) {
 			previousItems = outputTableViewer.getTable().getItems();
 		}

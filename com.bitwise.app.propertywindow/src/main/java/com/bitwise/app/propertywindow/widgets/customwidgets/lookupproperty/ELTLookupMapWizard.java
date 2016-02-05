@@ -234,11 +234,11 @@ public class ELTLookupMapWizard extends Dialog {
 		// DragDropLookupImp(joinOutputList, false, outputTableViewer));
 		dropData(outputTableViewer, joinOutputList, true);
 		// }
-		getPreviousItemsOfTable();
+		populatePreviousItemsOfTable();
 		return container;
 	}
 
-	private void getPreviousItemsOfTable() {
+	private void populatePreviousItemsOfTable() {
 		if (outputTableViewer.getTable().getItems() != null) {
 			previousItems = outputTableViewer.getTable().getItems();
 		}
