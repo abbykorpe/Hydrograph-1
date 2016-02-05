@@ -1,6 +1,7 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.joinproperty;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -43,6 +44,7 @@ import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -86,6 +88,10 @@ public class JoinMapGrid extends Dialog {
 	private List<List<FilterProperties>> joinInputSchemaList = new ArrayList<>();
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
 	private JoinMappingGrid joinMappingGrid;
+	private static final String INFORMATION = "Information";
+	private TableItem[] previousItems;
+	private TableItem[] currentItems;
+	
 
 	/**
 	 * Create the dialog.
@@ -97,13 +103,12 @@ public class JoinMapGrid extends Dialog {
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP
 				| SWT.APPLICATION_MODAL);
 		this.joinMappingGrid = joinPropertyGrid;
-
 	}
-
 	public void getJoinPropertyGrid() {
 		joinMappingGrid.setLookupInputProperties(joinInputSchemaList);
 		joinMappingGrid.setLookupMapProperties(joinOutputList);
 	}
+
 
 	/**
 	 * Create contents of the dialog.
@@ -348,7 +353,14 @@ public class JoinMapGrid extends Dialog {
 		if (joinOutputList != null) {
 			dropData(outputTableViewer, joinOutputList, true);
 		}
+		getPreviousItemsOfTable();
 		return container;
+	}
+
+	private void getPreviousItemsOfTable() {
+		if (outputTableViewer.getTable().getItems() != null) {
+			previousItems = outputTableViewer.getTable().getItems();
+		}
 	}
 
 	private void addAllFieldsFromSocketId(int inSocketIndex) {
@@ -649,14 +661,49 @@ public class JoinMapGrid extends Dialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
+		
 		okButton = createButton(parent, IDialogConstants.OK_ID,
 				IDialogConstants.OK_LABEL, true);
-		okButton.addSelectionListener(new SelectionAdapter() {
-		});
+
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
+
 	}
 
+	@Override
+	protected void okPressed() {
+		getJoinPropertyGrid();
+		super.okPressed();
+	}
+
+	@Override
+	protected void cancelPressed() {
+		if (outputTableViewer.getTable().getItems() != null) {
+			currentItems = outputTableViewer.getTable().getItems();
+		}
+		if (currentItems.length == 0 && previousItems.length == 0) {
+			super.close();
+		} else {
+			if (!Arrays.equals(currentItems, previousItems)) {
+				int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
+				MessageBox messageBox = new MessageBox(new Shell(), style);
+				messageBox.setText(INFORMATION);
+				messageBox.setMessage(Messages.MessageBeforeClosingWindow);
+				if (messageBox.open() == SWT.YES) {
+					joinOutputList.clear();
+					LookupMapProperty[] lookupMapPropertyObjects = new LookupMapProperty[previousItems.length];
+					for (int i = 0; i < previousItems.length; i++) {
+						lookupMapPropertyObjects[i] = (LookupMapProperty) previousItems[i].getData();
+						joinOutputList.add(lookupMapPropertyObjects[i]);
+					}
+					getJoinPropertyGrid();
+					super.close();
+				}
+			} else {
+				super.close();
+			}
+		}
+	}
 	protected boolean inputSchemavalidate(List<FilterProperties> inputList,
 			TableViewer tableViewer) {
 		int propertyCounter = 0;
@@ -740,7 +787,7 @@ public class JoinMapGrid extends Dialog {
 			}
 		}
 	}
-
+  
 	// Creates Value Validator for table's cells
 	private ICellEditorValidator inputSchemaEditorValidation(
 			final List<FilterProperties> joinInputList,
@@ -880,7 +927,6 @@ public class JoinMapGrid extends Dialog {
 	}
 
 	private void joinOutputProperty(TableViewer viewer, String sourceFieldValue) {
-
 		String outputFieldValue = null;
 		if (sourceFieldValue == null) {
 			sourceFieldValue = "";

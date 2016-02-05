@@ -66,10 +66,7 @@ public class ELTLookupMapWidget extends AbstractWidget {
 				lookupMapWizard = new ELTLookupMapWizard(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
 						lookupMappingGrid);
 				lookupMapWizard.open();
-				lookupMapWizard.getLookupPropertyGrid();
-				
 				propagateInternalSchema();
-				
 				propertyDialogButtonBar.enableApplyButton(true);
 				
 			}
