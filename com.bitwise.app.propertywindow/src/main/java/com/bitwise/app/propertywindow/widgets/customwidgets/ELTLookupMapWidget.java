@@ -68,13 +68,13 @@ public class ELTLookupMapWidget extends AbstractWidget {
 				lookupMapWizard.open();
 				lookupMapWizard.getLookupPropertyGrid();
 				
-				//propagateInternalSchema();
+				propagateInternalSchema();
 				
 				propertyDialogButtonBar.enableApplyButton(true);
 				
 			}
 		});
-		//propagateInternalSchema();
+		propagateInternalSchema();
 	}
 	
 	
