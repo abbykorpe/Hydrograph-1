@@ -31,7 +31,7 @@
                id="com.bitwise.app.graph.toolbar1">
             <command
                   commandId="com.bitwise.app.parametergrid.open.parametergrid"
-                  icon="icons/parameter_grid.png"
+                  icon="resources/icons/parameter_grid.png"
                   label="Open Grid"
                   style="push">
             </command>

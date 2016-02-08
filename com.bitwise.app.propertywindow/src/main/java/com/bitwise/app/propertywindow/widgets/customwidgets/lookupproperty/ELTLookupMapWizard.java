@@ -53,6 +53,7 @@ import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
+import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.JoinContentProvider;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.LookupCellModifier;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.LookupLabelProvider;
@@ -87,17 +88,20 @@ public class ELTLookupMapWizard extends Dialog {
 	private static final String INFORMATION = "Information";
 	private TableItem[] previousItems;
 	private TableItem[] currentItems;
+	private PropertyDialogButtonBar propertyDialogButtonBar;
 
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param parentShell
+	 * @param propertyDialogButtonBar 
 	 */
 	public ELTLookupMapWizard(Shell parentShell,
-			LookupMappingGrid lookupPropertyGrid) {
+			LookupMappingGrid lookupPropertyGrid, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.lookupPropertyGrid = lookupPropertyGrid;
+		this.propertyDialogButtonBar=propertyDialogButtonBar;
 	}
 
 	/**
@@ -616,15 +620,20 @@ public class ELTLookupMapWizard extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		populateCurrentItemsOfTable();
+		if (previousItems.length == 0 && currentItems.length != 0) {
+			propertyDialogButtonBar.enableApplyButton(true);
+		} else if ((currentItems.length != 0 && previousItems.length != 0)) {
+			if (!Arrays.equals(currentItems, previousItems))
+				propertyDialogButtonBar.enableApplyButton(true);
+		}
 		getLookupPropertyGrid();
-		super.okPressed();
+		super.close();
 	}
 
-	@Override
-	protected void cancelPressed() {
-		if (outputTableViewer.getTable().getItems() != null) {
-			currentItems = outputTableViewer.getTable().getItems();
-		}
+	private Boolean hasOutputMappingInTableChanged() {
+		boolean returnValue = false;
+		populateCurrentItemsOfTable();
 		if (currentItems.length == 0 && previousItems.length == 0) {
 			super.close();
 		} else {
@@ -641,13 +650,29 @@ public class ELTLookupMapWizard extends Dialog {
 						joinOutputList.add(lookupMapPropertyObjects[i]);
 					}
 					getLookupPropertyGrid();
-					super.close();
+					returnValue = super.close();
 				}
 			} else {
-				super.close();
+				returnValue = super.close();
 			}
 		}
+		return returnValue;
+	}
 
+	@Override
+	protected void cancelPressed() {
+		hasOutputMappingInTableChanged();
+	}
+
+	@Override
+	public boolean close() {
+		return hasOutputMappingInTableChanged();
+	}
+
+	private void populateCurrentItemsOfTable() {
+		if (outputTableViewer.getTable().getItems() != null) {
+			currentItems = outputTableViewer.getTable().getItems();
+		}
 	}
 
 	public Button buttonWidget(Composite parent, int style, int[] bounds,

@@ -1,6 +1,5 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.Map;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
@@ -64,11 +64,9 @@ public class ELTLookupMapWidget extends AbstractWidget {
 			public void widgetSelected(SelectionEvent e) {
 				getPropagatedSchema();
 				lookupMapWizard = new ELTLookupMapWizard(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
-						lookupMappingGrid);
+						lookupMappingGrid,propertyDialogButtonBar);
 				lookupMapWizard.open();
 				propagateInternalSchema();
-				propertyDialogButtonBar.enableApplyButton(true);
-				
 			}
 		});
 		propagateInternalSchema();

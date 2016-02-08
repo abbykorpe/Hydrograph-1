@@ -54,6 +54,7 @@ import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
+import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.JoinContentProvider;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinlookupproperty.LookupCellModifier;
@@ -91,18 +92,21 @@ public class JoinMapGrid extends Dialog {
 	private static final String INFORMATION = "Information";
 	private TableItem[] previousItems;
 	private TableItem[] currentItems;
+	private PropertyDialogButtonBar propertyDialogButtonBar;
 	
 
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param parentShell
+	 * @param propertyDialogButtonBar 
 	 */
-	public JoinMapGrid(Shell parentShell, JoinMappingGrid joinPropertyGrid) {
+	public JoinMapGrid(Shell parentShell, JoinMappingGrid joinPropertyGrid, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP
 				| SWT.APPLICATION_MODAL);
 		this.joinMappingGrid = joinPropertyGrid;
+		this.propertyDialogButtonBar=propertyDialogButtonBar;
 	}
 	public void getJoinPropertyGrid() {
 		joinMappingGrid.setLookupInputProperties(joinInputSchemaList);
@@ -360,6 +364,11 @@ public class JoinMapGrid extends Dialog {
 	private void populatePreviousItemsOfTable() {
 		if (outputTableViewer.getTable().getItems() != null) {
 			previousItems = outputTableViewer.getTable().getItems();
+		}
+	}
+	private void populateCurrentItemsOfTable() {
+		if (outputTableViewer.getTable().getItems() != null) {
+			currentItems = outputTableViewer.getTable().getItems();
 		}
 	}
 
@@ -672,15 +681,25 @@ public class JoinMapGrid extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		populateCurrentItemsOfTable();
+		if (previousItems.length == 0 && currentItems.length != 0) {
+			propertyDialogButtonBar.enableApplyButton(true);
+		} else if ((currentItems.length != 0 && previousItems.length != 0)) {
+			if (!Arrays.equals(currentItems, previousItems))
+				propertyDialogButtonBar.enableApplyButton(true);
+		}
 		getJoinPropertyGrid();
-		super.okPressed();
+		super.close();
 	}
 
 	@Override
 	protected void cancelPressed() {
-		if (outputTableViewer.getTable().getItems() != null) {
-			currentItems = outputTableViewer.getTable().getItems();
-		}
+		hasOutputMappingInTableChanged();
+	}
+
+	private Boolean hasOutputMappingInTableChanged() {
+		boolean returnValue = false;
+		populateCurrentItemsOfTable();
 		if (currentItems.length == 0 && previousItems.length == 0) {
 			super.close();
 		} else {
@@ -697,12 +716,18 @@ public class JoinMapGrid extends Dialog {
 						joinOutputList.add(lookupMapPropertyObjects[i]);
 					}
 					getJoinPropertyGrid();
-					super.close();
+					returnValue = super.close();
 				}
 			} else {
-				super.close();
+				returnValue = super.close();
 			}
 		}
+		return returnValue;
+	}
+
+	@Override
+	public boolean close() {
+		return hasOutputMappingInTableChanged();
 	}
 	protected boolean inputSchemavalidate(List<FilterProperties> inputList,
 			TableViewer tableViewer) {
