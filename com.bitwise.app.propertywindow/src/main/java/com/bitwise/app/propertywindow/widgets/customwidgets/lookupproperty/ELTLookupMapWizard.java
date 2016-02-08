@@ -631,7 +631,7 @@ public class ELTLookupMapWizard extends Dialog {
 		super.close();
 	}
 
-	private Boolean validateIsAnyUpdationPerformedInTable() {
+	private Boolean hasOutputMappingInTableChanged() {
 		boolean returnValue = false;
 		populateCurrentItemsOfTable();
 		if (currentItems.length == 0 && previousItems.length == 0) {
@@ -661,12 +661,12 @@ public class ELTLookupMapWizard extends Dialog {
 
 	@Override
 	protected void cancelPressed() {
-		validateIsAnyUpdationPerformedInTable();
+		hasOutputMappingInTableChanged();
 	}
 
 	@Override
 	public boolean close() {
-		return validateIsAnyUpdationPerformedInTable();
+		return hasOutputMappingInTableChanged();
 	}
 
 	private void populateCurrentItemsOfTable() {

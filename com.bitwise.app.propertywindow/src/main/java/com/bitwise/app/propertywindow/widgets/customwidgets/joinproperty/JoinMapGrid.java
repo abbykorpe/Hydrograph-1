@@ -694,10 +694,10 @@ public class JoinMapGrid extends Dialog {
 
 	@Override
 	protected void cancelPressed() {
-		validateIsAnyUpdationPerformedInTable();
+		hasOutputMappingInTableChanged();
 	}
 
-	private Boolean validateIsAnyUpdationPerformedInTable() {
+	private Boolean hasOutputMappingInTableChanged() {
 		boolean returnValue = false;
 		populateCurrentItemsOfTable();
 		if (currentItems.length == 0 && previousItems.length == 0) {
@@ -727,7 +727,7 @@ public class JoinMapGrid extends Dialog {
 
 	@Override
 	public boolean close() {
-		return validateIsAnyUpdationPerformedInTable();
+		return hasOutputMappingInTableChanged();
 	}
 	protected boolean inputSchemavalidate(List<FilterProperties> inputList,
 			TableViewer tableViewer) {
