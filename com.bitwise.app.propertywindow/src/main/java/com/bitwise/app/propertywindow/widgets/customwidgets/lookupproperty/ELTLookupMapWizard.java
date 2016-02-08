@@ -620,16 +620,20 @@ public class ELTLookupMapWizard extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		propertyDialogButtonBar.enableApplyButton(true);
+		populateCurrentItemsOfTable();
+		if (previousItems.length == 0 && currentItems.length != 0) {
+			propertyDialogButtonBar.enableApplyButton(true);
+		} else if ((currentItems.length != 0 && previousItems.length != 0)) {
+			if (!Arrays.equals(currentItems, previousItems))
+				propertyDialogButtonBar.enableApplyButton(true);
+		}
 		getLookupPropertyGrid();
-		super.okPressed();
+		super.close();
 	}
 
-	@Override
-	protected void cancelPressed() {
-		if (outputTableViewer.getTable().getItems() != null) {
-			currentItems = outputTableViewer.getTable().getItems();
-		}
+	private Boolean validateIsAnyUpdationPerformedInTable() {
+		boolean returnValue = false;
+		populateCurrentItemsOfTable();
 		if (currentItems.length == 0 && previousItems.length == 0) {
 			super.close();
 		} else {
@@ -646,13 +650,29 @@ public class ELTLookupMapWizard extends Dialog {
 						joinOutputList.add(lookupMapPropertyObjects[i]);
 					}
 					getLookupPropertyGrid();
-					super.close();
+					returnValue = super.close();
 				}
 			} else {
-				super.close();
+				returnValue = super.close();
 			}
 		}
+		return returnValue;
+	}
 
+	@Override
+	protected void cancelPressed() {
+		validateIsAnyUpdationPerformedInTable();
+	}
+
+	@Override
+	public boolean close() {
+		return validateIsAnyUpdationPerformedInTable();
+	}
+
+	private void populateCurrentItemsOfTable() {
+		if (outputTableViewer.getTable().getItems() != null) {
+			currentItems = outputTableViewer.getTable().getItems();
+		}
 	}
 
 	public Button buttonWidget(Composite parent, int style, int[] bounds,

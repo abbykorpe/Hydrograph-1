@@ -366,6 +366,11 @@ public class JoinMapGrid extends Dialog {
 			previousItems = outputTableViewer.getTable().getItems();
 		}
 	}
+	private void populateCurrentItemsOfTable() {
+		if (outputTableViewer.getTable().getItems() != null) {
+			currentItems = outputTableViewer.getTable().getItems();
+		}
+	}
 
 	private void addAllFieldsFromSocketId(int inSocketIndex) {
 		List<FilterProperties> inputFieldList = joinInputSchemaList
@@ -676,16 +681,25 @@ public class JoinMapGrid extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		propertyDialogButtonBar.enableApplyButton(true);
+		populateCurrentItemsOfTable();
+		if (previousItems.length == 0 && currentItems.length != 0) {
+			propertyDialogButtonBar.enableApplyButton(true);
+		} else if ((currentItems.length != 0 && previousItems.length != 0)) {
+			if (!Arrays.equals(currentItems, previousItems))
+				propertyDialogButtonBar.enableApplyButton(true);
+		}
 		getJoinPropertyGrid();
-		super.okPressed();
+		super.close();
 	}
 
 	@Override
 	protected void cancelPressed() {
-		if (outputTableViewer.getTable().getItems() != null) {
-			currentItems = outputTableViewer.getTable().getItems();
-		}
+		validateIsAnyUpdationPerformedInTable();
+	}
+
+	private Boolean validateIsAnyUpdationPerformedInTable() {
+		boolean returnValue = false;
+		populateCurrentItemsOfTable();
 		if (currentItems.length == 0 && previousItems.length == 0) {
 			super.close();
 		} else {
@@ -702,12 +716,18 @@ public class JoinMapGrid extends Dialog {
 						joinOutputList.add(lookupMapPropertyObjects[i]);
 					}
 					getJoinPropertyGrid();
-					super.close();
+					returnValue = super.close();
 				}
 			} else {
-				super.close();
+				returnValue = super.close();
 			}
 		}
+		return returnValue;
+	}
+
+	@Override
+	public boolean close() {
+		return validateIsAnyUpdationPerformedInTable();
 	}
 	protected boolean inputSchemavalidate(List<FilterProperties> inputList,
 			TableViewer tableViewer) {
