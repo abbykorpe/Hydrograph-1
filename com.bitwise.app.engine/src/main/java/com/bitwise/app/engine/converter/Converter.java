@@ -128,13 +128,11 @@ public abstract class Converter {
 
 	protected TypeProperties getRuntimeProperties() {
 		TypeProperties typeProperties = null;
-		if (properties.get(PropertyNameConstants.RUNTIME_PROPERTIES.value()) != null) {
+		Map<String, String> runtimeProps = (Map<String, String>) properties.get(PropertyNameConstants.RUNTIME_PROPERTIES.value());
+		if (runtimeProps != null && !runtimeProps.isEmpty()) {
 			typeProperties = new TypeProperties();
-			List<TypeProperties.Property> runtimePropertyList = typeProperties
-					.getProperty();
-			for (Map.Entry<String, String> entry : ((Map<String, String>) properties
-					.get(PropertyNameConstants.RUNTIME_PROPERTIES.value()))
-					.entrySet()) {
+			List<TypeProperties.Property> runtimePropertyList = typeProperties.getProperty();
+			for (Map.Entry<String, String> entry : runtimeProps.entrySet()) {
 				Property runtimeProperty = new Property();
 				runtimeProperty.setName(entry.getKey());
 				runtimeProperty.setValue(entry.getValue());

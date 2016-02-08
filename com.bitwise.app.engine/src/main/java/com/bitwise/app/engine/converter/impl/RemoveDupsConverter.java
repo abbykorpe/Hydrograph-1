@@ -69,11 +69,10 @@ public class RemoveDupsConverter extends StraightPullConverter {
 
 	private TypeSecondaryKeyFields getSecondaryKeys() {
 
-		Map<String, String> fieldValueMap = (LinkedHashMap<String, String>) properties
-				.get(PropertyNameConstants.SECONDARY_COLUMN_KEYS.value());
+		Map<String, String> fieldValueMap = (Map<String, String>) properties.get(PropertyNameConstants.SECONDARY_COLUMN_KEYS.value());
 
 		TypeSecondaryKeyFields typeSecondaryKeyFields = null;
-		if (fieldValueMap != null) {
+		if (fieldValueMap != null && !fieldValueMap.isEmpty()) {
 			typeSecondaryKeyFields = new TypeSecondaryKeyFields();
 			List<TypeSecondayKeyFieldsAttributes> fieldNameList = typeSecondaryKeyFields.getField();
 			for (Map.Entry<String, String> entry : fieldValueMap.entrySet()) {
@@ -99,7 +98,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 		logger.debug("Generating TypeStraightPullOutSocket data for : {}", properties.get(Constants.PARAM_NAME));
 		List<TypeStraightPullOutSocket> outSockectList = new ArrayList<TypeStraightPullOutSocket>();
 
-		for (Link link : component.getSourceConnections()) {
+		for (Link link : component.getTargetConnections()) {
 			TypeStraightPullOutSocket outSocket = new TypeStraightPullOutSocket();
 			TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
 			outSocketAsInsocket.setInSocketId(link.getTargetTerminal());
