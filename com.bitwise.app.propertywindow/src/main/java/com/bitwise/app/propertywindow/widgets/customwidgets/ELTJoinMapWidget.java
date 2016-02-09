@@ -146,11 +146,13 @@ public class ELTJoinMapWidget extends AbstractWidget {
 		componentsOutputSchema.getMapFieldsPortInfo().putAll(mapFieldsPortInfo);
 	}	
 
-	private GridRow getOutputFieldSchema(GridRow inputFieldSchema,
-			String output_Field) {
-		GridRow gridRow = inputFieldSchema.copy();
-		gridRow.setFieldName(output_Field);
-		return gridRow.copy();
+	private GridRow getOutputFieldSchema(GridRow inputFieldSchema, String output_Field) {
+		if (inputFieldSchema != null) {
+			GridRow gridRow = inputFieldSchema.copy();
+			gridRow.setFieldName(output_Field);
+			return gridRow.copy();
+		} else
+			return null;
 	}
 
 	private GridRow getInputFieldSchema(String source_Field) {		

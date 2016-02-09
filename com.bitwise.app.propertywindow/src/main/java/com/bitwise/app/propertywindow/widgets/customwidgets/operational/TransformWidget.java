@@ -6,22 +6,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
-import com.bitwise.app.common.datastructure.property.GridRow;
-import com.bitwise.app.common.datastructure.property.Schema;
-
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 
-import com.bitwise.app.graph.model.Component;
-import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
+import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
+import com.bitwise.app.common.datastructure.property.GridRow;
+import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
 import com.bitwise.app.common.datastructure.property.mapping.ErrorObject;
 import com.bitwise.app.common.datastructure.property.mapping.InputField;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.graph.model.Component;
+import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
@@ -207,6 +206,7 @@ public class TransformWidget extends AbstractWidget {
 	}
 
 	private void addMapFieldsToSchema(Map<String, String> mapFields) {
+		FixedWidthGridRow tempFixedWidthGridRow = null;
 		Schema schema = getSchemaForInternalPapogation();
 		List<String> currentFieldsInProppogatedSchemaObject = new LinkedList<>();
 		for (GridRow gridRow : schema.getGridRow()) {
@@ -214,20 +214,23 @@ public class TransformWidget extends AbstractWidget {
 		}
 
 		for (String inputField : mapFields.keySet()) {
-			FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) getFieldSchema(inputField).copy();
-			fixedWidthGridRow.setFieldName(mapFields.get(inputField));
+			tempFixedWidthGridRow = (FixedWidthGridRow) getFieldSchema(inputField);
+			if (tempFixedWidthGridRow != null) {
+				FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) tempFixedWidthGridRow.copy();
+				fixedWidthGridRow.setFieldName(mapFields.get(inputField));
 
-			if (!currentFieldsInProppogatedSchemaObject.contains(mapFields.get(inputField))) {
-				schema.getGridRow().add(fixedWidthGridRow);
-			} else {
-				for (int index = 0; index < schema.getGridRow().size(); index++) {
-					if (schema.getGridRow().get(index).getFieldName().equals(mapFields.get(inputField))) {
-						schema.getGridRow().set(index, fixedWidthGridRow);
+				if (!currentFieldsInProppogatedSchemaObject.contains(mapFields.get(inputField))) {
+					schema.getGridRow().add(fixedWidthGridRow);
+				} else {
+					for (int index = 0; index < schema.getGridRow().size(); index++) {
+						if (schema.getGridRow().get(index).getFieldName().equals(mapFields.get(inputField))) {
+							schema.getGridRow().set(index, fixedWidthGridRow);
+						}
 					}
 				}
 			}
 		}
-		
+
 	}
 
 	private void addPassthroughFieldsToSchema(List<String> passThroughFields) {
