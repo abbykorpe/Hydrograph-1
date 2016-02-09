@@ -48,19 +48,19 @@ public class Schema implements IDataStructure{
          { 
 		     Schema schema=new Schema();	
 		     clonedGridRow=new ArrayList<>();
-		     if(gridRow!=null){
-        	 for(int i=0;i<gridRow.size();i++)
-        	 {
-             if(gridRow.get(i)instanceof FixedWidthGridRow )
-             clonedGridRow.add(((FixedWidthGridRow)gridRow.get(i)).copy()); 
-             else if(gridRow.get(i)!=null)
-             clonedGridRow.add(((SchemaGrid)gridRow.get(i)).copy());
-        	 
-        	 }	}	 
-        	 schema.setExternalSchemaPath(getExternalSchemaPath());
-        	 schema.setGridRow(clonedGridRow);
-        	 schema.setIsExternal(getIsExternal());
-        	 return schema;
+		if (gridRow != null) {
+			for (int i = 0; i < gridRow.size(); i++) {
+				if (gridRow.get(i) instanceof FixedWidthGridRow)
+					clonedGridRow.add(((FixedWidthGridRow) gridRow.get(i)).copy());
+				else if (gridRow.get(i) != null)
+					clonedGridRow.add(((SchemaGrid) gridRow.get(i)).copy());
+
+			}
+		}
+		schema.setExternalSchemaPath(getExternalSchemaPath());
+		schema.setGridRow(clonedGridRow);
+		schema.setIsExternal(getIsExternal());
+		return schema;
         	 
          }
     

@@ -206,7 +206,7 @@ public class TransformWidget extends AbstractWidget {
 	}
 
 	private void addMapFieldsToSchema(Map<String, String> mapFields) {
-		FixedWidthGridRow tempFixedWidthGridRow=null;
+		FixedWidthGridRow tempFixedWidthGridRow = null;
 		Schema schema = getSchemaForInternalPapogation();
 		List<String> currentFieldsInProppogatedSchemaObject = new LinkedList<>();
 		for (GridRow gridRow : schema.getGridRow()) {
@@ -214,23 +214,23 @@ public class TransformWidget extends AbstractWidget {
 		}
 
 		for (String inputField : mapFields.keySet()) {
-			tempFixedWidthGridRow=(FixedWidthGridRow) getFieldSchema(inputField);
-			if(tempFixedWidthGridRow!=null){
-			FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) tempFixedWidthGridRow.copy();
-			fixedWidthGridRow.setFieldName(mapFields.get(inputField));
+			tempFixedWidthGridRow = (FixedWidthGridRow) getFieldSchema(inputField);
+			if (tempFixedWidthGridRow != null) {
+				FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) tempFixedWidthGridRow.copy();
+				fixedWidthGridRow.setFieldName(mapFields.get(inputField));
 
-			if (!currentFieldsInProppogatedSchemaObject.contains(mapFields.get(inputField))) {
-				schema.getGridRow().add(fixedWidthGridRow);
-			} else {
-				for (int index = 0; index < schema.getGridRow().size(); index++) {
-					if (schema.getGridRow().get(index).getFieldName().equals(mapFields.get(inputField))) {
-						schema.getGridRow().set(index, fixedWidthGridRow);
+				if (!currentFieldsInProppogatedSchemaObject.contains(mapFields.get(inputField))) {
+					schema.getGridRow().add(fixedWidthGridRow);
+				} else {
+					for (int index = 0; index < schema.getGridRow().size(); index++) {
+						if (schema.getGridRow().get(index).getFieldName().equals(mapFields.get(inputField))) {
+							schema.getGridRow().set(index, fixedWidthGridRow);
+						}
 					}
 				}
 			}
-			}
 		}
-		
+
 	}
 
 	private void addPassthroughFieldsToSchema(List<String> passThroughFields) {

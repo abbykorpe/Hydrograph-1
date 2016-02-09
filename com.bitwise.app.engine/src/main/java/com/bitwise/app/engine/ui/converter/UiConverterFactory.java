@@ -90,11 +90,10 @@ public class UiConverterFactory {
 		if((Join.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new JoinComponentUiConverter(typeBaseComponent,container);
 		}
-		if((HashJoin.class).isAssignableFrom(typeBaseComponent.getClass())){
-			return new LookupUiConverter(typeBaseComponent,container);
+		if ((HashJoin.class).isAssignableFrom(typeBaseComponent.getClass())) {
+			return new LookupUiConverter(typeBaseComponent, container);
 		}
-		
-		
+
 		return new DummyUiConverter(typeBaseComponent,container);
 	}
 }
