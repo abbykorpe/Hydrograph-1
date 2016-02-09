@@ -93,12 +93,7 @@ public class UiConverterFactory {
 		if((HashJoin.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new LookupUiConverter(typeBaseComponent,container);
 		}
-		if((Subgraph.class).isAssignableFrom(typeBaseComponent.getClass())){
-			return new SubGraphInputTypeUiConverter(typeBaseComponent,container);
-		}
-		if((Subgraph.class).isAssignableFrom(typeBaseComponent.getClass())){
-			return new SubGraphOperationTypeUiConverter(typeBaseComponent,container);
-		}
+		
 		
 		return new DummyUiConverter(typeBaseComponent,container);
 	}
