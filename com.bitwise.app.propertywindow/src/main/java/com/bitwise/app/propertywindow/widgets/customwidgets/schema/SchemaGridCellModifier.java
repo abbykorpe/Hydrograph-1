@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Item;
 
 import com.bitwise.app.common.datastructure.property.SchemaGrid;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * @author Bitwise
  * This class represents the cell modifier for the SchemaEditor program
@@ -25,15 +25,8 @@ class SchemaGridCellModifier implements ICellModifier {
     this.viewer = viewer;
   }
  
-  /**
-   * Returns whether the property can be modified
-   * 
-   * @param element
-   *            the element
-   * @param property
-   *            the property
-   * @return boolean
-   */
+  
+  @Override
   public boolean canModify(Object element, String property) {
     // Allow editing of all values
 	  SchemaGrid p1 = (SchemaGrid) element;
@@ -46,23 +39,20 @@ class SchemaGridCellModifier implements ICellModifier {
 	      }
 	  if (ELTSchemaGridWidget.SCALE.equals(property))
       {
-	    if(p1.getDataTypeValue().equalsIgnoreCase("java.lang.Float") ||p1.getDataTypeValue().equalsIgnoreCase("java.lang.Double")||p1.getDataTypeValue().equalsIgnoreCase("java.math.BigDecimal"))
-	    return true;
-	    else 
-	   return false; 	
+	    if(p1.getDataTypeValue().equalsIgnoreCase("java.lang.Float") 
+	    		||p1.getDataTypeValue().equalsIgnoreCase("java.lang.Double")
+	    		||p1.getDataTypeValue().equalsIgnoreCase("java.math.BigDecimal"))
+	    	return true;
+	    else {
+	    	return false; 	
+	    }
+	    	
       }
+	  
     return true;
   }
 
-  /**
-   * Returns the value for the property
-   * 
-   * @param element
-   *            the element
-   * @param property
-   *            the property
-   * @return Object
-   */ 
+  @Override
   public Object getValue(Object element, String property) {
     SchemaGrid p = (SchemaGrid) element;
     if (ELTSchemaGridWidget.FIELDNAME.equals(property))
@@ -77,16 +67,7 @@ class SchemaGridCellModifier implements ICellModifier {
       return null;
   }
 
-  /**
-   * Modifies the element
-   * 
-   * @param element
-   *            the element
-   * @param property
-   *            the property
-   * @param value
-   *            the value
-   */
+  @Override
   public void modify(Object element, String property, Object value) {
     if (element instanceof Item)
       element = ((Item) element).getData();
@@ -102,6 +83,23 @@ class SchemaGridCellModifier implements ICellModifier {
       p.setDataType((Integer)value);
       p.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]);
     }
+    
+    if(ELTSchemaGridWidget.DATATYPE.equals(property)){
+		  if(p.getDataTypeValue().equalsIgnoreCase("integer")||
+				  p.getDataTypeValue().equalsIgnoreCase("java.lang.Integer") 
+				  ||p.getDataTypeValue().equalsIgnoreCase("string")
+				  ||p.getDataTypeValue().equalsIgnoreCase("java.lang.String")
+				  ||p.getDataTypeValue().equalsIgnoreCase("short")
+				  ||p.getDataTypeValue().equalsIgnoreCase("java.lang.Short")
+				  ||p.getDataTypeValue().equalsIgnoreCase("boolean")
+				  ||p.getDataTypeValue().equalsIgnoreCase("java.lang.Boolean")
+				  ||p.getDataTypeValue().equalsIgnoreCase("date")
+				  ||p.getDataTypeValue().equalsIgnoreCase("java.util.Date")){
+			  p.setScale("");
+		  }
+			 
+	  }
+    
     viewer.refresh();
   }
   
