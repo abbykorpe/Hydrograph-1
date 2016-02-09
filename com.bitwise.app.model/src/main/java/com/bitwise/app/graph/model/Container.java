@@ -5,40 +5,23 @@ import java.util.Hashtable;
 import java.util.List;
 
 import com.bitwise.app.graph.model.helper.LoggerUtil;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-// TODO: Auto-generated Javadoc
+
 /**
- * The Class Container.
+ * The Class Container(Graph).
  * 
  * @author Bitwise
  */
 public class Container extends Model {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8825716379098354511L;
 	
+	private static final long serialVersionUID = 8825716379098354511L;
 	public static final String CHILD_ADDED_PROP = "ComponentsDiagram.ChildAdded";
 	public static final String CHILD_REMOVED_PROP = "ComponentsDiagram.ChildRemoved";
-	
 	
 	private final List<Component> components = new ArrayList<>();
 	private final Hashtable<String, Integer> componentNextNameSuffixes = new Hashtable<>();
 	private ArrayList<String> componentNames = new ArrayList<>();
-	//@XStreamOmitField
-	//private String parameterFileName;
-	//@XStreamOmitField
-	//private String parameterFileDirectory;
 		
-	private List<String> parameterList;
-	
-	public void addParameter(String parameterName){
-		if(parameterList == null){
-			parameterList = new ArrayList<>();
-		}
-		parameterList.add(parameterName);
-	}
 	
 	/**
 	 * Add a component to this graph.
@@ -47,7 +30,6 @@ public class Container extends Model {
 	public boolean addChild(Component component) {
 		if (component != null && components.add(component)) {
 			component.setParent(this);
-			String compOldName = (String) component.getPropertyValue(Component.Props.NAME_PROP.getValue());
 			String compNewName = getDefaultNameForComponent(component.getPrefix());
 			component.setComponentLabel(compNewName);
 			
@@ -61,7 +43,7 @@ public class Container extends Model {
 	}
 
 	/**
-	 * Add a component to this graph.
+	 * Add a subgraph to this graph.
 	 * @return true, if the component was added, false otherwise
 	 */
 	public boolean addSubGraphChild(Component component) {
@@ -89,12 +71,18 @@ public class Container extends Model {
 	public boolean removeChild(Component component) {
 		if (component != null && components.remove(component)) {
 			componentNames.remove(component.getPropertyValue(Component.Props.NAME_PROP.getValue()));
+			Integer nextSuffix = componentNextNameSuffixes.get(component.getPrefix()) - 1;
+			componentNextNameSuffixes.put(component.getPrefix(), nextSuffix);
 			firePropertyChange(CHILD_REMOVED_PROP, null, component);
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * Get default name for the component for particular prefix type.
+	 * @return generated default name.
+	 */
 	private String getDefaultNameForComponent(String prefix){
 
 		String newName = "";
@@ -205,12 +193,12 @@ public class Container extends Model {
 
 	}
 	
+	/**
+	 * Return a List of Component names in this graph. The returned List should not be
+	 * modified.
+	 */
 	public ArrayList<String> getComponentNames() {
 		return componentNames;
-	}
-
-	public void setComponentNames(ArrayList<String> componentNames) {
-		this.componentNames = componentNames;
 	}
 	
 	private boolean isUniqueCompName(String componentName) {
@@ -229,6 +217,9 @@ public class Container extends Model {
 		return result;
 	}
 	
+	/**
+	 * Return a HashTable of Component prefix as key and next suffix as value.
+	 */
 	public Hashtable<String, Integer> getComponentNextNameSuffixes() {
 		return componentNextNameSuffixes;
 	}
