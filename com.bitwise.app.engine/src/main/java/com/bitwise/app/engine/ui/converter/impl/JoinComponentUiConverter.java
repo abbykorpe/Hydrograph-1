@@ -88,7 +88,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 	
 	
 	private Integer getJoinType(TypeKeyFields typeKeysFields) {
-		int joinTypeNumber = 1;
+		int joinTypeNumber = 0;
 		if (typeKeysFields.getJoinType() != null && typeKeysFields.getJoinType().value() != null)
 			for (JoinType joinType : JoinType.values()) {
 				if (typeKeysFields.getJoinType().equals(joinType))
