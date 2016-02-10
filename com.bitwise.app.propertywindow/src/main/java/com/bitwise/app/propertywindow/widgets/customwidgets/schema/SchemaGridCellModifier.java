@@ -84,25 +84,40 @@ class SchemaGridCellModifier implements ICellModifier {
       p.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]);
     }
     
-    if(ELTSchemaGridWidget.DATATYPE.equals(property) && p.getDataTypeValue()!=null){
-		  if(p.getDataTypeValue().equalsIgnoreCase("integer")||
-				  p.getDataTypeValue().equalsIgnoreCase("java.lang.Integer") 
-				  ||p.getDataTypeValue().equalsIgnoreCase("string")
-				  ||p.getDataTypeValue().equalsIgnoreCase("java.lang.String")
-				  ||p.getDataTypeValue().equalsIgnoreCase("short")
-				  ||p.getDataTypeValue().equalsIgnoreCase("java.lang.Short")
-				  ||p.getDataTypeValue().equalsIgnoreCase("boolean")
-				  ||p.getDataTypeValue().equalsIgnoreCase("java.lang.Boolean")
-				  ||p.getDataTypeValue().equalsIgnoreCase("date")
-				  ||p.getDataTypeValue().equalsIgnoreCase("java.util.Date")){
-			  p.setScale("");
-		  }
-			 
-	  }
+    resetScale(p, property);
+    
+    resetDateFormat(p, property);
     
     viewer.refresh();
   }
   
+  private void resetScale(SchemaGrid row, String property){
+	  if(ELTSchemaGridWidget.DATATYPE.equals(property) && row.getDataTypeValue()!=null){
+		  if(row.getDataTypeValue().equalsIgnoreCase("integer")||
+				  row.getDataTypeValue().equalsIgnoreCase("java.lang.Integer") 
+				  ||row.getDataTypeValue().equalsIgnoreCase("string")
+				  ||row.getDataTypeValue().equalsIgnoreCase("java.lang.String")
+				  ||row.getDataTypeValue().equalsIgnoreCase("short")
+				  ||row.getDataTypeValue().equalsIgnoreCase("java.lang.Short")
+				  ||row.getDataTypeValue().equalsIgnoreCase("boolean")
+				  ||row.getDataTypeValue().equalsIgnoreCase("java.lang.Boolean")
+				  ||row.getDataTypeValue().equalsIgnoreCase("date")
+				  ||row.getDataTypeValue().equalsIgnoreCase("java.util.Date")){
+			  row.setScale("");
+		  }
+			 
+	  }
+  }
+  
+  private void resetDateFormat(SchemaGrid row, String property){
+	  if(ELTSchemaGridWidget.DATATYPE.equals(property) && row.getDataTypeValue()!=null){
+		  if(!(row.getDataTypeValue().equalsIgnoreCase("date")
+				  ||row.getDataTypeValue().equalsIgnoreCase("java.util.Date"))){
+			  row.setDateFormat("");
+		  }
+			 
+	  }
+  }
   
   
 }

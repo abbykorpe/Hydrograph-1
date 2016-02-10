@@ -5,6 +5,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
+import com.bitwise.app.common.datastructure.property.SchemaGrid;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GeneralGridWidgetBuilder;
 
@@ -102,7 +103,15 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 			p.setLength(((String) value).trim());
 		}
 		
-		if(ELTSchemaGridWidget.DATATYPE.equals(property) && p.getDataTypeValue()!=null){
+		resetScale(p, property);
+	    
+	    resetDateFormat(p, property);
+		
+		viewer.refresh();
+	}
+	
+	private void resetScale(FixedWidthGridRow p, String property){
+		  if(ELTSchemaGridWidget.DATATYPE.equals(property) && p.getDataTypeValue()!=null){
 			  if(p.getDataTypeValue().equalsIgnoreCase("integer")||
 					  p.getDataTypeValue().equalsIgnoreCase("java.lang.Integer") 
 					  ||p.getDataTypeValue().equalsIgnoreCase("string")
@@ -117,8 +126,16 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 			  }
 				 
 		  }
-		
-		viewer.refresh();
-	}
+	  }
+	  
+	  private void resetDateFormat(FixedWidthGridRow p, String property){
+		  if(ELTSchemaGridWidget.DATATYPE.equals(property) && p.getDataTypeValue()!=null){
+			  if(!(p.getDataTypeValue().equalsIgnoreCase("date")
+					  ||p.getDataTypeValue().equalsIgnoreCase("java.util.Date"))){
+				  p.setDateFormat("");
+			  }
+				 
+		  }
+	  }
 
 }
