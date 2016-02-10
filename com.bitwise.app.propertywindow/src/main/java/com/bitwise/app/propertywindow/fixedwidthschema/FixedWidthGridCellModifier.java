@@ -101,6 +101,23 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		} else if (ELTSchemaGridWidget.LENGTH.equals(property)) {
 			p.setLength(((String) value).trim());
 		}
+		
+		if(ELTSchemaGridWidget.DATATYPE.equals(property) && p.getDataTypeValue()!=null){
+			  if(p.getDataTypeValue().equalsIgnoreCase("integer")||
+					  p.getDataTypeValue().equalsIgnoreCase("java.lang.Integer") 
+					  ||p.getDataTypeValue().equalsIgnoreCase("string")
+					  ||p.getDataTypeValue().equalsIgnoreCase("java.lang.String")
+					  ||p.getDataTypeValue().equalsIgnoreCase("short")
+					  ||p.getDataTypeValue().equalsIgnoreCase("java.lang.Short")
+					  ||p.getDataTypeValue().equalsIgnoreCase("boolean")
+					  ||p.getDataTypeValue().equalsIgnoreCase("java.lang.Boolean")
+					  ||p.getDataTypeValue().equalsIgnoreCase("date")
+					  ||p.getDataTypeValue().equalsIgnoreCase("java.util.Date")){
+				  p.setScale("");
+			  }
+				 
+		  }
+		
 		viewer.refresh();
 	}
 
