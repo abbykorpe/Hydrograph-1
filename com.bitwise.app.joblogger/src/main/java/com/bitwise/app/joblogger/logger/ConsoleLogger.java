@@ -1,7 +1,5 @@
 package com.bitwise.app.joblogger.logger;
 
-import java.io.IOException;
-
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
@@ -22,7 +20,7 @@ public class ConsoleLogger extends AbstractJobLogger{
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ConsoleLogger.class);
 	
-	private static final String CONSOLE_NAME="Gradle Console";
+	//private static final String CONSOLE_NAME="Gradle Console";
 	private MessageConsoleStream messageConsoleStream;
 	
 	public ConsoleLogger(String projectName, String jobName) {
@@ -89,7 +87,7 @@ public class ConsoleLogger extends AbstractJobLogger{
 	 */
 	private MessageConsole createNewMessageConsole(IConsoleManager conMan) {
 		MessageConsole messageConsole;
-		messageConsole = new MessageConsole(CONSOLE_NAME, null);
+		messageConsole = new MessageConsole(getFullJobName(), null);
 		conMan.addConsoles(new IConsole[] { messageConsole });
 		logger.debug("Created message console");
 		return messageConsole;
@@ -105,7 +103,7 @@ public class ConsoleLogger extends AbstractJobLogger{
 	private MessageConsole getExistingMessageConsole(IConsole[] existing) {
 		MessageConsole messageConsole=null;
 		for (int i = 0; i < existing.length; i++) {
-			if (CONSOLE_NAME.equals(existing[i].getName())){
+			if (getFullJobName().equals(existing[i].getName())){
 				messageConsole=(MessageConsole) existing[i];
 				logger.debug("We have a message console");
 				break;
@@ -144,11 +142,13 @@ public class ConsoleLogger extends AbstractJobLogger{
 
 	@Override
 	public void close() {
-		try {
+		// TODO - need to re-implement once actual job kill process is in place
+		// need input from engine
+		/*try {
 			messageConsoleStream.close();
 		} catch (IOException e) {
 			logger.debug("Unable to close message console stream " + e.getMessage());
-		}
+		}*/
 	}
 
 	@Override
