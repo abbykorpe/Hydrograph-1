@@ -102,7 +102,7 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 			p.setLength(((String) value).trim());
 		}
 		
-		if(ELTSchemaGridWidget.DATATYPE.equals(property)){
+		if(ELTSchemaGridWidget.DATATYPE.equals(property) && p.getDataTypeValue()!=null){
 			  if(p.getDataTypeValue().equalsIgnoreCase("integer")||
 					  p.getDataTypeValue().equalsIgnoreCase("java.lang.Integer") 
 					  ||p.getDataTypeValue().equalsIgnoreCase("string")

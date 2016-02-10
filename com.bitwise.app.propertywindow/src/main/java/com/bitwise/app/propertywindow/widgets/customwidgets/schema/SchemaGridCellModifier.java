@@ -84,7 +84,7 @@ class SchemaGridCellModifier implements ICellModifier {
       p.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]);
     }
     
-    if(ELTSchemaGridWidget.DATATYPE.equals(property)){
+    if(ELTSchemaGridWidget.DATATYPE.equals(property) && p.getDataTypeValue()!=null){
 		  if(p.getDataTypeValue().equalsIgnoreCase("integer")||
 				  p.getDataTypeValue().equalsIgnoreCase("java.lang.Integer") 
 				  ||p.getDataTypeValue().equalsIgnoreCase("string")
