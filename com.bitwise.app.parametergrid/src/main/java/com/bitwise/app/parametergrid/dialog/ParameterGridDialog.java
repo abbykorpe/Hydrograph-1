@@ -237,6 +237,11 @@ public class ParameterGridDialog extends Dialog {
 						((Text)textGrid.getLastAddedRow().getChildren()[2]).setFocus();						
 					}
 				}	
+				
+				if(textGrid.getGrid().size() < 1){
+					headerCompositeCheckBox.setEnabled(false);
+					headerCompositeCheckBox.setSelection(false);
+				}
 			}
 
 			@Override
@@ -299,6 +304,7 @@ public class ParameterGridDialog extends Dialog {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				addRowToTextGrid();
+				headerCompositeCheckBox.setEnabled(true);
 			}
 			
 			@Override
@@ -669,6 +675,7 @@ public class ParameterGridDialog extends Dialog {
 		});
 
 		headerCompositeCheckBox = ((Button)textGrid.getHeaderComposite().getChildren()[0]);
+		headerCompositeCheckBox.setEnabled(false);
 	}
 
 	private GridData getGridControlButtonLayout() {
