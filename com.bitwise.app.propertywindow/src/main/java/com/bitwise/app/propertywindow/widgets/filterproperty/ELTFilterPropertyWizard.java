@@ -220,10 +220,10 @@ public class ELTFilterPropertyWizard {
 		isAnyUpdatePerformed = false;
 		shell.setSize(506, 548);
 		shell.setLayout(null);
-		if (componentName.equalsIgnoreCase("Key Field ")) {
+		if (Constants.COLUMN_NAME2.equalsIgnoreCase(componentName)) {
 			shell.setText(Constants.COLUMN_NAME2);
 		}
-		if(componentName.equalsIgnoreCase("Operation Field ")){
+		if(Constants.OPERATION_FIELD.equalsIgnoreCase(componentName)){
 			shell.setText(Constants.OPERATION_FIELD);	
 		}
 		imageShell(shell);
