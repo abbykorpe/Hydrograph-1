@@ -23,7 +23,7 @@ import com.bitwiseglobal.graph.inputtypes.GenerateRecord;
 import com.bitwiseglobal.graph.inputtypes.GenerateRecord.RecordCount;
 
 /**
- * This class is used to create target XML for Generate Records component.
+ * This class is used to create target XML for GenerateRecords component.
  * 
  * @author Bitwise
  *
@@ -39,6 +39,11 @@ public class GenerateRecordsConverter extends InputConverter {
 		this.properties = component.getProperties();
 	}
 
+	
+	/* *
+	 * This method initiates target XML generation of GenrateRecords component.
+	 * 
+	 */
 	@Override
 	public void prepareForXML() {
 		LOGGER.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
@@ -58,6 +63,9 @@ public class GenerateRecordsConverter extends InputConverter {
 		return recordCount;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.bitwise.app.engine.converter.InputConverter#getInOutSocket()
+	 */
 	@Override
 	protected List<TypeInputOutSocket> getInOutSocket() {
 		LOGGER.debug("Generating TypeInputOutSocket data for {}", properties.get(Constants.PARAM_NAME));
@@ -73,6 +81,9 @@ public class GenerateRecordsConverter extends InputConverter {
 		return outSockets;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.bitwise.app.engine.converter.InputConverter#getFieldOrRecord(java.util.List)
+	 */
 	@Override
 	protected List<TypeBaseField> getFieldOrRecord(List<GridRow> gridList) {
 		LOGGER.debug("Generating data for {} for property {}", new Object[] { properties.get(Constants.PARAM_NAME),

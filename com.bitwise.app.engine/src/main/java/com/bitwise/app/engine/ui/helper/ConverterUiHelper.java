@@ -17,18 +17,19 @@ import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;
 /**
  * The class ConverterUiHelper
  * 
- * @author Bitwise	a
+ * @author Bitwise a
  * 
- * This is a helper class for converter implementation. Contains the helper methods for conversion.
+ *         This is a helper class for converter implementation. Contains the helper methods for conversion.
  */
 public class ConverterUiHelper {
-	
+
 	protected Map<String, Object> properties = new LinkedHashMap<String, Object>();
 	protected Component uIComponent = null;
 	protected String componentName = null;
 
-	
-	/**Instantiate ConverterUiHelper 
+	/**
+	 * Instantiate ConverterUiHelper
+	 * 
 	 * @param component
 	 */
 	public ConverterUiHelper(Component component) {
@@ -37,8 +38,9 @@ public class ConverterUiHelper {
 		this.componentName = (String) properties.get(Constants.PARAM_NAME);
 	}
 
-	
-	/**Create Fixed-Width-Schema for the components.
+	/**
+	 * Create Fixed-Width-Schema for the components.
+	 * 
 	 * @param record
 	 * @return FixedWidthGridRow, this object is responsible for displaying fixed-width schema on property window
 	 */
@@ -59,7 +61,9 @@ public class ConverterUiHelper {
 		return null;
 	}
 
-	/**Create Schema for the components.
+	/**
+	 * Create Schema for the components.
+	 * 
 	 * @param record
 	 * @return SchemaGrid, this object is responsible for displaying schema on property window
 	 */
@@ -78,9 +82,10 @@ public class ConverterUiHelper {
 		}
 		return null;
 	}
-	
-	
-	/**Fetches value of Qname having name length.
+
+	/**
+	 * Fetches value of Qname having name length.
+	 * 
 	 * @param typeBaseField
 	 * @return String, length value
 	 */
@@ -92,8 +97,9 @@ public class ConverterUiHelper {
 		return null;
 	}
 
-
-	/**Create empty string for null values. 
+	/**
+	 * Create empty string for null values.
+	 * 
 	 * @param value
 	 * @return
 	 */
@@ -103,5 +109,22 @@ public class ConverterUiHelper {
 			return emptyString;
 		else
 			return value;
+	}
+
+	/**
+	 * Fetches value of given Qname from component's schema
+	 * 
+	 * @param typeBaseField
+	 *            engine component's schema object
+	 * @param qname
+	 *            qualified name of an schema field
+	 * @return String value of given Qname
+	 */
+	public String getQnameValue(TypeBaseField typeBaseField, String qname) {
+		for (Entry<QName, String> entry : typeBaseField.getOtherAttributes().entrySet()) {
+			if (entry.getKey().toString().equals(qname))
+				return entry.getValue();
+		}
+		return null;
 	}
 }

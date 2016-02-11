@@ -16,21 +16,21 @@ public class GenerateRecordsGridContentProvider implements IStructuredContentPro
 	public Object[] getElements(Object inputElement) {
 		return ((List) inputElement).toArray();
 	}
+
 	/**
-	   * Disposes any created resources
-	   */
+	 * Disposes any created resources
+	 */
 	@Override
 	public void dispose() {
-		// Do nothing
-
+		return;
 	}
 
-	  /**
-	   * Called when the input changes
-	   */
+	/**
+	 * Called when the input changes
+	 */
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		// Ignore
+		return;
 
 	}
 

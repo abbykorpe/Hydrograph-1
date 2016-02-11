@@ -5,18 +5,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Map.Entry;
-
-import javax.xml.namespace.QName;
 
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GenerateRecordSchemaGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.converter.InputUiConverter;
 import com.bitwise.app.engine.ui.helper.ConverterUiHelper;
@@ -31,14 +26,19 @@ import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
 import com.bitwiseglobal.graph.commontypes.TypeProperties;
 import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
 import com.bitwiseglobal.graph.inputtypes.GenerateRecord;
-import com.bitwiseglobal.graph.inputtypes.TextFileDelimited;
 
+/**
+ * This class is used to create ui-GenerateRecords component from engine's GenerateRecord component 
+ * 
+ * @author Bitwise
+ *
+ */
 public class GenerateRecordsUiConverter extends InputUiConverter {
 
-	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(InputFileDelimitedUiConverter.class);
 	private GenerateRecord genertaeRecord;
-	ConverterUiHelper converterUiHelper ;
+	ConverterUiHelper converterUiHelper;
+
 	public GenerateRecordsUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;
 		this.typeBaseComponent = typeBaseComponent;
@@ -47,12 +47,17 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 		converterUiHelper = new ConverterUiHelper(uiComponent);
 	}
 
+	/* 
+	 * Generates properties specific to GenerateRecords ui-component
+	 * 
+	 */
 	@Override
 	public void prepareUIXML() {
 		genertaeRecord = (GenerateRecord) typeBaseComponent;
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Input-Delimited-Properties for {}", componentName);
-		propertyMap.put(Constants.NO_OF_RECORDS_PROPERTY_NAME,String.valueOf(genertaeRecord.getRecordCount().getValue()));
+		propertyMap.put(Constants.NO_OF_RECORDS_PROPERTY_NAME,
+				String.valueOf(genertaeRecord.getRecordCount().getValue()));
 		uiComponent.setType(Constants.GENERATE_RECORDS_COMPONENT_TYPE);
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
@@ -60,8 +65,11 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 		validateComponentProperties(propertyMap);
 	}
 
-	
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bitwise.app.engine.ui.converter.UiConverter#getRuntimeProperties()
+	 */
 	@Override
 	protected Map<String, String> getRuntimeProperties() {
 		LOGGER.debug("Generating Runtime Properties for -{}", componentName);
@@ -76,12 +84,19 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 		return runtimeMap;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.bitwise.app.engine.ui.converter.InputUiConverter#getSchema(com.bitwiseglobal.graph.commontypes.TypeInputOutSocket
+	 * )
+	 */
 	@Override
 	protected Object getSchema(TypeInputOutSocket outSocket) {
 		LOGGER.debug("Generating UI-Schema data for {}", componentName);
 		Schema schema = null;
 		List<GridRow> gridRow = new ArrayList<>();
-		
+
 		if (outSocket.getSchema() != null
 				&& outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema().size() != 0) {
 			schema = new Schema();
@@ -96,38 +111,36 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 					schema.setIsExternal(false);
 				}
 			}
-		} 
+		}
 		return schema;
 
 	}
-	
+
 	private GenerateRecordSchemaGridRow getGenrateRecordsSchemaGridRow(Object record) {
 		if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
 			return null;
 		} else if ((TypeBaseField.class).isAssignableFrom(record.getClass())) {
 			GenerateRecordSchemaGridRow genertaeRecordsSchemaGridRow = new GenerateRecordSchemaGridRow();
 			TypeBaseField typeBaseField = (TypeBaseField) record;
-			genertaeRecordsSchemaGridRow.setDataTypeValue(converterUiHelper.getStringValue(typeBaseField.getType().value()));
+			genertaeRecordsSchemaGridRow.setDataTypeValue(converterUiHelper.getStringValue(typeBaseField.getType()
+					.value()));
 			genertaeRecordsSchemaGridRow.setDateFormat(converterUiHelper.getStringValue(typeBaseField.getFormat()));
 			genertaeRecordsSchemaGridRow.setFieldName(converterUiHelper.getStringValue(typeBaseField.getName()));
-			genertaeRecordsSchemaGridRow.setScale(converterUiHelper.getStringValue(String.valueOf(typeBaseField.getScale())));
-			genertaeRecordsSchemaGridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(typeBaseField.getType().value()));
-			genertaeRecordsSchemaGridRow.setLength(converterUiHelper.getStringValue(getQnameValue(typeBaseField,Constants.LENGTH_QNAME)));
-			genertaeRecordsSchemaGridRow.setRangeFrom(converterUiHelper.getStringValue(getQnameValue(typeBaseField,Constants.RANGE_FROM_QNAME)));
-			genertaeRecordsSchemaGridRow.setRangeTo(converterUiHelper.getStringValue(getQnameValue(typeBaseField,Constants.RANGE_TO_QNAME)));
-			genertaeRecordsSchemaGridRow.setDefaultValue(converterUiHelper.getStringValue(getQnameValue(typeBaseField,Constants.DEFAULT_VALUE_QNAME)));
+			genertaeRecordsSchemaGridRow.setScale(converterUiHelper.getStringValue(String.valueOf(typeBaseField
+					.getScale())));
+			genertaeRecordsSchemaGridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(typeBaseField.getType()
+					.value()));
+			genertaeRecordsSchemaGridRow.setLength(converterUiHelper.getStringValue(converterUiHelper.getQnameValue(
+					typeBaseField, Constants.LENGTH_QNAME)));
+			genertaeRecordsSchemaGridRow.setRangeFrom(converterUiHelper.getStringValue(converterUiHelper.getQnameValue(
+					typeBaseField, Constants.RANGE_FROM_QNAME)));
+			genertaeRecordsSchemaGridRow.setRangeTo(converterUiHelper.getStringValue(converterUiHelper.getQnameValue(
+					typeBaseField, Constants.RANGE_TO_QNAME)));
+			genertaeRecordsSchemaGridRow.setDefaultValue(converterUiHelper.getStringValue(converterUiHelper
+					.getQnameValue(typeBaseField, Constants.DEFAULT_VALUE_QNAME)));
 			return genertaeRecordsSchemaGridRow;
 		}
 		return null;
 	}
-
-	private String getQnameValue(TypeBaseField typeBaseField, String qname) {
-		for (Entry<QName, String> entry : typeBaseField.getOtherAttributes().entrySet()) {
-			if (entry.getKey().toString().equals(qname))
-				return entry.getValue();
-		}
-		return null;
-	}
-
 
 }
