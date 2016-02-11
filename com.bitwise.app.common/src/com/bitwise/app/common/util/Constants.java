@@ -113,6 +113,7 @@ public class Constants {
 	
 	
 	public static final String GENERATE_RECORDS_COMPONENT_TYPE = "Generate Records";
+	public static final String FIXED_INSOCKET_ID = "in0";
 		
 
 

@@ -187,7 +187,7 @@ public abstract class TransformUiConverter extends UiConverter {
 
 	private List<String> getInputFieldList(TypeTransformOperation item) {
 		List<String> inputfieldList = new LinkedList<>();
-		if(item != null){
+		if(item != null && item.getInputFields()!=null){
 			for (TypeInputField inputField : item.getInputFields().getField()) {
 				inputfieldList.add(inputField.getName());
 			}
