@@ -6,11 +6,18 @@ import org.eclipse.core.commands.ExecutionException;
 
 import com.bitwise.app.graph.job.RunStopButtonCommunicator;
 
+/**
+ * 
+ * The class is responsible to kill running job
+ * 
+ * @author bitwise
+ *
+ */
 public class StopJobHandler extends AbstractHandler {
 	
 	public StopJobHandler(){
 		setBaseEnabled(false);
-		RunStopButtonCommunicator.stopJobHandler = this;
+		RunStopButtonCommunicator.StopJob.setHandler(this);
 	}
 	
 	@Override
@@ -19,7 +26,13 @@ public class StopJobHandler extends AbstractHandler {
 		return null;
 	}
 	
-	public void setStopJobEnable(boolean enable){
+	/**
+	 * 
+	 * Enable/Disable stop button
+	 * 
+	 * @param enable
+	 */
+	public void setStopJobEnabled(boolean enable){
 		setBaseEnabled(enable);
 	}
 }

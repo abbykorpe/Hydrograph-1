@@ -1,7 +1,7 @@
 package com.bitwise.app.graph.job;
 
 /**
- * The job class 
+ * The job class. The class is a data structure of basic job entity
  * @author Bitwise
  *
  */
@@ -12,6 +12,14 @@ public class Job {
 	private String consoleName;
 	private String canvasName;
 	
+	/**
+	 * 
+	 * @param localJobId - job id
+	 * @param localProcessId - local process id for the job
+	 * @param remoteJobId - remote job id for the job
+	 * @param consoleName - console name for the job
+	 * @param canvasName - canvas name for the job
+	 */
 	public Job(String localJobId, Process localProcessId, String remoteJobId,
 			String consoleName, String canvasName) {
 		super();
@@ -22,66 +30,95 @@ public class Job {
 		this.canvasName = canvasName;
 	}
 
-	
-
+	/**
+	 * return local job id 
+	 * @return localJobId
+	 */
 	public String getLocalJobId() {
 		return localJobId;
 	}
 
-
-
+	/**
+	 * set local job id
+	 *  
+	 * @param localJobId
+	 */
 	public void setLocalJobId(String localJobId) {
 		this.localJobId = localJobId;
 	}
 
-
-
+	/**
+	 * 
+	 * get local process id
+	 * @return
+	 */
 	public Process getLocalProcessId() {
 		return localProcess;
 	}
 
-
-
+	/**
+	 * set local process ID
+	 * @param localProcess
+	 */
 	public void setLocalProcessId(Process localProcess) {
 		this.localProcess = localProcess;
 	}
 
-
-
+	/**
+	 * return remote job id
+	 * 
+	 * @return
+	 */
 	public String getRemoteJobId() {
 		return remoteJobId;
 	}
 
-
-
+	/**
+	 * set remote job id
+	 * 
+	 * @param remoteJobId
+	 */
 	public void setRemoteJobId(String remoteJobId) {
 		this.remoteJobId = remoteJobId;
 	}
 
-
-
+	/**
+	 * returns job console name
+	 * 
+	 * @return
+	 */
 	public String getConsoleName() {
 		return consoleName;
 	}
 
-
-
+	/**
+	 * set remote console name
+	 * 
+	 * @param consoleName
+	 */
 	public void setConsoleName(String consoleName) {
 		this.consoleName = consoleName;
 	}
 
-
-
+	/**
+	 * returns job canvas name
+	 * 
+	 * @return
+	 */
 	public String getCanvasName() {
 		return canvasName;
 	}
 
 
-
+	/**
+	 * 
+	 * set job canvas name
+	 * 
+	 * @param canvasName
+	 */
 	public void setCanvasName(String canvasName) {
 		this.canvasName = canvasName;
 	}
-
 
 
 	@Override

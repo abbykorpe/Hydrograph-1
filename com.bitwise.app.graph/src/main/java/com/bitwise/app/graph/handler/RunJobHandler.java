@@ -19,7 +19,7 @@ import com.bitwise.app.graph.job.RunStopButtonCommunicator;
 public class RunJobHandler extends AbstractHandler {
 	
 	public RunJobHandler(){
-		RunStopButtonCommunicator.runJobHandler = this;
+		RunStopButtonCommunicator.RunJob.setHandler(this);
 	}
 
 	/**
@@ -27,7 +27,7 @@ public class RunJobHandler extends AbstractHandler {
 	 * 
 	 * @param enable
 	 */
-	public void setRunJobEnable(boolean enable){
+	public void setRunJobEnabled(boolean enable){
 		setBaseEnabled(enable);
 	}
 	

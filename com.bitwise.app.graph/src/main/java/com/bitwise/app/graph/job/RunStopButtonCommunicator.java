@@ -1,7 +1,6 @@
 package com.bitwise.app.graph.job;
 
-import com.bitwise.app.graph.handler.RunJobHandler;
-import com.bitwise.app.graph.handler.StopJobHandler;
+import org.eclipse.core.commands.AbstractHandler;
 /**
  * 
  * The class is responsible for providing references to run and stop job button
@@ -9,7 +8,50 @@ import com.bitwise.app.graph.handler.StopJobHandler;
  * @author Bitwise
  *
  */
-public class RunStopButtonCommunicator {
-	public static RunJobHandler runJobHandler;
-	public static StopJobHandler stopJobHandler;	
+
+public enum RunStopButtonCommunicator{
+	RunJob {
+		private AbstractHandler abstractHandler;
+		
+		AbstractHandler getAbstractHandler() {
+			return abstractHandler;
+		}
+		void setAbstractHandler(AbstractHandler abstractHandler){
+			this.abstractHandler = abstractHandler;
+		}		
+	},
+	
+	StopJob {
+		private AbstractHandler abstractHandler;
+		
+		AbstractHandler getAbstractHandler() {
+			return abstractHandler;
+		}
+		void setAbstractHandler(AbstractHandler abstractHandler){
+			this.abstractHandler = abstractHandler;
+		}		
+	};
+	
+	abstract AbstractHandler getAbstractHandler();
+	abstract void setAbstractHandler(AbstractHandler abstractHandler);
+	
+	/**
+	 * returns button handler
+	 * 
+	 * @return
+	 */
+	public AbstractHandler getHandler() {
+		return getAbstractHandler();
+	}
+	
+	/**
+	 * set button handler
+	 * 
+	 * @param abstractHandler
+	 */
+	public void setHandler(AbstractHandler abstractHandler){
+		setAbstractHandler(abstractHandler);
+	};
+	
 }
+

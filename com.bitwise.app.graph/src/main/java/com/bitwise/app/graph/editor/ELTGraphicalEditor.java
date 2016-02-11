@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -68,16 +67,12 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
@@ -89,23 +84,15 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.ISelectionService;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.commands.ActionHandler;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleConstants;
 import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.dialogs.SaveAsDialog;
-import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.statushandlers.StatusManager;
@@ -130,6 +117,7 @@ import com.bitwise.app.graph.action.subgraph.SubGraphOpenAction;
 import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
 import com.bitwise.app.graph.handler.RunJobHandler;
+import com.bitwise.app.graph.handler.StopJobHandler;
 import com.bitwise.app.graph.job.JobManager;
 import com.bitwise.app.graph.job.RunStopButtonCommunicator;
 import com.bitwise.app.graph.model.Container;
@@ -292,6 +280,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		});
 	}
 	
+	private void enableRunJob(boolean enabled){
+		((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
+		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
+	}
+	
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		super.selectionChanged(part, selection);
@@ -306,11 +299,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		conMan.showConsoleView(consoleToShow);
 		
 		if(!JobManager.INSTANCE.isJobRunning(consoleName)){
-			RunStopButtonCommunicator.stopJobHandler.setStopJobEnable(false);
-			RunStopButtonCommunicator.runJobHandler.setRunJobEnable(true);
+			enableRunJob(true);
 		}else{
-			RunStopButtonCommunicator.stopJobHandler.setStopJobEnable(true);
-			RunStopButtonCommunicator.runJobHandler.setRunJobEnable(false);
+			enableRunJob(false);
 		}
 		
 	}

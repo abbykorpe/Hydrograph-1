@@ -21,6 +21,8 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.graph.Messages;
+import com.bitwise.app.graph.handler.RunJobHandler;
+import com.bitwise.app.graph.handler.StopJobHandler;
 import com.bitwise.app.joblogger.JobLogger;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.parametergrid.dialog.ParameterGridDialog;
@@ -54,7 +56,7 @@ public class JobManager {
 		logger.debug("Added job " + job.getCanvasName() + " to job map");
 	}
 
-	private void removeJobJob(String canvasId){
+	private void removeJob(String canvasId){
 		jobMap.remove(canvasId);
 		logger.debug("Removed job " + canvasId + " from jobmap");
 	}
@@ -70,14 +72,19 @@ public class JobManager {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty();
 	}
 
+	
+	private void enableRunJob(boolean enabled){
+		((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
+		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
+	}
+	
 	/**
 	 * execute job
 	 * 
 	 * @param job - job to execute
 	 */
 	public void executeJob(Job job){
-		RunStopButtonCommunicator.runJobHandler.setRunJobEnable(false);
-		RunStopButtonCommunicator.stopJobHandler.setStopJobEnable(true);
+		enableRunJob(false);
 		
 		final DefaultGEFCanvas gefCanvas = getComponentCanvas();
 		
@@ -89,22 +96,20 @@ public class JobManager {
 
 		RunConfigDialog runConfigDialog = getRunConfiguration();
 		if(!runConfigDialog.proceedToRunGraph()){	
-			RunStopButtonCommunicator.stopJobHandler.setStopJobEnable(false);
-			RunStopButtonCommunicator.runJobHandler.setRunJobEnable(true);
+			enableRunJob(true);
 			return;
 		}
 
 		ParameterGridDialog parameterGrid = getParameters();
 		if(parameterGrid.canRunGraph() == false){
 			logger.debug("Not running graph");
-			RunStopButtonCommunicator.stopJobHandler.setStopJobEnable(false);
-			RunStopButtonCommunicator.runJobHandler.setRunJobEnable(true);
+			enableRunJob(true);
 			return;
 		}
 		logger.debug("property File :"+parameterGrid.getParameterFile());
 
-		String XML_PATH = getJobXMLPath();		
-		if (XML_PATH == null) {				
+		String xmlPath = getJobXMLPath();		
+		if (xmlPath == null) {				
 			WidgetUtility.errorMessage("Please open a graph to run.");
 			return;
 		}
@@ -114,14 +119,13 @@ public class JobManager {
 		gefCanvas.disableRunningJobResource();
 		Process process=null;
 		try {
-			process = executeJob(XML_PATH,parameterGrid.getParameterFile(),clusterPassword);
+			process = executeJob(xmlPath,parameterGrid.getParameterFile(),clusterPassword);
 		} catch (IOException e) {
 			logger.error("Error in Run Job",e);
 		}
 		
 		job.setLocalProcessId(process);		
 		final JobLogger joblogger = initJobLogger(gefCanvas);
-		job.setConsoleName(gefCanvas.getActiveProject() + "." + gefCanvas.getJobName());
 		job.setConsoleName(gefCanvas.getActiveProject() + "." + gefCanvas.getJobName());
 		job.setCanvasName(gefCanvas.getActiveProject() + "." + gefCanvas.getJobName());
 		
@@ -144,7 +148,7 @@ public class JobManager {
 						joblogger.logMessage(line);
 					}
 				} catch (Exception e) {
-					logger.info("Error occured while reading run job log.");
+					logger.info("Error occured while reading run job log",e);
 				} finally {
 					if (reader != null) {
 						try {
@@ -156,11 +160,10 @@ public class JobManager {
 				}							
 				joblogger.logJobEndInfo();
 				joblogger.close();
-				removeJobJob(jobCanvasId);
+				removeJob(jobCanvasId);
 				
 				if(jobCanvasId.equals(activeCanvas)){
-					RunStopButtonCommunicator.runJobHandler.setRunJobEnable(true);
-					RunStopButtonCommunicator.stopJobHandler.setStopJobEnable(false);
+					enableRunJob(true);
 				}
 				
 				enableLockedResources(gefCanvas);
@@ -228,8 +231,7 @@ public class JobManager {
 		if(gefCanvas.getParameterFile() == null || isDirtyEditor()){
 			try{
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
-				RunStopButtonCommunicator.stopJobHandler.setStopJobEnable(false);
-				RunStopButtonCommunicator.runJobHandler.setRunJobEnable(true);
+				enableRunJob(true);
 				if(gefCanvas.getParameterFile() == null || isDirtyEditor()){
 					return false;
 				}else{
@@ -237,8 +239,7 @@ public class JobManager {
 				}				
 			}catch(Exception e){
 				logger.debug("Unable to save graph ", e);
-				RunStopButtonCommunicator.stopJobHandler.setStopJobEnable(false);
-				RunStopButtonCommunicator.runJobHandler.setRunJobEnable(true);
+				enableRunJob(true);
 				return false;
 			}			
 		}
@@ -273,14 +274,14 @@ public class JobManager {
 			runCommand=command;
 		} else if (OSValidator.isMac()) {
 			logger.debug("This is Mac.");
-			String[] command = {"bash","-c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "=\""+ XML_PATH.split("/", 2)[1] + "\" "+ Messages.PARAM_FILE+"=\""+paramFile+"\" "+ Messages.CLUSTER_PASSWORD+"=\""+clusterPassword+"\""};
+			String[] command = {Messages.SHELL,"-c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "=\""+ XML_PATH.split("/", 2)[1] + "\" "+ Messages.PARAM_FILE+"=\""+paramFile+"\" "+ Messages.CLUSTER_PASSWORD+"=\""+clusterPassword+"\""};
 			runCommand=command;
 		} else if (OSValidator.isUnix()) {
 			logger.debug("This is Unix or Linux");
 		} else if (OSValidator.isSolaris()) {
 			logger.debug("This is Solaris");
 		} else {
-			logger.debug("Your OS is not support!!");
+			logger.debug("Your OS is not supported!!");
 		}
 
 		ProcessBuilder pb = new ProcessBuilder(runCommand);
