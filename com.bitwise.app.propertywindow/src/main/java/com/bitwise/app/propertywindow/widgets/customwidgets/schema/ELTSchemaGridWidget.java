@@ -102,7 +102,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private String propertyName;
 	private ListenerHelper helper;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-	private ELTDefaultLable upButton, downButton, addButton, deleteButton;
+	private ELTDefaultLable upButton, downButton, addButton, deleteButton, importButton;
 	private Button button;
 	private AbstractELTWidget internalSchema, externalSchema;
 	private Text textBox;
@@ -523,6 +523,39 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		ELTSchemaSubgroupComposite buttonSubGroup = new ELTSchemaSubgroupComposite(container);
 		buttonSubGroup.createContainerWidget();
 
+		importButton = new ELTDefaultLable("");
+		importButton.lableWidth(25);
+		buttonSubGroup.attachWidget(importButton);
+		importButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/import_schema.png");
+
+		importButton.addMouseUpListener(new MouseListener() {
+			int index = 0, index2 = 0;
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				propertyDialogButtonBar.enableApplyButton(true);
+				index = table.getSelectionIndex();
+
+				if (index < schemaGridRowList.size() - 1) {
+					String text1 = tableViewer.getTable().getItem(index).getText(0);
+					index2 = index + 1;
+					String text2 = tableViewer.getTable().getItem(index2).getText(0);
+
+					swap(index, index2, text1, text2);
+					tableViewer.refresh();
+					table.setSelection(index + 1);
+				}
+			}
+		});
+		
 		downButton = new ELTDefaultLable("");
 		downButton.lableWidth(25);
 		buttonSubGroup.attachWidget(downButton);
