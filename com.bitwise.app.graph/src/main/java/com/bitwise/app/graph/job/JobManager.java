@@ -203,8 +203,8 @@ public class JobManager {
 
 	private String getJobXMLPath() {
 		IEditorPart iEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		String XML_PATH = iEditorPart.getEditorInput().getToolTipText().replace(Messages.JOBEXTENSION, Messages.XMLEXTENSION);
-		return XML_PATH;
+		String xmlPath = iEditorPart.getEditorInput().getToolTipText().replace(Messages.JOBEXTENSION, Messages.XMLEXTENSION);
+		return xmlPath;
 	}
 
 	private JobLogger initJobLogger(DefaultGEFCanvas gefCanvas) {
@@ -260,21 +260,21 @@ public class JobManager {
 	/**
 	 * Execute run job.
 	 *
-	 * @param XML_PATH the xml path that contain xml file name to run.
+	 * @param xmlPath the xml path that contain xml file name to run.
 	 * @return the process
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	private Process executeJob(String XML_PATH,String paramFile,String clusterPassword) throws IOException{
-		String projectName = XML_PATH.split("/", 2)[0];
+	private Process executeJob(String xmlPath,String paramFile,String clusterPassword) throws IOException{
+		String projectName = xmlPath.split("/", 2)[0];
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		String[] runCommand=new String[3];
 		if (OSValidator.isWindows()) {
 			logger.info("This is windows.");
-			String[] command = {Messages.CMD,"/c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "=\""+ XML_PATH.split("/", 2)[1] + "\" "+ Messages.PARAM_FILE+"=\""+paramFile+"\" "+ Messages.CLUSTER_PASSWORD+"=\""+clusterPassword+"\""};
+			String[] command = {Messages.CMD,"/c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "=\""+ xmlPath.split("/", 2)[1] + "\" "+ Messages.PARAM_FILE+"=\""+paramFile+"\" "+ Messages.CLUSTER_PASSWORD+"=\""+clusterPassword+"\""};
 			runCommand=command;
 		} else if (OSValidator.isMac()) {
 			logger.debug("This is Mac.");
-			String[] command = {Messages.SHELL,"-c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "=\""+ XML_PATH.split("/", 2)[1] + "\" "+ Messages.PARAM_FILE+"=\""+paramFile+"\" "+ Messages.CLUSTER_PASSWORD+"=\""+clusterPassword+"\""};
+			String[] command = {Messages.SHELL,"-c",Messages.GRADLE_RUN + " " + Messages.XMLPATH + "=\""+ xmlPath.split("/", 2)[1] + "\" "+ Messages.PARAM_FILE+"=\""+paramFile+"\" "+ Messages.CLUSTER_PASSWORD+"=\""+clusterPassword+"\""};
 			runCommand=command;
 		} else if (OSValidator.isUnix()) {
 			logger.debug("This is Unix or Linux");
