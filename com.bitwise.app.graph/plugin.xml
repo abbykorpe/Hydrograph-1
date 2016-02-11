@@ -18,6 +18,10 @@
             id="com.bitwise.app.graph.command.runjob"
             name="RunJob">
       </command>
+      <command
+            id="com.bitwise.app.graph.stopjob"
+            name="StopJob">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -33,6 +37,18 @@
        			 <equals value="com.bitwise.app.graph.etlgraphicaleditor"/>
    			 </with>
 </activeWhen>
+      </handler>
+      <handler
+            class="com.bitwise.app.graph.handler.StopJobHandler"
+            commandId="com.bitwise.app.graph.stopjob">
+         <activeWhen>
+            <with
+                  variable="activeEditorId">
+               <equals
+                     value="com.bitwise.app.graph.etlgraphicaleditor">
+               </equals>
+            </with>
+         </activeWhen>
       </handler>
    </extension> 
    <extension
@@ -135,6 +151,12 @@
                   commandId="com.bitwise.app.graph.command.runjob"
                   icon="resources/icons/run.png"
                   label="Run Job"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.bitwise.app.graph.stopjob"
+                  icon="resources/icons/stop_job.png"
+                  label="Stop Job"
                   style="push">
             </command>
          </toolbar>

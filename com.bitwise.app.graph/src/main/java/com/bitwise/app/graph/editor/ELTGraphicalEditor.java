@@ -62,6 +62,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -83,9 +84,14 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.commands.ActionHandler;
+import org.eclipse.ui.console.ConsolePlugin;
+import org.eclipse.ui.console.IConsole;
+import org.eclipse.ui.console.IConsoleManager;
+import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.FileEditorInput;
@@ -110,6 +116,10 @@ import com.bitwise.app.graph.action.subgraph.SubGraphAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphOpenAction;
 import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
+import com.bitwise.app.graph.handler.RunJobHandler;
+import com.bitwise.app.graph.handler.StopJobHandler;
+import com.bitwise.app.graph.job.JobManager;
+import com.bitwise.app.graph.job.RunStopButtonCommunicator;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -146,6 +156,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public ELTGraphicalEditor() {
 		setEditDomain(new DefaultEditDomain(this));
 	}
+	
+	
 
 	@Override
 	protected PaletteRoot getPaletteRoot() {
@@ -267,7 +279,48 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			}
 		});
 	}
+	
+	private void enableRunJob(boolean enabled){
+		((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
+		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
+	}
+	
+	@Override
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		super.selectionChanged(part, selection);
+		
+		ConsolePlugin plugin = ConsolePlugin.getDefault();
+		IConsoleManager conMan = plugin.getConsoleManager();
+		
+		String consoleName = (getActiveProject() + "." + part.getTitle()).replace(".job", "");
+		JobManager.INSTANCE.setActiveCanvasId(consoleName);
+		IConsole consoleToShow = getConsole(consoleName, conMan);
+		if(consoleToShow!=null)
+		conMan.showConsoleView(consoleToShow);
+		
+		if(!JobManager.INSTANCE.isJobRunning(consoleName)){
+			enableRunJob(true);
+		}else{
+			enableRunJob(false);
+		}
+		
+	}
 
+	
+	
+	public IConsole getConsole(String consoleName,IConsoleManager conMan){		
+		IConsole[] existing = conMan.getConsoles();
+		MessageConsole messageConsole=null;
+		for (int i = 0; i < existing.length; i++) {
+			
+			if (existing[i].getName().equals(consoleName)){
+				messageConsole=(MessageConsole) existing[i];
+				
+				return messageConsole;
+			}	
+		}
+		return null;
+	}
 	/**
 	 * Configure the graphical viewer with
 	 * <ul>
@@ -585,16 +638,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void doSave(IProgressMonitor monitor) {
 		String METHOD_NAME = "doSave -";
 		logger.debug(METHOD_NAME);
-		//getParameterFile();
 
 		firePropertyChange(PROP_DIRTY);
 		try {
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(getEditorInput(), this);
 			genrateContainerData.storeContainerData();
-			//parameterFilePath = container.getFullParameterFilePath();
-			//container.setParameterFileName(getPartName().replace(".job", ".properties"));
-			//if(container.getParameterFileDirectory() !=null)
+
 				saveParameters();
 
 		} catch (CoreException | IOException ce) {
@@ -615,11 +665,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		for(int i=0;i<letestParameterList.size();i++){
 			newParameterMap.put(letestParameterList.get(i), "");
 		}
-
-		/*for(String parameterName : letestParameterList){
-			if(currentParameterMap.containsKey(parameterName))
-				newParameterMap.put(parameterName, currentParameterMap.get(parameterName));
-		}*/
 
 		for(String parameterName : currentParameterMap.keySet()){
 			newParameterMap.put(parameterName, currentParameterMap.get(parameterName));
@@ -701,7 +746,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		if(StringUtils.isNotBlank(fileName)){
 			parameterFile = new File(fileName);
 		}else return null;
-		//destinationFile.create(new FileInputStream(sourceFile), true, null);
 		if(!parameterFile.exists()){
 			try {
 				parameterFile.createNewFile();
@@ -746,8 +790,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	@Override
 	public void doSaveAs() {
 		IFile file=opeSaveAsDialog();
-		//getParameterFile();
-		//setParameterFileLocationInfo(file);
 
 		if(file!=null){
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -769,19 +811,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			setDirty(false);
 		}
 	}
-
-	/*private void setParameterFileLocationInfo(IFile file) {
-		if(file!=null){
-
-			String fileName = file.getName().replace("job", "properties");
-			container.setParameterFileDirectory(file.getPathVariableManager().getURIValue("PROJECT_LOC").getPath() + "/" +  CustomMessages.ProjectSupport_PARAM + "/");
-			container.setParameterFileName(fileName);
-			
-			String projectName=file.getFullPath().segment(0);
-			parameterFileIPath =new Path("/"+projectName+"/param/"+fileName);
-		}
-
-	}*/
 
 	@Override
 	public boolean isSaveAsAllowed() {
