@@ -52,6 +52,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -219,7 +220,12 @@ public class ELTFilterPropertyWizard {
 		isAnyUpdatePerformed = false;
 		shell.setSize(506, 548);
 		shell.setLayout(null);
-		shell.setText("Properties");
+		if (componentName.equalsIgnoreCase("Key Field ")) {
+			shell.setText(Constants.COLUMN_NAME2);
+		}
+		if(componentName.equalsIgnoreCase("Operation Field ")){
+			shell.setText(Constants.OPERATION_FIELD);	
+		}
 		imageShell(shell);
 
 		TableViewer sourceTableViewer = new TableViewer(shell, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
