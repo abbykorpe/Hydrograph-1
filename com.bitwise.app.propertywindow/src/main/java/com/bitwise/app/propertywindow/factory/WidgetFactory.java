@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.fixedwidthschema.ELTFixedWidget;
 import com.bitwise.app.propertywindow.fixedwidthschema.ELTJoinFixedWidthSchemaWidget;
+import com.bitwise.app.propertywindow.generaterecords.schema.ELTGenerateRecordsGridWidget;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -50,6 +51,7 @@ public class WidgetFactory {
 		SCHEMA_WIDGET(ELTGenericSchemaGridWidget.class),
 		FIXED_WIDGET(ELTFixedWidget.class),
 		JOIN_FIXED_WIDTH_SCHEMA_WIDGET(ELTJoinFixedWidthSchemaWidget.class),
+		GENERATE_RECORDS_SCHEMA_WIDGET(ELTGenerateRecordsGridWidget.class),
 		FILE_PATH_WIDGET(ELTFilePathWidget.class),
 		COMPONENT_NAME_WIDGET(ELTComponentNameWidget.class),
 		
@@ -65,7 +67,7 @@ public class WidgetFactory {
 
 		DELIMETER_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getDelimiterWidgetConfig()),
 		PHASE_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getPhaseWidgetConfig()),
-
+		NO_OF_RECORDS_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getNoOfRecordsWidgetConfig()),
 		FILTER_PROPERTY_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getOperationFieldsConfig()),
 		COLUMN_NAME_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getColumnNameConfig()),
 

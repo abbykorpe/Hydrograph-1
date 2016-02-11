@@ -26,7 +26,6 @@ public class ConverterUiHelper {
 	protected Map<String, Object> properties = new LinkedHashMap<String, Object>();
 	protected Component uIComponent = null;
 	protected String componentName = null;
-	private static final String LENGTH_QNAME = "length";
 
 	
 	/**Instantiate ConverterUiHelper 
@@ -87,7 +86,7 @@ public class ConverterUiHelper {
 	 */
 	private String getLength(TypeBaseField typeBaseField) {
 		for (Entry<QName, String> entry : typeBaseField.getOtherAttributes().entrySet()) {
-			if (entry.getKey().toString().equals(LENGTH_QNAME))
+			if (entry.getKey().toString().equals(Constants.LENGTH_QNAME))
 				return entry.getValue();
 		}
 		return null;
@@ -98,7 +97,7 @@ public class ConverterUiHelper {
 	 * @param value
 	 * @return
 	 */
-	private String getStringValue(String value) {
+	public String getStringValue(String value) {
 		String emptyString = "";
 		if (value == null || value.equals("null"))
 			return emptyString;

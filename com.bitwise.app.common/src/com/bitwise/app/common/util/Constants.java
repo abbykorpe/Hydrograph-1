@@ -12,6 +12,8 @@ public class Constants {
 	public static final String DELIMITER = "Delimiter";
 	public static final String CHARACTER_SET = "Character Set";
 	public static final String PHASE = "Phase";
+	public static final String NO_OF_RECORDS = "No of Records";
+	public static final String NO_OF_RECORDS_PROPERTY_NAME = "no_of_records";
 	public static final String STRICT = "Strict";
 	public static final String HAS_HEADER = "Has Header";
 	public static final String SAFE_PROPERTY = "Safe Property ";	
@@ -103,6 +105,15 @@ public class Constants {
 	public static final String OUTPUTSUBGRAPH = "outputsubgraph";
 	public static final String NAME = "name";
 	public static final String SUBGRAPH_NAME = "subgraph.job";
+	
+	public static final String LENGTH_QNAME = "length";
+	public static final String RANGE_FROM_QNAME = "rangeFrom";
+	public static final String RANGE_TO_QNAME = "rangeTo";
+	public static final String DEFAULT_VALUE_QNAME = "default";
+	
+	
+	public static final String GENERATE_RECORDS_COMPONENT_TYPE = "Generate Records";
+		
 
 
 

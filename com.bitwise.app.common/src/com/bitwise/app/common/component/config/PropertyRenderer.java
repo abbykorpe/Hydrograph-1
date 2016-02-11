@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;simpleType name="property_renderer">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="JOIN_FIXED_WIDTH_SCHEMA_WIDGET"/>
+ *      &lt;enumeration value="GENERATE_RECORDS_SCHEMA_WIDGET"/>
  *     &lt;enumeration value="SCHEMA_WIDGET"/>
  *     &lt;enumeration value="FIELD_SEQUENCE_WIDGET"/>
  *     &lt;enumeration value="FIXED_WIDGET"/>
@@ -29,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="CHARACTER_SET_WIDGET"/>
  *     &lt;enumeration value="DELIMETER_WIDGET"/>
  *     &lt;enumeration value="PHASE_WIDGET"/>
+ *     &lt;enumeration value="NO_OF_RECORDS_WIDGET"/>
  *     &lt;enumeration value="HAS_HEADER_WIDGET"/>
  *     &lt;enumeration value="SAFE_PROPERTY_WIDGET"/>
  *     &lt;enumeration value="COMPONENT_NAME_WIDGET"/>
@@ -57,7 +59,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "property_renderer", namespace = "http://www.bitwise.com/constant")
 @XmlEnum
 public enum PropertyRenderer {
-
+	GENERATE_RECORDS_SCHEMA_WIDGET,
     JOIN_FIXED_WIDTH_SCHEMA_WIDGET,
     SCHEMA_WIDGET,
     FIELD_SEQUENCE_WIDGET,
@@ -67,6 +69,7 @@ public enum PropertyRenderer {
     CHARACTER_SET_WIDGET,
     DELIMETER_WIDGET,
     PHASE_WIDGET,
+    NO_OF_RECORDS_WIDGET,
     HAS_HEADER_WIDGET,
     SAFE_PROPERTY_WIDGET,
     COMPONENT_NAME_WIDGET,

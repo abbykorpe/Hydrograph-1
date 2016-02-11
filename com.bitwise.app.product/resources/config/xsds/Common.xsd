@@ -32,6 +32,7 @@
 	
 	<simpleType name="property_renderer">
 		<restriction base="string">
+		<enumeration value="GENERATE_RECORDS_SCHEMA_WIDGET" />
 		<enumeration value="JOIN_FIXED_WIDTH_SCHEMA_WIDGET" />
 			<enumeration value="SCHEMA_WIDGET" />
 			<enumeration value="FIELD_SEQUENCE_WIDGET" />
@@ -41,6 +42,7 @@
 			<enumeration value="CHARACTER_SET_WIDGET" />
 			<enumeration value="DELIMETER_WIDGET" />
 			<enumeration value="PHASE_WIDGET" />
+			<enumeration value="NO_OF_RECORDS_WIDGET" />
 			<enumeration value="HAS_HEADER_WIDGET" />
 			<enumeration value="SAFE_PROPERTY_WIDGET" />
 			<enumeration value="COMPONENT_NAME_WIDGET" />

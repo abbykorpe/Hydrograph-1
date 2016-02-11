@@ -78,11 +78,16 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String DATATYPE = Messages.DATATYPE;
 	public static final String SCALE = Messages.SCALE;
 	public static final String LENGTH = Messages.LENGTH;
-
+	public static final String RANGE_FROM = "Range From";
+	public static final String RANGE_TO = "Range To";
+	public static final String DEFAULT_VALUE ="Default Value";
+	
 	protected ControlDecoration fieldNameDecorator;
 	protected ControlDecoration isFieldNameAlphanumericDecorator;
 	protected ControlDecoration scaleDecorator;
 	protected ControlDecoration lengthDecorator;
+	protected ControlDecoration rangeFromDecorator;
+	protected ControlDecoration rangeToDecorator;
 	protected TableViewer tableViewer;
 	protected List schemaGridRowList = new ArrayList();
 	protected CellEditor[] editors;

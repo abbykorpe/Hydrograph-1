@@ -6,6 +6,7 @@ import com.bitwise.app.engine.ui.converter.impl.AggregateUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.CloneUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.DummyUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.FilterUiConverter;
+import com.bitwise.app.engine.ui.converter.impl.GenerateRecordsUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.InputFileDelimitedUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.InputFixedWidthUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.JoinComponentUiConverter;
@@ -13,20 +14,18 @@ import com.bitwise.app.engine.ui.converter.impl.LookupUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.OutputFileDelimitedUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.OutputFixedWidthUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.RemoveDupsUiConverter;
-import com.bitwise.app.engine.ui.converter.impl.SubGraphInputTypeUiConverter;
-import com.bitwise.app.engine.ui.converter.impl.SubGraphOperationTypeUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.TransformComponentUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.UnionAllUiConverter;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
+import com.bitwiseglobal.graph.inputtypes.GenerateRecord;
 import com.bitwiseglobal.graph.inputtypes.TextFileDelimited;
 import com.bitwiseglobal.graph.inputtypes.TextFileFixedWidth;
 import com.bitwiseglobal.graph.operationstypes.Aggregate;
 import com.bitwiseglobal.graph.operationstypes.Filter;
 import com.bitwiseglobal.graph.operationstypes.HashJoin;
 import com.bitwiseglobal.graph.operationstypes.Join;
-import com.bitwiseglobal.graph.operationstypes.Subgraph;
 import com.bitwiseglobal.graph.operationstypes.Transform;
 import com.bitwiseglobal.graph.straightpulltypes.Clone;
 import com.bitwiseglobal.graph.straightpulltypes.RemoveDups;
@@ -93,7 +92,9 @@ public class UiConverterFactory {
 		if ((HashJoin.class).isAssignableFrom(typeBaseComponent.getClass())) {
 			return new LookupUiConverter(typeBaseComponent, container);
 		}
-
+		if ((GenerateRecord.class).isAssignableFrom(typeBaseComponent.getClass())) {
+			return new GenerateRecordsUiConverter(typeBaseComponent, container);
+		}
 		return new DummyUiConverter(typeBaseComponent,container);
 	}
 }

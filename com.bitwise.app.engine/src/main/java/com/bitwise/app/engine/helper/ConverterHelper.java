@@ -17,10 +17,6 @@ import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
-import com.bitwise.app.common.datastructure.property.OperationField;
-import com.bitwise.app.common.datastructure.property.OperationSystemProperties;
-import com.bitwise.app.common.datastructure.property.TransformOperation;
-import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
 import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.Constants;
@@ -51,7 +47,6 @@ public class ConverterHelper {
 	protected Map<String, Object> properties = new LinkedHashMap<String, Object>();
 	protected Component component = null;
 	protected String componentName = null;
-	private static final String LENGTH_QNAME = "length";
 
 	public ConverterHelper(Component component) {
 		this.component = component;
@@ -289,7 +284,7 @@ public class ConverterHelper {
 				typeBaseField.setType(fieldDataType);
 		}
 		if (object.getLength() != null && !object.getLength().trim().isEmpty()) {
-			typeBaseField.getOtherAttributes().put(new QName(LENGTH_QNAME), object.getLength());
+			typeBaseField.getOtherAttributes().put(new QName(Constants.LENGTH_QNAME), object.getLength());
 		}
 		return typeBaseField;
 	}

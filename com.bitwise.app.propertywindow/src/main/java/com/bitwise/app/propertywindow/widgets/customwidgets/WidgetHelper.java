@@ -39,7 +39,14 @@ public class WidgetHelper {
 		textBoxConfig.setWidgetWidth(78);
 		return textBoxConfig;
 	}
-	
+	public WidgetConfig getNoOfRecordsWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.NO_OF_RECORDS);
+		addTextBoxListeners(textBoxConfig);
+		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
+		textBoxConfig.setWidgetWidth(78);
+		return textBoxConfig;
+	}
 	public WidgetConfig getInputCountWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Constants.INPUT_COUNT);
