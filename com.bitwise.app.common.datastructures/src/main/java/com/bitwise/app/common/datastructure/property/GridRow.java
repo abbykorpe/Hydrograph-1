@@ -2,22 +2,21 @@ package com.bitwise.app.common.datastructure.property;
 import com.bitwise.app.cloneableinterface.IDataStructure;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class GridRow.
  * 
  * @author Bitwise
  */
 public class GridRow implements IDataStructure {
+	
 		private String fieldName;
-
 		private String dateFormat;
-
 		private Integer dataType;
-
 		private String scale;
-		
 		private String dataTypeValue;
+		private String scaleType;
+		private String precision;
+		private String description;
 
 		public String getDataTypeValue() {
 			return dataTypeValue;
@@ -59,15 +58,42 @@ public class GridRow implements IDataStructure {
 			this.dataType = dataType;
 		}
 		
+		public String getScaleType() {
+			return scaleType;
+		}
+
+		public void setScaleType(String scaleType) {
+			this.scaleType = scaleType;
+		}
+
+		public String getPrecision() {
+			return precision;
+		}
+
+		public void setPrecision(String precision) {
+			this.precision = precision;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
+		}
+
 		@Override
 		public GridRow clone() 
 		{  
 		    GridRow gridRow =new GridRow();
-			gridRow.setFieldName(getFieldName());
-			gridRow.setDataType(getDataType());
-			gridRow.setDataTypeValue(getDataTypeValue());
-			gridRow.setDateFormat(getDateFormat());
-			gridRow.setScale(getScale());
+			gridRow.setFieldName(fieldName);
+			gridRow.setDataType(dataType);
+			gridRow.setDataTypeValue(dataTypeValue);
+			gridRow.setDateFormat(dateFormat);
+			gridRow.setScale(scale);
+			gridRow.setScaleType(scaleType);
+			gridRow.setPrecision(precision);
+			gridRow.setDescription(description);
 			return gridRow; 
 		}
 		
@@ -104,14 +130,20 @@ public class GridRow implements IDataStructure {
 			StringBuilder builder = new StringBuilder();
 			builder.append("GridRow [fieldName=");
 			builder.append(fieldName);
-			builder.append(", dateFormat=");
-			builder.append(dateFormat);
-			builder.append(", dataType=");
+			builder.append("\n dataType=");
 			builder.append(dataType);
-			builder.append(", scale=");
-			builder.append(scale);
-			builder.append(", dataTypeValue=");
+			builder.append("\n dataTypeValue=");
 			builder.append(dataTypeValue);
+			builder.append("\n dateFormat=");
+			builder.append(dateFormat);
+			builder.append("\n precision=");
+			builder.append(precision);
+			builder.append("\n scale=");
+			builder.append(scale);
+			builder.append("\n scaleType=");
+			builder.append(scaleType);
+			builder.append("\n description=");
+			builder.append(description);
 			builder.append("]");
 			return builder.toString();
 		}
@@ -123,11 +155,16 @@ public class GridRow implements IDataStructure {
 		 */
 		public GridRow copy() {
 			GridRow tempschemaGrid = new GridRow();
-			tempschemaGrid.setDataType(dataType);
-			tempschemaGrid.setDateFormat(dateFormat);
+			
 			tempschemaGrid.setFieldName(fieldName);
-			tempschemaGrid.setScale(scale);
+			tempschemaGrid.setDataType(dataType);
 			tempschemaGrid.setDataTypeValue(dataTypeValue);
+			tempschemaGrid.setDateFormat(dateFormat);
+			tempschemaGrid.setScale(scale);
+			tempschemaGrid.setScaleType(scaleType);
+			tempschemaGrid.setPrecision(precision);
+			tempschemaGrid.setDescription(description);
+			
 			return tempschemaGrid;
 		}
 	}

@@ -108,6 +108,29 @@
 		</restriction>
 	</simpleType>
 	
+	<simpleType name="field_data_types">
+		<restriction base="string">
+			<enumeration value="java.lang.String" />
+			<enumeration value="java.lang.Integer" />
+			<enumeration value="java.lang.Object" />
+			<enumeration value="java.lang.Long" />
+			<enumeration value="java.lang.Double" />
+			<enumeration value="java.lang.Float" />
+			<enumeration value="java.lang.Short" />
+			<enumeration value="java.lang.Boolean" />
+			<enumeration value="java.util.Date" />
+			<enumeration value="java.math.BigDecimal" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="scale_types">
+		<restriction base="string">
+			<enumeration value="explicit" />
+			<enumeration value="implicit" />
+		</restriction>
+	</simpleType>
+	
+	
 	<simpleType name="PortType">
 		<restriction base="string">
 			<enumeration value="in" />
