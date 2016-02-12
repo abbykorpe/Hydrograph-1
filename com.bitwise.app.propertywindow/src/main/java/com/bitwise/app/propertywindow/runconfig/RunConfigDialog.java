@@ -307,7 +307,6 @@ public class RunConfigDialog extends Dialog {
 					&& buildProps.getProperty(key).equals("true")) {
 				btnRemoteMode.setSelection(true);
 				btnLocalMode.setSelection(false);
-				container.getShell().setSize(380, 730);
 				compositeServerDetails.setVisible(true);
 				compositePathConfig.setVisible(true);
 			} else if (!(key.equals(LOCAL_MODE) || key.equals(REMOTE_MODE))) {
@@ -399,7 +398,12 @@ public class RunConfigDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(380, 171);
+		if(btnRemoteMode.getSelection()){
+			return new Point(380, 671);
+		}else{
+			return new Point(380, 171);
+		}
+		
 	}
 
 	private void checkBuildProperties() {
