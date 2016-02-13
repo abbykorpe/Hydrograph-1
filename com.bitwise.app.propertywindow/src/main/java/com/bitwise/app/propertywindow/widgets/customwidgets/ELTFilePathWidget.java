@@ -122,7 +122,8 @@ public class ELTFilePathWidget extends AbstractWidget{
 			
 		
 		txtDecorator = WidgetUtility.addDecorator(textBox, Messages.CHARACTERSET);
-		
+		txtDecorator.setMarginWidth(3);
+		decorator.setMarginWidth(3);
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
 

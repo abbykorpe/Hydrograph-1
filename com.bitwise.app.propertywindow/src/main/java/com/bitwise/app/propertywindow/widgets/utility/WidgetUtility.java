@@ -71,7 +71,7 @@ public class WidgetUtility {
 	 */
 	
 	public static ControlDecoration addDecorator(Control control,String message){
-		ControlDecoration txtDecorator = new ControlDecoration(control, SWT.TOP|SWT.LEFT);
+		ControlDecoration txtDecorator = new ControlDecoration(control,SWT.LEFT);
 		FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
 		Image img = fieldDecoration.getImage();
 		txtDecorator.setImage(img);
