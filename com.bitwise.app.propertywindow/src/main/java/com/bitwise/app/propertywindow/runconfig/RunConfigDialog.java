@@ -124,16 +124,15 @@ public class RunConfigDialog extends Dialog {
 		formToolkit.adapt(btnLocalMode, true, true);
 		btnLocalMode.setText("Local");
 		new Label(container, SWT.NONE);
-
+		btnLocalMode.setSelection(true);
 		btnLocalMode.addSelectionListener(selectionListener);
 
-		btnRemoteMode = new Button(compositeRunMode, SWT.RADIO);
+		btnRemoteMode = new Button(compositeRunMode, SWT.RADIO );
 		btnRemoteMode.setBounds(109, 43, 76, 16);
 		formToolkit.adapt(btnRemoteMode, true, true);
 		btnRemoteMode.setText("Remote");
 		new Label(container, SWT.NONE);
-
-		btnRemoteMode.addSelectionListener(selectionListener);
+     	btnRemoteMode.addSelectionListener(selectionListener);
 
 		compositeServerDetails = new Composite(container, SWT.BORDER);
 		GridData gd_compositeServerDetails = new GridData(SWT.LEFT, SWT.CENTER,
