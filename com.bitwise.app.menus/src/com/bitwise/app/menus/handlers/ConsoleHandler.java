@@ -26,7 +26,7 @@ public class ConsoleHandler extends AbstractHandler implements IHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 	
 		try {
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(IConsoleConstants.ID_CONSOLE_VIEW);
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("com.bitwise.app.project.structure.console.AcceleroConsole");
 		} catch (PartInitException e) {
 			logger.error("Failed to show view : ", e);
 		}

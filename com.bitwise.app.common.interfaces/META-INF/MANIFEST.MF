@@ -13,5 +13,6 @@ Require-Bundle: org.eclipse.core.runtime,
  com.bitwise.app.tooltip;bundle-version="0.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: com.bitwise.app.common.interfaces.parametergrid,
+Export-Package: com.bitwise.app.common.interfaces.console,
+ com.bitwise.app.common.interfaces.parametergrid,
  com.bitwise.app.common.interfaces.tooltip

@@ -25,6 +25,12 @@
             id="com.bitwise.app.project.structure.navigator"
             name="Project Explorer">
       </view>
+      <view
+            class="com.bitwise.app.project.structure.console.AcceleroConsole"
+            id="com.bitwise.app.project.structure.console.AcceleroConsole"
+            name="Console"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.navigator.viewer">
@@ -80,7 +86,7 @@
          </view>
          <view
                closeable="true"
-               id="org.eclipse.ui.console.ConsoleView"
+               id="com.bitwise.app.project.structure.console.AcceleroConsole"
                moveable="true"
                ratio="0.70"
                relationship="bottom"

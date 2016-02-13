@@ -86,6 +86,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.commands.ActionHandler;
 import org.eclipse.ui.console.ConsolePlugin;
@@ -101,6 +102,7 @@ import org.xml.sax.SAXException;
 
 import com.bitwise.app.common.component.config.CategoryType;
 import com.bitwise.app.common.component.config.Component;
+import com.bitwise.app.common.interfaces.console.IAcceleroConsole;
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.common.interfaces.tooltip.ComponentCanvas;
 import com.bitwise.app.common.util.CanvasDataAdpater;
@@ -287,26 +289,71 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		super.selectionChanged(part, selection);
+				
+		IWorkbenchPart partView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+		IAcceleroConsole currentConsoleView = (IAcceleroConsole) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("com.bitwise.app.project.structure.console.AcceleroConsole");
+		if(partView instanceof ELTGraphicalEditor){
+			
+			//System.out.println("+++ part title" + part.getTitle());
+			
+			if(getActiveProject()!=null){
+				ConsolePlugin plugin = ConsolePlugin.getDefault();
+				IConsoleManager conMan = plugin.getConsoleManager();
+				
+				
+				String consoleName;
+				if(part.getTitle().contains(".job")){
+					consoleName = (getActiveProject() + "." + part.getTitle()).replace(".job", "");
+				}else{
+					consoleName = "NewConsole";
+				}
+				
+				JobManager.INSTANCE.setActiveCanvasId(consoleName);
+				IConsole consoleToShow = getConsole(consoleName, conMan);			
+				
+				System.out.println("Selection changed = " + consoleName);
+				
+				if(currentConsoleView !=null ){
+					if(consoleToShow!=null && !currentConsoleView.isConsoleClosed()){
+						conMan.showConsoleView(consoleToShow);
+					}else{
+						if(consoleToShow==null || !consoleToShow.getName().equalsIgnoreCase(consoleName)){
+							if(!currentConsoleView.isConsoleClosed()){
+								addDummyConsole();
+							}
+						}
+							
+					}
+						
+				}
+				
+				if(!JobManager.INSTANCE.isJobRunning(consoleName)){
+					enableRunJob(true);
+				}else{
+					enableRunJob(false);;
+				}
+			}
+			
+			
+		}
 		
+		super.selectionChanged(part, selection);
+	}
+
+	private void addDummyConsole(){
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
 		IConsoleManager conMan = plugin.getConsoleManager();
 		
-		String consoleName = (getActiveProject() + "." + part.getTitle()).replace(".job", "");
-		JobManager.INSTANCE.setActiveCanvasId(consoleName);
-		IConsole consoleToShow = getConsole(consoleName, conMan);
-		if(consoleToShow!=null)
-		conMan.showConsoleView(consoleToShow);
+		String consoleName="NewConsole";
 		
-		if(!JobManager.INSTANCE.isJobRunning(consoleName)){
-			enableRunJob(true);
-		}else{
-			enableRunJob(false);
+		IConsole consoleToShow = getConsole(consoleName, conMan);	
+		
+		if(consoleToShow == null){
+			consoleToShow = createNewMessageConsole(consoleName,conMan);
 		}
-		
+		System.out.println(consoleToShow.getName());
+		conMan.showConsoleView(consoleToShow);
 	}
-
-	
 	
 	public IConsole getConsole(String consoleName,IConsoleManager conMan){		
 		IConsole[] existing = conMan.getConsoles();
@@ -319,8 +366,19 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				return messageConsole;
 			}	
 		}
+		
 		return null;
 	}
+	
+	
+	private MessageConsole createNewMessageConsole(String consoleName,IConsoleManager conMan) {
+		MessageConsole messageConsole;
+		messageConsole = new MessageConsole(consoleName, null);
+		conMan.addConsoles(new IConsole[] { messageConsole });
+		logger.debug("Created message console");
+		return messageConsole;
+	}
+	
 	/**
 	 * Configure the graphical viewer with
 	 * <ul>
@@ -1092,6 +1150,5 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 		
 	}
-	
 	
 }
