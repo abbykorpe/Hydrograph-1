@@ -42,6 +42,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="SECONDARY_COLUMN_KEYS_WIDGET"/>
  *     &lt;enumeration value="SECONDARY_KEYS_WIDGET"/>
  *     &lt;enumeration value="TRANSFORM_WIDGET"/>
+ *     &lt;enumeration value="NORMALIZE_WIDGET"/>
  *     &lt;enumeration value="AGGREGATE_WIDGET"/>
  *     &lt;enumeration value="INPUT_COUNT_WIDGET"/>
  *     &lt;enumeration value="JOIN_TYPE_WIDGET"/>
@@ -51,6 +52,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="XML_CONTENT_WIDGET"/>
  *     &lt;enumeration value="SUBGRAPH_PROPERTIES_WIDGET"/>
  *     &lt;enumeration value="MATCH_PROPERTY_WIDGET"/>
+ *     &lt;enumeration value="TEXTBOX_WITH_ISPARAMETER_CHECKBOX_WIDGET"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -81,6 +83,7 @@ public enum PropertyRenderer {
     SECONDARY_COLUMN_KEYS_WIDGET,
     SECONDARY_KEYS_WIDGET,
     TRANSFORM_WIDGET,
+    NORMALIZE_WIDGET,
     AGGREGATE_WIDGET,
     INPUT_COUNT_WIDGET,
     JOIN_TYPE_WIDGET,
@@ -89,7 +92,8 @@ public enum PropertyRenderer {
     HASH_JOIN_MAPPING_WIDGET,
     XML_CONTENT_WIDGET,
     SUBGRAPH_PROPERTIES_WIDGET,
-    MATCH_PROPERTY_WIDGET;
+    MATCH_PROPERTY_WIDGET,
+    TEXTBOX_WITH_ISPARAMETER_CHECKBOX_WIDGET;
 
     public String value() {
         return name();

@@ -4,7 +4,7 @@ import com.bitwise.app.graph.model.categories.InputCategory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class IFDelimited.
+ * The Class GenerateRecords.
  * 
  * @author Bitwise
  */
@@ -16,7 +16,7 @@ public class GenerateRecords extends InputCategory {
 	private static final long serialVersionUID = 7890131953714494139L;
 
 	/**
-	 * Instantiates a new IF delimited.
+	 * Instantiates a new GenerateRecords component.
 	 */
 	public GenerateRecords() {
 	super();

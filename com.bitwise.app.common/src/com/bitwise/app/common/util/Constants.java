@@ -42,6 +42,7 @@ public class Constants {
 	public static final String SECONDARY_KEYS2 = "Secondary Keys ";
 	public static final String SECONDARY_KEYS = "Secondary\n Keys";
 	public static final String REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
+	public static final String PARAMETER_REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}";
 	
 	public static final String PROPERTY_COLUMN_NAME = "column_name";
 	public static final String PROPERTY_SECONDARY_COLUMN_KEYS = "secondary_column_keys";
@@ -55,10 +56,12 @@ public class Constants {
 	public static final String ALL = "All";
 	
 	public static final String FILTER = "FILTER";
+	public static final String NORMALIZE = "NORMALIZE";
 	public static final String TRANSFORM = "TRANSFORM";
 	public static final String AGGREGATE = "AGGREGATE";
 	public static final String AGGREGATE_DISPLAYNAME = "Aggregate";
 	public static final String TRANSFORM_DISPLAYNAME = "Transform";
+	public static final String NORMALIZE_DISPLAYNAME = "Normalize";
 	public static final String INPUT_SOCKET_TYPE = "in";
 	public static final String OUTPUT_SOCKET_TYPE = "out";
 	public static final String UNUSED_SOCKET_TYPE = "unused";
@@ -114,8 +117,7 @@ public class Constants {
 	
 	public static final String GENERATE_RECORDS_COMPONENT_TYPE = "Generate Records";
 	public static final String FIXED_INSOCKET_ID = "in0";
+	public static final String SEQUENCE_FIELD = "Sequence Field";
+	public static final String IS_PARAMETER = "Is Parameter";
 		
-
-
-
 }

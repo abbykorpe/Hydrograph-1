@@ -54,6 +54,7 @@
 			<enumeration value="SECONDARY_COLUMN_KEYS_WIDGET"/>
 			<enumeration value="SECONDARY_KEYS_WIDGET"/>
 			<enumeration value="TRANSFORM_WIDGET"/>
+			<enumeration value="NORMALIZE_WIDGET"/>
 			<enumeration value="AGGREGATE_WIDGET"/>
 			<enumeration value="INPUT_COUNT_WIDGET"/>
 			<enumeration value="JOIN_TYPE_WIDGET"/>
@@ -63,6 +64,7 @@
 			<enumeration value="XML_CONTENT_WIDGET"/>
 			<enumeration value="SUBGRAPH_PROPERTIES_WIDGET" />
 			<enumeration value="MATCH_PROPERTY_WIDGET" />
+			<enumeration value="TEXTBOX_WITH_ISPARAMETER_CHECKBOX_WIDGET" />
 		</restriction>
 	</simpleType>
 

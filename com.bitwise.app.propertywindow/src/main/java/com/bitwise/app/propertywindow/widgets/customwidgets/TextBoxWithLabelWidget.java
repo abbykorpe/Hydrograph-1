@@ -1,12 +1,15 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets;
 
 import java.util.LinkedHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.factory.ListenerFactory.Listners;
 import com.bitwise.app.propertywindow.messages.Messages;
@@ -33,11 +36,11 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 public class TextBoxWithLabelWidget extends AbstractWidget{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(TextBoxWithLabelWidget.class);
 	protected Text textBox;
-	private String propertyValue;
+	protected String propertyValue;
 	protected String propertyName;
-	private ControlDecoration txtDecorator;
-	private TextBoxWithLableConfig textBoxConfig;
-	
+	protected ControlDecoration txtDecorator;
+	protected TextBoxWithLableConfig textBoxConfig;
+	protected ELTDefaultSubgroupComposite lableAndTextBox ;
 	/**
 	 * Instantiates a new text box widget with provided configurations
 	 * 
@@ -80,7 +83,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 		
 		logger.debug("Starting {} textbox creation", textBoxConfig.getName());
-		ELTDefaultSubgroupComposite lableAndTextBox = new ELTDefaultSubgroupComposite(container.getContainerControl());
+		lableAndTextBox = new ELTDefaultSubgroupComposite(container.getContainerControl());
 		lableAndTextBox.createContainerWidget();
 		
 		AbstractELTWidget lable = new ELTDefaultLable(textBoxConfig.getName() + " ");
@@ -109,13 +112,14 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		logger.debug("Finished {} textbox creation", textBoxConfig.getName());
 	}
 
-	private ListenerHelper prepareListenerHelper() {
+	protected ListenerHelper prepareListenerHelper() {
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
+		helper.put(HelperType.CURRENT_COMPONENT, getComponent());
 		return helper;
 	}
 	
-	private void populateWidget(){
+	protected void populateWidget(){
 		logger.debug("Populating {} textbox", textBoxConfig.getName());
 		String property = propertyValue;
 		if(StringUtils.isNotBlank(property)){
@@ -126,5 +130,15 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 			textBox.setText("");
 			txtDecorator.show();
 		}
+	}
+	
+	protected boolean isParameter(String input) {
+		if (input != null) {
+			Matcher matchs = Pattern.compile(Constants.PARAMETER_REGEX).matcher(input);
+			if (matchs.matches()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
