@@ -10,22 +10,21 @@ package com.bitwise.app.common.component.config;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for Policy complex type.
+ * <p>Java class for TypeInfo complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="Policy">
+ * &lt;complexType name="TypeInfo">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="value" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *       &lt;/sequence>
+ *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="class" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -34,14 +33,13 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Policy", propOrder = {
-    "name",
-    "value"
-})
-public class Policy {
+@XmlType(name = "TypeInfo")
+public class TypeInfo {
 
+    @XmlAttribute(name = "name")
     protected String name;
-    protected String value;
+    @XmlAttribute(name = "class")
+    protected String clazz;
 
     /**
      * Gets the value of the name property.
@@ -68,27 +66,27 @@ public class Policy {
     }
 
     /**
-     * Gets the value of the value property.
+     * Gets the value of the clazz property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getValue() {
-        return value;
+    public String getClazz() {
+        return clazz;
     }
 
     /**
-     * Sets the value of the value property.
+     * Sets the value of the clazz property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setValue(String value) {
-        this.value = value;
+    public void setClazz(String value) {
+        this.clazz = value;
     }
 
 }
