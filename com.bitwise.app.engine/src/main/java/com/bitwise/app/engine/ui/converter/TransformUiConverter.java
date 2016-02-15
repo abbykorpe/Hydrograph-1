@@ -19,6 +19,7 @@ import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.helper.ConverterUiHelper;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeInputField;
@@ -155,11 +156,20 @@ public abstract class TransformUiConverter extends UiConverter {
 		for (TypeTransformOperation item : xsdOpertaionList) {
 
 			mappingSheetRows.add(new MappingSheetRow(getInputFieldList(item),
-					new OperationClassProperty(item.getClazz(),
+					new OperationClassProperty(getOperationClassName(item.getClazz()),item.getClazz(),
 							isParameter(item.getClazz()), item.getClazz()),
 					getOutputFieldList(item)));
 		}
 
+	}
+
+	private String getOperationClassName(String fullClassPath) {
+		String operationClassName = Messages.CUSTOM;
+		if (fullClassPath != null) {
+			String str[] = fullClassPath.split("\\.");
+			operationClassName = str[str.length - 1];
+		}
+		return operationClassName;
 	}
 
 	private List<String> getOutputFieldList(TypeTransformOperation item) {
