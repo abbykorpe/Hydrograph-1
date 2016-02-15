@@ -1,6 +1,5 @@
 package com.bitwise.app.common.datastructure.property.mapping;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -49,7 +48,7 @@ public class MappingSheetRow implements IDataStructure {
 	public Object clone(){
 		
 		List<String> inputFields = new LinkedList<>();
-		OperationClassProperty operationClass = new OperationClassProperty("", false, "");
+		OperationClassProperty operationClass = new OperationClassProperty("Custom","", false, "");
 		List<String> outputList = new LinkedList<>();		
 		
 		inputFields.addAll(this.inputFields);

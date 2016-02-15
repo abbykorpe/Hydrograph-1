@@ -12,6 +12,9 @@ import com.bitwise.app.cloneableinterface.IDataStructure;
  * @author Bitwise
  */
 public class OperationClassProperty implements IDataStructure{
+
+
+	private String comboBoxValue;
 	private String operationClassPath;
 	private boolean isParameter;
 	private String operationClassFullPath;
@@ -28,10 +31,14 @@ public class OperationClassProperty implements IDataStructure{
 		this.operationClassPath = operationClassPath;
 		this.isParameter = isParameter;
 	}
-	public OperationClassProperty(String operationClassPath, boolean isParameter,String operationClassFullPath) {
+	public OperationClassProperty(String comboBoxValue,String operationClassPath, boolean isParameter,String operationClassFullPath) {
+		this.comboBoxValue=comboBoxValue;
 		this.operationClassPath = operationClassPath;
 		this.isParameter = isParameter;
 		this.operationClassFullPath=operationClassFullPath;
+	}
+	public String getComboBoxValue() {
+		return comboBoxValue;
 	}
 	public String getOperationClassPath() {
 		return operationClassPath;
@@ -48,7 +55,7 @@ public class OperationClassProperty implements IDataStructure{
 	}
 	@Override
 	public OperationClassProperty clone() {
-		return new OperationClassProperty(operationClassPath,isParameter,operationClassFullPath);
+		return new OperationClassProperty(comboBoxValue,operationClassPath,isParameter,operationClassFullPath);
 	}
 
 	@Override

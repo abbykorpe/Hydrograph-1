@@ -12,7 +12,7 @@ public class TransformOperation {
 	
 	public TransformOperation() {
 		inputFields=new ArrayList<>();
-		opClassProperty=new OperationClassProperty("", false,null);
+		opClassProperty=new OperationClassProperty("Custom","", false,null);
 		nameValueProps=new ArrayList<>();
 		schemaGridRowList= new ArrayList<>();
 	}
