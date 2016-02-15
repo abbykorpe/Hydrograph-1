@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
+	<tns:component paletteIconPath="/icons/sort_palette.png" canvasIconPath="/icons/sort_canvas.png"
+		name="SortComponent" nameInPalette="Sort" defaultNamePrefix="Sort" 
+		description="This is Sort component."
+		helpFilePath="/com.bitwise.app.help/html/Components/Sort.html">
+		<tns:category>STRAIGHTPULL</tns:category>
+		<tns:port>
+			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">
+				<tns:port sequenceOfPort="0" labelOfPort="in0" nameOfPort="in0" allowMultipleLinks="false" linkMandatory="true"/>
+			</tns:portSpecification>
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
+				<tns:port sequenceOfPort="0" labelOfPort="out0" nameOfPort="out0" allowMultipleLinks="false" linkMandatory="true"/>
+			</tns:portSpecification>
+		</tns:port>
+		
+		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
+			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED"/>
+		
+		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED">
+			<tns:validator>INTEGER_VALIDATOR</tns:validator>
+		</tns:property>
+		
+		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL"/>
+		
+		<tns:property dataType="string" name="primary_column_keys" renderer="PRIMARY_COLUMN_KEYS_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL"/>
+				
+		<tns:property dataType="string" name="secondary_column_keys" renderer="SECONDARY_COLUMN_KEYS_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL"/>
+		
+	</tns:component>
+</tns:Config>

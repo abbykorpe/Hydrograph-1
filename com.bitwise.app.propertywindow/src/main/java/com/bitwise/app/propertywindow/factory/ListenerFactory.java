@@ -26,6 +26,8 @@ import com.bitwise.app.propertywindow.widgets.listeners.ELTVerifyTextListener;
 import com.bitwise.app.propertywindow.widgets.listeners.FocusInListener;
 import com.bitwise.app.propertywindow.widgets.listeners.IELTListener;
 import com.bitwise.app.propertywindow.widgets.listeners.OperationClassComboChangeListener;
+import com.bitwise.app.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusInListener;
+import com.bitwise.app.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusOutListener;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridAddSelectionListener;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridDeleteAllSelectionListener;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridDeleteSelectionListener;
@@ -74,7 +76,10 @@ public class ListenerFactory {
 		NORMAL_FOCUS_IN(FocusInListener.class),
 		JOIN_INPUT_COUNT(ELTInputCountListener.class), 
 		VERIFY_SEQUENCE_FIELD_NAME_EXISTS(ELTVerifySequenceFieldName.class),
-		COMBO_CHANGE(OperationClassComboChangeListener.class);
+		COMBO_CHANGE(OperationClassComboChangeListener.class),
+		VERIFY_NUMERIC_OR_PARAMETER_FOCUS_IN(VerifyNumbericOrParameterFocusInListener.class),
+		VERIFY_NUMERIC_OR_PARAMETER_FOCUS_OUT(VerifyNumbericOrParameterFocusOutListener.class);
+		
 		Class<?> clazz = null;
 		private Listners(Class<?> clazz) {
 			this.clazz = clazz; 

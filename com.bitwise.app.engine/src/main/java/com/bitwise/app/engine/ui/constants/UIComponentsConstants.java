@@ -17,7 +17,9 @@ public enum UIComponentsConstants {
 	TRANSFORM("Transform"),
 	JOIN("Join"),
 	LOOKUP("Lookup"),
-	FILTER("Filter");
+	FILTER("Filter"),
+	LIMIT("Limit"),
+	SORT("Sort");
 	
 	private final String value;
 

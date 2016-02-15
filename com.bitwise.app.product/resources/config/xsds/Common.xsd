@@ -64,7 +64,12 @@
 			<enumeration value="XML_CONTENT_WIDGET"/>
 			<enumeration value="SUBGRAPH_PROPERTIES_WIDGET" />
 			<enumeration value="MATCH_PROPERTY_WIDGET" />
+<<<<<<< HEAD
 			<enumeration value="TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET" />
+=======
+			<enumeration value="COUNT_WIDGET"/>
+			<enumeration value="PRIMARY_COLUMN_KEYS_WIDGET"/>
+>>>>>>> Sort and Limit Component
 		</restriction>
 	</simpleType>
 
@@ -179,6 +184,13 @@
 			 <annotation>
 		          <appinfo>
 		            <jaxb:typesafeEnumMember name="LookupMappingValidationRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
+		<enumeration value="INTEGER_OR_PARAMETER_VALIDATOR">
+			 <annotation>
+		          <appinfo>
+		            <jaxb:typesafeEnumMember name="IntegerOrParameterValidationRule" />
 		          </appinfo>
         	</annotation>
 		</enumeration>

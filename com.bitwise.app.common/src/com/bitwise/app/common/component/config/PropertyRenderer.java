@@ -52,7 +52,12 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="XML_CONTENT_WIDGET"/>
  *     &lt;enumeration value="SUBGRAPH_PROPERTIES_WIDGET"/>
  *     &lt;enumeration value="MATCH_PROPERTY_WIDGET"/>
+<<<<<<< HEAD
  *     &lt;enumeration value="TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET"/>
+=======
+ *     &lt;enumeration value="COUNT_WIDGET"/>
+ *     &lt;enumeration value="PRIMARY_COLUMN_KEYS_WIDGET"/>
+>>>>>>> Sort and Limit Component
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -93,7 +98,9 @@ public enum PropertyRenderer {
     XML_CONTENT_WIDGET,
     SUBGRAPH_PROPERTIES_WIDGET,
     MATCH_PROPERTY_WIDGET,
-    TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET;
+    TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET,
+    COUNT_WIDGET,
+    PRIMARY_COLUMN_KEYS_WIDGET;
 
     public String value() {
         return name();

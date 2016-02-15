@@ -5,6 +5,7 @@ import java.util.List;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.factory.ListenerFactory.Listners;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.DropDownConfig;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.EditButtonWithLabelConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.SingleColumnGridConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.TextBoxWithLableConfig;
@@ -30,7 +31,17 @@ public class WidgetHelper {
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
 	}
-
+	public WidgetConfig getCountWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.COUNT);
+		textBoxConfig.getListeners().add(Listners.MODIFY);
+		textBoxConfig.getListeners().add(Listners.EVENT_CHANGE);
+		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC_OR_PARAMETER_FOCUS_IN);
+		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC_OR_PARAMETER_FOCUS_OUT);
+		textBoxConfig.setWidgetWidth(78);
+		return textBoxConfig;
+	}
+	
 	public WidgetConfig getPhaseWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Constants.PHASE);
@@ -112,6 +123,18 @@ public class WidgetHelper {
 		return operationClassConfig;
 	}
 	
+	public WidgetConfig getPrimaryKeyWidgetConfig() {
+		EditButtonWithLabelConfig buttonWithLabelConfig = new EditButtonWithLabelConfig();
+		buttonWithLabelConfig.setName(Constants.PRIMARY_KEYS);
+		return buttonWithLabelConfig;
+	}
+	
+	public WidgetConfig getSecondaryKeyWidgetConfig() {
+		EditButtonWithLabelConfig buttonWithLabelConfig = new EditButtonWithLabelConfig();
+		buttonWithLabelConfig.setName(Constants.SECONDARY_KEYS);
+		return buttonWithLabelConfig;
+	}
+		
 	private SingleColumnGridConfig populateSingleColumnGridConfig(String lable, String componentName) {
 		SingleColumnGridConfig gridConfig = new SingleColumnGridConfig();
 		gridConfig.setLabelName(lable);
