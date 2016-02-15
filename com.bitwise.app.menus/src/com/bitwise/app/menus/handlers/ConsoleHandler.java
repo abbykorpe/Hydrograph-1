@@ -17,6 +17,8 @@ import com.bitwise.app.logging.factory.LogFactory;
  */
 public class ConsoleHandler extends AbstractHandler implements IHandler {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ConsoleHandler.class);
+	private static final String consoleView = "com.bitwise.app.project.structure.console.AcceleroConsole";
+	
 	/**
 	 * open console view
 	 * @param event
@@ -26,7 +28,7 @@ public class ConsoleHandler extends AbstractHandler implements IHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 	
 		try {
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(IConsoleConstants.ID_CONSOLE_VIEW);
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(consoleView);
 		} catch (PartInitException e) {
 			logger.error("Failed to show view : ", e);
 		}

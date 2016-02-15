@@ -86,6 +86,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.commands.ActionHandler;
 import org.eclipse.ui.console.ConsolePlugin;
@@ -101,6 +102,7 @@ import org.xml.sax.SAXException;
 
 import com.bitwise.app.common.component.config.CategoryType;
 import com.bitwise.app.common.component.config.Component;
+import com.bitwise.app.common.interfaces.console.IAcceleroConsole;
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.common.interfaces.tooltip.ComponentCanvas;
 import com.bitwise.app.common.util.CanvasDataAdpater;
@@ -149,6 +151,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	//private String parameterFilePath;
 	private String currentParameterFilePath=null;
 	//private IPath parameterFileIPath;
+
+	private static final String DEFAULT_CONSOLE = "NewConsole";
+	private static final String CONSOLE_VIEW_ID = "com.bitwise.app.project.structure.console.AcceleroConsole";
 	
 	/**
 	 * Instantiates a new ETL graphical editor.
@@ -156,8 +161,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public ELTGraphicalEditor() {
 		setEditDomain(new DefaultEditDomain(this));
 	}
-	
-	
+
+
 
 	@Override
 	protected PaletteRoot getPaletteRoot() {
@@ -279,48 +284,96 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			}
 		});
 	}
-	
+
 	private void enableRunJob(boolean enabled){
 		((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
 		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
 	}
-	
+
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		super.selectionChanged(part, selection);
-		
-		ConsolePlugin plugin = ConsolePlugin.getDefault();
-		IConsoleManager conMan = plugin.getConsoleManager();
-		
-		String consoleName = (getActiveProject() + "." + part.getTitle()).replace(".job", "");
-		JobManager.INSTANCE.setActiveCanvasId(consoleName);
-		IConsole consoleToShow = getConsole(consoleName, conMan);
-		if(consoleToShow!=null)
-		conMan.showConsoleView(consoleToShow);
-		
-		if(!JobManager.INSTANCE.isJobRunning(consoleName)){
-			enableRunJob(true);
-		}else{
-			enableRunJob(false);
+
+		IWorkbenchPart partView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+
+		IAcceleroConsole currentConsoleView = (IAcceleroConsole) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getActivePage().findView(CONSOLE_VIEW_ID);
+
+		if (partView instanceof ELTGraphicalEditor) {
+			if (getActiveProject() != null) {
+				ConsolePlugin plugin = ConsolePlugin.getDefault();
+				IConsoleManager consoleManager = plugin.getConsoleManager();
+
+				String consoleName;
+				if (part.getTitle().contains(".job")) {
+					consoleName = (getActiveProject() + "." + part.getTitle()).replace(".job", "");
+				} else {
+					consoleName = DEFAULT_CONSOLE;
+				}
+
+				JobManager.INSTANCE.setActiveCanvasId(consoleName);
+				IConsole consoleToShow = getConsole(consoleName, consoleManager);
+
+				if (currentConsoleView != null) {
+					if (consoleToShow != null && !currentConsoleView.isConsoleClosed()) {
+						consoleManager.showConsoleView(consoleToShow);
+					} else {
+						if (consoleToShow == null || !consoleToShow.getName().equalsIgnoreCase(consoleName)) {
+							if (!currentConsoleView.isConsoleClosed()) {
+								addDummyConsole();
+							}
+						}
+
+					}
+
+				}
+
+				if (!JobManager.INSTANCE.isJobRunning(consoleName)) {
+					enableRunJob(true);
+				} else {
+					enableRunJob(false);
+					;
+				}
+			}
+
 		}
-		
+
+		super.selectionChanged(part, selection);
 	}
 
-	
-	
-	public IConsole getConsole(String consoleName,IConsoleManager conMan){		
-		IConsole[] existing = conMan.getConsoles();
+	private void addDummyConsole(){
+		ConsolePlugin plugin = ConsolePlugin.getDefault();
+		IConsoleManager consoleManager = plugin.getConsoleManager();
+
+		IConsole consoleToShow = getConsole(DEFAULT_CONSOLE, consoleManager);	
+
+		if(consoleToShow == null){
+			consoleToShow = createNewMessageConsole(DEFAULT_CONSOLE,consoleManager);
+		}
+		consoleManager.showConsoleView(consoleToShow);
+	}
+
+	private IConsole getConsole(String consoleName,IConsoleManager consoleManager){		
+		IConsole[] existing = consoleManager.getConsoles();
 		MessageConsole messageConsole=null;
 		for (int i = 0; i < existing.length; i++) {
-			
 			if (existing[i].getName().equals(consoleName)){
 				messageConsole=(MessageConsole) existing[i];
-				
 				return messageConsole;
 			}	
 		}
+
 		return null;
 	}
+
+
+	private MessageConsole createNewMessageConsole(String consoleName,IConsoleManager consoleManager) {
+		MessageConsole messageConsole;
+		messageConsole = new MessageConsole(consoleName, null);
+		consoleManager.addConsoles(new IConsole[] { messageConsole });
+		logger.debug("Created message console");
+		return messageConsole;
+	}
+
 	/**
 	 * Configure the graphical viewer with
 	 * <ul>
@@ -354,7 +407,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				// CombinatedTemplateCreationEntries
 				// from the palette into the editor
 				// @see ShapesEditor#createTransferDropTargetListener()
-				
+
 				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
 				PaletteContainerListener paletteContainerListener = new PaletteContainerListener(viewer, getGraphicalViewer());
 				viewer.getControl().addMouseListener(paletteContainerListener);
@@ -362,7 +415,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				viewer.getControl().addMouseMoveListener(paletteContainerListener);
 				setDefaultToolUndoRedoStatus();
 			}
-			
+
 			@Override
 			public PaletteViewer createPaletteViewer(Composite parent) {
 				CustomPaletteViewer pViewer = new CustomPaletteViewer();
@@ -426,10 +479,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			Class<?> clazz = DynamicClassProcessor.INSTANCE
 					.createClass(componentConfig);
 
-			
+
 			if(componentConfig.getName().equalsIgnoreCase(Constants.DUMMY_COMPONENT)|| componentConfig.getName().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT))
 				continue;
-			
+
 			/*CombinedTemplateCreationEntry component = new CombinedTemplateCreationEntry(
 					componentConfig.getNameInPalette(), componentConfig.getDescription(), clazz,
 					new SimpleFactory(clazz),
@@ -548,16 +601,16 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		action=new CutAction(this, pasteAction);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
-		
+
 		action=new SubGraphAction(this, pasteAction);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
-		
+
 		action=new SubGraphOpenAction(this, pasteAction);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
-		
-		
+
+
 	}
 
 
@@ -645,7 +698,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			genrateContainerData.setEditorInput(getEditorInput(), this);
 			genrateContainerData.storeContainerData();
 
-				saveParameters();
+			saveParameters();
 
 		} catch (CoreException | IOException ce) {
 			logger.error(METHOD_NAME , ce);
@@ -675,13 +728,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			parameterFileManager.storeParameters(newParameterMap);
 		} catch (IOException e) {
 			logger.error("Unable to store parameters to the file", e);
-			
+
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
 			messageBox.setText("Error");
 			messageBox.setMessage("Unable to store parameters to the file - \n" + e.getMessage());
 			messageBox.open();
 		}	
-				
+
 		refreshParameterFileInProjectExplorer();
 	}
 
@@ -693,45 +746,45 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			logger.error("Error in refreshing the parameters in file", e);
 		}
 	}
-	
+
 	private IPath getParameterFileIPath(){
 		if(getEditorInput() instanceof IFileEditorInput){
 			IFileEditorInput input = (IFileEditorInput)getEditorInput() ;
-		    IFile file = input.getFile();
-		    IProject activeProject = file.getProject();
-		    String activeProjectName = activeProject.getName();
-		    
-		    IPath parameterFileIPath =new Path("/"+activeProjectName+"/param/"+ getPartName().replace(".job", ".properties"));
-		    
+			IFile file = input.getFile();
+			IProject activeProject = file.getProject();
+			String activeProjectName = activeProject.getName();
+
+			IPath parameterFileIPath =new Path("/"+activeProjectName+"/param/"+ getPartName().replace(".job", ".properties"));
+
 			return parameterFileIPath;
 		}else{
 			return null;
 		}
-		
+
 	}
 
-	
-	
+
+
 	public String getActiveProject(){
 		if(getEditorInput() instanceof IFileEditorInput){
 			IFileEditorInput input = (IFileEditorInput)getEditorInput() ;
-		    IFile file = input.getFile();
-		    IProject activeProject = file.getProject();
-		    String activeProjectName = activeProject.getName();
-		    
+			IFile file = input.getFile();
+			IProject activeProject = file.getProject();
+			String activeProjectName = activeProject.getName();
+
 			return activeProjectName;
 		}else{
 			return null;
 		}
-		
+
 	}
-	
-	
+
+
 	public String getJobName(){
 		return getPartName().replace(".job", "");
 	}
-	
-	
+
+
 	@Override
 	public List<String> getLatestParameterList() {
 		String canvasData =getXMLString();		
@@ -760,13 +813,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			parameters = parameterFileManager.getParameterMap();
 		} catch (IOException e) {
 			logger.error("Failed to load parameters from the file", e);
-			
+
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
 			messageBox.setText("Error");
 			messageBox.setMessage("Unable to load parameter file - \n" + e.getMessage());
 			messageBox.open();
 		}	
-		
+
 		return parameters;
 	}
 
@@ -836,7 +889,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			IPath filePath = obj.getResult().removeFileExtension().addFileExtension("job");
 			file= ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
 		}
-	
+
 		return file;
 	}
 
@@ -1010,11 +1063,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		IPath currentProjectDirectory = ( (FileEditorInput)getEditorInput()).getPath().removeLastSegments(jobFileRelativePath.segmentCount());
 		return currentProjectDirectory.toString();
 	}
-	
+
 	@Override
 	public String getParameterFile(){		
 		IPath paramterFileRelativePath=getParameterFileIPath();
-		
+
 		if(paramterFileRelativePath!=null)
 			return getCurrentProjectDirectory() + paramterFileRelativePath.toFile().getPath().replace("\\", "/");
 		else
@@ -1030,7 +1083,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void setCurrentParameterFilePath(String currentParameterFilePath) {
 		this.currentParameterFilePath = currentParameterFilePath;
 	}
-	
+
 	public void setCustomToolUndoRedoStatus(){
 		ContributionItemManager.UndoRedoCustomToolBarManager.changeUndoRedoStatus(viewer);
 		ContributionItemManager.UndoRedoCustomMenuBarManager.changeUndoRedoStatus(viewer);
@@ -1043,17 +1096,17 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void disableRunningJobResource() {
 		viewer.getControl().setEnabled(false);
 		disableRunningGraphResource(getEditorInput(), getPartName());
-		
+
 	}
 	private void disableRunningGraphResource(IEditorInput editorInput,String partName){
 		if(editorInput instanceof IFileEditorInput){
 			IFileEditorInput input = (IFileEditorInput)editorInput ;
-		    IFile fileJob = input.getFile();
-		    IPath xmlFileIPath =new Path(input.getFile().getFullPath().toOSString().replace(".job", ".xml"));
-		    IFile fileXml = ResourcesPlugin.getWorkspace().getRoot().getFile(xmlFileIPath);
-		    ResourceAttributes attributes = new ResourceAttributes();
-		    attributes.setReadOnly(true);
-		    attributes.setExecutable(true);
+			IFile fileJob = input.getFile();
+			IPath xmlFileIPath =new Path(input.getFile().getFullPath().toOSString().replace(".job", ".xml"));
+			IFile fileXml = ResourcesPlugin.getWorkspace().getRoot().getFile(xmlFileIPath);
+			ResourceAttributes attributes = new ResourceAttributes();
+			attributes.setReadOnly(true);
+			attributes.setExecutable(true);
 
 			try {
 				fileJob.setResourceAttributes(attributes);
@@ -1061,28 +1114,28 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			} catch (CoreException e) {
 				logger.error("Unable to disable running job resources", e);
 			}
-		    
+
 		}
-		
+
 	}
 
 	@Override
 	public void enableRunningJobResource() {
 		viewer.getControl().setEnabled(true);
 		enableRunningGraphResource(getEditorInput(), getPartName());
-		
+
 	}
-	
+
 
 	private void enableRunningGraphResource(IEditorInput editorInput,
 			String partName) {
 		IFileEditorInput input = (IFileEditorInput)editorInput ;
-	    IFile fileJob = input.getFile();
-	    IPath xmlFileIPath =new Path(input.getFile().getFullPath().toOSString().replace(".job", ".xml"));
-	    IFile fileXml = ResourcesPlugin.getWorkspace().getRoot().getFile(xmlFileIPath);
-	    ResourceAttributes attributes = new ResourceAttributes();
-	    attributes.setReadOnly(false);
-	    attributes.setExecutable(true);
+		IFile fileJob = input.getFile();
+		IPath xmlFileIPath =new Path(input.getFile().getFullPath().toOSString().replace(".job", ".xml"));
+		IFile fileXml = ResourcesPlugin.getWorkspace().getRoot().getFile(xmlFileIPath);
+		ResourceAttributes attributes = new ResourceAttributes();
+		attributes.setReadOnly(false);
+		attributes.setExecutable(true);
 
 		try {
 			fileJob.setResourceAttributes(attributes);
@@ -1090,8 +1143,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		} catch (CoreException e) {
 			logger.error("Unable to enable locked job resources",e);
 		}
-		
+
 	}
-	
-	
+
 }
