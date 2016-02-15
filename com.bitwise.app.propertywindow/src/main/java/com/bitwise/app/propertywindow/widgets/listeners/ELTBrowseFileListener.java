@@ -28,7 +28,7 @@ public class ELTBrowseFileListener implements IELTListener{
 	}
 
 	@Override
-	public Listener getListener(PropertyDialogButtonBar propertyDialogButtonBar,ListenerHelper helpers, Widget... widgets) {
+	public Listener getListener(final PropertyDialogButtonBar propertyDialogButtonBar,ListenerHelper helpers, Widget... widgets) {
 		final Widget[] widgetList = widgets;
 				
 		if (helpers != null) {
@@ -38,6 +38,7 @@ public class ELTBrowseFileListener implements IELTListener{
 			@Override
 			public void handleEvent(Event event) {
 					FilterOperationClassUtility.browseFile("java",(Text)widgetList[0]);
+				propertyDialogButtonBar.enableApplyButton(true);
 				}
 		};
 		return listener;

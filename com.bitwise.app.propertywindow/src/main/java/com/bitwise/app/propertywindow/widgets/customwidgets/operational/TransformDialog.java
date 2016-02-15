@@ -67,6 +67,7 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultCheckBox;
+import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultCombo;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTTable;
@@ -606,9 +607,11 @@ public class TransformDialog extends Dialog {
 		/**
 		 * Create operation
 		 */
+		AbstractELTWidget combo=new ELTDefaultCombo();
 		AbstractELTWidget fileNameText = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(150);
 		AbstractELTWidget isParameterCheckbox = new ELTDefaultCheckBox("IsParam").checkBoxLableWidth(100);
-		FilterOperationClassUtility.createOperationalClass(innerOperationComposite, propertyDialogButtonBar, fileNameText, isParameterCheckbox, tootlTipErrorMessage, widgetConfig);
+		FilterOperationClassUtility.createOperationalClass(innerOperationComposite, propertyDialogButtonBar, combo,
+				isParameterCheckbox, fileNameText, tootlTipErrorMessage, widgetConfig);
 
 		Text fileName=(Text)fileNameText.getSWTWidgetControl(); 
 		Button btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl(); 
@@ -968,7 +971,7 @@ public class TransformDialog extends Dialog {
 				List<OperationClassProperty> operationClassProperties= new ArrayList<>();
 				for (Map.Entry<Text, Button> entry : opClassMap.entrySet())
 				{
-				    OperationClassProperty operationClassProperty = new OperationClassProperty(entry.getKey().getText(), entry.getValue().getSelection(),(String)entry.getKey().getData("path"));
+				    OperationClassProperty operationClassProperty = new OperationClassProperty("Custom",entry.getKey().getText(), entry.getValue().getSelection(),(String)entry.getKey().getData("path"));
 				    operationClassProperties.add(operationClassProperty);
 				}
 				for (TransformOperation transformOperation : transformOperationList) 

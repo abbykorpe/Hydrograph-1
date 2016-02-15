@@ -24,7 +24,9 @@ Require-Bundle: org.eclipse.core.runtime,
  com.bitwise.app.common.datastructures;bundle-version="0.0.1",
  com.bitwise.app.model;bundle-version="0.0.1",
  com.bitwise.app.validators;bundle-version="0.0.1",
- com.bitwise.app.logging;bundle-version="1.0.0"
+ com.bitwise.app.logging;bundle-version="1.0.0",
+ org.eclipse.jdt.core;bundle-version="3.7.3",
+ org.eclipse.ui.forms;bundle-version="3.5.101"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: com.bitwise.app.common.util,

@@ -1,5 +1,9 @@
 package com.bitwise.app.propertywindow.widgets.dialogs;
 
+
+
+import java.util.List;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -8,6 +12,7 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.MessageBox;
@@ -16,14 +21,19 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 
+import com.bitwise.app.common.component.config.Operations;
+import com.bitwise.app.common.component.config.TypeInfo;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructures.tooltip.TootlTipErrorMessage;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messagebox.ConfirmCancelMessageBox;
+import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultCheckBox;
+import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultCombo;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
 import com.bitwise.app.propertywindow.widgets.utility.FilterOperationClassUtility;
 
@@ -35,6 +45,7 @@ import com.bitwise.app.propertywindow.widgets.utility.FilterOperationClassUtilit
 public class ELTOperationClassDialog extends Dialog {
 
 	private Text fileName;
+	private Combo operationClasses;
 	private Button btnCheckButton; 
 	private Button applyButton;
 	private Composite container;
@@ -42,18 +53,21 @@ public class ELTOperationClassDialog extends Dialog {
 	private PropertyDialogButtonBar eltOperationClassDialogButtonBar;
 	private TootlTipErrorMessage tootlTipErrorMessage = new TootlTipErrorMessage();
 	private WidgetConfig widgetConfig; 
+	private String componentName;
 
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 * @param operationClassProperty 
 	 * @param widgetConfig 
+	 * @param componentName 
 	 */
-	public ELTOperationClassDialog(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar, OperationClassProperty operationClassProperty, WidgetConfig widgetConfig) {
+	public ELTOperationClassDialog(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar, OperationClassProperty operationClassProperty, WidgetConfig widgetConfig, String componentName) {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.operationClassProperty = operationClassProperty;
 		this.widgetConfig = widgetConfig;
+		this.componentName=componentName;
 	}
 
 	/**
@@ -88,20 +102,35 @@ public class ELTOperationClassDialog extends Dialog {
 			public void controlResized(ControlEvent e) {				
                
 				Rectangle containerBox = container.getShell().getBounds();
-				if(containerBox.height >= 185) {
-                	container.getShell().setBounds(containerBox.x, containerBox.y, containerBox.width, 185);
+				if(containerBox.height >= 210) {
+                	container.getShell().setBounds(containerBox.x, containerBox.y, containerBox.width, 210);
                 }
 				
 				cld_composite.heightHint = container.getBounds().height - 10;
 			}
 			
 		});
-		
 		AbstractELTWidget fileNameText = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(150);
+
 		AbstractELTWidget isParameterCheckbox = new ELTDefaultCheckBox(Constants.IS_PARAMETER).checkBoxLableWidth(100);
+
+		Operations operations = XMLConfigUtil.INSTANCE.getComponent(componentName).getOperations();
+		List<TypeInfo> typeInfos = operations.getStdOperation();
+		String optionsOfComboOfOperationClasses[] = new String[typeInfos.size() + 1];
+		optionsOfComboOfOperationClasses[0] =Messages.CUSTOM;
+		for (int i = 0; i < typeInfos.size(); i++) {
+			optionsOfComboOfOperationClasses[i + 1] = typeInfos.get(i).getName();
+		}
+		AbstractELTWidget comboOfOperationClasses = new ELTDefaultCombo().defaultText(optionsOfComboOfOperationClasses)
+				.comboBoxWidth(90);
 		
-		FilterOperationClassUtility.createOperationalClass(composite, eltOperationClassDialogButtonBar, fileNameText, isParameterCheckbox, tootlTipErrorMessage, widgetConfig);
+		FilterOperationClassUtility.createOperationalClass(composite, eltOperationClassDialogButtonBar,
+				comboOfOperationClasses, isParameterCheckbox, fileNameText, tootlTipErrorMessage, widgetConfig);
 		fileName=(Text)fileNameText.getSWTWidgetControl();
+		operationClasses = (Combo) comboOfOperationClasses.getSWTWidgetControl();
+
+		FilterOperationClassUtility.enableAndDisableButtons(true);
+		FilterOperationClassUtility.setComponentName(componentName);
 		btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl();
 		populateWidget();
 		return container;
@@ -112,10 +141,17 @@ public class ELTOperationClassDialog extends Dialog {
 	 */
     public void populateWidget() {
         if (!operationClassProperty.getOperationClassPath().equalsIgnoreCase("")) {
+			operationClasses.setText(operationClassProperty.getComboBoxValue());
               fileName.setText(operationClassProperty.getOperationClassPath());
               btnCheckButton.setSelection(operationClassProperty.isParameter());
               fileName.setData("path", operationClassProperty.getOperationClassFullPath());
+			FilterOperationClassUtility.enableAndDisableButtons(false);
+			if(operationClassProperty.getComboBoxValue().equalsIgnoreCase(Messages.CUSTOM))
+			fileName.setEnabled(false);
         }
+        else {
+			operationClasses.select(0);
+		}
   }
 
 	
@@ -151,11 +187,11 @@ public class ELTOperationClassDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(450, 183);
+		return new Point(540, 210);
 	}
 
 	private void setPropertyDialogSize() {
-		container.getShell().setMinimumSize(450, 185);
+		container.getShell().setMinimumSize(540, 210);
 	}
 
 	@Override
@@ -176,14 +212,16 @@ public class ELTOperationClassDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-        operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getSelection(),(String)fileName.getData("path"));
+		operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
+				btnCheckButton.getSelection(), (String) fileName.getData("path"));
 		super.okPressed();
 	}
 
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if(buttonId == 3){
-			operationClassProperty = new OperationClassProperty(fileName.getText(), btnCheckButton.getSelection(),(String)fileName.getData("path"));
+			operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
+					btnCheckButton.getSelection(), (String) fileName.getData("path"));
 			applyButton.setEnabled(false);
 		}else{
 			super.buttonPressed(buttonId);
@@ -191,7 +229,9 @@ public class ELTOperationClassDialog extends Dialog {
 	}
 	
 	public OperationClassProperty getOperationClassProperty() {
-		OperationClassProperty operationClassProperty = new OperationClassProperty(this.operationClassProperty.getOperationClassPath(),this.operationClassProperty.isParameter(),this.operationClassProperty.getOperationClassFullPath());
+		OperationClassProperty operationClassProperty = new OperationClassProperty(
+				this.operationClassProperty.getComboBoxValue(), this.operationClassProperty.getOperationClassPath(),
+				this.operationClassProperty.isParameter(), this.operationClassProperty.getOperationClassFullPath());
 		return operationClassProperty;
 	}
 

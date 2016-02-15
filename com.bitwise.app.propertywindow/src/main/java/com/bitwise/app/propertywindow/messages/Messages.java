@@ -48,9 +48,7 @@ public class Messages extends NLS {
 	public static String PROPERTY_NAME_ALLOWED_CHARACTERS;
 	public static String INVALID_CHARACTERS;
 	public static String PORT_VALUE;
-	public static String FILTER_TEMPLATE;
-	public static String TRANSFORM_TEMPLATE;
-	public static String AGGREGATE_TEMPLATE;
+	public static String CUSTOM;
 	public static String PROPERTY_NAME;
 	public static String PROPERTY_VALUE;
 	public static String PROPERTY_DECORATOR;
@@ -74,6 +72,10 @@ public class Messages extends NLS {
     public static String UP_ICON;
     public static String DOWN_ICON;
     public static String INFORMATION;
+	public static String SAVE_JOB_MESSAGE;
+	
+
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

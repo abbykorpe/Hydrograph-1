@@ -271,7 +271,7 @@ public class SecondaryColumnKeysWidgetWizard {
 		shell.addListener(SWT.Close, new Listener() {
 			public void handleEvent(Event event) {
 				if (isOkPressed && isAnyUpdatePerformed) {
-					// propertyDialogButtonBar.enableApplyButton(true);
+					 propertyDialogButtonBar.enableApplyButton(true);
 				}
 				if ((isAnyUpdatePerformed && !isOkPressed) && (targetTable.getItemCount() != 0 || isAnyUpdatePerformed)) {
 

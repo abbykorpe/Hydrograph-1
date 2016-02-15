@@ -2,11 +2,16 @@ package com.bitwise.app.propertywindow.widgets.listeners;
 
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.forms.SectionPart;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
@@ -22,6 +27,7 @@ import com.bitwise.app.propertywindow.widgets.utility.FilterOperationClassUtilit
  * @see ELTCreateNewClassEvent
  */
 public class ELTCreateNewClassListener implements IELTListener{
+	
 	private WidgetConfig widgetConfig;
 	@Override
 	public int getListenerType() {
@@ -30,7 +36,7 @@ public class ELTCreateNewClassListener implements IELTListener{
 	}
 
 	@Override
-	public Listener getListener(PropertyDialogButtonBar propertyDialogButtonBar,ListenerHelper helpers, Widget... widgets) {
+	public Listener getListener(final PropertyDialogButtonBar propertyDialogButtonBar,ListenerHelper helpers, Widget... widgets) {
 		final Widget[] widgetList = widgets;
 			
 		if (helpers != null) {
@@ -40,11 +46,16 @@ public class ELTCreateNewClassListener implements IELTListener{
 		Listener listener=new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				FilterOperationClassUtility.createNewClassWizard((Text)widgetList[0],widgetConfig);
+				String comboValue = ((Combo) widgetList[0]).getText();
+				if (comboValue.equals(Messages.CUSTOM)) {
+					FilterOperationClassUtility.createNewClassWizard((Text) widgetList[1], widgetConfig);
+					propertyDialogButtonBar.enableApplyButton(true);
+				}
 			}
 		};
 		return listener;
 	}
+	
 
 	
 }

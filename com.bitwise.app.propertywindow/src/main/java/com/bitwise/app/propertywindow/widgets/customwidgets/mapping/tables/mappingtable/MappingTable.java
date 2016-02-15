@@ -61,10 +61,13 @@ public class MappingTable {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(MappingTable.class);
 	private boolean rowChecked = false;
 	private Image checkedImage,uncheckedImage;
-	public MappingTable(WidgetConfig widgetConfig, PropertyDialogButtonBar propertyDialogButtonBar, MappingDialogButtonBar mappingDialogButtonBar){
+	private String componentName;
+	
+	public MappingTable(WidgetConfig widgetConfig, PropertyDialogButtonBar propertyDialogButtonBar, MappingDialogButtonBar mappingDialogButtonBar, String componentName){
 		this.widgetConfig = widgetConfig;
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
 		this.mappingDialogButtonBar = mappingDialogButtonBar;
+		this.componentName = componentName;
 	}
 	
 	public void createTable(Composite mappingTableComposite){
@@ -289,9 +292,10 @@ public class MappingTable {
 	    		  OperationClassProperty operationClassProperty = (OperationClassProperty) column2Txt.getData()  ;
 	    		  
 	    		if(operationClassProperty == null){
-	    			operationClassProperty = new OperationClassProperty("", false, "");
+	    			operationClassProperty = new OperationClassProperty("Custom","", false, "");
 	    		}
-				ELTOperationClassDialog eltOperationClassDialog = new ELTOperationClassDialog(button.getShell(), propertyDialogButtonBar,operationClassProperty.clone(), widgetConfig);
+				ELTOperationClassDialog eltOperationClassDialog = new ELTOperationClassDialog(button.getShell(),
+						propertyDialogButtonBar, operationClassProperty.clone(), widgetConfig, componentName);
 					eltOperationClassDialog.open();
 					if(!eltOperationClassDialog.getOperationClassProperty().equals(operationClassProperty)){
 						operationClassProperty = eltOperationClassDialog.getOperationClassProperty();
