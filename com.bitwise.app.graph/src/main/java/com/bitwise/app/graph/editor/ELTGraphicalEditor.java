@@ -299,7 +299,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				ConsolePlugin plugin = ConsolePlugin.getDefault();
 				IConsoleManager conMan = plugin.getConsoleManager();
 
-
 				String consoleName;
 				if(part.getTitle().contains(".job")){
 					consoleName = (getActiveProject() + "." + part.getTitle()).replace(".job", "");
@@ -309,8 +308,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 				JobManager.INSTANCE.setActiveCanvasId(consoleName);
 				IConsole consoleToShow = getConsole(consoleName, conMan);			
-
-				System.out.println("Selection changed = " + consoleName);
 
 				if(currentConsoleView !=null ){
 					if(consoleToShow!=null && !currentConsoleView.isConsoleClosed()){
@@ -348,7 +345,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		if(consoleToShow == null){
 			consoleToShow = createNewMessageConsole(DEFAULT_CONSOLE,conMan);
 		}
-		System.out.println(consoleToShow.getName());
 		conMan.showConsoleView(consoleToShow);
 	}
 
