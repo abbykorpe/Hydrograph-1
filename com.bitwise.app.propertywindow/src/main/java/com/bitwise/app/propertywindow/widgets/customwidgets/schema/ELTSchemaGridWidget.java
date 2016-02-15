@@ -318,6 +318,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		});
 
 		txtDecorator = WidgetUtility.addDecorator(textBox, Messages.CHARACTERSET);
+		txtDecorator.setMarginWidth(3);
+		decorator.setMarginWidth(3);
 		txtDecorator.hide();
 
 		ListenerHelper helper = new ListenerHelper();

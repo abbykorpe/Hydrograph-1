@@ -20,6 +20,7 @@ public class EmptyTextListener implements ModifyListener {
 		if (StringUtils.isEmpty(txt)) {
 			errorDecorator = WidgetUtility.addDecorator((Text)event.getSource(),Messages.EMPTY_FIELD);
 			errorDecorator.show();
+			errorDecorator.setMarginWidth(3);
 
 		} else {
 			if(errorDecorator!=null)

@@ -92,6 +92,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		
 		textBox = (Text) textBoxWidget.getSWTWidgetControl();
 		txtDecorator = WidgetUtility.addDecorator(textBox, Messages.bind(Messages.EMPTY_FIELD, textBoxConfig.getName()));
+		txtDecorator.setMarginWidth(3);
 		
 		ListenerHelper helper = prepareListenerHelper();
 		

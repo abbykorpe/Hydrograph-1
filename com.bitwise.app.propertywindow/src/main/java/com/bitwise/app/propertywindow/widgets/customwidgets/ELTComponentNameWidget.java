@@ -83,6 +83,7 @@ public class ELTComponentNameWidget extends AbstractWidget {
 		text.setTextLimit(256);
 		firstTextWidget = text;
 		txtDecorator = WidgetUtility.addDecorator(text, Messages.FIELD_LABEL_ERROR);
+		txtDecorator.setMarginWidth(3);
 		ListenerHelper listenerHelper = new ListenerHelper();
 		listenerHelper.put(HelperType.CONTROL_DECORATION, txtDecorator);
 		

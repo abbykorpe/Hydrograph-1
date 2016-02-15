@@ -65,6 +65,9 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 		fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAMEERROR);
 		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);	
 		scaleDecorator = WidgetUtility.addDecorator(editors[3].getControl(),Messages.SCALEERROR);
+		fieldNameDecorator.setMarginWidth(8);
+		scaleDecorator.setMarginWidth(8);
+		isFieldNameAlphanumericDecorator.setMarginWidth(8);
 	}
 
 	@Override
