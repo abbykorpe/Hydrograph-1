@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 
 import com.bitwise.app.common.datastructure.property.GenerateRecordSchemaGridRow;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 /**
@@ -19,7 +20,7 @@ import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 public class GenerateRecordsGridWidgetBuilder extends GridWidgetCommonBuilder {
 
 	public static GenerateRecordsGridWidgetBuilder INSTANCE = new GenerateRecordsGridWidgetBuilder();
-
+	
 	private GenerateRecordsGridWidgetBuilder() {
 	}
 
@@ -49,12 +50,12 @@ public class GenerateRecordsGridWidgetBuilder extends GridWidgetCommonBuilder {
 		int rowSequence = getRowSequence();
 
 		GenerateRecordSchemaGridRow generateRecordSchemaGridRow = new GenerateRecordSchemaGridRow();
-		generateRecordSchemaGridRow.setFieldName("DefaultField" + rowSequence++);
+		generateRecordSchemaGridRow.setFieldName(Constants.SCHEMA_DEFAULT_FIELD_NAME_SUFFIX+ rowSequence++);
 		generateRecordSchemaGridRow.setDateFormat("");
 		generateRecordSchemaGridRow.setScale("");
-		generateRecordSchemaGridRow.setDataType(Integer.valueOf("0"));
-		generateRecordSchemaGridRow.setDataTypeValue(getDataTypeValue()[Integer.valueOf("0")]);
-		generateRecordSchemaGridRow.setLength("0");
+		generateRecordSchemaGridRow.setDataType(Integer.valueOf(Constants.DEFAULT_DATATYPE_INDEX_VALUE));
+		generateRecordSchemaGridRow.setDataTypeValue(getDataTypeValue()[Integer.valueOf(Constants.DEFAULT_DATATYPE_INDEX_VALUE)]);
+		generateRecordSchemaGridRow.setLength("");
 		generateRecordSchemaGridRow.setRangeFrom("");
 		generateRecordSchemaGridRow.setRangeTo("");
 		generateRecordSchemaGridRow.setDefaultValue("");
@@ -68,7 +69,7 @@ public class GenerateRecordsGridWidgetBuilder extends GridWidgetCommonBuilder {
 						0);
 				break;
 			}
-			generateRecordSchemaGridRow.setFieldName("DefaultField" + rowSequence++);
+			generateRecordSchemaGridRow.setFieldName(Constants.SCHEMA_DEFAULT_FIELD_NAME_SUFFIX + rowSequence++);
 			numberOfRows--;
 		} while (numberOfRows >= -1);
 

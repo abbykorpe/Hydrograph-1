@@ -27,8 +27,8 @@
 			subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL" />
 
-		<tns:property dataType="string" name="sequence_field" value="0"
-			renderer="TEXTBOX_WITH_ISPARAMETER_CHECKBOX_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
+		<tns:property dataType="string" name="sequence_field" value=""
+			renderer="TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
 			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED">
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>

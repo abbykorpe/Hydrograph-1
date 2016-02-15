@@ -5,6 +5,7 @@ import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.SchemaGridContentProvider;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTCellEditorIsNumericValidator;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
@@ -47,8 +48,8 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 		return FixedWidthGridWidgetBuilder.INSTANCE;
 	}
 	
-	protected FixedWidthGridContentProvider getContentProvider() {
-		return new FixedWidthGridContentProvider();
+	protected SchemaGridContentProvider getContentProvider() {
+		return new SchemaGridContentProvider();
 	}
 	
 	protected FixedWidthGridLabelProvider getLableProvider() {

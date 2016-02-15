@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.GenerateRecordSchemaGridRow;
@@ -36,7 +36,7 @@ import com.bitwiseglobal.graph.inputtypes.GenerateRecord;
 public class GenerateRecordsUiConverter extends InputUiConverter {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(InputFileDelimitedUiConverter.class);
-	private GenerateRecord genertaeRecord;
+	private GenerateRecord generateRecord;
 	ConverterUiHelper converterUiHelper;
 
 	public GenerateRecordsUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
@@ -45,6 +45,7 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 		this.uiComponent = new GenerateRecords();
 		this.propertyMap = new LinkedHashMap<>();
 		converterUiHelper = new ConverterUiHelper(uiComponent);
+		generateRecord = (GenerateRecord) typeBaseComponent;
 	}
 
 	/* 
@@ -53,11 +54,10 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 	 */
 	@Override
 	public void prepareUIXML() {
-		genertaeRecord = (GenerateRecord) typeBaseComponent;
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Input-Delimited-Properties for {}", componentName);
-		propertyMap.put(Constants.NO_OF_RECORDS_PROPERTY_NAME,
-				String.valueOf(genertaeRecord.getRecordCount().getValue()));
+		propertyMap.put(Constants.PARAM_NO_OF_RECORDS,
+				String.valueOf(generateRecord.getRecordCount().getValue()));
 		uiComponent.setType(Constants.GENERATE_RECORDS_COMPONENT_TYPE);
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
@@ -73,10 +73,10 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 	@Override
 	protected Map<String, String> getRuntimeProperties() {
 		LOGGER.debug("Generating Runtime Properties for -{}", componentName);
-		TreeMap<String, String> runtimeMap = null;
-		TypeProperties typeProperties = genertaeRecord.getRuntimeProperties();
+		Map<String, String> runtimeMap = null;
+		TypeProperties typeProperties = generateRecord.getRuntimeProperties();
 		if (typeProperties != null) {
-			runtimeMap = new TreeMap<>();
+			runtimeMap = new LinkedHashMap<>();
 			for (Property runtimeProperty : typeProperties.getProperty()) {
 				runtimeMap.put(runtimeProperty.getName(), runtimeProperty.getValue());
 			}
@@ -103,10 +103,10 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 			for (Object record : outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema()) {
 				if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
 					schema.setIsExternal(true);
-					if (((TypeExternalSchema) record).getUri() != null)
+					if (StringUtils.isNotBlank(((TypeExternalSchema) record).getUri()))
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
 				} else {
-					gridRow.add(getGenrateRecordsSchemaGridRow(record));
+					gridRow.add(getGenerateRecordsSchemaGridRow(record));
 					schema.setGridRow(gridRow);
 					schema.setIsExternal(false);
 				}
@@ -116,7 +116,7 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 
 	}
 
-	private GenerateRecordSchemaGridRow getGenrateRecordsSchemaGridRow(Object record) {
+	private GenerateRecordSchemaGridRow getGenerateRecordsSchemaGridRow(Object record) {
 		if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
 			return null;
 		} else if ((TypeBaseField.class).isAssignableFrom(record.getClass())) {

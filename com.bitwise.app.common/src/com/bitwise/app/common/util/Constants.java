@@ -13,7 +13,7 @@ public class Constants {
 	public static final String CHARACTER_SET = "Character Set";
 	public static final String PHASE = "Phase";
 	public static final String NO_OF_RECORDS = "No of Records";
-	public static final String NO_OF_RECORDS_PROPERTY_NAME = "no_of_records";
+	public static final String PARAM_NO_OF_RECORDS = "no_of_records";
 	public static final String STRICT = "Strict";
 	public static final String HAS_HEADER = "Has Header";
 	public static final String SAFE_PROPERTY = "Safe Property ";	
@@ -119,5 +119,7 @@ public class Constants {
 	public static final String FIXED_INSOCKET_ID = "in0";
 	public static final String SEQUENCE_FIELD = "Sequence Field";
 	public static final String IS_PARAMETER = "Is Parameter";
+	public static final String SCHEMA_DEFAULT_FIELD_NAME_SUFFIX="DefaultValue";
+	public static final String DEFAULT_DATATYPE_INDEX_VALUE="0";
 		
 }

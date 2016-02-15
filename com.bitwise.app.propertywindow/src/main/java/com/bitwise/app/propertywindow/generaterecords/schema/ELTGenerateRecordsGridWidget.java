@@ -5,6 +5,7 @@ import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.SchemaGridContentProvider;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTCellEditorIsNumericValidator;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
@@ -50,8 +51,8 @@ public class ELTGenerateRecordsGridWidget extends ELTSchemaGridWidget {
 	/* (non-Javadoc)
 	 * @see com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget#getContentProvider()
 	 */
-	protected GenerateRecordsGridContentProvider getContentProvider() {
-		return new GenerateRecordsGridContentProvider();
+	protected SchemaGridContentProvider getContentProvider() {
+		return new SchemaGridContentProvider();
 	}
 
 	/* (non-Javadoc)

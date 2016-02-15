@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.GenerateRecordSchemaGridRow;
@@ -55,10 +56,10 @@ public class GenerateRecordsConverter extends InputConverter {
 
 	private RecordCount getRecordCount() {
 		RecordCount recordCount = null;
-		String recordCountPropertyValue = (String) properties.get(Constants.NO_OF_RECORDS_PROPERTY_NAME);
-		if (recordCountPropertyValue != null && !recordCountPropertyValue.trim().isEmpty()) {
+		String recordCountPropertyValue = (String) properties.get(Constants.PARAM_NO_OF_RECORDS);
+		if (StringUtils.isNotBlank(recordCountPropertyValue) && !recordCountPropertyValue.trim().isEmpty()) {
 			recordCount = new RecordCount();
-			recordCount.setValue(Integer.valueOf((String) properties.get(Constants.NO_OF_RECORDS_PROPERTY_NAME)));
+			recordCount.setValue(Integer.valueOf(recordCountPropertyValue));
 		}
 		return recordCount;
 	}
@@ -104,15 +105,15 @@ public class GenerateRecordsConverter extends InputConverter {
 		TypeBaseField typeBaseField = new TypeBaseField();
 		typeBaseField.setName(generateRecordsSchemaGridRow.getFieldName());
 
-		if (generateRecordsSchemaGridRow.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())
-				&& !generateRecordsSchemaGridRow.getDateFormat().trim().isEmpty())
+		if (FieldDataTypes.JAVA_UTIL_DATE.value().equals(generateRecordsSchemaGridRow.getDataTypeValue())
+				&& StringUtils.isNotBlank(generateRecordsSchemaGridRow.getDateFormat()))
 			typeBaseField.setFormat(generateRecordsSchemaGridRow.getDateFormat());
 
-		if (!generateRecordsSchemaGridRow.getScale().trim().isEmpty())
+		if (StringUtils.isNotBlank(generateRecordsSchemaGridRow.getScale()))
 			typeBaseField.setScale(Integer.parseInt(generateRecordsSchemaGridRow.getScale()));
 
-		if (generateRecordsSchemaGridRow.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())
-				|| generateRecordsSchemaGridRow.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())) {
+		if (FieldDataTypes.JAVA_LANG_DOUBLE.value().equals(generateRecordsSchemaGridRow.getDataTypeValue())
+				|| FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value().equals(generateRecordsSchemaGridRow.getDataTypeValue())) {
 			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
 			if (!generateRecordsSchemaGridRow.getScale().trim().isEmpty())
 				typeBaseField.setScale(Integer.parseInt(generateRecordsSchemaGridRow.getScale()));
@@ -122,23 +123,19 @@ public class GenerateRecordsConverter extends InputConverter {
 			if (fieldDataType.value().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue()))
 				typeBaseField.setType(fieldDataType);
 		}
-		if (generateRecordsSchemaGridRow.getLength() != null
-				&& !generateRecordsSchemaGridRow.getLength().trim().isEmpty()) {
+		if (StringUtils.isNotBlank(generateRecordsSchemaGridRow.getLength())) {
 			typeBaseField.getOtherAttributes().put(new QName(Constants.LENGTH_QNAME),
 					generateRecordsSchemaGridRow.getLength());
 		}
-		if (generateRecordsSchemaGridRow.getRangeFrom() != null
-				&& !generateRecordsSchemaGridRow.getRangeFrom().trim().isEmpty()) {
+		if ( StringUtils.isNotBlank(generateRecordsSchemaGridRow.getRangeFrom())) {
 			typeBaseField.getOtherAttributes().put(new QName(Constants.RANGE_FROM_QNAME),
 					generateRecordsSchemaGridRow.getRangeFrom());
 		}
-		if (generateRecordsSchemaGridRow.getRangeTo() != null
-				&& !generateRecordsSchemaGridRow.getRangeTo().trim().isEmpty()) {
+		if (StringUtils.isNotBlank(generateRecordsSchemaGridRow.getRangeTo())) {
 			typeBaseField.getOtherAttributes().put(new QName(Constants.RANGE_TO_QNAME),
 					generateRecordsSchemaGridRow.getRangeTo());
 		}
-		if (generateRecordsSchemaGridRow.getDefaultValue() != null
-				&& !generateRecordsSchemaGridRow.getDefaultValue().trim().isEmpty()) {
+		if (StringUtils.isNotBlank(generateRecordsSchemaGridRow.getDefaultValue())) {
 			typeBaseField.getOtherAttributes().put(new QName(Constants.DEFAULT_VALUE_QNAME),
 					generateRecordsSchemaGridRow.getDefaultValue());
 		}

@@ -34,7 +34,7 @@
 			<tns:validator>BOOLEAN_OR_PARAMETER_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="boolean" name="safe" renderer="SAFE_PROPERTY_WIDGET" type="USER"
+		<tns:property dataType="boolean" name="safe" renderer="SAFE_PROPERTY_WIDGET" type="USER" value="false"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL">
 			<tns:validator>BOOLEAN_OR_PARAMETER_VALIDATOR</tns:validator>

@@ -17,7 +17,7 @@ import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;
 /**
  * The class ConverterUiHelper
  * 
- * @author Bitwise a
+ * @author Bitwise
  * 
  *         This is a helper class for converter implementation. Contains the helper methods for conversion.
  */
@@ -91,7 +91,7 @@ public class ConverterUiHelper {
 	 */
 	private String getLength(TypeBaseField typeBaseField) {
 		for (Entry<QName, String> entry : typeBaseField.getOtherAttributes().entrySet()) {
-			if (entry.getKey().toString().equals(Constants.LENGTH_QNAME))
+			if (Constants.LENGTH_QNAME.equals(entry.getKey().toString()))
 				return entry.getValue();
 		}
 		return null;

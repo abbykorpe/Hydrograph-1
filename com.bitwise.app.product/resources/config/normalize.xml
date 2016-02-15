@@ -5,7 +5,7 @@
 	<tns:component paletteIconPath="/icons/normalize_palette.png"
 		canvasIconPath="/icons/normalize_canvas.png" name="Normalize"
 		nameInPalette="Normalize" defaultNamePrefix="Normalize" 
-		description="This is Normalize component.\nsome more text"
+		description="This is Normalize component."
 		helpFilePath="/com.bitwise.app.help/html/Components/Normalize.html">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>

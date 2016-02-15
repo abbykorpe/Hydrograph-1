@@ -52,7 +52,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="XML_CONTENT_WIDGET"/>
  *     &lt;enumeration value="SUBGRAPH_PROPERTIES_WIDGET"/>
  *     &lt;enumeration value="MATCH_PROPERTY_WIDGET"/>
- *     &lt;enumeration value="TEXTBOX_WITH_ISPARAMETER_CHECKBOX_WIDGET"/>
+ *     &lt;enumeration value="TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -93,7 +93,7 @@ public enum PropertyRenderer {
     XML_CONTENT_WIDGET,
     SUBGRAPH_PROPERTIES_WIDGET,
     MATCH_PROPERTY_WIDGET,
-    TEXTBOX_WITH_ISPARAMETER_CHECKBOX_WIDGET;
+    TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET;
 
     public String value() {
         return name();
