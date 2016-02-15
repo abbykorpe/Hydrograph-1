@@ -153,6 +153,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	//private IPath parameterFileIPath;
 
 	private static final String DEFAULT_CONSOLE = "NewConsole";
+	private static final String CONSOLE_VIEW_ID = "com.bitwise.app.project.structure.console.AcceleroConsole";
 	
 	/**
 	 * Instantiates a new ETL graphical editor.
@@ -293,28 +294,31 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 
 		IWorkbenchPart partView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
-		IAcceleroConsole currentConsoleView = (IAcceleroConsole) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("com.bitwise.app.project.structure.console.AcceleroConsole");
-		if(partView instanceof ELTGraphicalEditor){
-			if(getActiveProject()!=null){
+
+		IAcceleroConsole currentConsoleView = (IAcceleroConsole) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getActivePage().findView(CONSOLE_VIEW_ID);
+
+		if (partView instanceof ELTGraphicalEditor) {
+			if (getActiveProject() != null) {
 				ConsolePlugin plugin = ConsolePlugin.getDefault();
-				IConsoleManager conMan = plugin.getConsoleManager();
+				IConsoleManager consoleManager = plugin.getConsoleManager();
 
 				String consoleName;
-				if(part.getTitle().contains(".job")){
+				if (part.getTitle().contains(".job")) {
 					consoleName = (getActiveProject() + "." + part.getTitle()).replace(".job", "");
-				}else{
+				} else {
 					consoleName = DEFAULT_CONSOLE;
 				}
 
 				JobManager.INSTANCE.setActiveCanvasId(consoleName);
-				IConsole consoleToShow = getConsole(consoleName, conMan);			
+				IConsole consoleToShow = getConsole(consoleName, consoleManager);
 
-				if(currentConsoleView !=null ){
-					if(consoleToShow!=null && !currentConsoleView.isConsoleClosed()){
-						conMan.showConsoleView(consoleToShow);
-					}else{
-						if(consoleToShow==null || !consoleToShow.getName().equalsIgnoreCase(consoleName)){
-							if(!currentConsoleView.isConsoleClosed()){
+				if (currentConsoleView != null) {
+					if (consoleToShow != null && !currentConsoleView.isConsoleClosed()) {
+						consoleManager.showConsoleView(consoleToShow);
+					} else {
+						if (consoleToShow == null || !consoleToShow.getName().equalsIgnoreCase(consoleName)) {
+							if (!currentConsoleView.isConsoleClosed()) {
 								addDummyConsole();
 							}
 						}
@@ -323,13 +327,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 				}
 
-				if(!JobManager.INSTANCE.isJobRunning(consoleName)){
+				if (!JobManager.INSTANCE.isJobRunning(consoleName)) {
 					enableRunJob(true);
-				}else{
-					enableRunJob(false);;
+				} else {
+					enableRunJob(false);
+					;
 				}
 			}
-
 
 		}
 
@@ -338,18 +342,18 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private void addDummyConsole(){
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
-		IConsoleManager conMan = plugin.getConsoleManager();
+		IConsoleManager consoleManager = plugin.getConsoleManager();
 
-		IConsole consoleToShow = getConsole(DEFAULT_CONSOLE, conMan);	
+		IConsole consoleToShow = getConsole(DEFAULT_CONSOLE, consoleManager);	
 
 		if(consoleToShow == null){
-			consoleToShow = createNewMessageConsole(DEFAULT_CONSOLE,conMan);
+			consoleToShow = createNewMessageConsole(DEFAULT_CONSOLE,consoleManager);
 		}
-		conMan.showConsoleView(consoleToShow);
+		consoleManager.showConsoleView(consoleToShow);
 	}
 
-	private IConsole getConsole(String consoleName,IConsoleManager conMan){		
-		IConsole[] existing = conMan.getConsoles();
+	private IConsole getConsole(String consoleName,IConsoleManager consoleManager){		
+		IConsole[] existing = consoleManager.getConsoles();
 		MessageConsole messageConsole=null;
 		for (int i = 0; i < existing.length; i++) {
 			if (existing[i].getName().equals(consoleName)){
@@ -362,10 +366,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 
-	private MessageConsole createNewMessageConsole(String consoleName,IConsoleManager conMan) {
+	private MessageConsole createNewMessageConsole(String consoleName,IConsoleManager consoleManager) {
 		MessageConsole messageConsole;
 		messageConsole = new MessageConsole(consoleName, null);
-		conMan.addConsoles(new IConsole[] { messageConsole });
+		consoleManager.addConsoles(new IConsole[] { messageConsole });
 		logger.debug("Created message console");
 		return messageConsole;
 	}
