@@ -74,14 +74,21 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) element;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			return fixedWidthGridRow.getFieldName();
-		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
-			return String.valueOf(fixedWidthGridRow.getDateFormat());
-		else if (ELTSchemaGridWidget.SCALE.equals(property))
-			return String.valueOf(fixedWidthGridRow.getScale());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property))
 			return fixedWidthGridRow.getDataType();
+		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
+			return String.valueOf(fixedWidthGridRow.getDateFormat());
+		else if (ELTSchemaGridWidget.PRECISION.equals(property))
+			return fixedWidthGridRow.getPrecision();
+		else if (ELTSchemaGridWidget.SCALE.equals(property))
+			return String.valueOf(fixedWidthGridRow.getScale());
+		else if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
+			return fixedWidthGridRow.getScaleType();
+		else if (ELTSchemaGridWidget.FIELD_DESCRIPTION.equals(property))
+			return fixedWidthGridRow.getDescription();
 		else if (ELTSchemaGridWidget.LENGTH.equals(property))
 			return fixedWidthGridRow.getLength();
+		
 		else
 			return null;
 	}
@@ -94,14 +101,21 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) element;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			fixedWidthGridRow.setFieldName(((String) value).trim());
+		else if (ELTSchemaGridWidget.DATATYPE.equals(property)) {
+			fixedWidthGridRow.setDataType((Integer) value);
+			fixedWidthGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]); 
+		}
 		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
 			fixedWidthGridRow.setDateFormat(((String) value).trim());
 		else if (ELTSchemaGridWidget.SCALE.equals(property))
 			fixedWidthGridRow.setScale(((String) value).trim());
-		else if (ELTSchemaGridWidget.DATATYPE.equals(property)) {
-			fixedWidthGridRow.setDataType((Integer) value);
-			fixedWidthGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]); 
-		} else if (ELTSchemaGridWidget.LENGTH.equals(property)) {
+		else if (ELTSchemaGridWidget.SCALE_TYPE.equals(property)) {
+			fixedWidthGridRow.setScaleType((Integer) value);
+			fixedWidthGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[(Integer)value]); 
+		}
+		else if (ELTSchemaGridWidget.FIELD_DESCRIPTION.equals(property))
+			fixedWidthGridRow.setDescription(((String) value).trim());
+		else if (ELTSchemaGridWidget.LENGTH.equals(property)) {
 			fixedWidthGridRow.setLength(((String) value).trim());
 		}
 

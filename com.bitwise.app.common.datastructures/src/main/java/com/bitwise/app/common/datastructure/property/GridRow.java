@@ -14,7 +14,8 @@ public class GridRow implements IDataStructure {
 		private Integer dataType;
 		private String scale;
 		private String dataTypeValue;
-		private String scaleType;
+		private Integer scaleType;
+		private String scaleTypeValue;
 		private String precision;
 		private String description;
 
@@ -33,7 +34,14 @@ public class GridRow implements IDataStructure {
 		public void setScale(String scale) {
 			this.scale = scale;
 		}
+		
+		public String getScaleTypeValue() {
+			return scaleTypeValue;
+		}
 
+		public void setScaleTypeValue(String scaleTypeValue) {
+			this.scaleTypeValue = scaleTypeValue;
+		}
 		public String getFieldName() {
 			return fieldName;
 		}
@@ -58,11 +66,11 @@ public class GridRow implements IDataStructure {
 			this.dataType = dataType;
 		}
 		
-		public String getScaleType() {
+		public Integer getScaleType() {
 			return scaleType;
 		}
 
-		public void setScaleType(String scaleType) {
+		public void setScaleType(Integer scaleType) {
 			this.scaleType = scaleType;
 		}
 
@@ -90,8 +98,8 @@ public class GridRow implements IDataStructure {
 			gridRow.setDataType(dataType);
 			gridRow.setDataTypeValue(dataTypeValue);
 			gridRow.setDateFormat(dateFormat);
-			gridRow.setScale(scale);
 			gridRow.setScaleType(scaleType);
+			gridRow.setScaleTypeValue(scaleTypeValue);
 			gridRow.setPrecision(precision);
 			gridRow.setDescription(description);
 			return gridRow; 
@@ -138,10 +146,10 @@ public class GridRow implements IDataStructure {
 			builder.append(dateFormat);
 			builder.append("\n precision=");
 			builder.append(precision);
-			builder.append("\n scale=");
-			builder.append(scale);
 			builder.append("\n scaleType=");
 			builder.append(scaleType);
+			builder.append("\n scaleTypeValue=");
+			builder.append(scaleTypeValue);
 			builder.append("\n description=");
 			builder.append(description);
 			builder.append("]");
@@ -162,6 +170,7 @@ public class GridRow implements IDataStructure {
 			tempschemaGrid.setDateFormat(dateFormat);
 			tempschemaGrid.setScale(scale);
 			tempschemaGrid.setScaleType(scaleType);
+			tempschemaGrid.setScaleTypeValue(scaleTypeValue);
 			tempschemaGrid.setPrecision(precision);
 			tempschemaGrid.setDescription(description);
 			

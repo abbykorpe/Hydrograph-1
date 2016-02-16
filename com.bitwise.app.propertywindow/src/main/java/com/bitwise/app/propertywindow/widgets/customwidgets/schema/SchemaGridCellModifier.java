@@ -58,12 +58,19 @@ class SchemaGridCellModifier implements ICellModifier {
 		SchemaGrid schemaGrid = (SchemaGrid) element;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			return schemaGrid.getFieldName();
-		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
-			return String.valueOf(schemaGrid.getDateFormat());
-		else if (ELTSchemaGridWidget.SCALE.equals(property))
-			return String.valueOf(schemaGrid.getScale());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property))
 			return schemaGrid.getDataType();
+		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
+			return String.valueOf(schemaGrid.getDateFormat());
+		else if (ELTSchemaGridWidget.PRECISION.equals(property))
+			return schemaGrid.getPrecision();
+		else if (ELTSchemaGridWidget.SCALE.equals(property))
+			return String.valueOf(schemaGrid.getScale());
+		else if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
+			return schemaGrid.getScaleType();
+		else if (ELTSchemaGridWidget.FIELD_DESCRIPTION.equals(property))
+			return schemaGrid.getDescription();
+		
 		else
 			return null;
 	}
@@ -76,14 +83,23 @@ class SchemaGridCellModifier implements ICellModifier {
 		SchemaGrid schemaGrid = (SchemaGrid) element;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			schemaGrid.setFieldName(((String) value).trim());
-		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
-			schemaGrid.setDateFormat( ((String) value).trim()); 
-		else if (ELTSchemaGridWidget.SCALE.equals(property))
-			schemaGrid.setScale(((String) value).trim()); 
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)){
 			schemaGrid.setDataType((Integer)value);
 			schemaGrid.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]);
 		}
+		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
+			schemaGrid.setDateFormat( ((String) value).trim()); 
+		else if (ELTSchemaGridWidget.PRECISION.equals(property))
+			schemaGrid.setPrecision(((String) value).trim()); 
+		else if (ELTSchemaGridWidget.SCALE.equals(property))
+			schemaGrid.setScale(((String) value).trim());
+		else if (ELTSchemaGridWidget.SCALE_TYPE.equals(property)){
+			schemaGrid.setScaleType((Integer)value); 
+			schemaGrid.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[(Integer)value]);
+		}
+		else if (ELTSchemaGridWidget.FIELD_DESCRIPTION.equals(property))
+			schemaGrid.setDescription(((String) value).trim());
+		
 
 		resetScale(schemaGrid, property);
 

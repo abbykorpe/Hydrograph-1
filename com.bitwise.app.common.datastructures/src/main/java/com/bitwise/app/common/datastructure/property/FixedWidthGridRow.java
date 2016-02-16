@@ -30,11 +30,15 @@ public class FixedWidthGridRow extends GridRow{
 	public GridRow copy() {
 		FixedWidthGridRow tempschemaGrid = new FixedWidthGridRow();
 		tempschemaGrid.setDataType(getDataType());
+		tempschemaGrid.setDataTypeValue(getDataTypeValue());
 		tempschemaGrid.setDateFormat(getDateFormat());
 		tempschemaGrid.setFieldName(getFieldName());
 		tempschemaGrid.setScale(getScale());
-		tempschemaGrid.setDataTypeValue(getDataTypeValue());
+		tempschemaGrid.setScaleType(getScaleType());
+		tempschemaGrid.setScaleTypeValue(getScaleTypeValue());
+		tempschemaGrid.setDescription(getDescription());
 		tempschemaGrid.setLength(length);
+		
 		return tempschemaGrid;
 	}
 	

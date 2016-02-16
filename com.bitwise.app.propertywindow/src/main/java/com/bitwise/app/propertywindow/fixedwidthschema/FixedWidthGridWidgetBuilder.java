@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
+import com.bitwise.app.common.datastructure.property.SchemaGrid;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 /**
@@ -24,9 +25,12 @@ public class FixedWidthGridWidgetBuilder extends GridWidgetCommonBuilder {
 		CellEditor[] cellEditor = createCellEditor(size);
 		addTextEditor(table,cellEditor, 0);
 		addComboBox(table, cellEditor, getDataTypeKey(), 1);
-		addTextEditor(table,cellEditor, 2);
-		addTextEditor(table,cellEditor, 3);
-		addTextEditor(table,cellEditor, 4);
+		addTextEditor(table, cellEditor, 2);
+		addTextEditor(table, cellEditor, 3);
+		addTextEditor(table, cellEditor, 4);
+		addComboBox(table, cellEditor, getScaleTypeKey(), 5);
+		addTextEditor(table, cellEditor, 6);
+		addTextEditor(table, cellEditor, 7);
 		return cellEditor;
 	}
 
@@ -42,10 +46,15 @@ public class FixedWidthGridWidgetBuilder extends GridWidgetCommonBuilder {
 		FixedWidthGridRow fixedGrid = new FixedWidthGridRow();
 		fixedGrid.setFieldName("DefaultField" + rowSequence++);
 		fixedGrid.setDateFormat("");
+		fixedGrid.setPrecision("0");
 		fixedGrid.setScale("");
+		fixedGrid.setScaleType(Integer.valueOf("0"));
+		fixedGrid.setScaleTypeValue(getScaleTypeValue()[Integer.valueOf("0")]); 
 		fixedGrid.setDataType(Integer.valueOf("0"));
 		fixedGrid.setDataTypeValue(getDataTypeValue()[Integer.valueOf("0")]); 
 		fixedGrid.setLength("0");
+		fixedGrid.setDescription("");
+		
 		
 		int numberOfRows=grids.size();
 		do{

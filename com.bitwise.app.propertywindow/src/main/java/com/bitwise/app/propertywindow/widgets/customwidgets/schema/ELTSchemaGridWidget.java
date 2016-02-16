@@ -1,10 +1,15 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.schema;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
@@ -35,6 +40,8 @@ import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
+import com.bitwise.app.common.schema.Field;
+import com.bitwise.app.common.schema.Fields;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.ImagePathConstant;
 import com.bitwise.app.common.util.XMLConfigUtil;
@@ -83,9 +90,15 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String SCALE_TYPE = Messages.SCALE_TYPE;
 	public static final String FIELD_DESCRIPTION = Messages.FIELD_DESCRIPTION;
 	public static final String LENGTH = Messages.LENGTH;
+
 	public static final String RANGE_FROM = "Range From";
 	public static final String RANGE_TO = "Range To";
-	public static final String DEFAULT_VALUE = "Default Value";
+
+	public static final String DEFAULT_VALUE ="Default Value";
+	
+	private CellEditor fieldNameEditor;
+
+	
 
 	protected ControlDecoration fieldNameDecorator;
 	protected ControlDecoration isFieldNameAlphanumericDecorator;
@@ -555,6 +568,40 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			public void mouseUp(MouseEvent e) {
 				extSchemaPathText.getText();
 				System.out.println("Path set: "+extSchemaPathText.getText());
+				File schemaFile = new File(extSchemaPathText.getText());
+				Fields fields;
+				ArrayList<GridRow> schemaGridRowListToImport = new ArrayList<>();
+				
+				try {
+					JAXBContext jaxbContext = JAXBContext.newInstance(Fields.class);
+					Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+					fields = (Fields) jaxbUnmarshaller.unmarshal(schemaFile);
+					ArrayList<Field> fieldsList = (ArrayList<Field>) fields.getField();
+					
+					for (Field temp : fieldsList) {
+						GridRow gridRow = new GridRow();
+						gridRow.setFieldName(temp.getName());
+						//gridRow.setDataType(temp.getType());
+						gridRow.setDateFormat(temp.getFormat());
+						gridRow.setPrecision(String.valueOf(temp.getPrecision()));
+						gridRow.setScale(String.valueOf(temp.getScale()));
+						//gridRow.setScaleType(temp.getScaleType());
+						gridRow.setDescription(temp.getDescription());
+						schemaGridRowListToImport.add(gridRow);
+					}
+					
+					
+					System.out.println("");
+				} catch (JAXBException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+				tableViewer.setInput(schemaGridRowListToImport);
+				tableViewer.refresh();
+
+				
 			}
 		});
 		
@@ -751,4 +798,5 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 		return list;
 	}
+	
 }

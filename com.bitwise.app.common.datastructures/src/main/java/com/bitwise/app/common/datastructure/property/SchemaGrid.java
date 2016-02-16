@@ -1,13 +1,11 @@
 package com.bitwise.app.common.datastructure.property;
 
-
-
 /**
  * The Class SchemaGrid.
  * 
  * @author Bitwise
  */
-public class SchemaGrid extends GridRow{
+public class SchemaGrid extends GridRow {
 
 	public SchemaGrid copy() {
 		SchemaGrid tempschemaGrid = new SchemaGrid();
@@ -16,6 +14,10 @@ public class SchemaGrid extends GridRow{
 		tempschemaGrid.setFieldName(getFieldName());
 		tempschemaGrid.setScale(getScale());
 		tempschemaGrid.setDataTypeValue(getDataTypeValue());
+		tempschemaGrid.setScaleType(getScaleType());
+		tempschemaGrid.setPrecision(getPrecision());
+		tempschemaGrid.setDescription(getDescription());
+
 		return tempschemaGrid;
 	}
 }

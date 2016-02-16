@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwise.com/Schema"
+	xmlns:tns="http://www.bitwise.com/Schema" elementFormDefault="qualified" 
+	xmlns:cnst="http://www.bitwise.com/constant">
+	
+	<element name="Fields">
+		<complexType>
+			<sequence>
+				<element name="field" type="tns:Field" maxOccurs="unbounded" minOccurs="0" />
+			</sequence>
+		</complexType>
+	</element>
+	
+	<complexType name="Field">
+		<attribute name="name" type="string" use="required" />
+		<attribute name="type" type="tns:field_data_types" use="required" />
+		<attribute name="format" type="string" use="optional"/>
+		<attribute name="precision" type="int" use="optional"/>
+		<attribute name="scale" type="int" use="optional"/>	
+		<attribute name="scale_type" type="tns:scale_types" use="optional"/>
+		<attribute name="description" type="string" use="optional"/>
+		<attribute name="length" type="positiveInteger" use="optional"/>
+		<attribute name="delimiter" type="string" use="optional"/>
+		<attribute name="rangeTo" type="string" use="optional"/>
+		<attribute name="rangeFrom" type="string" use="optional"/>
+		<attribute name="default" type="string" use="optional"/>
+	</complexType>	
+	
+	<simpleType name="field_data_types">
+		<restriction base="string">
+			<enumeration value="java.lang.String" />
+			<enumeration value="java.lang.Integer" />
+			<enumeration value="java.lang.Object" />
+			<enumeration value="java.lang.Long" />
+			<enumeration value="java.lang.Double" />
+			<enumeration value="java.lang.Float" />
+			<enumeration value="java.lang.Short" />
+			<enumeration value="java.lang.Boolean" />
+			<enumeration value="java.util.Date" />
+			<enumeration value="java.math.BigDecimal" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="scale_types">
+		<restriction base="string">
+			<enumeration value="explicit" />
+			<enumeration value="implicit" />
+		</restriction>
+	</simpleType>
+	
+</schema>

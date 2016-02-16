@@ -24,8 +24,11 @@ public class GeneralGridWidgetBuilder extends GridWidgetCommonBuilder {
 		CellEditor[] cellEditor = createCellEditor(size);
 		addTextEditor(table,cellEditor, 0);
 		addComboBox(table, cellEditor, getDataTypeKey(), 1);
-		addTextEditor(table,cellEditor, 2);
-		addTextEditor(table,cellEditor, 3);
+		addTextEditor(table, cellEditor, 2);
+		addTextEditor(table, cellEditor, 3);
+		addTextEditor(table, cellEditor, 4);
+		addComboBox(table, cellEditor, getScaleTypeKey(), 5);
+		addTextEditor(table, cellEditor, 6);
 		return cellEditor;
 	}
 
@@ -39,10 +42,14 @@ public class GeneralGridWidgetBuilder extends GridWidgetCommonBuilder {
 		int rowSequence = getRowSequence();
 		SchemaGrid schemaGrid = new SchemaGrid();
 		schemaGrid.setFieldName("DefaultField" + rowSequence);
-		schemaGrid.setDateFormat(""); 
+		schemaGrid.setDateFormat("");
+		schemaGrid.setPrecision("0");
 		schemaGrid.setScale("");
+		schemaGrid.setScaleType(Integer.valueOf("0"));
+		schemaGrid.setScaleTypeValue(getScaleTypeValue()[Integer.valueOf("0")]);
 		schemaGrid.setDataType(Integer.valueOf("0"));
 		schemaGrid.setDataTypeValue(getDataTypeValue()[Integer.valueOf("0")]);
+		schemaGrid.setDescription("");
 		
 		int numberOfRows=grids.size();
 		do{

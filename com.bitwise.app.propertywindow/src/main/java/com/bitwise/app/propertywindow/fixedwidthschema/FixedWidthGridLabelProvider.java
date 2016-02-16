@@ -50,8 +50,14 @@ public class FixedWidthGridLabelProvider implements ITableLabelProvider,ITableCo
 	    case 2:
 	    	 return fixedGrid.getDateFormat();
 	    case 3:
-	   	 return fixedGrid.getScale(); 
+	   	 	 return fixedGrid.getPrecision(); 
 	    case 4: 
+	    	return fixedGrid.getScale().toString();
+	    case 5:
+	    	return GridWidgetCommonBuilder.getScaleTypeKey()[fixedGrid.getScaleType().intValue()];  
+	    case 6: 
+	    	return fixedGrid.getDescription();
+	    case 7: 
 	    	return fixedGrid.getLength().toString();
 	    }
 	    return null;
