@@ -42,6 +42,7 @@ import com.bitwise.app.common.datastructure.property.mapping.InputField;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.utils.SWTResourceManager;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
@@ -292,7 +293,7 @@ public class MappingTable {
 	    		  OperationClassProperty operationClassProperty = (OperationClassProperty) column2Txt.getData()  ;
 	    		  
 	    		if(operationClassProperty == null){
-	    			operationClassProperty = new OperationClassProperty("Custom","", false, "");
+	    			operationClassProperty = new OperationClassProperty(Messages.CUSTOM,"", false, "");
 	    		}
 				ELTOperationClassDialog eltOperationClassDialog = new ELTOperationClassDialog(button.getShell(),
 						propertyDialogButtonBar, operationClassProperty.clone(), widgetConfig, componentName);

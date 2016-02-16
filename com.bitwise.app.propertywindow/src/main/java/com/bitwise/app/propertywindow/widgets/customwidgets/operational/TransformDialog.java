@@ -971,7 +971,7 @@ public class TransformDialog extends Dialog {
 				List<OperationClassProperty> operationClassProperties= new ArrayList<>();
 				for (Map.Entry<Text, Button> entry : opClassMap.entrySet())
 				{
-				    OperationClassProperty operationClassProperty = new OperationClassProperty("Custom",entry.getKey().getText(), entry.getValue().getSelection(),(String)entry.getKey().getData("path"));
+				    OperationClassProperty operationClassProperty = new OperationClassProperty(Messages.CUSTOM,entry.getKey().getText(), entry.getValue().getSelection(),(String)entry.getKey().getData("path"));
 				    operationClassProperties.add(operationClassProperty);
 				}
 				for (TransformOperation transformOperation : transformOperationList) 
