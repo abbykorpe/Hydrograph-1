@@ -146,7 +146,7 @@ public class ELTOperationClassDialog extends Dialog {
               btnCheckButton.setSelection(operationClassProperty.isParameter());
               fileName.setData("path", operationClassProperty.getOperationClassFullPath());
 			FilterOperationClassUtility.enableAndDisableButtons(false);
-			if(operationClassProperty.getComboBoxValue().equalsIgnoreCase(Messages.CUSTOM))
+			if(!operationClassProperty.getComboBoxValue().equalsIgnoreCase(Messages.CUSTOM))
 			fileName.setEnabled(false);
         }
         else {
