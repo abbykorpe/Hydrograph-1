@@ -16,17 +16,17 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
  * 
  * @author Bitwise
  */
-public class ELTGenerateRecordsGridWidget extends ELTSchemaGridWidget {
+public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 
-	public ELTGenerateRecordsGridWidget(PropertyDialogButtonBar propertyDialogButtonBar) {
+	public GenerateRecordsGridWidget(PropertyDialogButtonBar propertyDialogButtonBar) {
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
 	}
 
 	/**
-	 * Instantiates a new ELTGenerateRecordsGridWidget.
+	 * Instantiates a new GenerateRecordsGridWidget.
 	 *
 	 */
-	public ELTGenerateRecordsGridWidget(ComponentConfigrationProperty componentConfigurationProperty,
+	public GenerateRecordsGridWidget(ComponentConfigrationProperty componentConfigurationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigurationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);

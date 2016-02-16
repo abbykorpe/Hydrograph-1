@@ -8,7 +8,7 @@ import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.fixedwidthschema.ELTFixedWidget;
 import com.bitwise.app.propertywindow.fixedwidthschema.ELTJoinFixedWidthSchemaWidget;
-import com.bitwise.app.propertywindow.generaterecords.schema.ELTGenerateRecordsGridWidget;
+import com.bitwise.app.propertywindow.generaterecords.schema.GenerateRecordsGridWidget;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -53,7 +53,7 @@ public class WidgetFactory {
 		SCHEMA_WIDGET(ELTGenericSchemaGridWidget.class),
 		FIXED_WIDGET(ELTFixedWidget.class),
 		JOIN_FIXED_WIDTH_SCHEMA_WIDGET(ELTJoinFixedWidthSchemaWidget.class),
-		GENERATE_RECORDS_SCHEMA_WIDGET(ELTGenerateRecordsGridWidget.class),
+		GENERATE_RECORDS_SCHEMA_WIDGET(GenerateRecordsGridWidget.class),
 		FILE_PATH_WIDGET(ELTFilePathWidget.class),
 		COMPONENT_NAME_WIDGET(ELTComponentNameWidget.class),
 		
