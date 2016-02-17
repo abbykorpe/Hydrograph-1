@@ -115,7 +115,7 @@ public class GenerateRecordsConverter extends InputConverter {
 		if (FieldDataTypes.JAVA_LANG_DOUBLE.value().equals(generateRecordsSchemaGridRow.getDataTypeValue())
 				|| FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value().equals(generateRecordsSchemaGridRow.getDataTypeValue())) {
 			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
-			if (!generateRecordsSchemaGridRow.getScale().trim().isEmpty())
+			if (StringUtils.isNotBlank(generateRecordsSchemaGridRow.getScale()))
 				typeBaseField.setScale(Integer.parseInt(generateRecordsSchemaGridRow.getScale()));
 		}
 
