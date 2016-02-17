@@ -36,6 +36,7 @@ import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinWidget;
+import com.bitwise.app.propertywindow.widgets.dialogs.FieldDialog;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterPropertyWizard;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
@@ -277,11 +278,16 @@ public class ELTJoinConfigGrid extends Dialog {
 	}
 
 	private String launchDialogToSelectFields(String availableValues, String socketId) {
-		ELTFilterPropertyWizard filterWizardObj = new ELTFilterPropertyWizard();
+		/*ELTFilterPropertyWizard filterWizardObj = new ELTFilterPropertyWizard();
 		filterWizardObj.setPropertyFromCommaSepratedString(availableValues);
 		filterWizardObj.setSourceFieldsFromPropagatedSchema(propagatedFiledNames.get(socketId));
-		filterWizardObj.launchRuntimeWindow(new Shell(), propertyDialogButtonBar);
-		return filterWizardObj.getResultAsCommaSeprated();
+		filterWizardObj.launchRuntimeWindow(new Shell(), propertyDialogButtonBar);		
+		return filterWizardObj.getResultAsCommaSeprated();*/
+		FieldDialog fieldDialog = new FieldDialog(new Shell());
+		fieldDialog.setPropertyFromCommaSepratedString(availableValues);
+		fieldDialog.setSourceFieldsFromPropagatedSchema(propagatedFiledNames.get(socketId));
+		fieldDialog.open();
+		return fieldDialog.getResultAsCommaSeprated();
 	}
 
 	public void setPropagatedFieldProperty(Map<String, List<String>> propagatedFiledNames) {
