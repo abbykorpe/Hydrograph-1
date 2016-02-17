@@ -76,7 +76,7 @@ public class SchemaPropagationHelper {
 			fixedWidthGridRow.setDataType(0);
 			fixedWidthGridRow.setDataTypeValue("java.lang.String");
 			fixedWidthGridRow.setScale("");
-			fixedWidthGridRow.setLength("0");
+			fixedWidthGridRow.setLength("");
 			fixedWidthGridRow.setDateFormat("");
 			
 		}
