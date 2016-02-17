@@ -35,13 +35,13 @@
 		</tns:property>
 
 			
-		<tns:property dataType="boolean" name="safe" renderer="SAFE_PROPERTY_WIDGET" type="USER" value="false"
+		<tns:property dataType="boolean" name="safe" renderer="SAFE_PROPERTY_WIDGET" type="USER" value="False"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL">
 			<tns:validator>BOOLEAN_OR_PARAMETER_VALIDATOR</tns:validator>
 		</tns:property>
 
-		<tns:property dataType="boolean" group="GENERAL" subGroup="CONFIGURATION" name="hasHeader" value="false"
+		<tns:property dataType="boolean" group="GENERAL" subGroup="CONFIGURATION" name="hasHeader" value="False"
 			renderer="HAS_HEADER_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL">
 			<tns:validator>BOOLEAN_OR_PARAMETER_VALIDATOR</tns:validator>
@@ -53,7 +53,7 @@
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 			
-		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="strict" value="false"
+		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="strict" value="False"
 		renderer="STRICT_CLASS_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
 		usage="OPTIONAL">
 			<tns:validator>BOOLEAN_OR_PARAMETER_VALIDATOR</tns:validator>
