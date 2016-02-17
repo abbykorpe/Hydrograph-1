@@ -44,6 +44,14 @@ import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 
+
+/**
+ * Class for runtime property dialog.
+ * This class is responsible to provide UI to read runtime properties from user. 
+ * 
+ * @author Bitwise
+ *
+ */
 public class RuntimePropertyDialog extends Dialog {
 
 	private static final String ERROR = "ERROR";
@@ -52,12 +60,6 @@ public class RuntimePropertyDialog extends Dialog {
 
 	private static final String REGEX_PPATTERN = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
 	private static final String[] PROPS = { PROPERTY_NAME, PROPERTY_VALUE };
-
-	private static final String ICONS_DOWN_PNG = "/icons/down.png";
-	private static final String ICONS_UP_PNG = "/icons/up.png";
-	private static final String ICONS_DELETE_PNG = "/icons/delete.png";
-	private static final String ICONS_ADD_PNG = "/icons/add.png";
-	private static final String ICONS_PROPERTY_WINDOW_ICON_PNG = "/icons/property_window_icon.png";
 
 	private String PROPERTY_EXISTS_ERROR = Messages.RuntimePropertAlreadyExists;
 	private String PROPERTY_NAME_BLANK_ERROR = Messages.EmptyNameNotification;
@@ -140,6 +142,11 @@ public class RuntimePropertyDialog extends Dialog {
 		lblPropertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
 	}
 
+	/**
+	 * Returns runtime property map
+	 *  
+	 * @return - runtimePropertyMap -  Map<String, String>
+	 */
 	public Map<String, String> getRuntimeProperties() {
 		return runtimePropertyMap;
 	}
@@ -366,6 +373,12 @@ public class RuntimePropertyDialog extends Dialog {
 		}
 	}
 
+	/**
+	 * 
+	 * Set runtime properties.
+	 * 
+	 * @param runtimePropertyMap
+	 */
 	public void setRuntimeProperties(Map<String, String> runtimePropertyMap) {
 		this.runtimePropertyMap = runtimePropertyMap;
 	}
@@ -536,7 +549,6 @@ public class RuntimePropertyDialog extends Dialog {
 		ICellEditorValidator propertyValidator = new ICellEditorValidator() {
 			@Override
 			public String isValid(Object value) {
-				table.getItem(table.getSelectionIndex()).getText();
 				String valueToValidate = String.valueOf(value).trim();
 				if (valueToValidate.isEmpty()) {
 					lblPropertyError.setText(ErrorMessage);
