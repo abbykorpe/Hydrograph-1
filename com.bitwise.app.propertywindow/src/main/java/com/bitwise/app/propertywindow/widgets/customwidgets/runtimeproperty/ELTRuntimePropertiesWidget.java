@@ -95,10 +95,10 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 		if (getProperties().get(propertyName) == null) {
 			initialMap = new HashMap<String, String>();
 		}
-		RunTimePropertyWizard runTimeWizardObj = new RunTimePropertyWizard();
-		runTimeWizardObj.setRuntimePropertyMap((Map<String, String>) getProperties().get(propertyName));
-		Map<String, String> updatedMap = runTimeWizardObj.launchRuntimeWindow(shell,propertyDialogButtonBar);
-		initialMap =  updatedMap;
-
+		
+		RuntimePropertyDialog runtimePropertyDialog = new RuntimePropertyDialog(shell);
+		runtimePropertyDialog.setRuntimeProperties((Map<String, String>) getProperties().get(propertyName));
+		runtimePropertyDialog.open();
+		initialMap = runtimePropertyDialog.getRuntimeProperties();
 	}
 }

@@ -11,6 +11,8 @@ import org.eclipse.swt.widgets.Item;
  */
 public class RunTimePropertyCellModifier implements ICellModifier {
 	private Viewer viewer;
+	private static final String PROPERTY_NAME = "PROPERTY_NAME"; 
+	private static final String PROPERTY_VALUE = "PROPERTY_VALUE";
 
 	/**
 	 * Instantiates a new run time property cell modifier.
@@ -48,11 +50,11 @@ public class RunTimePropertyCellModifier implements ICellModifier {
 	public Object getValue(Object element, String property) {
 		RuntimeProperties p = (RuntimeProperties) element;
 		
-		if (RunTimePropertyWizard.PROPERTY_NAME.equals(property)) {
+		if (PROPERTY_NAME.equals(property)) {
 
 			return p.getPropertyName();
 
-		} else if (RunTimePropertyWizard.PROPERTY_VALUE.equals(property))
+		} else if (PROPERTY_VALUE.equals(property))
 			return p.getPropertyValue();
 		else
 			return null;
@@ -75,10 +77,10 @@ public class RunTimePropertyCellModifier implements ICellModifier {
 
 		RuntimeProperties p = (RuntimeProperties) element;
 		
-		if (RunTimePropertyWizard.PROPERTY_NAME.equals(property))
+		if (PROPERTY_NAME.equals(property))
 			p.setPropertyName(((String) value));
 
-		else if (RunTimePropertyWizard.PROPERTY_VALUE.equals(property))
+		else if (PROPERTY_VALUE.equals(property))
 			p.setPropertyValue((String) value);
 		// Force the viewer to refresh
 		viewer.refresh();
