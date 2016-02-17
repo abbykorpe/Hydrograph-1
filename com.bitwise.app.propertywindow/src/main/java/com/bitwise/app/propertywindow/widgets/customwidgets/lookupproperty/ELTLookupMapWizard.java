@@ -293,67 +293,36 @@ public class ELTLookupMapWizard extends Dialog {
 				.applyDragFromTableViewer(
 						inputTableViewer[tableViewerIndex].getTable(),
 						tableViewerIndex);
-		addButton(comGrid, new int[] { 170, 8, 25, 20 },
-				inputTableViewer[tableViewerIndex], joinInputList);
-		deleteButton(comGrid, new int[] { 200, 8, 25, 20 },
-				inputTableViewer[tableViewerIndex], joinInputList);
 		return inputTableViewer[tableViewerIndex];
 	}
 
-	private void addButton(Composite parent, int[] bounds,
-			final TableViewer viewer, final List<FilterProperties> joinInputList) {
-
-		Button bt = new Button(parent, SWT.PUSH);
-		bt.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
-				+ "/icons/add.png"));
-		bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
-
-		bt.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				addRowToTable(viewer, joinInputList);
-			}
-		});
-	}
-
-	private void deleteButton(Composite parent, int[] bounds,
-			final TableViewer viewer, final List<FilterProperties> joinInputList) {
-
-		Button bt = new Button(parent, SWT.PUSH);
-		bt.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
-				+ "/icons/delete.png"));
-		bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
-		bt.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				int index = 0;
-				IStructuredSelection selection = (IStructuredSelection) viewer
-						.getSelection();
-				for (Iterator<?> iterator = selection.iterator(); iterator
-						.hasNext();) {
-					Object selectedObject = iterator.next();
-					index = joinInputList.indexOf(selectedObject);
-					viewer.remove(selectedObject);
-					joinInputList.remove(selectedObject);
-				}
-				viewer.refresh();
-				if (index != 0)
-					viewer.editElement(viewer.getElementAt(index - 1), 0);
-			}
-		});
-	}
-
+	
 	private void createLabel(Composite parent) {
-
-		Button button = buttonWidget(parent, SWT.CENTER | SWT.PUSH, new int[] {
-				0, 0, 25, 20 }, "", new Image(null,
-				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
-		ELTGridAddSelectionListener listener = new ELTGridAddSelectionListener();
-		button.addSelectionListener(new SelectionAdapter() {
+        Label add = eltswtWidgets
+				.labelWidget(parent, SWT.CENTER |SWT.PUSH, new int[] { 0, 0, 25, 20},
+						"", new Image(null,
+								XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
+										+ "/icons/add.png"));
+		
+		add.addMouseListener(new MouseListener(){
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void mouseUp(MouseEvent e) {
 				joinOutputProperty(outputTableViewer, null);
+				
 			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+			
+				
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				
+				
+			}
+
 		});
 
 		Label delete = eltswtWidgets

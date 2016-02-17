@@ -31,6 +31,7 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
@@ -81,7 +82,8 @@ public class SecondaryColumnKeysWidgetWizard {
 	private Label lblPropertyError;
 	private boolean isOkPressed;
 	private TableViewer targetTableViewer;
-	private Button addButton, okButton, deleteButton, cacelButton, upButton, downButton;
+	private Button okButton,cancelButton;
+	private Label upButton, downButton,addButton,deleteButton;
 	private boolean isAnyUpdatePerformed;
 	private Table sourceTable;
 	private DragSource dragSource;
@@ -263,7 +265,7 @@ public class SecondaryColumnKeysWidgetWizard {
 
 		Composite com = new Composite(shell, SWT.NONE);
 		com.setBounds(29, 35, 520, 30);
-		createIcons(com);
+		createLabelAsButton(com);
 
 		// Below Event will be fired when user closes the Runtime window
 		shell.addListener(SWT.Close, new Listener() {
@@ -351,36 +353,54 @@ public class SecondaryColumnKeysWidgetWizard {
 
 	}
 
-	private void createIcons(Composite composite) {
+	private void createLabelAsButton(Composite composite) {
 
 		new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL).setBounds(0, 41, 513, 60);
-		addButton = new Button(composite, SWT.PUSH);
-		// addButton.setText("+");
-		String addIconPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png";
+		addButton = new Label(composite, SWT.PUSH);
+        String addIconPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png";
 		addButton.setImage(new Image(null, addIconPath));
 		addButton.setBounds(433, 10, 20, 20);
-		addButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				addNewProperty(targetTableViewer, null);
-			}
-		});
+		addButton.addMouseListener(new MouseListener(){
 
-		deleteButton = new Button(composite, SWT.PUSH);
-		// deleteButton.setText("X");
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				addNewProperty(targetTableViewer, null);
+				
+			}});
+		
+
+		deleteButton = new Label(composite, SWT.PUSH);
 		String deleteIonPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png";
 		deleteButton.setImage(new Image(null, deleteIonPath));
 		deleteButton.setBounds(452, 10, 25, 20);
-		deleteButton.addSelectionListener(new SelectionAdapter() {
+		deleteButton.addMouseListener(new MouseListener(){
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				/*
-				 * if (temp == -1){ MessageDialog.openError(shell, "Error", //$NON-NLS-1$ Messages.SelectRowToDelete);
-				 * 
-				 * }else {
-				 */
+			public void mouseDoubleClick(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
 
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
 				IStructuredSelection selection = (IStructuredSelection) targetTableViewer.getSelection();
 				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 					Object selectedObject = iterator.next();
@@ -389,20 +409,30 @@ public class SecondaryColumnKeysWidgetWizard {
 				}
 				isAnyUpdatePerformed = true;
 
-			}
-		});
-
-		upButton = new Button(composite, SWT.PUSH);
-		// upButton.setText("^");
+				
+			}});
+		
+        upButton = new Label(composite, SWT.PUSH);
+		
 		String upIonPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png";
 		upButton.setImage(new Image(null, upIonPath));
 		upButton.setBounds(476, 10, 20, 20);
-
-		upButton.addSelectionListener(new SelectionAdapter() {
-			int index1 = 0, index2 = 0;
+        upButton.addMouseListener(new MouseListener(){
+        	int index1 = 0, index2 = 0;
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
 				index1 = targetTable.getSelectionIndex();
 				String text = targetTableViewer.getTable().getItem(index1).getText(0);
 				String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
@@ -425,19 +455,29 @@ public class SecondaryColumnKeysWidgetWizard {
 					targetTable.setSelection(index1 - 1);
 
 				}
-			}
-		});
-
-		downButton = new Button(composite, SWT.PUSH);
-		// downButton.setText("->");
+				
+			}});
+		
+		downButton = new Label(composite, SWT.PUSH);
 		String downIonPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png";
 		downButton.setImage(new Image(null, downIonPath));
 		downButton.setBounds(495, 10, 25, 20);
-		downButton.addSelectionListener(new SelectionAdapter() {
+		downButton.addMouseListener(new MouseListener(){
 			int index1 = 0, index2 = 0;
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
 				index1 = targetTable.getSelectionIndex();
 				String text = targetTableViewer.getTable().getItem(index1).getText(0);
 				String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
@@ -460,45 +500,14 @@ public class SecondaryColumnKeysWidgetWizard {
 					targetTableViewer.refresh();
 					targetTable.setSelection(index1 + 1);
 				}
-			}
-		});
+				
+			}});
 	}
+
 
 	// Creates The buttons For the widget
 	private void createButtons(Composite composite) {
 		new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL).setBounds(0, 41, 562, 2);
-		/*
-		 * addButton = new Button(composite, SWT.NONE); addButton.setText("Add"); //$NON-NLS-1$ addButton.setBounds(10,
-		 * 10, 75, 25); addButton.addSelectionListener(new SelectionAdapter() {
-		 * 
-		 * @Override public void widgetSelected(SelectionEvent e) { addNewProperty(tableViewer); } });
-		 * 
-		 * deleteButton = new Button(composite, SWT.NONE); deleteButton.setText("Delete"); //$NON-NLS-1$
-		 * deleteButton.setBounds(91, 10, 75, 25); deleteButton.addSelectionListener(new SelectionAdapter() {
-		 * 
-		 * @Override public void widgetSelected(SelectionEvent e) {
-		 * 
-		 * int temp = table.getSelectionIndex(); if (temp == -1) MessageDialog.openError(shell, "Error", //$NON-NLS-1$
-		 * Messages.SelectRowToDelete); else { table.remove(temp); propertyLst.remove(temp); isAnyUpdatePerformed =
-		 * true; enableButtons(); } } }); deleteButton.setImage(null);
-		 * 
-		 * deleteAll = new Button(composite, SWT.NONE); deleteAll.addSelectionListener(new SelectionAdapter() { public
-		 * void widgetSelected(SelectionEvent e) { if (table.getItemCount() != 0) { boolean userAns =
-		 * MessageDialog.openConfirm(shell, "Remove all", //$NON-NLS-1$ Messages.ConfirmToDeleteAllProperties); if
-		 * (userAns) { table.removeAll(); propertyLst.removeAll(propertyLst); lblPropertyError.setVisible(false);
-		 * isAnyUpdatePerformed=true; enableButtons(); } } } }); deleteAll.setBounds(172, 10, 75, 25);
-		 * deleteAll.setText("Delete All"); //$NON-NLS-1$
-		 * 
-		 * applyButton = new Button(composite, SWT.NONE); applyButton.addSelectionListener(new SelectionAdapter() {
-		 * 
-		 * @Override public void widgetSelected(SelectionEvent e) {
-		 * 
-		 * if (validate()) { if (isAnyUpdatePerformed) { runtimePropertyMap.clear(); for (RuntimeProperties temp :
-		 * propertyLst) { runtimePropertyMap.put(temp.getPropertyName(), temp.getPropertyValue()); }
-		 * isAnyUpdatePerformed = false; propertyDialogButtonBar.enableApplyButton(true); }
-		 * }applyButton.setEnabled(false); } }); applyButton.setBounds(253, 10, 75, 25); applyButton.setText("Apply");
-		 * //$NON-NLS-1$
-		 */
 		okButton = new Button(composite, SWT.NONE);
 		okButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -517,17 +526,17 @@ public class SecondaryColumnKeysWidgetWizard {
 		});
 		okButton.setBounds(357, 50, 75, 25);
 		okButton.setText("OK"); //$NON-NLS-1$
-		cacelButton = new Button(composite, SWT.NONE);
-		cacelButton.addSelectionListener(new SelectionAdapter() {
+		cancelButton = new Button(composite, SWT.NONE);
+		cancelButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				shell.close();
 			}
 		});
-		cacelButton.setBounds(438, 50, 75, 25);
+		cancelButton.setBounds(438, 50, 75, 25);
 
-		cacelButton.setText("Cancel"); //$NON-NLS-1$
+		cancelButton.setText("Cancel"); //$NON-NLS-1$
 
 	}
 
