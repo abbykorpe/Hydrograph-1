@@ -35,9 +35,9 @@ public class Constants {
 	
 	public static final String TRUE = "True";
 	public static final String FALSE = "False";
-	public static final String OPERATION_FIELD = "Operation Field ";
+	public static final String OPERATION_FIELD = "Operation Fields ";
 	public static final String OPERATION_FIELDS = "Operation\nFields";
-	public static final String COLUMN_NAME2 = "Key Field ";
+	public static final String COLUMN_NAME2 = "Key Fields ";
 	public static final String COLUMN_NAME = "Key\nFields";
 	public static final String SECONDARY_KEYS2 = "Secondary Keys ";
 	public static final String SECONDARY_KEYS = "Secondary\n Keys";
