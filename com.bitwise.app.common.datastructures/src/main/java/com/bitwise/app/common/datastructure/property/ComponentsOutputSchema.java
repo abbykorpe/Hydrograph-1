@@ -102,7 +102,7 @@ public class ComponentsOutputSchema implements IDataStructure {
 			fixedWidthGridRow.setDateFormat(schemaGrid.getDateFormat());
 			fixedWidthGridRow.setFieldName(schemaGrid.getFieldName());
 			fixedWidthGridRow.setScale(schemaGrid.getScale());
-			fixedWidthGridRow.setLength("0");
+			fixedWidthGridRow.setLength("");
 		}
 		return fixedWidthGridRow;
 	}
@@ -116,7 +116,7 @@ public class ComponentsOutputSchema implements IDataStructure {
 			fixedWidthGridRow.setDataType(1);
 			fixedWidthGridRow.setDataTypeValue("java.lang.String");
 			fixedWidthGridRow.setScale("");
-			fixedWidthGridRow.setLength("0");
+			fixedWidthGridRow.setLength("");
 		}
 		return fixedWidthGridRow;
 	}
