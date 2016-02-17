@@ -642,7 +642,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				String content = null;
 				try {
 					content = new Scanner(schemaFile).useDelimiter("\\Z").next();
-					System.out.println(content);
+					//System.out.println(content);
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -686,17 +686,44 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			        is.setCharacterStream(new StringReader(content));
 			        Document doc;
 			        doc = db.parse(is);
-		            NodeList nodes = doc.getElementsByTagName("employee");
+		            
+			        /*
+			        NodeList nodes = doc.getElementsByTagName("employee");
+		            nodes.item(0).hasAttributes();
+		            
 		            for (int i = 0; i < nodes.getLength(); i++) {
 		                Element element = (Element) nodes.item(i);
-
+		                
 		                NodeList name = element.getElementsByTagName("name");
 		                Element line = (Element) name.item(0);
+		                 
 		                System.out.println("Name: " + getCharacterDataFromElement(line));
-
+		                System.out.println("scale: "+ line.getAttribute("scale"));
+		                
 		                NodeList title = element.getElementsByTagName("title");
 		                line = (Element) title.item(0);
+		                
 		                System.out.println("Title: " + getCharacterDataFromElement(line));
+		                System.out.println("scaleType: "+ line.getAttribute("scaleType"));
+		              }*/
+			        
+			        NodeList nodes = doc.getElementsByTagName("field");
+		            nodes.item(0).hasAttributes();
+		            
+		            for (int i = 0; i < nodes.getLength(); i++) {
+		                Element element = (Element) nodes.item(i);
+		                
+		                NodeList name = element.getElementsByTagName("name");
+		                Element line = (Element) name.item(0);
+		                 
+		                System.out.println("Name: " + getCharacterDataFromElement(line));
+		                System.out.println("scale: "+ line.getAttribute("scale"));
+		                
+		                NodeList title = element.getElementsByTagName("title");
+		                line = (Element) title.item(0);
+		                
+		                System.out.println("Title: " + getCharacterDataFromElement(line));
+		                System.out.println("scaleType: "+ line.getAttribute("scaleType"));
 		              }
 
 		        } catch (ParserConfigurationException e1) {
