@@ -52,7 +52,7 @@ public class FilterConverter extends TransformConverter {
 		for (Link link : component.getSourceConnections()) {
 			TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();
 			TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
-			outSocketAsInsocket.setInSocketId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
+			outSocketAsInsocket.setInSocketId(Constants.FIXED_INSOCKET_ID);
 			outSocketAsInsocket.getOtherAttributes();
 			outSocket.setCopyOfInsocket(outSocketAsInsocket);
 

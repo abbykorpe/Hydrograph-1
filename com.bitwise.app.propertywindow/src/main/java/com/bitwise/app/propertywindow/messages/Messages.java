@@ -66,7 +66,9 @@ public class Messages extends NLS {
 	public static String BROWSE_BUTTON;
 	public static String OUTPUT_FIELD_EXISTS;
 	public static String AVAILABLE_FIELDS_HEADER;
-	
+	public static String RANGE_FROM;
+	public static String RANGE_TO;
+	public static String DEFAULT_VALUE;
 
 	static {
 		// initialize resource bundle

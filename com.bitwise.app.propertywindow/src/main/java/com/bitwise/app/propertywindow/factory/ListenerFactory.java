@@ -21,6 +21,7 @@ import com.bitwise.app.propertywindow.widgets.listeners.ELTSchemaDialogSelection
 import com.bitwise.app.propertywindow.widgets.listeners.ELTSelectionListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTVerifyComponentNameListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTVerifyNumbericListener;
+import com.bitwise.app.propertywindow.widgets.listeners.ELTVerifySequenceFieldName;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTVerifyTextListener;
 import com.bitwise.app.propertywindow.widgets.listeners.FocusInListener;
 import com.bitwise.app.propertywindow.widgets.listeners.IELTListener;
@@ -70,7 +71,8 @@ public class ListenerFactory {
 		NORMAL_FOCUS_OUT(ELTNormalFocusOutListener.class),
 		TRANSFORM_DELETE_SELECTION(ELTTransformDeleteSelectionListener.class),
 		NORMAL_FOCUS_IN(FocusInListener.class),
-		JOIN_INPUT_COUNT(ELTInputCountListener.class);
+		JOIN_INPUT_COUNT(ELTInputCountListener.class), 
+		VERIFY_SEQUENCE_FIELD_NAME_EXISTS(ELTVerifySequenceFieldName.class);
 		Class<?> clazz = null;
 		private Listners(Class<?> clazz) {
 			this.clazz = clazz; 

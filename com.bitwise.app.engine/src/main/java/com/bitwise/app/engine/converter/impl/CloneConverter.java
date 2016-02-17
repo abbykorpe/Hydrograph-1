@@ -44,12 +44,12 @@ public class CloneConverter extends StraightPullConverter {
 		logger.debug("getOutSocket - Generating TypeStraightPullOutSocket data for :{}",
 				properties.get(Constants.PARAM_NAME));
 		List<TypeStraightPullOutSocket> outSockectList = new ArrayList<TypeStraightPullOutSocket>();
-		String FIXED_INSOCKET_ID = "in0";
+		
 
 		for (Link link : component.getSourceConnections()) {
 			TypeStraightPullOutSocket outSocket = new TypeStraightPullOutSocket();
 			TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
-			outSocketAsInsocket.setInSocketId(FIXED_INSOCKET_ID);
+			outSocketAsInsocket.setInSocketId(Constants.FIXED_INSOCKET_ID);
 			outSocketAsInsocket.getOtherAttributes();
 			outSocket.setCopyOfInsocket(outSocketAsInsocket);
 			outSocket.setId(link.getSource().getPort(link.getSourceTerminal()).getPortType() + link.getLinkNumber());

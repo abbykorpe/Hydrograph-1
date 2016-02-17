@@ -376,7 +376,7 @@ public class JoinMapGrid extends Dialog {
 		List<FilterProperties> inputFieldList = joinInputSchemaList
 				.get(inSocketIndex);
 		LookupMapProperty property = null;
-		if (inputFieldList != null && !inputFieldList.isEmpty()) {
+		if (inputFieldList != null) {
 			joinOutputList.clear();
 			previousRadioButtonSelection = Constants.INPUT_SOCKET_TYPE
 					+ inSocketIndex;
@@ -386,8 +386,8 @@ public class JoinMapGrid extends Dialog {
 						+ properties.getPropertyname());
 				property.setOutput_Field(properties.getPropertyname());
 				joinOutputList.add(property);
-				outputTableViewer.refresh();
 			}
+			outputTableViewer.refresh();
 		}
 	}
 

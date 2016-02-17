@@ -12,6 +12,8 @@ public class Constants {
 	public static final String DELIMITER = "Delimiter";
 	public static final String CHARACTER_SET = "Character Set";
 	public static final String PHASE = "Phase";
+	public static final String NO_OF_RECORDS = "No of Records";
+	public static final String PARAM_NO_OF_RECORDS = "no_of_records";
 	public static final String STRICT = "Strict";
 	public static final String HAS_HEADER = "Has Header";
 	public static final String SAFE_PROPERTY = "Safe Property ";	
@@ -39,7 +41,11 @@ public class Constants {
 	public static final String COLUMN_NAME = "Key\nFields";
 	public static final String SECONDARY_KEYS2 = "Secondary Keys ";
 	public static final String SECONDARY_KEYS = "Secondary\n Keys";
+	
+	 // Used for validating AlphaNumeric or Parameter E.g Aplha_123 or @{Param_123}
 	public static final String REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
+	// Used for validating only Parameters E.g  @{Param_123}
+	public static final String PARAMETER_REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}"; 
 	
 	public static final String PROPERTY_COLUMN_NAME = "column_name";
 	public static final String PROPERTY_SECONDARY_COLUMN_KEYS = "secondary_column_keys";
@@ -53,10 +59,12 @@ public class Constants {
 	public static final String ALL = "All";
 	
 	public static final String FILTER = "FILTER";
+	public static final String NORMALIZE = "NORMALIZE";
 	public static final String TRANSFORM = "TRANSFORM";
 	public static final String AGGREGATE = "AGGREGATE";
 	public static final String AGGREGATE_DISPLAYNAME = "Aggregate";
 	public static final String TRANSFORM_DISPLAYNAME = "Transform";
+	public static final String NORMALIZE_DISPLAYNAME = "Normalize";
 	public static final String INPUT_SOCKET_TYPE = "in";
 	public static final String OUTPUT_SOCKET_TYPE = "out";
 	public static final String UNUSED_SOCKET_TYPE = "unused";
@@ -103,7 +111,20 @@ public class Constants {
 	public static final String OUTPUTSUBGRAPH = "outputsubgraph";
 	public static final String NAME = "name";
 	public static final String SUBGRAPH_NAME = "subgraph.job";
-
-
-
+	
+	public static final String LENGTH_QNAME = "length";
+	public static final String RANGE_FROM_QNAME = "rangeFrom";
+	public static final String RANGE_TO_QNAME = "rangeTo";
+	public static final String DEFAULT_VALUE_QNAME = "default";
+	
+	
+	public static final String GENERATE_RECORDS_COMPONENT_TYPE = "Generate Records";
+	public static final String FIXED_INSOCKET_ID = "in0";
+	public static final String SEQUENCE_FIELD = "Sequence Field";
+	public static final String IS_PARAMETER = "Is Parameter";
+	public static final String SCHEMA_DEFAULT_FIELD_NAME_SUFFIX="DefaultValue";
+	public static final String DEFAULT_DATATYPE_INDEX_VALUE="0";
+	public static final String PRAMETER_SUFFIX = "@{";
+	public static final String PARAMETER_PREFIX = "}";
+		
 }

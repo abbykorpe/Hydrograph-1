@@ -14,6 +14,14 @@ import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
  */
 
 public interface IELTListener {
+	
+	/**
+	 *  This method returns the listener type. 
+	 *  e.g  SWT.Modify
+	 *  
+	 *  @return int
+	 * 			
+	 */
 	public int getListenerType();
 	
 	/**

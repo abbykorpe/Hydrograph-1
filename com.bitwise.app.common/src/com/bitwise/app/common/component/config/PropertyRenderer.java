@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;simpleType name="property_renderer">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="JOIN_FIXED_WIDTH_SCHEMA_WIDGET"/>
+ *      &lt;enumeration value="GENERATE_RECORDS_SCHEMA_WIDGET"/>
  *     &lt;enumeration value="SCHEMA_WIDGET"/>
  *     &lt;enumeration value="FIELD_SEQUENCE_WIDGET"/>
  *     &lt;enumeration value="FIXED_WIDGET"/>
@@ -29,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="CHARACTER_SET_WIDGET"/>
  *     &lt;enumeration value="DELIMETER_WIDGET"/>
  *     &lt;enumeration value="PHASE_WIDGET"/>
+ *     &lt;enumeration value="NO_OF_RECORDS_WIDGET"/>
  *     &lt;enumeration value="HAS_HEADER_WIDGET"/>
  *     &lt;enumeration value="SAFE_PROPERTY_WIDGET"/>
  *     &lt;enumeration value="COMPONENT_NAME_WIDGET"/>
@@ -40,6 +42,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="SECONDARY_COLUMN_KEYS_WIDGET"/>
  *     &lt;enumeration value="SECONDARY_KEYS_WIDGET"/>
  *     &lt;enumeration value="TRANSFORM_WIDGET"/>
+ *     &lt;enumeration value="NORMALIZE_WIDGET"/>
  *     &lt;enumeration value="AGGREGATE_WIDGET"/>
  *     &lt;enumeration value="INPUT_COUNT_WIDGET"/>
  *     &lt;enumeration value="JOIN_TYPE_WIDGET"/>
@@ -49,6 +52,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="XML_CONTENT_WIDGET"/>
  *     &lt;enumeration value="SUBGRAPH_PROPERTIES_WIDGET"/>
  *     &lt;enumeration value="MATCH_PROPERTY_WIDGET"/>
+ *     &lt;enumeration value="TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -57,7 +61,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "property_renderer", namespace = "http://www.bitwise.com/constant")
 @XmlEnum
 public enum PropertyRenderer {
-
+	GENERATE_RECORDS_SCHEMA_WIDGET,
     JOIN_FIXED_WIDTH_SCHEMA_WIDGET,
     SCHEMA_WIDGET,
     FIELD_SEQUENCE_WIDGET,
@@ -67,6 +71,7 @@ public enum PropertyRenderer {
     CHARACTER_SET_WIDGET,
     DELIMETER_WIDGET,
     PHASE_WIDGET,
+    NO_OF_RECORDS_WIDGET,
     HAS_HEADER_WIDGET,
     SAFE_PROPERTY_WIDGET,
     COMPONENT_NAME_WIDGET,
@@ -78,6 +83,7 @@ public enum PropertyRenderer {
     SECONDARY_COLUMN_KEYS_WIDGET,
     SECONDARY_KEYS_WIDGET,
     TRANSFORM_WIDGET,
+    NORMALIZE_WIDGET,
     AGGREGATE_WIDGET,
     INPUT_COUNT_WIDGET,
     JOIN_TYPE_WIDGET,
@@ -86,7 +92,8 @@ public enum PropertyRenderer {
     HASH_JOIN_MAPPING_WIDGET,
     XML_CONTENT_WIDGET,
     SUBGRAPH_PROPERTIES_WIDGET,
-    MATCH_PROPERTY_WIDGET;
+    MATCH_PROPERTY_WIDGET,
+    TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET;
 
     public String value() {
         return name();

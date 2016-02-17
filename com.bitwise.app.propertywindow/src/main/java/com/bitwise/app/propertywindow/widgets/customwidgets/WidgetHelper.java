@@ -39,6 +39,23 @@ public class WidgetHelper {
 		textBoxConfig.setWidgetWidth(78);
 		return textBoxConfig;
 	}
+	public WidgetConfig getNoOfRecordsWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.NO_OF_RECORDS);
+		addTextBoxListeners(textBoxConfig);
+		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
+		textBoxConfig.setWidgetWidth(78);
+		return textBoxConfig;
+	}
+	
+	public WidgetConfig getSequenceFieldWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.SEQUENCE_FIELD);
+		addTextBoxListeners(textBoxConfig);
+		textBoxConfig.getListeners().add(Listners.VERIFY_SEQUENCE_FIELD_NAME_EXISTS);
+		textBoxConfig.setWidgetWidth(180);
+		return textBoxConfig;
+	}
 	
 	public WidgetConfig getInputCountWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
@@ -88,21 +105,12 @@ public class WidgetHelper {
 		return operationClassConfig;
 	}
 	
-	public WidgetConfig getOperationClassForTransformWidgetConfig() {
+	public WidgetConfig getOperationClassForTransformWidgetConfig(String componentName, String componentDisplayName) {
 		OperationClassConfig operationClassConfig = new OperationClassConfig();
-		operationClassConfig.setComponentName(Constants.TRANSFORM);
-		operationClassConfig.setComponentDisplayName(Constants.TRANSFORM_DISPLAYNAME);
+		operationClassConfig.setComponentName(componentName);
+		operationClassConfig.setComponentDisplayName(componentDisplayName);
 		return operationClassConfig;
 	}
-	
-	public WidgetConfig getOperationClassForAggregateWidgetConfig() {
-		OperationClassConfig operationClassConfig = new OperationClassConfig();
-		operationClassConfig.setComponentName(Constants.AGGREGATE);
-		operationClassConfig.setComponentDisplayName(Constants.AGGREGATE_DISPLAYNAME);
-		return operationClassConfig;
-	}
-	
-	
 	
 	private SingleColumnGridConfig populateSingleColumnGridConfig(String lable, String componentName) {
 		SingleColumnGridConfig gridConfig = new SingleColumnGridConfig();
