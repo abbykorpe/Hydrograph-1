@@ -24,7 +24,7 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
  */
 public class ELTVerifySequenceFieldName implements IELTListener {
 	private ControlDecoration txtDecorator;
-	Logger LOGGER = LogFactory.INSTANCE.getLogger(ELTVerifyTextListener.class);
+	Logger LOGGER = LogFactory.INSTANCE.getLogger(ELTVerifySequenceFieldName.class);
 
 	/* (non-Javadoc)
 	 * @see com.bitwise.app.propertywindow.widgets.listeners.IELTListener#getListenerType()

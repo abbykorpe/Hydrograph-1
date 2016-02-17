@@ -1,5 +1,8 @@
 package com.bitwise.app.propertywindow.generaterecords.schema;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
@@ -40,22 +43,22 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 
 		GenerateRecordSchemaGridRow generateRecordsSchemaGridRow = (GenerateRecordSchemaGridRow) element;
 		if (ELTSchemaGridWidget.DATEFORMAT.equals(property)) {
-			if (generateRecordsSchemaGridRow.getDataTypeValue().equalsIgnoreCase("java.util.date"))
+			if (Date.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue()))
 				return true;
 			else
 				return false;
 		}
 		if (ELTSchemaGridWidget.SCALE.equals(property)) {
-			if (generateRecordsSchemaGridRow.getDataTypeValue().equalsIgnoreCase("java.lang.Float")
-					|| generateRecordsSchemaGridRow.getDataTypeValue().equalsIgnoreCase("java.lang.Double")
-					|| generateRecordsSchemaGridRow.getDataTypeValue().equalsIgnoreCase("java.math.BigDecimal"))
+			if (Float.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue())
+					|| Double.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue())
+					|| BigDecimal.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue()))
 				return true;
 			else
 				return false;
 		}
 		if (ELTSchemaGridWidget.RANGE_FROM.equals(property) || ELTSchemaGridWidget.RANGE_TO.equals(property)) {
-			if (generateRecordsSchemaGridRow.getDataTypeValue().equalsIgnoreCase("java.lang.String")
-					|| generateRecordsSchemaGridRow.getDataTypeValue().equalsIgnoreCase("java.lang.Boolean"))
+			if (String.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue())
+					|| Boolean.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue()))
 				return false;
 			else
 				return true;
@@ -74,23 +77,23 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 	 */
 	@Override
 	public Object getValue(Object element, String property) {
-		GenerateRecordSchemaGridRow p = (GenerateRecordSchemaGridRow) element;
+		GenerateRecordSchemaGridRow pgenerateRecordSchemaGridRow = (GenerateRecordSchemaGridRow) element;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
-			return p.getFieldName();
+			return pgenerateRecordSchemaGridRow.getFieldName();
 		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
-			return String.valueOf(p.getDateFormat());
+			return String.valueOf(pgenerateRecordSchemaGridRow.getDateFormat());
 		else if (ELTSchemaGridWidget.SCALE.equals(property))
-			return String.valueOf(p.getScale());
+			return String.valueOf(pgenerateRecordSchemaGridRow.getScale());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property))
-			return p.getDataType();
+			return pgenerateRecordSchemaGridRow.getDataType();
 		else if (ELTSchemaGridWidget.LENGTH.equals(property))
-			return p.getLength();
+			return pgenerateRecordSchemaGridRow.getLength();
 		else if (ELTSchemaGridWidget.RANGE_FROM.equals(property))
-			return p.getRangeFrom();
+			return pgenerateRecordSchemaGridRow.getRangeFrom();
 		else if (ELTSchemaGridWidget.RANGE_TO.equals(property))
-			return p.getRangeTo();
+			return pgenerateRecordSchemaGridRow.getRangeTo();
 		else if (ELTSchemaGridWidget.DEFAULT_VALUE.equals(property))
-			return p.getDefaultValue();
+			return pgenerateRecordSchemaGridRow.getDefaultValue();
 		else
 			return null;
 	}

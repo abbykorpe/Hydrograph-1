@@ -18,27 +18,16 @@ import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
  */
 public class GenerateRecordsGridLabelProvider implements ITableLabelProvider, ITableColorProvider {
 
-	/**
-	 * Returns the image
-	 * 
-	 * @param element
-	 *            the element
-	 * @param columnIndex
-	 *            the column index
-	 * @return Image
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.Object, int)
 	 */
 	public Image getColumnImage(Object element, int columnIndex) {
 		return null;
 	}
 
-	/**
-	 * Returns the column text
-	 * 
-	 * @param element
-	 *            the element
-	 * @param columnIndex
-	 *            the column index
-	 * @return String
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
 	 */
 	public String getColumnText(Object element, int columnIndex) {
 		GenerateRecordSchemaGridRow generateRecordsSchemaGridRow = (GenerateRecordSchemaGridRow) element;
@@ -63,41 +52,33 @@ public class GenerateRecordsGridLabelProvider implements ITableLabelProvider, IT
 		return null;
 	}
 
-	/**
-	 * Adds a listener
-	 * 
-	 * @param listener
-	 *            the listener
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#addListener(org.eclipse.jface.viewers.ILabelProviderListener)
 	 */
 	public void addListener(ILabelProviderListener listener) {
 		return;
 	}
 
-	/**
-	 * Disposes any created resources
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#dispose()
 	 */
 	public void dispose() {
 		return;
 	}
 
-	/**
-	 * Returns whether altering this property on this element will affect the label
-	 * 
-	 * @param element
-	 *            the element
-	 * @param property
-	 *            the property
-	 * @return boolean
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#isLabelProperty(java.lang.Object, java.lang.String)
 	 */
 	public boolean isLabelProperty(Object element, String property) {
 		return false;
 	}
 
-	/**
-	 * Removes a listener
-	 * 
-	 * @param listener
-	 *            the listener
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#removeListener(org.eclipse.jface.viewers.ILabelProviderListener)
 	 */
 	public void removeListener(ILabelProviderListener listener) {
 		return;

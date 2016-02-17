@@ -65,7 +65,7 @@ public class TextBoxWithIsParameterCheckBoxWidget extends TextBoxWithLabelWidget
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				if (StringUtils.isNotBlank(textBox.getText()) && ((Button) event.getSource()).getSelection()) {
-					textBox.setText("@{" + textBox.getText() + "}");
+					textBox.setText(Constants.PRAMETER_SUFFIX + textBox.getText() + Constants.PARAMETER_PREFIX);
 					textBox.setEnabled(false);
 				} else {
 					if (StringUtils.isNotBlank(textBox.getText()))

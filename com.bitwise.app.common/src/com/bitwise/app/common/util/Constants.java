@@ -124,5 +124,7 @@ public class Constants {
 	public static final String IS_PARAMETER = "Is Parameter";
 	public static final String SCHEMA_DEFAULT_FIELD_NAME_SUFFIX="DefaultValue";
 	public static final String DEFAULT_DATATYPE_INDEX_VALUE="0";
+	public static final String PRAMETER_SUFFIX = "@{";
+	public static final String PARAMETER_PREFIX = "}";
 		
 }
