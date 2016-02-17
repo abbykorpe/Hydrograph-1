@@ -1,15 +1,22 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.schema;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.StringReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
@@ -35,13 +42,18 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
-import com.bitwise.app.common.schema.Field;
-import com.bitwise.app.common.schema.Fields;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.ImagePathConstant;
 import com.bitwise.app.common.util.XMLConfigUtil;
@@ -95,6 +107,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String RANGE_TO = "Range To";
 
 	public static final String DEFAULT_VALUE ="Default Value";
+
+	protected String gridRowType;
+
 	
 	private CellEditor fieldNameEditor;
 
@@ -395,7 +410,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			public void widgetSelected(SelectionEvent e) {
 				propertyDialogButtonBar.enableApplyButton(true);
 				toggleTextBox(false);
-				toggleTable(true);
+				//toggleTable(true);
 				isExternal = false;
 				decorator.hide();
 				txtDecorator.hide();
@@ -409,7 +424,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			public void widgetSelected(SelectionEvent e) {
 				propertyDialogButtonBar.enableApplyButton(true);
 				toggleTextBox(true);
-				toggleTable(false);
+				//toggleTable(false);
 				isExternal = true;
 
 				if (extSchemaPathText.getText().isEmpty()) {
@@ -566,41 +581,131 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
+//				extSchemaPathText.getText();
+//				System.out.println("Path set: "+extSchemaPathText.getText());
+//				File schemaFile = new File(extSchemaPathText.getText());
+//				Fields fields;
+//				ArrayList schemaGridRowListToImport = new ArrayList<>();
+//				
+//				try {
+//					JAXBContext jaxbContext = JAXBContext.newInstance(Fields.class);
+//					Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+//					fields = (Fields) jaxbUnmarshaller.unmarshal(schemaFile);
+//					ArrayList<Field> fieldsList = (ArrayList<Field>) fields.getField();
+//					
+//					if(gridRowType.equals("Generic")){
+//						schemaGridRowListToImport = new ArrayList<SchemaGrid>();
+//						
+//						for (Field temp : fieldsList) {
+//							SchemaGrid gridRow = new SchemaGrid();
+//							gridRow.setFieldName(temp.getName());
+//							gridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(temp.getType().value()));
+//							gridRow.setDateFormat(temp.getFormat());
+//							gridRow.setPrecision(String.valueOf(temp.getPrecision()));
+//							gridRow.setScale(String.valueOf(temp.getScale()));
+//							//gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(temp.getScaleType().value()));	
+//							gridRow.setDescription(temp.getDescription());
+//							schemaGridRowListToImport.add(gridRow);
+//						}
+//						
+//					}else if(gridRowType.equals("FixedWidth")){
+//						schemaGridRowListToImport = new ArrayList<FixedWidthGridRow>();
+//						
+//						for (Field temp : fieldsList) {
+//							FixedWidthGridRow gridRow = new FixedWidthGridRow();
+//							gridRow.setFieldName(temp.getName());
+//							gridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(temp.getType().value()));
+//							gridRow.setDateFormat(temp.getFormat());
+//							gridRow.setPrecision(String.valueOf(temp.getPrecision()));
+//							gridRow.setScale(String.valueOf(temp.getScale()));
+//							//gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(temp.getScaleType().value()));
+//							gridRow.setDescription(temp.getDescription());
+//							schemaGridRowListToImport.add(gridRow);
+//						}
+//					}
+//					
+//					
+//				} catch (JAXBException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+//				
+//				
+//				tableViewer.setInput(schemaGridRowListToImport);
+//				tableViewer.refresh();
+
+			
 				extSchemaPathText.getText();
 				System.out.println("Path set: "+extSchemaPathText.getText());
 				File schemaFile = new File(extSchemaPathText.getText());
-				Fields fields;
-				ArrayList<GridRow> schemaGridRowListToImport = new ArrayList<>();
 				
+				String content = null;
 				try {
-					JAXBContext jaxbContext = JAXBContext.newInstance(Fields.class);
-					Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-					fields = (Fields) jaxbUnmarshaller.unmarshal(schemaFile);
-					ArrayList<Field> fieldsList = (ArrayList<Field>) fields.getField();
-					
-					for (Field temp : fieldsList) {
-						GridRow gridRow = new GridRow();
-						gridRow.setFieldName(temp.getName());
-						//gridRow.setDataType(temp.getType());
-						gridRow.setDateFormat(temp.getFormat());
-						gridRow.setPrecision(String.valueOf(temp.getPrecision()));
-						gridRow.setScale(String.valueOf(temp.getScale()));
-						//gridRow.setScaleType(temp.getScaleType());
-						gridRow.setDescription(temp.getDescription());
-						schemaGridRowListToImport.add(gridRow);
-					}
-					
-					
-					System.out.println("");
-				} catch (JAXBException e1) {
+					content = new Scanner(schemaFile).useDelimiter("\\Z").next();
+					System.out.println(content);
+				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
 				
-				tableViewer.setInput(schemaGridRowListToImport);
-				tableViewer.refresh();
+				//StringBuilder xmlStr = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				
+				//xmlStr.append(content);
+				//-------------------------------
+				final String xmlStrtemp = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"+
+						"<data><employee><name>A</name>"
+				        + "<title>Manager</title></employee>" 
+				        + "<employee><name>B</name>"
+				        + "<title>Developer</title></employee>"
+				        + "</data>";
+				//--------------------------------------------------------
+				
+		        DocumentBuilder db;
+				try {
+					db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+					InputSource is = new InputSource();
+					
+			        /*is.setCharacterStream(new StringReader(xmlStrtemp));
+			        Document doc;
+			        doc = db.parse(is);
+			        NodeList nodes = doc.getElementsByTagName("employee");
+		         
+		            for (int i = 0; i < nodes.getLength(); i++) {
+		                Element element = (Element) nodes.item(i);
 
+		                NodeList name = element.getElementsByTagName("name");
+		                Element line = (Element) name.item(0);
+		                System.out.println("Name: " + getCharacterDataFromElement(line));
+
+		                NodeList title = element.getElementsByTagName("title");
+		                line = (Element) title.item(0);
+		                System.out.println("Title: " + getCharacterDataFromElement(line));
+		              }*/
+					
+			        is.setCharacterStream(new StringReader(content));
+			        Document doc;
+			        doc = db.parse(is);
+		            NodeList nodes = doc.getElementsByTagName("employee");
+		            for (int i = 0; i < nodes.getLength(); i++) {
+		                Element element = (Element) nodes.item(i);
+
+		                NodeList name = element.getElementsByTagName("name");
+		                Element line = (Element) name.item(0);
+		                System.out.println("Name: " + getCharacterDataFromElement(line));
+
+		                NodeList title = element.getElementsByTagName("title");
+		                line = (Element) title.item(0);
+		                System.out.println("Title: " + getCharacterDataFromElement(line));
+		              }
+
+		        } catch (ParserConfigurationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+			
+		        } catch (Exception exc) {  
+		            exc.printStackTrace();  
+		        } 
 				
 			}
 		});
@@ -722,7 +827,31 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		return tableViewer;
 	}
 
-	public List<GridRow> getSchemaGridRowList() {
+
+	public static String getCharacterDataFromElement(Element e) {
+	    Node child = e.getFirstChild();
+	    if (child instanceof CharacterData) {
+	      CharacterData cd = (CharacterData) child;
+	      return cd.getData();
+	    }
+	    return "";
+	  }
+	
+	private String readFile(String path, Charset encoding){
+		byte[] encoded;
+		try {
+			encoded = Files.readAllBytes(Paths.get(path));
+			return new String(encoded, encoding);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	
+	public List getSchemaGridRowList() {
+
 		return schemaGridRowList;
 	}
 
