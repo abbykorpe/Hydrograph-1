@@ -35,9 +35,9 @@ import com.bitwiseglobal.graph.inputtypes.GenerateRecord;
  */
 public class GenerateRecordsUiConverter extends InputUiConverter {
 
-	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(InputFileDelimitedUiConverter.class);
+	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(GenerateRecordsUiConverter.class);
 	private GenerateRecord generateRecord;
-	ConverterUiHelper converterUiHelper;
+	private ConverterUiHelper converterUiHelper;
 
 	public GenerateRecordsUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;

@@ -28,7 +28,7 @@ public class NormalizeConverter extends TransformConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(NormalizeConverter.class);
 	private ATMapping atMapping;
 	private List<FixedWidthGridRow> fixedWidthGridRows;
-	ConverterHelper converterHelper;
+	private ConverterHelper converterHelper;
 
 	public NormalizeConverter(Component component) {
 		super();

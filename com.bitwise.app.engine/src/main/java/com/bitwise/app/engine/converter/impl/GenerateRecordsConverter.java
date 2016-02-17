@@ -31,7 +31,7 @@ import com.bitwiseglobal.graph.inputtypes.GenerateRecord.RecordCount;
  */
 public class GenerateRecordsConverter extends InputConverter {
 
-	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(InputFileDelimitedConverter.class);
+	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(GenerateRecordsConverter.class);
 
 	public GenerateRecordsConverter(Component component) {
 		super();
