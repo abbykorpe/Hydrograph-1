@@ -43,10 +43,12 @@
 			usage="REQUIRED">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
-		
-	  <tns:Operations>
-      <tns:interface class="com.bitwiseglobal.bhse.userfunctions.base.FilterBase" name="FILTER"/>
-      <tns:stdOperation class="com.bitwisegloabal.bhse.userfuntions.Filter" name="Filter"/>
-      </tns:Operations>
+
+	<tns:operations>
+		<tns:interface class="com.bitwiseglobal.bhse.userfunctions.base.FilterBase"
+			name="FILTER" />
+		<tns:stdOperation class="com.bitwisegloabal.bhse.userfuntions.Filter"
+			name="Filter" />
+	</tns:operations>
 	</tns:component>
 </tns:Config>

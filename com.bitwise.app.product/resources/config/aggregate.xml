@@ -48,16 +48,22 @@
 
 		</tns:property>
 			
-		<tns:property dataType="string" name="operation" renderer="AGGREGATE_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
-			usage="OPTIONAL"/>	
-	  <tns:Operations>
-      <tns:interface class="com.bitwiseglobal.bhse.userfunctions.base.AggregateTransformBase" name="AGGREGATE"/>
-      <tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Sum" name="Sum"/>
-      <tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Max" name="Max"/>
-      <tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Min" name="Min"/>
-      <tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Count" name="Count"/>
-      <tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.StringAppend" name="StringAppend"/>
-      </tns:Operations>		
+	
+	<tns:operations>
+		<tns:interface
+			class="com.bitwiseglobal.bhse.userfunctions.base.AggregateTransformBase"
+			name="AGGREGATE" />
+		<tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Sum"
+			name="Sum" />
+		<tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Max"
+			name="Max" />
+		<tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Min"
+			name="Min" />
+		<tns:stdOperation
+			class="com.bitwiseglobal.bhse.userfunctions.aggregate.Count" name="Count" />
+		<tns:stdOperation
+			class="com.bitwiseglobal.bhse.userfunctions.aggregate.StringAppend"
+			name="StringAppend" />
+	</tns:operations>		
 	</tns:component>
 </tns:Config>
