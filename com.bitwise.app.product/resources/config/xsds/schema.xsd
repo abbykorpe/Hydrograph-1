@@ -13,7 +13,7 @@
 	
 	<complexType name="Field">
 		<attribute name="name" type="string" use="required" />
-		<attribute name="type" type="tns:field_data_types" use="required" default="0"/>
+		<attribute name="type" type="tns:field_data_types" use="required"/>
 		<attribute name="format" type="string" use="optional"/>
 		<attribute name="precision" type="int" use="optional"/>
 		<attribute name="scale" type="int" use="optional"/>	
