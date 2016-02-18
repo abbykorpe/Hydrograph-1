@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.GridRow;
@@ -165,7 +166,7 @@ public abstract class TransformUiConverter extends UiConverter {
 
 	private String getOperationClassName(String fullClassPath) {
 		String operationClassName = Messages.CUSTOM;
-		if (fullClassPath != null) {
+		if (StringUtils.isNotBlank(fullClassPath)) {
 			String str[] = fullClassPath.split("\\.");
 			operationClassName = str[str.length - 1];
 		}
