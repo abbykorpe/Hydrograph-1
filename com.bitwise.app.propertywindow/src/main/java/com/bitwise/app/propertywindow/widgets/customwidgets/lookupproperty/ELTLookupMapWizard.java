@@ -293,83 +293,42 @@ public class ELTLookupMapWizard extends Dialog {
 				.applyDragFromTableViewer(
 						inputTableViewer[tableViewerIndex].getTable(),
 						tableViewerIndex);
-		addButton(comGrid, new int[] { 170, 8, 25, 20 },
-				inputTableViewer[tableViewerIndex], joinInputList);
-		deleteButton(comGrid, new int[] { 200, 8, 25, 20 },
-				inputTableViewer[tableViewerIndex], joinInputList);
 		return inputTableViewer[tableViewerIndex];
 	}
 
-	private void addButton(Composite parent, int[] bounds,
-			final TableViewer viewer, final List<FilterProperties> joinInputList) {
-
-		Button bt = new Button(parent, SWT.PUSH);
-		bt.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
-				+ "/icons/add.png"));
-		bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
-
-		bt.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				addRowToTable(viewer, joinInputList);
-			}
-		});
-	}
-
-	private void deleteButton(Composite parent, int[] bounds,
-			final TableViewer viewer, final List<FilterProperties> joinInputList) {
-
-		Button bt = new Button(parent, SWT.PUSH);
-		bt.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
-				+ "/icons/delete.png"));
-		bt.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
-		bt.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				int index = 0;
-				IStructuredSelection selection = (IStructuredSelection) viewer
-						.getSelection();
-				for (Iterator<?> iterator = selection.iterator(); iterator
-						.hasNext();) {
-					Object selectedObject = iterator.next();
-					index = joinInputList.indexOf(selectedObject);
-					viewer.remove(selectedObject);
-					joinInputList.remove(selectedObject);
-				}
-				viewer.refresh();
-				if (index != 0)
-					viewer.editElement(viewer.getElementAt(index - 1), 0);
-			}
-		});
-	}
-
+	
 	private void createLabel(Composite parent) {
+		Label add = eltswtWidgets.labelWidget(parent, SWT.CENTER | SWT.PUSH, new int[] { 0, 0, 25, 20 }, "", new Image(
+				null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.ADD_ICON));
 
-		Button button = buttonWidget(parent, SWT.CENTER | SWT.PUSH, new int[] {
-				0, 0, 25, 20 }, "", new Image(null,
-				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
-		ELTGridAddSelectionListener listener = new ELTGridAddSelectionListener();
-		button.addSelectionListener(new SelectionAdapter() {
+		add.addMouseListener(new MouseListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void mouseUp(MouseEvent e) {
 				joinOutputProperty(outputTableViewer, null);
+
 			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+
+			}
+
 		});
 
-		Label delete = eltswtWidgets
-				.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 },
-						"", new Image(null,
-								XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
-										+ "/icons/delete.png"));
+		Label delete = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 }, "", new Image(null,
+				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DELETE_ICON));
 		delete.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
 				int index = 0;
-				IStructuredSelection selection = (IStructuredSelection) outputTableViewer
-						.getSelection();
-				for (Iterator<?> iterator = selection.iterator(); iterator
-						.hasNext();) {
+				IStructuredSelection selection = (IStructuredSelection) outputTableViewer.getSelection();
+				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 					Object selectedObject = iterator.next();
 					index = joinOutputList.indexOf(selectedObject);
 					outputTableViewer.remove(selectedObject);
@@ -377,8 +336,7 @@ public class ELTLookupMapWizard extends Dialog {
 				}
 				outputTableViewer.refresh();
 				if (index != 0)
-					outputTableViewer.editElement(
-							outputTableViewer.getElementAt(index - 1), 0);
+					outputTableViewer.editElement(outputTableViewer.getElementAt(index - 1), 0);
 			}
 
 			@Override
@@ -390,10 +348,8 @@ public class ELTLookupMapWizard extends Dialog {
 			}
 		});
 
-		Label upLabel = eltswtWidgets.labelWidget(parent, SWT.CENTER,
-				new int[] { 50, 0, 25, 20 }, "", new Image(null,
-						XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
-								+ "/icons/up.png"));
+		Label upLabel = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 50, 0, 25, 20 }, "", new Image(null,
+				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.UP_ICON));
 		upLabel.addMouseListener(new MouseListener() {
 
 			@Override
@@ -402,15 +358,11 @@ public class ELTLookupMapWizard extends Dialog {
 				int index1 = outputTableViewer.getTable().getSelectionIndex();
 
 				if (index1 > 0) {
-					String text = outputTableViewer.getTable().getItem(index1)
-							.getText(0);
-					String text1 = outputTableViewer.getTable().getItem(index1)
-							.getText(1);
+					String text = outputTableViewer.getTable().getItem(index1).getText(0);
+					String text1 = outputTableViewer.getTable().getItem(index1).getText(1);
 					index2 = index1 - 1;
-					String data = outputTableViewer.getTable().getItem(index2)
-							.getText(0);
-					String data2 = outputTableViewer.getTable().getItem(index2)
-							.getText(1);
+					String data = outputTableViewer.getTable().getItem(index2).getText(0);
+					String data2 = outputTableViewer.getTable().getItem(index2).getText(1);
 
 					LookupMapProperty property = new LookupMapProperty();
 					property.setSource_Field(data);
@@ -435,10 +387,8 @@ public class ELTLookupMapWizard extends Dialog {
 			}
 		});
 
-		Label downLabel = eltswtWidgets.labelWidget(parent, SWT.CENTER,
-				new int[] { 74, 0, 25, 20 }, "", new Image(null,
-						XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
-								+ "/icons/down.png"));
+		Label downLabel = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 74, 0, 25, 20 }, "", new Image(
+				null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DOWN_ICON));
 		downLabel.addMouseListener(new MouseListener() {
 
 			@Override
@@ -447,17 +397,13 @@ public class ELTLookupMapWizard extends Dialog {
 				int index2 = 0;
 
 				if (index1 < joinOutputList.size() - 1) {
-					String text = outputTableViewer.getTable().getItem(index1)
-							.getText(0);
-					String text1 = outputTableViewer.getTable().getItem(index1)
-							.getText(1);
+					String text = outputTableViewer.getTable().getItem(index1).getText(0);
+					String text1 = outputTableViewer.getTable().getItem(index1).getText(1);
 
 					index2 = index1 + 1;
 
-					String data = outputTableViewer.getTable().getItem(index2)
-							.getText(0);
-					String data1 = outputTableViewer.getTable().getItem(index2)
-							.getText(1);
+					String data = outputTableViewer.getTable().getItem(index2).getText(0);
+					String data1 = outputTableViewer.getTable().getItem(index2).getText(1);
 
 					LookupMapProperty p = new LookupMapProperty();
 					p.setSource_Field(data);

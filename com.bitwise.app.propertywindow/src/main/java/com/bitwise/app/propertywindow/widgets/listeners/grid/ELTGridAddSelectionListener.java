@@ -22,7 +22,7 @@ import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 public class ELTGridAddSelectionListener extends ELTSelectionTaskListener{
 
 	private Table table;
-	private int rowSequence=1;
+	private int rowSequence=0;
 	@Override
 	public int getListenerType() {
       return SWT.MouseUp;

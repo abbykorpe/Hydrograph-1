@@ -69,7 +69,10 @@ public class Messages extends NLS {
 	public static String RANGE_FROM;
 	public static String RANGE_TO;
 	public static String DEFAULT_VALUE;
-
+    public static String ADD_ICON;
+    public static String DELETE_ICON;
+    public static String UP_ICON;
+    public static String DOWN_ICON;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
