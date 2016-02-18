@@ -37,7 +37,6 @@ import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinWidget;
 import com.bitwise.app.propertywindow.widgets.dialogs.FieldDialog;
-import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterPropertyWizard;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;

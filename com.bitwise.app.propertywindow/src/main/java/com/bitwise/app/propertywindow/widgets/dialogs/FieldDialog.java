@@ -61,7 +61,7 @@ import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTCellModifier;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
-import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterPropertyWizard;
+
 
 /**
  * 
@@ -72,7 +72,7 @@ import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterPropertyWi
  */
 
 public class FieldDialog extends Dialog {
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTFilterPropertyWizard.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FieldDialog.class);
 
 	private final List<FilterProperties> propertyLst;
 	private static final String FilterInputFieldName = "Component Name"; //$NON-NLS-1$

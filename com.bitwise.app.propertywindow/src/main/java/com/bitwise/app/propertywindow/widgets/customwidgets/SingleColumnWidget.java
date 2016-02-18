@@ -21,7 +21,6 @@ import com.bitwise.app.propertywindow.schema.propagation.helper.SchemaPropagatio
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.SingleColumnGridConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.dialogs.FieldDialog;
-import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterPropertyWizard;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;

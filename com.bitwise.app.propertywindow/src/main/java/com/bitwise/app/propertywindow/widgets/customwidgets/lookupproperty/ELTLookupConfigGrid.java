@@ -29,7 +29,6 @@ import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.dialogs.FieldDialog;
-import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterPropertyWizard;
 
 public class ELTLookupConfigGrid extends Dialog {
 	

@@ -17,6 +17,7 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.lookupproperty.ELTLo
 public class ELTCellModifier implements ICellModifier{
 	
 	private Viewer viewer;
+	private static final String FilterInputFieldName = "Component Name";
 	
 	/**
 	 * Instantiates a new ELT cell modifier.
@@ -36,7 +37,7 @@ public class ELTCellModifier implements ICellModifier{
 	@Override
 	public Object getValue(Object element, String property) {
 		FilterProperties filter = (FilterProperties) element;
-		if(ELTFilterPropertyWizard.FilterInputFieldName.equals(property))
+		if(FilterInputFieldName.equals(property))
 		return filter.getPropertyname();
 		else if(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD.equals(property)){
 			return filter.getPropertyname();
@@ -51,7 +52,7 @@ public class ELTCellModifier implements ICellModifier{
 
 		FilterProperties p = (FilterProperties) element;
 		
-			if(ELTFilterPropertyWizard.FilterInputFieldName.equals(property))
+			if(FilterInputFieldName.equals(property))
 					p.setPropertyname((String)value);
 			else if(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD.equals(property)){
 				  p.setPropertyname((String)value);
