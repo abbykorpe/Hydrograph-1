@@ -5,7 +5,6 @@ package com.bitwise.app.common.datastructure.property;
 import com.bitwise.app.cloneableinterface.IDataStructure;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class OperationClassProperty.
  * 
@@ -91,8 +90,6 @@ public class OperationClassProperty implements IDataStructure{
 	
 	@Override
 	public String toString() {
-		/*return "OperationClass : [operationClassPath="
-				+ operationClassPath + ", isParameter=" + isParameter + "]";*/
 		return operationClassPath;
 	}
 	

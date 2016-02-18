@@ -11,6 +11,7 @@ public class MappingSheetRow implements IDataStructure {
 	private List<String> inputFields;
 	private OperationClassProperty operationClass;
 	private List<String> outputList;
+	private String CUSTOM="custom";
 	
 	public MappingSheetRow(List<String> imputFields, OperationClassProperty operationClass,
 			List<String> outputList) {
@@ -48,7 +49,7 @@ public class MappingSheetRow implements IDataStructure {
 	public Object clone(){
 		
 		List<String> inputFields = new LinkedList<>();
-		OperationClassProperty operationClass = new OperationClassProperty("Custom","", false, "");
+		OperationClassProperty operationClass = new OperationClassProperty(CUSTOM,"", false, "");
 		List<String> outputList = new LinkedList<>();		
 		
 		inputFields.addAll(this.inputFields);
