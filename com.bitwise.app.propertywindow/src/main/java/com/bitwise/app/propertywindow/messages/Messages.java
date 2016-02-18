@@ -73,6 +73,7 @@ public class Messages extends NLS {
     public static String DELETE_ICON;
     public static String UP_ICON;
     public static String DOWN_ICON;
+    public static String INFORMATION;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
