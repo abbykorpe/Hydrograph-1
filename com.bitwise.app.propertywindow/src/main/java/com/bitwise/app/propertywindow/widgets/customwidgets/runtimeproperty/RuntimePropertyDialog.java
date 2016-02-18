@@ -75,7 +75,6 @@ public class RuntimePropertyDialog extends Dialog {
 
 	private boolean isAnyUpdatePerformed;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
-	private static final String INFORMATION = "Information";
 	
 	/**
 	 * Create the dialog.
@@ -119,7 +118,7 @@ public class RuntimePropertyDialog extends Dialog {
 		createTable(composite_2);
 
 		addErrorLabel(container);
-
+		
 		return container;
 	}
 
@@ -291,14 +290,13 @@ public class RuntimePropertyDialog extends Dialog {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
+				IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();				
 				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 					Object selectedObject = iterator.next();
 					tableViewer.remove(selectedObject);
 					propertyList.remove(selectedObject);
-
+					isAnyUpdatePerformed = true;
 				}
-				isAnyUpdatePerformed = true;
 			}
 
 		});
@@ -360,18 +358,15 @@ public class RuntimePropertyDialog extends Dialog {
 	
 	@Override
 	protected void cancelPressed() {
-
-		if ((isAnyUpdatePerformed)
-				&& (table.getItemCount() != 0 || isAnyUpdatePerformed)) {
-
+		if (isAnyUpdatePerformed) {
 			int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
 			MessageBox messageBox = new MessageBox(new Shell(), style);
-			messageBox.setText(INFORMATION); 
+			messageBox.setText(Messages.INFORMATION);
 			messageBox.setMessage(Messages.MessageBeforeClosingWindow);
-			if(messageBox.open() == SWT.YES){
+			if (messageBox.open() == SWT.YES) {
 				super.cancelPressed();
 			}
-		}else{
+		} else {
 			super.cancelPressed();
 		}
 	}
