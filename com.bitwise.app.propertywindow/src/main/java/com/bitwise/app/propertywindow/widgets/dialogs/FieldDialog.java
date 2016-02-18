@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
@@ -38,7 +37,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -389,8 +387,8 @@ public class FieldDialog extends Dialog {
 					Object selectedObject = iterator.next();
 					targetTableViewer.remove(selectedObject);
 					propertyLst.remove(selectedObject);
+					isAnyUpdatePerformed = true;
 				}
-				isAnyUpdatePerformed = true;
 			}
 
 		});
@@ -477,7 +475,7 @@ public class FieldDialog extends Dialog {
 
 		TableColumn targetTableColumn = new TableColumn(targetTable, SWT.CENTER);
 		targetTableColumn.setText("Field Name");
-		targetTableColumn.setWidth(275);
+		targetTableColumn.setWidth(304);
 		targetTable.setHeaderVisible(true);
 		targetTable.setLinesVisible(true);
 
@@ -521,7 +519,7 @@ public class FieldDialog extends Dialog {
 
 		tableViewerColumn = new TableViewerColumn(sourceTableViewer, SWT.NONE);
 		sourceTableColumn = tableViewerColumn.getColumn();
-		sourceTableColumn.setWidth(200);
+		sourceTableColumn.setWidth(207);
 		sourceTableColumn.setText(Messages.AVAILABLE_FIELDS_HEADER);
 		getSourceFieldsFromPropagatedSchema(sourceTable);
 		dragSource = new DragSource(sourceTable, DND.DROP_MOVE);
@@ -692,7 +690,7 @@ public class FieldDialog extends Dialog {
 
 	@Override
 	protected void cancelPressed() {
-		if ((isAnyUpdatePerformed) && (targetTable.getItemCount() != 0 || isAnyUpdatePerformed)) {
+		if (isAnyUpdatePerformed) {
 			int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
 			MessageBox messageBox = new MessageBox(getShell(), style);
 			messageBox.setText("Information"); //$NON-NLS-1$
