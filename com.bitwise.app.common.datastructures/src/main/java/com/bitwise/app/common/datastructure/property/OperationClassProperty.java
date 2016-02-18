@@ -26,9 +26,10 @@ public class OperationClassProperty implements IDataStructure{
 	 * @param isParameter
 	 *            the is parameter
 	 */
-	public OperationClassProperty(String operationClassPath, boolean isParameter) {
+	public OperationClassProperty(String comboBoxValue, String operationClassPath, boolean isParameter) {
 		this.operationClassPath = operationClassPath;
 		this.isParameter = isParameter;
+		this.comboBoxValue = comboBoxValue;
 	}
 	public OperationClassProperty(String comboBoxValue,String operationClassPath, boolean isParameter,String operationClassFullPath) {
 		this.comboBoxValue=comboBoxValue;
