@@ -1,6 +1,7 @@
 package com.bitwise.app.propertywindow.widgets.listeners;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -41,7 +42,7 @@ public class OperationClassComboChangeListener implements IELTListener{
 						messageBox.setText(Messages.ERROR);
 						messageBox.setMessage(Messages.CHECKBOX_DISABLE_MESSAGE);
 						if (messageBox.open() == SWT.OK) {
-							((Text) widgetList[1]).setText("");
+							((Combo) widgetList[0]).setText(Messages.CUSTOM);
 						} 
 					}
 					else
@@ -49,6 +50,7 @@ public class OperationClassComboChangeListener implements IELTListener{
 						FilterOperationClassUtility.setOperationClassNameInTextBox(comboValue, (Text)widgetList[1]);
 						((Text) widgetList[1]).setEnabled(false);
 						FilterOperationClassUtility.enableAndDisableButtons(false, false);
+						((Button) widgetList[2]).setEnabled(false);
 					}
 				}
 			}

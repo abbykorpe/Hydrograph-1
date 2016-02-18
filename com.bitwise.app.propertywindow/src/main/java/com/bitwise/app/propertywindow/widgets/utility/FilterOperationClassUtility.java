@@ -65,6 +65,7 @@ public class FilterOperationClassUtility  {
 	private static Button btnCheckButton;
 	private static String componentName;
 	private static Text textBox;
+
 	/**
 	 * Creates the new class wizard.
 	 * 
@@ -270,11 +271,12 @@ public static OperationClassProperty createOperationalClass(Composite composite,
 		return iJavaProject;
 	}
 
+
 	public static void enableAndDisableButtons(boolean value,boolean checkboxValue) {
 		if (checkboxValue==false) {
 			createBtn.setEnabled(value);
 			browseBtn.setEnabled(value);
-			btnCheckButton.setEnabled(value);
+			btnCheckButton.setEnabled(!value);
 		}
 		if (checkboxValue==true) {
 			btnCheckButton.setEnabled(value);

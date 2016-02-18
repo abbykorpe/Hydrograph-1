@@ -3,6 +3,8 @@ package com.bitwise.app.propertywindow.widgets.listeners;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
@@ -14,6 +16,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.component.config.Operations;
@@ -82,7 +85,8 @@ public class ELTOpenFileEditorListener implements IELTListener{
 				IType findType = javaProject.findType(operationClassName);
 				JavaUI.openInEditor(findType);
 			} catch (JavaModelException | PartInitException e) {
-				WidgetUtility.errorMessage(Messages.CLASS_NOT_EXIST);
+				Status status = new Status(IStatus.ERROR, "com.bitwise.app.propertywindow",Messages.CLASS_NOT_EXIST,null);
+				StatusManager.getManager().handle(status, StatusManager.BLOCK);
 				logger.error(e.getMessage(), e);
 			}
 		} else {

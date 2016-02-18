@@ -154,6 +154,7 @@ public class ELTOperationClassDialog extends Dialog {
 	 */
     public void populateWidget() {
         if (!operationClassProperty.getOperationClassPath().equalsIgnoreCase("")) {
+        	btnCheckButton.setEnabled(true);
 			operationClasses.setText(operationClassProperty.getComboBoxValue());
 			fileName.setText(operationClassProperty.getOperationClassPath());
 			btnCheckButton.setSelection(operationClassProperty.isParameter());
@@ -168,6 +169,7 @@ public class ELTOperationClassDialog extends Dialog {
 			}
 		} else {
 			operationClasses.select(0);
+			btnCheckButton.setEnabled(false);
 		}
   }
 
@@ -195,13 +197,12 @@ public class ELTOperationClassDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				if (btnCheckButton.getSelection()) {
 					hasTextBoxAlphanumericCharactorsOnly(fileName.getText());
+					if (StringUtils.isNotBlank(fileName.getText()) && !fileName.getText().startsWith("@")) {
+						fileName.setText("@{" + fileName.getText() + "}");
+					} 
 				} else {
-					if(!operationClasses.getText().equalsIgnoreCase(Messages.CUSTOM))
-					{
-						String comoBoxValue=operationClasses.getText();
-						FilterOperationClassUtility.setOperationClassNameInTextBox(comoBoxValue, fileName);
-						fileName.setEnabled(false);
-						FilterOperationClassUtility.enableAndDisableButtons(false,false);
+					if (StringUtils.isNotBlank(fileName.getText())&&fileName.getText().startsWith("@")) {
+						fileName.setText(fileName.getText().substring(2,fileName.getText().length()-1));
 					}
 					okButton.setEnabled(true);
 					applyButton.setEnabled(true);
@@ -223,6 +224,17 @@ public class ELTOperationClassDialog extends Dialog {
 				if (btnCheckButton.getSelection()) {
 					hasTextBoxAlphanumericCharactorsOnly(textBoxValue);
 				}
+				else
+				{
+					if(StringUtils.isNotBlank(textBoxValue))
+					{
+						btnCheckButton.setEnabled(true);
+					}
+					else
+					{
+						btnCheckButton.setEnabled(false);
+					}
+				}
 			}
 		});
 
@@ -230,7 +242,7 @@ public class ELTOperationClassDialog extends Dialog {
 	
 	private void hasTextBoxAlphanumericCharactorsOnly(String textBoxValue) {
 		if (StringUtils.isNotBlank(textBoxValue)) {
-			Matcher matchs = Pattern.compile("[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*").matcher(textBoxValue);
+			Matcher matchs = Pattern.compile(Constants.REGEX).matcher(textBoxValue);
 			if (!matchs.matches()) {
 				decorator.show();
 				okButton.setEnabled(false);
@@ -286,9 +298,6 @@ public class ELTOperationClassDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		if (btnCheckButton.getSelection() && !fileName.getText().startsWith("@")) {
-			fileName.setText("@{" + fileName.getText() + "}");
-		}
 		operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
 				btnCheckButton.getSelection(), (String) fileName.getData("path"));
 		super.okPressed();
