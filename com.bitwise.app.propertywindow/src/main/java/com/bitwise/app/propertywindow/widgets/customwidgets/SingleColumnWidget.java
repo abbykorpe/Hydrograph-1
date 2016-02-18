@@ -20,6 +20,7 @@ import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.SingleColumnGridConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import com.bitwise.app.propertywindow.widgets.dialogs.FieldDialog;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterPropertyWizard;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
@@ -58,15 +59,18 @@ public class SingleColumnWidget extends AbstractWidget {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ELTFilterPropertyWizard filterWizardObj = new ELTFilterPropertyWizard();
-				filterWizardObj.setComponentName(gridConfig.getComponentName());
+
+				FieldDialog fieldDialog = new FieldDialog(new Shell(),propertyDialogButtonBar);
+				fieldDialog.setComponentName(gridConfig.getComponentName());
 				if (getProperties().get(propertyName) == null) {
 					setProperties(propertyName, new ArrayList<String>());
 				}
-				filterWizardObj.setRuntimePropertySet((List<String>) getProperties().get(propertyName));
-				filterWizardObj.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
-				setProperties(propertyName, filterWizardObj.launchRuntimeWindow(shell, propertyDialogButtonBar));
-
+				fieldDialog.setRuntimePropertySet((List<String>) getProperties().get(propertyName));
+				fieldDialog.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
+				fieldDialog.open();
+				
+				setProperties(propertyName, fieldDialog.getFieldNameList());
+				
 			}
 		});
 

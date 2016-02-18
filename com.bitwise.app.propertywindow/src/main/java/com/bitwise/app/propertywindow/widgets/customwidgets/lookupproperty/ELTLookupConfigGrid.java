@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Text;
 import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.widgets.dialogs.FieldDialog;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterPropertyWizard;
 
 public class ELTLookupConfigGrid extends Dialog {
@@ -294,12 +295,13 @@ public class ELTLookupConfigGrid extends Dialog {
 	
 	
 	private String launchDialogToSelectFields(String availableValues,String socketId)
-	{
-		ELTFilterPropertyWizard filterWizardObj = new ELTFilterPropertyWizard();
-		filterWizardObj.setPropertyFromCommaSepratedString(availableValues);
-		filterWizardObj.setSourceFieldsFromPropagatedSchema(propagatedFiledNames.get(socketId));
-		filterWizardObj.launchRuntimeWindow(new Shell(), propertyDialogButtonBar);
-		return filterWizardObj.getResultAsCommaSeprated();
+	{	
+		FieldDialog fieldDialog = new FieldDialog(new Shell(),propertyDialogButtonBar);
+		fieldDialog.setPropertyFromCommaSepratedString(availableValues);
+		fieldDialog.setSourceFieldsFromPropagatedSchema(propagatedFiledNames.get(socketId));
+		fieldDialog.open();
+		return fieldDialog.getResultAsCommaSeprated();
+		
 	}
 
 	public void setPropagatedFieldProperty(Map<String, List<String>> propagatedFiledNames)

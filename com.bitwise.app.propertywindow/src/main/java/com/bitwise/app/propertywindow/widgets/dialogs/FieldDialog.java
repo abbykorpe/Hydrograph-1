@@ -9,6 +9,16 @@ import java.util.regex.Pattern;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
+import org.eclipse.jface.viewers.ICellEditorValidator;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TableViewerEditor;
+import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceAdapter;
@@ -21,42 +31,25 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
-import org.eclipse.swt.SWT;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnViewerEditor;
-import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
-import org.eclipse.jface.viewers.ICellEditorValidator;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.TableViewerEditor;
-import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.FilterProperties;
@@ -70,31 +63,32 @@ import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterContentPro
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterPropertyWizard;
 
+/**
+ * 
+ * The class to create key field dialog. 
+ * 
+ * @author Bitwise
+ *
+ */
+
 public class FieldDialog extends Dialog {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTFilterPropertyWizard.class);
 
 	private final List<FilterProperties> propertyLst;
-	public static final String FilterInputFieldName = "Component Name"; //$NON-NLS-1$
+	private static final String FilterInputFieldName = "Component Name"; //$NON-NLS-1$
 	private List<String> fieldNameList;
 	private String componentName;
-	private Label lblHeader;
+
 	private final String PROPERTY_EXISTS_ERROR = Messages.RuntimePropertAlreadyExists;
-	public static final String[] PROPS = { FilterInputFieldName };
+	private static final String[] PROPS = { FilterInputFieldName };
 	private final String PROPERTY_NAME_BLANK_ERROR = Messages.EmptyNameNotification;
 	private Label lblPropertyError;
-	private boolean isOkPressed;
-
 	private TableViewer targetTableViewer;
 	private TableViewer sourceTableViewer;
 	private Table sourceTable;
 	private Table targetTable;
 
-	private ControlDecoration decorator;
-	private List<ControlDecoration> decoratorList;
-	public ControlDecoration scaleDecorator;
-	private Button okButton;
 	private boolean isAnyUpdatePerformed;
-	private Label addButton, deleteButton, upButton, downButton;
 
 	private TableColumn sourceTableColumn;
 	private TableViewerColumn tableViewerColumn;
@@ -102,18 +96,15 @@ public class FieldDialog extends Dialog {
 	private DropTarget dropTarget;
 	private List<String> sourceFieldsList;
 
+	PropertyDialogButtonBar propertyDialogButtonBar;
+
 	
-	
-	/**
-	 * Create the dialog.
-	 * 
-	 * @param parentShell
-	 */
-	public FieldDialog(Shell parentShell) {
+	public FieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
 
 		propertyLst = new ArrayList<FilterProperties>();
 		fieldNameList = new ArrayList<String>();
+		this.propertyDialogButtonBar = propertyDialogButtonBar;
 	}
 
 	// Add New Property After Validating old properties
@@ -138,14 +129,41 @@ public class FieldDialog extends Dialog {
 		}
 	}
 
+	/**
+	 * 
+	 * Returns the list of key field names
+	 * 
+	 * @return - list of key fields
+	 */
+	public List<String> getFieldNameList() {
+		return fieldNameList;
+	}
+
+	/**
+	 * set the list of key fields
+	 * 
+	 * @param runtimePropertySet
+	 */
 	public void setRuntimePropertySet(List<String> runtimePropertySet) {
 		this.fieldNameList = runtimePropertySet;
 	}
 
+	/**
+	 * 
+	 * returns the name of component
+	 * 
+	 * @return - name of component
+	 */
 	public String getComponentName() {
 		return componentName;
 	}
 
+	/**
+	 * 
+	 * Set the name of component
+	 * 
+	 * @param componentName
+	 */
 	public void setComponentName(String componentName) {
 		this.componentName = componentName;
 	}
@@ -183,9 +201,16 @@ public class FieldDialog extends Dialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		
+
 		isAnyUpdatePerformed = false;
-		
+
+		if (Constants.COLUMN_NAME2.equalsIgnoreCase(componentName)) {
+			getShell().setText(Constants.COLUMN_NAME2);
+		}
+		if (Constants.OPERATION_FIELD.equalsIgnoreCase(componentName)) {
+			getShell().setText(Constants.OPERATION_FIELD);
+		}
+
 		Composite container = (Composite) super.createDialogArea(parent);
 		ColumnLayout cl_container = new ColumnLayout();
 		cl_container.verticalSpacing = 0;
@@ -194,22 +219,20 @@ public class FieldDialog extends Dialog {
 
 		addSeperator(container);
 		addButtonPanel(container);
-		
+
 		Composite tableComposite = new Composite(container, SWT.NONE);
 		tableComposite.setLayout(new GridLayout(2, false));
 		ColumnLayoutData cld_composite_2 = new ColumnLayoutData();
 		cld_composite_2.heightHint = 355;
 		tableComposite.setLayoutData(cld_composite_2);
-		
-		createSourceTable(tableComposite);				
+
+		createSourceTable(tableComposite);
 		createTargetTable(tableComposite);
 
 		addErrorLabel(container);
-
 		return container;
 	}
 
-	
 	private void addSeperator(Composite container) {
 		Composite composite = new Composite(container, SWT.NONE);
 		ColumnLayout cl_composite = new ColumnLayout();
@@ -220,7 +243,7 @@ public class FieldDialog extends Dialog {
 		composite.setLayoutData(cld_composite);
 
 		Label lblTestlabel = new Label(composite, SWT.NONE);
-		lblTestlabel.setText(Messages.RUNTIME_HEADER);
+		lblTestlabel.setText(getComponentName() + "Properties");
 
 		new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
 	}
@@ -269,6 +292,7 @@ public class FieldDialog extends Dialog {
 	private void attachDownButtonListerner(Label downButton) {
 		downButton.addMouseListener(new MouseListener() {
 			int index1 = 0, index2 = 0;
+
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				// Nothing to do
@@ -309,6 +333,7 @@ public class FieldDialog extends Dialog {
 	private void attachUpButtonListener(Label upButton) {
 		upButton.addMouseListener(new MouseListener() {
 			int index1 = 0, index2 = 0;
+
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				// Nothing to do
@@ -402,7 +427,7 @@ public class FieldDialog extends Dialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
 	}
 
@@ -411,16 +436,16 @@ public class FieldDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(550, 531);
+		return new Point(550, 522);
 	}
-	
-	private void createTargetTable(Composite container) {		
+
+	private void createTargetTable(Composite container) {
 		targetTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI);
 		targetTable = targetTableViewer.getTable();
 		GridData gd_table_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_table_1.widthHint = 285;
 		targetTable.setLayoutData(gd_table_1);
-		
+
 		targetTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -484,10 +509,8 @@ public class FieldDialog extends Dialog {
 
 	}
 
-	
-	public void createSourceTable(Composite container) {		
-		
-		
+	public void createSourceTable(Composite container) {
+
 		sourceTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
 		sourceTable = sourceTableViewer.getTable();
 		sourceTable.setLinesVisible(true);
@@ -511,7 +534,6 @@ public class FieldDialog extends Dialog {
 
 		});
 	}
-	 
 
 	/**
 	 * Validate.
@@ -558,9 +580,8 @@ public class FieldDialog extends Dialog {
 					lblPropertyError.setText(ErrorMessage);
 					lblPropertyError.setVisible(true);
 					return "ERROR"; //$NON-NLS-1$
-				}else {
+				} else {
 					lblPropertyError.setVisible(false);
-					enableButtons();
 				}
 
 				for (FilterProperties temp : propertyLst) {
@@ -569,8 +590,8 @@ public class FieldDialog extends Dialog {
 						lblPropertyError.setText(PROPERTY_EXISTS_ERROR);
 						lblPropertyError.setVisible(true);
 						return "ERROR"; //$NON-NLS-1$
-					} else
-						enableButtons();
+					} 
+					
 					lblPropertyError.setVisible(false);
 				}
 
@@ -579,22 +600,6 @@ public class FieldDialog extends Dialog {
 			}
 		};
 		return propertyValidator;
-	}
-
-	/**
-	 * Disable buttons.
-	 */
-	void disableButtons() {
-		okButton.setEnabled(false);
-
-	}
-
-	/**
-	 * Enable buttons.
-	 */
-	void enableButtons() {
-		okButton.setEnabled(true);
-
 	}
 
 	private String formatDataToTransfer(TableItem[] selectedTableItems) {
@@ -668,22 +673,37 @@ public class FieldDialog extends Dialog {
 	}
 
 	@Override
-	protected void okPressed() {		
+	protected void okPressed() {
 		if (validate()) {
 			fieldNameList.clear();
-			isOkPressed = true;
 			for (FilterProperties temp : propertyLst) {
 				fieldNameList.add(temp.getPropertyname());
 			}
+
+			if (isAnyUpdatePerformed) {
+				propertyDialogButtonBar.enableApplyButton(true);
+			}
+
 			super.okPressed();
 		} else {
 			return;
 		}
 	}
-	
+
 	@Override
 	protected void cancelPressed() {
-		super.cancelPressed();
+		if ((isAnyUpdatePerformed) && (targetTable.getItemCount() != 0 || isAnyUpdatePerformed)) {
+			int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
+			MessageBox messageBox = new MessageBox(getShell(), style);
+			messageBox.setText("Information"); //$NON-NLS-1$
+			messageBox.setMessage(Messages.MessageBeforeClosingWindow);
+			if (messageBox.open() == SWT.YES) {
+				super.cancelPressed();
+			}
+		} else {
+			super.cancelPressed();
+		}
+
 	}
-	
+
 }

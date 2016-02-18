@@ -278,12 +278,7 @@ public class ELTJoinConfigGrid extends Dialog {
 	}
 
 	private String launchDialogToSelectFields(String availableValues, String socketId) {
-		/*ELTFilterPropertyWizard filterWizardObj = new ELTFilterPropertyWizard();
-		filterWizardObj.setPropertyFromCommaSepratedString(availableValues);
-		filterWizardObj.setSourceFieldsFromPropagatedSchema(propagatedFiledNames.get(socketId));
-		filterWizardObj.launchRuntimeWindow(new Shell(), propertyDialogButtonBar);		
-		return filterWizardObj.getResultAsCommaSeprated();*/
-		FieldDialog fieldDialog = new FieldDialog(new Shell());
+		FieldDialog fieldDialog = new FieldDialog(new Shell(),propertyDialogButtonBar);
 		fieldDialog.setPropertyFromCommaSepratedString(availableValues);
 		fieldDialog.setSourceFieldsFromPropagatedSchema(propagatedFiledNames.get(socketId));
 		fieldDialog.open();
