@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -72,18 +73,22 @@ public class RuntimePropertyDialog extends Dialog {
 	private Table table;
 	private Label lblPropertyError;
 
-
+	private boolean isAnyUpdatePerformed;
+	private PropertyDialogButtonBar propertyDialogButtonBar;
+	private static final String INFORMATION = "Information";
+	
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param parentShell
 	 * @param propertyDialogButtonBar
 	 */
-	public RuntimePropertyDialog(Shell parentShell) {
+	public RuntimePropertyDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
 
 		propertyList = new LinkedList<RuntimeProperties>();
 		runtimePropertyMap = new LinkedHashMap<String, String>();
+		this.propertyDialogButtonBar = propertyDialogButtonBar;
 	}
 
 	/**
@@ -93,6 +98,9 @@ public class RuntimePropertyDialog extends Dialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		
+		isAnyUpdatePerformed = false;
+		
 		Composite container = (Composite) super.createDialogArea(parent);
 		ColumnLayout cl_container = new ColumnLayout();
 		cl_container.verticalSpacing = 0;
@@ -290,6 +298,7 @@ public class RuntimePropertyDialog extends Dialog {
 					propertyList.remove(selectedObject);
 
 				}
+				isAnyUpdatePerformed = true;
 			}
 
 		});
@@ -339,9 +348,32 @@ public class RuntimePropertyDialog extends Dialog {
 			for (RuntimeProperties temp : propertyList) {
 				runtimePropertyMap.put(temp.getPropertyName(), temp.getPropertyValue());
 			}
+			
+			if (isAnyUpdatePerformed) {
+				propertyDialogButtonBar.enableApplyButton(true);
+			}
+			
 			super.okPressed();
 		}
 
+	}
+	
+	@Override
+	protected void cancelPressed() {
+
+		if ((isAnyUpdatePerformed)
+				&& (table.getItemCount() != 0 || isAnyUpdatePerformed)) {
+
+			int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
+			MessageBox messageBox = new MessageBox(new Shell(), style);
+			messageBox.setText(INFORMATION); 
+			messageBox.setMessage(Messages.MessageBeforeClosingWindow);
+			if(messageBox.open() == SWT.YES){
+				super.cancelPressed();
+			}
+		}else{
+			super.cancelPressed();
+		}
 	}
 
 	/**
@@ -354,6 +386,7 @@ public class RuntimePropertyDialog extends Dialog {
 
 	// Add New Property After Validating old properties
 	private void addNewProperty(TableViewer tabViewer) {
+		isAnyUpdatePerformed = true;
 		RuntimeProperties property = new RuntimeProperties();
 		if (propertyList.size() != 0) {
 			if (!validate()) {
@@ -519,6 +552,7 @@ public class RuntimePropertyDialog extends Dialog {
 		ICellEditorValidator propertyValidator = new ICellEditorValidator() {
 			@Override
 			public String isValid(Object value) {
+				isAnyUpdatePerformed = true;
 				String currentSelectedFld = table.getItem(table.getSelectionIndex()).getText();
 				String valueToValidate = String.valueOf(value).trim();
 				if (StringUtils.isEmpty(valueToValidate)) {
@@ -549,6 +583,7 @@ public class RuntimePropertyDialog extends Dialog {
 		ICellEditorValidator propertyValidator = new ICellEditorValidator() {
 			@Override
 			public String isValid(Object value) {
+				isAnyUpdatePerformed = true;
 				String valueToValidate = String.valueOf(value).trim();
 				if (valueToValidate.isEmpty()) {
 					lblPropertyError.setText(ErrorMessage);
