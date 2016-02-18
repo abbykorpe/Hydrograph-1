@@ -467,10 +467,8 @@ public class JoinMapGrid extends Dialog {
 	}
     
 	private void createLabel(Composite parent) {
-		Label add = widget.labelWidget(parent, SWT.CENTER | SWT.PUSH,
-				new int[] { 0, 0, 25, 20 }, "", new Image(null,
-						XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
-								+ "/icons/add.png"));
+		Label add = widget.labelWidget(parent, SWT.CENTER | SWT.PUSH, new int[] { 0, 0, 25, 20 }, "", new Image(null,
+				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.ADD_ICON));
 
 		add.addMouseListener(new MouseListener() {
 			@Override
@@ -491,20 +489,15 @@ public class JoinMapGrid extends Dialog {
 
 		});
 
-		Label delete = widget
-				.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 },
-						"", new Image(null,
-								XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
-										+ "/icons/delete.png"));
+		Label delete = widget.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 }, "", new Image(null,
+				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DELETE_ICON));
 		delete.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
 				int index = 0;
-				IStructuredSelection selection = (IStructuredSelection) outputTableViewer
-						.getSelection();
-				for (Iterator<?> iterator = selection.iterator(); iterator
-						.hasNext();) {
+				IStructuredSelection selection = (IStructuredSelection) outputTableViewer.getSelection();
+				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 					Object selectedObject = iterator.next();
 					index = joinOutputList.indexOf(selectedObject);
 					outputTableViewer.remove(selectedObject);
@@ -512,8 +505,7 @@ public class JoinMapGrid extends Dialog {
 				}
 				outputTableViewer.refresh();
 				if (index != 0)
-					outputTableViewer.editElement(
-							outputTableViewer.getElementAt(index - 1), 0);
+					outputTableViewer.editElement(outputTableViewer.getElementAt(index - 1), 0);
 			}
 
 			@Override
@@ -525,9 +517,8 @@ public class JoinMapGrid extends Dialog {
 			}
 		});
 
-		Label upLabel = widget.labelWidget(parent, SWT.CENTER, new int[] { 50,
-				0, 25, 20 }, "", new Image(null,
-				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png"));
+		Label upLabel = widget.labelWidget(parent, SWT.CENTER, new int[] { 50, 0, 25, 20 }, "", new Image(null,
+				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.UP_ICON));
 		upLabel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -535,15 +526,11 @@ public class JoinMapGrid extends Dialog {
 				int index1 = outputTableViewer.getTable().getSelectionIndex();
 
 				if (index1 > 0) {
-					String text = outputTableViewer.getTable().getItem(index1)
-							.getText(0);
-					String text1 = outputTableViewer.getTable().getItem(index1)
-							.getText(1);
+					String text = outputTableViewer.getTable().getItem(index1).getText(0);
+					String text1 = outputTableViewer.getTable().getItem(index1).getText(1);
 					index2 = index1 - 1;
-					String data = outputTableViewer.getTable().getItem(index2)
-							.getText(0);
-					String data2 = outputTableViewer.getTable().getItem(index2)
-							.getText(1);
+					String data = outputTableViewer.getTable().getItem(index2).getText(0);
+					String data2 = outputTableViewer.getTable().getItem(index2).getText(1);
 
 					LookupMapProperty property = new LookupMapProperty();
 					property.setSource_Field(data);
@@ -568,9 +555,8 @@ public class JoinMapGrid extends Dialog {
 			}
 		});
 
-		Label downLabel = widget.labelWidget(parent, SWT.CENTER, new int[] {
-				74, 0, 25, 20 }, "", new Image(null,
-				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png"));
+		Label downLabel = widget.labelWidget(parent, SWT.CENTER, new int[] { 74, 0, 25, 20 }, "", new Image(null,
+				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DOWN_ICON));
 		downLabel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -578,15 +564,11 @@ public class JoinMapGrid extends Dialog {
 				int index2 = 0;
 
 				if (index1 < joinOutputList.size() - 1) {
-					String text = outputTableViewer.getTable().getItem(index1)
-							.getText(0);
-					String text1 = outputTableViewer.getTable().getItem(index1)
-							.getText(1);
+					String text = outputTableViewer.getTable().getItem(index1).getText(0);
+					String text1 = outputTableViewer.getTable().getItem(index1).getText(1);
 					index2 = index1 + 1;
-					String data = outputTableViewer.getTable().getItem(index2)
-							.getText(0);
-					String data1 = outputTableViewer.getTable().getItem(index2)
-							.getText(1);
+					String data = outputTableViewer.getTable().getItem(index2).getText(0);
+					String data1 = outputTableViewer.getTable().getItem(index2).getText(1);
 					LookupMapProperty p = new LookupMapProperty();
 					p.setSource_Field(data);
 					p.setOutput_Field(data1);

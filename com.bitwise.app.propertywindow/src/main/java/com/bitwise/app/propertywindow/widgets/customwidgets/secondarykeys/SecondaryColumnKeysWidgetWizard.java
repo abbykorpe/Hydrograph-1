@@ -357,46 +357,46 @@ public class SecondaryColumnKeysWidgetWizard {
 
 		new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL).setBounds(0, 41, 513, 60);
 		addButton = new Label(composite, SWT.PUSH);
-        String addIconPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png";
+		String addIconPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.ADD_ICON;
 		addButton.setImage(new Image(null, addIconPath));
 		addButton.setBounds(433, 10, 20, 20);
-		addButton.addMouseListener(new MouseListener(){
+		addButton.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseDown(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseUp(MouseEvent e) {
 				addNewProperty(targetTableViewer, null);
-				
-			}});
-		
+
+			}
+		});
 
 		deleteButton = new Label(composite, SWT.PUSH);
-		String deleteIonPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png";
+		String deleteIonPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DELETE_ICON;
 		deleteButton.setImage(new Image(null, deleteIonPath));
 		deleteButton.setBounds(452, 10, 25, 20);
-		deleteButton.addMouseListener(new MouseListener(){
+		deleteButton.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseDown(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
@@ -409,26 +409,27 @@ public class SecondaryColumnKeysWidgetWizard {
 				}
 				isAnyUpdatePerformed = true;
 
-				
-			}});
-		
-        upButton = new Label(composite, SWT.PUSH);
-		
-		String upIonPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png";
+			}
+		});
+
+		upButton = new Label(composite, SWT.PUSH);
+
+		String upIonPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.UP_ICON;
 		upButton.setImage(new Image(null, upIonPath));
 		upButton.setBounds(476, 10, 20, 20);
-        upButton.addMouseListener(new MouseListener(){
-        	int index1 = 0, index2 = 0;
+		upButton.addMouseListener(new MouseListener() {
+			int index1 = 0, index2 = 0;
+
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseDown(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
@@ -455,25 +456,27 @@ public class SecondaryColumnKeysWidgetWizard {
 					targetTable.setSelection(index1 - 1);
 
 				}
-				
-			}});
-		
+
+			}
+		});
+
 		downButton = new Label(composite, SWT.PUSH);
-		String downIonPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png";
+		String downIonPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DOWN_ICON;
 		downButton.setImage(new Image(null, downIonPath));
 		downButton.setBounds(495, 10, 25, 20);
-		downButton.addMouseListener(new MouseListener(){
+		downButton.addMouseListener(new MouseListener() {
 			int index1 = 0, index2 = 0;
+
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseDown(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
@@ -500,8 +503,9 @@ public class SecondaryColumnKeysWidgetWizard {
 					targetTableViewer.refresh();
 					targetTable.setSelection(index1 + 1);
 				}
-				
-			}});
+
+			}
+		});
 	}
 
 
