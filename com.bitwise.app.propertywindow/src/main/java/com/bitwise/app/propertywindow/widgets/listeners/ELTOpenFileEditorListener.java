@@ -36,7 +36,6 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
  */
 public class ELTOpenFileEditorListener implements IELTListener{
 	IJavaProject javaProject;
-	private static final String INFORMATION = "Information";
 	private Logger logger=LogFactory.INSTANCE.getLogger(XMLConfigUtil.class);
 	@Override
 	public int getListenerType() {
@@ -52,24 +51,20 @@ public class ELTOpenFileEditorListener implements IELTListener{
 			public void handleEvent(Event event) {
 				
 				String comboValue = ((Combo) widgetList[0]).getText();
-				if (comboValue.equalsIgnoreCase("Custom")) {
-					if (((Text) widgetList[1]).getText().startsWith("$")) {
-						((Text) widgetList[1]).setText(Messages.path);
-					}
+				if (comboValue.equalsIgnoreCase(Messages.CUSTOM)) {
 					boolean flag = FilterOperationClassUtility.openFileEditor(((Text) widgetList[1]), null);
 					if (!flag) {
 						WidgetUtility.errorMessage("File Not Found");
 					}
 				} else {
-					openInbuiltOperationClass(comboValue, widgetList[1], propertyDialogButtonBar);
+					openInbuiltOperationClass(comboValue,propertyDialogButtonBar);
 				}
 			}
 		};
 		return listener;
 	}
 
-	private void openInbuiltOperationClass(String operationName, Widget widgetList,
-			PropertyDialogButtonBar propertyDialogButtonBar) {
+	private void openInbuiltOperationClass(String operationName, PropertyDialogButtonBar propertyDialogButtonBar) {
 		String operationClassName = null;
 		Operations operations = XMLConfigUtil.INSTANCE.getComponent(FilterOperationClassUtility.getComponentName())
 				.getOperations();
@@ -87,14 +82,12 @@ public class ELTOpenFileEditorListener implements IELTListener{
 				IType findType = javaProject.findType(operationClassName);
 				JavaUI.openInEditor(findType);
 			} catch (JavaModelException | PartInitException e) {
-				logger.error(e.getMessage(),e);
+				WidgetUtility.errorMessage(Messages.CLASS_NOT_EXIST);
+				logger.error(e.getMessage(), e);
 			}
-		}
-		else
-		{
+		} else {
 			WidgetUtility.errorMessage(Messages.SAVE_JOB_MESSAGE);
 		}
 	}
-
 	
 }

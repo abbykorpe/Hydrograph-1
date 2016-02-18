@@ -35,9 +35,11 @@ public class ELTEnableButtonListener implements IELTListener{
 				if (((Button)widgetList[0]).getSelection()) {
 					((Button)widgetList[1]).setEnabled(false);
 					((Button)widgetList[2]).setEnabled(false);
+					((Button)widgetList[3]).setEnabled(false);
 				} else {
 					((Button)widgetList[1]).setEnabled(true);
 					((Button)widgetList[2]).setEnabled(true);
+					((Button)widgetList[3]).setEnabled(true);
 				}
 				}
 		};

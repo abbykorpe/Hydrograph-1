@@ -2,6 +2,7 @@ package com.bitwise.app.propertywindow.widgets.listeners;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -35,6 +36,7 @@ public class ELTEventChangeListener implements IELTListener {
 			@Override
 			public void handleEvent(Event event) {
 				if (event.type == SWT.CHANGED) {
+					if (!((Button) wigetList[1]).getSelection())
 					propertyDialogButtonBar.enableApplyButton(true);
 				}
 			}

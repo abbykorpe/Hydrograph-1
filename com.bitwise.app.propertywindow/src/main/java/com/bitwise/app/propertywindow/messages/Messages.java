@@ -73,7 +73,10 @@ public class Messages extends NLS {
     public static String DOWN_ICON;
     public static String INFORMATION;
 	public static String SAVE_JOB_MESSAGE;
-	
+	public static String IS_PARAMETER;
+	public static String CLASS_NOT_EXIST;
+	public static String CHECKBOX_DISABLE_MESSAGE;
+	public static String ERROR;
 
 
 	static {

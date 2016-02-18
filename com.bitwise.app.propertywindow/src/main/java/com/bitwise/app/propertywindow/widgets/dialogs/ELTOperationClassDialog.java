@@ -3,12 +3,20 @@ package com.bitwise.app.propertywindow.widgets.dialogs;
 
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Button;
@@ -36,6 +44,7 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultCheckB
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultCombo;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
 import com.bitwise.app.propertywindow.widgets.utility.FilterOperationClassUtility;
+import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
 /**
  * The Class ELTOperationClassDialog.
@@ -48,12 +57,14 @@ public class ELTOperationClassDialog extends Dialog {
 	private Combo operationClasses;
 	private Button btnCheckButton; 
 	private Button applyButton;
+	private Button okButton;
 	private Composite container;
 	private OperationClassProperty operationClassProperty;
 	private PropertyDialogButtonBar eltOperationClassDialogButtonBar;
 	private TootlTipErrorMessage tootlTipErrorMessage = new TootlTipErrorMessage();
 	private WidgetConfig widgetConfig; 
 	private String componentName;
+	private ControlDecoration decorator;
 
 	/**
 	 * Create the dialog.
@@ -123,18 +134,20 @@ public class ELTOperationClassDialog extends Dialog {
 		}
 		AbstractELTWidget comboOfOperationClasses = new ELTDefaultCombo().defaultText(optionsOfComboOfOperationClasses)
 				.comboBoxWidth(90);
+
 		
 		FilterOperationClassUtility.createOperationalClass(composite, eltOperationClassDialogButtonBar,
 				comboOfOperationClasses, isParameterCheckbox, fileNameText, tootlTipErrorMessage, widgetConfig);
 		fileName=(Text)fileNameText.getSWTWidgetControl();
 		operationClasses = (Combo) comboOfOperationClasses.getSWTWidgetControl();
 
-		FilterOperationClassUtility.enableAndDisableButtons(true);
+		FilterOperationClassUtility.enableAndDisableButtons(true,false);
 		FilterOperationClassUtility.setComponentName(componentName);
 		btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl();
 		populateWidget();
 		return container;
 	}
+	
 
 	/**
 	 * Populate widget.
@@ -142,14 +155,18 @@ public class ELTOperationClassDialog extends Dialog {
     public void populateWidget() {
         if (!operationClassProperty.getOperationClassPath().equalsIgnoreCase("")) {
 			operationClasses.setText(operationClassProperty.getComboBoxValue());
-              fileName.setText(operationClassProperty.getOperationClassPath());
-              btnCheckButton.setSelection(operationClassProperty.isParameter());
-              fileName.setData("path", operationClassProperty.getOperationClassFullPath());
-			FilterOperationClassUtility.enableAndDisableButtons(false);
-			if(!operationClassProperty.getComboBoxValue().equalsIgnoreCase(Messages.CUSTOM))
-			fileName.setEnabled(false);
-        }
-        else {
+			fileName.setText(operationClassProperty.getOperationClassPath());
+			btnCheckButton.setSelection(operationClassProperty.isParameter());
+			fileName.setData("path", operationClassProperty.getOperationClassFullPath());
+			if (!operationClassProperty.getComboBoxValue().equalsIgnoreCase(Messages.CUSTOM)) {
+				fileName.setEnabled(false);
+				FilterOperationClassUtility.enableAndDisableButtons(false, false);
+			} else {
+				if (btnCheckButton.getSelection()) {
+					FilterOperationClassUtility.enableAndDisableButtons(true,true);
+				}
+			}
+		} else {
 			operationClasses.select(0);
 		}
   }
@@ -161,7 +178,7 @@ public class ELTOperationClassDialog extends Dialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		Button okButton=createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+	  okButton=createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
 		Button cancelButton=createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
@@ -170,6 +187,63 @@ public class ELTOperationClassDialog extends Dialog {
 		
 		
 		eltOperationClassDialogButtonBar.setPropertyDialogButtonBar(okButton, applyButton, cancelButton);
+		decorator=WidgetUtility.addDecorator(fileName,Messages.CHARACTERSET);
+		decorator.hide();
+		btnCheckButton.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (btnCheckButton.getSelection()) {
+					hasTextBoxAlphanumericCharactorsOnly(fileName.getText());
+				} else {
+					if(!operationClasses.getText().equalsIgnoreCase(Messages.CUSTOM))
+					{
+						String comoBoxValue=operationClasses.getText();
+						FilterOperationClassUtility.setOperationClassNameInTextBox(comoBoxValue, fileName);
+						fileName.setEnabled(false);
+						FilterOperationClassUtility.enableAndDisableButtons(false,false);
+					}
+					okButton.setEnabled(true);
+					applyButton.setEnabled(true);
+					decorator.hide();
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+		fileName.addVerifyListener(new VerifyListener() {
+
+			@Override
+			public void verifyText(VerifyEvent e) {
+				String currentText = ((Text) e.widget).getText();
+				String textBoxValue = (currentText.substring(0, e.start) + e.text + currentText.substring(e.end))
+						.trim();
+				if (btnCheckButton.getSelection()) {
+					hasTextBoxAlphanumericCharactorsOnly(textBoxValue);
+				}
+			}
+		});
+
+	}
+	
+	private void hasTextBoxAlphanumericCharactorsOnly(String textBoxValue) {
+		if (StringUtils.isNotBlank(textBoxValue)) {
+			Matcher matchs = Pattern.compile("[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*").matcher(textBoxValue);
+			if (!matchs.matches()) {
+				decorator.show();
+				okButton.setEnabled(false);
+				applyButton.setEnabled(false);
+			} else {
+				decorator.hide();
+				okButton.setEnabled(true);
+				applyButton.setEnabled(true);
+			}
+		} else {
+			okButton.setEnabled(false);
+			applyButton.setEnabled(false);
+		}
 	}
 	
 	private void createApplyButton(Composite parent) {
@@ -212,6 +286,9 @@ public class ELTOperationClassDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		if (btnCheckButton.getSelection() && !fileName.getText().startsWith("@")) {
+			fileName.setText("@{" + fileName.getText() + "}");
+		}
 		operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
 				btnCheckButton.getSelection(), (String) fileName.getData("path"));
 		super.okPressed();
@@ -238,4 +315,5 @@ public class ELTOperationClassDialog extends Dialog {
 	public String getTootlTipErrorMessage() {
 		return tootlTipErrorMessage.getErrorMessage();
 	}
+	
 }

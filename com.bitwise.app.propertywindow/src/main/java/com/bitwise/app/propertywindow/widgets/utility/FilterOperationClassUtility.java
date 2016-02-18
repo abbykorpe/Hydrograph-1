@@ -61,8 +61,10 @@ public class FilterOperationClassUtility  {
 	private static IJavaProject iJavaProject;
 	private static Button createBtn;
 	private static Button browseBtn;
+	private static Button openBtn;
 	private static Button btnCheckButton;
 	private static String componentName;
+	private static Text textBox;
 	/**
 	 * Creates the new class wizard.
 	 * 
@@ -71,6 +73,7 @@ public class FilterOperationClassUtility  {
 	 * @param widgetConfig 
 	 */
 	public static void createNewClassWizard(Text fileNameTextBox, WidgetConfig widgetConfig) {
+		textBox=fileNameTextBox;
 		OpenNewClassWizardAction wizard = new OpenNewClassWizardAction();
 		wizard.setOpenEditorOnFinish(false);
 		final NewClassWizardPage page = new NewClassWizardPage();
@@ -230,6 +233,7 @@ public static OperationClassProperty createOperationalClass(Composite composite,
 	// Edit new button, that use to edit operational class
 	AbstractELTWidget openButton = new ELTDefaultButton("Open");
 	eltSuDefaultSubgroupComposite2.attachWidget(openButton); 
+	openBtn=(Button)openButton.getSWTWidgetControl();
 	
 	btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl();
 	
@@ -238,14 +242,13 @@ public static OperationClassProperty createOperationalClass(Composite composite,
 		helper.put(HelperType.WIDGET_CONFIG, widgetConfig);
 		setIJavaProject();
 	try { 						
-		fileNameTextBox.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(),eltOperationClassDialogButtonBar, null,fileName);
+		fileNameTextBox.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(),eltOperationClassDialogButtonBar, null,fileName,btnCheckButton);
 		openButton.attachListener(ListenerFactory.Listners.OPEN_FILE_EDITOR.getListener(),eltOperationClassDialogButtonBar, null,comboOfOperaationClasses,fileName);
 		browseButton.attachListener(ListenerFactory.Listners.BROWSE_FILE_LISTNER.getListener(),eltOperationClassDialogButtonBar, helper,fileName);
 		createButton.attachListener(ListenerFactory.Listners.CREATE_NEW_CLASS.getListener(),eltOperationClassDialogButtonBar, helper,comboOfOperaationClasses,fileName);
-		combo.attachListener(ListenerFactory.Listners.COMBO_CHANGE.getListener(),eltOperationClassDialogButtonBar, helper,comboOfOperaationClasses,fileName);
-		isParameterCheckbox.attachListener(ListenerFactory.Listners.ENABLE_BUTTON.getListener(),eltOperationClassDialogButtonBar, null,btnCheckButton,browseButton.getSWTWidgetControl(),createButton.getSWTWidgetControl());
+		combo.attachListener(ListenerFactory.Listners.COMBO_CHANGE.getListener(),eltOperationClassDialogButtonBar, helper,comboOfOperaationClasses,fileName,btnCheckButton);
+		isParameterCheckbox.attachListener(ListenerFactory.Listners.ENABLE_BUTTON.getListener(),eltOperationClassDialogButtonBar, null,btnCheckButton,browseButton.getSWTWidgetControl(),createButton.getSWTWidgetControl(),openButton.getSWTWidgetControl());
 		} catch (Exception e1) {
-		// TODO Auto-generated catch block
 		e1.printStackTrace(); 
 	} 
 	OperationClassProperty operationClassProperty = new OperationClassProperty(comboOfOperaationClasses.getText(),fileName.getText(), btnCheckButton.getEnabled(),(String)fileName.getData("path"));
@@ -267,12 +270,19 @@ public static OperationClassProperty createOperationalClass(Composite composite,
 		return iJavaProject;
 	}
 
-	public static void enableAndDisableButtons(boolean value) {
-		createBtn.setEnabled(value);
-		browseBtn.setEnabled(value);
-		btnCheckButton.setEnabled(value);
+	public static void enableAndDisableButtons(boolean value,boolean checkboxValue) {
+		if (checkboxValue==false) {
+			createBtn.setEnabled(value);
+			browseBtn.setEnabled(value);
+			btnCheckButton.setEnabled(value);
+		}
+		if (checkboxValue==true) {
+			btnCheckButton.setEnabled(value);
+			openBtn.setEnabled(!value);
+			createBtn.setEnabled(!value);
+			browseBtn.setEnabled(!value);
+		}
 	}
-
 	public static void setComponentName(String name) {
 		componentName = name;
 	}
@@ -280,4 +290,23 @@ public static OperationClassProperty createOperationalClass(Composite composite,
 	public static String getComponentName() {
 		return componentName;
 	}
+
+	public static boolean isCheckBoxSelected() {
+		return btnCheckButton.getSelection();
+	}
+	public static void setOperationClassNameInTextBox(String operationName, Text textBox) {
+		String operationClassName = null;
+		Operations operations = XMLConfigUtil.INSTANCE.getComponent(FilterOperationClassUtility.getComponentName())
+				.getOperations();
+		List<TypeInfo> typeInfos = operations.getStdOperation();
+		for (int i = 0; i < typeInfos.size(); i++) {
+			if (typeInfos.get(i).getName().equalsIgnoreCase(operationName)) {
+				operationClassName = typeInfos.get(i).getClazz();
+				break;
+			}
+		}
+		textBox.setText(operationClassName);;
+	}
+
+	
 }

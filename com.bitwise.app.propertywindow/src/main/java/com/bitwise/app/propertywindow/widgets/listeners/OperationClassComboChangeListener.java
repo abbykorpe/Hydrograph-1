@@ -1,17 +1,14 @@
 package com.bitwise.app.propertywindow.widgets.listeners;
 
-import java.util.List;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
-import com.bitwise.app.common.component.config.Operations;
-import com.bitwise.app.common.component.config.TypeInfo;
-import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.utility.FilterOperationClassUtility;
@@ -33,34 +30,30 @@ public class OperationClassComboChangeListener implements IELTListener{
 			public void handleEvent(Event event) {
 				String comboValue = ((Combo) widgetList[0]).getText();
 				propertyDialogButtonBar.enableApplyButton(true);
-				if (comboValue.equalsIgnoreCase(Messages.CUSTOM)) {
+				if (Messages.CUSTOM.equalsIgnoreCase(comboValue) && !FilterOperationClassUtility.isCheckBoxSelected()) {
 					((Text) widgetList[1]).setText("");
-					((Text)widgetList[1]).setEnabled(true);
-					FilterOperationClassUtility.enableAndDisableButtons(true);
+					((Text) widgetList[1]).setEnabled(true);
+					FilterOperationClassUtility.enableAndDisableButtons(true, false);
 				} else {
-					setOperationClassNameInTextBox(comboValue, widgetList[1]);
-					((Text)widgetList[1]).setEnabled(false);
-					FilterOperationClassUtility.enableAndDisableButtons(false);
+					if(FilterOperationClassUtility.isCheckBoxSelected())
+					{
+						MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+						messageBox.setText(Messages.ERROR);
+						messageBox.setMessage(Messages.CHECKBOX_DISABLE_MESSAGE);
+						if (messageBox.open() == SWT.OK) {
+							((Text) widgetList[1]).setText("");
+						} 
+					}
+					else
+					{
+						FilterOperationClassUtility.setOperationClassNameInTextBox(comboValue, (Text)widgetList[1]);
+						((Text) widgetList[1]).setEnabled(false);
+						FilterOperationClassUtility.enableAndDisableButtons(false, false);
+					}
 				}
 			}
 		};
 		return listener;
 	}
-	private void setOperationClassNameInTextBox(String operationName, Widget widget) {
-		String operationClassName = null;
-		Operations operations = XMLConfigUtil.INSTANCE.getComponent(FilterOperationClassUtility.getComponentName())
-				.getOperations();
-		List<TypeInfo> typeInfos = operations.getStdOperation();
-		for (int i = 0; i < typeInfos.size(); i++) {
-			if (typeInfos.get(i).getName().equalsIgnoreCase(operationName)) {
-				operationClassName = typeInfos.get(i).getClazz();
-				break;
-			}
-		}
-		((Text) widget).setText(operationClassName);
-		
-	}
-	
-	
 
 }
