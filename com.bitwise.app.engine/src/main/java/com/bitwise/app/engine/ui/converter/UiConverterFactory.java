@@ -17,6 +17,7 @@ import com.bitwise.app.engine.ui.converter.impl.OutputFixedWidthUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.RemoveDupsUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.TransformComponentUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.UnionAllUiConverter;
+import com.bitwise.app.engine.ui.converter.impl.UniqueSequenceUiConverter;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
@@ -25,6 +26,7 @@ import com.bitwiseglobal.graph.inputtypes.TextFileDelimited;
 import com.bitwiseglobal.graph.inputtypes.TextFileFixedWidth;
 import com.bitwiseglobal.graph.operationstypes.Aggregate;
 import com.bitwiseglobal.graph.operationstypes.Filter;
+import com.bitwiseglobal.graph.operationstypes.GenerateSequence;
 import com.bitwiseglobal.graph.operationstypes.HashJoin;
 import com.bitwiseglobal.graph.operationstypes.Join;
 import com.bitwiseglobal.graph.operationstypes.Normalize;
@@ -102,6 +104,9 @@ public class UiConverterFactory {
 		}
 		if ((Normalize.class).isAssignableFrom(typeBaseComponent.getClass())) {
 			return new NormalizeUiConverter(typeBaseComponent, container);
+		}
+		if ((GenerateSequence.class).isAssignableFrom(typeBaseComponent.getClass())) {
+			return new UniqueSequenceUiConverter(typeBaseComponent, container);
 		}
 		return new DummyUiConverter(typeBaseComponent, container);
 	}

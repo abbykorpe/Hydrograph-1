@@ -9,7 +9,6 @@ import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.transform.TypeTransformOutSocket;
 
 public abstract class TransformConverter extends Converter {
-	public static final String DEFAULT_IN_SOCKET_ID = "in0";
 	
 	@Override
 	public void prepareForXML(){

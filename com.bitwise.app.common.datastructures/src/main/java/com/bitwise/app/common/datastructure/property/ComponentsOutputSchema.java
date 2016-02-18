@@ -239,4 +239,30 @@ public class ComponentsOutputSchema implements IDataStructure {
 			}
 		}
 	}
+
+	/**
+	 * Copy output-schema from source component. 
+	 * 
+	 * @param sourceComponentsOutputSchema
+	 */
+	public void copySchemaFromOther(ComponentsOutputSchema sourceComponentsOutputSchema) {
+	
+		this.flushCurrentData();
+		if (sourceComponentsOutputSchema != null) {
+			this.getFixedWidthGridRowsOutputFields().addAll(
+					sourceComponentsOutputSchema.getFixedWidthGridRowsOutputFields());
+			this.getPassthroughFields().addAll(sourceComponentsOutputSchema.getPassthroughFields());
+			this.getMapFields().putAll(sourceComponentsOutputSchema.getMapFields());
+			this.getPassthroughFieldsPortInfo().putAll(
+					sourceComponentsOutputSchema.getPassthroughFieldsPortInfo());
+		}
+	}
+
+	private void flushCurrentData() {
+		this.getFixedWidthGridRowsOutputFields().clear();
+		this.getPassthroughFields().clear();
+		this.getMapFields().clear();
+		this.getPassthroughFieldsPortInfo().clear();
+	}
+
 }
