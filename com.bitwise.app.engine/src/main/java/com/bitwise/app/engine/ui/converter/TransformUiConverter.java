@@ -164,9 +164,9 @@ public abstract class TransformUiConverter extends UiConverter {
 
 	}
 
-	private String getOperationClassName(String fullClassPath) {
+	protected String getOperationClassName(String fullClassPath) {
 		String operationClassName = Messages.CUSTOM;
-		if (StringUtils.isNotBlank(fullClassPath)) {
+		if (StringUtils.isNotBlank(fullClassPath) && !isParameter(fullClassPath)) {
 			String str[] = fullClassPath.split("\\.");
 			operationClassName = str[str.length - 1];
 		}
