@@ -244,9 +244,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		Schema schema = new Schema();
 		if (isExternal) {
+			
 			schema.setIsExternal(true);
 
-			schema.setGridRow(new ArrayList());
+			schema.setGridRow(schemaGridRowList);
+
 			schema.setExternalSchemaPath(extSchemaPathText.getText());
 
 		} else {
@@ -481,13 +483,14 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			Schema schema = (Schema) this.properties;
 			if (schema.getIsExternal()) {
 				if (extSchemaPathText != null) {
-					extSchemaPathText.setText(schema.getExternalSchemaPath());
+					//extSchemaPathText.setText(schema.getExternalSchemaPath());
+					extSchemaPathText.setText("kanchan");
 					schemaGridRowList = schema.getGridRow();
 					tableViewer.setInput(schemaGridRowList);
 					tableViewer.refresh();
 					decorator.hide();
 					isExternal = true;
-					toggleTable(false);
+					//toggleTable(false);
 					toggleTextBox(true);
 				}
 			}
@@ -505,7 +508,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 		} else {
 			toggleRadioButton(false);
-			toggleTable(true);
+			//toggleTable(true);
 			toggleTextBox(false);
 		}
 	}
@@ -582,56 +585,17 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			public void mouseUp(MouseEvent e) {
 				extSchemaPathText.getText();
 				System.out.println("Path set: "+extSchemaPathText.getText());
+				
 				File schemaFile = new File(extSchemaPathText.getText());
-				Fields fields;
-				ArrayList schemaGridRowListToImport = new ArrayList<>();
 				
-				try {
-					JAXBContext jaxbContext = JAXBContext.newInstance(Fields.class);
-					Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-					fields = (Fields) jaxbUnmarshaller.unmarshal(schemaFile);
-					ArrayList<Field> fieldsList = (ArrayList<Field>) fields.getField();
-					
-					if(gridRowType.equals("Generic")){
-						schemaGridRowListToImport = new ArrayList<SchemaGrid>();
-						
-						for (Field temp : fieldsList) {
-							SchemaGrid gridRow = new SchemaGrid();
-							gridRow.setFieldName(temp.getName());
-							gridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(temp.getType().value()));
-							gridRow.setDateFormat(temp.getFormat());
-							gridRow.setPrecision(String.valueOf(temp.getPrecision()));
-							gridRow.setScale(String.valueOf(temp.getScale()));
-							gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(temp.getScaleType().value()));	
-							gridRow.setDescription(temp.getDescription());
-							schemaGridRowListToImport.add(gridRow);
-						}
-						
-					}else if(gridRowType.equals("FixedWidth")){
-						schemaGridRowListToImport = new ArrayList<FixedWidthGridRow>();
-						
-						for (Field temp : fieldsList) {
-							FixedWidthGridRow gridRow = new FixedWidthGridRow();
-							gridRow.setFieldName(temp.getName());
-							gridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(temp.getType().value()));
-							gridRow.setDateFormat(temp.getFormat());
-							gridRow.setPrecision(String.valueOf(temp.getPrecision()));
-							gridRow.setScale(String.valueOf(temp.getScale()));
-							//gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(temp.getScaleType().value()));
-							gridRow.setDescription(temp.getDescription());
-							schemaGridRowListToImport.add(gridRow);
-						}
-					}
-					
-					
-				} catch (JAXBException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				ArrayList<GridRow> schemaGridRowListToImport;
 				
+				GridRowLoader gridRowLoader = new GridRowLoader();
+				schemaGridRowListToImport = gridRowLoader.loadGridRowsFromXML(gridRowType, schemaFile);
 				
 				tableViewer.setInput(schemaGridRowListToImport);
 				tableViewer.refresh();
+				schemaGridRowList=schemaGridRowListToImport;
 
 				
 				/*
@@ -864,7 +828,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				}
 			}
 			table.clearAll();
-			if (!originalSchema.getIsExternal()) {
+			//if (!originalSchema.getIsExternal()) {
+			if (originalSchema.getIsExternal()) {
 				if (tableViewer != null) {
 					schemaGridRowList = originalSchema.getGridRow();
 					tableViewer.setInput(schemaGridRowList);
