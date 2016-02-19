@@ -32,6 +32,7 @@ import org.xml.sax.SAXException;
 import com.bitwise.app.common.component.config.CategoryType;
 import com.bitwise.app.common.component.config.Component;
 import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 
@@ -106,6 +107,9 @@ public class CustomPaletteViewer extends PaletteViewer {
 		boolean matchFound = false;
 		for (Component componentConfig : componentsConfig) {
 			String componentName = componentConfig.getName().toUpperCase();
+			if (componentConfig.getName().equalsIgnoreCase(Constants.DUMMY_COMPONENT)
+					|| componentConfig.getName().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT))
+				continue;
 			if (componentName.contains(searchedString.trim())) {
 				CombinedTemplateCreationEntry component = getComponentToAddInContainer(editor,
 						componentConfig);
@@ -124,8 +128,12 @@ public class CustomPaletteViewer extends PaletteViewer {
 	private void showAllContainers(final PaletteRoot paletteRoot, final ELTGraphicalEditor editor,
 			final Map<String, PaletteDrawer> categoryPaletteConatiner, final List<Component> componentsConfig) {
 		for (Component componentConfig : componentsConfig) {
+			if (componentConfig.getName().equalsIgnoreCase(Constants.DUMMY_COMPONENT)
+					|| componentConfig.getName().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT))
+				continue;
 			CombinedTemplateCreationEntry component = getComponentToAddInContainer(editor,
 					componentConfig);
+			
 			categoryPaletteConatiner.get(componentConfig.getCategory().name()).add(component);
 			showClosedPaletteContainersWhenSearchTextBoxIsEmpty(paletteRoot.getChildren());
 		}
@@ -162,6 +170,9 @@ public class CustomPaletteViewer extends PaletteViewer {
 	private void createPaletteContainers(PaletteRoot paletteRoot, Map<String, PaletteDrawer> categoryPaletteConatiner,
 			ELTGraphicalEditor eLEtlGraphicalEditor) {
 		for (CategoryType category : CategoryType.values()) {
+			if (category.name().equalsIgnoreCase(Constants.DUMMY_COMPONENT_CATEGORY)
+					|| category.name().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY))
+				continue;
 			PaletteDrawer paletteDrawer = eLEtlGraphicalEditor.createPaletteContainer(category.name());
 			paletteDrawer.setInitialState(PaletteDrawer.INITIAL_STATE_OPEN);
 			eLEtlGraphicalEditor.addContainerToPalette(paletteRoot, paletteDrawer);
