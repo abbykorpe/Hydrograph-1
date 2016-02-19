@@ -2,7 +2,6 @@ package com.bitwise.app.engine.ui.converter.impl;
 
 import java.util.LinkedHashMap;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
@@ -15,7 +14,6 @@ import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 import com.bitwiseglobal.graph.commontypes.TypeOperationField;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsComponent;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
-import com.bitwiseglobal.graph.operationstypes.GenerateSequence;
 
 /**
  * This class creates ui-UniqueSequence component from target XML.
@@ -44,7 +42,7 @@ public class UniqueSequenceUiConverter extends TransformUiConverter {
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(componentName);
 		uiComponent.setProperties(propertyMap);
-		uiComponent.setType(UIComponentsConstants.TRANSFORM.value());
+		uiComponent.setType(Constants.UNIQUE_SEQUENCE_TYPE);
 		validateComponentProperties(propertyMap);
 	}
 

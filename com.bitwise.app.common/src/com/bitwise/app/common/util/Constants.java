@@ -126,6 +126,7 @@ public class Constants {
 	public static final String DEFAULT_DATATYPE_INDEX_VALUE="0";
 	public static final String PARAMETER_SUFFIX = "@{";
 	public static final String UNIQUE_SEQUENCE = "UniqueSequence";
+	public static final String UNIQUE_SEQUENCE_TYPE = "Unique Sequence";
 	
 	public static final String PARAMETER_PREFIX = "}";
 	public static final String UNIQUE_SEQUENCE_PROPERTY_NAME = "sequence_field";
