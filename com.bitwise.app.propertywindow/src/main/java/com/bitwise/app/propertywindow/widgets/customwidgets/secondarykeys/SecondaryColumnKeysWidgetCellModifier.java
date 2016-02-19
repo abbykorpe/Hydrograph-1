@@ -14,6 +14,8 @@ import org.eclipse.swt.widgets.Item;
  */
 public class SecondaryColumnKeysWidgetCellModifier implements ICellModifier {
 	private Viewer viewer;
+	private static final String COLUMNNAME = "Column Name"; //$NON-NLS-1$
+	private static final String SORTORDER = "Sort Order"; //$NON-NLS-1$
 
 	/**
 	 * Instantiates a new run time property cell modifier.
@@ -51,11 +53,11 @@ public class SecondaryColumnKeysWidgetCellModifier implements ICellModifier {
 	public Object getValue(Object element, String property) {
 		SecondaryColumnKeysInformation p = (SecondaryColumnKeysInformation) element;
 		
-		if (SecondaryColumnKeysWidgetWizard.COLUMNNAME.equals(property)) {
+		if (COLUMNNAME.equals(property)) {
 
 			return p.getPropertyName();
 
-		} else if (SecondaryColumnKeysWidgetWizard.SORTORDER.equals(property))
+		} else if (SORTORDER.equals(property))
 			return p.getPropertyValue();
 		else
 			return null;
@@ -78,10 +80,10 @@ public class SecondaryColumnKeysWidgetCellModifier implements ICellModifier {
 
 		SecondaryColumnKeysInformation p = (SecondaryColumnKeysInformation) element;
 		
-		if (SecondaryColumnKeysWidgetWizard.COLUMNNAME.equals(property))
+		if (COLUMNNAME.equals(property))
 			p.setPropertyName(((String) value));
 
-		else if (SecondaryColumnKeysWidgetWizard.SORTORDER.equals(property))
+		else if (SORTORDER.equals(property))
 			p.setPropertyValue((String) value);
 		// Force the viewer to refresh
 		viewer.refresh();

@@ -112,16 +112,19 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 	 * New window launcher.
 	 */
 	public void newWindowLauncher() {
-		SecondaryColumnKeysWidgetWizard secondaryColumnKeyWizard = new SecondaryColumnKeysWidgetWizard();
-		secondaryColumnKeyWizard.setComponentName(componentName);
+		
+		SecondaryColumnKeysDialog secondaryColumnDialog = new SecondaryColumnKeysDialog(shell, propertyDialogButtonBar);
 		if (getProperties().get(propertyName) == null) {
 			setProperties(propertyName, new LinkedHashMap<String, String>());
 
 		}
-		secondaryColumnKeyWizard.setRuntimePropertyMap((LinkedHashMap<String, String>) getProperties()
+		secondaryColumnDialog.setSecondaryColumnsMap((LinkedHashMap<String, String>) getProperties()
 				.get(propertyName));
-		secondaryColumnKeyWizard.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
-		setProperties(propertyName, secondaryColumnKeyWizard.launchRuntimeWindow(shell, propertyDialogButtonBar));
+		secondaryColumnDialog.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
+		
+		secondaryColumnDialog.open();
+		
+		setProperties(propertyName, secondaryColumnDialog.getSecondaryColumnsMap());
 
 	}
 

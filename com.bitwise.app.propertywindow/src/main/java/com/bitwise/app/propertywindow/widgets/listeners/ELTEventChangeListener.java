@@ -36,7 +36,6 @@ public class ELTEventChangeListener implements IELTListener {
 			@Override
 			public void handleEvent(Event event) {
 				if (event.type == SWT.CHANGED) {
-					if (!((Button) wigetList[1]).getSelection())
 					propertyDialogButtonBar.enableApplyButton(true);
 				}
 			}
