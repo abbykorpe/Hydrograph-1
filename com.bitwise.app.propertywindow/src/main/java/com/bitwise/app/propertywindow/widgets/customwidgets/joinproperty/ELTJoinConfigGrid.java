@@ -29,9 +29,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.bitwise.app.common.constants.imagepath.ImagePathConstant;
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ImagePathConstant;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
@@ -53,7 +53,7 @@ public class ELTJoinConfigGrid extends Dialog {
 	private ELTSWTWidgets eltswtWidgets = new ELTSWTWidgets();
 	private Label editLableAsButton;
 	private Map<String, List<String>> propagatedFiledNames;
-	private String editImageIconPath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.EDIT_BUTTON.getImagePath();
+	private String editImageIconPath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.EDIT_BUTTON;
 
 	/**
 	 * Create the dialog.

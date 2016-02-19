@@ -24,10 +24,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.bitwise.app.common.constants.imagepath.ImagePathConstant;
-import com.bitwise.app.common.constants.label.LabelConstants;
-import com.bitwise.app.common.constants.ports.PortConstants;
 import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
+import com.bitwise.app.common.util.ImagePathConstant;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.dialogs.FieldDialog;
@@ -42,8 +40,19 @@ public class ELTLookupConfigGrid extends Dialog {
 	private String drivenKeys, lookupKey;
 	private Label driverEditLableAsButton, lookupEditLableAsButton;
 	private Map<String, List<String>> propagatedFiledNames;
-	private String editImageIconPath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.EDIT_BUTTON.getImagePath();
+	private String editImageIconPath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.EDIT_BUTTON;
 
+	private static final String LOOKUP_PORT = "Lookup Port";
+	private static final String LOOKUP_KEYS = "Lookup Key(s)";
+	private static final String PORT_TYPE = "Port Type";
+	private static final String DRIVER ="driver";
+	private static final String LOOKUP = "lookup";
+	private static final String INSERT_IMAGE ="Insert Image";
+	private static final String LOOKUP_CONFIG="Lookup Configuration";
+	
+	private static final String IN_PORT0= "IN0";
+	private static final String IN_PORT1="IN1";
+	
 	/**
 	 * Create the dialog.
 	 * 
@@ -69,7 +78,7 @@ public class ELTLookupConfigGrid extends Dialog {
 	@Override
 	public Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
-		container.getShell().setText(LabelConstants.LOOKUP_CONFIG.getLabel());
+		container.getShell().setText(LOOKUP_CONFIG);
 		container.setLayout(new FillLayout(SWT.VERTICAL));
 
 		Composite composite = new Composite(container, SWT.BORDER);
@@ -77,25 +86,24 @@ public class ELTLookupConfigGrid extends Dialog {
 
 		Label lblNewLabel = new Label(composite, SWT.CENTER);
 		lblNewLabel.setLayoutData(new RowData(137, 21));
-		lblNewLabel.setText(LabelConstants.LOOKUP_CONFIG.getLabel());
+		lblNewLabel.setText(LOOKUP_CONFIG);
 
 		Composite portComposite = new Composite(composite, SWT.BORDER);
 		portComposite.setLayoutData(new RowData(436, 60));
 		portComposite.setBounds(10, 10, 200, 100);
 
-		labelWidget(portComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 5, 5, 100, 20 }, LabelConstants.LOOKUP_PORT.getLabel());
+		labelWidget(portComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 5, 5, 100, 20 }, LOOKUP_PORT);
 		radio[0] = buttonWidget(portComposite, SWT.RADIO, new int[] { 105, 5, 90, 20 },
-				PortConstants.IN_PORT0.getPortID());
+				IN_PORT0);
 		radio[1] = buttonWidget(portComposite, SWT.RADIO, new int[] { 105, 25, 90, 20 },
-				PortConstants.IN_PORT1.getPortID());
+				IN_PORT1);
 
-		final String in1_PortID = PortConstants.IN_PORT1.getPortID();
 		for (int i = 0; i < radio.length; i++) {
 			radio[i].addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent event) {
 					Button button = (Button) event.widget;
-					if (button.getText().equalsIgnoreCase(in1_PortID)) {
+					if (button.getText().equalsIgnoreCase(IN_PORT1)) {
 						radio[0].setSelection(false);
 						radio[1].setSelection(true);
 						configProperty.setSelected(false);
@@ -113,23 +121,22 @@ public class ELTLookupConfigGrid extends Dialog {
 		Composite keyComposite = new Composite(composite, SWT.BORDER);
 		keyComposite.setLayoutData(new RowData(436, 100));
 
-		labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 10, 10, 175, 15 }, LabelConstants.PORT_TYPE.getLabel());
-		labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 191, 10, 235, 15 }, LabelConstants.LOOKUP_KEYS.getLabel());
+		labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 10, 10, 175, 15 }, PORT_TYPE);
+		labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 191, 10, 235, 15 }, LOOKUP_KEYS);
 
-		textBoxWidget(keyComposite, new int[] { 10, 31, 175, 21 }, LabelConstants.DRIVER.getLabel(), false);
-		textBoxWidget(keyComposite, new int[] { 10, 58, 175, 21 }, LabelConstants.LOOKUP.getLabel(), false);
+		textBoxWidget(keyComposite, new int[] { 10, 31, 175, 21 }, DRIVER, false);
+		textBoxWidget(keyComposite, new int[] { 10, 58, 175, 21 },LOOKUP, false);
 
 		drivenText = textBoxWidget(keyComposite, new int[] { 191, 31, 220, 21 }, "", false);
 		lookupText = textBoxWidget(keyComposite, new int[] { 191, 58, 220, 21 }, "", false);
 		drivenText.setBackground(new Color(null, 255, 255, 255));
 		lookupText.setBackground(new Color(null, 255, 255, 255));
-		labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 10, 10, 175, 15 }, LabelConstants.PORT_TYPE.getLabel());
+		labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 10, 10, 175, 15 }, PORT_TYPE);
 
 		driverEditLableAsButton = labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 415, 28, 20, 20 },
-				LabelConstants.INSERT_IMAGE.getLabel());
+				INSERT_IMAGE);
 		driverEditLableAsButton.setImage(new Image(null, editImageIconPath));
-
-		final String in0_PortID = PortConstants.IN_PORT0.getPortID();
+		
 		driverEditLableAsButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -145,7 +152,7 @@ public class ELTLookupConfigGrid extends Dialog {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				drivenKeys = launchDialogToSelectFields(drivenKeys, in0_PortID);
+				drivenKeys = launchDialogToSelectFields(drivenKeys, IN_PORT0);
 				drivenText.setText(drivenKeys);
 
 			}
@@ -171,7 +178,7 @@ public class ELTLookupConfigGrid extends Dialog {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				lookupKey = launchDialogToSelectFields(lookupKey, in1_PortID);
+				lookupKey = launchDialogToSelectFields(lookupKey, IN_PORT1);
 				lookupText.setText(lookupKey);
 
 			}
