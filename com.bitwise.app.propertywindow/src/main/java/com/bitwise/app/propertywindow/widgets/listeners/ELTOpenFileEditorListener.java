@@ -23,6 +23,7 @@ import com.bitwise.app.common.component.config.Operations;
 import com.bitwise.app.common.component.config.TypeInfo;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.propertywindow.Activator;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.utility.FilterOperationClassUtility;
@@ -85,7 +86,7 @@ public class ELTOpenFileEditorListener implements IELTListener{
 				IType findType = javaProject.findType(operationClassName);
 				JavaUI.openInEditor(findType);
 			} catch (JavaModelException | PartInitException e) {
-				Status status = new Status(IStatus.ERROR, "com.bitwise.app.propertywindow",Messages.CLASS_NOT_EXIST,null);
+				Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID,Messages.CLASS_NOT_EXIST,null);
 				StatusManager.getManager().handle(status, StatusManager.BLOCK);
 				logger.error(e.getMessage(), e);
 			}
