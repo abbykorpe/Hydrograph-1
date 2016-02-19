@@ -54,9 +54,18 @@ import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ImagePathConstant;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+
+/**
+ * 
+ * Class to create Secondary column dialog
+ * 
+ * @author Bitwise
+ *
+ */
 
 public class SecondaryColumnKeysDialog extends Dialog {
 	
@@ -64,7 +73,6 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	private static final String COLUMNNAME = "Column Name"; //$NON-NLS-1$
 	private static final String SORTORDER = "Sort Order"; //$NON-NLS-1$
 	private Map<String, String> secondaryColumnsMap;
-	private String componentName;
 	public static final String[] PROPS = { COLUMNNAME, SORTORDER };
 	private Label lblPropertyError;
 	private TableViewer targetTableViewer;
@@ -77,6 +85,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 
+	
 	
 	public SecondaryColumnKeysDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
@@ -135,9 +144,9 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		targetTableViewer.setInput(propertyLst);
 
 		TableColumn targetTableColumnFieldName = new TableColumn(targetTable, SWT.CENTER);
-		targetTableColumnFieldName.setText("Column Name"); //$NON-NLS-1$
+		targetTableColumnFieldName.setText(COLUMNNAME); //$NON-NLS-1$
 		TableColumn targetTableColumnSortOrder = new TableColumn(targetTable, SWT.LEFT_TO_RIGHT);
-		targetTableColumnSortOrder.setText("Sort Order"); //$NON-NLS-1$
+		targetTableColumnSortOrder.setText(SORTORDER); //$NON-NLS-1$
 
 		for (int i = 0, n = targetTable.getColumnCount(); i < n; i++) {
 			targetTable.getColumn(i).pack();
@@ -283,22 +292,22 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 		Label addButton = new Label(composite_1, SWT.NONE);
 		addButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + "/icons/add.png"));
+		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON));
 		attachAddButtonListern(addButton);
 
 		Label deleteButton = new Label(composite_1, SWT.NONE);
 		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + "/icons/delete.png"));
+		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON));
 		attachDeleteButtonListener(deleteButton);
 
 		Label upButton = new Label(composite_1, SWT.NONE);
 		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + "/icons/up.png"));
+		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON));
 		attachUpButtonListener(upButton);
 
 		Label downButton = new Label(composite_1, SWT.NONE);
 		downButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + "/icons/down.png"));
+		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON));
 		attachDownButtonListerner(downButton);
 	}
 
@@ -492,15 +501,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		this.secondaryColumnsMap = secondaryColumnsMap;
 	}
 
-	/**
-	 * 
-	 * set component name
-	 * 
-	 * @param componentName
-	 */
-	public void setComponentName(String componentName) {
-		this.componentName = componentName;
-	}
+	
 
 	// Loads Already Saved Properties..
 	private void loadProperties(TableViewer tv) {
@@ -549,8 +550,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		int propertyCounter = 0;
 		for (SecondaryColumnKeysInformation temp : propertyLst) {
 			if (!temp.getPropertyName().trim().isEmpty() && !temp.getPropertyValue().trim().isEmpty()) {
-				String Regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
-				Matcher matchName = Pattern.compile(Regex).matcher(temp.getPropertyName());
+				//String Regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*"; -- TODO Please do not remove
+				Matcher matchName = Pattern.compile(Constants.REGEX).matcher(temp.getPropertyName());
 				if (!matchName.matches()) {
 					targetTable.setSelection(propertyCounter);
 					lblPropertyError.setVisible(true);
@@ -587,12 +588,12 @@ public class SecondaryColumnKeysDialog extends Dialog {
 				if (valueToValidate.isEmpty()) {
 					lblPropertyError.setText(ErrorMessage);
 					lblPropertyError.setVisible(true);
-					return "ERROR"; //$NON-NLS-1$
+					return Constants.ERROR; //$NON-NLS-1$
 				}
 				if (!currentSelectedFld.equalsIgnoreCase(valueToValidate) && isPropertyAlreadyExists(valueToValidate)) {
 					lblPropertyError.setText(Messages.RuntimePropertAlreadyExists);
 					lblPropertyError.setVisible(true);
-					return "ERROR"; //$NON-NLS-1$
+					return Constants.ERROR; //$NON-NLS-1$
 				}
 				
 				lblPropertyError.setVisible(false);
@@ -616,7 +617,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 				if (valueToValidate.isEmpty()) {
 					lblPropertyError.setText(ErrorMessage);
 					lblPropertyError.setVisible(true);
-					return "ERROR"; //$NON-NLS-1$
+					return Constants.ERROR; //$NON-NLS-1$
 				} else {
 					lblPropertyError.setVisible(false);
 				}
@@ -682,7 +683,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		if (isAnyUpdatePerformed) {
 			int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
 			MessageBox messageBox = new MessageBox(new Shell(), style);
-			messageBox.setText("Information");
+			messageBox.setText(Messages.INFORMATION);
 			messageBox.setMessage(Messages.MessageBeforeClosingWindow);
 
 			if (messageBox.open() == SWT.YES) {

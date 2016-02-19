@@ -114,7 +114,6 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 	public void newWindowLauncher() {
 		
 		SecondaryColumnKeysDialog secondaryColumnDialog = new SecondaryColumnKeysDialog(shell, propertyDialogButtonBar);
-		secondaryColumnDialog.setComponentName(componentName);
 		if (getProperties().get(propertyName) == null) {
 			setProperties(propertyName, new LinkedHashMap<String, String>());
 
