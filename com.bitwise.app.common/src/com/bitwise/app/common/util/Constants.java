@@ -35,9 +35,9 @@ public class Constants {
 	
 	public static final String TRUE = "True";
 	public static final String FALSE = "False";
-	public static final String OPERATION_FIELD = "Operation Fields ";
+	public static final String OPERATION_FIELD = "Operation Field ";
 	public static final String OPERATION_FIELDS = "Operation\nFields";
-	public static final String COLUMN_NAME2 = "Key Fields ";
+	public static final String COLUMN_NAME2 = "Key Field ";
 	public static final String COLUMN_NAME = "Key\nFields";
 	public static final String SECONDARY_KEYS2 = "Secondary Keys ";
 	public static final String SECONDARY_KEYS = "Secondary\n Keys";
@@ -124,7 +124,12 @@ public class Constants {
 	public static final String IS_PARAMETER = "Is Parameter";
 	public static final String SCHEMA_DEFAULT_FIELD_NAME_SUFFIX="DefaultValue";
 	public static final String DEFAULT_DATATYPE_INDEX_VALUE="0";
-	public static final String PRAMETER_SUFFIX = "@{";
+	public static final String PARAMETER_SUFFIX = "@{";
+	public static final String UNIQUE_SEQUENCE = "UniqueSequence";
+	public static final String UNIQUE_SEQUENCE_TYPE = "Unique Sequence";
+	
 	public static final String PARAMETER_PREFIX = "}";
+	public static final String UNIQUE_SEQUENCE_PROPERTY_NAME = "sequence_field";
+	public static final String ADD_ALL_FIELDS_SYMBOL = "*";
 		
 }

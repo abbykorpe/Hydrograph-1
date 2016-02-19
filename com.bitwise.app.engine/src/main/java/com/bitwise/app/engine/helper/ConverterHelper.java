@@ -97,7 +97,7 @@ public class ConverterHelper {
 			if(transformOperation.getOperationClassProperty() != null && transformOperation.getOperationClassProperty().getOperationClassPath() !=null){
 				for (String operationField : transformOperation.getImputFields()) {
 					TypeInputField typeInputField = new TypeInputField();
-					typeInputField.setInSocketId(TransformConverter.DEFAULT_IN_SOCKET_ID);
+					typeInputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
 					typeInputField.setName(operationField.trim());
 					inputFields.getField().add(typeInputField);
 				}
@@ -180,7 +180,7 @@ public class ConverterHelper {
 					for(String inputField : inputFields){
 						if(inputField.trim().equals(outputFields.get(index).trim())){
 							TypeInputField typeInputField = new TypeInputField();
-							typeInputField.setInSocketId(TransformConverter.DEFAULT_IN_SOCKET_ID);
+							typeInputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
 							typeInputField.setName(inputField.trim());
 							typeOperationFieldsList.add(typeInputField);
 						}
@@ -207,7 +207,7 @@ public class ConverterHelper {
 								TypeMapField mapField = new TypeMapField();
 								mapField.setSourceName(inputField.trim());
 								mapField.setName(outputFields.get(index).trim());
-								mapField.setInSocketId(TransformConverter.DEFAULT_IN_SOCKET_ID);
+								mapField.setInSocketId(Constants.FIXED_INSOCKET_ID);
 								typeMapFieldList.add(mapField);
 							}
 							index++;

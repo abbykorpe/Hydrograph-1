@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
+import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
@@ -82,4 +85,23 @@ public class SchemaPropagationHelper {
 		}
 		return fixedWidthGridRow;
 	}
+
+	/**
+	 * This method fetches input schema fields from source component.
+	 * 
+	 * @param sourceComponent
+	 * @return
+	 */
+	public List<String> getInputFieldListForLink(Link link) {
+		ComponentsOutputSchema sourceComponentsOutputSchema;
+		List<String> availableFields = new ArrayList<>();
+		sourceComponentsOutputSchema = (ComponentsOutputSchema) link.getSource().getProperties()
+				.get(Constants.SCHEMA_TO_PROPAGATE);
+		if (sourceComponentsOutputSchema != null) {
+			for (GridRow gridRow : sourceComponentsOutputSchema.getFixedWidthGridRowsOutputFields())
+				availableFields.add(StringUtils.lowerCase(gridRow.getFieldName()));
+		}
+		return availableFields;
+	}
+
 }

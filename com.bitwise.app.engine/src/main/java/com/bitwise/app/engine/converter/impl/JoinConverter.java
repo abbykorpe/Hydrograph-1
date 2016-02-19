@@ -177,7 +177,7 @@ public class JoinConverter extends TransformConverter {
 			for (String object : componentOperationFileds) {
 				TypeInputField operationFiled = new TypeInputField();
 				operationFiled.setName(object);
-				operationFiled.setInSocketId(DEFAULT_IN_SOCKET_ID);
+				operationFiled.setInSocketId(Constants.FIXED_INSOCKET_ID);
 				operationFiledList.add(operationFiled);
 			}
 		}

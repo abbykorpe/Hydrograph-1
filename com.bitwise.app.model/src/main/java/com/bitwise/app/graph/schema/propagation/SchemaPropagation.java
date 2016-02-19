@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
+import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.graph.model.Component;
@@ -61,7 +62,11 @@ public class SchemaPropagation {
 					getComponentsOutputSchema(link);
 					applySchemaToTargetComponents(link.getTarget(), this.componentsOutputSchema);
 				}
-			else {
+			else if(link.getTarget().getComponentName().equalsIgnoreCase(Constants.UNIQUE_SEQUENCE))
+						{
+							propagateSchemForUniqueSequenceComponent(link.getTarget(),componentsOutputSchema);
+						}
+				else{
 				for (Link link2 : link.getTarget().getSourceConnections()) {
 					if (!isMainLinkChecked(link2)) {
 						if (checkUnusedSocketAsSourceTerminal(link2) && getComponentsOutputSchema(link2) != null) {
@@ -73,6 +78,22 @@ public class SchemaPropagation {
 				}
 			}
 		}
+	}
+
+	private void propagateSchemForUniqueSequenceComponent(Component component, ComponentsOutputSchema previousComponentOutputSchema) {
+		FixedWidthGridRow fixedWidthGridRow=null;
+		ComponentsOutputSchema uniqeSequenceOutputSchema=(ComponentsOutputSchema) component.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
+		if (uniqeSequenceOutputSchema != null && !uniqeSequenceOutputSchema.getFixedWidthGridRowsOutputFields().isEmpty()) {
+			fixedWidthGridRow=uniqeSequenceOutputSchema.getFixedWidthGridRowsOutputFields().get(uniqeSequenceOutputSchema.getFixedWidthGridRowsOutputFields().size()-1);
+			uniqeSequenceOutputSchema.copySchemaFromOther(previousComponentOutputSchema);
+			if(!uniqeSequenceOutputSchema.getFixedWidthGridRowsOutputFields().contains(fixedWidthGridRow))
+				uniqeSequenceOutputSchema.getFixedWidthGridRowsOutputFields().add(fixedWidthGridRow);
+			applySchemaToTargetComponents(component, uniqeSequenceOutputSchema);
+		}else
+			for(Link linkFromCurrentComponent:component.getTargetConnections())
+			{
+				applySchemaToTargetComponents(linkFromCurrentComponent.getTarget(), previousComponentOutputSchema);
+			}
 	}
 
 	private void propagatePassThroughAndMapFields(Link link) {
