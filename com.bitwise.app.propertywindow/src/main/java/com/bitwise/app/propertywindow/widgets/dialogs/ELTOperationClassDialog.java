@@ -153,8 +153,7 @@ public class ELTOperationClassDialog extends Dialog {
 	 * Populate widget.
 	 */
     public void populateWidget() {
-        if (!operationClassProperty.getOperationClassPath().equalsIgnoreCase("")) {
-        	btnCheckButton.setEnabled(true);
+		if (!operationClassProperty.getOperationClassPath().equalsIgnoreCase("")) {
 			operationClasses.setText(operationClassProperty.getComboBoxValue());
 			fileName.setText(operationClassProperty.getOperationClassPath());
 			btnCheckButton.setSelection(operationClassProperty.isParameter());
@@ -162,9 +161,11 @@ public class ELTOperationClassDialog extends Dialog {
 			if (!operationClassProperty.getComboBoxValue().equalsIgnoreCase(Messages.CUSTOM)) {
 				fileName.setEnabled(false);
 				FilterOperationClassUtility.enableAndDisableButtons(false, false);
+				btnCheckButton.setEnabled(false);
 			} else {
+				btnCheckButton.setEnabled(true);
 				if (btnCheckButton.getSelection()) {
-					FilterOperationClassUtility.enableAndDisableButtons(true,true);
+					FilterOperationClassUtility.enableAndDisableButtons(true, true);
 				}
 			}
 		} else {
