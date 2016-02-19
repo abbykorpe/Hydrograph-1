@@ -9,11 +9,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Shell;
 
-import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
-import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.graph.model.Link;
-import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -31,7 +27,6 @@ public class SingleColumnWidget extends AbstractWidget {
 
 	private String propertyName;
 	private List<String> set;
-	private Shell shell;
 	private SingleColumnGridConfig gridConfig = null;
 
 	public SingleColumnWidget(ComponentConfigrationProperty componentConfigProp,
@@ -44,22 +39,21 @@ public class SingleColumnWidget extends AbstractWidget {
 
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
-		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(
+		ELTDefaultSubgroupComposite defaultSubgroupComposite = new ELTDefaultSubgroupComposite(
 				container.getContainerControl());
-		eltSuDefaultSubgroupComposite.createContainerWidget();
-		shell = eltSuDefaultSubgroupComposite.getContainerControl().getShell();
+		defaultSubgroupComposite.createContainerWidget();
 
-		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(gridConfig.getLabelName());
-		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
+		AbstractELTWidget defaultLable = new ELTDefaultLable(gridConfig.getLabelName());
+		defaultSubgroupComposite.attachWidget(defaultLable);
 
-		AbstractELTWidget eltDefaultButton = new ELTDefaultButton("Edit");
-		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
-		Button button = (Button) eltDefaultButton.getSWTWidgetControl();
+		AbstractELTWidget defaultButton = new ELTDefaultButton("Edit");
+		defaultSubgroupComposite.attachWidget(defaultButton);
+		Button button = (Button) defaultButton.getSWTWidgetControl();
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				FieldDialog fieldDialog = new FieldDialog(new Shell(),propertyDialogButtonBar);
+				FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 				fieldDialog.setComponentName(gridConfig.getComponentName());
 				if (getProperties().get(propertyName) == null) {
 					setProperties(propertyName, new ArrayList<String>());
@@ -67,9 +61,9 @@ public class SingleColumnWidget extends AbstractWidget {
 				fieldDialog.setRuntimePropertySet((List<String>) getProperties().get(propertyName));
 				fieldDialog.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
 				fieldDialog.open();
-				
+
 				setProperties(propertyName, fieldDialog.getFieldNameList());
-				
+
 			}
 		});
 
@@ -93,7 +87,7 @@ public class SingleColumnWidget extends AbstractWidget {
 	}
 
 	private List<String> getPropagatedSchema() {
-			return SchemaPropagationHelper.INSTANCE.getFieldsForFilterWidget(getComponent()).get(
+		return SchemaPropagationHelper.INSTANCE.getFieldsForFilterWidget(getComponent()).get(
 				Constants.INPUT_SOCKET_TYPE + 0);
 	}
 }

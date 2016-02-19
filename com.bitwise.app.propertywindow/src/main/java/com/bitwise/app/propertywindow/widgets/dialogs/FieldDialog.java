@@ -50,6 +50,7 @@ import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.constants.imagepath.ImagePathConstant;
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
@@ -60,25 +61,23 @@ import com.bitwise.app.propertywindow.widgets.filterproperty.ELTCellModifier;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
 
-
 /**
  * 
- * The class to create key field dialog. 
+ * The class to create key field dialog.
  * 
  * @author Bitwise
- *
+ * 
  */
 
 public class FieldDialog extends Dialog {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FieldDialog.class);
 
 	private final List<FilterProperties> propertyLst;
-	private static final String FilterInputFieldName = "Component Name"; //$NON-NLS-1$
 	private List<String> fieldNameList;
 	private String componentName;
 
 	private final String PROPERTY_EXISTS_ERROR = Messages.RuntimePropertAlreadyExists;
-	private static final String[] PROPS = { FilterInputFieldName };
+	private static final String[] PROPS = { Constants.COMPONENT_NAME };
 	private final String PROPERTY_NAME_BLANK_ERROR = Messages.EmptyNameNotification;
 	private Label lblPropertyError;
 	private TableViewer targetTableViewer;
@@ -96,7 +95,6 @@ public class FieldDialog extends Dialog {
 
 	PropertyDialogButtonBar propertyDialogButtonBar;
 
-	
 	public FieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
 
@@ -268,22 +266,22 @@ public class FieldDialog extends Dialog {
 
 		Label addButton = new Label(composite_1, SWT.NONE);
 		addButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		addButton.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
+		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON.getImagePath()));
 		attachAddButtonListern(addButton);
 
 		Label deleteButton = new Label(composite_1, SWT.NONE);
 		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		deleteButton.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
+		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON.getImagePath()));
 		attachDeleteButtonListener(deleteButton);
 
 		Label upButton = new Label(composite_1, SWT.NONE);
 		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		upButton.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png"));
+		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON.getImagePath()));
 		attachUpButtonListener(upButton);
 
 		Label downButton = new Label(composite_1, SWT.NONE);
 		downButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		downButton.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png"));
+		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON.getImagePath()));
 		attachDownButtonListerner(downButton);
 	}
 
@@ -544,20 +542,18 @@ public class FieldDialog extends Dialog {
 
 		for (FilterProperties temp : propertyLst) {
 			if (!temp.getPropertyname().trim().isEmpty()) {
-				String Regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
-				Matcher matchs = Pattern.compile(Regex).matcher(temp.getPropertyname().trim());
+				// String Regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*"; --- TODO PLEASE DO NOT REMOVE THIS COMMENT
+				Matcher matchs = Pattern.compile(Constants.REGEX).matcher(temp.getPropertyname().trim());
 				if (!matchs.matches()) {
 					targetTable.setSelection(propertyCounter);
 					lblPropertyError.setVisible(true);
 					lblPropertyError.setText(Messages.ALLOWED_CHARACTERS);
-					// disableButtons();
 					return false;
 				}
 			} else {
 				targetTable.setSelection(propertyCounter);
 				lblPropertyError.setVisible(true);
 				lblPropertyError.setText(Messages.EmptyNameNotification);
-				// disableButtons();
 				return false;
 			}
 			propertyCounter++;
@@ -577,7 +573,7 @@ public class FieldDialog extends Dialog {
 				if (valueToValidate.isEmpty()) {
 					lblPropertyError.setText(ErrorMessage);
 					lblPropertyError.setVisible(true);
-					return "ERROR"; //$NON-NLS-1$
+					return Constants.ERROR; //$NON-NLS-1$
 				} else {
 					lblPropertyError.setVisible(false);
 				}
@@ -587,9 +583,9 @@ public class FieldDialog extends Dialog {
 							&& temp.getPropertyname().trim().equalsIgnoreCase(valueToValidate)) {
 						lblPropertyError.setText(PROPERTY_EXISTS_ERROR);
 						lblPropertyError.setVisible(true);
-						return "ERROR"; //$NON-NLS-1$
-					} 
-					
+						return Constants.ERROR; //$NON-NLS-1$
+					}
+
 					lblPropertyError.setVisible(false);
 				}
 
