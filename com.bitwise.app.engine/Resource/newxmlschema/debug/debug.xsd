@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.bitwiseglobal.com/graph/debug"
+	targetNamespace="http://www.bitwiseglobal.com/graph/debug"
+	elementFormDefault="qualified">
+
+	<xs:element name="debug">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded" minOccurs="1">
+				<xs:element name="viewData">
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="limit" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:attribute name="value" type="xs:long" use="optional" />
+								</xs:complexType>
+							</xs:element>
+						</xs:all>
+						<xs:attribute name="fromComponentId" type="xs:string"
+							use="required" />
+						<xs:attribute name="outSocketId" type="xs:string"
+							use="required" />
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

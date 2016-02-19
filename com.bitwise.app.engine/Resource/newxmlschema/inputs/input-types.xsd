@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="http://www.bitwiseglobal.com/graph/inputtypes"
 	xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:itffw="http://www.bitwiseglobal.com/graph/itffw"
-	xmlns:itfd="http://www.bitwiseglobal.com/graph/itfd" xmlns:itfs="http://www.bitwiseglobal.com/graph/itfs" xmlns:igr="http://www.bitwiseglobal.com/graph/igr"
-	xmlns:ifparquet="http://www.bitwiseglobal.com/graph/ifparquet"
+	xmlns:itfd="http://www.bitwiseglobal.com/graph/itfd" xmlns:itfs="http://www.bitwiseglobal.com/graph/itfs"
+	xmlns:igr="http://www.bitwiseglobal.com/graph/igr" xmlns:ifparquet="http://www.bitwiseglobal.com/graph/ifparquet"
 	xmlns:ihiveparquet="http://www.bitwiseglobal.com/graph/ihiveparquet"
+	xmlns:ihivetextfile="http://www.bitwiseglobal.com/graph/ihivetextfile"
 	xmlns:ifMixedScheme="http://www.bitwiseglobal.com/graph/ifmixedscheme"
 	xmlns:ifsubgraph="http://www.bitwiseglobal.com/graph/ifsubgraph"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwiseglobal.com/graph/inputtypes"
@@ -22,6 +23,8 @@
 		namespace="http://www.bitwiseglobal.com/graph/ifparquet" />
 	<xs:import schemaLocation="./parquet-hive-file/input-hive-parquet-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/ihiveparquet" />
+	<xs:import schemaLocation="./hive-text-file/input-hive-text-file-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/ihivetextfile" />
 	<xs:import
 		schemaLocation="./text-file-mixedScheme/input-file-mixedScheme-text-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/ifmixedscheme" />
@@ -81,7 +84,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	
+
 	<xs:complexType name="textFileFixedWidth">
 		<xs:complexContent>
 			<xs:extension base="itffw:type-fixed-width-base">
@@ -124,7 +127,6 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-
 	<xs:complexType name="parquetFile">
 		<xs:complexContent>
 			<xs:extension base="ifparquet:type-input-file-delimited-base">
@@ -141,7 +143,6 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-
 	<xs:complexType name="parquetHiveFile">
 		<xs:complexContent>
 			<xs:extension base="ihiveparquet:type-input-file-delimited-base">
@@ -153,7 +154,39 @@
 						minOccurs="1" maxOccurs="1" />
 					<xs:element name="tableName" type="ihiveparquet:hive_type"
 						minOccurs="1" maxOccurs="1" />
-					<xs:element name="external_table_path" type="ihiveparquet:hive_path_type" maxOccurs="1" minOccurs="0"/>
+					<xs:element name="external_table_path" type="ihiveparquet:hive_path_type"
+						maxOccurs="1" minOccurs="0" />
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="hiveTextFile">
+		<xs:complexContent>
+			<xs:extension
+				base="ihivetextfile:type-input-hive-text-file-delimited-base">
+				<xs:sequence>
+					<xs:element name="partitionKeys"
+						type="ihivetextfile:hive_partition_fields_type" minOccurs="0"
+						maxOccurs="1" />
+					<xs:element name="delimiter">
+						<xs:complexType>
+							<xs:attribute name="value" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="databaseName" type="ihivetextfile:hive_type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="tableName" type="ihivetextfile:hive_type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="external_table_path" type="ihivetextfile:hive_path_type"
+						maxOccurs="1" minOccurs="0" />
+					<xs:element name="quote" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute name="value" type="xs:string" />
+						</xs:complexType>
+					</xs:element>
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" />
 				</xs:sequence>

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="http://www.bitwiseglobal.com/graph/outputtypes"
 	xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:otffw="http://www.bitwiseglobal.com/graph/otffw"
-	xmlns:otfd="http://www.bitwiseglobal.com/graph/otfd" xmlns:otfs="http://www.bitwiseglobal.com/graph/otfs" xmlns:otdiscard="http://www.bitwiseglobal.com/graph/otdiscard"
+	xmlns:otfd="http://www.bitwiseglobal.com/graph/otfd" xmlns:otfs="http://www.bitwiseglobal.com/graph/otfs"
+	xmlns:otdiscard="http://www.bitwiseglobal.com/graph/otdiscard"
 	xmlns:ofparquet="http://www.bitwiseglobal.com/graph/ofparquet"
 	xmlns:ohiveparquet="http://www.bitwiseglobal.com/graph/ohiveparquet"
+	xmlns:ohivetextfile="http://www.bitwiseglobal.com/graph/ohivetextfile"
 	xmlns:ofMixedScheme="http://www.bitwiseglobal.com/graph/ofmixedscheme"
 	xmlns:ofsubgraph="http://www.bitwiseglobal.com/graph/ofsubgraph"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwiseglobal.com/graph/outputtypes"
@@ -22,6 +24,8 @@
 		namespace="http://www.bitwiseglobal.com/graph/ofparquet" />
 	<xs:import schemaLocation="./parquet-hive-file/output-hive-parquet-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/ohiveparquet" />
+	<xs:import schemaLocation="./hive-text-file/output-hive-text-file-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/ohivetextfile" />
 	<xs:import
 		schemaLocation="./text-file-mixedScheme/output-file-mixedScheme-text-types.xsd"
 		namespace="http://www.bitwiseglobal.com/graph/ofmixedscheme" />
@@ -67,21 +71,21 @@
 	</xs:complexType>
 
 	<xs:complexType name="sequenceOutputFile">
-			<xs:complexContent>
-				<xs:extension base="otfs:type-output-file-sequence-base">
-					<xs:sequence>
-						<xs:element name="path">
-							<xs:complexType>
-								<xs:attribute name="uri" type="xs:string" use="required" />
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="runtimeProperties" type="cmn:type-properties"
-							minOccurs="0" />
-					</xs:sequence>
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	
+		<xs:complexContent>
+			<xs:extension base="otfs:type-output-file-sequence-base">
+				<xs:sequence>
+					<xs:element name="path">
+						<xs:complexType>
+							<xs:attribute name="uri" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
 	<xs:complexType name="textFileFixedWidth">
 		<xs:complexContent>
 			<xs:extension base="otffw:type-fixed-width-base">
@@ -108,10 +112,7 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-
-
 	<xs:complexType name="discard">
-
 		<xs:complexContent>
 			<xs:restriction base="cmn:type-output-component">
 				<xs:sequence>
@@ -121,8 +122,6 @@
 			</xs:restriction>
 		</xs:complexContent>
 	</xs:complexType>
-
-
 
 	<xs:complexType name="parquetFile">
 		<xs:complexContent>
@@ -151,8 +150,8 @@
 						minOccurs="1" maxOccurs="1" />
 					<xs:element name="tableName" type="ohiveparquet:hive_type"
 						minOccurs="1" maxOccurs="1" />
-					<xs:element name="external_table_path" type="ohiveparquet:hive_path_type" 
-					maxOccurs="1" minOccurs="0"/>	
+					<xs:element name="external_table_path" type="ohiveparquet:hive_path_type"
+						maxOccurs="1" minOccurs="0" />
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" />
 				</xs:sequence>
@@ -160,6 +159,36 @@
 		</xs:complexContent>
 	</xs:complexType>
 
+	<xs:complexType name="hiveTextFile">
+		<xs:complexContent>
+			<xs:extension
+				base="ohivetextfile:type-output-hive-text-file-delimited-base">
+				<xs:sequence>
+					<xs:element name="partitionKeys"
+						type="ohivetextfile:hive_partition_fields_type" minOccurs="0"
+						maxOccurs="1" />
+					<xs:element name="databaseName" type="ohivetextfile:hive_type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="tableName" type="ohivetextfile:hive_type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="delimiter">
+						<xs:complexType>
+							<xs:attribute name="value" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="external_table_path" type="ohivetextfile:hive_path_type"
+						maxOccurs="1" minOccurs="0" />
+					<xs:element name="quote" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute name="value" type="xs:string" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
 	<xs:complexType name="textFileMixedScheme">
 		<xs:complexContent>
@@ -170,9 +199,9 @@
 							<xs:attribute name="uri" type="xs:string" use="required" />
 						</xs:complexType>
 					</xs:element>
-					<xs:element name="strict" type="cmn:boolean-value-type"
-						minOccurs="0" />
 					<xs:element name="safe" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="strict" type="cmn:boolean-value-type"
 						minOccurs="0" />
 					<xs:element name="charset" minOccurs="0">
 						<xs:complexType>

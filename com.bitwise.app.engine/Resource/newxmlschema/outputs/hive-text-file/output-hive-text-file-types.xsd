@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.bitwiseglobal.com/graph/ohivetextfile"
+	xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bitwiseglobal.com/graph/ohivetextfile"
+	elementFormDefault="unqualified">
+	<xs:import schemaLocation="../../common/common-types.xsd"
+		namespace="http://www.bitwiseglobal.com/graph/commontypes" />
+
+	<xs:complexType name="hive_path_type">
+		<xs:attribute name="uri" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="hive_partition_fields_type">
+		<xs:sequence maxOccurs="unbounded" minOccurs="1">
+			<xs:element name="field" type="field_basic_type">
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="field_basic_type">
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="hive_type">
+		<xs:attribute name="value" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="type-output-hive-text-file-delimited-in-socket">
+		<xs:complexContent>
+			<xs:restriction base="cmn:type-output-inSocket">
+				<xs:sequence>
+					<xs:element name="schema" type="cmn:type-base-record" />
+				</xs:sequence>
+				<xs:attribute name="id" type="xs:string" use="required"
+					fixed="in0" />
+				<xs:attribute name="type" type="xs:string" use="optional"
+					fixed="in" />
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="type-output-hive-text-file-delimited-base">
+		<xs:complexContent>
+			<xs:restriction base="cmn:type-output-component">
+				<xs:sequence>
+					<xs:element name="inSocket" type="type-output-hive-text-file-delimited-in-socket"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="overWrite" type="cmn:type-true-false"
+						minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>
