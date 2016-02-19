@@ -31,12 +31,13 @@ import org.eclipse.swt.widgets.Text;
 
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ImagePathConstant;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTJoinWidget;
-import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterPropertyWizard;
+import com.bitwise.app.propertywindow.widgets.dialogs.FieldDialog;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
@@ -52,7 +53,7 @@ public class ELTJoinConfigGrid extends Dialog {
 	private ELTSWTWidgets eltswtWidgets = new ELTSWTWidgets();
 	private Label editLableAsButton;
 	private Map<String, List<String>> propagatedFiledNames;
-	private String editImageIconPath = XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/editImage.png";
+	private String editImageIconPath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.EDIT_BUTTON;
 
 	/**
 	 * Create the dialog.
@@ -136,15 +137,7 @@ public class ELTJoinConfigGrid extends Dialog {
 			Text portIndex = eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER, new int[] { 0, 28 + j, 142, 23 },
 					"in" + i, false);
 			joinConfigProperty.setPortIndex("in" + i);
-			// used for future use
-			/*
-			 * portIndex.addModifyListener(new ModifyListener() {
-			 * 
-			 * @Override public void modifyText(ModifyEvent e) {
-			 * joinConfigProperty.setPortIndex(((Text)e.widget).getText());
-			 * 
-			 * } });
-			 */
+
 			final Text keyText = eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER | SWT.READ_ONLY, new int[] { 144,
 					28 + j, 170, 23 }, "", false);
 			keyText.setBackground(new Color(null, 255, 255, 255));
@@ -200,23 +193,19 @@ public class ELTJoinConfigGrid extends Dialog {
 			editLableAsButton.addMouseListener(new MouseListener() {
 				@Override
 				public void mouseDoubleClick(MouseEvent e) {
-					// TODO Auto-generated method stub
-
+					// Nothing to do
 				}
 
 				@Override
 				public void mouseDown(MouseEvent e) {
-					// TODO Auto-generated method stub
-
+					// Nothing to do
 				}
 
 				@Override
 				public void mouseUp(MouseEvent e) {
-
 					keyText.setText(launchDialogToSelectFields(keyText.getText(), joinConfigProperty.getPortIndex()));
 					keyText.setToolTipText(keyText.getText());
 					joinConfigProperty.setJoinKey(keyText.getText());
-
 				}
 
 			});
@@ -262,26 +251,15 @@ public class ELTJoinConfigGrid extends Dialog {
 		Label label = new Label(parent, style);
 		label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		label.setText(value);
-		// label.setImage(image);
-
 		return label;
 	}
 
-	public Text textBoxWidget(Composite parent, int style, int[] bounds, Object text, boolean value) {
-		Text textWidget = new Text(parent, style);
-		textWidget.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
-		textWidget.setText((String) text);
-		textWidget.setEditable(value);
-
-		return textWidget;
-	}
-
 	private String launchDialogToSelectFields(String availableValues, String socketId) {
-		ELTFilterPropertyWizard filterWizardObj = new ELTFilterPropertyWizard();
-		filterWizardObj.setPropertyFromCommaSepratedString(availableValues);
-		filterWizardObj.setSourceFieldsFromPropagatedSchema(propagatedFiledNames.get(socketId));
-		filterWizardObj.launchRuntimeWindow(new Shell(), propertyDialogButtonBar);
-		return filterWizardObj.getResultAsCommaSeprated();
+		FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
+		fieldDialog.setPropertyFromCommaSepratedString(availableValues);
+		fieldDialog.setSourceFieldsFromPropagatedSchema(propagatedFiledNames.get(socketId));
+		fieldDialog.open();
+		return fieldDialog.getResultAsCommaSeprated();
 	}
 
 	public void setPropagatedFieldProperty(Map<String, List<String>> propagatedFiledNames) {

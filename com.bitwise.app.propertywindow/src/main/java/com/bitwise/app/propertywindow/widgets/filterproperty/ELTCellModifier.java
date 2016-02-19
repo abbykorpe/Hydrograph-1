@@ -5,10 +5,10 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
 import com.bitwise.app.common.datastructure.property.FilterProperties;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.widgets.customwidgets.lookupproperty.ELTLookupMapWizard;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTCellModifier.
  * 
@@ -17,7 +17,7 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.lookupproperty.ELTLo
 public class ELTCellModifier implements ICellModifier{
 	
 	private Viewer viewer;
-	
+		
 	/**
 	 * Instantiates a new ELT cell modifier.
 	 * 
@@ -36,7 +36,7 @@ public class ELTCellModifier implements ICellModifier{
 	@Override
 	public Object getValue(Object element, String property) {
 		FilterProperties filter = (FilterProperties) element;
-		if(ELTFilterPropertyWizard.FilterInputFieldName.equals(property))
+		if(Constants.COMPONENT_NAME.equals(property))
 		return filter.getPropertyname();
 		else if(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD.equals(property)){
 			return filter.getPropertyname();
@@ -51,7 +51,7 @@ public class ELTCellModifier implements ICellModifier{
 
 		FilterProperties p = (FilterProperties) element;
 		
-			if(ELTFilterPropertyWizard.FilterInputFieldName.equals(property))
+			if(Constants.COMPONENT_NAME.equals(property))
 					p.setPropertyname((String)value);
 			else if(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD.equals(property)){
 				  p.setPropertyname((String)value);

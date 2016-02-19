@@ -9,6 +9,9 @@ public class Constants {
 	public static final String VALIDATOR_PACKAGE_PREFIX = "com.bitwise.app.validators.impl.";
 	public static final String COMPONENT_PACKAGE_PREFIX = "com.bitwise.app.graph.model.components.";
 	
+	
+	public static final String ERROR = "ERROR";
+	
 	public static final String DELIMITER = "Delimiter";
 	public static final String CHARACTER_SET = "Character Set";
 	public static final String PHASE = "Phase";
@@ -41,6 +44,9 @@ public class Constants {
 	public static final String COLUMN_NAME = "Key\nFields";
 	public static final String SECONDARY_KEYS2 = "Secondary Keys ";
 	public static final String SECONDARY_KEYS = "Secondary\n Keys";
+	
+	
+	public static final String COMPONENT_NAME = "Component Name";
 	
 	 // Used for validating AlphaNumeric or Parameter E.g Aplha_123 or @{Param_123}
 	public static final String REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
