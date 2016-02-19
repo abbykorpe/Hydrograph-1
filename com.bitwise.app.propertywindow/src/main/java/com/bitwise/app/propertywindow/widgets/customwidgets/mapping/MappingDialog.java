@@ -30,6 +30,7 @@ public class MappingDialog extends Dialog {
 	private ATMapping atMapping;
 	private WidgetConfig widgetConfig;
 	private MappingDialogButtonBar mappingDialogButtonBar;
+	private String componentName;
 	/*private Button okButton;
 	private Button cancelButton;*/
 		
@@ -44,13 +45,13 @@ public class MappingDialog extends Dialog {
 	public MappingDialog(Shell shell,
 			PropertyDialogButtonBar propertyDialogButtonBar,
 			ATMapping atMapping,
-			WidgetConfig widgetConfig) {
+			WidgetConfig widgetConfig,String componeName) {
 		super(shell);
 		
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
 		this.atMapping = atMapping;
 		this.widgetConfig = widgetConfig;
-		
+		this.componentName = componeName;
 	}
 
 	/**
@@ -81,7 +82,8 @@ public class MappingDialog extends Dialog {
 		gd_composite_2.widthHint = 597;
 		composite_2.setLayoutData(gd_composite_2);
 		
-		MappingTable mappingTable = new MappingTable(widgetConfig,propertyDialogButtonBar,mappingDialogButtonBar);
+		MappingTable mappingTable = new MappingTable(widgetConfig, propertyDialogButtonBar, mappingDialogButtonBar,
+				componentName);
 		mappingTable.createTable(composite_2);
 		
 		return mappingTable;

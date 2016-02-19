@@ -5,13 +5,15 @@ package com.bitwise.app.common.datastructure.property;
 import com.bitwise.app.cloneableinterface.IDataStructure;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class OperationClassProperty.
  * 
  * @author Bitwise
  */
 public class OperationClassProperty implements IDataStructure{
+
+
+	private String comboBoxValue;
 	private String operationClassPath;
 	private boolean isParameter;
 	private String operationClassFullPath;
@@ -24,14 +26,19 @@ public class OperationClassProperty implements IDataStructure{
 	 * @param isParameter
 	 *            the is parameter
 	 */
-	public OperationClassProperty(String operationClassPath, boolean isParameter) {
+	public OperationClassProperty(String comboBoxValue, String operationClassPath, boolean isParameter) {
 		this.operationClassPath = operationClassPath;
 		this.isParameter = isParameter;
+		this.comboBoxValue = comboBoxValue;
 	}
-	public OperationClassProperty(String operationClassPath, boolean isParameter,String operationClassFullPath) {
+	public OperationClassProperty(String comboBoxValue,String operationClassPath, boolean isParameter,String operationClassFullPath) {
+		this.comboBoxValue=comboBoxValue;
 		this.operationClassPath = operationClassPath;
 		this.isParameter = isParameter;
 		this.operationClassFullPath=operationClassFullPath;
+	}
+	public String getComboBoxValue() {
+		return comboBoxValue;
 	}
 	public String getOperationClassPath() {
 		return operationClassPath;
@@ -48,7 +55,7 @@ public class OperationClassProperty implements IDataStructure{
 	}
 	@Override
 	public OperationClassProperty clone() {
-		return new OperationClassProperty(operationClassPath,isParameter,operationClassFullPath);
+		return new OperationClassProperty(comboBoxValue,operationClassPath,isParameter,operationClassFullPath);
 	}
 
 	@Override
@@ -84,8 +91,6 @@ public class OperationClassProperty implements IDataStructure{
 	
 	@Override
 	public String toString() {
-		/*return "OperationClass : [operationClassPath="
-				+ operationClassPath + ", isParameter=" + isParameter + "]";*/
 		return operationClassPath;
 	}
 	

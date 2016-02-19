@@ -21,6 +21,7 @@
 			<element name="port" type="tns:IOPort" maxOccurs="1" minOccurs="1" />
 			<element name="property" type="tns:Property" maxOccurs="unbounded" minOccurs="0" />
 			<element name="policy" type="tns:Policy" maxOccurs="unbounded" minOccurs="0" /> 
+			<element name="operations" type="tns:Operations" maxOccurs="1" minOccurs="0" /> 
 		</sequence>
 		<attribute name="name" type="string" use="required"></attribute>
 		<attribute name="nameInPalette" type="string" use="required"></attribute>
@@ -77,4 +78,17 @@
 			<element name="value" type="string" maxOccurs="1" minOccurs="0" />
 		</sequence>
 	</complexType>
+	
+	 <complexType name="Operations">
+		 <sequence>
+			<element name="interface" type="tns:TypeInfo" maxOccurs="1" minOccurs="0" />
+			<element name="stdOperation" type="tns:TypeInfo" maxOccurs="unbounded" minOccurs="0" />
+		</sequence>
+	</complexType>
+	
+	<complexType name="TypeInfo">
+			<attribute name="name" type="string"/>
+			<attribute name="class" type="string"/>
+	</complexType>
+	
 </schema>

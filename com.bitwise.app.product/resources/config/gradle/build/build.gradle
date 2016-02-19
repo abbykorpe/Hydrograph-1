@@ -41,7 +41,7 @@ def jarFiles = files {file(project.libsDir.path).listFiles() }
 if(properties.remote == "true"){
 
 	dependencies {
-  			compile(group: 'engine', name: 'bhs', version: '1.0.5')
+  			compile(group: 'engine', name: 'bhs', version: '1.0.6')
 		}
 
 	task(run, dependsOn: ['build']){ 
@@ -142,7 +142,8 @@ else
 	def mainClassName='com.bitwiseglobal.commandline.utilities.BHSExecution'
 
 dependencies {
-  	compile(group: 'engine', name: 'bhs', version: '1.0.5')
+  	compile(group: 'engine', name: 'bhs', version: '1.0.6')
+  	compile(group: 'cascading.avro', name: 'avro-scheme', version: '2.5.0')
   	compile group: 'cascading', name: 'cascading-core', version: cascadingVersion
   	compile group: 'cascading', name: 'cascading-hadoop2-mr1', version: cascadingVersion //required for plunger
   	compile group: 'cascading', name: 'cascading-local', version: cascadingVersion //required for plunger

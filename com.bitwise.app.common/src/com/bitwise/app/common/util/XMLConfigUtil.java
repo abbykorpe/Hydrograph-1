@@ -22,6 +22,7 @@ import org.eclipse.ui.statushandlers.StatusManager;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
+import com.bitwise.app.common.Activator;
 import com.bitwise.app.common.Messages;
 import com.bitwise.app.common.component.config.Component;
 import com.bitwise.app.common.component.config.Config;
@@ -78,7 +79,7 @@ public class XMLConfigUtil {
 				validateAndFillComponentConfigList(componentList);
 				return componentList;
 			}catch(Exception exception){
-				Status status = new Status(IStatus.ERROR, "com.bitwise.app.common", "XML read failed", exception);
+				Status status = new Status(IStatus.ERROR,Activator.PLUGIN_ID, "XML read failed", exception);
 				StatusManager.getManager().handle(status, StatusManager.BLOCK);
 				logger.error(exception.getMessage());
 				throw new RuntimeException("Faild in reading XML Config files", exception); //$NON-NLS-1$
@@ -149,7 +150,7 @@ public class XMLConfigUtil {
 				}
 				return policyConfig;
 			}catch(Exception exception){
-				Status status = new Status(IStatus.ERROR, "com.bitwise.app.common", "XML read failed", exception);
+				Status status = new Status(IStatus.ERROR,Activator.PLUGIN_ID, "XML read failed", exception);
 				StatusManager.getManager().handle(status, StatusManager.BLOCK);
 				logger.error(exception.getMessage());
 				throw new RuntimeException("Faild in reading XML Config files", exception); //$NON-NLS-1$
@@ -214,7 +215,7 @@ public class XMLConfigUtil {
 	private void validateAndFillComponentConfigList(List<Component> componentList) {
 		for (Component component : componentList) {
 			if(map.containsKey(component.getName())){
-				Status status = new Status(IStatus.ERROR, "com.bitwise.app.common", 
+				Status status = new Status(IStatus.ERROR,Activator.PLUGIN_ID, 
 						"One or more configuration files have similar names, reconfigure the files", null);
 				StatusManager.getManager().handle(status, StatusManager.BLOCK);
 				//remove all component configuration from list

@@ -13,21 +13,21 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for anonymous complex type.
+ * <p>Java class for Operations complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType>
+ * &lt;complexType name="Operations">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="component" type="{http://www.bitwise.com/ComponentConfig}Component" maxOccurs="unbounded"/>
+ *         &lt;element name="interface" type="{http://www.bitwise.com/ComponentConfig}TypeInfo" minOccurs="0"/>
+ *         &lt;element name="stdOperation" type="{http://www.bitwise.com/ComponentConfig}TypeInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,42 +37,67 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "component"
+@XmlType(name = "Operations", propOrder = {
+    "_interface",
+    "stdOperation"
 })
-@XmlRootElement(name = "Config")
-public class Config {
+public class Operations {
 
-    @XmlElement(required = true)
-    protected List<Component> component;
+    @XmlElement(name = "interface")
+    protected TypeInfo _interface;
+    protected List<TypeInfo> stdOperation;
 
     /**
-     * Gets the value of the component property.
+     * Gets the value of the interface property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TypeInfo }
+     *     
+     */
+    public TypeInfo getInterface() {
+        return _interface;
+    }
+
+    /**
+     * Sets the value of the interface property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TypeInfo }
+     *     
+     */
+    public void setInterface(TypeInfo value) {
+        this._interface = value;
+    }
+
+    /**
+     * Gets the value of the stdOperation property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the component property.
+     * This is why there is not a <CODE>set</CODE> method for the stdOperation property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getComponent().add(newItem);
+     *    getStdOperation().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Component }
+     * {@link TypeInfo }
      * 
      * 
      */
-    public List<Component> getComponent() {
-        if (component == null) {
-            component = new ArrayList<Component>();
+    public List<TypeInfo> getStdOperation() {
+        if (stdOperation == null) {
+            stdOperation = new ArrayList<TypeInfo>();
         }
-        return this.component;
+        return this.stdOperation;
     }
 
 }

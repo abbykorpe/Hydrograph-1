@@ -4,6 +4,8 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 public class Activator implements BundleActivator {
+	
+	public static final String PLUGIN_ID = "com.bitwise.app.common"; //$NON-NLS-1$
 
 	private static BundleContext context;
 

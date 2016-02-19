@@ -9,10 +9,11 @@ public class TransformOperation {
 	private OperationClassProperty opClassProperty;
 	private List<NameValueProperty> nameValueProps;
 	private List schemaGridRowList;
+	private String CUSTOM="custom";
 	
 	public TransformOperation() {
 		inputFields=new ArrayList<>();
-		opClassProperty=new OperationClassProperty("", false,null);
+		opClassProperty=new OperationClassProperty(CUSTOM,"", false,"");
 		nameValueProps=new ArrayList<>();
 		schemaGridRowList= new ArrayList<>();
 	}

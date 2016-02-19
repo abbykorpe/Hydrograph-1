@@ -45,7 +45,25 @@
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
-		</tns:property>			
+
+		</tns:property>
 			
+	
+	<tns:operations>
+		<tns:interface
+			class="com.bitwiseglobal.bhse.userfunctions.base.AggregateTransformBase"
+			name="AGGREGATE" />
+		<tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Sum"
+			name="Sum" />
+		<tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Max"
+			name="Max" />
+		<tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Min"
+			name="Min" />
+		<tns:stdOperation
+			class="com.bitwiseglobal.bhse.userfunctions.aggregate.Count" name="Count" />
+		<tns:stdOperation
+			class="com.bitwiseglobal.bhse.userfunctions.aggregate.StringAppend"
+			name="StringAppend" />
+	</tns:operations>		
 	</tns:component>
 </tns:Config>

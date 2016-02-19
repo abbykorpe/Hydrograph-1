@@ -41,6 +41,18 @@
 			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
+		
+	<tns:operations>
+		<tns:interface
+			class="com.bitwiseglobal.bhse.userfunctions.base.TransformBase" name="TRANSFORM" />
+		<tns:stdOperation
+			class="com.bitwiseglobal.bhse.userfunctions.transform.CopyFields"
+			name="CopyFields" />
+		<tns:stdOperation
+			class="com.bitwiseglobal.bhse.userfunctions.transform.RegexSplitTransform"
+			name="RegexSplitTransform" />
+	</tns:operations>
+
 
 	</tns:component>
 </tns:Config>

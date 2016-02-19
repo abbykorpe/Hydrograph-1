@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.GridRow;
@@ -19,6 +20,7 @@ import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.helper.ConverterUiHelper;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeInputField;
@@ -155,11 +157,20 @@ public abstract class TransformUiConverter extends UiConverter {
 		for (TypeTransformOperation item : xsdOpertaionList) {
 
 			mappingSheetRows.add(new MappingSheetRow(getInputFieldList(item),
-					new OperationClassProperty(item.getClazz(),
+					new OperationClassProperty(getOperationClassName(item.getClazz()),item.getClazz(),
 							isParameter(item.getClazz()), item.getClazz()),
 					getOutputFieldList(item)));
 		}
 
+	}
+
+	protected String getOperationClassName(String fullClassPath) {
+		String operationClassName = Messages.CUSTOM;
+		if (StringUtils.isNotBlank(fullClassPath) && !isParameter(fullClassPath)) {
+			String str[] = fullClassPath.split("\\.");
+			operationClassName = str[str.length - 1];
+		}
+		return operationClassName;
 	}
 
 	private List<String> getOutputFieldList(TypeTransformOperation item) {
