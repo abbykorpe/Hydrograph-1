@@ -123,28 +123,34 @@ public class ELTJoinMapWidget extends AbstractWidget {
 	}
 	
 	private void addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(Map<String, String> mapFields,
-			List<String> passThroughFields, Map<String, String> passThroughFieldsPortInfo, Map<String, String> mapFieldsPortInfo) {
-		ComponentsOutputSchema componentsOutputSchema = (ComponentsOutputSchema) getComponent().getProperties().get(
-				Constants.SCHEMA_TO_PROPAGATE);
-		if (componentsOutputSchema == null){
-			componentsOutputSchema = new ComponentsOutputSchema();
-			getComponent().getProperties().put(Constants.SCHEMA_TO_PROPAGATE, componentsOutputSchema);
-		}
+			List<String> passThroughFields, Map<String, String> passThroughFieldsPortInfo,
+			Map<String, String> mapFieldsPortInfo) {
+		ComponentsOutputSchema componentsOutputSchema = null;
+		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) getComponent()
+				.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
+		if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null)
+			componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
 		else {
-			componentsOutputSchema.getPassthroughFields().clear();
-			componentsOutputSchema.getMapFields().clear();
-			componentsOutputSchema.getPassthroughFieldsPortInfo().clear();
-			componentsOutputSchema.getMapFieldsPortInfo().clear();
+			componentsOutputSchema = new ComponentsOutputSchema();
+			schemaMap = new LinkedHashMap<>();
+			schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
 		}
+		getComponent().getProperties().put(Constants.SCHEMA_TO_PROPAGATE, schemaMap);
+
+		componentsOutputSchema.getPassthroughFields().clear();
+		componentsOutputSchema.getMapFields().clear();
+		componentsOutputSchema.getPassthroughFieldsPortInfo().clear();
+		componentsOutputSchema.getMapFieldsPortInfo().clear();
+
 		componentsOutputSchema.getPassthroughFields().addAll(passThroughFields);
 		componentsOutputSchema.getMapFields().putAll(mapFields);
-		
-		for(String field : passThroughFieldsPortInfo.keySet()){
+
+		for (String field : passThroughFieldsPortInfo.keySet()) {
 			componentsOutputSchema.getPassthroughFieldsPortInfo().put(field, passThroughFieldsPortInfo.get(field));
 		}
-		
+
 		componentsOutputSchema.getMapFieldsPortInfo().putAll(mapFieldsPortInfo);
-	}	
+	}
 
 	private GridRow getOutputFieldSchema(GridRow inputFieldSchema, String output_Field) {
 		if (inputFieldSchema != null) {

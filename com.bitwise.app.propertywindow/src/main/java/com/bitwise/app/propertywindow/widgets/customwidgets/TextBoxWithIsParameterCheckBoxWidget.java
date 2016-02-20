@@ -11,6 +11,7 @@ package com.bitwise.app.propertywindow.widgets.customwidgets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.events.ModifyEvent;
@@ -65,24 +66,22 @@ public class TextBoxWithIsParameterCheckBoxWidget extends TextBoxWithLabelWidget
 		return super.getProperties();
 	}
 
-	/* 
+	/*
 	 * This method sets the configuration of widget.
 	 */
 	public void setWidgetConfig(WidgetConfig widgetConfig) {
 		super.setWidgetConfig(widgetConfig);
 	}
 
-	/* 
+	/*
 	 * This method attaches widget to property sub group.
-	 * 
 	 */
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 		super.attachToPropertySubGroup(container);
 	}
 
-	
 	/* *
-	 * This method populates the widget.	 * 
+	 * This method populates the widget. *
 	 */
 	@Override
 	protected void populateWidget() {
@@ -162,17 +161,18 @@ public class TextBoxWithIsParameterCheckBoxWidget extends TextBoxWithLabelWidget
 	}
 
 	private void loadNewFieldAndPropagate(String fieldName) {
+		Map<String, ComponentsOutputSchema> schemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
 		ComponentsOutputSchema newComponentsOutputSchema = new ComponentsOutputSchema();
 		ComponentsOutputSchema sourceOutputSchema = null;
 		for (Link link : getComponent().getTargetConnections())
-			sourceOutputSchema = (ComponentsOutputSchema) link.getSource().getProperties()
-					.get(Constants.SCHEMA_TO_PROPAGATE);
+			sourceOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 		if (sourceOutputSchema != null) {
 			newComponentsOutputSchema.copySchemaFromOther(sourceOutputSchema);
 		}
 		if (StringUtils.isNotBlank(textBox.getText()))
 			newComponentsOutputSchema.getFixedWidthGridRowsOutputFields().add(createSchemaForNewField(fieldName));
-		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), newComponentsOutputSchema);
+		schemaMap.put(Constants.FIXED_OUTSOCKET_ID, newComponentsOutputSchema);
+		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), schemaMap);
 	}
 
 	private FixedWidthGridRow createSchemaForNewField(String fieldName) {

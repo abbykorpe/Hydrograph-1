@@ -159,16 +159,20 @@ public class TransformWidget extends AbstractWidget {
 
 	private void addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(Map<String, String> mapFields,
 			List<String> passThroughFields) {
-		ComponentsOutputSchema componentsOutputSchema = (ComponentsOutputSchema) getComponent().getProperties().get(
-				Constants.SCHEMA_TO_PROPAGATE);
-		if (componentsOutputSchema == null){
-			componentsOutputSchema = new ComponentsOutputSchema();
-			getComponent().getProperties().put(Constants.SCHEMA_TO_PROPAGATE, componentsOutputSchema);
-		}
+		ComponentsOutputSchema componentsOutputSchema = null;
+		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) getComponent()
+				.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
+		if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null)
+			componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
 		else {
-			componentsOutputSchema.getPassthroughFields().clear();
-			componentsOutputSchema.getMapFields().clear();
+			componentsOutputSchema = new ComponentsOutputSchema();
+			schemaMap = new LinkedHashMap<>();
+			schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
 		}
+		getComponent().getProperties().put(Constants.SCHEMA_TO_PROPAGATE, schemaMap);
+
+		componentsOutputSchema.getPassthroughFields().clear();
+		componentsOutputSchema.getMapFields().clear();
 		componentsOutputSchema.getPassthroughFields().addAll(passThroughFields);
 		componentsOutputSchema.getMapFields().putAll(mapFields);
 	}

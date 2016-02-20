@@ -89,7 +89,7 @@ public class Constants {
 	public static final String COMPONENT_TYPE = "componentType";
 	public static final String COMPONENT_BASE_TYPE = "componentBaseType";
 	public static final String COMPONENT_NAMES = "componentNames";
-	public static final String SCHEMA_TO_PROPAGATE="output_schema";
+	public static final String SCHEMA_TO_PROPAGATE="output_schema_map";
 
 	public static final String ASCENDING_SORT_ORDER = "Asc";
 	public static final String DESCENDING_SORT_ORDER="Desc";
@@ -126,6 +126,7 @@ public class Constants {
 	
 	public static final String GENERATE_RECORDS_COMPONENT_TYPE = "Generate Records";
 	public static final String FIXED_INSOCKET_ID = "in0";
+	public static final String FIXED_OUTSOCKET_ID = "out0";
 	public static final String SEQUENCE_FIELD = "Sequence Field";
 	public static final String IS_PARAMETER = "Is Parameter";
 	public static final String SCHEMA_DEFAULT_FIELD_NAME_SUFFIX="DefaultValue";
@@ -137,5 +138,6 @@ public class Constants {
 	public static final String PARAMETER_PREFIX = "}";
 	public static final String UNIQUE_SEQUENCE_PROPERTY_NAME = "sequence_field";
 	public static final String ADD_ALL_FIELDS_SYMBOL = "*";
+	public static final String INPUT_SUBGRAPH_COMPONENT_NAME = "InputSubgraphComponent";
 		
 }
