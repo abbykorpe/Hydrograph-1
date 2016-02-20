@@ -55,6 +55,7 @@ public class GeneralGridWidgetBuilder extends GridWidgetCommonBuilder {
 		do{
 			if(!grids.contains(schemaGrid)){
 				grids.add(schemaGrid);  
+				tableViewer.setInput(grids);
 				tableViewer.refresh();
 				tableViewer.editElement(tableViewer.getElementAt(grids.size() == 0 ? grids.size() : grids.size() - 1), 0);
 				break;
