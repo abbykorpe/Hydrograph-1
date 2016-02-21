@@ -1,25 +1,31 @@
 package com.bitwise.app.engine.ui.util;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.bitwise.app.common.util.CanvasDataAdpater;
-import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.engine.exceptions.EngineException;
 import com.bitwise.app.engine.parsing.XMLParser;
@@ -27,12 +33,14 @@ import com.bitwise.app.engine.ui.converter.LinkingData;
 import com.bitwise.app.engine.ui.converter.UiConverter;
 import com.bitwise.app.engine.ui.converter.UiConverterFactory;
 import com.bitwise.app.engine.ui.exceptions.ComponentNotFoundException;
+import com.bitwise.app.engine.ui.repository.ParameterData;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwise.app.engine.ui.xygenration.CoordinateProcessor;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 import com.bitwiseglobal.graph.main.Graph;
 import com.thoughtworks.xstream.XStream;
@@ -98,58 +106,6 @@ public class UiConverterUtil {
 	}
 
 	/**
-	 * Creates the job file based for the container object.
-	 * 
-	 * @param container
-	 * @param jobFile
-	 * @param parameterFile
-	 */
-	private void genrateUIXML(Container container, IFile jobFile, IFile parameterFile) {
-		LOGGER.debug("Generating UI-XML");
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		String jobXmlData = null;
-		try {
-			XStream xs = new XStream();
-			xs.autodetectAnnotations(true);
-			jobXmlData = xs.toXML(container);
-			storeParameterData(parameterFile, jobXmlData);
-			jobFile.create(new ByteArrayInputStream(jobXmlData.getBytes()), true, null);
-
-		} catch (Exception e) {
-			LOGGER.error("Exception occurred while creating UI-XML", e);
-		} finally {
-			UIComponentRepo.INSTANCE.flusRepository();
-			try {
-				out.close();
-			} catch (IOException ioe) {
-				LOGGER.error("IOException occurred while closing output stream", ioe);
-			}
-		}
-	}
-
-	private Graph unMarshall(File inputFile) throws JAXBException, ParserConfigurationException, SAXException,
-			IOException {
-		LOGGER.debug("Un-Marshaling generated object into target XML");
-		JAXBContext jaxbContext;
-		Graph graph = null;
-
-		parseXML(inputFile);
-		jaxbContext = JAXBContext.newInstance(Graph.class);
-		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		graph = (Graph) jaxbUnmarshaller.unmarshal(inputFile);
-		if (graph != null) {
-			UIComponentRepo.INSTANCE.genrateComponentRepo(graph);
-		}
-
-		return graph;
-	}
-
-	private void parseXML(File inputFile) throws ParserConfigurationException, SAXException, IOException {
-		XMLParser xmlParser = new XMLParser();
-		xmlParser.parseXML(inputFile);
-	}
-
-	/**
 	 * Load classes for all component classes. i.e. creates a logical palette into memory.
 	 */
 	public void loadClass() {
@@ -194,7 +150,85 @@ public class UiConverterUtil {
 		}
 
 	}
+	
+	/**
+	 * Creates the job file based for the container object.
+	 * 
+	 * @param container
+	 * @param jobFile
+	 * @param parameterFile
+	 */
+	private void genrateUIXML(Container container, IFile jobFile, IFile parameterFile) {
+		LOGGER.debug("Generating UI-XML");
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		String jobXmlData = null;
+		try {
+			XStream xs = new XStream();
+			xs.autodetectAnnotations(true);
+			jobXmlData = xs.toXML(container);
+			storeParameterData(parameterFile, jobXmlData);
+			jobFile.create(new ByteArrayInputStream(jobXmlData.getBytes()), true, null);
 
+		} catch (Exception e) {
+			LOGGER.error("Exception occurred while creating UI-XML", e);
+		} finally {
+			UIComponentRepo.INSTANCE.flusRepository();
+			try {
+				out.close();
+			} catch (IOException ioe) {
+				LOGGER.error("IOException occurred while closing output stream", ioe);
+			}
+		}
+	}
+
+	private Graph unMarshall(File inputFile) throws JAXBException, ParserConfigurationException, SAXException,
+			IOException {
+		LOGGER.debug("Un-Marshaling generated object into target XML");
+		JAXBContext jaxbContext;
+		Graph graph = null;
+		parseXML(inputFile);
+		String inputFileAsString = replaceParametersWithDefaultValues(inputFile);
+		
+		jaxbContext = JAXBContext.newInstance(Graph.class);
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		graph = (Graph) jaxbUnmarshaller.unmarshal(new ByteArrayInputStream(inputFileAsString.getBytes()));
+		if (graph != null) {
+			UIComponentRepo.INSTANCE.genrateComponentRepo(graph);
+		}
+		return graph;
+	}
+
+	private String replaceParametersWithDefaultValues(File inputFile) {
+		StringBuilder inputFileAsString = readFileContentInString(inputFile);
+		String fileContentWithoutString = inputFileAsString.toString();
+		//remove parameter with value="..." ex, value="@{some_parameter}", whole string will be removed including value=""
+		fileContentWithoutString = fileContentWithoutString.replaceAll("value\\=\"[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}\"", "");
+		//remove parameter @{some_parameter}
+		fileContentWithoutString = fileContentWithoutString.replaceAll("[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}", "");
+		return fileContentWithoutString;
+	}
+
+	
+
+	private StringBuilder readFileContentInString(File inputFile) {
+		StringBuilder inputStringBuilder = new StringBuilder();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(inputFile));
+			String sCurrentLine = null;
+			while ((sCurrentLine = br.readLine()) != null) {
+				inputStringBuilder.append(sCurrentLine);
+			}
+		} catch (IOException e) {
+			LOGGER.error("Failed to read the xml file", e);
+		}
+		return inputStringBuilder;
+	}
+
+	private void parseXML(File inputFile) throws ParserConfigurationException, SAXException, IOException {
+		XMLParser xmlParser = new XMLParser();
+		xmlParser.parseXML(inputFile);
+	}
+	
 	private void preProcessLinkData() {
 		LOGGER.debug("Process links data for one to many port generation");
 		boolean isMultiplePortAllowed;

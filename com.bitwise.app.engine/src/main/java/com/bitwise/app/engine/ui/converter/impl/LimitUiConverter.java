@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.converter.StraightpullUiConverter;
 import com.bitwise.app.graph.model.Container;
@@ -21,6 +22,8 @@ import com.bitwiseglobal.graph.straightpulltypes.Limit;
  * Converter to convert jaxb limit object into limit component
  */
 public class LimitUiConverter extends StraightpullUiConverter {
+
+	private static final String MAX_RECORDS = "maxRecords";
 
 	private Limit limit;
 	
@@ -42,7 +45,14 @@ public class LimitUiConverter extends StraightpullUiConverter {
 
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(limit.getId());
-		propertyMap.put(Constants.PARAM_COUNT, limit.getMaxRecords().getValue());
+		
+		Object value = getValue(MAX_RECORDS);
+		if(value != null){
+			propertyMap.put(Constants.PARAM_COUNT, value);
+		}else{
+			propertyMap.put(Constants.PARAM_COUNT, limit.getMaxRecords().getValue());
+		}
+		
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.LIMIT.value());
 	
