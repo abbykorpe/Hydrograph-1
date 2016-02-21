@@ -64,12 +64,9 @@
 			<enumeration value="XML_CONTENT_WIDGET"/>
 			<enumeration value="SUBGRAPH_PROPERTIES_WIDGET" />
 			<enumeration value="MATCH_PROPERTY_WIDGET" />
-<<<<<<< HEAD
 			<enumeration value="TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET" />
-=======
 			<enumeration value="COUNT_WIDGET"/>
 			<enumeration value="PRIMARY_COLUMN_KEYS_WIDGET"/>
->>>>>>> Sort and Limit Component
 		</restriction>
 	</simpleType>
 
