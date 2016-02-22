@@ -58,18 +58,18 @@ public class OperationClassProperty implements IDataStructure{
 		return new OperationClassProperty(comboBoxValue,operationClassPath,isParameter,operationClassFullPath);
 	}
 
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((comboBoxValue == null) ? 0 : comboBoxValue.hashCode());
 		result = prime * result + (isParameter ? 1231 : 1237);
-		result = prime
-				* result
-				+ ((operationClassPath == null) ? 0 : operationClassPath
-						.hashCode());
+		result = prime * result + ((operationClassFullPath == null) ? 0 : operationClassFullPath.hashCode());
+		result = prime * result + ((operationClassPath == null) ? 0 : operationClassPath.hashCode());
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -79,7 +79,17 @@ public class OperationClassProperty implements IDataStructure{
 		if (getClass() != obj.getClass())
 			return false;
 		OperationClassProperty other = (OperationClassProperty) obj;
+		if (comboBoxValue == null) {
+			if (other.comboBoxValue != null)
+				return false;
+		} else if (!comboBoxValue.equals(other.comboBoxValue))
+			return false;
 		if (isParameter != other.isParameter)
+			return false;
+		if (operationClassFullPath == null) {
+			if (other.operationClassFullPath != null)
+				return false;
+		} else if (!operationClassFullPath.equals(other.operationClassFullPath))
 			return false;
 		if (operationClassPath == null) {
 			if (other.operationClassPath != null)
@@ -88,7 +98,6 @@ public class OperationClassProperty implements IDataStructure{
 			return false;
 		return true;
 	}
-	
 	@Override
 	public String toString() {
 		return operationClassPath;

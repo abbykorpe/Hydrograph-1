@@ -42,6 +42,39 @@ public class InputField implements IDataStructure{
 		return new InputField(fieldName,(ErrorObject) errorObject.clone());
 	}
 
+	
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((errorObject == null) ? 0 : errorObject.hashCode());
+		result = prime * result + ((fieldName == null) ? 0 : fieldName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		InputField other = (InputField) obj;
+		if (errorObject == null) {
+			if (other.errorObject != null)
+				return false;
+		} else if (!errorObject.equals(other.errorObject))
+			return false;
+		if (fieldName == null) {
+			if (other.fieldName != null)
+				return false;
+		} else if (!fieldName.equals(other.fieldName))
+			return false;
+		return true;
+	}
+
 	@Override
 	public String toString() {
 		return "InputField [fieldName=" + fieldName + ", errorObject="

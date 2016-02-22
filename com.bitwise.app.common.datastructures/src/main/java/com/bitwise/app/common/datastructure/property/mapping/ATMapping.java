@@ -51,6 +51,39 @@ public class ATMapping implements IDataStructure{
 		
 		return atMapping;
 	}
+	
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((inputFields == null) ? 0 : inputFields.hashCode());
+		result = prime * result + ((mappingSheetRows == null) ? 0 : mappingSheetRows.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ATMapping other = (ATMapping) obj;
+		if (inputFields == null) {
+			if (other.inputFields != null)
+				return false;
+		} else if (!inputFields.equals(other.inputFields))
+			return false;
+		if (mappingSheetRows == null) {
+			if (other.mappingSheetRows != null)
+				return false;
+		} else if (!mappingSheetRows.equals(other.mappingSheetRows))
+			return false;
+		return true;
+	}
 
 	@Override
 	public String toString() {

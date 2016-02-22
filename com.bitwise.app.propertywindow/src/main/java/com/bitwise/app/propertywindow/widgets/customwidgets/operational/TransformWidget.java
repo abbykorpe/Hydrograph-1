@@ -93,11 +93,15 @@ public class TransformWidget extends AbstractWidget {
 				
 				getPropagatedSChema();
 
+				ATMapping oldATMappings = (ATMapping) atMapping.clone();
 				MappingDialog mappingDialog = new MappingDialog(transformComposite.getContainerControl().getShell(),
 						propertyDialogButtonBar, atMapping, widgetConfig,getComponent().getComponentName());
 				mappingDialog.open();
 
 				atMapping = mappingDialog.getATMapping();
+				if(!oldATMappings.equals(atMapping)){
+					propertyDialogButtonBar.enableApplyButton(true);
+				}
 
 				propagateOuputFieldsToSchemaTabFromTransformWidget();
 

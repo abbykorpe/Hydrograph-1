@@ -39,6 +39,35 @@ public class ErrorObject implements IDataStructure {
 		return "ErrorObject [hasError=" + hasError + ", errorMessage="
 				+ errorMessage + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((errorMessage == null) ? 0 : errorMessage.hashCode());
+		result = prime * result + (hasError ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ErrorObject other = (ErrorObject) obj;
+		if (errorMessage == null) {
+			if (other.errorMessage != null)
+				return false;
+		} else if (!errorMessage.equals(other.errorMessage))
+			return false;
+		if (hasError != other.hasError)
+			return false;
+		return true;
+	}
+	
 	
 	
 }

@@ -68,7 +68,47 @@ public class MappingSheetRow implements IDataStructure {
 				+ ", operationClass=" + operationClass + ", outputList="
 				+ outputList + "]";
 	}
-	
-	
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((CUSTOM == null) ? 0 : CUSTOM.hashCode());
+		result = prime * result + ((inputFields == null) ? 0 : inputFields.hashCode());
+		result = prime * result + ((operationClass == null) ? 0 : operationClass.hashCode());
+		result = prime * result + ((outputList == null) ? 0 : outputList.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MappingSheetRow other = (MappingSheetRow) obj;
+		if (CUSTOM == null) {
+			if (other.CUSTOM != null)
+				return false;
+		} else if (!CUSTOM.equals(other.CUSTOM))
+			return false;
+		if (inputFields == null) {
+			if (other.inputFields != null)
+				return false;
+		} else if (!inputFields.equals(other.inputFields))
+			return false;
+		if (operationClass == null) {
+			if (other.operationClass != null)
+				return false;
+		} else if (!operationClass.equals(other.operationClass))
+			return false;
+		if (outputList == null) {
+			if (other.outputList != null)
+				return false;
+		} else if (!outputList.equals(other.outputList))
+			return false;
+		return true;
+	}
 }
