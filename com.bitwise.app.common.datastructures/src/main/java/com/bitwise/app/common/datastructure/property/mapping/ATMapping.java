@@ -5,9 +5,16 @@ import java.util.List;
 
 import com.bitwise.app.cloneableinterface.IDataStructure;
 
+/**
+ * The class is a data structure to to save aggregate and transform mapping sheet 
+ * 
+ * @author Bitwise
+ *
+ */
 public class ATMapping implements IDataStructure{
 	private List<InputField> inputFields;
 	private List<MappingSheetRow> mappingSheetRows;
+	
 	public ATMapping() {
 		inputFields = new LinkedList<>();
 		mappingSheetRows = new LinkedList<>();
@@ -19,18 +26,37 @@ public class ATMapping implements IDataStructure{
 		this.mappingSheetRows = mappingSheetRows;
 	}
 	
+	/**
+	 * returns list of input fields
+	 * 
+	 * @return input fields
+	 */
 	public List<InputField> getInputFields() {
 		return inputFields;
 	}
 
+	/**
+	 * set list of input fields
+	 * 
+	 * @param inputFields
+	 */
 	public void setInputFields(List<InputField> inputFields) {
 		this.inputFields = inputFields;
 	}
 
+	/**
+	 * returns list of mapping sheet rows
+	 * 
+	 * @return mappingSheetRows
+	 */
 	public List<MappingSheetRow> getMappingSheetRows() {
 		return mappingSheetRows;
 	}
 
+	/**
+	 * set the list of mapping sheet rows.
+	 * @param mappingSheetRows
+	 */
 	public void setMappingSheetRows(List<MappingSheetRow> mappingSheetRows) {
 		this.mappingSheetRows = mappingSheetRows;
 	}
@@ -90,6 +116,4 @@ public class ATMapping implements IDataStructure{
 		return "ATMapping [inputFields=" + inputFields + ", mappingSheetRows="
 				+ mappingSheetRows + "]";
 	}
-	
-	
 }

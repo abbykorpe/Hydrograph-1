@@ -6,6 +6,13 @@ import java.util.List;
 import com.bitwise.app.cloneableinterface.IDataStructure;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 
+/**
+ * 
+ * This class stores rows in mapping sheet 
+ * 
+ * @author Bitwise
+ *
+ */
 public class MappingSheetRow implements IDataStructure {
 
 	private List<String> inputFields;
@@ -13,34 +20,75 @@ public class MappingSheetRow implements IDataStructure {
 	private List<String> outputList;
 	private String CUSTOM="custom";
 	
-	public MappingSheetRow(List<String> imputFields, OperationClassProperty operationClass,
+	/**
+	 * 
+	 * @param input - list of input fields
+	 * @param operationClass - operation class
+	 * @param outputList - list of output fields
+	 */
+	public MappingSheetRow(List<String> input, OperationClassProperty operationClass,
 			List<String> outputList) {
-		this.inputFields = imputFields;
+		this.inputFields = input;
 		this.operationClass = operationClass;
 		this.outputList = outputList;
 	}
 	
-	public List<String> getImputFields() {
+	/**
+	 * 
+	 * returns list of input fields
+	 * 
+	 * @return - List of input fields
+	 */
+	public List<String> getInputFields() {
 		return inputFields;
 	}
 
-	public void setImputFields(List<String> imputFields) {
-		this.inputFields = imputFields;
+	/**
+	 * 
+	 * set list of input fields
+	 * 
+	 * @param inputFields
+	 */
+	public void setInputFields(List<String> inputFields) {
+		this.inputFields = inputFields;
 	}
 	
+	/**
+	 * 
+	 * returns {@link OperationClassProperty} 
+	 * 
+	 * @return
+	 */
 	public OperationClassProperty getOperationClassProperty() {
 		return operationClass;
 	}
-
+	
+	/**
+	 * set {@link OperationClassProperty}
+	 * 
+	 * @param operationClass
+	 */
 	public void setOperationClassProperty(
 			OperationClassProperty operationClass) {
 		this.operationClass = operationClass;
 	}
 
+	/**
+	 * 
+	 * returns list of output fields
+	 * 
+	 * @return - output field list 
+	 */
 	public List<String> getOutputList() {
 		return outputList;
 	}
 
+	/**
+	 * 
+	 * set list of output fields
+	 * 
+	 * @param outputList
+	 */
 	public void setOutputList(List<String> outputList) {
 		this.outputList = outputList;
 	}

@@ -2,29 +2,62 @@ package com.bitwise.app.common.datastructure.property.mapping;
 
 import com.bitwise.app.cloneableinterface.IDataStructure;
 
-
+/**
+ * This class is a data structure to save error information used in {@link InputField}
+ * 
+ * @author Bitwise
+ *
+ */
 public class ErrorObject implements IDataStructure {
 	boolean hasError;
 	String errorMessage;
 	
+	/**
+	 * 
+	 * @param hasError - if error exist
+	 * @param errorMessage - error message
+	 */
 	public ErrorObject(boolean hasError, String errorMessage) {
 		super();
 		this.hasError = hasError;
 		this.errorMessage = errorMessage;
 	}
 
+	/**
+	 * 
+	 * returns true if it is error
+	 * 
+	 * @return boolean
+	 */
 	public boolean isHasError() {
 		return hasError;
 	}
 
+	/**
+	 * set true of it is error
+	 * 
+	 * @param hasError
+	 */
 	public void setHasError(boolean hasError) {
 		this.hasError = hasError;
 	}
 
+	/**
+	 * 
+	 * returns error message
+	 * 
+	 * @return error message
+	 */
 	public String getErrorMessage() {
 		return errorMessage;
 	}
 
+	/**
+	 * 
+	 * set error message
+	 * 
+	 * @param errorMessage
+	 */
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}

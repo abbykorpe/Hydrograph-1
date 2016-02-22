@@ -293,7 +293,7 @@ public class TransformWidget extends AbstractWidget {
 				|| mappingSheetRow.getOperationClassProperty().getOperationClassPath() == null
 				|| mappingSheetRow.getOperationClassProperty().getOperationClassPath().trim().equals("")) {
 
-			List<String> inputFields = mappingSheetRow.getImputFields();
+			List<String> inputFields = mappingSheetRow.getInputFields();
 			List<String> outputFields = mappingSheetRow.getOutputList();
 			int index = 0;
 			for (String inputField : inputFields) {
@@ -313,7 +313,7 @@ public class TransformWidget extends AbstractWidget {
 				|| mappingSheetRow.getOperationClassProperty().getOperationClassPath() == null
 				|| mappingSheetRow.getOperationClassProperty().getOperationClassPath().trim().equals("")) {
 
-			List<String> inputFields = mappingSheetRow.getImputFields();
+			List<String> inputFields = mappingSheetRow.getInputFields();
 			List<String> outputFields = mappingSheetRow.getOutputList();
 			int index = 0;
 			for (String inputField : inputFields) {

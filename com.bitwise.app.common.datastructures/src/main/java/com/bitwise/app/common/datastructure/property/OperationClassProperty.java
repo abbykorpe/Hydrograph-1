@@ -31,34 +31,76 @@ public class OperationClassProperty implements IDataStructure{
 		this.isParameter = isParameter;
 		this.comboBoxValue = comboBoxValue;
 	}
+	
+	/**
+	 * Instantiates a new operation class property.
+	 * 
+	 * @param comboBoxValue
+	 * @param operationClassPath
+	 * @param isParameter
+	 * @param operationClassFullPath
+	 */
 	public OperationClassProperty(String comboBoxValue,String operationClassPath, boolean isParameter,String operationClassFullPath) {
 		this.comboBoxValue=comboBoxValue;
 		this.operationClassPath = operationClassPath;
 		this.isParameter = isParameter;
 		this.operationClassFullPath=operationClassFullPath;
 	}
+	
+	/**
+	 * 
+	 * returns combobox value from Opeartion class widget
+	 * 
+	 * @return
+	 */
 	public String getComboBoxValue() {
 		return comboBoxValue;
 	}
+	
+	/**
+	 * 
+	 * Returns operation class path
+	 * 
+	 * @return operation class path
+	 */
 	public String getOperationClassPath() {
 		return operationClassPath;
 	}
+	
+	/**
+	 * 
+	 * returns true if user added parameter instead of operation class
+	 * 
+	 * @return boolean
+	 */
 	public boolean isParameter() {
 		return isParameter;
 	}
-		
+	
+	/**
+	 * 
+	 * returns full operation class path
+	 * 	
+	 * @return
+	 */
 	public String getOperationClassFullPath() {
 		return operationClassFullPath;
 	}
+	
+	/**
+	 * 
+	 * set full operation class path
+	 * 
+	 * @param operationClassFullPath
+	 */
 	public void setOperationClassFullPath(String operationClassFullPath) {
 		this.operationClassFullPath = operationClassFullPath;
 	}
+	
 	@Override
 	public OperationClassProperty clone() {
 		return new OperationClassProperty(comboBoxValue,operationClassPath,isParameter,operationClassFullPath);
 	}
-
-	
 	
 	@Override
 	public int hashCode() {
@@ -98,11 +140,9 @@ public class OperationClassProperty implements IDataStructure{
 			return false;
 		return true;
 	}
+	
 	@Override
 	public String toString() {
 		return operationClassPath;
 	}
-	
-	
-  
 }

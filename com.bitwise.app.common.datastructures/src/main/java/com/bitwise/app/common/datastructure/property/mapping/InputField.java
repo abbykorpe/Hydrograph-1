@@ -2,7 +2,13 @@ package com.bitwise.app.common.datastructure.property.mapping;
 
 import com.bitwise.app.cloneableinterface.IDataStructure;
 
-
+/**
+ * 
+ * The class stores input field names propagated in Aggregate/transform component
+ * 
+ * @author Bitwise
+ *
+ */
 public class InputField implements IDataStructure{
 	private String fieldName;
 	private ErrorObject errorObject;
@@ -12,27 +18,46 @@ public class InputField implements IDataStructure{
 		this.fieldName = fieldName;
 		errorObject = new ErrorObject(false, "");
 	}
-	
+
 	public InputField(String fieldName, ErrorObject errorObject) {
 		super();
 		this.fieldName = fieldName;
 		this.errorObject = errorObject;
 	}
 
-
-
+	/**
+	 * returns field name
+	 * 
+	 * @return
+	 */
 	public String getFieldName() {
 		return fieldName;
 	}
 
+	/**
+	 * 
+	 * set field name
+	 * 
+	 * @param fieldName
+	 */
 	public void setFieldName(String fieldName) {
 		this.fieldName = fieldName;
 	}
 
+	/**
+	 * returns {@code ErrorObject} associated with the field.
+	 * 
+	 * @return {@link ErrorObject}
+	 */
 	public ErrorObject getErrorObject() {
 		return errorObject;
 	}
 
+	/**
+	 * 
+	 * Set {@code ErrorObject}
+	 * @param errorObject
+	 */
 	public void setErrorObject(ErrorObject errorObject) {
 		this.errorObject = errorObject;
 	}
