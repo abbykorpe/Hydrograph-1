@@ -28,24 +28,12 @@ public class SchemaPropagation {
 	private List<Link> componentsLinkList = new ArrayList<>();
 	private List<Link> mainLinkList = new ArrayList<>();
 
-	/**
-	 * This method propagates component's schema to its successor components.
-	 * 
-	 * @param component
-	 * @param componentsOutputSchema
-	 */
-//	public void continuousSchemaPropagation(Component component, ComponentsOutputSchema componentsOutputSchema) {
-//		LOGGER.debug("Initiating recursive schema propagation");
-//		if (component != null)
-//			applySchemaToTargetComponents(component, componentsOutputSchema);
-//		flushLinkLists();
-//	}
 
 	/**
-	 * Map Propagation
+	 * This method propagates component's schema-map to its successor components.
 	 * 
 	 * @param component
-	 * @param schema
+	 * @param schemaMap
 	 */
 	public void continuousSchemaPropagation(Component component, Map<String, ComponentsOutputSchema> schemaMap) {
 		LOGGER.debug("Initiating recursive schema propagation");
@@ -74,7 +62,7 @@ public class SchemaPropagation {
 			ComponentsOutputSchema componentsOutputSchema) {
 		LOGGER.debug("Applying Schema to :" + destinationComponent.getComponentLabel());
 		setSchemaMapOfComponent(destinationComponent,componentsOutputSchema);
-		if (destinationComponent.getSourceConnections().isEmpty()) {
+		if (destinationComponent !=null && destinationComponent.getSourceConnections().isEmpty()) {
 			mainLinkList.clear();
 			return;
 		}
@@ -83,16 +71,16 @@ public class SchemaPropagation {
 			if (StringUtils.equals(Constants.SUBGRAPH_COMPONENT_CATEGORY, link.getTarget().getCategory())) {
 				propagateSchemaFromSubgraph(link.getTarget(), link.getTargetTerminal(), componentsOutputSchema);
 			} else {
-				if ((!(link.getTarget().getCategory().equals(Constants.TRANSFORM) & !link.getTarget()
-						.getComponentName().equalsIgnoreCase(Constants.FILTER)) && !link.getTarget().getProperties()
-						.containsValue(componentsOutputSchema)))
+				if ((!(Constants.TRANSFORM.equals(link.getTarget().getCategory()) & !Constants.FILTER
+						.equalsIgnoreCase(link.getTarget().getComponentName())) && !link.getTarget().getProperties()
+						.containsValue(componentsOutputSchema))) {
 					if (!checkUnusedSocketAsSourceTerminal(link))
 						applySchemaToTargetComponents(link.getTarget(), componentsOutputSchema);
 					else {
 						getComponentsOutputSchema(link);
 						applySchemaToTargetComponents(link.getTarget(), this.componentsOutputSchema);
 					}
-				else if (link.getTarget().getComponentName().equalsIgnoreCase(Constants.UNIQUE_SEQUENCE)) {
+				} else if (Constants.UNIQUE_SEQUENCE.equals(link.getTarget().getComponentName())) {
 					propagateSchemForUniqueSequenceComponent(link.getTarget(), componentsOutputSchema);
 				} else {
 					for (Link link2 : link.getTarget().getSourceConnections()) {
@@ -124,7 +112,7 @@ public class SchemaPropagation {
 		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) inputSubgraphComponent
 				.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
 		schemaMap.put(getTagetTerminalForSubgraph(targetTerminal), componentsOutputSchema);
-		appplySchemaToTargetComponentsFromSchemaMap(subGraphComponent, schemaMap,
+		appplySchemaToTargetComponentsFromSchemaMap(inputSubgraphComponent, schemaMap,
 				getTagetTerminalForSubgraph(targetTerminal));
 	}
 
@@ -228,18 +216,24 @@ public class SchemaPropagation {
 	}
 
 	private ComponentsOutputSchema getSourceComponentsOutputSchemaFromMap(Link link) {
-		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) link.getSource().getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
 		ComponentsOutputSchema componentsOutputSchema = null;
-		if (schemaMap != null && schemaMap.get(link.getSourceTerminal()) != null)
-			componentsOutputSchema = schemaMap.get(link.getSourceTerminal());
+		if (link != null && link.getSource() != null) {
+			Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) link.getSource()
+					.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
+			if (schemaMap != null && schemaMap.get(link.getSourceTerminal()) != null)
+				componentsOutputSchema = schemaMap.get(link.getSourceTerminal());
+		}
 		return componentsOutputSchema;
 	}
 
 	private ComponentsOutputSchema getTargetComponentsOutputSchemaFromMap(Link link) {
-		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) link.getTarget().getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
 		ComponentsOutputSchema componentsOutputSchema = null;
-		if (schemaMap != null && schemaMap.get(link.getSourceTerminal()) != null)
-			componentsOutputSchema = schemaMap.get(link.getSourceTerminal());
+		if (link != null && link.getSource() != null) {
+			Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) link.getTarget()
+					.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
+			if (schemaMap != null && schemaMap.get(link.getSourceTerminal()) != null)
+				componentsOutputSchema = schemaMap.get(link.getSourceTerminal());
+		}
 		return componentsOutputSchema;
 	}
 
