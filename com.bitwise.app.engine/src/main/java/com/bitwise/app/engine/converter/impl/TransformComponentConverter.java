@@ -41,8 +41,10 @@ public class TransformComponentConverter extends TransformConverter {
 	
 	private void initFixedWidthGridRows(){
 		fixedWidthGridRows = new LinkedList<>();
-		ComponentsOutputSchema componentsOutputSchema  = (ComponentsOutputSchema) properties.get(Constants.SCHEMA_TO_PROPAGATE);
-		if(componentsOutputSchema!=null){
+		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) properties
+				.get(Constants.SCHEMA_TO_PROPAGATE);
+		if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null) {
+			ComponentsOutputSchema componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
 			List<FixedWidthGridRow> gridRows = componentsOutputSchema.getFixedWidthGridRowsOutputFields();			
 			for(FixedWidthGridRow row : gridRows){
 				fixedWidthGridRows.add((FixedWidthGridRow) row.copy());
