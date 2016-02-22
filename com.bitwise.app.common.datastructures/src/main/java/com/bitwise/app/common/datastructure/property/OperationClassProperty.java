@@ -31,45 +31,87 @@ public class OperationClassProperty implements IDataStructure{
 		this.isParameter = isParameter;
 		this.comboBoxValue = comboBoxValue;
 	}
+	
+	/**
+	 * Instantiates a new operation class property.
+	 * 
+	 * @param comboBoxValue
+	 * @param operationClassPath
+	 * @param isParameter
+	 * @param operationClassFullPath
+	 */
 	public OperationClassProperty(String comboBoxValue,String operationClassPath, boolean isParameter,String operationClassFullPath) {
 		this.comboBoxValue=comboBoxValue;
 		this.operationClassPath = operationClassPath;
 		this.isParameter = isParameter;
 		this.operationClassFullPath=operationClassFullPath;
 	}
+	
+	/**
+	 * 
+	 * returns combobox value from Opeartion class widget
+	 * 
+	 * @return
+	 */
 	public String getComboBoxValue() {
 		return comboBoxValue;
 	}
+	
+	/**
+	 * 
+	 * Returns operation class path
+	 * 
+	 * @return operation class path
+	 */
 	public String getOperationClassPath() {
 		return operationClassPath;
 	}
+	
+	/**
+	 * 
+	 * returns true if user added parameter instead of operation class
+	 * 
+	 * @return boolean
+	 */
 	public boolean isParameter() {
 		return isParameter;
 	}
-		
+	
+	/**
+	 * 
+	 * returns full operation class path
+	 * 	
+	 * @return
+	 */
 	public String getOperationClassFullPath() {
 		return operationClassFullPath;
 	}
+	
+	/**
+	 * 
+	 * set full operation class path
+	 * 
+	 * @param operationClassFullPath
+	 */
 	public void setOperationClassFullPath(String operationClassFullPath) {
 		this.operationClassFullPath = operationClassFullPath;
 	}
+	
 	@Override
 	public OperationClassProperty clone() {
 		return new OperationClassProperty(comboBoxValue,operationClassPath,isParameter,operationClassFullPath);
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((comboBoxValue == null) ? 0 : comboBoxValue.hashCode());
 		result = prime * result + (isParameter ? 1231 : 1237);
-		result = prime
-				* result
-				+ ((operationClassPath == null) ? 0 : operationClassPath
-						.hashCode());
+		result = prime * result + ((operationClassFullPath == null) ? 0 : operationClassFullPath.hashCode());
+		result = prime * result + ((operationClassPath == null) ? 0 : operationClassPath.hashCode());
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -79,7 +121,17 @@ public class OperationClassProperty implements IDataStructure{
 		if (getClass() != obj.getClass())
 			return false;
 		OperationClassProperty other = (OperationClassProperty) obj;
+		if (comboBoxValue == null) {
+			if (other.comboBoxValue != null)
+				return false;
+		} else if (!comboBoxValue.equals(other.comboBoxValue))
+			return false;
 		if (isParameter != other.isParameter)
+			return false;
+		if (operationClassFullPath == null) {
+			if (other.operationClassFullPath != null)
+				return false;
+		} else if (!operationClassFullPath.equals(other.operationClassFullPath))
 			return false;
 		if (operationClassPath == null) {
 			if (other.operationClassPath != null)
@@ -93,7 +145,4 @@ public class OperationClassProperty implements IDataStructure{
 	public String toString() {
 		return operationClassPath;
 	}
-	
-	
-  
 }

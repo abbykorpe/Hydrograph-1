@@ -50,12 +50,19 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructur
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.RowData;
 import com.bitwise.app.propertywindow.widgets.dialogs.ELTOperationClassDialog;
 
-
+/**
+ * 
+ * UI for mapping sheet
+ * 
+ * @author Bitwise
+ *
+ */
 public class MappingTable {
 	private Table table;
 	private TableViewer tableViewer;	
 	private WidgetConfig widgetConfig;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
+	//TODO - mappingDialogButtonBar can be used in future when will enable and disable OK/Cancel buttons on Mapping dialog
 	private MappingDialogButtonBar mappingDialogButtonBar;
 	private List<InputField> inputTableFieldList;
 	private boolean validTable=true;
@@ -64,6 +71,13 @@ public class MappingTable {
 	private Image checkedImage,uncheckedImage;
 	private String componentName;
 	
+	/**
+	 * 
+	 * @param widgetConfig
+	 * @param propertyDialogButtonBar
+	 * @param mappingDialogButtonBar
+	 * @param componentName
+	 */
 	public MappingTable(WidgetConfig widgetConfig, PropertyDialogButtonBar propertyDialogButtonBar, MappingDialogButtonBar mappingDialogButtonBar, String componentName){
 		this.widgetConfig = widgetConfig;
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
@@ -71,6 +85,12 @@ public class MappingTable {
 		this.componentName = componentName;
 	}
 	
+	/**
+	 * 
+	 * Attach mapping table to mappingTableComposite
+	 * 
+	 * @param mappingTableComposite
+	 */
 	public void createTable(Composite mappingTableComposite){
 		createImageObjects();
 		createButtonPanel(mappingTableComposite);
@@ -253,7 +273,7 @@ public class MappingTable {
 		});
 	}
 	
-	protected TableItem addRow(final Table table) {
+	private TableItem addRow(final Table table) {
 		TableItem tableItem = new TableItem(table, SWT.NONE);
 		
 		TableEditor editor = new TableEditor(table);		      
@@ -560,20 +580,6 @@ public class MappingTable {
 			}
 							
 		}
-		/*for(String field : duplicateFieldSet){
-			for(TableItem item : table.getItems()){				
-				if(!((Text)item.getData("out")).getText().trim().equalsIgnoreCase("")){
-					List<String> outputCell = Arrays.asList(((Text)item.getData("out")).getText().split(","));
-					if(outputCell.contains(field)){	
-						if(((Text)item.getData("out")).getToolTipText() != null){
-							((Text)item.getData("out")).getToolTipText().contains("Duplicate output");
-						}
-						((Text)item.getData("out")).setBackground(((Text)item.getData("out")).getDisplay().getSystemColor(SWT.COLOR_WHITE));
-					}
-				}			
-			}
-		}*/
-		
 		
 		for(String field : duplicateFieldSet){
 			for(TableItem item : table.getItems()){
@@ -595,26 +601,6 @@ public class MappingTable {
 		}
 		
 		
-		
-		/*for(int i=0;i<mTableOutputFieldList.size();i++){
-			int counter=0;
-			for(int j=0;j<mTableOutputFieldList.size();j++){
-				if(i!=j && i<j){
-					if(mTableOutputFieldList.get(i).equalsIgnoreCase(mTableOutputFieldList.get(j))){
-						((Text)table.getItem(j).getData("out")).setForeground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_RED));
-						validUniqOutputColumns = false;		
-						if(((Text)table.getItem(j).getData("out")).getToolTipText() == null)
-							((Text)table.getItem(j).getData("out")).setToolTipText("Duplicate output");
-						else{
-							if(!((Text)table.getItem(j).getData("out")).getToolTipText().contains("Duplicate output"))
-								((Text)table.getItem(j).getData("out")).setToolTipText("- " + ((Text)table.getItem(j).getData("out")).getToolTipText() + "\n- " + "Duplicate output");
-						}
-							
-					}
-				}
-			}
-		}*/
-		//return validUniqOutputColumns;
 		return validUniqOutputColumns;
 	}
 	
@@ -634,9 +620,7 @@ public class MappingTable {
 				
 				if(txtOut.getToolTipText() == null)
 					txtOut.setToolTipText("In case of NO Operation class, number of input and number of output fields should be same");
-				//else
-					//txtOut.setToolTipText("- " + txtOut.getToolTipText() + "\n- " + "In case of NO Operation class, number of input and number of output fields should be same");
-				
+								
 				validTable = false;
 			}
 		}
@@ -714,7 +698,6 @@ public class MappingTable {
 			valid = false;			
 		}else{
 			columnText.setForeground(columnText.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-			//columnText.setToolTipText(null);
 		}
 		
 		if(columnText.getText().startsWith(","))					
@@ -729,8 +712,6 @@ public class MappingTable {
 	private void autoFormatText(final Text columnText) {
 		String text=columnText.getText().replace("\r\n", "");
 		text=text.replace(" ", "");
-		//text=text.replace(", ", ",");
-		//text=text.replace(",", ", ");
 		columnText.setText(text.replace(",", ",\r\n"));
 		
 		resizeTextBoxBasedOnUserInput(columnText);
@@ -775,6 +756,13 @@ public class MappingTable {
 		return list;
 	}
 	
+	/**
+	 * 
+	 * populate mapping table
+	 * 
+	 * @param mappingSheetRows - list of {@link MappingSheetRow}
+	 * @param list - list of {@link InputField}
+	 */
 	public void setData(List<MappingSheetRow> mappingSheetRows, List<InputField> list){
 		
 		inputTableFieldList = list;
@@ -782,7 +770,7 @@ public class MappingTable {
 		for(MappingSheetRow mappingSheetRow : mappingSheetRows){
 			TableItem item = addRow(table);
 			
-			((Text)item.getData("in")).setText(mappingSheetRow.getImputFields().toString().replace("[","").replace("]", "").replace(" ", ""));
+			((Text)item.getData("in")).setText(mappingSheetRow.getInputFields().toString().replace("[","").replace("]", "").replace(" ", ""));
 			if(mappingSheetRow.getOperationClassProperty() != null){
 				((Text)item.getData("OpClass")).setText(mappingSheetRow.getOperationClassProperty().getOperationClassPath());
 				((Text)item.getData("OpClass")).setData(mappingSheetRow.getOperationClassProperty());

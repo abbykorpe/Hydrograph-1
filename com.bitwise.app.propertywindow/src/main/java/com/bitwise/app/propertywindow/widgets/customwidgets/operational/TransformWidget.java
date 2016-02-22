@@ -93,11 +93,15 @@ public class TransformWidget extends AbstractWidget {
 				
 				getPropagatedSChema();
 
+				ATMapping oldATMappings = (ATMapping) atMapping.clone();
 				MappingDialog mappingDialog = new MappingDialog(transformComposite.getContainerControl().getShell(),
 						propertyDialogButtonBar, atMapping, widgetConfig,getComponent().getComponentName());
 				mappingDialog.open();
 
 				atMapping = mappingDialog.getATMapping();
+				if(!oldATMappings.equals(atMapping)){
+					propertyDialogButtonBar.enableApplyButton(true);
+				}
 
 				propagateOuputFieldsToSchemaTabFromTransformWidget();
 
@@ -289,7 +293,7 @@ public class TransformWidget extends AbstractWidget {
 				|| mappingSheetRow.getOperationClassProperty().getOperationClassPath() == null
 				|| mappingSheetRow.getOperationClassProperty().getOperationClassPath().trim().equals("")) {
 
-			List<String> inputFields = mappingSheetRow.getImputFields();
+			List<String> inputFields = mappingSheetRow.getInputFields();
 			List<String> outputFields = mappingSheetRow.getOutputList();
 			int index = 0;
 			for (String inputField : inputFields) {
@@ -309,7 +313,7 @@ public class TransformWidget extends AbstractWidget {
 				|| mappingSheetRow.getOperationClassProperty().getOperationClassPath() == null
 				|| mappingSheetRow.getOperationClassProperty().getOperationClassPath().trim().equals("")) {
 
-			List<String> inputFields = mappingSheetRow.getImputFields();
+			List<String> inputFields = mappingSheetRow.getInputFields();
 			List<String> outputFields = mappingSheetRow.getOutputList();
 			int index = 0;
 			for (String inputField : inputFields) {

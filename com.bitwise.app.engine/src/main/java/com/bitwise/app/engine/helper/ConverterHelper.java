@@ -20,7 +20,6 @@ import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -95,7 +94,7 @@ public class ConverterHelper {
 			inputFields = new TypeOperationInputFields();
 			
 			if(transformOperation.getOperationClassProperty() != null && transformOperation.getOperationClassProperty().getOperationClassPath() !=null){
-				for (String operationField : transformOperation.getImputFields()) {
+				for (String operationField : transformOperation.getInputFields()) {
 					TypeInputField typeInputField = new TypeInputField();
 					typeInputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
 					typeInputField.setName(operationField.trim());
@@ -106,6 +105,7 @@ public class ConverterHelper {
 		return inputFields;
 	}
 
+	// TODO - check if this will be used in future
 	private TypeProperties getProperties(List<NameValueProperty> nameValueProps) {
 		TypeProperties typeProperties = null;
 		if (nameValueProps != null && !nameValueProps.isEmpty()) {
@@ -137,6 +137,15 @@ public class ConverterHelper {
 		return outputFields;
 	}
 
+	/**
+	 * 
+	 * returns output socket
+	 * 
+	 * 
+	 * @param atMapping
+	 * @param fixedWidthGridRows
+	 * @return list of {@link TypeOperationsOutSocket}
+	 */
 	public List<TypeOperationsOutSocket> getOutSocket(ATMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {
 		logger.debug("Generating TypeOperationsOutSocket data for : {}", properties.get(Constants.PARAM_NAME));
 		List<TypeOperationsOutSocket> outSocketList = new ArrayList<TypeOperationsOutSocket>();
@@ -174,7 +183,7 @@ public class ConverterHelper {
 			for(MappingSheetRow operationRow : atMapping.getMappingSheetRows()){				
 				if( operationRow.getOperationClassProperty() ==null || operationRow.getOperationClassProperty().getOperationClassPath() == null || 
 						operationRow.getOperationClassProperty().getOperationClassPath().trim().equals("")){
-					List<String> inputFields = operationRow.getImputFields();
+					List<String> inputFields = operationRow.getInputFields();
 					List<String> outputFields = operationRow.getOutputList();
 					int index = 0;
 					for(String inputField : inputFields){
@@ -199,7 +208,7 @@ public class ConverterHelper {
 			for(MappingSheetRow operationRow : atMapping.getMappingSheetRows()){				
 				if( operationRow.getOperationClassProperty() ==null || operationRow.getOperationClassProperty().getOperationClassPath() == null || 
 						operationRow.getOperationClassProperty().getOperationClassPath().trim().equals("")){
-						List<String> inputFields = operationRow.getImputFields();
+						List<String> inputFields = operationRow.getInputFields();
 						List<String> outputFields = operationRow.getOutputList();
 						int index = 0;
 						for(String inputField : inputFields){
@@ -240,6 +249,12 @@ public class ConverterHelper {
 		return typeOperationFieldList;
 	}
 
+	/**
+	 * 
+	 * returns Input sockets
+	 * 
+	 * @return list of {@link TypeBaseInSocket}
+	 */
 	public List<TypeBaseInSocket> getInSocket() {
 		logger.debug("Generating TypeBaseInSocket data for :{}", component.getProperties().get(Constants.PARAM_NAME));
 		List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
@@ -261,6 +276,12 @@ public class ConverterHelper {
 		return inSocketsList;
 	}
 
+	/**
+	 * returns Schema
+	 * 
+	 * @param {@link FixedWidthGridRow}
+	 * @return {@link TypeBaseField}
+	 */
 	public TypeBaseField getFixedWidthTargetData(FixedWidthGridRow object) {
 		TypeBaseField typeBaseField = new TypeBaseField();
 		typeBaseField.setName(object.getFieldName());
@@ -289,6 +310,12 @@ public class ConverterHelper {
 		return typeBaseField;
 	}
 
+	/**
+	 * returns Schema
+	 * 
+	 * @param {@link GridRow}
+	 * @return {@link TypeBaseField}
+	 */
 	public TypeBaseField getSchemaGridTargetData(GridRow object) {
 		TypeBaseField typeBaseField = new TypeBaseField();
 		typeBaseField.setName(object.getFieldName());
@@ -314,6 +341,12 @@ public class ConverterHelper {
 		return typeBaseField;
 	}
 
+	/**
+	 * returns mapping rows list
+	 * 
+	 * @param lookupPropertyGrid
+	 * @return {@link Object}
+	 */
 	public List<Object> getLookuporJoinOutputMaping(LookupMappingGrid lookupPropertyGrid) {
 		List<Object> passThroughFieldorMapFieldList = null;
 		if (lookupPropertyGrid != null) {
@@ -341,6 +374,14 @@ public class ConverterHelper {
 		return passThroughFieldorMapFieldList;
 	}
 
+	/**
+	 * 
+	 * returns true if multiple links allowed at give component and ant given port
+	 * 
+	 * @param sourceComponent
+	 * @param portName
+	 * @return
+	 */
 	public boolean isMultipleLinkAllowed(Component sourceComponent, String portName) {
 		logger.debug("Getting port specification for port" + portName);
 		for (PortSpecification portSpecification : sourceComponent.getPortSpecification()) {
