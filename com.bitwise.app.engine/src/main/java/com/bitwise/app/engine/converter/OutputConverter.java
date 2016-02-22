@@ -1,6 +1,7 @@
 package com.bitwise.app.engine.converter;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 
@@ -64,8 +65,10 @@ public abstract class OutputConverter extends Converter {
 
 	protected ComponentsOutputSchema fetchPropagatedSchema() {
 		ComponentsOutputSchema componentsOutputSchema = null;
-		if (properties.get(Constants.SCHEMA_TO_PROPAGATE) != null)
-			componentsOutputSchema = (ComponentsOutputSchema) properties.get(Constants.SCHEMA_TO_PROPAGATE);
+		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) properties
+				.get(Constants.SCHEMA_TO_PROPAGATE);
+		if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null)
+			componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
 		return componentsOutputSchema;
 	}
 

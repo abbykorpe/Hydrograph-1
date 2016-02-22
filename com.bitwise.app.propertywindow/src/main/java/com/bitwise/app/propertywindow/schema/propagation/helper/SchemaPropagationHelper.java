@@ -95,8 +95,7 @@ public class SchemaPropagationHelper {
 	public List<String> getInputFieldListForLink(Link link) {
 		ComponentsOutputSchema sourceComponentsOutputSchema;
 		List<String> availableFields = new ArrayList<>();
-		sourceComponentsOutputSchema = (ComponentsOutputSchema) link.getSource().getProperties()
-				.get(Constants.SCHEMA_TO_PROPAGATE);
+		sourceComponentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 		if (sourceComponentsOutputSchema != null) {
 			for (GridRow gridRow : sourceComponentsOutputSchema.getFixedWidthGridRowsOutputFields())
 				availableFields.add(StringUtils.lowerCase(gridRow.getFieldName()));

@@ -1,5 +1,7 @@
 package com.bitwise.app.graph.model;
 
+import java.util.Map;
+
 import org.eclipse.draw2d.Graphics;
 
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
@@ -69,7 +71,7 @@ public class Link extends Model {
 	private void propagateSchema(Component sourceComponent) {
 		if (sourceComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE) != null)
 			SchemaPropagation.INSTANCE.continuousSchemaPropagation(sourceComponent,
-					(ComponentsOutputSchema) sourceComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
+					(Map<String,ComponentsOutputSchema>) sourceComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
 
 	}
 

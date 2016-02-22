@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
@@ -36,10 +37,10 @@ import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.fixedwidthschema.ELTFixedWidget;
 import com.bitwise.app.propertywindow.messages.Messages;
@@ -162,17 +163,18 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
+		Map<String, ComponentsOutputSchema> schemaMap=new LinkedHashMap<String,ComponentsOutputSchema>();
 		ComponentsOutputSchema componentsOutputSchema = new ComponentsOutputSchema();
 		if (getComponent().getProperties().get(Constants.SCHEMA_TO_PROPAGATE) != null) {
-			ComponentsOutputSchema previousOutputSchema = (ComponentsOutputSchema) getComponent().getProperties().get(
-					Constants.SCHEMA_TO_PROPAGATE);
-			if (!previousOutputSchema.getMapFields().isEmpty())
+			ComponentsOutputSchema previousOutputSchema = ((Map<String, ComponentsOutputSchema>) getComponent()
+					.getProperties().get(Constants.SCHEMA_TO_PROPAGATE)).get(Constants.FIXED_OUTSOCKET_ID);
+		if (previousOutputSchema!=null && !previousOutputSchema.getMapFields().isEmpty())
 				componentsOutputSchema.getMapFields().putAll(previousOutputSchema.getMapFields());
-			if (!previousOutputSchema.getPassthroughFields().isEmpty())
+			if (previousOutputSchema!=null && !previousOutputSchema.getPassthroughFields().isEmpty())
 				componentsOutputSchema.getPassthroughFields().addAll(previousOutputSchema.getPassthroughFields());
-			if (!previousOutputSchema.getPassthroughFieldsPortInfo().isEmpty())
+			if (previousOutputSchema!=null && !previousOutputSchema.getPassthroughFieldsPortInfo().isEmpty())
 				componentsOutputSchema.getPassthroughFieldsPortInfo().putAll(previousOutputSchema.getPassthroughFieldsPortInfo());
-			if (!previousOutputSchema.getMapFieldsPortInfo().isEmpty())
+			if (previousOutputSchema!=null && !previousOutputSchema.getMapFieldsPortInfo().isEmpty())
 				componentsOutputSchema.getMapFieldsPortInfo().putAll(previousOutputSchema.getMapFieldsPortInfo());
 		}//
 		List<GridRow> tempGrid = new ArrayList<>();
@@ -214,11 +216,14 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			schema.setIsExternal(false);
 			schema.setGridRow(tempGrid);
 			schema.setExternalSchemaPath("");
-			property.put(Constants.SCHEMA_TO_PROPAGATE, componentsOutputSchema);//
+			schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
+			property.put(Constants.SCHEMA_TO_PROPAGATE,schemaMap);
 		}
+		
+		
 		property.put(propertyName, schema);
-		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), componentsOutputSchema);//
-
+		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), schemaMap);//
+		
 		return property;
 	}
 
@@ -260,11 +265,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected void schemaFromConnectedLinks() {
 		for (Link link : getComponent().getTargetConnections()) {
 			this.properties = getPropagatedSchema(link);
-			// if (link.getSource().getPort(link.getSourceTerminal()).equals(Constants.UNUSED_SOCKET_TYPE)) {
-			//
-			// } else if (link.getSource().getProperties().get(Constants.SCHEMA_TO_PROPAGATE) != null) {
-			// this.properties = getPropagatedSchema(link);
-			// }
+			
 		}
 	}
 
