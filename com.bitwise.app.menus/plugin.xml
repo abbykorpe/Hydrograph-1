@@ -32,6 +32,18 @@
 	         id="com.bitwise.help.aboutaccelero"
             name="About Accelero">
      </command>
+     <command
+           id="com.bitwise.app.menus.edit.delete"
+           name="delete">
+     </command>
+     <command
+           id="com.bitwise.app.menus.edit.copy"
+           name="copy">
+     </command>
+     <command
+           id="com.bitwise.app.menus.edit.paste"
+           name="paste">
+     </command>
    </extension>
 	  <extension
          point="org.eclipse.ui.handlers">
@@ -57,7 +69,7 @@
       </handler>
       <handler
             class="com.bitwise.app.menus.handlers.DeleteHandler"
-            commandId="org.eclipse.ui.edit.delete">
+            commandId="com.bitwise.app.menus.edit.delete">
          <activeWhen>
             <with
                   variable="activeEditorId">
@@ -97,7 +109,7 @@
       </handler>
       <handler
             class="com.bitwise.app.menus.handlers.CopyHandler"
-            commandId="org.eclipse.ui.edit.copy">
+            commandId="com.bitwise.app.menus.edit.copy">
          <enabledWhen>
             <with
                   variable="selection">
@@ -117,7 +129,7 @@
       </handler>
       <handler
             class="com.bitwise.app.menus.handlers.PasteHandler"
-            commandId="org.eclipse.ui.edit.paste">
+            commandId="com.bitwise.app.menus.edit.paste">
          <activeWhen>
             <with
                   variable="activeEditorId">
@@ -354,19 +366,19 @@
                   mnemonic ="t">
             </command>
             <command
-                  commandId="org.eclipse.ui.edit.copy"
+                  commandId="com.bitwise.app.menus.edit.copy"
                   label="Copy"
                   style="push"
                   mnemonic ="C">
             </command>
             <command
-                  commandId="org.eclipse.ui.edit.paste"
+                  commandId="com.bitwise.app.menus.edit.paste"
                   label="Paste"
                   style="push"
                   mnemonic ="P">
             </command>
             <command
-                  commandId="org.eclipse.ui.edit.delete"
+                  commandId="com.bitwise.app.menus.edit.delete"
                   label="Delete"
                   style="push"
                   mnemonic ="D">
@@ -497,6 +509,24 @@
              contextId="org.eclipse.ui.contexts.window"
              schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
              sequence="f1">
+       </key>
+       <key
+             commandId="com.bitwise.app.menus.edit.delete"
+             contextId="org.eclipse.ui.contexts.window"
+             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+             sequence="M1+D">
+       </key>
+       <key
+             commandId="com.bitwise.app.menus.edit.copy"
+             contextId="org.eclipse.ui.contexts.window"
+             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+             sequence="M1+M2+C">
+       </key>
+       <key
+             commandId="com.bitwise.app.menus.edit.paste"
+             contextId="org.eclipse.ui.contexts.window"
+             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+             sequence="M1+M2+V">
        </key>
    </extension>
    <extension
