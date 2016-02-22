@@ -2,11 +2,13 @@ package com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.mapp
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
@@ -31,6 +33,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -232,48 +235,93 @@ public class MappingTable {
 		GridData gd_composite_1 = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
 		gd_composite_1.heightHint = 26;
 		composite_1.setLayoutData(gd_composite_1);
-		
-		Button btnAdd = new Button(composite_1, SWT.NONE);
-		btnAdd.addSelectionListener(new SelectionAdapter() {
+
+		Label addButton = new Label(composite_1, SWT.NONE);
+		addButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		addButton.setImage(new Image(null,
+				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
+		attachAddButtonListener(addButton);
+
+		Label deleteButton = new Label(composite_1, SWT.NONE);
+		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		deleteButton
+				.setImage(new Image(null,
+						XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
+								+ "/icons/delete.png"));
+		attachDeleteButtonListener(deleteButton);
+	}
+ 
+	// Add Listener
+	private void attachAddButtonListener(Label addButton) {
+		addButton.addMouseListener(new MouseListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void mouseDoubleClick(MouseEvent e) {
+				// Nothing TODO
+
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// Nothing TODO
+
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
 				addRow(table);
 			}
+
 		});
-		btnAdd.setText("Add");
-		
-		Button btnRemove = new Button(composite_1, SWT.NONE);
-		btnRemove.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		btnRemove.setText("Remove");
-		btnRemove.addSelectionListener(new SelectionAdapter() {
+	}
+
+	// Delete Listener
+	private void attachDeleteButtonListener(Label deleteButton) {
+		deleteButton.addMouseListener(new MouseListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub				
-				int index=0;
-				for(TableItem item : table.getItems()){
-					if(((Button)item.getData("chk")).getSelection()){
-						((Button)table.getItem(index).getData("chk")).dispose();
-						((Text)table.getItem(index).getData("in")).dispose();
-						((Text)table.getItem(index).getData("OpClass")).dispose();
-						((Button)table.getItem(index).getData("edit")).dispose();
-						((Text)table.getItem(index).getData("out")).dispose();
+			public void mouseDoubleClick(MouseEvent e) {
+				// Nothing to do
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// Nothing to do
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				int index = 0;
+				for (TableItem item : table.getItems()) {
+					if (((Button) item.getData("chk")).getSelection()) {
+						((Button) table.getItem(index).getData("chk"))
+								.dispose();
+						((Text) table.getItem(index).getData("in")).dispose();
+						((Text) table.getItem(index).getData("OpClass"))
+								.dispose();
+						((Button) table.getItem(index).getData("edit"))
+								.dispose();
+						((Text) table.getItem(index).getData("out")).dispose();
 						table.remove(index);
 						index--;
-						
+
 					}
-					index++;		
-					
-					//validateRow((RowData) ((Text)table.getItem(index).getData("out")).getData("rowData"));
-					
+					index++;
+
+					// validateRow((RowData)
+					// ((Text)table.getItem(index).getData("out")).getData("rowData"));
+
 				}
 				table.getColumns()[0].setWidth(31);
 				table.getColumns()[0].setWidth(30);
 				validateDuplicatesInOutputColumn();
 			}
+
 		});
 	}
 	
 	private TableItem addRow(final Table table) {
+
 		TableItem tableItem = new TableItem(table, SWT.NONE);
 		
 		TableEditor editor = new TableEditor(table);		      

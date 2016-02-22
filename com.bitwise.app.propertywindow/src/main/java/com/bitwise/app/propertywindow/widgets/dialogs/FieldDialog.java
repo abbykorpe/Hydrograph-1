@@ -213,7 +213,7 @@ public class FieldDialog extends Dialog {
 		cl_container.maxNumColumns = 1;
 		container.setLayout(cl_container);
 
-		addSeperator(container);
+		// addSeperator(container);
 		addButtonPanel(container);
 
 		Composite tableComposite = new Composite(container, SWT.NONE);

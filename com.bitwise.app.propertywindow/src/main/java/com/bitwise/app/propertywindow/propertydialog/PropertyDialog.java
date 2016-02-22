@@ -60,6 +60,7 @@ public class PropertyDialog extends Dialog {
 	private Map<String,String> toolTipErrorMessages;
 	
 	private Component component;
+	private  final String APP_ICON = "/icons/app_icon.bmp";
 	
 	/**
 	 * Create the dialog.
@@ -324,7 +325,7 @@ public class PropertyDialog extends Dialog {
 		String imagePath = null;
 		//TODO Please uncomment below code before build.
 		try{
-			imagePath = XMLConfigUtil.CONFIG_FILES_PATH + "/icons/property_window_icon.png" ;  
+			imagePath = XMLConfigUtil.CONFIG_FILES_PATH + APP_ICON;
 			Image shellImage = new Image(newShell.getDisplay(), imagePath);
 			newShell.setImage(shellImage);
 		}catch(Exception e){
