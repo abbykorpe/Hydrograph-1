@@ -711,8 +711,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				extSchemaPathText.getText();
 				File schemaFile = (File) new File(extSchemaPathText.getText());
 
-				GridRowLoader gridRowLoader = new GridRowLoader();
-				gridRowLoader.exportXMLfromGridRows((ArrayList<GridRow>) schemaGridRowList, gridRowType, schemaFile);
+				GridRowLoader gridRowLoader = new GridRowLoader(gridRowType, schemaFile);
+				gridRowLoader.exportXMLfromGridRows((ArrayList<GridRow>) schemaGridRowList);
 				
 			}
 		});
@@ -749,8 +749,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 				ArrayList<GridRow> schemaGridRowListToImport;
 
-				GridRowLoader gridRowLoader = new GridRowLoader();
-				schemaGridRowListToImport = gridRowLoader.importGridRowsFromXML(helper, gridRowType, schemaFile);
+				GridRowLoader gridRowLoader = new GridRowLoader(gridRowType, schemaFile);
+				schemaGridRowListToImport = gridRowLoader.importGridRowsFromXML(helper);
 
 
 				tableViewer.setInput(schemaGridRowListToImport);

@@ -29,6 +29,7 @@ public class Messages extends NLS {
 	public static String DATEFORMAT;
 	public static String PRECISION;
 	public static String SCALE_TYPE;
+	public static String SCALE_TYPE_NONE;
 	public static String SCALETYPELIST;
 	public static String FIELD_DESCRIPTION;
 	public static String RANGE_FROM;

@@ -1,15 +1,9 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.schema;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,42 +40,19 @@ public class GridRowLoader {
 
 	public final static String SCHEMA_CONFIG_XSD_PATH = Platform.getInstallLocation().getURL().getPath() + Messages.SCHEMA_CONFIG_XSD_PATH;
 
-
-	ArrayList<GridRow> schemaGridRowListToImport;
+	String gridRowType;
+	File schemaFile;
 	Fields fields;
 
-	public GridRowLoader(){
-		this.schemaGridRowListToImport = new ArrayList<>();
+	public GridRowLoader(String gridRowType, File schemaFile){
+		this.gridRowType = gridRowType;
+		this.schemaFile = schemaFile;
 	}
 
 	
-	private String readFile(String fileName) throws IOException {
-	    BufferedReader br = new BufferedReader(new FileReader(fileName));
-	    try {
-	        StringBuilder sb = new StringBuilder();
-	        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-	        sb.append("<ns2:Schema xmlns:ns2=\"http://www.bitwiseglobal.com/graph/schema\">");
-	       
-	        String line = br.readLine();
+	public ArrayList<GridRow> importGridRowsFromXML(ListenerHelper helper){
 
-	        while (line != null) {
-	        	sb.append("\n");
-	        	sb.append(line);
-	            
-	            line = br.readLine();
-	        }
-	        sb.append("\n");
-	        sb.append("</ns2:Schema>");
-	        sb.append("\n");
-	        return sb.toString();
-	    } finally {
-	        br.close();
-	    }
-	}
-
-	
-	public ArrayList<GridRow> importGridRowsFromXML(ListenerHelper helper, String gridRowType, File schemaFile){
-
+		ArrayList<GridRow> schemaGridRowListToImport = new ArrayList<>();
 		InputStream xml, xsd;
 		
 		ELTGridDetails eltGridDetails = (ELTGridDetails)helper.get(HelperType.SCHEMA_GRID);
@@ -89,22 +60,22 @@ public class GridRowLoader {
 		grids.clear();
 		try {
 			if(StringUtils.isNotBlank(schemaFile.getPath())){
-				String xmlAppendedData=readFile(schemaFile.getPath());
 				
-				ByteArrayInputStream in=new ByteArrayInputStream(xmlAppendedData.getBytes(StandardCharsets.UTF_8));
+				
+				xml = new FileInputStream(schemaFile);
 				
 				xsd = new FileInputStream(SCHEMA_CONFIG_XSD_PATH);
 				
-				if(validateXML(in, xsd)){
+				if(validateXML(xml, xsd)){
 
 					
 					JAXBContext jaxbContext = JAXBContext.newInstance(Schema.class);
 					Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-					in.reset();
-					Schema schema= (Schema) jaxbUnmarshaller.unmarshal(in);
+					
+					Schema schema= (Schema) jaxbUnmarshaller.unmarshal(schemaFile);
 					fields = schema.getFields();
 					ArrayList<Field> fieldsList = (ArrayList<Field>) fields.getField();
-					GridRow gridRow;
+					GridRow gridRow = null;
 					schemaGridRowListToImport = new ArrayList<GridRow>();
 
 					if(Messages.GENERIC_GRIDROW.equals(gridRowType)){
@@ -112,7 +83,6 @@ public class GridRowLoader {
 						for (Field temp : fieldsList) {
 							gridRow = new SchemaGrid();
 							populateCommonFields(gridRow, temp);
-							addRowToList(eltGridDetails, grids, gridRow);
 						}	
 						
 					}else if(Messages.FIXEDWIDTH_GRIDROW.equals(gridRowType)){
@@ -125,8 +95,6 @@ public class GridRowLoader {
 								((FixedWidthGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
 							else
 								((FixedWidthGridRow) gridRow).setLength("");
-
-							addRowToList(eltGridDetails, grids, gridRow);
 						}
 					}else if(Messages.GENERATE_RECORD_GRIDROW.equals(gridRowType)){
 
@@ -154,11 +122,11 @@ public class GridRowLoader {
 							else
 								((GenerateRecordSchemaGridRow) gridRow).setRangeTo("");
 
-							addRowToList(eltGridDetails, grids, gridRow);
+							
 						}
+						addRowToList(eltGridDetails, grids, gridRow, schemaGridRowListToImport);
 					}
 				}
-				//in.close();
 			}else
 				throw new Exception("FileName is Empty");
 
@@ -190,7 +158,7 @@ public class GridRowLoader {
 		}
 	}
 
-	private void addRowToList(ELTGridDetails eltGridDetails, List<GridRow> grids, GridRow gridRow) {
+	private void addRowToList(ELTGridDetails eltGridDetails, List<GridRow> grids, GridRow gridRow, ArrayList<GridRow> schemaGridRowListToImport) {
 		if(!grids.contains(gridRow))
 			grids.add(gridRow); 
 		eltGridDetails.setGrids(grids);
@@ -217,13 +185,13 @@ public class GridRowLoader {
 			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(temp.getScaleType().value()));	
 			gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[GridWidgetCommonBuilder.getScaleTypeByValue(temp.getType().value())]);
 		}else{
-			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue("none"));
+			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(Messages.SCALE_TYPE_NONE));
 			gridRow.setScaleTypeValue("");
 		}
 		gridRow.setDescription(temp.getDescription());
 	}
 
-	public void exportXMLfromGridRows(ArrayList<GridRow> schemaGridRowList, String gridRowType, File schemaFile){
+	public void exportXMLfromGridRows(ArrayList<GridRow> schemaGridRowList){
 		JAXBContext jaxbContext;
 		Schema schema = new Schema();
 		fields= new Fields();
@@ -245,7 +213,7 @@ public class GridRowLoader {
 						field.setPrecision(Integer.parseInt(temp.getPrecision()));
 					if(StringUtils.isNotBlank(temp.getScale()))
 						field.setScale(Integer.parseInt(temp.getScale()));
-					if(!temp.getScaleTypeValue().equals("") && !temp.getScaleTypeValue().equals("none"))
+					if(!temp.getScaleTypeValue().equals("") && !temp.getScaleTypeValue().equals(Messages.SCALE_TYPE_NONE))
 						field.setScaleType(ScaleTypes.fromValue(temp.getScaleTypeValue()));
 					if(StringUtils.isNotBlank(temp.getDescription()))
 						field.setDescription(temp.getDescription());
