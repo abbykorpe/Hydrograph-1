@@ -554,7 +554,8 @@ public class ParameterGridDialog extends Dialog {
 		
 
 		final Button btnReloadParameterFile = new Button(composite, SWT.NONE);
-		btnReloadParameterFile.setText("Reload File");
+		
+		btnReloadParameterFile.setText("View Parameters");
 		btnReloadParameterFile.addSelectionListener(new SelectionAdapter() {
 
 			@Override
