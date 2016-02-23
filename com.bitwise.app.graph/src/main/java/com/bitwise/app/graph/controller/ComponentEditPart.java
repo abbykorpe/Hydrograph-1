@@ -344,9 +344,13 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 
 	private void setInPortsCountDynamically(){
 		int prevInPortCount = getCastedModel().getInPortCount();
-
-		int newInPortCount=Integer.parseInt((String)getCastedModel().getProperties().get("inPortCount"));
-		int outPortCount=Integer.parseInt((String)getCastedModel().getProperties().get("outPortCount"));
+		int outPortCount = 0, newInPortCount = 0;
+		if (getCastedModel().getProperties().get("inPortCount") != null) {
+			newInPortCount = Integer.parseInt((String) getCastedModel().getProperties().get("inPortCount"));
+		}
+		if (getCastedModel().getProperties().get("outPortCount") != null) {
+			outPortCount = Integer.parseInt((String) getCastedModel().getProperties().get("outPortCount"));
+		}
 		int inPortCountToBeApplied = newInPortCount!=prevInPortCount ? newInPortCount : prevInPortCount;
 
 		ComponentFigure compFig = (ComponentFigure)getFigure();
@@ -378,9 +382,17 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 
 	private void setOutPortsCountDynamically(){
 		int prevOutPortCount = getCastedModel().getOutPortCount();
+		int inPortCount = 0, newOutPortCount = 0;
 
-		int inPortCount=Integer.parseInt((String)getCastedModel().getProperties().get("inPortCount"));
-		int newOutPortCount=Integer.parseInt((String)getCastedModel().getProperties().get("outPortCount"));
+		if (getCastedModel().getProperties().get("inPortCount") != null)
+		{
+			inPortCount = Integer.parseInt((String) getCastedModel().getProperties().get("inPortCount"));
+		}
+
+		if (getCastedModel().getProperties().get("outPortCount") != null)
+		{
+			newOutPortCount = Integer.parseInt((String) getCastedModel().getProperties().get("outPortCount"));
+		}
 
 		int outPortCountToBeApplied = newOutPortCount!=prevOutPortCount ? newOutPortCount : prevOutPortCount;
 
@@ -413,7 +425,11 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	private void setUnusedPortsCountDynamically(){
 		
 		int prevUnusedportCount = getCastedModel().getUnusedPortCount();
-		int newUnunsedPortCount=Integer.parseInt((String)getCastedModel().getProperties().get("unusedPortCount"));
+		int newUnunsedPortCount=0;
+			if(getCastedModel().getProperties().get("unusedPortCount")!=null)
+			{
+			 newUnunsedPortCount=Integer.parseInt((String)getCastedModel().getProperties().get("unusedPortCount"));
+			}
 		
 		int unusedPortCountToBeApplied = newUnunsedPortCount!=prevUnusedportCount ? newUnunsedPortCount : prevUnusedportCount;		
 
