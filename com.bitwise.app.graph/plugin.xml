@@ -114,7 +114,7 @@
                   style="push">
             </command>
             <command
-                  commandId="org.eclipse.ui.edit.delete"
+                  commandId="com.bitwise.app.menus.edit.delete"
                   icon="resources/icons/delete_o.png"
                   label="Delete"
                   style="push">
@@ -131,13 +131,13 @@
                   style="push">
             </command>
             <command
-                  commandId="org.eclipse.ui.edit.copy"
+                  commandId="com.bitwise.app.menus.edit.copy"
                   icon="resources/icons/copy_o.png"
                   label="Copy"
                   style="push">
             </command>
             <command
-                  commandId="org.eclipse.ui.edit.paste"
+                  commandId="com.bitwise.app.menus.edit.paste"
                   disabledIcon="resources/icons/dis_paste.png"
                   icon="resources/icons/paste_o.png"
                   label="Paste"

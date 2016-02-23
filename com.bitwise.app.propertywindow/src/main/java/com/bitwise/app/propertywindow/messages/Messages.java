@@ -77,6 +77,7 @@ public class Messages extends NLS {
 	public static String CLASS_NOT_EXIST;
 	public static String CHECKBOX_DISABLE_MESSAGE;
 	public static String ERROR;
+	public static String PARAMETER_ERROR;
 
 
 	static {

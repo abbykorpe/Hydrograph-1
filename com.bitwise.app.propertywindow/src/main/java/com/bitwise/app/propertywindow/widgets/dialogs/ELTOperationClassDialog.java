@@ -17,12 +17,14 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -55,7 +57,7 @@ public class ELTOperationClassDialog extends Dialog {
 
 	private Text fileName;
 	private Combo operationClasses;
-	private Button btnCheckButton; 
+	private Button isParameterCheckBox; 
 	private Button applyButton;
 	private Button okButton;
 	private Composite container;
@@ -64,7 +66,9 @@ public class ELTOperationClassDialog extends Dialog {
 	private TootlTipErrorMessage tootlTipErrorMessage = new TootlTipErrorMessage();
 	private WidgetConfig widgetConfig; 
 	private String componentName;
-	private ControlDecoration decorator;
+	private ControlDecoration alphanumericDecorator;
+	private ControlDecoration emptyDecorator;
+	private ControlDecoration parameterDecorator;
 
 	/**
 	 * Create the dialog.
@@ -143,7 +147,10 @@ public class ELTOperationClassDialog extends Dialog {
 
 		FilterOperationClassUtility.enableAndDisableButtons(true,false);
 		FilterOperationClassUtility.setComponentName(componentName);
-		btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl();
+		isParameterCheckBox=(Button) isParameterCheckbox.getSWTWidgetControl();
+		alphanumericDecorator=WidgetUtility.addDecorator(fileName,Messages.CHARACTERSET);
+		emptyDecorator=WidgetUtility.addDecorator(fileName,Messages.OperationClassBlank);
+		parameterDecorator=WidgetUtility.addDecorator(fileName,Messages.PARAMETER_ERROR);
 		populateWidget();
 		return container;
 	}
@@ -154,23 +161,26 @@ public class ELTOperationClassDialog extends Dialog {
 	 */
     public void populateWidget() {
 		if (!operationClassProperty.getOperationClassPath().equalsIgnoreCase("")) {
+			fileName.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+			emptyDecorator.hide();
 			operationClasses.setText(operationClassProperty.getComboBoxValue());
 			fileName.setText(operationClassProperty.getOperationClassPath());
-			btnCheckButton.setSelection(operationClassProperty.isParameter());
+			isParameterCheckBox.setSelection(operationClassProperty.isParameter());
 			fileName.setData("path", operationClassProperty.getOperationClassFullPath());
 			if (!operationClassProperty.getComboBoxValue().equalsIgnoreCase(Messages.CUSTOM)) {
 				fileName.setEnabled(false);
 				FilterOperationClassUtility.enableAndDisableButtons(false, false);
-				btnCheckButton.setEnabled(false);
+				isParameterCheckBox.setEnabled(false);
 			} else {
-				btnCheckButton.setEnabled(true);
-				if (btnCheckButton.getSelection()) {
+				isParameterCheckBox.setEnabled(true);
+				if (isParameterCheckBox.getSelection()) {
 					FilterOperationClassUtility.enableAndDisableButtons(true, true);
 				}
 			}
 		} else {
+			fileName.setBackground(new Color(Display.getDefault(), 255, 255, 204));
 			operationClasses.select(0);
-			btnCheckButton.setEnabled(false);
+			isParameterCheckBox.setEnabled(false);
 		}
   }
 
@@ -190,24 +200,26 @@ public class ELTOperationClassDialog extends Dialog {
 		
 		
 		eltOperationClassDialogButtonBar.setPropertyDialogButtonBar(okButton, applyButton, cancelButton);
-		decorator=WidgetUtility.addDecorator(fileName,Messages.CHARACTERSET);
-		decorator.hide();
-		btnCheckButton.addSelectionListener(new SelectionListener() {
+		alphanumericDecorator.hide();
+		parameterDecorator.hide();
+		isParameterCheckBox.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (btnCheckButton.getSelection()) {
+				if (isParameterCheckBox.getSelection()) {
 					hasTextBoxAlphanumericCharactorsOnly(fileName.getText());
-					if (StringUtils.isNotBlank(fileName.getText()) && !fileName.getText().startsWith("@")) {
+					if (StringUtils.isNotBlank(fileName.getText()) && !fileName.getText().startsWith("@{")&&!fileName.getText().endsWith("}")) {
 						fileName.setText("@{" + fileName.getText() + "}");
+						fileName.setBackground(new Color(Display.getDefault(), 255, 255, 255));
 					} 
 				} else {
-					if (StringUtils.isNotBlank(fileName.getText())&&fileName.getText().startsWith("@")) {
+					if (StringUtils.isNotBlank(fileName.getText())&&fileName.getText().startsWith("@{")) {
 						fileName.setText(fileName.getText().substring(2,fileName.getText().length()-1));
+						fileName.setBackground(new Color(Display.getDefault(), 255, 255, 255));
 					}
 					okButton.setEnabled(true);
 					applyButton.setEnabled(true);
-					decorator.hide();
+					alphanumericDecorator.hide();
 				}
 			}
 
@@ -222,18 +234,36 @@ public class ELTOperationClassDialog extends Dialog {
 				String currentText = ((Text) e.widget).getText();
 				String textBoxValue = (currentText.substring(0, e.start) + e.text + currentText.substring(e.end))
 						.trim();
-				if (btnCheckButton.getSelection()) {
-					hasTextBoxAlphanumericCharactorsOnly(textBoxValue);
+				if (isParameterCheckBox.getSelection()) {
+					if (StringUtils.isNotBlank(textBoxValue)
+							&& (!textBoxValue.startsWith("@{") || !textBoxValue.endsWith("}"))) {
+						((Text) e.widget).setBackground(new Color(Display.getDefault(), 255, 255, 255));
+						parameterDecorator.show();
+						emptyDecorator.hide();
+						okButton.setEnabled(false);
+						applyButton.setEnabled(false);
+					} else {
+						((Text) e.widget).setBackground(new Color(Display.getDefault(), 255, 255, 204));
+						emptyDecorator.show();
+						parameterDecorator.hide();
+						okButton.setEnabled(true);
+						hasTextBoxAlphanumericCharactorsOnly(textBoxValue);
+					}
 				}
 				else
 				{
 					if(StringUtils.isNotBlank(textBoxValue))
 					{
-						btnCheckButton.setEnabled(true);
+						((Text) e.widget).setBackground(new Color(Display.getDefault(), 255, 255, 255));
+						applyButton.setEnabled(true);
+						isParameterCheckBox.setEnabled(true);
+						emptyDecorator.hide();
 					}
 					else
 					{
-						btnCheckButton.setEnabled(false);
+						((Text) e.widget).setBackground(new Color(Display.getDefault(), 255, 255, 204));
+						isParameterCheckBox.setEnabled(false);
+						emptyDecorator.show();
 					}
 				}
 			}
@@ -243,17 +273,22 @@ public class ELTOperationClassDialog extends Dialog {
 	
 	private void hasTextBoxAlphanumericCharactorsOnly(String textBoxValue) {
 		if (StringUtils.isNotBlank(textBoxValue)) {
+			fileName.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+			emptyDecorator.hide();
 			Matcher matchs = Pattern.compile(Constants.REGEX).matcher(textBoxValue);
 			if (!matchs.matches()) {
-				decorator.show();
+				alphanumericDecorator.show();
 				okButton.setEnabled(false);
 				applyButton.setEnabled(false);
 			} else {
-				decorator.hide();
+				alphanumericDecorator.hide();
 				okButton.setEnabled(true);
 				applyButton.setEnabled(true);
 			}
 		} else {
+			fileName.setBackground(new Color(Display.getDefault(), 255, 255, 204));
+			emptyDecorator.show();
+			alphanumericDecorator.hide();
 			okButton.setEnabled(false);
 			applyButton.setEnabled(false);
 		}
@@ -300,7 +335,7 @@ public class ELTOperationClassDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
-				btnCheckButton.getSelection(), (String) fileName.getData("path"));
+				isParameterCheckBox.getSelection(), (String) fileName.getData("path"));
 		super.okPressed();
 	}
 
@@ -308,7 +343,7 @@ public class ELTOperationClassDialog extends Dialog {
 	protected void buttonPressed(int buttonId) {
 		if(buttonId == 3){
 			operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
-					btnCheckButton.getSelection(), (String) fileName.getData("path"));
+					isParameterCheckBox.getSelection(), (String) fileName.getData("path"));
 			applyButton.setEnabled(false);
 		}else{
 			super.buttonPressed(buttonId);

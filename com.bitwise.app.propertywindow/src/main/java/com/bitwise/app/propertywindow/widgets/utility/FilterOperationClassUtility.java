@@ -243,7 +243,6 @@ public static OperationClassProperty createOperationalClass(Composite composite,
 		helper.put(HelperType.WIDGET_CONFIG, widgetConfig);
 		setIJavaProject();
 	try { 						
-		fileNameTextBox.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(),eltOperationClassDialogButtonBar, null,fileName);
 		openButton.attachListener(ListenerFactory.Listners.OPEN_FILE_EDITOR.getListener(),eltOperationClassDialogButtonBar, null,comboOfOperaationClasses,fileName);
 		browseButton.attachListener(ListenerFactory.Listners.BROWSE_FILE_LISTNER.getListener(),eltOperationClassDialogButtonBar, helper,fileName);
 		createButton.attachListener(ListenerFactory.Listners.CREATE_NEW_CLASS.getListener(),eltOperationClassDialogButtonBar, helper,comboOfOperaationClasses,fileName);
