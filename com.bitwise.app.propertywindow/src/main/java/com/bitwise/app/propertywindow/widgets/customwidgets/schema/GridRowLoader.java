@@ -83,6 +83,7 @@ public class GridRowLoader {
 						for (Field temp : fieldsList) {
 							gridRow = new SchemaGrid();
 							populateCommonFields(gridRow, temp);
+							addRowToList(eltGridDetails, grids, gridRow, schemaGridRowListToImport);
 						}	
 						
 					}else if(Messages.FIXEDWIDTH_GRIDROW.equals(gridRowType)){
@@ -95,6 +96,7 @@ public class GridRowLoader {
 								((FixedWidthGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
 							else
 								((FixedWidthGridRow) gridRow).setLength("");
+							addRowToList(eltGridDetails, grids, gridRow, schemaGridRowListToImport);
 						}
 					}else if(Messages.GENERATE_RECORD_GRIDROW.equals(gridRowType)){
 
@@ -121,11 +123,13 @@ public class GridRowLoader {
 								((GenerateRecordSchemaGridRow) gridRow).setRangeTo(String.valueOf(temp.getRangeFrom()));
 							else
 								((GenerateRecordSchemaGridRow) gridRow).setRangeTo("");
-
+							
+							addRowToList(eltGridDetails, grids, gridRow, schemaGridRowListToImport);
 							
 						}
-						addRowToList(eltGridDetails, grids, gridRow, schemaGridRowListToImport);
+						
 					}
+				
 				}
 			}else
 				throw new Exception("FileName is Empty");

@@ -4,11 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.List;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
@@ -245,9 +242,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		} else {
 			schema.setIsExternal(false);
 			schema.setExternalSchemaPath("");
-			schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
-			property.put(Constants.SCHEMA_TO_PROPAGATE, schemaMap);
+
+//			schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
+//			property.put(Constants.SCHEMA_TO_PROPAGATE,schemaMap);
 		}
+		
+		schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
+		property.put(Constants.SCHEMA_TO_PROPAGATE,schemaMap);
 
 		property.put(propertyName, schema);
 		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), schemaMap);//
