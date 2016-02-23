@@ -199,13 +199,19 @@ public class UiConverterUtil {
 	}
 
 	private String replaceParametersWithDefaultValues(File inputFile) {
-		StringBuilder inputFileAsString = readFileContentInString(inputFile);
-		String fileContentWithoutString = inputFileAsString.toString();
-		//remove parameter with value="..." ex, value="@{some_parameter}", whole string will be removed including value=""
-		fileContentWithoutString = fileContentWithoutString.replaceAll("value\\=\"[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}\"", "");
-		//remove parameter @{some_parameter}
-		fileContentWithoutString = fileContentWithoutString.replaceAll("[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}", "");
-		return fileContentWithoutString;
+		String fileContentAsString = readFileContentInString(inputFile).toString();
+		List<ParameterData> parameterDataList = new ArrayList<>();
+		for (Entry<String, List<ParameterData>> entry : UIComponentRepo.INSTANCE.getParammeterFactory().entrySet()) {
+			parameterDataList.addAll(entry.getValue());
+		}
+		for (ParameterData parameterData : parameterDataList) {
+			String parameterName = parameterData.getParameterName();
+			parameterName = parameterName.replaceAll("\\@\\{", "");
+			parameterName = parameterName.replaceAll("\\}", "");
+			fileContentAsString = fileContentAsString.replaceAll("value=\"\\@\\{" + parameterName + "\\}\"", "");
+			fileContentAsString = fileContentAsString.replaceAll("\\@\\{" + parameterName + "\\}", "");
+		}
+		return fileContentAsString;
 	}
 
 	
