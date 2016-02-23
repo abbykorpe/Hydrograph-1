@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tns:Schema xmlns:tns="http://www.bitwise.com/Schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.bitwise.com/Schema schema.xsd ">
-  <tns:fields>
-    <tns:field default="0" delimiter="0" description="0" format="0" length="1" name="id" precision="0" 
-    rangeFrom="0" rangeTo="0" scale="0" scale_type="explicit" type="java.lang.String"/>
-    <tns:field name="name" type="java.lang.String"/>
-    <tns:field name="department" type="java.lang.String"/>
-  </tns:fields>
-</tns:Schema>

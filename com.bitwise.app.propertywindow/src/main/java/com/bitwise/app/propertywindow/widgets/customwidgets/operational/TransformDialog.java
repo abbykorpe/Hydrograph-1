@@ -835,9 +835,9 @@ public class TransformDialog extends Dialog {
 		 */
 		private ListenerHelper getListenerHelper(List<? extends PropertyField> opList,TableViewer tableViewer,AbstractELTWidget fieldError,GridWidgetCommonBuilder gridWidgetBuilder) {
 				ListenerHelper helper = new ListenerHelper();
-				ELTGridDetails value = new ELTGridDetails(opList, tableViewer, 
-						(Label) fieldError.getSWTWidgetControl(), gridWidgetBuilder);
-				helper.put(HelperType.SCHEMA_GRID, value);
+//				ELTGridDetails value = new ELTGridDetails(opList, tableViewer, 
+//						(Label) fieldError.getSWTWidgetControl(), gridWidgetBuilder);
+//				helper.put(HelperType.SCHEMA_GRID, value);
 				return helper;
 		}		
 	 

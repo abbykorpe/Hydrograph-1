@@ -39,8 +39,8 @@ public class ELTTransformDeleteSelectionListener extends ELTSelectionTaskListene
 			table.remove(indexs);
 			ArrayList tempList= new ArrayList();
 			for (int index :indexs) { 
-				PropertyField test =(PropertyField) gridDetails.getGrids().get(index);
-				tempList.add(test);
+//				PropertyField test =(PropertyField) gridDetails.getGrids().get(index);
+//				tempList.add(test);
 			}
 			 gridDetails.getGrids().removeAll(tempList); 
 			

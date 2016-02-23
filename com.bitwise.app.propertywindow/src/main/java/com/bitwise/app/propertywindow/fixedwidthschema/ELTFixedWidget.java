@@ -22,7 +22,7 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	
 	public ELTFixedWidget(PropertyDialogButtonBar propertyDialogButtonBar) {
 		this.propertyDialogButtonBar=propertyDialogButtonBar;
-		this.gridRowType = "FixedWidth";
+		this.gridRowType = Messages.FIXEDWIDTH_GRIDROW;
 		}
 	/**
 	 * Instantiates a new ELT fixed widget.
@@ -37,7 +37,7 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	public ELTFixedWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
-		this.gridRowType = "FixedWidth";
+		this.gridRowType = Messages.FIXEDWIDTH_GRIDROW;
 	}
 
 	@Override

@@ -9,13 +9,20 @@ import org.eclipse.osgi.util.NLS;
  */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "resources.messages";
+
 	public static String NOT_EXISTS;
 	public static  String FILE_DOES_NOT_EXISTS ;
+
+	public static  String SCHEMA_CONFIG_XSD_PATH;
+
 	public static  String FIELDNAME_NOT_ALPHANUMERIC_ERROR;
 	public static String EMPTY_XML_CONTENT;
 	public static String RUNTIME_WINDOW_NAME;
 	public static String RUNTIME_HEADER;
 	public static String LENGTHERROR;
+	public static String GENERIC_GRIDROW;
+	public static String FIXEDWIDTH_GRIDROW;
+	public static String GENERATE_RECORD_GRIDROW;
 	public static String DATATYPELIST;
 	public static String FIELDNAME;
 	public static String DATATYPE;
@@ -24,6 +31,9 @@ public class Messages extends NLS {
 	public static String SCALE_TYPE;
 	public static String SCALETYPELIST;
 	public static String FIELD_DESCRIPTION;
+	public static String RANGE_FROM;
+	public static String RANGE_TO;
+	public static String DEFAULT_VALUE;
 	public static String FIELDNAMEERROR;
 	public static String FIELDPHASE;
 	public static String CHARACTERSET;
@@ -70,9 +80,6 @@ public class Messages extends NLS {
 	public static String BROWSE_BUTTON;
 	public static String OUTPUT_FIELD_EXISTS;
 	public static String AVAILABLE_FIELDS_HEADER;
-	public static String RANGE_FROM;
-	public static String RANGE_TO;
-	public static String DEFAULT_VALUE;
     public static String ADD_ICON;
     public static String DELETE_ICON;
     public static String UP_ICON;

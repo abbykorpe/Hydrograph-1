@@ -16,7 +16,7 @@ public enum DataType {
 	DOUBLE_CLASS(Double.class.getCanonicalName()),
 	FLOAT_CLASS(Float.class.getCanonicalName()),
 	SHORT_CLASS(Short.class.getCanonicalName()),
-	BOLLEAN_CLASS(Boolean.class.getCanonicalName()),
+	BOOLEAN_CLASS(Boolean.class.getCanonicalName()),
 	DATE_CLASS(Date.class.getCanonicalName()),
 	BIGDECIMAL_CLASS(BigDecimal.class.getCanonicalName())
 	;

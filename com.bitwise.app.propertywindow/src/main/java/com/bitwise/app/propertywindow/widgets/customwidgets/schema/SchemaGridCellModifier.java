@@ -49,6 +49,28 @@ class SchemaGridCellModifier implements ICellModifier {
 				return false; 	
 			}
 		}
+		
+		if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
+		{
+			if(DataType.FLOAT_CLASS.equals(schemaGrid.getDataTypeValue()) 
+					||DataType.DOUBLE_CLASS.getValue().equals(schemaGrid.getDataTypeValue())
+					||DataType.BIGDECIMAL_CLASS.getValue().equals(schemaGrid.getDataTypeValue()))
+				return true;
+			else {
+				return false; 	
+			}
+		}
+		
+		if (ELTSchemaGridWidget.PRECISION.equals(property))
+		{
+			if(DataType.FLOAT_CLASS.equals(schemaGrid.getDataTypeValue()) 
+					||DataType.DOUBLE_CLASS.getValue().equals(schemaGrid.getDataTypeValue())
+					||DataType.BIGDECIMAL_CLASS.getValue().equals(schemaGrid.getDataTypeValue()))
+				return true;
+			else {
+				return false; 	
+			}
+		}
 
 		return true;
 	}
@@ -102,8 +124,9 @@ class SchemaGridCellModifier implements ICellModifier {
 		
 
 		resetScale(schemaGrid, property);
-
+		resetScaleType(schemaGrid, property);
 		resetDateFormat(schemaGrid, property);
+		resetPrecision(schemaGrid, property);
 
 		viewer.refresh();
 	}
@@ -113,9 +136,23 @@ class SchemaGridCellModifier implements ICellModifier {
 			if(DataType.INTEGER_CLASS.equals(row.getDataTypeValue()) 
 					||DataType.STRING_CLASS.equals(row.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(row.getDataTypeValue())
-					||DataType.BOLLEAN_CLASS.equals(row.getDataTypeValue())
+					||DataType.BOOLEAN_CLASS.equals(row.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(row.getDataTypeValue())){
 				row.setScale("");
+			}
+
+		}
+	}
+	
+	private void resetScaleType(SchemaGrid row, String property){
+		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
+			if(DataType.INTEGER_CLASS.equals(row.getDataTypeValue()) 
+					||DataType.STRING_CLASS.equals(row.getDataTypeValue())
+					||DataType.SHORT_CLASS.equals(row.getDataTypeValue())
+					||DataType.BOOLEAN_CLASS.equals(row.getDataTypeValue())
+					||DataType.DATE_CLASS.equals(row.getDataTypeValue())){
+				
+				row.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[0]);
 			}
 
 		}
@@ -125,6 +162,19 @@ class SchemaGridCellModifier implements ICellModifier {
 		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
 			if(!(DataType.DATE_CLASS.equals(row.getDataTypeValue()))){
 				row.setDateFormat("");
+			}
+
+		}
+	}
+	
+	private void resetPrecision(SchemaGrid row, String property){
+		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
+			if(DataType.INTEGER_CLASS.equals(row.getDataTypeValue()) 
+					||DataType.STRING_CLASS.equals(row.getDataTypeValue())
+					||DataType.SHORT_CLASS.equals(row.getDataTypeValue())
+					||DataType.BOOLEAN_CLASS.equals(row.getDataTypeValue())
+					||DataType.DATE_CLASS.equals(row.getDataTypeValue())){
+				row.setPrecision("");
 			}
 
 		}

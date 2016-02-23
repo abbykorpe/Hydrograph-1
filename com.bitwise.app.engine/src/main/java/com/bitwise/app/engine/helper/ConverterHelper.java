@@ -282,28 +282,16 @@ public class ConverterHelper {
 		TypeBaseField typeBaseField = new TypeBaseField();
 		typeBaseField.setName(object.getFieldName());
 
-		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())
-				&& !object.getDateFormat().trim().isEmpty())
-			typeBaseField.setFormat(object.getDateFormat());
+		populateCommonFieldInfo(object, typeBaseField);
+		return typeBaseField;
+	}
 
-		if (!object.getScale().trim().isEmpty())
-			typeBaseField.setScale(Integer.parseInt(object.getScale()));
-
-		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())
-				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())) {
-			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
-			if (!object.getScale().trim().isEmpty())
-				typeBaseField.setScale(Integer.parseInt(object.getScale()));
-		}
-
-		for (FieldDataTypes fieldDataType : FieldDataTypes.values()) {
-			if (fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
-				typeBaseField.setType(fieldDataType);
-		}
+	private void populateCommonFieldInfo(FixedWidthGridRow object, TypeBaseField typeBaseField) {
+		
+		populateCommonFieldInfo(object, typeBaseField);
 		if (object.getLength() != null && !object.getLength().trim().isEmpty()) {
 			typeBaseField.getOtherAttributes().put(new QName(Constants.LENGTH_QNAME), object.getLength());
 		}
-		return typeBaseField;
 	}
 
 	/**
@@ -315,6 +303,7 @@ public class ConverterHelper {
 	public TypeBaseField getSchemaGridTargetData(GridRow object) {
 		TypeBaseField typeBaseField = new TypeBaseField();
 		typeBaseField.setName(object.getFieldName());
+		
 		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())
 				&& !object.getDateFormat().trim().isEmpty())
 			typeBaseField.setFormat(object.getDateFormat());
@@ -323,8 +312,14 @@ public class ConverterHelper {
 			typeBaseField.setScale(Integer.parseInt(object.getScale()));
 
 		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())
-				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())) {
-			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
+				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())
+				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_FLOAT.value())) {
+			
+			for (ScaleTypeList scaleType : ScaleTypeList.values()) {
+				if (scaleType.value().equalsIgnoreCase(object.getScaleTypeValue()))
+					typeBaseField.setScaleType(scaleType);
+			}
+			
 			if (!object.getScale().trim().isEmpty())
 				typeBaseField.setScale(Integer.parseInt(object.getScale()));
 		}
@@ -334,6 +329,10 @@ public class ConverterHelper {
 				typeBaseField.setType(fieldDataType);
 		}
 
+		if (!object.getPrecision().trim().isEmpty())
+			typeBaseField.setPrecision(Integer.parseInt(object.getPrecision()));
+		
+		typeBaseField.setDescription(object.getDescription());
 		return typeBaseField;
 	}
 

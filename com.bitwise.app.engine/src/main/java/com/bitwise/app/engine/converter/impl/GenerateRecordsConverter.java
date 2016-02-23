@@ -40,7 +40,7 @@ public class GenerateRecordsConverter extends InputConverter {
 		this.properties = component.getProperties();
 	}
 
-	
+
 	/* *
 	 * This method initiates target XML generation of GenrateRecords component.
 	 * 
@@ -105,24 +105,34 @@ public class GenerateRecordsConverter extends InputConverter {
 		TypeBaseField typeBaseField = new TypeBaseField();
 		typeBaseField.setName(generateRecordsSchemaGridRow.getFieldName());
 
-		if (FieldDataTypes.JAVA_UTIL_DATE.value().equals(generateRecordsSchemaGridRow.getDataTypeValue())
-				&& StringUtils.isNotBlank(generateRecordsSchemaGridRow.getDateFormat()))
-			typeBaseField.setFormat(generateRecordsSchemaGridRow.getDateFormat());
-
-		if (StringUtils.isNotBlank(generateRecordsSchemaGridRow.getScale()))
-			typeBaseField.setScale(Integer.parseInt(generateRecordsSchemaGridRow.getScale()));
-
-		if (FieldDataTypes.JAVA_LANG_DOUBLE.value().equals(generateRecordsSchemaGridRow.getDataTypeValue())
-				|| FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value().equals(generateRecordsSchemaGridRow.getDataTypeValue())) {
-			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
-			if (StringUtils.isNotBlank(generateRecordsSchemaGridRow.getScale()))
-				typeBaseField.setScale(Integer.parseInt(generateRecordsSchemaGridRow.getScale()));
-		}
-
 		for (FieldDataTypes fieldDataType : FieldDataTypes.values()) {
 			if (fieldDataType.value().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue()))
 				typeBaseField.setType(fieldDataType);
 		}
+		if (FieldDataTypes.JAVA_UTIL_DATE.value().equals(generateRecordsSchemaGridRow.getDataTypeValue())
+				&& StringUtils.isNotBlank(generateRecordsSchemaGridRow.getDateFormat()))
+			typeBaseField.setFormat(generateRecordsSchemaGridRow.getDateFormat());
+
+		if (generateRecordsSchemaGridRow.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())
+				|| generateRecordsSchemaGridRow.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())
+				|| generateRecordsSchemaGridRow.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_FLOAT.value())) {
+
+			for (ScaleTypeList scaleType : ScaleTypeList.values()) {
+				if (scaleType.value().equalsIgnoreCase(generateRecordsSchemaGridRow.getScaleTypeValue()))
+					typeBaseField.setScaleType(scaleType);
+			}
+
+			if (!generateRecordsSchemaGridRow.getScale().trim().isEmpty())
+				typeBaseField.setScale(Integer.parseInt(generateRecordsSchemaGridRow.getScale()));
+		}
+		if (StringUtils.isNotBlank(generateRecordsSchemaGridRow.getScale()))
+			typeBaseField.setScale(Integer.parseInt(generateRecordsSchemaGridRow.getScale()));
+
+		if (!generateRecordsSchemaGridRow.getPrecision().trim().isEmpty())
+			typeBaseField.setPrecision(Integer.parseInt(generateRecordsSchemaGridRow.getPrecision()));
+
+		typeBaseField.setDescription(generateRecordsSchemaGridRow.getDescription());
+
 		if (StringUtils.isNotBlank(generateRecordsSchemaGridRow.getLength())) {
 			typeBaseField.getOtherAttributes().put(new QName(Constants.LENGTH_QNAME),
 					generateRecordsSchemaGridRow.getLength());

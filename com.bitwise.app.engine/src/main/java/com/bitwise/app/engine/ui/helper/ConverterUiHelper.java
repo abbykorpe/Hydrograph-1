@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import javax.xml.namespace.QName;
 
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
+import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.SchemaGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.Component;
@@ -50,12 +51,8 @@ public class ConverterUiHelper {
 		} else if ((TypeBaseField.class).isAssignableFrom(record.getClass())) {
 			FixedWidthGridRow fixedWidthGrid = new FixedWidthGridRow();
 			TypeBaseField typeBaseField = (TypeBaseField) record;
-			fixedWidthGrid.setDataTypeValue(getStringValue(typeBaseField.getType().value()));
-			fixedWidthGrid.setDateFormat(getStringValue(typeBaseField.getFormat()));
-			fixedWidthGrid.setFieldName(getStringValue(typeBaseField.getName()));
-			fixedWidthGrid.setScale(getStringValue(String.valueOf(typeBaseField.getScale())));
-			fixedWidthGrid.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(typeBaseField.getType().value()));
-			fixedWidthGrid.setLength(getStringValue(getLength(typeBaseField)));
+			getCommonSchema(fixedWidthGrid, typeBaseField);
+			fixedWidthGrid.setLength(getStringValue(getQnameValue(typeBaseField, Constants.LENGTH_QNAME)));
 			return fixedWidthGrid;
 		}
 		return null;
@@ -71,31 +68,26 @@ public class ConverterUiHelper {
 		if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
 			return null;
 		} else if ((TypeBaseField.class).isAssignableFrom(record.getClass())) {
-			SchemaGrid schemaGridData = new SchemaGrid();
+			SchemaGrid schemaGrid = new SchemaGrid();
 			TypeBaseField typeBaseField = (TypeBaseField) record;
-			schemaGridData.setDataTypeValue(getStringValue(typeBaseField.getType().value()));
-			schemaGridData.setDateFormat(getStringValue(typeBaseField.getFormat()));
-			schemaGridData.setFieldName(getStringValue(typeBaseField.getName()));
-			schemaGridData.setScale(getStringValue(String.valueOf(typeBaseField.getScale())));
-			schemaGridData.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(typeBaseField.getType().value()));
-			return schemaGridData;
+			getCommonSchema(schemaGrid, typeBaseField);
+			return schemaGrid;
 		}
 		return null;
+	}
+	
+	private void getCommonSchema(GridRow fixedWidthGrid, TypeBaseField typeBaseField) {
+		fixedWidthGrid.setDataTypeValue(getStringValue(typeBaseField.getType().value()));
+		fixedWidthGrid.setDateFormat(getStringValue(typeBaseField.getFormat()));
+		fixedWidthGrid.setFieldName(getStringValue(typeBaseField.getName()));
+		fixedWidthGrid.setScale(getStringValue(String.valueOf(typeBaseField.getScale())));
+		fixedWidthGrid.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(typeBaseField.getType().value()));
+		fixedWidthGrid.setPrecision(getStringValue(String.valueOf(typeBaseField.getPrecision())));
+		fixedWidthGrid.setDescription(getStringValue(typeBaseField.getDescription()));
+		fixedWidthGrid.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(typeBaseField.getScaleType().value()));
 	}
 
-	/**
-	 * Fetches value of Qname having name length.
-	 * 
-	 * @param typeBaseField
-	 * @return String, length value
-	 */
-	private String getLength(TypeBaseField typeBaseField) {
-		for (Entry<QName, String> entry : typeBaseField.getOtherAttributes().entrySet()) {
-			if (Constants.LENGTH_QNAME.equals(entry.getKey().toString()))
-				return entry.getValue();
-		}
-		return null;
-	}
+	
 
 	/**
 	 * Create empty string for null values.

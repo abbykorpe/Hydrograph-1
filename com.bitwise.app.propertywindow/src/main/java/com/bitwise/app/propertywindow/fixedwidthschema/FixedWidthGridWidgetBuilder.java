@@ -46,7 +46,7 @@ public class FixedWidthGridWidgetBuilder extends GridWidgetCommonBuilder {
 		FixedWidthGridRow fixedGrid = new FixedWidthGridRow();
 		fixedGrid.setFieldName("DefaultField" + rowSequence++);
 		fixedGrid.setDateFormat("");
-		fixedGrid.setPrecision("0");
+		fixedGrid.setPrecision("");
 		fixedGrid.setScale("");
 		fixedGrid.setScaleType(Integer.valueOf("0"));
 		fixedGrid.setScaleTypeValue(getScaleTypeValue()[Integer.valueOf("0")]); 
@@ -60,6 +60,7 @@ public class FixedWidthGridWidgetBuilder extends GridWidgetCommonBuilder {
 		do{
 			if(!grids.contains(fixedGrid)){
 				grids.add(fixedGrid);  
+				tableViewer.setInput(grids);
 				tableViewer.refresh();
 				tableViewer.editElement(tableViewer.getElementAt(grids.size() == 0 ? grids.size() : grids.size() - 1), 0);
 				break;

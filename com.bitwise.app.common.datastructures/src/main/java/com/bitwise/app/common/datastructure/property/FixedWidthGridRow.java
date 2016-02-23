@@ -32,6 +32,7 @@ public class FixedWidthGridRow extends GridRow{
 		tempschemaGrid.setDataType(getDataType());
 		tempschemaGrid.setDataTypeValue(getDataTypeValue());
 		tempschemaGrid.setDateFormat(getDateFormat());
+		tempschemaGrid.setPrecision(getPrecision());
 		tempschemaGrid.setFieldName(getFieldName());
 		tempschemaGrid.setScale(getScale());
 		tempschemaGrid.setScaleType(getScaleType());

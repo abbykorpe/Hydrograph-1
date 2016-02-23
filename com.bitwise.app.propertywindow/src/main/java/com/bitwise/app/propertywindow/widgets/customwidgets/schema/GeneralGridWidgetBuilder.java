@@ -43,7 +43,7 @@ public class GeneralGridWidgetBuilder extends GridWidgetCommonBuilder {
 		SchemaGrid schemaGrid = new SchemaGrid();
 		schemaGrid.setFieldName("DefaultField" + rowSequence);
 		schemaGrid.setDateFormat("");
-		schemaGrid.setPrecision("0");
+		schemaGrid.setPrecision("");
 		schemaGrid.setScale("");
 		schemaGrid.setScaleType(Integer.valueOf("0"));
 		schemaGrid.setScaleTypeValue(getScaleTypeValue()[Integer.valueOf("0")]);

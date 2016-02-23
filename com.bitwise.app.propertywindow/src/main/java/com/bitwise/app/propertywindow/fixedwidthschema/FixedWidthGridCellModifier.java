@@ -57,6 +57,26 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 			else 
 				return false; 	
 		}
+		if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
+		{
+			if(DataType.FLOAT_CLASS.equals(fixedWidthGridRow.getDataTypeValue()) 
+					||DataType.DOUBLE_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue())
+					||DataType.BIGDECIMAL_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue()))
+				return true;
+			else {
+				return false; 	
+			}
+		}
+		if (ELTSchemaGridWidget.PRECISION.equals(property))
+		{
+			if(DataType.FLOAT_CLASS.equals(fixedWidthGridRow.getDataTypeValue()) 
+					||DataType.DOUBLE_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue())
+					||DataType.BIGDECIMAL_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue()))
+				return true;
+			else {
+				return false; 	
+			}
+		}
 		return true;
 	}
 
@@ -107,6 +127,8 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		}
 		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
 			fixedWidthGridRow.setDateFormat(((String) value).trim());
+		else if (ELTSchemaGridWidget.PRECISION.equals(property))
+			fixedWidthGridRow.setPrecision(((String) value).trim()); 
 		else if (ELTSchemaGridWidget.SCALE.equals(property))
 			fixedWidthGridRow.setScale(((String) value).trim());
 		else if (ELTSchemaGridWidget.SCALE_TYPE.equals(property)) {
@@ -131,7 +153,7 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 			if(DataType.INTEGER_CLASS.equals(fixedWidthGridRow.getDataTypeValue()) 
 					||DataType.STRING_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
-					||DataType.BOLLEAN_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
+					||DataType.BOOLEAN_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(fixedWidthGridRow.getDataTypeValue())){
 				fixedWidthGridRow.setScale("");
 			}
