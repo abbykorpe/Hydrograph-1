@@ -63,7 +63,6 @@ import com.bitwise.app.propertywindow.widgets.filterproperty.ELTCellModifier;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
-import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridAddSelectionListener;
 
 public class JoinMapGrid extends Dialog {
 
@@ -662,8 +661,11 @@ public class JoinMapGrid extends Dialog {
 					joinOutputList.clear();
 					LookupMapProperty[] lookupMapPropertyObjects = new LookupMapProperty[previousItems.length];
 					for (int i = 0; i < previousItems.length; i++) {
+						if(!previousItems[i].isDisposed())
+						{
 						lookupMapPropertyObjects[i] = (LookupMapProperty) previousItems[i].getData();
 						joinOutputList.add(lookupMapPropertyObjects[i]);
+						}
 					}
 					getJoinPropertyGrid();
 					returnValue = super.close();
@@ -833,6 +835,7 @@ public class JoinMapGrid extends Dialog {
 					} else {
 						errorLabel.setVisible(false);
 						okButton.setEnabled(true);
+						validateDuplicatesInOutputField();
 					}
 				}
 				return null;

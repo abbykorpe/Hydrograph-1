@@ -592,8 +592,11 @@ public class ELTLookupMapWizard extends Dialog {
 					joinOutputList.clear();
 					LookupMapProperty[] lookupMapPropertyObjects = new LookupMapProperty[previousItems.length];
 					for (int i = 0; i < previousItems.length; i++) {
+						if(!previousItems[i].isDisposed())
+						{
 						lookupMapPropertyObjects[i] = (LookupMapProperty) previousItems[i].getData();
 						joinOutputList.add(lookupMapPropertyObjects[i]);
+						}
 					}
 					getLookupPropertyGrid();
 					returnValue = super.close();
@@ -680,6 +683,7 @@ public class ELTLookupMapWizard extends Dialog {
 					} else {
 						propertyError.setVisible(false);
 						okButton.setEnabled(true);
+						validateDuplicatesInOutputField();
 					}
 				}
 				return null;

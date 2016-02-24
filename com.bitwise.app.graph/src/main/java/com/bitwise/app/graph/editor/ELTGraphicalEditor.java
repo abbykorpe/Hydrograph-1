@@ -388,7 +388,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		final GraphicalViewer viewer = getGraphicalViewer();
 		configureViewer(viewer);
 		prepareZoomContributions(viewer);
-		handleKeyStrokes(viewer);
+		//handleKeyStrokes(viewer);
 	}
 
 	@Override
@@ -570,18 +570,18 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		};
 	}
 
-	private void handleKeyStrokes(GraphicalViewer viewer) {
-		KeyHandler keyHandler = new KeyHandler();
-		keyHandler.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
-				getActionRegistry().getAction(ActionFactory.DELETE.getId()));
-		keyHandler.put(KeyStroke.getPressed((char) ('z' - 'a' + 1),'z',SWT.CTRL), getActionRegistry().getAction(ActionFactory.UNDO.getId()));
-		keyHandler.put(KeyStroke.getPressed((char) ('y' - 'a' + 1), 'y', SWT.CTRL), getActionRegistry().getAction(ActionFactory.REDO.getId()));
-		keyHandler.put(KeyStroke.getPressed((char) ('a' - 'a' + 1), 'a', SWT.CTRL), getActionRegistry().getAction(ActionFactory.SELECT_ALL.getId()));
-		keyHandler.put(KeyStroke.getPressed((char) ('c' - 'a' + 1), 'c', SWT.CTRL), getActionRegistry().getAction(ActionFactory.COPY.getId()));
-		keyHandler.put(KeyStroke.getPressed((char) ('v' - 'a' + 1), 'v', SWT.CTRL), getActionRegistry().getAction(ActionFactory.PASTE.getId()));
-		keyHandler.put(KeyStroke.getPressed((char) ('x' - 'a' + 1), 'x', SWT.CTRL), getActionRegistry().getAction(ActionFactory.CUT.getId()));
-		viewer.setKeyHandler(keyHandler);
-	}
+//	private void handleKeyStrokes(GraphicalViewer viewer) {
+//		KeyHandler keyHandler = new KeyHandler();
+//		keyHandler.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
+//				getActionRegistry().getAction(ActionFactory.DELETE.getId()));
+//		keyHandler.put(KeyStroke.getPressed((char) ('z' - 'a' + 1),'z',SWT.CTRL), getActionRegistry().getAction(ActionFactory.UNDO.getId()));
+//		keyHandler.put(KeyStroke.getPressed((char) ('y' - 'a' + 1), 'y', SWT.CTRL), getActionRegistry().getAction(ActionFactory.REDO.getId()));
+//		keyHandler.put(KeyStroke.getPressed((char) ('a' - 'a' + 1), 'a', SWT.CTRL), getActionRegistry().getAction(ActionFactory.SELECT_ALL.getId()));
+//		keyHandler.put(KeyStroke.getPressed((char) ('c' - 'a' + 1), 'c', SWT.CTRL), getActionRegistry().getAction(ActionFactory.COPY.getId()));
+//		keyHandler.put(KeyStroke.getPressed((char) ('v' - 'a' + 1), 'v', SWT.CTRL), getActionRegistry().getAction(ActionFactory.PASTE.getId()));
+//		keyHandler.put(KeyStroke.getPressed((char) ('x' - 'a' + 1), 'x', SWT.CTRL), getActionRegistry().getAction(ActionFactory.CUT.getId()));
+//		viewer.setKeyHandler(keyHandler);
+//	}
 
 	@Override
 	public void createActions() {

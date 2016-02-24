@@ -44,6 +44,10 @@
            id="com.bitwise.app.menus.edit.paste"
            name="paste">
      </command>
+     <command
+           id="com.bitwise.app.menus.edit.cut"
+           name="cut">
+     </command>
    </extension>
 	  <extension
          point="org.eclipse.ui.handlers">
@@ -89,7 +93,7 @@
       </handler>
       <handler
             class="com.bitwise.app.menus.handlers.CutHandler"
-            commandId="org.eclipse.ui.edit.cut">
+            commandId="com.bitwise.app.menus.edit.cut">
          <activeWhen>
             <with
                   variable="activeEditorId">
@@ -360,7 +364,7 @@
                   mnemonic ="R">
             </command>
             <command
-                  commandId="org.eclipse.ui.edit.cut"
+                  commandId="com.bitwise.app.menus.edit.cut"
                   label="Cut"
                   style="push"
                   mnemonic ="t">
@@ -527,6 +531,12 @@
              contextId="org.eclipse.ui.contexts.window"
              schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
              sequence="M1+M2+V">
+       </key>
+       <key
+             commandId="com.bitwise.app.menus.edit.cut"
+             contextId="org.eclipse.ui.contexts.window"
+             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+             sequence="M1+M2+X">
        </key>
    </extension>
    <extension
