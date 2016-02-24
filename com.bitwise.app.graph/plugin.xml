@@ -124,7 +124,7 @@
                   visible="true">
             </separator>
             <command
-                  commandId="org.eclipse.ui.edit.cut"
+                  commandId="com.bitwise.app.menus.edit.cut"
                   disabledIcon="resources/icons/dis_cut.png"
                   icon="resources/icons/cut_o.png"
                   label="Cut"
