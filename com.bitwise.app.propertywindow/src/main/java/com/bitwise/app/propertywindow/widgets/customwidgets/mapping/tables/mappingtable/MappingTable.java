@@ -282,12 +282,12 @@ public class MappingTable {
 		deleteButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				// Nothing to do
+				// Nothing TODO
 			}
 
 			@Override
 			public void mouseDown(MouseEvent e) {
-				// Nothing to do
+				// Nothing TODO
 			}
 
 			@Override
@@ -308,9 +308,6 @@ public class MappingTable {
 
 					}
 					index++;
-
-					// validateRow((RowData)
-					// ((Text)table.getItem(index).getData("out")).getData("rowData"));
 
 				}
 				table.getColumns()[0].setWidth(31);

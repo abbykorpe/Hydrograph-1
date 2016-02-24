@@ -110,7 +110,6 @@ public class RuntimePropertyDialog extends Dialog {
 		cl_container.maxNumColumns = 1;
 		container.setLayout(cl_container);
 
-		// addSeperator(container);
 		addButtonPanel(container);
 
 		Composite composite_2 = new Composite(container, SWT.NONE);
@@ -126,22 +125,7 @@ public class RuntimePropertyDialog extends Dialog {
 		return container;
 	}
 
-	private void addSeperator(Composite container) {
-		Composite composite = new Composite(container, SWT.NONE);
-		ColumnLayout cl_composite = new ColumnLayout();
-		cl_composite.maxNumColumns = 1;
-		composite.setLayout(cl_composite);
-		ColumnLayoutData cld_composite = new ColumnLayoutData();
-		cld_composite.heightHint = 28;
-		composite.setLayoutData(cld_composite);
-
-		Label lblTestlabel = new Label(composite, SWT.NONE);
-		lblTestlabel.setText(Messages.RUNTIME_HEADER);
-
-		new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
-	}
-
-	private void addErrorLabel(Composite container) {
+	  	private void addErrorLabel(Composite container) {
 		Composite composite_3 = new Composite(container, SWT.NONE);
 		composite_3.setLayout(new ColumnLayout());
 		ColumnLayoutData cld_composite_3 = new ColumnLayoutData();
