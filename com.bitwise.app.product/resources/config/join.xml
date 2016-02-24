@@ -33,7 +33,6 @@
 		<tns:property dataType="string" name="inPortCount" value="2" renderer="INPUT_COUNT_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED">
-			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
 			
 		<tns:property dataType="string" name="join_config" renderer="JOIN_TYPE_WIDGET" type="USER"
