@@ -139,5 +139,9 @@ public class Constants {
 	public static final String UNIQUE_SEQUENCE_PROPERTY_NAME = "sequence_field";
 	public static final String ADD_ALL_FIELDS_SYMBOL = "*";
 	public static final String INPUT_SUBGRAPH_COMPONENT_NAME = "InputSubgraphComponent";
+	
+	public static final String EDIT = "Edit";
+	public static final String RUNTIME_PROPERTIES_COLUMN_NAME = "Runtime\nProperties";
+	public static final String RUNTIME_PROPERTIES_WINDOW_LABEL = "Runtime Properties";
 		
 }

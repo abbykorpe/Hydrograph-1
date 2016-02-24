@@ -7,6 +7,7 @@ import java.util.Map;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
@@ -68,7 +69,7 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 		runtimeComposite.attachWidget(defaultLable1);
 		
 		
-		ELTDefaultButton eltDefaultButton = new ELTDefaultButton("Edit");
+		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(Constants.EDIT);
 		
 		runtimeComposite.attachWidget(eltDefaultButton);
 

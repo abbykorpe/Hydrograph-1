@@ -46,7 +46,7 @@ public class SingleColumnWidget extends AbstractWidget {
 		AbstractELTWidget defaultLable = new ELTDefaultLable(gridConfig.getLabelName());
 		defaultSubgroupComposite.attachWidget(defaultLable);
 
-		AbstractELTWidget defaultButton = new ELTDefaultButton("Edit");
+		AbstractELTWidget defaultButton = new ELTDefaultButton(Constants.EDIT);
 		defaultSubgroupComposite.attachWidget(defaultButton);
 		Button button = (Button) defaultButton.getSWTWidgetControl();
 		button.addSelectionListener(new SelectionAdapter() {

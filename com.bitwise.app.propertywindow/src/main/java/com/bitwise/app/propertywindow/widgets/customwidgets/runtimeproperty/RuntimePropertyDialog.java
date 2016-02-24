@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.text.AbstractDocument.Content;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -41,6 +43,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -101,12 +104,12 @@ public class RuntimePropertyDialog extends Dialog {
 		isAnyUpdatePerformed = false;
 		
 		Composite container = (Composite) super.createDialogArea(parent);
+		container.getShell().setText(Constants.RUNTIME_PROPERTIES_WINDOW_LABEL);
 		ColumnLayout cl_container = new ColumnLayout();
 		cl_container.verticalSpacing = 0;
 		cl_container.maxNumColumns = 1;
 		container.setLayout(cl_container);
 
-		addSeperator(container);
 		addButtonPanel(container);
 
 		Composite composite_2 = new Composite(container, SWT.NONE);
@@ -122,22 +125,7 @@ public class RuntimePropertyDialog extends Dialog {
 		return container;
 	}
 
-	private void addSeperator(Composite container) {
-		Composite composite = new Composite(container, SWT.NONE);
-		ColumnLayout cl_composite = new ColumnLayout();
-		cl_composite.maxNumColumns = 1;
-		composite.setLayout(cl_composite);
-		ColumnLayoutData cld_composite = new ColumnLayoutData();
-		cld_composite.heightHint = 28;
-		composite.setLayoutData(cld_composite);
-
-		Label lblTestlabel = new Label(composite, SWT.NONE);
-		lblTestlabel.setText(Messages.RUNTIME_HEADER);
-
-		new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
-	}
-
-	private void addErrorLabel(Composite container) {
+	  	private void addErrorLabel(Composite container) {
 		Composite composite_3 = new Composite(container, SWT.NONE);
 		composite_3.setLayout(new ColumnLayout());
 		ColumnLayoutData cld_composite_3 = new ColumnLayoutData();

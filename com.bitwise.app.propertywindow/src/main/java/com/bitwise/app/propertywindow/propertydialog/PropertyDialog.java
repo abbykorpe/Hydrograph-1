@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.ComponentCacheUtil;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ImagePathConstant;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Component;
@@ -60,6 +61,7 @@ public class PropertyDialog extends Dialog {
 	private Map<String,String> toolTipErrorMessages;
 	
 	private Component component;
+	
 	
 	/**
 	 * Create the dialog.
@@ -324,7 +326,7 @@ public class PropertyDialog extends Dialog {
 		String imagePath = null;
 		//TODO Please uncomment below code before build.
 		try{
-			imagePath = XMLConfigUtil.CONFIG_FILES_PATH + "/icons/property_window_icon.png" ;  
+			imagePath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.APP_ICON;
 			Image shellImage = new Image(newShell.getDisplay(), imagePath);
 			newShell.setImage(shellImage);
 		}catch(Exception e){
