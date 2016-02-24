@@ -23,9 +23,16 @@ public class ELTJoinPortCount extends TextBoxWithLabelWidget{
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
 		LinkedHashMap<String, Object> property=new LinkedHashMap<>();
-		property.put(propertyName, textBox.getText());
-		property.put(unusedPortPropertyName, textBox.getText());
-		setToolTipErrorMessage();
+		if(Integer.parseInt(textBox.getText()) < 2 || Integer.parseInt(textBox.getText()) > 25 ){
+			property.put(propertyName, String.valueOf(2));
+			property.put(unusedPortPropertyName, String.valueOf(2));
+			setToolTipErrorMessage();
+		}else{
+			property.put(propertyName, textBox.getText());
+			property.put(unusedPortPropertyName, textBox.getText());
+		}	
+		
 		return property;
+	
 	}
 }
