@@ -77,13 +77,13 @@ public class SchemaPropagationHelper {
 		if (fieldName != null) {
 			fixedWidthGridRow = new FixedWidthGridRow();
 			fixedWidthGridRow.setFieldName(fieldName);
-			fixedWidthGridRow.setDataType(0);
+			fixedWidthGridRow.setDataType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
 			fixedWidthGridRow.setDataTypeValue(String.class.getCanonicalName());
 			fixedWidthGridRow.setScale("");
 			fixedWidthGridRow.setLength("");
 			fixedWidthGridRow.setPrecision("");
 			fixedWidthGridRow.setDateFormat("");
-			fixedWidthGridRow.setScaleType(0);
+			fixedWidthGridRow.setScaleType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
 			fixedWidthGridRow.setScaleTypeValue(Messages.SCALE_TYPE_NONE);
 			
 		}

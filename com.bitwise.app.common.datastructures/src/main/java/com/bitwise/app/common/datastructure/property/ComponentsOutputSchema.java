@@ -23,25 +23,9 @@ public class ComponentsOutputSchema implements IDataStructure {
 	private Map<String, String> mapFields = new LinkedHashMap<>();
 	private Map<String,String> passThroughFieldsPortInfo = new LinkedHashMap<>();
 	private Map<String,String> mapFieldsPortInfo = new LinkedHashMap<>();
+
 	private String STRING_TYPE="java.lang.String";
-	public List<String> getPassthroughFields() {
-
-		return passthroughFields;
-	}
-
-	public Map<String, String> getMapFields() {
-
-		return mapFields;
-	}
 	
-	public Map<String, String> getPassthroughFieldsPortInfo() {
-		return passThroughFieldsPortInfo;
-	}
-
-
-	public Map<String, String> getMapFieldsPortInfo() {
-		return mapFieldsPortInfo;
-	}
 
 
 	/**
@@ -82,6 +66,12 @@ public class ComponentsOutputSchema implements IDataStructure {
 		return schemaGrid;
 	}
 
+	/**
+	 * This method converts current schema object into fixed width.
+	 * 
+	 * @param fixedWidthGridRow
+	 * @return SchemaGrid
+	 */
 	private FixedWidthGridRow convertSchemaGridRowToFixedWidthSchema(SchemaGrid schemaGrid) {
 		FixedWidthGridRow fixedWidthGridRow = null;
 		if (schemaGrid != null) {
@@ -100,33 +90,6 @@ public class ComponentsOutputSchema implements IDataStructure {
 		return fixedWidthGridRow;
 	}
 
-	
-
-	public String getFromSocketId() {
-		return fromSocketId;
-	}
-
-	public void setFromSocketId(String fromSocketId) {
-		this.fromSocketId = fromSocketId;
-	}
-
-	public List<FixedWidthGridRow> getFixedWidthGridRowsOutputFields() {
-		return fixedWidthGridRowsOutputFields;
-	}
-
-	public List<SchemaGrid> getSchemaGridOutputFields() {
-		List<SchemaGrid> schemaGrid = new ArrayList<>();
-		for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
-			schemaGrid.add(convertFixedWidthSchemaToSchemaGridRow(fixedWidthGridRow));
-		}
-		return schemaGrid;
-	}
-
-	@Override
-	public ComponentsOutputSchema clone() {
-		return new ComponentsOutputSchema();
-
-	}
 
 	/**
 	 * It updates the current schema as per its pass-through fields mapping
@@ -135,7 +98,6 @@ public class ComponentsOutputSchema implements IDataStructure {
 	 * @param string 
 	 */
 	public void updatePassthroughFieldsSchema(ComponentsOutputSchema sourceOutputSchema, String port) {
-		System.out.println("The port is: " + port);
 		FixedWidthGridRow targetFixedWidthGridRow;
 		FixedWidthGridRow sourceFixedWidthGridRow;
 		for (String fieldName : passthroughFields) {
@@ -144,8 +106,6 @@ public class ComponentsOutputSchema implements IDataStructure {
 				String portName = passThroughFieldsPortInfo.get(fieldName);
 				
 				sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(fieldName);
-				
-				
 				
 				if (portName != null && sourceFixedWidthGridRow != null) {
 					targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
@@ -260,6 +220,50 @@ public class ComponentsOutputSchema implements IDataStructure {
 		this.getPassthroughFields().clear();
 		this.getMapFields().clear();
 		this.getPassthroughFieldsPortInfo().clear();
+	}
+	
+	public List<SchemaGrid> getSchemaGridOutputFields() {
+		List<SchemaGrid> schemaGrid = new ArrayList<>();
+		for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
+			schemaGrid.add(convertFixedWidthSchemaToSchemaGridRow(fixedWidthGridRow));
+		}
+		return schemaGrid;
+	}
+
+	@Override
+	public ComponentsOutputSchema clone() {
+		return new ComponentsOutputSchema();
+
+	}
+	
+	public List<String> getPassthroughFields() {
+
+		return passthroughFields;
+	}
+
+	public Map<String, String> getMapFields() {
+
+		return mapFields;
+	}
+	
+	public Map<String, String> getPassthroughFieldsPortInfo() {
+		return passThroughFieldsPortInfo;
+	}
+
+	public Map<String, String> getMapFieldsPortInfo() {
+		return mapFieldsPortInfo;
+	}
+
+	public String getFromSocketId() {
+		return fromSocketId;
+	}
+
+	public void setFromSocketId(String fromSocketId) {
+		this.fromSocketId = fromSocketId;
+	}
+
+	public List<FixedWidthGridRow> getFixedWidthGridRowsOutputFields() {
+		return fixedWidthGridRowsOutputFields;
 	}
 
 }

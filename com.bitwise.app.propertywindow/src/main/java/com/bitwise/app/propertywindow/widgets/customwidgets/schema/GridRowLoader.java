@@ -30,11 +30,18 @@ import com.bitwise.app.common.schema.FieldDataTypes;
 import com.bitwise.app.common.schema.Fields;
 import com.bitwise.app.common.schema.ScaleTypes;
 import com.bitwise.app.common.schema.Schema;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridDetails;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
+
+/**
+ * The Class GridRowLoader.
+ * 
+ * @author Bitwise
+ */
 
 public class GridRowLoader {
 
@@ -50,6 +57,11 @@ public class GridRowLoader {
 	}
 
 	
+	
+	/**
+	 * The method import schema rows from schema file into schema grid.
+	 * 
+	 */
 	public ArrayList<GridRow> importGridRowsFromXML(ListenerHelper helper){
 
 		ArrayList<GridRow> schemaGridRowListToImport = new ArrayList<>();
@@ -61,13 +73,11 @@ public class GridRowLoader {
 		try {
 			if(StringUtils.isNotBlank(schemaFile.getPath())){
 				
-				
 				xml = new FileInputStream(schemaFile);
 				
 				xsd = new FileInputStream(SCHEMA_CONFIG_XSD_PATH);
 				
 				if(validateXML(xml, xsd)){
-
 					
 					JAXBContext jaxbContext = JAXBContext.newInstance(Schema.class);
 					Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -190,11 +200,15 @@ public class GridRowLoader {
 			gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[GridWidgetCommonBuilder.getScaleTypeByValue(temp.getType().value())]);
 		}else{
 			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(Messages.SCALE_TYPE_NONE));
-			gridRow.setScaleTypeValue("");
+			gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
 		}
 		gridRow.setDescription(temp.getDescription());
 	}
 
+	/**
+	 * The method exports schema rows from schema grid into schema file.
+	 * 
+	 */
 	public void exportXMLfromGridRows(ArrayList<GridRow> schemaGridRowList){
 		JAXBContext jaxbContext;
 		Schema schema = new Schema();

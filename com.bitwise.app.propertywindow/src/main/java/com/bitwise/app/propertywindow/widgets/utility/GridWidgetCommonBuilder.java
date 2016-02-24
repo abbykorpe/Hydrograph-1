@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Table;
 
 import com.bitwise.app.propertywindow.messages.Messages;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class GridWidgetCommonBuilder.
  * 
@@ -99,7 +98,6 @@ public abstract class GridWidgetCommonBuilder {
 	public static String[] dataTypeList;
 	public static String[] dataTypeKey;
 	public static String[] dataTypeValue;
-	//public static String[] scaleTypeList={"implicit", "explicit"};
 	public static String[] scaleTypeList;
 	public static String[] scaleTypeKey;
 	public static String[] scaleTypeValue;

@@ -11,8 +11,8 @@ import org.eclipse.swt.widgets.Display;
 import com.bitwise.app.common.datastructure.property.SchemaGrid;
 
 /**
- * 
- * @author Bitwise
+ * The class SchemaGridLabelProvider
+ * @author Bitwise 
  *
  */
 public class SchemaGridLabelProvider implements ITableLabelProvider , ITableColorProvider {

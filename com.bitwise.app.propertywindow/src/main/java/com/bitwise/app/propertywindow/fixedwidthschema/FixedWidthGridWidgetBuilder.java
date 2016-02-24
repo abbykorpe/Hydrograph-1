@@ -1,5 +1,6 @@
 package com.bitwise.app.propertywindow.fixedwidthschema;
 
+
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
@@ -9,11 +10,15 @@ import org.eclipse.swt.widgets.Table;
 
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 /**
- *
+ * The Class FixedWidthGridWidgetBuilder.
+ * 
+ * @author Bitwise
  */
+
 public class FixedWidthGridWidgetBuilder extends GridWidgetCommonBuilder {
 	
 	public static FixedWidthGridWidgetBuilder INSTANCE = new FixedWidthGridWidgetBuilder();
@@ -48,10 +53,10 @@ public class FixedWidthGridWidgetBuilder extends GridWidgetCommonBuilder {
 		fixedGrid.setDateFormat("");
 		fixedGrid.setPrecision("");
 		fixedGrid.setScale("");
-		fixedGrid.setScaleType(Integer.valueOf("0"));
-		fixedGrid.setScaleTypeValue(getScaleTypeValue()[Integer.valueOf("0")]); 
-		fixedGrid.setDataType(Integer.valueOf("0"));
-		fixedGrid.setDataTypeValue(getDataTypeValue()[Integer.valueOf("0")]); 
+		fixedGrid.setScaleType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
+		fixedGrid.setScaleTypeValue(getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]); 
+		fixedGrid.setDataType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
+		fixedGrid.setDataTypeValue(getDataTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]); 
 		fixedGrid.setLength("0");
 		fixedGrid.setDescription("");
 		

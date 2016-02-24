@@ -59,10 +59,10 @@ public class GenerateRecordsGridWidgetBuilder extends GridWidgetCommonBuilder {
 		generateRecordSchemaGridRow.setDateFormat("");
 		generateRecordSchemaGridRow.setPrecision("");
 		generateRecordSchemaGridRow.setScale("");
-		generateRecordSchemaGridRow.setScaleType(Integer.valueOf("0"));
-		generateRecordSchemaGridRow.setScaleTypeValue(getScaleTypeValue()[Integer.valueOf("0")]); 
-		generateRecordSchemaGridRow.setDataType(Integer.valueOf(Constants.DEFAULT_DATATYPE_INDEX_VALUE));
-		generateRecordSchemaGridRow.setDataTypeValue(getDataTypeValue()[Integer.valueOf(Constants.DEFAULT_DATATYPE_INDEX_VALUE)]);
+		generateRecordSchemaGridRow.setScaleType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
+		generateRecordSchemaGridRow.setScaleTypeValue(getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]); 
+		generateRecordSchemaGridRow.setDataType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
+		generateRecordSchemaGridRow.setDataTypeValue(getDataTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
 		generateRecordSchemaGridRow.setDescription("");
 		generateRecordSchemaGridRow.setLength("");
 		generateRecordSchemaGridRow.setRangeFrom("");

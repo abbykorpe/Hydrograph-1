@@ -595,7 +595,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					propertyDialogButtonBar, helper, table);
 
 		} catch (Exception e) {
-			// TODO add logger
+			logger.error("Failed to attach listeners to table", e);
 			throw new RuntimeException("Failed to attach listeners to table");
 		}
 

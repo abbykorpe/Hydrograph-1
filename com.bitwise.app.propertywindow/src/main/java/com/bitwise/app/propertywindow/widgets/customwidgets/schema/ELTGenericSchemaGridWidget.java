@@ -9,7 +9,6 @@ import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTCellEditorIsNume
 import com.bitwise.app.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTGenericSchemaGridWidget.
  * 

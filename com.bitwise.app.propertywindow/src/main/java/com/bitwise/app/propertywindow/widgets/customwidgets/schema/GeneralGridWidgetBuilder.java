@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 
 import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 /**
@@ -45,10 +46,10 @@ public class GeneralGridWidgetBuilder extends GridWidgetCommonBuilder {
 		schemaGrid.setDateFormat("");
 		schemaGrid.setPrecision("");
 		schemaGrid.setScale("");
-		schemaGrid.setScaleType(Integer.valueOf("0"));
-		schemaGrid.setScaleTypeValue(getScaleTypeValue()[Integer.valueOf("0")]);
-		schemaGrid.setDataType(Integer.valueOf("0"));
-		schemaGrid.setDataTypeValue(getDataTypeValue()[Integer.valueOf("0")]);
+		schemaGrid.setScaleType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
+		schemaGrid.setScaleTypeValue(getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
+		schemaGrid.setDataType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
+		schemaGrid.setDataTypeValue(getDataTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
 		schemaGrid.setDescription("");
 		
 		int numberOfRows=grids.size();

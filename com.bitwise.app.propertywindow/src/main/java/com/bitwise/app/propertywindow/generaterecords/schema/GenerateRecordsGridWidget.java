@@ -92,16 +92,6 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 	@Override
 	protected void setDecorator() {
 		
-//		fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAMEERROR);
-//		scaleDecorator = WidgetUtility.addDecorator(editors[4].getControl(),Messages.SCALEERROR);
-//		lengthDecorator = WidgetUtility.addDecorator(editors[7].getControl(),Messages.LENGTHERROR);
-//		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);
-//		fieldNameDecorator.setMarginWidth(8);
-//		scaleDecorator.setMarginWidth(8);
-//		lengthDecorator.setMarginWidth(8);
-//		isFieldNameAlphanumericDecorator.setMarginWidth(8);
-		
-		//----------
 		fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(), Messages.FIELDNAMEERROR);
 		scaleDecorator = WidgetUtility.addDecorator(editors[4].getControl(), Messages.SCALEERROR);
 		lengthDecorator = WidgetUtility.addDecorator(editors[7].getControl(), Messages.LENGTHERROR);
