@@ -4,57 +4,50 @@
   <artifactId>com.bitwise.app.parent</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <properties>
-        <tycho.version>0.23.1</tycho.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
-        <mars-repo.url>http://download.eclipse.org/releases/indigo</mars-repo.url>
-        
-    </properties>
+	<properties>
+		<tycho.version>0.23.1</tycho.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<mars-repo.url>http://download.eclipse.org/releases/indigo</mars-repo.url>
 
-    <repositories>
-        <repository>
-            <id>indigo</id>
-            <url>${mars-repo.url}</url>
-            <layout>p2</layout>
-         </repository>
- 			<repository>
- 			<id>third-party-eclipse-plugins</id>
- 			  <layout>p2</layout>
-            <url>http://download.eclipse.org/e4/updates/0.11/</url>
-        </repository>
-        <repository>
- 			<id>gradle-plugins</id>
- 			  <layout>p2</layout> 
-            <url>http://download.eclipse.org/buildship/updates/e45/milestones/1.0</url>
-        </repository>
-        
+	</properties>
 
-    </repositories>
+	<repositories>
+		<repository>
+			<id>indigo</id>
+			<url>${mars-repo.url}</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>third-party-eclipse-plugins</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/e4/updates/0.11/</url>
+		</repository>
+	</repositories>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-maven-plugin</artifactId>
-                <version>${tycho.version}</version>
-                <extensions>true</extensions>
-            </plugin>
-             <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-compiler-plugin</artifactId>
-                <version>${tycho.version}</version>
-              <configuration>
-               <source>1.7</source>
-              <target>1.7</target>
-              </configuration>
-            </plugin>
-     
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>target-platform-configuration</artifactId>
-                <version>${tycho.version}</version>
-                <configuration>
-                <dependency-resolution>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-compiler-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<dependency-resolution>
 						<optionalDependencies>ignore</optionalDependencies>
 						<extraRequirements>
 							<requirement>
@@ -64,32 +57,30 @@
 							</requirement>
 						</extraRequirements>
 					</dependency-resolution>
-                    <environments>
-                      <environment>
-                            <os>win32</os>
-                            <ws>win32</ws>
-                            <arch>x86_64</arch>
-                        </environment>
+					<environments>
 						<environment>
-                            <os>win32</os>
-                            <ws>win32</ws>
-                            <arch>x86</arch>
-                        </environment>
-                       <environment>
-                            <os>linux</os>
-                            <ws>gtk</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                        <environment>
-                            <os>macosx</os>
-                            <ws>cocoa</ws>
-                            <arch>x86_64</arch>
-                        </environment>  
-                   </environments>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    
-  
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
