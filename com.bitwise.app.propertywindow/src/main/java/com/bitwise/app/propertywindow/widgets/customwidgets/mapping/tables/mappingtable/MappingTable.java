@@ -43,6 +43,7 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructure.property.mapping.InputField;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
+import com.bitwise.app.common.util.ImagePathConstant;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
@@ -151,10 +152,10 @@ public class MappingTable {
 	}
 	
 	private void createImageObjects(){
-		String imagePath = XMLConfigUtil.CONFIG_FILES_PATH + "/icons/uncheckall.png" ;  
+		String imagePath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.UNCHECKALL_ICON ;  
 		uncheckedImage = new Image(null,imagePath);		
 		
-		imagePath = XMLConfigUtil.CONFIG_FILES_PATH + "/icons/checkall.png" ;  
+		imagePath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.CHECKALL_ICON ;  
 		checkedImage = new Image(null,imagePath);		
 	}
 	
@@ -240,7 +241,7 @@ public class MappingTable {
 		addButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
 		addButton.setImage(new Image(null,
-				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
+				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON));
 		attachAddButtonListener(addButton);
 
 		Label deleteButton = new Label(composite_1, SWT.NONE);
@@ -249,7 +250,7 @@ public class MappingTable {
 		deleteButton
 				.setImage(new Image(null,
 						XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH
-								+ "/icons/delete.png"));
+								+ ImagePathConstant.DELETE_BUTTON));
 		attachDeleteButtonListener(deleteButton);
 	}
  
