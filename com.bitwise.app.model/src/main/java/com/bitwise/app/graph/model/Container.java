@@ -1,6 +1,7 @@
 package com.bitwise.app.graph.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -111,87 +112,60 @@ public class Container extends Model {
 		Integer i = componentNextNameSuffixes.put(prefix, nextSuffix);
 		LoggerUtil.getLoger(this.getClass()).debug("previous value for component " + prefix + " in map: " + i);
 		LoggerUtil.getLoger(this.getClass()).debug("Adding New component name to the list: " + newName);
-		componentNames.add(newName);
+		
 
+		Boolean duplicate = checkIfDuplicateComponentExists(newName);
+		if (!duplicate) {
+			componentNames.add(newName);
+		} else {
+			int maxSequenceNo = getMaximumSequenceNoFromComponentName();
+			for (String componentName : componentNames) {
+				if (componentName.equalsIgnoreCase(newName)) {
+					String newValue = Integer.toString(maxSequenceNo + 1);
+					String componenetSequenceNo = newName.substring(newName.lastIndexOf("_") + 1);
+					if (componenetSequenceNo.startsWith("0") && !componenetSequenceNo.endsWith("9")
+							&& newValue.length() == 1) {
+						newName = newName.replace(newName.substring(newName.lastIndexOf("_") + 2), newValue);
+					} else {
+						newName = newName.replace(newName.substring(newName.lastIndexOf("_") + 1), newValue);
+					}
+				}
+			}
+			componentNames.add(newName);
+		}
+			
 		return newName;
 		
+	}
+
+	private boolean checkIfDuplicateComponentExists(String newName) {
+		boolean duplicate = false;
+		if (!componentNames.isEmpty()) {
+			for (String componentName : componentNames) {
+				if (componentName.equalsIgnoreCase(newName)) {
+					duplicate = true;
+				}
+			}
+		}
+		return duplicate;
+	}
+
+	private int getMaximumSequenceNoFromComponentName() {
+		int maxSequenceValue = 0;
+		List<Integer> list = new ArrayList<>();
+		if (!componentNames.isEmpty()) {
+				for (String componentName : componentNames) {
+					String componentSequenceNo = componentName.substring(componentName.lastIndexOf("_") + 1);
+					if (componentSequenceNo.matches("[0-9]+")) {
+						list.add(Integer.parseInt(componentSequenceNo));
+					}
+				}
+				maxSequenceValue = Collections.max(list);
+		}
+		return maxSequenceValue;
 	}
 	
-	private String getDefaultNameForComponentOld(String componentName, String baseName, boolean isNewInstance) {
-
-		if (componentName == null) {
-			// TODO shouldn't be the case but what should be done if name is null
-			return null;
-		}
-		
-		LoggerUtil.getLoger(this.getClass()).debug("baseName: " + baseName + ", isNewInstance: " + isNewInstance);
-
-		if (!isNewInstance) {
-			// OK, so it's not a new instance of the component (probably undo ), check if the component name is still
-			// unique
-			if (isUniqueCompName(componentName)) {
-				componentNames.add(componentName);
-				return componentName;
-			} else {
-				// not a new instance nor the name is unique. get the default name using base name
-				componentName = baseName;
-			}
-
-		}
-
-		componentName = componentName.trim();
-		String newName = "";
-		Integer nextSuffix = componentNextNameSuffixes.get(componentName);
-		LoggerUtil.getLoger(this.getClass()).debug(
-				"componentNextNameSuffixes.size(): " + componentNextNameSuffixes.size());
-		int next = 1;
-
-		if (nextSuffix == null) {
-			LoggerUtil.getLoger(this.getClass())
-					.debug( "component "
-							+ componentName
-							+ " not present in the map! will check if default component name is already taken by some other component. If not, then return default name.");
-
-		} else {
-			LoggerUtil.getLoger(this.getClass()).debug(
-					"component exists in the map. value of nextSuffix: " + nextSuffix.intValue());
-			next = nextSuffix.intValue();
-		}
-
-		newName = componentName + "_" + (next < 10 ? "0" : "") + next;
-
-		while (true) {
-			boolean continueFor = false;
-			for (String cname : componentNames) {
-				if (cname.equalsIgnoreCase(newName)) {
-					LoggerUtil.getLoger(this.getClass()).debug("Found duplicate name: " + cname);
-					continueFor = true;
-					break;
-				}
-
-			}
-			if (continueFor) {
-				next++;
-				newName = componentName + "_" + (next < 10 ? "0" : "") + next;
-				LoggerUtil.getLoger(this.getClass()).debug(
-						"still didn't get the new name for the component, now checking for " + newName);
-			} else {
-				LoggerUtil.getLoger(this.getClass()).debug("Got the new name for the component! " + newName);
-				break;
-			}
-
-		}
-
-		// populate Hashtable
-		nextSuffix = new Integer(++next);
-		Integer i = componentNextNameSuffixes.put(componentName, nextSuffix);
-		LoggerUtil.getLoger(this.getClass()).debug("previous value for component " + componentName + " in map: " + i);
-		LoggerUtil.getLoger(this.getClass()).debug("Adding New component name to the list: " + newName);
-		componentNames.add(newName);
-
-		return newName;
-
-	}
+	
 	
 	/**
 	 * Return a List of Component names in this graph. The returned List should not be
