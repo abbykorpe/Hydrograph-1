@@ -13,8 +13,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -190,17 +190,8 @@ public class ELTJoinConfigGrid extends Dialog {
 			editLableAsButton = new Label(composite_1, SWT.None);
 			editLableAsButton.setBounds(317, 5 + j, 20, 20);
 			editLableAsButton.setImage(new Image(null, editImageIconPath));
-			editLableAsButton.addMouseListener(new MouseListener() {
-				@Override
-				public void mouseDoubleClick(MouseEvent e) {
-					// Nothing to do
-				}
-
-				@Override
-				public void mouseDown(MouseEvent e) {
-					// Nothing to do
-				}
-
+			editLableAsButton.addMouseListener(new MouseAdapter() {
+				
 				@Override
 				public void mouseUp(MouseEvent e) {
 					keyText.setText(launchDialogToSelectFields(keyText.getText(), joinConfigProperty.getPortIndex()));

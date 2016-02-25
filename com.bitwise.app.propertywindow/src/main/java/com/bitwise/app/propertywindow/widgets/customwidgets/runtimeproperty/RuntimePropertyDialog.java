@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.text.AbstractDocument.Content;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -24,7 +21,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
+
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
@@ -177,22 +174,10 @@ public class RuntimePropertyDialog extends Dialog {
 	}
 
 	private void attachDownButtonListerner(Label downButton) {
-		downButton.addMouseListener(new MouseListener() {
+		
+		downButton.addMouseListener(new MouseAdapter() {
 			int index1 = 0, index2 = 0;
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// Nothing to do
-
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// Nothing to do
-
-			}
-
-			@Override
+            @Override
 			public void mouseUp(MouseEvent e) {
 				index1 = table.getSelectionIndex();
 
@@ -222,20 +207,8 @@ public class RuntimePropertyDialog extends Dialog {
 	}
 
 	private void attachUpButtonListener(Label upButton) {
-		upButton.addMouseListener(new MouseListener() {
+		upButton.addMouseListener(new MouseAdapter() {
 			int index1 = 0, index2 = 0;
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// Nothing to do
-
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// Nothing to do
-
-			}
 
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -265,17 +238,8 @@ public class RuntimePropertyDialog extends Dialog {
 	}
 
 	private void attachDeleteButtonListener(Label deleteButton) {
-		deleteButton.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// Nothing to do
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// Nothing to do
-			}
-
+		deleteButton.addMouseListener(new MouseAdapter() {
+            
 			@Override
 			public void mouseUp(MouseEvent e) {
 				IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();				
@@ -292,20 +256,8 @@ public class RuntimePropertyDialog extends Dialog {
 	}
 
 	private void attachAddButtonListern(Label addButton) {
-		addButton.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// Nothing to do
-
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// Nothing to do
-
-			}
-
-			@Override
+		addButton.addMouseListener(new MouseAdapter() {
+            @Override
 			public void mouseUp(MouseEvent e) {
 				table.getParent().setFocus();
 				addNewProperty(tableViewer);

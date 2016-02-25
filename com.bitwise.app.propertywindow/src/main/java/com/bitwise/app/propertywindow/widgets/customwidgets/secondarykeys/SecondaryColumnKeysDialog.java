@@ -311,21 +311,9 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	}
 
 	private void attachDownButtonListerner(Label downButton) {
-		downButton.addMouseListener(new MouseListener() {
+		downButton.addMouseListener(new MouseAdapter() {
 			int index1 = 0, index2 = 0;
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// Nothing to do
-
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// Nothing to do
-
-			}
-
+       
 			@Override
 			public void mouseUp(MouseEvent e) {
 				index1 = targetTable.getSelectionIndex();
@@ -356,22 +344,10 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	}
 
 	private void attachUpButtonListener(Label upButton) {
-		upButton.addMouseListener(new MouseListener() {
+		upButton.addMouseListener(new MouseAdapter() {
 			int index1 = 0, index2 = 0;
 
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// Nothing to do
-
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// Nothing to do
-
-			}
-
-			@Override
+        	@Override
 			public void mouseUp(MouseEvent e) {
 				index1 = targetTable.getSelectionIndex();
 				String text = targetTableViewer.getTable().getItem(index1).getText(0);
@@ -401,17 +377,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	}
 
 	private void attachDeleteButtonListener(Label deleteButton) {
-		deleteButton.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// Nothing to do
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// Nothing to do
-			}
-
+		deleteButton.addMouseListener(new MouseAdapter() {
+			
 			@Override
 			public void mouseUp(MouseEvent e) {
 				IStructuredSelection selection = (IStructuredSelection) targetTableViewer.getSelection();
@@ -428,19 +395,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	}
 
 	private void attachAddButtonListern(Label addButton) {
-		addButton.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// Nothing to do
-
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// Nothing to do
-
-			}
-
+		addButton.addMouseListener(new MouseAdapter() {
+			
 			@Override
 			public void mouseUp(MouseEvent e) {
 				addNewProperty(targetTableViewer, null);
