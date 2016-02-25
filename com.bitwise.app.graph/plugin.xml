@@ -226,7 +226,7 @@
             commandId="com.bitwise.app.graph.newGraphcommand"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+M3+J">
+            sequence="M1+J">
       </key>
       <key
             commandId="com.bitwise.app.graph.command.runjob"

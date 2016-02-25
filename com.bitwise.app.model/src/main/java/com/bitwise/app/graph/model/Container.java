@@ -1,8 +1,12 @@
 package com.bitwise.app.graph.model;
 
+import java.awt.color.CMMException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.bitwise.app.graph.model.helper.LoggerUtil;
 
@@ -111,10 +115,55 @@ public class Container extends Model {
 		Integer i = componentNextNameSuffixes.put(prefix, nextSuffix);
 		LoggerUtil.getLoger(this.getClass()).debug("previous value for component " + prefix + " in map: " + i);
 		LoggerUtil.getLoger(this.getClass()).debug("Adding New component name to the list: " + newName);
-		componentNames.add(newName);
+		
 
+		Boolean duplicate = checkIfDuplicateComponentExists(newName);
+		if (!duplicate) {
+			componentNames.add(newName);
+		} else {
+			int maxSequenceNo = getMaximumSequenceNoFromComponentName();
+			for (String componentName : componentNames) {
+				if (componentName.equalsIgnoreCase(newName)) {
+					String newValue = Integer.toString(maxSequenceNo + 1);
+					String componenetSequenceNo = newName.substring(newName.lastIndexOf("_") + 1);
+					if (componenetSequenceNo.startsWith("0") && !componenetSequenceNo.endsWith("9")
+							&& newValue.length() == 1) {
+						newName = newName.replace(newName.substring(newName.lastIndexOf("_") + 2), newValue);
+					} else {
+						newName = newName.replace(newName.substring(newName.lastIndexOf("_") + 1), newValue);
+					}
+				}
+			}
+			componentNames.add(newName);
+		}
+			
 		return newName;
 		
+	}
+
+	private boolean checkIfDuplicateComponentExists(String newName) {
+		boolean duplicate = false;
+		if (!componentNames.isEmpty()) {
+			for (String componentName : componentNames) {
+				if (componentName.equalsIgnoreCase(newName)) {
+					duplicate = true;
+				}
+			}
+		}
+		return duplicate;
+	}
+
+	private int getMaximumSequenceNoFromComponentName() {
+		int maxSequenceValue = 0;
+		List<Integer> list = new ArrayList<>();
+		if (!componentNames.isEmpty()) {
+			for (String componentName : componentNames) {
+				String componentSequenceNo = componentName.substring(componentName.lastIndexOf("_") + 1);
+				list.add(Integer.parseInt(componentSequenceNo));
+			}
+			maxSequenceValue = Collections.max(list);
+		}
+		return maxSequenceValue;
 	}
 	
 	private String getDefaultNameForComponentOld(String componentName, String baseName, boolean isNewInstance) {
