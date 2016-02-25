@@ -466,7 +466,7 @@ public class RuntimePropertyDialog extends Dialog {
 		tableViewer.setLabelProvider(new PropertyLabelProvider());
 		tableViewer.setInput(propertyList);
 
-		TableColumn column1 = new TableColumn(table, SWT.CENTER);
+		TableColumn column1 = new TableColumn(table, SWT.LEFT_TO_RIGHT);
 		column1.setText(Messages.PROPERTY_NAME);
 		TableColumn column2 = new TableColumn(table, SWT.LEFT_TO_RIGHT);
 		column2.setText(Messages.PROPERTY_VALUE);
