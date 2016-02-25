@@ -711,8 +711,8 @@ public abstract class Component extends Model {
 		
 		component.setPorts(clonedPorts);
 		
-		component.setInputportTerminals(new ArrayList<>(inputportTerminals));
-		component.setOutputPortTerminals(new ArrayList<>(outputPortTerminals));
+		component.setInputportTerminals(new ArrayList<String> ());
+		component.setOutputPortTerminals(new ArrayList<String> ());
 		component.setValidityStatus(validityStatus);
 		component.setChangeInPortsCntDynamically(changeInPortsCntDynamically);
 		component.setChangeOutPortsCntDynamically(changeOutPortsCntDynamically);
