@@ -7,8 +7,11 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.helper.LoggerUtil;
+import com.bitwise.app.logging.factory.LogFactory;
 
 
 /**
@@ -25,6 +28,7 @@ public class Container extends Model {
 	private final List<Component> components = new ArrayList<>();
 	private final Hashtable<String, Integer> componentNextNameSuffixes = new Hashtable<>();
 	private ArrayList<String> componentNames = new ArrayList<>();
+	private Logger logger=LogFactory.INSTANCE.getLogger(Container.class);
 		
 	
 	/**
@@ -157,11 +161,13 @@ public class Container extends Model {
 		int maxSequenceValue = 0;
 		List<Integer> list = new ArrayList<>();
 		if (!componentNames.isEmpty()) {
-			for (String componentName : componentNames) {
-				String componentSequenceNo = componentName.substring(componentName.lastIndexOf("_") + 1);
-				list.add(Integer.parseInt(componentSequenceNo));
-			}
-			maxSequenceValue = Collections.max(list);
+				for (String componentName : componentNames) {
+					String componentSequenceNo = componentName.substring(componentName.lastIndexOf("_") + 1);
+					if (componentSequenceNo.matches("[0-9]+")) {
+						list.add(Integer.parseInt(componentSequenceNo));
+					}
+				}
+				maxSequenceValue = Collections.max(list);
 		}
 		return maxSequenceValue;
 	}
