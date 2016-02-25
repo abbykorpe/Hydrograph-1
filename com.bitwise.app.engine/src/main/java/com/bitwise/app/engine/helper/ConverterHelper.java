@@ -83,16 +83,16 @@ public class ConverterHelper {
 				return operation;
 			}				
 		}
-
+		
 		return null;
-
+		
 	}
 
 	private TypeOperationInputFields getOperationInputFields(MappingSheetRow transformOperation) {
 		TypeOperationInputFields inputFields = null;
 		if (transformOperation != null) {
 			inputFields = new TypeOperationInputFields();
-
+			
 			if(transformOperation.getOperationClassProperty() != null && transformOperation.getOperationClassProperty().getOperationClassPath() !=null){
 				for (String operationField : transformOperation.getInputFields()) {
 					TypeInputField typeInputField = new TypeInputField();
@@ -122,8 +122,8 @@ public class ConverterHelper {
 
 	private TypeOperationOutputFields getOperationOutputFields(MappingSheetRow transformOperation, List<FixedWidthGridRow> fixedWidthGrid) {
 		TypeOperationOutputFields outputFields = null;
-
-
+		
+		
 		for(String outputFieldName : transformOperation.getOutputList()){					
 			for(FixedWidthGridRow fixedWidthRow : fixedWidthGrid){
 				if(fixedWidthRow.getFieldName().equals(outputFieldName)){					
@@ -203,24 +203,24 @@ public class ConverterHelper {
 
 	private List<TypeMapField> addMapFields(ATMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {		
 		List<TypeMapField> typeMapFieldList = new ArrayList<>();
-
+		
 		if (atMapping != null) {			
 			for(MappingSheetRow operationRow : atMapping.getMappingSheetRows()){				
 				if( operationRow.getOperationClassProperty() ==null || operationRow.getOperationClassProperty().getOperationClassPath() == null || 
 						operationRow.getOperationClassProperty().getOperationClassPath().trim().equals("")){
-					List<String> inputFields = operationRow.getInputFields();
-					List<String> outputFields = operationRow.getOutputList();
-					int index = 0;
-					for(String inputField : inputFields){
-						if(!inputField.trim().equals(outputFields.get(index).trim())){
-							TypeMapField mapField = new TypeMapField();
-							mapField.setSourceName(inputField.trim());
-							mapField.setName(outputFields.get(index).trim());
-							mapField.setInSocketId(Constants.FIXED_INSOCKET_ID);
-							typeMapFieldList.add(mapField);
+						List<String> inputFields = operationRow.getInputFields();
+						List<String> outputFields = operationRow.getOutputList();
+						int index = 0;
+						for(String inputField : inputFields){
+							if(!inputField.trim().equals(outputFields.get(index).trim())){
+								TypeMapField mapField = new TypeMapField();
+								mapField.setSourceName(inputField.trim());
+								mapField.setName(outputFields.get(index).trim());
+								mapField.setInSocketId(Constants.FIXED_INSOCKET_ID);
+								typeMapFieldList.add(mapField);
+							}
+							index++;
 						}
-						index++;
-					}
 				}
 			}
 		}
@@ -229,7 +229,7 @@ public class ConverterHelper {
 
 	private List<TypeOperationField> addOperationFields(ATMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {
 		List<TypeOperationField> typeOperationFieldList = new ArrayList<>();
-
+		
 		if (atMapping != null) {			
 			for(MappingSheetRow operationRow : atMapping.getMappingSheetRows()){				
 				if(operationRow.getOperationClassProperty()!=null && operationRow.getOperationClassProperty().getOperationClassPath() != null && !operationRow.getOperationClassProperty().getOperationClassPath().equalsIgnoreCase("")){
@@ -245,7 +245,7 @@ public class ConverterHelper {
 				}
 			}
 		}
-
+		
 		return typeOperationFieldList;
 	}
 
@@ -282,16 +282,28 @@ public class ConverterHelper {
 		TypeBaseField typeBaseField = new TypeBaseField();
 		typeBaseField.setName(object.getFieldName());
 
-		populateCommonFieldInfo(object, typeBaseField);
-		return typeBaseField;
-	}
+		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())
+				&& !object.getDateFormat().trim().isEmpty())
+			typeBaseField.setFormat(object.getDateFormat());
 
-	private void populateCommonFieldInfo(FixedWidthGridRow object, TypeBaseField typeBaseField) {
+		if (!object.getScale().trim().isEmpty())
+			typeBaseField.setScale(Integer.parseInt(object.getScale()));
 
-		populateCommonFieldInfo(object, typeBaseField);
+		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())
+				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())) {
+			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
+			if (!object.getScale().trim().isEmpty())
+				typeBaseField.setScale(Integer.parseInt(object.getScale()));
+		}
+
+		for (FieldDataTypes fieldDataType : FieldDataTypes.values()) {
+			if (fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
+				typeBaseField.setType(fieldDataType);
+		}
 		if (object.getLength() != null && !object.getLength().trim().isEmpty()) {
 			typeBaseField.getOtherAttributes().put(new QName(Constants.LENGTH_QNAME), object.getLength());
 		}
+		return typeBaseField;
 	}
 
 	/**
@@ -303,7 +315,6 @@ public class ConverterHelper {
 	public TypeBaseField getSchemaGridTargetData(GridRow object) {
 		TypeBaseField typeBaseField = new TypeBaseField();
 		typeBaseField.setName(object.getFieldName());
-
 		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())
 				&& !object.getDateFormat().trim().isEmpty())
 			typeBaseField.setFormat(object.getDateFormat());
@@ -312,14 +323,8 @@ public class ConverterHelper {
 			typeBaseField.setScale(Integer.parseInt(object.getScale()));
 
 		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())
-				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())
-				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_FLOAT.value())) {
-
-			for (ScaleTypeList scaleType : ScaleTypeList.values()) {
-				if (scaleType.value().equalsIgnoreCase(object.getScaleTypeValue()))
-					typeBaseField.setScaleType(scaleType);
-			}
-
+				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())) {
+			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
 			if (!object.getScale().trim().isEmpty())
 				typeBaseField.setScale(Integer.parseInt(object.getScale()));
 		}
@@ -329,10 +334,6 @@ public class ConverterHelper {
 				typeBaseField.setType(fieldDataType);
 		}
 
-		if (!object.getPrecision().trim().isEmpty())
-			typeBaseField.setPrecision(Integer.parseInt(object.getPrecision()));
-
-		typeBaseField.setDescription(object.getDescription());
 		return typeBaseField;
 	}
 
