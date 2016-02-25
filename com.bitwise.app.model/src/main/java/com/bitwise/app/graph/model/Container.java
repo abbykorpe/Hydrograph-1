@@ -1,17 +1,11 @@
 package com.bitwise.app.graph.model;
 
-import java.awt.color.CMMException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-
-import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.helper.LoggerUtil;
-import com.bitwise.app.logging.factory.LogFactory;
 
 
 /**
@@ -28,7 +22,6 @@ public class Container extends Model {
 	private final List<Component> components = new ArrayList<>();
 	private final Hashtable<String, Integer> componentNextNameSuffixes = new Hashtable<>();
 	private ArrayList<String> componentNames = new ArrayList<>();
-	private Logger logger=LogFactory.INSTANCE.getLogger(Container.class);
 		
 	
 	/**
