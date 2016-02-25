@@ -7,8 +7,8 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -137,18 +137,7 @@ public class ELTLookupConfigGrid extends Dialog {
 				INSERT_IMAGE);
 		driverEditLableAsButton.setImage(new Image(null, editImageIconPath));
 		
-		driverEditLableAsButton.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// Nothing to do
-
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// Nothing to do
-
-			}
+		driverEditLableAsButton.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -163,20 +152,9 @@ public class ELTLookupConfigGrid extends Dialog {
 				"");
 		lookupEditLableAsButton.setImage(new Image(null, editImageIconPath));
 
-		lookupEditLableAsButton.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// Nothing to do
+		lookupEditLableAsButton.addMouseListener(new MouseAdapter() {
 
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// Nothing to do
-
-			}
-
-			@Override
+            @Override
 			public void mouseUp(MouseEvent e) {
 				lookupKey = launchDialogToSelectFields(lookupKey, IN_PORT1);
 				lookupText.setText(lookupKey);

@@ -301,28 +301,17 @@ public class ELTLookupMapWizard extends Dialog {
 		Label add = eltswtWidgets.labelWidget(parent, SWT.CENTER | SWT.PUSH, new int[] { 0, 0, 25, 20 }, "", new Image(
 				null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.ADD_ICON));
 
-		add.addMouseListener(new MouseListener() {
+		add.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				joinOutputProperty(outputTableViewer, null);
 
 			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-
-			}
-
 		});
 
 		Label delete = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 }, "", new Image(null,
 				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DELETE_ICON));
-		delete.addMouseListener(new MouseListener() {
+		delete.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -339,18 +328,11 @@ public class ELTLookupMapWizard extends Dialog {
 					outputTableViewer.editElement(outputTableViewer.getElementAt(index - 1), 0);
 			}
 
-			@Override
-			public void mouseDown(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-			}
 		});
 
 		Label upLabel = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 50, 0, 25, 20 }, "", new Image(null,
 				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.UP_ICON));
-		upLabel.addMouseListener(new MouseListener() {
+		upLabel.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -377,19 +359,11 @@ public class ELTLookupMapWizard extends Dialog {
 					outputTableViewer.getTable().setSelection(index1 - 1);
 				}
 			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-			}
-		});
+        });
 
 		Label downLabel = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 74, 0, 25, 20 }, "", new Image(
 				null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DOWN_ICON));
-		downLabel.addMouseListener(new MouseListener() {
+		downLabel.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -419,15 +393,7 @@ public class ELTLookupMapWizard extends Dialog {
 
 				}
 			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-			}
-		});
+     	});
 
 	}
 

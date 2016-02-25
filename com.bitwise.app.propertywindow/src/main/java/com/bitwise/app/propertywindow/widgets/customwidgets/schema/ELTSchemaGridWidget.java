@@ -17,8 +17,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -519,18 +519,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		downButton.lableWidth(25);
 		buttonSubGroup.attachWidget(downButton);
 		downButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png");
-
-		downButton.addMouseUpListener(new MouseListener() {
+	
+		downButton.addMouseUpListener(new MouseAdapter() {
 			int index = 0, index2 = 0;
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-			}
-
+            
 			@Override
 			public void mouseUp(MouseEvent e) {
 				propertyDialogButtonBar.enableApplyButton(true);
@@ -552,19 +544,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		upButton.lableWidth(25);
 		buttonSubGroup.attachWidget(upButton);
 		upButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png");
-		upButton.addMouseUpListener(new MouseListener() {
+		upButton.addMouseUpListener(new MouseAdapter() {
 			int index = 0, index2 = 0;
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
-
+        
 			@Override
 			public void mouseUp(MouseEvent e) {
              propertyDialogButtonBar.enableApplyButton(true);

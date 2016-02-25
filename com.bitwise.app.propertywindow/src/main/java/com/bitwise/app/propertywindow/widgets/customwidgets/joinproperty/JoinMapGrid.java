@@ -24,7 +24,6 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -469,28 +468,18 @@ public class JoinMapGrid extends Dialog {
 		Label add = widget.labelWidget(parent, SWT.CENTER | SWT.PUSH, new int[] { 0, 0, 25, 20 }, "", new Image(null,
 				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.ADD_ICON));
 
-		add.addMouseListener(new MouseListener() {
+		add.addMouseListener(new MouseAdapter() {
+			
 			@Override
 			public void mouseUp(MouseEvent e) {
 				joinOutputProperty(outputTableViewer, null);
 
 			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-
-			}
-
 		});
 
 		Label delete = widget.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 }, "", new Image(null,
 				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DELETE_ICON));
-		delete.addMouseListener(new MouseListener() {
+		delete.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -506,19 +495,11 @@ public class JoinMapGrid extends Dialog {
 				if (index != 0)
 					outputTableViewer.editElement(outputTableViewer.getElementAt(index - 1), 0);
 			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-			}
 		});
 
 		Label upLabel = widget.labelWidget(parent, SWT.CENTER, new int[] { 50, 0, 25, 20 }, "", new Image(null,
 				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.UP_ICON));
-		upLabel.addMouseListener(new MouseListener() {
+		upLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				int index2 = 0;
@@ -545,18 +526,11 @@ public class JoinMapGrid extends Dialog {
 				}
 			}
 
-			@Override
-			public void mouseDown(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-			}
 		});
 
 		Label downLabel = widget.labelWidget(parent, SWT.CENTER, new int[] { 74, 0, 25, 20 }, "", new Image(null,
 				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DOWN_ICON));
-		downLabel.addMouseListener(new MouseListener() {
+		downLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				int index1 = outputTableViewer.getTable().getSelectionIndex();
@@ -580,14 +554,6 @@ public class JoinMapGrid extends Dialog {
 					outputTableViewer.refresh();
 					outputTableViewer.getTable().setSelection(index1 + 1);
 				}
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
 			}
 		});
 
