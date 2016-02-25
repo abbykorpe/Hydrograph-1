@@ -24,7 +24,7 @@ Require-Bundle: org.eclipse.ui,
  org.w3c.dom.smil;bundle-version="1.0.0",
  org.w3c.dom.svg;bundle-version="1.1.0",
  org.apache.batik.css;bundle-version="1.6.0",
- org.slf4j.api;bundle-version="1.7.2",
+ org.slf4j.api,
  org.junit,
  com.bitwise.app.logging;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy

@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.bitwise.app.common.datastructures;bundle-version="0.0.1",
  com.bitwise.app.propertywindow;bundle-version="0.0.1",
  com.bitwise.app.common;bundle-version="0.0.1",
- org.slf4j.api;bundle-version="1.7.2",
+ org.slf4j.api,
  org.eclipse.ui,
  com.bitwise.app.logging;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

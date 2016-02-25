@@ -1,13 +1,11 @@
 package com.bitwise.app.project.structure.wizard;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.internal.events.BuildCommand;
 import org.eclipse.core.resources.IContainer;
@@ -33,7 +31,6 @@ import org.eclipse.jdt.launching.LibraryLocation;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 
 import com.bitwise.app.logging.factory.LogFactory;
@@ -95,9 +92,6 @@ public class ProjectStructureCreator {
 				
 				copyBuildFile(installLocation + CustomMessages.ProjectSupport_CONFIG_FOLDER + "/" + CustomMessages.ProjectSupport_GRADLE+"/properties", 
 						project);
-
-				//Add gradle prefs file to the project .setting folder. Has information regarding gradle home and args.
-				generateGradlePrefsFile(project.getFolder(CustomMessages.ProjectSupport_Settings),project.getLocation().toOSString());
 
 				javaProject.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), null);
 
@@ -192,18 +186,16 @@ public class ProjectStructureCreator {
 		if(!project.hasNature(ProjectNature.NATURE_ID)){
 			IProjectDescription description = project.getDescription();
 			String[] prevNatures = description.getNatureIds();
-			String[] newNatures = new String[prevNatures.length + 3];
+			String[] newNatures = new String[prevNatures.length + 2];
 			System.arraycopy(prevNatures, 0, newNatures, 0, prevNatures.length);
 			newNatures[prevNatures.length] = ProjectNature.NATURE_ID;
 			newNatures[prevNatures.length + 1] = JavaCore.NATURE_ID;
-			newNatures[prevNatures.length + 2] = CustomMessages.GradleNature_ID; 
 
 			// validate the natures
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			IStatus status = workspace.validateNatureSet(newNatures); 
 			BuildCommand buildCommand= new BuildCommand();
 			buildCommand.setName("org.eclipse.jdt.core.javabuilder");
-			buildCommand.setName("org.eclipse.buildship.core.gradleprojectbuilder");
 			BuildCommand[] iCommand = {buildCommand};
 			description.setBuildSpec(iCommand); 
 			// only apply new nature, if the status is ok
@@ -318,43 +310,4 @@ public class ProjectStructureCreator {
 		 */
 		private static final long serialVersionUID = -6194407190206545086L;
 	}
-
-
-
-	/**
-	 * Generate Gradle Prefs file that need to show task list and has gradle information.
-	 * @param destinationFile
-	 * @param projectPath
-	 */
-	public static void generateGradlePrefsFile(IFolder destinationFolder,String projectPath) {
-		try {
-			Map<String, String> env = System.getenv();	    	
-			JSONObject gradlePrefsFileJson= new JSONObject();
-			JSONObject jsonObject= new JSONObject(); 
-			jsonObject.put("project_path",":"); 
-			jsonObject.put("project_dir",projectPath);
-			jsonObject.put("connection_project_dir",projectPath);
-			jsonObject.put("connection_gradle_user_home","");
-			if(env.get("GRADLE_USER_HOME")!=null)
-				jsonObject.put("connection_gradle_distribution","GRADLE_DISTRIBUTION(LOCAL_INSTALLATION("+env.get("GRADLE_USER_HOME")+"))");
-			else
-				jsonObject.put("connection_gradle_distribution","GRADLE_DISTRIBUTION(WRAPPER)");	    		
-			jsonObject.put("connection_java_home","");
-			jsonObject.put("connection_arguments","");
-			jsonObject.put("connection_jvm_arguments","");
-			gradlePrefsFileJson.put("1.0", jsonObject);
-			IFile destinationFile = destinationFolder.getFile("gradle.prefs");
-			try {
-				destinationFile.create(new ByteArrayInputStream(gradlePrefsFileJson.toString().getBytes()), true, null);
-			} catch ( CoreException exception) {
-				logger.error("Copy external library files operation failed"); 
-				throw new CoreException(new MultiStatus(Activator.PLUGIN_ID, 101, "Copy external library files operation failed", exception));
-			}
-
-		} catch (Exception e) {
-			logger.error("Error while generating gradle prefs file.", e);
-		}
-	}
-
-
 }

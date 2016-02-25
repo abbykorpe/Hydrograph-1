@@ -83,7 +83,7 @@ public class TestProjectStructure {
     private void assertNatureIn(IProject project) throws CoreException {
         IProjectDescription descriptions = project.getDescription();
         String[] natureIds = descriptions.getNatureIds();
-        if (natureIds.length != 3) {
+        if (natureIds.length != 2) {
             Assert.fail("Not all natures found in project."); //$NON-NLS-1$
         }
  
