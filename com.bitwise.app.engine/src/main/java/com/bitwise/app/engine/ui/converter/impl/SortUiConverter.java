@@ -1,8 +1,6 @@
 package com.bitwise.app.engine.ui.converter.impl;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -14,7 +12,6 @@ import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.components.RemovedupsComponent;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.commontypes.TypeFieldName;
 import com.bitwiseglobal.graph.sort.TypePrimaryKeyFields;
 import com.bitwiseglobal.graph.sort.TypePrimaryKeyFieldsAttributes;
 import com.bitwiseglobal.graph.sort.TypeSecondaryKeyFields;
@@ -24,6 +21,7 @@ import com.bitwiseglobal.graph.straightpulltypes.Sort;
 /**
  * Converter to convert jaxb sort object into sort component
  *
+ *@author BITWISE
  */
 public class SortUiConverter extends StraightpullUiConverter {
 	private Sort sort;

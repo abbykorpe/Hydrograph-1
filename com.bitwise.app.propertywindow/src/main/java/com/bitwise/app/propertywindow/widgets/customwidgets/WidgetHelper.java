@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.factory.ListenerFactory.Listners;
+import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.DropDownConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.EditButtonWithLabelConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.OperationClassConfig;
@@ -11,6 +12,12 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.config.SingleColumnG
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.TextBoxWithLableConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 
+/**
+ * Helper class to provide configuration for customizing widgets.
+ * Customizing can be of label, types of listeners etc. 
+ * @author BITWISE
+ *
+ */
 public class WidgetHelper {
 	public static final WidgetHelper INSTANCE = new WidgetHelper();
 	private WidgetHelper(){
@@ -24,6 +31,9 @@ public class WidgetHelper {
 		return populateSingleColumnGridConfig(Constants.OPERATION_FIELDS, Constants.OPERATION_FIELD);
 	}
 	
+	/**
+	 * Configuration to customize text box as delimiter property 
+	 */
 	public WidgetConfig getDelimiterWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Constants.DELIMITER);
@@ -31,6 +41,10 @@ public class WidgetHelper {
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
 	}
+	
+	/**
+	 * Configuration to customize text box as count property 
+	 */
 	public WidgetConfig getCountWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Constants.COUNT);
@@ -42,6 +56,9 @@ public class WidgetHelper {
 		return textBoxConfig;
 	}
 	
+	/**
+	 * Configuration to customize text box as phase property 
+	 */
 	public WidgetConfig getPhaseWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Constants.PHASE);
@@ -50,6 +67,10 @@ public class WidgetHelper {
 		textBoxConfig.setWidgetWidth(78);
 		return textBoxConfig;
 	}
+	
+	/**
+	 * Configuration to customize text box as noOfRecords property 
+	 */
 	public WidgetConfig getNoOfRecordsWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Constants.NO_OF_RECORDS);
@@ -59,6 +80,9 @@ public class WidgetHelper {
 		return textBoxConfig;
 	}
 	
+	/**
+	 * Configuration for sequence widget
+	 */
 	public WidgetConfig getSequenceFieldWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Constants.SEQUENCE_FIELD);
@@ -68,6 +92,9 @@ public class WidgetHelper {
 		return textBoxConfig;
 	}
 	
+	/**
+	 * Configuration to customize text box as count property 
+	 */
 	public WidgetConfig getInputCountWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Constants.INPUT_COUNT);
@@ -78,24 +105,36 @@ public class WidgetHelper {
 		return textBoxConfig;
 	}
 	
+	/**
+	 * Configuration to customize dropdown as safe property 
+	 */
 	public WidgetConfig getSafeWidgetConfig(){
 		DropDownConfig dropDownConfig = populateTrueFalseConfig(Constants.SAFE_PROPERTY);
 		addComboBoxListeners(dropDownConfig);
 		return dropDownConfig;
 	}
 	
+	/**
+	 * Configuration to customize dropdown as hasHeader property 
+	 */
 	public WidgetConfig getHasHeaderWidgetConfig(){
 		DropDownConfig dropDownConfig =  populateTrueFalseConfig(Constants.HAS_HEADER);
 		addComboBoxListeners(dropDownConfig);
 		return dropDownConfig;
 	}
 	
+	/**
+	 * Configuration to customize dropdown as strict property 
+	 */
 	public WidgetConfig getStrictWidgetConfig(){
 		DropDownConfig dropDownConfig =  populateTrueFalseConfig(Constants.STRICT);
 		addComboBoxListeners(dropDownConfig);
 		return dropDownConfig;
 	}
 	
+	/**
+	 * Configuration to customize dropdown as characterSet property 
+	 */
 	public WidgetConfig getCharacterSetWidgetConfig(){
 		DropDownConfig dropDownConfig = new DropDownConfig();
 		dropDownConfig.setName(Constants.CHARACTER_SET);
@@ -109,13 +148,19 @@ public class WidgetHelper {
 		addComboBoxListeners(dropDownConfig);
 		return dropDownConfig;
 	}
-
+	
+	/**
+	 * Configuration for operation class widget
+	 */
 	public WidgetConfig getOperationClassForFilterWidgetConfig() {
 		OperationClassConfig operationClassConfig = new OperationClassConfig();
 		operationClassConfig.setComponentName(Constants.FILTER);
 		return operationClassConfig;
 	}
 	
+	/**
+	 * Configuration for Transform component operation class widget
+	 */
 	public WidgetConfig getOperationClassForTransformWidgetConfig(String componentName, String componentDisplayName) {
 		OperationClassConfig operationClassConfig = new OperationClassConfig();
 		operationClassConfig.setComponentName(componentName);
@@ -123,15 +168,25 @@ public class WidgetHelper {
 		return operationClassConfig;
 	}
 	
+	/**
+	 * Configuration for table as Primary key table
+	 */
 	public WidgetConfig getPrimaryKeyWidgetConfig() {
 		EditButtonWithLabelConfig buttonWithLabelConfig = new EditButtonWithLabelConfig();
 		buttonWithLabelConfig.setName(Constants.PRIMARY_KEYS);
+		buttonWithLabelConfig.setWindowName(Messages.PRIMARY_COLUMN_KEY_WINDOW_NAME);
+		buttonWithLabelConfig.setHeaderName(Messages.PRIMARY_COLUMN_KEY_WINDOW_HEADER);
 		return buttonWithLabelConfig;
 	}
 	
+	/**
+	 * Configuration for table as PrimaSecondary key table
+	 */
 	public WidgetConfig getSecondaryKeyWidgetConfig() {
 		EditButtonWithLabelConfig buttonWithLabelConfig = new EditButtonWithLabelConfig();
 		buttonWithLabelConfig.setName(Constants.SECONDARY_KEYS);
+		buttonWithLabelConfig.setWindowName(Messages.SECONDARY_COLUMN_KEY_WINDOW_NAME);
+		buttonWithLabelConfig.setHeaderName(Messages.SECONDARY_COLUMN_KEY_WINDOW_HEADER);
 		return buttonWithLabelConfig;
 	}
 		

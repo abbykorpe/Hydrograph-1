@@ -38,6 +38,8 @@ public class Messages extends NLS {
 	public static String INVALID_FILE;
 	public static String EMPTYFIELDMESSAGE;
 	public static String LENGTH;
+	public static String PRIMARY_COLUMN_KEY_WINDOW_NAME;
+	public static String PRIMARY_COLUMN_KEY_WINDOW_HEADER;
 	public static String SECONDARY_COLUMN_KEY_WINDOW_NAME;
 	public static String SECONDARY_COLUMN_KEY_WINDOW_HEADER;
 	public static String EmptyColumnNotification;

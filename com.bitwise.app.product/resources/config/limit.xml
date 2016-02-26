@@ -8,7 +8,7 @@
 		<tns:category>STRAIGHTPULL</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
-				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="out0" nameOfPort="out0" allowMultipleLinks="true"/>
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="out0" nameOfPort="out0" allowMultipleLinks="false"/>
 			</tns:portSpecification>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">
 				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="in0" nameOfPort="in0" allowMultipleLinks="false"/>

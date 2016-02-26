@@ -58,6 +58,7 @@ import com.bitwise.app.common.util.ImagePathConstant;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.EditButtonWithLabelConfig;
 
 /**
  * 
@@ -82,16 +83,17 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	private DragSource dragSource;
 	private DropTarget dropTarget;
 	private List<String> sourceFieldsList;
-
+	private EditButtonWithLabelConfig buttonWithLabelConfig;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 
 	
 	
-	public SecondaryColumnKeysDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
+	public SecondaryColumnKeysDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar, EditButtonWithLabelConfig buttonWithLabelConfig) {
 		super(parentShell);
 		propertyLst = new ArrayList<SecondaryColumnKeysInformation>();
 		secondaryColumnsMap = new LinkedHashMap<String, String>();
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
+		this.buttonWithLabelConfig = buttonWithLabelConfig;
 	}
 
 	/**
@@ -103,7 +105,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 
 		isAnyUpdatePerformed = false;
-		getShell().setText(Messages.SECONDARY_COLUMN_KEY_WINDOW_NAME);
+		getShell().setText(buttonWithLabelConfig.getWindowName());
 
 		Composite container = (Composite) super.createDialogArea(parent);
 		ColumnLayout cl_container = new ColumnLayout();
@@ -256,6 +258,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		composite.setLayoutData(cld_composite);
 
 		Label lblTestlabel = new Label(composite, SWT.NONE);
+		lblTestlabel.setText(buttonWithLabelConfig.getHeaderName());
 
 		new Label(composite, SWT.HORIZONTAL);
 	}

@@ -31,6 +31,7 @@ import com.bitwiseglobal.graph.straightpulltypes.Sort;
 /**
  * Converter to convert sort component into engine specific sort object
  *
+ *@author BITWISE
  */
 public class SortConverter extends StraightPullConverter {
 

@@ -21,7 +21,9 @@ import com.bitwiseglobal.graph.commontypes.TypeStraightPullOutSocket;
 import com.bitwiseglobal.graph.straightpulltypes.Limit;
 
 /**
- * Converter to convert Limit component into engine specific sort object
+ * Converter to convert Limit component into engine specific limit object
+ * 
+ * @author BITWISE
  */
 public class LimitConverter extends StraightPullConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(LimitConverter.class);
