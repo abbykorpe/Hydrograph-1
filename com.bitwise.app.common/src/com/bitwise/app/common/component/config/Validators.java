@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="JOIN_MAPPING_VALIDATOR"/>
  *     &lt;enumeration value="LOOKUP_CONFIG_VALIDATOR"/>
  *     &lt;enumeration value="LOOKUP_MAPPING_VALIDATOR"/>
+ *     &lt;enumeration value="INTEGER_OR_PARAMETER_VALIDATOR"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -56,7 +57,9 @@ public enum Validators {
     @XmlEnumValue("LOOKUP_CONFIG_VALIDATOR")
     LookupConfigValidationRule("LOOKUP_CONFIG_VALIDATOR"),
     @XmlEnumValue("LOOKUP_MAPPING_VALIDATOR")
-    LookupMappingValidationRule("LOOKUP_MAPPING_VALIDATOR");
+    LookupMappingValidationRule("LOOKUP_MAPPING_VALIDATOR"),
+    @XmlEnumValue("INTEGER_OR_PARAMETER_VALIDATOR")
+    IntegerOrParameterValidationRule("INTEGER_OR_PARAMETER_VALIDATOR");
     private final String value;
 
     Validators(String v) {

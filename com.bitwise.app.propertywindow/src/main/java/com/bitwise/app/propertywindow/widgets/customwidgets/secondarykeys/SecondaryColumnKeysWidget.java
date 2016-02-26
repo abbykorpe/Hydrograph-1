@@ -14,6 +14,8 @@ import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.EditButtonWithLabelConfig;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
@@ -32,6 +34,9 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 	private Shell shell;
 	private String componentName;
 	private Logger logger = LogFactory.INSTANCE.getLogger(SecondaryColumnKeysWidget.class);
+	private EditButtonWithLabelConfig buttonWithLabelConfig;
+	private LinkedHashMap<String, Object> tempPropertyMap;
+	
 	/*
 	 * public ELTRuntimePropertiesWidget() { super(); tempPropertyMap = new LinkedHashMap<String, Object>(); }
 	 */
@@ -58,8 +63,10 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 		tempPropertyMap = new LinkedHashMap<String, Object>();
 	}
 
-	private LinkedHashMap<String, Object> tempPropertyMap;
-
+	public void setWidgetConfig(WidgetConfig widgetConfig) {
+		buttonWithLabelConfig = (EditButtonWithLabelConfig) widgetConfig;
+	}
+	
 	/**
 	 * @wbp.parser.entryPoint
 	 */
@@ -70,7 +77,7 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 		runtimeComposite.createContainerWidget();
 		shell = runtimeComposite.getContainerControl().getShell();
 
-		ELTDefaultLable defaultLable1 = new ELTDefaultLable("Secondary\nKeys");
+		ELTDefaultLable defaultLable1 = new ELTDefaultLable(buttonWithLabelConfig.getName());
 		runtimeComposite.attachWidget(defaultLable1);
 
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton("Edit");
@@ -113,7 +120,7 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 	 */
 	public void newWindowLauncher() {
 		
-		SecondaryColumnKeysDialog secondaryColumnDialog = new SecondaryColumnKeysDialog(shell, propertyDialogButtonBar);
+		SecondaryColumnKeysDialog secondaryColumnDialog = new SecondaryColumnKeysDialog(shell, propertyDialogButtonBar, buttonWithLabelConfig);
 		if (getProperties().get(propertyName) == null) {
 			setProperties(propertyName, new LinkedHashMap<String, String>());
 

@@ -10,11 +10,13 @@ import com.bitwise.app.engine.ui.converter.impl.GenerateRecordsUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.InputFileDelimitedUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.InputFixedWidthUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.JoinComponentUiConverter;
+import com.bitwise.app.engine.ui.converter.impl.LimitUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.LookupUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.NormalizeUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.OutputFileDelimitedUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.OutputFixedWidthUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.RemoveDupsUiConverter;
+import com.bitwise.app.engine.ui.converter.impl.SortUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.TransformComponentUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.UnionAllUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.UniqueSequenceUiConverter;
@@ -32,7 +34,9 @@ import com.bitwiseglobal.graph.operationstypes.Join;
 import com.bitwiseglobal.graph.operationstypes.Normalize;
 import com.bitwiseglobal.graph.operationstypes.Transform;
 import com.bitwiseglobal.graph.straightpulltypes.Clone;
+import com.bitwiseglobal.graph.straightpulltypes.Limit;
 import com.bitwiseglobal.graph.straightpulltypes.RemoveDups;
+import com.bitwiseglobal.graph.straightpulltypes.Sort;
 import com.bitwiseglobal.graph.straightpulltypes.UnionAll;
 
 /**
@@ -108,6 +112,12 @@ public class UiConverterFactory {
 		if ((GenerateSequence.class).isAssignableFrom(typeBaseComponent.getClass())) {
 			return new UniqueSequenceUiConverter(typeBaseComponent, container);
 		}
-		return new DummyUiConverter(typeBaseComponent, container);
+		if((Limit.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new LimitUiConverter(typeBaseComponent,container);
+		}
+		if((Sort.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new SortUiConverter(typeBaseComponent,container);
+ 		}
+		return new DummyUiConverter(typeBaseComponent,container);
 	}
 }
