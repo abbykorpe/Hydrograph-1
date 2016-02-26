@@ -56,7 +56,7 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
  * @author Bitwise
  */
 public class FilterOperationClassUtility  {
-	
+
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterOperationClassUtility.class);
 	private static IJavaProject iJavaProject;
 	private static Button createBtn;
@@ -92,7 +92,7 @@ public class FilterOperationClassUtility  {
 		wizard.setConfiguredWizardPage(page);
 		if(OSValidator.isMac()){
 			Display.getDefault().timerExec(0, new Runnable() {
-				
+
 				@Override
 				public void run() {
 					page.getControl().forceFocus();					
@@ -111,9 +111,9 @@ public class FilterOperationClassUtility  {
 		/*if (page.isPageComplete())
 			fileName.setText(page.getPackageText()+"."
 					+ page.getTypeName());*/
-			fileNameTextBox.setData("path", "/" + page.getPackageFragmentRootText() + "/"
-					+ page.getPackageText().replace(".", "/") + "/"
-					+ page.getTypeName() + ".java");
+		fileNameTextBox.setData("path", "/" + page.getPackageFragmentRootText() + "/"
+				+ page.getPackageText().replace(".", "/") + "/"
+				+ page.getTypeName() + ".java");
 	}
 
 	/**
@@ -133,14 +133,17 @@ public class FilterOperationClassUtility  {
 			java.nio.file.Path path =Paths.get(filePath); 
 			String classFile=path.getFileName().toString();
 			String name = "";
-			 try { 
+			try { 
 				BufferedReader r = new BufferedReader(new FileReader(filePath));
-				String arg= r.readLine();
-				name= arg.replace("package", "").replace(";", ""); 
-				if(!name.equalsIgnoreCase(""))
-				name=name+"."+classFile.substring(0, classFile.lastIndexOf('.'));
-				else
+				String firstLine= r.readLine();
+				if(firstLine.contains("package")){
+					name= firstLine.replace("package", "").replace(";", "");
+					if(!name.equalsIgnoreCase(""))
+						name=name+"."+classFile.substring(0, classFile.lastIndexOf('.'));
+					
+				}else
 					name=classFile.substring(0, classFile.lastIndexOf('.'));
+				
 			} catch (IOException e) { 
 				logger.debug("Unable to read file " + filePath,e );
 			}
@@ -166,16 +169,16 @@ public class FilterOperationClassUtility  {
 				fileName= (String) filePath.getData("path");
 			else
 				fileName=pathFile;
-			
+
 			File fileToOpen = new File(fileName);
 			if(!fileToOpen.isFile())
 			{
-			Path path = new Path(fileName);
-			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-			fileFullPath = file.getRawLocation().toOSString();
+				Path path = new Path(fileName);
+				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+				fileFullPath = file.getRawLocation().toOSString();
 			}
 			else
-			fileFullPath=fileName;
+				fileFullPath=fileName;
 			File fileToEditor = new File(fileFullPath);
 			if (fileToEditor.exists()) {
 				IFileStore fileStore = EFS.getLocalFileSystem().getStore(
@@ -192,68 +195,68 @@ public class FilterOperationClassUtility  {
 
 	}
 
-public static OperationClassProperty createOperationalClass(Composite composite,
-											PropertyDialogButtonBar eltOperationClassDialogButtonBar,AbstractELTWidget combo
-											,AbstractELTWidget isParameterCheckbox, AbstractELTWidget fileNameTextBox, TootlTipErrorMessage tootlTipErrorMessage, WidgetConfig widgetConfig ){
-	ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(composite);
-	eltSuDefaultSubgroupComposite.createContainerWidget();
-	eltSuDefaultSubgroupComposite.numberOfBasicWidgets(5);
-	
-	AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Operation\nClass");
-	eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
-	
-	eltSuDefaultSubgroupComposite.attachWidget(combo);
-	Combo comboOfOperaationClasses = (Combo) combo.getSWTWidgetControl();
-	
-	eltSuDefaultSubgroupComposite.attachWidget(fileNameTextBox);
-	Text fileName = (Text) fileNameTextBox.getSWTWidgetControl();
-	fileName.setSize(10, 100);
-	
-	AbstractELTWidget browseButton = new ELTDefaultButton("...").buttonWidth(20);
-	eltSuDefaultSubgroupComposite.attachWidget(browseButton);
-	browseBtn=(Button)browseButton.getSWTWidgetControl();
-	 
-	
-	eltSuDefaultSubgroupComposite.attachWidget(isParameterCheckbox);
-	
-	
-	ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite2 = new ELTDefaultSubgroupComposite(composite);
-	eltSuDefaultSubgroupComposite2.createContainerWidget();
-	eltSuDefaultSubgroupComposite2.numberOfBasicWidgets(3);
-	
-	
-	ELTDefaultButton emptyButton = new ELTDefaultButton("").buttonWidth(75);
-	eltSuDefaultSubgroupComposite2.attachWidget(emptyButton);
-	emptyButton.visible(false);
-			
-	// Create new button, that use to create operational class
-	AbstractELTWidget createButton = new ELTDefaultButton("Create New");
-	eltSuDefaultSubgroupComposite2.attachWidget(createButton); 
-	createBtn=(Button)createButton.getSWTWidgetControl();
+	public static OperationClassProperty createOperationalClass(Composite composite,
+			PropertyDialogButtonBar eltOperationClassDialogButtonBar,AbstractELTWidget combo
+			,AbstractELTWidget isParameterCheckbox, AbstractELTWidget fileNameTextBox, TootlTipErrorMessage tootlTipErrorMessage, WidgetConfig widgetConfig ){
+		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(composite);
+		eltSuDefaultSubgroupComposite.createContainerWidget();
+		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(5);
 
-	// Edit new button, that use to edit operational class
-	AbstractELTWidget openButton = new ELTDefaultButton("Open");
-	eltSuDefaultSubgroupComposite2.attachWidget(openButton); 
-	openBtn=(Button)openButton.getSWTWidgetControl();
-	
-	btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl();
-	
+		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Operation\nClass");
+		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
+
+		eltSuDefaultSubgroupComposite.attachWidget(combo);
+		Combo comboOfOperaationClasses = (Combo) combo.getSWTWidgetControl();
+
+		eltSuDefaultSubgroupComposite.attachWidget(fileNameTextBox);
+		Text fileName = (Text) fileNameTextBox.getSWTWidgetControl();
+		fileName.setSize(10, 100);
+
+		AbstractELTWidget browseButton = new ELTDefaultButton("...").buttonWidth(20);
+		eltSuDefaultSubgroupComposite.attachWidget(browseButton);
+		browseBtn=(Button)browseButton.getSWTWidgetControl();
+
+
+		eltSuDefaultSubgroupComposite.attachWidget(isParameterCheckbox);
+
+
+		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite2 = new ELTDefaultSubgroupComposite(composite);
+		eltSuDefaultSubgroupComposite2.createContainerWidget();
+		eltSuDefaultSubgroupComposite2.numberOfBasicWidgets(3);
+
+
+		ELTDefaultButton emptyButton = new ELTDefaultButton("").buttonWidth(75);
+		eltSuDefaultSubgroupComposite2.attachWidget(emptyButton);
+		emptyButton.visible(false);
+
+		// Create new button, that use to create operational class
+		AbstractELTWidget createButton = new ELTDefaultButton("Create New");
+		eltSuDefaultSubgroupComposite2.attachWidget(createButton); 
+		createBtn=(Button)createButton.getSWTWidgetControl();
+
+		// Edit new button, that use to edit operational class
+		AbstractELTWidget openButton = new ELTDefaultButton("Open");
+		eltSuDefaultSubgroupComposite2.attachWidget(openButton); 
+		openBtn=(Button)openButton.getSWTWidgetControl();
+
+		btnCheckButton=(Button) isParameterCheckbox.getSWTWidgetControl();
+
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.TOOLTIP_ERROR_MESSAGE, tootlTipErrorMessage);
 		helper.put(HelperType.WIDGET_CONFIG, widgetConfig);
 		setIJavaProject();
-	try { 						
-		openButton.attachListener(ListenerFactory.Listners.OPEN_FILE_EDITOR.getListener(),eltOperationClassDialogButtonBar, null,comboOfOperaationClasses,fileName);
-		browseButton.attachListener(ListenerFactory.Listners.BROWSE_FILE_LISTNER.getListener(),eltOperationClassDialogButtonBar, helper,fileName);
-		createButton.attachListener(ListenerFactory.Listners.CREATE_NEW_CLASS.getListener(),eltOperationClassDialogButtonBar, helper,comboOfOperaationClasses,fileName);
-		combo.attachListener(ListenerFactory.Listners.COMBO_CHANGE.getListener(),eltOperationClassDialogButtonBar, helper,comboOfOperaationClasses,fileName,btnCheckButton);
-		isParameterCheckbox.attachListener(ListenerFactory.Listners.ENABLE_BUTTON.getListener(),eltOperationClassDialogButtonBar, null,btnCheckButton,browseButton.getSWTWidgetControl(),createButton.getSWTWidgetControl(),openButton.getSWTWidgetControl());
+		try { 						
+			openButton.attachListener(ListenerFactory.Listners.OPEN_FILE_EDITOR.getListener(),eltOperationClassDialogButtonBar, null,comboOfOperaationClasses,fileName);
+			browseButton.attachListener(ListenerFactory.Listners.BROWSE_FILE_LISTNER.getListener(),eltOperationClassDialogButtonBar, helper,fileName);
+			createButton.attachListener(ListenerFactory.Listners.CREATE_NEW_CLASS.getListener(),eltOperationClassDialogButtonBar, helper,comboOfOperaationClasses,fileName);
+			combo.attachListener(ListenerFactory.Listners.COMBO_CHANGE.getListener(),eltOperationClassDialogButtonBar, helper,comboOfOperaationClasses,fileName,btnCheckButton);
+			isParameterCheckbox.attachListener(ListenerFactory.Listners.ENABLE_BUTTON.getListener(),eltOperationClassDialogButtonBar, null,btnCheckButton,browseButton.getSWTWidgetControl(),createButton.getSWTWidgetControl(),openButton.getSWTWidgetControl());
 		} catch (Exception e1) {
-		e1.printStackTrace(); 
-	} 
-	OperationClassProperty operationClassProperty = new OperationClassProperty(comboOfOperaationClasses.getText(),fileName.getText(), btnCheckButton.getEnabled(),(String)fileName.getData("path"));
-	return operationClassProperty;
-}
+			e1.printStackTrace(); 
+		} 
+		OperationClassProperty operationClassProperty = new OperationClassProperty(comboOfOperaationClasses.getText(),fileName.getText(), btnCheckButton.getEnabled(),(String)fileName.getData("path"));
+		return operationClassProperty;
+	}
 
 	private static void setIJavaProject() {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -309,5 +312,5 @@ public static OperationClassProperty createOperationalClass(Composite composite,
 		textBox.setText(operationClassName);;
 	}
 
-	
+
 }
