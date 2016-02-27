@@ -1,5 +1,6 @@
 package com.bitwise.app.propertywindow.runconfig;
 
+import java.awt.font.TextHitInfo;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -69,12 +70,14 @@ public class RunConfigDialog extends Dialog {
 	private final String USER_NAME = "userName";
 
 	private final String RUN_UTILITY = "runUtility";
-	private final String JOB_XML = "jobXML";
-	private final String LIB_PATH = "libs";
-	private final String PARAM_FILE = "paramFile";
+	private final String JOB_XML = "remoteJobXMLDir";
+	private final String LIB_PATH = "remoteLibDir";
+	private final String PARAM_FILE = "remoteParameterFileDir";
 
 	private Composite container;
-
+	private String username;
+	private String host;
+	
 	/**
 	 * Create the dialog.
 	 * 
@@ -226,7 +229,7 @@ public class RunConfigDialog extends Dialog {
 		textJobXML = new Text(compositePathConfig, SWT.BORDER);
 		textJobXML.setBounds(110, 92, 206, 21);
 		formToolkit.adapt(textJobXML, true, true);
-		textBoxes.put("jobXML", textJobXML);
+		textBoxes.put("remoteJobXMLDir", textJobXML);
 
 		Label lblLibs = new Label(compositePathConfig, SWT.NONE);
 		lblLibs.setText("Jar Files");
@@ -236,7 +239,7 @@ public class RunConfigDialog extends Dialog {
 		textLibs = new Text(compositePathConfig, SWT.BORDER);
 		textLibs.setBounds(110, 132, 206, 21);
 		formToolkit.adapt(textLibs, true, true);
-		textBoxes.put("libs", textLibs);
+		textBoxes.put("remoteLibDir", textLibs);
 
 		Label lblParamFiles = new Label(compositePathConfig, SWT.NONE);
 		lblParamFiles.setText("Param Files");
@@ -246,7 +249,7 @@ public class RunConfigDialog extends Dialog {
 		textParamFiles = new Text(compositePathConfig, SWT.BORDER);
 		textParamFiles.setBounds(110, 169, 206, 21);
 		formToolkit.adapt(textParamFiles, true, true);
-		textBoxes.put("paramFile", textParamFiles);
+		textBoxes.put("remoteParameterFileDir", textParamFiles);
 
 		Label lblPathConfiguration = new Label(compositePathConfig, SWT.NONE);
 		lblPathConfiguration.setText("Path Configuration");
@@ -368,7 +371,9 @@ public class RunConfigDialog extends Dialog {
 							+ e.getMessage());
 		}
 		this.password = textPassword.getText();
-
+		this.username = textUser.getText();
+		this.host = textEdgeNode.getText();
+		
 		// Check build properties in case of 'Remote' mode.
 		if (btnRemoteMode.getSelection()) {
 			try {
@@ -449,4 +454,12 @@ public class RunConfigDialog extends Dialog {
 
 		};
 	};
+	
+	public String getHost(){
+		return this.host;
+	}
+	
+	public String getUsername(){
+		return this.username;
+	}
 }
