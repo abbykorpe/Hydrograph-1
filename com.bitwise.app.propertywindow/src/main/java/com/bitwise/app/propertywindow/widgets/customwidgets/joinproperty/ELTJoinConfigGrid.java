@@ -97,7 +97,7 @@ public class ELTJoinConfigGrid extends Dialog {
 		gd_composite_2.widthHint = 548;
 		composite_2.setLayoutData(gd_composite_2);
 
-		labelWidget(composite_2, SWT.None, new int[] { 6, 0, 102, 15 }, "Join configuration");
+		labelWidget(composite_2, SWT.None, new int[] { 6, 0, 102, 15 }, "Join Configuration");
 
 		Composite composite = new Composite(container, SWT.BORDER);
 		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -113,7 +113,7 @@ public class ELTJoinConfigGrid extends Dialog {
 		Composite composite_1 = new Composite(scrolledComposite, SWT.NONE);
 
 		eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER, new int[] { 0, 2, 142, 23 }, "PortIndex", false);
-		eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER, new int[] { 144, 2, 190, 23 }, "Join key(s)", false);
+		eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER, new int[] { 144, 2, 190, 23 }, "Join Key(s)", false);
 		eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER, new int[] { 337, 2, 205, 23 }, "Join Type", false);
 		eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER, new int[] { 544, 2, 190, 23 }, "Parameter", false);
 
