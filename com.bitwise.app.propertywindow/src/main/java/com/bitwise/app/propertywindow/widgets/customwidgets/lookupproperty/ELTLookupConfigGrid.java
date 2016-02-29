@@ -233,7 +233,7 @@ public class ELTLookupConfigGrid extends Dialog {
 	private String launchDialogToSelectFields(String availableValues, String socketId) {
 		FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 		fieldDialog.setPropertyFromCommaSepratedString(availableValues);
-		fieldDialog.setSourceFieldsFromPropagatedSchema(propagatedFiledNames.get(socketId));
+		fieldDialog.setSourceFieldsFromPropagatedSchema(propagatedFiledNames.get(StringUtils.lowerCase(socketId)));
 		fieldDialog.open();
 		return fieldDialog.getResultAsCommaSeprated();
 

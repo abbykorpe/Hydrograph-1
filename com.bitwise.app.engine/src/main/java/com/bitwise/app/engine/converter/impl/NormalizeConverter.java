@@ -2,6 +2,7 @@ package com.bitwise.app.engine.converter.impl;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 
@@ -42,9 +43,10 @@ public class NormalizeConverter extends TransformConverter {
 
 	private void initFixedWidthGridRows() {
 		fixedWidthGridRows = new LinkedList<>();
-		ComponentsOutputSchema componentsOutputSchema = (ComponentsOutputSchema) properties
+		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) properties
 				.get(Constants.SCHEMA_TO_PROPAGATE);
-		if (componentsOutputSchema != null) {
+		if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null) {
+			ComponentsOutputSchema componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
 			List<FixedWidthGridRow> gridRows = componentsOutputSchema.getFixedWidthGridRowsOutputFields();
 			for (FixedWidthGridRow row : gridRows) {
 				fixedWidthGridRows.add((FixedWidthGridRow) row.copy());
