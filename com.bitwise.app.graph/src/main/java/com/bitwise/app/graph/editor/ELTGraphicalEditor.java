@@ -35,8 +35,6 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.KeyHandler;
-import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
@@ -152,7 +150,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	//private String parameterFilePath;
 	private String currentParameterFilePath=null;
 	//private IPath parameterFileIPath;
-
+	private boolean stopButtonStatus;
+	
 	private static final String DEFAULT_CONSOLE = "NewConsole";
 	private static final String CONSOLE_VIEW_ID = "com.bitwise.app.project.structure.console.AcceleroConsole";
 	
@@ -162,8 +161,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public ELTGraphicalEditor() {
 		setEditDomain(new DefaultEditDomain(this));
 	}
-
-
 
 	@Override
 	protected PaletteRoot getPaletteRoot() {
@@ -317,8 +314,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				if (!JobManager.INSTANCE.isJobRunning(consoleName)) {
 					enableRunJob(true);
 				} else {
+					if(viewer.getControl().isEnabled())
 					enableRunJob(false);
-					;
 				}
 			}
 
@@ -1131,6 +1128,20 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			logger.error("Unable to enable locked job resources",e);
 		}
 
+	}
+
+
+
+	@Override
+	public void setStopButtonStatus(boolean enabled) {
+		stopButtonStatus = enabled;		
+	}
+
+
+
+	@Override
+	public boolean getStopButtonStatus() {
+		return stopButtonStatus;
 	}
 
 }

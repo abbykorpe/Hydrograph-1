@@ -12,4 +12,6 @@ public interface DefaultGEFCanvas {
 	public String getJobName();
 	public void disableRunningJobResource();
 	public void enableRunningJobResource();
+	public void setStopButtonStatus(boolean enabled);
+	public boolean getStopButtonStatus();
 }

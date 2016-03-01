@@ -16,11 +16,14 @@ public class Job {
 	private String username;
 	private String password;
 	private String jobProjectDirectory;
+	private String jobStatus;
+	private boolean remoteMode;
 	
 	public Job(String localJobID,String consoleName, String canvasName) {
 		this.localJobID = localJobID;
 		this.consoleName = consoleName;
 		this.canvasName = canvasName;
+		remoteMode=false;
 	}
 
 	public String getLocalJobID() {
@@ -94,12 +97,28 @@ public class Job {
 	public void setJobProjectDirectory(String jobProjectDirectory) {
 		this.jobProjectDirectory = jobProjectDirectory;
 	}
+	
+	public String getJobStatus() {
+		return jobStatus;
+	}
+
+	public void setJobStatus(String jobStatus) {
+		this.jobStatus = jobStatus;
+	}
+	
+	public boolean isRemoteMode() {
+		return remoteMode;
+	}
+
+	public void setRemoteMode(boolean remoteMode) {
+		this.remoteMode = remoteMode;
+	}
 
 	@Override
 	public String toString() {
 		return "Job [localJobID=" + localJobID + ", localJobProcess=" + localJobProcess + ", remoteJobProcessID="
 				+ remoteJobProcessID + ", consoleName=" + consoleName + ", canvasName=" + canvasName + ", host=" + host
 				+ ", username=" + username + ", password=" + password + ", jobProjectDirectory=" + jobProjectDirectory
-				+ "]";
+				+ ", jobStatus=" + jobStatus + ", remoteMode=" + remoteMode + "]";
 	}	
 }

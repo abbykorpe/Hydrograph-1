@@ -77,7 +77,7 @@ public class RunConfigDialog extends Dialog {
 	private Composite container;
 	private String username;
 	private String host;
-	
+	private boolean remoteMode=false;
 	/**
 	 * Create the dialog.
 	 * 
@@ -341,7 +341,7 @@ public class RunConfigDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-
+		remoteMode = btnRemoteMode.getSelection();
 		IFile iFile;
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
@@ -461,5 +461,9 @@ public class RunConfigDialog extends Dialog {
 	
 	public String getUsername(){
 		return this.username;
+	}
+
+	public boolean isRemoteMode() {
+		return remoteMode;
 	}
 }
