@@ -59,7 +59,9 @@ public enum Validators {
     @XmlEnumValue("LOOKUP_MAPPING_VALIDATOR")
     LookupMappingValidationRule("LOOKUP_MAPPING_VALIDATOR"),
     @XmlEnumValue("INTEGER_OR_PARAMETER_VALIDATOR")
-    IntegerOrParameterValidationRule("INTEGER_OR_PARAMETER_VALIDATOR");
+    IntegerOrParameterValidationRule("INTEGER_OR_PARAMETER_VALIDATOR"),
+    @XmlEnumValue("TRANSFORM_SCHEMA_GRID_VALIDATOR")
+    TransformSchemaGridValidationRule("TRANSFORM_SCHEMA_GRID_VALIDATOR");
     private final String value;
 
     Validators(String v) {
