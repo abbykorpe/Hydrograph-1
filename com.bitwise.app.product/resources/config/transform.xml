@@ -24,7 +24,7 @@
 		<tns:property dataType="string" name="schema" renderer="JOIN_FIXED_WIDTH_SCHEMA_WIDGET" type="USER"
 			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="REQUIRED">
-			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>
+			<tns:validator>TRANSFORM_SCHEMA_GRID_VALIDATOR</tns:validator>
 		</tns:property>
 
 		<tns:property dataType="string" name="runtime_properties"
