@@ -2,8 +2,10 @@ package com.bitwise.app.propertywindow.widgets.customwidgets.lookupproperty;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +29,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -89,6 +92,8 @@ public class ELTLookupMapWizard extends Dialog {
 	private TableItem[] previousItems;
 	private TableItem[] currentItems;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
+	private List<String> sourceFieldList=new ArrayList<>();
+	private HashMap<String, List<String>> inputFieldMap=new HashMap<String, List<String>>();
 
 	/**
 	 * Create the dialog.
@@ -169,11 +174,14 @@ public class ELTLookupMapWizard extends Dialog {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				joinOutputProperty(outputTableViewer, null);
+				changeColorOfNonMappedFields();
 			}
 
 			@Override
 			public void mouseDown(MouseEvent e) {
 				validateDuplicatesInOutputField();
+				getListOfNonMappedFields(inputFieldMap);
+				changeColorOfNonMappedFields();
 			}
 		});
 		eltswtWidgets.createTableColumns(outputTableViewer.getTable(),
@@ -233,13 +241,87 @@ public class ELTLookupMapWizard extends Dialog {
 		new Label(container, SWT.NONE);
 
 		populateWidget();
-		// if(joinOutputList!=null){
-		// DragDropUtility.INSTANCE.applyDrop(outputTableViewer, new
-		// DragDropLookupImp(joinOutputList, false, outputTableViewer));
+
 		dropData(outputTableViewer, joinOutputList, true);
-		// }
+	
 		populatePreviousItemsOfTable();
+		outputTableViewer.getTable().addMouseTrackListener(new MouseTrackListener() {
+			
+			@Override
+			public void mouseHover(MouseEvent e) {
+				changeColorOfNonMappedFields();
+			}
+			
+			@Override
+			public void mouseExit(MouseEvent e) {
+				changeColorOfNonMappedFields();
+				
+			}
+			
+			@Override
+			public void mouseEnter(MouseEvent e) {
+				changeColorOfNonMappedFields();
+			}
+		});
+		inputFieldMap = setMapOfInputFieldsPerPort();
+		sourceFieldList=getListOfNonMappedFields(inputFieldMap);
 		return container;
+	}
+	
+	public void changeColorOfNonMappedFields() {
+		if (outputTableViewer.getTable().getItems() != null) {
+			TableItem[] items = outputTableViewer.getTable().getItems();
+			for (int i = 0; i < joinOutputList.size(); i++) {
+				for (String sourceField : sourceFieldList) {
+					if (joinOutputList.get(i).getSource_Field().equalsIgnoreCase(sourceField)) {
+						items[i].setForeground(0, new Color(null, 255, 0, 0));
+					}
+				}
+			}
+		}
+	}
+	
+	
+
+	private List<String> getListOfNonMappedFields(HashMap<String, List<String>> inputFieldMap) {
+		Iterator iterator = inputFieldMap.entrySet().iterator();
+	    while (iterator.hasNext()) {
+	        Map.Entry portFieldPair = (Map.Entry)iterator.next();
+	        for (LookupMapProperty lookupMapProperty : joinOutputList) {
+	        	String port=lookupMapProperty.getSource_Field().substring(0,3);
+	        	String source_field = lookupMapProperty.getSource_Field().substring(lookupMapProperty.getSource_Field().lastIndexOf(".") + 1);
+				if(portFieldPair.getKey().equals(port))
+				{
+					ArrayList<String> value = (ArrayList<String>) portFieldPair.getValue();
+					if(!value.isEmpty()&&!value.contains(source_field))
+					{
+						 sourceFieldList.add(port+"."+source_field);
+					}
+				}
+			}
+	    }
+	    return sourceFieldList;
+	}
+
+	private HashMap<String, List<String>> setMapOfInputFieldsPerPort() {
+		HashMap<String, List<String>> inputFieldMap = new HashMap<String, List<String>>();
+		int j = 0;
+		for (List<FilterProperties> inputFieldList : joinInputList) {
+			List<String> inputFieldListPerPort = new ArrayList<>();
+			for (FilterProperties inputField : inputFieldList) {
+				for (LookupMapProperty lookupMapProperty : joinOutputList) {
+					char charactor = lookupMapProperty.getSource_Field().charAt(2);
+					if (Character.toString(charactor).equalsIgnoreCase(Integer.toString(j))) {
+						if (!inputFieldListPerPort.contains(inputField.getPropertyname())) {
+							inputFieldListPerPort.add(inputField.getPropertyname());
+						}
+					}
+				}
+			}
+			inputFieldMap.put("in" + j, inputFieldListPerPort);
+			j++;
+		}
+		return inputFieldMap;
 	}
 
 	private void populatePreviousItemsOfTable() {
@@ -273,6 +355,26 @@ public class ELTLookupMapWizard extends Dialog {
 					public void mouseDown(MouseEvent e) {
 					}
 				});
+		inputTableViewer[tableViewerIndex].getTable().addMouseTrackListener(new MouseTrackListener() {
+
+			@Override
+			public void mouseHover(MouseEvent e) {
+				changeColorOfNonMappedFields();
+
+			}
+
+			@Override
+			public void mouseExit(MouseEvent e) {
+				changeColorOfNonMappedFields();
+
+			}
+
+			@Override
+			public void mouseEnter(MouseEvent e) {
+				changeColorOfNonMappedFields();
+
+			}
+		});
 		eltswtWidgets.createTableColumns(
 				inputTableViewer[tableViewerIndex].getTable(),
 				INPUT_COLUMN_NAME, 224);
