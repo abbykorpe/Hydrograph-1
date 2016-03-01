@@ -97,7 +97,6 @@ public class ELTJoinConfigGrid extends Dialog {
 		gd_composite_2.widthHint = 548;
 		composite_2.setLayoutData(gd_composite_2);
 
-		labelWidget(composite_2, SWT.None, new int[] { 6, 0, 102, 15 }, "Join Configuration");
 
 		Composite composite = new Composite(container, SWT.BORDER);
 		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -237,14 +236,7 @@ public class ELTJoinConfigGrid extends Dialog {
 	protected Point getInitialSize() {
 		return new Point(787, 351);
 	}
-
-	public Label labelWidget(Composite parent, int style, int[] bounds, String value) {
-		Label label = new Label(parent, style);
-		label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
-		label.setText(value);
-		return label;
-	}
-
+	
 	private String launchDialogToSelectFields(String availableValues, String socketId) {
 		FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 		fieldDialog.setPropertyFromCommaSepratedString(availableValues);
