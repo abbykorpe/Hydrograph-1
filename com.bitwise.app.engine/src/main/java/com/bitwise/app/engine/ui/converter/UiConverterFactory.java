@@ -12,7 +12,6 @@ import com.bitwise.app.engine.ui.converter.impl.InputFixedWidthUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.JoinComponentUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.LimitUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.LookupUiConverter;
-import com.bitwise.app.engine.ui.converter.impl.NormalizeUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.OutputFileDelimitedUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.OutputFixedWidthUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.RemoveDupsUiConverter;
@@ -31,7 +30,6 @@ import com.bitwiseglobal.graph.operationstypes.Filter;
 import com.bitwiseglobal.graph.operationstypes.GenerateSequence;
 import com.bitwiseglobal.graph.operationstypes.HashJoin;
 import com.bitwiseglobal.graph.operationstypes.Join;
-import com.bitwiseglobal.graph.operationstypes.Normalize;
 import com.bitwiseglobal.graph.operationstypes.Transform;
 import com.bitwiseglobal.graph.straightpulltypes.Clone;
 import com.bitwiseglobal.graph.straightpulltypes.Limit;
@@ -105,9 +103,6 @@ public class UiConverterFactory {
 		}
 		if ((GenerateRecord.class).isAssignableFrom(typeBaseComponent.getClass())) {
 			return new GenerateRecordsUiConverter(typeBaseComponent, container);
-		}
-		if ((Normalize.class).isAssignableFrom(typeBaseComponent.getClass())) {
-			return new NormalizeUiConverter(typeBaseComponent, container);
 		}
 		if ((GenerateSequence.class).isAssignableFrom(typeBaseComponent.getClass())) {
 			return new UniqueSequenceUiConverter(typeBaseComponent, container);

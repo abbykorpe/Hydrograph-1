@@ -74,7 +74,6 @@ public class Constants {
 	public static final String AGGREGATE = "AGGREGATE";
 	public static final String AGGREGATE_DISPLAYNAME = "Aggregate";
 	public static final String TRANSFORM_DISPLAYNAME = "Transform";
-	public static final String NORMALIZE_DISPLAYNAME = "Normalize";
 	public static final String INPUT_SOCKET_TYPE = "in";
 	public static final String OUTPUT_SOCKET_TYPE = "out";
 	public static final String UNUSED_SOCKET_TYPE = "unused";
