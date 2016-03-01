@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.MappingDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.inputtable.InputTable;
@@ -61,6 +62,8 @@ public class MappingDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
+		OperationClassConfig operationClassConfig = (OperationClassConfig)widgetConfig;
+		container.getShell().setText(operationClassConfig.getWindowTitle());
 		container.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite composite = new Composite(container, SWT.NONE);

@@ -258,7 +258,6 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		composite.setLayoutData(cld_composite);
 
 		Label lblTestlabel = new Label(composite, SWT.NONE);
-		lblTestlabel.setText(buttonWithLabelConfig.getHeaderName());
 
 		new Label(composite, SWT.HORIZONTAL);
 	}

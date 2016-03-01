@@ -3,6 +3,7 @@ package com.bitwise.app.propertywindow.widgets.customwidgets.config;
 public class OperationClassConfig implements WidgetConfig {
 	String componentName;
 	String componentDisplayName;
+	String windowTitle;
 	
 	public String getComponentDisplayName() {
 		return componentDisplayName;
@@ -13,7 +14,17 @@ public class OperationClassConfig implements WidgetConfig {
 	public String getComponentName() {
 		return componentName;
 	}
+
 	public void setComponentName(String componentName) {
 		this.componentName = componentName;
 	}
+
+	public String getWindowTitle() {
+		return windowTitle;
+	}
+
+	public void setWindowTitle(String windowTitle) {
+		this.windowTitle = windowTitle;
+	}
+
 }
