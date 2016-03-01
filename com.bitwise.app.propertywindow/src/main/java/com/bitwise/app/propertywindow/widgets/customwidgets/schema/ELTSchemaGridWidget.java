@@ -652,7 +652,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			List<String> operationFieldList = getOperationFieldList();
 			for (GridRow row : schema.getGridRow()) {
 				if (existingFieldNames.contains(row.getFieldName().trim())) {
-					if (!existingFields.contains(row)) {
+					if (existingFields.contains(row)) {
 						for (int index = 0; index < originalSchema.getGridRow().size(); index++) {
 							if (originalSchema.getGridRow().get(index).getFieldName().equals(row.getFieldName().trim())) {
 								if(!operationFieldList.contains(row.getFieldName()))

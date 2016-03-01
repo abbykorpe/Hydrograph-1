@@ -38,7 +38,7 @@ public class LookupLabelProvider implements ITableLabelProvider , ITableColorPro
 
 	@Override
 	public Color getForeground(Object element, int columnIndex) {
-		return new Color(Display.getDefault(), new RGB(100, 0, 0));
+		return null;
 	}
 
 	@Override
