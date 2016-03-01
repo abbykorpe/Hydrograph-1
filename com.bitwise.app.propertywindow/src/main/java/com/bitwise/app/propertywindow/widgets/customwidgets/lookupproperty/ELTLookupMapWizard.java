@@ -717,7 +717,7 @@ public class ELTLookupMapWizard extends Dialog {
 			property.setOutput_Field(outputFieldValue);
 			joinOutputList.add(property);
 			viewer.refresh();
-			viewer.editElement(viewer.getElementAt(joinOutputList.size() - 1),
+			viewer.editElement(property,
 					0);
 		} else {
 			property.setSource_Field(sourceFieldValue);
