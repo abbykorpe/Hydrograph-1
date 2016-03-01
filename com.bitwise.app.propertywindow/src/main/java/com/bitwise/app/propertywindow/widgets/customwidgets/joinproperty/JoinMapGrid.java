@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -94,8 +95,9 @@ public class JoinMapGrid extends Dialog {
 	private TableItem[] previousItems;
 	private TableItem[] currentItems;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
-	private List<String> sourceFieldList=new ArrayList<>();
+	private List<String> nonMappedFieldList=new ArrayList<>();
 	private HashMap<String, List<String>> inputFieldMap=new HashMap<String, List<String>>();
+	private String IN="in";
 
 
 	/**
@@ -386,7 +388,7 @@ public class JoinMapGrid extends Dialog {
 	});
 	
 		inputFieldMap = setMapOfInputFieldsPerPort();
-		sourceFieldList=getListOfNonMappedFields(inputFieldMap);
+		nonMappedFieldList=getListOfNonMappedFields(inputFieldMap);
 		return container;
 	}
 	
@@ -396,7 +398,7 @@ public class JoinMapGrid extends Dialog {
 		if (outputTableViewer.getTable().getItems() != null) {
 			TableItem[] items = outputTableViewer.getTable().getItems();
 			for (int i = 0; i < joinOutputList.size(); i++) {
-				for (String sourceField : sourceFieldList) {
+				for (String sourceField : nonMappedFieldList) {
 					if (joinOutputList.get(i).getSource_Field().equalsIgnoreCase(sourceField)) {
 						items[i].setForeground(0, new Color(null, 255, 0, 0));
 					}
@@ -406,7 +408,7 @@ public class JoinMapGrid extends Dialog {
 	}
 	
 	private List<String> getListOfNonMappedFields(HashMap<String, List<String>> inputFieldMap) {
-		Iterator iterator = inputFieldMap.entrySet().iterator();
+		Iterator<Entry<String, List<String>>> iterator = inputFieldMap.entrySet().iterator();
 	    while (iterator.hasNext()) {
 	        Map.Entry portFieldPair = (Map.Entry)iterator.next();
 	        for (LookupMapProperty lookupMapProperty : joinOutputList) {
@@ -417,12 +419,12 @@ public class JoinMapGrid extends Dialog {
 					ArrayList<String> value = (ArrayList<String>) portFieldPair.getValue();
 					if(!value.isEmpty()&&!value.contains(source_field))
 					{
-						 sourceFieldList.add(port+"."+source_field);
+						 nonMappedFieldList.add(port+"."+source_field);
 					}
 				}
 			}
 	    }
-	    return sourceFieldList;
+	    return nonMappedFieldList;
 	}
 
 	private HashMap<String, List<String>> setMapOfInputFieldsPerPort() {
@@ -440,7 +442,7 @@ public class JoinMapGrid extends Dialog {
 					}
 				}
 			}
-			inputFieldMap.put("in" + j, inputFieldListPerPort);
+			inputFieldMap.put(IN + j, inputFieldListPerPort);
 			j++;
 		}
 		return inputFieldMap;
