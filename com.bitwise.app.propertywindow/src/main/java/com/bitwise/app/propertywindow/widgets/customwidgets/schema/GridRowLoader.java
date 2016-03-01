@@ -231,8 +231,10 @@ public class GridRowLoader {
 						field.setPrecision(Integer.parseInt(temp.getPrecision()));
 					if(StringUtils.isNotBlank(temp.getScale()))
 						field.setScale(Integer.parseInt(temp.getScale()));
-					if(!temp.getScaleTypeValue().equals("") && !temp.getScaleTypeValue().equals(Messages.SCALE_TYPE_NONE))
-						field.setScaleType(ScaleTypes.fromValue(temp.getScaleTypeValue()));
+					if(temp.getScaleTypeValue()!=null){
+						if(!temp.getScaleTypeValue().equals("") && !temp.getScaleTypeValue().equals(Messages.SCALE_TYPE_NONE))
+							field.setScaleType(ScaleTypes.fromValue(temp.getScaleTypeValue()));
+					}
 					if(StringUtils.isNotBlank(temp.getDescription()))
 						field.setDescription(temp.getDescription());
 
@@ -257,9 +259,13 @@ public class GridRowLoader {
 					}
 
 					fields.getField().add(field);
-					schema.setFields(fields);
-					jaxbMarshaller.marshal(schema, schemaFile);
+					
+					
 				}
+				schema.setFields(fields);
+				jaxbMarshaller.marshal(schema, schemaFile);
+				MessageDialog.openInformation(new Shell(), "Information", "Schema file exported.");
+				
 			}else
 				throw new Exception("FileName is Empty");
 

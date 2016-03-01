@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
@@ -29,6 +30,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
@@ -128,6 +130,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private Text extSchemaPathText;
 
 	private ControlDecoration txtDecorator, decorator;
+	
+	private String importButtonTooltip = "Import Schema File";
+	private String exportButtonTooptip = "Export Schema File";
+	private String addButtonTooltip = "Add Row";
+	private String removeButtonTooltip = "Delete Row";
+	private String upButtonTooltip = "Move Row Up";
+	private String downButtonTooltip = "Move Row Down";
 
 	protected abstract String[] getPropertiesToShow();
 
@@ -610,6 +619,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		addButton.lableWidth(25);
 		buttonSubGroup.attachWidget(addButton);
 		addButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png");
+		addButton.setToolTipText(addButtonTooltip);
 	}
 
 	private void addDeleteButton(ELTSchemaSubgroupComposite buttonSubGroup) {
@@ -617,6 +627,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		deleteButton.lableWidth(25);
 		buttonSubGroup.attachWidget(deleteButton);
 		deleteButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png");
+		deleteButton.setToolTipText(removeButtonTooltip);
 	}
 
 	private void addUpButton(ELTSchemaSubgroupComposite buttonSubGroup) {
@@ -624,6 +635,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		upButton.lableWidth(25);
 		buttonSubGroup.attachWidget(upButton);
 		upButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png");
+		upButton.setToolTipText(upButtonTooltip);
 		upButton.addMouseUpListener(new MouseListener() {
 			int index = 0, index2 = 0;
 
@@ -661,7 +673,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		downButton = new ELTDefaultLable("");
 		downButton.lableWidth(25);
 		buttonSubGroup.attachWidget(downButton);
-		downButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
+
+		downButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png");
+		downButton.setToolTipText(downButtonTooltip);
+	
 
 		downButton.addMouseUpListener(new MouseAdapter() {
 			int index = 0, index2 = 0;
@@ -694,6 +709,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		
 		buttonSubGroup.attachWidget(exportButton);
 		exportButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/export_schema.png");
+		exportButton.setToolTipText(exportButtonTooptip);
 		
 		((Label)exportButton.getSWTWidgetControl()).setEnabled(false);
 
@@ -727,6 +743,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		
 		buttonSubGroup.attachWidget(importButton);
 		importButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/import_schema.png");
+		importButton.setToolTipText(importButtonTooltip);
 		
 		((Label)importButton.getSWTWidgetControl()).setEnabled(false);
 
@@ -756,6 +773,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 				tableViewer.setInput(schemaGridRowListToImport);
 				tableViewer.refresh();
+
+				MessageDialog.openInformation(new Shell(), "Information", "Schema file imported.");
 
 
 			}
