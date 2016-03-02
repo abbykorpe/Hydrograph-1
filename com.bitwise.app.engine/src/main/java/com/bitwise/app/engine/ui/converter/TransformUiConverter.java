@@ -9,12 +9,15 @@ import java.util.TreeMap;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.component.config.Operations;
+import com.bitwise.app.common.component.config.TypeInfo;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.helper.ConverterUiHelper;
@@ -166,9 +169,16 @@ public abstract class TransformUiConverter extends UiConverter {
 
 	protected String getOperationClassName(String fullClassPath) {
 		String operationClassName = Messages.CUSTOM;
+		Operations operations = XMLConfigUtil.INSTANCE.getComponent(uiComponent.getComponentName()).getOperations();
+		List<TypeInfo> typeInfos = operations.getStdOperation();
 		if (StringUtils.isNotBlank(fullClassPath) && !isParameter(fullClassPath)) {
 			String str[] = fullClassPath.split("\\.");
-			operationClassName = str[str.length - 1];
+			for (int i = 0; i < typeInfos.size(); i++) {
+				if(typeInfos.get(i).getName().equalsIgnoreCase(str[str.length - 1]))
+				{
+					operationClassName = str[str.length - 1];
+				}
+			}
 		}
 		return operationClassName;
 	}

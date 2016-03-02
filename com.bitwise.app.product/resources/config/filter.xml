@@ -47,8 +47,6 @@
 	<tns:operations>
 		<tns:interface class="com.bitwiseglobal.bhse.userfunctions.base.FilterBase"
 			name="FILTER" />
-		<tns:stdOperation class="com.bitwisegloabal.bhse.userfuntions.Filter"
-			name="Filter" />
 	</tns:operations>
 	</tns:component>
 </tns:Config>
