@@ -36,7 +36,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 
 		String gradleCommand;
 
-		job.setJobStatus("RUNNING");
+		job.setJobStatus(JobStatus.RUNNING);
 		JobLogger joblogger;
 		// ---------------------------- code to copy jar file
 		gradleCommand = getLibararyScpCommand(job);
@@ -110,7 +110,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			JobLogger joblogger = initJobLogger(gefCanvas, logSystemInfo, logJobStartInfo);
 
 			JobManager.INSTANCE.addJob(job);
-			logProcessLogsAsyncronously(joblogger, process, job, gefCanvas);
+			logProcessLogsAsynchronously(joblogger, process, job, gefCanvas);
 			return joblogger;
 		} catch (IOException e) {
 			logger.debug("Unable to execute the job", e);
@@ -161,7 +161,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 				+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1];
 	}
 
-	private void logProcessLogsAsyncronously(final JobLogger joblogger, final Process process, final Job job,
+	private void logProcessLogsAsynchronously(final JobLogger joblogger, final Process process, final Job job,
 			DefaultGEFCanvas gefCanvas) {
 		InputStream stream = process.getInputStream();
 
@@ -194,7 +194,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 				joblogger.logMessage(line);
 			}
 		} catch (Exception e) {
-			if (JobManager.INSTANCE.jobMap.containsKey(job.getLocalJobID()))
+			if (JobManager.INSTANCE.getJobMap().containsKey(job.getLocalJobID()))
 				logger.info("Error occured while reading run job log", e);
 		} finally {
 			if (reader != null) {

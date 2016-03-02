@@ -60,7 +60,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 			JobLogger joblogger = initJobLogger(gefCanvas,true,true);
 
 			JobManager.INSTANCE.addJob(job);
-			logProcessLogsAsyncronously(joblogger, process, job);
+			logProcessLogsAsynchronously(joblogger, process, job);
 
 		} catch (IOException e) {
 			logger.debug("Unable to execute the job", e);
@@ -90,7 +90,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 				GradleCommandConstants.GPARAM_LOCAL_JOB;
 	}
 
-	private void logProcessLogsAsyncronously(final JobLogger joblogger, final Process process, final Job job) {
+	private void logProcessLogsAsynchronously(final JobLogger joblogger, final Process process, final Job job) {
 
 		InputStream stream = process.getInputStream();
 

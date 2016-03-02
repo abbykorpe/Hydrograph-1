@@ -32,7 +32,6 @@ public class RunJobHandler extends AbstractHandler {
 	}
 	
 	private Job getJob(String localJobID,String consoleName,String canvasName){
-		//return new Job(null, null, null, consoleName, canvasName);
 		return new Job(localJobID,consoleName, canvasName);
 	}
 	

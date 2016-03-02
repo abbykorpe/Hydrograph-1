@@ -184,7 +184,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		super.initializeGraphicalViewer();
 		viewer = getGraphicalViewer();
 		viewer.setContents(container);
+		// listen for dropped parts 
 		viewer.addDropTargetListener(createTransferDropTargetListener());
+		// listener for selection on canvas 
 		viewer.addSelectionChangedListener(createISelectionChangedListener());
 		attachCanvasMouseListeners();
 		setDefaultToolUndoRedoStatus();
@@ -311,10 +313,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 				}
 				
-				Job job = JobManager.INSTANCE.getJob(consoleName);
+				Job job = JobManager.INSTANCE.getRunningJob(consoleName);
 				
 				if(job!=null){
-					if(job.getJobStatus().equals(JobStatus.KILLED)){
+					if(JobStatus.KILLED.equals(job.getJobStatus())){
 						((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
 						((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 					}else{
@@ -883,15 +885,15 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	/**
 	 * 
+	 * Validates length of job name
 	 * 
-	 * 
-	 * @param Object
+	 * @param {@link SaveAsDialog}
 	 */
-	public void validateLengthOfJobName(SaveAsDialog obj) {
-		String jobName=obj.getResult().removeFileExtension().lastSegment();
+	public void validateLengthOfJobName(SaveAsDialog saveAsDialog) {
+		String jobName=saveAsDialog.getResult().removeFileExtension().lastSegment();
 		while(jobName.length()>50)
 		{
-			jobName=obj.getResult().removeFileExtension().lastSegment();
+			jobName=saveAsDialog.getResult().removeFileExtension().lastSegment();
 			if(jobName.length()>50)
 			{
 				MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
@@ -899,11 +901,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				messageBox.setMessage("File Name Too Long");
 				if(messageBox.open()==SWT.OK)
 				{
-					obj.setOriginalName(jobName+".job");
-					IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(obj.getResult());
-					obj.setOriginalFile(file);
-					obj.open();
-					if(obj.getReturnCode()==1)
+					saveAsDialog.setOriginalName(jobName+".job");
+					IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(saveAsDialog.getResult());
+					saveAsDialog.setOriginalFile(file);
+					saveAsDialog.open();
+					if(saveAsDialog.getReturnCode()==1)
 						break;
 				}
 			}

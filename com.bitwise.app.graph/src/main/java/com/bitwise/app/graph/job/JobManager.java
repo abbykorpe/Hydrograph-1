@@ -43,13 +43,13 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 public class JobManager {
 
 	private static Logger logger = LogFactory.INSTANCE.getLogger(JobManager.class);
-	Map<String, Job> jobMap;
+	private Map<String, Job> runningJobMap;
 	public static JobManager INSTANCE = new JobManager();
 
 	private String activeCanvas;
 
 	private JobManager() {
-		jobMap = new LinkedHashMap<>();
+		runningJobMap = new LinkedHashMap<>();
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class JobManager {
 	 *            - {@link Job}
 	 */
 	void addJob(Job job) {
-		jobMap.put(job.getLocalJobID(), job);
+		runningJobMap.put(job.getLocalJobID(), job);
 		logger.debug("Added job " + job.getCanvasName() + " to job map");
 	}
 
@@ -70,7 +70,7 @@ public class JobManager {
 	 * @param canvasId
 	 */
 	void removeJob(String canvasId) {
-		jobMap.remove(canvasId);
+		runningJobMap.remove(canvasId);
 		logger.debug("Removed job " + canvasId + " from jobmap");
 	}
 
@@ -211,7 +211,7 @@ public class JobManager {
 	 * @param gefCanvas 
 	 */
 	public void killJob(String jobId, DefaultGEFCanvas gefCanvas) {
-		Job jobToKill = jobMap.get(jobId);
+		Job jobToKill = runningJobMap.get(jobId);
 
 		jobToKill.setJobStatus(JobStatus.KILLED);
 
@@ -228,7 +228,7 @@ public class JobManager {
 	 * @param gefCanvas 
 	 */
 	public void killJob(String jobId) {	
-		Job jobToKill = jobMap.get(jobId);
+		Job jobToKill = runningJobMap.get(jobId);
 		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 		if(jobToKill.isRemoteMode()){
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.YES | SWT.NO);
@@ -240,13 +240,13 @@ public class JobManager {
 		}		
 	}
 
-	JobLogger initJobLogger(DefaultGEFCanvas gefCanvas) {
+	private JobLogger initJobLogger(DefaultGEFCanvas gefCanvas) {
 		final JobLogger joblogger = new JobLogger(gefCanvas.getActiveProject(), gefCanvas.getJobName());
 		return joblogger;
 	}
 
-	public Job getJob(String consoleName) {
-		return jobMap.get(consoleName);
+	public Job getRunningJob(String consoleName) {
+		return runningJobMap.get(consoleName);
 	}
 
 	private void killRemoteProcess(Job job, DefaultGEFCanvas gefCanvas) {
@@ -287,7 +287,7 @@ public class JobManager {
 	}
 
 	/**
-	 * Enables locked resouces..like job canvas
+	 * Enables locked resources..like job canvas
 	 * 
 	 * @param {@link DefaultGEFCanvas}
 	 */
@@ -362,7 +362,7 @@ public class JobManager {
 	 * @return
 	 */
 	public boolean isJobRunning(String consoleName) {
-		return jobMap.containsKey(consoleName);
+		return runningJobMap.containsKey(consoleName);
 	}
 
 	/**
@@ -384,5 +384,11 @@ public class JobManager {
 	String getActiveCanvas() {
 		return activeCanvas;
 	}
+
+	public Map<String, Job> getJobMap() {
+		return runningJobMap;
+	}
+	
+	
 
 }
