@@ -8,7 +8,6 @@ package com.bitwise.app.propertywindow.widgets.customwidgets.config;
 public class EditButtonWithLabelConfig implements WidgetConfig {
 	private String name;
 	private String windowName;
-	private String headerName;
 	
 	public String getName() {
 		return name;
@@ -21,13 +20,5 @@ public class EditButtonWithLabelConfig implements WidgetConfig {
 	}
 	public void setWindowName(String windowName) {
 		this.windowName = windowName;
-	}
-	
-	public void setHeaderName(String headerName) {
-		this.headerName = headerName;
-	}
-	
-	public String getHeaderName() {
-		return headerName;
 	}
 }
