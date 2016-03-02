@@ -161,10 +161,11 @@ public class WidgetHelper {
 	/**
 	 * Configuration for Transform component operation class widget
 	 */
-	public WidgetConfig getOperationClassForTransformWidgetConfig(String componentName, String componentDisplayName) {
+	public WidgetConfig getOperationClassForTransformWidgetConfig(String componentName, String componentDisplayName,String windowTitle) {
 		OperationClassConfig operationClassConfig = new OperationClassConfig();
 		operationClassConfig.setComponentName(componentName);
 		operationClassConfig.setComponentDisplayName(componentDisplayName);
+		operationClassConfig.setWindowTitle(windowTitle);
 		return operationClassConfig;
 	}
 	
@@ -175,7 +176,6 @@ public class WidgetHelper {
 		EditButtonWithLabelConfig buttonWithLabelConfig = new EditButtonWithLabelConfig();
 		buttonWithLabelConfig.setName(Constants.PRIMARY_KEYS);
 		buttonWithLabelConfig.setWindowName(Messages.PRIMARY_COLUMN_KEY_WINDOW_NAME);
-		buttonWithLabelConfig.setHeaderName(Messages.PRIMARY_COLUMN_KEY_WINDOW_HEADER);
 		return buttonWithLabelConfig;
 	}
 	
@@ -186,7 +186,6 @@ public class WidgetHelper {
 		EditButtonWithLabelConfig buttonWithLabelConfig = new EditButtonWithLabelConfig();
 		buttonWithLabelConfig.setName(Constants.SECONDARY_KEYS);
 		buttonWithLabelConfig.setWindowName(Messages.SECONDARY_COLUMN_KEY_WINDOW_NAME);
-		buttonWithLabelConfig.setHeaderName(Messages.SECONDARY_COLUMN_KEY_WINDOW_HEADER);
 		return buttonWithLabelConfig;
 	}
 		
