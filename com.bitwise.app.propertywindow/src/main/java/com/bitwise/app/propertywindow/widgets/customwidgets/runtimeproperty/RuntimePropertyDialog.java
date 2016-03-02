@@ -41,6 +41,7 @@ import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ImagePathConstant;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -72,6 +73,9 @@ public class RuntimePropertyDialog extends Dialog {
 
 	private Table table;
 	private Label lblPropertyError;
+	private Label deleteButton;
+	private Label upButton;
+	private Label downButton;
 
 	private boolean isAnyUpdatePerformed;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
@@ -153,24 +157,27 @@ public class RuntimePropertyDialog extends Dialog {
 
 		Label addButton = new Label(composite_1, SWT.NONE);
 		addButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		addButton.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
+		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON));
 
 		attachAddButtonListern(addButton);
 
-		Label deleteButton = new Label(composite_1, SWT.NONE);
+		deleteButton = new Label(composite_1, SWT.NONE);
 		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		deleteButton.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
+		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.DELETE_BUTTON));
 		attachDeleteButtonListener(deleteButton);
 
-		Label upButton = new Label(composite_1, SWT.NONE);
+		upButton = new Label(composite_1, SWT.NONE);
 		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		upButton.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png"));
+		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON));
 		attachUpButtonListener(upButton);
 
-		Label downButton = new Label(composite_1, SWT.NONE);
+		downButton = new Label(composite_1, SWT.NONE);
 		downButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		downButton.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png"));
+		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON));
 		attachDownButtonListerner(downButton);
+		deleteButton.setEnabled(false);
+		upButton.setEnabled(false);
+		downButton.setEnabled(false);
 	}
 
 	private void attachDownButtonListerner(Label downButton) {
@@ -237,11 +244,23 @@ public class RuntimePropertyDialog extends Dialog {
 
 	}
 
-	private void attachDeleteButtonListener(Label deleteButton) {
+	private void attachDeleteButtonListener(final Label deleteButton) {
 		deleteButton.addMouseListener(new MouseAdapter() {
             
 			@Override
 			public void mouseUp(MouseEvent e) {
+				if (propertyList.size() <= 1) {
+					deleteButton.setEnabled(false);
+				} else {
+					deleteButton.setEnabled(true);
+				}
+				if (propertyList.size() > 2) {
+					upButton.setEnabled(true);
+					downButton.setEnabled(true);
+				} else {
+					upButton.setEnabled(false);
+					downButton.setEnabled(false);
+				}
 				IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();				
 				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 					Object selectedObject = iterator.next();
@@ -261,7 +280,15 @@ public class RuntimePropertyDialog extends Dialog {
 			public void mouseUp(MouseEvent e) {
 				table.getParent().setFocus();
 				addNewProperty(tableViewer);
-
+				if (propertyList.size() >= 1) {
+					deleteButton.setEnabled(true);
+				} else {
+					deleteButton.setEnabled(false);
+				}
+				if (propertyList.size() >= 2) {
+					upButton.setEnabled(true);
+					downButton.setEnabled(true);
+				}
 			}
 
 		});
@@ -390,6 +417,15 @@ public class RuntimePropertyDialog extends Dialog {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				addNewProperty(tableViewer);
+				if (propertyList.size() >= 1) {
+					deleteButton.setEnabled(true);
+				} else {
+					deleteButton.setEnabled(false);
+				}
+				if (propertyList.size() >= 2) {
+					upButton.setEnabled(true);
+					downButton.setEnabled(true);
+				}
 			}
 
 			@Override
