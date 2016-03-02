@@ -555,7 +555,7 @@ public class MappingTable {
 		if(emptyOut && emptyInClass){
 			txtOut.setBackground(txtOut.getDisplay().getSystemColor(SWT.COLOR_WHITE));			
 		}else{
-			txtOut.setBackground(SWTResourceManager.getColor(250, 128, 114));
+			txtOut.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
 		}
 		
 		//boolean validUniqOutputColumns=validateDuplicatesInOutputColumn();
@@ -616,11 +616,12 @@ public class MappingTable {
 						}
 						
 						if(tooltip.equalsIgnoreCase("")){
-							((Text)item.getData("out")).setToolTipText(null);
+							((Text)item.getData("out")).setToolTipText(null);						    
+							((Text)item.getData("out")).setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 						}else{
 							((Text)item.getData("out")).setToolTipText(tooltip);
+							
 						}
-						
 					}
 				}
 			}
@@ -640,7 +641,7 @@ public class MappingTable {
 							if(!((Text)item.getData("out")).getToolTipText().contains("Duplicate output"))
 								((Text)item.getData("out")).setToolTipText("- " + ((Text)item.getData("out")).getToolTipText() + "\n- " + "Duplicate output");
 						}
-						((Text)item.getData("out")).setBackground(SWTResourceManager.getColor(250, 128, 114));
+						((Text)item.getData("out")).setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
 					}
 				}			
 			}
@@ -654,8 +655,8 @@ public class MappingTable {
 			Text txtOut) {
 		if(txtClazz.getText().trim().equalsIgnoreCase("")){
 			if(txtIn.getText().split(",").length != txtOut.getText().split(",").length){
-				txtIn.setBackground(SWTResourceManager.getColor(250, 128, 114));
-				txtOut.setBackground(SWTResourceManager.getColor(250, 128, 114));
+				txtIn.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
+				txtOut.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
 				
 				
 				if(txtIn.getToolTipText() == null)
@@ -678,7 +679,7 @@ public class MappingTable {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				column3Txt.setText("");
-				column3Txt.setBackground(SWTResourceManager.getColor(250, 128, 114));
+				column3Txt.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
 			}
 		});
 	}
