@@ -72,7 +72,6 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.MouseTrackListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -119,7 +118,9 @@ import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
 import com.bitwise.app.graph.handler.RunJobHandler;
 import com.bitwise.app.graph.handler.StopJobHandler;
+import com.bitwise.app.graph.job.Job;
 import com.bitwise.app.graph.job.JobManager;
+import com.bitwise.app.graph.job.JobStatus;
 import com.bitwise.app.graph.job.RunStopButtonCommunicator;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
@@ -135,7 +136,6 @@ import com.thoughtworks.xstream.XStream;
 public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette implements ComponentCanvas, DefaultGEFCanvas{
 
 	private boolean dirty=false;
-	private final Color palatteBackgroundColor= new Color(null,82,84,81);
 	private PaletteRoot paletteRoot = null;
 
 	Logger logger = LogFactory.INSTANCE.getLogger(ELTGraphicalEditor.class);
@@ -147,9 +147,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private ComponentTooltip componentTooltip;
 	private Rectangle toolTipComponentBounds;
-	//private String parameterFilePath;
 	private String currentParameterFilePath=null;
-	//private IPath parameterFileIPath;
 	private boolean stopButtonStatus;
 	
 	private static final String DEFAULT_CONSOLE = "NewConsole";
@@ -186,9 +184,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		super.initializeGraphicalViewer();
 		viewer = getGraphicalViewer();
 		viewer.setContents(container);
-		// listen for dropped parts
 		viewer.addDropTargetListener(createTransferDropTargetListener());
-		// listener for selection on canvas
 		viewer.addSelectionChangedListener(createISelectionChangedListener());
 		attachCanvasMouseListeners();
 		setDefaultToolUndoRedoStatus();
@@ -202,6 +198,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 	}
 
+	/**
+	 * Add mouse listener on canvas
+	 * 
+	 */
 	public void attachCanvasMouseListeners(){
 
 		viewer.getControl().addKeyListener(new KeyListener() {
@@ -310,12 +310,19 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					}
 
 				}
-
-				if (!JobManager.INSTANCE.isJobRunning(consoleName)) {
+				
+				Job job = JobManager.INSTANCE.getJob(consoleName);
+				
+				if(job!=null){
+					if(job.getJobStatus().equals(JobStatus.KILLED)){
+						((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
+						((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+					}else{
+						enableRunJob(false);
+					}
+					
+				}else{
 					enableRunJob(true);
-				} else {
-					if(viewer.getControl().isEnabled())
-					enableRunJob(false);
 				}
 			}
 
@@ -554,19 +561,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		};
 	}
 
-//	private void handleKeyStrokes(GraphicalViewer viewer) {
-//		KeyHandler keyHandler = new KeyHandler();
-//		keyHandler.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
-//				getActionRegistry().getAction(ActionFactory.DELETE.getId()));
-//		keyHandler.put(KeyStroke.getPressed((char) ('z' - 'a' + 1),'z',SWT.CTRL), getActionRegistry().getAction(ActionFactory.UNDO.getId()));
-//		keyHandler.put(KeyStroke.getPressed((char) ('y' - 'a' + 1), 'y', SWT.CTRL), getActionRegistry().getAction(ActionFactory.REDO.getId()));
-//		keyHandler.put(KeyStroke.getPressed((char) ('a' - 'a' + 1), 'a', SWT.CTRL), getActionRegistry().getAction(ActionFactory.SELECT_ALL.getId()));
-//		keyHandler.put(KeyStroke.getPressed((char) ('c' - 'a' + 1), 'c', SWT.CTRL), getActionRegistry().getAction(ActionFactory.COPY.getId()));
-//		keyHandler.put(KeyStroke.getPressed((char) ('v' - 'a' + 1), 'v', SWT.CTRL), getActionRegistry().getAction(ActionFactory.PASTE.getId()));
-//		keyHandler.put(KeyStroke.getPressed((char) ('x' - 'a' + 1), 'x', SWT.CTRL), getActionRegistry().getAction(ActionFactory.CUT.getId()));
-//		viewer.setKeyHandler(keyHandler);
-//	}
-
 	@Override
 	public void createActions() {
 		super.createActions();
@@ -618,7 +612,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		.setClippingStrategy(new ViewportAwareConnectionLayerClippingStrategy(
 				connectionLayer));
 
-		List zoomLevels = new ArrayList(3);
+		List<String> zoomLevels = new ArrayList<String>(3);
 		zoomLevels.add(ZoomManager.FIT_ALL);
 		zoomLevels.add(ZoomManager.FIT_WIDTH);
 		zoomLevels.add(ZoomManager.FIT_HEIGHT);
@@ -748,7 +742,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 
-
+	@Override
 	public String getActiveProject(){
 		if(getEditorInput() instanceof IFileEditorInput){
 			IFileEditorInput input = (IFileEditorInput)getEditorInput() ;
@@ -764,6 +758,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 
+	@Override
 	public String getJobName(){
 		return getPartName().replace(".job", "");
 	}
@@ -820,6 +815,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		out.write(fromObjectToXML(getContainer()).getBytes());
 	}
 
+	/**
+	 * Returns job continer
+	 * @return {@link Container}
+	 */
 	public Container getContainer() {
 		return container;
 	}
@@ -877,6 +876,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		return file;
 	}
 
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param Object
+	 */
 	public void validateLengthOfJobName(SaveAsDialog obj) {
 		String jobName=obj.getResult().removeFileExtension().lastSegment();
 		while(jobName.length()>50)

@@ -3,9 +3,6 @@ package com.bitwise.app.graph.handler;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
@@ -36,17 +33,7 @@ public class StopJobHandler extends AbstractHandler {
 	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		//RunStopButtonCommunicator.runJobHandler.setRunJobEnable(true);
 		JobManager.INSTANCE.killJob(getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName());
-		//JobManager.INSTANCE.setJobStatus(getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName(),"KILLED");
-		//setBaseEnabled(false);
-		
-		/*MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_INFORMATION | SWT.OK );
-		messageBox.setText("Kill job");
-		messageBox.setMessage("Kill request accpeted.\nPlease make a note that - Run button will available only when current operation will complete");
-		messageBox.open();*/
-		
-		//((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(true);
 		return null;
 	}
 	

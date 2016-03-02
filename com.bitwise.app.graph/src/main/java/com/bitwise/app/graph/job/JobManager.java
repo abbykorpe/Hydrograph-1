@@ -8,11 +8,16 @@ import java.io.InputStreamReader;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
@@ -40,27 +45,41 @@ public class JobManager {
 	private static Logger logger = LogFactory.INSTANCE.getLogger(JobManager.class);
 	Map<String, Job> jobMap;
 	public static JobManager INSTANCE = new JobManager();
-	private IEditorPart iEditorPart;
 
 	private String activeCanvas;
-	JobLogger joblogger;
 
 	private JobManager() {
 		jobMap = new LinkedHashMap<>();
 	}
 
+	/**
+	 * 
+	 * Register job with Job Manager
+	 * 
+	 * @param job
+	 *            - {@link Job}
+	 */
 	void addJob(Job job) {
 		jobMap.put(job.getLocalJobID(), job);
 		logger.debug("Added job " + job.getCanvasName() + " to job map");
 	}
 
+	/**
+	 * Deregister job with Job Manager
+	 * 
+	 * @param canvasId
+	 */
 	void removeJob(String canvasId) {
 		jobMap.remove(canvasId);
 		logger.debug("Removed job " + canvasId + " from jobmap");
 	}
 
-	
-
+	/**
+	 * Toggles state of Run and Stop button if enabled is true Run button will enable and stop button will disable if
+	 * enable is false Run button will disbale and stop will enable
+	 * 
+	 * @param enabled
+	 */
 	void enableRunJob(boolean enabled) {
 		((RunJobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
 		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
@@ -70,26 +89,23 @@ public class JobManager {
 	 * execute job
 	 * 
 	 * @param job
-	 *            - job to execute
+	 *            - {@link Job} to execute
 	 */
 	public void executeJob(final Job job) {
 		enableRunJob(false);
-
 		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
-
-		iEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
 		if (!saveJobBeforeExecute(gefCanvas)) {
 			return;
 		}
 
 		RunConfigDialog runConfigDialog = getRunConfiguration();
-		
+
 		if (!runConfigDialog.proceedToRunGraph()) {
 			enableRunJob(true);
 			return;
 		}
-		
+
 		final ParameterGridDialog parameterGrid = getParameters();
 		if (parameterGrid.canRunGraph() == false) {
 			logger.debug("Not running graph");
@@ -100,45 +116,47 @@ public class JobManager {
 
 		final String xmlPath = getJobXMLPath();
 		if (xmlPath == null) {
-			WidgetUtility.errorMessage("Please open a graph to run.");
+			WidgetUtility.errorMessage(Messages.OPEN_GRAPH_TO_RUN);
 			return;
 		}
 
 		String clusterPassword = getClusterPassword(runConfigDialog);
-		
+
 		job.setUsername(runConfigDialog.getUsername());
 		job.setPassword(clusterPassword);
 		job.setHost(runConfigDialog.getHost());
 		job.setRemoteMode(runConfigDialog.isRemoteMode());
-		
+
 		gefCanvas.disableRunningJobResource();
-		
-		
-		
-		
-		if(job.isRemoteMode()){
+
+		launchJob(job, gefCanvas, parameterGrid, xmlPath);
+
+	}
+
+	private void launchJob(final Job job, final DefaultGEFCanvas gefCanvas, final ParameterGridDialog parameterGrid,
+			final String xmlPath) {
+		if (job.isRemoteMode()) {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new RemoteJobLauncher();
-					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFile(),job,gefCanvas);
+					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFile(), job, gefCanvas);
 				}
-				
+
 			}).start();
-		}else{
+		} else {
 			new Thread(new Runnable() {
 
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new LocalJobLauncher();
-					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFile(),job,gefCanvas);
+					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFile(), job, gefCanvas);
 				}
-				
+
 			}).start();
 		}
-			
 	}
-	
+
 	private String getClusterPassword(RunConfigDialog runConfigDialog) {
 		String clusterPassword = runConfigDialog.getClusterPassword() != null ? runConfigDialog.getClusterPassword()
 				: "";
@@ -151,13 +169,6 @@ public class JobManager {
 		String xmlPath = iEditorPart.getEditorInput().getToolTipText()
 				.replace(Messages.JOBEXTENSION, Messages.XMLEXTENSION);
 		return xmlPath;
-	}
-
-	JobLogger initJobLogger(DefaultGEFCanvas gefCanvas) {
-		final JobLogger joblogger = new JobLogger(gefCanvas.getActiveProject(), gefCanvas.getJobName());
-		joblogger.logJobStartInfo();
-		joblogger.logSystemInformation();
-		return joblogger;
 	}
 
 	private ParameterGridDialog getParameters() {
@@ -200,88 +211,106 @@ public class JobManager {
 	 */
 	public void killJob(String jobId) {
 		Job jobToKill = jobMap.get(jobId);
-		
-		//killLocalJobProcess(jobToKill);
-		jobToKill.setJobStatus("KILLED");
-		
-		if(jobToKill.isRemoteMode()){
-			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_INFORMATION | SWT.OK );
-			messageBox.setText("Kill job");
-			messageBox.setMessage("Kill request accpeted.\nPlease make a note that - Run button will available only when current operation will complete");
-			messageBox.open();
+
+		jobToKill.setJobStatus(JobStatus.KILLED);
+
+		MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_INFORMATION | SWT.OK);
+		messageBox.setText(Messages.KILL_JOB_MESSAGEBOX_TITLE);
+
+		if (jobToKill.isRemoteMode()) {
+			messageBox.setMessage(Messages.REMOTE_KILL_REQUEST_ACCEPTED);
 			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
-			
-		}else{
-			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_INFORMATION | SWT.OK );
-			messageBox.setText("Kill job");
-			messageBox.setMessage("Only the remote job can be killed");
-			messageBox.open();			
+		} else {
+			messageBox.setMessage(Messages.LOCAL_KILL_REQUEST_ACCEPTED);
 		}
-		
-		if(jobToKill.getRemoteJobProcessID() != null){
+
+		messageBox.open();
+
+		if (jobToKill.getRemoteJobProcessID() != null) {
 			killRemoteProcess(jobToKill);
 		}
-		
-		
-		//removeJob(jobId);
+
 	}
 
-	private void killLocalJobProcess(Job jobToKill) {
-		try {
-			jobToKill.getLocalJobProcess().getErrorStream().close();
-			jobToKill.getLocalJobProcess().getInputStream().close();
-			jobToKill.getLocalJobProcess().getOutputStream().close();
-		} catch (IOException e) {
-			logger.debug("Unable to close process streams ",e);
-		}
-		jobToKill.getLocalJobProcess().destroy();
-		logger.debug("Job " + jobToKill.getLocalJobID() + " killed");
-		logger.debug("Killed remote job: " + jobToKill.getRemoteJobProcessID());
+	JobLogger initJobLogger(DefaultGEFCanvas gefCanvas) {
+		final JobLogger joblogger = new JobLogger(gefCanvas.getActiveProject(), gefCanvas.getJobName());
+		return joblogger;
 	}
-	
-	private void killRemoteProcess(Job job){
+
+	public Job getJob(String consoleName) {
+		return jobMap.get(consoleName);
+	}
+
+	private void killRemoteProcess(Job job) {
+
+		String gradleCommand = getKillJobCommand(job);
 		String[] runCommand = new String[3];
 		if (OSValidator.isWindows()) {
-			logger.info("This is windows.");
-			String[] command = {
-					Messages.CMD,
-					"/c",
-					Messages.KILL_JOB + " " + Messages.HOST + "=\"" + job.getHost() + "\" " + Messages.USERNAME + "=\""
-							+ job.getUsername() + "\" " + Messages.CLUSTER_PASSWORD + "=\"" + job.getPassword() + "\" " + 
-							Messages.PROCESS_ID + "=\"" + job.getRemoteJobProcessID()};
+			String[] command = { Messages.CMD, "/c", gradleCommand };
 			runCommand = command;
 
 		} else if (OSValidator.isMac()) {
-			logger.debug("This is Mac.");
-			String[] command = {
-					Messages.SHELL,
-					"-c",
-					Messages.KILL_JOB + " " + Messages.HOST + "=\"" + job.getHost() + "\" " + Messages.USERNAME + "=\""
-							+ job.getUsername() + "\" " + Messages.CLUSTER_PASSWORD + "=\"" + job.getPassword() + "\"" +
-							Messages.PROCESS_ID + "=\"" + job.getRemoteJobProcessID()};
+			String[] command = { Messages.SHELL, "-c", gradleCommand };
 			runCommand = command;
-		} else if (OSValidator.isUnix()) {
-			logger.debug("This is Unix or Linux");
-		} else if (OSValidator.isSolaris()) {
-			logger.debug("This is Solaris");
-		} else {
-			logger.debug("Your OS is not supported!!");
 		}
 
-		ProcessBuilder pb = new ProcessBuilder(runCommand);
-		pb.directory(new File(job.getJobProjectDirectory()));
+		ProcessBuilder processBuilder = new ProcessBuilder(runCommand);
+		processBuilder.directory(new File(job.getJobProjectDirectory()));
+		processBuilder.redirectErrorStream(true);
 		try {
-			Process process = pb.start();
-			//logKillProcessLogsAsyncronously(process);
+			Process process = processBuilder.start();
+			logKillProcessLogsAsyncronously(process, job, CanvasUtils.getComponentCanvas());
 		} catch (IOException e) {
-			logger.debug("Unable start to start kill job process ", e);
+			logger.debug("Unable to kill the job", e);
 		}
-		
 	}
-	
-	
-	private void logKillProcessLogsAsyncronously(final Process process) {
 
+	private void releaseResources(Job job, DefaultGEFCanvas gefCanvas, JobLogger joblogger) {
+		enableLockedResources(gefCanvas);
+		refreshProject(gefCanvas);
+		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
+			JobManager.INSTANCE.enableRunJob(true);
+		}
+		JobManager.INSTANCE.removeJob(job.getCanvasName());
+
+		joblogger.logJobEndInfo();
+		joblogger.close();
+		JobManager.INSTANCE.removeJob(job.getLocalJobID());
+	}
+
+	/**
+	 * Enables locked resouces..like job canvas
+	 * 
+	 * @param {@link DefaultGEFCanvas}
+	 */
+	protected void enableLockedResources(final DefaultGEFCanvas gefCanvas) {
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				gefCanvas.enableRunningJobResource();
+			}
+		});
+	}
+
+	/**
+	 * 
+	 * Refresh project directory corresponding to given {@link DefaultGEFCanvas}
+	 * 
+	 * @param gefCanvas
+	 */
+	protected void refreshProject(DefaultGEFCanvas gefCanvas) {
+		IEditorPart iEditorPart = ((IEditorPart) gefCanvas);
+		String projectName = ((IFileEditorInput) iEditorPart.getEditorInput()).getFile().getProject().getName();
+		IProject iProject = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		try {
+			iProject.refreshLocal(IResource.DEPTH_INFINITE, null);
+		} catch (CoreException e) {
+			logger.error("Error while refreshing the project", e);
+		}
+	}
+
+	private void logKillProcessLogsAsyncronously(final Process process, final Job job, final DefaultGEFCanvas gefCanvas) {
+		final JobLogger joblogger = initJobLogger(CanvasUtils.getComponentCanvas());
 		new Thread(new Runnable() {
 			InputStream stream = process.getInputStream();
 
@@ -290,12 +319,12 @@ public class JobManager {
 				try {
 					reader = new BufferedReader(new InputStreamReader(stream));
 					String line = null;
-					
+
 					while ((line = reader.readLine()) != null) {
 						joblogger.logMessage(line);
 					}
 				} catch (Exception e) {
-						logger.info("Error occured while reading run job log", e);
+					logger.info("Error occured while reading run job log", e);
 				} finally {
 					if (reader != null) {
 						try {
@@ -305,11 +334,17 @@ public class JobManager {
 						}
 					}
 				}
-				//joblogger.logJobEndInfo();
-				//joblogger.close();				
+
+				releaseResources(job, gefCanvas, joblogger);
 			}
 
 		}).start();
+	}
+
+	private String getKillJobCommand(Job job) {
+		return GradleCommandConstants.GCMD_KILL_REMOTE_JOB + GradleCommandConstants.GPARAM_HOST + job.getHost()
+				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
+				+ job.getPassword() + GradleCommandConstants.GPARAM_REMOTE_PROCESSID + job.getRemoteJobProcessID();
 	}
 
 	/**
@@ -332,12 +367,13 @@ public class JobManager {
 		this.activeCanvas = activeCanvas;
 	}
 
+	/**
+	 * 
+	 * Returns active canvas id
+	 * 
+	 * @return - String (active canvas id)
+	 */
 	String getActiveCanvas() {
 		return activeCanvas;
-	}
-
-	public void setJobStatus(String jobEditor, String status) {
-		
-		
 	}
 }
