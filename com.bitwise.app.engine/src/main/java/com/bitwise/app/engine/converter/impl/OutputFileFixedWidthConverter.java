@@ -56,11 +56,7 @@ public class OutputFileFixedWidthConverter extends OutputConverter {
 		for (Link link : component.getTargetConnections()) {
 			TypeOutputFixedwidthInSocket outInSocket = new TypeOutputFixedwidthInSocket();
 			outInSocket.setId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
-			if (converterHelper.isMultipleLinkAllowed(link.getSource(), link.getSourceTerminal()))
-				outInSocket.setFromSocketId(link.getSource().getPort(link.getSourceTerminal()).getPortType()
-						+ link.getLinkNumber());
-			else
-				outInSocket.setFromSocketId(link.getSourceTerminal());
+			outInSocket.setFromSocketId(converterHelper.getFromSocketId(link));
 			outInSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 			outInSocket.setSchema(getSchema());
 			outInSocket.getOtherAttributes();

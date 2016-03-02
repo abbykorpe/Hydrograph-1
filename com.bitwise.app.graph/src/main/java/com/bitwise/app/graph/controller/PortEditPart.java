@@ -55,7 +55,7 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 
 	
 
-	private Point getPortLocation(int totalPortsOfThisType, String type, int sequence, int height, int width, int margin) {
+	private Point getPortLocation(int totalPortsOfThisType, String type, int sequence, int height, int width, int margin){
 
 		Point p = null ;
 		int portOffsetFactor = totalPortsOfThisType+1;

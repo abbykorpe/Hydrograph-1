@@ -27,10 +27,10 @@
 		<tns:property dataType="string" name="schema" renderer="JOIN_FIXED_WIDTH_SCHEMA_WIDGET" type="USER"
 			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="REQUIRED">
-			<tns:validator>TRANSFORM_SCHEMA_GRID_VALIDATOR</tns:validator>
+			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>
 		</tns:property>
 			
-		<tns:property dataType="string" name="inPortCount" value="2" renderer="INPUT_COUNT_WIDGET" type="USER"
+		<tns:property dataType="string" name="inPortCount|unusedPortCount" value="2" renderer="JOIN_INPUT_COUNT_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED">
 		</tns:property>

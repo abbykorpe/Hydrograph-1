@@ -433,7 +433,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 		super.commandStackChanged(event);
 	}
-
+ 
 	/**
 	 * Creates the palette container.
 	 * 
@@ -465,7 +465,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			throws RuntimeException, SAXException, IOException {
 		Map<String, PaletteDrawer> categoryPaletteConatiner = new HashMap<>();
 		for (CategoryType category : CategoryType.values()) {
-			if(category.name().equalsIgnoreCase(Constants.DUMMY_COMPONENT_CATEGORY) || category.name().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY))
+			if(category.name().equalsIgnoreCase(Constants.DUMMY_COMPONENT_CATEGORY))
 				continue;
 			PaletteDrawer p = createPaletteContainer(category.name());
 			addContainerToPalette(palette, p);
@@ -478,7 +478,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					.createClass(componentConfig);
 
 
-			if(componentConfig.getName().equalsIgnoreCase(Constants.DUMMY_COMPONENT)|| componentConfig.getName().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT))
+			if(componentConfig.getName().equalsIgnoreCase(Constants.DUMMY_COMPONENT))
 				continue;
 
 			/*CombinedTemplateCreationEntry component = new CombinedTemplateCreationEntry(
@@ -845,7 +845,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				logger.info("Resetting EditorInput data from GraphicalEditorInput to FileEditorInput");
 				setInput(new FileEditorInput(file));
 				initializeGraphicalViewer();
-				genrateTargetXml(file);
+				genrateTargetXml(file,null);
 				getCommandStack().markSaveLocation();
 			} catch (CoreException  | IOException ce) {
 				logger.error("Failed to Save the file : ", ce);
@@ -967,12 +967,16 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 * @param ifile
 	 *            the ifile
 	 */
-	public void genrateTargetXml(IFile ifile) {
+	public void genrateTargetXml(IFile ifile,Container container) {
 
 		logger.debug("Genrating target XML");
 		IFile outPutFile = ResourcesPlugin.getWorkspace().getRoot().getFile(ifile.getFullPath().removeFileExtension().addFileExtension("xml"));
 		try {
-			ConverterUtil.INSTANCE.convertToXML(container, false, outPutFile);
+			if(container!=null)
+					ConverterUtil.INSTANCE.convertToXML(container, false, outPutFile);
+			else
+					ConverterUtil.INSTANCE.convertToXML(this.container, false, outPutFile);
+			
 		} catch (EngineException eexception) {
 			logger.warn("Failed to create the engine xml", eexception);
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Failed to create the engine xml", eexception.getMessage());

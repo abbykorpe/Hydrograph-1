@@ -23,6 +23,10 @@ public class Constants {
 	public static final String INPUT_COUNT = "Input Count";
 	public static final String COUNT = "Count";
 	
+	public static final String OUTPUT_COUNT = "Output Count";
+	public static final String INPUT_PORT_COUNT_PROPERTY="inPortCount";
+ 	public static final String OUTPUT_PORT_COUNT_PROPERTY="outPortCount";
+	
 	public static final String PARAM_OPERATION = "operation";
 	public static final String PARAM_NAME = "name";
 	public static final String PARAM_PHASE = "phase";
@@ -120,8 +124,8 @@ public class Constants {
 	public static final String OPERATION = "operation";
 	public static final String OUTPUT = "output";
 	public static final String INPUT = "input";
-	public static final String INPUTSUBGRAPH = "inputsubgraph";
-	public static final String OUTPUTSUBGRAPH = "outputsubgraph";
+	public static final String INPUTSUBGRAPH = "InputSubgraphComponent";
+ 	public static final String OUTPUTSUBGRAPH = "OutputSubgraphComponent";
 	public static final String NAME = "name";
 	public static final String SUBGRAPH_NAME = "subgraph.job";
 	
@@ -150,5 +154,17 @@ public class Constants {
 	public static final String EDIT = "Edit";
 	public static final String RUNTIME_PROPERTIES_COLUMN_NAME = "Runtime\nProperties";
 	public static final String RUNTIME_PROPERTIES_WINDOW_LABEL = "Runtime Properties";
+	
+	public static final String RUNTIME_PROPERTY_LABEL = "Runtime\nProperties";
+	public static final String SUBGRAPH_PROPERTY_LABEL = "Subgraph\nProperties";
+	public static final String UNUSED_PORT_COUNT_PROPERTY = "unusedPortCount";
+	public static final String UNUSED_AND_INPUT_PORT_COUNT_PROPERTY = "inPortCount|unusedPortCount";
+	public static final String SUBGRAPH_ALREADY_PRESENT_IN_CANVAS = " - already present in canvas.";
+	public static final String PATH_PROPERTY_NAME = "path";
+	public static final String SUBGRAPH_CREATE = "create";
+	public static final String SUBGRAPH_OPEN = "open"; 	
+	public static final String SUBGRAPH_ACTION = "SubGraph";
+	public static final String SUBGRAPH_ACTION_ToolTip = "Path operations";
+	public static final String STANDALONE_SUBGRAPH = "StandAlone_Subgraph";
 		
 }

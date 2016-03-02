@@ -159,7 +159,7 @@ public class ComponentsOutputSchema implements IDataStructure {
 		FixedWidthGridRow sourceFixedWidthGridRow;
 		for (String fieldName : passthroughFields) {
 			targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(fieldName);
-			if (targetFixedWidthGridRow != null) {
+			if (targetFixedWidthGridRow != null && sourceOutputSchema!=null) {
 				String portName = passThroughFieldsPortInfo.get(fieldName);
 				//if(targetFixedWidthGridRow.)
 				
@@ -208,7 +208,7 @@ public class ComponentsOutputSchema implements IDataStructure {
 		FixedWidthGridRow sourceFixedWidthGridRow;
 		for (Entry<String, String> entry : mapFields.entrySet()) {
 			targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(entry.getValue());
-			if (targetFixedWidthGridRow != null) {
+			if (targetFixedWidthGridRow != null && sourceOutputSchema!=null) {
 				sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(entry.getKey());
 				/*String mapFieldSourceFieldName;
 				if(entry.getKey().contains(".")){

@@ -1,7 +1,11 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.config;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
 
 import com.bitwise.app.propertywindow.factory.ListenerFactory.Listners;
 
@@ -10,6 +14,7 @@ public class TextBoxWithLableConfig implements WidgetConfig {
 	private List<Listners> listeners = new ArrayList<>();
 	private boolean grabExcessSpace = false;
 	private int widgetWidth=100;
+	private Map<String, String> otherAttributes = new HashMap<String, String>();
 	public String getName() {
 		return name;
 	}
@@ -33,5 +38,8 @@ public class TextBoxWithLableConfig implements WidgetConfig {
 	}
 	public void setWidgetWidth(int widgetWidth){
 		this.widgetWidth = widgetWidth;
+	}
+	public Map<String,String> getOtherAttributes() {
+		return otherAttributes;
 	}
 }

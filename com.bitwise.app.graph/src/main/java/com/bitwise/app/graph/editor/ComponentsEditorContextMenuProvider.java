@@ -6,10 +6,9 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
-import com.bitwise.app.graph.action.subgraph.SubGraphAction;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.action.subgraph.SubMenuAction;
 
 // TODO: Auto-generated Javadoc
@@ -45,10 +44,9 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		GEFActionConstants.addStandardActionGroups(menu);
 		
 		IAction[] actions = new IAction[2];
-        actions[0] = getAction("create");
-        actions[1] = getAction("open");
-         SubMenuAction subGraphMenu=new SubMenuAction( actions, "SubGraph", "Path operations",true);
-		// Add actions to the menu
+		actions[0] = getAction(Constants.SUBGRAPH_CREATE);
+	    actions[1] = getAction(Constants.SUBGRAPH_OPEN);
+	    SubMenuAction subGraphMenu=new SubMenuAction( actions, Constants.SUBGRAPH_ACTION, Constants.SUBGRAPH_ACTION_ToolTip,true);	// Add actions to the menu
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, // target group id
 				getAction(ActionFactory.UNDO.getId())); // action to add
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, getAction(ActionFactory.REDO.getId()));

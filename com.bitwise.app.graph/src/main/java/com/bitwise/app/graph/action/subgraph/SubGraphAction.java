@@ -35,7 +35,11 @@ import com.bitwise.app.graph.utility.SubGraphUtility;
  * @author Bitwise
  */
 public class SubGraphAction extends SelectionAction{
+	
+	/** The paste action. */
 	PasteAction pasteAction;
+	
+	/** The ed component edit part. */
 	ComponentEditPart edComponentEditPart;
 	/**
 	 * Instantiates a new cut action.
@@ -51,19 +55,28 @@ public class SubGraphAction extends SelectionAction{
 		setLazyEnablementCalculation(true);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#init()
+	 */
 	@Override
 	protected void init() {
 		super.init();
 		
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setText("create"); 
-		setId("create");
+		setText(Constants.SUBGRAPH_CREATE); 
+		setId(Constants.SUBGRAPH_CREATE);
 		setHoverImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT_DISABLED));
 		setEnabled(false);
 	}
 
+	/**
+	 * Creates the sub graph command.
+	 *
+	 * @param selectedObjects the selected objects
+	 * @return the command
+	 */
 	private Command createSubGraphCommand(List<Object> selectedObjects) {
 		SubGraphCommand cutCommand =new SubGraphCommand();
 		if (selectedObjects == null || selectedObjects.isEmpty()) {
@@ -94,6 +107,9 @@ public class SubGraphAction extends SelectionAction{
     	return null;	
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#calculateEnabled()
+	 */
 	@Override
 	protected boolean calculateEnabled() {
 		Command cmd = createSubGraphCommand(getSelectedObjects());
@@ -107,6 +123,7 @@ public class SubGraphAction extends SelectionAction{
  
 	}
 
+	
 	/* 
 	 * Create sub graph
 	 */
@@ -114,7 +131,7 @@ public class SubGraphAction extends SelectionAction{
 	public void run() { 
 		SubGraphUtility subGraphUtility = new SubGraphUtility();
 	
-		IFile file =subGraphUtility.doSaveAsSubGraph();
+		IFile file=subGraphUtility.openSubGraphSaveDialog();
 		if(file!=null)
 		{	
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -132,7 +149,7 @@ public class SubGraphAction extends SelectionAction{
 			EditPart editPart = (EditPart) ite.next();
 			if(editPart instanceof ComponentEditPart) 
 			{
-				if (((ComponentEditPart) editPart).getCastedModel().getCategory().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY)) {
+				if (Constants.SUBGRAPH_COMPONENT_CATEGORY.equalsIgnoreCase(((ComponentEditPart) editPart).getCastedModel().getCategory())) {
 					edComponentEditPart= (ComponentEditPart) editPart;
 				}
 			} 
@@ -143,7 +160,6 @@ public class SubGraphAction extends SelectionAction{
 		 */
 		List< Link> inLinks = new ArrayList<>();
 		List< Link> outLinks = new ArrayList<>();
-
 		for (Object object : clipboardList) {
 				Component component = (Component)object;
 				if(component!= null){
@@ -178,7 +194,7 @@ public class SubGraphAction extends SelectionAction{
 		/*
 		 * Generate subgraph target xml.
 		 */
-		subGraphUtility.createSubGraphXml(edComponentEditPart,clipboardList);
+		subGraphUtility.createSubGraphXml(edComponentEditPart,clipboardList,file);
 		}
 	}
    }

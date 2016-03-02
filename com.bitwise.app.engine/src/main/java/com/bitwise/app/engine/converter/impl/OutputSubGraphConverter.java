@@ -48,7 +48,7 @@ public class OutputSubGraphConverter extends OutputConverter {
 		temp = subGraphFilePath.split("\\\\",3);
 		path.setUri(temp[temp.length-1].replaceAll("\\\\", "/"));
 		subgraph.setPath(path);
-		subgraph.setRuntimeProperties(getRuntimeProperties());
+		subgraph.setSubgraphParameter(getRuntimeProperties());
 		 
 		
 	}
@@ -60,11 +60,7 @@ public class OutputSubGraphConverter extends OutputConverter {
 		for (Link link : component.getTargetConnections()) {
 			TypeOutputInSocket outInSocket = new TypeOutputInSocket();
 			outInSocket.setId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
-			if (converterHelper.isMultipleLinkAllowed(link.getSource(), link.getSourceTerminal()))
-				outInSocket.setFromSocketId(link.getSource().getPort(link.getSourceTerminal()).getPortType()
-						+ link.getLinkNumber());
-			else
-				outInSocket.setFromSocketId(link.getSourceTerminal());
+			outInSocket.setFromSocketId(converterHelper.getFromSocketId(link));
 			outInSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 			outInSocket.setSchema(getSchema());
 			outInSocket.getOtherAttributes();

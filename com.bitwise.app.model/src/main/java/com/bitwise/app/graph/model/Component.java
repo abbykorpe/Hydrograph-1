@@ -277,7 +277,7 @@ public abstract class Component extends Model {
 		for (int i = oldPortCount; i < newPortCount; i++) {
 			Port unusedPort = new Port("out" + i, "out" + i, "out" + i, this,
 					newPortCount, "out", i);
-			ports.put("unused" + i, unusedPort);
+			ports.put("out" + i, unusedPort);
 			firePropertyChange("Component:add", null, unusedPort);
 		}
 	}

@@ -5,6 +5,13 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.helper.LoggerUtil;
 
 
@@ -18,18 +25,32 @@ public class Container extends Model {
 	private static final long serialVersionUID = 8825716379098354511L;
 	public static final String CHILD_ADDED_PROP = "ComponentsDiagram.ChildAdded";
 	public static final String CHILD_REMOVED_PROP = "ComponentsDiagram.ChildRemoved";
+	private boolean isSubgraph;
 	
 	private final List<Component> components = new ArrayList<>();
 	private final Hashtable<String, Integer> componentNextNameSuffixes = new Hashtable<>();
 	private ArrayList<String> componentNames = new ArrayList<>();
 		
+	public Container(){
+		
+	}
+	
+	public Container(boolean isSubgraph){
+		this.isSubgraph=isSubgraph;
+	}
 	
 	/**
 	 * Add a component to this graph.
 	 * @return true, if the component was added, false otherwise
 	 */
 	public boolean addChild(Component component) {
-		if (component != null && components.add(component)) {
+		if (StringUtils.equals(component.getComponentName(), Constants.SUBGRAPH_COMPONENT)) {
+			Dimension newSize = new Dimension(100, 70);
+			component.setSize(newSize);
+		}
+
+		if (isIOSubgraphAlreadyNotPresent(component.getComponentName()) && component != null
+				&& components.add(component)) {
 			component.setParent(this);
 			String compNewName = getDefaultNameForComponent(component.getPrefix());
 			component.setComponentLabel(compNewName);
@@ -48,7 +69,8 @@ public class Container extends Model {
 	 * @return true, if the component was added, false otherwise
 	 */
 	public boolean addSubGraphChild(Component component) {
-		if (component != null && components.add(component)) {
+		
+		if (isIOSubgraphAlreadyNotPresent(component.getComponentName()) && component != null && components.add(component)) {
 			component.setParent(this);
 			firePropertyChange(CHILD_ADDED_PROP, null, component);
 			return true;
@@ -56,6 +78,22 @@ public class Container extends Model {
 		return false;
 	}
 
+	
+	private boolean isIOSubgraphAlreadyNotPresent(String ioSubgraphComponentName) {
+
+		if (StringUtils.equalsIgnoreCase(Constants.INPUT_SUBGRAPH_COMPONENT_NAME, ioSubgraphComponentName)
+				|| StringUtils.equalsIgnoreCase(Constants.OUTPUTSUBGRAPH, ioSubgraphComponentName)) {
+			for (Component component : components) {
+				if (StringUtils.equalsIgnoreCase(ioSubgraphComponentName, component.getComponentName())) {
+					MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", ioSubgraphComponentName
+							+ " [" + component.getComponentLabel().getLabelContents() + "]"
+							+ Constants.SUBGRAPH_ALREADY_PRESENT_IN_CANVAS);
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 	
 	/**
 	 * Return a List of Components in this graph. The returned List should not be
@@ -70,7 +108,7 @@ public class Container extends Model {
 	 * @return true, if the component was removed, false otherwise
 	 */
 	public boolean removeChild(Component component) {
-		if (component != null && components.remove(component)) {
+		if (component != null && components.remove(component) && !componentNextNameSuffixes.isEmpty()) {
 			componentNames.remove(component.getPropertyValue(Component.Props.NAME_PROP.getValue()));
 			Integer nextSuffix = componentNextNameSuffixes.get(component.getPrefix()) - 1;
 			componentNextNameSuffixes.put(component.getPrefix(), nextSuffix);
@@ -198,4 +236,9 @@ public class Container extends Model {
 		return componentNextNameSuffixes;
 	}
 
+	public boolean isSubgraph() {
+		return isSubgraph;
+	}
+
+	
 }
