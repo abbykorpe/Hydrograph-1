@@ -43,13 +43,13 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 public class JobManager {
 
 	private static Logger logger = LogFactory.INSTANCE.getLogger(JobManager.class);
-	private Map<String, Job> runningJobMap;
+	private Map<String, Job> runningJobsMap;
 	public static JobManager INSTANCE = new JobManager();
 
 	private String activeCanvas;
 
 	private JobManager() {
-		runningJobMap = new LinkedHashMap<>();
+		runningJobsMap = new LinkedHashMap<>();
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class JobManager {
 	 *            - {@link Job}
 	 */
 	void addJob(Job job) {
-		runningJobMap.put(job.getLocalJobID(), job);
+		runningJobsMap.put(job.getLocalJobID(), job);
 		logger.debug("Added job " + job.getCanvasName() + " to job map");
 	}
 
@@ -70,7 +70,7 @@ public class JobManager {
 	 * @param canvasId
 	 */
 	void removeJob(String canvasId) {
-		runningJobMap.remove(canvasId);
+		runningJobsMap.remove(canvasId);
 		logger.debug("Removed job " + canvasId + " from jobmap");
 	}
 
@@ -211,7 +211,7 @@ public class JobManager {
 	 * @param gefCanvas 
 	 */
 	public void killJob(String jobId, DefaultGEFCanvas gefCanvas) {
-		Job jobToKill = runningJobMap.get(jobId);
+		Job jobToKill = runningJobsMap.get(jobId);
 
 		jobToKill.setJobStatus(JobStatus.KILLED);
 
@@ -228,7 +228,7 @@ public class JobManager {
 	 * @param gefCanvas 
 	 */
 	public void killJob(String jobId) {	
-		Job jobToKill = runningJobMap.get(jobId);
+		Job jobToKill = runningJobsMap.get(jobId);
 		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 		if(jobToKill.isRemoteMode()){
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.YES | SWT.NO);
@@ -246,7 +246,7 @@ public class JobManager {
 	}
 
 	public Job getRunningJob(String consoleName) {
-		return runningJobMap.get(consoleName);
+		return runningJobsMap.get(consoleName);
 	}
 
 	private void killRemoteProcess(Job job, DefaultGEFCanvas gefCanvas) {
@@ -362,7 +362,7 @@ public class JobManager {
 	 * @return
 	 */
 	public boolean isJobRunning(String consoleName) {
-		return runningJobMap.containsKey(consoleName);
+		return runningJobsMap.containsKey(consoleName);
 	}
 
 	/**
@@ -385,8 +385,8 @@ public class JobManager {
 		return activeCanvas;
 	}
 
-	public Map<String, Job> getJobMap() {
-		return runningJobMap;
+	public Map<String, Job> getRunningJobsMap() {
+		return runningJobsMap;
 	}
 	
 	

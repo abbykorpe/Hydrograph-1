@@ -194,7 +194,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 				joblogger.logMessage(line);
 			}
 		} catch (Exception e) {
-			if (JobManager.INSTANCE.getJobMap().containsKey(job.getLocalJobID()))
+			if (JobManager.INSTANCE.getRunningJobsMap().containsKey(job.getLocalJobID()))
 				logger.info("Error occured while reading run job log", e);
 		} finally {
 			if (reader != null) {

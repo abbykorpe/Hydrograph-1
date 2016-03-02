@@ -6,13 +6,17 @@ import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 
 /**
  * 
- * This class provides below functionalities
- * -Return instance of component canvas
- * -check if editor is dirty
+ * This class provides Canvas related utilites
  * @author Bitwise
  *
  */
 public class CanvasUtils {
+	/**
+	 * 
+	 * Returns instance of active canvas
+	 * 
+	 * @return {@link DefaultGEFCanvas}
+	 */
 	public static DefaultGEFCanvas getComponentCanvas() {
 		if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
 			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
@@ -21,6 +25,12 @@ public class CanvasUtils {
 			return null;
 	}
 
+	/**
+	 * 
+	 * Returns true if canvas is dirty otherwise false
+	 * 
+	 * @return boolean
+	 */
 	public static boolean isDirtyEditor() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty();
 	}
