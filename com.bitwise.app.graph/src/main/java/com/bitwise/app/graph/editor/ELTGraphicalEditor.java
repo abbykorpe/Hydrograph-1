@@ -72,6 +72,7 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
@@ -249,39 +250,25 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 			@Override
 			public void mouseMove(MouseEvent e) {
-				if(toolTipComponentBounds !=null && componentTooltip != null){
-					if(!componentTooltip.hasToolBarManager()){
-						org.eclipse.swt.graphics.Point point = new org.eclipse.swt.graphics.Point(e.x, e.y);
-						if(!toolTipComponentBounds.contains(point)){
-							hideToolTip();
-						}
-					}
-				}
 				setCustomToolUndoRedoStatus();
 			}
 		});
 
-		viewer.getControl().addMouseTrackListener(new MouseTrackListener() {
+		viewer.getControl().addMouseTrackListener(new MouseTrackAdapter() {
 
 			@Override
 			public void mouseHover(MouseEvent e) {
-				if(toolTipComponentBounds !=null && componentTooltip != null){
-					if(!componentTooltip.hasToolBarManager()){
-						org.eclipse.swt.graphics.Point point = new org.eclipse.swt.graphics.Point(e.x, e.y);
-						if(!toolTipComponentBounds.contains(point)){
+				if (toolTipComponentBounds != null && componentTooltip != null) {
+					if (!componentTooltip.hasToolBarManager()) {
+						org.eclipse.swt.graphics.Point point = new org.eclipse.swt.graphics.Point(
+								e.x, e.y);
+						if (!toolTipComponentBounds.contains(point)) {
 							hideToolTip();
 						}
 					}
 				}
 			}
 
-			@Override
-			public void mouseExit(MouseEvent e) {		
-			}
-
-			@Override
-			public void mouseEnter(MouseEvent e) {		
-			}
 		});
 	}
 
