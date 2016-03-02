@@ -14,7 +14,17 @@ public class Messages extends NLS {
 	public static String CMD;
 	public static String SHELL;
 	public static String CLUSTER_PASSWORD;
+	public static String KILL_JOB;
+	public static String HOST;
+	public static String USERNAME;
+	public static String PROCESS_ID;
+	
+	public static String OPEN_GRAPH_TO_RUN;
+	public static String KILL_JOB_MESSAGEBOX_TITLE;
+	public static String KILL_JOB_MESSAGE;
 
+	public static String GRADLE_TASK_FAILED;
+	public static String CURRENT_JOB_ID;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
