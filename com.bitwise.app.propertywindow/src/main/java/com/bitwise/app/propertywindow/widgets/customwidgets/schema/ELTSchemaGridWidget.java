@@ -549,8 +549,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		ELTSchemaSubgroupComposite buttonSubGroup = new ELTSchemaSubgroupComposite(container);
 
+
 		buttonSubGroup.createContainerWidget();
 		buttonSubGroup.numberOfBasicWidgets(6);
+
 
 		addImportButton(buttonSubGroup);
 		addExportButton(buttonSubGroup);
@@ -637,7 +639,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		upButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png");
 		upButton.setToolTipText(upButtonTooltip);
 		upButton.addMouseUpListener(new MouseListener() {
-			int index = 0, index2 = 0;
+			int index2 = 0;
 
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -652,7 +654,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				propertyDialogButtonBar.enableApplyButton(true);
-				index = table.getSelectionIndex();
+				int[] indexs=table.getSelectionIndices();
+				for(int index :indexs)
+				{
 
 				if (index > 0) {
 					index2 = index - 1;
@@ -664,6 +668,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					tableViewer.refresh();
 					table.setSelection(index - 1);
 
+				}
 				}
 			}
 		});
@@ -679,22 +684,26 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	
 
 		downButton.addMouseUpListener(new MouseAdapter() {
-			int index = 0, index2 = 0;
+			int index2 = 0;
 
 			@Override
 			public void mouseUp(MouseEvent e) {
 
 				propertyDialogButtonBar.enableApplyButton(true);
-				index = table.getSelectionIndex();
+				int[] indexs = table.getSelectionIndices();
+				for (int i = indexs.length - 1; i > -1; i--) {
 
-				if (index < schemaGridRowList.size() - 1) {
-					String text1 = tableViewer.getTable().getItem(index).getText(0);
-					index2 = index + 1;
-					String text2 = tableViewer.getTable().getItem(index2).getText(0);
+					if (indexs[i] < schemaGridRowList.size() - 1) {
+						String text1 = tableViewer.getTable().getItem(indexs[i])
+								.getText(0);
+						index2 = indexs[i] + 1;
+						String text2 = tableViewer.getTable().getItem(index2)
+								.getText(0);
 
-					swap(index, index2, text1, text2);
-					tableViewer.refresh();
-					table.setSelection(index + 1);
+						swap(indexs[i], index2, text1, text2);
+						tableViewer.refresh();
+
+					}
 				}
 
 			}
