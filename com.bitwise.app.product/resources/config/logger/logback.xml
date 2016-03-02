@@ -15,7 +15,7 @@
 
     <appender name="FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>config/logger/Logs/ELTLogFile.log</File>
+        <File>config/logger/tool_logs/Accelero.log</File>
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
                 %d [%thread] %-5level %logger.%M - %msg%n
@@ -24,7 +24,7 @@
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>
-                config/logger/Logs/ELTLogFile.%d{yyyy-MM-dd}.log.zip
+                config/logger/tool_logs/Accelero.%d{yyyy-MM-dd}.log.zip
             </FileNamePattern>
             <MaxHistory>7</MaxHistory>
         </rollingPolicy>

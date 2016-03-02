@@ -20,6 +20,8 @@ import com.bitwise.app.logging.factory.LogFactory;
  */
 public class FileLogger extends AbstractJobLogger{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FileLogger.class);
+	private final String LOGGER_FOLDER_PATH="config\\logger";
+	private final String JOB_LOGS="//job_logs//";
 	
 	private BufferedWriter logFileStream;
 	
@@ -64,7 +66,15 @@ public class FileLogger extends AbstractJobLogger{
 		File file = new File(getFullJobName() + "_" +  dateFormat.format(date) + ".log") ;
 		logger.debug("Created logfile- " + getFullJobName() + "_" +  dateFormat.format(date) + ".log");
 		try {
-			logFileStream = new BufferedWriter(new FileWriter(file));
+			String jobLogsFolderPath = new File(LOGGER_FOLDER_PATH).getAbsolutePath() + JOB_LOGS;
+			File job_logs_folder = new File(jobLogsFolderPath);
+			if (!job_logs_folder.exists()) {
+				job_logs_folder.mkdirs();
+				logFileStream = new BufferedWriter(new FileWriter(jobLogsFolderPath + file, true));
+			} else {
+				logFileStream = new BufferedWriter(new FileWriter(jobLogsFolderPath + file, true));
+			}
+			
 			logger.debug("Created job log file stream");
 		} catch (IOException e) {
 			logger.debug("IOException while creating job log file stream" + e.getMessage());
