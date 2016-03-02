@@ -7,8 +7,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.slf4j.Logger;
 
+
+import com.bitwise.app.joblogger.Activator;
 import com.bitwise.app.logging.factory.LogFactory;
 
 /**
@@ -19,9 +25,11 @@ import com.bitwise.app.logging.factory.LogFactory;
  *
  */
 public class FileLogger extends AbstractJobLogger{
+	private static final String YYYY_M_MDD_H_HMMSS = "yyyyMMdd_HHmmss";
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FileLogger.class);
-	private final String LOGGER_FOLDER_PATH="config\\logger";
-	private final String JOB_LOGS="//job_logs//";
+	public final static String LOGGER_FOLDER_PATH = Platform.getInstallLocation().getURL().getPath()
+			+ "config\\logger\\job_logs\\";
+	public final String JOB_LOGS_ERROR = "Job_Logs will not be created in your workspace. Delete or Move Job_Logs to another location for smooth creation of logs.";
 	
 	private BufferedWriter logFileStream;
 	
@@ -49,7 +57,7 @@ public class FileLogger extends AbstractJobLogger{
 			
 			logger.debug("Written log to file with timestamp -  log message- {}",message);
 		}catch (Exception e) {
-			logger.debug("Exception while logging joblog to file " + e.getMessage());			
+			logger.debug("Exception while logging joblog to file ", e);			
 		}
 	}
 	
@@ -61,33 +69,41 @@ public class FileLogger extends AbstractJobLogger{
 	 */
 	private void initLogFileStream() {
 		Date date = new Date() ;
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss") ;
+		SimpleDateFormat dateFormat = new SimpleDateFormat(YYYY_M_MDD_H_HMMSS) ;
 		
-		File file = new File(getFullJobName() + "_" +  dateFormat.format(date) + ".log") ;
+	   
 		logger.debug("Created logfile- " + getFullJobName() + "_" +  dateFormat.format(date) + ".log");
+		
 		try {
-			String jobLogsFolderPath = new File(LOGGER_FOLDER_PATH).getAbsolutePath() + JOB_LOGS;
-			File job_logs_folder = new File(jobLogsFolderPath);
-			if (!job_logs_folder.exists()) {
-				job_logs_folder.mkdirs();
-				logFileStream = new BufferedWriter(new FileWriter(jobLogsFolderPath + file, true));
+			File job_logs_folder = new File(LOGGER_FOLDER_PATH);
+			if (job_logs_folder.exists()) {
+				if (job_logs_folder.isDirectory()) {
+					File file = new File(LOGGER_FOLDER_PATH + getFullJobName() + "_" + dateFormat.format(date) + ".log");
+					logFileStream = new BufferedWriter(new FileWriter(file, true));
+				} else {
+					Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, JOB_LOGS_ERROR);
+					StatusManager.getManager().handle(status, StatusManager.BLOCK);
+				}
 			} else {
-				logFileStream = new BufferedWriter(new FileWriter(jobLogsFolderPath + file, true));
+				job_logs_folder.mkdir();
+				File file = new File(LOGGER_FOLDER_PATH + getFullJobName() + "_" + dateFormat.format(date) + ".log");
+				logFileStream = new BufferedWriter(new FileWriter(file, true));
 			}
-			
 			logger.debug("Created job log file stream");
 		} catch (IOException e) {
-			logger.debug("IOException while creating job log file stream" + e.getMessage());
+			logger.debug("IOException while creating job log file stream", e);
 		}
 	}
 
 	@Override
 	public void close() {
 		try {
-			logFileStream.close();
+			if (logFileStream != null) {
+				logFileStream.close();
+			}
 			logger.debug("Closed job log file stream");
 		} catch (IOException e) {
-			logger.debug("IOException while closing job log file stream" + e.getMessage());
+			logger.debug("IOException while closing job log file stream", e);
 		}
 	}
 
@@ -97,11 +113,9 @@ public class FileLogger extends AbstractJobLogger{
 			logFileStream.write(message);
 			logFileStream.newLine();
 			logFileStream.flush();
-			
 			logger.debug("Written log to file with no timestamp -  log message- {}",message);
-			
 		}catch (Exception e) {
-			logger.debug("Exception while logging joblog to file " + e.getMessage());			
+			logger.debug("Exception while logging joblog to file ", e);			
 		}		
 	}
 }
