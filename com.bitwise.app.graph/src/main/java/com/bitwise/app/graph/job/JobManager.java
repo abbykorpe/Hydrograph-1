@@ -208,28 +208,36 @@ public class JobManager {
 	 * Kill the job for given jobId
 	 * 
 	 * @param jobId
+	 * @param gefCanvas 
 	 */
-	public void killJob(String jobId) {
+	public void killJob(String jobId, DefaultGEFCanvas gefCanvas) {
 		Job jobToKill = jobMap.get(jobId);
 
 		jobToKill.setJobStatus(JobStatus.KILLED);
 
-		MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_INFORMATION | SWT.OK);
-		messageBox.setText(Messages.KILL_JOB_MESSAGEBOX_TITLE);
-
-		if (jobToKill.isRemoteMode()) {
-			messageBox.setMessage(Messages.REMOTE_KILL_REQUEST_ACCEPTED);
-			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
-		} else {
-			messageBox.setMessage(Messages.LOCAL_KILL_REQUEST_ACCEPTED);
-		}
-
-		messageBox.open();
-
 		if (jobToKill.getRemoteJobProcessID() != null) {
-			killRemoteProcess(jobToKill);
+			killRemoteProcess(jobToKill,gefCanvas);
 		}
 
+	}
+	
+	/**
+	 * Kill the job for given jobId
+	 * 
+	 * @param jobId
+	 * @param gefCanvas 
+	 */
+	public void killJob(String jobId) {	
+		Job jobToKill = jobMap.get(jobId);
+		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+		if(jobToKill.isRemoteMode()){
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.YES | SWT.NO);
+			messageBox.setText(Messages.KILL_JOB_MESSAGEBOX_TITLE);
+			messageBox.setMessage(Messages.KILL_JOB_MESSAGE);
+			if(messageBox.open() == SWT.YES){
+				jobToKill.setJobStatus(JobStatus.KILLED);
+			}
+		}		
 	}
 
 	JobLogger initJobLogger(DefaultGEFCanvas gefCanvas) {
@@ -241,7 +249,7 @@ public class JobManager {
 		return jobMap.get(consoleName);
 	}
 
-	private void killRemoteProcess(Job job) {
+	private void killRemoteProcess(Job job, DefaultGEFCanvas gefCanvas) {
 
 		String gradleCommand = getKillJobCommand(job);
 		String[] runCommand = new String[3];
@@ -259,7 +267,7 @@ public class JobManager {
 		processBuilder.redirectErrorStream(true);
 		try {
 			Process process = processBuilder.start();
-			logKillProcessLogsAsyncronously(process, job, CanvasUtils.getComponentCanvas());
+			logKillProcessLogsAsyncronously(process, job, gefCanvas);
 		} catch (IOException e) {
 			logger.debug("Unable to kill the job", e);
 		}
@@ -310,7 +318,7 @@ public class JobManager {
 	}
 
 	private void logKillProcessLogsAsyncronously(final Process process, final Job job, final DefaultGEFCanvas gefCanvas) {
-		final JobLogger joblogger = initJobLogger(CanvasUtils.getComponentCanvas());
+		final JobLogger joblogger = initJobLogger(gefCanvas);
 		new Thread(new Runnable() {
 			InputStream stream = process.getInputStream();
 
@@ -376,4 +384,5 @@ public class JobManager {
 	String getActiveCanvas() {
 		return activeCanvas;
 	}
+
 }

@@ -21,8 +21,7 @@ public class Messages extends NLS {
 	
 	public static String OPEN_GRAPH_TO_RUN;
 	public static String KILL_JOB_MESSAGEBOX_TITLE;
-	public static String REMOTE_KILL_REQUEST_ACCEPTED;
-	public static String LOCAL_KILL_REQUEST_ACCEPTED;
+	public static String KILL_JOB_MESSAGE;
 
 	public static String GRADLE_TASK_FAILED;
 	public static String CURRENT_JOB_ID;

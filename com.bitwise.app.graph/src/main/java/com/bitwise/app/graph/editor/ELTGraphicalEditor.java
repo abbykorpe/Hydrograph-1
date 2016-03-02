@@ -318,7 +318,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
 						((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 					}else{
-						enableRunJob(false);
+						if(job.isRemoteMode()){
+							enableRunJob(false);
+						}else{
+							((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
+							((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+						}						
 					}
 					
 				}else{

@@ -71,8 +71,8 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		}
 
 		// ----------------------------- Execute job
-		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 		gradleCommand = getExecututeJobCommand(xmlPath, paramFile, job);
+		job.setJobStatus(JobStatus.SSHEXEC);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (job.getJobStatus().equals(JobStatus.FAILED)) {
 			releaseResources(job, gefCanvas, joblogger);
@@ -185,6 +185,8 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 					if (job.getJobStatus().equals(JobStatus.KILLED)) {
 						((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 						((RunJobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
+						JobManager.INSTANCE.killJob(job.getConsoleName(),gefCanvas);
+						joblogger.logMessage("Killing job with job remote process id: " + job.getRemoteJobProcessID());
 						break;
 					}
 				}

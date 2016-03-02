@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.graph.Messages;
+import com.bitwise.app.graph.handler.StopJobHandler;
 import com.bitwise.app.joblogger.JobLogger;
 import com.bitwise.app.logging.factory.LogFactory;
 
@@ -35,7 +36,8 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		String gradleCommand;
 
 		job.setJobStatus(JobStatus.RUNNING);
-
+		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+		
 		gradleCommand = getExecututeJobCommand(xmlPath, paramFile);
 		executeCommand(job, project, gradleCommand, gefCanvas);
 
