@@ -56,7 +56,9 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.COPY.getId()));
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.PASTE.getId()));
 	    menu.appendToGroup(GEFActionConstants.GROUP_REST, subGraphMenu);
-		
+		if(subGraphMenu.getActiveOperationCount()==0)
+	    subGraphMenu.setEnabled(false);
+
 		
 	}
 	private IAction getAction(String actionId) {

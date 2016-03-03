@@ -115,10 +115,8 @@ public class SubGraphAction extends SelectionAction{
 	protected boolean calculateEnabled() {
 		Command cmd = createSubGraphCommand(getSelectedObjects());
 		if (cmd == null){
-			ContributionItemManager.CUT.setEnable(false);			
 			return false;
 		}else{
-			ContributionItemManager.CUT.setEnable(true);			
 			return true;
 		}
  
