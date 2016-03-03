@@ -16,14 +16,12 @@
     </xs:complexContent>
   </xs:complexType>
 
-
   <xs:complexType name="type-primary-key-fields">
-    <xs:sequence>
-      <xs:element name="field" maxOccurs="unbounded" type="cmn:type-field-name" />
-    </xs:sequence>
+    <xs:choice>
+			<xs:element name="field" maxOccurs="unbounded" type="cmn:type-field-name" />
+			<xs:element name="none" />
+	</xs:choice>
   </xs:complexType>
-
-
 
   <xs:complexType name="type-seconday-key-fields-attributes">
      <xs:complexContent>
@@ -32,8 +30,6 @@
             </xs:extension>
      </xs:complexContent>
   </xs:complexType>
-  
-  
   
   <xs:complexType name="type-secondary-key-fields">
     <xs:sequence>

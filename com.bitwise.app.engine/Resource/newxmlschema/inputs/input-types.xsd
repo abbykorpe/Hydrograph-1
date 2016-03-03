@@ -187,6 +187,10 @@
 							<xs:attribute name="value" type="xs:string" />
 						</xs:complexType>
 					</xs:element>
+					<xs:element name="safe" type="cmn:boolean-value-type"
+						minOccurs="0" />
+					<xs:element name="strict" type="cmn:boolean-value-type"
+						minOccurs="0" />
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" />
 				</xs:sequence>

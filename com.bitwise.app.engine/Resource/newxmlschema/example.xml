@@ -420,10 +420,10 @@
 		<runtimeProperties>
 			<property name="fsdf" value="dsf" />
 		</runtimeProperties>
-		<keys inSocketId="in0" joinType="inner">
+		<keys inSocketId="in0" recordRequired="true">
 			<field name="abc" />
 		</keys>
-		<keys inSocketId="in1" joinType="outer">
+		<keys inSocketId="in1" recordRequired="true">
 			<field name="abc" />
 		</keys>
 

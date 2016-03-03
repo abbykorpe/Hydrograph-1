@@ -38,4 +38,17 @@
 		</xs:complexContent>
 	</xs:complexType>
 
+	<xs:complexType name="runProgram">
+		<xs:complexContent>
+			<xs:extension base="cmn:type-command-component">
+				<xs:sequence>
+					<xs:element name="command">
+						<xs:complexType>
+							<xs:attribute name="value" use="required" type="xs:string" />
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 </xs:schema>

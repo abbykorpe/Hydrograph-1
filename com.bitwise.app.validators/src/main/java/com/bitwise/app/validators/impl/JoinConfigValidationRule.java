@@ -38,21 +38,9 @@ public class JoinConfigValidationRule implements IValidator{
 				errorMessage = "Join keys are mandatary";
 				return false;
 			}
-			else if(joinConfigProperty.getJoinType() < 0 || joinConfigProperty.getJoinType() > 2){
-				errorMessage = "Join Type should be either INNER OR OUTER OR paramter";
+			else if(joinConfigProperty.getRecordRequired() < 0 || joinConfigProperty.getRecordRequired() > 1){
+				errorMessage = "Join Type should be either true or false ";
 				return false;
-			}
-			else if(joinConfigProperty.getJoinType() == 2){
-				if(StringUtils.isBlank(joinConfigProperty.getParamValue()) || 
-						!(
-							StringUtils.startsWith(joinConfigProperty.getParamValue(), "@{") && 
-							StringUtils.endsWith(joinConfigProperty.getParamValue(), "}") &&
-							!StringUtils.contains(joinConfigProperty.getParamValue(), "@{}")
-						) 
-					){
-						errorMessage = "Invalid parameter value";
-						return false;
-				}
 			}
 		}
 		return true;

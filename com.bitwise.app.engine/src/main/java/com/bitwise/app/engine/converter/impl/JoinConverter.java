@@ -1,13 +1,11 @@
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
@@ -19,9 +17,6 @@ import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
-import com.bitwise.app.engine.xpath.ComponentXpath;
-import com.bitwise.app.engine.xpath.ComponentXpathConstants;
-import com.bitwise.app.engine.xpath.ComponentsAttributeAndValue;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -33,14 +28,11 @@ import com.bitwiseglobal.graph.commontypes.TypeOperationInputFields;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
 import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
-import com.bitwiseglobal.graph.join.JoinType;
 import com.bitwiseglobal.graph.join.TypeKeyFields;
 import com.bitwiseglobal.graph.operationstypes.Join;
 
 public class JoinConverter extends TransformConverter {
 	private static final String JOIN_OPERATION_ID = "join";
-	private List<String> ITEMS = Arrays.asList(StringUtils.lowerCase(Constants.INNER),
-			StringUtils.lowerCase(Constants.OUTER));
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(JoinConverter.class);
 	private ConverterHelper converterHelper;
@@ -80,7 +72,7 @@ public class JoinConverter extends TransformConverter {
 				typeKeyField.getField().add(fieldName);
 				}
 				typeKeyField.setInSocketId(entry.getPortIndex());
-				typeKeyField.setJoinType(getParamValue(entry));
+				typeKeyField.setRecordRequired(getRecordRequiredValue(entry));
 				typeKeyFieldsList.add(typeKeyField);
 				
 			}
@@ -88,24 +80,18 @@ public class JoinConverter extends TransformConverter {
 		return typeKeyFieldsList;
 	}
 
-	protected JoinType getParamValue(JoinConfigProperty entry) {
-		logger.debug("Getting JoinType for {}", properties.get(Constants.PARAM_NAME));
-		JoinType targetJoinType = null;
-		if (entry.getJoinType() <= 1) {
-			for (JoinType type : JoinType.values()) {
-				if (type.value().equalsIgnoreCase(ITEMS.get(entry.getJoinType()))) {
-					targetJoinType = type;
-					break;
-				}
-			}
+	protected boolean getRecordRequiredValue(JoinConfigProperty entry) {
+		boolean recordRequired=false;
+		if(entry.getRecordRequired()==0)
+		{
+			recordRequired=true;
 		}
-
-		if (StringUtils.isNotBlank(entry.getParamValue()))
-			ComponentXpath.INSTANCE.getXpathMap().put(
-					ComponentXpathConstants.COMPONENT_JOIN_TYPE_XPATH.value().replace(ID, componentName)
-							.replace("$inSocketId", entry.getPortIndex()),
-					new ComponentsAttributeAndValue(Constants.JOIN_TYPE_ATTRIBUTE_NAME, entry.getParamValue()));
-		return targetJoinType;
+		else 
+		{
+			recordRequired=false;
+		}
+		return recordRequired;
+	
 	}
 
 	@Override
