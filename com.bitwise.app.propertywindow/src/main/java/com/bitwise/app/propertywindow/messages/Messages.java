@@ -78,7 +78,20 @@ public class Messages extends NLS {
 	public static String CHECKBOX_DISABLE_MESSAGE;
 	public static String ERROR;
 	public static String PARAMETER_ERROR;
-
+	
+	public static String FIELD_MAPPING;
+	public static String OPERATION_CLASS;
+	public static String OUTPUT_FIELD;
+	public static String INVALID_INPUT_FIELDS_OPERATION_CLASS;
+	public static String BLANK_OUTPUT_FIELD;
+	public static String INVALID_INPUT_FIELD;
+	public static String DUPLICATE_FIELDS;
+	public static String DUPLICATE_OUTPUT;
+	public static String LINE_SEPARATOR_KEY;
+	public static String NUMBER_INPUT_AND_NUMBER_OF_OUTPUT_FIELD_VALIDATION_MESSAGE;
+	public static String ALPHA_NUMRIC_REGULAR_EXPRESSION;
+	public static String TEXT_FIELD_SHOULD_MATCH;
+	public static String BROWSE_BUTTON_TEXT;
 
 	static {
 		// initialize resource bundle
