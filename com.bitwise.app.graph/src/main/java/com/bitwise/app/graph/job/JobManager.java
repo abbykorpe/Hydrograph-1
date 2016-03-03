@@ -236,6 +236,8 @@ public class JobManager {
 			messageBox.setMessage(Messages.KILL_JOB_MESSAGE);
 			if(messageBox.open() == SWT.YES){
 				jobToKill.setJobStatus(JobStatus.KILLED);
+			}else{
+				((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
 			}
 		}		
 	}
@@ -381,7 +383,7 @@ public class JobManager {
 	 * 
 	 * @return - String (active canvas id)
 	 */
-	String getActiveCanvas() {
+	public String getActiveCanvas() {
 		return activeCanvas;
 	}
 

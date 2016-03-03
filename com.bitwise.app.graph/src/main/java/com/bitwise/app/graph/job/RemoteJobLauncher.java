@@ -205,9 +205,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 				}
 			}
 		}
-
+		
+		
 		if (job.getRemoteJobProcessID() == null) {
 			if (job.getJobStatus().equals(JobStatus.KILLED)) {
+				joblogger.logMessage("JOB KILLED SUCCESSFULLY");
 				releaseResources(job, gefCanvas, joblogger);
 				JobManager.INSTANCE.removeJob(job.getLocalJobID());
 			}
