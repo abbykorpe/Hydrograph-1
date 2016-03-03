@@ -54,7 +54,7 @@ public class FileEditorContiner implements IGenrateContainerData {
 			{
 				Container container= eltGraphicalEditorInstance.getContainer();
 				for(int i=0;i<container.getChildren().size();i++){
-					if(Constants.INPUTSUBGRAPH.equalsIgnoreCase(container.getChildren().get(i).getComponentName())){
+					if(Constants.INPUT_SUBGRAPH.equalsIgnoreCase(container.getChildren().get(i).getComponentName())){
 						container.getChildren().get(i).getProperties().put(Constants.SCHEMA_TO_PROPAGATE, new HashMap<>());
 					}
 				}

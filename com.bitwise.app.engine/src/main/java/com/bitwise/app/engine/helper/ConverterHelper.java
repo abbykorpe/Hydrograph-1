@@ -391,10 +391,9 @@ public class ConverterHelper {
 	}
 	
 	public String getFromSocketId(Link link) {
-		ConverterHelper converterHelper = new ConverterHelper(component);
 		String inSocketId = link.getSourceTerminal();
 
-		if (converterHelper.isMultipleLinkAllowed(link.getSource(), link.getSourceTerminal()))
+		if (isMultipleLinkAllowed(link.getSource(), link.getSourceTerminal()))
 			inSocketId = link.getSource().getPort(link.getSourceTerminal()).getPortType() + link.getLinkNumber();
 
 		if (link.getSource().getComponentName().equals("InputSubgraphComponent")) {

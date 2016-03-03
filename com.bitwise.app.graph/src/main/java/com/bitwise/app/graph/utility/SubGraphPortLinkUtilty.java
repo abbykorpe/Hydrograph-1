@@ -51,13 +51,13 @@ public class SubGraphPortLinkUtilty {
 						outPort++; 
 						}	
 					
-					inputSubComponent.getProperties().put(Constants.TYPE, Constants.INPUTSUBGRAPH);							   	
+					inputSubComponent.getProperties().put(Constants.TYPE, Constants.INPUT_SUBGRAPH);							   	
 				   	container.addSubGraphChild((Component) entry.getKey());
 				   	clipboardList.remove(entry.getKey());						
 				}
 	   	if(cacheInputSubgraphComp.size()>0){
-	   		inputSubComponent.getProperties().put(Constants.NAME, Constants.INPUTSUBGRAPH);
-	   		inputSubComponent.setComponentLabel(Constants.INPUTSUBGRAPH);
+	   		inputSubComponent.getProperties().put(Constants.NAME, Constants.INPUT_SUBGRAPH);
+	   		inputSubComponent.setComponentLabel(Constants.INPUT_SUBGRAPH);
 	   		inputSubComponent.setCategory(Constants.SUBGRAPH_COMPONENT_CATEGORY);
 	   		inputSubComponent.outputPortSettings(outPort);
 	   		fixComponentSize(inputSubComponent, outPort);
@@ -92,7 +92,7 @@ public class SubGraphPortLinkUtilty {
 							linkNew.setTargetTerminal(Constants.INPUT_SOCKET_TYPE+inPort);
 							entry.getKey().connectOutput(linkNew);
 							outSubComponent.connectInput(linkNew);
-							outSubComponent.getProperties().put(Constants.TYPE, Constants.OUTPUTSUBGRAPH);			
+							outSubComponent.getProperties().put(Constants.TYPE, Constants.OUTPUT_SUBGRAPH);			
 							inPort++;
 		   					}		   					
 							if(cacheInputSubgraphComp.get(entry.getKey())==null){
@@ -102,8 +102,8 @@ public class SubGraphPortLinkUtilty {
 
 		   	}
 		   	if(cacheOutSubgraphComp.size()>0){
-		   		outSubComponent.getProperties().put(Constants.NAME,Constants.OUTPUTSUBGRAPH);
-		   		outSubComponent.setComponentLabel(Constants.OUTPUTSUBGRAPH);
+		   		outSubComponent.getProperties().put(Constants.NAME,Constants.OUTPUT_SUBGRAPH);
+		   		outSubComponent.setComponentLabel(Constants.OUTPUT_SUBGRAPH);
 		   		outSubComponent.setCategory(Constants.SUBGRAPH_COMPONENT_CATEGORY);
 		   		outSubComponent.inputPortSettings(inPort);	
 		   		fixComponentSize(outSubComponent, inPort);

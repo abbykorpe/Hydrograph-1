@@ -2,14 +2,15 @@ package com.bitwise.app.graph.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.helper.LoggerUtil;
@@ -28,7 +29,7 @@ public class Container extends Model {
 	private boolean isSubgraph;
 	
 	private final List<Component> components = new ArrayList<>();
-	private final Hashtable<String, Integer> componentNextNameSuffixes = new Hashtable<>();
+	private final Map<String, Integer> componentNextNameSuffixes = new HashMap<>();
 	private ArrayList<String> componentNames = new ArrayList<>();
 		
 	public Container(){
@@ -82,7 +83,7 @@ public class Container extends Model {
 	private boolean isIOSubgraphAlreadyNotPresent(String ioSubgraphComponentName) {
 
 		if (StringUtils.equalsIgnoreCase(Constants.INPUT_SUBGRAPH_COMPONENT_NAME, ioSubgraphComponentName)
-				|| StringUtils.equalsIgnoreCase(Constants.OUTPUTSUBGRAPH, ioSubgraphComponentName)) {
+				|| StringUtils.equalsIgnoreCase(Constants.OUTPUT_SUBGRAPH, ioSubgraphComponentName)) {
 			for (Component component : components) {
 				if (StringUtils.equalsIgnoreCase(ioSubgraphComponentName, component.getComponentName())) {
 					MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", ioSubgraphComponentName
@@ -232,7 +233,7 @@ public class Container extends Model {
 	/**
 	 * Return a HashTable of Component prefix as key and next suffix as value.
 	 */
-	public Hashtable<String, Integer> getComponentNextNameSuffixes() {
+	public Map<String, Integer> getComponentNextNameSuffixes() {
 		return componentNextNameSuffixes;
 	}
 

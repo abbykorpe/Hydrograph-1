@@ -43,7 +43,7 @@ public class OutputSubGraphConverter extends OutputConverter {
 		super.prepareForXML();
 		Subgraph subgraph = (Subgraph) baseComponent;
 		Subgraph.Path path = new Subgraph.Path();
-		String subGraphFilePath=	((String)properties.get("path")).replace(".job", ".xml");
+		String subGraphFilePath=	((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.JOB_EXTENSION);
 		String[] temp;
 		temp = subGraphFilePath.split("\\\\",3);
 		path.setUri(temp[temp.length-1].replaceAll("\\\\", "/"));

@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.engine.converter.SubgraphConverter;
-import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
@@ -27,10 +26,6 @@ public class OperationSubGraphConverter extends SubgraphConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OperationSubGraphConverter.class);
 	private ConverterHelper converterHelper;
-	private String JOBPATH="path";
-	private String JOBEXTENSION=".job";
-	private String XMLEXTENSION=".xml";
-
 	public OperationSubGraphConverter(Component component) {
 		super();
 		this.baseComponent = new Subgraph();
@@ -50,14 +45,14 @@ public class OperationSubGraphConverter extends SubgraphConverter {
 		Subgraph subgraph = (Subgraph) baseComponent;
 		Subgraph.Path path = new Subgraph.Path();
 		String[] temp;
-		String subGraphFilePath=	((String)properties.get(JOBPATH)).replace(JOBEXTENSION, XMLEXTENSION);
+		String subGraphFilePath=	((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION);
 		temp = subGraphFilePath.split("\\\\",3);
 		path.setUri(temp[temp.length-1].replaceAll("\\\\", "/"));
 		subgraph.setPath(path);
 		subgraph.setSubgraphParameter(getRuntimeProperties());
 		 
 	}
-
+ 
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
 		logger.debug("Generating TypeOperationsOutSocket data for : {}", properties.get(Constants.PARAM_NAME));

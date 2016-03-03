@@ -19,6 +19,7 @@ import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
 import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -176,15 +177,15 @@ public abstract class Component extends Model {
 	}
 
 	private void setPortCount(String portType, int portCount, boolean changePortCount) {
-		if (portType.equals("in")) {
+		if (portType.equals(Constants.INPUT_SOCKET_TYPE)) {
 			inPortCount = portCount;
 			properties.put("inPortCount", String.valueOf(portCount));
 			changeInPortsCntDynamically=changePortCount;
-		} else if (portType.equals("out")) {
+		} else if (portType.equals(Constants.OUTPUT_SOCKET_TYPE)) {
 			outPortCount = portCount;
 			properties.put("outPortCount", String.valueOf(portCount));
 			changeOutPortsCntDynamically=changePortCount;
-		} else if (portType.equals("unused")) {
+		} else if (portType.equals(Constants.UNUSED_SOCKET_TYPE)) {
 			unusedPortCount = portCount;
 			properties.put("unusedPortCount", String.valueOf(portCount));
 			changeUnusedPortsCntDynamically=changePortCount;
@@ -266,27 +267,27 @@ public abstract class Component extends Model {
 	public void incrementInPorts(int newPortCount, int oldPortCount) {
 
 		for (int i = oldPortCount; i < newPortCount; i++) {
-			Port inPort = new Port("in" + i, "in" + i, "in" + i, this,
-					newPortCount, "in", i);
-			ports.put("in" + i, inPort);
+			Port inPort = new Port(Constants.INPUT_SOCKET_TYPE + i, Constants.INPUT_SOCKET_TYPE + i, Constants.INPUT_SOCKET_TYPE + i, this,
+					newPortCount, Constants.INPUT_SOCKET_TYPE, i);
+			ports.put(Constants.INPUT_SOCKET_TYPE + i, inPort);
 			firePropertyChange("Component:add", null, inPort);
 		}
 	}
 
 	public void incrementOutPorts(int newPortCount, int oldPortCount) {
 		for (int i = oldPortCount; i < newPortCount; i++) {
-			Port unusedPort = new Port("out" + i, "out" + i, "out" + i, this,
-					newPortCount, "out", i);
-			ports.put("out" + i, unusedPort);
-			firePropertyChange("Component:add", null, unusedPort);
+			Port outputPort = new Port(Constants.OUTPUT_SOCKET_TYPE + i, Constants.OUTPUT_SOCKET_TYPE + i, Constants.OUTPUT_SOCKET_TYPE + i, this,
+					newPortCount, Constants.OUTPUT_SOCKET_TYPE, i);
+			ports.put(Constants.OUTPUT_SOCKET_TYPE + i, outputPort);
+			firePropertyChange("Component:add", null, outputPort);
 		}
 	}
 
 	public void incrementUnusedPorts(int newPortCount, int oldPortCount) {
 		for (int i = oldPortCount; i < newPortCount; i++) {
-			Port unusedPort = new Port("unused" + i, "un" + i, "unused" + i,
-					this, newPortCount, "unused", i);
-			ports.put("unused" + i, unusedPort);
+			Port unusedPort = new Port(Constants.UNUSED_SOCKET_TYPE + i, "un" + i, Constants.UNUSED_SOCKET_TYPE + i,
+					this, newPortCount,Constants.UNUSED_SOCKET_TYPE, i);
+			ports.put(Constants.UNUSED_SOCKET_TYPE + i, unusedPort);
 			firePropertyChange("Component:add", null, unusedPort);
 		}
 	}
@@ -296,7 +297,7 @@ public abstract class Component extends Model {
 		List<String> portTerminals = new ArrayList<>();
 		portTerminals.addAll(ports.keySet());
 		for (String key : portTerminals) {
-			if (key.contains("in")) {
+			if (key.contains(Constants.INPUT_SOCKET_TYPE)) {
 				ports.get(key).setNumberOfPortsOfThisType(newPortCount);
 			}
 		}
@@ -308,7 +309,7 @@ public abstract class Component extends Model {
 		List<String> portTerminals = new ArrayList<>();
 		portTerminals.addAll(ports.keySet());
 		for (String key : portTerminals) {
-			if (key.contains("unused")) {
+			if (key.contains(Constants.UNUSED_SOCKET_TYPE)) {
 				ports.get(key).setNumberOfPortsOfThisType(newPortCount);
 			}
 		}
@@ -320,7 +321,7 @@ public abstract class Component extends Model {
 		List<String> portTerminals = new ArrayList<>();
 		portTerminals.addAll(ports.keySet());
 		for (String key : portTerminals) {
-			if (key.contains("out")) {
+			if (key.contains(Constants.OUTPUT_SOCKET_TYPE)) {
 				ports.get(key).setNumberOfPortsOfThisType(newPortCount);
 			}
 		}
@@ -760,9 +761,9 @@ public abstract class Component extends Model {
 	public void unusedPortSettings(int newPortCount) {
        changeUnusedPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount - 2); i++) {
-			Port unusedPort = new Port("unused" + (i + 2), "un" + (i + 2),
-					"unused" + (i + 2), this, newPortCount, "unused", (i + 2));
-			ports.put("unused" + (i + 2), unusedPort);
+			Port unusedPort = new Port(Constants.UNUSED_SOCKET_TYPE + (i + 2), "un" + (i + 2),
+					Constants.UNUSED_SOCKET_TYPE + (i + 2), this, newPortCount, Constants.UNUSED_SOCKET_TYPE, (i + 2));
+			ports.put(Constants.UNUSED_SOCKET_TYPE + (i + 2), unusedPort);
 			firePropertyChange("Component:add", null, unusedPort);
 		}
 	}
@@ -770,9 +771,9 @@ public abstract class Component extends Model {
 	public void inputPortSettings(int newPortCount) {
        changeInPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount); i++) {
-			Port inPort = new Port("in" + (i), "in" + (i), "in"
-					+ (i), this, newPortCount, "in", (i));
-			ports.put("in" + (i), inPort);
+			Port inPort = new Port(Constants.INPUT_SOCKET_TYPE + (i), Constants.INPUT_SOCKET_TYPE + (i), Constants.INPUT_SOCKET_TYPE
+					+ (i), this, newPortCount, Constants.INPUT_SOCKET_TYPE, (i));
+			ports.put(Constants.INPUT_SOCKET_TYPE + (i), inPort);
 			firePropertyChange("Component:add", null, inPort);
 		}
 	}
@@ -781,9 +782,9 @@ public abstract class Component extends Model {
   changeOutPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount); i++) {
 
-			Port outPort = new Port("out" + (i), "out" + (i), "out"
-					+ (i), this, newPortCount, "out", (i));
-			ports.put("out" + (i), outPort);
+			Port outPort = new Port(Constants.OUTPUT_SOCKET_TYPE + (i), Constants.OUTPUT_SOCKET_TYPE + (i), Constants.OUTPUT_SOCKET_TYPE
+					+ (i), this, newPortCount, Constants.OUTPUT_SOCKET_TYPE, (i));
+			ports.put(Constants.OUTPUT_SOCKET_TYPE + (i), outPort);
 			firePropertyChange("Component:add", null, outPort);
 		}
 	} 
@@ -792,14 +793,14 @@ public abstract class Component extends Model {
 	public void incrementPorts(int newPortCount, int oldPortCount) {
 
 		for (int i = oldPortCount; i < newPortCount; i++) {
-			Port inPort = new Port("in" + i, "in" + i, "in" + i, this,
-					newPortCount, "in", i);
-			ports.put("in" + i, inPort);
+			Port inPort = new Port(Constants.INPUT_SOCKET_TYPE + i, Constants.INPUT_SOCKET_TYPE + i, Constants.INPUT_SOCKET_TYPE + i, this,
+					newPortCount, Constants.INPUT_SOCKET_TYPE, i);
+			ports.put(Constants.INPUT_SOCKET_TYPE + i, inPort);
 			firePropertyChange("Component:add", null, inPort);
 
-			Port unusedPort = new Port("unused" + i, "un" + i, "unused" + i,
-					this, newPortCount, "unused", i);
-			ports.put("unused" + i, unusedPort);
+			Port unusedPort = new Port(Constants.UNUSED_SOCKET_TYPE + i, "un" + i, Constants.UNUSED_SOCKET_TYPE + i,
+					this, newPortCount, Constants.UNUSED_SOCKET_TYPE, i);
+			ports.put(Constants.UNUSED_SOCKET_TYPE + i, unusedPort);
 			firePropertyChange("Component:add", null, unusedPort);
 		}
 	}

@@ -71,7 +71,7 @@ public class SubGraphOpenAction extends SelectionAction{
 	public void run() { 
 		List<Object> selectedObjects =getSelectedObjects();
 		SubGraphUtility subGraphUtility = new SubGraphUtility();
-		if (selectedObjects != null || !selectedObjects.isEmpty()) {
+		if (selectedObjects != null && !selectedObjects.isEmpty()) {
 			for(Object obj:selectedObjects)
 			{
 				if(obj instanceof ComponentEditPart)

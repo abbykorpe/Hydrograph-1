@@ -136,7 +136,7 @@ public class JoinConverter extends TransformConverter {
 			} else if (PortTypeConstant.getPortType(link.getSource().getPort(link.getSourceTerminal()).getPortType())
 					.equalsIgnoreCase("unused")) {
 				TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
-				outSocketAsInsocket.setInSocketId(getInsocket(link.getSourceTerminal()));
+				outSocketAsInsocket.setInSocketId(Constants.INPUT_SOCKET_TYPE + link.getSourceTerminal().substring(6));
 				outSocket.setId(link.getSourceTerminal());
 				outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
 				outSocket.setCopyOfInsocket(outSocketAsInsocket);
@@ -144,13 +144,6 @@ public class JoinConverter extends TransformConverter {
 			}
 		}
 		return outSocketList;
-	}
-
-	private String getInsocket(String nameOfUnusedPort) {
-		String unusedPortNo = nameOfUnusedPort.substring(6);
-		String inSocket = "in" + unusedPortNo;
-
-		return inSocket;
 	}
 
 	@Override

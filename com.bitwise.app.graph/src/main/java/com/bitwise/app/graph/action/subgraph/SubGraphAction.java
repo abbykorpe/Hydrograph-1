@@ -37,10 +37,11 @@ import com.bitwise.app.graph.utility.SubGraphUtility;
 public class SubGraphAction extends SelectionAction{
 	
 	/** The paste action. */
+	//TODO : remove pasteAction is not needed.
 	PasteAction pasteAction;
 	
 	/** The ed component edit part. */
-	ComponentEditPart edComponentEditPart;
+	ComponentEditPart componentEditPart;
 	/**
 	 * Instantiates a new cut action.
 	 * 
@@ -150,7 +151,7 @@ public class SubGraphAction extends SelectionAction{
 			if(editPart instanceof ComponentEditPart) 
 			{
 				if (Constants.SUBGRAPH_COMPONENT_CATEGORY.equalsIgnoreCase(((ComponentEditPart) editPart).getCastedModel().getCategory())) {
-					edComponentEditPart= (ComponentEditPart) editPart;
+					componentEditPart= (ComponentEditPart) editPart;
 				}
 			} 
 		}
@@ -181,20 +182,20 @@ public class SubGraphAction extends SelectionAction{
 		/*
 		 * Update main sub graph component size and properties
 		 */
-		subGraphUtility.updateSubGraphModelProperties(edComponentEditPart, inLinks.size(), outLinks.size(), file);
+		subGraphUtility.updateSubGraphModelProperties(componentEditPart, inLinks.size(), outLinks.size(), file);
 		
 		/*
 		 * Create Input port in main sub graph component.
 		 */
-		subGraphUtility.createDynamicInputPort(inLinks, edComponentEditPart);
+		subGraphUtility.createDynamicInputPort(inLinks, componentEditPart);
 		/*
 		 * Create output port in main subgraph component.
 		 */
-		subGraphUtility.createDynamicOutputPort(outLinks, edComponentEditPart)	;
+		subGraphUtility.createDynamicOutputPort(outLinks, componentEditPart)	;
 		/*
 		 * Generate subgraph target xml.
 		 */
-		subGraphUtility.createSubGraphXml(edComponentEditPart,clipboardList,file);
+		subGraphUtility.createSubGraphXml(componentEditPart,clipboardList,file);
 		}
 	}
    }

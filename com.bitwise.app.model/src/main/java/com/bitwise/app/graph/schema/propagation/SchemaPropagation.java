@@ -124,7 +124,7 @@ public class SchemaPropagation {
 	}
 
 	private boolean isInputSubGraphComponent(Component component) {
-		if (StringUtils.equals(Constants.INPUTSUBGRAPH, component.getComponentName()))
+		if (StringUtils.equals(Constants.INPUT_SUBGRAPH, component.getComponentName()))
 			return true;
 		return false;
 	}
@@ -135,7 +135,7 @@ public class SchemaPropagation {
 			Map<String, ComponentsOutputSchema> tempSchemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
 			tempSchemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
 			component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, tempSchemaMap);
-		} else if (StringUtils.equals(Constants.OUTPUTSUBGRAPH, component.getComponentName())) {
+		} else if (StringUtils.equals(Constants.OUTPUT_SUBGRAPH, component.getComponentName())) {
 
 		}
 	}
@@ -144,9 +144,9 @@ public class SchemaPropagation {
 			ComponentsOutputSchema componentsOutputSchema) {
 		String outPutTargetTerminal = getTagetTerminalForSubgraph(targetTerminal);
 
-		if (subGraphComponent.getProperties().get(Constants.INPUTSUBGRAPH) != null) {
+		if (subGraphComponent.getProperties().get(Constants.INPUT_SUBGRAPH) != null) {
 			Component inputSubgraphComponent = (Component) subGraphComponent.getProperties().get(
-					Constants.INPUTSUBGRAPH);
+					Constants.INPUT_SUBGRAPH);
 			Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) inputSubgraphComponent
 					.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
 			schemaMap.put(outPutTargetTerminal, componentsOutputSchema);
@@ -156,7 +156,7 @@ public class SchemaPropagation {
 			}
 		}
 
-		else if (StringUtils.equals(Constants.OUTPUTSUBGRAPH, subGraphComponent.getComponentName())) {
+		else if (StringUtils.equals(Constants.OUTPUT_SUBGRAPH, subGraphComponent.getComponentName())) {
 
 			// appplySchemaToTargetComponentsFromSchemaMap((Component)
 			// subGraphComponent.getProperties().get(Constants.SUBGRAPH_COMPONENT), schemaMap,
@@ -167,7 +167,7 @@ public class SchemaPropagation {
 	}
 
 	private boolean isOutputSubgraphComponent(Component subGraphComponent) {
-		if (StringUtils.equals(Constants.OUTPUTSUBGRAPH, subGraphComponent.getComponentName()))
+		if (StringUtils.equals(Constants.OUTPUT_SUBGRAPH, subGraphComponent.getComponentName()))
 			return true;
 		return false;
 	}

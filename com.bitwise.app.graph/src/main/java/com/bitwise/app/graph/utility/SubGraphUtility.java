@@ -41,10 +41,10 @@ import com.bitwise.app.logging.factory.LogFactory;
 public class SubGraphUtility {
 
 	/** The cache input subgraph comp. */
-	private Map<Component, Integer> cacheInputSubgraphComp = new LinkedHashMap<>();
+	private Map<Component, Integer> inputSubgraphCompCache = new LinkedHashMap<>();
 	
 	/** The cache out subgraph comp. */
-	private Map<Component, List<String>> cacheOutSubgraphComp = new LinkedHashMap<>();
+	private Map<Component, List<String>> outputSubgraphCompCache = new LinkedHashMap<>();
 	
 	/** The Constant logger. */
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(SubGraphUtility.class);
@@ -134,9 +134,9 @@ public class SubGraphUtility {
 			link.attachTarget();
 			edComponentEditPart.getCastedModel().engageInputPort(Constants.INPUT_SOCKET_TYPE + i);
 			edComponentEditPart.refresh();
-			Integer returnedValue = cacheInputSubgraphComp.put(oldTarget, sourceTerminal);
+			Integer returnedValue = inputSubgraphCompCache.put(oldTarget, sourceTerminal);
 			if (returnedValue != null) {
-				cacheInputSubgraphComp.put(oldTarget, returnedValue);
+				inputSubgraphCompCache.put(oldTarget, returnedValue);
 			}
 
 		}
@@ -157,11 +157,11 @@ public class SubGraphUtility {
 			Component oldSource = outLinks.get(i).getSource();
 			Link link = outLinks.get(i);
 
-			List<String> returnedValue = cacheOutSubgraphComp.put(oldSource, targetTerminal);
+			List<String> returnedValue = outputSubgraphCompCache.put(oldSource, targetTerminal);
 			if (returnedValue == null) {
 				targetTerminal = new ArrayList<>();
 				targetTerminal.add(link.getSourceTerminal());
-				cacheOutSubgraphComp.put(oldSource, targetTerminal);
+				outputSubgraphCompCache.put(oldSource, targetTerminal);
 			} else
 				targetTerminal.add(link.getSourceTerminal());
 
@@ -175,7 +175,7 @@ public class SubGraphUtility {
 			edComponentEditPart.refresh();
 
 		}
-		return cacheOutSubgraphComp;
+		return outputSubgraphCompCache;
 
 	}
 
@@ -227,9 +227,9 @@ public class SubGraphUtility {
 		 * Add sub graph join component in subgraph that use to link main graph with sub graph.
 		 */
 		Component inputSubComponent = SubGraphPortLinkUtilty.addInputSubGraphComponentAndLink(container,
-				cacheInputSubgraphComp, clipboardList);
+				inputSubgraphCompCache, clipboardList);
 		Component outSubComponent = SubGraphPortLinkUtilty.addOutputSubGraphComponentAndLink(container,
-				cacheInputSubgraphComp, cacheOutSubgraphComp, clipboardList);
+				inputSubgraphCompCache, outputSubgraphCompCache, clipboardList);
 
 		/*
 		 * Add all remaining component those not linked with main graph.
@@ -251,7 +251,7 @@ public class SubGraphUtility {
 	 */
 	public void propogateSchemaToSubgraph(Component subgraphComponent, Component component) {
 
-		if (Constants.INPUTSUBGRAPH.equalsIgnoreCase(component.getComponentName())) {
+		if (Constants.INPUT_SUBGRAPH.equalsIgnoreCase(component.getComponentName())) {
 			Map<String, ComponentsOutputSchema> inputSchemaMap = new HashMap<String, ComponentsOutputSchema>();
 			for (Link innerLink : component.getSourceConnections()) {
 				Link mainLink = null;
@@ -267,10 +267,10 @@ public class SubGraphUtility {
 
 			}
 			component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, inputSchemaMap);
-			subgraphComponent.getProperties().put(Constants.INPUTSUBGRAPH, component);
+			subgraphComponent.getProperties().put(Constants.INPUT_SUBGRAPH, component);
 			SchemaPropagation.INSTANCE.continuousSchemaPropagation(subgraphComponent, inputSchemaMap);
 		}
-		if (Constants.OUTPUTSUBGRAPH.equalsIgnoreCase(component.getComponentName())) {
+		if (Constants.OUTPUT_SUBGRAPH.equalsIgnoreCase(component.getComponentName())) {
 			Map<String, ComponentsOutputSchema> outputSchemaMap = new HashMap<String, ComponentsOutputSchema>();
 			for (Link innerLink : component.getSourceConnections()) {
 				ComponentsOutputSchema componentsOutputSchema = SchemaPropagation.INSTANCE
@@ -279,7 +279,7 @@ public class SubGraphUtility {
 			}
 			component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, outputSchemaMap);
 			subgraphComponent.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, outputSchemaMap);
-			subgraphComponent.getProperties().put(Constants.OUTPUTSUBGRAPH, component);
+			subgraphComponent.getProperties().put(Constants.OUTPUT_SUBGRAPH, component);
 			component.getProperties().put(Constants.SUBGRAPH_COMPONENT, subgraphComponent);
 		}
 	}
@@ -303,13 +303,13 @@ public class SubGraphUtility {
 				Container container = (Container) obj;
 
 				for (Component subComponent : container.getChildren()) {
-					if (Constants.INPUTSUBGRAPH.equalsIgnoreCase(subComponent.getComponentName())) {
+					if (Constants.INPUT_SUBGRAPH.equalsIgnoreCase(subComponent.getComponentName())) {
 						inPort = subComponent.getOutPortCount();
 						break;
 					}
 				}
 				for (Component subComponent : container.getChildren()) {
-					if (Constants.OUTPUTSUBGRAPH.equalsIgnoreCase(subComponent.getComponentName())) {
+					if (Constants.OUTPUT_SUBGRAPH.equalsIgnoreCase(subComponent.getComponentName())) {
 						outPort = subComponent.getInPortCount();
 						break;
 					}

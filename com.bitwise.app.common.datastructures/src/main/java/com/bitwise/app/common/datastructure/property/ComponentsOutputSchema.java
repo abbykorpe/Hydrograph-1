@@ -23,7 +23,7 @@ public class ComponentsOutputSchema implements IDataStructure {
 	private Map<String, String> mapFields = new LinkedHashMap<>();
 	private Map<String,String> passThroughFieldsPortInfo = new LinkedHashMap<>();
 	private Map<String,String> mapFieldsPortInfo = new LinkedHashMap<>();
-
+	private String STRING_TYPE="java.lang.String";
 	public List<String> getPassthroughFields() {
 
 		return passthroughFields;
@@ -38,18 +38,11 @@ public class ComponentsOutputSchema implements IDataStructure {
 		return passThroughFieldsPortInfo;
 	}
 
-	/*public void setPassthroughFieldsPortInfo(
-			Map<String, String> passthroughFieldsPortInfo) {
-		this.passthroughFieldsPortInfo = passthroughFieldsPortInfo;
-	}*/
 
 	public Map<String, String> getMapFieldsPortInfo() {
 		return mapFieldsPortInfo;
 	}
 
-	/*public void setMapFieldsPortInfo(Map<String, String> mapFieldsPortInfo) {
-		this.mapFieldsPortInfo = mapFieldsPortInfo;
-	}*/
 
 	/**
 	 * This method adds grid row object as fixed width object
@@ -114,7 +107,7 @@ public class ComponentsOutputSchema implements IDataStructure {
 			fixedWidthGridRow = new FixedWidthGridRow();
 			fixedWidthGridRow.setFieldName(fieldName);
 			fixedWidthGridRow.setDataType(1);
-			fixedWidthGridRow.setDataTypeValue("java.lang.String");
+			fixedWidthGridRow.setDataTypeValue(STRING_TYPE);
 			fixedWidthGridRow.setScale("");
 			fixedWidthGridRow.setLength("");
 		}
@@ -210,13 +203,6 @@ public class ComponentsOutputSchema implements IDataStructure {
 			targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(entry.getValue());
 			if (targetFixedWidthGridRow != null && sourceOutputSchema!=null) {
 				sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(entry.getKey());
-				/*String mapFieldSourceFieldName;
-				if(entry.getKey().contains(".")){
-					mapFieldSourceFieldName = entry.getKey().split("\\.")[1];
-				}else{
-					mapFieldSourceFieldName = entry.getKey();
-				}
-				sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(mapFieldSourceFieldName);*/
 				String portName = mapFieldsPortInfo.get(entry.getValue());
 				if(portName!=null){
 					if (sourceFixedWidthGridRow != null && portName.equalsIgnoreCase(port)) {

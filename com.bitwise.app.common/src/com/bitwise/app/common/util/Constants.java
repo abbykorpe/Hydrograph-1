@@ -124,8 +124,8 @@ public class Constants {
 	public static final String OPERATION = "operation";
 	public static final String OUTPUT = "output";
 	public static final String INPUT = "input";
-	public static final String INPUTSUBGRAPH = "InputSubgraphComponent";
- 	public static final String OUTPUTSUBGRAPH = "OutputSubgraphComponent";
+	public static final String INPUT_SUBGRAPH = "InputSubgraphComponent";
+ 	public static final String OUTPUT_SUBGRAPH = "OutputSubgraphComponent";
 	public static final String NAME = "name";
 	public static final String SUBGRAPH_NAME = "subgraph.job";
 	
@@ -166,5 +166,9 @@ public class Constants {
 	public static final String SUBGRAPH_ACTION = "SubGraph";
 	public static final String SUBGRAPH_ACTION_ToolTip = "Path operations";
 	public static final String STANDALONE_SUBGRAPH = "StandAlone_Subgraph";
-		
+	
+	public static final String JOB_PATH="path";
+	public static final String JOB_EXTENSION=".job";
+	public static final String XML_EXTENSION=".xml";
+
 }
