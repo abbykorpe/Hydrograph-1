@@ -190,8 +190,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 						break;
 					}
 				}
-
-				joblogger.logMessage(line);
+				
+				if(!line.contains("BUILD SUCCESSFUL")){
+					joblogger.logMessage(line);
+				}
+				
 			}
 		} catch (Exception e) {
 			if (JobManager.INSTANCE.getRunningJobsMap().containsKey(job.getLocalJobID()))
@@ -212,6 +215,12 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 				joblogger.logMessage("JOB KILLED SUCCESSFULLY");
 				releaseResources(job, gefCanvas, joblogger);
 				JobManager.INSTANCE.removeJob(job.getLocalJobID());
+			}
+		}
+		
+		if (job.getRemoteJobProcessID() != null) {
+			if (!job.getJobStatus().equals(JobStatus.KILLED) && !job.getJobStatus().equals(JobStatus.FAILED) && !job.getJobStatus().equals(JobStatus.RUNNING)) {
+				joblogger.logMessage("JOB COMPLETED SUCCESSFULLY");
 			}
 		}
 	}

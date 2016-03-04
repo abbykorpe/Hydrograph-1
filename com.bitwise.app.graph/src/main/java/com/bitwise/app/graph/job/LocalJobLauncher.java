@@ -100,7 +100,15 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 			String line = null;
 
 			while ((line = reader.readLine()) != null) {
-				joblogger.logMessage(line);
+				if(!line.contains("BUILD SUCCESSFUL") && !line.contains("BUILD FAILED")){
+					joblogger.logMessage(line);
+				}else{
+					if(line.contains("BUILD FAILED")){
+						joblogger.logMessage("JOB FAILED");
+					}else{
+						joblogger.logMessage("JOB COMPLETED SUCCESSFULLY");
+					}
+				}
 			}
 		} catch (Exception e) {
 			logger.info("Error occured while reading run job log", e);
