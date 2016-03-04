@@ -26,6 +26,10 @@ import com.bitwise.app.logging.factory.LogFactory;
 public class LocalJobLauncher extends AbstractJobLauncher {
 
 	private static Logger logger = LogFactory.INSTANCE.getLogger(LocalJobLauncher.class);
+	private static final String BUILD_SUCCESSFUL="BUILD SUCCESSFUL";
+	private static final String BUILD_FAILED="BUILD FAILED";
+	private static final String JOB_FAILED="JOB FAILED";
+	private static final String JOB_COMPLETED_SUCCESSFULLY="JOB COMPLETED SUCCESSFULLY";
 
 	@Override
 	public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas) {
@@ -100,13 +104,13 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 			String line = null;
 
 			while ((line = reader.readLine()) != null) {
-				if(!line.contains("BUILD SUCCESSFUL") && !line.contains("BUILD FAILED")){
+				if(!line.contains(BUILD_SUCCESSFUL) && !line.contains(BUILD_FAILED)){
 					joblogger.logMessage(line);
 				}else{
-					if(line.contains("BUILD FAILED")){
-						joblogger.logMessage("JOB FAILED");
+					if(line.contains(BUILD_FAILED)){
+						joblogger.logMessage(JOB_FAILED);
 					}else{
-						joblogger.logMessage("JOB COMPLETED SUCCESSFULLY");
+						joblogger.logMessage(JOB_COMPLETED_SUCCESSFULLY);
 					}
 				}
 			}
