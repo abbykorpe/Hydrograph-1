@@ -16,17 +16,14 @@ import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.utility.SubGraphUtility;
 
 /**
- * The Class SubGraphUpdateAction use to create sub graph.
+ * The Class SubGraphUpdateAction use to update sub graph property.
  * 
  * @author Bitwise
  */
 public class SubGraphUpdateAction extends SelectionAction {
 
-	/** The paste action. */
-	// TODO : remove pasteAction is not needed.
 	PasteAction pasteAction;
 
-	/** The ed component edit part. */
 	ComponentEditPart componentEditPart;
 
 	/**

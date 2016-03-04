@@ -19,10 +19,10 @@ import com.bitwise.app.graph.model.Container;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class FileEditorContiner.
+ * The Class FileEditorContainer.
  */
-public class FileEditorContiner implements IGenrateContainerData {
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(FileEditorContiner.class);
+public class FileEditorContainer implements IGenrateContainerData {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FileEditorContainer.class);
 	private final IFileEditorInput ifileEditorInput;
 	private final ELTGraphicalEditor eltGraphicalEditorInstance;
 	
@@ -34,7 +34,7 @@ public class FileEditorContiner implements IGenrateContainerData {
 	 * @param eltGraphicalEditorInstance
 	 *            the elt graphical editor instance
 	 */
-	public FileEditorContiner(IEditorInput editorInput, ELTGraphicalEditor eltGraphicalEditorInstance) {
+	public FileEditorContainer(IEditorInput editorInput, ELTGraphicalEditor eltGraphicalEditorInstance) {
 		this.ifileEditorInput=(IFileEditorInput)editorInput;
 		this.eltGraphicalEditorInstance=eltGraphicalEditorInstance;
 	}
