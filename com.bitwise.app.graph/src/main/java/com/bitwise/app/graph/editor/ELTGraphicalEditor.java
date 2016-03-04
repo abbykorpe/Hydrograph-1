@@ -1057,7 +1057,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		} catch (EngineException eexception) {
 			logger.warn("Failed to create the engine xml", eexception);
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Failed to create the engine xml", eexception.getMessage());
-			//			
 		}catch (Exception exception) {
 			logger.error("Failed to create the engine xml", exception);
 			Status status = new Status(IStatus.ERROR, "com.bitwise.app.graph",
@@ -1235,6 +1234,17 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	@Override
 	public boolean getStopButtonStatus() {
 		return stopButtonStatus;
+	}
+	
+
+	public void deleteSubgraphProperties() {
+		if (getContainer().isCurrentGraphIsSubgraph()) {
+			for (int i = 0; i < container.getChildren().size(); i++) {
+				if (Constants.INPUT_SUBGRAPH.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
+					container.getChildren().get(i).getProperties().put(Constants.SCHEMA_TO_PROPAGATE, new HashMap<>());
+				}
+			}
+		}
 	}
 
 }

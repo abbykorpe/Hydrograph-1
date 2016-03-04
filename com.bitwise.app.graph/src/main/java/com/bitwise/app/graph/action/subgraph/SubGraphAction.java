@@ -136,7 +136,7 @@ public class SubGraphAction extends SelectionAction{
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		Container containerOld=editor.getContainer(); 
 	   	execute(createSubGraphCommand(getSelectedObjects())); 
-    	List clipboardList = (ArrayList) Clipboard.getDefault().getContents();
+    	List clipboardList = new ArrayList<>((ArrayList)Clipboard.getDefault().getContents());//Rahul change
 
     	SubgraphComponent subgraphComponent= new SubgraphComponent();
 		ComponentCreateCommand createComponent = new ComponentCreateCommand(subgraphComponent,containerOld,new Rectangle(((Component)clipboardList.get(0)).getLocation(),((Component)clipboardList.get(0)).getSize()));

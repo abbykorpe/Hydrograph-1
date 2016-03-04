@@ -169,6 +169,8 @@ public class Constants {
 	public static final String JOB_PATH="path";
 	public static final String JOB_EXTENSION=".job";
 	public static final String XML_EXTENSION=".xml";
+	public static final String JOB_EXTENSION_FOR_IPATH="job";
+	public static final String XML_EXTENSION_FOR_IPATH="xml";
 	public static final String SUBGRAPH_UPDATE = "update";
 
 }

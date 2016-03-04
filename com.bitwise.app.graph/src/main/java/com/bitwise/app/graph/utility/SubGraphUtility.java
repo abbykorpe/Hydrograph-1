@@ -228,8 +228,7 @@ public class SubGraphUtility {
 	 * @param file the file
 	 */
 	public void createSubGraphXml(ComponentEditPart componentEditPart, List clipboardList, IFile file) {
-
-		Container container = new Container(true);
+		Container container = new Container();
 		/*
 		 * Add sub graph join component in subgraph that use to link main graph with sub graph.
 		 */
@@ -251,7 +250,7 @@ public class SubGraphUtility {
 	}
 
 	/**
-	 * Propogate schema to subgraph.
+	 * Propagate schema to subgraph.
 	 *
 	 * @param subgraphComponent the subgraph component
 	 * @param component the component
@@ -279,7 +278,7 @@ public class SubGraphUtility {
 		}
 		if (Constants.OUTPUT_SUBGRAPH.equalsIgnoreCase(component.getComponentName())) {
 			Map<String, ComponentsOutputSchema> outputSchemaMap = new HashMap<String, ComponentsOutputSchema>();
-			for (Link innerLink : component.getSourceConnections()) {
+			for (Link innerLink : component.getTargetConnections()) {
 				ComponentsOutputSchema componentsOutputSchema = SchemaPropagation.INSTANCE
 						.getComponentsOutputSchema(innerLink);
 				outputSchemaMap.put(innerLink.getTargetTerminal().replaceAll(Constants.INPUT_SOCKET_TYPE, Constants.OUTPUT_SOCKET_TYPE), componentsOutputSchema);
@@ -296,22 +295,27 @@ public class SubGraphUtility {
 	 *
 	 * @param componentEditPart the component edit part
 	 */
-	public void updateSubgraphPort(ComponentEditPart componentEditPart) {
-		String pathProperty = componentEditPart.getCastedModel().getProperties().get(Constants.PATH_PROPERTY_NAME).toString();
-		Path jobFilePath=new Path(pathProperty);
-		IPath jobFileIPath =jobFilePath;
-		Component selectedSubgraphComponent = componentEditPart.getCastedModel();
+	public void updateSubgraphProperty(ComponentEditPart componentEditPart,String filePath,Component selectedSubgraphComponent) {
+		IPath jobFileIPath=null;
 		int inPort = 0;
 		int outPort = 0;
-		Object obj=null;
-		if (StringUtils.isNotBlank(pathProperty) && !isFileContainsParameter(jobFileIPath)) {
+		Container container = null;
+		if (StringUtils.isNotBlank(filePath) && selectedSubgraphComponent != null) {
+			jobFileIPath = new Path(filePath);
+		} else if (componentEditPart != null && componentEditPart.getCastedModel().getProperties().get(Constants.PATH_PROPERTY_NAME)!=null) {
+			filePath = componentEditPart.getCastedModel().getProperties().get(Constants.PATH_PROPERTY_NAME)
+					.toString();
+			jobFileIPath = new Path(filePath);
+			selectedSubgraphComponent = componentEditPart.getCastedModel();
+		}
+		
+		if (StringUtils.isNotBlank(filePath) && !isFileContainsParameter(jobFileIPath)) {
 			try {
 				
 				if(ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists())
-					obj = getCurrentEditor().fromXMLToObject(ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents());
+					container = (Container) getCurrentEditor().fromXMLToObject(ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents());
 				else if(isFileExistsOnLocalFileSystem(jobFileIPath))
-					obj = getCurrentEditor().fromXMLToObject(new FileInputStream(jobFileIPath.toFile()));
-				Container container = (Container) obj;
+					container = (Container) getCurrentEditor().fromXMLToObject(new FileInputStream(jobFileIPath.toFile()));
 
 				for (Component subComponent : container.getChildren()) {
 					if (Constants.INPUT_SUBGRAPH.equalsIgnoreCase(subComponent.getComponentName())) {

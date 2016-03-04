@@ -26,7 +26,6 @@ public class Container extends Model {
 	private static final long serialVersionUID = 8825716379098354511L;
 	public static final String CHILD_ADDED_PROP = "ComponentsDiagram.ChildAdded";
 	public static final String CHILD_REMOVED_PROP = "ComponentsDiagram.ChildRemoved";
-	private boolean isSubgraph;
 	
 	private final List<Component> components = new ArrayList<>();
 	private final Map<String, Integer> componentNextNameSuffixes = new HashMap<>();
@@ -36,9 +35,6 @@ public class Container extends Model {
 		
 	}
 	
-	public Container(boolean isSubgraph){
-		this.isSubgraph=isSubgraph;
-	}
 	
 	/**
 	 * Add a component to this graph.
@@ -239,9 +235,16 @@ public class Container extends Model {
 		return componentNextNameSuffixes;
 	}
 
-	public boolean isSubgraph() {
-		return isSubgraph;
+	/**
+	 * Checks whether the graph is main or subgraph
+	 */
+	public boolean isCurrentGraphIsSubgraph() {
+		for (Component component : getChildren()) {
+			if (StringUtils.equalsIgnoreCase(Constants.INPUT_SUBGRAPH, component.getComponentName())
+					|| StringUtils.equalsIgnoreCase(Constants.OUTPUT_SUBGRAPH, component.getComponentName()))
+				return true;
+		}
+		return false;
 	}
-
 	
 }

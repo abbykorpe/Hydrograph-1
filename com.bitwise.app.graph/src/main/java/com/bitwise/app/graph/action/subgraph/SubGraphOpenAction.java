@@ -3,6 +3,7 @@ package com.bitwise.app.graph.action.subgraph;
 import java.io.InputStream;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
@@ -87,9 +88,10 @@ public class SubGraphOpenAction extends SelectionAction{
 					if (((ComponentEditPart) obj).getCastedModel().getCategory()
 							.equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY)) {
 						Component subgraphComponent = ((ComponentEditPart) obj).getCastedModel();
+						String pathProperty=(String) subgraphComponent.getProperties().get(Constants.PATH_PROPERTY_NAME);
+						if(StringUtils.isNotBlank(pathProperty)){
 						try {
-							IPath jobFilePath = new Path(subgraphComponent.getProperties()
-									.get(Constants.PATH_PROPERTY_NAME).toString());
+							IPath jobFilePath = new Path(pathProperty);
 							if (SubGraphUtility.isFileExistsOnLocalFileSystem(jobFilePath))
 								container = openEditor(jobFilePath);
 							else
@@ -100,11 +102,19 @@ public class SubGraphOpenAction extends SelectionAction{
 								subGraphUtility.propogateSchemaToSubgraph(subgraphComponent, component);
 							}
 							((ComponentEditPart) obj).refresh();
-						} catch (Exception e) {
-							logger.error("Unable to open subgraph" + e);
+
+							} catch (IllegalArgumentException exception) {
+								logger.error("Unable to open subgraph" + exception);
+								MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
+										"Unable to open subgraph : Invalid file path\n"+exception.getMessage());
+							} catch (Exception exception) {
+								logger.error("Unable to open subgraph" + exception);
+								MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
+										"Unable to open subgraph :" + exception.getMessage());
+							}
+						} else
 							MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
-									"Unable to open subgraph");
-						}
+									"Unable to open subgraph : Subgraph file path is empty");
 					}
 				}
 
@@ -130,7 +140,7 @@ public class SubGraphOpenAction extends SelectionAction{
 	@Override
 	protected boolean calculateEnabled() {
 		List<Object> selectedObjects =getSelectedObjects();
-		if (selectedObjects != null && !selectedObjects.isEmpty()) {
+		if (selectedObjects != null && !selectedObjects.isEmpty() && selectedObjects.size()==1) {
 			for(Object obj:selectedObjects)
 			{
 				if(obj instanceof ComponentEditPart)

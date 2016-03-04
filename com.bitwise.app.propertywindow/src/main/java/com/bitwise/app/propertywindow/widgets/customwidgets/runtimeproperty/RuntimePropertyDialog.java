@@ -401,7 +401,7 @@ public class RuntimePropertyDialog extends Dialog {
 
 	private boolean validateBeforeLoad(String key, String keyValue) {
 
-		if (key.trim().isEmpty() || keyValue.trim().isEmpty()) {
+		if (key.trim().isEmpty()) {
 			return false;
 		}
 		return true;

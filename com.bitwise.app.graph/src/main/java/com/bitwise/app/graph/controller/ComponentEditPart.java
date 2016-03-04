@@ -305,7 +305,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 							+ getCastedModel().getSize().width);
 			if(eltPropertyWindow.isPropertyChanged() && Constants.SUBGRAPH_COMPONENT.equalsIgnoreCase(getCastedModel().getComponentName())){
 				SubGraphUtility subGraphUtility=new SubGraphUtility();
-				subGraphUtility.updateSubgraphPort((ComponentEditPart)this);
+				subGraphUtility.updateSubgraphProperty((ComponentEditPart)this,null,null);
 			} 
 			adjustComponentFigure(getCastedModel(), getComponentFigure());
 			getCastedModel().setComponentLabel((String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue()));
