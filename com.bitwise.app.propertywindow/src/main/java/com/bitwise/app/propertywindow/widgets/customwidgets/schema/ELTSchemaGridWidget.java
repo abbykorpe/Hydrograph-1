@@ -27,7 +27,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
@@ -37,6 +36,7 @@ import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ImagePathConstant;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
@@ -72,7 +72,8 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
  * @author Bitwise
  */
 public abstract class ELTSchemaGridWidget extends AbstractWidget {
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTSchemaGridWidget.class);
+
+	private static Logger logger = LogFactory.INSTANCE.getLogger(ELTSchemaGridWidget.class);
 
 	public static final String FIELDNAME = Messages.FIELDNAME;
 	public static final String DATEFORMAT = Messages.DATEFORMAT;
@@ -81,8 +82,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String LENGTH = Messages.LENGTH;
 	public static final String RANGE_FROM = "Range From";
 	public static final String RANGE_TO = "Range To";
-	public static final String DEFAULT_VALUE ="Default Value";
-	
+	public static final String DEFAULT_VALUE = "Default Value";
+
 	protected ControlDecoration fieldNameDecorator;
 	protected ControlDecoration isFieldNameAlphanumericDecorator;
 	protected ControlDecoration scaleDecorator;
@@ -90,7 +91,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected ControlDecoration rangeFromDecorator;
 	protected ControlDecoration rangeToDecorator;
 	protected TableViewer tableViewer;
-	protected List schemaGridRowList = new ArrayList();
+	protected List<GridRow> schemaGridRowList = new ArrayList<GridRow>();
 	protected CellEditor[] editors;
 	protected Table table;
 
@@ -101,10 +102,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private String propertyName;
 	private ListenerHelper helper;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-	private Shell shell;
 	private ELTDefaultLable upButton, downButton, addButton, deleteButton;
 	private Button button;
-	AbstractELTWidget internalSchema, externalSchema;
+	private AbstractELTWidget internalSchema, externalSchema;
 	private Text textBox;
 	private ControlDecoration txtDecorator, decorator;
 
@@ -135,7 +135,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 * Instantiates a new ELT schema grid widget.
 	 * 
 	 * @param componentConfigrationProperty
-	 *            the component configration property
+	 *            the component configuration property
 	 * @param componentMiscellaneousProperties
 	 *            the component miscellaneous properties
 	 * @param propertyDialogButtonBar
@@ -150,80 +150,82 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		this.properties = componentConfigrationProperty.getPropertyValue();
 	}
 
-	private List<String> getSchemaFields(List<GridRow> schemaGridRowList2){
+	private List<String> getSchemaFields(List<GridRow> schemaGridRowList2) {
 		List<String> schemaFields = new LinkedList<>();
-		if(schemaGridRowList2!=null){								
-			for(GridRow gridRow : schemaGridRowList2){
-				GridRow fixedWidthGridRow = (GridRow)gridRow;
+		if (schemaGridRowList2 != null) {
+			for (GridRow gridRow : schemaGridRowList2) {
+				GridRow fixedWidthGridRow = (GridRow) gridRow;
 				schemaFields.add(fixedWidthGridRow.getFieldName());
 			}
 		}
 		return schemaFields;
 	}
-	
+
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		Map<String, ComponentsOutputSchema> schemaMap=new LinkedHashMap<String,ComponentsOutputSchema>();
+		Map<String, ComponentsOutputSchema> schemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
 		ComponentsOutputSchema componentsOutputSchema = new ComponentsOutputSchema();
 		if (getComponent().getProperties().get(Constants.SCHEMA_TO_PROPAGATE) != null) {
+
 			ComponentsOutputSchema previousOutputSchema = ((Map<String, ComponentsOutputSchema>) getComponent()
 					.getProperties().get(Constants.SCHEMA_TO_PROPAGATE)).get(Constants.FIXED_OUTSOCKET_ID);
-		if (previousOutputSchema!=null && !previousOutputSchema.getMapFields().isEmpty())
+
+			if (previousOutputSchema != null && !previousOutputSchema.getMapFields().isEmpty())
 				componentsOutputSchema.getMapFields().putAll(previousOutputSchema.getMapFields());
-			if (previousOutputSchema!=null && !previousOutputSchema.getPassthroughFields().isEmpty())
+			if (previousOutputSchema != null && !previousOutputSchema.getPassthroughFields().isEmpty())
 				componentsOutputSchema.getPassthroughFields().addAll(previousOutputSchema.getPassthroughFields());
-			if (previousOutputSchema!=null && !previousOutputSchema.getPassthroughFieldsPortInfo().isEmpty())
-				componentsOutputSchema.getPassthroughFieldsPortInfo().putAll(previousOutputSchema.getPassthroughFieldsPortInfo());
-			if (previousOutputSchema!=null && !previousOutputSchema.getMapFieldsPortInfo().isEmpty())
+			if (previousOutputSchema != null && !previousOutputSchema.getPassthroughFieldsPortInfo().isEmpty())
+				componentsOutputSchema.getPassthroughFieldsPortInfo().putAll(
+						previousOutputSchema.getPassthroughFieldsPortInfo());
+			if (previousOutputSchema != null && !previousOutputSchema.getMapFieldsPortInfo().isEmpty())
 				componentsOutputSchema.getMapFieldsPortInfo().putAll(previousOutputSchema.getMapFieldsPortInfo());
-		}//
+		}
 		List<GridRow> tempGrid = new ArrayList<>();
 		List<String> oprationFieldList = getOperationFieldList();
-		if (schemaGridRowList != null ) {
-			
-			if(getSchemaForInternalPapogation()!=null){
+		if (schemaGridRowList != null) {
+
+			if (getSchemaForInternalPapogation() != null) {
 				Schema internalSchema = getSchemaForInternalPapogation().clone();
 				List<String> schemaFields = getSchemaFields(schemaGridRowList);
-				for(GridRow internalSchemaRow : internalSchema.getGridRow()){
-					int index=0;
-					if(schemaFields.contains(internalSchemaRow.getFieldName())){
-						for(Object schemaGridRow :schemaGridRowList){							
-							if(internalSchemaRow.getFieldName().equals(((GridRow)schemaGridRow).getFieldName())){
-								if(!oprationFieldList.contains(internalSchemaRow.getFieldName()))
+				for (GridRow internalSchemaRow : internalSchema.getGridRow()) {
+					int index = 0;
+					if (schemaFields.contains(internalSchemaRow.getFieldName())) {
+						for (Object schemaGridRow : schemaGridRowList) {
+							if (internalSchemaRow.getFieldName().equals(((GridRow) schemaGridRow).getFieldName())) {
+								if (!oprationFieldList.contains(internalSchemaRow.getFieldName()))
 									schemaGridRowList.set(index, internalSchemaRow.copy());
 							}
 							index++;
 						}
-					}else{
+					} else {
 						schemaGridRowList.add(internalSchemaRow.copy());
 					}
 				}
 			}
-			if(!schemaGridRowList.isEmpty()){
+			if (!schemaGridRowList.isEmpty()) {
 				for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
 					tempGrid.add(gridRow.copy());
 					componentsOutputSchema.addSchemaFields(gridRow);
 				}
 			}
 		}
-		
+
 		Schema schema = new Schema();
 		if (isExternal) {
 			schema.setIsExternal(true);
-			schema.setGridRow(new ArrayList());
+			schema.setGridRow(new ArrayList<GridRow>());
 			schema.setExternalSchemaPath(textBox.getText());
 		} else {
 			schema.setIsExternal(false);
 			schema.setGridRow(tempGrid);
 			schema.setExternalSchemaPath("");
 			schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
-			property.put(Constants.SCHEMA_TO_PROPAGATE,schemaMap);
+			property.put(Constants.SCHEMA_TO_PROPAGATE, schemaMap);
 		}
-		
-		
+
 		property.put(propertyName, schema);
 		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), schemaMap);//
-		
+
 		return property;
 	}
 
@@ -241,6 +243,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		populateSchemaTypeWidget();
 	}
 
+	/**
+	 * 
+	 * returns propagated schema
+	 * 
+	 * @param {@link Link}
+	 * @return {@link Schema}
+	 */
 	protected Schema getPropagatedSchema(Link link) {
 		ComponentsOutputSchema componentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 		Schema schema = null;
@@ -265,7 +274,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected void schemaFromConnectedLinks() {
 		for (Link link : getComponent().getTargetConnections()) {
 			this.properties = getPropagatedSchema(link);
-			
+
 		}
 	}
 
@@ -303,7 +312,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 		});
 
-		AbstractELTWidget eltDefaultButton = new ELTDefaultButton(Messages.BROWSE_BUTTON).buttonWidth(20);
+		AbstractELTWidget eltDefaultButton = new ELTDefaultButton(Messages.BROWSE_BUTTON).buttonWidth(35);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
 		button = (Button) eltDefaultButton.getSWTWidgetControl();
 
@@ -318,7 +327,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
+				// Nothing to Do
 			}
 
 		});
@@ -430,7 +439,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 		}
 	}
-	
 
 	private void populateWidgetExternalSchema() {
 		if (this.properties != null) {
@@ -488,11 +496,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 	}
 
-	private AbstractELTWidget getButton(String displayName) {
-		AbstractELTWidget button = new ELTDefaultButton(displayName).buttonWidth(18).buttonHeight(18);
-		return button;
-	}
-
 	private ListenerHelper getListenerHelper() {
 		if (helper == null) {
 			helper = new ListenerHelper();
@@ -508,9 +511,14 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		return helper;
 	}
 
+	/**
+	 * 
+	 * Creates schema grid section
+	 * 
+	 * @param {@link Composite}
+	 * @return {@link TableViewer}
+	 */
 	public TableViewer createSchemaGridSection(Composite container) {
-
-		ListenerFactory listenerFactory = new ListenerFactory();
 
 		ELTSchemaSubgroupComposite buttonSubGroup = new ELTSchemaSubgroupComposite(container);
 		buttonSubGroup.createContainerWidget();
@@ -518,11 +526,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		downButton = new ELTDefaultLable("");
 		downButton.lableWidth(25);
 		buttonSubGroup.attachWidget(downButton);
-		downButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png");
-	
+		downButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
+
 		downButton.addMouseUpListener(new MouseAdapter() {
 			int index = 0, index2 = 0;
-            
+
 			@Override
 			public void mouseUp(MouseEvent e) {
 				propertyDialogButtonBar.enableApplyButton(true);
@@ -543,13 +551,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		upButton = new ELTDefaultLable("");
 		upButton.lableWidth(25);
 		buttonSubGroup.attachWidget(upButton);
-		upButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png");
+		upButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
 		upButton.addMouseUpListener(new MouseAdapter() {
 			int index = 0, index2 = 0;
-        
+
 			@Override
 			public void mouseUp(MouseEvent e) {
-             propertyDialogButtonBar.enableApplyButton(true);
+				propertyDialogButtonBar.enableApplyButton(true);
 				index = table.getSelectionIndex();
 
 				if (index > 0) {
@@ -569,12 +577,12 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		deleteButton = new ELTDefaultLable("");
 		deleteButton.lableWidth(25);
 		buttonSubGroup.attachWidget(deleteButton);
-		deleteButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png");
+		deleteButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
 
 		addButton = new ELTDefaultLable("");
 		addButton.lableWidth(25);
 		buttonSubGroup.attachWidget(addButton);
-		addButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png");
+		addButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
 
 		ELTSchemaTableComposite gridSubGroup = new ELTSchemaTableComposite(container);
 		gridSubGroup.createContainerWidget();
@@ -582,7 +590,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		AbstractELTWidget eltTableViewer = new ELTTableViewer(getContentProvider(), getLableProvider());
 		gridSubGroup.attachWidget(eltTableViewer);
 
-		// eltTableViewer.getSWTWidgetControl().
 		tableViewer = (TableViewer) eltTableViewer.getJfaceWidgetControl();
 		tableViewer.setInput(schemaGridRowList);
 		// Set the editors, cell modifier, and column properties
@@ -621,7 +628,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					propertyDialogButtonBar, helper, table);
 
 		} catch (Exception e) {
-			// TODO add logger
+			logger.debug("Failed to attach listeners to table",e);
 			throw new RuntimeException("Failed to attach listeners to table");
 		}
 
@@ -631,11 +638,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		return tableViewer;
 	}
 
-	public List getSchemaGridRowList() {
+	public List<GridRow> getSchemaGridRowList() {
 		return schemaGridRowList;
 	}
 
-	public void setSchemaGridRowList(List schemaGridRowList) {
+	public void setSchemaGridRowList(List<GridRow> schemaGridRowList) {
 		this.schemaGridRowList = schemaGridRowList;
 	}
 
@@ -655,7 +662,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					if (existingFields.contains(row)) {
 						for (int index = 0; index < originalSchema.getGridRow().size(); index++) {
 							if (originalSchema.getGridRow().get(index).getFieldName().equals(row.getFieldName().trim())) {
-								if(!operationFieldList.contains(row.getFieldName()))
+								if (!operationFieldList.contains(row.getFieldName()))
 									originalSchema.getGridRow().set(index, row.copy());
 							}
 						}
@@ -676,7 +683,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 
 		} else {
-			// this.properties = schema.clone();
 			if (schema.getGridRow().size() != 0) {
 				table.clearAll();
 				if (!schema.getIsExternal()) {
