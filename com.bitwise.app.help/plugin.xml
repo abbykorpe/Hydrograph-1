@@ -126,19 +126,19 @@
             primary="true">
       </toc>
       <toc
-            file="xml/How To Steps/howToCheckinJobsProject.xml">
+            file="xml/How To Steps/git_howToCheckinJobsProject.xml">
       </toc>
       <toc
-            file="xml/How To Steps/howToCheckoutProject.xml">
+            file="xml/How To Steps/git_howToCheckoutProject.xml">
       </toc>
       <toc
             file="xml/How To Steps/howToCreateAJob.xml">
       </toc>
       <toc
-            file="xml/How To Steps/howToCreateAProject.xml">
+            file="xml/How To Steps/howToCreateAnELTProject.xml">
       </toc>
       <toc
-            file="xml/How To Steps/howToImportAProject.xml">
+            file="xml/How To Steps/howToImportProjectFilesFromFileSystem.xml">
       </toc>
       <toc
             file="xml/How To Steps/howToImportEngineXMLToUI.xml">
@@ -185,6 +185,18 @@
       </toc>
       <toc
             file="xml/User Interface/parameterGrid.xml">
+      </toc>
+      <toc
+            file="xml/Components/generateRecords.xml">
+      </toc>
+      <toc
+            file="xml/Components/limit.xml">
+      </toc>
+      <toc
+            file="xml/Components/sort.xml">
+      </toc>
+      <toc
+            file="xml/Components/uniqueSequence.xml">
       </toc>
    </extension>
 

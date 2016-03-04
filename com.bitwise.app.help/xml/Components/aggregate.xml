@@ -2,7 +2,7 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Aggregate" link_to="xml\Components\components.xml#Aggregate"> 
-	<topic label="Properties"  href="html/concepts/maintopic.html"> 
+	<topic label="Properties"  href="html/Components/Aggregate_Properties.html"> 
 	</topic>
  <topic href="html/concepts/maintopic.html" label="Mapping View">
  </topic>

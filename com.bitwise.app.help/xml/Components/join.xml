@@ -2,7 +2,7 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Join" link_to="xml\Components\components.xml#Join"> 
-	<topic label="Properties"  href="html/concepts/maintopic.html"> 
+	<topic label="Properties"  href="html/Components/Join_Properties.html"> 
 	</topic>
  <topic href="html/concepts/maintopic.html" label="Mapping View">
  </topic>
