@@ -10,12 +10,12 @@
 		<tns:category>SUBGRAPH</tns:category>
 		
 			<tns:port>
-			<tns:portSpecification typeOfPort="in" numberOfPorts="0" changePortCountDynamically="true">
+			<tns:portSpecification typeOfPort="in" numberOfPorts="0" changePortCountDynamically="false" >
 			</tns:portSpecification>
 			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="true">
 				<tns:port sequenceOfPort="0" allowMultipleLinks="false" linkMandatory="true" nameOfPort="out0" labelOfPort="out0"/>
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="unused" numberOfPorts="0" changePortCountDynamically="true">
+			<tns:portSpecification typeOfPort="unused" numberOfPorts="0" changePortCountDynamically="false">
 			</tns:portSpecification>
 		</tns:port>			
 		

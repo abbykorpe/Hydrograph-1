@@ -31,6 +31,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="LOOKUP_CONFIG_VALIDATOR"/>
  *     &lt;enumeration value="LOOKUP_MAPPING_VALIDATOR"/>
  *     &lt;enumeration value="INTEGER_OR_PARAMETER_VALIDATOR"/>
+ *     &lt;enumeration value="TRANSFORM_SCHEMA_GRID_VALIDATOR"/>
+ *     &lt;enumeration value="FILE_EXISTS_VALIDATOR"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -61,7 +63,10 @@ public enum Validators {
     @XmlEnumValue("INTEGER_OR_PARAMETER_VALIDATOR")
     IntegerOrParameterValidationRule("INTEGER_OR_PARAMETER_VALIDATOR"),
     @XmlEnumValue("TRANSFORM_SCHEMA_GRID_VALIDATOR")
-    TransformSchemaGridValidationRule("TRANSFORM_SCHEMA_GRID_VALIDATOR");
+    TransformSchemaGridValidationRule("TRANSFORM_SCHEMA_GRID_VALIDATOR"),
+    @XmlEnumValue("FILE_EXISTS_VALIDATOR")
+    FileExistsValidatorRule("FILE_EXISTS_VALIDATOR");
+    
     private final String value;
 
     Validators(String v) {

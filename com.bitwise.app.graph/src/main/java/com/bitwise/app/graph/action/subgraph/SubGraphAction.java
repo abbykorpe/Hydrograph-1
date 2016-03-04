@@ -194,6 +194,7 @@ public class SubGraphAction extends SelectionAction{
 		 * Generate subgraph target xml.
 		 */
 		subGraphUtility.createSubGraphXml(componentEditPart,clipboardList,file);
+	subGraphUtility.updateParametersInGrid(subgraphComponent, file.getLocation());
 		}
 	}
    }

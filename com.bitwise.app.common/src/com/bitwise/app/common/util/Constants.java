@@ -152,6 +152,7 @@ public class Constants {
 	public static final String EDIT = "Edit";
 	public static final String RUNTIME_PROPERTIES_COLUMN_NAME = "Runtime\nProperties";
 	public static final String RUNTIME_PROPERTIES_WINDOW_LABEL = "Runtime Properties";
+	public static final String RUNTIME_PROPERTY_NAME = "runtime_properties";
 	
 	public static final String RUNTIME_PROPERTY_LABEL = "Runtime\nProperties";
 	public static final String SUBGRAPH_PROPERTY_LABEL = "Subgraph\nProperties";
@@ -164,9 +165,10 @@ public class Constants {
 	public static final String SUBGRAPH_ACTION = "SubGraph";
 	public static final String SUBGRAPH_ACTION_ToolTip = "Path operations";
 	public static final String STANDALONE_SUBGRAPH = "StandAlone_Subgraph";
-	
+	public static final String SUBGRAPH_WINDOW_LABEL = "Subgraph Parameters";
 	public static final String JOB_PATH="path";
 	public static final String JOB_EXTENSION=".job";
 	public static final String XML_EXTENSION=".xml";
+	public static final String SUBGRAPH_UPDATE = "update";
 
 }

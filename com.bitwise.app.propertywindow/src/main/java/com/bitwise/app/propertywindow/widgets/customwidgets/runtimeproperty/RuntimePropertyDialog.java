@@ -76,7 +76,7 @@ public class RuntimePropertyDialog extends Dialog {
 	private Label deleteButton;
 	private Label upButton;
 	private Label downButton;
-
+	private String windowLabel;
 	private boolean isAnyUpdatePerformed;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	
@@ -86,9 +86,12 @@ public class RuntimePropertyDialog extends Dialog {
 	 * @param parentShell
 	 * @param propertyDialogButtonBar
 	 */
-	public RuntimePropertyDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
+	public RuntimePropertyDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar, String windowLabel) {
 		super(parentShell);
-
+		if(StringUtils.isNotBlank(windowLabel))
+			this.windowLabel=windowLabel;
+		else
+			this.windowLabel=Constants.RUNTIME_PROPERTIES_WINDOW_LABEL;
 		propertyList = new LinkedList<RuntimeProperties>();
 		runtimePropertyMap = new LinkedHashMap<String, String>();
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
@@ -105,7 +108,7 @@ public class RuntimePropertyDialog extends Dialog {
 		isAnyUpdatePerformed = false;
 		
 		Composite container = (Composite) super.createDialogArea(parent);
-		container.getShell().setText(Constants.RUNTIME_PROPERTIES_WINDOW_LABEL);
+		container.getShell().setText(windowLabel);
 		ColumnLayout cl_container = new ColumnLayout();
 		cl_container.verticalSpacing = 0;
 		cl_container.maxNumColumns = 1;

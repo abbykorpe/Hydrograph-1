@@ -103,8 +103,7 @@ public class SchemaPropagation {
 			for (Link link2 : link.getTarget().getSourceConnections()) {
 				if (!isMainLinkChecked(link2)) {
 					if (checkUnusedSocketAsSourceTerminal(link2) && getComponentsOutputSchema(link2) != null) {
-						applySchemaToTargetComponents(link2.getTarget(), link2.getTargetTerminal(),
-								this.componentsOutputSchema);
+						applySchemaToLinkedComponents(link2,this.componentsOutputSchema);
 					} else
 						propagatePassThroughAndMapFields(link);
 				} else
@@ -164,6 +163,11 @@ public class SchemaPropagation {
 		}
 	}
 
+	private boolean isOutputSubgraphComponent(Component subGraphComponent) {
+		if (StringUtils.equals(Constants.OUTPUT_SUBGRAPH, subGraphComponent.getComponentName()))
+			return true;
+		return false;
+	}
 
 	private void propagateSchemForUniqueSequenceComponent(Component component,
 			ComponentsOutputSchema previousComponentOutputSchema) {
@@ -189,7 +193,8 @@ public class SchemaPropagation {
 
 	private void propagatePassThroughAndMapFields(Link link) {
 		boolean toPropagate = false;
-		ComponentsOutputSchema sourceOutputSchema = getSourceComponentsOutputSchemaFromMap(link);
+		
+		ComponentsOutputSchema sourceOutputSchema = getComponentsOutputSchema(link);
 		ComponentsOutputSchema targetOutputSchema = getTargetComponentsOutputSchemaFromMap(link);
 		if (targetOutputSchema != null && !targetOutputSchema.getPassthroughFields().isEmpty()) {
 			targetOutputSchema.updatePassthroughFieldsSchema(sourceOutputSchema, link.getTargetTerminal());

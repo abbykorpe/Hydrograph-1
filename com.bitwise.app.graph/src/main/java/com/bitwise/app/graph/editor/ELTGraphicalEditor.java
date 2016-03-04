@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -73,7 +74,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackAdapter;
-import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -116,6 +116,7 @@ import com.bitwise.app.graph.action.CutAction;
 import com.bitwise.app.graph.action.PasteAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphOpenAction;
+import com.bitwise.app.graph.action.subgraph.SubGraphUpdateAction;
 import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
 import com.bitwise.app.graph.handler.RunJobHandler;
@@ -636,6 +637,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		action=new SubGraphOpenAction(this, pasteAction);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
+		
+		action=new SubGraphUpdateAction(this, pasteAction);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
 
 
 	}
@@ -703,14 +708,17 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void setInput(IEditorInput input) {
-		super.setInput(input);
+		
 
 		try {
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(input, this);
 			container = genrateContainerData.getContainerData();
+			super.setInput(input);
 		} catch (CoreException | IOException ce) {
 			logger.error("Exception while setting input", ce);
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().dispose();
+			MessageDialog.openError(new Shell(), "Error", "Exception occured while opening the graph -\n"+ce.getMessage());
 		}
 	}
 
@@ -887,7 +895,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				logger.info("Resetting EditorInput data from GraphicalEditorInput to FileEditorInput");
 				setInput(new FileEditorInput(file));
 				initializeGraphicalViewer();
-				genrateTargetXml(file,null);
+				genrateTargetXml(file,null,null);
 				getCommandStack().markSaveLocation();
 			} catch (CoreException  | IOException ce) {
 				logger.error("Failed to Save the file : ", ce);
@@ -1009,16 +1017,21 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 * @param ifile
 	 *            the ifile
 	 */
-	public void genrateTargetXml(IFile ifile,Container container) {
-
+	public void genrateTargetXml(IFile ifile, IFileStore fileStore, Container container) {
 		logger.debug("Genrating target XML");
+		if (ifile != null)
+			generateTargetXMLInWorkspace(ifile, container);
+		else if (fileStore != null)
+			generateTargetXMLInLocalFileSystem(fileStore, container);
+	}
+
+	private void generateTargetXMLInWorkspace(IFile ifile, Container container2) {
 		IFile outPutFile = ResourcesPlugin.getWorkspace().getRoot().getFile(ifile.getFullPath().removeFileExtension().addFileExtension("xml"));
 		try {
 			if(container!=null)
-					ConverterUtil.INSTANCE.convertToXML(container, false, outPutFile);
+				ConverterUtil.INSTANCE.convertToXML(container, false, outPutFile,null);
 			else
-					ConverterUtil.INSTANCE.convertToXML(this.container, false, outPutFile);
-			
+				ConverterUtil.INSTANCE.convertToXML(this.container, false, outPutFile,null);
 		} catch (EngineException eexception) {
 			logger.warn("Failed to create the engine xml", eexception);
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Failed to create the engine xml", eexception.getMessage());
@@ -1029,7 +1042,29 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					"Failed to create Engine XML " + exception.getMessage());
 			StatusManager.getManager().handle(status, StatusManager.SHOW);
 		}
+		
+	}
 
+
+
+	private void generateTargetXMLInLocalFileSystem(IFileStore fileStore, Container container) {
+
+		try {
+			if(container!=null)
+				ConverterUtil.INSTANCE.convertToXML(container, false, null,fileStore);
+			else
+				ConverterUtil.INSTANCE.convertToXML(this.container, false,null,fileStore);
+		} catch (EngineException eexception) {
+			logger.warn("Failed to create the engine xml", eexception);
+			MessageDialog.openError(Display.getDefault().getActiveShell(), "Failed to create the engine xml", eexception.getMessage());
+			//			
+		}catch (Exception exception) {
+			logger.error("Failed to create the engine xml", exception);
+			Status status = new Status(IStatus.ERROR, "com.bitwise.app.graph",
+					"Failed to create Engine XML " + exception.getMessage());
+			StatusManager.getManager().handle(status, StatusManager.SHOW);
+		}
+		
 	}
 
 	@Override

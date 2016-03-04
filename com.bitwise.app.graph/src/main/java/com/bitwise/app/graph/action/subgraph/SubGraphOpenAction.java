@@ -1,18 +1,26 @@
 package com.bitwise.app.graph.action.subgraph;
 
+import java.io.InputStream;
 import java.util.List;
 
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
 import org.slf4j.Logger;
 
@@ -71,33 +79,52 @@ public class SubGraphOpenAction extends SelectionAction{
 	public void run() { 
 		List<Object> selectedObjects =getSelectedObjects();
 		SubGraphUtility subGraphUtility = new SubGraphUtility();
+		Container container = null;
 		if (selectedObjects != null && !selectedObjects.isEmpty()) {
 			for(Object obj:selectedObjects)
 			{
-				if(obj instanceof ComponentEditPart)
-				{
-					if (((ComponentEditPart) obj).getCastedModel().getCategory().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY)) {
-						IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();				
-						
+				if(obj instanceof ComponentEditPart) {
+					if (((ComponentEditPart) obj).getCastedModel().getCategory()
+							.equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY)) {
 						Component subgraphComponent = ((ComponentEditPart) obj).getCastedModel();
-						IPath jobFilePath=new Path((((ComponentEditPart) obj).getCastedModel()).getProperties().get(Constants.PATH_PROPERTY_NAME).toString());
-						IFile jobFile = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath);
 						try {
-							IDE.openEditor(page, jobFile, ELTGraphicalEditor.ID);
-						} catch (PartInitException e) {
-							logger.error("Unable to open subgraph");
-						}
-						ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-						Container container=editor.getContainer(); 
+							IPath jobFilePath = new Path(subgraphComponent.getProperties()
+									.get(Constants.PATH_PROPERTY_NAME).toString());
+							if (SubGraphUtility.isFileExistsOnLocalFileSystem(jobFilePath))
+								container = openEditor(jobFilePath);
+							else
+								MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
+										"Subgraph File does not exists");
 
-						for (Component component :  container.getChildren()) {
-							subGraphUtility.propogateSchemaToSubgraph(subgraphComponent, component);	
+							for (Component component : container.getChildren()) {
+								subGraphUtility.propogateSchemaToSubgraph(subgraphComponent, component);
+							}
+							((ComponentEditPart) obj).refresh();
+						} catch (Exception e) {
+							logger.error("Unable to open subgraph" + e);
+							MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
+									"Unable to open subgraph");
 						}
-						((ComponentEditPart) obj).refresh();
+					}
 				}
+
 			}
 		}
+	}
+		private Container openEditor(IPath jobFilePath) throws CoreException {
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists()) {
+			IFile iFile = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath);
+			IDE.openEditor(page, iFile);
+		} else {
+			if (jobFilePath.toFile().exists()) {
+				IFileStore fileStore = EFS.getLocalFileSystem().fromLocalFile(jobFilePath.toFile());
+				IEditorInput store = new FileStoreEditorInput(fileStore);
+				IDE.openEditorOnFileStore(page, fileStore);
+			}
 		}
+
+		return SubGraphUtility.getCurrentEditor().getContainer();
 	}
 	
 	@Override

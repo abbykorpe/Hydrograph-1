@@ -11,10 +11,11 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.slf4j.Logger;
 
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
+import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
-import com.bitwise.app.logging.factory.LogFactory;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -63,7 +64,7 @@ public class FileEditorContiner implements IGenrateContainerData {
 			IFile ifile = ifileEditorInput.getFile();
 			ifile.setContents(new ByteArrayInputStream(out.toByteArray()),true, false, null);
 			this.eltGraphicalEditorInstance.getCommandStack().markSaveLocation();
-			this.eltGraphicalEditorInstance.genrateTargetXml(ifile,null);
+			this.eltGraphicalEditorInstance.genrateTargetXml(ifile,null,null);
 			this.eltGraphicalEditorInstance.setDirty(false);
 		
 	}

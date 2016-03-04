@@ -33,6 +33,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: com.bitwise.app.graph.model,
  com.bitwise.app.graph.model.processor,
- com.thoughtworks.xstream
+ com.thoughtworks.xstream,
+ org.eclipse.core.filesystem
 Export-Package: com.bitwise.app.graph.controller,
  com.bitwise.app.graph.editor

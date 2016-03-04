@@ -22,5 +22,6 @@ Export-Package: com.bitwise.app.engine.exceptions,
  com.bitwise.app.engine.ui.util,
  com.bitwise.app.engine.util
 Import-Package: com.bitwise.app.parametergrid.utils,
+ org.eclipse.core.filesystem,
  org.eclipse.core.resources,
  org.eclipse.draw2d.geometry

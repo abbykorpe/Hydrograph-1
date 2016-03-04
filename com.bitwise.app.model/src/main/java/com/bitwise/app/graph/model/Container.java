@@ -111,8 +111,10 @@ public class Container extends Model {
 	public boolean removeChild(Component component) {
 		if (component != null && components.remove(component) && !componentNextNameSuffixes.isEmpty()) {
 			componentNames.remove(component.getPropertyValue(Component.Props.NAME_PROP.getValue()));
+			if(componentNextNameSuffixes.get(component.getPrefix())!=null){
 			Integer nextSuffix = componentNextNameSuffixes.get(component.getPrefix()) - 1;
 			componentNextNameSuffixes.put(component.getPrefix(), nextSuffix);
+			}
 			firePropertyChange(CHILD_REMOVED_PROP, null, component);
 			return true;
 		}

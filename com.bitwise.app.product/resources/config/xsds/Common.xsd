@@ -200,6 +200,13 @@
 		          </appinfo>
         	</annotation>
 		</enumeration>
+		<enumeration value="FILE_EXISTS_VALIDATOR">
+			 <annotation>
+		          <appinfo>
+		            <jaxb:typesafeEnumMember name="FileExistsValidatorRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
 	</restriction>
 	</simpleType>
 </schema>

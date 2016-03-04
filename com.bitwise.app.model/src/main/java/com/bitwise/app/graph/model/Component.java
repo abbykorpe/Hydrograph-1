@@ -564,6 +564,8 @@ public abstract class Component extends Model {
 	 *            a non-null Dimension instance or null
 	 */
 	public void setSize(Dimension newSize) {
+		if(newSize.height<75)
+			newSize.height=75;
 		if (newSize != null) {
 			size.setSize(newSize);
 			firePropertyChange(Props.SIZE_PROP.getValue(), null, size);
