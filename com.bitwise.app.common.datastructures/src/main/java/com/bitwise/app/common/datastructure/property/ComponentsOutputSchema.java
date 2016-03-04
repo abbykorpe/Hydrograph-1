@@ -118,31 +118,6 @@ public class ComponentsOutputSchema implements IDataStructure {
 					targetFixedWidthGridRow.setScaleTypeValue(sourceFixedWidthGridRow.getScaleTypeValue());
 				}
 				
-				/*if(portName!=null){
-					if (sourceFixedWidthGridRow != null && portName.equalsIgnoreCase(port)) {
-						targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
-						targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
-						targetFixedWidthGridRow.setLength(sourceFixedWidthGridRow.getLength());
-						targetFixedWidthGridRow.setPrecision(sourceFixedWidthGridRow.getPrecision());
-						targetFixedWidthGridRow.setScale(sourceFixedWidthGridRow.getScale());
-						targetFixedWidthGridRow.setDateFormat(sourceFixedWidthGridRow.getDateFormat());
-						targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
-						targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
-					}
-				}else{
-					if (sourceFixedWidthGridRow != null) {
-						targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
-						targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
-						targetFixedWidthGridRow.setLength(sourceFixedWidthGridRow.getLength());
-						targetFixedWidthGridRow.setPrecision(sourceFixedWidthGridRow.getPrecision());
-						targetFixedWidthGridRow.setScale(sourceFixedWidthGridRow.getScale());
-						targetFixedWidthGridRow.setDateFormat(sourceFixedWidthGridRow.getDateFormat());
-						targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
-						targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
-					}
-				}*/
-				
-				
 			}
 		}
 	}
@@ -170,17 +145,7 @@ public class ComponentsOutputSchema implements IDataStructure {
 			if (targetFixedWidthGridRow != null && sourceOutputSchema!=null) {
 				sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(entry.getKey());
 
-
-				/*String mapFieldSourceFieldName;
-				if(entry.getKey().contains(".")){
-					mapFieldSourceFieldName = entry.getKey().split("\\.")[1];
-				}else{
-					mapFieldSourceFieldName = entry.getKey();
-				}
-				sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(mapFieldSourceFieldName);*/
-				
-
-				String portName = mapFieldsPortInfo.get(entry.getValue());
+             	String portName = mapFieldsPortInfo.get(entry.getValue());
 				
 				if (portName != null && sourceFixedWidthGridRow != null) {
 					targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
