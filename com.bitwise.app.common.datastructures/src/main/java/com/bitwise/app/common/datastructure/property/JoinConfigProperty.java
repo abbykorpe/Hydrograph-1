@@ -6,29 +6,20 @@ public class JoinConfigProperty implements Cloneable{
 	
 	private String portIndex;
 	private String joinKey;
-	private Integer joinType;
-	private String paramValue;
+	private Integer recordRequired;
 	
 	public JoinConfigProperty() {
 		portIndex = "";
 		joinKey = "";
-		joinType = 0;
-		paramValue = "";
+		recordRequired = 0;
 	}
 	
-	public JoinConfigProperty(String portIndex,String joinKey, Integer joinType,String paramValue) {
+	public JoinConfigProperty(String portIndex,String joinKey, Integer joinType) {
 		this.portIndex =portIndex;
 		this.joinKey=joinKey;
-		this.joinType = joinType;
-		this.paramValue = paramValue;
+		this.recordRequired = joinType;
 	}
 	
-	public String getParamValue() {
-		return paramValue;
-	}
-	public void setParamValue(String paramValue) {
-		this.paramValue = paramValue;
-	}
 
 	public String getPortIndex() {
 		return portIndex;
@@ -42,13 +33,16 @@ public class JoinConfigProperty implements Cloneable{
 	public void setJoinKey(String joinKey) {
 		this.joinKey = joinKey;
 	}
-	public Integer getJoinType() {
-		return joinType;
-	}
-	public void setJoinType(Integer joinType) {
-		this.joinType = joinType;
-	}
+
 	
+	public Integer getRecordRequired() {
+		return recordRequired;
+	}
+
+	public void setRecordRequired(Integer recordRequired) {
+		this.recordRequired = recordRequired;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -56,7 +50,7 @@ public class JoinConfigProperty implements Cloneable{
 		result = prime * result
 				+ ((joinKey == null) ? 0 : joinKey.hashCode());
 		result = prime * result
-				+ ((joinType == null) ? 0 : joinType.hashCode());
+				+ ((recordRequired == null) ? 0 : recordRequired.hashCode());
 		result = prime * result
 				+ ((portIndex == null) ? 0 : portIndex.hashCode());
 		return result;
@@ -67,8 +61,7 @@ public class JoinConfigProperty implements Cloneable{
 	{  
 		JoinConfigProperty joinConfigProperty=new JoinConfigProperty() ;
 		joinConfigProperty.setJoinKey(getJoinKey());
-		joinConfigProperty.setJoinType(getJoinType());
-		joinConfigProperty.setParamValue(getParamValue());
+		joinConfigProperty.setRecordRequired(getRecordRequired());
 		joinConfigProperty.setPortIndex(getPortIndex());
 		return joinConfigProperty;
 	}
@@ -89,10 +82,10 @@ public class JoinConfigProperty implements Cloneable{
 				return false;
 		} else if (!joinKey.equals(other.joinKey))
 			return false;
-		if (joinType == null) {
-			if (other.joinType != null)
+		if (recordRequired == null) {
+			if (other.recordRequired != null)
 				return false;
-		} else if (!joinType.equals(other.joinType))
+		} else if (!recordRequired.equals(other.recordRequired))
 			return false;
 		if (portIndex == null) {
 			if (other.portIndex != null)

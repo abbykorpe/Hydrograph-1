@@ -11,12 +11,12 @@ import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
 import com.bitwise.app.common.datastructure.property.JoinMappingGrid;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.converter.LinkingData;
 import com.bitwise.app.engine.ui.converter.TransformUiConverter;
 import com.bitwise.app.engine.ui.repository.UIComponentRepo;
 import com.bitwise.app.graph.model.Container;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeFieldName;
@@ -24,7 +24,6 @@ import com.bitwiseglobal.graph.commontypes.TypeInputField;
 import com.bitwiseglobal.graph.commontypes.TypeMapField;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsComponent;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
-import com.bitwiseglobal.graph.join.JoinType;
 import com.bitwiseglobal.graph.join.TypeKeyFields;
 import com.bitwiseglobal.graph.operationstypes.Join;
 
@@ -65,7 +64,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 			joinConfigPropertyList = new ArrayList<>();
 			for (TypeKeyFields typeKeysFields : join.getKeys()) {
 				joinConfigProperty = new JoinConfigProperty();
-				joinConfigProperty.setJoinType(getJoinType(typeKeysFields));
+				joinConfigProperty.setRecordRequired(getRecordRequired(typeKeysFields));
 				joinConfigProperty.setJoinKey(getKeyNames(typeKeysFields));
 				joinConfigProperty.setPortIndex(typeKeysFields.getInSocketId());
 				joinConfigPropertyList.add(joinConfigProperty);
@@ -87,15 +86,17 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 	}
 	
 	
-	private Integer getJoinType(TypeKeyFields typeKeysFields) {
-		int joinTypeNumber = 0;
-		if (typeKeysFields.getJoinType() != null && typeKeysFields.getJoinType().value() != null)
-			for (JoinType joinType : JoinType.values()) {
-				if (typeKeysFields.getJoinType().equals(joinType))
-					return joinTypeNumber;
-				joinTypeNumber++;
-			}
-		return joinTypeNumber;
+	private Integer getRecordRequired(TypeKeyFields typeKeysFields) {
+		int recordRequiredNumber;
+		if(typeKeysFields.isRecordRequired())
+		{
+			recordRequiredNumber=0;
+		}
+		else
+		{
+			recordRequiredNumber=1;
+		}
+		return recordRequiredNumber;
 	}
 
 	private String getSize() {

@@ -63,8 +63,6 @@ public class Constants {
 	public static final String PRIMARY_KEYS = "Primary\n Keys";
 	public static final String PROPERTY_COLUMN_NAME = "column_name";
 	public static final String PROPERTY_SECONDARY_COLUMN_KEYS = "secondary_column_keys";
-	public static final String INNER = "Inner";
-	public static final String OUTER = "Outer";
 	
 	public static final String MATCH_PROPERTY_WIDGET = "match_value";
 	public static final String MATCH = "Match";

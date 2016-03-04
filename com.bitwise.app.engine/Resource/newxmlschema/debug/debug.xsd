@@ -5,24 +5,28 @@
 
 	<xs:element name="debug">
 		<xs:complexType>
-			<xs:choice maxOccurs="unbounded" minOccurs="1">
-				<xs:element name="viewData">
-					<xs:complexType>
-						<xs:all>
-							<xs:element name="limit" minOccurs="0" maxOccurs="1">
-								<xs:complexType>
-									<xs:attribute name="value" type="xs:long" use="optional" />
-								</xs:complexType>
-							</xs:element>
-						</xs:all>
-						<xs:attribute name="fromComponentId" type="xs:string"
-							use="required" />
-						<xs:attribute name="outSocketId" type="xs:string"
-							use="required" />
-					</xs:complexType>
-				</xs:element>
-			</xs:choice>
+			<xs:sequence>
+				<xs:element name="debugPlugin" type="debugPlugin" maxOccurs="1" minOccurs="0" />
+				<xs:element name="viewData" type="viewData" maxOccurs="unbounded" minOccurs="0"/>
+			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-
+	
+	<xs:complexType name="debugPlugin">
+			<xs:attribute name="value" type="xs:string" use="required"/>
+	</xs:complexType>
+		
+	<xs:complexType name="viewData">
+			<xs:sequence>
+				<xs:element name="limit" type="limit" maxOccurs="1" minOccurs="0" />
+			</xs:sequence>
+			<xs:attribute name="fromComponentId" type="xs:string" use="required"></xs:attribute>
+			<xs:attribute name="outSocketId" type="xs:string" use="required"></xs:attribute>
+			<xs:attribute name="outSocketType" type="xs:string" use="optional" default="out"></xs:attribute>
+	</xs:complexType>
+	
+	<xs:complexType name="limit">
+		<xs:attribute name="value" type="xs:long" use="optional" default="100"/>
+	</xs:complexType>
+	
 </xs:schema>

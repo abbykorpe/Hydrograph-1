@@ -6,19 +6,12 @@
   <xs:import schemaLocation="../../common/common-types.xsd"
     namespace="http://www.bitwiseglobal.com/graph/commontypes" />
 
-  <xs:simpleType name="join_type">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="inner" />
-      <xs:enumeration value="outer" />
-    </xs:restriction>
-  </xs:simpleType>
-
   <xs:complexType name="type-key-fields">
     <xs:sequence>
       <xs:element name="field" maxOccurs="unbounded" type="cmn:type-field-name" />
     </xs:sequence>
     <xs:attribute name="inSocketId" use="required" type="xs:string" />
-    <xs:attribute name="joinType" use="required" type="join_type" />
+    <xs:attribute name="recordRequired" use="required" type="xs:boolean" />
   </xs:complexType>
 
   <xs:simpleType name="types-outSocket-types">
