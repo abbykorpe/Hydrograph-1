@@ -26,15 +26,14 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.ELTMatchValueWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTOperationClassWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTRetentionLogicWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.ELTXmlPropertiesContainer;
-import com.bitwise.app.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.SingleColumnWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.TextBoxWithLabelWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.WidgetHelper;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.joinproperty.ELTJoinPortCount;
 import com.bitwise.app.propertywindow.widgets.customwidgets.operational.TransformWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.runtimeproperty.ELTRuntimePropertiesWidget;
-import com.bitwise.app.propertywindow.widgets.customwidgets.runtimeproperty.SubGraphPropertiesWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.secondarykeys.SecondaryColumnKeysWidget;
 

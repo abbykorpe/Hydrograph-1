@@ -5,9 +5,10 @@
 	<tns:component paletteIconPath="/icons/subgraph_palette.png"
 		canvasIconPath="/icons/subgraph-canvas.png" name="InputSubgraphComponent"
 		nameInPalette="InputSubgraph" defaultNamePrefix="Subgraph"
-		description="This is Default component.\nsome more text"
-		helpFilePath="/com.bitwise.app.help/html/Components/Dummy.html" >
+		description="Input Subgraph Component"
+		helpFilePath="/com.bitwise.app.help/html/Components/InputSubgraph.html" >
 		<tns:category>SUBGRAPH</tns:category>
+		
 			<tns:port>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="0" changePortCountDynamically="true">
 			</tns:portSpecification>
@@ -16,14 +17,12 @@
 			</tns:portSpecification>
 			<tns:portSpecification typeOfPort="unused" numberOfPorts="0" changePortCountDynamically="true">
 			</tns:portSpecification>
-		</tns:port>
-	
-			
-			<tns:property dataType="string" name="name"
-			renderer="COMPONENT_NAME_WIDGET" type="USER" group="GENERAL"
+		</tns:port>			
+		
+		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER" group="GENERAL"
 			subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" />
-	
-				<tns:property dataType="string" name="outPortCount" value="1" renderer="OUTPUT_COUNT_WIDGET" type="USER"
+			
+		<tns:property dataType="string" name="outPortCount" value="1" renderer="OUTPUT_COUNT_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>

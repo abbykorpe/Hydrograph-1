@@ -135,9 +135,7 @@ public class SchemaPropagation {
 			Map<String, ComponentsOutputSchema> tempSchemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
 			tempSchemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
 			component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, tempSchemaMap);
-		} else if (StringUtils.equals(Constants.OUTPUT_SUBGRAPH, component.getComponentName())) {
-
-		}
+		} 
 	}
 
 	private void propagateSchemaFromSubgraph(Component subGraphComponent, String targetTerminal,
@@ -166,11 +164,6 @@ public class SchemaPropagation {
 		}
 	}
 
-	private boolean isOutputSubgraphComponent(Component subGraphComponent) {
-		if (StringUtils.equals(Constants.OUTPUT_SUBGRAPH, subGraphComponent.getComponentName()))
-			return true;
-		return false;
-	}
 
 	private void propagateSchemForUniqueSequenceComponent(Component component,
 			ComponentsOutputSchema previousComponentOutputSchema) {

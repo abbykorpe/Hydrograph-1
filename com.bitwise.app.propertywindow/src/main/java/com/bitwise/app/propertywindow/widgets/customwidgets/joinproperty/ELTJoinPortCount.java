@@ -19,7 +19,7 @@ public class ELTJoinPortCount extends TextBoxWithLabelWidget{
 
 	private String unusedPortPropertyName;
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTJoinPortCount.class);
-	int minimunPortCount;
+	private int minimunPortCount;
 	private String firstPortPropertyName;
 	protected ComponentConfigrationProperty additionalComponentConfigrationProperty;
 
