@@ -33,15 +33,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     	
     	openPerspectiveAction = ActionFactory.OPEN_PERSPECTIVE_DIALOG.create(window);
         register(openPerspectiveAction);
-        IWorkbenchAction deleteAction = ActionFactory.DELETE.create(window);
-        register(deleteAction);
-        IWorkbenchAction copyAction = ActionFactory.COPY.create(window);
-        register(copyAction);
-        IWorkbenchAction pasteAction = ActionFactory.PASTE.create(window);
-        register(pasteAction);
         IWorkbenchAction refreshAction=ActionFactory.REFRESH.create(window);
         register(refreshAction);
-        
     }
 
     protected void fillMenuBar(IMenuManager menuBar) {
