@@ -146,11 +146,23 @@ public class ELTComponentNameWidget extends AbstractWidget {
 		componentName = componentName.trim();
 		boolean result = true;
 
-		for (String cname : ((ArrayList<String>) super.componentMiscellaneousProperties
-				.getComponentMiscellaneousProperty(COMPONENT_NAMES))) {
-			if (cname.equals(componentName)) {
-				result = false;
-				break;
+		if (!oldName.equals(componentName) && oldName.equalsIgnoreCase(componentName)) {
+			for (String cname : ((ArrayList<String>) super.componentMiscellaneousProperties
+					.getComponentMiscellaneousProperty(COMPONENT_NAMES))) {
+				if (cname.equalsIgnoreCase(componentName) && !cname.equals(oldName)) {
+					result = false;
+					break;
+				}
+			}
+
+		} else {
+
+			for (String cname : ((ArrayList<String>) super.componentMiscellaneousProperties
+					.getComponentMiscellaneousProperty(COMPONENT_NAMES))) {
+				if (cname.equalsIgnoreCase(componentName)) {
+					result = false;
+					break;
+				}
 			}
 		}
 		logger.debug("result: {}", result);
