@@ -498,30 +498,6 @@
              schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
              sequence="f1">
        </key>
-       <key
-             commandId="com.bitwise.app.menus.edit.delete"
-             contextId="org.eclipse.ui.contexts.window"
-             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-             sequence="M1+D">
-       </key>
-       <key
-             commandId="com.bitwise.app.menus.edit.copy"
-             contextId="org.eclipse.ui.contexts.window"
-             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-             sequence="M1+M2+C">
-       </key>
-       <key
-             commandId="com.bitwise.app.menus.edit.paste"
-             contextId="org.eclipse.ui.contexts.window"
-             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-             sequence="M1+M2+V">
-       </key>
-       <key
-             commandId="com.bitwise.app.menus.edit.cut"
-             contextId="org.eclipse.ui.contexts.window"
-             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-             sequence="M1+M2+X">
-       </key>
    </extension>
    <extension
          point="org.eclipse.ui.importWizards">
