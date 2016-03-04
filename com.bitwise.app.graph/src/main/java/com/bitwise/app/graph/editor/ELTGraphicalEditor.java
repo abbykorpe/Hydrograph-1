@@ -65,6 +65,8 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -206,6 +208,44 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 */
 	public void attachCanvasMouseListeners(){
 
+		//TODO - please do not remove this code for now. This code will be useful in resolving stop button bugs 
+		/*viewer.getControl().addControlListener(new ControlListener() {
+			
+			@Override
+			public void controlResized(ControlEvent e) {
+
+				String consoleName;
+				consoleName = (getActiveProject() + "." + getTitle().replace(".job", ""));
+				
+				Job job = JobManager.INSTANCE.getRunningJob(consoleName);
+				
+				if(job!=null){
+					if(JobStatus.KILLED.equals(job.getJobStatus())){
+						((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
+						((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+					}else{
+						if(job.isRemoteMode()){
+							enableRunJob(false);
+						}else{
+							((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
+							((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+						}						
+					}
+					
+				}else{
+					if(RunStopButtonCommunicator.StopJob.getHandler()!=null)
+					enableRunJob(true);
+				}
+			
+			};
+			
+			@Override
+			public void controlMoved(ControlEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});*/
+		
 		viewer.getControl().addKeyListener(new KeyListener() {
 
 			@Override
@@ -276,6 +316,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
 	}
 
+	
+	
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 

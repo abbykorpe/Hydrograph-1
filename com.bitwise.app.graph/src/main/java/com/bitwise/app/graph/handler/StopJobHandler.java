@@ -3,11 +3,13 @@ package com.bitwise.app.graph.handler;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.graph.job.JobManager;
 import com.bitwise.app.graph.job.RunStopButtonCommunicator;
+import com.bitwise.app.joblogger.JobLogger;
 
 /**
  * 
@@ -33,7 +35,8 @@ public class StopJobHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		JobManager.INSTANCE.killJob(getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName());
+		JobManager.INSTANCE.killJob(JobManager.INSTANCE.getActiveCanvas());
+		
 		return null;
 	}
 

@@ -27,6 +27,9 @@ import com.bitwise.app.logging.factory.LogFactory;
  */
 public class RemoteJobLauncher extends AbstractJobLauncher {
 	private static Logger logger = LogFactory.INSTANCE.getLogger(RemoteJobLauncher.class);
+	private static final String BUILD_SUCCESSFUL = "BUILD SUCCESSFUL";
+	private static final String JOB_KILLED_SUCCESSFULLY = "JOB KILLED SUCCESSFULLY";
+	private static final String JOB_COMPLETED_SUCCESSFULLY = "JOB COMPLETED SUCCESSFULLY";;
 
 	@Override
 	public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas) {
@@ -182,16 +185,19 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 				}
 
 				if (job.getRemoteJobProcessID() != null) {
-					if (job.getJobStatus().equals(JobStatus.KILLED)) {
+					if (JobStatus.KILLED.equals(job.getJobStatus())) {
 						((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 						((RunJobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
-						JobManager.INSTANCE.killJob(job.getConsoleName(),gefCanvas);
+						JobManager.INSTANCE.killJob(job.getConsoleName(), gefCanvas);
 						joblogger.logMessage("Killing job with job remote process id: " + job.getRemoteJobProcessID());
 						break;
 					}
 				}
 
-				joblogger.logMessage(line);
+				if (!line.contains(BUILD_SUCCESSFUL)) {
+					joblogger.logMessage(line);
+				}
+
 			}
 		} catch (Exception e) {
 			if (JobManager.INSTANCE.getRunningJobsMap().containsKey(job.getLocalJobID()))
@@ -207,9 +213,17 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		}
 
 		if (job.getRemoteJobProcessID() == null) {
-			if (job.getJobStatus().equals(JobStatus.KILLED)) {
+			if (JobStatus.KILLED.equals(job.getJobStatus())) {
+				joblogger.logMessage(JOB_KILLED_SUCCESSFULLY);
 				releaseResources(job, gefCanvas, joblogger);
 				JobManager.INSTANCE.removeJob(job.getLocalJobID());
+			}
+		}
+
+		if (job.getRemoteJobProcessID() != null) {
+			if (!JobStatus.KILLED.equals(job.getJobStatus()) && !JobStatus.FAILED.equals(job.getJobStatus())
+					&& !JobStatus.RUNNING.equals(job.getJobStatus())) {
+				joblogger.logMessage(JOB_COMPLETED_SUCCESSFULLY);
 			}
 		}
 	}
