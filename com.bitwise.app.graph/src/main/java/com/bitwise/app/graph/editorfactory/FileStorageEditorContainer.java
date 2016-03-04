@@ -5,12 +5,16 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.slf4j.Logger;
 
 import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.model.Container;
 
@@ -59,7 +63,8 @@ public class FileStorageEditorContainer implements IGenrateContainerData {
 		fsout.close();
 		eltGraphicalEditorInstance.getCommandStack().markSaveLocation();
 		eltGraphicalEditorInstance.setDirty(false);
-		// genrateTargetXml(ifile);
+		IFileStore fileStore = EFS.getLocalFileSystem().fromLocalFile(file);
+		this.eltGraphicalEditorInstance.genrateTargetXml(null,fileStore,null);
 
 	}
 

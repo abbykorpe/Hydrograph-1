@@ -38,6 +38,7 @@ import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.figure.ComponentBorder;
 import com.bitwise.app.graph.figure.ComponentFigure;
 import com.bitwise.app.graph.figure.ELTFigureConstants;
+import com.bitwise.app.graph.figure.PortFigure;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.ComponentLabel;
 import com.bitwise.app.graph.model.Link;
@@ -302,9 +303,9 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			
 			logger.debug("Updated dimentions: " + getCastedModel().getSize().height + ":"
 							+ getCastedModel().getSize().width);
-			if(Constants.SUBGRAPH_COMPONENT.equalsIgnoreCase(getCastedModel().getComponentName())){
-					SubGraphUtility subGraphUtility=new SubGraphUtility();
-					subGraphUtility.updateSubgraphPort((ComponentEditPart)this);
+			if(eltPropertyWindow.isPropertyChanged() && Constants.SUBGRAPH_COMPONENT.equalsIgnoreCase(getCastedModel().getComponentName())){
+				SubGraphUtility subGraphUtility=new SubGraphUtility();
+				subGraphUtility.updateSubgraphProperty((ComponentEditPart)this,null,null);
 			} 
 			adjustComponentFigure(getCastedModel(), getComponentFigure());
 			getCastedModel().setComponentLabel((String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue()));
@@ -398,7 +399,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		{
 			newOutPortCount = Integer.parseInt((String) getCastedModel().getProperties().get("outPortCount"));
 		}
-
+		if(prevOutPortCount != newOutPortCount){
 		int outPortCountToBeApplied = newOutPortCount!=prevOutPortCount ? newOutPortCount : prevOutPortCount;
 
 		ComponentFigure compFig = (ComponentFigure)getFigure();
@@ -408,7 +409,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		getCastedModel().setSize(newSize);
 		refresh();
 		
-		if(prevOutPortCount != newOutPortCount){
+		
 
 			if(prevOutPortCount < newOutPortCount){
 				//Increment the ports

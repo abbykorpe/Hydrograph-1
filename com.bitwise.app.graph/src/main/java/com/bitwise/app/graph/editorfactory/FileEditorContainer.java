@@ -11,17 +11,18 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.slf4j.Logger;
 
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
+import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
-import com.bitwise.app.logging.factory.LogFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class FileEditorContiner.
+ * The Class FileEditorContainer.
  */
-public class FileEditorContiner implements IGenrateContainerData {
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(FileEditorContiner.class);
+public class FileEditorContainer implements IGenrateContainerData {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FileEditorContainer.class);
 	private final IFileEditorInput ifileEditorInput;
 	private final ELTGraphicalEditor eltGraphicalEditorInstance;
 	
@@ -33,7 +34,7 @@ public class FileEditorContiner implements IGenrateContainerData {
 	 * @param eltGraphicalEditorInstance
 	 *            the elt graphical editor instance
 	 */
-	public FileEditorContiner(IEditorInput editorInput, ELTGraphicalEditor eltGraphicalEditorInstance) {
+	public FileEditorContainer(IEditorInput editorInput, ELTGraphicalEditor eltGraphicalEditorInstance) {
 		this.ifileEditorInput=(IFileEditorInput)editorInput;
 		this.eltGraphicalEditorInstance=eltGraphicalEditorInstance;
 	}
@@ -50,20 +51,12 @@ public class FileEditorContiner implements IGenrateContainerData {
 	public void storeEditorInput() throws IOException, CoreException {
 		logger.debug("storeEditorInput - Storing IFileEditor input into Ifile");
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			if(eltGraphicalEditorInstance.getContainer().isSubgraph())
-			{
-				Container container= eltGraphicalEditorInstance.getContainer();
-				for(int i=0;i<container.getChildren().size();i++){
-					if(Constants.INPUT_SUBGRAPH.equalsIgnoreCase(container.getChildren().get(i).getComponentName())){
-						container.getChildren().get(i).getProperties().put(Constants.SCHEMA_TO_PROPAGATE, new HashMap<>());
-					}
-				}
-			}
+			eltGraphicalEditorInstance.deleteSubgraphProperties();
 			eltGraphicalEditorInstance.createOutputStream(out);
 			IFile ifile = ifileEditorInput.getFile();
 			ifile.setContents(new ByteArrayInputStream(out.toByteArray()),true, false, null);
 			this.eltGraphicalEditorInstance.getCommandStack().markSaveLocation();
-			this.eltGraphicalEditorInstance.genrateTargetXml(ifile,null);
+			this.eltGraphicalEditorInstance.genrateTargetXml(ifile,null,null);
 			this.eltGraphicalEditorInstance.setDirty(false);
 		
 	}

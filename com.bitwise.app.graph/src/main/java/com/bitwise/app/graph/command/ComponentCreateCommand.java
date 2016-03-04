@@ -83,7 +83,8 @@ public class ComponentCreateCommand extends Command {
 		setupComponent(component);		
 
 		Dimension newSize = new Dimension(width, height + ELTFigureConstants.componentOneLineLabelMargin);
-
+		if(newSize.height<75)
+			newSize.height=75;
 		this.component = component;
 		this.parent = parent;
 		Point p = new Point(bounds.x, bounds.y);

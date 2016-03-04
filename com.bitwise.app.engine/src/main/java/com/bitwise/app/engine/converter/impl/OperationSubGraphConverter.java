@@ -44,10 +44,8 @@ public class OperationSubGraphConverter extends SubgraphConverter {
 		super.prepareForXML();
 		Subgraph subgraph = (Subgraph) baseComponent;
 		Subgraph.Path path = new Subgraph.Path();
-		String[] temp;
 		String subGraphFilePath=	((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION);
-		temp = subGraphFilePath.split("\\\\",3);
-		path.setUri(temp[temp.length-1].replaceAll("\\\\", "/"));
+		path.setUri(subGraphFilePath);
 		subgraph.setPath(path);
 		subgraph.setSubgraphParameter(getRuntimeProperties());
 		 

@@ -33,6 +33,7 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 	private String propertyName;
 	private Shell shell;
 	private String componentName;
+	private RuntimeConfig runtimeConfig;
 	
 	/**
 	 * Instantiates a new ELT runtime properties widget.
@@ -65,7 +66,7 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 				container.getContainerControl());
 		runtimeComposite.createContainerWidget();
 		shell = runtimeComposite.getContainerControl().getShell();
-		RuntimeConfig runtimeConfig = (RuntimeConfig) widgetConfig;
+		runtimeConfig = (RuntimeConfig) widgetConfig;
 		
 		ELTDefaultLable defaultLable1 = new ELTDefaultLable(runtimeConfig.getLabel()); 
 		runtimeComposite.attachWidget(defaultLable1);
@@ -99,7 +100,7 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 			initialMap = new HashMap<String, String>();
 		}
 		
-		RuntimePropertyDialog runtimePropertyDialog = new RuntimePropertyDialog(shell,propertyDialogButtonBar);
+		RuntimePropertyDialog runtimePropertyDialog = new RuntimePropertyDialog(shell,propertyDialogButtonBar,runtimeConfig.getWindowLabel());
 		runtimePropertyDialog.setRuntimeProperties((Map<String, String>) getProperties().get(propertyName));
 		runtimePropertyDialog.open();
 		initialMap = runtimePropertyDialog.getRuntimeProperties();

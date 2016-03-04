@@ -28,12 +28,9 @@ public class SubgraphComponent extends SubgraphCategory {
 				return "com.bitwise.app.engine.converter.impl.OutputSubGraphConverter";
 			if (type.equalsIgnoreCase(Constants.OPERATION))
 				return "com.bitwise.app.engine.converter.impl.OperationSubGraphConverter";
-			if (type.equalsIgnoreCase(Constants.OUTPUT_SUBGRAPH))
-				return "com.bitwise.app.engine.converter.impl.OutputComponentSubGraphConverter";
-			if (type.equalsIgnoreCase(Constants.INPUT_SUBGRAPH))
-				return "com.bitwise.app.engine.converter.impl.InputComponentSubGraphConverter";
+		
 		}
-		return "com.bitwise.app.engine.converter.impl.InputSubGraphConverter";
+		return "com.bitwise.app.engine.converter.impl.CommandSubgraphConverter";
 
 	}
 

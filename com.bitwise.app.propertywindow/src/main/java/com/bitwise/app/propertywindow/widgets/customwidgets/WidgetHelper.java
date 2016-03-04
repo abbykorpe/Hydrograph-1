@@ -232,9 +232,10 @@ public class WidgetHelper {
 		return dropDownConfig;
 	}
 	
-	public WidgetConfig getRunTimeWidgetConfig(String label) {
+	public WidgetConfig getRunTimeWidgetConfig(String label,String windowLabel) {
 		RuntimeConfig runtimeConfig = new RuntimeConfig();
 		runtimeConfig.setLabel(label);
+		runtimeConfig.setWindowLabel(windowLabel);
 		return runtimeConfig;
 	}
 

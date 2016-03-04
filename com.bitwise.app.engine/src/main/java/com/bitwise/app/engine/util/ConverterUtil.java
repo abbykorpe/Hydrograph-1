@@ -2,13 +2,19 @@ package com.bitwise.app.engine.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.slf4j.Logger;
 
 import com.bitwise.app.logging.factory.LogFactory;
@@ -31,7 +37,7 @@ public class ConverterUtil {
 		
 	}
 	
-	public void convertToXML(Container container, boolean validate, IFile outPutFile) throws Exception{
+	public void convertToXML(Container container, boolean validate, IFile outPutFile,  IFileStore externalOutputFile) throws Exception{
 		LOGGER.debug("Creating converter based on component");
 		
 			Graph graph = new ObjectFactory().createGraph();
@@ -46,28 +52,21 @@ public class ConverterUtil {
 				}
 			}
 			
-			marshall(graph, validate,outPutFile);
+			marshall(graph, validate,outPutFile,externalOutputFile);
 		
 		
 	}
 	
 	
-	private void marshall(Graph graph, boolean validate,IFile outPutFile) {
+	private void marshall(Graph graph, boolean validate,IFile outPutFile, IFileStore externalOutputFile) {
 		LOGGER.debug("Marshaling generated object into target XML");
 		ByteArrayOutputStream out = null;
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(graph.getClass());
-			Marshaller marshaller = jaxbContext.createMarshaller();
-			out = new ByteArrayOutputStream();
-		    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.marshal(graph, out);
-		 	 
-			out = ComponentXpath.INSTANCE.addParameters(out);
-			if (outPutFile.exists())
-				outPutFile.setContents(new ByteArrayInputStream(out.toByteArray()), true,false, null);
-			else
-				outPutFile.create(new ByteArrayInputStream(out.toByteArray()),true, null);
-			out.close();
+			 if (outPutFile!=null)
+				 storeFileIntoWorkspace(graph,outPutFile,out);
+			else if(externalOutputFile!=null)
+				storeFileIntoLocalFileSystem(graph,externalOutputFile,out);
+			
 			
 		} catch (Exception exception) {
 			LOGGER.error("Failed in marshal", exception);
@@ -80,6 +79,36 @@ public class ConverterUtil {
 				}
 			}
 		}
+	}
+
+	private void storeFileIntoLocalFileSystem(Graph graph, IFileStore externalOutputFile, ByteArrayOutputStream out) throws CoreException, JAXBException, IOException {
+		File externalFile=externalOutputFile.toLocalFile(0, null);
+		OutputStream outputStream = new FileOutputStream (externalFile.getAbsolutePath().replace(".job", ".xml")); 
+		JAXBContext jaxbContext = JAXBContext.newInstance(graph.getClass());
+		Marshaller marshaller = jaxbContext.createMarshaller();
+		out = new ByteArrayOutputStream();
+	    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		marshaller.marshal(graph, out);
+		out = ComponentXpath.INSTANCE.addParameters(out);
+			out.writeTo(outputStream);
+			outputStream.close();
+		
+	}
+
+	private void storeFileIntoWorkspace(Graph graph, IFile outPutFile, ByteArrayOutputStream out) throws JAXBException, CoreException {
+		
+		JAXBContext jaxbContext = JAXBContext.newInstance(graph.getClass());
+		Marshaller marshaller = jaxbContext.createMarshaller();
+		out = new ByteArrayOutputStream();
+	    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		marshaller.marshal(graph, out);
+	 	 
+		out = ComponentXpath.INSTANCE.addParameters(out);
+		if (outPutFile.exists())
+			outPutFile.setContents(new ByteArrayInputStream(out.toByteArray()), true,false, null);
+		else
+			outPutFile.create(new ByteArrayInputStream(out.toByteArray()),true, null);
+		
 	}
 
 }

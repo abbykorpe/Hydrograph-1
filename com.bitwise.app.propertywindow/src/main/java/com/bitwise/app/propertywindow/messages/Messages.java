@@ -9,6 +9,8 @@ import org.eclipse.osgi.util.NLS;
  */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "resources.messages";
+	public static String NOT_EXISTS;
+	public static  String FILE_DOES_NOT_EXISTS ;
 	public static  String FIELDNAME_NOT_ALPHANUMERIC_ERROR;
 	public static String EMPTY_XML_CONTENT;
 	public static String RUNTIME_WINDOW_NAME;

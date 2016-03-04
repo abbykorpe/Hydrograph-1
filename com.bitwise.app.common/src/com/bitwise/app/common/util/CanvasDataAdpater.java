@@ -19,7 +19,7 @@ public class CanvasDataAdpater {
 		parameterList = new LinkedList<>();
 	}
 	
-	private void fetchData(){
+	public void fetchData(){
 		Pattern parameterPattren = Pattern.compile("@\\{(.*?)\\}");
 		Matcher matcher = parameterPattren.matcher(canvasData);
 		while (matcher.find()) {

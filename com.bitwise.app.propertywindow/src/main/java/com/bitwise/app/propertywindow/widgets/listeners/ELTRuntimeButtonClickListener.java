@@ -7,7 +7,6 @@ import org.eclipse.swt.widgets.Widget;
 
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.runtimeproperty.ELTRuntimePropertiesWidget;
-import com.bitwise.app.propertywindow.widgets.customwidgets.runtimeproperty.SubGraphPropertiesWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.secondarykeys.SecondaryColumnKeysWidget;
 
 /**
@@ -36,8 +35,7 @@ public class ELTRuntimeButtonClickListener implements IELTListener {
 						((ELTRuntimePropertiesWidget)helpers.object).newWindowLauncher();
 					else if(helpers.object instanceof SecondaryColumnKeysWidget) 
 						((SecondaryColumnKeysWidget)helpers.object).newWindowLauncher();
-					else if(helpers.object instanceof SubGraphPropertiesWidget) 
-						((SubGraphPropertiesWidget)helpers.object).newWindowLauncher();
+					
 
 				}
 

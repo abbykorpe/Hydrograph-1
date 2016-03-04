@@ -43,9 +43,10 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		// Add standard action groups to the menu
 		GEFActionConstants.addStandardActionGroups(menu);
 		
-		IAction[] actions = new IAction[2];
+		IAction[] actions = new IAction[3];
 		actions[0] = getAction(Constants.SUBGRAPH_CREATE);
 	    actions[1] = getAction(Constants.SUBGRAPH_OPEN);
+	    actions[2] = getAction(Constants.SUBGRAPH_UPDATE);
 	    SubMenuAction subGraphMenu=new SubMenuAction( actions, Constants.SUBGRAPH_ACTION, Constants.SUBGRAPH_ACTION_ToolTip,true);	// Add actions to the menu
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, // target group id
 				getAction(ActionFactory.UNDO.getId())); // action to add

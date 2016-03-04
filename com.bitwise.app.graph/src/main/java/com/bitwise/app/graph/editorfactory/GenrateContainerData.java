@@ -35,7 +35,7 @@ public class GenrateContainerData {
 		{this.editorInput = new GraphicalEditorContiner(editorInput,eltGraphicalEditorInstance);}
 		else{
 			if((IFileEditorInput.class).isAssignableFrom(editorInput.getClass()))
-				this.editorInput= new FileEditorContiner(editorInput,eltGraphicalEditorInstance);
+				this.editorInput= new FileEditorContainer(editorInput,eltGraphicalEditorInstance);
 			else
 				if((FileStoreEditorInput.class).isAssignableFrom(editorInput.getClass()))
 					this.editorInput=new FileStorageEditorContainer(editorInput,eltGraphicalEditorInstance);

@@ -126,6 +126,7 @@ public class ELTFilePathWidget extends AbstractWidget{
 		decorator.setMarginWidth(3);
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
+		helper.put(HelperType.CURRENT_COMPONENT, getComponent());
 
 		try {
 			eltDefaultTextBox.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(), propertyDialogButtonBar,  null,eltDefaultTextBox.getSWTWidgetControl());
