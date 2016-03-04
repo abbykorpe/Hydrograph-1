@@ -4,6 +4,6 @@
 <toc label="Input File Fixed Width" link_to="xml\Components\components.xml#InputFileFixedWidth"> 
 	<topic label="Properties"  href="html/Components/Input_File_Fixed_Width_Properties.html"> 
 	</topic>
- <topic href="html/concepts/maintopic.html" label="Validations">
+ <topic href="html/Components/Input_File_Fixed_Width_Validations.html" label="Validations">
  </topic>
 </toc>

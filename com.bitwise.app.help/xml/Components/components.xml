@@ -11,6 +11,9 @@
    <topic href="html/Components/Filter.html" label="Filter">
       <anchor id="Filter"/>
    </topic>
+   <topic href="html/Components/Generate_Records.html" label="Generate Records">
+      <anchor id="GenerateRecords"/>
+   </topic>
    <topic href="html/Components/Input_File_Delimited.html" label="Input File Delimited">
       <anchor id="InputFileDelimited"/>
    </topic>
@@ -19,6 +22,9 @@
    </topic>
    <topic href="html/Components/Join.html" label="Join">
       <anchor id="Join"/>
+   </topic>
+   <topic href="html/Components/Limit.html" label="Limit">
+      <anchor id="Limit"/>
    </topic>
    <topic href="html/Components/Lookup.html" label="Lookup">
       <anchor id="Lookup"/>
@@ -32,10 +38,16 @@
    <topic href="html/Components/Remove_Dups.html" label="Remove Dups">
       <anchor id="RemoveDups"/>
    </topic>
+   <topic href="html/Components/Sort.html" label="Sort">
+      <anchor id="Sort"/>
+   </topic>
    <topic href="html/Components/Transform.html" label="Transform">
       <anchor id="Transform"/>
    </topic>
    <topic href="html/Components/Union_All.html" label="Union All">
       <anchor id="UnionAll"/>
+   </topic>
+   <topic href="html/Components/Unique_Sequence.html" label="Unique Sequence">
+      <anchor id="UniqueSequence"/>
    </topic>
 </toc>

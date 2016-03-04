@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="How to Run a Job on Cluster" link_to="xml/How To Steps/howToSteps.xml#RunJobCluster" topic="html/gettingstarted/maintopic.html">
-   <topic href="html/gettingstarted/maintopic.html" label="How to Run a Job on Cluster">
+<toc label="How to Run a Job on Cluster" link_to="xml/How To Steps/howToSteps.xml#RunJobCluster">
+   <topic href="html/How To Steps/How_to_run_a_Job_on_Cluster.html" label="How to Run a Job on Cluster">
    </topic> 
 	
 </toc>
