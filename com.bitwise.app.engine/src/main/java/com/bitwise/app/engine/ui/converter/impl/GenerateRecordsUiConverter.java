@@ -138,6 +138,11 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 					typeBaseField, Constants.RANGE_TO_QNAME)));
 			genertaeRecordsSchemaGridRow.setDefaultValue(converterUiHelper.getStringValue(converterUiHelper
 					.getQnameValue(typeBaseField, Constants.DEFAULT_VALUE_QNAME)));
+			
+			genertaeRecordsSchemaGridRow.setPrecision(converterUiHelper.getStringValue(String.valueOf(typeBaseField.getPrecision())));
+			genertaeRecordsSchemaGridRow.setDescription(converterUiHelper.getStringValue(typeBaseField.getDescription()));
+			genertaeRecordsSchemaGridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(typeBaseField.getScaleType().value()));
+			
 			return genertaeRecordsSchemaGridRow;
 		}
 		return null;

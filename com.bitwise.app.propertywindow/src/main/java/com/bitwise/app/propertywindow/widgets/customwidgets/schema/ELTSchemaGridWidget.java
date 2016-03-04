@@ -1,11 +1,13 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.schema;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
@@ -19,6 +21,7 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -27,6 +30,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
@@ -78,11 +82,27 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String FIELDNAME = Messages.FIELDNAME;
 	public static final String DATEFORMAT = Messages.DATEFORMAT;
 	public static final String DATATYPE = Messages.DATATYPE;
+	public static final String PRECISION = Messages.PRECISION;
 	public static final String SCALE = Messages.SCALE;
+	public static final String SCALE_TYPE = Messages.SCALE_TYPE;
+	public static final String FIELD_DESCRIPTION = Messages.FIELD_DESCRIPTION;
 	public static final String LENGTH = Messages.LENGTH;
-	public static final String RANGE_FROM = "Range From";
-	public static final String RANGE_TO = "Range To";
-	public static final String DEFAULT_VALUE = "Default Value";
+
+	public static final String RANGE_FROM = Messages.RANGE_FROM;
+	public static final String RANGE_TO = Messages.RANGE_TO;
+	public static final String DEFAULT_VALUE =Messages.DEFAULT_VALUE;
+
+
+
+
+	
+	private CellEditor fieldNameEditor;
+
+	
+
+
+	protected String gridRowType;
+
 
 	protected ControlDecoration fieldNameDecorator;
 	protected ControlDecoration isFieldNameAlphanumericDecorator;
@@ -102,11 +122,21 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private String propertyName;
 	private ListenerHelper helper;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-	private ELTDefaultLable upButton, downButton, addButton, deleteButton;
-	private Button button;
-	private AbstractELTWidget internalSchema, externalSchema;
-	private Text textBox;
+
+	private ELTDefaultLable upButton, downButton, addButton, deleteButton, importButton, exportButton;
+
+	private Button browseButton;
+	AbstractELTWidget internalSchema, externalSchema;
+	private Text extSchemaPathText;
+
 	private ControlDecoration txtDecorator, decorator;
+	
+	private String importButtonTooltip = "Import Schema File";
+	private String exportButtonTooptip = "Export Schema File";
+	private String addButtonTooltip = "Add Row";
+	private String removeButtonTooltip = "Delete Row";
+	private String upButtonTooltip = "Move Row Up";
+	private String downButtonTooltip = "Move Row Down";
 
 	protected abstract String[] getPropertiesToShow();
 
@@ -182,9 +212,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 		List<GridRow> tempGrid = new ArrayList<>();
 		List<String> oprationFieldList = getOperationFieldList();
-		if (schemaGridRowList != null) {
 
-			if (getSchemaForInternalPapogation() != null) {
+		if (schemaGridRowList != null ) {
+
+			if(getSchemaForInternalPapogation()!=null){
+
 				Schema internalSchema = getSchemaForInternalPapogation().clone();
 				List<String> schemaFields = getSchemaFields(schemaGridRowList);
 				for (GridRow internalSchemaRow : internalSchema.getGridRow()) {
@@ -211,17 +243,21 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 
 		Schema schema = new Schema();
+		schema.setGridRow(tempGrid);
 		if (isExternal) {
 			schema.setIsExternal(true);
-			schema.setGridRow(new ArrayList<GridRow>());
-			schema.setExternalSchemaPath(textBox.getText());
+			schema.setExternalSchemaPath(extSchemaPathText.getText());
+
 		} else {
 			schema.setIsExternal(false);
-			schema.setGridRow(tempGrid);
 			schema.setExternalSchemaPath("");
-			schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
-			property.put(Constants.SCHEMA_TO_PROPAGATE, schemaMap);
+
+//			schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
+//			property.put(Constants.SCHEMA_TO_PROPAGATE,schemaMap);
 		}
+		
+		schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
+		property.put(Constants.SCHEMA_TO_PROPAGATE,schemaMap);
 
 		property.put(propertyName, schema);
 		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), schemaMap);//
@@ -289,17 +325,17 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		AbstractELTWidget eltDefaultTextBox = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(200);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultTextBox);
 
-		textBox = (Text) eltDefaultTextBox.getSWTWidgetControl();
-		textBox.setToolTipText(Messages.CHARACTERSET);
-		decorator = WidgetUtility.addDecorator(textBox, Messages.EMPTYFIELDMESSAGE);
+		extSchemaPathText = (Text) eltDefaultTextBox.getSWTWidgetControl();
+		extSchemaPathText.setToolTipText(Messages.CHARACTERSET);
+		decorator = WidgetUtility.addDecorator(extSchemaPathText, Messages.EMPTYFIELDMESSAGE);
 		decorator.hide();
-		textBox.addFocusListener(new FocusListener() {
+		extSchemaPathText.addFocusListener(new FocusListener() {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				if (textBox.getText().isEmpty()) {
+				if (extSchemaPathText.getText().isEmpty()) {
 					decorator.show();
-					textBox.setBackground(new Color(Display.getDefault(), 250, 250, 250));
+					extSchemaPathText.setBackground(new Color(Display.getDefault(), 250, 250, 250));
 				} else {
 					decorator.hide();
 				}
@@ -308,20 +344,20 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			@Override
 			public void focusGained(FocusEvent e) {
 				decorator.hide();
-				textBox.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+				extSchemaPathText.setBackground(new Color(Display.getDefault(), 255, 255, 255));
 			}
 		});
 
 		AbstractELTWidget eltDefaultButton = new ELTDefaultButton(Messages.BROWSE_BUTTON).buttonWidth(35);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
-		button = (Button) eltDefaultButton.getSWTWidgetControl();
+		browseButton = (Button) eltDefaultButton.getSWTWidgetControl();
 
-		button.addSelectionListener(new SelectionListener() {
+		browseButton.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				decorator.hide();
-				textBox.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+				extSchemaPathText.setBackground(new Color(Display.getDefault(), 255, 255, 255));
 
 			}
 
@@ -332,9 +368,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		});
 
-		txtDecorator = WidgetUtility.addDecorator(textBox, Messages.CHARACTERSET);
+
+		txtDecorator = WidgetUtility.addDecorator(extSchemaPathText, Messages.CHARACTERSET);
 		txtDecorator.setMarginWidth(3);
 		decorator.setMarginWidth(3);
+
 		txtDecorator.hide();
 
 		ListenerHelper helper = new ListenerHelper();
@@ -372,8 +410,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				propertyDialogButtonBar.enableApplyButton(true);
-				toggleTextBox(false);
-				toggleTable(true);
+				toggleSchema(false);
 				isExternal = false;
 				decorator.hide();
 				txtDecorator.hide();
@@ -386,11 +423,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				propertyDialogButtonBar.enableApplyButton(true);
-				toggleTextBox(true);
-				toggleTable(false);
+				toggleSchema(true);
 				isExternal = true;
 
-				if (textBox.getText().isEmpty()) {
+				if (extSchemaPathText.getText().isEmpty()) {
 					decorator.show();
 				} else {
 					decorator.hide();
@@ -434,25 +470,25 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					tableViewer.setInput(schemaGridRowList);
 					tableViewer.refresh();
 					isExternal = false;
-					toggleTextBox(true);
+					toggleSchema(false);
 				}
 			}
 		}
 	}
 
+
 	private void populateWidgetExternalSchema() {
 		if (this.properties != null) {
 			Schema schema = (Schema) this.properties;
 			if (schema.getIsExternal()) {
-				if (textBox != null) {
-					textBox.setText(schema.getExternalSchemaPath());
+				if (extSchemaPathText != null) {
+					extSchemaPathText.setText(schema.getExternalSchemaPath());
 					schemaGridRowList = schema.getGridRow();
 					tableViewer.setInput(schemaGridRowList);
 					tableViewer.refresh();
 					decorator.hide();
 					isExternal = true;
-					toggleTable(false);
-					toggleTextBox(true);
+					toggleSchema(true);
 				}
 			}
 		}
@@ -462,37 +498,28 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		if (this.properties != null) {
 			Schema schema = (Schema) this.properties;
 			if (schema.getIsExternal()) {
-				toggleRadioButton(true);
+				toggleSchemaChoice(true);
 			} else {
-				toggleRadioButton(false);
-				toggleTextBox(false);
+				toggleSchemaChoice(false);
 			}
 		} else {
-			toggleRadioButton(false);
-			toggleTable(true);
-			toggleTextBox(false);
+			toggleSchemaChoice(false);
+			toggleSchema(false);
 		}
 	}
 
-	private void toggleTable(boolean enableInternalSchemaTable) {
-		if (table != null) {
-			table.setEnabled(enableInternalSchemaTable);
-			/*
-			 * addButton.setEnabled(enableInternalSchemaTable); deleteButton.setEnabled(enableInternalSchemaTable);
-			 * upButton.setEnabled(enableInternalSchemaTable); downButton.setEnabled(enableInternalSchemaTable);
-			 */
-		}
-	}
 
-	private void toggleRadioButton(boolean enableExternalSchemaRadioButton) {
+	private void toggleSchemaChoice(boolean enableExternalSchemaRadioButton) {
 		((Button) externalSchema.getSWTWidgetControl()).setSelection(enableExternalSchemaRadioButton);
 		((Button) internalSchema.getSWTWidgetControl()).setSelection(!enableExternalSchemaRadioButton);
 	}
 
-	private void toggleTextBox(boolean enableExternalSchemaTextBox) {
-		if (textBox != null && button != null) {
-			textBox.setEnabled(enableExternalSchemaTextBox);
-			button.setEnabled(enableExternalSchemaTextBox);
+	private void toggleSchema(boolean enableExtSchema) {
+		if (extSchemaPathText != null && browseButton != null) {
+			extSchemaPathText.setEnabled(enableExtSchema);
+			browseButton.setEnabled(enableExtSchema);
+			((Label)importButton.getSWTWidgetControl()).setEnabled(enableExtSchema);
+			((Label)exportButton.getSWTWidgetControl()).setEnabled(enableExtSchema);
 		}
 	}
 
@@ -521,68 +548,16 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public TableViewer createSchemaGridSection(Composite container) {
 
 		ELTSchemaSubgroupComposite buttonSubGroup = new ELTSchemaSubgroupComposite(container);
+
 		buttonSubGroup.createContainerWidget();
+		buttonSubGroup.numberOfBasicWidgets(6);
 
-		downButton = new ELTDefaultLable("");
-		downButton.lableWidth(25);
-		buttonSubGroup.attachWidget(downButton);
-		downButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
-
-		downButton.addMouseUpListener(new MouseAdapter() {
-			int index = 0, index2 = 0;
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-				propertyDialogButtonBar.enableApplyButton(true);
-				index = table.getSelectionIndex();
-
-				if (index < schemaGridRowList.size() - 1) {
-					String text1 = tableViewer.getTable().getItem(index).getText(0);
-					index2 = index + 1;
-					String text2 = tableViewer.getTable().getItem(index2).getText(0);
-
-					swap(index, index2, text1, text2);
-					tableViewer.refresh();
-					table.setSelection(index + 1);
-				}
-			}
-		});
-
-		upButton = new ELTDefaultLable("");
-		upButton.lableWidth(25);
-		buttonSubGroup.attachWidget(upButton);
-		upButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
-		upButton.addMouseUpListener(new MouseAdapter() {
-			int index = 0, index2 = 0;
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-				propertyDialogButtonBar.enableApplyButton(true);
-				index = table.getSelectionIndex();
-
-				if (index > 0) {
-					index2 = index - 1;
-					String text1 = tableViewer.getTable().getItem(index).getText(0);
-					String text2 = tableViewer.getTable().getItem(index2).getText(0);
-
-					swap(index, index2, text1, text2);
-
-					tableViewer.refresh();
-					table.setSelection(index - 1);
-
-				}
-			}
-		});
-
-		deleteButton = new ELTDefaultLable("");
-		deleteButton.lableWidth(25);
-		buttonSubGroup.attachWidget(deleteButton);
-		deleteButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
-
-		addButton = new ELTDefaultLable("");
-		addButton.lableWidth(25);
-		buttonSubGroup.attachWidget(addButton);
-		addButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
+		addImportButton(buttonSubGroup);
+		addExportButton(buttonSubGroup);
+		addDownButton(buttonSubGroup);
+		addUpButton(buttonSubGroup);
+		addDeleteButton(buttonSubGroup);
+		addAddButton(buttonSubGroup);
 
 		ELTSchemaTableComposite gridSubGroup = new ELTSchemaTableComposite(container);
 		gridSubGroup.createContainerWidget();
@@ -590,6 +565,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		AbstractELTWidget eltTableViewer = new ELTTableViewer(getContentProvider(), getLableProvider());
 		gridSubGroup.attachWidget(eltTableViewer);
 
+		// eltTableViewer.getSWTWidgetControl().
 		tableViewer = (TableViewer) eltTableViewer.getJfaceWidgetControl();
 		tableViewer.setInput(schemaGridRowList);
 		// Set the editors, cell modifier, and column properties
@@ -611,7 +587,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		// enables the tab functionality
 		TableViewerEditor.create(tableViewer, new ColumnViewerEditorActivationStrategy(tableViewer),
 				ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.TABBING_HORIZONTAL
-						| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL);
+				| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL);
 
 		// Adding the decorator to show error message when field name same.
 		setDecorator();
@@ -628,7 +604,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					propertyDialogButtonBar, helper, table);
 
 		} catch (Exception e) {
-			logger.debug("Failed to attach listeners to table",e);
+			logger.error("Failed to attach listeners to table", e);
 			throw new RuntimeException("Failed to attach listeners to table");
 		}
 
@@ -637,6 +613,174 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		populateWidget();
 		return tableViewer;
 	}
+
+	private void addAddButton(ELTSchemaSubgroupComposite buttonSubGroup) {
+		addButton = new ELTDefaultLable("");
+		addButton.lableWidth(25);
+		buttonSubGroup.attachWidget(addButton);
+		addButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png");
+		addButton.setToolTipText(addButtonTooltip);
+	}
+
+	private void addDeleteButton(ELTSchemaSubgroupComposite buttonSubGroup) {
+		deleteButton = new ELTDefaultLable("");
+		deleteButton.lableWidth(25);
+		buttonSubGroup.attachWidget(deleteButton);
+		deleteButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png");
+		deleteButton.setToolTipText(removeButtonTooltip);
+	}
+
+	private void addUpButton(ELTSchemaSubgroupComposite buttonSubGroup) {
+		upButton = new ELTDefaultLable("");
+		upButton.lableWidth(25);
+		buttonSubGroup.attachWidget(upButton);
+		upButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png");
+		upButton.setToolTipText(upButtonTooltip);
+		upButton.addMouseUpListener(new MouseListener() {
+			int index = 0, index2 = 0;
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				propertyDialogButtonBar.enableApplyButton(true);
+				index = table.getSelectionIndex();
+
+				if (index > 0) {
+					index2 = index - 1;
+					String text1 = tableViewer.getTable().getItem(index).getText(0);
+					String text2 = tableViewer.getTable().getItem(index2).getText(0);
+
+					swap(index, index2, text1, text2);
+
+					tableViewer.refresh();
+					table.setSelection(index - 1);
+
+				}
+			}
+		});
+	}
+
+	private void addDownButton(ELTSchemaSubgroupComposite buttonSubGroup) {
+		downButton = new ELTDefaultLable("");
+		downButton.lableWidth(25);
+		buttonSubGroup.attachWidget(downButton);
+
+		downButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png");
+		downButton.setToolTipText(downButtonTooltip);
+	
+
+		downButton.addMouseUpListener(new MouseAdapter() {
+			int index = 0, index2 = 0;
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+
+				propertyDialogButtonBar.enableApplyButton(true);
+				index = table.getSelectionIndex();
+
+				if (index < schemaGridRowList.size() - 1) {
+					String text1 = tableViewer.getTable().getItem(index).getText(0);
+					index2 = index + 1;
+					String text2 = tableViewer.getTable().getItem(index2).getText(0);
+
+					swap(index, index2, text1, text2);
+					tableViewer.refresh();
+					table.setSelection(index + 1);
+				}
+
+			}
+		});
+	}
+
+
+
+	private void addExportButton(ELTSchemaSubgroupComposite buttonSubGroup) {
+		exportButton = new ELTDefaultLable("");
+		exportButton.lableWidth(25);
+		
+		buttonSubGroup.attachWidget(exportButton);
+		exportButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/export_schema.png");
+		exportButton.setToolTipText(exportButtonTooptip);
+		
+		((Label)exportButton.getSWTWidgetControl()).setEnabled(false);
+
+
+		exportButton.addMouseUpListener(new MouseListener() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				extSchemaPathText.getText();
+				File schemaFile = (File) new File(extSchemaPathText.getText());
+
+				GridRowLoader gridRowLoader = new GridRowLoader(gridRowType, schemaFile);
+				gridRowLoader.exportXMLfromGridRows((ArrayList<GridRow>) schemaGridRowList);
+				
+			}
+		});
+	}
+
+
+
+	private void addImportButton(ELTSchemaSubgroupComposite buttonSubGroup) {
+		importButton = new ELTDefaultLable("");
+		importButton.lableWidth(25);
+		
+		buttonSubGroup.attachWidget(importButton);
+		importButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/import_schema.png");
+		importButton.setToolTipText(importButtonTooltip);
+		
+		((Label)importButton.getSWTWidgetControl()).setEnabled(false);
+
+		importButton.addMouseUpListener(new MouseListener() {
+
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+			}
+
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				extSchemaPathText.getText();
+				File schemaFile = new File(extSchemaPathText.getText());
+
+
+				ArrayList<GridRow> schemaGridRowListToImport;
+
+				GridRowLoader gridRowLoader = new GridRowLoader(gridRowType, schemaFile);
+				schemaGridRowListToImport = gridRowLoader.importGridRowsFromXML(helper);
+
+
+				tableViewer.setInput(schemaGridRowListToImport);
+				tableViewer.refresh();
+
+				MessageDialog.openInformation(new Shell(), "Information", "Schema file imported.");
+
+
+			}
+		});
+	}
+
 
 	public List<GridRow> getSchemaGridRowList() {
 		return schemaGridRowList;
@@ -672,14 +816,16 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				}
 			}
 			table.clearAll();
+
+
+			if (tableViewer != null) {
+				schemaGridRowList = originalSchema.getGridRow();
+				tableViewer.setInput(schemaGridRowList);
+				tableViewer.refresh();
+				toggleSchema(true);
+			}
 			if (!originalSchema.getIsExternal()) {
-				if (tableViewer != null) {
-					schemaGridRowList = originalSchema.getGridRow();
-					tableViewer.setInput(schemaGridRowList);
-					tableViewer.refresh();
-					isExternal = false;
-					toggleTextBox(true);
-				}
+				isExternal = false;
 			}
 
 		} else {
@@ -691,7 +837,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						tableViewer.setInput(schemaGridRowList);
 						tableViewer.refresh();
 						isExternal = false;
-						toggleTextBox(true);
+						toggleSchema(true);
 					}
 				}
 			}
@@ -714,4 +860,5 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 		return list;
 	}
+
 }

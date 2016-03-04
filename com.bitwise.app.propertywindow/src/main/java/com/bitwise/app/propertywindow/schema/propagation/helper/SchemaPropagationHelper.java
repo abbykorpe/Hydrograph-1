@@ -15,6 +15,7 @@ import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
+import com.bitwise.app.propertywindow.messages.Messages;
 
 public class SchemaPropagationHelper {
 
@@ -76,11 +77,14 @@ public class SchemaPropagationHelper {
 		if (fieldName != null) {
 			fixedWidthGridRow = new FixedWidthGridRow();
 			fixedWidthGridRow.setFieldName(fieldName);
-			fixedWidthGridRow.setDataType(0);
-			fixedWidthGridRow.setDataTypeValue("java.lang.String");
+			fixedWidthGridRow.setDataType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
+			fixedWidthGridRow.setDataTypeValue(String.class.getCanonicalName());
 			fixedWidthGridRow.setScale("");
 			fixedWidthGridRow.setLength("");
+			fixedWidthGridRow.setPrecision("");
 			fixedWidthGridRow.setDateFormat("");
+			fixedWidthGridRow.setScaleType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
+			fixedWidthGridRow.setScaleTypeValue(Messages.SCALE_TYPE_NONE);
 			
 		}
 		return fixedWidthGridRow;

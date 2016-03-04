@@ -23,25 +23,9 @@ public class ComponentsOutputSchema implements IDataStructure {
 	private Map<String, String> mapFields = new LinkedHashMap<>();
 	private Map<String,String> passThroughFieldsPortInfo = new LinkedHashMap<>();
 	private Map<String,String> mapFieldsPortInfo = new LinkedHashMap<>();
+
 	private String STRING_TYPE="java.lang.String";
-	public List<String> getPassthroughFields() {
-
-		return passthroughFields;
-	}
-
-	public Map<String, String> getMapFields() {
-
-		return mapFields;
-	}
 	
-	public Map<String, String> getPassthroughFieldsPortInfo() {
-		return passThroughFieldsPortInfo;
-	}
-
-
-	public Map<String, String> getMapFieldsPortInfo() {
-		return mapFieldsPortInfo;
-	}
 
 
 	/**
@@ -58,14 +42,6 @@ public class ComponentsOutputSchema implements IDataStructure {
 
 	}
 
-	/**
-	 * Accepts Field-Name and stores it in fixed width format.
-	 * 
-	 * @param fieldName
-	 */
-	public void addSchemaFields(String fieldName) {
-		this.fixedWidthGridRowsOutputFields.add(createFixedWidthGridRow(fieldName));
-	}
 
 	/**
 	 * This method converts current fixed width object into schema grid.
@@ -80,12 +56,22 @@ public class ComponentsOutputSchema implements IDataStructure {
 			schemaGrid.setDataType(fixedWidthGridRow.getDataType());
 			schemaGrid.setDataTypeValue(fixedWidthGridRow.getDataTypeValue());
 			schemaGrid.setDateFormat(fixedWidthGridRow.getDateFormat());
+			schemaGrid.setPrecision(fixedWidthGridRow.getPrecision());
 			schemaGrid.setFieldName(fixedWidthGridRow.getFieldName());
 			schemaGrid.setScale(fixedWidthGridRow.getScale());
+			schemaGrid.setScaleType(fixedWidthGridRow.getScaleType());
+			schemaGrid.setScaleTypeValue(fixedWidthGridRow.getScaleTypeValue());
+			schemaGrid.setDescription(fixedWidthGridRow.getDescription());
 		}
 		return schemaGrid;
 	}
 
+	/**
+	 * This method converts current schema object into fixed width.
+	 * 
+	 * @param fixedWidthGridRow
+	 * @return SchemaGrid
+	 */
 	private FixedWidthGridRow convertSchemaGridRowToFixedWidthSchema(SchemaGrid schemaGrid) {
 		FixedWidthGridRow fixedWidthGridRow = null;
 		if (schemaGrid != null) {
@@ -93,52 +79,17 @@ public class ComponentsOutputSchema implements IDataStructure {
 			fixedWidthGridRow.setDataType(schemaGrid.getDataType());
 			fixedWidthGridRow.setDataTypeValue(schemaGrid.getDataTypeValue());
 			fixedWidthGridRow.setDateFormat(schemaGrid.getDateFormat());
+			fixedWidthGridRow.setPrecision(schemaGrid.getPrecision());
 			fixedWidthGridRow.setFieldName(schemaGrid.getFieldName());
 			fixedWidthGridRow.setScale(schemaGrid.getScale());
+			fixedWidthGridRow.setScaleType(schemaGrid.getScaleType());
+			fixedWidthGridRow.setScaleTypeValue(schemaGrid.getScaleTypeValue());
+			fixedWidthGridRow.setDescription(schemaGrid.getDescription());
 			fixedWidthGridRow.setLength("");
 		}
 		return fixedWidthGridRow;
 	}
 
-	private FixedWidthGridRow createFixedWidthGridRow(String fieldName) {
-
-		FixedWidthGridRow fixedWidthGridRow = null;
-		if (fieldName != null) {
-			fixedWidthGridRow = new FixedWidthGridRow();
-			fixedWidthGridRow.setFieldName(fieldName);
-			fixedWidthGridRow.setDataType(1);
-			fixedWidthGridRow.setDataTypeValue(STRING_TYPE);
-			fixedWidthGridRow.setScale("");
-			fixedWidthGridRow.setLength("");
-		}
-		return fixedWidthGridRow;
-	}
-
-	public String getFromSocketId() {
-		return fromSocketId;
-	}
-
-	public void setFromSocketId(String fromSocketId) {
-		this.fromSocketId = fromSocketId;
-	}
-
-	public List<FixedWidthGridRow> getFixedWidthGridRowsOutputFields() {
-		return fixedWidthGridRowsOutputFields;
-	}
-
-	public List<SchemaGrid> getSchemaGridOutputFields() {
-		List<SchemaGrid> schemaGrid = new ArrayList<>();
-		for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
-			schemaGrid.add(convertFixedWidthSchemaToSchemaGridRow(fixedWidthGridRow));
-		}
-		return schemaGrid;
-	}
-
-	@Override
-	public ComponentsOutputSchema clone() {
-		return new ComponentsOutputSchema();
-
-	}
 
 	/**
 	 * It updates the current schema as per its pass-through fields mapping
@@ -147,35 +98,25 @@ public class ComponentsOutputSchema implements IDataStructure {
 	 * @param string 
 	 */
 	public void updatePassthroughFieldsSchema(ComponentsOutputSchema sourceOutputSchema, String port) {
-		System.out.println("The port is: " + port);
 		FixedWidthGridRow targetFixedWidthGridRow;
 		FixedWidthGridRow sourceFixedWidthGridRow;
 		for (String fieldName : passthroughFields) {
 			targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(fieldName);
 			if (targetFixedWidthGridRow != null && sourceOutputSchema!=null) {
 				String portName = passThroughFieldsPortInfo.get(fieldName);
-				//if(targetFixedWidthGridRow.)
 				
 				sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(fieldName);
 				
-				if(portName!=null){
-					if (sourceFixedWidthGridRow != null && portName.equalsIgnoreCase(port)) {
-						targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
-						targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
-						targetFixedWidthGridRow.setLength(sourceFixedWidthGridRow.getLength());
-						targetFixedWidthGridRow.setScale(sourceFixedWidthGridRow.getScale());
-						targetFixedWidthGridRow.setDateFormat(sourceFixedWidthGridRow.getDateFormat());
-					}
-				}else{
-					if (sourceFixedWidthGridRow != null) {
-						targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
-						targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
-						targetFixedWidthGridRow.setLength(sourceFixedWidthGridRow.getLength());
-						targetFixedWidthGridRow.setScale(sourceFixedWidthGridRow.getScale());
-						targetFixedWidthGridRow.setDateFormat(sourceFixedWidthGridRow.getDateFormat());
-					}
+				if (portName != null && sourceFixedWidthGridRow != null) {
+					targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
+					targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
+					targetFixedWidthGridRow.setLength(sourceFixedWidthGridRow.getLength());
+					targetFixedWidthGridRow.setPrecision(sourceFixedWidthGridRow.getPrecision());
+					targetFixedWidthGridRow.setScale(sourceFixedWidthGridRow.getScale());
+					targetFixedWidthGridRow.setDateFormat(sourceFixedWidthGridRow.getDateFormat());
+					targetFixedWidthGridRow.setScaleType(sourceFixedWidthGridRow.getScaleType());
+					targetFixedWidthGridRow.setScaleTypeValue(sourceFixedWidthGridRow.getScaleTypeValue());
 				}
-				
 				
 			}
 		}
@@ -203,23 +144,18 @@ public class ComponentsOutputSchema implements IDataStructure {
 			targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(entry.getValue());
 			if (targetFixedWidthGridRow != null && sourceOutputSchema!=null) {
 				sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(entry.getKey());
-				String portName = mapFieldsPortInfo.get(entry.getValue());
-				if(portName!=null){
-					if (sourceFixedWidthGridRow != null && portName.equalsIgnoreCase(port)) {
-						targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
-						targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
-						targetFixedWidthGridRow.setLength(sourceFixedWidthGridRow.getLength());
-						targetFixedWidthGridRow.setScale(sourceFixedWidthGridRow.getScale());
-						targetFixedWidthGridRow.setDateFormat(sourceFixedWidthGridRow.getDateFormat());
-					}
-				}else{
-					if (sourceFixedWidthGridRow != null) {
-						targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
-						targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
-						targetFixedWidthGridRow.setLength(sourceFixedWidthGridRow.getLength());
-						targetFixedWidthGridRow.setScale(sourceFixedWidthGridRow.getScale());
-						targetFixedWidthGridRow.setDateFormat(sourceFixedWidthGridRow.getDateFormat());
-					}
+
+             	String portName = mapFieldsPortInfo.get(entry.getValue());
+				
+				if (portName != null && sourceFixedWidthGridRow != null) {
+					targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
+					targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
+					targetFixedWidthGridRow.setLength(sourceFixedWidthGridRow.getLength());
+					targetFixedWidthGridRow.setPrecision(sourceFixedWidthGridRow.getPrecision());
+					targetFixedWidthGridRow.setScale(sourceFixedWidthGridRow.getScale());
+					targetFixedWidthGridRow.setDateFormat(sourceFixedWidthGridRow.getDateFormat());
+					targetFixedWidthGridRow.setScaleType(sourceFixedWidthGridRow.getScaleType());
+					targetFixedWidthGridRow.setScaleTypeValue(sourceFixedWidthGridRow.getScaleTypeValue());
 				}
 				
 			}
@@ -249,6 +185,50 @@ public class ComponentsOutputSchema implements IDataStructure {
 		this.getPassthroughFields().clear();
 		this.getMapFields().clear();
 		this.getPassthroughFieldsPortInfo().clear();
+	}
+	
+	public List<SchemaGrid> getSchemaGridOutputFields() {
+		List<SchemaGrid> schemaGrid = new ArrayList<>();
+		for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
+			schemaGrid.add(convertFixedWidthSchemaToSchemaGridRow(fixedWidthGridRow));
+		}
+		return schemaGrid;
+	}
+
+	@Override
+	public ComponentsOutputSchema clone() {
+		return new ComponentsOutputSchema();
+
+	}
+	
+	public List<String> getPassthroughFields() {
+
+		return passthroughFields;
+	}
+
+	public Map<String, String> getMapFields() {
+
+		return mapFields;
+	}
+	
+	public Map<String, String> getPassthroughFieldsPortInfo() {
+		return passThroughFieldsPortInfo;
+	}
+
+	public Map<String, String> getMapFieldsPortInfo() {
+		return mapFieldsPortInfo;
+	}
+
+	public String getFromSocketId() {
+		return fromSocketId;
+	}
+
+	public void setFromSocketId(String fromSocketId) {
+		this.fromSocketId = fromSocketId;
+	}
+
+	public List<FixedWidthGridRow> getFixedWidthGridRowsOutputFields() {
+		return fixedWidthGridRowsOutputFields;
 	}
 
 }

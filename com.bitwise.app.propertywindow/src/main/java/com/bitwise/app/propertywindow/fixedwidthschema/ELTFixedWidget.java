@@ -11,7 +11,6 @@ import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTCellEditorIsNume
 import com.bitwise.app.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTFixedWidget.
  * 
@@ -22,6 +21,7 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	
 	public ELTFixedWidget(PropertyDialogButtonBar propertyDialogButtonBar) {
 		this.propertyDialogButtonBar=propertyDialogButtonBar;
+		this.gridRowType = Messages.FIXEDWIDTH_GRIDROW;
 		}
 	/**
 	 * Instantiates a new ELT fixed widget.
@@ -36,11 +36,12 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	public ELTFixedWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
+		this.gridRowType = Messages.FIXEDWIDTH_GRIDROW;
 	}
 
 	@Override
 	protected String[] getPropertiesToShow() {
-		return new String[]{ FIELDNAME, DATATYPE, DATEFORMAT, SCALE, LENGTH };
+		return new String[]{ FIELDNAME, DATATYPE, DATEFORMAT, PRECISION, SCALE, SCALE_TYPE, FIELD_DESCRIPTION, LENGTH };
 	}
 	
 	@Override
@@ -63,15 +64,15 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	@Override
 	protected void addValidators() {
 		editors[0].setValidator(new ELTCellEditorFieldValidator(table, schemaGridRowList, fieldNameDecorator,isFieldNameAlphanumericDecorator,propertyDialogButtonBar));
-		editors[3].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator,propertyDialogButtonBar)); 
-		editors[4].setValidator(new ELTCellEditorIsNumericValidator(lengthDecorator,propertyDialogButtonBar)); 
+		editors[4].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator,propertyDialogButtonBar)); 
+		editors[7].setValidator(new ELTCellEditorIsNumericValidator(lengthDecorator,propertyDialogButtonBar)); 
 	}
 	//Adding the decorator to show error message when field name same.
 	@Override
 	protected void setDecorator() {
 		fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAMEERROR);
-		scaleDecorator = WidgetUtility.addDecorator(editors[3].getControl(),Messages.SCALEERROR);
-		lengthDecorator = WidgetUtility.addDecorator(editors[4].getControl(),Messages.LENGTHERROR);
+		scaleDecorator = WidgetUtility.addDecorator(editors[4].getControl(),Messages.SCALEERROR);
+		lengthDecorator = WidgetUtility.addDecorator(editors[7].getControl(),Messages.LENGTHERROR);
 		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);
 		fieldNameDecorator.setMarginWidth(8);
 		scaleDecorator.setMarginWidth(8);

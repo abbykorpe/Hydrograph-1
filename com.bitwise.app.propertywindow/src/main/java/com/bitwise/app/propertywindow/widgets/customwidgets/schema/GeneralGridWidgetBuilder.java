@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 
 import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 /**
@@ -24,8 +25,11 @@ public class GeneralGridWidgetBuilder extends GridWidgetCommonBuilder {
 		CellEditor[] cellEditor = createCellEditor(size);
 		addTextEditor(table,cellEditor, 0);
 		addComboBox(table, cellEditor, getDataTypeKey(), 1);
-		addTextEditor(table,cellEditor, 2);
-		addTextEditor(table,cellEditor, 3);
+		addTextEditor(table, cellEditor, 2);
+		addTextEditor(table, cellEditor, 3);
+		addTextEditor(table, cellEditor, 4);
+		addComboBox(table, cellEditor, getScaleTypeKey(), 5);
+		addTextEditor(table, cellEditor, 6);
 		return cellEditor;
 	}
 
@@ -39,15 +43,20 @@ public class GeneralGridWidgetBuilder extends GridWidgetCommonBuilder {
 		int rowSequence = getRowSequence();
 		SchemaGrid schemaGrid = new SchemaGrid();
 		schemaGrid.setFieldName("DefaultField" + rowSequence);
-		schemaGrid.setDateFormat(""); 
+		schemaGrid.setDateFormat("");
+		schemaGrid.setPrecision("");
 		schemaGrid.setScale("");
-		schemaGrid.setDataType(Integer.valueOf("0"));
-		schemaGrid.setDataTypeValue(getDataTypeValue()[Integer.valueOf("0")]);
+		schemaGrid.setScaleType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
+		schemaGrid.setScaleTypeValue(getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
+		schemaGrid.setDataType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
+		schemaGrid.setDataTypeValue(getDataTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
+		schemaGrid.setDescription("");
 		
 		int numberOfRows=grids.size();
 		do{
 			if(!grids.contains(schemaGrid)){
 				grids.add(schemaGrid);  
+				tableViewer.setInput(grids);
 				tableViewer.refresh();
 				tableViewer.editElement(tableViewer.getElementAt(grids.size() == 0 ? grids.size() : grids.size() - 1), 0);
 				break;

@@ -11,8 +11,8 @@ import org.eclipse.swt.widgets.Display;
 import com.bitwise.app.common.datastructure.property.SchemaGrid;
 
 /**
- * 
- * @author Bitwise
+ * The class SchemaGridLabelProvider
+ * @author Bitwise 
  *
  */
 public class SchemaGridLabelProvider implements ITableLabelProvider , ITableColorProvider {
@@ -48,7 +48,13 @@ public class SchemaGridLabelProvider implements ITableLabelProvider , ITableColo
     case 2:
     	 return schemaGrid.getDateFormat();
     case 3:
-   	 return schemaGrid.getScale(); 
+   	 	 return schemaGrid.getPrecision();
+    case 4:
+   	 	 return schemaGrid.getScale(); 
+    case 5:
+    	return GeneralGridWidgetBuilder.getScaleTypeKey()[schemaGrid.getScaleType().intValue()];
+    case 6:
+     	 return schemaGrid.getDescription(); 
     }
     return null;
   }

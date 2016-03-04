@@ -3,13 +3,12 @@ package com.bitwise.app.propertywindow.widgets.listeners.grid;
 import java.util.List;
 
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Label;
 
+import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ELTGridDetails.
  * 
@@ -17,7 +16,7 @@ import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
  */
 public class ELTGridDetails {
 
-	private List grids;
+	private List<GridRow> grids;
 	private TableViewer tableViewer;
 	private Label label;
 	private GridWidgetCommonBuilder gridWidgetCommonBuilder;
@@ -34,7 +33,7 @@ public class ELTGridDetails {
 	 * @param gridWidgetCommonBuilder
 	 *            the grid widget common builder
 	 */
-	public ELTGridDetails(List grids, TableViewer tableViewer,
+	public ELTGridDetails(List<GridRow> grids, TableViewer tableViewer,
 			Label label,GridWidgetCommonBuilder gridWidgetCommonBuilder) {
 		super();
 		this.grids = grids;
@@ -43,11 +42,11 @@ public class ELTGridDetails {
 		this.gridWidgetCommonBuilder=gridWidgetCommonBuilder;
 	}
 	
-	public List getGrids() {
+	public List<GridRow> getGrids() {
 		return grids;
 	}
 
-	public void setGrids(List grids) {
+	public void setGrids(List<GridRow> grids) {
 		this.grids = grids;
 	}
 

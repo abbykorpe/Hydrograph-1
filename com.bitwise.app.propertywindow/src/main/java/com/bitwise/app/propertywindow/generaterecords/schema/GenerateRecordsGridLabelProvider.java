@@ -25,34 +25,42 @@ public class GenerateRecordsGridLabelProvider implements ITableLabelProvider, IT
 		return null;
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
 	 */
 	public String getColumnText(Object element, int columnIndex) {
 		GenerateRecordSchemaGridRow generateRecordsSchemaGridRow = (GenerateRecordSchemaGridRow) element;
 		switch (columnIndex) {
+
 		case 0:
-			return generateRecordsSchemaGridRow.getFieldName();
+			return generateRecordsSchemaGridRow.getFieldName(); 
 		case 1:
-			return GridWidgetCommonBuilder.getDataTypeKey()[generateRecordsSchemaGridRow.getDataType().intValue()];
+			return GridWidgetCommonBuilder.getDataTypeKey()[generateRecordsSchemaGridRow.getDataType().intValue()];   
 		case 2:
 			return generateRecordsSchemaGridRow.getDateFormat();
 		case 3:
-			return generateRecordsSchemaGridRow.getScale();
-		case 4:
-			return generateRecordsSchemaGridRow.getLength().toString();
+			return generateRecordsSchemaGridRow.getPrecision(); 
+		case 4: 
+			return generateRecordsSchemaGridRow.getScale().toString();
 		case 5:
+			return GridWidgetCommonBuilder.getScaleTypeKey()[generateRecordsSchemaGridRow.getScaleType().intValue()];  
+		case 6: 
+			return generateRecordsSchemaGridRow.getDescription();
+		case 7: 
+			return generateRecordsSchemaGridRow.getLength().toString();
+		case 8:
 			return generateRecordsSchemaGridRow.getRangeFrom().toString();
-		case 6:
+		case 9:
 			return generateRecordsSchemaGridRow.getRangeTo().toString();
-		case 7:
+		case 10:
 			return generateRecordsSchemaGridRow.getDefaultValue().toString();
+
 		}
 		return null;
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#addListener(org.eclipse.jface.viewers.ILabelProviderListener)
 	 */
@@ -60,7 +68,7 @@ public class GenerateRecordsGridLabelProvider implements ITableLabelProvider, IT
 		return;
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#dispose()
 	 */
@@ -68,7 +76,7 @@ public class GenerateRecordsGridLabelProvider implements ITableLabelProvider, IT
 		return;
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#isLabelProperty(java.lang.Object, java.lang.String)
 	 */
@@ -76,7 +84,7 @@ public class GenerateRecordsGridLabelProvider implements ITableLabelProvider, IT
 		return false;
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#removeListener(org.eclipse.jface.viewers.ILabelProviderListener)
 	 */

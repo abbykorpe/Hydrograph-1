@@ -51,9 +51,13 @@ public class GenerateRecordSchemaGridRow extends FixedWidthGridRow {
 		GenerateRecordSchemaGridRow tempschemaGrid = new GenerateRecordSchemaGridRow();
 		tempschemaGrid.setDataType(getDataType());
 		tempschemaGrid.setDateFormat(getDateFormat());
+		tempschemaGrid.setPrecision(getPrecision());
 		tempschemaGrid.setFieldName(getFieldName());
 		tempschemaGrid.setScale(getScale());
+		tempschemaGrid.setScaleType(getScaleType());
+		tempschemaGrid.setScaleTypeValue(getScaleTypeValue());
 		tempschemaGrid.setDataTypeValue(getDataTypeValue());
+		tempschemaGrid.setDescription(getDescription());
 		tempschemaGrid.setLength(getLength());
 		tempschemaGrid.setRangeFrom(rangeFrom);
 		tempschemaGrid.setRangeTo(rangeTo);

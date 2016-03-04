@@ -35,6 +35,11 @@ public class ELTDefaultLable extends AbstractELTWidget {
 	public void setImage(String img) {
 		defaultELTLable.setImage(new Image(null, img));
 	}
+	
+	public void setToolTipText(String tooltip)
+	{
+		defaultELTLable.setToolTipText(tooltip);
+	}
 
 	public void addMouseUpListener(MouseListener listener) {
 		defaultELTLable.addMouseListener(listener);

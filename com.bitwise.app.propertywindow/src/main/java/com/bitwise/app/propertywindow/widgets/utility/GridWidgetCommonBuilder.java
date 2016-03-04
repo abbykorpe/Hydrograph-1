@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Table;
 
 import com.bitwise.app.propertywindow.messages.Messages;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class GridWidgetCommonBuilder.
  * 
@@ -93,12 +92,15 @@ public abstract class GridWidgetCommonBuilder {
 	 *            the position
 	 */
 	protected void addComboBox(Table table, CellEditor[] cellEditor, String[] data, int position){
-		cellEditor[position] = new ComboBoxCellEditor(table, data,SWT.READ_ONLY);		
+		cellEditor[position] = new ComboBoxCellEditor(table, data, SWT.READ_ONLY);		
 	}
 	
 	public static String[] dataTypeList;
 	public static String[] dataTypeKey;
 	public static String[] dataTypeValue;
+	public static String[] scaleTypeList;
+	public static String[] scaleTypeKey;
+	public static String[] scaleTypeValue;
 
 	/**
 	 * Sets the data type key value.
@@ -140,6 +142,44 @@ public abstract class GridWidgetCommonBuilder {
 		
 			return 0;
 	}
+
+	public static void setScaleTypeKeyValue() {
+		if (scaleTypeList != null)
+		{
+			scaleTypeKey= new String[scaleTypeList.length];
+			scaleTypeValue=new String[scaleTypeList.length];
+			for (int i=0;i<scaleTypeList.length;i++) {
+				String[] data = scaleTypeList[i].split("#");
+				scaleTypeKey[i]=data[0];
+				scaleTypeValue[i]=data[1];
+			}
+		}
+		else {
+			String schemaList = Messages.SCALETYPELIST;
+			scaleTypeList = schemaList.split(",");
+			scaleTypeKey= new String[scaleTypeList.length];
+			scaleTypeValue=new String[scaleTypeList.length];
+			for (int i=0;i<scaleTypeList.length;i++) {
+				String[] data = scaleTypeList[i].split("#");
+				scaleTypeKey[i]=data[0];
+				scaleTypeValue[i]=data[1];
+			}
+		}
+			
+	}
+	
+	public static Integer getScaleTypeByValue(String value) {
+		int i;
+		String schemaList = Messages.SCALETYPELIST;
+		String[] scaleTypeList = schemaList.split(",");
+		for (i=0;i<scaleTypeList.length;i++) {
+			String[] data = scaleTypeList[i].split("#");
+				if(value.equalsIgnoreCase(data[1]))
+					return i;
+		}
+	
+		return 0;
+}
 	
 	public static String[] getDataTypeValue() {
 		if(dataTypeValue!=null){
@@ -161,5 +201,27 @@ public abstract class GridWidgetCommonBuilder {
 		}
 	}
 	
+	public static String[] getScaleTypeValue() {
+		if(scaleTypeValue!=null){
+			return scaleTypeValue;
+		}
+		else{
+			setScaleTypeKeyValue();
+			return scaleTypeValue;
+		}
+	}
 	
+	public static String[] getScaleTypeKey() {
+		if(scaleTypeKey!=null){
+			return scaleTypeKey;
+		}
+		else{
+			setScaleTypeKeyValue();
+			return scaleTypeKey;
+		}
+	}
+	
+	public static String[] getScaleType(){
+		return scaleTypeList;
+	}
 }

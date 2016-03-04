@@ -57,6 +57,26 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 			else 
 				return false; 	
 		}
+		if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
+		{
+			if(DataType.FLOAT_CLASS.equals(fixedWidthGridRow.getDataTypeValue()) 
+					||DataType.DOUBLE_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue())
+					||DataType.BIGDECIMAL_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue()))
+				return true;
+			else {
+				return false; 	
+			}
+		}
+		if (ELTSchemaGridWidget.PRECISION.equals(property))
+		{
+			if(DataType.FLOAT_CLASS.equals(fixedWidthGridRow.getDataTypeValue()) 
+					||DataType.DOUBLE_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue())
+					||DataType.BIGDECIMAL_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue()))
+				return true;
+			else {
+				return false; 	
+			}
+		}
 		return true;
 	}
 
@@ -74,14 +94,21 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) element;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			return fixedWidthGridRow.getFieldName();
-		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
-			return String.valueOf(fixedWidthGridRow.getDateFormat());
-		else if (ELTSchemaGridWidget.SCALE.equals(property))
-			return String.valueOf(fixedWidthGridRow.getScale());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property))
 			return fixedWidthGridRow.getDataType();
+		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
+			return String.valueOf(fixedWidthGridRow.getDateFormat());
+		else if (ELTSchemaGridWidget.PRECISION.equals(property))
+			return fixedWidthGridRow.getPrecision();
+		else if (ELTSchemaGridWidget.SCALE.equals(property))
+			return String.valueOf(fixedWidthGridRow.getScale());
+		else if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
+			return fixedWidthGridRow.getScaleType();
+		else if (ELTSchemaGridWidget.FIELD_DESCRIPTION.equals(property))
+			return fixedWidthGridRow.getDescription();
 		else if (ELTSchemaGridWidget.LENGTH.equals(property))
 			return fixedWidthGridRow.getLength();
+		
 		else
 			return null;
 	}
@@ -94,14 +121,23 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) element;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			fixedWidthGridRow.setFieldName(((String) value).trim());
-		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
-			fixedWidthGridRow.setDateFormat(((String) value).trim());
-		else if (ELTSchemaGridWidget.SCALE.equals(property))
-			fixedWidthGridRow.setScale(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)) {
 			fixedWidthGridRow.setDataType((Integer) value);
 			fixedWidthGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]); 
-		} else if (ELTSchemaGridWidget.LENGTH.equals(property)) {
+		}
+		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
+			fixedWidthGridRow.setDateFormat(((String) value).trim());
+		else if (ELTSchemaGridWidget.PRECISION.equals(property))
+			fixedWidthGridRow.setPrecision(((String) value).trim()); 
+		else if (ELTSchemaGridWidget.SCALE.equals(property))
+			fixedWidthGridRow.setScale(((String) value).trim());
+		else if (ELTSchemaGridWidget.SCALE_TYPE.equals(property)) {
+			fixedWidthGridRow.setScaleType((Integer) value);
+			fixedWidthGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[(Integer)value]); 
+		}
+		else if (ELTSchemaGridWidget.FIELD_DESCRIPTION.equals(property))
+			fixedWidthGridRow.setDescription(((String) value).trim());
+		else if (ELTSchemaGridWidget.LENGTH.equals(property)) {
 			fixedWidthGridRow.setLength(((String) value).trim());
 		}
 
@@ -117,7 +153,7 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 			if(DataType.INTEGER_CLASS.equals(fixedWidthGridRow.getDataTypeValue()) 
 					||DataType.STRING_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
-					||DataType.BOLLEAN_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
+					||DataType.BOOLEAN_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(fixedWidthGridRow.getDataTypeValue())){
 				fixedWidthGridRow.setScale("");
 			}

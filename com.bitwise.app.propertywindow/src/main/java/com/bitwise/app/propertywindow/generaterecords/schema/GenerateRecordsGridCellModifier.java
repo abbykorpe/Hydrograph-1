@@ -3,13 +3,16 @@ package com.bitwise.app.propertywindow.generaterecords.schema;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
+import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GenerateRecordSchemaGridRow;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GeneralGridWidgetBuilder;
+import com.bitwise.app.propertywindow.widgets.utility.DataType;
 
 /**
  * This class is used for cell modification of GenerateRecords Schema Grid.
@@ -56,12 +59,32 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 			else
 				return false;
 		}
+		if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
+		{
+			if(DataType.FLOAT_CLASS.equals(generateRecordsSchemaGridRow.getDataTypeValue()) 
+					||DataType.DOUBLE_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue())
+					||DataType.BIGDECIMAL_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue()))
+				return true;
+			else {
+				return false; 	
+			}
+		}
 		if (ELTSchemaGridWidget.RANGE_FROM.equals(property) || ELTSchemaGridWidget.RANGE_TO.equals(property)) {
 			if (String.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue())
 					|| Boolean.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue()))
 				return false;
 			else
 				return true;
+		}
+		if (ELTSchemaGridWidget.PRECISION.equals(property))
+		{
+			if(DataType.FLOAT_CLASS.equals(generateRecordsSchemaGridRow.getDataTypeValue()) 
+					||DataType.DOUBLE_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue())
+					||DataType.BIGDECIMAL_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue()))
+				return true;
+			else {
+				return false; 	
+			}
 		}
 		return true;
 	}
@@ -82,10 +105,16 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 			return pgenerateRecordSchemaGridRow.getFieldName();
 		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
 			return String.valueOf(pgenerateRecordSchemaGridRow.getDateFormat());
+		else if (ELTSchemaGridWidget.PRECISION.equals(property))
+			return pgenerateRecordSchemaGridRow.getPrecision();
+		else if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
+			return pgenerateRecordSchemaGridRow.getScaleType();
 		else if (ELTSchemaGridWidget.SCALE.equals(property))
 			return String.valueOf(pgenerateRecordSchemaGridRow.getScale());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property))
 			return pgenerateRecordSchemaGridRow.getDataType();
+		else if (ELTSchemaGridWidget.FIELD_DESCRIPTION.equals(property))
+			return pgenerateRecordSchemaGridRow.getDescription();
 		else if (ELTSchemaGridWidget.LENGTH.equals(property))
 			return pgenerateRecordSchemaGridRow.getLength();
 		else if (ELTSchemaGridWidget.RANGE_FROM.equals(property))
@@ -96,6 +125,7 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 			return pgenerateRecordSchemaGridRow.getDefaultValue();
 		else
 			return null;
+		
 	}
 
 	/*
@@ -117,12 +147,21 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 			p.setFieldName(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
 			p.setDateFormat(((String) value).trim());
+		else if (ELTSchemaGridWidget.PRECISION.equals(property))
+			p.setPrecision(((String) value).trim()); 
 		else if (ELTSchemaGridWidget.SCALE.equals(property))
 			p.setScale(((String) value).trim());
+		else if (ELTSchemaGridWidget.SCALE_TYPE.equals(property)) {
+			p.setScaleType(((Integer) value));
+			p.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[(Integer) value]);
+		}
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)) {
 			p.setDataType((Integer) value);
 			p.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer) value]);
-		} else if (ELTSchemaGridWidget.LENGTH.equals(property)) {
+		} else if (ELTSchemaGridWidget.FIELD_DESCRIPTION.equals(property)) {
+			p.setDescription((((String) value).trim()));
+		}
+		else if (ELTSchemaGridWidget.LENGTH.equals(property)) {
 			p.setLength(((String) value).trim());
 		} else if (ELTSchemaGridWidget.RANGE_FROM.equals(property)) {
 			p.setRangeFrom(((String) value).trim());
@@ -131,24 +170,33 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 		} else if (ELTSchemaGridWidget.DEFAULT_VALUE.equals(property)) {
 			p.setDefaultValue(((String) value).trim());
 		}
+		
+		resetScale(p, property);
 
-		if (ELTSchemaGridWidget.DATATYPE.equals(property) && p.getDataTypeValue() != null) {
-			if (p.getDataTypeValue().equalsIgnoreCase("integer")
-					|| p.getDataTypeValue().equalsIgnoreCase("java.lang.Integer")
-					|| p.getDataTypeValue().equalsIgnoreCase("string")
-					|| p.getDataTypeValue().equalsIgnoreCase("java.lang.String")
-					|| p.getDataTypeValue().equalsIgnoreCase("short")
-					|| p.getDataTypeValue().equalsIgnoreCase("java.lang.Short")
-					|| p.getDataTypeValue().equalsIgnoreCase("boolean")
-					|| p.getDataTypeValue().equalsIgnoreCase("java.lang.Boolean")
-					|| p.getDataTypeValue().equalsIgnoreCase("date")
-					|| p.getDataTypeValue().equalsIgnoreCase("java.util.Date")) {
-				p.setScale("");
+		resetDateFormat(p, property);
+
+		viewer.refresh();
+	}
+	private void resetScale(GenerateRecordSchemaGridRow generateRecordSchemaGridRow, String property){
+		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(generateRecordSchemaGridRow.getDataTypeValue())){
+			if(DataType.INTEGER_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue()) 
+					||DataType.STRING_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
+					||DataType.SHORT_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
+					||DataType.BOOLEAN_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
+					||DataType.DATE_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())){
+				generateRecordSchemaGridRow.setScale("");
 			}
 
 		}
+	}
 
-		viewer.refresh();
+	private void resetDateFormat(GenerateRecordSchemaGridRow generateRecordSchemaGridRow, String property){
+		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(generateRecordSchemaGridRow.getDataTypeValue())){
+			if(!(DataType.DATE_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue()))){
+				generateRecordSchemaGridRow.setDateFormat("");
+			}
+
+		}
 	}
 
 }
