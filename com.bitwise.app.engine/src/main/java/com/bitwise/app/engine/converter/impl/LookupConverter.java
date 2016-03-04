@@ -156,11 +156,7 @@ public class LookupConverter extends TransformConverter {
 		for (Link link : component.getTargetConnections()) {
 			TypeBaseInSocket inSocket = new TypeBaseInSocket();
 			inSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
-			if (converterHelper.isMultipleLinkAllowed(link.getSource(), link.getSourceTerminal()))
-				inSocket.setFromSocketId(link.getSource().getPort(link.getSourceTerminal()).getPortType()
-						+ link.getLinkNumber());
-			else
-				inSocket.setFromSocketId(link.getSourceTerminal());
+			inSocket.setFromSocketId(converterHelper.getFromSocketId(link));
 			inSocket.setId(link.getTargetTerminal());
 			inSocket.setType(PortTypeConstant.getPortType(link.getTarget().getPort(link.getTargetTerminal())
 					.getNameOfPort()));

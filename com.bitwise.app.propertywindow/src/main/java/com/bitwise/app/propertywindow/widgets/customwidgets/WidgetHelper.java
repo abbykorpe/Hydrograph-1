@@ -8,9 +8,11 @@ import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.DropDownConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.EditButtonWithLabelConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.OperationClassConfig;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.RuntimeConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.SingleColumnGridConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.TextBoxWithLableConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 /**
  * Helper class to provide configuration for customizing widgets.
@@ -95,10 +97,15 @@ public class WidgetHelper {
 	/**
 	 * Configuration to customize text box as count property 
 	 */
-	public WidgetConfig getInputCountWidgetConfig(){
+	public WidgetConfig getInputCountWidgetConfig(String propertyLabel,int minimumPortCount){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Constants.INPUT_COUNT);
+		textBoxConfig.setName(propertyLabel);
 		addTextBoxListeners(textBoxConfig);
+		String portCount = "1";
+		if (minimumPortCount > 0) {
+			portCount = String.valueOf(minimumPortCount);
+		}
+		textBoxConfig.getOtherAttributes().put(HelperType.MINIMUM_PORT_COUNT.toString(), portCount);
 		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
 		textBoxConfig.getListeners().add(Listners.JOIN_INPUT_COUNT);
 		textBoxConfig.setWidgetWidth(78);
@@ -224,4 +231,12 @@ public class WidgetHelper {
 		dropDownConfig.getItems().add(Constants.PARAMETER);
 		return dropDownConfig;
 	}
+	
+	public WidgetConfig getRunTimeWidgetConfig(String label) {
+		RuntimeConfig runtimeConfig = new RuntimeConfig();
+		runtimeConfig.setLabel(label);
+		return runtimeConfig;
+	}
+
+
 }

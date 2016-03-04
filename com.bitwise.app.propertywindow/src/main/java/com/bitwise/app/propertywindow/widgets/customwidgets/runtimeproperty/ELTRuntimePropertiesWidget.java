@@ -14,6 +14,8 @@ import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.OperationClassConfig;
+import com.bitwise.app.propertywindow.widgets.customwidgets.config.RuntimeConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
@@ -63,9 +65,9 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 				container.getContainerControl());
 		runtimeComposite.createContainerWidget();
 		shell = runtimeComposite.getContainerControl().getShell();
-
+		RuntimeConfig runtimeConfig = (RuntimeConfig) widgetConfig;
 		
-		ELTDefaultLable defaultLable1 = new ELTDefaultLable("Runtime\nProperties"); 
+		ELTDefaultLable defaultLable1 = new ELTDefaultLable(runtimeConfig.getLabel()); 
 		runtimeComposite.attachWidget(defaultLable1);
 		
 		

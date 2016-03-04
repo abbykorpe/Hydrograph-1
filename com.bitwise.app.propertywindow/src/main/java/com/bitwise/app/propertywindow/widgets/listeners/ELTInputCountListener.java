@@ -14,6 +14,7 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
 
 public class ELTInputCountListener implements IELTListener{
 
+	private int minimunPortCount;
 	private ControlDecoration txtDecorator;
 	@Override
 	public int getListenerType() {
@@ -25,6 +26,8 @@ public class ELTInputCountListener implements IELTListener{
 		final Widget[] widgetList = widgets;
 		if (helper != null) {
 			txtDecorator = (ControlDecoration) helper.get(HelperType.CONTROL_DECORATION);
+			if (helper.get(HelperType.MINIMUM_PORT_COUNT) != null)
+				minimunPortCount = Integer.valueOf((String) helper.get(HelperType.MINIMUM_PORT_COUNT));
 		}
 
 		Listener listener=new Listener() {
@@ -33,8 +36,8 @@ public class ELTInputCountListener implements IELTListener{
 				String string =((Text) widgetList[0]).getText().trim();	
 				if(StringUtils.isNotEmpty(string)){
 					if(event.type == SWT.Modify){
-						if(Integer.parseInt(string) < 2 || Integer.parseInt(string) > 25 ){
-							txtDecorator.setDescriptionText(Messages.PORT_VALUE);
+						if(Integer.parseInt(string) < minimunPortCount || Integer.parseInt(string) > 25 ){
+							txtDecorator.setDescriptionText(Messages.bind(Messages.PORT_VALUE, minimunPortCount));
 							txtDecorator.show();
 							propertyDialogButtonBar.enableOKButton(false);
 							propertyDialogButtonBar.enableApplyButton(false);

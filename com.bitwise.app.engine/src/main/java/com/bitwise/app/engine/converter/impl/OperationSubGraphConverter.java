@@ -6,7 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.engine.converter.TransformConverter;
+import com.bitwise.app.engine.converter.SubgraphConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
@@ -22,18 +22,16 @@ import com.bitwiseglobal.graph.operationstypes.Subgraph;
  * @author Bitwise
  *
  */
-public class OperationSubGraphConverter extends TransformConverter {
+public class OperationSubGraphConverter extends SubgraphConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OperationSubGraphConverter.class);
-	private String JOBPATH="path";
-	private String JOBEXTENSION=".job";
-	private String XMLEXTENSION=".xml";
-
+	private ConverterHelper converterHelper;
 	public OperationSubGraphConverter(Component component) {
 		super();
 		this.baseComponent = new Subgraph();
 		this.component = component;
 		this.properties = component.getProperties();
+		converterHelper=new ConverterHelper(component);
 	}
 
 	/*
@@ -47,14 +45,14 @@ public class OperationSubGraphConverter extends TransformConverter {
 		Subgraph subgraph = (Subgraph) baseComponent;
 		Subgraph.Path path = new Subgraph.Path();
 		String[] temp;
-		String subGraphFilePath=	((String)properties.get(JOBPATH)).replace(JOBEXTENSION, XMLEXTENSION);
+		String subGraphFilePath=	((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION);
 		temp = subGraphFilePath.split("\\\\",3);
 		path.setUri(temp[temp.length-1].replaceAll("\\\\", "/"));
 		subgraph.setPath(path);
-		subgraph.setRuntimeProperties(getRuntimeProperties());
+		subgraph.setSubgraphParameter(getRuntimeProperties());
 		 
 	}
-
+ 
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
 		logger.debug("Generating TypeOperationsOutSocket data for : {}", properties.get(Constants.PARAM_NAME));
@@ -86,7 +84,7 @@ public class OperationSubGraphConverter extends TransformConverter {
 			for (Link link : component.getTargetConnections()) {
 				TypeBaseInSocket inSocket = new TypeBaseInSocket();
 				inSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
-				inSocket.setFromSocketId(link.getSourceTerminal());
+				inSocket.setFromSocketId(converterHelper.getFromSocketId(link));
 				inSocket.setId(link.getTargetTerminal());
 				inSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 				inSocket.getOtherAttributes();

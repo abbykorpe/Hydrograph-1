@@ -24,7 +24,8 @@ public class ListenerHelper {
 		SCHEMA_GRID,
 		TOOLTIP_ERROR_MESSAGE,
 		CURRENT_COMPONENT,
-		WIDGET_CONFIG;
+		WIDGET_CONFIG,
+		MINIMUM_PORT_COUNT;
 	}
 	
 	private Map<HelperType, Object> helpers;

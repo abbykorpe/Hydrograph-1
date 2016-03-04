@@ -26,6 +26,10 @@
 			usage="REQUIRED">
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
+		
+		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="runtime_properties"
+			renderer="SUBGRAPH_PROPERTIES_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL"/>
 
 	</tns:component>
 </tns:Config>

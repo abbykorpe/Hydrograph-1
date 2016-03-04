@@ -20,6 +20,9 @@ import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.action.PasteAction;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
+import com.bitwise.app.graph.model.Component;
+import com.bitwise.app.graph.model.Container;
+import com.bitwise.app.graph.utility.SubGraphUtility;
 import com.bitwise.app.logging.factory.LogFactory;
 
 /**
@@ -51,8 +54,8 @@ public class SubGraphOpenAction extends SelectionAction{
 		super.init();
 		
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setText("open"); 
-		setId("open");
+		setText(Constants.SUBGRAPH_OPEN); 
+		setId(Constants.SUBGRAPH_OPEN);
 		setHoverImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT_DISABLED));
@@ -67,21 +70,30 @@ public class SubGraphOpenAction extends SelectionAction{
 	@Override  
 	public void run() { 
 		List<Object> selectedObjects =getSelectedObjects();
-		if (selectedObjects != null || !selectedObjects.isEmpty()) {
+		SubGraphUtility subGraphUtility = new SubGraphUtility();
+		if (selectedObjects != null && !selectedObjects.isEmpty()) {
 			for(Object obj:selectedObjects)
 			{
 				if(obj instanceof ComponentEditPart)
 				{
 					if (((ComponentEditPart) obj).getCastedModel().getCategory().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY)) {
-						IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();						
-						IPath jobFilePath=new Path((((ComponentEditPart) obj).getCastedModel()).getProperties().get("path").toString());
+						IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();				
+						
+						Component subgraphComponent = ((ComponentEditPart) obj).getCastedModel();
+						IPath jobFilePath=new Path((((ComponentEditPart) obj).getCastedModel()).getProperties().get(Constants.PATH_PROPERTY_NAME).toString());
 						IFile jobFile = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath);
 						try {
 							IDE.openEditor(page, jobFile, ELTGraphicalEditor.ID);
 						} catch (PartInitException e) {
 							logger.error("Unable to open subgraph");
 						}
-	
+						ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+						Container container=editor.getContainer(); 
+
+						for (Component component :  container.getChildren()) {
+							subGraphUtility.propogateSchemaToSubgraph(subgraphComponent, component);	
+						}
+						((ComponentEditPart) obj).refresh();
 				}
 			}
 		}
@@ -90,7 +102,18 @@ public class SubGraphOpenAction extends SelectionAction{
 	
 	@Override
 	protected boolean calculateEnabled() {
-		// TODO Auto-generated method stub
+		List<Object> selectedObjects =getSelectedObjects();
+		if (selectedObjects != null && !selectedObjects.isEmpty()) {
+			for(Object obj:selectedObjects)
+			{
+				if(obj instanceof ComponentEditPart)
+				{
+					if (Constants.SUBGRAPH_COMPONENT.equalsIgnoreCase(((ComponentEditPart) obj).getCastedModel().getComponentName())) 
+						return true;
+					
+				}
+			}
+		}
 		return false;
 	}
    }

@@ -35,8 +35,13 @@ import com.bitwise.app.graph.utility.SubGraphUtility;
  * @author Bitwise
  */
 public class SubGraphAction extends SelectionAction{
+	
+	/** The paste action. */
+	//TODO : remove pasteAction is not needed.
 	PasteAction pasteAction;
-	ComponentEditPart edComponentEditPart;
+	
+	/** The ed component edit part. */
+	ComponentEditPart componentEditPart;
 	/**
 	 * Instantiates a new cut action.
 	 * 
@@ -51,19 +56,28 @@ public class SubGraphAction extends SelectionAction{
 		setLazyEnablementCalculation(true);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#init()
+	 */
 	@Override
 	protected void init() {
 		super.init();
 		
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setText("create"); 
-		setId("create");
+		setText(Constants.SUBGRAPH_CREATE); 
+		setId(Constants.SUBGRAPH_CREATE);
 		setHoverImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT_DISABLED));
 		setEnabled(false);
 	}
 
+	/**
+	 * Creates the sub graph command.
+	 *
+	 * @param selectedObjects the selected objects
+	 * @return the command
+	 */
 	private Command createSubGraphCommand(List<Object> selectedObjects) {
 		SubGraphCommand cutCommand =new SubGraphCommand();
 		if (selectedObjects == null || selectedObjects.isEmpty()) {
@@ -94,19 +108,21 @@ public class SubGraphAction extends SelectionAction{
     	return null;	
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#calculateEnabled()
+	 */
 	@Override
 	protected boolean calculateEnabled() {
 		Command cmd = createSubGraphCommand(getSelectedObjects());
 		if (cmd == null){
-			ContributionItemManager.CUT.setEnable(false);			
 			return false;
 		}else{
-			ContributionItemManager.CUT.setEnable(true);			
 			return true;
 		}
  
 	}
 
+	
 	/* 
 	 * Create sub graph
 	 */
@@ -114,7 +130,7 @@ public class SubGraphAction extends SelectionAction{
 	public void run() { 
 		SubGraphUtility subGraphUtility = new SubGraphUtility();
 	
-		IFile file =subGraphUtility.doSaveAsSubGraph();
+		IFile file=subGraphUtility.openSubGraphSaveDialog();
 		if(file!=null)
 		{	
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -132,8 +148,8 @@ public class SubGraphAction extends SelectionAction{
 			EditPart editPart = (EditPart) ite.next();
 			if(editPart instanceof ComponentEditPart) 
 			{
-				if (((ComponentEditPart) editPart).getCastedModel().getCategory().equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY)) {
-					edComponentEditPart= (ComponentEditPart) editPart;
+				if (Constants.SUBGRAPH_COMPONENT_CATEGORY.equalsIgnoreCase(((ComponentEditPart) editPart).getCastedModel().getCategory())) {
+					componentEditPart= (ComponentEditPart) editPart;
 				}
 			} 
 		}
@@ -143,7 +159,6 @@ public class SubGraphAction extends SelectionAction{
 		 */
 		List< Link> inLinks = new ArrayList<>();
 		List< Link> outLinks = new ArrayList<>();
-
 		for (Object object : clipboardList) {
 				Component component = (Component)object;
 				if(component!= null){
@@ -165,20 +180,20 @@ public class SubGraphAction extends SelectionAction{
 		/*
 		 * Update main sub graph component size and properties
 		 */
-		subGraphUtility.updateSubGraphModelProperties(edComponentEditPart, inLinks.size(), outLinks.size(), file);
+		subGraphUtility.updateSubGraphModelProperties(componentEditPart, inLinks.size(), outLinks.size(), file);
 		
 		/*
 		 * Create Input port in main sub graph component.
 		 */
-		subGraphUtility.createDynamicInputPort(inLinks, edComponentEditPart);
+		subGraphUtility.createDynamicInputPort(inLinks, componentEditPart);
 		/*
 		 * Create output port in main subgraph component.
 		 */
-		subGraphUtility.createDynamicOutputPort(outLinks, edComponentEditPart)	;
+		subGraphUtility.createDynamicOutputPort(outLinks, componentEditPart)	;
 		/*
 		 * Generate subgraph target xml.
 		 */
-		subGraphUtility.createSubGraphXml(edComponentEditPart,clipboardList);
+		subGraphUtility.createSubGraphXml(componentEditPart,clipboardList,file);
 		}
 	}
    }

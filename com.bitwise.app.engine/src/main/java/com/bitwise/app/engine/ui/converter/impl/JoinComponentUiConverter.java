@@ -48,7 +48,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Join-Properties for -{}", componentName);
 
-		propertyMap.put("inPortCount", getSize());
+		propertyMap.put(Constants.UNUSED_AND_INPUT_PORT_COUNT_PROPERTY, getSize());
 		propertyMap.put(Constants.JOIN_CONFIG_FIELD, getJoinConfigProperty());
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(componentName);

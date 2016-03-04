@@ -26,9 +26,6 @@ public class InputSubGraphConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputSubGraphConverter.class);
 	private ConverterHelper converterHelper;
-	private String JOBPATH="path";
-	private String JOBEXTENSION=".job";
-	private String XMLEXTENSION=".xml";
 	public InputSubGraphConverter(Component component) {
 		super();
 		this.baseComponent = new Subgraph();
@@ -44,12 +41,13 @@ public class InputSubGraphConverter extends InputConverter {
 		Subgraph subgraph = (Subgraph) baseComponent;
 		Subgraph.Path path = new Subgraph.Path();
 		String[] temp;
-		String subGraphFilePath=	((String)properties.get(JOBPATH)).replace(JOBEXTENSION, XMLEXTENSION);
-		temp = subGraphFilePath.split("\\\\",3);
-		path.setUri(temp[temp.length-1].replaceAll("\\\\", "/"));
-		subgraph.setPath(path);
-		subgraph.setRuntimeProperties(getRuntimeProperties());
-		
+		if(properties.get(Constants.JOB_PATH)!=null){
+			String subGraphFilePath=	((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION);
+			temp = subGraphFilePath.split("\\\\",3);
+			path.setUri(temp[temp.length-1].replaceAll("\\\\", "/"));
+			subgraph.setPath(path);
+		}
+		subgraph.setSubgraphParameter(getRuntimeProperties());
 		
 	}
 

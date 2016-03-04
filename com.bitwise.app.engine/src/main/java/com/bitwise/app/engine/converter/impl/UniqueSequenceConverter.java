@@ -94,6 +94,7 @@ public class UniqueSequenceConverter extends TransformConverter {
 		if (component.getSourceConnections() != null) {
 			for (Link link : component.getSourceConnections()) {
 				TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();
+				outSocket.setId(link.getSourceTerminal());
 				setOutSocketProperties(outSocket);
 				outSocket.getOtherAttributes();
 				outSocketList.add(outSocket);

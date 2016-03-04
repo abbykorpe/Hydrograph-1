@@ -17,6 +17,7 @@ import com.bitwiseglobal.graph.commontypes.TypeBaseRecord;
 import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;
 import com.bitwiseglobal.graph.commontypes.TypeOutputComponent;
 import com.bitwiseglobal.graph.commontypes.TypeOutputInSocket;
+import org.apache.commons.lang.StringUtils;
 
 public abstract class OutputConverter extends Converter {
 
@@ -65,10 +66,12 @@ public abstract class OutputConverter extends Converter {
 
 	protected ComponentsOutputSchema fetchPropagatedSchema() {
 		ComponentsOutputSchema componentsOutputSchema = null;
+		if(!StringUtils.equals(Constants.OUTPUT_SUBGRAPH, component.getComponentName())){
 		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) properties
 				.get(Constants.SCHEMA_TO_PROPAGATE);
 		if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null)
 			componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
+		}
 		return componentsOutputSchema;
 	}
 

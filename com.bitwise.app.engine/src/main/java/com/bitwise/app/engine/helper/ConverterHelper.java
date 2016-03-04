@@ -262,11 +262,7 @@ public class ConverterHelper {
 			for (Link link : component.getTargetConnections()) {
 				TypeBaseInSocket inSocket = new TypeBaseInSocket();
 				inSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
-				if (isMultipleLinkAllowed(link.getSource(), link.getSourceTerminal()))
-					inSocket.setFromSocketId(link.getSource().getPort(link.getSourceTerminal()).getPortType()
-							+ link.getLinkNumber());
-				else
-					inSocket.setFromSocketId(link.getSourceTerminal());
+				inSocket.setFromSocketId(getFromSocketId(link));
 				inSocket.setId(link.getTargetTerminal());
 				inSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 				inSocket.getOtherAttributes();
@@ -392,5 +388,18 @@ public class ConverterHelper {
 			}
 		}
 		return false;
+	}
+	
+	public String getFromSocketId(Link link) {
+		String inSocketId = link.getSourceTerminal();
+
+		if (isMultipleLinkAllowed(link.getSource(), link.getSourceTerminal()))
+			inSocketId = link.getSource().getPort(link.getSourceTerminal()).getPortType() + link.getLinkNumber();
+
+		if (link.getSource().getComponentName().equals("InputSubgraphComponent")) {
+			return inSocketId.replace("out", "in");
+		}
+		return inSocketId;
+
 	}
 }
