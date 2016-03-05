@@ -26,11 +26,11 @@ public class WidgetHelper {
 	}
 
 	public WidgetConfig getColumnNameConfig(){
-		return populateSingleColumnGridConfig(Constants.COLUMN_NAME, Constants.COLUMN_NAME2);
+		return populateSingleColumnGridConfig(Constants.KEY_FIELDS_LABEL, Constants.KEY_FIELDS_WINDOW_TITLE);
 	}
 
 	public WidgetConfig getOperationFieldsConfig(){
-		return populateSingleColumnGridConfig(Constants.OPERATION_FIELDS, Constants.OPERATION_FIELD);
+		return populateSingleColumnGridConfig(Constants.OPERATION_FIELDS_LABEL, Constants.OPERATION_FIELDS_WINDOW_TITLE);
 	}
 	
 	/**

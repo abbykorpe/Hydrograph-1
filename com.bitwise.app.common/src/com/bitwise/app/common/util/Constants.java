@@ -47,10 +47,10 @@ public class Constants {
 	
 	public static final String TRUE = "True";
 	public static final String FALSE = "False";
-	public static final String OPERATION_FIELD = "Operation Field ";
-	public static final String OPERATION_FIELDS = "Operation\nFields";
-	public static final String COLUMN_NAME2 = "Key Field ";
-	public static final String COLUMN_NAME = "Key\nFields";
+	public static final String OPERATION_FIELDS_WINDOW_TITLE = "Operation Fields";
+	public static final String OPERATION_FIELDS_LABEL = "Operation\nFields";
+	public static final String KEY_FIELDS_WINDOW_TITLE = "Key Fields";
+	public static final String KEY_FIELDS_LABEL= "Key\nFields";
 	public static final String SECONDARY_KEYS2 = "Secondary Keys ";
 	public static final String SECONDARY_KEYS = "Secondary\n Keys";
 	
@@ -172,5 +172,7 @@ public class Constants {
 	public static final String JOB_EXTENSION_FOR_IPATH="job";
 	public static final String XML_EXTENSION_FOR_IPATH="xml";
 	public static final String SUBGRAPH_UPDATE = "update";
+	public static final String JOIN_KEYS_WINDOW_TITLE = "Join Key(s)";
+	public static final String LOOKUP_KEYS_WINDOW_TITLE = "Lookup Key(s)";
 
 }

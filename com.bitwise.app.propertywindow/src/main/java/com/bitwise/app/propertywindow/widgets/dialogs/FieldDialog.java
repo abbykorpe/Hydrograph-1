@@ -200,13 +200,18 @@ public class FieldDialog extends Dialog {
 
 		isAnyUpdatePerformed = false;
 
-		if (Constants.COLUMN_NAME2.equalsIgnoreCase(componentName)) {
-			getShell().setText(Constants.COLUMN_NAME2);
+		if (Constants.KEY_FIELDS_WINDOW_TITLE.equalsIgnoreCase(componentName)) {
+			getShell().setText(Constants.KEY_FIELDS_WINDOW_TITLE);
 		}
-		if (Constants.OPERATION_FIELD.equalsIgnoreCase(componentName)) {
-			getShell().setText(Constants.OPERATION_FIELD);
+		if (Constants.OPERATION_FIELDS_WINDOW_TITLE.equalsIgnoreCase(componentName)) {
+			getShell().setText(Constants.OPERATION_FIELDS_WINDOW_TITLE);
 		}
-
+		if (Constants.JOIN_KEYS_WINDOW_TITLE.equalsIgnoreCase(componentName)) {
+			getShell().setText(Constants.JOIN_KEYS_WINDOW_TITLE);
+		}
+		if(Constants.LOOKUP_KEYS_WINDOW_TITLE.equalsIgnoreCase(componentName)){
+			getShell().setText(Constants.LOOKUP_KEYS_WINDOW_TITLE);
+		}
 		Composite container = (Composite) super.createDialogArea(parent);
 		ColumnLayout cl_container = new ColumnLayout();
 		cl_container.verticalSpacing = 0;

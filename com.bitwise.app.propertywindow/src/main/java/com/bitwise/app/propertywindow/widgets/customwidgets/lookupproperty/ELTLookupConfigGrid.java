@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.ImagePathConstant;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -234,6 +235,7 @@ public class ELTLookupConfigGrid extends Dialog {
 		FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 		fieldDialog.setPropertyFromCommaSepratedString(availableValues);
 		fieldDialog.setSourceFieldsFromPropagatedSchema(propagatedFiledNames.get(StringUtils.lowerCase(socketId)));
+		fieldDialog.setComponentName(Constants.LOOKUP_KEYS_WINDOW_TITLE);
 		fieldDialog.open();
 		return fieldDialog.getResultAsCommaSeprated();
 
