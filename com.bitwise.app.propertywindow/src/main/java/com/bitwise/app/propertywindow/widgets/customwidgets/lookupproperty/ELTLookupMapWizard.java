@@ -343,18 +343,7 @@ public class ELTLookupMapWizard extends Dialog {
 		inputTableViewer[tableViewerIndex] = eltswtWidgets.createTableViewer(
 				comGrid, INPUT_COLUMN_NAME, new int[] { 0, 30, 229, 232 }, 224,
 				new ELTFilterContentProvider(), new ELTFilterLabelProvider());
-		inputTableViewer[tableViewerIndex].getTable().addMouseListener(
-				new MouseAdapter() {
-					@Override
-					public void mouseDoubleClick(MouseEvent e) {
-						addRowToTable(inputTableViewer[tableViewerIndex],
-								joinInputList);
-					}
-
-					@Override
-					public void mouseDown(MouseEvent e) {
-					}
-				});
+		
 		inputTableViewer[tableViewerIndex].getTable().addMouseTrackListener(new MouseTrackListener() {
 
 			@Override
@@ -859,25 +848,7 @@ public class ELTLookupMapWizard extends Dialog {
 		}
 	}
 
-	private void addRowToTable(TableViewer viewer,
-			List<FilterProperties> joinInputList) {
-		FilterProperties join = new FilterProperties();
-		if (joinInputList.size() != 0) {
-			if (!inputTabvalidation())
-				return;
-			join.setPropertyname("");
-			joinInputList.add(join);
-			viewer.refresh();
-			viewer.editElement(viewer.getElementAt(joinInputList.size() - 1), 0);
-		} else {
-			join.setPropertyname("");
-			joinInputList.add(join);
-			viewer.refresh();
-			viewer.editElement(join, 0);
-		}
-	}
-
-	public void dropData(final TableViewer tableViewer,
+   public void dropData(final TableViewer tableViewer,
 			final List<LookupMapProperty> listOfFields,
 			final boolean isSingleColumn) {
 		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
