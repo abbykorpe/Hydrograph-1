@@ -2,6 +2,9 @@ package com.bitwise.app.propertywindow.widgets.customwidgets.schema;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -437,23 +440,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		populateSchemaTypeWidget();
 	}
 
-	private void swap(int index1, int index2, String text1, String text2) {
-		GridRow swap1 = null;
-		GridRow swap2 = null;
-		for (int i = 0; i < schemaGridRowList.size(); i++) {
-			GridRow grid = (GridRow) schemaGridRowList.get(i);
-			if (grid.getFieldName().equalsIgnoreCase(text1)) {
-				swap1 = grid;
-			}
-			if (grid.getFieldName().equalsIgnoreCase(text2)) {
-				swap2 = grid;
-			}
-		}
-
-		schemaGridRowList.set(index2, swap1);
-		schemaGridRowList.set(index1, swap2);
-	}
-
 	private void gridListener(CellEditor[] cellEditors) {
 
 		GridChangeListener gridChangeListener = new GridChangeListener(cellEditors, propertyDialogButtonBar);
@@ -549,8 +535,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		ELTSchemaSubgroupComposite buttonSubGroup = new ELTSchemaSubgroupComposite(container);
 
+
 		buttonSubGroup.createContainerWidget();
 		buttonSubGroup.numberOfBasicWidgets(6);
+
 
 		addImportButton(buttonSubGroup);
 		addExportButton(buttonSubGroup);
@@ -636,34 +624,19 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		buttonSubGroup.attachWidget(upButton);
 		upButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png");
 		upButton.setToolTipText(upButtonTooltip);
-		upButton.addMouseUpListener(new MouseListener() {
-			int index = 0, index2 = 0;
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
-
+		upButton.addMouseUpListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				propertyDialogButtonBar.enableApplyButton(true);
-				index = table.getSelectionIndex();
+				int[] indexes=table.getSelectionIndices();
+				for(int index :indexes)
+				{
 
 				if (index > 0) {
-					index2 = index - 1;
-					String text1 = tableViewer.getTable().getItem(index).getText(0);
-					String text2 = tableViewer.getTable().getItem(index2).getText(0);
-
-					swap(index, index2, text1, text2);
-
-					tableViewer.refresh();
-					table.setSelection(index - 1);
-
+					Collections.swap((List)schemaGridRowList,index ,index-1);
+                    tableViewer.refresh();
+					
+				}
 				}
 			}
 		});
@@ -679,22 +652,20 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	
 
 		downButton.addMouseUpListener(new MouseAdapter() {
-			int index = 0, index2 = 0;
+			
 
 			@Override
 			public void mouseUp(MouseEvent e) {
 
 				propertyDialogButtonBar.enableApplyButton(true);
-				index = table.getSelectionIndex();
+				int[] indexes = table.getSelectionIndices();
+				for (int i = indexes.length - 1; i > -1; i--) {
 
-				if (index < schemaGridRowList.size() - 1) {
-					String text1 = tableViewer.getTable().getItem(index).getText(0);
-					index2 = index + 1;
-					String text2 = tableViewer.getTable().getItem(index2).getText(0);
+					if (indexes[i] < schemaGridRowList.size() - 1) {
+                        Collections.swap((List)schemaGridRowList,indexes[i] ,indexes[i]+1);
+						tableViewer.refresh();
 
-					swap(index, index2, text1, text2);
-					tableViewer.refresh();
-					table.setSelection(index + 1);
+					}
 				}
 
 			}

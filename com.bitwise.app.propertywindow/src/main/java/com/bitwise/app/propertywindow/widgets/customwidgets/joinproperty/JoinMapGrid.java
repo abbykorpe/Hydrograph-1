@@ -524,18 +524,7 @@ public class JoinMapGrid extends Dialog {
 		inputTableViewer[tableViewerIndex] = widget.createTableViewer(comGrid,
 				INPUT_COLUMN_NAME, new int[] { 2, 30, 229, 232 }, 224,
 				new ELTFilterContentProvider(),new ELTFilterLabelProvider());
-		inputTableViewer[tableViewerIndex].getTable().addMouseListener(
-				new MouseAdapter() {
-					@Override
-					public void mouseDoubleClick(MouseEvent e) {
-						addRowToTable(inputTableViewer[tableViewerIndex],
-								joinInputList);
-					}
-
-					@Override
-					public void mouseDown(MouseEvent e) {
-					}
-				});
+		
 		inputTableViewer[tableViewerIndex].getTable().addMouseTrackListener(new MouseTrackListener() {
 
 			@Override
@@ -965,25 +954,7 @@ public class JoinMapGrid extends Dialog {
 		return propertyValidator;
 	}
 
-	private void addRowToTable(TableViewer viewer,
-			List<FilterProperties> joinInputList) {
-		FilterProperties join = new FilterProperties();
-		if (joinInputList != null && joinInputList.size() != 0) {
-			if (!inputSchemavalidate(joinInputList, viewer))
-				return;
-			join.setPropertyname("");
-			joinInputList.add(join);
-			viewer.refresh();
-			viewer.editElement(viewer.getElementAt(joinInputList.size() - 1), 0);
-		} else {
-			join.setPropertyname("");
-			joinInputList.add(join);
-			viewer.refresh();
-			viewer.editElement(join, 0);
-		}
-	}
-
-	private void joinOutputProperty(TableViewer viewer, String sourceFieldValue) {
+   private void joinOutputProperty(TableViewer viewer, String sourceFieldValue) {
 		String outputFieldValue = null;
 		if (sourceFieldValue == null) {
 			sourceFieldValue = "";
