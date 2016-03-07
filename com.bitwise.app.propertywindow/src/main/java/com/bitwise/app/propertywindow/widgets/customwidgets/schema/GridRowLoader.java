@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GenerateRecordSchemaGridRow;
@@ -31,6 +32,7 @@ import com.bitwise.app.common.schema.Fields;
 import com.bitwise.app.common.schema.ScaleTypes;
 import com.bitwise.app.common.schema.Schema;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
@@ -46,7 +48,8 @@ import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 public class GridRowLoader {
 
 	public final static String SCHEMA_CONFIG_XSD_PATH = Platform.getInstallLocation().getURL().getPath() + Messages.SCHEMA_CONFIG_XSD_PATH;
-
+	private static Logger logger = LogFactory.INSTANCE.getLogger(GridRowLoader.class);
+	
 	String gridRowType;
 	File schemaFile;
 	Fields fields;
@@ -64,7 +67,7 @@ public class GridRowLoader {
 	 */
 	public ArrayList<GridRow> importGridRowsFromXML(ListenerHelper helper){
 
-		ArrayList<GridRow> schemaGridRowListToImport = new ArrayList<>();
+		ArrayList<GridRow> schemaGridRowListToImport = null;
 		InputStream xml, xsd;
 		
 		ELTGridDetails eltGridDetails = (ELTGridDetails)helper.get(HelperType.SCHEMA_GRID);
@@ -141,14 +144,28 @@ public class GridRowLoader {
 					}
 				
 				}
-			}else
-				throw new Exception("FileName is Empty");
+			}else{
+				
+				logger.error("External schema FileName is Empty");
+				throw new Exception("External schema FileName is Empty");
+			}
 
 		} catch (JAXBException e1) {
+			grids.clear();
 			MessageDialog.openError(new Shell(), "Error", "Error while importing file. XML is not in correct format -\n"+e1.getMessage());
+			logger.error("Error while importing file. XML is not in correct format.");
+			return null;
+		}catch (DuplicateFieldException e1) {
+			grids.clear();
+			MessageDialog.openError(new Shell(), "Error", "Error while importing file. XML has duplicate field");
+			logger.error("Error while importing file. XML is not in correct format.");
+			return null;
 		}
 		catch (Exception e) {
+			grids.clear();
 			MessageDialog.openError(new Shell(), "Error", "Error while importing file. -\n"+e.getMessage());
+			logger.error("Error while importing file.");
+			return null;
 		}
 		
 		return schemaGridRowListToImport;
@@ -168,15 +185,22 @@ public class GridRowLoader {
 		catch(Exception ex)
 		{
 			MessageDialog.openError(new Shell(), "Error", "Error while importing file. XML is not in correct format -\n"+ex.getMessage());
+			logger.error("Error while importing file. XML is not in correct format.");
 			return false;
 		}
 	}
 
-	private void addRowToList(ELTGridDetails eltGridDetails, List<GridRow> grids, GridRow gridRow, ArrayList<GridRow> schemaGridRowListToImport) {
-		if(!grids.contains(gridRow))
+	private void addRowToList(ELTGridDetails eltGridDetails, List<GridRow> grids, GridRow gridRow, ArrayList<GridRow> schemaGridRowListToImport) throws Exception {
+		if(!grids.contains(gridRow)){
 			grids.add(gridRow); 
-		eltGridDetails.setGrids(grids);
-		schemaGridRowListToImport.add(gridRow);
+			eltGridDetails.setGrids(grids);
+			schemaGridRowListToImport.add(gridRow);
+		}
+		else{
+			logger.error("Duplicate Field in file.");
+			throw new DuplicateFieldException("Duplicate Field in file");
+		}
+		
 	}
 
 
@@ -197,7 +221,7 @@ public class GridRowLoader {
 
 		if(temp.getScaleType()!=null){
 			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(temp.getScaleType().value()));	
-			gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[GridWidgetCommonBuilder.getScaleTypeByValue(temp.getType().value())]);
+			gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[GridWidgetCommonBuilder.getScaleTypeByValue(temp.getScaleType().value())]);
 		}else{
 			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(Messages.SCALE_TYPE_NONE));
 			gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
@@ -232,8 +256,9 @@ public class GridRowLoader {
 					if(StringUtils.isNotBlank(temp.getScale()))
 						field.setScale(Integer.parseInt(temp.getScale()));
 					if(temp.getScaleTypeValue()!=null){
-						if(!temp.getScaleTypeValue().equals("") && !temp.getScaleTypeValue().equals(Messages.SCALE_TYPE_NONE))
+						if(!temp.getScaleTypeValue().equals("") && !temp.getScaleTypeValue().equals(Messages.SCALE_TYPE_NONE)){
 							field.setScaleType(ScaleTypes.fromValue(temp.getScaleTypeValue()));
+						}
 					}
 					if(StringUtils.isNotBlank(temp.getDescription()))
 						field.setDescription(temp.getDescription());
@@ -266,14 +291,26 @@ public class GridRowLoader {
 				jaxbMarshaller.marshal(schema, schemaFile);
 				MessageDialog.openInformation(new Shell(), "Information", "Schema file exported.");
 				
-			}else
-				throw new Exception("FileName is Empty");
+			}else{
+				
+				logger.error("External schema FileName is Empty.");
+				throw new Exception("External schema FileName is Empty");
+			}
 
 		} catch (JAXBException e) {
 			MessageDialog.openError(new Shell(), "Error", "Error while exporting file. -\n"+e.getMessage());
+			logger.error("Error while exporting file.");
 		}catch (Exception e) {
 			MessageDialog.openError(new Shell(), "Error", "Error while exporting file. -\n"+e.getMessage());
+			logger.error("Error while exporting file.");
 		}
 
+	}
+	
+	private class DuplicateFieldException extends Exception{
+		public DuplicateFieldException(String message)
+		{
+			super(message);
+		}
 	}
 }

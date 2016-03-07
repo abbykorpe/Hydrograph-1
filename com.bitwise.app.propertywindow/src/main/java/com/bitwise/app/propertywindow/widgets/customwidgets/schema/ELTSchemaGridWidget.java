@@ -98,10 +98,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 
 
-	
+
 	private CellEditor fieldNameEditor;
 
-	
+
 
 
 	protected String gridRowType;
@@ -133,7 +133,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private Text extSchemaPathText;
 
 	private ControlDecoration txtDecorator, decorator;
-	
+
 	private String importButtonTooltip = "Import Schema File";
 	private String exportButtonTooptip = "Export Schema File";
 	private String addButtonTooltip = "Add Row";
@@ -159,6 +159,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	/**
 	 * Sets the decorator.
 	 */
+	//protected abstract void setDecorator(ListenerHelper helper);
 	protected abstract void setDecorator();
 
 	public ELTSchemaGridWidget() {
@@ -254,11 +255,12 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		} else {
 			schema.setIsExternal(false);
 			schema.setExternalSchemaPath("");
+			toggleSchema(false);
 
-//			schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
-//			property.put(Constants.SCHEMA_TO_PROPAGATE,schemaMap);
+			//			schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
+			//			property.put(Constants.SCHEMA_TO_PROPAGATE,schemaMap);
 		}
-		
+
 		schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
 		property.put(Constants.SCHEMA_TO_PROPAGATE,schemaMap);
 
@@ -476,7 +478,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					isExternal = true;
 					toggleSchema(true);
 				}
-			}
+			}else
+				toggleSchema(false);
 		}
 	}
 
@@ -485,8 +488,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			Schema schema = (Schema) this.properties;
 			if (schema.getIsExternal()) {
 				toggleSchemaChoice(true);
+				toggleSchema(true);
 			} else {
 				toggleSchemaChoice(false);
+				toggleSchema(false);
 			}
 		} else {
 			toggleSchemaChoice(false);
@@ -578,8 +583,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL);
 
 		// Adding the decorator to show error message when field name same.
-		setDecorator();
+		
 		helper = getListenerHelper();
+		setDecorator();
+		
 		addValidators();
 		try {
 			eltTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),
@@ -649,7 +656,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		downButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png");
 		downButton.setToolTipText(downButtonTooltip);
-	
+
 
 		downButton.addMouseUpListener(new MouseAdapter() {
 			
@@ -677,11 +684,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private void addExportButton(ELTSchemaSubgroupComposite buttonSubGroup) {
 		exportButton = new ELTDefaultLable("");
 		exportButton.lableWidth(25);
-		
+
 		buttonSubGroup.attachWidget(exportButton);
 		exportButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/export_schema.png");
 		exportButton.setToolTipText(exportButtonTooptip);
-		
+
 		((Label)exportButton.getSWTWidgetControl()).setEnabled(false);
 
 
@@ -701,7 +708,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 				GridRowLoader gridRowLoader = new GridRowLoader(gridRowType, schemaFile);
 				gridRowLoader.exportXMLfromGridRows((ArrayList<GridRow>) schemaGridRowList);
-				
+
 			}
 		});
 	}
@@ -711,11 +718,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private void addImportButton(ELTSchemaSubgroupComposite buttonSubGroup) {
 		importButton = new ELTDefaultLable("");
 		importButton.lableWidth(25);
-		
+
 		buttonSubGroup.attachWidget(importButton);
 		importButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/import_schema.png");
 		importButton.setToolTipText(importButtonTooltip);
-		
+
 		((Label)importButton.getSWTWidgetControl()).setEnabled(false);
 
 		importButton.addMouseUpListener(new MouseListener() {
@@ -735,17 +742,21 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				extSchemaPathText.getText();
 				File schemaFile = new File(extSchemaPathText.getText());
 
-
-				ArrayList<GridRow> schemaGridRowListToImport;
-
+				ArrayList<GridRow> schemaGridRowListToImport = new ArrayList<GridRow>();;
+				
+				tableViewer.setInput(schemaGridRowListToImport);
+				tableViewer.refresh();
+				
 				GridRowLoader gridRowLoader = new GridRowLoader(gridRowType, schemaFile);
 				schemaGridRowListToImport = gridRowLoader.importGridRowsFromXML(helper);
 
+				if(schemaGridRowListToImport!=null){
 
-				tableViewer.setInput(schemaGridRowListToImport);
-				tableViewer.refresh();
+					tableViewer.setInput(schemaGridRowListToImport);
+					tableViewer.refresh();
 
-				MessageDialog.openInformation(new Shell(), "Information", "Schema file imported.");
+					MessageDialog.openInformation(new Shell(), "Information", "Schema file imported.");
+				}
 
 
 			}
@@ -797,6 +808,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 			if (!originalSchema.getIsExternal()) {
 				isExternal = false;
+				toggleSchema(false);
 			}
 
 		} else {

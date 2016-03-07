@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="format" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="precision" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="scale" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="scale_type" type="{http://www.bitwiseglobal.com/graph/schema}scale_types" />
+ *       &lt;attribute name="scaleType" type="{http://www.bitwiseglobal.com/graph/schema}scale_types" />
  *       &lt;attribute name="description" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="length" type="{http://www.w3.org/2001/XMLSchema}positiveInteger" />
  *       &lt;attribute name="delimiter" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -58,7 +58,7 @@ public class Field {
     protected Integer precision;
     @XmlAttribute(name = "scale")
     protected Integer scale;
-    @XmlAttribute(name = "scale_type")
+    @XmlAttribute(name = "scaleType")
     protected ScaleTypes scaleType;
     @XmlAttribute(name = "description")
     protected String description;

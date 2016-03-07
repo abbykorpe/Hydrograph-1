@@ -39,7 +39,7 @@ public class ELTSchemaDialogSelectionListener implements IELTListener {
 			public void handleEvent(Event event) {
 				if(event.type==SWT.Selection){
 					FileDialog filedialog=new FileDialog(button.getShell(),SWT.None);
-					 filedialog.setFilterExtensions(new String [] {"*.xml"});
+					 filedialog.setFilterExtensions(new String [] {"*.*"});
 					String path=filedialog.open();
 					if(StringUtils.isNotEmpty(path)){
 						File file= new File(path);
