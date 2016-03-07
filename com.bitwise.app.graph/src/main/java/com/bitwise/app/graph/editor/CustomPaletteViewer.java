@@ -179,7 +179,7 @@ public class CustomPaletteViewer extends PaletteViewer {
 			Component componentConfig) {
 		Class<?> clazz = DynamicClassProcessor.INSTANCE.createClass(componentConfig);
 
-		CombinedTemplateCreationEntry component = new CombinedTemplateCreationEntry(componentConfig.getName(),
+		CombinedTemplateCreationEntry component = new CombinedTemplateCreationEntry(componentConfig.getNameInPalette(),
 				null, clazz, new SimpleFactory(clazz),
 				ImageDescriptor.createFromURL(eLEtlGraphicalEditor.prepareIconPathURL(componentConfig
 						.getPaletteIconPath())), ImageDescriptor.createFromURL(eLEtlGraphicalEditor
