@@ -662,12 +662,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					index2 = index - 1;
 					String text1 = tableViewer.getTable().getItem(index).getText(0);
 					String text2 = tableViewer.getTable().getItem(index2).getText(0);
-
-					swap(index, index2, text1, text2);
-
-					tableViewer.refresh();
-					table.setSelection(index - 1);
-
+                    swap(index, index2, text1, text2);
+                    tableViewer.refresh();
+					
 				}
 				}
 			}
