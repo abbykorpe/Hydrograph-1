@@ -52,7 +52,14 @@ public class SchemaGridLabelProvider implements ITableLabelProvider , ITableColo
     case 4:
    	 	 return schemaGrid.getScale(); 
     case 5:
+    	if(schemaGrid.getScaleType()!=null)
+    	{
     	return GeneralGridWidgetBuilder.getScaleTypeKey()[schemaGrid.getScaleType().intValue()];
+    	}
+    	else
+    	{
+    		return GeneralGridWidgetBuilder.getScaleTypeKey()[0];
+    	}
     case 6:
      	 return schemaGrid.getDescription(); 
     }

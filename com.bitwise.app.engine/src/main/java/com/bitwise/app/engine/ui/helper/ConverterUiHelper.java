@@ -77,14 +77,21 @@ public class ConverterUiHelper {
 	}
 	
 	private void getCommonSchema(GridRow fixedWidthGrid, TypeBaseField typeBaseField) {
-		fixedWidthGrid.setDataTypeValue(getStringValue(typeBaseField.getType().value()));
-		fixedWidthGrid.setDateFormat(getStringValue(typeBaseField.getFormat()));
-		fixedWidthGrid.setFieldName(getStringValue(typeBaseField.getName()));
-		fixedWidthGrid.setScale(getStringValue(String.valueOf(typeBaseField.getScale())));
-		fixedWidthGrid.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(typeBaseField.getType().value()));
-		fixedWidthGrid.setPrecision(getStringValue(String.valueOf(typeBaseField.getPrecision())));
-		fixedWidthGrid.setDescription(getStringValue(typeBaseField.getDescription()));
-		fixedWidthGrid.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(typeBaseField.getScaleType().value()));
+		if (typeBaseField != null) {
+			if (typeBaseField.getType() != null) {
+				fixedWidthGrid.setDataTypeValue(getStringValue(typeBaseField.getType().value()));
+				fixedWidthGrid.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(typeBaseField.getType().value()));
+			}
+			fixedWidthGrid.setDateFormat(getStringValue(typeBaseField.getFormat()));
+			fixedWidthGrid.setFieldName(getStringValue(typeBaseField.getName()));
+			fixedWidthGrid.setScale(getStringValue(String.valueOf(typeBaseField.getScale())));
+			fixedWidthGrid.setPrecision(getStringValue(String.valueOf(typeBaseField.getPrecision())));
+			fixedWidthGrid.setDescription(getStringValue(typeBaseField.getDescription()));
+			if (typeBaseField.getScaleType() != null) {
+				fixedWidthGrid.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(typeBaseField.getScaleType()
+						.value()));
+			}
+		}
 	}
 
 	
