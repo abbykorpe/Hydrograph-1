@@ -662,7 +662,6 @@ public class MappingTable {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				column3Txt.setText("");
 				column3Txt.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
 			}
 		});
