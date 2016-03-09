@@ -120,30 +120,39 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 		if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
 			return null;
 		} else if ((TypeBaseField.class).isAssignableFrom(record.getClass())) {
-			GenerateRecordSchemaGridRow genertaeRecordsSchemaGridRow = new GenerateRecordSchemaGridRow();
+			GenerateRecordSchemaGridRow generateRecordsSchemaGridRow = new GenerateRecordSchemaGridRow();
 			TypeBaseField typeBaseField = (TypeBaseField) record;
-			genertaeRecordsSchemaGridRow.setDataTypeValue(converterUiHelper.getStringValue(typeBaseField.getType()
-					.value()));
-			genertaeRecordsSchemaGridRow.setDateFormat(converterUiHelper.getStringValue(typeBaseField.getFormat()));
-			genertaeRecordsSchemaGridRow.setFieldName(converterUiHelper.getStringValue(typeBaseField.getName()));
-			genertaeRecordsSchemaGridRow.setScale(converterUiHelper.getStringValue(String.valueOf(typeBaseField
-					.getScale())));
-			genertaeRecordsSchemaGridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(typeBaseField.getType()
-					.value()));
-			genertaeRecordsSchemaGridRow.setLength(converterUiHelper.getStringValue(converterUiHelper.getQnameValue(
-					typeBaseField, Constants.LENGTH_QNAME)));
-			genertaeRecordsSchemaGridRow.setRangeFrom(converterUiHelper.getStringValue(converterUiHelper.getQnameValue(
-					typeBaseField, Constants.RANGE_FROM_QNAME)));
-			genertaeRecordsSchemaGridRow.setRangeTo(converterUiHelper.getStringValue(converterUiHelper.getQnameValue(
-					typeBaseField, Constants.RANGE_TO_QNAME)));
-			genertaeRecordsSchemaGridRow.setDefaultValue(converterUiHelper.getStringValue(converterUiHelper
-					.getQnameValue(typeBaseField, Constants.DEFAULT_VALUE_QNAME)));
-			
-			genertaeRecordsSchemaGridRow.setPrecision(converterUiHelper.getStringValue(String.valueOf(typeBaseField.getPrecision())));
-			genertaeRecordsSchemaGridRow.setDescription(converterUiHelper.getStringValue(typeBaseField.getDescription()));
-			genertaeRecordsSchemaGridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(typeBaseField.getScaleType().value()));
-			
-			return genertaeRecordsSchemaGridRow;
+			if (typeBaseField != null) {
+				if (typeBaseField.getType() != null) {
+					generateRecordsSchemaGridRow.setDataTypeValue(converterUiHelper.getStringValue(typeBaseField
+							.getType().value()));
+					generateRecordsSchemaGridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(typeBaseField
+							.getType().value()));
+				}
+				if(typeBaseField.getScaleType()!=null)
+				{
+					generateRecordsSchemaGridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(typeBaseField
+							.getScaleType().value()));	
+				}
+				generateRecordsSchemaGridRow.setDateFormat(converterUiHelper.getStringValue(typeBaseField.getFormat()));
+				generateRecordsSchemaGridRow.setFieldName(converterUiHelper.getStringValue(typeBaseField.getName()));
+				generateRecordsSchemaGridRow.setScale(converterUiHelper.getStringValue(String.valueOf(typeBaseField
+						.getScale())));
+				generateRecordsSchemaGridRow.setLength(converterUiHelper.getStringValue(converterUiHelper
+						.getQnameValue(typeBaseField, Constants.LENGTH_QNAME)));
+				generateRecordsSchemaGridRow.setRangeFrom(converterUiHelper.getStringValue(converterUiHelper
+						.getQnameValue(typeBaseField, Constants.RANGE_FROM_QNAME)));
+				generateRecordsSchemaGridRow.setRangeTo(converterUiHelper.getStringValue(converterUiHelper
+						.getQnameValue(typeBaseField, Constants.RANGE_TO_QNAME)));
+				generateRecordsSchemaGridRow.setDefaultValue(converterUiHelper.getStringValue(converterUiHelper
+						.getQnameValue(typeBaseField, Constants.DEFAULT_VALUE_QNAME)));
+
+				generateRecordsSchemaGridRow.setPrecision(converterUiHelper.getStringValue(String.valueOf(typeBaseField
+						.getPrecision())));
+				generateRecordsSchemaGridRow.setDescription(converterUiHelper.getStringValue(typeBaseField
+						.getDescription()));
+			}
+			return generateRecordsSchemaGridRow;
 		}
 		return null;
 	}

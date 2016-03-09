@@ -44,7 +44,11 @@ public class GenerateRecordsGridLabelProvider implements ITableLabelProvider, IT
 		case 4: 
 			return generateRecordsSchemaGridRow.getScale().toString();
 		case 5:
-			return GridWidgetCommonBuilder.getScaleTypeKey()[generateRecordsSchemaGridRow.getScaleType().intValue()];  
+			if (generateRecordsSchemaGridRow.getScaleType() != null) {
+				return GridWidgetCommonBuilder.getScaleTypeKey()[generateRecordsSchemaGridRow.getScaleType().intValue()];
+			} else {
+				return GridWidgetCommonBuilder.getScaleTypeKey()[0];
+			}
 		case 6: 
 			return generateRecordsSchemaGridRow.getDescription();
 		case 7: 

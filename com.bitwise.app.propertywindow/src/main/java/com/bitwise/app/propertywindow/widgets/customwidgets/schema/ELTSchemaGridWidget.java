@@ -817,10 +817,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				if (!schema.getIsExternal()) {
 					if (tableViewer != null) {
 						schemaGridRowList = schema.getGridRow();
-						tableViewer.setInput(schemaGridRowList);
-						tableViewer.refresh();
+						 tableViewer.setInput(schemaGridRowList);
+						 tableViewer.refresh();
 						isExternal = false;
-						toggleSchema(true);
+						toggleSchema(false);
 					}
 				}
 			}
