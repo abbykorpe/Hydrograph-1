@@ -28,6 +28,7 @@ public enum ContributionItemManager {
 						toolItems = ((ToolBar) control).getItems();
 						toolItems[4].setEnabled(undoStatus);
 						toolItems[5].setEnabled(redoStatus);
+						toolItems[6].setEnabled(false);
 						toolItems[8].setEnabled(false);
 						toolItems[9].setEnabled(false);
 						toolItems[10].setEnabled(false);

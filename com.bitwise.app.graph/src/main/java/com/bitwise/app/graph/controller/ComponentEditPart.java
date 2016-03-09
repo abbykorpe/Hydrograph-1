@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.draw2d.ConnectionAnchor;
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.TextUtilities;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -337,6 +338,8 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			
 			adjustExistingPorts();
 
+			selectPorts();
+			
 			ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 			if(eltPropertyWindow.isPropertyChanged()){
 				eltGraphicalEditor.setDirty(true);
@@ -347,7 +350,6 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		}
 	}
 	
-
 	private void setInPortsCountDynamically(){
 		int prevInPortCount = getCastedModel().getInPortCount();
 		int outPortCount = 0, newInPortCount = 0;
@@ -378,7 +380,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				//decrement the ports
 				List<String> portsToBeRemoved = populateInPortsToBeRemoved(prevInPortCount, newInPortCount);
 				getCastedModel().decrementPorts(portsToBeRemoved);
-				((ComponentFigure)getFigure()).decrementAnchors(portsToBeRemoved);
+				compFig.decrementAnchors(portsToBeRemoved);
 				getCastedModel().changeInPortCount(newInPortCount);
 
 			}
@@ -421,7 +423,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				//decrement the ports
 				List<String> portsToBeRemoved = populateOutPortsToBeRemoved(prevOutPortCount, newOutPortCount);
 				getCastedModel().decrementPorts(portsToBeRemoved);
-				((ComponentFigure)getFigure()).decrementAnchors(portsToBeRemoved);
+				compFig.decrementAnchors(portsToBeRemoved);
 				getCastedModel().changeOutPortCount(newOutPortCount);
 
 			}
@@ -457,7 +459,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				//decrement the ports
 				List<String> portsToBeRemoved = populateUnusedPortsToBeRemoved(prevUnusedportCount, newUnunsedPortCount);
 				getCastedModel().decrementPorts(portsToBeRemoved);
-				((ComponentFigure)getFigure()).decrementAnchors(portsToBeRemoved);
+				compFig.decrementAnchors(portsToBeRemoved);
 				getCastedModel().changeUnusedPortCount(newUnunsedPortCount);
 
 			}
@@ -475,6 +477,19 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			}
 		}
 	}
+	
+	private void selectPorts() {
+		ComponentFigure compFig = (ComponentFigure)getFigure();
+		List<Figure> childrenFigures = compFig.getChildren();
+		if (!childrenFigures.isEmpty()){
+			for(Figure figure:childrenFigures)
+			{
+				if(figure instanceof PortFigure)
+					((PortFigure) figure).selectPort();
+			}
+		}
+	}
+
 	
 	private List<String> populateInPortsToBeRemoved(int prevCount, int newCount){
 		int keyCount = newCount;

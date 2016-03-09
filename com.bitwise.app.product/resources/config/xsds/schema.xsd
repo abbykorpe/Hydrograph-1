@@ -23,7 +23,7 @@
 		<xs:attribute name="format" type="xs:string" use="optional"/>
 		<xs:attribute name="precision" type="xs:int" use="optional"/>
 		<xs:attribute name="scale" type="xs:int" use="optional"/>	
-		<xs:attribute name="scale_type" type="scale_types" use="optional"/>
+		<xs:attribute name="scaleType" type="scale_types" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="length" type="xs:positiveInteger" use="optional"/>
 		<xs:attribute name="delimiter" type="xs:string" use="optional"/>
