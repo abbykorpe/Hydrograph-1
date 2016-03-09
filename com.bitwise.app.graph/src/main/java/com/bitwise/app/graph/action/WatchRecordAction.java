@@ -209,7 +209,7 @@ public class WatchRecordAction extends SelectionAction {
 	public void run() {
 		super.run();
 		 
-		List<Object> selectedObjects = getSelectedObjects();
+		List<Object> selectedObjects =  getSelectedObjects();
 	 
 			 createWatchCommand(selectedObjects);
 			 if(!checkWatcher){

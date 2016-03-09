@@ -70,7 +70,6 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		 
 		if(subGraphMenu.getActiveOperationCount()==0)
 	    subGraphMenu.setEnabled(false);
-		watcherMenu.setEnabled(false);
 
 		
 	}

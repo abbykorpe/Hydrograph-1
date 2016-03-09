@@ -13,7 +13,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.logging.factory.LogFactory;
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 
 /**
  * @author Bitwise
@@ -54,7 +56,7 @@ public class DebugRestService {
 		String ip = "http://"+ipAddress+":8001/debug";
 		 
 		PostMethod postMethod = new PostMethod(ip);//"http://10.130.248.53:4567/debug"
-		postMethod.addParameter("userID", userId);
+		postMethod.addParameter(Constants.USER_ID, userId);
 		postMethod.addParameter("password", password);
 		postMethod.addParameter("basePath", basePath);
 		postMethod.addParameter("jobId", jobId);
@@ -68,7 +70,7 @@ public class DebugRestService {
 		JSONArray jsonArray = null;
 		 
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-		System.out.println("Response:"+postMethod.getResponseBodyAsStream());
+		 
 		 String line = "";
 		   while ((line = br.readLine()) != null) {
 			   
@@ -77,14 +79,5 @@ public class DebugRestService {
 
 		   return jsonArray;
 	}
-
-	public static void main(String[] args) throws HttpException, IOException, JSONException {
-		///AcceleroDebug3/debug/Test_Debug_Remote_Job_Job_1_2066724424_1457430351703/IFDelimited_01_out0
-		///debug01/debug/TestDebugMarch_Job_1_1565981287_1457449202907/IFDelimited_01_out0
-		System.out.println("before service call");
-		DebugRestService debugRestService = new DebugRestService("10.130.248.53", "/debug01", "TestDebugMarch_Job_1_1565981287_1457449202907", "IFDelimited_01", 
-				"out0", "hduser", "Bitwise2012");
-		debugRestService.callRestService();
-		System.out.println("after service call");
-	}
+ 
 }
