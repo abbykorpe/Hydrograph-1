@@ -16,14 +16,16 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
+import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.MappingDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.inputtable.InputTable;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.mappingtable.MappingTable;
+import com.bitwise.app.propertywindow.widgets.interfaces.IOperationClassDialog;
 
-public class MappingDialog extends Dialog {
+public class MappingDialog extends Dialog implements IOperationClassDialog{
 	private InputTable inputTable;
 	private MappingTable mappingTable;
 	
@@ -32,17 +34,10 @@ public class MappingDialog extends Dialog {
 	private WidgetConfig widgetConfig;
 	private MappingDialogButtonBar mappingDialogButtonBar;
 	private String componentName;
-	/*private Button okButton;
-	private Button cancelButton;*/
-		
-	/**
-	 * Create the dialog.
-	 * @param parentShell
-	 */
-	public MappingDialog(Shell parentShell) {
-		super(parentShell);
-	}
-
+	
+	private boolean isOKButtonPressed=false;
+	private boolean isCancelButtonPressed=false;
+	
 	public MappingDialog(Shell shell,
 			PropertyDialogButtonBar propertyDialogButtonBar,
 			ATMapping atMapping,
@@ -85,8 +80,9 @@ public class MappingDialog extends Dialog {
 		gd_composite_2.widthHint = 597;
 		composite_2.setLayoutData(gd_composite_2);
 		
-		MappingTable mappingTable = new MappingTable(widgetConfig, propertyDialogButtonBar, mappingDialogButtonBar,
-				componentName);
+		MappingTable mappingTable = new MappingTable(widgetConfig,
+				propertyDialogButtonBar, mappingDialogButtonBar, componentName,
+				this);
 		mappingTable.createTable(composite_2);
 		
 		return mappingTable;
@@ -139,8 +135,8 @@ public class MappingDialog extends Dialog {
 			super.okPressed();
 		}else{
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
-			messageBox.setText("Could not save mapping sheet");
-			messageBox.setMessage("Invalid mapping");
+			messageBox.setText(Messages.COULD_NOT_SAVE_PROPERTY_SHEET);
+			messageBox.setMessage(Messages.INVALID_MAPPING);
 			messageBox.open();
 		}
 		
@@ -149,5 +145,36 @@ public class MappingDialog extends Dialog {
 	public ATMapping getATMapping() {
 		return atMapping;
 	}
-	
+
+	@Override
+	public void pressOK() {
+		isOKButtonPressed=true;
+		okPressed();
+	}
+
+	@Override
+	public void pressCancel() {
+		isCancelButtonPressed=true;
+		cancelPressed();
+	}
+
+	/**
+	 * 
+	 * returns true if ok button pressed from code
+	 * 
+	 * @return boolean
+	 */
+	public boolean isOkPressed() {
+		return isOKButtonPressed;
+	}
+
+	/**
+	 * 
+	 * returns true of cancel button pressed from code
+	 * 
+	 * @return boolean
+	 */
+	public boolean isCancelPressed() {
+		return isCancelButtonPressed;
+	}
 }

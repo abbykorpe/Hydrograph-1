@@ -33,6 +33,7 @@ import com.bitwise.app.propertywindow.messagebox.ConfirmCancelMessageBox;
 import com.bitwise.app.propertywindow.property.ELTComponenetProperties;
 import com.bitwise.app.propertywindow.property.Property;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget;
+import com.bitwise.app.propertywindow.widgets.interfaces.IOperationClassDialog;
 import com.bitwise.app.validators.impl.IValidator;
 
 
@@ -42,7 +43,7 @@ import com.bitwise.app.validators.impl.IValidator;
  * Sep 07, 2015
  * 
  */
-public class PropertyDialog extends Dialog {
+public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(PropertyDialog.class);
 	private Composite container;
 	private final LinkedHashMap<String, LinkedHashMap<String, ArrayList<Property>>> propertyTree;
@@ -62,6 +63,7 @@ public class PropertyDialog extends Dialog {
 	
 	private Component component;
 	
+	private boolean isCancelButtonPressed = false;
 	
 	/**
 	 * Create the dialog.
@@ -94,7 +96,7 @@ public class PropertyDialog extends Dialog {
 		createPropertyDialogContainer(parent);
 		propertyDialogButtonBar = new PropertyDialogButtonBar(container);
 
-		propertyDialogBuilder = new PropertyDialogBuilder(container,propertyTree,componentProperties,propertyDialogButtonBar,component);
+		propertyDialogBuilder = new PropertyDialogBuilder(container,propertyTree,componentProperties,propertyDialogButtonBar,component,this);
 		propertyDialogBuilder.buildPropertyWindow();
 
 		return container;
@@ -117,16 +119,6 @@ public class PropertyDialog extends Dialog {
 		container.getShell().setText(componentName + " - Properties");
 	}
 
-	/*private void setPropertyDialogSize() {
-		Monitor primary = container.getDisplay().getPrimaryMonitor();
-		Rectangle bounds = primary.getBounds();
-		Rectangle rect = container.getBounds();
-
-		int x = bounds.x + (bounds.width - rect.width+5) / 2;
-		int y = bounds.y + (bounds.height - rect.height) / 2;
-		container.getShell().setMinimumSize(x, y);
-	}
-*/
 	/**
 	 * Create contents of the button bar.
 	 * @param parent
@@ -196,10 +188,6 @@ public class PropertyDialog extends Dialog {
 		for(String propName : tempPropert.keySet()){
 			componentConfigurationProperties.put(propName, tempPropert.get(propName));
 		}
-	}
-	
-	private void setErrorMessagesInToolTip(){
-		
 	}
 	
 	private void disableApplyButton() {
@@ -298,24 +286,42 @@ public class PropertyDialog extends Dialog {
 		super.okPressed();
 	}
 
+	
+	/**
+	 * 
+	 * press ok button
+	 * 
+	 */
+	public void pressOK(){
+		okPressed();
+	}
+	
 	@Override
-	protected void cancelPressed(){
+	protected void cancelPressed() {
 		boolean windowValidityStaus = Boolean.TRUE;
-		for(AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()){
-			if(customWidget.getProperties() != null){
-				windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
+		for (AbstractWidget customWidget : propertyDialogBuilder
+				.getELTWidgetList()) {
+			if (customWidget.getProperties() != null) {
+				windowValidityStaus = validateWidget(windowValidityStaus,
+						customWidget);
 			}
 		}
 		isPropertyWindowValid = windowValidityStaus;
 		updateComponentValidityStatus();
-		if(applyButton.isEnabled()){
-			ConfirmCancelMessageBox confirmCancelMessageBox = new ConfirmCancelMessageBox(container);
-			MessageBox confirmCancleMessagebox = confirmCancelMessageBox.getMessageBox();
+		if (applyButton.isEnabled()) {
+			if (!isCancelButtonPressed) {
+				ConfirmCancelMessageBox confirmCancelMessageBox = new ConfirmCancelMessageBox(
+						container);
+				MessageBox confirmCancleMessagebox = confirmCancelMessageBox
+						.getMessageBox();
 
-			if(confirmCancleMessagebox.open() == SWT.OK){
+				if (confirmCancleMessagebox.open() == SWT.OK) {
+					super.close();
+				}
+			} else {
 				super.close();
 			}
-		}else{
+		} else {
 			super.close();
 		}
 	}
@@ -335,6 +341,12 @@ public class PropertyDialog extends Dialog {
 	}
 
 
+	/**
+	 * 
+	 * returns true if user made changes in property window
+	 * 
+	 * @return boolean
+	 */
 	public boolean isPropertyChanged(){
 		return propertyChanged;
 	}
@@ -371,5 +383,11 @@ public class PropertyDialog extends Dialog {
 		}else{
 			toolTipErrorMessages.put(customWidget.getPropertyName(), validator.getErrorMessage());
 		}
+	}
+
+	@Override
+	public void pressCancel() {
+		isCancelButtonPressed = true;
+		cancelPressed();
 	}
 }

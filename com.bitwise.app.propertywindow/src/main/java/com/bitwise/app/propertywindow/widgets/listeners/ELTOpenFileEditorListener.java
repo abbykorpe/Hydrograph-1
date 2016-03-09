@@ -13,6 +13,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PartInitException;
@@ -26,6 +28,8 @@ import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.Activator;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.widgets.interfaces.IOperationClassDialog;
+import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import com.bitwise.app.propertywindow.widgets.utility.FilterOperationClassUtility;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
@@ -48,26 +52,97 @@ public class ELTOpenFileEditorListener implements IELTListener{
 	}
 
 	@Override
-	public Listener getListener(final PropertyDialogButtonBar propertyDialogButtonBar,ListenerHelper helpers, Widget... widgets) {
+	public Listener getListener(
+			final PropertyDialogButtonBar propertyDialogButtonBar,
+			final ListenerHelper helpers, Widget... widgets) {
 		final Widget[] widgetList = widgets;
-		Listener listener=new Listener() {
+
+		Listener listener = new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				
+
 				String comboValue = ((Combo) widgetList[0]).getText();
 				if (comboValue.equalsIgnoreCase(Messages.CUSTOM)) {
-					boolean flag = FilterOperationClassUtility.openFileEditor(((Text) widgetList[1]), null);
-					if (!flag) {
-						WidgetUtility.errorMessage("File Not Found");
+
+					if (helpers
+							.get(HelperType.OPERATION_CLASS_DIALOG_OK_CONTROL) != null) {
+						IOperationClassDialog operationClassDialog = (IOperationClassDialog) helpers
+								.get(HelperType.OPERATION_CLASS_DIALOG_OK_CONTROL);
+						if (needToShowMessageBox(helpers)) {
+							MessageBox messageBox = new MessageBox(new Shell(),
+									SWT.ICON_WARNING | SWT.YES | SWT.NO
+											| SWT.CANCEL);
+							messageBox.setText("Save Changes");
+							messageBox
+									.setMessage("Do you want to save the changes?");
+							int retCode = messageBox.open();
+							if (retCode == SWT.YES) {
+								saveChangesAndOpenOpeartionClassInEditor(
+										widgetList, operationClassDialog);
+							} else if (retCode == SWT.NO) {
+								discardChangesAndOpenOpeartionClassInEditor(
+										widgetList, operationClassDialog);
+							}
+						} else {
+							saveChangesAndOpenOpeartionClassInEditor(
+									widgetList, operationClassDialog);
+						}
 					}
+
 				} else {
-					openInbuiltOperationClass(comboValue,propertyDialogButtonBar);
+					if (helpers
+							.get(HelperType.OPERATION_CLASS_DIALOG_OK_CONTROL) != null) {
+						IOperationClassDialog operationClassDialog = (IOperationClassDialog) helpers
+								.get(HelperType.OPERATION_CLASS_DIALOG_OK_CONTROL);
+
+						MessageBox messageBox = new MessageBox(new Shell(),
+								SWT.ICON_WARNING | SWT.YES | SWT.NO
+										| SWT.CANCEL);
+						messageBox.setText(Messages.INFORMATION);
+						messageBox
+								.setMessage(Messages.OPEARTION_CLASS_OPEN_BUTTON_MESSAGE);
+						int retCode = messageBox.open();
+						if (retCode == SWT.YES) {
+							openInbuiltOperationClass(comboValue,
+									propertyDialogButtonBar);
+							operationClassDialog.pressOK();
+						} else if (retCode == SWT.NO) {
+							openInbuiltOperationClass(comboValue,
+									propertyDialogButtonBar);
+							operationClassDialog.pressCancel();
+						}
+
+					}
 				}
 			}
 		};
 		return listener;
 	}
 
+	private void discardChangesAndOpenOpeartionClassInEditor(
+			final Widget[] widgetList,
+			IOperationClassDialog operationClassDialog) {
+		boolean flag = FilterOperationClassUtility.openFileEditor(
+				((Text) widgetList[1]), null);
+		if (!flag) {
+			WidgetUtility.errorMessage("File Not Found");
+		} else {
+			operationClassDialog.pressCancel();
+		}
+	}
+
+	private void saveChangesAndOpenOpeartionClassInEditor(
+			final Widget[] widgetList,
+			IOperationClassDialog operationClassDialog) {
+		boolean flag = FilterOperationClassUtility.openFileEditor(
+				((Text) widgetList[1]), null);
+		if (!flag) {
+			WidgetUtility.errorMessage("File Not Found");
+		} else {
+			operationClassDialog.pressOK();
+		}
+	}
+	
 	private void openInbuiltOperationClass(String operationName, PropertyDialogButtonBar propertyDialogButtonBar) {
 		String operationClassName = null;
 		Operations operations = XMLConfigUtil.INSTANCE.getComponent(FilterOperationClassUtility.getComponentName())
@@ -92,6 +167,20 @@ public class ELTOpenFileEditorListener implements IELTListener{
 			}
 		} else {
 			WidgetUtility.errorMessage(Messages.SAVE_JOB_MESSAGE);
+		}
+	}
+	
+	private boolean needToShowMessageBox(ListenerHelper helpers) {
+		PropertyDialogButtonBar opeartionClassDialogButtonBar = (PropertyDialogButtonBar) helpers
+				.get(HelperType.OPERATION_CLASS_DIALOG_APPLY_BUTTON);
+		PropertyDialogButtonBar propertyDialogButtonBar = (PropertyDialogButtonBar) helpers
+				.get(HelperType.PROPERTY_DIALOG_BUTTON_BAR);
+
+		if (opeartionClassDialogButtonBar.isApplyEnabled()
+				|| propertyDialogButtonBar.isApplyEnabled()) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 	

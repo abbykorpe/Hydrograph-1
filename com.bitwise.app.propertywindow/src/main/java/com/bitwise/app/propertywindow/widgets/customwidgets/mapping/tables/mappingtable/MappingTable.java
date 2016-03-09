@@ -51,6 +51,7 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.MappingDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.RowData;
 import com.bitwise.app.propertywindow.widgets.dialogs.ELTOperationClassDialog;
+import com.bitwise.app.propertywindow.widgets.interfaces.IOperationClassDialog;
 
 /**
  * 
@@ -81,19 +82,24 @@ public class MappingTable {
 	private final String tableItemDataKeyOutputColumn = "out";
 	private final String tableItemRowData = "rowData";
 
+	private IOperationClassDialog mappingDialog;
+	
 	/**
 	 * 
 	 * @param widgetConfig
 	 * @param propertyDialogButtonBar
 	 * @param mappingDialogButtonBar
 	 * @param componentName
+	 * @param mappingDialog 
 	 */
 	public MappingTable(WidgetConfig widgetConfig, PropertyDialogButtonBar propertyDialogButtonBar,
-			MappingDialogButtonBar mappingDialogButtonBar, String componentName) {
+			MappingDialogButtonBar mappingDialogButtonBar, String componentName, IOperationClassDialog mappingDialog) {
 		this.widgetConfig = widgetConfig;
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
 		this.mappingDialogButtonBar = mappingDialogButtonBar;
 		this.componentName = componentName;
+		
+		this.mappingDialog = mappingDialog;
 	}
 
 	/**
@@ -362,7 +368,17 @@ public class MappingTable {
 					column2Txt.setText(operationClassProperty.getOperationClassPath());
 					column2Txt.setData(operationClassProperty);
 				}
-
+				
+				if(eltOperationClassDialog.isOKPressed()){
+					
+					mappingDialog.pressOK();
+				}
+				
+				if(eltOperationClassDialog.isCancelPressed()){
+					
+					mappingDialog.pressCancel();
+				}
+				
 				super.widgetSelected(e);
 			}
 		});
@@ -395,8 +411,6 @@ public class MappingTable {
 	}
 
 	private void attachFieldValidators(final Text column1Txt, final Text column2Txt, final Text column3Txt) {
-
-		// TODO Listeners
 		attachTextModifyListener(column1Txt);
 		attachTextModifyListener(column3Txt);
 
@@ -428,8 +442,6 @@ public class MappingTable {
 	}
 
 	private void validateRow(RowData rowData) {
-		// TODO - validate row
-
 		boolean emptyInClass = true;
 		boolean emptyOut = true;
 		Text txtIn = (Text) rowData.getIn();

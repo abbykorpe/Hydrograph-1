@@ -35,7 +35,6 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTSchemaGrid
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroup;
 
-// TODO: Auto-generated Javadoc
 /**
  * 
  * @author Bitwise
@@ -54,7 +53,7 @@ public class PropertyDialogBuilder {
 	private AbstractWidget schemaWidget;
 	private Schema setSchemaForInternalPapogation;
 	private List<String> operationFieldList;
-
+	private PropertyDialog propertyDialog;
 
 	/**
 	 * Instantiates a new property dialog builder.
@@ -68,9 +67,10 @@ public class PropertyDialogBuilder {
 	 * @param propertyDialogButtonBar
 	 *            the property dialog button bar
 	 * @param component 
+	 * @param propertyDialog 
 	 */
 	public PropertyDialogBuilder(Composite container, LinkedHashMap<String,LinkedHashMap<String,ArrayList<Property>>> propertyTree, 
-			ELTComponenetProperties eltComponenetProperties,PropertyDialogButtonBar propertyDialogButtonBar, Component component){
+			ELTComponenetProperties eltComponenetProperties,PropertyDialogButtonBar propertyDialogButtonBar, Component component, PropertyDialog propertyDialog){
 		this.container = container;
 		this.propertyTree = propertyTree;
 		this.eltComponenetProperties = eltComponenetProperties;
@@ -78,6 +78,7 @@ public class PropertyDialogBuilder {
 		this.component = component;
 		eltWidgetList= new ArrayList<>();
 		
+		this.propertyDialog = propertyDialog;
 		initSchemaObject();
 	}
 
@@ -191,6 +192,8 @@ public class PropertyDialogBuilder {
 		widget.setSchemaForInternalPapogation(setSchemaForInternalPapogation);
 		widget.setOperationFieldList(operationFieldList);
 
+		
+		widget.setPropertyDialog(propertyDialog);
 		widget.setComponent(component);
 		widget.attachToPropertySubGroup(subGroupContainer);
 		
@@ -317,6 +320,12 @@ public class PropertyDialogBuilder {
 		return eltDefaultSubgroup;
 	}
 
+	/**
+	 * 
+	 * Returns list of widgets in property window
+	 * 
+	 * @return list of {@link AbstractWidget}
+	 */
 	public ArrayList<AbstractWidget> getELTWidgetList(){
 		return eltWidgetList;
 	}

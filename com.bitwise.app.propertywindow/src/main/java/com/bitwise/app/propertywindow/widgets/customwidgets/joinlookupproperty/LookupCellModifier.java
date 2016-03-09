@@ -6,8 +6,13 @@ import org.eclipse.swt.widgets.Item;
 
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.propertywindow.widgets.customwidgets.lookupproperty.ELTLookupMapWizard;
-import com.bitwise.app.propertywindow.widgets.customwidgets.operational.TransformDialog;
 
+/**
+ * Custom Table Cell modifier class for lookup component
+ * 
+ * @author Bitwise
+ *
+ */
 public class LookupCellModifier  implements ICellModifier{
 	private Viewer viewer;
 	
@@ -17,7 +22,6 @@ public class LookupCellModifier  implements ICellModifier{
 	
 	@Override
 	public boolean canModify(Object element, String property) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
