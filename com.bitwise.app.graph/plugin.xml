@@ -21,6 +21,15 @@
       <command
             id="com.bitwise.app.graph.stopjob"
             name="StopJob">
+ 	</command>
+      <command
+            id="com.bitwise.app.graph.command.debug"
+            name="Debug">
+ 
+      </command>
+      <command
+            id="com.bitwise.app.graph.command.removedebug"
+            name="Remove Debug">
       </command>
    </extension>
    <extension
@@ -41,6 +50,23 @@
       <handler
             class="com.bitwise.app.graph.handler.StopJobHandler"
             commandId="com.bitwise.app.graph.stopjob">
+	 </handler>
+      <handler
+            class="com.bitwise.app.graph.handler.DebugHandler"
+            commandId="com.bitwise.app.graph.command.debug">
+ 
+         <activeWhen>
+            <with
+                  variable="activeEditorId">
+               <equals
+                     value="com.bitwise.app.graph.etlgraphicaleditor">
+               </equals>
+            </with>
+         </activeWhen>
+      </handler>
+      <handler
+            class="com.bitwise.app.graph.handler.RemoveDebugHandler"
+            commandId="com.bitwise.app.graph.command.removedebug">
          <activeWhen>
             <with
                   variable="activeEditorId">
@@ -168,9 +194,25 @@
             <command
                   commandId="com.bitwise.app.graph.stopjob"
                   icon="resources/icons/stop_job.png"
-                  label="Stop Job"
+                  label="Stop Job">
+ 				 </command>
+ 				 
+ 				 <command
+                  commandId="com.bitwise.app.graph.command.debug"
+                  icon="resources/icons/debug_icon.png"
+                  label="Debug"
+ 
                   style="push">
             </command>
+      <separator
+            name="com.bitwise.app.graph.separator1">
+      </separator>
+      <command
+            commandId="com.bitwise.app.graph.command.removedebug"
+            icon="resources/icons/remove_debug.png"
+            label="Remove Watchers"
+            style="push">
+      </command>
          </toolbar>
       </menuContribution>
       <menuContribution

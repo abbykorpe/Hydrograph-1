@@ -27,6 +27,7 @@ public class PortFigure extends Figure {
 	private String labelOfPort;
 	private String portType;
 	private static boolean displayPortLabels;
+	private boolean isWatched;
 	/**
 	 * Instantiates a new port figure.
 	 * 
@@ -100,6 +101,12 @@ public class PortFigure extends Figure {
 	public void setLabelOfPort(String label) {
 		this.labelOfPort=label;
 	}
+	public boolean isWatched() {
+		return isWatched;
+	}
+	public void setWatched(boolean isWatched) {
+		this.isWatched = isWatched;
+	}
 	public String getPortType() {
 		return portType;
 	}
@@ -113,6 +120,8 @@ public class PortFigure extends Figure {
 	@Override
 	protected void paintFigure(Graphics graphics) {
 		super.paintFigure(graphics);
+		if(isWatched)
+			setBackgroundColor(ELTColorConstants.watchColor);
 		Rectangle r = getBounds().getCopy();
 		if("in".equalsIgnoreCase(portType))
 		{
@@ -178,13 +187,22 @@ public class PortFigure extends Figure {
 	}
 
 	public void selectPort() {
+		if(!isWatched)
 		setBackgroundColor(ELTColorConstants.blueBrandBoder);
 	}
 
 	public void deSelectPort() {
+		if(!isWatched)
 		setBackgroundColor(ELTColorConstants.componentBorder);
 	}
 
+	public void changeWatchColor(){
+		setBackgroundColor(ELTColorConstants.watchColor);
+	}
+	
+	public void removeWatchColor(){
+		setBackgroundColor(ELTColorConstants.componentBorder);
+	}
 	@Override
 	public void validate() {
 		super.validate();

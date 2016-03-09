@@ -233,4 +233,12 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		}
 	}
 
+	@Override
+	public void launchJobInDebug(String xmlPath, String debugXmlPath,
+			String basePath, String paramFile, Job job,
+			DefaultGEFCanvas gefCanvas, String uniqueJobID) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

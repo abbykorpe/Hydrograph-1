@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.HashMap;
@@ -66,8 +68,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -110,10 +110,13 @@ import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.engine.exceptions.EngineException;
 import com.bitwise.app.engine.util.ConverterUtil;
+import com.bitwise.app.graph.action.AddWatcherAction;
 import com.bitwise.app.graph.action.ContributionItemManager;
 import com.bitwise.app.graph.action.CopyAction;
 import com.bitwise.app.graph.action.CutAction;
 import com.bitwise.app.graph.action.PasteAction;
+import com.bitwise.app.graph.action.RemoveWatcherAction;
+import com.bitwise.app.graph.action.WatchRecordAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphOpenAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphUpdateAction;
@@ -155,7 +158,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	
 	private static final String DEFAULT_CONSOLE = "NewConsole";
 	private static final String CONSOLE_VIEW_ID = "com.bitwise.app.project.structure.console.AcceleroConsole";
-	
+	private String uniqueJobId;
+	private String jobId;
 	/**
 	 * Instantiates a new ETL graphical editor.
 	 */
@@ -314,7 +318,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private void enableRunJob(boolean enabled){
 		((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
-		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
+		//((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
 	}
 
 	
@@ -641,8 +645,20 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		action=new SubGraphUpdateAction(this, pasteAction);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
-
-
+		
+		action = new AddWatcherAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
+		action = new WatchRecordAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
+		action = new RemoveWatcherAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
+ 
 	}
 
 
@@ -790,6 +806,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			String activeProjectName = activeProject.getName();
 
 			IPath parameterFileIPath =new Path("/"+activeProjectName+"/param/"+ getPartName().replace(".job", ".properties"));
+		    jobId = activeProjectName.concat("_").concat(getPartName().replace(".job", "_"));
 
 			return parameterFileIPath;
 		}else{
@@ -799,7 +816,20 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 
-	@Override
+	
+	public String  generateUniqueJobId() throws NoSuchAlgorithmException{
+		SecureRandom random =  SecureRandom.getInstance("SHA1PRNG");
+		int number=0;
+		 for (int i = 0; i < 20; i++) {
+			 number= random.nextInt(21);
+		     }
+		 	byte[] secureRandom = random.getSeed(number);
+		    long milliSeconds = System.currentTimeMillis();
+		    String timeStampLong = Long.toString(milliSeconds);
+		    this.uniqueJobId=jobId.concat(""+secureRandom.hashCode()).concat("_"+timeStampLong);
+		    
+		    return uniqueJobId;
+	}
 	public String getActiveProject(){
 		if(getEditorInput() instanceof IFileEditorInput){
 			IFileEditorInput input = (IFileEditorInput)getEditorInput() ;
@@ -1088,6 +1118,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void dispose() {
 		super.dispose();
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
+		logger.debug("Job closed");
 	}
 	public void deleteSelection() {
 		//getActionRegistry().getAction(DeleteAction.ID).run();
@@ -1236,7 +1267,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		return stopButtonStatus;
 	}
 	
-
+	public String getJobId() {
+		return uniqueJobId;
+	}
+ 
 	public void deleteSubgraphProperties() {
 		if (getContainer().isCurrentGraphIsSubgraph()) {
 			for (int i = 0; i < container.getChildren().size(); i++) {
@@ -1246,5 +1280,5 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			}
 		}
 	}
-
+	
 }

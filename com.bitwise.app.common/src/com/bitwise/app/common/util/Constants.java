@@ -174,5 +174,12 @@ public class Constants {
 	public static final String SUBGRAPH_UPDATE = "update";
 	public static final String JOIN_KEYS_WINDOW_TITLE = "Join Key(s)";
 	public static final String LOOKUP_KEYS_WINDOW_TITLE = "Lookup Key(s)";
+	
+	public static final String INNER = "Inner";
+	public static final String OUTER = "Outer";
+	
+	public static final String DEBUG_DEFAULT = "Default";
+	public static final String DEBUG_CUSTOM = "Custom";
+	public static final String DEBUG_ALL = "All";
 
 }

@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.graph.Messages;
+import com.bitwise.app.graph.handler.DebugHandler;
 import com.bitwise.app.graph.handler.RunJobHandler;
 import com.bitwise.app.graph.handler.StopJobHandler;
 import com.bitwise.app.graph.utility.CanvasUtils;
@@ -45,6 +46,17 @@ public class JobManager {
 	private static Logger logger = LogFactory.INSTANCE.getLogger(JobManager.class);
 	private Map<String, Job> runningJobsMap;
 	public static JobManager INSTANCE = new JobManager();
+	private IEditorPart iEditorPart;
+	private boolean localMode;
+
+
+	public boolean isLocalMode() {
+		return localMode;
+	}
+
+	public void setLocalMode(boolean localMode) {
+		this.localMode = localMode;
+	}
 
 	private String activeCanvas;
 
@@ -82,6 +94,12 @@ public class JobManager {
 	 */
 	void enableRunJob(boolean enabled) {
 		((RunJobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
+		//((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
+	}
+	
+	void enableDebugJob(boolean enabled) {
+		((RunJobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
+		((DebugHandler) RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(enabled);
 		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
 	}
 
@@ -91,7 +109,7 @@ public class JobManager {
 	 * @param job
 	 *            - {@link Job} to execute
 	 */
-	public void executeJob(final Job job) {
+	public void executeJob(final Job job, String uniqueJobId) {
 		enableRunJob(false);
 		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
 
@@ -128,11 +146,41 @@ public class JobManager {
 		job.setRemoteMode(runConfigDialog.isRemoteMode());
 
 		gefCanvas.disableRunningJobResource();
-
-		launchJob(job, gefCanvas, parameterGrid, xmlPath);
-
+		
+			launchJob(job, gefCanvas, parameterGrid, xmlPath);
 	}
 
+	public void executeJobInDebug(final Job job, String uniqueJobId, boolean isRemote, String userName) {
+		enableDebugJob(false);
+		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
+
+		if (!saveJobBeforeExecute(gefCanvas)) {
+			return;
+		}
+
+		final ParameterGridDialog parameterGrid = getParameters();
+		if (parameterGrid.canRunGraph() == false) {
+			logger.debug("Not running graph");
+			enableDebugJob(true);
+			return;
+		}
+		logger.debug("property File :" + parameterGrid.getParameterFile());
+
+		final String xmlPath = getJobXMLPath();
+		String debugXmlPath = getJobDebugXMLPath();
+		if (xmlPath == null) {
+			WidgetUtility.errorMessage(Messages.OPEN_GRAPH_TO_RUN);
+			return;
+		}
+		
+		job.setUsername(userName);
+		job.setRemoteMode(isRemote);
+		job.setHost(job.getIpAddress());
+
+		gefCanvas.disableRunningJobResource();
+
+		launchJobWithDebugParameter(job, gefCanvas, parameterGrid, xmlPath, debugXmlPath, job.getBasePath(), uniqueJobId);
+	}
 	private void launchJob(final Job job, final DefaultGEFCanvas gefCanvas, final ParameterGridDialog parameterGrid,
 			final String xmlPath) {
 		if (job.isRemoteMode()) {
@@ -145,6 +193,7 @@ public class JobManager {
 
 			}).start();
 		} else {
+			setLocalMode(true);
 			new Thread(new Runnable() {
 
 				@Override
@@ -157,11 +206,38 @@ public class JobManager {
 		}
 	}
 
+	private void launchJobWithDebugParameter(final Job job, final DefaultGEFCanvas gefCanvas, final ParameterGridDialog parameterGrid,
+			final String xmlPath, final String debugXmlPath, final String basePath, final String uniqueJobId) {
+		if (job.isRemoteMode()) {
+			setLocalMode(false);
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					AbstractJobLauncher jobLauncher = new DebugRemoteJobLauncher();
+					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, basePath, parameterGrid.getParameterFile(), job, gefCanvas, uniqueJobId);
+				}
+
+			}).start();
+		} else {
+			setLocalMode(true);
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					AbstractJobLauncher jobLauncher = new DebugLocalJobLauncher();
+					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, basePath, parameterGrid.getParameterFile(), job, gefCanvas, uniqueJobId);
+				}
+
+			}).start();
+		}
+	}
+	
 	private String getClusterPassword(RunConfigDialog runConfigDialog) {
 		String clusterPassword = runConfigDialog.getClusterPassword() != null ? runConfigDialog.getClusterPassword()
 				: "";
 		return clusterPassword;
 	}
+
 
 	private String getJobXMLPath() {
 		IEditorPart iEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
@@ -171,6 +247,14 @@ public class JobManager {
 		return xmlPath;
 	}
 
+	private String getJobDebugXMLPath() {
+		IEditorPart iEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActiveEditor();
+		String debugXmlPath = iEditorPart.getEditorInput().getToolTipText().replace(Messages.JOBEXTENSION, "_debug.xml");
+		 
+		return debugXmlPath;
+	}
+	
 	private ParameterGridDialog getParameters() {
 		ParameterGridDialog parameterGrid = new ParameterGridDialog(Display.getDefault().getActiveShell());
 		parameterGrid.setVisibleParameterGridNote(false);

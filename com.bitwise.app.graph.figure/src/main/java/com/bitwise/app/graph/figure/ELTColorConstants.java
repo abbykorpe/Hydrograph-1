@@ -30,5 +30,5 @@ public class ELTColorConstants {
 	public static final Color componentBorder = darkGrey;
 	public static final Color componentSelectedBorder = darkBlue;
 	
-	
+	public static final Color watchColor = new Color(null, 204, 0, 0);
 }

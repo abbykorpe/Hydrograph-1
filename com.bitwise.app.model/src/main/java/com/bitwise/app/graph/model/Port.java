@@ -17,6 +17,7 @@ public class Port extends Model implements Cloneable{
 	private Component parent;
 	private String nameOfPort;
 	private String labelOfPort;
+	private boolean isWatched;
 	
 	/**
 	 * Instantiates a new port.
@@ -79,6 +80,18 @@ public class Port extends Model implements Cloneable{
 		return sequence;
 	}
 	
+	public boolean isWatched() {
+		return isWatched;
+	}
+
+
+
+	public void setWatched(boolean isWatched) {
+		this.isWatched = isWatched;
+	}
+
+
+
 	public String getNameOfPort() {
 		return nameOfPort;
 	}

@@ -33,6 +33,7 @@ abstract public class AbstractJobLauncher {
 	 * @param gefCanvas
 	 */
 	abstract public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas);
+	abstract public void launchJobInDebug(String xmlPath, String debugXmlPath, String basePath, String paramFile, Job job, DefaultGEFCanvas gefCanvas, String uniqueJobID);
 	
 	/**
 	 * Enables locked resouces..like job canvas

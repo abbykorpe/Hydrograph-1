@@ -9,6 +9,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.graph.action.WatcherMenuAction;
 import com.bitwise.app.graph.action.subgraph.SubMenuAction;
 
 // TODO: Auto-generated Javadoc
@@ -48,6 +49,13 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 	    actions[1] = getAction(Constants.SUBGRAPH_OPEN);
 	    actions[2] = getAction(Constants.SUBGRAPH_UPDATE);
 	    SubMenuAction subGraphMenu=new SubMenuAction( actions, Constants.SUBGRAPH_ACTION, Constants.SUBGRAPH_ACTION_ToolTip,true);	// Add actions to the menu
+		IAction[] watcherAction = new IAction[2];
+         watcherAction[0] = getAction("watchPointWithDefault");
+         watcherAction[1] = getAction("deleteWatchPoint");
+         WatcherMenuAction watcherMenu = new WatcherMenuAction(watcherAction, "Watch Point", "Add watch"); //Add Debug Actions
+       
+         
+         IAction actionWatchRecords = getAction("watchRecord");
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, // target group id
 				getAction(ActionFactory.UNDO.getId())); // action to add
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, getAction(ActionFactory.REDO.getId()));
@@ -57,8 +65,12 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.COPY.getId()));
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.PASTE.getId()));
 	    menu.appendToGroup(GEFActionConstants.GROUP_REST, subGraphMenu);
+		menu.appendToGroup(GEFActionConstants.GROUP_COPY, watcherMenu);
+		menu.appendToGroup(GEFActionConstants.GROUP_COPY, actionWatchRecords);
+		 
 		if(subGraphMenu.getActiveOperationCount()==0)
 	    subGraphMenu.setEnabled(false);
+		watcherMenu.setEnabled(false);
 
 		
 	}
