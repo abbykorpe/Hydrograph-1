@@ -139,6 +139,7 @@ public class ELTJoinConfigGrid extends Dialog {
 				public void widgetSelected(SelectionEvent e) {
 					String comboText = ((Combo) e.widget).getText();
 					joinConfigProperty.setRecordRequired(ITEMS.indexOf(comboText));
+					propertyDialogButtonBar.enableApplyButton(true);
 				}
 			});
 			j = j + 26;

@@ -2,8 +2,6 @@ package com.bitwise.app.propertywindow.widgets.customwidgets.schema;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -43,7 +41,6 @@ import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.common.util.ImagePathConstant;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
@@ -189,7 +186,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		if (schemaGridRowList2 != null) {
 			for (GridRow gridRow : schemaGridRowList2) {
 				GridRow fixedWidthGridRow = (GridRow) gridRow;
-				schemaFields.add(fixedWidthGridRow.getFieldName());
+				if (fixedWidthGridRow != null) {
+					schemaFields.add(fixedWidthGridRow.getFieldName());
+				}
 			}
 		}
 		return schemaFields;
@@ -240,8 +239,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 			if (!schemaGridRowList.isEmpty()) {
 				for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
-					tempGrid.add(gridRow.copy());
-					componentsOutputSchema.addSchemaFields(gridRow);
+					if (gridRow != null) {
+						tempGrid.add(gridRow.copy());
+						componentsOutputSchema.addSchemaFields(gridRow);
+					}
 				}
 			}
 		}
@@ -784,6 +785,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 			List<String> operationFieldList = getOperationFieldList();
 			for (GridRow row : schema.getGridRow()) {
+				if (row != null) {
 				if (existingFieldNames.contains(row.getFieldName().trim())) {
 					if (existingFields.contains(row)) {
 						for (int index = 0; index < originalSchema.getGridRow().size(); index++) {
@@ -795,6 +797,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					}
 				} else {
 					originalSchema.getGridRow().add(row.copy());
+				}
 				}
 			}
 			table.clearAll();
