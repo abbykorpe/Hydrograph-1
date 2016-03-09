@@ -19,6 +19,7 @@ public enum UIComponentsConstants {
 	LOOKUP("Lookup"),
 	FILTER("Filter"),
 	LIMIT("Limit"),
+	DISCARD("Discard"),
 	SORT("Sort");
 	
 	private final String value;
