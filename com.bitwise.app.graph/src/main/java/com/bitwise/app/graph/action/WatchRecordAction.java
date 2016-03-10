@@ -157,7 +157,7 @@ public class WatchRecordAction extends SelectionAction {
 		String ipAddress = getIPAddress();
 		String userID = getUserId();
 		String password = getPassword();
-		logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
+		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
 		DebugRestService debugRestService = new DebugRestService(ipAddress, basePath, jobId, componentId, socketId, userID, password);
 		if(debugRestService.callRestService().length() !=0){
 			DebugRemoteWizard debugDialogWizard = new DebugRemoteWizard(Display.getDefault().getActiveShell(), debugRestService.callRestService());
@@ -167,7 +167,7 @@ public class WatchRecordAction extends SelectionAction {
 	
 	private void localMode() throws Exception{
 		String basePath = getBasePath();
-		logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
+		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
 		DebugDataReader dataReader = new DebugDataReader(basePath, jobId, componentId, socketId);
 		 
 		List<String> debugDataList = new ArrayList<>();
