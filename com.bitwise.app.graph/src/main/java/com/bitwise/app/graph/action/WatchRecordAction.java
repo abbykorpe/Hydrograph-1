@@ -65,7 +65,7 @@ public class WatchRecordAction extends SelectionAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText(Constants.WATCH_RECORD_TEXT);
+		setText(Messages.WATCH_RECORD_TEXT);
 		setId(Constants.WATCH_RECORD_ID);
 		setEnabled(true);
 	}
@@ -157,6 +157,7 @@ public class WatchRecordAction extends SelectionAction {
 		String ipAddress = getIPAddress();
 		String userID = getUserId();
 		String password = getPassword();
+		logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
 		DebugRestService debugRestService = new DebugRestService(ipAddress, basePath, jobId, componentId, socketId, userID, password);
 		if(debugRestService.callRestService().length() !=0){
 			DebugRemoteWizard debugDialogWizard = new DebugRemoteWizard(Display.getDefault().getActiveShell(), debugRestService.callRestService());
@@ -165,9 +166,8 @@ public class WatchRecordAction extends SelectionAction {
 	}
 	
 	private void localMode() throws Exception{
-		
 		String basePath = getBasePath();
-		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
+		logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
 		DebugDataReader dataReader = new DebugDataReader(basePath, jobId, componentId, socketId);
 		 
 		List<String> debugDataList = new ArrayList<>();
@@ -183,7 +183,7 @@ public class WatchRecordAction extends SelectionAction {
 				}
 			}
 		}else{
-			logger.debug("file not exists.");
+			logger.info("file not exists.");
 		}
 		 
 		if(!debugDataList.isEmpty()){
@@ -203,7 +203,7 @@ public class WatchRecordAction extends SelectionAction {
  
 		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.APPLICATION_MODAL | SWT.OK);
 		messageBox.setText(Messages.MESSAGE_INFORMATION); 
-		messageBox.setMessage(Messages.MESSAGESBEFORECLOSEWINDOW);
+		messageBox.setMessage(Messages.MESSAGES_BEFORE_CLOSE_WINDOW);
 		messageBox.open();
 	}
 	

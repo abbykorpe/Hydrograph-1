@@ -1,4 +1,10 @@
 package com.bitwise.app.common.datastructure.property;
+
+
+/**
+ * @author Bitwise
+ *
+ */
 public class DebugProperty {
 
 	private String limit;

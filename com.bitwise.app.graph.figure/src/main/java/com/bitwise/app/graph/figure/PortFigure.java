@@ -2,7 +2,6 @@ package com.bitwise.app.graph.figure;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -26,7 +25,7 @@ public class PortFigure extends Figure {
 	private TooltipFigure tooltipFigure;
 	private String labelOfPort;
 	private String portType;
-	private static boolean displayPortLabels;
+	private boolean displayPortLabels;
 	private boolean isWatched;
 	/**
 	 * Instantiates a new port figure.

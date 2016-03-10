@@ -12,6 +12,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.graph.Messages;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.controller.LinkEditPart;
 import com.bitwise.app.graph.controller.PortEditPart;
@@ -39,7 +40,7 @@ public class RemoveWatcherAction extends SelectionAction{
 	@Override
 	protected void init() {
 		super.init();
-		 setText(Constants.REMOVE_WATCH_POINT_TEXT);
+		 setText(Messages.REMOVE_WATCH_POINT_TEXT);
 		 setId(Constants.REMOVE_WATCH_POINT_ID);
 		 setEnabled(false);
 	}

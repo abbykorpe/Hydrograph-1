@@ -9,9 +9,13 @@ import java.security.NoSuchAlgorithmException;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.codehaus.jackson.JsonGenerator;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
+
+import sun.org.mozilla.javascript.internal.json.JsonParser;
 
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -67,6 +71,8 @@ public class DebugRestService {
 		logger.debug("Rest Service Response Status :{}, status: {}", status);
 		
 		InputStream inputStream = postMethod.getResponseBodyAsStream();
+		
+		
 		JSONArray jsonArray = null;
 		 
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));

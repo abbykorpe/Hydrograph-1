@@ -178,18 +178,11 @@ public class Constants {
 	public static final String INNER = "Inner";
 	public static final String OUTER = "Outer";
 	
-	public static final String DEBUG_DEFAULT = "Default";
-	public static final String DEBUG_CUSTOM = "Custom";
-	public static final String DEBUG_ALL = "All";
-
 	/*
 	 * Debug required constants 
 	 */
-	public static final String ADD_WATCH_POINT_TEXT = "Add Watch Point";
 	public static final String ADD_WATCH_POINT_ID = "watchPointId";
-	public static final String WATCH_RECORD_TEXT = "Watch Records";
 	public static final String WATCH_RECORD_ID = "watchRecordId";
-	public static final String REMOVE_WATCH_POINT_TEXT = "Remove Watch Point";
 	public static final String REMOVE_WATCH_POINT_ID = "removeWatchPointId";
 	public static final String USER_ID = "userID";
 	public static final String PASSWORD = "password";

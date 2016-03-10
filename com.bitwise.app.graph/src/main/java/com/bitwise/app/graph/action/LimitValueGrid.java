@@ -39,7 +39,7 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 public class LimitValueGrid extends Dialog {
 	private Text textBox;
 	protected long limitValue = 100L;
-	private List<String> ITEMS = Arrays.asList(Constants.DEBUG_DEFAULT, Constants.DEBUG_CUSTOM, Constants.DEBUG_ALL);
+	private List<String> ITEMS = Arrays.asList(com.bitwise.app.graph.Messages.DEBUG_DEFAULT, com.bitwise.app.graph.Messages.DEBUG_CUSTOM, com.bitwise.app.graph.Messages.DEBUG_ALL);
 	private DebugProperty debugProperty;
 	private Combo combo;
 	private boolean okselection;
@@ -70,7 +70,7 @@ public class LimitValueGrid extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
-		container.getShell().setText("Record Limit");
+		container.getShell().setText(com.bitwise.app.graph.Messages.RECORD_LIMIT);
 		Composite composite = new Composite(container, SWT.BORDER);
 		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_composite.widthHint = 363;
@@ -79,7 +79,7 @@ public class LimitValueGrid extends Dialog {
 		
 		Label lblNewLabel = new Label(composite, SWT.NONE);
 		lblNewLabel.setBounds(32, 75, 78, 15);
-		lblNewLabel.setText("Records Limit");
+		lblNewLabel.setText(com.bitwise.app.graph.Messages.RECORD_LIMIT);
 		
 		textBox = new Text(composite, SWT.BORDER);
 		textBox.setBounds(132, 67, 181, 23);
@@ -98,8 +98,8 @@ public class LimitValueGrid extends Dialog {
 		
 		Label lblNewLabel_1 = new Label(composite, SWT.NONE);
 		lblNewLabel_1.setBounds(32, 26, 78, 15);
-		lblNewLabel_1.setText("Limit Value");
-		EmptyTextListener emptyTextListener = new EmptyTextListener("Records Limit");
+		lblNewLabel_1.setText(com.bitwise.app.graph.Messages.LIMIT_VALUE);
+		EmptyTextListener emptyTextListener = new EmptyTextListener(com.bitwise.app.graph.Messages.RECORD_LIMIT);
 		textBox.addModifyListener(emptyTextListener);
 		final ControlDecoration txtDecorator = WidgetUtility.addDecorator(textBox, Messages.FIELDPHASE);
 		txtDecorator.hide();
@@ -118,13 +118,13 @@ public class LimitValueGrid extends Dialog {
 					
 					debugProperty.setComboBoxIndex(ITEMS.indexOf(combo));
 					
-					if(Constants.DEBUG_CUSTOM.equalsIgnoreCase(comboBox))
+					if(com.bitwise.app.graph.Messages.DEBUG_CUSTOM.equalsIgnoreCase(comboBox))
 					{
 						textBox.setEnabled(true);
 						txtDecorator.show();
 						textBox.addListener(SWT.Verify, listener);
 						debugProperty.setLimit(textBox.getText()); 
-					}else if(Constants.DEBUG_ALL.equalsIgnoreCase(comboBox)){
+					}else if(com.bitwise.app.graph.Messages.DEBUG_ALL.equalsIgnoreCase(comboBox)){
 						textBox.setEnabled(false);
 						textBox.removeListener(SWT.Verify,listener);
 						txtDecorator.hide();
@@ -137,7 +137,7 @@ public class LimitValueGrid extends Dialog {
 		
 		Label lblNewLabel_3 = new Label(composite, SWT.READ_ONLY);
 		lblNewLabel_3.setBounds(132, 88, 181, 15);
-		lblNewLabel_3.setText("Default Limit : 100");
+		lblNewLabel_3.setText(com.bitwise.app.graph.Messages.DEFAULT_LIMIT);
 		
 		return container;
 	}

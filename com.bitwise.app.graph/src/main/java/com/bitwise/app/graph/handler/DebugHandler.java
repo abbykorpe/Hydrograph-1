@@ -141,7 +141,7 @@ public class DebugHandler  extends AbstractHandler {
 	
 		}
 		String clusterPassword = runConfigDialog.getClusterPassword()!=null ? runConfigDialog.getClusterPassword():"";
-		basePath = "/"+runConfigDialog.getBasePath();
+		basePath = runConfigDialog.getBasePath();
 		String host = runConfigDialog.getHost();
 		String userId = runConfigDialog.getUserId();
 		if(!runConfigDialog.proceedToRunGraph()){

@@ -9,11 +9,11 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.graph.Messages;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.controller.LinkEditPart;
 import com.bitwise.app.graph.controller.PortEditPart;
@@ -28,8 +28,6 @@ public class AddWatcherAction extends SelectionAction{
 
 	private Long limitValue;
 	private boolean watcherSelection;
-	private boolean watcher;
- 
 	
 	public AddWatcherAction(IWorkbenchPart part) {
 		super(part);
@@ -41,8 +39,7 @@ public class AddWatcherAction extends SelectionAction{
 	@Override
 	protected void init() {
 		super.init();
-		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setText(Constants.ADD_WATCH_POINT_TEXT);
+		setText(Messages.ADD_WATCH_POINT_TEXT);
 		setId(Constants.ADD_WATCH_POINT_ID);
 		setEnabled(true);
 

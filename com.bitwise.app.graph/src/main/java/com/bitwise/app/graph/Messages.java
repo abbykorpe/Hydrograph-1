@@ -26,10 +26,21 @@ public class Messages extends NLS {
 
 	public static String GRADLE_TASK_FAILED;
 	public static String CURRENT_JOB_ID;
-	public static String MESSAGESBEFORECLOSEWINDOW;
-	public static String JOBID;
-	public static String BASEPATH;
+	
+	public static String MESSAGES_BEFORE_CLOSE_WINDOW;
+	public static String JOB_ID;
+	public static String BASE_PATH;
 	public static String MESSAGE_INFORMATION;
+	
+	public static final String DEBUG_DEFAULT = "Default";
+	public static final String DEBUG_CUSTOM = "Custom";
+	public static final String DEBUG_ALL = "All";
+	public static final String ADD_WATCH_POINT_TEXT = "Add Watch Point";
+	public static final String WATCH_RECORD_TEXT = "Watch Records";
+	public static final String REMOVE_WATCH_POINT_TEXT = "Remove Watch Point";
+	public static final String RECORD_LIMIT = "Record Limit";
+	public static final String LIMIT_VALUE = "Limit Value";
+	public static final String DEFAULT_LIMIT = "Default Limit : 100";
 	 
 	
 	static {

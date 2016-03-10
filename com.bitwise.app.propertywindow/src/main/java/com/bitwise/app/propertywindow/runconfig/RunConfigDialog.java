@@ -157,11 +157,12 @@ public class RunConfigDialog extends Dialog {
      	basepathText.setBounds(109, 70, 206, 21);
      	EmptyTextListener textEdgeNodeListener1 = new EmptyTextListener("Base Path");
      	basepathText.addModifyListener(textEdgeNodeListener1);
+     	
      	 
-     	ListenerHelper helper = new ListenerHelper();
+     /*	ListenerHelper helper = new ListenerHelper();
 		ControlDecoration txtDecorator = WidgetUtility.addDecorator(basepathText, Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
-		basepathText.addListener(SWT.Verify, ListenerFactory.Listners.VERIFY_TEXT.getListener().getListener(null, helper, basepathText));
+		basepathText.addListener(SWT.Verify, ListenerFactory.Listners.VERIFY_TEXT.getListener().getListener(null, helper, basepathText));*/
 		
 		formToolkit.adapt(basepathText, true, true);
 		textBoxes.put("basePath", basepathText);
