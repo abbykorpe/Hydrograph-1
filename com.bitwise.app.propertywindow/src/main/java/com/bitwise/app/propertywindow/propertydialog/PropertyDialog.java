@@ -299,21 +299,17 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	@Override
 	protected void cancelPressed() {
 		boolean windowValidityStaus = Boolean.TRUE;
-		for (AbstractWidget customWidget : propertyDialogBuilder
-				.getELTWidgetList()) {
+		for (AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()) {
 			if (customWidget.getProperties() != null) {
-				windowValidityStaus = validateWidget(windowValidityStaus,
-						customWidget);
+				windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
 			}
 		}
 		isPropertyWindowValid = windowValidityStaus;
 		updateComponentValidityStatus();
 		if (applyButton.isEnabled()) {
 			if (!isCancelButtonPressed) {
-				ConfirmCancelMessageBox confirmCancelMessageBox = new ConfirmCancelMessageBox(
-						container);
-				MessageBox confirmCancleMessagebox = confirmCancelMessageBox
-						.getMessageBox();
+				ConfirmCancelMessageBox confirmCancelMessageBox = new ConfirmCancelMessageBox(container);
+				MessageBox confirmCancleMessagebox = confirmCancelMessageBox.getMessageBox();
 
 				if (confirmCancleMessagebox.open() == SWT.OK) {
 					super.close();

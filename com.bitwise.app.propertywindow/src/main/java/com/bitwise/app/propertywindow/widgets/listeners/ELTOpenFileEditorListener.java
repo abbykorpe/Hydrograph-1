@@ -72,9 +72,9 @@ public class ELTOpenFileEditorListener implements IELTListener{
 							MessageBox messageBox = new MessageBox(new Shell(),
 									SWT.ICON_WARNING | SWT.YES | SWT.NO
 											| SWT.CANCEL);
-							messageBox.setText("Save Changes");
+							messageBox.setText(Messages.WARNING);
 							messageBox
-									.setMessage("Do you want to save the changes?");
+									.setMessage(Messages.OPEARTION_CLASS_OPEN_BUTTON_MESSAGE);
 							int retCode = messageBox.open();
 							if (retCode == SWT.YES) {
 								saveChangesAndOpenOpeartionClassInEditor(
@@ -98,7 +98,7 @@ public class ELTOpenFileEditorListener implements IELTListener{
 						MessageBox messageBox = new MessageBox(new Shell(),
 								SWT.ICON_WARNING | SWT.YES | SWT.NO
 										| SWT.CANCEL);
-						messageBox.setText(Messages.INFORMATION);
+						messageBox.setText(Messages.WARNING);
 						messageBox
 								.setMessage(Messages.OPEARTION_CLASS_OPEN_BUTTON_MESSAGE);
 						int retCode = messageBox.open();
@@ -125,7 +125,7 @@ public class ELTOpenFileEditorListener implements IELTListener{
 		boolean flag = FilterOperationClassUtility.openFileEditor(
 				((Text) widgetList[1]), null);
 		if (!flag) {
-			WidgetUtility.errorMessage("File Not Found");
+			WidgetUtility.errorMessage(Messages.FILE_NOT_FOUND);
 		} else {
 			operationClassDialog.pressCancel();
 		}
@@ -137,7 +137,7 @@ public class ELTOpenFileEditorListener implements IELTListener{
 		boolean flag = FilterOperationClassUtility.openFileEditor(
 				((Text) widgetList[1]), null);
 		if (!flag) {
-			WidgetUtility.errorMessage("File Not Found");
+			WidgetUtility.errorMessage(Messages.FILE_NOT_FOUND);
 		} else {
 			operationClassDialog.pressOK();
 		}

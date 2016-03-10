@@ -17,6 +17,8 @@ public class Messages extends NLS {
 	public static String OPEARTION_CLASS_OPEN_BUTTON_MESSAGE;
 	public static String OPEN_BUTTON_LABEL;
 	public static String CREATE_NEW_OPEARTION_CLASS_LABEL;
+	public static String WARNING;
+	public static String FILE_NOT_FOUND;
 	
 	public static String NOT_EXISTS;
 	public static  String FILE_DOES_NOT_EXISTS ;
