@@ -11,6 +11,7 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.controller.LinkEditPart;
 import com.bitwise.app.graph.controller.PortEditPart;
@@ -38,8 +39,8 @@ public class RemoveWatcherAction extends SelectionAction{
 	@Override
 	protected void init() {
 		super.init();
-		 setText("Remove Watch Point");
-		 setId("deleteWatchPoint");
+		 setText(Constants.REMOVE_WATCH_POINT_TEXT);
+		 setId(Constants.REMOVE_WATCH_POINT_ID);
 		 setEnabled(false);
 	}
 	
@@ -75,6 +76,7 @@ public class RemoveWatcherAction extends SelectionAction{
 							if(((PortEditPart)part).getCastedModel().getTerminal().equals(portName)){
 								((PortEditPart)part).getPortFigure().removeWatchColor();
 								((PortEditPart)part).getPortFigure().setWatched(false);
+								((PortEditPart)part).getCastedModel().setWatched(false);
 							} 
 						}
 					}

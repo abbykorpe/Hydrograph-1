@@ -13,11 +13,11 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.controller.LinkEditPart;
 import com.bitwise.app.graph.controller.PortEditPart;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
-import com.bitwise.app.graph.handler.RemoveDebugHandler;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 /**
@@ -42,8 +42,8 @@ public class AddWatcherAction extends SelectionAction{
 	protected void init() {
 		super.init();
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setText("Add Watch Point");
-		setId("watchPointWithDefault");
+		setText(Constants.ADD_WATCH_POINT_TEXT);
+		setId(Constants.ADD_WATCH_POINT_ID);
 		setEnabled(true);
 
 	}
@@ -91,6 +91,7 @@ public class AddWatcherAction extends SelectionAction{
 						if(part instanceof PortEditPart){
 							if(((PortEditPart)part).getCastedModel().getTerminal().equals(portName)){
 								((PortEditPart)part).getPortFigure().changeWatchColor();
+								((PortEditPart)part).getCastedModel().setWatched(true);
 								((PortEditPart)part).getPortFigure().setWatched(true);
 								((PortEditPart)part).getPortFigure().repaint();
 							} 

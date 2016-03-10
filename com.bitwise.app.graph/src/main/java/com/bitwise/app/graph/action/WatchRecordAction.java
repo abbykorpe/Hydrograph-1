@@ -20,6 +20,8 @@ import org.eclipse.ui.PlatformUI;
 import org.json.JSONException;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.graph.Messages;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.controller.LinkEditPart;
 import com.bitwise.app.graph.controller.PortEditPart;
@@ -63,8 +65,8 @@ public class WatchRecordAction extends SelectionAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Watch Records");
-		setId("watchRecord");
+		setText(Constants.WATCH_RECORD_TEXT);
+		setId(Constants.WATCH_RECORD_ID);
 		setEnabled(true);
 	}
 	
@@ -165,7 +167,7 @@ public class WatchRecordAction extends SelectionAction {
 	private void localMode() throws Exception{
 		
 		String basePath = getBasePath();
-	//	logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
+		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
 		DebugDataReader dataReader = new DebugDataReader(basePath, jobId, componentId, socketId);
 		 
 		List<String> debugDataList = new ArrayList<>();
@@ -200,8 +202,8 @@ public class WatchRecordAction extends SelectionAction {
 	private void messageDialog(){
  
 		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.APPLICATION_MODAL | SWT.OK);
-		messageBox.setText("Information"); 
-		messageBox.setMessage("No Records available. Execute the Job with Watchers");
+		messageBox.setText(Messages.MESSAGE_INFORMATION); 
+		messageBox.setMessage(Messages.MESSAGESBEFORECLOSEWINDOW);
 		messageBox.open();
 	}
 	

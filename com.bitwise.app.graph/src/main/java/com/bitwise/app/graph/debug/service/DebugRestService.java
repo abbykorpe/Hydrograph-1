@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.logging.factory.LogFactory;
-import com.sun.corba.se.impl.orbutil.closure.Constant;
 
 /**
  * @author Bitwise
@@ -53,19 +52,20 @@ public class DebugRestService {
 	
 	public JSONArray callRestService() throws HttpException, IOException, JSONException{
 		HttpClient httpClient = new HttpClient();
-		String ip = "http://"+ipAddress+":8001/debug";
+		String ip = Constants.HTTP_PROTOCOL+ipAddress+Constants.PORT_NO;
 		 
 		PostMethod postMethod = new PostMethod(ip);//"http://10.130.248.53:4567/debug"
 		postMethod.addParameter(Constants.USER_ID, userId);
-		postMethod.addParameter("password", password);
-		postMethod.addParameter("basePath", basePath);
-		postMethod.addParameter("jobId", jobId);
-		postMethod.addParameter("componentId", componentId);
-		postMethod.addParameter("socketId", socketId);
+		postMethod.addParameter(Constants.PASSWORD, password);
+		postMethod.addParameter(Constants.BASE_PATH, basePath);
+		postMethod.addParameter(Constants.JOB_ID, jobId);
+		postMethod.addParameter(Constants.COMPONENT_ID, componentId);
+		postMethod.addParameter(Constants.SOCKET_ID, socketId);
 
 		 
 		int status = httpClient.executeMethod(postMethod);
-	 
+		logger.debug("Rest Service Response Status :{}, status: {}", status);
+		
 		InputStream inputStream = postMethod.getResponseBodyAsStream();
 		JSONArray jsonArray = null;
 		 

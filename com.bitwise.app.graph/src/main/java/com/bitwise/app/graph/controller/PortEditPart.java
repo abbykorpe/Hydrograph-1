@@ -31,7 +31,7 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 		Component component = ((ComponentEditPart) getParent()).getCastedModel();
 		PortFigure port = null;
 		
-		Color borderColor = ELTColorConstants.componentBorder;
+		Color borderColor = ELTColorConstants.COMPONENT_BORDER;
 		Point portPoint = null;
 		
 		int height = component.getSize().height-componentFigure.getComponentLabelMargin();

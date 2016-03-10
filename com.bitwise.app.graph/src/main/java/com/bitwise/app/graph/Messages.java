@@ -29,6 +29,9 @@ public class Messages extends NLS {
 	public static String MESSAGESBEFORECLOSEWINDOW;
 	public static String JOBID;
 	public static String BASEPATH;
+	public static String MESSAGE_INFORMATION;
+	 
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

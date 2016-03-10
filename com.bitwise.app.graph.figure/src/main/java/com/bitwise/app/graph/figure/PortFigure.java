@@ -121,7 +121,7 @@ public class PortFigure extends Figure {
 	protected void paintFigure(Graphics graphics) {
 		super.paintFigure(graphics);
 		if(isWatched)
-			setBackgroundColor(ELTColorConstants.watchColor);
+			setBackgroundColor(ELTColorConstants.WATCH_COLOR);
 		Rectangle r = getBounds().getCopy();
 		if("in".equalsIgnoreCase(portType))
 		{
@@ -188,20 +188,20 @@ public class PortFigure extends Figure {
 
 	public void selectPort() {
 		if(!isWatched)
-		setBackgroundColor(ELTColorConstants.blueBrandBoder);
+		setBackgroundColor(ELTColorConstants.BLUE_BRAND_BODER);
 	}
 
 	public void deSelectPort() {
 		if(!isWatched)
-		setBackgroundColor(ELTColorConstants.componentBorder);
+		setBackgroundColor(ELTColorConstants.COMPONENT_BORDER);
 	}
 
 	public void changeWatchColor(){
-		setBackgroundColor(ELTColorConstants.watchColor);
+		setBackgroundColor(ELTColorConstants.WATCH_COLOR);
 	}
 	
 	public void removeWatchColor(){
-		setBackgroundColor(ELTColorConstants.componentBorder);
+		setBackgroundColor(ELTColorConstants.COMPONENT_BORDER);
 	}
 	@Override
 	public void validate() {

@@ -137,10 +137,10 @@ public class ComponentFigure extends Figure implements Validator{
 	}
 
 	private void setInitialColor(){
-		componentColor = ELTColorConstants.bgComponent;
-		borderColor = ELTColorConstants.componentBorder;
-		selectedComponentColor = ELTColorConstants.bgComponentSelected;
-		selectedBorderColor = ELTColorConstants.blueBrandBoder;
+		componentColor = ELTColorConstants.BG_COMPONENT;
+		borderColor = ELTColorConstants.COMPONENT_BORDER;
+		selectedComponentColor = ELTColorConstants.BG_COMPONENT_SELECTED;
+		selectedBorderColor = ELTColorConstants.BLUE_BRAND_BODER;
 	}
 
 	/**

@@ -190,13 +190,13 @@ public class Constants {
 	public static final String WATCH_RECORD_TEXT = "Watch Records";
 	public static final String WATCH_RECORD_ID = "watchRecordId";
 	public static final String REMOVE_WATCH_POINT_TEXT = "Remove Watch Point";
-	public static final String REMOVE_WATCH_POINT_ID = "removeWatchPoint";
+	public static final String REMOVE_WATCH_POINT_ID = "removeWatchPointId";
 	public static final String USER_ID = "userID";
 	public static final String PASSWORD = "password";
 	public static final String BASE_PATH = "basePath";
 	public static final String COMPONENT_ID = "componentId";
 	public static final String SOCKET_ID = "socketId";
 	public static final String JOB_ID = "jobId";
-	public static final String PORT_NO = "8001";
+	public static final String PORT_NO = ":8001/debug";
 	public static final String HTTP_PROTOCOL = "http://";
 }
