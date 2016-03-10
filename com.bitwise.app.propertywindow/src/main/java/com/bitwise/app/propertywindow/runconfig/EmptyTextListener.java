@@ -11,14 +11,19 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
 public class EmptyTextListener implements ModifyListener {
 
+	private String fieldName;
 	private ControlDecoration errorDecorator;
 
+	public EmptyTextListener(String fieldName) {
+		this.fieldName = fieldName;
+	}
+	
 	@Override
 	public void modifyText(ModifyEvent event) {
 		String txt= ((Text)event.getSource()).getText();
 
 		if (StringUtils.isEmpty(txt)) {
-			errorDecorator = WidgetUtility.addDecorator((Text)event.getSource(),Messages.EMPTY_FIELD);
+			errorDecorator = WidgetUtility.addDecorator((Text)event.getSource(),Messages.bind(Messages.EMPTY_FIELD, fieldName));
 			errorDecorator.show();
 			errorDecorator.setMarginWidth(3);
 

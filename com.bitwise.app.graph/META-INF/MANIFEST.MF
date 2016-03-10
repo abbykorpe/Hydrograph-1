@@ -28,7 +28,9 @@ Require-Bundle: org.eclipse.ui,
  com.bitwise.app.joblogger;bundle-version="0.0.1",
  org.eclipse.ltk.core.refactoring,
  com.bitwise.app.validators;bundle-version="0.0.1",
- com.bitwise.app.logging;bundle-version="1.0.0"
+ com.bitwise.app.logging;bundle-version="1.0.0",
+ org.json;bundle-version="1.0.0",
+ org.apache.commons.httpclient;bundle-version="3.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: com.bitwise.app.graph.model,
@@ -37,3 +39,14 @@ Import-Package: com.bitwise.app.graph.model,
  org.eclipse.core.filesystem
 Export-Package: com.bitwise.app.graph.controller,
  com.bitwise.app.graph.editor
+Bundle-ClassPath: lib/avro-1.7.7.jar,
+ lib/avro-mapred-1.7.7-hadoop1.jar,
+ lib/DebugAPI.jar,
+ lib/hadoop-core-0.20.2-cdh3u0.jar,
+ lib/jackson-core-asl-1.9.13.jar,
+ lib/jackson-mapper-asl-1.9.13.jar,
+ lib/jackson-xc-1.9.13.jar,
+ lib/log4j-1.2.17.jar,
+ lib/org.apache.commons.io.jar,
+ lib/org.apache.commons.logging-1.1.1.jar,
+ .

@@ -4,7 +4,7 @@
 	<groupId>com.bitwise.app</groupId>
 	<artifactId>com.bitwise.app.graph</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>eclipse-test-plugin</packaging>
+	<packaging>eclipse-plugin</packaging>
 	<parent>
 		<groupId>com.bitwise.app</groupId>
 		<artifactId>com.bitwise.app.parent</artifactId>

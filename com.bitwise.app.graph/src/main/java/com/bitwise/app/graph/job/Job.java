@@ -18,13 +18,64 @@ public class Job {
 	private String jobProjectDirectory;
 	private String jobStatus;
 	private boolean remoteMode;
+	private boolean debugMode;
+	private String ipAddress;
+	private String userId;
+	private String basePath;
 	
-	public Job(String localJobID,String consoleName, String canvasName) {
+	
+	public Job(String localJobID,String consoleName, String canvasName, String ipAddress,String userId, String basePath, String password) {
 		this.localJobID = localJobID;
 		this.consoleName = consoleName;
 		this.canvasName = canvasName;
-		remoteMode=false;
+		this.ipAddress = ipAddress;
+		this.userId = userId;
+		this.password = password;
+		this.basePath = basePath;
+		this.debugMode = false;
+		this.remoteMode=false;
 	}
+
+	
+	
+	public boolean isDebugMode() {
+		return debugMode;
+	}
+
+
+	public void setDebugMode(boolean debugMode) {
+		this.debugMode = debugMode;
+	}
+
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
+
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
+	}
+
+
+	public String getUserId() {
+		return userId;
+	}
+
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+
+	public String getBasePath() {
+		return basePath;
+	}
+
+
+	public void setBasePath(String basePath) {
+		this.basePath = basePath;
+	}
+
 
 	public String getLocalJobID() {
 		return localJobID;

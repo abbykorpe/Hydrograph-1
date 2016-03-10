@@ -12,7 +12,10 @@ public class GradleCommandConstants {
 	public static final String GCMD_SCP_JOB_XML="gradle scpJobXML ";
 	public static final String GCMD_EXECUTE_REMOTE_JOB="gradle executeRemoteJob ";
 	public static final String GCMD_EXECUTE_LOCAL_JOB="gradle executeLocalJob ";
+	public static final String GCMD_EXECUTE_DEBUG_LOCAL_JOB="gradle executeDebugLocal ";
+	public static final String GCMD_EXECUTE_DEBUG_REMOTE_JOB="gradle executeDebugRemoteJob ";
 	public static final String GCMD_KILL_REMOTE_JOB="gradle killRemoteJob ";
+	
 	
 	public static final String GPARAM_USERNAME=" -Pusername=";
 	public static final String GPARAM_PASSWORD=" -Ppassword=";
@@ -21,4 +24,7 @@ public class GradleCommandConstants {
 	public static final String GPARAM_PARAM_FILE=" -PparameterFile=";
 	public static final String GPARAM_LOCAL_JOB=" -Plocaljob=true";
 	public static final String GPARAM_REMOTE_PROCESSID = " -Pjobprocessid=";
+	public static final String GPARAM_JOB_DEBUG_XML=" -PdebugJobXML=";
+	public static final String GPARAM_JOB_BASE_PATH=" -PbasePath=";
+	public static final String GPARAM_UNIQUE_JOB_ID=" -PjobId=";
 }

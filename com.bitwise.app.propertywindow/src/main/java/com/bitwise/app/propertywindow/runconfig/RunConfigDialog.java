@@ -1,6 +1,5 @@
 package com.bitwise.app.propertywindow.runconfig;
 
-import java.awt.font.TextHitInfo;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,6 +18,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -40,7 +40,12 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.bitwise.app.propertywindow.factory.ListenerFactory;
+import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.utils.SWTResourceManager;
+import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
+import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
 public class RunConfigDialog extends Dialog {
 	private final FormToolkit formToolkit = new FormToolkit(
@@ -52,10 +57,15 @@ public class RunConfigDialog extends Dialog {
 	private Text textJobXML;
 	private Text textLibs;
 	private Text textParamFiles;
+	private Text basepathText;
+ 
 
 	private boolean runGraph;
 
 	private String password;
+	private String edgeNodeText;
+	private String userId;
+	private String basePath;
 
 	private Composite compositeServerDetails, compositePathConfig;
 	private Button btnLocalMode, btnRemoteMode, okButton;
@@ -73,6 +83,7 @@ public class RunConfigDialog extends Dialog {
 	private final String JOB_XML = "remoteJobXMLDir";
 	private final String LIB_PATH = "remoteLibDir";
 	private final String PARAM_FILE = "remoteParameterFileDir";
+	private final String Base_PATH = "basePath";
 
 	private Composite container;
 	private String username;
@@ -109,7 +120,7 @@ public class RunConfigDialog extends Dialog {
 		Composite compositeRunMode = new Composite(container, SWT.BORDER);
 		GridData gd_compositeRunMode = new GridData(SWT.LEFT, SWT.CENTER,
 				false, false, 1, 1);
-		gd_compositeRunMode.heightHint = 80;
+		gd_compositeRunMode.heightHint = 100;
 		gd_compositeRunMode.widthHint = 351;
 		compositeRunMode.setLayoutData(gd_compositeRunMode);
 		formToolkit.adapt(compositeRunMode);
@@ -136,6 +147,25 @@ public class RunConfigDialog extends Dialog {
 		btnRemoteMode.setText("Remote");
 		new Label(container, SWT.NONE);
      	btnRemoteMode.addSelectionListener(selectionListener);
+     	
+     	Label lblBasePath = new Label(compositeRunMode, SWT.NONE);
+     	lblBasePath.setBounds(22, 70, 70, 15);
+		formToolkit.adapt(lblBasePath, true, true);
+		lblBasePath.setText("Base Path");
+		
+     	basepathText = new Text(compositeRunMode, SWT.BORDER);
+     	basepathText.setBounds(109, 70, 206, 21);
+     	EmptyTextListener textEdgeNodeListener1 = new EmptyTextListener("Base Path");
+     	basepathText.addModifyListener(textEdgeNodeListener1);
+     	
+     	 
+     /*	ListenerHelper helper = new ListenerHelper();
+		ControlDecoration txtDecorator = WidgetUtility.addDecorator(basepathText, Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);
+		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
+		basepathText.addListener(SWT.Verify, ListenerFactory.Listners.VERIFY_TEXT.getListener().getListener(null, helper, basepathText));*/
+		
+		formToolkit.adapt(basepathText, true, true);
+		textBoxes.put("basePath", basepathText);
 
 		compositeServerDetails = new Composite(container, SWT.BORDER);
 		GridData gd_compositeServerDetails = new GridData(SWT.LEFT, SWT.CENTER,
@@ -176,14 +206,14 @@ public class RunConfigDialog extends Dialog {
 
 		textEdgeNode = new Text(compositeServerDetails, SWT.BORDER);
 		textEdgeNode.setBounds(110, 31, 206, 21);
-		EmptyTextListener textEdgeNodeListener = new EmptyTextListener();
+		EmptyTextListener textEdgeNodeListener = new EmptyTextListener("Edge Node");
 		textEdgeNode.addModifyListener(textEdgeNodeListener);
 		formToolkit.adapt(textEdgeNode, true, true);
 		textBoxes.put("host", textEdgeNode);
 
 		textUser = new Text(compositeServerDetails, SWT.BORDER);
 		textUser.setBounds(110, 73, 206, 21);
-		EmptyTextListener textUserListener = new EmptyTextListener();
+		EmptyTextListener textUserListener = new EmptyTextListener("Host");
 		textUser.addModifyListener(textUserListener);
 		formToolkit.adapt(textUser, true, true);
 		textBoxes.put("userName", textUser);
@@ -191,7 +221,7 @@ public class RunConfigDialog extends Dialog {
 		textPassword = new Text(compositeServerDetails, SWT.PASSWORD
 				| SWT.BORDER);
 		textPassword.setBounds(110, 116, 206, 21);
-		EmptyTextListener textPasswordListener = new EmptyTextListener();
+		EmptyTextListener textPasswordListener = new EmptyTextListener("Password");
 		textPassword.addModifyListener(textPasswordListener);
 		formToolkit.adapt(textPassword, true, true);
 		textBoxes.put("password", textPassword);
@@ -323,6 +353,18 @@ public class RunConfigDialog extends Dialog {
 		return this.password;
 	}
 
+	public String getUserId() {
+		return this.userId;
+	}
+	
+	public String getEdgeNodeIp() {
+		return this.edgeNodeText;
+	}
+	
+	public String getBasePath(){
+		return this.basePath;
+	}
+	 
 	/**
 	 * Create contents of the button bar.
 	 * 
@@ -354,6 +396,7 @@ public class RunConfigDialog extends Dialog {
 			buildProps.put(JOB_XML, textJobXML.getText());
 			buildProps.put(LIB_PATH, textLibs.getText() );
 			buildProps.put(PARAM_FILE, textParamFiles.getText());
+			buildProps.put(Base_PATH, basepathText.getText()); 
 
 			buildProps.store(out, null);
 
@@ -370,24 +413,19 @@ public class RunConfigDialog extends Dialog {
 					"Exception occured while saving run configuration file -\n"
 							+ e.getMessage());
 		}
+		this.userId = textUser.getText();
 		this.password = textPassword.getText();
 		this.username = textUser.getText();
 		this.host = textEdgeNode.getText();
+		this.basePath = basepathText.getText();
 		
-		// Check build properties in case of 'Remote' mode.
-		if (btnRemoteMode.getSelection()) {
-			try {
-				checkBuildProperties();
-				this.runGraph = true;
-				super.okPressed();
-			} catch (IllegalArgumentException e) {
-				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
-						e.getMessage());
-				this.runGraph = false;
-			}
-		} else{
+		try {
+			checkBuildProperties(btnRemoteMode.getSelection());
 			this.runGraph = true;
 			super.okPressed();
+		} catch (IllegalArgumentException e) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",	e.getMessage());
+			this.runGraph = false;
 		}
 	}
 
@@ -405,27 +443,32 @@ public class RunConfigDialog extends Dialog {
 		if(btnRemoteMode.getSelection()){
 			return new Point(380, 671);
 		}else{
-			return new Point(380, 171);
+			return new Point(380, 190);
 		}
 		
 	}
 
-	private void checkBuildProperties() {
-		if (validation().hasErrors())
-			throw new IllegalArgumentException(validation().errorMessage());
+	private void checkBuildProperties(boolean remote) {
+		Notification notification = validate(remote);
+		if (notification.hasErrors()){
+			throw new IllegalArgumentException(notification.errorMessage());
+		}
 	}
 
-	private Notification validation() {
+	private Notification validate(boolean remote) {
 		Notification note = new Notification();
-
-		if (StringUtils.isEmpty(textEdgeNode.getText()))
-			note.addError("Edge Node value not specified");
-
-		if (StringUtils.isEmpty(textUser.getText()))
-			note.addError("User value not specified");
-
-		if (StringUtils.isEmpty(textPassword.getText()))
-			note.addError("Password not specified");
+		if(remote){
+			if (StringUtils.isEmpty(textEdgeNode.getText()))
+				note.addError("Edge Node value not specified");
+	
+			if (StringUtils.isEmpty(textUser.getText()))
+				note.addError("User value not specified");
+	
+			if (StringUtils.isEmpty(textPassword.getText()))
+				note.addError("Password not specified");
+		}
+		if (StringUtils.isEmpty(basepathText.getText()))
+			note.addError("Base Path not specified");
 		
 		return note;
 	}
@@ -442,7 +485,7 @@ public class RunConfigDialog extends Dialog {
 			Button button = ((Button) event.widget);
 
 			if (button.getText().equals("Local")) {
-				container.getShell().setSize(380, 171);
+				container.getShell().setSize(380, 190);
 				compositeServerDetails.setVisible(false);
 				compositePathConfig.setVisible(false);
 

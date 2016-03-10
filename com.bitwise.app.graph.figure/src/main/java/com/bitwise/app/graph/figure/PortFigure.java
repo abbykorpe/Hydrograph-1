@@ -2,7 +2,6 @@ package com.bitwise.app.graph.figure;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -26,7 +25,8 @@ public class PortFigure extends Figure {
 	private TooltipFigure tooltipFigure;
 	private String labelOfPort;
 	private String portType;
-	private static boolean displayPortLabels;
+	private boolean displayPortLabels;
+	private boolean isWatched;
 	/**
 	 * Instantiates a new port figure.
 	 * 
@@ -100,6 +100,12 @@ public class PortFigure extends Figure {
 	public void setLabelOfPort(String label) {
 		this.labelOfPort=label;
 	}
+	public boolean isWatched() {
+		return isWatched;
+	}
+	public void setWatched(boolean isWatched) {
+		this.isWatched = isWatched;
+	}
 	public String getPortType() {
 		return portType;
 	}
@@ -113,6 +119,8 @@ public class PortFigure extends Figure {
 	@Override
 	protected void paintFigure(Graphics graphics) {
 		super.paintFigure(graphics);
+		if(isWatched)
+			setBackgroundColor(ELTColorConstants.WATCH_COLOR);
 		Rectangle r = getBounds().getCopy();
 		if("in".equalsIgnoreCase(portType))
 		{
@@ -178,13 +186,22 @@ public class PortFigure extends Figure {
 	}
 
 	public void selectPort() {
-		setBackgroundColor(ELTColorConstants.blueBrandBoder);
+		if(!isWatched)
+		setBackgroundColor(ELTColorConstants.BLUE_BRAND_BODER);
 	}
 
 	public void deSelectPort() {
-		setBackgroundColor(ELTColorConstants.componentBorder);
+		if(!isWatched)
+		setBackgroundColor(ELTColorConstants.COMPONENT_BORDER);
 	}
 
+	public void changeWatchColor(){
+		setBackgroundColor(ELTColorConstants.WATCH_COLOR);
+	}
+	
+	public void removeWatchColor(){
+		setBackgroundColor(ELTColorConstants.COMPONENT_BORDER);
+	}
 	@Override
 	public void validate() {
 		super.validate();

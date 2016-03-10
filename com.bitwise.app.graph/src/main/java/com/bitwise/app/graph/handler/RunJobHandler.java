@@ -32,7 +32,7 @@ public class RunJobHandler extends AbstractHandler {
 	}
 	
 	private Job getJob(String localJobID,String consoleName,String canvasName){
-		return new Job(localJobID,consoleName, canvasName);
+		return new Job(localJobID,consoleName, canvasName, null,null,null,null);
 	}
 	
 	private DefaultGEFCanvas getComponentCanvas() {		
@@ -55,7 +55,7 @@ public class RunJobHandler extends AbstractHandler {
 		String consoleName= getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
 		String canvasName = consoleName;
 		String localJobID = consoleName;
-		JobManager.INSTANCE.executeJob(getJob(localJobID,consoleName, canvasName));
+		JobManager.INSTANCE.executeJob(getJob(localJobID,consoleName, canvasName), null);
 		
 		return null;
 	}

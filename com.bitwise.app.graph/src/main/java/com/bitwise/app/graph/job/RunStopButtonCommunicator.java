@@ -21,6 +21,17 @@ public enum RunStopButtonCommunicator{
 		}		
 	},
 	
+	RunDebugJob {
+		private AbstractHandler abstractHandler;
+		
+		AbstractHandler getAbstractHandler() {
+			return abstractHandler;
+		}
+		void setAbstractHandler(AbstractHandler abstractHandler){
+			this.abstractHandler = abstractHandler;
+		}		
+	},
+	
 	StopJob {
 		private AbstractHandler abstractHandler;
 		

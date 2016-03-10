@@ -109,6 +109,8 @@ public abstract class Component extends Model {
 
 	private ComponentLabel componentLabel;
 	private int componentLabelMargin;
+	 
+	private Map<String, Long> watcherTerminals;
 
 	@XStreamOmitField
 	private Map<String, PropertyToolTipInformation> tooltipInformation;
@@ -135,6 +137,7 @@ public abstract class Component extends Model {
 		outputLinks = new ArrayList<Link>();
 		inputportTerminals = new ArrayList<String>();
 		outputPortTerminals = new ArrayList<String>();
+		watcherTerminals = new HashMap();
 		newInstance = true;
 		validityStatus = ValidityStatus.WARN.name();
 		componentName = DynamicClassProcessor.INSTANCE.getClazzName(this
@@ -858,6 +861,27 @@ public abstract class Component extends Model {
 			ports.remove(portRemove);
 		}
 
+	}
+
+	public Map<String, Long> getWatcherTerminals() {
+		return watcherTerminals;
+	}
+
+	public void setWatcherTerminals(Map<String, Long> watcherTerminals) {
+		this.watcherTerminals = watcherTerminals;
+	}
+
+	public void addWatcherTerminal(String port, Long limit) {
+
+		watcherTerminals.put(port, limit);
+	}
+
+	public void removeWatcherTerminal(String port) {
+		watcherTerminals.remove(port);
+	}
+
+	public void clearWatcherMap() {
+		watcherTerminals.clear();
 	}
 
 }
