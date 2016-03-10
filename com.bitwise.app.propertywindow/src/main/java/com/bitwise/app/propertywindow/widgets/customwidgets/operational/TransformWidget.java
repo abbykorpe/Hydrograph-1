@@ -97,7 +97,7 @@ public class TransformWidget extends AbstractWidget {
 				MappingDialog mappingDialog = new MappingDialog(transformComposite.getContainerControl().getShell(),
 						propertyDialogButtonBar, atMapping, widgetConfig,getComponent().getComponentName());
 				mappingDialog.open();
-
+				
 				atMapping = mappingDialog.getATMapping();
 				if(!oldATMappings.equals(atMapping)){
 					propertyDialogButtonBar.enableApplyButton(true);
@@ -106,6 +106,14 @@ public class TransformWidget extends AbstractWidget {
 				propagateOuputFieldsToSchemaTabFromTransformWidget();
 
 				atMapping.getInputFields().clear();
+				
+				if(mappingDialog.isCancelPressed()){
+					propertyDialog.pressCancel();
+				}
+				
+				if(mappingDialog.isOkPressed()){
+					propertyDialog.pressOK();
+				}
 				super.widgetSelected(e);
 			}
 
@@ -115,14 +123,15 @@ public class TransformWidget extends AbstractWidget {
 		// prapogateOuputFieldsToSchemaTab();
 	}
 
-	private void initSchemaObject() {
+	// PLEASE DO NOT REMOVE THE CODE
+	/*private void initSchemaObject() {
 		Schema schemaForInternalPapogation = new Schema();
 		schemaForInternalPapogation.setIsExternal(false);
 		List<GridRow> gridRows = new ArrayList<>();
 		schemaForInternalPapogation.setGridRow(gridRows);
 		schemaForInternalPapogation.setExternalSchemaPath("");
 		setSchemaForInternalPapogation(schemaForInternalPapogation);
-	}
+	}*/
 	
 	private void propagateOuputFieldsToSchemaTabFromTransformWidget() {
 		
@@ -177,7 +186,8 @@ public class TransformWidget extends AbstractWidget {
 		componentsOutputSchema.getMapFields().putAll(mapFields);
 	}
 
-	private List<String> getCurrentSchemaFields() {
+	// PLEASE DO NOT REMOVE THE CODE
+	/*private List<String> getCurrentSchemaFields() {
 		Component component = getComponent();
 		Schema schema = (Schema) component.getProperties().get("schema");
 		List<String> schemaFields = new LinkedList<>();
@@ -188,7 +198,7 @@ public class TransformWidget extends AbstractWidget {
 			}
 		}
 		return schemaFields;
-	}
+	}*/
 
 	private FixedWidthGridRow getFieldSchema(String fieldName) {
 		List<FixedWidthGridRow> fixedWidthGridRows = getInputFieldSchema();

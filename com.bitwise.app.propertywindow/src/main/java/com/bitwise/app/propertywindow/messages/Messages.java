@@ -10,6 +10,16 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "resources.messages";
 
+	public static String COULD_NOT_SAVE_PROPERTY_SHEET;
+	public static String INVALID_MAPPING;
+	public static String OPERATION_CALSS_LABEL;
+	public static String EDIT_BUTTON_LABEL;
+	public static String OPEARTION_CLASS_OPEN_BUTTON_MESSAGE;
+	public static String OPEN_BUTTON_LABEL;
+	public static String CREATE_NEW_OPEARTION_CLASS_LABEL;
+	public static String WARNING;
+	public static String FILE_NOT_FOUND;
+	
 	public static String NOT_EXISTS;
 	public static  String FILE_DOES_NOT_EXISTS ;
 

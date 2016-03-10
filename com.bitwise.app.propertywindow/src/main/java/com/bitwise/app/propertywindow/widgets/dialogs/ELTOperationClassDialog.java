@@ -45,6 +45,7 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidge
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultCheckBox;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultCombo;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
+import com.bitwise.app.propertywindow.widgets.interfaces.IOperationClassDialog;
 import com.bitwise.app.propertywindow.widgets.utility.FilterOperationClassUtility;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
@@ -53,7 +54,7 @@ import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
  * 
  * @author Bitwise
  */
-public class ELTOperationClassDialog extends Dialog {
+public class ELTOperationClassDialog extends Dialog implements IOperationClassDialog{
 
 	private Text fileName;
 	private Combo operationClasses;
@@ -69,7 +70,11 @@ public class ELTOperationClassDialog extends Dialog {
 	private ControlDecoration alphanumericDecorator;
 	private ControlDecoration emptyDecorator;
 	private ControlDecoration parameterDecorator;
-
+	private boolean isOkPressed=false;
+	private boolean isCancelPressed=false;
+	private PropertyDialogButtonBar propertyDialogButtonBar;
+	private PropertyDialogButtonBar opeartionClassDialogButtonBar;
+	private Button cancelButton;
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -83,6 +88,8 @@ public class ELTOperationClassDialog extends Dialog {
 		this.operationClassProperty = operationClassProperty;
 		this.widgetConfig = widgetConfig;
 		this.componentName=componentName;
+		this.propertyDialogButtonBar = propertyDialogButtonBar;
+		opeartionClassDialogButtonBar = new PropertyDialogButtonBar(parentShell);
 	}
 
 	/**
@@ -141,7 +148,7 @@ public class ELTOperationClassDialog extends Dialog {
 
 		
 		FilterOperationClassUtility.createOperationalClass(composite, eltOperationClassDialogButtonBar,
-				comboOfOperationClasses, isParameterCheckbox, fileNameText, tootlTipErrorMessage, widgetConfig);
+				comboOfOperationClasses, isParameterCheckbox, fileNameText, tootlTipErrorMessage, widgetConfig,this,propertyDialogButtonBar,opeartionClassDialogButtonBar);
 		fileName=(Text)fileNameText.getSWTWidgetControl();
 		operationClasses = (Combo) comboOfOperationClasses.getSWTWidgetControl();
 
@@ -155,6 +162,10 @@ public class ELTOperationClassDialog extends Dialog {
 		return container;
 	}
 	
+	public void pressOK(){
+		okPressed();
+		isOkPressed=true;
+	}
 
 	/**
 	 * Populate widget.
@@ -193,7 +204,7 @@ public class ELTOperationClassDialog extends Dialog {
 	protected void createButtonsForButtonBar(Composite parent) {
 	  okButton=createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
-		Button cancelButton=createButton(parent, IDialogConstants.CANCEL_ID,
+	   cancelButton=createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 		
 		createApplyButton(parent);	
@@ -298,6 +309,7 @@ public class ELTOperationClassDialog extends Dialog {
 		applyButton = createButton(parent, IDialogConstants.NO_ID,
 				"Apply", false);
 		disableApplyButton();
+		opeartionClassDialogButtonBar.setPropertyDialogButtonBar(okButton, applyButton, cancelButton);
 	}
 	
 	private void disableApplyButton() {
@@ -317,16 +329,21 @@ public class ELTOperationClassDialog extends Dialog {
 	}
 
 	@Override
-	protected void cancelPressed() {
-		// TODO Auto-generated method stub
-		
+	protected void cancelPressed() {		
 		if(applyButton.isEnabled()){
-			ConfirmCancelMessageBox confirmCancelMessageBox = new ConfirmCancelMessageBox(container);
-			MessageBox confirmCancleMessagebox = confirmCancelMessageBox.getMessageBox();
+			
+			if(!isCancelPressed){
+				ConfirmCancelMessageBox confirmCancelMessageBox = new ConfirmCancelMessageBox(container);
+				MessageBox confirmCancleMessagebox = confirmCancelMessageBox.getMessageBox();
 
-			if(confirmCancleMessagebox.open() == SWT.OK){
+				if(confirmCancleMessagebox.open() == SWT.OK){
+					super.close();
+				}
+			}else{
 				super.close();
 			}
+			
+			
 		}else{
 			super.close();
 		}
@@ -361,4 +378,29 @@ public class ELTOperationClassDialog extends Dialog {
 		return tootlTipErrorMessage.getErrorMessage();
 	}
 	
+	/**
+	 * 
+	 * returns true if ok button pressed from code
+	 * 
+	 * @return boolean
+	 */
+	public boolean isOKPressed(){
+		return isOkPressed;
+	}
+
+	@Override
+	public void pressCancel() {
+		isCancelPressed=true;
+		cancelPressed();
+	}
+	
+	/**
+	 * 
+	 * returns true if cancel button pressed from code
+	 * 
+	 * @return boolean
+	 */
+	public boolean isCancelPressed(){
+		return isCancelPressed;
+	}
 }

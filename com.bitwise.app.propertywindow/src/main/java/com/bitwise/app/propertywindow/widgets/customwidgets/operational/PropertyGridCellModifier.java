@@ -6,7 +6,6 @@ import org.eclipse.swt.widgets.Item;
 
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
 
-// TODO: Auto-generated Javadoc
 /**
  * @author Bitwise
  * This class represents the cell modifier for the SchemaEditor program
@@ -15,6 +14,12 @@ import com.bitwise.app.common.datastructure.property.NameValueProperty;
 public class PropertyGridCellModifier implements ICellModifier {
   private Viewer viewer;
 
+  /** The Constant PROPERTY_NAME. */
+	private static final String PROPERTY_NAME = "Source";
+	
+	/** The Constant PROPERTY_VALUE. */
+	private static final String PROPERTY_VALUE = "Target";
+	
   /**
 	 * Instantiates a new schema grid cell modifier.
 	 * 
@@ -51,9 +56,9 @@ public class PropertyGridCellModifier implements ICellModifier {
   public Object getValue(Object element, String property) {
 	  NameValueProperty p = (NameValueProperty) element;
 	  
-    if (TransformDialog.PROPERTY_NAME.equals(property))
+    if (PROPERTY_NAME.equals(property))
         return p.getPropertyName();
-    else if (TransformDialog.PROPERTY_VALUE.equals(property))
+    else if (PROPERTY_VALUE.equals(property))
         return p.getPropertyValue();
     else
         return null;
@@ -75,9 +80,9 @@ public class PropertyGridCellModifier implements ICellModifier {
       element = ((Item) element).getData();
  
     NameValueProperty p = (NameValueProperty) element;
-    if (TransformDialog.PROPERTY_NAME.equals(property))
+    if (PROPERTY_NAME.equals(property))
       p.setPropertyName(((String) value).trim());
-    if (TransformDialog.PROPERTY_VALUE.equals(property))
+    if (PROPERTY_VALUE.equals(property))
         p.setPropertyValue(((String) value).trim());
     viewer.refresh();
   }

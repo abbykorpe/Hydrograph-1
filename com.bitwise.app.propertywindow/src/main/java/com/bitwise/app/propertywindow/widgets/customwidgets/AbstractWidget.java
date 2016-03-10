@@ -1,6 +1,5 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.property.ELTComponenetProperties;
+import com.bitwise.app.propertywindow.propertydialog.PropertyDialog;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
@@ -33,7 +33,8 @@ public abstract class AbstractWidget {
 	private Component component;
 	private Schema schemaForInternalPapogation;
 	private List<String> operationFieldList;
-
+	protected PropertyDialog propertyDialog;
+	
 	protected Component getComponent() {
 		return component;
 	}
@@ -127,5 +128,15 @@ public abstract class AbstractWidget {
 
 	public void refresh(){
 				
+	}
+
+	/**
+	 * 
+	 * Set property dialog
+	 * 
+	 * @param {@link PropertyDialog}
+	 */
+	public void setPropertyDialog(PropertyDialog propertyDialog) {
+		this.propertyDialog = propertyDialog;
 	}
 }

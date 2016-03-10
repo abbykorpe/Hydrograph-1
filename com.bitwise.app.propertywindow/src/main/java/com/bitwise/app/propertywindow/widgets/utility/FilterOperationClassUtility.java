@@ -40,6 +40,7 @@ import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
+import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
@@ -47,6 +48,7 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.AbstractELTWidge
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import com.bitwise.app.propertywindow.widgets.interfaces.IOperationClassDialog;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
@@ -64,7 +66,6 @@ public class FilterOperationClassUtility  {
 	private static Button openBtn;
 	private static Button btnCheckButton;
 	private static String componentName;
-	private static Text textBox;
 
 	/**
 	 * Creates the new class wizard.
@@ -74,7 +75,6 @@ public class FilterOperationClassUtility  {
 	 * @param widgetConfig 
 	 */
 	public static void createNewClassWizard(Text fileNameTextBox, WidgetConfig widgetConfig) {
-		textBox=fileNameTextBox;
 		OpenNewClassWizardAction wizard = new OpenNewClassWizardAction();
 		wizard.setOpenEditorOnFinish(false);
 		final NewClassWizardPage page = new NewClassWizardPage();
@@ -108,9 +108,7 @@ public class FilterOperationClassUtility  {
 				fileNameTextBox.setText(page.getTypeName());
 			}
 		}
-		/*if (page.isPageComplete())
-			fileName.setText(page.getPackageText()+"."
-					+ page.getTypeName());*/
+
 		fileNameTextBox.setData("path", "/" + page.getPackageFragmentRootText() + "/"
 				+ page.getPackageText().replace(".", "/") + "/"
 				+ page.getTypeName() + ".java");
@@ -195,14 +193,20 @@ public class FilterOperationClassUtility  {
 
 	}
 
-	public static OperationClassProperty createOperationalClass(Composite composite,
-			PropertyDialogButtonBar eltOperationClassDialogButtonBar,AbstractELTWidget combo
-			,AbstractELTWidget isParameterCheckbox, AbstractELTWidget fileNameTextBox, TootlTipErrorMessage tootlTipErrorMessage, WidgetConfig widgetConfig ){
+	public static OperationClassProperty createOperationalClass(
+			Composite composite,
+			PropertyDialogButtonBar eltOperationClassDialogButtonBar,
+			AbstractELTWidget combo, AbstractELTWidget isParameterCheckbox,
+			AbstractELTWidget fileNameTextBox,
+			TootlTipErrorMessage tootlTipErrorMessage,
+			WidgetConfig widgetConfig,
+			IOperationClassDialog eltOperationClassDialog,
+			PropertyDialogButtonBar propertyDialogButtonBar, PropertyDialogButtonBar opeartionClassDialogButtonBar) {
 		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(composite);
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(5);
 
-		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Operation\nClass");
+		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.OPERATION_CALSS_LABEL);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
 		eltSuDefaultSubgroupComposite.attachWidget(combo);
@@ -212,7 +216,7 @@ public class FilterOperationClassUtility  {
 		Text fileName = (Text) fileNameTextBox.getSWTWidgetControl();
 		fileName.setSize(10, 100);
 
-		AbstractELTWidget browseButton = new ELTDefaultButton("...").buttonWidth(20);
+		AbstractELTWidget browseButton = new ELTDefaultButton(Messages.BROWSE_BUTTON_TEXT).buttonWidth(20);
 		eltSuDefaultSubgroupComposite.attachWidget(browseButton);
 		browseBtn=(Button)browseButton.getSWTWidgetControl();
 
@@ -230,12 +234,12 @@ public class FilterOperationClassUtility  {
 		emptyButton.visible(false);
 
 		// Create new button, that use to create operational class
-		AbstractELTWidget createButton = new ELTDefaultButton("Create New");
+		AbstractELTWidget createButton = new ELTDefaultButton(Messages.CREATE_NEW_OPEARTION_CLASS_LABEL);
 		eltSuDefaultSubgroupComposite2.attachWidget(createButton); 
 		createBtn=(Button)createButton.getSWTWidgetControl();
 
 		// Edit new button, that use to edit operational class
-		AbstractELTWidget openButton = new ELTDefaultButton("Open");
+		AbstractELTWidget openButton = new ELTDefaultButton(Messages.OPEN_BUTTON_LABEL);
 		eltSuDefaultSubgroupComposite2.attachWidget(openButton); 
 		openBtn=(Button)openButton.getSWTWidgetControl();
 
@@ -244,9 +248,12 @@ public class FilterOperationClassUtility  {
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.TOOLTIP_ERROR_MESSAGE, tootlTipErrorMessage);
 		helper.put(HelperType.WIDGET_CONFIG, widgetConfig);
+		helper.put(HelperType.OPERATION_CLASS_DIALOG_OK_CONTROL, eltOperationClassDialog);
+		helper.put(HelperType.OPERATION_CLASS_DIALOG_APPLY_BUTTON, opeartionClassDialogButtonBar);
+		helper.put(HelperType.PROPERTY_DIALOG_BUTTON_BAR, propertyDialogButtonBar);
 		setIJavaProject();
 		try { 						
-			openButton.attachListener(ListenerFactory.Listners.OPEN_FILE_EDITOR.getListener(),eltOperationClassDialogButtonBar, null,comboOfOperaationClasses,fileName);
+			openButton.attachListener(ListenerFactory.Listners.OPEN_FILE_EDITOR.getListener(),eltOperationClassDialogButtonBar, helper,comboOfOperaationClasses,fileName);
 			browseButton.attachListener(ListenerFactory.Listners.BROWSE_FILE_LISTNER.getListener(),eltOperationClassDialogButtonBar, helper,fileName);
 			createButton.attachListener(ListenerFactory.Listners.CREATE_NEW_CLASS.getListener(),eltOperationClassDialogButtonBar, helper,comboOfOperaationClasses,fileName);
 			combo.attachListener(ListenerFactory.Listners.COMBO_CHANGE.getListener(),eltOperationClassDialogButtonBar, helper,comboOfOperaationClasses,fileName,btnCheckButton);

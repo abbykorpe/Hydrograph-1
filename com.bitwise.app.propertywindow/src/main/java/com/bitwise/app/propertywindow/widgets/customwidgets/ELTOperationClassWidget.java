@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Text;
 
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.propertywindow.messages.Messages;
@@ -25,13 +24,8 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSu
  */
 public class ELTOperationClassWidget extends AbstractWidget {
 
-	
-
-	private Text fileName;
-	private Object properties;
 	private String propertyName;
-	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-	private Button btnCheckButton; 
+	private LinkedHashMap<String, Object> property = new LinkedHashMap<>(); 
 	private OperationClassProperty operationClassProperty;
 	private ELTOperationClassDialog eltOperationClassDialog;
 
@@ -68,20 +62,18 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		final ELTDefaultSubgroupComposite runtimeComposite = new ELTDefaultSubgroupComposite(
 				container.getContainerControl());
 		runtimeComposite.createContainerWidget();
-		ELTDefaultLable defaultLable1 = new ELTDefaultLable("Operation\nClass"); 
+		ELTDefaultLable defaultLable1 = new ELTDefaultLable(Messages.OPERATION_CALSS_LABEL); 
 		runtimeComposite.attachWidget(defaultLable1);
 		
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(
-				"Edit").grabExcessHorizontalSpace(false);
+				Messages.EDIT_BUTTON_LABEL).grabExcessHorizontalSpace(false);
 		runtimeComposite.attachWidget(eltDefaultButton);
-
-		//populateWidget();
+		
 		setToolTipMessage(Messages.OperationClassBlank);
 		((Button)eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
 				eltOperationClassDialog = new ELTOperationClassDialog(
 						runtimeComposite.getContainerControl().getShell(), propertyDialogButtonBar,
 						operationClassProperty.clone(), widgetConfig, getComponent().getComponentName());
@@ -91,6 +83,15 @@ public class ELTOperationClassWidget extends AbstractWidget {
 					propertyDialogButtonBar.enableApplyButton(true);
 				}
 				setToolTipMessage(eltOperationClassDialog.getTootlTipErrorMessage());
+				
+				if(eltOperationClassDialog.isOKPressed()){
+					propertyDialog.pressOK();
+				}
+				
+				if(eltOperationClassDialog.isCancelPressed()){
+					propertyDialog.pressCancel();
+				}
+				
 				super.widgetSelected(e);
 			}
 			
