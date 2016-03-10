@@ -50,6 +50,18 @@
             </with>
          </activeWhen>
       </handler>
+      <handler
+            class="com.bitwise.app.graph.handler.NewGraphHandler"
+            commandId="org.eclipse.ui.window.newEditor">
+         <activeWhen>
+            <with
+                  variable="activeEditorId">
+               <equals
+                     value="com.bitwise.app.graph.etlgraphicaleditor">
+               </equals>
+            </with>
+         </activeWhen>
+      </handler>
    </extension> 
    <extension
          point="org.eclipse.ui.menus">

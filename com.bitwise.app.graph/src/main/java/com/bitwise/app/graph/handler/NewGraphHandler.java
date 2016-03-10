@@ -18,7 +18,7 @@ import com.bitwise.app.graph.editor.ELTGraphicalEditorInput;
  *	Handler class to create the graphical editor.
  */
 public class NewGraphHandler extends AbstractHandler {
-	private int graphCounter=1; 
+	private static int graphCounter = 1;
 	private Logger logger = LogFactory.INSTANCE.getLogger(NewGraphHandler.class);
 	
 	@Override
