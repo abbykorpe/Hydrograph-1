@@ -237,7 +237,8 @@ public class JobManager {
 			if(messageBox.open() == SWT.YES){
 				jobToKill.setJobStatus(JobStatus.KILLED);
 			}else{
-				((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
+				if(runningJobsMap.get(jobId) != null)
+					((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
 			}
 		}		
 	}
