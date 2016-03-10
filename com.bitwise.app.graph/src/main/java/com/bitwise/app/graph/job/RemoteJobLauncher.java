@@ -29,7 +29,8 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 	private static Logger logger = LogFactory.INSTANCE.getLogger(RemoteJobLauncher.class);
 	private static final String BUILD_SUCCESSFUL = "BUILD SUCCESSFUL";
 	private static final String JOB_KILLED_SUCCESSFULLY = "JOB KILLED SUCCESSFULLY";
-	private static final String JOB_COMPLETED_SUCCESSFULLY = "JOB COMPLETED SUCCESSFULLY";;
+	private static final String JOB_COMPLETED_SUCCESSFULLY = "JOB COMPLETED SUCCESSFULLY";
+	private static final String JOB_FAILED="JOB FAILED";
 
 	@Override
 	public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas) {
@@ -225,6 +226,10 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 					&& !JobStatus.RUNNING.equals(job.getJobStatus())) {
 				joblogger.logMessage(JOB_COMPLETED_SUCCESSFULLY);
 			}
+		}
+		
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
+			joblogger.logMessage(JOB_FAILED);
 		}
 	}
 
