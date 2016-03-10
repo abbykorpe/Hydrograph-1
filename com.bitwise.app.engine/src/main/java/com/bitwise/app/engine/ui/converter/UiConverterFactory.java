@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.engine.ui.converter.impl.AggregateUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.CloneUiConverter;
+import com.bitwise.app.engine.ui.converter.impl.DiscardUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.DummyUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.FilterUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.GenerateRecordsUiConverter;
@@ -31,6 +32,7 @@ import com.bitwiseglobal.graph.operationstypes.GenerateSequence;
 import com.bitwiseglobal.graph.operationstypes.HashJoin;
 import com.bitwiseglobal.graph.operationstypes.Join;
 import com.bitwiseglobal.graph.operationstypes.Transform;
+import com.bitwiseglobal.graph.outputtypes.Discard;
 import com.bitwiseglobal.graph.straightpulltypes.Clone;
 import com.bitwiseglobal.graph.straightpulltypes.Limit;
 import com.bitwiseglobal.graph.straightpulltypes.RemoveDups;
@@ -112,6 +114,9 @@ public class UiConverterFactory {
 		}
 		if((Sort.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new SortUiConverter(typeBaseComponent,container);
+ 		}
+		if((Discard.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new DiscardUiConverter(typeBaseComponent,container);
  		}
 		return new DummyUiConverter(typeBaseComponent,container);
 	}
