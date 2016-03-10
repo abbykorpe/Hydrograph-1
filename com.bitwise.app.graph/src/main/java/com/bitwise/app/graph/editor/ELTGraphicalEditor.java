@@ -16,6 +16,8 @@ package com.bitwise.app.graph.editor;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -109,6 +111,7 @@ import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.slf4j.Logger;
@@ -134,6 +137,7 @@ import com.bitwise.app.graph.action.debug.WatchRecordAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphOpenAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphUpdateAction;
+import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
 import com.bitwise.app.graph.handler.DebugHandler;
@@ -146,6 +150,7 @@ import com.bitwise.app.graph.job.JobStatus;
 import com.bitwise.app.graph.job.RunStopButtonCommunicator;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
+import com.bitwise.app.graph.utility.SubGraphUtility;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.parametergrid.utils.ParameterFileManager;
 import com.bitwise.app.tooltip.tooltips.ComponentTooltip;
@@ -769,9 +774,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(getEditorInput(), this);
 			genrateContainerData.storeContainerData();
-
+			
 			saveParameters();
-
+			updateMainGraphOnSavingSubgraph();
 		} catch (CoreException | IOException ce) {
 			logger.error(METHOD_NAME , ce);
 			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n"+ce.getMessage());
@@ -1138,6 +1143,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	@Override
 	public void dispose() {
 		super.dispose();
+		removeSubgraphProperties(isDirty());
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
 		try {
@@ -1157,6 +1163,80 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}*/
 	}
 	
+
+	
+	private void removeSubgraphProperties(Boolean isDirty) {
+		if (isDirty) {
+			loadFileAndDeleteSubgraphProperties();
+		} else if (deleteSubgraphProperties(getContainer())!=null)
+			doSave(null);
+	}		
+
+	private void loadFileAndDeleteSubgraphProperties() {
+		if(getEditorInput() instanceof IFileEditorInput){
+			FileEditorInput fileEditorInput=(FileEditorInput) getEditorInput();
+				stroeFileInWorkspace(fileEditorInput.getFile());
+		}else if(getEditorInput() instanceof FileStoreEditorInput){
+				FileStoreEditorInput fileStoreEditorInput=(FileStoreEditorInput) getEditorInput();
+					stroeFileInLocalFS(fileStoreEditorInput.getToolTipText());
+		}
+	}
+
+	private void stroeFileInLocalFS(String jobFilePath) {
+		File file=null;
+		if ( StringUtils.isNotBlank(jobFilePath)) {
+			file = new File(jobFilePath);
+		}
+		if (file != null) {
+			XStream xStream = new XStream();
+			Container container = (Container) xStream.fromXML(file);
+			container = deleteSubgraphProperties(container);
+			if (container != null) {
+				try {
+					FileOutputStream fileOutputStream = new FileOutputStream(file);
+					xStream.toXML(container, fileOutputStream);
+
+				} catch (FileNotFoundException eFileNotFoundException) {
+					logger.error("Exception occurred while saving sub-graph into local file-system when editor disposed",
+							eFileNotFoundException);
+				}
+			}
+		}
+
+	}
+	
+	private void stroeFileInWorkspace(IFile iFile) {
+		InputStream filenputStream = null;
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		if (iFile != null) {
+			try {
+				filenputStream = iFile.getContents(true);
+				if (filenputStream != null) {
+					XStream xStream = new XStream();
+					Container container = (Container) xStream.fromXML(filenputStream);
+					filenputStream.close();
+					container = deleteSubgraphProperties(container);
+					if (container != null) {
+						xStream.toXML(container, out);
+						if (iFile.exists())
+							iFile.setContents(new ByteArrayInputStream(out.toByteArray()), true,	false, null);
+					}
+				}
+			} catch (FileNotFoundException eFileNotFoundException) {
+				logger.error("Exception occurred while saving sub-graph into local file-system when editor disposed",
+						eFileNotFoundException);
+			} catch (IOException ioException) {
+				logger.error("Exception occurred while saving sub-graph into local file-system when editor disposed",
+						ioException);
+			} catch (CoreException coreException) {
+				logger.error("Exception occurred while saving sub-graph into local file-system when editor disposed",
+						coreException);
+			}
+		}
+	}
+
+
+
 	public void deleteSelection() {
 		//getActionRegistry().getAction(DeleteAction.ID).run();
 		getActionRegistry().getAction(ActionFactory.DELETE.getId()).run();
@@ -1303,19 +1383,51 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public boolean getStopButtonStatus() {
 		return stopButtonStatus;
 	}
-	
+
 	public String getJobId() {
 		return uniqueJobId;
 	}
  
-	public void deleteSubgraphProperties() {
-		if (getContainer().isCurrentGraphIsSubgraph()) {
+	public Container deleteSubgraphProperties(Container container) {
+		com.bitwise.app.graph.model.Component oldSubgraph=null;
+		if (container!=null && container.isCurrentGraphIsSubgraph()) {
+
 			for (int i = 0; i < container.getChildren().size(); i++) {
 				if (Constants.INPUT_SUBGRAPH.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
 					container.getChildren().get(i).getProperties().put(Constants.SCHEMA_TO_PROPAGATE, new HashMap<>());
 				}
+				if (Constants.OUTPUT_SUBGRAPH.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
+					oldSubgraph=(com.bitwise.app.graph.model.Component) container.getChildren().get(i).getProperties().put(Constants.SUBGRAPH_COMPONENT, null);
+					System.out.println(oldSubgraph);
+				}
+			}
+			return container;
+		} else
+			return null;
+	}
+
+	private void updateMainGraphOnSavingSubgraph() {
+		com.bitwise.app.graph.model.Component subgraphComponent=null;
+		if (container != null && container.isCurrentGraphIsSubgraph()) {
+			for (int i = 0; i < container.getChildren().size(); i++) {
+				if (Constants.OUTPUT_SUBGRAPH.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
+					subgraphComponent = (com.bitwise.app.graph.model.Component) container.getChildren().get(i)
+							.getProperties().get(Constants.SUBGRAPH_COMPONENT);
+					break;
+				}
+			}
+			if(subgraphComponent!=null){
+				String path=getEditorInput().getToolTipText();
+				if (getEditorInput() instanceof IFileEditorInput)
+					path = ((IFileEditorInput) getEditorInput()).getFile().getFullPath().toString();
+				IPath subgraphJobFilePath=new Path(path);
+				SubGraphUtility subGraphUtility=new SubGraphUtility();
+				subGraphUtility.updateContainerAndSubgraph(container, subgraphComponent, subgraphJobFilePath);
+				((ComponentEditPart)container.getSubgraphComponentEditPart()).changePortSettings();
 			}
 		}
 	}
+	
+
 	
 }

@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
@@ -66,6 +67,10 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		if (!isActive()) {
 			super.activate();
 			((Component) getModel()).addPropertyChangeListener(this);
+			if (StringUtils.equals(((Component) getModel()).getComponentName(), Constants.SUBGRAPH_COMPONENT)) {
+				SubGraphUtility subGraphUtility = new SubGraphUtility();
+				subGraphUtility.updateSubgraphProperty((ComponentEditPart) this, null, null);
+			}
 		}
 	}
 
@@ -311,15 +316,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			adjustComponentFigure(getCastedModel(), getComponentFigure());
 			getCastedModel().setComponentLabel((String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue()));
 			
-			if(getCastedModel().isChangeInPortsCntDynamically()){
-				setInPortsCountDynamically();
-			}
-			if(getCastedModel().isChangeOutPortsCntDynamically()){
-				setOutPortsCountDynamically();
-			}
-			if(getCastedModel().isChangeUnusedPortsCntDynamically()){
-				setUnusedPortsCountDynamically();
-			}
+			changePortSettings();
 			
 
 			if(getCastedModel().getComponentName().equalsIgnoreCase("lookup")){
@@ -349,7 +346,23 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			super.performRequest(req);
 		}
 	}
-	
+
+	public void changePortSettings() {
+		if(getCastedModel().isChangeInPortsCntDynamically()){
+			setInPortsCountDynamically();
+		}
+		if(getCastedModel().isChangeOutPortsCntDynamically()){
+			setOutPortsCountDynamically();
+		}
+		if(getCastedModel().isChangeUnusedPortsCntDynamically()){
+			setUnusedPortsCountDynamically();
+		}
+		refresh();
+		
+		adjustExistingPorts();
+	}
+
+
 	private void setInPortsCountDynamically(){
 		int prevInPortCount = getCastedModel().getInPortCount();
 		int outPortCount = 0, newInPortCount = 0;

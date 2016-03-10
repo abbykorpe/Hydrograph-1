@@ -1,6 +1,5 @@
 package com.bitwise.app.graph.action.subgraph;
 
-import java.io.InputStream;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -16,10 +15,10 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
@@ -28,7 +27,6 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.action.PasteAction;
 import com.bitwise.app.graph.controller.ComponentEditPart;
-import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.utility.SubGraphUtility;
@@ -76,37 +74,40 @@ public class SubGraphOpenAction extends SelectionAction{
 	/*
 	 * Open the sub graph that saved in sub graph component path property.
 	 */
-	@Override  
-	public void run() { 
-		List<Object> selectedObjects =getSelectedObjects();
+	@Override
+	public void run() {
+		List<Object> selectedObjects = getSelectedObjects();
 		SubGraphUtility subGraphUtility = new SubGraphUtility();
 		Container container = null;
 		if (selectedObjects != null && !selectedObjects.isEmpty()) {
-			for(Object obj:selectedObjects)
-			{
-				if(obj instanceof ComponentEditPart) {
+			for (Object obj : selectedObjects) {
+				if (obj instanceof ComponentEditPart) {
 					if (((ComponentEditPart) obj).getCastedModel().getCategory()
 							.equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY)) {
 						Component subgraphComponent = ((ComponentEditPart) obj).getCastedModel();
-						String pathProperty=(String) subgraphComponent.getProperties().get(Constants.PATH_PROPERTY_NAME);
-						if(StringUtils.isNotBlank(pathProperty)){
-						try {
-							IPath jobFilePath = new Path(pathProperty);
-							if (SubGraphUtility.isFileExistsOnLocalFileSystem(jobFilePath))
-								container = openEditor(jobFilePath);
-							else
-								MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
-										"Subgraph File does not exists");
+						String pathProperty = (String) subgraphComponent.getProperties().get(
+								Constants.PATH_PROPERTY_NAME);
+						if (StringUtils.isNotBlank(pathProperty)) {
+							try {
+								IPath jobFilePath = new Path(pathProperty);
+								if (SubGraphUtility.isFileExistsOnLocalFileSystem(jobFilePath)) {
 
-							for (Component component : container.getChildren()) {
-								subGraphUtility.propogateSchemaToSubgraph(subgraphComponent, component);
-							}
-							((ComponentEditPart) obj).refresh();
+									container = openEditor(jobFilePath);
+									
+									if (container != null){
+										container.setSubgraphComponentEditPart(obj);
+										for (Component component : container.getChildren()) {
+											subGraphUtility.propogateSchemaToSubgraph(subgraphComponent, component);
+										}}
+									((ComponentEditPart) obj).refresh();
+								} else
+									MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
+											"Subgraph File does not exists");
 
 							} catch (IllegalArgumentException exception) {
 								logger.error("Unable to open subgraph" + exception);
 								MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
-										"Unable to open subgraph : Invalid file path\n"+exception.getMessage());
+										"Unable to open subgraph : Invalid file path\n" + exception.getMessage());
 							} catch (Exception exception) {
 								logger.error("Unable to open subgraph" + exception);
 								MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
@@ -121,11 +122,13 @@ public class SubGraphOpenAction extends SelectionAction{
 			}
 		}
 	}
-		private Container openEditor(IPath jobFilePath) throws CoreException {
+
+	private Container openEditor(IPath jobFilePath) throws CoreException {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists()) {
-			IFile iFile = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath);
-			IDE.openEditor(page, iFile);
+		if (!isJobAlreadyOpen(jobFilePath)) {
+			if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists()) {
+				IFile iFile = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath);
+				IDE.openEditor(page, iFile);
 		} else {
 			if (jobFilePath.toFile().exists()) {
 				IFileStore fileStore = EFS.getLocalFileSystem().fromLocalFile(jobFilePath.toFile());
@@ -135,8 +138,29 @@ public class SubGraphOpenAction extends SelectionAction{
 		}
 
 		return SubGraphUtility.getCurrentEditor().getContainer();
+		}else
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
+					"Unable to open subgraph : "+jobFilePath.lastSegment()+" Subgraph is already open \n" +
+							"Please close the job and retry");
+		return null;
 	}
-	
+		
+	private boolean isJobAlreadyOpen(IPath jobFilePath) {
+		
+		String jobPathRelative = StringUtils.removeStart(jobFilePath.toString(), "..");
+		jobPathRelative=StringUtils.removeStart(jobPathRelative, "/");
+		String jobPathAbsolute = StringUtils.replace(jobPathRelative, "/", "\\");
+		for (IEditorReference editorRefrence : PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getEditorReferences()) {
+			if (StringUtils.equals(editorRefrence.getTitleToolTip(), jobPathRelative)) {
+				return true;
+			}else if (StringUtils.equals(editorRefrence.getTitleToolTip(), jobPathAbsolute)) {
+				return true;
+			}
+		}
+		return false;
+	}
+		
 	@Override
 	protected boolean calculateEnabled() {
 		List<Object> selectedObjects =getSelectedObjects();

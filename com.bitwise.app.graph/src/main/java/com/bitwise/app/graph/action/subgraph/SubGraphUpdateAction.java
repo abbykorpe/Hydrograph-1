@@ -85,12 +85,15 @@ public class SubGraphUpdateAction extends SelectionAction {
 	public void run() {
 		String filePath=null;
 		Component selectedSubgraphComponent = null;
+		componentEditPart=(ComponentEditPart) getSelectedObjects().get(0);
 		if (getSelectedObjects() != null && !getSelectedObjects().isEmpty() && getSelectedObjects().size() == 1) {
-			selectedSubgraphComponent = ((ComponentEditPart) getSelectedObjects().get(0)).getCastedModel();
+			selectedSubgraphComponent = componentEditPart.getCastedModel();
 			if (StringUtils.equals(Constants.SUBGRAPH_COMPONENT, selectedSubgraphComponent.getComponentName()) && selectedSubgraphComponent.getProperties().get(Constants.PATH_PROPERTY_NAME)!=null) {
 				filePath=(String) selectedSubgraphComponent.getProperties().get(Constants.PATH_PROPERTY_NAME);
 				SubGraphUtility subGraphUtility=new SubGraphUtility();
 				subGraphUtility.updateSubgraphProperty(null,filePath, selectedSubgraphComponent);
+				componentEditPart.changePortSettings();
+				componentEditPart.refresh();
 			}
 		}
 	}

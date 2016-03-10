@@ -51,13 +51,13 @@ public class FileEditorContainer implements IGenrateContainerData {
 	public void storeEditorInput() throws IOException, CoreException {
 		logger.debug("storeEditorInput - Storing IFileEditor input into Ifile");
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			eltGraphicalEditorInstance.deleteSubgraphProperties();
 			eltGraphicalEditorInstance.createOutputStream(out);
 			IFile ifile = ifileEditorInput.getFile();
 			ifile.setContents(new ByteArrayInputStream(out.toByteArray()),true, false, null);
 			this.eltGraphicalEditorInstance.getCommandStack().markSaveLocation();
 			this.eltGraphicalEditorInstance.genrateTargetXml(ifile,null,null);
 			this.eltGraphicalEditorInstance.setDirty(false);
+			
 		
 	}
 

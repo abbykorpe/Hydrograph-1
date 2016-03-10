@@ -317,26 +317,7 @@ public class SubGraphUtility {
 				else if(isFileExistsOnLocalFileSystem(jobFileIPath))
 					container = (Container) getCurrentEditor().fromXMLToObject(new FileInputStream(jobFileIPath.toFile()));
 
-				for (Component subComponent : container.getChildren()) {
-					if (Constants.INPUT_SUBGRAPH.equalsIgnoreCase(subComponent.getComponentName())) {
-						inPort = subComponent.getOutPortCount();
-						break;
-					}
-				}
-				for (Component subComponent : container.getChildren()) {
-					if (Constants.OUTPUT_SUBGRAPH.equalsIgnoreCase(subComponent.getComponentName())) {
-						outPort = subComponent.getInPortCount();
-						break;
-					}
-				}
-
-				selectedSubgraphComponent.getProperties().put(Constants.INPUT_PORT_COUNT_PROPERTY,
-						String.valueOf(inPort));
-				selectedSubgraphComponent.getProperties().put(Constants.OUTPUT_PORT_COUNT_PROPERTY,
-						String.valueOf(outPort));
-				updateSubgraphType(selectedSubgraphComponent,inPort,outPort);
-				updateParametersInGrid(selectedSubgraphComponent,jobFileIPath);
-				linkSubGraphToMainGraph(selectedSubgraphComponent, container);
+				updateContainerAndSubgraph(container,selectedSubgraphComponent,jobFileIPath);
 			} catch (Exception e) {
 				logger.error("Cannot update subgrap-component's property..", e);
 				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", "Invalid graph file.");
@@ -344,17 +325,44 @@ public class SubGraphUtility {
 		}
 	}
 
-	public void updateParametersInGrid(Component selectedSubgraphComponent, IPath jobFileIPath) {
+	public void updateContainerAndSubgraph(Container container,Component selectedSubgraphComponent, IPath jobFileIPath) {
+		int inPort=0;
+		int outPort=0;
+		
+		for (Component subComponent : container.getChildren()) {
+			if (Constants.INPUT_SUBGRAPH.equalsIgnoreCase(subComponent.getComponentName())) {
+				inPort = subComponent.getOutPortCount();
+				break;
+			}
+		}
+		for (Component subComponent : container.getChildren()) {
+			if (Constants.OUTPUT_SUBGRAPH.equalsIgnoreCase(subComponent.getComponentName())) {
+				outPort = subComponent.getInPortCount();
+				break;
+			}
+		}
+
+		selectedSubgraphComponent.getProperties().put(Constants.INPUT_PORT_COUNT_PROPERTY,
+				String.valueOf(inPort));
+		selectedSubgraphComponent.getProperties().put(Constants.OUTPUT_PORT_COUNT_PROPERTY,
+				String.valueOf(outPort));
+		updateSubgraphType(selectedSubgraphComponent,inPort,outPort);
+		updateParametersInGrid(selectedSubgraphComponent,jobFileIPath);
+		linkSubGraphToMainGraph(selectedSubgraphComponent, container);
+		
+	}
+
+	public void updateParametersInGrid(Component selectedSubgraphComponent, IPath subGraphJobFileIPath) {
 		Map<String, String> parameterPropertyMap = (Map<String, String>) selectedSubgraphComponent.getProperties().get(Constants.RUNTIME_PROPERTY_NAME);
 		if(parameterPropertyMap==null)
 			parameterPropertyMap=new HashMap<String, String>();
 		InputStream inputStream = null;
 		String content = null;
 		try {
-			if (jobFileIPath.toFile().exists())
-				inputStream = new FileInputStream(jobFileIPath.toFile());
-			else if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists())
-				inputStream = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
+			if (subGraphJobFileIPath.toFile().exists())
+				inputStream = new FileInputStream(subGraphJobFileIPath.toFile());
+			else if (ResourcesPlugin.getWorkspace().getRoot().getFile(subGraphJobFileIPath).exists())
+				inputStream = ResourcesPlugin.getWorkspace().getRoot().getFile(subGraphJobFileIPath).getContents();
 			if (inputStream != null) {
 				content = new Scanner(inputStream).useDelimiter("\\Z").next();
 				CanvasDataAdpater canvasDataAdpater = new CanvasDataAdpater(content);
@@ -393,6 +401,7 @@ public class SubGraphUtility {
 	 */
 	private void linkSubGraphToMainGraph(Component selectedSubgraphComponent, Container container) {
 		for (Component component : container.getChildren()) {
+			if (Constants.INPUT_SUBGRAPH.equalsIgnoreCase(component.getComponentName())|| Constants.OUTPUT_SUBGRAPH.equalsIgnoreCase(component.getComponentName()))
 			propogateSchemaToSubgraph(selectedSubgraphComponent, component);
 		}
 	}

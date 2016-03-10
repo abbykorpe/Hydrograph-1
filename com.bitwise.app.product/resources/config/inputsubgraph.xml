@@ -2,8 +2,8 @@
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
-	<tns:component paletteIconPath="/icons/subgraph_palette.png"
-		canvasIconPath="/icons/subgraph-canvas.png" name="InputSubgraphComponent"
+	<tns:component paletteIconPath="/icons/input_subgraph_palette.png"
+		canvasIconPath="/icons/input_subgraph_canvas.png" name="InputSubgraphComponent"
 		nameInPalette="InputSubgraph" defaultNamePrefix="Subgraph"
 		description="Input Subgraph Component"
 		helpFilePath="/com.bitwise.app.help/html/Components/InputSubgraph.html" >
