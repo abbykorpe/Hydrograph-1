@@ -9,7 +9,7 @@ import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.converter.StraightpullUiConverter;
 import com.bitwise.app.graph.model.Container;
-import com.bitwise.app.graph.model.components.RemovedupsComponent;
+import com.bitwise.app.graph.model.components.SortComponent;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 import com.bitwiseglobal.graph.sort.TypePrimaryKeyFields;
@@ -31,7 +31,7 @@ public class SortUiConverter extends StraightpullUiConverter {
 	public SortUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;
 		this.typeBaseComponent = typeBaseComponent;
-		this.uiComponent = new RemovedupsComponent();
+		this.uiComponent = new SortComponent();
 		this.propertyMap = new LinkedHashMap<>();
 	}
 

@@ -65,9 +65,10 @@ public class JoinConverter extends TransformConverter {
 			
 			for (JoinConfigProperty entry : keyFields) {
 				TypeKeyFields typeKeyField = new TypeKeyFields();
-				TypeFieldName fieldName = new TypeFieldName();
+				
 				String[] data = entry.getJoinKey().split(",");
 				for(String key : data){
+				TypeFieldName fieldName = new TypeFieldName();
 				fieldName.setName(key);
 				typeKeyField.getField().add(fieldName);
 				}
