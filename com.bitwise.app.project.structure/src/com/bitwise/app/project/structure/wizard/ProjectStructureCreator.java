@@ -7,7 +7,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.internal.events.BuildCommand;
+import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -25,12 +25,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.jdt.launching.LibraryLocation;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
 import com.bitwise.app.logging.factory.LogFactory;
@@ -43,6 +38,9 @@ import com.bitwise.app.project.structure.natures.ProjectNature;
  *
  */
 public class ProjectStructureCreator {
+
+	private static final String PROPERTIES = "properties";
+	private static final String BUILD = "build";
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ProjectStructureCreator.class);
 
@@ -87,11 +85,11 @@ public class ProjectStructureCreator {
 
 				copyExternalLibAndAddToClassPath(installLocation + CustomMessages.ProjectSupport_LIB, libFolder, entries);
 
-				copyBuildFile(installLocation + CustomMessages.ProjectSupport_CONFIG_FOLDER + "/" + CustomMessages.ProjectSupport_GRADLE+"/build", 
-						project);
+				copyBuildFile(installLocation + CustomMessages.ProjectSupport_CONFIG_FOLDER + "/" + 
+						CustomMessages.ProjectSupport_GRADLE + "/" + BUILD, project);
 				
-				copyBuildFile(installLocation + CustomMessages.ProjectSupport_CONFIG_FOLDER + "/" + CustomMessages.ProjectSupport_GRADLE+"/properties", 
-						project);
+				copyBuildFile(installLocation + CustomMessages.ProjectSupport_CONFIG_FOLDER + "/" + 
+						CustomMessages.ProjectSupport_GRADLE + "/" + PROPERTIES, project);
 
 				javaProject.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), null);
 
@@ -114,7 +112,9 @@ public class ProjectStructureCreator {
 			for(File sourceFile : listFiles){
 				IFile destinationFile = project.getFile(sourceFile.getName());
 				try {
-					destinationFile.create(new FileInputStream(sourceFile), true, null);
+					if(!sourceFile.exists()){ //used while importing a project
+						destinationFile.create(new FileInputStream(sourceFile), true, null);
+					}
 				} catch (FileNotFoundException | CoreException exception) {
 					logger.debug("Copy build file operation failed");
 					throw new CoreException(new MultiStatus(Activator.PLUGIN_ID, 100, "Copy build file operation failed", exception));
@@ -146,11 +146,9 @@ public class ProjectStructureCreator {
 	 */
 	private List<IClasspathEntry> addJavaLibrariesInClassPath() {
 		List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
-		IVMInstall vmInstall = JavaRuntime.getDefaultVMInstall();
-		LibraryLocation[] locations = JavaRuntime.getLibraryLocations(vmInstall);
-		for (LibraryLocation element : locations) {
-			entries.add(JavaCore.newLibraryEntry(element.getSystemLibraryPath(), null, null));
-		}
+		entries.add(JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath()));
+		//NOTE : added for future use
+		//entries.add(JavaCore.newContainerEntry(MavenRuntimeClasspathProvider.MAVEN_CLASSPATH_PROVIDER))
 		return entries;
 	}
 
@@ -190,13 +188,14 @@ public class ProjectStructureCreator {
 			System.arraycopy(prevNatures, 0, newNatures, 0, prevNatures.length);
 			newNatures[prevNatures.length] = ProjectNature.NATURE_ID;
 			newNatures[prevNatures.length + 1] = JavaCore.NATURE_ID;
+			//newNatures[prevNatures.length + 2] = "org.eclipse.m2e.core.maven2Nature";
 
 			// validate the natures
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			IStatus status = workspace.validateNatureSet(newNatures); 
-			BuildCommand buildCommand= new BuildCommand();
-			buildCommand.setName("org.eclipse.jdt.core.javabuilder");
-			BuildCommand[] iCommand = {buildCommand};
+			ICommand buildCommand= description.newCommand();
+			buildCommand.setBuilderName("org.eclipse.jdt.core.javabuilder");
+			ICommand[] iCommand = {buildCommand};
 			description.setBuildSpec(iCommand); 
 			// only apply new nature, if the status is ok
 			if (status.getCode() == IStatus.OK) {
@@ -216,27 +215,16 @@ public class ProjectStructureCreator {
 	 */
 	private IProject createBaseProject(String projectName, URI location) throws CoreException {
 		IProject newProject=null;
-		File file;
-		String errorMessage="Project already exists in Workspace";
-		if(location==null)
-		{
-			file=new File(ResourcesPlugin.getWorkspace().getRoot().getLocation()+"/"+projectName);
-			if(file.exists())
-				newProject = checkIfProjectAlreadyExists(newProject,errorMessage);
-			else
+		if(location==null){
 				newProject = createTheProjectAtSpecifiedLocation(projectName,location);
 		}
-		else
-		{
-			URI newLocation=URI.create(location+"/"+projectName);
-			file=new File(newLocation);
-			if(file.exists())
-				newProject = checkIfProjectAlreadyExists(newProject,errorMessage);
-			else
+		else{
+			URI newLocation=URI.create(location + "/" + projectName);
 				newProject=	createTheProjectAtSpecifiedLocation(projectName, newLocation);
 		}
 		return newProject;
 	}
+	
 	private IProject createTheProjectAtSpecifiedLocation(String projectName,
 			URI location) throws CoreException {
 		IProject newProject;
@@ -265,16 +253,6 @@ public class ProjectStructureCreator {
 		return newProject;
 	}
 
-	private IProject checkIfProjectAlreadyExists(IProject newProject,String errorMessage) {
-		MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
-		messageBox.setText("Error");
-		messageBox.setMessage(errorMessage);
-		if(messageBox.open()==SWT.OK){
-			newProject=null;
-		}
-		return newProject;
-	}
-
 	/*
 	 * Copy External jar to project lib directory
 	 * @param source path
@@ -288,7 +266,9 @@ public class ProjectStructureCreator {
 			for(File sourceFile : listFiles){
 				IFile destinationFile = destinationFolder.getFile(sourceFile.getName());
 				try {
-					destinationFile.create(new FileInputStream(sourceFile), true, null);
+					if(!sourceFile.exists()){ //used while importing a project
+						destinationFile.create(new FileInputStream(sourceFile), true, null);
+					}
 					entries.add(JavaCore.newLibraryEntry(new Path(destinationFile.getLocation().toOSString()), null, null));
 				} catch (FileNotFoundException | CoreException exception) {
 					logger.debug("Copy external library files operation failed", exception);
