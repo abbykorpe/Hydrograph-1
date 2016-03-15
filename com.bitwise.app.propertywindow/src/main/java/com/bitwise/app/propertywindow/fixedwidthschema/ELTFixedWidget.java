@@ -82,7 +82,7 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
-		if (!ELTJoinFixedWidthSchemaWidget.class.isAssignableFrom(this.getClass()))
+		if (!TransformSchemaWidget.class.isAssignableFrom(this.getClass()))
 			schemaFromConnectedLinks();
 		super.attachToPropertySubGroup(container);
 	}

@@ -6,7 +6,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTTable.
  * 
@@ -22,12 +21,12 @@ public class ELTTable extends AbstractELTWidget{
 	 * @param tableViewer
 	 *            the table viewer
 	 */
-	public ELTTable(TableViewer tableViewer) {
+	public ELTTable(TableViewer tableViewer, int height, int width) {
 		super();
 		this.table = tableViewer.getTable();
 		GridData gd_tableGridData = new GridData(SWT.FILL, SWT.FILL, false,false,0,0);
-		gd_tableGridData.heightHint = 250;
-		gd_tableGridData.widthHint = 360;
+		gd_tableGridData.heightHint = height;
+		gd_tableGridData.widthHint = width;
 		this.table.setLayoutData(gd_tableGridData);
 		
 	}
