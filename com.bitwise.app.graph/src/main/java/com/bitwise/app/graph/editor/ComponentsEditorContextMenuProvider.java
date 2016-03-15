@@ -9,7 +9,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.graph.action.WatcherMenuAction;
+import com.bitwise.app.graph.action.debug.WatcherMenuAction;
 import com.bitwise.app.graph.action.subgraph.SubMenuAction;
 
 // TODO: Auto-generated Javadoc
@@ -52,8 +52,7 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		IAction[] watcherAction = new IAction[2];
         watcherAction[0] = getAction(Constants.ADD_WATCH_POINT_ID);
         watcherAction[1] = getAction(Constants.REMOVE_WATCH_POINT_ID);
-        WatcherMenuAction watcherMenu = new WatcherMenuAction(watcherAction, "Watch Point", "Add watch"); //action to add watch points
-       
+        WatcherMenuAction watcherMenu = new WatcherMenuAction(watcherAction, Constants.WATCHER_ACTION,Constants.WATCHER_ACTION_TEXT); //action to add watch points
          
         IAction actionWatchRecords = getAction(Constants.WATCH_RECORD_ID);// action to view debug data
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, // target group id
@@ -65,12 +64,13 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.COPY.getId()));
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.PASTE.getId()));
 	    menu.appendToGroup(GEFActionConstants.GROUP_REST, subGraphMenu);
-		menu.appendToGroup(GEFActionConstants.GROUP_COPY, watcherMenu);
-		menu.appendToGroup(GEFActionConstants.GROUP_COPY, actionWatchRecords);
+		menu.appendToGroup(GEFActionConstants.GROUP_REST, watcherMenu);
+		menu.appendToGroup(GEFActionConstants.GROUP_REST, actionWatchRecords);
 		 
-		if(subGraphMenu.getActiveOperationCount()==0)
+		if(subGraphMenu.getActiveOperationCount()== 0)
 	    subGraphMenu.setEnabled(false);
-
+			 
+		watcherMenu.setEnabled(actionWatchRecords.isEnabled());
 		
 	}
 	private IAction getAction(String actionId) {

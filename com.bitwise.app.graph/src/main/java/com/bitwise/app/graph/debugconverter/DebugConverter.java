@@ -41,8 +41,7 @@ public class DebugConverter {
 		 
 		//debug.setDebugPlugin(debugPlugin);
 		ViewData viewData = null;
-		Limit limit = new Limit();
-		limit.setValue(10L);
+		Limit limit = null;
 		 
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		ELTGraphicalEditor editor=	(ELTGraphicalEditor) page.getActiveEditor();
@@ -54,19 +53,21 @@ public class DebugConverter {
 					iterator.hasNext();)
 			{
 				EditPart editPart = (EditPart) iterator.next();
-				if(editPart instanceof ComponentEditPart) 
-				{
+				if(editPart instanceof ComponentEditPart){
 					Component component = ((ComponentEditPart)editPart).getCastedModel();
 					Map<String, Long> map = component.getWatcherTerminals();
 					if(!map.isEmpty()){
 						for(Entry<String, Long> entrySet: map.entrySet()){
 							viewData = new ViewData();
+							limit = new Limit();
 							viewData.setFromComponentId(component.getComponentLabel().getLabelContents());
 							viewData.setOutSocketId(entrySet.getKey());
 							String portType = entrySet.getKey().substring(0, 3);
 							
-							if(portType.equalsIgnoreCase("usused")){
+							if(portType.equalsIgnoreCase("out")){
 								
+								viewData.setOutSocketType("out");
+							}else{
 								viewData.setOutSocketType("usused");
 							}
 							limit.setValue(entrySet.getValue());
@@ -82,7 +83,7 @@ public class DebugConverter {
 	}
 	
 	
-	public void marshell(Debug debug,IFile outPutFile) throws JAXBException, IOException, CoreException{
+	public void marshall(Debug debug,IFile outPutFile) throws JAXBException, IOException, CoreException{
 		
 		JAXBContext jaxbContext = JAXBContext.newInstance(debug.getClass());
 		Marshaller marshaller = jaxbContext.createMarshaller();

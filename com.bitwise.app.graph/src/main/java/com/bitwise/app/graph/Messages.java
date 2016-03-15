@@ -41,6 +41,8 @@ public class Messages extends NLS {
 	public static final String RECORD_LIMIT = "Record Limit";
 	public static final String LIMIT_VALUE = "Limit Value";
 	public static final String DEFAULT_LIMIT = "Default Limit : 100";
+	public static final String LOCAL_MODE_TEXT = "";
+	public static String REMOTE_MODE_TEXT;
 	 
 	
 	static {

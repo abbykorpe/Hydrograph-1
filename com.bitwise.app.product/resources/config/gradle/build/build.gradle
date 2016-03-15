@@ -134,6 +134,15 @@ task scpJobXML() {
         } catch (Exception gradleException) {
             println '#Gradle failed to execute task#'
         }
+        
+        if(project.hasProperty('debugJobXML'))
+         ant.scp(
+ 			    file: debugJobXML,
+                todir: "${username}@${host}:" + properties.remoteJobXMLDir,
+                password: password,
+                trust: true,
+        )
+        
     }
 }
 
@@ -226,7 +235,9 @@ executeRemoteJob.onlyIf {
 
 
 task executeDebugRemoteJob() {
+        
     doLast {
+    
         ant.taskdef(
                 name: 'sshexec',
                 classname: 'org.apache.tools.ant.taskdefs.optional.ssh.SSHExec',

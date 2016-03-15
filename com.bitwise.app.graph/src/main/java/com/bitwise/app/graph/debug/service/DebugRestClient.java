@@ -20,9 +20,9 @@ import com.bitwise.app.logging.factory.LogFactory;
  * @author Bitwise
  *
  */
-public class DebugRestService {
+public class DebugRestClient {
 
-	Logger logger = LogFactory.INSTANCE.getLogger(DebugRestService.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(DebugRestClient.class);
 	private String jobId;
 	private String componentId;
 	private String socketId;
@@ -39,7 +39,7 @@ public class DebugRestService {
 	 * @throws ClientProtocolException 
 	 * @throws JSONException 
 	 */
-	public DebugRestService(String IPAddress,String basePath, String jobId, String componentId, String socketId, String userId, String password) {
+	public DebugRestClient(String IPAddress,String basePath, String jobId, String componentId, String socketId, String userId, String password) {
 		logger.debug("call to rest service..."); 
 		this.ipAddress = IPAddress;
 		 this.basePath = basePath;
@@ -52,7 +52,7 @@ public class DebugRestService {
 	
 	public JSONArray callRestService() throws HttpException, IOException, JSONException{
 		HttpClient httpClient = new HttpClient();
-		String ip = Constants.HTTP_PROTOCOL+ipAddress+Constants.PORT_NO;
+		String ip = Constants.HTTP_PROTOCOL + ipAddress + Constants.PORT_NO + Constants.ROUTE;
 		 
 		PostMethod postMethod = new PostMethod(ip);//"http://10.130.248.53:4567/debug"
 		postMethod.addParameter(Constants.USER_ID, userId);
@@ -62,15 +62,12 @@ public class DebugRestService {
 		postMethod.addParameter(Constants.COMPONENT_ID, componentId);
 		postMethod.addParameter(Constants.SOCKET_ID, socketId);
 
-		 
 		int status = httpClient.executeMethod(postMethod);
 		logger.debug("Rest Service Response Status :{}, status: {}", status);
 		
 		InputStream inputStream = postMethod.getResponseBodyAsStream();
 		
-		
 		JSONArray jsonArray = null;
-		 
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 		 
 		 String line = "";

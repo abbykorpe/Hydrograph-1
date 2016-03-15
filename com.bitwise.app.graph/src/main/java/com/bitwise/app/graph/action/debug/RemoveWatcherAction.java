@@ -1,4 +1,4 @@
-package com.bitwise.app.graph.action;
+package com.bitwise.app.graph.action.debug;
 
 import java.util.Iterator;
 import java.util.List;
@@ -8,7 +8,6 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
@@ -24,54 +23,44 @@ import com.bitwise.app.graph.model.Link;
  * @author Bitwise
  *
  */
-public class AddWatcherAction extends SelectionAction{
+public class RemoveWatcherAction extends SelectionAction{
 
-	private Long limitValue;
-	private boolean watcherSelection;
 	
-	public AddWatcherAction(IWorkbenchPart part) {
+	public RemoveWatcherAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(true);
+	}
+
+	@Override
+	protected boolean calculateEnabled() {
 		 
-		
+		return false;
 	}
 
 	@Override
 	protected void init() {
 		super.init();
-		setText(Messages.ADD_WATCH_POINT_TEXT);
-		setId(Constants.ADD_WATCH_POINT_ID);
-		setEnabled(true);
-
+		 setText(Messages.REMOVE_WATCH_POINT_TEXT);
+		 setId(Constants.REMOVE_WATCH_POINT_ID);
+		 setEnabled(false);
 	}
+	
 
-	private void limitValueGrid(){
-		Shell parentShell = new Shell();
-		LimitValueGrid customLimitValueGrid = new LimitValueGrid(parentShell);
-		customLimitValueGrid.open();
-		limitValue = customLimitValueGrid.getLimitValue();
-		watcherSelection = customLimitValueGrid.isOkselection();
+	private void removeWatchPoint(List<Object> selectedObjects)  {
 		 
-	}
-
-	private void addWatchPoint(List<Object> selectedObjects) {
-	 
-
 		for(Object obj:selectedObjects)
 		{
 			if(obj instanceof LinkEditPart)
 			{
 				Link link = (Link)((LinkEditPart)obj).getModel();
-				link.getSource().addWatcherTerminal(link.getSourceTerminal(), limitValue);
+				link.getSource().removeWatcherTerminal(link.getSourceTerminal());
 				changePortColor(link.getSource(), link.getSourceTerminal());
-				
-			} 
+			}	
 		}
 	}
-
+	
 	private void changePortColor(Component selectedComponent, String portName){
 
-	 
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
 		for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator.hasNext();)
@@ -83,37 +72,26 @@ public class AddWatcherAction extends SelectionAction{
 				if(comp.equals(selectedComponent)){
 					List<PortEditPart> portEditParts = editPart.getChildren();
 					for(AbstractGraphicalEditPart part:portEditParts)
-					{	
-						 
+					{
 						if(part instanceof PortEditPart){
 							if(((PortEditPart)part).getCastedModel().getTerminal().equals(portName)){
-								((PortEditPart)part).getPortFigure().changeWatchColor();
-								((PortEditPart)part).getCastedModel().setWatched(true);
-								((PortEditPart)part).getPortFigure().setWatched(true);
-								((PortEditPart)part).getPortFigure().repaint();
+								((PortEditPart)part).getPortFigure().removeWatchColor();
+								((PortEditPart)part).getPortFigure().setWatched(false);
+								((PortEditPart)part).getCastedModel().setWatched(false);
 							} 
 						}
 					}
 				}
 			} 
 		}
-		 
 	}
-
-	@Override
-	protected boolean calculateEnabled() {
-		return false;
-	}
-
+	
 	@Override
 	public void run() {
+	 
 		super.run();
-		limitValueGrid();
-
 		List<Object> selectedObjects =getSelectedObjects();
-		if(watcherSelection){
-		addWatchPoint(selectedObjects);
 		 
-		}
+		removeWatchPoint(selectedObjects);
 	}
 }

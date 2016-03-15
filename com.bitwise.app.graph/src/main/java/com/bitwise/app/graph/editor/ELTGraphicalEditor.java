@@ -58,6 +58,7 @@ import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -110,18 +111,19 @@ import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.engine.exceptions.EngineException;
 import com.bitwise.app.engine.util.ConverterUtil;
-import com.bitwise.app.graph.action.AddWatcherAction;
 import com.bitwise.app.graph.action.ContributionItemManager;
 import com.bitwise.app.graph.action.CopyAction;
 import com.bitwise.app.graph.action.CutAction;
 import com.bitwise.app.graph.action.PasteAction;
-import com.bitwise.app.graph.action.RemoveWatcherAction;
-import com.bitwise.app.graph.action.WatchRecordAction;
+import com.bitwise.app.graph.action.debug.AddWatcherAction;
+import com.bitwise.app.graph.action.debug.RemoveWatcherAction;
+import com.bitwise.app.graph.action.debug.WatchRecordAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphOpenAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphUpdateAction;
 import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
+import com.bitwise.app.graph.handler.DebugHandler;
 import com.bitwise.app.graph.handler.RunJobHandler;
 import com.bitwise.app.graph.handler.StopJobHandler;
 import com.bitwise.app.graph.job.Job;
@@ -133,6 +135,7 @@ import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.parametergrid.utils.ParameterFileManager;
 import com.bitwise.app.tooltip.tooltips.ComponentTooltip;
+import com.bitwiseglobal.debug.api.DebugDataReader;
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -1119,7 +1122,26 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		super.dispose();
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
+		try {
+			deleteDebugFiles();
+			logger.debug("debug files removed.");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
+	private void deleteDebugFiles() throws IOException{
+		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		IPath path = new Path(editor.getTitleToolTip());
+		String currentJob = path.lastSegment().replace(Constants.JOB_EXTENSION, "");
+		Job job = DebugHandler.getJob(currentJob);
+		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
+		String uniqueJobId = editor.getJobId();
+		DebugDataReader debugDataReader = new DebugDataReader(job.getBasePath(), jobId, null, null);
+		//debugDataReader.delete();
+	}
+	
 	public void deleteSelection() {
 		//getActionRegistry().getAction(DeleteAction.ID).run();
 		getActionRegistry().getAction(ActionFactory.DELETE.getId()).run();

@@ -19,6 +19,7 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.debugconverter.DebugConverter;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.job.Job;
@@ -90,13 +91,12 @@ public class DebugHandler  extends AbstractHandler {
 			DebugConverter converter = new DebugConverter();
 			
 		try {
-			 
 			uniqueJobID= eltGraphicalEditor.generateUniqueJobId();
-			currentJobPath = currentJobIPath.lastSegment().replace(".job", "_debug.xml");
-			currentJobName = currentJobIPath.lastSegment().replace(".job", "");
+			currentJobPath = currentJobIPath.lastSegment().replace(Constants.JOB_EXTENSION, Constants.DEBUG_EXTENSION);
+			currentJobName = currentJobIPath.lastSegment().replace(Constants.JOB_EXTENSION, "");
 			currentJobIPath = currentJobIPath.removeLastSegments(1).append(currentJobPath);
 			
-			converter.marshell(converter.getParam(), ResourcesPlugin.getWorkspace().getRoot().getFile(currentJobIPath));
+			converter.marshall(converter.getParam(), ResourcesPlugin.getWorkspace().getRoot().getFile(currentJobIPath));
 			
 			
 		} catch (JAXBException | IOException e) {
@@ -123,7 +123,6 @@ public class DebugHandler  extends AbstractHandler {
 				logger.debug("Unable to save graph ", e);
 					setBaseEnabled(true);
 			}
-			
 		}
 		
 		try {
@@ -134,7 +133,7 @@ public class DebugHandler  extends AbstractHandler {
 			logger.error(e.getMessage(), e);
 		}
 		
-		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell());
+		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell(), true);
 		runConfigDialog.open();
 		if (!runConfigDialog.proceedToRunGraph()) {
 			setBaseEnabled(true);

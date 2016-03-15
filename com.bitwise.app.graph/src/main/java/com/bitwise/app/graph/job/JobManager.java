@@ -94,7 +94,7 @@ public class JobManager {
 	 */
 	void enableRunJob(boolean enabled) {
 		((RunJobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
-		//((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
+		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
 	}
 	
 	void enableDebugJob(boolean enabled) {
@@ -238,7 +238,6 @@ public class JobManager {
 		return clusterPassword;
 	}
 
-
 	private String getJobXMLPath() {
 		IEditorPart iEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
@@ -263,7 +262,7 @@ public class JobManager {
 	}
 
 	private RunConfigDialog getRunConfiguration() {
-		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell());
+		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell(), false);
 		runConfigDialog.open();
 		return runConfigDialog;
 	}
@@ -273,6 +272,7 @@ public class JobManager {
 			try {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 				enableRunJob(true);
+				enableDebugJob(true);
 				if (gefCanvas.getParameterFile() == null || CanvasUtils.isDirtyEditor()) {
 					return false;
 				} else {
@@ -281,6 +281,7 @@ public class JobManager {
 			} catch (Exception e) {
 				logger.debug("Unable to save graph ", e);
 				enableRunJob(true);
+				enableDebugJob(true);
 				return false;
 			}
 		}
@@ -365,6 +366,7 @@ public class JobManager {
 		refreshProject(gefCanvas);
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
 			JobManager.INSTANCE.enableRunJob(true);
+			JobManager.INSTANCE.enableDebugJob(true);
 		}
 		JobManager.INSTANCE.removeJob(job.getCanvasName());
 
