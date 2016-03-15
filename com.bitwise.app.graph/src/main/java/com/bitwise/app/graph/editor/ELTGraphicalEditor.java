@@ -53,6 +53,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
@@ -74,6 +75,7 @@ import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
+import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -459,6 +461,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		final GraphicalViewer viewer = getGraphicalViewer();
 		configureViewer(viewer);
 		prepareZoomContributions(viewer);
+		configureKeyboardShortcuts();
 		//handleKeyStrokes(viewer);
 	}
 
@@ -1428,6 +1431,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 	}
 	
+	private void configureKeyboardShortcuts() {
+	    GraphicalViewerKeyHandler keyHandler = new GraphicalViewerKeyHandler(getGraphicalViewer());
+	    keyHandler.put(KeyStroke.getPressed(SWT.F4,0), getActionRegistry().getAction("open"));
+	    getGraphicalViewer().setKeyHandler(keyHandler);
 
+	  }
 	
 }

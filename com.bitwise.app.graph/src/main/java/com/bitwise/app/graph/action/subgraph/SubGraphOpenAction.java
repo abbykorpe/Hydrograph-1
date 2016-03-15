@@ -163,18 +163,17 @@ public class SubGraphOpenAction extends SelectionAction{
 		
 	@Override
 	protected boolean calculateEnabled() {
-		List<Object> selectedObjects =getSelectedObjects();
-		if (selectedObjects != null && !selectedObjects.isEmpty() && selectedObjects.size()==1) {
-			for(Object obj:selectedObjects)
-			{
-				if(obj instanceof ComponentEditPart)
-				{
-					if (Constants.SUBGRAPH_COMPONENT.equalsIgnoreCase(((ComponentEditPart) obj).getCastedModel().getComponentName())) 
+		List<Object> selectedObjects = getSelectedObjects();
+		if (selectedObjects != null && !selectedObjects.isEmpty() && selectedObjects.size() == 1) {
+			for (Object obj : selectedObjects) {
+				if (obj instanceof ComponentEditPart) {
+					if (Constants.SUBGRAPH_COMPONENT.equalsIgnoreCase(((ComponentEditPart) obj).getCastedModel()
+							.getComponentName()))
 						return true;
-					
 				}
 			}
 		}
 		return false;
-	}
+	}	
+	
    }

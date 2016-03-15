@@ -35,6 +35,7 @@ public class Container extends Model {
 	private String linkedMainGraphPath;
 	@XStreamOmitField
 	private Object subgraphComponentEditPart;
+	private int subgraphVersion=1;
 	public Container(){
 		
 	}
@@ -264,6 +265,16 @@ public class Container extends Model {
 
 	public void setSubgraphComponentEditPart(Object subgraphComponentEditPart) {
 		this.subgraphComponentEditPart = subgraphComponentEditPart;
+	}
+
+
+	public int getSubgraphVersion() {
+		return subgraphVersion;
+	}
+
+
+	public void setSubgraphVersion(int subgraphVersion) {
+		this.subgraphVersion = subgraphVersion;
 	}
 	
 }

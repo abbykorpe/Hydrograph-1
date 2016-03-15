@@ -40,7 +40,7 @@ import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
 import com.bitwise.app.logging.factory.LogFactory;
-
+import java.io.InputStream;
 // TODO: Auto-generated Javadoc
 /**
  * The Class SubGraphUtility contain business logic to create sub graph.
@@ -86,8 +86,12 @@ public class SubGraphUtility {
 	 * @return the current editor
 	 */
 	public static ELTGraphicalEditor getCurrentEditor() {
-		return (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
+		if(editor!=null)
+			return  editor;
+		else
+			return new ELTGraphicalEditor();
 	}
 
 	/**
@@ -207,7 +211,7 @@ public class SubGraphUtility {
 				+ edComponentEditPart.getCastedModel().getComponentLabelMargin());
 
 		edComponentEditPart.getCastedModel().setSize(newSize);
-		edComponentEditPart.getCastedModel().setComponentLabel(file.getName());
+		edComponentEditPart.getCastedModel().setComponentLabel(StringUtils.abbreviate(file.getName(), 12));
 
 		String subGraphFilePath = file.getFullPath().toOSString();
 		edComponentEditPart.getCastedModel().getProperties().put(Constants.PATH, subGraphFilePath);
@@ -247,6 +251,7 @@ public class SubGraphUtility {
 		doSaveAsSubGraph(file, container);
 		inputSubComponent.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, new HashMap<>());
 		propogateSchemaToSubgraph((((ComponentEditPart) componentEditPart).getCastedModel()), outSubComponent);
+		updateParametersInGrid((((ComponentEditPart) componentEditPart).getCastedModel()), file.getFullPath());
 	}
 
 	/**
@@ -297,8 +302,6 @@ public class SubGraphUtility {
 	 */
 	public void updateSubgraphProperty(ComponentEditPart componentEditPart,String filePath,Component selectedSubgraphComponent) {
 		IPath jobFileIPath=null;
-		int inPort = 0;
-		int outPort = 0;
 		Container container = null;
 		if (StringUtils.isNotBlank(filePath) && selectedSubgraphComponent != null) {
 			jobFileIPath = new Path(filePath);
@@ -312,12 +315,14 @@ public class SubGraphUtility {
 		if (StringUtils.isNotBlank(filePath) && !isFileContainsParameter(jobFileIPath)) {
 			try {
 				
-				if(ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists())
-					container = (Container) getCurrentEditor().fromXMLToObject(ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents());
+				if(ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()){
+					InputStream inp=ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
+					container = (Container) getCurrentEditor().fromXMLToObject(inp);}
 				else if(isFileExistsOnLocalFileSystem(jobFileIPath))
 					container = (Container) getCurrentEditor().fromXMLToObject(new FileInputStream(jobFileIPath.toFile()));
 
 				updateContainerAndSubgraph(container,selectedSubgraphComponent,jobFileIPath);
+				
 			} catch (Exception e) {
 				logger.error("Cannot update subgrap-component's property..", e);
 				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", "Invalid graph file.");
@@ -325,17 +330,17 @@ public class SubGraphUtility {
 		}
 	}
 
-	public void updateContainerAndSubgraph(Container container,Component selectedSubgraphComponent, IPath jobFileIPath) {
+	public void updateContainerAndSubgraph(Container subGraphContainer,Component selectedSubgraphComponent, IPath jobFileIPath) {
 		int inPort=0;
 		int outPort=0;
 		
-		for (Component subComponent : container.getChildren()) {
+		for (Component subComponent : subGraphContainer.getChildren()) {
 			if (Constants.INPUT_SUBGRAPH.equalsIgnoreCase(subComponent.getComponentName())) {
 				inPort = subComponent.getOutPortCount();
 				break;
 			}
 		}
-		for (Component subComponent : container.getChildren()) {
+		for (Component subComponent : subGraphContainer.getChildren()) {
 			if (Constants.OUTPUT_SUBGRAPH.equalsIgnoreCase(subComponent.getComponentName())) {
 				outPort = subComponent.getInPortCount();
 				break;
@@ -348,7 +353,8 @@ public class SubGraphUtility {
 				String.valueOf(outPort));
 		updateSubgraphType(selectedSubgraphComponent,inPort,outPort);
 		updateParametersInGrid(selectedSubgraphComponent,jobFileIPath);
-		linkSubGraphToMainGraph(selectedSubgraphComponent, container);
+		linkSubGraphToMainGraph(selectedSubgraphComponent, subGraphContainer);
+		selectedSubgraphComponent.getProperties().put(Constants.SUBGRAPH_VERSION,subGraphContainer.getSubgraphVersion());
 		
 	}
 
@@ -422,6 +428,33 @@ public class SubGraphUtility {
 			}
 		return false;
 	}
-	
-	
+
+	public void isUpdateAvailableForSubgraph(Component subGraphComponent) {
+		IPath jobFileIPath = null;
+		String filePath = null;
+		Container subGraphContainer=null;
+		int versionStoredInSubgraphComponent = 0;
+		if (subGraphComponent != null && subGraphComponent.getProperties().get(Constants.PATH_PROPERTY_NAME) != null
+				&& subGraphComponent.getProperties().get(Constants.SUBGRAPH_VERSION) != null) {
+			versionStoredInSubgraphComponent = Integer.valueOf(String.valueOf(subGraphComponent.getProperties().get(
+					Constants.SUBGRAPH_VERSION)));
+			filePath = (String) subGraphComponent.getProperties().get(Constants.PATH_PROPERTY_NAME);
+			jobFileIPath = new Path(filePath);
+			try {
+				if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
+					InputStream inp = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
+					subGraphContainer = (Container) getCurrentEditor().fromXMLToObject(inp);
+				} else if (isFileExistsOnLocalFileSystem(jobFileIPath))
+					subGraphContainer = (Container) getCurrentEditor().fromXMLToObject(
+							new FileInputStream(jobFileIPath.toFile()));
+				if (subGraphContainer.getSubgraphVersion()!=versionStoredInSubgraphComponent){
+					subGraphComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(), Constants.UPDATE_AVAILABLE);
+				}
+				
+			} catch (Exception exception) {
+				logger.error("Exception occurred while updating Subgraph version", exception);
+			}
+		}
+	}
+
 }

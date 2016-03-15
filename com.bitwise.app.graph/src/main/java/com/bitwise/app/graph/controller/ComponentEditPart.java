@@ -67,10 +67,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		if (!isActive()) {
 			super.activate();
 			((Component) getModel()).addPropertyChangeListener(this);
-			if (StringUtils.equals(((Component) getModel()).getComponentName(), Constants.SUBGRAPH_COMPONENT)) {
-				SubGraphUtility subGraphUtility = new SubGraphUtility();
-				subGraphUtility.updateSubgraphProperty((ComponentEditPart) this, null, null);
-			}
+			
 		}
 	}
 
@@ -128,6 +125,10 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		IFigure figure = createFigureForModel();
 		figure.setOpaque(true); // non-transparent figure
 		LinkedHashMap<String, Object> properties = getCastedModel().getProperties();
+		if (StringUtils.equals(getCastedModel().getComponentName(), Constants.SUBGRAPH_COMPONENT)) {
+			SubGraphUtility graphUtility=new SubGraphUtility();
+				graphUtility.isUpdateAvailableForSubgraph(getCastedModel());
+		}
 		String status = (String) properties.get(Component.Props.VALIDITY_STATUS.getValue());
 		((ComponentFigure)figure).setStatus(status);
 		return figure;
@@ -300,8 +301,10 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 
 	@Override
 	public void performRequest(Request req) {
+		
 		// Opens Property Window only on Double click.
 		if (req.getType().equals(RequestConstants.REQ_OPEN)) {
+			String currentStatus=(String) getCastedModel().getProperties().get(Component.Props.VALIDITY_STATUS.getValue());
 			ComponentFigure componentFigure=((ComponentEditPart)this).getComponentFigure();
 			componentFigure.terminateToolTipTimer();
 			ELTPropertyWindow eltPropertyWindow = new ELTPropertyWindow(getModel());
@@ -313,6 +316,8 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				SubGraphUtility subGraphUtility=new SubGraphUtility();
 				subGraphUtility.updateSubgraphProperty((ComponentEditPart)this,null,null);
 			} 
+			if(eltPropertyWindow.isPropertyChanged())
+			{updateSubgraphVersion();}
 			adjustComponentFigure(getCastedModel(), getComponentFigure());
 			getCastedModel().setComponentLabel((String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue()));
 			
@@ -329,7 +334,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 					getCastedModel().getPorts().get("in0").setLabelOfPort("lkp");
 				}
 			}
-			
+			if(!StringUtils.equals(Constants.UPDATE_AVAILABLE,currentStatus))
 			updateComponentStatus();			
 			refresh();
 			
@@ -344,6 +349,13 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			}
 			
 			super.performRequest(req);
+		}
+	}
+
+	private void updateSubgraphVersion() {
+		Component currentComponent=getCastedModel();
+		if(currentComponent!=null && currentComponent.getParent().isCurrentGraphIsSubgraph()){
+			currentComponent.getParent().setSubgraphVersion(currentComponent.getParent().getSubgraphVersion()+1);
 		}
 	}
 
@@ -607,7 +619,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		
 	}
 	
-	private void updateComponentStatus(){
+	public void updateComponentStatus(){
 		Component component = getCastedModel();
 		LinkedHashMap<String, Object> properties = component.getProperties();
 		String statusName = Component.Props.VALIDITY_STATUS.getValue();
@@ -616,4 +628,5 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			getFigure().repaint();
 		}
 	}
+	
 }

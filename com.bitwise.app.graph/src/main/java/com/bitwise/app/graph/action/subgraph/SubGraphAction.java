@@ -13,10 +13,13 @@ import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-
+import com.bitwise.app.graph.Messages;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.action.ContributionItemManager;
 import com.bitwise.app.graph.action.PasteAction;
@@ -128,6 +131,10 @@ public class SubGraphAction extends SelectionAction{
 	 */
 	@Override  
 	public void run() { 
+		
+		if(notConfirmedByUser())
+			return;
+		
 		SubGraphUtility subGraphUtility = new SubGraphUtility();
 	
 		IFile file=subGraphUtility.openSubGraphSaveDialog();
@@ -194,7 +201,18 @@ public class SubGraphAction extends SelectionAction{
 		 * Generate subgraph target xml.
 		 */
 		subGraphUtility.createSubGraphXml(componentEditPart,clipboardList,file);
-//	subGraphUtility.updateParametersInGrid(subgraphComponent, file.getLocation());
 		}
 	}
-   }
+
+	private boolean notConfirmedByUser() {
+		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.YES
+				| SWT.NO);
+		messageBox.setMessage(Messages.CONFIRM_TO_CREATE_SUBGRAPH_MESSAGE);
+		messageBox.setText(Messages.CONFIRM_TO_CREATE_SUBGRAPH_WINDOW_TITLE);
+		int response = messageBox.open();
+		if (response == SWT.YES) {
+			return false;
+		} else
+			return true;
+	}
+}

@@ -12,6 +12,7 @@ import org.eclipse.ui.PlatformUI;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.action.PasteAction;
 import com.bitwise.app.graph.controller.ComponentEditPart;
+import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.utility.SubGraphUtility;
 
@@ -92,8 +93,13 @@ public class SubGraphUpdateAction extends SelectionAction {
 				filePath=(String) selectedSubgraphComponent.getProperties().get(Constants.PATH_PROPERTY_NAME);
 				SubGraphUtility subGraphUtility=new SubGraphUtility();
 				subGraphUtility.updateSubgraphProperty(null,filePath, selectedSubgraphComponent);
+				selectedSubgraphComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(), null);
 				componentEditPart.changePortSettings();
+				componentEditPart.updateComponentStatus();
 				componentEditPart.refresh();
+				ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+				editor.setDirty(true);
+				
 			}
 		}
 	}

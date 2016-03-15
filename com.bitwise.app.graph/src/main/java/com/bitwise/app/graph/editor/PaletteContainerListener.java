@@ -171,8 +171,8 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 		 * Populate the X and Y coordinate for new component to have it just below the last component which was added in job canvas.
 		 * This is not final position of new component as there is posibility that rectangle of new component may overlap on existing component.
 		 */
-		int newCompYPoint = (LastCompYPoint == 0 && lastAddedComp == null)? LastCompYPoint : (LastCompYPoint + genericComponent.getSize().height + 5);
-		int newCompXPoint = (LastCompXPoint == 0 && lastAddedComp == null)? LastCompXPoint : (LastCompXPoint +5);
+		int newCompYPoint = (LastCompYPoint == 0 && lastAddedComp == null)? LastCompYPoint : (LastCompYPoint );
+		int newCompXPoint = (LastCompXPoint == 0 && lastAddedComp == null)? LastCompXPoint : (LastCompXPoint + genericComponent.getSize().width + 10);
 		logger.debug("New component's possible location: (" + newCompXPoint + "," + newCompYPoint + ")");
 		
 		/**
