@@ -166,7 +166,6 @@ public class LimitValueGrid extends Dialog {
 	
 	@Override
 	protected void cancelPressed() {
-		// TODO Auto-generated method stub
 		super.cancelPressed();
 	}
 	
