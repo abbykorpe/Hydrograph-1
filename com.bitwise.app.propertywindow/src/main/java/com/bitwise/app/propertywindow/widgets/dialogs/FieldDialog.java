@@ -94,6 +94,8 @@ public class FieldDialog extends Dialog {
 	private List<String> sourceFieldsList;
 
 	PropertyDialogButtonBar propertyDialogButtonBar;
+	private boolean closeDialog;
+	private boolean okPressed;
 
 	public FieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
@@ -665,7 +667,7 @@ public class FieldDialog extends Dialog {
 			if (isAnyUpdatePerformed) {
 				propertyDialogButtonBar.enableApplyButton(true);
 			}
-
+			okPressed=true;
 			super.okPressed();
 		} else {
 			return;
@@ -680,12 +682,21 @@ public class FieldDialog extends Dialog {
 			messageBox.setText(Messages.INFORMATION); //$NON-NLS-1$
 			messageBox.setMessage(Messages.MessageBeforeClosingWindow);
 			if (messageBox.open() == SWT.YES) {
-				super.cancelPressed();
+				closeDialog = super.close();
 			}
 		} else {
-			super.cancelPressed();
+			closeDialog = super.close();
 		}
 
 	}
-
+	
+	@Override
+	public boolean close() {
+		if(!okPressed){
+			cancelPressed();			
+			return closeDialog;
+		}else{
+			return super.close();
+		}		
+	}
 }

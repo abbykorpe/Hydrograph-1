@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -21,7 +22,6 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
@@ -79,6 +79,8 @@ public class RuntimePropertyDialog extends Dialog {
 	private String windowLabel;
 	private boolean isAnyUpdatePerformed;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
+	private boolean closeDialog;	
+	private boolean okPressed;
 	
 	/**
 	 * Create the dialog.
@@ -320,7 +322,7 @@ public class RuntimePropertyDialog extends Dialog {
 			if (isAnyUpdatePerformed) {
 				propertyDialogButtonBar.enableApplyButton(true);
 			}
-			
+			okPressed=true;
 			super.okPressed();
 		}
 
@@ -334,10 +336,10 @@ public class RuntimePropertyDialog extends Dialog {
 			messageBox.setText(Messages.INFORMATION);
 			messageBox.setMessage(Messages.MessageBeforeClosingWindow);
 			if (messageBox.open() == SWT.YES) {
-				super.cancelPressed();
+				closeDialog = super.close();
 			}
 		} else {
-			super.cancelPressed();
+			closeDialog = super.close();
 		}
 	}
 
@@ -571,5 +573,15 @@ public class RuntimePropertyDialog extends Dialog {
 			}
 		};
 		return propertyValidator;
+	}
+	
+	@Override
+	public boolean close() {
+		if(!okPressed){
+			cancelPressed();			
+			return closeDialog;
+		}else{
+			return super.close();
+		}		
 	}
 }

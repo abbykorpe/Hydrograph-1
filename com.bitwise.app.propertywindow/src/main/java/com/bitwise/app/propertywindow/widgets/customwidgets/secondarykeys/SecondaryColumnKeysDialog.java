@@ -33,7 +33,6 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
@@ -86,7 +85,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	private EditButtonWithLabelConfig buttonWithLabelConfig;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 
-	
+	private boolean closeDialog;
+	private boolean okPressed;
 	
 	public SecondaryColumnKeysDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar, EditButtonWithLabelConfig buttonWithLabelConfig) {
 		super(parentShell);
@@ -257,7 +257,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		cld_composite.heightHint = 28;
 		composite.setLayoutData(cld_composite);
 
-		Label lblTestlabel = new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
 
 		new Label(composite, SWT.HORIZONTAL);
 	}
@@ -631,6 +631,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			if (isAnyUpdatePerformed) {
 				propertyDialogButtonBar.enableApplyButton(true);
 			}
+			okPressed=true;
 			super.okPressed();
 		}
 	}
@@ -644,12 +645,21 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			messageBox.setMessage(Messages.MessageBeforeClosingWindow);
 
 			if (messageBox.open() == SWT.YES) {
-				super.cancelPressed();
+				closeDialog = super.close();
 			}
 		} else {
-			super.cancelPressed();
+			closeDialog = super.close();
 		}
 
 	}
 
+	@Override
+	public boolean close() {
+		if(!okPressed){
+			cancelPressed();			
+			return closeDialog;
+		}else{
+			return super.close();
+		}		
+	}
 }
