@@ -1,9 +1,11 @@
 package com.bitwise.app.graph.action.subgraph;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
@@ -30,6 +32,7 @@ import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.Link;
+import com.bitwise.app.graph.model.LinkComparatorBySourceLocation;
 import com.bitwise.app.graph.model.components.SubgraphComponent;
 import com.bitwise.app.graph.utility.SubGraphUtility;
 /**
@@ -143,19 +146,19 @@ public class SubGraphAction extends SelectionAction{
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		Container containerOld=editor.getContainer(); 
 	   	execute(createSubGraphCommand(getSelectedObjects())); 
-    	List clipboardList = new ArrayList<>((ArrayList)Clipboard.getDefault().getContents());
-
+    	List clipboardList = (List) Clipboard.getDefault().getContents();
     	SubgraphComponent subgraphComponent= new SubgraphComponent();
 		ComponentCreateCommand createComponent = new ComponentCreateCommand(subgraphComponent,containerOld,new Rectangle(((Component)clipboardList.get(0)).getLocation(),((Component)clipboardList.get(0)).getSize()));
 		createComponent.execute(); 
-		
+		subgraphComponent.getProperties().put(Constants.VALIDITY_STATUS,"VALID");
 		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
 		for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();)
 		{
 			EditPart editPart = (EditPart) ite.next();
-			if(editPart instanceof ComponentEditPart) 
-			{
-				if (Constants.SUBGRAPH_COMPONENT_CATEGORY.equalsIgnoreCase(((ComponentEditPart) editPart).getCastedModel().getCategory())) {
+			
+			if(editPart instanceof ComponentEditPart && Constants.SUBGRAPH_COMPONENT_CATEGORY.equalsIgnoreCase(((ComponentEditPart) editPart).getCastedModel().getCategory())) 
+			{ Component tempComponent=((ComponentEditPart) editPart).getCastedModel();
+				if (StringUtils.equals(tempComponent.getComponentLabel().getLabelContents(), subgraphComponent.getComponentLabel().getLabelContents())) {
 					componentEditPart= (ComponentEditPart) editPart;
 				}
 			} 
@@ -184,6 +187,8 @@ public class SubGraphAction extends SelectionAction{
 					   
 				}   
 		}  
+		Collections.sort(inLinks, new LinkComparatorBySourceLocation());
+		Collections.sort(outLinks, new LinkComparatorBySourceLocation());
 		/*
 		 * Update main sub graph component size and properties
 		 */
@@ -201,11 +206,19 @@ public class SubGraphAction extends SelectionAction{
 		 * Generate subgraph target xml.
 		 */
 		subGraphUtility.createSubGraphXml(componentEditPart,clipboardList,file);
+		finishSubgraphCreation(subGraphUtility,subgraphComponent,componentEditPart);
 		}
 	}
 
+	
+	private void finishSubgraphCreation(SubGraphUtility subGraphUtility,Component subgraphComponent, ComponentEditPart componentEditPart) {
+		subgraphComponent.getProperties().put(Constants.SUBGRAPH_VERSION,1);
+		subGraphUtility.getCurrentEditor().setDirty(true);
+		componentEditPart.updateComponentStatus();
+	}
+
 	private boolean notConfirmedByUser() {
-		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.YES
+		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES
 				| SWT.NO);
 		messageBox.setMessage(Messages.CONFIRM_TO_CREATE_SUBGRAPH_MESSAGE);
 		messageBox.setText(Messages.CONFIRM_TO_CREATE_SUBGRAPH_WINDOW_TITLE);

@@ -203,4 +203,5 @@ public class Constants {
 	
 	public static final String UPDATE_AVAILABLE = "update_available";
 	public static final String SUBGRAPH_VERSION = "subgraphVersion";
+	public static final String VALIDITY_STATUS = "validityStatus";
 }

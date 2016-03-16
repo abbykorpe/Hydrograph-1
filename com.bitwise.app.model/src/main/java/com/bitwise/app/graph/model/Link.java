@@ -53,6 +53,7 @@ public class Link extends Model {
 			return;
 
 		getSource().connectOutput(this);
+		updateSubgraphVersionForAnyUpdation(this);
 		if(this.getTarget()!=null )
 			propagateSchema(this.getSource());
 	}
@@ -64,6 +65,7 @@ public class Link extends Model {
 		if (getTarget() == null || getTarget().getTargetConnections().contains(this))
 			return;
 		getTarget().connectInput(this);
+		updateSubgraphVersionForAnyUpdation(this);
 			propagateSchema(this.getSource());
 	}
 
@@ -81,6 +83,7 @@ public class Link extends Model {
 		if (getSource() == null)
 			return;
 		getSource().disconnectOutput(this);
+		updateSubgraphVersionForAnyUpdation(this);
 	}
 
 	/**
@@ -90,6 +93,7 @@ public class Link extends Model {
 		if (getTarget() == null)
 			return;
 		getTarget().disconnectInput(this);
+		updateSubgraphVersionForAnyUpdation(this);
 	}
 
 	public Component getSource() {
@@ -205,4 +209,9 @@ public class Link extends Model {
 					sourceComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
 		}
 	}
+	
+	private void updateSubgraphVersionForAnyUpdation(Link link) {
+		link.getSource().getParent().updateSubgraphVersion();
+	}
+
 }

@@ -93,7 +93,7 @@ public class SubGraphUpdateAction extends SelectionAction {
 				filePath=(String) selectedSubgraphComponent.getProperties().get(Constants.PATH_PROPERTY_NAME);
 				SubGraphUtility subGraphUtility=new SubGraphUtility();
 				subGraphUtility.updateSubgraphProperty(null,filePath, selectedSubgraphComponent);
-				selectedSubgraphComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(), null);
+				selectedSubgraphComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(), "VALID");
 				componentEditPart.changePortSettings();
 				componentEditPart.updateComponentStatus();
 				componentEditPart.refresh();

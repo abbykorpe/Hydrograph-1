@@ -1084,7 +1084,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			generateTargetXMLInLocalFileSystem(fileStore, container);
 	}
 
-	private void generateTargetXMLInWorkspace(IFile ifile, Container container2) {
+	private void generateTargetXMLInWorkspace(IFile ifile, Container container) {
 		IFile outPutFile = ResourcesPlugin.getWorkspace().getRoot().getFile(ifile.getFullPath().removeFileExtension().addFileExtension("xml"));
 		try {
 			if(container!=null)

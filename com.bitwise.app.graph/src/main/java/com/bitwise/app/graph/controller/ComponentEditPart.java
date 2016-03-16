@@ -355,7 +355,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	private void updateSubgraphVersion() {
 		Component currentComponent=getCastedModel();
 		if(currentComponent!=null && currentComponent.getParent().isCurrentGraphIsSubgraph()){
-			currentComponent.getParent().setSubgraphVersion(currentComponent.getParent().getSubgraphVersion()+1);
+			currentComponent.getParent().updateSubgraphVersion();
 		}
 	}
 
@@ -628,5 +628,6 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			getFigure().repaint();
 		}
 	}
+	
 	
 }

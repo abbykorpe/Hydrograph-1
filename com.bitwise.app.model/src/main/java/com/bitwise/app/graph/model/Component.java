@@ -29,7 +29,6 @@ import org.slf4j.Logger;
 import com.bitwise.app.cloneableinterface.IDataStructure;
 import com.bitwise.app.common.component.config.PortInfo;
 import com.bitwise.app.common.component.config.PortSpecification;
-import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
 import com.bitwise.app.common.util.Constants;
@@ -1279,6 +1278,7 @@ public abstract class Component extends Model {
 	}
 	
 	@Override
+
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

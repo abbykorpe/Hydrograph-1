@@ -29,13 +29,11 @@ public class CommandSubgraphConverter extends Converter {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		Subgraph subgraph = (Subgraph) baseComponent;
-		Subgraph.Path path = new Subgraph.Path();
-		String[] temp;
-		if(properties.get(JOBPATH)!=null){
-		String subGraphFilePath=	((String)properties.get(JOBPATH)).replace(JOBEXTENSION, XMLEXTENSION);
-		temp = subGraphFilePath.split("\\\\",3);
-		path.setUri(temp[temp.length-1].replaceAll("\\\\", "/"));
-		subgraph.setPath(path);
+		if(properties.get(Constants.JOB_PATH)!=null){
+			Subgraph.Path path = new Subgraph.Path();
+			String subGraphFilePath = getSubgraphAbsolutePath(((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.JOB_EXTENSION));
+			path.setUri(subGraphFilePath);
+			subgraph.setPath(path);
 		}
 		subgraph.setSubgraphParameter(getRuntimeProperties());
 		

@@ -40,8 +40,6 @@ import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
 import com.bitwise.app.logging.factory.LogFactory;
-import java.io.InputStream;
-// TODO: Auto-generated Javadoc
 /**
  * The Class SubGraphUtility contain business logic to create sub graph.
  */
@@ -211,7 +209,6 @@ public class SubGraphUtility {
 				+ edComponentEditPart.getCastedModel().getComponentLabelMargin());
 
 		edComponentEditPart.getCastedModel().setSize(newSize);
-		edComponentEditPart.getCastedModel().setComponentLabel(StringUtils.abbreviate(file.getName(), 12));
 
 		String subGraphFilePath = file.getFullPath().toOSString();
 		edComponentEditPart.getCastedModel().getProperties().put(Constants.PATH, subGraphFilePath);

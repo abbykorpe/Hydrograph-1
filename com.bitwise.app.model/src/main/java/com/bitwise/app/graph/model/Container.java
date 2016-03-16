@@ -32,10 +32,12 @@ public class Container extends Model {
 	private final Map<String, Integer> componentNextNameSuffixes = new HashMap<>();
 	private ArrayList<String> componentNames = new ArrayList<>();
 	@XStreamOmitField
+	private boolean isVersionAlreadyUpdated;
+	@XStreamOmitField
 	private String linkedMainGraphPath;
 	@XStreamOmitField
 	private Object subgraphComponentEditPart;
-	private int subgraphVersion=1;
+	private long subgraphVersion=1;
 	public Container(){
 		
 	}
@@ -56,8 +58,9 @@ public class Container extends Model {
 				component.setNewInstance(false);
 			}
 			firePropertyChange(CHILD_ADDED_PROP, null, component);
+			updateSubgraphVersion();
 			return true;
-		}
+			}
 		return false;
 	}
 
@@ -66,10 +69,10 @@ public class Container extends Model {
 	 * @return true, if the component was added, false otherwise
 	 */
 	public boolean addSubGraphChild(Component component) {
-		
 		if (isIOSubgraphAlreadyNotPresent(component.getComponentName()) && component != null && components.add(component)) {
 			component.setParent(this);
 			firePropertyChange(CHILD_ADDED_PROP, null, component);
+			updateSubgraphVersion();
 			return true;
 		}
 		return false;
@@ -112,6 +115,7 @@ public class Container extends Model {
 			componentNextNameSuffixes.put(component.getPrefix(), nextSuffix);
 			}
 			firePropertyChange(CHILD_REMOVED_PROP, null, component);
+			updateSubgraphVersion();
 			return true;
 		}
 		return false;
@@ -268,13 +272,16 @@ public class Container extends Model {
 	}
 
 
-	public int getSubgraphVersion() {
+	public long getSubgraphVersion() {
 		return subgraphVersion;
 	}
 
 
-	public void setSubgraphVersion(int subgraphVersion) {
-		this.subgraphVersion = subgraphVersion;
+	public void updateSubgraphVersion() {
+		if(!isVersionAlreadyUpdated && isCurrentGraphIsSubgraph()){
+			this.subgraphVersion++;
+			isVersionAlreadyUpdated=true;
+		}
 	}
 	
 }
