@@ -112,7 +112,7 @@ public class ProjectStructureCreator {
 			for(File sourceFile : listFiles){
 				IFile destinationFile = project.getFile(sourceFile.getName());
 				try {
-					if(!sourceFile.exists()){ //used while importing a project
+					if(!destinationFile.exists()){ //used while importing a project
 						destinationFile.create(new FileInputStream(sourceFile), true, null);
 					}
 				} catch (FileNotFoundException | CoreException exception) {
@@ -266,7 +266,7 @@ public class ProjectStructureCreator {
 			for(File sourceFile : listFiles){
 				IFile destinationFile = destinationFolder.getFile(sourceFile.getName());
 				try {
-					if(!sourceFile.exists()){ //used while importing a project
+					if(!destinationFile.exists()){ //used while importing a project
 						destinationFile.create(new FileInputStream(sourceFile), true, null);
 					}
 					entries.add(JavaCore.newLibraryEntry(new Path(destinationFile.getLocation().toOSString()), null, null));
