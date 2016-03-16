@@ -25,9 +25,9 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.util.ComponentCacheUtil;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.ImagePathConstant;
-import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Component;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.constants.ELTProperties;
 import com.bitwise.app.propertywindow.messagebox.ConfirmCancelMessageBox;
 import com.bitwise.app.propertywindow.property.ELTComponenetProperties;
@@ -64,6 +64,10 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	private Component component;
 	
 	private boolean isCancelButtonPressed = false;
+	
+	private boolean closeDialog;
+	
+	private boolean okPressed;
 	
 	/**
 	 * Create the dialog.
@@ -105,7 +109,6 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	private void createPropertyDialogContainer(Composite parent) {
 		container = (Composite) super.createDialogArea(parent);
 		setPropertyDialogContainerLayout();
-		//setPropertyDialogSize();
 		setPropertyDialogTitle();
 	}
 
@@ -283,6 +286,8 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		
 		isPropertyWindowValid = windowValidityStaus;
 		updateComponentValidityStatus();
+		
+		okPressed=true;
 		super.okPressed();
 	}
 
@@ -312,13 +317,13 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 				MessageBox confirmCancleMessagebox = confirmCancelMessageBox.getMessageBox();
 
 				if (confirmCancleMessagebox.open() == SWT.OK) {
-					super.close();
+					closeDialog = super.close();
 				}
 			} else {
-				super.close();
+				closeDialog = super.close();
 			}
 		} else {
-			super.close();
+			closeDialog = super.close();
 		}
 	}
 
@@ -385,5 +390,15 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	public void pressCancel() {
 		isCancelButtonPressed = true;
 		cancelPressed();
+	}
+
+	@Override
+	public boolean close() {
+		if(!okPressed){
+			cancelPressed();			
+			return closeDialog;
+		}else{
+			return super.close();
+		}		
 	}
 }

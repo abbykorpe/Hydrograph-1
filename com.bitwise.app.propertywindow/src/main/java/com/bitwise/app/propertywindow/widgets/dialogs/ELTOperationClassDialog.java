@@ -75,6 +75,10 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private PropertyDialogButtonBar opeartionClassDialogButtonBar;
 	private Button cancelButton;
+	
+	private boolean closeDialog;
+	private boolean okPressed;
+	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -337,15 +341,15 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 				MessageBox confirmCancleMessagebox = confirmCancelMessageBox.getMessageBox();
 
 				if(confirmCancleMessagebox.open() == SWT.OK){
-					super.close();
+					closeDialog = super.close();
 				}
 			}else{
-				super.close();
+				closeDialog = super.close();
 			}
 			
 			
 		}else{
-			super.close();
+			closeDialog = super.close();
 		}
 	}
 
@@ -353,6 +357,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	protected void okPressed() {
 		operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
 				isParameterCheckBox.getSelection(), (String) fileName.getData("path"));
+		okPressed=true;
 		super.okPressed();
 	}
 
@@ -402,5 +407,15 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	 */
 	public boolean isCancelPressed(){
 		return isCancelPressed;
+	}
+	
+	@Override
+	public boolean close() {
+		if(!okPressed){
+			cancelPressed();			
+			return closeDialog;
+		}else{
+			return super.close();
+		}		
 	}
 }
