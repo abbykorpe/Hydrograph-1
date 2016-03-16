@@ -19,14 +19,13 @@ import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.model.Model;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ComponentPasteCommand.
  */
 public class ComponentPasteCommand extends Command {
 	private static final Logger log = LogFactory.INSTANCE.getLogger(ComponentPasteCommand.class);
 	private int pasteCounter=0;
-	private Map list = new HashMap();
+	private Map<Component,Component> list = new HashMap();
 
 	@Override
 	public boolean canExecute() {
@@ -35,7 +34,7 @@ public class ComponentPasteCommand extends Command {
 			return false;
 		Iterator it = bList.iterator();
 		while (it.hasNext()) {
-			Model node = (Model) it.next();
+			Component node = (Component) it.next();
 			if (isPastableNode(node)) {
 				list.put(node, null);
 			}
@@ -79,6 +78,32 @@ public class ComponentPasteCommand extends Command {
 				node.getParent().addChild(node);
 			}
 		}
+		
+		pasteLinks();
+		
+	}
+
+	private void pasteLinks() {
+		for(Component originalNode:list.keySet()){
+			if(!originalNode.getSourceConnections().isEmpty()){
+				
+				for(Link originlink: originalNode.getSourceConnections()){
+					Component targetComponent = originlink.getTarget();
+					Component newSource = list.get(originalNode);
+					Component newtarget = list.get(targetComponent);					
+					
+					Link link = new Link();
+					link.setSourceTerminal(originalNode.getSourceConnections().get(0).getSourceTerminal());
+					link.setTargetTerminal(originalNode.getSourceConnections().get(0).getTargetTerminal());
+					link.setSource(newSource);
+					link.setTarget(newtarget);
+					newSource.connectOutput(link);
+					newtarget.connectInput(link);
+					
+					
+				}
+			}
+		}
 	}
 
 	@Override
@@ -112,10 +137,22 @@ public class ComponentPasteCommand extends Command {
 		return false;
 	}
 
+	/**
+	 * 
+	 * get paste counter
+	 * 
+	 * @return
+	 */
 	public int getPasteCounter() {
 		return pasteCounter;
 	}
 
+	/**
+	 * 
+	 * Set paste counter
+	 * 
+	 * @param pasteCounter
+	 */
 	public void setPasteCounter(int pasteCounter) {
 		this.pasteCounter = pasteCounter;
 	}
