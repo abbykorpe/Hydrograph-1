@@ -35,9 +35,7 @@ import com.bitwise.app.propertywindow.runconfig.RunConfigDialog;
  */
 public class DebugHandler  extends AbstractHandler {
 	private Logger logger = LogFactory.INSTANCE.getLogger(DebugHandler.class);
-
 	private static Map<String,Job> jobMap = new HashMap<>();	
-	
 	private IPath currentJobIPath=null;
 	private String uniqueJobID =null;
 	private String basePath = null;
@@ -115,13 +113,13 @@ public class DebugHandler  extends AbstractHandler {
 		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 			try{
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
-				setBaseEnabled(true);
+				JobManager.INSTANCE.enableDebugJob(true);
 				if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 					return null;
 				}
 			}catch(Exception e){
 				logger.debug("Unable to save graph ", e);
-					setBaseEnabled(true);
+					JobManager.INSTANCE.enableDebugJob(true);
 			}
 		}
 		
@@ -136,7 +134,7 @@ public class DebugHandler  extends AbstractHandler {
 		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell(), true);
 		runConfigDialog.open();
 		if (!runConfigDialog.proceedToRunGraph()) {
-			setBaseEnabled(true);
+			JobManager.INSTANCE.enableDebugJob(true);
 	
 		}
 		String clusterPassword = runConfigDialog.getClusterPassword()!=null ? runConfigDialog.getClusterPassword():"";
@@ -145,10 +143,15 @@ public class DebugHandler  extends AbstractHandler {
 		String userId = runConfigDialog.getUserId();
 		if(!runConfigDialog.proceedToRunGraph()){
 			setBaseEnabled(true);
+			JobManager.INSTANCE.enableDebugJob(true);
 			return null;
 		}
+		
+		String consoleName= getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
+		String canvasName = consoleName;
+		String localJobID = consoleName;
 
-		Job job = new Job(null, null, null, basePath, host, userId, clusterPassword); 
+		Job job = new Job(localJobID, consoleName, canvasName, basePath, host, userId, clusterPassword); 
 		job.setBasePath(basePath);
 		job.setIpAddress(host);
 		job.setUserId(userId);
@@ -164,11 +167,9 @@ public class DebugHandler  extends AbstractHandler {
 		 
 		addDebugJob(currentJobName, job);
 		
-		String consoleName= getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
-		String canvasName = consoleName;
-		String localJobID = consoleName;
+		
 	 
-		JobManager.INSTANCE.executeJobInDebug(new Job(localJobID, consoleName, canvasName, host, userId, basePath, clusterPassword), uniqueJobID, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
+		JobManager.INSTANCE.executeJobInDebug(job, uniqueJobID, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
 		
 		return null;
 	}

@@ -11,6 +11,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.gef.EditPart;
@@ -19,6 +20,7 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.debug.config.Debug;
 import com.bitwise.app.graph.debug.config.DebugPlugin;
@@ -64,11 +66,13 @@ public class DebugConverter {
 							viewData.setOutSocketId(entrySet.getKey());
 							String portType = entrySet.getKey().substring(0, 3);
 							
-							if(portType.equalsIgnoreCase("out")){
+							if(StringUtils.isNotBlank(portType)){
+							if(portType.equalsIgnoreCase(Constants.OUTPUT_SOCKET_TYPE)){
 								
-								viewData.setOutSocketType("out");
+								viewData.setOutSocketType(Constants.OUTPUT_SOCKET_TYPE);
 							}else{
-								viewData.setOutSocketType("usused");
+								viewData.setOutSocketType(Constants.UNUSED_SOCKET_TYPE);
+							}
 							}
 							limit.setValue(entrySet.getValue());
 							viewData.setLimit(limit);

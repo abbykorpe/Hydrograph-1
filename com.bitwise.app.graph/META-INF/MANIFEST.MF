@@ -30,7 +30,8 @@ Require-Bundle: org.eclipse.ui,
  com.bitwise.app.validators;bundle-version="0.0.1",
  com.bitwise.app.logging;bundle-version="1.0.0",
  org.json;bundle-version="1.0.0",
- org.apache.commons.httpclient;bundle-version="3.1.0"
+ org.apache.commons.httpclient;bundle-version="3.1.0",
+ ch.qos.logback.classic
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: com.bitwise.app.graph.model,

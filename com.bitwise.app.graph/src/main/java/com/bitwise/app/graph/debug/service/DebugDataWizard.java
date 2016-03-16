@@ -10,7 +10,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -22,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
+import com.bitwise.app.graph.Messages;
 import com.bitwise.app.logging.factory.LogFactory;
  
 
@@ -61,7 +61,7 @@ public class DebugDataWizard extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent){
 		Composite container = (Composite) super.createDialogArea(parent);
-		container.getShell().setText("Debug Wizard");
+		container.getShell().setText(Messages.DEBUG_WIZARD_TEXT);
 		container.setLayout(new GridLayout(2, false));
 		container.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, true, false));
 		
@@ -80,8 +80,6 @@ public class DebugDataWizard extends Dialog {
 		gd_scrolledComposite.widthHint = 681;
 		scrolledComposite.setLayoutData(gd_scrolledComposite);
 		
-		Button btnNewButton = new Button(scrolledComposite, SWT.BORDER);
-		btnNewButton.setText("New Button");
 		table = new Table(scrolledComposite, SWT.BORDER|SWT.FULL_SELECTION|SWT.MULTI);
 		scrolledComposite.setContent(table);
 		scrolledComposite.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));

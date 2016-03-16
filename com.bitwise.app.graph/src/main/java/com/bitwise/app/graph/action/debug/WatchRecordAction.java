@@ -114,15 +114,15 @@ public class WatchRecordAction extends SelectionAction {
 		return false;
 	}
 	
-	private void callRestService()throws JSONException, IOException{
+	private void debugRemoteMode()throws JSONException, IOException{
 		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
 		String basePath = job.getBasePath();
 		String ipAddress = job.getIpAddress();
 		String userID = job.getUserId();
 		String password = job.getPassword();
 		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
-		DebugRestClient debugRestService = new DebugRestClient(ipAddress, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password);
-		JSONArray jsonArray = debugRestService.callRestService();
+		DebugRestClient debugRestClient = new DebugRestClient(ipAddress, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password);
+		JSONArray jsonArray = debugRestClient.callRestService();
 		if(jsonArray.length() != 0){
 			DebugDataWizard debugRemoteWizard = new DebugDataWizard(Display.getDefault().getActiveShell(), jsonArray, isLocalDebugMode());
 			debugRemoteWizard.open();
@@ -131,7 +131,7 @@ public class WatchRecordAction extends SelectionAction {
 		}
 	}
 	
-	private void localMode() throws Exception{
+	private void debugLocalMode() throws Exception{
 		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
 		String basePath = job.getBasePath();
 		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
@@ -168,7 +168,7 @@ public class WatchRecordAction extends SelectionAction {
 	
 	private void messageDialog(String message){
 		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.APPLICATION_MODAL | SWT.OK);
-		messageBox.setText(Messages.MESSAGE_INFORMATION); 
+		messageBox.setText(Messages.DEBUG_ALERT_MESSAGE); 
 		messageBox.setMessage(message);
 		messageBox.open();
 	}
@@ -185,7 +185,7 @@ public class WatchRecordAction extends SelectionAction {
 				 if(isLocalDebugMode()){
 					 try {
 						 logger.debug("Reading local debug data");
-						localMode();
+						debugLocalMode();
 					} catch (Exception e) {
 						logger.error("Exception in local mode"+e.getMessage(), e);
 						messageDialog(Messages.REMOTE_MODE_TEXT);
@@ -193,7 +193,7 @@ public class WatchRecordAction extends SelectionAction {
 				 }else{
 					 try {
 						 logger.debug("Reading REMOTE debug data");
-						callRestService();
+						debugRemoteMode();
 					} catch (JSONException | IOException e) {
 						logger.error("Exception in remote mode"+e.getMessage(), e);
 						messageDialog(Messages.REMOTE_MODE_TEXT);

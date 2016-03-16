@@ -58,7 +58,6 @@ import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
-import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -135,7 +134,6 @@ import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.parametergrid.utils.ParameterFileManager;
 import com.bitwise.app.tooltip.tooltips.ComponentTooltip;
-import com.bitwiseglobal.debug.api.DebugDataReader;
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -302,7 +300,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		});
 
 		viewer.getControl().addMouseTrackListener(new MouseTrackAdapter() {
-
 			@Override
 			public void mouseHover(MouseEvent e) {
 				if (toolTipComponentBounds != null && componentTooltip != null) {
@@ -315,7 +312,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					}
 				}
 			}
-
 		});
 	}
 
@@ -365,7 +361,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				
 				Job job = JobManager.INSTANCE.getRunningJob(consoleName);
 				
-				if(job!=null){
+				logger.debug("job.isDebugMode: {}",job==null?"FALSE":job.isDebugMode());
+				if(job!=null && !job.isDebugMode()){
 					if(JobStatus.KILLED.equals(job.getJobStatus())){
 						((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
 						((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
@@ -379,6 +376,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					}
 					
 				}else{
+					logger.debug("enabling run job button");
 					enableRunJob(true);
 				}
 			}
@@ -1126,20 +1124,17 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			deleteDebugFiles();
 			logger.debug("debug files removed.");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.debug(e.getMessage(), e);
 		}
 	}
 	
 	private void deleteDebugFiles() throws IOException{
-		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		IPath path = new Path(editor.getTitleToolTip());
-		String currentJob = path.lastSegment().replace(Constants.JOB_EXTENSION, "");
+		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");
 		Job job = DebugHandler.getJob(currentJob);
-		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
-		String uniqueJobId = editor.getJobId();
-		DebugDataReader debugDataReader = new DebugDataReader(job.getBasePath(), jobId, null, null);
-		//debugDataReader.delete();
+		/*if(job!=null){
+		DebugDataReader debugDataReader = new DebugDataReader(job.getBasePath(), uniqueJobId, "IFDelimite_01", "out0");
+		debugDataReader.delete();
+		}*/
 	}
 	
 	public void deleteSelection() {
