@@ -14,22 +14,22 @@
  
 package com.bitwise.app.engine.converter.impl;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
-import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
 import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
+import com.bitwise.app.engine.xpath.ComponentXpathConstants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.aggregate.TypePrimaryKeyFields;
@@ -58,7 +58,7 @@ public class AggregateConverter extends TransformConverter {
 		initFixedWidthGridRows();
 	}
 
-	
+
 	private void initFixedWidthGridRows() {
 		fixedWidthGridRows = new LinkedList<>();
 		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) properties
@@ -72,8 +72,8 @@ public class AggregateConverter extends TransformConverter {
 			}
 		}
 	}
-	
-	
+
+
 	@Override
 	public void prepareForXML() {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
@@ -109,27 +109,36 @@ public class AggregateConverter extends TransformConverter {
 			aggregate.setPrimaryKeys(primaryKeyFields);
 			List<TypeFieldName> field = primaryKeyFields.getField();
 			for (String columnNameProperty : columnNameProperties) {
-				TypeFieldName fieldName = new TypeFieldName();
-				fieldName.setName(columnNameProperty);
-				field.add(fieldName);
+				if (!ParameterUtil.INSTANCE.isParameter(columnNameProperty)) {
+					TypeFieldName fieldName = new TypeFieldName();
+					fieldName.setName(columnNameProperty);
+					field.add(fieldName);
+				}else{
+					getParamTag(columnNameProperty, ComponentXpathConstants.AGGREGATE_PRIMARY_KEYS);
+				}
 			}
 		}
 	}
 
 	private void setSecondaryKeys(Aggregate aggregate) {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PROPERTY_SECONDARY_COLUMN_KEYS));
-		Map<String, String> gridRow = (Map<String, String>) component.getProperties().get(
+		Map<String, String> secondaryKeyRow = (Map<String, String>) component.getProperties().get(
 				Constants.PROPERTY_SECONDARY_COLUMN_KEYS);
-		if (gridRow != null) {
+		if (secondaryKeyRow != null) {
 			TypeSecondaryKeyFields secondaryKeyFields = new TypeSecondaryKeyFields();
 			aggregate.setSecondaryKeys(secondaryKeyFields);
 			List<TypeSecondayKeyFieldsAttributes> field = secondaryKeyFields.getField();
-			for (Entry<String, String> gridRowEntry : gridRow.entrySet()) {
-				TypeSecondayKeyFieldsAttributes fieldsAttributes = new TypeSecondayKeyFieldsAttributes();
-				TypeSortOrder order = TypeSortOrder.fromValue(gridRowEntry.getValue().toLowerCase());
-				fieldsAttributes.setName(gridRowEntry.getKey());
-				fieldsAttributes.setOrder(order);
-				field.add(fieldsAttributes);
+			for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet()) {
+				
+				if(!ParameterUtil.INSTANCE.isParameter(secondaryKeyRowEntry.getKey())){
+					TypeSecondayKeyFieldsAttributes fieldsAttributes = new TypeSecondayKeyFieldsAttributes();
+					fieldsAttributes.setName(secondaryKeyRowEntry.getKey());
+					TypeSortOrder order = TypeSortOrder.fromValue(secondaryKeyRowEntry.getValue().toLowerCase());
+					fieldsAttributes.setOrder(order);
+					field.add(fieldsAttributes);
+				}else{
+					getParamTag(secondaryKeyRowEntry.getKey(), ComponentXpathConstants.AGGREGATE_SECONDARY_KEYS);
+				}
 			}
 		}
 	}

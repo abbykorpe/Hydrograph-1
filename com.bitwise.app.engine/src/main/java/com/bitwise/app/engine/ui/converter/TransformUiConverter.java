@@ -31,6 +31,7 @@ import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
@@ -175,7 +176,7 @@ public abstract class TransformUiConverter extends UiConverter {
 
 			mappingSheetRows.add(new MappingSheetRow(getInputFieldList(item),
 					new OperationClassProperty(getOperationClassName(item.getClazz()),item.getClazz(),
-							isParameter(item.getClazz()), item.getClazz()),
+							ParameterUtil.INSTANCE.isParameter(item.getClazz()), item.getClazz()),
 					getOutputFieldList(item)));
 		}
 
@@ -185,7 +186,7 @@ public abstract class TransformUiConverter extends UiConverter {
 		String operationClassName = Messages.CUSTOM;
 		Operations operations = XMLConfigUtil.INSTANCE.getComponent(uiComponent.getComponentName()).getOperations();
 		List<TypeInfo> typeInfos = operations.getStdOperation();
-		if (StringUtils.isNotBlank(fullClassPath) && !isParameter(fullClassPath)) {
+		if (StringUtils.isNotBlank(fullClassPath) && !ParameterUtil.INSTANCE.isParameter(fullClassPath)) {
 			String str[] = fullClassPath.split("\\.");
 			for (int i = 0; i < typeInfos.size(); i++) {
 				if(typeInfos.get(i).getName().equalsIgnoreCase(str[str.length - 1]))

@@ -65,15 +65,10 @@ public class ComponentXpath {
 			LOGGER.debug("GENRATED COMPONENTS XPATH {}", getXpathMap().toString());
 			for (Map.Entry<String, ComponentsAttributeAndValue> entry : getXpathMap().entrySet()) {
 				NodeList nodeList = (NodeList) xPath.compile(entry.getKey()).evaluate(doc, XPathConstants.NODESET);
-
-				for (int i = 0; i < nodeList.getLength(); i++) {
-					Node nNode = nodeList.item(i);
-
-					if (Node.ELEMENT_NODE == nNode.getNodeType()) {
-						Element eElement = (Element) nNode;
-						eElement.setAttribute(entry.getValue().getAttributeName(), entry.getValue().getAttributeValue());
-					}
-				}
+				if(entry.getValue().isNewNode())
+					addParameterAsNewNode(entry, nodeList);
+				else
+					addParameterAsAttribute(entry, nodeList);
 			}
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
@@ -98,6 +93,31 @@ public class ComponentXpath {
 		return out;
 	}
 
+	private void addParameterAsAttribute(Map.Entry<String, ComponentsAttributeAndValue> entry,NodeList nodeList) {
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Node nNode = nodeList.item(i);
+
+			if (Node.ELEMENT_NODE == nNode.getNodeType()) {
+				Element eElement = (Element) nNode;
+				eElement.setAttribute(entry.getValue().getAttributeName(), entry.getValue().getAttributeValue());
+			}
+		}
+	}
+
+	private void addParameterAsNewNode(Map.Entry<String, ComponentsAttributeAndValue> entry,NodeList nodeList) {
+		Node cloneNode=null;
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Node parentNode=nodeList.item(i);
+			NodeList nNodeLst = (NodeList) nodeList.item(i);
+			for (int j = 0; j < nNodeLst.getLength(); j++) {
+				Node nNode=nNodeLst.item(i);
+				cloneNode=nNode.cloneNode(false);
+				cloneNode.setTextContent(entry.getValue().getNewNodeText());
+			}
+			parentNode.appendChild(cloneNode);
+		}
+	}
+	
 	public XPath createXPathInstance(ByteArrayInputStream inputStream, File file) throws ParserConfigurationException,
 			SAXException, IOException {
 		LOGGER.debug("Invoking X-Path instance");

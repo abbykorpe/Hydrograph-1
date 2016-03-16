@@ -18,6 +18,13 @@ package com.bitwise.app.engine.xpath;
  * @author Bitwise This class is used to hold component's properties attribute and name
  */
 public class ComponentsAttributeAndValue {
+	
+	private boolean isNewNode;
+	private String newNodeText;
+	public void setNewNodeText(String newNodeText) {
+		this.newNodeText = newNodeText;
+	}
+
 	private String attributeName;
 	private String attributeValue;
 	private static final String DEFAULT_ATTRIBUTE_NAME = "value";
@@ -26,12 +33,18 @@ public class ComponentsAttributeAndValue {
 
 	}
 
+	public ComponentsAttributeAndValue(boolean isNewNode,String newNodeText){
+		this.isNewNode=isNewNode;
+		this.newNodeText=newNodeText;		
+	}
+	
 	public ComponentsAttributeAndValue(String attributeName, String attributeValue) {
 		if (attributeName == null)
 			this.attributeName = DEFAULT_ATTRIBUTE_NAME;
 		else
 			this.attributeName = attributeName;
 		this.attributeValue = attributeValue;
+		this.isNewNode=false;
 	}
 
 	public String getAttributeName() {
@@ -42,4 +55,13 @@ public class ComponentsAttributeAndValue {
 		return attributeValue;
 	}
 
+	public boolean isNewNode() {
+		return isNewNode;
+	}
+
+	public String getNewNodeText() {
+		return newNodeText;
+	}
+
+	
 }

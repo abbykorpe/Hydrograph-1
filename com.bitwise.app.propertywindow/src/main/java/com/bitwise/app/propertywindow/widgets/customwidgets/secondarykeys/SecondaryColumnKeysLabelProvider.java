@@ -60,9 +60,9 @@ public class SecondaryColumnKeysLabelProvider implements ITableLabelProvider, IT
 		SecondaryColumnKeysInformation property = (SecondaryColumnKeysInformation) element;
 		switch (columnIndex) {
 		case 0:
-			return property.getPropertyName();
+			return property.getColumnName();
 		case 1:
-			return property.getPropertyValue();
+			return property.getSortOrder();
 		}
 		return null;
 	}

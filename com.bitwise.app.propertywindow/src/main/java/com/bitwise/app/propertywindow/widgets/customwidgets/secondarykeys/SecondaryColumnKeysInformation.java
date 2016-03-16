@@ -21,23 +21,23 @@ package com.bitwise.app.propertywindow.widgets.customwidgets.secondarykeys;
  */
 public class SecondaryColumnKeysInformation {
 
-	String propertyName;
-	String propertyValue;
+	String columnName;
+	String sortOrder;
 
-	public String getPropertyName() {
-		return propertyName;
+	public String getColumnName() {
+		return columnName;
 	}
 
-	public void setPropertyName(String propertyName) {
-		this.propertyName = propertyName;
+	public void setColumnName(String propertyName) {
+		this.columnName = propertyName;
 	}
 
-	public String getPropertyValue() {
-		return propertyValue;
+	public String getSortOrder() {
+		return sortOrder;
 	}
 
-	public void setPropertyValue(String propertyValue) {
-		this.propertyValue = propertyValue;
+	public void setSortOrder(String propertyValue) {
+		this.sortOrder = propertyValue;
 	}
 
 }

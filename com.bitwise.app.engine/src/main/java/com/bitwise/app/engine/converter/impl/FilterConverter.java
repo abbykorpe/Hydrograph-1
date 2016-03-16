@@ -21,9 +21,13 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
+import com.bitwise.app.engine.xpath.ComponentXpath;
+import com.bitwise.app.engine.xpath.ComponentXpathConstants;
+import com.bitwise.app.engine.xpath.ComponentsAttributeAndValue;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -39,7 +43,7 @@ import com.bitwiseglobal.graph.operationstypes.Filter;
  * Converter implementation for Filter component
  */
 public class FilterConverter extends TransformConverter {
-	private static final String FILTER_OPERATION_ID = "opt";
+	private static final String FILTER_OPERATION_ID = "filter_opt";
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConverter.class);
 	private ConverterHelper converterHelper;
 
@@ -101,15 +105,20 @@ public class FilterConverter extends TransformConverter {
 		List<String> componentOperationFileds = (List<String>) component.getProperties().get(
 				PropertyNameConstants.OPERATION_FILEDS.value());
 		if (componentOperationFileds != null) {
-			for (String object : componentOperationFileds) {
-				TypeInputField operationFiled = new TypeInputField();
-				operationFiled.setName(object);
-				operationFiled.setInSocketId(Constants.FIXED_INSOCKET_ID);
-				operationFiledList.add(operationFiled);
+			for (String fieldName : componentOperationFileds) {
+				if (!ParameterUtil.INSTANCE.isParameter(fieldName)) {
+					TypeInputField operationFiled = new TypeInputField();
+					operationFiled.setName(fieldName);
+					operationFiled.setInSocketId(Constants.FIXED_INSOCKET_ID);
+					operationFiledList.add(operationFiled);
+				}else{
+					getParamTag(fieldName, ComponentXpathConstants.FILTER_INPUT_FIELDS);
+				}
 			}
 		}
 		return operationFiledList;
 	}
+
 
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {

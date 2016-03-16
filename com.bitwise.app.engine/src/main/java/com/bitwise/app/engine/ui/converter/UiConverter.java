@@ -121,23 +121,23 @@ public abstract class UiConverter {
 		return null;
 	}
 
-	/**
-	 * Checks whether a given string is parameter or not.
-	 * 
-	 * @param String
-	 *            the input,
-	 * @return true, if input is parameter
-	 */
-	protected boolean isParameter(String input) {
-		if (input != null) {
-			String regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}";
-			Matcher matchs = Pattern.compile(regex).matcher(input);
-			if (matchs.matches()) {
-				return true;
-			}
-		}
-		return false;
-	}
+//	/**
+//	 * Checks whether a given string is parameter or not.
+//	 * 
+//	 * @param String
+//	 *            the input,
+//	 * @return true, if input is parameter
+//	 */
+//	protected boolean isParameter(String input) {
+//		if (input != null) {
+//			String regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}";
+//			Matcher matchs = Pattern.compile(regex).matcher(input);
+//			if (matchs.matches()) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 
 	/**
 	 * Generate runtime properties for component.

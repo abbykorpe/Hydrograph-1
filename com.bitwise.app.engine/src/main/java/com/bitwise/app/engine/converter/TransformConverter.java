@@ -16,6 +16,9 @@ package com.bitwise.app.engine.converter;
 
 import java.util.List;
 
+import com.bitwise.app.engine.xpath.ComponentXpath;
+import com.bitwise.app.engine.xpath.ComponentXpathConstants;
+import com.bitwise.app.engine.xpath.ComponentsAttributeAndValue;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsComponent;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
@@ -45,4 +48,14 @@ public abstract class TransformConverter extends Converter {
 	 */
 	protected abstract List<TypeTransformOperation> getOperations();
 	public abstract List<TypeBaseInSocket> getInSocket();
+	
+	protected void getParamTag(String fieldName, ComponentXpathConstants paramXpath) {
+		ComponentsAttributeAndValue tempAndValue=ComponentXpath.INSTANCE.getXpathMap().get(paramXpath.value().replace(ID, componentName));
+		if(tempAndValue==null)
+			ComponentXpath.INSTANCE.getXpathMap().put(
+					(paramXpath.value().replace(ID, componentName)),
+					new ComponentsAttributeAndValue(true,fieldName ));
+		else
+			tempAndValue.setNewNodeText(tempAndValue.getNewNodeText()+" "+fieldName);
+	}
 }

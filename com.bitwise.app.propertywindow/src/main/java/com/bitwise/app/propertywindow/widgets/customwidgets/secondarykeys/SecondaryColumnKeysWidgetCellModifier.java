@@ -18,6 +18,9 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
+import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ParameterUtil;
+
 
 
 // TODO: Auto-generated Javadoc
@@ -51,7 +54,12 @@ public class SecondaryColumnKeysWidgetCellModifier implements ICellModifier {
 	 * @return boolean
 	 */
 	public boolean canModify(Object element, String property) {
-		// Allow editing of all values
+		SecondaryColumnKeysInformation p = (SecondaryColumnKeysInformation) element;
+		if (SORTORDER.equals(property)) {
+			if(ParameterUtil.INSTANCE.isParameter(p.getColumnName())){
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -66,13 +74,17 @@ public class SecondaryColumnKeysWidgetCellModifier implements ICellModifier {
 	 */
 	public Object getValue(Object element, String property) {
 		SecondaryColumnKeysInformation p = (SecondaryColumnKeysInformation) element;
-		
+
 		if (COLUMNNAME.equals(property)) {
 
-			return p.getPropertyName();
+			return p.getColumnName();
 
-		} else if (SORTORDER.equals(property))
-			return p.getPropertyValue();
+		} else if (SORTORDER.equals(property)){
+			if(ParameterUtil.INSTANCE.isParameter(p.getColumnName())){
+				return Constants.NONE_SORT_ORDER;
+			}
+			return p.getSortOrder();
+		}
 		else
 			return null;
 	}
@@ -93,12 +105,21 @@ public class SecondaryColumnKeysWidgetCellModifier implements ICellModifier {
 			element = ((Item) element).getData();
 
 		SecondaryColumnKeysInformation p = (SecondaryColumnKeysInformation) element;
-		
-		if (COLUMNNAME.equals(property))
-			p.setPropertyName(((String) value));
+		System.out.println("###modify");
+		if (COLUMNNAME.equals(property)){
+			System.out.println("modifying column name");
+			if(ParameterUtil.INSTANCE.isParameter((String)value)){
+				System.out.println("Setting sort order from Param");
+				p.setSortOrder(Constants.NONE_SORT_ORDER);
+			}
+			p.setColumnName(((String) value));
 
-		else if (SORTORDER.equals(property))
-			p.setPropertyValue((String) value);
+		}else if (SORTORDER.equals(property)){
+			if(!ParameterUtil.INSTANCE.isParameter(p.getColumnName()) && !Constants.NONE_SORT_ORDER.equals((String) value)){
+				p.setSortOrder((String) value);
+			}else
+				p.setSortOrder(Constants.ASCENDING_SORT_ORDER);
+		}
 		// Force the viewer to refresh
 		viewer.refresh();
 	}

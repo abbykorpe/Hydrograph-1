@@ -18,8 +18,11 @@ public enum ComponentXpathConstants {
 	COMPONENT_CHARSET_XPATH("/graph/*[@id='$id']/charset"),
 	COMPONENT_JOIN_TYPE_XPATH("/graph/operations[@id='$id']/keys[@inSocketId='$inSocketId'] [not(@joinType)]"),
 	COMPONENT_XPATH_BOOLEAN("/graph/*[@id='$id']/propertyName"),
-	COMPONENT_XPATH_COUNT("/graph/*[@id='$id']/maxRecords");
-	///graph/*[@id='$id']/*[@id='$inSocketId']/joinType
+	COMPONENT_XPATH_COUNT("/graph/*[@id='$id']/maxRecords"),
+	FILTER_INPUT_FIELDS("/graph/operations[@id='$id']/operation[@id='opt']/inputFields"),
+	AGGREGATE_PRIMARY_KEYS("/graph/operations[@id='$id']/primaryKeys"),
+	AGGREGATE_SECONDARY_KEYS("/graph/operations[@id='$id']/secondaryKeys"),
+	LOOKUP_KEYS("/graph/operations[@id='$id']/keys[@id='$id']");
 	private final String value;
 
 	ComponentXpathConstants(String value) {
