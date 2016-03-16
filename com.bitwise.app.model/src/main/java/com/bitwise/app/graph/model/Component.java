@@ -24,7 +24,6 @@ import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Component.
  * 
@@ -35,7 +34,9 @@ public abstract class Component extends Model {
 			.getLogger(Component.class);
 
 	private static final long serialVersionUID = 2587870876576884352L;
-
+	
+	private final String UniqueComponentName = "Component" + Math.random() * 10000;
+	
 	/**
 	 * The Enum Props.
 	 * 
@@ -97,7 +98,7 @@ public abstract class Component extends Model {
 	private String category;
 	private HashMap<String, Port> ports;
 	private String componentName;
-	List<PortSpecification> portSpecification;
+	private List<PortSpecification> portSpecification;
 
 	private int inPortCount;
 	private int outPortCount;
@@ -118,10 +119,6 @@ public abstract class Component extends Model {
 	// @XStreamOmitField
 	private Map<String, String> toolTipErrorMessages; // <propertyName,ErrorMessage>
 
-	/*
-	 * @XStreamOmitField private Map<String,PropertyToolTipInformation>
-	 * paletteTooltipMessage;
-	 */
 
 	/**
 	 * Instantiates a new component.
@@ -152,14 +149,26 @@ public abstract class Component extends Model {
 		toolTipErrorMessages = new LinkedHashMap<>();
 	}
 
+	/**
+	 * 
+	 * Returns tooltip error message
+	 * 
+	 * @return {@link Map}
+	 */
 	public Map<String, String> getToolTipErrorMessages() {
 		return toolTipErrorMessages;
 	}
-
+	
+	/**
+	 *	
+	 *	Set Tooltip error message 
+	 * 
+	 * @param toolTipErrorMessages
+	 */
 	public void setToolTipErrorMessages(Map<String, String> toolTipErrorMessages) {
 		this.toolTipErrorMessages = toolTipErrorMessages;
 	}
-   
+   	
 	private void initPortSettings() {
 
 		portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName)
@@ -195,78 +204,195 @@ public abstract class Component extends Model {
 		}
 	}
 
+	/**
+	 * 
+	 * Returns list of input ports
+	 * 
+	 * @return
+	 */
 	public List<String> getInputportTerminals() {
 		return inputportTerminals;
 	}
+	
+	/**
+	 * 
+	 * Set input port names
+	 * 
+	 * @param portTerminals
+	 */
 	public void setInputportTerminals(List<String> portTerminals){
 		this.inputportTerminals=portTerminals;
 	}
 
+	/**
+	 * 
+	 * Returns list of output port
+	 * 
+	 * @return
+	 */
 	public List<String> getOutputPortTerminals() {
 		return outputPortTerminals;
 	}
+	
+	/**
+	 * 
+	 * Set output ports
+	 * 
+	 * @param portTerminals
+	 */
 	public void setOutputPortTerminals(List<String> portTerminals) {
 		this.outputPortTerminals=portTerminals;
 	}
+	
+	/**
+	 * 
+	 * Set true when number of input port count changed dynamically
+	 * 
+	 */
 	public void setChangeInPortsCntDynamically(boolean changeInPortsCntDynamically) {
 		this.changeInPortsCntDynamically = changeInPortsCntDynamically;
 	}
 
+	/**
+	 * 
+	 * Set true when number of output port count changed dynamically
+	 * 
+	 */	
 	public void setChangeOutPortsCntDynamically(boolean changeOutPortsCntDynamically) {
 		this.changeOutPortsCntDynamically = changeOutPortsCntDynamically;
 	}
 
+	/**
+	 * 
+	 * Set true when number of unused port count changed
+	 * 
+	 * @param changeUnusedPortsCntDynamically
+	 */
 	public void setChangeUnusedPortsCntDynamically(
 			boolean changeUnusedPortsCntDynamically) {
 		this.changeUnusedPortsCntDynamically = changeUnusedPortsCntDynamically;
 	}
 
-	
+	/**
+	 * 
+	 * Get input port count
+	 * 	
+	 * @return - number of input ports
+	 */
 	public int getInPortCount() {
 		return inPortCount;
 	}
 
+	/**
+	 * 
+	 * set number of input ports
+	 * 
+	 * @param inPortCount
+	 */
 	public void setInPortCount(int inPortCount) {
 		this.inPortCount = inPortCount;
 		this.properties.put("inPortCount", String.valueOf(inPortCount));
 	}
 
+	/**
+	 * 
+	 * Get number of output port
+	 * 
+	 * @return
+	 */
 	public int getOutPortCount() {
 		return outPortCount;
 	}
 
+	/**
+	 * 
+	 * Set number of output port
+	 * 
+	 * @param outPortCount
+	 */
 	public void setOutPortCount(int outPortCount) {
 		this.outPortCount = outPortCount;
 		this.properties.put("outPortCount", String.valueOf(outPortCount));
 	}
 
+	/**
+	 * 
+	 * Get number of unused port
+	 * 
+	 * @return
+	 */
 	public int getUnusedPortCount() {
 		return unusedPortCount;
 	}
 
+	/**
+	 * 
+	 * set number of unused port
+	 * 
+	 * @param unusedPortCount
+	 */
 	public void setUnusedPortCount(int unusedPortCount) {
 		this.unusedPortCount = unusedPortCount;
 		this.properties.put("unusedPortCount", String.valueOf(unusedPortCount));
 	}
 
+	/**
+	 * 
+	 * Get port specification list
+	 * 
+	 * @return - list of {@link PortSpecification}
+	 */
 	public List<PortSpecification> getPortSpecification() {
 		return portSpecification;
 	}
+	
+	/**
+	 * 
+	 * Set ports
+	 * 
+	 * @param ports
+	 */
 	public void setPorts(HashMap<String, Port> ports) {
 		this.ports = ports;
 	}
+	
+	/**
+	 * 
+	 * returns true when there is change in count of input port
+	 * 
+	 * @return boolean
+	 */
 	public boolean isChangeInPortsCntDynamically() {
 		return changeInPortsCntDynamically;
 	}
 
+	/**
+	 * 
+	 * returns true when there is change in count of output port
+	 * 
+	 * @return boolean
+	 */
 	public boolean isChangeOutPortsCntDynamically() {
 		return changeOutPortsCntDynamically;
 	}
 
+	/**
+	 * 
+	 * returns true when there is change in count of unused port
+	 * 
+	 * @return boolean
+	 */
 	public boolean isChangeUnusedPortsCntDynamically() {
 		return changeUnusedPortsCntDynamically;
 	}
 
+	/**
+	 * 
+	 * Add input ports
+	 * 
+	 * @param newPortCount
+	 * @param oldPortCount
+	 */
 	public void incrementInPorts(int newPortCount, int oldPortCount) {
 
 		for (int i = oldPortCount; i < newPortCount; i++) {
@@ -277,6 +403,14 @@ public abstract class Component extends Model {
 		}
 	}
 
+	
+	/**
+	 * 
+	 * Add output ports
+	 * 
+	 * @param newPortCount
+	 * @param oldPortCount
+	 */
 	public void incrementOutPorts(int newPortCount, int oldPortCount) {
 		for (int i = oldPortCount; i < newPortCount; i++) {
 			Port outputPort = new Port(Constants.OUTPUT_SOCKET_TYPE + i, Constants.OUTPUT_SOCKET_TYPE + i, Constants.OUTPUT_SOCKET_TYPE + i, this,
@@ -286,6 +420,13 @@ public abstract class Component extends Model {
 		}
 	}
 
+	/**
+	 * 
+	 * Add unused ports
+	 * 
+	 * @param newPortCount
+	 * @param oldPortCount
+	 */
 	public void incrementUnusedPorts(int newPortCount, int oldPortCount) {
 		for (int i = oldPortCount; i < newPortCount; i++) {
 			Port unusedPort = new Port(Constants.UNUSED_SOCKET_TYPE + i, "un" + i, Constants.UNUSED_SOCKET_TYPE + i,
@@ -295,6 +436,12 @@ public abstract class Component extends Model {
 		}
 	}
 
+	/**
+	 * 
+	 *  Change input port count
+	 * 
+	 * @param newPortCount
+	 */
 	public void changeInPortCount(int newPortCount) {
 
 		List<String> portTerminals = new ArrayList<>();
@@ -307,6 +454,12 @@ public abstract class Component extends Model {
 		setInPortCount(newPortCount);
 	}
 
+	/**
+	 * 
+	 * Change unused port count
+	 * 
+	 * @param newPortCount
+	 */
 	public void changeUnusedPortCount(int newPortCount) {
 
 		List<String> portTerminals = new ArrayList<>();
@@ -319,6 +472,12 @@ public abstract class Component extends Model {
 		setUnusedPortCount(newPortCount);
 	}
 
+	/**
+	 * 
+	 * Change output port count
+	 * 
+	 * @param newPortCount
+	 */
 	public void changeOutPortCount(int newPortCount) {
 
 		List<String> portTerminals = new ArrayList<>();
@@ -331,6 +490,11 @@ public abstract class Component extends Model {
 		setOutPortCount(newPortCount);
 	}
 
+	/**
+	 * 
+	 * Get ports
+	 *  
+	 */
 	public HashMap<String, Port> getPorts() {
 		return ports;
 	}
@@ -346,6 +510,12 @@ public abstract class Component extends Model {
 		return ports.get(terminal);
 	}
 
+	/**
+	 * 
+	 * Get list of component children
+	 * 
+	 * @return list of {@link Model}
+	 */
 	public List<Model> getChildren() {
 
 		List<Model> children = new ArrayList<Model>(ports.values());
@@ -354,7 +524,7 @@ public abstract class Component extends Model {
 		return children;
 
 	}
-
+	
 	private void updateConnectionProperty(String prop, Object newValue) {
 		firePropertyChange(prop, null, newValue);
 	}
@@ -362,8 +532,7 @@ public abstract class Component extends Model {
 	/**
 	 * Connect input.
 	 * 
-	 * @param c
-	 *            the c
+	 * @param {@link Link}
 	 */
 	public void connectInput(Link c) {
 		inputLinks.add(c);
@@ -374,8 +543,8 @@ public abstract class Component extends Model {
 	/**
 	 * Connect output.
 	 * 
-	 * @param c
-	 *            the c
+	 * @param {{@link Link}
+	 * 
 	 */
 	public void connectOutput(Link c) {
 		if (outputLinksHash.get(c.getSourceTerminal()) != null)
@@ -411,12 +580,22 @@ public abstract class Component extends Model {
 		updateConnectionProperty(Props.OUTPUTS.getValue(), c);
 	}
 
-	/* add comments as function called by gef */
+	/**
+	 * 
+	 * Get source connections
+	 * 
+	 * @return
+	 */
 	public List<Link> getSourceConnections() {
 		return outputLinks;
 	}
 	
-	/* add comments as function called by gef */
+	/**
+	 * 
+	 * Set source connections
+	 * 
+	 * @param links
+	 */
 	public void  setSourceConnections(List<Link> links) {
 		 outputLinks=(ArrayList<Link>) links;
 	}
@@ -584,27 +763,63 @@ public abstract class Component extends Model {
 		return size.getCopy();
 	}
 
+	/**
+	 * 
+	 * get component label margin
+	 * 
+	 */
 	public int getComponentLabelMargin() {
 		return componentLabelMargin;
 	}
 
+	/**
+	 * 
+	 * Set component label margin
+	 * 
+	 * @param componentLabelMargin
+	 */
 	public void setComponentLabelMargin(int componentLabelMargin) {
 		this.componentLabelMargin = componentLabelMargin;
 		firePropertyChange("componentLabelMargin", null, componentLabelMargin);
 	}
 
+	/**
+	 * 
+	 * Get parent of the component
+	 * 
+	 * @return {@link Container}
+	 */
 	public Container getParent() {
 		return parent;
 	}
 
+	/**
+	 * 
+	 * Set component parent
+	 * 
+	 * @param parent
+	 */
 	public void setParent(Container parent) {
 		this.parent = parent;
 	}
 
+	/**
+	 * 
+	 * Returns component properties
+	 * 
+	 * @return
+	 */
 	public LinkedHashMap<String, Object> getProperties() {
 		return (LinkedHashMap<String, Object>) properties;
 	}
 
+	/**
+	 * 
+	 * PropertyNotAvailableException exception
+	 * 
+	 * @author Bitwise
+	 *
+	 */
 	private class PropertyNotAvailableException extends RuntimeException {
 		private static final long serialVersionUID = -7978238880803956846L;
 
@@ -618,34 +833,82 @@ public abstract class Component extends Model {
 		this.newInstance = newInstance;
 	}
 
+	/**
+	 * 
+	 * Returns component type
+	 * 
+	 * @return - component type
+	 */
 	public String getType() {
 		return type;
 	}
 
+	/**
+	 * 
+	 * Set Component type
+	 * 
+	 * @param type
+	 */
 	public void setType(String type) {
 		this.type = type;
 	}
 
+	/**
+	 * 
+	 * Get Component prefix i.e. base name
+	 * 
+	 * @return
+	 */
 	public String getPrefix() {
 		return prefix;
 	}
 
+	/**
+	 * 
+	 * Set Component prefix i.e. base name
+	 * 
+	 * @param prefix
+	 */
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
 	}
 
+	/**
+	 * 
+	 * Get Component category 
+	 * 
+	 * @return
+	 */
 	public String getCategory() {
 		return category;
 	}
 
+	/**
+	 * 
+	 * Set component category
+	 * 
+	 * @param category
+	 */
 	public void setCategory(String category) {
 		this.category = category;
 	}
 
+	/**
+	 * 
+	 * returns component validation status
+	 * 
+	 * @return
+	 */
 	public String getValidityStatus() {
 		return validityStatus;
 	}
 
+	/**
+	 * 
+	 * Set component validation status
+	 * 
+	 * @param validityStatus
+	 */
 	public void setValidityStatus(String validityStatus) {
 		this.validityStatus = validityStatus;
 	}
@@ -730,15 +993,32 @@ public abstract class Component extends Model {
 		return component;
 	}
 
+	/**
+	 * 
+	 * Set tooltip information
+	 * 
+	 * @param tooltipInformation
+	 */
 	public void setTooltipInformation(
 			Map<String, PropertyToolTipInformation> tooltipInformation) {
 		this.tooltipInformation = tooltipInformation;
 	}
 
+	/**
+	 * 
+	 * get tooltip information
+	 * 
+	 * @return
+	 */
 	public Map<String, PropertyToolTipInformation> getTooltipInformation() {
 		return tooltipInformation;
 	}
 
+	/**
+	 * 
+	 * Update tooltip information
+	 * 
+	 */
 	public void updateTooltipInformation() {
 		for (String propertyName : properties.keySet()) {
 			if (tooltipInformation != null) {
@@ -753,16 +1033,34 @@ public abstract class Component extends Model {
 		}
 	}
 
+	/**
+	 * 
+	 * Set component label
+	 * 
+	 * @param label
+	 */
 	public void setComponentLabel(String label) {
 		setPropertyValue(Component.Props.NAME_PROP.getValue(), label);
 		componentLabel.setLabelContents(label);
 	}
 
+	/**
+	 * 
+	 * Get component Description
+	 * 
+	 * @return
+	 */
 	public String getComponentDescription() {
 		return XMLConfigUtil.INSTANCE.getComponent(componentName)
 				.getDescription();
 	}
 
+	/**
+	 * 
+	 * unused port settings
+	 * 
+	 * @param newPortCount
+	 */
 	public void unusedPortSettings(int newPortCount) {
        changeUnusedPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount - 2); i++) {
@@ -773,6 +1071,12 @@ public abstract class Component extends Model {
 		}
 	}
 	
+	/**
+	 * 
+	 * Input port settings
+	 * 
+	 * @param newPortCount
+	 */
 	public void inputPortSettings(int newPortCount) {
        changeInPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount); i++) {
@@ -783,6 +1087,12 @@ public abstract class Component extends Model {
 		}
 	}
 	
+	/**
+	 * 
+	 * Output port settings
+	 * 
+	 * @param newPortCount
+	 */
 	public void outputPortSettings(int newPortCount) {
   changeOutPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount); i++) {
@@ -795,6 +1105,13 @@ public abstract class Component extends Model {
 	} 
 
 
+	/**
+	 * 
+	 * Increments port
+	 * 
+	 * @param newPortCount
+	 * @param oldPortCount
+	 */
 	public void incrementPorts(int newPortCount, int oldPortCount) {
 
 		for (int i = oldPortCount; i < newPortCount; i++) {
@@ -810,6 +1127,12 @@ public abstract class Component extends Model {
 		}
 	}
 
+	/**
+	 * 
+	 * Decrements port
+	 * 
+	 * @param portsToBeRemoved
+	 */
 	public void decrementPorts(List<String> portsToBeRemoved) {
 
 		deleteInputLinks(portsToBeRemoved);
@@ -817,6 +1140,12 @@ public abstract class Component extends Model {
 		removePorts(portsToBeRemoved);
 	}
 
+	/**
+	 * 
+	 * Delete input links
+	 * 
+	 * @param portsToBeRemoved
+	 */
 	private void deleteInputLinks(List<String> portsToBeRemoved) {
 		if (inputLinks.size() > 0) {
 			Link[] inLinks = new Link[inputLinks.size()];
@@ -837,6 +1166,12 @@ public abstract class Component extends Model {
 		}
 	}
 
+	/**
+	 * 
+	 * Delete output links
+	 * 
+	 * @param portsToBeRemoved
+	 */
 	private void deleteOutputLinks(List<String> portsToBeRemoved) {
 		if (outputLinks.size() > 0) {
 			Link[] outLinks = new Link[outputLinks.size()];
@@ -856,6 +1191,12 @@ public abstract class Component extends Model {
 		}
 	}
 
+	/**
+	 * 
+	 * Remove ports
+	 * 
+	 * @param portsToBeRemoved
+	 */
 	private void removePorts(List<String> portsToBeRemoved) {
 		for (String portRemove : portsToBeRemoved) {
 			ports.remove(portRemove);
@@ -863,25 +1204,83 @@ public abstract class Component extends Model {
 
 	}
 
+	/**
+	 * 
+	 * Get watcher terminals
+	 * 
+	 * @return
+	 */
 	public Map<String, Long> getWatcherTerminals() {
 		return watcherTerminals;
 	}
 
+	/**
+	 * 
+	 * Set watcher terminals
+	 * 
+	 * @param watcherTerminals
+	 */
 	public void setWatcherTerminals(Map<String, Long> watcherTerminals) {
 		this.watcherTerminals = watcherTerminals;
 	}
 
+	/**
+	 * Add watcher terminal
+	 * 
+	 * @param port
+	 * @param limit
+	 */
 	public void addWatcherTerminal(String port, Long limit) {
 
 		watcherTerminals.put(port, limit);
 	}
 
+	/**
+	 * 
+	 * Remove watcher terminal
+	 * 
+	 * @param port
+	 */
 	public void removeWatcherTerminal(String port) {
 		watcherTerminals.remove(port);
 	}
 
+	/**
+	 * 
+	 * Clear watchers
+	 * 
+	 */
 	public void clearWatcherMap() {
 		watcherTerminals.clear();
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((UniqueComponentName == null) ? 0 : UniqueComponentName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Component other = (Component) obj;
+		if (UniqueComponentName == null) {
+			if (other.UniqueComponentName != null)
+				return false;
+		} else if (!UniqueComponentName.equals(other.UniqueComponentName))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Component [UniqueComponentName=" + UniqueComponentName + "]";
+	}
 }
