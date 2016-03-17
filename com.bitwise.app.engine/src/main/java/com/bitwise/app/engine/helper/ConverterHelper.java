@@ -34,6 +34,9 @@ import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.engine.xpath.ComponentXpath;
+import com.bitwise.app.engine.xpath.ComponentXpathConstants;
+import com.bitwise.app.engine.xpath.ComponentsAttributeAndValue;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -415,5 +418,15 @@ public class ConverterHelper {
 		}
 		return inSocketId;
 
+	}
+	
+	public void getParamTag(String ID, String fieldName, ComponentXpathConstants paramXpath) {
+		ComponentsAttributeAndValue tempAndValue=ComponentXpath.INSTANCE.getXpathMap().get(paramXpath.value().replace(ID, componentName));
+		if(tempAndValue==null)
+			ComponentXpath.INSTANCE.getXpathMap().put(
+					(paramXpath.value().replace(ID, componentName)),
+					new ComponentsAttributeAndValue(true,fieldName ));
+		else
+			tempAndValue.setNewNodeText(tempAndValue.getNewNodeText()+" "+fieldName);
 	}
 }

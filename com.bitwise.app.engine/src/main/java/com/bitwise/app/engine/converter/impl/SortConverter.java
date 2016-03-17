@@ -22,9 +22,11 @@ import java.util.Map;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.StraightPullConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
+import com.bitwise.app.engine.xpath.ComponentXpathConstants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -77,11 +79,15 @@ public class SortConverter extends StraightPullConverter {
 		if (fieldValueMap != null) {
 			primaryKeyFields = new TypePrimaryKeyFields();
 			List<TypePrimaryKeyFieldsAttributes> fieldNameList = primaryKeyFields.getField();
-			for (Map.Entry<String, String> entry : fieldValueMap.entrySet()) {
-				TypePrimaryKeyFieldsAttributes field = new TypePrimaryKeyFieldsAttributes();
-				field.setName(entry.getKey());
-				field.setOrder(TypeSortOrder.fromValue(entry.getValue().toLowerCase()));
-				fieldNameList.add(field);
+			for (Map.Entry<String, String> primaryKeyRowEntry : fieldValueMap.entrySet()) {
+				if(!ParameterUtil.INSTANCE.isParameter(primaryKeyRowEntry.getKey())){
+					TypePrimaryKeyFieldsAttributes field = new TypePrimaryKeyFieldsAttributes();
+					field.setName(primaryKeyRowEntry.getKey());
+					field.setOrder(TypeSortOrder.fromValue(primaryKeyRowEntry.getValue().toLowerCase()));
+					fieldNameList.add(field);
+				}else{
+					converterHelper.getParamTag(this.ID, primaryKeyRowEntry.getKey(), ComponentXpathConstants.SORT_PRIMARY_KEYS);
+				}
 			}
 		}
 		return primaryKeyFields;
@@ -95,11 +101,15 @@ public class SortConverter extends StraightPullConverter {
 		if (fieldValueMap != null && !fieldValueMap.isEmpty()) {
 			typeSecondaryKeyFields = new TypeSecondaryKeyFields();
 			List<TypeSecondayKeyFieldsAttributes> fieldNameList = typeSecondaryKeyFields.getField();
-			for (Map.Entry<String, String> entry : fieldValueMap.entrySet()) {
-				TypeSecondayKeyFieldsAttributes field = new TypeSecondayKeyFieldsAttributes();
-				field.setName(entry.getKey());
-				field.setOrder(TypeSortOrder.fromValue(entry.getValue().toLowerCase()));
-				fieldNameList.add(field);
+			for (Map.Entry<String, String> secondaryKeyRowEntry : fieldValueMap.entrySet()) {
+				if(!ParameterUtil.INSTANCE.isParameter(secondaryKeyRowEntry.getKey())){
+					TypeSecondayKeyFieldsAttributes field = new TypeSecondayKeyFieldsAttributes();
+					field.setName(secondaryKeyRowEntry.getKey());
+					field.setOrder(TypeSortOrder.fromValue(secondaryKeyRowEntry.getValue().toLowerCase()));
+					fieldNameList.add(field);}
+				else{
+					converterHelper.getParamTag(this.ID, secondaryKeyRowEntry.getKey(), ComponentXpathConstants.SORT_SECONDARY_KEYS);
+				}
 			}
 		}
 		return typeSecondaryKeyFields;

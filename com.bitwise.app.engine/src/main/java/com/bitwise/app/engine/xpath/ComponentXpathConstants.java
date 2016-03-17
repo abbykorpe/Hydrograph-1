@@ -22,7 +22,15 @@ public enum ComponentXpathConstants {
 	FILTER_INPUT_FIELDS("/graph/operations[@id='$id']/operation[@id='opt']/inputFields"),
 	AGGREGATE_PRIMARY_KEYS("/graph/operations[@id='$id']/primaryKeys"),
 	AGGREGATE_SECONDARY_KEYS("/graph/operations[@id='$id']/secondaryKeys"),
-	LOOKUP_KEYS("/graph/operations[@id='$id']/keys[@id='$id']");
+	
+	LOOKUP_KEYS("/graph/operations[@id='$id']/keys[@id='$id']"),
+	
+	REMOVEDUPS_PRIMARY_KEYS("/graph/straightPulls[@id='$id']/primaryKeys"),
+	REMOVEDUPS_SECONDARY_KEYS("/graph/straightPulls[@id='$id']/secondaryKeys"),
+	
+	SORT_PRIMARY_KEYS("/graph/straightPulls[@id='$id']/primaryKeys"),
+	SORT_SECONDARY_KEYS("/graph/straightPulls[@id='$id']/secondaryKeys");
+	
 	private final String value;
 
 	ComponentXpathConstants(String value) {

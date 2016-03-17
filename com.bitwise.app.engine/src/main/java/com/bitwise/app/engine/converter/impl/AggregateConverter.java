@@ -114,7 +114,7 @@ public class AggregateConverter extends TransformConverter {
 					fieldName.setName(columnNameProperty);
 					field.add(fieldName);
 				}else{
-					getParamTag(columnNameProperty, ComponentXpathConstants.AGGREGATE_PRIMARY_KEYS);
+					converterHelper.getParamTag(this.ID, columnNameProperty, ComponentXpathConstants.AGGREGATE_PRIMARY_KEYS);
 				}
 			}
 		}
@@ -137,7 +137,7 @@ public class AggregateConverter extends TransformConverter {
 					fieldsAttributes.setOrder(order);
 					field.add(fieldsAttributes);
 				}else{
-					getParamTag(secondaryKeyRowEntry.getKey(), ComponentXpathConstants.AGGREGATE_SECONDARY_KEYS);
+					converterHelper.getParamTag(this.ID, secondaryKeyRowEntry.getKey(), ComponentXpathConstants.AGGREGATE_SECONDARY_KEYS);
 				}
 			}
 		}
