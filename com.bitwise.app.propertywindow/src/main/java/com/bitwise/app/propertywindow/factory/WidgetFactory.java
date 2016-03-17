@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.fixedwidthschema.ELTFixedWidget;
-import com.bitwise.app.propertywindow.fixedwidthschema.ELTJoinFixedWidthSchemaWidget;
+import com.bitwise.app.propertywindow.fixedwidthschema.TransformSchemaWidget;
 import com.bitwise.app.propertywindow.generaterecords.schema.GenerateRecordsGridWidget;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
@@ -51,7 +51,7 @@ public class WidgetFactory {
 	public enum Widgets{
 		SCHEMA_WIDGET(ELTGenericSchemaGridWidget.class),
 		FIXED_WIDGET(ELTFixedWidget.class),
-		JOIN_FIXED_WIDTH_SCHEMA_WIDGET(ELTJoinFixedWidthSchemaWidget.class),
+		TRANSFORM_SCHEMA_WIDGET(TransformSchemaWidget.class),
 		GENERATE_RECORDS_SCHEMA_WIDGET(GenerateRecordsGridWidget.class),
 		FILE_PATH_WIDGET(ELTFilePathWidget.class),
 		COMPONENT_NAME_WIDGET(ELTComponentNameWidget.class),
@@ -73,7 +73,6 @@ public class WidgetFactory {
 		COUNT_WIDGET (TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getCountWidgetConfig ()),
 		FILTER_PROPERTY_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getOperationFieldsConfig()),
 		COLUMN_NAME_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getColumnNameConfig()),
-
 		OPERATIONAL_CLASS_WIDGET(ELTOperationClassWidget.class, WidgetHelper.INSTANCE.getOperationClassForFilterWidgetConfig()),
 		RUNTIME_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class,WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.RUNTIME_PROPERTY_LABEL,Constants.RUNTIME_PROPERTIES_WINDOW_LABEL)),
 		SUBGRAPH_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class,WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.SUBGRAPH_PROPERTY_LABEL,Constants.SUBGRAPH_WINDOW_LABEL)),
@@ -81,7 +80,6 @@ public class WidgetFactory {
 		SECONDARY_COLUMN_KEYS_WIDGET(SecondaryColumnKeysWidget.class, WidgetHelper.INSTANCE.getSecondaryKeyWidgetConfig()),
 		TRANSFORM_WIDGET(TransformWidget.class,WidgetHelper.INSTANCE.getOperationClassForTransformWidgetConfig(Constants.TRANSFORM,Constants.TRANSFORM_DISPLAYNAME, Constants.TRANSFORM_WINDOW_TITLE)),
 		AGGREGATE_WIDGET(TransformWidget.class,WidgetHelper.INSTANCE.getOperationClassForTransformWidgetConfig(Constants.AGGREGATE,Constants.AGGREGATE_DISPLAYNAME, Constants.AGGREGATE_WINDOW_TITLE)),
-
 		XML_CONTENT_WIDGET(ELTXmlPropertiesContainer.class),
 		JOIN_INPUT_COUNT_WIDGET(ELTJoinPortCount.class,WidgetHelper.INSTANCE.getInputCountWidgetConfig(Constants.INPUT_COUNT,2)),
 		INPUT_COUNT_WIDGET(ELTJoinPortCount.class,WidgetHelper.INSTANCE.getInputCountWidgetConfig(Constants.INPUT_COUNT,1)),

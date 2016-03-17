@@ -80,8 +80,7 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 		editors[0].setValidator(new ELTCellEditorFieldValidator(table, schemaGridRowList, fieldNameDecorator,isFieldNameAlphanumericDecorator,propertyDialogButtonBar));
 		editors[4].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator,propertyDialogButtonBar)); 
 		editors[7].setValidator(new ELTCellEditorIsNumericValidator(lengthDecorator,propertyDialogButtonBar)); 
-		editors[8].setValidator(new ELTCellEditorIsNumericValidator(rangeFromDecorator, propertyDialogButtonBar));
-		editors[9].setValidator(new ELTCellEditorIsNumericValidator(rangeToDecorator, propertyDialogButtonBar));
+		
 
 	}
 
@@ -95,8 +94,6 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 		fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(), Messages.FIELDNAMEERROR);
 		scaleDecorator = WidgetUtility.addDecorator(editors[4].getControl(), Messages.SCALEERROR);
 		lengthDecorator = WidgetUtility.addDecorator(editors[7].getControl(), Messages.LENGTHERROR);
-		rangeFromDecorator = WidgetUtility.addDecorator(editors[8].getControl(), Messages.LENGTHERROR);
-		rangeToDecorator = WidgetUtility.addDecorator(editors[9].getControl(), Messages.LENGTHERROR);
 		isFieldNameAlphanumericDecorator = WidgetUtility.addDecorator(editors[0].getControl(),
 				Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);
 	}

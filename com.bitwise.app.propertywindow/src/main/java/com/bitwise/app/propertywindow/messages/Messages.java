@@ -89,6 +89,19 @@ public class Messages extends NLS {
 	public static String INTERNAL_SCHEMA_TYPE;
 	public static String EXTERNAL_SCHEMA_TYPE;
 	public static String BROWSE_BUTTON;
+	public static String ADD_SCHEMA_TOOLTIP;
+	public static String DELETE_SCHEMA_TOOLTIP;
+	public static String MOVE_SCHEMA_UP_TOOLTIP;
+	public static String MOVE_SCHEMA_DOWN_TOOLTIP;
+	public static String IMPORTED_SCHEMA;
+	public static String EXPORTED_SCHEMA;
+	public static String IMPORT_XML;
+	public static String EXPORT_XML;
+	public static String IMPORT_XML_ERROR;
+	public static String IMPORT_XML_FORMAT_ERROR;
+	public static String IMPORT_XML_DUPLICATE_FIELD_ERROR;
+	public static String EXPORT_XML_ERROR;
+	public static String EXPORT_XML_EMPTY_FILENAME;
 	public static String OUTPUT_FIELD_EXISTS;
 	public static String AVAILABLE_FIELDS_HEADER;
     public static String ADD_ICON;
@@ -102,6 +115,7 @@ public class Messages extends NLS {
 	public static String CHECKBOX_DISABLE_MESSAGE;
 	public static String ERROR;
 	public static String PARAMETER_ERROR;
+	public static String ATTACH_LISTENER_ERROR;
 	
 	public static String FIELD_MAPPING;
 	public static String OPERATION_CLASS;

@@ -5,9 +5,9 @@ import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 
-public class ELTJoinFixedWidthSchemaWidget extends ELTFixedWidget{
+public class TransformSchemaWidget extends ELTFixedWidget{
 
-	public ELTJoinFixedWidthSchemaWidget(ComponentConfigrationProperty componentConfigrationProperty,
+	public TransformSchemaWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
@@ -16,6 +16,8 @@ public class ELTJoinFixedWidthSchemaWidget extends ELTFixedWidget{
 
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
+		transformSchemaType=true;
 		super.attachToPropertySubGroup(container);
+		
 	}
 }

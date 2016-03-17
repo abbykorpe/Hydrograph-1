@@ -33,7 +33,7 @@
 	<simpleType name="property_renderer">
 		<restriction base="string">
 		<enumeration value="GENERATE_RECORDS_SCHEMA_WIDGET" />
-		<enumeration value="JOIN_FIXED_WIDTH_SCHEMA_WIDGET" />
+		<enumeration value="TRANSFORM_SCHEMA_WIDGET" />
 			<enumeration value="SCHEMA_WIDGET" />
 			<enumeration value="FIELD_SEQUENCE_WIDGET" />
 			<enumeration value="FIXED_WIDGET"/>

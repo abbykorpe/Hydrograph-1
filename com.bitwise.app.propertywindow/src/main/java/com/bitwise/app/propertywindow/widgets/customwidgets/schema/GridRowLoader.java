@@ -146,25 +146,25 @@ public class GridRowLoader {
 				}
 			}else{
 				
-				logger.error("External schema FileName is Empty");
-				throw new Exception("External schema FileName is Empty");
+				logger.error(Messages.EXPORT_XML_EMPTY_FILENAME);
+				throw new Exception(Messages.EXPORT_XML_EMPTY_FILENAME);
 			}
 
 		} catch (JAXBException e1) {
 			grids.clear();
-			MessageDialog.openError(new Shell(), "Error", "Error while importing file. XML is not in correct format -\n"+e1.getMessage());
-			logger.error("Error while importing file. XML is not in correct format.");
+			MessageDialog.openError(new Shell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + " -\n"+e1.getMessage());
+			logger.error(Messages.IMPORT_XML_FORMAT_ERROR);
 			return null;
 		}catch (DuplicateFieldException e1) {
 			grids.clear();
-			MessageDialog.openError(new Shell(), "Error", "Error while importing file. XML has duplicate field");
-			logger.error("Error while importing file. XML is not in correct format.");
+			MessageDialog.openError(new Shell(), "Error", e1.getMessage());
+			logger.error(e1.getMessage());
 			return null;
 		}
 		catch (Exception e) {
 			grids.clear();
-			MessageDialog.openError(new Shell(), "Error", "Error while importing file. -\n"+e.getMessage());
-			logger.error("Error while importing file.");
+			MessageDialog.openError(new Shell(), "Error", Messages.IMPORT_XML_ERROR+" -\n"+e.getMessage());
+			logger.error(Messages.IMPORT_XML_ERROR);
 			return null;
 		}
 		
@@ -184,8 +184,8 @@ public class GridRowLoader {
 		}
 		catch(Exception ex)
 		{
-			MessageDialog.openError(new Shell(), "Error", "Error while importing file. XML is not in correct format -\n"+ex.getMessage());
-			logger.error("Error while importing file. XML is not in correct format.");
+			MessageDialog.openError(new Shell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + "-\n" + ex.getMessage());
+			logger.error(Messages.IMPORT_XML_FORMAT_ERROR);
 			return false;
 		}
 	}
@@ -197,8 +197,8 @@ public class GridRowLoader {
 			schemaGridRowListToImport.add(gridRow);
 		}
 		else{
-			logger.error("Duplicate Field in file.");
-			throw new DuplicateFieldException("Duplicate Field in file");
+			logger.error(Messages.IMPORT_XML_DUPLICATE_FIELD_ERROR);
+			throw new DuplicateFieldException(Messages.IMPORT_XML_DUPLICATE_FIELD_ERROR);
 		}
 		
 	}
@@ -289,20 +289,20 @@ public class GridRowLoader {
 				}
 				schema.setFields(fields);
 				jaxbMarshaller.marshal(schema, schemaFile);
-				MessageDialog.openInformation(new Shell(), "Information", "Schema file exported.");
+				MessageDialog.openInformation(new Shell(), "Information", Messages.EXPORTED_SCHEMA);
 				
 			}else{
 				
-				logger.error("External schema FileName is Empty.");
-				throw new Exception("External schema FileName is Empty");
+				logger.error(Messages.EXPORT_XML_EMPTY_FILENAME);
+				throw new Exception(Messages.EXPORT_XML_EMPTY_FILENAME);
 			}
 
 		} catch (JAXBException e) {
-			MessageDialog.openError(new Shell(), "Error", "Error while exporting file. -\n"+e.getMessage());
-			logger.error("Error while exporting file.");
+			MessageDialog.openError(new Shell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"+e.getMessage());
+			logger.error(Messages.EXPORT_XML_ERROR);
 		}catch (Exception e) {
-			MessageDialog.openError(new Shell(), "Error", "Error while exporting file. -\n"+e.getMessage());
-			logger.error("Error while exporting file.");
+			MessageDialog.openError(new Shell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"+e.getMessage());
+			logger.error(Messages.EXPORT_XML_ERROR);
 		}
 
 	}
