@@ -78,6 +78,7 @@ public class SubGraphOpenAction extends SelectionAction{
 	public void run() {
 		List<Object> selectedObjects = getSelectedObjects();
 		SubGraphUtility subGraphUtility = new SubGraphUtility();
+		String mainJobFilePath=subGraphUtility.getCurrentEditor().getTitleToolTip();
 		Container container = null;
 		if (selectedObjects != null && !selectedObjects.isEmpty()) {
 			for (Object obj : selectedObjects) {
@@ -91,9 +92,9 @@ public class SubGraphOpenAction extends SelectionAction{
 							try {
 								IPath jobFilePath = new Path(pathProperty);
 								if (SubGraphUtility.isFileExistsOnLocalFileSystem(jobFilePath)) {
-
-									container = openEditor(jobFilePath);
 									
+									container = openEditor(jobFilePath);
+									container.setLinkedMainGraphPath(mainJobFilePath);
 									if (container != null){
 										container.setSubgraphComponentEditPart(obj);
 										for (Component component : container.getChildren()) {
@@ -103,7 +104,7 @@ public class SubGraphOpenAction extends SelectionAction{
 								} else
 									MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
 											"Subgraph File does not exists");
-
+								
 							} catch (IllegalArgumentException exception) {
 								logger.error("Unable to open subgraph" + exception);
 								MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",

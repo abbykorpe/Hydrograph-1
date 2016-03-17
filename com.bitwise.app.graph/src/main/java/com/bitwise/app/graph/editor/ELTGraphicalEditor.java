@@ -16,6 +16,7 @@ package com.bitwise.app.graph.editor;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.filesystem.IFileStore;
@@ -100,6 +102,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
@@ -114,6 +117,7 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.ide.FileStoreEditorInput;
+import org.eclipse.ui.internal.EditorReference;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.slf4j.Logger;
@@ -747,9 +751,22 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	public void setDirty(boolean dirty){
 		this.dirty = dirty;
+		setMainGraphDirty(dirty);
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
+
+	private void setMainGraphDirty(boolean dirty) {
+		if(container.getLinkedMainGraphPath()!=null && container.isCurrentGraphIsSubgraph()){
+			for(IEditorReference editorReference:PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences()){
+				if(StringUtils.equals(editorReference.getTitleToolTip(), container.getLinkedMainGraphPath())){
+					if(editorReference.getEditor(false) instanceof ELTGraphicalEditor);
+					((ELTGraphicalEditor)editorReference.getEditor(false)).setDirty(true);
+				}
+			}
+			
+		}
+	}
 
 	@Override
 	public void setInput(IEditorInput input) {
@@ -1282,7 +1299,48 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public String getXMLString() {
-		return fromObjectToXML(getContainer());	
+		IPath xmlPath = null;
+		if (getEditorInput() instanceof IFileEditorInput) {
+			xmlPath = ((IFileEditorInput) getEditorInput()).getFile().getLocation();
+		} else if (getEditorInput() instanceof FileStoreEditorInput) {
+			xmlPath = new Path(getEditorInput().getToolTipText());
+		}
+		return getStringValueFromXMLFile(xmlPath);
+	}
+
+	/**
+	 * This method ret
+	 * 
+	 * @param xmlPath
+	 * @return
+	 */
+	public String getStringValueFromXMLFile(IPath xmlPath) {
+		if (xmlPath != null) {
+			InputStream inputStream = null;
+			String content = "";
+			try {
+				xmlPath = xmlPath.removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH);
+				if (xmlPath.toFile().exists())
+					inputStream = new FileInputStream(xmlPath.toFile());
+				else if (ResourcesPlugin.getWorkspace().getRoot().getFile(xmlPath).exists())
+					inputStream = ResourcesPlugin.getWorkspace().getRoot().getFile(xmlPath).getContents();
+				if (inputStream != null)
+					content = new Scanner(inputStream).useDelimiter("\\Z").next();
+				return content;
+			} catch (Exception exception) {
+				logger.error("Exception occurred while fetching data from " + xmlPath.toString(), exception);
+			} finally {
+				if (inputStream != null) {
+					try {
+						inputStream.close();
+					} catch (IOException ioException) {
+						logger.warn("Exception occurred while closing the inpustream", ioException);
+					}
+				}
+
+			}
+		}
+		return "";
 	}
 
 	private String getCurrentProjectDirectory(){

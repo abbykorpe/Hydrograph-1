@@ -376,15 +376,7 @@ public class SubGraphUtility {
 				Constants.RUNTIME_PROPERTY_NAME);
 		if (parameterPropertyMap == null)
 			parameterPropertyMap = new HashMap<String, String>();
-		InputStream inputStream = null;
-		String content = null;
-		try {
-			if (subGraphJobFileIPath.toFile().exists())
-				inputStream = new FileInputStream(subGraphJobFileIPath.toFile());
-			else if (ResourcesPlugin.getWorkspace().getRoot().getFile(subGraphJobFileIPath).exists())
-				inputStream = ResourcesPlugin.getWorkspace().getRoot().getFile(subGraphJobFileIPath).getContents();
-			if (inputStream != null) {
-				content = new Scanner(inputStream).useDelimiter("\\Z").next();
+			String content = getCurrentEditor().getStringValueFromXMLFile(subGraphJobFileIPath);
 				CanvasDataAdpater canvasDataAdpater = new CanvasDataAdpater(content);
 				canvasDataAdpater.fetchData();
 				for (String parameterName : canvasDataAdpater.getParameterList()) {
@@ -392,13 +384,12 @@ public class SubGraphUtility {
 						parameterPropertyMap.put(parameterName, "");
 				}
 				selectedSubgraphComponent.getProperties().put(Constants.RUNTIME_PROPERTY_NAME, parameterPropertyMap);
-			}
-		} catch (FileNotFoundException | CoreException e) {
-			logger.error("Cannot load parameters from subgraph job file");
 		}
 
-	}
 
+	
+	
+	
 	private void updateSubgraphType(Component selectedSubgraphComponent, int inPort, int outPort) {
 
 		if (inPort > 0 && outPort > 0)
