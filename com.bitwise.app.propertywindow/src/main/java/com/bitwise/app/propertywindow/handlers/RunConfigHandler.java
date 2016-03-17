@@ -21,7 +21,7 @@ public class RunConfigHandler extends AbstractHandler implements IHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		 
-		 RunConfigDialog runConfig = new RunConfigDialog(Display.getDefault().getActiveShell());
+		 RunConfigDialog runConfig = new RunConfigDialog(Display.getDefault().getActiveShell(), false);
 			try{
 				runConfig.open();
 			}catch(IllegalArgumentException e){

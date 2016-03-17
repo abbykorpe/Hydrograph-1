@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -40,12 +39,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.bitwise.app.propertywindow.factory.ListenerFactory;
-import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.utils.SWTResourceManager;
-import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
-import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
-import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
 public class RunConfigDialog extends Dialog {
 	private final FormToolkit formToolkit = new FormToolkit(
@@ -89,16 +83,18 @@ public class RunConfigDialog extends Dialog {
 	private String username;
 	private String host;
 	private boolean remoteMode=false;
+	private boolean isDebug;
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param parentShell
 	 */
-	public RunConfigDialog(Shell parentShell) {
+	public RunConfigDialog(Shell parentShell, boolean isDebug) {
 		super(parentShell);
 		this.runGraph = false;
 		buildProps = new Properties();
 		textBoxes = new HashMap<>();
+		this.isDebug = isDebug;
 
 	}
 
@@ -158,6 +154,14 @@ public class RunConfigDialog extends Dialog {
      	EmptyTextListener textEdgeNodeListener1 = new EmptyTextListener("Base Path");
      	basepathText.addModifyListener(textEdgeNodeListener1);
      	
+     	if(!isDebug){
+     		basepathText.removeModifyListener(textEdgeNodeListener1);
+     		lblBasePath.setVisible(false);
+     		basepathText.setVisible(false);
+     	}else{
+     		lblBasePath.setVisible(true);
+     		basepathText.setVisible(true);
+     	}
      	 
      /*	ListenerHelper helper = new ListenerHelper();
 		ControlDecoration txtDecorator = WidgetUtility.addDecorator(basepathText, Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);

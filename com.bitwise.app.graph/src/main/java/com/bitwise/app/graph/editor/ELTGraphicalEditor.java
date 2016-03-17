@@ -110,18 +110,19 @@ import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.engine.exceptions.EngineException;
 import com.bitwise.app.engine.util.ConverterUtil;
-import com.bitwise.app.graph.action.AddWatcherAction;
 import com.bitwise.app.graph.action.ContributionItemManager;
 import com.bitwise.app.graph.action.CopyAction;
 import com.bitwise.app.graph.action.CutAction;
 import com.bitwise.app.graph.action.PasteAction;
-import com.bitwise.app.graph.action.RemoveWatcherAction;
-import com.bitwise.app.graph.action.WatchRecordAction;
+import com.bitwise.app.graph.action.debug.AddWatcherAction;
+import com.bitwise.app.graph.action.debug.RemoveWatcherAction;
+import com.bitwise.app.graph.action.debug.WatchRecordAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphOpenAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphUpdateAction;
 import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
+import com.bitwise.app.graph.handler.DebugHandler;
 import com.bitwise.app.graph.handler.RunJobHandler;
 import com.bitwise.app.graph.handler.StopJobHandler;
 import com.bitwise.app.graph.job.Job;
@@ -299,7 +300,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		});
 
 		viewer.getControl().addMouseTrackListener(new MouseTrackAdapter() {
-
 			@Override
 			public void mouseHover(MouseEvent e) {
 				if (toolTipComponentBounds != null && componentTooltip != null) {
@@ -312,7 +312,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					}
 				}
 			}
-
 		});
 	}
 
@@ -362,7 +361,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				
 				Job job = JobManager.INSTANCE.getRunningJob(consoleName);
 				
-				if(job!=null){
+				logger.debug("job.isDebugMode: {}",job==null?"FALSE":job.isDebugMode());
+				if(job!=null && !job.isDebugMode()){
 					if(JobStatus.KILLED.equals(job.getJobStatus())){
 						((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
 						((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
@@ -376,6 +376,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					}
 					
 				}else{
+					logger.debug("enabling run job button");
 					enableRunJob(true);
 				}
 			}
@@ -1119,7 +1120,23 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		super.dispose();
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
+		try {
+			deleteDebugFiles();
+			logger.debug("debug files removed.");
+		} catch (IOException e) {
+			logger.debug(e.getMessage(), e);
+		}
 	}
+	
+	private void deleteDebugFiles() throws IOException{
+		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");
+		Job job = DebugHandler.getJob(currentJob);
+		/*if(job!=null){
+		DebugDataReader debugDataReader = new DebugDataReader(job.getBasePath(), uniqueJobId, "IFDelimite_01", "out0");
+		debugDataReader.delete();
+		}*/
+	}
+	
 	public void deleteSelection() {
 		//getActionRegistry().getAction(DeleteAction.ID).run();
 		getActionRegistry().getAction(ActionFactory.DELETE.getId()).run();

@@ -10,6 +10,7 @@ public class GradleCommandConstants {
 	public static final String GCMD_SCP_JAR="gradle scpJarFiles ";
 	public static final String GCMD_SCP_PARM_FILE="gradle scpParameterFile ";
 	public static final String GCMD_SCP_JOB_XML="gradle scpJobXML ";
+	public static final String GCMD_SCP_DEBUG_JOB_XML="gradle scpDebugJobXML ";
 	public static final String GCMD_EXECUTE_REMOTE_JOB="gradle executeRemoteJob ";
 	public static final String GCMD_EXECUTE_LOCAL_JOB="gradle executeLocalJob ";
 	public static final String GCMD_EXECUTE_DEBUG_LOCAL_JOB="gradle executeDebugLocal ";

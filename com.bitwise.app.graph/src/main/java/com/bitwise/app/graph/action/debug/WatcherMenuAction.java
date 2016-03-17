@@ -1,4 +1,4 @@
-package com.bitwise.app.graph.action;
+package com.bitwise.app.graph.action.debug;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;

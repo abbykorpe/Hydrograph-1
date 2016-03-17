@@ -19,6 +19,7 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.debugconverter.DebugConverter;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.job.Job;
@@ -34,9 +35,7 @@ import com.bitwise.app.propertywindow.runconfig.RunConfigDialog;
  */
 public class DebugHandler  extends AbstractHandler {
 	private Logger logger = LogFactory.INSTANCE.getLogger(DebugHandler.class);
-
 	private static Map<String,Job> jobMap = new HashMap<>();	
-	
 	private IPath currentJobIPath=null;
 	private String uniqueJobID =null;
 	private String basePath = null;
@@ -90,13 +89,12 @@ public class DebugHandler  extends AbstractHandler {
 			DebugConverter converter = new DebugConverter();
 			
 		try {
-			 
 			uniqueJobID= eltGraphicalEditor.generateUniqueJobId();
-			currentJobPath = currentJobIPath.lastSegment().replace(".job", "_debug.xml");
-			currentJobName = currentJobIPath.lastSegment().replace(".job", "");
+			currentJobPath = currentJobIPath.lastSegment().replace(Constants.JOB_EXTENSION, Constants.DEBUG_EXTENSION);
+			currentJobName = currentJobIPath.lastSegment().replace(Constants.JOB_EXTENSION, "");
 			currentJobIPath = currentJobIPath.removeLastSegments(1).append(currentJobPath);
 			
-			converter.marshell(converter.getParam(), ResourcesPlugin.getWorkspace().getRoot().getFile(currentJobIPath));
+			converter.marshall(converter.getParam(), ResourcesPlugin.getWorkspace().getRoot().getFile(currentJobIPath));
 			
 			
 		} catch (JAXBException | IOException e) {
@@ -115,15 +113,14 @@ public class DebugHandler  extends AbstractHandler {
 		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 			try{
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
-				setBaseEnabled(true);
+				JobManager.INSTANCE.enableDebugJob(true);
 				if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 					return null;
 				}
 			}catch(Exception e){
 				logger.debug("Unable to save graph ", e);
-					setBaseEnabled(true);
+					JobManager.INSTANCE.enableDebugJob(true);
 			}
-			
 		}
 		
 		try {
@@ -134,10 +131,10 @@ public class DebugHandler  extends AbstractHandler {
 			logger.error(e.getMessage(), e);
 		}
 		
-		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell());
+		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell(), true);
 		runConfigDialog.open();
 		if (!runConfigDialog.proceedToRunGraph()) {
-			setBaseEnabled(true);
+			JobManager.INSTANCE.enableDebugJob(true);
 	
 		}
 		String clusterPassword = runConfigDialog.getClusterPassword()!=null ? runConfigDialog.getClusterPassword():"";
@@ -146,10 +143,15 @@ public class DebugHandler  extends AbstractHandler {
 		String userId = runConfigDialog.getUserId();
 		if(!runConfigDialog.proceedToRunGraph()){
 			setBaseEnabled(true);
+			JobManager.INSTANCE.enableDebugJob(true);
 			return null;
 		}
+		
+		String consoleName= getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
+		String canvasName = consoleName;
+		String localJobID = consoleName;
 
-		Job job = new Job(null, null, null, basePath, host, userId, clusterPassword); 
+		Job job = new Job(localJobID, consoleName, canvasName, basePath, host, userId, clusterPassword); 
 		job.setBasePath(basePath);
 		job.setIpAddress(host);
 		job.setUserId(userId);
@@ -165,11 +167,9 @@ public class DebugHandler  extends AbstractHandler {
 		 
 		addDebugJob(currentJobName, job);
 		
-		String consoleName= getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
-		String canvasName = consoleName;
-		String localJobID = consoleName;
+		
 	 
-		JobManager.INSTANCE.executeJobInDebug(new Job(localJobID, consoleName, canvasName, host, userId, basePath, clusterPassword), uniqueJobID, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
+		JobManager.INSTANCE.executeJobInDebug(job, uniqueJobID, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
 		
 		return null;
 	}

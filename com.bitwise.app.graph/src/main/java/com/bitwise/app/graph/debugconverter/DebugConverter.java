@@ -11,6 +11,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.gef.EditPart;
@@ -19,6 +20,7 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.debug.config.Debug;
 import com.bitwise.app.graph.debug.config.DebugPlugin;
@@ -41,8 +43,7 @@ public class DebugConverter {
 		 
 		//debug.setDebugPlugin(debugPlugin);
 		ViewData viewData = null;
-		Limit limit = new Limit();
-		limit.setValue(10L);
+		Limit limit = null;
 		 
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		ELTGraphicalEditor editor=	(ELTGraphicalEditor) page.getActiveEditor();
@@ -54,20 +55,24 @@ public class DebugConverter {
 					iterator.hasNext();)
 			{
 				EditPart editPart = (EditPart) iterator.next();
-				if(editPart instanceof ComponentEditPart) 
-				{
+				if(editPart instanceof ComponentEditPart){
 					Component component = ((ComponentEditPart)editPart).getCastedModel();
 					Map<String, Long> map = component.getWatcherTerminals();
 					if(!map.isEmpty()){
 						for(Entry<String, Long> entrySet: map.entrySet()){
 							viewData = new ViewData();
+							limit = new Limit();
 							viewData.setFromComponentId(component.getComponentLabel().getLabelContents());
 							viewData.setOutSocketId(entrySet.getKey());
 							String portType = entrySet.getKey().substring(0, 3);
 							
-							if(portType.equalsIgnoreCase("usused")){
+							if(StringUtils.isNotBlank(portType)){
+							if(portType.equalsIgnoreCase(Constants.OUTPUT_SOCKET_TYPE)){
 								
-								viewData.setOutSocketType("usused");
+								viewData.setOutSocketType(Constants.OUTPUT_SOCKET_TYPE);
+							}else{
+								viewData.setOutSocketType(Constants.UNUSED_SOCKET_TYPE);
+							}
 							}
 							limit.setValue(entrySet.getValue());
 							viewData.setLimit(limit);
@@ -82,7 +87,7 @@ public class DebugConverter {
 	}
 	
 	
-	public void marshell(Debug debug,IFile outPutFile) throws JAXBException, IOException, CoreException{
+	public void marshall(Debug debug,IFile outPutFile) throws JAXBException, IOException, CoreException{
 		
 		JAXBContext jaxbContext = JAXBContext.newInstance(debug.getClass());
 		Marshaller marshaller = jaxbContext.createMarshaller();

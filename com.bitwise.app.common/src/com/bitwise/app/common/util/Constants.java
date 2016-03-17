@@ -76,9 +76,11 @@ public class Constants {
 	public static final String AGGREGATE = "AGGREGATE";
 	public static final String AGGREGATE_DISPLAYNAME = "Aggregate";
 	public static final String TRANSFORM_DISPLAYNAME = "Transform";
-	
+	public static final String CUMULATE_DISPLAYNAME = "Cumulate";
+
 	public static final String AGGREGATE_WINDOW_TITLE = "Aggregate";
 	public static final String TRANSFORM_WINDOW_TITLE = "Transform";
+	public static final String CUMULATE_WINDOW_TITLE= "Cumulate";
 	
 	public static final String INPUT_SOCKET_TYPE = "in";
 	public static final String OUTPUT_SOCKET_TYPE = "out";
@@ -181,6 +183,9 @@ public class Constants {
 	/*
 	 * Debug required constants 
 	 */
+	
+	public static final String WATCHER_ACTION = "Watch Point";
+	public static final String WATCHER_ACTION_TEXT = "Add watch";
 	public static final String ADD_WATCH_POINT_ID = "watchPointId";
 	public static final String WATCH_RECORD_ID = "watchRecordId";
 	public static final String REMOVE_WATCH_POINT_ID = "removeWatchPointId";
@@ -190,6 +195,8 @@ public class Constants {
 	public static final String COMPONENT_ID = "componentId";
 	public static final String SOCKET_ID = "socketId";
 	public static final String JOB_ID = "jobId";
-	public static final String PORT_NO = ":8001/debug";
+	public static final String PORT_NO = ":8001";
+	public static final String ROUTE = "/debug";
 	public static final String HTTP_PROTOCOL = "http://";
+	public static final String DEBUG_EXTENSION = "_debug.xml";
 }

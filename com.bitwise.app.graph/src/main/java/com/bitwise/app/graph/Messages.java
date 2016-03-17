@@ -6,7 +6,6 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "resources.messages"; //$NON-NLS-1$
 	public static String GRADLE_RUN;
 	public static String XMLPATH;
-	public static String DEBUGXMLPATH;
 	public static String PARAM_FILE;
 	public static String PARAM;
 	public static String CONSOLE_NAME;
@@ -30,17 +29,20 @@ public class Messages extends NLS {
 	public static String MESSAGES_BEFORE_CLOSE_WINDOW;
 	public static String JOB_ID;
 	public static String BASE_PATH;
-	public static String MESSAGE_INFORMATION;
+	public static String DEBUG_ALERT_MESSAGE;
 	
-	public static final String DEBUG_DEFAULT = "Default";
-	public static final String DEBUG_CUSTOM = "Custom";
-	public static final String DEBUG_ALL = "All";
-	public static final String ADD_WATCH_POINT_TEXT = "Add Watch Point";
-	public static final String WATCH_RECORD_TEXT = "Watch Records";
-	public static final String REMOVE_WATCH_POINT_TEXT = "Remove Watch Point";
-	public static final String RECORD_LIMIT = "Record Limit";
-	public static final String LIMIT_VALUE = "Limit Value";
-	public static final String DEFAULT_LIMIT = "Default Limit : 100";
+	public static String REMOTE_MODE_TEXT;
+	public static String DEBUG_WIZARD_TEXT;
+	public static String DEBUG_DEFAULT;
+	public static String DEBUG_CUSTOM;
+	public static String DEBUG_ALL;
+	public static String ADD_WATCH_POINT_TEXT;
+	public static String WATCH_RECORD_TEXT;
+	public static String REMOVE_WATCH_POINT_TEXT;
+	public static String RECORD_LIMIT;
+	public static String LIMIT_VALUE;
+	public static String DEFAULT_LIMIT;
+	
 	 
 	
 	static {

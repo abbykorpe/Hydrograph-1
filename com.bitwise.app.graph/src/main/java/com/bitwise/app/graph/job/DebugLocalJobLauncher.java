@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.graph.Messages;
-import com.bitwise.app.graph.handler.DebugHandler;
 import com.bitwise.app.graph.handler.StopJobHandler;
 import com.bitwise.app.joblogger.JobLogger;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -110,7 +109,8 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 						joblogger.logMessage(JOB_FAILED);
 					}else{
 						joblogger.logMessage(JOB_COMPLETED_SUCCESSFULLY);
-						((DebugHandler) RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(true);
+						JobManager.INSTANCE.enableDebugJob(true);
+						//((DebugHandler) RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(true);
 					}
 				}
 			}
