@@ -2,12 +2,14 @@ package com.bitwise.app.propertywindow.widgets.customwidgets;
 
 import java.util.LinkedHashMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
@@ -94,6 +96,8 @@ public class ELTRetentionLogicWidget extends AbstractWidget{
 	}
 	
 	private void populateWidget(){
+		if(StringUtils.isBlank(this.properties))
+			this.properties=Constants.FIRST;
 		switch(this.properties){
 			case "First":
 				((Button) First.getSWTWidgetControl()).setSelection(true);

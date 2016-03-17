@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
@@ -87,9 +88,12 @@ public class RemoveDupsConverter extends StraightPullConverter {
 
 	private Keep getKeep() {
 		logger.debug("Generating Retention Logic for ::{}", componentName);
-		String keepValue = properties.get(PropertyNameConstants.RETENTION_LOGIC_KEEP.value()).toString();
+		String keepValue =(String) properties.get(PropertyNameConstants.RETENTION_LOGIC_KEEP.value());
 		Keep keep = new Keep();
-		keep.setValue(KeepValue.fromValue(keepValue.toLowerCase()));
+		if(StringUtils.isNotBlank(keepValue))
+		keep.setValue(KeepValue.fromValue(StringUtils.lowerCase(keepValue)));
+		else
+		keep.setValue(KeepValue.fromValue(StringUtils.lowerCase(Constants.FIRST)));	
 		return keep;
 	}
 
