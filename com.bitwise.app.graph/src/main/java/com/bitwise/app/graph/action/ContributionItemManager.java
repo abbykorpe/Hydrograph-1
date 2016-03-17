@@ -132,6 +132,12 @@ public enum ContributionItemManager {
 		}
 
 	},
+	DELETE {
+		public void setEnable(boolean status) {
+			DELETE.setMenuItemStatus(menuItemsList.get(3), status);
+			DELETE.setToolItemStatus(6, status);
+		}
+	},
 	CUT {
 		public void setEnable(boolean status) {
 			CUT.setMenuItemStatus(menuItemsList.get(0), status);
@@ -205,6 +211,7 @@ public enum ContributionItemManager {
 	}
 
 	private void setToolItemStatus(int toolItemNumber, boolean status) {
+		
 		for (Control control : controls) {
 			if (control instanceof ToolBar && (!control.isDisposed())) {
 				if (((ToolBar) control).getItems().length > 5) {

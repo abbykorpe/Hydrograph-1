@@ -19,6 +19,7 @@ import java.util.List;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 
+import com.bitwise.app.graph.action.ContributionItemManager;
 import com.bitwise.app.graph.figure.ComponentFigure;
 import com.bitwise.app.graph.figure.PortFigure;
 
@@ -37,12 +38,14 @@ public class ComponentSelectionPolicy extends SelectionEditPolicy {
 	protected void hideSelection() {		
 		((ComponentFigure)getHostFigure()).setComponentColorAndBorder();
 		hideLabelSelection();
+		ContributionItemManager.DELETE.setEnable(false);
 	}
 
 	@Override
 	protected void showSelection() {
 		((ComponentFigure)getHostFigure()).setSelectedComponentColorAndBorder();
 		showLabelSelection();
+		ContributionItemManager.DELETE.setEnable(true);
 		
 	}
 
