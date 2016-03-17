@@ -21,11 +21,8 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;simpleType name="property_renderer">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="GENERATE_RECORDS_SCHEMA_WIDGET"/>
-<<<<<<< HEAD
  *     &lt;enumeration value="TRANSFORM_SCHEMA_WIDGET"/>
-=======
  *     &lt;enumeration value="JOIN_FIXED_WIDTH_SCHEMA_WIDGET"/>
->>>>>>> BugFix #202 - Short help Tool tip on component properties with expected
  *     &lt;enumeration value="SCHEMA_WIDGET"/>
  *     &lt;enumeration value="FIELD_SEQUENCE_WIDGET"/>
  *     &lt;enumeration value="FIXED_WIDGET"/>
