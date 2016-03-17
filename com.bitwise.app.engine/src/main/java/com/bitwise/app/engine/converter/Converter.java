@@ -154,7 +154,13 @@ public abstract class Converter {
 		return baseComponent;
 	}
 	
-	protected String getSubgraphAbsolutePath(String subgraphPath) {
+	/**
+	 * This method returns absolute path of subgraph xml.
+	 * 
+	 * @param subgraphPath
+	 * @return
+	 */
+	protected String getSubGraphAbsolutePath(String subgraphPath) {
 		String absolutePath = subgraphPath;
 		IPath ipath=new Path(subgraphPath);
 		try {

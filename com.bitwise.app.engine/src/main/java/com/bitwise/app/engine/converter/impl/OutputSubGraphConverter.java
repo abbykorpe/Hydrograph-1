@@ -44,7 +44,7 @@ public class OutputSubGraphConverter extends OutputConverter {
 		Subgraph subgraph = (Subgraph) baseComponent;
 		if(properties.get(Constants.JOB_PATH)!=null){
 			Subgraph.Path path = new Subgraph.Path();
-			String subGraphFilePath = getSubgraphAbsolutePath(((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.JOB_EXTENSION));
+			String subGraphFilePath = getSubGraphAbsolutePath(((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION));
 			path.setUri(subGraphFilePath);
 			subgraph.setPath(path);
 		}
