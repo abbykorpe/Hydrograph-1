@@ -233,7 +233,7 @@ public class ProjectStructureCreator {
 				newProject = createTheProjectAtSpecifiedLocation(projectName,location);
 		}
 		else{
-			URI newLocation=URI.create(location + "/" + projectName);
+			URI newLocation=URI.create(location.toString());
 				newProject=	createTheProjectAtSpecifiedLocation(projectName, newLocation);
 		}
 		return newProject;
