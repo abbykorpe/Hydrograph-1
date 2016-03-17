@@ -2,6 +2,7 @@ package com.bitwise.app.propertywindow.widgets.customwidgets;
 
 import java.util.LinkedHashMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -95,7 +96,7 @@ public class ELTRetentionLogicWidget extends AbstractWidget{
 	}
 	
 	private void populateWidget(){
-		if(this.properties==null)
+		if(StringUtils.isBlank(this.properties))
 			this.properties=Constants.FIRST;
 		switch(this.properties){
 			case "First":
