@@ -44,7 +44,6 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="TRANSFORM_WIDGET"/>
  *     &lt;enumeration value="NORMALIZE_WIDGET"/>
  *     &lt;enumeration value="JOIN_INPUT_COUNT_WIDGET"/>
- *     &lt;enumeration value="CUMULATE_WIDGET"/>
  *     &lt;enumeration value="INPUT_COUNT_WIDGET"/>
  *     &lt;enumeration value="OUTPUT_COUNT_WIDGET"/>
  *     &lt;enumeration value="JOIN_TYPE_WIDGET"/>
@@ -91,7 +90,6 @@ public enum PropertyRenderer {
     NORMALIZE_WIDGET,
     AGGREGATE_WIDGET,
     JOIN_INPUT_COUNT_WIDGET,
-    CUMULATE_WIDGET,
     INPUT_COUNT_WIDGET,
     OUTPUT_COUNT_WIDGET,
     JOIN_TYPE_WIDGET,

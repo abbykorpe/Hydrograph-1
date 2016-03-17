@@ -57,7 +57,6 @@
 			<enumeration value="NORMALIZE_WIDGET"/>
 			<enumeration value="AGGREGATE_WIDGET"/>
 			<enumeration value="JOIN_INPUT_COUNT_WIDGET"/>
-			<enumeration value="CUMULATE_WIDGET"/>
 			<enumeration value="INPUT_COUNT_WIDGET"/>
 			<enumeration value="OUTPUT_COUNT_WIDGET"/>
 			<enumeration value="JOIN_TYPE_WIDGET"/>
