@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Control;
 
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.propertywindow.messages.Messages;
@@ -64,6 +65,8 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		runtimeComposite.createContainerWidget();
 		ELTDefaultLable defaultLable1 = new ELTDefaultLable(Messages.OPERATION_CALSS_LABEL); 
 		runtimeComposite.attachWidget(defaultLable1);
+		
+		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
 		
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(
 				Messages.EDIT_BUTTON_LABEL).grabExcessHorizontalSpace(false);

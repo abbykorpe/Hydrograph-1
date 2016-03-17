@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Control;
 
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
@@ -56,7 +56,7 @@ public class ELTXmlPropertiesContainer extends AbstractWidget{
 		
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Properties");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
-		
+		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
 		
 		final AbstractELTWidget eltDefaultButton = new ELTDefaultButton("Edit");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);

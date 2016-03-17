@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
@@ -14,7 +15,6 @@ import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget;
-import com.bitwise.app.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.RuntimeConfig;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -32,7 +32,6 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 	private Map<String, String> initialMap;
 	private String propertyName;
 	private Shell shell;
-	private String componentName;
 	private RuntimeConfig runtimeConfig;
 	
 	/**
@@ -70,7 +69,7 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 		
 		ELTDefaultLable defaultLable1 = new ELTDefaultLable(runtimeConfig.getLabel()); 
 		runtimeComposite.attachWidget(defaultLable1);
-		
+		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
 		
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(Constants.EDIT);
 		

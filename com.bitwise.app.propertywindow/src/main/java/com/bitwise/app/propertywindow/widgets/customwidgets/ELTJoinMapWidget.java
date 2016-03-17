@@ -1,6 +1,5 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.Map;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Control;
 
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FilterProperties;
@@ -17,8 +17,6 @@ import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.JoinMappingGrid;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.datastructure.property.Schema;
-import com.bitwise.app.common.datastructure.property.mapping.ErrorObject;
-import com.bitwise.app.common.datastructure.property.mapping.InputField;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
@@ -62,6 +60,8 @@ public class ELTJoinMapWidget extends AbstractWidget {
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Join\n Mapping");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
+		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
+		
 		final AbstractELTWidget eltDefaultButton = new ELTDefaultButton("Edit");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {

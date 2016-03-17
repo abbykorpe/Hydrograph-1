@@ -196,6 +196,7 @@ public class PropertyDialogBuilder {
 		widget.setPropertyDialog(propertyDialog);
 		widget.setComponent(component);
 		widget.attachToPropertySubGroup(subGroupContainer);
+		widget.setPropertyHelp();
 		
 		if(widget instanceof ELTSchemaGridWidget){
 			schemaWidget = widget;

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Control;
 
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FilterProperties;
@@ -57,6 +58,8 @@ public class ELTLookupMapWidget extends AbstractWidget {
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Lookup\n Mapping");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
+		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
+		
 		final AbstractELTWidget eltDefaultButton = new ELTDefaultButton("Edit");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {

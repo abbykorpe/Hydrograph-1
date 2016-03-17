@@ -7,6 +7,7 @@ import java.util.List;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 import com.bitwise.app.common.util.Constants;
@@ -45,7 +46,9 @@ public class SingleColumnWidget extends AbstractWidget {
 
 		AbstractELTWidget defaultLable = new ELTDefaultLable(gridConfig.getLabelName());
 		defaultSubgroupComposite.attachWidget(defaultLable);
-
+		setPropertyHelpWidget((Control) defaultLable.getSWTWidgetControl());
+		
+		
 		AbstractELTWidget defaultButton = new ELTDefaultButton(Constants.EDIT);
 		defaultSubgroupComposite.attachWidget(defaultButton);
 		Button button = (Button) defaultButton.getSWTWidgetControl();
@@ -82,6 +85,7 @@ public class SingleColumnWidget extends AbstractWidget {
 		return property;
 	}
 
+	@Override
 	public void setWidgetConfig(WidgetConfig widgetConfig) {
 		gridConfig = (SingleColumnGridConfig) widgetConfig;
 	}
