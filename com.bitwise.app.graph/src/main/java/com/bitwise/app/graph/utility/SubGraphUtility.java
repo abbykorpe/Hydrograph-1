@@ -404,9 +404,9 @@ public class SubGraphUtility {
 		if (inPort > 0 && outPort > 0)
 			selectedSubgraphComponent.getProperties().put(Constants.TYPE, Constants.OPERATION);
 		else if (inPort > 0 && outPort == 0)
-			selectedSubgraphComponent.getProperties().put(Constants.TYPE, Constants.INPUT);
-		else if (inPort == 0 && outPort > 0)
 			selectedSubgraphComponent.getProperties().put(Constants.TYPE, Constants.OUTPUT);
+		else if (inPort == 0 && outPort > 0)
+			selectedSubgraphComponent.getProperties().put(Constants.TYPE, Constants.INPUT);
 		else if (inPort == 0 && outPort == 0)
 			selectedSubgraphComponent.getProperties().put(Constants.TYPE, Constants.STANDALONE_SUBGRAPH);
 

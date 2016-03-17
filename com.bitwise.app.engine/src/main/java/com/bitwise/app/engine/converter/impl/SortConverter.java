@@ -78,7 +78,7 @@ public class SortConverter extends StraightPullConverter {
 		Map<String, String> fieldValueMap = (LinkedHashMap<String, String>) properties.get(Constants.PARAM_SECONDARY_COLUMN_KEYS);
 
 		TypeSecondaryKeyFields typeSecondaryKeyFields = null;
-		if (fieldValueMap != null) {
+		if (fieldValueMap != null && !fieldValueMap.isEmpty()) {
 			typeSecondaryKeyFields = new TypeSecondaryKeyFields();
 			List<TypeSecondayKeyFieldsAttributes> fieldNameList = typeSecondaryKeyFields.getField();
 			for (Map.Entry<String, String> entry : fieldValueMap.entrySet()) {
