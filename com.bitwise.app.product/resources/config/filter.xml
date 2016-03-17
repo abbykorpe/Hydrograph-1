@@ -30,9 +30,12 @@
 			<tns:validator>CLASS_NAME_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="filter" renderer="FILTER_PROPERTY_WIDGET" type="USER"
+		<tns:property dataType="string" name="operation_fields" renderer="FILTER_PROPERTY_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
-			usage="OPTIONAL" propertyHelpText="Fields used within the java \nclass for the Filter operation."/>
+			usage="OPTIONAL" propertyHelpText="Fields used within the java \nclass for the Filter operation.">
+			<tns:validator>KEY_FIELDS_VALIDATOR</tns:validator>
+			</tns:property>
+
 			
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"

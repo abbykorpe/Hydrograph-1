@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.core.runtime,
  com.bitwise.app.common;bundle-version="0.0.1",
  org.slf4j.api,
  org.eclipse.ui,
- com.bitwise.app.logging;bundle-version="1.0.0"
+ com.bitwise.app.logging;bundle-version="1.0.0",
+ org.apache.commons.lang;bundle-version="2.6.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.bitwise.app.tooltip.tooltips

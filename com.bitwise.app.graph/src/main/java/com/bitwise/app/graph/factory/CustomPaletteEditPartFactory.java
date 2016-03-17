@@ -14,30 +14,25 @@ import org.eclipse.swt.graphics.Color;
  */
 public class CustomPaletteEditPartFactory extends PaletteEditPartFactory {
 
-    private Color palatteBackgroundColor;
+    private Color palatteTextColor;
     
 	/**
 	 * Instantiates a new custom palette edit part factory.
 	 * 
-	 * @param entryForegroundColor
-	 *            the entry foreground color
-	 * @param entryBackgroundColor
-	 *            the entry background color
+	 * @param palatteTextColor
 	 */
-    public CustomPaletteEditPartFactory(Color entryBackgroundColor) {
-        palatteBackgroundColor = entryBackgroundColor;
+    public CustomPaletteEditPartFactory(Color palatteTextColor) {
+    	this.palatteTextColor = palatteTextColor;
     }
     @Override
     protected EditPart createMainPaletteEditPart(EditPart parentEditPart, Object model) {
         return new SliderPaletteEditPart((PaletteRoot)model) {
             @Override
             public IFigure createFigure() {
-                IFigure fig = super.createFigure();
-                fig.setBackgroundColor(palatteBackgroundColor);
-                return fig;
+				IFigure figure = super.createFigure();
+				figure.setForegroundColor(palatteTextColor);
+				return figure;
             }
         };
     }
-   
-
 }

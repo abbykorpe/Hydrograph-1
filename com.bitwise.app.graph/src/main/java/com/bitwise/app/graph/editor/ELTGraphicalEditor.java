@@ -74,6 +74,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackAdapter;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -123,6 +124,7 @@ import com.bitwise.app.graph.action.subgraph.SubGraphUpdateAction;
 import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
 import com.bitwise.app.graph.handler.DebugHandler;
+import com.bitwise.app.graph.factory.CustomPaletteEditPartFactory;
 import com.bitwise.app.graph.handler.RunJobHandler;
 import com.bitwise.app.graph.handler.StopJobHandler;
 import com.bitwise.app.graph.job.Job;
@@ -159,8 +161,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	
 	private static final String DEFAULT_CONSOLE = "NewConsole";
 	private static final String CONSOLE_VIEW_ID = "com.bitwise.app.project.structure.console.AcceleroConsole";
+
 	private String uniqueJobId;
 	private String jobId;
+
+	private static final Color palatteTextColor=new Color(null,51,51,51);
+	
+
 	/**
 	 * Instantiates a new ETL graphical editor.
 	 */
@@ -445,7 +452,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			@Override
 			protected void configurePaletteViewer(final PaletteViewer viewer) {
 				super.configurePaletteViewer(viewer);
-				//viewer.setEditPartFactory(new CustomPaletteEditPartFactory(palatteBackgroundColor));
+				viewer.setEditPartFactory(new CustomPaletteEditPartFactory(palatteTextColor));
 				// create a drag source listener for this palette viewer
 				// together with an appropriate transfer drop target listener,
 				// this will enable

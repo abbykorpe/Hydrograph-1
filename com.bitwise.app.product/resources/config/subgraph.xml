@@ -25,7 +25,6 @@
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
 			usage="REQUIRED" propertyHelpText="Displays the location of the Subjob file \neither Remote/Local. Allows only underscore ‘_’ and \nalphanumeric characters.">
 			<tns:validator>FILE_EXISTS_VALIDATOR</tns:validator>
-			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="runtime_properties"

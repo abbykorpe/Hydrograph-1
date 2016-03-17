@@ -65,7 +65,11 @@ public enum Validators {
     @XmlEnumValue("TRANSFORM_SCHEMA_GRID_VALIDATOR")
     TransformSchemaGridValidationRule("TRANSFORM_SCHEMA_GRID_VALIDATOR"),
     @XmlEnumValue("FILE_EXISTS_VALIDATOR")
-    FileExistsValidatorRule("FILE_EXISTS_VALIDATOR");
+    FileExistsValidatorRule("FILE_EXISTS_VALIDATOR"),
+    @XmlEnumValue("KEY_FIELDS_VALIDATOR")
+    KeyFieldsValidationRule("KEY_FIELDS_VALIDATOR"),
+    @XmlEnumValue("SECONDARY_KEYS_VALIDATOR")
+    SecondaryKeysValidationRule("SECONDARY_KEYS_VALIDATOR");
     private final String value;
 
     Validators(String v) {

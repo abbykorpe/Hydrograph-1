@@ -1,5 +1,7 @@
 package com.bitwise.app.tooltip.tooltips;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.eclipse.jface.action.ToolBarManager;
@@ -22,12 +24,15 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
+import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
+import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
 import com.bitwise.app.common.util.WordUtils;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.widgets.utility.FilterOperationClassUtility;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
-
+import org.apache.commons.lang.StringUtils;
 /**
  * 
  * Class for component tooltip
@@ -118,7 +123,7 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 		for(String property: componentToolTipInformation.keySet()){
 			PropertyToolTipInformation propertyInfo = componentToolTipInformation.get(property);
 			if(propertyInfo.isShowAsTooltip()){
-				addPropertyInformationToToolTip(container, propertyInfo);
+					addPropertyInformationToToolTip(container, propertyInfo);
 			}
 		}
 	}
@@ -130,15 +135,104 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 	 */
 	private void addPropertyInformationToToolTip(final Composite container,
 			PropertyToolTipInformation propertyInfo) {
-		if(propertyInfo.getPropertyValue()!=null && propertyInfo.getPropertyName().equalsIgnoreCase("OPERATION_CLASS")){	
+		if(propertyInfo.getPropertyValue()!=null)
+		{
+		if(propertyInfo.getPropertyName().equalsIgnoreCase(Constants.OPERATION_CLASS)){	
 			logger.debug("ComponentTooltip.addToolTipContents(): Its Opeartion class");
 			addOperationClassPropertyToToolTip(container, propertyInfo);
-		}else{
-			logger.debug("ComponentTooltip.addToolTipContents(): Its other property or with Opeartion class=null");
-			addPropertyToToolTip(container, propertyInfo);
+		}
+			else if (propertyInfo.getPropertyName().equalsIgnoreCase(Constants.JOIN_CONFIG)) {
+				int joinKeyIndex = 0, recordRequiredIndex = 0;
+				if (propertyInfo.getPropertyValue() != null
+						&& !((ArrayList<JoinConfigProperty>) propertyInfo.getPropertyValue()).isEmpty()) {
+					for (JoinConfigProperty joinConfigProperty : ((ArrayList<JoinConfigProperty>) propertyInfo
+							.getPropertyValue())) {
+						addJoinKeysInTooltip(container, joinConfigProperty.getJoinKey(), joinKeyIndex);
+						joinKeyIndex++;
+					}
+					for (JoinConfigProperty joinConfigProperty : ((ArrayList<JoinConfigProperty>) propertyInfo
+							.getPropertyValue())) {
+						String recordRequired = joinConfigProperty.getRecordRequired() == 0 ? Constants.TRUE
+								: Constants.FALSE;
+						addRecordRequiredInTooltip(container, recordRequired, recordRequiredIndex);
+						recordRequiredIndex++;
+					}
+				}
+			} else if (propertyInfo.getPropertyName().equalsIgnoreCase(Constants.HASH_JOIN)) {
+				if (propertyInfo.getPropertyValue() != null) {
+					LookupConfigProperty lookupConfigProperty = (LookupConfigProperty) propertyInfo.getPropertyValue();
+					String lookupPort = lookupConfigProperty.isSelected() ? Constants.IN0 : Constants.IN1;
+					addLookupConfigurationDetailsInTooltip(container, lookupConfigProperty.getDriverKey(),
+							lookupConfigProperty.getLookupKey(), lookupPort);
+				}
+			} else if (propertyInfo.getPropertyName().equalsIgnoreCase(Constants.SCHEMA)) {
+				if (propertyInfo.getPropertyValue() != null) {
+					if(((Schema) propertyInfo.getPropertyValue()).getIsExternal())
+					{
+					String externalSchemaPath = ((Schema) propertyInfo.getPropertyValue()).getExternalSchemaPath();
+					Label externalSchemaPathLabel = setExternalSchemaInTooltip(container, externalSchemaPath);
+					showErrorMessageWhenFieldIsEmpty(externalSchemaPath, externalSchemaPathLabel,
+							Constants.EXTERNAL_SCHEMA_PATH_ERROR_MESSAGE);
+					}
+				}
+			} else {
+				logger.debug("ComponentTooltip.addToolTipContents(): Its other property or with Opeartion class=null");
+				addPropertyToToolTip(container, propertyInfo);
+			}
 		}
 	}
 
+	private Label setExternalSchemaInTooltip(final Composite container, String externalSchemaPath) {
+		Label externalSchemaPathLabel = new Label(container, SWT.NONE);
+		externalSchemaPathLabel.setText(Constants.EXTERNAL_SCHEMA_PATH + externalSchemaPath);
+		externalSchemaPathLabel.setBackground(container.getDisplay().getSystemColor(
+				SWT.COLOR_INFO_BACKGROUND));
+		externalSchemaPathLabel.addListener(SWT.MouseUp, getMouseClickListener(container));
+		return externalSchemaPathLabel;
+	}
+	private void addJoinKeysInTooltip(final Composite container, String joinKey, int index)
+	{
+		Label joinKeyLabel = new Label(container, SWT.NONE);
+		joinKeyLabel.setText(Constants.JOIN_KEY+index+":"+joinKey);
+		joinKeyLabel.setBackground(container.getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+		joinKeyLabel.addListener(SWT.MouseUp, getMouseClickListener(container));
+		showErrorMessageWhenFieldIsEmpty(joinKey,joinKeyLabel,Constants.JOIN_KEY_ERROR_MESSAGE);
+	}
+	
+	private void addRecordRequiredInTooltip(final Composite container, String recordRequired, int index)
+	{
+		Label recordRequiredLabel = new Label(container, SWT.NONE);
+		recordRequiredLabel.setText(Constants.RECORD_REQUIRED+index+":"+recordRequired);
+		recordRequiredLabel.setBackground(container.getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+		recordRequiredLabel.addListener(SWT.MouseUp, getMouseClickListener(container));
+	}
+
+	private void addLookupConfigurationDetailsInTooltip(final Composite container, String driverKey, String lookupKey, String lookupPort)
+	{
+		Label driverKeyLabel = new Label(container, SWT.NONE);
+		Label lookupKeyLabel = new Label(container, SWT.NONE);
+		Label lookupPortLabel = new Label(container, SWT.NONE);
+		driverKeyLabel.setText(Constants.DRIVER_KEY+driverKey);
+		lookupKeyLabel.setText(Constants.LOOKUP_KEY+lookupKey);
+		lookupPortLabel.setText(Constants.LOOKUP_PORT+lookupPort);
+		driverKeyLabel.setBackground(container.getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+		driverKeyLabel.addListener(SWT.MouseUp, getMouseClickListener(container));
+		lookupKeyLabel.setBackground(container.getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+		lookupKeyLabel.addListener(SWT.MouseUp, getMouseClickListener(container));
+		lookupPortLabel.setBackground(container.getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+		lookupPortLabel.addListener(SWT.MouseUp, getMouseClickListener(container));
+		showErrorMessageWhenFieldIsEmpty(driverKey,driverKeyLabel,Constants.DRIVER_KEY_ERROR_MESSAGE);
+		showErrorMessageWhenFieldIsEmpty(lookupKey,lookupKeyLabel,Constants.LOOKUP_KEY_ERROR_MESSAGE);
+	}
+	private void showErrorMessageWhenFieldIsEmpty(String propertyValue,Control label,String errorMessage)
+	{
+		ControlDecoration decorator = WidgetUtility.addDecorator(label,errorMessage);
+		if (StringUtils.isEmpty(propertyValue)) {
+			decorator.show();
+		} else {
+			decorator.hide();
+		}
+	}
 	/**
 	 * add operation class property to tooltip container
 	 * 
@@ -325,13 +419,53 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 	private void addPropertyNameValueText(
 			PropertyToolTipInformation propertyInfo, Label lblTextProperty,
 			String propertyNameCapitalized) {
-		if(propertyInfo.getTooltipDataType().equalsIgnoreCase("LIST")){
+		if (propertyInfo.getTooltipDataType().equalsIgnoreCase(Constants.LIST_DATA_TYPE)) {
 			logger.debug("ComponentTooltip.addPropertyToToolTip() - property type is LIST=");
-			lblTextProperty.setText(propertyNameCapitalized + " : " + propertyInfo.getPropertyValue());
-		}else{
+			String propertyValue = propertyInfo.getPropertyValue().toString()
+					.substring(1, propertyInfo.getPropertyValue().toString().length() - 1);
+			String formattedPropertyValue = "";
+			if (propertyInfo.getPropertyName().equalsIgnoreCase(Constants.SECONDARY_KEYS)
+					|| propertyInfo.getPropertyName().equalsIgnoreCase(Constants.PRIMARY_KEYS)) {
+				formattedPropertyValue = setFormattingOfSecondaryKeysAndPrimaryKeys(propertyValue,
+						formattedPropertyValue);
+				lblTextProperty.setText(propertyNameCapitalized + " : " + formattedPropertyValue);
+			} else {
+				lblTextProperty.setText(propertyNameCapitalized + " : " + propertyValue);
+			}
+		} else {
 			logger.debug("ComponentTooltip.addPropertyToToolTip() - property type is Text/Map=");
-			lblTextProperty.setText(propertyNameCapitalized + " : " + propertyInfo.getPropertyValue().toString());
+			if (propertyInfo.getPropertyName().equalsIgnoreCase(Constants.MATCH_VALUE)) {
+				String propertyValue = propertyInfo.getPropertyValue().toString();
+				String formattedPropertyValue = propertyValue.substring(propertyValue.lastIndexOf("=") + 1).replace(
+						"]", "");
+				if (!formattedPropertyValue.trim().equalsIgnoreCase("null")) {
+					lblTextProperty.setText(propertyNameCapitalized + " : " + formattedPropertyValue);
+				} else {
+					lblTextProperty.setText(propertyNameCapitalized + " : " + "First");
+				}
+			} else if (propertyInfo.getPropertyName().equalsIgnoreCase(Constants.NO_OF_RECORDS)) {
+				String formattedPropertyName = propertyNameCapitalized.toLowerCase().substring(0, 1).toUpperCase()
+						+ propertyNameCapitalized.toLowerCase().substring(1);
+				lblTextProperty.setText(formattedPropertyName + " : " + propertyInfo.getPropertyValue().toString());
+			} else {
+				lblTextProperty.setText(propertyNameCapitalized + " : " + propertyInfo.getPropertyValue().toString());
+			}
 		}
+	}
+
+	private String setFormattingOfSecondaryKeysAndPrimaryKeys(String propertyValue, String formattedPropertyValue) {
+		String[] rowData = propertyValue.split(",");
+
+		for (int i = 0; i < rowData.length; i++) {
+			formattedPropertyValue = formattedPropertyValue + rowData[i].replace("=", "(");
+			if (!formattedPropertyValue.equalsIgnoreCase("")) {
+				formattedPropertyValue = formattedPropertyValue + ")";
+				if (i != rowData.length - 1) {
+					formattedPropertyValue = formattedPropertyValue + ",";
+				}
+			}
+		}
+		return formattedPropertyValue;
 	}
 
 	/**
@@ -372,7 +506,33 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 			logger.debug("ComponentTooltip.showErrors() - Showing error balloon on property " + propertyInfo.getPropertyName() + 
 					", Error: " + propertyInfo.getErrorMessage());
 			ControlDecoration lblDecorator = WidgetUtility.addDecorator(lblLinkProperty, propertyInfo.getErrorMessage());
-			lblDecorator.show();
+			if (propertyInfo.getTooltipDataType().equalsIgnoreCase(Constants.LIST)) {
+				ArrayList<String> keyFieldList;
+				LinkedHashMap<String, Object> secondaryKeysList;
+				if (propertyInfo.getPropertyName().equalsIgnoreCase(Constants.KEY_FIELDS)||propertyInfo.getPropertyName().equalsIgnoreCase(Constants.OPERATION_FIELDS)) {
+					keyFieldList = (ArrayList<String>) propertyInfo.getPropertyValue();
+					if (keyFieldList.size() == 0) {
+						lblDecorator.show();
+					} else {
+						lblDecorator.hide();
+					}
+				} 
+				if(propertyInfo.getPropertyName().equalsIgnoreCase(Constants.SECONDARY_KEYS)||propertyInfo.getPropertyName().equalsIgnoreCase(Constants.PRIMARY_KEYS)) {
+					secondaryKeysList = (LinkedHashMap<String, Object>) propertyInfo.getPropertyValue();
+					if (secondaryKeysList.size() == 0) {
+						lblDecorator.show();
+					} else {
+						lblDecorator.hide();
+					}
+				}
+
+			} else {
+				if (propertyInfo.getPropertyValue() != null && (!propertyInfo.getPropertyValue().equals(""))) {
+					lblDecorator.hide();
+				} else {
+					lblDecorator.show();
+				}
+			}
 		}
 	}
 

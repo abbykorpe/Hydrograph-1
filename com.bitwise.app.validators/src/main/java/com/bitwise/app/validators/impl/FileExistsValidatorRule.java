@@ -36,6 +36,7 @@ public class FileExistsValidatorRule implements IValidator{
 				return false;
 			}
 		}
+		errorMessage= propertyName + " is mandatory";
 		return false;
 	}
 

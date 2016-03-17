@@ -21,8 +21,9 @@
 			renderer="COMPONENT_NAME_WIDGET" type="USER" group="GENERAL"
 			subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 
+
 		<tns:property dataType="string" name="schema" renderer="TRANSFORM_SCHEMA_WIDGET" type="USER"
-			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="FALSE" tooltipDataType="NONE"
+			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="REQUIRED">
 			<tns:validator>TRANSFORM_SCHEMA_GRID_VALIDATOR</tns:validator>
 		</tns:property>
@@ -34,7 +35,7 @@
 
 		<tns:property dataType="string" name="operation"
 			renderer="TRANSFORM_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
-			showAsTooltip="TRUE" tooltipDataType="LIST" usage="OPTIONAL" propertyHelpText="Fields mapping view."/>
+			showAsTooltip="FALSE" tooltipDataType="NONE" usage="OPTIONAL" propertyHelpText="Fields mapping view."/>
 			
 		<tns:property dataType="string" name="phase" value="0"
 			renderer="PHASE_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
