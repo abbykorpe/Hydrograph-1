@@ -471,7 +471,7 @@ public class RunConfigDialog extends Dialog {
 			if (StringUtils.isEmpty(textPassword.getText()))
 				note.addError("Password not specified");
 		}
-		if (StringUtils.isEmpty(basepathText.getText()))
+		if (isDebug && StringUtils.isEmpty(basepathText.getText()))
 			note.addError("Base Path not specified");
 		
 		return note;
