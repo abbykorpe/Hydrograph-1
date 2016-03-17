@@ -91,12 +91,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String RANGE_TO = Messages.RANGE_TO;
 	public static final String DEFAULT_VALUE =Messages.DEFAULT_VALUE;
 
-	protected boolean isTransformSchemaType=false;
+	protected boolean transformSchemaType=false;
 
 	protected String gridRowType;
-
-	private CellEditor fieldNameEditor;
-
 
 	protected ControlDecoration fieldNameDecorator;
 	protected ControlDecoration isFieldNameAlphanumericDecorator;
@@ -274,7 +271,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 
-		if(isTransformSchemaType)
+		if(transformSchemaType)
 			createSchemaGridSection(container.getContainerControl(), 340, 360);
 		else{
 			createSchemaTypesSection(container.getContainerControl());
@@ -407,7 +404,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		importExportComposite.createContainerWidget();
 		importExportComposite.numberOfBasicWidgets(2);
 
-		AbstractELTWidget importButtonWidget = new ELTDefaultButton("Import XML").buttonWidth(100);
+		AbstractELTWidget importButtonWidget = new ELTDefaultButton(Messages.IMPORT_XML).buttonWidth(100);
 		importExportComposite.attachWidget(importButtonWidget);
 		importButton = (Button) importButtonWidget.getSWTWidgetControl();
 
@@ -436,7 +433,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 		});
 
-		AbstractELTWidget exportButtonWidget = new ELTDefaultButton("Export XML").buttonWidth(100).grabExcessHorizontalSpace(false);
+		AbstractELTWidget exportButtonWidget = new ELTDefaultButton(Messages.EXPORT_XML).buttonWidth(100).grabExcessHorizontalSpace(false);
 		importExportComposite.attachWidget(exportButtonWidget);
 		exportButton = (Button) exportButtonWidget.getSWTWidgetControl();
 
@@ -554,10 +551,12 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	}
 
 
-	private void toggleSchemaChoice(boolean enableExternalSchemaRadioButton) {if(externalSchema!=null){
-		((Button) externalSchema.getSWTWidgetControl()).setSelection(enableExternalSchemaRadioButton);
-		((Button) internalSchema.getSWTWidgetControl()).setSelection(!enableExternalSchemaRadioButton);
-	}}
+	private void toggleSchemaChoice(boolean enableExternalSchemaRadioButton) {
+		if(externalSchema!=null){
+			((Button) externalSchema.getSWTWidgetControl()).setSelection(enableExternalSchemaRadioButton);
+			((Button) internalSchema.getSWTWidgetControl()).setSelection(!enableExternalSchemaRadioButton);
+		}
+	}
 
 	private void toggleSchema(boolean enableExtSchema) {
 		if (extSchemaPathText != null && browseButton != null) {
@@ -651,8 +650,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					propertyDialogButtonBar, helper, table);
 
 		} catch (Exception e) {
-			logger.error("Failed to attach listeners to table", e);
-			throw new RuntimeException("Failed to attach listeners to table");
+			logger.error(Messages.ATTACH_LISTENER_ERROR, e);
+			throw new RuntimeException(Messages.ATTACH_LISTENER_ERROR);
 		}
 
 		gridListener(editors);
@@ -665,7 +664,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		addButton = new ELTDefaultLable("");
 		addButton.lableWidth(25);
 		buttonSubGroup.attachWidget(addButton);
-		addButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png");
+		addButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addButton.setToolTipText(addButtonTooltip);
 	}
 
@@ -673,7 +672,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		deleteButton = new ELTDefaultLable("");
 		deleteButton.lableWidth(25);
 		buttonSubGroup.attachWidget(deleteButton);
-		deleteButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png");
+		deleteButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		deleteButton.setToolTipText(removeButtonTooltip);
 	}
 
@@ -681,7 +680,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		upButton = new ELTDefaultLable("");
 		upButton.lableWidth(25);
 		buttonSubGroup.attachWidget(upButton);
-		upButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/up.png");
+		upButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.UP_ICON);
 		upButton.setToolTipText(upButtonTooltip);
 		upButton.addMouseUpListener(new MouseAdapter() {
 			@Override
@@ -706,7 +705,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		downButton.lableWidth(25);
 		buttonSubGroup.attachWidget(downButton);
 
-		downButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/down.png");
+		downButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DOWN_ICON);
 		downButton.setToolTipText(downButtonTooltip);
 
 
@@ -817,11 +816,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	}
 
 	public boolean isTransformSchemaType() {
-		return isTransformSchemaType;
+		return transformSchemaType;
 	}
 
 	public void setTransformSchemaType(boolean isTransformSchemaType) {
-		this.isTransformSchemaType = isTransformSchemaType;
+		this.transformSchemaType = isTransformSchemaType;
 	}
 
 }

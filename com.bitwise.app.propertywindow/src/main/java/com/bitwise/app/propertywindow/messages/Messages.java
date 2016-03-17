@@ -95,6 +95,8 @@ public class Messages extends NLS {
 	public static String MOVE_SCHEMA_DOWN_TOOLTIP;
 	public static String IMPORTED_SCHEMA;
 	public static String EXPORTED_SCHEMA;
+	public static String IMPORT_XML;
+	public static String EXPORT_XML;
 	public static String IMPORT_XML_ERROR;
 	public static String IMPORT_XML_FORMAT_ERROR;
 	public static String IMPORT_XML_DUPLICATE_FIELD_ERROR;
@@ -113,6 +115,7 @@ public class Messages extends NLS {
 	public static String CHECKBOX_DISABLE_MESSAGE;
 	public static String ERROR;
 	public static String PARAMETER_ERROR;
+	public static String ATTACH_LISTENER_ERROR;
 	
 	public static String FIELD_MAPPING;
 	public static String OPERATION_CLASS;

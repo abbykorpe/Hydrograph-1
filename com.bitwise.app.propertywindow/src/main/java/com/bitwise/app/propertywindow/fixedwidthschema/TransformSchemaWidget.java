@@ -16,7 +16,7 @@ public class TransformSchemaWidget extends ELTFixedWidget{
 
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
-		isTransformSchemaType=true;
+		transformSchemaType=true;
 		super.attachToPropertySubGroup(container);
 		
 	}
