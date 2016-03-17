@@ -490,6 +490,13 @@ public class RuntimePropertyDialog extends Dialog {
 						| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL);
 
 		loadProperties(tableViewer);
+		if (propertyList.size() != 0) {
+			deleteButton.setEnabled(true);
+		}
+		if (propertyList.size() >= 2) {
+			upButton.setEnabled(true);
+			downButton.setEnabled(true);
+		}
 
 	}
 
