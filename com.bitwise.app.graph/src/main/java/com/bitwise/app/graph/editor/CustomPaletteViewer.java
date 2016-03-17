@@ -106,7 +106,7 @@ public class CustomPaletteViewer extends PaletteViewer {
 			List<Component> matchingComponents, String searchedString) {
 		boolean matchFound = false;
 		for (Component componentConfig : componentsConfig) {
-			String componentName = componentConfig.getName().toUpperCase();
+			String componentName = componentConfig.getNameInPalette().toUpperCase();
 			if (Constants.DUMMY_COMPONENT.equalsIgnoreCase(componentConfig.getName()))
 				continue;
 			if (componentName.contains(searchedString.trim())) {
