@@ -80,7 +80,7 @@ public class SortConverter extends StraightPullConverter {
 					field.setOrder(TypeSortOrder.fromValue(primaryKeyRowEntry.getValue().toLowerCase()));
 					fieldNameList.add(field);
 				}else{
-					converterHelper.getParamTag(this.ID, primaryKeyRowEntry.getKey(), ComponentXpathConstants.STRAIGHTPULL_PRIMARY_KEYS.value());
+					converterHelper.addParamTag(this.ID, primaryKeyRowEntry.getKey(), ComponentXpathConstants.STRAIGHTPULL_PRIMARY_KEYS.value());
 				}
 			}
 		}
@@ -102,7 +102,7 @@ public class SortConverter extends StraightPullConverter {
 					field.setOrder(TypeSortOrder.fromValue(secondaryKeyRowEntry.getValue().toLowerCase()));
 					fieldNameList.add(field);}
 				else{
-					converterHelper.getParamTag(this.ID, secondaryKeyRowEntry.getKey(), ComponentXpathConstants.STRAIGHTPULL_SECONDARY_KEYS.value());
+					converterHelper.addParamTag(this.ID, secondaryKeyRowEntry.getKey(), ComponentXpathConstants.STRAIGHTPULL_SECONDARY_KEYS.value());
 				}
 			}
 		}

@@ -95,7 +95,7 @@ public class JoinConverter extends TransformConverter {
 						fieldName.setName(key);
 						typeKeyField.getField().add(fieldName);
 					} else {
-						converterHelper.getParamTag(this.ID, key, ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", entry.getPortIndex()));
+						converterHelper.addParamTag(this.ID, key, ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", entry.getPortIndex()));
 					}
 				}
 			}

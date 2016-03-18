@@ -109,7 +109,7 @@ public class FilterConverter extends TransformConverter {
 					operationField.setInSocketId(Constants.FIXED_INSOCKET_ID);
 					operationFiledList.add(operationField);
 				}else{
-					converterHelper.getParamTag(this.ID,fieldName, ComponentXpathConstants.FILTER_INPUT_FIELDS.value());
+					converterHelper.addParamTag(this.ID,fieldName, ComponentXpathConstants.FILTER_INPUT_FIELDS.value());
 				}
 			}
 		}

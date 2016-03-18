@@ -133,7 +133,7 @@ public class LookupConverter extends TransformConverter {
 					typeFieldName.setName(key);
 					typeFieldNameList.add(typeFieldName);
 				} else {
-					converterHelper.getParamTag(this.ID, key, ComponentXpathConstants.LOOKUP_KEYS.value().replace("$inSocketId", socketID));
+					converterHelper.addParamTag(this.ID, key, ComponentXpathConstants.LOOKUP_KEYS.value().replace("$inSocketId", socketID));
 				}
 			}
 
