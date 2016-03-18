@@ -17,12 +17,12 @@
 			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 		
 		<tns:property dataType="string" group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS"
-			name="schema" renderer="SCHEMA_WIDGET" type="USER" showAsTooltip="FALSE"
-			tooltipDataType="NONE" usage="REQUIRED">
+			name="schema" renderer="SCHEMA_WIDGET" type="USER" showAsTooltip="TRUE"
+			tooltipDataType="LIST" usage="REQUIRED">
 			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="path"
+		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="Path"
 			renderer="FILE_PATH_WIDGET" type="USER" showAsTooltip="TRUE" tooltipDataType="LINK"
 			usage="REQUIRED"  propertyHelpText="Displays the location of the file either\n Remote/Local. Allows only underscore ‘_’ and \nalphanumeric characters.">
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>

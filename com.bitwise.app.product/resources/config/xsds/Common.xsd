@@ -202,8 +202,22 @@
 		</enumeration>
 		<enumeration value="FILE_EXISTS_VALIDATOR">
 			 <annotation>
-		          <appinfo>
+		          <appinfo> KeyFieldsValidationRule("KEY_FIELDS_VALIDATOR");
 		            <jaxb:typesafeEnumMember name="FileExistsValidatorRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
+		<enumeration value="KEY_FIELDS_VALIDATOR">
+			 <annotation>
+		          <appinfo> 
+		            <jaxb:typesafeEnumMember name="KeyFieldsValidationRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
+		<enumeration value="SECONDARY_KEYS_VALIDATOR">
+			 <annotation>
+		          <appinfo> 
+		            <jaxb:typesafeEnumMember name="SecondaryKeysValidationRule" />
 		          </appinfo>
         	</annotation>
 		</enumeration>

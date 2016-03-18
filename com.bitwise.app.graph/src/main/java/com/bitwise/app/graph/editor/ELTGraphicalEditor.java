@@ -1,3 +1,16 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package com.bitwise.app.graph.editor;
 
 import java.io.ByteArrayInputStream;
@@ -74,6 +87,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackAdapter;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -123,6 +137,7 @@ import com.bitwise.app.graph.action.subgraph.SubGraphUpdateAction;
 import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
 import com.bitwise.app.graph.handler.DebugHandler;
+import com.bitwise.app.graph.factory.CustomPaletteEditPartFactory;
 import com.bitwise.app.graph.handler.RunJobHandler;
 import com.bitwise.app.graph.handler.StopJobHandler;
 import com.bitwise.app.graph.job.Job;
@@ -159,8 +174,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	
 	private static final String DEFAULT_CONSOLE = "NewConsole";
 	private static final String CONSOLE_VIEW_ID = "com.bitwise.app.project.structure.console.AcceleroConsole";
+
 	private String uniqueJobId;
 	private String jobId;
+
+	private static final Color palatteTextColor=new Color(null,51,51,51);
+	
+
 	/**
 	 * Instantiates a new ETL graphical editor.
 	 */
@@ -445,7 +465,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			@Override
 			protected void configurePaletteViewer(final PaletteViewer viewer) {
 				super.configurePaletteViewer(viewer);
-				//viewer.setEditPartFactory(new CustomPaletteEditPartFactory(palatteBackgroundColor));
+				viewer.setEditPartFactory(new CustomPaletteEditPartFactory(palatteTextColor));
 				// create a drag source listener for this palette viewer
 				// together with an appropriate transfer drop target listener,
 				// this will enable

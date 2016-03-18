@@ -24,25 +24,26 @@
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 			
+
 		<tns:property dataType="string" name="schema" renderer="TRANSFORM_SCHEMA_WIDGET" type="USER"
-			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="FALSE" tooltipDataType="NONE"
+			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="REQUIRED">
 			<tns:validator>TRANSFORM_SCHEMA_GRID_VALIDATOR</tns:validator>
 		</tns:property>
 			
-		<tns:property dataType="string" name="inPortCount|unusedPortCount" value="2" renderer="JOIN_INPUT_COUNT_WIDGET" type="USER"
+		<tns:property dataType="string" name="inPortCount" value="2" renderer="JOIN_INPUT_COUNT_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Specifies number of inputs for the Join operation. Default 2.">
 		</tns:property>
 			
 		<tns:property dataType="string" name="join_config" renderer="JOIN_TYPE_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="REQUIRED" propertyHelpText="Specifies key fields and Join type">
 			<tns:validator>JOIN_CONFIG_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" name="join_mapping"  renderer="JOIN_MAPPING_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="REQUIRED" propertyHelpText="Fields mapping view.">
 			<tns:validator>JOIN_MAPPING_VALIDATOR</tns:validator>
 		</tns:property>

@@ -11,21 +11,28 @@
  * limitations under the License.
  ******************************************************************************/
 
-CTabFolder{ 
-background-color: rgb(23,101,173); 
-}
+package com.bitwise.app.tooltip.tooltips;
 
-CBanner,CoolBar{
-background-color: rgb(223,234,235);
-} 
+import org.eclipse.osgi.util.NLS;
 
-#projectExplorerTreeColor{
-color:rgb(51,51,51);
-}
+/**
+ * The Class Messages.
+ * 
+ * @author Bitwise
+ */
+public class Messages extends NLS {
+	private static final String BUNDLE_NAME = "resources.tooltipErrorMessages";
 
-#projectExplorerToolBarColor{
-	background-color: rgb(23,101,173);
-}
-#consoleToolbarColor{
-background-color: rgb(23,101,173); 	
+	public static String JOIN_KEY_ERROR_MESSAGE;
+	public static String DRIVER_KEY_ERROR_MESSAGE;
+	public static String LOOKUP_KEY_ERROR_MESSAGE;
+	public static String EXTERNAL_SCHEMA_PATH_ERROR_MESSAGE;
+	static {
+		// initialize resource bundle
+		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
+	}
+
+	private Messages() {
+	}
+	
 }
