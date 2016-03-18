@@ -751,7 +751,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	public void setDirty(boolean dirty){
 		this.dirty = dirty;
-		setMainGraphDirty(dirty);
+		if (dirty)
+			setMainGraphDirty(dirty);
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
