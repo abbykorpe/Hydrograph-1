@@ -42,10 +42,7 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseTrackListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -78,7 +75,6 @@ import com.bitwise.app.propertywindow.widgets.filterproperty.ELTCellModifier;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
-import com.bitwise.app.propertywindow.widgets.listeners.grid.ELTGridAddSelectionListener;
 
 public class ELTLookupMapWizard extends Dialog {
 
@@ -203,9 +199,9 @@ public class ELTLookupMapWizard extends Dialog {
 		CellEditor[] editors = eltswtWidgets.createCellEditorList(
 				outputTableViewer.getTable(), 2);
 		editors[0].setValidator(sourceEditorValidator(outputTableViewer,
-				Messages.EmptyNameNotification, joinOutputList));
+				Messages.EmptySourceFieldNotification, joinOutputList));
 		editors[1].setValidator(outputFieldEditorValidator(outputTableViewer,
-				Messages.EmptyNameNotification, joinOutputList));
+				Messages.EmptySourceFieldNotification, joinOutputList));
 
 		outputTableViewer.setColumnProperties(COLUMN_NAME);
 		outputTableViewer.setCellModifier(new LookupCellModifier(
@@ -302,19 +298,35 @@ public class ELTLookupMapWizard extends Dialog {
 	    while (iterator.hasNext()) {
 	        Map.Entry portFieldPair = (Map.Entry)iterator.next();
 	        for (LookupMapProperty lookupMapProperty : joinOutputList) {
-	        	String port=lookupMapProperty.getSource_Field().substring(0,3);
+				String port = "";
+				if (lookupMapProperty.getSource_Field().length() >= 3) {
+					port = lookupMapProperty.getSource_Field().substring(0, 3);
+				}
 	        	String source_field = lookupMapProperty.getSource_Field().substring(lookupMapProperty.getSource_Field().lastIndexOf(".") + 1);
-				if(portFieldPair.getKey().equals(port))
-				{
+				if (portFieldPair.getKey().equals(port)) {
 					ArrayList<String> value = (ArrayList<String>) portFieldPair.getValue();
-					if(!value.isEmpty()&&!value.contains(source_field))
-					{
-						 sourceFieldList.add(port+"."+source_field);
+					if (!value.isEmpty() && !checkIfSourceFieldExists(value, source_field)) {
+						sourceFieldList.add(port + "." + source_field);
 					}
+				}
+				else {
+					sourceFieldList.add(source_field);
+				}
+				if (port.equalsIgnoreCase("")) {
+					sourceFieldList.add(source_field);
 				}
 			}
 	    }
 	    return sourceFieldList;
+	}
+
+	private boolean checkIfSourceFieldExists(ArrayList<String> list, String sourceField) {
+		for (String field : list) {
+			if (field.equalsIgnoreCase(sourceField)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private HashMap<String, List<String>> setMapOfInputFieldsPerPort() {
@@ -324,7 +336,10 @@ public class ELTLookupMapWizard extends Dialog {
 			List<String> inputFieldListPerPort = new ArrayList<>();
 			for (FilterProperties inputField : inputFieldList) {
 				for (LookupMapProperty lookupMapProperty : joinOutputList) {
-					char charactor = lookupMapProperty.getSource_Field().charAt(2);
+					char charactor = ' ';
+					if (lookupMapProperty.getSource_Field().length() >= 3) {
+						charactor = lookupMapProperty.getSource_Field().charAt(2);
+					}
 					if (Character.toString(charactor).equalsIgnoreCase(Integer.toString(j))) {
 						if (!inputFieldListPerPort.contains(inputField.getPropertyname())) {
 							inputFieldListPerPort.add(inputField.getPropertyname());
@@ -522,13 +537,13 @@ public class ELTLookupMapWizard extends Dialog {
 			if (join.getSource_Field().trim().isEmpty()) {
 				outputTableViewer.getTable().setSelection(propertycount);
 				propertyError.setVisible(true);
-				propertyError.setText(Messages.EmptyNameNotification);
+				propertyError.setText(Messages.EmptySourceFieldNotification);
 				okButton.setEnabled(false);
 				return false;
 			} else if (join.getOutput_Field().trim().isEmpty()) {
 				outputTableViewer.getTable().setSelection(propertyValuecount);
 				propertyError.setVisible(true);
-				propertyError.setText(Messages.EmptyValueNotification);
+				propertyError.setText(Messages.EmptyOutputFieldNotification);
 				return false;
 			} else {
 				propertyError.setVisible(false);
@@ -563,7 +578,7 @@ public class ELTLookupMapWizard extends Dialog {
 			} else {
 				outputTableViewer.getTable().setSelection(propertycount);
 				propertyError.setVisible(true);
-				propertyError.setText(Messages.EmptyNameNotification);
+				propertyError.setText(Messages.EmptySourceFieldNotification);
 				okButton.setEnabled(false);
 				return false;
 			}
@@ -607,7 +622,7 @@ public class ELTLookupMapWizard extends Dialog {
 									.equalsIgnoreCase(valueToValidate)) {
 						propertyError.setVisible(true);
 						propertyError
-								.setText(Messages.RuntimePropertAlreadyExists);
+								.setText(Messages.FieldNameAlreadyExists);
 						okButton.setEnabled(false);
 						return "ERROR";
 					} else {
@@ -747,7 +762,7 @@ public class ELTLookupMapWizard extends Dialog {
 							&& temp.getSource_Field().equalsIgnoreCase(
 									valueToValidate)) {
 						propertyError
-								.setText(Messages.RuntimePropertAlreadyExists);
+								.setText(Messages.SourceFieldAlreadyExists);
 						propertyError.setVisible(true);
 						okButton.setEnabled(false);
 						return "ERROR";
@@ -786,7 +801,7 @@ public class ELTLookupMapWizard extends Dialog {
 					if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)
 							&& temp.getOutput_Field().equalsIgnoreCase(
 									valueToValidate)) {
-						propertyError.setText(Messages.OUTPUT_FIELD_EXISTS);
+						propertyError.setText(Messages.OutputFieldAlreadyExists);
 						propertyError.setVisible(true);
 						okButton.setEnabled(false);
 						validateDuplicatesInOutputField();
@@ -852,7 +867,7 @@ public class ELTLookupMapWizard extends Dialog {
 		}
 		if (duplicateFound) {
 			okButton.setEnabled(false);
-			propertyError.setText(Messages.OUTPUT_FIELD_EXISTS);
+			propertyError.setText(Messages.OutputFieldAlreadyExists);
 			propertyError.setVisible(true);
 		} else {
 			if (okButton != null && propertyError != null) {

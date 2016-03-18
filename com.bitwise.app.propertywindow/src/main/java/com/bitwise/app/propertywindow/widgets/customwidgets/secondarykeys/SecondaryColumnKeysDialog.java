@@ -540,7 +540,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			} else {
 				targetTable.setSelection(propertyCounter);
 				lblPropertyError.setVisible(true);
-				lblPropertyError.setText(Messages.EmptyFiledNotification);
+				lblPropertyError.setText(Messages.EmptyColumnNotification);
 				return false;
 			}
 			propertyCounter++;

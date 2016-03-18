@@ -271,9 +271,9 @@ public class JoinMapGrid extends Dialog {
 		CellEditor[] editors = widget.createCellEditorList(
 				outputTableViewer.getTable(), 2);
 		editors[0].setValidator(sourceEditorValidator(outputTableViewer,
-				Messages.EmptyNameNotification, joinOutputList));
+				Messages.EmptySourceFieldNotification, joinOutputList));
 		editors[1].setValidator(outputFieldEditorValidator(outputTableViewer,
-				Messages.EmptyNameNotification, joinOutputList));
+				Messages.EmptySourceFieldNotification, joinOutputList));
 		outputTableViewer.setColumnProperties(COLUMN_NAME);
 		outputTableViewer.setCellModifier(new LookupCellModifier(
 				outputTableViewer));
@@ -426,19 +426,36 @@ public class JoinMapGrid extends Dialog {
 	    while (iterator.hasNext()) {
 	        Map.Entry portFieldPair = (Map.Entry)iterator.next();
 	        for (LookupMapProperty lookupMapProperty : joinOutputList) {
-	        	String port=lookupMapProperty.getSource_Field().substring(0,3);
+	        	String port = "";
+				if (lookupMapProperty.getSource_Field().length() >= 3) {
+					port = lookupMapProperty.getSource_Field().substring(0, 3);
+				}
 	        	String source_field = lookupMapProperty.getSource_Field().substring(lookupMapProperty.getSource_Field().lastIndexOf(".") + 1);
 				if(portFieldPair.getKey().equals(port))
 				{
 					ArrayList<String> value = (ArrayList<String>) portFieldPair.getValue();
-					if(!value.isEmpty()&&!value.contains(source_field))
+					if(!value.isEmpty()&&!checkIfSourceFieldExists(value, source_field))
 					{
 						 nonMappedFieldList.add(port+"."+source_field);
 					}
 				}
+				else {
+					nonMappedFieldList.add(source_field);
+				}
+				if (port.equalsIgnoreCase("")) {
+					nonMappedFieldList.add(source_field);
+				}
 			}
 	    }
 	    return nonMappedFieldList;
+	}
+	private boolean checkIfSourceFieldExists(ArrayList<String> list, String sourceField) {
+		for (String field : list) {
+			if (field.equalsIgnoreCase(sourceField)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private HashMap<String, List<String>> setMapOfInputFieldsPerPort() {
@@ -448,7 +465,10 @@ public class JoinMapGrid extends Dialog {
 			List<String> inputFieldListPerPort = new ArrayList<>();
 			for (FilterProperties inputField : inputFieldList) {
 				for (LookupMapProperty lookupMapProperty : joinOutputList) {
-					char charactor = lookupMapProperty.getSource_Field().charAt(2);
+					char charactor = ' ';
+					if (lookupMapProperty.getSource_Field().length() >= 3) {
+						charactor = lookupMapProperty.getSource_Field().charAt(2);
+					}
 					if (Character.toString(charactor).equalsIgnoreCase(Integer.toString(j))) {
 						if (!inputFieldListPerPort.contains(inputField.getPropertyname())) {
 							inputFieldListPerPort.add(inputField.getPropertyname());
@@ -565,7 +585,7 @@ public class JoinMapGrid extends Dialog {
 		CellEditor[] editors = widget.createCellEditorList(
 				inputTableViewer[tableViewerIndex].getTable(), 1);
 		editors[0].setValidator(inputSchemaEditorValidation(joinInputList,
-				Messages.EmptyNameNotification,
+				Messages.EmptySourceFieldNotification,
 				inputTableViewer[tableViewerIndex]));
 		inputTableViewer[tableViewerIndex].setCellModifier(new ELTCellModifier(
 				inputTableViewer[tableViewerIndex]));
@@ -778,7 +798,7 @@ public class JoinMapGrid extends Dialog {
 			} else {
 				tableViewer.getTable().setSelection(propertyCounter);
 				errorLabel.setVisible(true);
-				errorLabel.setText(Messages.EmptyNameNotification);
+				errorLabel.setText(Messages.EmptySourceFieldNotification);
 				return false;
 			}
 
@@ -795,12 +815,12 @@ public class JoinMapGrid extends Dialog {
 			if (join.getSource_Field().trim().isEmpty()) {
 				outputTableViewer.getTable().setSelection(propertycount);
 				errorLabel.setVisible(true);
-				errorLabel.setText(Messages.EmptyNameNotification);
+				errorLabel.setText(Messages.EmptySourceFieldNotification);
 				return false;
 			} else if (join.getOutput_Field().trim().isEmpty()) {
 				outputTableViewer.getTable().setSelection(propertyValuecount);
 				errorLabel.setVisible(true);
-				errorLabel.setText(Messages.EmptyValueNotification);
+				errorLabel.setText(Messages.EmptyOutputFieldNotification);
 				return false;
 			} else {
 				errorLabel.setVisible(false);
@@ -835,7 +855,7 @@ public class JoinMapGrid extends Dialog {
 			}
 			if (duplicateFound) {
 				okButton.setEnabled(false);
-				errorLabel.setText(Messages.OUTPUT_FIELD_EXISTS);
+				errorLabel.setText(Messages.OutputFieldAlreadyExists);
 				errorLabel.setVisible(true);
 			} else {
 				if (okButton != null && errorLabel != null) {
@@ -862,7 +882,7 @@ public class JoinMapGrid extends Dialog {
 							&& temp.getPropertyname().equalsIgnoreCase(
 									valueToValidate)) {
 						errorLabel
-								.setText(Messages.RuntimePropertAlreadyExists);
+								.setText(Messages.FieldNameAlreadyExists);
 						errorLabel.setVisible(true);
 						okButton.setEnabled(false);
 						return "ERROR";
@@ -909,7 +929,7 @@ public class JoinMapGrid extends Dialog {
 							&& temp.getSource_Field().equalsIgnoreCase(
 									valueToValidate)) {
 						errorLabel
-								.setText(Messages.RuntimePropertAlreadyExists);
+								.setText(Messages.SourceFieldAlreadyExists);
 						errorLabel.setVisible(true);
 						okButton.setEnabled(false);
 						return "ERROR";
@@ -950,7 +970,7 @@ public class JoinMapGrid extends Dialog {
 							&& temp.getOutput_Field().equalsIgnoreCase(
 									valueToValidate)) {
 						errorLabel
-								.setText(Messages.RuntimePropertAlreadyExists);
+								.setText(Messages.OutputFieldAlreadyExists);
 						errorLabel.setVisible(true);
 						okButton.setEnabled(false);
 						validateDuplicatesInOutputField();
