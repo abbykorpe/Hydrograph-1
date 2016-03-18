@@ -1,3 +1,15 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package com.bitwise.app.propertywindow.widgets.customwidgets;
 
 import java.util.LinkedHashMap;
@@ -7,7 +19,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
 
 import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.graph.model.Component;
@@ -40,6 +51,7 @@ public abstract class AbstractWidget {
 	private List<String> operationFieldList;
 	protected PropertyDialog propertyDialog;
 	private Control propertyHelpWidget;
+	private String propertyHelpText;
 	
 	protected Component getComponent() {
 		return component;
@@ -235,7 +247,17 @@ public abstract class AbstractWidget {
 	protected void setPropertyHelpWidget(Control propertyHelpWidget){
 		this.propertyHelpWidget = propertyHelpWidget;
 	}
-	
+
+	/**
+	 * 
+	 * Set property help text
+	 * 
+	 * @param propertyHelpText
+	 */
+	public void setPropertyHelpText(String propertyHelpText) {
+		this.propertyHelpText = propertyHelpText;
+	}
+
 	/**
 	 * 
 	 * Attach help to property help widget
@@ -243,12 +265,9 @@ public abstract class AbstractWidget {
 	 */
 	public void setPropertyHelp() {
 
-		if (ShowHidePropertyHelpHandler.getInstance() != null
-				&& getComponent().getPropertyHelpTextMap().get(componentConfigrationProperty.getPropertyName()) != null
-				&& propertyHelpWidget != null
+		if (ShowHidePropertyHelpHandler.getInstance() != null && propertyHelpText != null && propertyHelpWidget != null
 				&& ShowHidePropertyHelpHandler.getInstance().isShowHidePropertyHelpChecked()) {
-			propertyHelpWidget.setToolTipText(component.getPropertyHelpTextMap()
-					.get(componentConfigrationProperty.getPropertyName()).replace("\\n", "\n"));
+			propertyHelpWidget.setToolTipText(propertyHelpText);
 			propertyHelpWidget.setCursor(new Cursor(propertyHelpWidget.getDisplay(), SWT.CURSOR_HELP));
 		}
 
