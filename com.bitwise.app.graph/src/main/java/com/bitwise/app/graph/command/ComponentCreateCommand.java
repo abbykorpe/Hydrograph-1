@@ -55,10 +55,13 @@ public class ComponentCreateCommand extends Command {
 		
 		//attach tooltip information to component
 		Map<String,PropertyToolTipInformation> tooltipInformation = new LinkedHashMap<>();
+		Map<String, String> propertyHelpMessages = new LinkedHashMap<>();
 		for(Property property : components.getProperty()){
 			tooltipInformation.put(property.getName(),new PropertyToolTipInformation(property.getName(), property.getShowAsTooltip().value(), property.getTooltipDataType().value()));
+			propertyHelpMessages.put(property.getName(), property.getPropertyHelpText());
 		}
 		component.setTooltipInformation(tooltipInformation);
+		component.setPropertyHelpTextMap(propertyHelpMessages);
 		
 		int totalPortsofInType=0, totalPortsOfOutType=0, totalPortsOfUnusedType=0;
 		List<PortSpecification> portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();

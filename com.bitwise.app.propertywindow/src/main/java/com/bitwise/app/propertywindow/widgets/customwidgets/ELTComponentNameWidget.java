@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
@@ -72,6 +73,7 @@ public class ELTComponentNameWidget extends AbstractWidget {
 
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(NAME);
 		eltDefaultSubgroupComposite.attachWidget(eltDefaultLable);
+		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
 
 		AbstractELTWidget eltDefaultTextBox = new ELTDefaultTextBox().defaultText("Hello")
 				.grabExcessHorizontalSpace(true).textBoxWidth(200);

@@ -3,6 +3,7 @@ package com.bitwise.app.propertywindow.widgets.customwidgets.secondarykeys;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
@@ -32,14 +33,9 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 	private LinkedHashMap<String, String> InstializeMap;
 	private String propertyName;
 	private Shell shell;
-	private String componentName;
 	private Logger logger = LogFactory.INSTANCE.getLogger(SecondaryColumnKeysWidget.class);
 	private EditButtonWithLabelConfig buttonWithLabelConfig;
 	private LinkedHashMap<String, Object> tempPropertyMap;
-	
-	/*
-	 * public ELTRuntimePropertiesWidget() { super(); tempPropertyMap = new LinkedHashMap<String, Object>(); }
-	 */
 
 	/**
 	 * Instantiates a new ELT runtime properties widget.
@@ -79,7 +75,8 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 
 		ELTDefaultLable defaultLable1 = new ELTDefaultLable(buttonWithLabelConfig.getName());
 		runtimeComposite.attachWidget(defaultLable1);
-
+		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
+		
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton("Edit");
 
 		runtimeComposite.attachWidget(eltDefaultButton);

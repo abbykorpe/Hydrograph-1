@@ -1,20 +1,13 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Control;
 
-import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
-import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
-import com.bitwise.app.graph.model.Link;
-import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -49,6 +42,8 @@ public class ELTLookupConfigWidget extends AbstractWidget {
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Lookup\nConfiguration");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
+		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
+		
 		final AbstractELTWidget eltDefaultButton = new ELTDefaultButton("Edit");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
 

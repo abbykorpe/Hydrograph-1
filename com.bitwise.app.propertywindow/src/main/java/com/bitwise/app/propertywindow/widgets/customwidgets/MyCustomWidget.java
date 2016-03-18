@@ -2,6 +2,7 @@ package com.bitwise.app.propertywindow.widgets.customwidgets;
 
 import java.util.LinkedHashMap;
 
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
@@ -68,6 +69,8 @@ public class MyCustomWidget extends AbstractWidget{
 		
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Addess :");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
+		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
+		
 		
 		AbstractELTWidget eltDefaultTextBox = new ELTDefaultTextBox().defaultText("Hello").grabExcessHorizontalSpace(true).textBoxWidth(100);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultTextBox);

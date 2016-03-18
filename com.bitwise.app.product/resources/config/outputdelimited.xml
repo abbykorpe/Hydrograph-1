@@ -14,7 +14,7 @@
 		
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED"/>
+			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 		
 		<tns:property dataType="string" group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS"
 			name="schema" renderer="SCHEMA_WIDGET" type="USER" showAsTooltip="FALSE"
@@ -24,48 +24,48 @@
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="path"
 			renderer="FILE_PATH_WIDGET" type="USER" showAsTooltip="TRUE" tooltipDataType="LINK"
-			usage="REQUIRED">
+			usage="REQUIRED"  propertyHelpText="Displays the location of the file either\n Remote/Local. Allows only underscore ‘_’ and \nalphanumeric characters.">
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="delimiter"
 			value="|" renderer="DELIMETER_WIDGET" type="USER" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED">
+			usage="REQUIRED" propertyHelpText="Specifies Delimiter present in the input file.">
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 
 			
 		<tns:property dataType="boolean" name="safe" renderer="SAFE_PROPERTY_WIDGET" type="USER" value="False"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL">
+			usage="OPTIONAL" propertyHelpText="When True, allows the input fields to pass \nevaluation despite of Data type mismatch.">
 			<tns:validator>BOOLEAN_OR_PARAMETER_VALIDATOR</tns:validator>
 		</tns:property>
 
 		<tns:property dataType="boolean" group="GENERAL" subGroup="CONFIGURATION" name="hasHeader" value="False"
 			renderer="HAS_HEADER_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL">
+			usage="OPTIONAL" propertyHelpText="When True, component assumes the first \nrow of the file to be the header.">
 			<tns:validator>BOOLEAN_OR_PARAMETER_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="charset"
 			value="UTF-8" renderer="CHARACTER_SET_WIDGET" type="USER" showAsTooltip="FALSE"
-			tooltipDataType="NONE" usage="REQUIRED">
+			tooltipDataType="NONE" usage="REQUIRED" propertyHelpText="Denotes the encoding system followed \nby the input file.">
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 			
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="strict" value="False"
 		renderer="STRICT_CLASS_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
-		usage="OPTIONAL">
+		usage="OPTIONAL"  propertyHelpText="When True, validates the Record Structure \nlike no. of fields, length of record, scale as \nspecified by the user.">
 			<tns:validator>BOOLEAN_OR_PARAMETER_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="runtime_properties"
 			renderer="RUNTIME_PROPERTIES_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL"/>
+			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time."/>
 		
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED">
+			usage="REQUIRED" propertyHelpText="Specifies the execution sequence of \nthis component in the job flow.">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
 	</tns:component>

@@ -7,6 +7,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Control;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
@@ -20,7 +21,6 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTRadioButton;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTRetentionlogicWidget.
  * 
@@ -32,7 +32,7 @@ public class ELTRetentionLogicWidget extends AbstractWidget{
 	private final String propertyName;
 	private final  LinkedHashMap<String, Object> property=new LinkedHashMap<>();
 	private String properties;
-	 AbstractELTWidget First,Last,Unique;
+	private AbstractELTWidget First,Last,Unique;
 	
 	/**
 	 * Instantiates a new ELT retentionlogic widget.
@@ -64,7 +64,7 @@ public class ELTRetentionLogicWidget extends AbstractWidget{
 		
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Retain");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
-		
+		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
 		
 		SelectionListener selectionListener = new SelectionAdapter () {
 			

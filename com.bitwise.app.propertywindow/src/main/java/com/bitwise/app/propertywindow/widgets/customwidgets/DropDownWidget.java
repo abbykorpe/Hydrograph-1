@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
@@ -74,6 +75,7 @@ public class DropDownWidget extends AbstractWidget{
 		
 		AbstractELTWidget defaultLabel = new ELTDefaultLable(dropDownConfig.getName());
 		eltSuDefaultSubgroupComposite.attachWidget(defaultLabel);
+		setPropertyHelpWidget((Control) defaultLabel.getSWTWidgetControl());
 		
 		AbstractELTWidget defaultCombo = new ELTDefaultCombo().defaultText(convertToArray(dropDownConfig.getItems()));
 		eltSuDefaultSubgroupComposite.attachWidget(defaultCombo);

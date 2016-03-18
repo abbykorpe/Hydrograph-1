@@ -7,6 +7,7 @@ import java.util.List;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Control;
 
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
@@ -76,6 +77,8 @@ public class ELTJoinWidget extends AbstractWidget {
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Join\nConfiguration");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
+		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
+		
 		final AbstractELTWidget eltDefaultButton = new ELTDefaultButton("Edit");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {

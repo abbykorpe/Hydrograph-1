@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
@@ -86,8 +87,9 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		lableAndTextBox = new ELTDefaultSubgroupComposite(container.getContainerControl());
 		lableAndTextBox.createContainerWidget();
 		
-		AbstractELTWidget lable = new ELTDefaultLable(textBoxConfig.getName() + " ");
-		lableAndTextBox.attachWidget(lable);
+		AbstractELTWidget label = new ELTDefaultLable(textBoxConfig.getName() + " ");
+		lableAndTextBox.attachWidget(label);
+		setPropertyHelpWidget((Control) label.getSWTWidgetControl());
 		
 		AbstractELTWidget textBoxWidget = new ELTDefaultTextBox().
 				grabExcessHorizontalSpace(textBoxConfig.getGrabExcessSpace()).textBoxWidth(textBoxConfig.getwidgetWidth());

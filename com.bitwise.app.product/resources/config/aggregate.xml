@@ -17,7 +17,7 @@
 		
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED"/>
+			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 		
 		<tns:property dataType="string" name="schema" renderer="TRANSFORM_SCHEMA_WIDGET" type="USER"
 			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="FALSE" tooltipDataType="NONE"
@@ -27,23 +27,23 @@
 		
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL"/>
+			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time."/>
 		
 		<tns:property dataType="string" name="column_name" renderer="COLUMN_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
-			usage="REQUIRED"/>
+			usage="REQUIRED" propertyHelpText="Fields used for grouping."/>
 			
 		<tns:property dataType="string" name="secondary_column_keys" renderer="SECONDARY_COLUMN_KEYS_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL"/>
+			usage="OPTIONAL" propertyHelpText="Fields used for sorting within the groups."/>
 			
 		<tns:property dataType="string" name="operation" renderer="AGGREGATE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
-			usage="OPTIONAL"/>
+			usage="OPTIONAL" propertyHelpText="Field Mapping view."/>
 			
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED">
+			usage="REQUIRED" propertyHelpText="Specifies the execution sequence \nof this component in the job flow.">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 
 		</tns:property>

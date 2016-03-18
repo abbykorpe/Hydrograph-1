@@ -45,7 +45,8 @@
 		<attribute name="group" type="cnst:group" use="required" />
 		<attribute name="subGroup" type="cnst:sub_group" use="required" /> 
 		<attribute name="showAsTooltip" type="cnst:showAsTooltip" use="required" />
-		<attribute name="tooltipDataType" type="cnst:tooltipDataType" use="required" />  
+		<attribute name="tooltipDataType" type="cnst:tooltipDataType" use="required" />
+		<attribute name="propertyHelpText" type="string" use="optional" />   
 		<attribute name="usage" type="cnst:usage" use="optional" />  
 	</complexType>
 

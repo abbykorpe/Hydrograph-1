@@ -119,6 +119,8 @@ public abstract class Component extends Model {
 	// @XStreamOmitField
 	private Map<String, String> toolTipErrorMessages; // <propertyName,ErrorMessage>
 
+	@XStreamOmitField
+	private Map<String,String> propertyHelpTextMap;
 
 	/**
 	 * Instantiates a new component.
@@ -147,6 +149,8 @@ public abstract class Component extends Model {
 				.getDefaultNamePrefix();
 		initPortSettings();
 		toolTipErrorMessages = new LinkedHashMap<>();
+		
+		propertyHelpTextMap = new LinkedHashMap<>();
 	}
 
 	/**
@@ -1253,6 +1257,26 @@ public abstract class Component extends Model {
 	public void clearWatcherMap() {
 		watcherTerminals.clear();
 	}
+	
+	/**
+	 * 
+	 * Returns help text for each property
+	 * 
+	 * @return
+	 */
+	public Map<String, String> getPropertyHelpTextMap() {
+		return propertyHelpTextMap;
+	}
+
+	/**
+	 * 
+	 * Set help text for each property
+	 * 
+	 * @param propertyHelpTextMap
+	 */
+	public void setPropertyHelpTextMap(Map<String, String> propertyHelpTextMap) {
+		this.propertyHelpTextMap = propertyHelpTextMap;
+	}
 
 	@Override
 	public int hashCode() {
@@ -1281,6 +1305,8 @@ public abstract class Component extends Model {
 
 	@Override
 	public String toString() {
-		return "Component [UniqueComponentName=" + UniqueComponentName + "]";
-	}
+		return "Component [UniqueComponentName=" + UniqueComponentName + ", type=" + type + ", prefix=" + prefix
+				+ ", category=" + category + ", inPortCount=" + inPortCount + ", outPortCount=" + outPortCount
+				+ ", unusedPortCount=" + unusedPortCount + ", componentLabel=" + componentLabel + "]";
+	}	
 }

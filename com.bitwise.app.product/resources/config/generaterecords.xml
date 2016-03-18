@@ -14,7 +14,7 @@
 		
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED"/>
+			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 		
 		<tns:property dataType="string" name="schema" renderer="GENERATE_RECORDS_SCHEMA_WIDGET" type="USER"
 			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="FALSE" tooltipDataType="NONE"
@@ -24,17 +24,17 @@
 		
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL"/>
+			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations\n specific to this component at run time."/>
 			
 		<tns:property dataType="string" name="no_of_records" value="0" renderer="NO_OF_RECORDS_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED">
+			usage="REQUIRED" propertyHelpText="Specify number of records to be generated">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>	
 		
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED">
+			usage="REQUIRED" propertyHelpText="Specifies the execution sequence of this component in the job flow">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
 	</tns:component>

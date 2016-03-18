@@ -19,18 +19,18 @@
 		
 			<tns:property dataType="string" name="name"
 			renderer="COMPONENT_NAME_WIDGET" type="USER" group="GENERAL"
-			subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" />
+			subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 
 		<tns:property dataType="string" name="path" renderer="FILE_PATH_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
-			usage="REQUIRED">
+			usage="REQUIRED" propertyHelpText="Displays the location of the Subjob file \neither Remote/Local. Allows only underscore ‘_’ and \nalphanumeric characters.">
 			<tns:validator>FILE_EXISTS_VALIDATOR</tns:validator>
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="runtime_properties"
 			renderer="SUBGRAPH_PROPERTIES_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL"/>
+			usage="OPTIONAL" propertyHelpText="Resolves parameters within components \nin a subgraph."/>
 
 	</tns:component>
 </tns:Config>

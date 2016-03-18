@@ -13,11 +13,11 @@
 		
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED"/>
+			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 		
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED">
+			usage="REQUIRED"  propertyHelpText="Specifies the execution sequence of \nthis component in the job flow.">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
 

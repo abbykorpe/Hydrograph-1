@@ -1,6 +1,5 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.operational;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.Map;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Control;
 
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
@@ -19,7 +19,6 @@ import com.bitwise.app.common.datastructure.property.mapping.ErrorObject;
 import com.bitwise.app.common.datastructure.property.mapping.InputField;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
@@ -82,7 +81,9 @@ public class TransformWidget extends AbstractWidget {
 		OperationClassConfig operationClassConfig = (OperationClassConfig) widgetConfig;
 		ELTDefaultLable defaultLable1 = new ELTDefaultLable(operationClassConfig.getComponentDisplayName());
 		transformComposite.attachWidget(defaultLable1);
-
+		
+		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
+		
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton("Edit").grabExcessHorizontalSpace(false);
 		transformComposite.attachWidget(eltDefaultButton);
 
