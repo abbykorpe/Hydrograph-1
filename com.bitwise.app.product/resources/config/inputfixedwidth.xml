@@ -22,7 +22,7 @@
 			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="path" renderer="FILE_PATH_WIDGET" type="USER"
+		<tns:property dataType="string" name="Path" renderer="FILE_PATH_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
 			usage="REQUIRED" propertyHelpText="Displays the location of the file \neither Remote/Local. Allows only \nunderscore ‘_’ and alphanumeric characters.">
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
