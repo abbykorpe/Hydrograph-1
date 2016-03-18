@@ -75,5 +75,14 @@
             commandId="com.bitwise.app.menus.showHidePropertyHelp">
       </handler>
    </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="com.bitwise.app.menus.showHidePropertyHelp"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="f6">
+      </key>
+   </extension>
 
 </plugin>
