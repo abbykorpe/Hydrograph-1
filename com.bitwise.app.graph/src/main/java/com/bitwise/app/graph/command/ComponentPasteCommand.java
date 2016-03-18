@@ -93,8 +93,8 @@ public class ComponentPasteCommand extends Command {
 					Component newtarget = list.get(targetComponent);					
 					
 					Link link = new Link();
-					link.setSourceTerminal(originalNode.getSourceConnections().get(0).getSourceTerminal());
-					link.setTargetTerminal(originalNode.getSourceConnections().get(0).getTargetTerminal());
+					link.setSourceTerminal(originlink.getSourceTerminal());
+					link.setTargetTerminal(originlink.getTargetTerminal());
 					link.setSource(newSource);
 					link.setTarget(newtarget);
 					newSource.connectOutput(link);
