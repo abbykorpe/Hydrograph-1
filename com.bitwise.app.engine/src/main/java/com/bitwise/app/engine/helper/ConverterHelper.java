@@ -420,11 +420,11 @@ public class ConverterHelper {
 
 	}
 	
-	public void getParamTag(String ID, String fieldName, ComponentXpathConstants paramXpath) {
-		ComponentsAttributeAndValue tempAndValue=ComponentXpath.INSTANCE.getXpathMap().get(paramXpath.value().replace(ID, componentName));
+	public void getParamTag(String ID, String fieldName, String paramXpath) {
+		ComponentsAttributeAndValue tempAndValue=ComponentXpath.INSTANCE.getXpathMap().get(paramXpath.replace(ID, componentName));
 		if(tempAndValue==null)
 			ComponentXpath.INSTANCE.getXpathMap().put(
-					(paramXpath.value().replace(ID, componentName)),
+					(paramXpath.replace(ID, componentName)),
 					new ComponentsAttributeAndValue(true,fieldName ));
 		else
 			tempAndValue.setNewNodeText(tempAndValue.getNewNodeText()+" "+fieldName);

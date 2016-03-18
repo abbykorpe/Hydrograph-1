@@ -27,10 +27,12 @@ import com.bitwise.app.common.datastructure.property.JoinMappingGrid;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
+import com.bitwise.app.engine.xpath.ComponentXpathConstants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -79,17 +81,20 @@ public class JoinConverter extends TransformConverter {
 			
 			for (JoinConfigProperty entry : keyFields) {
 				TypeKeyFields typeKeyField = new TypeKeyFields();
-				
 				String[] data = entry.getJoinKey().split(",");
-				for(String key : data){
-				TypeFieldName fieldName = new TypeFieldName();
-				fieldName.setName(key);
-				typeKeyField.getField().add(fieldName);
-				}
 				typeKeyField.setInSocketId(entry.getPortIndex());
 				typeKeyField.setRecordRequired(getRecordRequiredValue(entry));
 				typeKeyFieldsList.add(typeKeyField);
 				
+				for (String key : data) {
+					if (!ParameterUtil.INSTANCE.isParameter(key)) {
+						TypeFieldName fieldName = new TypeFieldName();
+						fieldName.setName(key);
+						typeKeyField.getField().add(fieldName);
+					} else {
+						converterHelper.getParamTag(this.ID, key, ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", entry.getPortIndex()));
+					}
+				}
 			}
 		}
 		return typeKeyFieldsList;

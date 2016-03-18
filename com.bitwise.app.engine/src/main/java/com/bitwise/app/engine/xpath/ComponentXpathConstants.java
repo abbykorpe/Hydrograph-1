@@ -19,17 +19,19 @@ public enum ComponentXpathConstants {
 	COMPONENT_JOIN_TYPE_XPATH("/graph/operations[@id='$id']/keys[@inSocketId='$inSocketId'] [not(@joinType)]"),
 	COMPONENT_XPATH_BOOLEAN("/graph/*[@id='$id']/propertyName"),
 	COMPONENT_XPATH_COUNT("/graph/*[@id='$id']/maxRecords"),
-	FILTER_INPUT_FIELDS("/graph/operations[@id='$id']/operation[@id='opt']/inputFields"),
+	FILTER_INPUT_FIELDS("/graph/operations[@id='$id']/operation[@id='filter_opt']/inputFields"),
 	AGGREGATE_PRIMARY_KEYS("/graph/operations[@id='$id']/primaryKeys"),
 	AGGREGATE_SECONDARY_KEYS("/graph/operations[@id='$id']/secondaryKeys"),
 	
-	LOOKUP_KEYS("/graph/operations[@id='$id']/keys[@id='$id']"),
+	LOOKUP_KEYS("/graph/operations[@id='$id']/keys[@inSocketId='$inSocketId']"),
 	
 	REMOVEDUPS_PRIMARY_KEYS("/graph/straightPulls[@id='$id']/primaryKeys"),
 	REMOVEDUPS_SECONDARY_KEYS("/graph/straightPulls[@id='$id']/secondaryKeys"),
 	
 	SORT_PRIMARY_KEYS("/graph/straightPulls[@id='$id']/primaryKeys"),
-	SORT_SECONDARY_KEYS("/graph/straightPulls[@id='$id']/secondaryKeys");
+	SORT_SECONDARY_KEYS("/graph/straightPulls[@id='$id']/secondaryKeys"),
+	
+	JOIN_KEYS("/graph/operations[@id='$id']/keys[@inSocketId='$inSocketId']"),;
 	
 	private final String value;
 

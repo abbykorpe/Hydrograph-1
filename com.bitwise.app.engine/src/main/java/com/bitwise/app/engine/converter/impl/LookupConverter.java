@@ -27,9 +27,11 @@ import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
 import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.datastructure.property.MatchValueProperty;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
+import com.bitwise.app.engine.xpath.ComponentXpathConstants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -105,13 +107,13 @@ public class LookupConverter extends TransformConverter {
 			if (keyFields.getDriverKey() != null) {
 				typeKeyField = new TypeKeyFields();
 				typeKeyField.setInSocketId("in0");
-				typeKeyField.getField().addAll(getTypeFieldName(keyFields.getDriverKey()));
+				typeKeyField.getField().addAll(getTypeFieldName("in0", keyFields.getDriverKey()));
 				typeKeyFieldsList.add(typeKeyField);
 			}
 			if (keyFields.getLookupKey() != null) {
 				typeKeyField = new TypeKeyFields();
 				typeKeyField.setInSocketId("in1");
-				typeKeyField.getField().addAll(getTypeFieldName(keyFields.getLookupKey()));
+				typeKeyField.getField().addAll(getTypeFieldName("in1", keyFields.getLookupKey()));
 				typeKeyFieldsList.add(typeKeyField);
 			}
 
@@ -119,16 +121,20 @@ public class LookupConverter extends TransformConverter {
 		return typeKeyFieldsList;
 	}
 
-	private List<TypeFieldName> getTypeFieldName(String keyData) {
+	private List<TypeFieldName> getTypeFieldName(String socketID, String keyData) {
 		List<TypeFieldName> typeFieldNameList = null;
 		TypeFieldName typeFieldName = null;
 		if (keyData != null) {
 			typeFieldNameList = new ArrayList<>();
 			String keyList[] = keyData.split(",");
 			for (String key : keyList) {
-				typeFieldName = new TypeFieldName();
-				typeFieldName.setName(key);
-				typeFieldNameList.add(typeFieldName);
+				if (!ParameterUtil.INSTANCE.isParameter(key)) {
+					typeFieldName = new TypeFieldName();
+					typeFieldName.setName(key);
+					typeFieldNameList.add(typeFieldName);
+				} else {
+					converterHelper.getParamTag(this.ID, key, ComponentXpathConstants.LOOKUP_KEYS.value().replace("$inSocketId", socketID));
+				}
 			}
 
 		}

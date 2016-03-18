@@ -80,7 +80,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 					field.setName(value);
 					fieldNameList.add(field);
 				}else{
-					converterHelper.getParamTag(this.ID, value, ComponentXpathConstants.REMOVEDUPS_PRIMARY_KEYS);
+					converterHelper.getParamTag(this.ID, value, ComponentXpathConstants.REMOVEDUPS_PRIMARY_KEYS.value());
 				}
 			}
 
@@ -103,7 +103,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 					field.setOrder(TypeSortOrder.fromValue(secondaryKeyRowEntry.getValue().toLowerCase()));
 					fieldNameList.add(field);
 				}else{
-					converterHelper.getParamTag(this.ID, secondaryKeyRowEntry.getKey(), ComponentXpathConstants.REMOVEDUPS_SECONDARY_KEYS);
+					converterHelper.getParamTag(this.ID, secondaryKeyRowEntry.getKey(), ComponentXpathConstants.REMOVEDUPS_SECONDARY_KEYS.value());
 				}
 			}
 		}
