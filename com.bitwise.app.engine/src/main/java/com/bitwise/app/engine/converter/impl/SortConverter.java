@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.ArrayList;
@@ -23,16 +22,13 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.ParameterUtil;
-import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.StraightPullConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
 import com.bitwise.app.engine.xpath.ComponentXpathConstants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
-import com.bitwiseglobal.graph.commontypes.KeepValue;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeFieldName;
 import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeSortOrder;
 import com.bitwiseglobal.graph.commontypes.TypeStraightPullOutSocket;
@@ -40,8 +36,6 @@ import com.bitwiseglobal.graph.sort.TypePrimaryKeyFields;
 import com.bitwiseglobal.graph.sort.TypePrimaryKeyFieldsAttributes;
 import com.bitwiseglobal.graph.sort.TypeSecondaryKeyFields;
 import com.bitwiseglobal.graph.sort.TypeSecondayKeyFieldsAttributes;
-import com.bitwiseglobal.graph.straightpulltypes.RemoveDups;
-import com.bitwiseglobal.graph.straightpulltypes.RemoveDups.Keep;
 import com.bitwiseglobal.graph.straightpulltypes.Sort;
 
 /**
@@ -86,7 +80,7 @@ public class SortConverter extends StraightPullConverter {
 					field.setOrder(TypeSortOrder.fromValue(primaryKeyRowEntry.getValue().toLowerCase()));
 					fieldNameList.add(field);
 				}else{
-					converterHelper.getParamTag(this.ID, primaryKeyRowEntry.getKey(), ComponentXpathConstants.SORT_PRIMARY_KEYS.value());
+					converterHelper.getParamTag(this.ID, primaryKeyRowEntry.getKey(), ComponentXpathConstants.STRAIGHTPULL_PRIMARY_KEYS.value());
 				}
 			}
 		}
@@ -108,7 +102,7 @@ public class SortConverter extends StraightPullConverter {
 					field.setOrder(TypeSortOrder.fromValue(secondaryKeyRowEntry.getValue().toLowerCase()));
 					fieldNameList.add(field);}
 				else{
-					converterHelper.getParamTag(this.ID, secondaryKeyRowEntry.getKey(), ComponentXpathConstants.SORT_SECONDARY_KEYS.value());
+					converterHelper.getParamTag(this.ID, secondaryKeyRowEntry.getKey(), ComponentXpathConstants.STRAIGHTPULL_SECONDARY_KEYS.value());
 				}
 			}
 		}

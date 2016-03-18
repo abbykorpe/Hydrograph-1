@@ -11,7 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
+
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.ArrayList;
@@ -49,9 +49,9 @@ import com.bitwiseglobal.graph.operationstypes.HashJoin.Match;
 
 
 /**
- * @author vibhort
- *
+ * @author Bitwise Converter implementation for Lookup component
  */
+
 public class LookupConverter extends TransformConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConverter.class);

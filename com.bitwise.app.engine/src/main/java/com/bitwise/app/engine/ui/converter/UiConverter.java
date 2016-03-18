@@ -11,14 +11,11 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.ui.converter;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 
@@ -120,24 +117,6 @@ public abstract class UiConverter {
 
 		return null;
 	}
-
-//	/**
-//	 * Checks whether a given string is parameter or not.
-//	 * 
-//	 * @param String
-//	 *            the input,
-//	 * @return true, if input is parameter
-//	 */
-//	protected boolean isParameter(String input) {
-//		if (input != null) {
-//			String regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}";
-//			Matcher matchs = Pattern.compile(regex).matcher(input);
-//			if (matchs.matches()) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
 
 	/**
 	 * Generate runtime properties for component.

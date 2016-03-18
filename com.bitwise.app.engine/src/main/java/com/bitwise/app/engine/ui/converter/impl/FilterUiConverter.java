@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.ui.converter.impl;
 
 import java.util.ArrayList;

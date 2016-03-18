@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.ArrayList;
@@ -46,6 +45,10 @@ import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.join.TypeKeyFields;
 import com.bitwiseglobal.graph.operationstypes.Join;
+
+/**
+ * @author Bitwise Converter implementation for Join component
+ */
 
 public class JoinConverter extends TransformConverter {
 	private static final String JOIN_OPERATION_ID = "join";

@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.xpath;
 
 import java.io.ByteArrayInputStream;
@@ -43,7 +42,12 @@ import org.xml.sax.SAXException;
 
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.engine.util.ConverterUtil;
-
+/**
+ * The class ComponentXpath
+ * 
+ * @author Bitwise
+ * 
+ */
 public class ComponentXpath {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ConverterUtil.class);

@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.propertywindow.widgets.customwidgets.secondarykeys;
 
 import java.util.ArrayList;

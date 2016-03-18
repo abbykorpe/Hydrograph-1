@@ -11,11 +11,10 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.propertywindow.widgets.customwidgets.secondarykeys;
 
 /**
- * The Class RuntimeProperties.
+ * The Class SecondaryColumnKeysInformation.
  * 
  * @author Bitwise
  */

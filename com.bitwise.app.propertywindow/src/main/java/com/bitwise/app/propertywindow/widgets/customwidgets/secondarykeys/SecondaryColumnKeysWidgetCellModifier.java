@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.propertywindow.widgets.customwidgets.secondarykeys;
 
 import org.eclipse.jface.viewers.ICellModifier;
@@ -21,11 +20,8 @@ import org.eclipse.swt.widgets.Item;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.ParameterUtil;
 
-
-
-// TODO: Auto-generated Javadoc
 /**
- * The Class RunTimePropertyCellModifier.
+ * The Class SecondaryColumnKeysWidgetCellModifier.
  * 
  * @author Bitwise
  */

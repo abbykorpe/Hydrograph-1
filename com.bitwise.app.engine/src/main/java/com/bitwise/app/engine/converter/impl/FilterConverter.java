@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.ArrayList;
@@ -25,9 +24,7 @@ import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
-import com.bitwise.app.engine.xpath.ComponentXpath;
 import com.bitwise.app.engine.xpath.ComponentXpathConstants;
-import com.bitwise.app.engine.xpath.ComponentsAttributeAndValue;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -40,7 +37,7 @@ import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.operationstypes.Filter;
 
 /**
- * Converter implementation for Filter component
+ * @author Bitwise Converter implementation for Filter component
  */
 public class FilterConverter extends TransformConverter {
 	private static final String FILTER_OPERATION_ID = "filter_opt";
@@ -107,10 +104,10 @@ public class FilterConverter extends TransformConverter {
 		if (componentOperationFileds != null) {
 			for (String fieldName : componentOperationFileds) {
 				if (!ParameterUtil.INSTANCE.isParameter(fieldName)) {
-					TypeInputField operationFiled = new TypeInputField();
-					operationFiled.setName(fieldName);
-					operationFiled.setInSocketId(Constants.FIXED_INSOCKET_ID);
-					operationFiledList.add(operationFiled);
+					TypeInputField operationField = new TypeInputField();
+					operationField.setName(fieldName);
+					operationField.setInSocketId(Constants.FIXED_INSOCKET_ID);
+					operationFiledList.add(operationField);
 				}else{
 					converterHelper.getParamTag(this.ID,fieldName, ComponentXpathConstants.FILTER_INPUT_FIELDS.value());
 				}

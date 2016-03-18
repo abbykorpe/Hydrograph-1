@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.LinkedList;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
@@ -41,6 +39,10 @@ import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
 import com.bitwiseglobal.graph.commontypes.TypeSortOrder;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.operationstypes.Aggregate;
+
+/**
+ * @author Bitwise Aggregate converter
+ */
 
 public class AggregateConverter extends TransformConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(AggregateConverter.class);
@@ -114,7 +116,7 @@ public class AggregateConverter extends TransformConverter {
 					fieldName.setName(columnNameProperty);
 					field.add(fieldName);
 				}else{
-					converterHelper.getParamTag(this.ID, columnNameProperty, ComponentXpathConstants.AGGREGATE_PRIMARY_KEYS.value());
+					converterHelper.getParamTag(this.ID, columnNameProperty, ComponentXpathConstants.OPERATIONS_PRIMARY_KEYS.value());
 				}
 			}
 		}
@@ -137,7 +139,7 @@ public class AggregateConverter extends TransformConverter {
 					fieldsAttributes.setOrder(order);
 					field.add(fieldsAttributes);
 				}else{
-					converterHelper.getParamTag(this.ID, secondaryKeyRowEntry.getKey(), ComponentXpathConstants.AGGREGATE_SECONDARY_KEYS.value());
+					converterHelper.getParamTag(this.ID, secondaryKeyRowEntry.getKey(), ComponentXpathConstants.OPERATIONS_SECONDARY_KEYS.value());
 				}
 			}
 		}

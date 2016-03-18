@@ -11,11 +11,9 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +40,10 @@ import com.bitwiseglobal.graph.removedups.TypeSecondaryKeyFields;
 import com.bitwiseglobal.graph.removedups.TypeSecondayKeyFieldsAttributes;
 import com.bitwiseglobal.graph.straightpulltypes.RemoveDups;
 import com.bitwiseglobal.graph.straightpulltypes.RemoveDups.Keep;
+
+/**
+ * @author Bitwise Converter implementation for RemoveDups component
+ */
 
 public class RemoveDupsConverter extends StraightPullConverter {
 
@@ -80,7 +82,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 					field.setName(value);
 					fieldNameList.add(field);
 				}else{
-					converterHelper.getParamTag(this.ID, value, ComponentXpathConstants.REMOVEDUPS_PRIMARY_KEYS.value());
+					converterHelper.getParamTag(this.ID, value, ComponentXpathConstants.STRAIGHTPULL_PRIMARY_KEYS.value());
 				}
 			}
 
@@ -103,7 +105,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 					field.setOrder(TypeSortOrder.fromValue(secondaryKeyRowEntry.getValue().toLowerCase()));
 					fieldNameList.add(field);
 				}else{
-					converterHelper.getParamTag(this.ID, secondaryKeyRowEntry.getKey(), ComponentXpathConstants.REMOVEDUPS_SECONDARY_KEYS.value());
+					converterHelper.getParamTag(this.ID, secondaryKeyRowEntry.getKey(), ComponentXpathConstants.STRAIGHTPULL_SECONDARY_KEYS.value());
 				}
 			}
 		}

@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.helper;
 
 import java.util.ArrayList;
@@ -35,7 +34,6 @@ import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.engine.xpath.ComponentXpath;
-import com.bitwise.app.engine.xpath.ComponentXpathConstants;
 import com.bitwise.app.engine.xpath.ComponentsAttributeAndValue;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
@@ -56,7 +54,7 @@ import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 
 /**
- * This is a helper class for converter implementation. Contains the helper methods for conversion.
+ * @author Bitwise This is a helper class for converter implementation. Contains the helper methods for conversion.
  */
 public class ConverterHelper {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ConverterHelper.class);
