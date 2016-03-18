@@ -173,7 +173,7 @@ public class Constants {
 	public static final String XML_EXTENSION=".xml";
 	public static final String JOB_EXTENSION_FOR_IPATH="job";
 	public static final String XML_EXTENSION_FOR_IPATH="xml";
-	public static final String SUBGRAPH_UPDATE = "update";
+	public static final String SUBGRAPH_UPDATE = "refresh";
 	public static final String JOIN_KEYS_WINDOW_TITLE = "Join Key(s)";
 	public static final String LOOKUP_KEYS_WINDOW_TITLE = "Lookup Key(s)";
 	
@@ -199,4 +199,9 @@ public class Constants {
 	public static final String ROUTE = "/debug";
 	public static final String HTTP_PROTOCOL = "http://";
 	public static final String DEBUG_EXTENSION = "_debug.xml";
+	
+	
+	public static final String UPDATE_AVAILABLE = "update_available";
+	public static final String SUBGRAPH_VERSION = "subgraphVersion";
+	public static final String VALIDITY_STATUS = "validityStatus";
 }

@@ -16,6 +16,9 @@ package com.bitwise.app.graph.editor;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,6 +33,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.filesystem.IFileStore;
@@ -51,6 +55,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
@@ -72,6 +77,7 @@ import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
+import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -96,6 +102,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
@@ -109,6 +116,8 @@ import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.ide.FileStoreEditorInput;
+import org.eclipse.ui.internal.EditorReference;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.slf4j.Logger;
@@ -134,6 +143,7 @@ import com.bitwise.app.graph.action.debug.WatchRecordAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphOpenAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphUpdateAction;
+import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
 import com.bitwise.app.graph.handler.DebugHandler;
@@ -146,6 +156,7 @@ import com.bitwise.app.graph.job.JobStatus;
 import com.bitwise.app.graph.job.RunStopButtonCommunicator;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
+import com.bitwise.app.graph.utility.SubGraphUtility;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.parametergrid.utils.ParameterFileManager;
 import com.bitwise.app.tooltip.tooltips.ComponentTooltip;
@@ -454,6 +465,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		final GraphicalViewer viewer = getGraphicalViewer();
 		configureViewer(viewer);
 		prepareZoomContributions(viewer);
+		configureKeyboardShortcuts();
 		//handleKeyStrokes(viewer);
 	}
 
@@ -739,9 +751,23 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	public void setDirty(boolean dirty){
 		this.dirty = dirty;
+		if (dirty)
+			setMainGraphDirty(dirty);
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
+
+	private void setMainGraphDirty(boolean dirty) {
+		if(container.getLinkedMainGraphPath()!=null && container.isCurrentGraphIsSubgraph()){
+			for(IEditorReference editorReference:PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences()){
+				if(StringUtils.equals(editorReference.getTitleToolTip(), container.getLinkedMainGraphPath())){
+					if(editorReference.getEditor(false) instanceof ELTGraphicalEditor);
+					((ELTGraphicalEditor)editorReference.getEditor(false)).setDirty(true);
+				}
+			}
+			
+		}
+	}
 
 	@Override
 	public void setInput(IEditorInput input) {
@@ -769,9 +795,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(getEditorInput(), this);
 			genrateContainerData.storeContainerData();
-
+			
 			saveParameters();
-
+			updateMainGraphOnSavingSubgraph();
 		} catch (CoreException | IOException ce) {
 			logger.error(METHOD_NAME , ce);
 			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n"+ce.getMessage());
@@ -1076,7 +1102,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			generateTargetXMLInLocalFileSystem(fileStore, container);
 	}
 
-	private void generateTargetXMLInWorkspace(IFile ifile, Container container2) {
+	private void generateTargetXMLInWorkspace(IFile ifile, Container container) {
 		IFile outPutFile = ResourcesPlugin.getWorkspace().getRoot().getFile(ifile.getFullPath().removeFileExtension().addFileExtension("xml"));
 		try {
 			if(container!=null)
@@ -1138,6 +1164,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	@Override
 	public void dispose() {
 		super.dispose();
+		removeSubgraphProperties(isDirty());
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
 		try {
@@ -1157,6 +1184,80 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}*/
 	}
 	
+
+	
+	private void removeSubgraphProperties(Boolean isDirty) {
+		if (isDirty) {
+			loadFileAndDeleteSubgraphProperties();
+		} else if (deleteSubgraphProperties(getContainer())!=null)
+			doSave(null);
+	}		
+
+	private void loadFileAndDeleteSubgraphProperties() {
+		if(getEditorInput() instanceof IFileEditorInput){
+			FileEditorInput fileEditorInput=(FileEditorInput) getEditorInput();
+				stroeFileInWorkspace(fileEditorInput.getFile());
+		}else if(getEditorInput() instanceof FileStoreEditorInput){
+				FileStoreEditorInput fileStoreEditorInput=(FileStoreEditorInput) getEditorInput();
+					stroeFileInLocalFS(fileStoreEditorInput.getToolTipText());
+		}
+	}
+
+	private void stroeFileInLocalFS(String jobFilePath) {
+		File file=null;
+		if ( StringUtils.isNotBlank(jobFilePath)) {
+			file = new File(jobFilePath);
+		}
+		if (file != null) {
+			XStream xStream = new XStream();
+			Container container = (Container) xStream.fromXML(file);
+			container = deleteSubgraphProperties(container);
+			if (container != null) {
+				try {
+					FileOutputStream fileOutputStream = new FileOutputStream(file);
+					xStream.toXML(container, fileOutputStream);
+
+				} catch (FileNotFoundException eFileNotFoundException) {
+					logger.error("Exception occurred while saving sub-graph into local file-system when editor disposed",
+							eFileNotFoundException);
+				}
+			}
+		}
+
+	}
+	
+	private void stroeFileInWorkspace(IFile iFile) {
+		InputStream filenputStream = null;
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		if (iFile != null) {
+			try {
+				filenputStream = iFile.getContents(true);
+				if (filenputStream != null) {
+					XStream xStream = new XStream();
+					Container container = (Container) xStream.fromXML(filenputStream);
+					filenputStream.close();
+					container = deleteSubgraphProperties(container);
+					if (container != null) {
+						xStream.toXML(container, out);
+						if (iFile.exists())
+							iFile.setContents(new ByteArrayInputStream(out.toByteArray()), true,	false, null);
+					}
+				}
+			} catch (FileNotFoundException eFileNotFoundException) {
+				logger.error("Exception occurred while saving sub-graph into local file-system when editor disposed",
+						eFileNotFoundException);
+			} catch (IOException ioException) {
+				logger.error("Exception occurred while saving sub-graph into local file-system when editor disposed",
+						ioException);
+			} catch (CoreException coreException) {
+				logger.error("Exception occurred while saving sub-graph into local file-system when editor disposed",
+						coreException);
+			}
+		}
+	}
+
+
+
 	public void deleteSelection() {
 		//getActionRegistry().getAction(DeleteAction.ID).run();
 		getActionRegistry().getAction(ActionFactory.DELETE.getId()).run();
@@ -1199,7 +1300,48 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public String getXMLString() {
-		return fromObjectToXML(getContainer());	
+		IPath xmlPath = null;
+		if (getEditorInput() instanceof IFileEditorInput) {
+			xmlPath = ((IFileEditorInput) getEditorInput()).getFile().getLocation();
+		} else if (getEditorInput() instanceof FileStoreEditorInput) {
+			xmlPath = new Path(getEditorInput().getToolTipText());
+		}
+		return getStringValueFromXMLFile(xmlPath);
+	}
+
+	/**
+	 * This method ret
+	 * 
+	 * @param xmlPath
+	 * @return
+	 */
+	public String getStringValueFromXMLFile(IPath xmlPath) {
+		if (xmlPath != null) {
+			InputStream inputStream = null;
+			String content = "";
+			try {
+				xmlPath = xmlPath.removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH);
+				if (xmlPath.toFile().exists())
+					inputStream = new FileInputStream(xmlPath.toFile());
+				else if (ResourcesPlugin.getWorkspace().getRoot().getFile(xmlPath).exists())
+					inputStream = ResourcesPlugin.getWorkspace().getRoot().getFile(xmlPath).getContents();
+				if (inputStream != null)
+					content = new Scanner(inputStream).useDelimiter("\\Z").next();
+				return content;
+			} catch (Exception exception) {
+				logger.error("Exception occurred while fetching data from " + xmlPath.toString(), exception);
+			} finally {
+				if (inputStream != null) {
+					try {
+						inputStream.close();
+					} catch (IOException ioException) {
+						logger.warn("Exception occurred while closing the inpustream", ioException);
+					}
+				}
+
+			}
+		}
+		return "";
 	}
 
 	private String getCurrentProjectDirectory(){
@@ -1303,19 +1445,55 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public boolean getStopButtonStatus() {
 		return stopButtonStatus;
 	}
-	
+
 	public String getJobId() {
 		return uniqueJobId;
 	}
  
-	public void deleteSubgraphProperties() {
-		if (getContainer().isCurrentGraphIsSubgraph()) {
+	public Container deleteSubgraphProperties(Container container) {
+		com.bitwise.app.graph.model.Component oldSubgraph=null;
+		if (container!=null && container.isCurrentGraphIsSubgraph()) {
+
 			for (int i = 0; i < container.getChildren().size(); i++) {
 				if (Constants.INPUT_SUBGRAPH.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
 					container.getChildren().get(i).getProperties().put(Constants.SCHEMA_TO_PROPAGATE, new HashMap<>());
 				}
+				if (Constants.OUTPUT_SUBGRAPH.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
+					oldSubgraph=(com.bitwise.app.graph.model.Component) container.getChildren().get(i).getProperties().put(Constants.SUBGRAPH_COMPONENT, null);
+				}
+			}
+			return container;
+		} else
+			return null;
+	}
+
+	private void updateMainGraphOnSavingSubgraph() {
+		com.bitwise.app.graph.model.Component subgraphComponent=null;
+		if (container != null && container.isCurrentGraphIsSubgraph()) {
+			for (int i = 0; i < container.getChildren().size(); i++) {
+				if (Constants.OUTPUT_SUBGRAPH.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
+					subgraphComponent = (com.bitwise.app.graph.model.Component) container.getChildren().get(i)
+							.getProperties().get(Constants.SUBGRAPH_COMPONENT);
+					break;
+				}
+			}
+			if(subgraphComponent!=null){
+				String path=getEditorInput().getToolTipText();
+				if (getEditorInput() instanceof IFileEditorInput)
+					path = ((IFileEditorInput) getEditorInput()).getFile().getFullPath().toString();
+				IPath subgraphJobFilePath=new Path(path);
+				SubGraphUtility subGraphUtility=new SubGraphUtility();
+				subGraphUtility.updateContainerAndSubgraph(container, subgraphComponent, subgraphJobFilePath);
+				((ComponentEditPart)container.getSubgraphComponentEditPart()).changePortSettings();
 			}
 		}
 	}
+	
+	private void configureKeyboardShortcuts() {
+	    GraphicalViewerKeyHandler keyHandler = new GraphicalViewerKeyHandler(getGraphicalViewer());
+	    keyHandler.put(KeyStroke.getPressed(SWT.F4,0), getActionRegistry().getAction(Constants.SUBGRAPH_OPEN));
+	    getGraphicalViewer().setKeyHandler(keyHandler);
+
+	  }
 	
 }

@@ -3,6 +3,7 @@ package com.bitwise.app.propertywindow.widgets.customwidgets;
 import java.util.LinkedHashMap;
 
 import org.eclipse.swt.widgets.Control;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.widgets.Text;
 
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
@@ -61,6 +62,7 @@ public class ELTComponentType extends AbstractWidget{
 	
 	private void populateWidget(){
 		String componentBaseType = (String) componentMiscellaneousProperties.getComponentMiscellaneousProperty("componentType");
+		if(StringUtils.isNotBlank(componentBaseType))
 		((Text)eltDefaultTextBox.getSWTWidgetControl()).setText(componentBaseType);
 	}
 

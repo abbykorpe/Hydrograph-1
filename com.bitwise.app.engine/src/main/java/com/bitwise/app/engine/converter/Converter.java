@@ -5,6 +5,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
@@ -150,4 +153,26 @@ public abstract class Converter {
 	public TypeBaseComponent getComponent() {
 		return baseComponent;
 	}
+	
+	/**
+	 * This method returns absolute path of subgraph xml.
+	 * 
+	 * @param subgraphPath
+	 * @return
+	 */
+	protected String getSubGraphAbsolutePath(String subgraphPath) {
+		String absolutePath = subgraphPath;
+		IPath ipath=new Path(subgraphPath);
+		try {
+			if (ResourcesPlugin.getWorkspace().getRoot().getFile(ipath).exists())
+				absolutePath= ResourcesPlugin.getWorkspace().getRoot().getFile(ipath).getLocation().toString();
+			else if (ipath.toFile().exists())
+				absolutePath= ipath.toFile().getAbsolutePath();
+		} catch (Exception exception) {
+			logger.warn("Exception occurred while getting absolute path for "+subgraphPath,exception);
+		}
+		return absolutePath;
+	}
+	
+	
 }

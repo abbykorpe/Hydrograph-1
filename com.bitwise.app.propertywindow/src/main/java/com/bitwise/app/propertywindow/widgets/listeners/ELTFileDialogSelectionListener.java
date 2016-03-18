@@ -71,7 +71,7 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 						filedialog.setFilterExtensions(filterFileExtensions);
 						path = filedialog.open();
 						if (StringUtils.isNotEmpty(path)) {
-							if (isFileExistsOnLocalFileSystem(new Path(path), ((Text) widgets[1]))) {
+							if (isFileExistsOnLocalFileSystem(new Path(path), ((Text) widgets[1]),propertyDialogButtonBar)) {
 								file = new File(path);
 								((Text) widgets[1]).setText(file.getAbsolutePath());
 								propertyDialogButtonBar.enableApplyButton(true);
@@ -93,7 +93,7 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 		return listener;
 	}
 	
-	private boolean isFileExistsOnLocalFileSystem(IPath jobFilePath, Text textBox) {
+	private boolean isFileExistsOnLocalFileSystem(IPath jobFilePath, Text textBox, PropertyDialogButtonBar propertyDialogButtonBar) {
 		jobFilePath=jobFilePath.removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH);
 		try {
 			if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists())
@@ -111,6 +111,7 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 		if (response == SWT.YES) {
 			jobFilePath=jobFilePath.removeFileExtension().addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH);
 			textBox.setText(jobFilePath.toString());
+			propertyDialogButtonBar.enableApplyButton(true);
 		}else
 			textBox.setText("");
 		return false;

@@ -33,6 +33,9 @@ import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
+import com.bitwise.app.graph.model.components.InputSubgraphComponent;
+import com.bitwise.app.graph.model.components.OutputSubgraphComponent;
+import com.bitwise.app.graph.model.components.SubgraphComponent;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -936,6 +939,7 @@ public abstract class Component extends Model {
 		clonedHashMap = new LinkedHashMap<String, Object>();
 		try {
 			component = this.getClass().newInstance();
+			
 			for (Map.Entry<String, Object> entry : getProperties().entrySet()) {
 				if (entry.getValue() instanceof String)
 				{	
@@ -964,6 +968,13 @@ public abstract class Component extends Model {
 					else if (entry.getValue() instanceof TreeMap)
 					clonedHashMap.put(entry.getKey(), new TreeMap<>((TreeMap<String,String>) entry.getValue()));
 						
+					else if (entry.getValue() instanceof InputSubgraphComponent) {
+						clonedHashMap.put(entry.getKey(), null);
+					}
+
+					else if (entry.getValue() instanceof OutputSubgraphComponent) {
+						clonedHashMap.put(entry.getKey(), null);
+					} 
 					else  if(entry.getValue()!=null)
 					{   
 						IDataStructure c=(IDataStructure) entry.getValue();
@@ -1002,7 +1013,6 @@ public abstract class Component extends Model {
 		component.setInPortCount(inPortCount);
 		component.setOutPortCount(outPortCount);
 		component.setUnusedPortCount(unusedPortCount);
-		
 		return component;
 	}
 
@@ -1268,6 +1278,7 @@ public abstract class Component extends Model {
 	}
 	
 	@Override
+
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

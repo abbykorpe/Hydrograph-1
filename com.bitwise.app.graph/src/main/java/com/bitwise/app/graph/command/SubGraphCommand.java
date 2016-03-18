@@ -2,13 +2,11 @@ package com.bitwise.app.graph.command;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.Clipboard;
 
 import com.bitwise.app.graph.model.Component;
-import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.model.Model;
 
 // TODO: Auto-generated Javadoc
@@ -26,7 +24,7 @@ public class SubGraphCommand extends Command {
 
 	@Override
 	public boolean canUndo() {
-		return wasRemoved;
+		return false;
 	}
 
 	/**

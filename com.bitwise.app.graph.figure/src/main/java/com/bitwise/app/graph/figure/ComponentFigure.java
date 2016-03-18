@@ -39,6 +39,7 @@ import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
 import com.bitwise.app.common.interfaces.tooltip.ComponentCanvas;
 import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Component.ValidityStatus;
 import com.bitwise.app.tooltip.tooltips.ComponentTooltip;
@@ -499,6 +500,9 @@ public class ComponentFigure extends Figure implements Validator{
 		}
 		else if (StringUtils.isNotBlank(getStatus()) && getStatus().equals(ValidityStatus.ERROR.name())){
 			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + "/icons/error.png");
+		}
+		else if (StringUtils.isNotBlank(getStatus()) && getStatus().equals(Constants.UPDATE_AVAILABLE)){
+			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + "/icons/update.png");
 		}
 		logger.debug("Component has {} status.", getStatus());
 		if(statusImage != null){

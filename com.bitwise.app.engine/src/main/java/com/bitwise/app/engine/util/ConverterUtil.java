@@ -12,6 +12,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -32,16 +33,14 @@ import com.bitwiseglobal.graph.main.ObjectFactory;
 public class ConverterUtil {
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ConverterUtil.class);
 	public static final ConverterUtil INSTANCE = new ConverterUtil();
-	private static final String GRAPH_NAME="Graph_1";
 	private ConverterUtil(){
 		
 	}
 	
 	public void convertToXML(Container container, boolean validate, IFile outPutFile,  IFileStore externalOutputFile) throws Exception{
 		LOGGER.debug("Creating converter based on component");
-		
 			Graph graph = new ObjectFactory().createGraph();
-			graph.setName(GRAPH_NAME);
+			graph.setName(getGraphName(outPutFile,externalOutputFile));
 			List<Component> children = container.getChildren();
 			if(children != null && !children.isEmpty()){
 				for (Component component : children) {
@@ -51,13 +50,18 @@ public class ConverterUtil {
 					graph.getInputsOrOutputsOrStraightPulls().add(typeBaseComponent);
 				}
 			}
-			
 			marshall(graph, validate,outPutFile,externalOutputFile);
-		
-		
 	}
 	
 	
+	private String getGraphName(IFile outPutFile, IFileStore externalOutputFile) {
+		if (outPutFile != null && StringUtils.isNotBlank(outPutFile.getName()))
+			return outPutFile.getName();
+		else if (externalOutputFile != null && StringUtils.isNotBlank(externalOutputFile.getName()))
+			return externalOutputFile.getName();
+		return null;
+	}
+
 	private void marshall(Graph graph, boolean validate,IFile outPutFile, IFileStore externalOutputFile) {
 		LOGGER.debug("Marshaling generated object into target XML");
 		ByteArrayOutputStream out = null;

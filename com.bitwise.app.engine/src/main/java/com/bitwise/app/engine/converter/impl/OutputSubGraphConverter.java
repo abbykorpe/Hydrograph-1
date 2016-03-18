@@ -42,10 +42,12 @@ public class OutputSubGraphConverter extends OutputConverter {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		Subgraph subgraph = (Subgraph) baseComponent;
-		Subgraph.Path path = new Subgraph.Path();
-		String subGraphFilePath=	((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.JOB_EXTENSION);
-		path.setUri(subGraphFilePath);
-		subgraph.setPath(path);
+		if(properties.get(Constants.JOB_PATH)!=null){
+			Subgraph.Path path = new Subgraph.Path();
+			String subGraphFilePath = getSubGraphAbsolutePath(((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION));
+			path.setUri(subGraphFilePath);
+			subgraph.setPath(path);
+		}
 		subgraph.setSubgraphParameter(getRuntimeProperties());
 		 
 		

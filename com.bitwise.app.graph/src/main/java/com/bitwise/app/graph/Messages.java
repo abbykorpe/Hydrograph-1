@@ -42,6 +42,9 @@ public class Messages extends NLS {
 	public static String RECORD_LIMIT;
 	public static String LIMIT_VALUE;
 	public static String DEFAULT_LIMIT;
+	public static String MESSAGE_INFORMATION;
+	public static String CONFIRM_TO_CREATE_SUBGRAPH_MESSAGE;
+	public static String CONFIRM_TO_CREATE_SUBGRAPH_WINDOW_TITLE;
 	
 	 
 	

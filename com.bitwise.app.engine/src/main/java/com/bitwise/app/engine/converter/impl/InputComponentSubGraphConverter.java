@@ -39,9 +39,10 @@ public class InputComponentSubGraphConverter extends InputConverter {
 	@Override
 	protected List<TypeInputOutSocket> getInOutSocket() {
 		List<TypeInputOutSocket> outSockets = new ArrayList<>();
+		int portCounter=0;
 		for (Link link : component.getSourceConnections()) {
 			TypeInputOutSocket outSocket = new TypeInputOutSocket();
-			outSocket.setId(link.getSourceTerminal());
+			outSocket.setId(Constants.INPUT_SOCKET_TYPE+portCounter++);
 			outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
 			outSocket.setSchema(getSchema());
 			outSocket.getOtherAttributes();

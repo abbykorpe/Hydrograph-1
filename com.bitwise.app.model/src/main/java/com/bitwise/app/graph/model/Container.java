@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.helper.LoggerUtil;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 
 /**
@@ -30,7 +31,13 @@ public class Container extends Model {
 	private final List<Component> components = new ArrayList<>();
 	private final Map<String, Integer> componentNextNameSuffixes = new HashMap<>();
 	private ArrayList<String> componentNames = new ArrayList<>();
-		
+	@XStreamOmitField
+	private boolean isVersionAlreadyUpdated;
+	@XStreamOmitField
+	private String linkedMainGraphPath;
+	@XStreamOmitField
+	private Object subgraphComponentEditPart;
+	private long subgraphVersion=1;
 	public Container(){
 		
 	}
@@ -41,12 +48,7 @@ public class Container extends Model {
 	 * @return true, if the component was added, false otherwise
 	 */
 	public boolean addChild(Component component) {
-		if (StringUtils.equals(component.getComponentName(), Constants.SUBGRAPH_COMPONENT)) {
-			Dimension newSize = new Dimension(100, 70);
-			component.setSize(newSize);
-		}
-
-		if (isIOSubgraphAlreadyNotPresent(component.getComponentName()) && component != null
+			if (isIOSubgraphAlreadyNotPresent(component.getComponentName()) && component != null
 				&& components.add(component)) {
 			component.setParent(this);
 			String compNewName = getDefaultNameForComponent(component.getPrefix());
@@ -56,8 +58,9 @@ public class Container extends Model {
 				component.setNewInstance(false);
 			}
 			firePropertyChange(CHILD_ADDED_PROP, null, component);
+			updateSubgraphVersion();
 			return true;
-		}
+			}
 		return false;
 	}
 
@@ -66,10 +69,10 @@ public class Container extends Model {
 	 * @return true, if the component was added, false otherwise
 	 */
 	public boolean addSubGraphChild(Component component) {
-		
 		if (isIOSubgraphAlreadyNotPresent(component.getComponentName()) && component != null && components.add(component)) {
 			component.setParent(this);
 			firePropertyChange(CHILD_ADDED_PROP, null, component);
+			updateSubgraphVersion();
 			return true;
 		}
 		return false;
@@ -105,13 +108,14 @@ public class Container extends Model {
 	 * @return true, if the component was removed, false otherwise
 	 */
 	public boolean removeChild(Component component) {
-		if (component != null && components.remove(component) && !componentNextNameSuffixes.isEmpty()) {
+		if (component != null && components.remove(component)) {
 			componentNames.remove(component.getPropertyValue(Component.Props.NAME_PROP.getValue()));
 			if(componentNextNameSuffixes.get(component.getPrefix())!=null){
 			Integer nextSuffix = componentNextNameSuffixes.get(component.getPrefix()) - 1;
 			componentNextNameSuffixes.put(component.getPrefix(), nextSuffix);
 			}
 			firePropertyChange(CHILD_REMOVED_PROP, null, component);
+			updateSubgraphVersion();
 			return true;
 		}
 		return false;
@@ -245,6 +249,39 @@ public class Container extends Model {
 				return true;
 		}
 		return false;
+	}
+
+
+	public String getLinkedMainGraphPath() {
+		return linkedMainGraphPath;
+	}
+
+
+	public void setLinkedMainGraphPath(String linkedMainGraphPath) {
+		this.linkedMainGraphPath = linkedMainGraphPath;
+	}
+
+
+	public Object getSubgraphComponentEditPart() {
+		return subgraphComponentEditPart;
+	}
+
+
+	public void setSubgraphComponentEditPart(Object subgraphComponentEditPart) {
+		this.subgraphComponentEditPart = subgraphComponentEditPart;
+	}
+
+
+	public long getSubgraphVersion() {
+		return subgraphVersion;
+	}
+
+
+	public void updateSubgraphVersion() {
+		if(!isVersionAlreadyUpdated && isCurrentGraphIsSubgraph()){
+			this.subgraphVersion++;
+			isVersionAlreadyUpdated=true;
+		}
 	}
 	
 }
