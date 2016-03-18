@@ -133,7 +133,7 @@ public class GridRowLoader {
 								((GenerateRecordSchemaGridRow) gridRow).setRangeFrom("");
 
 							if(temp.getRangeFrom()!=null)
-								((GenerateRecordSchemaGridRow) gridRow).setRangeTo(String.valueOf(temp.getRangeFrom()));
+								((GenerateRecordSchemaGridRow) gridRow).setRangeTo(String.valueOf(temp.getRangeTo()));
 							else
 								((GenerateRecordSchemaGridRow) gridRow).setRangeTo("");
 							
