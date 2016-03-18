@@ -473,7 +473,7 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 				String propertyValue = propertyInfo.getPropertyValue().toString();
 				String formattedPropertyValue = propertyValue.substring(propertyValue.lastIndexOf("=") + 1).replace(
 						"]", "");
-				if (!formattedPropertyValue.trim().equalsIgnoreCase("null")) {
+				if (!"null".equalsIgnoreCase(formattedPropertyValue.trim())) {
 					lblTextProperty.setText(propertyNameCapitalized + " : " + formattedPropertyValue);
 				} else {
 					lblTextProperty.setText(propertyNameCapitalized + " : " + "First");
@@ -493,7 +493,7 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 
 		for (int i = 0; i < rowData.length; i++) {
 			formattedPropertyValue = formattedPropertyValue + rowData[i].replace("=", "(");
-			if (!formattedPropertyValue.equalsIgnoreCase("")) {
+			if (!"".equalsIgnoreCase(formattedPropertyValue)) {
 				formattedPropertyValue = formattedPropertyValue + ")";
 				if (i != rowData.length - 1) {
 					formattedPropertyValue = formattedPropertyValue + ",";
