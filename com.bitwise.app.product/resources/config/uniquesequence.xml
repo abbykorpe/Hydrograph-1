@@ -19,23 +19,23 @@
 		
 		<tns:property dataType="string" name="name"
 			renderer="COMPONENT_NAME_WIDGET" type="USER" group="GENERAL"
-			subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" />
+			subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 
 
 		<tns:property dataType="string" name="runtime_properties"
 			renderer="RUNTIME_PROPERTIES_WIDGET" type="USER" group="GENERAL"
 			subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL" />
+			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time."/>
 
 		<tns:property dataType="string" name="sequence_field" value=""
 			renderer="TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
-			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED">
+			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" propertyHelpText="Field name for the generated Sequence. \nCan be parameterized.">
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 
 		<tns:property dataType="string" name="phase" value="0"
 			renderer="PHASE_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
-			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED">
+			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" propertyHelpText="Specifies the execution sequence \nof this component in the job flow.">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
 

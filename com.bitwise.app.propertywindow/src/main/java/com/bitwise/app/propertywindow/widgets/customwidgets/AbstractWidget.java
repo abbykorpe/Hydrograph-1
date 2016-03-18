@@ -7,9 +7,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 
 import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.graph.model.Component;
+import com.bitwise.app.propertywindow.handlers.ShowHidePropertyHelpHandler;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.property.ELTComponenetProperties;
@@ -239,11 +241,17 @@ public abstract class AbstractWidget {
 	 * Attach help to property help widget
 	 * 
 	 */
-	public void setPropertyHelp() {		
-		if(getComponent().getPropertyHelpTextMap().get(componentConfigrationProperty.getPropertyName())!=null && propertyHelpWidget!=null){
-			propertyHelpWidget.setToolTipText(component.getPropertyHelpTextMap().get(componentConfigrationProperty.getPropertyName()).replace("\\n", "\n"));
+	public void setPropertyHelp() {
+
+		if (ShowHidePropertyHelpHandler.getInstance() != null
+				&& getComponent().getPropertyHelpTextMap().get(componentConfigrationProperty.getPropertyName()) != null
+				&& propertyHelpWidget != null
+				&& ShowHidePropertyHelpHandler.getInstance().isShowHidePropertyHelpChecked()) {
+			propertyHelpWidget.setToolTipText(component.getPropertyHelpTextMap()
+					.get(componentConfigrationProperty.getPropertyName()).replace("\\n", "\n"));
 			propertyHelpWidget.setCursor(new Cursor(propertyHelpWidget.getDisplay(), SWT.CURSOR_HELP));
-		}	
+		}
+
 	}
 	
 }

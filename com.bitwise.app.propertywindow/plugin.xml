@@ -31,12 +31,30 @@
             </command>
          </toolbar>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.ui.main.menu">
+         <menu
+               id="com.bitwise.app.menus.WindowMenu"
+               label="Window"
+               mnemonic="W">
+            <command
+                  commandId="com.bitwise.app.menus.showHidePropertyHelp"
+                  label="Show/Hide Property Help"
+                  style="toggle">
+            </command>
+         </menu>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
       <command
             id="com.bitwise.app.propertywindow.runconfig"
             name="Run configuration settings">
+      </command>
+      <command
+            id="com.bitwise.app.menus.showHidePropertyHelp"
+            name="showHidePropertyHelp">
       </command>
    </extension>
    <extension
@@ -51,6 +69,10 @@
                      value="com.bitwise.app.graph.etlgraphicaleditor">
                </equals>
             </with></activeWhen>
+      </handler>
+      <handler
+            class="com.bitwise.app.propertywindow.handlers.ShowHidePropertyHelpHandler"
+            commandId="com.bitwise.app.menus.showHidePropertyHelp">
       </handler>
    </extension>
 

@@ -21,11 +21,11 @@
 		
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED"/>
+			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 		
 		<tns:property dataType="string" name="inPortCount" value="1" renderer="INPUT_COUNT_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED">
+			usage="REQUIRED" propertyHelpText="Specifies number of input ports. Default 1">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
 		
