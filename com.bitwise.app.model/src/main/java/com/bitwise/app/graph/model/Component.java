@@ -1,3 +1,16 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package com.bitwise.app.graph.model;
 
 import java.util.ArrayList;
@@ -18,10 +31,10 @@ import com.bitwise.app.common.component.config.PortInfo;
 import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
-import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
@@ -119,8 +132,6 @@ public abstract class Component extends Model {
 	// @XStreamOmitField
 	private Map<String, String> toolTipErrorMessages; // <propertyName,ErrorMessage>
 
-	@XStreamOmitField
-	private Map<String,String> propertyHelpTextMap;
 
 	/**
 	 * Instantiates a new component.
@@ -149,8 +160,6 @@ public abstract class Component extends Model {
 				.getDefaultNamePrefix();
 		initPortSettings();
 		toolTipErrorMessages = new LinkedHashMap<>();
-		
-		propertyHelpTextMap = new LinkedHashMap<>();
 	}
 
 	/**
@@ -1258,26 +1267,6 @@ public abstract class Component extends Model {
 		watcherTerminals.clear();
 	}
 	
-	/**
-	 * 
-	 * Returns help text for each property
-	 * 
-	 * @return
-	 */
-	public Map<String, String> getPropertyHelpTextMap() {
-		return propertyHelpTextMap;
-	}
-
-	/**
-	 * 
-	 * Set help text for each property
-	 * 
-	 * @param propertyHelpTextMap
-	 */
-	public void setPropertyHelpTextMap(Map<String, String> propertyHelpTextMap) {
-		this.propertyHelpTextMap = propertyHelpTextMap;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;

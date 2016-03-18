@@ -1,3 +1,15 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package com.bitwise.app.graph.command;
 
 import java.util.LinkedHashMap;
@@ -52,16 +64,12 @@ public class ComponentCreateCommand extends Command {
 		String componentName = DynamicClassProcessor.INSTANCE.getClazzName(component.getClass());
 		com.bitwise.app.common.component.config.Component components = XMLConfigUtil.INSTANCE.getComponent(componentName);
 		
-		
 		//attach tooltip information to component
 		Map<String,PropertyToolTipInformation> tooltipInformation = new LinkedHashMap<>();
-		Map<String, String> propertyHelpMessages = new LinkedHashMap<>();
 		for(Property property : components.getProperty()){
 			tooltipInformation.put(property.getName(),new PropertyToolTipInformation(property.getName(), property.getShowAsTooltip().value(), property.getTooltipDataType().value()));
-			propertyHelpMessages.put(property.getName(), property.getPropertyHelpText());
 		}
 		component.setTooltipInformation(tooltipInformation);
-		component.setPropertyHelpTextMap(propertyHelpMessages);
 		
 		int totalPortsofInType=0, totalPortsOfOutType=0, totalPortsOfUnusedType=0;
 		List<PortSpecification> portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();

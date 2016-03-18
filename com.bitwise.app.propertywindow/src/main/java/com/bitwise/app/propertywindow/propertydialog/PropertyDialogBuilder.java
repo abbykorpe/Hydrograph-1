@@ -1,9 +1,22 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package com.bitwise.app.propertywindow.propertydialog;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -23,6 +36,7 @@ import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import com.bitwise.app.cloneableinterface.IDataStructure;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
+import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.propertywindow.factory.WidgetFactory;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
@@ -54,6 +68,11 @@ public class PropertyDialogBuilder {
 	private Schema setSchemaForInternalPapogation;
 	private List<String> operationFieldList;
 	private PropertyDialog propertyDialog;
+	private Map<String, String> propertyHelpTextMap;
+	private final String TYPE = "Type";
+	private final String BASE_TYPE = "Base Type";
+	private final String TYPE_PROPERTY_HELP="Basic Category";
+	private final String BASE_TYPE_PROPERTY_HELP="Abstraction";
 
 	/**
 	 * Instantiates a new property dialog builder.
@@ -79,6 +98,8 @@ public class PropertyDialogBuilder {
 		eltWidgetList= new ArrayList<>();
 		
 		this.propertyDialog = propertyDialog;
+		propertyHelpTextMap = getPropertyHelpTextMap(component.getComponentName());
+		
 		initSchemaObject();
 	}
 
@@ -196,6 +217,16 @@ public class PropertyDialogBuilder {
 		widget.setPropertyDialog(propertyDialog);
 		widget.setComponent(component);
 		widget.attachToPropertySubGroup(subGroupContainer);
+		
+		if(TYPE.equals(componentConfigProp.getPropertyName())){
+			widget.setPropertyHelpText(BASE_TYPE_PROPERTY_HELP);
+		}else if(BASE_TYPE.equals(componentConfigProp.getPropertyName())){
+			widget.setPropertyHelpText(TYPE_PROPERTY_HELP);
+		}else{
+			if(propertyHelpTextMap.get(componentConfigProp.getPropertyName())!=null)
+				widget.setPropertyHelpText(propertyHelpTextMap.get(componentConfigProp.getPropertyName()).replace("\\n", "\n"));
+		}
+		
 		widget.setPropertyHelp();
 		
 		if(widget instanceof ELTSchemaGridWidget){
@@ -329,6 +360,20 @@ public class PropertyDialogBuilder {
 	 */
 	public ArrayList<AbstractWidget> getELTWidgetList(){
 		return eltWidgetList;
+	}
+	
+	/**
+	 * 
+	 * Returns help text for each property
+	 * 
+	 * @return
+	 */
+	private Map<String, String> getPropertyHelpTextMap(String componentName) {
+		propertyHelpTextMap = new LinkedHashMap<>();
+		 for(com.bitwise.app.common.component.config.Property property : XMLConfigUtil.INSTANCE.getComponent(componentName).getProperty()){
+				propertyHelpTextMap.put(property.getName(), property.getPropertyHelpText());
+			}
+		return propertyHelpTextMap;
 	}
 
 }
