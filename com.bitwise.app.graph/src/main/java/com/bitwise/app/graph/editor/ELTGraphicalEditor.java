@@ -1460,7 +1460,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				}
 				if (Constants.OUTPUT_SUBGRAPH.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
 					oldSubgraph=(com.bitwise.app.graph.model.Component) container.getChildren().get(i).getProperties().put(Constants.SUBGRAPH_COMPONENT, null);
-					System.out.println(oldSubgraph);
 				}
 			}
 			return container;
@@ -1492,7 +1491,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	
 	private void configureKeyboardShortcuts() {
 	    GraphicalViewerKeyHandler keyHandler = new GraphicalViewerKeyHandler(getGraphicalViewer());
-	    keyHandler.put(KeyStroke.getPressed(SWT.F4,0), getActionRegistry().getAction("open"));
+	    keyHandler.put(KeyStroke.getPressed(SWT.F4,0), getActionRegistry().getAction(Constants.SUBGRAPH_OPEN));
 	    getGraphicalViewer().setKeyHandler(keyHandler);
 
 	  }

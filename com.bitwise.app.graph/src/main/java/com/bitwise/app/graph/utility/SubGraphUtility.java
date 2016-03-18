@@ -438,11 +438,12 @@ public class SubGraphUtility {
 	}
 
 	/**
-	 * This methods checks if there is any update in subgraph file.
+	 * This methods updates version in subgraph component and sets status as update-available.
 	 *  
 	 * @param subGraphComponent
 	 */
-	public void isUpdateAvailableForSubgraph(Component subGraphComponent) {
+	
+	public void updateVersionOfSubgraph(Component subGraphComponent) {
 		IPath jobFileIPath = null;
 		String filePath = null;
 		Container subGraphContainer = null;

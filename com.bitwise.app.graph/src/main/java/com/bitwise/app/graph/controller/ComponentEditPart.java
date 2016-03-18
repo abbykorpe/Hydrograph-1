@@ -127,7 +127,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		LinkedHashMap<String, Object> properties = getCastedModel().getProperties();
 		if (StringUtils.equals(getCastedModel().getComponentName(), Constants.SUBGRAPH_COMPONENT)) {
 			SubGraphUtility graphUtility=new SubGraphUtility();
-				graphUtility.isUpdateAvailableForSubgraph(getCastedModel());
+				graphUtility.updateVersionOfSubgraph(getCastedModel());
 		}
 		String status = (String) properties.get(Component.Props.VALIDITY_STATUS.getValue());
 		((ComponentFigure)figure).setStatus(status);
