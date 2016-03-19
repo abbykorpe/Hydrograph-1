@@ -31,6 +31,10 @@
             id="com.bitwise.app.graph.command.removedebug"
             name="Remove Debug">
       </command>
+      <command
+            id="com.bitwise.app.propertywindow.graphProperties"
+            name="Graph Properties">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -79,6 +83,18 @@
       <handler
             class="com.bitwise.app.graph.handler.NewGraphHandler"
             commandId="org.eclipse.ui.window.newEditor">
+         <activeWhen>
+            <with
+                  variable="activeEditorId">
+               <equals
+                     value="com.bitwise.app.graph.etlgraphicaleditor">
+               </equals>
+            </with>
+         </activeWhen>
+      </handler>
+      <handler
+            class="com.bitwise.app.graph.handler.GraphPropertiesHandler"
+            commandId="com.bitwise.app.propertywindow.graphProperties">
          <activeWhen>
             <with
                   variable="activeEditorId">
@@ -185,6 +201,12 @@
                   name="com.bitwise.app.graph.separator5"
                   visible="true">
             </separator>
+            <command
+                  commandId="com.bitwise.app.propertywindow.graphProperties"
+                  icon="resources/icons/graph_property_window.png"
+                  label="Graph Properties"
+                  style="push">
+            </command>
             <command
                   commandId="com.bitwise.app.graph.command.runjob"
                   icon="resources/icons/run.png"

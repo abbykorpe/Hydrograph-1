@@ -17,12 +17,11 @@ package com.bitwise.app.graph.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -52,6 +51,8 @@ public class Container extends Model {
 	@XStreamOmitField
 	private Object subgraphComponentEditPart;
 	private long subgraphVersion=1;
+	private Map<String,String> graphRuntimeProperties;
+	
 	public Container(){
 		
 	}
@@ -296,6 +297,12 @@ public class Container extends Model {
 			this.subgraphVersion++;
 			isVersionAlreadyUpdated=true;
 		}
+	}
+
+	public Map<String, String> getGraphRuntimeProperties() {
+		if (graphRuntimeProperties == null)
+			graphRuntimeProperties = new LinkedHashMap<String, String>();
+		return graphRuntimeProperties;
 	}
 	
 }
