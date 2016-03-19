@@ -4,7 +4,7 @@
 <toc label="Aggregate" link_to="xml\Components\components.xml#Aggregate"> 
 	<topic label="Properties"  href="html/Components/Aggregate_Properties.html"> 
 	</topic>
- <topic href="html/concepts/maintopic.html" label="Mapping View">
+ <topic href="html/Components/Aggregate_Mapping_View.html" label="Mapping View">
  </topic>
  <topic href="html/concepts/maintopic.html" label="Operation Class">
  </topic>
