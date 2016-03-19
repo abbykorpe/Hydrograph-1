@@ -74,7 +74,7 @@ public class Constants {
 	// Used for validating only Parameters E.g  @{Param_123}
 	public static final String PARAMETER_REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}"; 
 	
-	public static final String PRIMARY_KEYS = "Primary\n Keys";
+
 	public static final String PROPERTY_COLUMN_NAME = "column_name";
 	public static final String PROPERTY_SECONDARY_COLUMN_KEYS = "secondary_column_keys";
 	

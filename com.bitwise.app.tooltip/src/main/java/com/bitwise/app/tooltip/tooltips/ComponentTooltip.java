@@ -77,7 +77,7 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 	private static final String OPERATION_FIELDS="operation_fields";
 	private static final String SECONDARY_KEYS="secondary_keys";
 	private static final String KEY_FIELDS="key_fields";
-	private static final String PRIMARY_KEYS="primary_keys";
+	private static final String KEY_FIELDS_SORT_COMPONENT="Key_fields_sort";
 	private static final String MATCH_VALUE="match_value";
 	private static final String LIST_DATA_TYPE="LIST";
 	private static final String NO_OF_RECORDS="no_of_records";
@@ -460,9 +460,13 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 					.substring(1, propertyInfo.getPropertyValue().toString().length() - 1);
 			String formattedPropertyValue = "";
 			if (SECONDARY_KEYS.equalsIgnoreCase(propertyInfo.getPropertyName())
-					|| PRIMARY_KEYS.equalsIgnoreCase(propertyInfo.getPropertyName())) {
+					|| KEY_FIELDS_SORT_COMPONENT.equalsIgnoreCase(propertyInfo.getPropertyName())) {
 				formattedPropertyValue = setFormattingOfSecondaryKeysAndPrimaryKeys(propertyValue,
 						formattedPropertyValue);
+				if(KEY_FIELDS_SORT_COMPONENT.equalsIgnoreCase(propertyInfo.getPropertyName()))
+				{
+					propertyNameCapitalized=WordUtils.capitalize(propertyInfo.getPropertyName().substring(0,10).toLowerCase(), '_').replace("_", " ");
+				}
 				lblTextProperty.setText(propertyNameCapitalized + " : " + formattedPropertyValue);
 			} else {
 				lblTextProperty.setText(propertyNameCapitalized + " : " + propertyValue);
@@ -552,7 +556,7 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 						lblDecorator.hide();
 					}
 				} 
-				if(SECONDARY_KEYS.equalsIgnoreCase(propertyInfo.getPropertyName())||PRIMARY_KEYS.equalsIgnoreCase(propertyInfo.getPropertyName())) {
+				if(SECONDARY_KEYS.equalsIgnoreCase(propertyInfo.getPropertyName())||KEY_FIELDS_SORT_COMPONENT.equalsIgnoreCase(propertyInfo.getPropertyName())) {
 					secondaryKeysList = (LinkedHashMap<String, Object>) propertyInfo.getPropertyValue();
 					if (secondaryKeysList.size() == 0) {
 						lblDecorator.show();

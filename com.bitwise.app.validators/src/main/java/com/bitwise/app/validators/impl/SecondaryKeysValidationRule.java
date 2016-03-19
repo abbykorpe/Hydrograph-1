@@ -18,6 +18,7 @@ import java.util.Map;
 
 public class SecondaryKeysValidationRule implements IValidator{
 	private String errorMessage;
+	private static final String KEY_FIELDS_SORT_COMPONENT="Key_fields_sort";
 	@Override
 	public boolean validateMap(Object object, String propertyName) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
@@ -34,6 +35,10 @@ public class SecondaryKeysValidationRule implements IValidator{
 			if (secondaryKeysList.size() != 0) {
 				return true;
 			}
+		}
+		if(KEY_FIELDS_SORT_COMPONENT.equalsIgnoreCase(propertyName))
+		{
+			propertyName=propertyName.substring(0,10);
 		}
 		errorMessage = propertyName.replace("_"," ") + " are mandatory";
 		return false;

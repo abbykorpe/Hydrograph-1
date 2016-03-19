@@ -23,7 +23,7 @@
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations specific \nto this component at run time."/>
 		
-		<tns:property dataType="string" name="Primary_keys" renderer="PRIMARY_COLUMN_KEYS_WIDGET" type="USER"
+		<tns:property dataType="string" name="Key_fields_sort" renderer="PRIMARY_COLUMN_KEYS_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="OPTIONAL" propertyHelpText="Fields used for grouping.">
 			<tns:validator>SECONDARY_KEYS_VALIDATOR</tns:validator>
