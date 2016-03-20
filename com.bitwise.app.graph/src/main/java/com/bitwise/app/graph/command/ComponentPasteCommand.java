@@ -39,7 +39,7 @@ import com.bitwise.app.graph.model.Model;
 public class ComponentPasteCommand extends Command {
 	private static final Logger log = LogFactory.INSTANCE.getLogger(ComponentPasteCommand.class);
 	private int pasteCounter=0;
-	private Map<Component,Component> list = new HashMap();
+	private Map<Component,Component> list = new HashMap<>();
 
 	@Override
 	public boolean canExecute() {
@@ -106,15 +106,15 @@ public class ComponentPasteCommand extends Command {
 					Component newSource = list.get(originalNode);
 					Component newtarget = list.get(targetComponent);					
 					
-					Link link = new Link();
-					link.setSourceTerminal(originlink.getSourceTerminal());
-					link.setTargetTerminal(originlink.getTargetTerminal());
-					link.setSource(newSource);
-					link.setTarget(newtarget);
-					newSource.connectOutput(link);
-					newtarget.connectInput(link);
-					
-					
+					if(newSource!=null && newtarget!=null){
+						Link link = new Link();
+						link.setSourceTerminal(originlink.getSourceTerminal());
+						link.setTargetTerminal(originlink.getTargetTerminal());
+						link.setSource(newSource);
+						link.setTarget(newtarget);
+						newSource.connectOutput(link);
+						newtarget.connectInput(link);
+					}
 				}
 			}
 		}
