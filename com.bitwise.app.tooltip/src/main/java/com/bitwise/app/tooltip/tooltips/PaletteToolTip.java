@@ -19,7 +19,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.component.config.Component;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.tooltip.utils.ToolTipUtils;
@@ -41,7 +40,6 @@ public class PaletteToolTip extends Shell {
 	private Label toolTipText;
 	private String blankCharacters;
 	private Link helpLink;	
-	private String tooltipContent;
 	private String componentName;
 	
 	/**
@@ -93,7 +91,6 @@ public class PaletteToolTip extends Shell {
 		addSpacesBeforeHelpLink(maxLength);		
 		toolTipText.setText(text.replace("\\n", "\n"));
 		setSize(this.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		tooltipContent=text;
 		logger.debug("set tooltip text - " + text);
 	}
 	
@@ -143,8 +140,7 @@ public class PaletteToolTip extends Shell {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
+				//Do Nothing				
 			}
 		});
 		logger.debug("Added help link");
@@ -204,8 +200,7 @@ public class PaletteToolTip extends Shell {
 			
 			@Override
 			public void mouseEnter(MouseEvent e) {
-				//Do Nothing
-				
+				helpLink.setFocus();
 			}
 		});
 	}
@@ -237,7 +232,7 @@ public class PaletteToolTip extends Shell {
 			
 			@Override
 			public void mouseEnter(MouseEvent e) {
-
+				//Do Nothing
 			}
 		});
 	}
@@ -283,10 +278,9 @@ public class PaletteToolTip extends Shell {
 		setSize(this.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 	}
-
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
+	
+	@Override 
+    protected void checkSubclass() { 
+            // Disable the check that prevents subclassing of SWT components 
+    }
 }
