@@ -81,7 +81,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		if (!isActive()) {
 			super.activate();
 			((Component) getModel()).addPropertyChangeListener(this);
-			
+			((Component) getModel()).setComponentEditPart(this);
 		}
 	}
 
@@ -361,8 +361,14 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				eltGraphicalEditor.setDirty(true);
 				getCastedModel().updateTooltipInformation();
 			}
-			
+			refreshComponentStatusOfAllComponent();
 			super.performRequest(req);
+		}
+	}
+
+	private void refreshComponentStatusOfAllComponent() {
+		for(Component component:getCastedModel().getParent().getChildren()){
+			((ComponentEditPart)component.getComponentEditPart()).updateComponentStatus();
 		}
 	}
 
@@ -634,12 +640,12 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	}
 	
 	public void updateComponentStatus(){
-		Component component = getCastedModel();
+		Component component = this.getCastedModel();
 		LinkedHashMap<String, Object> properties = component.getProperties();
 		String statusName = Component.Props.VALIDITY_STATUS.getValue();
 		if(properties.containsKey(statusName)){
-			((ComponentFigure)getFigure()).setStatus((String)properties.get(statusName));
-			getFigure().repaint();
+			((ComponentFigure)this.getFigure()).setStatus((String)properties.get(statusName));
+			this.getFigure().repaint();
 		}
 	}
 	

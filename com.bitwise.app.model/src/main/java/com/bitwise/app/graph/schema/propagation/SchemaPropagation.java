@@ -143,12 +143,23 @@ public class SchemaPropagation {
 	}
 
 	private void setSchemaMapOfComponent(Component component, ComponentsOutputSchema componentsOutputSchema) {
-
+		if(StringUtils.equals(Constants.OFIXED_WIDTH, component.getComponentName()))
+		{
+			updateComponentStatus(component,componentsOutputSchema);
+		}
 		if (!StringUtils.equals(Constants.SUBGRAPH_COMPONENT_CATEGORY, component.getCategory())) {
 			Map<String, ComponentsOutputSchema> tempSchemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
 			tempSchemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
 			component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, tempSchemaMap);
 		} 
+	}
+
+	private void updateComponentStatus(Component component, ComponentsOutputSchema componentsOutputSchema) {
+		for (FixedWidthGridRow fixedWidthGridRow : componentsOutputSchema.getFixedWidthGridRowsOutputFields()) {
+			if (StringUtils.isBlank(fixedWidthGridRow.getLength())) {
+				component.getProperties().put(Constants.VALIDITY_STATUS, Constants.ERROR);
+			}
+		}
 	}
 
 	private void propagateSchemaFromSubgraph(Component subGraphComponent, String targetTerminal,

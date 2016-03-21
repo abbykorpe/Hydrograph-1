@@ -13,6 +13,7 @@
 
 package com.bitwise.app.graph.model;
 
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -135,7 +136,9 @@ public abstract class Component extends Model {
 	// @XStreamOmitField
 	private Map<String, String> toolTipErrorMessages; // <propertyName,ErrorMessage>
 
-
+	@XStreamOmitField
+	private Object componentEditPart;
+	
 	/**
 	 * Instantiates a new component.
 	 */
@@ -1308,5 +1311,15 @@ public abstract class Component extends Model {
 		return "Component [UniqueComponentName=" + UniqueComponentName + ", type=" + type + ", prefix=" + prefix
 				+ ", category=" + category + ", inPortCount=" + inPortCount + ", outPortCount=" + outPortCount
 				+ ", unusedPortCount=" + unusedPortCount + ", componentLabel=" + componentLabel + "]";
+	}
+
+	public Object getComponentEditPart() {
+		return componentEditPart;
+	}
+
+	public void setComponentEditPart(Object componentEditPart) {
+		this.componentEditPart = componentEditPart;
 	}	
+	
+	
 }
