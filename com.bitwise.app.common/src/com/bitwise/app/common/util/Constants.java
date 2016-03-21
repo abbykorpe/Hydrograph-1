@@ -219,4 +219,5 @@ public class Constants {
 	public static final String SUBGRAPH_VERSION = "subgraphVersion";
 	public static final String VALIDITY_STATUS = "validityStatus";
 	public static final String HELP_ID="helpId";
+	public static final String COMPONENT_PROPERTIES_ID="propertiesId";
 }
