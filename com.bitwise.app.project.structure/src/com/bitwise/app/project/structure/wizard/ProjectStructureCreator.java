@@ -161,8 +161,7 @@ public class ProjectStructureCreator {
 	private List<IClasspathEntry> addJavaLibrariesInClassPath() {
 		List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
 		entries.add(JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath()));
-		//NOTE : added for future use
-		//entries.add(JavaCore.newContainerEntry(MavenRuntimeClasspathProvider.MAVEN_CLASSPATH_PROVIDER))
+		entries.add(JavaCore.newContainerEntry(new Path("org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER")));
 		return entries;
 	}
 
@@ -198,18 +197,20 @@ public class ProjectStructureCreator {
 		if(!project.hasNature(ProjectNature.NATURE_ID)){
 			IProjectDescription description = project.getDescription();
 			String[] prevNatures = description.getNatureIds();
-			String[] newNatures = new String[prevNatures.length + 2];
+			String[] newNatures = new String[prevNatures.length + 3];
 			System.arraycopy(prevNatures, 0, newNatures, 0, prevNatures.length);
 			newNatures[prevNatures.length] = ProjectNature.NATURE_ID;
 			newNatures[prevNatures.length + 1] = JavaCore.NATURE_ID;
-			//newNatures[prevNatures.length + 2] = "org.eclipse.m2e.core.maven2Nature";
+			newNatures[prevNatures.length + 2] = "org.eclipse.m2e.core.maven2Nature";
 
 			// validate the natures
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			IStatus status = workspace.validateNatureSet(newNatures); 
-			ICommand buildCommand= description.newCommand();
-			buildCommand.setBuilderName("org.eclipse.jdt.core.javabuilder");
-			ICommand[] iCommand = {buildCommand};
+			ICommand javaBuildCommand= description.newCommand();
+			javaBuildCommand.setBuilderName("org.eclipse.jdt.core.javabuilder");
+			ICommand mavenBuildCommand= description.newCommand();
+			mavenBuildCommand.setBuilderName("org.eclipse.m2e.core.maven2Builder");
+			ICommand[] iCommand = {javaBuildCommand, mavenBuildCommand};
 			description.setBuildSpec(iCommand); 
 			// only apply new nature, if the status is ok
 			if (status.getCode() == IStatus.OK) {
