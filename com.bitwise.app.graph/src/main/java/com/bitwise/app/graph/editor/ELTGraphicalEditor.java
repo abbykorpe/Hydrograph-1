@@ -117,7 +117,6 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.ide.FileStoreEditorInput;
-import org.eclipse.ui.internal.EditorReference;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.slf4j.Logger;
@@ -133,6 +132,8 @@ import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.engine.exceptions.EngineException;
 import com.bitwise.app.engine.util.ConverterUtil;
+import com.bitwise.app.graph.action.ComponentHelpAction;
+import com.bitwise.app.graph.action.ComponentPropertiesAction;
 import com.bitwise.app.graph.action.ContributionItemManager;
 import com.bitwise.app.graph.action.CopyAction;
 import com.bitwise.app.graph.action.CutAction;
@@ -146,8 +147,8 @@ import com.bitwise.app.graph.action.subgraph.SubGraphUpdateAction;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
-import com.bitwise.app.graph.handler.DebugHandler;
 import com.bitwise.app.graph.factory.CustomPaletteEditPartFactory;
+import com.bitwise.app.graph.handler.DebugHandler;
 import com.bitwise.app.graph.handler.RunJobHandler;
 import com.bitwise.app.graph.handler.StopJobHandler;
 import com.bitwise.app.graph.job.Job;
@@ -688,6 +689,14 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		getSelectionActions().add(action.getId());
 		
 		action = new RemoveWatcherAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
+		action=new ComponentHelpAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
+		action=new ComponentPropertiesAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 		

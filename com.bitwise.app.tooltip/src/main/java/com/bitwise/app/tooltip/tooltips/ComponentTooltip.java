@@ -83,6 +83,7 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 	private static final String NO_OF_RECORDS="no_of_records";
 	private static final String SCHEMA="schema";
 	private static final String EXTERNAL_SCHEMA_PATH="External schema path : ";
+	private static final String IN_PORT_COUNT="inPortCount|unusedPortCount";
 	
 	/**
 	 * 
@@ -486,7 +487,12 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 				String formattedPropertyName = propertyNameCapitalized.toLowerCase().substring(0, 1).toUpperCase()
 						+ propertyNameCapitalized.toLowerCase().substring(1);
 				lblTextProperty.setText(formattedPropertyName + " : " + propertyInfo.getPropertyValue().toString());
-			} else {
+			}
+			else if(IN_PORT_COUNT.equalsIgnoreCase(propertyInfo.getPropertyName())){
+				String formattedPropertyName = propertyNameCapitalized.substring(0,11);
+				lblTextProperty.setText(formattedPropertyName + " : " + propertyInfo.getPropertyValue());
+			}
+			else {
 				lblTextProperty.setText(propertyNameCapitalized + " : " + propertyInfo.getPropertyValue().toString());
 			}
 		}
