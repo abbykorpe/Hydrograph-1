@@ -137,6 +137,7 @@ import com.bitwise.app.graph.action.ComponentPropertiesAction;
 import com.bitwise.app.graph.action.ContributionItemManager;
 import com.bitwise.app.graph.action.CopyAction;
 import com.bitwise.app.graph.action.CutAction;
+import com.bitwise.app.graph.action.DeleteAction;
 import com.bitwise.app.graph.action.PasteAction;
 import com.bitwise.app.graph.action.debug.AddWatcherAction;
 import com.bitwise.app.graph.action.debug.RemoveWatcherAction;
@@ -654,6 +655,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		super.createActions();
 		ActionRegistry registry = getActionRegistry();
 		// ...
+		
+		IAction deleteAction;
+		deleteAction = new DeleteAction(this);
+		registry.registerAction(deleteAction);
+		getSelectionActions().add(deleteAction.getId());
+		
 		IAction pasteAction;
 		pasteAction = new PasteAction(this);
 		registry.registerAction(pasteAction);

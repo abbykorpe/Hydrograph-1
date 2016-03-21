@@ -15,20 +15,30 @@
 package com.bitwise.app.graph.command;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.gef.commands.Command;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 
+import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.Link;
+import com.bitwise.app.graph.model.Model;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ComponentDeleteCommand.
  */
 public class ComponentDeleteCommand extends Command {
-	private final Component child;
+	
+	private List<Component> selectedComponents;
+	//private List<Component> deleteComponents;
+	Set<Component> deleteComponents;
 	private final Container parent;
 	private boolean wasRemoved;
 	private final List<Link> sourceConnections = new ArrayList<Link>();
@@ -37,20 +47,53 @@ public class ComponentDeleteCommand extends Command {
 	/**
 	 * Instantiates a new component delete command.
 	 * 
-	 * @param parent
-	 *            the parent
-	 * @param child
-	 *            the child
 	 */
-	public ComponentDeleteCommand(Container parent, Component child) {
-		this.parent = parent;
-		this.child = child;
+	public ComponentDeleteCommand() {
+
+		IWorkbenchPage page = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage();	
+		this.parent=(((ELTGraphicalEditor) page.getActiveEditor()).getContainer());
+		selectedComponents = new ArrayList<Component>();
+		deleteComponents = new LinkedHashSet<>();
+
+	}
+
+	public boolean addChildToDelete(Component node){
+		selectedComponents.add(node);
+		return true;
+	}
+
+
+
+	@Override
+	public boolean canExecute() {
+		if (selectedComponents == null || selectedComponents.isEmpty())
+			return false;
+
+		Iterator it = selectedComponents.iterator();
+		while (it.hasNext()) {
+			Component node = (Component) it.next();
+			if (isDeletableNode(node)) {
+				deleteComponents.add(node);
+			}
+		}
+		return true;
+
+	}
+
+	private boolean isDeletableNode(Model node) {
+		if (node instanceof Component)
+			return true;
+		else
+			return false;
 	}
 
 	@Override
 	public boolean canUndo() {
 		return wasRemoved;
 	}
+
+
 
 	@Override
 	public void execute() {
@@ -59,18 +102,28 @@ public class ComponentDeleteCommand extends Command {
 
 	@Override
 	public void redo() {
-		deleteConnections(child);
-		wasRemoved = parent.removeChild(child);
+		Iterator it = deleteComponents.iterator();
+		while(it.hasNext()){
+			Component deleteComp=(Component)it.next();
+			deleteConnections(deleteComp);
+			wasRemoved = parent.removeChild(deleteComp);
+		}
+
 	}
 
 	@Override
 	public void undo() {
-		parent.addChild(child);
-		restoreConnections();
+		Iterator it = deleteComponents.iterator();
+		while(it.hasNext()){
+			Component restoreComp=(Component)it.next();
+			parent.addChild(restoreComp);
+			restoreConnections();
+		}
+
 	}
-	
+
 	private void deleteConnections(Component component) {
-		
+
 		sourceConnections.addAll(component.getSourceConnections());
 		for (int i = 0; i < sourceConnections.size(); i++) {
 			Link link = sourceConnections.get(i);
@@ -81,7 +134,7 @@ public class ComponentDeleteCommand extends Command {
 			if(link.getTarget()!=null)
 				link.getTarget().freeInputPort(link.getTargetTerminal());
 		}
-		
+
 		targetConnections.addAll(component.getTargetConnections());
 		for (int i = 0; i < targetConnections.size(); i++) {
 			Link link = targetConnections.get(i);
@@ -93,7 +146,7 @@ public class ComponentDeleteCommand extends Command {
 				link.getTarget().freeInputPort(link.getTargetTerminal());
 		}
 	}
-	
+
 	private void restoreConnections() {
 		for (int i = 0; i < sourceConnections.size(); i++) {
 			Link link = sourceConnections.get(i);

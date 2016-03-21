@@ -250,8 +250,8 @@ public class LinkCommand extends Command{
 
 	@Override
 	public void undo() {
+		//---undo link creation
 		source = connection.getSource();
-		logger.debug("New Name :{}",source.getProperties().get("name"));
 		target = connection.getTarget();
 		sourceTerminal = connection.getSourceTerminal();
 		targetTerminal = connection.getTargetTerminal();
@@ -261,8 +261,6 @@ public class LinkCommand extends Command{
 		
 		source.freeOutputPort(connection.getSourceTerminal());
 		target.freeInputPort(connection.getTargetTerminal());
-
-		
 
 	}
 }

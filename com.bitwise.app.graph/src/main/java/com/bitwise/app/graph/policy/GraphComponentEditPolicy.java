@@ -33,15 +33,15 @@ public class GraphComponentEditPolicy extends ComponentEditPolicy {
 	 * org.eclipse.gef.editpolicies.ComponentEditPolicy#createDeleteCommand(
 	 * org.eclipse.gef.requests.GroupRequest)
 	 */
-	@Override
-	protected Command createDeleteCommand(GroupRequest deleteRequest) {
-		Object parent = getHost().getParent().getModel();
-		Object child = getHost().getModel();
-		if (parent instanceof Container && child instanceof Component) {
-			return new ComponentDeleteCommand((Container) parent,
-					(Component) child);
-		}
-		return super.createDeleteCommand(deleteRequest);
-	}
+//	@Override
+//	protected Command createDeleteCommand(GroupRequest deleteRequest) {
+//		Object parent = getHost().getParent().getModel();
+//		Object child = getHost().getModel();
+//		if (parent instanceof Container && child instanceof Component) {
+//			return new ComponentDeleteCommand((Container) parent,
+//					(Component) child);
+//		}
+//		return super.createDeleteCommand(deleteRequest);
+//	}
 
 }
