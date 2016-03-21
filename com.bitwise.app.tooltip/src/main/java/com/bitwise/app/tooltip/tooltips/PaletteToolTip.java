@@ -1,3 +1,16 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package com.bitwise.app.tooltip.tooltips;
 
 import java.nio.CharBuffer;
@@ -19,7 +32,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.component.config.Component;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.tooltip.utils.ToolTipUtils;
@@ -41,7 +53,6 @@ public class PaletteToolTip extends Shell {
 	private Label toolTipText;
 	private String blankCharacters;
 	private Link helpLink;	
-	private String tooltipContent;
 	private String componentName;
 	
 	/**
@@ -93,7 +104,6 @@ public class PaletteToolTip extends Shell {
 		addSpacesBeforeHelpLink(maxLength);		
 		toolTipText.setText(text.replace("\\n", "\n"));
 		setSize(this.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		tooltipContent=text;
 		logger.debug("set tooltip text - " + text);
 	}
 	
@@ -143,8 +153,7 @@ public class PaletteToolTip extends Shell {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
+				//Do Nothing				
 			}
 		});
 		logger.debug("Added help link");
@@ -204,8 +213,7 @@ public class PaletteToolTip extends Shell {
 			
 			@Override
 			public void mouseEnter(MouseEvent e) {
-				//Do Nothing
-				
+				helpLink.setFocus();
 			}
 		});
 	}
@@ -237,7 +245,7 @@ public class PaletteToolTip extends Shell {
 			
 			@Override
 			public void mouseEnter(MouseEvent e) {
-
+				//Do Nothing
 			}
 		});
 	}
@@ -283,10 +291,9 @@ public class PaletteToolTip extends Shell {
 		setSize(this.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 	}
-
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
+	
+	@Override 
+    protected void checkSubclass() { 
+            // Disable the check that prevents subclassing of SWT components 
+    }
 }
