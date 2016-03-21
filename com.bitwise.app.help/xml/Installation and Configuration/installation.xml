@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 <toc label="Installation and Configuration">
-   <anchor id="Prerequisites"/>
-   <anchor id="StepsToInstall"/>
+   <anchor id="PrerequisitesForWindows"/>
+   <anchor id="LaunchingAcceleroOnWindows"/>
+   <anchor id="PrerequisitesForMacintosh"/>
+   <anchor id="LaunchingAcceleroOnMacintosh"/>
 </toc>

@@ -4,7 +4,7 @@
 <toc label="Join" link_to="xml\Components\components.xml#Join"> 
 	<topic label="Properties"  href="html/Components/Join_Properties.html"> 
 	</topic>
- <topic href="html/concepts/maintopic.html" label="Mapping View">
+ <topic href="html/Components/Join_Mapping_View.html" label="Mapping View">
  </topic>
  <topic href="html/concepts/maintopic.html" label="Validations">
  </topic>

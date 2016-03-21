@@ -25,7 +25,7 @@
             primary="true">
       </toc>
       <toc
-            file="xml/Installation and Configuration/prerequisites.xml">
+            file="xml/Installation and Configuration/prerequisitesForWindows.xml">
       </toc>
       <toc
             file="xml/Installation and Configuration/stepsToInstall.xml">
@@ -197,6 +197,42 @@
       </toc>
       <toc
             file="xml/Components/uniqueSequence.xml">
+      </toc>
+      <toc
+            file="xml/Installation and Configuration/launchingAcceleroOnWindows.xml">
+      </toc>
+      <toc
+            file="xml/Installation and Configuration/prerequisitesForMacintosh.xml">
+      </toc>
+      <toc
+            file="xml/Installation and Configuration/launchingAcceleroOnMacintosh.xml">
+      </toc>
+      <toc
+            file="html/How To Steps/How_To_Parameterize_Component_Properties.html">
+      </toc>
+      <toc
+            file="html/How To Steps/How_To_Import_Engine_XML_to_UI.html">
+      </toc>
+      <toc
+            file="html/How To Steps/How_To_Pass_Hadoop_Properties_To_Component.html">
+      </toc>
+      <toc
+            file="html/Components/Join_Mapping_View.html">
+      </toc>
+      <toc
+            file="html/Components/Lookup_Mapping_View.html">
+      </toc>
+      <toc
+            file="html/Components/Transform_Properties.html">
+      </toc>
+      <toc
+            file="html/Components/Transform_Mapping_View.html">
+      </toc>
+      <toc
+            file="html/Components/Aggregate_Mapping_View.html">
+      </toc>
+      <toc
+            file="html/references/Job_Examples.html">
       </toc>
    </extension>
 

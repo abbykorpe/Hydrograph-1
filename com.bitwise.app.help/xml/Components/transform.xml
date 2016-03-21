@@ -2,9 +2,9 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Transform" link_to="xml\Components\components.xml#Transform"> 
-	<topic label="Properties"  href="html/concepts/maintopic.html"> 
+	<topic label="Properties"  href="html/Components/Transform_Properties.html"> 
 	</topic>
- <topic href="html/concepts/maintopic.html" label="Mapping View">
+ <topic href="html/Components/Transform_Mapping_View.html" label="Mapping View">
  </topic>
  <topic href="html/concepts/maintopic.html" label="Operation Class">
  </topic>
