@@ -59,6 +59,7 @@ public class Messages extends NLS {
 	public static String MESSAGE_INFORMATION;
 	public static String CONFIRM_TO_CREATE_SUBGRAPH_MESSAGE;
 	public static String CONFIRM_TO_CREATE_SUBGRAPH_WINDOW_TITLE;
+	public static String HELP;
 	
 	 
 	
