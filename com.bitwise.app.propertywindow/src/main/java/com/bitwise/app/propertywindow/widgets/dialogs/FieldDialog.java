@@ -92,7 +92,7 @@ public class FieldDialog extends Dialog {
 
 	private final String PROPERTY_EXISTS_ERROR = Messages.RuntimePropertAlreadyExists;
 	private static final String[] PROPS = { Constants.COMPONENT_NAME };
-	private final String PROPERTY_NAME_BLANK_ERROR = Messages.EmptyNameNotification;
+	private final String PROPERTY_NAME_BLANK_ERROR = Messages.EmptyFieldNameNotification;
 	private Label lblPropertyError;
 	private TableViewer targetTableViewer;
 	private TableViewer sourceTableViewer;
@@ -557,7 +557,7 @@ public class FieldDialog extends Dialog {
 			} else {
 				targetTable.setSelection(propertyCounter);
 				lblPropertyError.setVisible(true);
-				lblPropertyError.setText(Messages.EmptyNameNotification);
+				lblPropertyError.setText(Messages.EmptyFieldNameNotification);
 				return false;
 			}
 			propertyCounter++;

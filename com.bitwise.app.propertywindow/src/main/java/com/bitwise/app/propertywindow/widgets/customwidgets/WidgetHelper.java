@@ -195,7 +195,7 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getPrimaryKeyWidgetConfig() {
 		EditButtonWithLabelConfig buttonWithLabelConfig = new EditButtonWithLabelConfig();
-		buttonWithLabelConfig.setName(Constants.PRIMARY_KEYS);
+		buttonWithLabelConfig.setName(Constants.KEY_FIELDS_LABEL);
 		buttonWithLabelConfig.setWindowName(Messages.PRIMARY_COLUMN_KEY_WINDOW_NAME);
 		return buttonWithLabelConfig;
 	}

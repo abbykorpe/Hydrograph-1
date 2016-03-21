@@ -144,6 +144,12 @@ public class Messages extends NLS {
 	public static String ALPHA_NUMRIC_REGULAR_EXPRESSION;
 	public static String TEXT_FIELD_SHOULD_MATCH;
 	public static String BROWSE_BUTTON_TEXT;
+	public static String EmptyFieldNameNotification;
+	public static String EmptySourceFieldNotification;
+	public static String EmptyOutputFieldNotification;
+	public static String SourceFieldAlreadyExists;
+	public static String OutputFieldAlreadyExists;
+	public static String FieldNameAlreadyExists;
 
 	static {
 		// initialize resource bundle
