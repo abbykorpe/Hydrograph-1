@@ -433,7 +433,7 @@ public class JoinMapGrid extends Dialog {
 	        	String source_field = lookupMapProperty.getSource_Field().substring(lookupMapProperty.getSource_Field().lastIndexOf(".") + 1);
 				if(portFieldPair.getKey().equals(port))
 				{
-					ArrayList<String> value = (ArrayList<String>) portFieldPair.getValue();
+					List<String> value = (ArrayList<String>) portFieldPair.getValue();
 					if(!value.isEmpty()&&!checkIfSourceFieldExists(value, source_field))
 					{
 						 nonMappedFieldList.add(port+"."+source_field);
@@ -449,7 +449,7 @@ public class JoinMapGrid extends Dialog {
 	    }
 	    return nonMappedFieldList;
 	}
-	private boolean checkIfSourceFieldExists(ArrayList<String> list, String sourceField) {
+	private boolean checkIfSourceFieldExists(List<String> list, String sourceField) {
 		for (String field : list) {
 			if (field.equalsIgnoreCase(sourceField)) {
 				return true;
