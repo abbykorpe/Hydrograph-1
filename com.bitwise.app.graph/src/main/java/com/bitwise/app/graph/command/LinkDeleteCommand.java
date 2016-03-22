@@ -1,0 +1,165 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
+
+package com.bitwise.app.graph.command;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
+import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+
+import com.bitwise.app.graph.controller.ComponentEditPart;
+import com.bitwise.app.graph.controller.PortEditPart;
+import com.bitwise.app.graph.editor.ELTGraphicalEditor;
+import com.bitwise.app.graph.model.Component;
+import com.bitwise.app.graph.model.Link;
+import com.bitwise.app.graph.model.Model;
+import com.bitwise.app.graph.model.Port;
+import com.bitwise.app.logging.factory.LogFactory;
+
+
+/**
+ * @author Bitwise The Class LinkDeleteCommand.
+ */
+public class LinkDeleteCommand extends Command{
+
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(LinkDeleteCommand.class);
+	
+	private List<Link> selectedLinks;
+	private Set<Link> deleteLinks;
+	
+
+	public LinkDeleteCommand() {
+		super("Delete connection");
+		selectedLinks=new ArrayList<Link>();
+		deleteLinks=new LinkedHashSet<Link>();
+		setLabel("Delete Connection");
+	}
+	
+	public void addLinkToDelete(Link link){
+		selectedLinks.add(link);
+	}
+
+	public boolean hasLinkToDelete(){
+		return !selectedLinks.isEmpty();
+	}
+
+	@Override
+	public boolean canExecute() {
+		
+		if (selectedLinks == null || selectedLinks.isEmpty())
+			return false;
+
+		deleteLinks.clear();
+		Iterator<Link> it = selectedLinks.iterator();
+		while (it.hasNext()) {
+			Link node = (Link) it.next();
+			if (isDeletableNode(node)) {
+				deleteLinks.add(node);
+			}
+		}
+		return true;
+	}
+	
+	private boolean isDeletableNode(Model node) {
+		if (node instanceof Link)
+			return true;
+		else
+			return false;
+	}
+
+	@Override
+	public void execute() {
+		redo();
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.commands.Command#execute()
+	 */
+	@Override
+	public void redo() {
+
+		Iterator<Link> it = deleteLinks.iterator();
+		while(it.hasNext()){
+			Link deleteLink=(Link)it.next();
+			Port sourcePort = deleteLink.getSource().getPort(deleteLink.getSourceTerminal());
+			if(sourcePort.isWatched()){
+				removeWatch(sourcePort, deleteLink.getSource());
+			}
+			
+			deleteLink.detachSource();
+			deleteLink.detachTarget();
+			deleteLink.getSource().freeOutputPort(deleteLink.getSourceTerminal());
+			deleteLink.getTarget().freeInputPort(deleteLink.getTargetTerminal());
+		}
+
+	}
+
+	private void removeWatch(Port sourcePort, Component sourceComponent){
+		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
+		for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator.hasNext();)
+		{
+			EditPart editPart = (EditPart) iterator.next();
+			if(editPart instanceof ComponentEditPart) 
+			{
+				Component comp = ((ComponentEditPart)editPart).getCastedModel();
+				if(comp.equals(sourceComponent)){
+					List<PortEditPart> portEditParts = editPart.getChildren();
+					for(AbstractGraphicalEditPart part:portEditParts)
+					{
+						if(part instanceof PortEditPart){
+							if(((PortEditPart)part).getCastedModel().getTerminal().equals(sourcePort.getTerminal())){
+								((PortEditPart)part).getPortFigure().removeWatchColor();
+								((PortEditPart)part).getPortFigure().setWatched(false);
+							} 
+						}
+					}
+				}
+			} 
+		}
+	}
+
+
+	@Override
+	public void undo() {
+		
+		Iterator<Link> it = deleteLinks.iterator();
+		while(it.hasNext()){
+			Link restoreLink=(Link)it.next();
+			
+			restoreLink.setLineStyle(Graphics.LINE_SOLID);
+			restoreLink.attachSource();
+			restoreLink.getSource().engageOutputPort(restoreLink.getSourceTerminal());
+			
+			restoreLink.setLineStyle(Graphics.LINE_SOLID);
+			restoreLink.attachTarget();
+			restoreLink.getTarget().engageInputPort(restoreLink.getTargetTerminal());
+			
+		}
+
+	}
+}
