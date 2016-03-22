@@ -31,7 +31,6 @@ public class LinkEndPointEditPolicy extends ConnectionEndpointEditPolicy{
 	protected void addSelectionHandles() {
 		super.addSelectionHandles();
 		getLinkFigure().setForegroundColor(new Color(null, 22, 169, 199));
-		//ContributionItemManager.DELETE.setEnable(true);
 	}
 
 	protected PolylineConnection getLinkFigure() {
@@ -42,6 +41,5 @@ public class LinkEndPointEditPolicy extends ConnectionEndpointEditPolicy{
 	protected void removeSelectionHandles() {
 		super.removeSelectionHandles();
 		getLinkFigure().setForegroundColor(ColorConstants.black);
-		//ContributionItemManager.DELETE.setEnable(false);
 	}
 }
