@@ -17,7 +17,12 @@ package com.bitwise.app.project.structure.wizard;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +58,9 @@ import com.bitwise.app.project.structure.natures.ProjectNature;
  */
 public class ProjectStructureCreator {
 
+	private static final String POM_XML = "pom.xml";
+	private static final String MAVEN = "maven";
+	private static final String TEMPLATE_PROJECT_NAME = "templateProjectName";
 	private static final String PROPERTIES = "properties";
 	private static final String BUILD = "build";
 
@@ -104,7 +112,12 @@ public class ProjectStructureCreator {
 				
 				copyBuildFile(installLocation + CustomMessages.ProjectSupport_CONFIG_FOLDER + "/" + 
 						CustomMessages.ProjectSupport_GRADLE + "/" + PROPERTIES, project);
-
+				
+				copyBuildFile(installLocation + CustomMessages.ProjectSupport_CONFIG_FOLDER + "/" + 
+						MAVEN, project);
+				
+				updateMavenFile(POM_XML, project);
+				
 				javaProject.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), null);
 
 				//set source folder entry in classpath
@@ -137,6 +150,21 @@ public class ProjectStructureCreator {
 		}
 	}
 
+	private void updateMavenFile(String source, IProject project) throws CoreException {
+		try{
+			IFile destinationFile = project.getFile(source);
+			java.nio.file.Path path = Paths.get(destinationFile.getLocationURI());
+			Charset charset = StandardCharsets.UTF_8;
+	
+			String content = new String(Files.readAllBytes(path), charset);
+			content = content.replaceAll(TEMPLATE_PROJECT_NAME, project.getName());
+			Files.write(path, content.getBytes(charset));
+		} catch (IOException exception) {
+			logger.debug("Could not change the group and artifact name");
+			throw new CoreException(new MultiStatus(Activator.PLUGIN_ID, 100, "Could not change the group and artifact name", exception));
+		}
+	}
+	
 	/**
 	 * Sets the <b>src</b> folder as the source folder in project
 	 * @param project
