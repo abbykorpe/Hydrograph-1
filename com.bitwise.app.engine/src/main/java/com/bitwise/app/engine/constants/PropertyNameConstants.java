@@ -17,7 +17,7 @@ package com.bitwise.app.engine.constants;
 
 public enum PropertyNameConstants {
 	
-		PATH("path"),
+		PATH("Path"),
 		IS_SAFE("safe"),
 		CHAR_SET("charset"),
 		SCHEMA ("schema"),
@@ -27,9 +27,9 @@ public enum PropertyNameConstants {
 		STRICT("strict"),
 		OPERATION_CLASS("OPERATION_CLASS"),
 		RETENTION_LOGIC_KEEP("retention_logic"),
-		OPERATION_FILEDS("filter"),
-		SECONDARY_COLUMN_KEYS("SECONDARY_COLUMN_KEYS"),
-		DEDUP_FILEDS("COLUMN_NAME");
+		OPERATION_FILEDS("operation_fields"),
+		SECONDARY_COLUMN_KEYS("Secondary_keys"),
+		DEDUP_FILEDS("Key_fields");
 		private final String value;
 
 	PropertyNameConstants(String value) {
