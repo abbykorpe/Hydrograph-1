@@ -54,25 +54,14 @@ public class LinkDeleteCommand extends Command{
 		super("Delete connection");
 		selectedLinks=new ArrayList<Link>();
 		deleteLinks=new LinkedHashSet<Link>();
-	}
-
-	/**
-	 * Instantiates a new link delete command.
-	 * 
-	 * @param source
-	 *            the source
-	 * @param lineStyle
-	 *            the line style
-	 */
-	public LinkDeleteCommand( int lineStyle) {
 		setLabel("Delete Connection");
 	}
 	
-	public void addComponentToDelete(Link link){
+	public void addLinkToDelete(Link link){
 		selectedLinks.add(link);
 	}
 
-	public boolean hasComponentToDelete(){
+	public boolean hasLinkToDelete(){
 		return !selectedLinks.isEmpty();
 	}
 

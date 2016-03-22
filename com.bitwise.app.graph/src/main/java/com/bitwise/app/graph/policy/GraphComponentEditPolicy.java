@@ -17,7 +17,7 @@ package com.bitwise.app.graph.policy;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 
 /**
- * The Class GraphComponentEditPolicy.
+ * @author Bitwise The Class GraphComponentEditPolicy.
  */
 public class GraphComponentEditPolicy extends ComponentEditPolicy {
 	

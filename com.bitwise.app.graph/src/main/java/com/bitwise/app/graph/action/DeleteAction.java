@@ -76,7 +76,7 @@ public class DeleteAction extends SelectionAction {
 		if(componentDeleteCommand.hasComponentToDelete())
 			return componentDeleteCommand;
 
-		if(linkDeleteCommand.hasComponentToDelete())
+		if(linkDeleteCommand.hasLinkToDelete())
 			return linkDeleteCommand;
 
 		return null;
@@ -96,7 +96,7 @@ public class DeleteAction extends SelectionAction {
 			if(obj instanceof LinkEditPart)
 			{
 				node = (Link) ((EditPart)obj).getModel();
-				linkDeleteCommand.addComponentToDelete((Link)node);
+				linkDeleteCommand.addLinkToDelete((Link)node);
 			}	
 		}
 	}

@@ -20,8 +20,6 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
 import org.eclipse.swt.graphics.Color;
 
-import com.bitwise.app.graph.action.ContributionItemManager;
-
 /**
  * The Class LinkEndPointEditPolicy.
  */
