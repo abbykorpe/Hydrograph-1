@@ -190,8 +190,6 @@ public class ELTLookupMapWizard extends Dialog {
 				changeColorOfNonMappedFields();
 				if (joinOutputList.size() >= 1) {
 					deleteButton.setEnabled(true);
-				} else {
-					deleteButton.setEnabled(false);
 				}
 				if (joinOutputList.size() >= 2) {
 					upButton.setEnabled(true);
@@ -439,9 +437,7 @@ public class ELTLookupMapWizard extends Dialog {
 				joinOutputProperty(outputTableViewer, null);
 				if (joinOutputList.size() >= 1) {
 					deleteButton.setEnabled(true);
-				} else {
-					deleteButton.setEnabled(false);
-				}
+				} 
 				if (joinOutputList.size() >= 2) {
 					upButton.setEnabled(true);
 					downButton.setEnabled(true);
@@ -471,13 +467,10 @@ public class ELTLookupMapWizard extends Dialog {
 				} else {
 					deleteButton.setEnabled(true);
 				}
-				if (joinOutputList.size() > 1) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				} else {
+				if (joinOutputList.size() <= 1) {
 					upButton.setEnabled(false);
 					downButton.setEnabled(false);
-				}
+				} 
 			}
 
 		});
@@ -949,9 +942,7 @@ public class ELTLookupMapWizard extends Dialog {
 					}
 					if (joinOutputList.size() >= 1) {
 						deleteButton.setEnabled(true);
-					} else {
-						deleteButton.setEnabled(false);
-					}
+					}					
 					if (joinOutputList.size() >= 2) {
 						upButton.setEnabled(true);
 						downButton.setEnabled(true);

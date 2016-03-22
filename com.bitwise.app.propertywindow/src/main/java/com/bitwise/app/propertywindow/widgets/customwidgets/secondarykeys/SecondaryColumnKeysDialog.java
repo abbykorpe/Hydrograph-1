@@ -214,9 +214,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 						addNewProperty(targetTableViewer, fieldName);
 				if (propertyList.size() >= 1) {
 					deleteButton.setEnabled(true);
-				} else {
-					deleteButton.setEnabled(false);
-				}
+				} 
 				if (propertyList.size() >= 2) {
 					upButton.setEnabled(true);
 					downButton.setEnabled(true);
@@ -233,9 +231,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 				addNewProperty(targetTableViewer, null);
 				if (propertyList.size() >= 1) {
 					deleteButton.setEnabled(true);
-				} else {
-					deleteButton.setEnabled(false);
-				}
+				} 
 				if (propertyList.size() >= 2) {
 					upButton.setEnabled(true);
 					downButton.setEnabled(true);
@@ -440,13 +436,10 @@ public class SecondaryColumnKeysDialog extends Dialog {
 				} else {
 					deleteButton.setEnabled(true);
 				}
-				if (propertyList.size() > 1) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				} else {
+				if (propertyList.size()<= 1) {
 					upButton.setEnabled(false);
 					downButton.setEnabled(false);
-				}
+				} 
 			}
 
 		});
@@ -461,8 +454,6 @@ public class SecondaryColumnKeysDialog extends Dialog {
 				addNewProperty(targetTableViewer, null);
 				if (propertyList.size() >= 1) {
 					deleteButton.setEnabled(true);
-				} else {
-					deleteButton.setEnabled(false);
 				}
 				if (propertyList.size() >= 2) {
 					upButton.setEnabled(true);
