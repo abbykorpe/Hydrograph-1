@@ -40,8 +40,8 @@ public class ComponentDeleteCommand extends Command {
 	private Set<Component> deleteComponents;
 	private final Container parent;
 	private boolean wasRemoved;
-	private final List<Link> sourceConnections = new ArrayList<Link>();
-	private final List<Link> targetConnections = new ArrayList<Link>();
+	private final List<Link> sourceConnections;
+	private final List<Link> targetConnections;
 
 	/**
 	 * Instantiates a new component delete command.
@@ -54,6 +54,8 @@ public class ComponentDeleteCommand extends Command {
 		this.parent=(((ELTGraphicalEditor) page.getActiveEditor()).getContainer());
 		selectedComponents = new ArrayList<Component>();
 		deleteComponents = new LinkedHashSet<>();
+		sourceConnections = new ArrayList<Link>();
+		targetConnections = new ArrayList<Link>();
 
 	}
 
