@@ -15,6 +15,7 @@
 package com.bitwise.app.propertywindow.widgets.listeners.grid;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Widget;
 
@@ -45,11 +46,14 @@ public class ELTGridAddSelectionListener extends ELTSelectionTaskListener{
 	@Override
 	public void selectionListenerAction(PropertyDialogButtonBar propertyDialogButtonBar, ListenerHelper helpers, Widget... widgets) {
 		propertyDialogButtonBar.enableApplyButton(true);
-		for(Widget widget:widgets){
-			table=(Table)widget;
-			table.getParent().getShell().setFocus();
-		}
+		table=(Table)widgets[0];
+		table.getParent().getShell().setFocus();
+		((Label) widgets[1]).setEnabled(true);
 		ELTGridDetails eltGridDetails = (ELTGridDetails)helpers.get(HelperType.SCHEMA_GRID);
+		if (eltGridDetails.getGrids().size() >= 1) {
+			((Label) widgets[2]).setEnabled(true);
+			((Label) widgets[3]).setEnabled(true);
+		}
 		GridWidgetCommonBuilder gridCommonBuilder = eltGridDetails.getGridWidgetCommonBuilder();
 		gridCommonBuilder.setRowSequence(rowSequence);
 		gridCommonBuilder.createDefaultSchema(eltGridDetails.getGrids(), eltGridDetails.getTableViewer(), eltGridDetails.getLabel());

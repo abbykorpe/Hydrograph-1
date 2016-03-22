@@ -165,6 +165,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected abstract void setDecorator();
 
 	public ELTSchemaGridWidget() {
+
 	}
 
 	/**
@@ -184,6 +185,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 		this.properties = componentConfigrationProperty.getPropertyValue();
+
 	}
 
 	private List<String> getSchemaFields(List<GridRow> schemaGridRowList2) {
@@ -526,6 +528,18 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					toggleSchema(false);
 				}
 			}
+			if (schemaGridRowList.size() >= 1) {
+				deleteButton.setEnabled(true);
+			} else {
+				deleteButton.setEnabled(false);
+			}
+			if (schemaGridRowList.size() >= 2) {
+				upButton.setEnabled(true);
+				downButton.setEnabled(true);
+			} else {
+				upButton.setEnabled(false);
+				downButton.setEnabled(false);
+			}
 		}
 	}
 
@@ -612,10 +626,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		buttonSubGroup.numberOfBasicWidgets(4);
 
-		addDownButton(buttonSubGroup);
-		addUpButton(buttonSubGroup);
-		addDeleteButton(buttonSubGroup);
 		addAddButton(buttonSubGroup);
+		addDeleteButton(buttonSubGroup);
+		addUpButton(buttonSubGroup);
+		addDownButton(buttonSubGroup);
 
 		ELTSchemaTableComposite gridSubGroup = new ELTSchemaTableComposite(container);
 		gridSubGroup.createContainerWidget();
@@ -655,13 +669,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		addValidators();
 		try {
 			eltTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),
-					propertyDialogButtonBar, helper, table);
+					propertyDialogButtonBar, helper, table,deleteButton.getSWTWidgetControl(),upButton.getSWTWidgetControl(),downButton.getSWTWidgetControl());
 			eltTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOWN.getListener(), propertyDialogButtonBar,
 					helper, editors[0].getControl());
 			addButton.attachListener(ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),
-					propertyDialogButtonBar, helper, table);
+					propertyDialogButtonBar, helper, table,deleteButton.getSWTWidgetControl(),upButton.getSWTWidgetControl(),downButton.getSWTWidgetControl());
 			deleteButton.attachListener(ListenerFactory.Listners.GRID_DELETE_SELECTION.getListener(),
-					propertyDialogButtonBar, helper, table);
+					propertyDialogButtonBar, helper, table,deleteButton.getSWTWidgetControl(),upButton.getSWTWidgetControl(),downButton.getSWTWidgetControl());
 
 		} catch (Exception e) {
 			logger.error(Messages.ATTACH_LISTENER_ERROR, e);
@@ -669,7 +683,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 
 		gridListener(editors);
-
+		upButton.setEnabled(false);
+		downButton.setEnabled(false);
+		deleteButton.setEnabled(false);
 		populateWidget();
 		return tableViewer;
 	}
