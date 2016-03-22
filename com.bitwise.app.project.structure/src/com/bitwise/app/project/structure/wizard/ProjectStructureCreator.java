@@ -105,7 +105,7 @@ public class ProjectStructureCreator {
 				//add libs to project class path 
 				String installLocation = Platform.getInstallLocation().getURL().getPath();
 
-				copyExternalLibAndAddToClassPath(installLocation + CustomMessages.ProjectSupport_LIB, libFolder, entries);
+				//copyExternalLibAndAddToClassPath(installLocation + CustomMessages.ProjectSupport_LIB, libFolder, entries);
 
 				copyBuildFile(installLocation + CustomMessages.ProjectSupport_CONFIG_FOLDER + "/" + 
 						CustomMessages.ProjectSupport_GRADLE + "/" + BUILD, project);
