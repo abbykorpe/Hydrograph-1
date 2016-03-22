@@ -433,8 +433,6 @@ public class SecondaryColumnKeysDialog extends Dialog {
 				}
 				if (propertyList.size() < 1) {
 					deleteButton.setEnabled(false);
-				} else {
-					deleteButton.setEnabled(true);
 				}
 				if (propertyList.size()<= 1) {
 					upButton.setEnabled(false);

@@ -663,9 +663,7 @@ public class JoinMapGrid extends Dialog {
 					outputTableViewer.editElement(outputTableViewer.getElementAt(index - 1), 0);
 				if (joinOutputList.size() < 1) {
 					deleteButton.setEnabled(false);
-				} else {
-					deleteButton.setEnabled(true);
-				}
+				} 
 				if (joinOutputList.size()<= 1) {
 					upButton.setEnabled(false);
 					downButton.setEnabled(false);
