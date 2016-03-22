@@ -37,8 +37,7 @@ import com.bitwise.app.graph.model.Model;
 public class ComponentDeleteCommand extends Command {
 	
 	private List<Component> selectedComponents;
-	//private List<Component> deleteComponents;
-	Set<Component> deleteComponents;
+	private Set<Component> deleteComponents;
 	private final Container parent;
 	private boolean wasRemoved;
 	private final List<Link> sourceConnections = new ArrayList<Link>();
@@ -58,19 +57,20 @@ public class ComponentDeleteCommand extends Command {
 
 	}
 
-	public boolean addChildToDelete(Component node){
+	public void addComponentToDelete(Component node){
 		selectedComponents.add(node);
-		return true;
 	}
 
-
+	public boolean hasComponentToDelete(){
+		return !selectedComponents.isEmpty();
+	}
 
 	@Override
 	public boolean canExecute() {
 		if (selectedComponents == null || selectedComponents.isEmpty())
 			return false;
 
-		Iterator it = selectedComponents.iterator();
+		Iterator<Component> it = selectedComponents.iterator();
 		while (it.hasNext()) {
 			Component node = (Component) it.next();
 			if (isDeletableNode(node)) {
@@ -102,7 +102,7 @@ public class ComponentDeleteCommand extends Command {
 
 	@Override
 	public void redo() {
-		Iterator it = deleteComponents.iterator();
+		Iterator<Component> it = deleteComponents.iterator();
 		while(it.hasNext()){
 			Component deleteComp=(Component)it.next();
 			deleteConnections(deleteComp);
@@ -113,7 +113,7 @@ public class ComponentDeleteCommand extends Command {
 
 	@Override
 	public void undo() {
-		Iterator it = deleteComponents.iterator();
+		Iterator<Component> it = deleteComponents.iterator();
 		while(it.hasNext()){
 			Component restoreComp=(Component)it.next();
 			parent.addChild(restoreComp);

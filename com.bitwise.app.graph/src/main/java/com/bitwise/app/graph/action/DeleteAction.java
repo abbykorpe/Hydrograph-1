@@ -1,7 +1,19 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package com.bitwise.app.graph.action;
 
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
@@ -13,7 +25,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.bitwise.app.graph.command.ComponentDeleteCommand;
-import com.bitwise.app.graph.command.LinkCommand;
+import com.bitwise.app.graph.command.LinkDeleteCommand;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.controller.LinkEditPart;
 import com.bitwise.app.graph.model.Component;
@@ -51,57 +63,42 @@ public class DeleteAction extends SelectionAction {
 	}
 
 	private Command createDeleteCommand(List<Object> selectedObjects) {
-		ComponentDeleteCommand componentDeleteCommand =new ComponentDeleteCommand();
-		LinkCommand linkCommand = new LinkCommand();
-		
 		if (selectedObjects == null || selectedObjects.isEmpty()) {
 			return null;
 		}
-		Model node = null;
-		Iterator<Object> it = selectedObjects.iterator();
-		boolean deleteComponent=false;
-		boolean deleteLink=false;
+
+		ComponentDeleteCommand componentDeleteCommand = new ComponentDeleteCommand();
+		LinkDeleteCommand linkDeleteCommand = new LinkDeleteCommand();
+
+		populateDeleteCommands(selectedObjects, componentDeleteCommand,
+				linkDeleteCommand);
+
+		if(componentDeleteCommand.hasComponentToDelete())
+			return componentDeleteCommand;
+
+		if(linkDeleteCommand.hasComponentToDelete())
+			return linkDeleteCommand;
+
+		return null;
+	}
+
+	private void populateDeleteCommands(List<Object> selectedObjects,
+			ComponentDeleteCommand componentDeleteCommand,
+			LinkDeleteCommand linkDeleteCommand) {
+		Model node;
 		for(Object obj:selectedObjects)
 		{
 			if(obj instanceof ComponentEditPart)
 			{
-				deleteComponent=true;
-				break;
-			}	
-		}
-		if(deleteComponent)
-		{	
-			for(Object obj:selectedObjects)
-			{
-				if (obj instanceof ComponentEditPart) {
-					node = (Component) ((EditPart)obj).getModel();
-					componentDeleteCommand.addChildToDelete((Component)node);
-				}
+				node = (Component) ((EditPart)obj).getModel();
+				componentDeleteCommand.addComponentToDelete((Component)node);
 			}
-			return componentDeleteCommand;
-		}
-		//------------------------------------------
-		for(Object obj:selectedObjects)
-		{
 			if(obj instanceof LinkEditPart)
 			{
-				deleteLink=true;
-				break;
+				node = (Link) ((EditPart)obj).getModel();
+				linkDeleteCommand.addComponentToDelete((Link)node);
 			}	
 		}
-		if(deleteLink)
-		{	
-			for(Object obj:selectedObjects)
-			{
-				if (obj instanceof LinkEditPart) {
-					node = (Link) ((EditPart)obj).getModel();
-					linkCommand.setConnection((Link)node);
-				}
-			}
-			return linkCommand;
-		}
-		else 
-			return null;	
 	}
 
 	@Override
@@ -109,11 +106,9 @@ public class DeleteAction extends SelectionAction {
 		Command cmd = createDeleteCommand(getSelectedObjects());
 		if (cmd == null){
 			ContributionItemManager.DELETE.setEnable(false);
-			System.out.println("Disabled delete button888888888888888888");
 			return false;
 		}else{
 			ContributionItemManager.DELETE.setEnable(true);
-			System.out.println("Enabled delete button888888888888888888");
 			return true;
 		}
 	}
@@ -123,7 +118,6 @@ public class DeleteAction extends SelectionAction {
 		Command cmd = createDeleteCommand(getSelectedObjects());
 		if (cmd != null && cmd.canExecute()) {
 			execute(cmd);
-			//cmd.execute();
 		}
 	}
 

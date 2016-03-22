@@ -14,37 +14,26 @@
  
 package com.bitwise.app.graph.command;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.draw2d.Graphics;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
-import org.eclipse.gef.ui.parts.GraphicalEditor;
-import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.component.config.PortInfo;
 import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.util.XMLConfigUtil;
-import com.bitwise.app.graph.controller.ComponentEditPart;
-import com.bitwise.app.graph.controller.PortEditPart;
-import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
-import com.bitwise.app.graph.model.Port;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 import com.bitwise.app.logging.factory.LogFactory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class LinkCommand.
+ * @author Bitwise The Class LinkCommand.
  */
 public class LinkCommand extends Command{
 	
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(LinkReconnectSourceCommand.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(LinkCommand.class);
 	
 	/** The connection instance. */
 	private Link connection;
@@ -172,48 +161,8 @@ public class LinkCommand extends Command{
 			
 		}
 		
-		//Delete the link
-		if (source == null && target == null) {
-			
-			
-			Port sourcePort = connection.getSource().getPort(connection.getSourceTerminal());
-			if(sourcePort.isWatched()){
-				removeWatch(sourcePort, connection.getSource());
-			}
-			connection.detachSource();
-			connection.detachTarget();
-			connection.getSource().freeOutputPort(connection.getSourceTerminal());
-			connection.getTarget().freeInputPort(connection.getTargetTerminal());
-			connection.setTarget(null);
-			connection.setSource(null);
-			
-		}
 	}
 	
-	private void removeWatch(Port sourcePort, Component sourceComponent){
-		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
-		for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator.hasNext();)
-		{
-			EditPart editPart = (EditPart) iterator.next();
-			if(editPart instanceof ComponentEditPart) 
-			{
-				Component comp = ((ComponentEditPart)editPart).getCastedModel();
-				if(comp.equals(sourceComponent)){
-					List<PortEditPart> portEditParts = editPart.getChildren();
-					for(AbstractGraphicalEditPart part:portEditParts)
-					{
-						if(part instanceof PortEditPart){
-							if(((PortEditPart)part).getCastedModel().getTerminal().equals(sourcePort.getTerminal())){
-								((PortEditPart)part).getPortFigure().removeWatchColor();
-								((PortEditPart)part).getPortFigure().setWatched(false);
-							} 
-						}
-					}
-				}
-			} 
-		}
-	}
 
 	public void setTarget(Component target) {
 		if (target == null) {
@@ -238,9 +187,9 @@ public class LinkCommand extends Command{
 	}
 
 
-	public void setConnection(Link w) {
+	public void setConnection(Link link) {
 
-		connection = w;
+		connection = link;
 	}
 
 	@Override
@@ -250,17 +199,21 @@ public class LinkCommand extends Command{
 
 	@Override
 	public void undo() {
-		//---undo link creation
+
 		source = connection.getSource();
 		target = connection.getTarget();
-		sourceTerminal = connection.getSourceTerminal();
-		targetTerminal = connection.getTargetTerminal();
 
-		connection.detachSource();
-		connection.detachTarget();
-		
-		source.freeOutputPort(connection.getSourceTerminal());
-		target.freeInputPort(connection.getTargetTerminal());
+		if(source!=null && target!=null){
+			logger.debug("Undo link creation");
+			sourceTerminal = connection.getSourceTerminal();
+			targetTerminal = connection.getTargetTerminal();
+
+			connection.detachSource();
+			connection.detachTarget();
+
+			source.freeOutputPort(connection.getSourceTerminal());
+			target.freeInputPort(connection.getTargetTerminal());
+		}
 
 	}
 }
