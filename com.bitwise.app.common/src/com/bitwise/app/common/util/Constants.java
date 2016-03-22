@@ -231,6 +231,7 @@ public class Constants {
 
 	public static final String GRAPH_PROPERTY = "Graph Property";
 	public static final String GRAPH_PROPERTY_COMMAND_ID = "com.bitwise.app.propertywindow.graphProperties";
+	public static final String SCHEMA_PROPERTY_NAME = "schema";
 }
 
 

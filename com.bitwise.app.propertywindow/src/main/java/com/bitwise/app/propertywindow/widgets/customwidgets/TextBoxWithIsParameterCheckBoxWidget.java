@@ -116,6 +116,7 @@ public class TextBoxWithIsParameterCheckBoxWidget extends TextBoxWithLabelWidget
 				if (isFieldNameExists(textBox.getText())) {
 					Point lastCursorPoint = textBox.getSelection();
 					String currentValue = textBox.getText();
+					if(StringUtils.isNotBlank(lastValue))
 					textBox.setText(lastValue);
 					textBox.setSelection(lastCursorPoint);
 					txtDecorator.setDescriptionText(currentValue + " - already exists");
