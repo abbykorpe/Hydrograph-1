@@ -369,16 +369,6 @@ public class SecondaryColumnKeysDialog extends Dialog {
 					String data1 = targetTableViewer.getTable().getItem(index2).getText(1);
 
 					SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
-//<<<<<<< HEAD
-//					p.setPropertyName(data);
-//					p.setPropertyValue(data1);
-//					propertyList.set(index1, p);
-//
-//					p = new SecondaryColumnKeysInformation();
-//					p.setPropertyName(text);
-//					p.setPropertyValue(text1);
-//					propertyList.set(index2, p);
-//=======
 					p.setColumnName(data);
 					p.setSortOrder(data1);
 					propertyList.set(index1, p);
@@ -387,7 +377,6 @@ public class SecondaryColumnKeysDialog extends Dialog {
 					p.setColumnName(text);
 					p.setSortOrder(text1);
 					propertyList.set(index2, p);
-//>>>>>>> Parameterization for Filter and Aggregate
 					targetTableViewer.refresh();
 					targetTable.setSelection(index1 + 1);
 				}
@@ -412,16 +401,6 @@ public class SecondaryColumnKeysDialog extends Dialog {
 					String data2 = targetTableViewer.getTable().getItem(index2).getText(1);
 
 					SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
-//<<<<<<< HEAD
-//					p.setPropertyName(data);
-//					p.setPropertyValue(data2);
-//					propertyList.set(index1, p);
-//
-//					p = new SecondaryColumnKeysInformation();
-//					p.setPropertyName(text);
-//					p.setPropertyValue(text1);
-//					propertyList.set(index2, p);
-//=======
 					p.setColumnName(data);
 					p.setSortOrder(data2);
 					propertyList.set(index1, p);
@@ -430,7 +409,6 @@ public class SecondaryColumnKeysDialog extends Dialog {
 					p.setColumnName(text);
 					p.setSortOrder(text1);
 					propertyList.set(index2, p);
-//>>>>>>> Parameterization for Filter and Aggregate
 					targetTableViewer.refresh();
 					targetTable.setSelection(index1 - 1);
 
@@ -511,27 +489,15 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		if (propertyList.size() != 0) {
 			if (!validate())
 				return;
-//<<<<<<< HEAD
-//			p.setPropertyName(fieldName); //$NON-NLS-1$
-//			p.setPropertyValue(Constants.ASCENDING_SORT_ORDER); //$NON-NLS-1$
-//			propertyList.add(p);
-//=======
 			p.setColumnName(fieldName); //$NON-NLS-1$
 			p.setSortOrder(Constants.ASCENDING_SORT_ORDER); //$NON-NLS-1$
 			propertyList.add(p);
-//>>>>>>> Parameterization for Filter and Aggregate
 			tv.refresh();
 			targetTableViewer.editElement(targetTableViewer.getElementAt(propertyList.size() - 1), 0);
 		} else {
-//<<<<<<< HEAD
-//			p.setPropertyName(fieldName); //$NON-NLS-1$
-//			p.setPropertyValue(Constants.ASCENDING_SORT_ORDER); //$NON-NLS-1$
-//			propertyList.add(p);
-//=======
 			p.setColumnName(fieldName); //$NON-NLS-1$
 			p.setSortOrder(Constants.ASCENDING_SORT_ORDER); //$NON-NLS-1$
 			propertyList.add(p);
-//>>>>>>> Parameterization for Filter and Aggregate
 			tv.refresh();
 			targetTableViewer.editElement(targetTableViewer.getElementAt(0), 0);
 		}
@@ -555,15 +521,9 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			for (String key : secondaryColumnsMap.keySet()) {
 				SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
 				if (validateBeforeLoad(key, secondaryColumnsMap.get(key))) {
-//<<<<<<< HEAD
-//					p.setPropertyName(key);
-//					p.setPropertyValue(secondaryColumnsMap.get(key));
-//					propertyList.add(p);
-//=======
 					p.setColumnName(key);
 					p.setSortOrder(secondaryColumnsMap.get(key));
 					propertyList.add(p);
-//>>>>>>> Parameterization for Filter and Aggregate
 				}
 			}
 			tv.refresh();
@@ -599,13 +559,9 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	protected boolean validate() {
 
 		int propertyCounter = 0;
-//<<<<<<< HEAD
-//		for (SecondaryColumnKeysInformation temp : propertyList) {
-//			if (!temp.getPropertyName().trim().isEmpty() && !temp.getPropertyValue().trim().isEmpty()) {
-//=======
 		for (SecondaryColumnKeysInformation temp : propertyList) {
 			if (!temp.getColumnName().trim().isEmpty() && !temp.getSortOrder().trim().isEmpty()) {
-//>>>>>>> Parameterization for Filter and Aggregate
+
 				//String Regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*"; -- TODO Please do not remove
 				Matcher matchName = Pattern.compile(Constants.REGEX).matcher(temp.getColumnName());
 				if (!matchName.matches()) {
@@ -714,13 +670,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	}
 
 	private boolean isPropertyAlreadyExists(String valueToValidate) {
-//<<<<<<< HEAD
-//		for (SecondaryColumnKeysInformation temp : propertyList)
-//			if (temp.getPropertyName().trim().equalsIgnoreCase(valueToValidate))
-//=======
 		for (SecondaryColumnKeysInformation temp : propertyList)
 			if (temp.getColumnName().trim().equalsIgnoreCase(valueToValidate))
-//>>>>>>> Parameterization for Filter and Aggregate
 				return true;
 		return false;
 	}
@@ -729,13 +680,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	protected void okPressed() {
 		if (validate()) {
 			secondaryColumnsMap.clear();
-//<<<<<<< HEAD
-//			for (SecondaryColumnKeysInformation temp : propertyList) {
-//				secondaryColumnsMap.put(temp.getPropertyName(), temp.getPropertyValue());
-//=======
 			for (SecondaryColumnKeysInformation temp : propertyList) {
 				secondaryColumnsMap.put(temp.getColumnName(), temp.getSortOrder());
-//>>>>>>> Parameterization for Filter and Aggregate
 			}
 
 			if (isAnyUpdatePerformed) {
