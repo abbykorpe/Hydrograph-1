@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
@@ -72,36 +73,60 @@ public class JoinConverter extends TransformConverter {
 		super.prepareForXML();
 		Join join = (Join) baseComponent;
 		if (properties.get(Constants.JOIN_CONFIG_FIELD) != null) {
-			join.getKeys().addAll(getJoinConfigKeys());
+			List<TypeKeyFields> typeKeyFields=getJoinConfigKeys();
+			if(typeKeyFields!=null && !typeKeyFields.isEmpty())
+				join.getKeys().addAll(typeKeyFields);
 		}
 	}
 
 	private List<TypeKeyFields> getJoinConfigKeys() {
 		List<TypeKeyFields> typeKeyFieldsList = null;
 		List<JoinConfigProperty> keyFields = (List<JoinConfigProperty>) properties.get(Constants.JOIN_CONFIG_FIELD);
-		typeKeyFieldsList = new ArrayList<>();
-		if (keyFields != null) {
-			
+		if (keyFields != null && !keyFields.isEmpty()) {
+			typeKeyFieldsList = new ArrayList<>();
 			for (JoinConfigProperty entry : keyFields) {
 				TypeKeyFields typeKeyField = new TypeKeyFields();
-				String[] data = entry.getJoinKey().split(",");
+				String[] keyList = entry.getJoinKey().split(",");
+				if(keyList.length==0 || (keyList.length==1 && StringUtils.isBlank(keyList[0])))
+					 continue;
 				typeKeyField.setInSocketId(entry.getPortIndex());
 				typeKeyField.setRecordRequired(getRecordRequiredValue(entry));
 				typeKeyFieldsList.add(typeKeyField);
-				
-				for (String key : data) {
-					if (!ParameterUtil.INSTANCE.isParameter(key)) {
-						TypeFieldName fieldName = new TypeFieldName();
-						fieldName.setName(key);
-						typeKeyField.getField().add(fieldName);
-					} else {
-						converterHelper.addParamTag(this.ID, key, ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", entry.getPortIndex()));
+
+				if (!isALLParameterizedFields(keyList)) {
+					for (String key : keyList) {
+						if (!ParameterUtil.INSTANCE.isParameter(key)) {
+							TypeFieldName fieldName = new TypeFieldName();
+							fieldName.setName(key);
+							typeKeyField.getField().add(fieldName);
+						} else {
+							converterHelper.addParamTag(this.ID, key, 
+									ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", entry.getPortIndex()), false);
+						}
 					}
+				}else{
+					StringBuffer parameterFieldNames=new StringBuffer();
+					TypeFieldName field = new TypeFieldName();
+					field.setName("");
+					typeKeyField.getField().add(field);
+					for (String fieldName : keyList) 
+						parameterFieldNames.append(fieldName+ " ");
+						converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), 
+								ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", entry.getPortIndex()),true);
+					
 				}
 			}
 		}
 		return typeKeyFieldsList;
 	}
+	
+	private boolean isALLParameterizedFields(String keys[]){
+		for (String fieldName : keys) 
+			if (!ParameterUtil.INSTANCE.isParameter(fieldName)) 
+				return false;
+		return true;
+	}
+
 
 	protected boolean getRecordRequiredValue(JoinConfigProperty entry) {
 		boolean recordRequired=false;

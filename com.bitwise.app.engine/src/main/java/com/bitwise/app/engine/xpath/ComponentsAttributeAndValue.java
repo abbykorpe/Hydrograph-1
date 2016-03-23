@@ -23,7 +23,7 @@ public class ComponentsAttributeAndValue {
 	public void setNewNodeText(String newNodeText) {
 		this.newNodeText = newNodeText;
 	}
-
+	private boolean emptyNode;
 	private String attributeName;
 	private String attributeValue;
 	private static final String DEFAULT_ATTRIBUTE_NAME = "value";
@@ -32,9 +32,10 @@ public class ComponentsAttributeAndValue {
 
 	}
 
-	public ComponentsAttributeAndValue(boolean isNewNode,String newNodeText){
+	public ComponentsAttributeAndValue(boolean isNewNode,String newNodeText, boolean emptyNode){
 		this.isNewNode=isNewNode;
-		this.newNodeText=newNodeText;		
+		this.newNodeText=newNodeText;
+		this.emptyNode=emptyNode;
 	}
 	
 	public ComponentsAttributeAndValue(String attributeName, String attributeValue) {
@@ -60,6 +61,10 @@ public class ComponentsAttributeAndValue {
 
 	public String getNewNodeText() {
 		return newNodeText;
+	}
+
+	public boolean hasEmptyNode() {
+		return emptyNode;
 	}
 
 	

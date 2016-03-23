@@ -101,11 +101,11 @@ public class SecondaryColumnKeysWidgetCellModifier implements ICellModifier {
 			element = ((Item) element).getData();
 
 		SecondaryColumnKeysInformation p = (SecondaryColumnKeysInformation) element;
-		System.out.println("###modify");
+		
 		if (COLUMNNAME.equals(property)){
-			System.out.println("modifying column name");
+			
 			if(ParameterUtil.INSTANCE.isParameter((String)value)){
-				System.out.println("Setting sort order from Param");
+				
 				p.setSortOrder(Constants.NONE_SORT_ORDER);
 			}
 			p.setColumnName(((String) value));

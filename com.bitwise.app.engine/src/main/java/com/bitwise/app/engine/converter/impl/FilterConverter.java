@@ -99,23 +99,41 @@ public class FilterConverter extends TransformConverter {
 	private List<TypeInputField> getOperationField() {
 		logger.debug("Generating TypeInputField data :{}", properties.get(Constants.PARAM_NAME));
 		List<TypeInputField> operationFiledList = new ArrayList<>();
-		List<String> componentOperationFileds = (List<String>) component.getProperties().get(
+		List<String> componentOperationFields = (List<String>) component.getProperties().get(
 				PropertyNameConstants.OPERATION_FILEDS.value());
-		if (componentOperationFileds != null) {
-			for (String fieldName : componentOperationFileds) {
-				if (!ParameterUtil.INSTANCE.isParameter(fieldName)) {
-					TypeInputField operationField = new TypeInputField();
-					operationField.setName(fieldName);
-					operationField.setInSocketId(Constants.FIXED_INSOCKET_ID);
-					operationFiledList.add(operationField);
-				}else{
-					converterHelper.addParamTag(this.ID,fieldName, ComponentXpathConstants.FILTER_INPUT_FIELDS.value());
+		if (componentOperationFields != null && !componentOperationFields.isEmpty()) {
+			if (!isALLParameterizedFields(componentOperationFields)) {
+				for (String fieldName : componentOperationFields) {
+					if (!ParameterUtil.INSTANCE.isParameter(fieldName)) {
+						TypeInputField operationField = new TypeInputField();
+						operationField.setName(fieldName);
+						operationField.setInSocketId(Constants.FIXED_INSOCKET_ID);
+						operationFiledList.add(operationField);
+					} else {
+						converterHelper.addParamTag(this.ID, fieldName,	ComponentXpathConstants.FILTER_INPUT_FIELDS.value(),false);
+					}
 				}
+			} else {
+				StringBuffer parameterFieldNames=new StringBuffer();
+				TypeInputField operationField = new TypeInputField();
+				operationField.setName("");
+				operationFiledList.add(operationField);
+				for (String fieldName : componentOperationFields) 
+					parameterFieldNames.append(fieldName+ " ");
+					converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), ComponentXpathConstants.FILTER_INPUT_FIELDS.value(),true);
+				
 			}
 		}
 		return operationFiledList;
 	}
 
+
+	private boolean isALLParameterizedFields(List<String> componentOperationFields){
+		for (String fieldName : componentOperationFields) 
+			if (!ParameterUtil.INSTANCE.isParameter(fieldName)) 
+				return false;
+		return true;
+	}
 
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {

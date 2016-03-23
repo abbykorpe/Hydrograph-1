@@ -35,6 +35,7 @@ import com.bitwiseglobal.graph.aggregate.TypeSecondaryKeyFields;
 import com.bitwiseglobal.graph.aggregate.TypeSecondayKeyFieldsAttributes;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeFieldName;
+import com.bitwiseglobal.graph.commontypes.TypeInputField;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
 import com.bitwiseglobal.graph.commontypes.TypeSortOrder;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
@@ -104,43 +105,83 @@ public class AggregateConverter extends TransformConverter {
 
 	private void setPrimaryKeys(Aggregate aggregate) {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PROPERTY_COLUMN_NAME));
-		List<String> columnNameProperties = (List<String>) component.getProperties().get(
-				Constants.PROPERTY_COLUMN_NAME);
-		if (columnNameProperties != null) {
+		List<String> columnNameProperties = (List<String>) component.getProperties()
+				.get(Constants.PROPERTY_COLUMN_NAME);
+		if (columnNameProperties != null && !columnNameProperties.isEmpty()) {
 			TypePrimaryKeyFields primaryKeyFields = new TypePrimaryKeyFields();
 			aggregate.setPrimaryKeys(primaryKeyFields);
 			List<TypeFieldName> field = primaryKeyFields.getField();
-			for (String columnNameProperty : columnNameProperties) {
-				if (!ParameterUtil.INSTANCE.isParameter(columnNameProperty)) {
-					TypeFieldName fieldName = new TypeFieldName();
-					fieldName.setName(columnNameProperty);
-					field.add(fieldName);
-				}else{
-					converterHelper.addParamTag(this.ID, columnNameProperty, ComponentXpathConstants.OPERATIONS_PRIMARY_KEYS.value());
+			if (!isALLParameterizedFields(columnNameProperties)) {
+				for (String columnNameProperty : columnNameProperties) {
+					if (!ParameterUtil.INSTANCE.isParameter(columnNameProperty)) {
+						TypeFieldName fieldName = new TypeFieldName();
+						fieldName.setName(columnNameProperty);
+						field.add(fieldName);
+					} else {
+						converterHelper.addParamTag(this.ID, columnNameProperty,
+								ComponentXpathConstants.OPERATIONS_PRIMARY_KEYS.value(), false);
+					}
 				}
+			} else {
+				StringBuffer parameterFieldNames = new StringBuffer();
+				TypeFieldName fieldName = new TypeFieldName();
+				fieldName.setName("");
+				field.add(fieldName);
+				for (String fName : columnNameProperties)
+					parameterFieldNames.append(fName + " ");
+				converterHelper.addParamTag(this.ID, parameterFieldNames.toString(),
+						ComponentXpathConstants.OPERATIONS_PRIMARY_KEYS.value(), true);
 			}
 		}
 	}
+
+	private boolean isALLParameterizedFields(List<String> componentOperationFields) {
+		for (String fieldName : componentOperationFields)
+			if (!ParameterUtil.INSTANCE.isParameter(fieldName))
+				return false;
+		return true;
+	}
+	
+	private boolean isALLParameterizedFields(Map<String, String> secondaryKeyRow) {
+		for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet())
+			if (!ParameterUtil.INSTANCE.isParameter(secondaryKeyRowEntry.getKey()))
+				return false;
+		return true;
+	}
+
 
 	private void setSecondaryKeys(Aggregate aggregate) {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PROPERTY_SECONDARY_COLUMN_KEYS));
 		Map<String, String> secondaryKeyRow = (Map<String, String>) component.getProperties().get(
 				Constants.PROPERTY_SECONDARY_COLUMN_KEYS);
-		if (secondaryKeyRow != null) {
+		if (secondaryKeyRow != null && !secondaryKeyRow.isEmpty()) {
 			TypeSecondaryKeyFields secondaryKeyFields = new TypeSecondaryKeyFields();
 			aggregate.setSecondaryKeys(secondaryKeyFields);
 			List<TypeSecondayKeyFieldsAttributes> field = secondaryKeyFields.getField();
-			for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet()) {
-				
-				if(!ParameterUtil.INSTANCE.isParameter(secondaryKeyRowEntry.getKey())){
-					TypeSecondayKeyFieldsAttributes fieldsAttributes = new TypeSecondayKeyFieldsAttributes();
-					fieldsAttributes.setName(secondaryKeyRowEntry.getKey());
-					TypeSortOrder order = TypeSortOrder.fromValue(secondaryKeyRowEntry.getValue().toLowerCase());
-					fieldsAttributes.setOrder(order);
-					field.add(fieldsAttributes);
-				}else{
-					converterHelper.addParamTag(this.ID, secondaryKeyRowEntry.getKey(), ComponentXpathConstants.OPERATIONS_SECONDARY_KEYS.value());
+			if (!isALLParameterizedFields(secondaryKeyRow)) {
+
+				for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet()) {
+
+					if (!ParameterUtil.INSTANCE.isParameter(secondaryKeyRowEntry.getKey())) {
+						TypeSecondayKeyFieldsAttributes fieldsAttributes = new TypeSecondayKeyFieldsAttributes();
+						fieldsAttributes.setName(secondaryKeyRowEntry.getKey());
+						TypeSortOrder order = TypeSortOrder.fromValue(secondaryKeyRowEntry.getValue().toLowerCase());
+						fieldsAttributes.setOrder(order);
+						field.add(fieldsAttributes);
+					} else {
+						converterHelper.addParamTag(this.ID, secondaryKeyRowEntry.getKey(),
+								ComponentXpathConstants.OPERATIONS_SECONDARY_KEYS.value(), false);
+					}
 				}
+			} else {
+				StringBuffer parameterFieldNames = new StringBuffer();
+				TypeSecondayKeyFieldsAttributes fieldsAttributes = new TypeSecondayKeyFieldsAttributes();
+				fieldsAttributes.setName("");
+				field.add(fieldsAttributes);
+				for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet())
+					parameterFieldNames.append(secondaryKeyRowEntry.getKey() + " ");
+				converterHelper.addParamTag(this.ID, parameterFieldNames.toString(),
+						ComponentXpathConstants.OPERATIONS_SECONDARY_KEYS.value(), true);
 			}
 		}
 	}

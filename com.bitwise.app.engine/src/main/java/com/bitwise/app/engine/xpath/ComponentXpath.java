@@ -70,7 +70,7 @@ public class ComponentXpath {
 			for (Map.Entry<String, ComponentsAttributeAndValue> entry : getXpathMap().entrySet()) {
 				NodeList nodeList = (NodeList) xPath.compile(entry.getKey()).evaluate(doc, XPathConstants.NODESET);
 				if(entry.getValue().isNewNode())
-					addParameterAsNewNode(entry, nodeList);
+					addParameterAsNewNode(entry, nodeList,entry.getValue().hasEmptyNode());
 				else
 					addParameterAsAttribute(entry, nodeList);
 			}
@@ -108,17 +108,34 @@ public class ComponentXpath {
 		}
 	}
 
-	private void addParameterAsNewNode(Map.Entry<String, ComponentsAttributeAndValue> entry,NodeList nodeList) {
+	private void addParameterAsNewNode(Map.Entry<String, ComponentsAttributeAndValue> entry,NodeList nodeList,boolean removeEmtyNode) {
 		Node cloneNode=null;
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			Node parentNode=nodeList.item(i);
-			NodeList nNodeLst = (NodeList) nodeList.item(i);
-			for (int j = 0; j < nNodeLst.getLength(); j++) {
-				Node nNode=nNodeLst.item(i);
-				cloneNode=nNode.cloneNode(false);
-				cloneNode.setTextContent(entry.getValue().getNewNodeText());
+		Node nNode=null;
+		Node parentNode = null;
+		try {
+
+			for (int i = 0; i < nodeList.getLength(); i++) {
+				parentNode = nodeList.item(i);
+				NodeList nNodeLst = (NodeList) nodeList.item(i);
+				for (int j = 0; j < nNodeLst.getLength(); j++) {
+					nNode = nNodeLst.item(i);
+					cloneNode = nNode.cloneNode(false);
+					cloneNode.setTextContent(entry.getValue().getNewNodeText());
+				}
+				parentNode.appendChild(cloneNode);
 			}
-			parentNode.appendChild(cloneNode);
+			// Remove empty node
+			if (removeEmtyNode)
+				for (int i = 0; i < nodeList.getLength(); i++) {
+					parentNode = nodeList.item(i);
+					NodeList nNodeLst = (NodeList) nodeList.item(i);
+					nNode = nNodeLst.item(0);
+					Node remove = nNode.getNextSibling();
+					parentNode.removeChild(remove);
+				}
+
+		} catch (Exception exception) {
+			LOGGER.error("Exception occured", exception);
 		}
 	}
 	

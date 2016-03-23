@@ -418,12 +418,12 @@ public class ConverterHelper {
 
 	}
 	
-	public void addParamTag(String ID, String fieldName, String paramXpath) {
+	public void addParamTag(String ID, String fieldName, String paramXpath, boolean hasEmptyNode) {
 		ComponentsAttributeAndValue tempAndValue=ComponentXpath.INSTANCE.getXpathMap().get(paramXpath.replace(ID, componentName));
 		if(tempAndValue==null)
 			ComponentXpath.INSTANCE.getXpathMap().put(
 					(paramXpath.replace(ID, componentName)),
-					new ComponentsAttributeAndValue(true,fieldName ));
+					new ComponentsAttributeAndValue(true,fieldName,hasEmptyNode));
 		else
 			tempAndValue.setNewNodeText(tempAndValue.getNewNodeText()+" "+fieldName);
 	}
