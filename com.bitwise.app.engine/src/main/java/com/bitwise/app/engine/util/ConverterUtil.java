@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -33,12 +34,15 @@ import org.eclipse.core.runtime.CoreException;
 import org.slf4j.Logger;
 
 import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.Converter;
 import com.bitwise.app.engine.converter.ConverterFactory;
 import com.bitwise.app.engine.xpath.ComponentXpath;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
+import com.bitwiseglobal.graph.commontypes.TypeProperties;
+import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
 import com.bitwiseglobal.graph.main.Graph;
 import com.bitwiseglobal.graph.main.ObjectFactory;
 
@@ -64,6 +68,7 @@ public class ConverterUtil {
 					graph.getInputsOrOutputsOrStraightPulls().add(typeBaseComponent);
 				}
 			}
+			graph.setRuntimeProperties(getRuntimeProperties(container));
 			marshall(graph, validate,outPutFile,externalOutputFile);
 	}
 	
@@ -129,5 +134,21 @@ public class ConverterUtil {
 		
 	}
 
+	private TypeProperties getRuntimeProperties(Container container) {
+		TypeProperties typeProperties = null;
+		Map<String, String> runtimeProps = container.getGraphRuntimeProperties();
+		if (runtimeProps != null && !runtimeProps.isEmpty()) {
+			typeProperties = new TypeProperties();
+			List<TypeProperties.Property> runtimePropertyList = typeProperties.getProperty();
+			for (Map.Entry<String, String> entry : runtimeProps.entrySet()) {
+				Property runtimeProperty = new Property();
+				runtimeProperty.setName(entry.getKey());
+				runtimeProperty.setValue(entry.getValue());
+				runtimePropertyList.add(runtimeProperty);
+			}
+		}
+		return typeProperties;
+	}
+	
 }
 

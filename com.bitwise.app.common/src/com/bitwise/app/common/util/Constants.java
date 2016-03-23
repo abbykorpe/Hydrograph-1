@@ -83,6 +83,7 @@ public class Constants {
 	public static final String LAST = "Last";
 	public static final String ALL = "All";
 	
+	public static final String OFIXED_WIDTH = "OFixedWidth";
 	public static final String FILTER = "FILTER";
 	public static final String NORMALIZE = "NORMALIZE";
 	public static final String TRANSFORM = "TRANSFORM";
@@ -217,6 +218,7 @@ public class Constants {
 	public static final String UPDATE_AVAILABLE = "update_available";
 	public static final String SUBGRAPH_VERSION = "subgraphVersion";
 	public static final String VALIDITY_STATUS = "validityStatus";
+
 	public static final String HELP_ID="helpId";
 	public static final String COMPONENT_PROPERTIES_ID="propertiesId";
 
@@ -227,6 +229,9 @@ public class Constants {
 	public static final String PROPERTY_SECONDARY_COLUMN_KEYS = "Secondary_keys";
 	
 
+	public static final String GRAPH_PROPERTY = "Graph Property";
+	public static final String GRAPH_PROPERTY_COMMAND_ID = "com.bitwise.app.propertywindow.graphProperties";
+	public static final String SCHEMA_PROPERTY_NAME = "schema";
 }
 
 

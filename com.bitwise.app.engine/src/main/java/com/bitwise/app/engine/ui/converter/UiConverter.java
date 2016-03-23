@@ -147,33 +147,7 @@ public abstract class UiConverter {
 	protected abstract Map<String, String> getRuntimeProperties();
 
 	protected Map<String, Object> validateComponentProperties(Map<String, Object> properties) {
-		boolean componentHasRequiredValues = Boolean.TRUE;
-		com.bitwise.app.common.component.config.Component component = XMLConfigUtil.INSTANCE.getComponent(uiComponent.getComponentName());
-		
-		for (Property configProperty : component.getProperty()) {
-			Object propertyValue = properties.get(configProperty.getName());
-			
-			List<String> validators = ComponentCacheUtil.INSTANCE.getValidatorsForProperty(uiComponent.getComponentName(), configProperty.getName());
-			
-			IValidator validator = null;
-			for (String validatorName : validators) {
-				try {
-					validator = (IValidator) Class.forName(Constants.VALIDATOR_PACKAGE_PREFIX + validatorName).newInstance();
-				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-					LOGGER.error("Failed to create validator", e);
-					throw new RuntimeException("Failed to create validator", e);
-				}
-				boolean status = validator.validate(propertyValue, configProperty.getName());
-				//NOTE : here if any of the property is not valid then whole component is not valid 
-				if(status == false){
-					componentHasRequiredValues = Boolean.FALSE;
-				}
-			}
-		}
-		if (!componentHasRequiredValues) {
-			properties.put(Component.Props.VALIDITY_STATUS.getValue(), Component.ValidityStatus.WARN.name());
-		}
-		return properties;
+		return uiComponent.validateComponentProperties();
 	}
 
 	protected String getInputSocketType(TypeBaseInSocket inSocket) {

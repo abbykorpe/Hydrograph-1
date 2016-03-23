@@ -12,3 +12,4 @@ Export-Package: com.bitwise.app.cloneableinterface,
  com.bitwise.app.common.datastructure.property,
  com.bitwise.app.common.datastructure.property.mapping,
  com.bitwise.app.common.datastructures.tooltip
+Import-Package: org.apache.commons.lang

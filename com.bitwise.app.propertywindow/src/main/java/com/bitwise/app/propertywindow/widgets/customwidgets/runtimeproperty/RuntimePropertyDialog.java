@@ -94,7 +94,7 @@ public class RuntimePropertyDialog extends Dialog {
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private boolean closeDialog;	
 	private boolean okPressed;
-	
+	private boolean okPressedAfterUpdate;
 	/**
 	 * Create the dialog.
 	 * 
@@ -325,10 +325,11 @@ public class RuntimePropertyDialog extends Dialog {
 				runtimePropertyMap.put(temp.getPropertyName(), temp.getPropertyValue());
 			}
 			
-			if (isAnyUpdatePerformed) {
+			if (isAnyUpdatePerformed && propertyDialogButtonBar != null) {
 				propertyDialogButtonBar.enableApplyButton(true);
-			}
-			okPressed=true;
+			} else if (isAnyUpdatePerformed)
+				okPressedAfterUpdate = true;
+			okPressed = true;
 			super.okPressed();
 		}
 
@@ -594,5 +595,9 @@ public class RuntimePropertyDialog extends Dialog {
 		}else{
 			return super.close();
 		}		
+	}
+
+	public boolean isOkPressedAfterUpdate(){
+		return this.okPressedAfterUpdate;
 	}
 }

@@ -24,6 +24,10 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
+import com.bitwise.app.common.datastructure.property.GenerateRecordSchemaGridRow;
+import com.bitwise.app.common.datastructure.property.GridRow;
+import com.bitwise.app.common.datastructure.property.Schema;
+import com.bitwise.app.common.datastructure.property.SchemaGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
@@ -143,14 +147,68 @@ public class SchemaPropagation {
 	}
 
 	private void setSchemaMapOfComponent(Component component, ComponentsOutputSchema componentsOutputSchema) {
-
+		Map<String, ComponentsOutputSchema>  oldComponentsOutputSchemaMap=null;
 		if (!StringUtils.equals(Constants.SUBGRAPH_COMPONENT_CATEGORY, component.getCategory())) {
-			Map<String, ComponentsOutputSchema> tempSchemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
-			tempSchemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
-			component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, tempSchemaMap);
-		} 
+			Map<String, ComponentsOutputSchema> newComponentsOutputSchemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
+			newComponentsOutputSchemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
+			oldComponentsOutputSchemaMap = (Map<String, ComponentsOutputSchema>) component.getProperties().put(
+					Constants.SCHEMA_TO_PROPAGATE, newComponentsOutputSchemaMap);
+			if(StringUtils.equalsIgnoreCase(component.getCategory(), Constants.OUTPUT)){
+				updateSchema(component,componentsOutputSchema);
+				component.validateComponentProperties();}
+		}
 	}
 
+
+	private void updateSchema(Component component, ComponentsOutputSchema componentsOutputSchema) {
+		GridRow gridRow=null;
+		String schemaName=null;
+		if ( component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME)!=null ) {
+				schemaName=getExistingSchemaName((Schema)component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME));
+			if (schemaName!=null && StringUtils.equals(FixedWidthGridRow.class.getCanonicalName(), schemaName) ) {
+				setFixedWidthAsSchema(component, componentsOutputSchema);
+			}else if (schemaName!=null && StringUtils.equals(SchemaGrid.class.getCanonicalName(), schemaName) ) {
+				setSchemaGridAsSchema(component, componentsOutputSchema);
+			}
+			else if(schemaName!=null && StringUtils.equals(GenerateRecordSchemaGridRow.class.getCanonicalName(), schemaName) ) 
+				setFixedWidthAsSchema(component, componentsOutputSchema);
+		}
+	}
+	
+
+	private void setSchemaGridAsSchema(Component component, ComponentsOutputSchema componentsOutputSchema) {
+		Schema schema = new Schema();
+		schema.setIsExternal(false);
+		schema.setExternalSchemaPath("");
+		List<GridRow> gridRows = new ArrayList<>();
+		for (SchemaGrid gridRow : componentsOutputSchema.getSchemaGridOutputFields())
+			gridRows.add(gridRow);
+		schema.setGridRow(gridRows);
+		component.getProperties().put(Constants.SCHEMA_PROPERTY_NAME, schema);
+	}
+
+	private String getExistingSchemaName(Schema schema) {
+		List<GridRow> gridRowList=null;
+		if (schema != null && !schema.getIsExternal()) {
+			gridRowList = schema.getGridRow();
+			if (gridRowList != null && !gridRowList.isEmpty()) {
+				return gridRowList.get(0).getClass().getCanonicalName();
+			}
+		}
+		return null;
+	}
+
+	private void setFixedWidthAsSchema(Component component, ComponentsOutputSchema componentsOutputSchema) {
+		Schema schema = new Schema();
+		schema.setIsExternal(false);
+		schema.setExternalSchemaPath("");
+		List<GridRow> gridRows = new ArrayList<>();
+		for (FixedWidthGridRow gridRow : componentsOutputSchema.getFixedWidthGridRowsOutputFields())
+			gridRows.add(gridRow);
+		schema.setGridRow(gridRows);
+		component.getProperties().put(Constants.SCHEMA_PROPERTY_NAME, schema);
+	}
+	
 	private void propagateSchemaFromSubgraph(Component subGraphComponent, String targetTerminal,
 			ComponentsOutputSchema componentsOutputSchema) {
 		String outPutTargetTerminal = getTagetTerminalForSubgraph(targetTerminal);
@@ -331,4 +389,18 @@ public class SchemaPropagation {
 			}
 		}
 	}
+	
+	/*private void loadOldSchmeaProperties(Map<String, ComponentsOutputSchema> oldComponentsOutputSchemaMap, Map<String, ComponentsOutputSchema> newComponentsOutputSchemaMap) {
+	ComponentsOutputSchema oldComponentsOutputSchema=oldComponentsOutputSchemaMap.get(Constants.FIXED_OUTSOCKET_ID);
+	ComponentsOutputSchema newComponentsOutputSchema=newComponentsOutputSchemaMap.get(Constants.FIXED_OUTSOCKET_ID);
+	for(FixedWidthGridRow oldFixedWidthGridRow:oldComponentsOutputSchema.getFixedWidthGridRowsOutputFields()) {
+			if(StringUtils.isNotBlank(oldFixedWidthGridRow.getLength())){
+				FixedWidthGridRow newFixedWidthGridRow = newComponentsOutputSchema.getFixedWidthSchemaRow(oldFixedWidthGridRow.getFieldName());
+				if(newFixedWidthGridRow!=null)
+					newFixedWidthGridRow.setLength(oldFixedWidthGridRow.getLength());
+			}
+		}
+		
+	}
+	*/
 }

@@ -80,6 +80,7 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.COPY.getId()));
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.PASTE.getId()));
 	    menu.appendToGroup(GEFActionConstants.GROUP_REST, subGraphMenu);
+	    menu.appendToGroup(GEFActionConstants.GROUP_REST, getAction(Constants.GRAPH_PROPERTY));
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, watcherMenu);
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, actionWatchRecords);
 		menu.appendToGroup(GEFActionConstants.GROUP_REST,componentPropertiesAction);

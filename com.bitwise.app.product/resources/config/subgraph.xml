@@ -5,7 +5,7 @@
 	<tns:component paletteIconPath="/icons/subgraph_palette.png"
 		canvasIconPath="/icons/subgraph-canvas.png" name="SubgraphComponent"
 		nameInPalette="Subgraph" defaultNamePrefix="Subgraph"
-		description="This is Default component."
+		description="This is Subgraph component."
 		helpFilePath="/com.bitwise.app.help/html/Components/Dummy.html">
 		<tns:category>SUBGRAPH</tns:category>
 			<tns:port>

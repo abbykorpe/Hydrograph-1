@@ -19,11 +19,14 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.action.PasteAction;
 import com.bitwise.app.graph.controller.ComponentEditPart;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
@@ -67,12 +70,23 @@ public class SubGraphUpdateAction extends SelectionAction {
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setText(Constants.SUBGRAPH_UPDATE);
 		setId(Constants.SUBGRAPH_UPDATE);
-		setHoverImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
-		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
-		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT_DISABLED));
+		setHoverImageDescriptor(getImageDisDescriptor());
+		setImageDescriptor(getImageDisDescriptor());
+		setDisabledImageDescriptor(getImageDisDescriptor());
 		setEnabled(false);
 	}
 
+	private ImageDescriptor getImageDisDescriptor() {
+		ImageDescriptor imageDescriptor = new ImageDescriptor() {
+
+			@Override
+			public ImageData getImageData() {
+				return new ImageData(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH+"/icons/refresh.png");
+			}
+		};
+		return imageDescriptor;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

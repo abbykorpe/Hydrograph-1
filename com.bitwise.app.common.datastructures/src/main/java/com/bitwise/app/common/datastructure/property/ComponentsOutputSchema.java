@@ -20,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
+import org.apache.commons.lang.StringUtils;
 import com.bitwise.app.cloneableinterface.IDataStructure;
 
 /**
@@ -241,4 +241,35 @@ public class ComponentsOutputSchema implements IDataStructure {
 		return fixedWidthGridRowsOutputFields;
 	}
 
+	/**
+	 * This methods returns fixed-width-schema row of given field-name.
+	 * 
+	 * @param fieldName
+	 * @return
+	 */
+	public FixedWidthGridRow getFixedWidthSchemaRow(String fieldName) {
+		FixedWidthGridRow fixedWidthGridRow = null;
+		if (StringUtils.isNotEmpty(fieldName)) {
+			for (FixedWidthGridRow row : this.getFixedWidthGridRowsOutputFields())
+				if (StringUtils.equals(fieldName, row.getFieldName()))
+					fixedWidthGridRow = row;
+		}
+		return fixedWidthGridRow;
+	}
+	
+	/**
+	 * This methods returns schema-grid row of given field-name.
+	 * 
+	 * @param fieldName
+	 * @return
+	 */
+	public SchemaGrid getSchemaGridRow(String fieldName) {
+		SchemaGrid schemaGridRow = null;
+		if (StringUtils.isNotEmpty(fieldName)) {
+		for (SchemaGrid row : this.getSchemaGridOutputFields())
+			if (StringUtils.equals(fieldName, row.getFieldName()))
+				schemaGridRow = row;
+		}
+		return schemaGridRow;
+	}
 }

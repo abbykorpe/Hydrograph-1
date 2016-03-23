@@ -108,8 +108,8 @@ public class SubGraphOpenAction extends SelectionAction{
 								if (SubGraphUtility.isFileExistsOnLocalFileSystem(jobFilePath)) {
 									
 									container = openEditor(jobFilePath);
-									container.setLinkedMainGraphPath(mainJobFilePath);
 									if (container != null){
+										container.setLinkedMainGraphPath(mainJobFilePath);
 										container.setSubgraphComponentEditPart(obj);
 										for (Component component : container.getChildren()) {
 											subGraphUtility.propogateSchemaToSubgraph(subgraphComponent, component);

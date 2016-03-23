@@ -21,7 +21,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import com.bitwise.app.validators.impl.IValidator;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.slf4j.Logger;
@@ -29,13 +31,14 @@ import org.slf4j.Logger;
 import com.bitwise.app.cloneableinterface.IDataStructure;
 import com.bitwise.app.common.component.config.PortInfo;
 import com.bitwise.app.common.component.config.PortSpecification;
+import com.bitwise.app.common.component.config.Property;
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
+import com.bitwise.app.common.util.ComponentCacheUtil;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.components.InputSubgraphComponent;
 import com.bitwise.app.graph.model.components.OutputSubgraphComponent;
-import com.bitwise.app.graph.model.components.SubgraphComponent;
 import com.bitwise.app.graph.model.processor.DynamicClassProcessor;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -135,7 +138,9 @@ public abstract class Component extends Model {
 	// @XStreamOmitField
 	private Map<String, String> toolTipErrorMessages; // <propertyName,ErrorMessage>
 
-
+	@XStreamOmitField
+	private Object componentEditPart;
+	
 	/**
 	 * Instantiates a new component.
 	 */
@@ -1308,5 +1313,62 @@ public abstract class Component extends Model {
 		return "Component [UniqueComponentName=" + UniqueComponentName + ", type=" + type + ", prefix=" + prefix
 				+ ", category=" + category + ", inPortCount=" + inPortCount + ", outPortCount=" + outPortCount
 				+ ", unusedPortCount=" + unusedPortCount + ", componentLabel=" + componentLabel + "]";
+	}
+
+	public Object getComponentEditPart() {
+		return componentEditPart;
+	}
+
+	public void setComponentEditPart(Object componentEditPart) {
+		this.componentEditPart = componentEditPart;
+	}	
+	
+	/**
+	 * Validates all the properties of component and updates its validity status accordingly.
+	 *  
+	 * @return properties 
+	 */
+	public Map<String, Object> validateComponentProperties() {
+		boolean componentHasRequiredValues = Boolean.TRUE;
+		com.bitwise.app.common.component.config.Component component = XMLConfigUtil.INSTANCE.getComponent(this.getComponentName());
+		Map<String, Object> properties=this.properties;
+		for (Property configProperty : component.getProperty()) {
+			Object propertyValue = properties.get(configProperty.getName());
+			
+			List<String> validators = ComponentCacheUtil.INSTANCE.getValidatorsForProperty(this.getComponentName(), configProperty.getName());
+			
+			IValidator validator = null;
+			for (String validatorName : validators) {
+				try {
+					validator = (IValidator) Class.forName(Constants.VALIDATOR_PACKAGE_PREFIX + validatorName).newInstance();
+				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+					logger.error("Failed to create validator", e);
+					throw new RuntimeException("Failed to create validator", e);
+				}
+				boolean status = validator.validate(propertyValue, configProperty.getName());
+				//NOTE : here if any of the property is not valid then whole component is not valid 
+				if(status == false){
+					componentHasRequiredValues = Boolean.FALSE;
+				}
+			}
+		}
+		
+		if (!componentHasRequiredValues && properties.get(Component.Props.VALIDITY_STATUS.getValue()) == null)
+			properties.put(Component.Props.VALIDITY_STATUS.getValue(), Component.ValidityStatus.WARN.name());
+		else if (!componentHasRequiredValues
+				&& StringUtils.equals((String) properties.get(Component.Props.VALIDITY_STATUS.getValue()),
+						Component.ValidityStatus.WARN.name()))
+			properties.put(Component.Props.VALIDITY_STATUS.getValue(), Component.ValidityStatus.WARN.name());
+		else if (!componentHasRequiredValues
+				&& StringUtils.equals((String) properties.get(Component.Props.VALIDITY_STATUS.getValue()),
+						Component.ValidityStatus.ERROR.name()))
+			properties.put(Component.Props.VALIDITY_STATUS.getValue(), Component.ValidityStatus.ERROR.name());
+		else if (!componentHasRequiredValues
+				&& StringUtils.equals((String) properties.get(Component.Props.VALIDITY_STATUS.getValue()),
+						Component.ValidityStatus.VALID.name()))
+			properties.put(Component.Props.VALIDITY_STATUS.getValue(), Component.ValidityStatus.ERROR.name());
+		else if (componentHasRequiredValues)
+			properties.put(Component.Props.VALIDITY_STATUS.getValue(), Component.ValidityStatus.VALID.name());
+		return properties;
 	}	
 }
