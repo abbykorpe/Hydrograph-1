@@ -443,9 +443,21 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 					tableViewer.setInput(schemaGridRowListToImport);
 					tableViewer.refresh();
-
+					if (schemaGridRowListToImport.size() >= 1) {
+						deleteButton.setEnabled(true);
+					} else {
+						deleteButton.setEnabled(false);
+					}
+					if (schemaGridRowListToImport.size() >= 2) {
+						upButton.setEnabled(true);
+						downButton.setEnabled(true);
+					} else {
+						upButton.setEnabled(false);
+						downButton.setEnabled(false);
+					}
 					MessageDialog.openInformation(new Shell(), "Information", Messages.IMPORTED_SCHEMA);
 				}
+				
 			}
 		});
 

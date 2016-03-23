@@ -81,16 +81,7 @@ public class PaletteToolTip extends Shell {
 		return bounds;
 	}
 
-	/**
-	 *  Add spaces before "Help" link
-	 * 
-	 * @param numberOfSpaces - to add
-	 */
-	private void addSpacesBeforeHelpLink(int numberOfSpaces){		
-		blankCharacters=CharBuffer.allocate( numberOfSpaces + 5).toString().replace( '\0', ' ' );
-		helpLink.setText(blankCharacters + "<a>help</a> ");
-		logger.debug("added " + numberOfSpaces + " before \"Help\" link");
-	}
+
 
 	
 	/**
@@ -101,8 +92,7 @@ public class PaletteToolTip extends Shell {
 	public void setToolTipText(String text){
 		String[] lines = ToolTipUtils.getLines(text);
 		int maxLength = ToolTipUtils.getMaxLength(lines);		
-		addSpacesBeforeHelpLink(maxLength);		
-		toolTipText.setText(text.replace("\\n", "\n"));
+		toolTipText.setText(text.replace("\\n", "\n")+" ");
 		setSize(this.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		logger.debug("set tooltip text - " + text);
 	}
@@ -138,8 +128,8 @@ public class PaletteToolTip extends Shell {
 	 */
 	private void addHelpLink() {
 		helpLink = new Link(toolTipComposite, SWT.NONE);
-		helpLink.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		helpLink.setText("<a>Help</a>");
+		helpLink.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		helpLink.setText("<a>Help</a> ");
 		helpLink.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 		helpLink.addSelectionListener(new SelectionListener() {
 			
@@ -173,6 +163,7 @@ public class PaletteToolTip extends Shell {
 	 */
 	private void addToolTipTextArea() {
 		toolTipText = new Label(toolTipComposite, SWT.NONE);
+		toolTipComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 		toolTipText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		toolTipComposite.setSize(toolTipComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));		
 		toolTipText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
