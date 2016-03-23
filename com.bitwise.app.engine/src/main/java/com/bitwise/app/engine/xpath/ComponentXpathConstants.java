@@ -11,15 +11,33 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.xpath;
 
+/**
+ * The enum ComponentXpathConstants
+ * 
+ * @author Bitwise
+ * 
+ */
 public enum ComponentXpathConstants {
 	COMPONENT_CHARSET_XPATH("/graph/*[@id='$id']/charset"),
 	COMPONENT_JOIN_TYPE_XPATH("/graph/operations[@id='$id']/keys[@inSocketId='$inSocketId'] [not(@joinType)]"),
 	COMPONENT_XPATH_BOOLEAN("/graph/*[@id='$id']/propertyName"),
-	COMPONENT_XPATH_COUNT("/graph/*[@id='$id']/maxRecords");
-	///graph/*[@id='$id']/*[@id='$inSocketId']/joinType
+	COMPONENT_XPATH_COUNT("/graph/*[@id='$id']/maxRecords"),
+	
+	FILTER_INPUT_FIELDS("/graph/operations[@id='$id']/operation[@id='filter_opt']/inputFields"),
+	
+	OPERATIONS_PRIMARY_KEYS("/graph/operations[@id='$id']/primaryKeys"),
+	OPERATIONS_SECONDARY_KEYS("/graph/operations[@id='$id']/secondaryKeys"),
+	
+	STRAIGHTPULL_PRIMARY_KEYS("/graph/straightPulls[@id='$id']/primaryKeys"),
+	STRAIGHTPULL_SECONDARY_KEYS("/graph/straightPulls[@id='$id']/secondaryKeys"),
+	
+	LOOKUP_KEYS("/graph/operations[@id='$id']/keys[@inSocketId='$inSocketId']"),
+	JOIN_KEYS("/graph/operations[@id='$id']/keys[@inSocketId='$inSocketId']"),
+	
+	RUNTIME_PROPERTIES("/graph/*[@id='$id']/runtimeProperties"),;
+	
 	private final String value;
 
 	ComponentXpathConstants(String value) {

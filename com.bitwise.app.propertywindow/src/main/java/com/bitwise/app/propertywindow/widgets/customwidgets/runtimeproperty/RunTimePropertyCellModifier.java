@@ -18,6 +18,8 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
+import com.bitwise.app.common.util.ParameterUtil;
+
 /**
  * The Class RunTimePropertyCellModifier.
  * 
@@ -91,11 +93,18 @@ public class RunTimePropertyCellModifier implements ICellModifier {
 
 		RuntimeProperties p = (RuntimeProperties) element;
 		
-		if (PROPERTY_NAME.equals(property))
+		if (PROPERTY_NAME.equals(property)){
+			if(ParameterUtil.isParameter((String)value)){
+				p.setPropertyValue((String) value);
+			}
 			p.setPropertyName(((String) value));
-
-		else if (PROPERTY_VALUE.equals(property))
+		}
+		else if (PROPERTY_VALUE.equals(property)){
+			if(ParameterUtil.isParameter((String)value)){
+				p.setPropertyName((String) value);
+			}
 			p.setPropertyValue((String) value);
+		}
 		// Force the viewer to refresh
 		viewer.refresh();
 	}

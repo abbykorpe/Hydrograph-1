@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.xpath;
 
 import java.io.ByteArrayInputStream;
@@ -43,7 +42,12 @@ import org.xml.sax.SAXException;
 
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.engine.util.ConverterUtil;
-
+/**
+ * The class ComponentXpath
+ * 
+ * @author Bitwise
+ * 
+ */
 public class ComponentXpath {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ConverterUtil.class);
@@ -65,15 +69,10 @@ public class ComponentXpath {
 			LOGGER.debug("GENRATED COMPONENTS XPATH {}", getXpathMap().toString());
 			for (Map.Entry<String, ComponentsAttributeAndValue> entry : getXpathMap().entrySet()) {
 				NodeList nodeList = (NodeList) xPath.compile(entry.getKey()).evaluate(doc, XPathConstants.NODESET);
-
-				for (int i = 0; i < nodeList.getLength(); i++) {
-					Node nNode = nodeList.item(i);
-
-					if (Node.ELEMENT_NODE == nNode.getNodeType()) {
-						Element eElement = (Element) nNode;
-						eElement.setAttribute(entry.getValue().getAttributeName(), entry.getValue().getAttributeValue());
-					}
-				}
+				if(entry.getValue().isNewNode())
+					addParameterAsNewNode(entry, nodeList,entry.getValue().hasEmptyNode());
+				else
+					addParameterAsAttribute(entry, nodeList);
 			}
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
@@ -98,6 +97,48 @@ public class ComponentXpath {
 		return out;
 	}
 
+	private void addParameterAsAttribute(Map.Entry<String, ComponentsAttributeAndValue> entry,NodeList nodeList) {
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Node nNode = nodeList.item(i);
+
+			if (Node.ELEMENT_NODE == nNode.getNodeType()) {
+				Element eElement = (Element) nNode;
+				eElement.setAttribute(entry.getValue().getAttributeName(), entry.getValue().getAttributeValue());
+			}
+		}
+	}
+
+	private void addParameterAsNewNode(Map.Entry<String, ComponentsAttributeAndValue> entry,NodeList nodeList,boolean removeEmtyNode) {
+		Node cloneNode=null;
+		Node nNode=null;
+		Node parentNode = null;
+		try {
+
+			for (int i = 0; i < nodeList.getLength(); i++) {
+				parentNode = nodeList.item(i);
+				NodeList nNodeLst = (NodeList) nodeList.item(i);
+				for (int j = 0; j < nNodeLst.getLength(); j++) {
+					nNode = nNodeLst.item(i);
+					cloneNode = nNode.cloneNode(false);
+					cloneNode.setTextContent(entry.getValue().getNewNodeText());
+				}
+				parentNode.appendChild(cloneNode);
+			}
+			// Remove empty node
+			if (removeEmtyNode)
+				for (int i = 0; i < nodeList.getLength(); i++) {
+					parentNode = nodeList.item(i);
+					NodeList nNodeLst = (NodeList) nodeList.item(i);
+					nNode = nNodeLst.item(0);
+					Node remove = nNode.getNextSibling();
+					parentNode.removeChild(remove);
+				}
+
+		} catch (Exception exception) {
+			LOGGER.error("Exception occured", exception);
+		}
+	}
+	
 	public XPath createXPathInstance(ByteArrayInputStream inputStream, File file) throws ParserConfigurationException,
 			SAXException, IOException {
 		LOGGER.debug("Invoking X-Path instance");

@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.ui.converter.impl;
 
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.converter.TransformUiConverter;
@@ -70,7 +70,7 @@ public class FilterUiConverter extends TransformUiConverter{
 		String clazz=null;
 		if(filter.getOperation()!=null && filter.getOperation().size()!=0){
 			clazz=filter.getOperation().get(0).getClazz();
-			operationClassProperty=new OperationClassProperty(getOperationClassName(clazz),clazz, isParameter(clazz));
+			operationClassProperty=new OperationClassProperty(getOperationClassName(clazz),clazz, ParameterUtil.isParameter(clazz));
 		}
 		return operationClassProperty;
 	}

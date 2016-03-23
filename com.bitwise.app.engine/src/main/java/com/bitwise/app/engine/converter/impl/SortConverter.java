@@ -11,26 +11,25 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
-import com.bitwise.app.engine.constants.PropertyNameConstants;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.engine.converter.StraightPullConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
+import com.bitwise.app.engine.xpath.ComponentXpathConstants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
-import com.bitwiseglobal.graph.commontypes.KeepValue;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeFieldName;
 import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeSortOrder;
 import com.bitwiseglobal.graph.commontypes.TypeStraightPullOutSocket;
@@ -38,8 +37,6 @@ import com.bitwiseglobal.graph.sort.TypePrimaryKeyFields;
 import com.bitwiseglobal.graph.sort.TypePrimaryKeyFieldsAttributes;
 import com.bitwiseglobal.graph.sort.TypeSecondaryKeyFields;
 import com.bitwiseglobal.graph.sort.TypeSecondayKeyFieldsAttributes;
-import com.bitwiseglobal.graph.straightpulltypes.RemoveDups;
-import com.bitwiseglobal.graph.straightpulltypes.RemoveDups.Keep;
 import com.bitwiseglobal.graph.straightpulltypes.Sort;
 
 /**
@@ -69,37 +66,78 @@ public class SortConverter extends StraightPullConverter {
 		sort.setSecondaryKeys(getSecondaryKeys());
 	}
 
+	private boolean isALLParameterizedFields(Map<String, String> secondaryKeyRow) {
+		for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet())
+			if (!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey()))
+				return false;
+		return true;
+	}
+	
 	private TypePrimaryKeyFields getPrimaryKeys() {
 
-		Map<String, String> fieldValueMap = (Map<String, String>) properties.get(Constants.PARAM_PRIMARY_COLUMN_KEYS);
+		Map<String, String> primaryKeyRow = (Map<String, String>) properties.get(Constants.PARAM_PRIMARY_COLUMN_KEYS);
 
 		TypePrimaryKeyFields primaryKeyFields = null;
-		if (fieldValueMap != null) {
+		if (primaryKeyRow != null &&  !primaryKeyRow.isEmpty()) {
 			primaryKeyFields = new TypePrimaryKeyFields();
 			List<TypePrimaryKeyFieldsAttributes> fieldNameList = primaryKeyFields.getField();
-			for (Map.Entry<String, String> entry : fieldValueMap.entrySet()) {
-				TypePrimaryKeyFieldsAttributes field = new TypePrimaryKeyFieldsAttributes();
-				field.setName(entry.getKey());
-				field.setOrder(TypeSortOrder.fromValue(entry.getValue().toLowerCase()));
-				fieldNameList.add(field);
+			if (!isALLParameterizedFields(primaryKeyRow)) {
+				for (Map.Entry<String, String> primaryKeyRowEntry : primaryKeyRow.entrySet()) {
+					if(!ParameterUtil.isParameter(primaryKeyRowEntry.getKey())){
+						TypePrimaryKeyFieldsAttributes field = new TypePrimaryKeyFieldsAttributes();
+						field.setName(primaryKeyRowEntry.getKey());
+						field.setOrder(TypeSortOrder.fromValue(primaryKeyRowEntry.getValue().toLowerCase()));
+						fieldNameList.add(field);
+					}else{
+						converterHelper.addParamTag(this.ID, primaryKeyRowEntry.getKey(), 
+								ComponentXpathConstants.STRAIGHTPULL_PRIMARY_KEYS.value(), false);
+					}
+				}
+			}else{
+				StringBuffer parameterFieldNames = new StringBuffer();
+				TypePrimaryKeyFieldsAttributes fieldsAttributes = new TypePrimaryKeyFieldsAttributes();
+				fieldsAttributes.setName("");
+				fieldNameList.add(fieldsAttributes);
+				for (Entry<String, String> secondaryKeyRowEntry : primaryKeyRow.entrySet())
+					parameterFieldNames.append(secondaryKeyRowEntry.getKey() + " ");
+				converterHelper.addParamTag(this.ID, parameterFieldNames.toString(),
+						ComponentXpathConstants.STRAIGHTPULL_PRIMARY_KEYS.value(), true);
 			}
+
 		}
 		return primaryKeyFields;
 	}
 
 	private TypeSecondaryKeyFields getSecondaryKeys() {
 
-		Map<String, String> fieldValueMap = (LinkedHashMap<String, String>) properties.get(Constants.PARAM_SECONDARY_COLUMN_KEYS);
+		Map<String, String> secondaryKeyRow = (LinkedHashMap<String, String>) properties.get(Constants.PARAM_SECONDARY_COLUMN_KEYS);
 
 		TypeSecondaryKeyFields typeSecondaryKeyFields = null;
-		if (fieldValueMap != null && !fieldValueMap.isEmpty()) {
+		if (secondaryKeyRow != null && !secondaryKeyRow.isEmpty()) {
 			typeSecondaryKeyFields = new TypeSecondaryKeyFields();
 			List<TypeSecondayKeyFieldsAttributes> fieldNameList = typeSecondaryKeyFields.getField();
-			for (Map.Entry<String, String> entry : fieldValueMap.entrySet()) {
-				TypeSecondayKeyFieldsAttributes field = new TypeSecondayKeyFieldsAttributes();
-				field.setName(entry.getKey());
-				field.setOrder(TypeSortOrder.fromValue(entry.getValue().toLowerCase()));
-				fieldNameList.add(field);
+			if(!isALLParameterizedFields(secondaryKeyRow)){
+				
+				for (Map.Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet()) {
+					if(!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey())){
+						TypeSecondayKeyFieldsAttributes field = new TypeSecondayKeyFieldsAttributes();
+						field.setName(secondaryKeyRowEntry.getKey());
+						field.setOrder(TypeSortOrder.fromValue(secondaryKeyRowEntry.getValue().toLowerCase()));
+						fieldNameList.add(field);}
+					else{
+						converterHelper.addParamTag(this.ID, secondaryKeyRowEntry.getKey(), 
+								ComponentXpathConstants.STRAIGHTPULL_SECONDARY_KEYS.value(), false);
+					}
+				}
+			}else{
+				StringBuffer parameterFieldNames = new StringBuffer();
+				TypeSecondayKeyFieldsAttributes fieldsAttributes = new TypeSecondayKeyFieldsAttributes();
+				fieldsAttributes.setName("");
+				fieldNameList.add(fieldsAttributes);
+				for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet())
+					parameterFieldNames.append(secondaryKeyRowEntry.getKey() + " ");
+				converterHelper.addParamTag(this.ID, parameterFieldNames.toString(),
+						ComponentXpathConstants.STRAIGHTPULL_SECONDARY_KEYS.value(), true);
 			}
 		}
 		return typeSecondaryKeyFields;

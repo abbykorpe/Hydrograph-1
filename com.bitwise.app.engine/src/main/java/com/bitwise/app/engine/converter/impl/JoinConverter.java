@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.ArrayList;
@@ -20,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.JoinConfigProperty;
@@ -27,10 +27,12 @@ import com.bitwise.app.common.datastructure.property.JoinMappingGrid;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
+import com.bitwise.app.engine.xpath.ComponentXpathConstants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -44,6 +46,10 @@ import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.join.TypeKeyFields;
 import com.bitwiseglobal.graph.operationstypes.Join;
+
+/**
+ * @author Bitwise Converter implementation for Join component
+ */
 
 public class JoinConverter extends TransformConverter {
 	private static final String JOIN_OPERATION_ID = "join";
@@ -67,33 +73,60 @@ public class JoinConverter extends TransformConverter {
 		super.prepareForXML();
 		Join join = (Join) baseComponent;
 		if (properties.get(Constants.JOIN_CONFIG_FIELD) != null) {
-			join.getKeys().addAll(getJoinConfigKeys());
+			List<TypeKeyFields> typeKeyFields=getJoinConfigKeys();
+			if(typeKeyFields!=null && !typeKeyFields.isEmpty())
+				join.getKeys().addAll(typeKeyFields);
 		}
 	}
 
 	private List<TypeKeyFields> getJoinConfigKeys() {
 		List<TypeKeyFields> typeKeyFieldsList = null;
 		List<JoinConfigProperty> keyFields = (List<JoinConfigProperty>) properties.get(Constants.JOIN_CONFIG_FIELD);
-		typeKeyFieldsList = new ArrayList<>();
-		if (keyFields != null) {
-			
+		if (keyFields != null && !keyFields.isEmpty()) {
+			typeKeyFieldsList = new ArrayList<>();
 			for (JoinConfigProperty entry : keyFields) {
 				TypeKeyFields typeKeyField = new TypeKeyFields();
-				
-				String[] data = entry.getJoinKey().split(",");
-				for(String key : data){
-				TypeFieldName fieldName = new TypeFieldName();
-				fieldName.setName(key);
-				typeKeyField.getField().add(fieldName);
-				}
+				String[] keyList = entry.getJoinKey().split(",");
+				if(keyList.length==0 || (keyList.length==1 && StringUtils.isBlank(keyList[0])))
+					 continue;
 				typeKeyField.setInSocketId(entry.getPortIndex());
 				typeKeyField.setRecordRequired(getRecordRequiredValue(entry));
 				typeKeyFieldsList.add(typeKeyField);
-				
+
+				if (!isALLParameterizedFields(keyList)) {
+					for (String key : keyList) {
+						if (!ParameterUtil.isParameter(key)) {
+							TypeFieldName fieldName = new TypeFieldName();
+							fieldName.setName(key);
+							typeKeyField.getField().add(fieldName);
+						} else {
+							converterHelper.addParamTag(this.ID, key, 
+									ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", entry.getPortIndex()), false);
+						}
+					}
+				}else{
+					StringBuffer parameterFieldNames=new StringBuffer();
+					TypeFieldName field = new TypeFieldName();
+					field.setName("");
+					typeKeyField.getField().add(field);
+					for (String fieldName : keyList) 
+						parameterFieldNames.append(fieldName+ " ");
+						converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), 
+								ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", entry.getPortIndex()),true);
+					
+				}
 			}
 		}
 		return typeKeyFieldsList;
 	}
+	
+	private boolean isALLParameterizedFields(String keys[]){
+		for (String fieldName : keys) 
+			if (!ParameterUtil.isParameter(fieldName)) 
+				return false;
+		return true;
+	}
+
 
 	protected boolean getRecordRequiredValue(JoinConfigProperty entry) {
 		boolean recordRequired=false;

@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.common.util;
 
 /**
@@ -118,6 +117,7 @@ public class Constants {
 
 	public static final String ASCENDING_SORT_ORDER = "Asc";
 	public static final String DESCENDING_SORT_ORDER="Desc";
+	public static final String NONE_SORT_ORDER="From Param";
 
 	//help related constants
 	public static final String ABOUT_TEXT="Accelero for ETL Developers\n\n Version: Accelero Service Release 1\n\n (c) Copyright Accelero contributors.  All rights reserved.\n" +

@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.helper;
 
 import java.util.ArrayList;
@@ -34,6 +33,8 @@ import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.engine.xpath.ComponentXpath;
+import com.bitwise.app.engine.xpath.ComponentsAttributeAndValue;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -53,7 +54,7 @@ import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 
 /**
- * This is a helper class for converter implementation. Contains the helper methods for conversion.
+ * @author Bitwise This is a helper class for converter implementation. Contains the helper methods for conversion.
  */
 public class ConverterHelper {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ConverterHelper.class);
@@ -415,5 +416,15 @@ public class ConverterHelper {
 		}
 		return inSocketId;
 
+	}
+	
+	public void addParamTag(String ID, String fieldName, String paramXpath, boolean hasEmptyNode) {
+		ComponentsAttributeAndValue tempAndValue=ComponentXpath.INSTANCE.getXpathMap().get(paramXpath.replace(ID, componentName));
+		if(tempAndValue==null)
+			ComponentXpath.INSTANCE.getXpathMap().put(
+					(paramXpath.replace(ID, componentName)),
+					new ComponentsAttributeAndValue(true,fieldName,hasEmptyNode));
+		else
+			tempAndValue.setNewNodeText(tempAndValue.getNewNodeText()+" "+fieldName);
 	}
 }

@@ -11,7 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
+
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.ArrayList;
@@ -21,15 +21,18 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.LookupConfigProperty;
 import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.datastructure.property.MatchValueProperty;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.engine.constants.PortTypeConstant;
 import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
+import com.bitwise.app.engine.xpath.ComponentXpathConstants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -47,9 +50,9 @@ import com.bitwiseglobal.graph.operationstypes.HashJoin.Match;
 
 
 /**
- * @author vibhort
- *
+ * @author Bitwise Converter implementation for Lookup component
  */
+
 public class LookupConverter extends TransformConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConverter.class);
@@ -105,35 +108,66 @@ public class LookupConverter extends TransformConverter {
 			if (keyFields.getDriverKey() != null) {
 				typeKeyField = new TypeKeyFields();
 				typeKeyField.setInSocketId("in0");
-				typeKeyField.getField().addAll(getTypeFieldName(keyFields.getDriverKey()));
-				typeKeyFieldsList.add(typeKeyField);
+				List<TypeFieldName> typeKeyFields=getTypeFieldName("in0", keyFields.getDriverKey());
+				if(typeKeyFields!=null && !typeKeyFields.isEmpty()){
+					typeKeyField.getField().addAll(typeKeyFields);
+					typeKeyFieldsList.add(typeKeyField);
+				}
 			}
 			if (keyFields.getLookupKey() != null) {
 				typeKeyField = new TypeKeyFields();
 				typeKeyField.setInSocketId("in1");
-				typeKeyField.getField().addAll(getTypeFieldName(keyFields.getLookupKey()));
-				typeKeyFieldsList.add(typeKeyField);
+				List<TypeFieldName> typeKeyFields=getTypeFieldName("in1", keyFields.getLookupKey());
+				if(typeKeyFields!=null && !typeKeyFields.isEmpty()){
+					typeKeyField.getField().addAll(typeKeyFields);
+					typeKeyFieldsList.add(typeKeyField);}
 			}
 
 		}
 		return typeKeyFieldsList;
 	}
 
-	private List<TypeFieldName> getTypeFieldName(String keyData) {
+	private List<TypeFieldName> getTypeFieldName(String socketID, String keyData) {
 		List<TypeFieldName> typeFieldNameList = null;
 		TypeFieldName typeFieldName = null;
 		if (keyData != null) {
 			typeFieldNameList = new ArrayList<>();
 			String keyList[] = keyData.split(",");
-			for (String key : keyList) {
-				typeFieldName = new TypeFieldName();
-				typeFieldName.setName(key);
-				typeFieldNameList.add(typeFieldName);
+			if(keyList.length==0 || (keyList.length==1 && StringUtils.isBlank(keyList[0])))
+				return null;
+			if (!isALLParameterizedFields(keyList)) {
+				for (String key : keyList) {
+					if (!ParameterUtil.isParameter(key)) {
+						typeFieldName = new TypeFieldName();
+						typeFieldName.setName(key);
+						typeFieldNameList.add(typeFieldName);
+					} else {
+						converterHelper.addParamTag(this.ID, key, 
+								ComponentXpathConstants.LOOKUP_KEYS.value().replace("$inSocketId", socketID), false);
+					}
+				}
+			}else{
+				StringBuffer parameterFieldNames=new StringBuffer();
+				TypeFieldName field = new TypeFieldName();
+				field.setName("");
+				typeFieldNameList.add(field);
+				for (String fieldName : keyList) 
+					parameterFieldNames.append(fieldName+ " ");
+					converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), 
+							ComponentXpathConstants.LOOKUP_KEYS.value().replace("$inSocketId", socketID),true);
+				
 			}
 
 		}
 
 		return typeFieldNameList;
+	}
+	
+	private boolean isALLParameterizedFields(String keys[]){
+		for (String fieldName : keys) 
+			if (!ParameterUtil.isParameter(fieldName)) 
+				return false;
+		return true;
 	}
 
 	@Override

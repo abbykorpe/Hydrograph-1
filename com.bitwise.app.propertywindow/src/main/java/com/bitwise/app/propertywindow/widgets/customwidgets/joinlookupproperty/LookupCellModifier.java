@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.propertywindow.widgets.customwidgets.lookupproperty.ELTLookupMapWizard;
 
 /**
@@ -59,9 +60,18 @@ public class LookupCellModifier  implements ICellModifier{
 		LookupMapProperty mapp = (LookupMapProperty) element;
 		
 		    if (ELTLookupMapWizard.PROPERTY_NAME.equals(property)){
+		    	if(ParameterUtil.isParameter((String)value)){
+		    		mapp.setOutput_Field((String)value);
+				}
 		      mapp.setSource_Field((String)value);
-		    }  if (ELTLookupMapWizard.PROPERTY_VALUE.equals(property))
+		    }  
+		    
+		    if (ELTLookupMapWizard.PROPERTY_VALUE.equals(property)){
+		    	if(ParameterUtil.isParameter((String)value)){
+		    		 mapp.setSource_Field((String)value);
+				}
 		        mapp.setOutput_Field((String)value);
+		    }
 		    
 		    viewer.refresh();
 		

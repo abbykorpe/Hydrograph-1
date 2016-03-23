@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.engine.converter.impl;
 
 import java.util.ArrayList;
@@ -21,9 +20,11 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.converter.TransformConverter;
 import com.bitwise.app.engine.helper.ConverterHelper;
+import com.bitwise.app.engine.xpath.ComponentXpathConstants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -37,9 +38,11 @@ import com.bitwiseglobal.graph.operationstypes.Filter;
 
 /**
  * Converter implementation for Filter component
+ * 
+ * @author Bitwise 
  */
 public class FilterConverter extends TransformConverter {
-	private static final String FILTER_OPERATION_ID = "opt";
+	private static final String FILTER_OPERATION_ID = "filter_opt";
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConverter.class);
 	private ConverterHelper converterHelper;
 
@@ -98,17 +101,40 @@ public class FilterConverter extends TransformConverter {
 	private List<TypeInputField> getOperationField() {
 		logger.debug("Generating TypeInputField data :{}", properties.get(Constants.PARAM_NAME));
 		List<TypeInputField> operationFiledList = new ArrayList<>();
-		List<String> componentOperationFileds = (List<String>) component.getProperties().get(
+		List<String> componentOperationFields = (List<String>) component.getProperties().get(
 				PropertyNameConstants.OPERATION_FILEDS.value());
-		if (componentOperationFileds != null) {
-			for (String object : componentOperationFileds) {
-				TypeInputField operationFiled = new TypeInputField();
-				operationFiled.setName(object);
-				operationFiled.setInSocketId(Constants.FIXED_INSOCKET_ID);
-				operationFiledList.add(operationFiled);
+		if (componentOperationFields != null && !componentOperationFields.isEmpty()) {
+			if (!isALLParameterizedFields(componentOperationFields)) {
+				for (String fieldName : componentOperationFields) {
+					if (!ParameterUtil.isParameter(fieldName)) {
+						TypeInputField operationField = new TypeInputField();
+						operationField.setName(fieldName);
+						operationField.setInSocketId(Constants.FIXED_INSOCKET_ID);
+						operationFiledList.add(operationField);
+					} else {
+						converterHelper.addParamTag(this.ID, fieldName,	ComponentXpathConstants.FILTER_INPUT_FIELDS.value(),false);
+					}
+				}
+			} else {
+				StringBuffer parameterFieldNames=new StringBuffer();
+				TypeInputField operationField = new TypeInputField();
+				operationField.setName("");
+				operationFiledList.add(operationField);
+				for (String fieldName : componentOperationFields) 
+					parameterFieldNames.append(fieldName+ " ");
+					converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), ComponentXpathConstants.FILTER_INPUT_FIELDS.value(),true);
+				
 			}
 		}
 		return operationFiledList;
+	}
+
+
+	private boolean isALLParameterizedFields(List<String> componentOperationFields){
+		for (String fieldName : componentOperationFields) 
+			if (!ParameterUtil.isParameter(fieldName)) 
+				return false;
+		return true;
 	}
 
 	@Override

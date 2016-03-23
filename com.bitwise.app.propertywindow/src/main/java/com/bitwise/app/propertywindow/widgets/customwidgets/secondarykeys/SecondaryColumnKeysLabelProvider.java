@@ -11,22 +11,18 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.propertywindow.widgets.customwidgets.secondarykeys;
 
-import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Item;
 
 /**
- * The Class PropertyLabelProvider.
+ * The Class SecondaryColumnKeysLabelProvider.
  * 
  * @author Bitwise
  */
@@ -60,9 +56,9 @@ public class SecondaryColumnKeysLabelProvider implements ITableLabelProvider, IT
 		SecondaryColumnKeysInformation property = (SecondaryColumnKeysInformation) element;
 		switch (columnIndex) {
 		case 0:
-			return property.getPropertyName();
+			return property.getColumnName();
 		case 1:
-			return property.getPropertyValue();
+			return property.getSortOrder();
 		}
 		return null;
 	}

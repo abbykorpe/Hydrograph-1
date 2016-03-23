@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.propertywindow.widgets.customwidgets.secondarykeys;
 
 import java.util.ArrayList;
@@ -184,7 +183,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		ComboBoxViewerCellEditor propertyValueeditor = new ComboBoxViewerCellEditor(targetTable, SWT.READ_ONLY);
 		propertyValueeditor.setContentProvider(new ArrayContentProvider());
 		propertyValueeditor.setLabelProvider(new LabelProvider());
-		propertyValueeditor.setInput(new String[] { Constants.ASCENDING_SORT_ORDER, Constants.DESCENDING_SORT_ORDER });
+		propertyValueeditor.setInput(new String[] { Constants.ASCENDING_SORT_ORDER, Constants.DESCENDING_SORT_ORDER, Constants.NONE_SORT_ORDER });
 
 		CellEditor[] editors = new CellEditor[] { propertyNameeditor, propertyValueeditor };
 
@@ -370,13 +369,13 @@ public class SecondaryColumnKeysDialog extends Dialog {
 					String data1 = targetTableViewer.getTable().getItem(index2).getText(1);
 
 					SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
-					p.setPropertyName(data);
-					p.setPropertyValue(data1);
+					p.setColumnName(data);
+					p.setSortOrder(data1);
 					propertyList.set(index1, p);
 
 					p = new SecondaryColumnKeysInformation();
-					p.setPropertyName(text);
-					p.setPropertyValue(text1);
+					p.setColumnName(text);
+					p.setSortOrder(text1);
 					propertyList.set(index2, p);
 					targetTableViewer.refresh();
 					targetTable.setSelection(index1 + 1);
@@ -402,13 +401,13 @@ public class SecondaryColumnKeysDialog extends Dialog {
 					String data2 = targetTableViewer.getTable().getItem(index2).getText(1);
 
 					SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
-					p.setPropertyName(data);
-					p.setPropertyValue(data2);
+					p.setColumnName(data);
+					p.setSortOrder(data2);
 					propertyList.set(index1, p);
 
 					p = new SecondaryColumnKeysInformation();
-					p.setPropertyName(text);
-					p.setPropertyValue(text1);
+					p.setColumnName(text);
+					p.setSortOrder(text1);
 					propertyList.set(index2, p);
 					targetTableViewer.refresh();
 					targetTable.setSelection(index1 - 1);
@@ -490,14 +489,14 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		if (propertyList.size() != 0) {
 			if (!validate())
 				return;
-			p.setPropertyName(fieldName); //$NON-NLS-1$
-			p.setPropertyValue(Constants.ASCENDING_SORT_ORDER); //$NON-NLS-1$
+			p.setColumnName(fieldName); //$NON-NLS-1$
+			p.setSortOrder(Constants.ASCENDING_SORT_ORDER); //$NON-NLS-1$
 			propertyList.add(p);
 			tv.refresh();
 			targetTableViewer.editElement(targetTableViewer.getElementAt(propertyList.size() - 1), 0);
 		} else {
-			p.setPropertyName(fieldName); //$NON-NLS-1$
-			p.setPropertyValue(Constants.ASCENDING_SORT_ORDER); //$NON-NLS-1$
+			p.setColumnName(fieldName); //$NON-NLS-1$
+			p.setSortOrder(Constants.ASCENDING_SORT_ORDER); //$NON-NLS-1$
 			propertyList.add(p);
 			tv.refresh();
 			targetTableViewer.editElement(targetTableViewer.getElementAt(0), 0);
@@ -522,8 +521,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			for (String key : secondaryColumnsMap.keySet()) {
 				SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
 				if (validateBeforeLoad(key, secondaryColumnsMap.get(key))) {
-					p.setPropertyName(key);
-					p.setPropertyValue(secondaryColumnsMap.get(key));
+					p.setColumnName(key);
+					p.setSortOrder(secondaryColumnsMap.get(key));
 					propertyList.add(p);
 				}
 			}
@@ -561,17 +560,19 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 		int propertyCounter = 0;
 		for (SecondaryColumnKeysInformation temp : propertyList) {
-			if (!temp.getPropertyName().trim().isEmpty() && !temp.getPropertyValue().trim().isEmpty()) {
+			if (!temp.getColumnName().trim().isEmpty() && !temp.getSortOrder().trim().isEmpty()) {
+
 				//String Regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*"; -- TODO Please do not remove
-				Matcher matchName = Pattern.compile(Constants.REGEX).matcher(temp.getPropertyName());
+				Matcher matchName = Pattern.compile(Constants.REGEX).matcher(temp.getColumnName());
 				if (!matchName.matches()) {
 					targetTable.setSelection(propertyCounter);
 					lblPropertyError.setVisible(true);
 					lblPropertyError.setText(Messages.PROPERTY_NAME_ALLOWED_CHARACTERS);
 					return false;
 				}
-				if (!(temp.getPropertyValue().trim().equalsIgnoreCase(Constants.ASCENDING_SORT_ORDER) || temp
-						.getPropertyValue().trim().equalsIgnoreCase(Constants.DESCENDING_SORT_ORDER))) {
+				if (!(temp.getSortOrder().trim().equalsIgnoreCase(Constants.ASCENDING_SORT_ORDER) || 
+						temp.getSortOrder().trim().equalsIgnoreCase(Constants.DESCENDING_SORT_ORDER)||
+						temp.getSortOrder().trim().equalsIgnoreCase(Constants.NONE_SORT_ORDER))) {
 					targetTable.setSelection(propertyCounter);
 					lblPropertyError.setVisible(true);
 					lblPropertyError.setText(Messages.INVALID_SORT_ORDER);
@@ -670,7 +671,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	private boolean isPropertyAlreadyExists(String valueToValidate) {
 		for (SecondaryColumnKeysInformation temp : propertyList)
-			if (temp.getPropertyName().trim().equalsIgnoreCase(valueToValidate))
+			if (temp.getColumnName().trim().equalsIgnoreCase(valueToValidate))
 				return true;
 		return false;
 	}
@@ -680,7 +681,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		if (validate()) {
 			secondaryColumnsMap.clear();
 			for (SecondaryColumnKeysInformation temp : propertyList) {
-				secondaryColumnsMap.put(temp.getPropertyName(), temp.getPropertyValue());
+				secondaryColumnsMap.put(temp.getColumnName(), temp.getSortOrder());
 			}
 
 			if (isAnyUpdatePerformed) {
