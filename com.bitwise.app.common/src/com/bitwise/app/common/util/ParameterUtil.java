@@ -17,8 +17,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
-
- * @author Bitwise The class ParameterUtil
+ * Utility class to check if String is parameter.
+ * 
+ * @author Bitwise 
  * 
  */
 

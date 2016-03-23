@@ -37,7 +37,9 @@ import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.operationstypes.Filter;
 
 /**
- * @author Bitwise Converter implementation for Filter component
+ * Converter implementation for Filter component
+ * 
+ * @author Bitwise 
  */
 public class FilterConverter extends TransformConverter {
 	private static final String FILTER_OPERATION_ID = "filter_opt";
