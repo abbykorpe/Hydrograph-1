@@ -5,7 +5,7 @@
 	<tns:component paletteIconPath="/icons/unique_sequence_palette.png"
 		canvasIconPath="/icons/unique_sequence_canvas.png" name="UniqueSequence"
 		nameInPalette="Unique Sequence" defaultNamePrefix="UniqueSeq" 
-		description="This is Unique Sequence component.\nsome more text"
+		description="Generates unique sequence of integer values."
 		helpFilePath="/com.bitwise.app.help/html/Components/Unique_Sequence.html">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>

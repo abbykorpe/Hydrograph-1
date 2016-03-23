@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/gather_palette.png" canvasIconPath="/icons/gather_canvas.png"
 		name="UnionallComponent" nameInPalette="Union All" defaultNamePrefix="Unionall" 
-		description="This is Unionall component."
+		description="Gathers input from two or more sources into one output."
 		helpFilePath="/com.bitwise.app.help/html/Components/Union_All.html">
 		<tns:category>STRAIGHTPULL</tns:category>
 		<tns:port>

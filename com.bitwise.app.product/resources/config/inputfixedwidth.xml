@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/input_fixwidth_palette.png" canvasIconPath="/icons/input_fixwidth_canvas.png"
 		name="IFixedWidth" nameInPalette="File Fixed Width" defaultNamePrefix="IFixedWidth" 
-		description="This is IFixedWidth component.\nsome more text"
+		description="Used to read any Fixed Width text file."
 		helpFilePath="/com.bitwise.app.help/html/Components/Input_File_Fixed_Width.html">
 		<tns:category>INPUT</tns:category>
 		<tns:port>

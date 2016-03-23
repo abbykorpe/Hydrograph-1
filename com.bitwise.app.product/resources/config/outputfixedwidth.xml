@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/output_fixwidth_palette.png" canvasIconPath="/icons/output_fixwidth_canvas.png"
 		name="OFixedWidth" nameInPalette="File Fixed Width" defaultNamePrefix="OFixedWidth" 
-		description="This is OFixedWidth component.\nsome more text"
+		description="Used to write output in fixed width text format."
 		helpFilePath="/com.bitwise.app.help/html/Components/Output_File_Fixed_Width.html">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
