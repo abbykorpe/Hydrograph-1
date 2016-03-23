@@ -27,7 +27,7 @@ public class CustomMessages extends NLS {
 	public static String ProjectSupport_PARAM;
 	public static String ProjectSupport_SCHEMA;
 	public static String CustomWizard_CREATE_ETL_PROJECT;
-	public static String CustomWizard_ENTER_PROJECT_NAME;
+	public static String CustomWizard_PROJECT_DESCRIPTION;
 	public static String ProjectSupport_BIN;
 	public static String ProjectSupport_LIB;
 	public static String ProjectSupport_SCRIPTS;
@@ -37,8 +37,7 @@ public class CustomMessages extends NLS {
 	public static String ProjectSupport_CONFIG_FOLDER;
 	public static String GradleNature_ID;
 	public static String ProjectSupport_Settings;
-	
-	
+	public static String CustomWizard_WINDOW_TITLE;
 	
 	static {
 		// initialize resource bundle
