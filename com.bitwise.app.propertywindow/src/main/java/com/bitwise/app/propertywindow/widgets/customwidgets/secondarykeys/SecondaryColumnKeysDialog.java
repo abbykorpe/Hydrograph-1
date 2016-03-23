@@ -83,7 +83,7 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.config.EditButtonWit
 
 public class SecondaryColumnKeysDialog extends Dialog {
 	
-	private List<SecondaryColumnKeysInformation> propertyLst;
+	private List<SecondaryColumnKeysInformation> propertyList;
 	private static final String COLUMNNAME = "Column Name"; //$NON-NLS-1$
 	private static final String SORTORDER = "Sort Order"; //$NON-NLS-1$
 	private Map<String, String> secondaryColumnsMap;
@@ -101,10 +101,12 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	private boolean closeDialog;
 	private boolean okPressed;
-	
+	private Label deleteButton;
+	private Label upButton;
+	private Label downButton;
 	public SecondaryColumnKeysDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar, EditButtonWithLabelConfig buttonWithLabelConfig) {
 		super(parentShell);
-		propertyLst = new ArrayList<SecondaryColumnKeysInformation>();
+		propertyList = new ArrayList<SecondaryColumnKeysInformation>();
 		secondaryColumnsMap = new LinkedHashMap<String, String>();
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
 		this.buttonWithLabelConfig = buttonWithLabelConfig;
@@ -157,7 +159,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 		targetTableViewer.setContentProvider(new SecondaryColumnKeysContentProvider());
 		targetTableViewer.setLabelProvider(new SecondaryColumnKeysLabelProvider());
-		targetTableViewer.setInput(propertyLst);
+		targetTableViewer.setInput(propertyList);
 
 		TableColumn targetTableColumnFieldName = new TableColumn(targetTable, SWT.CENTER);
 		targetTableColumnFieldName.setText(COLUMNNAME); //$NON-NLS-1$
@@ -194,6 +196,14 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		targetTableViewer.setCellEditors(editors);
 
 		loadProperties(targetTableViewer);
+		
+		if (propertyList.size() != 0) {
+			deleteButton.setEnabled(true);
+		}
+		if (propertyList.size() >= 2) {
+			upButton.setEnabled(true);
+			downButton.setEnabled(true);
+		}
 
 		dropTarget = new DropTarget(targetTable, DND.DROP_MOVE);
 		dropTarget.setTransfer(new Transfer[] { TextTransfer.getInstance() });
@@ -202,6 +212,13 @@ public class SecondaryColumnKeysDialog extends Dialog {
 				for (String fieldName : getformatedData((String) event.data))
 					if (!isPropertyAlreadyExists(fieldName))
 						addNewProperty(targetTableViewer, fieldName);
+				if (propertyList.size() >= 1) {
+					deleteButton.setEnabled(true);
+				} 
+				if (propertyList.size() >= 2) {
+					upButton.setEnabled(true);
+					downButton.setEnabled(true);
+				}
 			}
 		});
 
@@ -212,6 +229,13 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				addNewProperty(targetTableViewer, null);
+				if (propertyList.size() >= 1) {
+					deleteButton.setEnabled(true);
+				} 
+				if (propertyList.size() >= 2) {
+					upButton.setEnabled(true);
+					downButton.setEnabled(true);
+				}
 			}
 
 			@Override
@@ -310,20 +334,23 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON));
 		attachAddButtonListern(addButton);
 
-		Label deleteButton = new Label(composite_1, SWT.NONE);
+		deleteButton = new Label(composite_1, SWT.NONE);
 		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON));
 		attachDeleteButtonListener(deleteButton);
 
-		Label upButton = new Label(composite_1, SWT.NONE);
+		upButton = new Label(composite_1, SWT.NONE);
 		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON));
 		attachUpButtonListener(upButton);
 
-		Label downButton = new Label(composite_1, SWT.NONE);
+		downButton = new Label(composite_1, SWT.NONE);
 		downButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON));
 		attachDownButtonListerner(downButton);
+		deleteButton.setEnabled(false);
+		upButton.setEnabled(false);
+		downButton.setEnabled(false);
 	}
 
 	private void attachDownButtonListerner(Label downButton) {
@@ -336,7 +363,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 				String text = targetTableViewer.getTable().getItem(index1).getText(0);
 				String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
 
-				if (index1 < propertyLst.size()) {
+				if (index1 < propertyList.size()) {
 					index2 = index1 + 1;
 
 					String data = targetTableViewer.getTable().getItem(index2).getText(0);
@@ -345,12 +372,12 @@ public class SecondaryColumnKeysDialog extends Dialog {
 					SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
 					p.setPropertyName(data);
 					p.setPropertyValue(data1);
-					propertyLst.set(index1, p);
+					propertyList.set(index1, p);
 
 					p = new SecondaryColumnKeysInformation();
 					p.setPropertyName(text);
 					p.setPropertyValue(text1);
-					propertyLst.set(index2, p);
+					propertyList.set(index2, p);
 					targetTableViewer.refresh();
 					targetTable.setSelection(index1 + 1);
 				}
@@ -377,12 +404,12 @@ public class SecondaryColumnKeysDialog extends Dialog {
 					SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
 					p.setPropertyName(data);
 					p.setPropertyValue(data2);
-					propertyLst.set(index1, p);
+					propertyList.set(index1, p);
 
 					p = new SecondaryColumnKeysInformation();
 					p.setPropertyName(text);
 					p.setPropertyValue(text1);
-					propertyLst.set(index2, p);
+					propertyList.set(index2, p);
 					targetTableViewer.refresh();
 					targetTable.setSelection(index1 - 1);
 
@@ -392,7 +419,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	}
 
-	private void attachDeleteButtonListener(Label deleteButton) {
+	private void attachDeleteButtonListener(final Label deleteButton) {
 		deleteButton.addMouseListener(new MouseAdapter() {
 			
 			@Override
@@ -401,9 +428,16 @@ public class SecondaryColumnKeysDialog extends Dialog {
 				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 					Object selectedObject = iterator.next();
 					targetTableViewer.remove(selectedObject);
-					propertyLst.remove(selectedObject);
+					propertyList.remove(selectedObject);
 					isAnyUpdatePerformed = true;
 				}
+				if (propertyList.size() < 1) {
+					deleteButton.setEnabled(false);
+				}
+				if (propertyList.size()<= 1) {
+					upButton.setEnabled(false);
+					downButton.setEnabled(false);
+				} 
 			}
 
 		});
@@ -416,6 +450,13 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				addNewProperty(targetTableViewer, null);
+				if (propertyList.size() >= 1) {
+					deleteButton.setEnabled(true);
+				}
+				if (propertyList.size() >= 2) {
+					upButton.setEnabled(true);
+					downButton.setEnabled(true);
+				}
 			}
 
 		});
@@ -446,18 +487,18 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
 		if (fieldName == null)
 			fieldName = "";
-		if (propertyLst.size() != 0) {
+		if (propertyList.size() != 0) {
 			if (!validate())
 				return;
 			p.setPropertyName(fieldName); //$NON-NLS-1$
 			p.setPropertyValue(Constants.ASCENDING_SORT_ORDER); //$NON-NLS-1$
-			propertyLst.add(p);
+			propertyList.add(p);
 			tv.refresh();
-			targetTableViewer.editElement(targetTableViewer.getElementAt(propertyLst.size() - 1), 0);
+			targetTableViewer.editElement(targetTableViewer.getElementAt(propertyList.size() - 1), 0);
 		} else {
 			p.setPropertyName(fieldName); //$NON-NLS-1$
 			p.setPropertyValue(Constants.ASCENDING_SORT_ORDER); //$NON-NLS-1$
-			propertyLst.add(p);
+			propertyList.add(p);
 			tv.refresh();
 			targetTableViewer.editElement(targetTableViewer.getElementAt(0), 0);
 		}
@@ -483,7 +524,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 				if (validateBeforeLoad(key, secondaryColumnsMap.get(key))) {
 					p.setPropertyName(key);
 					p.setPropertyValue(secondaryColumnsMap.get(key));
-					propertyLst.add(p);
+					propertyList.add(p);
 				}
 			}
 			tv.refresh();
@@ -519,7 +560,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	protected boolean validate() {
 
 		int propertyCounter = 0;
-		for (SecondaryColumnKeysInformation temp : propertyLst) {
+		for (SecondaryColumnKeysInformation temp : propertyList) {
 			if (!temp.getPropertyName().trim().isEmpty() && !temp.getPropertyValue().trim().isEmpty()) {
 				//String Regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*"; -- TODO Please do not remove
 				Matcher matchName = Pattern.compile(Constants.REGEX).matcher(temp.getPropertyName());
@@ -628,7 +669,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	}
 
 	private boolean isPropertyAlreadyExists(String valueToValidate) {
-		for (SecondaryColumnKeysInformation temp : propertyLst)
+		for (SecondaryColumnKeysInformation temp : propertyList)
 			if (temp.getPropertyName().trim().equalsIgnoreCase(valueToValidate))
 				return true;
 		return false;
@@ -638,7 +679,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	protected void okPressed() {
 		if (validate()) {
 			secondaryColumnsMap.clear();
-			for (SecondaryColumnKeysInformation temp : propertyLst) {
+			for (SecondaryColumnKeysInformation temp : propertyList) {
 				secondaryColumnsMap.put(temp.getPropertyName(), temp.getPropertyValue());
 			}
 

@@ -112,6 +112,9 @@ public class JoinMapGrid extends Dialog {
 	private List<String> nonMappedFieldList=new ArrayList<>();
 	private HashMap<String, List<String>> inputFieldMap=new HashMap<String, List<String>>();
 	private String IN="in";
+	private Label deleteButton;
+	private Label upButton;
+	private Label downButton;
 
 
 	/**
@@ -257,6 +260,13 @@ public class JoinMapGrid extends Dialog {
 			public void mouseDoubleClick(MouseEvent e) {
 				joinOutputProperty(outputTableViewer, null);
 				changeColorOfNonMappedFields();
+				if (joinOutputList.size() >= 1) {
+					deleteButton.setEnabled(true);
+				} 
+				if (joinOutputList.size() >= 2) {
+					upButton.setEnabled(true);
+					downButton.setEnabled(true);
+				}
 			}
 
 			@Override
@@ -538,6 +548,22 @@ public class JoinMapGrid extends Dialog {
 			radio[0].setSelection(true);
 			outputTableViewer.getTable().setEnabled(true);
 		}
+		if (joinOutputList.size() != 0) {
+			deleteButton.setEnabled(true);
+		}
+		else
+		{
+			deleteButton.setEnabled(false);
+		}
+		if (joinOutputList.size() >= 2) {
+			upButton.setEnabled(true);
+			downButton.setEnabled(true);
+		}
+		else
+		{
+			upButton.setEnabled(false);
+			downButton.setEnabled(false);
+		}
 
 	}
 
@@ -600,21 +626,27 @@ public class JoinMapGrid extends Dialog {
 	}
     
 	private void createLabel(Composite parent) {
-		Label add = widget.labelWidget(parent, SWT.CENTER | SWT.PUSH, new int[] { 0, 0, 25, 20 }, "", new Image(null,
+		Label addButton = widget.labelWidget(parent, SWT.CENTER | SWT.PUSH, new int[] { 0, 0, 25, 20 }, "", new Image(null,
 				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.ADD_ICON));
 
-		add.addMouseListener(new MouseAdapter() {
+		addButton.addMouseListener(new MouseAdapter() {
 			
 			@Override
 			public void mouseUp(MouseEvent e) {
 				joinOutputProperty(outputTableViewer, null);
-
+				if (joinOutputList.size() >= 1) {
+					deleteButton.setEnabled(true);
+				}
+				if (joinOutputList.size() >= 2) {
+					upButton.setEnabled(true);
+					downButton.setEnabled(true);
+				}
 			}
 		});
 
-		Label delete = widget.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 }, "", new Image(null,
+	    deleteButton = widget.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 }, "", new Image(null,
 				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DELETE_ICON));
-		delete.addMouseListener(new MouseAdapter() {
+		deleteButton.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -629,12 +661,19 @@ public class JoinMapGrid extends Dialog {
 				outputTableViewer.refresh();
 				if (index != 0)
 					outputTableViewer.editElement(outputTableViewer.getElementAt(index - 1), 0);
+				if (joinOutputList.size() < 1) {
+					deleteButton.setEnabled(false);
+				} 
+				if (joinOutputList.size()<= 1) {
+					upButton.setEnabled(false);
+					downButton.setEnabled(false);
+				}
 			}
 		});
 
-		Label upLabel = widget.labelWidget(parent, SWT.CENTER, new int[] { 50, 0, 25, 20 }, "", new Image(null,
+		upButton = widget.labelWidget(parent, SWT.CENTER, new int[] { 50, 0, 25, 20 }, "", new Image(null,
 				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.UP_ICON));
-		upLabel.addMouseListener(new MouseAdapter() {
+		upButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				int index2 = 0;
@@ -663,9 +702,9 @@ public class JoinMapGrid extends Dialog {
 
 		});
 
-		Label downLabel = widget.labelWidget(parent, SWT.CENTER, new int[] { 74, 0, 25, 20 }, "", new Image(null,
+		downButton = widget.labelWidget(parent, SWT.CENTER, new int[] { 74, 0, 25, 20 }, "", new Image(null,
 				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DOWN_ICON));
-		downLabel.addMouseListener(new MouseAdapter() {
+		downButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				int index1 = outputTableViewer.getTable().getSelectionIndex();
@@ -1037,6 +1076,13 @@ public class JoinMapGrid extends Dialog {
 					String[] dropData = ((String) event.data).split(Pattern.quote("#"));
 					for (String data : dropData) {
 						joinOutputProperty(tableViewer, data);
+					}
+					if (joinOutputList.size() >= 1) {
+						deleteButton.setEnabled(true);
+					}
+					if (joinOutputList.size() >= 2) {
+						upButton.setEnabled(true);
+						downButton.setEnabled(true);
 					}
 					validateDuplicatesInOutputField();
 				}

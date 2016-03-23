@@ -83,4 +83,8 @@ public class ELTDefaultLable extends AbstractELTWidget {
 		return this;
 	}
 
+	public void setEnabled(Boolean value) {
+		defaultELTLable.setEnabled(value);
+	}
+
 }

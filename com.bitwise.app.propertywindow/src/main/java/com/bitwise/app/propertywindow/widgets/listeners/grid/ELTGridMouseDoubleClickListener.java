@@ -14,6 +14,7 @@
  
 package com.bitwise.app.propertywindow.widgets.listeners.grid;
 
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Widget;
 
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -33,8 +34,13 @@ import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperTyp
 public class ELTGridMouseDoubleClickListener extends ELTMouseDoubleClickListener{
 	@Override
 	public void mouseDoubleClickAction(PropertyDialogButtonBar propertyDialogButtonBar,ListenerHelper helpers, Widget... widgets){
+		((Label) widgets[1]).setEnabled(true);
 		propertyDialogButtonBar.enableApplyButton(true);
 		ELTGridDetails gridDetails = (ELTGridDetails) helpers.get(HelperType.SCHEMA_GRID);
+		if (gridDetails.getGrids().size() >= 1) {
+			((Label) widgets[2]).setEnabled(true);
+			((Label) widgets[3]).setEnabled(true);
+		}
 		gridDetails.getGridWidgetCommonBuilder().createDefaultSchema(gridDetails.getGrids(), gridDetails.getTableViewer(), gridDetails.getLabel());
 	}
 }

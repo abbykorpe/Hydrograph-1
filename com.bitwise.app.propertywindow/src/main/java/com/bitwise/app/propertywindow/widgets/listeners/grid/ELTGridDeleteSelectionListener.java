@@ -17,6 +17,7 @@ package com.bitwise.app.propertywindow.widgets.listeners.grid;
 import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Widget;
 
@@ -49,6 +50,12 @@ public class ELTGridDeleteSelectionListener extends ELTSelectionTaskListener{
 			ListenerHelper helpers, Widget... widgets) {
 		propertyDialogButtonBar.enableApplyButton(true);
 		ELTGridDetails gridDetails = (ELTGridDetails) helpers.get(HelperType.SCHEMA_GRID);
+		if (gridDetails.getGrids().size() > 1) {
+			((Label) widgets[1]).setEnabled(true);
+		} else {
+			((Label) widgets[1]).setEnabled(false);
+		}
+		
 		Table table =gridDetails.getTableViewer().getTable();
 		int temp = table.getSelectionIndex();
 		int[] indexs=table.getSelectionIndices();
@@ -62,6 +69,13 @@ public class ELTGridDeleteSelectionListener extends ELTSelectionTaskListener{
 				tempList.add(test);
 			}
 			 gridDetails.getGrids().removeAll(tempList);
-		}		
+		}
+		if (gridDetails.getGrids().size() >= 2) {
+			((Label) widgets[2]).setEnabled(true);
+			((Label) widgets[3]).setEnabled(true);
+		} else {
+			((Label) widgets[2]).setEnabled(false);
+			((Label) widgets[3]).setEnabled(false);
+		}
 	}
 }

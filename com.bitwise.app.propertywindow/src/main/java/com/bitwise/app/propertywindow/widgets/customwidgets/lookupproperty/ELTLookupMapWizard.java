@@ -104,6 +104,9 @@ public class ELTLookupMapWizard extends Dialog {
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private List<String> sourceFieldList=new ArrayList<>();
 	private HashMap<String, List<String>> inputFieldMap=new HashMap<String, List<String>>();
+	private Label deleteButton;
+	private Label upButton;
+	private Label downButton;
 
 	/**
 	 * Create the dialog.
@@ -185,6 +188,13 @@ public class ELTLookupMapWizard extends Dialog {
 			public void mouseDoubleClick(MouseEvent e) {
 				joinOutputProperty(outputTableViewer, null);
 				changeColorOfNonMappedFields();
+				if (joinOutputList.size() >= 1) {
+					deleteButton.setEnabled(true);
+				}
+				if (joinOutputList.size() >= 2) {
+					upButton.setEnabled(true);
+					downButton.setEnabled(true);
+				}
 			}
 
 			@Override
@@ -418,20 +428,26 @@ public class ELTLookupMapWizard extends Dialog {
 
 	
 	private void createLabel(Composite parent) {
-		Label add = eltswtWidgets.labelWidget(parent, SWT.CENTER | SWT.PUSH, new int[] { 0, 0, 25, 20 }, "", new Image(
+		Label addButton = eltswtWidgets.labelWidget(parent, SWT.CENTER | SWT.PUSH, new int[] { 0, 0, 25, 20 }, "", new Image(
 				null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.ADD_ICON));
 
-		add.addMouseListener(new MouseAdapter() {
+		addButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				joinOutputProperty(outputTableViewer, null);
-
+				if (joinOutputList.size() >= 1) {
+					deleteButton.setEnabled(true);
+				} 
+				if (joinOutputList.size() >= 2) {
+					upButton.setEnabled(true);
+					downButton.setEnabled(true);
+				}
 			}
 		});
 
-		Label delete = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 }, "", new Image(null,
+		deleteButton = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 }, "", new Image(null,
 				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DELETE_ICON));
-		delete.addMouseListener(new MouseAdapter() {
+		deleteButton.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -446,13 +462,20 @@ public class ELTLookupMapWizard extends Dialog {
 				outputTableViewer.refresh();
 				if (index != 0)
 					outputTableViewer.editElement(outputTableViewer.getElementAt(index - 1), 0);
+				if (joinOutputList.size() < 1) {
+					deleteButton.setEnabled(false);
+				} 
+				if (joinOutputList.size() <= 1) {
+					upButton.setEnabled(false);
+					downButton.setEnabled(false);
+				} 
 			}
 
 		});
 
-		Label upLabel = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 50, 0, 25, 20 }, "", new Image(null,
+		upButton = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 50, 0, 25, 20 }, "", new Image(null,
 				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.UP_ICON));
-		upLabel.addMouseListener(new MouseAdapter() {
+		upButton.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -481,9 +504,9 @@ public class ELTLookupMapWizard extends Dialog {
 			}
         });
 
-		Label downLabel = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 74, 0, 25, 20 }, "", new Image(
+		downButton = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 74, 0, 25, 20 }, "", new Image(
 				null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DOWN_ICON));
-		downLabel.addMouseListener(new MouseAdapter() {
+		downButton.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -642,6 +665,22 @@ public class ELTLookupMapWizard extends Dialog {
 			inputTableViewer[0].refresh();
 			inputTableViewer[1].refresh();
 			outputTableViewer.refresh();
+		}
+		if (joinOutputList.size() != 0) {
+			deleteButton.setEnabled(true);
+		}
+		else
+		{
+			deleteButton.setEnabled(false);
+		}
+		if (joinOutputList.size() >= 2) {
+			upButton.setEnabled(true);
+			downButton.setEnabled(true);
+		}
+		else
+		{
+			upButton.setEnabled(false);
+			downButton.setEnabled(false);
 		}
 	}
 
@@ -898,6 +937,13 @@ public class ELTLookupMapWizard extends Dialog {
 					String[] dropData = ((String) event.data).split(Pattern.quote("#"));
 					for (String data : dropData) {
 						joinOutputProperty(tableViewer, data);
+					}
+					if (joinOutputList.size() >= 1) {
+						deleteButton.setEnabled(true);
+					}					
+					if (joinOutputList.size() >= 2) {
+						upButton.setEnabled(true);
+						downButton.setEnabled(true);
 					}
 					validateDuplicatesInOutputField();
 				}

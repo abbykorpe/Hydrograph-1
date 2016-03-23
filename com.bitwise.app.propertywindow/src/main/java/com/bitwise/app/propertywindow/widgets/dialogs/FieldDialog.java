@@ -86,7 +86,7 @@ import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterLabelProvi
 public class FieldDialog extends Dialog {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FieldDialog.class);
 
-	private final List<FilterProperties> propertyLst;
+	private final List<FilterProperties> propertyList;
 	private List<String> fieldNameList;
 	private String componentName;
 
@@ -110,11 +110,14 @@ public class FieldDialog extends Dialog {
 	PropertyDialogButtonBar propertyDialogButtonBar;
 	private boolean closeDialog;
 	private boolean okPressed;
+	private Label deleteButton;
+	private Label upButton;
+	private Label downButton;
 
 	public FieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
 
-		propertyLst = new ArrayList<FilterProperties>();
+		propertyList = new ArrayList<FilterProperties>();
 		fieldNameList = new ArrayList<String>();
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
 	}
@@ -126,16 +129,16 @@ public class FieldDialog extends Dialog {
 		FilterProperties filter = new FilterProperties();
 		if (fieldName == null)
 			fieldName = "";
-		if (propertyLst.size() != 0) {
+		if (propertyList.size() != 0) {
 			if (!validate())
 				return;
 			filter.setPropertyname(fieldName); //$NON-NLS-1$
-			propertyLst.add(filter);
+			propertyList.add(filter);
 			tv.refresh();
-			targetTableViewer.editElement(targetTableViewer.getElementAt(propertyLst.size() - 1), 0);
+			targetTableViewer.editElement(targetTableViewer.getElementAt(propertyList.size() - 1), 0);
 		} else {
 			filter.setPropertyname(fieldName);//$NON-NLS-1$
-			propertyLst.add(filter);
+			propertyList.add(filter);
 			tv.refresh();
 			targetTableViewer.editElement(targetTableViewer.getElementAt(0), 0);
 		}
@@ -188,7 +191,7 @@ public class FieldDialog extends Dialog {
 				FilterProperties filter = new FilterProperties();
 				if (validateBeforeLoad(key)) {
 					filter.setPropertyname(key);
-					propertyLst.add(filter);
+					propertyList.add(filter);
 				}
 			}
 			tv.refresh();
@@ -273,20 +276,23 @@ public class FieldDialog extends Dialog {
 		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON));
 		attachAddButtonListern(addButton);
 
-		Label deleteButton = new Label(composite_1, SWT.NONE);
+		deleteButton = new Label(composite_1, SWT.NONE);
 		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON));
 		attachDeleteButtonListener(deleteButton);
 
-		Label upButton = new Label(composite_1, SWT.NONE);
+		upButton = new Label(composite_1, SWT.NONE);
 		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON));
 		attachUpButtonListener(upButton);
 
-		Label downButton = new Label(composite_1, SWT.NONE);
+		downButton = new Label(composite_1, SWT.NONE);
 		downButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON));
 		attachDownButtonListerner(downButton);
+		deleteButton.setEnabled(false);
+		upButton.setEnabled(false);
+		downButton.setEnabled(false);
 	}
 
 	private void attachDownButtonListerner(Label downButton) {
@@ -310,18 +316,18 @@ public class FieldDialog extends Dialog {
 				index1 = targetTable.getSelectionIndex();
 				index1 = targetTable.getSelectionIndex();
 
-				if (index1 < propertyLst.size() - 1) {
+				if (index1 < propertyList.size() - 1) {
 					String data = targetTableViewer.getTable().getItem(index1).getText();
 					index2 = index1 + 1;
 					String data2 = targetTableViewer.getTable().getItem(index2).getText();
 
 					FilterProperties filter = new FilterProperties();
 					filter.setPropertyname(data2);
-					propertyLst.set(index1, filter);
+					propertyList.set(index1, filter);
 
 					filter = new FilterProperties();
 					filter.setPropertyname(data);
-					propertyLst.set(index2, filter);
+					propertyList.set(index2, filter);
 					targetTableViewer.refresh();
 					targetTable.setSelection(index1 + 1);
 				}
@@ -357,11 +363,11 @@ public class FieldDialog extends Dialog {
 
 					FilterProperties filter = new FilterProperties();
 					filter.setPropertyname(data2);
-					propertyLst.set(index1, filter);
+					propertyList.set(index1, filter);
 
 					filter = new FilterProperties();
 					filter.setPropertyname(data);
-					propertyLst.set(index2, filter);
+					propertyList.set(index2, filter);
 					targetTableViewer.refresh();
 					targetTable.setSelection(index1 - 1);
 				}
@@ -370,7 +376,7 @@ public class FieldDialog extends Dialog {
 
 	}
 
-	private void attachDeleteButtonListener(Label deleteButton) {
+	private void attachDeleteButtonListener(final Label deleteButton) {
 		deleteButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -388,9 +394,16 @@ public class FieldDialog extends Dialog {
 				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 					Object selectedObject = iterator.next();
 					targetTableViewer.remove(selectedObject);
-					propertyLst.remove(selectedObject);
+					propertyList.remove(selectedObject);
 					isAnyUpdatePerformed = true;
 				}
+				if (propertyList.size() < 1) {
+					deleteButton.setEnabled(false);
+				} 
+				if (propertyList.size() <=1) {
+					upButton.setEnabled(false);
+					downButton.setEnabled(false);
+				} 
 			}
 
 		});
@@ -415,6 +428,13 @@ public class FieldDialog extends Dialog {
 			public void mouseUp(MouseEvent e) {
 				targetTable.getParent().setFocus();
 				addNewProperty(targetTableViewer, null);
+				if (propertyList.size() >= 1) {
+					deleteButton.setEnabled(true);
+				} 
+				if (propertyList.size() >= 2) {
+					upButton.setEnabled(true);
+					downButton.setEnabled(true);
+				}
 			}
 
 		});
@@ -450,6 +470,13 @@ public class FieldDialog extends Dialog {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				addNewProperty(targetTableViewer, null);
+				if (propertyList.size() >= 1) {
+					deleteButton.setEnabled(true);
+				} 
+				if (propertyList.size() >= 2) {
+					upButton.setEnabled(true);
+					downButton.setEnabled(true);
+				}
 			}
 
 			@Override
@@ -473,7 +500,7 @@ public class FieldDialog extends Dialog {
 		targetTable.setBounds(196, 70, 324, 400);
 		targetTableViewer.setContentProvider(new ELTFilterContentProvider());
 		targetTableViewer.setLabelProvider(new ELTFilterLabelProvider());
-		targetTableViewer.setInput(propertyLst);
+		targetTableViewer.setInput(propertyList);
 
 		TableColumn targetTableColumn = new TableColumn(targetTable, SWT.CENTER);
 		targetTableColumn.setText("Field Name");
@@ -496,6 +523,14 @@ public class FieldDialog extends Dialog {
 		targetTableViewer.setCellEditors(editors);
 
 		loadProperties(targetTableViewer);
+		
+		if (propertyList.size() != 0) {
+			deleteButton.setEnabled(true);
+		}
+		if (propertyList.size() >= 2) {
+			upButton.setEnabled(true);
+			downButton.setEnabled(true);
+		}
 
 		dropTarget = new DropTarget(targetTable, DND.DROP_MOVE);
 		dropTarget.setTransfer(new Transfer[] { TextTransfer.getInstance() });
@@ -504,6 +539,13 @@ public class FieldDialog extends Dialog {
 				for (String fieldName : getformatedData((String) event.data))
 					if (!isPropertyAlreadyExists(fieldName))
 						addNewProperty(targetTableViewer, fieldName);
+				if (propertyList.size() >= 1) {
+					deleteButton.setEnabled(true);
+				}
+				if (propertyList.size() >= 2) {
+					upButton.setEnabled(true);
+					downButton.setEnabled(true);
+				}
 			}
 		});
 
@@ -544,7 +586,7 @@ public class FieldDialog extends Dialog {
 
 		int propertyCounter = 0;
 
-		for (FilterProperties temp : propertyLst) {
+		for (FilterProperties temp : propertyList) {
 			if (!temp.getPropertyname().trim().isEmpty()) {
 				// String Regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*"; --- TODO PLEASE DO NOT REMOVE THIS COMMENT
 				Matcher matchs = Pattern.compile(Constants.REGEX).matcher(temp.getPropertyname().trim());
@@ -582,7 +624,7 @@ public class FieldDialog extends Dialog {
 					lblPropertyError.setVisible(false);
 				}
 
-				for (FilterProperties temp : propertyLst) {
+				for (FilterProperties temp : propertyList) {
 					if (!currentSelectedFld.equalsIgnoreCase(valueToValidate)
 							&& temp.getPropertyname().trim().equalsIgnoreCase(valueToValidate)) {
 						lblPropertyError.setText(PROPERTY_EXISTS_ERROR);
@@ -617,7 +659,7 @@ public class FieldDialog extends Dialog {
 	}
 
 	private boolean isPropertyAlreadyExists(String valueToValidate) {
-		for (FilterProperties temp : propertyLst)
+		for (FilterProperties temp : propertyList)
 			if (temp.getPropertyname().trim().equalsIgnoreCase(valueToValidate))
 				return true;
 		return false;
@@ -674,7 +716,7 @@ public class FieldDialog extends Dialog {
 	protected void okPressed() {
 		if (validate()) {
 			fieldNameList.clear();
-			for (FilterProperties temp : propertyLst) {
+			for (FilterProperties temp : propertyList) {
 				fieldNameList.add(temp.getPropertyname());
 			}
 
