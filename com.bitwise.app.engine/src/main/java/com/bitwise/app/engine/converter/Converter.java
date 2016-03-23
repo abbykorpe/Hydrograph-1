@@ -18,6 +18,7 @@ import java.math.BigInteger;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -25,6 +26,7 @@ import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.exceptions.PhaseException;
 import com.bitwise.app.engine.exceptions.SchemaException;
@@ -40,6 +42,7 @@ import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 import com.bitwiseglobal.graph.commontypes.TypeDependsOn;
 import com.bitwiseglobal.graph.commontypes.TypeProperties;
 import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
+import com.bitwiseglobal.graph.sort.TypePrimaryKeyFieldsAttributes;
 
 /**
  * Base class for converter implementation. Consists of common methods used by
@@ -149,14 +152,40 @@ public abstract class Converter {
 		if (runtimeProps != null && !runtimeProps.isEmpty()) {
 			typeProperties = new TypeProperties();
 			List<TypeProperties.Property> runtimePropertyList = typeProperties.getProperty();
-			for (Map.Entry<String, String> entry : runtimeProps.entrySet()) {
+			ConverterHelper converterHelper=new ConverterHelper(component);
+			if (!isALLParameterizedFields(runtimeProps)) {
+
+				for (Map.Entry<String, String> entry : runtimeProps.entrySet()) {
+					if(!ParameterUtil.isParameter(entry.getKey())){
+						Property runtimeProperty = new Property();
+						runtimeProperty.setName(entry.getKey());
+						runtimeProperty.setValue(entry.getValue());
+						runtimePropertyList.add(runtimeProperty);
+					}else{
+						converterHelper.addParamTag(this.ID, entry.getKey(), 
+								ComponentXpathConstants.RUNTIME_PROPERTIES.value(), false);
+					}
+				}
+			}else{
+				StringBuffer parameterFieldNames = new StringBuffer();
 				Property runtimeProperty = new Property();
-				runtimeProperty.setName(entry.getKey());
-				runtimeProperty.setValue(entry.getValue());
+				runtimeProperty.setName("");
+				runtimeProperty.setValue("");
 				runtimePropertyList.add(runtimeProperty);
+				for (Entry<String, String> propertyEntry : runtimeProps.entrySet())
+					parameterFieldNames.append(propertyEntry.getKey() + " ");
+				converterHelper.addParamTag(this.ID, parameterFieldNames.toString(),
+						ComponentXpathConstants.RUNTIME_PROPERTIES.value(), true);
 			}
 		}
 		return typeProperties;
+	}
+	
+	private boolean isALLParameterizedFields(Map<String, String> properties) {
+		for (Entry<String, String> secondaryKeyRowEntry : properties.entrySet())
+			if (!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey()))
+				return false;
+		return true;
 	}
 
 	/**

@@ -80,7 +80,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 			List<TypeFieldName> fieldNameList = typePrimaryKeyFields.getField();
 			if (!isALLParameterizedFields(fieldValueSet)) {
 			for (String value : fieldValueSet) {
-				if(!ParameterUtil.INSTANCE.isParameter(value)){
+				if(!ParameterUtil.isParameter(value)){
 					TypeFieldName field = new TypeFieldName();
 					field.setName(value);
 					fieldNameList.add(field);
@@ -105,14 +105,14 @@ public class RemoveDupsConverter extends StraightPullConverter {
 	
 	private boolean isALLParameterizedFields(List<String> fieldList){
 		for (String fieldName : fieldList) 
-			if (!ParameterUtil.INSTANCE.isParameter(fieldName)) 
+			if (!ParameterUtil.isParameter(fieldName)) 
 				return false;
 		return true;
 	}
 	
 	private boolean isALLParameterizedFields(Map<String, String> secondaryKeyRow) {
 		for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet())
-			if (!ParameterUtil.INSTANCE.isParameter(secondaryKeyRowEntry.getKey()))
+			if (!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey()))
 				return false;
 		return true;
 	}
@@ -127,7 +127,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 			List<TypeSecondayKeyFieldsAttributes> fieldNameList = typeSecondaryKeyFields.getField();
 			if (!isALLParameterizedFields(secondaryKeyRow)) {
 				for (Map.Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet()) {
-					if(!ParameterUtil.INSTANCE.isParameter(secondaryKeyRowEntry.getKey())){
+					if(!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey())){
 						TypeSecondayKeyFieldsAttributes field = new TypeSecondayKeyFieldsAttributes();
 						field.setName(secondaryKeyRowEntry.getKey());
 						field.setOrder(TypeSortOrder.fromValue(secondaryKeyRowEntry.getValue().toLowerCase()));

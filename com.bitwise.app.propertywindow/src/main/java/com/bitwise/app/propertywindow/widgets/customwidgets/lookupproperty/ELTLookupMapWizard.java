@@ -65,6 +65,7 @@ import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -293,7 +294,8 @@ public class ELTLookupMapWizard extends Dialog {
 			TableItem[] items = outputTableViewer.getTable().getItems();
 			for (int i = 0; i < joinOutputList.size(); i++) {
 				for (String sourceField : sourceFieldList) {
-					if (joinOutputList.get(i).getSource_Field().equalsIgnoreCase(sourceField)) {
+					if (joinOutputList.get(i).getSource_Field().equalsIgnoreCase(sourceField) &&
+							!ParameterUtil.isParameter(sourceField)) {
 						items[i].setForeground(0, new Color(null, 255, 0, 0));
 					}
 				}

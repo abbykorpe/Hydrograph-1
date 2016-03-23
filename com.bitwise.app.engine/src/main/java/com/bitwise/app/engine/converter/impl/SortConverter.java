@@ -68,7 +68,7 @@ public class SortConverter extends StraightPullConverter {
 
 	private boolean isALLParameterizedFields(Map<String, String> secondaryKeyRow) {
 		for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet())
-			if (!ParameterUtil.INSTANCE.isParameter(secondaryKeyRowEntry.getKey()))
+			if (!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey()))
 				return false;
 		return true;
 	}
@@ -83,7 +83,7 @@ public class SortConverter extends StraightPullConverter {
 			List<TypePrimaryKeyFieldsAttributes> fieldNameList = primaryKeyFields.getField();
 			if (!isALLParameterizedFields(primaryKeyRow)) {
 				for (Map.Entry<String, String> primaryKeyRowEntry : primaryKeyRow.entrySet()) {
-					if(!ParameterUtil.INSTANCE.isParameter(primaryKeyRowEntry.getKey())){
+					if(!ParameterUtil.isParameter(primaryKeyRowEntry.getKey())){
 						TypePrimaryKeyFieldsAttributes field = new TypePrimaryKeyFieldsAttributes();
 						field.setName(primaryKeyRowEntry.getKey());
 						field.setOrder(TypeSortOrder.fromValue(primaryKeyRowEntry.getValue().toLowerCase()));
@@ -119,7 +119,7 @@ public class SortConverter extends StraightPullConverter {
 			if(!isALLParameterizedFields(secondaryKeyRow)){
 				
 				for (Map.Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet()) {
-					if(!ParameterUtil.INSTANCE.isParameter(secondaryKeyRowEntry.getKey())){
+					if(!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey())){
 						TypeSecondayKeyFieldsAttributes field = new TypeSecondayKeyFieldsAttributes();
 						field.setName(secondaryKeyRowEntry.getKey());
 						field.setOrder(TypeSortOrder.fromValue(secondaryKeyRowEntry.getValue().toLowerCase()));

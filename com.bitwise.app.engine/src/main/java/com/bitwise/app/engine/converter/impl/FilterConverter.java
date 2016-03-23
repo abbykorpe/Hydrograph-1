@@ -104,7 +104,7 @@ public class FilterConverter extends TransformConverter {
 		if (componentOperationFields != null && !componentOperationFields.isEmpty()) {
 			if (!isALLParameterizedFields(componentOperationFields)) {
 				for (String fieldName : componentOperationFields) {
-					if (!ParameterUtil.INSTANCE.isParameter(fieldName)) {
+					if (!ParameterUtil.isParameter(fieldName)) {
 						TypeInputField operationField = new TypeInputField();
 						operationField.setName(fieldName);
 						operationField.setInSocketId(Constants.FIXED_INSOCKET_ID);
@@ -130,7 +130,7 @@ public class FilterConverter extends TransformConverter {
 
 	private boolean isALLParameterizedFields(List<String> componentOperationFields){
 		for (String fieldName : componentOperationFields) 
-			if (!ParameterUtil.INSTANCE.isParameter(fieldName)) 
+			if (!ParameterUtil.isParameter(fieldName)) 
 				return false;
 		return true;
 	}

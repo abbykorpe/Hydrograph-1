@@ -70,7 +70,7 @@ public class FilterUiConverter extends TransformUiConverter{
 		String clazz=null;
 		if(filter.getOperation()!=null && filter.getOperation().size()!=0){
 			clazz=filter.getOperation().get(0).getClazz();
-			operationClassProperty=new OperationClassProperty(getOperationClassName(clazz),clazz, ParameterUtil.INSTANCE.isParameter(clazz));
+			operationClassProperty=new OperationClassProperty(getOperationClassName(clazz),clazz, ParameterUtil.isParameter(clazz));
 		}
 		return operationClassProperty;
 	}

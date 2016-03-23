@@ -34,7 +34,9 @@ public enum ComponentXpathConstants {
 	STRAIGHTPULL_SECONDARY_KEYS("/graph/straightPulls[@id='$id']/secondaryKeys"),
 	
 	LOOKUP_KEYS("/graph/operations[@id='$id']/keys[@inSocketId='$inSocketId']"),
-	JOIN_KEYS("/graph/operations[@id='$id']/keys[@inSocketId='$inSocketId']"),;
+	JOIN_KEYS("/graph/operations[@id='$id']/keys[@inSocketId='$inSocketId']"),
+	
+	RUNTIME_PROPERTIES("/graph/*[@id='$id']/runtimeProperties"),;
 	
 	private final String value;
 

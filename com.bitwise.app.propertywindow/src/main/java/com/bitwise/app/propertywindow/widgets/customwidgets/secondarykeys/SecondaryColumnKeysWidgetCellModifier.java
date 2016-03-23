@@ -52,7 +52,7 @@ public class SecondaryColumnKeysWidgetCellModifier implements ICellModifier {
 	public boolean canModify(Object element, String property) {
 		SecondaryColumnKeysInformation p = (SecondaryColumnKeysInformation) element;
 		if (SORTORDER.equals(property)) {
-			if(ParameterUtil.INSTANCE.isParameter(p.getColumnName())){
+			if(ParameterUtil.isParameter(p.getColumnName())){
 				return false;
 			}
 		}
@@ -76,7 +76,7 @@ public class SecondaryColumnKeysWidgetCellModifier implements ICellModifier {
 			return p.getColumnName();
 
 		} else if (SORTORDER.equals(property)){
-			if(ParameterUtil.INSTANCE.isParameter(p.getColumnName())){
+			if(ParameterUtil.isParameter(p.getColumnName())){
 				return Constants.NONE_SORT_ORDER;
 			}
 			return p.getSortOrder();
@@ -104,14 +104,14 @@ public class SecondaryColumnKeysWidgetCellModifier implements ICellModifier {
 		
 		if (COLUMNNAME.equals(property)){
 			
-			if(ParameterUtil.INSTANCE.isParameter((String)value)){
+			if(ParameterUtil.isParameter((String)value)){
 				
 				p.setSortOrder(Constants.NONE_SORT_ORDER);
 			}
 			p.setColumnName(((String) value));
 
 		}else if (SORTORDER.equals(property)){
-			if(!ParameterUtil.INSTANCE.isParameter(p.getColumnName()) && !Constants.NONE_SORT_ORDER.equals((String) value)){
+			if(!ParameterUtil.isParameter(p.getColumnName()) && !Constants.NONE_SORT_ORDER.equals((String) value)){
 				p.setSortOrder((String) value);
 			}else
 				p.setSortOrder(Constants.ASCENDING_SORT_ORDER);

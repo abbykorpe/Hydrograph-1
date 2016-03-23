@@ -175,7 +175,7 @@ public abstract class TransformUiConverter extends UiConverter {
 
 			mappingSheetRows.add(new MappingSheetRow(getInputFieldList(item),
 					new OperationClassProperty(getOperationClassName(item.getClazz()),item.getClazz(),
-							ParameterUtil.INSTANCE.isParameter(item.getClazz()), item.getClazz()),
+							ParameterUtil.isParameter(item.getClazz()), item.getClazz()),
 					getOutputFieldList(item)));
 		}
 
@@ -185,7 +185,7 @@ public abstract class TransformUiConverter extends UiConverter {
 		String operationClassName = Messages.CUSTOM;
 		Operations operations = XMLConfigUtil.INSTANCE.getComponent(uiComponent.getComponentName()).getOperations();
 		List<TypeInfo> typeInfos = operations.getStdOperation();
-		if (StringUtils.isNotBlank(fullClassPath) && !ParameterUtil.INSTANCE.isParameter(fullClassPath)) {
+		if (StringUtils.isNotBlank(fullClassPath) && !ParameterUtil.isParameter(fullClassPath)) {
 			String str[] = fullClassPath.split("\\.");
 			for (int i = 0; i < typeInfos.size(); i++) {
 				if(typeInfos.get(i).getName().equalsIgnoreCase(str[str.length - 1]))

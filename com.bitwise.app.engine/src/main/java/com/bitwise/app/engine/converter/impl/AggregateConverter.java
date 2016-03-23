@@ -113,7 +113,7 @@ public class AggregateConverter extends TransformConverter {
 			List<TypeFieldName> field = primaryKeyFields.getField();
 			if (!isALLParameterizedFields(columnNameProperties)) {
 				for (String columnNameProperty : columnNameProperties) {
-					if (!ParameterUtil.INSTANCE.isParameter(columnNameProperty)) {
+					if (!ParameterUtil.isParameter(columnNameProperty)) {
 						TypeFieldName fieldName = new TypeFieldName();
 						fieldName.setName(columnNameProperty);
 						field.add(fieldName);
@@ -137,14 +137,14 @@ public class AggregateConverter extends TransformConverter {
 
 	private boolean isALLParameterizedFields(List<String> componentOperationFields) {
 		for (String fieldName : componentOperationFields)
-			if (!ParameterUtil.INSTANCE.isParameter(fieldName))
+			if (!ParameterUtil.isParameter(fieldName))
 				return false;
 		return true;
 	}
 	
 	private boolean isALLParameterizedFields(Map<String, String> secondaryKeyRow) {
 		for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet())
-			if (!ParameterUtil.INSTANCE.isParameter(secondaryKeyRowEntry.getKey()))
+			if (!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey()))
 				return false;
 		return true;
 	}
@@ -162,7 +162,7 @@ public class AggregateConverter extends TransformConverter {
 
 				for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet()) {
 
-					if (!ParameterUtil.INSTANCE.isParameter(secondaryKeyRowEntry.getKey())) {
+					if (!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey())) {
 						TypeSecondayKeyFieldsAttributes fieldsAttributes = new TypeSecondayKeyFieldsAttributes();
 						fieldsAttributes.setName(secondaryKeyRowEntry.getKey());
 						TypeSortOrder order = TypeSortOrder.fromValue(secondaryKeyRowEntry.getValue().toLowerCase());

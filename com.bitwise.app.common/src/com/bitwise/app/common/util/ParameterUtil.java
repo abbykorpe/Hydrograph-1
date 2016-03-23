@@ -17,20 +17,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The class ParameterUtil
- * 
- * @author Bitwise
+
+ * @author Bitwise The class ParameterUtil
  * 
  */
 
 public class ParameterUtil {
-
-	public static ParameterUtil INSTANCE=new ParameterUtil();
 	
 	private ParameterUtil(){}
 	
 	
-	public boolean isParameter(String input) {
+	public static boolean isParameter(String input) {
 		if (input != null) {
 			String regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}";
 			Matcher matchs = Pattern.compile(regex).matcher(input);

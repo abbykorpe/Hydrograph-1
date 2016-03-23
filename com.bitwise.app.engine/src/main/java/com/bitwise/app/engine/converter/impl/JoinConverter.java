@@ -95,7 +95,7 @@ public class JoinConverter extends TransformConverter {
 
 				if (!isALLParameterizedFields(keyList)) {
 					for (String key : keyList) {
-						if (!ParameterUtil.INSTANCE.isParameter(key)) {
+						if (!ParameterUtil.isParameter(key)) {
 							TypeFieldName fieldName = new TypeFieldName();
 							fieldName.setName(key);
 							typeKeyField.getField().add(fieldName);
@@ -122,7 +122,7 @@ public class JoinConverter extends TransformConverter {
 	
 	private boolean isALLParameterizedFields(String keys[]){
 		for (String fieldName : keys) 
-			if (!ParameterUtil.INSTANCE.isParameter(fieldName)) 
+			if (!ParameterUtil.isParameter(fieldName)) 
 				return false;
 		return true;
 	}

@@ -137,7 +137,7 @@ public class LookupConverter extends TransformConverter {
 				return null;
 			if (!isALLParameterizedFields(keyList)) {
 				for (String key : keyList) {
-					if (!ParameterUtil.INSTANCE.isParameter(key)) {
+					if (!ParameterUtil.isParameter(key)) {
 						typeFieldName = new TypeFieldName();
 						typeFieldName.setName(key);
 						typeFieldNameList.add(typeFieldName);
@@ -165,7 +165,7 @@ public class LookupConverter extends TransformConverter {
 	
 	private boolean isALLParameterizedFields(String keys[]){
 		for (String fieldName : keys) 
-			if (!ParameterUtil.INSTANCE.isParameter(fieldName)) 
+			if (!ParameterUtil.isParameter(fieldName)) 
 				return false;
 		return true;
 	}
