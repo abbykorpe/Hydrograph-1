@@ -441,7 +441,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 				if(schemaGridRowListToImport!=null){
 
-					tableViewer.setInput(schemaGridRowListToImport);
+					tableViewer.setInput(schemaGridRowList);
 					tableViewer.refresh();
 					if (schemaGridRowListToImport.size() >= 1) {
 						deleteButton.setEnabled(true);
