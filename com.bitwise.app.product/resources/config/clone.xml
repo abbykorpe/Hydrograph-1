@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/replicate_palette.png" canvasIconPath="/icons/replicate_canvas.png"
 		name="CloneComponent" nameInPalette="Clone" defaultNamePrefix="Clone" 
-		description="This is CloneComponent component."
+		description="Creates multiple copies of the input on the output."
 		helpFilePath="/com.bitwise.app.help/html/Components/Clone.html">
 		<tns:category>STRAIGHTPULL</tns:category>
 		<tns:port>

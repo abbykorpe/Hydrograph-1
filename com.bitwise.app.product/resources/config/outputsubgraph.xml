@@ -5,7 +5,7 @@
 	<tns:component paletteIconPath="/icons/output_subgraph_palette.png"
 		canvasIconPath="/icons/output_subgraph_canvas.png" name="OutputSubgraphComponent"
 		nameInPalette="OutputSubgraph" defaultNamePrefix="Subgraph"
-		description="This is Output Subgraph Component \nIt represents out-sockets of a subgraph"
+		description="Represents the out sockets for a subgraph."
 		helpFilePath="/com.bitwise.app.help/html/Components/Dummy.html" >
 		<tns:category>SUBGRAPH</tns:category>
 		

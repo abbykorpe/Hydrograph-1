@@ -27,6 +27,7 @@ import com.bitwise.app.graph.propertywindow.ELTPropertyWindow;
 
 public class ComponentPropertiesAction extends SelectionAction{
 
+
 	public ComponentPropertiesAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(true);
@@ -37,11 +38,15 @@ public class ComponentPropertiesAction extends SelectionAction{
 		super.init();
 		setText(Messages.PROPERTIES);
 		setId(Constants.COMPONENT_PROPERTIES_ID);
+		setEnabled(false);
 	}
 
 	@Override
 	protected boolean calculateEnabled() {
-		return true;
+		IStructuredSelection currentSelectedComponent = (IStructuredSelection) getSelection();
+		if (currentSelectedComponent.getFirstElement() instanceof ComponentEditPart)
+			return true;
+		return false;
 	}
 	
 	@Override

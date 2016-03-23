@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/sort_palette.png" canvasIconPath="/icons/sort_canvas.png"
 		name="SortComponent" nameInPalette="Sort" defaultNamePrefix="Sort" 
-		description="This is Sort component."
+		description="Sorts input records based on the primary and secondary key fields."
 		helpFilePath="/com.bitwise.app.help/html/Components/Sort.html">
 		<tns:category>STRAIGHTPULL</tns:category>
 		<tns:port>

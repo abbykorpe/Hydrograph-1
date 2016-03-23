@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/limit_palette.png" canvasIconPath="/icons/limit_canvas.png"
 		name="LimitComponent" nameInPalette="Limit" defaultNamePrefix="Limit" 
-		description="This is Limit component."
+		description="Limits or applies a threshold value to the number of records as desired by the user."
 		helpFilePath="/com.bitwise.app.help/html/Components/Limit.html">
 		<tns:category>STRAIGHTPULL</tns:category>
 		<tns:port>

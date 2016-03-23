@@ -2,7 +2,7 @@
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/discard_palette.png" canvasIconPath="/icons/discard_canvas.png"
-		name="Discard" nameInPalette="Discard" defaultNamePrefix="Discard" description="This is Discard component"
+		name="Discard" nameInPalette="Discard" defaultNamePrefix="Discard" description="Discards/flushes the records received from the attached input."
 		helpFilePath="/com.bitwise.app.help/html/Components/Discard.html">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>

@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/aggregate_palette.png" canvasIconPath="/icons/aggregate_canvas.png"
 		name="Aggregate" nameInPalette="Aggregate" defaultNamePrefix="Aggregate" 
-		description="This is Aggregate component."
+		description="Performs aggregations on data specified in a java operation class."
 		helpFilePath="/com.bitwise.app.help/html/components/Aggregate.html">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>

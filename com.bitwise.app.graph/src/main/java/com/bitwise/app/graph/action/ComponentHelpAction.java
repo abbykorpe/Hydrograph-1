@@ -35,11 +35,15 @@ public class ComponentHelpAction extends SelectionAction {
 		super.init();
 		setText(Messages.HELP);
 		setId(Constants.HELP_ID);
+		setEnabled(false);
 	}
 
 	@Override
 	protected boolean calculateEnabled() {
-		return true;
+		IStructuredSelection currentSelectedComponent = (IStructuredSelection) getSelection();
+		if (currentSelectedComponent.getFirstElement() instanceof ComponentEditPart)
+			return true;
+		return false;
 	}
 
 	@Override

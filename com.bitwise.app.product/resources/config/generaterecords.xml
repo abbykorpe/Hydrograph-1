@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/generate_records_palette.png" canvasIconPath="/icons/generate_records_canvas.png"
 		name="GenerateRecords" nameInPalette="Generate Records" defaultNamePrefix="GRecords" 
-		description="This is Generate Records component."
+		description="Generates dummy records as per the schema specified by the user."
 		helpFilePath="/com.bitwise.app.help/html/Components/Generate_Records.html">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
