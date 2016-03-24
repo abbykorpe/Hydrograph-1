@@ -59,14 +59,15 @@ public class LimitUiConverter extends StraightpullUiConverter {
 
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(limit.getId());
-		
-		Object value = getValue(MAX_RECORDS);
-		if(value != null){
-			propertyMap.put(Constants.PARAM_COUNT, value);
-		}else{
-			propertyMap.put(Constants.PARAM_COUNT, limit.getMaxRecords().getValue());
-		}
-		
+		if (limit.getMaxRecords() != null) {
+			Object value = getValue(MAX_RECORDS);
+			if (value != null) {
+				propertyMap.put(Constants.PARAM_COUNT, value);
+			} else {
+				propertyMap.put(Constants.PARAM_COUNT, String.valueOf(limit.getMaxRecords().getValue()));
+			}
+		} else
+			propertyMap.put(Constants.PARAM_COUNT, "0");
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.LIMIT.value());
 	

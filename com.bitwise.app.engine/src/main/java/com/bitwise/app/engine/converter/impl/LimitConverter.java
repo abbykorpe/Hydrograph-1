@@ -56,7 +56,7 @@ public class LimitConverter extends StraightPullConverter {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		Limit limit = (Limit) baseComponent;
-		String count = (String)properties.get(Constants.PARAM_COUNT);
+		String count =(String)properties.get(Constants.PARAM_COUNT);
 		
 		if (StringUtils.isNotBlank(count)){
 			Limit.MaxRecords value = new Limit.MaxRecords();
