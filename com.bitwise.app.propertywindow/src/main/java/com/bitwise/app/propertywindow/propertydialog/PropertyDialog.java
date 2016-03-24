@@ -47,6 +47,7 @@ import com.bitwise.app.propertywindow.messagebox.ConfirmCancelMessageBox;
 import com.bitwise.app.propertywindow.property.ELTComponenetProperties;
 import com.bitwise.app.propertywindow.property.Property;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import com.bitwise.app.propertywindow.widgets.interfaces.IOperationClassDialog;
 import com.bitwise.app.validators.impl.IValidator;
 
@@ -289,10 +290,14 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	@Override
 	protected void okPressed() {
 		boolean windowValidityStaus = Boolean.TRUE;
+		boolean verifiedSchema = Boolean.FALSE;
 		for(AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()){
 			if(customWidget.getProperties() != null){
 				windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
 				savePropertiesInComponentModel(customWidget);
+			}
+			if(customWidget instanceof ELTSchemaGridWidget){
+				verifiedSchema=customWidget.verifySchemaFile();
 			}
 		}
 		if(applyButton.isEnabled())
@@ -302,7 +307,8 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		updateComponentValidityStatus();
 		
 		okPressed=true;
-		super.okPressed();
+		if(verifiedSchema)
+			super.okPressed();
 	}
 
 	

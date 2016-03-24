@@ -105,18 +105,18 @@ public class GridRowLoader {
 					GridRow gridRow = null;
 					schemaGridRowListToImport = new ArrayList<GridRow>();
 
-					if(Constants.GENERIC_GRID_ROW.equals(gridRowType)){
+					if(Messages.GENERIC_GRID_ROW.equals(gridRowType)){
 
 						for (Field field : fieldsList) {
 							addRowToList(gridDetails, grids, getBasicSchemaGridRow(field), schemaGridRowListToImport);
 						}	
 						
-					}else if(Constants.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){
+					}else if(Messages.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){
 
 						for (Field field : fieldsList) {
 							addRowToList(gridDetails, grids, getFixedWidthGridRow(field), schemaGridRowListToImport);
 						}
-					}else if(Constants.GENERATE_RECORD_GRID_ROW.equals(gridRowType)){
+					}else if(Messages.GENERATE_RECORD_GRID_ROW.equals(gridRowType)){
 
 						for (Field field : fieldsList) {
 							
@@ -181,19 +181,20 @@ public class GridRowLoader {
 					GridRow gridRow = null;
 					schemaGridRowListToImport = new ArrayList<GridRow>();
 
-					if(Constants.GENERIC_GRID_ROW.equals(gridRowType)){
+
+					if(Messages.GENERIC_GRID_ROW.equals(gridRowType)){
 
 						for (Field field : fieldsList) {
 							gridRow = getBasicSchemaGridRow(field);
 							schemaGridRowListToImport.add(gridRow);
 						}	
 						
-					}else if(Constants.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){
+					}else if(Messages.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){
 
 						for (Field field : fieldsList) {
 							schemaGridRowListToImport.add(getFixedWidthGridRow(field));
 						}
-					}else if(Constants.GENERATE_RECORD_GRID_ROW.equals(gridRowType)){
+					}else if(Messages.GENERATE_RECORD_GRID_ROW.equals(gridRowType)){
 						
 						for (Field field : fieldsList) {
 							schemaGridRowListToImport.add(gridRow = getGenerateRecordGridRow(field));

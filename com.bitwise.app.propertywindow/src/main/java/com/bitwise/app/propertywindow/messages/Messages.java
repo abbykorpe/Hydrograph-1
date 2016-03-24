@@ -113,6 +113,8 @@ public class Messages extends NLS {
 	public static String IMPORT_XML_DUPLICATE_FIELD_ERROR;
 	public static String EXPORT_XML_ERROR;
 	public static String EXPORT_XML_EMPTY_FILENAME;
+	public static String EXPORTED_SCHEMA_NOTIN_SYNCH;
+	public static String EXPORTED_SCHEMA_SYNCH_ERROR;
 	public static String OUTPUT_FIELD_EXISTS;
 	public static String AVAILABLE_FIELDS_HEADER;
     public static String ADD_ICON;
@@ -164,6 +166,10 @@ public class Messages extends NLS {
     public static String ALL_DATA_WILL_BE_LOST_DO_YOU_WISH_TO_CONTINUE;
     public static String IS_PARAM;
 
+    public static String FIXEDWIDTH_GRID_ROW ;
+	public static String GENERATE_RECORD_GRID_ROW;
+	public static String GENERIC_GRID_ROW;
+    
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

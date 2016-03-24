@@ -78,4 +78,29 @@ public class GenerateRecordSchemaGridRow extends FixedWidthGridRow {
 		tempschemaGrid.setDefaultValue(defaultValue);
 		return tempschemaGrid;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (obj instanceof GenerateRecordSchemaGridRow) {
+			GenerateRecordSchemaGridRow generateRecordSchemaGridRow = (GenerateRecordSchemaGridRow) obj;
+			
+			if ( generateRecordSchemaGridRow.getFieldName().equals(this.getFieldName()) &&
+					generateRecordSchemaGridRow.getDataType().equals(this.getDataType()) &&
+					generateRecordSchemaGridRow.getDataTypeValue().equals(this.getDataTypeValue()) &&
+					generateRecordSchemaGridRow.getDateFormat().equals( this.getDateFormat()) &&
+					generateRecordSchemaGridRow.getScaleType().equals(this.getScaleType()) &&
+					generateRecordSchemaGridRow.getScaleTypeValue().equals(this.getScaleTypeValue()) &&
+					generateRecordSchemaGridRow.getPrecision().equals(this.getPrecision())	&&
+					generateRecordSchemaGridRow.getDescription().equals(this.getDescription()) &&
+					generateRecordSchemaGridRow.getLength().equals(this.getLength()) &&
+					generateRecordSchemaGridRow.getRangeFrom().equals(this.getRangeFrom()) &&
+					generateRecordSchemaGridRow.getRangeTo().equals(this.getRangeTo()) &&
+					generateRecordSchemaGridRow.getDefaultValue().equals(this.getDefaultValue())
+				)
+				return true;
+		}
+		return false;
+		
+	}
 }

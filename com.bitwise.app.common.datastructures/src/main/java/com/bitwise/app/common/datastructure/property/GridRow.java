@@ -13,6 +13,8 @@
 
  
 package com.bitwise.app.common.datastructure.property;
+import org.apache.commons.lang.StringUtils;
+
 import com.bitwise.app.cloneableinterface.IDataStructure;
 
 
@@ -131,19 +133,23 @@ public class GridRow implements IDataStructure {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			GridRow other = (GridRow) obj;
-			if (fieldName == null) {
-				if (other.fieldName != null)
-					return false;
-			} else if (!fieldName.equals(other.fieldName))
-				return false;
-			return true;
+			
+			if (obj instanceof GridRow) {
+				GridRow gridRow = (GridRow) obj;
+				
+				if ( StringUtils.equals(gridRow.getFieldName(), this.getFieldName()) &&
+						StringUtils.equals(String.valueOf(gridRow.getDataType()), String.valueOf(this.getDataType())) &&
+						StringUtils.equals(gridRow.getDataTypeValue(), this.getDataTypeValue()) &&
+						StringUtils.equals(gridRow.getDateFormat(),  this.getDateFormat()) &&
+						StringUtils.equals(String.valueOf(gridRow.getScaleType()), String.valueOf(this.getScaleType())) &&
+						StringUtils.equals(gridRow.getScaleTypeValue(), this.getScaleTypeValue()) &&
+						StringUtils.equals(gridRow.getPrecision(), this.getPrecision())	&&
+						StringUtils.equals(gridRow.getDescription(), this.getDescription())
+					)
+					return true;
+			}
+			return false;
+			
 		}
 
 		

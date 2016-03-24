@@ -57,5 +57,26 @@ public class FixedWidthGridRow extends GridRow{
 		return tempschemaGrid;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (obj instanceof FixedWidthGridRow) {
+			FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) obj;
+			
+			if ( fixedWidthGridRow.getFieldName().equals(this.getFieldName()) &&
+					fixedWidthGridRow.getDataType().equals(this.getDataType()) &&
+					fixedWidthGridRow.getDataTypeValue().equals(this.getDataTypeValue()) &&
+					fixedWidthGridRow.getDateFormat().equals( this.getDateFormat()) &&
+					fixedWidthGridRow.getScaleType().equals(this.getScaleType()) &&
+					fixedWidthGridRow.getScaleTypeValue().equals(this.getScaleTypeValue()) &&
+					fixedWidthGridRow.getPrecision().equals(this.getPrecision())	&&
+					fixedWidthGridRow.getDescription().equals(this.getDescription()) &&
+					fixedWidthGridRow.getLength().equals(this.getLength())
+				)
+				return true;
+		}
+		return false;
+		
+	}
 	
 }
