@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
+import com.bitwise.app.propertywindow.messages.Messages;
 
 /**
  * @author Bitwise
@@ -27,7 +28,7 @@ import com.bitwise.app.common.datastructure.property.NameValueProperty;
 
 public class PropertyGridCellModifier implements ICellModifier {
   private Viewer viewer;
-
+  TransformDialogNew transformDialog;	
   /** The Constant PROPERTY_NAME. */
 	private static final String PROPERTY_NAME = "Source";
 	
@@ -43,6 +44,12 @@ public class PropertyGridCellModifier implements ICellModifier {
   public PropertyGridCellModifier(Viewer viewer) {
     this.viewer = viewer;
   }
+  public PropertyGridCellModifier(TransformDialogNew transformDialogNew ,Viewer viewer) {
+	    this.viewer = viewer;
+	    this.transformDialog=transformDialogNew;
+	  }
+	 
+  
  
   /**
    * Returns whether the property can be modified
@@ -70,9 +77,9 @@ public class PropertyGridCellModifier implements ICellModifier {
   public Object getValue(Object element, String property) {
 	  NameValueProperty p = (NameValueProperty) element;
 	  
-    if (PROPERTY_NAME.equals(property))
+    if (PROPERTY_NAME.equals(property)||Messages.PROPERTY_NAME.equals(property))
         return p.getPropertyName();
-    else if (PROPERTY_VALUE.equals(property))
+    else if (PROPERTY_VALUE.equals(property)||Messages.PROPERTY_VALUE.equals(property))
         return p.getPropertyValue();
     else
         return null;
@@ -94,10 +101,17 @@ public class PropertyGridCellModifier implements ICellModifier {
       element = ((Item) element).getData();
  
     NameValueProperty p = (NameValueProperty) element;
-    if (PROPERTY_NAME.equals(property))
+    if (PROPERTY_NAME.equals(property)||Messages.PROPERTY_NAME.equals(property))
       p.setPropertyName(((String) value).trim());
     if (PROPERTY_VALUE.equals(property))
+    {	
         p.setPropertyValue(((String) value).trim());
+        transformDialog.refreshOutputTable();	
+    }
+    if(Messages.PROPERTY_VALUE.equals(property))
+    p.setPropertyValue(((String) value).trim());
+         
+    
     viewer.refresh();
   }
   

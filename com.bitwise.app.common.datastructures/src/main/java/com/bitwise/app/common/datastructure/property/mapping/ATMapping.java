@@ -14,10 +14,13 @@
  
 package com.bitwise.app.common.datastructure.property.mapping;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.bitwise.app.cloneableinterface.IDataStructure;
+import com.bitwise.app.common.datastructure.property.FilterProperties;
+import com.bitwise.app.common.datastructure.property.NameValueProperty;
 
 /**
  * The class is a data structure to to save aggregate and transform mapping sheet 
@@ -26,18 +29,43 @@ import com.bitwise.app.cloneableinterface.IDataStructure;
  *
  */
 public class ATMapping implements IDataStructure{
+	
 	private List<InputField> inputFields;
 	private List<MappingSheetRow> mappingSheetRows;
+	private List<NameValueProperty> mapAndPassthroughField;
+	private List<FilterProperties> outputFieldList;
 	
 	public ATMapping() {
 		inputFields = new LinkedList<>();
 		mappingSheetRows = new LinkedList<>();
+		mapAndPassthroughField=new ArrayList<>();
+		outputFieldList=new ArrayList<>();
 	}
 
+	public List<NameValueProperty> getMapAndPassthroughField() {
+		return mapAndPassthroughField;
+	}
+
+	public void setMapAndPassthroughField(List<NameValueProperty> mapAndPassthroughField) {
+		this.mapAndPassthroughField = mapAndPassthroughField;
+	}
+    
+	public List<FilterProperties> getOutputFieldList() {
+		return outputFieldList;
+	}
+
+    public void setOutputFieldList(List<FilterProperties> outputFieldList) {
+		this.outputFieldList = outputFieldList;
+	}
+
+
 	public ATMapping(List<InputField> inputFields,
-			List<MappingSheetRow> mappingSheetRows) {
+			List<MappingSheetRow> mappingSheetRows,List<NameValueProperty> nameValueProperties,List<FilterProperties> outputFieldList ) {
 		this.inputFields = inputFields;
 		this.mappingSheetRows = mappingSheetRows;
+		this.mapAndPassthroughField=nameValueProperties;
+		this.outputFieldList=outputFieldList;
+		
 	}
 	
 	/**
@@ -76,19 +104,16 @@ public class ATMapping implements IDataStructure{
 	}
 
 	@Override
-	public Object clone()  {
-		List<InputField> inputFields = new LinkedList<>();
-		List<MappingSheetRow> mappingSheetRows = new LinkedList<>();
-				
-		inputFields.addAll(this.inputFields);
-		
-		for(MappingSheetRow mappingSheetRow : this.mappingSheetRows){
-			if(this.mappingSheetRows!=null)
-			mappingSheetRows.add((MappingSheetRow) mappingSheetRow.clone());
+	public Object clone() {
+		ATMapping atMapping = new ATMapping();
+		atMapping.getInputFields().addAll(this.inputFields);
+		atMapping.getMapAndPassthroughField().addAll(this.mapAndPassthroughField);
+		atMapping.getOutputFieldList().addAll(this.outputFieldList);
+		for (MappingSheetRow mappingSheetRow : this.mappingSheetRows) {
+			if (this.mappingSheetRows != null)
+				atMapping.getMappingSheetRows().add((MappingSheetRow) mappingSheetRow.clone());
 		}
-		
-		ATMapping atMapping = new ATMapping(inputFields, mappingSheetRows);
-		
+
 		return atMapping;
 	}
 	

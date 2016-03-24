@@ -144,12 +144,27 @@ public class Messages extends NLS {
 	public static String ALPHA_NUMRIC_REGULAR_EXPRESSION;
 	public static String TEXT_FIELD_SHOULD_MATCH;
 	public static String BROWSE_BUTTON_TEXT;
+
 	public static String EmptyFieldNameNotification;
 	public static String EmptySourceFieldNotification;
 	public static String EmptyOutputFieldNotification;
 	public static String SourceFieldAlreadyExists;
 	public static String OutputFieldAlreadyExists;
 	public static String FieldNameAlreadyExists;
+
+
+	public static String OPERATION_ID_PREFIX;
+    public static String OPERATION_LIST_EMPTY;
+    public static String PULL_BUTTON_LABEL;
+    public static String OPERATION_CONTROL;
+    public static String SOURCE;
+    public static String TARGET;
+    public static String MAP_FIELD;
+    public static String OPERATION_ID;
+    public static String OP_CLASS;
+    public static String PARAMETER_LABEL;
+    public static String ALL_DATA_WILL_BE_LOST_DO_YOU_WISH_TO_CONTINUE;
+    public static String IS_PARAM;
 
 	static {
 		// initialize resource bundle

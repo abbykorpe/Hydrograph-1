@@ -18,41 +18,80 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.TableViewer;
 
+import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.OperationField;
+import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.propertywindow.widgets.utility.DragDropOperation;
 
 public class DragDropTransformOpImp implements DragDropOperation {
 
-	private List listOfFields;
+	private List listOfInputFields;
 	private boolean isSingleColumn;
-	private TableViewer tableViewer;
+	private TableViewer operationInputfieldtableviewer;
+	private List listOfOutputFields;
+	private TableViewer operationOutputFieldTableViewer;
+	private List<FilterProperties> outputFieldList;
 	
+	public List<FilterProperties> getOutputFieldList() {
+		return outputFieldList;
+	}
+
+	private List<NameValueProperty> mapAndPassThroughField;
+	private TableViewer outputFieldTableViewer;
+	private List<MappingSheetRow> mappingSheetRows;
+	private TransformDialogNew transformDialogNew;
 	
-	
-	
-	public DragDropTransformOpImp(List listOfFields, boolean isSingleColumn,TableViewer tableViewer) {
+	public DragDropTransformOpImp(TransformDialogNew transformDialogNew,List<MappingSheetRow> mappingSheetRows,TableViewer outputFieldTableViewer,List<NameValueProperty> mapAndPassThroughField,List<FilterProperties> outputFieldList,List listOfOutputFields,List listOfInputFields, boolean isSingleColumn,TableViewer tableViewer,TableViewer t) {
 		super();
-		this.listOfFields = listOfFields;
+		this.listOfInputFields = listOfInputFields;
 		this.isSingleColumn = isSingleColumn;
-		this.tableViewer=tableViewer;
+		this.operationInputfieldtableviewer=tableViewer;
+		this.listOfOutputFields=listOfOutputFields;
+		this.operationOutputFieldTableViewer=t;
+		this.outputFieldList=outputFieldList;
+		this.mapAndPassThroughField=mapAndPassThroughField;
+		this.outputFieldTableViewer=outputFieldTableViewer;
+		this.transformDialogNew=transformDialogNew;
+		this.mappingSheetRows=mappingSheetRows;
+	}
+	
+	public DragDropTransformOpImp(TransformDialogNew transformDialogNew,List listOfFields, boolean isSingleColumn,TableViewer tableViewer) {
+		super();
+		this.listOfInputFields = listOfFields;
+		this.isSingleColumn = isSingleColumn;
+		this.operationInputfieldtableviewer=tableViewer;
+		this.transformDialogNew=transformDialogNew;
+		
 	}
 
 	@Override
 	public void saveResult(String result) {
 		 if(isSingleColumn){
-	        	OperationField field = new OperationField();
-	        	field.setName(result);
-	        	if(!listOfFields.contains(field))
-	        		listOfFields.add(field);
+			   FilterProperties field = new FilterProperties();
+	        	field.setPropertyname(result);
+	        	if(!listOfInputFields.contains(field))
+	        	{	
+	        		listOfInputFields.add(field);
+	        		listOfOutputFields.add(field); 	
+	        		outputFieldList.addAll(listOfOutputFields);
+	        		transformDialogNew.refreshOutputTable();
+	        		}	
+	        	
+	             operationOutputFieldTableViewer.refresh();
+	        	
 	        }
 	        else{
 	        	NameValueProperty field = new NameValueProperty();
 	        	field.setPropertyName(result);
-	        	if(!listOfFields.contains(field))
-	        		listOfFields.add(field);
+	        	field.setPropertyValue(result);
+	        	if(!listOfInputFields.contains(field))
+	        	{
+            		listOfInputFields.add(field);
+	        		transformDialogNew.refreshOutputTable();
+	        	}	
 	        }
-		 tableViewer.refresh();
+		 operationInputfieldtableviewer.refresh();
 		
 	}
 

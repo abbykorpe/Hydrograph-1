@@ -14,10 +14,13 @@
  
 package com.bitwise.app.common.datastructure.property.mapping;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.bitwise.app.cloneableinterface.IDataStructure;
+import com.bitwise.app.common.datastructure.property.FilterProperties;
+import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 
 /**
@@ -29,10 +32,119 @@ import com.bitwise.app.common.datastructure.property.OperationClassProperty;
  */
 public class MappingSheetRow implements IDataStructure {
 
-	private List<String> inputFields;
-	private OperationClassProperty operationClass;
-	private List<String> outputList;
-	private String CUSTOM="custom";
+	private List<FilterProperties> inputFields;
+	private String comboBoxValue;
+	private String operationClassPath;
+	private boolean isWholeOperationParameter;
+	private List<FilterProperties> outputList;
+	private boolean isClassParameter;
+	private String operationId;
+	private List<NameValueProperty> nameValueProperty;
+    private String wholeOperationParameterValue;
+    
+	
+	
+
+	public MappingSheetRow(List<FilterProperties> input,
+			OperationClassProperty   operationClass,
+			List<FilterProperties> outputList) {
+		this.inputFields = input;
+		
+		this.outputList = outputList;
+
+	}
+
+	public MappingSheetRow(List<FilterProperties> input,
+			List<FilterProperties> outputList,
+			String operationId,
+			String comBoxValue,
+			String operationClassPath,
+			List<NameValueProperty> nameValueProperty,
+			boolean isClassParameter,
+			String wholeOperationParameterValue,
+			boolean isWholeOperationParameter
+			) {
+		this.inputFields = input;
+		this.outputList = outputList;
+		this.comboBoxValue = comBoxValue;
+		this.operationClassPath = operationClassPath;
+		this.operationId=operationId;
+		this.setClassParameter(isClassParameter);
+		this.nameValueProperty=nameValueProperty;
+		this.wholeOperationParameterValue=wholeOperationParameterValue;
+		this.isWholeOperationParameter=isWholeOperationParameter;
+		
+    }
+	
+	public MappingSheetRow(List<FilterProperties> input, List<FilterProperties> outputList, String comBoxValue,String operationClassPath,boolean isClassParameter,String operationId,
+			 List<NameValueProperty> nameValueProperty) 
+	{
+		this.inputFields = input;
+		this.outputList = outputList;
+		this.comboBoxValue = comBoxValue;
+		this.operationClassPath = operationClassPath;
+		this.operationId=operationId;
+		this.nameValueProperty=nameValueProperty;
+		this.setClassParameter(isClassParameter);
+	}
+	
+	
+
+   public boolean isWholeOperationParameter() {
+		return isWholeOperationParameter;
+	}
+
+	public void setWholeOperationParameter(boolean isWholeOperationParameter) {
+		this.isWholeOperationParameter = isWholeOperationParameter;
+	}
+
+	public String getWholeOperationParameterValue() {
+		return wholeOperationParameterValue;
+	}
+
+	public void setWholeOperationParameterValue(String wholeOperationParameterValue) {
+		this.wholeOperationParameterValue = wholeOperationParameterValue;
+	}
+
+	public List<NameValueProperty> getNameValueProperty() {
+		return nameValueProperty;
+	}
+
+	public void setNameValueProperty(List<NameValueProperty> nameValueProperty) {
+		this.nameValueProperty = nameValueProperty;
+	}
+
+	public String getOperationID() {
+		return operationId;
+	}
+
+	public void setOperationID(String operaionId) {
+		this.operationId = operaionId;
+	}
+
+	
+	
+	public String getComboBoxValue() {
+		return comboBoxValue;
+	}
+	public void setComboBoxValue(String comboBoxValue) {
+		this.comboBoxValue = comboBoxValue;
+	}
+	public String getOperationClassPath() {
+		return operationClassPath;
+	}
+	public void setOperationClassPath(String operationClassPath) {
+		this.operationClassPath = operationClassPath;
+	}
+	public boolean isParameter() {
+		return isWholeOperationParameter;
+	}
+	public void setParameter(boolean isParameter) {
+		this.isWholeOperationParameter = isParameter;
+	}
+
+	
+	
 	
 	/**
 	 * 
@@ -40,12 +152,7 @@ public class MappingSheetRow implements IDataStructure {
 	 * @param operationClass - operation class
 	 * @param outputList - list of output fields
 	 */
-	public MappingSheetRow(List<String> input, OperationClassProperty operationClass,
-			List<String> outputList) {
-		this.inputFields = input;
-		this.operationClass = operationClass;
-		this.outputList = outputList;
-	}
+	
 	
 	/**
 	 * 
@@ -53,7 +160,9 @@ public class MappingSheetRow implements IDataStructure {
 	 * 
 	 * @return - List of input fields
 	 */
-	public List<String> getInputFields() {
+	public List<FilterProperties> getInputFields() {
+		if(this.inputFields==null)
+			return new ArrayList<FilterProperties>();
 		return inputFields;
 	}
 
@@ -63,7 +172,7 @@ public class MappingSheetRow implements IDataStructure {
 	 * 
 	 * @param inputFields
 	 */
-	public void setInputFields(List<String> inputFields) {
+	public void setInputFields(List<FilterProperties> inputFields) {
 		this.inputFields = inputFields;
 	}
 	
@@ -73,19 +182,7 @@ public class MappingSheetRow implements IDataStructure {
 	 * 
 	 * @return
 	 */
-	public OperationClassProperty getOperationClassProperty() {
-		return operationClass;
-	}
 	
-	/**
-	 * set {@link OperationClassProperty}
-	 * 
-	 * @param operationClass
-	 */
-	public void setOperationClassProperty(
-			OperationClassProperty operationClass) {
-		this.operationClass = operationClass;
-	}
 
 	/**
 	 * 
@@ -93,7 +190,7 @@ public class MappingSheetRow implements IDataStructure {
 	 * 
 	 * @return - output field list 
 	 */
-	public List<String> getOutputList() {
+	public List<FilterProperties> getOutputList() {
 		return outputList;
 	}
 
@@ -103,42 +200,67 @@ public class MappingSheetRow implements IDataStructure {
 	 * 
 	 * @param outputList
 	 */
-	public void setOutputList(List<String> outputList) {
+	public void setOutputList(List<FilterProperties> outputList) {
 		this.outputList = outputList;
 	}
+	
+	public boolean isClassParameter() {
+		return isClassParameter;
+	}
+
+	public void setClassParameter(boolean isClassParameter) {
+		this.isClassParameter = isClassParameter;
+	}
+	
+	
 
 	@Override
 	public Object clone(){
+		List<FilterProperties> inputFields = new LinkedList<>();
+		List<FilterProperties> outputList = new LinkedList<>();		
+		List<NameValueProperty> nameValueProperty=new ArrayList<>();
 		
-		List<String> inputFields = new LinkedList<>();
-		OperationClassProperty operationClass = new OperationClassProperty(CUSTOM,"", false, "");
-		List<String> outputList = new LinkedList<>();		
-		
+		boolean isWholeOperationParameter=this.isWholeOperationParameter;
+		String wholeOperationParameterValue=this.wholeOperationParameterValue;
+		String comboBoxvalue=this.comboBoxValue;
+		String operationClasspath=this.operationClassPath;
+		boolean isClassParamter=this.isClassParameter;
+		String operationId=this.operationId;
 		inputFields.addAll(this.inputFields);
 		outputList.addAll(this.outputList);
-		if(this.operationClass != null)
-			operationClass = this.operationClass.clone();
+		if(this.nameValueProperty!=null)
+		nameValueProperty.addAll(this.nameValueProperty);
 		
-		MappingSheetRow mappingSheetRow = new MappingSheetRow(inputFields, operationClass, outputList);
+		MappingSheetRow mappingSheetRow = new MappingSheetRow(inputFields, outputList,operationId,comboBoxvalue,operationClasspath,nameValueProperty,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter);
 		
 		return mappingSheetRow;
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "MappingSheetRow [inputFields=" + inputFields
-				+ ", operationClass=" + operationClass + ", outputList="
-				+ outputList + "]";
+		return "MappingSheetRow [inputFields=" + inputFields + ", comboBoxValue=" + comboBoxValue
+				+ ", operationClassPath=" + operationClassPath + ", isWholeOperationParameter="
+				+ isWholeOperationParameter + ", outputList=" + outputList + ", isClassParameter=" + isClassParameter
+				+ ", operationId=" + operationId + ", nameValueProperty=" + nameValueProperty
+				+ ", wholeOperationParameterValue=" + wholeOperationParameterValue + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((CUSTOM == null) ? 0 : CUSTOM.hashCode());
+		result = prime * result + ((comboBoxValue == null) ? 0 : comboBoxValue.hashCode());
 		result = prime * result + ((inputFields == null) ? 0 : inputFields.hashCode());
-		result = prime * result + ((operationClass == null) ? 0 : operationClass.hashCode());
+		result = prime * result + (isClassParameter ? 1231 : 1237);
+		result = prime * result + (isWholeOperationParameter ? 1231 : 1237);
+		result = prime * result + ((nameValueProperty == null) ? 0 : nameValueProperty.hashCode());
+		result = prime * result + ((operationClassPath == null) ? 0 : operationClassPath.hashCode());
+		result = prime * result + ((operationId == null) ? 0 : operationId.hashCode());
 		result = prime * result + ((outputList == null) ? 0 : outputList.hashCode());
+		result = prime * result
+				+ ((wholeOperationParameterValue == null) ? 0 : wholeOperationParameterValue.hashCode());
 		return result;
 	}
 
@@ -151,26 +273,47 @@ public class MappingSheetRow implements IDataStructure {
 		if (getClass() != obj.getClass())
 			return false;
 		MappingSheetRow other = (MappingSheetRow) obj;
-		if (CUSTOM == null) {
-			if (other.CUSTOM != null)
+		if (comboBoxValue == null) {
+			if (other.comboBoxValue != null)
 				return false;
-		} else if (!CUSTOM.equals(other.CUSTOM))
+		} else if (!comboBoxValue.equals(other.comboBoxValue))
 			return false;
 		if (inputFields == null) {
 			if (other.inputFields != null)
 				return false;
 		} else if (!inputFields.equals(other.inputFields))
 			return false;
-		if (operationClass == null) {
-			if (other.operationClass != null)
+		if (isClassParameter != other.isClassParameter)
+			return false;
+		if (isWholeOperationParameter != other.isWholeOperationParameter)
+			return false;
+		if (nameValueProperty == null) {
+			if (other.nameValueProperty != null)
 				return false;
-		} else if (!operationClass.equals(other.operationClass))
+		} else if (!nameValueProperty.equals(other.nameValueProperty))
+			return false;
+		if (operationClassPath == null) {
+			if (other.operationClassPath != null)
+				return false;
+		} else if (!operationClassPath.equals(other.operationClassPath))
+			return false;
+		if (operationId == null) {
+			if (other.operationId != null)
+				return false;
+		} else if (!operationId.equals(other.operationId))
 			return false;
 		if (outputList == null) {
 			if (other.outputList != null)
 				return false;
 		} else if (!outputList.equals(other.outputList))
 			return false;
+		if (wholeOperationParameterValue == null) {
+			if (other.wholeOperationParameterValue != null)
+				return false;
+		} else if (!wholeOperationParameterValue.equals(other.wholeOperationParameterValue))
+			return false;
 		return true;
 	}
+
+	
 }
