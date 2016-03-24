@@ -214,10 +214,10 @@
 		          </appinfo>
         	</annotation>
 		</enumeration>
-		<enumeration value="SECONDARY_KEYS_VALIDATOR">
+		<enumeration value="SORT_KEY_FIELDS_VALIDATOR">
 			 <annotation>
 		          <appinfo> 
-		            <jaxb:typesafeEnumMember name="SecondaryKeysValidationRule" />
+		            <jaxb:typesafeEnumMember name="SortComponentKeysFieldsValidationRule" />
 		          </appinfo>
         	</annotation>
 		</enumeration>

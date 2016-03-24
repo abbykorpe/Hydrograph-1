@@ -68,8 +68,8 @@ public enum Validators {
     FileExistsValidatorRule("FILE_EXISTS_VALIDATOR"),
     @XmlEnumValue("KEY_FIELDS_VALIDATOR")
     KeyFieldsValidationRule("KEY_FIELDS_VALIDATOR"),
-    @XmlEnumValue("SECONDARY_KEYS_VALIDATOR")
-    SecondaryKeysValidationRule("SECONDARY_KEYS_VALIDATOR");
+    @XmlEnumValue("SORT_KEY_FIELDS_VALIDATOR")
+    SortComponentKeysFieldsValidationRule("SORT_KEY_FIELDS_VALIDATOR");
     private final String value;
 
     Validators(String v) {
