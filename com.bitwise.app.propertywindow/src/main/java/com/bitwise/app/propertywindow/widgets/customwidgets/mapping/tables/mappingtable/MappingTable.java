@@ -792,9 +792,9 @@ public class MappingTable {
 
 			String output = ((Text) item.getData(tableItemDataKeyOutputColumn)).getText();
 
-			MappingSheetRow mappingSheetRow = new MappingSheetRow(Arrays.asList(input.split(",")), operationClass,
+			/*MappingSheetRow mappingSheetRow = new MappingSheetRow(Arrays.asList(input.split(",")), operationClass,
 					Arrays.asList(output.split(",")));
-			mappingSheetRows.add(mappingSheetRow);
+			mappingSheetRows.add(mappingSheetRow);*/
 		}
 
 		return mappingSheetRows;
@@ -817,7 +817,7 @@ public class MappingTable {
 	 * @param list
 	 *            - list of {@link InputField}
 	 */
-	public void setData(List<MappingSheetRow> mappingSheetRows, List<InputField> list) {
+	/*public void setData(List<MappingSheetRow> mappingSheetRows, List<InputField> list) {
 
 		inputTableFieldList = list;
 
@@ -837,5 +837,5 @@ public class MappingTable {
 
 			validateRow((RowData) ((Text) item.getData(tableItemDataKeyOutputColumn)).getData(tableItemRowData));
 		}
-	}
+	}*/
 }

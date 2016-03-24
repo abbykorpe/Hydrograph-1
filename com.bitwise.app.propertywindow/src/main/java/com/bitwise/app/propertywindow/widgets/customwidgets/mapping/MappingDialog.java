@@ -82,7 +82,7 @@ public class MappingDialog extends Dialog implements IOperationClassDialog{
 		inputTable.setData(atMapping.getInputFields());
 		
 		mappingTable = createMappingTable(composite);
-		mappingTable.setData(atMapping.getMappingSheetRows(),atMapping.getInputFields());
+		//mappingTable.setData(atMapping.getMappingSheetRows(),atMapping.getInputFields());
 
 		return container;
 	}

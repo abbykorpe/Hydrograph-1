@@ -24,7 +24,9 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.component.config.Operations;
 import com.bitwise.app.common.component.config.TypeInfo;
+import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.GridRow;
+import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
@@ -47,6 +49,7 @@ import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
 import com.bitwiseglobal.graph.commontypes.TypeProperties;
 import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
+import com.thoughtworks.xstream.mapper.AttributeMapper;
 
 /**
  * The class TransformUiConverter
@@ -174,10 +177,11 @@ public abstract class TransformUiConverter extends UiConverter {
 		for (TypeTransformOperation item : xsdOpertaionList) {
 
 			mappingSheetRows.add(new MappingSheetRow(getInputFieldList(item),
-					new OperationClassProperty(getOperationClassName(item.getClazz()),item.getClazz(),
-							ParameterUtil.isParameter(item.getClazz()), item.getClazz()),
-					getOutputFieldList(item)));
-		}
+					getOutputFieldList(item),
+					getOperationClassName(item.getClazz()),item.getClazz(),
+					ParameterUtil.isParameter(item.getClazz()),item.getId(),getProperties(item))
+				   );
+      }
 
 	}
 
@@ -197,47 +201,99 @@ public abstract class TransformUiConverter extends UiConverter {
 		return operationClassName;
 	}
 
-	private List<String> getOutputFieldList(TypeTransformOperation item) {
-		List<String> outputFieldList = new LinkedList<>();
+	private List<NameValueProperty> getProperties(TypeTransformOperation item)
+	{
+		List<NameValueProperty> nameValueProperties=new LinkedList<>();
+		if(item!=null && item.getProperties()!=null)
+		{
+			for(Property property:item.getProperties().getProperty())
+			{
+				NameValueProperty nameValueProperty=new NameValueProperty();
+				nameValueProperty.setPropertyName(property.getName());
+				nameValueProperty.setPropertyValue(property.getValue());
+				nameValueProperties.add(nameValueProperty);
+			}	
+		}	
+		return nameValueProperties;
+	}
+	
+	
+	
+	private List<FilterProperties> getOutputFieldList(TypeTransformOperation item) {
+		List<FilterProperties> outputFieldList = new LinkedList<>();
 		if(item !=null ){
 			ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
 			List<GridRow> gridRow = new ArrayList<>();
 			if (item.getOutputFields() != null) {
-				if (schema == null) {
-					schema = new Schema();
-					schema.setGridRow(gridRow);
-					schema.setIsExternal(false);
-				}
+//				if (schema == null) {
+//					schema = new Schema();
+//					schema.setGridRow(gridRow);
+//					schema.setIsExternal(false);
+//				}
 				
 				for (TypeBaseField record : item.getOutputFields().getField()) {
 					gridRow.add(converterUiHelper.getFixedWidthSchema(record));
-					outputFieldList.add(record.getName());
+					FilterProperties f=new FilterProperties();
+					f.setPropertyname(record.getName());
+					outputFieldList.add(f);
 				}
 
 			}
-			propertyMap.put("schema",schema);
+//			propertyMap.put("schema",schema);
 		}
 		return outputFieldList;
 	}
 
-	private List<String> getInputFieldList(TypeTransformOperation item) {
-		List<String> inputfieldList = new LinkedList<>();
+	private List<FilterProperties> getInputFieldList(TypeTransformOperation item) {
+		List<FilterProperties> inputfieldList = new LinkedList<>();
 		if(item != null && item.getInputFields()!=null){
 			for (TypeInputField inputField : item.getInputFields().getField()) {
-				inputfieldList.add(inputField.getName());
+				FilterProperties f=new FilterProperties();
+				f.setPropertyname(inputField.getName());
+				inputfieldList.add(f);
 			}
 		}		
 		return inputfieldList;
 	}
+	
+	private List<NameValueProperty> getMapAndPassThroughField()
+	{
+		List<TypeOperationsOutSocket> xsdOpertaionList = ((TypeOperationsComponent) typeBaseComponent)
+				.getOutSocket();
+		List<NameValueProperty> nameValueproperties=new LinkedList<>();
+		
+		for(TypeOperationsOutSocket t:xsdOpertaionList)
+		{
+			for (Object property : t
+					.getPassThroughFieldOrOperationFieldOrMapField())
+			{
+				NameValueProperty nameValueProperty=new NameValueProperty();
+				if(property instanceof TypeInputField)
+				{
+					nameValueProperty.setPropertyName(((TypeInputField) property).getName());
+					nameValueProperty.setPropertyValue(((TypeInputField) property).getName());
+					nameValueproperties.add(nameValueProperty);
+				}
+				else if(property instanceof TypeMapField )
+				{
+					nameValueProperty.setPropertyName(((TypeMapField) property).getSourceName());
+					nameValueProperty.setPropertyValue(((TypeMapField) property).getName());
+					nameValueproperties.add(nameValueProperty);
+				}
+			}	
+		}
+		return nameValueproperties;
+	}
 
 	protected Object createTransformPropertyGrid() {
 		ATMapping atMapping = null;
-		if (propertyMap.get(Constants.PARAM_OPERATION) != null)
-			atMapping = (ATMapping) propertyMap.get(Constants.PARAM_OPERATION);
-		else
+//		if (propertyMap.get(Constants.PARAM_OPERATION) != null)
+//			atMapping = (ATMapping) propertyMap.get(Constants.PARAM_OPERATION);
+//		else
 			atMapping = new ATMapping();
 
 		getOperationData(atMapping);
+		atMapping.setMapAndPassthroughField(getMapAndPassThroughField());
 		return atMapping;
 	}
 
@@ -246,6 +302,7 @@ public abstract class TransformUiConverter extends UiConverter {
 	 * 
 	 * @return Map<String,String>
 	 */
+	
 	@Override
 	protected Map<String, String> getRuntimeProperties() {
 		LOGGER.debug("Generating Runtime Properties for -{}", componentName);

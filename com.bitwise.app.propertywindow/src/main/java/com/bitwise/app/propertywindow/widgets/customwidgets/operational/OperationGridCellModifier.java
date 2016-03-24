@@ -14,6 +14,8 @@
  
 package com.bitwise.app.propertywindow.widgets.customwidgets.operational;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
@@ -64,10 +66,10 @@ public class OperationGridCellModifier implements ICellModifier {
    * @return Object
    */ 
   public Object getValue(Object element, String property) {
-	  OperationField p = (OperationField) element;
+	  String p = (String) element;
 	  
     if (Messages.INNER_OPERATION_INPUT_FIELD.equals(property) ||Messages.INNER_OPERATION_OUTPUT_FIELD.equals(property) )
-        return p.getName();
+        return p;
       else
         return null;
     
@@ -87,9 +89,10 @@ public class OperationGridCellModifier implements ICellModifier {
     if (element instanceof Item)
       element = ((Item) element).getData();
  
-    OperationField p = (OperationField) element;
+   String s= (String) value;
+  
     if (Messages.INNER_OPERATION_INPUT_FIELD.equals(property) ||Messages.INNER_OPERATION_OUTPUT_FIELD.equals(property) )
-      p.setName(((String) value).trim());
+     s=((String) value);
 
     viewer.refresh();
   }

@@ -20,7 +20,9 @@ import org.eclipse.swt.widgets.Item;
 
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.widgets.customwidgets.lookupproperty.ELTLookupMapWizard;
+import com.bitwise.app.propertywindow.widgets.customwidgets.operational.TransformDialogNew;
 
 
 /**
@@ -31,7 +33,7 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.lookupproperty.ELTLo
 public class ELTCellModifier implements ICellModifier{
 	
 	private Viewer viewer;
-		
+	TransformDialogNew transformDialog;	
 	/**
 	 * Instantiates a new ELT cell modifier.
 	 * 
@@ -41,7 +43,12 @@ public class ELTCellModifier implements ICellModifier{
 	public ELTCellModifier(Viewer viewer) {
 		this.viewer = viewer;
 	}
+	public ELTCellModifier(Viewer viewer,TransformDialogNew transformDialog) {
+		this.viewer = viewer;
+		this.transformDialog=transformDialog;
+	}
 
+	
 	@Override
 	public boolean canModify(Object element, String property) {
 		return true;
@@ -55,6 +62,8 @@ public class ELTCellModifier implements ICellModifier{
 		else if(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD.equals(property)){
 			return filter.getPropertyname();
 		}
+		else  if (Messages.OUTPUT_FIELD.equals(property)||Messages.INNER_OPERATION_INPUT_FIELD.equals(property) ||Messages.INNER_OPERATION_OUTPUT_FIELD.equals(property) )
+			return filter.getPropertyname();
 		return null;
 	}
 
@@ -69,6 +78,17 @@ public class ELTCellModifier implements ICellModifier{
 					p.setPropertyname((String)value);
 			else if(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD.equals(property)){
 				  p.setPropertyname((String)value);
+			}
+			else if(Messages.INNER_OPERATION_INPUT_FIELD.equals(property))
+			p.setPropertyname((String)value);
+			else if(Messages.INNER_OPERATION_OUTPUT_FIELD.equals(property))
+			{		
+			p.setPropertyname((String )value);	
+			transformDialog.refreshOutputTable();
+			}
+			else if(Messages.OUTPUT_FIELD.equals(property))
+			{
+				p.setPropertyname((String )value);	
 			}
 		// Force the viewer to refresh
 		viewer.refresh();
