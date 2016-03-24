@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class SortComponentKeysFieldsValidationRule implements IValidator{
 	private String errorMessage;
-	private static final String KEY_FIELDS_SORT_COMPONENT="Key_fields_sort";
+	
 	@Override
 	public boolean validateMap(Object object, String propertyName) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
@@ -31,16 +31,12 @@ public class SortComponentKeysFieldsValidationRule implements IValidator{
 	@Override
 	public boolean validate(Object object, String propertyName) {
 		if (object != null) {
-			LinkedHashMap<String, Object> 	keyFieldsList = (LinkedHashMap<String, Object>) object;
-			if (keyFieldsList.size() != 0) {
+			Map<String, Object> keyFieldsList = (LinkedHashMap<String, Object>) object;
+			if (keyFieldsList != null && !keyFieldsList.isEmpty()) {
 				return true;
 			}
 		}
-		if(KEY_FIELDS_SORT_COMPONENT.equalsIgnoreCase(propertyName))
-		{
-			propertyName=propertyName.substring(0,10);
-		}
-		errorMessage = propertyName.replace("_"," ") + " are mandatory";
+		errorMessage = "Key Fields are mandatory";
 		return false;
 	}
 
