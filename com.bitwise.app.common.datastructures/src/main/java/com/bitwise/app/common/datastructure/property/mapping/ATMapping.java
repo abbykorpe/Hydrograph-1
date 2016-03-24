@@ -42,42 +42,23 @@ public class ATMapping implements IDataStructure{
 		outputFieldList=new ArrayList<>();
 	}
 
-	
-	
-	
-
 	public List<NameValueProperty> getMapAndPassthroughField() {
 		return mapAndPassthroughField;
 	}
 
-
-
-
-
 	public void setMapAndPassthroughField(List<NameValueProperty> mapAndPassthroughField) {
 		this.mapAndPassthroughField = mapAndPassthroughField;
 	}
-
-
-
-
-
+    
 	public List<FilterProperties> getOutputFieldList() {
 		return outputFieldList;
 	}
 
-
-	public void setOutputFieldList(List<FilterProperties> outputFieldList) {
+    public void setOutputFieldList(List<FilterProperties> outputFieldList) {
 		this.outputFieldList = outputFieldList;
 	}
 
 
-	public ATMapping(List<InputField> inputFields,
-			List<MappingSheetRow> mappingSheetRows) {
-		this.inputFields = inputFields;
-		this.mappingSheetRows = mappingSheetRows;
-	}
-	
 	public ATMapping(List<InputField> inputFields,
 			List<MappingSheetRow> mappingSheetRows,List<NameValueProperty> nameValueProperties,List<FilterProperties> outputFieldList ) {
 		this.inputFields = inputFields;
@@ -123,21 +104,16 @@ public class ATMapping implements IDataStructure{
 	}
 
 	@Override
-	public Object clone()  {
-		List<InputField> inputFields = new LinkedList<>();
-		List<MappingSheetRow> mappingSheetRows = new LinkedList<>();
-	    List<NameValueProperty> nameValueProperty=new LinkedList<>();		
-	    List<FilterProperties> outputFieldList=new LinkedList<>();
-		inputFields.addAll(this.inputFields);
-		nameValueProperty.addAll(this.mapAndPassthroughField);
-		outputFieldList.addAll(this.outputFieldList);
-		for(MappingSheetRow mappingSheetRow : this.mappingSheetRows){
-			if(this.mappingSheetRows!=null)
-			mappingSheetRows.add((MappingSheetRow) mappingSheetRow.clone());
+	public Object clone() {
+		ATMapping atMapping = new ATMapping();
+		atMapping.getInputFields().addAll(this.inputFields);
+		atMapping.getMapAndPassthroughField().addAll(this.mapAndPassthroughField);
+		atMapping.getOutputFieldList().addAll(this.outputFieldList);
+		for (MappingSheetRow mappingSheetRow : this.mappingSheetRows) {
+			if (this.mappingSheetRows != null)
+				atMapping.getMappingSheetRows().add((MappingSheetRow) mappingSheetRow.clone());
 		}
-		
-		ATMapping atMapping = new ATMapping(inputFields, mappingSheetRows,nameValueProperty,outputFieldList);
-		
+
 		return atMapping;
 	}
 	
