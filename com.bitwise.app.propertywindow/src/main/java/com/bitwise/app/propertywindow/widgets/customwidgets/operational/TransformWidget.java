@@ -36,6 +36,7 @@ import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
 import com.bitwise.app.common.datastructure.property.mapping.TransformMapping;
+import com.bitwise.app.common.datastructure.property.SchemaGrid;
 import com.bitwise.app.common.datastructure.property.mapping.ErrorObject;
 import com.bitwise.app.common.datastructure.property.mapping.InputField;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
@@ -220,31 +221,31 @@ public class TransformWidget extends AbstractWidget {
 		return schemaFields;
 	}*/
 
-	private FixedWidthGridRow getFieldSchema(String fieldName) {
-		List<FixedWidthGridRow> fixedWidthGridRows = getInputFieldSchema();
-		for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRows) {
-			if (fixedWidthGridRow.getFieldName().equals(fieldName)) {
-				return fixedWidthGridRow;
+	private SchemaGrid getFieldSchema(String fieldName) {
+		List<SchemaGrid> schemaGridRows = getInputFieldSchema();
+		for (SchemaGrid schemaGridRow : schemaGridRows) {
+			if (schemaGridRow.getFieldName().equals(fieldName)) {
+				return schemaGridRow;
 			}
 		}
 		return null;
 	}
 
-	private List<FixedWidthGridRow> getInputFieldSchema() {
+	private List<SchemaGrid> getInputFieldSchema() {
 		ComponentsOutputSchema outputSchema = null;
-		List<FixedWidthGridRow> fixedWidthGridRows = new LinkedList<>();
+		List<SchemaGrid> schemaGridRows = new LinkedList<>();
 		for (Link link : getComponent().getTargetConnections()) {
 			outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 			if (outputSchema != null)
-				for (FixedWidthGridRow row : outputSchema.getFixedWidthGridRowsOutputFields()) {
-					fixedWidthGridRows.add(row);
+				for (SchemaGrid row : outputSchema.getSchemaGridOutputFields()) {
+					schemaGridRows.add(row);
 				}
 		}
-		return fixedWidthGridRows;
+		return schemaGridRows;
 	}
 
 	private void addMapFieldsToSchema(Map<String, String> mapFields) {
-		FixedWidthGridRow tempFixedWidthGridRow = null;
+		SchemaGrid tempSchemaGridRow = null;
 		Schema schema = getSchemaForInternalPapogation();
 		List<String> currentFieldsInProppogatedSchemaObject = new LinkedList<>();
 		for (GridRow gridRow : schema.getGridRow()) {
@@ -252,17 +253,17 @@ public class TransformWidget extends AbstractWidget {
 		}
 
 		for (String inputField : mapFields.keySet()) {
-			tempFixedWidthGridRow = (FixedWidthGridRow) getFieldSchema(inputField);
-			if (tempFixedWidthGridRow != null) {
-				FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) tempFixedWidthGridRow.copy();
-				fixedWidthGridRow.setFieldName(mapFields.get(inputField));
+			tempSchemaGridRow = (SchemaGrid) getFieldSchema(inputField);
+			if (tempSchemaGridRow != null) {
+				SchemaGrid schemaGridRow = (SchemaGrid) tempSchemaGridRow.copy();
+				schemaGridRow.setFieldName(mapFields.get(inputField));
 
 				if (!currentFieldsInProppogatedSchemaObject.contains(mapFields.get(inputField))) {
-					schema.getGridRow().add(fixedWidthGridRow);
+					schema.getGridRow().add(schemaGridRow);
 				} else {
 					for (int index = 0; index < schema.getGridRow().size(); index++) {
 						if (schema.getGridRow().get(index).getFieldName().equals(mapFields.get(inputField))) {
-							schema.getGridRow().set(index, fixedWidthGridRow);
+							schema.getGridRow().set(index, schemaGridRow);
 						}
 					}
 				}
@@ -279,16 +280,16 @@ public class TransformWidget extends AbstractWidget {
 		}
 
 		for (String passThroughField : passThroughFields) {
-			FixedWidthGridRow tempFixedWidthGridRow= getFieldSchema(passThroughField);
-			if(tempFixedWidthGridRow!=null){
-			FixedWidthGridRow fixedWidthGridRow =(FixedWidthGridRow) tempFixedWidthGridRow.copy();
+			SchemaGrid schemaGridRow= getFieldSchema(passThroughField);
+			if(schemaGridRow!=null){
+			SchemaGrid tempSchemaGrid =(SchemaGrid) schemaGridRow.copy();
 
 			if (!currentFieldsInProppogatedSchemaObject.contains(passThroughField)) {
-				schema.getGridRow().add(fixedWidthGridRow);
+				schema.getGridRow().add(tempSchemaGrid);
 			} else {
 				for (int index = 0; index < schema.getGridRow().size(); index++) {
 					if (schema.getGridRow().get(index).getFieldName().equals(passThroughField)) {
-						schema.getGridRow().set(index, fixedWidthGridRow);
+						schema.getGridRow().set(index, tempSchemaGrid);
 					}
 				}
 			}
@@ -305,14 +306,14 @@ public class TransformWidget extends AbstractWidget {
 		SchemaPropagationHelper schemaPropagationHelper = new SchemaPropagationHelper();
 
 		for (FilterProperties operationField : operationFields) {
-
-			FixedWidthGridRow fixedWidthGridRow = schemaPropagationHelper.createFixedWidthGridRow(operationField.getPropertyname());
+			
+			SchemaGrid schemaGridRow = schemaPropagationHelper.createSchemaGridRow(operationField.getPropertyname());
 			if (!currentFieldsInProppogatedSchemaObject.contains(operationField)) {
-				schema.getGridRow().add(fixedWidthGridRow);
+				schema.getGridRow().add(schemaGridRow);
 			} else {
 				for (int index = 0; index < schema.getGridRow().size(); index++) {
 					if (schema.getGridRow().get(index).getFieldName().equals(operationField)) {
-						schema.getGridRow().set(index, fixedWidthGridRow);
+						schema.getGridRow().set(index, schemaGridRow);
 
 					}
 				}

@@ -17,9 +17,10 @@ package com.bitwise.app.propertywindow.fixedwidthschema;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 
-public class TransformSchemaWidget extends ELTFixedWidget{
+public class TransformSchemaWidget extends ELTGenericSchemaGridWidget{
 
 	public TransformSchemaWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
