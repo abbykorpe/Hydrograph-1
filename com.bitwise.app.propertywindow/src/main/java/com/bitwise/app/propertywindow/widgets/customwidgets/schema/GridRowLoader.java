@@ -216,8 +216,9 @@ public class GridRowLoader {
 			logger.warn(Messages.IMPORT_XML_ERROR);
 			return schemaGridRowListToImport;
 		}
-		
+
 		return schemaGridRowListToImport;
+
 	}
 
 
@@ -410,7 +411,12 @@ public class GridRowLoader {
 			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(Messages.SCALE_TYPE_NONE));
 			gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
 		}
-		gridRow.setDescription(field.getDescription());
+		
+		if(field.getDescription()!=null)
+			gridRow.setDescription(field.getDescription());
+		else
+			gridRow.setDescription("");
+		
 	}
 
 }
