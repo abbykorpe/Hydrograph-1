@@ -169,12 +169,12 @@ public abstract class TransformUiConverter extends UiConverter {
 	}
 
 	private void getOperationData(ATMapping atMapping) {
-		List<TypeTransformOperation> xsdOpertaionList = ((TypeOperationsComponent) typeBaseComponent)
+		List<TypeTransformOperation> typeTransformOpertaionList = ((TypeOperationsComponent) typeBaseComponent)
 				.getOperation();
 
 		List<MappingSheetRow> mappingSheetRows = atMapping
 				.getMappingSheetRows();
-		for (TypeTransformOperation item : xsdOpertaionList) {
+		for (TypeTransformOperation item : typeTransformOpertaionList) {
 
 			mappingSheetRows.add(new MappingSheetRow(getInputFieldList(item),
 					getOutputFieldList(item),
@@ -225,21 +225,15 @@ public abstract class TransformUiConverter extends UiConverter {
 			ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
 			List<GridRow> gridRow = new ArrayList<>();
 			if (item.getOutputFields() != null) {
-//				if (schema == null) {
-//					schema = new Schema();
-//					schema.setGridRow(gridRow);
-//					schema.setIsExternal(false);
-//				}
-				
+
 				for (TypeBaseField record : item.getOutputFields().getField()) {
 					gridRow.add(converterUiHelper.getFixedWidthSchema(record));
-					FilterProperties f=new FilterProperties();
-					f.setPropertyname(record.getName());
-					outputFieldList.add(f);
+					FilterProperties filterProperties=new FilterProperties();
+					filterProperties.setPropertyname(record.getName());
+					outputFieldList.add(filterProperties);
 				}
 
 			}
-//			propertyMap.put("schema",schema);
 		}
 		return outputFieldList;
 	}
@@ -248,9 +242,9 @@ public abstract class TransformUiConverter extends UiConverter {
 		List<FilterProperties> inputfieldList = new LinkedList<>();
 		if(item != null && item.getInputFields()!=null){
 			for (TypeInputField inputField : item.getInputFields().getField()) {
-				FilterProperties f=new FilterProperties();
-				f.setPropertyname(inputField.getName());
-				inputfieldList.add(f);
+				FilterProperties filterProperties=new FilterProperties();
+				filterProperties.setPropertyname(inputField.getName());
+				inputfieldList.add(filterProperties);
 			}
 		}		
 		return inputfieldList;
@@ -262,9 +256,9 @@ public abstract class TransformUiConverter extends UiConverter {
 				.getOutSocket();
 		List<NameValueProperty> nameValueproperties=new LinkedList<>();
 		
-		for(TypeOperationsOutSocket t:xsdOpertaionList)
+		for(TypeOperationsOutSocket typeOperationsOutSocket:xsdOpertaionList)
 		{
-			for (Object property : t
+			for (Object property : typeOperationsOutSocket
 					.getPassThroughFieldOrOperationFieldOrMapField())
 			{
 				NameValueProperty nameValueProperty=new NameValueProperty();
@@ -286,13 +280,8 @@ public abstract class TransformUiConverter extends UiConverter {
 	}
 
 	protected Object createTransformPropertyGrid() {
-		ATMapping atMapping = null;
-//		if (propertyMap.get(Constants.PARAM_OPERATION) != null)
-//			atMapping = (ATMapping) propertyMap.get(Constants.PARAM_OPERATION);
-//		else
-			atMapping = new ATMapping();
-
-		getOperationData(atMapping);
+		ATMapping atMapping = new ATMapping();
+        getOperationData(atMapping);
 		atMapping.setMapAndPassthroughField(getMapAndPassThroughField());
 		return atMapping;
 	}

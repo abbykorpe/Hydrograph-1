@@ -19,18 +19,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.jdt.internal.compiler.batch.Main;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
@@ -38,7 +33,6 @@ import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -47,13 +41,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.ColumnLayout;
-import org.eclipse.ui.forms.widgets.ColumnLayoutData;
-
 import com.bitwise.app.common.component.config.Operations;
 import com.bitwise.app.common.component.config.TypeInfo;
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
-import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.datastructures.tooltip.TootlTipErrorMessage;
 import com.bitwise.app.common.util.Constants;
@@ -91,7 +81,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	private Button okButton;
 	private Composite container;
 
-	private PropertyDialogButtonBar eltOperationClassDialogButtonBar;
+	private PropertyDialogButtonBar operationClassDialogButtonBar;
 	private TootlTipErrorMessage tootlTipErrorMessage = new TootlTipErrorMessage();
 	private WidgetConfig widgetConfig;
 	private String componentName;
@@ -135,7 +125,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 
 		setPropertyDialogSize();
 
-		eltOperationClassDialogButtonBar = new PropertyDialogButtonBar(container);
+		operationClassDialogButtonBar = new PropertyDialogButtonBar(container);
 
 		Composite composite = new Composite(container, SWT.BORDER);
 		GridData gd_composite = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
@@ -159,7 +149,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		AbstractELTWidget comboOfOperationClasses = new ELTDefaultCombo().defaultText(optionsOfComboOfOperationClasses)
 				.comboBoxWidth(90);
 
-		FilterOperationClassUtility.createOperationalClass(composite, eltOperationClassDialogButtonBar,
+		FilterOperationClassUtility.createOperationalClass(composite, operationClassDialogButtonBar,
 				comboOfOperationClasses, isParameterCheckbox, fileNameText, tootlTipErrorMessage, widgetConfig, this,
 				propertyDialogButtonBar, opeartionClassDialogButtonBar);
 		fileName = (Text) fileNameText.getSWTWidgetControl();
@@ -335,7 +325,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 
 		createApplyButton(parent);
 
-		eltOperationClassDialogButtonBar.setPropertyDialogButtonBar(okButton, applyButton, cancelButton);
+		operationClassDialogButtonBar.setPropertyDialogButtonBar(okButton, applyButton, cancelButton);
 		alphanumericDecorator.hide();
 		parameterDecorator.hide();
 		isParameterCheckBox.addSelectionListener(new SelectionListener() {

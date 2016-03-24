@@ -26,23 +26,18 @@ import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
-
-import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
-import com.bitwise.app.common.datastructure.property.mapping.InputField;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
-import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.inputtable.TableContenetProvider;
+import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.inputtable.TableContentProvider;
 
 public class OperationClassDeleteDialog extends Dialog {
 
 	private static final String DELETE_OPERATION = "Delete Operation";
 	private Table table;
 	private List<MappingSheetRow> mappingSheetRowList;
-	private List<String> operatioIdList = new ArrayList<>();
+	private List<String> operationIdList = new ArrayList<>();
 	List<String> checkedElements = new ArrayList<>();
 	private ExpandBar expandBar;
 	private CheckboxTableViewer checkboxTableViewer;
@@ -76,12 +71,12 @@ public class OperationClassDeleteDialog extends Dialog {
 		checkboxTableViewer = CheckboxTableViewer.newCheckList(composite, SWT.BORDER | SWT.FULL_SELECTION);
 		table = checkboxTableViewer.getTable();
 		table.setBounds(0, 0, 238, 204);
-		checkboxTableViewer.setContentProvider(new TableContenetProvider());
+		checkboxTableViewer.setContentProvider(new TableContentProvider());
 
 		for (MappingSheetRow m : mappingSheetRowList) {
-			operatioIdList.add(m.getOperationID());
+			operationIdList.add(m.getOperationID());
 		}
-		checkboxTableViewer.setInput(operatioIdList);
+		checkboxTableViewer.setInput(operationIdList);
 
 		return container;
 	}

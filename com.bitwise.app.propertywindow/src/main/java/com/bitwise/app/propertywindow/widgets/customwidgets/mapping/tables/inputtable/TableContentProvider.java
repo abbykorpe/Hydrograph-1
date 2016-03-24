@@ -21,7 +21,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 
-public class TableContenetProvider implements IStructuredContentProvider{
+public class TableContentProvider implements IStructuredContentProvider{
 
 	@Override
 	public void dispose() {

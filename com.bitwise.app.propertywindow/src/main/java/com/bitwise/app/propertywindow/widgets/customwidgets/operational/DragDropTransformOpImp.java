@@ -30,7 +30,7 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	private boolean isSingleColumn;
 	private TableViewer operationInputfieldtableviewer;
 	private List listOfOutputFields;
-	private TableViewer operationOutputfieldtableviewer;
+	private TableViewer operationOutputFieldTableViewer;
 	private List<FilterProperties> outputFieldList;
 	
 	public List<FilterProperties> getOutputFieldList() {
@@ -48,7 +48,7 @@ public class DragDropTransformOpImp implements DragDropOperation {
 		this.isSingleColumn = isSingleColumn;
 		this.operationInputfieldtableviewer=tableViewer;
 		this.listOfOutputFields=listOfOutputFields;
-		this.operationOutputfieldtableviewer=t;
+		this.operationOutputFieldTableViewer=t;
 		this.outputFieldList=outputFieldList;
 		this.mapAndPassThroughField=mapAndPassThroughField;
 		this.outputFieldTableViewer=outputFieldTableViewer;
@@ -78,7 +78,7 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	        		transformDialogNew.refreshOutputTable();
 	        		}	
 	        	
-	             operationOutputfieldtableviewer.refresh();
+	             operationOutputFieldTableViewer.refresh();
 	        	
 	        }
 	        else{

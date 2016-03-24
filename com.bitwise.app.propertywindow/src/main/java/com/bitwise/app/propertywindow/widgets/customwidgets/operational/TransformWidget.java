@@ -119,7 +119,7 @@ public class TransformWidget extends AbstractWidget {
 				TransformDialogNew t=new TransformDialogNew(new Shell(),getComponent().getComponentName(),widgetConfig,atMapping);
 				atMapping = t.getATMapping();
 				t.open();
-				if(!oldATMappings.equals(atMapping)){
+				if(!oldATMappings.equals(atMapping) && !(t.isCancelPressed())){
 					propertyDialogButtonBar.enableApplyButton(true);
 				}
 
@@ -135,19 +135,9 @@ public class TransformWidget extends AbstractWidget {
 					propertyDialog.pressOK();
 				}
 				
-				
-				
-				
-				//t.setTableData(getPropagatedSChema());
-				
-				
-				
 			}
 
 		});
-
-	//	propagateOuputFieldsToSchemaTabFromTransformWidget();
-		// prapogateOuputFieldsToSchemaTab();
 	}
 
 	// PLEASE DO NOT REMOVE THE CODE
@@ -386,21 +376,7 @@ public class TransformWidget extends AbstractWidget {
 		return property;
 	}
 
-
-	
-	
-	/*private List<String> getPropagatedSChema() {
-		List<String> inputFieldsList = new  ArrayList<String>();
-		for (Link link : getComponent().getTargetConnections()) {
-			inputFieldsList.addAll(SchemaPropagationHelper.INSTANCE.getInputFieldListForLink(link));
-		}
-		return inputFieldsList;
-	}
-	*/
-	
-	
-	
-private void getPropagatedSChema() {
+   private void getPropagatedSChema() {
 		ComponentsOutputSchema outputSchema = null;
 		InputField inputField = null;
 		List<InputField> inputFieldsList = atMapping.getInputFields();

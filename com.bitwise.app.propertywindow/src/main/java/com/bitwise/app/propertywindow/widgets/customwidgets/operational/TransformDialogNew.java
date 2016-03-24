@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -32,24 +31,12 @@ import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DropTarget;
-import org.eclipse.swt.dnd.DropTargetAdapter;
-import org.eclipse.swt.dnd.DropTargetEvent;
-import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.ExpandEvent;
-import org.eclipse.swt.events.ExpandListener;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
@@ -58,41 +45,30 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.wb.swt.SWTResourceManager;
-
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
-import com.bitwise.app.common.datastructure.property.OperationClassProperty;
-import com.bitwise.app.common.datastructure.property.OperationField;
-import com.bitwise.app.common.datastructure.property.OperationSystemProperties;
-import com.bitwise.app.common.datastructure.property.TransformOperation;
 import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
 import com.bitwise.app.common.datastructure.property.mapping.InputField;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.propertydialog.PropertyDialogButtonBar;
+import com.bitwise.app.propertywindow.utils.SWTResourceManager;
 import com.bitwise.app.propertywindow.widgets.customwidgets.config.WidgetConfig;
-import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.datastructures.RowData;
 import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.inputtable.InputFieldColumnLabelProvider;
-import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.inputtable.InputTable;
-import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.inputtable.TableContenetProvider;
+import com.bitwise.app.propertywindow.widgets.customwidgets.mapping.tables.inputtable.TableContentProvider;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTCellModifier;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import com.bitwise.app.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 import com.bitwise.app.propertywindow.widgets.interfaces.IOperationClassDialog;
-import com.bitwise.app.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
 import com.bitwise.app.propertywindow.widgets.utility.DragDropUtility;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
@@ -184,7 +160,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 
 		inputFieldTableViewer = new TableViewer(inputFieldComposite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		setTableViewer(inputFieldTableViewer, inputFieldComposite, new String[] { Messages.OPERATIONAL_SYSTEM_FIELD },
-				new TableContenetProvider(), new OperationLabelProvider());
+				new TableContentProvider(), new OperationLabelProvider());
 		inputFieldTableViewer.getTable().setBounds(0, 30, 229, 850);
 		inputFieldTableViewer.setInput(atMapping.getInputFields());
 		inputFieldTableViewer.getTable().getColumn(0).setWidth(221);
@@ -519,14 +495,14 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 				OperationClassDialog operationClassDialog = new OperationClassDialog(browseButton.getShell(),
 						componentName, orignalMappingSheetRow, propertyDialogButtonBar, widgetConfig);
 				operationClassDialog.open();
-
-				operationClassTextBox.setText(operationClassDialog.getMappingSheetRow().getOperationClassPath());
+                operationClassTextBox.setText(operationClassDialog.getMappingSheetRow().getOperationClassPath());
 				orignalMappingSheetRow.setComboBoxValue(operationClassDialog.getMappingSheetRow().getComboBoxValue());
 				orignalMappingSheetRow.setOperationClassPath(operationClassDialog.getMappingSheetRow()
 						.getOperationClassPath());
 				orignalMappingSheetRow.setClassParameter(operationClassDialog.getMappingSheetRow().isClassParameter());
 				orignalMappingSheetRow.setNameValueProperty(operationClassDialog.getMappingSheetRow()
 						.getNameValueProperty());
+                
 			}
 
 			
@@ -875,6 +851,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		super.okPressed();
 	}
 
+	
 	public ATMapping getATMapping() {
 		return atMapping;
 	}
