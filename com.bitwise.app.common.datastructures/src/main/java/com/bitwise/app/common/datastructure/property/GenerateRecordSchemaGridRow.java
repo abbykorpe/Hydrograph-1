@@ -14,6 +14,8 @@
  
 package com.bitwise.app.common.datastructure.property;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * This class is used as data structure for GenerateRecords component's Schema Grid
  * 
@@ -85,18 +87,18 @@ public class GenerateRecordSchemaGridRow extends FixedWidthGridRow {
 		if (obj instanceof GenerateRecordSchemaGridRow) {
 			GenerateRecordSchemaGridRow generateRecordSchemaGridRow = (GenerateRecordSchemaGridRow) obj;
 			
-			if ( generateRecordSchemaGridRow.getFieldName().equals(this.getFieldName()) &&
-					generateRecordSchemaGridRow.getDataType().equals(this.getDataType()) &&
-					generateRecordSchemaGridRow.getDataTypeValue().equals(this.getDataTypeValue()) &&
-					generateRecordSchemaGridRow.getDateFormat().equals( this.getDateFormat()) &&
-					generateRecordSchemaGridRow.getScaleType().equals(this.getScaleType()) &&
-					generateRecordSchemaGridRow.getScaleTypeValue().equals(this.getScaleTypeValue()) &&
-					generateRecordSchemaGridRow.getPrecision().equals(this.getPrecision())	&&
-					generateRecordSchemaGridRow.getDescription().equals(this.getDescription()) &&
-					generateRecordSchemaGridRow.getLength().equals(this.getLength()) &&
-					generateRecordSchemaGridRow.getRangeFrom().equals(this.getRangeFrom()) &&
-					generateRecordSchemaGridRow.getRangeTo().equals(this.getRangeTo()) &&
-					generateRecordSchemaGridRow.getDefaultValue().equals(this.getDefaultValue())
+			if ( StringUtils.equals(generateRecordSchemaGridRow.getFieldName(), (this.getFieldName()) )&&
+					StringUtils.equals(String.valueOf(generateRecordSchemaGridRow.getDataType()), String.valueOf((this.getDataType()) ))&&
+					StringUtils.equals(generateRecordSchemaGridRow.getDataTypeValue(), (this.getDataTypeValue()) )&&
+					StringUtils.equals(generateRecordSchemaGridRow.getDateFormat(), ( this.getDateFormat()) )&&
+					StringUtils.equals(String.valueOf(generateRecordSchemaGridRow.getScaleType()), String.valueOf((this.getScaleType()) ))&&
+					StringUtils.equals(generateRecordSchemaGridRow.getScaleTypeValue(), (this.getScaleTypeValue())) &&
+					StringUtils.equals(generateRecordSchemaGridRow.getPrecision(), (this.getPrecision()))	&&
+					StringUtils.equals(generateRecordSchemaGridRow.getDescription(), (this.getDescription())) &&
+					StringUtils.equals(generateRecordSchemaGridRow.getLength(), (this.getLength())) &&
+					StringUtils.equals(generateRecordSchemaGridRow.getRangeFrom(), (this.getRangeFrom()) )&&
+					StringUtils.equals(generateRecordSchemaGridRow.getRangeTo(), (this.getRangeTo())) &&
+					StringUtils.equals(generateRecordSchemaGridRow.getDefaultValue(), (this.getDefaultValue()))
 				)
 				return true;
 		}

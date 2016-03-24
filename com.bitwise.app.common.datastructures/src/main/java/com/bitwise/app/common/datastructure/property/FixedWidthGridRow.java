@@ -14,6 +14,8 @@
  
 package com.bitwise.app.common.datastructure.property;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * The Class FixedWidthGridRow.
  * 
@@ -63,15 +65,15 @@ public class FixedWidthGridRow extends GridRow{
 		if (obj instanceof FixedWidthGridRow) {
 			FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) obj;
 			
-			if ( fixedWidthGridRow.getFieldName().equals(this.getFieldName()) &&
-					fixedWidthGridRow.getDataType().equals(this.getDataType()) &&
-					fixedWidthGridRow.getDataTypeValue().equals(this.getDataTypeValue()) &&
-					fixedWidthGridRow.getDateFormat().equals( this.getDateFormat()) &&
-					fixedWidthGridRow.getScaleType().equals(this.getScaleType()) &&
-					fixedWidthGridRow.getScaleTypeValue().equals(this.getScaleTypeValue()) &&
-					fixedWidthGridRow.getPrecision().equals(this.getPrecision())	&&
-					fixedWidthGridRow.getDescription().equals(this.getDescription()) &&
-					fixedWidthGridRow.getLength().equals(this.getLength())
+			if ( StringUtils.equals(fixedWidthGridRow.getFieldName(), (this.getFieldName())) &&
+					StringUtils.equals(String.valueOf(fixedWidthGridRow.getDataType()), String.valueOf((this.getDataType()))) &&
+					StringUtils.equals(fixedWidthGridRow.getDataTypeValue(), (this.getDataTypeValue()) )&&
+					StringUtils.equals(fixedWidthGridRow.getDateFormat(), ( this.getDateFormat())) &&
+					StringUtils.equals(String.valueOf(fixedWidthGridRow.getScaleType()), String.valueOf((this.getScaleType()) ))&&
+					StringUtils.equals(fixedWidthGridRow.getScaleTypeValue(), (this.getScaleTypeValue()) )&&
+					StringUtils.equals(fixedWidthGridRow.getPrecision(), (this.getPrecision())	)&&
+					StringUtils.equals(fixedWidthGridRow.getDescription(), (this.getDescription()) )&&
+					StringUtils.equals(fixedWidthGridRow.getLength(), (this.getLength()))
 				)
 				return true;
 		}
