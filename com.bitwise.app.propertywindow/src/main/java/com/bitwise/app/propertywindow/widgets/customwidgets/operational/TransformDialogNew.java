@@ -831,7 +831,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		Button okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
-		Button cancelButton = createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+		Button cancelButton = createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, true);
 		propertyDialogButtonBar.setPropertyDialogButtonBar(okButton, null, cancelButton);
 	}
 
@@ -845,12 +845,18 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 
 	@Override
 	protected void okPressed() {
-
+		isOKButtonPressed = true;
 		atMapping = new ATMapping((List<InputField>) inputFieldTableViewer.getInput(), atMapping.getMappingSheetRows(),
 				atMapping.getMapAndPassthroughField(), atMapping.getOutputFieldList());
 		super.okPressed();
 	}
-
+   
+	@Override
+	protected void cancelPressed()
+	{
+		isCancelButtonPressed = true;
+		super.cancelPressed();
+	}
 	
 	public ATMapping getATMapping() {
 		return atMapping;
