@@ -126,6 +126,13 @@ public class JoinConverter extends TransformConverter {
 				return false;
 		return true;
 	}
+	
+	private boolean isALLParameterizedFields(List<LookupMapProperty> lookupMapProperties){
+		for (LookupMapProperty lookupMapProperty : lookupMapProperties) 
+			if (!ParameterUtil.isParameter(lookupMapProperty.getSource_Field())) 
+				return false;
+		return true;
+	}
 
 
 	protected boolean getRecordRequiredValue(JoinConfigProperty entry) {
@@ -233,21 +240,44 @@ public class JoinConverter extends TransformConverter {
 			passThroughFieldorMapFieldList = new ArrayList<>();
 			TypeInputField typeInputField = null;
 			TypeMapField mapField = null;
-			for (LookupMapProperty entry : joinPropertyGrid.getLookupMapProperties()) {
-				String[] sourceNameValue = entry.getSource_Field().split(Pattern.quote("."));
+			
+			List<LookupMapProperty> lookupMapProperties = joinPropertyGrid.getLookupMapProperties();
+			if (!isALLParameterizedFields(lookupMapProperties)) {
+				for (LookupMapProperty lookupMapProperty : lookupMapProperties) {
+					
+					if(!ParameterUtil.isParameter(lookupMapProperty.getSource_Field())){
+						String[] sourceNameValue = lookupMapProperty.getSource_Field().split(Pattern.quote("."));
 
-				if (sourceNameValue[1].equalsIgnoreCase(entry.getOutput_Field())) {
-					typeInputField = new TypeInputField();
-					typeInputField.setName(sourceNameValue[1]);
-					typeInputField.setInSocketId(sourceNameValue[0]);
-					passThroughFieldorMapFieldList.add(typeInputField);
-				} else {
-					mapField = new TypeMapField();
-					mapField.setSourceName(sourceNameValue[1]);
-					mapField.setName(entry.getOutput_Field());
-					mapField.setInSocketId(sourceNameValue[0]);
-					passThroughFieldorMapFieldList.add(mapField);
+						if (sourceNameValue[1].equalsIgnoreCase(lookupMapProperty.getOutput_Field())) {
+							typeInputField = new TypeInputField();
+							typeInputField.setName(sourceNameValue[1]);
+							typeInputField.setInSocketId(sourceNameValue[0]);
+							passThroughFieldorMapFieldList.add(typeInputField);
+						} else {
+							mapField = new TypeMapField();
+							mapField.setSourceName(sourceNameValue[1]);
+							mapField.setName(lookupMapProperty.getOutput_Field());
+							mapField.setInSocketId(sourceNameValue[0]);
+							passThroughFieldorMapFieldList.add(mapField);
+						}
+						
+					}else{
+						converterHelper.addParamTag(this.ID, lookupMapProperty.getSource_Field(),
+								ComponentXpathConstants.JOIN_OUTSOCKET.value(), false);
+					}
+
 				}
+			}else{
+				
+				StringBuffer parameterFieldNames = new StringBuffer();
+				TypeInputField inputField = new TypeInputField();
+				inputField.setName("");
+				inputField.setInSocketId("");
+				passThroughFieldorMapFieldList.add(inputField);
+				for (LookupMapProperty lookupMapProperty : lookupMapProperties)
+					parameterFieldNames.append(lookupMapProperty.getOutput_Field() + " ");
+				converterHelper.addParamTag(this.ID, parameterFieldNames.toString(),
+						ComponentXpathConstants.JOIN_OUTSOCKET.value(), true);
 			}
 		}
 		return passThroughFieldorMapFieldList;

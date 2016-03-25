@@ -56,7 +56,8 @@ import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 
 /**
- * @author Bitwise This is a helper class for converter implementation. Contains the helper methods for conversion.
+ * This is a helper class for converter implementation. Contains the helper methods for conversion.
+ * @author Bitwise 
  */
 public class ConverterHelper {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ConverterHelper.class);
