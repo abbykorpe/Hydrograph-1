@@ -44,7 +44,7 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 	public ELTGenericSchemaGridWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties,propertyDialogButtonBar);
-		this.gridRowType = Constants.GENERIC_GRIDROW;
+		this.gridRowType = Constants.GENERIC_GRID_ROW;
 	}
 	
 	@Override

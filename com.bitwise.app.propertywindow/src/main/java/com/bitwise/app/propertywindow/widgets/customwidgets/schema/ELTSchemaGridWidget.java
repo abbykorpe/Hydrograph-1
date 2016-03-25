@@ -430,7 +430,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				extSchemaPathText.getText();
 				File schemaFile = new File(extSchemaPathText.getText());
 
-				ArrayList<GridRow> schemaGridRowListToImport = new ArrayList<GridRow>();;
+				List<GridRow> schemaGridRowListToImport = new ArrayList<GridRow>();;
 
 				tableViewer.setInput(schemaGridRowListToImport);
 				tableViewer.refresh();

@@ -121,7 +121,7 @@ public class InputFileDelimitedUiConverter extends InputUiConverter {
 					schema.setIsExternal(true);
 					if (((TypeExternalSchema) record).getUri() != null)
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
-						gridRow.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(),Constants.GENERIC_GRIDROW));
+						gridRow.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(),Constants.GENERIC_GRID_ROW));
 						schema.setGridRow(gridRow);
 				} else {
 					gridRow.add(converterUiHelper.getSchema(record));

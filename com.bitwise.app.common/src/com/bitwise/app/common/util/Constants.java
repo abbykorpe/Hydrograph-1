@@ -236,9 +236,9 @@ public class Constants {
 	
 	
 	//Types of UI- Schema 
-	public static final String FIXEDWIDTH_GRIDROW = "FixedWidth";
-	public static final String GENERATE_RECORD_GRIDROW="GenerateRecord";
-	public static final String GENERIC_GRIDROW="Generic";
+	public static final String FIXEDWIDTH_GRID_ROW = "FixedWidth";
+	public static final String GENERATE_RECORD_GRID_ROW="GenerateRecord";
+	public static final String GENERIC_GRID_ROW="Generic";
 }
 
 
