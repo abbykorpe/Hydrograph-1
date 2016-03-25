@@ -334,9 +334,6 @@
                id="org.eclipse.ui.navigate.previous">
          </hiddenToolBarItem>
          <hiddenToolBarItem
-               id="org.eclipse.debug.internal.ui.actions.DebugDropDownAction">
-         </hiddenToolBarItem>
-         <hiddenToolBarItem
                id="org.eclipse.jdt.ui.navigate.open.type">
          </hiddenToolBarItem>
          <hiddenToolBarItem
@@ -354,9 +351,6 @@
           <hiddenToolBarItem
                id="org.eclipse.ui.externaltools.ExternalToolMenuDelegateToolbar">
          </hiddenToolBarItem> 
-          <actionSet
-               id="org.eclipse.debug.ui.launchActionSet">
-         </actionSet>
               
       </perspectiveExtension>
    </extension>
