@@ -128,10 +128,9 @@ public class TransformWidget extends AbstractWidget {
 					propertyDialogButtonBar.enableApplyButton(true);
 					propagateOuputFieldsToSchemaTabFromTransformWidget();
 				}
-				
-           }
-
+			}
 		});
+		propagateOuputFieldsToSchemaTabFromTransformWidget();
 	}
 
 	// PLEASE DO NOT REMOVE THE CODE
