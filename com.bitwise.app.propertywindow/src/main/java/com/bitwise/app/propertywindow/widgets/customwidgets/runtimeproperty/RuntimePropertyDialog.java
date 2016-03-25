@@ -73,7 +73,7 @@ public class RuntimePropertyDialog extends Dialog {
 	private static final String PROPERTY_NAME = "PROPERTY_NAME";
 	private static final String PROPERTY_VALUE = "PROPERTY_VALUE";
 
-	private static final String REGEX_PPATTERN = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
+	
 	private static final String[] PROPS = { PROPERTY_NAME, PROPERTY_VALUE };
 
 	private String PROPERTY_EXISTS_ERROR = Messages.RuntimePropertAlreadyExists;
@@ -512,19 +512,8 @@ public class RuntimePropertyDialog extends Dialog {
 	 */
 	protected boolean validate() {
 		int propertyCounter = 0;
-		for (RuntimeProperties temp : propertyList) {
-			if (!temp.getPropertyName().trim().isEmpty() && !temp.getPropertyValue().trim().isEmpty()) {
-				String Regex = REGEX_PPATTERN;
-				Matcher matchName = Pattern.compile(Regex).matcher(temp.getPropertyName());
-				Matcher matchValue = Pattern.compile(Regex).matcher(temp.getPropertyValue());
-				if (!matchName.matches() || !matchValue.matches()) {
-					table.setSelection(propertyCounter);
-					lblPropertyError.setVisible(true);
-					lblPropertyError.setText(Messages.ALLOWED_CHARACTERS);
-					return false;
-				}
-
-			} else {
+		for (RuntimeProperties runtimeProperties : propertyList) {
+			if (runtimeProperties.getPropertyName().trim().isEmpty() || runtimeProperties.getPropertyValue().trim().isEmpty()) {
 				table.setSelection(propertyCounter);
 				lblPropertyError.setVisible(true);
 				lblPropertyError.setText(Messages.EmptyFiledNotification);
