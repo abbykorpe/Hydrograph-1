@@ -155,14 +155,6 @@ public class GridRowLoader {
 	}
 
 
-
-	private GridRow getBasicSchemaGridRow(Field field) {
-		GridRow gridRow = new SchemaGrid();
-		populateCommonFields(gridRow, field);
-		return gridRow;
-	}
-	
-	
 	/**
 	 * For importing engine-XML, this method import schema rows from schema file into schema grid.
 	 * 
@@ -306,6 +298,14 @@ public class GridRowLoader {
 		}
 
 	}
+	
+
+	private GridRow getBasicSchemaGridRow(Field field) {
+		GridRow gridRow = new SchemaGrid();
+		populateCommonFields(gridRow, field);
+		return gridRow;
+	}
+	
 	
 	private class DuplicateFieldException extends Exception{
 		public DuplicateFieldException(String message)
