@@ -147,6 +147,7 @@ import com.bitwise.app.graph.action.subgraph.SubGraphAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphOpenAction;
 import com.bitwise.app.graph.action.subgraph.SubGraphUpdateAction;
 import com.bitwise.app.graph.controller.ComponentEditPart;
+import com.bitwise.app.graph.debug.service.DebugRestClient;
 import com.bitwise.app.graph.editorfactory.GenrateContainerData;
 import com.bitwise.app.graph.factory.ComponentsEditPartFactory;
 import com.bitwise.app.graph.factory.CustomPaletteEditPartFactory;
@@ -163,6 +164,7 @@ import com.bitwise.app.graph.utility.SubGraphUtility;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.parametergrid.utils.ParameterFileManager;
 import com.bitwise.app.tooltip.tooltips.ComponentTooltip;
+import com.bitwiseglobal.debug.api.DebugFilesReader;
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -1187,21 +1189,44 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		removeSubgraphProperties(isDirty());
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
-		try {
-			deleteDebugFiles();
-			logger.debug("debug files removed.");
-		} catch (IOException e) {
-			logger.debug(e.getMessage(), e);
-		}
+		deleteDebugFiles();
+		logger.debug("debug files removed.");
 	}
 	
-	private void deleteDebugFiles() throws IOException{
+	private void deleteDebugFiles() {
 		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");
+		boolean isLocal = JobManager.INSTANCE.isLocalMode();
 		Job job = DebugHandler.getJob(currentJob);
-		/*if(job!=null){
-		DebugDataReader debugDataReader = new DebugDataReader(job.getBasePath(), uniqueJobId, "IFDelimite_01", "out0");
-		debugDataReader.delete();
-		}*/
+		
+		if(isLocal){
+			if(job!=null){
+				DebugFilesReader debugFilesReader = new DebugFilesReader(job.getBasePath(), uniqueJobId, "IFDelimite_01", "out0");
+				try {
+					//if(debugFilesReader.isFilePathExists()){
+						debugFilesReader.delete();
+					//}
+				} catch (FileNotFoundException e) {
+					logger.debug(e.getMessage());
+				} catch (IllegalArgumentException e) {
+					logger.debug(e.getMessage());
+				} catch (IOException e) {
+					logger.debug(e.getMessage());
+				}
+				
+			}else {
+				logger.debug("current job {} wasn't found in Debughandler's map",currentJob);
+			}
+		}else{
+			String basePath = job.getBasePath();
+			String ipAddress = job.getIpAddress();
+			String userID = job.getUserId();
+			String password = job.getPassword();
+			//new DebugFilesReader(arg0, arg1, arg2, arg3, arg4, arg5)
+			//ipAddress, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password
+			DebugRestClient debugRestClient = new DebugRestClient(ipAddress, basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
+			debugRestClient.removeDebugFiles();
+		}
+		DebugHandler.getJobMap().remove(currentJob);
 	}
 	
 

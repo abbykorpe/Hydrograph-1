@@ -81,6 +81,28 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		WidgetElement.getEngine(widget).applyStyles(widget, true);
 	}
     
-    
+	/*@Override
+    public void dispose() {
+    	try {
+			
+		Map<String, Job> jobMap = DebugHandler.getJobMap();
+		
+		Set<String> keySet = jobMap.keySet();
+		
+		for (String jobId : keySet) {
+			Job job=jobMap.get(jobId);
+			DebugFilesReader debugFilesReader = new DebugFilesReader(job.getBasePath(), job.getUniqueJobId(), "IFDelimite_01", "out0");
+			try {
+				debugFilesReader.delete();
+				jobMap.remove(jobId);
+			} catch (IOException e) {
+				logger.debug(e.getMessage());
+			}
+		}
+    	} catch (Exception e) {
+    		logger.debug(e.getMessage());
+		}
+    	logger.info("debug files removed.");
+    }*/
     
 }

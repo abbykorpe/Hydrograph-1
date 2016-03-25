@@ -57,7 +57,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 		job.setJobStatus(JobStatus.SUCCESS);
 
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
-			JobManager.INSTANCE.enableDebugJob(true);
+			JobManager.INSTANCE.enableRunJob(true);
 		}
 		enableLockedResources(gefCanvas);
 		refreshProject(gefCanvas);
@@ -123,7 +123,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 						joblogger.logMessage(JOB_FAILED);
 					}else{
 						joblogger.logMessage(JOB_COMPLETED_SUCCESSFULLY);
-						JobManager.INSTANCE.enableDebugJob(true);
+						JobManager.INSTANCE.enableRunJob(true);
 						//((DebugHandler) RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(true);
 					}
 				}

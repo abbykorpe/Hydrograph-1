@@ -1,17 +1,3 @@
-/********************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
-
- 
 package com.bitwise.app.graph.editor;
 
 import org.eclipse.gef.ContextMenuProvider;
@@ -66,11 +52,9 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		IAction[] watcherAction = new IAction[2];
         watcherAction[0] = getAction(Constants.ADD_WATCH_POINT_ID);
         watcherAction[1] = getAction(Constants.REMOVE_WATCH_POINT_ID);
-        WatcherMenuAction watcherMenu = new WatcherMenuAction(watcherAction, Constants.WATCHER_ACTION,Constants.WATCHER_ACTION_TEXT); //action to add watch points
+        WatcherMenuAction watcherMenu = new WatcherMenuAction(watcherAction, Constants.WATCHER_ACTION,Constants.WATCHER_ACTION_TEXT, true); //action to add watch points
          
         IAction actionWatchRecords = getAction(Constants.WATCH_RECORD_ID);// action to view debug data
-        IAction componentHelpAction=getAction(Constants.HELP_ID);
-        IAction componentPropertiesAction=getAction(Constants.COMPONENT_PROPERTIES_ID);
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, // target group id
 		getAction(ActionFactory.UNDO.getId())); // action to add
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, getAction(ActionFactory.REDO.getId()));
@@ -80,16 +64,15 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.COPY.getId()));
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.PASTE.getId()));
 	    menu.appendToGroup(GEFActionConstants.GROUP_REST, subGraphMenu);
-	    menu.appendToGroup(GEFActionConstants.GROUP_REST, getAction(Constants.GRAPH_PROPERTY));
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, watcherMenu);
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, actionWatchRecords);
-		menu.appendToGroup(GEFActionConstants.GROUP_REST,componentPropertiesAction);
-		menu.appendToGroup(GEFActionConstants.GROUP_REST, componentHelpAction);
 		 
 		if(subGraphMenu.getActiveOperationCount()== 0)
 	    subGraphMenu.setEnabled(false);
 			 
-		watcherMenu.setEnabled(actionWatchRecords.isEnabled());
+		if(watcherMenu.getActiveOperationCount()== 0){
+			watcherMenu.setEnabled(false);
+		}
 		
 	}
 	private IAction getAction(String actionId) {

@@ -44,6 +44,9 @@ public class Messages extends NLS {
 	public static String RUNTIME_WINDOW_NAME;
 	public static String RUNTIME_HEADER;
 	public static String LENGTHERROR;
+	public static String GENERIC_GRIDROW;
+	public static String FIXEDWIDTH_GRIDROW;
+	public static String GENERATE_RECORD_GRIDROW;
 	public static String DATATYPELIST;
 	public static String FIELDNAME;
 	public static String DATATYPE;
@@ -148,6 +151,7 @@ public class Messages extends NLS {
 	public static String SourceFieldAlreadyExists;
 	public static String OutputFieldAlreadyExists;
 	public static String FieldNameAlreadyExists;
+	public static String ABSOLUTE_PATH_TEXT;
 
 
 	public static String OPERATION_ID_PREFIX;
