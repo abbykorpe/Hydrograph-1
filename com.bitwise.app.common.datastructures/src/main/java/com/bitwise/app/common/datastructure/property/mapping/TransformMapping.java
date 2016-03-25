@@ -28,14 +28,14 @@ import com.bitwise.app.common.datastructure.property.NameValueProperty;
  * @author Bitwise
  *
  */
-public class ATMapping implements IDataStructure{
+public class TransformMapping implements IDataStructure{
 	
 	private List<InputField> inputFields;
 	private List<MappingSheetRow> mappingSheetRows;
 	private List<NameValueProperty> mapAndPassthroughField;
 	private List<FilterProperties> outputFieldList;
 	
-	public ATMapping() {
+	public TransformMapping() {
 		inputFields = new LinkedList<>();
 		mappingSheetRows = new LinkedList<>();
 		mapAndPassthroughField=new ArrayList<>();
@@ -59,7 +59,7 @@ public class ATMapping implements IDataStructure{
 	}
 
 
-	public ATMapping(List<InputField> inputFields,
+	public TransformMapping(List<InputField> inputFields,
 			List<MappingSheetRow> mappingSheetRows,List<NameValueProperty> nameValueProperties,List<FilterProperties> outputFieldList ) {
 		this.inputFields = inputFields;
 		this.mappingSheetRows = mappingSheetRows;
@@ -105,7 +105,7 @@ public class ATMapping implements IDataStructure{
 
 	@Override
 	public Object clone() {
-		ATMapping atMapping = new ATMapping();
+		TransformMapping atMapping = new TransformMapping();
 		atMapping.getInputFields().addAll(this.inputFields);
 		atMapping.getMapAndPassthroughField().addAll(this.mapAndPassthroughField);
 		atMapping.getOutputFieldList().addAll(this.outputFieldList);
@@ -136,7 +136,7 @@ public class ATMapping implements IDataStructure{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ATMapping other = (ATMapping) obj;
+		TransformMapping other = (TransformMapping) obj;
 		if (inputFields == null) {
 			if (other.inputFields != null)
 				return false;

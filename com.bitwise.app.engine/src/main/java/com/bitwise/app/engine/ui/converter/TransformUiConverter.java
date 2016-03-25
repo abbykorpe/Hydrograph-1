@@ -29,7 +29,7 @@ import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructure.property.Schema;
-import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
+import com.bitwise.app.common.datastructure.property.mapping.TransformMapping;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.ParameterUtil;
@@ -130,9 +130,9 @@ public abstract class TransformUiConverter extends UiConverter {
 	 * @return TransformPropertyGrid, transformPropertyGrid object which is
 	 *         responsible to display transform grid.
 	 */
-	protected ATMapping getUiPassThroughOrOperationFieldsOrMapFieldGrid(
+	protected TransformMapping getUiPassThroughOrOperationFieldsOrMapFieldGrid(
 			TypeOperationsOutSocket outSocket) {
-		ATMapping atMapping = new ATMapping();
+		TransformMapping atMapping = new TransformMapping();
 		List<MappingSheetRow> mappingSheetRows = new LinkedList<>();
 
 		for (Object property : outSocket
@@ -168,7 +168,7 @@ public abstract class TransformUiConverter extends UiConverter {
 
 	}
 
-	private void getOperationData(ATMapping atMapping) {
+	private void getOperationData(TransformMapping atMapping) {
 		List<TypeTransformOperation> typeTransformOpertaionList = ((TypeOperationsComponent) typeBaseComponent)
 				.getOperation();
 
@@ -280,7 +280,7 @@ public abstract class TransformUiConverter extends UiConverter {
 	}
 
 	protected Object createTransformPropertyGrid() {
-		ATMapping atMapping = new ATMapping();
+		TransformMapping atMapping = new TransformMapping();
         getOperationData(atMapping);
 		atMapping.setMapAndPassthroughField(getMapAndPassThroughField());
 		return atMapping;
