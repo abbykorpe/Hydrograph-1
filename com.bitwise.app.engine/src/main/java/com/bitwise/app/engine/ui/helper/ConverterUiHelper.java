@@ -15,16 +15,21 @@
 package com.bitwise.app.engine.ui.helper;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.namespace.QName;
+
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.SchemaGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.Component;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GridRowLoader;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;
@@ -139,5 +144,18 @@ public class ConverterUiHelper {
 				return entry.getValue();
 		}
 		return null;
+	}
+	
+	/**
+	 * This methods loads schema from external schema file
+	 * 
+	 * @param externalSchemaFilePath
+	 * @param schemaType
+	 * @return
+	 */
+	public List<GridRow> loadSchemaFromExternalFile(String externalSchemaFilePath,String schemaType) {
+		IPath filePath=new Path(externalSchemaFilePath);
+		GridRowLoader gridRowLoader=new GridRowLoader(schemaType, filePath.toFile());
+		return gridRowLoader.importGridRowsFromXML();
 	}
 }

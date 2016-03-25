@@ -14,6 +14,7 @@
  
 package com.bitwise.app.propertywindow.fixedwidthschema;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
@@ -35,7 +36,7 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	
 	public ELTFixedWidget(PropertyDialogButtonBar propertyDialogButtonBar) {
 		this.propertyDialogButtonBar=propertyDialogButtonBar;
-		this.gridRowType = Messages.FIXEDWIDTH_GRIDROW;
+		this.gridRowType = Constants.FIXEDWIDTH_GRID_ROW;
 		}
 	/**
 	 * Instantiates a new ELT fixed widget.
@@ -50,7 +51,7 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	public ELTFixedWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
-		this.gridRowType = Messages.FIXEDWIDTH_GRIDROW;
+		this.gridRowType = Constants.FIXEDWIDTH_GRID_ROW;
 	}
 
 	@Override

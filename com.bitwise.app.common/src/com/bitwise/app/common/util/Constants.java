@@ -232,6 +232,13 @@ public class Constants {
 	public static final String GRAPH_PROPERTY = "Graph Property";
 	public static final String GRAPH_PROPERTY_COMMAND_ID = "com.bitwise.app.propertywindow.graphProperties";
 	public static final String SCHEMA_PROPERTY_NAME = "schema";
+	
+	
+	
+	//Types of UI- Schema 
+	public static final String FIXEDWIDTH_GRID_ROW = "FixedWidth";
+	public static final String GENERATE_RECORD_GRID_ROW="GenerateRecord";
+	public static final String GENERIC_GRID_ROW="Generic";
 }
 
 

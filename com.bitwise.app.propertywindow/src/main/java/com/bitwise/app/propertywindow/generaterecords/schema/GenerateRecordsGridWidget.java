@@ -14,6 +14,7 @@
  
 package com.bitwise.app.propertywindow.generaterecords.schema;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
@@ -34,7 +35,7 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 
 	public GenerateRecordsGridWidget(PropertyDialogButtonBar propertyDialogButtonBar) {
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
-		this.gridRowType = Messages.GENERATE_RECORD_GRIDROW;
+		this.gridRowType = Constants.GENERATE_RECORD_GRID_ROW;
 	}
 
 	/**
@@ -45,7 +46,7 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigurationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
-		this.gridRowType = Messages.GENERATE_RECORD_GRIDROW;
+		this.gridRowType = Constants.GENERATE_RECORD_GRID_ROW;
 	}
 
 	/* (non-Javadoc)
