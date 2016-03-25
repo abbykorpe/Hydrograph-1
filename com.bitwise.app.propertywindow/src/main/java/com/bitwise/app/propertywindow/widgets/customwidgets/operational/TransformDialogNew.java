@@ -143,7 +143,6 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 
 		composite_1 = new Composite(container, SWT.NONE);
 		composite_1.setForeground(SWTResourceManager.getColor(SWT.COLOR_TITLE_INACTIVE_FOREGROUND));
-
 		createInputFieldTable(composite_1);
 
 		createOperationClassGrid(composite_1);
@@ -156,7 +155,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	private void createInputFieldTable(Composite container) {
 		composite_1.setLayout(new GridLayout(3, false));
 		Composite inputFieldComposite = new Composite(container, SWT.NONE);
-		inputFieldComposite.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
+		inputFieldComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
 
 		inputFieldTableViewer = new TableViewer(inputFieldComposite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		setTableViewer(inputFieldTableViewer, inputFieldComposite, new String[] { Messages.OPERATIONAL_SYSTEM_FIELD },
@@ -174,12 +173,12 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	private void createOutputFieldTable(Composite composite) {
 
 		Composite outputFieldComposite = new Composite(composite, SWT.NONE);
-		outputFieldComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false, 1, 1));
+		outputFieldComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true,true, 1, 1));
 		outputFieldViewer = new TableViewer(outputFieldComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		setTableViewer(outputFieldViewer, outputFieldComposite, new String[] { Messages.OUTPUT_FIELD },
 				new ELTFilterContentProvider(), new OperationLabelProvider());
-		outputFieldViewer.getTable().setBounds(0, 30, 253, 850);
-		outputFieldViewer.getTable().getColumn(0).setWidth(249);
+		outputFieldViewer.getTable().setBounds(0, 30, 245, 850);
+		outputFieldViewer.getTable().getColumn(0).setWidth(241);
 		outputFieldViewer.setCellModifier(new ELTCellModifier(outputFieldViewer));
 		outputFieldViewer.setLabelProvider(new ELTFilterLabelProvider());
 
@@ -240,7 +239,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	private void createOperationClassGrid(Composite parentComposite) {
 
 		Composite middleComposite = new Composite(parentComposite, SWT.NONE);
-		middleComposite.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false, 1, 1));
+		middleComposite.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true,true, 1, 1));
 		middleComposite.setLayout(new GridLayout(1, false));
 
 		Composite topAddButtonComposite = new Composite(middleComposite, SWT.NONE);
@@ -252,7 +251,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		scrolledComposite = new ScrolledComposite(middleComposite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLUE));
 		scrolledComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		GridData gd_scrolledComposite = new GridData(SWT.TOP, SWT.CENTER, false, false, 1, 1);
+		GridData gd_scrolledComposite = new GridData(SWT.TOP, SWT.CENTER, true,true, 1, 1);
 		gd_scrolledComposite.widthHint = 730;
 		gd_scrolledComposite.heightHint = 513;
 		scrolledComposite.setLayoutData(gd_scrolledComposite);
@@ -840,7 +839,12 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(1500, 1500);
+		container.getShell().layout(true, true);
+
+		final Point newSize = container.getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT, true);  
+
+		container.getShell().setSize(newSize);
+		return newSize;
 	}
 
 	@Override
