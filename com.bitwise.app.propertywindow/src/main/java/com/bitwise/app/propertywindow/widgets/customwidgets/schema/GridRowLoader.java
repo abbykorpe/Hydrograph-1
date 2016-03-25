@@ -105,53 +105,22 @@ public class GridRowLoader {
 					GridRow gridRow = null;
 					schemaGridRowListToImport = new ArrayList<GridRow>();
 
-					if(Messages.GENERIC_GRIDROW.equals(gridRowType)){
+					if(Constants.GENERIC_GRIDROW.equals(gridRowType)){
 
 						for (Field temp : fieldsList) {
-							gridRow = new SchemaGrid();
-							populateCommonFields(gridRow, temp);
-							addRowToList(eltGridDetails, grids, gridRow, schemaGridRowListToImport);
+							addRowToList(eltGridDetails, grids, getBasicSchemaGridRow(temp), schemaGridRowListToImport);
 						}	
 						
-					}else if(Messages.FIXEDWIDTH_GRIDROW.equals(gridRowType)){
+					}else if(Constants.FIXEDWIDTH_GRIDROW.equals(gridRowType)){
 
 						for (Field temp : fieldsList) {
-							gridRow = new FixedWidthGridRow();
-							populateCommonFields(gridRow, temp);
-
-							if(temp.getLength()!=null)
-								((FixedWidthGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
-							else
-								((FixedWidthGridRow) gridRow).setLength("");
-							addRowToList(eltGridDetails, grids, gridRow, schemaGridRowListToImport);
+							addRowToList(eltGridDetails, grids, getFixedWidthGridRow(temp), schemaGridRowListToImport);
 						}
-					}else if(Messages.GENERATE_RECORD_GRIDROW.equals(gridRowType)){
+					}else if(Constants.GENERATE_RECORD_GRIDROW.equals(gridRowType)){
 
 						for (Field temp : fieldsList) {
-							gridRow = new GenerateRecordSchemaGridRow();
-							populateCommonFields(gridRow, temp);
-
-							if(temp.getLength()!=null)
-								((GenerateRecordSchemaGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
-							else
-								((GenerateRecordSchemaGridRow) gridRow).setLength("");
-
-							if(temp.getDefault()!=null)
-								((GenerateRecordSchemaGridRow) gridRow).setDefaultValue((String.valueOf(temp.getDefault())));
-							else
-								((GenerateRecordSchemaGridRow) gridRow).setDefaultValue((String.valueOf("")));
-
-							if(temp.getRangeFrom()!=null)
-								((GenerateRecordSchemaGridRow) gridRow).setRangeFrom(String.valueOf(temp.getRangeFrom()));
-							else
-								((GenerateRecordSchemaGridRow) gridRow).setRangeFrom("");
-
-							if(temp.getRangeFrom()!=null)
-								((GenerateRecordSchemaGridRow) gridRow).setRangeTo(String.valueOf(temp.getRangeTo()));
-							else
-								((GenerateRecordSchemaGridRow) gridRow).setRangeTo("");
 							
-							addRowToList(eltGridDetails, grids, gridRow, schemaGridRowListToImport);
+							addRowToList(eltGridDetails, grids, getGenerateRecordGridRow(temp), schemaGridRowListToImport);
 							
 						}
 						
@@ -183,6 +152,123 @@ public class GridRowLoader {
 		}
 		
 		return schemaGridRowListToImport;
+	}
+
+
+
+	private GridRow getBasicSchemaGridRow(Field temp) {
+		GridRow gridRow;
+		gridRow = new SchemaGrid();
+		populateCommonFields(gridRow, temp);
+		return gridRow;
+	}
+	
+	
+	/**
+	 * For importing engine-XML, this method import schema rows from schema file into schema grid.
+	 * 
+	 */
+	public ArrayList<GridRow> importGridRowsFromXML(){
+
+		ArrayList<GridRow> schemaGridRowListToImport = new ArrayList<GridRow>();
+		InputStream xml, xsd;
+		try {
+			if(StringUtils.isNotBlank(schemaFile.getPath())){
+				
+				xml = new FileInputStream(schemaFile);
+				
+				xsd = new FileInputStream(SCHEMA_CONFIG_XSD_PATH);
+				
+				if(validateXML(xml, xsd)){
+					
+					JAXBContext jaxbContext = JAXBContext.newInstance(Schema.class);
+					Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+					
+					Schema schema= (Schema) jaxbUnmarshaller.unmarshal(schemaFile);
+					fields = schema.getFields();
+					ArrayList<Field> fieldsList = (ArrayList<Field>) fields.getField();
+					GridRow gridRow = null;
+					schemaGridRowListToImport = new ArrayList<GridRow>();
+
+					if(Constants.GENERIC_GRIDROW.equals(gridRowType)){
+
+						for (Field temp : fieldsList) {
+							gridRow = getBasicSchemaGridRow(temp);
+							schemaGridRowListToImport.add(gridRow);
+						}	
+						
+					}else if(Constants.FIXEDWIDTH_GRIDROW.equals(gridRowType)){
+
+						for (Field temp : fieldsList) {
+							schemaGridRowListToImport.add(getFixedWidthGridRow(temp));
+						}
+					}else if(Constants.GENERATE_RECORD_GRIDROW.equals(gridRowType)){
+						
+						for (Field temp : fieldsList) {
+							schemaGridRowListToImport.add(gridRow = getGenerateRecordGridRow(temp));
+						}
+						
+					}
+				
+				}
+			}else{
+				
+				logger.warn(Messages.EXPORT_XML_EMPTY_FILENAME);
+			}
+
+		} catch (JAXBException e1) {
+			logger.warn(Messages.IMPORT_XML_FORMAT_ERROR);
+			return schemaGridRowListToImport;
+		}
+		catch (Exception e) {
+			logger.warn(Messages.IMPORT_XML_ERROR);
+			return schemaGridRowListToImport;
+		}
+		
+		return schemaGridRowListToImport;
+	}
+
+
+
+	private GridRow getGenerateRecordGridRow(Field temp) {
+		GridRow gridRow;
+		gridRow = new GenerateRecordSchemaGridRow();
+		populateCommonFields(gridRow, temp);
+
+		if(temp.getLength()!=null)
+			((GenerateRecordSchemaGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
+		else
+			((GenerateRecordSchemaGridRow) gridRow).setLength("");
+
+		if(temp.getDefault()!=null)
+			((GenerateRecordSchemaGridRow) gridRow).setDefaultValue((String.valueOf(temp.getDefault())));
+		else
+			((GenerateRecordSchemaGridRow) gridRow).setDefaultValue((String.valueOf("")));
+
+		if(temp.getRangeFrom()!=null)
+			((GenerateRecordSchemaGridRow) gridRow).setRangeFrom(String.valueOf(temp.getRangeFrom()));
+		else
+			((GenerateRecordSchemaGridRow) gridRow).setRangeFrom("");
+
+		if(temp.getRangeFrom()!=null)
+			((GenerateRecordSchemaGridRow) gridRow).setRangeTo(String.valueOf(temp.getRangeTo()));
+		else
+			((GenerateRecordSchemaGridRow) gridRow).setRangeTo("");
+		return gridRow;
+	}
+
+
+
+	private GridRow getFixedWidthGridRow(Field temp) {
+		GridRow gridRow;
+		gridRow = new FixedWidthGridRow();
+		populateCommonFields(gridRow, temp);
+		
+		if(temp.getLength()!=null)
+			((FixedWidthGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
+		else
+			((FixedWidthGridRow) gridRow).setLength("");
+		return gridRow;
 	}
 
 	private boolean validateXML(InputStream xml, InputStream xsd){

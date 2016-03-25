@@ -20,17 +20,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
-import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
 import com.bitwise.app.engine.ui.converter.InputUiConverter;
 import com.bitwise.app.engine.ui.helper.ConverterUiHelper;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.components.IFDelimited;
+import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GridRowLoader;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
 import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;
 import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
@@ -117,6 +121,8 @@ public class InputFileDelimitedUiConverter extends InputUiConverter {
 					schema.setIsExternal(true);
 					if (((TypeExternalSchema) record).getUri() != null)
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
+						gridRow.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(),Constants.GENERIC_GRIDROW));
+						schema.setGridRow(gridRow);
 				} else {
 					gridRow.add(converterUiHelper.getSchema(record));
 					schema.setGridRow(gridRow);

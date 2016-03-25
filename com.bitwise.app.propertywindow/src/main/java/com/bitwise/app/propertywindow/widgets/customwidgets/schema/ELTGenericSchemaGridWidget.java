@@ -14,6 +14,7 @@
  
 package com.bitwise.app.propertywindow.widgets.customwidgets.schema;
 
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
 import com.bitwise.app.propertywindow.property.ComponentMiscellaneousProperties;
@@ -43,7 +44,7 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 	public ELTGenericSchemaGridWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties,propertyDialogButtonBar);
-		this.gridRowType = Messages.GENERIC_GRIDROW;
+		this.gridRowType = Constants.GENERIC_GRIDROW;
 	}
 	
 	@Override

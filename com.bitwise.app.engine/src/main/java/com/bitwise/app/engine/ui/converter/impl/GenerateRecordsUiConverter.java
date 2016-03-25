@@ -119,6 +119,8 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 					schema.setIsExternal(true);
 					if (StringUtils.isNotBlank(((TypeExternalSchema) record).getUri()))
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
+						gridRow.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(), Constants.GENERATE_RECORD_GRIDROW));
+						schema.setGridRow(gridRow);
 				} else {
 					gridRow.add(getGenerateRecordsSchemaGridRow(record));
 					schema.setGridRow(gridRow);

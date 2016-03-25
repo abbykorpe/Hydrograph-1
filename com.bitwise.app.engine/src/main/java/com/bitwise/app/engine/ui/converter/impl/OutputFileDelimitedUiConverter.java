@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.engine.constants.PropertyNameConstants;
 import com.bitwise.app.engine.ui.constants.UIComponentsConstants;
@@ -104,6 +105,8 @@ public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 					schema.setIsExternal(true);
 					if (((TypeExternalSchema) record).getUri() != null)
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
+					gridRow.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(), Constants.GENERIC_GRIDROW));
+					schema.setGridRow(gridRow);
 				} else {
 					gridRow.add(converterUiHelper.getSchema(record));
 					schema.setGridRow(gridRow);
