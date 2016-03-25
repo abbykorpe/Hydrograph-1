@@ -25,6 +25,7 @@ import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
+import com.bitwise.app.common.datastructure.property.SchemaGrid;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
@@ -104,6 +105,25 @@ public class SchemaPropagationHelper {
 		return fixedWidthGridRow;
 	}
 
+
+	public SchemaGrid createSchemaGridRow(String fieldName) {
+
+		SchemaGrid	 schemaGrid = null;
+		if (fieldName != null) {
+			schemaGrid = new SchemaGrid();
+			schemaGrid.setFieldName(fieldName);
+			schemaGrid.setDataType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
+			schemaGrid.setDataTypeValue(String.class.getCanonicalName());
+			schemaGrid.setScale("");
+			schemaGrid.setPrecision("");
+			schemaGrid.setDateFormat("");
+			schemaGrid.setScaleType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
+			schemaGrid.setScaleTypeValue(Messages.SCALE_TYPE_NONE);
+			
+		}
+		return schemaGrid;
+	}
+	
 	/**
 	 * This method fetches input schema fields from source component.
 	 * 
