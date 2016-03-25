@@ -35,7 +35,7 @@ import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
-import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
+import com.bitwise.app.common.datastructure.property.mapping.TransformMapping;
 import com.bitwise.app.common.datastructure.property.mapping.ErrorObject;
 import com.bitwise.app.common.datastructure.property.mapping.InputField;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
@@ -62,7 +62,7 @@ public class TransformWidget extends AbstractWidget {
 
 	private String propertyName;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-	private ATMapping atMapping;
+	private TransformMapping transformMapping;
 	private TransformPropertyGrid transformPropertyGrid;
 
 	/**
@@ -80,9 +80,9 @@ public class TransformWidget extends AbstractWidget {
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
 
-		this.atMapping = (ATMapping) componentConfigrationProperty.getPropertyValue();
-		if (atMapping == null) {
-			atMapping = new ATMapping();
+		this.transformMapping = (TransformMapping) componentConfigrationProperty.getPropertyValue();
+		if (transformMapping == null) {
+			transformMapping = new TransformMapping();
 		}
 		
 		this.propertyName = componentConfigrationProperty.getPropertyName();
@@ -114,28 +114,21 @@ public class TransformWidget extends AbstractWidget {
 				
 				getPropagatedSChema();
 
-				ATMapping oldATMappings = (ATMapping) atMapping.clone();
+				TransformMapping oldATMappings = (TransformMapping) transformMapping.clone();
 				
-				TransformDialogNew t=new TransformDialogNew(new Shell(),getComponent().getComponentName(),widgetConfig,atMapping);
-				atMapping = t.getATMapping();
+				TransformDialogNew t=new TransformDialogNew(new Shell(),getComponent().getComponentName(),widgetConfig,transformMapping);
 				t.open();
-				if(!oldATMappings.equals(atMapping) && !(t.isCancelPressed())){
+				
+				if(t.isCancelPressed())
+				transformMapping=oldATMappings;
+				
+				if(!oldATMappings.equals(transformMapping))
+				{
 					propertyDialogButtonBar.enableApplyButton(true);
-				}
-
-				propagateOuputFieldsToSchemaTabFromTransformWidget();
-
-				atMapping.getInputFields().clear();
-				
-				if(t.isCancelPressed()){
-					propertyDialog.pressCancel();
+					propagateOuputFieldsToSchemaTabFromTransformWidget();
 				}
 				
-				if(t.isOkPressed()){
-					propertyDialog.pressOK();
-				}
-				
-			}
+           }
 
 		});
 	}
@@ -152,7 +145,7 @@ public class TransformWidget extends AbstractWidget {
 	
 	private void propagateOuputFieldsToSchemaTabFromTransformWidget() {
 		
-		if (atMapping == null || atMapping.getMappingSheetRows() == null)
+		if (transformMapping == null || transformMapping.getMappingSheetRows() == null)
 			return;
 		
 	
@@ -164,7 +157,7 @@ public class TransformWidget extends AbstractWidget {
 		
 		List<FilterProperties> operationFieldList=new LinkedList<FilterProperties>();
 		
-		for (MappingSheetRow mappingSheetRow : atMapping.getMappingSheetRows()) {
+		for (MappingSheetRow mappingSheetRow : transformMapping.getMappingSheetRows()) {
 			List<FilterProperties> operationFields = getOpeartionFields(mappingSheetRow);
 			
 			operationFieldList.addAll(operationFields);
@@ -174,8 +167,8 @@ public class TransformWidget extends AbstractWidget {
 		
 			
 			
-		List<String> passThroughFields = getPassThroughFields(atMapping.getMapAndPassthroughField());
-		Map<String, String> mapFields = getMapFields(atMapping.getMapAndPassthroughField());
+		List<String> passThroughFields = getPassThroughFields(transformMapping.getMapAndPassthroughField());
+		Map<String, String> mapFields = getMapFields(transformMapping.getMapAndPassthroughField());
 		finalMapFields.putAll(mapFields);
 		finalPassThroughFields.addAll(passThroughFields);
 		
@@ -370,8 +363,8 @@ public class TransformWidget extends AbstractWidget {
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		atMapping.getInputFields().clear();
-		property.put(propertyName, atMapping);
+		transformMapping.getInputFields().clear();
+		property.put(propertyName, transformMapping);
 
 		return property;
 	}
@@ -379,7 +372,7 @@ public class TransformWidget extends AbstractWidget {
    private void getPropagatedSChema() {
 		ComponentsOutputSchema outputSchema = null;
 		InputField inputField = null;
-		List<InputField> inputFieldsList = atMapping.getInputFields();
+		List<InputField> inputFieldsList = transformMapping.getInputFields();
 		for (Link link : getComponent().getTargetConnections()) {
 			outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 			if (outputSchema != null)

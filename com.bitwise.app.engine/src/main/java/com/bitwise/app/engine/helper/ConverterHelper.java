@@ -32,7 +32,7 @@ import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
-import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
+import com.bitwise.app.common.datastructure.property.mapping.TransformMapping;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.engine.xpath.ComponentXpath;
@@ -70,7 +70,7 @@ public class ConverterHelper {
 		this.componentName = (String) properties.get(Constants.PARAM_NAME);
 	}
 
-	public List<TypeTransformOperation> getOperations(ATMapping transformPropertyGrid, List<FixedWidthGridRow> fixedWidthGridRows) {
+	public List<TypeTransformOperation> getOperations(TransformMapping transformPropertyGrid, List<FixedWidthGridRow> fixedWidthGridRows) {
 		logger.debug("Generating TypeTransformOperation data :{}", properties.get(Constants.PARAM_NAME));
 		List<TypeTransformOperation> operationList = new ArrayList<>();
 		if (transformPropertyGrid != null) {
@@ -166,7 +166,7 @@ public class ConverterHelper {
 	 * @param fixedWidthGridRows
 	 * @return list of {@link TypeOperationsOutSocket}
 	 */
-	public List<TypeOperationsOutSocket> getOutSocket(ATMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {
+	public List<TypeOperationsOutSocket> getOutSocket(TransformMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {
 		logger.debug("Generating TypeOperationsOutSocket data for : {}", properties.get(Constants.PARAM_NAME));
 		List<TypeOperationsOutSocket> outSocketList = new ArrayList<TypeOperationsOutSocket>();
 		if (component.getSourceConnections() != null && !component.getSourceConnections().isEmpty()) {
@@ -181,7 +181,7 @@ public class ConverterHelper {
 		return outSocketList;
 	}
 
-	private void setOutSocketProperties(TypeOperationsOutSocket outSocket, ATMapping atMapping,
+	private void setOutSocketProperties(TypeOperationsOutSocket outSocket, TransformMapping atMapping,
 			List<FixedWidthGridRow> fixedWidthGridRows, Link link) {
 
 		TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
@@ -197,7 +197,7 @@ public class ConverterHelper {
 		}
 	}
 
-	private List<TypeInputField> addPassThroughFields(ATMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {
+	private List<TypeInputField> addPassThroughFields(TransformMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {
 		List<TypeInputField> typeOperationFieldsList = new ArrayList<>();
 		if (atMapping != null) {
 
@@ -214,7 +214,7 @@ public class ConverterHelper {
 		return typeOperationFieldsList;
 	}
 
-	private List<TypeMapField> addMapFields(ATMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {
+	private List<TypeMapField> addMapFields(TransformMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {
 		List<TypeMapField> typeMapFieldList = new ArrayList<>();
 
 		if (atMapping != null) {
@@ -235,7 +235,7 @@ public class ConverterHelper {
 		return typeMapFieldList;
 	}
 
-	private List<TypeOperationField> addOperationFields(ATMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {
+	private List<TypeOperationField> addOperationFields(TransformMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {
 		List<TypeOperationField> typeOperationFieldList = new ArrayList<>();
 		
 		if (atMapping != null) {			

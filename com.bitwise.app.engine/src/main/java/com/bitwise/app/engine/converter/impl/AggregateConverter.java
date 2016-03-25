@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
-import com.bitwise.app.common.datastructure.property.mapping.ATMapping;
+import com.bitwise.app.common.datastructure.property.mapping.TransformMapping;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.engine.converter.TransformConverter;
@@ -47,7 +47,7 @@ import com.bitwiseglobal.graph.operationstypes.Aggregate;
 
 public class AggregateConverter extends TransformConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(AggregateConverter.class);
-	private ATMapping atMapping;
+	private TransformMapping atMapping;
 	private List<FixedWidthGridRow> fixedWidthGridRows;
 	ConverterHelper converterHelper;
 
@@ -56,7 +56,7 @@ public class AggregateConverter extends TransformConverter {
 		this.baseComponent = new Aggregate();
 		this.component = component;
 		this.properties = component.getProperties();
-		atMapping = (ATMapping) properties.get(Constants.PARAM_OPERATION);
+		atMapping = (TransformMapping) properties.get(Constants.PARAM_OPERATION);
 		converterHelper = new ConverterHelper(component);
 		initFixedWidthGridRows();
 	}
