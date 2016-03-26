@@ -66,7 +66,7 @@ public class DebugRestClient {
 	
 	public JSONArray callRestService() {
 		HttpClient httpClient = new HttpClient();
-		String ip = Constants.HTTP_PROTOCOL + ipAddress + Constants.PORT_NO + Constants.ROUTE;
+		String ip = Constants.HTTP_PROTOCOL + ipAddress + Constants.PORT_NO + Constants.ROUTE_TO_READ_DATA;
 		 
 		PostMethod postMethod = new PostMethod(ip);//"http://10.130.248.53:4567/debug"
 		postMethod.addParameter(Constants.USER_ID, userId);
@@ -102,7 +102,7 @@ public class DebugRestClient {
 	
 	public void removeDebugFiles(){
 		HttpClient httpClient = new HttpClient();
-		String ip = Constants.HTTP_PROTOCOL + ipAddress + Constants.PORT_NO + "/delete";
+		String ip = Constants.HTTP_PROTOCOL + ipAddress + Constants.PORT_NO + Constants.ROUTE_TO_REMOVE_FILES;
 		 
 		PostMethod postMethod = new PostMethod(ip);//"http://10.130.248.53:4567/debug"
 		postMethod.addParameter(Constants.USER_ID, userId);
@@ -122,10 +122,10 @@ public class DebugRestClient {
 		}
 	}
  
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		///basepath/debug/Debug_Job_1_1153804326_1458905864960/GRecords_01_out0
-		DebugRestClient debugRestClient = new DebugRestClient("10.130.248.53", "/basepath", "Debug_Job_1_1153804326_1458905864960", "IfDelimited_01", "out0", "hduser", "Bitwise2012");
-		debugRestClient.removeDebugFiles();
-		//debugRestClient.callRestService();
-	}
+		DebugRestClient debugRestClient = new DebugRestClient("10.130.248.53", "/basepath", "Debug_Job_1_1153804326_1458905864960", "GRecords_01", "out0", "hduser", "Bitwise2012");
+		//debugRestClient.removeDebugFiles();
+		debugRestClient.callRestService();
+	}*/
 }

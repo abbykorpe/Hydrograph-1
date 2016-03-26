@@ -26,6 +26,7 @@ Require-Bundle: org.eclipse.ui,
  org.apache.batik.css;bundle-version="1.6.0",
  org.slf4j.api,
  org.junit,
- com.bitwise.app.logging;bundle-version="1.0.0"
+ com.bitwise.app.logging;bundle-version="1.0.0",
+ com.bitwise.app.common;bundle-version="0.0.1"
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.ui.console

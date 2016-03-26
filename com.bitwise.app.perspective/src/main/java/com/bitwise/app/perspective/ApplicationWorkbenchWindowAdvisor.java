@@ -23,7 +23,11 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
+import com.bitwise.app.common.services.IDebugService;
 import com.bitwise.app.perspective.config.ELTPerspectiveConfig;
 
 // TODO: Auto-generated Javadoc
@@ -81,28 +85,14 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		WidgetElement.getEngine(widget).applyStyles(widget, true);
 	}
     
-	/*@Override
+	@Override
     public void dispose() {
-    	try {
-			
-		Map<String, Job> jobMap = DebugHandler.getJobMap();
+		super.dispose();
+		BundleContext bundleContext = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
+		ServiceReference<IDebugService> serviceReference = (ServiceReference<IDebugService>) bundleContext.getServiceReference(IDebugService.class.getName());
+		IDebugService debugService = (IDebugService)bundleContext.getService(serviceReference);
+		debugService.delete();
 		
-		Set<String> keySet = jobMap.keySet();
-		
-		for (String jobId : keySet) {
-			Job job=jobMap.get(jobId);
-			DebugFilesReader debugFilesReader = new DebugFilesReader(job.getBasePath(), job.getUniqueJobId(), "IFDelimite_01", "out0");
-			try {
-				debugFilesReader.delete();
-				jobMap.remove(jobId);
-			} catch (IOException e) {
-				logger.debug(e.getMessage());
-			}
-		}
-    	} catch (Exception e) {
-    		logger.debug(e.getMessage());
-		}
-    	logger.info("debug files removed.");
-    }*/
+    }
     
 }

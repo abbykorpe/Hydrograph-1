@@ -1190,7 +1190,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
 		deleteDebugFiles();
-		logger.debug("debug files removed.");
 	}
 	
 	private void deleteDebugFiles() {
@@ -1198,12 +1197,17 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		boolean isLocal = JobManager.INSTANCE.isLocalMode();
 		Job job = DebugHandler.getJob(currentJob);
 		
+		if(job == null){
+			logger.debug("current job {} wasn't found in Debughandler's map",currentJob);
+			return ;
+		}
 		if(isLocal){
-			if(job!=null){
+			//if(job!=null){
 				DebugFilesReader debugFilesReader = new DebugFilesReader(job.getBasePath(), uniqueJobId, "IFDelimite_01", "out0");
 				try {
 					//if(debugFilesReader.isFilePathExists()){
 						debugFilesReader.delete();
+						logger.info("debug files removed from local");
 					//}
 				} catch (FileNotFoundException e) {
 					logger.debug(e.getMessage());
@@ -1212,10 +1216,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				} catch (IOException e) {
 					logger.debug(e.getMessage());
 				}
-				
-			}else {
-				logger.debug("current job {} wasn't found in Debughandler's map",currentJob);
-			}
 		}else{
 			String basePath = job.getBasePath();
 			String ipAddress = job.getIpAddress();
@@ -1225,6 +1225,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			//ipAddress, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password
 			DebugRestClient debugRestClient = new DebugRestClient(ipAddress, basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
 			debugRestClient.removeDebugFiles();
+			logger.debug("debug files removed from cluster");
 		}
 		DebugHandler.getJobMap().remove(currentJob);
 	}

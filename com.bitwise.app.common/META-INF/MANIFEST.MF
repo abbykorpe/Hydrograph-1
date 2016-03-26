@@ -21,5 +21,6 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.bitwise.app.common.component.config,
  com.bitwise.app.common.component.policyconfig,
  com.bitwise.app.common.schema,
+ com.bitwise.app.common.services,
  com.bitwise.app.common.util
 Import-Package: org.junit
