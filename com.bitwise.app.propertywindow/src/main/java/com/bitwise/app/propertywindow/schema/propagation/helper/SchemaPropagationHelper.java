@@ -25,7 +25,7 @@ import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
-import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
@@ -106,11 +106,11 @@ public class SchemaPropagationHelper {
 	}
 
 
-	public SchemaGrid createSchemaGridRow(String fieldName) {
+	public BasicSchemaGridRow createSchemaGridRow(String fieldName) {
 
-		SchemaGrid	 schemaGrid = null;
+		BasicSchemaGridRow	 schemaGrid = null;
 		if (fieldName != null) {
-			schemaGrid = new SchemaGrid();
+			schemaGrid = new BasicSchemaGridRow();
 			schemaGrid.setFieldName(fieldName);
 			schemaGrid.setDataType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
 			schemaGrid.setDataTypeValue(String.class.getCanonicalName());

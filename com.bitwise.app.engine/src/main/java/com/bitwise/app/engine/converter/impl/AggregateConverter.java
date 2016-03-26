@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
+import com.bitwise.app.common.datastructure.property.GridRow;
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.datastructure.property.mapping.TransformMapping;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.ParameterUtil;
@@ -35,20 +37,21 @@ import com.bitwiseglobal.graph.aggregate.TypeSecondaryKeyFields;
 import com.bitwiseglobal.graph.aggregate.TypeSecondayKeyFieldsAttributes;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeFieldName;
-import com.bitwiseglobal.graph.commontypes.TypeInputField;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
 import com.bitwiseglobal.graph.commontypes.TypeSortOrder;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.operationstypes.Aggregate;
 
 /**
- * @author Bitwise Aggregate converter
+ * Aggregate converter
+ * 
+ * @author Bitwise 
  */
 
 public class AggregateConverter extends TransformConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(AggregateConverter.class);
 	private TransformMapping atMapping;
-	private List<FixedWidthGridRow> fixedWidthGridRows;
+	private List<BasicSchemaGridRow> schemaGridRows;
 	ConverterHelper converterHelper;
 
 	public AggregateConverter(Component component) {
@@ -58,20 +61,20 @@ public class AggregateConverter extends TransformConverter {
 		this.properties = component.getProperties();
 		atMapping = (TransformMapping) properties.get(Constants.PARAM_OPERATION);
 		converterHelper = new ConverterHelper(component);
-		initFixedWidthGridRows();
+		initSchemaGridRows();
 	}
 
 
-	private void initFixedWidthGridRows() {
-		fixedWidthGridRows = new LinkedList<>();
+	private void initSchemaGridRows() {
+		schemaGridRows = new LinkedList<>();
 		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) properties
 				.get(Constants.SCHEMA_TO_PROPAGATE);
 		if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null) {
 			ComponentsOutputSchema componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
-			List<FixedWidthGridRow> gridRows = componentsOutputSchema.getFixedWidthGridRowsOutputFields();
+			List<BasicSchemaGridRow> gridRows = componentsOutputSchema.getSchemaGridOutputFields();
 
-			for (FixedWidthGridRow row : gridRows) {
-				fixedWidthGridRows.add((FixedWidthGridRow) row.copy());
+			for (BasicSchemaGridRow row : gridRows) {
+				schemaGridRows.add((BasicSchemaGridRow) row.copy());
 			}
 		}
 	}
@@ -90,12 +93,12 @@ public class AggregateConverter extends TransformConverter {
 
 	@Override
 	protected List<TypeTransformOperation> getOperations() {
-		return converterHelper.getOperations(atMapping,fixedWidthGridRows);
+		return converterHelper.getOperations(atMapping,schemaGridRows);
 	}
 
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
-		return converterHelper.getOutSocket(atMapping,fixedWidthGridRows);
+		return converterHelper.getOutSocket(atMapping,schemaGridRows);
 	}
 
 	@Override

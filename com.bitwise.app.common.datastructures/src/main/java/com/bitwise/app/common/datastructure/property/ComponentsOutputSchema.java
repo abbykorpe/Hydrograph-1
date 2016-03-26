@@ -50,8 +50,8 @@ public class ComponentsOutputSchema implements IDataStructure {
 	public void addSchemaFields(GridRow gridRow) {
 		if (gridRow instanceof FixedWidthGridRow) {
 			this.fixedWidthGridRowsOutputFields.add((FixedWidthGridRow) gridRow);
-		} else if (gridRow instanceof SchemaGrid) {
-			this.fixedWidthGridRowsOutputFields.add(convertSchemaGridRowToFixedWidthSchema((SchemaGrid) gridRow));
+		} else if (gridRow instanceof BasicSchemaGridRow) {
+			this.fixedWidthGridRowsOutputFields.add(convertSchemaGridRowToFixedWidthSchema((BasicSchemaGridRow) gridRow));
 		}
 
 	}
@@ -63,10 +63,10 @@ public class ComponentsOutputSchema implements IDataStructure {
 	 * @param fixedWidthGridRow
 	 * @return SchemaGrid
 	 */
-	public SchemaGrid convertFixedWidthSchemaToSchemaGridRow(FixedWidthGridRow fixedWidthGridRow) {
-		SchemaGrid schemaGrid = null;
+	public BasicSchemaGridRow convertFixedWidthSchemaToSchemaGridRow(FixedWidthGridRow fixedWidthGridRow) {
+		BasicSchemaGridRow schemaGrid = null;
 		if (fixedWidthGridRow != null) {
-			schemaGrid = new SchemaGrid();
+			schemaGrid = new BasicSchemaGridRow();
 			schemaGrid.setDataType(fixedWidthGridRow.getDataType());
 			schemaGrid.setDataTypeValue(fixedWidthGridRow.getDataTypeValue());
 			schemaGrid.setDateFormat(fixedWidthGridRow.getDateFormat());
@@ -86,7 +86,7 @@ public class ComponentsOutputSchema implements IDataStructure {
 	 * @param fixedWidthGridRow
 	 * @return SchemaGrid
 	 */
-	private FixedWidthGridRow convertSchemaGridRowToFixedWidthSchema(SchemaGrid schemaGrid) {
+	private FixedWidthGridRow convertSchemaGridRowToFixedWidthSchema(BasicSchemaGridRow schemaGrid) {
 		FixedWidthGridRow fixedWidthGridRow = null;
 		if (schemaGrid != null) {
 			fixedWidthGridRow = new FixedWidthGridRow();
@@ -197,8 +197,8 @@ public class ComponentsOutputSchema implements IDataStructure {
 		this.getPassthroughFieldsPortInfo().clear();
 	}
 	
-	public List<SchemaGrid> getSchemaGridOutputFields() {
-		List<SchemaGrid> schemaGrid = new ArrayList<>();
+	public List<BasicSchemaGridRow> getSchemaGridOutputFields() {
+		List<BasicSchemaGridRow> schemaGrid = new ArrayList<>();
 		for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
 			schemaGrid.add(convertFixedWidthSchemaToSchemaGridRow(fixedWidthGridRow));
 		}
@@ -263,10 +263,10 @@ public class ComponentsOutputSchema implements IDataStructure {
 	 * @param fieldName
 	 * @return
 	 */
-	public SchemaGrid getSchemaGridRow(String fieldName) {
-		SchemaGrid schemaGridRow = null;
+	public BasicSchemaGridRow getSchemaGridRow(String fieldName) {
+		BasicSchemaGridRow schemaGridRow = null;
 		if (StringUtils.isNotEmpty(fieldName)) {
-		for (SchemaGrid row : this.getSchemaGridOutputFields())
+		for (BasicSchemaGridRow row : this.getSchemaGridOutputFields())
 			if (StringUtils.equals(fieldName, row.getFieldName()))
 				schemaGridRow = row;
 		}

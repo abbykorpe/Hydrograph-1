@@ -263,7 +263,7 @@ public class JoinConverter extends TransformConverter {
 						
 					}else{
 						converterHelper.addParamTag(this.ID, lookupMapProperty.getSource_Field(),
-								ComponentXpathConstants.JOIN_OUTSOCKET.value(), false);
+								ComponentXpathConstants.OPERATIONS_OUTSOCKET.value(), false);
 					}
 
 				}
@@ -277,7 +277,7 @@ public class JoinConverter extends TransformConverter {
 				for (LookupMapProperty lookupMapProperty : lookupMapProperties)
 					parameterFieldNames.append(lookupMapProperty.getOutput_Field() + " ");
 				converterHelper.addParamTag(this.ID, parameterFieldNames.toString(),
-						ComponentXpathConstants.JOIN_OUTSOCKET.value(), true);
+						ComponentXpathConstants.OPERATIONS_OUTSOCKET.value(), true);
 			}
 		}
 		return passThroughFieldorMapFieldList;

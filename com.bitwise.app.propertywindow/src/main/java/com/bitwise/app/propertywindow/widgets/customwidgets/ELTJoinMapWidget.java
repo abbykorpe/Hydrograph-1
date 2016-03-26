@@ -31,7 +31,7 @@ import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.JoinMappingGrid;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.datastructure.property.Schema;
-import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.graph.model.Link;
@@ -194,7 +194,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 			if(linkNumber.equals(link.getTargetTerminal())){				
 				outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 				if (outputSchema != null)
-					for (SchemaGrid row : outputSchema.getSchemaGridOutputFields()) {
+					for (BasicSchemaGridRow row : outputSchema.getSchemaGridOutputFields()) {
 						if(row.getFieldName().equals(fieldName)){
 							return row.copy();
 						}

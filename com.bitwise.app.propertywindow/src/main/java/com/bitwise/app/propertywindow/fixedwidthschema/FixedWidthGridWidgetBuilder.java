@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
-import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 

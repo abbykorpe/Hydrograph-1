@@ -67,7 +67,7 @@ public class Schema implements IDataStructure{
 				if (gridRow.get(i) instanceof FixedWidthGridRow)
 					clonedGridRow.add(((FixedWidthGridRow) gridRow.get(i)).copy());
 				else if (gridRow.get(i) != null)
-					clonedGridRow.add(((SchemaGrid) gridRow.get(i)).copy());
+					clonedGridRow.add(((BasicSchemaGridRow) gridRow.get(i)).copy());
 
 			}
 		}

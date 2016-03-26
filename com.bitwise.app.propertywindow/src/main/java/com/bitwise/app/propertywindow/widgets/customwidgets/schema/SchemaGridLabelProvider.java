@@ -22,7 +22,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
-import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 
 /**
  * The class SchemaGridLabelProvider
@@ -53,7 +53,7 @@ public class SchemaGridLabelProvider implements ITableLabelProvider , ITableColo
    * @return String
    */
   public String getColumnText(Object element, int columnIndex) {
-    SchemaGrid schemaGrid = (SchemaGrid) element;
+    BasicSchemaGridRow schemaGrid = (BasicSchemaGridRow) element;
     switch (columnIndex) {
     case 0:
       return schemaGrid.getFieldName(); 
