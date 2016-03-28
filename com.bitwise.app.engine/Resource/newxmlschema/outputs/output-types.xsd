@@ -150,7 +150,7 @@
 						minOccurs="1" maxOccurs="1" />
 					<xs:element name="tableName" type="ohiveparquet:hive_type"
 						minOccurs="1" maxOccurs="1" />
-					<xs:element name="external_table_path" type="ohiveparquet:hive_path_type"
+					<xs:element name="externalTablePath" type="ohiveparquet:hive_path_type"
 						maxOccurs="1" minOccurs="0" />
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" />
@@ -176,7 +176,7 @@
 							<xs:attribute name="value" type="xs:string" use="required" />
 						</xs:complexType>
 					</xs:element>
-					<xs:element name="external_table_path" type="ohivetextfile:hive_path_type"
+					<xs:element name="externalTablePath" type="ohivetextfile:hive_path_type"
 						maxOccurs="1" minOccurs="0" />
 					<xs:element name="quote" minOccurs="0">
 						<xs:complexType>

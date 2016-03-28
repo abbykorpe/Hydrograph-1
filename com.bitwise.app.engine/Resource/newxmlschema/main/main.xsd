@@ -102,7 +102,7 @@
 		</xs:key>
 
 		<xs:keyref name="keyDependentComponentIdRef" refer="keyDependentComponentId">
-			<xs:selector xpath="inputs/dependsOn|commands/dependsOn" />
+			<xs:selector xpath="inputs|commands" />
 			<xs:field xpath="@componentId" />
 		</xs:keyref>
 

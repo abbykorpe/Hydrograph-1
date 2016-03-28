@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<debug xmlns="http://www.bitwiseglobal.com/graph/debug" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bitwiseglobal.com/graph/main ./debug.xsd  ">
+
+	<viewData fromComponentId="input1" outSocketId="out0">
+		<limit value="50" />
+	</viewData>
+
+	<viewData fromComponentId="clone" outSocketId="sdf">
+		<limit value="10" />
+	</viewData>
+
+	<viewData fromComponentId="clone" outSocketId="sdf1">
+	</viewData>
+
+</debug>
