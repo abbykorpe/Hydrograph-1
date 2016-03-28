@@ -44,9 +44,6 @@ public class Messages extends NLS {
 	public static String RUNTIME_WINDOW_NAME;
 	public static String RUNTIME_HEADER;
 	public static String LENGTHERROR;
-	public static String GENERIC_GRIDROW;
-	public static String FIXEDWIDTH_GRIDROW;
-	public static String GENERATE_RECORD_GRIDROW;
 	public static String DATATYPELIST;
 	public static String FIELDNAME;
 	public static String DATATYPE;
