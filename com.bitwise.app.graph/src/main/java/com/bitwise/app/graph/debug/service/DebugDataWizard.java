@@ -1,3 +1,16 @@
+/********************************************************************************
+ - * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ - * Licensed under the Apache License, Version 2.0 (the "License");
+ - * you may not use this file except in compliance with the License.
+ - * You may obtain a copy of the License at
+ - * http://www.apache.org/licenses/LICENSE-2.0
+ - * Unless required by applicable law or agreed to in writing, software
+ - * distributed under the License is distributed on an "AS IS" BASIS,
+ - * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ - * See the License for the specific language governing permissions and
+ - * limitations under the License.
+ - ******************************************************************************/
+
 package com.bitwise.app.graph.debug.service;
 
 import java.util.List;
@@ -19,8 +32,10 @@ import org.eclipse.swt.widgets.TableItem;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
 
 import com.bitwise.app.graph.Messages;
+import com.bitwise.app.logging.factory.LogFactory;
  
 
 /**
@@ -29,7 +44,7 @@ import com.bitwise.app.graph.Messages;
  */
 public class DebugDataWizard extends Dialog {
 	 
-	//private static final Logger logger = LogFactory.INSTANCE.getLogger(DebugDataWizard.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(DebugDataWizard.class);
 	private Table table;
 	private boolean isLocalMode; 
 	private JSONArray jsonArray;
@@ -85,13 +100,13 @@ public class DebugDataWizard extends Dialog {
 			try {
 				if(isLocalMode){
 					localMode(list);
-					//logger.info("records fetched.");
+					logger.info("records fetched.");
 				}else{
 					remoteMode(jsonArray);
-					//logger.info("records fetched.");
+					logger.info("records fetched.");
 				}
 			} catch (JSONException e) {
-				//logger.error(e.getMessage(), e);
+				logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		  
@@ -113,7 +128,7 @@ public class DebugDataWizard extends Dialog {
 	}
 	
 	public void localMode(List<String> debugDataList) throws JSONException{
-		//logger.debug("local mode");
+		logger.debug("local mode");
 		String obj = debugDataList.get(0).toString();
 		JSONObject jsonObject = new JSONObject(debugDataList.get(0).toString());
 		String[] columnValue = new String[jsonObject.length()];
@@ -137,7 +152,7 @@ public class DebugDataWizard extends Dialog {
 	}
 	
 	public void remoteMode(JSONArray jsonArray) throws JSONException{
-		//logger.debug("remote mode");
+		logger.debug("remote mode");
 		JSONObject jsonObj = jsonArray.getJSONObject(0);
 		String[] columnValue = new String[jsonObj.length()];
 		for(int j=0; j<jsonObj.length(); j++){

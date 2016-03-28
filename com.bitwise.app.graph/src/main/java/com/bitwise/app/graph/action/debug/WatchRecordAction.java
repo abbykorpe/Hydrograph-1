@@ -1,3 +1,16 @@
+/********************************************************************************
+ - * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ - * Licensed under the Apache License, Version 2.0 (the "License");
+ - * you may not use this file except in compliance with the License.
+ - * You may obtain a copy of the License at
+ - * http://www.apache.org/licenses/LICENSE-2.0
+ - * Unless required by applicable law or agreed to in writing, software
+ - * distributed under the License is distributed on an "AS IS" BASIS,
+ - * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ - * See the License for the specific language governing permissions and
+ - * limitations under the License.
+ - ******************************************************************************/
+
 package com.bitwise.app.graph.action.debug;
 
 import java.io.FileNotFoundException;
@@ -6,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.EditPart;
@@ -20,7 +32,6 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
@@ -190,7 +201,7 @@ public class WatchRecordAction extends SelectionAction {
 		List<Object> selectedObject = getSelectedObjects();
 		createWatchCommand(selectedObject);
 		if(!selectedObject.isEmpty() && isWatcher){
-			for(Object obj : getSelectedObjects()){
+			for(Object obj : selectedObject){
 				if(obj instanceof LinkEditPart)	{
 					count++;
 				}
@@ -208,18 +219,16 @@ public class WatchRecordAction extends SelectionAction {
 	@Override
 	public void run() {
 		super.run();
-		 
-		List<Object> selectedObjects =  getSelectedObjects();
-			 createWatchCommand(selectedObjects);
-			 if(!isWatcher){
-				 messageDialog(Messages.MESSAGES_BEFORE_CLOSE_WINDOW);
+		 createWatchCommand(getSelectedObjects());
+		 if(!isWatcher){
+			 messageDialog(Messages.MESSAGES_BEFORE_CLOSE_WINDOW);
+		 }else{
+			 if(isLocalDebugMode()){
+					debugLocalMode();
 			 }else{
-				 if(isLocalDebugMode()){
-						debugLocalMode();
-				 }else{
-						debugRemoteMode();
-				 }
+					debugRemoteMode();
 			 }
+		 }
 	}
 }
 

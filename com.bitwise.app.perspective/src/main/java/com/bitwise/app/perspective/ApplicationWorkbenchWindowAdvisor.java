@@ -23,11 +23,7 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 
-import com.bitwise.app.common.services.IDebugService;
 import com.bitwise.app.perspective.config.ELTPerspectiveConfig;
 
 // TODO: Auto-generated Javadoc
@@ -88,10 +84,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
     public void dispose() {
 		super.dispose();
-		BundleContext bundleContext = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
-		ServiceReference<IDebugService> serviceReference = (ServiceReference<IDebugService>) bundleContext.getServiceReference(IDebugService.class.getName());
-		IDebugService debugService = (IDebugService)bundleContext.getService(serviceReference);
-		debugService.delete();
 		
     }
     

@@ -17,9 +17,6 @@ package com.bitwise.app.graph;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import com.bitwise.app.common.services.IDebugService;
-import com.bitwise.app.graph.debug.service.DebugServiceHandler;
-
 // TODO: Auto-generated Javadoc
 /**
  * The activator class controls the plug-in life cycle
@@ -47,7 +44,6 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		context.registerService(IDebugService.class.getCanonicalName(), new DebugServiceHandler(), null);
 	}
 
 	/*

@@ -1205,16 +1205,15 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			//if(job!=null){
 				DebugFilesReader debugFilesReader = new DebugFilesReader(job.getBasePath(), uniqueJobId, "IFDelimite_01", "out0");
 				try {
-					//if(debugFilesReader.isFilePathExists()){
 						debugFilesReader.delete();
 						logger.info("debug files removed from local");
-					//}
 				} catch (FileNotFoundException e) {
 					logger.debug(e.getMessage());
 				} catch (IllegalArgumentException e) {
 					logger.debug(e.getMessage());
 				} catch (IOException e) {
 					logger.debug(e.getMessage());
+					logger.info("debug files not exists at given location");
 				}
 		}else{
 			String basePath = job.getBasePath();

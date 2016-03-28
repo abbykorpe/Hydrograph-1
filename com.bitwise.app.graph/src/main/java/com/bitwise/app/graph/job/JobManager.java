@@ -112,12 +112,6 @@ public class JobManager {
 		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
 	}
 	
-	/*public void enableDebugJob(boolean enabled) {
-		((RunJobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
-		((DebugHandler) RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(enabled);
-		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
-	}*/
-
 	/**
 	 * execute job
 	 * 
@@ -287,7 +281,6 @@ public class JobManager {
 			try {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 				enableRunJob(true);
-				//enableDebugJob(true);
 				if (gefCanvas.getParameterFile() == null || CanvasUtils.isDirtyEditor()) {
 					return false;
 				} else {
@@ -296,7 +289,6 @@ public class JobManager {
 			} catch (Exception e) {
 				logger.debug("Unable to save graph ", e);
 				enableRunJob(true);
-				//enableDebugJob(true);
 				return false;
 			}
 		}
@@ -381,7 +373,6 @@ public class JobManager {
 		refreshProject(gefCanvas);
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
 			JobManager.INSTANCE.enableRunJob(true);
-			//JobManager.INSTANCE.enableDebugJob(true);
 		}
 		JobManager.INSTANCE.removeJob(job.getCanvasName());
 
@@ -493,6 +484,4 @@ public class JobManager {
 		return runningJobsMap;
 	}
 	
-	
-
 }

@@ -55,6 +55,9 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
         WatcherMenuAction watcherMenu = new WatcherMenuAction(watcherAction, Constants.WATCHER_ACTION,Constants.WATCHER_ACTION_TEXT, true); //action to add watch points
          
         IAction actionWatchRecords = getAction(Constants.WATCH_RECORD_ID);// action to view debug data
+        IAction componentHelpAction=getAction(Constants.HELP_ID);
+        IAction componentPropertiesAction=getAction(Constants.COMPONENT_PROPERTIES_ID);
+        
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, // target group id
 		getAction(ActionFactory.UNDO.getId())); // action to add
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, getAction(ActionFactory.REDO.getId()));
@@ -64,8 +67,11 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.COPY.getId()));
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.PASTE.getId()));
 	    menu.appendToGroup(GEFActionConstants.GROUP_REST, subGraphMenu);
+	    menu.appendToGroup(GEFActionConstants.GROUP_REST, getAction(Constants.GRAPH_PROPERTY));
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, watcherMenu);
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, actionWatchRecords);
+		menu.appendToGroup(GEFActionConstants.GROUP_REST,componentPropertiesAction);
+		menu.appendToGroup(GEFActionConstants.GROUP_REST, componentHelpAction);
 		 
 		if(subGraphMenu.getActiveOperationCount()== 0)
 	    subGraphMenu.setEnabled(false);

@@ -165,9 +165,9 @@ public class ComponentDeleteCommand extends Command {
 	private void removeWatch(Port sourcePort, Component sourceComponent){
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
-		for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator.hasNext();)
+		for (Object objectEditPart : graphicalViewer.getEditPartRegistry().values()) 
 		{
-			EditPart editPart = (EditPart) iterator.next();
+			EditPart editPart = (EditPart) objectEditPart;
 			if(editPart instanceof ComponentEditPart) 
 			{
 				Component comp = ((ComponentEditPart)editPart).getCastedModel();
