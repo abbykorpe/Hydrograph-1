@@ -58,6 +58,7 @@ import com.bitwise.app.project.structure.natures.ProjectNature;
  */
 public class ProjectStructureCreator {
 
+	private static final String ORG_ECLIPSE_M2E_CORE_MAVEN2_NATURE = "org.eclipse.m2e.core.maven2Nature";
 	private static final String POM_XML = "pom.xml";
 	private static final String MAVEN = "maven";
 	private static final String TEMPLATE_PROJECT_NAME = "templateProjectName";
@@ -155,7 +156,6 @@ public class ProjectStructureCreator {
 			IFile destinationFile = project.getFile(source);
 			java.nio.file.Path path = Paths.get(destinationFile.getLocationURI());
 			Charset charset = StandardCharsets.UTF_8;
-	
 			String content = new String(Files.readAllBytes(path), charset);
 			content = content.replaceAll(TEMPLATE_PROJECT_NAME, project.getName());
 			Files.write(path, content.getBytes(charset));
@@ -229,7 +229,7 @@ public class ProjectStructureCreator {
 			System.arraycopy(prevNatures, 0, newNatures, 0, prevNatures.length);
 			newNatures[prevNatures.length] = ProjectNature.NATURE_ID;
 			newNatures[prevNatures.length + 1] = JavaCore.NATURE_ID;
-			newNatures[prevNatures.length + 2] = "org.eclipse.m2e.core.maven2Nature";
+			newNatures[prevNatures.length + 2] = ORG_ECLIPSE_M2E_CORE_MAVEN2_NATURE;
 
 			// validate the natures
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
