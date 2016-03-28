@@ -75,7 +75,7 @@ public class SingleColumnWidget extends AbstractWidget {
 				if (getProperties().get(propertyName) == null) {
 					setProperties(propertyName, new ArrayList<String>());
 				}
-				fieldDialog.setRuntimePropertySet((List<String>) getProperties().get(propertyName));
+				fieldDialog.setRuntimePropertySet(new ArrayList<String>(set));
 				fieldDialog.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
 				fieldDialog.open();
 

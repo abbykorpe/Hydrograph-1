@@ -136,8 +136,7 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 			setProperties(propertyName, new LinkedHashMap<String, String>());
 
 		}
-		secondaryColumnDialog.setSecondaryColumnsMap((LinkedHashMap<String, String>) getProperties()
-				.get(propertyName));
+		secondaryColumnDialog.setSecondaryColumnsMap(new LinkedHashMap<String,String>(InstializeMap));
 		secondaryColumnDialog.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
 		
 		secondaryColumnDialog.open();
