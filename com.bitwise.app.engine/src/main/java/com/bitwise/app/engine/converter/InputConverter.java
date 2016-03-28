@@ -37,8 +37,7 @@ public abstract class InputConverter extends Converter {
 	public void prepareForXML() {
 		super.prepareForXML();
 		((TypeInputComponent)baseComponent).getOutSocket().addAll(getInOutSocket());
-		if(getDependsOn()!=null)
-		((TypeInputComponent)baseComponent).getDependsOn().add(getDependsOn());
+	
 		
 	}
 

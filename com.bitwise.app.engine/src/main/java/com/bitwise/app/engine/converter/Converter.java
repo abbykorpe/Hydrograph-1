@@ -39,10 +39,8 @@ import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwiseglobal.graph.commontypes.BooleanValueType;
 import com.bitwiseglobal.graph.commontypes.StandardCharsets;
 import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.commontypes.TypeDependsOn;
 import com.bitwiseglobal.graph.commontypes.TypeProperties;
 import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
-import com.bitwiseglobal.graph.sort.TypePrimaryKeyFieldsAttributes;
 
 /**
  * Base class for converter implementation. Consists of common methods used by
@@ -136,7 +134,7 @@ public abstract class Converter {
 	 * 
 	 * @return {@link TypeDependsOn}
 	 */
-	protected TypeDependsOn getDependsOn() {
+	/*protected TypeDependsOn getDependsOn() {
 		logger.debug("Getting DependsOn for {}", properties.get(Constants.PARAM_NAME));
 		if (properties.get(Constants.PARAM_DEPENDS_ON) != null) {
 			TypeDependsOn dependsOn = new TypeDependsOn();
@@ -144,7 +142,7 @@ public abstract class Converter {
 			return dependsOn;
 		}
 		return null;
-	}
+	}*/
 
 	protected TypeProperties getRuntimeProperties() {
 		TypeProperties typeProperties = null;

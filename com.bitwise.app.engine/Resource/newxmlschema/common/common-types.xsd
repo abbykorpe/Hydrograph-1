@@ -93,9 +93,6 @@
 		<xs:anyAttribute />
 	</xs:complexType>
 
-	<xs:complexType name="type-depends-on">
-		<xs:attribute name="componentId" type="xs:string" use="required" />
-	</xs:complexType>
 
 	<!--*******************Sockets ends********************** -->
 
@@ -114,8 +111,6 @@
 				<xs:sequence>
 					<xs:element name="outSocket" type="type-input-outSocket"
 						minOccurs="1" maxOccurs="unbounded" />
-					<xs:element name="dependsOn" type="type-depends-on"
-						minOccurs="0" maxOccurs="unbounded" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -171,10 +166,6 @@
 	<xs:complexType name="type-command-component" abstract="true">
 		<xs:complexContent>
 			<xs:extension base="type-base-component">
-				<xs:sequence>
-					<xs:element name="dependsOn" type="type-depends-on"
-						minOccurs="0" maxOccurs="unbounded" />
-				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
