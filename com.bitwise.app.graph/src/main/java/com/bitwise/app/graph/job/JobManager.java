@@ -106,17 +106,12 @@ public class JobManager {
 	 * 
 	 * @param enabled
 	 */
-	void enableRunJob(boolean enabled) {
-		((RunJobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
-		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
-	}
-	
-	public void enableDebugJob(boolean enabled) {
+	public void enableRunJob(boolean enabled) {
 		((RunJobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
 		((DebugHandler) RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(enabled);
 		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
 	}
-
+	
 	/**
 	 * execute job
 	 * 
@@ -165,7 +160,7 @@ public class JobManager {
 	}
 
 	public void executeJobInDebug(final Job job, String uniqueJobId, boolean isRemote, String userName) {
-		enableDebugJob(false);
+		enableRunJob(false);
 		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
 
 		if (!saveJobBeforeExecute(gefCanvas)) {
@@ -175,7 +170,7 @@ public class JobManager {
 		final ParameterGridDialog parameterGrid = getParameters();
 		if (parameterGrid.canRunGraph() == false) {
 			logger.debug("Not running graph");
-			enableDebugJob(true);
+			enableRunJob(true);
 			return;
 		}
 		logger.debug("property File :" + parameterGrid.getParameterFile());
@@ -286,7 +281,6 @@ public class JobManager {
 			try {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 				enableRunJob(true);
-				enableDebugJob(true);
 				if (gefCanvas.getParameterFile() == null || CanvasUtils.isDirtyEditor()) {
 					return false;
 				} else {
@@ -295,7 +289,6 @@ public class JobManager {
 			} catch (Exception e) {
 				logger.debug("Unable to save graph ", e);
 				enableRunJob(true);
-				enableDebugJob(true);
 				return false;
 			}
 		}
@@ -380,7 +373,6 @@ public class JobManager {
 		refreshProject(gefCanvas);
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
 			JobManager.INSTANCE.enableRunJob(true);
-			JobManager.INSTANCE.enableDebugJob(true);
 		}
 		JobManager.INSTANCE.removeJob(job.getCanvasName());
 
@@ -492,6 +484,4 @@ public class JobManager {
 		return runningJobsMap;
 	}
 	
-	
-
 }

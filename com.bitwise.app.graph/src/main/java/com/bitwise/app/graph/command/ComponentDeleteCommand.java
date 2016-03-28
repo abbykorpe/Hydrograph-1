@@ -20,15 +20,22 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
+import com.bitwise.app.graph.controller.ComponentEditPart;
+import com.bitwise.app.graph.controller.PortEditPart;
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Container;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.model.Model;
+import com.bitwise.app.graph.model.Port;
 
 
 /**
@@ -140,6 +147,12 @@ public class ComponentDeleteCommand extends Command {
 		targetConnections.addAll(component.getTargetConnections());
 		for (int i = 0; i < targetConnections.size(); i++) {
 			Link link = targetConnections.get(i);
+			
+			Port sourcePort = link.getSource().getPort(link.getSourceTerminal());
+			if(sourcePort.isWatched()){
+				removeWatch(sourcePort, link.getSource());
+			}
+			
 			link.detachSource();
 			link.detachTarget();
 			if(link.getSource()!=null)
@@ -149,6 +162,31 @@ public class ComponentDeleteCommand extends Command {
 		}
 	}
 
+	private void removeWatch(Port sourcePort, Component sourceComponent){
+		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
+		for (Object objectEditPart : graphicalViewer.getEditPartRegistry().values()) 
+		{
+			EditPart editPart = (EditPart) objectEditPart;
+			if(editPart instanceof ComponentEditPart) 
+			{
+				Component comp = ((ComponentEditPart)editPart).getCastedModel();
+				if(comp.equals(sourceComponent)){
+					List<PortEditPart> portEditParts = editPart.getChildren();
+					for(AbstractGraphicalEditPart part:portEditParts)
+					{
+						if(part instanceof PortEditPart){
+							if(((PortEditPart)part).getCastedModel().getTerminal().equals(sourcePort.getTerminal())){
+								((PortEditPart)part).getPortFigure().removeWatchColor();
+								((PortEditPart)part).getPortFigure().setWatched(false);
+							} 
+						}
+					}
+				}
+			} 
+		}
+	}
+	 
 	private void restoreConnections() {
 		for (int i = 0; i < sourceConnections.size(); i++) {
 			Link link = sourceConnections.get(i);

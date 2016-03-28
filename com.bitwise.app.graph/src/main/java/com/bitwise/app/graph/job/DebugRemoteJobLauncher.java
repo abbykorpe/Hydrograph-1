@@ -112,7 +112,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		((DebugHandler) RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(true);
 		
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
-			JobManager.INSTANCE.enableDebugJob(true);
+			JobManager.INSTANCE.enableRunJob(true);
 		}
 	}
 
@@ -241,7 +241,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 					&& !JobStatus.RUNNING.equals(job.getJobStatus())) {
 				joblogger.logMessage(JOB_COMPLETED_SUCCESSFULLY);
 				job.setJobStatus(JobStatus.SUCCESS);
-				JobManager.INSTANCE.enableDebugJob(true);
+				JobManager.INSTANCE.enableRunJob(true);
 				//((DebugHandler) RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(true);
 			}
 		}

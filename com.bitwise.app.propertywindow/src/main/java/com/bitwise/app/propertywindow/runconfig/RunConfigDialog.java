@@ -1,17 +1,16 @@
 /********************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
+  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * http://www.apache.org/licenses/LICENSE2.0
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  ******************************************************************************/
 
- 
 package com.bitwise.app.propertywindow.runconfig;
 
 import java.io.ByteArrayInputStream;
@@ -21,6 +20,8 @@ import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
@@ -32,11 +33,14 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -53,7 +57,9 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.utils.SWTResourceManager;
+import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
 public class RunConfigDialog extends Dialog {
 	private final FormToolkit formToolkit = new FormToolkit(
@@ -165,6 +171,30 @@ public class RunConfigDialog extends Dialog {
 		
      	basepathText = new Text(compositeRunMode, SWT.BORDER);
      	basepathText.setBounds(109, 70, 206, 21);
+     	basepathText.addVerifyListener(new VerifyListener() {
+			
+     		ControlDecoration txtDecorator = null;
+     		
+			@Override
+			public void verifyText(VerifyEvent event) {
+				if (txtDecorator == null)
+					txtDecorator = WidgetUtility.addDecorator(basepathText,Messages.ABSOLUTE_PATH_TEXT);
+					txtDecorator.hide();
+				Text text = (Text)event.widget;
+				String data = text.getText();
+				IPath path = new Path(data);
+				//^(?!-)[a-z0-9-]+(?<!-)(/(?!-)[a-z0-9-]+(?<!-))*$
+				Matcher matchs = Pattern.compile("^(?!-)[a-z0-9-]+(?<!-)(/(?!-)[a-z0-9-]+(?<!-))*$").matcher(data);
+				if (matchs.matches()) {
+					txtDecorator.setMarginWidth(3);
+					txtDecorator.show();
+				}else{
+					txtDecorator.hide();
+					txtDecorator.setMarginWidth(3);
+				}
+			}
+		});
+	 
      	EmptyTextListener textEdgeNodeListener1 = new EmptyTextListener("Base Path");
      	basepathText.addModifyListener(textEdgeNodeListener1);
      	
@@ -177,11 +207,6 @@ public class RunConfigDialog extends Dialog {
      		basepathText.setVisible(true);
      	}
      	 
-     /*	ListenerHelper helper = new ListenerHelper();
-		ControlDecoration txtDecorator = WidgetUtility.addDecorator(basepathText, Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);
-		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
-		basepathText.addListener(SWT.Verify, ListenerFactory.Listners.VERIFY_TEXT.getListener().getListener(null, helper, basepathText));*/
-		
 		formToolkit.adapt(basepathText, true, true);
 		textBoxes.put("basePath", basepathText);
 
@@ -487,6 +512,11 @@ public class RunConfigDialog extends Dialog {
 		}
 		if (isDebug && StringUtils.isEmpty(basepathText.getText()))
 			note.addError("Base Path not specified");
+		
+		IPath path = new Path(basepathText.getText());
+		if(isDebug && !path.isAbsolute()){
+			note.addError("Base Path should not be relative");
+		}
 		
 		return note;
 	}

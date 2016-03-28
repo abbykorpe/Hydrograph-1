@@ -54,6 +54,14 @@
       <handler
             class="com.bitwise.app.graph.handler.StopJobHandler"
             commandId="com.bitwise.app.graph.stopjob">
+         <activeWhen>
+            <with
+                  variable="activeEditorId">
+               <equals
+                     value="com.bitwise.app.graph.etlgraphicaleditor">
+               </equals>
+            </with>
+         </activeWhen>
 	 </handler>
       <handler
             class="com.bitwise.app.graph.handler.DebugHandler"

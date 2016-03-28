@@ -81,6 +81,10 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		WidgetElement.getEngine(widget).applyStyles(widget, true);
 	}
     
-    
+	@Override
+    public void dispose() {
+		super.dispose();
+		
+    }
     
 }

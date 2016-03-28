@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.graph.debug.service;
 
 import java.util.List;
@@ -106,8 +105,8 @@ public class DebugDataWizard extends Dialog {
 					remoteMode(jsonArray);
 					logger.info("records fetched.");
 				}
-			} catch (JSONException e) {
-				logger.error(e.getMessage(), e);
+			} catch (JSONException exception) {
+				logger.error(exception.getMessage(), exception);
 			}
 		  
 			container.getShell().setMaximized(true);
@@ -201,4 +200,5 @@ public class DebugDataWizard extends Dialog {
 		int y = monitorArea.y + (monitorArea.height - shellArea.height)/2;
 		getShell().setLocation(x,y);
 	}
+	
 }

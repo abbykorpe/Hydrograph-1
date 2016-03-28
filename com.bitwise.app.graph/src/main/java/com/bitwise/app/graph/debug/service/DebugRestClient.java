@@ -64,9 +64,9 @@ public class DebugRestClient {
 		 this.password = password;
 	}
 	
-	public JSONArray callRestService() throws HttpException, IOException, JSONException{
+	public JSONArray callRestService() {
 		HttpClient httpClient = new HttpClient();
-		String ip = Constants.HTTP_PROTOCOL + ipAddress + Constants.PORT_NO + Constants.ROUTE;
+		String ip = Constants.HTTP_PROTOCOL + ipAddress + Constants.PORT_NO + Constants.ROUTE_TO_READ_DATA;
 		 
 		PostMethod postMethod = new PostMethod(ip);//"http://10.130.248.53:4567/debug"
 		postMethod.addParameter(Constants.USER_ID, userId);
@@ -76,21 +76,56 @@ public class DebugRestClient {
 		postMethod.addParameter(Constants.COMPONENT_ID, componentId);
 		postMethod.addParameter(Constants.SOCKET_ID, socketId);
 
-		int status = httpClient.executeMethod(postMethod);
-		logger.debug("Rest Service Response Status :{}, status: {}", status);
-		
-		InputStream inputStream = postMethod.getResponseBodyAsStream();
-		
+		int status;
+		BufferedReader bufferedReader = null;
 		JSONArray jsonArray = null;
-		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+		try {
+			status = httpClient.executeMethod(postMethod);
+			logger.debug("Rest Service Response Status :{}, status: {}", status);
+			InputStream inputStream = postMethod.getResponseBodyAsStream();
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+			String line = "";
+			
+			while ((line = bufferedReader.readLine()) != null) {
+				jsonArray =  new JSONArray(line);
+			}
+			return jsonArray;
+		} catch (HttpException e) {
+			logger.debug(e.getMessage());
+		} catch (IOException e) {
+			logger.debug(e.getMessage());
+		}catch (JSONException e) {
+			logger.debug(e.getMessage());
+		}
+		return jsonArray;
+	}
+	
+	public void removeDebugFiles(){
+		HttpClient httpClient = new HttpClient();
+		String ip = Constants.HTTP_PROTOCOL + ipAddress + Constants.PORT_NO + Constants.ROUTE_TO_REMOVE_FILES;
 		 
-		 String line = "";
-		   while ((line = br.readLine()) != null) {
-			   
-			   jsonArray =  new JSONArray(line);
-		   }
-
-		   return jsonArray;
+		PostMethod postMethod = new PostMethod(ip);//"http://10.130.248.53:4567/debug"
+		postMethod.addParameter(Constants.USER_ID, userId);
+		postMethod.addParameter(Constants.PASSWORD, password);
+		postMethod.addParameter(Constants.BASE_PATH, basePath);
+		postMethod.addParameter(Constants.JOB_ID, jobId);
+		postMethod.addParameter(Constants.COMPONENT_ID, componentId);
+		postMethod.addParameter(Constants.SOCKET_ID, socketId);
+		try {
+			int status = httpClient.executeMethod(postMethod);
+			InputStream inputStream = postMethod.getResponseBodyAsStream();
+			logger.debug("Rest Service Response Status :{}, status: {}", status);
+		} catch (HttpException e) {
+			logger.debug(e.getMessage());
+		} catch (IOException e) {
+			logger.debug(e.getMessage());
+		}
 	}
  
+	/*public static void main(String[] args) {
+		///basepath/debug/Debug_Job_1_1153804326_1458905864960/GRecords_01_out0
+		DebugRestClient debugRestClient = new DebugRestClient("10.130.248.53", "/basepath", "Debug_Job_1_1153804326_1458905864960", "GRecords_01", "out0", "hduser", "Bitwise2012");
+		//debugRestClient.removeDebugFiles();
+		debugRestClient.callRestService();
+	}*/
 }

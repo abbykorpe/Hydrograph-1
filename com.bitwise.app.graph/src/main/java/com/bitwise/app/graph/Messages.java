@@ -44,6 +44,7 @@ public class Messages extends NLS {
 	public static String JOB_ID;
 	public static String BASE_PATH;
 	public static String DEBUG_ALERT_MESSAGE;
+	public static String NO_RECORD_FETCHED;
 	
 	public static String REMOTE_MODE_TEXT;
 	public static String DEBUG_WIZARD_TEXT;

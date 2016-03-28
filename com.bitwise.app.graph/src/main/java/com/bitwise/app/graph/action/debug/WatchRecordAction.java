@@ -1,19 +1,19 @@
 /********************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
+  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * http://www.apache.org/licenses/LICENSE-2.0
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  ******************************************************************************/
 
- 
 package com.bitwise.app.graph.action.debug;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,7 +32,6 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.util.Constants;
@@ -49,7 +48,7 @@ import com.bitwise.app.graph.job.JobManager;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.logging.factory.LogFactory;
-import com.bitwiseglobal.debug.api.DebugDataReader;
+import com.bitwiseglobal.debug.api.DebugFilesReader;
  
 /**
  * @author Bitwise
@@ -66,14 +65,6 @@ public class WatchRecordAction extends SelectionAction {
 		setLazyEnablementCalculation(true);
 	}
 
-	@Override
-	protected boolean calculateEnabled() {
-		if(createWatchCommand(getSelectedObjects())){
-			return true;
-		}else{
-			return false;
-		}
-	}
 
 	@Override
 	protected void init() {
@@ -119,6 +110,7 @@ public class WatchRecordAction extends SelectionAction {
 							String port_Name = ((PortEditPart)part).getCastedModel().getTerminal();
 							if(port_Name.equals(portName)){
 								return ((PortEditPart)part).getPortFigure().isWatched();
+								
 							}
 						}
 					}
@@ -128,7 +120,7 @@ public class WatchRecordAction extends SelectionAction {
 		return false;
 	}
 	
-	private void debugRemoteMode()throws JSONException, IOException{
+	private void debugRemoteMode() {
 		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
 		String basePath = job.getBasePath();
 		String ipAddress = job.getIpAddress();
@@ -136,7 +128,14 @@ public class WatchRecordAction extends SelectionAction {
 		String password = job.getPassword();
 		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
 		DebugRestClient debugRestClient = new DebugRestClient(ipAddress, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password);
-		JSONArray jsonArray = debugRestClient.callRestService();
+		JSONArray jsonArray = null;
+		try {
+			jsonArray = debugRestClient.callRestService();
+		} catch (NullPointerException e){
+			logger.debug(e.getMessage(), e);
+			messageDialog(Messages.REMOTE_MODE_TEXT);
+		}
+		
 		if(jsonArray.length() != 0){
 			DebugDataWizard debugRemoteWizard = new DebugDataWizard(Display.getDefault().getActiveShell(), jsonArray, isLocalDebugMode());
 			debugRemoteWizard.open();
@@ -145,32 +144,41 @@ public class WatchRecordAction extends SelectionAction {
 		}
 	}
 	
-	private void debugLocalMode() throws Exception{
+	private void debugLocalMode() {
 		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
 		String basePath = job.getBasePath();
 		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
-		DebugDataReader dataReader = new DebugDataReader(basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
+		DebugFilesReader debugFilesReader = new DebugFilesReader(basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
 		List<String> debugDataList = new ArrayList<>();
 		int count = 0;
-		if(dataReader.isFilePathExists()){
-			while(dataReader.hasNext()){
-				if(count <= 100){
-					String data = dataReader.next().toString();
-					debugDataList.add(data);
-					count++;
-				}else{
-					break;
+		try {
+			if(debugFilesReader.isFilePathExists()){
+				while(debugFilesReader.hasNext()){
+					if(count <= 100){
+						String data = debugFilesReader.next();
+						debugDataList.add(data);
+						count++;
+					}else{
+						break;
+					}
 				}
+			}else{
+				messageDialog(Messages.REMOTE_MODE_TEXT);
+				logger.info("file not exists.");
 			}
-		}else{
-			messageDialog(Messages.REMOTE_MODE_TEXT);
-			logger.info("file not exists.");
+		} catch (FileNotFoundException e) {
+			logger.debug(e.getMessage(), e);
+		} catch (IllegalArgumentException e) {
+			logger.debug(e.getMessage(), e);
+		} catch (IOException e) {
+			logger.debug(e.getMessage(), e);
 		}
+		
 		if(!debugDataList.isEmpty()){
 			DebugDataWizard debugRemoteWizard = new DebugDataWizard(Display.getDefault().getActiveShell(), debugDataList, isLocalDebugMode());
 			debugRemoteWizard.open();
 		}else{
-			messageDialog("No record fetched.");
+			messageDialog(Messages.NO_RECORD_FETCHED);
 		}
 	}
 	
@@ -188,32 +196,39 @@ public class WatchRecordAction extends SelectionAction {
 	}
 	
 	@Override
+	protected boolean calculateEnabled() {
+		int count =0;
+		List<Object> selectedObject = getSelectedObjects();
+		createWatchCommand(selectedObject);
+		if(!selectedObject.isEmpty() && isWatcher){
+			for(Object obj : selectedObject){
+				if(obj instanceof LinkEditPart)	{
+					count++;
+				}
+			}
+		}
+		
+		if(count == 1){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	
+	@Override
 	public void run() {
 		super.run();
-		 
-		List<Object> selectedObjects =  getSelectedObjects();
-			 createWatchCommand(selectedObjects);
-			 if(!isWatcher){
-				 messageDialog(Messages.MESSAGES_BEFORE_CLOSE_WINDOW);
+		 createWatchCommand(getSelectedObjects());
+		 if(!isWatcher){
+			 messageDialog(Messages.MESSAGES_BEFORE_CLOSE_WINDOW);
+		 }else{
+			 if(isLocalDebugMode()){
+					debugLocalMode();
 			 }else{
-				 if(isLocalDebugMode()){
-					 try {
-						 logger.debug("Reading local debug data");
-						debugLocalMode();
-					} catch (Exception e) {
-						logger.error("Exception in local mode"+e.getMessage(), e);
-						messageDialog(Messages.REMOTE_MODE_TEXT);
-					}
-				 }else{
-					 try {
-						 logger.debug("Reading REMOTE debug data");
-						debugRemoteMode();
-					} catch (JSONException | IOException e) {
-						logger.error("Exception in remote mode"+e.getMessage(), e);
-						messageDialog(Messages.REMOTE_MODE_TEXT);
-					}
-				 }
+					debugRemoteMode();
 			 }
+		 }
 	}
 }
 
