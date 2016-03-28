@@ -114,7 +114,7 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 		}
 		
 		RuntimePropertyDialog runtimePropertyDialog = new RuntimePropertyDialog(shell,propertyDialogButtonBar,runtimeConfig.getWindowLabel());
-		runtimePropertyDialog.setRuntimeProperties((Map<String, String>) getProperties().get(propertyName));
+		runtimePropertyDialog.setRuntimeProperties(new LinkedHashMap<>(initialMap));
 		runtimePropertyDialog.open();
 		initialMap = runtimePropertyDialog.getRuntimeProperties();
 	}
