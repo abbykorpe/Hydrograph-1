@@ -20,6 +20,7 @@ import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
+import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.propertywindow.handlers.ShowHidePropertyHelpHandler;
@@ -271,6 +272,10 @@ public abstract class AbstractWidget {
 			propertyHelpWidget.setCursor(new Cursor(propertyHelpWidget.getDisplay(), SWT.CURSOR_HELP));
 		}
 
+	}
+	
+	public boolean verifySchemaFile(){
+		return true;
 	}
 	
 }

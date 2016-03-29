@@ -105,18 +105,18 @@ public class GridRowLoader {
 					GridRow gridRow = null;
 					schemaGridRowListToImport = new ArrayList<GridRow>();
 
-					if(Constants.GENERIC_GRID_ROW.equals(gridRowType)){
+					if(Messages.GENERIC_GRID_ROW.equals(gridRowType)){
 
 						for (Field field : fieldsList) {
 							addRowToList(gridDetails, grids, getBasicSchemaGridRow(field), schemaGridRowListToImport);
 						}	
 						
-					}else if(Constants.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){
+					}else if(Messages.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){
 
 						for (Field field : fieldsList) {
 							addRowToList(gridDetails, grids, getFixedWidthGridRow(field), schemaGridRowListToImport);
 						}
-					}else if(Constants.GENERATE_RECORD_GRID_ROW.equals(gridRowType)){
+					}else if(Messages.GENERATE_RECORD_GRID_ROW.equals(gridRowType)){
 
 						for (Field field : fieldsList) {
 							
@@ -181,19 +181,20 @@ public class GridRowLoader {
 					GridRow gridRow = null;
 					schemaGridRowListToImport = new ArrayList<GridRow>();
 
-					if(Constants.GENERIC_GRID_ROW.equals(gridRowType)){
+
+					if(Messages.GENERIC_GRID_ROW.equals(gridRowType)){
 
 						for (Field field : fieldsList) {
 							gridRow = getBasicSchemaGridRow(field);
 							schemaGridRowListToImport.add(gridRow);
 						}	
 						
-					}else if(Constants.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){
+					}else if(Messages.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){
 
 						for (Field field : fieldsList) {
 							schemaGridRowListToImport.add(getFixedWidthGridRow(field));
 						}
-					}else if(Constants.GENERATE_RECORD_GRID_ROW.equals(gridRowType)){
+					}else if(Messages.GENERATE_RECORD_GRID_ROW.equals(gridRowType)){
 						
 						for (Field field : fieldsList) {
 							schemaGridRowListToImport.add(gridRow = getGenerateRecordGridRow(field));
@@ -215,8 +216,9 @@ public class GridRowLoader {
 			logger.warn(Messages.IMPORT_XML_ERROR);
 			return schemaGridRowListToImport;
 		}
-		
+
 		return schemaGridRowListToImport;
+
 	}
 
 
@@ -391,7 +393,12 @@ public class GridRowLoader {
 		gridRow.setFieldName(field.getName());
 		gridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(field.getType().value()));
 		gridRow.setDataTypeValue(GridWidgetCommonBuilder.getDataTypeValue()[GridWidgetCommonBuilder.getDataTypeByValue(field.getType().value())]);
-		gridRow.setDateFormat(field.getFormat());
+		
+		if(field.getFormat()!=null)
+			gridRow.setDateFormat(field.getFormat());
+		else
+			gridRow.setDateFormat("");
+		
 		if(field.getPrecision()!=null)
 			gridRow.setPrecision(String.valueOf(field.getPrecision()));
 		else
@@ -409,7 +416,12 @@ public class GridRowLoader {
 			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(Messages.SCALE_TYPE_NONE));
 			gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
 		}
-		gridRow.setDescription(field.getDescription());
+		
+		if(field.getDescription()!=null)
+			gridRow.setDescription(field.getDescription());
+		else
+			gridRow.setDescription("");
+		
 	}
 
 }

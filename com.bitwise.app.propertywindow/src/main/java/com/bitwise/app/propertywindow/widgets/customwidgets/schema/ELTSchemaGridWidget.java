@@ -15,6 +15,9 @@
 package com.bitwise.app.propertywindow.widgets.customwidgets.schema;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -22,6 +25,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
@@ -51,10 +63,14 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
+import com.bitwise.app.common.datastructure.property.GenerateRecordSchemaGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
+import com.bitwise.app.common.schema.Field;
+import com.bitwise.app.common.schema.Fields;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Link;
@@ -137,6 +153,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	AbstractELTWidget internalSchema, externalSchema;
 	private Text extSchemaPathText;
+	public final static String SCHEMA_CONFIG_XSD_PATH = Platform.getInstallLocation().getURL().getPath() + Messages.SCHEMA_CONFIG_XSD_PATH;
 
 	private ControlDecoration txtDecorator, decorator;
 
@@ -205,6 +222,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
+		
 		Map<String, ComponentsOutputSchema> schemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
 		ComponentsOutputSchema componentsOutputSchema = new ComponentsOutputSchema();
 		if (getComponent().getProperties().get(Constants.SCHEMA_TO_PROPAGATE) != null) {
@@ -279,7 +297,174 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		return property;
 	}
+	
+	@Override
+	public boolean verifySchemaFile(){
+		boolean verifiedSchema=true;
+		if(isExternal){
+			verifiedSchema=verifyExtSchemaSync(extSchemaPathText.getText(), schemaGridRowList);
+		}
+		return verifiedSchema;
+	}
 
+	private boolean verifyExtSchemaSync(String extSchemaPath, List<GridRow> schemaInGrid) {
+		List<GridRow> schemasFromFile = new ArrayList<GridRow>();
+		File schemaFile = new File(extSchemaPath);
+		InputStream xml, xsd;
+		Fields fields;
+		boolean verifiedSchema = true;
+		try {
+			xml = new FileInputStream(extSchemaPath);
+			xsd = new FileInputStream(SCHEMA_CONFIG_XSD_PATH);
+
+			if(validateXML(xml, xsd)){
+				JAXBContext jaxbContext;
+				try {
+					jaxbContext = JAXBContext.newInstance(com.bitwise.app.common.schema.Schema.class);
+					Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+					
+					com.bitwise.app.common.schema.Schema schema= 
+							(com.bitwise.app.common.schema.Schema) jaxbUnmarshaller.unmarshal(schemaFile);
+					fields = schema.getFields();
+					ArrayList<Field> fieldsList = (ArrayList<Field>) fields.getField();
+					GridRow gridRow = null;
+					
+					if(Messages.GENERIC_GRID_ROW.equals(gridRowType)){
+
+						for (Field temp : fieldsList) {
+							gridRow = new BasicSchemaGridRow();
+							populateCommonFields(gridRow, temp);
+							schemasFromFile.add(gridRow);
+						}	
+						
+					}else if(Messages.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){
+
+						for (Field temp : fieldsList) {
+							gridRow = new FixedWidthGridRow();
+							populateCommonFields(gridRow, temp);
+
+							if(temp.getLength()!=null)
+								((FixedWidthGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
+							else
+								((FixedWidthGridRow) gridRow).setLength("");
+							schemasFromFile.add(gridRow);
+						}
+					}else if(Messages.GENERATE_RECORD_GRID_ROW.equals(gridRowType)){
+
+						for (Field temp : fieldsList) {
+							gridRow = new GenerateRecordSchemaGridRow();
+							populateCommonFields(gridRow, temp);
+
+							if(temp.getLength()!=null)
+								((GenerateRecordSchemaGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
+							else
+								((GenerateRecordSchemaGridRow) gridRow).setLength("");
+
+							if(temp.getDefault()!=null)
+								((GenerateRecordSchemaGridRow) gridRow).setDefaultValue((String.valueOf(temp.getDefault())));
+							else
+								((GenerateRecordSchemaGridRow) gridRow).setDefaultValue((String.valueOf("")));
+
+							if(temp.getRangeFrom()!=null)
+								((GenerateRecordSchemaGridRow) gridRow).setRangeFrom(String.valueOf(temp.getRangeFrom()));
+							else
+								((GenerateRecordSchemaGridRow) gridRow).setRangeFrom("");
+
+							if(temp.getRangeFrom()!=null)
+								((GenerateRecordSchemaGridRow) gridRow).setRangeTo(String.valueOf(temp.getRangeTo()));
+							else
+								((GenerateRecordSchemaGridRow) gridRow).setRangeTo("");
+							
+							schemasFromFile.add(gridRow);
+							
+						}
+						
+					}
+				} catch (JAXBException e) {
+					logger.error(Messages.EXPORTED_SCHEMA_SYNC_ERROR, e);
+				}
+				
+			}
+			if(!equalLists(schemaInGrid, schemasFromFile)){
+				verifiedSchema=false;
+				MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.EXPORTED_SCHEMA_NOT_IN_SYNC);
+			}
+			
+		} catch (FileNotFoundException e) {
+			logger.error(Messages.EXPORTED_SCHEMA_SYNC_ERROR, e);
+		}
+		return verifiedSchema;
+
+	}
+
+	private boolean validateXML(InputStream xml, InputStream xsd){
+		try
+		{
+			SchemaFactory factory = 
+					SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			javax.xml.validation.Schema schema = factory.newSchema(new StreamSource(xsd));
+			Validator validator = schema.newValidator();
+			
+			validator.validate(new StreamSource(xml));
+			return true;
+		}
+		catch(Exception ex)
+		{
+			MessageDialog.openError(new Shell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + "-\n" + ex.getMessage());
+			logger.error(Messages.IMPORT_XML_FORMAT_ERROR);
+			return false;
+		}
+	}
+	
+	private void populateCommonFields(GridRow gridRow, Field temp) {
+		gridRow.setFieldName(temp.getName());
+		gridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(temp.getType().value()));
+		gridRow.setDataTypeValue(GridWidgetCommonBuilder.getDataTypeValue()[GridWidgetCommonBuilder.getDataTypeByValue(temp.getType().value())]);
+		
+		if(temp.getFormat()!=null)
+			gridRow.setDateFormat(temp.getFormat());
+		else
+			gridRow.setDateFormat("");
+		
+		if(temp.getPrecision()!=null)
+			gridRow.setPrecision(String.valueOf(temp.getPrecision()));
+		else
+			gridRow.setPrecision("");
+
+		if(temp.getScale()!=null)
+			gridRow.setScale(String.valueOf(temp.getScale()));
+		else
+			gridRow.setScale("");
+
+		if(temp.getScaleType()!=null){
+			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(temp.getScaleType().value()));	
+			gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[GridWidgetCommonBuilder.getScaleTypeByValue(temp.getScaleType().value())]);
+		}else{
+			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(Messages.SCALE_TYPE_NONE));
+			gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
+		}
+		if(temp.getDescription()!=null)
+			gridRow.setDescription(temp.getDescription());
+		else
+			gridRow.setDescription("");
+	}
+	
+	public  boolean equalLists(List<GridRow> one, List<GridRow> two){     
+	    if (one == null && two == null){
+	        return true;
+	    }
+
+	    if((one == null && two != null) 
+	      || one != null && two == null
+	      || one.size() != two.size()){
+	        return false;
+	    }
+	    one = new ArrayList<GridRow>(one); 
+	    two = new ArrayList<GridRow>(two);   
+ 
+	    return one.equals(two);
+	}
+	
 	// Operational class label.
 	AbstractELTWidget fieldError = new ELTDefaultLable(Messages.FIELDNAMEERROR).lableWidth(250);
 

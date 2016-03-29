@@ -167,6 +167,7 @@ class SchemaGridCellModifier implements ICellModifier {
 					||DataType.DATE_CLASS.equals(row.getDataTypeValue())){
 				
 				row.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[0]);
+				row.setScaleType(0);
 			}
 
 		}

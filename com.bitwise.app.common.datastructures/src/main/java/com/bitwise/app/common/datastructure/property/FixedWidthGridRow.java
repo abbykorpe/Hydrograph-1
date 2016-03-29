@@ -14,6 +14,8 @@
  
 package com.bitwise.app.common.datastructure.property;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * The Class FixedWidthGridRow.
  * 
@@ -57,5 +59,26 @@ public class FixedWidthGridRow extends GridRow{
 		return tempschemaGrid;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (obj instanceof FixedWidthGridRow) {
+			FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) obj;
+			
+			if ( StringUtils.equals(fixedWidthGridRow.getFieldName(), (this.getFieldName())) &&
+					StringUtils.equals(String.valueOf(fixedWidthGridRow.getDataType()), String.valueOf((this.getDataType()))) &&
+					StringUtils.equals(fixedWidthGridRow.getDataTypeValue(), (this.getDataTypeValue()) )&&
+					StringUtils.equals(fixedWidthGridRow.getDateFormat(), ( this.getDateFormat())) &&
+					StringUtils.equals(String.valueOf(fixedWidthGridRow.getScaleType()), String.valueOf((this.getScaleType()) ))&&
+					StringUtils.equals(fixedWidthGridRow.getScaleTypeValue(), (this.getScaleTypeValue()) )&&
+					StringUtils.equals(fixedWidthGridRow.getPrecision(), (this.getPrecision())	)&&
+					StringUtils.equals(fixedWidthGridRow.getDescription(), (this.getDescription()) )&&
+					StringUtils.equals(fixedWidthGridRow.getLength(), (this.getLength()))
+				)
+				return true;
+		}
+		return false;
+		
+	}
 	
 }

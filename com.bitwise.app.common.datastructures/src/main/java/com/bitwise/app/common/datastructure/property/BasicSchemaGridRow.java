@@ -29,6 +29,7 @@ public class BasicSchemaGridRow extends GridRow {
 		tempschemaGrid.setScale(getScale());
 		tempschemaGrid.setDataTypeValue(getDataTypeValue());
 		tempschemaGrid.setScaleType(getScaleType());
+		tempschemaGrid.setScaleTypeValue(getScaleTypeValue());
 		tempschemaGrid.setPrecision(getPrecision());
 		tempschemaGrid.setDescription(getDescription());
 

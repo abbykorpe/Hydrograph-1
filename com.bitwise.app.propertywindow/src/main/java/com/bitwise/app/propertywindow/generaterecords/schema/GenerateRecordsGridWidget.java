@@ -35,7 +35,7 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 
 	public GenerateRecordsGridWidget(PropertyDialogButtonBar propertyDialogButtonBar) {
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
-		this.gridRowType = Constants.GENERATE_RECORD_GRID_ROW;
+		this.gridRowType = Messages.GENERATE_RECORD_GRID_ROW;
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigurationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
-		this.gridRowType = Constants.GENERATE_RECORD_GRID_ROW;
+		this.gridRowType = Messages.GENERATE_RECORD_GRID_ROW;
 	}
 
 	/* (non-Javadoc)
