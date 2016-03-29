@@ -39,7 +39,7 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GenerateRecordSchemaGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
-import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.schema.Field;
 import com.bitwise.app.common.schema.FieldDataTypes;
 import com.bitwise.app.common.schema.Fields;
@@ -301,7 +301,7 @@ public class GridRowLoader {
 	
 
 	private GridRow getBasicSchemaGridRow(Field field) {
-		GridRow gridRow = new SchemaGrid();
+		GridRow gridRow = new BasicSchemaGridRow();
 		populateCommonFields(gridRow, field);
 		return gridRow;
 	}

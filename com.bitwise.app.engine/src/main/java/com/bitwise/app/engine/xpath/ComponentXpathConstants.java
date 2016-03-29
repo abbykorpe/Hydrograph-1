@@ -36,7 +36,9 @@ public enum ComponentXpathConstants {
 	LOOKUP_KEYS("/graph/operations[@id='$id']/keys[@inSocketId='$inSocketId']"),
 	JOIN_KEYS("/graph/operations[@id='$id']/keys[@inSocketId='$inSocketId']"),
 	
-	RUNTIME_PROPERTIES("/graph/*[@id='$id']/runtimeProperties"),;
+	RUNTIME_PROPERTIES("/graph/*[@id='$id']/runtimeProperties"),
+	
+	OPERATIONS_OUTSOCKET("graph/operations[@id='$id']/outSocket");
 	
 	private final String value;
 

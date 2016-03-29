@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.Path;
 
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
-import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GridRowLoader;
@@ -83,11 +83,11 @@ public class ConverterUiHelper {
 	 * @param record
 	 * @return SchemaGrid, this object is responsible for displaying schema on property window
 	 */
-	public SchemaGrid getSchema(Object record) {
+	public BasicSchemaGridRow getSchema(Object record) {
 		if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
 			return null;
 		} else if ((TypeBaseField.class).isAssignableFrom(record.getClass())) {
-			SchemaGrid schemaGrid = new SchemaGrid();
+			BasicSchemaGridRow schemaGrid = new BasicSchemaGridRow();
 			TypeBaseField typeBaseField = (TypeBaseField) record;
 			getCommonSchema(schemaGrid, typeBaseField);
 			return schemaGrid;

@@ -21,7 +21,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 
-import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
@@ -55,7 +55,7 @@ public class GeneralGridWidgetBuilder extends GridWidgetCommonBuilder {
 	@Override
 	public void createDefaultSchema(List grids, TableViewer tableViewer, Label errorLabel) {
 		int rowSequence = getRowSequence();
-		SchemaGrid schemaGrid = new SchemaGrid();
+		BasicSchemaGridRow schemaGrid = new BasicSchemaGridRow();
 		schemaGrid.setFieldName("DefaultField" + rowSequence);
 		schemaGrid.setDateFormat("");
 		schemaGrid.setPrecision("");

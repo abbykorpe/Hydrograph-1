@@ -36,7 +36,7 @@ import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
 import com.bitwise.app.common.datastructure.property.mapping.TransformMapping;
-import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.datastructure.property.mapping.ErrorObject;
 import com.bitwise.app.common.datastructure.property.mapping.InputField;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
@@ -220,9 +220,9 @@ public class TransformWidget extends AbstractWidget {
 		return schemaFields;
 	}*/
 
-	private SchemaGrid getFieldSchema(String fieldName) {
-		List<SchemaGrid> schemaGridRows = getInputFieldSchema();
-		for (SchemaGrid schemaGridRow : schemaGridRows) {
+	private BasicSchemaGridRow getFieldSchema(String fieldName) {
+		List<BasicSchemaGridRow> schemaGridRows = getInputFieldSchema();
+		for (BasicSchemaGridRow schemaGridRow : schemaGridRows) {
 			if (schemaGridRow.getFieldName().equals(fieldName)) {
 				return schemaGridRow;
 			}
@@ -230,13 +230,13 @@ public class TransformWidget extends AbstractWidget {
 		return null;
 	}
 
-	private List<SchemaGrid> getInputFieldSchema() {
+	private List<BasicSchemaGridRow> getInputFieldSchema() {
 		ComponentsOutputSchema outputSchema = null;
-		List<SchemaGrid> schemaGridRows = new LinkedList<>();
+		List<BasicSchemaGridRow> schemaGridRows = new LinkedList<>();
 		for (Link link : getComponent().getTargetConnections()) {
 			outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 			if (outputSchema != null)
-				for (SchemaGrid row : outputSchema.getSchemaGridOutputFields()) {
+				for (BasicSchemaGridRow row : outputSchema.getSchemaGridOutputFields()) {
 					schemaGridRows.add(row);
 				}
 		}
@@ -244,7 +244,7 @@ public class TransformWidget extends AbstractWidget {
 	}
 
 	private void addMapFieldsToSchema(Map<String, String> mapFields) {
-		SchemaGrid tempSchemaGridRow = null;
+		BasicSchemaGridRow tempSchemaGridRow = null;
 		Schema schema = getSchemaForInternalPapogation();
 		List<String> currentFieldsInProppogatedSchemaObject = new LinkedList<>();
 		for (GridRow gridRow : schema.getGridRow()) {
@@ -252,9 +252,9 @@ public class TransformWidget extends AbstractWidget {
 		}
 
 		for (String inputField : mapFields.keySet()) {
-			tempSchemaGridRow = (SchemaGrid) getFieldSchema(inputField);
+			tempSchemaGridRow = (BasicSchemaGridRow) getFieldSchema(inputField);
 			if (tempSchemaGridRow != null) {
-				SchemaGrid schemaGridRow = (SchemaGrid) tempSchemaGridRow.copy();
+				BasicSchemaGridRow schemaGridRow = (BasicSchemaGridRow) tempSchemaGridRow.copy();
 				schemaGridRow.setFieldName(mapFields.get(inputField));
 
 				if (!currentFieldsInProppogatedSchemaObject.contains(mapFields.get(inputField))) {
@@ -279,9 +279,9 @@ public class TransformWidget extends AbstractWidget {
 		}
 
 		for (String passThroughField : passThroughFields) {
-			SchemaGrid schemaGridRow= getFieldSchema(passThroughField);
+			BasicSchemaGridRow schemaGridRow= getFieldSchema(passThroughField);
 			if(schemaGridRow!=null){
-			SchemaGrid tempSchemaGrid =(SchemaGrid) schemaGridRow.copy();
+			BasicSchemaGridRow tempSchemaGrid =(BasicSchemaGridRow) schemaGridRow.copy();
 
 			if (!currentFieldsInProppogatedSchemaObject.contains(passThroughField)) {
 				schema.getGridRow().add(tempSchemaGrid);
@@ -306,7 +306,7 @@ public class TransformWidget extends AbstractWidget {
 
 		for (FilterProperties operationField : operationFields) {
 
-			SchemaGrid schemaGridRow = schemaPropagationHelper.createSchemaGridRow(operationField.getPropertyname());
+			BasicSchemaGridRow schemaGridRow = schemaPropagationHelper.createSchemaGridRow(operationField.getPropertyname());
 
 			if (!currentFieldsInProppogatedSchemaObject.contains(operationField.getPropertyname())) {
 				schema.getGridRow().add(schemaGridRow);

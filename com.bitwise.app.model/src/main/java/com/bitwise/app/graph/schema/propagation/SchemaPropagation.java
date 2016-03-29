@@ -27,7 +27,7 @@ import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GenerateRecordSchemaGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
-import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
@@ -167,7 +167,7 @@ public class SchemaPropagation {
 				schemaName=getExistingSchemaName((Schema)component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME));
 			if (schemaName!=null && StringUtils.equals(FixedWidthGridRow.class.getCanonicalName(), schemaName) ) {
 				setFixedWidthAsSchema(component, componentsOutputSchema);
-			}else if (schemaName!=null && StringUtils.equals(SchemaGrid.class.getCanonicalName(), schemaName) ) {
+			}else if (schemaName!=null && StringUtils.equals(BasicSchemaGridRow.class.getCanonicalName(), schemaName) ) {
 				setSchemaGridAsSchema(component, componentsOutputSchema);
 			}
 			else if(schemaName!=null && StringUtils.equals(GenerateRecordSchemaGridRow.class.getCanonicalName(), schemaName) ) 
@@ -181,7 +181,7 @@ public class SchemaPropagation {
 		schema.setIsExternal(false);
 		schema.setExternalSchemaPath("");
 		List<GridRow> gridRows = new ArrayList<>();
-		for (SchemaGrid gridRow : componentsOutputSchema.getSchemaGridOutputFields())
+		for (BasicSchemaGridRow gridRow : componentsOutputSchema.getSchemaGridOutputFields())
 			gridRows.add(gridRow);
 		schema.setGridRow(gridRows);
 		component.getProperties().put(Constants.SCHEMA_PROPERTY_NAME, schema);

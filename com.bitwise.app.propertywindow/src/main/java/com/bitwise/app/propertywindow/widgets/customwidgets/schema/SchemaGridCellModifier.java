@@ -19,7 +19,7 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
-import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.propertywindow.widgets.utility.DataType;
 
 
@@ -45,7 +45,7 @@ class SchemaGridCellModifier implements ICellModifier {
 	@Override
 	public boolean canModify(Object element, String property) {
 		// Allow editing of all values
-		SchemaGrid schemaGrid = (SchemaGrid) element;
+		BasicSchemaGridRow schemaGrid = (BasicSchemaGridRow) element;
 		if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
 		{
 			if(DataType.DATE_CLASS.equals(schemaGrid.getDataTypeValue()))
@@ -91,7 +91,7 @@ class SchemaGridCellModifier implements ICellModifier {
 
 	@Override
 	public Object getValue(Object element, String property) {
-		SchemaGrid schemaGrid = (SchemaGrid) element;
+		BasicSchemaGridRow schemaGrid = (BasicSchemaGridRow) element;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			return schemaGrid.getFieldName();
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property))
@@ -116,7 +116,7 @@ class SchemaGridCellModifier implements ICellModifier {
 		if (element instanceof Item)
 			element = ((Item) element).getData();
 
-		SchemaGrid schemaGrid = (SchemaGrid) element;
+		BasicSchemaGridRow schemaGrid = (BasicSchemaGridRow) element;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			schemaGrid.setFieldName(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)){
@@ -145,7 +145,7 @@ class SchemaGridCellModifier implements ICellModifier {
 		viewer.refresh();
 	}
 
-	private void resetScale(SchemaGrid row, String property){
+	private void resetScale(BasicSchemaGridRow row, String property){
 		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
 			if(DataType.INTEGER_CLASS.equals(row.getDataTypeValue()) 
 					||DataType.STRING_CLASS.equals(row.getDataTypeValue())
@@ -158,7 +158,7 @@ class SchemaGridCellModifier implements ICellModifier {
 		}
 	}
 	
-	private void resetScaleType(SchemaGrid row, String property){
+	private void resetScaleType(BasicSchemaGridRow row, String property){
 		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
 			if(DataType.INTEGER_CLASS.equals(row.getDataTypeValue()) 
 					||DataType.STRING_CLASS.equals(row.getDataTypeValue())
@@ -172,7 +172,7 @@ class SchemaGridCellModifier implements ICellModifier {
 		}
 	}
 
-	private void resetDateFormat(SchemaGrid row, String property){
+	private void resetDateFormat(BasicSchemaGridRow row, String property){
 		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
 			if(!(DataType.DATE_CLASS.equals(row.getDataTypeValue()))){
 				row.setDateFormat("");
@@ -181,7 +181,7 @@ class SchemaGridCellModifier implements ICellModifier {
 		}
 	}
 	
-	private void resetPrecision(SchemaGrid row, String property){
+	private void resetPrecision(BasicSchemaGridRow row, String property){
 		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
 			if(DataType.INTEGER_CLASS.equals(row.getDataTypeValue()) 
 					||DataType.STRING_CLASS.equals(row.getDataTypeValue())

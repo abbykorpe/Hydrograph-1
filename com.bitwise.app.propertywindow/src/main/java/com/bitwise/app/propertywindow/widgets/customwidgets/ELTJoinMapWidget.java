@@ -31,8 +31,9 @@ import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.JoinMappingGrid;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.datastructure.property.Schema;
-import com.bitwise.app.common.datastructure.property.SchemaGrid;
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
@@ -115,19 +116,21 @@ public class ELTJoinMapWidget extends AbstractWidget {
 			 List<GridRow> outputSchemaGridRowList = new LinkedList<>();
 			 
 			 for(LookupMapProperty row : lookupMapRows){
-				 GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
-				 GridRow outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
-				 
-				 
-				 if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
-					 finalPassThroughFields.add(row.getOutput_Field());
-					 passThroughFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
-				 }else{
-					 finalMapFields.put(row.getSource_Field().split("\\.")[1], row.getOutput_Field());
-					 mapFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+				 if(!ParameterUtil.isParameter(row.getSource_Field())){
+					 GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
+					 GridRow outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
+
+
+					 if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
+						 finalPassThroughFields.add(row.getOutput_Field());
+						 passThroughFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+					 }else{
+						 finalMapFields.put(row.getSource_Field().split("\\.")[1], row.getOutput_Field());
+						 mapFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+					 }
+
+					 outputSchemaGridRowList.add(outputFieldSchema);
 				 }
-				 
-				 outputSchemaGridRowList.add(outputFieldSchema);
 			 }
 			 
 			 addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(finalMapFields, finalPassThroughFields,passThroughFieldsPortInfo,mapFieldsPortInfo);
@@ -191,7 +194,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 			if(linkNumber.equals(link.getTargetTerminal())){				
 				outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 				if (outputSchema != null)
-					for (SchemaGrid row : outputSchema.getSchemaGridOutputFields()) {
+					for (BasicSchemaGridRow row : outputSchema.getSchemaGridOutputFields()) {
 						if(row.getFieldName().equals(fieldName)){
 							return row.copy();
 						}

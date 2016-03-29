@@ -26,16 +26,19 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.component.config.PortInfo;
 import com.bitwise.app.common.component.config.PortSpecification;
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.LookupMapProperty;
 import com.bitwise.app.common.datastructure.property.LookupMappingGrid;
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
-import com.bitwise.app.common.datastructure.property.mapping.TransformMapping;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
+import com.bitwise.app.common.datastructure.property.mapping.TransformMapping;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.common.util.ParameterUtil;
 import com.bitwise.app.engine.xpath.ComponentXpath;
+import com.bitwise.app.engine.xpath.ComponentXpathConstants;
 import com.bitwise.app.engine.xpath.ComponentsAttributeAndValue;
 import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
@@ -56,13 +59,15 @@ import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 
 /**
- * @author Bitwise This is a helper class for converter implementation. Contains the helper methods for conversion.
+ * This is a helper class for converter implementation. Contains the helper methods for conversion.
+ * @author Bitwise 
  */
 public class ConverterHelper {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ConverterHelper.class);
 	protected Map<String, Object> properties = new LinkedHashMap<String, Object>();
 	protected Component component = null;
 	protected String componentName = null;
+	private static final String ID = "$id";
 
 	public ConverterHelper(Component component) {
 		this.component = component;
@@ -70,7 +75,7 @@ public class ConverterHelper {
 		this.componentName = (String) properties.get(Constants.PARAM_NAME);
 	}
 
-	public List<TypeTransformOperation> getOperations(TransformMapping transformPropertyGrid, List<FixedWidthGridRow> fixedWidthGridRows) {
+	public List<TypeTransformOperation> getOperations(TransformMapping transformPropertyGrid, List<BasicSchemaGridRow> schemaGridRows) {
 		logger.debug("Generating TypeTransformOperation data :{}", properties.get(Constants.PARAM_NAME));
 		List<TypeTransformOperation> operationList = new ArrayList<>();
 		if (transformPropertyGrid != null) {
@@ -78,7 +83,7 @@ public class ConverterHelper {
 			if (transformOperations != null) {
 				int OperationID = 0;
 				for (MappingSheetRow transformOperation : transformOperations) {
-					TypeTransformOperation operation = getOperation(transformOperation,OperationID,fixedWidthGridRows);
+					TypeTransformOperation operation = getOperation(transformOperation,OperationID,schemaGridRows);
 					if( operation != null){
 						operationList.add(operation);
 						OperationID++;
@@ -89,14 +94,14 @@ public class ConverterHelper {
 		return operationList;
 	}
 
-	private TypeTransformOperation getOperation(MappingSheetRow mappingSheetRow, int operationID, List<FixedWidthGridRow> fixedWidthGridRows) {
+	private TypeTransformOperation getOperation(MappingSheetRow mappingSheetRow, int operationID, List<BasicSchemaGridRow> schemaGridRows) {
 		if(mappingSheetRow != null){
 			
 				TypeTransformOperation operation = new TypeTransformOperation();			
 				operation.setId(mappingSheetRow.getOperationID());
 				operation.setInputFields(getOperationInputFields(mappingSheetRow));				
 				operation.setProperties(getOperationProperties(mappingSheetRow.getNameValueProperty()));
-				operation.setOutputFields(getOperationOutputFields(mappingSheetRow,fixedWidthGridRows));
+				operation.setOutputFields(getOperationOutputFields(mappingSheetRow,schemaGridRows));
 				if(StringUtils.isNotBlank(mappingSheetRow.getOperationClassPath()))
 				operation.setClazz(mappingSheetRow.getOperationClassPath());
 				return operation;
@@ -140,17 +145,17 @@ public class ConverterHelper {
 		return inputFields;
 	}
 
-	private TypeOperationOutputFields getOperationOutputFields(MappingSheetRow mappingSheetRow, List<FixedWidthGridRow> fixedWidthGrid) {
+	private TypeOperationOutputFields getOperationOutputFields(MappingSheetRow mappingSheetRow, List<BasicSchemaGridRow> schemaGrid) {
 		TypeOperationOutputFields outputFields = null;
 		
 		
 		for(FilterProperties outputFieldName : mappingSheetRow.getOutputList()){					
-			for(FixedWidthGridRow fixedWidthRow : fixedWidthGrid){
-				if(fixedWidthRow.getFieldName().equals(outputFieldName.getPropertyname())){					
+			for(GridRow gridRow : schemaGrid){
+				if(gridRow.getFieldName().equals(outputFieldName.getPropertyname())){					
 					if(outputFields == null){
 						outputFields = new TypeOperationOutputFields();
 					}
-					outputFields.getField().add(getFixedWidthTargetData(fixedWidthRow));
+					outputFields.getField().add(getSchemaGridTargetData(gridRow));
 				}
 			}
 		}
@@ -163,16 +168,16 @@ public class ConverterHelper {
 	 * 
 	 * 
 	 * @param atMapping
-	 * @param fixedWidthGridRows
+	 * @param gridRows
 	 * @return list of {@link TypeOperationsOutSocket}
 	 */
-	public List<TypeOperationsOutSocket> getOutSocket(TransformMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {
+	public List<TypeOperationsOutSocket> getOutSocket(TransformMapping atMapping, List<BasicSchemaGridRow> gridRows) {
 		logger.debug("Generating TypeOperationsOutSocket data for : {}", properties.get(Constants.PARAM_NAME));
 		List<TypeOperationsOutSocket> outSocketList = new ArrayList<TypeOperationsOutSocket>();
 		if (component.getSourceConnections() != null && !component.getSourceConnections().isEmpty()) {
 			for (Link link : component.getSourceConnections()) {
 				TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();
-				setOutSocketProperties(outSocket, atMapping, fixedWidthGridRows, link);
+				setOutSocketProperties(outSocket, atMapping, gridRows, link);
 
 				outSocket.getOtherAttributes();
 				outSocketList.add(outSocket);
@@ -182,39 +187,65 @@ public class ConverterHelper {
 	}
 
 	private void setOutSocketProperties(TypeOperationsOutSocket outSocket, TransformMapping atMapping,
-			List<FixedWidthGridRow> fixedWidthGridRows, Link link) {
+			List<BasicSchemaGridRow> gridRows, Link link) {
 
 		TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
 		outSocket.setId(link.getSourceTerminal());
 		outSocketAsInsocket.setInSocketId(link.getTargetTerminal());
 		outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
-		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addPassThroughFields(atMapping,fixedWidthGridRows));
-		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addMapFields(atMapping,fixedWidthGridRows));
-		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addOperationFields(atMapping,fixedWidthGridRows));
+		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addPassThroughFields(atMapping,gridRows));
+		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addMapFields(atMapping,gridRows));
+		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addOperationFields(atMapping,gridRows));
 		if (outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()) {
 			outSocket.setCopyOfInsocket(outSocketAsInsocket);
 
 		}
 	}
 
-	private List<TypeInputField> addPassThroughFields(TransformMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {
+	private List<TypeInputField> addPassThroughFields(TransformMapping atMapping, List<BasicSchemaGridRow> schemaGridRows) {
 		List<TypeInputField> typeOperationFieldsList = new ArrayList<>();
 		if (atMapping != null) {
+			if (!isALLParameterizedFields(atMapping.getMapAndPassthroughField())) {
+				{
+					for (NameValueProperty nameValueProperty : atMapping.getMapAndPassthroughField()) {
+						if (nameValueProperty.getPropertyName().trim().equals(nameValueProperty.getPropertyValue().trim())) {
+							if (!ParameterUtil.isParameter(nameValueProperty.getPropertyName())) {
+								TypeInputField typeInputField = new TypeInputField();
+								typeInputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
+								typeInputField.setName(nameValueProperty.getPropertyName().trim());
+								typeOperationFieldsList.add(typeInputField);
+							} else {
+								addParamTag(ID, nameValueProperty.getPropertyName(),
+										ComponentXpathConstants.OPERATIONS_OUTSOCKET.value(), false);
+							}
+						}
 
-			for (NameValueProperty nameValueProperty : atMapping.getMapAndPassthroughField()) {
-				if (nameValueProperty.getPropertyName().trim().equals(nameValueProperty.getPropertyValue().trim())) {
-					TypeInputField typeInputField = new TypeInputField();
-					typeInputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
-					typeInputField.setName(nameValueProperty.getPropertyName().trim());
-					typeOperationFieldsList.add(typeInputField);
+					}
 				}
-
+			}else{
+				StringBuffer parameterFieldNames = new StringBuffer();
+				TypeInputField typeInputField = new TypeInputField();
+				typeInputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
+				typeInputField.setName("");
+				typeOperationFieldsList.add(typeInputField);
+				for (NameValueProperty nameValueProperty : atMapping.getMapAndPassthroughField())
+					parameterFieldNames.append(nameValueProperty.getPropertyName().trim() + " ");
+				addParamTag(ID, parameterFieldNames.toString(),
+						ComponentXpathConstants.OPERATIONS_OUTSOCKET.value(), true);
 			}
 		}
+
 		return typeOperationFieldsList;
 	}
 
-	private List<TypeMapField> addMapFields(TransformMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {
+	private boolean isALLParameterizedFields(List<NameValueProperty> mapAndPassthroughField) {
+		for (NameValueProperty nameValueProperty : mapAndPassthroughField)
+			if (!ParameterUtil.isParameter(nameValueProperty.getPropertyName()))
+				return false;
+		return true;
+	}
+
+	private List<TypeMapField> addMapFields(TransformMapping atMapping, List<BasicSchemaGridRow> gridRows) {
 		List<TypeMapField> typeMapFieldList = new ArrayList<>();
 
 		if (atMapping != null) {
@@ -235,7 +266,7 @@ public class ConverterHelper {
 		return typeMapFieldList;
 	}
 
-	private List<TypeOperationField> addOperationFields(TransformMapping atMapping, List<FixedWidthGridRow> fixedWidthGridRows) {
+	private List<TypeOperationField> addOperationFields(TransformMapping atMapping, List<BasicSchemaGridRow> gridRows) {
 		List<TypeOperationField> typeOperationFieldList = new ArrayList<>();
 		
 		if (atMapping != null) {			

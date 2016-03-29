@@ -139,6 +139,9 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	protected Control createDialogArea(Composite parent) {
 		container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		container.getShell().setText("Transform Editor");
+		
 		propertyDialogButtonBar = new PropertyDialogButtonBar(container);
 
 		composite_1 = new Composite(container, SWT.NONE);
@@ -183,7 +186,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		outputFieldViewer.setLabelProvider(new ELTFilterLabelProvider());
 
 		refreshOutputTable();
-		Label addLabel = widget.labelWidget(outputFieldComposite, SWT.CENTER, new int[] { 130, 10, 20, 15 }, "",
+		/*Label addLabel = widget.labelWidget(outputFieldComposite, SWT.CENTER, new int[] { 130, 10, 20, 15 }, "",
 				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
 		addLabel.addMouseListener(new MouseAdapter() {
 
@@ -206,7 +209,18 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 
 				}
 			}
+		});*/
+		
+		Button btnPull = new Button(outputFieldComposite, SWT.NONE);
+		btnPull.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
 		});
+		btnPull.setBounds(20, 10, 129, 20);
+		
+		btnPull.setText(Messages.PULL_BUTTON_LABEL);
+		
 		Label deletLabel = widget.labelWidget(outputFieldComposite, SWT.CENTER, new int[] { 160, 10, 20, 15 }, "",
 				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
 		deletLabel.addMouseListener(new MouseAdapter() {
@@ -308,14 +322,14 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 				}
 			}
 		});
-		Button btnPull = new Button(topAddButtonComposite, SWT.NONE);
+		/*Button btnPull = new Button(topAddButtonComposite, SWT.NONE);
 		btnPull.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 			}
 		});
 		btnPull.setBounds(573, 10, 129, 25);
-		btnPull.setText(Messages.PULL_BUTTON_LABEL);
+		btnPull.setText(Messages.PULL_BUTTON_LABEL);*/
 
 		Label lblOperationsControl = new Label(topAddButtonComposite, SWT.NONE);
 		lblOperationsControl.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
@@ -529,15 +543,15 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		});
 
 		isParam = new Button(innerComposite, SWT.CHECK);
-		isParam.setData(PARAMETER_TEXT_BOX, text);
+		/*isParam.setData(PARAMETER_TEXT_BOX, text);
 		isParam.setData(OPERATION_CLASS_TEXT_BOX, operationClassTextBox);
 		isParam.setData(OPERATION_ID_TEXT_BOX, operationIDTextBox);
 		isParam.setData(BTN_NEW_BUTTON, browseButton);
 		isParam.setData(OPERATION_INPUT_FIELD_TABLE_VIEWER, operationalInputFieldTableViewer);
 		isParam.setData(INPUT_ADD_BUTTON, operationInputaddButton);
 		isParam.setData(INPUT_DELET_BUTTON, operationInputDeleteButton);
-		isParam.setSelection(mappingSheetRow.isWholeOperationParameter());
-		final List<MappingSheetRow> mappingsheetRowList = transformMapping.getMappingSheetRows();
+		isParam.setSelection(mappingSheetRow.isWholeOperationParameter());*/
+		//final List<MappingSheetRow> mappingsheetRowList = transformMapping.getMappingSheetRows();
 		isParam.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -563,8 +577,8 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 
 						operationInputFieldTableViewer.getTable().setEnabled(false);
 						operationInputFieldTableViewer.getTable().clearAll();
-						operationOutputFieldTableViewer.getTable().setEnabled(false);
-						operationOutputFieldTableViewer.getTable().clearAll();
+						//operationOutputFieldTableViewer.getTable().setEnabled(false);
+						//operationOutputFieldTableViewer.getTable().clearAll();
 						operationClassTextBox.setEnabled(false);
 						operationClassTextBox.setText("");
 						operationIDTextBox.setEnabled(false);
@@ -572,8 +586,8 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 						btnNewButton.setEnabled(false);
 						inputAdd.setEnabled(false);
 						inputDelete.setEnabled(false);
-						outputAdd.setEnabled(false);
-						outputDelete.setEnabled(false);
+						//outputAdd.setEnabled(false);
+						//outputDelete.setEnabled(false);
 
 						mappingSheetRow.getInputFields().clear();
 						mappingSheetRow.getOutputList().clear();
