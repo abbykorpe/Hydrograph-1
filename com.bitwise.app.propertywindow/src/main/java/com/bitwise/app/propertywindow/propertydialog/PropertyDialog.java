@@ -96,7 +96,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		this.componentProperties = eltComponenetProperties;
 		componentName = (String) this.componentProperties.getComponentConfigurationProperty(ELTProperties.NAME_PROPERTY.propertyName());
 		this.component = component;
-		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
+		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL | SWT.RESIZE);
 		/**
 		 * 	Initialize it with true, if any one of the property is invalid then mark this status as false
 		 */
