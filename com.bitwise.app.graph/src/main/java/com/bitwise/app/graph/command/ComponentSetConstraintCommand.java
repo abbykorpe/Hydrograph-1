@@ -21,7 +21,6 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.bitwise.app.graph.model.Component;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ComponentSetConstraintCommand.
  */
@@ -59,10 +58,7 @@ public class ComponentSetConstraintCommand extends Command {
 		Object type = request.getType();
 		// make sure the Request is of a type we support:
 		return (RequestConstants.REQ_MOVE.equals(type) ||
-				RequestConstants.REQ_MOVE_CHILDREN.equals(type) /*||
-				RequestConstants.REQ_RESIZE.equals(type) || 
-				RequestConstants.REQ_RESIZE_CHILDREN.equals(type)*/
-				);
+				RequestConstants.REQ_MOVE_CHILDREN.equals(type));
 	}
 	
 	@Override
@@ -73,13 +69,11 @@ public class ComponentSetConstraintCommand extends Command {
 	
 	@Override
 	public void redo() {
-		shape.setSize(newBounds.getSize());
 		shape.setLocation(newBounds.getLocation());
 	}
 
 	@Override
 	public void undo() {
-		shape.setSize(oldBounds.getSize());
 		shape.setLocation(oldBounds.getLocation());
 	}
 }
