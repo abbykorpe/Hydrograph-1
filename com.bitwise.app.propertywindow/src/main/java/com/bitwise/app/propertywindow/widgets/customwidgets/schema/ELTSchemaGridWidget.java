@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -40,6 +41,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -657,7 +659,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		tableViewer.setCellModifier(getCellModifier());
 		ELTTable eltTable = new ELTTable(tableViewer, height, width);
 		gridSubGroup.attachWidget(eltTable);
+		
 		table = (Table) eltTable.getSWTWidgetControl();
+		GridData tbl_gridData = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		tbl_gridData.widthHint = 230;
+		tbl_gridData.heightHint = 230;
+		table.setLayoutData(tbl_gridData);
+		
 		// Create Table column
 		WidgetUtility.createTableColumns(table, PROPS);
 		// Set up the table
