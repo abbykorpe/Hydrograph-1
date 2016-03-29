@@ -50,6 +50,7 @@ import com.bitwise.app.common.component.config.Operations;
 import com.bitwise.app.common.component.config.TypeInfo;
 import com.bitwise.app.common.datastructure.property.OperationClassProperty;
 import com.bitwise.app.common.datastructures.tooltip.TootlTipErrorMessage;
+import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.logging.factory.LogFactory;
@@ -148,8 +149,8 @@ public class FilterOperationClassUtility  {
 			try { 
 				BufferedReader r = new BufferedReader(new FileReader(filePath));
 				String firstLine= r.readLine();
-				if(firstLine.contains("package")){
-					name= firstLine.replace("package", "").replace(";", "");
+				if(firstLine.contains(Constants.PACKAGE)){
+					name= firstLine.replaceFirst(Constants.PACKAGE, "").replace(";", "");
 					if(!name.equalsIgnoreCase(""))
 						name=name+"."+classFile.substring(0, classFile.lastIndexOf('.'));
 					
