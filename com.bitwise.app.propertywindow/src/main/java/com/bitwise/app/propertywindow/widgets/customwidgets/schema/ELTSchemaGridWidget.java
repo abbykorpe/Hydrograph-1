@@ -443,7 +443,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(Messages.SCALE_TYPE_NONE));
 			gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
 		}
-		gridRow.setDescription(temp.getDescription());
+		if(temp.getDescription()!=null)
+			gridRow.setDescription(temp.getDescription());
+		else
+			gridRow.setDescription("");
 	}
 	
 	public  boolean equalLists(List<GridRow> one, List<GridRow> two){     

@@ -393,7 +393,12 @@ public class GridRowLoader {
 		gridRow.setFieldName(field.getName());
 		gridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(field.getType().value()));
 		gridRow.setDataTypeValue(GridWidgetCommonBuilder.getDataTypeValue()[GridWidgetCommonBuilder.getDataTypeByValue(field.getType().value())]);
-		gridRow.setDateFormat(field.getFormat());
+		
+		if(field.getFormat()!=null)
+			gridRow.setDateFormat(field.getFormat());
+		else
+			gridRow.setDateFormat("");
+		
 		if(field.getPrecision()!=null)
 			gridRow.setPrecision(String.valueOf(field.getPrecision()));
 		else
