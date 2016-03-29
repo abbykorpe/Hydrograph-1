@@ -115,6 +115,9 @@ public class Messages extends NLS {
 	public static String EXPORT_XML_EMPTY_FILENAME;
 	public static String EXPORTED_SCHEMA_NOT_IN_SYNC;
 	public static String EXPORTED_SCHEMA_SYNC_ERROR;
+	public static String COPY_MENU_TEXT;
+	public static String PASTE_MENU_TEXT;
+	public static String COPY_GRID_SUFFIX;
 	public static String OUTPUT_FIELD_EXISTS;
 	public static String AVAILABLE_FIELDS_HEADER;
     public static String ADD_ICON;
