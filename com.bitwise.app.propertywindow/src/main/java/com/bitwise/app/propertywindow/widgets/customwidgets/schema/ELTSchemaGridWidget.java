@@ -63,12 +63,12 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GenerateRecordSchemaGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.Schema;
-import com.bitwise.app.common.datastructure.property.SchemaGrid;
 import com.bitwise.app.common.schema.Field;
 import com.bitwise.app.common.schema.Fields;
 import com.bitwise.app.common.util.Constants;
@@ -302,12 +302,12 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public boolean verifySchemaFile(){
 		boolean verifiedSchema=true;
 		if(isExternal){
-			verifiedSchema=verifyExtSchemaSynch(extSchemaPathText.getText(), schemaGridRowList);
+			verifiedSchema=verifyExtSchemaSync(extSchemaPathText.getText(), schemaGridRowList);
 		}
 		return verifiedSchema;
 	}
 
-	private boolean verifyExtSchemaSynch(String extSchemaPath, List<GridRow> schemaInGrid) {
+	private boolean verifyExtSchemaSync(String extSchemaPath, List<GridRow> schemaInGrid) {
 		List<GridRow> schemasFromFile = new ArrayList<GridRow>();
 		File schemaFile = new File(extSchemaPath);
 		InputStream xml, xsd;
@@ -332,7 +332,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					if(Messages.GENERIC_GRID_ROW.equals(gridRowType)){
 
 						for (Field temp : fieldsList) {
-							gridRow = new SchemaGrid();
+							gridRow = new BasicSchemaGridRow();
 							populateCommonFields(gridRow, temp);
 							schemasFromFile.add(gridRow);
 						}	
@@ -381,17 +381,17 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						
 					}
 				} catch (JAXBException e) {
-					logger.error(Messages.EXPORTED_SCHEMA_SYNCH_ERROR, e);
+					logger.error(Messages.EXPORTED_SCHEMA_SYNC_ERROR, e);
 				}
 				
 			}
 			if(!equalLists(schemaInGrid, schemasFromFile)){
 				verifiedSchema=false;
-				MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.EXPORTED_SCHEMA_NOTIN_SYNCH);
+				MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.EXPORTED_SCHEMA_NOT_IN_SYNC);
 			}
 			
 		} catch (FileNotFoundException e) {
-			logger.error(Messages.EXPORTED_SCHEMA_SYNCH_ERROR, e);
+			logger.error(Messages.EXPORTED_SCHEMA_SYNC_ERROR, e);
 		}
 		return verifiedSchema;
 

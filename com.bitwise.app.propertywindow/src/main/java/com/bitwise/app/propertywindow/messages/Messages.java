@@ -113,8 +113,8 @@ public class Messages extends NLS {
 	public static String IMPORT_XML_DUPLICATE_FIELD_ERROR;
 	public static String EXPORT_XML_ERROR;
 	public static String EXPORT_XML_EMPTY_FILENAME;
-	public static String EXPORTED_SCHEMA_NOTIN_SYNCH;
-	public static String EXPORTED_SCHEMA_SYNCH_ERROR;
+	public static String EXPORTED_SCHEMA_NOT_IN_SYNC;
+	public static String EXPORTED_SCHEMA_SYNC_ERROR;
 	public static String OUTPUT_FIELD_EXISTS;
 	public static String AVAILABLE_FIELDS_HEADER;
     public static String ADD_ICON;
