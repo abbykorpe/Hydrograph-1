@@ -68,12 +68,14 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	@Override
 	public void saveResult(String result) {
 		 if(isSingleColumn){
-			   FilterProperties field = new FilterProperties();
-	        	field.setPropertyname(result);
-	        	if(!listOfInputFields.contains(field))
+			   FilterProperties inputField = new FilterProperties();
+	           inputField.setPropertyname(result);
+	           FilterProperties outputField = new FilterProperties();
+	           outputField.setPropertyname(result);
+	        	if(!listOfInputFields.contains(inputField))
 	        	{	
-	        		listOfInputFields.add(field);
-	        		listOfOutputFields.add(field); 	
+	        		listOfInputFields.add(inputField);
+	        		listOfOutputFields.add(outputField); 	
 	        		outputFieldList.addAll(listOfOutputFields);
 	        		transformDialogNew.refreshOutputTable();
 	        		}	
