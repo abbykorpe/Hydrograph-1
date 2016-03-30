@@ -146,7 +146,7 @@ public class TransformWidget extends AbstractWidget {
 		setSchemaForInternalPapogation(schemaForInternalPapogation);
 	}*/
 	
-	public void propagateOuputFieldsToSchemaTabFromTransformWidget() {
+	private void propagateOuputFieldsToSchemaTabFromTransformWidget() {
 		
 		if (transformMapping == null || transformMapping.getMappingSheetRows() == null)
 			return;

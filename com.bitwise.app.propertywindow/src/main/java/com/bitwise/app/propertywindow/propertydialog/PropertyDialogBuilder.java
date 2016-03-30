@@ -45,7 +45,6 @@ import com.bitwise.app.propertywindow.property.ELTComponenetProperties;
 import com.bitwise.app.propertywindow.property.Property;
 import com.bitwise.app.propertywindow.utils.WordUtils;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget;
-import com.bitwise.app.propertywindow.widgets.customwidgets.operational.TransformWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroup;
