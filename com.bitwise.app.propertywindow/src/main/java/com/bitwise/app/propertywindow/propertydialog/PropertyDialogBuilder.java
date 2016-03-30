@@ -45,6 +45,7 @@ import com.bitwise.app.propertywindow.property.ELTComponenetProperties;
 import com.bitwise.app.propertywindow.property.Property;
 import com.bitwise.app.propertywindow.utils.WordUtils;
 import com.bitwise.app.propertywindow.widgets.customwidgets.AbstractWidget;
+import com.bitwise.app.propertywindow.widgets.customwidgets.operational.TransformWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroup;
@@ -126,9 +127,17 @@ public class PropertyDialogBuilder {
 			public void widgetSelected(SelectionEvent e) {
 			
 				if(schemaWidget!=null){
-					ELTSchemaGridWidget eltSchemaGridWidget = (ELTSchemaGridWidget) schemaWidget;
-					eltSchemaGridWidget.enableDisableButtons(schemaWidget.getSchemaForInternalPapogation().getGridRow()
-							.size());
+					if (schemaWidget instanceof ELTSchemaGridWidget) {
+						ELTSchemaGridWidget eltSchemaGridWidget = (ELTSchemaGridWidget) schemaWidget;
+						if (!eltSchemaGridWidget.isExternal()) {
+							if (schemaWidget.getSchemaForInternalPapogation().getGridRow().size() != 0) {
+								eltSchemaGridWidget.enableDisableButtons(schemaWidget.getSchemaForInternalPapogation()
+										.getGridRow().size());
+							} else {
+								eltSchemaGridWidget.enableDisableButtons(eltSchemaGridWidget.getSizeOfTableViewer());
+							}
+						}
+					}
 					schemaWidget.refresh();
 				}
 			}

@@ -128,6 +128,9 @@ public class TransformWidget extends AbstractWidget {
 					propertyDialogButtonBar.enableApplyButton(true);
 					propagateOuputFieldsToSchemaTabFromTransformWidget();
 				}
+				
+				transformMapping.getInputFields().clear();
+
 			}
 		});
 		propagateOuputFieldsToSchemaTabFromTransformWidget();
@@ -143,7 +146,7 @@ public class TransformWidget extends AbstractWidget {
 		setSchemaForInternalPapogation(schemaForInternalPapogation);
 	}*/
 	
-	private void propagateOuputFieldsToSchemaTabFromTransformWidget() {
+	public void propagateOuputFieldsToSchemaTabFromTransformWidget() {
 		
 		if (transformMapping == null || transformMapping.getMappingSheetRows() == null)
 			return;

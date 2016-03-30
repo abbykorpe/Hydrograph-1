@@ -143,7 +143,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	protected GridWidgetCommonBuilder gridWidgetBuilder = getGridWidgetBuilder();
 	protected final String[] PROPS = getPropertiesToShow();
-	private boolean isExternal;
+	private boolean external;
 	private Object properties;
 	private String propertyName;
 	private ListenerHelper helper;
@@ -283,7 +283,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		Schema schema = new Schema();
 		schema.setGridRow(tempGrid);
-		if (isExternal) {
+		if (external) {
 			schema.setIsExternal(true);
 			schema.setExternalSchemaPath(extSchemaPathText.getText());
 
@@ -308,7 +308,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	@Override
 	public boolean verifySchemaFile(){
 		boolean verifiedSchema=true;
-		if(isExternal){
+		if(external){
 			verifiedSchema=verifyExtSchemaSync(extSchemaPathText.getText(), schemaGridRowList);
 		}
 		return verifiedSchema;
@@ -678,7 +678,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			public void widgetSelected(SelectionEvent e) {
 				propertyDialogButtonBar.enableApplyButton(true);
 				toggleSchema(false);
-				isExternal = false;
+				external = false;
 				decorator.hide();
 				txtDecorator.hide();
 			}
@@ -691,7 +691,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			public void widgetSelected(SelectionEvent e) {
 				propertyDialogButtonBar.enableApplyButton(true);
 				toggleSchema(true);
-				isExternal = true;
+				external = true;
 
 				if (extSchemaPathText.getText().isEmpty()) {
 					decorator.show();
@@ -719,7 +719,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					schemaGridRowList = schema.getGridRow();
 					tableViewer.setInput(schemaGridRowList);
 					tableViewer.refresh();
-					isExternal = false;
+					external = false;
 					toggleSchema(false);
 				}
 			}
@@ -738,11 +738,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					tableViewer.setInput(schemaGridRowList);
 					tableViewer.refresh();
 					decorator.hide();
-					isExternal = true;
+					external = true;
 					toggleSchema(true);
 				}
-			}else
+			} else {
 				toggleSchema(false);
+			}
+			enableDisableButtons(schemaGridRowList.size());
 		}
 	}
 
@@ -1060,7 +1062,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				toggleSchema(true);
 			}
 			if (!originalSchema.getIsExternal()) {
-				isExternal = false;
+				external = false;
 				toggleSchema(false);
 			}
 
@@ -1072,7 +1074,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						schemaGridRowList = schema.getGridRow();
 						tableViewer.setInput(schemaGridRowList);
 						tableViewer.refresh();
-						isExternal = false;
+						external = false;
 						toggleSchema(false);
 					}
 				}
@@ -1120,5 +1122,12 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 	}
 
+	public boolean isExternal() {
+		return external;
+	}
+	public int getSizeOfTableViewer()
+	{
+		return schemaGridRowList.size();
+	}
 
 }
