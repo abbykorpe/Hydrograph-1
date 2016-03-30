@@ -637,18 +637,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 					tableViewer.setInput(schemaGridRowList);
 					tableViewer.refresh();
-					if (schemaGridRowListToImport.size() >= 1) {
-						deleteButton.setEnabled(true);
-					} else {
-						deleteButton.setEnabled(false);
-					}
-					if (schemaGridRowListToImport.size() >= 2) {
-						upButton.setEnabled(true);
-						downButton.setEnabled(true);
-					} else {
-						upButton.setEnabled(false);
-						downButton.setEnabled(false);
-					}
+					enableDisableButtons(schemaGridRowListToImport.size());
 					MessageDialog.openInformation(new Shell(), "Information", Messages.IMPORTED_SCHEMA);
 				}
 				
@@ -734,18 +723,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					toggleSchema(false);
 				}
 			}
-			if (schemaGridRowList.size() >= 1) {
-				deleteButton.setEnabled(true);
-			} else {
-				deleteButton.setEnabled(false);
-			}
-			if (schemaGridRowList.size() >= 2) {
-				upButton.setEnabled(true);
-				downButton.setEnabled(true);
-			} else {
-				upButton.setEnabled(false);
-				downButton.setEnabled(false);
-			}
+			enableDisableButtons(schemaGridRowList.size());
 		}
 	}
 
@@ -1126,4 +1104,21 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public void setTransformSchemaType(boolean isTransformSchemaType) {
 		this.transformSchemaType = isTransformSchemaType;
 	}
+	
+	public void enableDisableButtons(int size) {
+		if (size >= 1) {
+			deleteButton.setEnabled(true);
+		} else {
+			deleteButton.setEnabled(false);
+		}
+		if (size >= 2) {
+			upButton.setEnabled(true);
+			downButton.setEnabled(true);
+		} else {
+			upButton.setEnabled(false);
+			downButton.setEnabled(false);
+		}
+	}
+
+
 }

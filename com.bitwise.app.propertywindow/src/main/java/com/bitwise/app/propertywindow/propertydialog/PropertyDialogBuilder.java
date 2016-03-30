@@ -126,6 +126,9 @@ public class PropertyDialogBuilder {
 			public void widgetSelected(SelectionEvent e) {
 			
 				if(schemaWidget!=null){
+					ELTSchemaGridWidget eltSchemaGridWidget = (ELTSchemaGridWidget) schemaWidget;
+					eltSchemaGridWidget.enableDisableButtons(schemaWidget.getSchemaForInternalPapogation().getGridRow()
+							.size());
 					schemaWidget.refresh();
 				}
 			}
