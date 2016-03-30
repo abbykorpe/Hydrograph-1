@@ -106,7 +106,7 @@ public class DebugConverter {
 		if(debug.getDebugPlugin() == null && debug.getViewData().isEmpty()){
 			return;
 		}
-		JAXBContext jaxbContext = JAXBContext.newInstance(debug.getClass());
+		JAXBContext jaxbContext = JAXBContext.newInstance(Debug.class);
 		Marshaller marshaller = jaxbContext.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
