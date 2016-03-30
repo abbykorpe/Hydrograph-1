@@ -14,14 +14,14 @@
  
 package com.bitwise.app.graph.model.components;
 
-import com.bitwise.app.graph.model.categories.InputCategory;
+import com.bitwise.app.graph.model.categories.StraightPullCategory;
 
 /**
  * The Sort class.
  * 
  * @author Bitwise
  */
-public class SortComponent extends InputCategory {
+public class SortComponent extends StraightPullCategory {
 
 	private static final long serialVersionUID = 5336234307203189573L;
 

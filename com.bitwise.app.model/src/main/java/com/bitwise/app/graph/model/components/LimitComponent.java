@@ -14,14 +14,14 @@
  
 package com.bitwise.app.graph.model.components;
 
-import com.bitwise.app.graph.model.categories.InputCategory;
+import com.bitwise.app.graph.model.categories.StraightPullCategory;
 
 /**
  * The Limit class.
  * 
  * @author Bitwise
  */
-public class LimitComponent extends InputCategory {
+public class LimitComponent extends StraightPullCategory {
 
 	private static final long serialVersionUID = -6038215992214041586L;
 
