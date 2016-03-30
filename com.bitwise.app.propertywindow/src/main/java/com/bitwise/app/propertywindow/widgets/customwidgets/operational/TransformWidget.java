@@ -128,6 +128,9 @@ public class TransformWidget extends AbstractWidget {
 					propertyDialogButtonBar.enableApplyButton(true);
 					propagateOuputFieldsToSchemaTabFromTransformWidget();
 				}
+				
+				transformMapping.getInputFields().clear();
+
 			}
 		});
 		propagateOuputFieldsToSchemaTabFromTransformWidget();

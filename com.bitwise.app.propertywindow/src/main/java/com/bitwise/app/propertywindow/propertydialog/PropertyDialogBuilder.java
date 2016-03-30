@@ -126,6 +126,17 @@ public class PropertyDialogBuilder {
 			public void widgetSelected(SelectionEvent e) {
 			
 				if(schemaWidget!=null){
+					if (schemaWidget instanceof ELTSchemaGridWidget) {
+						ELTSchemaGridWidget eltSchemaGridWidget = (ELTSchemaGridWidget) schemaWidget;
+						if (!eltSchemaGridWidget.isExternal()) {
+							if (schemaWidget.getSchemaForInternalPapogation().getGridRow().size() != 0) {
+								eltSchemaGridWidget.enableDisableButtons(schemaWidget.getSchemaForInternalPapogation()
+										.getGridRow().size());
+							} else {
+								eltSchemaGridWidget.enableDisableButtons(eltSchemaGridWidget.getSizeOfTableViewer());
+							}
+						}
+					}
 					schemaWidget.refresh();
 				}
 			}
