@@ -62,17 +62,17 @@ public abstract class OutputConverter extends Converter {
 		TypeBaseRecord typeBaseRecord = new TypeBaseRecord();
 		Schema schema = (Schema) properties.get(PropertyNameConstants.SCHEMA.value());
 		if (schema != null) {
-			if (fetchPropagatedSchema() == null && schema.getIsExternal()) {
+			if ( schema.getIsExternal()) {
 				TypeExternalSchema typeExternalSchema = new TypeExternalSchema();
 				typeExternalSchema.setUri(schema.getExternalSchemaPath());
-				typeBaseRecord.setName("External");
+				typeBaseRecord.setName(Constants.EXTERNAL_SCHEMA);
 				typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().add(typeExternalSchema);
 			} else
-				typeBaseRecord.setName("Internal");
+				typeBaseRecord.setName(Constants.INTERNAL_SCHEMA);
 		}else
-			typeBaseRecord.setName("Internal");
+			typeBaseRecord.setName(Constants.INTERNAL_SCHEMA);
 		
-		if (fetchPropagatedSchema() != null)
+		if (fetchPropagatedSchema() != null && !schema.getIsExternal())
 			typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().addAll(getFieldOrRecord(fetchPropagatedSchema()));
 
 		return typeBaseRecord;

@@ -242,6 +242,10 @@ public class Constants {
 	public static final String GENERATE_RECORD_GRID_ROW="GenerateRecord";
 	public static final String GENERIC_GRID_ROW="Generic";
 	public static final String PACKAGE = "package";
+	
+	
+	public static final String EXTERNAL_SCHEMA = "External";
+	public static final String INTERNAL_SCHEMA = "Internal";
 }
 
 
