@@ -32,11 +32,11 @@ public class DebugServiceHandler  implements IDebugService{
 				debugFilesReader.delete();
 				jobMap.remove(jobId);
 			} catch (IOException exception) {
-				logger.error("No files available to remove" +exception);
+				logger.error("No files available to remove", exception);
 			}
 		}
     	} catch (Exception exception) {
-    		logger.error("Failes to call DebugApi" +exception);
+    		logger.error("Failes to call DebugApi", exception);
 		}
 	}
 }
