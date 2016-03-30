@@ -295,12 +295,13 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 			if (customWidget.getProperties() != null) {
 				windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
 				if (customWidget instanceof ELTSchemaGridWidget) {
-					verifiedSchema = Boolean.FALSE;
 					verifiedSchema = customWidget.verifySchemaFile();
-					if (verifiedSchema)
+					if (verifiedSchema){
 						savePropertiesInComponentModel(customWidget);
-				} else
+					}
+				} else{
 					savePropertiesInComponentModel(customWidget);
+				}
 			}
 		}
 		if (applyButton.isEnabled())
@@ -310,8 +311,9 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		updateComponentValidityStatus();
 
 		okPressed = true;
-		if (verifiedSchema)
+		if (verifiedSchema){
 			super.okPressed();
+		}
 	}
 
 	

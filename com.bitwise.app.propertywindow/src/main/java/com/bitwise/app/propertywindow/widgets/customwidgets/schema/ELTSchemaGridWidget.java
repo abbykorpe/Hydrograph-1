@@ -14,8 +14,6 @@
  
 package com.bitwise.app.propertywindow.widgets.customwidgets.schema;
 
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,7 +34,6 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
@@ -60,7 +57,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -170,9 +166,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private String removeButtonTooltip = Messages.DELETE_SCHEMA_TOOLTIP;
 	private String upButtonTooltip = Messages.MOVE_SCHEMA_UP_TOOLTIP;
 	private String downButtonTooltip = Messages.MOVE_SCHEMA_DOWN_TOOLTIP;
-	
-	private String copyMenuText=Messages.COPY_MENU_TEXT;
-	private String pasteMenuText=Messages.PASTE_MENU_TEXT;
 	
 	List<GridRow> copiedGridRows=new ArrayList<GridRow>();
 
@@ -853,7 +846,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		tableViewer = (TableViewer) eltTableViewer.getJfaceWidgetControl();
 		tableViewer.setInput(schemaGridRowList);
 		
-		addGridrowsCopyPasteContextMenu();
+		addGridRowsCopyPasteContextMenu();
 		
 		// Set the editors, cell modifier, and column properties
 		tableViewer.setColumnProperties(PROPS);
@@ -911,22 +904,21 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		return tableViewer;
 	}
 
-	protected void addGridrowsCopyPasteContextMenu() {
+	private void addGridRowsCopyPasteContextMenu() {
 		Menu menu = new Menu(tableViewer.getControl());
+	
 		copyMenuItem = new MenuItem(menu, SWT.PUSH);
-		copyMenuItem.setText(copyMenuText);
+		copyMenuItem.setText(Messages.COPY_MENU_TEXT);
 		copyMenuItem.setAccelerator(SWT.CTRL + 'C');
 		copyMenuItem.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				logger.debug("Copying gridRows");
+				logger.trace("Copying gridRows");
 				copiedGridRows.clear();
-				TableItem[] copiedtableItems = tableViewer.getTable().getSelection();
-				for (TableItem tableItem:copiedtableItems){
-					GridRow g = (GridRow) tableItem.getData();
-					copiedGridRows.add(g);
-					logger.debug("Copied", g.getFieldName());
+				for (TableItem tableItem:tableViewer.getTable().getSelection()){
+					copiedGridRows.add((GridRow) tableItem.getData());
+					logger.trace("Copied", ((GridRow) tableItem.getData()).getFieldName());
 				}
 				pasteMenuItem.setEnabled(true);
 			}
@@ -938,27 +930,25 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		});
 		
 		pasteMenuItem = new MenuItem(menu, SWT.PUSH);
-		pasteMenuItem.setText(pasteMenuText);
+		pasteMenuItem.setText(Messages.PASTE_MENU_TEXT);
 		pasteMenuItem.setAccelerator(SWT.CTRL + 'V');
-		
-		if(copiedGridRows.isEmpty())
-			pasteMenuItem.setEnabled(false);
-		else
-			pasteMenuItem.setEnabled(true);
+		pasteMenuItem.setEnabled(!copiedGridRows.isEmpty());
 		
 		pasteMenuItem.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				logger.debug("Pasting gridRows");
+				logger.trace("Pasting gridRows");
 				ELTGridDetails eltGridDetails = (ELTGridDetails)helper.get(HelperType.SCHEMA_GRID);
 				for (GridRow copiedRow:copiedGridRows){
-					logger.debug("Pasted",copiedRow.getFieldName());
+					logger.trace("Pasted",copiedRow.getFieldName());
 					GridRow pasteGrid = copiedRow.copy();
-					pasteGrid.setFieldName(copiedRow.getFieldName() + Messages.COPY_GRID_SUFFIX);
-					if(eltGridDetails.getGrids().contains(pasteGrid)){
-						pasteGrid.setFieldName(pasteGrid.getFieldName() + Messages.COPY_GRID_SUFFIX);
-					}
+
+					int copyCount =0;	
+					do{
+						pasteGrid.setFieldName(copiedRow.getFieldName() + Messages.COPY_GRID_SUFFIX + copyCount++);
+					}while(eltGridDetails.getGrids().contains(pasteGrid));
+					
 					eltGridDetails.getGrids().add(pasteGrid);
 				}
 				tableViewer.setInput(eltGridDetails.getGrids());
