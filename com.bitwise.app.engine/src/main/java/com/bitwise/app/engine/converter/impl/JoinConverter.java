@@ -82,15 +82,16 @@ public class JoinConverter extends TransformConverter {
 	private List<TypeKeyFields> getJoinConfigKeys() {
 		List<TypeKeyFields> typeKeyFieldsList = null;
 		List<JoinConfigProperty> keyFields = (List<JoinConfigProperty>) properties.get(Constants.JOIN_CONFIG_FIELD);
+		int portCount=  Integer.parseInt((String)properties.get(Constants.INPUT_PORT_COUNT_PROPERTY));
 		if (keyFields != null && !keyFields.isEmpty()) {
 			typeKeyFieldsList = new ArrayList<>();
-			for (JoinConfigProperty entry : keyFields) {
+			for (int i=0;i<portCount;i++) {
 				TypeKeyFields typeKeyField = new TypeKeyFields();
-				String[] keyList = entry.getJoinKey().split(",");
+				String[] keyList = keyFields.get(i).getJoinKey().split(",");
 				if(keyList.length==0 || (keyList.length==1 && StringUtils.isBlank(keyList[0])))
 					 continue;
-				typeKeyField.setInSocketId(entry.getPortIndex());
-				typeKeyField.setRecordRequired(getRecordRequiredValue(entry));
+				typeKeyField.setInSocketId(keyFields.get(i).getPortIndex());
+				typeKeyField.setRecordRequired(getRecordRequiredValue(keyFields.get(i)));
 				typeKeyFieldsList.add(typeKeyField);
 
 				if (!isALLParameterizedFields(keyList)) {
@@ -101,7 +102,7 @@ public class JoinConverter extends TransformConverter {
 							typeKeyField.getField().add(fieldName);
 						} else {
 							converterHelper.addParamTag(this.ID, key, 
-									ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", entry.getPortIndex()), false);
+									ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", keyFields.get(i).getPortIndex()), false);
 						}
 					}
 				}else{
@@ -112,7 +113,7 @@ public class JoinConverter extends TransformConverter {
 					for (String fieldName : keyList) 
 						parameterFieldNames.append(fieldName+ " ");
 						converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), 
-								ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", entry.getPortIndex()),true);
+								ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", keyFields.get(i).getPortIndex()),true);
 					
 				}
 			}

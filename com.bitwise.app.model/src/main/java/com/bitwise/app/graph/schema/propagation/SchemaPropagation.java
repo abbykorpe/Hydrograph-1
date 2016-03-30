@@ -181,6 +181,8 @@ public class SchemaPropagation {
 		schema.setIsExternal(false);
 		schema.setExternalSchemaPath("");
 		List<GridRow> gridRows = new ArrayList<>();
+		if(componentsOutputSchema==null)
+			return;
 		for (BasicSchemaGridRow gridRow : componentsOutputSchema.getSchemaGridOutputFields())
 			gridRows.add(gridRow);
 		schema.setGridRow(gridRows);
@@ -203,6 +205,8 @@ public class SchemaPropagation {
 		schema.setIsExternal(false);
 		schema.setExternalSchemaPath("");
 		List<GridRow> gridRows = new ArrayList<>();
+		if(componentsOutputSchema==null)
+			return;
 		for (FixedWidthGridRow gridRow : componentsOutputSchema.getFixedWidthGridRowsOutputFields())
 			gridRows.add(gridRow);
 		schema.setGridRow(gridRows);

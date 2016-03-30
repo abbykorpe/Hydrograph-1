@@ -33,6 +33,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -520,10 +521,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	}
 
 	protected void schemaFromConnectedLinks() {
-		for (Link link : getComponent().getTargetConnections()) {
-			this.properties = getPropagatedSchema(link);
-
-		}
+		Schema currentSchema = (Schema) this.properties;
+		if ((currentSchema != null && !currentSchema.getIsExternal())
+				|| (currentSchema == null && StringUtils.equalsIgnoreCase(getComponent().getCategory(),
+						Constants.OUTPUT)))
+			for (Link link : getComponent().getTargetConnections()) {
+				this.properties = getPropagatedSchema(link);
+			}
 	}
 
 	// Adds the browse button
@@ -823,6 +827,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		AbstractELTWidget eltTableViewer = new ELTTableViewer(getContentProvider(), getLableProvider());
 		gridSubGroup.attachWidget(eltTableViewer);
 
+		// eltTableViewer.getSWTWidgetControl().
 		tableViewer = (TableViewer) eltTableViewer.getJfaceWidgetControl();
 		tableViewer.setInput(schemaGridRowList);
 		
@@ -1129,5 +1134,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	{
 		return schemaGridRowList.size();
 	}
+
 
 }

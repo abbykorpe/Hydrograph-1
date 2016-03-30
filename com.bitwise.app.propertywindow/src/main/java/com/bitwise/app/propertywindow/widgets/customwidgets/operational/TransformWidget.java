@@ -22,12 +22,10 @@ import java.util.Map;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
-
 import org.eclipse.swt.widgets.Control;
-
 import org.eclipse.swt.widgets.Shell;
 
-
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.datastructure.property.ComponentsOutputSchema;
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
@@ -35,12 +33,12 @@ import com.bitwise.app.common.datastructure.property.GridRow;
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
 import com.bitwise.app.common.datastructure.property.Schema;
 import com.bitwise.app.common.datastructure.property.TransformPropertyGrid;
-import com.bitwise.app.common.datastructure.property.mapping.TransformMapping;
-import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.datastructure.property.mapping.ErrorObject;
 import com.bitwise.app.common.datastructure.property.mapping.InputField;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
+import com.bitwise.app.common.datastructure.property.mapping.TransformMapping;
 import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.graph.model.Component;
 import com.bitwise.app.graph.model.Link;
 import com.bitwise.app.graph.schema.propagation.SchemaPropagation;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
@@ -210,18 +208,17 @@ public class TransformWidget extends AbstractWidget {
 	}
 
 	// PLEASE DO NOT REMOVE THE CODE
-	/*private List<String> getCurrentSchemaFields() {
+	private GridRow getCurrentSchemaField(String fieldName) {
 		Component component = getComponent();
 		Schema schema = (Schema) component.getProperties().get("schema");
-		List<String> schemaFields = new LinkedList<>();
 		if (schema != null) {
 			for (GridRow gridRow : schema.getGridRow()) {
-				FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) gridRow;
-				schemaFields.add(fixedWidthGridRow.getFieldName());
+				if(gridRow.getFieldName().equals(fieldName))
+					return gridRow;
 			}
 		}
-		return schemaFields;
-	}*/
+		return null;
+	}
 
 	private BasicSchemaGridRow getFieldSchema(String fieldName) {
 		List<BasicSchemaGridRow> schemaGridRows = getInputFieldSchema();
@@ -300,6 +297,7 @@ public class TransformWidget extends AbstractWidget {
 
 	private void addOperationFieldsToSchema(List<FilterProperties> operationFields) {
 		Schema schema = getSchemaForInternalPapogation();
+		GridRow schemaGridRow=null;
 		List<String> currentFieldsInProppogatedSchemaObject = new LinkedList<>();
 		for (GridRow gridRow : schema.getGridRow()) {
 			currentFieldsInProppogatedSchemaObject.add(gridRow.getFieldName());
@@ -308,8 +306,12 @@ public class TransformWidget extends AbstractWidget {
 		SchemaPropagationHelper schemaPropagationHelper = new SchemaPropagationHelper();
 
 		for (FilterProperties operationField : operationFields) {
-
-			BasicSchemaGridRow schemaGridRow = schemaPropagationHelper.createSchemaGridRow(operationField.getPropertyname());
+			if(getCurrentSchemaField(operationField.getPropertyname())!=null){
+				schemaGridRow=getCurrentSchemaField(operationField.getPropertyname());
+				schemaGridRow=schemaGridRow.copy();
+			}
+			else
+				schemaGridRow = schemaPropagationHelper.createSchemaGridRow(operationField.getPropertyname());
 
 			if (!currentFieldsInProppogatedSchemaObject.contains(operationField.getPropertyname())) {
 				schema.getGridRow().add(schemaGridRow);
