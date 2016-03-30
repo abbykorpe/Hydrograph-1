@@ -293,8 +293,9 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		scrolledComposite.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLUE));
 		scrolledComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		scrolledComposite.setLayout(new GridLayout(1,false)); 
-		GridData gd_scrolledComposite = new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1);
 		
+		GridData gd_scrolledComposite = new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1);
+		gd_scrolledComposite.heightHint=200;
 		scrolledComposite.setLayoutData(gd_scrolledComposite);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
