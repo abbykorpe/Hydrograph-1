@@ -153,6 +153,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 				comboOfOperationClasses, isParameterCheckbox, fileNameText, tootlTipErrorMessage, widgetConfig, this,
 				propertyDialogButtonBar, opeartionClassDialogButtonBar);
 		fileName = (Text) fileNameText.getSWTWidgetControl();
+		fileName.setData("path", mappingSheetRow.getOperationClassFullPath());
 		operationClasses = (Combo) comboOfOperationClasses.getSWTWidgetControl();
 
 		FilterOperationClassUtility.enableAndDisableButtons(true, false);
@@ -464,7 +465,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		mappingSheetRow = new MappingSheetRow(mappingSheetRow.getInputFields(), mappingSheetRow.getOutputList(),
 				mappingSheetRow.getOperationID(), operationClasses.getText(), fileName.getText(),
 				mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),
-				mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter());
+				mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData("path"));
 		super.okPressed();
 	}
 
@@ -474,7 +475,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 			mappingSheetRow = new MappingSheetRow(mappingSheetRow.getInputFields(), mappingSheetRow.getOutputList(),
 					mappingSheetRow.getOperationID(), operationClasses.getText(), fileName.getText(),
 					mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),
-					mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter());
+					mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData("path") );
 			applyButton.setEnabled(false);
 		} else {
 			super.buttonPressed(buttonId);

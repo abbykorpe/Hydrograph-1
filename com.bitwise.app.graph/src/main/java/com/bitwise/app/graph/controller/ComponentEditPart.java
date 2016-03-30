@@ -355,11 +355,12 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			adjustExistingPorts();
 
 			selectPorts();
-			
-			ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-			if(eltPropertyWindow.isPropertyChanged()){
-				eltGraphicalEditor.setDirty(true);
-				getCastedModel().updateTooltipInformation();
+			if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof ELTGraphicalEditor){
+				ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+				if(eltPropertyWindow.isPropertyChanged()){
+					eltGraphicalEditor.setDirty(true);
+					getCastedModel().updateTooltipInformation();
+				}
 			}
 			refreshComponentStatusOfAllComponent();
 			super.performRequest(req);

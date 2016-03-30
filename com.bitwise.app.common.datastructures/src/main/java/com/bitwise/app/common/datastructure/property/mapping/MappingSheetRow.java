@@ -41,9 +41,17 @@ public class MappingSheetRow implements IDataStructure {
 	private String operationId;
 	private List<NameValueProperty> nameValueProperty;
     private String wholeOperationParameterValue;
-    
+    private String operationClassFullPath;
 	
 	
+
+	public String getOperationClassFullPath() {
+		return operationClassFullPath;
+	}
+
+	public void setOperationClassFullPath(String operationClassFullPath) {
+		this.operationClassFullPath = operationClassFullPath;
+	}
 
 	public MappingSheetRow(List<FilterProperties> input,
 			OperationClassProperty   operationClass,
@@ -62,7 +70,8 @@ public class MappingSheetRow implements IDataStructure {
 			List<NameValueProperty> nameValueProperty,
 			boolean isClassParameter,
 			String wholeOperationParameterValue,
-			boolean isWholeOperationParameter
+			boolean isWholeOperationParameter,
+			String operationClassFullPath
 			) {
 		this.inputFields = input;
 		this.outputList = outputList;
@@ -73,6 +82,7 @@ public class MappingSheetRow implements IDataStructure {
 		this.nameValueProperty=nameValueProperty;
 		this.wholeOperationParameterValue=wholeOperationParameterValue;
 		this.isWholeOperationParameter=isWholeOperationParameter;
+		this.operationClassFullPath=operationClassFullPath;
 		
     }
 	
@@ -226,12 +236,13 @@ public class MappingSheetRow implements IDataStructure {
 		String operationClasspath=this.operationClassPath;
 		boolean isClassParamter=this.isClassParameter;
 		String operationId=this.operationId;
+		String operationClassFullPath=this.operationClassFullPath;
 		inputFields.addAll(this.inputFields);
 		outputList.addAll(this.outputList);
 		if(this.nameValueProperty!=null)
 		nameValueProperty.addAll(this.nameValueProperty);
 		
-		MappingSheetRow mappingSheetRow = new MappingSheetRow(inputFields, outputList,operationId,comboBoxvalue,operationClasspath,nameValueProperty,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter);
+		MappingSheetRow mappingSheetRow = new MappingSheetRow(inputFields, outputList,operationId,comboBoxvalue,operationClasspath,nameValueProperty,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath);
 		
 		return mappingSheetRow;
 	}

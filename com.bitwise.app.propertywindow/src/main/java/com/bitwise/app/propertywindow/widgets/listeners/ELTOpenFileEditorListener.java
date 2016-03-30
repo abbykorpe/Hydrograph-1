@@ -187,11 +187,8 @@ public class ELTOpenFileEditorListener implements IELTListener{
 	private boolean needToShowMessageBox(ListenerHelper helpers) {
 		PropertyDialogButtonBar opeartionClassDialogButtonBar = (PropertyDialogButtonBar) helpers
 				.get(HelperType.OPERATION_CLASS_DIALOG_APPLY_BUTTON);
-		PropertyDialogButtonBar propertyDialogButtonBar = (PropertyDialogButtonBar) helpers
-				.get(HelperType.PROPERTY_DIALOG_BUTTON_BAR);
 
-		if (opeartionClassDialogButtonBar.isApplyEnabled()
-				|| propertyDialogButtonBar.isApplyEnabled()) {
+		if (opeartionClassDialogButtonBar.isApplyEnabled()) {
 			return true;
 		} else {
 			return false;
