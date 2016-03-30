@@ -324,7 +324,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 				int n = transformMapping.getMappingSheetRows().size() + 1;
 				String operationID = Messages.OPERATION_ID_PREFIX + n;
 				mappingSheetRow = new MappingSheetRow(inputFieldList, outputList, operationID, Messages.CUSTOM, "",
-						nameValueProperty, false, "", false);
+						nameValueProperty, false, "", false,"");
 
 				transformMapping.getMappingSheetRows().add(mappingSheetRow);
 
@@ -552,7 +552,12 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 				orignalMappingSheetRow.setClassParameter(operationClassDialog.getMappingSheetRow().isClassParameter());
 				orignalMappingSheetRow.setNameValueProperty(operationClassDialog.getMappingSheetRow()
 						.getNameValueProperty());
-                
+				orignalMappingSheetRow.setOperationClassFullPath(operationClassDialog.getMappingSheetRow().getOperationClassFullPath());
+                if(operationClassDialog.isCancelPressed())
+                pressCancel();
+                if(operationClassDialog.isOKPressed())
+                pressOK();	
+				
 			}
 
 			
