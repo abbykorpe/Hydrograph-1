@@ -14,6 +14,8 @@
 
 package com.bitwise.app.propertywindow.widgets.customwidgets.operational;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -146,6 +148,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 
 		composite_1 = new Composite(container, SWT.NONE);
 		composite_1.setForeground(SWTResourceManager.getColor(SWT.COLOR_TITLE_INACTIVE_FOREGROUND));
+		composite_1.setLayout(new GridLayout(3, false));
 		createInputFieldTable(composite_1);
 
 		createOperationClassGrid(composite_1);
@@ -156,16 +159,23 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	}
 
 	private void createInputFieldTable(Composite container) {
-		composite_1.setLayout(new GridLayout(3, false));
+		
 		Composite inputFieldComposite = new Composite(container, SWT.NONE);
-		inputFieldComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
-
+		
+		inputFieldComposite.setLayout(new GridLayout(2, false));
+		
+		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_composite.widthHint = 250;
+		inputFieldComposite.setLayoutData(gd_composite);
+		new Label(inputFieldComposite, SWT.NONE);
 		inputFieldTableViewer = new TableViewer(inputFieldComposite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
+		
 		setTableViewer(inputFieldTableViewer, inputFieldComposite, new String[] { Messages.OPERATIONAL_SYSTEM_FIELD },
 				new TableContentProvider(), new OperationLabelProvider());
-		inputFieldTableViewer.getTable().setBounds(0, 30, 229, 850);
-		inputFieldTableViewer.setInput(transformMapping.getInputFields());
-		inputFieldTableViewer.getTable().getColumn(0).setWidth(221);
+		inputFieldTableViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		inputFieldTableViewer.getTable().getColumn(0).setWidth(220);
+		
+		
 		DragDropUtility.INSTANCE.applyDragFromTableViewer(inputFieldTableViewer.getTable());
 
 		inputFieldTableViewer.setLabelProvider(new InputFieldColumnLabelProvider());
@@ -174,54 +184,33 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	}
 
 	private void createOutputFieldTable(Composite composite) {
-
-		Composite outputFieldComposite = new Composite(composite, SWT.NONE);
-		outputFieldComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true,true, 1, 1));
-		outputFieldViewer = new TableViewer(outputFieldComposite, SWT.BORDER | SWT.FULL_SELECTION);
-		setTableViewer(outputFieldViewer, outputFieldComposite, new String[] { Messages.OUTPUT_FIELD },
-				new ELTFilterContentProvider(), new OperationLabelProvider());
-		outputFieldViewer.getTable().setBounds(0, 30, 245, 850);
-		outputFieldViewer.getTable().getColumn(0).setWidth(241);
-		outputFieldViewer.setCellModifier(new ELTCellModifier(outputFieldViewer));
-		outputFieldViewer.setLabelProvider(new ELTFilterLabelProvider());
-
-		refreshOutputTable();
-		/*Label addLabel = widget.labelWidget(outputFieldComposite, SWT.CENTER, new int[] { 130, 10, 20, 15 }, "",
-				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
-		addLabel.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-
-				FilterProperties f = new FilterProperties();
-				f.setPropertyname("");
-				if (!transformMapping.getOutputFieldList().contains(f)) {
-
-					temporaryOutputFieldList.add(f);
-
-					outputFieldViewer.refresh();
-
-					int i = temporaryOutputFieldList.size() == 0 ? temporaryOutputFieldList.size()
-							: temporaryOutputFieldList.size() - 1;
-					outputFieldViewer.editElement(outputFieldViewer.getElementAt(i), 0);
-					transformMapping.getOutputFieldList().add(
-							temporaryOutputFieldList.get(temporaryOutputFieldList.size() - 1));
-
-				}
-			}
-		});*/
 		
-		Button btnPull = new Button(outputFieldComposite, SWT.NONE);
+		Composite rightComposite=new Composite(composite,SWT.NONE);
+		rightComposite.setLayout(new GridLayout(1,false));
+		GridData gridData=new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1);
+		gridData.widthHint=250;
+		rightComposite.setLayoutData(gridData);
+       
+		Composite buttonComposite=new Composite(rightComposite, SWT.NONE);
+       buttonComposite.setLayout(new GridLayout(2,false));
+       buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,false, 1, 1));
+		
+		
+		
+		Composite outputFieldComposite = new Composite(rightComposite, SWT.NONE);
+		outputFieldComposite.setLayout(new GridLayout(1,false));
+		outputFieldComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
+		Button btnPull = new Button(buttonComposite, SWT.NONE);
 		btnPull.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 			}
 		});
-		btnPull.setBounds(20, 10, 129, 20);
+		btnPull.setBounds(20, 10, 20, 20);
 		
 		btnPull.setText(Messages.PULL_BUTTON_LABEL);
 		
-		Label deletLabel = widget.labelWidget(outputFieldComposite, SWT.CENTER, new int[] { 160, 10, 20, 15 }, "",
+		Label deletLabel = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 160, 10, 20, 15 }, "",
 				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
 		deletLabel.addMouseListener(new MouseAdapter() {
 
@@ -250,26 +239,62 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		});
 		deletLabel.setEnabled(false);
 
+		
+		outputFieldViewer = new TableViewer(outputFieldComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		setTableViewer(outputFieldViewer, outputFieldComposite, new String[] { Messages.OUTPUT_FIELD },
+				new ELTFilterContentProvider(), new OperationLabelProvider());
+		outputFieldViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+		outputFieldViewer.setCellModifier(new ELTCellModifier(outputFieldViewer));
+		outputFieldViewer.setLabelProvider(new ELTFilterLabelProvider());
+		outputFieldViewer.getTable().getColumn(0).setWidth(210);
+		refreshOutputTable();
+		/*Label addLabel = widget.labelWidget(outputFieldComposite, SWT.CENTER, new int[] { 130, 10, 20, 15 }, "",
+				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		addLabel.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+
+				FilterProperties f = new FilterProperties();
+				f.setPropertyname("");
+				if (!transformMapping.getOutputFieldList().contains(f)) {
+
+					temporaryOutputFieldList.add(f);
+
+					outputFieldViewer.refresh();
+
+					int i = temporaryOutputFieldList.size() == 0 ? temporaryOutputFieldList.size()
+							: temporaryOutputFieldList.size() - 1;
+					outputFieldViewer.editElement(outputFieldViewer.getElementAt(i), 0);
+					transformMapping.getOutputFieldList().add(
+							temporaryOutputFieldList.get(temporaryOutputFieldList.size() - 1));
+
+				}
+			}
+		});*/
+		
+	
 	}
 
 	private void createOperationClassGrid(Composite parentComposite) {
 
 		Composite middleComposite = new Composite(parentComposite, SWT.NONE);
-		middleComposite.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true,true, 1, 1));
 		middleComposite.setLayout(new GridLayout(1, false));
+		middleComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
+		
 
 		Composite topAddButtonComposite = new Composite(middleComposite, SWT.NONE);
-		GridData gd_topAddButtonComposite = new GridData(SWT.TOP, SWT.CENTER, false, false, 1, 1);
-		gd_topAddButtonComposite.heightHint = 48;
-		gd_topAddButtonComposite.widthHint = 745;
+		
+		GridData gd_topAddButtonComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		
 		topAddButtonComposite.setLayoutData(gd_topAddButtonComposite);
-
+		
 		scrolledComposite = new ScrolledComposite(middleComposite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLUE));
 		scrolledComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		GridData gd_scrolledComposite = new GridData(SWT.TOP, SWT.CENTER, true,true, 1, 1);
-		gd_scrolledComposite.widthHint = 730;
-		gd_scrolledComposite.heightHint = 513;
+		scrolledComposite.setLayout(new GridLayout(1,false)); 
+		GridData gd_scrolledComposite = new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1);
+		
 		scrolledComposite.setLayoutData(gd_scrolledComposite);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
@@ -279,11 +304,11 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		expandBar.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 		expandBar.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
 		expandBar.setVisible(true);
-
+		expandBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		Label addLabel = widget.labelWidget(topAddButtonComposite, SWT.CENTER, new int[] { 315, 10, 20, 15 }, "",
 				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
 		addLabel.addMouseListener(new MouseAdapter() {
-
+		
 			@Override
 			public void mouseUp(MouseEvent e) {
 				if (expandBar.getItemCount() > 1)
@@ -330,7 +355,6 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		lblOperationsControl.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
 		lblOperationsControl.setBounds(181, 10, 129, 28);
 		lblOperationsControl.setText(Messages.OPERATION_CONTROL);
-		
 		if (!transformMapping.getMappingSheetRows().isEmpty()) {
 			for (MappingSheetRow mappingSheetRow : transformMapping.getMappingSheetRows()) {
 				addExpandItem(scrolledComposite, mappingSheetRow, mappingSheetRow.getOperationID());
@@ -343,29 +367,49 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 
 	private void createMapAndPassthroughTable(Composite middleComposite) {
 		Composite mappingTableComposite = new Composite(middleComposite, SWT.NONE);
-		GridData gd_mappingTableComposite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_mappingTableComposite.heightHint = 289;
-		gd_mappingTableComposite.widthHint = 753;
+		mappingTableComposite.setLayout(new GridLayout(2,false));
+		GridData gd_mappingTableComposite = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		mappingTableComposite.setLayoutData(gd_mappingTableComposite);
+		
+		Composite labelComposite=new Composite(mappingTableComposite,SWT.NONE);
+		labelComposite.setLayout(new GridLayout(1,false));
+		GridData gd_mappingTableComposite3 = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
+		labelComposite.setLayoutData(gd_mappingTableComposite3);
+		
+		
+		Composite buttonComposite=new Composite(mappingTableComposite,SWT.NONE);
+		buttonComposite.setLayout(new GridLayout(2,true));
+		GridData gd_mappingTableComposite2 = new GridData(SWT.END, SWT.END, false, false, 1, 1);
+		buttonComposite.setLayoutData(gd_mappingTableComposite2);
+		 
+		
+		Composite tableComposite = new Composite(mappingTableComposite, SWT.NONE);
+		tableComposite.setLayout(new GridLayout(1,false));
+		GridData gd_mappingTableComposite1 = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
+		tableComposite.setLayoutData(gd_mappingTableComposite1);
 		transformMapping.getMapAndPassthroughField();
 
-		final TableViewer mappingTableViewer = new TableViewer(mappingTableComposite, SWT.BORDER | SWT.FULL_SELECTION
+		final TableViewer mappingTableViewer = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION
 				| SWT.MULTI);
-		setTableViewer(mappingTableViewer, mappingTableComposite, new String[] { Messages.SOURCE, Messages.TARGET },
+		setTableViewer(mappingTableViewer, tableComposite, new String[] { Messages.SOURCE, Messages.TARGET },
 				new ELTFilterContentProvider(), new OperationLabelProvider());
 		mappingTableViewer.setLabelProvider(new PropertyLabelProvider());
 		mappingTableViewer.setCellModifier(new PropertyGridCellModifier(this, mappingTableViewer));
-		mappingTableViewer.getTable().setBounds(10, 32, 733, 250);
+		mappingTableViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		mappingTableViewer.setInput(transformMapping.getMapAndPassthroughField());
 
 		DragDropUtility.INSTANCE.applyDrop(mappingTableViewer,
 				new DragDropTransformOpImp(this, transformMapping.getMapAndPassthroughField(), false, mappingTableViewer));
-
-		Label mapFieldAddLabel = widget.labelWidget(mappingTableComposite, SWT.CENTER, new int[] { 635, 10, 20, 15 },
+       
+		Label lblNewLabel = new Label(labelComposite, SWT.NONE);
+		lblNewLabel.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
+		lblNewLabel.setText(Messages.MAP_FIELD);
+		
+		
+		Label mapFieldAddLabel = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 635, 10, 20, 15 },
 				"", new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON)
 
 		);
-
 		mapFieldAddLabel.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -384,9 +428,9 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 			}
 		});
 
-		Label mapFieldDeletLabel = widget.labelWidget(mappingTableComposite, SWT.CENTER, new int[] { 665, 10, 20, 15 },
+		Label mapFieldDeletLabel = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 665, 10, 20, 15 },
 				"", new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
-
+		
 		mapFieldDeletLabel.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -409,10 +453,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 			}
 		});
 
-		Label lblNewLabel = new Label(mappingTableComposite, SWT.NONE);
-		lblNewLabel.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
-		lblNewLabel.setBounds(355, 10, 95, 24);
-		lblNewLabel.setText(Messages.MAP_FIELD);
+		
 
 		mappingTableViewer.getTable().getColumn(0).setWidth(362);
 		mappingTableViewer.getTable().getColumn(1).setWidth(362);
@@ -840,9 +881,10 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	@Override
 	protected Point getInitialSize() {
 		container.getShell().layout(true, true);
-
-		final Point newSize = container.getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT, true);  
-
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	
+		final Point newSize = container.getShell().computeSize(screenSize.width,screenSize.height,true);  
+		
 		container.getShell().setSize(newSize);
 		return newSize;
 	}
