@@ -209,7 +209,7 @@ public class Constants {
 	public static final String COMPONENT_ID = "componentId";
 	public static final String SOCKET_ID = "socketId";
 	public static final String JOB_ID = "jobId";
-	public static final String PORT_NO = ":8001";
+	public static final String PORT_NO = ":8004";
 	public static final String ROUTE_TO_READ_DATA = "/debug";
 	public static final String ROUTE_TO_REMOVE_FILES = "/delete";
 	
