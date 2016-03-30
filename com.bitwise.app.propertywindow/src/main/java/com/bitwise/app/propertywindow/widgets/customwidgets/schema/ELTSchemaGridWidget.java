@@ -59,8 +59,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
@@ -151,6 +154,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private ELTDefaultLable upButton, downButton, addButton, deleteButton;
 
 	private Button browseButton, importButton, exportButton;
+	
+	private MenuItem copyMenuItem, pasteMenuItem;
 
 	AbstractELTWidget internalSchema, externalSchema;
 	private Text extSchemaPathText;
@@ -162,6 +167,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private String removeButtonTooltip = Messages.DELETE_SCHEMA_TOOLTIP;
 	private String upButtonTooltip = Messages.MOVE_SCHEMA_UP_TOOLTIP;
 	private String downButtonTooltip = Messages.MOVE_SCHEMA_DOWN_TOOLTIP;
+	
+	List<GridRow> copiedGridRows=new ArrayList<GridRow>();
 
 	protected abstract String[] getPropertiesToShow();
 
@@ -823,6 +830,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		// eltTableViewer.getSWTWidgetControl().
 		tableViewer = (TableViewer) eltTableViewer.getJfaceWidgetControl();
 		tableViewer.setInput(schemaGridRowList);
+		
+		addGridRowsCopyPasteContextMenu();
+		
 		// Set the editors, cell modifier, and column properties
 		tableViewer.setColumnProperties(PROPS);
 		tableViewer.setCellModifier(getCellModifier());
@@ -877,6 +887,66 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		deleteButton.setEnabled(false);
 		populateWidget();
 		return tableViewer;
+	}
+
+	private void addGridRowsCopyPasteContextMenu() {
+		Menu menu = new Menu(tableViewer.getControl());
+	
+		copyMenuItem = new MenuItem(menu, SWT.PUSH);
+		copyMenuItem.setText(Messages.COPY_MENU_TEXT);
+		copyMenuItem.setAccelerator(SWT.CTRL + 'C');
+		copyMenuItem.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				logger.trace("Copying gridRows");
+				copiedGridRows.clear();
+				for (TableItem tableItem:tableViewer.getTable().getSelection()){
+					copiedGridRows.add((GridRow) tableItem.getData());
+					logger.trace("Copied", ((GridRow) tableItem.getData()).getFieldName());
+				}
+				pasteMenuItem.setEnabled(true);
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+			}
+		});
+		
+		pasteMenuItem = new MenuItem(menu, SWT.PUSH);
+		pasteMenuItem.setText(Messages.PASTE_MENU_TEXT);
+		pasteMenuItem.setAccelerator(SWT.CTRL + 'V');
+		pasteMenuItem.setEnabled(!copiedGridRows.isEmpty());
+		
+		pasteMenuItem.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				logger.trace("Pasting gridRows");
+				ELTGridDetails eltGridDetails = (ELTGridDetails)helper.get(HelperType.SCHEMA_GRID);
+				for (GridRow copiedRow:copiedGridRows){
+					logger.trace("Pasted",copiedRow.getFieldName());
+					GridRow pasteGrid = copiedRow.copy();
+
+					int copyCount =0;	
+					do{
+						pasteGrid.setFieldName(copiedRow.getFieldName() + Messages.COPY_GRID_SUFFIX + copyCount++);
+					}while(eltGridDetails.getGrids().contains(pasteGrid));
+					
+					eltGridDetails.getGrids().add(pasteGrid);
+				}
+				tableViewer.setInput(eltGridDetails.getGrids());
+				tableViewer.refresh();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+			}
+		});
+		
+		tableViewer.getTable().setMenu(menu);
 	}
 
 	private void addAddButton(ELTSchemaSubgroupComposite buttonSubGroup) {
