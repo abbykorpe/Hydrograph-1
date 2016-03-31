@@ -156,9 +156,10 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		}
 
 		resetScale(fixedWidthGridRow, property);
-
+		resetScaleType(fixedWidthGridRow, property);
 		resetDateFormat(fixedWidthGridRow, property);
-
+		resetPrecision(fixedWidthGridRow, property);
+		
 		viewer.refresh();
 	}
 
@@ -174,11 +175,39 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 
 		}
 	}
+	
+	private void resetScaleType(FixedWidthGridRow row, String property){
+		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
+			if(DataType.INTEGER_CLASS.equals(row.getDataTypeValue()) 
+					||DataType.STRING_CLASS.equals(row.getDataTypeValue())
+					||DataType.SHORT_CLASS.equals(row.getDataTypeValue())
+					||DataType.BOOLEAN_CLASS.equals(row.getDataTypeValue())
+					||DataType.DATE_CLASS.equals(row.getDataTypeValue())){
+				
+				row.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[0]);
+				row.setScaleType(0);
+			}
+
+		}
+	}
 
 	private void resetDateFormat(FixedWidthGridRow fixedWidthGridRow, String property){
 		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(fixedWidthGridRow.getDataTypeValue())){
 			if(!(DataType.DATE_CLASS.equals(fixedWidthGridRow.getDataTypeValue()))){
 				fixedWidthGridRow.setDateFormat("");
+			}
+
+		}
+	}
+	
+	private void resetPrecision(FixedWidthGridRow row, String property){
+		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
+			if(DataType.INTEGER_CLASS.equals(row.getDataTypeValue()) 
+					||DataType.STRING_CLASS.equals(row.getDataTypeValue())
+					||DataType.SHORT_CLASS.equals(row.getDataTypeValue())
+					||DataType.BOOLEAN_CLASS.equals(row.getDataTypeValue())
+					||DataType.DATE_CLASS.equals(row.getDataTypeValue())){
+				row.setPrecision("");
 			}
 
 		}
