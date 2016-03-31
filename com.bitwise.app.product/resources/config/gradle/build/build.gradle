@@ -38,8 +38,8 @@ ext.hadoopVersion = '2.6.0'
 ext.hiveVersion = '1.2.0'
 
 dependencies {
-   compile(group: 'com.bitwiseglobal', name: 'elt-command-line', version: '0.1.2')
-   compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
+    compile(group: 'com.bitwiseglobal', name: 'elt-command-line', version: '0.1.2')
+    compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
 }
 
 test {
@@ -76,9 +76,9 @@ task scpJarFiles(dependsOn: ['build']) {
                     password: password,
                     trust: true,
             )
-       } catch (Exception gradleException) {
+        } catch (Exception gradleException) {
             println '#Gradle failed to execute task#'
-       }
+        }
 
 
     }
@@ -108,18 +108,22 @@ task scpJobXML() {
                     password: password,
                     trust: true,
             )
+
+            if(project.hasProperty('debugJobXML'))
+            {
+                ant.scp(
+                        file: debugJobXML,
+                        todir: "${username}@${host}:" + properties.remoteJobXMLDir,
+                        password: password,
+                        trust: true,
+                )
+            }
         } catch (Exception gradleException) {
             println '#Gradle failed to execute task#'
         }
-        
-        if(project.hasProperty('debugJobXML'))
-         ant.scp(
- 			    file: debugJobXML,
-                todir: "${username}@${host}:" + properties.remoteJobXMLDir,
-                password: password,
-                trust: true,
-        )
-        
+
+
+
     }
 }
 
@@ -138,12 +142,20 @@ task scpParameterFile() {
                 classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp',
                 classpath: configurations.sshAntTask.asPath)
         try {
-            ant.scp(
-                    file: parameterFile,
-                    todir: "${username}@${host}:" + properties.remoteParameterFileDir,
-                    password: password,
-                    trust: true,
-            )
+
+            def parameterFiles = parameterFile.split(',');
+
+            for(int i = 0; i < parameterFiles.length; i++){
+                println 'copying parameter file: ' + parameterFiles[i];
+                ant.scp(
+                        file: parameterFiles[i],
+                        todir: "${username}@${host}:" + properties.remoteParameterFileDir,
+                        password: password,
+                        trust: true,
+                )
+            }
+
+
         } catch (Exception gradleException) {
             println '#Gradle failed to execute task#'
         }
@@ -182,10 +194,18 @@ task executeRemoteJob() {
 
 
         def xmlFileName = jobXML.substring(jobXML.lastIndexOf("/") + 1);
-        def parameterFileName = parameterFile.substring(parameterFile.lastIndexOf("/") + 1);
+        //def parameterFileName = parameterFile.substring(parameterFile.lastIndexOf("/") + 1);
+        def parameterFiles = parameterFile.split(',');
+        def unixParameterFileList = "";
+        for(int i = 0; i < parameterFiles.length; i++){
+         	def unixParameterFileName = parameterFiles[i].substring(parameterFiles[i].replaceAll("\\\\","/").lastIndexOf("/") + 1);
+         	println "+++ unixParameterFileName: " + unixParameterFileName; 
+            unixParameterFileList= unixParameterFileList + properties.remoteParameterFileDir + "/" + unixParameterFileName + ",";
+        }
 
+        unixParameterFileList=unixParameterFileList.substring(0, unixParameterFileList.length() - 1);
 
-        println 'executing command - ' + properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " + properties.remoteLibDir + "/" + jarName + " -paramfiles " + properties.remoteParameterFileDir + "/" + parameterFileName
+        println 'executing command - ' + properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " + properties.remoteLibDir + "/" + jarName + " -paramfiles " + unixParameterFileList
 
         try {
             ant.sshexec(
@@ -193,7 +213,7 @@ task executeRemoteJob() {
                     username: username,
                     password: password,
                     trust: true,
-                    command: properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " + properties.remoteLibDir + "/" + jarName + " -paramfiles " + properties.remoteParameterFileDir + "/" + parameterFileName
+                    command: properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " + properties.remoteLibDir + "/" + jarName + " -paramfiles " + unixParameterFileList
             )
         } catch (Exception gradleException) {
             println '#Gradle failed to execute task#'
@@ -212,9 +232,9 @@ executeRemoteJob.onlyIf {
 
 
 task executeDebugRemoteJob() {
-        
+
     doLast {
-    
+
         ant.taskdef(
                 name: 'sshexec',
                 classname: 'org.apache.tools.ant.taskdefs.optional.ssh.SSHExec',
@@ -236,13 +256,13 @@ task executeDebugRemoteJob() {
 
         def xmlFileName = jobXML.substring(jobXML.lastIndexOf("/") + 1);
         def parameterFileName = parameterFile.substring(parameterFile.lastIndexOf("/") + 1);
-		def debugXmlFileName = debugJobXML.substring(debugJobXML.lastIndexOf("/") + 1);
-		def jobId = jobId;
-		def basePath = basePath;
-		 
-        println 'executing command - ' + properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " + 
-        properties.remoteLibDir + "/" + jarName + " -paramfiles " + properties.remoteParameterFileDir + "/" + parameterFileName + " -debugxmlpath " + 
-        properties.remoteJobXMLDir + "/" + debugXmlFileName + " -jobid " + jobId + " -basepath " + basePath
+        def debugXmlFileName = debugJobXML.substring(debugJobXML.lastIndexOf("/") + 1);
+        def jobId = jobId;
+        def basePath = basePath;
+
+        println 'executing command - ' + properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " +
+                properties.remoteLibDir + "/" + jarName + " -paramfiles " + properties.remoteParameterFileDir + "/" + parameterFileName + " -debugxmlpath " +
+                properties.remoteJobXMLDir + "/" + debugXmlFileName + " -jobid " + jobId + " -basepath " + basePath
 
         try {
             ant.sshexec(
@@ -250,9 +270,9 @@ task executeDebugRemoteJob() {
                     username: username,
                     password: password,
                     trust: true,
-                    command: properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " + properties.remoteLibDir + 
-                    "/" + jarName + " -paramfiles " + properties.remoteParameterFileDir + "/" + parameterFileName + " -debugxmlpath " + properties.remoteJobXMLDir + 
-                    "/" + debugXmlFileName + " -jobid " + jobId + " -basepath " + basePath
+                    command: properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " + properties.remoteLibDir +
+                            "/" + jarName + " -paramfiles " + properties.remoteParameterFileDir + "/" + parameterFileName + " -debugxmlpath " + properties.remoteJobXMLDir +
+                            "/" + debugXmlFileName + " -jobid " + jobId + " -basepath " + basePath
             )
         } catch (Exception gradleException) {
             println '#Gradle failed to execute task#'
@@ -263,19 +283,19 @@ task executeDebugRemoteJob() {
 
 task executeLocalJob(dependsOn: ['build', 'classes'], type: JavaExec) {
 
-	if(project.hasProperty('localjob')){
-		def mainClassName = 'com.bitwiseglobal.commandline.utilities.BHSExecution'
-    def transformFiles = files { file(project.libsDir.path).listFiles() }
+    if(project.hasProperty('localjob')){
+        def mainClassName = 'com.bitwiseglobal.commandline.utilities.BHSExecution'
+        def transformFiles = files { file(project.libsDir.path).listFiles() }
 
-	println 'Executing local job'
-    main = mainClassName
-    standardOutput = System.out
-    errorOutput = System.err
-    classpath += transformFiles + configurations.compile
-    def argsArray = getArgsForRunJob()
-    args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'']
-		
-	}
+        println 'Executing local job'
+        main = mainClassName
+        standardOutput = System.out
+        errorOutput = System.err
+        classpath += transformFiles + configurations.compile
+        def argsArray = getArgsForRunJob()
+        args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'']
+
+    }
 }
 
 def getArgsForRunJob() {
@@ -299,20 +319,20 @@ executeLocalJob.onlyIf {
 
 task executeDebugLocal (dependsOn: ['build', 'classes'], type: JavaExec) {
 
-	if(project.hasProperty('localjob')){
-		def mainClassName = 'com.bitwiseglobal.commandline.utilities.BHSExecution'
-    def transformFiles = files { file(project.libsDir.path).listFiles() }
+    if(project.hasProperty('localjob')){
+        def mainClassName = 'com.bitwiseglobal.commandline.utilities.BHSExecution'
+        def transformFiles = files { file(project.libsDir.path).listFiles() }
 
-	println 'Executing Debug local job'
-    main = mainClassName
-    standardOutput = System.out
-    errorOutput = System.err
-    classpath += transformFiles + configurations.compile
-    def argsArray = getArgsForDebugRunJob()
-    args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'',''+argsArray[4]+'',''+argsArray[5]+'',''+argsArray[6]+'',''+argsArray[7]+'',''+
-												argsArray[8]+'',''+argsArray[9]+'']
-		
-	}
+        println 'Executing Debug local job'
+        main = mainClassName
+        standardOutput = System.out
+        errorOutput = System.err
+        classpath += transformFiles + configurations.compile
+        def argsArray = getArgsForDebugRunJob()
+        args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'',''+argsArray[4]+'',''+argsArray[5]+'',''+argsArray[6]+'',''+argsArray[7]+'',''+
+                argsArray[8]+'',''+argsArray[9]+'']
+
+    }
 }
 
 def getArgsForDebugRunJob() {
@@ -322,51 +342,51 @@ def getArgsForDebugRunJob() {
         argsArray[1] = jobXML
         println jobXML
     }
-   
+
     if (project.hasProperty("parameterFile")) {
         argsArray[2] = "-paramFiles"
         argsArray[3] = parameterFile
     }
- 
-  		if(project.hasProperty("debugJobXML")){
-			argsArray[4] = "-debugxmlpath"
-			argsArray[5] = debugJobXML
-			println debugJobXML
-		}
-	 
-		if(project.hasProperty("jobId")){
-			argsArray[6] = "-jobid"
-			argsArray[7] = jobId
-			println jobId
-		}
-	 
-		if(project.hasProperty("basePath")){
-			argsArray[8] = "-basepath"
-			argsArray[9] = basePath
-			println basePath
-		}
-	 
+
+    if(project.hasProperty("debugJobXML")){
+        argsArray[4] = "-debugxmlpath"
+        argsArray[5] = debugJobXML
+        println debugJobXML
+    }
+
+    if(project.hasProperty("jobId")){
+        argsArray[6] = "-jobid"
+        argsArray[7] = jobId
+        println jobId
+    }
+
+    if(project.hasProperty("basePath")){
+        argsArray[8] = "-basepath"
+        argsArray[9] = basePath
+        println basePath
+    }
+
     return argsArray
 }
- 
- 
-task killRemoteJob() << {
-	
-	if(jobprocessid !=null){
-		println "Gradle is Killing remote job"
-    ant.taskdef(
-            name: 'sshexec',
-            classname: 'org.apache.tools.ant.taskdefs.optional.ssh.SSHExec',
-            classpath: configurations.sshAntTask.asPath)
 
-    ant.sshexec(
-            host: host,
-            username: username,
-            password: password,
-            trust: true,
-            command: "sh /home/hduser/milestone/kill_job.sh " + jobprocessid)
-      }
-    
+
+task killRemoteJob() << {
+
+    if(jobprocessid !=null){
+        println "Gradle is Killing remote job"
+        ant.taskdef(
+                name: 'sshexec',
+                classname: 'org.apache.tools.ant.taskdefs.optional.ssh.SSHExec',
+                classpath: configurations.sshAntTask.asPath)
+
+        ant.sshexec(
+                host: host,
+                username: username,
+                password: password,
+                trust: true,
+                command: "sh /home/hduser/milestone/kill_job.sh " + jobprocessid)
+    }
+
 }
 
 killRemoteJob.onlyIf {

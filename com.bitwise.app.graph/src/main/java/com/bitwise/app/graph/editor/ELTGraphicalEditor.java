@@ -929,6 +929,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		    
 		    return uniqueJobId;
 	}
+	
+	@Override
 	public String getActiveProject(){
 		if(getEditorInput() instanceof IFileEditorInput){
 			IFileEditorInput input = (IFileEditorInput)getEditorInput() ;

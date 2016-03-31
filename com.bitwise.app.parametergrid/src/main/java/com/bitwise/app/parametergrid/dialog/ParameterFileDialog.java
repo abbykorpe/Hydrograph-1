@@ -64,8 +64,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 
+import com.bitwise.app.common.datastructures.parametergrid.FilePath;
 import com.bitwise.app.parametergrid.constants.ParameterGridConstants;
-import com.bitwise.app.parametergrid.dialog.models.FilePath;
 import com.bitwise.app.parametergrid.dialog.models.Parameter;
 import com.bitwise.app.parametergrid.dialog.models.ParameterWithFilePath;
 import com.bitwise.app.parametergrid.dialog.support.ParameterEditingSupport;
@@ -87,6 +87,9 @@ public class ParameterFileDialog extends Dialog {
 	private Image checkAllImage;
 	private Image uncheckAllImage;
 	private boolean selectAllFiles=true;
+	private String activeProjectLocation;
+	
+	private boolean runGraph;
 	/**
 	 * Create the dialog.
 	 * 
@@ -104,6 +107,26 @@ public class ParameterFileDialog extends Dialog {
 		uncheckAllImage = new Image(null, "C:\\Users\\shrirangk\\Desktop\\DeskTopBackupMarch16\\eclipse-rcp-indigo-SR2-win32-x86_64\\eclipse\\config\\icons\\uncheckall.png");
 	}
 
+	
+	/**
+	 * Create the dialog.
+	 * 
+	 * @param parentShell
+	 */
+	public ParameterFileDialog(Shell parentShell,String activeProjectLocation) {
+		super(parentShell);
+		if (parameterFiles == null)
+			parameterFiles = new LinkedList<>();
+
+		parameters = new LinkedList<>();
+		parameterSearchBoxItems = new LinkedList<>();
+		parameterSearchBoxItemsFixed = new LinkedList<>();
+		checkAllImage = new Image(null, "C:\\Users\\shrirangk\\Desktop\\DeskTopBackupMarch16\\eclipse-rcp-indigo-SR2-win32-x86_64\\eclipse\\config\\icons\\checkall.png");
+		uncheckAllImage = new Image(null, "C:\\Users\\shrirangk\\Desktop\\DeskTopBackupMarch16\\eclipse-rcp-indigo-SR2-win32-x86_64\\eclipse\\config\\icons\\uncheckall.png");
+		
+		this.activeProjectLocation = activeProjectLocation;
+	}
+	
 	/**
 	 * Create contents of the dialog.
 	 * 
@@ -968,23 +991,53 @@ public class ParameterFileDialog extends Dialog {
 	
 	@Override
 	protected void okPressed() {
+		List<FilePath> tempParameterFiles = new LinkedList<>();
+		tempParameterFiles.addAll(parameterFiles);
 		
 		try {
 			FileOutputStream fout;
-			fout = new FileOutputStream("C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param.meta");
+			//fout = new FileOutputStream("C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param.meta");
+			fout = new FileOutputStream(this.activeProjectLocation + "\\project.metadata");
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
-			oos.writeObject(parameterFiles);
+			tempParameterFiles.remove(getJobSpecificFile());
+			oos.writeObject(tempParameterFiles);
 			oos.close();
 			fout.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
+			runGraph=false;
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			runGraph=false;
 			e.printStackTrace();
 		}
-		
+		runGraph=true;
 		
 		super.okPressed();
+	}
+	
+	public boolean canRunGraph(){
+		return runGraph;
+	}
+	
+	@Override
+	protected void cancelPressed() {
+		// TODO Auto-generated method stub
+		runGraph = false;
+		super.cancelPressed();
+	}
+	
+	public String getParameterFilesForExecution(){
+		
+		String activeParameterFiles = "";
+		
+		for(FilePath parameterFile:parameterFiles){
+			if(parameterFile.isChecked()){
+				activeParameterFiles = activeParameterFiles + parameterFile.getPath() + ",";
+			}
+		}
+		
+		return activeParameterFiles.substring(0, activeParameterFiles.length()-1);
 	}
 }

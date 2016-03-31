@@ -14,18 +14,31 @@
  
 package com.bitwise.app.parametergrid.actions;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructures.parametergrid.FilePath;
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.parametergrid.dialog.ParameterFileDialog;
 import com.bitwise.app.parametergrid.dialog.ParameterGridDialog;
 /**
  * 
@@ -53,7 +66,42 @@ public class ParameterGridOpenHandler extends AbstractHandler{
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
-		if(getComponentCanvas().getParameterFile() == null ){
+		
+		IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart(); 
+	    IFile file = (IFile) workbenchPart.getSite().getPage().getActiveEditor().getEditorInput().getAdapter(IFile.class);
+	    IProject project = file.getProject();
+	    String activeProjectLocation =project.getLocation().toOSString();
+	    System.out.println("path: " + project.getLocation().toOSString());
+	   
+	    
+		FileInputStream fin;
+		List<FilePath> filepathList = new LinkedList<>();
+		filepathList.add(new FilePath(getComponentCanvas().getJobName().replace("job", "properties"), getComponentCanvas().getParameterFile(), true, true));
+		try {
+			fin = new FileInputStream(activeProjectLocation + "\\project.metadata");
+			ObjectInputStream ois = new ObjectInputStream(fin);
+			//filepathList = (LinkedList<FilePath>) ois.readObject();
+			filepathList.addAll((LinkedList<FilePath>)ois.readObject());
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException xe) {
+			// TODO Auto-generated catch block
+			xe.printStackTrace();
+		} catch (ClassNotFoundException ex) {
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+		}
+		
+		
+		ParameterFileDialog testDialog = new ParameterFileDialog(new Shell(),activeProjectLocation);
+		testDialog.setParameterFiles(filepathList);
+		testDialog.open();
+		
+		//String activeProject = getComponentCanvas().getActiveProject();
+		
+		
+		/*if(getComponentCanvas().getParameterFile() == null ){
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
 
 			messageBox.setText("Error");
@@ -72,7 +120,7 @@ public class ParameterGridOpenHandler extends AbstractHandler{
 			}catch(Exception e){
 				logger.debug("Unable to open parameter grid " , e);
 			}
-			
+			*/
 		return null;
 	}
 }

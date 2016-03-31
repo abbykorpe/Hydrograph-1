@@ -12,7 +12,7 @@
  ******************************************************************************/
 
  
-package com.bitwise.app.parametergrid.dialog.models;
+package com.bitwise.app.common.datastructures.parametergrid;
 
 import java.io.Serializable;
 

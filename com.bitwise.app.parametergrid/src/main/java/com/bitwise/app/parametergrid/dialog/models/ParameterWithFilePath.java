@@ -1,5 +1,7 @@
 package com.bitwise.app.parametergrid.dialog.models;
 
+import com.bitwise.app.common.datastructures.parametergrid.FilePath;
+
 public class ParameterWithFilePath extends Parameter{
 	FilePath filePath;
 	

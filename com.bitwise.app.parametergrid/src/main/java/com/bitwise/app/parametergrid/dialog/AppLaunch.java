@@ -12,16 +12,16 @@ import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 
-import com.bitwise.app.parametergrid.dialog.models.FilePath;
+import com.bitwise.app.common.datastructures.parametergrid.FilePath;
 
 public class AppLaunch extends ApplicationWindow {
 
@@ -56,7 +56,7 @@ public class AppLaunch extends ApplicationWindow {
 					filepathList.add(new FilePath("param5.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param5.properties",false,true));*/
 					
 					FileInputStream fin;
-					List<FilePath> filepathList = null;
+					List<FilePath> filepathList = new LinkedList<>();
 					try {
 						fin = new FileInputStream("C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param.meta");
 						ObjectInputStream ois = new ObjectInputStream(fin);
