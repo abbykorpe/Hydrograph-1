@@ -80,7 +80,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	private Button applyButton;
 	private Button okButton;
 	private Composite container;
-
+	private boolean okPressed;
 	private PropertyDialogButtonBar operationClassDialogButtonBar;
 	private TootlTipErrorMessage tootlTipErrorMessage = new TootlTipErrorMessage();
 	private WidgetConfig widgetConfig;
@@ -466,6 +466,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 				mappingSheetRow.getOperationID(), operationClasses.getText(), fileName.getText(),
 				mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),
 				mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData("path"));
+		okPressed=true;
 		super.okPressed();
 	}
 

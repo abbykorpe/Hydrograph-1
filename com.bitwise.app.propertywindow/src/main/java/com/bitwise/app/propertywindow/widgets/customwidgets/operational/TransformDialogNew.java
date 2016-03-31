@@ -118,6 +118,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	private List<FilterProperties> temporaryOutputFieldList = new ArrayList<>();
 	private MappingSheetRow mappingSheetRow;
 	private static ControlDecoration fieldNameDecorator;
+	private boolean okButtonPressed;
 
 	public TransformDialogNew(Shell parentShell, String componentName, WidgetConfig widgetConfig, TransformMapping atMapping) {
 		super(parentShell);
@@ -897,16 +898,16 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 
 	@Override
 	protected void okPressed() {
-		isOKButtonPressed = true;
+		
 		transformMapping = new TransformMapping((List<InputField>) inputFieldTableViewer.getInput(), transformMapping.getMappingSheetRows(),
 				transformMapping.getMapAndPassthroughField(), transformMapping.getOutputFieldList());
+	    okButtonPressed = true;
 		super.okPressed();
 	}
    
 	@Override
 	protected void cancelPressed()
 	{
-		isCancelButtonPressed = true;
 		super.cancelPressed();
 	}
 	
@@ -914,13 +915,13 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		return transformMapping;
 	}
 
-	@Override
+	
 	public void pressOK() {
 		isOKButtonPressed = true;
 		okPressed();
 	}
 
-	@Override
+	
 	public void pressCancel() {
 		isCancelButtonPressed = true;
 		cancelPressed();
