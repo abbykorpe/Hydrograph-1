@@ -11,7 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
+
 package com.bitwise.app.propertywindow.fixedwidthschema;
 
 import org.apache.commons.lang.StringUtils;
@@ -122,7 +122,7 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 			return fixedWidthGridRow.getDescription();
 		else if (ELTSchemaGridWidget.LENGTH.equals(property))
 			return fixedWidthGridRow.getLength();
-		
+
 		else
 			return null;
 	}
@@ -155,33 +155,38 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 			fixedWidthGridRow.setLength(((String) value).trim());
 		}
 
-		resetScale(fixedWidthGridRow, property);
-
+		if (isResetNeeded(fixedWidthGridRow, property)){
+			fixedWidthGridRow.setScale("");
+			fixedWidthGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[0]);
+			fixedWidthGridRow.setScaleType(0);
+			fixedWidthGridRow.setPrecision("");
+		}
 		resetDateFormat(fixedWidthGridRow, property);
 
 		viewer.refresh();
 	}
+	
+	private void resetDateFormat(FixedWidthGridRow row, String property){
+		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
+			if(!(DataType.DATE_CLASS.equals(row.getDataTypeValue()))){
+				row.setDateFormat("");
+			}
 
-	private void resetScale(FixedWidthGridRow fixedWidthGridRow, String property){
+		}
+	}
+
+
+	private boolean isResetNeeded(FixedWidthGridRow fixedWidthGridRow, String property) {
 		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(fixedWidthGridRow.getDataTypeValue())){
 			if(DataType.INTEGER_CLASS.equals(fixedWidthGridRow.getDataTypeValue()) 
 					||DataType.STRING_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(fixedWidthGridRow.getDataTypeValue())){
-				fixedWidthGridRow.setScale("");
-			}
-
+				return true;
+			}	
 		}
-	}
-
-	private void resetDateFormat(FixedWidthGridRow fixedWidthGridRow, String property){
-		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(fixedWidthGridRow.getDataTypeValue())){
-			if(!(DataType.DATE_CLASS.equals(fixedWidthGridRow.getDataTypeValue()))){
-				fixedWidthGridRow.setDateFormat("");
-			}
-
-		}
+		return false;
 	}
 
 }
