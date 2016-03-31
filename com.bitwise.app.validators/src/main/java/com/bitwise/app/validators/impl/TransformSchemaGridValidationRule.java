@@ -61,13 +61,11 @@ public class TransformSchemaGridValidationRule implements IValidator {
 		}
 		else if(schema.getIsExternal()){
 			errorMessage = propertyName + " is mandatory";
-			Boolean validateExternalSchemaPath=StringUtils.isNotBlank(schema.getExternalSchemaPath());
-			Boolean validateSchemaGrid=validateSchema(schema, propertyName);
-			return validateExternalSchemaPath && validateSchemaGrid;
+			if(StringUtils.isBlank(schema.getExternalSchemaPath())){
+				return false;
+			}
 		}
-		else{
-			return validateSchema(schema, propertyName);
-		}
+		return validateSchema(schema, propertyName);
 	}
 
 
