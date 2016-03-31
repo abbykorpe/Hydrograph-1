@@ -163,6 +163,7 @@ class SchemaGridCellModifier implements ICellModifier {
 	private boolean isResetNeeded(BasicSchemaGridRow basicSchemaGridRow, String property) {
 		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(basicSchemaGridRow.getDataTypeValue())){
 			if(DataType.INTEGER_CLASS.equals(basicSchemaGridRow.getDataTypeValue()) 
+					||DataType.LONG_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
 					||DataType.STRING_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(basicSchemaGridRow.getDataTypeValue())

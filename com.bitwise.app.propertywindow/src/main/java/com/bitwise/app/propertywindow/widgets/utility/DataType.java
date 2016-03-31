@@ -32,8 +32,8 @@ public enum DataType {
 	SHORT_CLASS(Short.class.getCanonicalName()),
 	BOOLEAN_CLASS(Boolean.class.getCanonicalName()),
 	DATE_CLASS(Date.class.getCanonicalName()),
-	BIGDECIMAL_CLASS(BigDecimal.class.getCanonicalName())
-	;
+	BIGDECIMAL_CLASS(BigDecimal.class.getCanonicalName()),
+	LONG_CLASS(Long.class.getCanonicalName());
 	
 	private String value;
 

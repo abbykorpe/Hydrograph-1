@@ -206,6 +206,7 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 	private boolean isResetNeeded(GenerateRecordSchemaGridRow generateRecordSchemaGridRow, String property) {
 		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(generateRecordSchemaGridRow.getDataTypeValue())){
 			if(DataType.INTEGER_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue()) 
+					||DataType.LONG_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
 					||DataType.STRING_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())

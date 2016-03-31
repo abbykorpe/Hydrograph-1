@@ -179,6 +179,7 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 	private boolean isResetNeeded(FixedWidthGridRow fixedWidthGridRow, String property) {
 		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(fixedWidthGridRow.getDataTypeValue())){
 			if(DataType.INTEGER_CLASS.equals(fixedWidthGridRow.getDataTypeValue()) 
+					||DataType.LONG_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.STRING_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
