@@ -151,7 +151,12 @@ class SchemaGridCellModifier implements ICellModifier {
 
 
 	private void resetDateFormat(BasicSchemaGridRow row, String property){
-		row.setDateFormat("");	
+		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
+			if(!(DataType.DATE_CLASS.equals(row.getDataTypeValue()))){
+				row.setDateFormat("");
+			}
+
+		}
 	}
 
 
