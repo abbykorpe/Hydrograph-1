@@ -17,13 +17,19 @@ package com.bitwise.app.parametergrid.dialog.models;
 public class FilePath  {
 	private String fileName;
 	private String path;
+	private boolean jobSpecificFile;
 	
-	public FilePath(String fileName, String path) {
+	public FilePath(){
+		
+	}
+	
+	public FilePath(String fileName, String path, boolean jobSpecificFile) {
 		super();
 		this.fileName = fileName;
 		this.path = path;
+		this.jobSpecificFile = jobSpecificFile;
 	}
-	
+
 	public String getFilePathViewString(){
 		return this.fileName + " - " + this.path;
 	}
@@ -47,11 +53,20 @@ public class FilePath  {
 		this.path = path;
 	}
 	
+	public boolean isJobSpecificFile() {
+		return jobSpecificFile;
+	}
+
+	public void setJobSpecificFile(boolean jobSpecificFile) {
+		this.jobSpecificFile = jobSpecificFile;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((fileName == null) ? 0 : fileName.hashCode());
+		result = prime * result + (jobSpecificFile ? 1231 : 1237);
 		result = prime * result + ((path == null) ? 0 : path.hashCode());
 		return result;
 	}
@@ -70,6 +85,8 @@ public class FilePath  {
 				return false;
 		} else if (!fileName.equals(other.fileName))
 			return false;
+		if (jobSpecificFile != other.jobSpecificFile)
+			return false;
 		if (path == null) {
 			if (other.path != null)
 				return false;
@@ -78,10 +95,9 @@ public class FilePath  {
 		return true;
 	}
 
-
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		FilePath filePath = new FilePath(this.fileName,this.path);
+		FilePath filePath = new FilePath(this.fileName,this.path,this.jobSpecificFile);
 		return filePath;
 	}
 	

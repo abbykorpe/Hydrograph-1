@@ -45,11 +45,11 @@ public class AppLaunch extends ApplicationWindow {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					List<FilePath> filepathList = new LinkedList<>();
-					filepathList.add(new FilePath("param1.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param1.properties"));
-					filepathList.add(new FilePath("param2.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param2.properties"));
-					filepathList.add(new FilePath("param3.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param3.properties"));
-					filepathList.add(new FilePath("param4.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param4.properties"));
-					filepathList.add(new FilePath("param5.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param5.properties"));
+					filepathList.add(new FilePath("param1.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param1.properties",true));
+					filepathList.add(new FilePath("param2.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param2.properties",false));
+					filepathList.add(new FilePath("param3.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param3.properties",false));
+					filepathList.add(new FilePath("param4.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param4.properties",false));
+					filepathList.add(new FilePath("param5.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param5.properties",false));
 					
 					ParameterFileDialog testDialog = new ParameterFileDialog(new Shell());
 					testDialog.setParameterFiles(filepathList);
