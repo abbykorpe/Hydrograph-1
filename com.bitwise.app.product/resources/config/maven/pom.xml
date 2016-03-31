@@ -15,9 +15,9 @@
 	
 	<dependencies>
 		<dependency>
-			<groupId>engine</groupId>
-			<artifactId>bhs</artifactId>
-			<version>1.0.10</version>
+			<groupId>com.bitwiseglobal</groupId>
+			<artifactId>elt-command-line</artifactId>
+			<version>0.1.2</version>
 		</dependency>
 	</dependencies>
 </project>
