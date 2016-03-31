@@ -54,7 +54,9 @@ public class SchemaGridValidationRule implements IValidator {
 		}
 		else if(schema.getIsExternal()){
 			errorMessage = propertyName + " is mandatory";
-			return StringUtils.isNotBlank(schema.getExternalSchemaPath());
+			Boolean validateExternalSchemaPath=StringUtils.isNotBlank(schema.getExternalSchemaPath());
+			Boolean validateSchemaGrid=validateSchema(schema, propertyName);
+			return validateExternalSchemaPath && validateSchemaGrid;
 		}
 		else{
 			return validateSchema(schema, propertyName);
