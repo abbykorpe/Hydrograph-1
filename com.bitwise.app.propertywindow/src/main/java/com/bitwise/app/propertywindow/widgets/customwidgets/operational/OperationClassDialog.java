@@ -80,7 +80,8 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	private Button applyButton;
 	private Button okButton;
 	private Composite container;
-	private boolean okPressed;
+	private boolean isOkPressed;
+	private boolean closeDialog;
 	private PropertyDialogButtonBar operationClassDialogButtonBar;
 	private TootlTipErrorMessage tootlTipErrorMessage = new TootlTipErrorMessage();
 	private WidgetConfig widgetConfig;
@@ -88,8 +89,8 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	private ControlDecoration alphanumericDecorator;
 	private ControlDecoration emptyDecorator;
 	private ControlDecoration parameterDecorator;
-	private boolean isOkPressed = false;
-	private boolean isCancelPressed = false;
+	private boolean isYesPressed = false;
+	private boolean isNoPressed = false;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private PropertyDialogButtonBar opeartionClassDialogButtonBar;
 	private Button cancelButton;
@@ -283,7 +284,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 
 	public void pressOK() {
 		okPressed();
-		isOkPressed = true;
+		isYesPressed = true;
 	}
 
 	/**
@@ -443,19 +444,19 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	protected void cancelPressed() {
 		if (applyButton.isEnabled()) {
 
-			if (!isCancelPressed) {
+			if (!isNoPressed) {
 				ConfirmCancelMessageBox confirmCancelMessageBox = new ConfirmCancelMessageBox(container);
 				MessageBox confirmCancleMessagebox = confirmCancelMessageBox.getMessageBox();
 
 				if (confirmCancleMessagebox.open() == SWT.OK) {
-					super.close();
+					closeDialog=super.close();
 				}
 			} else {
-				super.close();
+				closeDialog=super.close();
 			}
 
 		} else {
-			super.close();
+			closeDialog=super.close();
 		}
 	}
 
@@ -466,7 +467,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 				mappingSheetRow.getOperationID(), operationClasses.getText(), fileName.getText(),
 				mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),
 				mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData("path"));
-		okPressed=true;
+		isOkPressed=true;
 		super.okPressed();
 	}
 
@@ -499,15 +500,24 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	 * @return boolean
 	 */
 	public boolean isOKPressed() {
-		return isOkPressed;
+		return isYesPressed;
 	}
 
 	@Override
 	public void pressCancel() {
-		isCancelPressed = true;
+		isNoPressed = true;
 		cancelPressed();
 	}
 
+	@Override
+	public boolean close() {
+		if(!isOkPressed){
+			cancelPressed();			
+			return closeDialog;
+		}else{
+			return super.close();
+		}		
+	}
 	/**
 	 * 
 	 * returns true if cancel button pressed from code
@@ -515,6 +525,6 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	 * @return boolean
 	 */
 	public boolean isCancelPressed() {
-		return isCancelPressed;
+		return isNoPressed;
 	}
 }
