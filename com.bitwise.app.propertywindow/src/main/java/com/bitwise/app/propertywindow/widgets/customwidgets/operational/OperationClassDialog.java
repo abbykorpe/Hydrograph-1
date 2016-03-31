@@ -124,7 +124,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 
 		container.getShell().setText(Messages.OPERATION_CLASS);
 
-		setPropertyDialogSize();
+		
 
 		operationClassDialogButtonBar = new PropertyDialogButtonBar(container);
 
@@ -182,7 +182,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 				| SWT.MULTI);
 		Table table_2 = nameValueTableViewer.getTable();
 		GridData gd_table_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_table_2.heightHint = 221;
+		gd_table_2.heightHint = 180;
 		gd_table_2.widthHint = 499;
 		table_2.setLayoutData(gd_table_2);
 		new TransformDialogNew().setTableViewer(nameValueTableViewer, nameValueComposite, new String[] {
@@ -433,12 +433,10 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(540, 500);
+		return new Point(540, 460);
 	}
 
-	private void setPropertyDialogSize() {
-		container.getShell().setMinimumSize(540, 500);
-	}
+	
 
 	@Override
 	protected void cancelPressed() {
