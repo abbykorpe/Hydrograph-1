@@ -1,6 +1,9 @@
 package com.bitwise.app.parametergrid.dialog;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Type;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -13,9 +16,11 @@ import java.util.Map;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -49,6 +54,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -237,7 +243,7 @@ public class ParameterFileDialog extends Dialog {
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(parameterSearchTableViewer, SWT.NONE);
 		TableColumn tblclmnFilePath_1 = tableViewerColumn.getColumn();
 		tblclmnFilePath_1.setWidth(195);
-		tblclmnFilePath_1.setText("File Path");
+		tblclmnFilePath_1.setText("Parameter Files");
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 
 			@Override
@@ -450,7 +456,7 @@ public class ParameterFileDialog extends Dialog {
 						parameterFiles.get(parameterFiles.size() - 1).setPath(path.toString());
 
 					} else {
-						parameterFiles.add(new FilePath(fileName.toString(), path.toString(),false));
+						parameterFiles.add(new FilePath(fileName.toString(), path.toString(),false,false));
 					}
 
 					try {
@@ -489,7 +495,7 @@ public class ParameterFileDialog extends Dialog {
 				String firstFile = fileDialog.open();
 				if (firstFile != null) {
 					parameterFileTextBox.setText(firstFile);
-					parameterFiles.add(new FilePath(fileDialog.getFileName(), firstFile,false));
+					parameterFiles.add(new FilePath(fileDialog.getFileName(), firstFile,false,false));
 
 					try {
 						ParameterFileManager parameterFileManager = new ParameterFileManager(firstFile);
@@ -525,18 +531,6 @@ public class ParameterFileDialog extends Dialog {
 		gd_table_2.widthHint = 320;
 		table_2.setLayoutData(gd_table_2);
 		parameterTableViewer.setContentProvider(new ArrayContentProvider());
-
-		/*
-		 * parameterTableViewer.getTable().addFocusListener(new FocusListener() {
-		 * 
-		 * @Override public void focusLost(FocusEvent e) { //System.out.println("+++ Focus lost"); saveParameters();
-		 * 
-		 * }
-		 * 
-		 * 
-		 * 
-		 * @Override public void focusGained(FocusEvent e) { //Do nothing System.out.println("Focus gained"); } });
-		 */
 
 		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(parameterTableViewer, SWT.NONE);
 		TableColumn tblclmnParameterName_1 = tableViewerColumn_3.getColumn();
@@ -716,9 +710,9 @@ public class ParameterFileDialog extends Dialog {
 		cld_composite_2.heightHint = 570;
 		composite_2.setLayoutData(cld_composite_2);
 		composite_2.setLayout(new GridLayout(1, false));
-		
+				
 		Composite composite = new Composite(composite_2, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(3, false));
 		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_composite.heightHint = 33;
 		composite.setLayoutData(gd_composite);
@@ -759,6 +753,17 @@ public class ParameterFileDialog extends Dialog {
 		});
 		btnDown_1.setText("Down");
 
+		Link link = new Link(composite, SWT.NONE);
+		link.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+		//link.setText("                              <a>Help</a>");
+		link.setText("<a>Help</a>");
+		link.setToolTipText("Only the check files will be considered while executing job\nand will be passed to job in same sequence as they are in grid");
+		/*new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);*/
 		//filePathTableViewer = new TableViewer(composite_2, SWT.BORDER | SWT.FULL_SELECTION | SWT.CHECK | SWT.MULTI);
 		filePathTableViewer = CheckboxTableViewer.newCheckList(composite_2, SWT.BORDER | SWT.FULL_SELECTION | SWT.CHECK | SWT.MULTI);
 		Table table = filePathTableViewer.getTable();
@@ -770,11 +775,21 @@ public class ParameterFileDialog extends Dialog {
 		filePathTableViewer.setContentProvider(new ArrayContentProvider());
 		ColumnViewerToolTipSupport.enableFor(filePathTableViewer, ToolTip.NO_RECREATE);
 		
+		
+		filePathTableViewer.addCheckStateListener(new ICheckStateListener() {
+			
+			@Override
+			public void checkStateChanged(CheckStateChangedEvent event) {
+				// TODO Auto-generated method stub
+				FilePath file=(FilePath) event.getElement();
+				file.setChecked(event.getChecked());
+			}
+		});
+		
 		int operations = DND.DROP_COPY| DND.DROP_MOVE;
 	    Transfer[] transferTypes = new Transfer[]{TextTransfer.getInstance()};
 	    filePathTableViewer.addDragSupport(operations, transferTypes , new DragSourceListener() {
-	    	
-	    	 
+	    		    	 
 			@Override
 			public void dragStart(DragSourceEvent event) {
 				// Do Nothing
@@ -814,12 +829,9 @@ public class ParameterFileDialog extends Dialog {
 		final TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(filePathTableViewer, SWT.NONE);
 		TableColumn tblclmnFilePath = tableViewerColumn_4.getColumn();
 		tblclmnFilePath.setWidth(249);
-		tblclmnFilePath.setText("File path");
+		tblclmnFilePath.setText("Parameter Files");
 		tableViewerColumn_4.getColumn().setImage(uncheckAllImage);
-		
-		
-		
-		
+				
 		tableViewerColumn_4.getColumn().addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
@@ -827,10 +839,18 @@ public class ParameterFileDialog extends Dialog {
 					filePathTableViewer.setAllChecked(true);
 					tableViewerColumn_4.getColumn().setImage(checkAllImage);
 					selectAllFiles = false;
+					
+					for(FilePath file: parameterFiles){
+						file.setChecked(true);
+					}
+					
 				} else {
 					filePathTableViewer.setAllChecked(false);
 					tableViewerColumn_4.getColumn().setImage(uncheckAllImage);
 					selectAllFiles = true;
+					for(FilePath file: parameterFiles){
+						file.setChecked(false);
+					}
 				}
 			}
 		});
@@ -937,5 +957,34 @@ public class ParameterFileDialog extends Dialog {
 	private void populateFilePathTableViewer() {
 		filePathTableViewer.setInput(parameterFiles);
 		filePathTableViewer.refresh();
+
+		for(FilePath file: parameterFiles){
+			if(file.isChecked()){
+				filePathTableViewer.setChecked(file, true);
+			}
+		}
+		
+	}
+	
+	@Override
+	protected void okPressed() {
+		
+		try {
+			FileOutputStream fout;
+			fout = new FileOutputStream("C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param.meta");
+			ObjectOutputStream oos = new ObjectOutputStream(fout);
+			oos.writeObject(parameterFiles);
+			oos.close();
+			fout.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		super.okPressed();
 	}
 }

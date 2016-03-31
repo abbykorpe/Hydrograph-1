@@ -14,20 +14,24 @@
  
 package com.bitwise.app.parametergrid.dialog.models;
 
-public class FilePath  {
+import java.io.Serializable;
+
+public class FilePath  implements Serializable{
 	private String fileName;
 	private String path;
 	private boolean jobSpecificFile;
+	private boolean checked;
 	
 	public FilePath(){
 		
 	}
 	
-	public FilePath(String fileName, String path, boolean jobSpecificFile) {
+	public FilePath(String fileName, String path, boolean jobSpecificFile, boolean checked) {
 		super();
 		this.fileName = fileName;
 		this.path = path;
 		this.jobSpecificFile = jobSpecificFile;
+		this.checked = checked;
 	}
 
 	public String getFilePathViewString(){
@@ -61,10 +65,20 @@ public class FilePath  {
 		this.jobSpecificFile = jobSpecificFile;
 	}
 
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
+
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (checked ? 1231 : 1237);
 		result = prime * result + ((fileName == null) ? 0 : fileName.hashCode());
 		result = prime * result + (jobSpecificFile ? 1231 : 1237);
 		result = prime * result + ((path == null) ? 0 : path.hashCode());
@@ -80,6 +94,8 @@ public class FilePath  {
 		if (getClass() != obj.getClass())
 			return false;
 		FilePath other = (FilePath) obj;
+		if (checked != other.checked)
+			return false;
 		if (fileName == null) {
 			if (other.fileName != null)
 				return false;
@@ -97,7 +113,7 @@ public class FilePath  {
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		FilePath filePath = new FilePath(this.fileName,this.path,this.jobSpecificFile);
+		FilePath filePath = new FilePath(this.fileName,this.path,this.jobSpecificFile,this.checked);
 		return filePath;
 	}
 	

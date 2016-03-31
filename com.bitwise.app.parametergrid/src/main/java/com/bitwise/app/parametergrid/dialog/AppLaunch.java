@@ -1,5 +1,9 @@
 package com.bitwise.app.parametergrid.dialog;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,12 +48,30 @@ public class AppLaunch extends ApplicationWindow {
 			btnNewButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					List<FilePath> filepathList = new LinkedList<>();
-					filepathList.add(new FilePath("param1.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param1.properties",true));
-					filepathList.add(new FilePath("param2.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param2.properties",false));
-					filepathList.add(new FilePath("param3.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param3.properties",false));
-					filepathList.add(new FilePath("param4.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param4.properties",false));
-					filepathList.add(new FilePath("param5.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param5.properties",false));
+					/*List<FilePath> filepathList = new LinkedList<>();
+					filepathList.add(new FilePath("param1.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param1.properties",true,false));
+					filepathList.add(new FilePath("param2.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param2.properties",false,false));
+					filepathList.add(new FilePath("param3.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param3.properties",false,true));
+					filepathList.add(new FilePath("param4.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param4.properties",false,false));
+					filepathList.add(new FilePath("param5.properties","C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param5.properties",false,true));*/
+					
+					FileInputStream fin;
+					List<FilePath> filepathList = null;
+					try {
+						fin = new FileInputStream("C:\\Users\\shrirangk\\Desktop\\Paramfiles\\param.meta");
+						ObjectInputStream ois = new ObjectInputStream(fin);
+						filepathList = (LinkedList<FilePath>) ois.readObject();
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException xe) {
+						// TODO Auto-generated catch block
+						xe.printStackTrace();
+					} catch (ClassNotFoundException ex) {
+						// TODO Auto-generated catch block
+						ex.printStackTrace();
+					}
+					
 					
 					ParameterFileDialog testDialog = new ParameterFileDialog(new Shell());
 					testDialog.setParameterFiles(filepathList);
