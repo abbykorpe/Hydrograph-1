@@ -184,42 +184,15 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 			generateRecordSchemaGridRow.setDefaultValue(((String) value).trim());
 		}
 		
-		resetScale(generateRecordSchemaGridRow, property);
-		resetScaleType(generateRecordSchemaGridRow, property);
+		if (isResetNeeded(generateRecordSchemaGridRow, property)){
+			generateRecordSchemaGridRow.setScale("");
+			generateRecordSchemaGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[0]);
+			generateRecordSchemaGridRow.setScaleType(0);
+			generateRecordSchemaGridRow.setPrecision("");
+		}
 		resetDateFormat(generateRecordSchemaGridRow, property);
-		resetPrecision(generateRecordSchemaGridRow, property);
-		
-
 		viewer.refresh();
 	}
-	private void resetScale(GenerateRecordSchemaGridRow generateRecordSchemaGridRow, String property){
-		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(generateRecordSchemaGridRow.getDataTypeValue())){
-			if(DataType.INTEGER_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue()) 
-					||DataType.STRING_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
-					||DataType.SHORT_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
-					||DataType.BOOLEAN_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
-					||DataType.DATE_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())){
-				generateRecordSchemaGridRow.setScale("");
-			}
-
-		}
-	}
-	
-	private void resetScaleType(GenerateRecordSchemaGridRow row, String property){
-		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
-			if(DataType.INTEGER_CLASS.equals(row.getDataTypeValue()) 
-					||DataType.STRING_CLASS.equals(row.getDataTypeValue())
-					||DataType.SHORT_CLASS.equals(row.getDataTypeValue())
-					||DataType.BOOLEAN_CLASS.equals(row.getDataTypeValue())
-					||DataType.DATE_CLASS.equals(row.getDataTypeValue())){
-				
-				row.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[0]);
-				row.setScaleType(0);
-			}
-
-		}
-	}
-
 
 	private void resetDateFormat(GenerateRecordSchemaGridRow generateRecordSchemaGridRow, String property){
 		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(generateRecordSchemaGridRow.getDataTypeValue())){
@@ -230,17 +203,17 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 		}
 	}
 	
-	private void resetPrecision(GenerateRecordSchemaGridRow row, String property){
-		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
-			if(DataType.INTEGER_CLASS.equals(row.getDataTypeValue()) 
-					||DataType.STRING_CLASS.equals(row.getDataTypeValue())
-					||DataType.SHORT_CLASS.equals(row.getDataTypeValue())
-					||DataType.BOOLEAN_CLASS.equals(row.getDataTypeValue())
-					||DataType.DATE_CLASS.equals(row.getDataTypeValue())){
-				row.setPrecision("");
-			}
-
+	private boolean isResetNeeded(GenerateRecordSchemaGridRow generateRecordSchemaGridRow, String property) {
+		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(generateRecordSchemaGridRow.getDataTypeValue())){
+			if(DataType.INTEGER_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue()) 
+					||DataType.STRING_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
+					||DataType.SHORT_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
+					||DataType.BOOLEAN_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
+					||DataType.DATE_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())){
+				return true;
+			}	
 		}
+		return false;
 	}
 
 }

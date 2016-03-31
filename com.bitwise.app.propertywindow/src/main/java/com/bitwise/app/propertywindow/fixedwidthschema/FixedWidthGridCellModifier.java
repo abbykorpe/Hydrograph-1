@@ -11,7 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
+
 package com.bitwise.app.propertywindow.fixedwidthschema;
 
 import org.apache.commons.lang.StringUtils;
@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
+import com.bitwise.app.common.datastructure.property.GenerateRecordSchemaGridRow;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import com.bitwise.app.propertywindow.widgets.customwidgets.schema.GeneralGridWidgetBuilder;
 import com.bitwise.app.propertywindow.widgets.utility.DataType;
@@ -122,7 +123,7 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 			return fixedWidthGridRow.getDescription();
 		else if (ELTSchemaGridWidget.LENGTH.equals(property))
 			return fixedWidthGridRow.getLength();
-		
+
 		else
 			return null;
 	}
@@ -155,62 +156,38 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 			fixedWidthGridRow.setLength(((String) value).trim());
 		}
 
-		resetScale(fixedWidthGridRow, property);
-		resetScaleType(fixedWidthGridRow, property);
+		if (isResetNeeded(fixedWidthGridRow, property)){
+			fixedWidthGridRow.setScale("");
+			fixedWidthGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[0]);
+			fixedWidthGridRow.setScaleType(0);
+			fixedWidthGridRow.setPrecision("");
+		}
 		resetDateFormat(fixedWidthGridRow, property);
-		resetPrecision(fixedWidthGridRow, property);
-		
+
 		viewer.refresh();
 	}
+	
+	private void resetDateFormat(FixedWidthGridRow row, String property){
+		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
+			if(!(DataType.DATE_CLASS.equals(row.getDataTypeValue()))){
+				row.setDateFormat("");
+			}
 
-	private void resetScale(FixedWidthGridRow fixedWidthGridRow, String property){
+		}
+	}
+
+
+	private boolean isResetNeeded(FixedWidthGridRow fixedWidthGridRow, String property) {
 		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(fixedWidthGridRow.getDataTypeValue())){
 			if(DataType.INTEGER_CLASS.equals(fixedWidthGridRow.getDataTypeValue()) 
 					||DataType.STRING_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(fixedWidthGridRow.getDataTypeValue())){
-				fixedWidthGridRow.setScale("");
-			}
-
+				return true;
+			}	
 		}
-	}
-	
-	private void resetScaleType(FixedWidthGridRow row, String property){
-		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
-			if(DataType.INTEGER_CLASS.equals(row.getDataTypeValue()) 
-					||DataType.STRING_CLASS.equals(row.getDataTypeValue())
-					||DataType.SHORT_CLASS.equals(row.getDataTypeValue())
-					||DataType.BOOLEAN_CLASS.equals(row.getDataTypeValue())
-					||DataType.DATE_CLASS.equals(row.getDataTypeValue())){
-				
-				row.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[0]);
-				row.setScaleType(0);
-			}
-
-		}
-	}
-
-	private void resetDateFormat(FixedWidthGridRow fixedWidthGridRow, String property){
-		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(fixedWidthGridRow.getDataTypeValue())){
-			if(!(DataType.DATE_CLASS.equals(fixedWidthGridRow.getDataTypeValue()))){
-				fixedWidthGridRow.setDateFormat("");
-			}
-
-		}
-	}
-	
-	private void resetPrecision(FixedWidthGridRow row, String property){
-		if(ELTSchemaGridWidget.DATATYPE.equals(property) && StringUtils.isNotBlank(row.getDataTypeValue())){
-			if(DataType.INTEGER_CLASS.equals(row.getDataTypeValue()) 
-					||DataType.STRING_CLASS.equals(row.getDataTypeValue())
-					||DataType.SHORT_CLASS.equals(row.getDataTypeValue())
-					||DataType.BOOLEAN_CLASS.equals(row.getDataTypeValue())
-					||DataType.DATE_CLASS.equals(row.getDataTypeValue())){
-				row.setPrecision("");
-			}
-
-		}
+		return false;
 	}
 
 }
