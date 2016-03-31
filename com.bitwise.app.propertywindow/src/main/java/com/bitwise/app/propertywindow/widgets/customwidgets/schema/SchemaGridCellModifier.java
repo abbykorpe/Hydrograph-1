@@ -20,7 +20,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
 import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
-import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.propertywindow.widgets.utility.DataType;
 
 
