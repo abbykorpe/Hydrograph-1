@@ -123,8 +123,12 @@ public class TransformWidget extends AbstractWidget {
 				if(t.isCancelPressed())
 				{
 					transformMapping=oldATMappings;
-					propertyDialog.pressCancel();
 				}
+				
+				if(t.isNoButtonPressed())
+				{
+					propertyDialog.pressCancel();
+				}	
 
 				if(!oldATMappings.equals(transformMapping))
 				{
@@ -132,7 +136,7 @@ public class TransformWidget extends AbstractWidget {
 					propagateOuputFieldsToSchemaTabFromTransformWidget();
 				}
 
-				if(t.isOkPressed()){
+				if(t.isYesButtonPressed()){
 					propertyDialog.pressOK();	
 				}
 				transformMapping.getInputFields().clear();

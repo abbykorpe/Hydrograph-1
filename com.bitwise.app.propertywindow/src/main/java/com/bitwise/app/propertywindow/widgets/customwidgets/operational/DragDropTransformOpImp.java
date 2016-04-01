@@ -87,11 +87,10 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	        	NameValueProperty field = new NameValueProperty();
 	        	field.setPropertyName(result);
 	        	field.setPropertyValue(result);
-	        	if(!listOfInputFields.contains(field))
-	        	{
+	        	
             		listOfInputFields.add(field);
 	        		transformDialogNew.refreshOutputTable();
-	        	}	
+	        
 	        }
 		 operationInputfieldtableviewer.refresh();
 		

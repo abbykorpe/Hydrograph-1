@@ -14,6 +14,8 @@
  
 package com.bitwise.app.propertywindow.widgets.utility;
 
+import java.util.regex.Pattern;
+
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.dnd.DND;
@@ -72,7 +74,7 @@ public class DragDropUtility {
 	      }; 
 
 	      public void dragSetData(DragSourceEvent event) {
-	        event.data = columnData[0];
+	        event.data = addDelimeter(table.getSelection());
 	      }
 
 	      public void dragFinished(DragSourceEvent event) {
@@ -82,6 +84,14 @@ public class DragDropUtility {
 	      }
 	    });
 
+	}
+	
+	private String addDelimeter(TableItem[] selectedTableItems) {
+		StringBuffer buffer = new StringBuffer();
+		for (TableItem tableItem : selectedTableItems) {
+			buffer.append(tableItem.getText() + "#");
+		}
+		return buffer.toString();
 	}
 	
 	public void applyDragFromTableViewerOuter(final TableViewer tableViewer){
@@ -136,8 +146,11 @@ class DradDropUtilityListener extends DropTargetAdapter{
         	event.detail = DND.DROP_NONE;
         	return;
         }
-        result=(String) event.data;
-        dragDropOperation.saveResult(result);
+        String[] dropData = ((String) event.data).split(Pattern.quote("#"));
+        for(String result:dropData)
+        {	
+         dragDropOperation.saveResult(result);
+        }
         
       }
  }

@@ -30,9 +30,7 @@ public class TransformCellEditorFieldValidator implements ICellEditorValidator {
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 
 	public TransformCellEditorFieldValidator(Table table, List<FilterProperties> inputFields,
-			ControlDecoration fieldNameDecorator,
-
-			PropertyDialogButtonBar propertyDialogButtonBar) {
+			ControlDecoration fieldNameDecorator, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super();
 		this.table = table;
 		this.inputFields = inputFields;

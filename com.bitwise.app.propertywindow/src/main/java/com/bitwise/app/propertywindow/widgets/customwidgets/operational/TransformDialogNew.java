@@ -33,6 +33,8 @@ import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -41,15 +43,18 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -99,8 +104,9 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private Text operationClassTextBox;
 	private Text operationIDTextBox;
-	private boolean isOKButtonPressed = false;
-	private boolean isCancelButtonPressed = false;
+	private boolean isYesButtonPressed;
+	private boolean isNoButtonPressed;
+	private boolean cancelPressed;
 	private Table tableViewerTable;
 	private String componentName;
 	private WidgetConfig widgetConfig;
@@ -117,18 +123,21 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	private TableViewer outputFieldViewer;
 	private List<FilterProperties> temporaryOutputFieldList = new ArrayList<>();
 	private MappingSheetRow mappingSheetRow;
-	private static ControlDecoration fieldNameDecorator;
 	
 
 	public TransformDialogNew(Shell parentShell, String componentName, WidgetConfig widgetConfig, TransformMapping atMapping) {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.transformMapping = atMapping;
-
+		isYesButtonPressed = false;
+		isNoButtonPressed=false;
 		this.componentName = componentName;
 		this.widgetConfig = widgetConfig;
 	}
 
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public TransformDialogNew() {
 		super(new Shell());
 	}
@@ -173,15 +182,29 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		
 		setTableViewer(inputFieldTableViewer, inputFieldComposite, new String[] { Messages.OPERATIONAL_SYSTEM_FIELD },
 				new TableContentProvider(), new OperationLabelProvider());
-		inputFieldTableViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		inputFieldTableViewer.getTable().getColumn(0).setWidth(220);
-		
-		
-		DragDropUtility.INSTANCE.applyDragFromTableViewer(inputFieldTableViewer.getTable());
-
-		inputFieldTableViewer.setLabelProvider(new InputFieldColumnLabelProvider());
+ 		inputFieldTableViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+ 		DragDropUtility.INSTANCE.applyDragFromTableViewer(inputFieldTableViewer.getTable());
+    	inputFieldTableViewer.setLabelProvider(new InputFieldColumnLabelProvider());
 		inputFieldTableViewer.setInput(transformMapping.getInputFields());
-
+		
+		inputFieldTableViewer.getTable().addControlListener(new ControlListener() {
+			
+			@Override
+			public void controlResized(ControlEvent e) {
+				// TODO Auto-generated method stub
+				 Table table = (Table)e.widget;
+				  Rectangle area = table.getClientArea();
+			         int totalAreaWdith = area.width;
+			         int diff = totalAreaWdith-(table.getColumn(0).getWidth());
+			         table.getColumn(0).setWidth(diff+table.getColumn(0).getWidth());
+			}
+			
+			@Override
+			public void controlMoved(ControlEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 	private void createOutputFieldTable(Composite composite) {
@@ -195,7 +218,8 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		Composite buttonComposite=new Composite(rightComposite, SWT.NONE);
        buttonComposite.setLayout(new GridLayout(2,false));
        buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,false, 1, 1));
-		
+       
+       
 		
 		
 		Composite outputFieldComposite = new Composite(rightComposite, SWT.NONE);
@@ -208,6 +232,8 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 			}
 		});
 		btnPull.setBounds(20, 10, 20, 20);
+        
+		
 		
 		btnPull.setText(Messages.PULL_BUTTON_LABEL);
 		
@@ -247,8 +273,27 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		outputFieldViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 		outputFieldViewer.setCellModifier(new ELTCellModifier(outputFieldViewer));
 		outputFieldViewer.setLabelProvider(new ELTFilterLabelProvider());
-		outputFieldViewer.getTable().getColumn(0).setWidth(210);
+		
 		refreshOutputTable();
+		
+		outputFieldViewer.getTable().addControlListener(new ControlListener() {
+			
+			@Override
+			public void controlResized(ControlEvent e) {
+				// TODO Auto-generated method stub
+				 Table table = (Table)e.widget;
+				  Rectangle area = table.getClientArea();
+			         int totalAreaWdith = area.width;
+			         int diff = totalAreaWdith-(table.getColumn(0).getWidth());
+			         table.getColumn(0).setWidth(diff+table.getColumn(0).getWidth());
+			}
+			
+			@Override
+			public void controlMoved(ControlEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		/*Label addLabel = widget.labelWidget(outputFieldComposite, SWT.CENTER, new int[] { 130, 10, 20, 15 }, "",
 				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
 		addLabel.addMouseListener(new MouseAdapter() {
@@ -286,7 +331,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 
 		Composite topAddButtonComposite = new Composite(middleComposite, SWT.NONE);
 		
-		GridData gd_topAddButtonComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		GridData gd_topAddButtonComposite = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
 		
 		topAddButtonComposite.setLayoutData(gd_topAddButtonComposite);
 		
@@ -306,8 +351,9 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		expandBar.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 		expandBar.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
 		expandBar.setVisible(true);
-		expandBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		Label addLabel = widget.labelWidget(topAddButtonComposite, SWT.CENTER, new int[] { 315, 10, 20, 15 }, "",
+		expandBar.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
+		
+		Label addLabel = widget.labelWidget(topAddButtonComposite, SWT.CENTER, new int[] { 184, 10, 20, 15 }, "",
 				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
 		addLabel.addMouseListener(new MouseAdapter() {
 		
@@ -333,7 +379,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 			}
 		});
 
-		final Label deleteLabel = widget.labelWidget(topAddButtonComposite, SWT.CENTER, new int[] { 345, 10, 20, 15 },
+		final Label deleteLabel = widget.labelWidget(topAddButtonComposite, SWT.CENTER, new int[] { 213, 10, 20, 15 },
 				"", new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
 		deleteLabel.addMouseListener(new MouseAdapter() {
 
@@ -355,7 +401,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 
 		Label lblOperationsControl = new Label(topAddButtonComposite, SWT.NONE);
 		lblOperationsControl.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
-		lblOperationsControl.setBounds(181, 10, 129, 28);
+		lblOperationsControl.setBounds(50, 10, 129, 28);
 		lblOperationsControl.setText(Messages.OPERATION_CONTROL);
 		if (!transformMapping.getMappingSheetRows().isEmpty()) {
 			for (MappingSheetRow mappingSheetRow : transformMapping.getMappingSheetRows()) {
@@ -399,7 +445,40 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		mappingTableViewer.setCellModifier(new PropertyGridCellModifier(this, mappingTableViewer));
 		mappingTableViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		mappingTableViewer.setInput(transformMapping.getMapAndPassthroughField());
+        
+		mappingTableViewer.getTable().addControlListener(new ControlListener() {
+			
+			@Override
+			public void controlResized(ControlEvent e) {
+				// TODO Auto-generated method stub
+				
+				Table table = (Table)e.widget;
+	            int columnCount = table.getColumnCount();
+	            
+	            Rectangle area = table.getClientArea();
+	            int totalAreaWdith = area.width;
+	            int lineWidth = table.getGridLineWidth();
+	            int totalGridLineWidth = (2-1)*lineWidth; 
+	            int totalColumnWidth = 0;
+	            for(TableColumn column: table.getColumns())
+	            {
+	              totalColumnWidth = totalColumnWidth+column.getWidth();
+	            }
+	            int diff = totalAreaWdith-(totalColumnWidth+totalGridLineWidth);
 
+	            TableColumn lastCol = table.getColumns()[columnCount-1];
+                lastCol.setWidth(diff+lastCol.getWidth());
+				
+				 
+			}
+			
+			@Override
+			public void controlMoved(ControlEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		DragDropUtility.INSTANCE.applyDrop(mappingTableViewer,
 				new DragDropTransformOpImp(this, transformMapping.getMapAndPassthroughField(), false, mappingTableViewer));
        
@@ -488,7 +567,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 			final MappingSheetRow mappingSheetRow) {
 
 		Composite innerComposite = new Composite(expandItemComposite, SWT.NONE);
-		GridData gd_fileSelectComposite = new GridData(SWT.CENTER, SWT.FILL, false, false, 1, 1);
+		GridData gd_fileSelectComposite = new GridData(SWT.CENTER, SWT.FILL, true, true, 1, 1);
 		gd_fileSelectComposite.heightHint = 29;
 		gd_fileSelectComposite.widthHint = 360;
 		innerComposite.setLayoutData(gd_fileSelectComposite);
@@ -689,7 +768,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 				temporaryOutputFieldList, mappingSheetRow.getOutputList(), mappingSheetRow.getInputFields(), true,
 				operationalInputFieldTableViewer, operationOutputtableViewer);
 		DragDropUtility.INSTANCE.applyDrop(operationalInputFieldTableViewer, dragDropTransformOpImpnew);
-
+       
 		Label addLabel = widget.labelWidget(operationalOutputFieldComposite, SWT.CENTER, new int[] { 60, 3, 20, 15 },
 				"", new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
 		addLabel.addMouseListener(new MouseAdapter() {
@@ -815,7 +894,8 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 
 		CellEditor[] editors = operationalInputFieldTableViewer.getCellEditors();
 
-		fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(), Messages.DUPLICATE_FIELDS);
+		ControlDecoration fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(), Messages.DUPLICATE_FIELDS);
+		
 		editors[0].setValidator(new TransformCellEditorFieldValidator(operationalInputFieldTableViewer.getTable(),
 				mappingSheetRow.getInputFields(), fieldNameDecorator, propertyDialogButtonBar));
 		operationInputaddButton = widget.labelWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 60, 3, 20,
@@ -907,6 +987,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	@Override
 	protected void cancelPressed()
 	{
+		cancelPressed=true;
 		super.cancelPressed();
 	}
 	
@@ -916,24 +997,28 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 
 	
 	public void pressOK() {
-		isOKButtonPressed = true;
+		isYesButtonPressed = true;
 		okPressed();
 	}
 
 	
 	public void pressCancel() {
-		isCancelButtonPressed = true;
+		isNoButtonPressed = true;
 		cancelPressed();
 	}
-
+    
+	public boolean isCancelPressed()
+	{
+	  	return cancelPressed;
+	}
 	/**
 	 * 
 	 * returns true if ok button pressed from code
 	 * 
 	 * @return boolean
 	 */
-	public boolean isOkPressed() {
-		return isOKButtonPressed;
+	public boolean isYesButtonPressed() {
+		return isYesButtonPressed;
 	}
 
 	/**
@@ -942,8 +1027,8 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	 * 
 	 * @return boolean
 	 */
-	public boolean isCancelPressed() {
-		return isCancelButtonPressed;
+	public boolean isNoButtonPressed() {
+		return isNoButtonPressed;
 	}
 
 	public TableViewer setTableViewer(TableViewer tableViewer, Composite composite, String[] prop,
