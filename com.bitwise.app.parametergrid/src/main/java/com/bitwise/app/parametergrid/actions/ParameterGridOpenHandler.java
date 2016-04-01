@@ -67,6 +67,17 @@ public class ParameterGridOpenHandler extends AbstractHandler{
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
 		
+		if(getComponentCanvas().getParameterFile() == null ){
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
+
+			messageBox.setText("Error");
+			messageBox.setMessage("Could not open parameter grid. \nPlease save the job file.");
+			messageBox.open();
+			
+			logger.debug("Parameter file does not exist. Need to save job file");
+			return null;
+		}
+		
 		IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart(); 
 	    IFile file = (IFile) workbenchPart.getSite().getPage().getActiveEditor().getEditorInput().getAdapter(IFile.class);
 	    IProject project = file.getProject();
