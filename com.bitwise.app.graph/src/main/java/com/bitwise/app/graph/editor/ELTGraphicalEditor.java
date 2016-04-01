@@ -87,6 +87,8 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -237,14 +239,19 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		
 	}
 
-	private void hideToolTip(){
+	public void hideToolTip(){
 		if(toolTipComponentBounds !=null && componentTooltip != null){
 			componentTooltip.setVisible(false);
 			componentTooltip=null;
 			toolTipComponentBounds=null;
 		}
 	}
-
+	
+	@Override
+	public boolean isFocused(){
+		return viewer.getControl().isFocusControl();
+	}
+	
 	/**
 	 * Add mouse listener on canvas
 	 * 
@@ -288,6 +295,25 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				
 			}
 		});*/
+		
+		viewer.getControl().addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub
+				//System.out.println("+++ focus out");
+				if(componentTooltip!=null && !componentTooltip.isToolBarToolTip()){
+						hideToolTip();
+				}
+				
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		viewer.getControl().addKeyListener(new KeyListener() {
 
