@@ -107,6 +107,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	private boolean isYesButtonPressed;
 	private boolean isNoButtonPressed;
 	private boolean cancelPressed;
+	private boolean okPressed;
 	private Table tableViewerTable;
 	private String componentName;
 	private WidgetConfig widgetConfig;
@@ -457,6 +458,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	            
 	            Rectangle area = table.getClientArea();
 	            int totalAreaWdith = area.width;
+	            table.getColumn(0).setWidth(area.width/2);
 	            int lineWidth = table.getGridLineWidth();
 	            int totalGridLineWidth = (2-1)*lineWidth; 
 	            int totalColumnWidth = 0;
@@ -637,7 +639,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
                 pressCancel();
                 if(operationClassDialog.isOKPressed())
                 pressOK();	
-				
+                super.widgetSelected(e);
 			}
 
 			
@@ -981,6 +983,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		
 		transformMapping = new TransformMapping((List<InputField>) inputFieldTableViewer.getInput(), transformMapping.getMappingSheetRows(),
 				transformMapping.getMapAndPassthroughField(), transformMapping.getOutputFieldList());
+		okPressed=true;
 	    super.okPressed();
 	}
    
@@ -1010,6 +1013,11 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	public boolean isCancelPressed()
 	{
 	  	return cancelPressed;
+	}
+	
+	public boolean isOkPressed()
+	{
+	  	return okPressed;
 	}
 	/**
 	 * 

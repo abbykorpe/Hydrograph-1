@@ -124,18 +124,23 @@ public class TransformWidget extends AbstractWidget {
 				{
 					transformMapping=oldATMappings;
 				}
+			 	
+				if(t.isOkPressed())
+               	{
+               	propagateOuputFieldsToSchemaTabFromTransformWidget();	
+               	}	
+			 	
 				
+
+				if(!oldATMappings.equals(t.getATMapping()))
+				{
+					propertyDialogButtonBar.enableApplyButton(true);
+					
+				}
 				if(t.isNoButtonPressed())
 				{
 					propertyDialog.pressCancel();
 				}	
-
-				if(!oldATMappings.equals(transformMapping))
-				{
-					propertyDialogButtonBar.enableApplyButton(true);
-					propagateOuputFieldsToSchemaTabFromTransformWidget();
-				}
-
 				if(t.isYesButtonPressed()){
 					propertyDialog.pressOK();	
 				}
