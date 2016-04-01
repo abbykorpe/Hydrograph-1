@@ -151,6 +151,13 @@
                   label="Save"
                   style="push">
             </command>
+            <command
+                  commandId="org.eclipse.ui.file.saveAll"
+                  icon="resources/icons/saveAll_o.png"
+                  id="com.bitwise.app.saveAll"
+                  label="Save All"
+                  style="push">
+            </command>
             <separator
                   name="com.bitwise.app.graph.separator1"
                   visible="true">

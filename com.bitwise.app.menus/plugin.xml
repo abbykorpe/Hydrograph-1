@@ -277,6 +277,27 @@
                   label="Open File..."
                   mnemonic="e">
             </command>
+            <separator
+                  name="com.bitwise.app.graph.separator1"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="org.eclipse.ui.file.closeAll"
+                  label="Close All"
+                  mnemonic="l"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.file.close"
+                  id="bitwise.close.id"
+                  label="Close"
+                  mnemonic="C"
+                  style="push">
+            </command>
+            <separator
+                  name="com.bitwise.app.graph.separator2"
+                  visible="true">
+            </separator>
             <command
                   commandId="org.eclipse.ui.file.save"
                   id="com.bitwise.app.menus.FileMenu.SaveFile"
@@ -292,6 +313,15 @@
                   mnemonic ="A">
             </command>
             <command
+                  commandId="org.eclipse.ui.file.saveAll"
+                  label="Save All"
+                  style="push">
+            </command>
+            <separator
+                  name="com.bitwise.app.graph.separator3"
+                  visible="true">
+            </separator>
+            <command
                   commandId="org.eclipse.ui.file.import"
                   label="Import"
                   style="push"
@@ -303,19 +333,10 @@
                   style="push"
                   mnemonic ="o">
             </command>
-            <command
-                  commandId="org.eclipse.ui.file.close"
-                  id="bitwise.close.id"
-                  label="Close"
-                  style="push"
-                  mnemonic ="C">
-            </command>
-            <command
-                  commandId="org.eclipse.ui.file.closeAll"
-                  label="Close All"
-                  style="push"
-                  mnemonic ="l">
-            </command>
+            <separator
+                  name="com.bitwise.app.graph.separator4"
+                  visible="true">
+            </separator>
             <command
                   commandId="org.eclipse.ui.file.exit"
                   label="Exit"
