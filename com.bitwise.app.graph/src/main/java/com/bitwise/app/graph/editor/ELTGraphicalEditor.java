@@ -181,7 +181,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private Container container;
 	private final Point defaultComponentLocation = new Point(0, 0);
 
-	public GraphicalViewer viewer;
+	private GraphicalViewer viewer;
 
 	private ComponentTooltip componentTooltip;
 	private Rectangle toolTipComponentBounds;
@@ -234,6 +234,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		viewer.addSelectionChangedListener(createISelectionChangedListener());
 		attachCanvasMouseListeners();
 		setDefaultToolUndoRedoStatus();
+		
 	}
 
 	private void hideToolTip(){
@@ -1540,5 +1541,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	    getGraphicalViewer().setKeyHandler(keyHandler);
 
 	  }
+
+	public GraphicalViewer getViewer() {
+		return viewer;
+	}
 	
 }
