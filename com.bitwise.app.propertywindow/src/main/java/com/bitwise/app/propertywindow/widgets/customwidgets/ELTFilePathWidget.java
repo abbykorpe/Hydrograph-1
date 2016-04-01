@@ -26,8 +26,12 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.slf4j.Logger;
 
+import com.bitwise.app.common.util.Constants;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.propertywindow.factory.ListenerFactory;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.property.ComponentConfigrationProperty;
@@ -39,6 +43,7 @@ import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import com.bitwise.app.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import com.bitwise.app.propertywindow.widgets.listeners.ELTFileDialogSelectionListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper;
 import com.bitwise.app.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
@@ -57,7 +62,7 @@ public class ELTFilePathWidget extends AbstractWidget{
 	private ControlDecoration txtDecorator;
 	private ControlDecoration decorator;
 	private Button button;
-
+	private Logger LOGGER = LogFactory.INSTANCE.getLogger(ELTFilePathWidget.class);
 	/**
 	 * Instantiates a new ELT file path widget.
 	 * 
@@ -147,10 +152,17 @@ public class ELTFilePathWidget extends AbstractWidget{
 		try {
 			eltDefaultTextBox.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(), propertyDialogButtonBar,  null,eltDefaultTextBox.getSWTWidgetControl());
 			eltDefaultTextBox.attachListener(ListenerFactory.Listners.MODIFY.getListener(), propertyDialogButtonBar,  helper, eltDefaultTextBox.getSWTWidgetControl());
-			eltDefaultButton.attachListener(ListenerFactory.Listners.FILE_DIALOG_SELECTION.getListener(), propertyDialogButtonBar, helper, eltDefaultButton.getSWTWidgetControl(),eltDefaultTextBox.getSWTWidgetControl());
+			if (StringUtils.equalsIgnoreCase(Constants.OUTPUT, getComponent().getCategory()))
+				eltDefaultButton.attachListener(ListenerFactory.Listners.DIRECTORY_DIALOG_SELECTION.getListener(),
+						propertyDialogButtonBar, helper, eltDefaultButton.getSWTWidgetControl(),
+						eltDefaultTextBox.getSWTWidgetControl());
+			else
+				eltDefaultButton.attachListener(ListenerFactory.Listners.FILE_DIALOG_SELECTION.getListener(),
+						propertyDialogButtonBar, helper, eltDefaultButton.getSWTWidgetControl(),
+						eltDefaultTextBox.getSWTWidgetControl());
 			//eltDefaultTextBox.attachListener(listenerFactory.getListener("ELTFocusOutListener"), propertyDialogButtonBar,  helper,eltDefaultTextBox.getSWTWidgetControl());
-			} catch (Exception e1) {
-			e1.printStackTrace();
+			} catch (Exception exception) {
+			LOGGER.error("Exception occurred while attaching listeners to ELTFileWidget",exception);
 		}
 		
 		populateWidget();
