@@ -17,6 +17,7 @@ package com.bitwise.app.engine.ui.converter;
 import org.slf4j.Logger;
 
 import com.bitwise.app.engine.ui.converter.impl.AggregateUiConverter;
+import com.bitwise.app.engine.ui.converter.impl.CumulateUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.CloneUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.DiscardUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.DummyUiConverter;
@@ -41,6 +42,7 @@ import com.bitwiseglobal.graph.inputtypes.GenerateRecord;
 import com.bitwiseglobal.graph.inputtypes.TextFileDelimited;
 import com.bitwiseglobal.graph.inputtypes.TextFileFixedWidth;
 import com.bitwiseglobal.graph.operationstypes.Aggregate;
+import com.bitwiseglobal.graph.operationstypes.Cumulate;
 import com.bitwiseglobal.graph.operationstypes.Filter;
 import com.bitwiseglobal.graph.operationstypes.GenerateSequence;
 import com.bitwiseglobal.graph.operationstypes.HashJoin;
@@ -110,6 +112,9 @@ public class UiConverterFactory {
 		}
 		if ((Transform.class).isAssignableFrom(typeBaseComponent.getClass())) {
 			return new TransformComponentUiConverter(typeBaseComponent, container);
+		}
+		if ((Cumulate.class).isAssignableFrom(typeBaseComponent.getClass())) {
+			return new CumulateUiConverter(typeBaseComponent, container);
 		}
 		if ((Join.class).isAssignableFrom(typeBaseComponent.getClass())) {
 			return new JoinComponentUiConverter(typeBaseComponent, container);
