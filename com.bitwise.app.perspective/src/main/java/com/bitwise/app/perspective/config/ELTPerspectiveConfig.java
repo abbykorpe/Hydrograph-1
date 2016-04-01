@@ -53,7 +53,7 @@ public class ELTPerspectiveConfig {
 		configurer.setInitialSize(configurer.getInitialSize());
         configurer.setShowCoolBar(true);
         configurer.setShowStatusLine(false);
-        configurer.setTitle("Accelero"); //$NON-NLS-1$
+        configurer.setTitle("Hydrograph"); //$NON-NLS-1$
         configurer.setShowPerspectiveBar(true);
         
         dockPrespectiveBarToRightTop();

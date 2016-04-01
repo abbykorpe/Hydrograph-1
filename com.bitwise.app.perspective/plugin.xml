@@ -25,10 +25,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="com.bitwise.app.perspective.application"
-            name="Accelero">
+            name="Hydrograph">
          <property
                name="appName"
-               value="Accelero">
+               value="Hydrograph">
          </property>
          <property
                name="applicationCSS"

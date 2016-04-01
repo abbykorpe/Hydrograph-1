@@ -119,15 +119,7 @@ public class Constants {
 	public static final String DESCENDING_SORT_ORDER="Desc";
 	public static final String NONE_SORT_ORDER="From Param";
 
-	//help related constants
-	public static final String ABOUT_TEXT="Accelero for ETL Developers\n\n Version: Accelero Service Release 1\n\n (c) Copyright Accelero contributors.  All rights reserved.\n" +
-			"Visit http://Accelero.org/";
-	public static final String ABOUT_DIALOG_IMAGE_PATH="icons/alt_about.gif";
-	public static final String ABOUT_DIALOG_FEATURE_IMAGE_PATH="icons/app_icon.png";
-	public static final String ABOUT_DIALOG_IMAGE_BUNDLE_NAME="com.bitwise.app.help";
-	public static final String ABOUT_DIALOG_FEATURE_IMAGE_BUNDLE_NAME="com.bitwise.app.perspective";
-	public static final String IFDELIMITED="IFDelimited";
-	public static final String IFIXEDWIDTH="IFixedWidth";
+
 	/*
 	 * Sub graph required constants 
 	 */
