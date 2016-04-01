@@ -39,10 +39,10 @@ public class RunConfigHandler extends AbstractHandler implements IHandler {
 			try{
 				runConfig.open();
 			}catch(IllegalArgumentException e){
-				MessageDialog.openWarning(new Shell(), "Warning", e.getMessage());
+				MessageDialog.openWarning(Display.getDefault().getActiveShell(), "Warning", e.getMessage());
 			}
 			catch(Exception e){
-				MessageDialog.openWarning(new Shell(), "Warning", "Please save the graph before setting the run configuration.");
+				MessageDialog.openWarning(Display.getDefault().getActiveShell(), "Warning", "Please save the graph before setting the run configuration.");
 			}
 		return null;
 	}

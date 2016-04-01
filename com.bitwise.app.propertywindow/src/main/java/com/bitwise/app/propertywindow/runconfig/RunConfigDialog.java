@@ -348,7 +348,7 @@ public class RunConfigDialog extends Dialog {
 			buildProps.load(reader);
 
 		} catch (CoreException | IOException e) {
-			MessageDialog.openError(new Shell(), "Error",
+			MessageDialog.openError(Display.getDefault().getActiveShell(), "Error",
 					"Exception occured while loading build properties from file -\n"
 							+ e.getMessage());
 		}
@@ -452,7 +452,7 @@ public class RunConfigDialog extends Dialog {
 					true, false, null);
 
 		} catch (IOException | CoreException e) {
-			MessageDialog.openError(new Shell(), "Error",
+			MessageDialog.openError(Display.getDefault().getActiveShell(), "Error",
 					"Exception occured while saving run configuration file -\n"
 							+ e.getMessage());
 		}
