@@ -144,15 +144,16 @@ task scpParameterFile() {
         try {
 
             def parameterFiles = parameterFile.split(',');
-
             for(int i = 0; i < parameterFiles.length; i++){
                 println 'copying parameter file: ' + parameterFiles[i];
-                ant.scp(
+                if(!parameterFiles[i].trim().equals("")){
+                	ant.scp(
                         file: parameterFiles[i],
                         todir: "${username}@${host}:" + properties.remoteParameterFileDir,
                         password: password,
                         trust: true,
-                )
+                		)
+                }
             }
 
 
@@ -197,11 +198,16 @@ task executeRemoteJob() {
         def parameterFiles = parameterFile.split(',');
         def unixParameterFileList = "";
         for(int i = 0; i < parameterFiles.length; i++){
-         	def unixParameterFileName = parameterFiles[i].substring(parameterFiles[i].replaceAll("\\\\","/").lastIndexOf("/") + 1);
-            unixParameterFileList= unixParameterFileList + properties.remoteParameterFileDir + "/" + unixParameterFileName + ",";
+        	if(!parameterFiles[i].trim().equals("")){
+        		def unixParameterFileName = parameterFiles[i].substring(parameterFiles[i].replaceAll("\\\\","/").lastIndexOf("/") + 1);
+            	unixParameterFileList= unixParameterFileList + properties.remoteParameterFileDir + "/" + unixParameterFileName + ",";
+         	}
         }
-
-        unixParameterFileList=unixParameterFileList.substring(0, unixParameterFileList.length() - 1);
+		
+		if(!unixParameterFileList.trim().equals("")){
+			unixParameterFileList=unixParameterFileList.substring(0, unixParameterFileList.length() - 1);
+		}
+        
 
         println 'executing command - ' + properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " + properties.remoteLibDir + "/" + jarName + " -paramfiles " + unixParameterFileList
 
@@ -256,11 +262,15 @@ task executeDebugRemoteJob() {
         def parameterFiles = parameterFile.split(',');
         def unixParameterFileList = "";
         for(int i = 0; i < parameterFiles.length; i++){
-         	def unixParameterFileName = parameterFiles[i].substring(parameterFiles[i].replaceAll("\\\\","/").lastIndexOf("/") + 1);
-            unixParameterFileList= unixParameterFileList + properties.remoteParameterFileDir + "/" + unixParameterFileName + ",";
+        	if(!parameterFiles[i].trim().equals("")){
+        		def unixParameterFileName = parameterFiles[i].substring(parameterFiles[i].replaceAll("\\\\","/").lastIndexOf("/") + 1);
+            	unixParameterFileList= unixParameterFileList + properties.remoteParameterFileDir + "/" + unixParameterFileName + ",";
+         	}
         }
-
-        unixParameterFileList=unixParameterFileList.substring(0, unixParameterFileList.length() - 1);
+		
+		if(!unixParameterFileList.trim().equals("")){
+			unixParameterFileList=unixParameterFileList.substring(0, unixParameterFileList.length() - 1);
+		}
         
         
         def debugXmlFileName = debugJobXML.substring(debugJobXML.lastIndexOf("/") + 1);
