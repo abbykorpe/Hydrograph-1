@@ -50,11 +50,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -79,7 +77,7 @@ import com.bitwise.app.propertywindow.widgets.interfaces.IOperationClassDialog;
 import com.bitwise.app.propertywindow.widgets.utility.DragDropUtility;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
-public class TransformDialogNew extends Dialog implements IOperationClassDialog {
+public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 	private static final String OUTPUT_DELETE_BUTTON = "outputDeleteButton";
 	private static final String OUTPUT_ADD_BUTTON = "outputAddButton";
@@ -126,7 +124,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	private MappingSheetRow mappingSheetRow;
 	
 
-	public TransformDialogNew(Shell parentShell, String componentName, WidgetConfig widgetConfig, TransformMapping atMapping) {
+	public TransformDialog(Shell parentShell, String componentName, WidgetConfig widgetConfig, TransformMapping atMapping) {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.transformMapping = atMapping;
@@ -139,7 +137,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public TransformDialogNew() {
+	public TransformDialog() {
 		super(new Shell());
 	}
 
@@ -192,18 +190,15 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 			
 			@Override
 			public void controlResized(ControlEvent e) {
-				// TODO Auto-generated method stub
-				 Table table = (Table)e.widget;
-				  Rectangle area = table.getClientArea();
-			         int totalAreaWdith = area.width;
-			         int diff = totalAreaWdith-(table.getColumn(0).getWidth());
-			         table.getColumn(0).setWidth(diff+table.getColumn(0).getWidth());
+				Table table = (Table) e.widget;
+				Rectangle area = table.getClientArea();
+				int totalAreaWidth = area.width;
+				int diff = totalAreaWidth - (table.getColumn(0).getWidth());
+				table.getColumn(0).setWidth(diff + table.getColumn(0).getWidth());
 			}
 			
 			@Override
 			public void controlMoved(ControlEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 	}
@@ -281,46 +276,17 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 			
 			@Override
 			public void controlResized(ControlEvent e) {
-				// TODO Auto-generated method stub
 				 Table table = (Table)e.widget;
 				  Rectangle area = table.getClientArea();
-			         int totalAreaWdith = area.width;
-			         int diff = totalAreaWdith-(table.getColumn(0).getWidth());
+			         int totalAreaWidth = area.width;
+			         int diff = totalAreaWidth-(table.getColumn(0).getWidth());
 			         table.getColumn(0).setWidth(diff+table.getColumn(0).getWidth());
 			}
 			
 			@Override
 			public void controlMoved(ControlEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
-		/*Label addLabel = widget.labelWidget(outputFieldComposite, SWT.CENTER, new int[] { 130, 10, 20, 15 }, "",
-				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
-		addLabel.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-
-				FilterProperties f = new FilterProperties();
-				f.setPropertyname("");
-				if (!transformMapping.getOutputFieldList().contains(f)) {
-
-					temporaryOutputFieldList.add(f);
-
-					outputFieldViewer.refresh();
-
-					int i = temporaryOutputFieldList.size() == 0 ? temporaryOutputFieldList.size()
-							: temporaryOutputFieldList.size() - 1;
-					outputFieldViewer.editElement(outputFieldViewer.getElementAt(i), 0);
-					transformMapping.getOutputFieldList().add(
-							temporaryOutputFieldList.get(temporaryOutputFieldList.size() - 1));
-
-				}
-			}
-		});*/
-		
-	
 	}
 
 	private void createOperationClassGrid(Composite parentComposite) {
@@ -451,13 +417,11 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 			
 			@Override
 			public void controlResized(ControlEvent e) {
-				// TODO Auto-generated method stub
-				
 				Table table = (Table)e.widget;
 	            int columnCount = table.getColumnCount();
 	            
 	            Rectangle area = table.getClientArea();
-	            int totalAreaWdith = area.width;
+	            int totalAreaWidth = area.width;
 	            table.getColumn(0).setWidth(area.width/2);
 	            int lineWidth = table.getGridLineWidth();
 	            int totalGridLineWidth = (2-1)*lineWidth; 
@@ -466,7 +430,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 	            {
 	              totalColumnWidth = totalColumnWidth+column.getWidth();
 	            }
-	            int diff = totalAreaWdith-(totalColumnWidth+totalGridLineWidth);
+	            int diff = totalAreaWidth-(totalColumnWidth+totalGridLineWidth);
 
 	            TableColumn lastCol = table.getColumns()[columnCount-1];
                 lastCol.setWidth(diff+lastCol.getWidth());
@@ -1055,7 +1019,7 @@ public class TransformDialogNew extends Dialog implements IOperationClassDialog 
 		editors = createCellEditorList(tableViewerTable, prop.length);
 		tableViewer.setCellEditors(editors);
 
-		// enables the tab functionality
+		
 		TableViewerEditor.create(tableViewer, new ColumnViewerEditorActivationStrategy(tableViewer),
 				ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.TABBING_HORIZONTAL
 						| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL);

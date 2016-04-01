@@ -185,7 +185,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		gd_table_2.heightHint = 180;
 		gd_table_2.widthHint = 499;
 		table_2.setLayoutData(gd_table_2);
-		new TransformDialogNew().setTableViewer(nameValueTableViewer, nameValueComposite, new String[] {
+		new TransformDialog().setTableViewer(nameValueTableViewer, nameValueComposite, new String[] {
 				Messages.PROPERTY_NAME, Messages.PROPERTY_VALUE }, new ELTFilterContentProvider(),
 				new OperationLabelProvider());
 		nameValueTableViewer.setLabelProvider(new PropertyLabelProvider());
