@@ -194,12 +194,10 @@ task executeRemoteJob() {
 
 
         def xmlFileName = jobXML.substring(jobXML.lastIndexOf("/") + 1);
-        //def parameterFileName = parameterFile.substring(parameterFile.lastIndexOf("/") + 1);
         def parameterFiles = parameterFile.split(',');
         def unixParameterFileList = "";
         for(int i = 0; i < parameterFiles.length; i++){
          	def unixParameterFileName = parameterFiles[i].substring(parameterFiles[i].replaceAll("\\\\","/").lastIndexOf("/") + 1);
-         	println "+++ unixParameterFileName: " + unixParameterFileName; 
             unixParameterFileList= unixParameterFileList + properties.remoteParameterFileDir + "/" + unixParameterFileName + ",";
         }
 
@@ -255,13 +253,22 @@ task executeDebugRemoteJob() {
         }
 
         def xmlFileName = jobXML.substring(jobXML.lastIndexOf("/") + 1);
-        def parameterFileName = parameterFile.substring(parameterFile.lastIndexOf("/") + 1);
+        def parameterFiles = parameterFile.split(',');
+        def unixParameterFileList = "";
+        for(int i = 0; i < parameterFiles.length; i++){
+         	def unixParameterFileName = parameterFiles[i].substring(parameterFiles[i].replaceAll("\\\\","/").lastIndexOf("/") + 1);
+            unixParameterFileList= unixParameterFileList + properties.remoteParameterFileDir + "/" + unixParameterFileName + ",";
+        }
+
+        unixParameterFileList=unixParameterFileList.substring(0, unixParameterFileList.length() - 1);
+        
+        
         def debugXmlFileName = debugJobXML.substring(debugJobXML.lastIndexOf("/") + 1);
         def jobId = jobId;
         def basePath = basePath;
 
         println 'executing command - ' + properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " +
-                properties.remoteLibDir + "/" + jarName + " -paramfiles " + properties.remoteParameterFileDir + "/" + parameterFileName + " -debugxmlpath " +
+                properties.remoteLibDir + "/" + jarName + " -paramfiles " + unixParameterFileList + " -debugxmlpath " +
                 properties.remoteJobXMLDir + "/" + debugXmlFileName + " -jobid " + jobId + " -basepath " + basePath
 
         try {
@@ -271,7 +278,7 @@ task executeDebugRemoteJob() {
                     password: password,
                     trust: true,
                     command: properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " + properties.remoteLibDir +
-                            "/" + jarName + " -paramfiles " + properties.remoteParameterFileDir + "/" + parameterFileName + " -debugxmlpath " + properties.remoteJobXMLDir +
+                            "/" + jarName + " -paramfiles " + unixParameterFileList + " -debugxmlpath " + properties.remoteJobXMLDir +
                             "/" + debugXmlFileName + " -jobid " + jobId + " -basepath " + basePath
             )
         } catch (Exception gradleException) {
