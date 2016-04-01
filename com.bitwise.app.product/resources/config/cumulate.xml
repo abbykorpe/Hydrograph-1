@@ -4,14 +4,14 @@
 	<tns:component paletteIconPath="/icons/cumulate_palette.png" canvasIconPath="/icons/cumulate_canvas.png"
 		name="Cumulate" nameInPalette="Cumulate" defaultNamePrefix="Cumulate" 
 		description="Performs cumulate on data specified in a java operation class."
-		helpFilePath="/com.bitwise.app.help/html/components/Aggregate.html">
+		helpFilePath="/com.bitwise.app.help/html/Components/Aggregate.html">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">
 				<tns:port sequenceOfPort="0" allowMultipleLinks="false" linkMandatory="true" nameOfPort="in0" labelOfPort="in0"/>
 			</tns:portSpecification>
 			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
-				<tns:port sequenceOfPort="1" allowMultipleLinks="false" linkMandatory="true" nameOfPort="out0" labelOfPort="out0"/>
+				<tns:port sequenceOfPort="0" allowMultipleLinks="false" linkMandatory="true" nameOfPort="out0" labelOfPort="out0"/>
 			</tns:portSpecification>
 		</tns:port>
 		
@@ -26,9 +26,6 @@
 			<tns:validator>TRANSFORM_SCHEMA_GRID_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time."/>
 		
 		<tns:property dataType="string" name="Key_fields" renderer="COLUMN_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
@@ -45,6 +42,9 @@
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL" propertyHelpText="Field Mapping view."/>
 
+		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time."/>
 			
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
