@@ -115,24 +115,33 @@ public class TransformWidget extends AbstractWidget {
 
 				TransformMapping oldATMappings = (TransformMapping) transformMapping.clone();
 
-				TransformDialogNew t=new TransformDialogNew(new Shell(),getComponent().getComponentName(),widgetConfig,transformMapping);
-				t.open();
+				TransformDialog transformDialog=new TransformDialog(new Shell(),getComponent().getComponentName(),widgetConfig,transformMapping);
+				transformDialog.open();
 
 
 
-				if(t.isCancelPressed())
+				if(transformDialog.isCancelPressed())
 				{
 					transformMapping=oldATMappings;
-					propertyDialog.pressCancel();
 				}
+			 	
+				if(transformDialog.isOkPressed())
+               	{
+               	propagateOuputFieldsToSchemaTabFromTransformWidget();	
+               	}	
+			 	
+				
 
-				if(!oldATMappings.equals(transformMapping))
+				if(!oldATMappings.equals(transformDialog.getATMapping()))
 				{
 					propertyDialogButtonBar.enableApplyButton(true);
-					propagateOuputFieldsToSchemaTabFromTransformWidget();
+					
 				}
-
-				if(t.isOkPressed()){
+				if(transformDialog.isNoButtonPressed())
+				{
+					propertyDialog.pressCancel();
+				}	
+				if(transformDialog.isYesButtonPressed()){
 					propertyDialog.pressOK();	
 				}
 				transformMapping.getInputFields().clear();

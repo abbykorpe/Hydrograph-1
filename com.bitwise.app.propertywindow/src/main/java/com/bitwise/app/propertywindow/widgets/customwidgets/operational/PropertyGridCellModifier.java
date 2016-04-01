@@ -28,7 +28,7 @@ import com.bitwise.app.propertywindow.messages.Messages;
 
 public class PropertyGridCellModifier implements ICellModifier {
   private Viewer viewer;
-  TransformDialogNew transformDialog;	
+  TransformDialog transformDialog;	
   /** The Constant PROPERTY_NAME. */
 	private static final String PROPERTY_NAME = "Source";
 	
@@ -44,7 +44,7 @@ public class PropertyGridCellModifier implements ICellModifier {
   public PropertyGridCellModifier(Viewer viewer) {
     this.viewer = viewer;
   }
-  public PropertyGridCellModifier(TransformDialogNew transformDialogNew ,Viewer viewer) {
+  public PropertyGridCellModifier(TransformDialog transformDialogNew ,Viewer viewer) {
 	    this.viewer = viewer;
 	    this.transformDialog=transformDialogNew;
 	  }

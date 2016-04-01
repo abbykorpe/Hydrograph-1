@@ -119,12 +119,17 @@ public class TransformMapping implements IDataStructure{
 	
 	
 
+	
+
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((inputFields == null) ? 0 : inputFields.hashCode());
+		result = prime * result + ((mapAndPassthroughField == null) ? 0 : mapAndPassthroughField.hashCode());
 		result = prime * result + ((mappingSheetRows == null) ? 0 : mappingSheetRows.hashCode());
+		result = prime * result + ((outputFieldList == null) ? 0 : outputFieldList.hashCode());
 		return result;
 	}
 
@@ -142,10 +147,20 @@ public class TransformMapping implements IDataStructure{
 				return false;
 		} else if (!inputFields.equals(other.inputFields))
 			return false;
+		if (mapAndPassthroughField == null) {
+			if (other.mapAndPassthroughField != null)
+				return false;
+		} else if (!mapAndPassthroughField.equals(other.mapAndPassthroughField))
+			return false;
 		if (mappingSheetRows == null) {
 			if (other.mappingSheetRows != null)
 				return false;
 		} else if (!mappingSheetRows.equals(other.mappingSheetRows))
+			return false;
+		if (outputFieldList == null) {
+			if (other.outputFieldList != null)
+				return false;
+		} else if (!outputFieldList.equals(other.outputFieldList))
 			return false;
 		return true;
 	}

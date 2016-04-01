@@ -20,7 +20,6 @@ import org.eclipse.jface.viewers.TableViewer;
 
 import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.datastructure.property.NameValueProperty;
-import com.bitwise.app.common.datastructure.property.OperationField;
 import com.bitwise.app.common.datastructure.property.mapping.MappingSheetRow;
 import com.bitwise.app.propertywindow.widgets.utility.DragDropOperation;
 
@@ -40,9 +39,9 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	private List<NameValueProperty> mapAndPassThroughField;
 	private TableViewer outputFieldTableViewer;
 	private List<MappingSheetRow> mappingSheetRows;
-	private TransformDialogNew transformDialogNew;
+	private TransformDialog transformDialogNew;
 	
-	public DragDropTransformOpImp(TransformDialogNew transformDialogNew,List<MappingSheetRow> mappingSheetRows,TableViewer outputFieldTableViewer,List<NameValueProperty> mapAndPassThroughField,List<FilterProperties> outputFieldList,List listOfOutputFields,List listOfInputFields, boolean isSingleColumn,TableViewer tableViewer,TableViewer t) {
+	public DragDropTransformOpImp(TransformDialog transformDialogNew,List<MappingSheetRow> mappingSheetRows,TableViewer outputFieldTableViewer,List<NameValueProperty> mapAndPassThroughField,List<FilterProperties> outputFieldList,List listOfOutputFields,List listOfInputFields, boolean isSingleColumn,TableViewer tableViewer,TableViewer t) {
 		super();
 		this.listOfInputFields = listOfInputFields;
 		this.isSingleColumn = isSingleColumn;
@@ -56,7 +55,7 @@ public class DragDropTransformOpImp implements DragDropOperation {
 		this.mappingSheetRows=mappingSheetRows;
 	}
 	
-	public DragDropTransformOpImp(TransformDialogNew transformDialogNew,List listOfFields, boolean isSingleColumn,TableViewer tableViewer) {
+	public DragDropTransformOpImp(TransformDialog transformDialogNew,List listOfFields, boolean isSingleColumn,TableViewer tableViewer) {
 		super();
 		this.listOfInputFields = listOfFields;
 		this.isSingleColumn = isSingleColumn;
@@ -87,11 +86,10 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	        	NameValueProperty field = new NameValueProperty();
 	        	field.setPropertyName(result);
 	        	field.setPropertyValue(result);
-	        	if(!listOfInputFields.contains(field))
-	        	{
+	        	
             		listOfInputFields.add(field);
 	        		transformDialogNew.refreshOutputTable();
-	        	}	
+	        
 	        }
 		 operationInputfieldtableviewer.refresh();
 		

@@ -22,7 +22,7 @@ import com.bitwise.app.common.datastructure.property.FilterProperties;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.propertywindow.messages.Messages;
 import com.bitwise.app.propertywindow.widgets.customwidgets.lookupproperty.ELTLookupMapWizard;
-import com.bitwise.app.propertywindow.widgets.customwidgets.operational.TransformDialogNew;
+import com.bitwise.app.propertywindow.widgets.customwidgets.operational.TransformDialog;
 
 
 /**
@@ -33,7 +33,7 @@ import com.bitwise.app.propertywindow.widgets.customwidgets.operational.Transfor
 public class ELTCellModifier implements ICellModifier{
 	
 	private Viewer viewer;
-	TransformDialogNew transformDialog;	
+	TransformDialog transformDialog;	
 	/**
 	 * Instantiates a new ELT cell modifier.
 	 * 
@@ -43,7 +43,7 @@ public class ELTCellModifier implements ICellModifier{
 	public ELTCellModifier(Viewer viewer) {
 		this.viewer = viewer;
 	}
-	public ELTCellModifier(Viewer viewer,TransformDialogNew transformDialog) {
+	public ELTCellModifier(Viewer viewer,TransformDialog transformDialog) {
 		this.viewer = viewer;
 		this.transformDialog=transformDialog;
 	}
