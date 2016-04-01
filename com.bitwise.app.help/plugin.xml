@@ -85,6 +85,12 @@
             file="xml/Components/inputFileFixedWidth.xml">
       </toc>
       <toc
+            file="xml/Components/inputHiveParquet.xml">
+      </toc>
+      <toc
+            file="xml/Components/inputHiveTextFile.xml">
+      </toc>
+      <toc
             file="xml/Components/join.xml">
       </toc>
       <toc
@@ -95,6 +101,12 @@
       </toc>
       <toc
             file="xml/Components/outputFileFixedWidth.xml">
+      </toc>
+      <toc
+            file="xml/Components/outputHiveParquet.xml">
+      </toc>
+      <toc
+            file="xml/Components/outputHiveTextFile.xml">
       </toc>
       <toc
             file="xml/Components/removeDups.xml">

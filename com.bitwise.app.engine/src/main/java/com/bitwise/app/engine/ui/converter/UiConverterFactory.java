@@ -25,11 +25,17 @@ import com.bitwise.app.engine.ui.converter.impl.FilterUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.GenerateRecordsUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.InputFileDelimitedUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.InputFixedWidthUiConverter;
+import com.bitwise.app.engine.ui.converter.impl.InputHiveParquetUiConverter;
+import com.bitwise.app.engine.ui.converter.impl.InputHiveTextFileUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.JoinComponentUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.LimitUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.LookupUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.OutputFileDelimitedUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.OutputFixedWidthUiConverter;
+import com.bitwise.app.engine.ui.converter.impl.OutputHiveParquetUiConverter;
+import com.bitwise.app.engine.ui.converter.impl.OutputHiveTextFileUiConverter;
+import com.bitwiseglobal.graph.inputtypes.ParquetHiveFile;
+import com.bitwiseglobal.graph.inputtypes.HiveTextFile;
 import com.bitwise.app.engine.ui.converter.impl.RemoveDupsUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.SortUiConverter;
 import com.bitwise.app.engine.ui.converter.impl.TransformComponentUiConverter;
@@ -137,6 +143,18 @@ public class UiConverterFactory {
 		if((Discard.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new DiscardUiConverter(typeBaseComponent,container);
  		}
+		if((com.bitwiseglobal.graph.outputtypes.ParquetHiveFile.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new OutputHiveParquetUiConverter(typeBaseComponent,container);
+		}
+		if((ParquetHiveFile.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new InputHiveParquetUiConverter(typeBaseComponent, container);
+		}
+		if((com.bitwiseglobal.graph.outputtypes.HiveTextFile.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new OutputHiveTextFileUiConverter(typeBaseComponent,container);
+		}
+		if((HiveTextFile.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new InputHiveTextFileUiConverter(typeBaseComponent, container);
+		}
 		return new DummyUiConverter(typeBaseComponent,container);
 	}
 }

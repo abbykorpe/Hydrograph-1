@@ -70,6 +70,12 @@
 			<enumeration value="TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET" />
 			<enumeration value="COUNT_WIDGET"/>
 			<enumeration value="PRIMARY_COLUMN_KEYS_WIDGET"/>
+			<enumeration value="PRIMARY_COLUMN_KEYS_WIDGET"/>
+			<enumeration value="DATABASE_NAME_WIDGET"/>
+			<enumeration value="TABLE_NAME_WIDGET"/>
+			<enumeration value="PARTITION_KEYS_WIDGET"/>
+			<enumeration value="QUOTE_WIDGET"/>
+			<enumeration value="EXTERNAL_TABLE_PATH_WIDGET"/>
 		</restriction>
 	</simpleType>
 

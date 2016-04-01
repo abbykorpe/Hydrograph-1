@@ -50,4 +50,16 @@
    <topic href="html/Components/Unique_Sequence.html" label="Unique Sequence">
       <anchor id="UniqueSequence"/>
    </topic>
+   <topic href="html/Components/Input_Hive_Parquet.html" label="Input Hive Parquet">
+      <anchor id="inputHiveParquet"/>
+   </topic>
+   <topic href="html/Components/Output_Hive_Parquet.html" label="Output Hive Parquet">
+      <anchor id="outputHiveParquet"/>
+   </topic>
+   <topic href="html/Components/Input_Hive_Text.html" label="Input Hive TextFile">
+      <anchor id="inputHiveTextFile"/>
+   </topic>
+   <topic href="html/Components/Output_Hive_Text.html" label="Output Hive TextFile">
+      <anchor id="outputHiveTextFile"/>
+   </topic>
 </toc>

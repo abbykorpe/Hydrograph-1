@@ -18,6 +18,8 @@ package com.bitwise.app.engine.ui.constants;
 public enum UIComponentsConstants {
 	
 	FILE_DELIMITED("File Delimited"),
+	HIVE_PARQUET("Hive Parquet"),
+	HIVE_TEXTFILE("Hive TextFile"),
 	VALIDITY_STATUS("validityStatus"),
 	INPUT_CATEGORY("INPUT"),
 	FILE_FIXEDWIDTH("File Fixed Width"),

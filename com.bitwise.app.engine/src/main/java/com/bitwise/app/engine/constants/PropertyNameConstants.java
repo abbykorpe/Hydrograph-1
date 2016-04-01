@@ -29,7 +29,12 @@ public enum PropertyNameConstants {
 		RETENTION_LOGIC_KEEP("retention_logic"),
 		OPERATION_FILEDS("operation_fields"),
 		SECONDARY_COLUMN_KEYS("Secondary_keys"),
-		DEDUP_FILEDS("Key_fields");
+		DEDUP_FILEDS("Key_fields"),
+		DATABASE_NAME("databaseName"),
+		TABLE_NAME("tableName"),
+		EXTERNAL_TABLE_PATH("externalTablePath"),
+		PARTITION_KEYS("partitionKeys"),
+		QUOTE("quote");
 		private final String value;
 
 	PropertyNameConstants(String value) {

@@ -83,10 +83,17 @@ public class WidgetFactory {
 		TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET(TextBoxWithIsParameterCheckBoxWidget.class,WidgetHelper.INSTANCE.getSequenceFieldWidgetConfig()),
 		DELIMETER_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getDelimiterWidgetConfig()),
 		PHASE_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getPhaseWidgetConfig()),
+		QUOTE_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getQuoteWidgetConfig()),
+		DATABASE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getDatabaseNameWidgetConfig()),
+		TABLE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getTableNameWidgetConfig()),
+		EXTERNAL_TABLE_PATH_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getExternalTablePathWidgetConfig()),
+		
 		NO_OF_RECORDS_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getNoOfRecordsWidgetConfig()),
 		COUNT_WIDGET (TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getCountWidgetConfig ()),
 		FILTER_PROPERTY_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getOperationFieldsConfig()),
 		COLUMN_NAME_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getColumnNameConfig()),
+		PARTITION_KEYS_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getPartitionKeysConfig()),
+		
 		OPERATIONAL_CLASS_WIDGET(ELTOperationClassWidget.class, WidgetHelper.INSTANCE.getOperationClassForFilterWidgetConfig()),
 		RUNTIME_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class,WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.RUNTIME_PROPERTY_LABEL,Constants.RUNTIME_PROPERTIES_WINDOW_LABEL)),
 		SUBGRAPH_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class,WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.SUBGRAPH_PROPERTY_LABEL,Constants.SUBGRAPH_WINDOW_LABEL)),
