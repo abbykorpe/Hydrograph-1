@@ -17,6 +17,7 @@ package com.bitwise.app.propertywindow.factory;
 import org.slf4j.Logger;
 
 import com.bitwise.app.logging.factory.LogFactory;
+import com.bitwise.app.propertywindow.widgets.listeners.DirectoryDialogSelectionListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTBrowseFileListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTCheckFileExtensionListener;
 import com.bitwise.app.propertywindow.widgets.listeners.ELTCreateNewClassListener;
@@ -69,6 +70,7 @@ public class ListenerFactory {
 		VERIFY_COMPONENT_NAME(ELTVerifyComponentNameListener.class),
 		RUNTIME_BUTTON_CLICK(ELTRuntimeButtonClickListener.class),
 		FILE_DIALOG_SELECTION(ELTFileDialogSelectionListener.class),
+		DIRECTORY_DIALOG_SELECTION(DirectoryDialogSelectionListener.class),
 		SCHEMA_DIALOG_SELECTION(ELTSchemaDialogSelectionListener.class),
 		FOCUS_OUT(ELTFocusOutListener.class),
 		FOCUS_IN(ELTFocusGainedListener.class),

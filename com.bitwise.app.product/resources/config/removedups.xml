@@ -22,9 +22,7 @@
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 				
-		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations specific \nto this component at run time."/>
+		
 		
 		<tns:property dataType="string" name="Key_fields" renderer="COLUMN_NAME_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
@@ -37,6 +35,9 @@
 			usage="OPTIONAL" propertyHelpText="Fields used for sorting within the groups.">
 			</tns:property>
 
+		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations specific \nto this component at run time."/>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="retention_logic"
 			value="First" renderer="RETENTION_LOGIC_WIDGET" type="USER" showAsTooltip="TRUE"
