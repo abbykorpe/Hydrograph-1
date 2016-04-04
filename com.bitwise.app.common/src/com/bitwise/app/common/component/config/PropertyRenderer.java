@@ -57,6 +57,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET"/>
  *     &lt;enumeration value="COUNT_WIDGET"/>
  *     &lt;enumeration value="PRIMARY_COLUMN_KEYS_WIDGET"/>
+ *     &lt;enumeration value="CUMULATE_WIDGET"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -102,7 +103,8 @@ public enum PropertyRenderer {
     MATCH_PROPERTY_WIDGET,
     TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET,
     COUNT_WIDGET,
-    PRIMARY_COLUMN_KEYS_WIDGET;
+    PRIMARY_COLUMN_KEYS_WIDGET,
+    CUMULATE_WIDGET;
 
     public String value() {
         return name();
