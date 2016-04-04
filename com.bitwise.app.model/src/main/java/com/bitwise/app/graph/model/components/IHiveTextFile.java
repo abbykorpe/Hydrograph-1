@@ -18,7 +18,7 @@ import com.bitwise.app.graph.model.categories.InputCategory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class IHiveParquet.
+ * The Class IHiveTextFile.
  * 
  * @author eyy445
  */
@@ -27,6 +27,7 @@ public class IHiveTextFile extends InputCategory {
 	/**
 	 * Instantiates a new Input Hive TextFile.
 	 */
+	private static final long serialVersionUID = 5221821689519010232L;
 	public IHiveTextFile() {
 	super();
 	}

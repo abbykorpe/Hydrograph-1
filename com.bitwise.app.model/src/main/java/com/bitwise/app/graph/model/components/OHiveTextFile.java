@@ -18,15 +18,16 @@ import com.bitwise.app.graph.model.categories.InputCategory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class IHiveParquet.
+ * The Class OHiveTextFile.
  * 
  * @author eyy445
  */
 public class OHiveTextFile extends InputCategory {
 
 	/**
-	 * Instantiates a new Input Hive TextFile.
+	 * Instantiates a new Output Hive TextFile.
 	 */
+	private static final long serialVersionUID = 5221821689519010234L;
 	public OHiveTextFile() {
 	super();
 	}

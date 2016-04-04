@@ -71,8 +71,8 @@ public class Constants {
 	public static final String KEY_FIELDS_LABEL= "Key\nFields";
 	public static final String SECONDARY_KEYS2 = "Secondary Keys ";
 	public static final String SECONDARY_KEYS = "Secondary\n Keys";
-	public static final String PARTITION_KEY = "Partition Key ";
-	public static final String PARTITION_KEYS = "Partition\nKeys";
+	public static final String PARTITION_KEYS_WINDOW_TITLE = "Partition Keys";
+	public static final String PARTITION_KEYS_LABEL = "Partition\nKeys";
 	
 	public static final String COMPONENT_NAME = "Component Name";
 	 // Used for validating AlphaNumeric or Parameter E.g Aplha_123 or @{Param_123}

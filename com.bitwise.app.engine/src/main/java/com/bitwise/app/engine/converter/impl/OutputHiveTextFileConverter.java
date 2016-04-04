@@ -36,8 +36,13 @@ import com.bitwiseglobal.graph.ohivetextfile.HivePartitionFieldsType;
 import com.bitwiseglobal.graph.ohivetextfile.HivePathType;
 import com.bitwiseglobal.graph.ohivetextfile.HiveType;
 import com.bitwiseglobal.graph.ohivetextfile.TypeOutputHiveTextFileDelimitedInSocket;
+import com.bitwiseglobal.graph.otfd.TypeOutputDelimitedInSocket;
 import com.bitwiseglobal.graph.outputtypes.HiveTextFile;
-
+/**
+ * Converter implementation for Output Hive TextFile component
+ * 
+ * @author eyy445 
+ */
 public class OutputHiveTextFileConverter extends OutputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputHiveTextFileConverter.class);
@@ -60,8 +65,8 @@ public class OutputHiveTextFileConverter extends OutputConverter {
 
 		hiveTextfile.setDatabaseName(getHiveType(PropertyNameConstants.DATABASE_NAME.value()));
 		hiveTextfile.setTableName(getHiveType(PropertyNameConstants.TABLE_NAME.value()));
-		if(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()!=null){
-		hiveTextfile.setExternalTablePath(getHivePathType(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()));
+		if(!(((String)properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value())).isEmpty() |properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()).equals("null"))){
+			hiveTextfile.setExternalTablePath(getHivePathType(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()));
 		}
 		hiveTextfile.setPartitionKeys(getPartitionKeys());
 		HiveTextFile.Delimiter delimiter = new HiveTextFile.Delimiter();
@@ -69,14 +74,17 @@ public class OutputHiveTextFileConverter extends OutputConverter {
 		HiveTextFile.Quote quote = new HiveTextFile.Quote();
 		quote.setValue((String) properties.get(PropertyNameConstants.QUOTE.value()));
 		hiveTextfile.setDelimiter(delimiter);
-		if(quote!=null) {
-		hiveTextfile.setQuote(quote);
+		if(!(quote.getValue().isEmpty() )| (quote.getValue().equals("null"))){
+			hiveTextfile.setQuote(quote);
 		}
 		hiveTextfile.setStrict(getBoolean(PropertyNameConstants.STRICT.value()));
 		hiveTextfile.setSafe(getBoolean(PropertyNameConstants.IS_SAFE.value()));
 		
 	}
-	
+
+	/*
+	 * returns hiveType
+	 */
 	protected HiveType getHiveType(String propertyName) {
 		logger.debug("Getting HypeType Value for {}={}", new Object[] {
 				propertyName, properties.get(propertyName) });
@@ -84,25 +92,30 @@ public class OutputHiveTextFileConverter extends OutputConverter {
 			HiveType hiveType = new HiveType();
 			hiveType.setValue(String.valueOf((String) properties
 					.get(propertyName)));
-			
+				
 				return hiveType;
 		}
 		return null;
 	}
-	
+
+	/*
+	 * returns hivePathType
+	 */
 	protected HivePathType getHivePathType(String propertyName) {
-		logger.debug("Getting HypeType Value for {}={}", new Object[] {
+		logger.debug("Getting HypePathType Value for {}={}", new Object[] {
 				propertyName, properties.get(propertyName) });
 		if (properties.get(propertyName) != null) {
 			HivePathType hivePathType = new HivePathType();
 			hivePathType.setUri(String.valueOf((String) properties
 					.get(propertyName)));
-			
 				return hivePathType;
 		}
 		return null;
 	}
-	
+
+	/*
+	 * returns HivePartitionFieldsType
+	 */
 	private HivePartitionFieldsType getPartitionKeys() {
 
 		List<String> fieldValueSet = (List<String>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
@@ -120,6 +133,8 @@ public class OutputHiveTextFileConverter extends OutputConverter {
 		}
 		return typeHivePartitionFields;
 	}
+	
+	
 	@Override
 	protected List<TypeOutputInSocket> getOutInSocket() {
 		logger.debug("Generating TypeOutputInSocket data");
@@ -127,11 +142,7 @@ public class OutputHiveTextFileConverter extends OutputConverter {
 		for (Link link : component.getTargetConnections()) {
 			TypeOutputHiveTextFileDelimitedInSocket outInSocket = new TypeOutputHiveTextFileDelimitedInSocket();
 			outInSocket.setId(link.getTargetTerminal());
-			if (converterHelper.isMultipleLinkAllowed(link.getSource(), link.getSourceTerminal()))
-				outInSocket.setFromSocketId(link.getSource().getPort(link.getSourceTerminal()).getPortType()
-						+ link.getLinkNumber());
-			else
-				outInSocket.setFromSocketId(link.getSourceTerminal());
+			outInSocket.setFromSocketId(converterHelper.getFromSocketId(link));
 			outInSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 			outInSocket.setSchema(getSchema());
 			outInSocket.getOtherAttributes();
@@ -140,6 +151,7 @@ public class OutputHiveTextFileConverter extends OutputConverter {
 		}
 		return outputinSockets;
 	}
+	
 	@Override
 	protected List<TypeBaseField> getFieldOrRecord(ComponentsOutputSchema outputSchema) {
 		List<FixedWidthGridRow> gridList=outputSchema.getFixedWidthGridRowsOutputFields();

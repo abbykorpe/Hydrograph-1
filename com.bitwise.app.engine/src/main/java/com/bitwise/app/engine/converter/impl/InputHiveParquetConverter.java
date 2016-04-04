@@ -35,7 +35,11 @@ import com.bitwiseglobal.graph.ihiveparquet.HivePathType;
 import com.bitwiseglobal.graph.ihiveparquet.HiveType;
 import com.bitwiseglobal.graph.inputtypes.ParquetHiveFile;
 import com.bitwiseglobal.graph.ihiveparquet.TypeInputDelimitedOutSocket;
-
+/**
+ * Converter implementation for Input Hive Parquet component
+ * 
+ * @author eyy445 
+ */
 public class InputHiveParquetConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputHiveParquetConverter.class);
@@ -58,13 +62,16 @@ public class InputHiveParquetConverter extends InputConverter {
 
 		parquetHive.setDatabaseName(getHiveType(PropertyNameConstants.DATABASE_NAME.value()));
 		parquetHive.setTableName(getHiveType(PropertyNameConstants.TABLE_NAME.value()));
-		if(PropertyNameConstants.EXTERNAL_TABLE_PATH.value() != null){
-		parquetHive.setExternalTablePath(getHivePathType(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()));
+		if(!(((String)properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value())).isEmpty() |properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()).equals("null"))){
+			parquetHive.setExternalTablePath(getHivePathType(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()));
 		}
 		parquetHive.setPartitionKeys(getPartitionKeys());
 		
 	}
 	
+	/*
+	 * returns hiveType
+	 */
 	protected HiveType getHiveType(String propertyName) {
 		logger.debug("Getting HypeType Value for {}={}", new Object[] {
 				propertyName, properties.get(propertyName) });
@@ -78,6 +85,9 @@ public class InputHiveParquetConverter extends InputConverter {
 		return null;
 	}
 	
+	/*
+	 * returns hivePathType
+	 */
 	protected HivePathType getHivePathType(String propertyName) {
 		logger.debug("Getting HypeType Value for {}={}", new Object[] {
 				propertyName, properties.get(propertyName) });
@@ -91,6 +101,9 @@ public class InputHiveParquetConverter extends InputConverter {
 		return null;
 	}
 	
+	/*
+	 * returns HivePartitionFieldsType
+	 */
 	private HivePartitionFieldsType getPartitionKeys() {
 
 		List<String> fieldValueSet = (List<String>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());

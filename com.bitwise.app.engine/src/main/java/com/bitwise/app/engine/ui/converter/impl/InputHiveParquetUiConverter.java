@@ -25,7 +25,12 @@ import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
 import com.bitwiseglobal.graph.ihiveparquet.FieldBasicType;
 import com.bitwiseglobal.graph.ihiveparquet.HivePartitionFieldsType;
 import com.bitwiseglobal.graph.inputtypes.ParquetHiveFile;
-
+/**
+ * The class InputHiveParquetUiConverter
+ * 
+ * @author eyy445
+ * 
+ */
 
 public class InputHiveParquetUiConverter extends InputUiConverter {
 
@@ -67,6 +72,10 @@ public class InputHiveParquetUiConverter extends InputUiConverter {
 		validateComponentProperties(propertyMap);
 	}
 
+	
+	/*
+	 * returns Partition keys list
+	 */
 	private List<String> getPartitionKeys() {
 		LOGGER.debug("Fetching Input Hive Parquet-Partition-Keys-Properties for -{}", componentName);
 		List<String> partitionKeySet = null;

@@ -18,15 +18,16 @@ import com.bitwise.app.graph.model.categories.OutputCategory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class OFDelimited.
+ * The Class OHiveParquet.
  * 
  * @author Bitwise
  */
 public class OHiveParquet extends OutputCategory {
 
 	/**
-	 * Instantiates a new OF delimited.
+	 * Instantiates a new Output Hive Parquet.
 	 */
+	private static final long serialVersionUID = 5221821689519010233L;
 	public OHiveParquet() {
 		super();
 	}

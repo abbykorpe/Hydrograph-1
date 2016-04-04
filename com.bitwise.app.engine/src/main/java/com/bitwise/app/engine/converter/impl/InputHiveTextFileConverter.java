@@ -36,6 +36,11 @@ import com.bitwiseglobal.graph.ihivetextfile.HiveType;
 import com.bitwiseglobal.graph.ihivetextfile.TypeInputHiveTextDelimitedOutSocket;
 import com.bitwiseglobal.graph.inputtypes.HiveTextFile;
 
+/**
+ * Converter implementation for Input Hive TextFile component
+ * 
+ * @author eyy445 
+ */
 public class InputHiveTextFileConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputHiveTextFileConverter.class);
@@ -58,8 +63,9 @@ public class InputHiveTextFileConverter extends InputConverter {
 
 		hiveTextfile.setDatabaseName(getHiveType(PropertyNameConstants.DATABASE_NAME.value()));
 		hiveTextfile.setTableName(getHiveType(PropertyNameConstants.TABLE_NAME.value()));
-		if(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()!=null){
-		hiveTextfile.setExternalTablePath(getHivePathType(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()));
+		
+		if(!(((String)properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value())).isEmpty() |properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()).equals("null"))){
+			hiveTextfile.setExternalTablePath(getHivePathType(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()));
 		}
 		hiveTextfile.setPartitionKeys(getPartitionKeys());
 		HiveTextFile.Delimiter delimiter = new HiveTextFile.Delimiter();
@@ -67,14 +73,17 @@ public class InputHiveTextFileConverter extends InputConverter {
 		HiveTextFile.Quote quote = new HiveTextFile.Quote();
 		quote.setValue((String) properties.get(PropertyNameConstants.QUOTE.value()));
 		hiveTextfile.setDelimiter(delimiter);
-		if(quote!=null){
-		hiveTextfile.setQuote(quote);
+		if(!(quote.getValue().isEmpty() )| (quote.getValue().equals("null"))){
+			hiveTextfile.setQuote(quote);
 		}
 		hiveTextfile.setStrict(getBoolean(PropertyNameConstants.STRICT.value()));
 		hiveTextfile.setSafe(getBoolean(PropertyNameConstants.IS_SAFE.value()));
 		
 	}
 	
+	/*
+	 * returns hiveType
+	 */
 	protected HiveType getHiveType(String propertyName) {
 		logger.debug("Getting HypeType Value for {}={}", new Object[] {
 				propertyName, properties.get(propertyName) });
@@ -88,6 +97,9 @@ public class InputHiveTextFileConverter extends InputConverter {
 		return null;
 	}
 	
+	/*
+	 * returns hivePathType
+	 */
 	protected HivePathType getHivePathType(String propertyName) {
 		logger.debug("Getting HypeType Value for {}={}", new Object[] {
 				propertyName, properties.get(propertyName) });
@@ -101,6 +113,9 @@ public class InputHiveTextFileConverter extends InputConverter {
 		return null;
 	}
 	
+	/*
+	 * returns HivePartitionFieldsType
+	 */
 	private HivePartitionFieldsType getPartitionKeys() {
 
 		List<String> fieldValueSet = (List<String>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
@@ -118,6 +133,7 @@ public class InputHiveTextFileConverter extends InputConverter {
 		}
 		return typeHivePartitionFields;
 	}
+	
 	@Override
 	protected List<TypeInputOutSocket> getInOutSocket() {
 		logger.debug("Generating TypeInputOutSocket data for {}", properties.get(Constants.PARAM_NAME));

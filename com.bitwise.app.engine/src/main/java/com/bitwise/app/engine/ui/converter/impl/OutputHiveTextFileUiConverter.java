@@ -26,7 +26,12 @@ import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
 import com.bitwiseglobal.graph.ohivetextfile.FieldBasicType;
 import com.bitwiseglobal.graph.ohivetextfile.HivePartitionFieldsType;
 import com.bitwiseglobal.graph.outputtypes.HiveTextFile;
-
+/**
+ * The class OutputHiveTextFileUiConverter
+ * 
+ * @author eyy445
+ * 
+ */
 
 public class OutputHiveTextFileUiConverter extends OutputUiConverter {
 
@@ -76,6 +81,9 @@ public class OutputHiveTextFileUiConverter extends OutputUiConverter {
 		validateComponentProperties(propertyMap);
 	}
 
+	/*
+	 * returns Partition keys list
+	 */
 	private List<String> getPartitionKeys() {
 		LOGGER.debug("Fetching Input Hive Parquet-Partition-Keys-Properties for -{}", componentName);
 		List<String> partitionKeySet = null;

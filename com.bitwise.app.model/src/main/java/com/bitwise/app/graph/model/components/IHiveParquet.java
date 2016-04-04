@@ -27,6 +27,7 @@ public class IHiveParquet extends InputCategory {
 	/**
 	 * Instantiates a new Input Hive Parquet.
 	 */
+	private static final long serialVersionUID = 5221821689519010231L;
 	public IHiveParquet() {
 	super();
 	}

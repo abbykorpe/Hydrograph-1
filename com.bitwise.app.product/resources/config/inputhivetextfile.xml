@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd">
-	<tns:component paletteIconPath="/icons/hive_palette.png" canvasIconPath="/icons/hive_canvas.png"
+	<tns:component paletteIconPath="/icons/hive_textfile_input_palette.png" canvasIconPath="/icons/hive_textfile_input_canvas.png"
 		name="IHiveTextFile" nameInPalette="Hive TextFile" defaultNamePrefix="IHiveTextFile" 
 		description="This is IHiveTextFile component. Reads text file as input and performs Hive job."
 		helpFilePath="/com.bitwise.app.help/html/Components/Input_Hive_Text.html">
@@ -34,19 +34,23 @@
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 			
-			<tns:property dataType="string" name="externalTablePath" renderer="EXTERNAL_TABLE_PATH_WIDGET"
+			<tns:property dataType="string" name="externalTablePath" value="" renderer="EXTERNAL_TABLE_PATH_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="OPTIONAL" propertyHelpText="Displays the location of the file either Remote/Local."/>
-			
+			usage="OPTIONAL" propertyHelpText="Displays the location of the file either Remote/Local.">
+		<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+		</tns:property>
+		
 		<tns:property dataType="string" name="delimiter" value="|" renderer="DELIMETER_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Specifies Delimiter present in the input file.">
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="quote" renderer="QUOTE_WIDGET"
+		<tns:property dataType="string" name="quote" value="" renderer="QUOTE_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="OPTIONAL" propertyHelpText="Specifies Quote present in the input file."/>
+			usage="OPTIONAL" propertyHelpText="Specifies Quote present in the input file.">
+		<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+		</tns:property>
 		
 		<tns:property dataType="boolean" name="safe" value="False" renderer="SAFE_PROPERTY_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
@@ -54,24 +58,26 @@
 			<tns:validator>BOOLEAN_OR_PARAMETER_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="partitionKeys" renderer="PARTITION_KEYS_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
-			usage="OPTIONAL" propertyHelpText="Displays the user specific partition keys"/>
-			
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="strict" value="False"
-		renderer="STRICT_CLASS_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
-		usage="OPTIONAL" propertyHelpText="When True, validates the Record Structure \nlike no. of fields, length of record, scale \nas specified by the user.">
+			renderer="STRICT_CLASS_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL" propertyHelpText="When True, validates the Record Structure \nlike no. of fields, length of record, scale \nas specified by the user.">
 			<tns:validator>BOOLEAN_OR_PARAMETER_VALIDATOR</tns:validator>
 		</tns:property>
+		
+		<tns:property dataType="string" name="partitionKeys" renderer="PARTITION_KEYS_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
+			usage="OPTIONAL" propertyHelpText="Displays the user specific partition keys">
+			<tns:validator>KEY_FIELDS_VALIDATOR</tns:validator>
+		</tns:property>
+		
+		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="OPTIONAL" propertyHelpText="Used to override runtime \nHadoop configurations specific to \nthis component at run time."/>
 		
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Specifies the execution sequence of \nthis component in the job flow.">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
-		
-		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="OPTIONAL" propertyHelpText="Used to override runtime \nHadoop configurations specific to \nthis component at run time."/>
 	</tns:component>
 </tns:Config>
