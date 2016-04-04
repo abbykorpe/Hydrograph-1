@@ -78,9 +78,9 @@ public class ComponentDeleteCommand extends Command {
 
 	/**
 	 * 
-	 * returns true if selected component list is empty
+	 * returns false if selected component list is empty
 	 * 
-	 * @return
+	 * @return boolean
 	 */
 	public boolean hasComponentToDelete(){
 		return !selectedComponents.isEmpty();
@@ -118,7 +118,6 @@ public class ComponentDeleteCommand extends Command {
 
 	@Override
 	public void execute() {
-		System.out.println("+++ Deleted");
 		redo();
 	}
 

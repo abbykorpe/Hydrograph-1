@@ -33,12 +33,11 @@ public class DeleteHandler extends AbstractHandler implements IHandler{
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		if(editor instanceof ELTGraphicalEditor){
-			((ELTGraphicalEditor)editor).deleteSelection();
-			((ELTGraphicalEditor)editor).hideToolTip();
+		if (editor instanceof ELTGraphicalEditor) {
+			((ELTGraphicalEditor) editor).deleteSelection();
+			((ELTGraphicalEditor) editor).hideToolTip();
 		}
-		
-		
+
 		return null;
-		}
+	}
 }

@@ -239,6 +239,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		
 	}
 
+	/**
+	 * 
+	 * Hide component tooltip
+	 * 
+	 */
 	public void hideToolTip(){
 		if(toolTipComponentBounds !=null && componentTooltip != null){
 			componentTooltip.setVisible(false);
@@ -300,8 +305,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			
 			@Override
 			public void focusLost(FocusEvent e) {
-				// TODO Auto-generated method stub
-				//System.out.println("+++ focus out");
 				if(componentTooltip!=null && !componentTooltip.isToolBarToolTip()){
 						hideToolTip();
 				}
@@ -310,7 +313,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			
 			@Override
 			public void focusGained(FocusEvent e) {
-				// TODO Auto-generated method stub
+				// Nothing to do
 				
 			}
 		});

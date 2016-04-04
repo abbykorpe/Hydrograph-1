@@ -59,6 +59,8 @@ import com.bitwise.app.tooltip.tooltips.ComponentTooltip;
 
 /**
  * The Class ComponentFigure.
+ * 
+ * @author Bitwise
  *  
  */
 public class ComponentFigure extends Figure implements Validator{
@@ -201,7 +203,7 @@ public class ComponentFigure extends Figure implements Validator{
 	 * 
 	 * Get component Height
 	 * 
-	 * @return
+	 * @return int
 	 */
 	public int getHeight() {
 		return height;
@@ -213,8 +215,8 @@ public class ComponentFigure extends Figure implements Validator{
 	 * 
 	 * @param totalPortsofUnusedType
 	 */
-	public void setWidth(int totalPortsofUnusedType) {
-		int widthFactor=totalPortsofUnusedType;
+	public void setWidth(int totalPortsOfUnusedType) {
+		int widthFactor=totalPortsOfUnusedType;
 		this.width=100;
 		if(widthFactor > 1)
 			this.width = (widthFactor+1)*33;
@@ -668,7 +670,7 @@ public class ComponentFigure extends Figure implements Validator{
 
 	/**
 	 * 
-	 * Returns true of height of the component incremented
+	 * Returns true if height of the component incremented
 	 * 
 	 * @return
 	 */
