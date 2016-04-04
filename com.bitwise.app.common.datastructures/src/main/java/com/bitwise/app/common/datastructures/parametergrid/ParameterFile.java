@@ -15,6 +15,8 @@ package com.bitwise.app.common.datastructures.parametergrid;
 
 import java.io.Serializable;
 
+import com.bitwise.app.cloneableinterface.IDataStructure;
+
 /**
  * 
  * The class to hold parameter file with its metadata
@@ -22,7 +24,7 @@ import java.io.Serializable;
  * @author Bitwise
  *
  */
-public class ParameterFile  implements Serializable{
+public class ParameterFile  implements Serializable,IDataStructure{
 	private static final long serialVersionUID = 5403262912433893757L;
 	private String fileName;
 	private String path;
@@ -168,7 +170,7 @@ public class ParameterFile  implements Serializable{
 	}
 
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	public Object clone() {
 		ParameterFile filePath = new ParameterFile(this.fileName,this.path,this.jobSpecificFile,this.checked);
 		return filePath;
 	}
