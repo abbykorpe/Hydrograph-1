@@ -134,7 +134,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		Composite composite_2 = new Composite(container, SWT.NONE);
 		composite_2.setLayout(new GridLayout(2, false));
 		ColumnLayoutData cld_composite_2 = new ColumnLayoutData();
-		cld_composite_2.heightHint = 410;
+		cld_composite_2.heightHint = 453;
 		composite_2.setLayoutData(cld_composite_2);
 
 		createSourceTable(composite_2);
@@ -291,7 +291,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		cl_composite.maxNumColumns = 1;
 		composite.setLayout(cl_composite);
 		ColumnLayoutData cld_composite = new ColumnLayoutData();
-		cld_composite.heightHint = 28;
+		cld_composite.heightHint = 0;
 		composite.setLayoutData(cld_composite);
 
 		new Label(composite, SWT.NONE);
