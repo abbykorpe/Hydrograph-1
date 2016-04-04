@@ -85,20 +85,21 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 
 		FileInputStream fin;
 		List<FilePath> filepathList = new LinkedList<>();
-		filepathList.add(new FilePath(getComponentCanvas().getJobName().replace("job", "properties"),
-				getComponentCanvas().getParameterFile(), true, true));
+		
+		if(getComponentCanvas().getParameterFile().contains(":")){
+			filepathList.add(new FilePath(getComponentCanvas().getJobName().replace("job", "properties"),
+					getComponentCanvas().getParameterFile().replace("/", "\\"), true, true));
+		}else{
+			filepathList.add(new FilePath(getComponentCanvas().getJobName().replace("job", "properties"),
+					getComponentCanvas().getParameterFile(), true, true));
+		}
+		
 		try {
 			fin = new FileInputStream(activeProjectLocation + "\\project.metadata");
 			ObjectInputStream ois = new ObjectInputStream(fin);
 			filepathList.addAll((LinkedList<FilePath>) ois.readObject());
 		} catch (Exception exception) {
-			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.OK);
-
-			messageBox.setText("Warning");
-			messageBox.setMessage("Unable to read project.metadata file, this might be a new project");
-			messageBox.open();
-
-			logger.debug("Parameter file does not exist. Need to save job file", exception);
+			logger.debug("Unable to read project.metadata file, this might be a new project", exception);
 		}
 
 		ParameterFileDialog testDialog = new ParameterFileDialog(new Shell(), activeProjectLocation);

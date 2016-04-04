@@ -74,6 +74,7 @@ import com.bitwise.app.parametergrid.dialog.models.Parameter;
 import com.bitwise.app.parametergrid.dialog.models.ParameterWithFilePath;
 import com.bitwise.app.parametergrid.dialog.support.ParameterEditingSupport;
 import com.bitwise.app.parametergrid.utils.ParameterFileManager;
+import com.bitwise.app.parametergrid.utils.SWTResourceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -100,6 +101,7 @@ public class ParameterFileDialog extends Dialog {
 	 * Create the dialog.
 	 * 
 	 * @param parentShell
+	 * @wbp.parser.constructor
 	 */
 	public ParameterFileDialog(Shell parentShell) {
 		super(parentShell);
@@ -194,7 +196,7 @@ public class ParameterFileDialog extends Dialog {
 		parameterSearchBoxItems.clear();
 
 		for (ParameterWithFilePath parameterSearchBoxItem : parameterSearchBoxItemsFixed) {
-			if (parameterSearchBoxItem.toString().contains(text)) {
+			if (parameterSearchBoxItem.toString().toLowerCase().contains(text)) {
 				parameterSearchBoxItems.add(parameterSearchBoxItem);
 			}
 		}
@@ -219,14 +221,15 @@ public class ParameterFileDialog extends Dialog {
 		cl_composite_5.leftMargin = 0;
 		cl_composite_5.maxNumColumns = 1;
 		composite_5.setLayout(cl_composite_5);
-		GridData gd_composite_5 = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
+		GridData gd_composite_5 = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_composite_5.heightHint = 301;
-		gd_composite_5.widthHint = 496;
+		gd_composite_5.widthHint = 428;
 		composite_5.setLayoutData(gd_composite_5);
 
 		Composite composite_6 = new Composite(composite_5, SWT.NONE);
 		composite_6.setLayout(new GridLayout(2, false));
 		ColumnLayoutData cld_composite_6 = new ColumnLayoutData();
+		cld_composite_6.widthHint = 415;
 		cld_composite_6.heightHint = 33;
 		composite_6.setLayoutData(cld_composite_6);
 
@@ -243,7 +246,7 @@ public class ParameterFileDialog extends Dialog {
 				if (text_1.getText().isEmpty()) {
 					populateParameterSearchBox();
 				} else {
-					searchParameter(text_1.getText());
+					searchParameter(text_1.getText().toLowerCase());
 				}
 
 				parameterSearchTableViewer.refresh();
@@ -253,6 +256,7 @@ public class ParameterFileDialog extends Dialog {
 		Composite composite_7 = new Composite(composite_5, SWT.NONE);
 		composite_7.setLayout(new GridLayout(1, false));
 		ColumnLayoutData cld_composite_7 = new ColumnLayoutData();
+		cld_composite_7.widthHint = 413;
 		cld_composite_7.heightHint = 258;
 		composite_7.setLayoutData(cld_composite_7);
 
@@ -260,16 +264,15 @@ public class ParameterFileDialog extends Dialog {
 		Table table_1 = parameterSearchTableViewer.getTable();
 		table_1.setLinesVisible(true);
 		table_1.setHeaderVisible(true);
-		GridData gd_table_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		gd_table_1.widthHint = 456;
+		GridData gd_table_1 = new GridData(SWT.LEFT, SWT.FILL, true, true, 1, 1);
+		gd_table_1.widthHint = 404;
 		table_1.setLayoutData(gd_table_1);
 		parameterSearchTableViewer.setContentProvider(new ArrayContentProvider());
 		ColumnViewerToolTipSupport.enableFor(parameterSearchTableViewer, ToolTip.NO_RECREATE);
 
-
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(parameterSearchTableViewer, SWT.NONE);
 		TableColumn tblclmnFilePath_1 = tableViewerColumn.getColumn();
-		tblclmnFilePath_1.setWidth(195);
+		tblclmnFilePath_1.setWidth(138);
 		tblclmnFilePath_1.setText("Parameter Files");
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 
@@ -444,159 +447,25 @@ public class ParameterFileDialog extends Dialog {
 		cl_grpPropertyFileView.maxNumColumns = 1;
 		grpPropertyFileView.setLayout(cl_grpPropertyFileView);
 		ColumnLayoutData cld_grpPropertyFileView = new ColumnLayoutData();
+		cld_grpPropertyFileView.horizontalAlignment = ColumnLayoutData.LEFT;
+		cld_grpPropertyFileView.widthHint = 427;
 		cld_grpPropertyFileView.heightHint = 246;
 		grpPropertyFileView.setLayoutData(cld_grpPropertyFileView);
 		grpPropertyFileView.setText("Parameter file view");
 
-		Composite composite_3 = new Composite(grpPropertyFileView, SWT.NONE);
-		composite_3.setLayout(new GridLayout(4, false));
-		ColumnLayoutData cld_composite_3 = new ColumnLayoutData();
-		cld_composite_3.widthHint = 490;
-		cld_composite_3.heightHint = 32;
-		composite_3.setLayoutData(cld_composite_3);
-
-		Label lblFile = new Label(composite_3, SWT.NONE);
-		lblFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblFile.setText("File");
-
-		parameterFileTextBox = new Text(composite_3, SWT.BORDER);
-		GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_text.widthHint = 363;
-		parameterFileTextBox.setLayoutData(gd_text);
-
-		Button btnReload = new Button(composite_3, SWT.NONE);
-		btnReload.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				java.nio.file.Path path = Paths.get(parameterFileTextBox.getText());
-				java.nio.file.Path fileName = path.getFileName();
-
-				parameterTableViewer.setData("CURRENT_PARAM_FILE", parameterFileTextBox.getText());
-
-				if (!parameterFileTextBox.getText().isEmpty()) {
-
-					parameterFiles.add(new FilePath(fileName.toString(), path.toString(), false, false));
-
-					try {
-						ParameterFileManager parameterFileManager = new ParameterFileManager(path.toString());
-						parameterTableViewer.setData("CURRENT_PARAM_FILE", path.toString());
-						Map<String, String> parameterMap = new LinkedHashMap<>();
-						parameterMap = parameterFileManager.getParameterMap();
-						setGridData(parameters, parameterMap);
-
-						filePathTableViewer.refresh();
-						parameterTableViewer.refresh();
-						populateParameterSearchBox();
-
-					} catch (IOException ioException) {
-						MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
-
-						messageBox.setText("Error");
-						messageBox.setMessage("Unable to populate parameter file" + ioException.getMessage());
-						messageBox.open();
-						
-						logger.debug("Unable to populate parameter file" , ioException.getMessage());
-					}
-
-				}
-			}
-		});
-		btnReload.setText("Reload");
-
-		final Button browseBtn = new Button(composite_3, SWT.NONE);
-		browseBtn.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				FileDialog fileDialog = new FileDialog(browseBtn.getShell(), SWT.OPEN);
-				fileDialog.setText("Open");
-
-				if (activeProjectLocation != null) {
-					fileDialog.setFilterPath(activeProjectLocation);
-				}
-
-				String[] filterExt = { "*.properties" };
-				fileDialog.setFilterExtensions(filterExt);
-				String firstFile = fileDialog.open();
-				if (firstFile != null) {
-					parameterFileTextBox.setText(firstFile);
-					parameterFiles.add(new FilePath(fileDialog.getFileName(), firstFile, false, false));
-
-					try {
-						ParameterFileManager parameterFileManager = new ParameterFileManager(firstFile);
-						parameterTableViewer.setData("CURRENT_PARAM_FILE", firstFile);
-						Map<String, String> parameterMap = new LinkedHashMap<>();
-						parameterMap = parameterFileManager.getParameterMap();
-						setGridData(parameters, parameterMap);
-					} catch (IOException ioException) {
-						MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
-
-						messageBox.setText("Error");
-						messageBox.setMessage("Unable to populate parameter file" + ioException.getMessage());
-						messageBox.open();
-						
-						logger.debug("Unable to populate parameter file" , ioException.getMessage());
-					}
-
-					filePathTableViewer.refresh();
-					parameterTableViewer.refresh();
-					populateParameterSearchBox();
-				}
-			}
-		});
-		browseBtn.setText("Add");
-
 		Composite composite_4 = new Composite(grpPropertyFileView, SWT.NONE);
-		composite_4.setLayout(new GridLayout(2, false));
+		composite_4.setLayout(new GridLayout(1, false));
 		ColumnLayoutData cld_composite_4 = new ColumnLayoutData();
-		cld_composite_4.heightHint = 204;
+		cld_composite_4.widthHint = 402;
+		cld_composite_4.heightHint = 240;
 		composite_4.setLayoutData(cld_composite_4);
-
-		parameterTableViewer = new TableViewer(composite_4, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
-		Table table_2 = parameterTableViewer.getTable();
-		table_2.setLinesVisible(true);
-		table_2.setHeaderVisible(true);
-		GridData gd_table_2 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		gd_table_2.widthHint = 320;
-		table_2.setLayoutData(gd_table_2);
-		parameterTableViewer.setContentProvider(new ArrayContentProvider());
-
-		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(parameterTableViewer, SWT.NONE);
-		TableColumn tblclmnParameterName_1 = tableViewerColumn_3.getColumn();
-		tblclmnParameterName_1.setWidth(201);
-		tblclmnParameterName_1.setText(ParameterGridConstants.PARAMETER_NAME);
-		tableViewerColumn_3.setEditingSupport(new ParameterEditingSupport(parameterTableViewer,
-				ParameterGridConstants.PARAMETER_NAME));
-		tableViewerColumn_3.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				Parameter p = (Parameter) element;
-				return p.getParameterName();
-			}
-		});
-
-		TableViewerColumn tableViewerColumn_5 = new TableViewerColumn(parameterTableViewer, SWT.NONE);
-		TableColumn tblclmnParameterValue_1 = tableViewerColumn_5.getColumn();
-		tblclmnParameterValue_1.setWidth(208);
-		tblclmnParameterValue_1.setText(ParameterGridConstants.PARAMETER_VALUE);
-		tableViewerColumn_5.setEditingSupport(new ParameterEditingSupport(parameterTableViewer,
-				ParameterGridConstants.PARAMETER_VALUE));
-		tableViewerColumn_5.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				Parameter p = (Parameter) element;
-				return p.getParameterValue();
-			}
-		});
-
-		parameterTableViewer.setInput(parameters);
 
 		Composite composite_8 = new Composite(composite_4, SWT.NONE);
 		ColumnLayout cl_composite_8 = new ColumnLayout();
-		cl_composite_8.maxNumColumns = 1;
+		cl_composite_8.maxNumColumns = 5;
 		composite_8.setLayout(cl_composite_8);
 		GridData gd_composite_8 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_composite_8.widthHint = 63;
+		gd_composite_8.widthHint = 390;
 		composite_8.setLayoutData(gd_composite_8);
 
 		Button btnAdd_1 = new Button(composite_8, SWT.NONE);
@@ -678,6 +547,46 @@ public class ParameterFileDialog extends Dialog {
 			}
 		});
 		btnSave.setText("Save");
+
+		parameterTableViewer = new TableViewer(composite_4, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
+		Table table_2 = parameterTableViewer.getTable();
+		table_2.setLinesVisible(true);
+		table_2.setHeaderVisible(true);
+		GridData gd_table_2 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_table_2.heightHint = 188;
+		gd_table_2.widthHint = 305;
+		table_2.setLayoutData(gd_table_2);
+		parameterTableViewer.setContentProvider(new ArrayContentProvider());
+
+		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(parameterTableViewer, SWT.NONE);
+		TableColumn tblclmnParameterName_1 = tableViewerColumn_3.getColumn();
+		tblclmnParameterName_1.setWidth(206);
+		tblclmnParameterName_1.setText(ParameterGridConstants.PARAMETER_NAME);
+		tableViewerColumn_3.setEditingSupport(new ParameterEditingSupport(parameterTableViewer,
+				ParameterGridConstants.PARAMETER_NAME));
+		tableViewerColumn_3.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				Parameter p = (Parameter) element;
+				return p.getParameterName();
+			}
+		});
+
+		TableViewerColumn tableViewerColumn_5 = new TableViewerColumn(parameterTableViewer, SWT.NONE);
+		TableColumn tblclmnParameterValue_1 = tableViewerColumn_5.getColumn();
+		tblclmnParameterValue_1.setWidth(206);
+		tblclmnParameterValue_1.setText(ParameterGridConstants.PARAMETER_VALUE);
+		tableViewerColumn_5.setEditingSupport(new ParameterEditingSupport(parameterTableViewer,
+				ParameterGridConstants.PARAMETER_VALUE));
+		tableViewerColumn_5.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				Parameter p = (Parameter) element;
+				return p.getParameterValue();
+			}
+		});
+
+		parameterTableViewer.setInput(parameters);
 	}
 
 	private void saveParameters() {
@@ -707,7 +616,7 @@ public class ParameterFileDialog extends Dialog {
 		composite.setLayout(cl_composite);
 		GridData gd_composite = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
 		gd_composite.heightHint = 584;
-		gd_composite.widthHint = 505;
+		gd_composite.widthHint = 434;
 		composite.setLayoutData(gd_composite);
 		return composite;
 	}
@@ -723,7 +632,7 @@ public class ParameterFileDialog extends Dialog {
 		grpPropertyFiles.setLayout(cl_grpPropertyFiles);
 		GridData gd_grpPropertyFiles = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
 		gd_grpPropertyFiles.heightHint = 579;
-		gd_grpPropertyFiles.widthHint = 267;
+		gd_grpPropertyFiles.widthHint = 340;
 		grpPropertyFiles.setLayoutData(gd_grpPropertyFiles);
 
 		createParameterFilesTable(grpPropertyFiles);
@@ -738,10 +647,106 @@ public class ParameterFileDialog extends Dialog {
 		composite_2.setLayout(new GridLayout(1, false));
 
 		Composite composite = new Composite(composite_2, SWT.NONE);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(7, false));
 		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_composite.heightHint = 33;
 		composite.setLayoutData(gd_composite);
+
+		final Button browseBtn = new Button(composite, SWT.NONE);
+		browseBtn.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog fileDialog = new FileDialog(browseBtn.getShell(), SWT.OPEN);
+				fileDialog.setText("Open");
+
+				if (activeProjectLocation != null) {
+					fileDialog.setFilterPath(activeProjectLocation + "/globalparam");
+				}
+
+				String[] filterExt = { "*.properties" };
+				fileDialog.setFilterExtensions(filterExt);
+				String firstFile = fileDialog.open();
+				if (firstFile != null) {
+					parameterFileTextBox.setText(firstFile);
+					
+					if(isExistInParameterFileList(firstFile)){
+						MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_INFORMATION | SWT.OK);
+
+						messageBox.setText("Info");
+						messageBox.setMessage("File alredy exist");
+						messageBox.open();
+						return;
+					}
+					
+					parameterFiles.add(new FilePath(fileDialog.getFileName(), firstFile, false, false));
+
+					try {
+						ParameterFileManager parameterFileManager = new ParameterFileManager(firstFile);
+						parameterTableViewer.setData("CURRENT_PARAM_FILE", firstFile);
+						Map<String, String> parameterMap = new LinkedHashMap<>();
+						parameterMap = parameterFileManager.getParameterMap();
+						setGridData(parameters, parameterMap);
+					} catch (IOException ioException) {
+						MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+
+						messageBox.setText("Error");
+						messageBox.setMessage("Unable to populate parameter file" + ioException.getMessage());
+						messageBox.open();
+
+						logger.debug("Unable to populate parameter file", ioException.getMessage());
+					}
+
+					filePathTableViewer.refresh();
+					parameterTableViewer.refresh();
+					populateParameterSearchBox();
+				}
+			}
+		});
+		browseBtn.setText("Add");
+
+		Button btnReload = new Button(composite, SWT.NONE);
+		btnReload.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				java.nio.file.Path path = Paths.get(parameterFileTextBox.getText());
+				java.nio.file.Path fileName = path.getFileName();
+
+				if(isExistInParameterFileList(path.toString())){
+					return;
+				}
+				
+				parameterTableViewer.setData("CURRENT_PARAM_FILE", parameterFileTextBox.getText());
+
+				if (!parameterFileTextBox.getText().isEmpty()) {
+
+					parameterFiles.add(new FilePath(fileName.toString(), path.toString(), false, false));
+
+					try {
+						ParameterFileManager parameterFileManager = new ParameterFileManager(path.toString());
+						parameterTableViewer.setData("CURRENT_PARAM_FILE", path.toString());
+						Map<String, String> parameterMap = new LinkedHashMap<>();
+						parameterMap = parameterFileManager.getParameterMap();
+						setGridData(parameters, parameterMap);
+
+						filePathTableViewer.refresh();
+						parameterTableViewer.refresh();
+						populateParameterSearchBox();
+
+					} catch (IOException ioException) {
+						MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+
+						messageBox.setText("Error");
+						messageBox.setMessage("Unable to populate parameter file" + ioException.getMessage());
+						messageBox.open();
+
+						logger.debug("Unable to populate parameter file", ioException.getMessage());
+					}
+
+				}
+			}
+		});
+		btnReload.setText("Reload");
 
 		Button btnUp_1 = new Button(composite, SWT.NONE);
 		btnUp_1.addSelectionListener(new SelectionAdapter() {
@@ -778,11 +783,28 @@ public class ParameterFileDialog extends Dialog {
 			}
 		});
 		btnDown_1.setText("Down");
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
 
 		Link link = new Link(composite, SWT.NONE);
 		link.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		link.setText("<a>Help</a>");
 		link.setToolTipText("Only the check files will be considered while executing job\nand will be passed to job in same sequence as they are in grid");
+
+		Composite composite_3 = new Composite(composite_2, SWT.NONE);
+		GridData gd_composite_3 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_composite_3.widthHint = 326;
+		composite_3.setLayoutData(gd_composite_3);
+		composite_3.setLayout(new GridLayout(2, false));
+
+		Label lblFile = new Label(composite_3, SWT.NONE);
+		lblFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblFile.setText("File");
+
+		parameterFileTextBox = new Text(composite_3, SWT.BORDER);
+		GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_text.widthHint = 363;
+		parameterFileTextBox.setLayoutData(gd_text);
 		filePathTableViewer = CheckboxTableViewer.newCheckList(composite_2, SWT.BORDER | SWT.FULL_SELECTION | SWT.CHECK
 				| SWT.MULTI);
 		Table table = filePathTableViewer.getTable();
@@ -845,7 +867,7 @@ public class ParameterFileDialog extends Dialog {
 
 		final TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(filePathTableViewer, SWT.NONE);
 		TableColumn tblclmnFilePath = tableViewerColumn_4.getColumn();
-		tblclmnFilePath.setWidth(249);
+		tblclmnFilePath.setWidth(333);
 		tblclmnFilePath.setText("Parameter Files");
 		tableViewerColumn_4.getColumn().setImage(uncheckAllImage);
 
@@ -922,6 +944,8 @@ public class ParameterFileDialog extends Dialog {
 		composite_1.setLayoutData(gd_composite_1);
 
 		final Label lblDrop = new Label(composite_1, SWT.BORDER | SWT.SHADOW_NONE | SWT.CENTER);
+		lblDrop.setForeground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		lblDrop.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
 		lblDrop.setAlignment(SWT.CENTER);
 		lblDrop.setText("\nDrop parameter file here to delete");
 
@@ -938,6 +962,12 @@ public class ParameterFileDialog extends Dialog {
 
 				if (jobSpecificFile != null && filesToRemove.contains(jobSpecificFile)) {
 					filesToRemove.remove(jobSpecificFile);
+					
+					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_INFORMATION | SWT.OK);
+
+					messageBox.setText("Info");
+					messageBox.setMessage("Could not remove job specific file");
+					messageBox.open();
 				}
 
 				parameterFiles.removeAll(filesToRemove);
@@ -947,6 +977,15 @@ public class ParameterFileDialog extends Dialog {
 			}
 		});
 
+	}
+
+	protected boolean isExistInParameterFileList(String firstFile) {
+		for(FilePath file: parameterFiles){
+			if(firstFile.equals(file.getPath())){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -989,7 +1028,9 @@ public class ParameterFileDialog extends Dialog {
 		List<FilePath> tempParameterFiles = new LinkedList<>();
 		tempParameterFiles.addAll(parameterFiles);
 
-		try {
+		saveParameters();
+		
+		try {	
 			FileOutputStream fout;
 			fout = new FileOutputStream(this.activeProjectLocation + "\\project.metadata");
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
@@ -999,14 +1040,14 @@ public class ParameterFileDialog extends Dialog {
 			fout.close();
 		} catch (FileNotFoundException fileNotFoundException) {
 			runGraph = false;
-			
+
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 
 			messageBox.setText("Error");
 			messageBox.setMessage("Unable to write project metadata file" + fileNotFoundException.getMessage());
 			messageBox.open();
-			
-			logger.debug("Unable to write project metadata file" , fileNotFoundException.getMessage());
+
+			logger.debug("Unable to write project metadata file", fileNotFoundException.getMessage());
 			fileNotFoundException.printStackTrace();
 		} catch (IOException ioException) {
 			runGraph = false;
@@ -1015,8 +1056,8 @@ public class ParameterFileDialog extends Dialog {
 			messageBox.setText("Error");
 			messageBox.setMessage("Unable to write project metadata file" + ioException.getMessage());
 			messageBox.open();
-			
-			logger.debug("Unable to write project metadata file" , ioException.getMessage());
+
+			logger.debug("Unable to write project metadata file", ioException.getMessage());
 			ioException.printStackTrace();
 		}
 		runGraph = true;
@@ -1043,7 +1084,7 @@ public class ParameterFileDialog extends Dialog {
 				activeParameterFiles = activeParameterFiles + parameterFile.getPath() + ",";
 			}
 		}
-		if(activeParameterFiles.length() != 0)
+		if (activeParameterFiles.length() != 0)
 			return activeParameterFiles.substring(0, activeParameterFiles.length() - 1);
 		else
 			return activeParameterFiles;
