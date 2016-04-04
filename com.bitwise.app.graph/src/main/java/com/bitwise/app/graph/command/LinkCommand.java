@@ -140,7 +140,7 @@ public class LinkCommand extends Command{
 	@Override
 	public void execute() {
 
-		if(source!=null){
+		if(source!=null && target!=null){
 
 			connection.setSource(source);
 			connection.setSourceTerminal(sourceTerminal);

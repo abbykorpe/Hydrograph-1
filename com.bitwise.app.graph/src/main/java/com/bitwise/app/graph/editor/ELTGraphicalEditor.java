@@ -109,7 +109,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.commands.ActionHandler;
+import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
@@ -181,7 +181,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private Container container;
 	private final Point defaultComponentLocation = new Point(0, 0);
 
-	public GraphicalViewer viewer;
+	private GraphicalViewer viewer;
 
 	private ComponentTooltip componentTooltip;
 	private Rectangle toolTipComponentBounds;
@@ -234,6 +234,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		viewer.addSelectionChangedListener(createISelectionChangedListener());
 		attachCanvasMouseListeners();
 		setDefaultToolUndoRedoStatus();
+		
 	}
 
 	private void hideToolTip(){
@@ -1540,5 +1541,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	    getGraphicalViewer().setKeyHandler(keyHandler);
 
 	  }
+
+	public GraphicalViewer getViewer() {
+		return viewer;
+	}
 	
 }

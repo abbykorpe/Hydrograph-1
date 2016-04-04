@@ -220,15 +220,16 @@ public class SubGraphAction extends SelectionAction{
 		 * Generate subgraph target xml.
 		 */
 		subGraphUtility.createSubGraphXml(componentEditPart,clipboardList,file);
-		finishSubgraphCreation(subGraphUtility,subgraphComponent,componentEditPart);
+		finishSubgraphCreation(subgraphComponent,componentEditPart);
 		}
 	}
 
 	
-	private void finishSubgraphCreation(SubGraphUtility subGraphUtility,Component subgraphComponent, ComponentEditPart componentEditPart) {
+	private void finishSubgraphCreation(Component subgraphComponent, ComponentEditPart componentEditPart) {
 		subgraphComponent.getProperties().put(Constants.SUBGRAPH_VERSION,1);
-		subGraphUtility.getCurrentEditor().setDirty(true);
+		SubGraphUtility.getCurrentEditor().setDirty(true);
 		componentEditPart.updateComponentStatus();
+		SubGraphUtility.getCurrentEditor().getViewer().select(componentEditPart);
 	}
 
 	private boolean notConfirmedByUser() {

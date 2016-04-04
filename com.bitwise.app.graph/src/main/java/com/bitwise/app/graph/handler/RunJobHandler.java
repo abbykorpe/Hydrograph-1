@@ -19,6 +19,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.ui.PlatformUI;
 
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
+import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 import com.bitwise.app.graph.job.Job;
 import com.bitwise.app.graph.job.JobManager;
 import com.bitwise.app.graph.job.RunStopButtonCommunicator;
@@ -66,6 +67,7 @@ public class RunJobHandler extends AbstractHandler {
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) {
+		((ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()).getViewer().deselectAll();
 		String consoleName= getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
 		String canvasName = consoleName;
 		String localJobID = consoleName;

@@ -33,13 +33,13 @@ import javax.xml.validation.Validator;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.datastructure.property.FixedWidthGridRow;
 import com.bitwise.app.common.datastructure.property.GenerateRecordSchemaGridRow;
 import com.bitwise.app.common.datastructure.property.GridRow;
-import com.bitwise.app.common.datastructure.property.BasicSchemaGridRow;
 import com.bitwise.app.common.schema.Field;
 import com.bitwise.app.common.schema.FieldDataTypes;
 import com.bitwise.app.common.schema.Fields;
@@ -135,18 +135,18 @@ public class GridRowLoader {
 
 		} catch (JAXBException e1) {
 			grids.clear();
-			MessageDialog.openError(new Shell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + " -\n"+e1.getMessage());
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + " -\n"+e1.getMessage());
 			logger.error(Messages.IMPORT_XML_FORMAT_ERROR);
 			return null;
 		}catch (DuplicateFieldException e1) {
 			grids.clear();
-			MessageDialog.openError(new Shell(), "Error", e1.getMessage());
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", e1.getMessage());
 			logger.error(e1.getMessage());
 			return null;
 		}
 		catch (Exception e) {
 			grids.clear();
-			MessageDialog.openError(new Shell(), "Error", Messages.IMPORT_XML_ERROR+" -\n"+e.getMessage());
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.IMPORT_XML_ERROR+" -\n"+e.getMessage());
 			logger.error(Messages.IMPORT_XML_ERROR);
 			return null;
 		}
@@ -283,7 +283,7 @@ public class GridRowLoader {
 				}
 				schema.setFields(fields);
 				jaxbMarshaller.marshal(schema, schemaFile);
-				MessageDialog.openInformation(new Shell(), "Information", Messages.EXPORTED_SCHEMA);
+				MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.EXPORTED_SCHEMA);
 				
 			}else{
 				
@@ -292,10 +292,10 @@ public class GridRowLoader {
 			}
 
 		} catch (JAXBException e) {
-			MessageDialog.openError(new Shell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"+e.getMessage());
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"+e.getMessage());
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}catch (Exception e) {
-			MessageDialog.openError(new Shell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"+e.getMessage());
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"+e.getMessage());
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}
 
@@ -369,7 +369,7 @@ public class GridRowLoader {
 		}
 		catch(Exception ex)
 		{
-			MessageDialog.openError(new Shell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + "-\n" + ex.getMessage());
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + "-\n" + ex.getMessage());
 			logger.error(Messages.IMPORT_XML_FORMAT_ERROR);
 			return false;
 		}
