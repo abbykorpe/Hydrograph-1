@@ -201,7 +201,8 @@
             </command>
             <command
                   commandId="org.eclipse.ui.edit.copy"
-                  icon="resources/icons/copy_o.png"
+                  disabledIcon="resources/icons/disable_copy_icon.png"
+                  icon="resources/icons/enable_copy_icon.png"
                   label="Copy"
                   style="push">
             </command>

@@ -134,7 +134,7 @@ public class RuntimePropertyDialog extends Dialog {
 		Composite composite_2 = new Composite(container, SWT.NONE);
 		composite_2.setLayout(new GridLayout(1, false));
 		ColumnLayoutData cld_composite_2 = new ColumnLayoutData();
-		cld_composite_2.heightHint = 336;
+		cld_composite_2.heightHint = 453;
 		composite_2.setLayoutData(cld_composite_2);
 
 		createTable(composite_2);
@@ -148,10 +148,13 @@ public class RuntimePropertyDialog extends Dialog {
 		Composite composite_3 = new Composite(container, SWT.NONE);
 		composite_3.setLayout(new ColumnLayout());
 		ColumnLayoutData cld_composite_3 = new ColumnLayoutData();
-		cld_composite_3.heightHint = 25;
+		cld_composite_3.heightHint = 19;
 		composite_3.setLayoutData(cld_composite_3);
 
 		lblPropertyError = new Label(composite_3, SWT.NONE);
+		ColumnLayoutData cld_lblPropertyError = new ColumnLayoutData();
+		cld_lblPropertyError.heightHint = 25;
+		lblPropertyError.setLayoutData(cld_lblPropertyError);
 		lblPropertyError.setVisible(false);
 		lblPropertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
 	}
@@ -355,7 +358,7 @@ public class RuntimePropertyDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(497, 499);
+		return new Point(646, 587);
 	}
 
 	// Add New Property After Validating old properties
@@ -422,6 +425,7 @@ public class RuntimePropertyDialog extends Dialog {
 		tableViewer = new TableViewer(composite, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
 		table = tableViewer.getTable();
 		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_table.heightHint = 422;
 		gd_table.widthHint = 431;
 		table.setLayoutData(gd_table);
 
@@ -473,7 +477,7 @@ public class RuntimePropertyDialog extends Dialog {
 			table.getColumn(i).pack();
 		}
 		column1.setWidth(230);
-		column2.setWidth(236);
+		column2.setWidth(386);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 

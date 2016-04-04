@@ -242,7 +242,7 @@ public class FieldDialog extends Dialog {
 		Composite tableComposite = new Composite(container, SWT.NONE);
 		tableComposite.setLayout(new GridLayout(2, false));
 		ColumnLayoutData cld_composite_2 = new ColumnLayoutData();
-		cld_composite_2.heightHint = 355;
+		cld_composite_2.heightHint = 453;
 		tableComposite.setLayoutData(cld_composite_2);
 
 		createSourceTable(tableComposite);
@@ -255,10 +255,13 @@ public class FieldDialog extends Dialog {
 		Composite composite_3 = new Composite(container, SWT.NONE);
 		composite_3.setLayout(new ColumnLayout());
 		ColumnLayoutData cld_composite_3 = new ColumnLayoutData();
-		cld_composite_3.heightHint = 25;
+		cld_composite_3.heightHint = 72;
 		composite_3.setLayoutData(cld_composite_3);
 
 		lblPropertyError = new Label(composite_3, SWT.NONE);
+		ColumnLayoutData cld_lblPropertyError = new ColumnLayoutData();
+		cld_lblPropertyError.heightHint = 24;
+		lblPropertyError.setLayoutData(cld_lblPropertyError);
 		lblPropertyError.setVisible(false);
 		lblPropertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
 	}
@@ -456,13 +459,14 @@ public class FieldDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(550, 522);
+		return new Point(646, 587);
 	}
 
 	private void createTargetTable(Composite container) {
 		targetTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI);
 		targetTable = targetTableViewer.getTable();
 		GridData gd_table_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_table_1.heightHint = 449;
 		gd_table_1.widthHint = 285;
 		targetTable.setLayoutData(gd_table_1);
 
@@ -504,7 +508,7 @@ public class FieldDialog extends Dialog {
 
 		TableColumn targetTableColumn = new TableColumn(targetTable, SWT.CENTER);
 		targetTableColumn.setText("Field Name");
-		targetTableColumn.setWidth(304);
+		targetTableColumn.setWidth(352);
 		targetTable.setHeaderVisible(true);
 		targetTable.setLinesVisible(true);
 
@@ -558,12 +562,13 @@ public class FieldDialog extends Dialog {
 		sourceTable.setLinesVisible(true);
 		sourceTable.setHeaderVisible(true);
 		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_table.heightHint = 437;
 		gd_table.widthHint = 189;
 		sourceTable.setLayoutData(gd_table);
 
 		tableViewerColumn = new TableViewerColumn(sourceTableViewer, SWT.NONE);
 		sourceTableColumn = tableViewerColumn.getColumn();
-		sourceTableColumn.setWidth(207);
+		sourceTableColumn.setWidth(255);
 		sourceTableColumn.setText(Messages.AVAILABLE_FIELDS_HEADER);
 		getSourceFieldsFromPropagatedSchema(sourceTable);
 		dragSource = new DragSource(sourceTable, DND.DROP_MOVE);
