@@ -66,10 +66,22 @@ public class ComponentDeleteCommand extends Command {
 
 	}
 
+	/**
+	 * 
+	 * Add component to delete in selected component list
+	 * 
+	 * @param node
+	 */
 	public void addComponentToDelete(Component node){
 		selectedComponents.add(node);
 	}
 
+	/**
+	 * 
+	 * returns false if selected component list is empty
+	 * 
+	 * @return boolean
+	 */
 	public boolean hasComponentToDelete(){
 		return !selectedComponents.isEmpty();
 	}

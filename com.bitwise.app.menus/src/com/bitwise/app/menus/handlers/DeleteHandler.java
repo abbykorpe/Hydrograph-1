@@ -23,14 +23,21 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.bitwise.app.graph.editor.ELTGraphicalEditor;
 
+/**
+ * 
+ * Handler to delete component on canvas 
+ *
+ */
 public class DeleteHandler extends AbstractHandler implements IHandler{
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		if(editor instanceof ELTGraphicalEditor)((ELTGraphicalEditor)editor).deleteSelection();
-		
-		
-		return null;
+		if (editor instanceof ELTGraphicalEditor) {
+			((ELTGraphicalEditor) editor).deleteSelection();
+			((ELTGraphicalEditor) editor).hideToolTip();
 		}
+
+		return null;
+	}
 }

@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.ConnectionAnchor;
@@ -52,16 +51,17 @@ import org.slf4j.Logger;
 import com.bitwise.app.common.component.config.PortSpecification;
 import com.bitwise.app.common.datastructures.tooltip.PropertyToolTipInformation;
 import com.bitwise.app.common.interfaces.tooltip.ComponentCanvas;
-import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.common.util.Constants;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.graph.model.Component.ValidityStatus;
+import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.tooltip.tooltips.ComponentTooltip;
 
 /**
  * The Class ComponentFigure.
  * 
  * @author Bitwise
+ *  
  */
 public class ComponentFigure extends Figure implements Validator{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ComponentFigure.class);
@@ -187,30 +187,67 @@ public class ComponentFigure extends Figure implements Validator{
 
 	}
 
+	/**
+	 * 
+	 * Set component height
+	 * 
+	 * @param totalPortsofInType
+	 * @param totalPortsOfOutType
+	 */
 	public void setHeight(int totalPortsofInType, int totalPortsOfOutType) {
 		int heightFactor=totalPortsofInType > totalPortsOfOutType ? totalPortsofInType : totalPortsOfOutType;
 		this.height = (heightFactor+1)*25;
 	}
 
+	/**
+	 * 
+	 * Get component Height
+	 * 
+	 * @return int
+	 */
 	public int getHeight() {
 		return height;
 	}
 
-	public void setWidth(int totalPortsofUnusedType) {
-		int widthFactor=totalPortsofUnusedType;
+	/**
+	 * 
+	 * Set component width
+	 * 
+	 * @param totalPortsofUnusedType
+	 */
+	public void setWidth(int totalPortsOfUnusedType) {
+		int widthFactor=totalPortsOfUnusedType;
 		this.width=100;
 		if(widthFactor > 1)
 			this.width = (widthFactor+1)*33;
 	}
 
+	/**
+	 * 
+	 * Get component width
+	 * 
+	 * @return
+	 */
 	public int getWidth(){
 		return width;
 	}
 
+	/**
+	 * 
+	 * Get component border color
+	 * 
+	 * @return {@link Color}
+	 */
 	public Color getBorderColor() {
 		return borderColor;
 	}
 
+	/**
+	 * 
+	 * Set component border color
+	 * 
+	 * @param borderColor
+	 */
 	public void setBorderColor(Color borderColor) {
 		this.borderColor = borderColor;
 	}
@@ -231,6 +268,12 @@ public class ComponentFigure extends Figure implements Validator{
 		componentCanvas=null;
 	}
 
+	/**
+	 * 
+	 * Set tooltip information
+	 * 
+	 * @param propertyToolTipInformation
+	 */
 	public void setPropertyToolTipInformation(Map<String,PropertyToolTipInformation> propertyToolTipInformation){
 		this.propertyToolTipInformation = propertyToolTipInformation;
 	}
@@ -270,6 +313,9 @@ public class ComponentFigure extends Figure implements Validator{
 	private void showStatusToolTip(
 			org.eclipse.swt.graphics.Point location) {
 
+		if(!componentCanvas.isFocused())
+			return;
+		
 		componentCanvas = getComponentCanvas();
 		if(componentCanvas.getComponentTooltip() == null){
 			componentToolTip = getStatusToolTip(componentCanvas.getCanvasControl().getShell(), location);
@@ -453,8 +499,12 @@ public class ComponentFigure extends Figure implements Validator{
 		});
 	}
 
-
-
+	/**
+	 * 
+	 * Set connection anchor
+	 * 
+	 * @param fCAnchor
+	 */
 	public void setAnchors(FixedConnectionAnchor fCAnchor) {
 		connectionAnchors.put(fCAnchor.getType()+fCAnchor.getSequence(), fCAnchor);
 		if(("out").equalsIgnoreCase(fCAnchor.getType()) || ("unused").equalsIgnoreCase(fCAnchor.getType()))
@@ -463,6 +513,12 @@ public class ComponentFigure extends Figure implements Validator{
 			inputConnectionAnchors.add(fCAnchor);
 	}
 
+	/**
+	 * 
+	 * Decrement anchors
+	 * 
+	 * @param portsToBeRemoved
+	 */
 	public void decrementAnchors(List<String> portsToBeRemoved){
 
 		for(String portRemove: portsToBeRemoved){
@@ -612,21 +668,51 @@ public class ComponentFigure extends Figure implements Validator{
 		this.status = status;
 	}
 
+	/**
+	 * 
+	 * Returns true if height of the component incremented
+	 * 
+	 * @return
+	 */
 	public boolean isIncrementedHeight() {
 		return incrementedHeight;
 	}
 
+	/**
+	 * 
+	 * Set incremented height
+	 * 
+	 * @param incrementedHeight
+	 */
 	public void setIncrementedHeight(boolean incrementedHeight) {
 		this.incrementedHeight = incrementedHeight;
 	}
+	
+	/**
+	 * 
+	 * Get component label margin
+	 * 
+	 * @return
+	 */
 	public int getComponentLabelMargin() {
 		return componentLabelMargin;
 	}
 
+	/**
+	 * 
+	 * Set component label margin 
+	 * 
+	 * @param componentLabelMargin
+	 */
 	public void setComponentLabelMargin(int componentLabelMargin) {
 		this.componentLabelMargin = componentLabelMargin;
 	}
 
+	/**
+	 * 
+	 * terminate tooltip timer
+	 * 
+	 */
 	public void terminateToolTipTimer() {
 		if(display != null && timer != null){
 			display.timerExec(-1,timer);

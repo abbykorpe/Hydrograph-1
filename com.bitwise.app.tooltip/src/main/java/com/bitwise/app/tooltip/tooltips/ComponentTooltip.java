@@ -648,4 +648,18 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 	public void dispose() {
 		super.dispose();
 	}
+	
+	/**
+	 * 
+	 * Returns true if it is toolbar tooltip
+	 * 
+	 * @return boolean
+	 */
+	public boolean isToolBarToolTip(){
+		if(toolBarManager==null){
+			return false;
+		}else{
+			return true;
+		}
+	}
 }

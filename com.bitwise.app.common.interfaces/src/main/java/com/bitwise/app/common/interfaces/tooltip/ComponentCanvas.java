@@ -18,9 +18,42 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Control;
 
 import com.bitwise.app.tooltip.tooltips.ComponentTooltip;
-
+/**
+ * 
+ * Component canvas.
+ *
+ */
 public interface ComponentCanvas {
+	/**
+	 * 
+	 * Returns Canvas control
+	 * 
+	 * @return {@link Control}
+	 */
 	public Control getCanvasControl();
+	
+	/**
+	 * 
+	 * Provide tooltip objects for figures which will be drawn on canvas
+	 * 
+	 * @param componentTooltip
+	 * @param componentBounds
+	 */
 	public void issueToolTip(ComponentTooltip componentTooltip,Rectangle componentBounds);
+	
+	/**
+	 * 
+	 * Get component tooltip
+	 * 
+	 * @return @{link ComponentTooltip}
+	 */
 	public ComponentTooltip getComponentTooltip();
+	
+	/**
+	 * 
+	 * returns true if canvas is focused
+	 * 
+	 * @return boolean
+	 */
+	public boolean isFocused();
 }
