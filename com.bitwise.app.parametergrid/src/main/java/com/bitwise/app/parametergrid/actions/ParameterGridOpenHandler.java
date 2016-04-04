@@ -14,8 +14,6 @@
 package com.bitwise.app.parametergrid.actions;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,10 +30,13 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.datastructures.parametergrid.FilePath;
+import com.bitwise.app.common.datastructures.parametergrid.ParameterFile;
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.logging.factory.LogFactory;
-import com.bitwise.app.parametergrid.dialog.ParameterFileDialog;
+import com.bitwise.app.parametergrid.constants.ErrorMessages;
+import com.bitwise.app.parametergrid.constants.MessageType;
+import com.bitwise.app.parametergrid.constants.MultiParameterFileDialogConstants;
+import com.bitwise.app.parametergrid.dialog.MultiParameterFileDialog;
 
 /**
  * 
@@ -67,46 +68,58 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 		if (getComponentCanvas().getParameterFile() == null) {
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 
-			messageBox.setText("Error");
-			messageBox.setMessage("Could not open parameter grid. \nPlease save the job file.");
+			messageBox.setText(MessageType.ERROR.messageType());
+			messageBox.setMessage(ErrorMessages.SAVE_JOB_BEFORE_OPENING_PARAM_GRID);
 			messageBox.open();
 
-			logger.debug("Parameter file does not exist. Need to save job file");
+			logger.debug(ErrorMessages.SAVE_JOB_BEFORE_OPENING_PARAM_GRID);
 			return null;
 		}
 
+		String activeProjectLocation = getActiveProjectLocation();
+
+		List<ParameterFile> parameterFileList = getParameterFileList(activeProjectLocation);
+
+		MultiParameterFileDialog parameterFileDialog = new MultiParameterFileDialog(new Shell(), activeProjectLocation);
+		parameterFileDialog.setParameterFiles(parameterFileList);
+		parameterFileDialog.open();
+
+		return null;
+	}
+
+	private List<ParameterFile> getParameterFileList(String activeProjectLocation) {
+		FileInputStream fileInputStream;
+		List<ParameterFile> parameterFileList = new LinkedList<>();
+
+		updateParameterFileListWithJobSpecificFile(parameterFileList);
+
+		try {
+			fileInputStream = new FileInputStream(activeProjectLocation + MultiParameterFileDialogConstants.PROJECT_METADATA_FILE);
+			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+			parameterFileList.addAll((LinkedList<ParameterFile>) objectInputStream.readObject());
+		} catch (Exception exception) {
+			logger.debug("Unable to read project.metadata file, this might be a new project", exception);
+		}
+		return parameterFileList;
+	}
+
+	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList) {
+		if (getComponentCanvas().getParameterFile().contains(":")) {
+			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),
+					getComponentCanvas().getParameterFile().replace("/", "\\"), true, true));
+		} else {
+			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),
+					getComponentCanvas().getParameterFile(), true, true));
+		}
+	}
+
+	private String getActiveProjectLocation() {
 		IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActivePart();
 		IFile file = (IFile) workbenchPart.getSite().getPage().getActiveEditor().getEditorInput()
 				.getAdapter(IFile.class);
 		IProject project = file.getProject();
 		String activeProjectLocation = project.getLocation().toOSString();
-		System.out.println("path: " + project.getLocation().toOSString());
-
-		FileInputStream fin;
-		List<FilePath> filepathList = new LinkedList<>();
-		
-		if(getComponentCanvas().getParameterFile().contains(":")){
-			filepathList.add(new FilePath(getComponentCanvas().getJobName().replace("job", "properties"),
-					getComponentCanvas().getParameterFile().replace("/", "\\"), true, true));
-		}else{
-			filepathList.add(new FilePath(getComponentCanvas().getJobName().replace("job", "properties"),
-					getComponentCanvas().getParameterFile(), true, true));
-		}
-		
-		try {
-			fin = new FileInputStream(activeProjectLocation + "\\project.metadata");
-			ObjectInputStream ois = new ObjectInputStream(fin);
-			filepathList.addAll((LinkedList<FilePath>) ois.readObject());
-		} catch (Exception exception) {
-			logger.debug("Unable to read project.metadata file, this might be a new project", exception);
-		}
-
-		ParameterFileDialog testDialog = new ParameterFileDialog(new Shell(), activeProjectLocation);
-		testDialog.setParameterFiles(filepathList);
-		testDialog.open();
-
-		
-		return null;
+		return activeProjectLocation;
 	}
 }

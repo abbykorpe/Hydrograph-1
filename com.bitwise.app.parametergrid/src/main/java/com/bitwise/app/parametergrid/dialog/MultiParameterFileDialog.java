@@ -1,3 +1,16 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package com.bitwise.app.parametergrid.dialog;
 
 import java.io.FileNotFoundException;
@@ -66,10 +79,12 @@ import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.datastructures.parametergrid.FilePath;
+import com.bitwise.app.common.datastructures.parametergrid.ParameterFile;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.logging.factory.LogFactory;
-import com.bitwise.app.parametergrid.constants.ParameterGridConstants;
+import com.bitwise.app.parametergrid.constants.ErrorMessages;
+import com.bitwise.app.parametergrid.constants.MessageType;
+import com.bitwise.app.parametergrid.constants.MultiParameterFileDialogConstants;
 import com.bitwise.app.parametergrid.dialog.models.Parameter;
 import com.bitwise.app.parametergrid.dialog.models.ParameterWithFilePath;
 import com.bitwise.app.parametergrid.dialog.support.ParameterEditingSupport;
@@ -78,15 +93,22 @@ import com.bitwise.app.parametergrid.utils.SWTResourceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class ParameterFileDialog extends Dialog {
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(ParameterFileDialog.class);
+/**
+ * 
+ * UI for multi parameter file dialog
+ * 
+ * @author Bitwise
+ * 
+ */
+public class MultiParameterFileDialog extends Dialog {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(MultiParameterFileDialog.class);
 
 	private CheckboxTableViewer filePathTableViewer;
 	private TableViewer parameterTableViewer;
 	private TableViewer parameterSearchTableViewer;
 	private Text parameterFileTextBox;
 
-	private List<FilePath> parameterFiles;
+	private List<ParameterFile> parameterFiles;
 	private List<Parameter> parameters;
 	private List<ParameterWithFilePath> parameterSearchBoxItems;
 	private List<ParameterWithFilePath> parameterSearchBoxItemsFixed;
@@ -94,16 +116,20 @@ public class ParameterFileDialog extends Dialog {
 	private Image uncheckAllImage;
 	private boolean selectAllFiles = true;
 	private String activeProjectLocation;
-
+	
+	private final String HELP_LINK_TOOLTIP_TEXT="Only the check files will be considered while executing job\nand will be passed to job in same sequence as they are in grid";
 	private boolean runGraph;
-
+	
+	private static final String DROP_BOX_TEXT = "\nDrop parameter file here to delete";
+	private boolean okPressed;
+	
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param parentShell
 	 * @wbp.parser.constructor
 	 */
-	public ParameterFileDialog(Shell parentShell) {
+	public MultiParameterFileDialog(Shell parentShell) {
 		super(parentShell);
 		if (parameterFiles == null)
 			parameterFiles = new LinkedList<>();
@@ -120,7 +146,7 @@ public class ParameterFileDialog extends Dialog {
 	 * 
 	 * @param parentShell
 	 */
-	public ParameterFileDialog(Shell parentShell, String activeProjectLocation) {
+	public MultiParameterFileDialog(Shell parentShell, String activeProjectLocation) {
 		super(parentShell);
 		if (parameterFiles == null)
 			parameterFiles = new LinkedList<>();
@@ -149,7 +175,7 @@ public class ParameterFileDialog extends Dialog {
 
 		Composite composite = createParameterFileViewOuterComposite(container);
 		createViewParameterFileBox(composite);
-		FilePath jobSpecificFile = getJobSpecificFile();
+		ParameterFile jobSpecificFile = getJobSpecificFile();
 		if (jobSpecificFile != null)
 			populateViewParameterFileBox(jobSpecificFile);
 
@@ -158,9 +184,9 @@ public class ParameterFileDialog extends Dialog {
 		return container;
 	}
 
-	private FilePath getJobSpecificFile() {
-		FilePath jobSpecificFile = null;
-		for (FilePath filePath : parameterFiles) {
+	private ParameterFile getJobSpecificFile() {
+		ParameterFile jobSpecificFile = null;
+		for (ParameterFile filePath : parameterFiles) {
 			if (filePath.isJobSpecificFile()) {
 				jobSpecificFile = filePath;
 				break;
@@ -169,7 +195,7 @@ public class ParameterFileDialog extends Dialog {
 		return jobSpecificFile;
 	}
 
-	private void populateViewParameterFileBox(FilePath file) {
+	private void populateViewParameterFileBox(ParameterFile file) {
 		parameterFileTextBox.setText(file.getPath());
 		try {
 			ParameterFileManager parameterFileManager = new ParameterFileManager(file.getPath());
@@ -181,8 +207,8 @@ public class ParameterFileDialog extends Dialog {
 
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 
-			messageBox.setText("Error");
-			messageBox.setMessage("Unable to populate parameter file" + ioException.getMessage());
+			messageBox.setText(MessageType.ERROR.messageType());
+			messageBox.setMessage(ErrorMessages.UNABLE_TO_POPULATE_PARAM_FILE + ioException.getMessage());
 			messageBox.open();
 
 			logger.debug("Unable to populate parameter file", ioException);
@@ -273,15 +299,17 @@ public class ParameterFileDialog extends Dialog {
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(parameterSearchTableViewer, SWT.NONE);
 		TableColumn tblclmnFilePath_1 = tableViewerColumn.getColumn();
 		tblclmnFilePath_1.setWidth(138);
-		tblclmnFilePath_1.setText("Parameter Files");
+		tblclmnFilePath_1.setText(MultiParameterFileDialogConstants.TABLE_COLUMN_LIST_OF_PARAMETER_FILES);
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 
 			@Override
 			public String getToolTipText(Object element) {
-				String tooltip = "ParameterFile: "
-						+ ((ParameterWithFilePath) element).getFilePath().getFilePathViewString() + "\n "
-						+ "ParameterName: " + ((ParameterWithFilePath) element).getParameterName() + "\n "
-						+ "ParameterValue: " + ((ParameterWithFilePath) element).getParameterValue();
+				String tooltip = MultiParameterFileDialogConstants.PARAMETER_FILE + ": "
+						+ ((ParameterWithFilePath) element).getParameterFile().getFilePathViewString() + "\n "
+						+ MultiParameterFileDialogConstants.PARAMETER_NAME + ": "
+						+ ((ParameterWithFilePath) element).getParameterName() + "\n "
+						+ MultiParameterFileDialogConstants.PARAMETER_VALUE + ": "
+						+ ((ParameterWithFilePath) element).getParameterValue();
 				return tooltip;
 			}
 
@@ -308,22 +336,24 @@ public class ParameterFileDialog extends Dialog {
 			@Override
 			public String getText(Object element) {
 				ParameterWithFilePath p = (ParameterWithFilePath) element;
-				return p.getFilePath().getFilePathViewString();
+				return p.getParameterFile().getFilePathViewString();
 			}
 		});
 
 		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(parameterSearchTableViewer, SWT.NONE);
 		TableColumn tblclmnParameterName = tableViewerColumn_1.getColumn();
 		tblclmnParameterName.setWidth(140);
-		tblclmnParameterName.setText("Parameter Name");
+		tblclmnParameterName.setText(MultiParameterFileDialogConstants.PARAMETER_NAME);
 		tableViewerColumn_1.setLabelProvider(new ColumnLabelProvider() {
 
 			@Override
 			public String getToolTipText(Object element) {
-				String tooltip = "ParameterFile: "
-						+ ((ParameterWithFilePath) element).getFilePath().getFilePathViewString() + "\n "
-						+ "ParameterName: " + ((ParameterWithFilePath) element).getParameterName() + "\n "
-						+ "ParameterValue: " + ((ParameterWithFilePath) element).getParameterValue();
+				String tooltip = MultiParameterFileDialogConstants.PARAMETER_FILE + ": "
+						+ ((ParameterWithFilePath) element).getParameterFile().getFilePathViewString() + "\n "
+						+ MultiParameterFileDialogConstants.PARAMETER_NAME + ": "
+						+ ((ParameterWithFilePath) element).getParameterName() + "\n "
+						+ MultiParameterFileDialogConstants.PARAMETER_VALUE + ": "
+						+ ((ParameterWithFilePath) element).getParameterValue();
 				return tooltip;
 			}
 
@@ -357,15 +387,17 @@ public class ParameterFileDialog extends Dialog {
 		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(parameterSearchTableViewer, SWT.NONE);
 		TableColumn tblclmnParameterValue = tableViewerColumn_2.getColumn();
 		tblclmnParameterValue.setWidth(140);
-		tblclmnParameterValue.setText("Parameter Value");
+		tblclmnParameterValue.setText(MultiParameterFileDialogConstants.PARAMETER_VALUE);
 		tableViewerColumn_2.setLabelProvider(new ColumnLabelProvider() {
 
 			@Override
 			public String getToolTipText(Object element) {
-				String tooltip = "ParameterFile: "
-						+ ((ParameterWithFilePath) element).getFilePath().getFilePathViewString() + "\n "
-						+ "ParameterName: " + ((ParameterWithFilePath) element).getParameterName() + "\n "
-						+ "ParameterValue: " + ((ParameterWithFilePath) element).getParameterValue();
+				String tooltip = MultiParameterFileDialogConstants.PARAMETER_FILE + ": "
+						+ ((ParameterWithFilePath) element).getParameterFile().getFilePathViewString() + "\n "
+						+ MultiParameterFileDialogConstants.PARAMETER_NAME + ": "
+						+ ((ParameterWithFilePath) element).getParameterName() + "\n "
+						+ MultiParameterFileDialogConstants.PARAMETER_VALUE + ": "
+						+ ((ParameterWithFilePath) element).getParameterValue();
 				return tooltip;
 			}
 
@@ -403,7 +435,7 @@ public class ParameterFileDialog extends Dialog {
 		parameterSearchBoxItems.clear();
 		parameterSearchBoxItemsFixed.clear();
 
-		for (FilePath filePath : parameterFiles) {
+		for (ParameterFile filePath : parameterFiles) {
 			try {
 				ParameterFileManager parameterFileManager = new ParameterFileManager(filePath.getPath());
 				Map<String, String> parameterMap = new LinkedHashMap<>();
@@ -451,7 +483,7 @@ public class ParameterFileDialog extends Dialog {
 		cld_grpPropertyFileView.widthHint = 427;
 		cld_grpPropertyFileView.heightHint = 246;
 		grpPropertyFileView.setLayoutData(cld_grpPropertyFileView);
-		grpPropertyFileView.setText("Parameter file view");
+		grpPropertyFileView.setText(MultiParameterFileDialogConstants.PARAMETER_FILE_VIEW);
 
 		Composite composite_4 = new Composite(grpPropertyFileView, SWT.NONE);
 		composite_4.setLayout(new GridLayout(1, false));
@@ -472,7 +504,7 @@ public class ParameterFileDialog extends Dialog {
 		btnAdd_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Parameter parameter = new Parameter("DefaultParameter", "DefaultValue");
+				Parameter parameter = new Parameter(MultiParameterFileDialogConstants.DefaultParameter, MultiParameterFileDialogConstants.DefaultValue);
 				parameters.add(parameter);
 				parameterTableViewer.refresh();
 			}
@@ -487,9 +519,7 @@ public class ParameterFileDialog extends Dialog {
 				Table table = parameterTableViewer.getTable();
 				int temp = table.getSelectionIndex();
 				int[] indexs = table.getSelectionIndices();
-				if (temp == -1) {
-					System.out.println("Please Select row to delete");
-				} else {
+				if (temp != -1) {
 					table.remove(indexs);
 					List<Parameter> parametersToRemove = new LinkedList<>();
 					for (int index : indexs) {
@@ -561,9 +591,9 @@ public class ParameterFileDialog extends Dialog {
 		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(parameterTableViewer, SWT.NONE);
 		TableColumn tblclmnParameterName_1 = tableViewerColumn_3.getColumn();
 		tblclmnParameterName_1.setWidth(206);
-		tblclmnParameterName_1.setText(ParameterGridConstants.PARAMETER_NAME);
+		tblclmnParameterName_1.setText(MultiParameterFileDialogConstants.PARAMETER_NAME);
 		tableViewerColumn_3.setEditingSupport(new ParameterEditingSupport(parameterTableViewer,
-				ParameterGridConstants.PARAMETER_NAME));
+				MultiParameterFileDialogConstants.PARAMETER_NAME));
 		tableViewerColumn_3.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -575,9 +605,9 @@ public class ParameterFileDialog extends Dialog {
 		TableViewerColumn tableViewerColumn_5 = new TableViewerColumn(parameterTableViewer, SWT.NONE);
 		TableColumn tblclmnParameterValue_1 = tableViewerColumn_5.getColumn();
 		tblclmnParameterValue_1.setWidth(206);
-		tblclmnParameterValue_1.setText(ParameterGridConstants.PARAMETER_VALUE);
+		tblclmnParameterValue_1.setText(MultiParameterFileDialogConstants.PARAMETER_VALUE);
 		tableViewerColumn_5.setEditingSupport(new ParameterEditingSupport(parameterTableViewer,
-				ParameterGridConstants.PARAMETER_VALUE));
+				MultiParameterFileDialogConstants.PARAMETER_VALUE));
 		tableViewerColumn_5.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -591,7 +621,7 @@ public class ParameterFileDialog extends Dialog {
 
 	private void saveParameters() {
 		if (!parameterFileTextBox.getText().isEmpty()) {
-			String currentFilePath = (String) parameterTableViewer.getData("CURRENT_PARAM_FILE");
+			String currentFilePath = (String) parameterTableViewer.getData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE);
 			ParameterFileManager parameterFileManager = new ParameterFileManager(currentFilePath);
 			Map<String, String> parameterMap = new LinkedHashMap<>();
 			for (Parameter parameter : parameters) {
@@ -623,7 +653,7 @@ public class ParameterFileDialog extends Dialog {
 
 	private void createParameterFilesBox(Composite container) {
 		Group grpPropertyFiles = new Group(container, SWT.NONE);
-		grpPropertyFiles.setText("Parameter files");
+		grpPropertyFiles.setText(MultiParameterFileDialogConstants.TABLE_COLUMN_LIST_OF_PARAMETER_FILES);
 		ColumnLayout cl_grpPropertyFiles = new ColumnLayout();
 		cl_grpPropertyFiles.rightMargin = 0;
 		cl_grpPropertyFiles.verticalSpacing = 0;
@@ -657,10 +687,10 @@ public class ParameterFileDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fileDialog = new FileDialog(browseBtn.getShell(), SWT.OPEN);
-				fileDialog.setText("Open");
+				fileDialog.setText(MultiParameterFileDialogConstants.OPEN_FILE_DIALOG_NAME);
 
 				if (activeProjectLocation != null) {
-					fileDialog.setFilterPath(activeProjectLocation + "/globalparam");
+					fileDialog.setFilterPath(activeProjectLocation + "/" + MultiParameterFileDialogConstants.GLOBAL_PARAMETER_DIRECTORY_NAME);
 				}
 
 				String[] filterExt = { "*.properties" };
@@ -668,29 +698,29 @@ public class ParameterFileDialog extends Dialog {
 				String firstFile = fileDialog.open();
 				if (firstFile != null) {
 					parameterFileTextBox.setText(firstFile);
-					
-					if(isExistInParameterFileList(firstFile)){
+
+					if (isExistInParameterFileList(firstFile)) {
 						MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_INFORMATION | SWT.OK);
 
-						messageBox.setText("Info");
-						messageBox.setMessage("File alredy exist");
+						messageBox.setText(MessageType.INFO.messageType());
+						messageBox.setMessage(ErrorMessages.FILE_EXIST);
 						messageBox.open();
 						return;
 					}
-					
-					parameterFiles.add(new FilePath(fileDialog.getFileName(), firstFile, false, false));
+
+					parameterFiles.add(new ParameterFile(fileDialog.getFileName(), firstFile, false, false));
 
 					try {
 						ParameterFileManager parameterFileManager = new ParameterFileManager(firstFile);
-						parameterTableViewer.setData("CURRENT_PARAM_FILE", firstFile);
+						parameterTableViewer.setData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE, firstFile);
 						Map<String, String> parameterMap = new LinkedHashMap<>();
 						parameterMap = parameterFileManager.getParameterMap();
 						setGridData(parameters, parameterMap);
 					} catch (IOException ioException) {
 						MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 
-						messageBox.setText("Error");
-						messageBox.setMessage("Unable to populate parameter file" + ioException.getMessage());
+						messageBox.setText(MessageType.ERROR.messageType());
+						messageBox.setMessage(ErrorMessages.UNABLE_TO_POPULATE_PARAM_FILE + ioException.getMessage());
 						messageBox.open();
 
 						logger.debug("Unable to populate parameter file", ioException.getMessage());
@@ -712,19 +742,19 @@ public class ParameterFileDialog extends Dialog {
 				java.nio.file.Path path = Paths.get(parameterFileTextBox.getText());
 				java.nio.file.Path fileName = path.getFileName();
 
-				if(isExistInParameterFileList(path.toString())){
+				if (isExistInParameterFileList(path.toString())) {
 					return;
 				}
-				
-				parameterTableViewer.setData("CURRENT_PARAM_FILE", parameterFileTextBox.getText());
+
+				parameterTableViewer.setData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE, parameterFileTextBox.getText());
 
 				if (!parameterFileTextBox.getText().isEmpty()) {
 
-					parameterFiles.add(new FilePath(fileName.toString(), path.toString(), false, false));
+					parameterFiles.add(new ParameterFile(fileName.toString(), path.toString(), false, false));
 
 					try {
 						ParameterFileManager parameterFileManager = new ParameterFileManager(path.toString());
-						parameterTableViewer.setData("CURRENT_PARAM_FILE", path.toString());
+						parameterTableViewer.setData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE, path.toString());
 						Map<String, String> parameterMap = new LinkedHashMap<>();
 						parameterMap = parameterFileManager.getParameterMap();
 						setGridData(parameters, parameterMap);
@@ -736,8 +766,8 @@ public class ParameterFileDialog extends Dialog {
 					} catch (IOException ioException) {
 						MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 
-						messageBox.setText("Error");
-						messageBox.setMessage("Unable to populate parameter file" + ioException.getMessage());
+						messageBox.setText(MessageType.ERROR.messageType());
+						messageBox.setMessage(ErrorMessages.UNABLE_TO_POPULATE_PARAM_FILE + ioException.getMessage());
 						messageBox.open();
 
 						logger.debug("Unable to populate parameter file", ioException.getMessage());
@@ -757,7 +787,7 @@ public class ParameterFileDialog extends Dialog {
 				for (int index : indexes) {
 
 					if (index > 0) {
-						Collections.swap((List<FilePath>) parameterFiles, index, index - 1);
+						Collections.swap((List<ParameterFile>) parameterFiles, index, index - 1);
 						filePathTableViewer.refresh();
 
 					}
@@ -775,7 +805,7 @@ public class ParameterFileDialog extends Dialog {
 				for (int i = indexes.length - 1; i > -1; i--) {
 
 					if (indexes[i] < parameterFiles.size() - 1) {
-						Collections.swap((List<FilePath>) parameterFiles, indexes[i], indexes[i] + 1);
+						Collections.swap((List<ParameterFile>) parameterFiles, indexes[i], indexes[i] + 1);
 						filePathTableViewer.refresh();
 
 					}
@@ -789,7 +819,7 @@ public class ParameterFileDialog extends Dialog {
 		Link link = new Link(composite, SWT.NONE);
 		link.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		link.setText("<a>Help</a>");
-		link.setToolTipText("Only the check files will be considered while executing job\nand will be passed to job in same sequence as they are in grid");
+		link.setToolTipText(HELP_LINK_TOOLTIP_TEXT);
 
 		Composite composite_3 = new Composite(composite_2, SWT.NONE);
 		GridData gd_composite_3 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -820,7 +850,7 @@ public class ParameterFileDialog extends Dialog {
 
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event) {
-				FilePath file = (FilePath) event.getElement();
+				ParameterFile file = (ParameterFile) event.getElement();
 				file.setChecked(event.getChecked());
 			}
 		});
@@ -837,9 +867,9 @@ public class ParameterFileDialog extends Dialog {
 			@Override
 			public void dragSetData(DragSourceEvent event) {
 				TableItem[] selectedTableItems = filePathTableViewer.getTable().getSelection();
-				ArrayList<FilePath> filePathList = new ArrayList<FilePath>();
+				ArrayList<ParameterFile> filePathList = new ArrayList<ParameterFile>();
 				for (TableItem selectedItem : selectedTableItems) {
-					FilePath filePath = (FilePath) selectedItem.getData();
+					ParameterFile filePath = (ParameterFile) selectedItem.getData();
 					filePathList.add(filePath);
 				}
 				String gsonFilePathList = new Gson().toJson(filePathList);
@@ -857,7 +887,7 @@ public class ParameterFileDialog extends Dialog {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection selection = (IStructuredSelection) filePathTableViewer.getSelection();
-				FilePath selectedFile = (FilePath) selection.getFirstElement();
+				ParameterFile selectedFile = (ParameterFile) selection.getFirstElement();
 				if (selectedFile != null) {
 					populateViewParameterFileBox(selectedFile);
 				}
@@ -868,7 +898,7 @@ public class ParameterFileDialog extends Dialog {
 		final TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(filePathTableViewer, SWT.NONE);
 		TableColumn tblclmnFilePath = tableViewerColumn_4.getColumn();
 		tblclmnFilePath.setWidth(333);
-		tblclmnFilePath.setText("Parameter Files");
+		tblclmnFilePath.setText(MultiParameterFileDialogConstants.TABLE_COLUMN_LIST_OF_PARAMETER_FILES);
 		tableViewerColumn_4.getColumn().setImage(uncheckAllImage);
 
 		tableViewerColumn_4.getColumn().addListener(SWT.Selection, new Listener() {
@@ -879,7 +909,7 @@ public class ParameterFileDialog extends Dialog {
 					tableViewerColumn_4.getColumn().setImage(checkAllImage);
 					selectAllFiles = false;
 
-					for (FilePath file : parameterFiles) {
+					for (ParameterFile file : parameterFiles) {
 						file.setChecked(true);
 					}
 
@@ -887,7 +917,7 @@ public class ParameterFileDialog extends Dialog {
 					filePathTableViewer.setAllChecked(false);
 					tableViewerColumn_4.getColumn().setImage(uncheckAllImage);
 					selectAllFiles = true;
-					for (FilePath file : parameterFiles) {
+					for (ParameterFile file : parameterFiles) {
 						file.setChecked(false);
 					}
 				}
@@ -898,7 +928,7 @@ public class ParameterFileDialog extends Dialog {
 
 			@Override
 			public String getToolTipText(Object element) {
-				return ((FilePath) element).getFilePathViewString();
+				return ((ParameterFile) element).getFilePathViewString();
 			}
 
 			@Override
@@ -923,7 +953,7 @@ public class ParameterFileDialog extends Dialog {
 
 			@Override
 			public Color getBackground(Object element) {
-				FilePath filePath = (FilePath) element;
+				ParameterFile filePath = (ParameterFile) element;
 				if (filePath.isJobSpecificFile())
 					return new Color(Display.getDefault(), 0xFF, 0xDD, 0xDD);
 
@@ -932,7 +962,7 @@ public class ParameterFileDialog extends Dialog {
 
 			@Override
 			public String getText(Object element) {
-				FilePath p = (FilePath) element;
+				ParameterFile p = (ParameterFile) element;
 				return p.getFilePathViewString();
 			}
 		});
@@ -947,26 +977,26 @@ public class ParameterFileDialog extends Dialog {
 		lblDrop.setForeground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblDrop.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
 		lblDrop.setAlignment(SWT.CENTER);
-		lblDrop.setText("\nDrop parameter file here to delete");
+		lblDrop.setText(DROP_BOX_TEXT);
 
 		DropTarget dt = new DropTarget(lblDrop, DND.DROP_MOVE);
 		dt.setTransfer(new Transfer[] { TextTransfer.getInstance() });
 		dt.addDropListener(new DropTargetAdapter() {
 
 			public void drop(DropTargetEvent event) {
-				Type type = new TypeToken<List<FilePath>>() {
+				Type type = new TypeToken<List<ParameterFile>>() {
 				}.getType();
-				List<FilePath> filesToRemove = new Gson().fromJson((String) event.data, type);
+				List<ParameterFile> filesToRemove = new Gson().fromJson((String) event.data, type);
 
-				FilePath jobSpecificFile = getJobSpecificFile();
+				ParameterFile jobSpecificFile = getJobSpecificFile();
 
 				if (jobSpecificFile != null && filesToRemove.contains(jobSpecificFile)) {
 					filesToRemove.remove(jobSpecificFile);
-					
+
 					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_INFORMATION | SWT.OK);
 
-					messageBox.setText("Info");
-					messageBox.setMessage("Could not remove job specific file");
+					messageBox.setText(MessageType.INFO.messageType());
+					messageBox.setMessage(ErrorMessages.UNABLE_TO_REMOVE_JOB_SPECIFIC_FILE);
 					messageBox.open();
 				}
 
@@ -980,8 +1010,8 @@ public class ParameterFileDialog extends Dialog {
 	}
 
 	protected boolean isExistInParameterFileList(String firstFile) {
-		for(FilePath file: parameterFiles){
-			if(firstFile.equals(file.getPath())){
+		for (ParameterFile file : parameterFiles) {
+			if (firstFile.equals(file.getPath())) {
 				return true;
 			}
 		}
@@ -1007,15 +1037,21 @@ public class ParameterFileDialog extends Dialog {
 		return new Point(798, 688);
 	}
 
-	public void setParameterFiles(List<FilePath> filePathList) {
-		parameterFiles = filePathList;
+	/**
+	 * 
+	 * Set parameter file list
+	 * 
+	 * @param parameterFiles
+	 */
+	public void setParameterFiles(List<ParameterFile> parameterFiles) {
+		this.parameterFiles = parameterFiles;
 	}
 
 	private void populateFilePathTableViewer() {
 		filePathTableViewer.setInput(parameterFiles);
 		filePathTableViewer.refresh();
 
-		for (FilePath file : parameterFiles) {
+		for (ParameterFile file : parameterFiles) {
 			if (file.isChecked()) {
 				filePathTableViewer.setChecked(file, true);
 			}
@@ -1025,14 +1061,14 @@ public class ParameterFileDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		List<FilePath> tempParameterFiles = new LinkedList<>();
+		List<ParameterFile> tempParameterFiles = new LinkedList<>();
 		tempParameterFiles.addAll(parameterFiles);
 
 		saveParameters();
-		
-		try {	
+
+		try {
 			FileOutputStream fout;
-			fout = new FileOutputStream(this.activeProjectLocation + "\\project.metadata");
+			fout = new FileOutputStream(this.activeProjectLocation + "\\" + MultiParameterFileDialogConstants.PROJECT_METADATA_FILE);
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
 			tempParameterFiles.remove(getJobSpecificFile());
 			oos.writeObject(tempParameterFiles);
@@ -1043,8 +1079,8 @@ public class ParameterFileDialog extends Dialog {
 
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 
-			messageBox.setText("Error");
-			messageBox.setMessage("Unable to write project metadata file" + fileNotFoundException.getMessage());
+			messageBox.setText(MessageType.ERROR.messageType());
+			messageBox.setMessage(ErrorMessages.UNABLE_To_WRITE_PROJECT_METADAT_FILE + fileNotFoundException.getMessage());
 			messageBox.open();
 
 			logger.debug("Unable to write project metadata file", fileNotFoundException.getMessage());
@@ -1053,18 +1089,24 @@ public class ParameterFileDialog extends Dialog {
 			runGraph = false;
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 
-			messageBox.setText("Error");
-			messageBox.setMessage("Unable to write project metadata file" + ioException.getMessage());
+			messageBox.setText(MessageType.ERROR.messageType());
+			messageBox.setMessage(ErrorMessages.UNABLE_To_WRITE_PROJECT_METADAT_FILE + ioException.getMessage());
 			messageBox.open();
 
-			logger.debug("Unable to write project metadata file", ioException.getMessage());
+			logger.debug(ErrorMessages.UNABLE_To_WRITE_PROJECT_METADAT_FILE, ioException.getMessage());
 			ioException.printStackTrace();
 		}
 		runGraph = true;
-
+		okPressed=true;
 		super.okPressed();
 	}
 
+	/**
+	 * 
+	 * Returns true if we have all valid parameter file list
+	 * 
+	 * @return
+	 */
 	public boolean canRunGraph() {
 		return runGraph;
 	}
@@ -1075,11 +1117,17 @@ public class ParameterFileDialog extends Dialog {
 		super.cancelPressed();
 	}
 
+	/**
+	 * 
+	 * Returns list of parameter files(comma separated)
+	 * 
+	 * @return
+	 */
 	public String getParameterFilesForExecution() {
 
 		String activeParameterFiles = "";
 
-		for (FilePath parameterFile : parameterFiles) {
+		for (ParameterFile parameterFile : parameterFiles) {
 			if (parameterFile.isChecked()) {
 				activeParameterFiles = activeParameterFiles + parameterFile.getPath() + ",";
 			}
@@ -1088,5 +1136,13 @@ public class ParameterFileDialog extends Dialog {
 			return activeParameterFiles.substring(0, activeParameterFiles.length() - 1);
 		else
 			return activeParameterFiles;
+	}
+
+	@Override
+	public boolean close() {
+		if(!okPressed)
+			runGraph = false;
+		
+		return super.close();
 	}
 }

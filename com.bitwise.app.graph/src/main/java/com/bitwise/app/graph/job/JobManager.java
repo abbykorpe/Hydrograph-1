@@ -42,7 +42,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
-import com.bitwise.app.common.datastructures.parametergrid.FilePath;
+import com.bitwise.app.common.datastructures.parametergrid.ParameterFile;
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
 import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.graph.Messages;
@@ -52,8 +52,7 @@ import com.bitwise.app.graph.handler.StopJobHandler;
 import com.bitwise.app.graph.utility.CanvasUtils;
 import com.bitwise.app.joblogger.JobLogger;
 import com.bitwise.app.logging.factory.LogFactory;
-import com.bitwise.app.parametergrid.dialog.ParameterFileDialog;
-import com.bitwise.app.parametergrid.dialog.ParameterGridDialog;
+import com.bitwise.app.parametergrid.dialog.MultiParameterFileDialog;
 import com.bitwise.app.propertywindow.runconfig.RunConfigDialog;
 import com.bitwise.app.propertywindow.widgets.utility.WidgetUtility;
 
@@ -69,7 +68,6 @@ public class JobManager {
 	private static Logger logger = LogFactory.INSTANCE.getLogger(JobManager.class);
 	private Map<String, Job> runningJobsMap;
 	public static JobManager INSTANCE = new JobManager();
-	private IEditorPart iEditorPart;
 	private boolean localMode;
 
 
@@ -154,15 +152,8 @@ public class JobManager {
 			enableRunJob(true);
 			return;
 		}
-
-		/*final ParameterGridDialog parameterGrid = getParameters();
-		if (parameterGrid.canRunGraph() == false) {
-			logger.debug("Not running graph");
-			enableRunJob(true);
-			return;
-		}
-		logger.debug("property File :" + parameterGrid.getParameterFile());*/
-		final ParameterFileDialog parameterGrid = getParameterFileDialog();
+		
+		final MultiParameterFileDialog parameterGrid = getParameterFileDialog();
 		if (parameterGrid.canRunGraph() == false) {
 			logger.debug("Not running graph");
 			enableRunJob(true);
@@ -195,15 +186,8 @@ public class JobManager {
 		if (!saveJobBeforeExecute(gefCanvas)) {
 			return;
 		}
-
-		/*final ParameterGridDialog parameterGrid = getParameters();
-		if (parameterGrid.canRunGraph() == false) {
-			logger.debug("Not running graph");
-			enableRunJob(true);
-			return;
-		}
-		logger.debug("property File :" + parameterGrid.getParameterFile());*/
-		final ParameterFileDialog parameterGrid = getParameterFileDialog();
+		
+		final MultiParameterFileDialog parameterGrid = getParameterFileDialog();
 		if (parameterGrid.canRunGraph() == false) {
 			logger.debug("Not running graph");
 			enableRunJob(true);
@@ -226,17 +210,14 @@ public class JobManager {
 
 		launchJobWithDebugParameter(job, gefCanvas, parameterGrid, xmlPath, debugXmlPath, job.getBasePath(), uniqueJobId);
 	}
-	
-	/*private void launchJob(final Job job, final DefaultGEFCanvas gefCanvas, final ParameterGridDialog parameterGrid,
-			final String xmlPath) {*/
-	private void launchJob(final Job job, final DefaultGEFCanvas gefCanvas, final ParameterFileDialog parameterGrid,
+		
+	private void launchJob(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
 			final String xmlPath) {
 		if (job.isRemoteMode()) {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new RemoteJobLauncher();
-					//jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFile(), job, gefCanvas);
 					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas);
 				}
 
@@ -248,7 +229,6 @@ public class JobManager {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new LocalJobLauncher();
-					//jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFile(), job, gefCanvas);
 					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas);
 				}
 
@@ -256,9 +236,7 @@ public class JobManager {
 		}
 	}
 
-	/*private void launchJobWithDebugParameter(final Job job, final DefaultGEFCanvas gefCanvas, final ParameterGridDialog parameterGrid,
-			final String xmlPath, final String debugXmlPath, final String basePath, final String uniqueJobId) {*/
-	private void launchJobWithDebugParameter(final Job job, final DefaultGEFCanvas gefCanvas, final ParameterFileDialog parameterGrid,
+	private void launchJobWithDebugParameter(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
 			final String xmlPath, final String debugXmlPath, final String basePath, final String uniqueJobId) {
 		if (job.isRemoteMode()) {
 			setLocalMode(false);
@@ -266,7 +244,6 @@ public class JobManager {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new DebugRemoteJobLauncher();
-					//jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, basePath, parameterGrid.getParameterFile(), job, gefCanvas, uniqueJobId);
 					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, basePath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas, uniqueJobId);
 				}
 
@@ -278,7 +255,6 @@ public class JobManager {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new DebugLocalJobLauncher();
-					//jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, basePath, parameterGrid.getParameterFile(), job, gefCanvas, uniqueJobId);
 					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, basePath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas, uniqueJobId);
 				}
 
@@ -308,14 +284,7 @@ public class JobManager {
 		return debugXmlPath;
 	}
 	
-	/*private ParameterGridDialog getParameters() {
-		ParameterGridDialog parameterGrid = new ParameterGridDialog(Display.getDefault().getActiveShell());
-		parameterGrid.setVisibleParameterGridNote(false);
-		parameterGrid.open();
-		return parameterGrid;
-	}*/
-	
-	private ParameterFileDialog getParameterFileDialog(){
+	private MultiParameterFileDialog getParameterFileDialog(){
 		IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart(); 
 	    IFile file = (IFile) workbenchPart.getSite().getPage().getActiveEditor().getEditorInput().getAdapter(IFile.class);
 	    IProject project = file.getProject();
@@ -323,25 +292,22 @@ public class JobManager {
 	    
 
 		FileInputStream fin;
-		List<FilePath> filepathList = new LinkedList<>();
-		filepathList.add(new FilePath(getComponentCanvas().getJobName().replace("job", "properties"), getComponentCanvas().getParameterFile(), true, true));
+		List<ParameterFile> filepathList = new LinkedList<>();
+		filepathList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"), getComponentCanvas().getParameterFile(), true, true));
 		try {
 			fin = new FileInputStream(activeProjectLocation + "\\project.metadata");
 			ObjectInputStream ois = new ObjectInputStream(fin);
-			//filepathList = (LinkedList<FilePath>) ois.readObject();
-			filepathList.addAll((LinkedList<FilePath>)ois.readObject());
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException xe) {
-			// TODO Auto-generated catch block
-			xe.printStackTrace();
-		} catch (ClassNotFoundException ex) {
-			// TODO Auto-generated catch block
-			ex.printStackTrace();
+			filepathList.addAll((LinkedList<ParameterFile>)ois.readObject());
+		} catch (FileNotFoundException fileNotfoundException) {
+			logger.debug("Unable to read file" , fileNotfoundException);
+			fileNotfoundException.printStackTrace();
+		} catch (IOException ioException) {
+			logger.debug("Unable to read file" , ioException);
+		} catch (ClassNotFoundException classNotFoundException) {
+			logger.debug("Unable to read file" , classNotFoundException);
 		}
 	    
-		ParameterFileDialog parameterFileDialog = new ParameterFileDialog(Display.getDefault().getActiveShell(), activeProjectLocation);
+		MultiParameterFileDialog parameterFileDialog = new MultiParameterFileDialog(Display.getDefault().getActiveShell(), activeProjectLocation);
 		parameterFileDialog.setParameterFiles(filepathList);
 		parameterFileDialog.open();
 		

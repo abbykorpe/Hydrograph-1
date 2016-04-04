@@ -10,23 +10,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
  
 package com.bitwise.app.common.datastructures.parametergrid;
 
 import java.io.Serializable;
 
-public class FilePath  implements Serializable{
+/**
+ * 
+ * The class to hold parameter file with its metadata
+ * 
+ * @author Bitwise
+ *
+ */
+public class ParameterFile  implements Serializable{
+	private static final long serialVersionUID = 5403262912433893757L;
 	private String fileName;
 	private String path;
 	private boolean jobSpecificFile;
 	private boolean checked;
-	
-	public FilePath(){
 		
-	}
-	
-	public FilePath(String fileName, String path, boolean jobSpecificFile, boolean checked) {
+	public ParameterFile(String fileName, String path, boolean jobSpecificFile, boolean checked) {
 		super();
 		this.fileName = fileName;
 		this.path = path;
@@ -34,41 +37,94 @@ public class FilePath  implements Serializable{
 		this.checked = checked;
 	}
 
+	/**
+	 * 
+	 * Returns string to show in parameter file path grid
+	 * 
+	 * @return String
+	 */
 	public String getFilePathViewString(){
 		return this.fileName + " - " + this.path;
 	}
 	
+	/**
+	 * 
+	 * Returns name of parameter file
+	 * 
+	 * @return String
+	 */
 	public String getFileName() {
 		return fileName;
 	}
-
-
+	
+	/**
+	 * 
+	 * Set name of parameter file
+	 * 
+	 * @param String
+	 */
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
 
-
+	/**
+	 * 
+	 * Get parameter file path
+	 * 
+	 * @return
+	 */
 	public String getPath() {
 		return path;
 	}
 
-
+	/**
+	 * 
+	 * Set parameter file path
+	 * 
+	 * @param String
+	 */
 	public void setPath(String path) {
 		this.path = path;
 	}
 	
+	/**
+	 * 
+	 * Returns true if it is job specific parameter file
+	 * 
+	 * @return
+	 */
 	public boolean isJobSpecificFile() {
 		return jobSpecificFile;
 	}
 
+	/**
+	 * 
+	 * Set parameter file type
+	 * True - if it is job specific file
+	 * False - if it is normal parameter file
+	 * 
+	 * @param jobSpecificFile
+	 */
 	public void setJobSpecificFile(boolean jobSpecificFile) {
 		this.jobSpecificFile = jobSpecificFile;
 	}
 
+	/**
+	 * 
+	 * Returns true if the file is checked for execution
+	 * 
+	 * @return boolean
+	 */
 	public boolean isChecked() {
 		return checked;
 	}
 
+	/**
+	 * 
+	 * Check file for execution
+	 * 
+	 * @param boolean
+	 */
 	public void setChecked(boolean checked) {
 		this.checked = checked;
 	}
@@ -93,7 +149,7 @@ public class FilePath  implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FilePath other = (FilePath) obj;
+		ParameterFile other = (ParameterFile) obj;
 		if (checked != other.checked)
 			return false;
 		if (fileName == null) {
@@ -113,7 +169,7 @@ public class FilePath  implements Serializable{
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		FilePath filePath = new FilePath(this.fileName,this.path,this.jobSpecificFile,this.checked);
+		ParameterFile filePath = new ParameterFile(this.fileName,this.path,this.jobSpecificFile,this.checked);
 		return filePath;
 	}
 	

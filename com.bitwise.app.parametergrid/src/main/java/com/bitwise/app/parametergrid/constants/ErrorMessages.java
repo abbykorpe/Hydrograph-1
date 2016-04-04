@@ -34,6 +34,12 @@ public class ErrorMessages extends NLS{
 	public static String PARAMETER_FILE_NOT_LOADED;
 	public static String UNABLE_TO_STORE_PARAMETERS;
 	
+	public static String SAVE_JOB_BEFORE_OPENING_PARAM_GRID;
+	public static String UNABLE_TO_POPULATE_PARAM_FILE;
+	public static String FILE_EXIST;
+	public static String UNABLE_TO_REMOVE_JOB_SPECIFIC_FILE;
+	public static String UNABLE_To_WRITE_PROJECT_METADAT_FILE;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, ErrorMessages.class);

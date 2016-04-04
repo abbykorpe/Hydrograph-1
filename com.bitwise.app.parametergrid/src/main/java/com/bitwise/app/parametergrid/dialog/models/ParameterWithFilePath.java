@@ -1,28 +1,59 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package com.bitwise.app.parametergrid.dialog.models;
 
-import com.bitwise.app.common.datastructures.parametergrid.FilePath;
+import com.bitwise.app.common.datastructures.parametergrid.ParameterFile;
 
+/**
+ * 
+ * Extended parameter class, which contains ParameterFile as new private object
+ * 
+ * @author Bitwise
+ *
+ */
 public class ParameterWithFilePath extends Parameter{
-	FilePath filePath;
+	private ParameterFile parameterFile;
 	
-	public ParameterWithFilePath(String parameterName, String parameterValue,FilePath filePath) {
+	public ParameterWithFilePath(String parameterName, String parameterValue,ParameterFile filePath) {
 		super(parameterName, parameterValue);
-		this.filePath = filePath;
+		this.parameterFile = filePath;
 	}
 
-	public FilePath getFilePath() {
-		return filePath;
+	/**
+	 * 
+	 * Get Parameter File
+	 *  
+	 * @return {@link ParameterFile}
+	 */
+	public ParameterFile getParameterFile() {
+		return parameterFile;
 	}
 
-	public void setFilePath(FilePath filePath) {
-		this.filePath = filePath;
+	/**
+	 * Set parameter file
+	 * 
+	 * @param {@link ParameterFile}
+	 */
+	public void setParameterFile(ParameterFile parameterFile) {
+		this.parameterFile = parameterFile;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((filePath == null) ? 0 : filePath.hashCode());
+		result = prime * result + ((parameterFile == null) ? 0 : parameterFile.hashCode());
 		return result;
 	}
 
@@ -35,16 +66,16 @@ public class ParameterWithFilePath extends Parameter{
 		if (getClass() != obj.getClass())
 			return false;
 		ParameterWithFilePath other = (ParameterWithFilePath) obj;
-		if (filePath == null) {
-			if (other.filePath != null)
+		if (parameterFile == null) {
+			if (other.parameterFile != null)
 				return false;
-		} else if (!filePath.equals(other.filePath))
+		} else if (!parameterFile.equals(other.parameterFile))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return filePath + "\n" + super.toString();
+		return parameterFile + "\n" + super.toString();
 	}	
 }

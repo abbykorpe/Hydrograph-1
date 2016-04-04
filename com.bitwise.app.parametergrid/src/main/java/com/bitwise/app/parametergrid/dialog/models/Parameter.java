@@ -1,5 +1,24 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package com.bitwise.app.parametergrid.dialog.models;
 
+/**
+ * 
+ * The parameter class
+ * 
+ * @author Bitwise
+ *
+ */
 public class Parameter {
 	private String parameterName;
 	private String parameterValue;
@@ -10,18 +29,42 @@ public class Parameter {
 		this.parameterValue = parameterValue;
 	}
 
+	/**
+	 * 
+	 * Get parameter name
+	 * 
+	 * @return String
+	 */
 	public String getParameterName() {
 		return parameterName;
 	}
 
+	/**
+	 * 
+	 * Set parameter name
+	 * 
+	 * @param parameterName
+	 */
 	public void setParameterName(String parameterName) {
 		this.parameterName = parameterName;
 	}
 
+	/**
+	 * 
+	 * Get parameter value
+	 * 
+	 * @return String
+	 */
 	public String getParameterValue() {
 		return parameterValue;
 	}
 
+	/**
+	 * 
+	 * Set parameter value
+	 * 
+	 * @param parameterValue
+	 */
 	public void setParameterValue(String parameterValue) {
 		this.parameterValue = parameterValue;
 	}
