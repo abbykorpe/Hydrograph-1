@@ -365,7 +365,7 @@ public class JobManager {
 		Job jobToKill = runningJobsMap.get(jobId);
 		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 		if(jobToKill.isRemoteMode()){
-			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.YES | SWT.NO);
+			MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.ICON_WARNING | SWT.YES | SWT.NO);
 			messageBox.setText(Messages.KILL_JOB_MESSAGEBOX_TITLE);
 			messageBox.setMessage(Messages.KILL_JOB_MESSAGE);
 			if(messageBox.open() == SWT.YES){
