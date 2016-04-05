@@ -11,68 +11,108 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package com.bitwise.app.parametergrid.actions;
 
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
+import com.bitwise.app.common.datastructures.parametergrid.ParameterFile;
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
+import com.bitwise.app.common.util.MultiParameterFileUIUtils;
 import com.bitwise.app.logging.factory.LogFactory;
-import com.bitwise.app.parametergrid.dialog.ParameterGridDialog;
+import com.bitwise.app.parametergrid.constants.ErrorMessages;
+import com.bitwise.app.parametergrid.constants.MessageType;
+import com.bitwise.app.parametergrid.constants.MultiParameterFileDialogConstants;
+import com.bitwise.app.parametergrid.dialog.MultiParameterFileDialog;
+
+
 /**
  * 
  * Handler to open parameter grid
  * 
  * @author Bitwise
- *
+ * 
  */
-public class ParameterGridOpenHandler extends AbstractHandler{
+public class ParameterGridOpenHandler extends AbstractHandler {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ParameterGridOpenHandler.class);
-	
+
 	/**
 	 * 
 	 * Returns active editor as {@link DefaultGEFCanvas}
 	 * 
 	 * @return {@link DefaultGEFCanvas}
 	 */
-	private DefaultGEFCanvas getComponentCanvas() {		
-		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
-			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+	private DefaultGEFCanvas getComponentCanvas() {
+		if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
+			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+					.getActiveEditor();
 		else
 			return null;
 	}
-	
+
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
-		if(getComponentCanvas().getParameterFile() == null ){
-			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
 
-			messageBox.setText("Error");
-			messageBox.setMessage("Could not open parameter grid. \nPlease save the job file.");
+		if (StringUtils.isBlank(getComponentCanvas().getParameterFile())) {
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+
+			messageBox.setText(MessageType.ERROR.messageType());
+			messageBox.setMessage(ErrorMessages.SAVE_JOB_BEFORE_OPENING_PARAM_GRID);
 			messageBox.open();
-			
-			logger.debug("Parameter file does not exist. Need to save job file");
+
+			logger.debug(ErrorMessages.SAVE_JOB_BEFORE_OPENING_PARAM_GRID);
 			return null;
 		}
-		
-		ParameterGridDialog parameterGrid = new ParameterGridDialog(Display.getDefault().getActiveShell());
-		logger.debug("Created Parameter grid dialog instance");
-			try{
-				parameterGrid.open();
-				logger.debug("Opened parameter grid");
-			}catch(Exception e){
-				logger.debug("Unable to open parameter grid " , e);
-			}
-			
+
+		String activeProjectLocation = MultiParameterFileUIUtils.getActiveProjectLocation();
+
+		List<ParameterFile> parameterFileList = getParameterFileList(activeProjectLocation);
+
+		MultiParameterFileDialog parameterFileDialog = new MultiParameterFileDialog(new Shell(), activeProjectLocation);
+		parameterFileDialog.setParameterFiles(parameterFileList);
+		parameterFileDialog.open();
+
 		return null;
+	}
+
+	private List<ParameterFile> getParameterFileList(String activeProjectLocation) {
+		FileInputStream fileInputStream;
+		List<ParameterFile> parameterFileList = new LinkedList<>();
+
+		updateParameterFileListWithJobSpecificFile(parameterFileList);
+
+		try {
+			fileInputStream = new FileInputStream(activeProjectLocation + MultiParameterFileDialogConstants.PROJECT_METADATA_FILE);
+			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+			parameterFileList.addAll((LinkedList<ParameterFile>) objectInputStream.readObject());
+		} catch (Exception exception) {
+			logger.debug("Unable to read project.metadata file, this might be a new project", exception);
+		}
+		return parameterFileList;
+	}
+
+	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList) {
+		if (getComponentCanvas().getParameterFile().contains(":")) {
+			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),
+					getComponentCanvas().getParameterFile().replace("/", "\\"), true, true));
+		} else {
+			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),
+					getComponentCanvas().getParameterFile(), true, true));
+		}
 	}
 }

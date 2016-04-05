@@ -14,7 +14,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide;bundle-version="3.7.0",
  org.slf4j.api,
  com.bitwise.app.logging;bundle-version="1.0.0",
- org.junit
+ org.junit,
+ com.google.gson,
+ com.bitwise.app.common.datastructures;bundle-version="0.0.1",
+ org.apache.commons.lang;bundle-version="2.4.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.bitwise.app.parametergrid.dialog,
