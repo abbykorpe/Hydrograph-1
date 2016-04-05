@@ -44,6 +44,7 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructures.parametergrid.ParameterFile;
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
+import com.bitwise.app.common.util.MultiParameterFileUIUtils;
 import com.bitwise.app.common.util.OSValidator;
 import com.bitwise.app.graph.Messages;
 import com.bitwise.app.graph.handler.DebugHandler;
@@ -285,10 +286,8 @@ public class JobManager {
 	}
 	
 	private MultiParameterFileDialog getParameterFileDialog(){
-		IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart(); 
-	    IFile file = (IFile) workbenchPart.getSite().getPage().getActiveEditor().getEditorInput().getAdapter(IFile.class);
-	    IProject project = file.getProject();
-	    String activeProjectLocation =project.getLocation().toOSString();
+		
+	    String activeProjectLocation=MultiParameterFileUIUtils.getActiveProjectLocation();
 	    
 
 		FileInputStream fin;
@@ -300,7 +299,6 @@ public class JobManager {
 			filepathList.addAll((LinkedList<ParameterFile>)ois.readObject());
 		} catch (FileNotFoundException fileNotfoundException) {
 			logger.debug("Unable to read file" , fileNotfoundException);
-			fileNotfoundException.printStackTrace();
 		} catch (IOException ioException) {
 			logger.debug("Unable to read file" , ioException);
 		} catch (ClassNotFoundException classNotFoundException) {

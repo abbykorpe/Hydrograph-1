@@ -18,6 +18,7 @@ import java.io.ObjectInputStream;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -32,11 +33,13 @@ import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructures.parametergrid.ParameterFile;
 import com.bitwise.app.common.interfaces.parametergrid.DefaultGEFCanvas;
+import com.bitwise.app.common.util.MultiParameterFileUIUtils;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.parametergrid.constants.ErrorMessages;
 import com.bitwise.app.parametergrid.constants.MessageType;
 import com.bitwise.app.parametergrid.constants.MultiParameterFileDialogConstants;
 import com.bitwise.app.parametergrid.dialog.MultiParameterFileDialog;
+
 
 /**
  * 
@@ -65,7 +68,7 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
-		if (getComponentCanvas().getParameterFile() == null) {
+		if (StringUtils.isBlank(getComponentCanvas().getParameterFile())) {
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 
 			messageBox.setText(MessageType.ERROR.messageType());
@@ -76,7 +79,7 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 			return null;
 		}
 
-		String activeProjectLocation = getActiveProjectLocation();
+		String activeProjectLocation = MultiParameterFileUIUtils.getActiveProjectLocation();
 
 		List<ParameterFile> parameterFileList = getParameterFileList(activeProjectLocation);
 
@@ -111,15 +114,5 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),
 					getComponentCanvas().getParameterFile(), true, true));
 		}
-	}
-
-	private String getActiveProjectLocation() {
-		IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActivePart();
-		IFile file = (IFile) workbenchPart.getSite().getPage().getActiveEditor().getEditorInput()
-				.getAdapter(IFile.class);
-		IProject project = file.getProject();
-		String activeProjectLocation = project.getLocation().toOSString();
-		return activeProjectLocation;
 	}
 }

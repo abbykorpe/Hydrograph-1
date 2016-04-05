@@ -80,6 +80,7 @@ import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.slf4j.Logger;
 
 import com.bitwise.app.common.datastructures.parametergrid.ParameterFile;
+import com.bitwise.app.common.util.ImagePathConstant;
 import com.bitwise.app.common.util.XMLConfigUtil;
 import com.bitwise.app.logging.factory.LogFactory;
 import com.bitwise.app.parametergrid.constants.ErrorMessages;
@@ -129,6 +130,7 @@ public class MultiParameterFileDialog extends Dialog {
 	 * @param parentShell
 	 * @wbp.parser.constructor
 	 */
+	@Deprecated
 	public MultiParameterFileDialog(Shell parentShell) {
 		super(parentShell);
 		if (parameterFiles == null)
@@ -137,8 +139,8 @@ public class MultiParameterFileDialog extends Dialog {
 		parameters = new LinkedList<>();
 		parameterSearchBoxItems = new LinkedList<>();
 		parameterSearchBoxItemsFixed = new LinkedList<>();
-		checkAllImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + "/icons/checkall.png");
-		uncheckAllImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + "/icons/uncheckall.png");
+		checkAllImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.CHECKALL_ICON);
+		uncheckAllImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.UNCHECKALL_ICON);
 	}
 
 	/**
@@ -154,8 +156,8 @@ public class MultiParameterFileDialog extends Dialog {
 		parameters = new LinkedList<>();
 		parameterSearchBoxItems = new LinkedList<>();
 		parameterSearchBoxItemsFixed = new LinkedList<>();
-		checkAllImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + "/icons/checkall.png");
-		uncheckAllImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + "/icons/uncheckall.png");
+		checkAllImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.CHECKALL_ICON);
+		uncheckAllImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.UNCHECKALL_ICON);
 
 		this.activeProjectLocation = activeProjectLocation;
 	}

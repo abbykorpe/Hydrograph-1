@@ -27,7 +27,7 @@ import org.eclipse.jface.viewers.Viewer;
  * @author Bitwise
  *
  */
-public class TableContenetProvider implements IStructuredContentProvider{
+public class TableContentProvider implements IStructuredContentProvider{
 
 	@Override
 	public void dispose() {
