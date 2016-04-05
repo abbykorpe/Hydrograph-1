@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd">
+	<tns:component paletteIconPath="/icons/hive_parquet_input_palette.png" canvasIconPath="/icons/hive_parquet_input_canvas.png"
+		name="IHiveParquet" nameInPalette="Hive Parquet" defaultNamePrefix="IHiveParquet" 
+		description="This is IHiveParquet component. Reads parquet file as input and performs Hive job."
+		helpFilePath="/com.bitwise.app.help/html/Components/Input_Hive_Parquet.html">
+		<tns:category>INPUT</tns:category>
+		<tns:port>
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="out0" nameOfPort="out0" allowMultipleLinks="false"/>
+			</tns:portSpecification>
+		</tns:port>
+		
+		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
+			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
+			
+		<tns:property dataType="string" name="schema" renderer="SCHEMA_WIDGET" type="USER"
+			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="TRUE" tooltipDataType="LIST"
+			usage="REQUIRED">
+			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>
+		</tns:property>
+		
+		<tns:property dataType="string" name="databaseName" value="" renderer="DATABASE_NAME_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Displays the Hive Database Name provided by the user">
+			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+		</tns:property>
+			
+		<tns:property dataType="string" name="tableName" value="" renderer="TABLE_NAME_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Displays the Hive Table Name provided by the user">
+			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+		</tns:property>
+			
+		<tns:property dataType="string" name="externalTablePath" value="" renderer="EXTERNAL_TABLE_PATH_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="OPTIONAL" propertyHelpText="Displays the location of the file either Remote/Local.">
+			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+		</tns:property>
+		
+		<tns:property dataType="string" name="partitionKeys" renderer="PARTITION_KEYS_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
+			usage="OPTIONAL" propertyHelpText="Displays the user specific partition keys">
+			<tns:validator>KEY_FIELDS_VALIDATOR</tns:validator>
+		</tns:property>
+		
+		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="OPTIONAL" propertyHelpText="Used to override runtime \nHadoop configurations specific to \nthis component at run time."/>
+			
+		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Specifies the execution sequence of \nthis component in the job flow.">
+			<tns:validator>INTEGER_VALIDATOR</tns:validator>
+		</tns:property>
+	</tns:component>
+</tns:Config>

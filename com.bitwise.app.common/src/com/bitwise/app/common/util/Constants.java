@@ -26,6 +26,11 @@ public class Constants {
 	public static final String ERROR = "ERROR";
 	
 	public static final String DELIMITER = "Delimiter";
+	public static final String QUOTE = "Quote";
+	public static final String DATABASE_NAME = "Database Name";
+	public static final String TABLE_NAME = "Table name";
+	public static final String EXTERNAL_TABLE_PATH = "Ext.Table Path";
+	
 	public static final String CHARACTER_SET = "Character Set";
 	public static final String PHASE = "Phase";
 	public static final String NO_OF_RECORDS = "No of Records";
@@ -66,6 +71,8 @@ public class Constants {
 	public static final String KEY_FIELDS_LABEL= "Key\nFields";
 	public static final String SECONDARY_KEYS2 = "Secondary Keys ";
 	public static final String SECONDARY_KEYS = "Secondary\n Keys";
+	public static final String PARTITION_KEYS_WINDOW_TITLE = "Partition Keys";
+	public static final String PARTITION_KEYS_LABEL = "Partition\nKeys";
 	
 	public static final String COMPONENT_NAME = "Component Name";
 	 // Used for validating AlphaNumeric or Parameter E.g Aplha_123 or @{Param_123}

@@ -42,6 +42,10 @@ public class WidgetHelper {
 	public WidgetConfig getColumnNameConfig(){
 		return populateSingleColumnGridConfig(Constants.KEY_FIELDS_LABEL, Constants.KEY_FIELDS_WINDOW_TITLE);
 	}
+	
+	public WidgetConfig getPartitionKeysConfig(){
+		return populateSingleColumnGridConfig(Constants.PARTITION_KEYS_LABEL, Constants.PARTITION_KEYS_WINDOW_TITLE);
+	}
 
 	public WidgetConfig getOperationFieldsConfig(){
 		return populateSingleColumnGridConfig(Constants.OPERATION_FIELDS_LABEL, Constants.OPERATION_FIELDS_WINDOW_TITLE);
@@ -53,6 +57,17 @@ public class WidgetHelper {
 	public WidgetConfig getDelimiterWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Constants.DELIMITER);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as quote property 
+	 */
+	public WidgetConfig getQuoteWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.QUOTE);
 		textBoxConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
@@ -81,6 +96,39 @@ public class WidgetHelper {
 		addTextBoxListeners(textBoxConfig);
 		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
 		textBoxConfig.setWidgetWidth(78);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as Table Name property 
+	 */
+	public WidgetConfig getTableNameWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.TABLE_NAME);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as Database Name property 
+	 */
+	public WidgetConfig getDatabaseNameWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.DATABASE_NAME);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as External Table Path property 
+	 */
+	public WidgetConfig getExternalTablePathWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.EXTERNAL_TABLE_PATH);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
 	}
 	
