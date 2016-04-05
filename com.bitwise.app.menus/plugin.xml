@@ -9,16 +9,8 @@
             name="console">
       </command>
       <command
-            id="com.bitwise.window.outline"
-            name="outline">
-      </command>
-      <command
             id="com.bitwise.window.ETLNavigator"
             name="ETLNavigator">
-      </command>
-      <command
-            id="com.bitwise.window.properties"
-            name="properties">
       </command>
       <command
             id="com.bitwise.window.palette"
@@ -40,16 +32,8 @@
             commandId="com.bitwise.window.console">
       </handler>
       <handler
-            class="com.bitwise.app.menus.handlers.OutlineHandler"
-            commandId="com.bitwise.window.outline">
-      </handler>
-      <handler
             class="com.bitwise.app.menus.handlers.ProjectExplorerHandler"
             commandId="com.bitwise.window.ETLNavigator">
-      </handler>
-      <handler
-            class="com.bitwise.app.menus.handlers.PropertiesHandler"
-            commandId="com.bitwise.window.properties">
       </handler>
       <handler
             class="com.bitwise.app.menus.handlers.PaletteHandler"
@@ -410,22 +394,10 @@
                   mnemonic ="C">
             </command>
             <command
-                  commandId="com.bitwise.window.outline"
-                  label="Outline"
-                  style="push"
-                  mnemonic ="l">
-            </command>
-            <command
                   commandId="com.bitwise.window.ETLNavigator"
                   label="Project Explorer"
                   style="push"
                   mnemonic ="E">
-            </command>
-            <command
-                  commandId="com.bitwise.window.properties"
-                  label="Properties"
-                  style="push"
-                  mnemonic ="P">
             </command>
             <command
                   commandId="com.bitwise.window.palette"
@@ -500,12 +472,6 @@
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+M3+E">
-      </key>
-      <key
-            commandId="com.bitwise.window.properties"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+M3+T">
       </key>
       <key
             commandId="com.bitwise.window.portLabels.showHide"
