@@ -24,7 +24,7 @@ import javax.xml.validation.Validator;
 
 public class ValidateTargetXML {
 
-static	String XSDPATH="Resource/newxmlschema/main/main.xsd";
+static	String XSDPATH="resources/newxmlschema/main/main.xsd";
 
 static String XMLPATH="C:\\Users\\shrirangk\\Desktop\\BHSUIWorkSpace\\runtime-com.bitwise.app.perspective.product\\as\\Job_1.xml";
 				// replace above path with generated XML.
