@@ -1,0 +1,11 @@
+<extensions>
+ <tocOrder>
+  <toc id="/hydrograph.ui.help/xml/Introduction/introduction.xml"/>
+  <toc id="/hydrograph.ui.help/xml/Installation and Configuration/installation.xml"/>
+  <toc id="/hydrograph.ui.help/xml/User Interface/userInterface.xml"/>
+  <toc id="/hydrograph.ui.help/xml/Components/components.xml"/>
+  <toc id="/hydrograph.ui.help/xml/Operation Class/operationClass.xml"/>
+  <toc id="/hydrograph.ui.help/xml/How To Steps/howToSteps.xml"/>
+  <toc id="/hydrograph.ui.help/xml/References/references.xml"/>
+ </tocOrder>
+ </extensions>

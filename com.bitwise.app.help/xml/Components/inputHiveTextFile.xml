@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?NLS TYPE="org.eclipse.help.toc"?>
-
-<toc label="Input Hive TextFile" link_to="xml\Components\components.xml#inputHiveTextFile"> 
-	<topic label="Properties"  href="html/Components/Input_Hive_Text_Properties.html"> 
-	</topic>
- <topic href="html/Components/Input_Hive_Text_Validations.html" label="Validations">
- </topic>
-</toc>

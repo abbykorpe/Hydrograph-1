@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig ComponentConfig.xsd ">
+	<tns:component paletteIconPath="/icons/discard_palette.png" canvasIconPath="/icons/discard_canvas.png"
+		name="Discard" nameInPalette="Discard" defaultNamePrefix="Discard" description="Discards/flushes the records received from the attached input."
+		helpFilePath="/hydrograph.ui.help/html/Components/Discard.html">
+		<tns:category>OUTPUT</tns:category>
+		<tns:port>
+			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="in0" nameOfPort="in0" allowMultipleLinks="false"/>
+			</tns:portSpecification>
+		</tns:port>
+		
+		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
+			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
+		
+		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED"  propertyHelpText="Specifies the execution sequence of \nthis component in the job flow.">
+			<tns:validator>INTEGER_VALIDATOR</tns:validator>
+		</tns:property>
+
+			
+	</tns:component>
+</tns:Config>

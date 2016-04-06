@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Clone" link_to="xml\Components\components.xml#GenerateRecords"> 
+	<topic label="Properties"  href="html/Components/Generate_Records_Properties.html"> 
+	</topic>
+ <topic href="html/Components/Generate_Records_Validations.html" label="Validations">
+ </topic>
+</toc>

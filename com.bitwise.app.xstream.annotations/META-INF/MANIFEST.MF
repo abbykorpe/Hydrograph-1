@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Annotations
-Bundle-SymbolicName: com.bitwise.app.xstream.annotations
-Bundle-Version: 0.0.1.qualifier
-Export-Package: com.thoughtworks.xstream.annotations
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7

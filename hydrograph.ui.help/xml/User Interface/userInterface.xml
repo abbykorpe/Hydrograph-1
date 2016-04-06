@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="User Interface">
+   <anchor id="MenuBarToolBar"/>
+   <anchor id="ComponentPalette"/>
+   <anchor id="ProjectExplorer"/>
+   <anchor id="JobCanvas"/>
+   <anchor id="Console"/>
+   <anchor id="RunConfiguration"/>
+   <anchor id="ParameterGrid"/>
+</toc>

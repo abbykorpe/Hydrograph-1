@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Datastructures
+Bundle-SymbolicName: hydrograph.ui.common.datastructures;singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Bundle-Activator: hydrograph.ui.common.activator.Activator
+Bundle-Vendor: BITWISE
+Require-Bundle: org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Export-Package: hydrograph.ui.common.cloneableinterface,
+ hydrograph.ui.common.datastructures.tooltip,
+ hydrograph.ui.datastructure.property,
+ hydrograph.ui.datastructure.property.mapping,
+ hydrograph.ui.datastructures.parametergrid
+Import-Package: org.apache.commons.lang

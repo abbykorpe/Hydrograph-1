@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
+	<tns:component paletteIconPath="/icons/aggregate_palette.png" canvasIconPath="/icons/aggregate_canvas.png"
+		name="Aggregate" nameInPalette="Aggregate" defaultNamePrefix="Aggregate" 
+		description="Performs aggregations on data specified in a java operation class."
+		helpFilePath="/hydrograph.ui.help/html/Components/Aggregate.html">
+		<tns:category>TRANSFORM</tns:category>
+		<tns:port>
+			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">
+				<tns:port sequenceOfPort="0" allowMultipleLinks="false" linkMandatory="true" nameOfPort="in0" labelOfPort="in0"/>
+			</tns:portSpecification>
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
+				<tns:port sequenceOfPort="0" allowMultipleLinks="false" linkMandatory="true" nameOfPort="out0" labelOfPort="out0"/>
+			</tns:portSpecification>
+		</tns:port>
+		
+		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
+			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
+		
+
+		<tns:property dataType="string" name="schema" renderer="TRANSFORM_SCHEMA_WIDGET" type="USER"
+			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="TRUE" tooltipDataType="LIST"
+         usage="REQUIRED">
+			<tns:validator>TRANSFORM_SCHEMA_GRID_VALIDATOR</tns:validator>
+		</tns:property>
+		
+		
+		<tns:property dataType="string" name="Key_fields" renderer="COLUMN_NAME_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
+			usage="REQUIRED" propertyHelpText="Fields used for grouping.">
+			<tns:validator>KEY_FIELDS_VALIDATOR</tns:validator>
+		</tns:property>
+			
+		<tns:property dataType="string" name="Secondary_keys" renderer="SECONDARY_COLUMN_KEYS_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
+			usage="OPTIONAL" propertyHelpText="Fields used for sorting within the groups.">
+		</tns:property>
+		
+		<tns:property dataType="string" name="operation" renderer="AGGREGATE_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL" propertyHelpText="Field Mapping view."/>
+
+		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time."/>
+			
+		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Specifies the execution sequence \nof this component in the job flow.">
+			<tns:validator>INTEGER_VALIDATOR</tns:validator>
+
+		</tns:property>
+			
+	
+	<tns:operations>
+		<tns:interface
+			class="com.bitwiseglobal.bhse.userfunctions.base.AggregateTransformBase"
+			name="AGGREGATE" />
+		<tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Sum"
+			name="Sum" />
+		<tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Max"
+			name="Max" />
+		<tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Min"
+			name="Min" />
+		<tns:stdOperation
+			class="com.bitwiseglobal.bhse.userfunctions.aggregate.Count" name="Count" />
+		<tns:stdOperation
+			class="com.bitwiseglobal.bhse.userfunctions.aggregate.StringAppend"
+			name="StringAppend" />
+	</tns:operations>		
+	</tns:component>
+</tns:Config>

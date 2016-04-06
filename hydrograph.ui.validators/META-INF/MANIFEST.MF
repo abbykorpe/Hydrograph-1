@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Validators
+Bundle-SymbolicName: hydrograph.ui.validators
+Bundle-Version: 0.0.1.qualifier
+Bundle-Activator: hydrograph.ui.validators.Activator
+Bundle-Vendor: BITWISE
+Require-Bundle: org.eclipse.core.runtime,
+ hydrograph.ui.common.datastructures;bundle-version="0.0.1",
+ org.apache.commons.lang,
+ hydrograph.ui.common;bundle-version="0.0.1",
+ org.slf4j.api,
+ hydrograph.ui.logging;bundle-version="0.0.1"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Export-Package: hydrograph.ui.validators.impl
+Import-Package: org.eclipse.core.resources

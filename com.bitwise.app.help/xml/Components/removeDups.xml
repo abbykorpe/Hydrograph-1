@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?NLS TYPE="org.eclipse.help.toc"?>
-
-<toc label="Remove Dups" link_to="xml\Components\components.xml#RemoveDups"> 
-	<topic label="Properties"  href="html/Components/Remove_Dups_Properties.html"> 
-	</topic>
- <topic href="html/Components/Remove_Dups_Validations.html" label="Validations">
- </topic>
-</toc>
