@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwise.com/ComponentConfig"
+	xmlns:tns="http://www.bitwise.com/ComponentConfig" elementFormDefault="qualified">
+	<include schemaLocation=""></include>
+	<element name="PolicyConfig">
+		<complexType>
+			<sequence>
+				<element name="masterpolicies" type="tns:MasterPolicies"
+					minOccurs="1" maxOccurs="1" />
+				<element name="categorypolicies" type="tns:CategoryPolicies"
+					minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<complexType name="MasterPolicies">
+		<sequence>
+			<element name="policy" type="tns:Policy" maxOccurs="unbounded"
+				minOccurs="0" />
+		</sequence>
+	</complexType>
+
+	<complexType name="CategoryPolicies" >
+		<sequence>
+			<element name="policy" type="tns:Policy" maxOccurs="unbounded"
+				minOccurs="0" />
+		</sequence>
+		<attribute name="category" type="tns:category_type"></attribute>
+	</complexType>
+	
+	<complexType name="Policy">
+		<sequence>
+			<element name="name" type="string" maxOccurs="1" minOccurs="0" />
+			<element name="value" type="string" maxOccurs="1" minOccurs="0" />
+		</sequence>
+	</complexType>
+	
+	<simpleType name="category_type">
+		<restriction base="string"> 
+			<enumeration value="INPUT" />
+			<enumeration value="OUTPUT" />
+			<enumeration value="STRAIGHTPULL"/>
+		</restriction>
+	</simpleType>
+</schema>

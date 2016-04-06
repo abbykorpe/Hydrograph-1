@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.bitwise.app</groupId>
-	<artifactId>com.bitwise.app.parent</artifactId>
+	<groupId>hydrograph</groupId>
+	<artifactId>hydrograph.ui.parent</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
@@ -66,7 +66,7 @@
 								<extraRequirements>
 									<requirement>
 										<type>eclipse-feature</type>
-										<id>com.bitwise.app.platformspecificplugins</id>
+										<id>hydrograph.ui.platformspecificplugins</id>
 										<versionRange>0.0.0</versionRange>
 									</requirement>
 								</extraRequirements>
@@ -139,7 +139,7 @@
 								<extraRequirements>
 									<requirement>
 										<type>eclipse-feature</type>
-										<id>com.bitwise.app.platformspecificplugins</id>
+										<id>hydrograph.ui.platformspecificplugins</id>
 										<versionRange>0.0.0</versionRange>
 									</requirement>
 								</extraRequirements>
@@ -212,7 +212,7 @@
 								<extraRequirements>
 									<requirement>
 										<type>eclipse-feature</type>
-										<id>com.bitwise.app.platformspecificplugins</id>
+										<id>hydrograph.ui.platformspecificplugins</id>
 										<versionRange>0.0.0</versionRange>
 									</requirement>
 								</extraRequirements>
@@ -247,26 +247,26 @@
 	</profiles>
 		
 	<modules>
-		<module>com.bitwise.app.perspective</module>
-		<module>com.bitwise.app.menus</module>
-		<module>com.bitwise.app.project.structure</module>
-		<module>com.bitwise.app.logging</module>
-		<module>com.bitwise.app.common</module>
-        <module>com.bitwise.app.graph</module>
-		<module>com.bitwise.app.product</module>
-		<module>com.bitwise.app.graph.figure</module>
-		<module>com.bitwise.app.propertywindow</module>	
-		<module>com.bitwise.app.model</module>	
-		<module>com.bitwise.app.xstream</module>
-		<module>com.bitwise.app.engine</module>
-		<module>com.bitwise.app.common.datastructures</module>
-		<module>com.bitwise.app.tooltip</module>
-		<module>com.bitwise.app.common.interfaces</module>
-		<module>com.bitwise.app.xstream.annotations</module>
-		<module>com.bitwise.app.parametergrid</module>
-		<module>com.bitwise.app.joblogger</module>
-	    <module>com.bitwise.app.help</module>
-	    <module>com.bitwise.app.platformspecificplugins</module>
-	    <module>com.bitwise.app.validators</module>
+		<module>hydrograph.ui.perspective</module>
+		<module>hydrograph.ui.menus</module>
+		<module>hydrograph.ui.project.structure</module>
+		<module>hydrograph.ui.logging</module>
+		<module>hydrograph.ui.common</module>
+        <module>hydrograph.ui.graph</module>
+		<module>hydrograph.ui.product</module>
+		<module>hydrograph.ui.graph.figure</module>
+		<module>hydrograph.ui.propertywindow</module>	
+		<module>hydrograph.ui.model</module>	
+		<module>hydrograph.ui.xstream</module>
+		<module>hydrograph.ui.engine</module>
+		<module>hydrograph.ui.common.datastructures</module>
+		<module>hydrograph.ui.tooltip</module>
+		<module>hydrograph.ui.common.interfaces</module>
+		<module>hydrograph.ui.xstream.annotations</module>
+		<module>hydrograph.ui.parametergrid</module>
+		<module>hydrograph.ui.joblogger</module>
+	    <module>hydrograph.ui.help</module>
+	    <module>hydrograph.ui.platformspecificplugins</module>
+	    <module>hydrograph.ui.validators</module>
 	</modules>
 </project>

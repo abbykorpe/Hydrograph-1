@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
+	<tns:component paletteIconPath="/icons/join_palette.png" canvasIconPath="/icons/join_canvas.png"
+		name="Join" nameInPalette="Join" defaultNamePrefix="Join" 
+		description="Joins two or more input sources." 
+		helpFilePath="/hydrograph.ui.help/html/Components/Join.html">
+		<tns:category>TRANSFORM</tns:category>
+		<tns:port>
+			<tns:portSpecification typeOfPort="in" numberOfPorts="2" changePortCountDynamically="true">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="in0" nameOfPort="in0" allowMultipleLinks="false"/>
+				<tns:port sequenceOfPort="1" linkMandatory="true" labelOfPort="in1" nameOfPort="in1" allowMultipleLinks="false"/>
+			</tns:portSpecification>
+			<tns:portSpecification typeOfPort="unused" numberOfPorts="2" changePortCountDynamically="true">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="un0" nameOfPort="un0" allowMultipleLinks="false"/>
+				<tns:port sequenceOfPort="1" linkMandatory="true" labelOfPort="un1" nameOfPort="un1" allowMultipleLinks="false"/>
+			</tns:portSpecification>
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
+				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="out0" nameOfPort="out0" allowMultipleLinks="false"/>
+			</tns:portSpecification>
+		</tns:port>
+		
+		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
+			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
+			
+
+		<tns:property dataType="string" name="schema" renderer="TRANSFORM_SCHEMA_WIDGET" type="USER"
+			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="TRUE" tooltipDataType="LIST"
+			usage="REQUIRED">
+			<tns:validator>TRANSFORM_SCHEMA_GRID_VALIDATOR</tns:validator>
+		</tns:property>
+			
+		<tns:property dataType="string" name="inPortCount|unusedPortCount" value="2" renderer="JOIN_INPUT_COUNT_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Specifies number of inputs for the Join operation. Default 2.">
+		</tns:property>
+			
+		<tns:property dataType="string" name="join_config" renderer="JOIN_TYPE_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
+			usage="REQUIRED" propertyHelpText="Specifies key fields and Join type">
+			<tns:validator>JOIN_CONFIG_VALIDATOR</tns:validator>
+		</tns:property>
+		
+		<tns:property dataType="string" name="join_mapping"  renderer="JOIN_MAPPING_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="REQUIRED" propertyHelpText="Fields mapping view.">
+			<tns:validator>JOIN_MAPPING_VALIDATOR</tns:validator>
+		</tns:property>
+		
+		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time."/>
+		
+		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Specifies the execution sequence \nof this component in the job flow.">
+			<tns:validator>INTEGER_VALIDATOR</tns:validator>
+		</tns:property>
+		
+	</tns:component>
+</tns:Config>

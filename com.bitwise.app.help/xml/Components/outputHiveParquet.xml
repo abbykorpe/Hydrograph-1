@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?NLS TYPE="org.eclipse.help.toc"?>
-
-<toc label="Output Hive Parquet" link_to="xml\Components\components.xml#outputHiveParquet"> 
-	<topic label="Properties"  href="html/Components/Output_Hive_Parquet_Properties.html"> 
-	</topic>
- <topic href="html/Components/Output_Hive_Parquet_Validations.html" label="Validations">
- </topic>
-</toc>

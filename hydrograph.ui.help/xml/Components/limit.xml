@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Limit" link_to="xml\Components\components.xml#Limit"> 
+	<topic label="Properties"  href="html/Components/Limit_Properties.html"> 
+	</topic>
+ <topic href="html/Components/Limit_Validations.html" label="Validations">
+ </topic>
+</toc>
