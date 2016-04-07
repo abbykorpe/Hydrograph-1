@@ -16,7 +16,7 @@
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd">
 	<tns:component paletteIconPath="/icons/hive_parquet_input_palette.png" canvasIconPath="/icons/hive_parquet_input_canvas.png"
 		name="IHiveParquet" nameInPalette="Hive Parquet" defaultNamePrefix="IHiveParquet" 
-		description="This is IHiveParquet component. Reads parquet file as input and performs Hive job."
+		description="Reads parquet file as input and performs Hive job."
 		helpFilePath="/hydrograph.ui.help/html/Components/Input_Hive_Parquet.html">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
