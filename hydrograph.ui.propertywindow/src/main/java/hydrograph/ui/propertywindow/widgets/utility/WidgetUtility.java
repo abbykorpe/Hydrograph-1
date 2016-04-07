@@ -88,7 +88,6 @@ public class WidgetUtility {
 		ControlDecoration txtDecorator = new ControlDecoration(control,SWT.LEFT);
 		FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
 		Image img = fieldDecoration.getImage();
-		txtDecorator.hide();
 		txtDecorator.setImage(img);
 		txtDecorator.setDescriptionText(message);
 		return txtDecorator; 
