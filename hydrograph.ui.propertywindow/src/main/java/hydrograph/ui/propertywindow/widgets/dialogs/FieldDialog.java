@@ -114,6 +114,7 @@ public class FieldDialog extends Dialog {
 	private Label deleteButton;
 	private Label upButton;
 	private Label downButton;
+	private static final String INFORMATION="Information";
 
 	public FieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
@@ -744,7 +745,7 @@ public class FieldDialog extends Dialog {
 		if (isAnyUpdatePerformed) {
 			int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
 			MessageBox messageBox = new MessageBox(getShell(), style);
-			messageBox.setText(Messages.INFORMATION); //$NON-NLS-1$
+			messageBox.setText(INFORMATION); //$NON-NLS-1$
 			messageBox.setMessage(Messages.MessageBeforeClosingWindow);
 			if (messageBox.open() == SWT.YES) {
 				closeDialog = super.close();

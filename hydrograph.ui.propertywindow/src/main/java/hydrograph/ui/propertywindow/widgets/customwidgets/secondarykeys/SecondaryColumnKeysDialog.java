@@ -104,6 +104,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	private Label deleteButton;
 	private Label upButton;
 	private Label downButton;
+	private static final String INFORMATION="Information";
+	
 	public SecondaryColumnKeysDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar, EditButtonWithLabelConfig buttonWithLabelConfig) {
 		super(parentShell);
 		propertyList = new ArrayList<SecondaryColumnKeysInformation>();
@@ -698,7 +700,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		if (isAnyUpdatePerformed) {
 			int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
 			MessageBox messageBox = new MessageBox(new Shell(), style);
-			messageBox.setText(Messages.INFORMATION);
+			messageBox.setText(INFORMATION);
 			messageBox.setMessage(Messages.MessageBeforeClosingWindow);
 
 			if (messageBox.open() == SWT.YES) {
