@@ -33,14 +33,14 @@ import java.util.List;
  */
 public class MappingSheetRow implements IDataStructure {
 
-	private List<FilterProperties> inputFields;
+	private List<FilterProperties> inputFieldList;
 	private String comboBoxValue;
 	private String operationClassPath;
 	private boolean isWholeOperationParameter;
 	private List<FilterProperties> outputList;
 	private boolean isClassParameter;
 	private String operationId;
-	private List<NameValueProperty> nameValueProperty;
+	private List<NameValueProperty> nameValuePropertyList;
     private String wholeOperationParameterValue;
     private String operationClassFullPath;
 	
@@ -57,7 +57,7 @@ public class MappingSheetRow implements IDataStructure {
 	public MappingSheetRow(List<FilterProperties> input,
 			OperationClassProperty   operationClass,
 			List<FilterProperties> outputList) {
-		this.inputFields = input;
+		this.inputFieldList = input;
 		
 		this.outputList = outputList;
 
@@ -74,13 +74,13 @@ public class MappingSheetRow implements IDataStructure {
 			boolean isWholeOperationParameter,
 			String operationClassFullPath
 			) {
-		this.inputFields = input;
+		this.inputFieldList = input;
 		this.outputList = outputList;
 		this.comboBoxValue = comBoxValue;
 		this.operationClassPath = operationClassPath;
 		this.operationId=operationId;
 		this.setClassParameter(isClassParameter);
-		this.nameValueProperty=nameValueProperty;
+		this.nameValuePropertyList=nameValueProperty;
 		this.wholeOperationParameterValue=wholeOperationParameterValue;
 		this.isWholeOperationParameter=isWholeOperationParameter;
 		this.operationClassFullPath=operationClassFullPath;
@@ -90,12 +90,12 @@ public class MappingSheetRow implements IDataStructure {
 	public MappingSheetRow(List<FilterProperties> input, List<FilterProperties> outputList, String comBoxValue,String operationClassPath,boolean isClassParameter,String operationId,
 			 List<NameValueProperty> nameValueProperty) 
 	{
-		this.inputFields = input;
+		this.inputFieldList = input;
 		this.outputList = outputList;
 		this.comboBoxValue = comBoxValue;
 		this.operationClassPath = operationClassPath;
 		this.operationId=operationId;
-		this.nameValueProperty=nameValueProperty;
+		this.nameValuePropertyList=nameValueProperty;
 		this.setClassParameter(isClassParameter);
 	}
 	
@@ -118,11 +118,11 @@ public class MappingSheetRow implements IDataStructure {
 	}
 
 	public List<NameValueProperty> getNameValueProperty() {
-		return nameValueProperty;
+		return nameValuePropertyList;
 	}
 
 	public void setNameValueProperty(List<NameValueProperty> nameValueProperty) {
-		this.nameValueProperty = nameValueProperty;
+		this.nameValuePropertyList = nameValueProperty;
 	}
 
 	public String getOperationID() {
@@ -172,9 +172,9 @@ public class MappingSheetRow implements IDataStructure {
 	 * @return - List of input fields
 	 */
 	public List<FilterProperties> getInputFields() {
-		if(this.inputFields==null)
+		if(this.inputFieldList==null)
 			return new ArrayList<FilterProperties>();
-		return inputFields;
+		return inputFieldList;
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class MappingSheetRow implements IDataStructure {
 	 * @param inputFields
 	 */
 	public void setInputFields(List<FilterProperties> inputFields) {
-		this.inputFields = inputFields;
+		this.inputFieldList = inputFields;
 	}
 	
 	/**
@@ -227,9 +227,9 @@ public class MappingSheetRow implements IDataStructure {
 
 	@Override
 	public Object clone(){
-		List<FilterProperties> inputFields = new LinkedList<>();
+		List<FilterProperties> inputFieldList = new LinkedList<>();
 		List<FilterProperties> outputList = new LinkedList<>();		
-		List<NameValueProperty> nameValueProperty=new ArrayList<>();
+		List<NameValueProperty> nameValuePropertyList=new ArrayList<>();
 		
 		boolean isWholeOperationParameter=this.isWholeOperationParameter;
 		String wholeOperationParameterValue=this.wholeOperationParameterValue;
@@ -238,18 +238,18 @@ public class MappingSheetRow implements IDataStructure {
 		boolean isClassParamter=this.isClassParameter;
 		String operationId=this.operationId;
 		String operationClassFullPath=this.operationClassFullPath;
-		inputFields.addAll(this.inputFields);
+		inputFieldList.addAll(this.inputFieldList);
 		outputList.addAll(this.outputList);
-		if(this.nameValueProperty!=null)
+		if(this.nameValuePropertyList!=null)
 		{
-		for(NameValueProperty nameValueProperty2:this.nameValueProperty)
+		for(NameValueProperty nameValueProperty2:this.nameValuePropertyList)
 		{
 			NameValueProperty clonedNameValueProperty=new NameValueProperty();
 			clonedNameValueProperty=nameValueProperty2.clone();
-			nameValueProperty.add(clonedNameValueProperty);
+			nameValuePropertyList.add(clonedNameValueProperty);
 		}
 		}
-		MappingSheetRow mappingSheetRow = new MappingSheetRow(inputFields, outputList,operationId,comboBoxvalue,operationClasspath,nameValueProperty,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath);
+		MappingSheetRow mappingSheetRow = new MappingSheetRow(inputFieldList, outputList,operationId,comboBoxvalue,operationClasspath,nameValuePropertyList,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath);
 		
 		return mappingSheetRow;
 	}
@@ -258,10 +258,10 @@ public class MappingSheetRow implements IDataStructure {
 
 	@Override
 	public String toString() {
-		return "MappingSheetRow [inputFields=" + inputFields + ", comboBoxValue=" + comboBoxValue
+		return "MappingSheetRow [inputFields=" + inputFieldList + ", comboBoxValue=" + comboBoxValue
 				+ ", operationClassPath=" + operationClassPath + ", isWholeOperationParameter="
 				+ isWholeOperationParameter + ", outputList=" + outputList + ", isClassParameter=" + isClassParameter
-				+ ", operationId=" + operationId + ", nameValueProperty=" + nameValueProperty
+				+ ", operationId=" + operationId + ", nameValueProperty=" + nameValuePropertyList
 				+ ", wholeOperationParameterValue=" + wholeOperationParameterValue + "]";
 	}
 
@@ -270,10 +270,10 @@ public class MappingSheetRow implements IDataStructure {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((comboBoxValue == null) ? 0 : comboBoxValue.hashCode());
-		result = prime * result + ((inputFields == null) ? 0 : inputFields.hashCode());
+		result = prime * result + ((inputFieldList == null) ? 0 : inputFieldList.hashCode());
 		result = prime * result + (isClassParameter ? 1231 : 1237);
 		result = prime * result + (isWholeOperationParameter ? 1231 : 1237);
-		result = prime * result + ((nameValueProperty == null) ? 0 : nameValueProperty.hashCode());
+		result = prime * result + ((nameValuePropertyList == null) ? 0 : nameValuePropertyList.hashCode());
 		result = prime * result + ((operationClassPath == null) ? 0 : operationClassPath.hashCode());
 		result = prime * result + ((operationId == null) ? 0 : operationId.hashCode());
 		result = prime * result + ((outputList == null) ? 0 : outputList.hashCode());
@@ -296,19 +296,19 @@ public class MappingSheetRow implements IDataStructure {
 				return false;
 		} else if (!comboBoxValue.equals(other.comboBoxValue))
 			return false;
-		if (inputFields == null) {
-			if (other.inputFields != null)
+		if (inputFieldList == null) {
+			if (other.inputFieldList != null)
 				return false;
-		} else if (!inputFields.equals(other.inputFields))
+		} else if (!inputFieldList.equals(other.inputFieldList))
 			return false;
 		if (isClassParameter != other.isClassParameter)
 			return false;
 		if (isWholeOperationParameter != other.isWholeOperationParameter)
 			return false;
-		if (nameValueProperty == null) {
-			if (other.nameValueProperty != null)
+		if (nameValuePropertyList == null) {
+			if (other.nameValuePropertyList != null)
 				return false;
-		} else if (!nameValueProperty.equals(other.nameValueProperty))
+		} else if (!nameValuePropertyList.equals(other.nameValuePropertyList))
 			return false;
 		if (operationClassPath == null) {
 			if (other.operationClassPath != null)

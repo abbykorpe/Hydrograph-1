@@ -411,8 +411,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		}
 		createMapAndPassthroughTable(middleComposite);
-
-	}
+		
+		
+    }
 
 	private void createMapAndPassthroughTable(Composite middleComposite) {
 		Composite mappingTableComposite = new Composite(middleComposite, SWT.NONE);
@@ -864,7 +865,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		
 		List<FilterProperties> validatorOutputFields  = new ArrayList<>(temporaryOutputFieldList);
 		temporaryOutputFieldList.clear();
-		validatorOutputFields.clear();
 		temporaryOutputFieldList.addAll(convertNameValueToFilterProperties(transformMapping.getMapAndPassthroughField()));
 		for (MappingSheetRow mappingSheetRow1 : transformMapping.getMappingSheetRows()) {
 
