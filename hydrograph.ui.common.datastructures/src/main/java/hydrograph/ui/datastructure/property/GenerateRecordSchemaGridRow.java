@@ -14,7 +14,6 @@
  
 package hydrograph.ui.datastructure.property;
 
-import org.apache.commons.lang.StringUtils;
 
 /**
  * This class is used as data structure for GenerateRecords component's Schema Grid
@@ -81,7 +80,7 @@ public class GenerateRecordSchemaGridRow extends FixedWidthGridRow {
 		return tempschemaGrid;
 	}
 	
-	@Override
+/*	@Override
 	public boolean equals(Object obj) {
 		
 		if (obj instanceof GenerateRecordSchemaGridRow) {
@@ -104,5 +103,5 @@ public class GenerateRecordSchemaGridRow extends FixedWidthGridRow {
 		}
 		return false;
 		
-	}
+	}*/
 }

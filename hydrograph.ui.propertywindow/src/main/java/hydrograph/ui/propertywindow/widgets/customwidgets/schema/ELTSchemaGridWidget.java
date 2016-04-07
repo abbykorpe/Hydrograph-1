@@ -49,6 +49,7 @@ import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDetails;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.GridChangeListener;
+import hydrograph.ui.propertywindow.widgets.utility.GridComparator;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
@@ -58,6 +59,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -394,7 +396,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				}
 				
 			}
-			if(!equalLists(schemaInGrid, schemasFromFile)){
+			if(!equalLists(schemaInGrid, schemasFromFile,new GridComparator())){
 				verifiedSchema=false;
 				MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.EXPORTED_SCHEMA_NOT_IN_SYNC);
 			}
@@ -458,7 +460,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			gridRow.setDescription("");
 	}
 	
-	public  boolean equalLists(List<GridRow> one, List<GridRow> two){     
+	public  boolean equalLists(List<GridRow> one, List<GridRow> two, GridComparator gridComparator ){     
 	    if (one == null && two == null){
 	        return true;
 	    }
@@ -468,10 +470,17 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	      || one.size() != two.size()){
 	        return false;
 	    }
-	    one = new ArrayList<GridRow>(one); 
-	    two = new ArrayList<GridRow>(two);   
- 
-	    return one.equals(two);
+	    Iterator<GridRow> firstList = one.iterator();
+	    Iterator<GridRow> secondList = two.iterator();
+	    while (firstList.hasNext()) {
+	    	GridRow t1 = firstList.next();
+	    	GridRow t2 = secondList.next();
+	        if (gridComparator.compare(t1, t2) != 0) {
+	            // as soon as a difference is found, stop looping
+	            return false;
+	        }
+	    }
+	    return true;
 	}
 	
 	// Operational class label.

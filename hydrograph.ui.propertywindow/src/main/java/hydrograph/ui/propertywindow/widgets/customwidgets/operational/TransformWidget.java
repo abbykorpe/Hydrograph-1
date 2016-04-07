@@ -280,12 +280,8 @@ public class TransformWidget extends AbstractWidget {
 				SchemaPropagationHelper schemaPropagationHelper = new SchemaPropagationHelper();
 				schemaGridRow = schemaPropagationHelper.createSchemaGridRow(inputField);
 			}
-				if (!currentFieldsInProppogatedSchemaObject.contains(inputField)) {
-					for (int i = 0; i < schema.getGridRow().size(); i++) {
-						if(!schema.getGridRow().get(i).getFieldName().equalsIgnoreCase(schemaGridRow.getFieldName()))
+				if (!currentFieldsInProppogatedSchemaObject.contains(inputField) && !schema.getGridRow().contains(schemaGridRow)) {
 							schema.getGridRow().add(schemaGridRow);
-					} 
-					
 				} else {
 					for (int index = 0; index < schema.getGridRow().size(); index++) {
 						if (schema.getGridRow().get(index).getFieldName().equals(inputField)) {

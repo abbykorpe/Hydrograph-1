@@ -15,8 +15,6 @@
 package hydrograph.ui.datastructure.property;
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
 
-import org.apache.commons.lang.StringUtils;
-
 
 
 /**
@@ -132,7 +130,7 @@ public class GridRow implements IDataStructure {
 			return result;
 		}
 
-		@Override
+	/*	@Override
 		public boolean equals(Object obj) {
 			
 			if (obj instanceof GridRow) {
@@ -145,12 +143,31 @@ public class GridRow implements IDataStructure {
 						StringUtils.equals(String.valueOf(gridRow.getScaleType()), String.valueOf(this.getScaleType())) &&
 						StringUtils.equals(gridRow.getScaleTypeValue(), this.getScaleTypeValue()) &&
 						StringUtils.equals(gridRow.getPrecision(), this.getPrecision())	
-						//&& StringUtils.equals(gridRow.getDescription(), this.getDescription())
+						&& StringUtils.equals(gridRow.getDescription(), this.getDescription())
 					)
 					return true;
 			}
 			return false;
 			
+		}
+
+*/
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			GridRow other = (GridRow) obj;
+			if (fieldName == null) {
+				if (other.fieldName != null)
+					return false;
+			} else if (!fieldName.equals(other.fieldName))
+				return false;
+			return true;
 		}
 
 		

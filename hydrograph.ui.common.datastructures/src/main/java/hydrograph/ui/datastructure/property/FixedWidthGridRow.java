@@ -14,7 +14,6 @@
  
 package hydrograph.ui.datastructure.property;
 
-import org.apache.commons.lang.StringUtils;
 
 /**
  * The Class FixedWidthGridRow.
@@ -59,7 +58,7 @@ public class FixedWidthGridRow extends GridRow{
 		return tempschemaGrid;
 	}
 	
-	@Override
+/*	@Override
 	public boolean equals(Object obj) {
 		
 		if (obj instanceof FixedWidthGridRow) {
@@ -79,6 +78,6 @@ public class FixedWidthGridRow extends GridRow{
 		}
 		return false;
 		
-	}
+	}*/
 	
 }
