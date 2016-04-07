@@ -14,6 +14,12 @@
  
 package hydrograph.ui.propertywindow.widgets.utility;
 
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.NameValueProperty;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.eclipse.jface.viewers.CellEditor;
@@ -127,6 +133,22 @@ public class DragDropUtility {
 	    });
 
 	}
+	public static List<NameValueProperty> union(List<NameValueProperty> list1, List<NameValueProperty> list2) {
+	    for (NameValueProperty nameValueProperty : list1) {
+	    	if(!list2.contains(nameValueProperty))
+	    		list2.add(nameValueProperty);
+	    }
+	    return list2;
+	}
+	public static List<FilterProperties> unionFilter(List<FilterProperties> list1, List<FilterProperties> list2) {
+	    for (FilterProperties filterProperties : list1) {
+	    	if(!list2.contains(filterProperties))
+	    		list2.add(filterProperties);
+	    }
+	    return list2;
+	}
+
+
 }
 
 class DradDropUtilityListener extends DropTargetAdapter{

@@ -16,6 +16,7 @@ package hydrograph.ui.propertywindow.widgets.filterproperty;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.customwidgets.lookupproperty.ELTLookupMapWizard;
 import hydrograph.ui.propertywindow.widgets.customwidgets.operational.TransformDialog;
@@ -34,7 +35,8 @@ import org.eclipse.swt.widgets.Item;
 public class ELTCellModifier implements ICellModifier{
 	
 	private Viewer viewer;
-	TransformDialog transformDialog;	
+	private TransformDialog transformDialog;	
+	private MappingSheetRow mappingSheetRow;  
 	/**
 	 * Instantiates a new ELT cell modifier.
 	 * 
@@ -48,7 +50,12 @@ public class ELTCellModifier implements ICellModifier{
 		this.viewer = viewer;
 		this.transformDialog=transformDialog;
 	}
-
+    
+	public ELTCellModifier(Viewer viewer,TransformDialog transformDialog,MappingSheetRow mappingSheetRow) {
+		this.viewer = viewer;
+		this.transformDialog=transformDialog;
+		this.mappingSheetRow=mappingSheetRow;
+	}
 	
 	@Override
 	public boolean canModify(Object element, String property) {
@@ -81,7 +88,10 @@ public class ELTCellModifier implements ICellModifier{
 				  p.setPropertyname((String)value);
 			}
 			else if(Messages.INNER_OPERATION_INPUT_FIELD.equals(property))
-			p.setPropertyname((String)value);
+			{p.setPropertyname((String)value);
+			transformDialog.refreshOutputTable();
+			transformDialog.showValidationMessage(mappingSheetRow);
+			}
 			else if(Messages.INNER_OPERATION_OUTPUT_FIELD.equals(property))
 			{		
 			p.setPropertyname((String )value);	

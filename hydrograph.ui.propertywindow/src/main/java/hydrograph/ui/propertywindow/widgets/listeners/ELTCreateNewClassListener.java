@@ -18,6 +18,7 @@ package hydrograph.ui.propertywindow.widgets.listeners;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.operational.OperationClassDialog;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
 
@@ -48,19 +49,25 @@ public class ELTCreateNewClassListener implements IELTListener{
 	}
 
 	@Override
-	public Listener getListener(final PropertyDialogButtonBar propertyDialogButtonBar,ListenerHelper helpers, Widget... widgets) {
+	public Listener getListener(final PropertyDialogButtonBar propertyDialogButtonBar, final ListenerHelper helpers, Widget... widgets) {
 		final Widget[] widgetList = widgets;
-			
+		
 		if (helpers != null) {
 			widgetConfig = (WidgetConfig) helpers.get(HelperType.WIDGET_CONFIG);
 		}
 		
-		Listener listener=new Listener() {
+		 Listener listener=new Listener() {
 			@Override
 			public void handleEvent(Event event) {
 				String comboValue = ((Combo) widgetList[0]).getText();
 				if (comboValue.equals(Messages.CUSTOM)) {
 					FilterOperationClassUtility.createNewClassWizard((Text) widgetList[1], widgetConfig);
+					if(helpers.get(HelperType.OPERATION_CLASS_DIALOG_OK_CONTROL) instanceof OperationClassDialog)
+					{
+						OperationClassDialog operationClassDialog=(OperationClassDialog)helpers.get(HelperType.OPERATION_CLASS_DIALOG_OK_CONTROL);
+						operationClassDialog.getShell().setFocus();
+					}
+						
 					propertyDialogButtonBar.enableApplyButton(true);
 				}
 			}

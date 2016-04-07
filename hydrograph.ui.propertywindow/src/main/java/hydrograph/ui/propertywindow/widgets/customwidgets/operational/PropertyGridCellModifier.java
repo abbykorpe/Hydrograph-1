@@ -16,8 +16,10 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
@@ -35,7 +37,7 @@ public class PropertyGridCellModifier implements ICellModifier {
 	
 	/** The Constant PROPERTY_VALUE. */
 	private static final String PROPERTY_VALUE = "Target";
-	
+	private PropertyDialogButtonBar propertyDialogButtonBar ;
   /**
 	 * Instantiates a new schema grid cell modifier.
 	 * 
@@ -45,6 +47,12 @@ public class PropertyGridCellModifier implements ICellModifier {
   public PropertyGridCellModifier(Viewer viewer) {
     this.viewer = viewer;
   }
+  
+  public PropertyGridCellModifier(Viewer viewer,PropertyDialogButtonBar propertyDialogButtonBar) {
+	    this.viewer = viewer;
+	    this.propertyDialogButtonBar=propertyDialogButtonBar;
+	  }
+ 
   public PropertyGridCellModifier(TransformDialog transformDialogNew ,Viewer viewer) {
 	    this.viewer = viewer;
 	    this.transformDialog=transformDialogNew;
@@ -77,7 +85,7 @@ public class PropertyGridCellModifier implements ICellModifier {
    */ 
   public Object getValue(Object element, String property) {
 	  NameValueProperty p = (NameValueProperty) element;
-	  
+	
     if (PROPERTY_NAME.equals(property)||Messages.PROPERTY_NAME.equals(property))
         return p.getPropertyName();
     else if (PROPERTY_VALUE.equals(property)||Messages.PROPERTY_VALUE.equals(property))
@@ -102,15 +110,29 @@ public class PropertyGridCellModifier implements ICellModifier {
       element = ((Item) element).getData();
  
     NameValueProperty p = (NameValueProperty) element;
-    if (PROPERTY_NAME.equals(property)||Messages.PROPERTY_NAME.equals(property))
+    if (PROPERTY_NAME.equals(property))
       p.setPropertyName(((String) value).trim());
+   
     if (PROPERTY_VALUE.equals(property))
     {	
         p.setPropertyValue(((String) value).trim());
         transformDialog.refreshOutputTable();	
+        transformDialog.showHideValidationMessage();
+        
     }
+    if(Messages.PROPERTY_NAME.equals(property))
+    {
+    	 p.setPropertyName(((String) value).trim());
+    	 if(propertyDialogButtonBar!=null )  
+    	 propertyDialogButtonBar.enableApplyButton(true);
+    }	
     if(Messages.PROPERTY_VALUE.equals(property))
+    {	
     p.setPropertyValue(((String) value).trim());
+    if(propertyDialogButtonBar!=null )  
+   	 propertyDialogButtonBar.enableApplyButton(true);
+	
+    }
          
     
     viewer.refresh();

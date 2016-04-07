@@ -19,7 +19,9 @@ public class NameValueProperty extends PropertyField{
 	private String propertyName;
 	private String propertyValue;
 
-	
+	public NameValueProperty() {
+		
+	}
 	
 	public String getPropertyValue() {
 		return propertyValue;
@@ -66,13 +68,20 @@ public class NameValueProperty extends PropertyField{
 		if (getClass() != obj.getClass())
 			return false;
 		NameValueProperty other = (NameValueProperty) obj;
-		if (propertyName == null) {
-			if (other.propertyName != null)
+		if (propertyValue == null) {
+			if (other.propertyValue != null)
 				return false;
-		} else if (!propertyName.equals(other.propertyName))
+		} else if (!propertyValue.equals(other.propertyValue))
 			return false;
 		return true;
 	}
-
+	
+	@Override
+	public NameValueProperty  clone(){
+		NameValueProperty nameValueProperty=new NameValueProperty();
+	    nameValueProperty.setPropertyName(getPropertyName());
+	    nameValueProperty.setPropertyValue(getPropertyValue());
+		return nameValueProperty;
+	};
 
 }

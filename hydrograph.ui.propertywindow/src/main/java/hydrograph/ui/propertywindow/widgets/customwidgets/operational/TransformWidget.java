@@ -116,7 +116,7 @@ public class TransformWidget extends AbstractWidget {
 
 				TransformMapping oldATMappings = (TransformMapping) transformMapping.clone();
 
-				TransformDialog transformDialog=new TransformDialog(new Shell(),getComponent().getComponentName(),widgetConfig,transformMapping);
+				TransformDialog transformDialog=new TransformDialog(new Shell(),getComponent(),widgetConfig,transformMapping);
 				transformDialog.open();
 
 
@@ -271,20 +271,26 @@ public class TransformWidget extends AbstractWidget {
 
 		for (String inputField : mapFields.keySet()) {
 			tempSchemaGridRow = (BasicSchemaGridRow) getFieldSchema(inputField);
+			BasicSchemaGridRow schemaGridRow=null ;
 			if (tempSchemaGridRow != null) {
-				BasicSchemaGridRow schemaGridRow = (BasicSchemaGridRow) tempSchemaGridRow.copy();
-				schemaGridRow.setFieldName(mapFields.get(inputField));
-
-				if (!currentFieldsInProppogatedSchemaObject.contains(mapFields.get(inputField))) {
-					schema.getGridRow().add(schemaGridRow);
+				schemaGridRow= (BasicSchemaGridRow) tempSchemaGridRow.copy();
+				schemaGridRow.setFieldName(inputField);
+			}
+			else{
+				SchemaPropagationHelper schemaPropagationHelper = new SchemaPropagationHelper();
+				schemaGridRow = schemaPropagationHelper.createSchemaGridRow(inputField);
+			}
+				if (!currentFieldsInProppogatedSchemaObject.contains(inputField) && !schema.getGridRow().contains(schemaGridRow)) {
+							schema.getGridRow().add(schemaGridRow);
 				} else {
 					for (int index = 0; index < schema.getGridRow().size(); index++) {
-						if (schema.getGridRow().get(index).getFieldName().equals(mapFields.get(inputField))) {
+						if (schema.getGridRow().get(index).getFieldName().equals(inputField)) {
 							schema.getGridRow().set(index, schemaGridRow);
 						}
 					}
 				}
-			}
+			 
+			
 		}
 
 	}
@@ -301,7 +307,7 @@ public class TransformWidget extends AbstractWidget {
 			if(schemaGridRow!=null){
 				BasicSchemaGridRow tempSchemaGrid =(BasicSchemaGridRow) schemaGridRow.copy();
 
-				if (!currentFieldsInProppogatedSchemaObject.contains(passThroughField)) {
+				if (!currentFieldsInProppogatedSchemaObject.contains(passThroughField) && !schema.getGridRow().contains(tempSchemaGrid)) {
 					schema.getGridRow().add(tempSchemaGrid);
 				} else {
 					for (int index = 0; index < schema.getGridRow().size(); index++) {
@@ -335,7 +341,7 @@ public class TransformWidget extends AbstractWidget {
 			
 
 
-			if (!currentFieldsInProppogatedSchemaObject.contains(operationField.getPropertyname())) {
+			if (!currentFieldsInProppogatedSchemaObject.contains(operationField.getPropertyname()) && !schema.getGridRow().contains(schemaGridRow)) {
 				schema.getGridRow().add(schemaGridRow);
 			} else {
 				for (int index = 0; index < schema.getGridRow().size(); index++) {
@@ -357,7 +363,7 @@ public class TransformWidget extends AbstractWidget {
 			for (NameValueProperty nameValueProperty : nameValueProperties) {
 				if (!(nameValueProperty.getPropertyName().equals(
 						nameValueProperty.getPropertyValue()))) {
-					mapField.put(nameValueProperty.getPropertyName(),nameValueProperty.getPropertyValue());
+					mapField.put(nameValueProperty.getPropertyValue(),nameValueProperty.getPropertyName());
 				}
 			}
 
