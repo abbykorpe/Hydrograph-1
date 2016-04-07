@@ -15,7 +15,7 @@
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd">
 	<tns:component paletteIconPath="/icons/hive_textfile_output_palette.png" canvasIconPath="/icons/hive_textfile_output_canvas.png"
 		name="OHiveTextFile" nameInPalette="Hive TextFile" defaultNamePrefix="OHiveTextFile" 
-		description="This is OHiveTextFile component. Takes text file as input and performs Hive job."
+		description="Takes text file as input and performs Hive job."
 		helpFilePath="/hydrograph.ui.help/html/Components/Output_Hive_Text.html">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
