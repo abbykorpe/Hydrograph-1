@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -963,9 +964,16 @@ public abstract class Component extends Model {
 					     } 
 						clonedHashMap.put(entry.getKey(), clonedArrayList);
 					}
+					
+					else if (entry.getValue() instanceof LinkedHashMap)
+						clonedHashMap.put(entry.getKey(),new LinkedHashMap<>((LinkedHashMap<String, String>) entry.getValue()));
+					
 					else if (entry.getValue() instanceof HashMap)
 					clonedHashMap.put(entry.getKey(),new HashMap<>((HashMap<String, String>) entry.getValue()));
 						
+					else if (entry.getValue() instanceof LinkedHashSet)
+						clonedHashMap.put(entry.getKey(),new LinkedHashSet<>((LinkedHashSet<String>) entry.getValue()));
+							
 					
 					else if (entry.getValue() instanceof HashSet)
 					clonedHashMap.put(entry.getKey(),new HashSet<>((HashSet<String>) entry.getValue()));

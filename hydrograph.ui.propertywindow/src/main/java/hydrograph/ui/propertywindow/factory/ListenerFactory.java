@@ -96,7 +96,6 @@ public class ListenerFactory {
 		COMBO_CHANGE(OperationClassComboChangeListener.class),
 		VERIFY_NUMERIC_OR_PARAMETER_FOCUS_IN(VerifyNumbericOrParameterFocusInListener.class),
 		VERIFY_NUMERIC_OR_PARAMETER_FOCUS_OUT(VerifyNumbericOrParameterFocusOutListener.class);
-		
 		Class<?> clazz = null;
 		private Listners(Class<?> clazz) {
 			this.clazz = clazz; 

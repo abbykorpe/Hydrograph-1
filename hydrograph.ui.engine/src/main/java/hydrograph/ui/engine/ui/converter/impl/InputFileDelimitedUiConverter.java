@@ -72,6 +72,9 @@ public class InputFileDelimitedUiConverter extends InputUiConverter {
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
 				convertBooleanVlaue(fileDelimited.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 
+		if(fileDelimited.getQuote()!=null)
+			 propertyMap.put(PropertyNameConstants.QUOTE.value(), fileDelimited.getQuote().getValue());
+		
 		uiComponent.setType(UIComponentsConstants.FILE_DELIMITED.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);

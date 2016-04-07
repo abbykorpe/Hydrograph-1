@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
 import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
 import com.bitwiseglobal.graph.inputtypes.TextFileDelimited;
+import com.bitwiseglobal.graph.inputtypes.TextFileDelimited.Quote;
 import com.bitwiseglobal.graph.itfd.TypeInputDelimitedOutSocket;
 
 public class InputFileDelimitedConverter extends InputConverter {
@@ -64,6 +65,12 @@ public class InputFileDelimitedConverter extends InputConverter {
 		fileDelimited.setSafe(getBoolean(PropertyNameConstants.IS_SAFE.value()));
 		fileDelimited.setCharset(charset);
 		fileDelimited.setRuntimeProperties(getRuntimeProperties());
+		if (properties.get(PropertyNameConstants.QUOTE.value()) != null) {
+			Quote quote = new Quote();
+			quote.setValue((String) properties.get(PropertyNameConstants.QUOTE.value()));
+			fileDelimited.setQuote(quote);
+		}
+			 	
 	}
 
 	@Override

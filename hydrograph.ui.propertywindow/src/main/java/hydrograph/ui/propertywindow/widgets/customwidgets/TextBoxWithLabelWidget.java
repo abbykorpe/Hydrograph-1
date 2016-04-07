@@ -114,8 +114,14 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		txtDecorator = WidgetUtility.addDecorator(textBox, Messages.bind(Messages.EMPTY_FIELD, textBoxConfig.getName()));
 		txtDecorator.setMarginWidth(3);
 		
-		ListenerHelper helper = prepareListenerHelper();
+		attachListeners(textBoxWidget);
 		
+		populateWidget();
+		logger.debug("Finished {} textbox creation", textBoxConfig.getName());
+	}
+
+	protected void attachListeners(AbstractELTWidget textBoxWidget) {
+		ListenerHelper helper = prepareListenerHelper();
 		try {
 			for (Listners listenerNameConstant : textBoxConfig.getListeners()) {
 				IELTListener listener = listenerNameConstant.getListener();
@@ -124,9 +130,6 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		} catch (Exception exception) {
 			logger.error("Failed in attaching listeners to {}, {}", textBoxConfig.getName(), exception);
 		}
-		
-		populateWidget();
-		logger.debug("Finished {} textbox creation", textBoxConfig.getName());
 	}
 
 	protected ListenerHelper prepareListenerHelper() {
@@ -139,7 +142,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 	protected void populateWidget(){
 		logger.debug("Populating {} textbox", textBoxConfig.getName());
 		String property = propertyValue;
-		if(StringUtils.isNotBlank(property)){
+		if(StringUtils.isNotBlank(property) ){
 			textBox.setText(property);
 			txtDecorator.hide();
 		}

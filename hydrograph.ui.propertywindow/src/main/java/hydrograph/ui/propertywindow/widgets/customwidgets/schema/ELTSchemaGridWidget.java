@@ -1,3 +1,4 @@
+
 /********************************************************************************
  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,6 +60,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EventObject;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -79,12 +81,15 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
+import org.eclipse.jface.viewers.FocusCellOwnerDrawHighlighter;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
+import org.eclipse.jface.viewers.TableViewerFocusCellManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -101,7 +106,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
@@ -421,7 +425,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 		catch(Exception ex)
 		{
-			MessageDialog.openError(new Shell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + "-\n" + ex.getMessage());
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + "-\n" + ex.getMessage());
 			logger.error(Messages.IMPORT_XML_FORMAT_ERROR);
 			return false;
 		}
@@ -652,7 +656,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					tableViewer.setInput(schemaGridRowList);
 					tableViewer.refresh();
 					enableDisableButtons(schemaGridRowListToImport.size());
-					MessageDialog.openInformation(new Shell(), "Information", Messages.IMPORTED_SCHEMA);
+					MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.IMPORTED_SCHEMA);
 				}
 				
 			}
@@ -902,6 +906,23 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		upButton.setEnabled(false);
 		downButton.setEnabled(false);
 		deleteButton.setEnabled(false);
+		
+		TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(tableViewer, new FocusCellOwnerDrawHighlighter(tableViewer));
+		ColumnViewerEditorActivationStrategy activationSupport = new ColumnViewerEditorActivationStrategy(tableViewer) {
+		    protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
+		        if (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION) {
+		            EventObject source = event.sourceEvent;
+		            if (source instanceof MouseEvent && ((MouseEvent)source).button == 3)
+		                return false;
+		        }
+		        return super.isEditorActivationEvent(event) || (event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED && event.keyCode == SWT.F2);
+		    }
+		};
+		TableViewerEditor.create(tableViewer, focusCellManager, activationSupport,ColumnViewerEditor.TABBING_HORIZONTAL | 
+			    ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | 
+			    ColumnViewerEditor.TABBING_VERTICAL |
+			    ColumnViewerEditor.KEYBOARD_ACTIVATION);
+		
 		populateWidget();
 		return tableViewer;
 	}

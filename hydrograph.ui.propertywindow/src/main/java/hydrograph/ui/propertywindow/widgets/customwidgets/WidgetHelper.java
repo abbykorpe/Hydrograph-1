@@ -70,7 +70,6 @@ public class WidgetHelper {
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Constants.QUOTE);
 		textBoxConfig.setGrabExcessSpace(true);
-		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
 	}
 	
