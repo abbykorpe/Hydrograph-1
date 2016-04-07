@@ -135,8 +135,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private List<FilterProperties> temporaryOutputFieldList = new ArrayList<>();
 	private MappingSheetRow mappingSheetRow;
 	private Label errorLabel;
-	private Set<FilterProperties> set ;
-	private boolean isOperationInputFieldDupluicate;
+	private boolean isOperationInputFieldDuplicate;
 	private TransformDialog transformDialog; 
 	public TransformDialog(Shell parentShell, Component component, WidgetConfig widgetConfig, TransformMapping atMapping) {
 	
@@ -884,7 +883,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	}
    public boolean isDuplicateDataInOutputList()
    {
-	 set= new HashSet<FilterProperties>(temporaryOutputFieldList); 
+	  Set<FilterProperties>  set= new HashSet<FilterProperties>(temporaryOutputFieldList); 
      if(set.size() < temporaryOutputFieldList.size()){
 	      return true;
 	   }
@@ -894,14 +893,14 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
  } 
    public boolean isDuplicateInOperationInputField(MappingSheetRow mappingSheetRow)
    {
-	   set=new HashSet<FilterProperties>(mappingSheetRow.getInputFields());
+	   Set<FilterProperties> set=new HashSet<FilterProperties>(mappingSheetRow.getInputFields());
 	   if(set.size()< mappingSheetRow.getInputFields().size())
 	   {   
-		 isOperationInputFieldDupluicate=true;  
-		return true;
+		 isOperationInputFieldDuplicate=true;  
+		return isOperationInputFieldDuplicate;
 	   }
 	   else
-		isOperationInputFieldDupluicate=false;    
+		isOperationInputFieldDuplicate=false;    
 	   set.clear();
 	   return false;
    } 
@@ -930,7 +929,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		  errorLabel.setText("Output Field already exists                "); 
 		 
 	   }  
-	   else if(isOperationInputFieldDupluicate)
+	   else if(isOperationInputFieldDuplicate)
 	   {
 		   errorLabel.setVisible(true); 
 		   errorLabel.setText("Operation Input field already exists"); 
@@ -1028,22 +1027,21 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		});
 		return operationalInputFieldTableViewer;
 	}
-    private void setIsOperationInputFieldDuplicate()
+   
+	private void setIsOperationInputFieldDuplicate()
     {
-   if(!transformMapping.getMappingSheetRows().isEmpty()) 	
-   {   
-    List<MappingSheetRow> mappingSheetRows=transformMapping.getMappingSheetRows();
-    for(MappingSheetRow mappingSheetRow:mappingSheetRows)
-    {
-     set=new HashSet<FilterProperties>(mappingSheetRow.getInputFields());
-    if(set.size() < mappingSheetRow.getInputFields().size())
-    {
-    	isOperationInputFieldDupluicate=true;
-    	break;
-    }
-    
-    }
-    set.clear();
+		if (!transformMapping.getMappingSheetRows().isEmpty()) {
+			Set<FilterProperties> set = null;
+			List<MappingSheetRow> mappingSheetRows = transformMapping.getMappingSheetRows();
+			for (MappingSheetRow mappingSheetRow : mappingSheetRows) {
+				set = new HashSet<FilterProperties>(mappingSheetRow.getInputFields());
+				if (set.size() < mappingSheetRow.getInputFields().size()) {
+					isOperationInputFieldDuplicate = true;
+					break;
+				}
+
+			}
+			set.clear();
    }
     }
 	/**
@@ -1124,7 +1122,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	}
     
 	public boolean isOperationInputFieldDupluicate() {
-		return isOperationInputFieldDupluicate;
+		return isOperationInputFieldDuplicate;
 	}
 	
 	/**

@@ -129,29 +129,6 @@ public class GridRow implements IDataStructure {
 					+ ((fieldName == null) ? 0 : fieldName.hashCode());
 			return result;
 		}
-
-	/*	@Override
-		public boolean equals(Object obj) {
-			
-			if (obj instanceof GridRow) {
-				GridRow gridRow = (GridRow) obj;
-				
-				if ( StringUtils.equals(gridRow.getFieldName(), this.getFieldName()) &&
-						StringUtils.equals(String.valueOf(gridRow.getDataType()), String.valueOf(this.getDataType())) &&
-						StringUtils.equals(gridRow.getDataTypeValue(), this.getDataTypeValue()) &&
-						StringUtils.equals(gridRow.getDateFormat(),  this.getDateFormat()) &&
-						StringUtils.equals(String.valueOf(gridRow.getScaleType()), String.valueOf(this.getScaleType())) &&
-						StringUtils.equals(gridRow.getScaleTypeValue(), this.getScaleTypeValue()) &&
-						StringUtils.equals(gridRow.getPrecision(), this.getPrecision())	
-						&& StringUtils.equals(gridRow.getDescription(), this.getDescription())
-					)
-					return true;
-			}
-			return false;
-			
-		}
-
-*/
 		
 		@Override
 		public boolean equals(Object obj) {
