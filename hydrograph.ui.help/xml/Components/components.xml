@@ -74,4 +74,7 @@
    <topic href="html/Components/Output_Hive_Text.html" label="Output Hive TextFile">
       <anchor id="outputHiveTextFile"/>
    </topic>
+   <topic href="html/Components/Discard.html" label="Discard">
+      <anchor id="Discard"/>
+   </topic>
 </toc>
