@@ -39,6 +39,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.ELTXmlPropertiesContai
 import hydrograph.ui.propertywindow.widgets.customwidgets.SingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithLabelWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithLabelWidgetWithoutAnyValidation;
 import hydrograph.ui.propertywindow.widgets.customwidgets.WidgetHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty.ELTJoinPortCount;
@@ -84,7 +85,7 @@ public class WidgetFactory {
 		TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET(TextBoxWithIsParameterCheckBoxWidget.class,WidgetHelper.INSTANCE.getSequenceFieldWidgetConfig()),
 		DELIMETER_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getDelimiterWidgetConfig()),
 		PHASE_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getPhaseWidgetConfig()),
-		QUOTE_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getQuoteWidgetConfig()),
+		QUOTE_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getQuoteWidgetConfig()),
 		DATABASE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getDatabaseNameWidgetConfig()),
 		TABLE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getTableNameWidgetConfig()),
 		EXTERNAL_TABLE_PATH_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getExternalTablePathWidgetConfig()),
