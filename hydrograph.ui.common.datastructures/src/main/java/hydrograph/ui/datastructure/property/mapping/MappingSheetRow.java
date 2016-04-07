@@ -241,8 +241,14 @@ public class MappingSheetRow implements IDataStructure {
 		inputFields.addAll(this.inputFields);
 		outputList.addAll(this.outputList);
 		if(this.nameValueProperty!=null)
-		nameValueProperty.addAll(this.nameValueProperty);
-		
+		{
+		for(NameValueProperty nameValueProperty2:this.nameValueProperty)
+		{
+			NameValueProperty clonedNameValueProperty=new NameValueProperty();
+			clonedNameValueProperty=nameValueProperty2.clone();
+			nameValueProperty.add(clonedNameValueProperty);
+		}
+		}
 		MappingSheetRow mappingSheetRow = new MappingSheetRow(inputFields, outputList,operationId,comboBoxvalue,operationClasspath,nameValueProperty,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath);
 		
 		return mappingSheetRow;

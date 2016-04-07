@@ -24,6 +24,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.TableViewer;
 
 
+
 public class DragDropTransformOpImp implements DragDropOperation {
 
 	private List listOfInputFields;
@@ -93,6 +94,8 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	        
 	        }
 		 operationInputfieldtableviewer.refresh();
+		 transformDialogNew.showHideValidationMessage();
+		
 		
 	}
 

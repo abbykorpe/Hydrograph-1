@@ -82,6 +82,8 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	private Button okButton;
 	private Composite container;
 	private boolean isOkPressed;
+	private boolean isCancelPressed;
+	private boolean isApplyPressed;
 	private boolean closeDialog;
 	private PropertyDialogButtonBar operationClassDialogButtonBar;
 	private TootlTipErrorMessage tootlTipErrorMessage = new TootlTipErrorMessage();
@@ -95,14 +97,14 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private PropertyDialogButtonBar opeartionClassDialogButtonBar;
 	private Button cancelButton;
-
+    private TransformDialog transformDialog;
 	private MappingSheetRow mappingSheetRow;
 
 	private Composite buttonComposite;
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
 
 	public OperationClassDialog(Shell parentShell, String componentName, MappingSheetRow mappingSheetRow,
-			PropertyDialogButtonBar propertyDialogButtonBar, WidgetConfig widgetConfig) {
+			PropertyDialogButtonBar propertyDialogButtonBar, WidgetConfig widgetConfig,TransformDialog transformDialog ) {
 		super(parentShell);
 
 		this.widgetConfig = widgetConfig;
@@ -110,6 +112,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
 		opeartionClassDialogButtonBar = new PropertyDialogButtonBar(parentShell);
 		this.mappingSheetRow = mappingSheetRow;
+		this.transformDialog=transformDialog;
 	}
 
 	/**
@@ -157,7 +160,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		fileName = (Text) fileNameText.getSWTWidgetControl();
 		fileName.setData("path", mappingSheetRow.getOperationClassFullPath());
 		operationClasses = (Combo) comboOfOperationClasses.getSWTWidgetControl();
-
+        
 		FilterOperationClassUtility.enableAndDisableButtons(true, false);
 		FilterOperationClassUtility.setComponentName(componentName);
 		isParameterCheckBox = (Button) isParameterCheckbox.getSWTWidgetControl();
@@ -186,11 +189,11 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		gd_table_2.heightHint = 180;
 		gd_table_2.widthHint = 499;
 		table_2.setLayoutData(gd_table_2);
-		new TransformDialog().setTableViewer(nameValueTableViewer, nameValueComposite, new String[] {
+		transformDialog.setTableViewer(nameValueTableViewer, nameValueComposite, new String[] {
 				Messages.PROPERTY_NAME, Messages.PROPERTY_VALUE }, new ELTFilterContentProvider(),
 				new OperationLabelProvider());
 		nameValueTableViewer.setLabelProvider(new PropertyLabelProvider());
-		nameValueTableViewer.setCellModifier(new PropertyGridCellModifier(nameValueTableViewer));
+		nameValueTableViewer.setCellModifier(new PropertyGridCellModifier(nameValueTableViewer,operationClassDialogButtonBar));
 		nameValueTableViewer.setInput(mappingSheetRow.getNameValueProperty());
 		table_2.getColumn(0).setWidth(252);
 		table_2.getColumn(1).setWidth(259);
@@ -209,6 +212,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 					int currentSize = mappingSheetRow.getNameValueProperty().size();
 					int i = currentSize == 0 ? currentSize : currentSize - 1;
 					nameValueTableViewer.editElement(nameValueTableViewer.getElementAt(i), 0);
+					applyButton.setEnabled(true);
 				}
 
 			}
@@ -235,7 +239,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 						tempList.add(mappingSheetRow.getNameValueProperty().get(index));
 					}
 					mappingSheetRow.getNameValueProperty().removeAll(tempList);
-
+					applyButton.setEnabled(true);
 				}
 			}
 
@@ -254,7 +258,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 					if (index > 0) {
 						Collections.swap(mappingSheetRow.getNameValueProperty(), index, index - 1);
 						nameValueTableViewer.refresh();
-
+						applyButton.setEnabled(true);
 					}
 				}
 			}
@@ -272,6 +276,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 					if (indexes[i] < mappingSheetRow.getNameValueProperty().size() - 1) {
 						Collections.swap(mappingSheetRow.getNameValueProperty(), indexes[i], indexes[i] + 1);
 						nameValueTableViewer.refresh();
+						applyButton.setEnabled(true);
 
 					}
 				}
@@ -457,6 +462,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		} else {
 			closeDialog=super.close();
 		}
+		isCancelPressed=true;
 	}
 
 	@Override
@@ -478,6 +484,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 					mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),
 					mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData("path") );
 			applyButton.setEnabled(false);
+			isApplyPressed=true;
 		} else {
 			super.buttonPressed(buttonId);
 		}
@@ -485,7 +492,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	}
 
 	public MappingSheetRow getMappingSheetRow() {
-		return this.mappingSheetRow;
+		return mappingSheetRow;
 	}
 
 	public String getTootlTipErrorMessage() {
@@ -498,10 +505,28 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	 * 
 	 * @return boolean
 	 */
-	public boolean isOKPressed() {
+	public boolean isYesPressed() {
 		return isYesPressed;
 	}
-
+	
+	public boolean isNoPressed() {
+		return isNoPressed;
+	}
+	
+	public boolean isOkPressed()
+	{
+	return isOkPressed;	
+	}
+	
+	public boolean isCancelPressed()
+	{
+		return isCancelPressed;
+	}
+	public boolean isApplyPressed()
+	{
+	return isApplyPressed;	
+	}
+	
 	@Override
 	public void pressCancel() {
 		isNoPressed = true;
@@ -523,7 +548,5 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	 * 
 	 * @return boolean
 	 */
-	public boolean isCancelPressed() {
-		return isNoPressed;
-	}
+	
 }

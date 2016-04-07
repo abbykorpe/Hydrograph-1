@@ -786,8 +786,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 	}
 
-	private ListenerHelper getListenerHelper() {
-		if (helper == null) {
+	public ListenerHelper getListenerHelper(boolean isTab) {
+		if (helper == null && !isTab) {
 			helper = new ListenerHelper();
 			if (this.properties != null) {
 				Schema schema = (Schema) this.properties;
@@ -797,7 +797,14 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					(Label) fieldError.getSWTWidgetControl(), gridWidgetBuilder);
 			helper.put(HelperType.SCHEMA_GRID, value);
 
-		}
+		}else{
+			ELTGridDetails eltGridDetails = (ELTGridDetails)helper.get(HelperType.SCHEMA_GRID);
+			List<GridRow> gridRow= eltGridDetails.getGrids();
+			for (GridRow grids : getSchemaForInternalPapogation().getGridRow()) {
+				if(!gridRow.contains(grids))
+					gridRow.add(grids);
+			}
+			}
 		return helper;
 	}
 
@@ -863,7 +870,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		// Adding the decorator to show error message when field name same.
 
-		helper = getListenerHelper();
+		helper = getListenerHelper(false);
 		setDecorator();
 
 		addValidators();

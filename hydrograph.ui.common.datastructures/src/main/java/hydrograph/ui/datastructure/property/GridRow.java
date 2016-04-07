@@ -144,8 +144,8 @@ public class GridRow implements IDataStructure {
 						StringUtils.equals(gridRow.getDateFormat(),  this.getDateFormat()) &&
 						StringUtils.equals(String.valueOf(gridRow.getScaleType()), String.valueOf(this.getScaleType())) &&
 						StringUtils.equals(gridRow.getScaleTypeValue(), this.getScaleTypeValue()) &&
-						StringUtils.equals(gridRow.getPrecision(), this.getPrecision())	&&
-						StringUtils.equals(gridRow.getDescription(), this.getDescription())
+						StringUtils.equals(gridRow.getPrecision(), this.getPrecision())	
+						//&& StringUtils.equals(gridRow.getDescription(), this.getDescription())
 					)
 					return true;
 			}
