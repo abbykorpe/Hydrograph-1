@@ -68,9 +68,11 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getQuoteWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		List<Listners> listeners = textBoxConfig.getListeners();
+		listeners.add(Listners.EVENT_CHANGE);
+		textBoxConfig.setListeners(listeners);
 		textBoxConfig.setName(Constants.QUOTE);
 		textBoxConfig.setGrabExcessSpace(true);
-		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
 	}
 	

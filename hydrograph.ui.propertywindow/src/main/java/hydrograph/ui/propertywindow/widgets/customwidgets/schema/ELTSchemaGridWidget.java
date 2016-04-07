@@ -421,7 +421,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 		catch(Exception ex)
 		{
-			MessageDialog.openError(new Shell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + "-\n" + ex.getMessage());
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + "-\n" + ex.getMessage());
 			logger.error(Messages.IMPORT_XML_FORMAT_ERROR);
 			return false;
 		}
@@ -652,7 +652,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					tableViewer.setInput(schemaGridRowList);
 					tableViewer.refresh();
 					enableDisableButtons(schemaGridRowListToImport.size());
-					MessageDialog.openInformation(new Shell(), "Information", Messages.IMPORTED_SCHEMA);
+					MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.IMPORTED_SCHEMA);
 				}
 				
 			}

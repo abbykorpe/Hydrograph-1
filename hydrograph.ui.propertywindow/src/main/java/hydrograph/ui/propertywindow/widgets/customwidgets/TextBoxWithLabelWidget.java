@@ -139,7 +139,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 	protected void populateWidget(){
 		logger.debug("Populating {} textbox", textBoxConfig.getName());
 		String property = propertyValue;
-		if(StringUtils.isNotBlank(property)){
+		if(StringUtils.isNotBlank(property) || StringUtils.equals(textBoxConfig.getName(), Constants.QUOTE)){
 			textBox.setText(property);
 			txtDecorator.hide();
 		}
