@@ -92,7 +92,6 @@ public class ParameterGridDialog extends Dialog {
 	private Button headerCompositeCheckBox;
 	private Text paramterFileTextBox;
 	private String parameterFile;
-	private ControlDecoration txtDecorator;
 	private TraverseListener lastRowLastColumnTraverseListener;
 	
 	private boolean visibleParameterGirdNote=true;
@@ -300,8 +299,9 @@ public class ParameterGridDialog extends Dialog {
 		
 		for(Composite row:textGrid.getGrid()){
 			final Text text=((Text)row.getChildren()[1]);
-			txtDecorator=WidgetUtility.addDecorator(text,Messages.CHARACTERSET);
+			ControlDecoration txtDecorator=WidgetUtility.addDecorator(text,Messages.CHARACTERSET);
 			txtDecorator.hide();
+			text.setData(txtDecorator);
 			attachKeyValidator(text);
 			attachKeyFocusListener(text); 
 		}
@@ -383,7 +383,7 @@ public class ParameterGridDialog extends Dialog {
 		text.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				txtDecorator.hide();
+				((ControlDecoration)((Text)e.widget).getData()).hide();
 			}
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -396,14 +396,13 @@ public class ParameterGridDialog extends Dialog {
 		text.addVerifyListener(new VerifyListener() {
 			@Override
 			public void verifyText(VerifyEvent e) {
+				ControlDecoration txtDecorator=(ControlDecoration)((Text)e.widget).getData();
 				txtDecorator.hide();
 				String currentText = ((Text) e.widget).getText();
 				String newName = (currentText.substring(0, e.start) + e.text + currentText.substring(e.end));
 				Matcher matchName = Pattern.compile("[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*").matcher(newName);
 				if(!matchName.matches()){
 					text.setToolTipText(Messages.CHARACTERSET);
-					txtDecorator=WidgetUtility.addDecorator(text,Messages.CHARACTERSET);
-					txtDecorator.setDescriptionText(Messages.CHARACTERSET);
 					txtDecorator.show();
 					e.doit=false;
 				}
