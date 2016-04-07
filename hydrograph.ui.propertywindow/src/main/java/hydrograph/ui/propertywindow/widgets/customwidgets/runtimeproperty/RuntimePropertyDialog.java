@@ -96,6 +96,7 @@ public class RuntimePropertyDialog extends Dialog {
 	private boolean closeDialog;	
 	private boolean okPressed;
 	private boolean okPressedAfterUpdate;
+	private static final String INFORMATION="Information";
 	/**
 	 * Create the dialog.
 	 * 
@@ -344,7 +345,7 @@ public class RuntimePropertyDialog extends Dialog {
 		if (isAnyUpdatePerformed) {
 			int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
 			MessageBox messageBox = new MessageBox(new Shell(), style);
-			messageBox.setText(Messages.INFORMATION);
+			messageBox.setText(INFORMATION);
 			messageBox.setMessage(Messages.MessageBeforeClosingWindow);
 			if (messageBox.open() == SWT.YES) {
 				closeDialog = super.close();

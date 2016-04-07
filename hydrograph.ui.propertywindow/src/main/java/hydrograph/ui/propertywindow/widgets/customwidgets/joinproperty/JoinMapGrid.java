@@ -56,6 +56,8 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseTrackListener;
@@ -148,6 +150,7 @@ public class JoinMapGrid extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 		final Composite container = (Composite) super.createDialogArea(parent);
 		container.getShell().setText("Join Mapping");
+		container.setFocus();
 		container.setLayout(new GridLayout(6, false));
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
@@ -220,9 +223,23 @@ public class JoinMapGrid extends Dialog {
 				});
 			}
 		};
-
+		
 		expandBar.addListener(SWT.Expand, updateScrolledSize);
 		expandBar.addListener(SWT.Collapse, updateScrolledSize);
+		expandBar.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent event) {
+			}
+
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.character == SWT.ESC) {
+					close();
+					event.doit = false;
+				}
+			}
+		});
 		scrolledComposite.setContent(expandBar);
 		scrolledComposite.setMinSize(expandBar.computeSize(SWT.DEFAULT,
 				SWT.DEFAULT));
@@ -583,9 +600,9 @@ public class JoinMapGrid extends Dialog {
 		xpndtmItem.setControl(comGrid);
 		xpndtmItem.setHeight(270);
 		xpndtmItem.setExpanded(false);
-
+		
 		inputTableViewer[tableViewerIndex] = widget.createTableViewer(comGrid,
-				INPUT_COLUMN_NAME, new int[] { 2, 30, 229, 232 }, 224,
+				INPUT_COLUMN_NAME, new int[] { 7,7, 229, 251 }, 224,
 				new ELTFilterContentProvider(),new ELTFilterLabelProvider());
 		
 		inputTableViewer[tableViewerIndex].getTable().addMouseTrackListener(new MouseTrackListener() {
