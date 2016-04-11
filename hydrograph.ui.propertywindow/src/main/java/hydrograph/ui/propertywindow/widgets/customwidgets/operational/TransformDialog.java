@@ -847,12 +847,11 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					WidgetUtility.errorMessage(Messages.SelectRowToDelete);
 				} else {
 					table.remove(indexs);
-					ArrayList tempList = new ArrayList();
+					
 					for (int index : indexs) {
-
-						tempList.add(mappingSheetRow.getOutputList().get(index));
+						mappingSheetRow.getOutputList().remove(index);
+						
 					}
-					mappingSheetRow.getOutputList().removeAll(tempList);
 					refreshOutputTable();
 					showHideValidationMessage();
 				}
@@ -895,14 +894,14 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 	public void refreshOutputTable() {
 		
+
 		List<FilterProperties> validatorOutputFields  = new ArrayList<>();
 		 
 		for (FilterProperties filterproperty : temporaryOutputFieldList) {
 			if(!ParameterUtil.isParameter(filterproperty.getPropertyname()))
 		    validatorOutputFields.add(filterproperty);		
 		} 
-		
-		
+		validatorOutputFields.clear();
 		temporaryOutputFieldList.clear();
 		temporaryOutputFieldList.addAll(convertNameValueToFilterProperties(transformMapping.getMapAndPassthroughField()));
 		for (MappingSheetRow mappingSheetRow1 : transformMapping.getMappingSheetRows()) {

@@ -97,11 +97,15 @@ public class ELTCellModifier implements ICellModifier{
 		{		
 			filterProperties.setPropertyname((String )value);	
 			transformDialog.refreshOutputTable();
+
+			transformDialog.showHideValidationMessage();
 		}
+			
 		else if(Messages.OUTPUT_FIELD.equals(property))
-		{
-			filterProperties.setPropertyname((String )value);	
-		}
+			{
+				filterProperties.setPropertyname((String )value);	
+			}
+
 		// Force the viewer to refresh
 		viewer.refresh();
 
