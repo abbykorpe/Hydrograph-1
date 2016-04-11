@@ -244,8 +244,12 @@
             file="html/Components/Aggregate_Mapping_View.html">
       </toc>
       <toc
+            file="html/Components/Discard.html">
+      </toc>
+      <toc
             file="html/references/Job_Examples.html">
       </toc>
+      
    </extension>
 
 </plugin>
