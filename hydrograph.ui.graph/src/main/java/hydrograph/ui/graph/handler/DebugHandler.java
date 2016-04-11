@@ -30,6 +30,7 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -175,6 +176,14 @@ public class DebugHandler  extends AbstractHandler {
 		job.setRemoteMode(runConfigDialog.isRemoteMode());
 		job.setPassword(clusterPassword);
 		job.setUniqueJobId(uniqueJobID);
+		
+		String port_no =runConfigDialog.getPortNo();
+		
+		if(!StringUtils.isEmpty(port_no)){
+			job.setPort_no(port_no);
+		}else{
+			job.setPort_no("8004");
+		}
 
 		job.setDebugMode(true);
 		job.setPassword(clusterPassword);

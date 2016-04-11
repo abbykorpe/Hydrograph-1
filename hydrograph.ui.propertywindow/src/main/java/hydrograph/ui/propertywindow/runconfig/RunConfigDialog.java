@@ -40,11 +40,11 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -73,6 +73,7 @@ public class RunConfigDialog extends Dialog {
 	private Text textLibs;
 	private Text textParamFiles;
 	private Text basepathText;
+	private Text txtPortNo;
  
 
 	private boolean runGraph;
@@ -81,6 +82,7 @@ public class RunConfigDialog extends Dialog {
 	private String edgeNodeText;
 	private String userId;
 	private String basePath;
+	private String port_no;
 
 	private Composite compositeServerDetails, compositePathConfig;
 	private Button btnLocalMode, btnRemoteMode, okButton;
@@ -99,12 +101,14 @@ public class RunConfigDialog extends Dialog {
 	private final String LIB_PATH = "remoteLibDir";
 	private final String PARAM_FILE = "remoteParameterFileDir";
 	private final String Base_PATH = "basePath";
+	private final String PORT_NO = "remotePortNo";
 
 	private Composite container;
 	private String username;
 	private String host;
 	private boolean remoteMode=false;
 	private boolean isDebug;
+	//private EmptyTextListener textPortNoListener;
 	/**
 	 * Create the dialog.
 	 * 
@@ -172,12 +176,12 @@ public class RunConfigDialog extends Dialog {
 		
      	basepathText = new Text(compositeRunMode, SWT.BORDER);
      	basepathText.setBounds(109, 70, 206, 21);
-     	basepathText.addVerifyListener(new VerifyListener() {
-			
+     	 
+     	basepathText.addModifyListener(new ModifyListener() {
      		ControlDecoration txtDecorator = null;
      		
 			@Override
-			public void verifyText(VerifyEvent event) {
+			public void modifyText(ModifyEvent event) {
 				if (txtDecorator == null)
 					txtDecorator = WidgetUtility.addDecorator(basepathText,Messages.ABSOLUTE_PATH_TEXT);
 					txtDecorator.hide();
@@ -186,13 +190,14 @@ public class RunConfigDialog extends Dialog {
 				IPath path = new Path(data);
 				//^(?!-)[a-z0-9-]+(?<!-)(/(?!-)[a-z0-9-]+(?<!-))*$
 				Matcher matchs = Pattern.compile("^(?!-)[a-z0-9-]+(?<!-)(/(?!-)[a-z0-9-]+(?<!-))*$").matcher(data);
-				if (matchs.matches()) {
+				if (!path.isAbsolute()) {
 					txtDecorator.setMarginWidth(3);
 					txtDecorator.show();
 				}else{
 					txtDecorator.hide();
 					txtDecorator.setMarginWidth(3);
 				}
+				
 			}
 		});
 	 
@@ -331,8 +336,31 @@ public class RunConfigDialog extends Dialog {
 				SWT.BOLD));
 		lblPathConfiguration.setBounds(24, 22, 113, 15);
 		formToolkit.adapt(lblPathConfiguration, true, true);
+		
+		Label lblPortNo = new Label(compositePathConfig, SWT.NONE);
+		lblPortNo.setText("Port No");
+		lblPortNo.setBounds(24, 210, 70, 15);
+		formToolkit.adapt(lblPortNo, true, true);
+		
+		txtPortNo = new Text(compositePathConfig, SWT.BORDER);
+		txtPortNo.setBounds(110, 210, 206, 21);
+		formToolkit.adapt(txtPortNo, true, true);
+		textBoxes.put("remotePortNo", txtPortNo);
+		
+		/*Label label = new Label(compositePathConfig, SWT.READ_ONLY);
+		label.setBounds(110, 236, 100, 20);
+		label.setText("Default_Port_No#8004");*/
+		
+		if(!isDebug){
+     		lblPortNo.setVisible(false);
+     		txtPortNo.setVisible(false);
+     	}else{
+     		lblPortNo.setVisible(true);
+     		txtPortNo.setVisible(true);
+     	}
 
 		compositePathConfig.setVisible(false);
+	 
 
 		loadbuildProperties();
 
@@ -409,6 +437,9 @@ public class RunConfigDialog extends Dialog {
 		return this.basePath;
 	}
 	 
+	public String getPortNo(){
+		return this.port_no;
+	}
 	/**
 	 * Create contents of the button bar.
 	 * 
@@ -441,6 +472,7 @@ public class RunConfigDialog extends Dialog {
 			buildProps.put(LIB_PATH, textLibs.getText() );
 			buildProps.put(PARAM_FILE, textParamFiles.getText());
 			buildProps.put(Base_PATH, basepathText.getText()); 
+			buildProps.put(PORT_NO, txtPortNo.getText());
 
 			buildProps.store(out, null);
 
@@ -462,6 +494,7 @@ public class RunConfigDialog extends Dialog {
 		this.username = textUser.getText();
 		this.host = textEdgeNode.getText();
 		this.basePath = basepathText.getText();
+		this.port_no = txtPortNo.getText();
 		
 		try {
 			checkBuildProperties(btnRemoteMode.getSelection());
@@ -518,6 +551,10 @@ public class RunConfigDialog extends Dialog {
 		if(isDebug && !path.isAbsolute()){
 			note.addError("Base Path should not be relative");
 		}
+		
+		/*if(isDebug && StringUtils.isEmpty(txtPortNo.getText())){
+			note.addError("Port Value not specified");
+		}*/
 		
 		return note;
 	}

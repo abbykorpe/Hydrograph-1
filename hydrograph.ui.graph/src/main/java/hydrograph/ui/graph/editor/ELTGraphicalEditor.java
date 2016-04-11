@@ -122,6 +122,7 @@ import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.TransferDropTargetListener;
@@ -154,7 +155,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
@@ -167,7 +167,6 @@ import org.eclipse.ui.statushandlers.StatusManager;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
-import com.bitwiseglobal.debug.api.DebugFilesReader;
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -1234,8 +1233,14 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			return ;
 		}
 		if(isLocal){
+			String basePath = job.getBasePath();
+			String userID = job.getUserId();
+			String password = job.getPassword();
+			DebugRestClient debugRestClient = new DebugRestClient();
+			debugRestClient.removeDebugFiles("localhost", "8004", basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
+			logger.debug("debug files removed from local");
 			//if(job!=null){
-				DebugFilesReader debugFilesReader = new DebugFilesReader(job.getBasePath(), uniqueJobId, "IFDelimite_01", "out0");
+				/*DebugFilesReader debugFilesReader = new DebugFilesReader(job.getBasePath(), uniqueJobId, "IFDelimite_01", "out0");
 				try {
 						debugFilesReader.delete();
 						logger.info("debug files removed from local");
@@ -1246,7 +1251,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				} catch (IOException e) {
 					logger.debug(e.getMessage());
 					logger.info("debug files not exists at given location");
-				}
+				}*/
 		}else{
 			String basePath = job.getBasePath();
 			String ipAddress = job.getIpAddress();
@@ -1254,8 +1259,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			String password = job.getPassword();
 			//new DebugFilesReader(arg0, arg1, arg2, arg3, arg4, arg5)
 			//ipAddress, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password
-			DebugRestClient debugRestClient = new DebugRestClient(ipAddress, basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
-			debugRestClient.removeDebugFiles();
+			DebugRestClient debugRestClient = new DebugRestClient();
+			debugRestClient.removeDebugFiles(ipAddress, "8004", basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
 			logger.debug("debug files removed from cluster");
 		}
 		DebugHandler.getJobMap().remove(currentJob);
