@@ -11,7 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
+
 package hydrograph.ui.propertywindow.widgets.filterproperty;
 
 import hydrograph.ui.common.util.Constants;
@@ -33,7 +33,7 @@ import org.eclipse.swt.widgets.Item;
  * @author Bitwise
  */
 public class ELTCellModifier implements ICellModifier{
-	
+
 	private Viewer viewer;
 	private TransformDialog transformDialog;	
 	private MappingSheetRow mappingSheetRow;  
@@ -50,13 +50,13 @@ public class ELTCellModifier implements ICellModifier{
 		this.viewer = viewer;
 		this.transformDialog=transformDialog;
 	}
-    
+
 	public ELTCellModifier(Viewer viewer,TransformDialog transformDialog,MappingSheetRow mappingSheetRow) {
 		this.viewer = viewer;
 		this.transformDialog=transformDialog;
 		this.mappingSheetRow=mappingSheetRow;
 	}
-	
+
 	@Override
 	public boolean canModify(Object element, String property) {
 		return true;
@@ -66,7 +66,7 @@ public class ELTCellModifier implements ICellModifier{
 	public Object getValue(Object element, String property) {
 		FilterProperties filter = (FilterProperties) element;
 		if(Constants.COMPONENT_NAME.equals(property))
-		return filter.getPropertyname();
+			return filter.getPropertyname();
 		else if(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD.equals(property)){
 			return filter.getPropertyname();
 		}
@@ -81,29 +81,30 @@ public class ELTCellModifier implements ICellModifier{
 			element = ((Item) element).getData();
 
 		FilterProperties p = (FilterProperties) element;
-		
-			if(Constants.COMPONENT_NAME.equals(property))
-					p.setPropertyname((String)value);
-			else if(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD.equals(property)){
-				  p.setPropertyname((String)value);
-			}
-			else if(Messages.INNER_OPERATION_INPUT_FIELD.equals(property))
-			{p.setPropertyname((String)value);
+
+		if(Constants.COMPONENT_NAME.equals(property))
+			p.setPropertyname((String)value);
+		else if(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD.equals(property)){
+			p.setPropertyname((String)value);
+		}
+		else if(Messages.INNER_OPERATION_INPUT_FIELD.equals(property))
+		{
+			p.setPropertyname((String)value);
 			transformDialog.refreshOutputTable();
 			transformDialog.showValidationMessage(mappingSheetRow);
-			}
-			else if(Messages.INNER_OPERATION_OUTPUT_FIELD.equals(property))
-			{		
+		}
+		else if(Messages.INNER_OPERATION_OUTPUT_FIELD.equals(property))
+		{		
 			p.setPropertyname((String )value);	
 			transformDialog.refreshOutputTable();
-			}
-			else if(Messages.OUTPUT_FIELD.equals(property))
-			{
-				p.setPropertyname((String )value);	
-			}
+		}
+		else if(Messages.OUTPUT_FIELD.equals(property))
+		{
+			p.setPropertyname((String )value);	
+		}
 		// Force the viewer to refresh
 		viewer.refresh();
-		
+
 	}
 
 }
