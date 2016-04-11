@@ -314,8 +314,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			
 			@Override
 			public void focusGained(FocusEvent e) {
-				// Nothing to do
-				
+				viewer.getEditDomain().loadDefaultTool();				
 			}
 		});
 		
