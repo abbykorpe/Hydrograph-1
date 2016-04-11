@@ -127,7 +127,7 @@ public class WatchRecordAction extends SelectionAction {
 		String password = job.getPassword();
 		String port_no = job.getPort_no();
 		
-		logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
+		//ogger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
 		DebugRestClient debugRestClient = new DebugRestClient();
 		 
 			try {
