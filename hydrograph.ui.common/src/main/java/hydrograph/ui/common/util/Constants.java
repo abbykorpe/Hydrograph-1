@@ -156,11 +156,11 @@ public class Constants {
 	public static final String IS_PARAMETER = "Is Parameter";
 	public static final String SCHEMA_DEFAULT_FIELD_NAME_SUFFIX="DefaultField";
 	public static final String DEFAULT_INDEX_VALUE_FOR_COMBOBOX="0";
-	public static final String PARAMETER_SUFFIX = "@{";
+	public static final String PARAMETER_PREFIX = "@{";
 	public static final String UNIQUE_SEQUENCE = "UniqueSequence";
 	public static final String UNIQUE_SEQUENCE_TYPE = "Unique Sequence";
 	
-	public static final String PARAMETER_PREFIX = "}";
+	public static final String PARAMETER_SUFFIX = "}";
 	public static final String UNIQUE_SEQUENCE_PROPERTY_NAME = "sequence_field";
 	public static final String ADD_ALL_FIELDS_SYMBOL = "*";
 	public static final String INPUT_SUBGRAPH_COMPONENT_NAME = "InputSubgraphComponent";

@@ -80,27 +80,27 @@ public class ELTCellModifier implements ICellModifier{
 		if (element instanceof Item)
 			element = ((Item) element).getData();
 
-		FilterProperties p = (FilterProperties) element;
+		FilterProperties filterProperties = (FilterProperties) element;
 
 		if(Constants.COMPONENT_NAME.equals(property))
-			p.setPropertyname((String)value);
+			filterProperties.setPropertyname((String)value);
 		else if(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD.equals(property)){
-			p.setPropertyname((String)value);
+			filterProperties.setPropertyname((String)value);
 		}
 		else if(Messages.INNER_OPERATION_INPUT_FIELD.equals(property))
 		{
-			p.setPropertyname((String)value);
+			filterProperties.setPropertyname((String)value);
 			transformDialog.refreshOutputTable();
 			transformDialog.showValidationMessage(mappingSheetRow);
 		}
 		else if(Messages.INNER_OPERATION_OUTPUT_FIELD.equals(property))
 		{		
-			p.setPropertyname((String )value);	
+			filterProperties.setPropertyname((String )value);	
 			transformDialog.refreshOutputTable();
 		}
 		else if(Messages.OUTPUT_FIELD.equals(property))
 		{
-			p.setPropertyname((String )value);	
+			filterProperties.setPropertyname((String )value);	
 		}
 		// Force the viewer to refresh
 		viewer.refresh();

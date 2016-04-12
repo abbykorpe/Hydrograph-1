@@ -177,14 +177,6 @@ public abstract class Converter {
 		}
 		return typeProperties;
 	}
-	
-	/*private boolean isALLParameterizedFields(Map<String, String> properties) {
-		for (Entry<String, String> secondaryKeyRowEntry : properties.entrySet())
-			if (!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey()))
-				return false;
-		return true;
-	}
-*/
 	/**
 	 * Returns the base type of the component
 	 * 

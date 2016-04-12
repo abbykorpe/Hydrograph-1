@@ -683,15 +683,15 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			public void focusLost(FocusEvent e) {
 				Text textBox=(Text)e.widget;
 				String parameterText=textBox.getText();
-				parameterText=StringUtils.replace(StringUtils.replace(parameterText,Constants.PARAMETER_SUFFIX , ""),Constants.PARAMETER_PREFIX,"");
-				textBox.setText(Constants.PARAMETER_SUFFIX+parameterText+Constants.PARAMETER_PREFIX);
+				parameterText=StringUtils.replace(StringUtils.replace(parameterText,Constants.PARAMETER_PREFIX , ""),Constants.PARAMETER_SUFFIX,"");
+				textBox.setText(Constants.PARAMETER_PREFIX+parameterText+Constants.PARAMETER_SUFFIX);
 			}
 			
 			@Override
 			public void focusGained(FocusEvent e) {
 				Text textBox=(Text)e.widget;
 				String parameterText=textBox.getText();
-				parameterText=StringUtils.replace(StringUtils.replace(parameterText, Constants.PARAMETER_SUFFIX, ""),Constants.PARAMETER_PREFIX,"");
+				parameterText=StringUtils.replace(StringUtils.replace(parameterText, Constants.PARAMETER_PREFIX, ""),Constants.PARAMETER_SUFFIX,"");
 				textBox.setText(parameterText);
 				
 				

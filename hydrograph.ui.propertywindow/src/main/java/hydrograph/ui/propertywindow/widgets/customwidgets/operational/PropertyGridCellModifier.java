@@ -84,12 +84,12 @@ public class PropertyGridCellModifier implements ICellModifier {
 	 * @return Object
 	 */ 
 	public Object getValue(Object element, String property) {
-		NameValueProperty p = (NameValueProperty) element;
+		NameValueProperty nameValueProperty = (NameValueProperty) element;
 
 		if (PROPERTY_NAME.equals(property)||Messages.PROPERTY_NAME.equals(property))
-			return p.getPropertyName();
+			return nameValueProperty.getPropertyName();
 		else if (PROPERTY_VALUE.equals(property)||Messages.PROPERTY_VALUE.equals(property))
-			return p.getPropertyValue();
+			return nameValueProperty.getPropertyValue();
 		else
 			return null;
 
@@ -109,38 +109,37 @@ public class PropertyGridCellModifier implements ICellModifier {
 		if (element instanceof Item)
 			element = ((Item) element).getData();
 
-		NameValueProperty p = (NameValueProperty) element;
+		NameValueProperty nameValueProperty = (NameValueProperty) element;
 		if (PROPERTY_NAME.equals(property)){
 			if(ParameterUtil.isParameter((String)value)){
-				p.setPropertyValue((String)value);
+				nameValueProperty.setPropertyValue((String)value);
 			}
-			p.setPropertyName(((String) value).trim());
+			nameValueProperty.setPropertyName(((String) value).trim());
 		}
 
 		if (PROPERTY_VALUE.equals(property))
 		{	
 			if(ParameterUtil.isParameter((String)value)){
-				p.setPropertyName((String)value);
+				nameValueProperty.setPropertyName((String)value);
 			}
-			p.setPropertyValue(((String) value).trim());
+			nameValueProperty.setPropertyValue(((String) value).trim());
 			transformDialog.refreshOutputTable();	
 			transformDialog.showHideValidationMessage();
 
 		}
 		if(Messages.PROPERTY_NAME.equals(property))
 		{
-			p.setPropertyName(((String) value).trim());
+			nameValueProperty.setPropertyName(((String) value).trim());
 			if(propertyDialogButtonBar!=null ){
 				propertyDialogButtonBar.enableApplyButton(true);
 			}
 		}	
 		if(Messages.PROPERTY_VALUE.equals(property))
 		{	
-			p.setPropertyValue(((String) value).trim());
+			nameValueProperty.setPropertyValue(((String) value).trim());
 			if(propertyDialogButtonBar!=null ){
 				propertyDialogButtonBar.enableApplyButton(true);
 			}
-
 		}
 
 
