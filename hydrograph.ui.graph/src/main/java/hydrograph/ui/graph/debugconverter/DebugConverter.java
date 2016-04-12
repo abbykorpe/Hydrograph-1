@@ -104,9 +104,6 @@ public class DebugConverter {
 	
 	public void marshall(Debug debug,IFile outPutFile) throws JAXBException, IOException, CoreException{
 		
-		if(debug.getDebugPlugin() == null && debug.getViewData().isEmpty()){
-			return;
-		}
 		JAXBContext jaxbContext = JAXBContext.newInstance(Debug.class);
 		Marshaller marshaller = jaxbContext.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
