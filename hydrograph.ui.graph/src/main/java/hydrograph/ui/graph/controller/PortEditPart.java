@@ -16,11 +16,13 @@ package hydrograph.ui.graph.controller;
 
 import hydrograph.ui.graph.figure.ComponentFigure;
 import hydrograph.ui.graph.figure.ELTColorConstants;
-import hydrograph.ui.graph.figure.ELTFigureConstants;
 import hydrograph.ui.graph.figure.PortFigure;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Port;
 
+import java.util.Map.Entry;
+
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.DragTracker;
@@ -135,7 +137,32 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 		((PortFigure)getFigure()).setLabelOfPort(getCastedModel().getLabelOfPort());
+		
+		for(Entry<String,Long> entry : getCastedModel().getParent().getWatcherTerminals().entrySet())
+		{
+			if(StringUtils.equals(getCastedModel().getTerminal(),entry.getKey()))
+			{
+				getCastedModel().setWatched(true);
+				getPortFigure().setWatched(true);
+				getPortFigure().repaint();
+			}
+		}
+		
 		getFigure().repaint();
 	}
 
+	/*@Override
+	public void activate() {
+		super.activate();
+		
+		for(Entry<String,Long> entry : getCastedModel().getParent().getWatcherTerminals().entrySet())
+		{
+			if(StringUtils.equals(getCastedModel().getTerminal(),entry.getKey()))
+			{
+				getCastedModel().setWatched(true);
+				getPortFigure().setWatched(true);
+				getPortFigure().repaint();
+			}
+		}
+	}*/
 }

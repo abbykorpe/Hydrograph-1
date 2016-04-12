@@ -120,12 +120,16 @@ public class WatchRecordAction extends SelectionAction {
 
 	private void readViewDataInRemoteMode() {
 		JSONArray jsonArray = null;
+		String basePath = null,ipAddress = null,userID = null,password = null,port_no = null;
 		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
-		String basePath = job.getBasePath();
-		String ipAddress = job.getIpAddress();
-		String userID = job.getUserId();
-		String password = job.getPassword();
-		String port_no = job.getPort_no();
+		if(job!=null){
+			System.out.println("Initailize parameters...");
+			basePath = job.getBasePath();
+			ipAddress = job.getIpAddress();
+			userID = job.getUserId();
+			password = job.getPassword();
+			port_no = job.getPort_no();
+		}
 		
 		//ogger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
 		DebugRestClient debugRestClient = new DebugRestClient();
@@ -135,12 +139,15 @@ public class WatchRecordAction extends SelectionAction {
 			} catch (IOException exception) {
 				logger.error("Connection failed", exception);
 				messageDialog(Messages.REMOTE_MODE_TEXT);
+				return;
 			}catch(JSONException exception){
 				logger.error("Service failed to response in JSON format", exception);
 				messageDialog(Messages.REMOTE_MODE_TEXT);
+				return;
 			}catch (Exception exception){
 				logger.error("Exception while calling rest service: ", exception);
 				messageDialog(Messages.REMOTE_MODE_TEXT);
+				return;
 		}
 		
 		if(jsonArray == null || jsonArray.length() == 0){

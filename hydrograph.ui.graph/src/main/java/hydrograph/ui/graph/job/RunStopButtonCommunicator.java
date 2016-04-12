@@ -55,6 +55,17 @@ public enum RunStopButtonCommunicator{
 		void setAbstractHandler(AbstractHandler abstractHandler){
 			this.abstractHandler = abstractHandler;
 		}		
+	},
+	
+	Removewatcher {
+		private AbstractHandler abstractHandler;
+		
+		AbstractHandler getAbstractHandler() {
+			return abstractHandler;
+		}
+		void setAbstractHandler(AbstractHandler abstractHandler){
+			this.abstractHandler = abstractHandler;
+		}	
 	};
 	
 	abstract AbstractHandler getAbstractHandler();

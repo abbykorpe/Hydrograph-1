@@ -21,6 +21,9 @@ import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.handler.DebugHandler;
+import hydrograph.ui.graph.handler.RemoveDebugHandler;
+import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 
@@ -76,7 +79,9 @@ public class AddWatcherAction extends SelectionAction{
 				Link link = (Link)((LinkEditPart)obj).getModel();
 				link.getSource().addWatcherTerminal(link.getSourceTerminal(), limitValue);
 				changePortColor(link.getSource(), link.getSourceTerminal());
-		 
+				//((RemoveDebugHandler) RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
+				if(!PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty())
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 			} 
 		}
 	}
@@ -104,8 +109,6 @@ public class AddWatcherAction extends SelectionAction{
 			} 
 		}
 	}
-	
-	 
 
 
 	@Override
@@ -126,7 +129,7 @@ public class AddWatcherAction extends SelectionAction{
 		for(Object obj : getSelectedObjects()){
 			if(obj instanceof LinkEditPart)	{
 				return true;
-			}
+			} 
 		  }
 		}
 		return false;

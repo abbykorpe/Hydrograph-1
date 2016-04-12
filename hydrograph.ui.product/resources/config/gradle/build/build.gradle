@@ -347,6 +347,7 @@ executeLocalJob.onlyIf {
     project.hasProperty('localjob');
 }
 
+
 task executeDebugLocal (dependsOn: ['build', 'classes'], type: JavaExec) {
 
     if(project.hasProperty('localjob')){
