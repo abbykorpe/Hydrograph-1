@@ -28,6 +28,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
@@ -65,7 +66,7 @@ public class OutputHiveParquetConverter extends OutputConverter {
 
 		parquetHive.setDatabaseName(getHiveType(PropertyNameConstants.DATABASE_NAME.value()));
 		parquetHive.setTableName(getHiveType(PropertyNameConstants.TABLE_NAME.value()));
-		if(!(((String)properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value())).isEmpty() |properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()).equals("null"))){
+		if(StringUtils.isNotBlank((String)properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()))){
 		parquetHive.setExternalTablePath(getHivePathType(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()));
 		}
 		parquetHive.setPartitionKeys(getPartitionKeys());

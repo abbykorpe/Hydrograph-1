@@ -36,6 +36,7 @@ import com.bitwiseglobal.graph.ihiveparquet.HivePathType;
 import com.bitwiseglobal.graph.ihiveparquet.HiveType;
 import com.bitwiseglobal.graph.inputtypes.ParquetHiveFile;
 import com.bitwiseglobal.graph.ihiveparquet.TypeInputDelimitedOutSocket;
+import org.apache.commons.lang.StringUtils;
 /**
  * Converter implementation for Input Hive Parquet component
  * 
@@ -63,7 +64,9 @@ public class InputHiveParquetConverter extends InputConverter {
 
 		parquetHive.setDatabaseName(getHiveType(PropertyNameConstants.DATABASE_NAME.value()));
 		parquetHive.setTableName(getHiveType(PropertyNameConstants.TABLE_NAME.value()));
-		if(!(((String)properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value())).isEmpty() |properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()).equals("null"))){
+		
+		
+		if(StringUtils.isNotBlank((String)properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()))){
 			parquetHive.setExternalTablePath(getHivePathType(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()));
 		}
 		parquetHive.setPartitionKeys(getPartitionKeys());
