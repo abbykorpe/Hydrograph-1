@@ -13,6 +13,7 @@
 package hydrograph.ui.propertywindow.propertydialog;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -138,8 +139,10 @@ public class PropertyDialogBuilder {
 							}
 						}
 						((ELTSchemaGridWidget) schemaWidget).getListenerHelper(true);
+
 					}
-					schemaWidget.refresh();
+					if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()) || Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName()))
+						schemaWidget.refresh(); 
 				}
 			}
 		});

@@ -1,4 +1,3 @@
-
 /********************************************************************************
  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -111,6 +110,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
@@ -265,7 +265,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		List<String> oprationFieldList = getOperationFieldList();
 
 		if (schemaGridRowList != null ) {
-
+			if(!Constants.TRANSFORM.equalsIgnoreCase(getComponent().getComponentName()) && !Constants.AGGREGATE.equalsIgnoreCase(getComponent().getComponentName()))
 			if(getSchemaForInternalPapogation()!=null){
 
 				Schema internalSchema = getSchemaForInternalPapogation().clone();
@@ -295,6 +295,24 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 		}
 
+		if (!isSchemaInSync()){
+			MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, 
+					 Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, 
+	                new String[] { "Sync Now", "Later" }, 0);
+			int dialogResult =dialog.open();
+			if(dialogResult == 0){
+				syncSchemaFromTransform();
+				if (!schemaGridRowList.isEmpty()) {
+					for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
+						if (gridRow != null) {
+							tempGrid.add(gridRow.copy());
+							componentsOutputSchema.addSchemaFields(gridRow);
+						}
+					}
+				}
+			}
+			
+		}
 		Schema schema = new Schema();
 		schema.setGridRow(tempGrid);
 		if (external) {
@@ -502,8 +520,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 
-		if(transformSchemaType)
+		if(transformSchemaType){
 			createSchemaGridSection(container.getContainerControl(), 340, 360);
+			createPullSchemaFromTransform(container.getContainerControl());
+		}
 		else{
 			createSchemaTypesSection(container.getContainerControl());
 			createSchemaGridSection(container.getContainerControl(), 250, 360);
@@ -548,6 +568,27 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			for (Link link : getComponent().getTargetConnections()) {
 				this.properties = getPropagatedSchema(link);
 			}
+	}
+	
+	
+	
+	
+	// Adds the browse button
+	private void createPullSchemaFromTransform(Composite containerControl) {
+		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(containerControl);
+		eltSuDefaultSubgroupComposite.createContainerWidget();
+		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(2);
+		ELTDefaultButton btnPull = new ELTDefaultButton(Messages.PULL_FROM_TRANSFORM);
+		btnPull.buttonWidth(150);
+		eltSuDefaultSubgroupComposite.attachWidget(btnPull);
+		((Button)btnPull.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				syncSchemaFromTransform();
+			}
+		});
+	
+
 	}
 
 	// Adds the browse button
@@ -812,16 +853,22 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				Schema schema = (Schema) this.properties;
 				schemaGridRowList = schema.getGridRow();
 			}
-			ELTGridDetails value = new ELTGridDetails(schemaGridRowList, tableViewer,
-					(Label) fieldError.getSWTWidgetControl(), gridWidgetBuilder);
-			helper.put(HelperType.SCHEMA_GRID, value);
-
-		}else{
-			ELTGridDetails eltGridDetails = (ELTGridDetails)helper.get(HelperType.SCHEMA_GRID);
-			List<GridRow> gridRow= eltGridDetails.getGrids();
-			for (GridRow grids : getSchemaForInternalPapogation().getGridRow()) {
-				if(!gridRow.contains(grids))
-					gridRow.add(grids);
+				ELTGridDetails value = new ELTGridDetails(schemaGridRowList, tableViewer,(Label) fieldError.getSWTWidgetControl(), gridWidgetBuilder);
+				helper.put(HelperType.SCHEMA_GRID, value);
+		}
+		else{
+			if(Constants.TRANSFORM.equalsIgnoreCase(getComponent().getComponentName()) || Constants.AGGREGATE.equalsIgnoreCase(getComponent().getComponentName()))
+			{	Map<String, ComponentsOutputSchema> previousOutputSchema = ((Map<String, ComponentsOutputSchema>) getComponent().getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
+				if(previousOutputSchema!=null){
+				for (String schemaKey : previousOutputSchema.keySet()) {
+					ComponentsOutputSchema componentsOutputSchema = previousOutputSchema.get(schemaKey);
+					for (BasicSchemaGridRow basicSchemaGridRow : componentsOutputSchema.getSchemaGridOutputFields() ){
+						if(!schemaGridRowList.contains(basicSchemaGridRow))
+							schemaGridRowList.add(basicSchemaGridRow);
+					}
+				}
+			}
+			tableViewer.refresh();
 			}
 			}
 		return helper;
@@ -1159,7 +1206,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 								}
 							}
 						}
-					} else {
+					} 
+					else if(!StringUtils.equalsIgnoreCase(Constants.TRANSFORM, getComponent().getComponentName()) && !StringUtils.equalsIgnoreCase(Constants.AGGREGATE, getComponent().getComponentName())){
 						originalSchema.getGridRow().add(row.copy());
 					}
 				}
@@ -1179,6 +1227,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 
 		} else {
+			if(!StringUtils.equalsIgnoreCase(Constants.TRANSFORM, getComponent().getComponentName()) && !StringUtils.equalsIgnoreCase(Constants.AGGREGATE, getComponent().getComponentName()))
+			{			
 			if (schema.getGridRow().size() != 0) {
 				table.clearAll();
 				if (!schema.getIsExternal()) {
@@ -1190,6 +1240,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						toggleSchema(false);
 					}
 				}
+			}
 			}
 		}
 	}
@@ -1242,5 +1293,30 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		return schemaGridRowList.size();
 	}
 
+private void syncSchemaFromTransform(){
+	Schema schema =getSchemaForInternalPapogation();
+	for (GridRow gridRow : schema.getGridRow()) {
+		if(!schemaGridRowList.contains(gridRow)){
+			schemaGridRowList.add(gridRow);
+		}else
+		{
+			schemaGridRowList.set(schemaGridRowList.indexOf(gridRow), gridRow);
+		}
+	}
+	ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
+	eLTDetails.setGrids(schemaGridRowList);
+	tableViewer.setInput(schemaGridRowList);
+	tableViewer.refresh();
 
+}
+private boolean isSchemaInSync(){
+	Schema schema =getSchemaForInternalPapogation();
+	for (GridRow gridRow : schema.getGridRow()) {
+		if(!schemaGridRowList.contains(gridRow)){
+			return false;
+		}
+	}
+	return true;
+}
+	
 }
