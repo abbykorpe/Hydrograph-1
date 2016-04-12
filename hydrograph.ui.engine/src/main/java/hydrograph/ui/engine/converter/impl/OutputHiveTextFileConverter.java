@@ -38,7 +38,6 @@ import com.bitwiseglobal.graph.ohivetextfile.HivePartitionFieldsType;
 import com.bitwiseglobal.graph.ohivetextfile.HivePathType;
 import com.bitwiseglobal.graph.ohivetextfile.HiveType;
 import com.bitwiseglobal.graph.ohivetextfile.TypeOutputHiveTextFileDelimitedInSocket;
-import com.bitwiseglobal.graph.otfd.TypeOutputDelimitedInSocket;
 import com.bitwiseglobal.graph.outputtypes.HiveTextFile;
 /**
  * Converter implementation for Output Hive TextFile component
@@ -48,7 +47,6 @@ import com.bitwiseglobal.graph.outputtypes.HiveTextFile;
 public class OutputHiveTextFileConverter extends OutputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputHiveTextFileConverter.class);
-	private ConverterHelper converterHelper;
 
 	public OutputHiveTextFileConverter(Component component) {
 		super();

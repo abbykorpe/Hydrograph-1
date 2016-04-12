@@ -42,7 +42,6 @@ import com.bitwiseglobal.graph.straightpulltypes.Limit;
  */
 public class LimitConverter extends StraightPullConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(LimitConverter.class);
-	private ConverterHelper converterHelper;
 	
 	public LimitConverter(Component component) {
 		super();

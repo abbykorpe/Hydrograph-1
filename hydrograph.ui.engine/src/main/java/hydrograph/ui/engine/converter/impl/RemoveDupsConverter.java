@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import com.bitwiseglobal.graph.commontypes.KeepValue;
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeFieldName;
-import com.bitwiseglobal.graph.commontypes.TypeInputField;
 import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
 import com.bitwiseglobal.graph.commontypes.TypeSortOrder;
 import com.bitwiseglobal.graph.commontypes.TypeStraightPullOutSocket;
@@ -51,7 +50,6 @@ import com.bitwiseglobal.graph.straightpulltypes.RemoveDups.Keep;
 public class RemoveDupsConverter extends StraightPullConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(RemoveDupsConverter.class);
-	private ConverterHelper converterHelper;
 
 	public RemoveDupsConverter(Component component) {
 		super();
@@ -79,7 +77,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 		if (fieldValueSet != null) {
 			typePrimaryKeyFields = new TypePrimaryKeyFields();
 			List<TypeFieldName> fieldNameList = typePrimaryKeyFields.getField();
-			if (!isALLParameterizedFields(fieldValueSet)) {
+			if (!converterHelper.hasAllStringsInListAsParams(fieldValueSet)) {
 			for (String value : fieldValueSet) {
 				if(!ParameterUtil.isParameter(value)){
 					TypeFieldName field = new TypeFieldName();
@@ -103,20 +101,6 @@ public class RemoveDupsConverter extends StraightPullConverter {
 		}
 		return typePrimaryKeyFields;
 	}
-	
-	private boolean isALLParameterizedFields(List<String> fieldList){
-		for (String fieldName : fieldList) 
-			if (!ParameterUtil.isParameter(fieldName)) 
-				return false;
-		return true;
-	}
-	
-	private boolean isALLParameterizedFields(Map<String, String> secondaryKeyRow) {
-		for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet())
-			if (!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey()))
-				return false;
-		return true;
-	}
 
 	private TypeSecondaryKeyFields getSecondaryKeys() {
 
@@ -126,7 +110,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 		if (secondaryKeyRow != null && !secondaryKeyRow.isEmpty()) {
 			typeSecondaryKeyFields = new TypeSecondaryKeyFields();
 			List<TypeSecondayKeyFieldsAttributes> fieldNameList = typeSecondaryKeyFields.getField();
-			if (!isALLParameterizedFields(secondaryKeyRow)) {
+			if (!converterHelper.hasAllKeysAsParams(secondaryKeyRow)) {
 				for (Map.Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet()) {
 					if(!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey())){
 						TypeSecondayKeyFieldsAttributes field = new TypeSecondayKeyFieldsAttributes();

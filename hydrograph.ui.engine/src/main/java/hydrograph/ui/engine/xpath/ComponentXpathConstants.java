@@ -41,7 +41,9 @@ public enum ComponentXpathConstants {
 	OPERATIONS_OUTSOCKET("graph/operations[@id='$id']/outSocket"),
 	
 	TRANSFORM_INPUT_FIELDS("/graph/operations[@id='$id']/operation[@id='$operationId']/inputFields"),
-	TRANSFORM_OUTPUT_FIELDS("/graph/operations[@id='$id']/operation[@id='$operationId']/outputFields"),;
+	TRANSFORM_OUTPUT_FIELDS("/graph/operations[@id='$id']/operation[@id='$operationId']/outputFields"),
+	
+	TRANSFORM_OPERATION("graph/operations[@id='$id']");
 	
 	
 	private final String value;

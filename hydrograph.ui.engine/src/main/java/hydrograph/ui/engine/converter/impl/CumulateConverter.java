@@ -50,16 +50,15 @@ import com.bitwiseglobal.graph.operationstypes.Cumulate;
 
 public class CumulateConverter extends TransformConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(CumulateConverter.class);
-	private TransformMapping atMapping;
+	private TransformMapping transformMapping;
 	private List<BasicSchemaGridRow> schemaGridRows;
-	ConverterHelper converterHelper;
 
 	public CumulateConverter(Component component) {
 		super();
 		this.baseComponent = new Cumulate();
 		this.component = component;
 		this.properties = component.getProperties();
-		atMapping = (TransformMapping) properties.get(Constants.PARAM_OPERATION);
+		transformMapping = (TransformMapping) properties.get(Constants.PARAM_OPERATION);
 		converterHelper = new ConverterHelper(component);
 		initSchemaGridRows();
 	}
@@ -93,12 +92,12 @@ public class CumulateConverter extends TransformConverter {
 
 	@Override
 	protected List<TypeTransformOperation> getOperations() {
-		return converterHelper.getOperations(atMapping,schemaGridRows);
+		return converterHelper.getOperations(transformMapping,schemaGridRows);
 	}
 
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
-		return converterHelper.getOutSocket(atMapping,schemaGridRows);
+		return converterHelper.getOutSocket(transformMapping,schemaGridRows);
 	}
 
 	@Override
@@ -114,7 +113,7 @@ public class CumulateConverter extends TransformConverter {
 			TypePrimaryKeyFields primaryKeyFields = new TypePrimaryKeyFields();
 			cumulate.setPrimaryKeys(primaryKeyFields);
 			List<TypeFieldName> field = primaryKeyFields.getField();
-			if (!isALLParameterizedFields(columnNameProperties)) {
+			if (!converterHelper.hasAllStringsInListAsParams(columnNameProperties)) {
 				for (String columnNameProperty : columnNameProperties) {
 					if (!ParameterUtil.isParameter(columnNameProperty)) {
 						TypeFieldName fieldName = new TypeFieldName();
@@ -138,20 +137,6 @@ public class CumulateConverter extends TransformConverter {
 		}
 	}
 
-	private boolean isALLParameterizedFields(List<String> componentOperationFields) {
-		for (String fieldName : componentOperationFields)
-			if (!ParameterUtil.isParameter(fieldName))
-				return false;
-		return true;
-	}
-	
-	private boolean isALLParameterizedFields(Map<String, String> secondaryKeyRow) {
-		for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet())
-			if (!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey()))
-				return false;
-		return true;
-	}
-
 
 	private void setSecondaryKeys(Cumulate cumulate) {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PROPERTY_SECONDARY_COLUMN_KEYS));
@@ -161,7 +146,7 @@ public class CumulateConverter extends TransformConverter {
 			TypeSecondaryKeyFields secondaryKeyFields = new TypeSecondaryKeyFields();
 			cumulate.setSecondaryKeys(secondaryKeyFields);
 			List<TypeSecondayKeyFieldsAttributes> field = secondaryKeyFields.getField();
-			if (!isALLParameterizedFields(secondaryKeyRow)) {
+			if (!converterHelper.hasAllKeysAsParams(secondaryKeyRow)) {
 
 				for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet()) {
 

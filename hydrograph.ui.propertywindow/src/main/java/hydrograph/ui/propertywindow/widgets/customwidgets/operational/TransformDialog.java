@@ -125,6 +125,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private Text text;
 	private Button isParam;
 	private TableViewer operationalInputFieldTableViewer;
+	private TableViewer operationalOutputFieldTableViewer;
 	private Label operationInputaddButton;
 	private Label operationInputDeleteButton;
 	private Composite composite_1;
@@ -703,6 +704,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		isParam.setData(OPERATION_ID_TEXT_BOX, operationIDTextBox);
 		isParam.setData(BTN_NEW_BUTTON, browseButton);
 		isParam.setData(OPERATION_INPUT_FIELD_TABLE_VIEWER, operationalInputFieldTableViewer);
+		isParam.setData(OPERATION_OUTPUT_FIELD_TABLE_VIEWER, operationalOutputFieldTableViewer);
 		isParam.setData(INPUT_ADD_BUTTON, operationInputaddButton);
 		isParam.setData(INPUT_DELETE_BUTTON, operationInputDeleteButton);
 		isParam.setSelection(mappingSheetRow.isWholeOperationParameter());
@@ -717,6 +719,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 						.getData(OPERATION_INPUT_FIELD_TABLE_VIEWER);
 				TableViewer operationOutputFieldTableViewer = (TableViewer) text
 						.getData(OPERATION_OUTPUT_FIELD_TABLE_VIEWER);
+				
 				Text operationClassTextBox = (Text) text.getData(OPERATION_CLASS_TEXT_BOX);
 				Text operationIDTextBox = (Text) text.getData(OPERATION_ID_TEXT_BOX);
 				Button btnNewButton = (Button) text.getData(BTN_NEW_BUTTON);
@@ -746,7 +749,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 						inputDelete.setEnabled(false);
 						
                         mappingSheetRow.getInputFields().clear();
-				
+				        mappingSheetRow.getOutputList().clear();
 						mappingSheetRow.setComboBoxValue(Messages.CUSTOM);
 						mappingSheetRow.getNameValueProperty().clear();
 						mappingSheetRow.setClassParameter(false);
@@ -789,7 +792,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		gd_operationalOutputFieldComposite.widthHint = 156;
 		operationalOutputFieldComposite.setLayoutData(gd_operationalOutputFieldComposite);
 
-		final TableViewer operationalOutputFieldTableViewer = new TableViewer(operationalOutputFieldComposite,
+		 operationalOutputFieldTableViewer = new TableViewer(operationalOutputFieldComposite,
 				SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		final TableViewer operationOutputtableViewer = setTableViewer(operationalOutputFieldTableViewer,
 				operationalOutputFieldComposite, new String[] { Messages.INNER_OPERATION_OUTPUT_FIELD },
@@ -862,6 +865,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			Button text = (Button) isParam;
 			Text parameterTextBox = (Text) text.getData(PARAMETER_TEXT_BOX);
 			TableViewer operationInputFieldTableViewer = (TableViewer) text.getData(OPERATION_INPUT_FIELD_TABLE_VIEWER);
+			TableViewer operationalOutputFieldTableViewer = (TableViewer) text.getData(OPERATION_OUTPUT_FIELD_TABLE_VIEWER);
 			Text operationClassTextBox = (Text) text.getData(OPERATION_CLASS_TEXT_BOX);
 			Text operationIDTextBox = (Text) text.getData(OPERATION_ID_TEXT_BOX);
 			Button btnNewButton = (Button) text.getData(BTN_NEW_BUTTON);

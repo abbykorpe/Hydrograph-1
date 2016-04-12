@@ -37,7 +37,6 @@ import com.bitwiseglobal.graph.straightpulltypes.UnionAll;
 public class UnionAllConverter extends StraightPullConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(UnionAllConverter.class);
-	private ConverterHelper converterHelper;
 
 	public UnionAllConverter(Component component) {
 		super();

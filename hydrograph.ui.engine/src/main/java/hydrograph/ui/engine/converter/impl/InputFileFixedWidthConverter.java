@@ -37,7 +37,6 @@ import com.bitwiseglobal.graph.itffw.TypeInputFixedwidthOutSocket;
 public class InputFileFixedWidthConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputFileFixedWidthConverter.class);
-	private ConverterHelper converterHelper;
 
 	public InputFileFixedWidthConverter(Component component) {
 		super();

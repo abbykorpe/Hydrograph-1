@@ -32,12 +32,11 @@ import com.bitwiseglobal.graph.commontypes.TypeStraightPullOutSocket;
 import com.bitwiseglobal.graph.straightpulltypes.Clone;
 
 /**
- * Converter implementation for Replicate component
+ * Converter implementation for Clone component
  */
 public class CloneConverter extends StraightPullConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(CloneConverter.class);
-	private ConverterHelper converterHelper;
 
 	public CloneConverter(Component component) {
 		super();

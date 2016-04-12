@@ -36,7 +36,6 @@ import com.bitwiseglobal.graph.commontypes.TypeOperationOutputFields;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.operationstypes.GenerateSequence;
-import com.bitwiseglobal.graph.operationstypes.Transform;
 
 /**
  * This class is used to create target XML for UniqueSequence component.
@@ -48,7 +47,6 @@ public class UniqueSequenceConverter extends TransformConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(UniqueSequenceConverter.class);
 	private String defaultOperationId = "opt1";
 	private String newFieldName;
-	ConverterHelper converterHelper;
 
 	public UniqueSequenceConverter(Component component) {
 		super();

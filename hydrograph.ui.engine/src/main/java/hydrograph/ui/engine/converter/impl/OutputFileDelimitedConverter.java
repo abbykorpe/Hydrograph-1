@@ -38,7 +38,6 @@ import com.bitwiseglobal.graph.outputtypes.TextFileDelimited;
 public class OutputFileDelimitedConverter extends OutputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
-	private ConverterHelper converterHelper;
 
 	public OutputFileDelimitedConverter(Component component) {
 		super();

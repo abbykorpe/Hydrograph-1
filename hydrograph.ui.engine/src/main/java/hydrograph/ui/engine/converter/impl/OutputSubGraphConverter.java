@@ -42,7 +42,6 @@ import com.bitwiseglobal.graph.outputtypes.Subgraph;
 public class OutputSubGraphConverter extends OutputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputSubGraphConverter.class);
-	private ConverterHelper converterHelper;
 
 	public OutputSubGraphConverter(Component component) {
 		super();

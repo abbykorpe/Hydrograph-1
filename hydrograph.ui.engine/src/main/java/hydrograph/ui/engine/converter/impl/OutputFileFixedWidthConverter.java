@@ -38,7 +38,6 @@ import com.bitwiseglobal.graph.outputtypes.TextFileFixedWidth;
 public class OutputFileFixedWidthConverter extends OutputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
-	private ConverterHelper converterHelper;
 
 	public OutputFileFixedWidthConverter(Component component) {
 		super();

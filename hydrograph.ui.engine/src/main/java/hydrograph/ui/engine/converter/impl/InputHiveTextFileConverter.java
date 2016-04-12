@@ -46,7 +46,6 @@ import com.bitwiseglobal.graph.inputtypes.HiveTextFile;
 public class InputHiveTextFileConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputHiveTextFileConverter.class);
-	private ConverterHelper converterHelper;
 
 	public InputHiveTextFileConverter(Component component) {
 		super();

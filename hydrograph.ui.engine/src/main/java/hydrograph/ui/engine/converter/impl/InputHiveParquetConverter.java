@@ -45,7 +45,6 @@ import org.apache.commons.lang.StringUtils;
 public class InputHiveParquetConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputHiveParquetConverter.class);
-	private ConverterHelper converterHelper;
 
 	public InputHiveParquetConverter(Component component) {
 		super();

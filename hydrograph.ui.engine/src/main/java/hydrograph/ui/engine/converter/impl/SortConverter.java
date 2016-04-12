@@ -48,7 +48,6 @@ import com.bitwiseglobal.graph.straightpulltypes.Sort;
 public class SortConverter extends StraightPullConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(SortConverter.class);
-	private ConverterHelper converterHelper;
 
 	public SortConverter(Component component) {
 		super();
@@ -66,13 +65,6 @@ public class SortConverter extends StraightPullConverter {
 		sort.setPrimaryKeys(getPrimaryKeys());
 		sort.setSecondaryKeys(getSecondaryKeys());
 	}
-
-	private boolean isALLParameterizedFields(Map<String, String> secondaryKeyRow) {
-		for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet())
-			if (!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey()))
-				return false;
-		return true;
-	}
 	
 	private TypePrimaryKeyFields getPrimaryKeys() {
 
@@ -82,7 +74,7 @@ public class SortConverter extends StraightPullConverter {
 		if (primaryKeyRow != null &&  !primaryKeyRow.isEmpty()) {
 			primaryKeyFields = new TypePrimaryKeyFields();
 			List<TypePrimaryKeyFieldsAttributes> fieldNameList = primaryKeyFields.getField();
-			if (!isALLParameterizedFields(primaryKeyRow)) {
+			if (!converterHelper.hasAllKeysAsParams(primaryKeyRow)) {
 				for (Map.Entry<String, String> primaryKeyRowEntry : primaryKeyRow.entrySet()) {
 					if(!ParameterUtil.isParameter(primaryKeyRowEntry.getKey())){
 						TypePrimaryKeyFieldsAttributes field = new TypePrimaryKeyFieldsAttributes();
@@ -117,7 +109,7 @@ public class SortConverter extends StraightPullConverter {
 		if (secondaryKeyRow != null && !secondaryKeyRow.isEmpty()) {
 			typeSecondaryKeyFields = new TypeSecondaryKeyFields();
 			List<TypeSecondayKeyFieldsAttributes> fieldNameList = typeSecondaryKeyFields.getField();
-			if(!isALLParameterizedFields(secondaryKeyRow)){
+			if(!converterHelper.hasAllKeysAsParams(secondaryKeyRow)){
 				
 				for (Map.Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet()) {
 					if(!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey())){

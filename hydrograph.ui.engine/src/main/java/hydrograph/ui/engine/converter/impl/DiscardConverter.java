@@ -16,9 +16,6 @@ package hydrograph.ui.engine.converter.impl;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.OutputConverter;
 import hydrograph.ui.engine.helper.ConverterHelper;
 import hydrograph.ui.graph.model.Component;
@@ -44,7 +41,6 @@ import com.bitwiseglobal.graph.outputtypes.Discard;
 public class DiscardConverter extends OutputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(DiscardConverter.class);
-	private ConverterHelper converterHelper;
 
 	public DiscardConverter(Component component) {
 		super();

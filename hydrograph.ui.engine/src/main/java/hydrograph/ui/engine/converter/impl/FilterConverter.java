@@ -45,7 +45,6 @@ import com.bitwiseglobal.graph.operationstypes.Filter;
 public class FilterConverter extends TransformConverter {
 	private static final String FILTER_OPERATION_ID = "filter_opt";
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConverter.class);
-	private ConverterHelper converterHelper;
 
 	public FilterConverter(Component component) {
 		super();
@@ -105,7 +104,7 @@ public class FilterConverter extends TransformConverter {
 		List<String> componentOperationFields = (List<String>) component.getProperties().get(
 				PropertyNameConstants.OPERATION_FILEDS.value());
 		if (componentOperationFields != null && !componentOperationFields.isEmpty()) {
-			if (!isALLParameterizedFields(componentOperationFields)) {
+			if (!converterHelper.hasAllStringsInListAsParams(componentOperationFields)) {
 				for (String fieldName : componentOperationFields) {
 					if (!ParameterUtil.isParameter(fieldName)) {
 						TypeInputField operationField = new TypeInputField();
@@ -130,13 +129,6 @@ public class FilterConverter extends TransformConverter {
 		return operationFiledList;
 	}
 
-
-	private boolean isALLParameterizedFields(List<String> componentOperationFields){
-		for (String fieldName : componentOperationFields) 
-			if (!ParameterUtil.isParameter(fieldName)) 
-				return false;
-		return true;
-	}
 
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {

@@ -47,7 +47,6 @@ import com.bitwiseglobal.graph.ohiveparquet.HiveType;
 public class OutputHiveParquetConverter extends OutputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputHiveParquetConverter.class);
-	private ConverterHelper converterHelper;
 
 	public OutputHiveParquetConverter(Component component) {
 		super();
