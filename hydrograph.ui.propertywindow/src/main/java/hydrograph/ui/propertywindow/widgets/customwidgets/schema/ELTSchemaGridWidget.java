@@ -18,6 +18,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
@@ -79,10 +80,12 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.FocusCellOwnerDrawHighlighter;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -91,6 +94,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TableViewerFocusCellManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -100,6 +104,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -109,6 +114,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.slf4j.Logger;
 
 
@@ -828,10 +834,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 * @param {@link Composite}
 	 * @return {@link TableViewer}
 	 */
-	public TableViewer createSchemaGridSection(Composite container, int height, int width) {
+	public TableViewer createSchemaGridSection(Composite container, int height,
+			int width) {
 
-		ELTSchemaSubgroupComposite buttonSubGroup = new ELTSchemaSubgroupComposite(container);
-
+		ELTSchemaSubgroupComposite buttonSubGroup = new ELTSchemaSubgroupComposite(
+				container);
 
 		buttonSubGroup.createContainerWidget();
 
@@ -842,30 +849,57 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		addUpButton(buttonSubGroup);
 		addDownButton(buttonSubGroup);
 
-		ELTSchemaTableComposite gridSubGroup = new ELTSchemaTableComposite(container);
+		ELTSchemaTableComposite gridSubGroup = new ELTSchemaTableComposite(
+				container);
 		gridSubGroup.createContainerWidget();
 
-		AbstractELTWidget eltTableViewer = new ELTTableViewer(getContentProvider(), getLableProvider());
-		gridSubGroup.attachWidget(eltTableViewer);
+		ColumnLayoutData cld_composite = new ColumnLayoutData();
+		cld_composite.heightHint = 260;
+		cld_composite.widthHint = 400;
+		gridSubGroup.getContainerControl().setLayoutData(cld_composite);
 
-		// eltTableViewer.getSWTWidgetControl().
+		Composite composite = new Composite(gridSubGroup.getContainerControl(),
+				SWT.NONE);
+		composite.setLayout(new GridLayout(1, false));
+		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, true, true, 1,
+				1);
+		
+		composite.setLayoutData(gd_composite);
+
+		ScrolledComposite scrolledComposite = new ScrolledComposite(composite,
+				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		GridData gd_scrolledComposite = new GridData(SWT.FILL, SWT.FILL, true,
+				true, 1, 1);
+		scrolledComposite.setLayoutData(gd_scrolledComposite);
+		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setExpandVertical(true);
+
+		Composite composite_2 = new Composite(scrolledComposite, SWT.NONE);
+		GridLayout gl_composite_2 = new GridLayout(1, false);
+		gl_composite_2.marginWidth = 0;
+		gl_composite_2.marginHeight = 0;
+		gl_composite_2.horizontalSpacing = 0;
+		composite_2.setLayout(gl_composite_2);
+		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
+				1, 1));
+
+		AbstractELTWidget eltTableViewer = new ELTTableViewer(
+				getContentProvider(), getLableProvider());
+		eltTableViewer.attachWidget(composite_2);
+
 		tableViewer = (TableViewer) eltTableViewer.getJfaceWidgetControl();
 		tableViewer.setInput(schemaGridRowList);
-		
+
 		addGridRowsCopyPasteContextMenu();
-		
+
 		// Set the editors, cell modifier, and column properties
 		tableViewer.setColumnProperties(PROPS);
 		tableViewer.setCellModifier(getCellModifier());
 		ELTTable eltTable = new ELTTable(tableViewer, height, width);
 		gridSubGroup.attachWidget(eltTable);
-		
+
 		table = (Table) eltTable.getSWTWidgetControl();
-		GridData tbl_gridData = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-		tbl_gridData.widthHint = 230;
-		tbl_gridData.heightHint = 230;
-		table.setLayoutData(tbl_gridData);
-		
+
 		// Create Table column
 		WidgetUtility.createTableColumns(table, PROPS);
 		// Set up the table
@@ -877,25 +911,49 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		tableViewer.setCellEditors(editors);
 
 		// enables the tab functionality
-		TableViewerEditor.create(tableViewer, new ColumnViewerEditorActivationStrategy(tableViewer),
-				ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.TABBING_HORIZONTAL
-				| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL);
+		TableViewerEditor.create(tableViewer,
+				new ColumnViewerEditorActivationStrategy(tableViewer),
+				ColumnViewerEditor.KEYBOARD_ACTIVATION
+						| ColumnViewerEditor.TABBING_HORIZONTAL
+						| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
+						| ColumnViewerEditor.TABBING_VERTICAL);
 
-		// Adding the decorator to show error message when field name same.
+		TableColumnLayout layout = new TableColumnLayout();
+		tableViewer.getControl().getParent().setLayout(layout);
 
+		for (int i = 0; i < tableViewer.getTable().getColumnCount(); i++) {
+			layout.setColumnData(tableViewer.getTable().getColumn(i),
+					new ColumnWeightData(1));
+		}
+		
 		helper = getListenerHelper(false);
+		
+		// Adding the decorator to show error message when field name same.
 		setDecorator();
 
 		addValidators();
 		try {
-			eltTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK.getListener(),
-					propertyDialogButtonBar, helper, table,deleteButton.getSWTWidgetControl(),upButton.getSWTWidgetControl(),downButton.getSWTWidgetControl());
-			eltTable.attachListener(ListenerFactory.Listners.GRID_MOUSE_DOWN.getListener(), propertyDialogButtonBar,
-					helper, editors[0].getControl());
-			addButton.attachListener(ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),
-					propertyDialogButtonBar, helper, table,deleteButton.getSWTWidgetControl(),upButton.getSWTWidgetControl(),downButton.getSWTWidgetControl());
-			deleteButton.attachListener(ListenerFactory.Listners.GRID_DELETE_SELECTION.getListener(),
-					propertyDialogButtonBar, helper, table,deleteButton.getSWTWidgetControl(),upButton.getSWTWidgetControl(),downButton.getSWTWidgetControl());
+			eltTable.attachListener(
+					ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK
+							.getListener(), propertyDialogButtonBar, helper,
+					table, deleteButton.getSWTWidgetControl(), upButton
+							.getSWTWidgetControl(), downButton
+							.getSWTWidgetControl());
+			eltTable.attachListener(
+					ListenerFactory.Listners.GRID_MOUSE_DOWN.getListener(),
+					propertyDialogButtonBar, helper, editors[0].getControl());
+			addButton.attachListener(
+					ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),
+					propertyDialogButtonBar, helper, table,
+					deleteButton.getSWTWidgetControl(),
+					upButton.getSWTWidgetControl(),
+					downButton.getSWTWidgetControl());
+			deleteButton.attachListener(
+					ListenerFactory.Listners.GRID_DELETE_SELECTION
+							.getListener(), propertyDialogButtonBar, helper,
+					table, deleteButton.getSWTWidgetControl(), upButton
+							.getSWTWidgetControl(), downButton
+							.getSWTWidgetControl());
 
 		} catch (Exception e) {
 			logger.error(Messages.ATTACH_LISTENER_ERROR, e);
@@ -906,24 +964,34 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		upButton.setEnabled(false);
 		downButton.setEnabled(false);
 		deleteButton.setEnabled(false);
-		
-		TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(tableViewer, new FocusCellOwnerDrawHighlighter(tableViewer));
-		ColumnViewerEditorActivationStrategy activationSupport = new ColumnViewerEditorActivationStrategy(tableViewer) {
-		    protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
-		        if (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION) {
-		            EventObject source = event.sourceEvent;
-		            if (source instanceof MouseEvent && ((MouseEvent)source).button == 3)
-		                return false;
-		        }
-		        return super.isEditorActivationEvent(event) || (event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED && event.keyCode == SWT.F2);
-		    }
+
+		TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(
+				tableViewer, new FocusCellOwnerDrawHighlighter(tableViewer));
+		ColumnViewerEditorActivationStrategy activationSupport = new ColumnViewerEditorActivationStrategy(
+				tableViewer) {
+			protected boolean isEditorActivationEvent(
+					ColumnViewerEditorActivationEvent event) {
+				if (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION) {
+					EventObject source = event.sourceEvent;
+					if (source instanceof MouseEvent
+							&& ((MouseEvent) source).button == 3)
+						return false;
+				}
+				return super.isEditorActivationEvent(event)
+						|| (event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED && event.keyCode == SWT.F2);
+			}
 		};
-		TableViewerEditor.create(tableViewer, focusCellManager, activationSupport,ColumnViewerEditor.TABBING_HORIZONTAL | 
-			    ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | 
-			    ColumnViewerEditor.TABBING_VERTICAL |
-			    ColumnViewerEditor.KEYBOARD_ACTIVATION);
-		
+		TableViewerEditor.create(tableViewer, focusCellManager,
+				activationSupport, ColumnViewerEditor.TABBING_HORIZONTAL
+						| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
+						| ColumnViewerEditor.TABBING_VERTICAL
+						| ColumnViewerEditor.KEYBOARD_ACTIVATION);
+
 		populateWidget();
+		scrolledComposite.setContent(composite_2);
+		scrolledComposite.setMinSize(composite_2.computeSize(SWT.DEFAULT,
+				SWT.DEFAULT));
+
 		return tableViewer;
 	}
 
@@ -991,7 +1059,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		addButton = new ELTDefaultLable("");
 		addButton.lableWidth(25);
 		buttonSubGroup.attachWidget(addButton);
-		addButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.ADD_ICON);
+		addButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
 		addButton.setToolTipText(addButtonTooltip);
 	}
 
@@ -999,7 +1067,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		deleteButton = new ELTDefaultLable("");
 		deleteButton.lableWidth(25);
 		buttonSubGroup.attachWidget(deleteButton);
-		deleteButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+		deleteButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
 		deleteButton.setToolTipText(removeButtonTooltip);
 	}
 
@@ -1007,7 +1075,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		upButton = new ELTDefaultLable("");
 		upButton.lableWidth(25);
 		buttonSubGroup.attachWidget(upButton);
-		upButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.UP_ICON);
+		upButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
 		upButton.setToolTipText(upButtonTooltip);
 		upButton.addMouseUpListener(new MouseAdapter() {
 			@Override
@@ -1032,7 +1100,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		downButton.lableWidth(25);
 		buttonSubGroup.attachWidget(downButton);
 
-		downButton.setImage(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DOWN_ICON);
+		downButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
 		downButton.setToolTipText(downButtonTooltip);
 
 
