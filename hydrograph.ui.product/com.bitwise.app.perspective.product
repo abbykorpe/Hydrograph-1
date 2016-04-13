@@ -3,7 +3,6 @@
 
 <product name="Hydrograph" uid="hydrograph.ui.perspective.ID" id="hydrograph.ui.perspective.productId" application="hydrograph.ui.perspective.application" version="0.0.1" useFeatures="false" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -28,17 +27,15 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
 
    <splash
       location="hydrograph.ui.perspective" />
-   <launcher name="Hydrograph">
+   <launcher>
       <solaris/>
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
 
-
    <vm>
    </vm>
-
 
    <plugins>
       <plugin id="ch.qos.logback.classic"/>
