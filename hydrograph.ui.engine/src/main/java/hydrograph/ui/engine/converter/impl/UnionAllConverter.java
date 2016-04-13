@@ -39,11 +39,10 @@ public class UnionAllConverter extends StraightPullConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(UnionAllConverter.class);
 
 	public UnionAllConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new UnionAll();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

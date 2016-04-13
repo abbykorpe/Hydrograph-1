@@ -43,11 +43,10 @@ public class DiscardConverter extends OutputConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(DiscardConverter.class);
 
 	public DiscardConverter(Component component) {
-		super();
+		super(component);
 		this.component = component;
 		this.properties = component.getProperties();
 		this.baseComponent = new Discard();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	/* *

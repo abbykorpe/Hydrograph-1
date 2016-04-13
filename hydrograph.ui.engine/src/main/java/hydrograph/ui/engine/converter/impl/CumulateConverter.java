@@ -54,12 +54,11 @@ public class CumulateConverter extends TransformConverter {
 	private List<BasicSchemaGridRow> schemaGridRows;
 
 	public CumulateConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Cumulate();
 		this.component = component;
 		this.properties = component.getProperties();
 		transformMapping = (TransformMapping) properties.get(Constants.PARAM_OPERATION);
-		converterHelper = new ConverterHelper(component);
 		initSchemaGridRows();
 	}
 

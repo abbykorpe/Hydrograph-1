@@ -121,14 +121,14 @@ public class ConverterHelper {
 
 	private TypeProperties getOperationProperties(List<NameValueProperty> nameValueProperties) {
 		TypeProperties properties=null;
-		if(!nameValueProperties.isEmpty())
-		{	properties = new TypeProperties();
-		for (NameValueProperty nameValueProperty : nameValueProperties) {
-			Property property = new Property();
-			property.setName(nameValueProperty.getPropertyName());
-			property.setValue(nameValueProperty.getPropertyValue());
-			properties.getProperty().add(property);
-		}	
+		if(!nameValueProperties.isEmpty()){
+			properties = new TypeProperties();
+			for (NameValueProperty nameValueProperty : nameValueProperties) {
+				Property property = new Property();
+				property.setName(nameValueProperty.getPropertyName());
+				property.setValue(nameValueProperty.getPropertyValue());
+				properties.getProperty().add(property);
+			}	
 
 		}	
 		return properties;
@@ -315,21 +315,21 @@ public class ConverterHelper {
 				return false;
 		return true;
 	}
-	
+
 	public boolean hasAllStringsInListAsParams(List<String> componentOperationFields) {
 		for (String fieldName : componentOperationFields)
 			if (!ParameterUtil.isParameter(fieldName))
 				return false;
 		return true;
 	}
-	
+
 	public boolean hasAllKeysAsParams(Map<String, String> secondaryKeyRow) {
 		for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet())
 			if (!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey()))
 				return false;
 		return true;
 	}
-	
+
 	public boolean hasAllStringsInArrayAsParams(String keys[]){
 		for (String fieldName : keys) 
 			if (!ParameterUtil.isParameter(fieldName)) 

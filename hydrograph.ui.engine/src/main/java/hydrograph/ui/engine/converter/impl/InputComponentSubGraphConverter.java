@@ -39,7 +39,7 @@ public class InputComponentSubGraphConverter extends InputConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputComponentSubGraphConverter.class);
 
 	public InputComponentSubGraphConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new SubgraphInput();
 		this.component = component;
 		this.properties = component.getProperties();

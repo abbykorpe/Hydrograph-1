@@ -49,11 +49,10 @@ public class UniqueSequenceConverter extends TransformConverter {
 	private String newFieldName;
 
 	public UniqueSequenceConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new GenerateSequence();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 		newFieldName = (String) properties.get(Constants.UNIQUE_SEQUENCE_PROPERTY_NAME);
 	}
 

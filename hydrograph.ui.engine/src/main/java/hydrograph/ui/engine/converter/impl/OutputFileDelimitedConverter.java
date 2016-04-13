@@ -40,11 +40,10 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
 
 	public OutputFileDelimitedConverter(Component component) {
-		super();
+		super(component);
 		this.component = component;
 		this.properties = component.getProperties();
 		this.baseComponent = new TextFileDelimited();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

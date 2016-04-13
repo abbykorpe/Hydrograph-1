@@ -50,11 +50,10 @@ public class SortConverter extends StraightPullConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(SortConverter.class);
 
 	public SortConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Sort();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

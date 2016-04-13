@@ -47,11 +47,10 @@ public class InputHiveParquetConverter extends InputConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputHiveParquetConverter.class);
 
 	public InputHiveParquetConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new ParquetHiveFile();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

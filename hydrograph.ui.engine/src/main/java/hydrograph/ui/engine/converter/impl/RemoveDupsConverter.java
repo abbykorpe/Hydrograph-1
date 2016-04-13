@@ -52,11 +52,10 @@ public class RemoveDupsConverter extends StraightPullConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(RemoveDupsConverter.class);
 
 	public RemoveDupsConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new RemoveDups();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

@@ -61,13 +61,11 @@ public class LookupConverter extends TransformConverter {
 	private LookupMappingGrid lookupPropertyGrid;
 
 	public LookupConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new HashJoin();
 		this.component = component;
 		this.properties = component.getProperties();
 		lookupPropertyGrid = (LookupMappingGrid) properties.get(Constants.LOOKUP_MAP_FIELD);
-		converterHelper = new ConverterHelper(component);
-
 	}
 
 	@Override

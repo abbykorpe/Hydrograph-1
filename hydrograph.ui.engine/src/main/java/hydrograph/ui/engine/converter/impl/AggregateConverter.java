@@ -19,7 +19,6 @@ import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.engine.converter.TransformConverter;
-import hydrograph.ui.engine.helper.ConverterHelper;
 import hydrograph.ui.engine.xpath.ComponentXpathConstants;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -53,12 +52,11 @@ public class AggregateConverter extends TransformConverter {
 	private List<BasicSchemaGridRow> schemaGridRows;
 
 	public AggregateConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Aggregate();
 		this.component = component;
 		this.properties = component.getProperties();
 		transformMapping = (TransformMapping) properties.get(Constants.PARAM_OPERATION);
-		converterHelper = new ConverterHelper(component);
 		initSchemaGridRows();
 	}
 

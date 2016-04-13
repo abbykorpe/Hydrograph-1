@@ -20,11 +20,13 @@ import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.impl.OutputFileDelimitedConverter;
 import hydrograph.ui.engine.exceptions.SchemaException;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
@@ -32,9 +34,12 @@ import com.bitwiseglobal.graph.commontypes.TypeBaseRecord;
 import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;
 import com.bitwiseglobal.graph.commontypes.TypeOutputComponent;
 import com.bitwiseglobal.graph.commontypes.TypeOutputInSocket;
-import org.apache.commons.lang.StringUtils;
 
 public abstract class OutputConverter extends Converter {
+
+	public OutputConverter(Component comp) {
+		super(comp);
+	}
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
 

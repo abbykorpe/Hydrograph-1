@@ -47,11 +47,10 @@ public class FilterConverter extends TransformConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConverter.class);
 
 	public FilterConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Filter();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

@@ -42,11 +42,10 @@ public class OperationSubGraphConverter extends SubgraphConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OperationSubGraphConverter.class);
 
 	public OperationSubGraphConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Subgraph();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper=new ConverterHelper(component);
 	}
 
 	/*

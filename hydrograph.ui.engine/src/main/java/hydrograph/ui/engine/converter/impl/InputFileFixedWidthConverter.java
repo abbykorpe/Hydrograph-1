@@ -39,11 +39,10 @@ public class InputFileFixedWidthConverter extends InputConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputFileFixedWidthConverter.class);
 
 	public InputFileFixedWidthConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new TextFileFixedWidth();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

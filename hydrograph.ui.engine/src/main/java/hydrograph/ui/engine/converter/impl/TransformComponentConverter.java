@@ -46,12 +46,11 @@ public class TransformComponentConverter extends TransformConverter {
 	private List<BasicSchemaGridRow> schemaGridRows;
 
 	public TransformComponentConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Transform();
 		this.component = component;
 		this.properties = component.getProperties();
 		transformMapping = (TransformMapping) properties.get(Constants.PARAM_OPERATION);
-		converterHelper = new ConverterHelper(component);
 		initSchemaGridRows();
 	}
 

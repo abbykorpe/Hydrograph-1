@@ -42,11 +42,10 @@ public class OutputComponentSubGraphConverter extends OutputConverter {
 
 
 	public OutputComponentSubGraphConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new SubgraphOutput();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

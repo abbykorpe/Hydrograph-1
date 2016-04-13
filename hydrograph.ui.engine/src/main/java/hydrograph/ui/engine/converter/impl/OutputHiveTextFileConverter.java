@@ -49,11 +49,10 @@ public class OutputHiveTextFileConverter extends OutputConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputHiveTextFileConverter.class);
 
 	public OutputHiveTextFileConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new HiveTextFile();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

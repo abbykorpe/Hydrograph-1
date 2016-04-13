@@ -40,11 +40,10 @@ public class OutputFileFixedWidthConverter extends OutputConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
 
 	public OutputFileFixedWidthConverter(Component component) {
-		super();
+		super(component);
 		this.component = component;
 		this.properties = component.getProperties();
 		this.baseComponent = new TextFileFixedWidth();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

@@ -39,11 +39,10 @@ public class CloneConverter extends StraightPullConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(CloneConverter.class);
 
 	public CloneConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Clone();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

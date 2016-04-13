@@ -54,10 +54,14 @@ public abstract class Converter {
 	protected ConverterHelper converterHelper;
 	protected static final String ID = "$id";
 	protected Map<String, Object> properties = new LinkedHashMap<String, Object>();
-	protected Component component = null;
+	protected Component component;
 	protected TypeBaseComponent baseComponent = null;
 	protected String componentName = null;
 
+	public Converter(Component comp){
+		converterHelper = new ConverterHelper(comp);
+	}
+	
 	/**
 	 * Prepares the class of type {@link TypeBaseComponent} for xml conversion
 	 * 

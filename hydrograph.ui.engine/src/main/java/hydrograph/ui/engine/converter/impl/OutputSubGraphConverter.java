@@ -44,11 +44,10 @@ public class OutputSubGraphConverter extends OutputConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputSubGraphConverter.class);
 
 	public OutputSubGraphConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Subgraph();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

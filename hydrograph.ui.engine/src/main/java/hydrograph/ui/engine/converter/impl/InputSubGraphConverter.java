@@ -42,11 +42,10 @@ public class InputSubGraphConverter extends InputConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputSubGraphConverter.class);
 	
 	public InputSubGraphConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Subgraph();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

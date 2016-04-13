@@ -59,12 +59,11 @@ public class JoinConverter extends TransformConverter {
 	private JoinMappingGrid joinupPropertyGrid;
 
 	public JoinConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Join();
 		this.component = component;
 		this.properties = component.getProperties();
 		joinupPropertyGrid = (JoinMappingGrid) properties.get(Constants.JOIN_MAP_FIELD);
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override
