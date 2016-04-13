@@ -37,7 +37,8 @@ public enum UIComponentsConstants {
 	LIMIT("Limit"),
 	DISCARD("Discard"),
 	SORT("Sort"),
-	CUMULATE("Cumulate");
+	CUMULATE("Cumulate"),
+	NORMALIZE("Normalize");
 	
 	private final String value;
 

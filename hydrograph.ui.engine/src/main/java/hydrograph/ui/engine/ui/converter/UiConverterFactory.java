@@ -28,6 +28,7 @@ import hydrograph.ui.engine.ui.converter.impl.InputHiveTextFileUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.JoinComponentUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.LimitUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.LookupUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.NormalizeUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputFileDelimitedUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputFixedWidthUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputHiveParquetUiConverter;
@@ -54,6 +55,7 @@ import com.bitwiseglobal.graph.operationstypes.Filter;
 import com.bitwiseglobal.graph.operationstypes.GenerateSequence;
 import com.bitwiseglobal.graph.operationstypes.HashJoin;
 import com.bitwiseglobal.graph.operationstypes.Join;
+import com.bitwiseglobal.graph.operationstypes.Normalize;
 import com.bitwiseglobal.graph.operationstypes.Transform;
 import com.bitwiseglobal.graph.outputtypes.Discard;
 import com.bitwiseglobal.graph.straightpulltypes.Clone;
@@ -155,6 +157,9 @@ public class UiConverterFactory {
 		}
 		if((HiveTextFile.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new InputHiveTextFileUiConverter(typeBaseComponent, container);
+		}
+		if((Normalize.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new NormalizeUiConverter(typeBaseComponent, container);
 		}
 		return new DummyUiConverter(typeBaseComponent,container);
 	}

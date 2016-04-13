@@ -1,0 +1,101 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
+package hydrograph.ui.engine.converter.impl;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
+import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.mapping.TransformMapping;
+import hydrograph.ui.engine.converter.TransformConverter;
+import hydrograph.ui.engine.helper.ConverterHelper;
+import hydrograph.ui.engine.xpath.ComponentXpathConstants;
+import hydrograph.ui.graph.model.Component;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.slf4j.Logger;
+
+import hydrograph.ui.logging.factory.LogFactory;
+
+
+import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
+import com.bitwiseglobal.graph.commontypes.TypeFieldName;
+import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
+import com.bitwiseglobal.graph.commontypes.TypeSortOrder;
+import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
+import com.bitwiseglobal.graph.operationstypes.Normalize;
+
+public class NormalizeConverter extends TransformConverter {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(NormalizeConverter.class);
+	private TransformMapping atMapping;
+	private List<BasicSchemaGridRow> schemaGridRows;
+	ConverterHelper converterHelper;
+
+	public NormalizeConverter(Component component) {
+		super(component);
+		this.baseComponent = new Normalize();
+		this.component = component;
+		this.properties = component.getProperties();
+		atMapping = (TransformMapping) properties.get(Constants.PARAM_OPERATION);
+		converterHelper = new ConverterHelper(component);
+		initSchemaGridRows();
+	}
+
+	
+	private void initSchemaGridRows() {
+		schemaGridRows = new LinkedList<>();
+		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) properties
+				.get(Constants.SCHEMA_TO_PROPAGATE);
+		if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null) {
+			ComponentsOutputSchema componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
+			List<BasicSchemaGridRow> gridRows = componentsOutputSchema.getSchemaGridOutputFields();
+
+			for (BasicSchemaGridRow row : gridRows) {
+				schemaGridRows.add((BasicSchemaGridRow) row.copy());
+			}
+		}
+	}
+	
+	
+	@Override
+	public void prepareForXML() {
+		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
+		super.prepareForXML();
+
+		Normalize normalize = (Normalize) baseComponent;
+		normalize.getOperation().addAll(getOperations());
+	}
+
+	@Override
+	protected List<TypeTransformOperation> getOperations() {
+		return converterHelper.getOperations(atMapping,schemaGridRows);
+	}
+
+	@Override
+	protected List<TypeOperationsOutSocket> getOutSocket() {
+		return converterHelper.getOutSocket(atMapping,schemaGridRows);
+	}
+
+	@Override
+	public List<TypeBaseInSocket> getInSocket() {
+		return converterHelper.getInSocket();
+	}
+
+}
