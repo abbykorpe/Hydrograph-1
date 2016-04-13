@@ -15,6 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
@@ -47,9 +48,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
@@ -62,6 +63,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -85,7 +88,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 public class TransformDialog extends Dialog implements IOperationClassDialog {
@@ -93,7 +95,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private static final String OUTPUT_DELETE_BUTTON = "outputDeleteButton";
 	private static final String OUTPUT_ADD_BUTTON = "outputAddButton";
 	private static final String OPERATION_OUTPUT_FIELD_TABLE_VIEWER = "operationOutputFieldTableViewer";
-	private static final String INPUT_DELET_BUTTON = "inputDeletButton";
+	private static final String INPUT_DELETE_BUTTON = "inputDeletButton";
 	private static final String INPUT_ADD_BUTTON = "inputAddButton";
 	private static final String OPERATION_INPUT_FIELD_TABLE_VIEWER = "operationInputFieldTableViewer";
 	private static final String OPERATION_ID_TEXT_BOX = "operationIDTextBox";
@@ -123,6 +125,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private Text text;
 	private Button isParam;
 	private TableViewer operationalInputFieldTableViewer;
+	private TableViewer operationalOutputFieldTableViewer;
 	private Label operationInputaddButton;
 	private Label operationInputDeleteButton;
 	private Composite composite_1;
@@ -673,6 +676,27 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 			}
 		});
+		
+		text.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				Text textBox=(Text)e.widget;
+				String parameterText=textBox.getText();
+				parameterText=StringUtils.replace(StringUtils.replace(parameterText,Constants.PARAMETER_PREFIX , ""),Constants.PARAMETER_SUFFIX,"");
+				textBox.setText(Constants.PARAMETER_PREFIX+parameterText+Constants.PARAMETER_SUFFIX);
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				Text textBox=(Text)e.widget;
+				String parameterText=textBox.getText();
+				parameterText=StringUtils.replace(StringUtils.replace(parameterText, Constants.PARAMETER_PREFIX, ""),Constants.PARAMETER_SUFFIX,"");
+				textBox.setText(parameterText);
+				
+				
+			}
+		});
 
 		isParam = new Button(innerComposite, SWT.CHECK);
 		isParam.setData(PARAMETER_TEXT_BOX, text);
@@ -680,8 +704,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		isParam.setData(OPERATION_ID_TEXT_BOX, operationIDTextBox);
 		isParam.setData(BTN_NEW_BUTTON, browseButton);
 		isParam.setData(OPERATION_INPUT_FIELD_TABLE_VIEWER, operationalInputFieldTableViewer);
+		isParam.setData(OPERATION_OUTPUT_FIELD_TABLE_VIEWER, operationalOutputFieldTableViewer);
 		isParam.setData(INPUT_ADD_BUTTON, operationInputaddButton);
-		isParam.setData(INPUT_DELET_BUTTON, operationInputDeleteButton);
+		isParam.setData(INPUT_DELETE_BUTTON, operationInputDeleteButton);
 		isParam.setSelection(mappingSheetRow.isWholeOperationParameter());
 		
 		isParam.addSelectionListener(new SelectionAdapter() {
@@ -694,11 +719,12 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 						.getData(OPERATION_INPUT_FIELD_TABLE_VIEWER);
 				TableViewer operationOutputFieldTableViewer = (TableViewer) text
 						.getData(OPERATION_OUTPUT_FIELD_TABLE_VIEWER);
+				
 				Text operationClassTextBox = (Text) text.getData(OPERATION_CLASS_TEXT_BOX);
 				Text operationIDTextBox = (Text) text.getData(OPERATION_ID_TEXT_BOX);
 				Button btnNewButton = (Button) text.getData(BTN_NEW_BUTTON);
 				Label inputAdd = (Label) text.getData(INPUT_ADD_BUTTON);
-				Label inputDelete = (Label) text.getData(INPUT_DELET_BUTTON);
+				Label inputDelete = (Label) text.getData(INPUT_DELETE_BUTTON);
 				Label outputAdd = (Label) text.getData(OUTPUT_ADD_BUTTON);
 				Label outputDelete = (Label) text.getData(OUTPUT_DELETE_BUTTON);
 
@@ -709,16 +735,21 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 						operationInputFieldTableViewer.getTable().setEnabled(false);
 						operationInputFieldTableViewer.getTable().clearAll();
+						operationOutputFieldTableViewer.getTable().setEnabled(false);
+						operationOutputFieldTableViewer.getTable().clearAll();
+						
 						operationClassTextBox.setEnabled(false);
 						operationClassTextBox.setText("");
 						operationIDTextBox.setEnabled(false);
 
 						btnNewButton.setEnabled(false);
+						outputAdd.setEnabled(false);
+						outputDelete.setEnabled(false);
 						inputAdd.setEnabled(false);
 						inputDelete.setEnabled(false);
 						
                         mappingSheetRow.getInputFields().clear();
-				
+				        mappingSheetRow.getOutputList().clear();
 						mappingSheetRow.setComboBoxValue(Messages.CUSTOM);
 						mappingSheetRow.getNameValueProperty().clear();
 						mappingSheetRow.setClassParameter(false);
@@ -761,7 +792,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		gd_operationalOutputFieldComposite.widthHint = 156;
 		operationalOutputFieldComposite.setLayoutData(gd_operationalOutputFieldComposite);
 
-		final TableViewer operationalOutputFieldTableViewer = new TableViewer(operationalOutputFieldComposite,
+		 operationalOutputFieldTableViewer = new TableViewer(operationalOutputFieldComposite,
 				SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		final TableViewer operationOutputtableViewer = setTableViewer(operationalOutputFieldTableViewer,
 				operationalOutputFieldComposite, new String[] { Messages.INNER_OPERATION_OUTPUT_FIELD },
@@ -834,19 +865,19 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			Button text = (Button) isParam;
 			Text parameterTextBox = (Text) text.getData(PARAMETER_TEXT_BOX);
 			TableViewer operationInputFieldTableViewer = (TableViewer) text.getData(OPERATION_INPUT_FIELD_TABLE_VIEWER);
+			TableViewer operationalOutputFieldTableViewer = (TableViewer) text.getData(OPERATION_OUTPUT_FIELD_TABLE_VIEWER);
 			Text operationClassTextBox = (Text) text.getData(OPERATION_CLASS_TEXT_BOX);
 			Text operationIDTextBox = (Text) text.getData(OPERATION_ID_TEXT_BOX);
 			Button btnNewButton = (Button) text.getData(BTN_NEW_BUTTON);
 			Label inputAdd = (Label) text.getData(INPUT_ADD_BUTTON);
-			Label inputDelete = (Label) text.getData(INPUT_DELET_BUTTON);
-			
+			Label inputDelete = (Label) text.getData(INPUT_DELETE_BUTTON);
+			Label outputAdd = (Label) text.getData(OUTPUT_ADD_BUTTON);
+			Label outputDelete = (Label) text.getData(OUTPUT_DELETE_BUTTON);
 
 			parameterTextBox.setEnabled(true);
 
 			operationInputFieldTableViewer.getTable().setEnabled(false);
-
-			
-
+			operationalOutputFieldTableViewer.getTable().setEnabled(false);
 			operationClassTextBox.setEnabled(false);
 
 			operationIDTextBox.setEnabled(false);
@@ -854,6 +885,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			btnNewButton.setEnabled(false);
 			inputAdd.setEnabled(false);
 			inputDelete.setEnabled(false);
+			outputAdd.setEnabled(false);
+			outputDelete.setEnabled(false);
 			
 
 		}
@@ -862,18 +895,33 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 	public void refreshOutputTable() {
 		
-		List<FilterProperties> validatorOutputFields  = new ArrayList<>(temporaryOutputFieldList);
+		List<FilterProperties> validatorOutputFields  = new ArrayList<>();
+		 
+		for (FilterProperties filterproperty : temporaryOutputFieldList) {
+			if(!ParameterUtil.isParameter(filterproperty.getPropertyname()))
+		    validatorOutputFields.add(filterproperty);		
+		} 
+		
+		
 		temporaryOutputFieldList.clear();
 		temporaryOutputFieldList.addAll(convertNameValueToFilterProperties(transformMapping.getMapAndPassthroughField()));
 		for (MappingSheetRow mappingSheetRow1 : transformMapping.getMappingSheetRows()) {
-
+			
 			temporaryOutputFieldList.addAll(mappingSheetRow1.getOutputList());
 		}
 		temporaryOutputFieldList.addAll(transformMapping.getOutputFieldList());
 		
 		DragDropUtility.unionFilter(convertNameValueToFilterProperties(transformMapping.getMapAndPassthroughField()),validatorOutputFields);
 		for (MappingSheetRow mappingSheetRow1 : transformMapping.getMappingSheetRows()) {
-			DragDropUtility.unionFilter(mappingSheetRow1.getOutputList(),validatorOutputFields);
+			List<FilterProperties> operationOutputFieldList=mappingSheetRow1.getOutputList();
+			List<FilterProperties> nonParameterOutputFieldList=new ArrayList<>();  
+            for(FilterProperties filterProperties : operationOutputFieldList)
+            {
+                  if(!ParameterUtil.isParameter(filterProperties.getPropertyname()))
+                	  nonParameterOutputFieldList.add(filterProperties);
+                 
+            } 
+            DragDropUtility.unionFilter(nonParameterOutputFieldList,validatorOutputFields);
 		}
 		DragDropUtility.unionFilter(transformMapping.getOutputFieldList(),validatorOutputFields);
 		outputFieldViewer.setInput(validatorOutputFields);

@@ -13,6 +13,8 @@
 
 package hydrograph.ui.engine.converter;
 
+import hydrograph.ui.graph.model.Component;
+
 import java.util.List;
 
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
@@ -27,6 +29,10 @@ import com.bitwiseglobal.graph.transform.TypeTransformOutSocket;
 
 public abstract class TransformConverter extends Converter {
 	
+	public TransformConverter(Component comp) {
+		super(comp);
+	}
+
 	@Override
 	public void prepareForXML(){
 		super.prepareForXML();

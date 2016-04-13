@@ -39,14 +39,13 @@ import com.bitwiseglobal.graph.outputtypes.SubgraphOutput;
 public class OutputComponentSubGraphConverter extends OutputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputComponentSubGraphConverter.class);
-	private ConverterHelper converterHelper;
+
 
 	public OutputComponentSubGraphConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new SubgraphOutput();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

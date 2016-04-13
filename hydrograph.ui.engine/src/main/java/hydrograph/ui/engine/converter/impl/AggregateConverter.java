@@ -17,11 +17,8 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.engine.converter.TransformConverter;
-import hydrograph.ui.engine.helper.ConverterHelper;
 import hydrograph.ui.engine.xpath.ComponentXpathConstants;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -51,17 +48,15 @@ import com.bitwiseglobal.graph.operationstypes.Aggregate;
 
 public class AggregateConverter extends TransformConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(AggregateConverter.class);
-	private TransformMapping atMapping;
+	private TransformMapping transformMapping;
 	private List<BasicSchemaGridRow> schemaGridRows;
-	ConverterHelper converterHelper;
 
 	public AggregateConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Aggregate();
 		this.component = component;
 		this.properties = component.getProperties();
-		atMapping = (TransformMapping) properties.get(Constants.PARAM_OPERATION);
-		converterHelper = new ConverterHelper(component);
+		transformMapping = (TransformMapping) properties.get(Constants.PARAM_OPERATION);
 		initSchemaGridRows();
 	}
 
@@ -94,12 +89,12 @@ public class AggregateConverter extends TransformConverter {
 
 	@Override
 	protected List<TypeTransformOperation> getOperations() {
-		return converterHelper.getOperations(atMapping,schemaGridRows);
+		return converterHelper.getOperations(transformMapping, schemaGridRows);
 	}
 
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
-		return converterHelper.getOutSocket(atMapping,schemaGridRows);
+		return converterHelper.getOutSocket(transformMapping, schemaGridRows);
 	}
 
 	@Override
@@ -115,7 +110,7 @@ public class AggregateConverter extends TransformConverter {
 			TypePrimaryKeyFields primaryKeyFields = new TypePrimaryKeyFields();
 			aggregate.setPrimaryKeys(primaryKeyFields);
 			List<TypeFieldName> field = primaryKeyFields.getField();
-			if (!isALLParameterizedFields(columnNameProperties)) {
+			if (!converterHelper.hasAllStringsInListAsParams(columnNameProperties)) {
 				for (String columnNameProperty : columnNameProperties) {
 					if (!ParameterUtil.isParameter(columnNameProperty)) {
 						TypeFieldName fieldName = new TypeFieldName();
@@ -139,20 +134,6 @@ public class AggregateConverter extends TransformConverter {
 		}
 	}
 
-	private boolean isALLParameterizedFields(List<String> componentOperationFields) {
-		for (String fieldName : componentOperationFields)
-			if (!ParameterUtil.isParameter(fieldName))
-				return false;
-		return true;
-	}
-	
-	private boolean isALLParameterizedFields(Map<String, String> secondaryKeyRow) {
-		for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet())
-			if (!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey()))
-				return false;
-		return true;
-	}
-
 
 	private void setSecondaryKeys(Aggregate aggregate) {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PROPERTY_SECONDARY_COLUMN_KEYS));
@@ -162,7 +143,7 @@ public class AggregateConverter extends TransformConverter {
 			TypeSecondaryKeyFields secondaryKeyFields = new TypeSecondaryKeyFields();
 			aggregate.setSecondaryKeys(secondaryKeyFields);
 			List<TypeSecondayKeyFieldsAttributes> field = secondaryKeyFields.getField();
-			if (!isALLParameterizedFields(secondaryKeyRow)) {
+			if (!converterHelper.hasAllKeysAsParams(secondaryKeyRow)) {
 
 				for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet()) {
 

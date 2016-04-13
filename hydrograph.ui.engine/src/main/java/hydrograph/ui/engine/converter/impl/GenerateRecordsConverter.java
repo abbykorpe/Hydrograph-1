@@ -49,7 +49,7 @@ public class GenerateRecordsConverter extends InputConverter {
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(GenerateRecordsConverter.class);
 
 	public GenerateRecordsConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new GenerateRecord();
 		this.component = component;
 		this.properties = component.getProperties();

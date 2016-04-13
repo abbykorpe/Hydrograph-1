@@ -37,14 +37,12 @@ import com.bitwiseglobal.graph.itfd.TypeInputDelimitedOutSocket;
 public class InputFileDelimitedConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputFileDelimitedConverter.class);
-	private ConverterHelper converterHelper;
 
 	public InputFileDelimitedConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new TextFileDelimited();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

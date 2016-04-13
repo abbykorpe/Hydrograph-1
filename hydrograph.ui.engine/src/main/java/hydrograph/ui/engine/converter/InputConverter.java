@@ -19,6 +19,7 @@ import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.exceptions.SchemaException;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.List;
@@ -32,6 +33,10 @@ import com.bitwiseglobal.graph.commontypes.TypeInputComponent;
 import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
 
 public abstract class InputConverter extends Converter {
+	public InputConverter(Component comp) {
+		super(comp);
+	}
+
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(InputConverter.class);
 	
 	@Override

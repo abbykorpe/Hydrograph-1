@@ -56,16 +56,14 @@ public class JoinConverter extends TransformConverter {
 	private static final String JOIN_OPERATION_ID = "join";
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(JoinConverter.class);
-	private ConverterHelper converterHelper;
 	private JoinMappingGrid joinupPropertyGrid;
 
 	public JoinConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Join();
 		this.component = component;
 		this.properties = component.getProperties();
 		joinupPropertyGrid = (JoinMappingGrid) properties.get(Constants.JOIN_MAP_FIELD);
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override
@@ -95,7 +93,7 @@ public class JoinConverter extends TransformConverter {
 				typeKeyField.setRecordRequired(getRecordRequiredValue(keyFields.get(i)));
 				typeKeyFieldsList.add(typeKeyField);
 
-				if (!isALLParameterizedFields(keyList)) {
+				if (!converterHelper.hasAllStringsInArrayAsParams(keyList)) {
 					for (String key : keyList) {
 						if (!ParameterUtil.isParameter(key)) {
 							TypeFieldName fieldName = new TypeFieldName();
@@ -121,21 +119,6 @@ public class JoinConverter extends TransformConverter {
 		}
 		return typeKeyFieldsList;
 	}
-	
-	private boolean isALLParameterizedFields(String keys[]){
-		for (String fieldName : keys) 
-			if (!ParameterUtil.isParameter(fieldName)) 
-				return false;
-		return true;
-	}
-	
-	private boolean isALLParameterizedFields(List<LookupMapProperty> lookupMapProperties){
-		for (LookupMapProperty lookupMapProperty : lookupMapProperties) 
-			if (!ParameterUtil.isParameter(lookupMapProperty.getSource_Field())) 
-				return false;
-		return true;
-	}
-
 
 	protected boolean getRecordRequiredValue(JoinConfigProperty entry) {
 		boolean recordRequired=false;
@@ -244,7 +227,7 @@ public class JoinConverter extends TransformConverter {
 			TypeMapField mapField = null;
 			
 			List<LookupMapProperty> lookupMapProperties = joinPropertyGrid.getLookupMapProperties();
-			if (!isALLParameterizedFields(lookupMapProperties)) {
+			if (!converterHelper.hasAllLookupMapPropertiesAsParams(lookupMapProperties)) {
 				for (LookupMapProperty lookupMapProperty : lookupMapProperties) {
 					
 					if(!ParameterUtil.isParameter(lookupMapProperty.getSource_Field())){

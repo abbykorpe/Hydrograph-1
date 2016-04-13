@@ -28,7 +28,7 @@ public class CommandSubgraphConverter extends Converter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputSubGraphConverter.class);
 
 	public CommandSubgraphConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Subgraph();
 		this.component = component;
 		this.properties = component.getProperties();

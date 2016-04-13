@@ -11,15 +11,15 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
+
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
@@ -30,114 +30,122 @@ import org.eclipse.swt.widgets.Item;
  */
 
 public class PropertyGridCellModifier implements ICellModifier {
-  private Viewer viewer;
-  TransformDialog transformDialog;	
-  /** The Constant PROPERTY_NAME. */
+	private Viewer viewer;
+	TransformDialog transformDialog;	
+	/** The Constant PROPERTY_NAME. */
 	private static final String PROPERTY_NAME = "Source";
-	
+
 	/** The Constant PROPERTY_VALUE. */
 	private static final String PROPERTY_VALUE = "Target";
 	private PropertyDialogButtonBar propertyDialogButtonBar ;
-  /**
+	/**
 	 * Instantiates a new schema grid cell modifier.
 	 * 
 	 * @param viewer
 	 *            the viewer
 	 */
-  public PropertyGridCellModifier(Viewer viewer) {
-    this.viewer = viewer;
-  }
-  
-  public PropertyGridCellModifier(Viewer viewer,PropertyDialogButtonBar propertyDialogButtonBar) {
-	    this.viewer = viewer;
-	    this.propertyDialogButtonBar=propertyDialogButtonBar;
-	  }
- 
-  public PropertyGridCellModifier(TransformDialog transformDialogNew ,Viewer viewer) {
-	    this.viewer = viewer;
-	    this.transformDialog=transformDialogNew;
-	  }
-	 
-  
- 
-  /**
-   * Returns whether the property can be modified
-   * 
-   * @param element
-   *            the element
-   * @param property
-   *            the property
-   * @return boolean
-   */
-  public boolean canModify(Object element, String property) {
-    // Allow editing of all values
-	    return true;
-  }
+	public PropertyGridCellModifier(Viewer viewer) {
+		this.viewer = viewer;
+	}
 
-  /**
-   * Returns the value for the property
-   * 
-   * @param element
-   *            the element
-   * @param property
-   *            the property
-   * @return Object
-   */ 
-  public Object getValue(Object element, String property) {
-	  NameValueProperty p = (NameValueProperty) element;
-	
-    if (PROPERTY_NAME.equals(property)||Messages.PROPERTY_NAME.equals(property))
-        return p.getPropertyName();
-    else if (PROPERTY_VALUE.equals(property)||Messages.PROPERTY_VALUE.equals(property))
-        return p.getPropertyValue();
-    else
-        return null;
-    
-  }
+	public PropertyGridCellModifier(Viewer viewer,PropertyDialogButtonBar propertyDialogButtonBar) {
+		this.viewer = viewer;
+		this.propertyDialogButtonBar=propertyDialogButtonBar;
+	}
 
-  /**
-   * Modifies the element
-   * 
-   * @param element
-   *            the element
-   * @param property
-   *            the property
-   * @param value
-   *            the value
-   */
-  public void modify(Object element, String property, Object value) {
-    if (element instanceof Item)
-      element = ((Item) element).getData();
- 
-    NameValueProperty p = (NameValueProperty) element;
-    if (PROPERTY_NAME.equals(property))
-      p.setPropertyName(((String) value).trim());
-   
-    if (PROPERTY_VALUE.equals(property))
-    {	
-        p.setPropertyValue(((String) value).trim());
-        transformDialog.refreshOutputTable();	
-        transformDialog.showHideValidationMessage();
-        
-    }
-    if(Messages.PROPERTY_NAME.equals(property))
-    {
-    	 p.setPropertyName(((String) value).trim());
-    	 if(propertyDialogButtonBar!=null )  
-    	 propertyDialogButtonBar.enableApplyButton(true);
-    }	
-    if(Messages.PROPERTY_VALUE.equals(property))
-    {	
-    p.setPropertyValue(((String) value).trim());
-    if(propertyDialogButtonBar!=null )  
-   	 propertyDialogButtonBar.enableApplyButton(true);
-	
-    }
-         
-    
-    viewer.refresh();
-  }
-  
-  
-  
+	public PropertyGridCellModifier(TransformDialog transformDialogNew ,Viewer viewer) {
+		this.viewer = viewer;
+		this.transformDialog=transformDialogNew;
+	}
+
+
+
+	/**
+	 * Returns whether the property can be modified
+	 * 
+	 * @param element
+	 *            the element
+	 * @param property
+	 *            the property
+	 * @return boolean
+	 */
+	public boolean canModify(Object element, String property) {
+		// Allow editing of all values
+		return true;
+	}
+
+	/**
+	 * Returns the value for the property
+	 * 
+	 * @param element
+	 *            the element
+	 * @param property
+	 *            the property
+	 * @return Object
+	 */ 
+	public Object getValue(Object element, String property) {
+		NameValueProperty nameValueProperty = (NameValueProperty) element;
+
+		if (PROPERTY_NAME.equals(property)||Messages.PROPERTY_NAME.equals(property))
+			return nameValueProperty.getPropertyName();
+		else if (PROPERTY_VALUE.equals(property)||Messages.PROPERTY_VALUE.equals(property))
+			return nameValueProperty.getPropertyValue();
+		else
+			return null;
+
+	}
+
+	/**
+	 * Modifies the element
+	 * 
+	 * @param element
+	 *            the element
+	 * @param property
+	 *            the property
+	 * @param value
+	 *            the value
+	 */
+	public void modify(Object element, String property, Object value) {
+		if (element instanceof Item)
+			element = ((Item) element).getData();
+
+		NameValueProperty nameValueProperty = (NameValueProperty) element;
+		if (PROPERTY_NAME.equals(property)){
+			if(ParameterUtil.isParameter((String)value)){
+				nameValueProperty.setPropertyValue((String)value);
+			}
+			nameValueProperty.setPropertyName(((String) value).trim());
+		}
+
+		if (PROPERTY_VALUE.equals(property))
+		{	
+			if(ParameterUtil.isParameter((String)value)){
+				nameValueProperty.setPropertyName((String)value);
+			}
+			nameValueProperty.setPropertyValue(((String) value).trim());
+			transformDialog.refreshOutputTable();	
+			transformDialog.showHideValidationMessage();
+
+		}
+		if(Messages.PROPERTY_NAME.equals(property))
+		{
+			nameValueProperty.setPropertyName(((String) value).trim());
+			if(propertyDialogButtonBar!=null ){
+				propertyDialogButtonBar.enableApplyButton(true);
+			}
+		}	
+		if(Messages.PROPERTY_VALUE.equals(property))
+		{	
+			nameValueProperty.setPropertyValue(((String) value).trim());
+			if(propertyDialogButtonBar!=null ){
+				propertyDialogButtonBar.enableApplyButton(true);
+			}
+		}
+
+
+		viewer.refresh();
+	}
+
+
+
 }

@@ -51,13 +51,17 @@ import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
  */
 public abstract class Converter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(Converter.class);
-
+	protected ConverterHelper converterHelper;
 	protected static final String ID = "$id";
 	protected Map<String, Object> properties = new LinkedHashMap<String, Object>();
-	protected Component component = null;
+	protected Component component;
 	protected TypeBaseComponent baseComponent = null;
 	protected String componentName = null;
 
+	public Converter(Component comp){
+		converterHelper = new ConverterHelper(comp);
+	}
+	
 	/**
 	 * Prepares the class of type {@link TypeBaseComponent} for xml conversion
 	 * 
@@ -67,7 +71,6 @@ public abstract class Converter {
 	public void prepareForXML() {
 		componentName = (String) properties.get(Constants.PARAM_NAME);
 		baseComponent.setId(componentName);
-
 		try {
 			baseComponent.setPhase(new BigInteger((String) properties
 					.get(Constants.PARAM_PHASE)));
@@ -151,8 +154,7 @@ public abstract class Converter {
 		if (runtimeProps != null && !runtimeProps.isEmpty()) {
 			typeProperties = new TypeProperties();
 			List<TypeProperties.Property> runtimePropertyList = typeProperties.getProperty();
-			ConverterHelper converterHelper=new ConverterHelper(component);
-			if (!isALLParameterizedFields(runtimeProps)) {
+			if (!converterHelper.hasAllKeysAsParams(runtimeProps)) {
 
 				for (Map.Entry<String, String> entry : runtimeProps.entrySet()) {
 					if(!ParameterUtil.isParameter(entry.getKey())){
@@ -179,14 +181,6 @@ public abstract class Converter {
 		}
 		return typeProperties;
 	}
-	
-	private boolean isALLParameterizedFields(Map<String, String> properties) {
-		for (Entry<String, String> secondaryKeyRowEntry : properties.entrySet())
-			if (!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey()))
-				return false;
-		return true;
-	}
-
 	/**
 	 * Returns the base type of the component
 	 * 

@@ -46,14 +46,12 @@ import com.bitwiseglobal.graph.inputtypes.HiveTextFile;
 public class InputHiveTextFileConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputHiveTextFileConverter.class);
-	private ConverterHelper converterHelper;
 
 	public InputHiveTextFileConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new HiveTextFile();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

@@ -14,6 +14,8 @@
  
 package hydrograph.ui.engine.converter;
 
+import hydrograph.ui.graph.model.Component;
+
 import java.util.List;
 
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
@@ -24,6 +26,10 @@ import com.bitwiseglobal.graph.commontypes.TypeStraightPullOutSocket;
  * Converter implementation for StraightPull type components
  */
 public abstract class StraightPullConverter extends Converter {
+
+	public StraightPullConverter(Component comp) {
+		super(comp);
+	}
 
 	@Override
 	public void prepareForXML(){

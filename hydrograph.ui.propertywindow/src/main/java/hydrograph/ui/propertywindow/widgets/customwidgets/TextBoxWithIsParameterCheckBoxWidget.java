@@ -132,7 +132,7 @@ public class TextBoxWithIsParameterCheckBoxWidget extends TextBoxWithLabelWidget
 		((Button) isParameterCheckbox.getSWTWidgetControl()).addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				String parameterText = Constants.PARAMETER_SUFFIX + textBox.getText() + Constants.PARAMETER_PREFIX;
+				String parameterText = Constants.PARAMETER_PREFIX + textBox.getText() + Constants.PARAMETER_SUFFIX;
 				if (StringUtils.isNotBlank(textBox.getText()) && ((Button) event.getSource()).getSelection()) {
 					if (!isFieldNameExists(parameterText)) {
 						textBox.setText(parameterText);
@@ -147,8 +147,8 @@ public class TextBoxWithIsParameterCheckBoxWidget extends TextBoxWithLabelWidget
 
 				} else {
 					if (StringUtils.isNotBlank(textBox.getText())) {
-						textBox.setText(textBox.getText().replace(Constants.PARAMETER_SUFFIX, "")
-								.replace(Constants.PARAMETER_PREFIX, ""));
+						textBox.setText(textBox.getText().replace(Constants.PARAMETER_PREFIX, "")
+								.replace(Constants.PARAMETER_SUFFIX, ""));
 						propDialogButtonBar.enableApplyButton(true);
 					}
 					textBox.setEnabled(true);

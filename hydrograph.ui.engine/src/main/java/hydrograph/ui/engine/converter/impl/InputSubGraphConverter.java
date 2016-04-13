@@ -40,13 +40,12 @@ import com.bitwiseglobal.graph.inputtypes.Subgraph;
 public class InputSubGraphConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputSubGraphConverter.class);
-	private ConverterHelper converterHelper;
+	
 	public InputSubGraphConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Subgraph();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

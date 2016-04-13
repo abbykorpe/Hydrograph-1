@@ -51,23 +51,21 @@ import com.bitwiseglobal.graph.operationstypes.HashJoin.Match;
 
 
 /**
- * @author Bitwise Converter implementation for Lookup component
+ * Converter implementation for Lookup component
+ * @author Bitwise 
  */
 
 public class LookupConverter extends TransformConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConverter.class);
 	private LookupMappingGrid lookupPropertyGrid;
-	private ConverterHelper converterHelper;
 
 	public LookupConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new HashJoin();
 		this.component = component;
 		this.properties = component.getProperties();
 		lookupPropertyGrid = (LookupMappingGrid) properties.get(Constants.LOOKUP_MAP_FIELD);
-		converterHelper = new ConverterHelper(component);
-
 	}
 
 	@Override
@@ -136,7 +134,7 @@ public class LookupConverter extends TransformConverter {
 			String keyList[] = keyData.split(",");
 			if(keyList.length==0 || (keyList.length==1 && StringUtils.isBlank(keyList[0])))
 				return null;
-			if (!isALLParameterizedFields(keyList)) {
+			if (!converterHelper.hasAllStringsInArrayAsParams(keyList)) {
 				for (String key : keyList) {
 					if (!ParameterUtil.isParameter(key)) {
 						typeFieldName = new TypeFieldName();
@@ -162,13 +160,6 @@ public class LookupConverter extends TransformConverter {
 		}
 
 		return typeFieldNameList;
-	}
-	
-	private boolean isALLParameterizedFields(String keys[]){
-		for (String fieldName : keys) 
-			if (!ParameterUtil.isParameter(fieldName)) 
-				return false;
-		return true;
 	}
 
 	@Override

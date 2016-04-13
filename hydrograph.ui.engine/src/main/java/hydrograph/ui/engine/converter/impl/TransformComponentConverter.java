@@ -42,17 +42,15 @@ import com.bitwiseglobal.graph.operationstypes.Transform;
 
 public class TransformComponentConverter extends TransformConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(TransformComponentConverter.class);
-	private TransformMapping atMapping;
+	private TransformMapping transformMapping;
 	private List<BasicSchemaGridRow> schemaGridRows;
-	ConverterHelper converterHelper;
 
 	public TransformComponentConverter(Component component) {
-		super();
+		super(component);
 		this.baseComponent = new Transform();
 		this.component = component;
 		this.properties = component.getProperties();
-		atMapping = (TransformMapping) properties.get(Constants.PARAM_OPERATION);
-		converterHelper = new ConverterHelper(component);
+		transformMapping = (TransformMapping) properties.get(Constants.PARAM_OPERATION);
 		initSchemaGridRows();
 	}
 
@@ -81,12 +79,12 @@ public class TransformComponentConverter extends TransformConverter {
 
 	@Override
 	protected List<TypeTransformOperation> getOperations() {
-		return converterHelper.getOperations(atMapping,schemaGridRows);
+		return converterHelper.getOperations(transformMapping,schemaGridRows);
 	}
 
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
-		return converterHelper.getOutSocket(atMapping,schemaGridRows);
+		return converterHelper.getOutSocket(transformMapping,schemaGridRows);
 	}
 
 	@Override
