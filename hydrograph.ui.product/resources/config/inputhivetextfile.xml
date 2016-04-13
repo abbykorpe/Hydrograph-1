@@ -46,10 +46,9 @@
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 			
-			<tns:property dataType="string" name="externalTablePath" value="" renderer="EXTERNAL_TABLE_PATH_WIDGET"
+		<tns:property dataType="string" name="externalTablePath" value="" renderer="EXTERNAL_TABLE_PATH_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL" propertyHelpText="Displays the location of the file either Remote/Local.">
-		<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" name="delimiter" value="|" renderer="DELIMETER_WIDGET"

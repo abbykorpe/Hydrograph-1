@@ -26,6 +26,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.bitwiseglobal.graph.commontypes.TypeBaseField;
@@ -65,7 +66,7 @@ public class InputHiveTextFileConverter extends InputConverter {
 		hiveTextfile.setDatabaseName(getHiveType(PropertyNameConstants.DATABASE_NAME.value()));
 		hiveTextfile.setTableName(getHiveType(PropertyNameConstants.TABLE_NAME.value()));
 		
-		if(!(((String)properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value())).isEmpty() |properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()).equals("null"))){
+		if(StringUtils.isNotBlank((String)properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()))){
 			hiveTextfile.setExternalTablePath(getHivePathType(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()));
 		}
 		hiveTextfile.setPartitionKeys(getPartitionKeys());
@@ -74,7 +75,8 @@ public class InputHiveTextFileConverter extends InputConverter {
 		HiveTextFile.Quote quote = new HiveTextFile.Quote();
 		quote.setValue((String) properties.get(PropertyNameConstants.QUOTE.value()));
 		hiveTextfile.setDelimiter(delimiter);
-		if(!(quote.getValue().isEmpty() )| (quote.getValue().equals("null"))){
+		
+		if(StringUtils.isNotBlank(quote.getValue())){
 			hiveTextfile.setQuote(quote);
 		}
 		hiveTextfile.setStrict(getBoolean(PropertyNameConstants.STRICT.value()));
