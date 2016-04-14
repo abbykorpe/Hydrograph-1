@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.draw2d.ColorConstants;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.Figure;
@@ -172,7 +174,8 @@ public class ComponentFigure extends Figure implements Validator{
 		componentColor = ELTColorConstants.BG_COMPONENT;
 		borderColor = ELTColorConstants.COMPONENT_BORDER;
 		selectedComponentColor = ELTColorConstants.BG_COMPONENT_SELECTED;
-		selectedBorderColor = ELTColorConstants.BLUE_BRAND_BODER;
+		selectedBorderColor = ELTColorConstants.COMPONENT_BORDER_SELECTED;
+		//selectedBorderColor = new Color(null, 255, 51, 0);
 	}
 
 	/**
@@ -181,6 +184,7 @@ public class ComponentFigure extends Figure implements Validator{
 	public void setComponentColorAndBorder(){
 		setBackgroundColor(componentColor);
 		setBorder(new ComponentBorder(borderColor, 0, componentLabelMargin));
+		setForegroundColor(ColorConstants.black);
 	}
 
 	/**
@@ -188,7 +192,8 @@ public class ComponentFigure extends Figure implements Validator{
 	 */
 	public void setSelectedComponentColorAndBorder(){
 		setBackgroundColor(selectedComponentColor);
-		setBorder(new ComponentBorder(selectedBorderColor, 2, componentLabelMargin));
+		setForegroundColor(ColorConstants.white);
+		setBorder(new ComponentBorder(selectedBorderColor, 1, componentLabelMargin));
 	}
 
 	private void setPortCount(PortSpecification p) {
