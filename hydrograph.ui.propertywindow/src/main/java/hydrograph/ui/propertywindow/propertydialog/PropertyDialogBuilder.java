@@ -141,7 +141,7 @@ public class PropertyDialogBuilder {
 						((ELTSchemaGridWidget) schemaWidget).getListenerHelper(true);
 
 					}
-					if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()) || Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName()))
+					if(!Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()) && !Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName()))
 						schemaWidget.refresh(); 
 				}
 			}
