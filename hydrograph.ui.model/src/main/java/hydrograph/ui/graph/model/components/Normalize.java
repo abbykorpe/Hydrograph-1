@@ -14,14 +14,14 @@
 package hydrograph.ui.graph.model.components;
 import hydrograph.ui.graph.model.categories.TransformCategory;
 
+/**
+ * Model class for Normalize component
+ * 
+ * @author Solomon Shockley
+ */
 public class Normalize extends TransformCategory{
 
-	/**
-	 * Model class for Normalize component
-	 * 
-	 * @author Solomon Shockley
-	 */
-	private static final long serialVersionUID = 5221821689519010230L;
+	private static final long serialVersionUID = 5727228298656911305L;
 
 	public String getConverter(){
 		return "hydrograph.ui.engine.converter.impl.NormalizeConverter";

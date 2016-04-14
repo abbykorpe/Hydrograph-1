@@ -14,34 +14,29 @@
 package hydrograph.ui.engine.converter.impl;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.engine.converter.TransformConverter;
 import hydrograph.ui.engine.helper.ConverterHelper;
-import hydrograph.ui.engine.xpath.ComponentXpathConstants;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 
-import hydrograph.ui.logging.factory.LogFactory;
-
-
 import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeFieldName;
 import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
-import com.bitwiseglobal.graph.commontypes.TypeSortOrder;
 import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
 import com.bitwiseglobal.graph.operationstypes.Normalize;
-
+/**
+ * Normalize converter
+ * 
+ * @author Solomon Shockley
+ */
 public class NormalizeConverter extends TransformConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(NormalizeConverter.class);
 	private TransformMapping atMapping;
