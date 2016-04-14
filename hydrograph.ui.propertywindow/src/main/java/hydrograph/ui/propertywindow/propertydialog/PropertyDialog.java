@@ -186,10 +186,17 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 
 	private void applyButtonAction() {
 		boolean windowValidityStaus = Boolean.TRUE;
+		boolean verifiedSchema = Boolean.TRUE;
 		for(AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()){
 			if(customWidget.getProperties() != null){
-				if(customWidget.getProperties() != null){
-					windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
+				
+				windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
+				if (customWidget instanceof ELTSchemaGridWidget) {
+					verifiedSchema = customWidget.verifySchemaFile();
+					if (verifiedSchema){
+						savePropertiesInComponentModel(customWidget);
+					}
+				} else{
 					savePropertiesInComponentModel(customWidget);
 				}
 			}

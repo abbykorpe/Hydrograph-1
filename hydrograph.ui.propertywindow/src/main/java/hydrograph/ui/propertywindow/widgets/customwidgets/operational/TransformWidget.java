@@ -15,6 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
@@ -330,24 +331,26 @@ public class TransformWidget extends AbstractWidget {
 		SchemaPropagationHelper schemaPropagationHelper = new SchemaPropagationHelper();
 
 		for (FilterProperties operationField : operationFields) {
+			if(!ParameterUtil.isParameter(operationField.getPropertyname())){
 
-			if(getCurrentSchemaField(operationField.getPropertyname())!=null){
-				schemaGridRow=getCurrentSchemaField(operationField.getPropertyname());
-				schemaGridRow=schemaGridRow.copy();
-			}
-			else
-				schemaGridRow = schemaPropagationHelper.createSchemaGridRow(operationField.getPropertyname());
-
-			
+				if(getCurrentSchemaField(operationField.getPropertyname())!=null){
+					schemaGridRow=getCurrentSchemaField(operationField.getPropertyname());
+					schemaGridRow=schemaGridRow.copy();
+				}
+				else
+					schemaGridRow = schemaPropagationHelper.createSchemaGridRow(operationField.getPropertyname());
 
 
-			if (!currentFieldsInProppogatedSchemaObject.contains(operationField.getPropertyname()) && !schema.getGridRow().contains(schemaGridRow)) {
-				schema.getGridRow().add(schemaGridRow);
-			} else {
-				for (int index = 0; index < schema.getGridRow().size(); index++) {
-					if (schema.getGridRow().get(index).getFieldName().equals(operationField.getPropertyname())) {
-						schema.getGridRow().set(index, schemaGridRow);
 
+
+				if (!currentFieldsInProppogatedSchemaObject.contains(operationField.getPropertyname()) && !schema.getGridRow().contains(schemaGridRow)) {
+					schema.getGridRow().add(schemaGridRow);
+				} else {
+					for (int index = 0; index < schema.getGridRow().size(); index++) {
+						if (schema.getGridRow().get(index).getFieldName().equals(operationField.getPropertyname())) {
+							schema.getGridRow().set(index, schemaGridRow);
+
+						}
 					}
 				}
 			}
