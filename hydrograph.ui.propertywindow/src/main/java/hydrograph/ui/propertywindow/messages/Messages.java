@@ -40,6 +40,7 @@ public class Messages extends NLS {
 	public static  String SCHEMA_CONFIG_XSD_PATH;
 
 	public static  String FIELDNAME_NOT_ALPHANUMERIC_ERROR;
+	public static  String FIELDNAME_SHOULD_NOT_BE_BLANK;
 	public static String EMPTY_XML_CONTENT;
 	public static String RUNTIME_WINDOW_NAME;
 	public static String RUNTIME_HEADER;

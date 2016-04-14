@@ -21,9 +21,14 @@ import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.customwidgets.lookupproperty.ELTLookupMapWizard;
 import hydrograph.ui.propertywindow.widgets.customwidgets.operational.TransformDialog;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 
 
 
@@ -77,6 +82,7 @@ public class ELTCellModifier implements ICellModifier{
 
 	@Override
 	public void modify(Object element, String property, Object value) {
+		final TableItem item=(TableItem) element;
 		if (element instanceof Item)
 			element = ((Item) element).getData();
 
@@ -91,22 +97,20 @@ public class ELTCellModifier implements ICellModifier{
 		{
 			filterProperties.setPropertyname((String)value);
 			transformDialog.refreshOutputTable();
-			transformDialog.showValidationMessage(mappingSheetRow);
-		}
-		else if(Messages.INNER_OPERATION_OUTPUT_FIELD.equals(property))
-		{		
+			transformDialog.setDuplicateOperationInputFieldMap(mappingSheetRow); 
+			transformDialog.showHideValidationMessage();
+			}
+			else if(Messages.INNER_OPERATION_OUTPUT_FIELD.equals(property))
+			{		
 			filterProperties.setPropertyname((String )value);	
 			transformDialog.refreshOutputTable();
-
-			transformDialog.showHideValidationMessage();
+            transformDialog.showHideValidationMessage();
 		}
 			
 		else if(Messages.OUTPUT_FIELD.equals(property))
 			{
 				filterProperties.setPropertyname((String )value);	
 			}
-
-		// Force the viewer to refresh
 		viewer.refresh();
 
 	}

@@ -14,6 +14,7 @@
 
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 
@@ -25,34 +26,35 @@ import org.eclipse.swt.widgets.Table;
 
 
 public class TransformCellEditorFieldValidator implements ICellEditorValidator {
-	private Table table;
-	private List<FilterProperties> inputFields;
+	
 	private ControlDecoration fieldNameDecorator;
-	private PropertyDialogButtonBar propertyDialogButtonBar;
+	private ControlDecoration isFieldNameAlphanumericDecorator;
 
-	public TransformCellEditorFieldValidator(Table table, List<FilterProperties> inputFields,
-			ControlDecoration fieldNameDecorator, PropertyDialogButtonBar propertyDialogButtonBar) {
+	public TransformCellEditorFieldValidator(ControlDecoration fieldNameDecorator,ControlDecoration isFieldNameAlphanumericDecorator) 
+	{
 		super();
-		this.table = table;
-		this.inputFields = inputFields;
 		this.fieldNameDecorator = fieldNameDecorator;
-
-		this.propertyDialogButtonBar = propertyDialogButtonBar;
-	}
+        this.isFieldNameAlphanumericDecorator=isFieldNameAlphanumericDecorator;
+	 }
 
 	@Override
 	public String isValid(Object value) {
 		String fieldName = (String) value;
-		String selectedGrid = table.getItem(table.getSelectionIndex()).getText();
-		for (int i = 0; i < inputFields.size(); i++) {
-			if (inputFields.get(i).getPropertyname().equals(fieldName) && !selectedGrid.equalsIgnoreCase(fieldName)) {
-				fieldNameDecorator.show();
+		if(fieldName.equals("")){     
+			fieldNameDecorator.show();   
+			return "Error";   
+		}else{  
+			fieldNameDecorator.hide(); 
+			if(isFieldNameAlphanumeric(fieldName))
+				isFieldNameAlphanumericDecorator.hide();
+			else{
+				isFieldNameAlphanumericDecorator.show();
 				return "Error";
-			} else {
-				fieldNameDecorator.hide();
 			}
 		}
 		return null;
 	}
-
+	private boolean isFieldNameAlphanumeric(String fieldName){
+		return (!fieldName.matches(Constants.REGEX))?false:true;
+	}
 }
