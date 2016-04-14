@@ -159,6 +159,7 @@ public class Messages extends NLS {
 	public static String OPERATION_ID_PREFIX;
     public static String OPERATION_LIST_EMPTY;
     public static String PULL_BUTTON_LABEL;
+    public static String PULL_FROM_TRANSFORM;
     public static String OPERATION_CONTROL;
     public static String SOURCE;
     public static String TARGET;
