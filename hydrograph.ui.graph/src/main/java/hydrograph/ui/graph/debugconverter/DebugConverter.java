@@ -11,7 +11,8 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
+
+
 package hydrograph.ui.graph.debugconverter;
 
 import hydrograph.ui.common.util.Constants;
@@ -44,6 +45,13 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 
+/**
+ * The Class used to generate debug xml. When we assign watchers at component source socket. 
+ * It will save in debug xml with socket type and record limit.
+ * 
+ * @author Bitwise
+ *
+ */
 public class DebugConverter {
 
 	public DebugConverter() {
@@ -51,7 +59,7 @@ public class DebugConverter {
 	}
 	
 	
-	public Debug getParam(){
+	public Debug getParam() throws Exception{
 		DebugPlugin debugPlugin = new DebugPlugin();
 		debugPlugin.setValue("");
 		Debug debug = new Debug();
@@ -77,20 +85,32 @@ public class DebugConverter {
 						for(Entry<String, Long> entrySet: map.entrySet()){
 							viewData = new ViewData();
 							limit = new Limit();
-							viewData.setFromComponentId(component.getComponentLabel().getLabelContents());
-							viewData.setOutSocketId(entrySet.getKey());
-							String portType = entrySet.getKey().substring(0, 3);
 							
-							if(StringUtils.isNotBlank(portType)){
-							if(portType.equalsIgnoreCase(Constants.OUTPUT_SOCKET_TYPE)){
-								
-								viewData.setOutSocketType(Constants.OUTPUT_SOCKET_TYPE);
+							if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBGRAPH_COMPONENT)){
+								String componentId_socketId = DebugHelper.INSTANCE.getSubgraphComponent(component);
+								String[] data = StringUtils.split(componentId_socketId,".");
+								String componentId = data[0];
+								String socketId = data[1];
+								viewData.setFromComponentId(component.getComponentLabel().getLabelContents()+"."+componentId);
+								viewData.setOutSocketId(socketId);
+								//viewData.setOutSocketType(Constants.OUTPUT_SOCKET_TYPE);
+								limit.setValue(entrySet.getValue());
+								viewData.setLimit(limit);
 							}else{
-								viewData.setOutSocketType(Constants.UNUSED_SOCKET_TYPE);
+								viewData.setFromComponentId(component.getComponentLabel().getLabelContents());
+								viewData.setOutSocketId(entrySet.getKey());
+								String portType = entrySet.getKey().substring(0, 3);
+								if(StringUtils.isNotBlank(portType)){
+									if(portType.equalsIgnoreCase(Constants.OUTPUT_SOCKET_TYPE)){
+										viewData.setOutSocketType(Constants.OUTPUT_SOCKET_TYPE);
+									}else{
+										viewData.setOutSocketType(Constants.UNUSED_SOCKET_TYPE);
+									}
+								}
+								limit.setValue(entrySet.getValue());
+								viewData.setLimit(limit);
 							}
-							}
-							limit.setValue(entrySet.getValue());
-							viewData.setLimit(limit);
+								
 							debug.getViewData().add(viewData);
 						}
 					}  

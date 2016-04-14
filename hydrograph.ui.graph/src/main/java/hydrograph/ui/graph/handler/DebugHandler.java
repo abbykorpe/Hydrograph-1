@@ -92,10 +92,8 @@ public class DebugHandler  extends AbstractHandler {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty();
 	}
 
-	private void createDebugXml() throws IOException, NoSuchAlgorithmException{
+	private void createDebugXml() throws Exception{
 		String currentJobPath=null;
-		
-		
 		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)
 		{}
@@ -110,15 +108,12 @@ public class DebugHandler  extends AbstractHandler {
 			currentJobIPath = currentJobIPath.removeLastSegments(1).append(currentJobPath);
 			
 			converter.marshall(converter.getParam(), ResourcesPlugin.getWorkspace().getRoot().getFile(currentJobIPath));
-			
-			
 		} catch (JAXBException | IOException e) {
 			logger.error(e.getMessage(), e);
 		} catch (CoreException e) {
 			logger.error(e.getMessage(), e);
 		}
 	}
-
 
 	
 	@Override
@@ -143,6 +138,8 @@ public class DebugHandler  extends AbstractHandler {
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		} catch (NoSuchAlgorithmException e) {
+			logger.error(e.getMessage(), e);
+		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 		
