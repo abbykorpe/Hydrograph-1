@@ -1071,7 +1071,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
     
    public void showHideValidationMessage()
    	{		
-	  
+		if(errorTableViewer!=null)
+		{
 		   Map<String,List<String>> duplicateOutputFieldMap=getDuplicateOutputFieldMap(temporaryOutputFieldMap);
 		   if(!duplicateOutputFieldMap.isEmpty())
 		   {	for (Map.Entry<String,List<String>> entry: duplicateOutputFieldMap.entrySet()) 
@@ -1113,8 +1114,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		   }
 	   } 
 		
-		if(errorTableViewer!=null)
-		{	
+		
 			for(ExpandItem item:expandBar.getItems() )
 			{
 				Text textBox=(Text)item.getData();
@@ -1130,9 +1130,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			
 	   errorTableViewer.getTable().setForeground(new Color(Display.getDefault(), 255, 0, 0));
 	   errorTableViewer.refresh();
+	   errorLabelList.clear();
 		}
-	  
-	  errorLabelList.clear();
 	}
 
 	public List<FilterProperties> convertNameValueToFilterProperties(List<NameValueProperty> nameValueProperty) {
