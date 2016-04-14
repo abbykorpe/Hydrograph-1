@@ -148,7 +148,7 @@ public abstract class Component extends Model {
 	 */
 	public Component() {
 		location = new Point(0, 0);
-		size = new Dimension(100, 75);
+		size = new Dimension(100, 80);
 		properties = new LinkedHashMap<>();
 		inputLinksHash = new Hashtable<String, ArrayList<Link>>();
 
@@ -769,8 +769,8 @@ public abstract class Component extends Model {
 	 *            a non-null Dimension instance or null
 	 */
 	public void setSize(Dimension newSize) {
-		if(newSize.height<75)
-			newSize.height=75;
+		if(newSize.height<80)
+			newSize.height=80;
 		if (newSize != null) {
 			size.setSize(newSize);
 			firePropertyChange(Props.SIZE_PROP.getValue(), null, size);

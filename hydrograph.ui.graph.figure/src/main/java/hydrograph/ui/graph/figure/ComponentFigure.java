@@ -96,6 +96,8 @@ public class ComponentFigure extends Figure implements Validator{
 	private static final int TOOLTIP_SHOW_DELAY=800;
 	private Display display;
 	private Runnable timer;
+	
+	private String accronym;
 	/**
 	 * Instantiates a new component figure.
 	 * 
@@ -108,6 +110,15 @@ public class ComponentFigure extends Figure implements Validator{
 		this.portspecification = portSpecification;
 		this.canvasIconPath = XMLConfigUtil.CONFIG_FILES_PATH + cIconPath;
 
+		if(cIconPath.equals("/icons/join_canvas.png"))
+			accronym="Join";
+		else if(cIconPath.equals("/icons/input_delimited_canvas.png"))
+			accronym="I_dlm";
+		else if(cIconPath.equals("/icons/input_fixwidth_canvas.png"))
+			accronym="I_fxd";
+		else if(cIconPath.equals("/icons/output_delimited_canvas.png"))
+			accronym="O_dlm";
+		
 		layout = new XYLayout();
 		setLayoutManager(layout);
 
@@ -139,6 +150,11 @@ public class ComponentFigure extends Figure implements Validator{
 			setHeight(totalPortsofInType, totalPortsOfOutType);
 			setWidth(totalPortsOfUnusedType);
 		}
+		
+
+		Font accronymFont = new Font(Display.getDefault(),ELTFigureConstants.labelFont, 8, SWT.BOLD);
+		setFont(accronymFont);
+		setForegroundColor(org.eclipse.draw2d.ColorConstants.black);
 
 		componentCanvas = getComponentCanvas();
 		attachMouseListener();
@@ -197,7 +213,8 @@ public class ComponentFigure extends Figure implements Validator{
 	 */
 	public void setHeight(int totalPortsofInType, int totalPortsOfOutType) {
 		int heightFactor=totalPortsofInType > totalPortsOfOutType ? totalPortsofInType : totalPortsOfOutType;
-		this.height = (heightFactor+1)*25;
+		//this.height = (heightFactor+1)*25;
+		this.height = (heightFactor+1)*27;
 	}
 
 	/**
@@ -555,8 +572,11 @@ public class ComponentFigure extends Figure implements Validator{
 		Rectangle q = new Rectangle(4, 4+componentLabelMargin, r.width-8, r.height-8-componentLabelMargin);
 		graphics.fillRoundRectangle(q, 5, 5);
 
-		graphics.drawImage(canvasIcon, new Point(q.width/2-16, q.height/2+componentLabelMargin-15));
+		graphics.drawImage(canvasIcon, new Point(q.width/2-16, q.height/2+componentLabelMargin-15 + 4));
 		drawStatus(graphics);
+		
+		
+		graphics.drawText(accronym, new Point(q.width/2-16 + 5, q.height/2+componentLabelMargin-15 - 10));
 	}
 
 	/**
