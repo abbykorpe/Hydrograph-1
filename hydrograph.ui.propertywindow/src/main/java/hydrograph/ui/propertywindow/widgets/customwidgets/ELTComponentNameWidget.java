@@ -102,7 +102,7 @@ public class ELTComponentNameWidget extends AbstractWidget {
 		txtDecorator.setMarginWidth(3);
 		ListenerHelper listenerHelper = new ListenerHelper();
 		listenerHelper.put(HelperType.CONTROL_DECORATION, txtDecorator);
-
+		listenerHelper.put(HelperType.CURRENT_COMPONENT, getComponent());
 		try {
 			listener = (ELTVerifyComponentNameListener) ListenerFactory.Listners.VERIFY_COMPONENT_NAME.getListener();
 			listener.setNames((ArrayList<String>) super.componentMiscellaneousProperties
@@ -145,10 +145,10 @@ public class ELTComponentNameWidget extends AbstractWidget {
 		LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 		if (newName != null && newName != "" && isUniqueCompName(newName)) {
 			property.put(propertyName, newName);
-			((ArrayList<String>) super.componentMiscellaneousProperties
-					.getComponentMiscellaneousProperty(COMPONENT_NAMES)).remove(oldName);
-			((ArrayList<String>) super.componentMiscellaneousProperties
-					.getComponentMiscellaneousProperty(COMPONENT_NAMES)).add(newName);
+//			((ArrayList<String>) super.componentMiscellaneousProperties
+//					.getComponentMiscellaneousProperty(COMPONENT_NAMES)).remove(oldName);
+//			((ArrayList<String>) super.componentMiscellaneousProperties
+//					.getComponentMiscellaneousProperty(COMPONENT_NAMES)).add(newName);
 			oldName = newName;
 		} else {
 			// old name already should be there in the names arraylist

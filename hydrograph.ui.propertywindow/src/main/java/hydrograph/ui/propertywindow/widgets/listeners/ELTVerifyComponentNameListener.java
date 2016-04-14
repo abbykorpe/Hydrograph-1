@@ -14,6 +14,7 @@
  
 package hydrograph.ui.propertywindow.widgets.listeners;
 
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -48,7 +50,7 @@ public class ELTVerifyComponentNameListener implements IELTListener {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTVerifyComponentNameListener.class);
 	private ArrayList<String> names;
 	private String oldName;
-	
+	private Component currentComponent;
 	private ControlDecoration txtDecorator;
 	
 	@Override
@@ -63,6 +65,7 @@ public class ELTVerifyComponentNameListener implements IELTListener {
 		
 		if(helpers != null){
 			if (helpers != null) {
+				currentComponent=(Component) helpers.get(HelperType.CURRENT_COMPONENT);
 				txtDecorator = (ControlDecoration) helpers.get(HelperType.CONTROL_DECORATION);
 				txtDecorator.hide();
 			}
@@ -126,8 +129,8 @@ public class ELTVerifyComponentNameListener implements IELTListener {
 		componentName = componentName.trim();
 		boolean result = true;
 
-		for (String cname : names) {
-			if (cname.equalsIgnoreCase(componentName)) {
+		for (Component component : currentComponent.getParent().getChildren()) {
+			if (component.getComponentLabel()!=null && StringUtils.equalsIgnoreCase(component.getComponentLabel().getLabelContents(), componentName)) {
 				result = false;
 				break;
 			}

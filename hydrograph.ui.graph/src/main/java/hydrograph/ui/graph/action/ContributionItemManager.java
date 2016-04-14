@@ -40,12 +40,12 @@ public enum ContributionItemManager {
 				if (control instanceof ToolBar && (!control.isDisposed())) {
 					if (((ToolBar) control).getItems().length > 5) {
 						toolItems = ((ToolBar) control).getItems();
-						toolItems[4].setEnabled(undoStatus);
-						toolItems[5].setEnabled(redoStatus);
-						toolItems[6].setEnabled(false);
-						toolItems[8].setEnabled(false);
+						toolItems[5].setEnabled(undoStatus);
+						toolItems[6].setEnabled(redoStatus);
+						toolItems[7].setEnabled(false);
 						toolItems[9].setEnabled(false);
 						toolItems[10].setEnabled(false);
+						toolItems[11].setEnabled(false);
 
 					}
 
@@ -92,8 +92,8 @@ public enum ContributionItemManager {
 				if (control instanceof ToolBar && (!control.isDisposed())) {
 					if (((ToolBar) control).getItemCount() > 5) {
 						ToolItem[] toolItems = ((ToolBar) control).getItems();
-						toolItems[4].setEnabled(undoStatus);
-						toolItems[5].setEnabled(redoStatus);
+						toolItems[5].setEnabled(undoStatus);
+						toolItems[6].setEnabled(redoStatus);
 
 					}
 
@@ -135,25 +135,25 @@ public enum ContributionItemManager {
 	DELETE {
 		public void setEnable(boolean status) {
 			DELETE.setMenuItemStatus(menuItemsList.get(3), status);
-			DELETE.setToolItemStatus(6, status);
+			DELETE.setToolItemStatus(7, status);
 		}
 	},
 	CUT {
 		public void setEnable(boolean status) {
 			CUT.setMenuItemStatus(menuItemsList.get(0), status);
-			CUT.setToolItemStatus(8, status);
+			CUT.setToolItemStatus(9, status);
 		}
 	},
 	COPY {
 		public void setEnable(boolean status) {
 			COPY.setMenuItemStatus(menuItemsList.get(1), status);
-			COPY.setToolItemStatus(9, status);
+			COPY.setToolItemStatus(10, status);
 		}
 	},
 	PASTE {
 		public void setEnable(boolean status) {
 			PASTE.setMenuItemStatus(menuItemsList.get(2), status);
-			PASTE.setToolItemStatus(10, status);
+			PASTE.setToolItemStatus(11, status);
 		}
 	};
 	boolean undoStatus = false;

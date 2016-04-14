@@ -162,10 +162,6 @@
                   name="hydrograph.ui.graph.separator1"
                   visible="true">
             </separator>
-            <separator
-                  name="hydrograph.ui.graph.separator2"
-                  visible="false">
-            </separator>
             <command
                   commandId="org.eclipse.ui.edit.undo"
                   disabledIcon="resources/icons/dis_undo.png"
@@ -189,7 +185,7 @@
                   style="push">
             </command>
             <separator
-                  name="hydrograph.ui.graph.separator4"
+                  name="hydrograph.ui.graph.separator2"
                   visible="true">
             </separator>
             <command
@@ -214,7 +210,7 @@
                   style="push">
             </command>
             <separator
-                  name="hydrograph.ui.graph.separator5"
+                  name="hydrograph.ui.graph.separator3"
                   visible="true">
             </separator>
             <command
@@ -243,7 +239,7 @@
                   style="push">
             </command>
       <separator
-            name="hydrograph.ui.graph.separator1">
+            name="hydrograph.ui.graph.separator4">
       </separator>
       <command
             commandId="hydrograph.ui.graph.command.removedebug"

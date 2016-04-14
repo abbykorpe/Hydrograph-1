@@ -41,6 +41,9 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="ch.qos.logback.classic"/>
       <plugin id="ch.qos.logback.core"/>
       <plugin id="ch.qos.logback.slf4j" fragment="true"/>
+      <plugin id="com.ibm.icu"/>
+      <plugin id="com.jcraft.jsch"/>
+      <plugin id="com.ning.async-http-client"/>
       <plugin id="hydrograph.ui.common"/>
       <plugin id="hydrograph.ui.common.datastructures"/>
       <plugin id="hydrograph.ui.common.interfaces"/>
@@ -60,9 +63,6 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="hydrograph.ui.validators"/>
       <plugin id="hydrograph.ui.xstream"/>
       <plugin id="hydrograph.ui.xstream.annotations"/>
-      <plugin id="com.ibm.icu"/>
-      <plugin id="com.jcraft.jsch"/>
-      <plugin id="com.ning.async-http-client"/>
       <plugin id="javax.annotation"/>
       <plugin id="javax.inject"/>
       <plugin id="javax.servlet" version="2.5.0.v201103041518"/>
@@ -70,7 +70,7 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="org.apache.batik.css"/>
       <plugin id="org.apache.batik.util"/>
       <plugin id="org.apache.batik.util.gui"/>
-      <plugin id="org.apache.commons.beanutils" fragment=""/>
+      <plugin id="org.apache.commons.beanutils"/>
       <plugin id="org.apache.commons.el"/>
       <plugin id="org.apache.commons.logging"/>
       <plugin id="org.apache.jasper"/>
