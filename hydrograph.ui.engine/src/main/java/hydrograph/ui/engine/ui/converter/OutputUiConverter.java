@@ -20,8 +20,8 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeOutputComponent;
-import com.bitwiseglobal.graph.commontypes.TypeOutputInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
+import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 
 /**
  * The class OutputUiConverter

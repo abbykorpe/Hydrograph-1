@@ -1,43 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://www.bitwiseglobal.com/graph/operationstypes"
-	xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes"
-	xmlns:transform="http://www.bitwiseglobal.com/graph/transform"
-	xmlns:aggregate="http://www.bitwiseglobal.com/graph/aggregate"
-	xmlns:join="http://www.bitwiseglobal.com/graph/join" xmlns:filter="http://www.bitwiseglobal.com/graph/filter"
-	xmlns:gen_seq="http://www.bitwiseglobal.com/graph/generatesequence"
-	xmlns:cumulate="http://www.bitwiseglobal.com/graph/cumulate"
-	xmlns:lookup="http://www.bitwiseglobal.com/graph/lookup"
-	xmlns:hashjoin="http://www.bitwiseglobal.com/graph/hashjoin"
-	xmlns:normalize="http://www.bitwiseglobal.com/graph/normalize"
-	xmlns:pbe="http://www.bitwiseglobal.com/graph/partitionByExpression"
-	xmlns:subgraph="http://www.bitwiseglobal.com/graph/subgraph" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="http://www.bitwiseglobal.com/graph/operationstypes"
+<!--
+    Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+ -->
+<xs:schema xmlns="hydrograph/engine/jaxb/operationstypes"
+	xmlns:cmn="hydrograph/engine/jaxb/commontypes"
+	xmlns:transform="hydrograph/engine/jaxb/transform"
+	xmlns:aggregate="hydrograph/engine/jaxb/aggregate"
+	xmlns:join="hydrograph/engine/jaxb/join" xmlns:filter="hydrograph/engine/jaxb/filter"
+	xmlns:gen_seq="hydrograph/engine/jaxb/generatesequence"
+	xmlns:cumulate="hydrograph/engine/jaxb/cumulate"
+	xmlns:lookup="hydrograph/engine/jaxb/lookup"
+	xmlns:hashjoin="hydrograph/engine/jaxb/hashjoin"
+	xmlns:normalize="hydrograph/engine/jaxb/normalize"
+	xmlns:pbe="hydrograph/engine/jaxb/partitionByExpression"
+	xmlns:subgraph="hydrograph/engine/jaxb/subgraph" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="hydrograph/engine/jaxb/operationstypes"
 	elementFormDefault="unqualified">
 	<xs:import schemaLocation="../common/common-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/commontypes" />
+		namespace="hydrograph/engine/jaxb/commontypes" />
 	<xs:import schemaLocation="./transform/transform-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/transform" />
+		namespace="hydrograph/engine/jaxb/transform" />
 	<xs:import schemaLocation="./aggregate/aggregate-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/aggregate" />
+		namespace="hydrograph/engine/jaxb/aggregate" />
 	<xs:import schemaLocation="./join/join-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/join" />
+		namespace="hydrograph/engine/jaxb/join" />
 	<xs:import schemaLocation="./filter/filter-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/filter" />
+		namespace="hydrograph/engine/jaxb/filter" />
 	<xs:import schemaLocation="./generate-sequence/generate-sequence-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/generatesequence" />
+		namespace="hydrograph/engine/jaxb/generatesequence" />
 	<xs:import schemaLocation="./cumulate/cumulate-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/cumulate" />
+		namespace="hydrograph/engine/jaxb/cumulate" />
 	<xs:import schemaLocation="./lookup/lookup-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/lookup" />
+		namespace="hydrograph/engine/jaxb/lookup" />
 	<xs:import schemaLocation="./normalize/normalize-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/normalize" />
+		namespace="hydrograph/engine/jaxb/normalize" />
 	<xs:import schemaLocation="./subgraph/subgraph-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/subgraph" />
+		namespace="hydrograph/engine/jaxb/subgraph" />
 			<xs:import schemaLocation="./hashjoin/hashjoin-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/hashjoin" />
+		namespace="hydrograph/engine/jaxb/hashjoin" />
 	<xs:import
 		schemaLocation="./partition-by-expression/partition-by-expression-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/partitionByExpression" />
+		namespace="hydrograph/engine/jaxb/partitionByExpression" />
 
 	<xs:complexType name="transform">
 		<xs:complexContent>

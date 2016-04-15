@@ -59,12 +59,12 @@
 		
 	<tns:operations>
 		<tns:interface
-			class="com.bitwiseglobal.bhse.userfunctions.base.TransformBase" name="TRANSFORM" />
+			class="hydrograph.engine.bhse.userfunctions.base.TransformBase" name="TRANSFORM" />
 		<tns:stdOperation
-			class="com.bitwiseglobal.bhse.userfunctions.transform.CopyFields"
+			class="hydrograph.engine.bhse.userfunctions.transform.CopyFields"
 			name="CopyFields" />
 		<tns:stdOperation
-			class="com.bitwiseglobal.bhse.userfunctions.transform.RegexSplitTransform"
+			class="hydrograph.engine.bhse.userfunctions.transform.RegexSplitTransform"
 			name="RegexSplitTransform" />
 	</tns:operations>
 

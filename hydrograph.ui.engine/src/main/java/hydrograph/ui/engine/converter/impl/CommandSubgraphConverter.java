@@ -21,7 +21,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commandtypes.Subgraph;
+import hydrograph.engine.jaxb.commandtypes.Subgraph;
 
 public class CommandSubgraphConverter extends Converter {
 

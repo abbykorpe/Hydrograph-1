@@ -26,10 +26,10 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.commontypes.TypeFieldName;
-import com.bitwiseglobal.graph.hashjoin.TypeKeyFields;
-import com.bitwiseglobal.graph.operationstypes.HashJoin;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import hydrograph.engine.jaxb.hashjoin.TypeKeyFields;
+import hydrograph.engine.jaxb.operationstypes.HashJoin;
 
 public class LookupUiConverter extends TransformUiConverter {
 

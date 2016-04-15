@@ -29,11 +29,11 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseField;
-import com.bitwiseglobal.graph.commontypes.TypeBaseRecord;
-import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;
-import com.bitwiseglobal.graph.commontypes.TypeOutputComponent;
-import com.bitwiseglobal.graph.commontypes.TypeOutputInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
+import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
+import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 
 public abstract class OutputConverter extends Converter {
 

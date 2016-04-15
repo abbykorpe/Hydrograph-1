@@ -32,14 +32,14 @@ import java.util.TreeMap;
 import org.slf4j.Logger;
 
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;
-import com.bitwiseglobal.graph.commontypes.TypeOutputInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeProperties;
-import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
-import com.bitwiseglobal.graph.ohivetextfile.FieldBasicType;
-import com.bitwiseglobal.graph.ohivetextfile.HivePartitionFieldsType;
-import com.bitwiseglobal.graph.outputtypes.HiveTextFile;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
+import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.ohivetextfile.FieldBasicType;
+import hydrograph.engine.jaxb.ohivetextfile.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.outputtypes.HiveTextFile;
 /**
  * The class OutputHiveTextFileUiConverter
  * 

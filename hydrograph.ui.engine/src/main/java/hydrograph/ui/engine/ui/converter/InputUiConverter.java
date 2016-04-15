@@ -19,8 +19,8 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeInputComponent;
-import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 
 /**
  * The class InputUiConverter

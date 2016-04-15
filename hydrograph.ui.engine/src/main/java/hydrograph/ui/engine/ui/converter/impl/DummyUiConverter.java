@@ -34,8 +34,8 @@ import javax.xml.bind.Marshaller;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.main.Graph;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.main.Graph;
 import com.thoughtworks.xstream.XStream;
 
 public class DummyUiConverter extends UiConverter {

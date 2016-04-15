@@ -56,8 +56,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.main.Graph;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.main.Graph;
 import com.thoughtworks.xstream.XStream;
 
 /**

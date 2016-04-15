@@ -26,10 +26,10 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeStraightPullOutSocket;
-import com.bitwiseglobal.graph.straightpulltypes.UnionAll;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
+import hydrograph.engine.jaxb.straightpulltypes.UnionAll;
 
 /**
  * Converter implementation for Gather component

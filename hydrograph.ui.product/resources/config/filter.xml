@@ -60,7 +60,7 @@
 		</tns:property>
 
 	<tns:operations>
-		<tns:interface class="com.bitwiseglobal.bhse.userfunctions.base.FilterBase"
+		<tns:interface class="hydrograph.engine.bhse.userfunctions.base.FilterBase"
 			name="FILTER" />
 	</tns:operations>
 	</tns:component>

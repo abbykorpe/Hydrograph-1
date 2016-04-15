@@ -31,15 +31,15 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.cumulate.TypePrimaryKeyFields;
-import com.bitwiseglobal.graph.cumulate.TypeSecondaryKeyFields;
-import com.bitwiseglobal.graph.cumulate.TypeSecondayKeyFieldsAttributes;
-import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeFieldName;
-import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
-import com.bitwiseglobal.graph.commontypes.TypeSortOrder;
-import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
-import com.bitwiseglobal.graph.operationstypes.Cumulate;
+import hydrograph.engine.jaxb.cumulate.TypePrimaryKeyFields;
+import hydrograph.engine.jaxb.cumulate.TypeSecondaryKeyFields;
+import hydrograph.engine.jaxb.cumulate.TypeSecondayKeyFieldsAttributes;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeSortOrder;
+import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
+import hydrograph.engine.jaxb.operationstypes.Cumulate;
 
 /**
  * The class CumulateConverter

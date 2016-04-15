@@ -43,26 +43,26 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.inputtypes.ParquetHiveFile;
-import com.bitwiseglobal.graph.inputtypes.HiveTextFile;
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.inputtypes.GenerateRecord;
-import com.bitwiseglobal.graph.inputtypes.TextFileDelimited;
-import com.bitwiseglobal.graph.inputtypes.TextFileFixedWidth;
-import com.bitwiseglobal.graph.operationstypes.Aggregate;
-import com.bitwiseglobal.graph.operationstypes.Cumulate;
-import com.bitwiseglobal.graph.operationstypes.Filter;
-import com.bitwiseglobal.graph.operationstypes.GenerateSequence;
-import com.bitwiseglobal.graph.operationstypes.HashJoin;
-import com.bitwiseglobal.graph.operationstypes.Join;
-import com.bitwiseglobal.graph.operationstypes.Normalize;
-import com.bitwiseglobal.graph.operationstypes.Transform;
-import com.bitwiseglobal.graph.outputtypes.Discard;
-import com.bitwiseglobal.graph.straightpulltypes.Clone;
-import com.bitwiseglobal.graph.straightpulltypes.Limit;
-import com.bitwiseglobal.graph.straightpulltypes.RemoveDups;
-import com.bitwiseglobal.graph.straightpulltypes.Sort;
-import com.bitwiseglobal.graph.straightpulltypes.UnionAll;
+import hydrograph.engine.jaxb.inputtypes.ParquetHiveFile;
+import hydrograph.engine.jaxb.inputtypes.HiveTextFile;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.inputtypes.GenerateRecord;
+import hydrograph.engine.jaxb.inputtypes.TextFileDelimited;
+import hydrograph.engine.jaxb.inputtypes.TextFileFixedWidth;
+import hydrograph.engine.jaxb.operationstypes.Aggregate;
+import hydrograph.engine.jaxb.operationstypes.Cumulate;
+import hydrograph.engine.jaxb.operationstypes.Filter;
+import hydrograph.engine.jaxb.operationstypes.GenerateSequence;
+import hydrograph.engine.jaxb.operationstypes.HashJoin;
+import hydrograph.engine.jaxb.operationstypes.Join;
+import hydrograph.engine.jaxb.operationstypes.Normalize;
+import hydrograph.engine.jaxb.operationstypes.Transform;
+import hydrograph.engine.jaxb.outputtypes.Discard;
+import hydrograph.engine.jaxb.straightpulltypes.Clone;
+import hydrograph.engine.jaxb.straightpulltypes.Limit;
+import hydrograph.engine.jaxb.straightpulltypes.RemoveDups;
+import hydrograph.engine.jaxb.straightpulltypes.Sort;
+import hydrograph.engine.jaxb.straightpulltypes.UnionAll;
 
 /**
  * The class UiConverterFactory Factory class for creating Converter instances for particular component
@@ -90,14 +90,14 @@ public class UiConverterFactory {
 	 */
 	public UiConverter getUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		LOGGER.debug("Getting Ui-Converter for component:{}", typeBaseComponent.getClass());
-		if ((com.bitwiseglobal.graph.outputtypes.TextFileDelimited.class)
+		if ((hydrograph.engine.jaxb.outputtypes.TextFileDelimited.class)
 				.isAssignableFrom(typeBaseComponent.getClass())) {
 			return new OutputFileDelimitedUiConverter(typeBaseComponent, container);
 		}
 		if ((TextFileDelimited.class).isAssignableFrom(typeBaseComponent.getClass())) {
 			return new InputFileDelimitedUiConverter(typeBaseComponent, container);
 		}
-		if ((com.bitwiseglobal.graph.outputtypes.TextFileFixedWidth.class).isAssignableFrom(typeBaseComponent
+		if ((hydrograph.engine.jaxb.outputtypes.TextFileFixedWidth.class).isAssignableFrom(typeBaseComponent
 				.getClass())) {
 			return new OutputFixedWidthUiConverter(typeBaseComponent, container);
 		}
@@ -146,13 +146,13 @@ public class UiConverterFactory {
 		if((Discard.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new DiscardUiConverter(typeBaseComponent,container);
  		}
-		if((com.bitwiseglobal.graph.outputtypes.ParquetHiveFile.class).isAssignableFrom(typeBaseComponent.getClass())){
+		if((hydrograph.engine.jaxb.outputtypes.ParquetHiveFile.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new OutputHiveParquetUiConverter(typeBaseComponent,container);
 		}
 		if((ParquetHiveFile.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new InputHiveParquetUiConverter(typeBaseComponent, container);
 		}
-		if((com.bitwiseglobal.graph.outputtypes.HiveTextFile.class).isAssignableFrom(typeBaseComponent.getClass())){
+		if((hydrograph.engine.jaxb.outputtypes.HiveTextFile.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new OutputHiveTextFileUiConverter(typeBaseComponent,container);
 		}
 		if((HiveTextFile.class).isAssignableFrom(typeBaseComponent.getClass())){

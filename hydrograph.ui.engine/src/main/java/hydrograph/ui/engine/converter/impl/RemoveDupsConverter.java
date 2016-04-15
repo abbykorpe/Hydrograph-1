@@ -31,17 +31,17 @@ import java.util.Map.Entry;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.KeepValue;
-import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeFieldName;
-import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeSortOrder;
-import com.bitwiseglobal.graph.commontypes.TypeStraightPullOutSocket;
-import com.bitwiseglobal.graph.removedups.TypePrimaryKeyFields;
-import com.bitwiseglobal.graph.removedups.TypeSecondaryKeyFields;
-import com.bitwiseglobal.graph.removedups.TypeSecondayKeyFieldsAttributes;
-import com.bitwiseglobal.graph.straightpulltypes.RemoveDups;
-import com.bitwiseglobal.graph.straightpulltypes.RemoveDups.Keep;
+import hydrograph.engine.jaxb.commontypes.KeepValue;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeSortOrder;
+import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
+import hydrograph.engine.jaxb.removedups.TypePrimaryKeyFields;
+import hydrograph.engine.jaxb.removedups.TypeSecondaryKeyFields;
+import hydrograph.engine.jaxb.removedups.TypeSecondayKeyFieldsAttributes;
+import hydrograph.engine.jaxb.straightpulltypes.RemoveDups;
+import hydrograph.engine.jaxb.straightpulltypes.RemoveDups.Keep;
 
 /**
  * @author Bitwise Converter implementation for RemoveDups component

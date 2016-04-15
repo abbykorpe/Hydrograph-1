@@ -28,11 +28,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseField;
-import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
-import com.bitwiseglobal.graph.inputtypes.TextFileDelimited;
-import com.bitwiseglobal.graph.inputtypes.TextFileDelimited.Quote;
-import com.bitwiseglobal.graph.itfd.TypeInputDelimitedOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
+import hydrograph.engine.jaxb.inputtypes.TextFileDelimited;
+import hydrograph.engine.jaxb.inputtypes.TextFileDelimited.Quote;
+import hydrograph.engine.jaxb.itfd.TypeInputDelimitedOutSocket;
 
 public class InputFileDelimitedConverter extends InputConverter {
 

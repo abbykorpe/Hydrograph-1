@@ -26,12 +26,12 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.sort.TypePrimaryKeyFields;
-import com.bitwiseglobal.graph.sort.TypePrimaryKeyFieldsAttributes;
-import com.bitwiseglobal.graph.sort.TypeSecondaryKeyFields;
-import com.bitwiseglobal.graph.sort.TypeSecondayKeyFieldsAttributes;
-import com.bitwiseglobal.graph.straightpulltypes.Sort;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.sort.TypePrimaryKeyFields;
+import hydrograph.engine.jaxb.sort.TypePrimaryKeyFieldsAttributes;
+import hydrograph.engine.jaxb.sort.TypeSecondaryKeyFields;
+import hydrograph.engine.jaxb.sort.TypeSecondayKeyFieldsAttributes;
+import hydrograph.engine.jaxb.straightpulltypes.Sort;
 
 /**
  * Converter to convert jaxb sort object into sort component

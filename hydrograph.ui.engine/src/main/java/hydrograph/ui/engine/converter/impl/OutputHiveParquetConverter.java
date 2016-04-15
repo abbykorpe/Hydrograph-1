@@ -31,14 +31,14 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseField;
-import com.bitwiseglobal.graph.commontypes.TypeOutputInSocket;
-import com.bitwiseglobal.graph.outputtypes.ParquetHiveFile;
-import com.bitwiseglobal.graph.ohiveparquet.TypeOutputDelimitedInSocket;
-import com.bitwiseglobal.graph.ohiveparquet.FieldBasicType;
-import com.bitwiseglobal.graph.ohiveparquet.HivePartitionFieldsType;
-import com.bitwiseglobal.graph.ohiveparquet.HivePathType;
-import com.bitwiseglobal.graph.ohiveparquet.HiveType;
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
+import hydrograph.engine.jaxb.outputtypes.ParquetHiveFile;
+import hydrograph.engine.jaxb.ohiveparquet.TypeOutputDelimitedInSocket;
+import hydrograph.engine.jaxb.ohiveparquet.FieldBasicType;
+import hydrograph.engine.jaxb.ohiveparquet.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.ohiveparquet.HivePathType;
+import hydrograph.engine.jaxb.ohiveparquet.HiveType;
 /**
  * Converter implementation for Output Hive Parquet component
  * 

@@ -30,15 +30,15 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.aggregate.TypePrimaryKeyFields;
-import com.bitwiseglobal.graph.aggregate.TypeSecondaryKeyFields;
-import com.bitwiseglobal.graph.aggregate.TypeSecondayKeyFieldsAttributes;
-import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeFieldName;
-import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
-import com.bitwiseglobal.graph.commontypes.TypeSortOrder;
-import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
-import com.bitwiseglobal.graph.operationstypes.Aggregate;
+import hydrograph.engine.jaxb.aggregate.TypePrimaryKeyFields;
+import hydrograph.engine.jaxb.aggregate.TypeSecondaryKeyFields;
+import hydrograph.engine.jaxb.aggregate.TypeSecondayKeyFieldsAttributes;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeSortOrder;
+import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
+import hydrograph.engine.jaxb.operationstypes.Aggregate;
 
 /**
  * Aggregate converter

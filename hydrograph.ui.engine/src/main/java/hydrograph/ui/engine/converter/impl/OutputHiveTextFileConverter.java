@@ -31,14 +31,14 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseField;
-import com.bitwiseglobal.graph.commontypes.TypeOutputInSocket;
-import com.bitwiseglobal.graph.ohivetextfile.FieldBasicType;
-import com.bitwiseglobal.graph.ohivetextfile.HivePartitionFieldsType;
-import com.bitwiseglobal.graph.ohivetextfile.HivePathType;
-import com.bitwiseglobal.graph.ohivetextfile.HiveType;
-import com.bitwiseglobal.graph.ohivetextfile.TypeOutputHiveTextFileDelimitedInSocket;
-import com.bitwiseglobal.graph.outputtypes.HiveTextFile;
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
+import hydrograph.engine.jaxb.ohivetextfile.FieldBasicType;
+import hydrograph.engine.jaxb.ohivetextfile.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.ohivetextfile.HivePathType;
+import hydrograph.engine.jaxb.ohivetextfile.HiveType;
+import hydrograph.engine.jaxb.ohivetextfile.TypeOutputHiveTextFileDelimitedInSocket;
+import hydrograph.engine.jaxb.outputtypes.HiveTextFile;
 /**
  * Converter implementation for Output Hive TextFile component
  * 

@@ -68,18 +68,18 @@
 	
 	<tns:operations>
 		<tns:interface
-			class="com.bitwiseglobal.bhse.userfunctions.base.AggregateTransformBase"
+			class="hydrograph.engine.bhse.userfunctions.base.AggregateTransformBase"
 			name="AGGREGATE" />
-		<tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Sum"
+		<tns:stdOperation class="hydrograph.engine.bhse.userfunctions.aggregate.Sum"
 			name="Sum" />
-		<tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Max"
+		<tns:stdOperation class="hydrograph.engine.bhse.userfunctions.aggregate.Max"
 			name="Max" />
-		<tns:stdOperation class="com.bitwiseglobal.bhse.userfunctions.aggregate.Min"
+		<tns:stdOperation class="hydrograph.engine.bhse.userfunctions.aggregate.Min"
 			name="Min" />
 		<tns:stdOperation
-			class="com.bitwiseglobal.bhse.userfunctions.aggregate.Count" name="Count" />
+			class="hydrograph.engine.bhse.userfunctions.aggregate.Count" name="Count" />
 		<tns:stdOperation
-			class="com.bitwiseglobal.bhse.userfunctions.aggregate.StringAppend"
+			class="hydrograph.engine.bhse.userfunctions.aggregate.StringAppend"
 			name="StringAppend" />
 	</tns:operations>		
 	</tns:component>
