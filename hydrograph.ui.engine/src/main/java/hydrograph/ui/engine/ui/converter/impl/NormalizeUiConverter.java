@@ -15,20 +15,17 @@
 	package hydrograph.ui.engine.ui.converter.impl;
 
 	import hydrograph.ui.common.util.Constants;
-	import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
-	import hydrograph.ui.engine.ui.converter.TransformUiConverter;
-	import hydrograph.ui.graph.model.Container;
-	import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
+import hydrograph.ui.engine.ui.converter.TransformUiConverter;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.logging.factory.LogFactory;
 
-	import java.util.LinkedHashMap;
-	import java.util.LinkedList;
-	import java.util.List;
-	import java.util.Map;
-	import org.slf4j.Logger;
+import java.util.LinkedHashMap;
 
-	import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-	import com.bitwiseglobal.graph.commontypes.TypeFieldName;
-	import com.bitwiseglobal.graph.operationstypes.Normalize;
+import org.slf4j.Logger;
+
+import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
+import com.bitwiseglobal.graph.operationstypes.Normalize;
 
 	/**
 	 * The class NormalizeUiConverter
