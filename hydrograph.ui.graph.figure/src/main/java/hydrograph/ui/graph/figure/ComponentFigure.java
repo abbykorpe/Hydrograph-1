@@ -99,7 +99,7 @@ public class ComponentFigure extends Figure implements Validator{
 	private Display display;
 	private Runnable timer;
 	
-	private String accronym;
+	private String acronym;
 	/**
 	 * Instantiates a new component figure.
 	 * 
@@ -108,18 +108,10 @@ public class ComponentFigure extends Figure implements Validator{
 	 * @param cIconPath
 	 *            the canvas icon path
 	 */
-	public ComponentFigure(List<PortSpecification> portSpecification, String cIconPath, String label) {
+	public ComponentFigure(List<PortSpecification> portSpecification, String cIconPath, String label, String acronym) {
 		this.portspecification = portSpecification;
 		this.canvasIconPath = XMLConfigUtil.CONFIG_FILES_PATH + cIconPath;
-
-		if(cIconPath.equals("/icons/join_canvas.png"))
-			accronym="Join";
-		else if(cIconPath.equals("/icons/input_delimited_canvas.png"))
-			accronym="I_dlm";
-		else if(cIconPath.equals("/icons/input_fixwidth_canvas.png"))
-			accronym="I_fxd";
-		else if(cIconPath.equals("/icons/output_delimited_canvas.png"))
-			accronym="O_dlm";
+		this.acronym = acronym;
 		
 		layout = new XYLayout();
 		setLayoutManager(layout);
@@ -175,7 +167,6 @@ public class ComponentFigure extends Figure implements Validator{
 		borderColor = ELTColorConstants.COMPONENT_BORDER;
 		selectedComponentColor = ELTColorConstants.BG_COMPONENT_SELECTED;
 		selectedBorderColor = ELTColorConstants.COMPONENT_BORDER_SELECTED;
-		//selectedBorderColor = new Color(null, 255, 51, 0);
 	}
 
 	/**
@@ -184,7 +175,6 @@ public class ComponentFigure extends Figure implements Validator{
 	public void setComponentColorAndBorder(){
 		setBackgroundColor(componentColor);
 		setBorder(new ComponentBorder(borderColor, 0, componentLabelMargin));
-		setForegroundColor(ColorConstants.black);
 	}
 
 	/**
@@ -192,7 +182,6 @@ public class ComponentFigure extends Figure implements Validator{
 	 */
 	public void setSelectedComponentColorAndBorder(){
 		setBackgroundColor(selectedComponentColor);
-		setForegroundColor(ColorConstants.white);
 		setBorder(new ComponentBorder(selectedBorderColor, 1, componentLabelMargin));
 	}
 
@@ -580,8 +569,7 @@ public class ComponentFigure extends Figure implements Validator{
 		graphics.drawImage(canvasIcon, new Point(q.width/2-16, q.height/2+componentLabelMargin-15 + 4));
 		drawStatus(graphics);
 		
-		
-		graphics.drawText(accronym, new Point(q.width/2-16 + 5, q.height/2+componentLabelMargin-15 - 10));
+		graphics.drawText(acronym, new Point(q.width/2-16 + 5, q.height/2+componentLabelMargin-15 - 10));
 	}
 
 	/**

@@ -119,6 +119,7 @@ public abstract class Component extends Model {
 	private String category;
 	private HashMap<String, Port> ports;
 	private String componentName;
+	private String acronym;
 	private List<PortSpecification> portSpecification;
 
 	private int inPortCount;
@@ -167,6 +168,8 @@ public abstract class Component extends Model {
 		componentLabelMargin = 16;
 
 		prefix = XMLConfigUtil.INSTANCE.getComponent(componentName)
+				.getDefaultNamePrefix();
+		acronym = XMLConfigUtil.INSTANCE.getComponent(componentName)
 				.getDefaultNamePrefix();
 		initPortSettings();
 		toolTipErrorMessages = new LinkedHashMap<>();
