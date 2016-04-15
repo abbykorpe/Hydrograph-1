@@ -16,7 +16,8 @@
 	<tns:component paletteIconPath="/icons/join_palette.png" canvasIconPath="/icons/join_canvas.png"
 		name="Join" nameInPalette="Join" defaultNamePrefix="Join" 
 		description="Joins two or more input sources." 
-		helpFilePath="/hydrograph.ui.help/html/Components/Join.html">
+		helpFilePath="/hydrograph.ui.help/html/Components/Join.html"
+		acronym="Join">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="2" changePortCountDynamically="true">

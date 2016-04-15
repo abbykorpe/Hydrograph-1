@@ -16,7 +16,8 @@
 	<tns:component paletteIconPath="/icons/aggregate_palette.png" canvasIconPath="/icons/aggregate_canvas.png"
 		name="Aggregate" nameInPalette="Aggregate" defaultNamePrefix="Aggregate" 
 		description="Performs aggregations on data specified in a java operation class."
-		helpFilePath="/hydrograph.ui.help/html/Components/Aggregate.html">
+		helpFilePath="/hydrograph.ui.help/html/Components/Aggregate.html"
+		acronym="Agg">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">

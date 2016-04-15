@@ -16,7 +16,8 @@
 	<tns:component paletteIconPath="/icons/output_delimited_palette.png" canvasIconPath="/icons/output_delimited_canvas.png"
 		name="OFDelimited" nameInPalette="File Delimited" defaultNamePrefix="OFDelimited" 
 		description="Used to write output in delimited text format."
-		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Delimited.html">
+		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Delimited.html"
+		acronym="Delim">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">

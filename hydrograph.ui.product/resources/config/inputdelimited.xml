@@ -16,7 +16,8 @@
 	<tns:component paletteIconPath="/icons/input_delimited_palette.png" canvasIconPath="/icons/input_delimited_canvas.png"
 		name="IFDelimited" nameInPalette="File Delimited" defaultNamePrefix="IFDelimited" 
 		description="Used to read any delimited text file."
-		helpFilePath="/hydrograph.ui.help/html/Components/Input_File_Delimited.html">
+		helpFilePath="/hydrograph.ui.help/html/Components/Input_File_Delimited.html"
+		acronym="Delim">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
