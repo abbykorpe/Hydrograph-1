@@ -128,7 +128,9 @@ public class WidgetUtility {
 	 */
 	public static boolean eltConfirmMessage(String message){
 		Shell shell = new Shell();
+		
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setText("Warning");
 	    messageBox.setMessage(message);
 	    int response = messageBox.open();
 	    if (response == SWT.YES){
