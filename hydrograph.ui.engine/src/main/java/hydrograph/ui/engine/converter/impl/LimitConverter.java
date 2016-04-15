@@ -30,10 +30,10 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeStraightPullOutSocket;
-import com.bitwiseglobal.graph.straightpulltypes.Limit;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
+import hydrograph.engine.jaxb.straightpulltypes.Limit;
 
 /**
  * Converter to convert Limit component into engine specific limit object

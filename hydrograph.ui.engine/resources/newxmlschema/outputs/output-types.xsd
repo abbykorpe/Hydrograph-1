@@ -1,36 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://www.bitwiseglobal.com/graph/outputtypes"
-	xmlns:cmn="http://www.bitwiseglobal.com/graph/commontypes" xmlns:otffw="http://www.bitwiseglobal.com/graph/otffw"
-	xmlns:otfd="http://www.bitwiseglobal.com/graph/otfd" xmlns:otfs="http://www.bitwiseglobal.com/graph/otfs"
-	xmlns:otdiscard="http://www.bitwiseglobal.com/graph/otdiscard"
-	xmlns:ofparquet="http://www.bitwiseglobal.com/graph/ofparquet"
-	xmlns:ohiveparquet="http://www.bitwiseglobal.com/graph/ohiveparquet"
-	xmlns:ohivetextfile="http://www.bitwiseglobal.com/graph/ohivetextfile"
-	xmlns:ofMixedScheme="http://www.bitwiseglobal.com/graph/ofmixedscheme"
-	xmlns:ofsubgraph="http://www.bitwiseglobal.com/graph/ofsubgraph"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwiseglobal.com/graph/outputtypes"
+<!--
+    Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+ -->
+<xs:schema xmlns="hydrograph/engine/jaxb/outputtypes"
+	xmlns:cmn="hydrograph/engine/jaxb/commontypes" xmlns:otffw="hydrograph/engine/jaxb/otffw"
+	xmlns:otfd="hydrograph/engine/jaxb/otfd" xmlns:otfs="hydrograph/engine/jaxb/otfs"
+	xmlns:otdiscard="hydrograph/engine/jaxb/otdiscard"
+	xmlns:ofparquet="hydrograph/engine/jaxb/ofparquet"
+	xmlns:ohiveparquet="hydrograph/engine/jaxb/ohiveparquet"
+	xmlns:ohivetextfile="hydrograph/engine/jaxb/ohivetextfile"
+	xmlns:ofMixedScheme="hydrograph/engine/jaxb/ofmixedscheme"
+	xmlns:ofsubgraph="hydrograph/engine/jaxb/ofsubgraph"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="hydrograph/engine/jaxb/outputtypes"
 	elementFormDefault="unqualified">
 	<xs:import schemaLocation="../common/common-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/commontypes" />
+		namespace="hydrograph/engine/jaxb/commontypes" />
 	<xs:import schemaLocation="./text-file-fixed-width/output-text-file-fixed-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/otffw" />
+		namespace="hydrograph/engine/jaxb/otffw" />
 	<xs:import schemaLocation="./text-file-delimited/output-text-file-delimited-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/otfd" />
+		namespace="hydrograph/engine/jaxb/otfd" />
 	<xs:import schemaLocation="./sequence-file/output-sequence-file-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/otfs" />
+		namespace="hydrograph/engine/jaxb/otfs" />
 	<xs:import schemaLocation="./discard/output-discard-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/otdiscard" />
+		namespace="hydrograph/engine/jaxb/otdiscard" />
 	<xs:import schemaLocation="./parquet-file/output-file-parquet-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/ofparquet" />
+		namespace="hydrograph/engine/jaxb/ofparquet" />
 	<xs:import schemaLocation="./parquet-hive-file/output-hive-parquet-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/ohiveparquet" />
+		namespace="hydrograph/engine/jaxb/ohiveparquet" />
 	<xs:import schemaLocation="./hive-text-file/output-hive-text-file-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/ohivetextfile" />
+		namespace="hydrograph/engine/jaxb/ohivetextfile" />
 	<xs:import
 		schemaLocation="./text-file-mixedScheme/output-file-mixedScheme-text-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/ofmixedscheme" />
+		namespace="hydrograph/engine/jaxb/ofmixedscheme" />
 	<xs:import schemaLocation="./subgraph/output-subgraph-types.xsd"
-		namespace="http://www.bitwiseglobal.com/graph/ofsubgraph" />
+		namespace="hydrograph/engine/jaxb/ofsubgraph" />
+
+
+	<xs:complexType name="avroFile">
+		<xs:complexContent>
+			<xs:extension base="otfd:type-output-file-delimited-base">
+				<xs:sequence>
+					<xs:element name="path">
+						<xs:complexType>
+							<xs:attribute name="uri" type="xs:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
 
 	<xs:complexType name="textFileDelimited">
 		<xs:complexContent>

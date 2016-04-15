@@ -58,11 +58,11 @@
 			
 		<tns:operations>
 			<tns:interface
-				class="com.bitwiseglobal.bhse.userfunctions.base.NormalizeTransformBase" name="NORMALIZE" />
+				class="hydrograph.engine.bhse.userfunctions.base.NormalizeTransformBase" name="NORMALIZE" />
 			<tns:stdOperation
-				class="com.bitwiseglobal.bhse.userfunctions.normalize.MetaPivot" name="MetaPivot" />
+				class="hydrograph.engine.bhse.userfunctions.normalize.MetaPivot" name="MetaPivot" />
 			<tns:stdOperation
-				class="com.bitwiseglobal.bhse.userfunctions.normalize.RegexSplitNormalize" name="RegexSplitNormalize" />
+				class="hydrograph.engine.bhse.userfunctions.normalize.RegexSplitNormalize" name="RegexSplitNormalize" />
 		</tns:operations>		
 			
 	</tns:component>

@@ -31,12 +31,12 @@ import javax.xml.namespace.QName;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.FieldDataTypes;
-import com.bitwiseglobal.graph.commontypes.ScaleTypeList;
-import com.bitwiseglobal.graph.commontypes.TypeBaseField;
-import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
-import com.bitwiseglobal.graph.inputtypes.GenerateRecord;
-import com.bitwiseglobal.graph.inputtypes.GenerateRecord.RecordCount;
+import hydrograph.engine.jaxb.commontypes.FieldDataTypes;
+import hydrograph.engine.jaxb.commontypes.ScaleTypeList;
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
+import hydrograph.engine.jaxb.inputtypes.GenerateRecord;
+import hydrograph.engine.jaxb.inputtypes.GenerateRecord.RecordCount;
 
 /**
  * This class is used to create target XML for GenerateRecords component.

@@ -37,16 +37,16 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeFieldName;
-import com.bitwiseglobal.graph.commontypes.TypeInputField;
-import com.bitwiseglobal.graph.commontypes.TypeMapField;
-import com.bitwiseglobal.graph.commontypes.TypeOperationInputFields;
-import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
-import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
-import com.bitwiseglobal.graph.join.TypeKeyFields;
-import com.bitwiseglobal.graph.operationstypes.Join;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import hydrograph.engine.jaxb.commontypes.TypeInputField;
+import hydrograph.engine.jaxb.commontypes.TypeMapField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
+import hydrograph.engine.jaxb.join.TypeKeyFields;
+import hydrograph.engine.jaxb.operationstypes.Join;
 
 /**
  * @author Bitwise Converter implementation for Join component

@@ -28,12 +28,12 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.commontypes.TypeFieldName;
-import com.bitwiseglobal.graph.removedups.TypePrimaryKeyFields;
-import com.bitwiseglobal.graph.removedups.TypeSecondaryKeyFields;
-import com.bitwiseglobal.graph.removedups.TypeSecondayKeyFieldsAttributes;
-import com.bitwiseglobal.graph.straightpulltypes.RemoveDups;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import hydrograph.engine.jaxb.removedups.TypePrimaryKeyFields;
+import hydrograph.engine.jaxb.removedups.TypeSecondaryKeyFields;
+import hydrograph.engine.jaxb.removedups.TypeSecondayKeyFieldsAttributes;
+import hydrograph.engine.jaxb.straightpulltypes.RemoveDups;
 
 public class RemoveDupsUiConverter extends StraightpullUiConverter {
 	private RemoveDups removeDups;

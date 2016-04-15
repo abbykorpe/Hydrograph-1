@@ -37,17 +37,17 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.MatchValue;
-import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeFieldName;
-import com.bitwiseglobal.graph.commontypes.TypeInputField;
-import com.bitwiseglobal.graph.commontypes.TypeMapField;
-import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
-import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
-import com.bitwiseglobal.graph.hashjoin.TypeKeyFields;
-import com.bitwiseglobal.graph.operationstypes.HashJoin;
-import com.bitwiseglobal.graph.operationstypes.HashJoin.Match;
+import hydrograph.engine.jaxb.commontypes.MatchValue;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import hydrograph.engine.jaxb.commontypes.TypeInputField;
+import hydrograph.engine.jaxb.commontypes.TypeMapField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
+import hydrograph.engine.jaxb.hashjoin.TypeKeyFields;
+import hydrograph.engine.jaxb.operationstypes.HashJoin;
+import hydrograph.engine.jaxb.operationstypes.HashJoin.Match;
 
 
 /**

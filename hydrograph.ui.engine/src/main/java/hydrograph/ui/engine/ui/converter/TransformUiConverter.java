@@ -41,15 +41,15 @@ import java.util.TreeMap;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseField;
-import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeInputField;
-import com.bitwiseglobal.graph.commontypes.TypeMapField;
-import com.bitwiseglobal.graph.commontypes.TypeOperationsComponent;
-import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
-import com.bitwiseglobal.graph.commontypes.TypeProperties;
-import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
-import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeInputField;
+import hydrograph.engine.jaxb.commontypes.TypeMapField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import com.thoughtworks.xstream.mapper.AttributeMapper;
 
 /**

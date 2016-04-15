@@ -41,11 +41,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.commontypes.TypeProperties;
-import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
-import com.bitwiseglobal.graph.main.Graph;
-import com.bitwiseglobal.graph.main.ObjectFactory;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.main.Graph;
+import hydrograph.engine.jaxb.main.ObjectFactory;
 
 
 

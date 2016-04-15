@@ -30,15 +30,15 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeSortOrder;
-import com.bitwiseglobal.graph.commontypes.TypeStraightPullOutSocket;
-import com.bitwiseglobal.graph.sort.TypePrimaryKeyFields;
-import com.bitwiseglobal.graph.sort.TypePrimaryKeyFieldsAttributes;
-import com.bitwiseglobal.graph.sort.TypeSecondaryKeyFields;
-import com.bitwiseglobal.graph.sort.TypeSecondayKeyFieldsAttributes;
-import com.bitwiseglobal.graph.straightpulltypes.Sort;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeSortOrder;
+import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
+import hydrograph.engine.jaxb.sort.TypePrimaryKeyFields;
+import hydrograph.engine.jaxb.sort.TypePrimaryKeyFieldsAttributes;
+import hydrograph.engine.jaxb.sort.TypeSecondaryKeyFields;
+import hydrograph.engine.jaxb.sort.TypeSecondayKeyFieldsAttributes;
+import hydrograph.engine.jaxb.straightpulltypes.Sort;
 
 /**
  * Converter to convert sort component into engine specific sort object

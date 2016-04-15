@@ -18,9 +18,9 @@ import hydrograph.ui.graph.model.Component;
 
 import java.util.List;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeStraightPullComponent;
-import com.bitwiseglobal.graph.commontypes.TypeStraightPullOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
+import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
 
 /**
  * Converter implementation for StraightPull type components

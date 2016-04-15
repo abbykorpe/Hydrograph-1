@@ -26,12 +26,12 @@ import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.aggregate.TypePrimaryKeyFields;
-import com.bitwiseglobal.graph.aggregate.TypeSecondaryKeyFields;
-import com.bitwiseglobal.graph.aggregate.TypeSecondayKeyFieldsAttributes;
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.commontypes.TypeFieldName;
-import com.bitwiseglobal.graph.operationstypes.Aggregate;
+import hydrograph.engine.jaxb.aggregate.TypePrimaryKeyFields;
+import hydrograph.engine.jaxb.aggregate.TypeSecondaryKeyFields;
+import hydrograph.engine.jaxb.aggregate.TypeSecondayKeyFieldsAttributes;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import hydrograph.engine.jaxb.operationstypes.Aggregate;
 
 /**
  * The class AggregateUiConverter

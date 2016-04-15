@@ -31,14 +31,14 @@ import java.util.TreeMap;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;
-import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
-import com.bitwiseglobal.graph.commontypes.TypeProperties;
-import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
-import com.bitwiseglobal.graph.ihiveparquet.FieldBasicType;
-import com.bitwiseglobal.graph.ihiveparquet.HivePartitionFieldsType;
-import com.bitwiseglobal.graph.inputtypes.ParquetHiveFile;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.ihiveparquet.FieldBasicType;
+import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.inputtypes.ParquetHiveFile;
 /**
  * The class InputHiveParquetUiConverter
  * 

@@ -24,8 +24,8 @@ import java.util.LinkedHashMap;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.operationstypes.Transform;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.operationstypes.Transform;
 
 public class TransformComponentUiConverter extends TransformUiConverter {
 

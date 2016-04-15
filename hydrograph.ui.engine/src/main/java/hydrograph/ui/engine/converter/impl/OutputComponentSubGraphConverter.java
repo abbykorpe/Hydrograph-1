@@ -27,9 +27,9 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseField;
-import com.bitwiseglobal.graph.commontypes.TypeOutputInSocket;
-import com.bitwiseglobal.graph.outputtypes.SubgraphOutput;
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
+import hydrograph.engine.jaxb.outputtypes.SubgraphOutput;
 
 /**
  * SubGraph mapping output component converter that use to map main graph.

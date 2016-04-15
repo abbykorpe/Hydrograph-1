@@ -34,13 +34,13 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.commontypes.TypeBaseField;
-import com.bitwiseglobal.graph.commontypes.TypeExternalSchema;
-import com.bitwiseglobal.graph.commontypes.TypeInputOutSocket;
-import com.bitwiseglobal.graph.commontypes.TypeProperties;
-import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
-import com.bitwiseglobal.graph.inputtypes.GenerateRecord;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.inputtypes.GenerateRecord;
 
 /**
  * This class is used to create ui-GenerateRecords component from engine's GenerateRecord component 
@@ -103,7 +103,7 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * hydrograph.ui.engine.ui.converter.InputUiConverter#getSchema(com.bitwiseglobal.graph.commontypes.TypeInputOutSocket
+	 * hydrograph.ui.engine.ui.converter.InputUiConverter#getSchema(hydrograph.engine.jaxb.commontypes.TypeInputOutSocket
 	 * )
 	 */
 	@Override

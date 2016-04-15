@@ -45,20 +45,20 @@ import javax.xml.namespace.QName;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.FieldDataTypes;
-import com.bitwiseglobal.graph.commontypes.ScaleTypeList;
-import com.bitwiseglobal.graph.commontypes.TypeBaseField;
-import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeInputField;
-import com.bitwiseglobal.graph.commontypes.TypeMapField;
-import com.bitwiseglobal.graph.commontypes.TypeOperationField;
-import com.bitwiseglobal.graph.commontypes.TypeOperationInputFields;
-import com.bitwiseglobal.graph.commontypes.TypeOperationOutputFields;
-import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
-import com.bitwiseglobal.graph.commontypes.TypeOutSocketAsInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeProperties;
-import com.bitwiseglobal.graph.commontypes.TypeProperties.Property;
-import com.bitwiseglobal.graph.commontypes.TypeTransformOperation;
+import hydrograph.engine.jaxb.commontypes.FieldDataTypes;
+import hydrograph.engine.jaxb.commontypes.ScaleTypeList;
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeInputField;
+import hydrograph.engine.jaxb.commontypes.TypeMapField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
+import hydrograph.engine.jaxb.commontypes.TypeOperationOutputFields;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 
 /**
  * This is a helper class for converter implementation. Contains the helper methods for conversion.

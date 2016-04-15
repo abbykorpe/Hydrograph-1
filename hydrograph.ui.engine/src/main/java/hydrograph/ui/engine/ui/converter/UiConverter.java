@@ -30,10 +30,10 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.BooleanValueType;
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeBaseOutSocket;
+import hydrograph.engine.jaxb.commontypes.BooleanValueType;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
 
 /**
  * The class UiConverter

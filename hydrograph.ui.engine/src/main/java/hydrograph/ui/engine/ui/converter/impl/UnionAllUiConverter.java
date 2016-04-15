@@ -26,10 +26,10 @@ import java.util.LinkedHashMap;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.commontypes.TypeBaseInSocket;
-import com.bitwiseglobal.graph.commontypes.TypeStraightPullComponent;
-import com.bitwiseglobal.graph.straightpulltypes.UnionAll;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
+import hydrograph.engine.jaxb.straightpulltypes.UnionAll;
 
 public class UnionAllUiConverter extends StraightpullUiConverter {
 

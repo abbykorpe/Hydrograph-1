@@ -25,10 +25,10 @@ import java.util.LinkedHashMap;
 
 import org.slf4j.Logger;
 
-import com.bitwiseglobal.graph.commontypes.TypeBaseComponent;
-import com.bitwiseglobal.graph.commontypes.TypeOperationField;
-import com.bitwiseglobal.graph.commontypes.TypeOperationsComponent;
-import com.bitwiseglobal.graph.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeOperationField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
 
 /**
  * This class creates ui-UniqueSequence component from target XML.
