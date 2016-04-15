@@ -402,6 +402,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 							.getShell(), transformMapping.getMappingSheetRows(), expandBar);
 					operationClassDeleteDialog.open();
 					refreshOutputTable();
+					showHideValidationMessage();
 
 				}
 			}
