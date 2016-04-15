@@ -104,6 +104,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private static final String OPERATION_CLASS_TEXT_BOX = "operationClassTextBox";
 	private static final String PARAMETER_TEXT_BOX = "parameterTextBox";
 	private static final String BTN_NEW_BUTTON = "btnNewButton";
+	private static final String IS_PARAM="isParam"; 
 	/**
 	 * Create the dialog.
 	 * 
@@ -626,11 +627,12 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		gd_fileSelectComposite.heightHint = 29;
 		gd_fileSelectComposite.widthHint = 360;
 		innerComposite.setLayoutData(gd_fileSelectComposite);
-
+		isParam = new Button(innerComposite, SWT.CHECK);
 		operationClassTextBox = new Text(innerComposite, SWT.BORDER);
 		operationClassTextBox.setBounds(104, 91, 150, 21);
 		operationClassTextBox.setData(mappingSheetRow.getOperationID());
-		expandItem.setData(operationClassTextBox);
+		expandItem.setData(OPERATION_CLASS_TEXT_BOX,operationClassTextBox);
+		expandItem.setData(IS_PARAM, isParam);
 		operationClassTextBox.addModifyListener(new ModifyListener() {
 		
 			@Override
@@ -640,7 +642,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		});
 		
 		if (mappingSheetRow.getOperationClassPath() != null)
-			operationClassTextBox.setText(mappingSheetRow.getOperationClassPath());
+		operationClassTextBox.setText(mappingSheetRow.getOperationClassPath());
 
 		operationClassTextBox.setEditable(false);
 		operationClassTextBox.setData(mappingSheetRow.getOperationID());
@@ -776,7 +778,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			}
 		});
 
-		isParam = new Button(innerComposite, SWT.CHECK);
+	
 		isParam.setData(PARAMETER_TEXT_BOX, text);
 		isParam.setData(OPERATION_CLASS_TEXT_BOX, operationClassTextBox);
 		isParam.setData(OPERATION_ID_TEXT_BOX, operationIDTextBox);
@@ -845,7 +847,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					operationOutputFieldTableViewer.getTable().setEnabled(true);
 
 					operationClassTextBox.setEnabled(true);
-
+					operationClassTextBox.setText("");
 					operationIDTextBox.setEnabled(true);
 
 					btnNewButton.setEnabled(true);
@@ -853,6 +855,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					inputDelete.setEnabled(true);
 					outputAdd.setEnabled(true);
 					outputDelete.setEnabled(true);
+					 
 
 				}
 			}
@@ -860,7 +863,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		});
 		isParam.setBounds(284, 156, 93, 16);
 		isParam.setText(Messages.IS_PARAM);
-
+        
 	}
 
 	private void createOperationOutputFieldTable(Composite expandItemComposite, final MappingSheetRow mappingSheetRow) {
@@ -1118,8 +1121,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		
 			for(ExpandItem item:expandBar.getItems() )
 			{
-				Text textBox=(Text)item.getData();
-				if(StringUtils.isBlank(textBox.getText()))
+				Text textBox=(Text)item.getData(OPERATION_CLASS_TEXT_BOX);
+				Button isParam=(Button)item.getData(IS_PARAM);
+				
+				if(StringUtils.isBlank(textBox.getText()) && !isParam.getSelection())
 				{
 					errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
 				    errorLabel.setVisible(true); 
