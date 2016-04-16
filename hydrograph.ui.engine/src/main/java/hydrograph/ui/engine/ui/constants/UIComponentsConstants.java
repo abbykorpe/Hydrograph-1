@@ -18,6 +18,7 @@ package hydrograph.ui.engine.ui.constants;
 public enum UIComponentsConstants {
 	
 	FILE_DELIMITED("File Delimited"),
+	FILE_PARQUET("File Parquet"),
 	HIVE_PARQUET("Hive Parquet"),
 	HIVE_TEXTFILE("Hive TextFile"),
 	VALIDITY_STATUS("validityStatus"),
