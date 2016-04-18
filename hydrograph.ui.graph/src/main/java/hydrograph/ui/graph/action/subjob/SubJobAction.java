@@ -12,22 +12,22 @@
  ******************************************************************************/
 
  
-package hydrograph.ui.graph.action.subgraph;
+package hydrograph.ui.graph.action.subjob;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.action.ContributionItemManager;
 import hydrograph.ui.graph.action.PasteAction;
 import hydrograph.ui.graph.command.ComponentCreateCommand;
-import hydrograph.ui.graph.command.SubGraphCommand;
+import hydrograph.ui.graph.command.SubJobCommand;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.LinkComparatorBySourceLocation;
-import hydrograph.ui.graph.model.components.SubgraphComponent;
-import hydrograph.ui.graph.utility.SubGraphUtility;
+import hydrograph.ui.graph.model.components.SubjobComponent;
+import hydrograph.ui.graph.utility.SubJobUtility;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,11 +51,11 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 /**
- * The Class SubGraphAction use to create sub graph.
+ * The Class SubJobAction use to create sub graph.
  * 
  * @author Bitwise
  */
-public class SubGraphAction extends SelectionAction{
+public class SubJobAction extends SelectionAction{
 	
 	/** The paste action. */
 	//TODO : remove pasteAction is not needed.
@@ -71,7 +71,7 @@ public class SubGraphAction extends SelectionAction{
 	 * @param action
 	 *            the action
 	 */
-	public SubGraphAction(IWorkbenchPart part, IAction action) {
+	public SubJobAction(IWorkbenchPart part, IAction action) {
 		super(part);
 		this.pasteAction = (PasteAction) action;
 		setLazyEnablementCalculation(true);
@@ -85,8 +85,8 @@ public class SubGraphAction extends SelectionAction{
 		super.init();
 		
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setText(Constants.SUBGRAPH_CREATE); 
-		setId(Constants.SUBGRAPH_CREATE);
+		setText(Constants.SUBJOB_CREATE); 
+		setId(Constants.SUBJOB_CREATE);
 		setHoverImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT_DISABLED));
@@ -94,13 +94,13 @@ public class SubGraphAction extends SelectionAction{
 	}
 
 	/**
-	 * Creates the sub graph command.
+	 * Creates the sub job command.
 	 *
 	 * @param selectedObjects the selected objects
 	 * @return the command
 	 */
-	private Command createSubGraphCommand(List<Object> selectedObjects) {
-		SubGraphCommand cutCommand =new SubGraphCommand();
+	private Command createSubJobCommand(List<Object> selectedObjects) {
+		SubJobCommand cutCommand =new SubJobCommand();
 		if (selectedObjects == null || selectedObjects.isEmpty()) {
 			return null;
 		}
@@ -134,7 +134,7 @@ public class SubGraphAction extends SelectionAction{
 	 */
 	@Override
 	protected boolean calculateEnabled() {
-		Command cmd = createSubGraphCommand(getSelectedObjects());
+		Command cmd = createSubJobCommand(getSelectedObjects());
 		if (cmd == null){
 			return false;
 		}else{
@@ -153,27 +153,27 @@ public class SubGraphAction extends SelectionAction{
 		if(notConfirmedByUser())
 			return;
 		
-		SubGraphUtility subGraphUtility = new SubGraphUtility();
+		SubJobUtility subJobUtility = new SubJobUtility();
 	
-		IFile file=subGraphUtility.openSubGraphSaveDialog();
+		IFile file=subJobUtility.openSubJobSaveDialog();
 		if(file!=null)
 		{	
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		Container containerOld=editor.getContainer(); 
-	   	execute(createSubGraphCommand(getSelectedObjects())); 
+	   	execute(createSubJobCommand(getSelectedObjects())); 
     	List clipboardList = (List) Clipboard.getDefault().getContents();
-    	SubgraphComponent subgraphComponent= new SubgraphComponent();
-		ComponentCreateCommand createComponent = new ComponentCreateCommand(subgraphComponent,containerOld,new Rectangle(((Component)clipboardList.get(0)).getLocation(),((Component)clipboardList.get(0)).getSize()));
+    	SubjobComponent subjobComponent= new SubjobComponent();
+		ComponentCreateCommand createComponent = new ComponentCreateCommand(subjobComponent,containerOld,new Rectangle(((Component)clipboardList.get(0)).getLocation(),((Component)clipboardList.get(0)).getSize()));
 		createComponent.execute(); 
-		subgraphComponent.getProperties().put(Constants.VALIDITY_STATUS,"VALID");
+		subjobComponent.getProperties().put(Constants.VALIDITY_STATUS,"VALID");
 		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
 		for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();)
 		{
 			EditPart editPart = (EditPart) ite.next();
 			
-			if(editPart instanceof ComponentEditPart && Constants.SUBGRAPH_COMPONENT_CATEGORY.equalsIgnoreCase(((ComponentEditPart) editPart).getCastedModel().getCategory())) 
+			if(editPart instanceof ComponentEditPart && Constants.SUBJOB_COMPONENT_CATEGORY.equalsIgnoreCase(((ComponentEditPart) editPart).getCastedModel().getCategory())) 
 			{ Component tempComponent=((ComponentEditPart) editPart).getCastedModel();
-				if (StringUtils.equals(tempComponent.getComponentLabel().getLabelContents(), subgraphComponent.getComponentLabel().getLabelContents())) {
+				if (StringUtils.equals(tempComponent.getComponentLabel().getLabelContents(), subjobComponent.getComponentLabel().getLabelContents())) {
 					componentEditPart= (ComponentEditPart) editPart;
 				}
 			} 
@@ -207,37 +207,37 @@ public class SubGraphAction extends SelectionAction{
 		/*
 		 * Update main sub graph component size and properties
 		 */
-		subGraphUtility.updateSubGraphModelProperties(componentEditPart, inLinks.size(), outLinks.size(), file);
+		subJobUtility.updateSubJobModelProperties(componentEditPart, inLinks.size(), outLinks.size(), file);
 		
 		/*
-		 * Create Input port in main sub graph component.
+		 * Create Input port in main subjob component.
 		 */
-		subGraphUtility.createDynamicInputPort(inLinks, componentEditPart);
+		subJobUtility.createDynamicInputPort(inLinks, componentEditPart);
 		/*
-		 * Create output port in main subgraph component.
+		 * Create output port in main subjob component.
 		 */
-		subGraphUtility.createDynamicOutputPort(outLinks, componentEditPart)	;
+		subJobUtility.createDynamicOutputPort(outLinks, componentEditPart)	;
 		/*
-		 * Generate subgraph target xml.
+		 * Generate subjob target xml.
 		 */
-		subGraphUtility.createSubGraphXml(componentEditPart,clipboardList,file);
-		finishSubgraphCreation(subgraphComponent,componentEditPart);
+		subJobUtility.createSubJobXml(componentEditPart,clipboardList,file);
+		finishSubjobCreation(subjobComponent,componentEditPart);
 		}
 	}
 
 	
-	private void finishSubgraphCreation(Component subgraphComponent, ComponentEditPart componentEditPart) {
-		subgraphComponent.getProperties().put(Constants.SUBGRAPH_VERSION,1);
-		SubGraphUtility.getCurrentEditor().setDirty(true);
+	private void finishSubjobCreation(Component subjobComponent, ComponentEditPart componentEditPart) {
+		subjobComponent.getProperties().put(Constants.SUBJOB_VERSION,1);
+		SubJobUtility.getCurrentEditor().setDirty(true);
 		componentEditPart.updateComponentStatus();
-		SubGraphUtility.getCurrentEditor().getViewer().select(componentEditPart);
+		SubJobUtility.getCurrentEditor().getViewer().select(componentEditPart);
 	}
 
 	private boolean notConfirmedByUser() {
 		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES
 				| SWT.NO);
-		messageBox.setMessage(Messages.CONFIRM_TO_CREATE_SUBGRAPH_MESSAGE);
-		messageBox.setText(Messages.CONFIRM_TO_CREATE_SUBGRAPH_WINDOW_TITLE);
+		messageBox.setMessage(Messages.CONFIRM_TO_CREATE_SUBJOB_MESSAGE);
+		messageBox.setText(Messages.CONFIRM_TO_CREATE_SUBJOB_WINDOW_TITLE);
 		int response = messageBox.open();
 		if (response == SWT.YES) {
 			return false;

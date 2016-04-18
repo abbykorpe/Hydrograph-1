@@ -21,7 +21,7 @@
 			<enumeration value="TRANSFORM" />
 			<enumeration value="STRAIGHTPULL" />
 			<enumeration value="DUMMY" />
-			<enumeration value="SUBGRAPH" />
+			<enumeration value="SUBJOB" />
 		</restriction>
 	</simpleType>
 	
@@ -77,7 +77,7 @@
 			<enumeration value="HASH_JOIN_WIDGET"/>
 			<enumeration value="HASH_JOIN_MAPPING_WIDGET"/>
 			<enumeration value="XML_CONTENT_WIDGET"/>
-			<enumeration value="SUBGRAPH_PROPERTIES_WIDGET" />
+			<enumeration value="SUBJOB_PROPERTIES_WIDGET" />
 			<enumeration value="MATCH_PROPERTY_WIDGET" />
 			<enumeration value="TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET" />
 			<enumeration value="COUNT_WIDGET"/>

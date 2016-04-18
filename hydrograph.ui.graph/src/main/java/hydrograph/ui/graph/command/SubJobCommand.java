@@ -30,7 +30,7 @@ import org.eclipse.gef.ui.actions.Clipboard;
  * 
  * @author Bitwise
  */
-public class SubGraphCommand extends Command {
+public class SubJobCommand extends Command {
 	private ArrayList list = new ArrayList();
 
 	private boolean wasRemoved;

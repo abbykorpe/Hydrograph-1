@@ -52,7 +52,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="HASH_JOIN_WIDGET"/>
  *     &lt;enumeration value="HASH_JOIN_MAPPING_WIDGET"/>
  *     &lt;enumeration value="XML_CONTENT_WIDGET"/>
- *     &lt;enumeration value="SUBGRAPH_PROPERTIES_WIDGET"/>
+ *     &lt;enumeration value="SUBJOB_PROPERTIES_WIDGET"/>
  *     &lt;enumeration value="MATCH_PROPERTY_WIDGET"/>
  *     &lt;enumeration value="TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET"/>
  *     &lt;enumeration value="COUNT_WIDGET"/>
@@ -104,7 +104,7 @@ public enum PropertyRenderer {
     HASH_JOIN_WIDGET,
     HASH_JOIN_MAPPING_WIDGET,
     XML_CONTENT_WIDGET,
-    SUBGRAPH_PROPERTIES_WIDGET,
+    SUBJOB_PROPERTIES_WIDGET,
     MATCH_PROPERTY_WIDGET,
     TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET,
     COUNT_WIDGET,

@@ -12,14 +12,14 @@
  ******************************************************************************/
 
  
-package hydrograph.ui.graph.action.subgraph;
+package hydrograph.ui.graph.action.subjob;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.action.PasteAction;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.utility.SubGraphUtility;
+import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.List;
@@ -48,15 +48,15 @@ import org.slf4j.Logger;
 
 
 /**
- * The Class SubGraphOpenAction use to open sub graph.
+ * The Class SubJobOpenAction use to open sub graph.
  * 
  * @author Bitwise
  */
-public class SubGraphOpenAction extends SelectionAction{
+public class SubJobOpenAction extends SelectionAction{
 	PasteAction pasteAction;
 	ComponentEditPart edComponentEditPart;
 	
-	Logger logger = LogFactory.INSTANCE.getLogger(SubGraphOpenAction.class);
+	Logger logger = LogFactory.INSTANCE.getLogger(SubJobOpenAction.class);
 	/**
 	 * Instantiates a new cut action.
 	 * 
@@ -65,7 +65,7 @@ public class SubGraphOpenAction extends SelectionAction{
 	 * @param action
 	 *            the action
 	 */
-	public SubGraphOpenAction(IWorkbenchPart part, IAction action) {
+	public SubJobOpenAction(IWorkbenchPart part, IAction action) {
 		super(part);
 		this.pasteAction = (PasteAction) action;
 		setLazyEnablementCalculation(true);
@@ -76,8 +76,8 @@ public class SubGraphOpenAction extends SelectionAction{
 		super.init();
 		
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setText(Constants.SUBGRAPH_OPEN); 
-		setId(Constants.SUBGRAPH_OPEN);
+		setText(Constants.SUBJOB_OPEN); 
+		setId(Constants.SUBJOB_OPEN);
 		setHoverImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT_DISABLED));
@@ -92,46 +92,46 @@ public class SubGraphOpenAction extends SelectionAction{
 	@Override
 	public void run() {
 		List<Object> selectedObjects = getSelectedObjects();
-		SubGraphUtility subGraphUtility = new SubGraphUtility();
-		String mainJobFilePath=subGraphUtility.getCurrentEditor().getTitleToolTip();
+		SubJobUtility subJobUtility = new SubJobUtility();
+		String mainJobFilePath=subJobUtility.getCurrentEditor().getTitleToolTip();
 		Container container = null;
 		if (selectedObjects != null && !selectedObjects.isEmpty()) {
 			for (Object obj : selectedObjects) {
 				if (obj instanceof ComponentEditPart) {
 					if (((ComponentEditPart) obj).getCastedModel().getCategory()
-							.equalsIgnoreCase(Constants.SUBGRAPH_COMPONENT_CATEGORY)) {
-						Component subgraphComponent = ((ComponentEditPart) obj).getCastedModel();
-						String pathProperty = (String) subgraphComponent.getProperties().get(
+							.equalsIgnoreCase(Constants.SUBJOB_COMPONENT_CATEGORY)) {
+						Component subjobComponent = ((ComponentEditPart) obj).getCastedModel();
+						String pathProperty = (String) subjobComponent.getProperties().get(
 								Constants.PATH_PROPERTY_NAME);
 						if (StringUtils.isNotBlank(pathProperty)) {
 							try {
 								IPath jobFilePath = new Path(pathProperty);
-								if (SubGraphUtility.isFileExistsOnLocalFileSystem(jobFilePath)) {
+								if (SubJobUtility.isFileExistsOnLocalFileSystem(jobFilePath)) {
 									
 									container = openEditor(jobFilePath);
 									if (container != null){
 										container.setLinkedMainGraphPath(mainJobFilePath);
-										container.setSubgraphComponentEditPart(obj);
+										container.setSubjobComponentEditPart(obj);
 										for (Component component : container.getChildren()) {
-											subGraphUtility.propogateSchemaToSubgraph(subgraphComponent, component);
+											subJobUtility.propogateSchemaToSubjob(subjobComponent, component);
 										}}
 									((ComponentEditPart) obj).refresh();
 								} else
 									MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
-											"Subgraph File does not exists");
+											"Subjob File does not exists");
 								
 							} catch (IllegalArgumentException exception) {
-								logger.error("Unable to open subgraph" + exception);
+								logger.error("Unable to open subjob" + exception);
 								MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
-										"Unable to open subgraph : Invalid file path\n" + exception.getMessage());
+										"Unable to open subjob : Invalid file path\n" + exception.getMessage());
 							} catch (Exception exception) {
-								logger.error("Unable to open subgraph" + exception);
+								logger.error("Unable to open subjob" + exception);
 								MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
-										"Unable to open subgraph :" + exception.getMessage());
+										"Unable to open subjob :" + exception.getMessage());
 							}
 						} else
 							MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
-									"Unable to open subgraph : Subgraph file path is empty");
+									"Unable to open subjob : Subjob file path is empty");
 					}
 				}
 
@@ -153,10 +153,10 @@ public class SubGraphOpenAction extends SelectionAction{
 			}
 		}
 
-		return SubGraphUtility.getCurrentEditor().getContainer();
+		return SubJobUtility.getCurrentEditor().getContainer();
 		}else
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
-					"Unable to open subgraph : "+jobFilePath.lastSegment()+" Subgraph is already open \n" +
+					"Unable to open subjob : "+jobFilePath.lastSegment()+" Subjob is already open \n" +
 							"Please close the job and retry");
 		return null;
 	}
@@ -183,7 +183,7 @@ public class SubGraphOpenAction extends SelectionAction{
 		if (selectedObjects != null && !selectedObjects.isEmpty() && selectedObjects.size() == 1) {
 			for (Object obj : selectedObjects) {
 				if (obj instanceof ComponentEditPart) {
-					if (Constants.SUBGRAPH_COMPONENT.equalsIgnoreCase(((ComponentEditPart) obj).getCastedModel()
+					if (Constants.SUBJOB_COMPONENT.equalsIgnoreCase(((ComponentEditPart) obj).getCastedModel()
 							.getComponentName()))
 						return true;
 				}

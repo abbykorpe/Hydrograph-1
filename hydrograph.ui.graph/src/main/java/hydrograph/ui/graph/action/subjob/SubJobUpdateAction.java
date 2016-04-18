@@ -12,7 +12,7 @@
  ******************************************************************************/
 
  
-package hydrograph.ui.graph.action.subgraph;
+package hydrograph.ui.graph.action.subjob;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
@@ -20,7 +20,7 @@ import hydrograph.ui.graph.action.PasteAction;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.utility.SubGraphUtility;
+import hydrograph.ui.graph.utility.SubJobUtility;
 
 import java.util.List;
 
@@ -35,11 +35,11 @@ import org.eclipse.ui.PlatformUI;
 
 
 /**
- * The Class SubGraphUpdateAction use to update sub graph property.
+ * The Class SubJobUpdateAction use to update sub graph property.
  * 
  * @author Bitwise
  */
-public class SubGraphUpdateAction extends SelectionAction {
+public class SubJobUpdateAction extends SelectionAction {
 
 	PasteAction pasteAction;
 
@@ -53,7 +53,7 @@ public class SubGraphUpdateAction extends SelectionAction {
 	 * @param action
 	 *            the action
 	 */
-	public SubGraphUpdateAction(IWorkbenchPart part, IAction action) {
+	public SubJobUpdateAction(IWorkbenchPart part, IAction action) {
 		super(part);
 		this.pasteAction = (PasteAction) action;
 		setLazyEnablementCalculation(true);
@@ -69,8 +69,8 @@ public class SubGraphUpdateAction extends SelectionAction {
 		super.init();
 
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setText(Constants.SUBGRAPH_UPDATE);
-		setId(Constants.SUBGRAPH_UPDATE);
+		setText(Constants.SUBJOB_UPDATE);
+		setId(Constants.SUBJOB_UPDATE);
 		setHoverImageDescriptor(getImageDisDescriptor());
 		setImageDescriptor(getImageDisDescriptor());
 		setDisabledImageDescriptor(getImageDisDescriptor());
@@ -99,7 +99,7 @@ public class SubGraphUpdateAction extends SelectionAction {
 		if (selectedObjects != null && !selectedObjects.isEmpty() && selectedObjects.size() == 1) {
 			for (Object obj : selectedObjects) {
 				if (obj instanceof ComponentEditPart) {
-					if (Constants.SUBGRAPH_COMPONENT.equalsIgnoreCase(((ComponentEditPart) obj).getCastedModel()
+					if (Constants.SUBJOB_COMPONENT.equalsIgnoreCase(((ComponentEditPart) obj).getCastedModel()
 							.getComponentName()))
 						return true;
 				}
@@ -109,20 +109,20 @@ public class SubGraphUpdateAction extends SelectionAction {
 	}
 
 	/*
-	 * Updates selected subgraph property from subgraph's job file.
+	 * Updates selected subjob property from subjob's job file.
 	 */
 	@Override
 	public void run() {
 		String filePath=null;
-		Component selectedSubgraphComponent = null;
+		Component selectedSubjobComponent = null;
 		componentEditPart=(ComponentEditPart) getSelectedObjects().get(0);
 		if (getSelectedObjects() != null && !getSelectedObjects().isEmpty() && getSelectedObjects().size() == 1) {
-			selectedSubgraphComponent = componentEditPart.getCastedModel();
-			if (StringUtils.equals(Constants.SUBGRAPH_COMPONENT, selectedSubgraphComponent.getComponentName()) && selectedSubgraphComponent.getProperties().get(Constants.PATH_PROPERTY_NAME)!=null) {
-				filePath=(String) selectedSubgraphComponent.getProperties().get(Constants.PATH_PROPERTY_NAME);
-				SubGraphUtility subGraphUtility=new SubGraphUtility();
-				subGraphUtility.updateSubgraphProperty(null,filePath, selectedSubgraphComponent);
-				selectedSubgraphComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(), "VALID");
+			selectedSubjobComponent = componentEditPart.getCastedModel();
+			if (StringUtils.equals(Constants.SUBJOB_COMPONENT, selectedSubjobComponent.getComponentName()) && selectedSubjobComponent.getProperties().get(Constants.PATH_PROPERTY_NAME)!=null) {
+				filePath=(String) selectedSubjobComponent.getProperties().get(Constants.PATH_PROPERTY_NAME);
+				SubJobUtility subJobUtility=new SubJobUtility();
+				subJobUtility.updateSubgjobProperty(null,filePath, selectedSubjobComponent);
+				selectedSubjobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(), "VALID");
 				componentEditPart.changePortSettings();
 				componentEditPart.updateComponentStatus();
 				componentEditPart.refresh();

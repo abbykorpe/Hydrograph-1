@@ -31,7 +31,7 @@ import hydrograph.ui.graph.model.ComponentLabel;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
 import hydrograph.ui.graph.propertywindow.ELTPropertyWindow;
-import hydrograph.ui.graph.utility.SubGraphUtility;
+import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.beans.PropertyChangeEvent;
@@ -140,9 +140,9 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		IFigure figure = createFigureForModel();
 		figure.setOpaque(true); // non-transparent figure
 		LinkedHashMap<String, Object> properties = getCastedModel().getProperties();
-		if (StringUtils.equals(getCastedModel().getComponentName(), Constants.SUBGRAPH_COMPONENT)) {
-			SubGraphUtility graphUtility=new SubGraphUtility();
-				graphUtility.updateVersionOfSubgraph(getCastedModel());
+		if (StringUtils.equals(getCastedModel().getComponentName(), Constants.SUBJOB_COMPONENT)) {
+			SubJobUtility graphUtility=new SubJobUtility();
+				graphUtility.updateVersionOfSubjob(getCastedModel());
 		}
 		String status = (String) properties.get(Component.Props.VALIDITY_STATUS.getValue());
 		((ComponentFigure)figure).setStatus(status);
@@ -327,12 +327,12 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			
 			logger.debug("Updated dimentions: " + getCastedModel().getSize().height + ":"
 							+ getCastedModel().getSize().width);
-			if(eltPropertyWindow.isPropertyChanged() && Constants.SUBGRAPH_COMPONENT.equalsIgnoreCase(getCastedModel().getComponentName())){
-				SubGraphUtility subGraphUtility=new SubGraphUtility();
-				subGraphUtility.updateSubgraphProperty((ComponentEditPart)this,null,null);
+			if(eltPropertyWindow.isPropertyChanged() && Constants.SUBJOB_COMPONENT.equalsIgnoreCase(getCastedModel().getComponentName())){
+				SubJobUtility subJobUtility=new SubJobUtility();
+				subJobUtility.updateSubgjobProperty((ComponentEditPart)this,null,null);
 			} 
 			if(eltPropertyWindow.isPropertyChanged())
-			{updateSubgraphVersion();}
+			{updateSubjobVersion();}
 			adjustComponentFigure(getCastedModel(), getComponentFigure());
 			getCastedModel().setComponentLabel((String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue()));
 			
@@ -374,10 +374,10 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		}
 	}
 
-	private void updateSubgraphVersion() {
+	private void updateSubjobVersion() {
 		Component currentComponent=getCastedModel();
-		if(currentComponent!=null && currentComponent.getParent().isCurrentGraphIsSubgraph()){
-			currentComponent.getParent().updateSubgraphVersion();
+		if(currentComponent!=null && currentComponent.getParent().isCurrentGraphIsSubjob()){
+			currentComponent.getParent().updateSubjobVersion();
 		}
 	}
 

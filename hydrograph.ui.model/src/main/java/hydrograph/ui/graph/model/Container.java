@@ -50,8 +50,8 @@ public class Container extends Model {
 	@XStreamOmitField
 	private String linkedMainGraphPath;
 	@XStreamOmitField
-	private Object subgraphComponentEditPart;
-	private long subgraphVersion=1;
+	private Object subjobComponentEditPart;
+	private long subjobVersion=1;
 	private Map<String,String> graphRuntimeProperties;
 	
 	public Container(){
@@ -64,7 +64,7 @@ public class Container extends Model {
 	 * @return true, if the component was added, false otherwise
 	 */
 	public boolean addChild(Component component) {
-			if (isIOSubgraphAlreadyNotPresent(component.getComponentName()) && component != null
+			if (isIOSubjobAlreadyNotPresent(component.getComponentName()) && component != null
 				&& components.add(component)) {
 			component.setParent(this);
 			String compNewName = getDefaultNameForComponent(component.getPrefix());
@@ -74,36 +74,36 @@ public class Container extends Model {
 				component.setNewInstance(false);
 			}
 			firePropertyChange(CHILD_ADDED_PROP, null, component);
-			updateSubgraphVersion();
+			updateSubjobVersion();
 			return true;
 			}
 		return false;
 	}
 
 	/**
-	 * Add a subgraph to this graph.
+	 * Add a subjob to this graph.
 	 * @return true, if the component was added, false otherwise
 	 */
-	public boolean addSubGraphChild(Component component) {
-		if (isIOSubgraphAlreadyNotPresent(component.getComponentName()) && component != null && components.add(component)) {
+	public boolean addSubJobChild(Component component) {
+		if (isIOSubjobAlreadyNotPresent(component.getComponentName()) && component != null && components.add(component)) {
 			component.setParent(this);
 			firePropertyChange(CHILD_ADDED_PROP, null, component);
-			updateSubgraphVersion();
+			updateSubjobVersion();
 			return true;
 		}
 		return false;
 	}
 
 	
-	private boolean isIOSubgraphAlreadyNotPresent(String ioSubgraphComponentName) {
+	private boolean isIOSubjobAlreadyNotPresent(String ioSubjobComponentName) {
 
-		if (StringUtils.equalsIgnoreCase(Constants.INPUT_SUBGRAPH_COMPONENT_NAME, ioSubgraphComponentName)
-				|| StringUtils.equalsIgnoreCase(Constants.OUTPUT_SUBGRAPH, ioSubgraphComponentName)) {
+		if (StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB_COMPONENT_NAME, ioSubjobComponentName)
+				|| StringUtils.equalsIgnoreCase(Constants.OUTPUT_SUBJOB, ioSubjobComponentName)) {
 			for (Component component : components) {
-				if (StringUtils.equalsIgnoreCase(ioSubgraphComponentName, component.getComponentName())) {
-					MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", ioSubgraphComponentName
+				if (StringUtils.equalsIgnoreCase(ioSubjobComponentName, component.getComponentName())) {
+					MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", ioSubjobComponentName
 							+ " [" + component.getComponentLabel().getLabelContents() + "]"
-							+ Constants.SUBGRAPH_ALREADY_PRESENT_IN_CANVAS);
+							+ Constants.SUBJOB_ALREADY_PRESENT_IN_CANVAS);
 					return false;
 				}
 			}
@@ -131,7 +131,7 @@ public class Container extends Model {
 			componentNextNameSuffixes.put(component.getPrefix(), nextSuffix);
 			}
 			firePropertyChange(CHILD_REMOVED_PROP, null, component);
-			updateSubgraphVersion();
+			updateSubjobVersion();
 			return true;
 		}
 		return false;
@@ -256,12 +256,12 @@ public class Container extends Model {
 	}
 
 	/**
-	 * Checks whether the graph is main or subgraph
+	 * Checks whether the graph is main or subjob
 	 */
-	public boolean isCurrentGraphIsSubgraph() {
+	public boolean isCurrentGraphIsSubjob() {
 		for (Component component : getChildren()) {
-			if (StringUtils.equalsIgnoreCase(Constants.INPUT_SUBGRAPH, component.getComponentName())
-					|| StringUtils.equalsIgnoreCase(Constants.OUTPUT_SUBGRAPH, component.getComponentName()))
+			if (StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB, component.getComponentName())
+					|| StringUtils.equalsIgnoreCase(Constants.OUTPUT_SUBJOB, component.getComponentName()))
 				return true;
 		}
 		return false;
@@ -278,24 +278,24 @@ public class Container extends Model {
 	}
 
 
-	public Object getSubgraphComponentEditPart() {
-		return subgraphComponentEditPart;
+	public Object getSubjobComponentEditPart() {
+		return subjobComponentEditPart;
 	}
 
 
-	public void setSubgraphComponentEditPart(Object subgraphComponentEditPart) {
-		this.subgraphComponentEditPart = subgraphComponentEditPart;
+	public void setSubjobComponentEditPart(Object subjobComponentEditPart) {
+		this.subjobComponentEditPart = subjobComponentEditPart;
 	}
 
 
-	public long getSubgraphVersion() {
-		return subgraphVersion;
+	public long getSubjobVersion() {
+		return subjobVersion;
 	}
 
 
-	public void updateSubgraphVersion() {
-		if(!isVersionAlreadyUpdated && isCurrentGraphIsSubgraph()){
-			this.subgraphVersion++;
+	public void updateSubjobVersion() {
+		if(!isVersionAlreadyUpdated && isCurrentGraphIsSubjob()){
+			this.subjobVersion++;
 			isVersionAlreadyUpdated=true;
 		}
 	}

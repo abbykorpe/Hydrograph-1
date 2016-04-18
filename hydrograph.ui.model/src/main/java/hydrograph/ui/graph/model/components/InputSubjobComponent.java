@@ -14,38 +14,23 @@
  
 package hydrograph.ui.graph.model.components;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.model.categories.SubgraphCategory;
-
-import org.apache.commons.lang.StringUtils;
-
-
+import hydrograph.ui.graph.model.categories.SubjobCategory;
 /**
- * Return sub graph component converter.
- * 
+ * Return sub graph component converter. 
  * @author Bitwise
- * 
+ *
  */
-public class SubgraphComponent extends SubgraphCategory {
+public class InputSubjobComponent extends SubjobCategory{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2406782326279531800L;
+	
 
 	@Override
 	public String getConverter() {
-		String type = (String) this.getProperties().get(Constants.TYPE);
-		if (StringUtils.isNotBlank(type)) {
-			if (type.equalsIgnoreCase(Constants.INPUT))
-				return "hydrograph.ui.engine.converter.impl.InputSubGraphConverter";
-			if (type.equalsIgnoreCase(Constants.OUTPUT))
-				return "hydrograph.ui.engine.converter.impl.OutputSubGraphConverter";
-			if (type.equalsIgnoreCase(Constants.OPERATION))
-				return "hydrograph.ui.engine.converter.impl.OperationSubGraphConverter";
-		
-		}
-		return "hydrograph.ui.engine.converter.impl.CommandSubgraphConverter";
+			return "hydrograph.ui.engine.converter.impl.InputComponentSubJobConverter";
 
 	}
 

@@ -86,7 +86,7 @@ public abstract class OutputConverter extends Converter {
 
 	protected ComponentsOutputSchema fetchPropagatedSchema() {
 		ComponentsOutputSchema componentsOutputSchema = null;
-		if(!StringUtils.equals(Constants.OUTPUT_SUBGRAPH, component.getComponentName())){
+		if(!StringUtils.equals(Constants.OUTPUT_SUBJOB, component.getComponentName())){
 		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) properties
 				.get(Constants.SCHEMA_TO_PROPAGATE);
 		if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null)

@@ -34,9 +34,9 @@ import hydrograph.ui.graph.action.PasteAction;
 import hydrograph.ui.graph.action.debug.AddWatcherAction;
 import hydrograph.ui.graph.action.debug.RemoveWatcherAction;
 import hydrograph.ui.graph.action.debug.WatchRecordAction;
-import hydrograph.ui.graph.action.subgraph.SubGraphAction;
-import hydrograph.ui.graph.action.subgraph.SubGraphOpenAction;
-import hydrograph.ui.graph.action.subgraph.SubGraphUpdateAction;
+import hydrograph.ui.graph.action.subjob.SubJobAction;
+import hydrograph.ui.graph.action.subjob.SubJobOpenAction;
+import hydrograph.ui.graph.action.subjob.SubJobUpdateAction;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.debug.service.DebugRestClient;
 import hydrograph.ui.graph.editorfactory.GenrateContainerData;
@@ -51,7 +51,7 @@ import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
-import hydrograph.ui.graph.utility.SubGraphUtility;
+import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.utils.ParameterFileManager;
 import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
@@ -708,15 +708,15 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action=new SubGraphAction(this, pasteAction);
+		action=new SubJobAction(this, pasteAction);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action=new SubGraphOpenAction(this, pasteAction);
+		action=new SubJobOpenAction(this, pasteAction);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 		
-		action=new SubGraphUpdateAction(this, pasteAction);
+		action=new SubJobUpdateAction(this, pasteAction);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 		
@@ -810,7 +810,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 
 	private void setMainGraphDirty(boolean dirty) {
-		if(container.getLinkedMainGraphPath()!=null && container.isCurrentGraphIsSubgraph()){
+		if(container.getLinkedMainGraphPath()!=null && container.isCurrentGraphIsSubjob()){
 			for(IEditorReference editorReference:PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences()){
 				if(StringUtils.equals(editorReference.getTitleToolTip(), container.getLinkedMainGraphPath())){
 					if(editorReference.getEditor(false) instanceof ELTGraphicalEditor);
@@ -849,7 +849,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			genrateContainerData.storeContainerData();
 			
 			saveParameters();
-			updateMainGraphOnSavingSubgraph();
+			updateMainGraphOnSavingSubjob();
 		} catch (CoreException | IOException ce) {
 			logger.error(METHOD_NAME , ce);
 			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n"+ce.getMessage());
@@ -1218,7 +1218,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	@Override
 	public void dispose() {
 		super.dispose();
-		removeSubgraphProperties(isDirty());
+		removeSubjobProperties(isDirty());
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
 		deleteDebugFiles();
@@ -1263,14 +1263,14 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	
 
 	
-	private void removeSubgraphProperties(Boolean isDirty) {
+	private void removeSubjobProperties(Boolean isDirty) {
 		if (isDirty) {
-			loadFileAndDeleteSubgraphProperties();
-		} else if (deleteSubgraphProperties(getContainer())!=null)
+			loadFileAndDeleteSubjobProperties();
+		} else if (deleteSubjobProperties(getContainer())!=null)
 			doSave(null);
 	}		
 
-	private void loadFileAndDeleteSubgraphProperties() {
+	private void loadFileAndDeleteSubjobProperties() {
 		if(getEditorInput() instanceof IFileEditorInput){
 			FileEditorInput fileEditorInput=(FileEditorInput) getEditorInput();
 				stroeFileInWorkspace(fileEditorInput.getFile());
@@ -1288,7 +1288,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		if (file != null) {
 			XStream xStream = new XStream();
 			Container container = (Container) xStream.fromXML(file);
-			container = deleteSubgraphProperties(container);
+			container = deleteSubjobProperties(container);
 			if (container != null) {
 				try {
 					FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -1313,7 +1313,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					XStream xStream = new XStream();
 					Container container = (Container) xStream.fromXML(filenputStream);
 					filenputStream.close();
-					container = deleteSubgraphProperties(container);
+					container = deleteSubjobProperties(container);
 					if (container != null) {
 						xStream.toXML(container, out);
 						if (iFile.exists())
@@ -1527,16 +1527,16 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		return uniqueJobId;
 	}
  
-	public Container deleteSubgraphProperties(Container container) {
-		hydrograph.ui.graph.model.Component oldSubgraph=null;
-		if (container!=null && container.isCurrentGraphIsSubgraph()) {
+	public Container deleteSubjobProperties(Container container) {
+		hydrograph.ui.graph.model.Component oldSubjob=null;
+		if (container!=null && container.isCurrentGraphIsSubjob()) {
 
 			for (int i = 0; i < container.getChildren().size(); i++) {
-				if (Constants.INPUT_SUBGRAPH.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
+				if (Constants.INPUT_SUBJOB.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
 					container.getChildren().get(i).getProperties().put(Constants.SCHEMA_TO_PROPAGATE, new HashMap<>());
 				}
-				if (Constants.OUTPUT_SUBGRAPH.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
-					oldSubgraph=(hydrograph.ui.graph.model.Component) container.getChildren().get(i).getProperties().put(Constants.SUBGRAPH_COMPONENT, null);
+				if (Constants.OUTPUT_SUBJOB.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
+					oldSubjob=(hydrograph.ui.graph.model.Component) container.getChildren().get(i).getProperties().put(Constants.SUBJOB_COMPONENT, null);
 				}
 			}
 			return container;
@@ -1544,31 +1544,31 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			return null;
 	}
 
-	private void updateMainGraphOnSavingSubgraph() {
-		hydrograph.ui.graph.model.Component subgraphComponent=null;
-		if (container != null && container.isCurrentGraphIsSubgraph()) {
+	private void updateMainGraphOnSavingSubjob() {
+		hydrograph.ui.graph.model.Component subjobComponent=null;
+		if (container != null && container.isCurrentGraphIsSubjob()) {
 			for (int i = 0; i < container.getChildren().size(); i++) {
-				if (Constants.OUTPUT_SUBGRAPH.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
-					subgraphComponent = (hydrograph.ui.graph.model.Component) container.getChildren().get(i)
-							.getProperties().get(Constants.SUBGRAPH_COMPONENT);
+				if (Constants.OUTPUT_SUBJOB.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
+					subjobComponent = (hydrograph.ui.graph.model.Component) container.getChildren().get(i)
+							.getProperties().get(Constants.SUBJOB_COMPONENT);
 					break;
 				}
 			}
-			if(subgraphComponent!=null){
+			if(subjobComponent!=null){
 				String path=getEditorInput().getToolTipText();
 				if (getEditorInput() instanceof IFileEditorInput)
 					path = ((IFileEditorInput) getEditorInput()).getFile().getFullPath().toString();
-				IPath subgraphJobFilePath=new Path(path);
-				SubGraphUtility subGraphUtility=new SubGraphUtility();
-				subGraphUtility.updateContainerAndSubgraph(container, subgraphComponent, subgraphJobFilePath);
-				((ComponentEditPart)container.getSubgraphComponentEditPart()).changePortSettings();
+				IPath subJobFilePath=new Path(path);
+				SubJobUtility subJobUtility=new SubJobUtility();
+				subJobUtility.updateContainerAndSubjob(container, subjobComponent, subJobFilePath);
+				((ComponentEditPart)container.getSubjobComponentEditPart()).changePortSettings();
 			}
 		}
 	}
 	
 	private void configureKeyboardShortcuts() {
 	    GraphicalViewerKeyHandler keyHandler = new GraphicalViewerKeyHandler(getGraphicalViewer());
-	    keyHandler.put(KeyStroke.getPressed(SWT.F4,0), getActionRegistry().getAction(Constants.SUBGRAPH_OPEN));
+	    keyHandler.put(KeyStroke.getPressed(SWT.F4,0), getActionRegistry().getAction(Constants.SUBJOB_OPEN));
 	    getGraphicalViewer().setKeyHandler(keyHandler);
 
 	  }

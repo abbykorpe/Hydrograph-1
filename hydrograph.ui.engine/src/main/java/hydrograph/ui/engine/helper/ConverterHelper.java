@@ -547,7 +547,7 @@ public class ConverterHelper {
 		if (isMultipleLinkAllowed(link.getSource(), link.getSourceTerminal()))
 			inSocketId = link.getSource().getPort(link.getSourceTerminal()).getPortType() + link.getLinkNumber();
 
-		if (link.getSource().getComponentName().equals("InputSubgraphComponent")) {
+		if (link.getSource().getComponentName().equals("InputSubjobComponent")) {
 			return inSocketId.replace("out", "in");
 		}
 		return inSocketId;

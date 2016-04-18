@@ -60,7 +60,7 @@ public class SchemaPropagation {
 		LOGGER.debug("Initiating recursive schema propagation");
 
 		if (component != null && schemaMap != null)
-			if (StringUtils.equals(Constants.SUBGRAPH_COMPONENT_CATEGORY, component.getCategory()))
+			if (StringUtils.equals(Constants.SUBJOB_COMPONENT_CATEGORY, component.getCategory()))
 				appplySchemaToTargetComponentsFromSchemaMap(component, schemaMap, Constants.FIXED_OUTSOCKET_ID);
 			else
 				appplySchemaToTargetComponentsFromSchemaMap(component, schemaMap, null);
@@ -87,18 +87,18 @@ public class SchemaPropagation {
 	private void applySchemaToTargetComponents(Component destinationComponent, String targetTerminal,
 			ComponentsOutputSchema componentsOutputSchema) {
 		LOGGER.debug("Applying Schema to :" + destinationComponent.getComponentLabel());
-		if (!isInputSubGraphComponent(destinationComponent)
-				&& StringUtils.equals(Constants.SUBGRAPH_COMPONENT_CATEGORY, destinationComponent.getCategory())
+		if (!isInputSubJobComponent(destinationComponent)
+				&& StringUtils.equals(Constants.SUBJOB_COMPONENT_CATEGORY, destinationComponent.getCategory())
 				&& targetTerminal != null) {
-			propagateSchemaFromSubgraph(destinationComponent, targetTerminal, componentsOutputSchema);
+			propagateSchemaFromSubJob(destinationComponent, targetTerminal, componentsOutputSchema);
 		}
 		setSchemaMapOfComponent(destinationComponent, componentsOutputSchema);
 		if (destinationComponent != null && destinationComponent.getSourceConnections().isEmpty()) {
 //			mainLinkList.clear();
 			return;
 		}
-		if (!StringUtils.equals(Constants.SUBGRAPH_COMPONENT_CATEGORY, destinationComponent.getCategory())
-				|| isInputSubGraphComponent(destinationComponent)) {
+		if (!StringUtils.equals(Constants.SUBJOB_COMPONENT_CATEGORY, destinationComponent.getCategory())
+				|| isInputSubJobComponent(destinationComponent)) {
 			for (Link link : destinationComponent.getSourceConnections()) {
 				applySchemaToLinkedComponents(link,componentsOutputSchema);
 			}
@@ -135,21 +135,21 @@ public class SchemaPropagation {
 	private ComponentsOutputSchema getComponentsOutputSchemaFromMap(Component destinationComponent,
 			Link link, ComponentsOutputSchema componentsOutputSchema) {
 		Map<String , ComponentsOutputSchema> schemaMap=(Map<String, ComponentsOutputSchema>) destinationComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
-		if(isInputSubGraphComponent(destinationComponent) && schemaMap!=null){
+		if(isInputSubJobComponent(destinationComponent) && schemaMap!=null){
 			componentsOutputSchema = schemaMap.get(link.getSourceTerminal());	
 		}
 		return componentsOutputSchema ;
 	}
 
-	private boolean isInputSubGraphComponent(Component component) {
-		if (StringUtils.equals(Constants.INPUT_SUBGRAPH, component.getComponentName()))
+	private boolean isInputSubJobComponent(Component component) {
+		if (StringUtils.equals(Constants.INPUT_SUBJOB, component.getComponentName()))
 			return true;
 		return false;
 	}
 
 	private void setSchemaMapOfComponent(Component component, ComponentsOutputSchema componentsOutputSchema) {
 		Map<String, ComponentsOutputSchema>  oldComponentsOutputSchemaMap=null;
-		if (!StringUtils.equals(Constants.SUBGRAPH_COMPONENT_CATEGORY, component.getCategory())) {
+		if (!StringUtils.equals(Constants.SUBJOB_COMPONENT_CATEGORY, component.getCategory())) {
 			Map<String, ComponentsOutputSchema> newComponentsOutputSchemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
 			newComponentsOutputSchemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
 			oldComponentsOutputSchemaMap = (Map<String, ComponentsOutputSchema>) component.getProperties().put(
@@ -214,34 +214,34 @@ public class SchemaPropagation {
 		component.getProperties().put(Constants.SCHEMA_PROPERTY_NAME, schema);
 	}
 	
-	private void propagateSchemaFromSubgraph(Component subGraphComponent, String targetTerminal,
+	private void propagateSchemaFromSubJob(Component subJobComponent, String targetTerminal,
 			ComponentsOutputSchema componentsOutputSchema) {
-		String outPutTargetTerminal = getTagetTerminalForSubgraph(targetTerminal);
+		String outPutTargetTerminal = getTagetTerminalForSubjob(targetTerminal);
 
-		if (subGraphComponent.getProperties().get(Constants.INPUT_SUBGRAPH) != null) {
-			Component inputSubgraphComponent = (Component) subGraphComponent.getProperties().get(
-					Constants.INPUT_SUBGRAPH);
-			Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) inputSubgraphComponent
+		if (subJobComponent.getProperties().get(Constants.INPUT_SUBJOB) != null) {
+			Component inputSubjobComponent = (Component) subJobComponent.getProperties().get(
+					Constants.INPUT_SUBJOB);
+			Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) inputSubjobComponent
 					.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
 			schemaMap.put(outPutTargetTerminal, componentsOutputSchema);
-			for (Link link : inputSubgraphComponent.getSourceConnections()) {
+			for (Link link : inputSubjobComponent.getSourceConnections()) {
 				if (StringUtils.equals(link.getSourceTerminal(), outPutTargetTerminal))
 					 applySchemaToLinkedComponents(link,componentsOutputSchema);
 			}
 		}
 
-		else if (StringUtils.equals(Constants.OUTPUT_SUBGRAPH, subGraphComponent.getComponentName())) {
+		else if (StringUtils.equals(Constants.OUTPUT_SUBJOB, subJobComponent.getComponentName())) {
 
 			// appplySchemaToTargetComponentsFromSchemaMap((Component)
-			// subGraphComponent.getProperties().get(Constants.SUBGRAPH_COMPONENT), schemaMap,
-			// getTagetTerminalForSubgraph(targetTerminal));
-			propagateSchemaFromOutputSubgraphComponent(subGraphComponent, outPutTargetTerminal, componentsOutputSchema);
+			// subJobComponent.getProperties().get(Constants.SUBJOB_COMPONENT), schemaMap,
+			// getTagetTerminalForSubjob(targetTerminal));
+			propagateSchemaFromOutputSubjobComponent(subJobComponent, outPutTargetTerminal, componentsOutputSchema);
 
 		}
 	}
 
-	private boolean isOutputSubgraphComponent(Component subGraphComponent) {
-		if (StringUtils.equals(Constants.OUTPUT_SUBGRAPH, subGraphComponent.getComponentName()))
+	private boolean isOutputSubjobComponent(Component subJobComponent) {
+		if (StringUtils.equals(Constants.OUTPUT_SUBJOB, subJobComponent.getComponentName()))
 			return true;
 		return false;
 	}
@@ -370,25 +370,25 @@ public class SchemaPropagation {
 		return componentsOutputSchema;
 	}
 
-	private String getTagetTerminalForSubgraph(String targetTerminal) {
-		String targetTerminalForSubgraph = Constants.FIXED_OUTSOCKET_ID;
+	private String getTagetTerminalForSubjob(String targetTerminal) {
+		String targetTerminalForSubjob = Constants.FIXED_OUTSOCKET_ID;
 		if (StringUtils.isNotEmpty(targetTerminal))
-			targetTerminalForSubgraph = targetTerminal.replace(Constants.INPUT_SOCKET_TYPE,
+			targetTerminalForSubjob = targetTerminal.replace(Constants.INPUT_SOCKET_TYPE,
 					Constants.OUTPUT_SOCKET_TYPE);
-		return targetTerminalForSubgraph;
+		return targetTerminalForSubjob;
 
 	}
 
-	private void propagateSchemaFromOutputSubgraphComponent(Component outputSubraphComponent, String targetTerminal,
+	private void propagateSchemaFromOutputSubjobComponent(Component outputSubjobComponent, String targetTerminal,
 			ComponentsOutputSchema componentsOutputSchema) {
 
-		Component parentSubgraph = (Component) outputSubraphComponent.getProperties().get(Constants.SUBGRAPH_COMPONENT);
-		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) outputSubraphComponent
+		Component parentSubjob = (Component) outputSubjobComponent.getProperties().get(Constants.SUBJOB_COMPONENT);
+		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) outputSubjobComponent
 				.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
 		if (schemaMap != null)
 			schemaMap.put(targetTerminal, componentsOutputSchema);
-		if (parentSubgraph != null) {
-			for (Link link : parentSubgraph.getSourceConnections()) {
+		if (parentSubjob != null) {
+			for (Link link : parentSubjob.getSourceConnections()) {
 				if (StringUtils.equals(link.getSourceTerminal(), targetTerminal))
 					 applySchemaToLinkedComponents(link,componentsOutputSchema);
 			}
