@@ -1,3 +1,4 @@
+
 /********************************************************************************
  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +15,10 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
@@ -88,25 +91,45 @@ public class RunTimePropertyCellModifier implements ICellModifier {
 	 *            the value
 	 */
 	public void modify(Object element, String property, Object value) {
-
+		if (viewer.getData(Constants.WINDOW_TITLE) != null
+				&& StringUtils.equalsIgnoreCase((String) viewer.getData(Constants.WINDOW_TITLE),
+						Constants.SUBJOB_WINDOW_LABEL))
+			customizedModifyForSubgraph(element, property, value);
+		else {
 		if (element instanceof Item)
 			element = ((Item) element).getData();
 
-		RuntimeProperties p = (RuntimeProperties) element;
+		RuntimeProperties runtimePropertyRow = (RuntimeProperties) element;
 		
-		if (PROPERTY_NAME.equals(property)){
+		if (StringUtils.equals(PROPERTY_NAME,property)){
 			if(ParameterUtil.isParameter((String)value)){
-				p.setPropertyValue((String) value);
+				runtimePropertyRow.setPropertyValue((String) value);
 			}
-			p.setPropertyName(((String) value));
+			runtimePropertyRow.setPropertyName(((String) value));
 		}
-		else if (PROPERTY_VALUE.equals(property)){
+		else if (StringUtils.equals(PROPERTY_VALUE,property)){
 			if(ParameterUtil.isParameter((String)value)){
-				p.setPropertyName((String) value);
+				runtimePropertyRow.setPropertyName((String) value);
 			}
-			p.setPropertyValue((String) value);
+			runtimePropertyRow.setPropertyValue((String) value);
+		}
 		}
 		// Force the viewer to refresh
 		viewer.refresh();
 	}
+
+	private void customizedModifyForSubgraph(Object element, String property, Object value) {
+		if (element instanceof Item)
+			element = ((Item) element).getData();
+
+		RuntimeProperties runtimePropertyRow = (RuntimeProperties) element;
+
+		if (StringUtils.equals(PROPERTY_NAME,property)) {
+			runtimePropertyRow.setPropertyName(((String) value));
+		} else if (StringUtils.equals(PROPERTY_VALUE,property)) {
+			runtimePropertyRow.setPropertyValue((String) value);
+		}
+	}
+		
+	
 }

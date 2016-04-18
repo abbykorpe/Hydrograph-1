@@ -425,6 +425,7 @@ public class RuntimePropertyDialog extends Dialog {
 	// Method for creating Table
 	private void createTable(Composite composite) {
 		tableViewer = new TableViewer(composite, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
+		tableViewer.setData(Constants.WINDOW_TITLE, windowLabel);
 		table = tableViewer.getTable();
 		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_table.heightHint = 422;
@@ -516,7 +517,7 @@ public class RuntimePropertyDialog extends Dialog {
 	 * 
 	 * @return true, if successful
 	 */
-	protected boolean validate() {
+	private boolean validate() {
 		int propertyCounter = 0;
 		for (RuntimeProperties runtimeProperties : propertyList) {
 			if (runtimeProperties.getPropertyName().trim().isEmpty() || runtimeProperties.getPropertyValue().trim().isEmpty()) {
@@ -592,6 +593,11 @@ public class RuntimePropertyDialog extends Dialog {
 		}		
 	}
 
+	/**
+	 * This method is used to determine whether ok button is pressed after any update.
+	 * 
+	 * @return
+	 */
 	public boolean isOkPressedAfterUpdate(){
 		return this.okPressedAfterUpdate;
 	}

@@ -184,6 +184,7 @@ public class Constants {
 	public static final String SUBJOB_ACTION_ToolTip = "Path operations";
 	public static final String STANDALONE_SUBJOB = "StandAlone_Subjob";
 	public static final String SUBJOB_WINDOW_LABEL = "Subjob Parameters";
+	public static final String WINDOW_TITLE="WINDOW TITLE";
 	public static final String JOB_PATH="path";
 	public static final String JOB_EXTENSION=".job";
 	public static final String XML_EXTENSION=".xml";
