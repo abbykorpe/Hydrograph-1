@@ -270,22 +270,22 @@ public class TransformWidget extends AbstractWidget {
 			currentFieldsInProppogatedSchemaObject.add(gridRow.getFieldName());
 		}
 
-		for (String inputField : mapFields.keySet()) {
-			tempSchemaGridRow = (BasicSchemaGridRow) getFieldSchema(inputField);
+	  for (Map.Entry<String,String> entry: mapFields.entrySet()) {
+			tempSchemaGridRow = (BasicSchemaGridRow) getFieldSchema(entry.getValue());
 			BasicSchemaGridRow schemaGridRow=null ;
 			if (tempSchemaGridRow != null) {
 				schemaGridRow= (BasicSchemaGridRow) tempSchemaGridRow.copy();
-				schemaGridRow.setFieldName(inputField);
+				schemaGridRow.setFieldName(entry.getKey());
 			}
 			else{
 				SchemaPropagationHelper schemaPropagationHelper = new SchemaPropagationHelper();
-				schemaGridRow = schemaPropagationHelper.createSchemaGridRow(inputField);
+				schemaGridRow = schemaPropagationHelper.createSchemaGridRow(entry.getKey());
 			}
-				if (!currentFieldsInProppogatedSchemaObject.contains(inputField) && !schema.getGridRow().contains(schemaGridRow)) {
+				if (!currentFieldsInProppogatedSchemaObject.contains(entry.getKey()) && !schema.getGridRow().contains(schemaGridRow)) {
 							schema.getGridRow().add(schemaGridRow);
 				} else {
 					for (int index = 0; index < schema.getGridRow().size(); index++) {
-						if (schema.getGridRow().get(index).getFieldName().equals(inputField)) {
+						if (schema.getGridRow().get(index).getFieldName().equals(entry.getKey())) {
 							schema.getGridRow().set(index, schemaGridRow);
 						}
 					}

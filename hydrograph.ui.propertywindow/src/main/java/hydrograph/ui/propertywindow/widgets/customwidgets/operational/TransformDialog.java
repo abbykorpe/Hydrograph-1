@@ -94,6 +94,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class TransformDialog extends Dialog implements IOperationClassDialog {
 
+	private static final String OPERATION_MAP_OR_PASSTHROUGH_FIELD_S_CANNOT_BE_DELETED_FROM_OUTPUT_TABLE_PLEASE_DELETE_IT_FROM_RESPECTIVE_TABLE = "Operation,Map or Passthrough Field(s) cannot be deleted from output table.Please delete it from respective table.";
 	private static final String OUTPUT_DELETE_BUTTON = "outputDeleteButton";
 	private static final String OUTPUT_ADD_BUTTON = "outputAddButton";
 	private static final String OPERATION_OUTPUT_FIELD_TABLE_VIEWER = "operationOutputFieldTableViewer";
@@ -238,8 +239,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		rightComposite.setLayoutData(gridData);
 
 		Composite buttonComposite = new Composite(rightComposite, SWT.NONE);
-		buttonComposite.setLayout(new GridLayout(2, false));
-		buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		buttonComposite.setLayout(new GridLayout(3, false));
+		buttonComposite.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 
 		Composite outputFieldComposite = new Composite(rightComposite, SWT.NONE);
 		outputFieldComposite.setLayout(new GridLayout(1, false));
@@ -270,7 +271,32 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		btnPull.setBounds(20, 10, 20, 20);
 
 		btnPull.setText(Messages.PULL_BUTTON_LABEL);
+	
+		Label addLabel = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 60, 3, 20, 15 }, "", new Image(
+				null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		addLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseUp(MouseEvent e) {
+				FilterProperties f = new FilterProperties();
+				f.setPropertyname("");
 
+				if (!transformMapping.getOutputFieldList().contains(f)) {
+
+					transformMapping.getOutputFieldList().add(f);
+					((List<FilterProperties>)outputFieldViewer.getInput()).add(f);
+					outputFieldViewer.refresh();
+					
+					int i = ((List<FilterProperties>)outputFieldViewer.getInput()).size() == 0 ? ((List<FilterProperties>)outputFieldViewer.getInput()).size()
+							:((List<FilterProperties>)outputFieldViewer.getInput()).size() - 1;
+					outputFieldViewer.editElement(outputFieldViewer.getElementAt(i), 0);
+
+				}
+			}
+
+		});
+		
+		
+		
 		Label deletLabel = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 160, 10, 20, 15 }, "",
 				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
 		deletLabel.addMouseListener(new MouseAdapter() {
@@ -282,35 +308,42 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				int temp = table.getSelectionIndex();
 				int[] indexs = table.getSelectionIndices();
 				if (temp == -1) {
-					WidgetUtility.errorMessage(Messages.SelectRowToDelete);
+				WidgetUtility.errorMessage(Messages.SelectRowToDelete);
+				  
 				} else {
-					table.remove(indexs);
-					ArrayList tempList = new ArrayList();
+					
+					List<FilterProperties> tempList = new ArrayList<FilterProperties >();
 					for (int index : indexs) {
 
-						tempList.add(temporaryOutputFieldMap.get(index));
+						tempList.add(((List<FilterProperties>)outputFieldViewer.getInput()).get(index));
 					}
-					for (Map.Entry<String, List<FilterProperties>> entry: temporaryOutputFieldMap.entrySet()) {
 					
-						entry.getValue().removeAll(tempList);
+					if(!transformMapping.getOutputFieldList().containsAll(tempList))
+					{
+						WidgetUtility.errorMessage(OPERATION_MAP_OR_PASSTHROUGH_FIELD_S_CANNOT_BE_DELETED_FROM_OUTPUT_TABLE_PLEASE_DELETE_IT_FROM_RESPECTIVE_TABLE);
+					}	
+					else
+					{	
+						table.remove(indexs);
+					for(FilterProperties filterProperties:tempList)
+					{		
+						transformMapping.getOutputFieldList().remove(filterProperties);
 					}
-					transformMapping.getOutputFieldList().removeAll(tempList);
+					
+					}
 					refreshOutputTable();
-
-					showHideValidationMessage();
-				}
+            	}
 			}
 
 		});
-		deletLabel.setEnabled(false);
+		
 
-		outputFieldViewer = new TableViewer(outputFieldComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		outputFieldViewer = new TableViewer(outputFieldComposite, SWT.BORDER | SWT.FULL_SELECTION|SWT.MULTI);
 		setTableViewer(outputFieldViewer, outputFieldComposite, new String[] { Messages.OUTPUT_FIELD },
 				new ELTFilterContentProvider(), new OperationLabelProvider());
 		outputFieldViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 		outputFieldViewer.setCellModifier(new ELTCellModifier(outputFieldViewer));
 		outputFieldViewer.setLabelProvider(new ELTFilterLabelProvider());
-
 		refreshOutputTable();
 		setIsOperationInputFieldDuplicate();
 		showHideValidationMessage();
@@ -1025,6 +1058,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		}
 		DragDropUtility.unionFilter(transformMapping.getOutputFieldList(), validatorOutputFields);
+	   
+		
 		outputFieldViewer.setInput(validatorOutputFields);
 		outputFieldViewer.refresh();
 		mappingTableViewer.refresh();

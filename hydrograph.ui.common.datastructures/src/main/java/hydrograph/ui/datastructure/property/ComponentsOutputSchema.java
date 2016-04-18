@@ -153,9 +153,9 @@ public class ComponentsOutputSchema implements IDataStructure {
 		FixedWidthGridRow targetFixedWidthGridRow;
 		FixedWidthGridRow sourceFixedWidthGridRow;
 		for (Entry<String, String> entry : mapFields.entrySet()) {
-			targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(entry.getValue());
+			targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(entry.getKey());
 			if (targetFixedWidthGridRow != null && sourceOutputSchema!=null) {
-				sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(entry.getKey());
+				sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(entry.getValue());
              	if (sourceFixedWidthGridRow != null) {
 					targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
 					targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
