@@ -137,6 +137,11 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			fixedWidthGridRow.setFieldName(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)) {
+			if(StringUtils.equals(DataType.BIGDECIMAL_CLASS.getValue(), GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]))
+			{
+				fixedWidthGridRow.setScaleType(2); 
+				fixedWidthGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[2]);
+			}
 			fixedWidthGridRow.setDataType((Integer) value);
 			fixedWidthGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]); 
 		}
