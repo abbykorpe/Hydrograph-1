@@ -13,16 +13,6 @@
 
 package hydrograph.ui.engine.converter.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-
-import hydrograph.ui.engine.converter.InputConverter;
-import hydrograph.ui.engine.helper.ConverterHelper;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.ifparquet.TypeInputDelimitedOutSocket;
@@ -30,19 +20,26 @@ import hydrograph.engine.jaxb.inputtypes.ParquetFile;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
+import hydrograph.ui.engine.converter.InputConverter;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.logging.factory.LogFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
 
 
 public class InputParquetConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputParquetConverter.class);
-	private ConverterHelper converterHelper;
 
 	public InputParquetConverter(Component component) {
 		super(component);
 		this.baseComponent = new ParquetFile();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

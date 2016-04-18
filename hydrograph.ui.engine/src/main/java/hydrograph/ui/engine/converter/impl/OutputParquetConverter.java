@@ -23,7 +23,6 @@ import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.OutputConverter;
-import hydrograph.ui.engine.helper.ConverterHelper;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -36,14 +35,12 @@ import org.slf4j.Logger;
 public class OutputParquetConverter extends OutputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputParquetConverter.class);
-	private ConverterHelper converterHelper;
 
 	public OutputParquetConverter(Component component) {
 		super(component);
 		this.component = component;
 		this.properties = component.getProperties();
 		this.baseComponent = new ParquetFile();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override
