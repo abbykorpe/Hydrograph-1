@@ -66,8 +66,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.ServerSocket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -1221,6 +1224,22 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
 		deleteDebugFiles();
+		
+		try {
+			closeSocket();
+			logger.info("Socket closed @ 8004");
+		} catch (UnknownHostException e) {
+			logger.error(e.getMessage());
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+	}
+	
+	private void closeSocket() throws UnknownHostException, IOException{
+		ServerSocket serverSocket = new ServerSocket(8004, 1, InetAddress.getLocalHost());
+		if(!serverSocket.isClosed()){
+			serverSocket.close();
+		}
 	}
 	
 	private void deleteDebugFiles() {
@@ -1239,28 +1258,16 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			DebugRestClient debugRestClient = new DebugRestClient();
 			debugRestClient.removeDebugFiles("localhost", "8004", basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
 			logger.debug("debug files removed from local");
-			//if(job!=null){
-				/*DebugFilesReader debugFilesReader = new DebugFilesReader(job.getBasePath(), uniqueJobId, "IFDelimite_01", "out0");
-				try {
-						debugFilesReader.delete();
-						logger.info("debug files removed from local");
-				} catch (FileNotFoundException e) {
-					logger.debug(e.getMessage());
-				} catch (IllegalArgumentException e) {
-					logger.debug(e.getMessage());
-				} catch (IOException e) {
-					logger.debug(e.getMessage());
-					logger.info("debug files not exists at given location");
-				}*/
 		}else{
 			String basePath = job.getBasePath();
 			String ipAddress = job.getIpAddress();
 			String userID = job.getUserId();
 			String password = job.getPassword();
+			String port_no = job.getPort_no();
 			//new DebugFilesReader(arg0, arg1, arg2, arg3, arg4, arg5)
 			//ipAddress, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password
 			DebugRestClient debugRestClient = new DebugRestClient();
-			debugRestClient.removeDebugFiles(ipAddress, "8004", basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
+			debugRestClient.removeDebugFiles(ipAddress, port_no, basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
 			logger.debug("debug files removed from cluster");
 		}
 		DebugHandler.getJobMap().remove(currentJob);

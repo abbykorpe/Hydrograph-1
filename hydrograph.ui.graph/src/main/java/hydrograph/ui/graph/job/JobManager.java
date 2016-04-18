@@ -19,6 +19,7 @@ import hydrograph.ui.common.util.MultiParameterFileUIUtils;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.debug.service.ViewDataServiceInitiator;
 import hydrograph.ui.graph.handler.DebugHandler;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
@@ -252,6 +253,7 @@ public class JobManager {
 			}).start();
 		} else {
 			setLocalMode(true);
+			ViewDataServiceInitiator.startService();
 			new Thread(new Runnable() {
 
 				@Override

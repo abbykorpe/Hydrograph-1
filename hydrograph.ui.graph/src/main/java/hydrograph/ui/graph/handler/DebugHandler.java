@@ -118,8 +118,6 @@ public class DebugHandler  extends AbstractHandler {
 	
 	@Override
 	public Object execute(ExecutionEvent event){
-		 
-
 		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 			try{
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
