@@ -517,7 +517,7 @@ public class RuntimePropertyDialog extends Dialog {
 	 * 
 	 * @return true, if successful
 	 */
-	protected boolean validate() {
+	private boolean validate() {
 		int propertyCounter = 0;
 		for (RuntimeProperties runtimeProperties : propertyList) {
 			if (runtimeProperties.getPropertyName().trim().isEmpty() || runtimeProperties.getPropertyValue().trim().isEmpty()) {
@@ -593,6 +593,11 @@ public class RuntimePropertyDialog extends Dialog {
 		}		
 	}
 
+	/**
+	 * This method is used to determine whether ok button is pressed after any update.
+	 * 
+	 * @return
+	 */
 	public boolean isOkPressedAfterUpdate(){
 		return this.okPressedAfterUpdate;
 	}
