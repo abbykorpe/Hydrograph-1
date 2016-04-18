@@ -12,7 +12,7 @@
  ******************************************************************************/
 
  
-package hydrograph.ui.graph.action.subgraph;
+package hydrograph.ui.graph.action.subjob;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;

@@ -14,12 +14,12 @@
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
-	<tns:component paletteIconPath="/icons/subgraph_palette.png"
-		canvasIconPath="/icons/subgraph-canvas.png" name="SubgraphComponent"
-		nameInPalette="Subgraph" defaultNamePrefix="Subgraph"
-		description="Used to specify path for an existing Subgraph element."
+	<tns:component paletteIconPath="/icons/subjob_palette.png"
+		canvasIconPath="/icons/subjob-canvas.png" name="SubjobComponent"
+		nameInPalette="Subjob" defaultNamePrefix="Subjob"
+		description="Used to specify path for an existing Subjob element."
 		helpFilePath="/hydrograph.ui.help/html/Components/Dummy.html">
-		<tns:category>SUBGRAPH</tns:category>
+		<tns:category>SUBJOB</tns:category>
 			<tns:port>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="0" changePortCountDynamically="true">
 			</tns:portSpecification>
@@ -40,8 +40,8 @@
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="runtime_properties"
-			renderer="SUBGRAPH_PROPERTIES_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL" propertyHelpText="Resolves parameters within components \nin a subgraph."/>
+			renderer="SUBJOB_PROPERTIES_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL" propertyHelpText="Resolves parameters within components \nin a subjob."/>
 
 	</tns:component>
 </tns:Config>

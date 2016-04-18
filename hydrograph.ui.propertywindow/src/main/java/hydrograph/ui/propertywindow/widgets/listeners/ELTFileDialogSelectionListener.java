@@ -82,7 +82,7 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 					FileDialog filedialog = new FileDialog(button.getShell(), SWT.None);
 					filedialog.setFileName(((Text) widgets[1]).getText());
 
-					if (StringUtils.equals(Constants.SUBGRAPH_COMPONENT, currentComponent.getComponentName())) {
+					if (StringUtils.equals(Constants.SUBJOB_COMPONENT, currentComponent.getComponentName())) {
 						filedialog.setFilterExtensions(filterFileExtensions);
 						path = filedialog.open();
 						if (StringUtils.isNotEmpty(path)) {

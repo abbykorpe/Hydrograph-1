@@ -16,7 +16,7 @@ package hydrograph.ui.graph.handler;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.utility.SubGraphUtility;
+import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty.RuntimePropertyDialog;
 
 import org.apache.commons.lang.StringUtils;
@@ -42,7 +42,7 @@ public class GraphPropertiesHandler extends AbstractHandler implements IHandler 
 				getCurrentGraphName()+" - Graph Properties");
 		dialog.setRuntimeProperties(getCurrentGarphInstance().getGraphRuntimeProperties());
 		if(dialog.open()==0 && dialog.isOkPressedAfterUpdate()) 
-			SubGraphUtility.getCurrentEditor().setDirty(true);
+			SubJobUtility.getCurrentEditor().setDirty(true);
 		return null;
 	}
 
@@ -56,7 +56,7 @@ public class GraphPropertiesHandler extends AbstractHandler implements IHandler 
 	
 	private Container getCurrentGarphInstance()
 	{
-		return SubGraphUtility.getCurrentEditor().getContainer();
+		return SubJobUtility.getCurrentEditor().getContainer();
 	}
 	
 	

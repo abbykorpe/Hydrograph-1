@@ -131,19 +131,19 @@ public class Constants {
 
 
 	/*
-	 * Sub graph required constants 
+	 * Sub Job required constants 
 	 */
-	public static final String SUBGRAPH_COMPONENT_CATEGORY = "SUBGRAPH";
-	public static final String SUBGRAPH_COMPONENT = "SubgraphComponent";
+	public static final String SUBJOB_COMPONENT_CATEGORY = "SUBJOB";
+	public static final String SUBJOB_COMPONENT = "SubjobComponent";
 	public static final String PATH = "path";
 	public static final String TYPE = "type";
 	public static final String OPERATION = "operation";
 	public static final String OUTPUT = "output";
 	public static final String INPUT = "input";
-	public static final String INPUT_SUBGRAPH = "InputSubgraphComponent";
- 	public static final String OUTPUT_SUBGRAPH = "OutputSubgraphComponent";
+	public static final String INPUT_SUBJOB = "InputSubjobComponent";
+ 	public static final String OUTPUT_SUBJOB = "OutputSubjobComponent";
 	public static final String NAME = "name";
-	public static final String SUBGRAPH_NAME = "subgraph.job";
+	public static final String SUBJOB_NAME = "subjob.job";
 	
 	public static final String LENGTH_QNAME = "length";
 	public static final String RANGE_FROM_QNAME = "rangeFrom";
@@ -165,7 +165,7 @@ public class Constants {
 	public static final String PARAMETER_SUFFIX = "}";
 	public static final String UNIQUE_SEQUENCE_PROPERTY_NAME = "sequence_field";
 	public static final String ADD_ALL_FIELDS_SYMBOL = "*";
-	public static final String INPUT_SUBGRAPH_COMPONENT_NAME = "InputSubgraphComponent";
+	public static final String INPUT_SUBJOB_COMPONENT_NAME = "InputSubjobComponent";
 	
 	public static final String EDIT = "Edit";
 	public static final String RUNTIME_PROPERTIES_COLUMN_NAME = "Runtime\nProperties";
@@ -173,23 +173,23 @@ public class Constants {
 	public static final String RUNTIME_PROPERTY_NAME = "runtime_properties";
 	
 	public static final String RUNTIME_PROPERTY_LABEL = "Runtime\nProperties";
-	public static final String SUBGRAPH_PROPERTY_LABEL = "Subgraph\nProperties";
+	public static final String SUBJOB_PROPERTY_LABEL = "Subjob\nProperties";
 	public static final String UNUSED_PORT_COUNT_PROPERTY = "unusedPortCount";
 	public static final String UNUSED_AND_INPUT_PORT_COUNT_PROPERTY = "inPortCount|unusedPortCount";
-	public static final String SUBGRAPH_ALREADY_PRESENT_IN_CANVAS = " - already present in canvas.";
+	public static final String SUBJOB_ALREADY_PRESENT_IN_CANVAS = " - already present in canvas.";
 	public static final String PATH_PROPERTY_NAME = "path";
-	public static final String SUBGRAPH_CREATE = "create";
-	public static final String SUBGRAPH_OPEN = "open"; 	
-	public static final String SUBGRAPH_ACTION = "SubGraph";
-	public static final String SUBGRAPH_ACTION_ToolTip = "Path operations";
-	public static final String STANDALONE_SUBGRAPH = "StandAlone_Subgraph";
-	public static final String SUBGRAPH_WINDOW_LABEL = "Subgraph Parameters";
+	public static final String SUBJOB_CREATE = "create";
+	public static final String SUBJOB_OPEN = "open"; 	
+	public static final String SUBJOB_ACTION = "SubJob";
+	public static final String SUBJOB_ACTION_ToolTip = "Path operations";
+	public static final String STANDALONE_SUBJOB = "StandAlone_Subjob";
+	public static final String SUBJOB_WINDOW_LABEL = "Subjob Parameters";
 	public static final String JOB_PATH="path";
 	public static final String JOB_EXTENSION=".job";
 	public static final String XML_EXTENSION=".xml";
 	public static final String JOB_EXTENSION_FOR_IPATH="job";
 	public static final String XML_EXTENSION_FOR_IPATH="xml";
-	public static final String SUBGRAPH_UPDATE = "refresh";
+	public static final String SUBJOB_UPDATE = "refresh";
 	public static final String JOIN_KEYS_WINDOW_TITLE = "Join Key(s)";
 	public static final String LOOKUP_KEYS_WINDOW_TITLE = "Lookup Key(s)";
 	
@@ -220,7 +220,7 @@ public class Constants {
 	
 	
 	public static final String UPDATE_AVAILABLE = "update_available";
-	public static final String SUBGRAPH_VERSION = "subgraphVersion";
+	public static final String SUBJOB_VERSION = "subjobVersion";
 	public static final String VALIDITY_STATUS = "validityStatus";
 
 	public static final String HELP_ID="helpId";

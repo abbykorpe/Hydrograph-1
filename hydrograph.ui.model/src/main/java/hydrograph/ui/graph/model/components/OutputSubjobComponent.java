@@ -12,15 +12,26 @@
  ******************************************************************************/
 
  
-package hydrograph.ui.graph.model.categories;
+package hydrograph.ui.graph.model.components;
 
-import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.categories.SubjobCategory;
 
-public abstract class SubgraphCategory extends Component{
+/**
+ * Return sub graph component converter.
+ * 
+ * @author Bitwise
+ * 
+ */
+public class OutputSubjobComponent extends SubjobCategory {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2406782326279531800L;
+
+	@Override
+	public String getConverter() {
+		return "hydrograph.ui.engine.converter.impl.OutputComponentSubJobConverter";
+	}
 
 }

@@ -14,7 +14,7 @@ package hydrograph.ui.graph.editor;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.action.debug.WatcherMenuAction;
-import hydrograph.ui.graph.action.subgraph.SubMenuAction;
+import hydrograph.ui.graph.action.subjob.SubMenuAction;
 
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
@@ -57,10 +57,10 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		GEFActionConstants.addStandardActionGroups(menu);
 		
 		IAction[] actions = new IAction[3];
-		actions[0] = getAction(Constants.SUBGRAPH_CREATE);
-	    actions[1] = getAction(Constants.SUBGRAPH_OPEN);
-	    actions[2] = getAction(Constants.SUBGRAPH_UPDATE);
-	    SubMenuAction subGraphMenu=new SubMenuAction( actions, Constants.SUBGRAPH_ACTION, Constants.SUBGRAPH_ACTION_ToolTip,true);	// Add actions to the menu
+		actions[0] = getAction(Constants.SUBJOB_CREATE);
+	    actions[1] = getAction(Constants.SUBJOB_OPEN);
+	    actions[2] = getAction(Constants.SUBJOB_UPDATE);
+	    SubMenuAction subJobMenu=new SubMenuAction( actions, Constants.SUBJOB_ACTION, Constants.SUBJOB_ACTION_ToolTip,true);	// Add actions to the menu
 		IAction[] watcherAction = new IAction[2];
         watcherAction[0] = getAction(Constants.ADD_WATCH_POINT_ID);
         watcherAction[1] = getAction(Constants.REMOVE_WATCH_POINT_ID);
@@ -78,15 +78,15 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.CUT.getId()));
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.COPY.getId()));
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.PASTE.getId()));
-	    menu.appendToGroup(GEFActionConstants.GROUP_REST, subGraphMenu);
+	    menu.appendToGroup(GEFActionConstants.GROUP_REST, subJobMenu);
 	    menu.appendToGroup(GEFActionConstants.GROUP_REST, getAction(Constants.GRAPH_PROPERTY));
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, watcherMenu);
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, actionWatchRecords);
 		menu.appendToGroup(GEFActionConstants.GROUP_REST,componentPropertiesAction);
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, componentHelpAction);
 		 
-		if(subGraphMenu.getActiveOperationCount()== 0)
-	    subGraphMenu.setEnabled(false);
+		if(subJobMenu.getActiveOperationCount()== 0)
+	    subJobMenu.setEnabled(false);
 			 
 		if(watcherMenu.getActiveOperationCount()== 0){
 			watcherMenu.setEnabled(false);

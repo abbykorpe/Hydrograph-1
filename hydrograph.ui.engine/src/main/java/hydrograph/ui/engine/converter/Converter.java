@@ -191,21 +191,21 @@ public abstract class Converter {
 	}
 	
 	/**
-	 * This method returns absolute path of subgraph xml.
+	 * This method returns absolute path of subjob xml.
 	 * 
-	 * @param subgraphPath
+	 * @param subJobPath
 	 * @return
 	 */
-	protected String getSubGraphAbsolutePath(String subgraphPath) {
-		String absolutePath = subgraphPath;
-		IPath ipath=new Path(subgraphPath);
+	protected String getSubJobAbsolutePath(String subJobPath) {
+		String absolutePath = subJobPath;
+		IPath ipath=new Path(subJobPath);
 		try {
 			if (ResourcesPlugin.getWorkspace().getRoot().getFile(ipath).exists())
 				absolutePath= ResourcesPlugin.getWorkspace().getRoot().getFile(ipath).getLocation().toString();
 			else if (ipath.toFile().exists())
 				absolutePath= ipath.toFile().getAbsolutePath();
 		} catch (Exception exception) {
-			logger.warn("Exception occurred while getting absolute path for "+subgraphPath,exception);
+			logger.warn("Exception occurred while getting absolute path for "+subJobPath,exception);
 		}
 		return absolutePath;
 	}

@@ -22,8 +22,8 @@ import hydrograph.ui.common.util.ComponentCacheUtil;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
-import hydrograph.ui.graph.model.components.InputSubgraphComponent;
-import hydrograph.ui.graph.model.components.OutputSubgraphComponent;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.validators.impl.IValidator;
@@ -982,11 +982,11 @@ public abstract class Component extends Model {
 					else if (entry.getValue() instanceof TreeMap)
 					clonedHashMap.put(entry.getKey(), new TreeMap<>((TreeMap<String,String>) entry.getValue()));
 						
-					else if (entry.getValue() instanceof InputSubgraphComponent) {
+					else if (entry.getValue() instanceof InputSubjobComponent) {
 						clonedHashMap.put(entry.getKey(), null);
 					}
 
-					else if (entry.getValue() instanceof OutputSubgraphComponent) {
+					else if (entry.getValue() instanceof OutputSubjobComponent) {
 						clonedHashMap.put(entry.getKey(), null);
 					} 
 					else  if(entry.getValue()!=null)
