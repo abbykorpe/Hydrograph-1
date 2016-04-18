@@ -873,6 +873,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		scrolledComposite.setLayoutData(gd_scrolledComposite);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
+		scrolledComposite.setShowFocusedControl(true);
 
 		Composite composite_2 = new Composite(scrolledComposite, SWT.NONE);
 		GridLayout gl_composite_2 = new GridLayout(1, false);

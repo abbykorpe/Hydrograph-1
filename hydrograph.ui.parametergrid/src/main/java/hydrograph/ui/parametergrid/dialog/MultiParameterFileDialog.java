@@ -26,11 +26,15 @@ import hydrograph.ui.parametergrid.dialog.support.ParameterEditingSupport;
 import hydrograph.ui.parametergrid.utils.ParameterFileManager;
 import hydrograph.ui.parametergrid.utils.SWTResourceManager;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Type;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +43,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.SerializationException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -92,8 +98,6 @@ import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.slf4j.Logger;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 /**
  * 
@@ -124,6 +128,8 @@ public class MultiParameterFileDialog extends Dialog {
 	
 	private static final String DROP_BOX_TEXT = "\nDrop parameter file here to delete";
 	private boolean okPressed;
+	
+	private static final Base64 base64 = new Base64();
 	
 	/**
 	 * Create the dialog.
@@ -875,8 +881,17 @@ public class MultiParameterFileDialog extends Dialog {
 					ParameterFile filePath = (ParameterFile) selectedItem.getData();
 					filePathList.add(filePath);
 				}
-				String gsonFilePathList = new Gson().toJson(filePathList);
-				event.data = gsonFilePathList;
+				try {
+					event.data =serializeToString(filePathList);
+				} catch (UnsupportedEncodingException e) {
+					logger.debug(ErrorMessages.UNABLE_TO_REMOVE_JOB_SPECIFIC_FILE,e);
+					
+					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+
+					messageBox.setText(MessageType.INFO.messageType());
+					messageBox.setMessage(ErrorMessages.UNABLE_TO_REMOVE_JOB_SPECIFIC_FILE);
+					messageBox.open();
+				}
 			}
 
 			@Override
@@ -987,10 +1002,20 @@ public class MultiParameterFileDialog extends Dialog {
 		dt.addDropListener(new DropTargetAdapter() {
 
 			public void drop(DropTargetEvent event) {
-				Type type = new TypeToken<List<ParameterFile>>() {
-				}.getType();
-				List<ParameterFile> filesToRemove = new Gson().fromJson((String) event.data, type);
+				List<ParameterFile> filesToRemove = new ArrayList<>();;
+				try {
+					
+					filesToRemove = (List) deserializeFromString((String) event.data);
+				} catch (UnsupportedEncodingException e) {
+					logger.debug(ErrorMessages.UNABLE_TO_REMOVE_JOB_SPECIFIC_FILE,e);
+					
+					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 
+					messageBox.setText(MessageType.INFO.messageType());
+					messageBox.setMessage(ErrorMessages.UNABLE_TO_REMOVE_JOB_SPECIFIC_FILE);
+					messageBox.open();
+				}
+				
 				ParameterFile jobSpecificFile = getJobSpecificFile();
 
 				if (jobSpecificFile != null && filesToRemove.contains(jobSpecificFile)) {
@@ -1147,5 +1172,60 @@ public class MultiParameterFileDialog extends Dialog {
 			runGraph = false;
 		
 		return super.close();
+	}
+	
+	private String serializeToString(Serializable input)
+			throws UnsupportedEncodingException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
+		ObjectOutputStream out = null;
+		try {
+			// stream closed in the finally
+			out = new ObjectOutputStream(baos);
+			out.writeObject(input);
+
+		} catch (IOException ex) {
+			throw new SerializationException(ex);
+		} finally {
+			try {
+				if (out != null) {
+					out.close();
+				}
+			} catch (IOException ex) {
+				// ignore close exception
+			}
+		}
+
+		byte[] repr = baos.toByteArray();
+		String decoded = new String(base64.encode(repr));
+		return decoded;
+	}
+	
+	private Object deserializeFromString(String input)
+			throws UnsupportedEncodingException {
+		byte[] repr = base64.decode(input.getBytes());
+		ByteArrayInputStream bais = new ByteArrayInputStream(repr);
+		if (bais == null) {
+			throw new IllegalArgumentException(
+					"The InputStream must not be null");
+		}
+		ObjectInputStream in = null;
+		try {
+			// stream closed in the finally
+			in = new ObjectInputStream(bais);
+			return in.readObject();
+
+		} catch (ClassNotFoundException ex) {
+			throw new SerializationException(ex);
+		} catch (IOException ex) {
+			throw new SerializationException(ex);
+		} finally {
+			try {
+				if (in != null) {
+					in.close();
+				}
+			} catch (IOException ex) {
+				// ignore close exception
+			}
+		}
 	}
 }
