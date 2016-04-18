@@ -35,7 +35,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -883,7 +882,7 @@ public class MultiParameterFileDialog extends Dialog {
 					filePathList.add(filePath);
 				}
 				try {
-					event.data =SerializeToString(filePathList);
+					event.data =serializeToString(filePathList);
 				} catch (UnsupportedEncodingException e) {
 					logger.debug(ErrorMessages.UNABLE_TO_REMOVE_JOB_SPECIFIC_FILE,e);
 					
@@ -1006,7 +1005,7 @@ public class MultiParameterFileDialog extends Dialog {
 				List<ParameterFile> filesToRemove = new ArrayList<>();;
 				try {
 					
-					filesToRemove = (List) DeserializeFromString((String) event.data);
+					filesToRemove = (List) deserializeFromString((String) event.data);
 				} catch (UnsupportedEncodingException e) {
 					logger.debug(ErrorMessages.UNABLE_TO_REMOVE_JOB_SPECIFIC_FILE,e);
 					
@@ -1175,7 +1174,7 @@ public class MultiParameterFileDialog extends Dialog {
 		return super.close();
 	}
 	
-	private String SerializeToString(Serializable input)
+	private String serializeToString(Serializable input)
 			throws UnsupportedEncodingException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
 		ObjectOutputStream out = null;
@@ -1201,7 +1200,7 @@ public class MultiParameterFileDialog extends Dialog {
 		return decoded;
 	}
 	
-	private Object DeserializeFromString(String input)
+	private Object deserializeFromString(String input)
 			throws UnsupportedEncodingException {
 		byte[] repr = base64.decode(input.getBytes());
 		ByteArrayInputStream bais = new ByteArrayInputStream(repr);
