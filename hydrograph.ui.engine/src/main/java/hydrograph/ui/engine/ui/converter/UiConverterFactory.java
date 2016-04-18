@@ -25,6 +25,7 @@ import hydrograph.ui.engine.ui.converter.impl.InputFileDelimitedUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputFixedWidthUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputHiveParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputHiveTextFileUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.InputParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.JoinComponentUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.LimitUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.LookupUiConverter;
@@ -33,6 +34,7 @@ import hydrograph.ui.engine.ui.converter.impl.OutputFileDelimitedUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputFixedWidthUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputHiveParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputHiveTextFileUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OutputParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.RemoveDupsUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.SortUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.TransformComponentUiConverter;
@@ -160,6 +162,12 @@ public class UiConverterFactory {
 		}
 		if((Normalize.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new NormalizeUiConverter(typeBaseComponent, container);
+		}
+		if((hydrograph.engine.jaxb.inputtypes.ParquetFile.class).isAssignableFrom(typeBaseComponent.getClass())) {
+			return new InputParquetUiConverter(typeBaseComponent, container);
+		}	
+		if((hydrograph.engine.jaxb.outputtypes.ParquetFile.class).isAssignableFrom(typeBaseComponent.getClass())) {
+			return new OutputParquetUiConverter(typeBaseComponent, container);
 		}
 		return new DummyUiConverter(typeBaseComponent,container);
 	}
