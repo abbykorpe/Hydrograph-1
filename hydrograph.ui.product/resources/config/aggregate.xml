@@ -17,7 +17,7 @@
 		name="Aggregate" nameInPalette="Aggregate" defaultNamePrefix="Aggregate" 
 		description="Performs aggregations on data specified in a java operation class."
 		helpFilePath="/hydrograph.ui.help/html/Components/Aggregate.html"
-		acronym="Agg">
+		acronym="Aggt">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">

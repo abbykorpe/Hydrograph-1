@@ -14,11 +14,13 @@
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
+
 	<tns:component paletteIconPath="/icons/input_subjob_palette.png"
 		canvasIconPath="/icons/input_subjob_canvas.png" name="InputSubjobComponent"
 		nameInPalette="InputSubjob" defaultNamePrefix="INSubjob"
 		description="Represents the in sockets for a subjob."
-		helpFilePath="/hydrograph.ui.help/html/Components/InputSubjob.html" >
+		helpFilePath="/hydrograph.ui.help/html/Components/InputSubjob.html" 
+		acronym="Subjob" >
 		<tns:category>SUBJOB</tns:category>
 		
 			<tns:port>

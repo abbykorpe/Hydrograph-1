@@ -18,7 +18,8 @@
 		canvasIconPath="/icons/dummy-canvas.png" name="DummyComponent"
 		nameInPalette="Dummy" defaultNamePrefix="Dummy"
 		description="This is Default component."
-		helpFilePath="/hydrograph.ui.help/html/Components/Dummy.html">
+		helpFilePath="/hydrograph.ui.help/html/Components/Dummy.html"
+		acronym="Dumy">
 		<tns:category>DUMMY</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">

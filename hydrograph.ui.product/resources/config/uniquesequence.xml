@@ -18,7 +18,8 @@
 		canvasIconPath="/icons/unique_sequence_canvas.png" name="UniqueSequence"
 		nameInPalette="Unique Sequence" defaultNamePrefix="UniqueSeq" 
 		description="Generates unique sequence of integer values."
-		helpFilePath="/hydrograph.ui.help/html/Components/Unique_Sequence.html">
+		helpFilePath="/hydrograph.ui.help/html/Components/Unique_Sequence.html"
+		acronym="UnqSeq">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">
