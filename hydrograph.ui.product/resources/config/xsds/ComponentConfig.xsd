@@ -36,6 +36,7 @@
 			<element name="operations" type="tns:Operations" maxOccurs="1" minOccurs="0" /> 
 		</sequence>
 		<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="acronym" type="string" use="optional" default=""></attribute>
 		<attribute name="nameInPalette" type="string" use="required"></attribute>
 		<attribute name="defaultNamePrefix" type="string" use="required"></attribute>
 		<attribute name="paletteIconPath" type="string" use="required"></attribute>

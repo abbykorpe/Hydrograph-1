@@ -16,7 +16,8 @@
 	<tns:component paletteIconPath="/icons/filter_palette.png" canvasIconPath="/icons/filter_canvas.png"
 		name="Filter" nameInPalette="Filter" defaultNamePrefix="Filter" 
 		description="Select specific records from input based on filter condition in the operation class."
-		helpFilePath="/hydrograph.ui.help/html/Components/Filter.html">
+		helpFilePath="/hydrograph.ui.help/html/Components/Filter.html"
+		acronym="Fltr">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">

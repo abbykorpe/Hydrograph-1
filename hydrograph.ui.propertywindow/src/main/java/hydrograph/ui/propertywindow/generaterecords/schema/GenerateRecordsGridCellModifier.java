@@ -170,6 +170,11 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 			generateRecordSchemaGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[(Integer) value]);
 		}
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)) {
+			if(StringUtils.equals(DataType.BIGDECIMAL_CLASS.getValue(), GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]))
+			{
+				generateRecordSchemaGridRow.setScaleType(2); 
+				generateRecordSchemaGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[2]);
+			}
 			generateRecordSchemaGridRow.setDataType((Integer) value);
 			generateRecordSchemaGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer) value]);
 		} else if (ELTSchemaGridWidget.FIELD_DESCRIPTION.equals(property)) {

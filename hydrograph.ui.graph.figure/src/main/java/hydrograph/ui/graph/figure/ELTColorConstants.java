@@ -40,9 +40,10 @@ public class ELTColorConstants {
 	public static final Color BLUE_BRAND_BODER =  new Color(null,5,117,158);
 	
 	public static final Color BG_COMPONENT = LIGHT_GREY;
-	public static final Color BG_COMPONENT_SELECTED = BLUE_BRAND;
 	public static final Color COMPONENT_BORDER = DARK_GREY;
-	public static final Color COMPONENT_SELECTED_BORDER = DARK_BLUE;
+	
+	public static final Color BG_COMPONENT_SELECTED = new Color(null, 0,186,242);
+	public static final Color COMPONENT_BORDER_SELECTED = new Color(null, 5,117,158);
 	
 	public static final Color WATCH_COLOR = new Color(null, 204, 0, 0);
 }

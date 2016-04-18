@@ -18,7 +18,8 @@
 		canvasIconPath="/icons/transform_canvas.png" name="Transform"
 		nameInPalette="Transform" defaultNamePrefix="Transform" 
 		description="Used to apply custom transformations on the input data."
-		helpFilePath="/hydrograph.ui.help/html/Components/Transform.html">
+		helpFilePath="/hydrograph.ui.help/html/Components/Transform.html"
+		acronym="Xform">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">

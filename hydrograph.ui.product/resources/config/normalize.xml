@@ -14,12 +14,13 @@
  
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig ComponentConfig.xsd ">
+	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/normalize_palette.png" 
 		canvasIconPath="/icons/normalize_canvas.png" name="Normalize" 
 		nameInPalette="Normalize" defaultNamePrefix="Normalize" 
 		description="Normalize merges many into one."
-		helpFilePath="/hydrograph.ui.help/html/Components/Normalize.html">
+		helpFilePath="/hydrograph.ui.help/html/Components/Normalize.html"
+		acronym="Nrmlz">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">

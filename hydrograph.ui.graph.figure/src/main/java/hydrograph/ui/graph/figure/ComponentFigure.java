@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.draw2d.ColorConstants;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.Figure;
@@ -96,6 +98,8 @@ public class ComponentFigure extends Figure implements Validator{
 	private static final int TOOLTIP_SHOW_DELAY=800;
 	private Display display;
 	private Runnable timer;
+	
+	private String acronym;
 	/**
 	 * Instantiates a new component figure.
 	 * 
@@ -104,10 +108,11 @@ public class ComponentFigure extends Figure implements Validator{
 	 * @param cIconPath
 	 *            the canvas icon path
 	 */
-	public ComponentFigure(List<PortSpecification> portSpecification, String cIconPath, String label) {
+	public ComponentFigure(List<PortSpecification> portSpecification, String cIconPath, String label, String acronym) {
 		this.portspecification = portSpecification;
 		this.canvasIconPath = XMLConfigUtil.CONFIG_FILES_PATH + cIconPath;
-
+		this.acronym = acronym;
+		
 		layout = new XYLayout();
 		setLayoutManager(layout);
 
@@ -139,6 +144,11 @@ public class ComponentFigure extends Figure implements Validator{
 			setHeight(totalPortsofInType, totalPortsOfOutType);
 			setWidth(totalPortsOfUnusedType);
 		}
+		
+
+		Font accronymFont = new Font(Display.getDefault(),ELTFigureConstants.labelFont, 8, SWT.BOLD);
+		setFont(accronymFont);
+		setForegroundColor(org.eclipse.draw2d.ColorConstants.black);
 
 		componentCanvas = getComponentCanvas();
 		attachMouseListener();
@@ -156,7 +166,7 @@ public class ComponentFigure extends Figure implements Validator{
 		componentColor = ELTColorConstants.BG_COMPONENT;
 		borderColor = ELTColorConstants.COMPONENT_BORDER;
 		selectedComponentColor = ELTColorConstants.BG_COMPONENT_SELECTED;
-		selectedBorderColor = ELTColorConstants.BLUE_BRAND_BODER;
+		selectedBorderColor = ELTColorConstants.COMPONENT_BORDER_SELECTED;
 	}
 
 	/**
@@ -172,7 +182,7 @@ public class ComponentFigure extends Figure implements Validator{
 	 */
 	public void setSelectedComponentColorAndBorder(){
 		setBackgroundColor(selectedComponentColor);
-		setBorder(new ComponentBorder(selectedBorderColor, 2, componentLabelMargin));
+		setBorder(new ComponentBorder(selectedBorderColor, 1, componentLabelMargin));
 	}
 
 	private void setPortCount(PortSpecification p) {
@@ -197,7 +207,8 @@ public class ComponentFigure extends Figure implements Validator{
 	 */
 	public void setHeight(int totalPortsofInType, int totalPortsOfOutType) {
 		int heightFactor=totalPortsofInType > totalPortsOfOutType ? totalPortsofInType : totalPortsOfOutType;
-		this.height = (heightFactor+1)*25;
+		//this.height = (heightFactor+1)*25;
+		this.height = (heightFactor+1)*27;
 	}
 
 	/**
@@ -555,8 +566,10 @@ public class ComponentFigure extends Figure implements Validator{
 		Rectangle q = new Rectangle(4, 4+componentLabelMargin, r.width-8, r.height-8-componentLabelMargin);
 		graphics.fillRoundRectangle(q, 5, 5);
 
-		graphics.drawImage(canvasIcon, new Point(q.width/2-16, q.height/2+componentLabelMargin-15));
+		graphics.drawImage(canvasIcon, new Point(q.width/2-16, q.height/2+componentLabelMargin-15 + 4));
 		drawStatus(graphics);
+		
+		graphics.drawText(acronym, new Point(q.width/2-16 + 5, q.height/2+componentLabelMargin-15 - 10));
 	}
 
 	/**

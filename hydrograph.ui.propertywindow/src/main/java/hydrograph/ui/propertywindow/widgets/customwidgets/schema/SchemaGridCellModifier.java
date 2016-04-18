@@ -121,6 +121,11 @@ class SchemaGridCellModifier implements ICellModifier {
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			basicSchemaGridRow.setFieldName(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)){
+			if(StringUtils.equals(DataType.BIGDECIMAL_CLASS.getValue(), GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]))
+			{
+				basicSchemaGridRow.setScaleType(2); 
+				basicSchemaGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[2]);
+			}
 			basicSchemaGridRow.setDataType((Integer)value);
 			basicSchemaGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]);
 		}

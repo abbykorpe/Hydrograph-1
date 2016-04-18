@@ -157,8 +157,8 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		List<PortSpecification> portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
 		
 		String label = (String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue());
-
-		return new ComponentFigure(portSpecification, canvasIconPath, label);
+		String acronym = XMLConfigUtil.INSTANCE.getComponent(componentName).getAcronym();
+		return new ComponentFigure(portSpecification, canvasIconPath, label, acronym);
 	}
 
 	public Component getCastedModel() {

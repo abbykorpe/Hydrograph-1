@@ -119,6 +119,7 @@ public abstract class Component extends Model {
 	private String category;
 	private HashMap<String, Port> ports;
 	private String componentName;
+	private String acronym;
 	private List<PortSpecification> portSpecification;
 
 	private int inPortCount;
@@ -148,7 +149,7 @@ public abstract class Component extends Model {
 	 */
 	public Component() {
 		location = new Point(0, 0);
-		size = new Dimension(100, 75);
+		size = new Dimension(100, 80);
 		properties = new LinkedHashMap<>();
 		inputLinksHash = new Hashtable<String, ArrayList<Link>>();
 
@@ -167,6 +168,8 @@ public abstract class Component extends Model {
 		componentLabelMargin = 16;
 
 		prefix = XMLConfigUtil.INSTANCE.getComponent(componentName)
+				.getDefaultNamePrefix();
+		acronym = XMLConfigUtil.INSTANCE.getComponent(componentName)
 				.getDefaultNamePrefix();
 		initPortSettings();
 		toolTipErrorMessages = new LinkedHashMap<>();
@@ -769,8 +772,8 @@ public abstract class Component extends Model {
 	 *            a non-null Dimension instance or null
 	 */
 	public void setSize(Dimension newSize) {
-		if(newSize.height<75)
-			newSize.height=75;
+		if(newSize.height<80)
+			newSize.height=80;
 		if (newSize != null) {
 			size.setSize(newSize);
 			firePropertyChange(Props.SIZE_PROP.getValue(), null, size);

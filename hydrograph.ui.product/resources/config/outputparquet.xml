@@ -16,7 +16,8 @@
 	<tns:component paletteIconPath="/icons/output_parquet_palette.png" canvasIconPath="/icons/output_parquet_canvas.png"
 		name="OFParquet" nameInPalette="File Parquet" defaultNamePrefix="OFParquet" 
 		description="This is OFParquet component."
-		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Parquet.html">
+		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Parquet.html"
+		acronym="FPrqt">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">

@@ -14,6 +14,7 @@
  
 package hydrograph.ui.validators.impl;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -34,7 +35,10 @@ public class SchemaGridValidationRule implements IValidator {
 	private static final String DATA_TYPE_FLOAT = "java.lang.Float"; 
 	private static final String DATA_TYPE_DATE = "java.util.Date";
 	private static final String DATA_TYPE_BIG_DECIMAL = "java.math.BigDecimal";
-
+	private static final String SCALE_TYPE_IMPLICIT ="implicit" ;
+	private static final String SCALE_TYPE_EXPLICIT = "explicit";
+	private static final String SCALE_TYPE_NONE = "none";
+	
 	String errorMessage;
 	
 	@Override
@@ -106,6 +110,13 @@ public class SchemaGridValidationRule implements IValidator {
 			else if(DATA_TYPE_DATE.equalsIgnoreCase(gridRow.getDataTypeValue()) && 
 					StringUtils.isBlank(gridRow.getDateFormat())){
 				errorMessage = "Date format is mandatory";
+				return false;
+			}
+			
+			if (StringUtils.equalsIgnoreCase(DATA_TYPE_BIG_DECIMAL, gridRow.getDataTypeValue())
+					&& (StringUtils.isBlank(gridRow.getScaleTypeValue()) || StringUtils.equalsIgnoreCase(
+							SCALE_TYPE_NONE, gridRow.getScaleTypeValue()))){
+				errorMessage = "Scale type cannot be blank or none for Big Decimal data type";
 				return false;
 			}
 			

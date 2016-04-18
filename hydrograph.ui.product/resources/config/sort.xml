@@ -16,7 +16,8 @@
 	<tns:component paletteIconPath="/icons/sort_palette.png" canvasIconPath="/icons/sort_canvas.png"
 		name="SortComponent" nameInPalette="Sort" defaultNamePrefix="Sort" 
 		description="Sorts input records based on the primary and secondary key fields."
-		helpFilePath="/hydrograph.ui.help/html/Components/Sort.html">
+		helpFilePath="/hydrograph.ui.help/html/Components/Sort.html"
+		acronym="Sort">
 		<tns:category>STRAIGHTPULL</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">

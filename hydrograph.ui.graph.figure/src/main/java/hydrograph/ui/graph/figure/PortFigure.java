@@ -14,6 +14,7 @@
  
 package hydrograph.ui.graph.figure;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.MouseEvent;
@@ -66,6 +67,7 @@ public class PortFigure extends Figure {
 
 		Font font = new Font(Display.getDefault(),ELTFigureConstants.labelFont, 8, SWT.NORMAL);
 		setFont(font);
+		setForegroundColor(ColorConstants.black);
 		//NOTE : to Suppress the component tooltip when user hover the mouse on Port 
 		addMouseMotionListener(new MouseMotionListener() {
 			@Override
@@ -201,7 +203,8 @@ public class PortFigure extends Figure {
 
 	public void selectPort() {
 		if(!isWatched)
-		setBackgroundColor(ELTColorConstants.BLUE_BRAND_BODER);
+		setBackgroundColor(ELTColorConstants.COMPONENT_BORDER_SELECTED);
+			//setBackgroundColor(new Color(null, 255, 51, 0));
 	}
 
 	public void deSelectPort() {

@@ -16,7 +16,8 @@
 	<tns:component paletteIconPath="/icons/generate_records_palette.png" canvasIconPath="/icons/generate_records_canvas.png"
 		name="GenerateRecords" nameInPalette="Generate Records" defaultNamePrefix="GRecords" 
 		description="Generates dummy records as per the schema specified by the user."
-		helpFilePath="/hydrograph.ui.help/html/Components/Generate_Records.html">
+		helpFilePath="/hydrograph.ui.help/html/Components/Generate_Records.html"
+		acronym="Genrec">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
