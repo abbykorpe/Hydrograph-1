@@ -13,7 +13,7 @@
  
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
-	<tns:component paletteIconPath="/icons/gather_palette.png" canvasIconPath="/icons/gather_canvas.png"
+	<tns:component paletteIconPath="/icons/unionall_palette.png" canvasIconPath="/icons/unionall_canvas.png"
 		name="UnionallComponent" nameInPalette="Union All" defaultNamePrefix="Unionall" 
 		description="Gathers input from two or more sources into one output."
 		helpFilePath="/hydrograph.ui.help/html/Components/Union_All.html"

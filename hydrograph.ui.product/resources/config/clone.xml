@@ -13,7 +13,7 @@
  
 <tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
-	<tns:component paletteIconPath="/icons/replicate_palette.png" canvasIconPath="/icons/replicate_canvas.png"
+	<tns:component paletteIconPath="/icons/clone_palette.png" canvasIconPath="/icons/clone_canvas.png"
 		name="CloneComponent" nameInPalette="Clone" defaultNamePrefix="Clone" 
 		description="Creates multiple copies of the input on the output."
 		helpFilePath="/hydrograph.ui.help/html/Components/Clone.html"
