@@ -52,6 +52,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
@@ -249,19 +250,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		btnPull.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				List<NameValueProperty> outputFileds = new ArrayList<>();
-				Map<String, ComponentsOutputSchema> schema = (Map<String, ComponentsOutputSchema>) component
-						.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
-				for (Map.Entry<String, ComponentsOutputSchema> entry : schema.entrySet()) {
-					ComponentsOutputSchema componentsOutputSchema = entry.getValue();
-					for (FixedWidthGridRow fixedWidthGridRow : componentsOutputSchema
-							.getFixedWidthGridRowsOutputFields()) {
-						NameValueProperty nameValueProperty = new NameValueProperty();
-						nameValueProperty.setPropertyName("");
-						nameValueProperty.setPropertyValue(fixedWidthGridRow.getFieldName());
-						outputFileds.add(nameValueProperty);
-					}
-				}
+				List<NameValueProperty> outputFileds= getComponentSchemaAsProperty();
 				List<NameValueProperty> mapNameValueProperties = transformMapping.getMapAndPassthroughField();
 				DragDropUtility.union(outputFileds, mapNameValueProperties);
 				refreshOutputTable();
@@ -1328,7 +1317,23 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				transformMapping.getMappingSheetRows(), transformMapping.getMapAndPassthroughField(),
 				transformMapping.getOutputFieldList());
 		okPressed = true;
-		super.okPressed();
+		List<NameValueProperty> outputFileds= getComponentSchemaAsProperty();
+		List<NameValueProperty> mapNameValueProperties = transformMapping.getMapAndPassthroughField();
+		if(!isSchemaInSync(outputFileds, mapNameValueProperties))
+		{
+			MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, 
+					 Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, 
+	                new String[] { "Sync Now", "Later" }, 0);
+			int dialogResult =dialog.open();
+			if(dialogResult == 0){
+				DragDropUtility.union(outputFileds, mapNameValueProperties);
+				refreshOutputTable();
+			}
+			else
+				super.okPressed();
+		}
+		else
+			super.okPressed();
 	}
 
 	@Override
@@ -1431,4 +1436,30 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		cellEditor[position] = new TextCellEditor(table, SWT.COLOR_GREEN);
 
 	}
+	
+	private List<NameValueProperty> getComponentSchemaAsProperty(){
+		List<NameValueProperty> outputFileds = new ArrayList<>();
+		Map<String, ComponentsOutputSchema> schema = (Map<String, ComponentsOutputSchema>) component
+				.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
+		for (Map.Entry<String, ComponentsOutputSchema> entry : schema.entrySet()) {
+			ComponentsOutputSchema componentsOutputSchema = entry.getValue();
+			for (FixedWidthGridRow fixedWidthGridRow : componentsOutputSchema
+					.getFixedWidthGridRowsOutputFields()) {
+				NameValueProperty nameValueProperty = new NameValueProperty();
+				nameValueProperty.setPropertyName("");
+				nameValueProperty.setPropertyValue(fixedWidthGridRow.getFieldName());
+				outputFileds.add(nameValueProperty);
+			}
+		}
+		return outputFileds;
+	}
+
+	private boolean isSchemaInSync(List<NameValueProperty> outSchema, List<NameValueProperty> internalSchema){
+		    for (NameValueProperty nameValueProperty : outSchema) {
+		    	if(!internalSchema.contains(nameValueProperty))
+		    		return false;
+		    }
+		    return true;
+		}
+	
 }
