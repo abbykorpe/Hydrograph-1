@@ -66,8 +66,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.ServerSocket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -122,6 +125,7 @@ import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.TransferDropTargetListener;
@@ -129,6 +133,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.osgi.framework.adaptor.FilePath;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -154,7 +159,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
@@ -167,7 +171,6 @@ import org.eclipse.ui.statushandlers.StatusManager;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
-import com.bitwiseglobal.debug.api.DebugFilesReader;
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -1222,6 +1225,26 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
 		deleteDebugFiles();
+		
+ 
+				closeSocket();
+				logger.info("Socket closed @ 8004");
+			 
+		 
+	}
+	
+	private void closeSocket()  {
+		ServerSocket serverSocket = null;
+		try {
+			serverSocket = new ServerSocket(8004);
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+			try {
+				serverSocket.close();
+			} catch (IOException e1) {
+				logger.error(e.getMessage());
+			}
+		}
 	}
 	
 	private void deleteDebugFiles() {
@@ -1233,32 +1256,42 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			logger.debug("current job {} wasn't found in Debughandler's map",currentJob);
 			return ;
 		}
+		String file_path = job.getDebug_file_path();
+		try {
+			ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(file_path)).delete(true, null);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		
+		
 		if(isLocal){
-			//if(job!=null){
-				DebugFilesReader debugFilesReader = new DebugFilesReader(job.getBasePath(), uniqueJobId, "IFDelimite_01", "out0");
-				try {
-						debugFilesReader.delete();
-						logger.info("debug files removed from local");
-				} catch (FileNotFoundException e) {
-					logger.debug(e.getMessage());
-				} catch (IllegalArgumentException e) {
-					logger.debug(e.getMessage());
-				} catch (IOException e) {
-					logger.debug(e.getMessage());
-					logger.info("debug files not exists at given location");
-				}
+			String basePath = job.getBasePath();
+			String userID = job.getUserId();
+			String password = job.getPassword();
+			String host = "localhost";
+			String port = "8004";
+			
+			DebugRestClient debugRestClient = new DebugRestClient();
+			debugRestClient.removeDebugFiles(host, port, basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
+			logger.debug("debug files removed from local");
+			
+			
 		}else{
 			String basePath = job.getBasePath();
 			String ipAddress = job.getIpAddress();
 			String userID = job.getUserId();
 			String password = job.getPassword();
+			String port_no = job.getPort_no();
 			//new DebugFilesReader(arg0, arg1, arg2, arg3, arg4, arg5)
 			//ipAddress, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password
-			DebugRestClient debugRestClient = new DebugRestClient(ipAddress, basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
-			debugRestClient.removeDebugFiles();
+			DebugRestClient debugRestClient = new DebugRestClient();
+			debugRestClient.removeDebugFiles(ipAddress, port_no, basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
 			logger.debug("debug files removed from cluster");
 		}
+		 
+		
 		DebugHandler.getJobMap().remove(currentJob);
+		
 	}
 	
 

@@ -15,6 +15,7 @@ package hydrograph.ui.graph.handler;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.debugconverter.DebugConverter;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
@@ -23,6 +24,7 @@ import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -30,14 +32,18 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
@@ -91,10 +97,8 @@ public class DebugHandler  extends AbstractHandler {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty();
 	}
 
-	private void createDebugXml() throws IOException, NoSuchAlgorithmException{
+	private void createDebugXml() throws Exception{
 		String currentJobPath=null;
-		
-		
 		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)
 		{}
@@ -108,9 +112,13 @@ public class DebugHandler  extends AbstractHandler {
 			currentJobName = currentJobIPath.lastSegment().replace(Constants.JOB_EXTENSION, "");
 			currentJobIPath = currentJobIPath.removeLastSegments(1).append(currentJobPath);
 			
+			/*if(currentJobIPath.toFile().exists()){
+				MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.APPLICATION_MODAL | SWT.OK | SWT.CANCEL);
+				messageBox.setText("Alert"); 
+				messageBox.setMessage("File name already exists.");
+				messageBox.open();
+			}*/
 			converter.marshall(converter.getParam(), ResourcesPlugin.getWorkspace().getRoot().getFile(currentJobIPath));
-			
-			
 		} catch (JAXBException | IOException e) {
 			logger.error(e.getMessage(), e);
 		} catch (CoreException e) {
@@ -118,12 +126,9 @@ public class DebugHandler  extends AbstractHandler {
 		}
 	}
 
-
 	
 	@Override
 	public Object execute(ExecutionEvent event){
-		 
-
 		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 			try{
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
@@ -142,6 +147,8 @@ public class DebugHandler  extends AbstractHandler {
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		} catch (NoSuchAlgorithmException e) {
+			logger.error(e.getMessage(), e);
+		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 		
@@ -175,6 +182,17 @@ public class DebugHandler  extends AbstractHandler {
 		job.setRemoteMode(runConfigDialog.isRemoteMode());
 		job.setPassword(clusterPassword);
 		job.setUniqueJobId(uniqueJobID);
+		
+		IFile file=ResourcesPlugin.getWorkspace().getRoot().getFile(currentJobIPath);
+		job.setDebug_file_path(file.getFullPath().toString());
+		
+		String port_no =runConfigDialog.getPortNo();
+		
+		if(!StringUtils.isEmpty(port_no)){
+			job.setPort_no(port_no);
+		}else{
+			job.setPort_no("8004");
+		}
 
 		job.setDebugMode(true);
 		job.setPassword(clusterPassword);

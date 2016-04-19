@@ -35,6 +35,8 @@ public class Job {
 	private String userId;
 	private String basePath;
 	private String uniqueJobId;
+	private String port_no;
+	private String debug_file_path;
 	
 	public Job(String localJobID,String consoleName, String canvasName, String ipAddress,String userId, String basePath, String password) {
 		this.localJobID = localJobID;
@@ -185,15 +187,27 @@ public class Job {
 				+ ", jobStatus=" + jobStatus + ", remoteMode=" + remoteMode + "]";
 	}
 
-
-
 	public String getUniqueJobId() {
 		return uniqueJobId;
 	}
 
-
-
 	public void setUniqueJobId(String uniqueJobId) {
 		this.uniqueJobId = uniqueJobId;
 	}	
+	
+	public String getPort_no() {
+		return port_no;
+	}
+	public void setPort_no(String port_no) {
+		this.port_no = port_no;
+	}
+
+	public String getDebug_file_path() {
+		return debug_file_path;
+	}
+
+	public void setDebug_file_path(String debug_file_path) {
+		this.debug_file_path = debug_file_path;
+	}
+	
 }

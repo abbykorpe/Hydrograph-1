@@ -14,91 +14,44 @@
  
 package hydrograph.ui.graph.handler;
 
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.controller.LinkEditPart;
-import hydrograph.ui.graph.controller.PortEditPart;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Link;
-
-import java.util.Iterator;
-import java.util.List;
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
-import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
 
 
 public class RemoveDebugHandler extends AbstractHandler{
 
-	
 	public RemoveDebugHandler() {
 		setBaseEnabled(false);
-		 
-		
+		RunStopButtonCommunicator.Removewatcher.setHandler(this);
 	}
 	
+	private DefaultGEFCanvas getComponentCanvas() {
+		if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
+			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+					.getActiveEditor();
+		else
+			return null;
+	}
 	
-	/*private void removeWatchPoint(List<Object> selectedObjects)  {
-		 
-		for(Object obj:selectedObjects)
-		{
-			if(obj instanceof LinkEditPart)
-			{
-				Link link = (Link)((LinkEditPart)obj).getModel();
-				link.getSource().clearWatcherMap();
-				changePortColor(link.getSource(), link.getSourceTerminal());
-			}	
-		}
-		
-		
-	}*/
-	
-	/*private void changePortColor(Component selectedComponent, String portName){
-
-		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
-		for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator.hasNext();)
-		{
-			EditPart editPart = (EditPart) iterator.next();
-			if(editPart instanceof ComponentEditPart) 
-			{
-				Component comp = ((ComponentEditPart)editPart).getCastedModel();
-				comp.clearWatcherMap();
-				 
-				
-			} 
-		}
-	}*/
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
-		for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator.hasNext();)
-		{
-			EditPart editPart = (EditPart) iterator.next();
-			if(editPart instanceof ComponentEditPart) 
-			{
-				Component comp = ((ComponentEditPart)editPart).getCastedModel();
-				 	comp.clearWatcherMap();
-					List<PortEditPart> portEditParts = editPart.getChildren();
-					for(AbstractGraphicalEditPart part:portEditParts)
-					{
-						if(part instanceof PortEditPart){
-							((PortEditPart)part).getPortFigure().deSelectPort();
-					}
-				}
-			} 
-		}
+		
 		return null;
 	}
 
-	public void setRemoveDebugEnable(boolean enable){
+	/**
+	 * 
+	 * Enable/Disable removeWatcher button in toolBar
+	 * 
+	 * @param enable
+	 */
+	public void setRemoveWatcherEnabled(boolean enable) {
 		setBaseEnabled(enable);
 	}
+	
 }

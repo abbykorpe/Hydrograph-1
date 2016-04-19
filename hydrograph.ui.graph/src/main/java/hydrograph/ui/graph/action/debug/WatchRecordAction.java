@@ -20,6 +20,7 @@ import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.debug.service.DebugDataWizard;
 import hydrograph.ui.graph.debug.service.DebugRestClient;
+import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.handler.DebugHandler;
 import hydrograph.ui.graph.job.Job;
@@ -28,12 +29,12 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.EditPart;
@@ -47,11 +48,11 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.slf4j.Logger;
-
-import com.bitwiseglobal.debug.api.DebugFilesReader;
  
 /**
+ * The Class WatchRecordAction used to view data at watch points after job execution
  * @author Bitwise
  *
  */
@@ -75,14 +76,25 @@ public class WatchRecordAction extends SelectionAction {
 		setEnabled(true);
 	}
 	
-	private boolean createWatchCommand(List<Object> selectedObjects)  {
+	private boolean createWatchCommand(List<Object> selectedObjects) throws CoreException  {
 		for(Object obj:selectedObjects){
 			if(obj instanceof LinkEditPart)	{
 				Link link = (Link)((LinkEditPart)obj).getModel();
 				String componentId = link.getSource().getComponentLabel().getLabelContents();
-				watchRecordInner.setComponentId(componentId);
-				String socketId = link.getSourceTerminal();
-				watchRecordInner.setSocketId(socketId);
+				Component component = link.getSource();
+				if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
+					String str = DebugHelper.INSTANCE.getSubgraphComponent(component);
+					String[] str1 = StringUtils.split(str,".");
+					String componentID = str1[0];
+					String socketId = str1[1];
+					watchRecordInner.setComponentId(link.getSource().getComponentLabel().getLabelContents()+"."+componentID);
+					watchRecordInner.setSocketId(socketId);
+				}else{
+					watchRecordInner.setComponentId(componentId);
+					String socketId = link.getSourceTerminal();
+					watchRecordInner.setSocketId(socketId);
+				}
+				
 				isWatcher = checkWatcher(link.getSource(), link.getSourceTerminal());
 				return true;
 			}	
@@ -91,7 +103,6 @@ public class WatchRecordAction extends SelectionAction {
 	}
 	
 	private boolean checkWatcher(Component selectedComponent, String portName) {
-		
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		IPath path = new Path(editor.getTitleToolTip());
 		String currentJob = path.lastSegment().replace(Constants.JOB_EXTENSION, "");
@@ -111,7 +122,6 @@ public class WatchRecordAction extends SelectionAction {
 							String port_Name = ((PortEditPart)part).getCastedModel().getTerminal();
 							if(port_Name.equals(portName)){
 								return ((PortEditPart)part).getPortFigure().isWatched();
-								
 							}
 						}
 					}
@@ -121,65 +131,83 @@ public class WatchRecordAction extends SelectionAction {
 		return false;
 	}
 	
-	private void debugRemoteMode() {
-		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
-		String basePath = job.getBasePath();
-		String ipAddress = job.getIpAddress();
-		String userID = job.getUserId();
-		String password = job.getPassword();
-		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
-		DebugRestClient debugRestClient = new DebugRestClient(ipAddress, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password);
+
+	private void readViewDataInRemoteMode() {
 		JSONArray jsonArray = null;
-		try {
-			jsonArray = debugRestClient.callRestService();
-		} catch (NullPointerException e){
-			logger.debug(e.getMessage(), e);
-			messageDialog(Messages.REMOTE_MODE_TEXT);
+		String basePath = null,ipAddress = null,userID = null,password = null,port_no = null;
+		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
+		if(job!=null){
+			basePath = job.getBasePath();
+			ipAddress = job.getIpAddress();
+			userID = job.getUserId();
+			password = job.getPassword();
+			port_no = job.getPort_no();
 		}
 		
-		if(jsonArray.length() != 0){
-			DebugDataWizard debugRemoteWizard = new DebugDataWizard(Display.getDefault().getActiveShell(), jsonArray, isLocalDebugMode());
-			debugRemoteWizard.open();
-		}else{
+		//ogger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
+		DebugRestClient debugRestClient = new DebugRestClient();
+			try {
+				jsonArray = debugRestClient.callRestService(ipAddress, port_no, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password);
+			} catch (IOException exception) {
+				logger.error("Connection failed", exception);
+				messageDialog(Messages.REMOTE_MODE_TEXT);
+				return;
+			}catch(JSONException exception){
+				logger.error("Service failed to response in JSON format", exception);
+				messageDialog(Messages.REMOTE_MODE_TEXT);
+				return;
+			}catch (Exception exception){
+				logger.error("Exception while calling rest service: ", exception);
+				messageDialog(Messages.REMOTE_MODE_TEXT);
+				return;
+		}
+		
+		if(jsonArray == null || jsonArray.length() == 0){
 			messageDialog(Messages.REMOTE_MODE_TEXT);
+		}else{
+			DebugDataWizard debugRemoteWizard = new DebugDataWizard(Display.getDefault().getActiveShell(), jsonArray, false);
+			debugRemoteWizard.open();
 		}
 	}
 	
-	private void debugLocalMode() {
+	private void readViewDataInLocalMode()   {
 		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
+		if(job == null){
+			messageDialog(Messages.REMOTE_MODE_TEXT);
+			return;
+		}
 		String basePath = job.getBasePath();
-		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, jobId, componentId, socketId);
-		DebugFilesReader debugFilesReader = new DebugFilesReader(basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
-		List<String> debugDataList = new ArrayList<>();
-		int count = 0;
-		try {
-			if(debugFilesReader.isFilePathExists()){
-				while(debugFilesReader.hasNext()){
-					if(count <= 100){
-						String data = debugFilesReader.next();
-						debugDataList.add(data);
-						count++;
-					}else{
-						break;
-					}
-				}
-			}else{
+		String ipAddress = "localhost";//job.getIpAddress();
+		String userID = job.getUserId();
+		String password = job.getPassword();
+		String port = "8004";
+		
+		
+		JSONArray jsonArray = null;
+		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
+		DebugRestClient debugRestClient = new DebugRestClient();
+		 
+			try {
+				jsonArray = debugRestClient.callRestService(ipAddress, port, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), "userid", "password");
+			} catch (IOException exception) {
+				logger.error("Connection failed", exception);
 				messageDialog(Messages.REMOTE_MODE_TEXT);
-				logger.info("file not exists.");
-			}
-		} catch (FileNotFoundException e) {
-			logger.debug(e.getMessage(), e);
-		} catch (IllegalArgumentException e) {
-			logger.debug(e.getMessage(), e);
-		} catch (IOException e) {
-			logger.debug(e.getMessage(), e);
+				return;
+			}catch(JSONException exception){
+				logger.error("Service failed to response in JSON format", exception);
+				messageDialog(Messages.REMOTE_MODE_TEXT);
+				return;
+			}catch (Exception exception){
+				logger.error("Exception while calling rest service: ", exception);
+				messageDialog(Messages.REMOTE_MODE_TEXT);
+				return;
 		}
 		
-		if(!debugDataList.isEmpty()){
-			DebugDataWizard debugRemoteWizard = new DebugDataWizard(Display.getDefault().getActiveShell(), debugDataList, isLocalDebugMode());
-			debugRemoteWizard.open();
+		if(jsonArray == null || jsonArray.length() == 0){
+			messageDialog(Messages.REMOTE_MODE_TEXT);
 		}else{
-			messageDialog(Messages.NO_RECORD_FETCHED);
+			DebugDataWizard debugRemoteWizard = new DebugDataWizard(Display.getDefault().getActiveShell(), jsonArray, false);
+			debugRemoteWizard.open();
 		}
 	}
 	
@@ -200,7 +228,13 @@ public class WatchRecordAction extends SelectionAction {
 	protected boolean calculateEnabled() {
 		int count =0;
 		List<Object> selectedObject = getSelectedObjects();
-		createWatchCommand(selectedObject);
+		
+		try {
+			createWatchCommand(selectedObject);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		
 		if(!selectedObject.isEmpty() && isWatcher){
 			for(Object obj : selectedObject){
 				if(obj instanceof LinkEditPart)	{
@@ -220,14 +254,20 @@ public class WatchRecordAction extends SelectionAction {
 	@Override
 	public void run() {
 		super.run();
-		 createWatchCommand(getSelectedObjects());
+		
+		 try {
+			createWatchCommand(getSelectedObjects());
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		 
 		 if(!isWatcher){
 			 messageDialog(Messages.MESSAGES_BEFORE_CLOSE_WINDOW);
 		 }else{
 			 if(isLocalDebugMode()){
-					debugLocalMode();
+					readViewDataInLocalMode();
 			 }else{
-					debugRemoteMode();
+					readViewDataInRemoteMode();
 			 }
 		 }
 	}

@@ -64,6 +64,8 @@ public class RemoveWatcherAction extends SelectionAction{
 				Link link = (Link)((LinkEditPart)obj).getModel();
 				link.getSource().removeWatcherTerminal(link.getSourceTerminal());
 				changePortColor(link.getSource(), link.getSourceTerminal());
+				if(!PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty())
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 			}	
 		}
 	}
