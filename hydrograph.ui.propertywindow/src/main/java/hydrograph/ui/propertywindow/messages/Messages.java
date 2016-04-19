@@ -133,7 +133,7 @@ public class Messages extends NLS {
 	public static String ERROR;
 	public static String PARAMETER_ERROR;
 	public static String ATTACH_LISTENER_ERROR;
-	
+	public static String OPERATION_MAP_OR_PASSTHROUGH_FIELD_S_CANNOT_BE_DELETED_FROM_OUTPUT_TABLE_PLEASE_DELETE_IT_FROM_RESPECTIVE_TABLE;
 	public static String FIELD_MAPPING;
 	public static String OPERATION_CLASS;
 	public static String OUTPUT_FIELD;
@@ -147,7 +147,11 @@ public class Messages extends NLS {
 	public static String ALPHA_NUMRIC_REGULAR_EXPRESSION;
 	public static String TEXT_FIELD_SHOULD_MATCH;
 	public static String BROWSE_BUTTON_TEXT;
-
+	public static  String TRANSFORM_EDITOR = "Transform Editor";
+	public static  String LATER = "Later";
+	public static  String SYNC_NOW = "Sync Now";
+	public static  String MAPPING_SHEET = "mappingSheet";
+	public static  String PERVIOUS_VALUE = "perviousValue";
 	public static String EmptyFieldNameNotification;
 	public static String EmptySourceFieldNotification;
 	public static String EmptyOutputFieldNotification;

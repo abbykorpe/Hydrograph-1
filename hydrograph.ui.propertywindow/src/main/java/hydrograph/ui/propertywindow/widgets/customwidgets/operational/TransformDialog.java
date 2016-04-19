@@ -95,7 +95,6 @@ import org.eclipse.swt.widgets.Text;
 
 public class TransformDialog extends Dialog implements IOperationClassDialog {
 
-	private static final String OPERATION_MAP_OR_PASSTHROUGH_FIELD_S_CANNOT_BE_DELETED_FROM_OUTPUT_TABLE_PLEASE_DELETE_IT_FROM_RESPECTIVE_TABLE = "Operation,Map or Passthrough Field(s) cannot be deleted from output table.Please delete it from respective table.";
 	private static final String OUTPUT_DELETE_BUTTON = "outputDeleteButton";
 	private static final String OUTPUT_ADD_BUTTON = "outputAddButton";
 	private static final String OPERATION_OUTPUT_FIELD_TABLE_VIEWER = "operationOutputFieldTableViewer";
@@ -135,23 +134,25 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private Label operationInputDeleteButton;
 	private Composite composite_1;
 	private ScrolledComposite scrolledComposite;
-	Map<Text, Button> opClassMap = new LinkedHashMap<Text, Button>();
 	private TableViewer inputFieldTableViewer;
 	private TableViewer mappingTableViewer;
 	private TransformMapping transformMapping;
 	private TableViewer outputFieldViewer;
-	private Map<String,List<FilterProperties>> temporaryOutputFieldMap = new HashMap<String,List<FilterProperties>>();
+	private Map<String,List<FilterProperties>> temporaryOutputFieldMap;
 	private MappingSheetRow mappingSheetRow;
 	private Label errorLabel;
 	private boolean isOperationInputFieldDuplicate;
 	private TransformDialog transformDialog;
-	List<Label> errorLabelList = new ArrayList<>();
+	private List<Label> errorLabelList;
 	private TableViewer errorTableViewer;
 	private Composite errorComposite;
-	private Map<String,List<String>> duplicateOperationInputFieldMap = new HashMap<String,List<String>>();
-	private Map<String,List<String>> duplicateFieldMap = new HashMap<String,List<String>>();
+	private Map<String,List<String>> duplicateOperationInputFieldMap;
+	private Map<String,List<String>> duplicateFieldMap;
 	private ControlDecoration isFieldNameAlphanumericDecorator;
 	private ControlDecoration fieldNameDecorator;
+	
+	
+	
 	public TransformDialog(Shell parentShell, Component component, WidgetConfig widgetConfig, TransformMapping atMapping) {
 
 		super(parentShell);
@@ -162,8 +163,11 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		this.component = component;
 		this.widgetConfig = widgetConfig;
 		this.transformDialog = this;
-
-	}
+		temporaryOutputFieldMap=new HashMap<String,List<FilterProperties>>();
+		errorLabelList=new ArrayList<>();
+		duplicateOperationInputFieldMap=new HashMap<String,List<String>>();
+		duplicateFieldMap=new HashMap<String,List<String>>();
+	}  
 
 	/**
 	 * @wbp.parser.constructor
@@ -179,7 +183,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-		container.getShell().setText("Transform Editor");
+		container.getShell().setText(Messages.TRANSFORM_EDITOR);
 
 		propertyDialogButtonBar = new PropertyDialogButtonBar(container);
 
@@ -266,13 +270,13 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		addLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				FilterProperties f = new FilterProperties();
-				f.setPropertyname("");
+				FilterProperties filterproperties = new FilterProperties();
+				filterproperties.setPropertyname("");
 
-				if (!transformMapping.getOutputFieldList().contains(f)) {
+				if (!transformMapping.getOutputFieldList().contains(filterproperties)) {
 
-					transformMapping.getOutputFieldList().add(f);
-					((List<FilterProperties>)outputFieldViewer.getInput()).add(f);
+					transformMapping.getOutputFieldList().add(filterproperties);
+					((List<FilterProperties>)outputFieldViewer.getInput()).add(filterproperties);
 					outputFieldViewer.refresh();
 					
 					int i = ((List<FilterProperties>)outputFieldViewer.getInput()).size() == 0 ? ((List<FilterProperties>)outputFieldViewer.getInput()).size()
@@ -309,7 +313,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					
 					if(!transformMapping.getOutputFieldList().containsAll(tempList))
 					{
-						WidgetUtility.errorMessage(OPERATION_MAP_OR_PASSTHROUGH_FIELD_S_CANNOT_BE_DELETED_FROM_OUTPUT_TABLE_PLEASE_DELETE_IT_FROM_RESPECTIVE_TABLE);
+						WidgetUtility.errorMessage(Messages.OPERATION_MAP_OR_PASSTHROUGH_FIELD_S_CANNOT_BE_DELETED_FROM_OUTPUT_TABLE_PLEASE_DELETE_IT_FROM_RESPECTIVE_TABLE);
 					}	
 					else
 					{	
@@ -701,7 +705,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				Text textBox = (Text) e.widget;
 				if(StringUtils.isBlank(textBox.getText()))
 				{
-					textBox.setText((String) textBox.getData("perviousValue"));
+					textBox.setText((String) textBox.getData(Messages.PERVIOUS_VALUE));
 				}	
 				
 			}
@@ -709,7 +713,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			@Override
 			public void focusGained(FocusEvent e) {
 				Text textBox=(Text) e.widget;
-				textBox.setData("perviousValue",textBox.getText());
+				textBox.setData(Messages.PERVIOUS_VALUE,textBox.getText());
 			}
 		});
 		
@@ -726,14 +730,14 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		});
 		browseButton.setBounds(284, 91, 35, 21);
 		browseButton.setText("...");
-		browseButton.setData("mappingSheet",mappingSheetRow);
-		browseButton.setData("opertionClassTextbox", operationClassTextBox);
+		browseButton.setData(Messages.MAPPING_SHEET,mappingSheetRow);
+		browseButton.setData(OPERATION_CLASS_TEXT_BOX, operationClassTextBox);
 		browseButton.addSelectionListener(new SelectionAdapter() {
 		
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MappingSheetRow orignalMappingSheetRow = (MappingSheetRow) ((Button) e.widget).getData("mappingSheet");
-				Text operationClassTextBox=(Text)((Button)e.widget).getData("opertionClassTextbox");
+				MappingSheetRow orignalMappingSheetRow = (MappingSheetRow) ((Button) e.widget).getData(Messages.MAPPING_SHEET);
+				Text operationClassTextBox=(Text)((Button)e.widget).getData(OPERATION_CLASS_TEXT_BOX);
 				MappingSheetRow oldMappingSheetRow = (MappingSheetRow) orignalMappingSheetRow.clone();
 				OperationClassDialog operationClassDialog = new OperationClassDialog(browseButton.getShell(), component
 						.getComponentName(), orignalMappingSheetRow, propertyDialogButtonBar, widgetConfig,
@@ -1217,10 +1221,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			@Override
 			public void mouseUp(MouseEvent e) {
 
-				FilterProperties f = new FilterProperties();
-				f.setPropertyname("");
-				if (!mappingSheetRow.getInputFields().contains(f)) {
-					mappingSheetRow.getInputFields().add(f);
+				FilterProperties filterProperties = new FilterProperties();
+				filterProperties.setPropertyname("");
+				if (!mappingSheetRow.getInputFields().contains(filterProperties)) {
+					mappingSheetRow.getInputFields().add(filterProperties);
 
 					operationalInputFieldTableViewer.refresh();
 					int i = mappingSheetRow.getInputFields().size() == 0 ? mappingSheetRow.getInputFields().size()
@@ -1323,7 +1327,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		{
 			MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, 
 					 Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, 
-	                new String[] { "Sync Now", "Later" }, 0);
+	                new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
 			int dialogResult =dialog.open();
 			if(dialogResult == 0){
 				DragDropUtility.union(outputFileds, mapNameValueProperties);
