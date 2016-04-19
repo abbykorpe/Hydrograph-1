@@ -29,6 +29,7 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -98,6 +99,8 @@ public class ComponentFigure extends Figure implements Validator{
 	private Runnable timer;
 	
 	private String acronym;
+
+	private LinkedHashMap<String, Object> componentProperties;
 	/**
 	 * Instantiates a new component figure.
 	 * 
@@ -105,12 +108,13 @@ public class ComponentFigure extends Figure implements Validator{
 	 *            the port specification
 	 * @param cIconPath
 	 *            the canvas icon path
+	 * @param linkedHashMap 
 	 */
-	public ComponentFigure(List<PortSpecification> portSpecification, String cIconPath, String label, String acronym) {
+	public ComponentFigure(List<PortSpecification> portSpecification, String cIconPath, String label, String acronym, LinkedHashMap<String, Object> properties) {
 		this.portspecification = portSpecification;
 		this.canvasIconPath = XMLConfigUtil.CONFIG_FILES_PATH + cIconPath;
 		this.acronym = acronym;
-		
+		this.componentProperties= properties;
 		layout = new XYLayout();
 		setLayoutManager(layout);
 
@@ -567,6 +571,17 @@ public class ComponentFigure extends Figure implements Validator{
 		drawStatus(graphics);
 		
 		graphics.drawText(acronym, new Point(q.width/2-16 + 5, q.height/2+componentLabelMargin-25));
+
+		if (componentProperties != null && componentProperties.get(StringUtils.lowerCase(Constants.PHASE)) != null) {
+			if (String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))).length() > 2)
+				graphics.drawText(
+						StringUtils.substring(
+								String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))), 0, 2)
+								+ "..", new Point(q.width - 16, q.height - 4));
+			else
+				graphics.drawText(String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))),
+						new Point(q.width - 14, q.height - 4));
+		}
 	}
 
 	/**
