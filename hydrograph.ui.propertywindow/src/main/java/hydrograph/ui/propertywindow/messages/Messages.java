@@ -40,6 +40,7 @@ public class Messages extends NLS {
 	public static  String SCHEMA_CONFIG_XSD_PATH;
 
 	public static  String FIELDNAME_NOT_ALPHANUMERIC_ERROR;
+	public static  String FIELDNAME_SHOULD_NOT_BE_BLANK;
 	public static String EMPTY_XML_CONTENT;
 	public static String RUNTIME_WINDOW_NAME;
 	public static String RUNTIME_HEADER;
@@ -132,7 +133,7 @@ public class Messages extends NLS {
 	public static String ERROR;
 	public static String PARAMETER_ERROR;
 	public static String ATTACH_LISTENER_ERROR;
-	
+	public static String OPERATION_MAP_OR_PASSTHROUGH_FIELD_S_CANNOT_BE_DELETED_FROM_OUTPUT_TABLE_PLEASE_DELETE_IT_FROM_RESPECTIVE_TABLE;
 	public static String FIELD_MAPPING;
 	public static String OPERATION_CLASS;
 	public static String OUTPUT_FIELD;
@@ -146,7 +147,11 @@ public class Messages extends NLS {
 	public static String ALPHA_NUMRIC_REGULAR_EXPRESSION;
 	public static String TEXT_FIELD_SHOULD_MATCH;
 	public static String BROWSE_BUTTON_TEXT;
-
+	public static  String TRANSFORM_EDITOR ;
+	public static  String LATER;
+	public static  String SYNC_NOW;
+	public static  String MAPPING_SHEET;
+	public static  String PERVIOUS_VALUE;
 	public static String EmptyFieldNameNotification;
 	public static String EmptySourceFieldNotification;
 	public static String EmptyOutputFieldNotification;
@@ -159,6 +164,7 @@ public class Messages extends NLS {
 	public static String OPERATION_ID_PREFIX;
     public static String OPERATION_LIST_EMPTY;
     public static String PULL_BUTTON_LABEL;
+    public static String PULL_FROM_TRANSFORM;
     public static String OPERATION_CONTROL;
     public static String SOURCE;
     public static String TARGET;

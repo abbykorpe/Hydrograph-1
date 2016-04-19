@@ -20,6 +20,7 @@ import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.propertywindow.widgets.utility.DragDropOperation;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.TableViewer;
 
@@ -32,10 +33,10 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	private TableViewer operationInputfieldtableviewer;
 	private List listOfOutputFields;
 	private TableViewer operationOutputFieldTableViewer;
-	private List<FilterProperties> outputFieldList;
+	private Map<String,List<FilterProperties>> outputFieldMap;
 	
-	public List<FilterProperties> getOutputFieldList() {
-		return outputFieldList;
+	public Map<String,List<FilterProperties>> getOutputFieldList() {
+		return outputFieldMap;
 	}
 
 	private List<NameValueProperty> mapAndPassThroughField;
@@ -43,14 +44,14 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	private List<MappingSheetRow> mappingSheetRows;
 	private TransformDialog transformDialogNew;
 	
-	public DragDropTransformOpImp(TransformDialog transformDialogNew,List<MappingSheetRow> mappingSheetRows,TableViewer outputFieldTableViewer,List<NameValueProperty> mapAndPassThroughField,List<FilterProperties> outputFieldList,List listOfOutputFields,List listOfInputFields, boolean isSingleColumn,TableViewer tableViewer,TableViewer t) {
+	public DragDropTransformOpImp(TransformDialog transformDialogNew,List<MappingSheetRow> mappingSheetRows,TableViewer outputFieldTableViewer,List<NameValueProperty> mapAndPassThroughField,Map<String,List<FilterProperties>> outputFieldMap,List listOfOutputFields,List listOfInputFields, boolean isSingleColumn,TableViewer tableViewer,TableViewer t) {
 		super();
 		this.listOfInputFields = listOfInputFields;
 		this.isSingleColumn = isSingleColumn;
 		this.operationInputfieldtableviewer=tableViewer;
 		this.listOfOutputFields=listOfOutputFields;
 		this.operationOutputFieldTableViewer=t;
-		this.outputFieldList=outputFieldList;
+		this.outputFieldMap=outputFieldMap;
 		this.mapAndPassThroughField=mapAndPassThroughField;
 		this.outputFieldTableViewer=outputFieldTableViewer;
 		this.transformDialogNew=transformDialogNew;
@@ -77,7 +78,6 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	        	{	
 	        		listOfInputFields.add(inputField);
 	        		listOfOutputFields.add(outputField); 	
-	        		outputFieldList.addAll(listOfOutputFields);
 	        		transformDialogNew.refreshOutputTable();
 	        		}	
 	        	

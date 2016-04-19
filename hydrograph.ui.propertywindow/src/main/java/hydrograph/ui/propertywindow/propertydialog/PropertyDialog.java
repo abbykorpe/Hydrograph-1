@@ -188,16 +188,17 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		boolean windowValidityStaus = Boolean.TRUE;
 		boolean verifiedSchema = Boolean.TRUE;
 		for(AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()){
-			if(customWidget.getProperties() != null){
+			LinkedHashMap<String, Object> properties= customWidget.getProperties();
+			if(properties != null){
 				
-				windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
+				windowValidityStaus = validateWidget(windowValidityStaus, customWidget,properties);
 				if (customWidget instanceof ELTSchemaGridWidget) {
 					verifiedSchema = customWidget.verifySchemaFile();
 					if (verifiedSchema){
-						savePropertiesInComponentModel(customWidget);
+						savePropertiesInComponentModel(customWidget,properties);
 					}
 				} else{
-					savePropertiesInComponentModel(customWidget);
+					savePropertiesInComponentModel(customWidget,properties);
 				}
 			}
 		}
@@ -208,8 +209,8 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		disableApplyButton();
 	}
 
-	private void savePropertiesInComponentModel(AbstractWidget eltWidget) {
-		LinkedHashMap<String, Object> tempPropert = eltWidget.getProperties();
+	private void savePropertiesInComponentModel(AbstractWidget eltWidget,LinkedHashMap<String, Object> properties) {
+		LinkedHashMap<String, Object> tempPropert = properties;
 		LinkedHashMap<String, Object> componentConfigurationProperties = componentProperties.getComponentConfigurationProperties();
 		for(String propName : tempPropert.keySet()){
 			componentConfigurationProperties.put(propName, tempPropert.get(propName));
@@ -300,15 +301,16 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		boolean windowValidityStaus = Boolean.TRUE;
 		boolean verifiedSchema = Boolean.TRUE;
 		for (AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()) {
-			if (customWidget.getProperties() != null) {
-				windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
+			LinkedHashMap<String, Object> properties= customWidget.getProperties();
+			if (properties != null) {
+				windowValidityStaus = validateWidget(windowValidityStaus, customWidget,properties);
 				if (customWidget instanceof ELTSchemaGridWidget) {
 					verifiedSchema = customWidget.verifySchemaFile();
 					if (verifiedSchema){
-						savePropertiesInComponentModel(customWidget);
+						savePropertiesInComponentModel(customWidget,properties);
 					}
 				} else{
-					savePropertiesInComponentModel(customWidget);
+					savePropertiesInComponentModel(customWidget,properties);
 				}
 			}
 		}
@@ -338,8 +340,9 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	protected void cancelPressed() {
 		boolean windowValidityStaus = Boolean.TRUE;
 		for (AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()) {
+			LinkedHashMap<String, Object> properties= customWidget.getProperties();
 			if (customWidget.getProperties() != null) {
-				windowValidityStaus = validateWidget(windowValidityStaus, customWidget);
+				windowValidityStaus = validateWidget(windowValidityStaus, customWidget,properties);
 			}
 		}
 		isPropertyWindowValid = windowValidityStaus;
@@ -386,7 +389,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	}
 
 	
-	private boolean validateWidget(Boolean windowValidityStaus, AbstractWidget customWidget) {
+	private boolean validateWidget(Boolean windowValidityStaus, AbstractWidget customWidget,LinkedHashMap<String, Object> properties) {
 		List<String> validators = ComponentCacheUtil.INSTANCE.getValidatorsForProperty(
 				(String) this.componentProperties.getComponentMiscellaneousProperty(Constants.COMPONENT_ORIGINAL_NAME), 
 				customWidget.getPropertyName());
@@ -399,7 +402,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 				logger.error("Failed to create validator", e);
 				throw new RuntimeException("Failed to create validator", e);
 			}
-			boolean status = validator.validateMap(customWidget.getProperties(), customWidget.getPropertyName());
+			boolean status = validator.validateMap(properties, customWidget.getPropertyName());
 			//NOTE : here if any of the property is not valid then whole component is not valid 
 			if(status == false){
 				windowValidityStaus = Boolean.FALSE;

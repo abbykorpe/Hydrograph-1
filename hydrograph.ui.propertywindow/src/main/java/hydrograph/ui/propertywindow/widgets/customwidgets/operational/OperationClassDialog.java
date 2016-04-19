@@ -297,7 +297,9 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	 * Populate widget.
 	 */
 	public void populateWidget() {
-		if (!mappingSheetRow.getOperationClassPath().equalsIgnoreCase("")) {
+		
+		if (mappingSheetRow.getOperationClassPath()!=null && StringUtils.isNotBlank(mappingSheetRow.getOperationClassPath())) 
+		{
 			fileName.setBackground(new Color(Display.getDefault(), 255, 255, 255));
 			emptyDecorator.hide();
 			mappingSheetRow.setComboBoxValue(mappingSheetRow.getComboBoxValue());

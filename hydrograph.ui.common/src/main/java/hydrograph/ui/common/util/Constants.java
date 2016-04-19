@@ -249,6 +249,9 @@ public class Constants {
 	
 	public static final String EXTERNAL_SCHEMA = "External";
 	public static final String INTERNAL_SCHEMA = "Internal";
+
+	public static String SCHEMA_NOT_SYNC_MESSAGE="Schema Not In Sync";
+	public static String SYNC_WARNING="Sync Warning";
 }
 
 
