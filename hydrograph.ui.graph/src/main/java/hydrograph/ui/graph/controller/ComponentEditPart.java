@@ -548,13 +548,13 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		oldKeys.addAll(getCastedModel().getPorts().keySet());
 
 		for (String key : oldKeys) {
-			if(key.contains("in"))
+			if(key.contains(Constants.INPUT_SOCKET_TYPE))
 				oldInKeys.add(key);
 		}
 
 		for(int i=0; i<keyCount; i++)
 		{
-			newInKeys.add("in"+i);
+			newInKeys.add(Constants.INPUT_SOCKET_TYPE+i);
 		}
 		for (String key : oldInKeys) {
 			if(!newInKeys.contains(key))
@@ -573,13 +573,13 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		oldKeys.addAll(getCastedModel().getPorts().keySet());
 
 		for (String key : oldKeys) {
-			if(key.contains("out"))
+			if(key.contains(Constants.OUTPUT_SOCKET_TYPE))
 				oldOutKeys.add(key);
 		}
 
 		for(int i=0; i<keyCount; i++)
 		{
-			newOutKeys.add("out"+i);
+			newOutKeys.add(Constants.OUTPUT_SOCKET_TYPE+i);
 		}
 		for (String key : oldOutKeys) {
 			if(!newOutKeys.contains(key))
@@ -598,13 +598,13 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		oldKeys.addAll(getCastedModel().getPorts().keySet());
 
 		for (String key : oldKeys) {
-			if(key.contains("unused"))
+			if(key.contains(Constants.UNUSED_SOCKET_TYPE))
 				oldUnusedKeys.add(key);
 		}
 
 		for(int i=0; i<keyCount; i++)
 		{
-			newUnusedKeys.add("unused"+i);
+			newUnusedKeys.add(Constants.UNUSED_SOCKET_TYPE+i);
 		}
 		for (String key : oldUnusedKeys) {
 			if(!newUnusedKeys.contains(key))

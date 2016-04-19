@@ -254,5 +254,6 @@ public class Constants {
 
 	public static String SCHEMA_NOT_SYNC_MESSAGE="Schema Not In Sync";
 	public static String SYNC_WARNING="Sync Warning";
-}
+	public static String CLICK_TO_FOCUS="Click to focus";
 
+}
