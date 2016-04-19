@@ -133,6 +133,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.osgi.framework.adaptor.FilePath;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -1225,20 +1226,24 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		logger.debug("Job closed");
 		deleteDebugFiles();
 		
-		try {
-			closeSocket();
-			logger.info("Socket closed @ 8004");
-		} catch (UnknownHostException e) {
-			logger.error(e.getMessage());
-		} catch (IOException e) {
-			logger.error(e.getMessage());
-		}
+ 
+				closeSocket();
+				logger.info("Socket closed @ 8004");
+			 
+		 
 	}
 	
-	private void closeSocket() throws UnknownHostException, IOException{
-		ServerSocket serverSocket = new ServerSocket(8004, 1, InetAddress.getLocalHost());
-		if(!serverSocket.isClosed()){
-			serverSocket.close();
+	private void closeSocket()  {
+		ServerSocket serverSocket = null;
+		try {
+			serverSocket = new ServerSocket(8004);
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+			try {
+				serverSocket.close();
+			} catch (IOException e1) {
+				logger.error(e.getMessage());
+			}
 		}
 	}
 	
@@ -1251,13 +1256,26 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			logger.debug("current job {} wasn't found in Debughandler's map",currentJob);
 			return ;
 		}
+		String file_path = job.getDebug_file_path();
+		try {
+			ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(file_path)).delete(true, null);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		
+		
 		if(isLocal){
 			String basePath = job.getBasePath();
 			String userID = job.getUserId();
 			String password = job.getPassword();
+			String host = "localhost";
+			String port = "8004";
+			
 			DebugRestClient debugRestClient = new DebugRestClient();
-			debugRestClient.removeDebugFiles("localhost", "8004", basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
+			debugRestClient.removeDebugFiles(host, port, basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
 			logger.debug("debug files removed from local");
+			
+			
 		}else{
 			String basePath = job.getBasePath();
 			String ipAddress = job.getIpAddress();
@@ -1270,7 +1288,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			debugRestClient.removeDebugFiles(ipAddress, port_no, basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
 			logger.debug("debug files removed from cluster");
 		}
+		 
+		
 		DebugHandler.getJobMap().remove(currentJob);
+		
 	}
 	
 

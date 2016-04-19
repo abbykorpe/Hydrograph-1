@@ -190,7 +190,7 @@ public class WatchRecordAction extends SelectionAction {
 		DebugRestClient debugRestClient = new DebugRestClient();
 		 
 			try {
-				jsonArray = debugRestClient.callRestService(ipAddress, port, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), "vibhort", "Bitwise");
+				jsonArray = debugRestClient.callRestService(ipAddress, port, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), "userid", "password");
 			} catch (IOException exception) {
 				logger.error("Connection failed", exception);
 				messageDialog(Messages.REMOTE_MODE_TEXT);
