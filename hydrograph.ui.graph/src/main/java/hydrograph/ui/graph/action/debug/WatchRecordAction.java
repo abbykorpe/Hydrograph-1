@@ -82,8 +82,7 @@ public class WatchRecordAction extends SelectionAction {
 				Link link = (Link)((LinkEditPart)obj).getModel();
 				String componentId = link.getSource().getComponentLabel().getLabelContents();
 				Component component = link.getSource();
-				if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBGRAPH_COMPONENT)){
-					System.out.println("Subgraph");
+				if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
 					String str = DebugHelper.INSTANCE.getSubgraphComponent(component);
 					String[] str1 = StringUtils.split(str,".");
 					String componentID = str1[0];
@@ -138,7 +137,6 @@ public class WatchRecordAction extends SelectionAction {
 		String basePath = null,ipAddress = null,userID = null,password = null,port_no = null;
 		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
 		if(job!=null){
-			System.out.println("Initailize parameters...");
 			basePath = job.getBasePath();
 			ipAddress = job.getIpAddress();
 			userID = job.getUserId();

@@ -33,7 +33,7 @@ public class DebugHelper {
 	 */
 	public String getSubgraphComponent(Component component) throws CoreException{
 		Container container=null;
-		if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBGRAPH_COMPONENT)){
+		if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
 			String subgraphFilePath=(String) component.getProperties().get(Constants.JOB_PATH);
 			if(StringUtils.isNotBlank(subgraphFilePath)){
 				IPath jobPath=new Path(subgraphFilePath);

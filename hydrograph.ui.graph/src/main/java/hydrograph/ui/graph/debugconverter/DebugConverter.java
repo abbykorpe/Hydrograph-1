@@ -86,7 +86,7 @@ public class DebugConverter {
 							viewData = new ViewData();
 							limit = new Limit();
 							
-							if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBGRAPH_COMPONENT)){
+							if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
 								String componentId_socketId = DebugHelper.INSTANCE.getSubgraphComponent(component);
 								String[] data = StringUtils.split(componentId_socketId,".");
 								String componentId = data[0];
