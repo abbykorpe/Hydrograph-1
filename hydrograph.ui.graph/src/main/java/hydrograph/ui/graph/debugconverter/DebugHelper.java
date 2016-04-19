@@ -42,7 +42,7 @@ public class DebugHelper {
 					container=(Container) xs.fromXML(jobPath.toFile());
 					List<Link> links = null;
 					for(Component component_temp:container.getChildren()){
-						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), "OutputSubgraphComponent")){
+						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), "OutputSubjobComponent")){
 							links=component_temp.getTargetConnections();
 						}
 					}
@@ -58,7 +58,7 @@ public class DebugHelper {
 					container=(Container) xs.fromXML(ResourcesPlugin.getWorkspace().getRoot().getFile(jobPath).getContents(true));
 					List<Link> links = null;
 					for(Component component_temp:container.getChildren()){
-						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), "OutputSubgraphComponent")){
+						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), "OutputSubjobComponent")){
 							links=component_temp.getTargetConnections();
 						}
 					}for(Link str : links){
