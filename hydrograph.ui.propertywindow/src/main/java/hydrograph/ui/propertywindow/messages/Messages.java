@@ -147,11 +147,11 @@ public class Messages extends NLS {
 	public static String ALPHA_NUMRIC_REGULAR_EXPRESSION;
 	public static String TEXT_FIELD_SHOULD_MATCH;
 	public static String BROWSE_BUTTON_TEXT;
-	public static  String TRANSFORM_EDITOR = "Transform Editor";
-	public static  String LATER = "Later";
-	public static  String SYNC_NOW = "Sync Now";
-	public static  String MAPPING_SHEET = "mappingSheet";
-	public static  String PERVIOUS_VALUE = "perviousValue";
+	public static  String TRANSFORM_EDITOR ;
+	public static  String LATER;
+	public static  String SYNC_NOW;
+	public static  String MAPPING_SHEET;
+	public static  String PERVIOUS_VALUE;
 	public static String EmptyFieldNameNotification;
 	public static String EmptySourceFieldNotification;
 	public static String EmptyOutputFieldNotification;
