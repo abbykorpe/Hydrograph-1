@@ -295,10 +295,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 		}
 
-		if (!isSchemaInSync()){
+		if (schemaGridRowList != null && schemaGridRowList.size()>0 && !isSchemaInSync()){
 			MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, 
 					 Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, 
-	                new String[] { "Sync Now", "Later" }, 0);
+	                new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
 			int dialogResult =dialog.open();
 			if(dialogResult == 0){
 				syncSchemaFromTransform();
@@ -522,7 +522,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		if(transformSchemaType){
 			createSchemaGridSection(container.getContainerControl(), 340, 360);
-			createPullSchemaFromTransform(container.getContainerControl());
+			if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.TRANSFORM)|| StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.AGGREGATE))
+				createPullSchemaFromTransform(container.getContainerControl());
 		}
 		else{
 			createSchemaTypesSection(container.getContainerControl());
@@ -1207,9 +1208,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 							}
 						}
 					} 
-					else if(!StringUtils.equalsIgnoreCase(Constants.TRANSFORM, getComponent().getComponentName()) && !StringUtils.equalsIgnoreCase(Constants.AGGREGATE, getComponent().getComponentName())){
-						originalSchema.getGridRow().add(row.copy());
+					else if(!StringUtils.equalsIgnoreCase(Constants.TRANSFORM, getComponent().getComponentName()) && !StringUtils.equalsIgnoreCase(Constants.AGGREGATE, getComponent().getComponentName()))
+							originalSchema.getGridRow().add(row.copy());
+					else{
+						Schema outerSchema = (Schema) getComponent().getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
+						originalSchema.setGridRow(outerSchema.getGridRow());
 					}
+					
 				}
 			}
 			table.clearAll();
