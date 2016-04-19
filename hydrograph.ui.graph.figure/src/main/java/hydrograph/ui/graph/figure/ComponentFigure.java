@@ -33,8 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.draw2d.ColorConstants;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.Figure;
@@ -207,7 +205,6 @@ public class ComponentFigure extends Figure implements Validator{
 	 */
 	public void setHeight(int totalPortsofInType, int totalPortsOfOutType) {
 		int heightFactor=totalPortsofInType > totalPortsOfOutType ? totalPortsofInType : totalPortsOfOutType;
-		//this.height = (heightFactor+1)*25;
 		this.height = (heightFactor+1)*27;
 	}
 
@@ -566,10 +563,10 @@ public class ComponentFigure extends Figure implements Validator{
 		Rectangle q = new Rectangle(4, 4+componentLabelMargin, r.width-8, r.height-8-componentLabelMargin);
 		graphics.fillRoundRectangle(q, 5, 5);
 
-		graphics.drawImage(canvasIcon, new Point(q.width/2-16, q.height/2+componentLabelMargin-15 + 4));
+		graphics.drawImage(canvasIcon, new Point(q.width/2-16, q.height/2+componentLabelMargin-11));
 		drawStatus(graphics);
 		
-		graphics.drawText(acronym, new Point(q.width/2-16 + 5, q.height/2+componentLabelMargin-15 - 10));
+		graphics.drawText(acronym, new Point(q.width/2-16 + 5, q.height/2+componentLabelMargin-25));
 	}
 
 	/**
