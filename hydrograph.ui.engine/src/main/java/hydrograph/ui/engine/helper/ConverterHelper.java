@@ -23,6 +23,7 @@ import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
+import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
@@ -437,6 +438,43 @@ public class ConverterHelper {
 		}
 		return typeBaseField;
 	}
+	
+	/**
+	 * returns Schema
+	 * 
+	 * @param {@link MixedSchemeGridRow}
+	 * @return {@link TypeBaseField}
+	 */	
+	public TypeBaseField getFileMixedSchemeTargetData(MixedSchemeGridRow object) {
+		TypeBaseField typeBaseField = new TypeBaseField();
+		typeBaseField.setName(object.getFieldName());
+
+		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())
+				&& !object.getDateFormat().trim().isEmpty())
+			typeBaseField.setFormat(object.getDateFormat());
+
+		if (!object.getScale().trim().isEmpty())
+			typeBaseField.setScale(Integer.parseInt(object.getScale()));
+
+		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())
+				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())) {
+			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
+			if (!object.getScale().trim().isEmpty())
+				typeBaseField.setScale(Integer.parseInt(object.getScale()));
+		}
+
+		for (FieldDataTypes fieldDataType : FieldDataTypes.values()) {
+			if (fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
+				typeBaseField.setType(fieldDataType);
+		}
+		if (object.getLength() != null && !object.getLength().trim().isEmpty()) {
+			typeBaseField.getOtherAttributes().put(new QName(Constants.LENGTH_QNAME), object.getLength());
+		}
+		if (object.getDelimiter() != null && !object.getDelimiter().trim().isEmpty()) {
+			typeBaseField.getOtherAttributes().put(new QName(Constants.DELIMITER_QNAME), object.getDelimiter());
+		}		
+		return typeBaseField;
+	}	
 
 	/**
 	 * returns Schema
@@ -564,3 +602,4 @@ public class ConverterHelper {
 			tempAndValue.setNewNodeText(tempAndValue.getNewNodeText()+" "+fieldName);
 	}
 }
+

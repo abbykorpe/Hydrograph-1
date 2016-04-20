@@ -146,6 +146,7 @@ public class Constants {
 	public static final String SUBJOB_NAME = "subjob.job";
 	
 	public static final String LENGTH_QNAME = "length";
+	public static final String DELIMITER_QNAME = "delimiter";	
 	public static final String RANGE_FROM_QNAME = "rangeFrom";
 	public static final String RANGE_TO_QNAME = "rangeTo";
 	public static final String DEFAULT_VALUE_QNAME = "default";
@@ -242,6 +243,7 @@ public class Constants {
 	
 	//Types of UI- Schema 
 	public static final String FIXEDWIDTH_GRID_ROW = "FixedWidth";
+	public static final String MIXEDSCHEMA_GRID_ROW = "MixedSchema";		
 	public static final String GENERATE_RECORD_GRID_ROW="GenerateRecord";
 	public static final String GENERIC_GRID_ROW="Generic";
 	public static final String PACKAGE = "package";
@@ -253,5 +255,4 @@ public class Constants {
 	public static String SCHEMA_NOT_SYNC_MESSAGE="Schema Not In Sync";
 	public static String SYNC_WARNING="Sync Warning";
 }
-
 
