@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package hydrograph.ui.common.util;
 
 /**
@@ -19,7 +18,7 @@ package hydrograph.ui.common.util;
  * Class to store Image path constants
  * 
  * @author Bitwise
- *
+ * 
  */
 public class ImagePathConstant {
 	public static final String ADD_BUTTON = "/icons/add.png";
@@ -29,5 +28,9 @@ public class ImagePathConstant {
 	public static final String EDIT_BUTTON = "/icons/editImage.png";
 	public static final String APP_ICON = "/icons/app_icon.png";
 	public static final String UNCHECKALL_ICON = "/icons/uncheckall.png";
-	public static final String CHECKALL_ICON = 	"/icons/checkall.png";
+	public static final String CHECKALL_ICON = "/icons/checkall.png";
+	public static final String COMPONENT_WARN_ICON = "/icons/warn.png";
+	public static final String COMPONENT_ERROR_ICON = "/icons/error.png";
+	public static final String COMPONENT_UPDATE_ICON = "/icons/update.png";
+
 }
