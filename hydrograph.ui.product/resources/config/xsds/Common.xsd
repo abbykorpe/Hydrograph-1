@@ -88,6 +88,7 @@
 			<enumeration value="PARTITION_KEYS_WIDGET"/>
 			<enumeration value="QUOTE_WIDGET"/>
 			<enumeration value="EXTERNAL_TABLE_PATH_WIDGET"/>
+			<enumeration value="MIXED_SCHEME"/>
 		</restriction>
 	</simpleType>
 
@@ -170,6 +171,13 @@
 		          </appinfo>
         	</annotation>
 		</enumeration>
+		<enumeration value="MIXED_SCHEME_GRID_VALIDATOR">
+			 <annotation>
+		          <appinfo>
+		            <jaxb:typesafeEnumMember name="MixedSchemeGridValidationRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>		
 		<enumeration value="BOOLEAN_OR_PARAMETER_VALIDATOR">
 			 <annotation>
 		          <appinfo>

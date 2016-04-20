@@ -115,6 +115,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
+import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.propertywindow.filemixedschema.ELTMixedSchemeWidget;
 import org.slf4j.Logger;
 
 
@@ -135,6 +137,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String SCALE_TYPE = Messages.SCALE_TYPE;
 	public static final String FIELD_DESCRIPTION = Messages.FIELD_DESCRIPTION;
 	public static final String LENGTH = Messages.LENGTH;
+	public static final String DELIMITER = Messages.DELIMITER;
 
 	public static final String RANGE_FROM = Messages.RANGE_FROM;
 	public static final String RANGE_TO = Messages.RANGE_TO;
@@ -148,6 +151,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected ControlDecoration isFieldNameAlphanumericDecorator;
 	protected ControlDecoration scaleDecorator;
 	protected ControlDecoration lengthDecorator;
+	protected ControlDecoration delimiterDecorator;
 	protected ControlDecoration rangeFromDecorator;
 	protected ControlDecoration rangeToDecorator;
 	protected TableViewer tableViewer;
@@ -388,6 +392,18 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 								((FixedWidthGridRow) gridRow).setLength("");
 							schemasFromFile.add(gridRow);
 						}
+					}else if(Messages.MIXEDSCHEME_GRID_ROW.equals(gridRowType)){
+
+						for (Field temp : fieldsList) {
+							gridRow = new MixedSchemeGridRow();
+							populateCommonFields(gridRow, temp);
+							if(temp.getLength()!=null)
+								((MixedSchemeGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
+							else
+								((MixedSchemeGridRow) gridRow).setLength("");
+							((MixedSchemeGridRow) gridRow).setDelimiter(temp.getDelimiter());
+							schemasFromFile.add(gridRow);
+						}
 					}else if(Messages.GENERATE_RECORD_GRID_ROW.equals(gridRowType)){
 
 						for (Field temp : fieldsList) {
@@ -548,7 +564,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		schema.setIsExternal(false);
 		schema.setGridRow(new ArrayList<GridRow>());
 		if (componentsOutputSchema != null) {
-			if (this.getClass().isAssignableFrom(ELTFixedWidget.class)) {
+			if( this.getClass().isAssignableFrom(ELTMixedSchemeWidget.class))
+				for (FixedWidthGridRow gridRow : componentsOutputSchema.getFixedWidthGridRowsOutputFields()) {
+					schema.getGridRow().add(componentsOutputSchema.convertFixedWidthSchemaToMixedSchemaGridRow(gridRow));
+				}
+			else if (this.getClass().isAssignableFrom(ELTFixedWidget.class)) {
 				for (FixedWidthGridRow gridRow : componentsOutputSchema.getFixedWidthGridRowsOutputFields()) {
 					schema.getGridRow().add(gridRow);
 				}

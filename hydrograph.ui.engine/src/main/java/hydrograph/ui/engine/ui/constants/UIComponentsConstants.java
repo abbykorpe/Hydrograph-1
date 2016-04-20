@@ -24,6 +24,7 @@ public enum UIComponentsConstants {
 	VALIDITY_STATUS("validityStatus"),
 	INPUT_CATEGORY("INPUT"),
 	FILE_FIXEDWIDTH("File Fixed Width"),
+	FILE_MIXEDSCHEMA("File Mixed Schema"),		
 	OUTPUT_CATEGORY("OUTPUT"),
 	STRAIGHTPULL_CATEGORY("STRAIGHTPULL"),
 	CLONE("Clone"), 

@@ -18,6 +18,7 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GridRowLoader;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
@@ -74,6 +75,26 @@ public class ConverterUiHelper {
 			getCommonSchema(fixedWidthGrid, typeBaseField);
 			fixedWidthGrid.setLength(getStringValue(getQnameValue(typeBaseField, Constants.LENGTH_QNAME)));
 			return fixedWidthGrid;
+		}
+		return null;
+	}
+	
+	/**
+	 * Create File-Mixed-Scheme for the components.
+	 * 
+	 * @param record
+	 * @return MixedSchemeGridRow, this object is responsible for displaying mixed-scheme on property window
+	 */
+	public MixedSchemeGridRow getMixedScheme(Object record) {
+		if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
+			return null;
+		} else if ((TypeBaseField.class).isAssignableFrom(record.getClass())) {
+			MixedSchemeGridRow mixedSchemeGrid = new MixedSchemeGridRow();
+			TypeBaseField typeBaseField = (TypeBaseField) record;
+			getCommonSchema(mixedSchemeGrid, typeBaseField);
+			mixedSchemeGrid.setLength(getStringValue(getQnameValue(typeBaseField, Constants.LENGTH_QNAME)));
+			mixedSchemeGrid.setDelimiter(getStringValue(getQnameValue(typeBaseField, Constants.DELIMITER_QNAME)));
+			return mixedSchemeGrid;
 		}
 		return null;
 	}

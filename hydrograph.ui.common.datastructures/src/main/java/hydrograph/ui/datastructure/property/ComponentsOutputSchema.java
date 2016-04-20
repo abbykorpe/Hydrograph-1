@@ -34,6 +34,7 @@ public class ComponentsOutputSchema implements IDataStructure {
 
 	private String fromSocketId;
 	private List<FixedWidthGridRow> fixedWidthGridRowsOutputFields = new ArrayList<>();
+	private List<MixedSchemeGridRow> mixedSchemeGridRowsOutputFields = new ArrayList<>();
 	private List<String> passthroughFields = new LinkedList<>();
 	private Map<String, String> mapFields = new LinkedHashMap<>();
 	private Map<String,String> passThroughFieldsPortInfo = new LinkedHashMap<>();
@@ -51,7 +52,9 @@ public class ComponentsOutputSchema implements IDataStructure {
 	public void addSchemaFields(GridRow gridRow) {
 		if (gridRow instanceof FixedWidthGridRow) {
 			this.fixedWidthGridRowsOutputFields.add((FixedWidthGridRow) gridRow);
-		} else if (gridRow instanceof BasicSchemaGridRow) {
+		} else if(gridRow instanceof MixedSchemeGridRow){
+			this.mixedSchemeGridRowsOutputFields.add((MixedSchemeGridRow) gridRow);
+		}else if (gridRow instanceof BasicSchemaGridRow) {
 			this.fixedWidthGridRowsOutputFields.add(convertSchemaGridRowToFixedWidthSchema((BasicSchemaGridRow) gridRow));
 		}
 
@@ -272,5 +275,23 @@ public class ComponentsOutputSchema implements IDataStructure {
 				schemaGridRow = row;
 		}
 		return schemaGridRow;
+	}
+
+
+	public MixedSchemeGridRow convertFixedWidthSchemaToMixedSchemaGridRow(
+			FixedWidthGridRow fixedWidthGridRow) {
+		MixedSchemeGridRow mixedSchemeGridRow=new MixedSchemeGridRow();
+		mixedSchemeGridRow.setDataType(fixedWidthGridRow.getDataType());
+		mixedSchemeGridRow.setDataTypeValue(fixedWidthGridRow.getDataTypeValue());
+		mixedSchemeGridRow.setDateFormat(fixedWidthGridRow.getDateFormat());
+		mixedSchemeGridRow.setDescription(fixedWidthGridRow.getDescription());
+		mixedSchemeGridRow.setFieldName(fixedWidthGridRow.getFieldName());
+		mixedSchemeGridRow.setLength(fixedWidthGridRow.getLength());
+		mixedSchemeGridRow.setPrecision(fixedWidthGridRow.getPrecision());
+		mixedSchemeGridRow.setScale(fixedWidthGridRow.getScale());
+		mixedSchemeGridRow.setScaleType(fixedWidthGridRow.getScaleType());
+		mixedSchemeGridRow.setScaleTypeValue(fixedWidthGridRow.getScaleTypeValue());
+		mixedSchemeGridRow.setDelimiter("");
+	return mixedSchemeGridRow;
 	}
 }

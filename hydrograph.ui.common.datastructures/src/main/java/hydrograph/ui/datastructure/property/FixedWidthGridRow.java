@@ -22,6 +22,7 @@ package hydrograph.ui.datastructure.property;
  */
 public class FixedWidthGridRow extends GridRow{
 	private String length;
+	protected String delimiter;
 
 	public String getLength() {
 		return length;
@@ -29,6 +30,13 @@ public class FixedWidthGridRow extends GridRow{
 
 	public void setLength(String length) {
 		this.length = length;
+	}
+	
+	public String getDelimiter() {
+		return delimiter;
+	}
+	public void setDelimiter(String delimiter) {
+		this.delimiter = delimiter;
 	}
 
 	@Override
