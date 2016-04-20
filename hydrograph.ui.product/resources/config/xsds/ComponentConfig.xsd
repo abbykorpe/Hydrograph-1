@@ -75,13 +75,14 @@
 		</sequence>
 		<attribute name="typeOfPort" type="cnst:PortType" use="required" />
 		<attribute name="numberOfPorts" type="int" use="required" />	
-		<attribute name="changePortCountDynamically" type="boolean" use="optional" default="false"/>		
+		<attribute name="changePortCountDynamically" type="boolean" use="optional" default="false"/>	
+		<attribute name="allowMultipleLinks" type="boolean" use="required" />
+		<attribute name="linkMandatory" type="boolean" use="required"/>	
 	</complexType>
 	
 	<complexType name="PortInfo">
 		<attribute name="sequenceOfPort" type="int" use="required" />
-		<attribute name="allowMultipleLinks" type="boolean" use="required" />
-		<attribute name="linkMandatory" type="boolean" use="required"/>
+		
 		<attribute name="nameOfPort" type="string" use="required"/>
 		<attribute name="labelOfPort" type="string" use="required"/>	
 	</complexType>	

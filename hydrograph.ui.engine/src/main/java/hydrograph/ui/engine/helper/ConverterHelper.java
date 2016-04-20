@@ -13,8 +13,20 @@
 
 package hydrograph.ui.engine.helper;
 
-import hydrograph.ui.common.component.config.PortInfo;
-import hydrograph.ui.common.component.config.PortSpecification;
+import hydrograph.engine.jaxb.commontypes.FieldDataTypes;
+import hydrograph.engine.jaxb.commontypes.ScaleTypeList;
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeInputField;
+import hydrograph.engine.jaxb.commontypes.TypeMapField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
+import hydrograph.engine.jaxb.commontypes.TypeOperationOutputFields;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
@@ -32,6 +44,8 @@ import hydrograph.ui.engine.xpath.ComponentXpathConstants;
 import hydrograph.ui.engine.xpath.ComponentsAttributeAndValue;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.Port;
+import hydrograph.ui.graph.model.PortDetails;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
@@ -45,21 +59,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.FieldDataTypes;
-import hydrograph.engine.jaxb.commontypes.ScaleTypeList;
-import hydrograph.engine.jaxb.commontypes.TypeBaseField;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeInputField;
-import hydrograph.engine.jaxb.commontypes.TypeMapField;
-import hydrograph.engine.jaxb.commontypes.TypeOperationField;
-import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
-import hydrograph.engine.jaxb.commontypes.TypeOperationOutputFields;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 
 /**
  * This is a helper class for converter implementation. Contains the helper methods for conversion.
@@ -374,8 +373,6 @@ public class ConverterHelper {
 						typeOperationFieldList.add(typeOperationField);	
 					}
 				}
-
-
 			}
 		}
 
@@ -403,40 +400,6 @@ public class ConverterHelper {
 			}
 		}
 		return inSocketsList;
-	}
-
-	/**
-	 * returns Schema
-	 * 
-	 * @param {@link FixedWidthGridRow}
-	 * @return {@link TypeBaseField}
-	 */
-	public TypeBaseField getFixedWidthTargetData(FixedWidthGridRow object) {
-		TypeBaseField typeBaseField = new TypeBaseField();
-		typeBaseField.setName(object.getFieldName());
-
-		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())
-				&& !object.getDateFormat().trim().isEmpty())
-			typeBaseField.setFormat(object.getDateFormat());
-
-		if (!object.getScale().trim().isEmpty())
-			typeBaseField.setScale(Integer.parseInt(object.getScale()));
-
-		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())
-				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())) {
-			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
-			if (!object.getScale().trim().isEmpty())
-				typeBaseField.setScale(Integer.parseInt(object.getScale()));
-		}
-
-		for (FieldDataTypes fieldDataType : FieldDataTypes.values()) {
-			if (fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
-				typeBaseField.setType(fieldDataType);
-		}
-		if (object.getLength() != null && !object.getLength().trim().isEmpty()) {
-			typeBaseField.getOtherAttributes().put(new QName(Constants.LENGTH_QNAME), object.getLength());
-		}
-		return typeBaseField;
 	}
 	
 	/**
@@ -475,6 +438,40 @@ public class ConverterHelper {
 		}		
 		return typeBaseField;
 	}	
+
+	/**
+	 * returns Schema
+	 * 
+	 * @param {@link FixedWidthGridRow}
+	 * @return {@link TypeBaseField}
+	 */
+	public TypeBaseField getFixedWidthTargetData(FixedWidthGridRow object) {
+		TypeBaseField typeBaseField = new TypeBaseField();
+		typeBaseField.setName(object.getFieldName());
+
+		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())
+				&& !object.getDateFormat().trim().isEmpty())
+			typeBaseField.setFormat(object.getDateFormat());
+
+		if (!object.getScale().trim().isEmpty())
+			typeBaseField.setScale(Integer.parseInt(object.getScale()));
+
+		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())
+				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())) {
+			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
+			if (!object.getScale().trim().isEmpty())
+				typeBaseField.setScale(Integer.parseInt(object.getScale()));
+		}
+
+		for (FieldDataTypes fieldDataType : FieldDataTypes.values()) {
+			if (fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
+				typeBaseField.setType(fieldDataType);
+		}
+		if (object.getLength() != null && !object.getLength().trim().isEmpty()) {
+			typeBaseField.getOtherAttributes().put(new QName(Constants.LENGTH_QNAME), object.getLength());
+		}
+		return typeBaseField;
+	}
 
 	/**
 	 * returns Schema
@@ -569,10 +566,11 @@ public class ConverterHelper {
 	 */
 	public boolean isMultipleLinkAllowed(Component sourceComponent, String portName) {
 		logger.debug("Getting port specification for port" + portName);
-		for (PortSpecification portSpecification : sourceComponent.getPortSpecification()) {
-			for(PortInfo portInfo:portSpecification.getPort()){
-				if (portInfo.getNameOfPort().equals(portName)) {
-					return portInfo.isAllowMultipleLinks();
+		
+		for (PortDetails portDetails : sourceComponent.getPortDetails()) {
+			for( Port port: portDetails.getPort()){
+				if(port.getPortType().equals(portName)){
+					return port.isAllowMultipleLinks();
 				}
 			}
 		}
@@ -602,4 +600,3 @@ public class ConverterHelper {
 			tempAndValue.setNewNodeText(tempAndValue.getNewNodeText()+" "+fieldName);
 	}
 }
-

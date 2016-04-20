@@ -23,11 +23,11 @@
 		<tns:category>SUBJOB</tns:category>
 
 			<tns:port>
-			<tns:portSpecification typeOfPort="in" numberOfPorts="0" changePortCountDynamically="true">
+			<tns:portSpecification typeOfPort="in" numberOfPorts="0" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="out" numberOfPorts="0" changePortCountDynamically="true">
+			<tns:portSpecification typeOfPort="out" numberOfPorts="0" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="unused" numberOfPorts="0" changePortCountDynamically="false">
+			<tns:portSpecification typeOfPort="unused" numberOfPorts="0" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
 			</tns:portSpecification>
 		</tns:port>
 		

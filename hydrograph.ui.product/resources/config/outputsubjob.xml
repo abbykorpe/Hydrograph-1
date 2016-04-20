@@ -22,13 +22,15 @@
 		<tns:category>SUBJOB</tns:category>
 
 		
-			<tns:port>
-			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="true">
-				<tns:port sequenceOfPort="0" allowMultipleLinks="false" linkMandatory="true" nameOfPort="in0" labelOfPort="in0"/>
+		<tns:port>
+			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
+				<tns:port sequenceOfPort="0" nameOfPort="in0" labelOfPort="in0"/>
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="out" numberOfPorts="0" changePortCountDynamically="false">
+			
+			<tns:portSpecification typeOfPort="out" numberOfPorts="0" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="unused" numberOfPorts="0" changePortCountDynamically="false">
+			
+			<tns:portSpecification typeOfPort="unused" numberOfPorts="0" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
 			</tns:portSpecification>
 		</tns:port>			
 		

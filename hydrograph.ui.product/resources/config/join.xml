@@ -20,16 +20,16 @@
 		acronym="Join">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
-			<tns:portSpecification typeOfPort="in" numberOfPorts="2" changePortCountDynamically="true">
-				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="in0" nameOfPort="in0" allowMultipleLinks="false"/>
-				<tns:port sequenceOfPort="1" linkMandatory="true" labelOfPort="in1" nameOfPort="in1" allowMultipleLinks="false"/>
+			<tns:portSpecification typeOfPort="in" numberOfPorts="2" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
+				<tns:port sequenceOfPort="0"  labelOfPort="in0" nameOfPort="in0" />
+				<tns:port sequenceOfPort="1" labelOfPort="in1" nameOfPort="in1"/>
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="unused" numberOfPorts="2" changePortCountDynamically="true">
-				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="un0" nameOfPort="un0" allowMultipleLinks="false"/>
-				<tns:port sequenceOfPort="1" linkMandatory="true" labelOfPort="un1" nameOfPort="un1" allowMultipleLinks="false"/>
+			<tns:portSpecification typeOfPort="unused" numberOfPorts="2" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
+				<tns:port sequenceOfPort="0" labelOfPort="un0" nameOfPort="un0" />
+				<tns:port sequenceOfPort="1" labelOfPort="un1" nameOfPort="un1" />
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
-				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="out0" nameOfPort="out0" allowMultipleLinks="false"/>
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+				<tns:port sequenceOfPort="0" labelOfPort="out0" nameOfPort="out0" />
 			</tns:portSpecification>
 		</tns:port>
 		

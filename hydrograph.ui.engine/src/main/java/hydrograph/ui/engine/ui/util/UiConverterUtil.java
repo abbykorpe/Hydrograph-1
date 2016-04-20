@@ -256,8 +256,10 @@ public class UiConverterUtil {
 		for (LinkingData linkingData : UIComponentRepo.INSTANCE.getComponentLinkList()) {
 			LOGGER.debug("Process links data for one to many port generation : {}", linkingData);
 			if (UIComponentRepo.INSTANCE.getComponentUiFactory().get(linkingData.getSourceComponentId()) != null) {
+				/*isMultiplePortAllowed = UIComponentRepo.INSTANCE.getComponentUiFactory()
+						.get(linkingData.getSourceComponentId()).getPortSpecification().get(0).getPort().get(0).isAllowMultipleLinks();*/
 				isMultiplePortAllowed = UIComponentRepo.INSTANCE.getComponentUiFactory()
-						.get(linkingData.getSourceComponentId()).getPortSpecification().get(0).getPort().get(0).isAllowMultipleLinks();
+						.get(linkingData.getSourceComponentId()).getPortDetails().get(0).isAllowMultipleLinks();
 				
 				if (isMultiplePortAllowed) {
 					if (linkingData.getSourceTerminal().contains("out"))
