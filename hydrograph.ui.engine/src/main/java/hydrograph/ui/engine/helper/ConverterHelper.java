@@ -373,6 +373,8 @@ public class ConverterHelper {
 						typeOperationFieldList.add(typeOperationField);	
 					}
 				}
+
+
 			}
 		}
 
@@ -400,6 +402,40 @@ public class ConverterHelper {
 			}
 		}
 		return inSocketsList;
+	}
+
+	/**
+	 * returns Schema
+	 * 
+	 * @param {@link FixedWidthGridRow}
+	 * @return {@link TypeBaseField}
+	 */
+	public TypeBaseField getFixedWidthTargetData(FixedWidthGridRow object) {
+		TypeBaseField typeBaseField = new TypeBaseField();
+		typeBaseField.setName(object.getFieldName());
+
+		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())
+				&& !object.getDateFormat().trim().isEmpty())
+			typeBaseField.setFormat(object.getDateFormat());
+
+		if (!object.getScale().trim().isEmpty())
+			typeBaseField.setScale(Integer.parseInt(object.getScale()));
+
+		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())
+				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())) {
+			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
+			if (!object.getScale().trim().isEmpty())
+				typeBaseField.setScale(Integer.parseInt(object.getScale()));
+		}
+
+		for (FieldDataTypes fieldDataType : FieldDataTypes.values()) {
+			if (fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
+				typeBaseField.setType(fieldDataType);
+		}
+		if (object.getLength() != null && !object.getLength().trim().isEmpty()) {
+			typeBaseField.getOtherAttributes().put(new QName(Constants.LENGTH_QNAME), object.getLength());
+		}
+		return typeBaseField;
 	}
 	
 	/**
@@ -438,40 +474,6 @@ public class ConverterHelper {
 		}		
 		return typeBaseField;
 	}	
-
-	/**
-	 * returns Schema
-	 * 
-	 * @param {@link FixedWidthGridRow}
-	 * @return {@link TypeBaseField}
-	 */
-	public TypeBaseField getFixedWidthTargetData(FixedWidthGridRow object) {
-		TypeBaseField typeBaseField = new TypeBaseField();
-		typeBaseField.setName(object.getFieldName());
-
-		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())
-				&& !object.getDateFormat().trim().isEmpty())
-			typeBaseField.setFormat(object.getDateFormat());
-
-		if (!object.getScale().trim().isEmpty())
-			typeBaseField.setScale(Integer.parseInt(object.getScale()));
-
-		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())
-				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())) {
-			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
-			if (!object.getScale().trim().isEmpty())
-				typeBaseField.setScale(Integer.parseInt(object.getScale()));
-		}
-
-		for (FieldDataTypes fieldDataType : FieldDataTypes.values()) {
-			if (fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
-				typeBaseField.setType(fieldDataType);
-		}
-		if (object.getLength() != null && !object.getLength().trim().isEmpty()) {
-			typeBaseField.getOtherAttributes().put(new QName(Constants.LENGTH_QNAME), object.getLength());
-		}
-		return typeBaseField;
-	}
 
 	/**
 	 * returns Schema
