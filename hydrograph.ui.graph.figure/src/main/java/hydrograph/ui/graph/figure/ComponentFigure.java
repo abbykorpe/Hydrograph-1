@@ -109,6 +109,7 @@ public class ComponentFigure extends Figure implements Validator {
 	 * @param cIconPath
 	 *            the canvas icon path
 	 * @param linkedHashMap
+	 * 			  the properties of components
 	 */
 	public ComponentFigure(List<PortSpecification> portSpecification, String cIconPath, String label, String acronym,
 			LinkedHashMap<String, Object> properties) {
@@ -185,13 +186,13 @@ public class ComponentFigure extends Figure implements Validator {
 		setBorder(new ComponentBorder(selectedBorderColor, 1, componentLabelMargin));
 	}
 
-	private void setPortCount(PortSpecification p) {
-		if ((Constants.INPUT_SOCKET_TYPE).equalsIgnoreCase(p.getTypeOfPort().value())) {
-			totalPortsofInType = p.getNumberOfPorts();
-		} else if ((Constants.OUTPUT_SOCKET_TYPE).equalsIgnoreCase(p.getTypeOfPort().value())) {
-			totalPortsOfOutType = p.getNumberOfPorts();
-		} else if ((Constants.UNUSED_SOCKET_TYPE).equalsIgnoreCase(p.getTypeOfPort().value())) {
-			totalPortsOfUnusedType = p.getNumberOfPorts();
+	private void setPortCount(PortSpecification portSpecification) {
+		if (StringUtils.equalsIgnoreCase(Constants.INPUT_SOCKET_TYPE,portSpecification.getTypeOfPort().value())) {
+			totalPortsofInType = portSpecification.getNumberOfPorts();
+		} else if (StringUtils.equalsIgnoreCase(Constants.OUTPUT_SOCKET_TYPE,portSpecification.getTypeOfPort().value())) {
+			totalPortsOfOutType = portSpecification.getNumberOfPorts();
+		} else if (StringUtils.equalsIgnoreCase(Constants.UNUSED_SOCKET_TYPE,portSpecification.getTypeOfPort().value())) {
+			totalPortsOfUnusedType = portSpecification.getNumberOfPorts();
 		}
 
 	}
@@ -493,19 +494,16 @@ public class ComponentFigure extends Figure implements Validator {
 
 			@Override
 			public void mouseReleased(org.eclipse.draw2d.MouseEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void mousePressed(org.eclipse.draw2d.MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				hideToolTip();
 			}
 
 			@Override
 			public void mouseDoubleClicked(org.eclipse.draw2d.MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				hideToolTip();
 			}
 		});
