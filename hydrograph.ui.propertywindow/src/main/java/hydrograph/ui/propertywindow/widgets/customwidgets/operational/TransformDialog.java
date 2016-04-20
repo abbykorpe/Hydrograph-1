@@ -453,8 +453,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private void createMapAndPassthroughTable(Composite middleComposite) {
 		Composite mappingTableComposite = new Composite(middleComposite, SWT.NONE);
 		mappingTableComposite.setLayout(new GridLayout(2, false));
-		GridData gd_mappingTableComposite = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		gd_mappingTableComposite.minimumHeight=200;
+		GridData gd_mappingTableComposite = new GridData(SWT.FILL, SWT.FILL, true, true, 10, 1);
+		gd_mappingTableComposite.minimumHeight=180;
 		
 		mappingTableComposite.setLayoutData(gd_mappingTableComposite);
 
@@ -592,7 +592,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		errorComposite = new Composite(middleComposite, SWT.NONE);
 		errorComposite.setLayout(new GridLayout(1, false));
 		GridData errorCompositeData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		errorCompositeData.minimumHeight=70;
+		errorCompositeData.minimumHeight=60;
 		
 		
 		errorComposite.setLayoutData(errorCompositeData);

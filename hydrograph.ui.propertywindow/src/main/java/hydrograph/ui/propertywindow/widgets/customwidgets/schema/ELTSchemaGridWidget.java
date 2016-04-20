@@ -1209,12 +1209,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						}
 					} 
 					else if(!StringUtils.equalsIgnoreCase(Constants.TRANSFORM, getComponent().getComponentName()) && !StringUtils.equalsIgnoreCase(Constants.AGGREGATE, getComponent().getComponentName()))
-							originalSchema.getGridRow().add(row.copy());
-					else{
-						Schema outerSchema = (Schema) getComponent().getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
-						originalSchema.setGridRow(outerSchema.getGridRow());
-					}
-					
+							originalSchema.getGridRow().add(row.copy());					
 				}
 			}
 			table.clearAll();
