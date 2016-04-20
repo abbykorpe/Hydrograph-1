@@ -566,7 +566,6 @@ public class ConverterHelper {
 	 */
 	public boolean isMultipleLinkAllowed(Component sourceComponent, String portName) {
 		logger.debug("Getting port specification for port" + portName);
-		
 		for (PortDetails portDetails : sourceComponent.getPortDetails()) {
 			for( Port port: portDetails.getPort()){
 				if(port.getPortType().equals(portName)){

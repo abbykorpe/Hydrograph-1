@@ -86,22 +86,6 @@ public class LinkCommand extends Command{
 
 			portspecification=XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
 
-			/*for (PortSpecification p:portspecification)
-			{
-				for(PortInfo portInfo:p.getPort()){
-					String portName=p.getTypeOfPort().value()+portInfo.getSequenceOfPort();
-					if(portName.equals(sourceTerminal)){
-						if(portInfo.isAllowMultipleLinks() || 
-								!source.isOutputPortEngaged(sourceTerminal)){
-							
-						}else{
-							
-							return false;
-						}
-					}
-				}
-				
-			}*/
 			for (PortSpecification p:portspecification)
 			{
 				for(PortInfo portInfo:p.getPort()){
@@ -127,22 +111,6 @@ public class LinkCommand extends Command{
 					.getClazzName(target.getClass());
 
 			portspecification=XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
-			/*for (PortSpecification p:portspecification)
-			{
-				for(PortInfo portInfo:p.getPort()){
-					String portName=p.getTypeOfPort().value()+portInfo.getSequenceOfPort();
-					if(portName.equals(targetTerminal)){
-						if(portInfo.isAllowMultipleLinks() ||
-								!target.isInputPortEngaged(targetTerminal)){
-							
-						}else{
-							
-							return false;
-						}
-					}
-				}
-				
-			}*/
 			for (PortSpecification p:portspecification)
 			{
 				for(PortInfo portInfo:p.getPort()){

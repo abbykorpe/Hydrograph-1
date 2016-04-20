@@ -16,7 +16,6 @@ package hydrograph.ui.graph.model;
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
 import hydrograph.ui.common.component.config.PortInfo;
 import hydrograph.ui.common.component.config.PortSpecification;
-import hydrograph.ui.common.component.config.PortType;
 import hydrograph.ui.common.component.config.Property;
 import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.util.ComponentCacheUtil;
@@ -425,7 +424,7 @@ public abstract class Component extends Model {
 	 * @param oldPortCount
 	 */
 	
-	private boolean isAllowMultipleLinks(PortTypeEnum portType){
+	private boolean isAllowMultipleLinksForPort(PortTypeEnum portType){
 		for(PortDetails portDetailsInfo :this.portDetails){
 			if(portDetailsInfo.getPortType().equals(portType)){
 				return portDetailsInfo.isAllowMultipleLinks();
@@ -434,7 +433,7 @@ public abstract class Component extends Model {
 		return false;
 	}
 	
-	private boolean isLinkMandatory(PortTypeEnum portType){
+	private boolean isLinkMandatoryForPort(PortTypeEnum portType){
 		for(PortDetails portDetailsInfo :this.portDetails){
 			if(portDetailsInfo.getPortType().equals(portType)){
 				return portDetailsInfo.isLinkMandatory();
@@ -448,7 +447,7 @@ public abstract class Component extends Model {
 		for (int i = oldPortCount; i < newPortCount; i++) {
 			
 			Port inPort = new Port(Constants.INPUT_SOCKET_TYPE + i, Constants.INPUT_SOCKET_TYPE + i, Constants.INPUT_SOCKET_TYPE + i, this,
-					newPortCount, PortTypeEnum.IN, i, isAllowMultipleLinks(PortTypeEnum.IN), isLinkMandatory(PortTypeEnum.IN));
+					newPortCount, PortTypeEnum.IN, i, isAllowMultipleLinksForPort(PortTypeEnum.IN), isLinkMandatoryForPort(PortTypeEnum.IN));
 			ports.put(Constants.INPUT_SOCKET_TYPE + i, inPort);
 			firePropertyChange("Component:add", null, inPort);
 		}
@@ -465,7 +464,7 @@ public abstract class Component extends Model {
 	public void incrementOutPorts(int newPortCount, int oldPortCount) {
 		for (int i = oldPortCount; i < newPortCount; i++) {
 			Port outputPort = new Port(Constants.OUTPUT_SOCKET_TYPE + i, Constants.OUTPUT_SOCKET_TYPE + i, Constants.OUTPUT_SOCKET_TYPE + i, this,
-					newPortCount, PortTypeEnum.OUT, i, isAllowMultipleLinks(PortTypeEnum.OUT), isLinkMandatory(PortTypeEnum.OUT));
+					newPortCount, PortTypeEnum.OUT, i, isAllowMultipleLinksForPort(PortTypeEnum.OUT), isLinkMandatoryForPort(PortTypeEnum.OUT));
 			ports.put(Constants.OUTPUT_SOCKET_TYPE + i, outputPort);
 			firePropertyChange("Component:add", null, outputPort);
 		}
@@ -481,7 +480,7 @@ public abstract class Component extends Model {
 	public void incrementUnusedPorts(int newPortCount, int oldPortCount) {
 		for (int i = oldPortCount; i < newPortCount; i++) {
 			Port unusedPort = new Port(Constants.UNUSED_SOCKET_TYPE + i, "un" + i, Constants.UNUSED_SOCKET_TYPE + i,
-					this, newPortCount, PortTypeEnum.UNUSED, i, isAllowMultipleLinks(PortTypeEnum.OUT), isLinkMandatory(PortTypeEnum.OUT));
+					this, newPortCount, PortTypeEnum.UNUSED, i, isAllowMultipleLinksForPort(PortTypeEnum.OUT), isLinkMandatoryForPort(PortTypeEnum.OUT));
 			ports.put(Constants.UNUSED_SOCKET_TYPE + i, unusedPort);
 			firePropertyChange("Component:add", null, unusedPort);
 		}
@@ -1130,7 +1129,7 @@ public abstract class Component extends Model {
        changeUnusedPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount - 2); i++) {
 			Port unusedPort = new Port(Constants.UNUSED_SOCKET_TYPE + (i + 2), "un" + (i + 2),
-					Constants.UNUSED_SOCKET_TYPE + (i + 2), this, newPortCount, PortTypeEnum.UNUSED, (i + 2), isAllowMultipleLinks(PortTypeEnum.UNUSED), isLinkMandatory(PortTypeEnum.UNUSED));
+					Constants.UNUSED_SOCKET_TYPE + (i + 2), this, newPortCount, PortTypeEnum.UNUSED, (i + 2), isAllowMultipleLinksForPort(PortTypeEnum.UNUSED), isLinkMandatoryForPort(PortTypeEnum.UNUSED));
 			ports.put(Constants.UNUSED_SOCKET_TYPE + (i + 2), unusedPort);
 			firePropertyChange("Component:add", null, unusedPort);
 		}
@@ -1146,7 +1145,7 @@ public abstract class Component extends Model {
        changeInPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount); i++) {
 			Port inPort = new Port(Constants.INPUT_SOCKET_TYPE + (i), Constants.INPUT_SOCKET_TYPE + (i), Constants.INPUT_SOCKET_TYPE
-					+ (i), this, newPortCount, PortTypeEnum.IN, (i), isAllowMultipleLinks(PortTypeEnum.IN), isLinkMandatory(PortTypeEnum.IN));
+					+ (i), this, newPortCount, PortTypeEnum.IN, (i), isAllowMultipleLinksForPort(PortTypeEnum.IN), isLinkMandatoryForPort(PortTypeEnum.IN));
 			ports.put(Constants.INPUT_SOCKET_TYPE + (i), inPort);
 			firePropertyChange("Component:add", null, inPort);
 		}
@@ -1162,7 +1161,7 @@ public abstract class Component extends Model {
   changeOutPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount); i++) {
 			Port outPort = new Port(Constants.OUTPUT_SOCKET_TYPE + (i), Constants.OUTPUT_SOCKET_TYPE + (i), Constants.OUTPUT_SOCKET_TYPE
-					+ (i), this, newPortCount, PortTypeEnum.OUT, (i), isAllowMultipleLinks(PortTypeEnum.OUT), isLinkMandatory(PortTypeEnum.OUT));
+					+ (i), this, newPortCount, PortTypeEnum.OUT, (i), isAllowMultipleLinksForPort(PortTypeEnum.OUT), isLinkMandatoryForPort(PortTypeEnum.OUT));
 			ports.put(Constants.OUTPUT_SOCKET_TYPE + (i), outPort);
 			firePropertyChange("Component:add", null, outPort);
 		}

@@ -28,7 +28,6 @@ import org.eclipse.gef.commands.Command;
 import org.slf4j.Logger;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class LinkReconnectSourceCommand.
  */
@@ -75,20 +74,6 @@ public class LinkReconnectSourceCommand extends Command {
 		portspecification = XMLConfigUtil.INSTANCE.getComponent(componentName)
 				.getPort().getPortSpecification();
 
-		/*for (PortSpecification p : portspecification) {
-			for(PortInfo portInfo:p.getPort()){
-				String portName = p.getTypeOfPort().value() + portInfo.getSequenceOfPort();
-				if (portName.equals(newSourceTerminal)) {
-					if (portInfo.isAllowMultipleLinks()
-							|| !newSource.isOutputPortEngaged(newSourceTerminal)) {
-
-					} else{
-						return false;
-					}
-				}
-			}
-			
-		}*/
 		for (PortSpecification p : portspecification) {
 			for(PortInfo portInfo:p.getPort()){
 				String portName = p.getTypeOfPort().value() + portInfo.getSequenceOfPort();
