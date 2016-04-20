@@ -16,11 +16,12 @@
 	<tns:component paletteIconPath="/icons/output_mixed_scheme_palette.png" canvasIconPath="/icons/output_mixed_scheme_canvas.png"
 		name="OFMixedScheme" nameInPalette="File Mixed Scheme" defaultNamePrefix="OFMixedScheme" 
 		description="Used to write output in Mixed Scheme text format."
-		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Fixed_Width.html">
+		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Fixed_Width.html"
+		acronym="Mix">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
-			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false">
-				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="in0" nameOfPort="in0" allowMultipleLinks="false"/>
+			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+				<tns:port sequenceOfPort="0" labelOfPort="in0" nameOfPort="in0" />
 			</tns:portSpecification>
 		</tns:port>
 		

@@ -125,6 +125,7 @@ class SchemaGridCellModifier implements ICellModifier {
 			{
 				basicSchemaGridRow.setScaleType(2); 
 				basicSchemaGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[2]);
+				basicSchemaGridRow.setScale(String.valueOf(0));
 			}
 			basicSchemaGridRow.setDataType((Integer)value);
 			basicSchemaGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]);

@@ -132,6 +132,12 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			mixedSchemeGridRow.setFieldName(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)) {
+			if(StringUtils.equals(DataType.BIGDECIMAL_CLASS.getValue(), GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]))
+			{
+				mixedSchemeGridRow.setScaleType(2); 
+				mixedSchemeGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[2]);
+				mixedSchemeGridRow.setScale(String.valueOf(0));
+			}
 			mixedSchemeGridRow.setDataType((Integer) value);
 			mixedSchemeGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]); 
 		}

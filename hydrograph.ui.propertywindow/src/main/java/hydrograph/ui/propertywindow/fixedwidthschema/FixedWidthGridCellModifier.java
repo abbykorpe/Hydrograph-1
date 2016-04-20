@@ -141,6 +141,7 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 			{
 				fixedWidthGridRow.setScaleType(2); 
 				fixedWidthGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[2]);
+				fixedWidthGridRow.setScale(String.valueOf(0));
 			}
 			fixedWidthGridRow.setDataType((Integer) value);
 			fixedWidthGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]); 
