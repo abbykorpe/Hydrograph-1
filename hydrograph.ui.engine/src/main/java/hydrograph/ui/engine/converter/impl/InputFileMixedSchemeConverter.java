@@ -37,14 +37,12 @@ public class InputFileMixedSchemeConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE
 			.getLogger(InputFileMixedSchemeConverter.class);
-	private ConverterHelper converterHelper;
 
 	public InputFileMixedSchemeConverter(Component component) {
 		super(component);
 		this.baseComponent = new TextFileMixedScheme();
 		this.component = component;
 		this.properties = component.getProperties();
-		converterHelper = new ConverterHelper(component);
 	}
 
 	@Override

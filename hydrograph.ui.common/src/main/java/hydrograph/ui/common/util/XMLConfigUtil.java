@@ -86,7 +86,9 @@ public class XMLConfigUtil {
 				Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 				String[] configFileList = getFilteredFiles(CONFIG_FILES_PATH, getFileNameFilter(Messages.XMLConfigUtil_FILE_EXTENTION));
 				for (int i = 0; i < configFileList.length; i++){
+					logger.trace("Creating palette component: ", configFileList[i]);
 					if(validateXMLSchema(COMPONENT_CONFIG_XSD_PATH, CONFIG_FILES_PATH + SEPARATOR + configFileList[i])){
+						
 						Config config = (Config) unmarshaller.unmarshal(new File(CONFIG_FILES_PATH + SEPARATOR + configFileList[i]));
 						componentList.addAll(config.getComponent());
 					}

@@ -14,8 +14,9 @@
  
 package hydrograph.ui.engine.ui.util;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.main.Graph;
 import hydrograph.ui.common.util.CanvasDataAdpater;
-import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.engine.exceptions.EngineException;
 import hydrograph.ui.engine.parsing.XMLParser;
@@ -43,21 +44,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.regex.Pattern;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.main.Graph;
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -257,7 +254,7 @@ public class UiConverterUtil {
 			LOGGER.debug("Process links data for one to many port generation : {}", linkingData);
 			if (UIComponentRepo.INSTANCE.getComponentUiFactory().get(linkingData.getSourceComponentId()) != null) {
 				isMultiplePortAllowed = UIComponentRepo.INSTANCE.getComponentUiFactory()
-						.get(linkingData.getSourceComponentId()).getPortSpecification().get(0).getPort().get(0).isAllowMultipleLinks();
+						.get(linkingData.getSourceComponentId()).getPortDetails().get(0).isAllowMultipleLinks();
 				
 				if (isMultiplePortAllowed) {
 					if (linkingData.getSourceTerminal().contains("out"))

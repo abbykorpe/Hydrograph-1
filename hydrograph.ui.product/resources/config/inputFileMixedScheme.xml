@@ -16,11 +16,12 @@
 	<tns:component paletteIconPath="/icons/input_filemixedscheme_palette.png" canvasIconPath="/icons/input_filemixedscheme_canvas.png"
 		name="IFileMixedScheme" nameInPalette="File Mixed Scheme" defaultNamePrefix="IFMixedScheme" 
 		description="Used to read any Fixed Width text file and delimiter can be applied record level."
-		helpFilePath="/hydrograph.ui.help/html/Components/Input_File_Fixed_Width.html">
+		helpFilePath="/hydrograph.ui.help/html/Components/Input_File_Fixed_Width.html"
+		acronym="Mix">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
-			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
-				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="out0" nameOfPort="out0" allowMultipleLinks="false"/>
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+				<tns:port sequenceOfPort="0"  labelOfPort="out0" nameOfPort="out0" />
 			</tns:portSpecification>
 		</tns:port>
 		

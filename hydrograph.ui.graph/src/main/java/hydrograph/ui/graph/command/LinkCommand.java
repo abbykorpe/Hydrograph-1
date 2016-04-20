@@ -91,7 +91,7 @@ public class LinkCommand extends Command{
 				for(PortInfo portInfo:p.getPort()){
 					String portName=p.getTypeOfPort().value()+portInfo.getSequenceOfPort();
 					if(portName.equals(sourceTerminal)){
-						if(portInfo.isAllowMultipleLinks() || 
+						if(p.isAllowMultipleLinks() || 
 								!source.isOutputPortEngaged(sourceTerminal)){
 							
 						}else{
@@ -116,7 +116,7 @@ public class LinkCommand extends Command{
 				for(PortInfo portInfo:p.getPort()){
 					String portName=p.getTypeOfPort().value()+portInfo.getSequenceOfPort();
 					if(portName.equals(targetTerminal)){
-						if(portInfo.isAllowMultipleLinks() ||
+						if(p.isAllowMultipleLinks() ||
 								!target.isInputPortEngaged(targetTerminal)){
 							
 						}else{

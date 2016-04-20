@@ -20,12 +20,12 @@
 		acronym="Lkp">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
-			<tns:portSpecification typeOfPort="in" numberOfPorts="2" changePortCountDynamically="false">
-				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="drv" nameOfPort="in0" allowMultipleLinks="false"/>
-				<tns:port sequenceOfPort="1" linkMandatory="true" labelOfPort="lkp" nameOfPort="in1" allowMultipleLinks="false"/>
+			<tns:portSpecification typeOfPort="in" numberOfPorts="2" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true" >
+				<tns:port sequenceOfPort="0" labelOfPort="drv" nameOfPort="in0" />
+				<tns:port sequenceOfPort="1" labelOfPort="lkp" nameOfPort="in1" />
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false">
-				<tns:port sequenceOfPort="0" linkMandatory="true" labelOfPort="out0" nameOfPort="out0" allowMultipleLinks="false"/>
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+				<tns:port sequenceOfPort="0"  labelOfPort="out0" nameOfPort="out0" />
 			</tns:portSpecification>
 		</tns:port>
 		

@@ -119,8 +119,7 @@ public abstract class Component extends Model {
 	private String category;
 	private HashMap<String, Port> ports;
 	private String componentName;
-	private String acronym;
-	private List<PortSpecification> portSpecification;
+	private List<PortDetails> portDetails;
 
 	private int inPortCount;
 	private int outPortCount;
@@ -169,8 +168,6 @@ public abstract class Component extends Model {
 
 		prefix = XMLConfigUtil.INSTANCE.getComponent(componentName)
 				.getDefaultNamePrefix();
-		acronym = XMLConfigUtil.INSTANCE.getComponent(componentName)
-				.getDefaultNamePrefix();
 		initPortSettings();
 		toolTipErrorMessages = new LinkedHashMap<>();
 	}
@@ -197,21 +194,29 @@ public abstract class Component extends Model {
    	
 	private void initPortSettings() {
 
-		portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName)
+		List<PortSpecification> portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName)
 				.getPort().getPortSpecification();
 
+		portDetails = new ArrayList<PortDetails>();
+		List<Port> portList = new ArrayList<Port>();
 		ports = new HashMap<String, Port>();
+		PortTypeEnum pEnum = null;
 
 		for (PortSpecification p : portSpecification) {
 			setPortCount(p.getTypeOfPort().value(), p.getNumberOfPorts(), p.isChangePortCountDynamically());
 			for(PortInfo portInfo :p.getPort()){
 				String portTerminal = p.getTypeOfPort().value() + portInfo.getSequenceOfPort();
+				pEnum= PortTypeEnum.fromValue(p.getTypeOfPort().value());
 				Port port = new Port(portInfo.getNameOfPort(), portInfo.getLabelOfPort(),
-						portTerminal, this, p.getNumberOfPorts(), p.getTypeOfPort()
-								.value(), portInfo.getSequenceOfPort());
+						portTerminal, this, p.getNumberOfPorts(), pEnum
+								, portInfo.getSequenceOfPort(), p.isAllowMultipleLinks(), p.isLinkMandatory());
 				ports.put(portTerminal, port);
+				portList.add(port);
 			}
+			PortDetails pd = new PortDetails(portList, pEnum, p.getNumberOfPorts(), p.isChangePortCountDynamically(), p.isAllowMultipleLinks(), p.isLinkMandatory());
+			portDetails.add(pd);
 		}
+		
 	}
 
 	private void setPortCount(String portType, int portCount, boolean changePortCount) {
@@ -366,12 +371,11 @@ public abstract class Component extends Model {
 	 * 
 	 * Get port specification list
 	 * 
-	 * @return - list of {@link PortSpecification}
+	 * @return - list of {@link PortDetails}
 	 */
-	public List<PortSpecification> getPortSpecification() {
-		return portSpecification;
+	public List<PortDetails> getPortDetails() {
+		return portDetails;
 	}
-	
 	/**
 	 * 
 	 * Set ports
@@ -419,11 +423,31 @@ public abstract class Component extends Model {
 	 * @param newPortCount
 	 * @param oldPortCount
 	 */
+	
+	private boolean isAllowMultipleLinksForPort(PortTypeEnum portType){
+		for(PortDetails portDetailsInfo :this.portDetails){
+			if(portDetailsInfo.getPortType().equals(portType)){
+				return portDetailsInfo.isAllowMultipleLinks();
+			}
+		}
+		return false;
+	}
+	
+	private boolean isLinkMandatoryForPort(PortTypeEnum portType){
+		for(PortDetails portDetailsInfo :this.portDetails){
+			if(portDetailsInfo.getPortType().equals(portType)){
+				return portDetailsInfo.isLinkMandatory();
+			}
+		}
+		return false;
+	}
+	
 	public void incrementInPorts(int newPortCount, int oldPortCount) {
 
 		for (int i = oldPortCount; i < newPortCount; i++) {
+			
 			Port inPort = new Port(Constants.INPUT_SOCKET_TYPE + i, Constants.INPUT_SOCKET_TYPE + i, Constants.INPUT_SOCKET_TYPE + i, this,
-					newPortCount, Constants.INPUT_SOCKET_TYPE, i);
+					newPortCount, PortTypeEnum.IN, i, isAllowMultipleLinksForPort(PortTypeEnum.IN), isLinkMandatoryForPort(PortTypeEnum.IN));
 			ports.put(Constants.INPUT_SOCKET_TYPE + i, inPort);
 			firePropertyChange("Component:add", null, inPort);
 		}
@@ -440,7 +464,7 @@ public abstract class Component extends Model {
 	public void incrementOutPorts(int newPortCount, int oldPortCount) {
 		for (int i = oldPortCount; i < newPortCount; i++) {
 			Port outputPort = new Port(Constants.OUTPUT_SOCKET_TYPE + i, Constants.OUTPUT_SOCKET_TYPE + i, Constants.OUTPUT_SOCKET_TYPE + i, this,
-					newPortCount, Constants.OUTPUT_SOCKET_TYPE, i);
+					newPortCount, PortTypeEnum.OUT, i, isAllowMultipleLinksForPort(PortTypeEnum.OUT), isLinkMandatoryForPort(PortTypeEnum.OUT));
 			ports.put(Constants.OUTPUT_SOCKET_TYPE + i, outputPort);
 			firePropertyChange("Component:add", null, outputPort);
 		}
@@ -456,7 +480,7 @@ public abstract class Component extends Model {
 	public void incrementUnusedPorts(int newPortCount, int oldPortCount) {
 		for (int i = oldPortCount; i < newPortCount; i++) {
 			Port unusedPort = new Port(Constants.UNUSED_SOCKET_TYPE + i, "un" + i, Constants.UNUSED_SOCKET_TYPE + i,
-					this, newPortCount,Constants.UNUSED_SOCKET_TYPE, i);
+					this, newPortCount, PortTypeEnum.UNUSED, i, isAllowMultipleLinksForPort(PortTypeEnum.OUT), isLinkMandatoryForPort(PortTypeEnum.OUT));
 			ports.put(Constants.UNUSED_SOCKET_TYPE + i, unusedPort);
 			firePropertyChange("Component:add", null, unusedPort);
 		}
@@ -1105,7 +1129,7 @@ public abstract class Component extends Model {
        changeUnusedPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount - 2); i++) {
 			Port unusedPort = new Port(Constants.UNUSED_SOCKET_TYPE + (i + 2), "un" + (i + 2),
-					Constants.UNUSED_SOCKET_TYPE + (i + 2), this, newPortCount, Constants.UNUSED_SOCKET_TYPE, (i + 2));
+					Constants.UNUSED_SOCKET_TYPE + (i + 2), this, newPortCount, PortTypeEnum.UNUSED, (i + 2), isAllowMultipleLinksForPort(PortTypeEnum.UNUSED), isLinkMandatoryForPort(PortTypeEnum.UNUSED));
 			ports.put(Constants.UNUSED_SOCKET_TYPE + (i + 2), unusedPort);
 			firePropertyChange("Component:add", null, unusedPort);
 		}
@@ -1121,7 +1145,7 @@ public abstract class Component extends Model {
        changeInPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount); i++) {
 			Port inPort = new Port(Constants.INPUT_SOCKET_TYPE + (i), Constants.INPUT_SOCKET_TYPE + (i), Constants.INPUT_SOCKET_TYPE
-					+ (i), this, newPortCount, Constants.INPUT_SOCKET_TYPE, (i));
+					+ (i), this, newPortCount, PortTypeEnum.IN, (i), isAllowMultipleLinksForPort(PortTypeEnum.IN), isLinkMandatoryForPort(PortTypeEnum.IN));
 			ports.put(Constants.INPUT_SOCKET_TYPE + (i), inPort);
 			firePropertyChange("Component:add", null, inPort);
 		}
@@ -1136,36 +1160,13 @@ public abstract class Component extends Model {
 	public void outputPortSettings(int newPortCount) {
   changeOutPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount); i++) {
-
 			Port outPort = new Port(Constants.OUTPUT_SOCKET_TYPE + (i), Constants.OUTPUT_SOCKET_TYPE + (i), Constants.OUTPUT_SOCKET_TYPE
-					+ (i), this, newPortCount, Constants.OUTPUT_SOCKET_TYPE, (i));
+					+ (i), this, newPortCount, PortTypeEnum.OUT, (i), isAllowMultipleLinksForPort(PortTypeEnum.OUT), isLinkMandatoryForPort(PortTypeEnum.OUT));
 			ports.put(Constants.OUTPUT_SOCKET_TYPE + (i), outPort);
 			firePropertyChange("Component:add", null, outPort);
 		}
 	} 
 
-
-	/**
-	 * 
-	 * Increments port
-	 * 
-	 * @param newPortCount
-	 * @param oldPortCount
-	 */
-	public void incrementPorts(int newPortCount, int oldPortCount) {
-
-		for (int i = oldPortCount; i < newPortCount; i++) {
-			Port inPort = new Port(Constants.INPUT_SOCKET_TYPE + i, Constants.INPUT_SOCKET_TYPE + i, Constants.INPUT_SOCKET_TYPE + i, this,
-					newPortCount, Constants.INPUT_SOCKET_TYPE, i);
-			ports.put(Constants.INPUT_SOCKET_TYPE + i, inPort);
-			firePropertyChange("Component:add", null, inPort);
-
-			Port unusedPort = new Port(Constants.UNUSED_SOCKET_TYPE + i, "un" + i, Constants.UNUSED_SOCKET_TYPE + i,
-					this, newPortCount, Constants.UNUSED_SOCKET_TYPE, i);
-			ports.put(Constants.UNUSED_SOCKET_TYPE + i, unusedPort);
-			firePropertyChange("Component:add", null, unusedPort);
-		}
-	}
 
 	/**
 	 * 

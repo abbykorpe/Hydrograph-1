@@ -26,7 +26,6 @@ import java.util.List;
 import org.eclipse.gef.commands.Command;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class LinkReconnectTargetCommand.
  */
@@ -73,7 +72,7 @@ public class LinkReconnectTargetCommand extends Command{
 				for(PortInfo portInfo:p.getPort()){
 					String portName=p.getTypeOfPort().value()+portInfo.getSequenceOfPort();
 					if(portName.equals(newTargetTerminal)){
-						if(portInfo.isAllowMultipleLinks() ||
+						if(p.isAllowMultipleLinks() ||
 								!newTarget.isInputPortEngaged(newTargetTerminal)){
 							
 						}else{
