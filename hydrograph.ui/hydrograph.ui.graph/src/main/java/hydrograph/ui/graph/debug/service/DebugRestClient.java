@@ -47,12 +47,12 @@ public class DebugRestClient {
 	 *	Request to service with following parameters: BasePath, JobId, ComponentId, SocketId, UserId, Password and 
 	 *	get response in JSON format.
 	 */
-	public JSONArray callRestService(String ipAddress, String port_no, String basePath, String jobId, String componentId, String socketId, String userId, String password) throws IOException, JSONException {
+	public JSONArray callRestService(String ipAddress, String portNumber, String basePath, String jobId, String componentId, String socketId, String userId, String password) throws IOException, JSONException {
 		HttpClient httpClient = new HttpClient();
-		String url = Constants.HTTP_PROTOCOL + ipAddress + ":" + port_no + Constants.ROUTE_TO_READ_DATA;
+		String url = Constants.HTTP_PROTOCOL + ipAddress + ":" + portNumber + Constants.ROUTE_TO_READ_DATA;
 		
 		logger.debug("Host: {}, Port_No: {}, Route: {}, Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}", 
-				new Object[] { ipAddress, port_no, Constants.ROUTE_TO_READ_DATA, jobId, componentId, socketId, userId});
+				new Object[] { ipAddress, portNumber, Constants.ROUTE_TO_READ_DATA, jobId, componentId, socketId, userId});
 		
 		PostMethod postMethod = new PostMethod(url); //"http://10.130.248.53:4567/read"
 		postMethod.addParameter(Constants.BASE_PATH, basePath);
@@ -86,9 +86,9 @@ public class DebugRestClient {
 	 *	to remove files from edge node.
 	 *	
 	 */
-	public void removeDebugFiles(String ipAddress, String port_no, String basePath, String jobId, String componentId, String socketId, String userId, String password){
+	public void removeDebugFiles(String ipAddress, String portNumber, String basePath, String jobId, String componentId, String socketId, String userId, String password){
 		HttpClient httpClient = new HttpClient();
-		String url = Constants.HTTP_PROTOCOL + ipAddress + ":"+port_no + Constants.ROUTE_TO_REMOVE_FILES;
+		String url = Constants.HTTP_PROTOCOL + ipAddress + ":"+portNumber + Constants.ROUTE_TO_REMOVE_FILES;
 		 
 		PostMethod postMethod = new PostMethod(url); //"http://10.130.248.53:4567/delete"
 		postMethod.addParameter(Constants.BASE_PATH, basePath);
@@ -104,9 +104,9 @@ public class DebugRestClient {
 			logger.trace("Requesting to rest service...");
 			logger.info("Time taken by /read endpoint ( in milliseconds): ", System.currentTimeMillis()-start);
 		} catch (HttpException e) {
-			logger.error(e.getMessage(), e);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
+			logger.error("Invalid response code: ", e);
+		} catch (IOException exception) {
+			logger.error("Connection failed", exception);
 		}
 	}
  

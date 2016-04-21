@@ -23,6 +23,15 @@ public class DebugServiceHandler  implements IDebugService{
 		
 		Set<String> keySet = jobMap.keySet();
 		
+		/*try {
+			int portPID = Integer.parseInt(DebugHelper.INSTANCE.getServicePortPID());
+			DebugHelper.INSTANCE.killPortProcess(portPID);
+		} catch (NumberFormatException exception) {
+			logger.error(exception.getMessage());
+		} catch (IOException exception) {
+			logger.error(exception.getMessage());
+		}*/
+		
 		/*for (String jobId : keySet) {
 			Job job=jobMap.get(jobId);
 			DebugFilesReader debugFilesReader = new DebugFilesReader(job.getBasePath(), job.getUniqueJobId(), "IFDelimite_01", "out0");

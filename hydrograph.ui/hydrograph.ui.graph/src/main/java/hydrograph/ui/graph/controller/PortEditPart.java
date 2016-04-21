@@ -150,19 +150,4 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 		
 		getFigure().repaint();
 	}
-
-	/*@Override
-	public void activate() {
-		super.activate();
-		
-		for(Entry<String,Long> entry : getCastedModel().getParent().getWatcherTerminals().entrySet())
-		{
-			if(StringUtils.equals(getCastedModel().getTerminal(),entry.getKey()))
-			{
-				getCastedModel().setWatched(true);
-				getPortFigure().setWatched(true);
-				getPortFigure().repaint();
-			}
-		}
-	}*/
 }

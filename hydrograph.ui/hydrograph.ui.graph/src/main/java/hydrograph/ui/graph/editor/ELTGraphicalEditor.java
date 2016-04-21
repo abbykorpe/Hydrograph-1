@@ -39,6 +39,7 @@ import hydrograph.ui.graph.action.subjob.SubJobOpenAction;
 import hydrograph.ui.graph.action.subjob.SubJobUpdateAction;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.debug.service.DebugRestClient;
+import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.editorfactory.GenrateContainerData;
 import hydrograph.ui.graph.factory.ComponentsEditPartFactory;
 import hydrograph.ui.graph.factory.CustomPaletteEditPartFactory;
@@ -66,11 +67,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -133,7 +132,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.osgi.framework.adaptor.FilePath;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -1225,12 +1223,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
 		deleteDebugFiles();
-		
  
-				closeSocket();
-				logger.info("Socket closed @ 8004");
-			 
-		 
+		closeSocket();
+		logger.info("Socket closed @ 8004");
 	}
 	
 	private void closeSocket()  {
@@ -1256,40 +1251,33 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			logger.debug("current job {} wasn't found in Debughandler's map",currentJob);
 			return ;
 		}
-		String file_path = job.getDebug_file_path();
+		String file_path = job.getDebugFilePath();
 		try {
 			ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(file_path)).delete(true, null);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
 		
-		
 		if(isLocal){
 			String basePath = job.getBasePath();
 			String userID = job.getUserId();
 			String password = job.getPassword();
 			String host = "localhost";
-			String port = "8004";
-			
+			String port = DebugHelper.INSTANCE.restServicePort();
 			DebugRestClient debugRestClient = new DebugRestClient();
-			debugRestClient.removeDebugFiles(host, port, basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
+			debugRestClient.removeDebugFiles(host, port, basePath, uniqueJobId, "componentId", "socketId", userID, password);
 			logger.debug("debug files removed from local");
-			
-			
 		}else{
 			String basePath = job.getBasePath();
 			String ipAddress = job.getIpAddress();
 			String userID = job.getUserId();
 			String password = job.getPassword();
-			String port_no = job.getPort_no();
-			//new DebugFilesReader(arg0, arg1, arg2, arg3, arg4, arg5)
+			String port_no = job.getPortNumber();
 			//ipAddress, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password
 			DebugRestClient debugRestClient = new DebugRestClient();
-			debugRestClient.removeDebugFiles(ipAddress, port_no, basePath, uniqueJobId, "IfDelimited_01", "out0", userID, password);
+			debugRestClient.removeDebugFiles(ipAddress, port_no, basePath, uniqueJobId, "componentId", "socketId", userID, password);
 			logger.debug("debug files removed from cluster");
 		}
-		 
-		
 		DebugHandler.getJobMap().remove(currentJob);
 		
 	}

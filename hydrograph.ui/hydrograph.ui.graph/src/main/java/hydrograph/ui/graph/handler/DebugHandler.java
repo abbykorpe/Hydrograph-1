@@ -15,7 +15,6 @@ package hydrograph.ui.graph.handler;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.debugconverter.DebugConverter;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
@@ -24,7 +23,6 @@ import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -41,9 +39,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
@@ -112,12 +108,6 @@ public class DebugHandler  extends AbstractHandler {
 			currentJobName = currentJobIPath.lastSegment().replace(Constants.JOB_EXTENSION, "");
 			currentJobIPath = currentJobIPath.removeLastSegments(1).append(currentJobPath);
 			
-			/*if(currentJobIPath.toFile().exists()){
-				MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.APPLICATION_MODAL | SWT.OK | SWT.CANCEL);
-				messageBox.setText("Alert"); 
-				messageBox.setMessage("File name already exists.");
-				messageBox.open();
-			}*/
 			converter.marshall(converter.getParam(), ResourcesPlugin.getWorkspace().getRoot().getFile(currentJobIPath));
 		} catch (JAXBException | IOException e) {
 			logger.error(e.getMessage(), e);
@@ -184,26 +174,22 @@ public class DebugHandler  extends AbstractHandler {
 		job.setUniqueJobId(uniqueJobID);
 		
 		IFile file=ResourcesPlugin.getWorkspace().getRoot().getFile(currentJobIPath);
-		job.setDebug_file_path(file.getFullPath().toString());
+		job.setDebugFilePath(file.getFullPath().toString());
 		
-		String port_no =runConfigDialog.getPortNo();
+		String portNumber =runConfigDialog.getPortNo();
 		
-		if(!StringUtils.isEmpty(port_no)){
-			job.setPort_no(port_no);
+		if(!StringUtils.isEmpty(portNumber)){
+			job.setPortNumber(portNumber);
 		}else{
-			job.setPort_no("8004");
+			job.setPortNumber("8004");
 		}
-
 		job.setDebugMode(true);
 		job.setPassword(clusterPassword);
 		job.setRemoteMode(runConfigDialog.isRemoteMode());
 		 
 		addDebugJob(currentJobName, job);
 		
-		
-	 
 		JobManager.INSTANCE.executeJobInDebug(job, uniqueJobID, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
-		
 		return null;
 	}
  

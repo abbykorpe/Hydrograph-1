@@ -14,6 +14,7 @@
 package hydrograph.ui.graph.debug.service;
 
 import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.IOException;
@@ -35,9 +36,12 @@ import org.slf4j.Logger;
  */
 public class ViewDataServiceInitiator {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ViewDataServiceInitiator.class);
+	
 	public static void startService(){
+	
 		try{
-			ServerSocket serverSocket = new ServerSocket(8004, 1, InetAddress.getLocalHost());
+			int portNumber = Integer.parseInt(DebugHelper.INSTANCE.restServicePort());
+			ServerSocket serverSocket = new ServerSocket(portNumber, 1, InetAddress.getLocalHost());
 			if(!serverSocket.isClosed()){
 				startServer();
 			}
@@ -55,31 +59,27 @@ public class ViewDataServiceInitiator {
 
 	private static void startServer() throws InterruptedException, IOException {
 		if(OSValidator.isWindows()){
-			//"cmd", "/c", "start", "/b", "java","-jar", getInstallationPath()
 			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "start", "/b", "java","-jar", getInstallationPath()});
 			builder.start();
-			//builder.redirectOutput(new File("C:/Users/vibhort/Desktop/Test_Vibhor"));
 		}
 		else if(OSValidator.isMac()){
 			ProcessBuilder builder = new ProcessBuilder(new String[]{"java", "-jar", getInstallationPath()});
 			builder.start();
-			//builder.redirectOutput(new File("/Users/bitwise/Desktop/Test_Vibhor"));
-			
 		}
 		else if(OSValidator.isUnix()){
 			new ProcessBuilder(new String[]{"java", "-jar", getInstallationPath()}).start();
 		}
 		else if(OSValidator.isSolaris()){
-			
 		}
 	}
 
-	private static String getInstallationPath() {
+	private static String getInstallationPath()  {
 		String path = Platform.getInstallLocation().getURL().getPath();
+		String restServiceJar = DebugHelper.INSTANCE.restServiceJar();
 		if(StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/") && OSValidator.isWindows()){
 			path = StringUtils.substring(path, 1);
 		}
-		//path + "config/service/" + Debug.SERVICE_JAR
-		return path + "config/service/elt-debug-0.1.9.jar";
+		
+		return path + "config/service/" + restServiceJar;
 	}
 }
