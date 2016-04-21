@@ -983,12 +983,20 @@ public abstract class Component extends Model {
 					
 					if(entry.getValue() instanceof ArrayList)
 					{
-						clonedArrayList=new ArrayList<>();
-					     ArrayList<JoinConfigProperty>  t= (ArrayList<JoinConfigProperty>) entry.getValue();
-					     for(int i=0;i<t.size();i++)
+						clonedArrayList = new ArrayList<>();
+						List orignalList = (ArrayList) entry.getValue();
+						if (!orignalList.isEmpty() && String.class.isAssignableFrom(orignalList.get(0).getClass())) {
+							 for(int i=0;i<orignalList.size();i++)
+						     {
+						    	 clonedArrayList.addAll(orignalList);
+						     } 
+							
+						} else {
+							ArrayList<JoinConfigProperty>  joinConfigList= (ArrayList<JoinConfigProperty>) orignalList ;
+					     for(int i=0;i<joinConfigList.size();i++)
 					     {
-					    	 clonedArrayList.add(t.get(i).clone());
-					     } 
+					    	 clonedArrayList.add(joinConfigList.get(i).clone());
+					     } }
 						clonedHashMap.put(entry.getKey(), clonedArrayList);
 					}
 					
