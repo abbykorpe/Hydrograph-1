@@ -61,7 +61,6 @@ public class ELTFocusOutListener implements IELTListener {
 				if (event.type == SWT.FocusOut) {
 
 					if (charSet == null || charSet == "") {
-						txtDecorator.setDescriptionText(txtDecorator.getDescriptionText());
 						txtDecorator.show();
 						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
 						((Text) widgetList[0]).setToolTipText(txtDecorator.getDescriptionText());
