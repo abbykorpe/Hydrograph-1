@@ -198,7 +198,7 @@ public abstract class Component extends Model {
 				.getPort().getPortSpecification();
 
 		portDetails = new ArrayList<PortDetails>();
-		List<Port> portList = new ArrayList<Port>();
+		//List<Port> portList = new ArrayList<Port>();
 		ports = new HashMap<String, Port>();
 		PortTypeEnum pEnum = null;
 
@@ -211,9 +211,9 @@ public abstract class Component extends Model {
 						portTerminal, this, p.getNumberOfPorts(), pEnum
 								, portInfo.getSequenceOfPort(), p.isAllowMultipleLinks(), p.isLinkMandatory());
 				ports.put(portTerminal, port);
-				portList.add(port);
+				//portList.add(port);
 			}
-			PortDetails pd = new PortDetails(portList, pEnum, p.getNumberOfPorts(), p.isChangePortCountDynamically(), p.isAllowMultipleLinks(), p.isLinkMandatory());
+			PortDetails pd = new PortDetails(ports, pEnum, p.getNumberOfPorts(), p.isChangePortCountDynamically(), p.isAllowMultipleLinks(), p.isLinkMandatory());
 			portDetails.add(pd);
 		}
 		
@@ -426,7 +426,7 @@ public abstract class Component extends Model {
 	
 	private boolean isAllowMultipleLinksForPort(PortTypeEnum portType){
 		for(PortDetails portDetailsInfo :this.portDetails){
-			if(portDetailsInfo.getPortType().equals(portType)){
+			if(portDetailsInfo.getPortType()!=null && portDetailsInfo.getPortType().equals(portType)){
 				return portDetailsInfo.isAllowMultipleLinks();
 			}
 		}
@@ -435,7 +435,7 @@ public abstract class Component extends Model {
 	
 	private boolean isLinkMandatoryForPort(PortTypeEnum portType){
 		for(PortDetails portDetailsInfo :this.portDetails){
-			if(portDetailsInfo.getPortType().equals(portType)){
+			if(portDetailsInfo.getPortType()!=null && portDetailsInfo.getPortType().equals(portType)){
 				return portDetailsInfo.isLinkMandatory();
 			}
 		}
@@ -450,6 +450,11 @@ public abstract class Component extends Model {
 					newPortCount, PortTypeEnum.IN, i, isAllowMultipleLinksForPort(PortTypeEnum.IN), isLinkMandatoryForPort(PortTypeEnum.IN));
 			ports.put(Constants.INPUT_SOCKET_TYPE + i, inPort);
 			firePropertyChange("Component:add", null, inPort);
+			for(PortDetails p:portDetails){
+				if(p.getPortType().equals(PortTypeEnum.IN)){
+					p.setPorts(ports);
+				}
+			}
 		}
 	}
 

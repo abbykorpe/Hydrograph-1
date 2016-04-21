@@ -14,15 +14,11 @@
  
 package hydrograph.ui.graph.command;
 
-import hydrograph.ui.common.component.config.PortInfo;
-import hydrograph.ui.common.component.config.PortSpecification;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
+import hydrograph.ui.graph.model.Port;
+import hydrograph.ui.graph.model.PortDetails;
 import hydrograph.ui.logging.factory.LogFactory;
-
-import java.util.List;
 
 import org.eclipse.gef.commands.Command;
 import org.slf4j.Logger;
@@ -42,8 +38,7 @@ public class LinkReconnectSourceCommand extends Command {
 	private Component oldSource;
 	private final  Component oldTarget;
 
-	private String componentName;
-
+	
 	/**
 	 * Instantiates a new link reconnect source command.
 	 * 
@@ -62,21 +57,17 @@ public class LinkReconnectSourceCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		List<PortSpecification> portspecification;
+		
 		if (newSource != null)
 			if (newSource.equals(oldTarget)) {
 				return false;
 			}
 
 		// Out Port
-		componentName = DynamicClassProcessor.INSTANCE.getClazzName(newSource
-				.getClass());
-		portspecification = XMLConfigUtil.INSTANCE.getComponent(componentName)
-				.getPort().getPortSpecification();
-
-		for (PortSpecification p : portspecification) {
-			for(PortInfo portInfo:p.getPort()){
-				String portName = p.getTypeOfPort().value() + portInfo.getSequenceOfPort();
+		
+		for (PortDetails p : newSource.getPortDetails()) {
+			for(Port port:p.getPorts().values()){
+				String portName = p.getPortType().value() + port.getSequence();
 				if (portName.equals(newSourceTerminal)) {
 					if (p.isAllowMultipleLinks()
 							|| !newSource.isOutputPortEngaged(newSourceTerminal)) {

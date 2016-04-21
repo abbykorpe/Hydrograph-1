@@ -14,15 +14,11 @@
  
 package hydrograph.ui.graph.command;
 
-import hydrograph.ui.common.component.config.PortInfo;
-import hydrograph.ui.common.component.config.PortSpecification;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
+import hydrograph.ui.graph.model.Port;
+import hydrograph.ui.graph.model.PortDetails;
 import hydrograph.ui.logging.factory.LogFactory;
-
-import java.util.List;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.gef.commands.Command;
@@ -30,7 +26,8 @@ import org.slf4j.Logger;
 
 
 /**
- * @author Bitwise The Class LinkCommand.
+ *  The Class LinkCommand.
+ *  @author Bitwise
  */
 public class LinkCommand extends Command{
 	
@@ -71,9 +68,7 @@ public class LinkCommand extends Command{
 
 	@Override
 	public boolean canExecute() {
-		String componentName;
-		List<PortSpecification> portspecification;
-
+		
 		if(source!=null){
 			//disallow the link to itself
 			if (source.equals(target)) {
@@ -81,21 +76,17 @@ public class LinkCommand extends Command{
 			}
 
 			//Out port restrictions
-			componentName = DynamicClassProcessor.INSTANCE
-					.getClazzName(source.getClass());
 
-			portspecification=XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
-
-			for (PortSpecification p:portspecification)
+			for (PortDetails p:source.getPortDetails())
 			{
-				for(PortInfo portInfo:p.getPort()){
-					String portName=p.getTypeOfPort().value()+portInfo.getSequenceOfPort();
+				for(Port port:p.getPorts().values()){
+					String portName=p.getPortType().value()+port.getSequence();
 					if(portName.equals(sourceTerminal)){
 						if(p.isAllowMultipleLinks() || 
 								!source.isOutputPortEngaged(sourceTerminal)){
-							
+							logger.debug("connectable source");
 						}else{
-							
+							logger.debug("non-connectable source");
 							return false;
 						}
 					}
@@ -107,20 +98,17 @@ public class LinkCommand extends Command{
 
 		//In port restrictions
 		if(target!=null){
-			componentName = DynamicClassProcessor.INSTANCE
-					.getClazzName(target.getClass());
-
-			portspecification=XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
-			for (PortSpecification p:portspecification)
+			
+			for (PortDetails p:target.getPortDetails())
 			{
-				for(PortInfo portInfo:p.getPort()){
-					String portName=p.getTypeOfPort().value()+portInfo.getSequenceOfPort();
+				for(Port port:p.getPorts().values()){
+					String portName=p.getPortType().value()+port.getSequence();
 					if(portName.equals(targetTerminal)){
 						if(p.isAllowMultipleLinks() ||
 								!target.isInputPortEngaged(targetTerminal)){
-							
+							logger.debug("connectable target");
 						}else{
-							
+							logger.debug("non-connectable target");
 							return false;
 						}
 					}
