@@ -406,6 +406,18 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				List<NameValueProperty> nameValueProperty = new ArrayList<>();
 				int n = transformMapping.getMappingSheetRows().size() + 1;
 				String operationID = Messages.OPERATION_ID_PREFIX + n;
+				
+				for(int i=0;i<expandBar.getItemCount();i++)
+				{
+					Text text= (Text) expandBar.getItems()[i].getData();
+					if(operationID.equalsIgnoreCase(text.getText()))
+					{
+						 n++;
+						 operationID = Messages.OPERATION_ID_PREFIX + n;
+						 i=-1;
+					}
+				}	
+              
 				mappingSheetRow = new MappingSheetRow(inputFieldList, outputList, operationID, Messages.CUSTOM, "",
 						nameValueProperty, false, "", false, "");
 
@@ -682,7 +694,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		operationIDTextBox.setText(expandItem.getText());
 
 		operationIDTextBox.setData(expandItem);
-		
+		expandItem.setData(operationIDTextBox);
 		mappingSheetRow.setOperationID(operationIDTextBox.getText());
 
 		operationIDTextBox.addModifyListener(new ModifyListener() {
@@ -695,7 +707,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 				expandItem.setText(textBox.getText());
 				mappingSheetRow.setOperationID(textBox.getText());
-			 }
+			}
 		});
 
 		operationIDTextBox.addFocusListener(new FocusListener() {
