@@ -125,24 +125,6 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>target/products/hydrograph.ui.perspective.ID/macosx/cocoa/x86_64/ELTTool.app/Contents/MacOS/</outputDirectory>
-							<resources>
-								<resource>
-									<directory>target/products/hydrograph.ui.perspective.ID/macosx/cocoa/x86_64/ELTTool.app/Contents/Eclipse/</directory>
-									<includes>
-										<include>eclipse.ini</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-resources-6</id>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
 							<outputDirectory>target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\ELTTool.app</outputDirectory>
 							<resources>
 								<resource>
@@ -153,6 +135,31 @@
 					</execution>
 				</executions>
 			</plugin>
+	<plugin>
+	<artifactId>maven-antrun-plugin</artifactId>
+	<version>1.7</version>
+	<executions>
+		<execution>
+			<phase>verify</phase>
+			<configuration>
+				<tasks>
+
+					<copy
+						todir="target/products/hydrograph.ui.perspective.ID/macosx/cocoa/x86_64/ELTTool.app/Contents/MacOS/">
+						<fileset
+							dir="target/products/hydrograph.ui.perspective.ID/macosx/cocoa/x86_64/ELTTool.app/Contents/Eclipse/">
+							<include name="eclipse.ini" />
+						</fileset>
+					</copy>
+
+				</tasks>
+			</configuration>
+			<goals>
+				<goal>run</goal>
+			</goals>
+		</execution>
+	</executions>
+</plugin>	 
 		</plugins>
 	</build>
 </project>
