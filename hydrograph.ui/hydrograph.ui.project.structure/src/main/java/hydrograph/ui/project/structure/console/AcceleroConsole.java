@@ -102,7 +102,8 @@ public class AcceleroConsole extends ConsoleView implements IAcceleroConsole {
 			IConsole consoleToShow = getConsole(consoleName, conMan);
 
 			if (consoleToShow != null) {
-				conMan.showConsoleView(consoleToShow);
+//				Fix for : Console window is getting displayed if user maximize canvas window and then try to create new job (Ctrl+J)
+//				conMan.showConsoleView(consoleToShow);
 			} else {
 				addDummyConsole();
 			}
@@ -118,8 +119,8 @@ public class AcceleroConsole extends ConsoleView implements IAcceleroConsole {
 		if (consoleToShow == null) {
 			consoleToShow = createNewMessageConsole(DEFAULT_CONSOLE, conMan);
 		}
-
-		conMan.showConsoleView(consoleToShow);
+//		Fix for : Console window is getting displayed if user maximize canvas window and then try to create new job (Ctrl+J)
+//		conMan.showConsoleView(consoleToShow);
 	}
 
 	private MessageConsole createNewMessageConsole(String consoleName, IConsoleManager conMan) {

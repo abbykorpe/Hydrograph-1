@@ -416,7 +416,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 				if (currentConsoleView != null) {
 					if (consoleToShow != null && !currentConsoleView.isConsoleClosed()) {
-						consoleManager.showConsoleView(consoleToShow);
+//						Fix for : Console window is getting displayed if user maximize canvas window and then try to create new job (Ctrl+J)
+//						consoleManager.showConsoleView(consoleToShow);
 					} else {
 						if (consoleToShow == null || !consoleToShow.getName().equalsIgnoreCase(consoleName)) {
 							if (!currentConsoleView.isConsoleClosed()) {
@@ -464,7 +465,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		if(consoleToShow == null){
 			consoleToShow = createNewMessageConsole(DEFAULT_CONSOLE,consoleManager);
 		}
-		consoleManager.showConsoleView(consoleToShow);
+//		Fix for : Console window is getting displayed if user maximize canvas window and then try to create new job (Ctrl+J) 
+//		consoleManager.showConsoleView(consoleToShow);
 	}
 
 	private IConsole getConsole(String consoleName,IConsoleManager consoleManager){		
