@@ -14,10 +14,14 @@
 package hydrograph.ui.perspective;
 
 import hydrograph.ui.common.debug.service.IDebugService;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.perspective.config.ELTPerspectiveConfig;
 
 import org.eclipse.e4.ui.css.swt.dom.WidgetElement;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IViewPart;
@@ -41,6 +45,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	private static final String CURRENT_THEME_ID = "hydrograph.ui.custom.ui.theme";
 	private static final String CONSOLE_ID = "hydrograph.ui.project.structure.console.AcceleroConsole";
 	private static final String CONSOLE_TOOLBAR_CSS_ID="consoleToolbarColor";
+	private static final String WARNING_TITLE="Warning";
+	private static final String WARNING_MESSAGE="Current Dpi Setting is not equal to 100%.Recommended Dpi Setting for tool is 100%.If you will not set it you will face alignment issues.";
 	/**
 	 * Instantiates a new application workbench window advisor.
 	 * 
@@ -79,6 +85,20 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		IViewPart consoleView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(CONSOLE_ID);
 		ToolBarManager toobar = (ToolBarManager) consoleView.getViewSite().getActionBars().getToolBarManager();
 		setCSSID(toobar.getControl(),CONSOLE_TOOLBAR_CSS_ID);
+		if (OSValidator.isWindows()) {
+			Point dpiCoordinates = PlatformUI.getWorkbench()
+					.getActiveWorkbenchWindow().getShell().getDisplay()
+					.getDPI();
+			if (dpiCoordinates.x != 96 && dpiCoordinates.y != 96) {
+				MessageBox messageBox = new MessageBox(new Shell(), SWT.OK);
+				messageBox.setText(WARNING_TITLE);
+				messageBox.setMessage(WARNING_MESSAGE);
+				int response = messageBox.open();
+				if (response == SWT.OK) {
+				}
+			}
+		}
+		
 	}
 	
 	private void setCSSID(Widget widget, String name) {
