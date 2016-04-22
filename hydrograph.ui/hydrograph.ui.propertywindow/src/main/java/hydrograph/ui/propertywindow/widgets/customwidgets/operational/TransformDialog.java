@@ -106,6 +106,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private static final String PARAMETER_TEXT_BOX = "parameterTextBox";
 	private static final String BTN_NEW_BUTTON = "btnNewButton";
 	private static final String IS_PARAM="isParam"; 
+	private List<String> deletedInternalSchemaList;
 	/**
 	 * Create the dialog.
 	 * 
@@ -153,7 +154,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	
 	
 	
-	public TransformDialog(Shell parentShell, Component component, WidgetConfig widgetConfig, TransformMapping atMapping) {
+	public TransformDialog(Shell parentShell, Component component, WidgetConfig widgetConfig, TransformMapping atMapping, List<String> deletedInternalSchema) {
 
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
@@ -167,6 +168,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		errorLabelList=new ArrayList<>();
 		duplicateOperationInputFieldMap=new HashMap<String,List<String>>();
 		duplicateFieldMap=new HashMap<String,List<String>>();
+		this.deletedInternalSchemaList=deletedInternalSchema;
 	}  
 
 	/**
@@ -587,6 +589,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					for (int index : indexs) {
 
 						tempList.add(transformMapping.getMapAndPassthroughField().get(index));
+						deletedInternalSchemaList.add(transformMapping.getMapAndPassthroughField().get(index).getPropertyValue());
 					}
 					for(NameValueProperty nameValueProperty:tempList)
 					{	
@@ -984,6 +987,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					for(FilterProperties filterProperties: tempList)
 					{	
 					mappingSheetRow.getOutputList().remove(filterProperties);
+					deletedInternalSchemaList.add(filterProperties.getPropertyname());
 					}
 					refreshOutputTable();
 					showHideValidationMessage();
