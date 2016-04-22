@@ -100,7 +100,7 @@ public class TransformWidget extends AbstractWidget {
 				container.getContainerControl());
 		transformComposite.createContainerWidget();
 		OperationClassConfig operationClassConfig = (OperationClassConfig) widgetConfig;
-		ELTDefaultLable defaultLable1 = new ELTDefaultLable(operationClassConfig.getComponentDisplayName());
+		ELTDefaultLable defaultLable1 = new ELTDefaultLable(operationClassConfig.getComponentDisplayName()+" \n ");
 		transformComposite.attachWidget(defaultLable1);
 
 		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
