@@ -570,7 +570,7 @@ public class ConverterHelper {
 		logger.debug("Getting port specification for port" + portName);
 		for (PortDetails portDetails : sourceComponent.getPortDetails()) {
 			for( Port port: portDetails.getPorts().values()){
-				if(port.getPortType().equals(portName)){
+				if(port.getTerminal().equals(portName)){
 					return port.isAllowMultipleLinks();
 				}
 			}
@@ -583,7 +583,6 @@ public class ConverterHelper {
 
 		if (isMultipleLinkAllowed(link.getSource(), link.getSourceTerminal()))
 			inSocketId = link.getSource().getPort(link.getSourceTerminal()).getPortType() + link.getLinkNumber();
-
 		if (link.getSource().getComponentName().equals("InputSubjobComponent")) {
 			return inSocketId.replace("out", "in");
 		}
