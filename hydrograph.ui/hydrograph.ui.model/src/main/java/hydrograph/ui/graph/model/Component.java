@@ -117,7 +117,7 @@ public abstract class Component extends Model {
 	private String type;
 	private String prefix;
 	private String category;
-	private HashMap<String, Port> ports;
+	private Map<String, Port> ports;
 	private String componentName;
 	private List<PortDetails> portDetails;
 
@@ -198,7 +198,6 @@ public abstract class Component extends Model {
 				.getPort().getPortSpecification();
 
 		portDetails = new ArrayList<PortDetails>();
-		List<Port> portList = new ArrayList<Port>();
 		ports = new HashMap<String, Port>();
 		PortTypeEnum pEnum = null;
 
@@ -211,9 +210,8 @@ public abstract class Component extends Model {
 						portTerminal, this, p.getNumberOfPorts(), pEnum
 								, portInfo.getSequenceOfPort(), p.isAllowMultipleLinks(), p.isLinkMandatory());
 				ports.put(portTerminal, port);
-				portList.add(port);
 			}
-			PortDetails pd = new PortDetails(portList, pEnum, p.getNumberOfPorts(), p.isChangePortCountDynamically(), p.isAllowMultipleLinks(), p.isLinkMandatory());
+			PortDetails pd = new PortDetails(ports, pEnum, p.getNumberOfPorts(), p.isChangePortCountDynamically(), p.isAllowMultipleLinks(), p.isLinkMandatory());
 			portDetails.add(pd);
 		}
 		
@@ -382,7 +380,7 @@ public abstract class Component extends Model {
 	 * 
 	 * @param ports
 	 */
-	public void setPorts(HashMap<String, Port> ports) {
+	public void setPorts(Map<String, Port> ports) {
 		this.ports = ports;
 	}
 	
@@ -426,7 +424,7 @@ public abstract class Component extends Model {
 	
 	private boolean isAllowMultipleLinksForPort(PortTypeEnum portType){
 		for(PortDetails portDetailsInfo :this.portDetails){
-			if(portDetailsInfo.getPortType().equals(portType)){
+			if(portDetailsInfo.getPortType()!=null && portDetailsInfo.getPortType().equals(portType)){
 				return portDetailsInfo.isAllowMultipleLinks();
 			}
 		}
@@ -435,7 +433,7 @@ public abstract class Component extends Model {
 	
 	private boolean isLinkMandatoryForPort(PortTypeEnum portType){
 		for(PortDetails portDetailsInfo :this.portDetails){
-			if(portDetailsInfo.getPortType().equals(portType)){
+			if(portDetailsInfo.getPortType()!=null && portDetailsInfo.getPortType().equals(portType)){
 				return portDetailsInfo.isLinkMandatory();
 			}
 		}
@@ -445,11 +443,17 @@ public abstract class Component extends Model {
 	public void incrementInPorts(int newPortCount, int oldPortCount) {
 
 		for (int i = oldPortCount; i < newPortCount; i++) {
-			
+
 			Port inPort = new Port(Constants.INPUT_SOCKET_TYPE + i, Constants.INPUT_SOCKET_TYPE + i, Constants.INPUT_SOCKET_TYPE + i, this,
 					newPortCount, PortTypeEnum.IN, i, isAllowMultipleLinksForPort(PortTypeEnum.IN), isLinkMandatoryForPort(PortTypeEnum.IN));
 			ports.put(Constants.INPUT_SOCKET_TYPE + i, inPort);
 			firePropertyChange("Component:add", null, inPort);
+			for(PortDetails p:portDetails){
+
+				if(PortTypeEnum.IN.equals(p.getPortType())){
+					p.setPorts(ports);
+				}
+			}
 		}
 	}
 
@@ -545,7 +549,7 @@ public abstract class Component extends Model {
 	 * Get ports
 	 *  
 	 */
-	public HashMap<String, Port> getPorts() {
+	public Map<String, Port> getPorts() {
 		return ports;
 	}
 

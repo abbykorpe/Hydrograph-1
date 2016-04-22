@@ -15,10 +15,10 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
@@ -112,19 +112,21 @@ public class ELTLookupMapWidget extends AbstractWidget {
 			 List<GridRow> outputSchemaGridRowList = new LinkedList<>();
 			 
 			 for(LookupMapProperty row : lookupMapRows){
-				 GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
-				 GridRow outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
-				 
-				 
-				 if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
-					 finalPassThroughFields.add(row.getOutput_Field());
-					 passThroughFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
-				 }else{
-					 finalMapFields.put(row.getSource_Field().split("\\.")[1], row.getOutput_Field());
-					 mapFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+				 if(!ParameterUtil.isParameter(row.getSource_Field())){
+					 GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
+					 GridRow outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
+
+
+					 if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
+						 finalPassThroughFields.add(row.getOutput_Field());
+						 passThroughFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+					 }else{
+						 finalMapFields.put(row.getSource_Field().split("\\.")[1], row.getOutput_Field());
+						 mapFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+					 }
+
+					 outputSchemaGridRowList.add(outputFieldSchema);
 				 }
-				 
-				 outputSchemaGridRowList.add(outputFieldSchema);
 			 }
 			 
 			 addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(finalMapFields, finalPassThroughFields,passThroughFieldsPortInfo,mapFieldsPortInfo);

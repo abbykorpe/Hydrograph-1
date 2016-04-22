@@ -1,20 +1,20 @@
 package hydrograph.ui.graph.model;
 
-import java.util.List;
+import java.util.Map;
 
 public class PortDetails extends Model implements Cloneable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8713585457081109591L;
-	private List<Port> ports;
+	private Map<String, Port> ports;
 	private PortTypeEnum portType;
 	private int numberOfPorts;
 	private boolean changePortCountDynamically;
 	private boolean allowMultipleLinks;
 	private boolean linkMandatory;
 	
-	public PortDetails(List<Port> p, PortTypeEnum portTypeEnum, int noOfPorts, boolean changePortCount, boolean allowMultLinks, boolean linkMan){
+	public PortDetails(Map<String, Port> p, PortTypeEnum portTypeEnum, int noOfPorts, boolean changePortCount, boolean allowMultLinks, boolean linkMan){
 		this.ports = p;
 		this.portType = portTypeEnum;
 		this.numberOfPorts = noOfPorts;
@@ -31,8 +31,12 @@ public class PortDetails extends Model implements Cloneable{
 		return allowMultipleLinks;
 	}
 
-	public List<Port> getPort() {
+	public Map<String, Port> getPorts() {
 		return ports;
+	}
+
+	public void setPorts(Map<String, Port> ports) {
+		this.ports = ports;
 	}
 
 	public PortTypeEnum getPortType() {
