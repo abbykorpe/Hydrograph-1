@@ -143,8 +143,9 @@ public class WatchRecordAction extends SelectionAction {
 			password = job.getPassword();
 			port_no = job.getPortNumber();
 		}
-		
-		logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
+		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
+		logger.info("Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}",
+				new Object[] { basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId() });
 		DebugRestClient debugRestClient = new DebugRestClient();
 			try {
 				jsonArray = debugRestClient.callRestService(ipAddress, port_no, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password);
@@ -183,8 +184,12 @@ public class WatchRecordAction extends SelectionAction {
 		String password = job.getPassword();
 		String port = DebugHelper.INSTANCE.restServicePort();
 		
+		logger.debug("BasePath :{}", basePath);
+		logger.debug("jobid: {}", watchRecordInner.getUniqueJobId());
+		logger.debug("componetid: {} :{}", watchRecordInner.getComponentId());
+		logger.debug("socketid :{}", watchRecordInner.getSocketId());
 		
-		logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
+		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
 		DebugRestClient debugRestClient = new DebugRestClient();
 			try {
 				jsonArray = debugRestClient.callRestService(ipAddress, port, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), "userid", "password");
