@@ -44,7 +44,6 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1473,20 +1472,20 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	}
 
 	private boolean isSchemaInSync(List<NameValueProperty> outSchema, TransformMapping transformMapping){
-		List<NameValueProperty> internalSchema = transformMapping.getMapAndPassthroughField(); 
+		List<NameValueProperty> mapAndPassthroughFields = transformMapping.getMapAndPassthroughField(); 
 		List<MappingSheetRow> mappingSheetRows  = transformMapping.getMappingSheetRows(); 
 		for (NameValueProperty nameValueProperty : outSchema) {
-		    	if(!internalSchema.contains(nameValueProperty)){
-		    		for (MappingSheetRow mappingSheetRow : mappingSheetRows) {
-		    				FilterProperties tempFilterProperties = new FilterProperties();
-		    				tempFilterProperties.setPropertyname(nameValueProperty.getPropertyValue());
-		    				if(mappingSheetRow.getOutputList().contains(tempFilterProperties))
-		    		    		return true;
-		    			}
-		    			return false;
-		    			}
+			if(!mapAndPassthroughFields.contains(nameValueProperty)){
+				for (MappingSheetRow mappingSheetRow : mappingSheetRows) {
+					FilterProperties tempFilterProperties = new FilterProperties();
+					tempFilterProperties.setPropertyname(nameValueProperty.getPropertyValue());
+					if(mappingSheetRow.getOutputList().contains(tempFilterProperties))
+						return true;
+				}
+				return false;
+			}
 		}
-		    return true;
-		}
-	
+		return true;
+	}
+
 }

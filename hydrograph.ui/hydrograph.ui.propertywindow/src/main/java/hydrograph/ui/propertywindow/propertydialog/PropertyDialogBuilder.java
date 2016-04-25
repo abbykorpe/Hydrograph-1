@@ -227,7 +227,7 @@ public class PropertyDialogBuilder {
 		widget.setEltComponenetProperties(eltComponenetProperties);
 		
 		widget.setSchemaForInternalPapogation(setSchemaForInternalPapogation);
-		widget.setDeletedInternalSchemaSchema(deletedInternalSchema);
+		widget.setDeletedInternalSchema(deletedInternalSchema);
 		widget.setOperationFieldList(operationFieldList);
 
 		

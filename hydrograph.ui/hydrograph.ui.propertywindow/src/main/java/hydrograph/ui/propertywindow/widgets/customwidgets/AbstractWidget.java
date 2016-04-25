@@ -49,7 +49,7 @@ public abstract class AbstractWidget {
 	private String toolTipErrorMessage =  null;
 	private Component component;
 	private Schema schemaForInternalPapogation;
-	private List<String> deletedInternalSchemaSchema;
+	private List<String> deletedInternalSchema;
 	private List<String> operationFieldList;
 	protected PropertyDialog propertyDialog;
 	private Control propertyHelpWidget;
@@ -92,13 +92,13 @@ public abstract class AbstractWidget {
 	}
 	
 	
-	public List<String> getDeletedInternalSchemaSchema() {
-		return deletedInternalSchemaSchema;
+	public List<String> getDeletedInternalSchema() {
+		return deletedInternalSchema;
 	}
 
-	public void setDeletedInternalSchemaSchema(
+	public void setDeletedInternalSchema(
 			List<String> deletedInternalSchemaSchema) {
-		this.deletedInternalSchemaSchema = deletedInternalSchemaSchema;
+		this.deletedInternalSchema = deletedInternalSchemaSchema;
 	}
 
 	/**

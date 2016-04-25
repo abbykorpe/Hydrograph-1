@@ -19,12 +19,9 @@ import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.dnd.DND;
@@ -38,7 +35,6 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 public class DragDropUtility {
@@ -168,7 +164,7 @@ public class DragDropUtility {
 }
 
 class DradDropUtilityListener extends DropTargetAdapter{
-	private String result; 
+
 	private DragDropOperation dragDropOperation;
 	
 	  public DradDropUtilityListener(DragDropOperation dragDropOperation) {

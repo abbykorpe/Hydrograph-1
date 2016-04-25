@@ -348,9 +348,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private void rePopulatePreviousSchema(
 			ComponentsOutputSchema componentsOutputSchema) {
 		if(componentsOutputSchema.getFixedWidthGridRowsOutputFields().size()==0 && schemaGridRowList.size()>0){
-			Map<String, ComponentsOutputSchema> test = (Map<String, ComponentsOutputSchema>) getComponent()
+			Map<String, ComponentsOutputSchema> previousSchema = (Map<String, ComponentsOutputSchema>) getComponent()
 					.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
-		for (Map.Entry<String, ComponentsOutputSchema> entry : test.entrySet()) {
+		for (Map.Entry<String, ComponentsOutputSchema> entry : previousSchema.entrySet()) {
 				ComponentsOutputSchema componentsOutputSchema1 = entry.getValue();			
 				for (FixedWidthGridRow fixedWidthGridRow : componentsOutputSchema1.getFixedWidthGridRowsOutputFields()) {
 					BasicSchemaGridRow basicSchemaGridRow= componentsOutputSchema1.convertFixedWidthSchemaToSchemaGridRow(fixedWidthGridRow);
@@ -1335,7 +1335,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 private void syncSchemaFromTransform(){
 	Schema schema =getSchemaForInternalPapogation();
-	List<String> deletedSchema = getDeletedInternalSchemaSchema();
+	List<String> deletedSchema = getDeletedInternalSchema();
 	for (GridRow gridRow : schema.getGridRow()) {
 		if(!schemaGridRowList.contains(gridRow)){
 			schemaGridRowList.add(gridRow);
