@@ -13,7 +13,6 @@
 package hydrograph.ui.propertywindow.propertydialog;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
-import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -68,6 +67,7 @@ public class PropertyDialogBuilder {
 	private Component component;
 	private AbstractWidget schemaWidget;
 	private Schema setSchemaForInternalPapogation;
+	private List<String> deletedInternalSchema;
 	private List<String> operationFieldList;
 	private PropertyDialog propertyDialog;
 	private Map<String, String> propertyHelpTextMap;
@@ -112,6 +112,7 @@ public class PropertyDialogBuilder {
 		setSchemaForInternalPapogation.setGridRow(gridRows);
 		setSchemaForInternalPapogation.setExternalSchemaPath("");
 		operationFieldList = new LinkedList<>();
+		deletedInternalSchema= new ArrayList<>();
 
 	}
 	
@@ -226,6 +227,7 @@ public class PropertyDialogBuilder {
 		widget.setEltComponenetProperties(eltComponenetProperties);
 		
 		widget.setSchemaForInternalPapogation(setSchemaForInternalPapogation);
+		widget.setDeletedInternalSchema(deletedInternalSchema);
 		widget.setOperationFieldList(operationFieldList);
 
 		

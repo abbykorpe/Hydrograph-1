@@ -269,7 +269,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		List<String> oprationFieldList = getOperationFieldList();
 
 		if (schemaGridRowList != null ) {
-			if(!Constants.TRANSFORM.equalsIgnoreCase(getComponent().getComponentName()) && !Constants.AGGREGATE.equalsIgnoreCase(getComponent().getComponentName()))
+			if(!Constants.TRANSFORM.equalsIgnoreCase(getComponent().getComponentName()) && !Constants.AGGREGATE.equalsIgnoreCase(getComponent().getComponentName())){
 			if(getSchemaForInternalPapogation()!=null){
 
 				Schema internalSchema = getSchemaForInternalPapogation().clone();
@@ -288,6 +288,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						schemaGridRowList.add(internalSchemaRow.copy());
 					}
 				}
+			}
 			}
 			if (!schemaGridRowList.isEmpty()) {
 				for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
@@ -314,6 +315,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						}
 					}
 				}
+				
 			}
 			
 		}
@@ -331,7 +333,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			//			schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
 			//			property.put(Constants.SCHEMA_TO_PROPAGATE,schemaMap);
 		}
-
+		if((Constants.TRANSFORM.equalsIgnoreCase(getComponent().getComponentName()) || Constants.AGGREGATE.equalsIgnoreCase(getComponent().getComponentName())) )
+			rePopulatePreviousSchema(componentsOutputSchema);
+		
 		schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
 		property.put(Constants.SCHEMA_TO_PROPAGATE,schemaMap);
 
@@ -339,6 +343,22 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), schemaMap);//
 
 		return property;
+	}
+
+	private void rePopulatePreviousSchema(
+			ComponentsOutputSchema componentsOutputSchema) {
+		if(componentsOutputSchema.getFixedWidthGridRowsOutputFields().size()==0 && schemaGridRowList.size()>0){
+			Map<String, ComponentsOutputSchema> previousSchema = (Map<String, ComponentsOutputSchema>) getComponent()
+					.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
+		for (Map.Entry<String, ComponentsOutputSchema> entry : previousSchema.entrySet()) {
+				ComponentsOutputSchema componentsOutputSchema1 = entry.getValue();			
+				for (FixedWidthGridRow fixedWidthGridRow : componentsOutputSchema1.getFixedWidthGridRowsOutputFields()) {
+					BasicSchemaGridRow basicSchemaGridRow= componentsOutputSchema1.convertFixedWidthSchemaToSchemaGridRow(fixedWidthGridRow);
+					componentsOutputSchema.addSchemaFields(basicSchemaGridRow);
+				}
+				
+			}	
+		}
 	}
 	
 	@Override
@@ -1315,12 +1335,20 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 private void syncSchemaFromTransform(){
 	Schema schema =getSchemaForInternalPapogation();
+	List<String> deletedSchema = getDeletedInternalSchema();
 	for (GridRow gridRow : schema.getGridRow()) {
 		if(!schemaGridRowList.contains(gridRow)){
 			schemaGridRowList.add(gridRow);
 		}else
 		{
 			schemaGridRowList.set(schemaGridRowList.indexOf(gridRow), gridRow);
+		}
+	}
+	for (String fieldName : deletedSchema) {
+		BasicSchemaGridRow tempGrid = new BasicSchemaGridRow();
+		tempGrid.setFieldName(fieldName);
+		if(schemaGridRowList.contains(tempGrid)){
+			schemaGridRowList.remove(tempGrid);
 		}
 	}
 	ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);

@@ -16,9 +16,9 @@ package hydrograph.ui.propertywindow.widgets.utility;
 
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
+import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -35,7 +35,6 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 public class DragDropUtility {
@@ -133,12 +132,25 @@ public class DragDropUtility {
 	    });
 
 	}
-	public static List<NameValueProperty> union(List<NameValueProperty> list1, List<NameValueProperty> list2) {
-	    for (NameValueProperty nameValueProperty : list1) {
-	    	if(!list2.contains(nameValueProperty))
-	    		list2.add(nameValueProperty);
+	public static List<NameValueProperty> union(List<NameValueProperty> outSchema, TransformMapping transformMapping) {
+		List<NameValueProperty> mapNameValueProperties = transformMapping.getMapAndPassthroughField();
+		for (NameValueProperty nameValueProperty : outSchema) {
+			boolean isPresent=false;
+	    	if(!mapNameValueProperties.contains(nameValueProperty))
+	    	{
+	    		for (MappingSheetRow mappingSheetRow : transformMapping.getMappingSheetRows()) {
+    				FilterProperties tempFilterProperties = new FilterProperties();
+    				tempFilterProperties.setPropertyname(nameValueProperty.getPropertyValue());
+    				if(mappingSheetRow.getOutputList().contains(tempFilterProperties)){
+    					isPresent=true;
+    					break;    					
+    				}
+    			}
+	    		if(!isPresent)
+	    			mapNameValueProperties.add(nameValueProperty);
+	    	}
 	    }
-	    return list2;
+	    return mapNameValueProperties;
 	}
 	public static List<FilterProperties> unionFilter(List<FilterProperties> list1, List<FilterProperties> list2) {
 	    for (FilterProperties filterProperties : list1) {
@@ -152,7 +164,7 @@ public class DragDropUtility {
 }
 
 class DradDropUtilityListener extends DropTargetAdapter{
-	private String result; 
+
 	private DragDropOperation dragDropOperation;
 	
 	  public DradDropUtilityListener(DragDropOperation dragDropOperation) {

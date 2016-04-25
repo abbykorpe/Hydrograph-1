@@ -44,7 +44,6 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -106,6 +105,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private static final String PARAMETER_TEXT_BOX = "parameterTextBox";
 	private static final String BTN_NEW_BUTTON = "btnNewButton";
 	private static final String IS_PARAM="isParam"; 
+	private List<String> deletedInternalSchemaList;
 	/**
 	 * Create the dialog.
 	 * 
@@ -153,7 +153,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	
 	
 	
-	public TransformDialog(Shell parentShell, Component component, WidgetConfig widgetConfig, TransformMapping atMapping) {
+	public TransformDialog(Shell parentShell, Component component, WidgetConfig widgetConfig, TransformMapping atMapping, List<String> deletedInternalSchema) {
 
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
@@ -167,6 +167,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		errorLabelList=new ArrayList<>();
 		duplicateOperationInputFieldMap=new HashMap<String,List<String>>();
 		duplicateFieldMap=new HashMap<String,List<String>>();
+		this.deletedInternalSchemaList=deletedInternalSchema;
 	}  
 
 	/**
@@ -255,8 +256,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				List<NameValueProperty> outputFileds= getComponentSchemaAsProperty();
-				List<NameValueProperty> mapNameValueProperties = transformMapping.getMapAndPassthroughField();
-				DragDropUtility.union(outputFileds, mapNameValueProperties);
+				DragDropUtility.union(outputFileds, transformMapping);
 				refreshOutputTable();
 
 			}
@@ -587,6 +587,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					for (int index : indexs) {
 
 						tempList.add(transformMapping.getMapAndPassthroughField().get(index));
+						deletedInternalSchemaList.add(transformMapping.getMapAndPassthroughField().get(index).getPropertyValue());
 					}
 					for(NameValueProperty nameValueProperty:tempList)
 					{	
@@ -984,6 +985,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					for(FilterProperties filterProperties: tempList)
 					{	
 					mappingSheetRow.getOutputList().remove(filterProperties);
+					deletedInternalSchemaList.add(filterProperties.getPropertyname());
 					}
 					refreshOutputTable();
 					showHideValidationMessage();
@@ -1334,15 +1336,14 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				transformMapping.getOutputFieldList());
 		okPressed = true;
 		List<NameValueProperty> outputFileds= getComponentSchemaAsProperty();
-		List<NameValueProperty> mapNameValueProperties = transformMapping.getMapAndPassthroughField();
-		if(!isSchemaInSync(outputFileds, mapNameValueProperties))
+		if(!isSchemaInSync(outputFileds, transformMapping))
 		{
 			MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, 
 					 Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, 
 	                new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
 			int dialogResult =dialog.open();
 			if(dialogResult == 0){
-				DragDropUtility.union(outputFileds, mapNameValueProperties);
+				DragDropUtility.union(outputFileds, transformMapping);
 				refreshOutputTable();
 			}
 			else
@@ -1470,12 +1471,21 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		return outputFileds;
 	}
 
-	private boolean isSchemaInSync(List<NameValueProperty> outSchema, List<NameValueProperty> internalSchema){
-		    for (NameValueProperty nameValueProperty : outSchema) {
-		    	if(!internalSchema.contains(nameValueProperty))
-		    		return false;
-		    }
-		    return true;
+	private boolean isSchemaInSync(List<NameValueProperty> outSchema, TransformMapping transformMapping){
+		List<NameValueProperty> mapAndPassthroughFields = transformMapping.getMapAndPassthroughField(); 
+		List<MappingSheetRow> mappingSheetRows  = transformMapping.getMappingSheetRows(); 
+		for (NameValueProperty nameValueProperty : outSchema) {
+			if(!mapAndPassthroughFields.contains(nameValueProperty)){
+				for (MappingSheetRow mappingSheetRow : mappingSheetRows) {
+					FilterProperties tempFilterProperties = new FilterProperties();
+					tempFilterProperties.setPropertyname(nameValueProperty.getPropertyValue());
+					if(mappingSheetRow.getOutputList().contains(tempFilterProperties))
+						return true;
+				}
+				return false;
+			}
 		}
-	
+		return true;
+	}
+
 }
