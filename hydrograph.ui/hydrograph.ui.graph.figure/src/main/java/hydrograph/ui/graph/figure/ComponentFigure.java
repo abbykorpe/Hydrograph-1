@@ -567,7 +567,7 @@ public class ComponentFigure extends Figure implements Validator {
 		graphics.drawImage(canvasIcon, new Point(q.width / 2 - 16, q.height / 2 + componentLabelMargin - 11));
 		drawStatus(graphics);
 
-		graphics.drawText(acronym, new Point(q.width / 2 - 16 + 5, q.height / 2 + componentLabelMargin - 25));
+		graphics.drawText(acronym, new Point(q.width / 2 - 16 + 5, q.height / 2 + componentLabelMargin - 23));
 
 		if (componentProperties != null && componentProperties.get(StringUtils.lowerCase(Constants.PHASE)) != null) {
 			if (String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))).length() > 2)
