@@ -336,7 +336,7 @@ public class PropertyDialogBuilder {
 			tabItem.setText(" "+WordUtils.capitalize(groupName.replace("_", " ").toLowerCase(), null));
 		}
 		else {
-			tabItem.setText(WordUtils.capitalize(groupName.replace("_", " ").toLowerCase(), null));
+			tabItem.setText(WordUtils.capitalize(groupName.replace("_", " ").toLowerCase(), null));			
 		}
 		return tabItem;
 	}
@@ -377,7 +377,7 @@ public class PropertyDialogBuilder {
 		}
 			scrolledCompositeHolder.getScrolledComposite().setContent(scrolledCompositeHolder.getComposite());
 			scrolledCompositeHolder.getScrolledComposite().setMinSize(scrolledCompositeHolder.getComposite().computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		return eltDefaultSubgroup;
+			return eltDefaultSubgroup;
 	}
 
 	/**
