@@ -21,7 +21,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import org.slf4j.Logger;
 
-import hydrograph.engine.jaxb.commandtypes.Subgraph;
+import hydrograph.engine.jaxb.commandtypes.Subjob;
 
 public class CommandSubjobConverter extends Converter {
 
@@ -29,7 +29,7 @@ public class CommandSubjobConverter extends Converter {
 
 	public CommandSubjobConverter(Component component) {
 		super(component);
-		this.baseComponent = new Subgraph();
+		this.baseComponent = new Subjob();
 		this.component = component;
 		this.properties = component.getProperties();
 
@@ -39,15 +39,15 @@ public class CommandSubjobConverter extends Converter {
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		Subgraph subjob = (Subgraph) baseComponent;
+		Subjob subjob = (Subjob) baseComponent;
 		if (properties.get(Constants.JOB_PATH) != null) {
-			Subgraph.Path path = new Subgraph.Path();
+			Subjob.Path path = new Subjob.Path();
 			String subJobFilePath = getSubJobAbsolutePath(((String) properties.get(Constants.JOB_PATH)).replace(
 					Constants.JOB_EXTENSION, Constants.XML_EXTENSION));
 			path.setUri(subJobFilePath);
 			subjob.setPath(path);
 		}
-		subjob.setSubgraphParameter(getRuntimeProperties());
+		subjob.setSubjobParameter(getRuntimeProperties());
 
 	}
 

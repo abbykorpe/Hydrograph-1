@@ -19,7 +19,7 @@
 	xmlns:ohiveparquet="hydrograph/engine/jaxb/ohiveparquet"
 	xmlns:ohivetextfile="hydrograph/engine/jaxb/ohivetextfile"
 	xmlns:ofMixedScheme="hydrograph/engine/jaxb/ofmixedscheme"
-	xmlns:ofsubgraph="hydrograph/engine/jaxb/ofsubgraph"
+	xmlns:ofsubjob="hydrograph/engine/jaxb/ofsubjob"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="hydrograph/engine/jaxb/outputtypes"
 	elementFormDefault="unqualified">
 	<xs:import schemaLocation="../common/common-types.xsd"
@@ -41,8 +41,8 @@
 	<xs:import
 		schemaLocation="./text-file-mixedScheme/output-file-mixedScheme-text-types.xsd"
 		namespace="hydrograph/engine/jaxb/ofmixedscheme" />
-	<xs:import schemaLocation="./subgraph/output-subgraph-types.xsd"
-		namespace="hydrograph/engine/jaxb/ofsubgraph" />
+	<xs:import schemaLocation="./subjob/output-subjob-types.xsd"
+		namespace="hydrograph/engine/jaxb/ofsubjob" />
 
 
 	<xs:complexType name="avroFile">
@@ -252,9 +252,9 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="subgraph">
+	<xs:complexType name="subjob">
 		<xs:complexContent>
-			<xs:extension base="ofsubgraph:type-output-file-delimited-base">
+			<xs:extension base="ofsubjob:type-output-file-delimited-base">
 				<xs:sequence>
 					<xs:element name="path">
 						<xs:complexType>
@@ -263,16 +263,16 @@
 					</xs:element>
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" />
-					<xs:element name="subgraphParameter" type="cmn:type-properties"
+					<xs:element name="subjobParameter" type="cmn:type-properties"
 						minOccurs="0" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="subgraphOutput">
+	<xs:complexType name="subjobOutput">
 		<xs:complexContent>
-			<xs:extension base="ofsubgraph:type-output-file-delimited-subgraph">
+			<xs:extension base="ofsubjob:type-output-file-delimited-subjob">
 				<xs:sequence>
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" />

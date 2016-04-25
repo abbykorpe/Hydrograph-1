@@ -30,7 +30,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
-import hydrograph.engine.jaxb.operationstypes.Subgraph;
+import hydrograph.engine.jaxb.operationstypes.Subjob;
 
 /**
  * Operation type sub graph converter
@@ -43,7 +43,7 @@ public class OperationSubJobConverter extends SubjobConverter {
 
 	public OperationSubJobConverter(Component component) {
 		super(component);
-		this.baseComponent = new Subgraph();
+		this.baseComponent = new Subjob();
 		this.component = component;
 		this.properties = component.getProperties();
 	}
@@ -56,15 +56,15 @@ public class OperationSubJobConverter extends SubjobConverter {
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		Subgraph subjob = (Subgraph) baseComponent;
+		Subjob subjob = (Subjob) baseComponent;
 		if (properties.get(Constants.JOB_PATH) != null) {
-			Subgraph.Path path = new Subgraph.Path();
+			Subjob.Path path = new Subjob.Path();
 			String subJobFilePath = getSubJobAbsolutePath(((String) properties.get(Constants.JOB_PATH)).replace(
 					Constants.JOB_EXTENSION, Constants.XML_EXTENSION));
 			path.setUri(subJobFilePath);
 			subjob.setPath(path);
 		}
-		subjob.setSubgraphParameter(getRuntimeProperties());
+		subjob.setSubjobParameter(getRuntimeProperties());
 		 
 	}
  

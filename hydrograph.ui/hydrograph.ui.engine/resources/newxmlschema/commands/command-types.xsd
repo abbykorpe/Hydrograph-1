@@ -32,7 +32,7 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="subgraph">
+	<xs:complexType name="subjob">
 		<xs:complexContent>
 			<xs:extension base="cmn:type-command-component">
 				<xs:sequence>
@@ -43,7 +43,7 @@
 					</xs:element>
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" />
-					<xs:element name="subgraphParameter" type="cmn:type-properties"
+					<xs:element name="subjobParameter" type="cmn:type-properties"
 						minOccurs="0" />
 				</xs:sequence>
 			</xs:extension>

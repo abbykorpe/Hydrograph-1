@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
-import hydrograph.engine.jaxb.inputtypes.Subgraph;
+import hydrograph.engine.jaxb.inputtypes.Subjob;
 /**
  * 
  * @author Bitwise
@@ -43,7 +43,7 @@ public class InputSubJobConverter extends InputConverter {
 	
 	public InputSubJobConverter(Component component) {
 		super(component);
-		this.baseComponent = new Subgraph();
+		this.baseComponent = new Subjob();
 		this.component = component;
 		this.properties = component.getProperties();
 	}
@@ -52,14 +52,14 @@ public class InputSubJobConverter extends InputConverter {
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		Subgraph subjob = (Subgraph) baseComponent;
-		Subgraph.Path path = new Subgraph.Path();
+		Subjob subjob = (Subjob) baseComponent;
+		Subjob.Path path = new Subjob.Path();
 		if(properties.get(Constants.JOB_PATH)!=null){
 			String subJobFilePath = getSubJobAbsolutePath(((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION));
 			path.setUri(subJobFilePath);
 			subjob.setPath(path);
 		}
-		subjob.setSubgraphParameter(getRuntimeProperties());
+		subjob.setSubjobParameter(getRuntimeProperties());
 		
 	}
 

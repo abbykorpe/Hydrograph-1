@@ -22,7 +22,7 @@
 	xmlns:hashjoin="hydrograph/engine/jaxb/hashjoin"
 	xmlns:normalize="hydrograph/engine/jaxb/normalize"
 	xmlns:pbe="hydrograph/engine/jaxb/partitionByExpression"
-	xmlns:subgraph="hydrograph/engine/jaxb/subgraph" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:subjob="hydrograph/engine/jaxb/subjob" xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="hydrograph/engine/jaxb/operationstypes"
 	elementFormDefault="unqualified">
 	<xs:import schemaLocation="../common/common-types.xsd"
@@ -43,8 +43,8 @@
 		namespace="hydrograph/engine/jaxb/lookup" />
 	<xs:import schemaLocation="./normalize/normalize-types.xsd"
 		namespace="hydrograph/engine/jaxb/normalize" />
-	<xs:import schemaLocation="./subgraph/subgraph-types.xsd"
-		namespace="hydrograph/engine/jaxb/subgraph" />
+	<xs:import schemaLocation="./subjob/subjob-types.xsd"
+		namespace="hydrograph/engine/jaxb/subjob" />
 			<xs:import schemaLocation="./hashjoin/hashjoin-types.xsd"
 		namespace="hydrograph/engine/jaxb/hashjoin" />
 	<xs:import
@@ -68,16 +68,16 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="subgraph">
+	<xs:complexType name="subjob">
 		<xs:complexContent>
-			<xs:extension base="subgraph:subgraph-base">
+			<xs:extension base="subjob:subjob-base">
 				<xs:sequence>
 					<xs:element name="path">
 						<xs:complexType>
 							<xs:attribute name="uri" type="xs:string" use="required" />
 						</xs:complexType>
 					</xs:element>
-					<xs:element name="subgraphParameter" type="cmn:type-properties"
+					<xs:element name="subjobParameter" type="cmn:type-properties"
 						minOccurs="0" />
 				</xs:sequence>
 			</xs:extension>
