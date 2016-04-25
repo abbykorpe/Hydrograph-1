@@ -93,19 +93,17 @@ public class DebugConverter {
 								String socketId = data[1];
 								viewData.setFromComponentId(component.getComponentLabel().getLabelContents()+"."+componentId);
 								viewData.setOutSocketId(socketId);
-								//viewData.setOutSocketType(Constants.OUTPUT_SOCKET_TYPE);
 								limit.setValue(entrySet.getValue());
 								viewData.setLimit(limit);
 							}else{
 								viewData.setFromComponentId(component.getComponentLabel().getLabelContents());
 								viewData.setOutSocketId(entrySet.getKey());
 								String portType = entrySet.getKey().substring(0, 3);
-								if(StringUtils.isNotBlank(portType)){
-									if(portType.equalsIgnoreCase(Constants.OUTPUT_SOCKET_TYPE)){
-										viewData.setOutSocketType(Constants.OUTPUT_SOCKET_TYPE);
-									}else{
-										viewData.setOutSocketType(Constants.UNUSED_SOCKET_TYPE);
-									}
+								
+								if(StringUtils.equalsIgnoreCase(portType, Constants.OUTPUT_SOCKET_TYPE)){
+									viewData.setOutSocketType(Constants.OUTPUT_SOCKET_TYPE);
+								}else{
+									viewData.setOutSocketType(Constants.UNUSED_SOCKET_TYPE);
 								}
 								limit.setValue(entrySet.getValue());
 								viewData.setLimit(limit);

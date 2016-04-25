@@ -141,10 +141,11 @@ public class WatchRecordAction extends SelectionAction {
 			ipAddress = job.getIpAddress();
 			userID = job.getUserId();
 			password = job.getPassword();
-			port_no = job.getPort_no();
+			port_no = job.getPortNumber();
 		}
-		
-		//ogger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
+		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
+		logger.info("Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}",
+				new Object[] { basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId() });
 		DebugRestClient debugRestClient = new DebugRestClient();
 			try {
 				jsonArray = debugRestClient.callRestService(ipAddress, port_no, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password);
@@ -171,6 +172,7 @@ public class WatchRecordAction extends SelectionAction {
 	}
 	
 	private void readViewDataInLocalMode()   {
+		JSONArray jsonArray = null;
 		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
 		if(job == null){
 			messageDialog(Messages.REMOTE_MODE_TEXT);
@@ -180,13 +182,15 @@ public class WatchRecordAction extends SelectionAction {
 		String ipAddress = "localhost";//job.getIpAddress();
 		String userID = job.getUserId();
 		String password = job.getPassword();
-		String port = "8004";
+		String port = DebugHelper.INSTANCE.restServicePort();
 		
+		logger.debug("BasePath :{}", basePath);
+		logger.debug("jobid: {}", watchRecordInner.getUniqueJobId());
+		logger.debug("componetid: {} :{}", watchRecordInner.getComponentId());
+		logger.debug("socketid :{}", watchRecordInner.getSocketId());
 		
-		JSONArray jsonArray = null;
 		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
 		DebugRestClient debugRestClient = new DebugRestClient();
-		 
 			try {
 				jsonArray = debugRestClient.callRestService(ipAddress, port, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), "userid", "password");
 			} catch (IOException exception) {
@@ -231,8 +235,8 @@ public class WatchRecordAction extends SelectionAction {
 		
 		try {
 			createWatchCommand(selectedObject);
-		} catch (CoreException e) {
-			e.printStackTrace();
+		} catch (CoreException exception) {
+			logger.error(exception.getMessage(), exception);
 		}
 		
 		if(!selectedObject.isEmpty() && isWatcher){
@@ -249,6 +253,8 @@ public class WatchRecordAction extends SelectionAction {
 			return false;
 		}
 	}
+	
+	
 	
 	
 	@Override

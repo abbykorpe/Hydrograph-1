@@ -1,12 +1,21 @@
 package hydrograph.ui.graph.debugconverter;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -66,10 +75,94 @@ public class DebugHelper {
 						String sub_comp_port = str.getSourceTerminal();
 						return sub_comp+"."+sub_comp_port;
 					}
-					}
+				  }
 				}
-					}
-				}
+			  }
+			}
 		return null;
+	}
+	
+	/**
+	 * This function used to return Rest Service port Number which running on local
+	 *
+	 */
+	public String restServicePort(){
+		String portNumber = null;
+		try {
+			FileReader fileReader = new FileReader(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/service/hydrograph-service.properties");
+			Properties properties = new Properties();
+			properties.load(fileReader);
+			if(StringUtils.isNotBlank(properties.getProperty("SERVICE_JAR"))){
+				portNumber = properties.getProperty("PORT_NO");
+			}
+		} catch (FileNotFoundException e) {
+			logger.error("File not exists", e);
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+		
+		return portNumber;
+	}
+	
+	/**
+	 * This function used to return Rest Service jar Name which uses to start the rest service
+	 *
+	 */
+	public String restServiceJar(){
+		String restServiceJar = null;
+		try {
+			FileReader fileReader = new FileReader(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/service/hydrograph-service.properties");
+			Properties properties = new Properties();
+			properties.load(fileReader);
+			if(StringUtils.isNotBlank(properties.getProperty("SERVICE_JAR"))){
+				restServiceJar = properties.getProperty("SERVICE_JAR");
+			}
+		} catch (FileNotFoundException e) {
+			logger.error("File not exists", e);
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+		return restServiceJar;
+	}
+	
+	/**
+	 * This function will be return process ID which running on defined port
+	 *
+	 */
+	public String getServicePortPID() throws IOException{
+		int portNumber = Integer.parseInt(restServicePort());
+		if(OSValidator.isWindows()){
+			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c" ,"netstat -a -o -n |findstr :"+portNumber});
+			Process process =builder.start();
+			InputStream inputStream = process.getInputStream();
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+			String str = bufferedReader.readLine();
+			str=StringUtils.substringAfter(str, "LISTENING");
+			str=StringUtils.trim(str);
+			return str;
+		}
+		else if(OSValidator.isMac()){
+			//sudo lsof -n -i4tcp:8004 |grep LISTEN
+			ProcessBuilder builder = new ProcessBuilder(new String[]{"sudo lsof -n -i4tcp:"+portNumber+" |grep LISTEN"});
+			builder.start();
+		}
+		else if(OSValidator.isUnix()){
+			new ProcessBuilder(new String[]{}).start();
+		}
+		return "";
+	}
+	
+	public void killPortProcess(int portPid) throws IOException{
+		if(OSValidator.isWindows()){
+			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "taskkill /F /PID " + portPid});
+			builder.start();
+		}
+		else if(OSValidator.isMac()){
+			ProcessBuilder builder = new ProcessBuilder(new String[]{"kill -9 " + portPid});
+			builder.start();
+		}
+		else if(OSValidator.isUnix()){
+			new ProcessBuilder(new String[]{"kill -9 " + portPid}).start();
+		}
 	}
 }
