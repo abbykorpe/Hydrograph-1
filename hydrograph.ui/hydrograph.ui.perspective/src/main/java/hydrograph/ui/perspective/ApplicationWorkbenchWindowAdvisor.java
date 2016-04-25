@@ -46,8 +46,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	private static final String CONSOLE_ID = "hydrograph.ui.project.structure.console.AcceleroConsole";
 	private static final String CONSOLE_TOOLBAR_CSS_ID="consoleToolbarColor";
 	private static final String WARNING_TITLE="Warning";
-	private static final String WARNING_MESSAGE="Current DPI setting is not equal to 100%. Recommended DPI setting for tool is 100%. Update it from Control Panel -> Display settings. DPI setting other than 100% may cause alignment issues.";
-	private static final int DPI_COORDINATE=96;
+	private static final String WARNING_MESSAGE="Current DPI setting is other than 100%. Recommended 100%.\nUpdate it from Control Panel -> Display settings.\n\nNote: DPI setting other than 100% may cause alignment issues.";
+	private static final int DPI_COORDINATE=26;
 	/**
 	 * Instantiates a new application workbench window advisor.
 	 * 
