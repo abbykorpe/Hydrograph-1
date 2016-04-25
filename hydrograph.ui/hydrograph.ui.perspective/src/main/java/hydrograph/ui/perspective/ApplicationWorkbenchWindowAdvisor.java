@@ -46,7 +46,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	private static final String CONSOLE_ID = "hydrograph.ui.project.structure.console.AcceleroConsole";
 	private static final String CONSOLE_TOOLBAR_CSS_ID="consoleToolbarColor";
 	private static final String WARNING_TITLE="Warning";
-	private static final String WARNING_MESSAGE="Current Dpi Setting is not equal to 100%.Recommended Dpi Setting for tool is 100%.If you will not set it you will face alignment issues.";
+	private static final String WARNING_MESSAGE="Current DPI setting is not equal to 100%. Recommended DPI setting for tool is 100%. Update it from Control Panel -> Display settings. DPI setting other than 100% may cause alignment issues.";
+	private static final int DPI_COORDINATE=96;
 	/**
 	 * Instantiates a new application workbench window advisor.
 	 * 
@@ -89,8 +90,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 			Point dpiCoordinates = PlatformUI.getWorkbench()
 					.getActiveWorkbenchWindow().getShell().getDisplay()
 					.getDPI();
-			if (dpiCoordinates.x != 96 && dpiCoordinates.y != 96) {
-				MessageBox messageBox = new MessageBox(new Shell(), SWT.OK);
+			if (dpiCoordinates.x != DPI_COORDINATE && dpiCoordinates.y != DPI_COORDINATE) {
+				MessageBox messageBox = new MessageBox(new Shell(),SWT.ICON_WARNING| SWT.OK);
 				messageBox.setText(WARNING_TITLE);
 				messageBox.setMessage(WARNING_MESSAGE);
 				int response = messageBox.open();
