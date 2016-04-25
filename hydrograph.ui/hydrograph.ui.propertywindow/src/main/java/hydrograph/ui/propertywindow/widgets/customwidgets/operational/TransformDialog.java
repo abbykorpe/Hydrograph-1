@@ -257,8 +257,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				List<NameValueProperty> outputFileds= getComponentSchemaAsProperty();
-				List<NameValueProperty> mapNameValueProperties = transformMapping.getMapAndPassthroughField();
-				DragDropUtility.union(outputFileds, mapNameValueProperties);
+				DragDropUtility.union(outputFileds, transformMapping);
 				refreshOutputTable();
 
 			}
@@ -1338,15 +1337,14 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				transformMapping.getOutputFieldList());
 		okPressed = true;
 		List<NameValueProperty> outputFileds= getComponentSchemaAsProperty();
-		List<NameValueProperty> mapNameValueProperties = transformMapping.getMapAndPassthroughField();
-		if(!isSchemaInSync(outputFileds, mapNameValueProperties))
+		if(!isSchemaInSync(outputFileds, transformMapping))
 		{
 			MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, 
 					 Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, 
 	                new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
 			int dialogResult =dialog.open();
 			if(dialogResult == 0){
-				DragDropUtility.union(outputFileds, mapNameValueProperties);
+				DragDropUtility.union(outputFileds, transformMapping);
 				refreshOutputTable();
 			}
 			else
@@ -1474,11 +1472,20 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		return outputFileds;
 	}
 
-	private boolean isSchemaInSync(List<NameValueProperty> outSchema, List<NameValueProperty> internalSchema){
-		    for (NameValueProperty nameValueProperty : outSchema) {
-		    	if(!internalSchema.contains(nameValueProperty))
-		    		return false;
-		    }
+	private boolean isSchemaInSync(List<NameValueProperty> outSchema, TransformMapping transformMapping){
+		List<NameValueProperty> internalSchema = transformMapping.getMapAndPassthroughField(); 
+		List<MappingSheetRow> mappingSheetRows  = transformMapping.getMappingSheetRows(); 
+		for (NameValueProperty nameValueProperty : outSchema) {
+		    	if(!internalSchema.contains(nameValueProperty)){
+		    		for (MappingSheetRow mappingSheetRow : mappingSheetRows) {
+		    				FilterProperties tempFilterProperties = new FilterProperties();
+		    				tempFilterProperties.setPropertyname(nameValueProperty.getPropertyValue());
+		    				if(mappingSheetRow.getOutputList().contains(tempFilterProperties))
+		    		    		return true;
+		    			}
+		    			return false;
+		    			}
+		}
 		    return true;
 		}
 	
