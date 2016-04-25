@@ -574,10 +574,10 @@ public class ComponentFigure extends Figure implements Validator {
 				graphics.drawText(
 						StringUtils.substring(
 								String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))), 0, 2)
-								+ "..", new Point(q.width - 16, q.height - 4));
+								+ "..", new Point(q.width - 16, q.height+ getComponentLabelMargin()-20));
 			else
 				graphics.drawText(String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))),
-						new Point(q.width - 14, q.height - 4));
+						new Point(q.width - 14, q.height+ getComponentLabelMargin()-20));
 		}
 	}
 
