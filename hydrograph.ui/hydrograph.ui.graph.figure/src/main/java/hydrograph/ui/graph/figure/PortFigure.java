@@ -159,17 +159,17 @@ public class PortFigure extends Figure {
 			if("in".equalsIgnoreCase(portType))
 			{
 				graphics.drawText(labelOfPort,new Point(getBounds().getLocation().x+8,getBounds()
-						.getLocation().y-3));
+						.getLocation().y-0.2));
 			}
 			else if("out".equalsIgnoreCase(portType))
 			{
 				graphics.drawText(labelOfPort,new Point(getBounds().getLocation().x,getBounds()
-						.getLocation().y-3));
+						.getLocation().y-0.2));
 			}
 	       else if("unused".equalsIgnoreCase(portType))
 			{
 				graphics.drawText(labelOfPort,new Point(getBounds().getLocation().x,getBounds()
-						.getLocation().y-2));
+						.getLocation().y-0.2));
 			}	
 		}
 	}
