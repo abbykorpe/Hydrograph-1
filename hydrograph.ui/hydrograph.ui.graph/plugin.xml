@@ -328,6 +328,12 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+K">
       </key>
+      <key
+            commandId="org.eclipse.ui.edit.text.openLocalFile"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+O">
+      </key>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">

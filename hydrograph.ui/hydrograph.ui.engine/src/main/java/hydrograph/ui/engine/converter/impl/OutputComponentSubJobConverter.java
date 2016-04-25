@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-import hydrograph.engine.jaxb.outputtypes.SubgraphOutput;
+import hydrograph.engine.jaxb.outputtypes.SubjobOutput;
 
 /**
  * SubJob mapping output component converter that use to map main graph.
@@ -43,7 +43,7 @@ public class OutputComponentSubJobConverter extends OutputConverter {
 
 	public OutputComponentSubJobConverter(Component component) {
 		super(component);
-		this.baseComponent = new SubgraphOutput();
+		this.baseComponent = new SubjobOutput();
 		this.component = component;
 		this.properties = component.getProperties();
 	}

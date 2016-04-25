@@ -18,7 +18,7 @@
 	xmlns:ihiveparquet="hydrograph/engine/jaxb/ihiveparquet"
 	xmlns:ihivetextfile="hydrograph/engine/jaxb/ihivetextfile"
 	xmlns:ifMixedScheme="hydrograph/engine/jaxb/ifmixedscheme"
-	xmlns:ifsubgraph="hydrograph/engine/jaxb/ifsubgraph"
+	xmlns:ifsubjob="hydrograph/engine/jaxb/ifsubjob"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="hydrograph/engine/jaxb/inputtypes"
 	elementFormDefault="unqualified">
 	<xs:import schemaLocation="../common/common-types.xsd"
@@ -40,8 +40,8 @@
 	<xs:import
 		schemaLocation="./text-file-mixedScheme/input-file-mixedScheme-text-types.xsd"
 		namespace="hydrograph/engine/jaxb/ifmixedscheme" />
-	<xs:import schemaLocation="./subgraph/input-subgraph-types.xsd"
-		namespace="hydrograph/engine/jaxb/ifsubgraph" />
+	<xs:import schemaLocation="./subjob/input-subjob-types.xsd"
+		namespace="hydrograph/engine/jaxb/ifsubjob" />
 
 
 
@@ -257,9 +257,9 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="subgraph">
+	<xs:complexType name="subjob">
 		<xs:complexContent>
-			<xs:extension base="ifsubgraph:type-input-file-delimited-base">
+			<xs:extension base="ifsubjob:type-input-file-delimited-base">
 				<xs:sequence>
 					<xs:element name="path">
 						<xs:complexType>
@@ -268,16 +268,16 @@
 					</xs:element>
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" />
-					<xs:element name="subgraphParameter" type="cmn:type-properties"
+					<xs:element name="subjobParameter" type="cmn:type-properties"
 						minOccurs="0" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="subgraphInput">
+	<xs:complexType name="subjobInput">
 		<xs:complexContent>
-			<xs:extension base="ifsubgraph:type-input-file-delimited-subgraph">
+			<xs:extension base="ifsubjob:type-input-file-delimited-subjob">
 				<xs:sequence>
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" />

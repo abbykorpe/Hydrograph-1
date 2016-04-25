@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
-import hydrograph.engine.jaxb.inputtypes.SubgraphInput;
+import hydrograph.engine.jaxb.inputtypes.SubjobInput;
 /**
  * 
  * @author Bitwise
@@ -40,7 +40,7 @@ public class InputComponentSubJobConverter extends InputConverter {
 
 	public InputComponentSubJobConverter(Component component) {
 		super(component);
-		this.baseComponent = new SubgraphInput();
+		this.baseComponent = new SubjobInput();
 		this.component = component;
 		this.properties = component.getProperties();
 	}
