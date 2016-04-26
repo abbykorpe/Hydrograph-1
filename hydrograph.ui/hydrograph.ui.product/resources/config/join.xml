@@ -11,8 +11,8 @@
  limitations under the License. -->
  
  
-<tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
+<tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/join_palette.png" canvasIconPath="/icons/join_canvas.png"
 		name="Join" nameInPalette="Join" defaultNamePrefix="Join" 
 		description="Joins two or more input sources." 
@@ -20,15 +20,15 @@
 		acronym="Join">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
-			<tns:portSpecification typeOfPort="in" numberOfPorts="2" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
+			<tns:portSpecification typeOfPort="in" numberOfPorts="2" portAlignment="left" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
 				<tns:port sequenceOfPort="0"  labelOfPort="in0" nameOfPort="in0" />
 				<tns:port sequenceOfPort="1" labelOfPort="in1" nameOfPort="in1"/>
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="unused" numberOfPorts="2" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
+			<tns:portSpecification typeOfPort="unused" numberOfPorts="2" portAlignment="bottom" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
 				<tns:port sequenceOfPort="0" labelOfPort="un0" nameOfPort="un0" />
 				<tns:port sequenceOfPort="1" labelOfPort="un1" nameOfPort="un1" />
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
 				<tns:port sequenceOfPort="0" labelOfPort="out0" nameOfPort="out0" />
 			</tns:portSpecification>
 		</tns:port>

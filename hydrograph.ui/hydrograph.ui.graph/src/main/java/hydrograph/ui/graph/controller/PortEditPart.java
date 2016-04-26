@@ -19,6 +19,7 @@ import hydrograph.ui.graph.figure.ELTColorConstants;
 import hydrograph.ui.graph.figure.PortFigure;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Port;
+import hydrograph.ui.graph.model.PortAlignmentEnum;
 
 import java.util.Map.Entry;
 
@@ -56,13 +57,14 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 		
 		
 		int margin = componentFigure.getComponentLabelMargin();
-		port =  new PortFigure(borderColor, getCastedModel().getPortType(), getCastedModel().getSequence(), getCastedModel().getNumberOfPortsOfThisType(),getCastedModel().getNameOfPort(),getCastedModel().getLabelOfPort());	
+		port =  new PortFigure(borderColor, getCastedModel().getPortType(), getCastedModel().getSequence(), getCastedModel().getNumberOfPortsOfThisType(),getCastedModel().getNameOfPort(),
+				getCastedModel().getLabelOfPort(), getCastedModel().getPortAlignment());	
 		
 		String toolTipText = getCastedModel().getNameOfPort();
 		port.getToolTipFigure().setMessage(toolTipText);
-		
+		System.out.println("****Creating port for: "+getCastedModel().getNameOfPort());
 		portPoint = getPortLocation(getCastedModel().getNumberOfPortsOfThisType(), getCastedModel().getPortType(),
-				getCastedModel().getSequence(), height, width, margin);
+				getCastedModel().getSequence(), height, width, margin, getCastedModel().getPortAlignment());
 		
 		Point  tmpPoint = new Point(componentFigure.getLocation().x+portPoint.x , componentFigure.getLocation().y+portPoint.y);
 		port.setLocation(tmpPoint);
@@ -72,21 +74,25 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 
 	
 
-	private Point getPortLocation(int totalPortsOfThisType, String type, int sequence, int height, int width, int margin){
+	private Point getPortLocation(int totalPortsOfThisType, String type, int sequence, int height, int width, int margin, 
+			PortAlignmentEnum portAlignment){
 
+		System.out.println("***type: "+type);
+		System.out.println("***seq: "+sequence);
 		Point p = null ;
 		int portOffsetFactor = totalPortsOfThisType+1;
 		int portHeightOffset=height/portOffsetFactor;
 		int portWidthOffset=width/portOffsetFactor;
 		int xLocation=0, yLocation=0;
 
-		if(type.equalsIgnoreCase("in")){
+		//if(type.equalsIgnoreCase("in")){
+		if(PortAlignmentEnum.LEFT.equals(portAlignment)){
 			xLocation=0;
 			yLocation=portHeightOffset*(sequence+1) - 4 + margin;
-		}else if(type.equalsIgnoreCase("out")){
+		}else if(PortAlignmentEnum.RIGHT.equals(portAlignment)){
 			xLocation=width-27;
 			yLocation=portHeightOffset*(sequence+1) - 4 + margin;
-		}else if (type.equalsIgnoreCase("unused")){
+		}else if (PortAlignmentEnum.BOTTOM.equals(portAlignment)){
 			if(totalPortsOfThisType == 1){
 				xLocation = 43;
 				
@@ -122,7 +128,7 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 		
 		int margin = componentFigure.getComponentLabelMargin(); 
 		Point portPoint = getPortLocation(getCastedModel().getNumberOfPortsOfThisType(), getCastedModel().getPortType(),
-				getCastedModel().getSequence(), height, width, margin);
+				getCastedModel().getSequence(), height, width, margin, getCastedModel().getPortAlignment());
 		
 		Point newPortLoc = new Point(portPoint.x+componentLocation.x, portPoint.y+componentLocation.y);
 				

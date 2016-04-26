@@ -14,6 +14,8 @@
  
 package hydrograph.ui.graph.figure;
 
+import hydrograph.ui.graph.model.PortAlignmentEnum;
+
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
@@ -42,6 +44,7 @@ public class PortFigure extends Figure {
 	private String portType;
 	private static boolean displayPortLabels;
 	private boolean isWatched;
+	private PortAlignmentEnum portAlignment;
 	/**
 	 * Instantiates a new port figure.
 	 * 
@@ -52,13 +55,15 @@ public class PortFigure extends Figure {
 	 *            the terminal
 	 */
 	public PortFigure(Color portColor, String portType, int portSeq,
-			int totalPorts, String nameOfPort, String labelOfPort) {
+			int totalPorts, String nameOfPort, String labelOfPort, PortAlignmentEnum alignment) {
 		this.portColor = portColor;
 		this.terminal = portType + portSeq;
+		this.terminal = nameOfPort;
 		this.anchor = new FixedConnectionAnchor(this, portType, totalPorts,
 				portSeq);
 		this.labelOfPort=labelOfPort;
 		this.portType=portType;
+		this.portAlignment = alignment;
 		////to define the height and width of in, out and unused port 
 		setPortDimension();
 
@@ -94,13 +99,14 @@ public class PortFigure extends Figure {
 	}
 	  //to define the height and width of in, out and unused port 
 		private void setPortDimension() {
-			if("in".equalsIgnoreCase(portType)){
+			//if("in".equalsIgnoreCase(portType)){
+			if(PortAlignmentEnum.LEFT.equals(portAlignment)){
 				getBounds().setSize(new Dimension(27,10));
 			}
-			else if("out".equalsIgnoreCase(portType)){
+			else if(PortAlignmentEnum.RIGHT.equals(portAlignment)){
 				getBounds().setSize(new Dimension(27,10));
 			}
-			else if("unused".equalsIgnoreCase(portType)){
+			else if(PortAlignmentEnum.BOTTOM.equals(portAlignment)){
 				getBounds().setSize(new Dimension(24,16));
 			}		
 		}
@@ -138,36 +144,28 @@ public class PortFigure extends Figure {
 		if(isWatched)
 			setBackgroundColor(ELTColorConstants.WATCH_COLOR);
 		Rectangle r = getBounds().getCopy();
-		if("in".equalsIgnoreCase(portType))
-		{
+		//if("in".equalsIgnoreCase(portType))
+		if(PortAlignmentEnum.LEFT.equals(portAlignment)){
 			graphics.fillRectangle(getBounds().getLocation().x-20, getBounds()
 					.getLocation().y-1, r.width, r.height-2);
-		}
-		else if("out".equalsIgnoreCase(portType))
-		{
+		}else if(PortAlignmentEnum.RIGHT.equals(portAlignment)){
 			graphics.fillRectangle(getBounds().getLocation().x+20, getBounds()
 					.getLocation().y-1, r.width, r.height-2);
-		}else if("unused".equalsIgnoreCase(portType))
-		{
+		}else if(PortAlignmentEnum.BOTTOM.equals(portAlignment)){
 			graphics.fillRectangle(getBounds().getLocation().x-16, getBounds()
 					.getLocation().y+10, r.width,r.height);
 		}
 			
 			
-		if(isDisplayPortlabels())
-		{
-			if("in".equalsIgnoreCase(portType))
-			{
+		if(isDisplayPortlabels()){
+			//if("in".equalsIgnoreCase(portType))
+			if(PortAlignmentEnum.LEFT.equals(portAlignment)){
 				graphics.drawText(labelOfPort,new Point(getBounds().getLocation().x+8,getBounds()
 						.getLocation().y-0.2));
-			}
-			else if("out".equalsIgnoreCase(portType))
-			{
+			}else if(PortAlignmentEnum.RIGHT.equals(portAlignment)){
 				graphics.drawText(labelOfPort,new Point(getBounds().getLocation().x,getBounds()
 						.getLocation().y-0.2));
-			}
-	       else if("unused".equalsIgnoreCase(portType))
-			{
+			}else if(PortAlignmentEnum.BOTTOM.equals(portAlignment)){
 				graphics.drawText(labelOfPort,new Point(getBounds().getLocation().x,getBounds()
 						.getLocation().y-0.2));
 			}	

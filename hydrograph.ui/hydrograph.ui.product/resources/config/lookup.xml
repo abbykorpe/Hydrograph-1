@@ -11,8 +11,8 @@
  limitations under the License. -->
  
  
-<tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
+<tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/lookup_palette.png" canvasIconPath="/icons/lookup_canvas.png"
 		name="Lookup" nameInPalette="Lookup" defaultNamePrefix="Lookup" 
 		description="Performs an in-memory join on a small lookup file and the base file."
@@ -20,11 +20,13 @@
 		acronym="Lkp">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
-			<tns:portSpecification typeOfPort="in" numberOfPorts="2" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true" >
+			<tns:portSpecification typeOfPort="driver" numberOfPorts="1" portAlignment="left"  changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true" >
 				<tns:port sequenceOfPort="0" labelOfPort="drv" nameOfPort="in0" />
+			</tns:portSpecification>
+			<tns:portSpecification typeOfPort="lookup" numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true" >
 				<tns:port sequenceOfPort="1" labelOfPort="lkp" nameOfPort="in1" />
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
 				<tns:port sequenceOfPort="0"  labelOfPort="out0" nameOfPort="out0" />
 			</tns:portSpecification>
 		</tns:port>

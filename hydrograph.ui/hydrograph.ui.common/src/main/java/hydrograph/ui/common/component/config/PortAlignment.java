@@ -14,31 +14,34 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for data_type.
+ * <p>Java class for PortAlignment.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="data_type">
+ * &lt;simpleType name="PortAlignment">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="string"/>
- *     &lt;enumeration value="boolean"/>
+ *     &lt;enumeration value="left"/>
+ *     &lt;enumeration value="right"/>
+ *     &lt;enumeration value="bottom"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "data_type", namespace = "hydrograph/ui/constant")
+@XmlType(name = "PortAlignment", namespace = "hydrograph/ui/constant")
 @XmlEnum
-public enum DataType {
+public enum PortAlignment {
 
-    @XmlEnumValue("string")
-    STRING("string"),
-    @XmlEnumValue("boolean")
-    BOOLEAN("boolean");
+    @XmlEnumValue("left")
+    LEFT("left"),
+    @XmlEnumValue("right")
+    RIGHT("right"),
+    @XmlEnumValue("bottom")
+    BOTTOM("bottom");
     private final String value;
 
-    DataType(String v) {
+    PortAlignment(String v) {
         value = v;
     }
 
@@ -46,8 +49,8 @@ public enum DataType {
         return value;
     }
 
-    public static DataType fromValue(String v) {
-        for (DataType c: DataType.values()) {
+    public static PortAlignment fromValue(String v) {
+        for (PortAlignment c: PortAlignment.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

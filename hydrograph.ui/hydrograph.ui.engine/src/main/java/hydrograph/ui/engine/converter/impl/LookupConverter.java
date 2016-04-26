@@ -45,9 +45,10 @@ import hydrograph.engine.jaxb.commontypes.TypeMapField;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
-import hydrograph.engine.jaxb.hashjoin.TypeKeyFields;
+import hydrograph.engine.jaxb.lookup.TypeKeyFields;
 import hydrograph.engine.jaxb.operationstypes.HashJoin;
-import hydrograph.engine.jaxb.operationstypes.HashJoin.Match;
+import hydrograph.engine.jaxb.operationstypes.Lookup;
+import hydrograph.engine.jaxb.operationstypes.Lookup.Match;
 
 
 /**
@@ -62,7 +63,7 @@ public class LookupConverter extends TransformConverter {
 
 	public LookupConverter(Component component) {
 		super(component);
-		this.baseComponent = new HashJoin();
+		this.baseComponent = new Lookup();
 		this.component = component;
 		this.properties = component.getProperties();
 		lookupPropertyGrid = (LookupMappingGrid) properties.get(Constants.LOOKUP_MAP_FIELD);
@@ -71,11 +72,11 @@ public class LookupConverter extends TransformConverter {
 	@Override
 	public void prepareForXML() {
 		super.prepareForXML();
-		HashJoin hashJoin = (HashJoin) baseComponent;
+		Lookup lookup = (Lookup) baseComponent;
 		if (properties.get(Constants.LOOKUP_CONFIG_FIELD) != null) {
-			hashJoin.getKeys().addAll(getLookupConfigKeys());
+			lookup.getKeys().addAll(getLookupConfigKeys());
 		}
-		hashJoin.setMatch(getMatchValueFromUi());
+		lookup.setMatch(getMatchValueFromUi());
 	}
 
 	private Match getMatchValueFromUi() {

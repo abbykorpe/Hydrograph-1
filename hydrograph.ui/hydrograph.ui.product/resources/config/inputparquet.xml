@@ -10,8 +10,8 @@
  See the License for the specific language governing permissions and
  limitations under the License. -->
  
-<tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
+<tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/input_parquet_palette.png" canvasIconPath="/icons/input_parquet_canvas.png"
 		name="IFParquet" nameInPalette="File Parquet" defaultNamePrefix="IFParquet" 
 		description="This is IFParquet component."
@@ -19,7 +19,7 @@
 		acronym="FPrqt">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
-			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
 				<tns:port sequenceOfPort="0" labelOfPort="out0" nameOfPort="out0" />
 			</tns:portSpecification>
 		</tns:port>

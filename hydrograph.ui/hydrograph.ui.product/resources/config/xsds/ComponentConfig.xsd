@@ -11,12 +11,12 @@
  limitations under the License. -->
  
  
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwise.com/ComponentConfig"
-	xmlns:tns="http://www.bitwise.com/ComponentConfig" elementFormDefault="qualified" 
-	xmlns:cnst="http://www.bitwise.com/constant">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="hydrograph/ui/ComponentConfig"
+	xmlns:tns="hydrograph/ui/ComponentConfig" elementFormDefault="qualified" 
+	xmlns:cnst="hydrograph/ui/constant">
 	
 	<import schemaLocation="Common.xsd"
-		namespace="http://www.bitwise.com/constant" />
+		namespace="hydrograph/ui/constant" />
 		
 	<element name="Config">
 		<complexType>
@@ -74,7 +74,8 @@
 			<element name="port" type="tns:PortInfo" maxOccurs="unbounded" minOccurs="0" />
 		</sequence>
 		<attribute name="typeOfPort" type="cnst:PortType" use="required" />
-		<attribute name="numberOfPorts" type="int" use="required" />	
+		<attribute name="numberOfPorts" type="int" use="required" />
+		<attribute name="portAlignment" type="cnst:PortAlignment" use="required" />	
 		<attribute name="changePortCountDynamically" type="boolean" use="optional" default="false"/>	
 		<attribute name="allowMultipleLinks" type="boolean" use="required" />
 		<attribute name="linkMandatory" type="boolean" use="required"/>	

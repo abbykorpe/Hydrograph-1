@@ -13,13 +13,14 @@
 
 package hydrograph.ui.graph.figure;
 
-import hydrograph.ui.common.component.config.PortSpecification;
 import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.model.Component.ValidityStatus;
+import hydrograph.ui.graph.model.PortAlignmentEnum;
+import hydrograph.ui.graph.model.PortDetails;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
 
@@ -73,9 +74,8 @@ public class ComponentFigure extends Figure implements Validator {
 	private HashMap<String, FixedConnectionAnchor> connectionAnchors;
 	private List<FixedConnectionAnchor> inputConnectionAnchors;
 	private List<FixedConnectionAnchor> outputConnectionAnchors;
-	private List<PortSpecification> portspecification;
 
-	private int totalPortsofInType = 0, totalPortsOfOutType = 0, totalPortsOfUnusedType = 0;
+	private int totalPortsAtLeftSide = 0, totalPortsAtRightSide = 0, totalPortsAtBottonSide = 0;
 
 	private Color borderColor;
 	private Color selectedBorderColor;
@@ -111,9 +111,9 @@ public class ComponentFigure extends Figure implements Validator {
 	 * @param linkedHashMap
 	 * 			  the properties of components
 	 */
-	public ComponentFigure(List<PortSpecification> portSpecification, String cIconPath, String label, String acronym,
-			LinkedHashMap<String, Object> properties) {
-		this.portspecification = portSpecification;
+	
+		public ComponentFigure(List<PortDetails> portDetails, String cIconPath, String label, String acronym,
+				LinkedHashMap<String, Object> properties) {
 		this.canvasIconPath = XMLConfigUtil.CONFIG_FILES_PATH + cIconPath;
 		this.acronym = acronym;
 		this.componentProperties = properties;
@@ -140,10 +140,10 @@ public class ComponentFigure extends Figure implements Validator {
 		setInitialColor();
 		setComponentColorAndBorder();
 
-		for (PortSpecification portSpec : portspecification) {
+		for (PortDetails portSpec : portDetails) {
 			setPortCount(portSpec);
-			setHeight(totalPortsofInType, totalPortsOfOutType);
-			setWidth(totalPortsOfUnusedType);
+			setHeight(totalPortsAtLeftSide, totalPortsAtRightSide);
+			setWidth(totalPortsAtBottonSide);
 		}
 
 		Font accronymFont = new Font(Display.getDefault(), ELTFigureConstants.labelFont, 8, SWT.BOLD);
@@ -186,13 +186,14 @@ public class ComponentFigure extends Figure implements Validator {
 		setBorder(new ComponentBorder(selectedBorderColor, 1, componentLabelMargin));
 	}
 
-	private void setPortCount(PortSpecification portSpecification) {
-		if (StringUtils.equalsIgnoreCase(Constants.INPUT_SOCKET_TYPE,portSpecification.getTypeOfPort().value())) {
-			totalPortsofInType = portSpecification.getNumberOfPorts();
-		} else if (StringUtils.equalsIgnoreCase(Constants.OUTPUT_SOCKET_TYPE,portSpecification.getTypeOfPort().value())) {
-			totalPortsOfOutType = portSpecification.getNumberOfPorts();
-		} else if (StringUtils.equalsIgnoreCase(Constants.UNUSED_SOCKET_TYPE,portSpecification.getTypeOfPort().value())) {
-			totalPortsOfUnusedType = portSpecification.getNumberOfPorts();
+	private void setPortCount(PortDetails portDetails) {
+		//if (StringUtils.equalsIgnoreCase(Constants.INPUT_SOCKET_TYPE, portDetails.getPortType().value())) {
+		if(PortAlignmentEnum.LEFT.equals(portDetails.getPortAlignment())){
+			totalPortsAtLeftSide = totalPortsAtLeftSide + portDetails.getNumberOfPorts();
+		} else if (PortAlignmentEnum.RIGHT.equals(portDetails.getPortAlignment())) {
+			totalPortsAtRightSide = totalPortsAtRightSide + portDetails.getNumberOfPorts();
+		} else if (PortAlignmentEnum.BOTTOM.equals(portDetails.getPortAlignment())) {
+			totalPortsAtBottonSide = totalPortsAtBottonSide + portDetails.getNumberOfPorts();
 		}
 
 	}

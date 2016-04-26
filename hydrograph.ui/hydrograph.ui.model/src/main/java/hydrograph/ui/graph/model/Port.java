@@ -35,6 +35,7 @@ public class Port extends Model implements Cloneable{
 	private boolean isWatched;
 	private boolean allowMultipleLinks;
 	private boolean linkMandatory;
+	private PortAlignmentEnum portAlignment;
 	
 	/**
 	 * Instantiates a new port.
@@ -59,7 +60,7 @@ public class Port extends Model implements Cloneable{
 	 *  		If link is mandatory           
 	 */
 	public Port(String nameOfPort,String labelOfPort,String terminal, Component component, int noPortsOfThisType, PortTypeEnum type, int seq,
-			boolean alwMulLinks, boolean lnkMan){
+			boolean alwMulLinks, boolean lnkMan, PortAlignmentEnum portAlignmentEnum){
 		this.terminal = terminal;
 		this.numberOfPortsOfThisType = noPortsOfThisType;
 		this.portType = type;
@@ -69,6 +70,7 @@ public class Port extends Model implements Cloneable{
 		this.labelOfPort=labelOfPort;
 		this.allowMultipleLinks = alwMulLinks;
 		this.linkMandatory = lnkMan;
+		portAlignment = portAlignmentEnum;
 	}
 	
 	public boolean isAllowMultipleLinks() {
@@ -122,6 +124,10 @@ public class Port extends Model implements Cloneable{
 	public String getNameOfPort() {
 		return nameOfPort;
 	}
+	public PortAlignmentEnum getPortAlignment() {
+		return portAlignment;
+	}
+
 	public void setNumberOfPortsOfThisType(int newPortCount){
 		this.numberOfPortsOfThisType = newPortCount;
 	}

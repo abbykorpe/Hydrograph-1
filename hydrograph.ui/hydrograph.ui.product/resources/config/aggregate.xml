@@ -11,8 +11,8 @@
  limitations under the License. -->
  
  
-<tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
+<tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/aggregate_palette.png" canvasIconPath="/icons/aggregate_canvas.png"
 		name="Aggregate" nameInPalette="Aggregate" defaultNamePrefix="Aggregate" 
 		description="Performs aggregations on data specified in a java operation class."
@@ -20,10 +20,10 @@
 		acronym="Aggt">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
-			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+			<tns:portSpecification typeOfPort="in" numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
 				<tns:port sequenceOfPort="0"  nameOfPort="in0" labelOfPort="in0"/>
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="out" numberOfPorts="1" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+			<tns:portSpecification typeOfPort="out" numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
 				<tns:port sequenceOfPort="0"  nameOfPort="out0" labelOfPort="out0"/>
 			</tns:portSpecification>
 		</tns:port>

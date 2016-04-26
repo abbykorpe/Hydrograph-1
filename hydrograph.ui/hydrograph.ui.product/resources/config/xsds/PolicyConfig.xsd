@@ -11,8 +11,8 @@
  limitations under the License. -->
  
  
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwise.com/ComponentConfig"
-	xmlns:tns="http://www.bitwise.com/ComponentConfig" elementFormDefault="qualified">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="hydrograph/ui/ComponentConfig"
+	xmlns:tns="hydrograph/ui/ComponentConfig" elementFormDefault="qualified">
 	<include schemaLocation=""></include>
 	<element name="PolicyConfig">
 		<complexType>
