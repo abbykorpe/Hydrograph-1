@@ -166,6 +166,7 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.statushandlers.StatusManager;
+import org.hamcrest.core.IsInstanceOf;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -1248,17 +1249,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");
 		boolean isLocal = JobManager.INSTANCE.isLocalMode();
 		Job job = DebugHandler.getJob(currentJob);
-		
+		deleteDebugFileFromWorkspace();
 		if(job == null){
 			logger.debug("current job {} wasn't found in Debughandler's map",currentJob);
 			return ;
 		}
-		String file_path = job.getDebugFilePath();
-		try {
-			ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(file_path)).delete(true, null);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
+		
 		
 		if(isLocal){
 			String basePath = job.getBasePath();
@@ -1282,6 +1278,21 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 		DebugHandler.getJobMap().remove(currentJob);
 		
+	}
+
+	private void deleteDebugFileFromWorkspace() {
+		if (getEditorInput() instanceof FileEditorInput) {
+			IPath fileIpath = ((FileEditorInput) getEditorInput()).getFile().getFullPath();
+			if (fileIpath != null) {
+				String debugFileName = fileIpath.removeFileExtension().lastSegment() + Constants.DEBUG_EXTENSION;
+				IPath debugFileiPath = fileIpath.removeLastSegments(1).append(debugFileName);						
+				try {
+					ResourcesPlugin.getWorkspace().getRoot().getFile(debugFileiPath).delete(true, null);
+				} catch (CoreException e) {
+					logger.warn("CoreException occurred while deleting debug file", e);
+				}
+			}
+		}
 	}
 	
 
