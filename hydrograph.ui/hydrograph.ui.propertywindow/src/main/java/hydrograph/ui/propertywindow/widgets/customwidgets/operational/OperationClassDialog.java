@@ -70,6 +70,7 @@ import org.eclipse.jface.viewers.TableViewer;
 
 public class OperationClassDialog extends Dialog implements IOperationClassDialog {
 
+	private static final String PATH = "path";
 	/**
 	 * Create the dialog.
 	 * 
@@ -158,7 +159,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 				comboOfOperationClasses, isParameterCheckbox, fileNameText, tootlTipErrorMessage, widgetConfig, this,
 				propertyDialogButtonBar, opeartionClassDialogButtonBar);
 		fileName = (Text) fileNameText.getSWTWidgetControl();
-		fileName.setData("path", mappingSheetRow.getOperationClassFullPath());
+		fileName.setData(PATH, mappingSheetRow.getOperationClassFullPath());
 		operationClasses = (Combo) comboOfOperationClasses.getSWTWidgetControl();
         
 		FilterOperationClassUtility.enableAndDisableButtons(true, false);
@@ -306,7 +307,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 			fileName.setText(mappingSheetRow.getOperationClassPath());
 			operationClasses.setText(mappingSheetRow.getComboBoxValue());
 			isParameterCheckBox.setSelection(mappingSheetRow.isClassParameter());
-			if (!mappingSheetRow.getComboBoxValue().equalsIgnoreCase(Messages.CUSTOM)) {
+			if (!StringUtils.equalsIgnoreCase(Messages.CUSTOM, mappingSheetRow.getComboBoxValue())) {
 				fileName.setEnabled(false);
 				FilterOperationClassUtility.enableAndDisableButtons(false, false);
 				isParameterCheckBox.setEnabled(false);
@@ -473,7 +474,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		mappingSheetRow = new MappingSheetRow(mappingSheetRow.getInputFields(), mappingSheetRow.getOutputList(),
 				mappingSheetRow.getOperationID(), operationClasses.getText(), fileName.getText(),
 				mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),
-				mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData("path"));
+				mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData(PATH));
 		isOkPressed=true;
 		super.okPressed();
 	}
@@ -484,7 +485,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 			mappingSheetRow = new MappingSheetRow(mappingSheetRow.getInputFields(), mappingSheetRow.getOutputList(),
 					mappingSheetRow.getOperationID(), operationClasses.getText(), fileName.getText(),
 					mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),
-					mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData("path") );
+					mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData(PATH) );
 			applyButton.setEnabled(false);
 			isApplyPressed=true;
 		} else {

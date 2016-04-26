@@ -14,6 +14,8 @@
  
 package hydrograph.ui.propertywindow.widgets.utility;
 
+import hydrograph.ui.propertywindow.messages.Messages;
+
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
@@ -37,6 +39,9 @@ import org.eclipse.swt.widgets.TableColumn;
  * @author Bitwise
  */
 public class WidgetUtility {
+	private static final String ERROR = "Error";
+	
+
 	private WidgetUtility(){
 	}
 	 
@@ -114,7 +119,7 @@ public class WidgetUtility {
 	public static void errorMessage(String message) {
 		Shell shell = new Shell();
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR | SWT.OK);
-		messageBox.setText("Error");
+		messageBox.setText(ERROR);
 		messageBox.setMessage(message);
 		messageBox.open();
 	}
@@ -130,7 +135,7 @@ public class WidgetUtility {
 		Shell shell = new Shell();
 		
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Warning");
+		messageBox.setText(Messages.WARNING);
 	    messageBox.setMessage(message);
 	    int response = messageBox.open();
 	    if (response == SWT.YES){

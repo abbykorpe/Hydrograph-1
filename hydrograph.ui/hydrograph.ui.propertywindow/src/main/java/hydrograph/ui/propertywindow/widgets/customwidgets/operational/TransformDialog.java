@@ -410,7 +410,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				for(int i=0;i<expandBar.getItemCount();i++)
 				{
 					Text text= (Text) expandBar.getItems()[i].getData();
-					if(operationID.equalsIgnoreCase(text.getText()))
+					if(StringUtils.equalsIgnoreCase(operationID, text.getText()))
 					{
 						 n++;
 						 operationID = Messages.OPERATION_ID_PREFIX + n;
