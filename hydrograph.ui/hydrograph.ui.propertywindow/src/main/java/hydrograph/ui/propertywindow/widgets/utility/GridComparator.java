@@ -18,8 +18,11 @@ package hydrograph.ui.propertywindow.widgets.utility;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 
 import java.util.Comparator;
+
+import org.apache.commons.lang.StringUtils;
 
 public class GridComparator implements Comparator<GridRow> {
 
@@ -35,8 +38,22 @@ public class GridComparator implements Comparator<GridRow> {
 	        if(flag==0) flag = o1.getScale().compareTo(o2.getScale());
 	        if(flag==0) flag = o1.getScaleTypeValue().compareTo(o2.getScaleTypeValue());
 	        
+	        if(MixedSchemeGridRow.class.isAssignableFrom(o1.getClass()) && MixedSchemeGridRow.class.isAssignableFrom(o2.getClass())){
+	        	if(flag==0){ 
+	        		if(StringUtils.isNotBlank(((MixedSchemeGridRow) o1).getLength()) && StringUtils.isNotBlank(((MixedSchemeGridRow) o2).getLength()))
+	        			flag = ((MixedSchemeGridRow) o1).getLength().compareTo(((MixedSchemeGridRow) o2).getLength());
+	        	}
+	        	if(flag==0) {
+	        		if(StringUtils.isNotBlank(((MixedSchemeGridRow) o1).getDelimiter()) && StringUtils.isNotBlank(((MixedSchemeGridRow) o2).getDelimiter()))
+	        			flag = ((MixedSchemeGridRow) o1).getDelimiter().compareTo(((MixedSchemeGridRow) o2).getDelimiter());
+	        	}
+	        	return flag;
+	        }
+	        
 	        if(FixedWidthGridRow.class.isAssignableFrom(o1.getClass()) && FixedWidthGridRow.class.isAssignableFrom(o2.getClass())){
-	        	if(flag==0) flag = ((FixedWidthGridRow) o1).getLength().compareTo(((FixedWidthGridRow) o2).getLength());
+	        	if(StringUtils.isNotBlank(((FixedWidthGridRow) o1).getLength()))
+	        			if(flag==0) flag = ((FixedWidthGridRow) o1).getLength().compareTo(((FixedWidthGridRow) o2).getLength());
+	        	return flag;
 	        }
 	        if(GenerateRecordSchemaGridRow.class.isAssignableFrom(o1.getClass()) && GenerateRecordSchemaGridRow.class.isAssignableFrom(o2.getClass())){
 	        	if(flag==0) flag = ((GenerateRecordSchemaGridRow) o1).getLength().compareTo(((GenerateRecordSchemaGridRow) o2).getLength());

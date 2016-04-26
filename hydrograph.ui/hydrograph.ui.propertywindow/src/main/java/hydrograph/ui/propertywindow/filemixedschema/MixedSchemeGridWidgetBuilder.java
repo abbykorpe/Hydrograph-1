@@ -45,9 +45,9 @@ public class MixedSchemeGridWidgetBuilder extends GridWidgetCommonBuilder{
 		mixedSchemeGridRow.setScaleTypeValue(getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]); 
 		mixedSchemeGridRow.setDataType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
 		mixedSchemeGridRow.setDataTypeValue(getDataTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]); 
-		mixedSchemeGridRow.setLength("0");
+		mixedSchemeGridRow.setLength("");
 		mixedSchemeGridRow.setDescription("");
-		mixedSchemeGridRow.setDelimiter("");
+		mixedSchemeGridRow.setDelimiter("|");
 		
 		int numberOfRows=grids.size();
 		do{

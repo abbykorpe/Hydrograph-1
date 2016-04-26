@@ -24,6 +24,7 @@ import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
@@ -107,24 +108,22 @@ public class GridRowLoader {
 					schemaGridRowListToImport = new ArrayList<GridRow>();
 
 					if(Messages.GENERIC_GRID_ROW.equals(gridRowType)){
-
 						for (Field field : fieldsList) {
 							addRowToList(gridDetails, grids, getBasicSchemaGridRow(field), schemaGridRowListToImport);
 						}	
-						
 					}else if(Messages.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){
 
 						for (Field field : fieldsList) {
 							addRowToList(gridDetails, grids, getFixedWidthGridRow(field), schemaGridRowListToImport);
 						}
 					}else if(Messages.GENERATE_RECORD_GRID_ROW.equals(gridRowType)){
-
 						for (Field field : fieldsList) {
-							
 							addRowToList(gridDetails, grids, getGenerateRecordGridRow(field), schemaGridRowListToImport);
-							
-						}
-						
+						}	
+					}else if(Messages.MIXEDSCHEME_GRID_ROW.equals(gridRowType)){
+						for (Field field : fieldsList) {
+							addRowToList(gridDetails, grids, getMixedSchemeGridRow(field), schemaGridRowListToImport);
+						}	
 					}
 				
 				}
@@ -200,7 +199,11 @@ public class GridRowLoader {
 						for (Field field : fieldsList) {
 							schemaGridRowListToImport.add(gridRow = getGenerateRecordGridRow(field));
 						}
+					}else if(Messages.MIXEDSCHEME_GRID_ROW.equals(gridRowType)){
 						
+						for (Field field : fieldsList) {
+							schemaGridRowListToImport.add(gridRow = getMixedSchemeGridRow(field));
+						}
 					}
 				
 				}
@@ -255,12 +258,25 @@ public class GridRowLoader {
 							field.setScaleType(ScaleTypes.fromValue(gridRow.getScaleTypeValue()));
 						}
 					}
-					if(StringUtils.isNotBlank(gridRow.getDescription()))
+					if(StringUtils.isNotBlank(gridRow.getDescription())){
 						field.setDescription(gridRow.getDescription());
+					}
 
 					if(gridRow instanceof FixedWidthGridRow){
 						if(StringUtils.isNotBlank(((FixedWidthGridRow)gridRow).getLength())){
 							field.setLength(new BigInteger(((FixedWidthGridRow)gridRow).getLength()));
+						}
+
+					}
+					
+					if(gridRow instanceof MixedSchemeGridRow){
+						
+						if(StringUtils.isNotBlank(((FixedWidthGridRow)gridRow).getLength())){
+							field.setLength(new BigInteger(((FixedWidthGridRow)gridRow).getLength()));
+						}
+						
+						if(StringUtils.isNotBlank(((MixedSchemeGridRow)gridRow).getDelimiter())){
+							field.setDelimiter((((MixedSchemeGridRow)gridRow).getDelimiter()));
 						}
 
 					}
@@ -354,6 +370,23 @@ public class GridRowLoader {
 			((FixedWidthGridRow) gridRow).setLength(String.valueOf(field.getLength()));
 		else
 			((FixedWidthGridRow) gridRow).setLength("");
+		return gridRow;
+	}
+	
+	private GridRow getMixedSchemeGridRow(Field field) {
+		GridRow gridRow = new MixedSchemeGridRow();
+		populateCommonFields(gridRow, field);
+		
+		if(field.getLength()!=null)
+			((FixedWidthGridRow) gridRow).setLength(String.valueOf(field.getLength()));
+		else
+			((FixedWidthGridRow) gridRow).setLength("");
+		
+		if(field.getDelimiter()!=null)
+			((MixedSchemeGridRow)gridRow).setDelimiter(field.getDelimiter());
+		else
+			((MixedSchemeGridRow) gridRow).setDelimiter("");
+		
 		return gridRow;
 	}
 
