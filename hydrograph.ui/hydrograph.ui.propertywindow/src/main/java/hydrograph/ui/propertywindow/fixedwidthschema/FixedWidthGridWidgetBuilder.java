@@ -16,7 +16,6 @@ package hydrograph.ui.propertywindow.fixedwidthschema;
 
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
@@ -72,7 +71,7 @@ public class FixedWidthGridWidgetBuilder extends GridWidgetCommonBuilder {
 		fixedGrid.setScaleTypeValue(getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]); 
 		fixedGrid.setDataType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
 		fixedGrid.setDataTypeValue(getDataTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]); 
-		fixedGrid.setLength("0");
+		fixedGrid.setLength("");
 		fixedGrid.setDescription("");
 		
 		

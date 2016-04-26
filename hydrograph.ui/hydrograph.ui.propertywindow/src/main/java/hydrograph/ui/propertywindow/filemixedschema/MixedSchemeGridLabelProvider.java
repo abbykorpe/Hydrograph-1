@@ -24,6 +24,12 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+/**
+ * The Class MixedSchemeGridLabelProvider.
+ * 
+ * @author Bitwise
+ */
+
 public class MixedSchemeGridLabelProvider implements ITableLabelProvider,ITableColorProvider{
 
 	/**
