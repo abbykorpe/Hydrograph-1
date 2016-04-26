@@ -145,7 +145,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 	private String getExecututeJobCommand(String xmlPath, String debugXmlPath, String basePath, String paramFile, Job job, String uniqueJobId) {
 		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_REMOTE_JOB + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
-				+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE + paramFile
+				+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE + "\""+ paramFile+"\""
 				+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_DEBUG_XML 
 				+ debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH 
 				+ basePath + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +uniqueJobId;
@@ -172,7 +172,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 	private String getParameterFileScpCommand(String paramFile, Job job) {
 		return GradleCommandConstants.GCMD_SCP_PARM_FILE + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
-				+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE + paramFile;
+				+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE + "\""+ paramFile+"\"";
 	}
 	
 	private String getLibararyScpCommand(Job job) {

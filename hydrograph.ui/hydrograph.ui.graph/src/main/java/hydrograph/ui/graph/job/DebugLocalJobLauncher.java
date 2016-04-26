@@ -84,7 +84,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 	}
 	
 	private String getExecututeJobCommand(String xmlPath, String paramFile, String debugXmlPath, String basePath, String uniqueJobId) {
-		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB + GradleCommandConstants.GPARAM_PARAM_FILE + paramFile + GradleCommandConstants.GPARAM_JOB_XML +  xmlPath.split("/", 2)[1] +
+		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB + GradleCommandConstants.GPARAM_PARAM_FILE + "\""+ paramFile+"\"" + GradleCommandConstants.GPARAM_JOB_XML +  xmlPath.split("/", 2)[1] +
 				GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH + basePath + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +uniqueJobId;
 	}
 	
