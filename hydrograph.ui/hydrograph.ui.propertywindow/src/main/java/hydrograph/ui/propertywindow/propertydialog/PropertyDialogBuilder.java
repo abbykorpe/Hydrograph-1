@@ -13,6 +13,9 @@
 package hydrograph.ui.propertywindow.propertydialog;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -40,6 +43,7 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
@@ -328,7 +332,12 @@ public class PropertyDialogBuilder {
 
 	private TabItem createTab(String groupName, TabFolder tabFolder) {
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText(WordUtils.capitalize(groupName.replace("_", " ").toLowerCase(), null));
+		if (OSValidator.isMac()) {
+			tabItem.setText(" "+WordUtils.capitalize(groupName.replace("_", " ").toLowerCase(), null));
+		}
+		else {
+			tabItem.setText(WordUtils.capitalize(groupName.replace("_", " ").toLowerCase(), null));			
+		}
 		return tabItem;
 	}
 
@@ -363,10 +372,12 @@ public class PropertyDialogBuilder {
 	public AbstractELTContainerWidget addSubgroupToPropertyWindowTab(String subgroupName,ScrolledCompositeHolder scrolledCompositeHolder){
 		AbstractELTContainerWidget eltDefaultSubgroup= new ELTDefaultSubgroup(scrolledCompositeHolder.getComposite()).subGroupName(WordUtils.capitalize(subgroupName.replace("_", " ").toLowerCase(), null));
 		eltDefaultSubgroup.createContainerWidget();		
-		scrolledCompositeHolder.getScrolledComposite().setContent(scrolledCompositeHolder.getComposite());
-		scrolledCompositeHolder.getScrolledComposite().setMinSize(scrolledCompositeHolder.getComposite().computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
-		return eltDefaultSubgroup;
+		if (OSValidator.isMac()) {
+			((Group)eltDefaultSubgroup.getContainerControl()).setFont(new Font(null, "Arial", 13,SWT.BOLD));
+		}
+			scrolledCompositeHolder.getScrolledComposite().setContent(scrolledCompositeHolder.getComposite());
+			scrolledCompositeHolder.getScrolledComposite().setMinSize(scrolledCompositeHolder.getComposite().computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			return eltDefaultSubgroup;
 	}
 
 	/**
