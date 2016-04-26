@@ -14,8 +14,6 @@
 
 package hydrograph.ui.propertywindow.widgets.filterproperty;
 
-import hydrograph.ui.datastructure.property.FilterProperties;
-
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableFontProvider;

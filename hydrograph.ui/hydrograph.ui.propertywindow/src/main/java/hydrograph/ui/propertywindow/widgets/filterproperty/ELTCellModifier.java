@@ -24,10 +24,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.operational.TransformD
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Item;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
 
@@ -70,12 +67,12 @@ public class ELTCellModifier implements ICellModifier{
 	@Override
 	public Object getValue(Object element, String property) {
 		FilterProperties filter = (FilterProperties) element;
-		if(Constants.COMPONENT_NAME.equals(property))
+		if(StringUtils.equals(Constants.COMPONENT_NAME, property))
 			return filter.getPropertyname();
-		else if(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD.equals(property)){
+		else if(StringUtils.equals(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD, property)){
 			return filter.getPropertyname();
 		}
-		else  if (Messages.OUTPUT_FIELD.equals(property)||Messages.INNER_OPERATION_INPUT_FIELD.equals(property) ||Messages.INNER_OPERATION_OUTPUT_FIELD.equals(property) )
+		else  if (StringUtils.equals(Messages.OUTPUT_FIELD,property)||StringUtils.equals(Messages.INNER_OPERATION_INPUT_FIELD,property)||StringUtils.equals(Messages.INNER_OPERATION_OUTPUT_FIELD, property))
 			return filter.getPropertyname();
 		return null;
 	}
@@ -88,26 +85,26 @@ public class ELTCellModifier implements ICellModifier{
 
 		FilterProperties filterProperties = (FilterProperties) element;
 
-		if(Constants.COMPONENT_NAME.equals(property))
+		if(StringUtils.equals(Constants.COMPONENT_NAME, property))
 			filterProperties.setPropertyname((String)value);
-		else if(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD.equals(property)){
+		else if(StringUtils.equals(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD, property)){
 			filterProperties.setPropertyname((String)value);
 		}
-		else if(Messages.INNER_OPERATION_INPUT_FIELD.equals(property))
+		else if(StringUtils.equals(Messages.INNER_OPERATION_INPUT_FIELD,property))
 		{
 			filterProperties.setPropertyname((String)value);
 			transformDialog.refreshOutputTable();
 			transformDialog.setDuplicateOperationInputFieldMap(mappingSheetRow); 
 			transformDialog.showHideValidationMessage();
 			}
-			else if(Messages.INNER_OPERATION_OUTPUT_FIELD.equals(property))
+			else if(StringUtils.equals(Messages.INNER_OPERATION_OUTPUT_FIELD, property))
 			{		
 			filterProperties.setPropertyname((String )value);	
 			transformDialog.refreshOutputTable();
             transformDialog.showHideValidationMessage();
 		}
 			
-		else if(Messages.OUTPUT_FIELD.equals(property))
+		else if(StringUtils.equals(Messages.OUTPUT_FIELD,property))
 			{
 				filterProperties.setPropertyname((String )value);	
 			}

@@ -61,6 +61,7 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class TransformWidget extends AbstractWidget {
 
+	private static final String EDIT = "Edit";
 	private String propertyName;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private TransformMapping transformMapping;
@@ -105,7 +106,7 @@ public class TransformWidget extends AbstractWidget {
 
 		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
 
-		ELTDefaultButton eltDefaultButton = new ELTDefaultButton("Edit").grabExcessHorizontalSpace(false);
+		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(EDIT).grabExcessHorizontalSpace(false);
 		transformComposite.attachWidget(eltDefaultButton);
 
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {

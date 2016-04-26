@@ -15,18 +15,17 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 
-import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.ICellEditorValidator;
-import org.eclipse.swt.widgets.Table;
+
 
 
 public class TransformCellEditorFieldValidator implements ICellEditorValidator {
 	
+	private static final String ERROR = "Error";
 	private ControlDecoration fieldNameDecorator;
 	private ControlDecoration isFieldNameAlphanumericDecorator;
 
@@ -40,16 +39,16 @@ public class TransformCellEditorFieldValidator implements ICellEditorValidator {
 	@Override
 	public String isValid(Object value) {
 		String fieldName = (String) value;
-		if(fieldName.equals("")){     
+		if(StringUtils.isBlank(fieldName)){     
 			fieldNameDecorator.show();   
-			return "Error";   
+			return ERROR;   
 		}else{  
 			fieldNameDecorator.hide(); 
 			if(isFieldNameAlphanumeric(fieldName))
 				isFieldNameAlphanumericDecorator.hide();
 			else{
 				isFieldNameAlphanumericDecorator.show();
-				return "Error";
+				return ERROR;
 			}
 		}
 		return null;

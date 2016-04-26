@@ -34,16 +34,25 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	private List listOfOutputFields;
 	private TableViewer operationOutputFieldTableViewer;
 	private Map<String,List<FilterProperties>> outputFieldMap;
-	
-	public Map<String,List<FilterProperties>> getOutputFieldList() {
-		return outputFieldMap;
-	}
-
 	private List<NameValueProperty> mapAndPassThroughField;
 	private TableViewer outputFieldTableViewer;
 	private List<MappingSheetRow> mappingSheetRows;
 	private TransformDialog transformDialogNew;
 	
+	
+	
+	/**
+	 * @param transformDialogNew
+	 * @param mappingSheetRows
+	 * @param outputFieldTableViewer
+	 * @param mapAndPassThroughField
+	 * @param outputFieldMap
+	 * @param listOfOutputFields
+	 * @param listOfInputFields
+	 * @param isSingleColumn
+	 * @param tableViewer
+	 * @param t
+	 */
 	public DragDropTransformOpImp(TransformDialog transformDialogNew,List<MappingSheetRow> mappingSheetRows,TableViewer outputFieldTableViewer,List<NameValueProperty> mapAndPassThroughField,Map<String,List<FilterProperties>> outputFieldMap,List listOfOutputFields,List listOfInputFields, boolean isSingleColumn,TableViewer tableViewer,TableViewer t) {
 		super();
 		this.listOfInputFields = listOfInputFields;
@@ -67,6 +76,7 @@ public class DragDropTransformOpImp implements DragDropOperation {
 		
 	}
 
+	
 	@Override
 	public void saveResult(String result) {
 		 if(isSingleColumn){
@@ -98,5 +108,10 @@ public class DragDropTransformOpImp implements DragDropOperation {
 		
 		
 	}
+	
+	public Map<String,List<FilterProperties>> getOutputFieldList() {
+		return outputFieldMap;
+	}
+	
 
 }
