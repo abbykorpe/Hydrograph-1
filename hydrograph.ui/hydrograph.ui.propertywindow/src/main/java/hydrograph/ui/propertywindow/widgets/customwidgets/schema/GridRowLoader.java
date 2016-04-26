@@ -380,9 +380,9 @@ public class GridRowLoader {
 		populateCommonFields(gridRow, field);
 		
 		if(field.getLength()!=null)
-			((FixedWidthGridRow) gridRow).setLength(String.valueOf(field.getLength()));
+			((MixedSchemeGridRow) gridRow).setLength(String.valueOf(field.getLength()));
 		else
-			((FixedWidthGridRow) gridRow).setLength("");
+			((MixedSchemeGridRow) gridRow).setLength("");
 		
 		if(field.getDelimiter()!=null)
 			((MixedSchemeGridRow)gridRow).setDelimiter(field.getDelimiter());
