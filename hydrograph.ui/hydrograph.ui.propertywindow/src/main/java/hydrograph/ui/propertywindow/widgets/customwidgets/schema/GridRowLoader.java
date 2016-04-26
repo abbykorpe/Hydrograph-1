@@ -327,6 +327,8 @@ public class GridRowLoader {
 	
 	
 	private class DuplicateFieldException extends Exception{
+		private static final long serialVersionUID = -6430674437086982389L;
+
 		public DuplicateFieldException(String message)
 		{
 			super(message);

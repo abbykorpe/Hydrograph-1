@@ -16,7 +16,6 @@ package hydrograph.ui.propertywindow.fixedwidthschema;
 
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 

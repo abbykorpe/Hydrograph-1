@@ -24,6 +24,12 @@ import java.util.Comparator;
 
 import org.apache.commons.lang.StringUtils;
 
+/**
+ * The Class GridComparator.
+ * 
+ * @author Bitwise
+ */
+
 public class GridComparator implements Comparator<GridRow> {
 
 	@Override

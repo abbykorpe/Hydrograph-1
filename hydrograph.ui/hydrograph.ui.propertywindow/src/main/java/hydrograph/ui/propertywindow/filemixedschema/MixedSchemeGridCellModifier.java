@@ -23,6 +23,12 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
+/**
+ * The Class MixedSchemeGridCellModifier.
+ * 
+ * @author Bitwise
+ */
+
 public class MixedSchemeGridCellModifier implements ICellModifier{
 	private Viewer viewer;
 	

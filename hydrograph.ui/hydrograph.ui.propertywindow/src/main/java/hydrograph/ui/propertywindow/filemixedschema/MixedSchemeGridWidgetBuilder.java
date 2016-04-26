@@ -27,6 +27,7 @@ import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 public class MixedSchemeGridWidgetBuilder extends GridWidgetCommonBuilder{
 	
 	public static MixedSchemeGridWidgetBuilder INSTANCE = new MixedSchemeGridWidgetBuilder();
+	public static final String PIPE_DELIMITER = "|";
 	
 	private MixedSchemeGridWidgetBuilder(){}
 
@@ -47,7 +48,7 @@ public class MixedSchemeGridWidgetBuilder extends GridWidgetCommonBuilder{
 		mixedSchemeGridRow.setDataTypeValue(getDataTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]); 
 		mixedSchemeGridRow.setLength("");
 		mixedSchemeGridRow.setDescription("");
-		mixedSchemeGridRow.setDelimiter("|");
+		mixedSchemeGridRow.setDelimiter(PIPE_DELIMITER);
 		
 		int numberOfRows=grids.size();
 		do{
