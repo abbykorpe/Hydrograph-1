@@ -271,8 +271,8 @@ public class GridRowLoader {
 					
 					if(gridRow instanceof MixedSchemeGridRow){
 						
-						if(StringUtils.isNotBlank(((FixedWidthGridRow)gridRow).getLength())){
-							field.setLength(new BigInteger(((FixedWidthGridRow)gridRow).getLength()));
+						if(StringUtils.isNotBlank(((MixedSchemeGridRow)gridRow).getLength())){
+							field.setLength(new BigInteger(((MixedSchemeGridRow)gridRow).getLength()));
 						}
 						
 						if(StringUtils.isNotBlank(((MixedSchemeGridRow)gridRow).getDelimiter())){
