@@ -444,7 +444,7 @@ public class ConverterHelper {
 	 * @param {@link MixedSchemeGridRow}
 	 * @return {@link TypeBaseField}
 	 */	
-	public TypeBaseField getFileMixedSchemeTargetData(MixedSchemeGridRow object) {
+	public TypeBaseField getFileMixedSchemeTargetData(FixedWidthGridRow object) {
 		TypeBaseField typeBaseField = new TypeBaseField();
 		typeBaseField.setName(object.getFieldName());
 

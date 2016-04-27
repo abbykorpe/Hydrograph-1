@@ -87,7 +87,7 @@ public class OutputFileMixedSchemeConverter extends OutputConverter {
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
 		if (gridList != null && gridList.size() != 0) {
 			for (GridRow object : gridList)
-				typeBaseFields.add(converterHelper.getFileMixedSchemeTargetData((MixedSchemeGridRow) object));
+				typeBaseFields.add(converterHelper.getFileMixedSchemeTargetData((FixedWidthGridRow) object));
 		}
 		return typeBaseFields;
 	}
