@@ -43,7 +43,7 @@ import org.osgi.framework.ServiceReference;
  */
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	private static final String CURRENT_THEME_ID = "hydrograph.ui.custom.ui.theme";
-	private static final String CONSOLE_ID = "hydrograph.ui.project.structure.console.AcceleroConsole";
+	private static final String CONSOLE_ID = "hydrograph.ui.project.structure.console.HydrographConsole";
 	private static final String CONSOLE_TOOLBAR_CSS_ID="consoleToolbarColor";
 	private static final String WARNING_TITLE="Warning";
 	private static final String WARNING_MESSAGE="Current DPI setting is other than 100%. Recommended 100%.\nUpdate it from Control Panel -> Display settings.\n\nNote: DPI setting other than 100% may cause alignment issues.";

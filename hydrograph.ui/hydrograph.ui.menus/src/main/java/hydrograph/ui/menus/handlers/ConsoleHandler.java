@@ -32,7 +32,7 @@ import org.slf4j.Logger;
  */
 public class ConsoleHandler extends AbstractHandler implements IHandler {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ConsoleHandler.class);
-	private static final String consoleView = "hydrograph.ui.project.structure.console.AcceleroConsole";
+	private static final String consoleView = "hydrograph.ui.project.structure.console.HydrographConsole";
 	
 	/**
 	 * open console view
