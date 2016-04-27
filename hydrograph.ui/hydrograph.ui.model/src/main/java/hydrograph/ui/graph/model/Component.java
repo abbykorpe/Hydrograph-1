@@ -203,9 +203,9 @@ public abstract class Component extends Model {
 
 		for (PortSpecification p : portSpecification) {
 			setPortCount(p.getTypeOfPort().value(), p.getNumberOfPorts(), p.isChangePortCountDynamically());
+			pEnum= PortTypeEnum.fromValue(p.getTypeOfPort().value());
 			for(PortInfo portInfo :p.getPort()){
 				String portTerminal = p.getTypeOfPort().value() + portInfo.getSequenceOfPort();
-				pEnum= PortTypeEnum.fromValue(p.getTypeOfPort().value());
 				Port port = new Port(portInfo.getNameOfPort(), portInfo.getLabelOfPort(),
 						portTerminal, this, p.getNumberOfPorts(), pEnum
 								, portInfo.getSequenceOfPort(), p.isAllowMultipleLinks(), p.isLinkMandatory());
