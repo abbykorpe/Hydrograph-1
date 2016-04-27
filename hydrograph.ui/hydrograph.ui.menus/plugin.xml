@@ -440,7 +440,7 @@
            </command>
           <command
                   commandId="com.bitwise.help.aboutaccelero"
-                 label="About Accelero"
+                 label="About Hydrograph"
                   style="push"
                   mnemonic ="A">
             </command>
