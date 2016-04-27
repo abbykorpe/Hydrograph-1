@@ -181,7 +181,7 @@
             </command>
             <command
                   commandId="org.eclipse.ui.edit.delete"
-                  icon="resources/icons/delete_o.png"
+                  icon="resources/icons/delete.png"
                   label="Delete"
                   style="push">
             </command>
