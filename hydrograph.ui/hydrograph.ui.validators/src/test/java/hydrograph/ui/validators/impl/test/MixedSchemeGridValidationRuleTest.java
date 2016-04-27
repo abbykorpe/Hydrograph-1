@@ -23,65 +23,62 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class MixedSchemeGridValidationRuleTest {
 
 	MixedSchemeGridValidationRule mixedSchemeGridRule = new MixedSchemeGridValidationRule();
+	private String expected;
+
+	@Before
+	public void setUP() {
+		expected = "";
+	}
 
 	@Test
 	public void testGridWithEmptyLengthANDEmptyDelimiter_fail() {
-		mixedSchemeGridRule.validate(SchemaFactory.getSchema("", ""), "schema");
-		System.out.println(mixedSchemeGridRule.getErrorMessage());
-		Assert.assertFalse(StringUtils.isBlank(mixedSchemeGridRule
-				.getErrorMessage()));
+		expected = "Length Or Delimiter is mandatory";
+		mixedSchemeGridRule.validate(getSchema("", ""), "schema");
+		Assert.assertEquals(expected, mixedSchemeGridRule.getErrorMessage());
 	}
 
 	@Test
 	public void testGridWithEmptyLengthANDProperDelimiter_success() {
-		mixedSchemeGridRule
-				.validate(SchemaFactory.getSchema("", "|"), "schema");
+		mixedSchemeGridRule.validate(getSchema("", "|"), "schema");
 		Assert.assertTrue(StringUtils.isBlank(mixedSchemeGridRule
 				.getErrorMessage()));
 	}
 
 	@Test
 	public void testGridWithProperLengthANDEmptyDelimiter_success() {
-		mixedSchemeGridRule
-				.validate(SchemaFactory.getSchema("1", ""), "schema");
+		mixedSchemeGridRule.validate(getSchema("1", ""), "schema");
 		Assert.assertTrue(StringUtils.isBlank(mixedSchemeGridRule
 				.getErrorMessage()));
 	}
 
 	@Test
 	public void testGridWithProperLengthANDProperDelimiter_fail() {
-		mixedSchemeGridRule.validate(SchemaFactory.getSchema("1", "|"),
-				"schema");
-		Assert.assertFalse(StringUtils.isBlank(mixedSchemeGridRule
-				.getErrorMessage()));
+		expected = "Either Length Or Delimiter should be given";
+		mixedSchemeGridRule.validate(getSchema("1", "|"), "schema");
+		Assert.assertEquals(expected, mixedSchemeGridRule.getErrorMessage());
 	}
 
 	@Test
 	public void testGridWithZeroLengthANDEmptyDelimiter_fail() {
-		mixedSchemeGridRule
-				.validate(SchemaFactory.getSchema("0", ""), "schema");
-		Assert.assertFalse(StringUtils.isBlank(mixedSchemeGridRule
-				.getErrorMessage()));
+		expected = "Length should not be zero or negative";
+		mixedSchemeGridRule.validate(getSchema("0", ""), "schema");
+		Assert.assertEquals(expected, mixedSchemeGridRule.getErrorMessage());
 	}
 
 	@Test
 	public void testGridWithZeroLengthANDProperDelimiter_fail() {
-		mixedSchemeGridRule.validate(SchemaFactory.getSchema("0", "|"),
-				"schema");
-		Assert.assertFalse(StringUtils.isBlank(mixedSchemeGridRule
-				.getErrorMessage()));
+		expected = "Length should not be zero or negative";
+		mixedSchemeGridRule.validate(getSchema("0", "|"), "schema");
+		Assert.assertEquals(expected, mixedSchemeGridRule.getErrorMessage());
 	}
 
-}
-
-class SchemaFactory {
-
-	public static Schema getSchema(String length, String delimiter) {
+	private Schema getSchema(String length, String delimiter) {
 		Schema schema = new Schema();
 		MixedSchemeGridRow mixedSchemaGridRow = new MixedSchemeGridRow();
 		List<GridRow> gridRows = new ArrayList<>();

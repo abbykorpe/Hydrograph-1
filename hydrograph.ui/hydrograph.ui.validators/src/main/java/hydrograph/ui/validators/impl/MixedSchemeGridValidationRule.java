@@ -110,6 +110,10 @@ public class MixedSchemeGridValidationRule implements IValidator {
 
 			if (mixedSchemeGrid) {
 				MixedSchemeGridRow mixedSchemeGridRow = (MixedSchemeGridRow) gridRow;
+				if (mixedSchemeGridRow.getLength().equals("0") || mixedSchemeGridRow.getLength().contains("-")) {
+					errorMessage = "Length should not be zero or negative";
+					return false;
+				}
 				if ((StringUtils.isBlank(mixedSchemeGridRow.getLength())
 						|| mixedSchemeGridRow.getLength().equals("0")
 						|| mixedSchemeGridRow.getLength().contains("-"))
@@ -118,9 +122,6 @@ public class MixedSchemeGridValidationRule implements IValidator {
 					errorMessage = "Length Or Delimiter is mandatory";
 					return false;
 				}
-			}
-			if (mixedSchemeGrid) {
-				MixedSchemeGridRow mixedSchemeGridRow = (MixedSchemeGridRow) gridRow;
 				if ((StringUtils.isNotBlank(mixedSchemeGridRow.getLength())
 						|| mixedSchemeGridRow.getLength().equals("0")
 						|| mixedSchemeGridRow.getLength().contains("-"))
@@ -130,6 +131,7 @@ public class MixedSchemeGridValidationRule implements IValidator {
 					return false;
 				}
 			}
+			
 			if (uniqueNamesList.isEmpty()
 					|| !uniqueNamesList.contains(gridRow.getFieldName())) {
 				uniqueNamesList.add(gridRow.getFieldName());
