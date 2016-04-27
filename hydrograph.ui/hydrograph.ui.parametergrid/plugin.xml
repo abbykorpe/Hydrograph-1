@@ -32,7 +32,7 @@
             <command
                   commandId="hydrograph.ui.parametergrid.open.parametergrid"
                   icon="resources/icons/parameter_grid.png"
-                  label="Open Grid"
+                  label="Open Parameter Dialog"
                   style="push">
             </command>
          </toolbar>

@@ -34,4 +34,16 @@ public class MultiParameterFileDialogConstants {
 	public static final String GLOBAL_PARAMETER_DIRECTORY_NAME="globalparam";
 	public static final String OPEN_FILE_DIALOG_NAME = "Open";
 	
+	public static final String UP_BUTTON_TEXT="Up";
+	public static final String DOWN_BUTTON_TEXT="Down";
+	public static final String ADD_BUTTON_TEXT="Add";
+	public static final String DELETE_BUTTON_TEXT="Delete";
+	public static final String EDIT_BUTTON_TEXT="Edit";
+	public static final String RELOAD_BUTTON_TEXT="Reload";
+	public static final String SAVE_BUTTON_TEXT="Save";
+	
+	public static final String HELP_LINK="<a>Help</a>";
+	public static final String FILE_LABEL_TEXT="File";
+	
+	
 }
