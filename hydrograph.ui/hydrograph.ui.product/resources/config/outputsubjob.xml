@@ -16,7 +16,7 @@
 	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/output_subjob_palette.png"
 		canvasIconPath="/icons/output_subjob_canvas.png" name="OutputSubjobComponent"
-		nameInPalette="OutputSubjob" defaultNamePrefix="Subjob"
+		nameInPalette="Output Sub job" defaultNamePrefix="Subjob"
 		description="Represents the out sockets for a subjob."
 		helpFilePath="/hydrograph.ui.help/html/Components/Dummy.html"  acronym="Subjob">
 		<tns:category>SUBJOB</tns:category>

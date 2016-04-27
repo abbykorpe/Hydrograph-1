@@ -40,7 +40,7 @@ public class PortFigure extends Figure {
 	private TooltipFigure tooltipFigure;
 	private String labelOfPort;
 	private String portType;
-	private boolean displayPortLabels;
+	private static boolean displayPortLabels;
 	private boolean isWatched;
 	/**
 	 * Instantiates a new port figure.
