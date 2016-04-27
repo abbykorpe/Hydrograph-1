@@ -14,7 +14,7 @@
  
 package hydrograph.ui.project.structure.console;
 
-import hydrograph.ui.common.interfaces.console.IAcceleroConsole;
+import hydrograph.ui.common.interfaces.console.IHydrographConsole;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 
 import org.eclipse.ui.IWorkbenchPart;
@@ -28,13 +28,13 @@ import org.eclipse.ui.internal.console.ConsoleView;
 
 /**
  * 
- * Accelero's custom console view
+ * Hydrograph's custom console view
  * 
  * @author Bitwise
  * 
  */
 
-public class AcceleroConsole extends ConsoleView implements IAcceleroConsole {
+public class HydrographConsole extends ConsoleView implements IHydrographConsole {
 
 	private boolean consoleClosed;
 	private static String DEFAULT_CONSOLE = "NewConsole";

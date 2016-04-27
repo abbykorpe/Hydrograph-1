@@ -15,12 +15,12 @@
 package hydrograph.ui.common.interfaces.console;
 
 /**
- * Accelero Console
+ * Hydrograph Console
  * 
  * @author Bitwise
  * 
  */
-public interface IAcceleroConsole {
+public interface IHydrographConsole {
 	/**
 	 * 
 	 * Returns true if consoleview is closed else false

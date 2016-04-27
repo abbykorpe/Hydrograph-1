@@ -15,7 +15,7 @@ package hydrograph.ui.graph.editor;
 
 import hydrograph.ui.common.component.config.CategoryType;
 import hydrograph.ui.common.component.config.Component;
-import hydrograph.ui.common.interfaces.console.IAcceleroConsole;
+import hydrograph.ui.common.interfaces.console.IHydrographConsole;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
 import hydrograph.ui.common.util.CanvasDataAdpater;
@@ -194,7 +194,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private boolean stopButtonStatus;
 	
 	private static final String DEFAULT_CONSOLE = "NewConsole";
-	private static final String CONSOLE_VIEW_ID = "hydrograph.ui.project.structure.console.AcceleroConsole";
+	private static final String CONSOLE_VIEW_ID = "hydrograph.ui.project.structure.console.HydrographConsole";
 
 	private String uniqueJobId;
 	private String jobId;
@@ -395,7 +395,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 		IWorkbenchPart partView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 
-		IAcceleroConsole currentConsoleView = (IAcceleroConsole) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+		IHydrographConsole currentConsoleView = (IHydrographConsole) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 				.getActivePage().findView(CONSOLE_VIEW_ID);
 
 		if (partView instanceof ELTGraphicalEditor) {

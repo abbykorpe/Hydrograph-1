@@ -26,8 +26,8 @@
             name="Project Explorer">
       </view>
       <view
-            class="hydrograph.ui.project.structure.console.AcceleroConsole"
-            id="hydrograph.ui.project.structure.console.AcceleroConsole"
+            class="hydrograph.ui.project.structure.console.HydrographConsole"
+            id="hydrograph.ui.project.structure.console.HydrographConsole"
             name="Console"
             restorable="true">
       </view>
@@ -86,7 +86,7 @@
          </view>
          <view
                closeable="true"
-               id="hydrograph.ui.project.structure.console.AcceleroConsole"
+               id="hydrograph.ui.project.structure.console.HydrographConsole"
                moveable="true"
                ratio="0.70"
                relationship="bottom"
