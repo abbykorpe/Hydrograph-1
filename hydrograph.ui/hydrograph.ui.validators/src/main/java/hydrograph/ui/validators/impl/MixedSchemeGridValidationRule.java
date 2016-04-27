@@ -111,22 +111,17 @@ public class MixedSchemeGridValidationRule implements IValidator {
 			if (mixedSchemeGrid) {
 				MixedSchemeGridRow mixedSchemeGridRow = (MixedSchemeGridRow) gridRow;
 				if (mixedSchemeGridRow.getLength().equals("0") || mixedSchemeGridRow.getLength().contains("-")) {
-					errorMessage = "Length should not be zero or negative";
+					errorMessage = "Length should be positive integer";
 					return false;
 				}
-				if ((StringUtils.isBlank(mixedSchemeGridRow.getLength())
-						|| mixedSchemeGridRow.getLength().equals("0")
-						|| mixedSchemeGridRow.getLength().contains("-"))
+				if (StringUtils.isBlank(mixedSchemeGridRow.getLength())
 						&& StringUtils.isBlank(mixedSchemeGridRow
 								.getDelimiter())) {
 					errorMessage = "Length Or Delimiter is mandatory";
 					return false;
 				}
-				if ((StringUtils.isNotBlank(mixedSchemeGridRow.getLength())
-						|| mixedSchemeGridRow.getLength().equals("0")
-						|| mixedSchemeGridRow.getLength().contains("-"))
-						&& StringUtils.isNotBlank(mixedSchemeGridRow
-								.getDelimiter())) {
+				if (StringUtils.isNotBlank(mixedSchemeGridRow.getLength())	
+						&& StringUtils.isNotBlank(mixedSchemeGridRow.getDelimiter())) {
 					errorMessage = "Either Length Or Delimiter should be given";
 					return false;
 				}
