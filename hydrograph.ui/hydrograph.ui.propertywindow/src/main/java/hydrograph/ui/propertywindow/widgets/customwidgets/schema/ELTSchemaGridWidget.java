@@ -633,7 +633,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		if (!schemaGridRowList.isEmpty()) {
 			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES
 					| SWT.NO);
-			messageBox.setMessage(Messages.MESAAGE_FOR_FETCHING_PROPAGATED_SCHEMA);
+			messageBox.setMessage(Messages.MESSAGE_FOR_FETCHING_PROPAGATED_SCHEMA);
 			if (messageBox.open() == SWT.YES ) {
 				for (GridRow gridRow : copiedList)
 					if (componentsOutputSchema.getSchemaGridRow(gridRow.getFieldName()) == null)
