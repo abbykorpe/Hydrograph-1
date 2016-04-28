@@ -433,6 +433,7 @@ public class ELTLookupMapWizard extends Dialog {
 	private void createLabel(Composite parent) {
 		Label addButton = eltswtWidgets.labelWidget(parent, SWT.CENTER | SWT.PUSH, new int[] { 0, 0, 25, 20 }, "", new Image(
 				null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		addButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 
 		addButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -450,6 +451,7 @@ public class ELTLookupMapWizard extends Dialog {
 
 		deleteButton = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 }, "", new Image(null,
 				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+		deleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deleteButton.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -478,6 +480,7 @@ public class ELTLookupMapWizard extends Dialog {
 
 		upButton = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 50, 0, 25, 20 }, "", new Image(null,
 				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.UP_ICON));
+		upButton.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		upButton.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -509,6 +512,7 @@ public class ELTLookupMapWizard extends Dialog {
 
 		downButton = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 74, 0, 25, 20 }, "", new Image(
 				null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DOWN_ICON));
+		downButton.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		downButton.addMouseListener(new MouseAdapter() {
 
 			@Override

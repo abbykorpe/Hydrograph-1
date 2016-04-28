@@ -71,6 +71,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -267,6 +268,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	
 		Label addLabel = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 60, 3, 20, 15 }, "", new Image(
 				null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		addLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		addLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -292,6 +294,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		
 		Label deletLabel = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 160, 10, 20, 15 }, "",
 				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+		deletLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deletLabel.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -391,6 +394,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		
 		Label addLabel = widget.labelWidget(topAddButtonComposite, SWT.CENTER, new int[] { 184, 10, 20, 15 }, "",
 				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		addLabel.setToolTipText(Messages.ADD_OPERATION_CONTROL);
 		addLabel.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -429,6 +433,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		final Label deleteLabel = widget.labelWidget(topAddButtonComposite, SWT.CENTER, new int[] { 213, 10, 20, 15 },
 				"", new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+		deleteLabel.setToolTipText(Messages.DELETE_OPERATION_CONTROL);
 		deleteLabel.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -545,11 +550,13 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		Label lblNewLabel = new Label(labelComposite, SWT.NONE);
 		lblNewLabel.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
 		lblNewLabel.setText(Messages.MAP_FIELD);
+	
 
 		Label mapFieldAddLabel = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 635, 10, 20, 15 }, "",
 				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON)
 
 		);
+		mapFieldAddLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		mapFieldAddLabel.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -571,6 +578,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		Label mapFieldDeletLabel = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 665, 10, 20, 15 }, "",
 				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+		mapFieldDeletLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 
 		mapFieldDeletLabel.addMouseListener(new MouseAdapter() {
 
@@ -932,6 +940,21 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		editor[0].setValidator(new TransformCellEditorFieldValidator(fieldNameDecorator,isFieldNameAlphanumericDecorator));
 		isFieldNameAlphanumericDecorator.setMarginWidth(8);
 		fieldNameDecorator.setMarginWidth(8);
+		operationOutputtableViewer.getTable().addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				isFieldNameAlphanumericDecorator.hide();
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+			}
+		});
 		
 		DragDropTransformOpImp dragDropTransformOpImpnew = new DragDropTransformOpImp(this,
 				transformMapping.getMappingSheetRows(), outputFieldViewer,
@@ -942,6 +965,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		Label addLabel = widget.labelWidget(operationalOutputFieldComposite, SWT.CENTER, new int[] { 60, 3, 20, 15 },
 				"", new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		addLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		addLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -964,7 +988,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		Label deleteLabel = widget.labelWidget(operationalOutputFieldComposite, SWT.CENTER,
 				new int[] { 90, 3, 20, 15 }, "",
 				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
-
+		deleteLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deleteLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -1223,9 +1247,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		editors[0].setValidator(new TransformCellEditorFieldValidator(fieldNameDecorator,isFieldNameAlphanumericDecorator));
 		operationInputaddButton = widget.labelWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 60, 3, 20,
 				15 }, "", new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
-
+		operationInputaddButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		operationInputDeleteButton = widget.labelWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 90, 3,
 				20, 15 }, "", new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+		operationInputDeleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		
 		isFieldNameAlphanumericDecorator.setMarginWidth(8);
 		fieldNameDecorator.setMarginWidth(8);

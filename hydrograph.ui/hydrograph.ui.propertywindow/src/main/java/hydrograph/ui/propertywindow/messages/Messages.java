@@ -182,6 +182,8 @@ public class Messages extends NLS {
 	public static String MIXEDSCHEME_GRID_ROW ;
 
 	public static String MESSAGE_FOR_FETCHING_PROPAGATED_SCHEMA;
+	public static String ADD_OPERATION_CONTROL;
+	public static String DELETE_OPERATION_CONTROL;
     
 	static {
 		// initialize resource bundle
