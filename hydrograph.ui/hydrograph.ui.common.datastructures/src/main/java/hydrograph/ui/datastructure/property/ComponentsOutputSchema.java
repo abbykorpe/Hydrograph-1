@@ -40,7 +40,6 @@ public class ComponentsOutputSchema implements IDataStructure {
 	private Map<String,String> passThroughFieldsPortInfo = new LinkedHashMap<>();
 	private Map<String,String> mapFieldsPortInfo = new LinkedHashMap<>();
 
-	private String STRING_TYPE="java.lang.String";
 	
 
 

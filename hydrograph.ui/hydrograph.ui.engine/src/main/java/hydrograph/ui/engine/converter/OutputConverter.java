@@ -14,8 +14,12 @@
  
 package hydrograph.ui.engine.converter;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
+import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
+import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
@@ -25,16 +29,8 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseField;
-import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
-import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
-import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
-import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 
 public abstract class OutputConverter extends Converter {
 
@@ -81,16 +77,6 @@ public abstract class OutputConverter extends Converter {
 		return typeBaseRecord;
 	}
 
-//	protected ComponentsOutputSchema fetchPropagatedSchema() {
-//		ComponentsOutputSchema componentsOutputSchema = null;
-//		if(!StringUtils.equals(Constants.OUTPUT_SUBJOB, component.getComponentName())){
-//		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) properties
-//				.get(Constants.SCHEMA_TO_PROPAGATE);
-//		if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null)
-//			componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
-//		}
-//		return componentsOutputSchema;
-//	}
 
 	/**
 	 * Prepare the Fields/Records for shcema

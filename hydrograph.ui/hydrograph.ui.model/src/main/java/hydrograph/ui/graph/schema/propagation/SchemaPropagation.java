@@ -15,10 +15,8 @@
 package hydrograph.ui.graph.schema.propagation;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Component;
@@ -178,26 +176,6 @@ public class SchemaPropagation {
 		}
 	}
 
-//	private String getExistingSchemaName(Schema schema) {
-//		List<GridRow> gridRowList=null;
-//		if (schema != null && !schema.getIsExternal()) {
-//			gridRowList = schema.getGridRow();
-//			if (gridRowList != null && !gridRowList.isEmpty()) {
-//				return gridRowList.get(0).getClass().getCanonicalName();
-//			}
-//		}
-//		return null;
-//	}
-
-//	private void setFixedWidthAsSchema(Component component, ComponentsOutputSchema componentsOutputSchema) {
-//		Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
-//		if(schema!=null && schema.getGridRow()!=null && !schema.getGridRow().isEmpty()){
-//		if(componentsOutputSchema==null)
-//			return;
-//		for (GridRow gridRow : schema.getGridRow())
-//			gridRow.updateBasicGridRow(componentsOutputSchema.getSchemaGridRow(gridRow.getFieldName()));
-//		}
-//	}
 	
 	private void propagateSchemaFromSubJob(Component subJobComponent, String targetTerminal,
 			ComponentsOutputSchema componentsOutputSchema) {
@@ -217,9 +195,6 @@ public class SchemaPropagation {
 
 		else if (StringUtils.equals(Constants.OUTPUT_SUBJOB, subJobComponent.getComponentName())) {
 
-			// appplySchemaToTargetComponentsFromSchemaMap((Component)
-			// subJobComponent.getProperties().get(Constants.SUBJOB_COMPONENT), schemaMap,
-			// getTagetTerminalForSubjob(targetTerminal));
 			propagateSchemaFromOutputSubjobComponent(subJobComponent, outPutTargetTerminal, componentsOutputSchema);
 
 		}
@@ -380,17 +355,5 @@ public class SchemaPropagation {
 		}
 	}
 	
-	/*private void loadOldSchmeaProperties(Map<String, ComponentsOutputSchema> oldComponentsOutputSchemaMap, Map<String, ComponentsOutputSchema> newComponentsOutputSchemaMap) {
-	ComponentsOutputSchema oldComponentsOutputSchema=oldComponentsOutputSchemaMap.get(Constants.FIXED_OUTSOCKET_ID);
-	ComponentsOutputSchema newComponentsOutputSchema=newComponentsOutputSchemaMap.get(Constants.FIXED_OUTSOCKET_ID);
-	for(FixedWidthGridRow oldFixedWidthGridRow:oldComponentsOutputSchema.getFixedWidthGridRowsOutputFields()) {
-			if(StringUtils.isNotBlank(oldFixedWidthGridRow.getLength())){
-				FixedWidthGridRow newFixedWidthGridRow = newComponentsOutputSchema.getFixedWidthSchemaRow(oldFixedWidthGridRow.getFieldName());
-				if(newFixedWidthGridRow!=null)
-					newFixedWidthGridRow.setLength(oldFixedWidthGridRow.getLength());
-			}
-		}
-		
-	}
-	*/
+	
 }

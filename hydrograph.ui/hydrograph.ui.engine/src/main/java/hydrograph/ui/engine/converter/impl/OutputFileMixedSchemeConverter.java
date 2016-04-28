@@ -20,7 +20,6 @@ import hydrograph.engine.jaxb.outputtypes.TextFileMixedScheme;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.OutputConverter;
 import hydrograph.ui.graph.model.Component;
