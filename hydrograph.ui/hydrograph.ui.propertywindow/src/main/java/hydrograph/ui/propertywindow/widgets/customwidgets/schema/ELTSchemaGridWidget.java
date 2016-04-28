@@ -659,10 +659,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	}
 
 	private void schemaFromConnectedLinks() {
-		Schema currentSchema = (Schema) this.properties;
-		if ((currentSchema != null)
-				|| (currentSchema == null && StringUtils.equalsIgnoreCase(getComponent().getCategory(),
-						Constants.OUTPUT)))
+		if (StringUtils.equalsIgnoreCase(getComponent().getCategory(),Constants.OUTPUT))
 			for (Link link : getComponent().getTargetConnections()) {
 				this.properties = getPropagatedSchema(link);
 			}
