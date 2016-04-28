@@ -44,6 +44,7 @@ public class MultiParameterFileDialogConstants {
 	
 	public static final String HELP_LINK="<a>Help</a>";
 	public static final String FILE_LABEL_TEXT="File";
+	public static final String PARAMETER_FILE_DIALOG_TEXT="Parameter file dialog";
 	
 	
 }

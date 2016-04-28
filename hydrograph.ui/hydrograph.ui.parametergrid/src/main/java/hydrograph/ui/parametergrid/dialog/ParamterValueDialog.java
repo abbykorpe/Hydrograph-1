@@ -36,8 +36,8 @@ import org.eclipse.swt.widgets.Text;
 public class ParamterValueDialog extends Dialog {
 	private Text text;
 	private String inputString;
-	private String initalValue;
-	private final String DIALOG_NOTE = "Note: Vaules entered in this text area will be saved without new line characters";
+	private String initialValue;
+	private final String DIALOG_NOTE = "Note: Values entered in this text area will be saved without new line characters";
 
 	/**
 	 * Create the dialog.
@@ -56,7 +56,7 @@ public class ParamterValueDialog extends Dialog {
 	public ParamterValueDialog(Shell parentShell,String initalValue) {
 		super(parentShell);
 		setShellStyle(SWT.TITLE |  SWT.RESIZE );
-		this.initalValue = initalValue;
+		this.initialValue = initalValue;
 	}
 
 	/**
@@ -77,8 +77,8 @@ public class ParamterValueDialog extends Dialog {
 		Label lblNoteVaulesEntered = new Label(container, SWT.NONE);
 		lblNoteVaulesEntered.setText(DIALOG_NOTE);
 		
-		if(StringUtils.isNotBlank(this.initalValue))
-			text.setText(this.initalValue);
+		if(StringUtils.isNotBlank(this.initialValue))
+			text.setText(this.initialValue);
 		
 		return container;
 	}

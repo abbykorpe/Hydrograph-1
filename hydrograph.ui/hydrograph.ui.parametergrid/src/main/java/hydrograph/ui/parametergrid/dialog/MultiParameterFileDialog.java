@@ -190,7 +190,7 @@ public class MultiParameterFileDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		
-		getShell().setText("Parameter file dialog");
+		getShell().setText(MultiParameterFileDialogConstants.PARAMETER_FILE_DIALOG_TEXT);
 		
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(2, false));
@@ -547,7 +547,7 @@ public class MultiParameterFileDialog extends Dialog {
 					WidgetUtility.errorMessage(ErrorMessages.SELECT_ROW_TO_DELETE);
 				} else {
 					table.remove(indexs);
-					ArrayList<Parameter> paremetersToRemove= new ArrayList<>();
+					List<Parameter> paremetersToRemove= new ArrayList<>();
 					for (int index :indexs) { 
 						Parameter parameter = parameters.get(index);
 						paremetersToRemove.add(parameter);
@@ -685,11 +685,11 @@ public class MultiParameterFileDialog extends Dialog {
 								.indexOf(item);
 						
 						if(StringUtils.isNotEmpty(paramterValueDialog.getParamterValue())){
-							String newPrameterValue = paramterValueDialog
+							String newParameterValue = paramterValueDialog
 									.getParamterValue().replaceAll("\r", "")
 									.replaceAll("\n", "").replaceAll("\t", "")
 									.replace("  ", "");
-							parameters.get(index).setParameterValue(newPrameterValue);
+							parameters.get(index).setParameterValue(newParameterValue);
 						}
 						
 						parameterTableViewer.refresh();
