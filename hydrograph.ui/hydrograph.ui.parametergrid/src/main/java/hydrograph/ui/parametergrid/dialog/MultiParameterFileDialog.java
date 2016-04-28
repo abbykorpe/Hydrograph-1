@@ -15,6 +15,7 @@ package hydrograph.ui.parametergrid.dialog;
 
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.common.util.XMLUtil;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.constants.ErrorMessages;
@@ -25,6 +26,7 @@ import hydrograph.ui.parametergrid.dialog.models.ParameterWithFilePath;
 import hydrograph.ui.parametergrid.dialog.support.ParameterEditingSupport;
 import hydrograph.ui.parametergrid.utils.ParameterFileManager;
 import hydrograph.ui.parametergrid.utils.SWTResourceManager;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -37,6 +39,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -45,6 +48,7 @@ import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.SerializationException;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -58,8 +62,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
@@ -68,6 +74,8 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -107,6 +115,8 @@ import org.slf4j.Logger;
  * 
  */
 public class MultiParameterFileDialog extends Dialog {
+	private static final int PROPERTY_VALUE_COLUMN_INDEX = 1;
+
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(MultiParameterFileDialog.class);
 
 	private CheckboxTableViewer filePathTableViewer;
@@ -130,6 +140,7 @@ public class MultiParameterFileDialog extends Dialog {
 	private boolean okPressed;
 	
 	private static final Base64 base64 = new Base64();
+	
 	
 	/**
 	 * Create the dialog.
@@ -167,6 +178,8 @@ public class MultiParameterFileDialog extends Dialog {
 		uncheckAllImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.UNCHECKALL_ICON);
 
 		this.activeProjectLocation = activeProjectLocation;
+		
+
 	}
 
 	/**
@@ -176,6 +189,9 @@ public class MultiParameterFileDialog extends Dialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		
+		getShell().setText(MultiParameterFileDialogConstants.PARAMETER_FILE_DIALOG_TEXT);
+		
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(2, false));
 
@@ -518,29 +534,31 @@ public class MultiParameterFileDialog extends Dialog {
 				parameterTableViewer.refresh();
 			}
 		});
-		btnAdd_1.setText("Add");
+		btnAdd_1.setText(MultiParameterFileDialogConstants.ADD_BUTTON_TEXT);
 
 		Button btnDelete = new Button(composite_8, SWT.NONE);
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-
 				Table table = parameterTableViewer.getTable();
-				int temp = table.getSelectionIndex();
-				int[] indexs = table.getSelectionIndices();
-				if (temp != -1) {
+				int selectionIndex = table.getSelectionIndex();
+				int[] indexs=table.getSelectionIndices();
+				if (selectionIndex == -1) {
+					WidgetUtility.errorMessage(ErrorMessages.SELECT_ROW_TO_DELETE);
+				} else {
 					table.remove(indexs);
-					List<Parameter> parametersToRemove = new LinkedList<>();
-					for (int index : indexs) {
-						parametersToRemove.add(parameters.get(index));
-						parameters.remove(index);
+					List<Parameter> paremetersToRemove= new ArrayList<>();
+					for (int index :indexs) { 
+						Parameter parameter = parameters.get(index);
+						paremetersToRemove.add(parameter);
 					}
+					parameters.removeAll(paremetersToRemove);
+					parameterTableViewer.getTable().removeAll();
 					parameterTableViewer.refresh();
 				}
-
 			}
 		});
-		btnDelete.setText("Delete");
+		btnDelete.setText(MultiParameterFileDialogConstants.DELETE_BUTTON_TEXT);
 
 		Button btnUp = new Button(composite_8, SWT.NONE);
 		btnUp.addSelectionListener(new SelectionAdapter() {
@@ -558,7 +576,7 @@ public class MultiParameterFileDialog extends Dialog {
 				}
 			}
 		});
-		btnUp.setText("Up");
+		btnUp.setText(MultiParameterFileDialogConstants.UP_BUTTON_TEXT);
 
 		Button btnDown = new Button(composite_8, SWT.NONE);
 		btnDown.addSelectionListener(new SelectionAdapter() {
@@ -576,7 +594,7 @@ public class MultiParameterFileDialog extends Dialog {
 				}
 			}
 		});
-		btnDown.setText("Down");
+		btnDown.setText(MultiParameterFileDialogConstants.DOWN_BUTTON_TEXT);
 
 		Button btnSave = new Button(composite_8, SWT.NONE);
 		btnSave.addSelectionListener(new SelectionAdapter() {
@@ -585,7 +603,7 @@ public class MultiParameterFileDialog extends Dialog {
 				saveParameters();
 			}
 		});
-		btnSave.setText("Save");
+		btnSave.setText(MultiParameterFileDialogConstants.SAVE_BUTTON_TEXT);
 
 		parameterTableViewer = new TableViewer(composite_4, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		Table table_2 = parameterTableViewer.getTable();
@@ -599,7 +617,7 @@ public class MultiParameterFileDialog extends Dialog {
 
 		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(parameterTableViewer, SWT.NONE);
 		TableColumn tblclmnParameterName_1 = tableViewerColumn_3.getColumn();
-		tblclmnParameterName_1.setWidth(206);
+		tblclmnParameterName_1.setWidth(146);
 		tblclmnParameterName_1.setText(MultiParameterFileDialogConstants.PARAMETER_NAME);
 		tableViewerColumn_3.setEditingSupport(new ParameterEditingSupport(parameterTableViewer,
 				MultiParameterFileDialogConstants.PARAMETER_NAME));
@@ -613,7 +631,7 @@ public class MultiParameterFileDialog extends Dialog {
 
 		TableViewerColumn tableViewerColumn_5 = new TableViewerColumn(parameterTableViewer, SWT.NONE);
 		TableColumn tblclmnParameterValue_1 = tableViewerColumn_5.getColumn();
-		tblclmnParameterValue_1.setWidth(206);
+		tblclmnParameterValue_1.setWidth(189);
 		tblclmnParameterValue_1.setText(MultiParameterFileDialogConstants.PARAMETER_VALUE);
 		tableViewerColumn_5.setEditingSupport(new ParameterEditingSupport(parameterTableViewer,
 				MultiParameterFileDialogConstants.PARAMETER_VALUE));
@@ -624,9 +642,76 @@ public class MultiParameterFileDialog extends Dialog {
 				return p.getParameterValue();
 			}
 		});
+		
+		TableViewerColumn tableViewerColumn = new TableViewerColumn(parameterTableViewer, SWT.NONE);
+		TableColumn tblclmnEdit = tableViewerColumn.getColumn();
+		tblclmnEdit.setWidth(72);
+		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {			
+			
+			@Override
+			public void update(ViewerCell cell) {
+				final TableItem item = (TableItem) cell.getItem();
 
+				//DO NOT REMOVE THIS CONDITION. The condition is return to prevent multiple updates on single item
+				if(item.getData("UPDATED") == null){
+					item.setData("UPDATED", "TRUE");	
+				}else{
+					return;
+				}
+								
+				final Composite buttonPane = new Composite(parameterTableViewer.getTable(), SWT.NONE);
+				buttonPane.setLayout(new FillLayout());
+
+				final Button button = new Button(buttonPane, SWT.NONE);
+				button.setText(MultiParameterFileDialogConstants.EDIT_BUTTON_TEXT);
+
+				final TableEditor editor = new TableEditor(parameterTableViewer.getTable());
+				editor.grabHorizontal = true;
+				editor.grabVertical = true;
+				editor.setEditor(buttonPane, item, cell.getColumnIndex());
+				editor.layout();
+				
+				button.addSelectionListener(new SelectionAdapter() {
+					
+					@Override
+					public void widgetSelected(SelectionEvent e) {						
+						String initialParameterValue = item.getText(PROPERTY_VALUE_COLUMN_INDEX);
+						ParamterValueDialog paramterValueDialog = new ParamterValueDialog(
+								getShell(), XMLUtil.formatXML(initialParameterValue));
+						paramterValueDialog.open();
+
+						int index = Arrays.asList(
+								parameterTableViewer.getTable().getItems())
+								.indexOf(item);
+						
+						if(StringUtils.isNotEmpty(paramterValueDialog.getParamterValue())){
+							String newParameterValue = paramterValueDialog
+									.getParamterValue().replaceAll("\r", "")
+									.replaceAll("\n", "").replaceAll("\t", "")
+									.replace("  ", "");
+							parameters.get(index).setParameterValue(newParameterValue);
+						}
+						
+						parameterTableViewer.refresh();
+					}
+				});
+				
+				item.addDisposeListener(new DisposeListener() {
+					
+					@Override
+					public void widgetDisposed(DisposeEvent e) {
+						button.dispose();
+						buttonPane.dispose();
+						editor.dispose();
+					}
+				});
+			}
+		});
+		
+		
 		parameterTableViewer.setInput(parameters);
 	}
+		
 
 	private void saveParameters() {
 		if (!parameterFileTextBox.getText().isEmpty()) {
@@ -741,7 +826,7 @@ public class MultiParameterFileDialog extends Dialog {
 				}
 			}
 		});
-		browseBtn.setText("Add");
+		browseBtn.setText(MultiParameterFileDialogConstants.ADD_BUTTON_TEXT);
 
 		Button btnReload = new Button(composite, SWT.NONE);
 		btnReload.addSelectionListener(new SelectionAdapter() {
@@ -758,9 +843,6 @@ public class MultiParameterFileDialog extends Dialog {
 				parameterTableViewer.setData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE, parameterFileTextBox.getText());
 
 				if (!parameterFileTextBox.getText().isEmpty()) {
-
-					parameterFiles.add(new ParameterFile(fileName.toString(), path.toString(), false, false));
-
 					try {
 						ParameterFileManager parameterFileManager = new ParameterFileManager(path.toString());
 						parameterTableViewer.setData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE, path.toString());
@@ -768,8 +850,11 @@ public class MultiParameterFileDialog extends Dialog {
 						parameterMap = parameterFileManager.getParameterMap();
 						setGridData(parameters, parameterMap);
 
+						parameterFiles.add(new ParameterFile(fileName.toString(), path.toString(), false, false));
+						
 						filePathTableViewer.refresh();
 						parameterTableViewer.refresh();
+						
 						populateParameterSearchBox();
 
 					} catch (IOException ioException) {
@@ -785,7 +870,7 @@ public class MultiParameterFileDialog extends Dialog {
 				}
 			}
 		});
-		btnReload.setText("Reload");
+		btnReload.setText(MultiParameterFileDialogConstants.RELOAD_BUTTON_TEXT);
 
 		Button btnUp_1 = new Button(composite, SWT.NONE);
 		btnUp_1.addSelectionListener(new SelectionAdapter() {
@@ -803,7 +888,7 @@ public class MultiParameterFileDialog extends Dialog {
 				}
 			}
 		});
-		btnUp_1.setText("Up");
+		btnUp_1.setText(MultiParameterFileDialogConstants.UP_BUTTON_TEXT);
 
 		Button btnDown_1 = new Button(composite, SWT.NONE);
 		btnDown_1.addSelectionListener(new SelectionAdapter() {
@@ -821,13 +906,13 @@ public class MultiParameterFileDialog extends Dialog {
 				}
 			}
 		});
-		btnDown_1.setText("Down");
+		btnDown_1.setText(MultiParameterFileDialogConstants.DOWN_BUTTON_TEXT);
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
 
 		Link link = new Link(composite, SWT.NONE);
 		link.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
-		link.setText("<a>Help</a>");
+		link.setText(MultiParameterFileDialogConstants.HELP_LINK);
 		link.setToolTipText(HELP_LINK_TOOLTIP_TEXT);
 
 		Composite composite_3 = new Composite(composite_2, SWT.NONE);
@@ -838,7 +923,7 @@ public class MultiParameterFileDialog extends Dialog {
 
 		Label lblFile = new Label(composite_3, SWT.NONE);
 		lblFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblFile.setText("File");
+		lblFile.setText(MultiParameterFileDialogConstants.FILE_LABEL_TEXT);
 
 		parameterFileTextBox = new Text(composite_3, SWT.BORDER);
 		GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
@@ -882,7 +967,7 @@ public class MultiParameterFileDialog extends Dialog {
 					filePathList.add(filePath);
 				}
 				try {
-					event.data =serializeToString(filePathList);
+					event.data = serializeToString(filePathList);
 				} catch (UnsupportedEncodingException e) {
 					logger.debug(ErrorMessages.UNABLE_TO_REMOVE_JOB_SPECIFIC_FILE,e);
 					
@@ -1174,6 +1259,14 @@ public class MultiParameterFileDialog extends Dialog {
 		return super.close();
 	}
 	
+	/**
+	 * 
+	 * Serialize object to string. Serialized string will not be in human readable format 
+	 * 
+	 * @param input
+	 * @return String
+	 * @throws UnsupportedEncodingException
+	 */
 	private String serializeToString(Serializable input)
 			throws UnsupportedEncodingException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
@@ -1200,14 +1293,19 @@ public class MultiParameterFileDialog extends Dialog {
 		return decoded;
 	}
 	
+	/**
+	 * 
+	 * deserialize string converted to Object.
+	 * 
+	 * @param input
+	 * @return Object
+	 * @throws UnsupportedEncodingException
+	 */
 	private Object deserializeFromString(String input)
 			throws UnsupportedEncodingException {
 		byte[] repr = base64.decode(input.getBytes());
 		ByteArrayInputStream bais = new ByteArrayInputStream(repr);
-		if (bais == null) {
-			throw new IllegalArgumentException(
-					"The InputStream must not be null");
-		}
+		
 		ObjectInputStream in = null;
 		try {
 			// stream closed in the finally
