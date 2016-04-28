@@ -38,6 +38,7 @@ import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifySequenceFieldName
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyTextListener;
 import hydrograph.ui.propertywindow.widgets.listeners.FocusInListener;
 import hydrograph.ui.propertywindow.widgets.listeners.IELTListener;
+import hydrograph.ui.propertywindow.widgets.listeners.JoinInputCountFocusOutListener;
 import hydrograph.ui.propertywindow.widgets.listeners.OperationClassComboChangeListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusInListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusOutListener;
@@ -95,7 +96,8 @@ public class ListenerFactory {
 		VERIFY_SEQUENCE_FIELD_NAME_EXISTS(ELTVerifySequenceFieldName.class),
 		COMBO_CHANGE(OperationClassComboChangeListener.class),
 		VERIFY_NUMERIC_OR_PARAMETER_FOCUS_IN(VerifyNumbericOrParameterFocusInListener.class),
-		VERIFY_NUMERIC_OR_PARAMETER_FOCUS_OUT(VerifyNumbericOrParameterFocusOutListener.class);
+		VERIFY_NUMERIC_OR_PARAMETER_FOCUS_OUT(VerifyNumbericOrParameterFocusOutListener.class),
+		JOIN_INPUT_COUNT_FOCUS_OUT(JoinInputCountFocusOutListener.class);
 		Class<?> clazz = null;
 		private Listners(Class<?> clazz) {
 			this.clazz = clazz; 

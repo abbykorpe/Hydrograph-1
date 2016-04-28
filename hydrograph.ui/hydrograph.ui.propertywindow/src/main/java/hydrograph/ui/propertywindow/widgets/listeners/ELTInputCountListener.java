@@ -26,6 +26,15 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
+/**
+ * The listener interface for receiving ELTInputCount events. The class that is interested in processing a ELTInputCount
+ * event implements this interface, and the object created with that class is registered with a component using the
+ * component's <code>addELTInputCountListener<code> method. When
+ * the ELTInputCount event occurs, that object's appropriate
+ * method is invoked.
+ * 
+ * @see ELTInputCountEvent
+ */
 
 public class ELTInputCountListener implements IELTListener{
 
@@ -56,14 +65,18 @@ public class ELTInputCountListener implements IELTListener{
 							txtDecorator.show();
 							propertyDialogButtonBar.enableOKButton(false);
 							propertyDialogButtonBar.enableApplyButton(false);
-						}else
-						{
+						} else {
 							txtDecorator.hide();
 							propertyDialogButtonBar.enableOKButton(true);
+							propertyDialogButtonBar.enableApplyButton(true);
 						}
 					}
 				}
-
+				else
+				{
+					propertyDialogButtonBar.enableApplyButton(true);
+					txtDecorator.show();
+				}
 			}
 		};
 		return listener;

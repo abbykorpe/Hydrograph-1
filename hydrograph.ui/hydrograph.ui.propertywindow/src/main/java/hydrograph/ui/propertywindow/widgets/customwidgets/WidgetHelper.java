@@ -162,14 +162,15 @@ public class WidgetHelper {
 	public WidgetConfig getInputCountWidgetConfig(String propertyLabel,int minimumPortCount){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(propertyLabel);
-		addTextBoxListeners(textBoxConfig);
+		List<Listners> listeners = textBoxConfig.getListeners();
 		String portCount = "1";
 		if (minimumPortCount > 0) {
 			portCount = String.valueOf(minimumPortCount);
 		}
 		textBoxConfig.getOtherAttributes().put(HelperType.MINIMUM_PORT_COUNT.toString(), portCount);
-		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
-		textBoxConfig.getListeners().add(Listners.JOIN_INPUT_COUNT);
+		listeners.add(Listners.VERIFY_NUMERIC);
+		listeners.add(Listners.JOIN_INPUT_COUNT);
+		listeners.add(Listners.JOIN_INPUT_COUNT_FOCUS_OUT);
 		textBoxConfig.setWidgetWidth(78);
 		return textBoxConfig;
 	}
