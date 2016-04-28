@@ -162,57 +162,42 @@ public class SchemaPropagation {
 
 
 	private void updateSchema(Component component, ComponentsOutputSchema componentsOutputSchema) {
-		GridRow gridRow=null;
-		String schemaName=null;
-		if ( component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME)!=null ) {
-				schemaName=getExistingSchemaName((Schema)component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME));
-			if (schemaName!=null && StringUtils.equals(FixedWidthGridRow.class.getCanonicalName(), schemaName) ) {
-				setFixedWidthAsSchema(component, componentsOutputSchema);
-			}else if (schemaName!=null && StringUtils.equals(BasicSchemaGridRow.class.getCanonicalName(), schemaName) ) {
-				setSchemaGridAsSchema(component, componentsOutputSchema);
-			}
-			else if(schemaName!=null && StringUtils.equals(GenerateRecordSchemaGridRow.class.getCanonicalName(), schemaName) ) 
-				setFixedWidthAsSchema(component, componentsOutputSchema);
+		if (component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME) != null) {
+			setSchemaGridAsSchema(component, componentsOutputSchema);
 		}
 	}
 	
 
 	private void setSchemaGridAsSchema(Component component, ComponentsOutputSchema componentsOutputSchema) {
-		Schema schema = new Schema();
-		schema.setIsExternal(false);
-		schema.setExternalSchemaPath("");
-		List<GridRow> gridRows = new ArrayList<>();
+		Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+		if(schema!=null && schema.getGridRow()!=null && !schema.getGridRow().isEmpty()){
 		if(componentsOutputSchema==null)
 			return;
-		for (BasicSchemaGridRow gridRow : componentsOutputSchema.getSchemaGridOutputFields())
-			gridRows.add(gridRow);
-		schema.setGridRow(gridRows);
-		component.getProperties().put(Constants.SCHEMA_PROPERTY_NAME, schema);
-	}
-
-	private String getExistingSchemaName(Schema schema) {
-		List<GridRow> gridRowList=null;
-		if (schema != null && !schema.getIsExternal()) {
-			gridRowList = schema.getGridRow();
-			if (gridRowList != null && !gridRowList.isEmpty()) {
-				return gridRowList.get(0).getClass().getCanonicalName();
-			}
+		for (GridRow gridRow : schema.getGridRow())
+			gridRow.updateBasicGridRow(componentsOutputSchema.getSchemaGridRow(gridRow.getFieldName()));
 		}
-		return null;
 	}
 
-	private void setFixedWidthAsSchema(Component component, ComponentsOutputSchema componentsOutputSchema) {
-		Schema schema = new Schema();
-		schema.setIsExternal(false);
-		schema.setExternalSchemaPath("");
-		List<GridRow> gridRows = new ArrayList<>();
-		if(componentsOutputSchema==null)
-			return;
-		for (FixedWidthGridRow gridRow : componentsOutputSchema.getFixedWidthGridRowsOutputFields())
-			gridRows.add(gridRow);
-		schema.setGridRow(gridRows);
-		component.getProperties().put(Constants.SCHEMA_PROPERTY_NAME, schema);
-	}
+//	private String getExistingSchemaName(Schema schema) {
+//		List<GridRow> gridRowList=null;
+//		if (schema != null && !schema.getIsExternal()) {
+//			gridRowList = schema.getGridRow();
+//			if (gridRowList != null && !gridRowList.isEmpty()) {
+//				return gridRowList.get(0).getClass().getCanonicalName();
+//			}
+//		}
+//		return null;
+//	}
+
+//	private void setFixedWidthAsSchema(Component component, ComponentsOutputSchema componentsOutputSchema) {
+//		Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+//		if(schema!=null && schema.getGridRow()!=null && !schema.getGridRow().isEmpty()){
+//		if(componentsOutputSchema==null)
+//			return;
+//		for (GridRow gridRow : schema.getGridRow())
+//			gridRow.updateBasicGridRow(componentsOutputSchema.getSchemaGridRow(gridRow.getFieldName()));
+//		}
+//	}
 	
 	private void propagateSchemaFromSubJob(Component subJobComponent, String targetTerminal,
 			ComponentsOutputSchema componentsOutputSchema) {

@@ -85,13 +85,12 @@ public class OutputSubJobConverter extends OutputConverter {
 	}
 
 	@Override
-	protected List<TypeBaseField> getFieldOrRecord(ComponentsOutputSchema outputSchema) {
-		List<FixedWidthGridRow> gridList=outputSchema.getFixedWidthGridRowsOutputFields();
+	protected List<TypeBaseField> getFieldOrRecord(List<GridRow> gridRowList) {
 		logger.debug("Generating data for {} for property {}", new Object[] { properties.get(Constants.PARAM_NAME),
 				PropertyNameConstants.SCHEMA.value() });
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
-		if (gridList != null && gridList.size() != 0) {
-			for (GridRow object : gridList)
+		if (gridRowList != null && gridRowList.size() != 0) {
+			for (GridRow object : gridRowList)
 				typeBaseFields.add(converterHelper.getFixedWidthTargetData((FixedWidthGridRow) object));
 		}
 		return typeBaseFields;

@@ -21,8 +21,8 @@ package hydrograph.ui.datastructure.property;
  * @author Bitwise
  */
 public class FixedWidthGridRow extends GridRow{
-	private String length;
-	protected String delimiter;
+	private String length="";
+	protected String delimiter="";
 
 	public String getLength() {
 		return length;

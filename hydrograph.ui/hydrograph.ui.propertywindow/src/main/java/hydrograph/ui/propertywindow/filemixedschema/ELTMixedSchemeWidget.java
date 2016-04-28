@@ -102,8 +102,6 @@ public class ELTMixedSchemeWidget extends ELTSchemaGridWidget {
 	
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
-		if (!TransformSchemaWidget.class.isAssignableFrom(this.getClass()))
-			schemaFromConnectedLinks();
 		super.attachToPropertySubGroup(container);
 	}
 

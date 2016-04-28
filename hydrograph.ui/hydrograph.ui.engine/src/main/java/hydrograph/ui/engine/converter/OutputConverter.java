@@ -16,6 +16,7 @@ package hydrograph.ui.engine.converter;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.impl.OutputFileDelimitedConverter;
@@ -73,34 +74,30 @@ public abstract class OutputConverter extends Converter {
 				typeExternalSchema.setUri(schema.getExternalSchemaPath());
 				typeBaseRecord.setName(Constants.EXTERNAL_SCHEMA);
 				typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().add(typeExternalSchema);
-			} else
+			} else{
 				typeBaseRecord.setName(Constants.INTERNAL_SCHEMA);
-		}else
-			typeBaseRecord.setName(Constants.INTERNAL_SCHEMA);
-		
-		if (fetchPropagatedSchema() != null && schema!=null && !schema.getIsExternal())
-			typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().addAll(getFieldOrRecord(fetchPropagatedSchema()));
-
+				typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().addAll(getFieldOrRecord(schema.getGridRow()));}
+		}
 		return typeBaseRecord;
 	}
 
-	protected ComponentsOutputSchema fetchPropagatedSchema() {
-		ComponentsOutputSchema componentsOutputSchema = null;
-		if(!StringUtils.equals(Constants.OUTPUT_SUBJOB, component.getComponentName())){
-		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) properties
-				.get(Constants.SCHEMA_TO_PROPAGATE);
-		if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null)
-			componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
-		}
-		return componentsOutputSchema;
-	}
+//	protected ComponentsOutputSchema fetchPropagatedSchema() {
+//		ComponentsOutputSchema componentsOutputSchema = null;
+//		if(!StringUtils.equals(Constants.OUTPUT_SUBJOB, component.getComponentName())){
+//		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) properties
+//				.get(Constants.SCHEMA_TO_PROPAGATE);
+//		if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null)
+//			componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
+//		}
+//		return componentsOutputSchema;
+//	}
 
 	/**
 	 * Prepare the Fields/Records for shcema
 	 * 
-	 * @param componentsOutputSchema
+	 * @param list
 	 * @return {@link List}
 	 * 
 	 */
-	protected abstract List<TypeBaseField> getFieldOrRecord(ComponentsOutputSchema componentsOutputSchema);
+	protected abstract List<TypeBaseField> getFieldOrRecord(List<GridRow> list);
 }

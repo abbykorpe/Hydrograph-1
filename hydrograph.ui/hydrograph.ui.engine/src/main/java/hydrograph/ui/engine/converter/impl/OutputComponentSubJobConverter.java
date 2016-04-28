@@ -16,6 +16,7 @@ package hydrograph.ui.engine.converter.impl;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.converter.OutputConverter;
 import hydrograph.ui.engine.helper.ConverterHelper;
 import hydrograph.ui.graph.model.Component;
@@ -72,9 +73,8 @@ public class OutputComponentSubJobConverter extends OutputConverter {
 	}
 
 	@Override
-	protected List<TypeBaseField> getFieldOrRecord(
-			ComponentsOutputSchema componentsOutputSchema) {
-		// TODO Auto-generated method stub
+	protected List<TypeBaseField> getFieldOrRecord(List<GridRow> gridRowList) {
+		logger.debug("Returning Null for getFieldOrRecord in OutputComponentSubjobConverter");
 		return null;
 	}
 

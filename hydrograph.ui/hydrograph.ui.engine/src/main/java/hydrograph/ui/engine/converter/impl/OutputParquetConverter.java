@@ -18,8 +18,6 @@ import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.ofparquet.TypeOutputDelimitedInSocket;
 import hydrograph.engine.jaxb.outputtypes.ParquetFile;
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.OutputConverter;
@@ -79,14 +77,13 @@ public class OutputParquetConverter extends OutputConverter {
 	}
 
 	@Override
-	protected List<TypeBaseField> getFieldOrRecord(ComponentsOutputSchema outputSchema) {
-		List<FixedWidthGridRow> gridList=outputSchema.getFixedWidthGridRowsOutputFields();
+	protected List<TypeBaseField> getFieldOrRecord(List<GridRow> gridRowList) {
 		logger.debug("Generating data for {} for property {}", new Object[] { properties.get(Constants.PARAM_NAME),
 				PropertyNameConstants.SCHEMA.value() });
 
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
-		if (gridList != null && gridList.size() != 0) {
-			for (GridRow object : gridList)
+		if (gridRowList != null && gridRowList.size() != 0) {
+			for (GridRow object : gridRowList)
 				typeBaseFields.add(converterHelper.getSchemaGridTargetData(object));
 
 		}

@@ -131,6 +131,7 @@ public class ComponentsOutputSchema implements IDataStructure {
 					targetFixedWidthGridRow.setDateFormat(sourceFixedWidthGridRow.getDateFormat());
 					targetFixedWidthGridRow.setScaleType(sourceFixedWidthGridRow.getScaleType());
 					targetFixedWidthGridRow.setScaleTypeValue(sourceFixedWidthGridRow.getScaleTypeValue());
+					targetFixedWidthGridRow.setDescription(sourceFixedWidthGridRow.getDescription());
 				}
 				
 			}
@@ -168,6 +169,7 @@ public class ComponentsOutputSchema implements IDataStructure {
 					targetFixedWidthGridRow.setDateFormat(sourceFixedWidthGridRow.getDateFormat());
 					targetFixedWidthGridRow.setScaleType(sourceFixedWidthGridRow.getScaleType());
 					targetFixedWidthGridRow.setScaleTypeValue(sourceFixedWidthGridRow.getScaleTypeValue());
+					targetFixedWidthGridRow.setDescription(sourceFixedWidthGridRow.getDescription());
 				}
 				
 				

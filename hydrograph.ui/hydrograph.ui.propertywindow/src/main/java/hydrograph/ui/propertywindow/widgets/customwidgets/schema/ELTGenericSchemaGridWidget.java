@@ -87,7 +87,7 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
-		schemaFromConnectedLinks();
+		
 		super.attachToPropertySubGroup(container);
 	}
 }

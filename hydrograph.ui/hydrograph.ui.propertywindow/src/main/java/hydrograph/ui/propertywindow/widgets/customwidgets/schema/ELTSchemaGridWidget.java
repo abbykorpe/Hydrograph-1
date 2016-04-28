@@ -25,6 +25,7 @@ import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -58,6 +59,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EventObject;
@@ -110,6 +112,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -129,6 +132,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private static Logger logger = LogFactory.INSTANCE.getLogger(ELTSchemaGridWidget.class);
 
+	private ELTDefaultButton pullButtonForOuputComponents;
 	public static final String FIELDNAME = Messages.FIELDNAME;
 	public static final String DATEFORMAT = Messages.DATEFORMAT;
 	public static final String DATATYPE = Messages.DATATYPE;
@@ -562,11 +566,32 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				createPullSchemaFromTransform(container.getContainerControl());
 		}
 		else{
+			
 			createSchemaTypesSection(container.getContainerControl());
+			if (StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT))
+				createPullPropagtedSchemaButton(container.getContainerControl());
 			createSchemaGridSection(container.getContainerControl(), 250, 360);
 			createExternalSchemaSection(container.getContainerControl());
 		}
 		populateSchemaTypeWidget();
+	}
+
+	private void createPullPropagtedSchemaButton(Composite containerControl) {
+		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(containerControl);
+		eltSuDefaultSubgroupComposite.createContainerWidget();
+		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(2);
+		ELTDefaultButton pullButtonForOuputComponents = new ELTDefaultButton("Pull Schema");
+		pullButtonForOuputComponents.buttonWidth(150);
+		eltSuDefaultSubgroupComposite.attachWidget(pullButtonForOuputComponents);
+		((Button)pullButtonForOuputComponents.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				schemaFromConnectedLinks();
+			}
+		});
+		if(getComponent().getTargetConnections()==null || getComponent().getTargetConnections().isEmpty()){
+			((Button)pullButtonForOuputComponents.getSWTWidgetControl()).setEnabled(false);
+		}
 	}
 
 	/**
@@ -576,13 +601,15 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 * @param {@link Link}
 	 * @return {@link Schema}
 	 */
-	protected Schema getPropagatedSchema(Link link) {
+	private Schema getPropagatedSchema(Link link) {
 		ComponentsOutputSchema componentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 		Schema schema = null;
-		schema = new Schema();
-		schema.setExternalSchemaPath("");
-		schema.setIsExternal(false);
-		schema.setGridRow(new ArrayList<GridRow>());
+		if (schema == null) {
+			schema = new Schema();
+			schema.setExternalSchemaPath("");
+			schema.setIsExternal(false);
+			schema.setGridRow(new ArrayList<GridRow>());
+		}
 		if (componentsOutputSchema != null) {
 			if( this.getClass().isAssignableFrom(ELTMixedSchemeWidget.class))
 				for (FixedWidthGridRow gridRow : componentsOutputSchema.getFixedWidthGridRowsOutputFields()) {
@@ -597,13 +624,45 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					schema.getGridRow().add(componentsOutputSchema.convertFixedWidthSchemaToSchemaGridRow(gridRow));
 				}
 			}
+			applySchemaFromPropagatedSchemaOnPull(schema,componentsOutputSchema);
 		}
+		tableViewer.refresh();
 		return schema;
 	}
 
-	protected void schemaFromConnectedLinks() {
+	private void applySchemaFromPropagatedSchemaOnPull(Schema schema, ComponentsOutputSchema componentsOutputSchema) {
+		List<GridRow> copiedList=new ArrayList<>(schemaGridRowList);
+		if (!schemaGridRowList.isEmpty()) {
+			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES
+					| SWT.NO);
+			messageBox.setMessage(Messages.MESAAGE_FOR_FETCHING_PROPAGATED_SCHEMA);
+			if (messageBox.open() == SWT.YES ) {
+				for (GridRow gridRow : copiedList)
+					if (componentsOutputSchema.getSchemaGridRow(gridRow.getFieldName()) == null)
+						schemaGridRowList.remove(gridRow);
+			}
+		}
+		for (GridRow gridRow : schema.getGridRow()){
+			if (!schemaGridRowList.contains(gridRow)){
+				GridRow newGridRow;
+				try {
+					newGridRow = (GridRow) Class.forName(gridRow.getClass().getCanonicalName()).getDeclaredConstructor().newInstance();
+					newGridRow.updateBasicGridRow(gridRow);
+					schemaGridRowList.add(newGridRow);
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException | NoSuchMethodException | SecurityException
+						| ClassNotFoundException e) {
+				logger.error("Exception occurred while creating new row for schema",e);
+				}
+				
+				
+			}
+		}
+	}
+
+	private void schemaFromConnectedLinks() {
 		Schema currentSchema = (Schema) this.properties;
-		if ((currentSchema != null && !currentSchema.getIsExternal())
+		if ((currentSchema != null)
 				|| (currentSchema == null && StringUtils.equalsIgnoreCase(getComponent().getCategory(),
 						Constants.OUTPUT)))
 			for (Link link : getComponent().getTargetConnections()) {
