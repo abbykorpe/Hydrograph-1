@@ -15,10 +15,8 @@
 package hydrograph.ui.graph.schema.propagation;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Component;
@@ -162,57 +160,22 @@ public class SchemaPropagation {
 
 
 	private void updateSchema(Component component, ComponentsOutputSchema componentsOutputSchema) {
-		GridRow gridRow=null;
-		String schemaName=null;
-		if ( component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME)!=null ) {
-				schemaName=getExistingSchemaName((Schema)component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME));
-			if (schemaName!=null && StringUtils.equals(FixedWidthGridRow.class.getCanonicalName(), schemaName) ) {
-				setFixedWidthAsSchema(component, componentsOutputSchema);
-			}else if (schemaName!=null && StringUtils.equals(BasicSchemaGridRow.class.getCanonicalName(), schemaName) ) {
-				setSchemaGridAsSchema(component, componentsOutputSchema);
-			}
-			else if(schemaName!=null && StringUtils.equals(GenerateRecordSchemaGridRow.class.getCanonicalName(), schemaName) ) 
-				setFixedWidthAsSchema(component, componentsOutputSchema);
+		if (component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME) != null) {
+			setSchemaGridAsSchema(component, componentsOutputSchema);
 		}
 	}
 	
 
 	private void setSchemaGridAsSchema(Component component, ComponentsOutputSchema componentsOutputSchema) {
-		Schema schema = new Schema();
-		schema.setIsExternal(false);
-		schema.setExternalSchemaPath("");
-		List<GridRow> gridRows = new ArrayList<>();
+		Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+		if(schema!=null && schema.getGridRow()!=null && !schema.getGridRow().isEmpty()){
 		if(componentsOutputSchema==null)
 			return;
-		for (BasicSchemaGridRow gridRow : componentsOutputSchema.getSchemaGridOutputFields())
-			gridRows.add(gridRow);
-		schema.setGridRow(gridRows);
-		component.getProperties().put(Constants.SCHEMA_PROPERTY_NAME, schema);
-	}
-
-	private String getExistingSchemaName(Schema schema) {
-		List<GridRow> gridRowList=null;
-		if (schema != null && !schema.getIsExternal()) {
-			gridRowList = schema.getGridRow();
-			if (gridRowList != null && !gridRowList.isEmpty()) {
-				return gridRowList.get(0).getClass().getCanonicalName();
-			}
+		for (GridRow gridRow : schema.getGridRow())
+			gridRow.updateBasicGridRow(componentsOutputSchema.getSchemaGridRow(gridRow.getFieldName()));
 		}
-		return null;
 	}
 
-	private void setFixedWidthAsSchema(Component component, ComponentsOutputSchema componentsOutputSchema) {
-		Schema schema = new Schema();
-		schema.setIsExternal(false);
-		schema.setExternalSchemaPath("");
-		List<GridRow> gridRows = new ArrayList<>();
-		if(componentsOutputSchema==null)
-			return;
-		for (FixedWidthGridRow gridRow : componentsOutputSchema.getFixedWidthGridRowsOutputFields())
-			gridRows.add(gridRow);
-		schema.setGridRow(gridRows);
-		component.getProperties().put(Constants.SCHEMA_PROPERTY_NAME, schema);
-	}
 	
 	private void propagateSchemaFromSubJob(Component subJobComponent, String targetTerminal,
 			ComponentsOutputSchema componentsOutputSchema) {
@@ -232,9 +195,6 @@ public class SchemaPropagation {
 
 		else if (StringUtils.equals(Constants.OUTPUT_SUBJOB, subJobComponent.getComponentName())) {
 
-			// appplySchemaToTargetComponentsFromSchemaMap((Component)
-			// subJobComponent.getProperties().get(Constants.SUBJOB_COMPONENT), schemaMap,
-			// getTagetTerminalForSubjob(targetTerminal));
 			propagateSchemaFromOutputSubjobComponent(subJobComponent, outPutTargetTerminal, componentsOutputSchema);
 
 		}
@@ -395,17 +355,5 @@ public class SchemaPropagation {
 		}
 	}
 	
-	/*private void loadOldSchmeaProperties(Map<String, ComponentsOutputSchema> oldComponentsOutputSchemaMap, Map<String, ComponentsOutputSchema> newComponentsOutputSchemaMap) {
-	ComponentsOutputSchema oldComponentsOutputSchema=oldComponentsOutputSchemaMap.get(Constants.FIXED_OUTSOCKET_ID);
-	ComponentsOutputSchema newComponentsOutputSchema=newComponentsOutputSchemaMap.get(Constants.FIXED_OUTSOCKET_ID);
-	for(FixedWidthGridRow oldFixedWidthGridRow:oldComponentsOutputSchema.getFixedWidthGridRowsOutputFields()) {
-			if(StringUtils.isNotBlank(oldFixedWidthGridRow.getLength())){
-				FixedWidthGridRow newFixedWidthGridRow = newComponentsOutputSchema.getFixedWidthSchemaRow(oldFixedWidthGridRow.getFieldName());
-				if(newFixedWidthGridRow!=null)
-					newFixedWidthGridRow.setLength(oldFixedWidthGridRow.getLength());
-			}
-		}
-		
-	}
-	*/
+	
 }

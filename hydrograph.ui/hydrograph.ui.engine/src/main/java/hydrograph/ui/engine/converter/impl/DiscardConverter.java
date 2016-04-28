@@ -14,10 +14,13 @@
  
 package hydrograph.ui.engine.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
+import hydrograph.engine.jaxb.otdiscard.TypeOutputInSocketIno;
+import hydrograph.engine.jaxb.outputtypes.Discard;
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.converter.OutputConverter;
-import hydrograph.ui.engine.helper.ConverterHelper;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -26,11 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseField;
-import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-import hydrograph.engine.jaxb.otdiscard.TypeOutputInSocketIno;
-import hydrograph.engine.jaxb.outputtypes.Discard;
 
 /**
  * This class is used to create target XML for Discard component.
@@ -83,7 +81,7 @@ public class DiscardConverter extends OutputConverter {
 
 
 	@Override
-	protected List<TypeBaseField> getFieldOrRecord(ComponentsOutputSchema outputSchema) {
+	protected List<TypeBaseField> getFieldOrRecord(List<GridRow> gridRowList) {
 		logger.debug("Returning Null for getFieldOrRecord in DiscardConverter");
 
 		return null;

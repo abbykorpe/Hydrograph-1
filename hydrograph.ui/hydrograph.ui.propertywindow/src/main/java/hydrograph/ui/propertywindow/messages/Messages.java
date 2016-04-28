@@ -180,6 +180,8 @@ public class Messages extends NLS {
 	public static String GENERATE_RECORD_GRID_ROW;
 	public static String GENERIC_GRID_ROW;
 	public static String MIXEDSCHEME_GRID_ROW ;
+
+	public static String MESSAGE_FOR_FETCHING_PROPAGATED_SCHEMA;
     
 	static {
 		// initialize resource bundle

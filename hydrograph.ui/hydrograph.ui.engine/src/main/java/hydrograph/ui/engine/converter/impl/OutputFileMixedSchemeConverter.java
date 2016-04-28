@@ -13,11 +13,13 @@
 
 package hydrograph.ui.engine.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
+import hydrograph.engine.jaxb.ofmixedscheme.TypeOutputMixedInSocket;
+import hydrograph.engine.jaxb.outputtypes.TextFileMixedScheme;
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.OutputConverter;
 import hydrograph.ui.graph.model.Component;
@@ -28,11 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseField;
-import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-import hydrograph.engine.jaxb.ofmixedscheme.TypeOutputMixedInSocket;
-import hydrograph.engine.jaxb.outputtypes.TextFileMixedScheme;
 
 public class OutputFileMixedSchemeConverter extends OutputConverter {
 	
@@ -80,13 +77,12 @@ public class OutputFileMixedSchemeConverter extends OutputConverter {
 	}
 
 	@Override
-	protected List<TypeBaseField> getFieldOrRecord(ComponentsOutputSchema outputSchema) {
-		List<FixedWidthGridRow> gridList=outputSchema.getFixedWidthGridRowsOutputFields();
+	protected List<TypeBaseField>getFieldOrRecord(List<GridRow> gridRowList) {
 		logger.debug("Generating data for {} for property {}", new Object[] { properties.get(Constants.PARAM_NAME),
 				PropertyNameConstants.SCHEMA.value() });
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
-		if (gridList != null && gridList.size() != 0) {
-			for (GridRow object : gridList)
+		if (gridRowList != null && gridRowList.size() != 0) {
+			for (GridRow object : gridRowList)
 				typeBaseFields.add(converterHelper.getFileMixedSchemeTargetData((FixedWidthGridRow) object));
 		}
 		return typeBaseFields;

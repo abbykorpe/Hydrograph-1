@@ -119,7 +119,6 @@ public class GridRow implements IDataStructure {
 			gridRow.setDescription(description);
 			return gridRow; 
 		}
-		
 		//NOTE: DO NOT CHANGE THIS METHOD UNLESS YOU KNOW WHAT YOU ARE DOING
 		@Override
 		public int hashCode() {
@@ -191,4 +190,24 @@ public class GridRow implements IDataStructure {
 			
 			return tempschemaGrid;
 		}
+		
+		
+	/**
+	 * Updates current grid row properties.
+	 * 
+	 * @param sourceGridRow
+	 */
+	public void updateBasicGridRow(GridRow sourceGridRow) {
+		if (sourceGridRow != null) {
+			this.setFieldName(sourceGridRow.getFieldName());
+			this.setDataType(sourceGridRow.getDataType());
+			this.setDataTypeValue(sourceGridRow.getDataTypeValue());
+			this.setDateFormat(sourceGridRow.getDateFormat());
+			this.setScale(sourceGridRow.getScale());
+			this.setScaleType(sourceGridRow.getScaleType());
+			this.setScaleTypeValue(sourceGridRow.getScaleTypeValue());
+			this.setPrecision(sourceGridRow.getPrecision());
+			this.setDescription(sourceGridRow.getDescription());
+		}
 	}
+}
