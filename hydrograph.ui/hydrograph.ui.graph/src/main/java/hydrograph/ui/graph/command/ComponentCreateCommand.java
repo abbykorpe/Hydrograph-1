@@ -21,6 +21,7 @@ import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.figure.ELTFigureConstants;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.PortAlignmentEnum;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.validators.impl.IValidator;
@@ -72,22 +73,29 @@ public class ComponentCreateCommand extends Command {
 		}
 		component.setTooltipInformation(tooltipInformation);
 		
-		int totalPortsofInType=0, totalPortsOfOutType=0, totalPortsOfUnusedType=0;
+		int totalPortsOnLeftSide=0, totalPortsOnRightSide=0, totalPortsOnBottomSide=0;
 		List<PortSpecification> portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
 		for(PortSpecification p:portSpecification)
 		{	
-			if(p.getTypeOfPort().value().equalsIgnoreCase("in")){
+			/*if(p.getTypeOfPort().value().equalsIgnoreCase("in")){
 				totalPortsofInType=p.getNumberOfPorts();
 			}else if(p.getTypeOfPort().value().equalsIgnoreCase("out")){
 				totalPortsOfOutType=p.getNumberOfPorts();
 			}else if(p.getTypeOfPort().value().equalsIgnoreCase("unused")){
 				totalPortsOfUnusedType=p.getNumberOfPorts();
+			}*/
+			if(PortAlignmentEnum.LEFT.value().equals(p.getPortAlignment().value())){
+				totalPortsOnLeftSide=p.getNumberOfPorts();
+			}else if(PortAlignmentEnum.RIGHT.value().equals(p.getPortAlignment().value())){
+				totalPortsOnRightSide=p.getNumberOfPorts();
+			}else if(PortAlignmentEnum.BOTTOM.value().equals(p.getPortAlignment().value())){
+				totalPortsOnBottomSide=p.getNumberOfPorts();
 			}
 		}
-		int heightFactor=totalPortsofInType > totalPortsOfOutType ? totalPortsofInType : totalPortsOfOutType;
+		int heightFactor=totalPortsOnLeftSide > totalPortsOnRightSide ? totalPortsOnLeftSide : totalPortsOnRightSide;
 		int height = (heightFactor+1)*25;
 		
-		int widthFactor = totalPortsOfUnusedType;
+		int widthFactor = totalPortsOnBottomSide;
 		int width = 100;
 		if(widthFactor > 1)
 			width =(widthFactor+1)*33;

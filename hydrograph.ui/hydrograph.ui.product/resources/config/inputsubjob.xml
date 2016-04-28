@@ -24,12 +24,12 @@
 		<tns:category>SUBJOB</tns:category>
 		
 			<tns:port>
-			<tns:portSpecification typeOfPort="in" numberOfPorts="0" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+			<tns:portSpecification  numberOfPorts="0" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="out" numberOfPorts="1" portAlignment="right" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0"  nameOfPort="out0" labelOfPort="out0"/>
+			<tns:portSpecification  numberOfPorts="1" portAlignment="right" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
+				<tns:port sequenceOfPort="0" typeOfPort="out" nameOfPort="out0" labelOfPort="out0"/>
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="unused" numberOfPorts="0" portAlignment="bottom" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+			<tns:portSpecification numberOfPorts="0" portAlignment="bottom" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
 			</tns:portSpecification>
 		</tns:port>			
 		

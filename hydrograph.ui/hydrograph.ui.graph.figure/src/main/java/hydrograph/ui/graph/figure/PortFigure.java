@@ -41,7 +41,7 @@ public class PortFigure extends Figure {
 	private FixedConnectionAnchor anchor;
 	private TooltipFigure tooltipFigure;
 	private String labelOfPort;
-	private String portType;
+	private String alignmentType;
 	private static boolean displayPortLabels;
 	private boolean isWatched;
 	private PortAlignmentEnum portAlignment;
@@ -54,15 +54,15 @@ public class PortFigure extends Figure {
 	 * @param terminal
 	 *            the terminal
 	 */
-	public PortFigure(Color portColor, String portType, int portSeq,
+	public PortFigure(Color portColor, String portAlignment, int portSeq,
 			int totalPorts, String nameOfPort, String labelOfPort, PortAlignmentEnum alignment) {
 		this.portColor = portColor;
-		this.terminal = portType + portSeq;
+		this.terminal = portAlignment + portSeq;
 		this.terminal = nameOfPort;
-		this.anchor = new FixedConnectionAnchor(this, portType, totalPorts,
-				portSeq);
+		this.anchor = new FixedConnectionAnchor(this, portAlignment, totalPorts,
+				portSeq, nameOfPort);
 		this.labelOfPort=labelOfPort;
-		this.portType=portType;
+		this.alignmentType=portAlignment;
 		this.portAlignment = alignment;
 		////to define the height and width of in, out and unused port 
 		setPortDimension();
@@ -129,7 +129,7 @@ public class PortFigure extends Figure {
 		this.isWatched = isWatched;
 	}
 	public String getPortType() {
-		return portType;
+		return alignmentType;
 	}
 	
 	public boolean isDisplayPortlabels() {

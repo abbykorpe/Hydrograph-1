@@ -23,11 +23,11 @@
 		acronym="Nrmlz">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
-			<tns:portSpecification typeOfPort="in" numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0" nameOfPort="in0" labelOfPort="in0"/>
+			<tns:portSpecification  numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+				<tns:port sequenceOfPort="0" typeOfPort="in" nameOfPort="in0" labelOfPort="in0"/>
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="out" numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0" nameOfPort="out0" labelOfPort="out0"/>
+			<tns:portSpecification  numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+				<tns:port sequenceOfPort="0" typeOfPort="out" nameOfPort="out0" labelOfPort="out0"/>
 			</tns:portSpecification>
 		</tns:port>
 		

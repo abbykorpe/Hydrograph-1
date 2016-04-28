@@ -57,7 +57,7 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 		
 		
 		int margin = componentFigure.getComponentLabelMargin();
-		port =  new PortFigure(borderColor, getCastedModel().getPortType(), getCastedModel().getSequence(), getCastedModel().getNumberOfPortsOfThisType(),getCastedModel().getNameOfPort(),
+		port =  new PortFigure(borderColor, getCastedModel().getPortAlignment().value(), getCastedModel().getSequence(), getCastedModel().getNumberOfPortsOfThisType(),getCastedModel().getNameOfPort(),
 				getCastedModel().getLabelOfPort(), getCastedModel().getPortAlignment());	
 		
 		String toolTipText = getCastedModel().getNameOfPort();

@@ -73,7 +73,7 @@
  		<sequence>
 			<element name="port" type="tns:PortInfo" maxOccurs="unbounded" minOccurs="0" />
 		</sequence>
-		<attribute name="typeOfPort" type="cnst:PortType" use="required" />
+		
 		<attribute name="numberOfPorts" type="int" use="required" />
 		<attribute name="portAlignment" type="cnst:PortAlignment" use="required" />	
 		<attribute name="changePortCountDynamically" type="boolean" use="optional" default="false"/>	
@@ -83,7 +83,7 @@
 	
 	<complexType name="PortInfo">
 		<attribute name="sequenceOfPort" type="int" use="required" />
-		
+		<attribute name="typeOfPort" type="cnst:PortType" use="required" />
 		<attribute name="nameOfPort" type="string" use="required"/>
 		<attribute name="labelOfPort" type="string" use="required"/>	
 	</complexType>	

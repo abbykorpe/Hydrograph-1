@@ -20,8 +20,8 @@
 		acronym="Mix">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
-			<tns:portSpecification typeOfPort="out" numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0"  labelOfPort="out0" nameOfPort="out0" />
+			<tns:portSpecification  numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+				<tns:port sequenceOfPort="0" typeOfPort="out" labelOfPort="out0" nameOfPort="out0" />
 			</tns:portSpecification>
 		</tns:port>
 		

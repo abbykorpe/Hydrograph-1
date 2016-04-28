@@ -80,13 +80,15 @@ public class LinkCommand extends Command{
 			for (PortDetails p:source.getPortDetails())
 			{
 				for(Port port:p.getPorts().values()){
-					String portName=p.getPortType().value()+port.getSequence();
-					if(portName.equals(sourceTerminal)){
+					//String portName=p.getPortType().value()+port.getSequence();
+					String portName=port.getNameOfPort();
+					//String portName=p.getPortAlignment().value()+port.getSequence();
+					if(portName.equals(sourceTerminal) && port.getPortAlignment().equals(p.getPortAlignment())){
 						if(p.isAllowMultipleLinks() || 
 								!source.isOutputPortEngaged(sourceTerminal)){
-							logger.debug("connectable source");
+							logger.debug("connectable source "+sourceTerminal);
 						}else{
-							logger.debug("non-connectable source");
+							logger.debug("non-connectable source "+sourceTerminal);
 							return false;
 						}
 					}
@@ -102,13 +104,15 @@ public class LinkCommand extends Command{
 			for (PortDetails p:target.getPortDetails())
 			{
 				for(Port port:p.getPorts().values()){
-					String portName=p.getPortType().value()+port.getSequence();
-					if(portName.equals(targetTerminal)){
+					//String portName=p.getPortType().value()+port.getSequence();
+					String portName=port.getNameOfPort();
+					//String portName=p.getPortAlignment().value()+port.getSequence();
+					if(portName.equals(targetTerminal) && port.getPortAlignment().equals(p.getPortAlignment())){
 						if(p.isAllowMultipleLinks() ||
 								!target.isInputPortEngaged(targetTerminal)){
-							logger.debug("connectable target");
+							logger.debug("connectable target "+targetTerminal);
 						}else{
-							logger.debug("non-connectable target");
+							logger.debug("non-connectable target "+targetTerminal);
 							return false;
 						}
 					}

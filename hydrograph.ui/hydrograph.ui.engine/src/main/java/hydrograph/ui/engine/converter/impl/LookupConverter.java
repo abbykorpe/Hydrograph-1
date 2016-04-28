@@ -46,7 +46,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.engine.jaxb.lookup.TypeKeyFields;
-import hydrograph.engine.jaxb.operationstypes.HashJoin;
+//import hydrograph.engine.jaxb.operationstypes.HashJoin;
 import hydrograph.engine.jaxb.operationstypes.Lookup;
 import hydrograph.engine.jaxb.operationstypes.Lookup.Match;
 
@@ -199,8 +199,7 @@ public class LookupConverter extends TransformConverter {
 			inSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
 			inSocket.setFromSocketId(converterHelper.getFromSocketId(link));
 			inSocket.setId(link.getTargetTerminal());
-			inSocket.setType(PortTypeConstant.getPortType(link.getTarget().getPort(link.getTargetTerminal())
-					.getNameOfPort()));
+			inSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 			inSocket.getOtherAttributes();
 			inSocketsList.add(inSocket);
 			inSocketCounter++;
@@ -208,7 +207,7 @@ public class LookupConverter extends TransformConverter {
 		return inSocketsList;
 	}
 
-	private void setInputProperty(HashJoin hashJoin) {
+	/*private void setInputProperty(Lookup lookup) {
 		List<TypeBaseInSocket> inputField = new ArrayList<>();
 		Map<String, String> mapFields = (TreeMap<String, String>) properties.get(Constants.LOOKUP_MAP_FIELD);
 		if (mapFields != null) {
@@ -230,7 +229,7 @@ public class LookupConverter extends TransformConverter {
 			}
 		}
 
-	}
+	}*/
 
 	@Override
 	protected List<TypeTransformOperation> getOperations() {

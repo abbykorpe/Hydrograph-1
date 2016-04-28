@@ -32,6 +32,7 @@ public class FixedConnectionAnchor extends AbstractConnectionAnchor {
 	private String type;
 	private int totalPortsOfThisType;
 	private int sequence;
+	private String terminal;
 
 	
 
@@ -47,11 +48,12 @@ public class FixedConnectionAnchor extends AbstractConnectionAnchor {
 	 * @param sequence
 	 *            the sequence
 	 */
-	public FixedConnectionAnchor(IFigure owner, String type, int totalPortsOfThisType, int sequence) {
+	public FixedConnectionAnchor(IFigure owner, String type, int totalPortsOfThisType, int sequence, String terminal) {
 		super(owner);
 		this.type=type;
 		this.totalPortsOfThisType=totalPortsOfThisType;
 		this.sequence=sequence;
+		this.terminal = terminal;
 	}
 
 	/**
@@ -70,13 +72,13 @@ public class FixedConnectionAnchor extends AbstractConnectionAnchor {
 		int xLocation =0, yLocation = 0;
 		
 			
-		if(("in").equalsIgnoreCase(this.type)){
+		if(("left").equalsIgnoreCase(this.type)){
 			 xLocation=getOwner().getBounds().getTopLeft().x-1;
 			 yLocation=getOwner().getBounds().getTopLeft().y+4;
-		}else if(("out").equalsIgnoreCase(this.type)){
+		}else if(("right").equalsIgnoreCase(this.type)){
 			 xLocation=getOwner().getBounds().getTopRight().x-1;
 			 yLocation=getOwner().getBounds().getTopRight().y+4;
-		}else if(("unused").equalsIgnoreCase(this.type)){
+		}else if(("bottom").equalsIgnoreCase(this.type)){
 			 xLocation=getOwner().getBounds().getBottomRight().x-20;
 			 yLocation=getOwner().getBounds().getBottomRight().y-2;
 		}
@@ -86,6 +88,10 @@ public class FixedConnectionAnchor extends AbstractConnectionAnchor {
 		return point;
 	}
 		
+	public String getTerminal() {
+		return terminal;
+	}
+
 	public String getType() {
 		return type;
 	}
