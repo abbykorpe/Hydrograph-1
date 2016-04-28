@@ -56,14 +56,18 @@ public class ELTInputCountListener implements IELTListener{
 							txtDecorator.show();
 							propertyDialogButtonBar.enableOKButton(false);
 							propertyDialogButtonBar.enableApplyButton(false);
-						}else
-						{
+						} else {
 							txtDecorator.hide();
 							propertyDialogButtonBar.enableOKButton(true);
+							propertyDialogButtonBar.enableApplyButton(true);
 						}
 					}
 				}
-
+				else
+				{
+					propertyDialogButtonBar.enableApplyButton(true);
+					txtDecorator.show();
+				}
 			}
 		};
 		return listener;
