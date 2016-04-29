@@ -104,10 +104,14 @@ public class ComponentFigure extends Figure implements Validator {
 	/**
 	 * Instantiates a new component figure.
 	 * 
-	 * @param portSpecification
-	 *            the port specification
+	 * @param portDetails
+	 *            the port details
 	 * @param cIconPath
 	 *            the canvas icon path
+	 * @param label
+	 * 			  Label to be displayed on component
+	 * @param acronym
+	 * 			  Acronym to be displayed on component
 	 * @param linkedHashMap
 	 * 			  the properties of components
 	 */
@@ -140,8 +144,8 @@ public class ComponentFigure extends Figure implements Validator {
 		setInitialColor();
 		setComponentColorAndBorder();
 
-		for (PortDetails portSpec : portDetails) {
-			setPortCount(portSpec);
+		for (PortDetails pDetail : portDetails) {
+			setPortCount(pDetail);
 			setHeight(totalPortsAtLeftSide, totalPortsAtRightSide);
 			setWidth(totalPortsAtBottonSide);
 		}
@@ -187,7 +191,6 @@ public class ComponentFigure extends Figure implements Validator {
 	}
 
 	private void setPortCount(PortDetails portDetails) {
-		//if (StringUtils.equalsIgnoreCase(Constants.INPUT_SOCKET_TYPE, portDetails.getPortType().value())) {
 		if(PortAlignmentEnum.LEFT.equals(portDetails.getPortAlignment())){
 			totalPortsAtLeftSide = totalPortsAtLeftSide + portDetails.getNumberOfPorts();
 		} else if (PortAlignmentEnum.RIGHT.equals(portDetails.getPortAlignment())) {
@@ -263,6 +266,240 @@ public class ComponentFigure extends Figure implements Validator {
 		this.borderColor = borderColor;
 	}
 
+	
+	/**
+	 * 
+	 * Set connection anchor
+	 * 
+	 * @param fCAnchor
+	 */
+	public void setAnchors(FixedConnectionAnchor fCAnchor) {
+		connectionAnchors.put(fCAnchor.getTerminal(), fCAnchor);
+		if (PortAlignmentEnum.RIGHT.value().equalsIgnoreCase(fCAnchor.getAlignment()) || PortAlignmentEnum.BOTTOM.value().equalsIgnoreCase(fCAnchor.getAlignment()))
+			outputConnectionAnchors.add(fCAnchor);
+		else
+			inputConnectionAnchors.add(fCAnchor);
+	}
+
+	/**
+	 * 
+	 * Decrement anchors
+	 * 
+	 * @param portsToBeRemoved
+	 */
+	public void decrementAnchors(List<String> portsToBeRemoved) {
+
+		for (String portRemove : portsToBeRemoved) {
+			connectionAnchors.remove(portRemove);
+		}
+
+		for (String portRemove : portsToBeRemoved) {
+			for (Iterator<FixedConnectionAnchor> iterator = outputConnectionAnchors.iterator(); iterator.hasNext();) {
+				FixedConnectionAnchor fca = iterator.next();
+				if ((fca.getAlignment() + fca.getSequence()).equals(portRemove)) {
+					// Remove the current element from the iterator and the list.
+					iterator.remove();
+				}
+			}
+		}
+		for (String portRemove : portsToBeRemoved) {
+			for (Iterator<FixedConnectionAnchor> iterator = inputConnectionAnchors.iterator(); iterator.hasNext();) {
+				FixedConnectionAnchor fca = iterator.next();
+				if ((fca.getAlignment() + fca.getSequence()).equals(portRemove)) {
+					// Remove the current element from the iterator and the list.
+					iterator.remove();
+				}
+			}
+		}
+	}
+
+	@Override
+	protected void paintFigure(Graphics graphics) {
+
+		Rectangle r = getBounds().getCopy();
+		graphics.translate(r.getLocation());
+
+		Rectangle q = new Rectangle(4, 4 + componentLabelMargin, r.width - 8, r.height - 8 - componentLabelMargin);
+		graphics.fillRoundRectangle(q, 5, 5);
+
+		graphics.drawImage(canvasIcon, new Point(q.width / 2 - 16, q.height / 2 + componentLabelMargin - 11));
+		drawStatus(graphics);
+
+		graphics.drawText(acronym, new Point(q.width / 2 - 16 + 5, q.height / 2 + componentLabelMargin - 23));
+
+		if (componentProperties != null && componentProperties.get(StringUtils.lowerCase(Constants.PHASE)) != null) {
+			if (String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))).length() > 2)
+				graphics.drawText(
+						StringUtils.substring(
+								String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))), 0, 2)
+								+ "..", new Point(q.width - 16, q.height+ getComponentLabelMargin()-20));
+			else
+				graphics.drawText(String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))),
+						new Point(q.width - 14, q.height+ getComponentLabelMargin()-20));
+		}
+	}
+
+	/**
+	 * Draws the status image to right corner of the component
+	 * 
+	 * @param graphics
+	 */
+	private void drawStatus(Graphics graphics) {
+		Image statusImage = null;
+		Rectangle rectangle = getBounds().getCopy();
+		if (StringUtils.isNotBlank(getStatus()) && getStatus().equals(ValidityStatus.WARN.name())) {
+			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_WARN_ICON);
+		} else if (StringUtils.isNotBlank(getStatus()) && getStatus().equals(ValidityStatus.ERROR.name())) {
+			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_ERROR_ICON);
+		} else if (StringUtils.isNotBlank(getStatus()) && getStatus().equals(Constants.UPDATE_AVAILABLE)) {
+			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_UPDATE_ICON);
+		}
+		logger.debug("Component has {} status.", getStatus());
+		if (statusImage != null) {
+			graphics.drawImage(statusImage, new Point(rectangle.width - 25, 8 + componentLabelMargin));
+		}
+	}
+
+	/**
+	 * Gets the connection anchor.
+	 * 
+	 * @param terminal
+	 *            the terminal
+	 * @return the connection anchor
+	 */
+	public ConnectionAnchor getConnectionAnchor(String terminal) {
+
+		return connectionAnchors.get(terminal);
+	}
+
+	/**
+	 * Gets the connection anchor name.
+	 * 
+	 * @param c
+	 *            the c
+	 * @return the connection anchor name
+	 */
+	public String getConnectionAnchorName(ConnectionAnchor c) {
+
+		Set<String> keys = connectionAnchors.keySet();
+		String key;
+		Iterator<String> it = keys.iterator();
+
+		while (it.hasNext()) {
+			key = it.next();
+			if (connectionAnchors.get(key).equals(c))
+				return key;
+		}
+		return null;
+	}
+
+	private ConnectionAnchor closestAnchor(Point p, List<FixedConnectionAnchor> connectionAnchors) {
+		ConnectionAnchor closest = null;
+		double min = Double.MAX_VALUE;
+		for (ConnectionAnchor c : connectionAnchors) {
+			double d = p.getDistance(c.getLocation(null));
+			if (d < min) {
+				min = d;
+				closest = c;
+			}
+		}
+		return closest;
+	}
+
+	/**
+	 * Gets the source connection anchor at.
+	 * 
+	 * @param p
+	 *            the p
+	 * @return the source connection anchor at
+	 */
+	public ConnectionAnchor getSourceConnectionAnchorAt(Point p) {
+		return closestAnchor(p, outputConnectionAnchors);
+	}
+
+	/**
+	 * Gets the target connection anchor at.
+	 * 
+	 * @param p
+	 *            the p
+	 * @return the target connection anchor at
+	 */
+	public ConnectionAnchor getTargetConnectionAnchorAt(Point p) {
+		return closestAnchor(p, inputConnectionAnchors);
+	}
+
+	@Override
+	public void validate() {
+		super.validate();
+
+		if (isValid())
+			return;
+
+	}
+
+	@Override
+	public String getStatus() {
+		return status;
+	}
+
+	@Override
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	/**
+	 * 
+	 * Returns true if height of the component incremented
+	 * 
+	 * @return
+	 */
+	public boolean isIncrementedHeight() {
+		return incrementedHeight;
+	}
+
+	/**
+	 * 
+	 * Set incremented height
+	 * 
+	 * @param incrementedHeight
+	 */
+	public void setIncrementedHeight(boolean incrementedHeight) {
+		this.incrementedHeight = incrementedHeight;
+	}
+
+	/**
+	 * 
+	 * Get component label margin
+	 * 
+	 * @return
+	 */
+	public int getComponentLabelMargin() {
+		return componentLabelMargin;
+	}
+
+	/**
+	 * 
+	 * Set component label margin
+	 * 
+	 * @param componentLabelMargin
+	 */
+	public void setComponentLabelMargin(int componentLabelMargin) {
+		this.componentLabelMargin = componentLabelMargin;
+	}
+
+	/**
+	 * 
+	 * terminate tooltip timer
+	 * 
+	 */
+	public void terminateToolTipTimer() {
+		if (display != null && timer != null) {
+			display.timerExec(-1, timer);
+		}
+
+	}
+
+	
 	private void hideToolTip() {
 		if (componentCanvas != null) {
 			if (componentCanvas.getComponentTooltip() != null) {
@@ -510,237 +747,5 @@ public class ComponentFigure extends Figure implements Validator {
 		});
 	}
 
-	/**
-	 * 
-	 * Set connection anchor
-	 * 
-	 * @param fCAnchor
-	 */
-	public void setAnchors(FixedConnectionAnchor fCAnchor) {
-		//connectionAnchors.put(fCAnchor.getType() + fCAnchor.getSequence(), fCAnchor);
-		connectionAnchors.put(fCAnchor.getTerminal(), fCAnchor);
-		if (("right").equalsIgnoreCase(fCAnchor.getType()) || ("bottom").equalsIgnoreCase(fCAnchor.getType()))
-			outputConnectionAnchors.add(fCAnchor);
-		else
-			inputConnectionAnchors.add(fCAnchor);
-	}
-
-	/**
-	 * 
-	 * Decrement anchors
-	 * 
-	 * @param portsToBeRemoved
-	 */
-	public void decrementAnchors(List<String> portsToBeRemoved) {
-
-		for (String portRemove : portsToBeRemoved) {
-			connectionAnchors.remove(portRemove);
-		}
-
-		for (String portRemove : portsToBeRemoved) {
-			for (Iterator<FixedConnectionAnchor> iterator = outputConnectionAnchors.iterator(); iterator.hasNext();) {
-				FixedConnectionAnchor fca = iterator.next();
-				if ((fca.getType() + fca.getSequence()).equals(portRemove)) {
-					// Remove the current element from the iterator and the list.
-					iterator.remove();
-				}
-			}
-		}
-		for (String portRemove : portsToBeRemoved) {
-			for (Iterator<FixedConnectionAnchor> iterator = inputConnectionAnchors.iterator(); iterator.hasNext();) {
-				FixedConnectionAnchor fca = iterator.next();
-				if ((fca.getType() + fca.getSequence()).equals(portRemove)) {
-					// Remove the current element from the iterator and the list.
-					iterator.remove();
-				}
-			}
-		}
-	}
-
-	@Override
-	protected void paintFigure(Graphics graphics) {
-
-		Rectangle r = getBounds().getCopy();
-		graphics.translate(r.getLocation());
-
-		Rectangle q = new Rectangle(4, 4 + componentLabelMargin, r.width - 8, r.height - 8 - componentLabelMargin);
-		graphics.fillRoundRectangle(q, 5, 5);
-
-		graphics.drawImage(canvasIcon, new Point(q.width / 2 - 16, q.height / 2 + componentLabelMargin - 11));
-		drawStatus(graphics);
-
-		graphics.drawText(acronym, new Point(q.width / 2 - 16 + 5, q.height / 2 + componentLabelMargin - 23));
-
-		if (componentProperties != null && componentProperties.get(StringUtils.lowerCase(Constants.PHASE)) != null) {
-			if (String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))).length() > 2)
-				graphics.drawText(
-						StringUtils.substring(
-								String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))), 0, 2)
-								+ "..", new Point(q.width - 16, q.height+ getComponentLabelMargin()-20));
-			else
-				graphics.drawText(String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))),
-						new Point(q.width - 14, q.height+ getComponentLabelMargin()-20));
-		}
-	}
-
-	/**
-	 * Draws the status image to right corner of the component
-	 * 
-	 * @param graphics
-	 */
-	private void drawStatus(Graphics graphics) {
-		Image statusImage = null;
-		Rectangle rectangle = getBounds().getCopy();
-		if (StringUtils.isNotBlank(getStatus()) && getStatus().equals(ValidityStatus.WARN.name())) {
-			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_WARN_ICON);
-		} else if (StringUtils.isNotBlank(getStatus()) && getStatus().equals(ValidityStatus.ERROR.name())) {
-			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_ERROR_ICON);
-		} else if (StringUtils.isNotBlank(getStatus()) && getStatus().equals(Constants.UPDATE_AVAILABLE)) {
-			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_UPDATE_ICON);
-		}
-		logger.debug("Component has {} status.", getStatus());
-		if (statusImage != null) {
-			graphics.drawImage(statusImage, new Point(rectangle.width - 25, 8 + componentLabelMargin));
-		}
-	}
-
-	/**
-	 * Gets the connection anchor.
-	 * 
-	 * @param terminal
-	 *            the terminal
-	 * @return the connection anchor
-	 */
-	public ConnectionAnchor getConnectionAnchor(String terminal) {
-
-		return connectionAnchors.get(terminal);
-	}
-
-	/**
-	 * Gets the connection anchor name.
-	 * 
-	 * @param c
-	 *            the c
-	 * @return the connection anchor name
-	 */
-	public String getConnectionAnchorName(ConnectionAnchor c) {
-
-		Set<String> keys = connectionAnchors.keySet();
-		String key;
-		Iterator<String> it = keys.iterator();
-
-		while (it.hasNext()) {
-			key = it.next();
-			if (connectionAnchors.get(key).equals(c))
-				return key;
-		}
-		return null;
-	}
-
-	private ConnectionAnchor closestAnchor(Point p, List<FixedConnectionAnchor> connectionAnchors) {
-		ConnectionAnchor closest = null;
-		double min = Double.MAX_VALUE;
-		for (ConnectionAnchor c : connectionAnchors) {
-			double d = p.getDistance(c.getLocation(null));
-			if (d < min) {
-				min = d;
-				closest = c;
-			}
-		}
-		return closest;
-	}
-
-	/**
-	 * Gets the source connection anchor at.
-	 * 
-	 * @param p
-	 *            the p
-	 * @return the source connection anchor at
-	 */
-	public ConnectionAnchor getSourceConnectionAnchorAt(Point p) {
-		return closestAnchor(p, outputConnectionAnchors);
-	}
-
-	/**
-	 * Gets the target connection anchor at.
-	 * 
-	 * @param p
-	 *            the p
-	 * @return the target connection anchor at
-	 */
-	public ConnectionAnchor getTargetConnectionAnchorAt(Point p) {
-		return closestAnchor(p, inputConnectionAnchors);
-	}
-
-	@Override
-	public void validate() {
-		super.validate();
-
-		if (isValid())
-			return;
-
-	}
-
-	@Override
-	public String getStatus() {
-		return status;
-	}
-
-	@Override
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	/**
-	 * 
-	 * Returns true if height of the component incremented
-	 * 
-	 * @return
-	 */
-	public boolean isIncrementedHeight() {
-		return incrementedHeight;
-	}
-
-	/**
-	 * 
-	 * Set incremented height
-	 * 
-	 * @param incrementedHeight
-	 */
-	public void setIncrementedHeight(boolean incrementedHeight) {
-		this.incrementedHeight = incrementedHeight;
-	}
-
-	/**
-	 * 
-	 * Get component label margin
-	 * 
-	 * @return
-	 */
-	public int getComponentLabelMargin() {
-		return componentLabelMargin;
-	}
-
-	/**
-	 * 
-	 * Set component label margin
-	 * 
-	 * @param componentLabelMargin
-	 */
-	public void setComponentLabelMargin(int componentLabelMargin) {
-		this.componentLabelMargin = componentLabelMargin;
-	}
-
-	/**
-	 * 
-	 * terminate tooltip timer
-	 * 
-	 */
-	public void terminateToolTipTimer() {
-		if (display != null && timer != null) {
-			display.timerExec(-1, timer);
-		}
-
-	}
-
+	
 }

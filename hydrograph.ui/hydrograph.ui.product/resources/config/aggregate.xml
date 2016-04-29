@@ -21,10 +21,10 @@
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0"  nameOfPort="in0" labelOfPort="in0" typeOfPort="in"/>
+				<tns:port sequenceOfPort="0"  portTerminal="in0" labelOfPort="in0" typeOfPort="in"/>
 			</tns:portSpecification>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0"  nameOfPort="out0" labelOfPort="out0" typeOfPort="out"/>
+				<tns:port sequenceOfPort="0"  portTerminal="out0" labelOfPort="out0" typeOfPort="out"/>
 			</tns:portSpecification>
 		</tns:port>
 		

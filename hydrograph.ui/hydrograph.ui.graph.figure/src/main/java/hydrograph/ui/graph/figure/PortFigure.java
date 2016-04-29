@@ -41,7 +41,6 @@ public class PortFigure extends Figure {
 	private FixedConnectionAnchor anchor;
 	private TooltipFigure tooltipFigure;
 	private String labelOfPort;
-	private String alignmentType;
 	private static boolean displayPortLabels;
 	private boolean isWatched;
 	private PortAlignmentEnum portAlignment;
@@ -50,19 +49,23 @@ public class PortFigure extends Figure {
 	 * 
 	 * @param portColor
 	 *            the port color
+	 * @param portSeq 
+	 * 			Sequence of the port
+	 * @param totalPorts
+	 * 			Total number of ports
+	 * @param portTerminal
+	 *            the port terminal
 	 * @param labelOfPort 
-	 * @param terminal
-	 *            the terminal
+	 * 			label to be displayed for port
+	
 	 */
-	public PortFigure(Color portColor, String portAlignment, int portSeq,
-			int totalPorts, String nameOfPort, String labelOfPort, PortAlignmentEnum alignment) {
+	public PortFigure(Color portColor, int portSeq,
+			int totalPorts, String portTerminal, String labelOfPort, PortAlignmentEnum alignment) {
 		this.portColor = portColor;
-		this.terminal = portAlignment + portSeq;
-		this.terminal = nameOfPort;
-		this.anchor = new FixedConnectionAnchor(this, portAlignment, totalPorts,
-				portSeq, nameOfPort);
+		this.terminal = portTerminal;
+		this.anchor = new FixedConnectionAnchor(this, alignment.value(), totalPorts,
+				portSeq, portTerminal);
 		this.labelOfPort=labelOfPort;
-		this.alignmentType=portAlignment;
 		this.portAlignment = alignment;
 		////to define the height and width of in, out and unused port 
 		setPortDimension();
@@ -99,7 +102,6 @@ public class PortFigure extends Figure {
 	}
 	  //to define the height and width of in, out and unused port 
 		private void setPortDimension() {
-			//if("in".equalsIgnoreCase(portType)){
 			if(PortAlignmentEnum.LEFT.equals(portAlignment)){
 				getBounds().setSize(new Dimension(27,10));
 			}
@@ -128,15 +130,12 @@ public class PortFigure extends Figure {
 	public void setWatched(boolean isWatched) {
 		this.isWatched = isWatched;
 	}
-	public String getPortType() {
-		return alignmentType;
-	}
 	
 	public boolean isDisplayPortlabels() {
 		return displayPortLabels;
 	}
 	public void setDisplayPortlabels(boolean toggleValue) {
-		this.displayPortLabels = toggleValue;
+		PortFigure.displayPortLabels = toggleValue;
 	}
 	@Override
 	protected void paintFigure(Graphics graphics) {
@@ -144,7 +143,6 @@ public class PortFigure extends Figure {
 		if(isWatched)
 			setBackgroundColor(ELTColorConstants.WATCH_COLOR);
 		Rectangle r = getBounds().getCopy();
-		//if("in".equalsIgnoreCase(portType))
 		if(PortAlignmentEnum.LEFT.equals(portAlignment)){
 			graphics.fillRectangle(getBounds().getLocation().x-20, getBounds()
 					.getLocation().y-1, r.width, r.height-2);
@@ -158,7 +156,6 @@ public class PortFigure extends Figure {
 			
 			
 		if(isDisplayPortlabels()){
-			//if("in".equalsIgnoreCase(portType))
 			if(PortAlignmentEnum.LEFT.equals(portAlignment)){
 				graphics.drawText(labelOfPort,new Point(getBounds().getLocation().x+8,getBounds()
 						.getLocation().y-0.2));
@@ -191,9 +188,13 @@ public class PortFigure extends Figure {
 		int var1 = terminal.length();
 		int sequence = terminal.charAt(terminal.length() - 1);
 		int var2 = portColor.hashCode();
+		int var3 = labelOfPort.hashCode();
+		int var4 = portAlignment.hashCode();
 		result = 31 * result + var1;
 		result = 31 * result + sequence;
 		result = 31 * result + var2;
+		result = 31 * result + var3;
+		result = 31 * result + var4;
 
 		return result;
 
@@ -202,7 +203,6 @@ public class PortFigure extends Figure {
 	public void selectPort() {
 		if(!isWatched)
 		setBackgroundColor(ELTColorConstants.COMPONENT_BORDER_SELECTED);
-			//setBackgroundColor(new Color(null, 255, 51, 0));
 	}
 
 	public void deSelectPort() {

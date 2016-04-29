@@ -84,7 +84,7 @@
 	<complexType name="PortInfo">
 		<attribute name="sequenceOfPort" type="int" use="required" />
 		<attribute name="typeOfPort" type="cnst:PortType" use="required" />
-		<attribute name="nameOfPort" type="string" use="required"/>
+		<attribute name="portTerminal" type="string" use="required"/>
 		<attribute name="labelOfPort" type="string" use="required"/>	
 	</complexType>	
 

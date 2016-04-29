@@ -24,7 +24,7 @@
 		
 		<tns:port>
 			<tns:portSpecification numberOfPorts="1" portAlignment="left" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0" typeOfPort="in" nameOfPort="in0" labelOfPort="in0"/>
+				<tns:port sequenceOfPort="0" typeOfPort="in" portTerminal="in0" labelOfPort="in0"/>
 			</tns:portSpecification>
 			
 			<tns:portSpecification numberOfPorts="0" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">

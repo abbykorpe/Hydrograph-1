@@ -15,6 +15,8 @@
 
 package hydrograph.ui.graph.figure;
 
+import hydrograph.ui.graph.model.PortAlignmentEnum;
+
 import org.eclipse.draw2d.AbstractConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ScalableFigure;
@@ -29,7 +31,7 @@ import org.eclipse.draw2d.geometry.Point;
 public class FixedConnectionAnchor extends AbstractConnectionAnchor {
 
 	private boolean allowMultipleLinks, linkMandatory;
-	private String type;
+	private String alignment;
 	private int totalPortsOfThisType;
 	private int sequence;
 	private String terminal;
@@ -41,16 +43,18 @@ public class FixedConnectionAnchor extends AbstractConnectionAnchor {
 	 * 
 	 * @param owner
 	 *            the owner
-	 * @param type
+	 * @param align
 	 *            the type
 	 * @param totalPortsOfThisType
 	 *            the total ports of this type
 	 * @param sequence
 	 *            the sequence
+	 * @param terminal 
+	 * 			Port terminal
 	 */
-	public FixedConnectionAnchor(IFigure owner, String type, int totalPortsOfThisType, int sequence, String terminal) {
+	public FixedConnectionAnchor(IFigure owner, String align, int totalPortsOfThisType, int sequence, String terminal) {
 		super(owner);
-		this.type=type;
+		this.alignment=align;
 		this.totalPortsOfThisType=totalPortsOfThisType;
 		this.sequence=sequence;
 		this.terminal = terminal;
@@ -72,13 +76,13 @@ public class FixedConnectionAnchor extends AbstractConnectionAnchor {
 		int xLocation =0, yLocation = 0;
 		
 			
-		if(("left").equalsIgnoreCase(this.type)){
+		if(PortAlignmentEnum.LEFT.value().equalsIgnoreCase(this.alignment)){
 			 xLocation=getOwner().getBounds().getTopLeft().x-1;
 			 yLocation=getOwner().getBounds().getTopLeft().y+4;
-		}else if(("right").equalsIgnoreCase(this.type)){
+		}else if(PortAlignmentEnum.RIGHT.value().equalsIgnoreCase(this.alignment)){
 			 xLocation=getOwner().getBounds().getTopRight().x-1;
 			 yLocation=getOwner().getBounds().getTopRight().y+4;
-		}else if(("bottom").equalsIgnoreCase(this.type)){
+		}else if(PortAlignmentEnum.BOTTOM.value().equalsIgnoreCase(this.alignment)){
 			 xLocation=getOwner().getBounds().getBottomRight().x-20;
 			 yLocation=getOwner().getBounds().getBottomRight().y-2;
 		}
@@ -92,8 +96,8 @@ public class FixedConnectionAnchor extends AbstractConnectionAnchor {
 		return terminal;
 	}
 
-	public String getType() {
-		return type;
+	public String getAlignment() {
+		return alignment;
 	}
 
 	public int getSequence() {
@@ -120,8 +124,9 @@ public class FixedConnectionAnchor extends AbstractConnectionAnchor {
 				"\nOwner: "+getOwner()+
 				"\nallowMultipleLinks: "+this.allowMultipleLinks+
 				"\nlinkMandatory: "+this.linkMandatory+
-				"\ntype: "+this.type+
+				"\nalignment: "+this.alignment+
 				"\nsequence: "+this.sequence+
+				"\nterminal: "+this.terminal+
 				"\ntotalPortsOfThisType: "+this.totalPortsOfThisType+
 				"\n******************************************\n";
 		 
@@ -137,9 +142,10 @@ public class FixedConnectionAnchor extends AbstractConnectionAnchor {
 			FixedConnectionAnchor fa = (FixedConnectionAnchor) o;
 			
 			if ( fa.getOwner() == this.getOwner() &&
-					fa.getType().equals(this.getType()) &&
-					fa.getTotalPortsOfThisType()==this.getTotalPortsOfThisType() &&
-					fa.getSequence() == this.getSequence() &&
+					fa.getAlignment().equals(this.alignment) &&
+					fa.getTerminal().equals(this.terminal) &&
+					fa.getTotalPortsOfThisType()==this.totalPortsOfThisType&&
+					fa.getSequence() == this.sequence &&
 					fa.allowMultipleLinks == this.allowMultipleLinks &&
 					fa.linkMandatory == this.linkMandatory
 				)

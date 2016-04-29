@@ -14,9 +14,6 @@
  
 package hydrograph.ui.graph.model;
 
-
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class Port.
  * 
@@ -57,7 +54,9 @@ public class Port extends Model implements Cloneable{
 	 * @param alwMulLinks 
 	 * 			  If multiple links are allowed
 	 *  @param lnkMan
-	 *  		If link is mandatory           
+	 *  		If link is mandatory    
+	 *  @param portAlignmentEnum
+	 *  	Port alignment       
 	 */
 	public Port(String nameOfPort,String labelOfPort,String terminal, Component component, int noPortsOfThisType, PortTypeEnum type, int seq,
 			boolean alwMulLinks, boolean lnkMan, PortAlignmentEnum portAlignmentEnum){
@@ -70,7 +69,7 @@ public class Port extends Model implements Cloneable{
 		this.labelOfPort=labelOfPort;
 		this.allowMultipleLinks = alwMulLinks;
 		this.linkMandatory = lnkMan;
-		portAlignment = portAlignmentEnum;
+		this.portAlignment = portAlignmentEnum;
 	}
 	
 	public boolean isAllowMultipleLinks() {
@@ -145,6 +144,7 @@ public class Port extends Model implements Cloneable{
 				"\nlabelOfPort: "+this.labelOfPort+
 				"\nMultiple links allowed: "+this.allowMultipleLinks+
 				"\nLink mandatory: "+this.linkMandatory+
+				"\nPort Alignment: "+this.portAlignment.value()+
 				"\n******************************************\n";
 		 
 	}

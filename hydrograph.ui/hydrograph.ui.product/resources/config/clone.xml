@@ -21,10 +21,10 @@
 		<tns:category>STRAIGHTPULL</tns:category>
 		<tns:port>
 			<tns:portSpecification numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="true" linkMandatory="true">
-				<tns:port sequenceOfPort="0" typeOfPort="out"  labelOfPort="out0" nameOfPort="out0" />
+				<tns:port sequenceOfPort="0" typeOfPort="out"  labelOfPort="out0" portTerminal="out0" />
 			</tns:portSpecification>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0" typeOfPort="in" labelOfPort="in0" nameOfPort="in0" />
+				<tns:port sequenceOfPort="0" typeOfPort="in" labelOfPort="in0" portTerminal="in0" />
 			</tns:portSpecification>
 		</tns:port>
 		

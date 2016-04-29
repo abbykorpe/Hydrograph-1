@@ -57,12 +57,11 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 		
 		
 		int margin = componentFigure.getComponentLabelMargin();
-		port =  new PortFigure(borderColor, getCastedModel().getPortAlignment().value(), getCastedModel().getSequence(), getCastedModel().getNumberOfPortsOfThisType(),getCastedModel().getNameOfPort(),
+		port =  new PortFigure(borderColor, getCastedModel().getSequence(), getCastedModel().getNumberOfPortsOfThisType(),getCastedModel().getNameOfPort(),
 				getCastedModel().getLabelOfPort(), getCastedModel().getPortAlignment());	
 		
 		String toolTipText = getCastedModel().getNameOfPort();
 		port.getToolTipFigure().setMessage(toolTipText);
-		System.out.println("****Creating port for: "+getCastedModel().getNameOfPort());
 		portPoint = getPortLocation(getCastedModel().getNumberOfPortsOfThisType(), getCastedModel().getPortType(),
 				getCastedModel().getSequence(), height, width, margin, getCastedModel().getPortAlignment());
 		
@@ -77,15 +76,12 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 	private Point getPortLocation(int totalPortsOfThisType, String type, int sequence, int height, int width, int margin, 
 			PortAlignmentEnum portAlignment){
 
-		System.out.println("***type: "+type);
-		System.out.println("***seq: "+sequence);
 		Point p = null ;
 		int portOffsetFactor = totalPortsOfThisType+1;
 		int portHeightOffset=height/portOffsetFactor;
 		int portWidthOffset=width/portOffsetFactor;
 		int xLocation=0, yLocation=0;
 
-		//if(type.equalsIgnoreCase("in")){
 		if(PortAlignmentEnum.LEFT.equals(portAlignment)){
 			xLocation=0;
 			yLocation=portHeightOffset*(sequence+1) - 4 + margin;

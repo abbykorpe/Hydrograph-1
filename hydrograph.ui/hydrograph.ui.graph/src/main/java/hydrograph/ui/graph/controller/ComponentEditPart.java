@@ -15,7 +15,6 @@
 package hydrograph.ui.graph.controller;
 
 import hydrograph.ui.common.component.config.Policy;
-import hydrograph.ui.common.component.config.PortSpecification;
 import hydrograph.ui.common.component.config.Property;
 import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.util.Constants;
@@ -154,11 +153,10 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				.getClazzName(getModel().getClass());
 		
 		String canvasIconPath = XMLConfigUtil.INSTANCE.getComponent(componentName).getCanvasIconPath();
-		//List<PortSpecification> portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
 		
 		String label = (String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue());
 		String acronym = XMLConfigUtil.INSTANCE.getComponent(componentName).getAcronym();
-		return new ComponentFigure(getCastedModel().getPortDetails(), canvasIconPath, label, acronym,getCastedModel().getProperties());
+		return new ComponentFigure(getCastedModel().getPortDetails(), canvasIconPath, label, acronym, getCastedModel().getProperties());
 	}
 
 	public Component getCastedModel() {
@@ -341,11 +339,11 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			if(getCastedModel().getComponentName().equalsIgnoreCase("lookup")){
 				LookupConfigProperty lookup_in0 = (LookupConfigProperty)getCastedModel().getProperties().get("hash_join");
 				if(lookup_in0 != null && !lookup_in0.isSelected()){
-					getCastedModel().getPorts().get("left1").setLabelOfPort("lkp");
-					getCastedModel().getPorts().get("left0").setLabelOfPort("drv");
+					getCastedModel().getPorts().get("in1").setLabelOfPort("lkp");
+					getCastedModel().getPorts().get("in0").setLabelOfPort("drv");
 				}else{
-					getCastedModel().getPorts().get("left1").setLabelOfPort("drv");
-					getCastedModel().getPorts().get("left0").setLabelOfPort("lkp");
+					getCastedModel().getPorts().get("in1").setLabelOfPort("drv");
+					getCastedModel().getPorts().get("in0").setLabelOfPort("lkp");
 				}
 			}
 			if(!StringUtils.equals(Constants.UPDATE_AVAILABLE,currentStatus))

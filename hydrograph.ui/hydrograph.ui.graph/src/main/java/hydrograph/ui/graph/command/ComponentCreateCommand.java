@@ -77,13 +77,6 @@ public class ComponentCreateCommand extends Command {
 		List<PortSpecification> portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName).getPort().getPortSpecification();
 		for(PortSpecification p:portSpecification)
 		{	
-			/*if(p.getTypeOfPort().value().equalsIgnoreCase("in")){
-				totalPortsofInType=p.getNumberOfPorts();
-			}else if(p.getTypeOfPort().value().equalsIgnoreCase("out")){
-				totalPortsOfOutType=p.getNumberOfPorts();
-			}else if(p.getTypeOfPort().value().equalsIgnoreCase("unused")){
-				totalPortsOfUnusedType=p.getNumberOfPorts();
-			}*/
 			if(PortAlignmentEnum.LEFT.value().equals(p.getPortAlignment().value())){
 				totalPortsOnLeftSide=p.getNumberOfPorts();
 			}else if(PortAlignmentEnum.RIGHT.value().equals(p.getPortAlignment().value())){

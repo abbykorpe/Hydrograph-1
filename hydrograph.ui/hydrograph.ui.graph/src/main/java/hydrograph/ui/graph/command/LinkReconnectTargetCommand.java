@@ -18,14 +18,17 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.Port;
 import hydrograph.ui.graph.model.PortDetails;
+import hydrograph.ui.logging.factory.LogFactory;
 
 import org.eclipse.gef.commands.Command;
+import org.slf4j.Logger;
 
 
 /**
  * The Class LinkReconnectTargetCommand.
  */
 public class LinkReconnectTargetCommand extends Command{
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(LinkReconnectTargetCommand.class);
 	
 	Link link;
 	private Component oldTarget;
@@ -62,13 +65,11 @@ public class LinkReconnectTargetCommand extends Command{
 			for (PortDetails p : newTarget.getPortDetails())
 			{
 				for(Port port:p.getPorts().values()){
-					//String portName = p.getPortType().value() + port.getSequence();
-					String portName=port.getNameOfPort();
-					//String portName=p.getPortAlignment().value()+port.getSequence();
-					if(portName.equals(newTargetTerminal)){
+					String portTerminal=port.getNameOfPort();
+					if(portTerminal.equals(newTargetTerminal)){
 						if(p.isAllowMultipleLinks() ||
 								!newTarget.isInputPortEngaged(newTargetTerminal)){
-							
+							logger.debug("Reconnectable source {}", newTargetTerminal);
 						}else{
 							return false;
 						}

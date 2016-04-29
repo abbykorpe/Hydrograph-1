@@ -21,11 +21,11 @@
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="2" portAlignment="left"  changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true" >
-				<tns:port sequenceOfPort="0" typeOfPort="driver" labelOfPort="drv" nameOfPort="in0" />
-				<tns:port sequenceOfPort="1" typeOfPort="lookup" labelOfPort="lkp" nameOfPort="in1" />
+				<tns:port sequenceOfPort="0" typeOfPort="driver" labelOfPort="drv" portTerminal="in0" />
+				<tns:port sequenceOfPort="1" typeOfPort="lookup" labelOfPort="lkp" portTerminal="in1" />
 			</tns:portSpecification>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0" typeOfPort="out"  labelOfPort="out0" nameOfPort="out0" />
+				<tns:port sequenceOfPort="0" typeOfPort="out"  labelOfPort="out0" portTerminal="out0" />
 			</tns:portSpecification>
 		</tns:port>
 		

@@ -20,7 +20,7 @@
 		<tns:category>INPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0" typeOfPort="out" labelOfPort="out0" nameOfPort="out0" />
+				<tns:port sequenceOfPort="0" typeOfPort="out" labelOfPort="out0" portTerminal="out0" />
 			</tns:portSpecification>
 		</tns:port>
 		

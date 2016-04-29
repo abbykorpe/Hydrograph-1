@@ -67,13 +67,11 @@ public class LinkReconnectSourceCommand extends Command {
 		
 		for (PortDetails p : newSource.getPortDetails()) {
 			for(Port port:p.getPorts().values()){
-				//String portName = p.getPortType().value() + port.getSequence();
-				String portName=port.getNameOfPort();
-				//String portName=p.getPortAlignment().value()+port.getSequence();
-				if (portName.equals(newSourceTerminal)) {
+				String portTerminal=port.getNameOfPort();
+				if (portTerminal.equals(newSourceTerminal)) {
 					if (p.isAllowMultipleLinks()
 							|| !newSource.isOutputPortEngaged(newSourceTerminal)) {
-
+						logger.debug("Reconnectable source {}", newSourceTerminal);
 					} else{
 						return false;
 					}

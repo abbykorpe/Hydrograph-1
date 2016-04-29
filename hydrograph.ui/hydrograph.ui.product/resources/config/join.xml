@@ -21,15 +21,15 @@
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="2" portAlignment="left" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0" typeOfPort="in" labelOfPort="in0" nameOfPort="in0" />
-				<tns:port sequenceOfPort="1" typeOfPort="in" labelOfPort="in1" nameOfPort="in1"/>
+				<tns:port sequenceOfPort="0" typeOfPort="in" labelOfPort="in0" portTerminal="in0" />
+				<tns:port sequenceOfPort="1" typeOfPort="in" labelOfPort="in1" portTerminal="in1"/>
 			</tns:portSpecification>
 			<tns:portSpecification  numberOfPorts="2" portAlignment="bottom" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0" typeOfPort="unused" labelOfPort="un0" nameOfPort="unused0" />
-				<tns:port sequenceOfPort="1" typeOfPort="unused" labelOfPort="un1" nameOfPort="unused1" />
+				<tns:port sequenceOfPort="0" typeOfPort="unused" labelOfPort="un0" portTerminal="unused0" />
+				<tns:port sequenceOfPort="1" typeOfPort="unused" labelOfPort="un1" portTerminal="unused1" />
 			</tns:portSpecification>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0" typeOfPort="out" labelOfPort="out0" nameOfPort="out0" />
+				<tns:port sequenceOfPort="0" typeOfPort="out" labelOfPort="out0" portTerminal="out0" />
 			</tns:portSpecification>
 		</tns:port>
 		
