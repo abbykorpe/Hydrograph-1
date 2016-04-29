@@ -22,7 +22,6 @@ import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import java.util.List;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FilterOperationClassUtility.
  * 

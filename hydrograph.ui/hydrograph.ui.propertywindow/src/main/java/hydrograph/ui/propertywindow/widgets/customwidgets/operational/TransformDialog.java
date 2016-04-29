@@ -108,6 +108,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private static final String BTN_NEW_BUTTON = "btnNewButton";
 	private static final String IS_PARAM="isParam"; 
 	private static final String OUTPUT_TABLE_VIEWER="OutputTableViewer";
+	private static final String OUTPUT_FIELD="OutputFields";
+	
 	/**
 	 * Create the dialog.
 	 * 
@@ -1071,7 +1073,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			temporaryOutputFieldMap.put(mappingSheetRow1.getOperationID(),mappingSheetRow1.getOutputList());
 
 		}
-		temporaryOutputFieldMap.put("OutputFields",transformMapping.getOutputFieldList());
+		temporaryOutputFieldMap.put(OUTPUT_FIELD,transformMapping.getOutputFieldList());
 
 		SchemaSyncUtility.unionFilter(convertNameValueToFilterProperties(transformMapping.getMapAndPassthroughField()),
 				validatorOutputFields);
@@ -1088,7 +1090,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		}
 		SchemaSyncUtility.unionFilter(transformMapping.getOutputFieldList(), validatorOutputFields);
-	   
 		
 		outputFieldViewer.setInput(validatorOutputFields);
 		outputFieldViewer.refresh();
