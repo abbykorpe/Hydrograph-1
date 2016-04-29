@@ -415,7 +415,7 @@ task killRemoteJob() << {
                 username: username,
                 password: password,
                 trust: true,
-                command: "sh /home/hduser/milestone/kill_job.sh " + jobprocessid)
+                command: "sh "+properties.runUtility+" -k " + jobprocessid)
     }
 
 }
