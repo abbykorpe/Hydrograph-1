@@ -668,7 +668,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(!isSchemaInSync()){
-				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Messages.MESSAGE_FOR_FETCHING_PROPAGATED_SCHEMA, MessageDialog.QUESTION, new String[] {"Ok", "Cancel" }, 0);
+				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Constants.SYNC_CONFIRM_MESSAGE, MessageDialog.QUESTION, new String[] {"Ok", "Cancel" }, 0);
 				int dialogResult =dialog.open();
 				if(dialogResult == 0){
 					syncSchemaFromTransform();
