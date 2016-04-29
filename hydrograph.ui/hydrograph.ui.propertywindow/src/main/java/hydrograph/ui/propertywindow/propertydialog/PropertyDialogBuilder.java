@@ -49,6 +49,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 
@@ -131,7 +132,10 @@ public class PropertyDialogBuilder {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-			
+				TabItem tabItem=(TabItem) e.item;
+				if(tabItem!=null){
+					propertyDialog.setSelectedTab(tabItem.getText());
+				}
 				if(schemaWidget!=null){
 					if (schemaWidget instanceof ELTSchemaGridWidget) {
 						ELTSchemaGridWidget eltSchemaGridWidget = (ELTSchemaGridWidget) schemaWidget;
@@ -256,7 +260,6 @@ public class PropertyDialogBuilder {
 		widget.setEltComponenetProperties(eltComponenetProperties);
 		
 		widget.setSchemaForInternalPapogation(setSchemaForInternalPapogation);
-		widget.setDeletedInternalSchema(deletedInternalSchema);
 		widget.setOperationFieldList(operationFieldList);
         
 	    widget.setProperty(property);

@@ -85,6 +85,8 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	
 	private boolean okPressed;
 	
+	private String selectedTab;
+	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -341,7 +343,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		boolean windowValidityStaus = Boolean.TRUE;
 		for (AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()) {
 			LinkedHashMap<String, Object> properties= customWidget.getProperties();
-			if (customWidget.getProperties() != null) {
+			if (properties != null) {
 				windowValidityStaus = validateWidget(windowValidityStaus, customWidget,properties);
 			}
 		}
@@ -437,4 +439,15 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 			return super.close();
 		}		
 	}
+
+	public String getSelectedTab() {
+		return selectedTab;
+	}
+
+	public void setSelectedTab(String selectedTab) {
+		this.selectedTab = selectedTab;
+	}
+
+	
+	
 }

@@ -14,12 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.utility;
 
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.NameValueProperty;
-import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
-import hydrograph.ui.datastructure.property.mapping.TransformMapping;
-
-import java.util.List;
 import java.util.regex.Pattern;
 
 import org.eclipse.jface.viewers.CellEditor;
@@ -132,35 +126,6 @@ public class DragDropUtility {
 	    });
 
 	}
-	public static List<NameValueProperty> union(List<NameValueProperty> outSchema, TransformMapping transformMapping) {
-		List<NameValueProperty> mapNameValueProperties = transformMapping.getMapAndPassthroughField();
-		for (NameValueProperty nameValueProperty : outSchema) {
-			boolean isPresent=false;
-	    	if(!mapNameValueProperties.contains(nameValueProperty))
-	    	{
-	    		for (MappingSheetRow mappingSheetRow : transformMapping.getMappingSheetRows()) {
-    				FilterProperties tempFilterProperties = new FilterProperties();
-    				tempFilterProperties.setPropertyname(nameValueProperty.getPropertyValue());
-    				if(mappingSheetRow.getOutputList().contains(tempFilterProperties)){
-    					isPresent=true;
-    					break;    					
-    				}
-    			}
-	    		if(!isPresent)
-	    			mapNameValueProperties.add(nameValueProperty);
-	    	}
-	    }
-	    return mapNameValueProperties;
-	}
-	public static List<FilterProperties> unionFilter(List<FilterProperties> list1, List<FilterProperties> list2) {
-	    for (FilterProperties filterProperties : list1) {
-	    	if(!list2.contains(filterProperties))
-	    		list2.add(filterProperties);
-	    }
-	    return list2;
-	}
-
-
 }
 
 class DradDropUtilityListener extends DropTargetAdapter{
