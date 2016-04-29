@@ -624,6 +624,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 			applySchemaFromPropagatedSchemaOnPull(schema,componentsOutputSchema);
 		}
+		if (schemaGridRowList != null)
+			enableDisableButtons(schemaGridRowList.size());
 		tableViewer.refresh();
 		return schema;
 	}
