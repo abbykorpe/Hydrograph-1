@@ -589,6 +589,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				schemaFromConnectedLinks();
+				showHideErrorSymbol(applyValidationRule());
+				
 			}
 		});
 		if(getComponent().getTargetConnections()==null || getComponent().getTargetConnections().isEmpty()){
@@ -690,6 +692,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				syncSchemaFromTransform();
+				showHideErrorSymbol(applySchemaValidationRule());
 			}
 		});
 	
