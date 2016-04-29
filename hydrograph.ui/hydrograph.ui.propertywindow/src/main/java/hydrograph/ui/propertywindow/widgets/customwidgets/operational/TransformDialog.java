@@ -52,6 +52,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
@@ -255,8 +256,11 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		btnPull.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				syncTransformFieldsWithSchema();	
-
+				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Messages.MESSAGE_FOR_FETCHING_PROPAGATED_SCHEMA, MessageDialog.QUESTION, new String[] {"Ok", "Cancel" }, 0);
+				int dialogResult =dialog.open();
+				if(dialogResult == 0){
+					syncTransformFieldsWithSchema();
+				}
 			}
 		});
 		btnPull.setBounds(20, 10, 20, 20);

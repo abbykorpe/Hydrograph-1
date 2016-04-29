@@ -147,7 +147,6 @@ public class PropertyDialogBuilder {
 								eltSchemaGridWidget.enableDisableButtons(eltSchemaGridWidget.getSizeOfTableViewer());
 							}
 						}
-						((ELTSchemaGridWidget) schemaWidget).getListenerHelper(true);
 
 					}
 						schemaWidget.refresh(); 
