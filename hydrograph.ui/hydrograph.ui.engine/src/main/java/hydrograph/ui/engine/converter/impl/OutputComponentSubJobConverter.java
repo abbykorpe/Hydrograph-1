@@ -60,7 +60,7 @@ public class OutputComponentSubJobConverter extends OutputConverter {
 		List<TypeOutputInSocket> outputinSockets = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {
 			TypeOutputInSocket outInSocket = new TypeOutputInSocket();
-			outInSocket.setId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
+			outInSocket.setId(link.getTarget().getPort(link.getTargetTerminal()).getTerminal());
 			outInSocket.setId(link.getTargetTerminal().replaceAll(Constants.INPUT_SOCKET_TYPE, Constants.OUTPUT_SOCKET_TYPE));	 	
 			outInSocket.setFromSocketId(converterHelper.getFromSocketId(link));
 			outInSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());

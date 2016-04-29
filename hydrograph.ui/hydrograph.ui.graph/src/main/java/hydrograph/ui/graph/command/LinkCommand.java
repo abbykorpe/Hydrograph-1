@@ -80,7 +80,7 @@ public class LinkCommand extends Command{
 			for (PortDetails p:source.getPortDetails())
 			{
 				for(Port port:p.getPorts().values()){
-					String portTerminal=port.getNameOfPort();
+					String portTerminal=port.getTerminal();
 					if(portTerminal.equals(sourceTerminal) && port.getPortAlignment().equals(p.getPortAlignment())){
 						if(p.isAllowMultipleLinks() || 
 								!source.isOutputPortEngaged(sourceTerminal)){
@@ -102,7 +102,7 @@ public class LinkCommand extends Command{
 			for (PortDetails p:target.getPortDetails())
 			{
 				for(Port port:p.getPorts().values()){
-					String portTerminal=port.getNameOfPort();
+					String portTerminal=port.getTerminal();
 					if(portTerminal.equals(targetTerminal) && port.getPortAlignment().equals(p.getPortAlignment())){
 						if(p.isAllowMultipleLinks() ||
 								!target.isInputPortEngaged(targetTerminal)){

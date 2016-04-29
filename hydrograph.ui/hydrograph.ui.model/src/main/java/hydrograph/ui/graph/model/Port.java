@@ -27,7 +27,6 @@ public class Port extends Model implements Cloneable{
 	private PortTypeEnum portType;
 	private int sequence;
 	private Component parent;
-	private String nameOfPort;
 	private String labelOfPort;
 	private boolean isWatched;
 	private boolean allowMultipleLinks;
@@ -58,14 +57,13 @@ public class Port extends Model implements Cloneable{
 	 *  @param portAlignmentEnum
 	 *  	Port alignment       
 	 */
-	public Port(String nameOfPort,String labelOfPort,String terminal, Component component, int noPortsOfThisType, PortTypeEnum type, int seq,
-			boolean alwMulLinks, boolean lnkMan, PortAlignmentEnum portAlignmentEnum){
+		public Port(String labelOfPort,String terminal, Component component, int noPortsOfThisType, PortTypeEnum type, int seq,
+				boolean alwMulLinks, boolean lnkMan, PortAlignmentEnum portAlignmentEnum){
 		this.terminal = terminal;
 		this.numberOfPortsOfThisType = noPortsOfThisType;
 		this.portType = type;
 		this.sequence = seq;
 		this.parent =component;
-		this.nameOfPort=nameOfPort;
 		this.labelOfPort=labelOfPort;
 		this.allowMultipleLinks = alwMulLinks;
 		this.linkMandatory = lnkMan;
@@ -120,9 +118,9 @@ public class Port extends Model implements Cloneable{
 		this.isWatched = isWatched;
 	}
 
-	public String getNameOfPort() {
+	/*public String getNameOfPort() {
 		return nameOfPort;
-	}
+	}*/
 	public PortAlignmentEnum getPortAlignment() {
 		return portAlignment;
 	}
@@ -140,7 +138,6 @@ public class Port extends Model implements Cloneable{
 				"\nportType: "+this.portType+
 				"\nsequence: "+this.sequence+
 				"\nparent: "+this.parent+
-				"\nnameOfPort: "+this.nameOfPort+
 				"\nlabelOfPort: "+this.labelOfPort+
 				"\nMultiple links allowed: "+this.allowMultipleLinks+
 				"\nLink mandatory: "+this.linkMandatory+
@@ -162,7 +159,6 @@ public class Port extends Model implements Cloneable{
 					p.getSequence() == this.getSequence() &&
 					p.getPortType().equals(this.getPortType()) &&
 					p.getParent().equals( this.getParent()) &&
-					p.getNameOfPort().equals(this.getNameOfPort()) &&
 					p.getLabelOfPort().equals(this.getLabelOfPort()) &&
 					p.isAllowMultipleLinks() == this.isAllowMultipleLinks() &&
 					p.isLinkMandatory() == this.isLinkMandatory()
@@ -185,7 +181,6 @@ public class Port extends Model implements Cloneable{
 		result = 31 * result + terminal.hashCode();
 		result = 31 * result + portType.hashCode();
 		result = 31 * result + parent.hashCode();
-		result = 31 * result + nameOfPort.hashCode();
 		result = 31 * result + labelOfPort.hashCode();
 	 
 		return result;
@@ -200,7 +195,6 @@ public class Port extends Model implements Cloneable{
 		clonedPort.numberOfPortsOfThisType = numberOfPortsOfThisType;
 		clonedPort.portType = portType;
 		clonedPort.sequence = sequence;
-		clonedPort.nameOfPort = nameOfPort;
 		clonedPort.labelOfPort = labelOfPort;
 		clonedPort.allowMultipleLinks = allowMultipleLinks;
 		clonedPort.linkMandatory = linkMandatory;

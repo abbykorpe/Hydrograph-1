@@ -98,39 +98,4 @@ public class LookupUiConverter extends TransformUiConverter {
 		return lookupKey.toString();
 	}
 	
-	protected void getOutPort(TypeOperationsComponent operationsComponent) {
-		LOGGER.debug("Generating OutPut Ports for -{}", componentName);
-		if (operationsComponent.getOutSocket() != null) {
-			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
-				uiComponent.engageOutputPort(outSocket.getId());
-				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null
-						&& !outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty())
-					propertyMap.put("hash_join_map", getJoinMappingGrid(outSocket));
-			}
-
-		}
-	}
-
-	private JoinMappingGrid getJoinMappingGrid(TypeOperationsOutSocket outSocket) {
-		String dot_separator = ".";
-		LookupMapProperty lookupMapProperty = null;
-		JoinMappingGrid joinMappingGrid = new JoinMappingGrid();
-		for (Object object : outSocket.getPassThroughFieldOrOperationFieldOrMapField()) {
-			if ((TypeInputField.class).isAssignableFrom(object.getClass())) {
-				lookupMapProperty = new LookupMapProperty();
-				lookupMapProperty.setOutput_Field(((TypeInputField) object).getName());
-				lookupMapProperty.setSource_Field(((TypeInputField) object).getInSocketId() + dot_separator
-						+ ((TypeInputField) object).getName());
-				joinMappingGrid.getLookupMapProperties().add(lookupMapProperty);
-			}
-			if ((TypeMapField.class).isAssignableFrom(object.getClass())) {
-				lookupMapProperty = new LookupMapProperty();
-				lookupMapProperty.setOutput_Field(((TypeMapField) object).getName());
-				lookupMapProperty.setSource_Field(((TypeMapField) object).getInSocketId() + dot_separator
-						+ ((TypeMapField) object).getSourceName());
-				joinMappingGrid.getLookupMapProperties().add(lookupMapProperty);
-			}
-		}
-		return joinMappingGrid;
-	}
 }

@@ -212,7 +212,7 @@ public abstract class Component extends Model {
 				String portTerminal = portInfo.getPortTerminal();
 				pEnum = PortTypeEnum.fromValue(portInfo.getTypeOfPort().value());
 				
-				Port port = new Port(portInfo.getPortTerminal(), portInfo.getLabelOfPort(),
+				Port port = new Port(portInfo.getLabelOfPort(),
 						portTerminal, this, getNumberOfPortsForAlignment(pAlignEnum), pEnum
 								, portInfo.getSequenceOfPort(), p.isAllowMultipleLinks(), p.isLinkMandatory(), pAlignEnum);
 				logger.trace("Adding portTerminal {}", portTerminal);
@@ -462,10 +462,10 @@ public abstract class Component extends Model {
 
 		for (int i = oldPortCount; i < newPortCount; i++) {
 
-			Port inPort = new Port("in" + i, Constants.INPUT_SOCKET_TYPE + i, Constants.INPUT_SOCKET_TYPE + i, this,
+			Port inPort = new Port(Constants.INPUT_SOCKET_TYPE + i, Constants.INPUT_SOCKET_TYPE + i, this,
 					newPortCount, PortTypeEnum.IN, i, isAllowMultipleLinksForPort("in0"), isLinkMandatoryForPort("in0"),
 					PortAlignmentEnum.LEFT);
-			ports.put("in" + i, inPort);
+			ports.put(Constants.INPUT_SOCKET_TYPE + i, inPort);
 			firePropertyChange("Component:add", null, inPort);
 			for(PortDetails p:portDetails){
 				if(PortAlignmentEnum.LEFT.equals(p.getPortAlignment())){
@@ -485,10 +485,10 @@ public abstract class Component extends Model {
 	 */
 	public void incrementRightSidePorts(int newPortCount, int oldPortCount) {
 		for (int i = oldPortCount; i < newPortCount; i++) {
-			Port outputPort = new Port("out" + i, Constants.OUTPUT_SOCKET_TYPE + i, Constants.OUTPUT_SOCKET_TYPE + i, this,
+			Port outputPort = new Port(Constants.OUTPUT_SOCKET_TYPE + i, Constants.OUTPUT_SOCKET_TYPE + i, this,
 					newPortCount, PortTypeEnum.OUT, i, isAllowMultipleLinksForPort("out0"), isLinkMandatoryForPort("out0"),
 					PortAlignmentEnum.RIGHT);
-			ports.put("out" + i, outputPort);
+			ports.put(Constants.OUTPUT_SOCKET_TYPE + i, outputPort);
 			firePropertyChange("Component:add", null, outputPort);
 			for(PortDetails p:portDetails){
 				if(PortAlignmentEnum.RIGHT.equals(p.getPortAlignment())){
@@ -507,10 +507,10 @@ public abstract class Component extends Model {
 	 */
 	public void incrementBottomSidePorts(int newPortCount, int oldPortCount) {
 		for (int i = oldPortCount; i < newPortCount; i++) {
-			Port unusedPort = new Port("unused" + i, "un" + i, Constants.UNUSED_SOCKET_TYPE + i,
+			Port unusedPort = new Port("un" + i, Constants.UNUSED_SOCKET_TYPE + i,
 					this, newPortCount, PortTypeEnum.UNUSED, i, isAllowMultipleLinksForPort("unused0"), isLinkMandatoryForPort("unused0"),
 					PortAlignmentEnum.BOTTOM);
-			ports.put("unused" + i, unusedPort);
+			ports.put(Constants.UNUSED_SOCKET_TYPE + i, unusedPort);
 			firePropertyChange("Component:add", null, unusedPort);
 			for(PortDetails p:portDetails){
 				if(PortAlignmentEnum.BOTTOM.equals(p.getPortAlignment())){
@@ -1170,7 +1170,7 @@ public abstract class Component extends Model {
 	public void unusedPortSettings(int newPortCount) {
        changeUnusedPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount - 2); i++) {
-			Port unusedPort = new Port(Constants.UNUSED_SOCKET_TYPE + (i + 2), "un" + (i + 2),
+			Port unusedPort = new Port("un" + (i + 2),
 					Constants.UNUSED_SOCKET_TYPE + (i + 2), this, newPortCount, PortTypeEnum.UNUSED, (i + 2), isAllowMultipleLinksForPort("unused0"), 
 					isLinkMandatoryForPort("unused0"), PortAlignmentEnum.BOTTOM);
 			ports.put(Constants.UNUSED_SOCKET_TYPE + (i + 2), unusedPort);
@@ -1187,7 +1187,7 @@ public abstract class Component extends Model {
 	public void inputPortSettings(int newPortCount) {
        changeInPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount); i++) {
-			Port inPort = new Port(Constants.INPUT_SOCKET_TYPE + (i), Constants.INPUT_SOCKET_TYPE + (i), Constants.INPUT_SOCKET_TYPE
+			Port inPort = new Port(Constants.INPUT_SOCKET_TYPE + (i), Constants.INPUT_SOCKET_TYPE
 					+ (i), this, newPortCount, PortTypeEnum.IN, (i), isAllowMultipleLinksForPort("in0"), 
 					isLinkMandatoryForPort("in0"), PortAlignmentEnum.LEFT);
 			ports.put(Constants.INPUT_SOCKET_TYPE + (i), inPort);
@@ -1204,7 +1204,7 @@ public abstract class Component extends Model {
 	public void outputPortSettings(int newPortCount) {
 		changeOutPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount); i++) {
-			Port outPort = new Port(Constants.OUTPUT_SOCKET_TYPE + (i), Constants.OUTPUT_SOCKET_TYPE + (i), Constants.OUTPUT_SOCKET_TYPE
+			Port outPort = new Port(Constants.OUTPUT_SOCKET_TYPE + (i), Constants.OUTPUT_SOCKET_TYPE
 					+ (i), this, newPortCount, PortTypeEnum.OUT, (i), isAllowMultipleLinksForPort("out0"), 
 					isLinkMandatoryForPort("out0"), PortAlignmentEnum.RIGHT);
 			ports.put(Constants.OUTPUT_SOCKET_TYPE + (i), outPort);

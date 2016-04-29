@@ -164,7 +164,7 @@ public class LookupConverter extends TransformConverter {
 			TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();
 			TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
 
-			outSocketAsInsocket.setInSocketId(link.getTarget().getPort(link.getTargetTerminal()).getNameOfPort());
+			outSocketAsInsocket.setInSocketId(link.getTarget().getPort(link.getTargetTerminal()).getTerminal());
 			outSocketAsInsocket.getOtherAttributes();
 			// outSocket.setCopyOfInsocket(outSocketAsInsocket);
 			outSocket.setId(link.getSourceTerminal());
