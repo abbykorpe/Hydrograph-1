@@ -14,6 +14,15 @@
  
 package hydrograph.ui.engine.ui.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import hydrograph.engine.jaxb.commontypes.TypeInputField;
+import hydrograph.engine.jaxb.commontypes.TypeMapField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.join.TypeKeyFields;
+import hydrograph.engine.jaxb.operationstypes.Join;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
@@ -29,18 +38,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeFieldName;
-import hydrograph.engine.jaxb.commontypes.TypeInputField;
-import hydrograph.engine.jaxb.commontypes.TypeMapField;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
-import hydrograph.engine.jaxb.join.TypeKeyFields;
-import hydrograph.engine.jaxb.operationstypes.Join;
 
 public class JoinComponentUiConverter extends TransformUiConverter {
 
@@ -48,6 +48,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(JoinComponentUiConverter.class);
 	private int inPortCounter = 0;
+	private int unusedPortCounter = 0;
 
 	public JoinComponentUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;
@@ -135,17 +136,24 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 			}
 
 			if (inPortCounter > 2) {
-				uiComponent.inputPortSettings(inPortCounter);
-				uiComponent.unusedPortSettings(inPortCounter);
+			incrementPort();
 			}
 		}
 
+	}
+
+	private void incrementPort() {
+		uiComponent.inputPortSettings(inPortCounter);
+		uiComponent.unusedPortSettings(inPortCounter);
+		
 	}
 
 	protected void getOutPort(TypeOperationsComponent operationsComponent) {
 		LOGGER.debug("Generating OutPut Ports for -{}", componentName);
 		if (operationsComponent.getOutSocket() != null) {
 			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
+					if(StringUtils.equalsIgnoreCase(Constants.UNUSED_SOCKET_TYPE, outSocket.getType()))
+						unusedPortCounter++;
 				uiComponent.engageOutputPort(outSocket.getId());
 				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null
 						&& !outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty())
@@ -153,6 +161,11 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 			}
 
 		}
+		if(unusedPortCounter>inPortCounter){
+			inPortCounter=unusedPortCounter;
+			incrementPort();
+		}
+			
 	}
 
 	private JoinMappingGrid getJoinMappingGrid(TypeOperationsOutSocket outSocket) {
@@ -161,18 +174,23 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 		JoinMappingGrid joinMappingGrid = new JoinMappingGrid();
 		for (Object object : outSocket.getPassThroughFieldOrOperationFieldOrMapField()) {
 			if ((TypeInputField.class).isAssignableFrom(object.getClass())) {
-				lookupMapProperty = new LookupMapProperty();
-				lookupMapProperty.setOutput_Field(((TypeInputField) object).getName());
-				lookupMapProperty.setSource_Field(((TypeInputField) object).getInSocketId() + dot_separator
-						+ ((TypeInputField) object).getName());
-				joinMappingGrid.getLookupMapProperties().add(lookupMapProperty);
+				TypeInputField inputField=(TypeInputField) object;
+				if (StringUtils.isNotBlank(inputField.getName()) && StringUtils.isNotBlank(inputField.getInSocketId())) {
+					lookupMapProperty = new LookupMapProperty();
+					lookupMapProperty.setOutput_Field(inputField.getName());
+					lookupMapProperty
+							.setSource_Field(inputField.getInSocketId() + dot_separator + inputField.getName());
+					joinMappingGrid.getLookupMapProperties().add(lookupMapProperty);
+				}
 			}
 			if ((TypeMapField.class).isAssignableFrom(object.getClass())) {
-				lookupMapProperty = new LookupMapProperty();
-				lookupMapProperty.setOutput_Field(((TypeMapField) object).getName());
-				lookupMapProperty.setSource_Field(((TypeMapField) object).getInSocketId() + dot_separator
-						+ ((TypeMapField) object).getSourceName());
-				joinMappingGrid.getLookupMapProperties().add(lookupMapProperty);
+				TypeMapField mapField = (TypeMapField) object;
+				if (StringUtils.isNotBlank(mapField.getName()) && StringUtils.isNotBlank(mapField.getSourceName())) {
+					lookupMapProperty = new LookupMapProperty();
+					lookupMapProperty.setOutput_Field(mapField.getName());
+					lookupMapProperty.setSource_Field(mapField.getInSocketId() + dot_separator	+ mapField.getSourceName());
+					joinMappingGrid.getLookupMapProperties().add(lookupMapProperty);
+				}
 			}
 		}
 		return joinMappingGrid;
