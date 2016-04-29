@@ -68,8 +68,6 @@ public abstract class AbstractWidget {
 	private TabFolder tabFolder; 
 	private Property property; 
 	
-	
-	
 	public TabFolder getTabFolder() {
 		return tabFolder;
 	}
@@ -286,9 +284,7 @@ public abstract class AbstractWidget {
 						    item.setImage(new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_ERROR_ICON));
 							}			
 				}	
-			   
 		   }
-		   
 		   else
 		   {
 			   for(TabItem item:getTabFolder().getItems())
@@ -298,11 +294,7 @@ public abstract class AbstractWidget {
 						    item.setImage(null);
 							}			
 				}	
-			   
-			   
 		   }
-		   
-		   
 	   }
 	
 	
@@ -349,7 +341,6 @@ public abstract class AbstractWidget {
 			propertyHelpWidget.setToolTipText(propertyHelpText);
 			propertyHelpWidget.setCursor(new Cursor(propertyHelpWidget.getDisplay(), SWT.CURSOR_HELP));
 		}
-
 	}
 	
 	public boolean verifySchemaFile(){
@@ -361,18 +352,14 @@ public abstract class AbstractWidget {
 		boolean isErrorPresent=false;
 		 for(AbstractWidget abstractWidget:widgetList)	
 	 	 {
-			 
 		 if(StringUtils.equals(abstractWidget.getProperty().getPropertyGroup(), property.getPropertyGroup()) &&abstractWidget.isWidgetValid())
 	 	  {
 	 			isErrorPresent=true;
 	 			break;
 	 		}	
-	 		 
 	 	 }	
-		 
 	 	if(isErrorPresent)
 	 	{
-	 	
 	 	for(TabItem item:getTabFolder().getItems())
 		{
 			if(StringUtils.equalsIgnoreCase(item.getText(),property.getPropertyGroup()))
@@ -392,12 +379,10 @@ public abstract class AbstractWidget {
 			}	
 	 	}
 	}
-	
 	public boolean validateAgainstValidationRule(Object object){
 		boolean componentHasRequiredValues = Boolean.FALSE;
 		List<String> validators = ComponentCacheUtil.INSTANCE.getValidatorsForProperty(
 							getComponent().getComponentName(),getPropertyName());
-
 			IValidator validator = null;
 			for (String validatorName : validators) {
 				try {
