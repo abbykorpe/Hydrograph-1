@@ -20,6 +20,7 @@ import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.propertywindow.ELTPropertyWindow;
 
 import org.eclipse.gef.ui.actions.SelectionAction;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -41,9 +42,12 @@ public class ComponentHelpAction extends SelectionAction {
 
 	@Override
 	protected boolean calculateEnabled() {
+		ISelection selection = getSelection();
+		if(selection instanceof IStructuredSelection){
 		IStructuredSelection currentSelectedComponent = (IStructuredSelection) getSelection();
 		if (currentSelectedComponent.getFirstElement() instanceof ComponentEditPart)
 			return true;
+		}
 		return false;
 	}
 

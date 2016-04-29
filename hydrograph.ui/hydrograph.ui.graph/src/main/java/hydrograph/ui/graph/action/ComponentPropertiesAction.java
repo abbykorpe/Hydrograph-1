@@ -44,9 +44,12 @@ public class ComponentPropertiesAction extends SelectionAction{
 
 	@Override
 	protected boolean calculateEnabled() {
+		ISelection selection = getSelection();
+		if(selection instanceof IStructuredSelection){		
 		IStructuredSelection currentSelectedComponent = (IStructuredSelection) getSelection();
 		if (currentSelectedComponent.getFirstElement() instanceof ComponentEditPart)
 			return true;
+		}
 		return false;
 	}
 	
