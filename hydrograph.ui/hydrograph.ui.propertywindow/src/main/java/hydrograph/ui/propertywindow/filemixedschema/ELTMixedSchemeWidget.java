@@ -13,11 +13,16 @@
 
 package hydrograph.ui.propertywindow.filemixedschema;
 
+import java.util.ArrayList;
+
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.fixedwidthschema.TransformSchemaWidget;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.SchemaGridContentProvider;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
@@ -77,7 +82,7 @@ public class ELTMixedSchemeWidget extends ELTSchemaGridWidget {
 
 	@Override
 	protected MixedSchemeGridCellModifier getCellModifier() {
-		return new MixedSchemeGridCellModifier(tableViewer);
+		return new MixedSchemeGridCellModifier(this,tableViewer);
 	}
 
 	@Override
@@ -102,7 +107,20 @@ public class ELTMixedSchemeWidget extends ELTSchemaGridWidget {
 	
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
+		if (!TransformSchemaWidget.class.isAssignableFrom(this.getClass()))
+			schemaFromConnectedLinks();
 		super.attachToPropertySubGroup(container);
 	}
 
+	@Override
+	public boolean applyValidationRule() {
+		return applySchemaValidationRule();
+	}
+
+	
+
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		attachListener();
+	}
 }

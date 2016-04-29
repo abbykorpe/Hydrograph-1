@@ -15,10 +15,12 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.RuntimeConfig;
@@ -28,6 +30,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTCon
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -118,5 +121,19 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 		runtimePropertyDialog.setRuntimeProperties(new LinkedHashMap<>(initialMap));
 		runtimePropertyDialog.open();
 		initialMap = runtimePropertyDialog.getRuntimeProperties();
+	}
+
+	@Override
+	public boolean applyValidationRule() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
+
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -24,19 +24,23 @@ import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty.JoinMapGrid;
+import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,11 +55,12 @@ import org.eclipse.swt.widgets.Control;
 public class ELTJoinMapWidget extends AbstractWidget {
 
 	public static int value;
+	
 	private Object properties;
 	private String propertyName;
 	private JoinMappingGrid joinMappingGrid;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-
+	private ArrayList<AbstractWidget> widgets;
 	public ELTJoinMapWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propertyDialogButtonBar);
@@ -88,7 +93,19 @@ public class ELTJoinMapWidget extends AbstractWidget {
 				JoinMapGrid joinMapGrid = new JoinMapGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
 						joinMappingGrid,propertyDialogButtonBar);
 				joinMapGrid.open();
-				propagateInternalSchema();
+				Schema internalSchema=propagateInternalSchema();
+				showHideErrorSymbol(widgets);
+				for(AbstractWidget widget:widgets)
+				{
+					if(widget instanceof ELTGenericSchemaGridWidget)
+					{
+						ELTGenericSchemaGridWidget eltGenericSchemaGridWidget =(ELTGenericSchemaGridWidget) widget;
+						if(internalSchema!=null )
+						eltGenericSchemaGridWidget.validateInternalSchemaPropogatedData(internalSchema);
+						
+					}	
+				}	
+				
 			}
 		});
 		
@@ -97,9 +114,9 @@ public class ELTJoinMapWidget extends AbstractWidget {
 
 	
 	
-	private void propagateInternalSchema() {
+	private Schema propagateInternalSchema() {
 		if(joinMappingGrid ==null)
-			return;
+			return null;
 		
 			 Schema internalSchema = getSchemaForInternalPapogation();			 
 			 internalSchema.getGridRow().clear();
@@ -138,6 +155,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 			 
 			 
 			 internalSchema.getGridRow().addAll(outputSchemaGridRowList);
+			 return internalSchema;
 		
 	}
 	
@@ -216,6 +234,18 @@ public class ELTJoinMapWidget extends AbstractWidget {
 				.sortedFiledNamesBySocketId(getComponent());
 		if (sorceFieldList != null)
 			joinMappingGrid.setLookupInputProperties(sorceFieldList);
+	}
+
+	@Override
+	public boolean applyValidationRule() {
+		return validateAgainstValidationRule(joinMappingGrid);
+	}
+
+	
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		widgets=widgetList;
+		
 	}
 	
 }

@@ -16,6 +16,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 
 import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.common.util.ComponentCacheUtil;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
@@ -99,6 +100,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -119,6 +122,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
+import hydrograph.ui.validators.impl.IValidator;
 import org.slf4j.Logger;
 
 
@@ -156,28 +160,28 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected ControlDecoration delimiterDecorator;
 	protected ControlDecoration rangeFromDecorator;
 	protected ControlDecoration rangeToDecorator;
-	protected TableViewer tableViewer;
+	protected TableViewer tableViewer=null;
 	protected List<GridRow> schemaGridRowList = new ArrayList<GridRow>();
 	protected CellEditor[] editors;
 	protected Table table;
 
 	protected GridWidgetCommonBuilder gridWidgetBuilder = getGridWidgetBuilder();
 	protected final String[] PROPS = getPropertiesToShow();
-	private boolean external;
+	protected boolean external;
 	private Object properties;
 	private String propertyName;
 	private ListenerHelper helper;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 
 
-	private ELTDefaultLable upButton, downButton, addButton, deleteButton;
+	protected ELTDefaultLable upButton, downButton, addButton, deleteButton;
 
 	private Button browseButton, importButton, exportButton;
 	
 	private MenuItem copyMenuItem, pasteMenuItem;
 
-	AbstractELTWidget internalSchema, externalSchema;
-	private Text extSchemaPathText;
+	protected AbstractELTWidget internalSchema, externalSchema;
+	protected Text extSchemaPathText;
 	public final static String SCHEMA_CONFIG_XSD_PATH = Platform.getInstallLocation().getURL().getPath() + Messages.SCHEMA_CONFIG_XSD_PATH;
 
 	private ControlDecoration txtDecorator, decorator;
@@ -849,7 +853,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				txtDecorator.hide();
 			}
 		});
-
+		
 		externalSchema = new ELTRadioButton(Messages.EXTERNAL_SCHEMA_TYPE);
 		eltSuDefaultSubgroupComposite.attachWidget(externalSchema);
 		((Button) externalSchema.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
@@ -1058,7 +1062,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}
 		editors = gridWidgetBuilder.createCellEditorList(table, PROPS.length);
 		tableViewer.setCellEditors(editors);
-
+		
 		// enables the tab functionality
 		TableViewerEditor.create(tableViewer,
 				new ColumnViewerEditorActivationStrategy(tableViewer),
@@ -1426,5 +1430,73 @@ private boolean isSchemaInSync(){
 	}
 	return true;
 }
+
+ protected void attachListener()
+{
+	if(extSchemaPathText!=null)
+	{
+		extSchemaPathText.addModifyListener(new ModifyListener() {
+		
+		@Override
+		public void modifyText(ModifyEvent e) {
+		   
+			showHideErrorSymbol(applyValidationRule());
+			
+		}
+	});
+		
+		((Button) externalSchema.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(StringUtils.isBlank(extSchemaPathText.getText()))
+						{
+					showHideErrorSymbol(applyValidationRule());
+						}			
+			}
+			
+		});
+		((Button) internalSchema.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(StringUtils.isBlank(extSchemaPathText.getText()))
+						{
+					showHideErrorSymbol(applyValidationRule());
+						}			
+			}
+			
+		});
+		
+	}
 	
+	deleteButton.addMouseUpListener(new MouseAdapter() {
+		
+		@Override
+		public void mouseUp(MouseEvent e) {
+			if(table.getItemCount()==0)
+			{
+				showHideErrorSymbol(applyValidationRule());
+			}	
+			
+		}
+	});	
+}
+
+ protected boolean applySchemaValidationRule()
+ {
+	    
+	    
+	    if(!schemaGridRowList.isEmpty())
+	    { 	
+	    Schema schema=new Schema();	
+		schema.setGridRow(schemaGridRowList);
+	    if(extSchemaPathText!=null)
+		schema.setExternalSchemaPath(extSchemaPathText.getText());
+		schema.setIsExternal(external);
+		return validateAgainstValidationRule(schema);
+	    }
+	    else
+	    return validateAgainstValidationRule(getComponent().getProperties().get(Constants.SCHEMA_PROPERTY_NAME));
+	 
+ }
+ 
 }

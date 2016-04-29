@@ -14,10 +14,12 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
@@ -211,6 +213,19 @@ public class ELTFieldSequenceWidget extends AbstractWidget {
 		helper=new ListenerHelper("schemaGrid", new ELTGridDetails(fieldSeduence,tableViewer,(Label)fieldError.getSWTWidgetControl(),new GeneralGridWidgetBuilder()));
 		tableViewer.refresh();
 		} */
+	}
+
+	@Override
+	public boolean applyValidationRule() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		// TODO Auto-generated method stub
+		
 	} 
 
 

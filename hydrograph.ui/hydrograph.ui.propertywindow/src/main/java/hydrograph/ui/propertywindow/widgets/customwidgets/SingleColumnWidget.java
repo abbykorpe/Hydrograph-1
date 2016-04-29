@@ -15,8 +15,10 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.SingleColumnGridConfig;
@@ -44,6 +46,7 @@ public class SingleColumnWidget extends AbstractWidget {
 	private String propertyName;
 	private List<String> set;
 	private SingleColumnGridConfig gridConfig = null;
+	private ArrayList<AbstractWidget> widgets;
 
 	public SingleColumnWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propDialogButtonBar) {
@@ -81,8 +84,8 @@ public class SingleColumnWidget extends AbstractWidget {
 				fieldDialog.open();
 
 				setProperties(propertyName, fieldDialog.getFieldNameList());
-
-			}
+                showHideErrorSymbol(widgets);
+			} 
 		});
 
 	}
@@ -108,5 +111,18 @@ public class SingleColumnWidget extends AbstractWidget {
 	private List<String> getPropagatedSchema() {
 		return SchemaPropagationHelper.INSTANCE.getFieldsForFilterWidget(getComponent()).get(
 				Constants.INPUT_SOCKET_TYPE + 0);
+	}
+
+	@Override
+	public boolean applyValidationRule() {
+		return validateAgainstValidationRule(getProperties().get(propertyName));
+	}
+
+	
+
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		widgets=widgetList;
+		
 	}
 }

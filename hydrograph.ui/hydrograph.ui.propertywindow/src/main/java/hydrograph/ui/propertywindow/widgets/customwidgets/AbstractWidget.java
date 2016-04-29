@@ -12,23 +12,34 @@
  ******************************************************************************/
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
+import hydrograph.ui.common.util.ComponentCacheUtil;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.handlers.ShowHidePropertyHelpHandler;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.ELTComponenetProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialog;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
+import hydrograph.ui.validators.impl.IValidator;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 
@@ -54,7 +65,28 @@ public abstract class AbstractWidget {
 	protected PropertyDialog propertyDialog;
 	private Control propertyHelpWidget;
 	private String propertyHelpText;
+	private Text textBox;
+	private TabFolder tabFolder; 
+	private Property property; 
 	
+	
+	
+	public TabFolder getTabFolder() {
+		return tabFolder;
+	}
+
+	public Property getProperty() {
+		return property;
+	}
+
+	public void setProperty(Property property) {
+		this.property = property;
+	}
+
+	public void setTabFolder(TabFolder tabFolder) {
+		this.tabFolder = tabFolder;
+	}
+
 	protected Component getComponent() {
 		return component;
 	}
@@ -155,7 +187,11 @@ public abstract class AbstractWidget {
 	 * 
 	 */
 	public abstract LinkedHashMap<String, Object> getProperties();
+	
+	public abstract boolean applyValidationRule();
 		
+	public abstract void addModifyListener(Property property, ArrayList<AbstractWidget> widgetList);
+	
 	public Text getFirstTextWidget(){
 		return firstTextWidget;
 	}
@@ -240,6 +276,38 @@ public abstract class AbstractWidget {
 				
 	}
 
+	 public void showHideErrorSymbol(boolean isError)
+	   {
+		   if(isError)
+		   {
+			   for(TabItem item:getTabFolder().getItems())
+				{
+					if(StringUtils.equalsIgnoreCase(item.getText(),getPropertyName()))
+							{
+						    item.setImage(new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_ERROR_ICON));
+							}			
+				}	
+			   
+		   }
+		   
+		   else
+		   {
+			   for(TabItem item:getTabFolder().getItems())
+				{
+					if(StringUtils.equalsIgnoreCase(item.getText(),getPropertyName()))
+							{
+						    item.setImage(null);
+							}			
+				}	
+			   
+			   
+		   }
+		   
+		   
+	   }
+	
+	
+	
 	/**
 	 * 
 	 * Set property dialog
@@ -287,6 +355,74 @@ public abstract class AbstractWidget {
 	
 	public boolean verifySchemaFile(){
 		return true;
+	}
+	
+	public void showHideErrorSymbol(ArrayList<AbstractWidget> widgetList)
+	{
+		boolean isErrorPresent=false;
+		 for(AbstractWidget abstractWidget:widgetList)	
+	 	 {
+			 
+		 if(StringUtils.equals(abstractWidget.getProperty().getPropertyGroup(), property.getPropertyGroup()) &&abstractWidget.applyValidationRule())
+	 	  {
+	 			isErrorPresent=true;
+	 			break;
+	 		}	
+	 		 
+	 	 }	
+		 
+	 	if(isErrorPresent)
+	 	{
+	 	
+	 	for(TabItem item:getTabFolder().getItems())
+		{
+			if(StringUtils.equalsIgnoreCase(item.getText(),property.getPropertyGroup()))
+					{
+				    item.setImage(new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_ERROR_ICON));
+					}			
+		}	
+	 	}
+	 	else
+	 	{
+	 		for(TabItem item:getTabFolder().getItems())
+			{
+				if(StringUtils.equalsIgnoreCase(item.getText(),property.getPropertyGroup()))
+						{
+					    item.setImage(null);
+						}			
+			}	
+	 	}
+	}
+	
+	public boolean validateAgainstValidationRule(Object object)
+	{
+		 boolean componentHasRequiredValues = Boolean.FALSE;
+			List<String> validators = ComponentCacheUtil.INSTANCE
+					.getValidatorsForProperty(
+							getComponent().getComponentName(),
+							getPropertyName());
+
+			IValidator validator = null;
+			for (String validatorName : validators) {
+				try {
+					validator = (IValidator) Class.forName(
+							Constants.VALIDATOR_PACKAGE_PREFIX
+									+ validatorName).newInstance();
+				} catch (InstantiationException
+						| IllegalAccessException
+						| ClassNotFoundException e) {
+					throw new RuntimeException(
+							"Failed to create validator", e);
+				}
+				boolean status = validator.validate(object,
+						getPropertyName());
+				// NOTE : here if any of the property is not valid
+				// then whole component is not valid
+				if (status == false) {
+					componentHasRequiredValues = Boolean.TRUE;
+				}
+			}
+		return componentHasRequiredValues;
 	}
 	
 }

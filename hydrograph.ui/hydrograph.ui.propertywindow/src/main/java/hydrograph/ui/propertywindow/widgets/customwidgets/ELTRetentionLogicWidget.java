@@ -15,9 +15,11 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -25,6 +27,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTRadioButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
@@ -140,6 +143,20 @@ public class ELTRetentionLogicWidget extends AbstractWidget{
 	public LinkedHashMap<String, Object> getProperties() {
 		property.put(propertyName, properties);
 		return property;
+	}
+
+	@Override
+	public boolean applyValidationRule() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
+
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

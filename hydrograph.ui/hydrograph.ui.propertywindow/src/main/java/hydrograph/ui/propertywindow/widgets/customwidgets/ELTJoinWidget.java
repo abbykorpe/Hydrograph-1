@@ -15,11 +15,14 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty.ELTJoinConfigGrid;
+import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -46,7 +49,7 @@ public class ELTJoinWidget extends AbstractWidget {
 	private Object properties;
 	private String propertyName;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-
+	private ArrayList<AbstractWidget> widgets;
 	// private JoinMappingGrid lookupPropertyGrid;
 	private List<JoinConfigProperty> configProperty;
 
@@ -104,6 +107,8 @@ public class ELTJoinWidget extends AbstractWidget {
 				eltJoinConfigGrid.setPropagatedFieldProperty(SchemaPropagationHelper.INSTANCE
 						.getFieldsForFilterWidget(getComponent()));
 				eltJoinConfigGrid.open();
+				showHideErrorSymbol(widgets);
+				
 			}
 
 		});
@@ -114,5 +119,17 @@ public class ELTJoinWidget extends AbstractWidget {
 		property.put(propertyName, configProperty);
 		return property;
 	}
+	@Override
+	public boolean applyValidationRule() {
+	 return validateAgainstValidationRule(configProperty);
+	}
+
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		widgets=widgetList;
+		
+	}
+
+	
 
 }

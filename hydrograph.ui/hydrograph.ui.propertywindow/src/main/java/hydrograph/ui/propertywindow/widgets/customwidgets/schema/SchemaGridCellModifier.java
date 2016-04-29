@@ -31,15 +31,16 @@ import org.eclipse.swt.widgets.Item;
 
 class SchemaGridCellModifier implements ICellModifier {
 	private Viewer viewer;
-
+   private ELTGenericSchemaGridWidget eltGenericSchemaGridWidget;
 	/**
 	 * Instantiates a new schema grid cell modifier.
 	 * 
 	 * @param viewer
 	 *            the viewer
 	 */
-	public SchemaGridCellModifier(Viewer viewer) {
+	public SchemaGridCellModifier(ELTGenericSchemaGridWidget eltGenericSchemaGridWidget,Viewer viewer) {
 		this.viewer = viewer;
+		this.eltGenericSchemaGridWidget=eltGenericSchemaGridWidget;
 	}
 
 
@@ -152,8 +153,10 @@ class SchemaGridCellModifier implements ICellModifier {
 		}
 
 		resetDateFormat(basicSchemaGridRow, property);
-
+        
 		viewer.refresh();
+		;
+		eltGenericSchemaGridWidget.showHideErrorSymbol(eltGenericSchemaGridWidget.applyValidationRule());
 	}
 
 

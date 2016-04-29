@@ -14,11 +14,13 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -185,6 +187,18 @@ public class ELTComponentNameWidget extends AbstractWidget {
 		logger.debug("result: {}", result);
 
 		return result;
+	}
+
+	@Override
+	public boolean applyValidationRule() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

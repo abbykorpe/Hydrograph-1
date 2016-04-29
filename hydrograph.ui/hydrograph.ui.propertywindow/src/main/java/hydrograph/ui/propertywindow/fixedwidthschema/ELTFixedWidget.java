@@ -14,17 +14,39 @@
  
 package hydrograph.ui.propertywindow.fixedwidthschema;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.TabItem;
+
+import hydrograph.ui.common.util.ComponentCacheUtil;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.SchemaGridContentProvider;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTCellEditorIsNumericValidator;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
+import hydrograph.ui.validators.impl.IValidator;
 
 
 /**
@@ -74,7 +96,7 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	}
 	
 	protected FixedWidthGridCellModifier getCellModifier() {
-		return new FixedWidthGridCellModifier(tableViewer);
+		return new FixedWidthGridCellModifier(this,tableViewer);
 	}
 
 	@Override
@@ -98,6 +120,18 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
+		if (!TransformSchemaWidget.class.isAssignableFrom(this.getClass()))
+			schemaFromConnectedLinks();
 		super.attachToPropertySubGroup(container);
 	}
+	@Override
+	public boolean applyValidationRule() {
+		 return applySchemaValidationRule();
+	}
+	
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+	  attachListener();
+	}
+	
 }

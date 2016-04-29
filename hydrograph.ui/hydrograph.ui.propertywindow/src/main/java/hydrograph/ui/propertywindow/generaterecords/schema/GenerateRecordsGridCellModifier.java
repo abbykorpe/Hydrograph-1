@@ -35,15 +35,16 @@ import org.eclipse.swt.widgets.Item;
  */
 public class GenerateRecordsGridCellModifier implements ICellModifier {
 	private Viewer viewer;
-
+    private GenerateRecordsGridWidget generateRecordsGridWidget;
 	/**
 	 * Instantiates a new Generate Records Grid CellModifier.
 	 * 
 	 * @param viewer
 	 *            the viewer
 	 */
-	public GenerateRecordsGridCellModifier(Viewer viewer) {
+	public GenerateRecordsGridCellModifier(GenerateRecordsGridWidget generateRecordsGridWidget,Viewer viewer) {
 		this.viewer = viewer;
+		this.generateRecordsGridWidget=generateRecordsGridWidget;
 	}
 
 	/**
@@ -199,6 +200,7 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 		}
 		resetDateFormat(generateRecordSchemaGridRow, property);
 		viewer.refresh();
+		generateRecordsGridWidget.showHideErrorSymbol(generateRecordsGridWidget.applyValidationRule());
 	}
 
 	private void resetDateFormat(GenerateRecordSchemaGridRow generateRecordSchemaGridRow, String property){

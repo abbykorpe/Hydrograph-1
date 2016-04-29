@@ -60,11 +60,12 @@ public class ComponentCacheUtil {
 			if(propertyValidatorMap.containsKey(propertyName)){
 				return propertyValidatorMap.get(propertyName);
 			}
+			else{
+				return new ArrayList<>();
+			}
 		}
-		else{
-			return new ArrayList<>();
-		}
-		throw new RuntimeException("Incorrect Component or Property Name");
+		
+		throw new RuntimeException("Incorrect Component or Property Name"+componentName+">>>"+propertyName);
 	}
 	
 	private void fillValidators(Property property, Map<String, List<String>> propertyValidatorMap, String propertyName) {

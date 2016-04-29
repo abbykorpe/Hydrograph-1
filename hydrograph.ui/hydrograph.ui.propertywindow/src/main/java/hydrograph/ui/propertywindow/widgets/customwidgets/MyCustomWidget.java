@@ -14,9 +14,11 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.utils.WordUtils;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
@@ -27,6 +29,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTCon
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import org.eclipse.swt.widgets.Control;
@@ -113,6 +116,20 @@ public class MyCustomWidget extends AbstractWidget{
 		LinkedHashMap<String, Object> property=new LinkedHashMap<>();
 		property.put(propertyName, textBox.getText());
 		return property;
+	}
+
+	@Override
+	public boolean applyValidationRule() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
+
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/*@Override
