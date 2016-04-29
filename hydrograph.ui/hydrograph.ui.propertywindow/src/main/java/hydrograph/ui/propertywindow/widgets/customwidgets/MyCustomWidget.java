@@ -14,7 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -28,10 +27,8 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
@@ -119,8 +116,7 @@ public class MyCustomWidget extends AbstractWidget{
 	}
 
 	@Override
-	public boolean applyValidationRule() {
-		// TODO Auto-generated method stub
+	public boolean isWidgetValid() {
 		return false;
 	}
 
@@ -128,14 +124,6 @@ public class MyCustomWidget extends AbstractWidget{
 
 	@Override
 	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
-		// TODO Auto-generated method stub
 		
 	}
-
-	/*@Override
-	public void setComponentName(String componentName) {
-		// TODO Auto-generated method stub
-		
-	}*/
-
 }

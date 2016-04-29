@@ -23,7 +23,6 @@ import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
 import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -57,7 +56,7 @@ public class ELTLookupMapWidget extends AbstractWidget {
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private ELTLookupMapWizard lookupMapWizard;
 	private LookupMappingGrid lookupMappingGrid;
-	private ArrayList<AbstractWidget> widgets;
+	private List<AbstractWidget> widgets;
 	
 	public ELTLookupMapWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
@@ -230,7 +229,7 @@ public class ELTLookupMapWidget extends AbstractWidget {
 	}
 
 	@Override
-	public boolean applyValidationRule() {
+	public boolean isWidgetValid() {
 		return validateAgainstValidationRule(lookupMappingGrid);
 	}
 

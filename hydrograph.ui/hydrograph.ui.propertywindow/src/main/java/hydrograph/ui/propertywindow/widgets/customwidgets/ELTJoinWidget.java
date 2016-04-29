@@ -15,24 +15,20 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty.ELTJoinConfigGrid;
-import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -49,7 +45,7 @@ public class ELTJoinWidget extends AbstractWidget {
 	private Object properties;
 	private String propertyName;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-	private ArrayList<AbstractWidget> widgets;
+	private List<AbstractWidget> widgets;
 	// private JoinMappingGrid lookupPropertyGrid;
 	private List<JoinConfigProperty> configProperty;
 
@@ -120,16 +116,12 @@ public class ELTJoinWidget extends AbstractWidget {
 		return property;
 	}
 	@Override
-	public boolean applyValidationRule() {
+	public boolean isWidgetValid() {
 	 return validateAgainstValidationRule(configProperty);
 	}
 
 	@Override
 	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
 		widgets=widgetList;
-		
 	}
-
-	
-
 }

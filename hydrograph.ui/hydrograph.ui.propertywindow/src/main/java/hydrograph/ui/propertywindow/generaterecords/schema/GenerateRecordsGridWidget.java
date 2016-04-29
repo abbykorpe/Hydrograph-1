@@ -15,12 +15,6 @@
 package hydrograph.ui.propertywindow.generaterecords.schema;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import hydrograph.ui.common.util.ComponentCacheUtil;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -32,7 +26,6 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.schema.SchemaGridConte
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTCellEditorIsNumericValidator;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-import hydrograph.ui.validators.impl.IValidator;
 
 
 
@@ -124,7 +117,7 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 	}
 
 	@Override
-	public boolean applyValidationRule() {
+	public boolean isWidgetValid() {
 		return applySchemaValidationRule();
 	}
 

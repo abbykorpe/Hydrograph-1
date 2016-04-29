@@ -38,6 +38,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
     	IDE.registerAdapters();
     	 PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.ENABLE_DETACHED_VIEWS, false);
+    	 configurer.setShowProgressIndicator(true);
         return new ApplicationWorkbenchWindowAdvisor(configurer);
     }
 

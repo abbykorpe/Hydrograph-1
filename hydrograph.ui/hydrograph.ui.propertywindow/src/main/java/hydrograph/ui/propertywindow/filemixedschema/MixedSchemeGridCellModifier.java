@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.Item;
 
 public class MixedSchemeGridCellModifier implements ICellModifier{
 	private Viewer viewer;
-	private ELTMixedSchemeWidget eltMixedSchemeWidget;
+	private ELTMixedSchemeWidget mixedSchemeWidget;
 	/**
 	 * Instantiates a new fixed width grid cell modifier.
 	 * 
@@ -40,7 +40,7 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 	 */
 	public MixedSchemeGridCellModifier(ELTMixedSchemeWidget eltMixedSchemeWidget,Viewer viewer) {
 		this.viewer = viewer;
-		this.eltMixedSchemeWidget=eltMixedSchemeWidget;
+		this.mixedSchemeWidget=eltMixedSchemeWidget;
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 		resetDateFormat(mixedSchemeGridRow, property);
 
 		viewer.refresh();
-		eltMixedSchemeWidget.showHideErrorSymbol(eltMixedSchemeWidget.applyValidationRule());
+		mixedSchemeWidget.showHideErrorSymbol(mixedSchemeWidget.isWidgetValid());
 	}
 	
 	private void resetDateFormat(MixedSchemeGridRow row, String property){

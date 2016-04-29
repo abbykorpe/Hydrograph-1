@@ -424,7 +424,7 @@ public class TransformWidget extends AbstractWidget {
 	}
 
 	@Override
-	public boolean applyValidationRule() {
+	public boolean isWidgetValid() {
 		// TODO Auto-generated method stub
 		return false;
 	}

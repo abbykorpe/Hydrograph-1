@@ -14,9 +14,8 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
-import hydrograph.ui.common.util.ComponentCacheUtil;
+
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.datastructures.ComboBoxParameter;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
@@ -37,12 +36,9 @@ import hydrograph.ui.propertywindow.widgets.listeners.IELTListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-import hydrograph.ui.validators.impl.IValidator;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.events.ModifyEvent;
@@ -190,7 +186,7 @@ public class DropDownWidget extends AbstractWidget{
 	}
 
 	@Override
-	public boolean applyValidationRule() {
+	public boolean isWidgetValid() {
 			if(StringUtils.equals(combo.getText(), Constants.PARAMETER))
 			{	
 			 return validateAgainstValidationRule(text.getText());

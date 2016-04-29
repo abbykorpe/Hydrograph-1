@@ -13,9 +13,6 @@
 package hydrograph.ui.propertywindow.propertydialog;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
-
-import hydrograph.ui.common.util.ComponentCacheUtil;
-import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
@@ -29,28 +26,19 @@ import hydrograph.ui.propertywindow.property.ELTComponenetProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.utils.WordUtils;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
-import hydrograph.ui.propertywindow.widgets.customwidgets.ELTFilePathWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroup;
-import hydrograph.ui.validators.impl.IValidator;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.osgi.framework.adaptor.FilePath;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
@@ -230,20 +218,20 @@ public class PropertyDialogBuilder {
 					subGroupContainer, property);	
 			eltWidgetList.add(eltWidget);
 			
-			if(eltWidget.applyValidationRule())
+			if(eltWidget.isWidgetValid())
 				isError=true;
 		
 		}
 		
-		if(isError)
-		{
-			for(TabItem item:tabFolder.getItems())
-			{
-				if(StringUtils.equalsIgnoreCase(item.getText(),subgroupTree.get(subgroupName).get(0).getPropertyGroup()))
-						{
-					    item.setImage(new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_ERROR_ICON));
-						}			
-			}		
+		if (isError) {
+			for (TabItem item : tabFolder.getItems()) {
+				if (StringUtils.equalsIgnoreCase(item.getText(), subgroupTree
+						.get(subgroupName).get(0).getPropertyGroup())) {
+					item.setImage(new Image(null,
+							XMLConfigUtil.CONFIG_FILES_PATH
+									+ ImagePathConstant.COMPONENT_ERROR_ICON));
+				}
+			}
 		}
 		
 	}

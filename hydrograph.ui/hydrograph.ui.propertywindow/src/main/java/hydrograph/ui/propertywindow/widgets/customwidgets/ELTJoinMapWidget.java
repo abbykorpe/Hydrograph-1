@@ -19,12 +19,10 @@ import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -39,13 +37,11 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -55,12 +51,11 @@ import org.eclipse.swt.widgets.Control;
 public class ELTJoinMapWidget extends AbstractWidget {
 
 	public static int value;
-	
 	private Object properties;
 	private String propertyName;
 	private JoinMappingGrid joinMappingGrid;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-	private ArrayList<AbstractWidget> widgets;
+	private List<AbstractWidget> widgets;
 	public ELTJoinMapWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propertyDialogButtonBar);
@@ -237,7 +232,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 	}
 
 	@Override
-	public boolean applyValidationRule() {
+	public boolean isWidgetValid() {
 		return validateAgainstValidationRule(joinMappingGrid);
 	}
 

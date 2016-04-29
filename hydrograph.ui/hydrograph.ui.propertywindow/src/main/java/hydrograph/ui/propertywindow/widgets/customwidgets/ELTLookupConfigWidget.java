@@ -15,7 +15,6 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.datastructure.property.LookupConfigProperty;
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
@@ -27,11 +26,10 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -40,7 +38,7 @@ import org.eclipse.swt.widgets.Control;
 
 public class ELTLookupConfigWidget extends AbstractWidget {
     
-	private ArrayList<AbstractWidget> widgets;
+	private List<AbstractWidget> widgets;
 	private LookupConfigProperty properties;
 	private String propertyName;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
@@ -93,7 +91,7 @@ public class ELTLookupConfigWidget extends AbstractWidget {
 	}
 
 	@Override
-	public boolean applyValidationRule() {
+	public boolean isWidgetValid() {
 		LookupConfigProperty lookupConfigProperty = (LookupConfigProperty)properties;
 		return validateAgainstValidationRule(lookupConfigProperty);
 	}

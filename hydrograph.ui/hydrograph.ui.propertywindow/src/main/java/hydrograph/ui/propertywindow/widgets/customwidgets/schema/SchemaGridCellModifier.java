@@ -156,7 +156,7 @@ class SchemaGridCellModifier implements ICellModifier {
         
 		viewer.refresh();
 		;
-		eltGenericSchemaGridWidget.showHideErrorSymbol(eltGenericSchemaGridWidget.applyValidationRule());
+		eltGenericSchemaGridWidget.showHideErrorSymbol(eltGenericSchemaGridWidget.isWidgetValid());
 	}
 
 

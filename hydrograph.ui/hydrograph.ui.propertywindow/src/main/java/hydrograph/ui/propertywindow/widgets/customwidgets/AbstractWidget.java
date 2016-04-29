@@ -65,7 +65,6 @@ public abstract class AbstractWidget {
 	protected PropertyDialog propertyDialog;
 	private Control propertyHelpWidget;
 	private String propertyHelpText;
-	private Text textBox;
 	private TabFolder tabFolder; 
 	private Property property; 
 	
@@ -188,7 +187,7 @@ public abstract class AbstractWidget {
 	 */
 	public abstract LinkedHashMap<String, Object> getProperties();
 	
-	public abstract boolean applyValidationRule();
+	public abstract boolean isWidgetValid();
 		
 	public abstract void addModifyListener(Property property, ArrayList<AbstractWidget> widgetList);
 	
@@ -357,13 +356,13 @@ public abstract class AbstractWidget {
 		return true;
 	}
 	
-	public void showHideErrorSymbol(ArrayList<AbstractWidget> widgetList)
+	public void showHideErrorSymbol(List<AbstractWidget> widgetList)
 	{
 		boolean isErrorPresent=false;
 		 for(AbstractWidget abstractWidget:widgetList)	
 	 	 {
 			 
-		 if(StringUtils.equals(abstractWidget.getProperty().getPropertyGroup(), property.getPropertyGroup()) &&abstractWidget.applyValidationRule())
+		 if(StringUtils.equals(abstractWidget.getProperty().getPropertyGroup(), property.getPropertyGroup()) &&abstractWidget.isWidgetValid())
 	 	  {
 	 			isErrorPresent=true;
 	 			break;
@@ -394,25 +393,18 @@ public abstract class AbstractWidget {
 	 	}
 	}
 	
-	public boolean validateAgainstValidationRule(Object object)
-	{
-		 boolean componentHasRequiredValues = Boolean.FALSE;
-			List<String> validators = ComponentCacheUtil.INSTANCE
-					.getValidatorsForProperty(
-							getComponent().getComponentName(),
-							getPropertyName());
+	public boolean validateAgainstValidationRule(Object object){
+		boolean componentHasRequiredValues = Boolean.FALSE;
+		List<String> validators = ComponentCacheUtil.INSTANCE.getValidatorsForProperty(
+							getComponent().getComponentName(),getPropertyName());
 
 			IValidator validator = null;
 			for (String validatorName : validators) {
 				try {
-					validator = (IValidator) Class.forName(
-							Constants.VALIDATOR_PACKAGE_PREFIX
+					validator = (IValidator) Class.forName(Constants.VALIDATOR_PACKAGE_PREFIX
 									+ validatorName).newInstance();
-				} catch (InstantiationException
-						| IllegalAccessException
-						| ClassNotFoundException e) {
-					throw new RuntimeException(
-							"Failed to create validator", e);
+				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+					throw new RuntimeException("Failed to create validator", e);
 				}
 				boolean status = validator.validate(object,
 						getPropertyName());
@@ -424,5 +416,4 @@ public abstract class AbstractWidget {
 			}
 		return componentHasRequiredValues;
 	}
-	
 }

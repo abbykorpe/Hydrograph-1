@@ -14,7 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
@@ -99,8 +98,7 @@ public class ELTXmlPropertiesContainer extends AbstractWidget{
 	}
 
 	@Override
-	public boolean applyValidationRule() {
-		// TODO Auto-generated method stub
+	public boolean isWidgetValid() {
 		return false;
 	}
 
@@ -108,8 +106,6 @@ public class ELTXmlPropertiesContainer extends AbstractWidget{
 
 	@Override
 	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 

@@ -200,7 +200,7 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 		}
 		resetDateFormat(generateRecordSchemaGridRow, property);
 		viewer.refresh();
-		generateRecordsGridWidget.showHideErrorSymbol(generateRecordsGridWidget.applyValidationRule());
+		generateRecordsGridWidget.showHideErrorSymbol(generateRecordsGridWidget.isWidgetValid());
 	}
 
 	private void resetDateFormat(GenerateRecordSchemaGridRow generateRecordSchemaGridRow, String property){

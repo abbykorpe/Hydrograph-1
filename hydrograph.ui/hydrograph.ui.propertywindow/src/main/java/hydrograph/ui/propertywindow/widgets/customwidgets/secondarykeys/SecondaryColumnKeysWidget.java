@@ -15,7 +15,6 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.secondarykeys;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -157,7 +156,7 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 	}
 
 	@Override
-	public boolean applyValidationRule() {
+	public boolean isWidgetValid() {
 		if(StringUtils.equalsIgnoreCase(buttonWithLabelConfig.getName(), "Key\nFields"))
 		{
 			return validateAgainstValidationRule(getProperties().get(propertyName));

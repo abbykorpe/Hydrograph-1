@@ -14,11 +14,8 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
-import hydrograph.ui.common.util.ComponentCacheUtil;
+
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -32,16 +29,11 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-import hydrograph.ui.propertywindow.widgets.listeners.ELTFileDialogSelectionListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-import hydrograph.ui.validators.impl.IValidator;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.events.FocusEvent;
@@ -51,12 +43,9 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
@@ -217,7 +206,7 @@ public class ELTFilePathWidget extends AbstractWidget{
 	}
 
 	
-	public boolean applyValidationRule() {
+	public boolean isWidgetValid() {
 		 return validateAgainstValidationRule(textBox.getText());
 	}
 
@@ -230,15 +219,10 @@ public class ELTFilePathWidget extends AbstractWidget{
 	@Override
 	public void addModifyListener(final Property property, final ArrayList<AbstractWidget> widgetList) {
 		textBox.addModifyListener(new ModifyListener() {
-			
 			@Override
 			public void modifyText(ModifyEvent e) {
 				showHideErrorSymbol(widgetList);
 			}
 		});
-		
 	}
-
-
-	
 }

@@ -16,7 +16,6 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 
 import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
-import hydrograph.ui.common.util.ComponentCacheUtil;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
@@ -122,7 +121,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
-import hydrograph.ui.validators.impl.IValidator;
 import org.slf4j.Logger;
 
 
@@ -589,7 +587,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				schemaFromConnectedLinks();
-				showHideErrorSymbol(applyValidationRule());
+				showHideErrorSymbol(isWidgetValid());
 				
 			}
 		});
@@ -1434,72 +1432,65 @@ private boolean isSchemaInSync(){
 	return true;
 }
 
- protected void attachListener()
-{
-	if(extSchemaPathText!=null)
-	{
-		extSchemaPathText.addModifyListener(new ModifyListener() {
-		
-		@Override
-		public void modifyText(ModifyEvent e) {
-		   
-			showHideErrorSymbol(applyValidationRule());
-			
-		}
-	});
-		
-		((Button) externalSchema.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(StringUtils.isBlank(extSchemaPathText.getText()))
-						{
-					showHideErrorSymbol(applyValidationRule());
-						}			
-			}
-			
-		});
-		((Button) internalSchema.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(StringUtils.isBlank(extSchemaPathText.getText()))
-						{
-					showHideErrorSymbol(applyValidationRule());
-						}			
-			}
-			
-		});
-		
-	}
-	
-	deleteButton.addMouseUpListener(new MouseAdapter() {
-		
-		@Override
-		public void mouseUp(MouseEvent e) {
-			if(table.getItemCount()==0)
-			{
-				showHideErrorSymbol(applyValidationRule());
-			}	
-			
-		}
-	});	
-}
+	protected void attachListener() {
+		if (extSchemaPathText != null) {
+			extSchemaPathText.addModifyListener(new ModifyListener() {
 
- protected boolean applySchemaValidationRule()
- {
-	    
-	    
-	    if(!schemaGridRowList.isEmpty())
-	    { 	
-	    Schema schema=new Schema();	
-		schema.setGridRow(schemaGridRowList);
-	    if(extSchemaPathText!=null)
-		schema.setExternalSchemaPath(extSchemaPathText.getText());
-		schema.setIsExternal(external);
-		return validateAgainstValidationRule(schema);
-	    }
-	    else
-	    return validateAgainstValidationRule(getComponent().getProperties().get(Constants.SCHEMA_PROPERTY_NAME));
-	 
- }
+				@Override
+				public void modifyText(ModifyEvent e) {
+
+					showHideErrorSymbol(isWidgetValid());
+
+				}
+			});
+
+			((Button) externalSchema.getSWTWidgetControl())
+					.addSelectionListener(new SelectionAdapter() {
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+							if (StringUtils.isBlank(extSchemaPathText.getText())) {
+								showHideErrorSymbol(isWidgetValid());
+							}
+						}
+
+					});
+			((Button) internalSchema.getSWTWidgetControl())
+					.addSelectionListener(new SelectionAdapter() {
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+							showHideErrorSymbol(isWidgetValid());
+
+						}
+
+					});
+
+		}
+
+		deleteButton.addMouseUpListener(new MouseAdapter() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				if (table.getItemCount() == 0) {
+					showHideErrorSymbol(isWidgetValid());
+				}
+
+			}
+		});
+	}
+
+	protected boolean applySchemaValidationRule() {
+
+		if (!schemaGridRowList.isEmpty()) {
+			Schema schema = new Schema();
+			schema.setGridRow(schemaGridRowList);
+			if (extSchemaPathText != null)
+				schema.setExternalSchemaPath(extSchemaPathText.getText());
+			schema.setIsExternal(external);
+			return validateAgainstValidationRule(schema);
+		} else
+			return validateAgainstValidationRule(getComponent().getProperties()
+					.get(Constants.SCHEMA_PROPERTY_NAME));
+
+	}
  
 }

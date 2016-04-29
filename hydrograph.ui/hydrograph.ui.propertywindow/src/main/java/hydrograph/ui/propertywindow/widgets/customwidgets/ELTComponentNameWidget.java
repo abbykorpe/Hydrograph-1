@@ -14,7 +14,7 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
-import hydrograph.ui.graph.model.Component;
+
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -190,14 +190,12 @@ public class ELTComponentNameWidget extends AbstractWidget {
 	}
 
 	@Override
-	public boolean applyValidationRule() {
-		// TODO Auto-generated method stub
+	public boolean isWidgetValid() {
 		return false;
 	}
 
 	@Override
 	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
-		// TODO Auto-generated method stub
 		
 	}
 

@@ -14,11 +14,7 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
-import hydrograph.ui.common.util.ComponentCacheUtil;
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -37,21 +33,15 @@ import hydrograph.ui.propertywindow.widgets.listeners.IELTListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-import hydrograph.ui.validators.impl.IValidator;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
@@ -179,7 +169,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 
 	
 	@Override
-	public boolean applyValidationRule() {
+	public boolean isWidgetValid() {
 	  return validateAgainstValidationRule(textBox.getText());
 	}
 

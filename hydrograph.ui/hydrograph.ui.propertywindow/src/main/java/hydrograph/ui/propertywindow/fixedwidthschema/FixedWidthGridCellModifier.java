@@ -172,7 +172,7 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		resetDateFormat(fixedWidthGridRow, property);
 
 		viewer.refresh();
-		eltFixedWidget.showHideErrorSymbol(eltFixedWidget.applyValidationRule());
+		eltFixedWidget.showHideErrorSymbol(eltFixedWidget.isWidgetValid());
 	}
 	
 	private void resetDateFormat(FixedWidthGridRow row, String property){

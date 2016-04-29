@@ -15,7 +15,6 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
@@ -114,7 +113,7 @@ public class SingleColumnWidget extends AbstractWidget {
 	}
 
 	@Override
-	public boolean applyValidationRule() {
+	public boolean isWidgetValid() {
 		return validateAgainstValidationRule(getProperties().get(propertyName));
 	}
 

@@ -14,8 +14,7 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.propertywindow.factory.ListenerFactory;
+
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -23,26 +22,14 @@ import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTTable;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTTableViewer;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
-import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTCellEditorIsNumericValidator;
-import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDetails;
-import hydrograph.ui.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
 import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 
 
@@ -216,17 +203,12 @@ public class ELTFieldSequenceWidget extends AbstractWidget {
 	}
 
 	@Override
-	public boolean applyValidationRule() {
-		// TODO Auto-generated method stub
+	public boolean isWidgetValid() {
 		return false;
 	}
 
 	
 	@Override
 	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
-		// TODO Auto-generated method stub
-		
 	} 
-
-
 }

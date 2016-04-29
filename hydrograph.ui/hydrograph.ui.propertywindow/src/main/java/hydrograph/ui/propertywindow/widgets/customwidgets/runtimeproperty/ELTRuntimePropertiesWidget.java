@@ -15,7 +15,6 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -29,12 +28,10 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
@@ -124,8 +121,7 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 	}
 
 	@Override
-	public boolean applyValidationRule() {
-		// TODO Auto-generated method stub
+	public boolean isWidgetValid() {
 		return false;
 	}
 
@@ -133,7 +129,5 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 
 	@Override
 	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
-		// TODO Auto-generated method stub
-		
 	}
 }
