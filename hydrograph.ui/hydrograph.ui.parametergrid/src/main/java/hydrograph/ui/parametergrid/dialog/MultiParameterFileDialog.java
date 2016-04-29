@@ -264,7 +264,7 @@ public class MultiParameterFileDialog extends Dialog {
 		ColumnLayoutData cld_grpAllProperties = new ColumnLayoutData();
 		cld_grpAllProperties.heightHint = 302;
 		grpAllProperties.setLayoutData(cld_grpAllProperties);
-		grpAllProperties.setText("All Parameters");
+		grpAllProperties.setText(MultiParameterFileDialogConstants.SEARCH_ALL_PARAMETERS);
 
 		Composite composite_5 = new Composite(grpAllProperties, SWT.NONE);
 		ColumnLayout cl_composite_5 = new ColumnLayout();
@@ -1056,11 +1056,16 @@ public class MultiParameterFileDialog extends Dialog {
 
 			@Override
 			public Color getBackground(Object element) {
-				ParameterFile filePath = (ParameterFile) element;
-				if (filePath.isJobSpecificFile())
-					return new Color(Display.getDefault(), 0xFF, 0xDD, 0xDD);
 
 				return super.getBackground(element);
+			}
+			
+			@Override
+			public Color getForeground(Object element) {
+				ParameterFile filePath = (ParameterFile) element;
+				if (filePath.isJobSpecificFile())
+					return new Color(Display.getDefault(), 0, 0, 255);
+				return super.getForeground(element);
 			}
 
 			@Override

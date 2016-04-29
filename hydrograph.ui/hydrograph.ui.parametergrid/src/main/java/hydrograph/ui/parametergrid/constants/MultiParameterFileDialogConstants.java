@@ -26,7 +26,8 @@ public class MultiParameterFileDialogConstants {
 	public static final String PARAMETER_FILE="ParameterFile";
 	public static final String PROJECT_METADATA_FILE="\\project.metadata";
 	public static final String TABLE_COLUMN_LIST_OF_PARAMETER_FILES="Parameter Files";
-	public static final String PARAMETER_FILE_VIEW="Parameter file view";
+	public static final String PARAMETER_FILE_VIEW="Parameter File View";
+	public static final String SEARCH_ALL_PARAMETERS="Search All Parameters";
 	public static final String DefaultParameter = "DefaultParameter";
 	public static final String DefaultValue = "DefaultValue";
 	
@@ -44,7 +45,7 @@ public class MultiParameterFileDialogConstants {
 	
 	public static final String HELP_LINK="<a>Help</a>";
 	public static final String FILE_LABEL_TEXT="File";
-	public static final String PARAMETER_FILE_DIALOG_TEXT="Parameter file dialog";
+	public static final String PARAMETER_FILE_DIALOG_TEXT="Parameter File Dialog";
 	
 	
 }

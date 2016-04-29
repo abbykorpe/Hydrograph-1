@@ -288,11 +288,12 @@ public class JobManager {
 	private MultiParameterFileDialog getParameterFileDialog(){
 		
 	    String activeProjectLocation=MultiParameterFileUIUtils.getActiveProjectLocation();
-	    
-
+	 
 		FileInputStream fin;
 		List<ParameterFile> filepathList = new LinkedList<>();
-		filepathList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"), getComponentCanvas().getParameterFile(), true, true));
+		
+		updateParameterFileListWithJobSpecificFile(filepathList);
+		
 		try {
 			fin = new FileInputStream(activeProjectLocation + "\\project.metadata");
 			ObjectInputStream ois = new ObjectInputStream(fin);
@@ -310,6 +311,16 @@ public class JobManager {
 		parameterFileDialog.open();
 		
 		return parameterFileDialog;
+	}
+	
+	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList) {
+		if (getComponentCanvas().getParameterFile().contains(":")) {
+			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),
+					getComponentCanvas().getParameterFile().replace("/", "\\"), true, true));
+		} else {
+			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),
+					getComponentCanvas().getParameterFile(), true, true));
+		}
 	}
 
 	private RunConfigDialog getRunConfiguration() {
