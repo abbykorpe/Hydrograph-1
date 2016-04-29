@@ -13,8 +13,7 @@
 package hydrograph.ui.propertywindow.propertydialog;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
-
-import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -30,13 +29,12 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroup;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
@@ -44,6 +42,7 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
@@ -79,7 +78,8 @@ public class PropertyDialogBuilder {
 	private final String BASE_TYPE = "Base Type";
 	private final String TYPE_PROPERTY_HELP="Basic Category";
 	private final String BASE_TYPE_PROPERTY_HELP="Abstraction";
-
+	
+    private TabFolder tabFolder;
 	/**
 	 * Instantiates a new property dialog builder.
 	 * 
@@ -124,7 +124,7 @@ public class PropertyDialogBuilder {
 	 * Builds the property window.
 	 */
 	public void buildPropertyWindow(){
-		TabFolder tabFolder = addTabFolderToPropertyWindow();
+		tabFolder = addTabFolderToPropertyWindow();
         addTabsInTabFolder(tabFolder);
       
         tabFolder.addSelectionListener(new SelectionAdapter() {
@@ -151,15 +151,20 @@ public class PropertyDialogBuilder {
 			}
 		});
 		
+        
 	}
 
 	private void addTabsInTabFolder(TabFolder tabFolder) {
+	
 		for(String groupName : propertyTree.keySet()){
 			ScrolledCompositeHolder scrolledCompositeHolder = getPropertyWindowTab(groupName,tabFolder);
 			LinkedHashMap<String,ArrayList<Property>> subgroupTree = propertyTree.get(groupName);
 			addGroupsInTab(scrolledCompositeHolder, subgroupTree);
+			  
 			addEmptyGroupWidget(scrolledCompositeHolder);
 		}
+		
+			
 	}
 
 	private void addEmptyGroupWidget(
@@ -197,6 +202,7 @@ public class PropertyDialogBuilder {
 		AbstractELTContainerWidget subGroupContainer;
 		if(property != null){
 			subGroupContainer=addSubgroupToPropertyWindowTab(property.getPropertySubGroup(),scrolledCompositeHolder);
+		
 		}else{
 			subGroupContainer=addSubgroupToPropertyWindowTab(subgroupName,scrolledCompositeHolder);
 		}
@@ -206,14 +212,33 @@ public class PropertyDialogBuilder {
 	private void addCustomWidgetsToGroupWidget(
 			LinkedHashMap<String, ArrayList<Property>> subgroupTree,
 			String subgroupName, AbstractELTContainerWidget subGroupContainer) {
-		for(Property property: subgroupTree.get(subgroupName)){
+		boolean isError=false;
+		for(final Property property: subgroupTree.get(subgroupName)){
 			AbstractWidget eltWidget = addCustomWidgetInGroupWidget(
-					subGroupContainer, property);					
+					subGroupContainer, property);	
 			eltWidgetList.add(eltWidget);
+			
+			if(eltWidget.isWidgetValid())
+				isError=true;
+		
 		}
+		
+		if (isError) {
+			for (TabItem item : tabFolder.getItems()) {
+				if (StringUtils.equalsIgnoreCase(item.getText(), subgroupTree
+						.get(subgroupName).get(0).getPropertyGroup())) {
+					item.setImage(new Image(null,
+							XMLConfigUtil.CONFIG_FILES_PATH
+									+ ImagePathConstant.COMPONENT_ERROR_ICON));
+				}
+			}
+		}
+		
 	}
 
-	private AbstractWidget addCustomWidgetInGroupWidget(AbstractELTContainerWidget subGroupContainer, Property property) {
+	
+	
+	private AbstractWidget addCustomWidgetInGroupWidget(AbstractELTContainerWidget subGroupContainer, final Property property) {
 		
 		Object object = eltComponenetProperties.getComponentConfigurationProperty(property.getPropertyName());
 		if(object != null && IDataStructure.class.isAssignableFrom(object.getClass())){
@@ -233,12 +258,12 @@ public class PropertyDialogBuilder {
 		widget.setSchemaForInternalPapogation(setSchemaForInternalPapogation);
 		widget.setDeletedInternalSchema(deletedInternalSchema);
 		widget.setOperationFieldList(operationFieldList);
-
-		
+        
+	    widget.setProperty(property);
 		widget.setPropertyDialog(propertyDialog);
 		widget.setComponent(component);
 		widget.attachToPropertySubGroup(subGroupContainer);
-		
+		widget.setTabFolder(tabFolder);
 		if(TYPE.equals(componentConfigProp.getPropertyName())){
 			widget.setPropertyHelpText(BASE_TYPE_PROPERTY_HELP);
 		}else if(BASE_TYPE.equals(componentConfigProp.getPropertyName())){
@@ -249,6 +274,8 @@ public class PropertyDialogBuilder {
 		}
 		
 		widget.setPropertyHelp();
+        
+		widget.addModifyListener(property,eltWidgetList);
 		
 		if(widget instanceof ELTSchemaGridWidget){
 			schemaWidget = widget;

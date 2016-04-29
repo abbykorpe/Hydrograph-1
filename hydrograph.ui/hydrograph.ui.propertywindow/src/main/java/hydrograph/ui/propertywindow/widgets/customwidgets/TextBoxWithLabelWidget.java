@@ -20,6 +20,7 @@ import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.TextBoxWithLableConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
@@ -32,13 +33,14 @@ import hydrograph.ui.propertywindow.widgets.listeners.IELTListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
@@ -160,5 +162,28 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 			}
 		}
 		return false;
+	}
+
+	
+
+
+	
+	@Override
+	public boolean isWidgetValid() {
+	  return validateAgainstValidationRule(textBox.getText());
+	}
+
+	
+
+	@Override
+	public void addModifyListener(final Property property,  final ArrayList<AbstractWidget> widgetList) {
+       textBox.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+			 showHideErrorSymbol(widgetList);
+			}
+		});
+		
 	}
 }

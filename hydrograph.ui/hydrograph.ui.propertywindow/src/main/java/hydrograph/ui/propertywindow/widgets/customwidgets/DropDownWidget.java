@@ -14,6 +14,7 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.datastructures.ComboBoxParameter;
@@ -21,6 +22,7 @@ import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.DropDownConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
@@ -34,12 +36,13 @@ import hydrograph.ui.propertywindow.widgets.listeners.IELTListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
@@ -181,4 +184,28 @@ public class DropDownWidget extends AbstractWidget{
 		}
 		return stringItemsList;
 	}
+
+	@Override
+	public boolean isWidgetValid() {
+			if(StringUtils.equals(combo.getText(), Constants.PARAMETER))
+			{	
+			 return validateAgainstValidationRule(text.getText());
+			}
+			return false;
+	}
+
+	
+   @Override
+	public void addModifyListener(Property property, final ArrayList<AbstractWidget> widgetList) {
+	   text.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+			 showHideErrorSymbol(widgetList);
+			}
+		});
+		
+	}
+
+
 }

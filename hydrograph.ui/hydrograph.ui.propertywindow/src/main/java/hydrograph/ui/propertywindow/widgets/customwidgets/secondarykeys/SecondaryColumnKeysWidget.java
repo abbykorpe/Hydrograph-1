@@ -19,6 +19,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
@@ -30,9 +31,11 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTCon
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
@@ -48,6 +51,7 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 	private LinkedHashMap<String, String> InstializeMap;
 	private String propertyName;
 	private Shell shell;
+	private ArrayList<AbstractWidget> widgets;
 	private Logger logger = LogFactory.INSTANCE.getLogger(SecondaryColumnKeysWidget.class);
 	private EditButtonWithLabelConfig buttonWithLabelConfig;
 	private LinkedHashMap<String, Object> tempPropertyMap;
@@ -143,12 +147,29 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 		secondaryColumnDialog.open();
 		
 		setProperties(propertyName, secondaryColumnDialog.getSecondaryColumnsMap());
-
+        showHideErrorSymbol(widgets);
 	}
 
 	private List<String> getPropagatedSchema() {
 		return SchemaPropagationHelper.INSTANCE.getFieldsForFilterWidget(getComponent()).get(
 				Constants.INPUT_SOCKET_TYPE + 0);
+	}
+
+	@Override
+	public boolean isWidgetValid() {
+		if(StringUtils.equalsIgnoreCase(buttonWithLabelConfig.getName(), "Key\nFields"))
+		{
+			return validateAgainstValidationRule(getProperties().get(propertyName));
+		}
+		return false;
+		
+	}
+
+	
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		widgets=widgetList;
+		
 	}
 
 }

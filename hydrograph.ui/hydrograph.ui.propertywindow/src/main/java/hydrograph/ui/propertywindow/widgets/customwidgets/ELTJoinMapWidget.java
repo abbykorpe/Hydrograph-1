@@ -19,7 +19,6 @@ import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
@@ -28,20 +27,21 @@ import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty.JoinMapGrid;
+import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -55,7 +55,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 	private String propertyName;
 	private JoinMappingGrid joinMappingGrid;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-
+	private List<AbstractWidget> widgets;
 	public ELTJoinMapWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propertyDialogButtonBar);
@@ -88,7 +88,19 @@ public class ELTJoinMapWidget extends AbstractWidget {
 				JoinMapGrid joinMapGrid = new JoinMapGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
 						joinMappingGrid,propertyDialogButtonBar);
 				joinMapGrid.open();
-				propagateInternalSchema();
+				Schema internalSchema=propagateInternalSchema();
+				showHideErrorSymbol(widgets);
+				for(AbstractWidget widget:widgets)
+				{
+					if(widget instanceof ELTGenericSchemaGridWidget)
+					{
+						ELTGenericSchemaGridWidget eltGenericSchemaGridWidget =(ELTGenericSchemaGridWidget) widget;
+						if(internalSchema!=null )
+						eltGenericSchemaGridWidget.validateInternalSchemaPropogatedData(internalSchema);
+						
+					}	
+				}	
+				
 			}
 		});
 		
@@ -97,9 +109,9 @@ public class ELTJoinMapWidget extends AbstractWidget {
 
 	
 	
-	private void propagateInternalSchema() {
+	private Schema propagateInternalSchema() {
 		if(joinMappingGrid ==null)
-			return;
+			return null;
 		
 			 Schema internalSchema = getSchemaForInternalPapogation();			 
 			 internalSchema.getGridRow().clear();
@@ -138,6 +150,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 			 
 			 
 			 internalSchema.getGridRow().addAll(outputSchemaGridRowList);
+			 return internalSchema;
 		
 	}
 	
@@ -216,6 +229,18 @@ public class ELTJoinMapWidget extends AbstractWidget {
 				.sortedFiledNamesBySocketId(getComponent());
 		if (sorceFieldList != null)
 			joinMappingGrid.setLookupInputProperties(sorceFieldList);
+	}
+
+	@Override
+	public boolean isWidgetValid() {
+		return validateAgainstValidationRule(joinMappingGrid);
+	}
+
+	
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		widgets=widgetList;
+		
 	}
 	
 }

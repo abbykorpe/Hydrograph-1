@@ -18,15 +18,15 @@ import hydrograph.ui.datastructure.property.OperationClassProperty;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.ELTOperationClassDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -41,10 +41,10 @@ import org.eclipse.swt.widgets.Control;
 public class ELTOperationClassWidget extends AbstractWidget {
 
 	private String propertyName;
+	private ArrayList<AbstractWidget> widgets;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>(); 
 	private OperationClassProperty operationClassProperty;
 	private ELTOperationClassDialog eltOperationClassDialog;
-
 	/**
 	 * Instantiates a new ELT operation class widget.
 	 * 
@@ -109,18 +109,30 @@ public class ELTOperationClassWidget extends AbstractWidget {
 				if(eltOperationClassDialog.isCancelPressed()){
 					propertyDialog.pressCancel();
 				}
-				
+				showHideErrorSymbol(widgets);
 				super.widgetSelected(e);
 			}
 			
 		});
 	
 } 
-
+	
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {		
 		property.put(propertyName, operationClassProperty);
 		return property;
+	}
+
+	@Override
+	public boolean isWidgetValid() {
+		return validateAgainstValidationRule(operationClassProperty);
+	}
+
+
+
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		widgets=widgetList;
 	}
 
 }

@@ -33,6 +33,7 @@ import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
@@ -42,6 +43,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -419,5 +421,19 @@ public class TransformWidget extends AbstractWidget {
 					inputFieldsList.add(inputField);
 				}
 		}
+	}
+
+	@Override
+	public boolean isWidgetValid() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
+
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		// TODO Auto-generated method stub
+		
 	}
 }

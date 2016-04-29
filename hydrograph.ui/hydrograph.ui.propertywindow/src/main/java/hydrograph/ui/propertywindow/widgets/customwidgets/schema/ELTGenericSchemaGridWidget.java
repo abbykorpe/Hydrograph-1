@@ -14,10 +14,14 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 
+import java.util.ArrayList;
+import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTCellEditorIsNumericValidator;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
@@ -65,7 +69,8 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 	}
 	
 	protected SchemaGridCellModifier getCellModifier() {
-		return new SchemaGridCellModifier(tableViewer);
+        
+		return new SchemaGridCellModifier(this,tableViewer);
 	}
 
 	@Override
@@ -87,7 +92,22 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
-		
 		super.attachToPropertySubGroup(container);
+	}
+
+	@Override
+	public boolean isWidgetValid() {
+		return applySchemaValidationRule();
+	}
+
+	public void validateInternalSchemaPropogatedData(Schema propogatedSchema)
+	{
+		showHideErrorSymbol(validateAgainstValidationRule(propogatedSchema));
+		
+	}
+  
+	@Override
+	public void addModifyListener(final Property property,  ArrayList<AbstractWidget> widgetList) {
+	      attachListener();
 	}
 }

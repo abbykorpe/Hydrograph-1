@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Item;
  */
 public class FixedWidthGridCellModifier implements ICellModifier{
 	private Viewer viewer;
-
+    private ELTFixedWidget eltFixedWidget;
 
 	/**
 	 * Instantiates a new fixed width grid cell modifier.
@@ -40,8 +40,9 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 	 * @param viewer
 	 *            the viewer
 	 */
-	public FixedWidthGridCellModifier(Viewer viewer) {
+	public FixedWidthGridCellModifier(ELTFixedWidget eltFixedWidget,Viewer viewer) {
 		this.viewer = viewer;
+		this.eltFixedWidget=eltFixedWidget;
 	}
 	/**
 	 * Returns whether the property can be modified
@@ -171,6 +172,7 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		resetDateFormat(fixedWidthGridRow, property);
 
 		viewer.refresh();
+		eltFixedWidget.showHideErrorSymbol(eltFixedWidget.isWidgetValid());
 	}
 	
 	private void resetDateFormat(FixedWidthGridRow row, String property){

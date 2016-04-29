@@ -27,15 +27,18 @@ import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.lookupproperty.ELTLookupMapWizard;
+import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,7 +56,8 @@ public class ELTLookupMapWidget extends AbstractWidget {
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private ELTLookupMapWizard lookupMapWizard;
 	private LookupMappingGrid lookupMappingGrid;
-
+	private List<AbstractWidget> widgets;
+	
 	public ELTLookupMapWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propertyDialogButtonBar);
@@ -85,16 +89,27 @@ public class ELTLookupMapWidget extends AbstractWidget {
 				lookupMapWizard = new ELTLookupMapWizard(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
 						lookupMappingGrid,propertyDialogButtonBar);
 				lookupMapWizard.open();
-				propagateInternalSchema();
+				Schema internalSchema=propagateInternalSchema();
+				showHideErrorSymbol(widgets);
+				for(AbstractWidget widget:widgets)
+				{
+					if(widget instanceof ELTGenericSchemaGridWidget)
+					{
+						ELTGenericSchemaGridWidget eltGenericSchemaGridWidget =(ELTGenericSchemaGridWidget) widget;
+						if(internalSchema!=null )
+						eltGenericSchemaGridWidget.validateInternalSchemaPropogatedData(internalSchema);
+						
+					}	
+				}	
 			}
 		});
 		propagateInternalSchema();
 	}
 	
 	
-	private void propagateInternalSchema() {
+	private Schema propagateInternalSchema() {
 		if(lookupMappingGrid ==null)
-			return;
+			return null;
 		
 			 Schema internalSchema = getSchemaForInternalPapogation();			 
 			 internalSchema.getGridRow().clear();
@@ -133,7 +148,7 @@ public class ELTLookupMapWidget extends AbstractWidget {
 			 
 			 
 			 internalSchema.getGridRow().addAll(outputSchemaGridRowList);
-		
+		return internalSchema;
 	}
 
 	private void addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(Map<String, String> mapFields,
@@ -211,6 +226,19 @@ public class ELTLookupMapWidget extends AbstractWidget {
 	public LinkedHashMap<String, Object> getProperties() {
 		property.put(propertyName, lookupMappingGrid);
 		return property;
+	}
+
+	@Override
+	public boolean isWidgetValid() {
+		return validateAgainstValidationRule(lookupMappingGrid);
+	}
+
+	
+
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		widgets=widgetList;
+		
 	}
 
 }

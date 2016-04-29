@@ -31,15 +31,16 @@ import org.eclipse.swt.widgets.Item;
 
 public class MixedSchemeGridCellModifier implements ICellModifier{
 	private Viewer viewer;
-	
+	private ELTMixedSchemeWidget mixedSchemeWidget;
 	/**
 	 * Instantiates a new fixed width grid cell modifier.
 	 * 
 	 * @param viewer
 	 *            the viewer
 	 */
-	public MixedSchemeGridCellModifier(Viewer viewer) {
+	public MixedSchemeGridCellModifier(ELTMixedSchemeWidget eltMixedSchemeWidget,Viewer viewer) {
 		this.viewer = viewer;
+		this.mixedSchemeWidget=eltMixedSchemeWidget;
 	}
 
 	/**
@@ -175,6 +176,7 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 		resetDateFormat(mixedSchemeGridRow, property);
 
 		viewer.refresh();
+		mixedSchemeWidget.showHideErrorSymbol(mixedSchemeWidget.isWidgetValid());
 	}
 	
 	private void resetDateFormat(MixedSchemeGridRow row, String property){

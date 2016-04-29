@@ -16,6 +16,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -23,6 +24,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import org.eclipse.swt.widgets.Control;
@@ -83,5 +85,14 @@ public class ELTComponentBaseType extends AbstractWidget{
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
 		return null;
+	}
+
+	@Override
+	public boolean isWidgetValid() {
+		return false;
+	}
+
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
 	}
 }

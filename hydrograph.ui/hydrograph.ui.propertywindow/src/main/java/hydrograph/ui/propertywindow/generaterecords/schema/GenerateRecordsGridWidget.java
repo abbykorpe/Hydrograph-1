@@ -14,11 +14,13 @@
  
 package hydrograph.ui.propertywindow.generaterecords.schema;
 
-import hydrograph.ui.common.util.Constants;
+import java.util.ArrayList;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.SchemaGridContentProvider;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTCellEditorIsNumericValidator;
@@ -84,7 +86,7 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 	 * @see hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget#getCellModifier()
 	 */
 	protected GenerateRecordsGridCellModifier getCellModifier() {
-		return new GenerateRecordsGridCellModifier(tableViewer);
+		return new GenerateRecordsGridCellModifier(this,tableViewer);
 	}
 
 	/* (non-Javadoc)
@@ -112,6 +114,19 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 		lengthDecorator = WidgetUtility.addDecorator(editors[7].getControl(), Messages.LENGTHERROR);
 		isFieldNameAlphanumericDecorator = WidgetUtility.addDecorator(editors[0].getControl(),
 				Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);
+	}
+
+	@Override
+	public boolean isWidgetValid() {
+		return applySchemaValidationRule();
+	}
+
+	
+
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+		attachListener();
+		
 	}
 
 }

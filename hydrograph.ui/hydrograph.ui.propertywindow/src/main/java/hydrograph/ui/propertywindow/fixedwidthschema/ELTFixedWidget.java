@@ -14,11 +14,13 @@
  
 package hydrograph.ui.propertywindow.fixedwidthschema;
 
-import hydrograph.ui.common.util.Constants;
+import java.util.ArrayList;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.SchemaGridContentProvider;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
@@ -74,7 +76,7 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	}
 	
 	protected FixedWidthGridCellModifier getCellModifier() {
-		return new FixedWidthGridCellModifier(tableViewer);
+		return new FixedWidthGridCellModifier(this,tableViewer);
 	}
 
 	@Override
@@ -98,6 +100,17 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
+		if (!TransformSchemaWidget.class.isAssignableFrom(this.getClass()))
 		super.attachToPropertySubGroup(container);
 	}
+	@Override
+	public boolean isWidgetValid() {
+		 return applySchemaValidationRule();
+	}
+	
+	@Override
+	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+	  attachListener();
+	}
+	
 }
