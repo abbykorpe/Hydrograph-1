@@ -166,7 +166,6 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.statushandlers.StatusManager;
-import org.hamcrest.core.IsInstanceOf;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -364,12 +363,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			@Override
 			public void mouseMove(MouseEvent e) {
 				setCustomToolUndoRedoStatus();
-			}
-		});
-
-		viewer.getControl().addMouseTrackListener(new MouseTrackAdapter() {
-			@Override
-			public void mouseHover(MouseEvent e) {
 				if (toolTipComponentBounds != null && componentTooltip != null) {
 					if (!componentTooltip.hasToolBarManager()) {
 						org.eclipse.swt.graphics.Point point = new org.eclipse.swt.graphics.Point(
