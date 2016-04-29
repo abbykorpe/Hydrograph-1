@@ -378,7 +378,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private void enableRunJob(boolean enabled){
 		((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
-		//((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
+		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
+		((DebugHandler)RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(enabled);
 	}
 
 	
@@ -424,17 +425,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				Job job = JobManager.INSTANCE.getRunningJob(consoleName);
 				
 				logger.debug("job.isDebugMode: {}",job==null?"FALSE":job.isDebugMode());
-				if(job!=null && !job.isDebugMode()){
-					if(JobStatus.KILLED.equals(job.getJobStatus())){
-						((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
-						((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+				if(job!=null){
+					if(JobStatus.KILLED.equals(job.getJobStatus()) || JobStatus.SUCCESS.equals(job.getJobStatus())){
+						enableRunJob(true);
 					}else{
-						if(job.isRemoteMode()){
-							enableRunJob(false);
-						}else{
-							((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
-							((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
-						}						
+							enableRunJob(false);					
 					}
 					
 				}else{
