@@ -182,6 +182,7 @@ public class Messages extends NLS {
 	public static String MIXEDSCHEME_GRID_ROW ;
 
 	public static String MESSAGE_FOR_FETCHING_PROPAGATED_SCHEMA;
+	public static String TITLE_FOR_MESSAGE_BOX_OF_FETCHING_PROPAGATED_SCHEMA;
 	public static String ADD_OPERATION_CONTROL;
 	public static String DELETE_OPERATION_CONTROL;
     

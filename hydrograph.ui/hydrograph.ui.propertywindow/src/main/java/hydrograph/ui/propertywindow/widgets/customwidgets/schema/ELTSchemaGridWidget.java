@@ -624,36 +624,42 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 			applySchemaFromPropagatedSchemaOnPull(schema,componentsOutputSchema);
 		}
+		if (schemaGridRowList != null)
+			enableDisableButtons(schemaGridRowList.size());
 		tableViewer.refresh();
 		return schema;
 	}
 
 	private void applySchemaFromPropagatedSchemaOnPull(Schema schema, ComponentsOutputSchema componentsOutputSchema) {
 		List<GridRow> copiedList=new ArrayList<>(schemaGridRowList);
-		if (!schemaGridRowList.isEmpty()) {
-			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES
-					| SWT.NO);
-			messageBox.setMessage(Messages.MESSAGE_FOR_FETCHING_PROPAGATED_SCHEMA);
-			if (messageBox.open() == SWT.YES ) {
-				for (GridRow gridRow : copiedList)
-					if (componentsOutputSchema.getSchemaGridRow(gridRow.getFieldName()) == null)
-						schemaGridRowList.remove(gridRow);
-			}
-		}
-		for (GridRow gridRow : schema.getGridRow()){
-			if (!schemaGridRowList.contains(gridRow)){
-				GridRow newGridRow;
-				try {
-					newGridRow = (GridRow) Class.forName(gridRow.getClass().getCanonicalName()).getDeclaredConstructor().newInstance();
-					newGridRow.updateBasicGridRow(gridRow);
-					schemaGridRowList.add(newGridRow);
-				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-						| InvocationTargetException | NoSuchMethodException | SecurityException
-						| ClassNotFoundException e) {
-				logger.error("Exception occurred while creating new row for schema",e);
+		int returnCode =0;
+		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES| SWT.CANCEL |SWT.NO);
+		messageBox.setMessage(Messages.MESSAGE_FOR_FETCHING_PROPAGATED_SCHEMA);
+		messageBox.setText(Messages.TITLE_FOR_MESSAGE_BOX_OF_FETCHING_PROPAGATED_SCHEMA);
+		returnCode=messageBox.open();
+		if(returnCode!=SWT.CANCEL){
+			if (!schemaGridRowList.isEmpty()) {
+				if ( returnCode== SWT.YES ) {
+					for (GridRow gridRow : copiedList)
+						if (componentsOutputSchema.getSchemaGridRow(gridRow.getFieldName()) == null)
+							schemaGridRowList.remove(gridRow);
 				}
-				
-				
+			}
+			for (GridRow gridRow : schema.getGridRow()){
+				if (!schemaGridRowList.contains(gridRow)){
+					GridRow newGridRow;
+					try {
+						newGridRow = (GridRow) Class.forName(gridRow.getClass().getCanonicalName()).getDeclaredConstructor().newInstance();
+						newGridRow.updateBasicGridRow(gridRow);
+						schemaGridRowList.add(newGridRow);
+					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+							| InvocationTargetException | NoSuchMethodException | SecurityException
+							| ClassNotFoundException e) {
+					logger.error("Exception occurred while creating new row for schema",e);
+					}
+					
+					
+				}
 			}
 		}
 	}
