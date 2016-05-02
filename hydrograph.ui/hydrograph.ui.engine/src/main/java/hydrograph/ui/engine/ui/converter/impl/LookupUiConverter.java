@@ -15,7 +15,9 @@
 package hydrograph.ui.engine.ui.converter.impl;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupConfigProperty;
+import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.converter.TransformUiConverter;
 import hydrograph.ui.graph.model.Container;
@@ -28,13 +30,17 @@ import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
-import hydrograph.engine.jaxb.hashjoin.TypeKeyFields;
-import hydrograph.engine.jaxb.operationstypes.HashJoin;
+import hydrograph.engine.jaxb.commontypes.TypeInputField;
+import hydrograph.engine.jaxb.commontypes.TypeMapField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.lookup.TypeKeyFields;
+import hydrograph.engine.jaxb.operationstypes.Lookup;
 
 public class LookupUiConverter extends TransformUiConverter {
 
 
-	private HashJoin lookup;
+	private Lookup lookup;
 	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(LookupUiConverter.class);
 		
@@ -51,7 +57,7 @@ public class LookupUiConverter extends TransformUiConverter {
 
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Lookup-Properties for -{}", componentName);
-		lookup = (HashJoin) typeBaseComponent;
+		lookup = (Lookup) typeBaseComponent;
 		LOGGER.info("LOOKUP_CONFIG_FIELD::{}",getLookupConfigProperty());
 		propertyMap.put(Constants.LOOKUP_CONFIG_FIELD, getLookupConfigProperty());
 
@@ -91,4 +97,5 @@ public class LookupUiConverter extends TransformUiConverter {
 			lookupKey=lookupKey.deleteCharAt(lookupKey.lastIndexOf(","));
 		return lookupKey.toString();
 	}
+	
 }

@@ -193,6 +193,7 @@ public class XMLConfigUtil {
 		List<Policy> policies = new ArrayList<>();
 		PolicyConfig policyConfig = XMLConfigUtil.INSTANCE.getPolicyConfig();
 		//put all master policies
+		
 		policies.addAll(policyConfig.getMasterpolicies().getPolicy());
 		for (CategoryPolicies categoryPolicies : policyConfig.getCategorypolicies()) {
 			if (categoryPolicies.getCategory().toString().equalsIgnoreCase(component.getCategory().toString())) {

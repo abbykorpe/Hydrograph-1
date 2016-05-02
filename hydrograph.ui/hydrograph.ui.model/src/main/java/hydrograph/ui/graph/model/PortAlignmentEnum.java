@@ -1,16 +1,16 @@
 package hydrograph.ui.graph.model;
 
-public enum PortTypeEnum {
 
-	IN("in"), 
-	OUT("out"), 
-	UNUSED("unused"),
-	LOOKUP("lookup"),
-	DRIVER("driver")
+public enum PortAlignmentEnum {
+
+	LEFT("left"), 
+	RIGHT("right"), 
+	BOTTOM("bottom"),
+	
 	;
 	private final String value;
 	
-	PortTypeEnum(String v) {
+	PortAlignmentEnum(String v) {
         value = v;
     }
 
@@ -18,8 +18,8 @@ public enum PortTypeEnum {
         return value;
     }
 
-    public static PortTypeEnum fromValue(String v) {
-        for (PortTypeEnum c: PortTypeEnum.values()) {
+    public static PortAlignmentEnum fromValue(String v) {
+        for (PortAlignmentEnum c: PortAlignmentEnum.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

@@ -11,9 +11,9 @@
  limitations under the License. -->
  
  
-<tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig"
+<tns:Config xmlns:tns="hydrograph/ui/ComponentConfig"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd ">
+	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 
 	<tns:component paletteIconPath="/icons/subjob_palette.png"
 		canvasIconPath="/icons/subjob-canvas.png" name="SubjobComponent"
@@ -23,11 +23,11 @@
 		<tns:category>SUBJOB</tns:category>
 
 			<tns:port>
-			<tns:portSpecification typeOfPort="in" numberOfPorts="0" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
+			<tns:portSpecification numberOfPorts="0" portAlignment="left" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="out" numberOfPorts="0" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
+			<tns:portSpecification  numberOfPorts="0" portAlignment="right" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
 			</tns:portSpecification>
-			<tns:portSpecification typeOfPort="unused" numberOfPorts="0" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+			<tns:portSpecification numberOfPorts="0" portAlignment="bottom" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
 			</tns:portSpecification>
 		</tns:port>
 		

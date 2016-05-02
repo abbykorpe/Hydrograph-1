@@ -11,8 +11,8 @@
  limitations under the License. -->
  
  
-<tns:Config xmlns:tns="http://www.bitwise.com/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.bitwise.com/ComponentConfig xsds/ComponentConfig.xsd">
+<tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd">
 	<tns:component paletteIconPath="/icons/hive_parquet_output_palette.png" canvasIconPath="/icons/hive_parquet_output_canvas.png"
 		name="OHiveParquet" nameInPalette="Hive Parquet" defaultNamePrefix="OHiveParquet" 
 		description="Takes parquet file as input and performs Hive job."
@@ -20,8 +20,8 @@
 		acronym="HPrqt">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
-			<tns:portSpecification typeOfPort="in" numberOfPorts="1" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0" labelOfPort="in0" nameOfPort="in0" />
+			<tns:portSpecification numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+				<tns:port sequenceOfPort="0" typeOfPort="in" labelOfPort="in0" portTerminal="in0" />
 			</tns:portSpecification>
 		</tns:port>
 		

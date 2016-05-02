@@ -11,7 +11,7 @@
  limitations under the License. -->
  
  
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bitwise.com/constant"
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="hydrograph/ui/constant"
   xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="1.0">
 	
 	<simpleType name="category_type">
@@ -133,6 +133,16 @@
 			<enumeration value="in" />
 			<enumeration value="out" />
 			<enumeration value="unused"/>
+			<enumeration value="driver"/>
+			<enumeration value="lookup"/>
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="PortAlignment">
+		<restriction base="string">
+			<enumeration value="left" />
+			<enumeration value="right" />
+			<enumeration value="bottom"/>
 		</restriction>
 	</simpleType>
 	

@@ -63,7 +63,7 @@ import hydrograph.engine.jaxb.operationstypes.Aggregate;
 import hydrograph.engine.jaxb.operationstypes.Cumulate;
 import hydrograph.engine.jaxb.operationstypes.Filter;
 import hydrograph.engine.jaxb.operationstypes.GenerateSequence;
-import hydrograph.engine.jaxb.operationstypes.HashJoin;
+import hydrograph.engine.jaxb.operationstypes.Lookup;
 import hydrograph.engine.jaxb.operationstypes.Join;
 import hydrograph.engine.jaxb.operationstypes.Normalize;
 import hydrograph.engine.jaxb.operationstypes.Transform;
@@ -139,7 +139,7 @@ public class UiConverterFactory {
 		if ((Join.class).isAssignableFrom(typeBaseComponent.getClass())) {
 			return new JoinComponentUiConverter(typeBaseComponent, container);
 		}
-		if ((HashJoin.class).isAssignableFrom(typeBaseComponent.getClass())) {
+		if ((Lookup.class).isAssignableFrom(typeBaseComponent.getClass())) {
 			return new LookupUiConverter(typeBaseComponent, container);
 		}
 		if ((GenerateRecord.class).isAssignableFrom(typeBaseComponent.getClass())) {

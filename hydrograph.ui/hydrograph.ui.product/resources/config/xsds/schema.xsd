@@ -11,8 +11,8 @@
  limitations under the License. -->
  
  
-<xs:schema xmlns="http://www.bitwiseglobal.com/graph/schema"
-	targetNamespace="http://www.bitwiseglobal.com/graph/schema" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+<xs:schema xmlns="hydrograph/ui/graph/schema"
+	targetNamespace="hydrograph/ui/graph/schema" xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	elementFormDefault="unqualified">
 
 	<xs:element name="Schema">
