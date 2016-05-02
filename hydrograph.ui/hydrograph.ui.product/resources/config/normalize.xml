@@ -39,10 +39,13 @@
 			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="TRUE" tooltipDataType="LIST"
          usage="REQUIRED">
 			<tns:validator>TRANSFORM_SCHEMA_GRID_VALIDATOR</tns:validator>
+			
 		</tns:property>
 		
 		<tns:property dataType="string" name="operation" renderer="NORMALIZE_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
-			showAsTooltip="TRUE" tooltipDataType="LIST" usage="OPTIONAL" />
+			showAsTooltip="TRUE" tooltipDataType="LIST" usage="OPTIONAL" >
+			<tns:validator>TRANSFORM_MAPPING_VALIDATOR</tns:validator>
+			</tns:property>
 		
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"

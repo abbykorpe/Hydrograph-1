@@ -883,7 +883,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 						mappingSheetRow.getNameValueProperty().clear();
 						mappingSheetRow.setClassParameter(false);
 						mappingSheetRow.setOperationClassPath("");
-
+						refreshOutputTable();
+                   
 					} else
 						text.setSelection(false);
 				} else {
@@ -892,9 +893,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					parameterTextBox.setEnabled(false);
 
 					operationInputFieldTableViewer.getTable().setEnabled(true);
-
+					operationInputFieldTableViewer.refresh();
 					operationOutputFieldTableViewer.getTable().setEnabled(true);
-
+					operationOutputFieldTableViewer.refresh();
 					operationClassTextBox.setEnabled(true);
 					operationClassTextBox.setText("");
 					operationIDTextBox.setEnabled(true);

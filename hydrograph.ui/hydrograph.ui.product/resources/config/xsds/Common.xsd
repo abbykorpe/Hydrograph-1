@@ -239,7 +239,7 @@
 		</enumeration>
 		<enumeration value="FILE_EXISTS_VALIDATOR">
 			 <annotation>
-		          <appinfo> KeyFieldsValidationRule("KEY_FIELDS_VALIDATOR");
+		          <appinfo> 
 		            <jaxb:typesafeEnumMember name="FileExistsValidatorRule" />
 		          </appinfo>
         	</annotation>
@@ -255,6 +255,13 @@
 			 <annotation>
 		          <appinfo> 
 		            <jaxb:typesafeEnumMember name="SortComponentKeysFieldsValidationRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
+		<enumeration value="TRANSFORM_MAPPING_VALIDATOR">
+			 <annotation>
+		          <appinfo> 
+		            <jaxb:typesafeEnumMember name="TransformMappingValidationRule" />
 		          </appinfo>
         	</annotation>
 		</enumeration>
