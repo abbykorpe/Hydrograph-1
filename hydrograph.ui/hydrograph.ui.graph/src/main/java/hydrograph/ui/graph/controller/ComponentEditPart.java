@@ -334,7 +334,6 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			if(eltPropertyWindow.isPropertyChanged())
 			{updateSubjobVersion();}
 			adjustComponentFigure(getCastedModel(), getComponentFigure());
-			getCastedModel().setComponentLabel((String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue()));
 			
 			changePortSettings();
 			

@@ -25,7 +25,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.draw2d.TextUtilities;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -68,6 +72,19 @@ public class Container extends Model {
 				&& components.add(component)) {
 			component.setParent(this);
 			String compNewName = getDefaultNameForComponent(component.getPrefix());
+			
+			//Check length and increment height
+			Font font = new Font( Display.getDefault(), ModelConstants.labelFont, 10,
+					SWT.NORMAL );
+			int labelLength = TextUtilities.INSTANCE.getStringExtents(compNewName, font).width;
+			ComponentLabel componentLabel = component.getComponentLabel();
+			
+			if(labelLength >= ModelConstants.compLabelOneLineLengthLimit ){
+				component.setSize(new Dimension(component.getSize().width, component.getSize().height + ModelConstants.componentOneLineLabelMargin));
+				componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height + ModelConstants.componentOneLineLabelMargin));
+				component.setComponentLabelMargin(ModelConstants.componentTwoLineLabelMargin);
+			}
+			
 			component.setComponentLabel(compNewName);
 			
 			if (component.isNewInstance()) {
