@@ -32,7 +32,7 @@ public class GridRow implements IDataStructure {
 		private Integer scaleType;
 		private String scaleTypeValue;
 		private String precision;
-		private String description;
+		private String description = "";
 		
 		public String getDataTypeValue() {
 			return dataTypeValue;
