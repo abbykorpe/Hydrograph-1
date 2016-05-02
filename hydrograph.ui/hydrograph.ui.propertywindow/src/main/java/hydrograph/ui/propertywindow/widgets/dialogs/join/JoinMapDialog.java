@@ -9,20 +9,28 @@ import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEdit
 import hydrograph.ui.propertywindow.widgets.dialogs.join.utils.JoinMapDialogConstants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.eclipse.jdt.internal.ui.wizards.buildpaths.SetFilterWizardPage;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.DND;
@@ -36,6 +44,7 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -63,6 +72,11 @@ public class JoinMapDialog extends Dialog {
 	
 	private Map<String,Button> radioButtonMap ;
 	
+	private JoinMappingGrid oldJoinMappingGrid;
+	private JoinMappingGrid newJoinMappingGrid;
+	
+	private List<String> allInputFields;
+	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -88,6 +102,7 @@ public class JoinMapDialog extends Dialog {
 		radioButtonMap = new LinkedHashMap<>();
 		
 		this.propertyDialogButtonBar=propertyDialogButtonBar;
+		allInputFields = new LinkedList<>();
 	}
 
 	/**
@@ -114,17 +129,6 @@ public class JoinMapDialog extends Dialog {
 	}
 
 	private void createNoteSection(Composite container) {
-		Composite composite_9 = new Composite(container, SWT.NONE);
-		composite_9.setLayout(new GridLayout(2, false));
-		GridData gd_composite_9 = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-		gd_composite_9.heightHint = 29;
-		composite_9.setLayoutData(gd_composite_9);
-		
-		Label lblNote = new Label(composite_9, SWT.NONE);
-		lblNote.setText("Note: ");
-		
-		Label lblThisIsTest = new Label(composite_9, SWT.NONE);
-		lblThisIsTest.setText("This is test not an you can change it later");
 	}
 
 	private void createCopyInputToOutputFieldSection(Composite composite) {
@@ -157,18 +161,20 @@ public class JoinMapDialog extends Dialog {
 		Composite composite_12 = new Composite(scrolledComposite_2, SWT.NONE);
 		composite_12.setLayout(new GridLayout(1, false));
 		
-		//TODO
 		Button btnRadioButton_None = new Button(composite_12, SWT.RADIO);
 		btnRadioButton_None.setText("None");
 		
 		btnRadioButton_None.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				joinMappingGrid.setButtonText(((Button)e.widget).getText());
-				joinMappingGrid.setIsSelected(false);
-				mappingTableItemList.clear();
-				mappingTableViewer.refresh();
-				mappingTableViewer.getTable().setEnabled(true);
+				
+				if(!mappingTableViewer.getTable().isEnabled()){
+					joinMappingGrid.setButtonText(((Button)e.widget).getText());
+					joinMappingGrid.setIsSelected(false);
+					mappingTableItemList.clear();
+					mappingTableViewer.refresh();
+					mappingTableViewer.getTable().setEnabled(true);
+				}
 			}
 		});
 		radioButtonMap.put(btnRadioButton_None.getText(), btnRadioButton_None);
@@ -263,6 +269,9 @@ public class JoinMapDialog extends Dialog {
 		gd_table.widthHint = 374;
 		table.setLayoutData(gd_table);
 		mappingTableViewer.setContentProvider(new ArrayContentProvider());
+		ColumnViewerToolTipSupport.enableFor(mappingTableViewer);
+		
+		
 		
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(mappingTableViewer, SWT.NONE);
 		TableColumn tblclmnPropertyName = tableViewerColumn.getColumn();
@@ -270,12 +279,41 @@ public class JoinMapDialog extends Dialog {
 		tblclmnPropertyName.setText(JoinMapDialogConstants.INPUT_FIELD);
 		tableViewerColumn.setEditingSupport(new JoinMappingEditingSupport(mappingTableViewer,
 				JoinMapDialogConstants.INPUT_FIELD));
+		
+		
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
+			String tooltipText;
+			@Override
+			public String getToolTipText(Object element) {
+				tooltipText=null;
+				LookupMapProperty lookupMapProperty = (LookupMapProperty) element;
+				if(!allInputFields.contains(lookupMapProperty.getSource_Field())){				
+					tooltipText="No such input field";
+				}
+								
+				getForeground(element);
+				return tooltipText;
+			}
+			
+			@Override
+			public Color getForeground(Object element) {
+				LookupMapProperty lookupMapProperty = (LookupMapProperty) element;
+				if(!allInputFields.contains(lookupMapProperty.getSource_Field())){				
+					return new Color(null, 255,0,0);
+				}else{
+					return super.getForeground(element);
+				}
+				
+			}
+			
+			
 			@Override
 			public String getText(Object element) {
 				LookupMapProperty lookupMapProperty = (LookupMapProperty) element;
 				return lookupMapProperty.getSource_Field();
 			}
+			
+			
 		});
 		
 		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(mappingTableViewer, SWT.NONE);
@@ -285,6 +323,31 @@ public class JoinMapDialog extends Dialog {
 		tableViewerColumn_1.setEditingSupport(new JoinMappingEditingSupport(mappingTableViewer,
 				JoinMapDialogConstants.OUTPUT_FIELD));
 		tableViewerColumn_1.setLabelProvider(new ColumnLabelProvider() {
+			
+			String tooltipText;
+			@Override
+			public String getToolTipText(Object element) {
+				tooltipText=null;
+				int occurrences = Collections.frequency(mappingTableItemList, element);				
+				if(occurrences > 1){
+					tooltipText="Duplicate field";
+				}
+				
+				getForeground(element);
+				return tooltipText;
+			}
+			
+			@Override
+			public Color getForeground(Object element) {
+				int occurrences = Collections.frequency(mappingTableItemList, element);
+				if(occurrences > 1){				
+					return new Color(null, 255,0,0);
+				}else{
+					return super.getForeground(element);
+				}
+				
+			}
+			
 			@Override
 			public String getText(Object element) {
 				LookupMapProperty lookupMapProperty = (LookupMapProperty) element;
@@ -324,9 +387,6 @@ public class JoinMapDialog extends Dialog {
 
 					String[] dropData = ((String) event.data).split(Pattern.quote("#"));
 					for (String data : dropData) {
-						//joinOutputProperty(mappingTableViewer, data);
-						//mappingTableItemList.add(e)
-						//TODO
 						LookupMapProperty mappingTableItem = new LookupMapProperty();
 						mappingTableItem.setSource_Field(data);
 						mappingTableItem.setOutput_Field( data.split("\\.")[1]);
@@ -374,6 +434,13 @@ public class JoinMapDialog extends Dialog {
 		
 		Button btnAdd = new Button(composite_11, SWT.NONE);
 		btnAdd.setText("Add");
+		btnAdd.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				mappingTableViewer.refresh();
+				super.widgetSelected(e);
+			}
+		});
 		
 		Button btnDelete = new Button(composite_11, SWT.NONE);
 		btnDelete.setText("Delete");
@@ -447,6 +514,11 @@ public class JoinMapDialog extends Dialog {
 			}
 			if (inputPorts != null) {
 				inputPorts.add(inputPortFieldList);
+				
+				for(FilterProperties inputField: inputPortFieldList){
+					allInputFields.add("in" + i + "." + inputField.getPropertyname());
+				}
+				
 			}
 			addExpandItem(expandBar, inputPortFieldList, i);
 		}
@@ -531,6 +603,19 @@ public class JoinMapDialog extends Dialog {
 	
 	@Override
 	protected void okPressed() {
+		populateCurrentItemsOfTable();
+		
+		/*if (previousItems.length == 0 && currentItems.length != 0) {
+			propertyDialogButtonBar.enableApplyButton(true);
+		} else if ((currentItems.length != 0 && previousItems.length != 0)) {
+			if (!Arrays.equals(currentItems, previousItems))
+				propertyDialogButtonBar.enableApplyButton(true);
+		}*/
+		
+		if(!oldJoinMappingGrid.equals(newJoinMappingGrid)){
+			propertyDialogButtonBar.enableApplyButton(true);
+		}
+		
 		joinMappingGrid.setLookupInputProperties(inputPorts);
 		joinMappingGrid.setLookupMapProperties(mappingTableItemList);
 		super.okPressed();
@@ -548,13 +633,31 @@ public class JoinMapDialog extends Dialog {
 		//mappingTableItemList.clear();
 		//mappingTableItemList.addAll(joinMappingGrid.getLookupMapProperties());
 		
-		if(radioButtonMap.get(joinMappingGrid.getButtonText())!=null)
+		if(joinMappingGrid.getButtonText()!=null && !joinMappingGrid.getButtonText().equals("None")){
 			radioButtonMap.get(joinMappingGrid.getButtonText()).setSelection(true);
-		else
+			mappingTableViewer.getTable().setEnabled(false);
+		}else{
 			radioButtonMap.get("None").setSelection(true);
+		}
+		
 		
 		mappingTableViewer.setInput(mappingTableItemList);
 		
 		mappingTableViewer.refresh();
+		
+		//inputPorts
+		//joinMappingGrid.getLookupInputProperties();
+		//allInputFields
+		
+		
+		populatePreviousItemsOfTable();
+		
+	}
+	
+	private void populatePreviousItemsOfTable() {
+		oldJoinMappingGrid = joinMappingGrid.clone();
+	}
+	private void populateCurrentItemsOfTable() {
+		newJoinMappingGrid = joinMappingGrid.clone();
 	}
 }

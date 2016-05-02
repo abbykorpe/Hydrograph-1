@@ -233,18 +233,21 @@ public class JoinConverter extends TransformConverter {
 					if(!ParameterUtil.isParameter(lookupMapProperty.getSource_Field())){
 						String[] sourceNameValue = lookupMapProperty.getSource_Field().split(Pattern.quote("."));
 
-						if (sourceNameValue[1].equalsIgnoreCase(lookupMapProperty.getOutput_Field())) {
-							typeInputField = new TypeInputField();
-							typeInputField.setName(sourceNameValue[1]);
-							typeInputField.setInSocketId(sourceNameValue[0]);
-							passThroughFieldorMapFieldList.add(typeInputField);
-						} else {
-							mapField = new TypeMapField();
-							mapField.setSourceName(sourceNameValue[1]);
-							mapField.setName(lookupMapProperty.getOutput_Field());
-							mapField.setInSocketId(sourceNameValue[0]);
-							passThroughFieldorMapFieldList.add(mapField);
+						if(sourceNameValue.length == 2){
+							if (sourceNameValue[1].equalsIgnoreCase(lookupMapProperty.getOutput_Field())) {
+								typeInputField = new TypeInputField();
+								typeInputField.setName(sourceNameValue[1]);
+								typeInputField.setInSocketId(sourceNameValue[0]);
+								passThroughFieldorMapFieldList.add(typeInputField);
+							} else {
+								mapField = new TypeMapField();
+								mapField.setSourceName(sourceNameValue[1]);
+								mapField.setName(lookupMapProperty.getOutput_Field());
+								mapField.setInSocketId(sourceNameValue[0]);
+								passThroughFieldorMapFieldList.add(mapField);
+							}
 						}
+						
 						
 					}else{
 						converterHelper.addParamTag(this.ID, lookupMapProperty.getSource_Field(),

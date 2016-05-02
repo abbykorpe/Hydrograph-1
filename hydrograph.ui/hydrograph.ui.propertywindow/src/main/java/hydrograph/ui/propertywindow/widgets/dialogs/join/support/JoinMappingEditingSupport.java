@@ -69,6 +69,7 @@ public class JoinMappingEditingSupport extends EditingSupport {
 		else if(JoinMapDialogConstants.OUTPUT_FIELD.equals(columnName))
 			((LookupMapProperty) element).setOutput_Field(String.valueOf(userInputValue));
 		
+		viewer.refresh();
 		viewer.update(element, null);
 	}
 }
