@@ -23,7 +23,6 @@ import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.datastructure.property.TransformPropertyGrid;
 import hydrograph.ui.datastructure.property.mapping.ErrorObject;
 import hydrograph.ui.datastructure.property.mapping.InputField;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
@@ -67,7 +66,6 @@ public class TransformWidget extends AbstractWidget {
 	private String propertyName;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private TransformMapping transformMapping;
-	private TransformPropertyGrid transformPropertyGrid;
 	private List<AbstractWidget> widgets;
 	/**
 	 * Instantiates a new ELT operation class widget.

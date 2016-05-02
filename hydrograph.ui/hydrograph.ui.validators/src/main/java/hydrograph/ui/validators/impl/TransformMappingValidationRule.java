@@ -33,24 +33,26 @@ public class TransformMappingValidationRule implements IValidator{
 		}	
 		List<MappingSheetRow> mappingSheetRows=transformMapping.getMappingSheetRows();
 		List<NameValueProperty>  mapOrPassthroughfields = transformMapping.getMapAndPassthroughField();
+		
 		if((mappingSheetRows==null || mappingSheetRows.isEmpty()) && (mapOrPassthroughfields==null || mapOrPassthroughfields.isEmpty() ) )
 		{
 	    errorMessage = propertyName + "Output field(s) is mandatory";		 	
 		return false;
 		}
+		
 		Set<FilterProperties>set=null;
-		if(mappingSheetRows!=null || !mappingSheetRows.isEmpty())
+		if(mappingSheetRows!=null && !mappingSheetRows.isEmpty())
 		{
 			for(MappingSheetRow mappingSheetRow:mappingSheetRows)
 			{
 				if(StringUtils.isBlank(mappingSheetRow.getOperationClassPath()))
 				{
-					 errorMessage = propertyName + "Operation class is mandatory";		
+					 errorMessage = propertyName + "Operation class is blank in"+" "+mappingSheetRow.getOperationID();		
 					 return false;
 				}
 				if(mappingSheetRow.getInputFields().isEmpty() ||mappingSheetRow.getOutputList().isEmpty())
 				{
-					 errorMessage = propertyName + "Operation Fiel(s) are empty";		
+					 errorMessage = propertyName + "Operation field(s) are empty";		
 					 return false;
 				}
 					
@@ -60,7 +62,7 @@ public class TransformMappingValidationRule implements IValidator{
 				   set = new HashSet<FilterProperties>(mappingSheetRow.getInputFields());
 				   if(set.size() < mappingSheetRow.getInputFields().size())
 				   {
-					 errorMessage = propertyName + "Duplicate fields exists in" +" "+mappingSheetRow.getOperationID();		
+					 errorMessage = propertyName + "Duplicate field(s) exists in" +" "+mappingSheetRow.getOperationID();		
 					 return false;
 				   }
 			}
@@ -74,7 +76,7 @@ public class TransformMappingValidationRule implements IValidator{
 		}
 		
 		List<FilterProperties> operationOutputFieldList=new ArrayList<>();
-		for( MappingSheetRow mappingSheetRow:mappingSheetRows)
+		for( MappingSheetRow mappingSheetRow : mappingSheetRows)
 		{
 			operationOutputFieldList.addAll(mappingSheetRow.getOutputList());
 		}
@@ -83,7 +85,7 @@ public class TransformMappingValidationRule implements IValidator{
 		
 		if((set.size()<(operationOutputFieldList.size()+filterProperties.size()))) 
 		{
-			 errorMessage = propertyName + "Duplicate fields exists in OutputFields";		
+			 errorMessage = propertyName + "Duplicate field(s) exists in OutputFields";		
 			 return false;
 			
 		}	
