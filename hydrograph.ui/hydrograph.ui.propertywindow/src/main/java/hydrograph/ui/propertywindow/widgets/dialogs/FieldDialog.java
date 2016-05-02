@@ -515,7 +515,7 @@ public class FieldDialog extends Dialog {
 		targetTableViewer.setLabelProvider(new ELTFilterLabelProvider());
 		targetTableViewer.setInput(propertyList);
 
-		TableColumn targetTableColumn = new TableColumn(targetTable, SWT.CENTER);
+		TableColumn targetTableColumn = new TableColumn(targetTable, SWT.LEFT);
 		targetTableColumn.setText("Field Name");
 		targetTableColumn.setWidth(352);
 		targetTable.setHeaderVisible(true);
@@ -575,7 +575,7 @@ public class FieldDialog extends Dialog {
 		gd_table.widthHint = 189;
 		sourceTable.setLayoutData(gd_table);
 
-		tableViewerColumn = new TableViewerColumn(sourceTableViewer, SWT.NONE);
+		tableViewerColumn = new TableViewerColumn(sourceTableViewer, SWT.LEFT);
 		sourceTableColumn = tableViewerColumn.getColumn();
 		sourceTableColumn.setWidth(255);
 		sourceTableColumn.setText(Messages.AVAILABLE_FIELDS_HEADER);
