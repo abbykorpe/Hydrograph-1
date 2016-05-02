@@ -540,7 +540,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		if(transformSchemaType){
 			createSchemaGridSection(container.getContainerControl(), 340, 360);
-			if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.TRANSFORM)|| StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.AGGREGATE))
+			if(SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()))
 				createPullSchemaFromTransform(container.getContainerControl());
 		}
 		else{
@@ -1301,7 +1301,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 
 		} else {
-			if(!StringUtils.equalsIgnoreCase(Constants.TRANSFORM, getComponent().getComponentName()) && !StringUtils.equalsIgnoreCase(Constants.AGGREGATE, getComponent().getComponentName()))
+			if(!SchemaSyncUtility.isSchemaSyncAllow( getComponent().getComponentName()))
 			{			
 			if (schema.getGridRow().size() != 0) {
 				table.clearAll();

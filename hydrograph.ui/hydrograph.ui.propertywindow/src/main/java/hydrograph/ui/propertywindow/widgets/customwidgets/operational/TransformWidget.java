@@ -231,7 +231,7 @@ public class TransformWidget extends AbstractWidget {
 	// PLEASE DO NOT REMOVE THE CODE
 	private GridRow getCurrentSchemaField(String fieldName) {
 		Component component = getComponent();
-		Schema schema = (Schema) component.getProperties().get("schema");
+		Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
 		if (schema != null) {
 			for (GridRow gridRow : schema.getGridRow()) {
 				if(gridRow.getFieldName().equals(fieldName))
