@@ -146,12 +146,10 @@ public class SchemaPropagation {
 	}
 
 	private void setSchemaMapOfComponent(Component component, ComponentsOutputSchema componentsOutputSchema) {
-		Map<String, ComponentsOutputSchema>  oldComponentsOutputSchemaMap=null;
 		if (!StringUtils.equals(Constants.SUBJOB_COMPONENT_CATEGORY, component.getCategory())) {
 			Map<String, ComponentsOutputSchema> newComponentsOutputSchemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
 			newComponentsOutputSchemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
-			oldComponentsOutputSchemaMap = (Map<String, ComponentsOutputSchema>) component.getProperties().put(
-					Constants.SCHEMA_TO_PROPAGATE, newComponentsOutputSchemaMap);
+			component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, newComponentsOutputSchemaMap);
 			if(StringUtils.equalsIgnoreCase(component.getCategory(), Constants.OUTPUT)){
 				updateSchema(component,componentsOutputSchema);
 				component.validateComponentProperties();}
@@ -231,14 +229,13 @@ public class SchemaPropagation {
 	private void propagatePassThroughAndMapFields(Link link) {
 		boolean toPropagate = false;
 		
-		ComponentsOutputSchema sourceOutputSchema = getComponentsOutputSchema(link);
 		ComponentsOutputSchema targetOutputSchema = getTargetComponentsOutputSchemaFromMap(link);
 		if (targetOutputSchema != null && !targetOutputSchema.getPassthroughFields().isEmpty()) {
-			targetOutputSchema.updatePassthroughFieldsSchema(sourceOutputSchema, link.getTargetTerminal());
+			targetOutputSchema.updatePassthroughFieldsSchema(getComponentsOutputSchema(link), link.getTargetTerminal());
 			toPropagate = true;
 		}
 		if (targetOutputSchema != null && !targetOutputSchema.getMapFields().isEmpty()) {
-			targetOutputSchema.updateMapFieldsSchema(sourceOutputSchema, link.getTargetTerminal());
+			targetOutputSchema.updateMapFieldsSchema(getComponentsOutputSchema(link), link.getTargetTerminal());
 			toPropagate = true;
 		}
 		if (toPropagate)
