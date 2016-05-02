@@ -1,4 +1,5 @@
-package hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty;
+package hydrograph.ui.propertywindow.widgets.dialogs.join;
+
 
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.StatusLineManager;

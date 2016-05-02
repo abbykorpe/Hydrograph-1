@@ -1,12 +1,19 @@
-package hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty;
+package hydrograph.ui.propertywindow.widgets.dialogs.join;
 
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
+import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTJoinWidget;
+import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEditingSupport;
+import hydrograph.ui.propertywindow.widgets.dialogs.join.utils.JoinMapDialogConstants;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -18,6 +25,17 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceAdapter;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -30,14 +48,20 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 
 public class JoinMapDialog extends Dialog {
-	private Table table;
-	private Table table_1;
+	//private Table table;
+	//private Table table_1;
 	private JoinMappingGrid joinMappingGrid;
 	private List<List<FilterProperties>> inputPorts = new ArrayList<>();
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private int inputPortValue = ELTJoinWidget.value;
+	private TableViewer mappingTableViewer;
+	
+	private List<LookupMapProperty> mappingTableItemList;
+	
+	private Map<String,Button> radioButtonMap ;
 	
 	/**
 	 * Create the dialog.
@@ -53,6 +77,16 @@ public class JoinMapDialog extends Dialog {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL | SWT.RESIZE);
 		this.joinMappingGrid = joinPropertyGrid;
+		
+		/*if (joinMappingGrid.getLookupMapProperties() != null
+				&& !joinMappingGrid.getLookupMapProperties().isEmpty()) {
+			mappingTableItemList = joinMappingGrid.getLookupMapProperties();
+		} else {
+			mappingTableItemList = new LinkedList<>();
+		}*/
+		
+		radioButtonMap = new LinkedHashMap<>();
+		
 		this.propertyDialogButtonBar=propertyDialogButtonBar;
 	}
 
@@ -71,10 +105,11 @@ public class JoinMapDialog extends Dialog {
 		
 		creatFieldMappingSection(composite);
 		
-		creatCopyInputToOutputFieldSection(composite);
+		createCopyInputToOutputFieldSection(composite);
 		
 		createNoteSection(container);
-
+		
+		populateJoinMapDialog();
 		return container;
 	}
 
@@ -92,7 +127,7 @@ public class JoinMapDialog extends Dialog {
 		lblThisIsTest.setText("This is test not an you can change it later");
 	}
 
-	private void creatCopyInputToOutputFieldSection(Composite composite) {
+	private void createCopyInputToOutputFieldSection(Composite composite) {
 		Composite composite_3 = new Composite(composite, SWT.NONE);
 		GridLayout gl_composite_3 = new GridLayout(1, false);
 		gl_composite_3.verticalSpacing = 0;
@@ -122,19 +157,66 @@ public class JoinMapDialog extends Dialog {
 		Composite composite_12 = new Composite(scrolledComposite_2, SWT.NONE);
 		composite_12.setLayout(new GridLayout(1, false));
 		
-		Button btnRadioButton = new Button(composite_12, SWT.RADIO);
-		btnRadioButton.setText("Radio Button");
+		//TODO
+		Button btnRadioButton_None = new Button(composite_12, SWT.RADIO);
+		btnRadioButton_None.setText("None");
 		
-		Button btnRadioButton_1 = new Button(composite_12, SWT.RADIO);
-		btnRadioButton_1.setText("Radio Button");
+		btnRadioButton_None.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				joinMappingGrid.setButtonText(((Button)e.widget).getText());
+				joinMappingGrid.setIsSelected(false);
+				mappingTableItemList.clear();
+				mappingTableViewer.refresh();
+				mappingTableViewer.getTable().setEnabled(true);
+			}
+		});
+		radioButtonMap.put(btnRadioButton_None.getText(), btnRadioButton_None);
 		
-		Button btnRadioButton_2 = new Button(composite_12, SWT.RADIO);
-		btnRadioButton_2.setText("Radio Button");
+		for (int i = 0; i < inputPortValue; i++) {
+			Button btnRadioButton = new Button(composite_12, SWT.RADIO);
+			btnRadioButton.setText("Copy of in" + i);
+			btnRadioButton.setData("PORT_ID", i);
+			radioButtonMap.put(btnRadioButton.getText(), btnRadioButton);
+			btnRadioButton.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					joinMappingGrid.setButtonText(((Button)e.widget).getText());
+					joinMappingGrid.setIsSelected(true);
+					mappingTableViewer.getTable().setEnabled(false);
+					
+					List<FilterProperties> inputFieldList = inputPorts
+							.get((int) ((Button)e.widget).getData("PORT_ID"));
+					
+					
+					LookupMapProperty property = null;
+					
+					String inputPortID = "in"+ ((Button)e.widget).getData("PORT_ID") ;
+					
+					if (inputFieldList != null) {
+						mappingTableItemList.clear();
+						for (FilterProperties properties : inputFieldList) {
+							
+							property = new LookupMapProperty();
+							property.setSource_Field(inputPortID + "."
+									+ properties.getPropertyname());
+							property.setOutput_Field(properties.getPropertyname());
+							mappingTableItemList.add(property);
+						}
+						mappingTableViewer.refresh();
+						
+					}
+					
+				}
+			});
+		}
+		
 		scrolledComposite_2.setContent(composite_12);
 		scrolledComposite_2.setMinSize(composite_12.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
 	private void creatFieldMappingSection(Composite composite) {
+		
 		Composite composite_2 = new Composite(composite, SWT.NONE);
 		GridLayout gl_composite_2 = new GridLayout(1, false);
 		gl_composite_2.verticalSpacing = 0;
@@ -145,7 +227,127 @@ public class JoinMapDialog extends Dialog {
 		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		composite_2.setBounds(0, 0, 64, 64);
 		
-		Composite composite_4 = new Composite(composite_2, SWT.NONE);
+		createButtonSectionInFieldMappingSection(composite_2);
+		
+		createMappingTableInFieldMappingSection(composite_2);
+	}
+
+	private void createMappingTableInFieldMappingSection(Composite composite_2) {
+		Composite composite_5 = new Composite(composite_2, SWT.NONE);
+		GridLayout gl_composite_5 = new GridLayout(1, false);
+		gl_composite_5.verticalSpacing = 0;
+		gl_composite_5.marginWidth = 0;
+		gl_composite_5.marginHeight = 0;
+		gl_composite_5.horizontalSpacing = 0;
+		composite_5.setLayout(gl_composite_5);
+		composite_5.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		ScrolledComposite scrolledComposite = new ScrolledComposite(composite_5, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setExpandVertical(true);
+		
+		Composite composite_6 = new Composite(scrolledComposite, SWT.NONE);
+		GridLayout gl_composite_6 = new GridLayout(1, false);
+		gl_composite_6.verticalSpacing = 0;
+		gl_composite_6.marginWidth = 0;
+		gl_composite_6.marginHeight = 0;
+		gl_composite_6.horizontalSpacing = 0;
+		composite_6.setLayout(gl_composite_6);
+		
+		mappingTableViewer = new TableViewer(composite_6, SWT.BORDER | SWT.FULL_SELECTION);
+		Table table = mappingTableViewer.getTable();
+		table.setLinesVisible(true);
+		table.setHeaderVisible(true);
+		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_table.widthHint = 374;
+		table.setLayoutData(gd_table);
+		mappingTableViewer.setContentProvider(new ArrayContentProvider());
+		
+		TableViewerColumn tableViewerColumn = new TableViewerColumn(mappingTableViewer, SWT.NONE);
+		TableColumn tblclmnPropertyName = tableViewerColumn.getColumn();
+		tblclmnPropertyName.setWidth(169);
+		tblclmnPropertyName.setText(JoinMapDialogConstants.INPUT_FIELD);
+		tableViewerColumn.setEditingSupport(new JoinMappingEditingSupport(mappingTableViewer,
+				JoinMapDialogConstants.INPUT_FIELD));
+		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				LookupMapProperty lookupMapProperty = (LookupMapProperty) element;
+				return lookupMapProperty.getSource_Field();
+			}
+		});
+		
+		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(mappingTableViewer, SWT.NONE);
+		TableColumn tblclmnPropertyValue = tableViewerColumn_1.getColumn();
+		tblclmnPropertyValue.setWidth(148);
+		tblclmnPropertyValue.setText(JoinMapDialogConstants.OUTPUT_FIELD);
+		tableViewerColumn_1.setEditingSupport(new JoinMappingEditingSupport(mappingTableViewer,
+				JoinMapDialogConstants.OUTPUT_FIELD));
+		tableViewerColumn_1.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				LookupMapProperty lookupMapProperty = (LookupMapProperty) element;
+				return lookupMapProperty.getOutput_Field();
+			}
+		});
+		
+		
+		TableColumnLayout layout = new TableColumnLayout();
+		mappingTableViewer.getControl().getParent().setLayout(layout);
+
+		for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
+			table.getColumn(columnIndex).pack();
+		}
+		
+		for (int i = 0; i < mappingTableViewer.getTable().getColumnCount(); i++) {
+			layout.setColumnData(mappingTableViewer.getTable().getColumn(i),
+					new ColumnWeightData(1));
+		}
+		
+		mappingTableViewer.setInput(mappingTableItemList);
+		
+		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
+		int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK;
+		DropTarget target = new DropTarget(mappingTableViewer.getTable(), operations);
+		target.setTransfer(types);
+		target.addDropListener(new DropTargetAdapter() {
+			public void dragOver(DropTargetEvent event) {
+				event.feedback = DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
+			}
+
+			public void drop(DropTargetEvent event) {
+				if (event.data == null) {
+					event.detail = DND.DROP_NONE;
+					return;
+				}
+
+					String[] dropData = ((String) event.data).split(Pattern.quote("#"));
+					for (String data : dropData) {
+						//joinOutputProperty(mappingTableViewer, data);
+						//mappingTableItemList.add(e)
+						//TODO
+						LookupMapProperty mappingTableItem = new LookupMapProperty();
+						mappingTableItem.setSource_Field(data);
+						mappingTableItem.setOutput_Field( data.split("\\.")[1]);
+						mappingTableItemList.add(mappingTableItem);
+						
+						mappingTableViewer.refresh();
+					}
+					
+			}
+		});
+		
+				
+		scrolledComposite.setContent(composite_6);
+		scrolledComposite.setMinSize(composite_6.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+	}
+
+	private void createButtonSectionInFieldMappingSection(
+			Composite composite) {
+		
+		
+		Composite composite_4 = new Composite(composite, SWT.NONE);
 		composite_4.setLayout(new GridLayout(2, false));
 		GridData gd_composite_4 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_composite_4.heightHint = 40;
@@ -181,63 +383,6 @@ public class JoinMapDialog extends Dialog {
 		
 		Button btnDown = new Button(composite_11, SWT.NONE);
 		btnDown.setText("Down");
-		
-		Composite composite_5 = new Composite(composite_2, SWT.NONE);
-		GridLayout gl_composite_5 = new GridLayout(1, false);
-		gl_composite_5.verticalSpacing = 0;
-		gl_composite_5.marginWidth = 0;
-		gl_composite_5.marginHeight = 0;
-		gl_composite_5.horizontalSpacing = 0;
-		composite_5.setLayout(gl_composite_5);
-		composite_5.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		
-		ScrolledComposite scrolledComposite = new ScrolledComposite(composite_5, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		scrolledComposite.setExpandHorizontal(true);
-		scrolledComposite.setExpandVertical(true);
-		
-		Composite composite_6 = new Composite(scrolledComposite, SWT.NONE);
-		GridLayout gl_composite_6 = new GridLayout(1, false);
-		gl_composite_6.verticalSpacing = 0;
-		gl_composite_6.marginWidth = 0;
-		gl_composite_6.marginHeight = 0;
-		gl_composite_6.horizontalSpacing = 0;
-		composite_6.setLayout(gl_composite_6);
-		
-		TableViewer tableViewer = new TableViewer(composite_6, SWT.BORDER | SWT.FULL_SELECTION);
-		table = tableViewer.getTable();
-		table.setLinesVisible(true);
-		table.setHeaderVisible(true);
-		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		gd_table.widthHint = 374;
-		table.setLayoutData(gd_table);
-		
-		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnPropertyName = tableViewerColumn.getColumn();
-		tblclmnPropertyName.setWidth(169);
-		tblclmnPropertyName.setText("Property Name");
-		
-		
-		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnPropertyValue = tableViewerColumn_1.getColumn();
-		tblclmnPropertyValue.setWidth(148);
-		tblclmnPropertyValue.setText("Property Value");
-		
-		TableColumnLayout layout = new TableColumnLayout();
-		tableViewer.getControl().getParent().setLayout(layout);
-
-		for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
-			table.getColumn(columnIndex).pack();
-		}
-		
-		for (int i = 0; i < tableViewer.getTable().getColumnCount(); i++) {
-			layout.setColumnData(tableViewer.getTable().getColumn(i),
-					new ColumnWeightData(1));
-		}
-		
-		
-		scrolledComposite.setContent(composite_6);
-		scrolledComposite.setMinSize(composite_6.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
 	private Composite createOuterMostComposite(Composite container) {
@@ -316,7 +461,7 @@ public class JoinMapDialog extends Dialog {
 		composite_13.setLayout(new GridLayout(1, false));
 		
 		TableViewer tableViewer_1 = new TableViewer(composite_13, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
-		table_1 = tableViewer_1.getTable();
+		final Table table_1 = tableViewer_1.getTable();
 		table_1.setLinesVisible(true);
 		table_1.setHeaderVisible(true);
 		table_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -337,10 +482,33 @@ public class JoinMapDialog extends Dialog {
 		});
 		
 		tableViewer_1.setInput(inputPortFieldList);
+		
+		
+		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
+		final String portLabel = "in" + portNumber + ".";
+		int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK;
+		//final Table table = (Table) sourceControl;
+		DragSource source = new DragSource(table_1, operations);
+		source.setTransfer(types);
+		source.addDragListener(new DragSourceAdapter() {
+			public void dragSetData(DragSourceEvent event) {
+				// Set the data to be the first selected item's text
+				event.data = addDelimeter(portLabel, table_1.getSelection());
+			}
+		});
+		
 		xpndtmItem.setHeight(150);
 		
 	}
 
+	private String addDelimeter(String portLabel, TableItem[] selectedTableItems) {
+		StringBuffer buffer = new StringBuffer();
+		for (TableItem tableItem : selectedTableItems) {
+			buffer.append(portLabel + tableItem.getText() + "#");
+		}
+		return buffer.toString();
+	}
+	
 	/**
 	 * Create contents of the button bar.
 	 * @param parent
@@ -359,5 +527,34 @@ public class JoinMapDialog extends Dialog {
 	@Override
 	protected Point getInitialSize() {
 		return new Point(922, 558);
+	}
+	
+	@Override
+	protected void okPressed() {
+		joinMappingGrid.setLookupInputProperties(inputPorts);
+		joinMappingGrid.setLookupMapProperties(mappingTableItemList);
+		super.okPressed();
+	}
+	
+	private void populateJoinMapDialog(){
+		
+		if (joinMappingGrid.getLookupMapProperties() != null
+				&& !joinMappingGrid.getLookupMapProperties().isEmpty()) {
+			mappingTableItemList = joinMappingGrid.getLookupMapProperties();
+		} else {
+			mappingTableItemList = new LinkedList<>();
+		}
+		
+		//mappingTableItemList.clear();
+		//mappingTableItemList.addAll(joinMappingGrid.getLookupMapProperties());
+		
+		if(radioButtonMap.get(joinMappingGrid.getButtonText())!=null)
+			radioButtonMap.get(joinMappingGrid.getButtonText()).setSelection(true);
+		else
+			radioButtonMap.get("None").setSelection(true);
+		
+		mappingTableViewer.setInput(mappingTableItemList);
+		
+		mappingTableViewer.refresh();
 	}
 }
