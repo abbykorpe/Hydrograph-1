@@ -61,7 +61,7 @@
 		</tns:property>
 
 	<tns:operations>
-		<tns:interface class="hydrograph.engine.bhse.userfunctions.base.FilterBase"
+		<tns:interface class="hydrograph.engine.transformation.userfunctions.base.FilterBase"
 			name="FILTER" />
 	</tns:operations>
 	</tns:component>

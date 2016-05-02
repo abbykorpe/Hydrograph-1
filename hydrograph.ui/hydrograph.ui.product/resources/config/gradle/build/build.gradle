@@ -51,7 +51,9 @@ ext.hadoopVersion = '2.6.0'
 ext.hiveVersion = '1.2.0'
 
 dependencies {
-    compile(group: 'hydrograph.engine', name: 'elt-command-line', version: '0.1.5')
+
+    compile(group: 'hydrograph', name: 'hydrograph.engine.command-line', version: '0.1.6')
+
     compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
 }
 
@@ -314,7 +316,9 @@ task executeDebugRemoteJob() {
 task executeLocalJob(dependsOn: ['build', 'classes'], type: JavaExec) {
 
     if(project.hasProperty('localjob')){
-        def mainClassName = 'hydrograph.engine.commandline.utilities.BHSExecution'
+
+        def mainClassName = 'hydrograph.engine.commandline.utilities.HydrographExecution'
+
         def transformFiles = files { file(project.libsDir.path).listFiles() }
 
         println 'Executing local job'
@@ -415,7 +419,11 @@ task killRemoteJob() << {
                 username: username,
                 password: password,
                 trust: true,
+
                 command: "sh "+properties.runUtility+" -k " + jobprocessid)
+
+                command: "sh /home/hduser/milestone/kill_job.sh " + jobprocessid)
+
     }
 
 }
