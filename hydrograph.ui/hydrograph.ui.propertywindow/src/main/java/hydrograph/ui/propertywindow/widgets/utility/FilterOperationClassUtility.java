@@ -124,10 +124,7 @@ public class FilterOperationClassUtility  {
 				fileNameTextBox.setText(page.getTypeName());
 			}
 		}
-
-		fileNameTextBox.setData("path", "/" + page.getPackageFragmentRootText() + "/"
-				+ page.getPackageText().replace(".", "/") + "/"
-				+ page.getTypeName() + ".java");
+		fileNameTextBox.setData("path", "\\" + page.getPackageFragmentRootText().replace("/","\\") + "\\"+ page.getPackageText().replace(".", "\\") + "\\"+ page.getTypeName() + ".java");
 	}
 
 	/**
@@ -164,7 +161,6 @@ public class FilterOperationClassUtility  {
 			fileName.setText(name.trim());
 			filePath = resource.getRawLocation().toOSString();
 			fileName.setData("path", resource.getFullPath().toOSString());
-
 		}
 	} 
 
@@ -178,11 +174,18 @@ public class FilterOperationClassUtility  {
 	public static boolean openFileEditor(Text filePath,String pathFile) {
 		try {
 			String fileFullPath;
-			String fileName;
-			if(filePath!=null)
-				fileName= (String) filePath.getData("path");
-			else
-				fileName=pathFile;
+			String fileName="";
+			if (filePath != null) {
+				String projectPath=(String) filePath.getData("path");
+				if(!projectPath.isEmpty()){
+					String splitedProjectPath[]=projectPath.split("\\\\");
+					String formattedProjectPath="\\"+splitedProjectPath[1]+"\\"+splitedProjectPath[2]+"\\";
+					String textBoxValue=((Text)filePath).getText().replace(".","\\")+".java";
+					fileName = formattedProjectPath + textBoxValue;
+				}
+			} else {
+				fileName = pathFile;  
+			}
 
 			File fileToOpen = new File(fileName);
 			if(!fileToOpen.isFile())
