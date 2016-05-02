@@ -16,10 +16,10 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.datastructure.property.mapping.InputField;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
@@ -37,6 +37,7 @@ import hydrograph.ui.propertywindow.widgets.filterproperty.ErrorLabelProvider;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
 import hydrograph.ui.propertywindow.widgets.utility.DragDropUtility;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.awt.Dimension;
@@ -106,7 +107,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private static final String PARAMETER_TEXT_BOX = "parameterTextBox";
 	private static final String BTN_NEW_BUTTON = "btnNewButton";
 	private static final String IS_PARAM="isParam"; 
-	private List<String> deletedInternalSchemaList;
+	private static final String OUTPUT_TABLE_VIEWER="OutputTableViewer";
+	private static final String OUTPUT_FIELD="OutputFields";
+	
 	/**
 	 * Create the dialog.
 	 * 
@@ -154,7 +157,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	
 	
 	
-	public TransformDialog(Shell parentShell, Component component, WidgetConfig widgetConfig, TransformMapping atMapping, List<String> deletedInternalSchema) {
+	public TransformDialog(Shell parentShell, Component component, WidgetConfig widgetConfig, TransformMapping atMapping) {
 
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
@@ -168,7 +171,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		errorLabelList=new ArrayList<>();
 		duplicateOperationInputFieldMap=new HashMap<String,List<String>>();
 		duplicateFieldMap=new HashMap<String,List<String>>();
-		this.deletedInternalSchemaList=deletedInternalSchema;
 	}  
 
 	/**
@@ -256,10 +258,11 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		btnPull.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				List<NameValueProperty> outputFileds= getComponentSchemaAsProperty();
-				DragDropUtility.union(outputFileds, transformMapping);
-				refreshOutputTable();
-
+				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Constants.SYNC_CONFIRM_MESSAGE, MessageDialog.QUESTION, new String[] {"Ok", "Cancel" }, 0);
+				int dialogResult =dialog.open();
+				if(dialogResult == 0){
+					syncTransformFieldsWithSchema();
+				}
 			}
 		});
 		btnPull.setBounds(20, 10, 20, 20);
@@ -595,7 +598,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					for (int index : indexs) {
 
 						tempList.add(transformMapping.getMapAndPassthroughField().get(index));
-						deletedInternalSchemaList.add(transformMapping.getMapAndPassthroughField().get(index).getPropertyValue());
 					}
 					for(NameValueProperty nameValueProperty:tempList)
 					{	
@@ -660,8 +662,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		operationalInputFieldTableViewer = createOperationInputFieldTable(expandItemComposite, mappingSheetRow);
 
 		createMiddleWidgets(expandItemComposite, expandItem, mappingSheetRow);
-		createOperationOutputFieldTable(expandItemComposite, mappingSheetRow);
-
+		TableViewer opTableViewer=createOperationOutputFieldTable(expandItemComposite, mappingSheetRow);
+        	expandItem.setData(OUTPUT_TABLE_VIEWER, opTableViewer);
 		scrollBarComposite.setContent(expandBar);
 		scrollBarComposite.setMinSize(expandBar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
@@ -913,7 +915,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
         
 	}
 
-	private void createOperationOutputFieldTable(Composite expandItemComposite, final MappingSheetRow mappingSheetRow) {
+	private TableViewer createOperationOutputFieldTable(Composite expandItemComposite, final MappingSheetRow mappingSheetRow) {
 
 		Composite operationalOutputFieldComposite = new Composite(expandItemComposite, SWT.NONE);
 		GridData gd_operationalOutputFieldComposite = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
@@ -1009,7 +1011,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					for(FilterProperties filterProperties: tempList)
 					{	
 					mappingSheetRow.getOutputList().remove(filterProperties);
-					deletedInternalSchemaList.add(filterProperties.getPropertyname());
 					}
 					refreshOutputTable();
 					showHideValidationMessage();
@@ -1049,7 +1050,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			outputDelete.setEnabled(false);
 
 		}
-
+    return operationOutputtableViewer;
 	}
 
 	public void refreshOutputTable() {
@@ -1072,9 +1073,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			temporaryOutputFieldMap.put(mappingSheetRow1.getOperationID(),mappingSheetRow1.getOutputList());
 
 		}
-		temporaryOutputFieldMap.put("OutputFields",transformMapping.getOutputFieldList());
+		temporaryOutputFieldMap.put(OUTPUT_FIELD,transformMapping.getOutputFieldList());
 
-		DragDropUtility.unionFilter(convertNameValueToFilterProperties(transformMapping.getMapAndPassthroughField()),
+		SchemaSyncUtility.unionFilter(convertNameValueToFilterProperties(transformMapping.getMapAndPassthroughField()),
 				validatorOutputFields);
 		for (MappingSheetRow mappingSheetRow1 : transformMapping.getMappingSheetRows()) {
 			List<FilterProperties> operationOutputFieldList=mappingSheetRow1.getOutputList();
@@ -1085,11 +1086,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
                 	  nonParameterOutputFieldList.add(filterProperties);
                  
             } 
-            DragDropUtility.unionFilter(nonParameterOutputFieldList,validatorOutputFields);
+            SchemaSyncUtility.unionFilter(nonParameterOutputFieldList,validatorOutputFields);
 
 		}
-		DragDropUtility.unionFilter(transformMapping.getOutputFieldList(), validatorOutputFields);
-	   
+		SchemaSyncUtility.unionFilter(transformMapping.getOutputFieldList(), validatorOutputFields);
 		
 		outputFieldViewer.setInput(validatorOutputFields);
 		outputFieldViewer.refresh();
@@ -1237,9 +1237,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		operationalInputFieldTableViewer.setInput(mappingSheetRow.getInputFields());
 		operationalInputFieldTableViewer.getTable().setBounds(0, 25, 156, 182);
 		operationalInputFieldTableViewer.getTable().getColumn(0).setWidth(152);
-		operationalInputFieldTableViewer.setCellModifier(new ELTCellModifier(operationalInputFieldTableViewer, this,
-				mappingSheetRow));
-
+		operationalInputFieldTableViewer.setCellModifier(new ELTCellModifier(operationalInputFieldTableViewer, this,mappingSheetRow));
 		CellEditor[] editor=operationalInputFieldTableViewer.getCellEditors();
 		fieldNameDecorator = WidgetUtility.addDecorator(editor[0].getControl(),Messages.FIELDNAME_SHOULD_NOT_BE_BLANK);
 		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editor[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);	
@@ -1346,35 +1344,17 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	protected Point getInitialSize() {
 		container.getShell().layout(true, true);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
 		final Point newSize = container.getShell().computeSize(screenSize.width, screenSize.height, true);
-
 		container.getShell().setSize(newSize);
 		return newSize;
 	}
 
 	@Override
 	protected void okPressed() {
-
-		transformMapping = new TransformMapping((List<InputField>) inputFieldTableViewer.getInput(),
-				transformMapping.getMappingSheetRows(), transformMapping.getMapAndPassthroughField(),
-				transformMapping.getOutputFieldList());
-		okPressed = true;
-		List<NameValueProperty> outputFileds= getComponentSchemaAsProperty();
-		if(!isSchemaInSync(outputFileds, transformMapping))
-		{
-			MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, 
-					 Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, 
-	                new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
-			int dialogResult =dialog.open();
-			if(dialogResult == 0){
-				DragDropUtility.union(outputFileds, transformMapping);
-				refreshOutputTable();
-			}
-			else
-				super.okPressed();
-		}
-		else
+			transformMapping = new TransformMapping((List<InputField>) inputFieldTableViewer.getInput(),
+			transformMapping.getMappingSheetRows(), transformMapping.getMapAndPassthroughField(),
+			transformMapping.getOutputFieldList());
+			okPressed = true;
 			super.okPressed();
 	}
 
@@ -1479,38 +1459,53 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 	}
 	
+	/**
+	 * Sync transform fields with outer schema.
+	 */
+	private void syncTransformFieldsWithSchema() {
+		List<FilterProperties> filterProperties = convertSchemaToFilterProperty();
+		SchemaSyncUtility.removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
+		List<NameValueProperty> outputFileds= getComponentSchemaAsProperty();
+		SchemaSyncUtility.filterCommonMapFields(outputFileds, transformMapping);
+		refreshOutputTable();
+		for(ExpandItem item:expandBar.getItems())
+		{
+			TableViewer t=(TableViewer)item.getData(OUTPUT_TABLE_VIEWER);
+			t.refresh();
+		}
+	}
+	
+	/**
+	 * Convert schema to name value property of map fields. 
+	 * @return list
+	 */
 	private List<NameValueProperty> getComponentSchemaAsProperty(){
 		List<NameValueProperty> outputFileds = new ArrayList<>();
-		Map<String, ComponentsOutputSchema> schema = (Map<String, ComponentsOutputSchema>) component
-				.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
-		for (Map.Entry<String, ComponentsOutputSchema> entry : schema.entrySet()) {
-			ComponentsOutputSchema componentsOutputSchema = entry.getValue();
-			for (FixedWidthGridRow fixedWidthGridRow : componentsOutputSchema
-					.getFixedWidthGridRowsOutputFields()) {
+		Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+		if(schema!=null){
+			for (GridRow gridRow : schema.getGridRow()) {
 				NameValueProperty nameValueProperty = new NameValueProperty();
 				nameValueProperty.setPropertyName("");
-				nameValueProperty.setPropertyValue(fixedWidthGridRow.getFieldName());
+				nameValueProperty.setPropertyValue(gridRow.getFieldName());
 				outputFileds.add(nameValueProperty);
 			}
 		}
 		return outputFileds;
 	}
-
-	private boolean isSchemaInSync(List<NameValueProperty> outSchema, TransformMapping transformMapping){
-		List<NameValueProperty> mapAndPassthroughFields = transformMapping.getMapAndPassthroughField(); 
-		List<MappingSheetRow> mappingSheetRows  = transformMapping.getMappingSheetRows(); 
-		for (NameValueProperty nameValueProperty : outSchema) {
-			if(!mapAndPassthroughFields.contains(nameValueProperty)){
-				for (MappingSheetRow mappingSheetRow : mappingSheetRows) {
-					FilterProperties tempFilterProperties = new FilterProperties();
-					tempFilterProperties.setPropertyname(nameValueProperty.getPropertyValue());
-					if(mappingSheetRow.getOutputList().contains(tempFilterProperties))
-						return true;
-				}
-				return false;
+	
+	/**
+	 * convert schema to filter property 
+	 * @return  list
+	 */
+	private List<FilterProperties> convertSchemaToFilterProperty(){
+		List<FilterProperties> outputFileds = new ArrayList<>();
+		Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+			for (GridRow gridRow : schema.getGridRow()) {
+				FilterProperties filterProperty = new FilterProperties();
+				filterProperty.setPropertyname(gridRow.getFieldName());
+				outputFileds.add(filterProperty);
 			}
-		}
-		return true;
+		return outputFileds;
 	}
 
 }

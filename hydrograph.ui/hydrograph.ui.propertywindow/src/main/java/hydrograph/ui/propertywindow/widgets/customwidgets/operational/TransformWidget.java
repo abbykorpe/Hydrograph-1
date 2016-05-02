@@ -120,7 +120,7 @@ public class TransformWidget extends AbstractWidget {
 
 				TransformMapping oldATMappings = (TransformMapping) transformMapping.clone();
 
-				TransformDialog transformDialog=new TransformDialog(new Shell(),getComponent(),widgetConfig,transformMapping,getDeletedInternalSchema());
+				TransformDialog transformDialog=new TransformDialog(new Shell(),getComponent(),widgetConfig,transformMapping);
 				transformDialog.open();
 
 
