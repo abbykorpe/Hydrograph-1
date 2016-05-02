@@ -672,6 +672,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				int dialogResult =dialog.open();
 				if(dialogResult == 0){
 					syncSchemaFromTransform();
+					showHideErrorSymbol(applySchemaValidationRule());
 					propertyDialogButtonBar.enableApplyButton(true);
 				}
 			}
@@ -1282,7 +1283,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 							}
 						}
 					} 
-					else if(!StringUtils.equalsIgnoreCase(Constants.TRANSFORM, getComponent().getComponentName()) && !StringUtils.equalsIgnoreCase(Constants.AGGREGATE, getComponent().getComponentName()))
+					else if(!SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()))
 							originalSchema.getGridRow().add(row.copy());
 				}
 			}
