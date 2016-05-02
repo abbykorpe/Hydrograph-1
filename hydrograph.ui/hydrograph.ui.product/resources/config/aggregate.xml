@@ -53,7 +53,9 @@
 		
 		<tns:property dataType="string" name="operation" renderer="AGGREGATE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL" propertyHelpText="Field Mapping view."/>
+			usage="OPTIONAL" propertyHelpText="Field Mapping view.">
+			<tns:validator>TRANSFORM_MAPPING_VALIDATOR</tns:validator>
+			</tns:property>
 
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"

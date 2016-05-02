@@ -68,7 +68,7 @@ public class TransformWidget extends AbstractWidget {
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private TransformMapping transformMapping;
 	private TransformPropertyGrid transformPropertyGrid;
-
+	private List<AbstractWidget> widgets;
 	/**
 	 * Instantiates a new ELT operation class widget.
 	 * 
@@ -133,6 +133,7 @@ public class TransformWidget extends AbstractWidget {
 				if(transformDialog.isOkPressed())
                	{
                	propagateOuputFieldsToSchemaTabFromTransformWidget();	
+               	showHideErrorSymbol(widgets);
                	}	
 			 	
 				
@@ -425,15 +426,13 @@ public class TransformWidget extends AbstractWidget {
 
 	@Override
 	public boolean isWidgetValid() {
-		// TODO Auto-generated method stub
-		return false;
+		return validateAgainstValidationRule(transformMapping);
 	}
 
 	
 
 	@Override
 	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
-		// TODO Auto-generated method stub
-		
+		widgets=widgetList;
 	}
 }
