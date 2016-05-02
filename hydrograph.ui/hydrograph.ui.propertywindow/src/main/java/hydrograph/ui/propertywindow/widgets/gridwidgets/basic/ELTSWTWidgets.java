@@ -87,7 +87,7 @@ public class ELTSWTWidgets {
 
 	public void createTableColumns(Table table, String[] fields, int width) {
 		for (String field : fields) {
-			TableColumn tableColumn = new TableColumn(table, SWT.CENTER);
+			TableColumn tableColumn = new TableColumn(table, SWT.LEFT);
 			tableColumn.setText(field);
 			tableColumn.setWidth(width);
 			// tableColumn.pack();

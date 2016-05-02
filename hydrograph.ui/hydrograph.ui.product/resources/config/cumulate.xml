@@ -71,18 +71,18 @@
 	
 	<tns:operations>
 		<tns:interface
-			class="hydrograph.engine.bhse.userfunctions.base.CumulateTransformBase"
+			class="hydrograph.engine.transformation.userfunctions.base.CumulateTransformBase"
 			name="CUMULATE" />
-		<tns:stdOperation class="hydrograph.engine.bhse.userfunctions.cumulate.Sum"
+		<tns:stdOperation class="hydrograph.engine.transformation.userfunctions.cumulate.Sum"
 			name="Sum" />
-		<tns:stdOperation class="hydrograph.engine.bhse.userfunctions.cumulate.Max"
+		<tns:stdOperation class="hydrograph.engine.transformation.userfunctions.cumulate.Max"
 			name="Max" />
-		<tns:stdOperation class="hydrograph.engine.bhse.userfunctions.cumulate.Min"
+		<tns:stdOperation class="hydrograph.engine.transformation.userfunctions.cumulate.Min"
 			name="Min" />
 		<tns:stdOperation
-			class="hydrograph.engine.bhse.userfunctions.cumulate.Count" name="Count" />
+			class="hydrograph.engine.transformation.userfunctions.cumulate.Count" name="Count" />
 		<tns:stdOperation
-			class="hydrograph.engine.bhse.userfunctions.cumulate.StringAppend"
+			class="hydrograph.engine.transformation.userfunctions.cumulate.StringAppend"
 			name="StringAppend" />
 	</tns:operations>		
 	</tns:component>

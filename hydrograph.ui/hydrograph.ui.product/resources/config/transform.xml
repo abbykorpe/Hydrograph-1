@@ -65,12 +65,12 @@
 		
 	<tns:operations>
 		<tns:interface
-			class="hydrograph.engine.bhse.userfunctions.base.TransformBase" name="TRANSFORM" />
+			class="hydrograph.engine.transformation.userfunctions.base.TransformBase" name="TRANSFORM" />
 		<tns:stdOperation
-			class="hydrograph.engine.bhse.userfunctions.transform.CopyFields"
+			class="hydrograph.engine.transformation.userfunctions.transform.CopyFields"
 			name="CopyFields" />
 		<tns:stdOperation
-			class="hydrograph.engine.bhse.userfunctions.transform.RegexSplitTransform"
+			class="hydrograph.engine.transformation.userfunctions.transform.RegexSplitTransform"
 			name="RegexSplitTransform" />
 	</tns:operations>
 

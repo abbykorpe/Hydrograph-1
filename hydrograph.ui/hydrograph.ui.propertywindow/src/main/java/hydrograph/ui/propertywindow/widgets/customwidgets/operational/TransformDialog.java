@@ -1436,7 +1436,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 	public static void createTableColumns(Table table, String[] fields) {
 		for (String field : fields) {
-			TableColumn tableColumn = new TableColumn(table, SWT.CENTER);
+			TableColumn tableColumn = new TableColumn(table, SWT.LEFT);
 			tableColumn.setText(field);
 
 			tableColumn.setWidth(100);

@@ -163,7 +163,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		targetTableViewer.setLabelProvider(new SecondaryColumnKeysLabelProvider());
 		targetTableViewer.setInput(propertyList);
 
-		TableColumn targetTableColumnFieldName = new TableColumn(targetTable, SWT.CENTER);
+		TableColumn targetTableColumnFieldName = new TableColumn(targetTable, SWT.LEFT);
 		targetTableColumnFieldName.setText(COLUMNNAME); //$NON-NLS-1$
 		TableColumn targetTableColumnSortOrder = new TableColumn(targetTable, SWT.LEFT_TO_RIGHT);
 		targetTableColumnSortOrder.setText(SORTORDER); //$NON-NLS-1$
@@ -273,7 +273,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		sourceTable.setHeaderVisible(true);
 		sourceTable.setLinesVisible(true);
 
-		TableColumn sourceTableColumnFieldName = new TableColumn(sourceTable, SWT.CENTER);
+		TableColumn sourceTableColumnFieldName = new TableColumn(sourceTable, SWT.LEFT);
 		sourceTableColumnFieldName.setWidth(237);
 		sourceTableColumnFieldName.setText(Messages.AVAILABLE_FIELDS_HEADER);
 		getSourceFieldsFromPropagatedSchema(sourceTable);
