@@ -20,6 +20,7 @@ import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
+import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
@@ -124,10 +125,12 @@ public class DebugHandler  extends AbstractHandler {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 				JobManager.INSTANCE.enableRunJob(true);
 				if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
+					CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();					
 					return null;
 				}
 			}catch(Exception e){
 				logger.debug("Unable to save graph ", e);
+				CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();
 					JobManager.INSTANCE.enableRunJob(true);
 			}
 		}
@@ -156,6 +159,7 @@ public class DebugHandler  extends AbstractHandler {
 			setBaseEnabled(true);
 			JobManager.INSTANCE.enableRunJob(true);
 			//JobManager.INSTANCE.enableDebugJob(true);
+			CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();			
 			return null;
 		}
 		
@@ -190,6 +194,7 @@ public class DebugHandler  extends AbstractHandler {
 		addDebugJob(currentJobName, job);
 		
 		JobManager.INSTANCE.executeJobInDebug(job, uniqueJobID, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
+		CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();		
 		return null;
 	}
  

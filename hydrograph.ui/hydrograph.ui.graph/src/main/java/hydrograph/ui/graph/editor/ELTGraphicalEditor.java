@@ -1597,5 +1597,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public GraphicalViewer getViewer() {
 		return viewer;
 	}
+
+	@Override
+	public void restoreMenuToolContextItemsState() {
+		ContributionItemManager.UndoRedoDefaultBarManager.changeUndoRedoStatus(getViewer());
+	}
 	
 }

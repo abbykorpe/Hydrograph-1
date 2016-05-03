@@ -11,19 +11,19 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package hydrograph.ui.graph.handler;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.graph.action.ContributionItemManager;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
+import hydrograph.ui.graph.utility.CanvasUtils;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.ui.PlatformUI;
-
 
 /**
  * Handler use to run the job using gradle command.
@@ -33,8 +33,8 @@ import org.eclipse.ui.PlatformUI;
  * @since 2015-10-27
  */
 public class RunJobHandler extends AbstractHandler {
-	
-	public RunJobHandler(){
+
+	public RunJobHandler() {
 		RunStopButtonCommunicator.RunJob.setHandler(this);
 	}
 
@@ -43,21 +43,21 @@ public class RunJobHandler extends AbstractHandler {
 	 * 
 	 * @param enable
 	 */
-	public void setRunJobEnabled(boolean enable){
+	public void setRunJobEnabled(boolean enable) {
 		setBaseEnabled(enable);
 	}
-	
-	private Job getJob(String localJobID,String consoleName,String canvasName){
-		return new Job(localJobID,consoleName, canvasName, null,null,null,null);
+
+	private Job getJob(String localJobID, String consoleName, String canvasName) {
+		return new Job(localJobID, consoleName, canvasName, null, null, null, null);
 	}
-	
-	private DefaultGEFCanvas getComponentCanvas() {		
-		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
+
+	private DefaultGEFCanvas getComponentCanvas() {
+		if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
 			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		else
 			return null;
 	}
-	
+
 	/*
 	 * 
 	 * Execute command to run the job.
@@ -68,19 +68,14 @@ public class RunJobHandler extends AbstractHandler {
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) {
-		((ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()).getViewer().deselectAll();
-		String consoleName= getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
+		((ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()).getViewer().deselectAll();
+		String consoleName = getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
 		String canvasName = consoleName;
 		String localJobID = consoleName;
-		JobManager.INSTANCE.executeJob(getJob(localJobID,consoleName, canvasName), null);
+		JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null);
 		
+		CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();
 		return null;
 	}
 
-	
-	
-	
-	
-	
-	
 }

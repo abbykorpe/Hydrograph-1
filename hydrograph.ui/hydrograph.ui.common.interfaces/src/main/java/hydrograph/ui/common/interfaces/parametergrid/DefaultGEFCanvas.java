@@ -28,4 +28,5 @@ public interface DefaultGEFCanvas {
 	public void enableRunningJobResource();
 	public void setStopButtonStatus(boolean enabled);
 	public boolean getStopButtonStatus();
+	public void restoreMenuToolContextItemsState(); 
 }
