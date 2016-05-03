@@ -111,7 +111,7 @@ public class ELTLookupMapWidget extends AbstractWidget {
 		if(lookupMappingGrid ==null)
 			return null;
 		
-			 Schema internalSchema = getSchemaForInternalPapogation();			 
+			 Schema internalSchema = getSchemaForInternalPropagation();			 
 			 internalSchema.getGridRow().clear();
 			 
 			 

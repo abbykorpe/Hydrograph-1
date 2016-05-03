@@ -171,7 +171,7 @@ public class TransformWidget extends AbstractWidget {
 			return;
 
 
-		getSchemaForInternalPapogation().getGridRow().clear();
+		getSchemaForInternalPropagation().getGridRow().clear();
 		getOperationFieldList().clear();
 
 		List<String> finalPassThroughFields=new LinkedList<String>();
@@ -225,7 +225,6 @@ public class TransformWidget extends AbstractWidget {
 		componentsOutputSchema.getMapFields().clear();
 		componentsOutputSchema.getPassthroughFields().addAll(passThroughFields);
 		componentsOutputSchema.getMapFields().putAll(mapFields);
-		Schema tmpSchema = getSchemaForInternalPapogation();
 	}
 
 	// PLEASE DO NOT REMOVE THE CODE
@@ -266,7 +265,7 @@ public class TransformWidget extends AbstractWidget {
 
 	private void addMapFieldsToSchema(Map<String, String> mapFields) {
 		BasicSchemaGridRow tempSchemaGridRow = null;
-		Schema schema = getSchemaForInternalPapogation();
+		Schema schema = getSchemaForInternalPropagation();
 		List<String> currentFieldsInProppogatedSchemaObject = new LinkedList<>();
 		for (GridRow gridRow : schema.getGridRow()) {
 			currentFieldsInProppogatedSchemaObject.add(gridRow.getFieldName());
@@ -299,7 +298,7 @@ public class TransformWidget extends AbstractWidget {
 	}
 
 	private void addPassthroughFieldsToSchema(List<String> passThroughFields) {
-		Schema schema = getSchemaForInternalPapogation();
+		Schema schema = getSchemaForInternalPropagation();
 		List<String> currentFieldsInProppogatedSchemaObject = new LinkedList<>();
 		for (GridRow gridRow : schema.getGridRow()) {
 			currentFieldsInProppogatedSchemaObject.add(gridRow.getFieldName());
@@ -323,7 +322,7 @@ public class TransformWidget extends AbstractWidget {
 	}
 
 	private void addOperationFieldsToSchema(List<FilterProperties> operationFields) {
-		Schema schema = getSchemaForInternalPapogation();
+		Schema schema = getSchemaForInternalPropagation();
 		GridRow schemaGridRow=null;
 		List<String> currentFieldsInProppogatedSchemaObject = new LinkedList<>();
 		for (GridRow gridRow : schema.getGridRow()) {

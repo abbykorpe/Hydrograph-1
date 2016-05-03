@@ -281,9 +281,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		if (schemaGridRowList != null ) {
 			if(!SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName())){
-			if(getSchemaForInternalPapogation()!=null){
+			if(getSchemaForInternalPropagation()!=null){
 
-				Schema internalSchema = getSchemaForInternalPapogation().clone();
+				Schema internalSchema = getSchemaForInternalPropagation().clone();
 				List<String> schemaFields = getSchemaFields(schemaGridRowList);
 				for (GridRow internalSchemaRow : internalSchema.getGridRow()) {
 					int index = 0;
@@ -1263,7 +1263,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	@Override
 	public void refresh() {
 
-		Schema schema = getSchemaForInternalPapogation();
+		Schema schema = getSchemaForInternalPropagation();
 		if (this.properties != null) {
 			Schema originalSchema = (Schema) this.properties;
 			List<GridRow> existingFields = getExitingSchemaFields(originalSchema);
@@ -1368,7 +1368,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	}
 
 private void syncSchemaFromTransform(){
-	Schema schema =getSchemaForInternalPapogation();
+	Schema schema =getSchemaForInternalPropagation();
 	schemaGridRowList=new ArrayList<>(schema.getGridRow());
 	ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
 	eLTDetails.setGrids(schemaGridRowList);
@@ -1379,7 +1379,7 @@ private void syncSchemaFromTransform(){
 
 private void syncTransformWithSchema(){
 	
-	Schema schema = getSchemaForInternalPapogation();
+	Schema schema = getSchemaForInternalPropagation();
 	if(StringUtils.endsWithIgnoreCase(SCHEMA_TAB,propertyDialog.getSelectedTab())){
 		TransformMapping transformMapping= (TransformMapping) getComponent().getProperties().get(OPERATION);
 		List<FilterProperties> filterProperties = convertSchemaToFilterProperty();
@@ -1395,7 +1395,7 @@ private void syncTransformWithSchema(){
 
 
 private boolean isSchemaInSync(){
-	Schema schema =getSchemaForInternalPapogation();
+	Schema schema =getSchemaForInternalPropagation();
 	if(schemaGridRowList.size() != schema.getGridRow().size())
 		return false;
 	if(schemaGridRowList.size()==0 && schema.getGridRow().size()==0)
