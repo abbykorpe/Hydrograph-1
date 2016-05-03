@@ -183,7 +183,6 @@ public class LookupConverter extends TransformConverter {
 	public List<TypeBaseInSocket> getInSocket() {
 		logger.debug("Generating TypeBaseInSocket data for :{}", component.getProperties().get(Constants.PARAM_NAME));
 		List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
-		int inSocketCounter = 0;
 		for (Link link : component.getTargetConnections()) {
 			TypeBaseInSocket inSocket = new TypeBaseInSocket();
 			inSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
@@ -192,7 +191,6 @@ public class LookupConverter extends TransformConverter {
 			inSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 			inSocket.getOtherAttributes();
 			inSocketsList.add(inSocket);
-			inSocketCounter++;
 		}
 		return inSocketsList;
 	}

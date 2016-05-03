@@ -5,9 +5,8 @@ public enum PortAlignmentEnum {
 
 	LEFT("left"), 
 	RIGHT("right"), 
-	BOTTOM("bottom"),
+	BOTTOM("bottom");
 	
-	;
 	private final String value;
 	
 	PortAlignmentEnum(String v) {

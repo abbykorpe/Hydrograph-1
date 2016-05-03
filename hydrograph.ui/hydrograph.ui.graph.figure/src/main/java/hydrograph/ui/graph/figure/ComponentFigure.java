@@ -305,7 +305,6 @@ public class ComponentFigure extends Figure implements Validator {
 		for (String portRemove : portsToBeRemoved) {
 			for (Iterator<FixedConnectionAnchor> iterator = inputConnectionAnchors.iterator(); iterator.hasNext();) {
 				FixedConnectionAnchor fca = iterator.next();
-				//if ((fca.getAlignment() + fca.getSequence()).equals(portRemove)) {
 				if (fca.getTerminal().equals(portRemove)) {
 					// Remove the current element from the iterator and the list.
 					iterator.remove();
