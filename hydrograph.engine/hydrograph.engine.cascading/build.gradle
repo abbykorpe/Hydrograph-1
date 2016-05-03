@@ -1,0 +1,112 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply from: '../version.gradle'
+
+sourceCompatibility = 1.7
+
+group = 'hydrograph'
+archivesBaseName = 'hydrograph.engine.cascading'
+
+ext.cascadingVersion = '3.0.1'
+ext.hadoopVersion = '2.6.0'
+ext.hiveVersion = '1.2.0'
+
+project.ext.setTestingProperties = {
+System.properties[ 'test.data.path' ] = new String( "${projectDir}/../elt-cascading/src/test/resources/data/" )
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact (testJar) { 
+                classifier = 'tests'
+            }
+             artifact (sourcesJar) { 
+                classifier = 'sources'
+            }
+            
+            pom.withXml {
+                asNode().dependencies.'*'.findAll() {
+                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+                        dep.name == it.artifactId.text()
+                    }
+                }.each() {
+                    it.scope*.value = 'compile'
+                }
+            }
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': archivesBaseName,
+                'Implementation-Version': version
+    }
+}
+
+test {
+    exclude '**/CascadingTestCase*'
+    exclude '**/DataGeneratorTest*'
+    exclude '**/InputFileHiveParquetFileTest*'
+    exclude '**/OutputFileHiveParquetFileTest*'
+    exclude '**/InputFileHiveTextFileTest*'
+    exclude '**/OutputFileHiveTextFileTest*'
+}
+
+uploadArchives {
+    repositories {
+        mavenLocal()
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url 'http://conjars.org/repo/'
+    }
+    maven {
+        url 'http://maven.twttr.com/'
+    }
+
+}
+
+
+dependencies {
+	compile group: 'cascading.avro', name: 'avro-scheme', version: '2.5.0'
+    compile group: 'cascading', name: 'cascading-core', version: cascadingVersion
+    compile group: 'cascading', name: 'cascading-hadoop2-mr1', version: cascadingVersion //required for plunger
+    compile group: 'cascading', name: 'cascading-local', version: cascadingVersion //required for plunger
+    //compile group: 'cascading', name: 'cascading-hadoop', version: cascadingVersion //using hadoop2-mr1 instead
+
+    compile group: 'org.apache.hadoop', name: 'hadoop-common', version: hadoopVersion //required for plunger
+
+    compile group: 'org.apache.hadoop', name: 'hadoop-mapreduce-client-common', version: hadoopVersion
+    //compile group: 'org.apache.hadoop', name: 'hadoop-mapreduce-client-core', version: hadoopVersion //required for plunger
+	compile group: 'riffle', name: 'riffle', version: '1.0.0'
+    compile group: 'cascading', name: 'cascading-hive', version: '2.0.0'
+    compile (group: 'org.apache.hive', name: 'hive-exec', version: hiveVersion) {
+        exclude group: 'com.google.guava'
+        exclude group: 'org.apache.curator'
+    }
+
+    compile project(':hydrograph.engine.core')
+    compile project(':hydrograph.engine.transformation')
+
+    compile 'com.google.guava:guava:14.0.1'
+    compile 'org.slf4j:slf4j-api:1.7.2'
+    testCompile 'junit:junit:4.11'
+    testCompile 'com.hotels:plunger:2.1.1'
+    compile 'com.twitter:parquet-cascading:1.6.0'
+    compile 'com.twitter:parquet-hadoop:1.6.0'
+    compile 'com.twitter:parquet-column:1.6.0'
+    compile 'org.fluttercode.datafactory:datafactory:0.8'
+    compile 'org.hamcrest:hamcrest-core:1.3' //required by plunger
+    testCompile 'org.mockito:mockito-core:1.9.5' //required by plunger
+    testCompile 'commons-io:commons-io:2.4' //required by plunger
+    
+}
