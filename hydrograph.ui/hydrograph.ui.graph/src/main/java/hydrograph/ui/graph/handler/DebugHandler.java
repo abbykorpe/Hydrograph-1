@@ -125,7 +125,8 @@ public class DebugHandler  extends AbstractHandler {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 				JobManager.INSTANCE.enableRunJob(true);
 				if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
-					return returnObject();
+					CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();					
+					return null;
 				}
 			}catch(Exception e){
 				logger.debug("Unable to save graph ", e);
@@ -158,7 +159,8 @@ public class DebugHandler  extends AbstractHandler {
 			setBaseEnabled(true);
 			JobManager.INSTANCE.enableRunJob(true);
 			//JobManager.INSTANCE.enableDebugJob(true);
-			return returnObject();
+			CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();			
+			return null;
 		}
 		
 		String consoleName= getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
@@ -192,11 +194,7 @@ public class DebugHandler  extends AbstractHandler {
 		addDebugJob(currentJobName, job);
 		
 		JobManager.INSTANCE.executeJobInDebug(job, uniqueJobID, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
-		return returnObject();
-	}
-	
-	public Object returnObject(){
-		CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();
+		CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();		
 		return null;
 	}
  
