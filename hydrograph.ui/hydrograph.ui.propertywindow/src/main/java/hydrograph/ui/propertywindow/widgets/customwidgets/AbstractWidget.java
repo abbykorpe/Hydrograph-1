@@ -106,7 +106,7 @@ public abstract class AbstractWidget {
 	 *  
 	 * @return {@link Schema}
 	 */
-	public Schema getSchemaForInternalPapogation() {
+	public Schema getSchemaForInternalPropagation() {
 		return schemaForInternalPapogation;
 	}
 

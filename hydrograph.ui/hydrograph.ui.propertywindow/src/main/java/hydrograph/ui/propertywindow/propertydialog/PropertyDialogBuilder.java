@@ -140,8 +140,8 @@ public class PropertyDialogBuilder {
 					if (schemaWidget instanceof ELTSchemaGridWidget) {
 						ELTSchemaGridWidget eltSchemaGridWidget = (ELTSchemaGridWidget) schemaWidget;
 						if (!eltSchemaGridWidget.isExternal()) {
-							if (schemaWidget.getSchemaForInternalPapogation().getGridRow().size() != 0) {
-								eltSchemaGridWidget.enableDisableButtons(schemaWidget.getSchemaForInternalPapogation()
+							if (schemaWidget.getSchemaForInternalPropagation().getGridRow().size() != 0) {
+								eltSchemaGridWidget.enableDisableButtons(schemaWidget.getSchemaForInternalPropagation()
 										.getGridRow().size());
 							} else {
 								eltSchemaGridWidget.enableDisableButtons(eltSchemaGridWidget.getSizeOfTableViewer());

@@ -113,7 +113,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 		if(joinMappingGrid ==null)
 			return null;
 		
-			 Schema internalSchema = getSchemaForInternalPapogation();			 
+			 Schema internalSchema = getSchemaForInternalPropagation();			 
 			 internalSchema.getGridRow().clear();
 			 
 			 
