@@ -86,7 +86,7 @@ public class ComponentCreateCommand extends Command {
 			}
 		}
 		int heightFactor=totalPortsOnLeftSide > totalPortsOnRightSide ? totalPortsOnLeftSide : totalPortsOnRightSide;
-		int height = (heightFactor+1)*25;
+		int height = (heightFactor+1)*27;
 		
 		int widthFactor = totalPortsOnBottomSide;
 		int width = 100;

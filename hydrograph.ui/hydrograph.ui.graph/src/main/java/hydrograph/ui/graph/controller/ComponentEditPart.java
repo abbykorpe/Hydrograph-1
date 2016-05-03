@@ -28,6 +28,7 @@ import hydrograph.ui.graph.figure.PortFigure;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.ComponentLabel;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.PortTypeEnum;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
 import hydrograph.ui.graph.propertywindow.ELTPropertyWindow;
 import hydrograph.ui.graph.utility.SubJobUtility;
@@ -335,17 +336,6 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			
 			changePortSettings();
 			
-
-			if(getCastedModel().getComponentName().equalsIgnoreCase("lookup")){
-				LookupConfigProperty lookup_in0 = (LookupConfigProperty)getCastedModel().getProperties().get("hash_join");
-				if(lookup_in0 != null && !lookup_in0.isSelected()){
-					getCastedModel().getPorts().get("in1").setLabelOfPort("lkp");
-					getCastedModel().getPorts().get("in0").setLabelOfPort("drv");
-				}else{
-					getCastedModel().getPorts().get("in1").setLabelOfPort("drv");
-					getCastedModel().getPorts().get("in0").setLabelOfPort("lkp");
-				}
-			}
 			if(!StringUtils.equals(Constants.UPDATE_AVAILABLE,currentStatus))
 			updateComponentStatus();			
 			refresh();

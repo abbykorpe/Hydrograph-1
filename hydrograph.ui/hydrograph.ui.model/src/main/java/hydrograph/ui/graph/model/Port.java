@@ -106,6 +106,10 @@ public class Port extends Model implements Cloneable{
 		return portType.value();
 	}
 
+	public void setPortType(PortTypeEnum portType) {
+		this.portType = portType;
+	}
+
 	public int getSequence() {
 		return sequence;
 	}

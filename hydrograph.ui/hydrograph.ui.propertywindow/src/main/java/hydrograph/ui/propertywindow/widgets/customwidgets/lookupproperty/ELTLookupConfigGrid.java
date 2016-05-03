@@ -48,12 +48,12 @@ import org.eclipse.swt.widgets.Text;
 
 public class ELTLookupConfigGrid extends Dialog {
 
-	private Text drivenText;
+	private Text driverText;
 	private Text lookupText;
 	private Button[] radio = new Button[2];
 	private LookupConfigProperty configProperty = new LookupConfigProperty();
 	private PropertyDialogButtonBar propertyDialogButtonBar;
-	private String drivenKeys, lookupKey;
+	private String driverKey, lookupKey;
 	private Label driverEditLableAsButton, lookupEditLableAsButton;
 	private Map<String, List<String>> propagatedFiledNames;
 	private String editImageIconPath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.EDIT_BUTTON;
@@ -81,7 +81,7 @@ public class ELTLookupConfigGrid extends Dialog {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		configProperty = lookupConfigProperty;
-		drivenKeys = configProperty.getDriverKey();
+		driverKey = configProperty.getDriverKey();
 		lookupKey = configProperty.getLookupKey();
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
 	}
@@ -143,9 +143,9 @@ public class ELTLookupConfigGrid extends Dialog {
 		textBoxWidget(keyComposite, new int[] { 10, 31, 175, 21 }, DRIVER, false);
 		textBoxWidget(keyComposite, new int[] { 10, 58, 175, 21 },LOOKUP, false);
 
-		drivenText = textBoxWidget(keyComposite, new int[] { 191, 31, 220, 21 }, "", false);
+		driverText = textBoxWidget(keyComposite, new int[] { 191, 31, 220, 21 }, "", false);
 		lookupText = textBoxWidget(keyComposite, new int[] { 191, 58, 220, 21 }, "", false);
-		drivenText.setBackground(new Color(null, 255, 255, 255));
+		driverText.setBackground(new Color(null, 255, 255, 255));
 		lookupText.setBackground(new Color(null, 255, 255, 255));
 		labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 10, 10, 175, 15 }, PORT_TYPE);
 
@@ -157,8 +157,8 @@ public class ELTLookupConfigGrid extends Dialog {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				drivenKeys = launchDialogToSelectFields(drivenKeys, IN_PORT0);
-				drivenText.setText(drivenKeys);
+				driverKey = launchDialogToSelectFields(driverKey, IN_PORT0);
+				driverText.setText(driverKey);
 
 			}
 
@@ -186,7 +186,7 @@ public class ELTLookupConfigGrid extends Dialog {
 
 	public void populateWidget() {
 		if (StringUtils.isNotBlank(configProperty.getDriverKey())) {
-			drivenText.setText(configProperty.getDriverKey());
+			driverText.setText(configProperty.getDriverKey());
 		}
 		if (StringUtils.isNotBlank(configProperty.getLookupKey())) {
 			lookupText.setText(configProperty.getLookupKey());
@@ -268,7 +268,7 @@ public class ELTLookupConfigGrid extends Dialog {
 	@Override
 	protected void okPressed() {
 		configProperty.setLookupKey(lookupKey);
-		configProperty.setDriverKey(drivenKeys);
+		configProperty.setDriverKey(driverKey);
 		super.okPressed();
 	}
 }

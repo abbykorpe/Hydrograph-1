@@ -185,6 +185,11 @@ public class Messages extends NLS {
 	public static String TITLE_FOR_MESSAGE_BOX_OF_FETCHING_PROPAGATED_SCHEMA;
 	public static String ADD_OPERATION_CONTROL;
 	public static String DELETE_OPERATION_CONTROL;
+	
+	public static String IN0_PORT;
+	public static String IN1_PORT;
+	public static String LOOKUP_PORT_LABEL;
+	public static String DRIVER_PORT_LABEL;
     
 	static {
 		// initialize resource bundle
