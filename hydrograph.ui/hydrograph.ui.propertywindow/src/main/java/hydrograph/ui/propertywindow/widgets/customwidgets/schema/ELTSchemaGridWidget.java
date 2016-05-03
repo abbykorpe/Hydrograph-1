@@ -584,13 +584,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 */
 	private Schema getPropagatedSchema(Link link) {
 		ComponentsOutputSchema componentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
-		Schema schema = null;
-		if (schema == null) {
-			schema = new Schema();
-			schema.setExternalSchemaPath("");
-			schema.setIsExternal(false);
-			schema.setGridRow(new ArrayList<GridRow>());
-		}
+		Schema schema = new Schema();
+		schema.setExternalSchemaPath("");
+		schema.setIsExternal(false);
+		schema.setGridRow(new ArrayList<GridRow>());
 		if (componentsOutputSchema != null) {
 			if( this.getClass().isAssignableFrom(ELTMixedSchemeWidget.class))
 				for (FixedWidthGridRow gridRow : componentsOutputSchema.getFixedWidthGridRowsOutputFields()) {
