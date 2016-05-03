@@ -314,13 +314,13 @@ public class JobManager {
 	}
 	
 	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList) {
-		if (getComponentCanvas().getParameterFile().contains(":")) {
-			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),
-					getComponentCanvas().getParameterFile().replace("/", "\\"), true, true));
-		} else {
-			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),
-					getComponentCanvas().getParameterFile(), true, true));
-		}
+		
+		String parameterFile = getComponentCanvas().getParameterFile();
+		if(OSValidator.isWindows()){
+			parameterFile.replace("/", "\\");
+		} 
+		parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),
+				parameterFile, true, true));
 	}
 
 	private RunConfigDialog getRunConfiguration() {
