@@ -30,18 +30,20 @@ import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
-import hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty.JoinMapGrid;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
+import hydrograph.ui.propertywindow.widgets.dialogs.join.JoinMapDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -85,9 +87,10 @@ public class ELTJoinMapWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				getPropagatedSchema();
-				JoinMapGrid joinMapGrid = new JoinMapGrid(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
+				
+				JoinMapDialog joinMapDialog = new JoinMapDialog(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
 						joinMappingGrid,propertyDialogButtonBar);
-				joinMapGrid.open();
+				joinMapDialog.open();
 				Schema internalSchema=propagateInternalSchema();
 				showHideErrorSymbol(widgets);
 				for(AbstractWidget widget:widgets)
@@ -99,8 +102,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 						eltGenericSchemaGridWidget.validateInternalSchemaPropogatedData(internalSchema);
 						
 					}	
-				}	
-				
+				}
 			}
 		});
 		
@@ -133,6 +135,8 @@ public class ELTJoinMapWidget extends AbstractWidget {
 					 GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
 					 GridRow outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
 
+					 if(inputFieldSchema==null)
+						 continue;
 
 					 if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
 						 finalPassThroughFields.add(row.getOutput_Field());
@@ -195,7 +199,10 @@ public class ELTJoinMapWidget extends AbstractWidget {
 
 	private GridRow getInputFieldSchema(String source_Field) {		
 		String[] source = source_Field.split("\\.");
-		return getInputFieldSchema(source[1],source[0]);
+		if(source.length == 2)
+			return getInputFieldSchema(source[1],source[0]);
+		else
+			return null;
 	
 		
 	}

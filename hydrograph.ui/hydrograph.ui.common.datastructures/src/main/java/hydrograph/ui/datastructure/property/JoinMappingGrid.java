@@ -91,6 +91,89 @@ public class JoinMappingGrid implements IDataStructure{
 		joinMappingGrid.setLookupMapProperties(clonedLookupMapProperties);
 		return joinMappingGrid;
 	}
+	
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((buttonText == null) ? 0 : buttonText.hashCode());
+		result = prime
+				* result
+				+ ((clonedInnerLookupInputProperties == null) ? 0
+						: clonedInnerLookupInputProperties.hashCode());
+		result = prime
+				* result
+				+ ((clonedLookupInputProperties == null) ? 0
+						: clonedLookupInputProperties.hashCode());
+		result = prime
+				* result
+				+ ((clonedLookupMapProperties == null) ? 0
+						: clonedLookupMapProperties.hashCode());
+		result = prime * result
+				+ ((isSelected == null) ? 0 : isSelected.hashCode());
+		result = prime
+				* result
+				+ ((lookupInputProperties == null) ? 0 : lookupInputProperties
+						.hashCode());
+		result = prime
+				* result
+				+ ((lookupMapProperties == null) ? 0 : lookupMapProperties
+						.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JoinMappingGrid other = (JoinMappingGrid) obj;
+		if (buttonText == null) {
+			if (other.buttonText != null)
+				return false;
+		} else if (!buttonText.equals(other.buttonText))
+			return false;
+		if (clonedInnerLookupInputProperties == null) {
+			if (other.clonedInnerLookupInputProperties != null)
+				return false;
+		} else if (!clonedInnerLookupInputProperties
+				.equals(other.clonedInnerLookupInputProperties))
+			return false;
+		if (clonedLookupInputProperties == null) {
+			if (other.clonedLookupInputProperties != null)
+				return false;
+		} else if (!clonedLookupInputProperties
+				.equals(other.clonedLookupInputProperties))
+			return false;
+		if (clonedLookupMapProperties == null) {
+			if (other.clonedLookupMapProperties != null)
+				return false;
+		} else if (!clonedLookupMapProperties
+				.equals(other.clonedLookupMapProperties))
+			return false;
+		if (isSelected == null) {
+			if (other.isSelected != null)
+				return false;
+		} else if (!isSelected.equals(other.isSelected))
+			return false;
+		if (lookupInputProperties == null) {
+			if (other.lookupInputProperties != null)
+				return false;
+		} else if (!lookupInputProperties.equals(other.lookupInputProperties))
+			return false;
+		if (lookupMapProperties == null) {
+			if (other.lookupMapProperties != null)
+				return false;
+		} else if (!lookupMapProperties.equals(other.lookupMapProperties))
+			return false;
+		return true;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
