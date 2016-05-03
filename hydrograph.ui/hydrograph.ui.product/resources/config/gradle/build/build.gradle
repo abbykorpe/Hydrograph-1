@@ -422,7 +422,7 @@ task killRemoteJob() << {
 
                 command: "sh "+properties.runUtility+" -k " + jobprocessid)
 
-                command: "sh /home/hduser/milestone/kill_job.sh " + jobprocessid)
+                
 
     }
 
