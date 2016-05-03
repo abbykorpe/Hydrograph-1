@@ -15,6 +15,7 @@ package hydrograph.ui.parametergrid.actions;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.MultiParameterFileUIUtils;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.constants.ErrorMessages;
@@ -108,12 +109,12 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 	}
 
 	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList) {
-		if (getComponentCanvas().getParameterFile().contains(":")) {
-			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),
-					getComponentCanvas().getParameterFile().replace("/", "\\"), true, true));
-		} else {
-			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),
-					getComponentCanvas().getParameterFile(), true, true));
-		}
+		
+		String parameterFile = getComponentCanvas().getParameterFile();
+		if(OSValidator.isWindows()){
+			parameterFile.replace("/", "\\");
+		} 
+		parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),
+				parameterFile, true, true));
 	}
 }
