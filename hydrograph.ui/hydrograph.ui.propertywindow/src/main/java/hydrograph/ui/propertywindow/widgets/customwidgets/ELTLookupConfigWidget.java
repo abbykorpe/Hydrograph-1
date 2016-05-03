@@ -90,14 +90,14 @@ public class ELTLookupConfigWidget extends AbstractWidget {
 			private void setPortTypes() {
 				if(properties.isSelected()){
 					getComponent().getPorts().get(Messages.IN1_PORT).setPortType(PortTypeEnum.DRIVER);
-					getComponent().getPorts().get(Messages.IN1_PORT).setLabelOfPort("drv");
+					getComponent().getPorts().get(Messages.IN1_PORT).setLabelOfPort(Messages.DRIVER_PORT_LABEL);
 					getComponent().getPorts().get(Messages.IN0_PORT).setPortType(PortTypeEnum.LOOKUP);
-					getComponent().getPorts().get(Messages.IN0_PORT).setLabelOfPort("lkp");
+					getComponent().getPorts().get(Messages.IN0_PORT).setLabelOfPort(Messages.LOOKUP_PORT_LABEL);
 				}else{
 					getComponent().getPorts().get(Messages.IN1_PORT).setPortType(PortTypeEnum.LOOKUP);
-					getComponent().getPorts().get(Messages.IN1_PORT).setLabelOfPort("lkp");
+					getComponent().getPorts().get(Messages.IN1_PORT).setLabelOfPort(Messages.LOOKUP_PORT_LABEL);
 					getComponent().getPorts().get(Messages.IN0_PORT).setPortType(PortTypeEnum.DRIVER);
-					getComponent().getPorts().get(Messages.IN0_PORT).setLabelOfPort("drv");
+					getComponent().getPorts().get(Messages.IN0_PORT).setLabelOfPort(Messages.DRIVER_PORT_LABEL);
 				}
 			}
 		});
