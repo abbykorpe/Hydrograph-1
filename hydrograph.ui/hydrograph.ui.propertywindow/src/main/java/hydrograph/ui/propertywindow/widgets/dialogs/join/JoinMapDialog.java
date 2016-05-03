@@ -90,6 +90,10 @@ public class JoinMapDialog extends Dialog {
 	private JoinMappingGrid oldJoinMappingGrid;
 	private JoinMappingGrid newJoinMappingGrid;
 	private List<String> allInputFields;
+	private Button btnDown;
+	private Button btnUp;
+	private Button btnDelete;
+	private Button btnAdd;
 
 	private static final String PORT_ID_KEY = "PORT_ID";
 	private static final String NO_COPY="None";
@@ -108,6 +112,7 @@ public class JoinMapDialog extends Dialog {
 	private static final String DOWN_BUTTON_TEXT="Down";
 	
 	private static final String INPUT_TABLE_COLUMN_TEXT="Input Fields";
+	private static final String DIALOG_TITLE="Join Mapping Dialog";
 	
 	/**
 	 * Create the dialog.
@@ -132,7 +137,7 @@ public class JoinMapDialog extends Dialog {
 		inputPorts = new ArrayList<>();
 
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
-		allInputFields = new LinkedList<>();
+		allInputFields = new LinkedList<>();		
 	}
 
 	/**
@@ -144,7 +149,8 @@ public class JoinMapDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(1, false));
-
+		container.getShell().setText(DIALOG_TITLE);
+		
 		Composite composite = createOuterMostComposite(container);
 
 		createInputFieldExpandBarSection(composite);
@@ -205,6 +211,7 @@ public class JoinMapDialog extends Dialog {
 					mappingTableItemList.clear();
 					mappingTableViewer.refresh();
 					mappingTableViewer.getTable().setEnabled(true);
+					enableMappingTableButtonPanel(true);
 				}
 			}
 		});
@@ -218,6 +225,7 @@ public class JoinMapDialog extends Dialog {
 			btnRadioButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
+					enableMappingTableButtonPanel(false);
 					joinMappingGrid.setButtonText(((Button) e.widget).getText());
 					joinMappingGrid.setIsSelected(true);
 					mappingTableViewer.getTable().setEnabled(false);
@@ -380,6 +388,7 @@ public class JoinMapDialog extends Dialog {
 
 					mappingTableViewer.refresh();
 				}
+				refreshButtonStatus();
 			}
 		});
 	}
@@ -547,7 +556,7 @@ public class JoinMapDialog extends Dialog {
 	}
 
 	private void createDownButton(Composite composite_11) {
-		Button btnDown = new Button(composite_11, SWT.NONE);
+		btnDown = new Button(composite_11, SWT.NONE);
 		btnDown.setText(DOWN_BUTTON_TEXT);
 		btnDown.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -564,12 +573,13 @@ public class JoinMapDialog extends Dialog {
 
 					}
 				}
+				refreshButtonStatus();
 			}
 		});
 	}
 
 	private void createUpButton(Composite composite_11) {
-		Button btnUp = new Button(composite_11, SWT.NONE);
+		btnUp = new Button(composite_11, SWT.NONE);
 		btnUp.setText(UP_BUTTON_TEXT);
 		btnUp.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -585,12 +595,13 @@ public class JoinMapDialog extends Dialog {
 						mappingTableViewer.refresh();
 					}
 				}
+				refreshButtonStatus();
 			}
 		});
 	}
 
 	private void createDeleteButton(Composite composite_11) {
-		Button btnDelete = new Button(composite_11, SWT.NONE);
+		btnDelete = new Button(composite_11, SWT.NONE);
 		btnDelete.setText(DELETE_BUTTON_TEXT);
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -602,22 +613,29 @@ public class JoinMapDialog extends Dialog {
 					WidgetUtility.errorMessage("Select Rows to delete");
 				} else {
 					table.remove(indexs);
-					List<LookupMapProperty> mappingsToRemove = new ArrayList<>();
+					//TODO - Do not remove below(commented) code - kept for referance
+					//List<LookupMapProperty> mappingsToRemove = new ArrayList<>();
+					int itemsRemoved=0;
 					for (int index : indexs) {
-						LookupMapProperty parameter = mappingTableItemList
+						//TODO - Do not remove below(commented) code - kept for referance 
+						/*LookupMapProperty parameter = mappingTableItemList
 								.get(index);
-						mappingsToRemove.add(parameter);
+						mappingsToRemove.add(parameter);*/
+						mappingTableItemList.remove(index-itemsRemoved);
+						itemsRemoved++;
 					}
-					mappingTableItemList.removeAll(mappingsToRemove);
+					//TODO - Do not remove below(commented) code - kept for referance 
+					//mappingTableItemList.removeAll(mappingsToRemove);
 					mappingTableViewer.getTable().removeAll();
 					mappingTableViewer.refresh();
 				}
+				refreshButtonStatus();
 			}
 		});
 	}
 
 	private void createAddButton(Composite composite_11) {
-		Button btnAdd = new Button(composite_11, SWT.NONE);
+		btnAdd = new Button(composite_11, SWT.NONE);
 		btnAdd.setText(ADD_BUTTON_TEXT);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -628,6 +646,7 @@ public class JoinMapDialog extends Dialog {
 				mappingTableItemList.add(lookupMapProperty);
 				mappingTableViewer.refresh();
 				mappingTableViewer.editElement(lookupMapProperty, 0);
+				refreshButtonStatus();
 			}
 		});
 	}
@@ -792,14 +811,14 @@ public class JoinMapDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		joinMappingGrid.setLookupInputProperties(inputPorts);
+		joinMappingGrid.setLookupMapProperties(mappingTableItemList);
+		
 		populateCurrentItemsOfTable();
 
 		if (!oldJoinMappingGrid.equals(newJoinMappingGrid)) {
 			propertyDialogButtonBar.enableApplyButton(true);
 		}
-
-		joinMappingGrid.setLookupInputProperties(inputPorts);
-		joinMappingGrid.setLookupMapProperties(mappingTableItemList);
 		super.okPressed();
 	}
 
@@ -826,6 +845,7 @@ public class JoinMapDialog extends Dialog {
 		mappingTableViewer.refresh();
 
 		populatePreviousItemsOfTable();
+		refreshButtonStatus();
 
 	}
 
@@ -835,5 +855,29 @@ public class JoinMapDialog extends Dialog {
 
 	private void populateCurrentItemsOfTable() {
 		newJoinMappingGrid = joinMappingGrid.clone();
+	}
+	
+	private void enableMappingTableButtonPanel(boolean enabled){
+		btnAdd.setEnabled(enabled);
+		btnDelete.setEnabled(enabled);
+		btnDown.setEnabled(enabled);
+		btnUp.setEnabled(enabled);
+	}
+	
+	private void refreshButtonStatus(){
+		if(mappingTableItemList.size()>=1){
+			btnDelete.setEnabled(true);
+		}
+		
+		if(mappingTableItemList.size()>1){
+			btnDown.setEnabled(true);
+			btnUp.setEnabled(true);
+		}
+		if(mappingTableItemList.size() == 0){
+			btnDelete.setEnabled(false);
+			btnDown.setEnabled(false);
+			btnUp.setEnabled(false);
+		}
+		
 	}
 }

@@ -30,6 +30,7 @@ import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
+import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.JoinMapDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
@@ -90,7 +91,18 @@ public class ELTJoinMapWidget extends AbstractWidget {
 				JoinMapDialog joinMapDialog = new JoinMapDialog(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
 						joinMappingGrid,propertyDialogButtonBar);
 				joinMapDialog.open();
-				propagateInternalSchema();
+				Schema internalSchema=propagateInternalSchema();
+				showHideErrorSymbol(widgets);
+				for(AbstractWidget widget:widgets)
+				{
+					if(widget instanceof ELTGenericSchemaGridWidget)
+					{
+						ELTGenericSchemaGridWidget eltGenericSchemaGridWidget =(ELTGenericSchemaGridWidget) widget;
+						if(internalSchema!=null )
+						eltGenericSchemaGridWidget.validateInternalSchemaPropogatedData(internalSchema);
+						
+					}	
+				}
 			}
 		});
 		
