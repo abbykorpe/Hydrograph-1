@@ -75,7 +75,6 @@ public class ELTLookupConfigWidget extends AbstractWidget {
 					properties = new LookupConfigProperty();
 					properties.setDriverKey("");
 					properties.setLookupKey("");
-					//properties.isSelected();
 				}
 				ELTLookupConfigGrid eltLookupConfigGrid = new ELTLookupConfigGrid(((Button) eltDefaultButton
 						.getSWTWidgetControl()).getShell(), propertyDialogButtonBar, properties);
