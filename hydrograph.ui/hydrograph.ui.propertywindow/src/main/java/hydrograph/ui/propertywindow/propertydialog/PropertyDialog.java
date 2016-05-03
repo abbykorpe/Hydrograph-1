@@ -87,6 +87,8 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	
 	private String selectedTab;
 	
+	private boolean isCancelPressed;
+	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -340,6 +342,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	
 	@Override
 	protected void cancelPressed() {
+		setCancelPressed(true);
 		boolean windowValidityStaus = Boolean.TRUE;
 		for (AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()) {
 			LinkedHashMap<String, Object> properties= customWidget.getProperties();
@@ -446,6 +449,14 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 
 	public void setSelectedTab(String selectedTab) {
 		this.selectedTab = selectedTab;
+	}
+
+	public boolean isCancelPressed() {
+		return isCancelPressed;
+	}
+
+	public void setCancelPressed(boolean isCancelPressed) {
+		this.isCancelPressed = isCancelPressed;
 	}
 
 	

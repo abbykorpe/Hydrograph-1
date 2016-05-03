@@ -305,7 +305,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			
 		}
 		
-		if ( SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()) && !isSchemaInSync()){
+		if (!propertyDialog.isCancelPressed() && SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()) && !isSchemaInSync()){
 				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
 				int dialogResult =dialog.open();
 				if(dialogResult == 0){
@@ -991,7 +991,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		composite.setLayoutData(gd_composite);
 
 		ScrolledComposite scrolledComposite = new ScrolledComposite(composite,
-				SWT.BORDER | SWT.V_SCROLL);
+				SWT.BORDER | SWT.H_SCROLL);
 		GridData gd_scrolledComposite = new GridData(SWT.FILL, SWT.FILL, true,
 				true, 1, 1);
 		scrolledComposite.setLayoutData(gd_scrolledComposite);
