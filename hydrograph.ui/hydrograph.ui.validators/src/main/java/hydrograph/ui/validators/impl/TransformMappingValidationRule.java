@@ -50,7 +50,7 @@ public class TransformMappingValidationRule implements IValidator{
 					 errorMessage = propertyName + "Operation class is blank in"+" "+mappingSheetRow.getOperationID();		
 					 return false;
 				}
-				if(mappingSheetRow.getInputFields().isEmpty() ||mappingSheetRow.getOutputList().isEmpty())
+				if(mappingSheetRow.getOutputList().isEmpty())
 				{
 					 errorMessage = propertyName + "Operation field(s) are empty";		
 					 return false;

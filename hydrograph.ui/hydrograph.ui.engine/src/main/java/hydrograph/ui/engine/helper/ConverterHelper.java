@@ -115,7 +115,6 @@ public class ConverterHelper {
 		}
 
 		return null;
-
 	}
 
 
@@ -136,7 +135,7 @@ public class ConverterHelper {
 
 	private TypeOperationInputFields getOperationInputFields(MappingSheetRow mappingSheetRow) {
 		TypeOperationInputFields inputFields = null;
-		if (mappingSheetRow != null) {
+		if (mappingSheetRow != null && !mappingSheetRow.getInputFields().isEmpty()) {
 			inputFields = new TypeOperationInputFields();
 
 			if (!hasAllFilterPropertiesAsParams(mappingSheetRow.getInputFields())) {	

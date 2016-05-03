@@ -381,7 +381,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		scrolledComposite.setLayout(new GridLayout(1, false));
 
 		GridData gd_scrolledComposite = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		gd_scrolledComposite.minimumHeight = 250;
+		gd_scrolledComposite.minimumHeight = 170;
 		gd_scrolledComposite.heightHint = 200;
 		scrolledComposite.setLayoutData(gd_scrolledComposite);
 		scrolledComposite.setExpandHorizontal(true);
