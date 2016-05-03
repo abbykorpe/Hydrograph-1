@@ -336,21 +336,6 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			
 			changePortSettings();
 			
-
-			if(getCastedModel().getComponentName().equalsIgnoreCase("lookup")){
-				LookupConfigProperty lookup_in0 = (LookupConfigProperty)getCastedModel().getProperties().get("hash_join");
-				if(lookup_in0 != null && !lookup_in0.isSelected()){
-					getCastedModel().getPorts().get("in1").setLabelOfPort("lkp");
-					getCastedModel().getPorts().get("in1").setPortType(PortTypeEnum.LOOKUP);
-					getCastedModel().getPorts().get("in0").setLabelOfPort("drv");
-					getCastedModel().getPorts().get("in0").setPortType(PortTypeEnum.DRIVER);
-				}else{
-					getCastedModel().getPorts().get("in1").setLabelOfPort("drv");
-					getCastedModel().getPorts().get("in1").setPortType(PortTypeEnum.DRIVER);
-					getCastedModel().getPorts().get("in0").setLabelOfPort("lkp");
-					getCastedModel().getPorts().get("in0").setPortType(PortTypeEnum.LOOKUP);
-				}
-			}
 			if(!StringUtils.equals(Constants.UPDATE_AVAILABLE,currentStatus))
 			updateComponentStatus();			
 			refresh();

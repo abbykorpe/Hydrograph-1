@@ -15,6 +15,8 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.datastructure.property.LookupConfigProperty;
+import hydrograph.ui.graph.model.PortTypeEnum;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
@@ -26,6 +28,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -72,14 +75,31 @@ public class ELTLookupConfigWidget extends AbstractWidget {
 					properties = new LookupConfigProperty();
 					properties.setDriverKey("");
 					properties.setLookupKey("");
-					properties.isSelected();
+					//properties.isSelected();
 				}
 				ELTLookupConfigGrid eltLookupConfigGrid = new ELTLookupConfigGrid(((Button) eltDefaultButton
 						.getSWTWidgetControl()).getShell(), propertyDialogButtonBar, properties);
 				eltLookupConfigGrid.setPropagatedFieldProperty(SchemaPropagationHelper.INSTANCE
 						.getFieldsForFilterWidget(getComponent()));
 				eltLookupConfigGrid.open();
+				
+				setPortTypes();
+				
 				showHideErrorSymbol(widgets);
+			}
+
+			private void setPortTypes() {
+				if(properties.isSelected()){
+					getComponent().getPorts().get(Messages.IN1_PORT).setPortType(PortTypeEnum.DRIVER);
+					getComponent().getPorts().get(Messages.IN1_PORT).setLabelOfPort("drv");
+					getComponent().getPorts().get(Messages.IN0_PORT).setPortType(PortTypeEnum.LOOKUP);
+					getComponent().getPorts().get(Messages.IN0_PORT).setLabelOfPort("lkp");
+				}else{
+					getComponent().getPorts().get(Messages.IN1_PORT).setPortType(PortTypeEnum.LOOKUP);
+					getComponent().getPorts().get(Messages.IN1_PORT).setLabelOfPort("lkp");
+					getComponent().getPorts().get(Messages.IN0_PORT).setPortType(PortTypeEnum.DRIVER);
+					getComponent().getPorts().get(Messages.IN0_PORT).setLabelOfPort("drv");
+				}
 			}
 		});
 	}
