@@ -228,7 +228,7 @@ public class PropertyDialogBuilder {
 		
 		if (isError) {
 			for (TabItem item : tabFolder.getItems()) {
-				if (StringUtils.equalsIgnoreCase(item.getText(), subgroupTree
+				if (StringUtils.equalsIgnoreCase(StringUtils.trim(item.getText()), subgroupTree
 						.get(subgroupName).get(0).getPropertyGroup())) {
 					item.setImage(new Image(null,
 							XMLConfigUtil.CONFIG_FILES_PATH

@@ -268,7 +268,7 @@ public abstract class AbstractWidget {
 		   {
 			   for(TabItem item:getTabFolder().getItems())
 				{
-					if(StringUtils.equalsIgnoreCase(item.getText(),getPropertyName()))
+					if(StringUtils.equalsIgnoreCase(StringUtils.trim(item.getText()),getPropertyName()))
 							{
 						    item.setImage(new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_ERROR_ICON));
 							}			
@@ -278,7 +278,7 @@ public abstract class AbstractWidget {
 		   {
 			   for(TabItem item:getTabFolder().getItems())
 				{
-					if(StringUtils.equalsIgnoreCase(item.getText(),getPropertyName()))
+					if(StringUtils.equalsIgnoreCase(StringUtils.trim(item.getText()),getPropertyName()))
 							{
 						    item.setImage(null);
 							}			
@@ -351,7 +351,7 @@ public abstract class AbstractWidget {
 	 	{
 	 	for(TabItem item:getTabFolder().getItems())
 		{
-			if(StringUtils.equalsIgnoreCase(item.getText(),property.getPropertyGroup()))
+			if(StringUtils.equalsIgnoreCase(StringUtils.trim(item.getText()),property.getPropertyGroup()))
 					{
 				    item.setImage(new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_ERROR_ICON));
 					}			
@@ -361,7 +361,7 @@ public abstract class AbstractWidget {
 	 	{
 	 		for(TabItem item:getTabFolder().getItems())
 			{
-				if(StringUtils.equalsIgnoreCase(item.getText(),property.getPropertyGroup()))
+				if(StringUtils.equalsIgnoreCase(StringUtils.trim(item.getText()),property.getPropertyGroup()))
 						{
 					    item.setImage(null);
 						}			
