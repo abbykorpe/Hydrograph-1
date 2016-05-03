@@ -124,7 +124,9 @@ public class FilterOperationClassUtility  {
 				fileNameTextBox.setText(page.getTypeName());
 			}
 		}
-		fileNameTextBox.setData("path", "\\" + page.getPackageFragmentRootText().replace("/","\\") + "\\"+ page.getPackageText().replace(".", "\\") + "\\"+ page.getTypeName() + ".java");
+		fileNameTextBox.setData("path", "/" + page.getPackageFragmentRootText() + "/"
+				+ page.getPackageText().replace(".", "/") + "/"
+				+ page.getTypeName() + ".java");
 	}
 
 	/**
@@ -160,7 +162,7 @@ public class FilterOperationClassUtility  {
 			}
 			fileName.setText(name.trim());
 			filePath = resource.getRawLocation().toOSString();
-			fileName.setData("path", resource.getFullPath().toOSString());
+			fileName.setData("path", resource.getFullPath().toString());
 		}
 	} 
 
@@ -178,9 +180,9 @@ public class FilterOperationClassUtility  {
 			if (filePath != null) {
 				String projectPath=(String) filePath.getData("path");
 				if(!projectPath.isEmpty()){
-					String splitedProjectPath[]=projectPath.split("\\\\");
-					String formattedProjectPath="\\"+splitedProjectPath[1]+"\\"+splitedProjectPath[2]+"\\";
-					String textBoxValue=((Text)filePath).getText().replace(".","\\")+".java";
+					String splitedProjectPath[]=projectPath.split("/");
+					String formattedProjectPath="/"+splitedProjectPath[1]+"/"+splitedProjectPath[2]+"/";
+					String textBoxValue=((Text)filePath).getText().replace(".","/")+".java";
 					fileName = formattedProjectPath + textBoxValue;
 				}
 			} else {
