@@ -281,9 +281,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		if (schemaGridRowList != null ) {
 			if(!SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName())){
-			if(getSchemaForInternalPropagation()!=null){
+			Schema schemaForInternalPropagation = getSchemaForInternalPropagation();
+			if(schemaForInternalPropagation!=null){
 
-				Schema internalSchema = getSchemaForInternalPropagation().clone();
+				Schema internalSchema = schemaForInternalPropagation.clone();
 				List<String> schemaFields = getSchemaFields(schemaGridRowList);
 				for (GridRow internalSchemaRow : internalSchema.getGridRow()) {
 					int index = 0;
