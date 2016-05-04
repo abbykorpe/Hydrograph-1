@@ -32,6 +32,7 @@ import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.Activator;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.filemixedschema.ELTMixedSchemeWidget;
 import hydrograph.ui.propertywindow.fixedwidthschema.ELTFixedWidget;
@@ -83,7 +84,11 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.layout.TableColumnLayout;
@@ -124,13 +129,12 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.ColumnLayoutData;
-import org.slf4j.Logger;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.widgets.ColumnLayoutData;
+import org.eclipse.ui.statushandlers.StatusManager;
+import org.slf4j.Logger;
 
 
 /**
@@ -360,21 +364,15 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private boolean verifyExtSchemaSync(String extSchemaPath, List<GridRow> schemaInGrid) {
 		List<GridRow> schemasFromFile = new ArrayList<GridRow>();
-		File schemaFile=null;
-		if(!new File(extSchemaPath).isAbsolute()){
-			extSchemaPath=getAbsolutePath();
-			schemaFile = new File(extSchemaPath);
-			System.out.print(extSchemaPath);
-		}
-		else {
-		//TODO
-		schemaFile = new File(extSchemaPath);
+		File schemaFile=getPath();
+		if (schemaFile == null){
+			return false;
 		}
 		InputStream xml, xsd;
 		Fields fields;
 		boolean verifiedSchema = true;
 		try {
-			xml = new FileInputStream(extSchemaPath);
+			xml = new FileInputStream(schemaFile);
 			xsd = new FileInputStream(SCHEMA_CONFIG_XSD_PATH);
 
 			if(validateXML(xml, xsd)){
@@ -463,7 +461,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 			
 		} catch (FileNotFoundException e) {
-			logger.error(Messages.EXPORTED_SCHEMA_SYNC_ERROR, e);
+			logger.error(Messages.EXPORTED_SCHEMA_SYNC_ERROR +e.getMessage());
+			
+			
 		}
 		return verifiedSchema;
 
@@ -787,34 +787,51 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		populateWidgetExternalSchema();
 
 	}
-	private String getAbsolutePath(){
-		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput() instanceof IFileEditorInput){
-			IFileEditorInput input = (IFileEditorInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput() ;
-			IFile file = input.getFile();
-			Path path=(Path) file.getRawLocation().makeAbsolute();
-			String device=path.getDevice();
-			String[] args=path.segments();
-			String absolutePath="";
-			String pathOfFIle="";
-			if(device!=null){
-				absolutePath=device;
-			}
-			for(String i: args){
-				absolutePath+="/"+i;
-			}	
-			String workSpacePath=absolutePath.substring(0,absolutePath.indexOf("/"+"jobs"));
-			if(extSchemaPathText.getText().startsWith("/")){
-				pathOfFIle=workSpacePath.concat(extSchemaPathText.getText());
-			}
-			else
-				pathOfFIle=workSpacePath.concat("/"+extSchemaPathText.getText());
-			
-			return pathOfFIle;
-							
+	private String getAbsolutePath(IFileEditorInput input){
+		Path path = (Path) input.getFile().getRawLocation().makeAbsolute();
+		String device = path.getDevice();
+		String absolutePath = "";
+		String pathOfFIle = "";
+		if(device != null){
+			absolutePath=device;
 		}
-		else 
-			return null;
-		
+		for(String segment: path.segments()){
+			absolutePath += "/" + segment;
+		}	
+		String workSpacePath = absolutePath.substring(0, absolutePath.indexOf("/" + "jobs"));
+		if(extSchemaPathText.getText().startsWith("/")){
+			pathOfFIle=workSpacePath.concat(extSchemaPathText.getText());
+		}
+		else{
+			pathOfFIle=workSpacePath.concat("/"+extSchemaPathText.getText());
+		}
+		return pathOfFIle;
+	}
+	private File getPath(){
+		IEditorInput input = (IEditorInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
+		File schemaFile=null;
+		if(!(input instanceof IFileEditorInput)){
+			String schemaPath = extSchemaPathText.getText();
+			if(!new File(schemaPath).isAbsolute()){
+				Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, 
+						"Existing job is not saved. In order to use relative path save the job", null);
+				StatusManager.getManager().handle(status, StatusManager.BLOCK);
+				return schemaFile;
+			}
+			else {
+				schemaFile = new File(schemaPath);
+				
+			}
+		}
+		else if(input instanceof IFileEditorInput){
+			String schemaPath = extSchemaPathText.getText();
+			if(!new File(schemaPath).isAbsolute()){
+				schemaFile = new File(getAbsolutePath((IFileEditorInput)input));
+			}
+			else {
+				schemaFile = new File(schemaPath);
+			}
+		}return schemaFile;
 	}
 	private void addImportExportButtons(Composite containerControl) {
 		ELTDefaultSubgroupComposite importExportComposite = new ELTDefaultSubgroupComposite(containerControl);
@@ -828,15 +845,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		importButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				extSchemaPathText.getText();
-				File schemaFile=null;
-				if(!new File(extSchemaPathText.getText()).isAbsolute()){
-					String pathOfFIle=getAbsolutePath();
-					schemaFile = new File(pathOfFIle);
-				}
-				else {
-				//TODO
-				schemaFile = new File(extSchemaPathText.getText());
+				File schemaFile=getPath();
+				if (schemaFile == null){
+					return;
 				}
 				List<GridRow> schemaGridRowListToImport = new ArrayList<GridRow>();;
 
@@ -854,7 +865,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					enableDisableButtons(schemaGridRowListToImport.size());
 					MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.IMPORTED_SCHEMA);
 				}
-				
 			}
 		});
 
@@ -866,16 +876,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		exportButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				extSchemaPathText.getText();
-				File schemaFile = null;
-				if(!new File(extSchemaPathText.getText()).isAbsolute()){
-					String pathOfFIle=getAbsolutePath();
-					schemaFile = new File(pathOfFIle);
-					System.out.println("NOT absolute"+pathOfFIle);
-				}else {
-					schemaFile = new File(extSchemaPathText.getText());
-					System.out.println("absolute"+extSchemaPathText.getText());
-					}
+				File schemaFile=getPath();
+				if (schemaFile == null){
+					return;
+				}
 				GridRowLoader gridRowLoader = new GridRowLoader(gridRowType, schemaFile);
 				gridRowLoader.exportXMLfromGridRows((ArrayList<GridRow>) schemaGridRowList);
 			}
