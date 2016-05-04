@@ -12,7 +12,7 @@
  
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
-	<tns:component paletteIconPath="/icons/input_parquet_palette.png" canvasIconPath="/icons/input_parquet_canvas.png"
+	<tns:component paletteIconPath="/icons/input_file_palette.png" canvasIconPath="/icons/input_file_canvas.png"
 		name="IFParquet" nameInPalette="File Parquet" defaultNamePrefix="IFParquet" 
 		description="This is IFParquet component."
 		helpFilePath="/hydrograph.ui.help/html/Components/Input_File_Parquet.html"

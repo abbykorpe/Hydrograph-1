@@ -16,7 +16,7 @@
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 
 	<tns:component paletteIconPath="/icons/subjob_palette.png"
-		canvasIconPath="/icons/subjob-canvas.png" name="SubjobComponent"
+		canvasIconPath="/icons/subjob_canvas.png" name="SubjobComponent"
 		nameInPalette="Subjob" defaultNamePrefix="Subjob"
 		description="Used to specify path for an existing Subjob element."
 		helpFilePath="/hydrograph.ui.help/html/Components/Dummy.html" acronym="Subjob">

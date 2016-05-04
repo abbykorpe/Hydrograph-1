@@ -13,7 +13,7 @@
  
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
-	<tns:component paletteIconPath="/icons/output_mixed_scheme_palette.png" canvasIconPath="/icons/output_mixed_scheme_canvas.png"
+	<tns:component paletteIconPath="/icons/output_file_palette.png" canvasIconPath="/icons/output_file_canvas.png"
 		name="OFMixedScheme" nameInPalette="File Mixed Scheme" defaultNamePrefix="OFMixedScheme" 
 		description="Used to write output in Mixed Scheme text format."
 		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Fixed_Width.html"
