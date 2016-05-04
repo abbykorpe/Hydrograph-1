@@ -142,12 +142,9 @@ public class OperationClassProperty implements IDataStructure{
 		List<NameValueProperty> nameValueProperties=new ArrayList<>();
 		if(this.nameValuePropertyList!=null)
 		{	
-		
-		for(NameValueProperty nameValueProperty2:this.nameValuePropertyList)
+		for(NameValueProperty nameValueProperty:this.nameValuePropertyList)
 		{
-			NameValueProperty clonedNameValueProperty=new NameValueProperty();
-			clonedNameValueProperty=nameValueProperty2.clone();
-			nameValueProperties.add(clonedNameValueProperty);
+		  nameValueProperties.add(nameValueProperty.clone());
 		}
 		}
 		return new OperationClassProperty(comboBoxValue,operationClassPath,isParameter,operationClassFullPath,nameValueProperties);

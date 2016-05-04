@@ -301,7 +301,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	 */
 	public void populateWidget() {
 		
-		if (operationClassProperty.getOperationClassPath()!=null && StringUtils.isNotBlank(operationClassProperty.getOperationClassPath())) 
+		if (StringUtils.isNotBlank(operationClassProperty.getOperationClassPath())) 
 		{
 			fileName.setBackground(new Color(Display.getDefault(), 255, 255, 255));
 			emptyDecorator.hide();
