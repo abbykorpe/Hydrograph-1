@@ -14,28 +14,25 @@
  
 package hydrograph.ui.engine.ui.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
+import hydrograph.engine.jaxb.lookup.TypeKeyFields;
+import hydrograph.engine.jaxb.operationstypes.Lookup;
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupConfigProperty;
-import hydrograph.ui.datastructure.property.LookupMapProperty;
+import hydrograph.ui.datastructure.property.MatchValueProperty;
 import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.converter.TransformUiConverter;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.PortTypeEnum;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeFieldName;
-import hydrograph.engine.jaxb.commontypes.TypeInputField;
-import hydrograph.engine.jaxb.commontypes.TypeMapField;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
-import hydrograph.engine.jaxb.lookup.TypeKeyFields;
-import hydrograph.engine.jaxb.operationstypes.Lookup;
 
 public class LookupUiConverter extends TransformUiConverter {
 
@@ -58,6 +55,11 @@ public class LookupUiConverter extends TransformUiConverter {
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Lookup-Properties for -{}", componentName);
 		lookup = (Lookup) typeBaseComponent;
+		
+		getPortLabels(lookup);
+			
+		propertyMap.put(Constants.MATCH_PROPERTY_WIDGET, getMatch());
+		
 		LOGGER.info("LOOKUP_CONFIG_FIELD::{}",getLookupConfigProperty());
 		propertyMap.put(Constants.LOOKUP_CONFIG_FIELD, getLookupConfigProperty());
 
@@ -68,21 +70,64 @@ public class LookupUiConverter extends TransformUiConverter {
 		uiComponent.setType(UIComponentsConstants.LOOKUP.value());
 		validateComponentProperties(propertyMap);
 	}
+	
+
+	private void getPortLabels(TypeOperationsComponent operationsComponent){
+		LOGGER.debug("Generating Port labels for -{}", componentName);
+		if (operationsComponent.getInSocket() != null) {
+			for (TypeBaseInSocket inSocket : operationsComponent.getInSocket()) {
+				if(inSocket.getType().equals(PortTypeEnum.LOOKUP.value()))
+					uiComponent.getPorts().get(inSocket.getId()).setLabelOfPort("lkp");
+				else if(inSocket.getType().equals(PortTypeEnum.DRIVER.value()))
+					uiComponent.getPorts().get(inSocket.getId()).setLabelOfPort("drv");
+			}
+		}
+	}
+	
+	private MatchValueProperty getMatch() {
+		LOGGER.debug("Generating Match for -{}", componentName);
+		MatchValueProperty matchValue =  new MatchValueProperty();;
+		matchValue.setMatchValue(lookup.getMatch().getValue().toString());
+		matchValue.setRadioButtonSelected(true);
+		return matchValue;
+		
+	}
 
 	private LookupConfigProperty getLookupConfigProperty() {
 		LookupConfigProperty lookupConfigProperty = null;
 		List<TypeKeyFields> typeKeyFieldsList = lookup.getKeys();
+		
 		if (typeKeyFieldsList != null && !typeKeyFieldsList.isEmpty()) {
 			lookupConfigProperty = new LookupConfigProperty();
 			for (TypeKeyFields typeKeyFields : typeKeyFieldsList) {
-				if (typeKeyFields.getInSocketId().equalsIgnoreCase("in0")
-						|| typeKeyFields.getInSocketId().equalsIgnoreCase("lookup"))
-					lookupConfigProperty.setLookupKey(getKeyNames(typeKeyFields));
-				else if (typeKeyFields.getInSocketId().equalsIgnoreCase("in1")
-						|| typeKeyFields.getInSocketId().equalsIgnoreCase("driver"))
-					lookupConfigProperty.setDriverKey(getKeyNames(typeKeyFields));
+				if (typeKeyFields.getInSocketId().equalsIgnoreCase("in0")){
+					for (TypeBaseInSocket inSocket : lookup.getInSocket()) {
+						if(inSocket.getId().equals("in0")){
+							//if(inSocket.getType().equals("lookup")){
+							if(inSocket.getType().equals(PortTypeEnum.LOOKUP.value())){
+								lookupConfigProperty.setLookupKey(getKeyNames(typeKeyFields));
+								lookupConfigProperty.setSelected(true);
+							}else if(inSocket.getType().equals(PortTypeEnum.DRIVER.value())){
+								lookupConfigProperty.setDriverKey(getKeyNames(typeKeyFields));
+							}	
+						}
+					}
+					
+				}else if (typeKeyFields.getInSocketId().equalsIgnoreCase("in1")){
+					for (TypeBaseInSocket inSocket : lookup.getInSocket()) {
+						if(inSocket.getId().equals("in1")){
+							if(inSocket.getType().equals(PortTypeEnum.LOOKUP.value())){
+								lookupConfigProperty.setLookupKey(getKeyNames(typeKeyFields));
+								lookupConfigProperty.setSelected(false);
+							}else if(inSocket.getType().equals(PortTypeEnum.DRIVER.value())){
+								lookupConfigProperty.setDriverKey(getKeyNames(typeKeyFields));
+							}	
+						}
+					}
+				}		
 			}
 		}
+		
 		return lookupConfigProperty;
 	}
 

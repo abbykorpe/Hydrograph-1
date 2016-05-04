@@ -29,6 +29,7 @@ import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.helper.ConverterUiHelper;
 import hydrograph.ui.engine.ui.repository.UIComponentRepo;
+import hydrograph.ui.graph.model.PortTypeEnum;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 
@@ -96,6 +97,7 @@ public abstract class TransformUiConverter extends UiConverter {
 						new LinkingData(inSocket.getFromComponentId(),
 								operationsComponent.getId(), inSocket
 										.getFromSocketId(), inSocket.getId()));
+				uiComponent.getPorts().get(inSocket.getId()).setPortType(PortTypeEnum.fromValue(inSocket.getType()));
 			}
 		}
 	}
