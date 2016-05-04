@@ -14,7 +14,7 @@
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd">
 	<tns:component paletteIconPath="/icons/hive_palette.png" canvasIconPath="/icons/hive_canvas.png"
-		name="OHiveParquet" nameInPalette="Hive Parquet" defaultNamePrefix="OHiveParquet" 
+		name="OHiveParquet" nameInPalette="Hive Parquet" defaultNamePrefix="OHive_Parquet" 
 		description="Takes parquet file as input and performs Hive job."
 		helpFilePath="/hydrograph.ui.help/html/Components/Output_Hive_Parquet.html"
 		acronym="HPrqt">
