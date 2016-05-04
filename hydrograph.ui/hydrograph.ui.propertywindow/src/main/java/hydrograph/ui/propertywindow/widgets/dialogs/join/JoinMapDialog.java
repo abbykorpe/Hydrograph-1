@@ -405,11 +405,20 @@ public class JoinMapDialog extends Dialog {
 
 			String tooltipText;
 
+			private List<String> getOutputFieldList(){
+				List<String> outputFieldList = new LinkedList<>();
+				for(LookupMapProperty lookupMapProperty : mappingTableItemList){
+					outputFieldList.add(lookupMapProperty.getOutput_Field());
+				}
+				return outputFieldList;
+			}
+			
 			@Override
 			public String getToolTipText(Object element) {
 				tooltipText = null;
-				int occurrences = Collections.frequency(mappingTableItemList,
-						element);
+				
+				int occurrences = Collections.frequency(getOutputFieldList(),
+						((LookupMapProperty)element).getOutput_Field());
 				if (occurrences > 1) {
 					tooltipText = FIELD_TOOLTIP_MESSAGE_DUPLICATE_FIELDS;
 				}
@@ -422,9 +431,9 @@ public class JoinMapDialog extends Dialog {
 			}
 
 			@Override
-			public Color getForeground(Object element) {
-				int occurrences = Collections.frequency(mappingTableItemList,
-						element);
+			public Color getForeground(Object element) {				
+				int occurrences = Collections.frequency(getOutputFieldList(),
+						((LookupMapProperty)element).getOutput_Field());
 				if (occurrences > 1) {
 					return new Color(null, 255, 0, 0);
 				} else {
