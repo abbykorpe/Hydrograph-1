@@ -309,7 +309,7 @@ public class GridRowLoader {
 			}
 
 		} catch (JAXBException e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"+e.getMessage());
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"+ ((e.getCause() != null)? e.getLinkedException().getMessage():e.getMessage()));
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}catch (Exception e) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"+e.getMessage());

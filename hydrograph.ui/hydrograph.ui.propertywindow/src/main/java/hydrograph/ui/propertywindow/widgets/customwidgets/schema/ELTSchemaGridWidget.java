@@ -126,6 +126,11 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.slf4j.Logger;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Path;
 
 
 /**
@@ -355,7 +360,16 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private boolean verifyExtSchemaSync(String extSchemaPath, List<GridRow> schemaInGrid) {
 		List<GridRow> schemasFromFile = new ArrayList<GridRow>();
-		File schemaFile = new File(extSchemaPath);
+		File schemaFile=null;
+		if(!new File(extSchemaPath).isAbsolute()){
+			extSchemaPath=getAbsolutePath();
+			schemaFile = new File(extSchemaPath);
+			System.out.print(extSchemaPath);
+		}
+		else {
+		//TODO
+		schemaFile = new File(extSchemaPath);
+		}
 		InputStream xml, xsd;
 		Fields fields;
 		boolean verifiedSchema = true;
@@ -773,7 +787,35 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		populateWidgetExternalSchema();
 
 	}
-
+	private String getAbsolutePath(){
+		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput() instanceof IFileEditorInput){
+			IFileEditorInput input = (IFileEditorInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput() ;
+			IFile file = input.getFile();
+			Path path=(Path) file.getRawLocation().makeAbsolute();
+			String device=path.getDevice();
+			String[] args=path.segments();
+			String absolutePath="";
+			String pathOfFIle="";
+			if(device!=null){
+				absolutePath=device;
+			}
+			for(String i: args){
+				absolutePath+="/"+i;
+			}	
+			String workSpacePath=absolutePath.substring(0,absolutePath.indexOf("/"+"jobs"));
+			if(extSchemaPathText.getText().startsWith("/")){
+				pathOfFIle=workSpacePath.concat(extSchemaPathText.getText());
+			}
+			else
+				pathOfFIle=workSpacePath.concat("/"+extSchemaPathText.getText());
+			
+			return pathOfFIle;
+							
+		}
+		else 
+			return null;
+		
+	}
 	private void addImportExportButtons(Composite containerControl) {
 		ELTDefaultSubgroupComposite importExportComposite = new ELTDefaultSubgroupComposite(containerControl);
 		importExportComposite.createContainerWidget();
@@ -787,8 +829,15 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				extSchemaPathText.getText();
-				File schemaFile = new File(extSchemaPathText.getText());
-
+				File schemaFile=null;
+				if(!new File(extSchemaPathText.getText()).isAbsolute()){
+					String pathOfFIle=getAbsolutePath();
+					schemaFile = new File(pathOfFIle);
+				}
+				else {
+				//TODO
+				schemaFile = new File(extSchemaPathText.getText());
+				}
 				List<GridRow> schemaGridRowListToImport = new ArrayList<GridRow>();;
 
 				tableViewer.setInput(schemaGridRowListToImport);
@@ -818,8 +867,15 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				extSchemaPathText.getText();
-				File schemaFile = (File) new File(extSchemaPathText.getText());
-
+				File schemaFile = null;
+				if(!new File(extSchemaPathText.getText()).isAbsolute()){
+					String pathOfFIle=getAbsolutePath();
+					schemaFile = new File(pathOfFIle);
+					System.out.println("NOT absolute"+pathOfFIle);
+				}else {
+					schemaFile = new File(extSchemaPathText.getText());
+					System.out.println("absolute"+extSchemaPathText.getText());
+					}
 				GridRowLoader gridRowLoader = new GridRowLoader(gridRowType, schemaFile);
 				gridRowLoader.exportXMLfromGridRows((ArrayList<GridRow>) schemaGridRowList);
 			}
