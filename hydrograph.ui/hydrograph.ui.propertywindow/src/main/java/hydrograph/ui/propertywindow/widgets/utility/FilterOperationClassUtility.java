@@ -20,6 +20,7 @@ import hydrograph.ui.common.datastructures.tooltip.TootlTipErrorMessage;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.OperationClassProperty;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
@@ -214,7 +215,7 @@ public class FilterOperationClassUtility  {
 
 	}
 
-	public static OperationClassProperty createOperationalClass(
+	public static void createOperationalClass(
 			Composite composite,
 			PropertyDialogButtonBar eltOperationClassDialogButtonBar,
 			AbstractELTWidget combo, AbstractELTWidget isParameterCheckbox,
@@ -282,8 +283,6 @@ public class FilterOperationClassUtility  {
 		} catch (Exception e1) {
 			e1.printStackTrace(); 
 		} 
-		OperationClassProperty operationClassProperty = new OperationClassProperty(comboOfOperaationClasses.getText(),fileName.getText(), btnCheckButton.getEnabled(),(String)fileName.getData("path"));
-		return operationClassProperty;
 	}
 
 	private static void setIJavaProject() {

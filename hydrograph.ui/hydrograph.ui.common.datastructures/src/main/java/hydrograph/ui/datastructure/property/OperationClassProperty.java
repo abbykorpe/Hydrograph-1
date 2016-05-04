@@ -16,6 +16,9 @@ package hydrograph.ui.datastructure.property;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
 
 
@@ -31,7 +34,7 @@ public class OperationClassProperty implements IDataStructure{
 	private String operationClassPath;
 	private boolean isParameter;
 	private String operationClassFullPath;
-	
+	private List<NameValueProperty> nameValuePropertyList;
 	/**
 	 * Instantiates a new operation class property.
 	 * 
@@ -46,6 +49,8 @@ public class OperationClassProperty implements IDataStructure{
 		this.comboBoxValue = comboBoxValue;
 	}
 	
+	
+
 	/**
 	 * Instantiates a new operation class property.
 	 * 
@@ -54,11 +59,12 @@ public class OperationClassProperty implements IDataStructure{
 	 * @param isParameter
 	 * @param operationClassFullPath
 	 */
-	public OperationClassProperty(String comboBoxValue,String operationClassPath, boolean isParameter,String operationClassFullPath) {
+	public OperationClassProperty(String comboBoxValue,String operationClassPath, boolean isParameter,String operationClassFullPath,List<NameValueProperty> nameValuePropertyList ) {
 		this.comboBoxValue=comboBoxValue;
 		this.operationClassPath = operationClassPath;
 		this.isParameter = isParameter;
 		this.operationClassFullPath=operationClassFullPath;
+		this.nameValuePropertyList=nameValuePropertyList;
 	}
 	
 	/**
@@ -70,6 +76,26 @@ public class OperationClassProperty implements IDataStructure{
 	public String getComboBoxValue() {
 		return comboBoxValue;
 	}
+	
+	public void setComboBoxValue(String comboBoxValue) {
+		this.comboBoxValue = comboBoxValue;
+	}
+	
+	
+	public List<NameValueProperty> getNameValuePropertyList() {
+		return nameValuePropertyList;
+	}
+
+	
+	public void setNameValuePropertyList(
+			List<NameValueProperty> nameValuePropertyList) {
+		this.nameValuePropertyList = nameValuePropertyList;
+	}
+
+	public void setParameter(boolean isParameter) {
+		this.isParameter = isParameter;
+	}
+
 	
 	/**
 	 * 
@@ -113,7 +139,15 @@ public class OperationClassProperty implements IDataStructure{
 	
 	@Override
 	public OperationClassProperty clone() {
-		return new OperationClassProperty(comboBoxValue,operationClassPath,isParameter,operationClassFullPath);
+		List<NameValueProperty> nameValueProperties=new ArrayList<>();
+		if(this.nameValuePropertyList!=null)
+		{	
+		for(NameValueProperty nameValueProperty:this.nameValuePropertyList)
+		{
+		  nameValueProperties.add(nameValueProperty.clone());
+		}
+		}
+		return new OperationClassProperty(comboBoxValue,operationClassPath,isParameter,operationClassFullPath,nameValueProperties);
 	}
 	
 	@Override
@@ -124,6 +158,7 @@ public class OperationClassProperty implements IDataStructure{
 		result = prime * result + (isParameter ? 1231 : 1237);
 		result = prime * result + ((operationClassFullPath == null) ? 0 : operationClassFullPath.hashCode());
 		result = prime * result + ((operationClassPath == null) ? 0 : operationClassPath.hashCode());
+		result = prime * result + ((nameValuePropertyList == null) ? 0 : nameValuePropertyList.hashCode());
 		return result;
 	}
 	@Override
@@ -152,9 +187,18 @@ public class OperationClassProperty implements IDataStructure{
 				return false;
 		} else if (!operationClassPath.equals(other.operationClassPath))
 			return false;
+		if (nameValuePropertyList == null) {
+			if (other.nameValuePropertyList != null)
+				return false;
+		} else if (!nameValuePropertyList.equals(other.nameValuePropertyList))
+			return false;
 		return true;
 	}
 	
+	public void setOperationClassPath(String operationClassPath) {
+		this.operationClassPath = operationClassPath;
+	}
+
 	@Override
 	public String toString() {
 		return operationClassPath;
