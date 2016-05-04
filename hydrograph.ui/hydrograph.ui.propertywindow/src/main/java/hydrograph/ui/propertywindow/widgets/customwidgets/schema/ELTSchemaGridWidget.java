@@ -1395,7 +1395,7 @@ private void syncTransformWithSchema(){
 		SchemaSyncUtility.removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
 		List<NameValueProperty> outputFileds =getComponentSchemaAsProperty();
 		SchemaSyncUtility.filterCommonMapFields(outputFileds, transformMapping);
-		schema.setGridRow(schemaGridRowList);
+		schema.setGridRow(new ArrayList<>(schemaGridRowList));
 	}
 	else{
 		schemaGridRowList=schema.getGridRow();
