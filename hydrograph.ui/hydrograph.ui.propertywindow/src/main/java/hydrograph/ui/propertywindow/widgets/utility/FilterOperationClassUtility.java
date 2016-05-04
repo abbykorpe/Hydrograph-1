@@ -215,7 +215,7 @@ public class FilterOperationClassUtility  {
 
 	}
 
-	public static OperationClassProperty createOperationalClass(
+	public static void createOperationalClass(
 			Composite composite,
 			PropertyDialogButtonBar eltOperationClassDialogButtonBar,
 			AbstractELTWidget combo, AbstractELTWidget isParameterCheckbox,
@@ -283,9 +283,6 @@ public class FilterOperationClassUtility  {
 		} catch (Exception e1) {
 			e1.printStackTrace(); 
 		} 
-		List<NameValueProperty> nameValueProperties=new ArrayList<>();
-		OperationClassProperty operationClassProperty = new OperationClassProperty(comboOfOperaationClasses.getText(),fileName.getText(), btnCheckButton.getEnabled(),(String)fileName.getData("path"),nameValueProperties);
-		return operationClassProperty;
 	}
 
 	private static void setIJavaProject() {
