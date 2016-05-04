@@ -17,7 +17,6 @@ package hydrograph.ui.engine.ui.converter.impl;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
 import hydrograph.engine.jaxb.lookup.TypeKeyFields;
 import hydrograph.engine.jaxb.operationstypes.Lookup;
 import hydrograph.ui.common.util.Constants;
@@ -32,6 +31,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 public class LookupUiConverter extends TransformUiConverter {
@@ -42,6 +42,8 @@ public class LookupUiConverter extends TransformUiConverter {
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(LookupUiConverter.class);
 	private static final String lookupLabel = "lkp";
 	private static final String driverLabel = "drv";
+	private static final String IN0_PORT = "in0";
+	private static final String IN1_PORT = "in1";
 	
 	
 	public LookupUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
@@ -78,9 +80,9 @@ public class LookupUiConverter extends TransformUiConverter {
 		LOGGER.debug("Generating Port labels for -{}", componentName);
 		if (lookup.getInSocket() != null) {
 			for (TypeBaseInSocket inSocket : lookup.getInSocket()) {
-				if(inSocket.getType().equals(PortTypeEnum.LOOKUP.value()))
+				if(StringUtils.equalsIgnoreCase(inSocket.getType(), PortTypeEnum.LOOKUP.value()))
 					uiComponent.getPorts().get(inSocket.getId()).setLabelOfPort(lookupLabel);
-				else if(inSocket.getType().equals(PortTypeEnum.DRIVER.value()))
+				else if(StringUtils.equalsIgnoreCase(inSocket.getType(), PortTypeEnum.DRIVER.value()))
 					uiComponent.getPorts().get(inSocket.getId()).setLabelOfPort(driverLabel);
 			}
 		}
@@ -88,7 +90,7 @@ public class LookupUiConverter extends TransformUiConverter {
 	
 	private MatchValueProperty getMatch() {
 		LOGGER.debug("Generating Match for -{}", componentName);
-		MatchValueProperty matchValue =  new MatchValueProperty();;
+		MatchValueProperty matchValue =  new MatchValueProperty();
 		matchValue.setMatchValue(lookup.getMatch().getValue().toString());
 		matchValue.setRadioButtonSelected(true);
 		return matchValue;
@@ -102,25 +104,25 @@ public class LookupUiConverter extends TransformUiConverter {
 		if (typeKeyFieldsList != null && !typeKeyFieldsList.isEmpty()) {
 			lookupConfigProperty = new LookupConfigProperty();
 			for (TypeKeyFields typeKeyFields : typeKeyFieldsList) {
-				if (typeKeyFields.getInSocketId().equalsIgnoreCase("in0")){
+				if(StringUtils.equalsIgnoreCase(typeKeyFields.getInSocketId(), IN0_PORT)){
 					for (TypeBaseInSocket inSocket : lookup.getInSocket()) {
-						if(inSocket.getId().equals("in0")){
-							if(inSocket.getType().equals(PortTypeEnum.LOOKUP.value())){
+						if(StringUtils.equalsIgnoreCase(inSocket.getId(), IN0_PORT)){
+							if(StringUtils.equalsIgnoreCase(inSocket.getType(), PortTypeEnum.LOOKUP.value())){
 								lookupConfigProperty.setLookupKey(getKeyNames(typeKeyFields));
 								lookupConfigProperty.setSelected(true);
-							}else if(inSocket.getType().equals(PortTypeEnum.DRIVER.value())){
+							}else if(StringUtils.equalsIgnoreCase(inSocket.getType(), PortTypeEnum.DRIVER.value())){
 								lookupConfigProperty.setDriverKey(getKeyNames(typeKeyFields));
 							}	
 						}
 					}
 					
-				}else if (typeKeyFields.getInSocketId().equalsIgnoreCase("in1")){
+				}else if (StringUtils.equalsIgnoreCase(typeKeyFields.getInSocketId(), IN1_PORT)){
 					for (TypeBaseInSocket inSocket : lookup.getInSocket()) {
-						if(inSocket.getId().equals("in1")){
-							if(inSocket.getType().equals(PortTypeEnum.LOOKUP.value())){
+						if(StringUtils.equalsIgnoreCase(inSocket.getId(), IN1_PORT)){
+							if(StringUtils.equalsIgnoreCase(inSocket.getType(), PortTypeEnum.LOOKUP.value())){
 								lookupConfigProperty.setLookupKey(getKeyNames(typeKeyFields));
 								lookupConfigProperty.setSelected(false);
-							}else if(inSocket.getType().equals(PortTypeEnum.DRIVER.value())){
+							}else if(StringUtils.equalsIgnoreCase(inSocket.getType(), PortTypeEnum.DRIVER.value())){
 								lookupConfigProperty.setDriverKey(getKeyNames(typeKeyFields));
 							}	
 						}
