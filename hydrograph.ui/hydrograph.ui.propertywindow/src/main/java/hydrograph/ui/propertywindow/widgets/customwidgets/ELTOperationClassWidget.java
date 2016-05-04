@@ -14,6 +14,7 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
+import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.OperationClassProperty;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -27,6 +28,8 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTCon
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -45,6 +48,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>(); 
 	private OperationClassProperty operationClassProperty;
 	private ELTOperationClassDialog eltOperationClassDialog;
+	private List<NameValueProperty> nameValuePropertyList;
 	/**
 	 * Instantiates a new ELT operation class widget.
 	 * 
@@ -61,10 +65,10 @@ public class ELTOperationClassWidget extends AbstractWidget {
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties,
 				propertyDialogButtonBar);
-
+		nameValuePropertyList=new ArrayList<>(); 
 		this.operationClassProperty = (OperationClassProperty) componentConfigrationProperty.getPropertyValue();
 		if(operationClassProperty == null){
-			operationClassProperty = new OperationClassProperty(Messages.CUSTOM, "", false, "");
+			operationClassProperty = new OperationClassProperty(Messages.CUSTOM, "", false, "",nameValuePropertyList);
 		}
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 	}
@@ -92,13 +96,16 @@ public class ELTOperationClassWidget extends AbstractWidget {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				OperationClassProperty oldOperationClassProperty=operationClassProperty.clone();
 				eltOperationClassDialog = new ELTOperationClassDialog(
 						runtimeComposite.getContainerControl().getShell(), propertyDialogButtonBar,
-						operationClassProperty.clone(), widgetConfig, getComponent().getComponentName());
+						operationClassProperty, widgetConfig, getComponent().getComponentName());
 				eltOperationClassDialog.open();
-				if(!eltOperationClassDialog.getOperationClassProperty().equals(operationClassProperty)){
-					operationClassProperty = eltOperationClassDialog.getOperationClassProperty();
-					propertyDialogButtonBar.enableApplyButton(true);
+				operationClassProperty.setComboBoxValue(eltOperationClassDialog.getOperationClassProperty().getComboBoxValue());
+				operationClassProperty.setOperationClassPath(eltOperationClassDialog.getOperationClassProperty().getOperationClassPath());
+				operationClassProperty.setParameter(eltOperationClassDialog.getOperationClassProperty().isParameter());
+				if (eltOperationClassDialog.isCancelPressed() && (!(eltOperationClassDialog.isApplyPressed()))) {
+					operationClassProperty.setNameValuePropertyList(oldOperationClassProperty.getNameValuePropertyList());
 				}
 				setToolTipMessage(eltOperationClassDialog.getTootlTipErrorMessage());
 				
@@ -106,7 +113,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 					propertyDialog.pressOK();
 				}
 				
-				if(eltOperationClassDialog.isCancelPressed()){
+				if(eltOperationClassDialog.isCancelPressed()&&(!(eltOperationClassDialog.isApplyPressed()))){
 					propertyDialog.pressCancel();
 				}
 				showHideErrorSymbol(widgets);
