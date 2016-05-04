@@ -40,7 +40,9 @@ public class LookupUiConverter extends TransformUiConverter {
 	private Lookup lookup;
 	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(LookupUiConverter.class);
-		
+	private static final String lookupLabel = "lkp";
+	private static final String driverLabel = "drv";
+	
 	
 	public LookupUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;
@@ -56,7 +58,7 @@ public class LookupUiConverter extends TransformUiConverter {
 		LOGGER.debug("Fetching Lookup-Properties for -{}", componentName);
 		lookup = (Lookup) typeBaseComponent;
 		
-		getPortLabels(lookup);
+		getPortLabels();
 			
 		propertyMap.put(Constants.MATCH_PROPERTY_WIDGET, getMatch());
 		
@@ -72,14 +74,14 @@ public class LookupUiConverter extends TransformUiConverter {
 	}
 	
 
-	private void getPortLabels(TypeOperationsComponent operationsComponent){
+	private void getPortLabels(){
 		LOGGER.debug("Generating Port labels for -{}", componentName);
-		if (operationsComponent.getInSocket() != null) {
-			for (TypeBaseInSocket inSocket : operationsComponent.getInSocket()) {
+		if (lookup.getInSocket() != null) {
+			for (TypeBaseInSocket inSocket : lookup.getInSocket()) {
 				if(inSocket.getType().equals(PortTypeEnum.LOOKUP.value()))
-					uiComponent.getPorts().get(inSocket.getId()).setLabelOfPort("lkp");
+					uiComponent.getPorts().get(inSocket.getId()).setLabelOfPort(lookupLabel);
 				else if(inSocket.getType().equals(PortTypeEnum.DRIVER.value()))
-					uiComponent.getPorts().get(inSocket.getId()).setLabelOfPort("drv");
+					uiComponent.getPorts().get(inSocket.getId()).setLabelOfPort(driverLabel);
 			}
 		}
 	}
@@ -103,7 +105,6 @@ public class LookupUiConverter extends TransformUiConverter {
 				if (typeKeyFields.getInSocketId().equalsIgnoreCase("in0")){
 					for (TypeBaseInSocket inSocket : lookup.getInSocket()) {
 						if(inSocket.getId().equals("in0")){
-							//if(inSocket.getType().equals("lookup")){
 							if(inSocket.getType().equals(PortTypeEnum.LOOKUP.value())){
 								lookupConfigProperty.setLookupKey(getKeyNames(typeKeyFields));
 								lookupConfigProperty.setSelected(true);
