@@ -17,10 +17,16 @@ package hydrograph.ui.engine.ui.converter.impl;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import hydrograph.engine.jaxb.commontypes.TypeInputField;
+import hydrograph.engine.jaxb.commontypes.TypeMapField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
 import hydrograph.engine.jaxb.lookup.TypeKeyFields;
 import hydrograph.engine.jaxb.operationstypes.Lookup;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.LookupConfigProperty;
+import hydrograph.ui.datastructure.property.LookupMapProperty;
+import hydrograph.ui.datastructure.property.LookupMappingGrid;
 import hydrograph.ui.datastructure.property.MatchValueProperty;
 import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.converter.TransformUiConverter;
@@ -144,6 +150,47 @@ public class LookupUiConverter extends TransformUiConverter {
 		if( lookupKey.lastIndexOf(",")!=-1)
 			lookupKey=lookupKey.deleteCharAt(lookupKey.lastIndexOf(","));
 		return lookupKey.toString();
+	}
+	
+protected void getOutPort(TypeOperationsComponent operationsComponent) {
+		LOGGER.debug("Generating OutPut Ports for -{}", componentName);
+		if (operationsComponent.getOutSocket() != null) {
+			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
+				uiComponent.engageOutputPort(outSocket.getId());
+				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null
+						&& !outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty())
+					propertyMap.put(Constants.LOOKUP_MAP_FIELD, getLookupMappingGrid(outSocket));
+			}
+
+		}			
+	}
+
+	private LookupMappingGrid getLookupMappingGrid(TypeOperationsOutSocket outSocket) {
+		String dot_separator = ".";
+		LookupMapProperty lookupMapProperty = null;
+		LookupMappingGrid lookupMappingGrid = new LookupMappingGrid();
+		for (Object object : outSocket.getPassThroughFieldOrOperationFieldOrMapField()) {
+			if ((TypeInputField.class).isAssignableFrom(object.getClass())) {
+				TypeInputField inputField=(TypeInputField) object;
+				if (StringUtils.isNotBlank(inputField.getName()) && StringUtils.isNotBlank(inputField.getInSocketId())) {
+					lookupMapProperty = new LookupMapProperty();
+					lookupMapProperty.setOutput_Field(inputField.getName());
+					lookupMapProperty
+							.setSource_Field(inputField.getInSocketId() + dot_separator + inputField.getName());
+					lookupMappingGrid.getLookupMapProperties().add(lookupMapProperty);
+				}
+			}
+			if ((TypeMapField.class).isAssignableFrom(object.getClass())) {
+				TypeMapField mapField = (TypeMapField) object;
+				if (StringUtils.isNotBlank(mapField.getName()) && StringUtils.isNotBlank(mapField.getSourceName())) {
+					lookupMapProperty = new LookupMapProperty();
+					lookupMapProperty.setOutput_Field(mapField.getName());
+					lookupMapProperty.setSource_Field(mapField.getInSocketId() + dot_separator	+ mapField.getSourceName());
+					lookupMappingGrid.getLookupMapProperties().add(lookupMapProperty);
+				} 
+			}
+		}
+		return lookupMappingGrid;
 	}
 	
 }
