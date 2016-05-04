@@ -204,7 +204,7 @@ public class ELTLookupConfigGrid extends Dialog {
 	}
 
 	public Text textBoxWidget(Composite parent, int[] bounds, String textValue, boolean value) {
-		Text text = new Text(parent, SWT.BORDER | SWT.READ_ONLY | SWT.CENTER);
+		Text text = new Text(parent, SWT.BORDER | SWT.READ_ONLY | SWT.LEFT);
 		text.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		text.setText(textValue);
 		text.setEditable(value);

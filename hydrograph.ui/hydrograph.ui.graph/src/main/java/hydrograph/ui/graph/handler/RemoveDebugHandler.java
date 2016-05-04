@@ -15,11 +15,22 @@
 package hydrograph.ui.graph.handler;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.controller.PortEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
+import hydrograph.ui.graph.model.Component;
+
+import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
 
 
@@ -40,8 +51,23 @@ public class RemoveDebugHandler extends AbstractHandler{
 	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
+
+		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
+		for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator.hasNext();){
+			EditPart editPart = (EditPart) iterator.next();
+			if(editPart instanceof ComponentEditPart){
+				Component comp = ((ComponentEditPart)editPart).getCastedModel();
+				comp.clearWatcherMap();
+			} else if(editPart instanceof PortEditPart){
+				((PortEditPart)editPart).getPortFigure().removeWatchColor();
+				((PortEditPart)editPart).getPortFigure().setWatched(false);
+				((PortEditPart)editPart).getCastedModel().setWatched(false);
+			}
+		}
+		((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
 		return null;
+		
 	}
 
 	/**

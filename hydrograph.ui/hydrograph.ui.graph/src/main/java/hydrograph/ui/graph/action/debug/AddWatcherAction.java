@@ -21,8 +21,11 @@ import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.handler.RemoveDebugHandler;
+import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
+
 
 import java.util.Iterator;
 import java.util.List;
@@ -78,6 +81,7 @@ public class AddWatcherAction extends SelectionAction{
 					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 			} 
 		}
+		((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
 	}
 
 	private void changePortColor(Component selectedComponent, String portName){
