@@ -84,7 +84,6 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -357,12 +356,12 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public boolean verifySchemaFile(){
 		boolean verifiedSchema=true;
 		if(external){
-			verifiedSchema=verifyExtSchemaSync(extSchemaPathText.getText(), schemaGridRowList);
+			verifiedSchema=verifyExtSchemaSync(schemaGridRowList);
 		}
 		return verifiedSchema;
 	}
 
-	private boolean verifyExtSchemaSync(String extSchemaPath, List<GridRow> schemaInGrid) {
+	private boolean verifyExtSchemaSync(List<GridRow> schemaInGrid) {
 		List<GridRow> schemasFromFile = new ArrayList<GridRow>();
 		File schemaFile=getPath();
 		if (schemaFile == null){
@@ -461,7 +460,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 			
 		} catch (FileNotFoundException e) {
-			logger.error(Messages.EXPORTED_SCHEMA_SYNC_ERROR +e.getMessage());
+			logger.error(Messages.EXPORTED_SCHEMA_SYNC_ERROR ,e);
 			
 			
 		}
@@ -787,11 +786,12 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		populateWidgetExternalSchema();
 
 	}
+	
 	private String getAbsolutePath(IFileEditorInput input){
 		Path path = (Path) input.getFile().getRawLocation().makeAbsolute();
 		String device = path.getDevice();
 		String absolutePath = "";
-		String pathOfFIle = "";
+		String pathOfFile = "";
 		if(device != null){
 			absolutePath=device;
 		}
@@ -800,13 +800,14 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		}	
 		String workSpacePath = absolutePath.substring(0, absolutePath.indexOf("/" + "jobs"));
 		if(extSchemaPathText.getText().startsWith("/")){
-			pathOfFIle=workSpacePath.concat(extSchemaPathText.getText());
+			pathOfFile=workSpacePath.concat(extSchemaPathText.getText());
 		}
 		else{
-			pathOfFIle=workSpacePath.concat("/"+extSchemaPathText.getText());
+			pathOfFile=workSpacePath.concat("/"+extSchemaPathText.getText());
 		}
-		return pathOfFIle;
+		return pathOfFile;
 	}
+	
 	private File getPath(){
 		IEditorInput input = (IEditorInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
 		File schemaFile=null;
@@ -833,6 +834,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 		}return schemaFile;
 	}
+	
 	private void addImportExportButtons(Composite containerControl) {
 		ELTDefaultSubgroupComposite importExportComposite = new ELTDefaultSubgroupComposite(containerControl);
 		importExportComposite.createContainerWidget();
