@@ -32,12 +32,9 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
@@ -110,11 +107,11 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 
 	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList) {
 		
-		String parameterFile = getComponentCanvas().getParameterFile();
-		if(OSValidator.isWindows()){
-			parameterFile.replace("/", "\\");
-		} 
-		parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),
-				parameterFile, true, true));
+		if (OSValidator.isWindows()) {
+			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),getComponentCanvas().getParameterFile().replace("/", "\\"),
+					true, true));
+		} else {
+			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),getComponentCanvas().getParameterFile(), true, true));
+		}
 	}
 }
