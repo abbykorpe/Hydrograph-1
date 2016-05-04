@@ -106,7 +106,6 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 	}
 
 	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList) {
-		
 		if (OSValidator.isWindows()) {
 			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),getComponentCanvas().getParameterFile().replace("/", "\\"),
 					true, true));
