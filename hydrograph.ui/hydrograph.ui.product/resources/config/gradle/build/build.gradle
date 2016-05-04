@@ -355,7 +355,7 @@ executeLocalJob.onlyIf {
 task executeDebugLocal (dependsOn: ['build', 'classes'], type: JavaExec) {
 
     if(project.hasProperty('localjob')){
-        def mainClassName = 'hydrograph.engine.commandline.utilities.BHSExecution'
+        def mainClassName = 'hydrograph.engine.commandline.utilities.HydrographExecution'
         def transformFiles = files { file(project.libsDir.path).listFiles() }
 
         println 'Executing Debug local job'
