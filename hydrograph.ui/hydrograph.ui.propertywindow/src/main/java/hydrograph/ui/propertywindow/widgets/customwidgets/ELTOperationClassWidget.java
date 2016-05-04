@@ -103,17 +103,18 @@ public class ELTOperationClassWidget extends AbstractWidget {
 				eltOperationClassDialog.open();
 				operationClassProperty.setComboBoxValue(eltOperationClassDialog.getOperationClassProperty().getComboBoxValue());
 				operationClassProperty.setOperationClassPath(eltOperationClassDialog.getOperationClassProperty().getOperationClassPath());
+				operationClassProperty.setOperationClassFullPath(eltOperationClassDialog.getOperationClassProperty().getOperationClassFullPath());
 				operationClassProperty.setParameter(eltOperationClassDialog.getOperationClassProperty().isParameter());
 				if (eltOperationClassDialog.isCancelPressed() && (!(eltOperationClassDialog.isApplyPressed()))) {
 					operationClassProperty.setNameValuePropertyList(oldOperationClassProperty.getNameValuePropertyList());
 				}
 				setToolTipMessage(eltOperationClassDialog.getTootlTipErrorMessage());
 				
-				if(eltOperationClassDialog.isOKPressed()){
+				if(eltOperationClassDialog.isYesPressed()){
 					propertyDialog.pressOK();
 				}
 				
-				if(eltOperationClassDialog.isCancelPressed()&&(!(eltOperationClassDialog.isApplyPressed()))){
+				if(eltOperationClassDialog.isNoPressed()){
 					propertyDialog.pressCancel();
 				}
 				showHideErrorSymbol(widgets);

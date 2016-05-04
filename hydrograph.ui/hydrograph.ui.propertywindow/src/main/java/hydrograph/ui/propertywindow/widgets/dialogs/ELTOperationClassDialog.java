@@ -107,8 +107,8 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	private ControlDecoration alphanumericDecorator;
 	private ControlDecoration emptyDecorator;
 	private ControlDecoration parameterDecorator;
-	private boolean isYesPressed = false;
-	private boolean isNoPressed = false;
+	private boolean isYesPressed;
+	private boolean isNoPressed;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private PropertyDialogButtonBar opeartionClassDialogButtonBar;
 	private Button cancelButton;
@@ -136,27 +136,17 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	@Override
 	public Control createDialogArea(Composite parent) {
 		container = (Composite) super.createDialogArea(parent);
-
 		container.setLayout(new GridLayout(1, false));
-
 		container.getShell().setText(Messages.OPERATION_CLASS);
-
-		
-
 		operationClassDialogButtonBar = new PropertyDialogButtonBar(container);
-
 		Composite composite = new Composite(container, SWT.BORDER);
 		GridData gd_composite = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
 		gd_composite.heightHint = 104;
 		gd_composite.widthHint = 522;
 		composite.setLayoutData(gd_composite);
-
 		composite.setLayout(new GridLayout(1, false));
-
 		AbstractELTWidget fileNameText = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(150);
-
 		AbstractELTWidget isParameterCheckbox = new ELTDefaultCheckBox(Constants.IS_PARAMETER).checkBoxLableWidth(100);
-
 		Operations operations = XMLConfigUtil.INSTANCE.getComponent(componentName).getOperations();
 		List<TypeInfo> typeInfos = operations.getStdOperation();
 		String optionsOfComboOfOperationClasses[] = new String[typeInfos.size() + 1];
@@ -334,6 +324,10 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 			operationClasses.select(0);
 			isParameterCheckBox.setEnabled(false);
 		}
+	}
+
+	public boolean isNoPressed() {
+		return isNoPressed;
 	}
 
 	/**
@@ -532,7 +526,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	@Override
 	protected void okPressed() {
 		operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
-				isParameterCheckBox.getSelection(), (String) fileName.getData("path"),this.operationClassProperty.getNameValuePropertyList());
+				isParameterCheckBox.getSelection(), (String) fileName.getData(PATH),this.operationClassProperty.getNameValuePropertyList());
 		okPressed=true;
 		super.okPressed();
 	}
@@ -541,7 +535,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	protected void buttonPressed(int buttonId) {
 		if(buttonId == 3){
 			operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
-					isParameterCheckBox.getSelection(), (String) fileName.getData("path"),this.operationClassProperty.getNameValuePropertyList());
+					isParameterCheckBox.getSelection(), (String) fileName.getData(PATH),this.operationClassProperty.getNameValuePropertyList());
 			applyButton.setEnabled(false);
 			isApplyPressed=true;
 		}else{
@@ -572,10 +566,18 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	}
 	@Override
 	public void pressCancel() {
-		isCancelPressed=true;
+		isNoPressed=true;
 		cancelPressed();
 	}
 	
+	public boolean isYesPressed() {
+		return isYesPressed;
+	}
+
+	public boolean isOkPressed() {
+		return isOkPressed;
+	}
+
 	/**
 	 * 
 	 * returns true if cancel button pressed from code
