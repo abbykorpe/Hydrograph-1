@@ -3,6 +3,7 @@
 <plugin>
 
    <extension
+         name="xml/Components/normalize.xml"
          point="org.eclipse.help.toc">
       <toc
             file="xml/Introduction/introduction.xml"
@@ -95,6 +96,9 @@
       </toc>
       <toc
             file="xml/Components/lookup.xml">
+      </toc>
+      <toc
+            file="xml/Components/normalize.xml">
       </toc>
       <toc
             file="xml/Components/outputFileDelimited.xml">
