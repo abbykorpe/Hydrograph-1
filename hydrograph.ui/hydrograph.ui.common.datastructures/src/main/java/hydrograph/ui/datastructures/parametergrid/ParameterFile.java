@@ -30,14 +30,12 @@ public class ParameterFile  implements Serializable,IDataStructure{
 	private String fileName;
 	private String path;
 	private boolean jobSpecificFile;
-	private boolean checked;
 		
-	public ParameterFile(String fileName, String path, boolean jobSpecificFile, boolean checked) {
+	public ParameterFile(String fileName, String path, boolean jobSpecificFile) {
 		super();
 		this.fileName = fileName;
 		this.path = path;
 		this.jobSpecificFile = jobSpecificFile;
-		this.checked = checked;
 	}
 
 	/**
@@ -112,33 +110,13 @@ public class ParameterFile  implements Serializable,IDataStructure{
 		this.jobSpecificFile = jobSpecificFile;
 	}
 
-	/**
-	 * 
-	 * Returns true if the file is checked for execution
-	 * 
-	 * @return boolean
-	 */
-	public boolean isChecked() {
-		return checked;
-	}
 
-	/**
-	 * 
-	 * Check file for execution
-	 * 
-	 * @param boolean
-	 */
-	public void setChecked(boolean checked) {
-		this.checked = checked;
-	}
-
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (checked ? 1231 : 1237);
-		result = prime * result + ((fileName == null) ? 0 : fileName.hashCode());
+		result = prime * result
+				+ ((fileName == null) ? 0 : fileName.hashCode());
 		result = prime * result + (jobSpecificFile ? 1231 : 1237);
 		result = prime * result + ((path == null) ? 0 : path.hashCode());
 		return result;
@@ -153,8 +131,6 @@ public class ParameterFile  implements Serializable,IDataStructure{
 		if (getClass() != obj.getClass())
 			return false;
 		ParameterFile other = (ParameterFile) obj;
-		if (checked != other.checked)
-			return false;
 		if (fileName == null) {
 			if (other.fileName != null)
 				return false;
@@ -172,7 +148,7 @@ public class ParameterFile  implements Serializable,IDataStructure{
 
 	@Override
 	public Object clone() {
-		ParameterFile filePath = new ParameterFile(this.fileName,this.path,this.jobSpecificFile,this.checked);
+		ParameterFile filePath = new ParameterFile(this.fileName,this.path,this.jobSpecificFile);
 		return filePath;
 	}
 	
