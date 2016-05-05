@@ -44,6 +44,7 @@ import org.slf4j.Logger;
 
 /**
  * This WizardPage can create an empty .job file for the GraphicalEditor.
+ * @author Bitwise
  */
 public class JobCreationPage extends WizardNewFileCreationPage {
 	private Logger logger = LogFactory.INSTANCE.getLogger(JobCreationPage.class);
