@@ -193,6 +193,26 @@ public class Messages extends NLS {
 	public static String LOOKUP_PORT_CHANGE;
 
     
+	
+	public static String LABEL_DELIMITER;
+	public static String LABEL_QUOTE;
+	public static String LABEL_DATABASE_NAME;
+	public static String LABEL_TABLE_NAME;
+	public static String LABEL_EXTERNAL_TABLE_PATH;
+	public static String LABEL_INPUT_COUNT;
+	public static String LABEL_OUTPUT_COUNT;
+	public static String LABEL_CHARACTER_SET;
+	public static String LABEL_NO_OF_RECORDS;
+	public static String LABEL_HAS_HEADER;
+	public static String LABEL_SAFE_PROPERTY;	
+	public static String LABEL_STRICT;
+	public static String LABEL_COUNT;
+	public static String LABEL_OVERWRITE;
+	public static String LABEL_OPERATION_FIELDS;
+	public static String LABEL_KEY_FIELDS;
+	public static String LABEL_SECONDARY_KEYS;
+	public static String LABEL_PARTITION_KEYS;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -57,6 +57,7 @@ public class OutputFileFixedWidthConverter extends OutputConverter {
 		fileFixedWidth.setStrict(getBoolean(PropertyNameConstants.STRICT.value()));
 		fileFixedWidth.setCharset(charset);
 		fileFixedWidth.setRuntimeProperties(getRuntimeProperties());
+		fileFixedWidth.setOverWrite(getTrueFalse(PropertyNameConstants.OVER_WRITE.value()));
 	}
 
 	@Override

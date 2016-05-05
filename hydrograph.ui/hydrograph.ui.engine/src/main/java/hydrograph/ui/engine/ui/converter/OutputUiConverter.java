@@ -14,14 +14,17 @@
  
 package hydrograph.ui.engine.ui.converter;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import org.slf4j.Logger;
 
+import hydrograph.engine.jaxb.commontypes.BooleanValueType;
 import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeTrueFalse;
 
 /**
  * The class OutputUiConverter
@@ -72,6 +75,17 @@ public abstract class OutputUiConverter extends UiConverter {
 		}
 	}
 
+	public Object convertToTrueFalseValue(TypeTrueFalse value, String propertyName) {
+		LOGGER.debug("Converting Boolean to String - {}", propertyName);
+		Object parsedValue = getValue(PropertyNameConstants.OVER_WRITE.value());
+		if (parsedValue != null) {
+			return parsedValue;
+		} else {
+			value.getValue();
+		}
+		return parsedValue;
+	}
+	
 	/**
 	 * Create schema for for Input Component.
 	 * 

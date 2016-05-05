@@ -64,9 +64,9 @@ public class InputFixedWidthUiConverter extends InputUiConverter {
 			propertyMap.put(PropertyNameConstants.PATH.value(), fileFixedWidth.getPath().getUri());
 		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
-				convertBooleanVlaue(fileFixedWidth.getStrict(), PropertyNameConstants.STRICT.value()));
+				convertBooleanValue(fileFixedWidth.getStrict(), PropertyNameConstants.STRICT.value()));
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
-				convertBooleanVlaue(fileFixedWidth.getSafe(), PropertyNameConstants.IS_SAFE.value()));
+				convertBooleanValue(fileFixedWidth.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 
 		uiComponent.setType(UIComponentsConstants.FILE_FIXEDWIDTH.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());

@@ -65,6 +65,7 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 		fileDelimited.setSafe(getBoolean(PropertyNameConstants.IS_SAFE.value()));
 		fileDelimited.setCharset(charset);
 		fileDelimited.setRuntimeProperties(getRuntimeProperties());
+		fileDelimited.setOverWrite(getTrueFalse(PropertyNameConstants.OVER_WRITE.value()));
 	}
 
 	@Override

@@ -59,17 +59,20 @@ public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 		TextFileDelimited fileDelimited = (TextFileDelimited) typeBaseComponent;
 		uiComponent.setComponentLabel(fileDelimited.getId());
 		propertyMap.put(PropertyNameConstants.HAS_HEADER.value(),
-				convertBooleanVlaue(fileDelimited.getHasHeader(), PropertyNameConstants.HAS_HEADER.value()));
+				convertBooleanValue(fileDelimited.getHasHeader(), PropertyNameConstants.HAS_HEADER.value()));
 		if (fileDelimited.getPath() != null)
 			propertyMap.put(PropertyNameConstants.PATH.value(), fileDelimited.getPath().getUri());
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
-				convertBooleanVlaue(fileDelimited.getStrict(), PropertyNameConstants.STRICT.value()));
+				convertBooleanValue(fileDelimited.getStrict(), PropertyNameConstants.STRICT.value()));
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
-				convertBooleanVlaue(fileDelimited.getSafe(), PropertyNameConstants.IS_SAFE.value()));
+				convertBooleanValue(fileDelimited.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
 		if (fileDelimited.getDelimiter() != null)
 			propertyMap.put(PropertyNameConstants.DELIMITER.value(), fileDelimited.getDelimiter().getValue());
 
+		propertyMap.put(PropertyNameConstants.OVER_WRITE.value(),
+				convertToTrueFalseValue(fileDelimited.getOverWrite(), PropertyNameConstants.OVER_WRITE.value()));
+		
 		uiComponent.setType(UIComponentsConstants.FILE_DELIMITED.value());
 		uiComponent.setCategory(UIComponentsConstants.OUTPUT_CATEGORY.value());
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);

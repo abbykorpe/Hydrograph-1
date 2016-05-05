@@ -84,7 +84,7 @@ public abstract class UiConverter {
 	 * 
 	 * @return String, string value of BooleanValueType value.
 	 */
-	public String convertBooleanVlaue(BooleanValueType value, String propertyName) {
+	public String convertBooleanValue(BooleanValueType value, String propertyName) {
 		LOGGER.debug("Converting Boolean to String - {}", propertyName);
 		Object stringValue = null;
 		if (value != null && value.isValue() != null && value.isValue().toString().equalsIgnoreCase("true")) {

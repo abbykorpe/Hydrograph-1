@@ -61,9 +61,10 @@ public class OutputHiveParquetConverter extends OutputConverter {
 		parquetHive.setDatabaseName(getHiveType(PropertyNameConstants.DATABASE_NAME.value()));
 		parquetHive.setTableName(getHiveType(PropertyNameConstants.TABLE_NAME.value()));
 		if(StringUtils.isNotBlank((String)properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()))){
-		parquetHive.setExternalTablePath(getHivePathType(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()));
+			parquetHive.setExternalTablePath(getHivePathType(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()));
 		}
 		parquetHive.setPartitionKeys(getPartitionKeys());
+		parquetHive.setOverWrite(getTrueFalse(PropertyNameConstants.OVER_WRITE.value()));
 	}
 
 	/*

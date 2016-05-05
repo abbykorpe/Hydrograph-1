@@ -14,22 +14,28 @@
  
 package hydrograph.ui.engine.converter;
 
+import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
 import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
 import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeTrueFalse;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.impl.OutputFileDelimitedConverter;
 import hydrograph.ui.engine.exceptions.SchemaException;
+import hydrograph.ui.engine.xpath.ComponentXpath;
+import hydrograph.ui.engine.xpath.ComponentXpathConstants;
+import hydrograph.ui.engine.xpath.ComponentsAttributeAndValue;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 public abstract class OutputConverter extends Converter {
@@ -76,7 +82,25 @@ public abstract class OutputConverter extends Converter {
 		}
 		return typeBaseRecord;
 	}
-
+	
+	protected TypeTrueFalse getTrueFalse(String propertyName) {
+		logger.debug("Getting TrueFalse Value for {}={}", new Object[] {propertyName, properties.get(propertyName) });
+		TypeTrueFalse typeTrueFalse = new TypeTrueFalse();
+		if (StringUtils.isNotBlank((String) properties.get(propertyName))) {
+			try{
+				Object object = properties.get(propertyName);
+				typeTrueFalse.setValue(TrueFalse.fromValue(StringUtils.lowerCase((String)object)));
+			}
+			catch(IllegalArgumentException exception){
+				ComponentXpath.INSTANCE.getXpathMap().put((ComponentXpathConstants.COMPONENT_XPATH_BOOLEAN.value()
+							.replace(ID, componentName))
+							.replace(Constants.PARAM_PROPERTY_NAME,	propertyName),
+								new ComponentsAttributeAndValue(null, properties.get(propertyName).toString()));
+				typeTrueFalse.setValue(TrueFalse.TRUE);
+			}
+		}
+		return typeTrueFalse;
+	}
 
 	/**
 	 * Prepare the Fields/Records for shcema

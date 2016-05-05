@@ -89,6 +89,7 @@
 			<enumeration value="QUOTE_WIDGET"/>
 			<enumeration value="EXTERNAL_TABLE_PATH_WIDGET"/>
 			<enumeration value="MIXED_SCHEME"/>
+			<enumeration value="OVERWRITE_WIDGET"/>
 		</restriction>
 	</simpleType>
 

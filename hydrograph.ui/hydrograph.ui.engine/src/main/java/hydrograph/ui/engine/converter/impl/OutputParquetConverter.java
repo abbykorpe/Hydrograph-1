@@ -53,6 +53,7 @@ public class OutputParquetConverter extends OutputConverter {
 
 		parquetFile.setPath(path);
 		parquetFile.setRuntimeProperties(getRuntimeProperties());
+		parquetFile.setOverWrite(getTrueFalse(PropertyNameConstants.OVER_WRITE.value()));
 	}
 
 	@Override

@@ -41,15 +41,15 @@ public class WidgetHelper {
 	}
 
 	public WidgetConfig getColumnNameConfig(){
-		return populateSingleColumnGridConfig(Constants.KEY_FIELDS_LABEL, Constants.KEY_FIELDS_WINDOW_TITLE);
+		return populateSingleColumnGridConfig(Messages.LABEL_KEY_FIELDS, Constants.KEY_FIELDS_WINDOW_TITLE);
 	}
 	
 	public WidgetConfig getPartitionKeysConfig(){
-		return populateSingleColumnGridConfig(Constants.PARTITION_KEYS_LABEL, Constants.PARTITION_KEYS_WINDOW_TITLE);
+		return populateSingleColumnGridConfig(Messages.LABEL_PARTITION_KEYS, Constants.PARTITION_KEYS_WINDOW_TITLE);
 	}
 
 	public WidgetConfig getOperationFieldsConfig(){
-		return populateSingleColumnGridConfig(Constants.OPERATION_FIELDS_LABEL, Constants.OPERATION_FIELDS_WINDOW_TITLE);
+		return populateSingleColumnGridConfig(Messages.LABEL_OPERATION_FIELDS, Constants.OPERATION_FIELDS_WINDOW_TITLE);
 	}
 	
 	/**
@@ -57,7 +57,7 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getDelimiterWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Constants.DELIMITER);
+		textBoxConfig.setName(Messages.LABEL_DELIMITER);
 		textBoxConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
@@ -68,7 +68,7 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getQuoteWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Constants.QUOTE);
+		textBoxConfig.setName(Messages.LABEL_QUOTE);
 		textBoxConfig.setGrabExcessSpace(true);
 		return textBoxConfig;
 	}
@@ -78,7 +78,7 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getCountWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Constants.COUNT);
+		textBoxConfig.setName(Messages.LABEL_COUNT);
 		textBoxConfig.getListeners().add(Listners.MODIFY);
 		textBoxConfig.getListeners().add(Listners.EVENT_CHANGE);
 		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC_OR_PARAMETER_FOCUS_IN);
@@ -104,7 +104,7 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getTableNameWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Constants.TABLE_NAME);
+		textBoxConfig.setName(Messages.LABEL_TABLE_NAME);
 		textBoxConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
@@ -115,7 +115,7 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getDatabaseNameWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Constants.DATABASE_NAME);
+		textBoxConfig.setName(Messages.LABEL_DATABASE_NAME);
 		textBoxConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
@@ -126,7 +126,7 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getExternalTablePathWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Constants.EXTERNAL_TABLE_PATH);
+		textBoxConfig.setName(Messages.LABEL_EXTERNAL_TABLE_PATH);
 		textBoxConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
@@ -137,7 +137,7 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getNoOfRecordsWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Constants.NO_OF_RECORDS);
+		textBoxConfig.setName(Messages.LABEL_NO_OF_RECORDS);
 		addTextBoxListeners(textBoxConfig);
 		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
 		textBoxConfig.setWidgetWidth(78);
@@ -179,7 +179,7 @@ public class WidgetHelper {
 	 * Configuration to customize dropdown as safe property 
 	 */
 	public WidgetConfig getSafeWidgetConfig(){
-		DropDownConfig dropDownConfig = populateTrueFalseConfig(Constants.SAFE_PROPERTY);
+		DropDownConfig dropDownConfig = populateTrueFalseConfig(Messages.LABEL_SAFE_PROPERTY);
 		addComboBoxListeners(dropDownConfig);
 		return dropDownConfig;
 	}
@@ -188,7 +188,16 @@ public class WidgetHelper {
 	 * Configuration to customize dropdown as hasHeader property 
 	 */
 	public WidgetConfig getHasHeaderWidgetConfig(){
-		DropDownConfig dropDownConfig =  populateTrueFalseConfig(Constants.HAS_HEADER);
+		DropDownConfig dropDownConfig =  populateTrueFalseConfig(Messages.LABEL_HAS_HEADER);
+		addComboBoxListeners(dropDownConfig);
+		return dropDownConfig;
+	}
+
+	/**
+	 * Configuration to customize dropdown as overWrite property 
+	 */
+	public WidgetConfig getOverWriteWidgetConfig(){
+		DropDownConfig dropDownConfig =  populateTrueFalseConfig(Messages.LABEL_OVERWRITE);
 		addComboBoxListeners(dropDownConfig);
 		return dropDownConfig;
 	}
@@ -197,7 +206,7 @@ public class WidgetHelper {
 	 * Configuration to customize dropdown as strict property 
 	 */
 	public WidgetConfig getStrictWidgetConfig(){
-		DropDownConfig dropDownConfig =  populateTrueFalseConfig(Constants.STRICT);
+		DropDownConfig dropDownConfig =  populateTrueFalseConfig(Messages.LABEL_STRICT);
 		addComboBoxListeners(dropDownConfig);
 		return dropDownConfig;
 	}
@@ -207,7 +216,7 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getCharacterSetWidgetConfig(){
 		DropDownConfig dropDownConfig = new DropDownConfig();
-		dropDownConfig.setName(Constants.CHARACTER_SET);
+		dropDownConfig.setName(Messages.LABEL_CHARACTER_SET);
 		dropDownConfig.getItems().add(Constants.UTF_8);
 		dropDownConfig.getItems().add(Constants.US_ASCII);
 		dropDownConfig.getItems().add(Constants.ISO_8859_1);
@@ -244,7 +253,7 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getPrimaryKeyWidgetConfig() {
 		EditButtonWithLabelConfig buttonWithLabelConfig = new EditButtonWithLabelConfig();
-		buttonWithLabelConfig.setName(Constants.KEY_FIELDS_LABEL);
+		buttonWithLabelConfig.setName(Messages.LABEL_KEY_FIELDS);
 		buttonWithLabelConfig.setWindowName(Messages.PRIMARY_COLUMN_KEY_WINDOW_NAME);
 		return buttonWithLabelConfig;
 	}
@@ -254,7 +263,7 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getSecondaryKeyWidgetConfig() {
 		EditButtonWithLabelConfig buttonWithLabelConfig = new EditButtonWithLabelConfig();
-		buttonWithLabelConfig.setName(Constants.SECONDARY_KEYS);
+		buttonWithLabelConfig.setName(Messages.LABEL_SECONDARY_KEYS);
 		buttonWithLabelConfig.setWindowName(Messages.SECONDARY_COLUMN_KEY_WINDOW_NAME);
 		return buttonWithLabelConfig;
 	}
