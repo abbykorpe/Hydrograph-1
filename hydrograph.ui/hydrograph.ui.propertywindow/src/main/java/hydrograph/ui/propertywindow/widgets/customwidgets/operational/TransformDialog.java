@@ -1222,7 +1222,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			final MappingSheetRow mappingSheetRow) {
 		Composite operationInputFieldComposite = new Composite(expandItemComposite, SWT.NONE);
 		GridData gd_operationInputFieldComposite = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
-		gd_operationInputFieldComposite.widthHint = 185;
+		gd_operationInputFieldComposite.widthHint = 156;
 		gd_operationInputFieldComposite.heightHint = 216;
 		
 		operationInputFieldComposite.setLayoutData(gd_operationInputFieldComposite);
