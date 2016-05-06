@@ -640,7 +640,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						}
 						else{
 							//if "Yes" is clicked in pull schema then it should update the data type etc. 
-							schemaGridRowList.set(schemaGridRowList.indexOf(gridRow),gridRow);
+							schemaGridRowList.set(schemaGridRowList.indexOf(gridRow),schemaGridRow);
 						}
 					}
 				}
