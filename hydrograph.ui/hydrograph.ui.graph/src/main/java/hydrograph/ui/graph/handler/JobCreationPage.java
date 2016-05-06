@@ -74,7 +74,7 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 	 */
 	public void createControl(Composite parent) {
 		super.createControl(parent);
-		setFileName(Messages.JOB + jobCounter + DEFAULT_EXTENSION);
+		setFileName(Messages.JOB + jobCounter++ + DEFAULT_EXTENSION);
 		setPageComplete(validatePage());
 	}
 
