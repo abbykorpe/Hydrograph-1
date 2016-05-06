@@ -3,7 +3,6 @@
 <plugin>
 
    <extension
-         name="xml/Components/normalize.xml"
          point="org.eclipse.help.toc">
       <toc
             file="xml/Introduction/introduction.xml"
