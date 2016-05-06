@@ -28,21 +28,6 @@ public class Constants {
 	public static final String PHASE = "Phase";
 	public static final String PARAM_NO_OF_RECORDS = "no_of_records";
 	
-/*	public static final String INPUT_COUNT = "Input Count";
-	public static final String OUTPUT_COUNT = "Output Count";
-	public static final String CHARACTER_SET = "Character Set";
-	public static final String NO_OF_RECORDS = "No of Records";
-	public static final String HAS_HEADER = "Has Header";
-	public static final String SAFE_PROPERTY = "Safe Property ";	
-	public static final String STRICT = "Strict";
-	public static final String COUNT = "Count";
-	public static final String OVERWRITE = "Overwrite";
-	public static final String OPERATION_FIELDS_LABEL = "Operation\nFields";
-	public static final String KEY_FIELDS_LABEL= "Key\nFields";
-	public static final String SECONDARY_KEYS = "Secondary\n Keys";
-	public static final String PARTITION_KEYS_LABEL = "Partition\nKeys";*/
-	
-	
 	public static final String INPUT_PORT_COUNT_PROPERTY="inPortCount";
  	public static final String OUTPUT_PORT_COUNT_PROPERTY="outPortCount";
 	

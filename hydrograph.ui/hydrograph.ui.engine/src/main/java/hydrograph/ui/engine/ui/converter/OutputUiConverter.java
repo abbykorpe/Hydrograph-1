@@ -84,9 +84,8 @@ public abstract class OutputUiConverter extends UiConverter {
 		if (parsedValue != null) {
 			return parsedValue;
 		} else {
-			value.getValue();
+			return value.getValue().toString();
 		}
-		return parsedValue;
 	}
 	
 	/**
