@@ -583,7 +583,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		//To show the components in sorted order in palette
 		Collections.sort(componentsConfig, new Comparator<Component>() {
 			public int compare(Component component1, Component component2) {
-				return 	component1.getName().compareToIgnoreCase(component2.getName());			
+				return 	component1.getNameInPalette().compareToIgnoreCase(component2.getNameInPalette());			
 			};
 		});
 				
