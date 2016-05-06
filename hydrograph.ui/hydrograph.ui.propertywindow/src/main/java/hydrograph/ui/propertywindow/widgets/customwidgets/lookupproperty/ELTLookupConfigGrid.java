@@ -274,7 +274,7 @@ public class ELTLookupConfigGrid extends Dialog {
 		configProperty.setDriverKey(driverKey);
 		if(!oldConfigProperty.equals(configProperty)){
 			propertyDialogButtonBar.enableApplyButton(true);
-			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.LOOKUP_PORT_CHANGE);
+			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), Messages.INFORMATION, Messages.LOOKUP_PORT_CHANGE);
 		}
 		
 		
