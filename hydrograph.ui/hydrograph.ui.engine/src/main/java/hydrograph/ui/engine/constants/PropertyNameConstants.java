@@ -34,7 +34,8 @@ public enum PropertyNameConstants {
 		TABLE_NAME("tableName"),
 		EXTERNAL_TABLE_PATH("externalTablePath"),
 		PARTITION_KEYS("partitionKeys"),
-		QUOTE("quote");
+		QUOTE("quote"),
+		OVER_WRITE("overWrite");
 		private final String value;
 
 	PropertyNameConstants(String value) {

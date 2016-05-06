@@ -25,23 +25,9 @@ public class Constants {
 	
 	public static final String ERROR = "ERROR";
 	
-	public static final String DELIMITER = "Delimiter";
-	public static final String QUOTE = "Quote";
-	public static final String DATABASE_NAME = "Database Name";
-	public static final String TABLE_NAME = "Table name";
-	public static final String EXTERNAL_TABLE_PATH = "Ext.Table Path";
-	
-	public static final String CHARACTER_SET = "Character Set";
 	public static final String PHASE = "Phase";
-	public static final String NO_OF_RECORDS = "No of Records";
 	public static final String PARAM_NO_OF_RECORDS = "no_of_records";
-	public static final String STRICT = "Strict";
-	public static final String HAS_HEADER = "Has Header";
-	public static final String SAFE_PROPERTY = "Safe Property ";	
-	public static final String INPUT_COUNT = "Input Count";
-	public static final String COUNT = "Count";
 	
-	public static final String OUTPUT_COUNT = "Output Count";
 	public static final String INPUT_PORT_COUNT_PROPERTY="inPortCount";
  	public static final String OUTPUT_PORT_COUNT_PROPERTY="outPortCount";
 	
@@ -52,7 +38,6 @@ public class Constants {
 	public static final String PARAM_PROPERTY_NAME = "propertyName";
 	public static final String PARAM_COUNT = "count";
 	
-
 	
 	public static final String PARAMETER = "Parameter";
 	public static final String UTF_16 = "UTF-16";
@@ -66,13 +51,9 @@ public class Constants {
 	public static final String TRUE = "True";
 	public static final String FALSE = "False";
 	public static final String OPERATION_FIELDS_WINDOW_TITLE = "Operation Fields";
-	public static final String OPERATION_FIELDS_LABEL = "Operation\nFields";
 	public static final String KEY_FIELDS_WINDOW_TITLE = "Key Fields";
-	public static final String KEY_FIELDS_LABEL= "Key\nFields";
-	public static final String SECONDARY_KEYS2 = "Secondary Keys ";
-	public static final String SECONDARY_KEYS = "Secondary\n Keys";
+	
 	public static final String PARTITION_KEYS_WINDOW_TITLE = "Partition Keys";
-	public static final String PARTITION_KEYS_LABEL = "Partition\nKeys";
 	
 	public static final String COMPONENT_NAME = "Component Name";
 	 // Used for validating AlphaNumeric or Parameter E.g Aplha_123 or @{Param_123}
@@ -80,8 +61,6 @@ public class Constants {
 	// Used for validating only Parameters E.g  @{Param_123}
 	public static final String PARAMETER_REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}"; 
 	
-
-
 
 	public static final String MATCH_PROPERTY_WIDGET = "match_value";
 	public static final String MATCH = "Match";

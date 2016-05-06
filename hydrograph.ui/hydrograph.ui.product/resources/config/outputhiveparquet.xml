@@ -51,6 +51,12 @@
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL" propertyHelpText="Displays the location of the file either Remote/Local."/>
 		
+		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="overWrite" value="True"
+			renderer="OVERWRITE_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL" propertyHelpText="If ‘Overwrite’ property is true, the output location will be overwritten. Existing file / folder contents will be deleted.">
+			<tns:validator>BOOLEAN_OR_PARAMETER_VALIDATOR</tns:validator>
+		</tns:property>
+		
 		<tns:property dataType="string" name="partitionKeys" renderer="PARTITION_KEYS_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="OPTIONAL" propertyHelpText="Displays the user specific partition keys">

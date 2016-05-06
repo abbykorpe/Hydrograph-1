@@ -56,6 +56,7 @@ public class OutputFileMixedSchemeConverter extends OutputConverter {
 		fileMixedScheme.setStrict(getBoolean(PropertyNameConstants.STRICT.value()));
 		fileMixedScheme.setCharset(charset);
 		fileMixedScheme.setRuntimeProperties(getRuntimeProperties());
+		fileMixedScheme.setOverWrite(getTrueFalse(PropertyNameConstants.OVER_WRITE.value()));
 	}
 	
 

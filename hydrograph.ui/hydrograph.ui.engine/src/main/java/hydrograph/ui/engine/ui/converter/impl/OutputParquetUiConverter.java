@@ -59,6 +59,9 @@ public class OutputParquetUiConverter extends OutputUiConverter {
 		if (parquetFile.getPath() != null)
 			propertyMap.put(PropertyNameConstants.PATH.value(), parquetFile.getPath().getUri());
 
+		propertyMap.put(PropertyNameConstants.OVER_WRITE.value(),
+				convertToTrueFalseValue(parquetFile.getOverWrite(), PropertyNameConstants.OVER_WRITE.value()));
+		
 		uiComponent.setType(UIComponentsConstants.FILE_PARQUET.value());
 		uiComponent.setCategory(UIComponentsConstants.OUTPUT_CATEGORY.value());
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);

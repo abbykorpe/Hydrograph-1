@@ -61,16 +61,16 @@ public class InputFileDelimitedUiConverter extends InputUiConverter {
 		LOGGER.debug("Fetching Input-Delimited-Properties for {}", componentName);
 		fileDelimited = (TextFileDelimited) typeBaseComponent;
 		propertyMap.put(PropertyNameConstants.HAS_HEADER.value(),
-				convertBooleanVlaue(fileDelimited.getHasHeader(), PropertyNameConstants.HAS_HEADER.value()));
+				convertBooleanValue(fileDelimited.getHasHeader(), PropertyNameConstants.HAS_HEADER.value()));
 		if (fileDelimited.getPath() != null)
 			propertyMap.put(PropertyNameConstants.PATH.value(), fileDelimited.getPath().getUri());
 		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
-				convertBooleanVlaue(fileDelimited.getStrict(), PropertyNameConstants.STRICT.value()));
+				convertBooleanValue(fileDelimited.getStrict(), PropertyNameConstants.STRICT.value()));
 		if (fileDelimited.getDelimiter() != null)
 			propertyMap.put(PropertyNameConstants.DELIMITER.value(), fileDelimited.getDelimiter().getValue());
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
-				convertBooleanVlaue(fileDelimited.getSafe(), PropertyNameConstants.IS_SAFE.value()));
+				convertBooleanValue(fileDelimited.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 
 		if(fileDelimited.getQuote()!=null)
 			 propertyMap.put(PropertyNameConstants.QUOTE.value(), fileDelimited.getQuote().getValue());

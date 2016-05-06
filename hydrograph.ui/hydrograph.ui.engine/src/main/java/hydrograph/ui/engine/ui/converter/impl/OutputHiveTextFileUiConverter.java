@@ -76,14 +76,16 @@ public class OutputHiveTextFileUiConverter extends OutputUiConverter {
 		}
 		propertyMap.put(PropertyNameConstants.PARTITION_KEYS.value(), getPartitionKeys());
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
-				convertBooleanVlaue(hiveTextfile.getStrict(), PropertyNameConstants.STRICT.value()));
+				convertBooleanValue(hiveTextfile.getStrict(), PropertyNameConstants.STRICT.value()));
 		if (hiveTextfile.getDelimiter() != null)
 			propertyMap.put(PropertyNameConstants.DELIMITER.value(), hiveTextfile.getDelimiter().getValue());
 		if (hiveTextfile.getQuote() != null)
 			propertyMap.put(PropertyNameConstants.QUOTE.value(), hiveTextfile.getQuote().getValue());
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
-				convertBooleanVlaue(hiveTextfile.getSafe(), PropertyNameConstants.IS_SAFE.value()));
+				convertBooleanValue(hiveTextfile.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 		
+		propertyMap.put(PropertyNameConstants.OVER_WRITE.value(),
+				convertToTrueFalseValue(hiveTextfile.getOverWrite(), PropertyNameConstants.OVER_WRITE.value()));
 		
 		uiComponent.setComponentLabel(hiveTextfile.getId());
 		uiComponent.setType(UIComponentsConstants.HIVE_TEXTFILE.value());

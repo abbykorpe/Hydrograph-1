@@ -126,7 +126,7 @@ public abstract class Converter {
 				break;
 			}
 		}
-		if (charset != null)
+		if (targetCharset == null)
 			ComponentXpath.INSTANCE.getXpathMap().put(
 					ComponentXpathConstants.COMPONENT_CHARSET_XPATH.value()
 							.replace(ID, componentName), new ComponentsAttributeAndValue(null, charset));

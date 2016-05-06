@@ -13,27 +13,22 @@
 
 package hydrograph.ui.engine.ui.converter;
 
-import hydrograph.ui.common.component.config.Property;
-import hydrograph.ui.common.util.ComponentCacheUtil;
+import hydrograph.engine.jaxb.commontypes.BooleanValueType;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.engine.ui.repository.ParameterData;
 import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.validators.impl.IValidator;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.BooleanValueType;
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
 
 /**
  * The class UiConverter
@@ -84,7 +79,7 @@ public abstract class UiConverter {
 	 * 
 	 * @return String, string value of BooleanValueType value.
 	 */
-	public String convertBooleanVlaue(BooleanValueType value, String propertyName) {
+	public String convertBooleanValue(BooleanValueType value, String propertyName) {
 		LOGGER.debug("Converting Boolean to String - {}", propertyName);
 		Object stringValue = null;
 		if (value != null && value.isValue() != null && value.isValue().toString().equalsIgnoreCase("true")) {

@@ -74,7 +74,7 @@ public class OutputHiveTextFileConverter extends OutputConverter {
 		}
 		hiveTextfile.setStrict(getBoolean(PropertyNameConstants.STRICT.value()));
 		hiveTextfile.setSafe(getBoolean(PropertyNameConstants.IS_SAFE.value()));
-		
+		hiveTextfile.setOverWrite(getTrueFalse(PropertyNameConstants.OVER_WRITE.value()));
 	}
 
 	/*

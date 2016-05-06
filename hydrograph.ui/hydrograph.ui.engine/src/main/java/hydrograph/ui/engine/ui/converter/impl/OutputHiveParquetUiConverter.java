@@ -75,6 +75,9 @@ public class OutputHiveParquetUiConverter extends OutputUiConverter {
 		}
 		propertyMap.put(PropertyNameConstants.PARTITION_KEYS.value(), getPartitionKeys());
 		
+		propertyMap.put(PropertyNameConstants.OVER_WRITE.value(),
+				convertToTrueFalseValue(parquetHive.getOverWrite(), PropertyNameConstants.OVER_WRITE.value()));
+		
 		uiComponent.setComponentLabel(parquetHive.getId());
 		uiComponent.setType(UIComponentsConstants.HIVE_PARQUET.value());
 		uiComponent.setCategory(UIComponentsConstants.OUTPUT_CATEGORY.value());

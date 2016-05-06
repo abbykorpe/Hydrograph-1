@@ -62,6 +62,12 @@
 			usage="OPTIONAL" propertyHelpText="Specifies Quote present in the input file.">
 		</tns:property>
 		
+		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="overWrite" value="True"
+			renderer="OVERWRITE_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="OPTIONAL" propertyHelpText="If ‘Overwrite’ property is true, the output location will be overwritten. Existing file / folder contents will be deleted.">
+			<tns:validator>BOOLEAN_OR_PARAMETER_VALIDATOR</tns:validator>
+		</tns:property>
+		
 		<tns:property dataType="boolean" name="safe" value="False" renderer="SAFE_PROPERTY_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL" propertyHelpText="When True, allows the input fields to pass \nevaluation despite of Data type mismatch.">

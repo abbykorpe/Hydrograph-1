@@ -60,9 +60,11 @@ public class OutputMixedSchemeUiConverter extends OutputUiConverter {
 		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
 		propertyMap.put(PropertyNameConstants.RUNTIME_PROPERTIES.value(), getRuntimeProperties());
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
-				convertBooleanVlaue(fileMixedScheme.getSafe(), PropertyNameConstants.IS_SAFE.value()));
+				convertBooleanValue(fileMixedScheme.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
-				convertBooleanVlaue(fileMixedScheme.getStrict(), PropertyNameConstants.STRICT.value()));
+				convertBooleanValue(fileMixedScheme.getStrict(), PropertyNameConstants.STRICT.value()));
+		propertyMap.put(PropertyNameConstants.OVER_WRITE.value(),
+				convertToTrueFalseValue(fileMixedScheme.getOverWrite(), PropertyNameConstants.OVER_WRITE.value()));
 
 		uiComponent.setType(UIComponentsConstants.FILE_MIXEDSCHEMA.value());
 		uiComponent.setCategory(UIComponentsConstants.OUTPUT_CATEGORY.value());

@@ -61,10 +61,13 @@ public class OutputFixedWidthUiConverter extends OutputUiConverter {
 		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
 		propertyMap.put(PropertyNameConstants.RUNTIME_PROPERTIES.value(), getRuntimeProperties());
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
-				convertBooleanVlaue(fileFixedWidth.getSafe(), PropertyNameConstants.IS_SAFE.value()));
+				convertBooleanValue(fileFixedWidth.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
-				convertBooleanVlaue(fileFixedWidth.getStrict(), PropertyNameConstants.STRICT.value()));
+				convertBooleanValue(fileFixedWidth.getStrict(), PropertyNameConstants.STRICT.value()));
 
+		propertyMap.put(PropertyNameConstants.OVER_WRITE.value(),
+				convertToTrueFalseValue(fileFixedWidth.getOverWrite(), PropertyNameConstants.OVER_WRITE.value()));
+		
 		uiComponent.setType(UIComponentsConstants.FILE_FIXEDWIDTH.value());
 		uiComponent.setCategory(UIComponentsConstants.OUTPUT_CATEGORY.value());
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
