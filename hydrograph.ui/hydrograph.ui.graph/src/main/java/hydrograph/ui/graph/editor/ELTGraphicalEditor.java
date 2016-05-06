@@ -73,6 +73,8 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -567,8 +569,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		p1.add(p);
 	}
 
-	private void createShapesDrawer(PaletteRoot palette)
-			throws RuntimeException, SAXException, IOException {
+	private void createShapesDrawer(PaletteRoot palette) throws RuntimeException, SAXException, IOException {
 		Map<String, PaletteDrawer> categoryPaletteConatiner = new HashMap<>();
 		for (CategoryType category : CategoryType.values()) {
 			if(category.name().equalsIgnoreCase(Constants.DUMMY_COMPONENT_CATEGORY))
@@ -577,40 +578,30 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			addContainerToPalette(palette, p);
 			categoryPaletteConatiner.put(category.name(), p);
 		}
-		List<Component> componentsConfig = XMLConfigUtil.INSTANCE
-				.getComponentConfig();
+		List<Component> componentsConfig = XMLConfigUtil.INSTANCE.getComponentConfig();
+		
+		//To show the components in sorted order in palette
+		Collections.sort(componentsConfig, new Comparator<Component>() {
+			public int compare(Component component1, Component component2) {
+				return 	component1.getName().compareToIgnoreCase(component2.getName());			
+			};
+		});
+				
 		for (Component componentConfig : componentsConfig) {
-			Class<?> clazz = DynamicClassProcessor.INSTANCE
-					.createClass(componentConfig);
+			Class<?> clazz = DynamicClassProcessor.INSTANCE.createClass(componentConfig);
 
-
-			if(componentConfig.getName().equalsIgnoreCase(Constants.DUMMY_COMPONENT))
+			if(componentConfig.getName().equalsIgnoreCase(Constants.DUMMY_COMPONENT)){
 				continue;
-
-			/*CombinedTemplateCreationEntry component = new CombinedTemplateCreationEntry(
-					componentConfig.getNameInPalette(), componentConfig.getDescription(), clazz,
-					new SimpleFactory(clazz),
-					ImageDescriptor
-					.createFromURL(prepareIconPathURL(componentConfig
-							.getPaletteIconPath())),
-							ImageDescriptor
-							.createFromURL(prepareIconPathURL(componentConfig
-									.getPaletteIconPath())));
-			categoryPaletteConatiner.get(componentConfig.getCategory().name())
-			.add(component);*/
+			}
 
 			CombinedTemplateCreationEntry component = new CombinedTemplateCreationEntry(
 					componentConfig.getNameInPalette(), null, clazz,
 					new SimpleFactory(clazz),
-					ImageDescriptor
-					.createFromURL(prepareIconPathURL(componentConfig
-							.getPaletteIconPath())),
-							ImageDescriptor
-							.createFromURL(prepareIconPathURL(componentConfig
-									.getPaletteIconPath())));
-			categoryPaletteConatiner.get(componentConfig.getCategory().name())
-			.add(component);
-
+					ImageDescriptor.createFromURL(
+							prepareIconPathURL(componentConfig.getPaletteIconPath())),
+							ImageDescriptor.createFromURL(
+									prepareIconPathURL(componentConfig.getPaletteIconPath())));
+			categoryPaletteConatiner.get(componentConfig.getCategory().name()).add(component);
 		}
 
 	}
