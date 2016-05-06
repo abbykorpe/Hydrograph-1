@@ -13,13 +13,22 @@
 
 package hydrograph.ui.engine.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeSortOrder;
+import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
+import hydrograph.engine.jaxb.cumulate.TypePrimaryKeyFields;
+import hydrograph.engine.jaxb.cumulate.TypeSecondaryKeyFields;
+import hydrograph.engine.jaxb.cumulate.TypeSecondayKeyFieldsAttributes;
+import hydrograph.engine.jaxb.operationstypes.Cumulate;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.engine.converter.TransformConverter;
-import hydrograph.ui.engine.helper.ConverterHelper;
 import hydrograph.ui.engine.xpath.ComponentXpathConstants;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -30,16 +39,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.cumulate.TypePrimaryKeyFields;
-import hydrograph.engine.jaxb.cumulate.TypeSecondaryKeyFields;
-import hydrograph.engine.jaxb.cumulate.TypeSecondayKeyFieldsAttributes;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeFieldName;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeSortOrder;
-import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
-import hydrograph.engine.jaxb.operationstypes.Cumulate;
 
 /**
  * The class CumulateConverter
@@ -69,9 +68,9 @@ public class CumulateConverter extends TransformConverter {
 				.get(Constants.SCHEMA_TO_PROPAGATE);
 		if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null) {
 			ComponentsOutputSchema componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
-			List<BasicSchemaGridRow> gridRows = componentsOutputSchema.getSchemaGridOutputFields();
+			List<GridRow> gridRows = componentsOutputSchema.getSchemaGridOutputFields(null);
 
-			for (BasicSchemaGridRow row : gridRows) {
+			for (GridRow row : gridRows) {
 				schemaGridRows.add((BasicSchemaGridRow) row.copy());
 			}
 		}

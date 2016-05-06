@@ -205,7 +205,7 @@ public class ELTLookupMapWidget extends AbstractWidget {
 			if(linkNumber.equals(link.getTargetTerminal())){				
 				outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 				if (outputSchema != null)
-					for (BasicSchemaGridRow row : outputSchema.getSchemaGridOutputFields()) {
+					for (GridRow row : outputSchema.getSchemaGridOutputFields(null)) {
 						if(row.getFieldName().equals(fieldName)){
 							return row.copy();
 						}

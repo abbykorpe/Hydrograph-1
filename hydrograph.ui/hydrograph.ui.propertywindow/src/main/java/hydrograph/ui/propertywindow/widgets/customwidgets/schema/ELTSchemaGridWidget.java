@@ -634,17 +634,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			if (!schemaGridRowList.isEmpty()) {
 				if ( returnCode== SWT.YES ) {
 					for (GridRow gridRow : copiedList){
-						BasicSchemaGridRow schemaGridRow = componentsOutputSchema.getSchemaGridRow(gridRow.getFieldName());
+						GridRow schemaGridRow = componentsOutputSchema.getSchemaGridRow(gridRow);
 						if (schemaGridRow == null){
 							schemaGridRowList.remove(gridRow);
 						}
 						else{
-							//if "Yes" is clicked in pull schema then it should update the data type etc. of existing row
-							//here add operation adds new row in the list hence in order to update the existing row,
-							//first remove the row and then add the pulled schema row to same the index
-							int indexOfGridRow = schemaGridRowList.indexOf(gridRow);
-							schemaGridRowList.remove(indexOfGridRow);
-							schemaGridRowList.add(indexOfGridRow, schemaGridRow);
+							//if "Yes" is clicked in pull schema then it should update the data type etc. 
+							schemaGridRowList.set(schemaGridRowList.indexOf(gridRow),schemaGridRow);
 						}
 					}
 				}

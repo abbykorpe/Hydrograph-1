@@ -202,11 +202,24 @@ public class ComponentsOutputSchema implements IDataStructure {
 		this.getPassthroughFieldsPortInfo().clear();
 	}
 	
-	public List<BasicSchemaGridRow> getSchemaGridOutputFields() {
-		List<BasicSchemaGridRow> schemaGrid = new ArrayList<>();
-		for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
-			schemaGrid.add(convertFixedWidthSchemaToSchemaGridRow(fixedWidthGridRow));
+	public List<GridRow> getSchemaGridOutputFields(GridRow gridRow) {
+		List<GridRow> schemaGrid = new ArrayList<>();
+		
+		if (gridRow instanceof MixedSchemeGridRow) {
+			for (MixedSchemeGridRow mixedSchemeGridRow : mixedSchemeGridRowsOutputFields) {
+				schemaGrid.add(mixedSchemeGridRow);
+			}
+		} else if(gridRow instanceof FixedWidthGridRow){
+			for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
+				schemaGrid.add(fixedWidthGridRow);
+			}
+		}else {
+			for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
+				schemaGrid.add(convertFixedWidthSchemaToSchemaGridRow(fixedWidthGridRow));
+			}
 		}
+			
+		
 		return schemaGrid;
 	}
 
@@ -268,11 +281,11 @@ public class ComponentsOutputSchema implements IDataStructure {
 	 * @param fieldName
 	 * @return
 	 */
-	public BasicSchemaGridRow getSchemaGridRow(String fieldName) {
-		BasicSchemaGridRow schemaGridRow = null;
-		if (StringUtils.isNotEmpty(fieldName)) {
-		for (BasicSchemaGridRow row : this.getSchemaGridOutputFields())
-			if (StringUtils.equals(fieldName, row.getFieldName()))
+	public GridRow getSchemaGridRow(GridRow gridRow) {
+		GridRow schemaGridRow = null;
+		if (StringUtils.isNotEmpty(gridRow.getFieldName())) {
+		for (GridRow row : this.getSchemaGridOutputFields(gridRow))
+			if (StringUtils.equals(gridRow.getFieldName(), row.getFieldName()))
 				schemaGridRow = row;
 		}
 		return schemaGridRow;
