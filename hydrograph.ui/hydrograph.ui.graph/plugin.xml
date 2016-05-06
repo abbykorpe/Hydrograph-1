@@ -5,11 +5,6 @@
          id="hydrograph.ui.graph.commands"
          name="Graph Commands"
          point="org.eclipse.ui.commands">
-      <command
-            categoryId="hydrograph.ui.graph.newGraphcategory"
-            id="hydrograph.ui.graph.newGraphcommand"
-            name="New Graph">
-      </command>
       <category
             id="hydrograph.ui.graph.newGraphcategory"
             name="New Graph Category">
@@ -38,10 +33,6 @@
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
-      <handler
-            class="hydrograph.ui.graph.handler.NewGraphHandler"
-            commandId="hydrograph.ui.graph.newGraphcommand">
-      </handler>
       <handler
             class="hydrograph.ui.graph.handler.RunJobHandler"
             commandId="hydrograph.ui.graph.command.runjob">
@@ -119,10 +110,14 @@
             allPopups="true"
             locationURI="menu:hydrograph.ui.menus.NewMenu?before=hydrograph.ui.menus.NewMenu.Class">
          <command
-               commandId="hydrograph.ui.graph.newGraphcommand"
+               commandId="org.eclipse.ui.newWizard"
                label="Job"
                mnemonic="J"
                style="push">
+            <parameter
+                  name="newWizardId"
+                  value="hydrograph.ui.graph.job.wizard">
+            </parameter>
          </command>
       </menuContribution>
       <menuContribution
@@ -132,11 +127,15 @@
                id="hydrograph.ui.graph.toolbar1"
                label="Hydrograph Toolbar">
             <command
-                  commandId="hydrograph.ui.graph.newGraphcommand"
+                  commandId="org.eclipse.ui.newWizard"
                   icon="resources/icons/new_file_o.png"
                   id="hydrograph.ui.graph.newJob"
                   label="Job"
                   style="pulldown">
+               <parameter
+                     name="newWizardId"
+                     value="hydrograph.ui.graph.job.wizard">
+               </parameter>
             </command>
             <command
                   commandId="org.eclipse.ui.edit.text.openLocalFile"
@@ -254,9 +253,13 @@
             allPopups="false"
             locationURI="menu:hydrograph.ui.graph.newJob">
          <command
-               commandId="hydrograph.ui.graph.newGraphcommand"
+               commandId="org.eclipse.ui.newWizard"
                label="Job"
                style="push">
+            <parameter
+                  name="newWizardId"
+                  value="hydrograph.ui.graph.job.wizard">
+            </parameter>
          </command>
          <command
                commandId="org.eclipse.ui.newWizard"
@@ -311,12 +314,6 @@
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
-      <key
-            commandId="hydrograph.ui.graph.newGraphcommand"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+J">
-      </key>
       <key
             commandId="hydrograph.ui.graph.command.runjob"
             contextId="org.eclipse.ui.contexts.window"
@@ -388,4 +385,16 @@
          </enablement>
       </renameParticipant>
    </extension>
+ <extension
+       point="org.eclipse.ui.newWizards">
+    <wizard
+          class="hydrograph.ui.graph.handler.JobCreationWizard"
+          icon="resources/icons/new_file_o.png"
+          id="hydrograph.ui.graph.job.wizard"
+          name="Job">
+       <selection
+             class="org.eclipse.core.resources.IResource">
+       </selection>
+    </wizard>
+ </extension>
 </plugin>

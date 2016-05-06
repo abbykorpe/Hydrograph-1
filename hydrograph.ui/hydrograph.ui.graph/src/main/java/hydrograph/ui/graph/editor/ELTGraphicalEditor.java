@@ -227,7 +227,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 * Initialize the viewer with container
 	 */
 	@Override
-	protected void initializeGraphicalViewer() {
+	public void initializeGraphicalViewer() {
 		super.initializeGraphicalViewer();
 		viewer = getGraphicalViewer();
 		viewer.setContents(container);

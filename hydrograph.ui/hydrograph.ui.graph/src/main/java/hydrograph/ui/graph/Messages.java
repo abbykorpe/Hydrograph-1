@@ -62,8 +62,13 @@ public class Messages extends NLS {
 	public static String CONFIRM_TO_CREATE_SUBJOB_WINDOW_TITLE;
 	public static String HELP;
 	public static String PROPERTIES;
-	
-	 
+	public static String JOB_WIZARD_TITLE;
+	public static String CREATE_NEW;
+	public static String FILE;
+	public static String JOB;
+	public static String FILE_END_MESSAGE;
+	public static String NEW_JOB;
+	public static String OPEN_PROJECT_ERROR_MESSAGE;
 	
 	static {
 		// initialize resource bundle

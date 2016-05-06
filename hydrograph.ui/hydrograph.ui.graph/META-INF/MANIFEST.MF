@@ -31,12 +31,14 @@ Require-Bundle: org.eclipse.ui,
  hydrograph.ui.logging;bundle-version="0.0.1",
  org.json;bundle-version="1.0.0",
  org.apache.commons.httpclient;bundle-version="3.1.0",
- ch.qos.logback.classic
+ ch.qos.logback.classic,
+ org.eclipse.core.expressions
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: com.thoughtworks.xstream,
  hydrograph.ui.graph.model,
  hydrograph.ui.graph.model.processor,
- org.eclipse.core.filesystem
+ org.eclipse.core.filesystem,
+ org.eclipse.jdt.ui.wizards
 Export-Package: hydrograph.ui.graph.controller,
  hydrograph.ui.graph.editor
