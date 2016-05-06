@@ -240,9 +240,9 @@ public class TransformWidget extends AbstractWidget {
 		return null;
 	}
 
-	private BasicSchemaGridRow getFieldSchema(String fieldName) {
-		List<BasicSchemaGridRow> schemaGridRows = getInputFieldSchema();
-		for (BasicSchemaGridRow schemaGridRow : schemaGridRows) {
+	private GridRow getFieldSchema(String fieldName) {
+		List<GridRow> schemaGridRows = getInputFieldSchema();
+		for (GridRow schemaGridRow : schemaGridRows) {
 			if (schemaGridRow.getFieldName().equals(fieldName)) {
 				return schemaGridRow;
 			}
@@ -250,13 +250,13 @@ public class TransformWidget extends AbstractWidget {
 		return null;
 	}
 
-	private List<BasicSchemaGridRow> getInputFieldSchema() {
+	private List<GridRow> getInputFieldSchema() {
 		ComponentsOutputSchema outputSchema = null;
-		List<BasicSchemaGridRow> schemaGridRows = new LinkedList<>();
+		List<GridRow> schemaGridRows = new LinkedList<>();
 		for (Link link : getComponent().getTargetConnections()) {
 			outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 			if (outputSchema != null)
-				for (BasicSchemaGridRow row : outputSchema.getSchemaGridOutputFields()) {
+				for (GridRow row : outputSchema.getSchemaGridOutputFields(null)) {
 					schemaGridRows.add(row);
 				}
 		}
@@ -305,7 +305,7 @@ public class TransformWidget extends AbstractWidget {
 		}
 
 		for (String passThroughField : passThroughFields) {
-			BasicSchemaGridRow schemaGridRow= getFieldSchema(passThroughField);
+			GridRow schemaGridRow= getFieldSchema(passThroughField);
 			if(schemaGridRow!=null){
 				BasicSchemaGridRow tempSchemaGrid =(BasicSchemaGridRow) schemaGridRow.copy();
 

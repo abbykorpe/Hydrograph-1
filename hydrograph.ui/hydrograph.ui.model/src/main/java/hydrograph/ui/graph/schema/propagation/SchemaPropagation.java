@@ -170,7 +170,7 @@ public class SchemaPropagation {
 		if(componentsOutputSchema==null)
 			return;
 		for (GridRow gridRow : schema.getGridRow())
-			gridRow.updateBasicGridRow(componentsOutputSchema.getSchemaGridRow(gridRow.getFieldName()));
+			gridRow.updateBasicGridRow(componentsOutputSchema.getSchemaGridRow(gridRow));
 		}
 	}
 
