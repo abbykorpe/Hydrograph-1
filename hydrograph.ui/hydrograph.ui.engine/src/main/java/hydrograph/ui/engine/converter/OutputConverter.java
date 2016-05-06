@@ -83,6 +83,11 @@ public abstract class OutputConverter extends Converter {
 		return typeBaseRecord;
 	}
 	
+	/**
+	 * Caches the parameter value for later substitution in engine xml.
+	 * @param propertyName
+	 * @return
+	 */
 	protected TypeTrueFalse getTrueFalse(String propertyName) {
 		logger.debug("Getting TrueFalse Value for {}={}", new Object[] {propertyName, properties.get(propertyName) });
 		TypeTrueFalse typeTrueFalse = new TypeTrueFalse();
