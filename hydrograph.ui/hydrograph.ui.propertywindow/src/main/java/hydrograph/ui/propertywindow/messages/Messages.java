@@ -191,6 +191,7 @@ public class Messages extends NLS {
 	public static String LOOKUP_PORT_LABEL;
 	public static String DRIVER_PORT_LABEL;
 	public static String LOOKUP_PORT_CHANGE;
+
     
 	static {
 		// initialize resource bundle
