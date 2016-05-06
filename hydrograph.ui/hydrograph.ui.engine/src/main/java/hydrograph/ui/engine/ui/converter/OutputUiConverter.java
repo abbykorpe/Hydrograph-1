@@ -14,6 +14,7 @@
  
 package hydrograph.ui.engine.ui.converter;
 
+import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeTrueFalse;
@@ -84,7 +85,11 @@ public abstract class OutputUiConverter extends UiConverter {
 		if (parsedValue != null) {
 			return parsedValue;
 		} else {
-			return value.getValue().toString();
+			if(TrueFalse.TRUE.equals(value.getValue()))
+				return "True";
+			else{
+				return "False";
+			}
 		}
 	}
 	
