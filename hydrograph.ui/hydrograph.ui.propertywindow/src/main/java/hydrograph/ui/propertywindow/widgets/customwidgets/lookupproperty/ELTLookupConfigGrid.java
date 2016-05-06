@@ -18,6 +18,7 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.LookupConfigProperty;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
 
@@ -27,6 +28,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -41,6 +43,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -51,7 +54,8 @@ public class ELTLookupConfigGrid extends Dialog {
 	private Text driverText;
 	private Text lookupText;
 	private Button[] radio = new Button[2];
-	private LookupConfigProperty configProperty = new LookupConfigProperty();
+	private LookupConfigProperty configProperty;
+	private LookupConfigProperty oldConfigProperty;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private String driverKey, lookupKey;
 	private Label driverEditLableAsButton, lookupEditLableAsButton;
@@ -60,14 +64,12 @@ public class ELTLookupConfigGrid extends Dialog {
 
 	private static final String LOOKUP_PORT = "Lookup Port";
 	private static final String LOOKUP_KEYS = "Lookup Key(s)";
-	private static final String PORT_TYPE = "Port Type";
-	private static final String DRIVER ="driver";
-	private static final String LOOKUP = "lookup";
+	private static final String PORT = "Port";
 	private static final String INSERT_IMAGE ="Insert Image";
 	private static final String LOOKUP_CONFIG="Lookup Configuration";
 	
-	private static final String IN_PORT0= "IN0";
-	private static final String IN_PORT1="IN1";
+	private static final String IN_PORT0= "in0";
+	private static final String IN_PORT1="in1";
 	
 	/**
 	 * Create the dialog.
@@ -81,6 +83,7 @@ public class ELTLookupConfigGrid extends Dialog {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		configProperty = lookupConfigProperty;
+		oldConfigProperty = (LookupConfigProperty) lookupConfigProperty.clone();
 		driverKey = configProperty.getDriverKey();
 		lookupKey = configProperty.getLookupKey();
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
@@ -137,17 +140,17 @@ public class ELTLookupConfigGrid extends Dialog {
 		Composite keyComposite = new Composite(composite, SWT.BORDER);
 		keyComposite.setLayoutData(new RowData(436, 100));
 
-		labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 10, 10, 175, 15 }, PORT_TYPE);
+		labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 10, 10, 175, 15 }, PORT);
 		labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 191, 10, 235, 15 }, LOOKUP_KEYS);
 
-		textBoxWidget(keyComposite, new int[] { 10, 31, 175, 21 }, DRIVER, false);
-		textBoxWidget(keyComposite, new int[] { 10, 58, 175, 21 },LOOKUP, false);
+		textBoxWidget(keyComposite, new int[] { 10, 31, 175, 21 }, IN_PORT0, false);
+		textBoxWidget(keyComposite, new int[] { 10, 58, 175, 21 }, IN_PORT1, false);
 
 		driverText = textBoxWidget(keyComposite, new int[] { 191, 31, 220, 21 }, "", false);
 		lookupText = textBoxWidget(keyComposite, new int[] { 191, 58, 220, 21 }, "", false);
 		driverText.setBackground(new Color(null, 255, 255, 255));
 		lookupText.setBackground(new Color(null, 255, 255, 255));
-		labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 10, 10, 175, 15 }, PORT_TYPE);
+		labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 10, 10, 175, 15 }, PORT);
 
 		driverEditLableAsButton = labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 415, 28, 20, 20 },
 				INSERT_IMAGE);
@@ -269,6 +272,12 @@ public class ELTLookupConfigGrid extends Dialog {
 	protected void okPressed() {
 		configProperty.setLookupKey(lookupKey);
 		configProperty.setDriverKey(driverKey);
+		if(!oldConfigProperty.equals(configProperty)){
+			propertyDialogButtonBar.enableApplyButton(true);
+			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), Messages.INFORMATION, Messages.LOOKUP_PORT_CHANGE);
+		}
+		
+		
 		super.okPressed();
 	}
 }

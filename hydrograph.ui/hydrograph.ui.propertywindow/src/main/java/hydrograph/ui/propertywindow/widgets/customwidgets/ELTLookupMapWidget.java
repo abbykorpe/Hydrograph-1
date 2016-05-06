@@ -75,7 +75,7 @@ public class ELTLookupMapWidget extends AbstractWidget {
 				subGroup.getContainerControl());
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 
-		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Lookup\n Mapping");
+		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("Lookup\nMapping");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
 		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());

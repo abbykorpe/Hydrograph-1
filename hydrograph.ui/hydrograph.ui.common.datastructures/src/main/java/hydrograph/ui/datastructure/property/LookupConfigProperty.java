@@ -54,6 +54,41 @@ public class LookupConfigProperty implements IDataStructure{
 		this.lookupPort = lookupPort;
 	}
 	
+
+	@Override
+    public boolean equals(Object obj) {
+          if (this == obj)
+                return true;
+          if (obj == null)
+                return false;
+          if (getClass() != obj.getClass())
+                return false;
+          
+          LookupConfigProperty other = (LookupConfigProperty) obj;
+          if (driverKey == null) {
+                if (other.driverKey != null)
+                      return false;
+          } else if (!driverKey.equals(other.driverKey))
+                return false;
+          if (isSelected == null) {
+                if (other.isSelected != null)
+                      return false;
+          } else if (!isSelected.equals(other.isSelected))
+                return false;
+          if (lookupKey == null) {
+                if (other.lookupKey != null)
+                      return false;
+          } else if (!lookupKey.equals(other.lookupKey))
+                return false;
+          if (lookupPort == null) {
+                if (other.lookupPort != null)
+                      return false;
+          } else if (!lookupPort.equals(other.lookupPort))
+                return false;
+          return true;
+    }
+
+	
 	@Override
 	public Object clone() 
 	{
