@@ -27,7 +27,7 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
 
    <splash
       location="hydrograph.ui.perspective" />
-   <launcher name="hydrograph">
+   <launcher>
       <macosx icon="icons/icons.icns"/>
       <solaris/>
       <win useIco="false">
