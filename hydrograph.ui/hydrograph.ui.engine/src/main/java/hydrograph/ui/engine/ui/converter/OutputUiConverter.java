@@ -22,6 +22,7 @@ import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 /**
@@ -85,10 +86,10 @@ public abstract class OutputUiConverter extends UiConverter {
 		if (parsedValue != null) {
 			return parsedValue;
 		} else {
-			if(TrueFalse.TRUE.equals(value.getValue()))
-				return "True";
+			if(value != null && TrueFalse.FALSE.equals(value.getValue()))
+				return StringUtils.capitalize(TrueFalse.FALSE.value());
 			else{
-				return "False";
+				return StringUtils.capitalize(TrueFalse.TRUE.value());
 			}
 		}
 	}
