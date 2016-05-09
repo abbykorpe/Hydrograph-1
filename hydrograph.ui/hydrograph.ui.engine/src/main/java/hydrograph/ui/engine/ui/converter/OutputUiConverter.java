@@ -14,6 +14,7 @@
  
 package hydrograph.ui.engine.ui.converter;
 
+import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeTrueFalse;
@@ -21,6 +22,7 @@ import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 /**
@@ -84,7 +86,11 @@ public abstract class OutputUiConverter extends UiConverter {
 		if (parsedValue != null) {
 			return parsedValue;
 		} else {
-			return value.getValue().toString();
+			if(value != null && TrueFalse.FALSE.equals(value.getValue()))
+				return StringUtils.capitalize(TrueFalse.FALSE.value());
+			else{
+				return StringUtils.capitalize(TrueFalse.TRUE.value());
+			}
 		}
 	}
 	
