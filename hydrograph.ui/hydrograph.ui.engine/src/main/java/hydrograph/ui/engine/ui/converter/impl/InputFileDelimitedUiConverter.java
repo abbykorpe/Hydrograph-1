@@ -14,6 +14,12 @@
  
 package hydrograph.ui.engine.ui.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.inputtypes.TextFileDelimited;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -24,7 +30,6 @@ import hydrograph.ui.engine.ui.helper.ConverterUiHelper;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.components.IFDelimited;
 import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GridRowLoader;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -32,16 +37,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
-import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.inputtypes.TextFileDelimited;
 
 public class InputFileDelimitedUiConverter extends InputUiConverter {
 
@@ -67,8 +64,12 @@ public class InputFileDelimitedUiConverter extends InputUiConverter {
 		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
 				convertBooleanValue(fileDelimited.getStrict(), PropertyNameConstants.STRICT.value()));
-		if (fileDelimited.getDelimiter() != null)
+		
+		if (fileDelimited.getDelimiter() != null && StringUtils.isNotEmpty(fileDelimited.getDelimiter().getValue()))
 			propertyMap.put(PropertyNameConstants.DELIMITER.value(), fileDelimited.getDelimiter().getValue());
+		else if(StringUtils.isNotEmpty(getValue(PropertyNameConstants.DELIMITER.value())))
+			propertyMap.put(PropertyNameConstants.DELIMITER.value(), getValue(PropertyNameConstants.DELIMITER.value()));
+		
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
 				convertBooleanValue(fileDelimited.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 

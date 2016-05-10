@@ -14,6 +14,12 @@
  
 package hydrograph.ui.engine.ui.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
+import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.outputtypes.TextFileDelimited;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -31,14 +37,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
-import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.outputtypes.TextFileDelimited;
 
 public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 
@@ -67,8 +67,11 @@ public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
 				convertBooleanValue(fileDelimited.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
-		if (fileDelimited.getDelimiter() != null)
+		
+		if (fileDelimited.getDelimiter() != null && StringUtils.isNotEmpty(fileDelimited.getDelimiter().getValue()))
 			propertyMap.put(PropertyNameConstants.DELIMITER.value(), fileDelimited.getDelimiter().getValue());
+		else if(StringUtils.isNotEmpty(getValue(PropertyNameConstants.DELIMITER.value())))
+			propertyMap.put(PropertyNameConstants.DELIMITER.value(), getValue(PropertyNameConstants.DELIMITER.value()));
 
 		propertyMap.put(PropertyNameConstants.OVER_WRITE.value(),
 				convertToTrueFalseValue(fileDelimited.getOverWrite(), PropertyNameConstants.OVER_WRITE.value()));
