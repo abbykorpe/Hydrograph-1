@@ -80,8 +80,7 @@ class SchemaGridCellModifier implements ICellModifier {
 		if (ELTSchemaGridWidget.PRECISION.equals(property))
 		{
 			if(DataType.FLOAT_CLASS.equals(basicSchemaGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue()))
+					||DataType.DOUBLE_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	

@@ -94,8 +94,7 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 		if (ELTSchemaGridWidget.PRECISION.equals(property))
 		{
 			if(DataType.FLOAT_CLASS.equals(generateRecordsSchemaGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue()))
+					||DataType.DOUBLE_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	

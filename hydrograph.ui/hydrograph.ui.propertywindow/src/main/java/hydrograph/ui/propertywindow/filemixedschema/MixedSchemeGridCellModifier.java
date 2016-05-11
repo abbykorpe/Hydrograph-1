@@ -75,8 +75,7 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 		if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
 		{
 			if(DataType.FLOAT_CLASS.equals(mixedSchemeGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue()))
+					||DataType.DOUBLE_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -85,8 +84,7 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 		if (ELTSchemaGridWidget.PRECISION.equals(property))
 		{
 			if(DataType.FLOAT_CLASS.equals(mixedSchemeGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue()))
+					||DataType.DOUBLE_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	

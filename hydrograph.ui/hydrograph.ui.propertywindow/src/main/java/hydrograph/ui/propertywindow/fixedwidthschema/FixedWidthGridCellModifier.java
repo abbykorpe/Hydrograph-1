@@ -86,8 +86,7 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		if (ELTSchemaGridWidget.PRECISION.equals(property))
 		{
 			if(DataType.FLOAT_CLASS.equals(fixedWidthGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue()))
+					||DataType.DOUBLE_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
