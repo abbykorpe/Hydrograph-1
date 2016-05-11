@@ -16,24 +16,28 @@ package hydrograph.ui.propertywindow.widgets.listeners;
 
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
 
-import java.io.File;
-
-import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.wizards.IWizardDescriptor;
 
 
 public class ELTSchemaDialogSelectionListener implements IELTListener {
 	Shell shell;
 	private ControlDecoration txtDecorator;
+	private String file_extension;
 	
 	@Override
 	public int getListenerType() {
@@ -47,21 +51,17 @@ public class ELTSchemaDialogSelectionListener implements IELTListener {
 		button.getShell();
 		if(helpers != null){
 			txtDecorator = (ControlDecoration) helpers.get(HelperType.CONTROL_DECORATION);
+			file_extension=(String)helpers.get(HelperType.FILE_EXTENSION);
 		}
 		
 		Listener listener=new Listener() {
 			@Override
 			public void handleEvent(Event event) {
 				if(event.type==SWT.Selection){
-					FileDialog filedialog=new FileDialog(button.getShell(),SWT.None);
-					 filedialog.setFilterExtensions(new String [] {"*.*"});
-					String path=filedialog.open();
-					if(StringUtils.isNotEmpty(path)){
-						File file= new File(path);
-						((Text)widgets[1]).setText(file.getAbsolutePath());
+					FilterOperationClassUtility filterOperationClassUtility = new FilterOperationClassUtility();
+					filterOperationClassUtility.browseFile(file_extension,((Text) widgets[0]));
 						propertyDialogButtonBar.enableApplyButton(true);
 						txtDecorator.hide();
-					} 
 				}
 			}
 		};

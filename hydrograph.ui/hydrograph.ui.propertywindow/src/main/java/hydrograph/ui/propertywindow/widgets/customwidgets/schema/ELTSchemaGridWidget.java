@@ -57,6 +57,7 @@ import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDetails;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.GridChangeListener;
+import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
 import hydrograph.ui.propertywindow.widgets.utility.GridComparator;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import hydrograph.ui.propertywindow.widgets.utility.MouseWheelScrollingOnComposite;
@@ -822,15 +823,15 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
+		helper.put(HelperType.FILE_EXTENSION,"schema");
 
 		try {
 			eltDefaultTextBox.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(),
 					propertyDialogButtonBar, null, eltDefaultTextBox.getSWTWidgetControl());
 			eltDefaultTextBox.attachListener(ListenerFactory.Listners.MODIFY.getListener(), propertyDialogButtonBar,
 					helper, eltDefaultTextBox.getSWTWidgetControl());
-			eltDefaultButton.attachListener(ListenerFactory.Listners.SCHEMA_DIALOG_SELECTION.getListener(),
-					propertyDialogButtonBar, helper, eltDefaultButton.getSWTWidgetControl(),
-					eltDefaultTextBox.getSWTWidgetControl());
+			eltDefaultButton.attachListener(ListenerFactory.Listners.BROWSE_FILE_LISTNER.getListener(),
+					propertyDialogButtonBar, helper,extSchemaPathText);
 
 		} catch (Exception e1) {
 			e1.printStackTrace();

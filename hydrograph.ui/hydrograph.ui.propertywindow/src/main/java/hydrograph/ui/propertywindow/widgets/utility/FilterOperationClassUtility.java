@@ -20,8 +20,6 @@ import hydrograph.ui.common.datastructures.tooltip.TootlTipErrorMessage;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.NameValueProperty;
-import hydrograph.ui.datastructure.property.OperationClassProperty;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -35,6 +33,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubg
 import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import hydrograph.ui.propertywindow.widgets.listeners.grid.schema.ExternalSchemaFileSelectionDialog;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -84,6 +83,7 @@ public class FilterOperationClassUtility  {
 	private static Button openBtn;
 	private static Button btnCheckButton;
 	private static String componentName;
+	private String fileNameTextBoxValue;
 
 	/**
 	 * Creates the new class wizard.
@@ -117,7 +117,7 @@ public class FilterOperationClassUtility  {
 			});
 		}
 		wizard.run();
-		if (page.isPageComplete()){
+		if (page.isPageComplete()) {
 			if(!page.getPackageText().equalsIgnoreCase("")){
 				fileNameTextBox.setText(page.getPackageText()+"."
 						+ page.getTypeName());
@@ -138,10 +138,46 @@ public class FilterOperationClassUtility  {
 	 * @param fileName
 	 *            the file name
 	 */
-	public static void browseFile(String filterExtension, Text fileName) {
+	public void browseFile(String filterExtension, Text fileName) {
+		
+		if(Extensions.JAVA.toString().equalsIgnoreCase(filterExtension))
+		{
+			browseJavaSelectionDialog(filterExtension, fileName);
+		}
+		else
+		{
+			browseSchemaSelectionDialog(filterExtension, fileName);
+		}
+	}
+
+	private void browseSchemaSelectionDialog(String filterExtension, Text fileName) {
+		String externalSchemaTextBoxValue = "";
+		ExternalSchemaFileSelectionDialog dialog = new ExternalSchemaFileSelectionDialog("Project",
+				"Select Schema File (.schema)", new String[] { filterExtension }, this);
+		if (dialog.open() == IDialogConstants.OK_ID) {
+			String file = fileNameTextBoxValue;
+			IResource resource = (IResource) dialog.getFirstResult();
+			String path[] = resource.getFullPath().toString().split("/");
+			if (file.isEmpty()) {
+				for (int i = 2; i < path.length; i++) {
+					externalSchemaTextBoxValue = externalSchemaTextBoxValue + path[i] + "/";
+				}
+			} else {
+				for (int i = 2; i < path.length; i++) {
+					if (!path[i].endsWith(".schema")) {
+						externalSchemaTextBoxValue = externalSchemaTextBoxValue + path[i] + "/";
+					}
+				}
+				externalSchemaTextBoxValue = externalSchemaTextBoxValue + file;
+			}
+			fileName.setText(externalSchemaTextBoxValue);
+		}
+	}
+
+	private void browseJavaSelectionDialog(String filterExtension, Text fileName) {
 		ResourceFileSelectionDialog dialog = new ResourceFileSelectionDialog(
 				"Project", "Select Java Class (.java)", new String[] { filterExtension });
-		if (dialog.open() == IDialogConstants.OK_ID){
+		if (dialog.open() == IDialogConstants.OK_ID) {
 			IResource resource = (IResource) dialog.getFirstResult();
 			String filePath = resource.getRawLocation().toOSString();
 			java.nio.file.Path path =Paths.get(filePath); 
@@ -163,7 +199,7 @@ public class FilterOperationClassUtility  {
 			fileName.setText(name.trim());
 			filePath = resource.getRawLocation().toOSString();
 			fileName.setData("path", resource.getFullPath().toString());
-		}
+}
 	} 
 
 	/**
@@ -177,7 +213,7 @@ public class FilterOperationClassUtility  {
 		try {
 			String fileFullPath;
 			String fileName="";
-			if (filePath != null){
+			if (filePath != null) {
 				String projectPath=(String) filePath.getData("path");
 				if(!projectPath.isEmpty()){
 					String splitedProjectPath[]=projectPath.split("/");
@@ -199,7 +235,7 @@ public class FilterOperationClassUtility  {
 				fileFullPath=fileName;
 			}
 			File fileToEditor = new File(fileFullPath);
-			if (fileToEditor.exists()){
+			if (fileToEditor.exists()) {
 				IFileStore fileStore = EFS.getLocalFileSystem().getStore(
 						fileToEditor.toURI());
 				IWorkbenchPage page = PlatformUI.getWorkbench()
@@ -272,6 +308,7 @@ public class FilterOperationClassUtility  {
 		helper.put(HelperType.OPERATION_CLASS_DIALOG_OK_CONTROL, eltOperationClassDialog);
 		helper.put(HelperType.OPERATION_CLASS_DIALOG_APPLY_BUTTON, opeartionClassDialogButtonBar);
 		helper.put(HelperType.PROPERTY_DIALOG_BUTTON_BAR, propertyDialogButtonBar);
+		helper.put(HelperType.FILE_EXTENSION,"java");
 		setIJavaProject();
 		try { 						
 			openButton.attachListener(ListenerFactory.Listners.OPEN_FILE_EDITOR.getListener(),eltOperationClassDialogButtonBar, helper,comboOfOperaationClasses,fileName);
@@ -286,7 +323,7 @@ public class FilterOperationClassUtility  {
 
 	private static void setIJavaProject() {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		if ((page.getActiveEditor().getEditorInput().getClass()).isAssignableFrom(FileEditorInput.class)){
+		if ((page.getActiveEditor().getEditorInput().getClass()).isAssignableFrom(FileEditorInput.class)) {
 			IFileEditorInput input = (IFileEditorInput) page.getActiveEditor().getEditorInput();
 			IFile file = input.getFile();
 			IProject activeProject = file.getProject();
@@ -301,12 +338,12 @@ public class FilterOperationClassUtility  {
 
 
 	public static void enableAndDisableButtons(boolean value,boolean checkboxValue) {
-		if (checkboxValue==false){
+		if (checkboxValue==false) {
 			createBtn.setEnabled(value);
 			browseBtn.setEnabled(value);
 			btnCheckButton.setEnabled(!value);
 		}
-		if (checkboxValue==true){
+		if (checkboxValue==true) {
 			btnCheckButton.setEnabled(value);
 			openBtn.setEnabled(!value);
 			createBtn.setEnabled(!value);
@@ -330,12 +367,20 @@ public class FilterOperationClassUtility  {
 				.getOperations();
 		List<TypeInfo> typeInfos = operations.getStdOperation();
 		for (int i = 0; i < typeInfos.size(); i++) {
-			if (typeInfos.get(i).getName().equalsIgnoreCase(operationName)){
+			if (typeInfos.get(i).getName().equalsIgnoreCase(operationName)) {
 				operationClassName = typeInfos.get(i).getClazz();
 				break;
 			}
 		}
 		textBox.setText(operationClassName);;
+	}
+
+	public String getFileNameTextBoxValue() {
+		return fileNameTextBoxValue;
+	}
+
+	public void setFileNameTextBoxValue(String fileNameTextBoxValue) {
+		this.fileNameTextBoxValue = fileNameTextBoxValue;
 	}
 
 

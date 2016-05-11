@@ -16,6 +16,7 @@ package hydrograph.ui.propertywindow.widgets.listeners;
 
 
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
 
 import org.eclipse.swt.SWT;
@@ -35,6 +36,7 @@ import org.eclipse.swt.widgets.Widget;
  * @see ELTBrowseFileEvent
  */
 public class ELTBrowseFileListener implements IELTListener{
+	private String file_extension;
 	
 	@Override
 	public int getListenerType() {
@@ -43,16 +45,18 @@ public class ELTBrowseFileListener implements IELTListener{
 	}
 
 	@Override
-	public Listener getListener(final PropertyDialogButtonBar propertyDialogButtonBar,ListenerHelper helpers, Widget... widgets) {
+	public Listener getListener(final PropertyDialogButtonBar propertyDialogButtonBar,final ListenerHelper helpers, Widget... widgets) {
 		final Widget[] widgetList = widgets;
 				
 		if (helpers != null) {
+			file_extension=(String)helpers.get(HelperType.FILE_EXTENSION);
 		}
 		
 		Listener listener=new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-					FilterOperationClassUtility.browseFile("java",(Text)widgetList[0]);
+				FilterOperationClassUtility filterOperationClassUtility = new FilterOperationClassUtility();
+				filterOperationClassUtility.browseFile(file_extension, (Text) widgetList[0]);
 				propertyDialogButtonBar.enableApplyButton(true);
 				}
 		};
