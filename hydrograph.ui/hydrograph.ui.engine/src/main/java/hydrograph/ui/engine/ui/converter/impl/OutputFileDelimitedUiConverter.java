@@ -68,10 +68,10 @@ public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 				convertBooleanValue(fileDelimited.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
 		
-		if (fileDelimited.getDelimiter() != null && StringUtils.isNotEmpty(fileDelimited.getDelimiter().getValue()))
-			propertyMap.put(PropertyNameConstants.DELIMITER.value(), fileDelimited.getDelimiter().getValue());
-		else if(StringUtils.isNotEmpty(getValue(PropertyNameConstants.DELIMITER.value())))
+		if (StringUtils.isNotEmpty(getValue(PropertyNameConstants.DELIMITER.value())))
 			propertyMap.put(PropertyNameConstants.DELIMITER.value(), getValue(PropertyNameConstants.DELIMITER.value()));
+		else if (fileDelimited.getDelimiter() != null && StringUtils.isNotEmpty(fileDelimited.getDelimiter().getValue()))
+				propertyMap.put(PropertyNameConstants.DELIMITER.value(), fileDelimited.getDelimiter().getValue());
 
 		propertyMap.put(PropertyNameConstants.OVER_WRITE.value(),
 				convertToTrueFalseValue(fileDelimited.getOverWrite(), PropertyNameConstants.OVER_WRITE.value()));
