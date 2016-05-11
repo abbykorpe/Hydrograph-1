@@ -18,7 +18,10 @@ import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
+import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.handler.RemoveDebugHandler;
+import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 
@@ -39,6 +42,7 @@ import org.eclipse.ui.PlatformUI;
  */
 public class RemoveWatcherAction extends SelectionAction{
 
+	private boolean isWatcher;
 	
 	public RemoveWatcherAction(IWorkbenchPart part) {
 		super(part);
@@ -54,6 +58,15 @@ public class RemoveWatcherAction extends SelectionAction{
 		 setEnabled(false);
 	}
 	
+	
+	private void checkWatchPoint(List<Object> selectedObjects){
+		for(Object obj:selectedObjects) {
+			if(obj instanceof LinkEditPart) {
+				Link link = (Link)((LinkEditPart)obj).getModel();
+				isWatcher = DebugHelper.INSTANCE.checkWatcher(link.getSource(), link.getSourceTerminal());
+			}
+		}
+	}
 
 	private void removeWatchPoint(List<Object> selectedObjects)  {
 		 
@@ -63,12 +76,14 @@ public class RemoveWatcherAction extends SelectionAction{
 			{
 				Link link = (Link)((LinkEditPart)obj).getModel();
 				link.getSource().removeWatcherTerminal(link.getSourceTerminal());
+				((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
 				changePortColor(link.getSource(), link.getSourceTerminal());
 				if(!PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty())
 					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 			}	
 		}
 	}
+	
 	
 	private void changePortColor(Component selectedComponent, String portName){
 
@@ -109,9 +124,10 @@ public class RemoveWatcherAction extends SelectionAction{
 	@Override
 	protected boolean calculateEnabled() {
 		List<Object> selectedObject = getSelectedObjects();
+		checkWatchPoint(selectedObject);
 		if(!selectedObject.isEmpty()){
 			for(Object obj : getSelectedObjects()){
-				if(obj instanceof LinkEditPart)	{
+				if(obj instanceof LinkEditPart && isWatcher)	{
 					return true;
 				}
 			}
