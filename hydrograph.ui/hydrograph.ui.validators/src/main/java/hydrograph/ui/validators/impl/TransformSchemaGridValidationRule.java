@@ -41,6 +41,7 @@ public class TransformSchemaGridValidationRule implements IValidator {
 	private static final String DATA_TYPE_FLOAT = "java.lang.Float"; 
 	private static final String DATA_TYPE_DATE = "java.util.Date";
 	private static final String DATA_TYPE_BIG_DECIMAL = "java.math.BigDecimal";
+	private static final String SCALE_TYPE_NONE = "none";
 
 	String errorMessage;
 	
@@ -113,6 +114,13 @@ public class TransformSchemaGridValidationRule implements IValidator {
 			else if(DATA_TYPE_DATE.equalsIgnoreCase(gridRow.getDataTypeValue()) && 
 					StringUtils.isBlank(gridRow.getDateFormat())){
 				errorMessage = "Date format is mandatory";
+				return false;
+			}
+			
+			if (StringUtils.equalsIgnoreCase(DATA_TYPE_BIG_DECIMAL, gridRow.getDataTypeValue())
+					&& (StringUtils.isBlank(gridRow.getScaleTypeValue()) || StringUtils.equalsIgnoreCase(
+							SCALE_TYPE_NONE, gridRow.getScaleTypeValue()))){
+				errorMessage = "Scale type cannot be blank or none for Big Decimal data type";
 				return false;
 			}
 			

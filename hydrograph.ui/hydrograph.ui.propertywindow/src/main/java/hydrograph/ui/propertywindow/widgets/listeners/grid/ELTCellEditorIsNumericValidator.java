@@ -48,12 +48,11 @@ public class ELTCellEditorIsNumericValidator implements ICellEditorValidator {
 	@Override
 	public String isValid(Object value) {
 		String selectedGrid=(String) value;
-		if(!selectedGrid.matches("\\d+") && !selectedGrid.isEmpty()){     
+		if(!selectedGrid.matches("\\d+") | selectedGrid.isEmpty()){     
 			scaleDecorator.show();   
 		return "Error";   
 	}else{  
 		scaleDecorator.hide(); 
-		    
 	}
 	return null; 
 	}

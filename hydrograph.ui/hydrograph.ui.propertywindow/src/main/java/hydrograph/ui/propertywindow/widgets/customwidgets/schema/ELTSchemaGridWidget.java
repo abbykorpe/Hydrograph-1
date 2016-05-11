@@ -169,6 +169,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected ControlDecoration fieldNameDecorator;
 	protected ControlDecoration isFieldNameAlphanumericDecorator;
 	protected ControlDecoration scaleDecorator;
+	protected ControlDecoration fieldEmptyDecorator;
 	protected ControlDecoration lengthDecorator;
 	protected ControlDecoration delimiterDecorator;
 	protected ControlDecoration rangeFromDecorator;

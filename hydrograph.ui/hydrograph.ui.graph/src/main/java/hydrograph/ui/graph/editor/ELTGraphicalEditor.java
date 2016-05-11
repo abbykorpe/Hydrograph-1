@@ -1215,7 +1215,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private void closeSocket()  {
 		ServerSocket serverSocket = null;
 		try {
-			serverSocket = new ServerSocket(8004);
+			serverSocket = new ServerSocket(Integer.parseInt(DebugHelper.INSTANCE.restServicePort()));
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 			try {
