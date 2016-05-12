@@ -78,7 +78,7 @@ public class AddWatcherAction extends SelectionAction{
 		customLimitValueGrid.open();
 		limitValue = customLimitValueGrid.getLimitValue();
 		watcherSelection = customLimitValueGrid.isOkselection();
-		//((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
+		((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
 	}
 
 	private void addWatchPoint(List<Object> selectedObjects) {

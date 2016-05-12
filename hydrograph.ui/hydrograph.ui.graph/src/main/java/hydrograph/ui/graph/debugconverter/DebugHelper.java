@@ -9,6 +9,7 @@ import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.Model;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.BufferedReader;
@@ -184,33 +185,21 @@ public class DebugHelper {
 	}
 	
 	/**
-	 * This function checks that watcher is added on selected port
+	 * This function returns that watcher is added on selected port
 	 *
 	 */
 	public boolean checkWatcher(Component selectedComponent, String portName) {
-		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		IPath path = new Path(editor.getTitleToolTip());
-		String currentJob = path.lastSegment().replace(Constants.JOB_EXTENSION, "");
-		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
-		String uniqueJobId = editor.getJobId();
-		 
-		for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator.hasNext();) {
-			EditPart editPart = (EditPart) iterator.next();
-			if(editPart instanceof ComponentEditPart) {
-				Component comp = ((ComponentEditPart)editPart).getCastedModel();
-				if(comp.equals(selectedComponent)){
-					List<PortEditPart> portEditParts = editPart.getChildren();
-					for(AbstractGraphicalEditPart part:portEditParts) {	
+					EditPart editPart = (EditPart) selectedComponent.getComponentEditPart();
+					List<PortEditPart> portEdit = editPart.getChildren();
+					for(AbstractGraphicalEditPart part : portEdit){
 						if(part instanceof PortEditPart){
-							String port_Name = ((PortEditPart)part).getCastedModel().getTerminal();
-							if(port_Name.equals(portName)){
-								return ((PortEditPart)part).getPortFigure().isWatched();
+							String portLabel = ((PortEditPart) part).getCastedModel().getTerminal();
+							if(portLabel.equals(portName)){
+								return  ((PortEditPart) part).getPortFigure().isWatched();
 							}
 						}
 					}
-				}
-			}
-		}
+					
 		return false;
 	}
 }
