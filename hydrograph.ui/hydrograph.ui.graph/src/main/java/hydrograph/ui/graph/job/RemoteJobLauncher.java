@@ -164,7 +164,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 	private String getJobXMLScpCommand(String xmlPath, Job job) {
 		return GradleCommandConstants.GCMD_SCP_JOB_XML + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
-				+ job.getPassword() + GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1];
+				+ job.getPassword() + GradleCommandConstants.GPARAM_JOB_XML +  "\""+ xmlPath.split("/", 2)[1]+"\"";
 	}
 
 	private String getParameterFileScpCommand(String paramFile, Job job) {
@@ -177,7 +177,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		return GradleCommandConstants.GCMD_EXECUTE_REMOTE_JOB + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE +"\""+ paramFile+"\""
-				+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1];
+				+ GradleCommandConstants.GPARAM_JOB_XML + "\""+ xmlPath.split("/", 2)[1]+"\"";
 	}
 
 	private void logProcessLogsAsynchronously(final JobLogger joblogger, final Process process, final Job job,

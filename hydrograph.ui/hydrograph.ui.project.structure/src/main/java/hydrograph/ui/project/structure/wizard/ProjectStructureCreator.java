@@ -51,7 +51,9 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.slf4j.Logger;
-
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * Class to create the Custom Project Structure.
@@ -85,7 +87,15 @@ public class ProjectStructureCreator {
 	 * @return
 	 */
 	public IProject createProject(String projectName, URI location){
-
+		if (projectName.contains(" ")){
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+			messageBox.setText("Error");
+			messageBox.setMessage("The Project Name has spaces");
+			if(messageBox.open()==SWT.OK)
+			{
+				return null;
+			}
+		}
 		if(projectName == null || projectName.trim().length() <= 0)
 			throw new InvalidProjectNameException();
 		IProject project = null;

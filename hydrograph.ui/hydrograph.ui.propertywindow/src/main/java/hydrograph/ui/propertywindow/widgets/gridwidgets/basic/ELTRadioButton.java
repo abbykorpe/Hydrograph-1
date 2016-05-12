@@ -14,6 +14,8 @@
  
 package hydrograph.ui.propertywindow.widgets.gridwidgets.basic;
 
+import hydrograph.ui.common.util.OSValidator;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -45,6 +47,9 @@ public class ELTRadioButton extends AbstractELTWidget{
 	public void attachWidget(Composite container) {
 		defaultELTButton = new Button(container, SWT.RADIO);
 		GridData gd_defaultELTButton = new GridData(SWT.FILL, SWT.FILL, grabExcessSpace, false, 1, 1);
+		if (OSValidator.isMac()) {
+			gd_defaultELTButton.horizontalIndent=6;
+		}
 		defaultELTButton.setLayoutData(gd_defaultELTButton);
 		defaultELTButton.setText(buttonText);
 		

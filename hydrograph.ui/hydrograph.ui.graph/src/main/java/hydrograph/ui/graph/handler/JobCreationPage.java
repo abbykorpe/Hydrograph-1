@@ -41,7 +41,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.part.FileEditorInput;
 import org.slf4j.Logger;
-
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.SWT;
 /**
  * This WizardPage can create an empty .job file for the GraphicalEditor.
  * @author Bitwise
@@ -84,7 +85,15 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 	 * @see JobCreationWizard#performFinish()
 	 */
 	boolean finish() {
-
+		IPath filePath = new Path(this.getContainerFullPath() + "/" + this.getFileName());
+		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
+		if (file.getFullPath().toOSString().contains(" ")) {
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR| SWT.OK);
+			messageBox.setText("Error");
+			messageBox.setMessage("The Job Name has spaces");
+			if (messageBox.open() == SWT.OK)
+				return false;
+		}
 		// open newly created job in the editor
 		IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
 		ELTGraphicalEditorInput input = new ELTGraphicalEditorInput(getFileName());
