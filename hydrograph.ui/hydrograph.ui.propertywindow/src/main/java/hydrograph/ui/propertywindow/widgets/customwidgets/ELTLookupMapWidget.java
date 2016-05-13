@@ -16,7 +16,6 @@ package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -32,6 +31,7 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.lookupproperty.ELTLookupMapWizard;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
+import hydrograph.ui.propertywindow.widgets.dialogs.lookup.LookupMapDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -86,9 +86,18 @@ public class ELTLookupMapWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				getPropagatedSchema();
-				lookupMapWizard = new ELTLookupMapWizard(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
+				
+				/*lookupMapWizard = new ELTLookupMapWizard(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
 						lookupMappingGrid,propertyDialogButtonBar);
-				lookupMapWizard.open();
+						
+				lookupMapWizard.open(); */
+				
+				LookupMapDialog lookupMapDialog = new LookupMapDialog(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
+						lookupMappingGrid,propertyDialogButtonBar);
+				
+				lookupMapDialog.open();
+				
+				
 				Schema internalSchema=propagateInternalSchema();
 				showHideErrorSymbol(widgets);
 				for(AbstractWidget widget:widgets)
