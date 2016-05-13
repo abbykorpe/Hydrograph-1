@@ -488,18 +488,20 @@ public class ConverterHelper {
 				&& !object.getDateFormat().trim().isEmpty())
 			typeBaseField.setFormat(object.getDateFormat());
 
+
 		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())) {
+			
 			if (!object.getScale().trim().isEmpty())
 				typeBaseField.setScale(Integer.parseInt(object.getScale()));
-			for(ScaleTypeList scaleType : ScaleTypeList.values()){
-				if (scaleType.value().equalsIgnoreCase(object.getScaleTypeValue())){
-						typeBaseField.setScaleType(scaleType);
-					break;
-				}
+			
+			for (ScaleTypeList scaleType : ScaleTypeList.values()) {
+				if (scaleType.value().equalsIgnoreCase(object.getScaleTypeValue()))
+					typeBaseField.setScaleType(scaleType);
 			}
-		 	if (!object.getPrecision().trim().isEmpty()){
-		 		 typeBaseField.setPrecision(Integer.parseInt(object.getPrecision()));
-		 	}
+			
+			if (!object.getPrecision().trim().isEmpty())
+				typeBaseField.setPrecision(Integer.parseInt(object.getPrecision()));
+				
 		}
 			
 		for (FieldDataTypes fieldDataType : FieldDataTypes.values()) {

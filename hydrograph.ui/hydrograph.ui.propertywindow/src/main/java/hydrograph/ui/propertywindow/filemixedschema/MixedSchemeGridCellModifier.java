@@ -195,7 +195,7 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 					||DataType.SHORT_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
 					||DataType.FLOAT_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
- 					||DataType.DOUBLE_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
+					||DataType.DOUBLE_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())){
 				return true;
 			}	

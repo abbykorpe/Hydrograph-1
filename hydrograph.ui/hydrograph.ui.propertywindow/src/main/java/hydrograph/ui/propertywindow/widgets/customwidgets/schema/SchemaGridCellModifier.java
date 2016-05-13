@@ -183,7 +183,7 @@ class SchemaGridCellModifier implements ICellModifier {
 					||DataType.SHORT_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
 					||DataType.FLOAT_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
- 					||DataType.DOUBLE_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
+					||DataType.DOUBLE_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(basicSchemaGridRow.getDataTypeValue())){
 				return true;
 			}	

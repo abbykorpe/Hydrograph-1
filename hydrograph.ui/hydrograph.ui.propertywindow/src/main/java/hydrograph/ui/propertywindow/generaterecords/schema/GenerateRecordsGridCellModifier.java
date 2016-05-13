@@ -220,7 +220,7 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 					||DataType.SHORT_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
 					||DataType.FLOAT_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
- 					||DataType.DOUBLE_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
+					||DataType.DOUBLE_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())){
 				return true;
 			}	
