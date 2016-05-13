@@ -87,11 +87,6 @@ public class ELTLookupMapWidget extends AbstractWidget {
 			public void widgetSelected(SelectionEvent e) {
 				getPropagatedSchema();
 				
-				/*lookupMapWizard = new ELTLookupMapWizard(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
-						lookupMappingGrid,propertyDialogButtonBar);
-						
-				lookupMapWizard.open(); */
-				
 				LookupMapDialog lookupMapDialog = new LookupMapDialog(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
 						lookupMappingGrid,propertyDialogButtonBar);
 				
