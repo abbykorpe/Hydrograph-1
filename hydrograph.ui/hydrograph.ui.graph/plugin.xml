@@ -80,18 +80,6 @@
          </activeWhen>
       </handler>
       <handler
-            class="hydrograph.ui.graph.handler.NewGraphHandler"
-            commandId="org.eclipse.ui.window.newEditor">
-         <activeWhen>
-            <with
-                  variable="activeEditorId">
-               <equals
-                     value="hydrograph.ui.graph.etlgraphicaleditor">
-               </equals>
-            </with>
-         </activeWhen>
-      </handler>
-      <handler
             class="hydrograph.ui.graph.handler.GraphPropertiesHandler"
             commandId="hydrograph.ui.propertywindow.graphProperties">
          <activeWhen>
@@ -266,6 +254,10 @@
                id="hydrograph.ui.menus.NewMenu.Class"
                label="Class"
                style="push">
+            <parameter
+                  name="newWizardId"
+                  value="org.eclipse.jdt.ui.wizards.NewClassCreationWizard">
+            </parameter>
          </command>
          <command
                commandId="org.eclipse.ui.newWizard"

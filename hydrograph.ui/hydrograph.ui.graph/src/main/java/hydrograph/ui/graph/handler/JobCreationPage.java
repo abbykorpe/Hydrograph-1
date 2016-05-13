@@ -52,7 +52,8 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 	private static int jobCounter = 1;
 	private static final String DEFAULT_EXTENSION = ".job";
 	private final IWorkbench workbench;
-
+    private static final String ERROR="Error";
+    private static final String ERROR_MESSAGE="File Name Too Long";
 	/**
 	 * Create a new wizard page instance.
 	 * 
@@ -85,64 +86,67 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 	 * @see JobCreationWizard#performFinish()
 	 */
 	boolean finish() {
-		IPath filePath = new Path(this.getContainerFullPath() + "/" + this.getFileName());
-		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
-		if (file.getFullPath().toOSString().contains(" ")) {
-			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR| SWT.OK);
-			messageBox.setText("Error");
-			messageBox.setMessage("The Job Name has spaces");
-			if (messageBox.open() == SWT.OK)
-				return false;
+		String[] fileName=this.getFileName().split("\\.");
+		if (fileName[0].length() > 50) {
+			return validateLengthOfFileName();
 		}
-		// open newly created job in the editor
-		IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
-		ELTGraphicalEditorInput input = new ELTGraphicalEditorInput(getFileName());
-		if (page != null) {
-			try {
-				page.openEditor(input, ELTGraphicalEditor.ID, true);
-				IWorkbench workbench = PlatformUI.getWorkbench();
-				IWorkbenchWindow activeWindow = workbench.getActiveWorkbenchWindow();
-				if (activeWindow != null) {
-					final IWorkbenchPage activePage = activeWindow.getActivePage();
-					if (activePage != null) {
-						activePage.activate(activePage.findEditor(input));
-					}
-				}
-			} catch (PartInitException e) {
-				logger.error("Error while opening job", e);
-				return false;
+       else {
+			IPath filePath = new Path(this.getContainerFullPath() + "/" + this.getFileName());
+			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
+			if (file.getFullPath().toOSString().contains(" ")) {
+				MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+				messageBox.setText("Error");
+				messageBox.setMessage("The Job Name has spaces");
+				if (messageBox.open() == SWT.OK)
+					return false;
 			}
+			// open newly created job in the editor
+			IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
+			ELTGraphicalEditorInput input = new ELTGraphicalEditorInput(getFileName());
+			if (page != null) {
+				try {
+					openJobInEditor(page, input);
+				} catch (PartInitException e) {
+					logger.error("Error while opening job", e);
+					return false;
+				}
+			}
+			createFilesOfJob();
 		}
-		saveJob();
 		return true;
 
 	}
 
-	private void saveJob() {
+	private void openJobInEditor(IWorkbenchPage page, ELTGraphicalEditorInput input) throws PartInitException {
+		page.openEditor(input, ELTGraphicalEditor.ID, true);
+		IWorkbench workbench = PlatformUI.getWorkbench();
+		IWorkbenchWindow activeWindow = workbench.getActiveWorkbenchWindow();
+		if (activeWindow != null) {
+			final IWorkbenchPage activePage = activeWindow.getActivePage();
+			if (activePage != null) {
+				activePage.activate(activePage.findEditor(input));
+			}
+		}
+	}
+
+	private boolean validateLengthOfFileName() {
+		MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+		messageBox.setText(ERROR);
+		messageBox.setMessage(ERROR_MESSAGE);
+		if (messageBox.open() == SWT.OK) {
+			this.getControl().getShell().open();
+		}
+		return false;
+	}
+
+	private void createFilesOfJob() {
 		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 				.getActivePage().getActiveEditor();
 		IPath filePath = new Path(this.getContainerFullPath() + "/" + this.getFileName());
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
-		if (file != null) {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			try {
-				editor.createOutputStream(out);
-				if (file.exists())
-					file.setContents(new ByteArrayInputStream(out.toByteArray()), true, false, null);
-				else
-					file.create(new ByteArrayInputStream(out.toByteArray()), true, null);
-				logger.info("Resetting EditorInput data from GraphicalEditorInput to FileEditorInput");
-				editor.setInput(new FileEditorInput(file));
-				editor.initializeGraphicalViewer();
-				editor.genrateTargetXml(file, null, null);
-				editor.getCommandStack().markSaveLocation();
-			} catch (CoreException | IOException ce) {
-				logger.error("Failed to Save the file : ", ce);
-				MessageDialog.openError(new Shell(), "Error",
-						"Exception occured while saving the graph -\n" + ce.getMessage());
-			}
-			editor.setDirty(false);
-		}
+		editor.saveJob(file);
+		editor.saveParameters();
+		
 	}
 
 	/*
