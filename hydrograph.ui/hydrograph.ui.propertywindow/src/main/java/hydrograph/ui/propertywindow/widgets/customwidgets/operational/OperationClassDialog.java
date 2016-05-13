@@ -487,10 +487,6 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		    isOkPressed=true;
 		    super.okPressed();
         }
-        else
-        {
-        	
-        }	
 	}
 	
 	public  boolean checkNameValueFieldBlankOrNot()

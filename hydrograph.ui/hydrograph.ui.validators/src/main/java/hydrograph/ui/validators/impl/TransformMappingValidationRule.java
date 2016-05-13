@@ -55,7 +55,15 @@ public class TransformMappingValidationRule implements IValidator{
 					 errorMessage = propertyName + "Operation field(s) are empty";		
 					 return false;
 				}
-					
+			    for(NameValueProperty nameValueProperty :mappingSheetRow.getNameValueProperty())
+			    {
+			    	if(StringUtils.isBlank(nameValueProperty.getPropertyValue()))
+			    	{
+			    		 errorMessage = propertyName + "Property value is Blank";		
+						 return false;
+			    	}	
+			    }	
+			   
 			}
 			for(MappingSheetRow mappingSheetRow:mappingSheetRows)
 			{
@@ -66,6 +74,7 @@ public class TransformMappingValidationRule implements IValidator{
 					 return false;
 				   }
 			}
+			
 		}	
 		List<FilterProperties> filterProperties = new ArrayList<>();
 
