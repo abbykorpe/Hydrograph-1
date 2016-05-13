@@ -26,12 +26,12 @@ import java.io.ObjectOutputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -39,10 +39,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
-import org.eclipse.ui.part.FileEditorInput;
 import org.slf4j.Logger;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.SWT;
 /**
  * This WizardPage can create an empty .job file for the GraphicalEditor.
  * @author Bitwise
@@ -88,7 +85,7 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 	boolean finish() {
 		String[] fileName=this.getFileName().split("\\.");
 		if (fileName[0].length() > 50) {
-			return validateLengthOfFileName();
+			return showErrorIfFileNameIsGreaterThanFiftyCharactors();
 		}
        else {
 			IPath filePath = new Path(this.getContainerFullPath() + "/" + this.getFileName());
@@ -129,7 +126,7 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 		}
 	}
 
-	private boolean validateLengthOfFileName() {
+	private boolean showErrorIfFileNameIsGreaterThanFiftyCharactors() {
 		MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 		messageBox.setText(ERROR);
 		messageBox.setMessage(ERROR_MESSAGE);
