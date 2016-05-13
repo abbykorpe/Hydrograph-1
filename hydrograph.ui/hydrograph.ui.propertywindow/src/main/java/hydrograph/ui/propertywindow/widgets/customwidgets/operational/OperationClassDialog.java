@@ -100,14 +100,13 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	private Button cancelButton;
     private TransformDialog transformDialog;
 	private MappingSheetRow mappingSheetRow;
-
+    private Label errorLabel; 
 	private Composite buttonComposite;
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
 
 	public OperationClassDialog(Shell parentShell, String componentName, MappingSheetRow mappingSheetRow,
 			PropertyDialogButtonBar propertyDialogButtonBar, WidgetConfig widgetConfig,TransformDialog transformDialog ) {
 		super(parentShell);
-
 		this.widgetConfig = widgetConfig;
 		this.componentName = componentName;
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
@@ -128,8 +127,6 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		container.setLayout(new GridLayout(1, false));
 
 		container.getShell().setText(Messages.OPERATION_CLASS);
-
-		
 
 		operationClassDialogButtonBar = new PropertyDialogButtonBar(container);
 
@@ -178,7 +175,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		Composite nameValueComposite = new Composite(container, SWT.None);
 		GridData gd_nameValueComposite = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
 		gd_nameValueComposite.widthHint = 526;
-		gd_nameValueComposite.heightHint = 251;
+		gd_nameValueComposite.heightHint = 220;
 		nameValueComposite.setLayoutData(gd_nameValueComposite);
 
 		nameValueComposite.setLayout(new GridLayout(1, false));
@@ -194,7 +191,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 				Messages.PROPERTY_NAME, Messages.PROPERTY_VALUE }, new ELTFilterContentProvider(),
 				new OperationLabelProvider());
 		nameValueTableViewer.setLabelProvider(new PropertyLabelProvider());
-		nameValueTableViewer.setCellModifier(new PropertyGridCellModifier(nameValueTableViewer,operationClassDialogButtonBar));
+		nameValueTableViewer.setCellModifier(new PropertyGridCellModifier(this,nameValueTableViewer,operationClassDialogButtonBar));
 		nameValueTableViewer.setInput(mappingSheetRow.getNameValueProperty());
 		table_2.getColumn(0).setWidth(252);
 		table_2.getColumn(1).setWidth(259);
@@ -286,6 +283,17 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		});
 
 		populateWidget();
+		Composite errorComposite=new Composite(container, SWT.NONE);
+		errorComposite.setLayout(new GridLayout(1,false));
+		GridData griddata=new GridData(SWT.TOP,SWT.TOP,false,false,1,1);
+		
+		errorComposite.setLayoutData(griddata);
+		
+		errorLabel=new Label(errorComposite,SWT.NONE);
+		errorLabel.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		errorLabel.setText(Messages.EmptyFiledNotification);
+		errorLabel.setVisible(false);
+		checkNameValueFieldBlankOrNot();
 		return container;
 	}
 
@@ -442,7 +450,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(540, 460);
+		return new Point(540, 500);
 	}
 
 	
@@ -470,18 +478,54 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 
 	@Override
 	protected void okPressed() {
-
-		mappingSheetRow = new MappingSheetRow(mappingSheetRow.getInputFields(), mappingSheetRow.getOutputList(),
-				mappingSheetRow.getOperationID(), operationClasses.getText(), fileName.getText(),
-				mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),
-				mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData(PATH));
-		isOkPressed=true;
-		super.okPressed();
+        if(checkNameValueFieldBlankOrNot()) 
+        {
+        	mappingSheetRow = new MappingSheetRow(mappingSheetRow.getInputFields(), mappingSheetRow.getOutputList(),
+			mappingSheetRow.getOperationID(), operationClasses.getText(), fileName.getText(),
+			mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),
+			mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData(PATH));
+		    isOkPressed=true;
+		    super.okPressed();
+        }
+        else
+        {
+        	
+        }	
+	}
+	
+	public  boolean checkNameValueFieldBlankOrNot()
+	{
+		if(!mappingSheetRow.getNameValueProperty().isEmpty())
+		{
+			for(NameValueProperty nameValueProperty:mappingSheetRow.getNameValueProperty())
+			{
+				if(StringUtils.isBlank(nameValueProperty.getPropertyName()) && StringUtils.isBlank(nameValueProperty.getPropertyValue()))
+				{
+					errorLabel.setText(Messages.EmptyFiledNotification);
+					errorLabel.setVisible(true);
+					return false;
+				}	
+				else if(StringUtils.isBlank(nameValueProperty.getPropertyName()))
+						{
+					errorLabel.setText(Messages.EmptyNameNotification);
+					errorLabel.setVisible(true);
+					return false;
+						}		
+				else if(StringUtils.isBlank(nameValueProperty.getPropertyValue()))
+				{
+			        errorLabel.setText(Messages.EmptyValueNotification+"                   ");
+			        errorLabel.setVisible(true);
+			        return true;
+				}	
+			}	
+		}
+		errorLabel.setVisible(false);
+	  return true;
 	}
 
 	@Override
 	protected void buttonPressed(int buttonId) {
-		if (buttonId == 3) {
+		if (buttonId == 3 && checkNameValueFieldBlankOrNot()) {
 			mappingSheetRow = new MappingSheetRow(mappingSheetRow.getInputFields(), mappingSheetRow.getOutputList(),
 					mappingSheetRow.getOperationID(), operationClasses.getText(), fileName.getText(),
 					mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),
