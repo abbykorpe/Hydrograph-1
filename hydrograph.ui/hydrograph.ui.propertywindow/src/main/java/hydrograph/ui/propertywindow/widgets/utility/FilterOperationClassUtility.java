@@ -20,6 +20,8 @@ import hydrograph.ui.common.datastructures.tooltip.TootlTipErrorMessage;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.OperationClassProperty;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -39,6 +41,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream.GetField;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +52,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -159,11 +163,11 @@ public class FilterOperationClassUtility  {
 			IResource resource = (IResource) dialog.getFirstResult();
 			String path[] = resource.getFullPath().toString().split("/");
 			if (file.isEmpty()) {
-				for (int i = 2; i < path.length; i++) {
+				for (int i = 1; i < path.length; i++) {
 					externalSchemaTextBoxValue = externalSchemaTextBoxValue + path[i] + "/";
 				}
 			} else {
-				for (int i = 2; i < path.length; i++) {
+				for (int i = 1; i < path.length; i++) {
 					if (!path[i].endsWith(".schema")) {
 						externalSchemaTextBoxValue = externalSchemaTextBoxValue + path[i] + "/";
 					}

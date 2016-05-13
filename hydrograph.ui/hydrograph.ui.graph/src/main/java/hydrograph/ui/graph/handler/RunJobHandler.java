@@ -83,8 +83,7 @@ public class RunJobHandler extends AbstractHandler {
 		String canvasName = consoleName;
 		String localJobID = consoleName;
 		JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null);
-		
-		CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();
+		CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();		
 		return null;
 	}
 
