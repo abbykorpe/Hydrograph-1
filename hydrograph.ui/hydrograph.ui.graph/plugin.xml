@@ -283,6 +283,10 @@
                label="ELT Project"
                mnemonic="&amp;E"
                style="push">
+            <parameter
+                  name="newWizardId"
+                  value="hydrograph.ui.project.structure.wizard">
+            </parameter>
          </command>
          <separator
                name="hydrograph.ui.menus.separator1"
