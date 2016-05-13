@@ -5,7 +5,7 @@
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"
-            locationURI="menu:org.eclipse.ui.main.menu?after=com.bitwsie.edit.menu">
+            locationURI="menu:org.eclipse.ui.main.menu?before=hydrograph.ui.menus.WindowMenu">
          <menu
                id="hydrograph.ui.menus.RunMenu"
                label="Run"
