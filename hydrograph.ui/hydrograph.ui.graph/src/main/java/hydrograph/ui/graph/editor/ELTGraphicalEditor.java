@@ -838,7 +838,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}	
 	}
 
-	private void saveParameters() {
+	public void saveParameters() {
 
 		//get map from file
 		Map<String,String> currentParameterMap = getCurrentParameterMap();
@@ -996,7 +996,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	@Override
 	public void doSaveAs() {
 		IFile file=opeSaveAsDialog();
+		saveJob(file);
+	}
 
+	public void saveJob(IFile file) {
 		if(file!=null){
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			try {
