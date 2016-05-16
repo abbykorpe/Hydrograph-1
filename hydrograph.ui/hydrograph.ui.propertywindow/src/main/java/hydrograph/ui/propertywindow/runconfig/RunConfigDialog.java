@@ -389,9 +389,9 @@ public class RunConfigDialog extends Dialog {
 				compositeServerDetails.setVisible(true);
 				compositePathConfig.setVisible(true);
 			} else if (!(key.equals(LOCAL_MODE) || key.equals(REMOTE_MODE))) {
-				if(!key.equalsIgnoreCase("password"))
+				if(!key.equalsIgnoreCase("password") && textBoxes.get(key)!=null)
 				{
-				textBoxes.get(key).setText(buildProps.getProperty(key));
+					textBoxes.get(key).setText(buildProps.getProperty(key));
 				}
 			}
 		}

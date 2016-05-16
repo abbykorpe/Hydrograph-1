@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -145,7 +146,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 
 	@Override
 	public void launchJob(String xmlPath, String paramFile, Job job,
-			DefaultGEFCanvas gefCanvas) {
+			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles) {
 		// TODO Auto-generated method stub
 		
 	}

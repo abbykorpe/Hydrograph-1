@@ -14,7 +14,10 @@
  
 package hydrograph.ui.graph.job;
 
+import java.util.List;
+
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -47,7 +50,7 @@ abstract public class AbstractJobLauncher {
 	 * @param job
 	 * @param gefCanvas
 	 */
-	abstract public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas);
+	abstract public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles);
 	abstract public void launchJobInDebug(String xmlPath, String debugXmlPath, String basePath, String paramFile, Job job, DefaultGEFCanvas gefCanvas, String uniqueJobID);
 	
 	/**

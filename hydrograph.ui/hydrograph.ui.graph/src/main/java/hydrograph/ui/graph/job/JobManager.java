@@ -50,6 +50,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
@@ -159,7 +160,7 @@ public class JobManager {
 	 * @param job
 	 *            - {@link Job} to execute
 	 */
-	public void executeJob(final Job job, String uniqueJobId) {
+	public void executeJob(final Job job, String uniqueJobId,List<String> externalSchemaFiles) {
 		enableRunJob(false);
 		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
 
@@ -197,7 +198,7 @@ public class JobManager {
 
 		gefCanvas.disableRunningJobResource();
 		
-			launchJob(job, gefCanvas, parameterGrid, xmlPath);
+			launchJob(job, gefCanvas, parameterGrid, xmlPath,externalSchemaFiles);
 	}
 
 	public void executeJobInDebug(final Job job, String uniqueJobId, boolean isRemote, String userName) {
@@ -233,13 +234,13 @@ public class JobManager {
 	}
 		
 	private void launchJob(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
-			final String xmlPath) {
-		if (job.isRemoteMode()){
+			final String xmlPath,final List<String> externalSchemaFiles) {
+		if (job.isRemoteMode()) {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new RemoteJobLauncher();
-					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas);
+					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles);
 				}
 
 			}).start();
@@ -250,7 +251,7 @@ public class JobManager {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new LocalJobLauncher();
-					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas);
+					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles);
 				}
 
 			}).start();
@@ -555,5 +556,13 @@ public class JobManager {
 	public Map<String, Job> getRunningJobsMap() {
 		return runningJobsMap;
 	}
-	
+
+	public static String getAbsolutePathFromFile(IPath jobFilePath) {
+		if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists())
+			return ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).getLocation().toString();
+		else if (jobFilePath.toFile().exists())
+			return jobFilePath.toFile().getAbsolutePath();
+		return "";
+	}
+
 }

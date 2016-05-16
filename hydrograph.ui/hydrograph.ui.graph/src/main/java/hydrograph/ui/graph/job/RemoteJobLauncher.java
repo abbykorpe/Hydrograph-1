@@ -27,9 +27,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
 
 
@@ -48,7 +52,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 	private static final String JOB_FAILED="JOB FAILED";
 
 	@Override
-	public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas) {
+	public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles) {
 		String projectName = xmlPath.split("/", 2)[0];
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		job.setJobProjectDirectory(project.getLocation().toOSString());
@@ -58,6 +62,35 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		job.setJobStatus(JobStatus.RUNNING);
 		JobLogger joblogger;
 		// ---------------------------- code to copy jar file
+
+		gradleCommand = getCreateDirectoryCommand(job,paramFile,xmlPath,projectName,"my_test_123",new ArrayList<String>(externalSchemaFiles));
+		
+		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
+		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+			releaseResources(job, gefCanvas, joblogger);
+			return;
+		}
+		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+			return;
+		}
+		
+		List<String> schemaFilesFullPath = new ArrayList<>();
+		for (String schemaFile : externalSchemaFiles) {
+			schemaFilesFullPath.add(schemaFile+"#"+JobManager.getAbsolutePathFromFile(new Path(schemaFile)));
+		}
+		gradleCommand = getSchemaScpCommand(schemaFilesFullPath,job);
+		
+		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
+		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+			releaseResources(job, gefCanvas, joblogger);
+			return;
+		}
+		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+			return;
+		}
+
+		
+		
 		gradleCommand = getLibararyScpCommand(job);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, true, true);
 		if (job.getJobStatus().equals(JobStatus.FAILED)) {
@@ -164,7 +197,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 	private String getJobXMLScpCommand(String xmlPath, Job job) {
 		return GradleCommandConstants.GCMD_SCP_JOB_XML + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
-				+ job.getPassword() + GradleCommandConstants.GPARAM_JOB_XML +  "\""+ xmlPath.split("/", 2)[1]+"\"";
+				+ job.getPassword() + GradleCommandConstants.GPARAM_JOB_XML + xmlPath;
 	}
 
 	private String getParameterFileScpCommand(String paramFile, Job job) {
@@ -256,4 +289,41 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		
 	}
 
+	private String getCreateDirectoryCommand(Job job,String paramFile,String  xmlPath,String project,String root,List<String> externalSchemaFiles) {
+		if (null != xmlPath && xmlPath.length() > 0 )
+		{
+		    int endIndex = xmlPath.lastIndexOf("/");
+		    if (endIndex != -1)  
+		    {
+		    	xmlPath = xmlPath.substring(0, endIndex); // not forgot to put check if(endIndex != -1)
+		    }
+		}  
+		String externalFiles=StringUtils.join(externalSchemaFiles, ",");
+		externalSchemaFiles.clear();
+		for (String schemaFile : externalFiles.split(",")) {
+			if(schemaFile.length() > 0 )
+			{
+			    int endIndex = schemaFile.lastIndexOf("/");
+			    if (endIndex != -1)  
+			    {
+			    	schemaFile = schemaFile.substring(0, endIndex); // not forgot to put check if(endIndex != -1)
+			    	externalSchemaFiles.add(schemaFile);
+			    }
+			}
+		}
+		externalFiles=StringUtils.join(externalSchemaFiles, ",");
+		return  "gradle createDirectories"+ GradleCommandConstants.GPARAM_HOST + job.getHost()
+				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
+				+ job.getPassword() + GradleCommandConstants.GPARAM_JOB_XML + xmlPath + " -PmoveRoot="+root + " -PmoveParameterFile="+project+"/param" + " -PmoveExternalSchemaFiles="+externalFiles +" -PmoveJar="+project+"/lib" ;
+	}
+
+	
+	private String getSchemaScpCommand(List<String> externalSchemaFiles,Job job) {
+		String externalSchema =  StringUtils.join(externalSchemaFiles, ",");
+		return  "gradle scpSchemaFiles"+ GradleCommandConstants.GPARAM_HOST + job.getHost()
+				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
+				+ job.getPassword() + " -PexternalSchemaFiles=" + externalSchema;
+	}
+
+	
 }
