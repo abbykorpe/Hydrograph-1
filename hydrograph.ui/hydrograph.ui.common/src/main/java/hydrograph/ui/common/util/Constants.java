@@ -198,6 +198,9 @@ public class Constants {
 	
 	public static final String HTTP_PROTOCOL = "http://";
 	public static final String DEBUG_EXTENSION = "_debug.xml";
+	public static final String SERVICE_JAR = "SERVICE_JAR";
+	public static final String PORT_NUMBER = "PORT_NO";
+	public static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
 	
 	
 	public static final String UPDATE_AVAILABLE = "update_available";

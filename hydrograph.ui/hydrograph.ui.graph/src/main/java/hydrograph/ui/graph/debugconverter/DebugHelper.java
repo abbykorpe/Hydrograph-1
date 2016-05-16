@@ -31,7 +31,7 @@ import com.thoughtworks.xstream.XStream;
 
 
 /**
- * @author vibhort
+ * @author Bitwise
  *
  */
 public class DebugHelper {
@@ -55,7 +55,7 @@ public class DebugHelper {
 					container=(Container) xs.fromXML(jobPath.toFile());
 					List<Link> links = null;
 					for(Component component_temp:container.getChildren()){
-						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), "OutputSubjobComponent")){
+						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), Constants.OUTPUT_SUBJOB)){
 							links=component_temp.getTargetConnections();
 						}
 					}
@@ -71,7 +71,7 @@ public class DebugHelper {
 					container=(Container) xs.fromXML(ResourcesPlugin.getWorkspace().getRoot().getFile(jobPath).getContents(true));
 					List<Link> links = null;
 					for(Component component_temp:container.getChildren()){
-						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), "OutputSubjobComponent")){
+						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), Constants.OUTPUT_SUBJOB)){
 							links=component_temp.getTargetConnections();
 						}
 					}for(Link str : links){
@@ -93,11 +93,11 @@ public class DebugHelper {
 	public String restServicePort(){
 		String portNumber = null;
 		try {
-			FileReader fileReader = new FileReader(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/service/hydrograph-service.properties");
+			FileReader fileReader = new FileReader(XMLConfigUtil.CONFIG_FILES_PATH + Constants.PROPERY_FILE_PATH);
 			Properties properties = new Properties();
 			properties.load(fileReader);
-			if(StringUtils.isNotBlank(properties.getProperty("SERVICE_JAR"))){
-				portNumber = properties.getProperty("PORT_NO");
+			if(StringUtils.isNotBlank(properties.getProperty(Constants.SERVICE_JAR))){
+				portNumber = properties.getProperty(Constants.PORT_NUMBER);
 			}
 		} catch (FileNotFoundException e) {
 			logger.error("File not exists", e);
@@ -115,11 +115,11 @@ public class DebugHelper {
 	public String restServiceJar(){
 		String restServiceJar = null;
 		try {
-			FileReader fileReader = new FileReader(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/service/hydrograph-service.properties");
+			FileReader fileReader = new FileReader(XMLConfigUtil.CONFIG_FILES_PATH + Constants.PROPERY_FILE_PATH);
 			Properties properties = new Properties();
 			properties.load(fileReader);
-			if(StringUtils.isNotBlank(properties.getProperty("SERVICE_JAR"))){
-				restServiceJar = properties.getProperty("SERVICE_JAR");
+			if(StringUtils.isNotBlank(properties.getProperty(Constants.SERVICE_JAR))){
+				restServiceJar = properties.getProperty(Constants.SERVICE_JAR);
 			}
 		} catch (FileNotFoundException e) {
 			logger.error("File not exists", e);
@@ -175,16 +175,16 @@ public class DebugHelper {
 	 *
 	 */
 	public boolean checkWatcher(Component selectedComponent, String portName) {
-					EditPart editPart = (EditPart) selectedComponent.getComponentEditPart();
-					List<PortEditPart> portEdit = editPart.getChildren();
-					for(AbstractGraphicalEditPart part : portEdit){
-						if(part instanceof PortEditPart){
-							String portLabel = ((PortEditPart) part).getCastedModel().getTerminal();
-							if(portLabel.equals(portName)){
-								return  ((PortEditPart) part).getPortFigure().isWatched();
-							}
-						}
-					}
+		EditPart editPart = (EditPart) selectedComponent.getComponentEditPart();
+		List<PortEditPart> portEdit = editPart.getChildren();
+		for(AbstractGraphicalEditPart part : portEdit){
+			if(part instanceof PortEditPart){
+				String portLabel = ((PortEditPart) part).getCastedModel().getTerminal();
+				if(portLabel.equals(portName)){
+					return  ((PortEditPart) part).getPortFigure().isWatched();
+				}
+			}
+		}
 					
 		return false;
 	}

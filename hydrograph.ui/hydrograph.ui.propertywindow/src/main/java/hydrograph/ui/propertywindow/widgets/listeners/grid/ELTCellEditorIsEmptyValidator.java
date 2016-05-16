@@ -1,7 +1,6 @@
 package hydrograph.ui.propertywindow.widgets.listeners.grid;
 
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 
@@ -13,22 +12,20 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 public class ELTCellEditorIsEmptyValidator implements ICellEditorValidator{
 
 	private ControlDecoration fieldEmptyDecorator;
-	private PropertyDialogButtonBar propertyDialogButtonBar;
 	
 	
-	public ELTCellEditorIsEmptyValidator(ControlDecoration fieldEmptyDecorator, PropertyDialogButtonBar propertyDialogButtonBar) {
+	public ELTCellEditorIsEmptyValidator(ControlDecoration fieldEmptyDecorator) {
 		super();
 		this.fieldEmptyDecorator = fieldEmptyDecorator;
-		this.propertyDialogButtonBar = propertyDialogButtonBar;
 	}
 	
 	
 	@Override
 	public String isValid(Object value) {
 		String selectedGrid=(String) value;
-		if(selectedGrid.isEmpty()){
+		if(StringUtils.isBlank(selectedGrid)){
 			fieldEmptyDecorator.show();
-			return "Error";
+			return "Field should not be empty";
 		}else{
 			fieldEmptyDecorator.hide();
 		}

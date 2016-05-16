@@ -77,9 +77,9 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 	@Override
 	protected void addValidators() {
 		editors[0].setValidator(new ELTCellEditorFieldValidator(table, schemaGridRowList, fieldNameDecorator,isFieldNameAlphanumericDecorator,propertyDialogButtonBar));
-		editors[2].setValidator(new ELTCellEditorIsEmptyValidator(fieldEmptyDecorator, propertyDialogButtonBar));
-		editors[3].setValidator(new ELTCellEditorIsNumericValidator(precisionDecorator,propertyDialogButtonBar)); 
-		editors[4].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator,propertyDialogButtonBar)); 
+		editors[2].setValidator(new ELTCellEditorIsEmptyValidator(fieldEmptyDecorator));
+		editors[3].setValidator(new ELTCellEditorIsNumericValidator(precisionDecorator)); 
+		editors[4].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator)); 
 	}
 	//Adding the decorator to show error message when field name same.
 	@Override

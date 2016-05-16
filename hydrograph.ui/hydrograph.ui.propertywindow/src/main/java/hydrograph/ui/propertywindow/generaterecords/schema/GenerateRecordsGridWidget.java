@@ -97,10 +97,10 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 	protected void addValidators() {
 		
 		editors[0].setValidator(new ELTCellEditorFieldValidator(table, schemaGridRowList, fieldNameDecorator,isFieldNameAlphanumericDecorator,propertyDialogButtonBar));
-		editors[2].setValidator(new ELTCellEditorIsEmptyValidator(fieldEmptyDecorator, propertyDialogButtonBar));
-		editors[3].setValidator(new ELTCellEditorIsNumericValidator(precisionDecorator,propertyDialogButtonBar)); 
-		editors[4].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator,propertyDialogButtonBar)); 
-		editors[7].setValidator(new ELTCellEditorIsNumericValidator(lengthDecorator,propertyDialogButtonBar)); 
+		editors[2].setValidator(new ELTCellEditorIsEmptyValidator(fieldEmptyDecorator));
+		editors[3].setValidator(new ELTCellEditorIsNumericValidator(precisionDecorator)); 
+		editors[4].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator)); 
+		editors[7].setValidator(new ELTCellEditorIsNumericValidator(lengthDecorator)); 
 
 	}
 

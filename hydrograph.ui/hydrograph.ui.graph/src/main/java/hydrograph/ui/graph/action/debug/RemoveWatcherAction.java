@@ -84,12 +84,10 @@ public class RemoveWatcherAction extends SelectionAction{
 		EditPart editPart = (EditPart) selectedComponent.getComponentEditPart();
 		List<PortEditPart> portEdit = editPart.getChildren();
 		for(AbstractGraphicalEditPart part : portEdit){
-			if(part instanceof PortEditPart){
-				if(((PortEditPart)part).getCastedModel().getTerminal().equals(portName)){
+			if(part instanceof PortEditPart && ((PortEditPart)part).getCastedModel().getTerminal().equals(portName)){
 					((PortEditPart)part).getPortFigure().removeWatchColor();
 					((PortEditPart)part).getPortFigure().setWatched(false);
 					((PortEditPart)part).getCastedModel().setWatched(false);
-				} 
 			}
 		}
 	}
