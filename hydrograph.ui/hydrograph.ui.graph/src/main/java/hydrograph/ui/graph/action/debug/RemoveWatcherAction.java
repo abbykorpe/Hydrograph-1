@@ -15,24 +15,19 @@ package hydrograph.ui.graph.action.debug;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.handler.RemoveDebugHandler;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
-import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
@@ -86,27 +81,16 @@ public class RemoveWatcherAction extends SelectionAction{
 	
 	
 	private void changePortColor(Component selectedComponent, String portName){
-
-		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
-		for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator.hasNext();)
-		{
-			EditPart editPart = (EditPart) iterator.next();
-			if(editPart instanceof ComponentEditPart) {
-				Component comp = ((ComponentEditPart)editPart).getCastedModel();
-				if(comp.equals(selectedComponent)){
-					List<PortEditPart> portEditParts = editPart.getChildren();
-					for(AbstractGraphicalEditPart part:portEditParts) {
-						if(part instanceof PortEditPart){
-							if(((PortEditPart)part).getCastedModel().getTerminal().equals(portName)){
-								((PortEditPart)part).getPortFigure().removeWatchColor();
-								((PortEditPart)part).getPortFigure().setWatched(false);
-								((PortEditPart)part).getCastedModel().setWatched(false);
-							} 
-						}
-					}
-				}
-			} 
+		EditPart editPart = (EditPart) selectedComponent.getComponentEditPart();
+		List<PortEditPart> portEdit = editPart.getChildren();
+		for(AbstractGraphicalEditPart part : portEdit){
+			if(part instanceof PortEditPart){
+				if(((PortEditPart)part).getCastedModel().getTerminal().equals(portName)){
+					((PortEditPart)part).getPortFigure().removeWatchColor();
+					((PortEditPart)part).getPortFigure().setWatched(false);
+					((PortEditPart)part).getCastedModel().setWatched(false);
+				} 
+			}
 		}
 	}
 	

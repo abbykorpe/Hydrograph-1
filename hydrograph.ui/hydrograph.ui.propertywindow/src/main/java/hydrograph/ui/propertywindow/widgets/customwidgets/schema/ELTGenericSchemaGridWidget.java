@@ -78,6 +78,7 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 	protected void addValidators() {
 		editors[0].setValidator(new ELTCellEditorFieldValidator(table, schemaGridRowList, fieldNameDecorator,isFieldNameAlphanumericDecorator,propertyDialogButtonBar));
 		editors[2].setValidator(new ELTCellEditorIsEmptyValidator(fieldEmptyDecorator, propertyDialogButtonBar));
+		editors[3].setValidator(new ELTCellEditorIsNumericValidator(precisionDecorator,propertyDialogButtonBar)); 
 		editors[4].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator,propertyDialogButtonBar)); 
 	}
 	//Adding the decorator to show error message when field name same.
@@ -86,6 +87,7 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 		fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAMEERROR);
 		fieldEmptyDecorator = WidgetUtility.addDecorator(editors[2].getControl(), Messages.EMPTYFIELDMESSAGE);
 		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);	
+		precisionDecorator = WidgetUtility.addDecorator(editors[3].getControl(),Messages.SCALEERROR);
 		scaleDecorator = WidgetUtility.addDecorator(editors[4].getControl(),Messages.SCALEERROR);
 		fieldNameDecorator.setMarginWidth(8);
 		scaleDecorator.setMarginWidth(8);

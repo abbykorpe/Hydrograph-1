@@ -3,13 +3,10 @@ package hydrograph.ui.graph.debugconverter;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.Model;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.BufferedReader;
@@ -18,7 +15,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -28,22 +24,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
-import org.eclipse.gef.ui.parts.GraphicalEditor;
-import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 
-/**
- * @author Bitwise
- *
- */
-/**
- * @author vibhort
- *
- */
+
 /**
  * @author vibhort
  *

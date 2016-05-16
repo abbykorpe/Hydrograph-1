@@ -66,18 +66,14 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		}
 		if (ELTSchemaGridWidget.SCALE.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(fixedWidthGridRow.getDataTypeValue())||
-					DataType.DOUBLE_CLASS.equals(fixedWidthGridRow.getDataTypeValue())||
-					DataType.BIGDECIMAL_CLASS.equals(fixedWidthGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.equals(fixedWidthGridRow.getDataTypeValue()))
 				return true;
 			else 
 				return false; 	
 		}
 		if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(fixedWidthGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -85,8 +81,7 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		}
 		if (ELTSchemaGridWidget.PRECISION.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(fixedWidthGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(fixedWidthGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -191,6 +186,8 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 					||DataType.STRING_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
+					||DataType.FLOAT_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
+ 					||DataType.DOUBLE_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(fixedWidthGridRow.getDataTypeValue())){
 				return true;
 			}	
