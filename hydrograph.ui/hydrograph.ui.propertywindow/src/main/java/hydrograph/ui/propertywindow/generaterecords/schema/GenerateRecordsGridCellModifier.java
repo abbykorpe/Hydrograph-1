@@ -67,18 +67,14 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 				return false;
 		}
 		if (ELTSchemaGridWidget.SCALE.equals(property)) {
-			if (Float.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue())
-					|| Double.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue())
-					|| BigDecimal.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue()))
+			if (BigDecimal.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue()))
 				return true;
 			else
 				return false;
 		}
 		if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(generateRecordsSchemaGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -93,9 +89,7 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 		}
 		if (ELTSchemaGridWidget.PRECISION.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(generateRecordsSchemaGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -219,6 +213,8 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 					||DataType.STRING_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
+					||DataType.FLOAT_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
+ 					||DataType.DOUBLE_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())){
 				return true;
 			}	

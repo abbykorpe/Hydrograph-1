@@ -3,6 +3,7 @@ package hydrograph.ui.graph.debugconverter;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
@@ -22,9 +23,12 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.slf4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
+
 
 /**
  * @author Bitwise
@@ -34,6 +38,9 @@ public class DebugHelper {
 
 	private static Logger logger = LogFactory.INSTANCE.getLogger(DebugHelper.class);
 	public static DebugHelper INSTANCE = new DebugHelper();
+	public static final String SERVICE_JAR = "SERVICE_JAR";
+	public static final String PORT_NUMBER = "PORT_NO";
+	public static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
 	
 
 	/**
@@ -51,7 +58,7 @@ public class DebugHelper {
 					container=(Container) xs.fromXML(jobPath.toFile());
 					List<Link> links = null;
 					for(Component component_temp:container.getChildren()){
-						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), "OutputSubjobComponent")){
+						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), Constants.OUTPUT_SUBJOB)){
 							links=component_temp.getTargetConnections();
 						}
 					}
@@ -67,7 +74,7 @@ public class DebugHelper {
 					container=(Container) xs.fromXML(ResourcesPlugin.getWorkspace().getRoot().getFile(jobPath).getContents(true));
 					List<Link> links = null;
 					for(Component component_temp:container.getChildren()){
-						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), "OutputSubjobComponent")){
+						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), Constants.OUTPUT_SUBJOB)){
 							links=component_temp.getTargetConnections();
 						}
 					}for(Link str : links){
@@ -89,11 +96,11 @@ public class DebugHelper {
 	public String restServicePort(){
 		String portNumber = null;
 		try {
-			FileReader fileReader = new FileReader(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/service/hydrograph-service.properties");
+			FileReader fileReader = new FileReader(XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
 			Properties properties = new Properties();
 			properties.load(fileReader);
-			if(StringUtils.isNotBlank(properties.getProperty("SERVICE_JAR"))){
-				portNumber = properties.getProperty("PORT_NO");
+			if(StringUtils.isNotBlank(properties.getProperty(SERVICE_JAR))){
+				portNumber = properties.getProperty(PORT_NUMBER);
 			}
 		} catch (FileNotFoundException e) {
 			logger.error("File not exists", e);
@@ -111,11 +118,11 @@ public class DebugHelper {
 	public String restServiceJar(){
 		String restServiceJar = null;
 		try {
-			FileReader fileReader = new FileReader(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/service/hydrograph-service.properties");
+			FileReader fileReader = new FileReader(XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
 			Properties properties = new Properties();
 			properties.load(fileReader);
-			if(StringUtils.isNotBlank(properties.getProperty("SERVICE_JAR"))){
-				restServiceJar = properties.getProperty("SERVICE_JAR");
+			if(StringUtils.isNotBlank(properties.getProperty(SERVICE_JAR))){
+				restServiceJar = properties.getProperty(SERVICE_JAR);
 			}
 		} catch (FileNotFoundException e) {
 			logger.error("File not exists", e);
@@ -164,5 +171,24 @@ public class DebugHelper {
 		else if(OSValidator.isUnix()){
 			new ProcessBuilder(new String[]{"kill -9 " + portPid}).start();
 		}
+	}
+	
+	/**
+	 * This function returns that watcher is added on selected port
+	 *
+	 */
+	public boolean checkWatcher(Component selectedComponent, String portName) {
+		EditPart editPart = (EditPart) selectedComponent.getComponentEditPart();
+		List<PortEditPart> portEdit = editPart.getChildren();
+		for(AbstractGraphicalEditPart part : portEdit){
+			if(part instanceof PortEditPart){
+				String portLabel = ((PortEditPart) part).getCastedModel().getTerminal();
+				if(portLabel.equals(portName)){
+					return  ((PortEditPart) part).getPortFigure().isWatched();
+				}
+			}
+		}
+					
+		return false;
 	}
 }

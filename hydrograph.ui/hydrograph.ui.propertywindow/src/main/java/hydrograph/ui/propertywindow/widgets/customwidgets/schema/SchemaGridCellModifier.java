@@ -57,9 +57,7 @@ class SchemaGridCellModifier implements ICellModifier {
 		}
 		if (ELTSchemaGridWidget.SCALE.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(basicSchemaGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -68,9 +66,7 @@ class SchemaGridCellModifier implements ICellModifier {
 
 		if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(basicSchemaGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -79,9 +75,7 @@ class SchemaGridCellModifier implements ICellModifier {
 
 		if (ELTSchemaGridWidget.PRECISION.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(basicSchemaGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -177,6 +171,8 @@ class SchemaGridCellModifier implements ICellModifier {
 					||DataType.STRING_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
+					||DataType.FLOAT_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
+ 					||DataType.DOUBLE_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(basicSchemaGridRow.getDataTypeValue())){
 				return true;
 			}	

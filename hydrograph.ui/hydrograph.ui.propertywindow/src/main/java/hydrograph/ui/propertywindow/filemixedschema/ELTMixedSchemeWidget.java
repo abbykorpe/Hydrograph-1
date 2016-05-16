@@ -23,6 +23,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.SchemaGridContentProvider;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
+import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTCellEditorIsEmptyValidator;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTCellEditorIsNumericValidator;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
@@ -85,13 +86,17 @@ public class ELTMixedSchemeWidget extends ELTSchemaGridWidget {
 	@Override
 	protected void addValidators() {
 		editors[0].setValidator(new ELTCellEditorFieldValidator(table, schemaGridRowList, fieldNameDecorator,isFieldNameAlphanumericDecorator,propertyDialogButtonBar));
-		editors[4].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator,propertyDialogButtonBar)); 
-		editors[7].setValidator(new ELTCellEditorIsNumericValidator(lengthDecorator,propertyDialogButtonBar)); 
+		editors[2].setValidator(new ELTCellEditorIsEmptyValidator(fieldEmptyDecorator));
+		editors[3].setValidator(new ELTCellEditorIsNumericValidator(precisionDecorator)); 
+		editors[4].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator)); 
+		editors[7].setValidator(new ELTCellEditorIsNumericValidator(lengthDecorator)); 
 	}
 
 	@Override
 	protected void setDecorator() {
 		fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAMEERROR);
+		fieldEmptyDecorator = WidgetUtility.addDecorator(editors[2].getControl(), Messages.EMPTYFIELDMESSAGE);
+		precisionDecorator = WidgetUtility.addDecorator(editors[3].getControl(),Messages.SCALEERROR);
 		scaleDecorator = WidgetUtility.addDecorator(editors[4].getControl(),Messages.SCALEERROR);
 		lengthDecorator = WidgetUtility.addDecorator(editors[7].getControl(),Messages.LENGTHERROR);
 		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);

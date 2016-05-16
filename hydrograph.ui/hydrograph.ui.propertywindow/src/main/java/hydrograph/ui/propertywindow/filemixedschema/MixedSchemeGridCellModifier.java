@@ -65,18 +65,14 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 		}
 		if (ELTSchemaGridWidget.SCALE.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())||
-					DataType.DOUBLE_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())||
-					DataType.BIGDECIMAL_CLASS.equals(mixedSchemeGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.equals(mixedSchemeGridRow.getDataTypeValue()))
 				return true;
 			else 
 				return false; 	
 		}
 		if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(mixedSchemeGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -84,9 +80,7 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 		}
 		if (ELTSchemaGridWidget.PRECISION.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(mixedSchemeGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -196,6 +190,8 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 					||DataType.STRING_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
+					||DataType.FLOAT_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
+ 					||DataType.DOUBLE_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())){
 				return true;
 			}	
