@@ -217,7 +217,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected abstract ITableLabelProvider getLableProvider();
 
 	protected abstract ICellModifier getCellModifier();
-
+	private ScrolledComposite scrolledComposite;
+	private Composite tableComposite;
 	/**
 	 * Adds the validators.
 	 */
@@ -582,6 +583,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			public void widgetSelected(SelectionEvent e) {
 				schemaFromConnectedLinks();
 				showHideErrorSymbol(isWidgetValid());
+				scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,
+						SWT.DEFAULT));
 				
 			}
 		});
@@ -694,6 +697,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					syncSchemaFromTransform();
 					showHideErrorSymbol(applySchemaValidationRule());
 					propertyDialogButtonBar.enableApplyButton(true);
+					scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,
+							SWT.DEFAULT));
 				}
 			}
 		}
@@ -1058,8 +1063,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		
 		composite.setLayoutData(gd_composite);
 
-		ScrolledComposite scrolledComposite = new ScrolledComposite(composite,
-				SWT.BORDER | SWT.H_SCROLL);
+		scrolledComposite = new ScrolledComposite(composite,SWT.BORDER|
+				SWT.V_SCROLL|SWT.H_SCROLL );
 		GridData gd_scrolledComposite = new GridData(SWT.FILL, SWT.FILL, true,
 				true, 1, 1);
 		scrolledComposite.setLayoutData(gd_scrolledComposite);
@@ -1067,18 +1072,18 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		scrolledComposite.setExpandVertical(true);
 		scrolledComposite.setShowFocusedControl(true);
 
-		Composite composite_2 = new Composite(scrolledComposite, SWT.NONE);
+		tableComposite = new Composite(scrolledComposite, SWT.NONE);
 		GridLayout gl_composite_2 = new GridLayout(1, false);
 		gl_composite_2.marginWidth = 0;
 		gl_composite_2.marginHeight = 0;
 		gl_composite_2.horizontalSpacing = 0;
-		composite_2.setLayout(gl_composite_2);
-		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
+		tableComposite.setLayout(gl_composite_2);
+		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1));
 
 		AbstractELTWidget eltTableViewer = new ELTTableViewer(
 				getContentProvider(), getLableProvider());
-		eltTableViewer.attachWidget(composite_2);
+		eltTableViewer.attachWidget(tableComposite);
 
 		tableViewer = (TableViewer) eltTableViewer.getJfaceWidgetControl();
 		tableViewer.setInput(schemaGridRowList);
@@ -1135,12 +1140,14 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			eltTable.attachListener(
 					ListenerFactory.Listners.GRID_MOUSE_DOWN.getListener(),
 					propertyDialogButtonBar, helper, editors[0].getControl());
+			
 			addButton.attachListener(
 					ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),
 					propertyDialogButtonBar, helper, table,
 					deleteButton.getSWTWidgetControl(),
 					upButton.getSWTWidgetControl(),
 					downButton.getSWTWidgetControl());
+			
 			deleteButton.attachListener(
 					ListenerFactory.Listners.GRID_DELETE_SELECTION
 							.getListener(), propertyDialogButtonBar, helper,
@@ -1181,10 +1188,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						| ColumnViewerEditor.KEYBOARD_ACTIVATION);
 
 		populateWidget();
-		scrolledComposite.setContent(composite_2);
-		scrolledComposite.setMinSize(composite_2.computeSize(SWT.DEFAULT,
+		scrolledComposite.setContent(tableComposite);
+		scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,
 				SWT.DEFAULT));
-
+		
 		return tableViewer;
 	}
 
@@ -1520,8 +1527,18 @@ private boolean isSchemaInSync(){
 				if (table.getItemCount() == 0) {
 					showHideErrorSymbol(isWidgetValid());
 				}
-
+				scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,
+						SWT.DEFAULT));
 			}
+		});
+		
+		addButton.addMouseUpListener(new MouseAdapter() {
+			@Override
+			public void mouseUp(MouseEvent e) {
+				scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,
+						SWT.DEFAULT));
+			}
+			
 		});
 	}
 
