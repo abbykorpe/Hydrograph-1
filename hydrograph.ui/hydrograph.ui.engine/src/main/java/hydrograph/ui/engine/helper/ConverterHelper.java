@@ -495,8 +495,10 @@ public class ConverterHelper {
 				typeBaseField.setScale(Integer.parseInt(object.getScale()));
 			
 			for (ScaleTypeList scaleType : ScaleTypeList.values()) {
-				if (scaleType.value().equalsIgnoreCase(object.getScaleTypeValue()))
+				if (scaleType.value().equalsIgnoreCase(object.getScaleTypeValue())){
 					typeBaseField.setScaleType(scaleType);
+					break;
+				}
 			}
 			
 			if (!object.getPrecision().trim().isEmpty())
