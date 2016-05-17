@@ -3,7 +3,9 @@ package hydrograph.ui.graph.debugconverter;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
@@ -15,6 +17,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -24,7 +27,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
@@ -189,6 +195,30 @@ public class DebugHelper {
 			}
 		}
 					
+		return false;
+	}
+	
+	/**
+	 * This function will check watch point in the graph and return true if any watch point exist 
+	 *
+	 */
+	public boolean hasMoreWatchPoints(){
+		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
+		for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator.hasNext();){
+			EditPart editPart = (EditPart) iterator.next();
+			if(editPart instanceof ComponentEditPart){
+				List<PortEditPart> portEditParts = editPart.getChildren();
+				for(AbstractGraphicalEditPart part:portEditParts) {	
+					if(part instanceof PortEditPart){
+						boolean isWatch = ((PortEditPart)part).getPortFigure().isWatched();
+						if(isWatch){
+							return isWatch;
+						}
+					}
+				}
+			}
+		}
 		return false;
 	}
 }

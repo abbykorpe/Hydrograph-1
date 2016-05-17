@@ -44,6 +44,7 @@ import hydrograph.ui.graph.editorfactory.GenrateContainerData;
 import hydrograph.ui.graph.factory.ComponentsEditPartFactory;
 import hydrograph.ui.graph.factory.CustomPaletteEditPartFactory;
 import hydrograph.ui.graph.handler.DebugHandler;
+import hydrograph.ui.graph.handler.RemoveDebugHandler;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.job.Job;
@@ -442,8 +443,16 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 
 		super.selectionChanged(part, selection);
+		
+		boolean isWatch = DebugHelper.INSTANCE.hasMoreWatchPoints();
+		if(isWatch){
+			((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
+		}else{
+			((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
+		}
 	}
 
+	
 	private void addDummyConsole(){
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
 		IConsoleManager consoleManager = plugin.getConsoleManager();
