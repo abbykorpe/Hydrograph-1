@@ -38,7 +38,7 @@
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="Path"
 			renderer="FILE_PATH_WIDGET" type="USER" showAsTooltip="TRUE" tooltipDataType="LINK"
 			usage="REQUIRED"  propertyHelpText="Displays the location of the file either\n Remote/Local. Allows only underscore ‘_’ and \nalphanumeric characters.">
-			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="delimiter"
@@ -68,7 +68,7 @@
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="charset"
 			value="UTF-8" renderer="CHARACTER_SET_WIDGET" type="USER" showAsTooltip="FALSE"
 			tooltipDataType="NONE" usage="REQUIRED" propertyHelpText="Denotes the encoding system followed \nby the input file.">
-			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 			
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="strict" value="False"
