@@ -69,7 +69,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 /**
  * 
- * Join mapping dialog
+ * Lookup mapping dialog
  * 
  * @author Bitwise
  *

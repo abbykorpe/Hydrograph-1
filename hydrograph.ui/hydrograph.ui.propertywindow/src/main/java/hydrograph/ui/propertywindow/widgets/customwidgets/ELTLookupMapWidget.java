@@ -135,6 +135,8 @@ public class ELTLookupMapWidget extends AbstractWidget {
 					 GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
 					 GridRow outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
 
+					 if(inputFieldSchema==null)
+						 continue;
 
 					 if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
 						 finalPassThroughFields.add(row.getOutput_Field());
@@ -195,10 +197,12 @@ public class ELTLookupMapWidget extends AbstractWidget {
 	}
 
 	private GridRow getInputFieldSchema(String source_Field) {		
-		String[] source = source_Field.split("\\.");
-		return getInputFieldSchema(source[1],source[0]);
-	
 		
+		String[] source = source_Field.split("\\.");
+		if(source.length == 2)
+			return getInputFieldSchema(source[1],source[0]);
+		else
+			return null;
 	}
 	
 	private GridRow getInputFieldSchema(String fieldName,String linkNumber) {
