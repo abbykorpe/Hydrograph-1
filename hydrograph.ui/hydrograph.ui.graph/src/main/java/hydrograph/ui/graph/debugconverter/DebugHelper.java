@@ -17,6 +17,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -205,11 +206,10 @@ public class DebugHelper {
 	public boolean hasMoreWatchPoints(){
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
-		for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator.hasNext();){
-			EditPart editPart = (EditPart) iterator.next();
-			if(editPart instanceof ComponentEditPart){
-				List<PortEditPart> portEditParts = editPart.getChildren();
-				for(AbstractGraphicalEditPart part:portEditParts) {	
+		for (Object objectEditPart : graphicalViewer.getEditPartRegistry().values()){
+			if(objectEditPart instanceof ComponentEditPart){
+				List<PortEditPart> portEditParts = ((EditPart) objectEditPart).getChildren();
+				for(AbstractGraphicalEditPart part : portEditParts) {	
 					if(part instanceof PortEditPart){
 						boolean isWatch = ((PortEditPart)part).getPortFigure().isWatched();
 						if(isWatch){

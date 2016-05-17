@@ -149,6 +149,8 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 				getCastedModel().setWatched(true);
 				getPortFigure().setWatched(true);
 				getPortFigure().repaint();
+			}
+			if((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler() != null){
 				((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
 			}
 		}
