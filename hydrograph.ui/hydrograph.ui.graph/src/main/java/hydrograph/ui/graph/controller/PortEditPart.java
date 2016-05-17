@@ -17,6 +17,8 @@ package hydrograph.ui.graph.controller;
 import hydrograph.ui.graph.figure.ComponentFigure;
 import hydrograph.ui.graph.figure.ELTColorConstants;
 import hydrograph.ui.graph.figure.PortFigure;
+import hydrograph.ui.graph.handler.RemoveDebugHandler;
+import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Port;
 import hydrograph.ui.graph.model.PortAlignmentEnum;
@@ -147,6 +149,9 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 				getCastedModel().setWatched(true);
 				getPortFigure().setWatched(true);
 				getPortFigure().repaint();
+			}
+			if((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler() != null){
+				((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
 			}
 		}
 		

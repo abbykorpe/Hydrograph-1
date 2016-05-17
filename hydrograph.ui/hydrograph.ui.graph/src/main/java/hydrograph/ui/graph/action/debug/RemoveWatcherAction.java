@@ -71,10 +71,17 @@ public class RemoveWatcherAction extends SelectionAction{
 			{
 				Link link = (Link)((LinkEditPart)obj).getModel();
 				link.getSource().removeWatcherTerminal(link.getSourceTerminal());
-				((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
 				changePortColor(link.getSource(), link.getSourceTerminal());
-				if(!PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty())
+				if(!PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty()){
 					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
+				}
+				
+				boolean isWatch = DebugHelper.INSTANCE.hasMoreWatchPoints();
+				if(isWatch){
+					((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
+				}else{
+					((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
+				}
 			}	
 		}
 	}
