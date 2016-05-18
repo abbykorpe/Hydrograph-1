@@ -201,7 +201,7 @@ public class JobManager {
 			launchJob(job, gefCanvas, parameterGrid, xmlPath,externalSchemaFiles);
 	}
 
-	public void executeJobInDebug(final Job job, String uniqueJobId, boolean isRemote, String userName) {
+	public void executeJobInDebug(final Job job, boolean isRemote, String userName,List<String> externalSchemaFiles) {
 		enableRunJob(false);
 		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
 
@@ -230,7 +230,7 @@ public class JobManager {
 
 		gefCanvas.disableRunningJobResource();
 
-		launchJobWithDebugParameter(job, gefCanvas, parameterGrid, xmlPath, debugXmlPath, job.getBasePath(), uniqueJobId);
+		launchJobWithDebugParameter(job, gefCanvas, parameterGrid, xmlPath, debugXmlPath,externalSchemaFiles);
 	}
 		
 	private void launchJob(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
@@ -259,14 +259,14 @@ public class JobManager {
 	}
 
 	private void launchJobWithDebugParameter(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
-			final String xmlPath, final String debugXmlPath, final String basePath, final String uniqueJobId) {
-		if (job.isRemoteMode()){
+			final String xmlPath, final String debugXmlPath,final List<String> externalSchemaFiles) {
+		if (job.isRemoteMode()) {
 			setLocalMode(false);
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new DebugRemoteJobLauncher();
-					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, basePath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas, uniqueJobId);
+					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath,  parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles);
 				}
 
 			}).start();
@@ -278,7 +278,7 @@ public class JobManager {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new DebugLocalJobLauncher();
-					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, basePath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas, uniqueJobId);
+					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas, externalSchemaFiles);
 				}
 
 			}).start();
@@ -558,6 +558,14 @@ public class JobManager {
 	}
 
 	public static String getAbsolutePathFromFile(IPath jobFilePath) {
+		if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists())
+			return ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).getLocation().toString();
+		else if (jobFilePath.toFile().exists())
+			return jobFilePath.toFile().getAbsolutePath();
+		return "";
+	}
+	
+	public static String isAbsolutePathFromFile(IPath jobFilePath) {
 		if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists())
 			return ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).getLocation().toString();
 		else if (jobFilePath.toFile().exists())

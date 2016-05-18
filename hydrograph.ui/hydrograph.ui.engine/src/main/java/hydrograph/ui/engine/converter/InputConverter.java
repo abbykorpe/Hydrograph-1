@@ -14,7 +14,13 @@
  
 package hydrograph.ui.engine.converter;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
+import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.PathUtility;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
@@ -25,12 +31,6 @@ import hydrograph.ui.logging.factory.LogFactory;
 import java.util.List;
 
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseField;
-import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
-import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
-import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
-import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 
 public abstract class InputConverter extends Converter {
 	public InputConverter(Component comp) {
@@ -66,7 +66,10 @@ public abstract class InputConverter extends Converter {
 		if(schema!=null){
 		if(schema.getIsExternal()){
 			TypeExternalSchema typeExternalSchema=new TypeExternalSchema();
-			typeExternalSchema.setUri(schema.getExternalSchemaPath());
+			if(PathUtility.INSTANCE.isAbsolute(schema.getExternalSchemaPath()))
+				typeExternalSchema.setUri(schema.getExternalSchemaPath());
+			else
+				typeExternalSchema.setUri("../"+schema.getExternalSchemaPath());
 			typeBaseRecord.setName("External");
 			typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().add(typeExternalSchema);
 		}else{

@@ -14,6 +14,7 @@
  
 package hydrograph.ui.engine.util;
 
+import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.Converter;
 import hydrograph.ui.engine.converter.ConverterFactory;
 import hydrograph.ui.engine.xpath.ComponentXpath;
@@ -39,6 +40,8 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
@@ -154,4 +157,3 @@ public class ConverterUtil {
 	}
 	
 }
-

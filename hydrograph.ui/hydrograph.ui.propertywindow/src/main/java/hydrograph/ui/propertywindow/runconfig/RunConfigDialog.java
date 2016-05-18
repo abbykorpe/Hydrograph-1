@@ -283,7 +283,7 @@ public class RunConfigDialog extends Dialog {
 		compositePathConfig = new Composite(container, SWT.BORDER);
 		GridData gd_compositePathConfig = new GridData(SWT.CENTER, SWT.BOTTOM,
 				false, false, 1, 1);
-		gd_compositePathConfig.heightHint = 256;
+		gd_compositePathConfig.heightHint = 400;
 		gd_compositePathConfig.widthHint = 349;
 		compositePathConfig.setLayoutData(gd_compositePathConfig);
 		formToolkit.adapt(compositePathConfig);
@@ -318,11 +318,11 @@ public class RunConfigDialog extends Dialog {
 		
 		Label lblPortNo = new Label(compositePathConfig, SWT.NONE);
 		lblPortNo.setText("Port No");
-		lblPortNo.setBounds(24, 210, 70, 15);
+		lblPortNo.setBounds(24, 138, 70, 15);
 		formToolkit.adapt(lblPortNo, true, true);
 		
 		txtPortNo = new Text(compositePathConfig, SWT.BORDER);
-		txtPortNo.setBounds(110, 210, 206, 21);
+		txtPortNo.setBounds(110, 132, 206, 21);
 		formToolkit.adapt(txtPortNo, true, true);
 		textBoxes.put("remotePortNo", txtPortNo);
 		
@@ -494,7 +494,7 @@ public class RunConfigDialog extends Dialog {
 	@Override
 	protected Point getInitialSize() {
 		if(btnRemoteMode.getSelection()){
-			return new Point(380, 547);
+			return new Point(380, 580); 
 		}else{
 			return new Point(380, 190);
 		}
@@ -552,7 +552,7 @@ public class RunConfigDialog extends Dialog {
 				compositePathConfig.setVisible(false);
 
 			} else if (button.getText().equals("Remote")) {
-				container.getShell().setSize(380,547);
+				container.getShell().setSize(380,580);
 				compositeServerDetails.setVisible(true);
 				compositePathConfig.setVisible(true);
 			}

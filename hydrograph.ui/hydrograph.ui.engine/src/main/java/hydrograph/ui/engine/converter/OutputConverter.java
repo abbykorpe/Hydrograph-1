@@ -22,6 +22,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeTrueFalse;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.PathUtility;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
@@ -73,7 +74,11 @@ public abstract class OutputConverter extends Converter {
 		if (schema != null) {
 			if ( schema.getIsExternal()) {
 				TypeExternalSchema typeExternalSchema = new TypeExternalSchema();
-				typeExternalSchema.setUri(schema.getExternalSchemaPath());
+				if(PathUtility.INSTANCE.isAbsolute(schema.getExternalSchemaPath()))
+					typeExternalSchema.setUri(schema.getExternalSchemaPath());
+				else
+					typeExternalSchema.setUri("../"+schema.getExternalSchemaPath());
+
 				typeBaseRecord.setName(Constants.EXTERNAL_SCHEMA);
 				typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().add(typeExternalSchema);
 			} else{

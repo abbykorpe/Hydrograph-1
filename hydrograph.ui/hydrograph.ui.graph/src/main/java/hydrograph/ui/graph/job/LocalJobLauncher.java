@@ -17,8 +17,10 @@ package hydrograph.ui.graph.job;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
+import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -74,7 +76,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 	}
 
 	private void executeCommand(Job job, IProject project, String gradleCommand, DefaultGEFCanvas gefCanvas) {
-		ProcessBuilder processBuilder = getProcess(project, gradleCommand);
+		ProcessBuilder processBuilder = JobScpAndProcessUtility.INSTANCE.getProcess(project, gradleCommand);
 		try {
 			Process process = processBuilder.start();
 
@@ -87,24 +89,6 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		} catch (IOException e) {
 			logger.debug("Unable to execute the job", e);
 		}
-	}
-
-	private ProcessBuilder getProcess(IProject project, String gradleCommand) {
-		String[] runCommand = new String[3];
-		if (OSValidator.isWindows()) {
-			String[] command = { Messages.CMD, "/c", gradleCommand };
-			runCommand = command;
-
-		} else if (OSValidator.isMac()) {
-			String[] command = { Messages.SHELL, "-c", gradleCommand };
-			runCommand = command;
-		}
-
-		ProcessBuilder processBuilder = new ProcessBuilder(runCommand);
-		processBuilder.directory(new File(project.getLocation().toOSString()));
-		processBuilder.redirectErrorStream(true);
-		return processBuilder;
-
 	}
 
 	private String getExecututeJobCommand(String xmlPath, String paramFile) {
@@ -150,8 +134,8 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 
 	@Override
 	public void launchJobInDebug(String xmlPath, String debugXmlPath,
-			String basePath, String paramFile, Job job,
-			DefaultGEFCanvas gefCanvas, String uniqueJobID) {
+			 String paramFile, Job job,
+			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles) {
 		// TODO Auto-generated method stub
 		
 	}

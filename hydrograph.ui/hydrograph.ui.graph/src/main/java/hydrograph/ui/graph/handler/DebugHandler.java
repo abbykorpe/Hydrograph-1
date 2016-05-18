@@ -15,19 +15,25 @@ package hydrograph.ui.graph.handler;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
+import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.debugconverter.DebugConverter;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
@@ -40,6 +46,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
@@ -201,7 +209,9 @@ public class DebugHandler  extends AbstractHandler {
 		 
 		addDebugJob(currentJobName, job);
 		
-		JobManager.INSTANCE.executeJobInDebug(job, uniqueJobID, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
+		List<String> externalSchemaFiles=getExternalSchemaList();
+		
+		JobManager.INSTANCE.executeJobInDebug(job, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername(),externalSchemaFiles);
 		CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();		
 		return null;
 	}
@@ -221,4 +231,30 @@ public class DebugHandler  extends AbstractHandler {
 	public static void setJobMap(Map<String, Job> jobMap) {
 		DebugHandler.jobMap = jobMap;
 	}
+	
+	private List<String> getExternalSchemaList() {
+		ArrayList<String> externalSchemaPathList=new ArrayList<>();
+		try{
+		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if (editor != null && editor instanceof ELTGraphicalEditor) {
+			GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor)
+					.getAdapter(GraphicalViewer.class);
+			for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();) {
+				EditPart editPart = (EditPart) ite.next();
+				if (editPart instanceof ComponentEditPart) {
+					Component component = ((ComponentEditPart) editPart).getCastedModel();
+					Schema  schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+					if(schema!=null && schema.getIsExternal()){
+						System.out.println(schema.getExternalSchemaPath());
+						externalSchemaPathList.add(schema.getExternalSchemaPath());
+					}
+				}
+			}
+		}
+		}catch (Exception e) {
+			logger.error("Error occurred while fetching external schema files path.");
+		}
+		return externalSchemaPathList;
+	}
+
 }

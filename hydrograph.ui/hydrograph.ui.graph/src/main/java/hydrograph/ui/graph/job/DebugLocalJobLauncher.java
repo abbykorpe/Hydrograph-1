@@ -19,6 +19,7 @@ import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
+import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -44,7 +45,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 	
 	
 	@Override
-	public void launchJobInDebug(String xmlPath, String debugXmlPath, String basePath, String paramFile, Job job,	DefaultGEFCanvas gefCanvas, String uniqueJobId) {
+	public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFile, Job job,	DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles) {
 		String projectName = xmlPath.split("/", 2)[0];
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		job.setJobProjectDirectory(project.getLocation().toOSString());
@@ -55,7 +56,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 		((RunJobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
 		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 		
-		gradleCommand = getExecututeJobCommand(xmlPath, paramFile, debugXmlPath, basePath, uniqueJobId);
+		gradleCommand = getExecututeJobCommand(xmlPath, paramFile, debugXmlPath,job);
 		executeCommand(job, project, gradleCommand, gefCanvas);
 
 		job.setJobStatus(JobStatus.SUCCESS);
@@ -69,7 +70,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 	}
 
 	private void executeCommand(Job job, IProject project, String gradleCommand, DefaultGEFCanvas gefCanvas) {
-		ProcessBuilder processBuilder = getProcess(project, gradleCommand);
+		ProcessBuilder processBuilder = JobScpAndProcessUtility.INSTANCE.getProcess(project, gradleCommand);
 		try {
 			Process process = processBuilder.start();
 
@@ -84,27 +85,9 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 		}
 	}
 	
-	private String getExecututeJobCommand(String xmlPath, String paramFile, String debugXmlPath, String basePath, String uniqueJobId) {
-		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB + GradleCommandConstants.GPARAM_PARAM_FILE + "\""+ paramFile+"\"" + GradleCommandConstants.GPARAM_JOB_XML +  xmlPath.split("/", 2)[1] +
-				GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH + basePath + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +uniqueJobId;
-	}
-	
-	private ProcessBuilder getProcess(IProject project, String gradleCommand) {
-		String[] runCommand = new String[3];
-		if (OSValidator.isWindows()) {
-			String[] command = { Messages.CMD, "/c", gradleCommand };
-			runCommand = command;
-
-		} else if (OSValidator.isMac()) {
-			String[] command = { Messages.SHELL, "-c", gradleCommand };
-			runCommand = command;
-		}
-
-		ProcessBuilder processBuilder = new ProcessBuilder(runCommand);
-		processBuilder.directory(new File(project.getLocation().toOSString()));
-		processBuilder.redirectErrorStream(true);
-		return processBuilder;
-
+	private String getExecututeJobCommand(String xmlPath, String paramFile, String debugXmlPath, Job job) {
+		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB + GradleCommandConstants.GPARAM_PARAM_FILE + paramFile + GradleCommandConstants.GPARAM_JOB_XML +  xmlPath.split("/", 2)[1] +
+				GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH + job.getBasePath() + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId();
 	}
 	
 	private void logProcessLogsAsynchronously(final JobLogger joblogger, final Process process, final Job job) {

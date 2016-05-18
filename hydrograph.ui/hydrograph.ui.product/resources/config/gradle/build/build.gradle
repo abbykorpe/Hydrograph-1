@@ -88,7 +88,7 @@ task scpJarFiles(dependsOn: ['build']) {
         try {
             ant.scp(
                     file: jarFile,
-                    todir: "${username}@${host}:" + properties.remoteLibDir,
+                    todir: "${username}@${host}:"+properties.remoteDirectory +"/" + project.name+"/lib",
                     password: password,
                     trust: true,
             )
@@ -116,11 +116,10 @@ task scpJobXML() {
 
         println 'Copying XML files...'
 
-        try {
 
             ant.scp(
                     file: jobXML,
-                    todir: "${username}@${host}:" + properties.remoteJobXMLDir,
+                    todir: "${username}@${host}:"+properties.remoteDirectory +"/" +project.name+ "/" +getFilePath(jobXML),
                     password: password,
                     trust: true,
             )
@@ -129,16 +128,11 @@ task scpJobXML() {
             {
                 ant.scp(
                         file: debugJobXML,
-                        todir: "${username}@${host}:" + properties.remoteJobXMLDir,
+                        todir: "${username}@${host}:"+properties.remoteDirectory +"/" +project.name+ "/" +getFilePath(debugJobXML),
                         password: password,
                         trust: true,
                 )
             }
-        } catch (Exception gradleException) {
-            println '#Gradle failed to execute task#'
-        }
-
-
 
     }
 }
@@ -165,7 +159,7 @@ task scpParameterFile() {
                 if(!parameterFiles[i].trim().equals("")){
                 	ant.scp(
                         file: parameterFiles[i],
-                        todir: "${username}@${host}:" + properties.remoteParameterFileDir,
+                        todir: "${username}@${host}:" +properties.remoteDirectory + "/" +project.name+"/param",
                         password: password,
                         trust: true,
                 		)
@@ -209,14 +203,12 @@ task executeRemoteJob() {
                 jarName = file.name
         }
 
-
-        def xmlFileName = jobXML.substring(jobXML.lastIndexOf("/") + 1);
-        def parameterFiles = parameterFile.split(',');
+       def parameterFiles = parameterFile.split(',');
         def unixParameterFileList = "";
         for(int i = 0; i < parameterFiles.length; i++){
         	if(!parameterFiles[i].trim().equals("")){
         		def unixParameterFileName = parameterFiles[i].substring(parameterFiles[i].replaceAll("\\\\","/").lastIndexOf("/") + 1);
-            	unixParameterFileList= unixParameterFileList + properties.remoteParameterFileDir + "/" + unixParameterFileName + ",";
+            	unixParameterFileList= unixParameterFileList +  "param/" + unixParameterFileName + ",";
          	}
         }
 		
@@ -225,20 +217,16 @@ task executeRemoteJob() {
 		}
         
 
-        println 'executing command - ' + properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " + properties.remoteLibDir + "/" + jarName + " -paramfiles " + unixParameterFileList
+        println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList
 
-        try {
             ant.sshexec(
                     host: host,
                     username: username,
                     password: password,
                     trust: true,
-                    command: properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " + properties.remoteLibDir + "/" + jarName + " -paramfiles " + unixParameterFileList
+                    command: "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList
             )
-        } catch (Exception gradleException) {
-            println '#Gradle failed to execute task#'
-        }
-
+       
     }
 }
 
@@ -274,13 +262,12 @@ task executeDebugRemoteJob() {
                 jarName = file.name
         }
 
-        def xmlFileName = jobXML.substring(jobXML.lastIndexOf("/") + 1);
         def parameterFiles = parameterFile.split(',');
         def unixParameterFileList = "";
         for(int i = 0; i < parameterFiles.length; i++){
         	if(!parameterFiles[i].trim().equals("")){
         		def unixParameterFileName = parameterFiles[i].substring(parameterFiles[i].replaceAll("\\\\","/").lastIndexOf("/") + 1);
-            	unixParameterFileList= unixParameterFileList + properties.remoteParameterFileDir + "/" + unixParameterFileName + ",";
+            	unixParameterFileList= unixParameterFileList + "param/" + unixParameterFileName + ",";
          	}
         }
 		
@@ -293,9 +280,7 @@ task executeDebugRemoteJob() {
         def jobId = jobId;
         def basePath = basePath;
 
-        println 'executing command - ' + properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " +
-                properties.remoteLibDir + "/" + jarName + " -paramfiles " + unixParameterFileList + " -debugxmlpath " +
-                properties.remoteJobXMLDir + "/" + debugXmlFileName + " -jobid " + jobId + " -basepath " + basePath
+       		println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList + " -debugxmlpath " + debugJobXML + " -jobid " + jobId + " -basepath " + basePath
 
         try {
             ant.sshexec(
@@ -303,9 +288,7 @@ task executeDebugRemoteJob() {
                     username: username,
                     password: password,
                     trust: true,
-                    command: properties.runUtility + " -xmlpath " + properties.remoteJobXMLDir + "/" + xmlFileName + " -libjars " + properties.remoteLibDir +
-                            "/" + jarName + " -paramfiles " + unixParameterFileList + " -debugxmlpath " + properties.remoteJobXMLDir +
-                            "/" + debugXmlFileName + " -jobid " + jobId + " -basepath " + basePath
+                    command: "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath
             )
         } catch (Exception gradleException) {
             println '#Gradle failed to execute task#'
@@ -420,11 +403,7 @@ task killRemoteJob() << {
                 username: username,
                 password: password,
                 trust: true,
-
                 command: "sh "+properties.runUtility+" -k " + jobprocessid)
-
-                
-
     }
 
 }
@@ -434,4 +413,71 @@ killRemoteJob.onlyIf {
     project.hasProperty('username')
     project.hasProperty('password')
     project.hasProperty('jobprocessid');
+}
+
+task createDirectories(){
+ doLast{
+    ant.taskdef(
+                name: 'sshexec',
+                classname: 'org.apache.tools.ant.taskdefs.optional.ssh.SSHExec',
+                classpath: configurations.sshAntTask.asPath)
+
+        println "Executing createDirectories..."
+          ant.sshexec(
+                    host: '10.130.248.53',
+                    username: 'hduser',
+                    password: 'Bitwise2012',
+                    trust: true,
+                    command:"mkdir -p " +properties.remoteDirectory+"/{"+jobXML+","+moveJar+","+moveParameterFile+","+moveExternalSchemaFiles+"}" 
+            )
+	}
+}
+
+task scpSchemaFiles() {
+    doLast {
+    def files=externalSchemaFiles;
+	def schemaFiles = files.split(",");
+	def sampleMap = [:]
+	schemaFiles.each {
+		def fileValue = "${it}"
+		def singleFile = fileValue.split("#");
+		sampleMap.put(singleFile[0],singleFile[1])
+	 }
+
+    sampleMap.each {
+        ant.taskdef(
+                name: 'scp',
+                classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp',
+                classpath: configurations.sshAntTask.asPath)
+        
+        println 'Copying external schema files...'
+          	 def path = "${it.value}"
+    	     ant.scp(
+                    file: path,
+                    todir: "${username}@${host}:"+properties.remoteDirectory + "/" +getFilePath("${it.key}"),
+                    password: password,
+                    trust: true,
+            )
+       
+      };
+    } 
+}
+
+scpSchemaFiles.onlyIf {
+    project.hasProperty('host')
+    project.hasProperty('username')
+    project.hasProperty('password')
+    project.hasProperty('externalSchemaFiles')
+}
+
+def getFilePath(def path){
+	if(path.length() > 0 )
+		{
+		    def endIndex = path.lastIndexOf("/");
+		    if (endIndex != -1)  
+		    {
+		    	path = path.substring(0, endIndex);
+		    }
+		} 
+		return path  
 }
