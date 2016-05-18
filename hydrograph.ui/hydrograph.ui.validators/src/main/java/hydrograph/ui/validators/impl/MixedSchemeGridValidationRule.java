@@ -123,13 +123,13 @@ public class MixedSchemeGridValidationRule implements IValidator {
 					return false;
 				}
 				if (StringUtils.isBlank(mixedSchemeGridRow.getLength())
-						&& StringUtils.isBlank(mixedSchemeGridRow
+						&& StringUtils.isEmpty(mixedSchemeGridRow
 								.getDelimiter())) {
 					errorMessage = "Length Or Delimiter is mandatory";
 					return false;
 				}
-				if (StringUtils.isNotBlank(mixedSchemeGridRow.getLength())	
-						&& StringUtils.isNotBlank(mixedSchemeGridRow.getDelimiter())) {
+				if (StringUtils.isNotBlank(mixedSchemeGridRow.getLength())
+						&& StringUtils.isEmpty(mixedSchemeGridRow.getDelimiter())) {
 					errorMessage = "Either Length Or Delimiter should be given";
 					return false;
 				}
