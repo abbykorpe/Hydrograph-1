@@ -393,4 +393,16 @@
        </selection>
     </wizard>
  </extension>
+ <extension
+       point="org.eclipse.ltk.core.refactoring.deleteParticipants">
+    <deleteParticipant
+          class="hydrograph.ui.graph.editor.JobDeleteParticipant"
+          id="hydrograph.ui.graph.editor.DeleteJobParticipant"
+          name="DeleteJobRelatedFiles">
+       <enablement>
+          <instanceof
+                value="org.eclipse.core.resources.IFile">
+          </instanceof></enablement>
+    </deleteParticipant>
+ </extension>
 </plugin>
