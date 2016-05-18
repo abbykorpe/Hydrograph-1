@@ -1228,6 +1228,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 			try {
+				if(serverSocket!=null)
 				serverSocket.close();
 			} catch (IOException e1) {
 				logger.error(e.getMessage());
