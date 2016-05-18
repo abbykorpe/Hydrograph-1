@@ -13,7 +13,7 @@
 
 package hydrograph.ui.validators.impl;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class KeyFieldsValidationRule implements IValidator {
@@ -30,7 +30,7 @@ public class KeyFieldsValidationRule implements IValidator {
 	@Override
 	public boolean validate(Object object, String propertyName) {
 		if (object != null) {
-			ArrayList<String> keyFieldList = (ArrayList<String>) object;
+			List<String> keyFieldList = (List<String>) object;
 			if (keyFieldList.size() != 0) {
 				return true;
 			}

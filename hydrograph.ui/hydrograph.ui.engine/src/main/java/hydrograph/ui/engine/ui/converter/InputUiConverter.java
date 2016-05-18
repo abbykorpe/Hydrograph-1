@@ -14,13 +14,19 @@
  
 package hydrograph.ui.engine.ui.converter;
 
+import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import org.slf4j.Logger;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
-import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
+import org.slf4j.Logger;
 
 /**
  * The class InputUiConverter
@@ -77,5 +83,25 @@ public abstract class InputUiConverter extends UiConverter {
 	 * @return Object
 	 */
 	protected abstract Object getSchema(TypeInputOutSocket outSocket);
+	
+	/**
+	 * Stores ComponentOutputSchema in component property for schema propagation. 
+	 * 
+	 * @param outSocketId
+	 * @param gridRowList
+	 */
+	protected void saveComponentOutputSchema(String outSocketId, List<GridRow> gridRowList) {
+		ComponentsOutputSchema componentsOutputSchema = null;
+		if (outSocketId != null && gridRowList != null && !gridRowList.isEmpty()) {
+			componentsOutputSchema = new ComponentsOutputSchema();
+			for (GridRow gridRow : gridRowList) {
+				componentsOutputSchema.addSchemaFields(gridRow);
+			}
+			Map<String, ComponentsOutputSchema> schemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
+			schemaMap.put(outSocketId, componentsOutputSchema);
+			propertyMap.put(Constants.SCHEMA_TO_PROPAGATE, schemaMap);
+		}
+	}
+
 
 }
