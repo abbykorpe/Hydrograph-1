@@ -118,11 +118,9 @@ public class ComponentsOutputSchema implements IDataStructure {
 	public void updatePassthroughFieldsSchema(ComponentsOutputSchema sourceOutputSchema) {
 		if(sourceOutputSchema==null)
 			return ;
-		FixedWidthGridRow targetFixedWidthGridRow;
-		FixedWidthGridRow sourceFixedWidthGridRow;
 		for (String fieldName : passthroughFields) {
-			targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(fieldName);
-			sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(fieldName);
+			FixedWidthGridRow targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(fieldName);
+			FixedWidthGridRow sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(fieldName);
 			if (targetFixedWidthGridRow != null && sourceFixedWidthGridRow!=null) {
 					targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
 					targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
@@ -157,11 +155,9 @@ public class ComponentsOutputSchema implements IDataStructure {
 	public void updateMapFieldsSchema(ComponentsOutputSchema sourceOutputSchema) {
 		if(sourceOutputSchema==null)
 			return ;
-		FixedWidthGridRow targetFixedWidthGridRow;
-		FixedWidthGridRow sourceFixedWidthGridRow;
 		for (Entry<String, String> entry : mapFields.entrySet()) {
-			targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(entry.getKey());
-			sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(entry.getValue());
+			FixedWidthGridRow targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(entry.getKey());
+			FixedWidthGridRow sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(entry.getValue());
 			if (targetFixedWidthGridRow != null && sourceFixedWidthGridRow!=null) {
 					targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
 					targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());

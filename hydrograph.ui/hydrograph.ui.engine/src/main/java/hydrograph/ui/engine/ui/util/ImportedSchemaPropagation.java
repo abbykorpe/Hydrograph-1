@@ -46,7 +46,6 @@ public class ImportedSchemaPropagation {
 	 */
 	public void initiateSchemaPropagationAfterImport(Container container) {
 		for (Component component : container.getChildren()) {
-			@SuppressWarnings("unchecked")
 			Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) component
 					.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
 			if (schemaMap != null && !StringUtils.equalsIgnoreCase(component.getCategory(), Constants.TRANSFORM))
@@ -73,12 +72,11 @@ public class ImportedSchemaPropagation {
 
 	//This method creates rows for schema tab of transform components from propagated schema.
 	private void addSchemaForTransformComponents(Component component) {
-		Schema schema = null;
 		if (component != null && component.getProperties().get(Constants.SCHEMA_TO_PROPAGATE) != null) {
 			Map<String, ComponentsOutputSchema> componentOutputSchemaMap = (Map<String, ComponentsOutputSchema>) component
 					.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
 			if (componentOutputSchemaMap != null && componentOutputSchemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null) {
-				schema = new Schema();
+				Schema schema = new Schema();
 				schema.getGridRow().addAll(
 						componentOutputSchemaMap.get(Constants.FIXED_OUTSOCKET_ID).getBasicGridRowsOutputFields());
 				arrangeSchemaFieldsAndAddToComponentsSchema(schema,component);
@@ -86,20 +84,20 @@ public class ImportedSchemaPropagation {
 		}
 	}
 
-	//This method arranges the schema grid rows of schema tab as arranged in the target XML.
+	// This method arranges the schema grid rows of schema tab as arranged in the target XML.
 	private void arrangeSchemaFieldsAndAddToComponentsSchema(Schema schema, Component component) {
-		Schema arrangedSchema=null;
-		List<String> schemaFieldSequnce=null;
+		List<String> schemaFieldSequnce = null;
 		if (schema != null && component != null) {
-			arrangedSchema=new Schema();			
-			if (component.getProperties().get(Constants.SCHEMA_FILED_SEQUENCE) != null) {
-				schemaFieldSequnce = (List<String>) component.getProperties().get(Constants.SCHEMA_FILED_SEQUENCE);
-				for(String fieldName:schemaFieldSequnce){
-					if(schema.getGridRow(fieldName)!=null)
-					arrangedSchema.getGridRow().add(schema.getGridRow(fieldName));
+			Schema arrangedSchema = new Schema();
+			if (component.getProperties().get(Constants.SCHEMA_FIELD_SEQUENCE) != null) {
+				schemaFieldSequnce = (List<String>) component.getProperties().get(Constants.SCHEMA_FIELD_SEQUENCE);
+				for (String fieldName : schemaFieldSequnce) {
+					if (schema.getGridRow(fieldName) != null) {
+						arrangedSchema.getGridRow().add(schema.getGridRow(fieldName));
+					}
 				}
 				component.getProperties().put(Constants.SCHEMA_PROPERTY_NAME, arrangedSchema);
-			} else 
+			} else
 				component.getProperties().put(Constants.SCHEMA_PROPERTY_NAME, schema);
 		}
 	}
@@ -107,7 +105,7 @@ public class ImportedSchemaPropagation {
 	//This method removes temporary properties from components.
 	private void removeTempraryProperties(Container container){
 		for(Component component:container.getChildren()){
-			component.getProperties().remove(Constants.SCHEMA_FILED_SEQUENCE);
+			component.getProperties().remove(Constants.SCHEMA_FIELD_SEQUENCE);
 		}
 	}
 	

@@ -116,7 +116,7 @@ public abstract class TransformUiConverter extends UiConverter {
 				uiComponent.engageOutputPort(outSocket.getId());
 				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null){
 					propertyMap.put(Constants.PARAM_OPERATION,getUiPassThroughOrOperationFieldsOrMapFieldGrid(outSocket));
-					createPassThroughAndMappingFiledsForSchemaPropagation(outSocket);
+					createPassThroughAndMappingFieldsForSchemaPropagation(outSocket);
 					}
 				}
 
@@ -334,30 +334,30 @@ public abstract class TransformUiConverter extends UiConverter {
 	 * 
 	 * @param operationsOutSockets
 	 */
-	protected void createPassThroughAndMappingFiledsForSchemaPropagation(TypeOperationsOutSocket operationsOutSockets) {
+	protected void createPassThroughAndMappingFieldsForSchemaPropagation(TypeOperationsOutSocket operationsOutSockets) {
 		ComponentsOutputSchema componentsOutputSchema = null;
-		List<String> schemaFiledSequence = null;
+		List<String> schemaFieldSequence = null;
 		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) propertyMap
 				.get(Constants.SCHEMA_TO_PROPAGATE);
 		if (operationsOutSockets != null
 				&& !operationsOutSockets.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()) {
 			componentsOutputSchema = new ComponentsOutputSchema();
-			schemaFiledSequence = new ArrayList<>();
+			schemaFieldSequence = new ArrayList<>();
 			for (Object property : operationsOutSockets.getPassThroughFieldOrOperationFieldOrMapField()) {
 
 				if (property instanceof TypeInputField) {
-					schemaFiledSequence.add(((TypeInputField) property).getName());
+					schemaFieldSequence.add(((TypeInputField) property).getName());
 					componentsOutputSchema.getPassthroughFields().add(((TypeInputField) property).getName());
 					componentsOutputSchema.addSchemaFields(SchemaPropagationHelper.INSTANCE
 							.createFixedWidthGridRow(((TypeInputField) property).getName()));
 				} else if (property instanceof TypeMapField) {
-					schemaFiledSequence.add(((TypeMapField) property).getName());
+					schemaFieldSequence.add(((TypeMapField) property).getName());
 					componentsOutputSchema.getMapFields().put(((TypeMapField) property).getName(),
 							((TypeMapField) property).getSourceName());
 					componentsOutputSchema.addSchemaFields(SchemaPropagationHelper.INSTANCE
 							.createFixedWidthGridRow(((TypeMapField) property).getName()));
 				} else if (property instanceof TypeOperationField) {
-					schemaFiledSequence.add(((TypeOperationField) property).getName());
+					schemaFieldSequence.add(((TypeOperationField) property).getName());
 				}
 			}
 		}
@@ -366,7 +366,7 @@ public abstract class TransformUiConverter extends UiConverter {
 		}
 		schemaMap.put(operationsOutSockets.getId(), componentsOutputSchema);
 		propertyMap.put(Constants.SCHEMA_TO_PROPAGATE, schemaMap);
-		propertyMap.put(Constants.SCHEMA_FILED_SEQUENCE, schemaFiledSequence);
+		propertyMap.put(Constants.SCHEMA_FIELD_SEQUENCE, schemaFieldSequence);
 	}
 	
 	

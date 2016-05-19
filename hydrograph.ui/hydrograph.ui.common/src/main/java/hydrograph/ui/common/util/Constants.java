@@ -238,6 +238,6 @@ public class Constants {
 	public static String CLICK_TO_FOCUS="Click to focus";
 
 	// Temporary property names of component 
-	public static String SCHEMA_FILED_SEQUENCE = "schema_field_sequence";
+	public static String SCHEMA_FIELD_SEQUENCE = "schema_field_sequence";
 	
 }

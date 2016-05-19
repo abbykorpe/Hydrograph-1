@@ -160,7 +160,7 @@ protected void getOutPort(TypeOperationsComponent operationsComponent) {
 				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null
 						&& !outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()){
 					propertyMap.put(Constants.LOOKUP_MAP_FIELD, getLookupMappingGrid(outSocket));
-					createPassThroughAndMappingFiledsForSchemaPropagation(outSocket);
+					createPassThroughAndMappingFieldsForSchemaPropagation(outSocket);
 					}
 			}
 		}			

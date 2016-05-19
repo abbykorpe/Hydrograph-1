@@ -72,7 +72,7 @@ public class UniqueSequenceUiConverter extends TransformUiConverter {
 					for (Object outSocketProperties : outSocket.getPassThroughFieldOrOperationFieldOrMapField()) {
 						if (((TypeOperationField.class).isAssignableFrom(outSocketProperties.getClass()))) {
 							newFieldName = ((TypeOperationField) outSocketProperties).getName();
-							createComponentOutputSchmeaForPropagation(newFieldName);
+							createComponentOutputSchemaForPropagation(newFieldName);
 						}
 					}
 			}
@@ -80,7 +80,7 @@ public class UniqueSequenceUiConverter extends TransformUiConverter {
 		}
 	}
 
-	private void createComponentOutputSchmeaForPropagation(String fieldName) {
+	private void createComponentOutputSchemaForPropagation(String fieldName) {
 		Map<String, ComponentsOutputSchema> schemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
 		ComponentsOutputSchema newComponentsOutputSchema = new ComponentsOutputSchema();
 		newComponentsOutputSchema.getFixedWidthGridRowsOutputFields().add(createSchemaForNewField(fieldName));

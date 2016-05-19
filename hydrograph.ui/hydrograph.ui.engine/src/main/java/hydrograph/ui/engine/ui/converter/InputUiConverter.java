@@ -91,9 +91,8 @@ public abstract class InputUiConverter extends UiConverter {
 	 * @param gridRowList
 	 */
 	protected void saveComponentOutputSchema(String outSocketId, List<GridRow> gridRowList) {
-		ComponentsOutputSchema componentsOutputSchema = null;
 		if (outSocketId != null && gridRowList != null && !gridRowList.isEmpty()) {
-			componentsOutputSchema = new ComponentsOutputSchema();
+			ComponentsOutputSchema componentsOutputSchema = new ComponentsOutputSchema();
 			for (GridRow gridRow : gridRowList) {
 				componentsOutputSchema.addSchemaFields(gridRow);
 			}

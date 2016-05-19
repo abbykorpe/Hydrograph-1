@@ -158,7 +158,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null
 						&& !outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()){
 					propertyMap.put(Constants.JOIN_MAP_FIELD, getJoinMappingGrid(outSocket));
-					createPassThroughAndMappingFiledsForSchemaPropagation(outSocket);
+					createPassThroughAndMappingFieldsForSchemaPropagation(outSocket);
 				}
 			}
 

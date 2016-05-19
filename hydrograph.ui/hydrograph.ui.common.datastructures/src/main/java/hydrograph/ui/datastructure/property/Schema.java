@@ -104,14 +104,13 @@ public class Schema implements IDataStructure{
 	 * @return gridRow
 	 */
 	public GridRow getGridRow(String fieldName) {
-		GridRow gridRow = null;
 		if (!getGridRow().isEmpty()) {
 			for (GridRow row : getGridRow()) {
 				if (StringUtils.equalsIgnoreCase(fieldName, row.getFieldName()))
-					gridRow = row.copy();
+					return row.copy();
 			}
 		}
-		return gridRow;
+		return null;
 	}
 	
 }
