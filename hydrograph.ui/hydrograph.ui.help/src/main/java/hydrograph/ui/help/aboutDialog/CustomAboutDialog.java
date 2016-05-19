@@ -14,9 +14,12 @@
  
 package hydrograph.ui.help.aboutDialog;
 
+import hydrograph.ui.help.Activator;
+
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.MenuManager;
@@ -65,6 +68,7 @@ import org.osgi.framework.Bundle;
  *
  */
 public class CustomAboutDialog extends TrayDialog {
+	private static final String ECLIPSE_BUILD_ID = "eclipse.buildId";
 	private final static int MAX_IMAGE_WIDTH_FOR_TEXT = 250;
 	private final static int TEXT_MARGIN = 5;
 
@@ -191,7 +195,11 @@ public class CustomAboutDialog extends TrayDialog {
 
 
 				if (aboutText != null) {
-					item = AboutTextManager.scan(aboutText);
+					String buildNumber = System.getProperty(ECLIPSE_BUILD_ID);
+					if(StringUtils.isBlank(buildNumber)){
+						buildNumber = Platform.getBundle(Activator.PLUGIN_ID).getVersion().toString();
+					}
+					item = AboutTextManager.scan(aboutText + "\n" + "Build Number: " + buildNumber);
 				}
 			}
 

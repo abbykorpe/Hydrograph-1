@@ -9,7 +9,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.help.ui,
  org.eclipse.help.webapp,
- org.eclipse.equinox.http.jetty
+ org.eclipse.equinox.http.jetty,
+ org.apache.commons.lang
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: hydrograph.ui.help.aboutDialog

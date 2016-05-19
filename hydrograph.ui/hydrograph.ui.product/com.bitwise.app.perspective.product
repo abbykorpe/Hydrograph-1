@@ -19,6 +19,7 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
 -vm
 /Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home/jre/lib/jli/libjli.dylib</programArgsMac>
       <vmArgs>-Xms512m
+
 -Xmx1024m</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
@@ -267,6 +268,8 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="3" />
+      <property name="eclipse.buildId" value="${unqualifiedVersion}.${buildQualifier}" />
    </configurations>
 
 </product>
+
