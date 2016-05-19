@@ -51,11 +51,6 @@ public class ELTGridDeleteSelectionListener extends ELTSelectionTaskListener{
 			ListenerHelper helpers, Widget... widgets) {
 		propertyDialogButtonBar.enableApplyButton(true);
 		ELTGridDetails gridDetails = (ELTGridDetails) helpers.get(HelperType.SCHEMA_GRID);
-		if (gridDetails.getGrids().size() > 1) {
-			((Label) widgets[1]).setEnabled(true);
-		} else {
-			((Label) widgets[1]).setEnabled(false);
-		}
 		
 		Table table =gridDetails.getTableViewer().getTable();
 		int temp = table.getSelectionIndex();
@@ -71,6 +66,13 @@ public class ELTGridDeleteSelectionListener extends ELTSelectionTaskListener{
 			}
 			 gridDetails.getGrids().removeAll(tempList);
 		}
+		
+		if (gridDetails.getGrids().size() >= 1) {
+			((Label) widgets[1]).setEnabled(true);
+		} else {
+			((Label) widgets[1]).setEnabled(false);
+		}
+		
 		if (gridDetails.getGrids().size() >= 2) {
 			((Label) widgets[2]).setEnabled(true);
 			((Label) widgets[3]).setEnabled(true);
