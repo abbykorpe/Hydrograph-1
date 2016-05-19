@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package hydrograph.ui.graph.editor;
 
 import hydrograph.ui.graph.Messages;
@@ -33,11 +32,18 @@ import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
-import org.eclipse.ltk.core.refactoring.participants.RenameParticipant;
-import org.eclipse.ltk.core.refactoring.resource.RenameResourceChange;
+import org.eclipse.ltk.core.refactoring.participants.DeleteParticipant;
+import org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange;
 
+/**
+ * JobDeleteParticipant- If any of the .job, .xml and .properties file is deleted in Project explorer, then the corresponding 
+ * other files will also get deleted.
+ * 
+ *  Author: Bitwise
+ * 
+ */
 
-public class RenameJobParticipant extends RenameParticipant {
+public class JobDeleteParticipant extends DeleteParticipant{
 	private IFile modifiedResource;
 	
 	@Override
@@ -48,70 +54,39 @@ public class RenameJobParticipant extends RenameParticipant {
 
 	@Override
 	public String getName() {
-		return "Job File Renaming Participant";
+		return "Job File Deleting Participant";
 	}
 
 	@Override
 	public RefactoringStatus checkConditions(IProgressMonitor pm,
 			CheckConditionsContext context) throws OperationCanceledException {
-		String newName = getArguments().getNewName();
-		String newExt = newName.substring(newName.lastIndexOf(".")+1);
-		
-		if("job".equals(modifiedResource.getFileExtension())) {
-			if(!("job".equals(newExt))) {
-				return RefactoringStatus.createFatalErrorStatus("Changing extension of job file is not allowed");
-			}
-		}
-		else if("job".equals(newExt)) {
-			return RefactoringStatus.createFatalErrorStatus("Changing extension to .job not allowed." +
-					"Please create a new job file.");
-		}
-		else if(CustomMessages.ProjectSupport_JOBS.equals(modifiedResource.getFullPath().segment(1))
-				&& !newExt.matches("job|xml")) {
-			return RefactoringStatus.createFatalErrorStatus("Only .job and .xml files can be stored in this folder" );
-		}
-		else if(modifiedResource.getFileExtension().matches("xml|properties")
-				|| (newExt.matches("xml|properties"))){
-			if(ResourceChangeUtil.isGeneratedFile(modifiedResource.getName()
-											,modifiedResource.getProject())) {
-				return RefactoringStatus.createFatalErrorStatus(
-						".xml or .properties file cannot be renamed. " +
-						"Rename the .job file to rename the xml and properties file");
-				
-			}
-			else if(ResourceChangeUtil.isGeneratedFile(newName,modifiedResource.getProject())) {
-				return RefactoringStatus.createFatalErrorStatus("Generated file with same name exists.Please choose a different name");
-			}
-			else if(("properties".equals(modifiedResource.getFileExtension()) 
-					|| "properties".equals(newExt))
-					&& !modifiedResource.getFullPath().segment(1).equals(CustomMessages.ProjectSupport_PARAM)) {
-				return RefactoringStatus.createFatalErrorStatus("properties file can only be saved in param folder.");
-			}
-		}
 		return new RefactoringStatus();
 	}
 
 	@Override
 	public Change createChange(IProgressMonitor pm) throws CoreException,
 			OperationCanceledException {
-		final HashMap<IFile,RenameResourceChange> changes= new HashMap<IFile,RenameResourceChange>();
-		final String newName = ResourceChangeUtil.removeExtension(getArguments().getNewName());
-	
+		final HashMap<IFile,DeleteResourceChange> changes= new HashMap<IFile,DeleteResourceChange>();
+		
 		List<IResource> memberList = 
 				new ArrayList<IResource>(modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_PARAM).members().length
 										+modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_JOBS).members().length);
 		ResourceChangeUtil.addMembersToList(memberList, modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_JOBS));
 		ResourceChangeUtil.addMembersToList(memberList, modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_PARAM));
+		
 		final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
+		
 		for(IResource resource:memberList) {
 			if(Pattern.matches(fileName+".*", resource.getName())) {
 				if((Messages.XML_EXT.equals(resource.getFileExtension())
 						|| Messages.PROPERTIES_EXT.equals(resource.getFileExtension())
 						|| Messages.JOB_EXT.equals(resource.getFileExtension()))
 						&&!(modifiedResource.getName().equals(resource.getName()))) {
-					RenameResourceChange change= (RenameResourceChange) changes.get((IFile)resource);
+					
+					
+					DeleteResourceChange change = (DeleteResourceChange) changes.get((IFile)resource);
 					if (change == null) {
-						change= new RenameResourceChange(resource.getFullPath(), newName+"."+resource.getFileExtension());
+						change= new DeleteResourceChange(resource.getFullPath(), true);
 						changes.put((IFile)resource, change);
 					}
 				}
@@ -122,11 +97,13 @@ public class RenameJobParticipant extends RenameParticipant {
 	        return null;
 		}
 		
-		CompositeChange result= new CompositeChange("Rename Job Related Files"); 
-	    for (Iterator<RenameResourceChange> iter= changes.values().iterator(); iter.hasNext();) {
+		
+		CompositeChange result= new CompositeChange("Delete Job Related Files"); 
+	    for (Iterator<DeleteResourceChange> iter= changes.values().iterator(); iter.hasNext();) {
 	        result.add((Change) iter.next());
 	    }
 		return result;
+		
 	}
 
 }

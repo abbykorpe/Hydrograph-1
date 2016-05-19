@@ -114,6 +114,5 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(), activeProjectLocation + "/"
 					+ PARAMETER_FILE_DIR + "/" + getComponentCanvas().getJobName() + PARAMETER_FILE_EXTENTION, true));
 		}
-		
 	}
 }

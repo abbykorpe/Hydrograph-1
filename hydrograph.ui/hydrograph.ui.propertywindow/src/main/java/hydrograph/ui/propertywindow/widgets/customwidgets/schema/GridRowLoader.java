@@ -435,6 +435,25 @@ public class GridRowLoader {
 		else
 			gridRow.setDateFormat("");
 		
+		if(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.equals(field.getType())){
+			populateBigDecimal(gridRow, field);
+		}else{
+			gridRow.setPrecision("");
+			gridRow.setScale("");
+			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(Messages.SCALE_TYPE_NONE));
+			gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
+		}
+		
+		if(field.getDescription()!=null)
+			gridRow.setDescription(field.getDescription());
+		else
+			gridRow.setDescription("");
+		
+	}
+
+
+
+	private void populateBigDecimal(GridRow gridRow, Field field) {
 		if(field.getPrecision()!=null)
 			gridRow.setPrecision(String.valueOf(field.getPrecision()));
 		else
@@ -452,12 +471,6 @@ public class GridRowLoader {
 			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(Messages.SCALE_TYPE_NONE));
 			gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
 		}
-		
-		if(field.getDescription()!=null)
-			gridRow.setDescription(field.getDescription());
-		else
-			gridRow.setDescription("");
-		
 	}
 
 }

@@ -324,7 +324,6 @@ public class JobManager {
 			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(), activeProjectLocation + "/"
 					+ PARAMETER_FILE_DIR + "/" + getComponentCanvas().getJobName() + PARAMETER_FILE_EXTENTION, true));
 		}
-		
 	}
 
 	private RunConfigDialog getRunConfiguration() {
