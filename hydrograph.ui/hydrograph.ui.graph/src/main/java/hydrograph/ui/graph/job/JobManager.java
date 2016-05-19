@@ -69,8 +69,11 @@ public class JobManager {
 	private Map<String, Job> runningJobsMap;
 	public static JobManager INSTANCE = new JobManager();
 	private boolean localMode;
-
-
+	private static final String PARAMETER_FILE_DIR="param";
+	private static final String PARAMETER_FILE_EXTENTION=".properties";
+	private static final String DEBUG_FILE_EXTENTION="_debug.xml";
+	public static final String PROJECT_METADATA_FILE="\\project.metadata";
+	
 	public boolean isLocalMode() {
 		return localMode;
 	}
@@ -280,7 +283,7 @@ public class JobManager {
 	private String getJobDebugXMLPath() {
 		IEditorPart iEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
-		String debugXmlPath = iEditorPart.getEditorInput().getToolTipText().replace(Messages.JOBEXTENSION, "_debug.xml");
+		String debugXmlPath = iEditorPart.getEditorInput().getToolTipText().replace(Messages.JOBEXTENSION,DEBUG_FILE_EXTENTION);
 		 
 		return debugXmlPath;
 	}
@@ -292,10 +295,10 @@ public class JobManager {
 		FileInputStream fin;
 		List<ParameterFile> filepathList = new LinkedList<>();
 		
-		updateParameterFileListWithJobSpecificFile(filepathList);
+		updateParameterFileListWithJobSpecificFile(filepathList,activeProjectLocation);
 		
 		try {
-			fin = new FileInputStream(activeProjectLocation + "\\project.metadata");
+			fin = new FileInputStream(activeProjectLocation + PROJECT_METADATA_FILE);
 			ObjectInputStream ois = new ObjectInputStream(fin);
 			filepathList.addAll((LinkedList<ParameterFile>)ois.readObject());
 		} catch (FileNotFoundException fileNotfoundException) {
@@ -313,13 +316,15 @@ public class JobManager {
 		return parameterFileDialog;
 	}
 	
-	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList) {
+	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList, String activeProjectLocation) {
 		if (OSValidator.isWindows()) {
-			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),getComponentCanvas().getParameterFile().replace("/", "\\"),
-					true));
+			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(), activeProjectLocation + "\\"
+					+ PARAMETER_FILE_DIR + "\\" + getComponentCanvas().getJobName() + PARAMETER_FILE_EXTENTION, true));
 		} else {
-			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),getComponentCanvas().getParameterFile(), true));
+			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(), activeProjectLocation + "/"
+					+ PARAMETER_FILE_DIR + "/" + getComponentCanvas().getJobName() + PARAMETER_FILE_EXTENTION, true));
 		}
+		
 	}
 
 	private RunConfigDialog getRunConfiguration() {
