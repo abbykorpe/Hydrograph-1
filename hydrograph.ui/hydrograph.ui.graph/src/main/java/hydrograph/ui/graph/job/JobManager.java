@@ -71,7 +71,7 @@ public class JobManager {
 	private boolean localMode;
 	private static final String PARAMETER_FILE_DIR="param";
 	private static final String PARAMETER_FILE_EXTENTION=".properties";
-	private static final String DEBUG_FILE_EXTENATION="_debug.xml";
+	private static final String DEBUG_FILE_EXTENTION="_debug.xml";
 	public static final String PROJECT_METADATA_FILE="\\project.metadata";
 	
 	public boolean isLocalMode() {
@@ -283,7 +283,7 @@ public class JobManager {
 	private String getJobDebugXMLPath() {
 		IEditorPart iEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
-		String debugXmlPath = iEditorPart.getEditorInput().getToolTipText().replace(Messages.JOBEXTENSION,DEBUG_FILE_EXTENATION);
+		String debugXmlPath = iEditorPart.getEditorInput().getToolTipText().replace(Messages.JOBEXTENSION,DEBUG_FILE_EXTENTION);
 		 
 		return debugXmlPath;
 	}
