@@ -18,6 +18,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "resources.messages"; //$NON-NLS-1$
+	
 	public static String GRADLE_RUN;
 	public static String XMLPATH;
 	public static String PARAM_FILE;
@@ -32,6 +33,10 @@ public class Messages extends NLS {
 	public static String HOST;
 	public static String USERNAME;
 	public static String PROCESS_ID;
+	
+	public static String JOB_EXT;
+	public static String PROPERTIES_EXT;
+	public static String XML_EXT;
 	 
 	public static String OPEN_GRAPH_TO_RUN;
 	public static String KILL_JOB_MESSAGEBOX_TITLE;

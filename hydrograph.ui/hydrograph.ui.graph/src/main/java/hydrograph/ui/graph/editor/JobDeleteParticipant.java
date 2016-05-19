@@ -13,6 +13,7 @@
 
 package hydrograph.ui.graph.editor;
 
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.utility.ResourceChangeUtil;
 import hydrograph.ui.project.structure.CustomMessages;
 
@@ -77,9 +78,9 @@ public class JobDeleteParticipant extends DeleteParticipant{
 		
 		for(IResource resource:memberList) {
 			if(Pattern.matches(fileName+".*", resource.getName())) {
-				if(("xml".equals(resource.getFileExtension())
-						|| "properties".equals(resource.getFileExtension())
-						|| "job".equals(resource.getFileExtension()))
+				if((Messages.XML_EXT.equals(resource.getFileExtension())
+						|| Messages.PROPERTIES_EXT.equals(resource.getFileExtension())
+						|| Messages.JOB_EXT.equals(resource.getFileExtension()))
 						&&!(modifiedResource.getName().equals(resource.getName()))) {
 					
 					

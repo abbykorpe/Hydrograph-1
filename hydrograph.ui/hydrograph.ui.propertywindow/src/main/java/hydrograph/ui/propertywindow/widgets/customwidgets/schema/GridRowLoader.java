@@ -435,7 +435,7 @@ public class GridRowLoader {
 		else
 			gridRow.setDateFormat("");
 		
-		if(field.getType().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL)){
+		if(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.equals(field.getType())){
 			populateBigDecimal(gridRow, field);
 		}else{
 			gridRow.setPrecision("");
