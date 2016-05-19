@@ -565,12 +565,4 @@ public class JobManager {
 		return "";
 	}
 	
-	public static String isAbsolutePathFromFile(IPath jobFilePath) {
-		if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists())
-			return ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).getLocation().toString();
-		else if (jobFilePath.toFile().exists())
-			return jobFilePath.toFile().getAbsolutePath();
-		return "";
-	}
-
 }
