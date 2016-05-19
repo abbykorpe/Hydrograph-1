@@ -35,12 +35,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
@@ -55,7 +49,8 @@ import org.slf4j.Logger;
  */
 public class ParameterGridOpenHandler extends AbstractHandler {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ParameterGridOpenHandler.class);
-
+	private static final String PARAMETER_FILE_DIR="param";
+	private static final String PARAMETER_FILE_EXTENTION=".properties";
 	/**
 	 * 
 	 * Returns active editor as {@link DefaultGEFCanvas}
@@ -99,7 +94,7 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 		FileInputStream fileInputStream;
 		List<ParameterFile> parameterFileList = new LinkedList<>();
 
-		updateParameterFileListWithJobSpecificFile(parameterFileList);
+		updateParameterFileListWithJobSpecificFile(parameterFileList,activeProjectLocation);
 
 		try {
 			fileInputStream = new FileInputStream(activeProjectLocation + MultiParameterFileDialogConstants.PROJECT_METADATA_FILE);
@@ -111,13 +106,14 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 		return parameterFileList;
 	}
 
-	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList) {
+	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList, String activeProjectLocation) {
 		if (OSValidator.isWindows()) {
-			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),getComponentCanvas().getParameterFile().replace("/", "\\"),
-					true));
+			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(), activeProjectLocation + "\\"
+					+ PARAMETER_FILE_DIR + "\\" + getComponentCanvas().getJobName() + PARAMETER_FILE_EXTENTION, true));
 		} else {
-			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName().replace("job", "properties"),getComponentCanvas().getParameterFile(), true));
+			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(), activeProjectLocation + "/"
+					+ PARAMETER_FILE_DIR + "/" + getComponentCanvas().getJobName() + PARAMETER_FILE_EXTENTION, true));
 		}
-
+		
 	}
 }
