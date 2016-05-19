@@ -237,4 +237,7 @@ public class Constants {
 	public static String SYNC_CONFIRM_MESSAGE="Do you want to sync schema ?, It will override existing schema";
 	public static String CLICK_TO_FOCUS="Click to focus";
 
+	// Temporary property names of component 
+	public static String SCHEMA_FIELD_SEQUENCE = "schema_field_sequence";
+	
 }

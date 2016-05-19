@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -114,14 +115,13 @@ public class ComponentsOutputSchema implements IDataStructure {
 	 * @param sourceOutputSchema
 	 * @param string 
 	 */
-	public void updatePassthroughFieldsSchema(ComponentsOutputSchema sourceOutputSchema, String port) {
-		FixedWidthGridRow targetFixedWidthGridRow;
-		FixedWidthGridRow sourceFixedWidthGridRow;
+	public void updatePassthroughFieldsSchema(ComponentsOutputSchema sourceOutputSchema) {
+		if(sourceOutputSchema==null)
+			return ;
 		for (String fieldName : passthroughFields) {
-			targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(fieldName);
-			if (targetFixedWidthGridRow != null && sourceOutputSchema!=null) {
-				sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(fieldName);
-				if (sourceFixedWidthGridRow != null) {
+			FixedWidthGridRow targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(fieldName);
+			FixedWidthGridRow sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(fieldName);
+			if (targetFixedWidthGridRow != null && sourceFixedWidthGridRow!=null) {
 					targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
 					targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
 					targetFixedWidthGridRow.setLength(sourceFixedWidthGridRow.getLength());
@@ -131,10 +131,11 @@ public class ComponentsOutputSchema implements IDataStructure {
 					targetFixedWidthGridRow.setScaleType(sourceFixedWidthGridRow.getScaleType());
 					targetFixedWidthGridRow.setScaleTypeValue(sourceFixedWidthGridRow.getScaleTypeValue());
 					targetFixedWidthGridRow.setDescription(sourceFixedWidthGridRow.getDescription());
+			}else
+				if(sourceFixedWidthGridRow!=null){
+					this.addSchemaFields(sourceFixedWidthGridRow.copy());
 				}
-				
 			}
-		}
 	}
 
 	private FixedWidthGridRow getFixedWidthGridRowForFieldName(String fieldName) {
@@ -151,15 +152,13 @@ public class ComponentsOutputSchema implements IDataStructure {
 	 * @param sourceOutputSchema
 	 * @param port 
 	 */
-	public void updateMapFieldsSchema(ComponentsOutputSchema sourceOutputSchema, String port) {
-		System.out.println("The port is: " + port);
-		FixedWidthGridRow targetFixedWidthGridRow;
-		FixedWidthGridRow sourceFixedWidthGridRow;
+	public void updateMapFieldsSchema(ComponentsOutputSchema sourceOutputSchema) {
+		if(sourceOutputSchema==null)
+			return ;
 		for (Entry<String, String> entry : mapFields.entrySet()) {
-			targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(entry.getKey());
-			if (targetFixedWidthGridRow != null && sourceOutputSchema!=null) {
-				sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(entry.getValue());
-             	if (sourceFixedWidthGridRow != null) {
+			FixedWidthGridRow targetFixedWidthGridRow = getFixedWidthGridRowForFieldName(entry.getKey());
+			FixedWidthGridRow sourceFixedWidthGridRow = sourceOutputSchema.getFixedWidthGridRowForFieldName(entry.getValue());
+			if (targetFixedWidthGridRow != null && sourceFixedWidthGridRow!=null) {
 					targetFixedWidthGridRow.setDataType(sourceFixedWidthGridRow.getDataType());
 					targetFixedWidthGridRow.setDataTypeValue(sourceFixedWidthGridRow.getDataTypeValue());
 					targetFixedWidthGridRow.setLength(sourceFixedWidthGridRow.getLength());
@@ -169,11 +168,11 @@ public class ComponentsOutputSchema implements IDataStructure {
 					targetFixedWidthGridRow.setScaleType(sourceFixedWidthGridRow.getScaleType());
 					targetFixedWidthGridRow.setScaleTypeValue(sourceFixedWidthGridRow.getScaleTypeValue());
 					targetFixedWidthGridRow.setDescription(sourceFixedWidthGridRow.getDescription());
+			} else if ( sourceFixedWidthGridRow != null) {
+					GridRow newGridRow=sourceFixedWidthGridRow.copy();
+					newGridRow.setFieldName(entry.getKey());
+					this.addSchemaFields(newGridRow);
 				}
-				
-				
-				
-			}
 		}
 	}
 
@@ -258,6 +257,22 @@ public class ComponentsOutputSchema implements IDataStructure {
 	public List<FixedWidthGridRow> getFixedWidthGridRowsOutputFields() {
 		return fixedWidthGridRowsOutputFields;
 	}
+	
+	/**
+	 * This method returns list of basic-schema from current propagated schema. 
+	 * 
+	 * @return
+	 */
+	public List<BasicSchemaGridRow> getBasicGridRowsOutputFields() {
+		List<BasicSchemaGridRow> basicSchemaGridRows = null;
+		if (fixedWidthGridRowsOutputFields != null) {
+			basicSchemaGridRows = new ArrayList<>();
+			for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
+				basicSchemaGridRows.add(convertFixedWidthSchemaToSchemaGridRow(fixedWidthGridRow));
+			}
+		}
+		return basicSchemaGridRows;
+	}
 
 	/**
 	 * This methods returns fixed-width-schema row of given field-name.
@@ -308,4 +323,19 @@ public class ComponentsOutputSchema implements IDataStructure {
 		mixedSchemeGridRow.setDelimiter("");
 	return mixedSchemeGridRow;
 	}
+
+	public ComponentsOutputSchema copy() {
+		ComponentsOutputSchema newComponentsOutputSchema = new ComponentsOutputSchema();
+			for (FixedWidthGridRow fixedWidthGridRow : this.getFixedWidthGridRowsOutputFields())
+				newComponentsOutputSchema.getFixedWidthGridRowsOutputFields().add(
+						(FixedWidthGridRow) fixedWidthGridRow.copy());
+			for (MixedSchemeGridRow mixedSchemeGridRow : this.mixedSchemeGridRowsOutputFields)
+				newComponentsOutputSchema.mixedSchemeGridRowsOutputFields.add((MixedSchemeGridRow) mixedSchemeGridRow.copy());
+			newComponentsOutputSchema.passthroughFields.addAll(this.passthroughFields);
+			newComponentsOutputSchema.mapFields.putAll(this.mapFields);
+			newComponentsOutputSchema.passThroughFieldsPortInfo.putAll(this.passThroughFieldsPortInfo);
+			newComponentsOutputSchema.mapFieldsPortInfo.putAll(this.mapFieldsPortInfo);
+		return newComponentsOutputSchema;
+	}
+
 }

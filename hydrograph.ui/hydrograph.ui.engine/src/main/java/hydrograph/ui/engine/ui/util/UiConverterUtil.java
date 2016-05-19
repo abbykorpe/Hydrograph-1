@@ -113,8 +113,9 @@ public class UiConverterUtil {
 			}
 			createLinks();
 		}
+		ImportedSchemaPropagation.INSTANCE.initiateSchemaPropagationAfterImport(container);
 		genrateUIXML(container, jobFile, parameterFile);
-
+		
 	}
 
 	/**

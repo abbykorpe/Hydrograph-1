@@ -110,7 +110,7 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 	protected Object getSchema(TypeInputOutSocket outSocket) {
 		LOGGER.debug("Generating UI-Schema data for {}", componentName);
 		Schema schema = null;
-		List<GridRow> gridRow = new ArrayList<>();
+		List<GridRow> gridRowList = new ArrayList<>();
 
 		if (outSocket.getSchema() != null
 				&& outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema().size() != 0) {
@@ -120,13 +120,14 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 					schema.setIsExternal(true);
 					if (StringUtils.isNotBlank(((TypeExternalSchema) record).getUri()))
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
-						gridRow.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(), Constants.GENERATE_RECORD_GRID_ROW));
-						schema.setGridRow(gridRow);
+						gridRowList.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(), Constants.GENERATE_RECORD_GRID_ROW));
+						schema.setGridRow(gridRowList);
 				} else {
-					gridRow.add(getGenerateRecordsSchemaGridRow(record));
-					schema.setGridRow(gridRow);
+					gridRowList.add(getGenerateRecordsSchemaGridRow(record));
+					schema.setGridRow(gridRowList);
 					schema.setIsExternal(false);
 				}
+				saveComponentOutputSchema(outSocket.getId(),gridRowList);
 			}
 		}
 		return schema;

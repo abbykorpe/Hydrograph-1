@@ -156,8 +156,10 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 						unusedPortCounter++;
 				uiComponent.engageOutputPort(outSocket.getId());
 				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null
-						&& !outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty())
+						&& !outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()){
 					propertyMap.put(Constants.JOIN_MAP_FIELD, getJoinMappingGrid(outSocket));
+					createPassThroughAndMappingFieldsForSchemaPropagation(outSocket);
+				}
 			}
 
 		}

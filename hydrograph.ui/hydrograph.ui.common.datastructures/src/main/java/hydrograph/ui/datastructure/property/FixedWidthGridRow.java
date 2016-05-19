@@ -16,7 +16,7 @@ package hydrograph.ui.datastructure.property;
 
 
 /**
- * The Class FixedWidthGridRow.
+ * FixedWidthGridRow is the data-structure used for storing schema of Fixed-Width components
  * 
  * @author Bitwise
  */
