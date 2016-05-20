@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -87,7 +88,7 @@ public class ProjectStructureCreator {
 	 * @return
 	 */
 	public IProject createProject(String projectName, URI location){
-		if (projectName.contains(" ")){
+		if (StringUtils.isNotBlank(projectName) && projectName.contains(" ")){
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 			messageBox.setText("Error");
 			messageBox.setMessage("The Project Name has spaces");
@@ -96,8 +97,9 @@ public class ProjectStructureCreator {
 				return null;
 			}
 		}
-		if(projectName == null || projectName.trim().length() <= 0)
+		else if(StringUtils.isBlank(projectName)){
 			throw new InvalidProjectNameException();
+		}
 		IProject project = null;
 		try {
 			project = createBaseProject(projectName, location);
