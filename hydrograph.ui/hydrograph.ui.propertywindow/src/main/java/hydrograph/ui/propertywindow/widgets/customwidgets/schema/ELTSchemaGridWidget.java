@@ -58,6 +58,7 @@ import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDetails;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.GridChangeListener;
 import hydrograph.ui.propertywindow.widgets.utility.GridComparator;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
+import hydrograph.ui.propertywindow.widgets.utility.MouseWheelScrollingOnComposite;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
@@ -1193,13 +1194,15 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		scrolledComposite.setContent(tableComposite);
 		scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,
 				SWT.DEFAULT));
-		
+		MouseWheelScrollingOnComposite.installMouseWheelScrollRecursively(scrolledComposite);
 		return tableViewer;
 	}
 
+	
+	
+	
 	private void addGridRowsCopyPasteContextMenu() {
 		Menu menu = new Menu(tableViewer.getControl());
-	
 		copyMenuItem = new MenuItem(menu, SWT.PUSH);
 		copyMenuItem.setText(Messages.COPY_MENU_TEXT);
 		copyMenuItem.setAccelerator(SWT.CTRL + 'C');

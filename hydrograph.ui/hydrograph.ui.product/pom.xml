@@ -30,12 +30,14 @@
 				<executions>
 					<execution>
 						<id>materialize-products</id>
+						<phase>package</phase>
 						<goals>
 							<goal>materialize-products</goal>
 						</goals>
 					</execution>
 					<execution>
 						<id>archive-products</id>
+						<phase>verify</phase> 
 						<goals>
 							<goal>archive-products</goal>
 						</goals>
@@ -51,8 +53,8 @@
 						</product>
 					</products>
 				</configuration>
-
 			</plugin>
+            
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.6</version>
@@ -135,31 +137,27 @@
 					</execution>
 				</executions>
 			</plugin>
-	<plugin>
-	<artifactId>maven-antrun-plugin</artifactId>
-	<version>1.7</version>
-	<executions>
-		<execution>
-			<phase>verify</phase>
-			<configuration>
-				<tasks>
-
-					<copy
-						todir="target/products/hydrograph.ui.perspective.ID/macosx/cocoa/x86_64/ELTTool.app/Contents/MacOS/">
-						<fileset
-							dir="target/products/hydrograph.ui.perspective.ID/macosx/cocoa/x86_64/ELTTool.app/Contents/Eclipse/">
-							<include name="eclipse.ini" />
-						</fileset>
-					</copy>
-
-				</tasks>
-			</configuration>
-			<goals>
-				<goal>run</goal>
-			</goals>
-		</execution>
-	</executions>
-</plugin>	 
+	        <plugin>
+                   	<groupId>org.apache.maven.plugins</groupId>
+	                <artifactId>maven-antrun-plugin</artifactId>
+	                <version>1.8</version>
+	                <executions>
+		               <execution>
+			              <id>copy-dependencies</id>
+			              <phase>package</phase>
+			              <goals>
+				             <goal>run</goal>
+			              </goals>
+			           <configuration>
+			         	<target>
+					    <copy
+						file="target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\ELTTool.app\Contents\Eclipse\eclipse.ini"
+						todir="target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\ELTTool.app\Contents\MacOS\" />
+				        </target>
+		            </configuration>
+		         </execution>
+	          </executions>
+         </plugin>	
 		</plugins>
 	</build>
 </project>
