@@ -58,6 +58,7 @@ import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDetails;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.GridChangeListener;
 import hydrograph.ui.propertywindow.widgets.utility.GridComparator;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
+import hydrograph.ui.propertywindow.widgets.utility.MouseWheelScrollingOnComposite;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
@@ -111,17 +112,14 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -1196,44 +1194,15 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		scrolledComposite.setContent(tableComposite);
 		scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,
 				SWT.DEFAULT));
-		installMouseWheelScrollRecursively(scrolledComposite);
+		MouseWheelScrollingOnComposite.installMouseWheelScrollRecursively(scrolledComposite);
 		return tableViewer;
 	}
 
-	private  void installMouseWheelScrollRecursively( ScrolledComposite scrollable) {
-		MouseWheelListener scroller = createMouseWheelScroller(scrollable);
-		if (scrollable.getParent() != null)
-		{	
-		 scrollable.getParent().addMouseWheelListener(scroller);
-		}	
-		installMouseWheelScrollRecursively(scroller, scrollable);
-	}
-
-	private  MouseWheelListener createMouseWheelScroller(final ScrolledComposite scrollable) {
-		return new MouseWheelListener() {
-			
-			@Override
-			public void mouseScrolled(MouseEvent e) {
-				Point currentScroll = scrollable.getOrigin();
-				scrollable.setOrigin(currentScroll.x, currentScroll.y - (e.count * 5));
-			}
-		};
-	}
-
-	private  void installMouseWheelScrollRecursively(MouseWheelListener scroller, Control c) {
-		c.addMouseWheelListener(scroller);
-		if (c instanceof Composite) {
-			Composite comp = (Composite) c;
-			for (Control child : comp.getChildren()) {
-				installMouseWheelScrollRecursively(scroller, child);
-			}
-		}
-	}
+	
 	
 	
 	private void addGridRowsCopyPasteContextMenu() {
 		Menu menu = new Menu(tableViewer.getControl());
-	
 		copyMenuItem = new MenuItem(menu, SWT.PUSH);
 		copyMenuItem.setText(Messages.COPY_MENU_TEXT);
 		copyMenuItem.setAccelerator(SWT.CTRL + 'C');
