@@ -160,7 +160,7 @@ public class JobManager {
 	 * @param job
 	 *            - {@link Job} to execute
 	 */
-	public void executeJob(final Job job, String uniqueJobId,List<String> externalSchemaFiles) {
+	public void executeJob(final Job job, String uniqueJobId,List<String> externalSchemaFiles,List<String> subJobList) {
 		enableRunJob(false);
 		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
 
@@ -196,12 +196,12 @@ public class JobManager {
 		job.setHost(runConfigDialog.getHost());
 		job.setRemoteMode(runConfigDialog.isRemoteMode());
 
-		gefCanvas.disableRunningJobResource();
+		gefCanvas.disableRunningJobResource(); 
 		
-			launchJob(job, gefCanvas, parameterGrid, xmlPath,externalSchemaFiles);
+			launchJob(job, gefCanvas, parameterGrid, xmlPath,externalSchemaFiles,subJobList);
 	}
 
-	public void executeJobInDebug(final Job job, boolean isRemote, String userName,List<String> externalSchemaFiles) {
+	public void executeJobInDebug(final Job job, boolean isRemote, String userName,List<String> externalSchemaFiles,List<String> subJobList) {
 		enableRunJob(false);
 		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
 
@@ -230,17 +230,17 @@ public class JobManager {
 
 		gefCanvas.disableRunningJobResource();
 
-		launchJobWithDebugParameter(job, gefCanvas, parameterGrid, xmlPath, debugXmlPath,externalSchemaFiles);
+		launchJobWithDebugParameter(job, gefCanvas, parameterGrid, xmlPath, debugXmlPath,externalSchemaFiles,subJobList);
 	}
 		
 	private void launchJob(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
-			final String xmlPath,final List<String> externalSchemaFiles) {
+			final String xmlPath,final List<String> externalSchemaFiles,final List<String> subJobList) {
 		if (job.isRemoteMode()) {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new RemoteJobLauncher();
-					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles);
+					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles,subJobList);
 				}
 
 			}).start();
@@ -251,7 +251,7 @@ public class JobManager {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new LocalJobLauncher();
-					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles);
+					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles,subJobList);
 				}
 
 			}).start();
@@ -259,14 +259,14 @@ public class JobManager {
 	}
 
 	private void launchJobWithDebugParameter(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
-			final String xmlPath, final String debugXmlPath,final List<String> externalSchemaFiles) {
+			final String xmlPath, final String debugXmlPath,final List<String> externalSchemaFiles,final List<String> subJobList) {
 		if (job.isRemoteMode()) {
 			setLocalMode(false);
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new DebugRemoteJobLauncher();
-					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath,  parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles);
+					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath,  parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles,subJobList);
 				}
 
 			}).start();
@@ -278,7 +278,7 @@ public class JobManager {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new DebugLocalJobLauncher();
-					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas, externalSchemaFiles);
+					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas, externalSchemaFiles,subJobList);
 				}
 
 			}).start();

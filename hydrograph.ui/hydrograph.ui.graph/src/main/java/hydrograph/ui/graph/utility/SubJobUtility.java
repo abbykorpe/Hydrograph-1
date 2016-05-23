@@ -10,6 +10,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+
+ 
 package hydrograph.ui.graph.utility;
 
 import hydrograph.ui.common.util.CanvasDataAdpater;
@@ -226,8 +228,8 @@ public class SubJobUtility {
 
 		edComponentEditPart.getCastedModel().setSize(newSize);
 
-		String subJobFilePath = file.getFullPath().toOSString();
-		edComponentEditPart.getCastedModel().getProperties().put(Constants.PATH, subJobFilePath);
+		String subJobFilePath = file.getFullPath().toString();
+		edComponentEditPart.getCastedModel().getProperties().put(Constants.PATH, subJobFilePath.substring(1));
 		if (inPort != 0 && outPort != 0)
 			edComponentEditPart.getCastedModel().getProperties().put(Constants.TYPE, Constants.OPERATION);
 		if (inPort != 0 && outPort == 0)

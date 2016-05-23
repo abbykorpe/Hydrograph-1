@@ -20,8 +20,6 @@ import hydrograph.ui.common.datastructures.tooltip.TootlTipErrorMessage;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.NameValueProperty;
-import hydrograph.ui.datastructure.property.OperationClassProperty;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -41,7 +39,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream.GetField;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,10 +56,12 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.actions.OpenNewClassWizardAction;
 import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
@@ -148,10 +147,15 @@ public class FilterOperationClassUtility  {
 		{
 			browseJavaSelectionDialog(filterExtension, fileName);
 		}
-		else
+		if(Extensions.JOB.toString().equalsIgnoreCase(filterExtension))
+		{
+			browseJobSelectionDialog(filterExtension, fileName);
+		}
+		if(Extensions.SCHEMA.toString().equalsIgnoreCase(filterExtension))
 		{
 			browseSchemaSelectionDialog(filterExtension, fileName);
 		}
+		
 	}
 
 	private void browseSchemaSelectionDialog(String filterExtension, Text fileName) {
@@ -206,6 +210,43 @@ public class FilterOperationClassUtility  {
 }
 	} 
 
+	private void browseJobSelectionDialog(String filterExtension, Text fileName) {
+		ResourceFileSelectionDialog dialog = new ResourceFileSelectionDialog(
+				"Project", "Select Sub Job (.job)", new String[] { filterExtension });
+		if (dialog.open() == IDialogConstants.OK_ID) {
+			IResource resource = (IResource) dialog.getFirstResult();
+			String filePath = resource.getFullPath().toString();
+			if(isFileExistsOnLocalFileSystem(new Path(filePath), fileName))
+				fileName.setText(filePath.substring(1));
+			}
+	}
+	
+	private boolean isFileExistsOnLocalFileSystem(IPath jobFilePath, Text textBox) {
+		jobFilePath=jobFilePath.removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH);
+		try {
+			if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists())
+				return true;
+			else if (jobFilePath.toFile().exists())
+				return true;
+		} catch (Exception exception) {
+			logger.error("Error occured while cheking file on local file system", exception);
+		}
+		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.YES
+				| SWT.NO);
+		messageBox.setMessage(jobFilePath.lastSegment()+Messages.FILE_DOES_NOT_EXISTS);
+		messageBox.setText(jobFilePath.toString() +Messages.NOT_EXISTS);
+		int response = messageBox.open();
+		if (response == SWT.YES) {
+			jobFilePath=jobFilePath.removeFileExtension().addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH);
+			textBox.setText(jobFilePath.toString().substring(1));
+		}else
+			textBox.setText("");
+		return false;
+	}
+
+
+	
+	
 	/**
 	 * Open file editor.
 	 * 
@@ -352,7 +393,7 @@ public class FilterOperationClassUtility  {
 			openBtn.setEnabled(!value);
 			createBtn.setEnabled(!value);
 			browseBtn.setEnabled(!value);
-		}
+		} 
 	}
 	public static void setComponentName(String name) {
 		componentName = name;
@@ -386,6 +427,5 @@ public class FilterOperationClassUtility  {
 	public void setFileNameTextBoxValue(String fileNameTextBoxValue) {
 		this.fileNameTextBoxValue = fileNameTextBoxValue;
 	}
-
-
+	
 }

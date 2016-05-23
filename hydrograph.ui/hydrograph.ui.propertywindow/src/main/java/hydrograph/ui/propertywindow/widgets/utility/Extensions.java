@@ -1,8 +1,9 @@
 package hydrograph.ui.propertywindow.widgets.utility;
 
 public enum Extensions {
-	JAVA("JAVA"),
-	SCHEMA("SCHEMA");
+	JAVA("java"),
+	SCHEMA("schema"),
+	JOB("job");
 	
 private final String extension;
 

@@ -14,15 +14,14 @@
  
 package hydrograph.ui.engine.converter;
 
-import hydrograph.ui.graph.model.Component;
-
-import java.util.List;
-
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.engine.jaxb.transform.TypeTransformOutSocket;
+import hydrograph.ui.graph.model.Component;
+
+import java.util.List;
 
 public abstract class SubjobConverter extends Converter {
 	

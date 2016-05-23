@@ -15,9 +15,13 @@
 package hydrograph.ui.graph.job;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -27,12 +31,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 
@@ -51,7 +60,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 	private static final String JOB_FAILED="JOB FAILED";
 
 	@Override
-	public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles) {
+	public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		String projectName = xmlPath.split("/", 2)[0];
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		job.setJobProjectDirectory(project.getLocation().toOSString());
@@ -60,9 +69,8 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 
 		job.setJobStatus(JobStatus.RUNNING);
 		JobLogger joblogger;
-		// ---------------------------- code to copy jar file
 
-		gradleCommand = JobScpAndProcessUtility.INSTANCE.getCreateDirectoryCommand(job,paramFile,xmlPath,projectName,new ArrayList<String>(externalSchemaFiles));
+		gradleCommand = JobScpAndProcessUtility.INSTANCE.getCreateDirectoryCommand(job,paramFile,xmlPath,projectName,new ArrayList<String>(externalSchemaFiles),new ArrayList<>(subJobList));
 		
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (job.getJobStatus().equals(JobStatus.FAILED)) {
@@ -73,10 +81,34 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			return;
 		}
 		
+		
 		/*
 		 * Created list having relative and absolute # separated path, 
-		 * the path is split in gradle script using absolute path we move the schema file to relative path directory of remote server   
+		 * the path is split in gradle script,Using absolute path we move the schema file to relative path directory of remote server   
 		 */
+		if(!subJobList.isEmpty()){
+		List<String> subJobFullPath = new ArrayList<>();
+		for (String subJobFile : subJobList) {
+			subJobFullPath.add(subJobFile+"#"+JobManager.getAbsolutePathFromFile(new Path(subJobFile)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION));
+		}
+		gradleCommand = JobScpAndProcessUtility.INSTANCE.getSubjobScpCommand(subJobFullPath,job);
+		
+		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
+		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+			releaseResources(job, gefCanvas, joblogger);
+			return;
+		}
+		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+			return;
+		}
+		}
+
+		
+		/*
+		 * Created list having relative and absolute # separated path, 
+		 * the path is split in gradle script, Using absolute path we move the schema file to relative path directory of remote server   
+		 */
+		if(!externalSchemaFiles.isEmpty()){
 		List<String> schemaFilesFullPath = new ArrayList<>();
 		for (String schemaFile : externalSchemaFiles) {
 			schemaFilesFullPath.add(schemaFile+"#"+JobManager.getAbsolutePathFromFile(new Path(schemaFile)));
@@ -90,6 +122,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		}
 		if (job.getJobStatus().equals(JobStatus.KILLED)) {
 			return;
+		}
 		}
 
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getLibararyScpCommand(job);
@@ -243,9 +276,29 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 	@Override
 	public void launchJobInDebug(String xmlPath, String debugXmlPath,
 			 String paramFile, Job job,
-			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles) {
+			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	private List<String> getSubJobList() {
+		ArrayList<String> subJobList=new ArrayList<>();
+		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if (editor != null && editor instanceof ELTGraphicalEditor) {
+			GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor)
+					.getAdapter(GraphicalViewer.class);
+			for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();) {
+				EditPart editPart = (EditPart) ite.next();
+				if (editPart instanceof ComponentEditPart) {
+					Component component = ((ComponentEditPart) editPart).getCastedModel();
+					if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
+					  String subJobPath=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
+					  subJobList.add(subJobPath);
+					}
+				}
+			}
+		}
+		return subJobList;
 	}
 
 }

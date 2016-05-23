@@ -94,7 +94,8 @@ public class RunJobHandler extends AbstractHandler {
 		String canvasName = consoleName;
 		String localJobID = consoleName;
 		List<String> externalSchemaFiles=getExternalSchemaList();
-		JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null,externalSchemaFiles);
+		List<String> subJobList = getSubJobList();
+		JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null,externalSchemaFiles,subJobList);
 		CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();		
 		return null;
 	}
@@ -119,5 +120,26 @@ public class RunJobHandler extends AbstractHandler {
 		}
 		return externalSchemaPathList;
 	}
+	
+	private List<String> getSubJobList() {
+		ArrayList<String> subJobList=new ArrayList<>();
+		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if (editor != null && editor instanceof ELTGraphicalEditor) {
+			GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor)
+					.getAdapter(GraphicalViewer.class);
+			for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();) {
+				EditPart editPart = (EditPart) ite.next();
+				if (editPart instanceof ComponentEditPart) {
+					Component component = ((ComponentEditPart) editPart).getCastedModel();
+					if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
+					  String subJobPath=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
+					  subJobList.add(subJobPath);
+					}
+				}
+			}
+		}
+		return subJobList;
+	}
+
 
 }

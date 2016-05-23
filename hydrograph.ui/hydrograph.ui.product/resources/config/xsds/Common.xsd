@@ -51,6 +51,7 @@
 			<enumeration value="FIXED_WIDGET"/>
 			<enumeration value="RUNTIME_PROPERTIES_WIDGET" />
 			<enumeration value="FILE_PATH_WIDGET" />
+			<enumeration value="BROWSE_WORKSPACE_WIDGET" />
 			<enumeration value="CHARACTER_SET_WIDGET" />
 			<enumeration value="DELIMETER_WIDGET" />
 			<enumeration value="PHASE_WIDGET" />

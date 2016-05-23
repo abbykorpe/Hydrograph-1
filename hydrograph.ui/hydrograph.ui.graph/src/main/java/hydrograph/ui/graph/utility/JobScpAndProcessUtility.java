@@ -13,17 +13,17 @@
 
 package hydrograph.ui.graph.utility;
 
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.job.GradleCommandConstants;
+import hydrograph.ui.graph.job.Job;
+
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IProject;
-
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.PathUtility;
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.job.GradleCommandConstants;
-import hydrograph.ui.graph.job.Job;
 
 public class JobScpAndProcessUtility {
 
@@ -86,6 +86,20 @@ public class JobScpAndProcessUtility {
 				+ job.getPassword() + GradleCommandConstants.GPARAM_MOVE_SCHEMA + externalSchema;
 	}
 	
+	
+	/**
+	 * 
+	 * @param externalSchemaFiles
+	 * @param job
+	 * @return
+	 */
+	public String getSubjobScpCommand(List<String> subJobList,Job job) {
+			String subJobFiles =  StringUtils.join(subJobList, ",");
+			return  GradleCommandConstants.GCMD_SCP_SUBJOB_FILES + GradleCommandConstants.GPARAM_HOST + job.getHost()
+				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
+				+ job.getPassword() + GradleCommandConstants.GPARAM_MOVE_SUBJOB + subJobFiles;
+	}
+	
 
 
 	/**
@@ -98,22 +112,20 @@ public class JobScpAndProcessUtility {
 	 * @param externalSchemaFiles
 	 * @return String (Command)
 	 */
-	public  String getCreateDirectoryCommand(Job job,String paramFile,String  xmlPath,String project,List<String> externalSchemaFiles) {
+	public  String getCreateDirectoryCommand(Job job,String paramFile,String  xmlPath,String project,List<String> externalSchemaFiles,List<String> subJobList) {
 		xmlPath = getDirectoryPath(xmlPath);
 		//Get comma separated files from list.
-		String externalFiles=StringUtils.join(externalSchemaFiles, ",");
-		externalSchemaFiles.clear();
+		String schemaFiles="";
+		String subJobFiles="";
+		if(!externalSchemaFiles.isEmpty())
+			schemaFiles = getCommaSeparatedDirectories(externalSchemaFiles);
 		
-		for (String schemaFile : externalFiles.split(",")) {
-					schemaFile=getDirectoryPath(schemaFile);
-			    	externalSchemaFiles.add(schemaFile);
-			}
+		if(!subJobList.isEmpty()) 
+			subJobFiles = getCommaSeparatedDirectories(subJobList);
 		
-		externalFiles=StringUtils.join(externalSchemaFiles, ",");
-
 		return  GradleCommandConstants.GCMD_CREATE_DIRECTORIES+ GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
-				+ job.getPassword() + GradleCommandConstants.GPARAM_JOB_XML + xmlPath +GradleCommandConstants.GPARAM_MOVE_PARAM_FILE +project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_PARAM + GradleCommandConstants.GPARAM_MOVE_SCHEMA_FILES + externalFiles + GradleCommandConstants.GPARAM_MOVE_JAR + project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_LIB ;
+				+ job.getPassword() + GradleCommandConstants.GPARAM_JOB_XML + xmlPath +GradleCommandConstants.GPARAM_MOVE_PARAM_FILE +project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_PARAM + GradleCommandConstants.GPARAM_MOVE_SCHEMA_FILES + schemaFiles + GradleCommandConstants.GPARAM_MOVE_SUBJOB_FILES + subJobFiles + GradleCommandConstants.GPARAM_MOVE_JAR + project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_LIB ;
 	}
 
 	public  ProcessBuilder getProcess(IProject project, String gradleCommand) {
@@ -147,5 +159,16 @@ public class JobScpAndProcessUtility {
 		
 		}
 		return "";
+	}
+	
+	private String getCommaSeparatedDirectories(List<String> fileList ){
+		List<String> directories = new ArrayList<>();
+		for (String schemaFile : fileList) {
+					schemaFile=getDirectoryPath(schemaFile);
+					directories.add(schemaFile);
+			}
+		
+		String files=StringUtils.join(directories, ",");
+		return files;
 	}
 }

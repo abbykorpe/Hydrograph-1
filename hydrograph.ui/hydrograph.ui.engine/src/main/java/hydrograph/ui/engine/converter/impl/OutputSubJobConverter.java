@@ -18,6 +18,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.outputtypes.Subjob;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.PathUtility;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
@@ -54,8 +55,12 @@ public class OutputSubJobConverter extends OutputConverter {
 		Subjob subjob = (Subjob) baseComponent;
 		if(properties.get(Constants.JOB_PATH)!=null){
 			Subjob.Path path = new Subjob.Path();
-			String subJobFilePath = getSubJobAbsolutePath(((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION));
-			path.setUri(subJobFilePath);
+			String subJobFile=((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION);
+			if(PathUtility.INSTANCE.isAbsolute(subJobFile))
+				path.setUri(subJobFile);
+			else
+				path.setUri("../"+subJobFile);
+
 			subjob.setPath(path);
 		}
 		subjob.setSubjobParameter(getRuntimeProperties());

@@ -48,7 +48,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 	@Override
 	public void launchJobInDebug(String xmlPath, String debugXmlPath,
 			 String paramFile, Job job,
-			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles) {
+			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 
 		String projectName = xmlPath.split("/", 2)[0];
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
@@ -59,7 +59,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		job.setJobStatus(JobStatus.RUNNING);
 		JobLogger joblogger;
 		
-		gradleCommand = JobScpAndProcessUtility.INSTANCE.getCreateDirectoryCommand(job,paramFile,xmlPath,projectName,new ArrayList<String>(externalSchemaFiles));
+		gradleCommand = JobScpAndProcessUtility.INSTANCE.getCreateDirectoryCommand(job,paramFile,xmlPath,projectName,new ArrayList<String>(externalSchemaFiles),new ArrayList<>(subJobList));
 		
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (job.getJobStatus().equals(JobStatus.FAILED)) {
@@ -241,7 +241,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 	
 	@Override
 	public void launchJob(String xmlPath, String paramFile, Job job,
-			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles) {
+			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		// TODO Auto-generated method stub
 		
 	}

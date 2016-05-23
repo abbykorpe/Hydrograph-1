@@ -51,7 +51,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 	private static final String JOB_COMPLETED_SUCCESSFULLY="JOB COMPLETED SUCCESSFULLY";
 
 	@Override
-	public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles) {
+	public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		String projectName = xmlPath.split("/", 2)[0];
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		job.setJobProjectDirectory(project.getLocation().toOSString());
@@ -135,7 +135,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 	@Override
 	public void launchJobInDebug(String xmlPath, String debugXmlPath,
 			 String paramFile, Job job,
-			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles) {
+			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		// TODO Auto-generated method stub
 		
 	}
