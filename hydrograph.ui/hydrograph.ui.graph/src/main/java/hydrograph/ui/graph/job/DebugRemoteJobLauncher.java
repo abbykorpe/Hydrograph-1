@@ -15,6 +15,7 @@
 package hydrograph.ui.graph.job;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.handler.DebugHandler;
@@ -68,6 +69,27 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		}
 		if (job.getJobStatus().equals(JobStatus.KILLED)) {
 			return;
+		}
+		
+		/*
+		 * Created list having relative and absolute # separated path, 
+		 * the path is split in gradle script,Using absolute path we move the schema file to relative path directory of remote server   
+		 */
+		if(!subJobList.isEmpty()){
+		List<String> subJobFullPath = new ArrayList<>();
+		for (String subJobFile : subJobList) {
+			subJobFullPath.add(subJobFile+"#"+JobManager.getAbsolutePathFromFile(new Path(subJobFile)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION));
+		}
+		gradleCommand = JobScpAndProcessUtility.INSTANCE.getSubjobScpCommand(subJobFullPath,job);
+		
+		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
+		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+			releaseResources(job, gefCanvas, joblogger);
+			return;
+		}
+		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+			return;
+		}
 		}
 		
 		/*

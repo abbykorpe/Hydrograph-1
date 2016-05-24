@@ -12,7 +12,7 @@
  ******************************************************************************/
 
 
-package hydrograph.ui.propertywindow.widgets.listeners.grid.schema;
+package hydrograph.ui.propertywindow.widgets.dialogs;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;

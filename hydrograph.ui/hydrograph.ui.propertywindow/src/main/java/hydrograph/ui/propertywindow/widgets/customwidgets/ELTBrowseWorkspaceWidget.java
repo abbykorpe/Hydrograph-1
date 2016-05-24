@@ -59,7 +59,7 @@ import org.slf4j.Logger;
  */
 public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 	
-	private Text extSchemaPathText;
+	private Text subJobPath;
 	private Object properties;
 	private String propertyName;
 	private ControlDecoration txtDecorator;
@@ -94,23 +94,23 @@ public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(container.getContainerControl());
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 
-		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.EXTERNAL_SCHEMA);
+		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.SUBJOB_PATH);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
 		AbstractELTWidget eltDefaultTextBox = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(200);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultTextBox);
 
-		extSchemaPathText = (Text) eltDefaultTextBox.getSWTWidgetControl();
-		extSchemaPathText.setToolTipText(Messages.CHARACTERSET);
-		decorator = WidgetUtility.addDecorator(extSchemaPathText, Messages.EMPTYFIELDMESSAGE);
+		subJobPath = (Text) eltDefaultTextBox.getSWTWidgetControl();
+		subJobPath.setToolTipText(Messages.CHARACTERSET);
+		decorator = WidgetUtility.addDecorator(subJobPath, Messages.EMPTYFIELDMESSAGE);
 		decorator.hide();
-		extSchemaPathText.addFocusListener(new FocusListener() {
+		subJobPath.addFocusListener(new FocusListener() {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				if (extSchemaPathText.getText().isEmpty()) {
+				if (subJobPath.getText().isEmpty()) {
 					decorator.show();
-					extSchemaPathText.setBackground(new Color(Display.getDefault(), 250, 250, 250));
+					subJobPath.setBackground(new Color(Display.getDefault(), 250, 250, 250));
 				} else {
 					decorator.hide();
 				}
@@ -119,7 +119,7 @@ public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 			@Override
 			public void focusGained(FocusEvent e) {
 				decorator.hide();
-				extSchemaPathText.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+				subJobPath.setBackground(new Color(Display.getDefault(), 255, 255, 255));
 			}
 		});
 
@@ -132,7 +132,7 @@ public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				decorator.hide();
-				extSchemaPathText.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+				subJobPath.setBackground(new Color(Display.getDefault(), 255, 255, 255));
 
 			}
 
@@ -144,7 +144,7 @@ public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 		});
 
 
-		txtDecorator = WidgetUtility.addDecorator(extSchemaPathText, Messages.CHARACTERSET);
+		txtDecorator = WidgetUtility.addDecorator(subJobPath, Messages.CHARACTERSET);
 		txtDecorator.setMarginWidth(3);
 		decorator.setMarginWidth(3);
 
@@ -160,7 +160,7 @@ public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 			eltDefaultTextBox.attachListener(ListenerFactory.Listners.MODIFY.getListener(), propertyDialogButtonBar,
 					helper, eltDefaultTextBox.getSWTWidgetControl());
 			eltDefaultButton.attachListener(ListenerFactory.Listners.BROWSE_FILE_LISTNER.getListener(),
-					propertyDialogButtonBar, helper,extSchemaPathText);
+					propertyDialogButtonBar, helper,subJobPath);
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -172,12 +172,12 @@ public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 	private void populateWidget(){		
 		String property = (String)properties;
 		if(StringUtils.isNotBlank(property)){
-			extSchemaPathText.setText(property);	
+			subJobPath.setText(property);	
 			decorator.hide();
 			txtDecorator.hide();
 		}
 		else{
-			extSchemaPathText.setText("");
+			subJobPath.setText("");
 			decorator.show();
 			//setToolTipMessage(toolTipErrorMessage)
 		}
@@ -197,7 +197,7 @@ public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
 		LinkedHashMap<String, Object> property=new LinkedHashMap<>();
-		property.put(propertyName, extSchemaPathText.getText());
+		property.put(propertyName, subJobPath.getText());
 		setToolTipErrorMessage();
 		
 		return property;
@@ -205,18 +205,18 @@ public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 
 	
 	public boolean isWidgetValid() {
-		 return validateAgainstValidationRule(extSchemaPathText.getText());
+		 return validateAgainstValidationRule(subJobPath.getText());
 	}
 
 
 	public Text getTextBox() {
-		return extSchemaPathText;
+		return subJobPath;
 	}
 
 
 	@Override
 	public void addModifyListener(final Property property, final ArrayList<AbstractWidget> widgetList) {
-		extSchemaPathText.addModifyListener(new ModifyListener() {
+		subJobPath.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				showHideErrorSymbol(widgetList);

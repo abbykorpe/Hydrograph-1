@@ -116,6 +116,7 @@ task scpJobXML() {
 
         println 'Copying XML files...'
 
+        try {
 
             ant.scp(
                     file: jobXML,
@@ -133,6 +134,11 @@ task scpJobXML() {
                         trust: true,
                 )
             }
+        } catch (Exception gradleException) {
+            println '#Gradle failed to execute task#'
+        }
+
+
 
     }
 }
@@ -219,6 +225,7 @@ task executeRemoteJob() {
 
         println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList
 
+        try {
             ant.sshexec(
                     host: host,
                     username: username,
@@ -226,7 +233,10 @@ task executeRemoteJob() {
                     trust: true,
                     command: "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList
             )
-       
+        } catch (Exception gradleException) {
+            println '#Gradle failed to execute task#'
+        }
+
     }
 }
 
@@ -424,13 +434,20 @@ task createDirectories(){
 
         println "Executing createDirectories..."
           ant.sshexec(
-                    host: '10.130.248.53',
-                    username: 'hduser',
-                    password: 'Bitwise2012',
+                    host: host,
+                    username: username,
+                    password: password,
                     trust: true,
-                    command:"mkdir -p " +properties.remoteDirectory+"/{"+jobXML+","+moveJar+","+moveParameterFile+","+moveExternalSchemaFiles+"}" 
+                    command:"mkdir -p " +properties.remoteDirectory+"/{"+jobXML+","+moveJar+","+moveParameterFile+","+moveExternalSchemaFiles+","+moveSubJobFiles+"}" 
             )
 	}
+}
+
+createDirectories.onlyIf {
+    project.hasProperty('host')
+    project.hasProperty('username')
+    project.hasProperty('password')
+    project.hasProperty('jobXML');
 }
 
 task scpSchemaFiles() {
@@ -469,6 +486,38 @@ scpSchemaFiles.onlyIf {
     project.hasProperty('password')
     project.hasProperty('externalSchemaFiles')
 }
+
+
+task scpSubJobFiles() {
+    doLast {
+    def files=subJobFiles;
+	def schemaFiles = files.split(",");
+	def sampleMap = [:]
+	schemaFiles.each {
+		def fileValue = "${it}"
+		def singleFile = fileValue.split("#");
+		sampleMap.put(singleFile[0],singleFile[1])
+	 }
+
+    sampleMap.each {
+        ant.taskdef(
+                name: 'scp',
+                classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp',
+                classpath: configurations.sshAntTask.asPath)
+        
+        println 'Copying external schema files...'
+          	 def path = "${it.value}"
+    	     ant.scp(
+                    file: path,
+                    todir: "${username}@${host}:"+properties.remoteDirectory + "/" +getFilePath("${it.key}"),
+                    password: password,
+                    trust: true,
+            )
+       
+      };
+    } 
+}
+
 
 def getFilePath(def path){
 	if(path.length() > 0 )

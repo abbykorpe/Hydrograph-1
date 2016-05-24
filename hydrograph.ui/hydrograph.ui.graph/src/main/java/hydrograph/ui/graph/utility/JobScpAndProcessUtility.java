@@ -83,7 +83,7 @@ public class JobScpAndProcessUtility {
 			String externalSchema =  StringUtils.join(externalSchemaFiles, ",");
 			return  GradleCommandConstants.GCMD_SCP_SCHEMA_FILES + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
-				+ job.getPassword() + GradleCommandConstants.GPARAM_MOVE_SCHEMA + externalSchema;
+				+ job.getPassword() + GradleCommandConstants.GPARAM_MOVE_SCHEMA +"\""+externalSchema+"\"";
 	}
 	
 	
@@ -97,7 +97,7 @@ public class JobScpAndProcessUtility {
 			String subJobFiles =  StringUtils.join(subJobList, ",");
 			return  GradleCommandConstants.GCMD_SCP_SUBJOB_FILES + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
-				+ job.getPassword() + GradleCommandConstants.GPARAM_MOVE_SUBJOB + subJobFiles;
+				+ job.getPassword() + GradleCommandConstants.GPARAM_MOVE_SUBJOB +"\""+subJobFiles+"\"";
 	}
 	
 

@@ -223,6 +223,8 @@ public class Messages extends NLS {
 	public static String LABEL_PARTITION_KEYS;
 	public static String SCHEMA_IS_UPTO_DATE_MESSAGE;
 	public static String FILE_NAME;
+	public static String SUBJOB_PATH;
+	
 	
 	static {
 		// initialize resource bundle
