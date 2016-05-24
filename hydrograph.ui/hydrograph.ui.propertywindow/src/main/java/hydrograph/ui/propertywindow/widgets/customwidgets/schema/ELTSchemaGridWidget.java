@@ -569,7 +569,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		if(transformSchemaType){
 			createSchemaGridSection(container.getContainerControl(),tableHeight, tableWidth);
 			if(SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()))
-				createPullSchemaFromTransform(container.getContainerControl());
+				createPullInternallyPropagatedSchema(container.getContainerControl());
 		}
 		else{
 			
@@ -732,11 +732,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	}
 
 	// Adds the browse button
-	private void createPullSchemaFromTransform(Composite containerControl) {
+	private void createPullInternallyPropagatedSchema(Composite containerControl) {
 		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(containerControl);
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(2);
-		ELTDefaultButton btnPull = new ELTDefaultButton(Messages.PULL_FROM_TRANSFORM);
+		ELTDefaultButton btnPull = new ELTDefaultButton(Messages.PULL_SCHEMA);
 		btnPull.buttonWidth(150);
 		eltSuDefaultSubgroupComposite.attachWidget(btnPull);
 		((Button)btnPull.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
@@ -746,7 +746,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Constants.SYNC_CONFIRM_MESSAGE, MessageDialog.QUESTION, new String[] {"OK", "Cancel" }, 0);
 				int dialogResult =dialog.open();
 				if(dialogResult == 0){
-					syncSchemaFromTransform();
+					syncInternallyPropagatedSchema();
 					showHideErrorSymbol(applySchemaValidationRule());
 					enableDisableButtons(schemaGridRowList.size());
 					propertyDialogButtonBar.enableApplyButton(true);
@@ -1480,7 +1480,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		return schemaGridRowList.size();
 	}
 
-private void syncSchemaFromTransform(){
+private void syncInternallyPropagatedSchema(){
 	Schema schema =getSchemaForInternalPropagation();
 	schemaGridRowList=new ArrayList<>(schema.getGridRow());
 	ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);

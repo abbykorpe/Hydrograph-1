@@ -88,7 +88,12 @@ public class SchemaSyncUtility {
 	}
 	
 	public static boolean isSchemaSyncAllow(String componentName){
-		return Constants.TRANSFORM.equalsIgnoreCase(componentName) || Constants.AGGREGATE.equalsIgnoreCase(componentName) || Constants.NORMALIZE.equalsIgnoreCase(componentName) || Constants.CUMULATE.equalsIgnoreCase(componentName);
+		return Constants.TRANSFORM.equalsIgnoreCase(componentName)
+				|| Constants.AGGREGATE.equalsIgnoreCase(componentName) 
+				|| Constants.NORMALIZE.equalsIgnoreCase(componentName) 
+				|| Constants.CUMULATE.equalsIgnoreCase(componentName)
+				|| Constants.LOOKUP.equalsIgnoreCase(componentName)
+				|| Constants.JOIN.equalsIgnoreCase(componentName);
 	}
 
 }
