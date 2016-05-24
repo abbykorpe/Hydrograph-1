@@ -212,6 +212,7 @@ public class Messages extends NLS {
 	public static String LABEL_KEY_FIELDS;
 	public static String LABEL_SECONDARY_KEYS;
 	public static String LABEL_PARTITION_KEYS;
+	public static String SCHEMA_IS_UPTO_DATE_MESSAGE;
 	
 	static {
 		// initialize resource bundle

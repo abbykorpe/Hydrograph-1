@@ -40,6 +40,7 @@ import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
@@ -601,8 +602,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 * @param {@link Link}
 	 * @return {@link Schema}
 	 */
-	private Schema getPropagatedSchema(Link link) {
-		ComponentsOutputSchema componentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+	private Schema getPropagatedSchema(ComponentsOutputSchema componentsOutputSchema) {
 		Schema schema = new Schema();
 		schema.setExternalSchemaPath("");
 		schema.setIsExternal(false);
@@ -667,19 +667,47 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					
 				}
 			}
+			propertyDialogButtonBar.enableApplyButton(true);
 		}
 	}
 
 	private void schemaFromConnectedLinks() {
-		if (StringUtils.equalsIgnoreCase(getComponent().getCategory(),Constants.OUTPUT))
+		ComponentsOutputSchema componentsOutputSchema = null;
+		if (StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT))
 			for (Link link : getComponent().getTargetConnections()) {
-				this.properties = getPropagatedSchema(link);
+				componentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+				if (this.properties != null && this.schemaGridRowList != null && !this.schemaGridRowList.isEmpty()) {
+					if (isAnyUpdateAvailableOnPropagatedSchema(componentsOutputSchema)) {
+						this.properties = getPropagatedSchema(componentsOutputSchema);
+					} else {
+						MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(),
+								SWT.ICON_INFORMATION);
+						messageBox.setMessage(Messages.SCHEMA_IS_UPTO_DATE_MESSAGE);
+						messageBox.setText(Messages.SCHEMA_IS_UPTO_DATE_MESSAGE);
+						messageBox.open();
+					}
+				} else {
+					this.properties = getPropagatedSchema(componentsOutputSchema);
+					}
 			}
 	}
 	
-	
-	
-	
+	private boolean isAnyUpdateAvailableOnPropagatedSchema(ComponentsOutputSchema componentsOutputSchema) {
+		GridRow propagatedGridRow = null;
+		if (this.schemaGridRowList.size() == componentsOutputSchema.getFixedWidthGridRowsOutputFields().size()) {
+			for (GridRow gridRowOfSchemaGrid : this.schemaGridRowList) {
+				propagatedGridRow = componentsOutputSchema.getSchemaGridRow(gridRowOfSchemaGrid);
+				if (propagatedGridRow == null)
+						return true;
+				if (propagatedGridRow != null && !SchemaPropagationHelper.INSTANCE.isGridRowEqual(gridRowOfSchemaGrid,propagatedGridRow))
+						return true;
+				}
+			return false;
+			}
+					
+		return true;
+	}
+
 	// Adds the browse button
 	private void createPullSchemaFromTransform(Composite containerControl) {
 		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(containerControl);

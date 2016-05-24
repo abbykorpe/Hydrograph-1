@@ -12,6 +12,7 @@
  ******************************************************************************/
 package hydrograph.ui.propertywindow.widgets.dialogs.join;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
@@ -233,26 +234,15 @@ public class JoinMapDialog extends Dialog {
 					List<FilterProperties> inputFieldList = inputPorts
 							.get((int) ((Button) e.widget).getData(PORT_ID_KEY));
 
-					LookupMapProperty property = null;
-
 					String inputPortID = INPUT_PORT_ID_PREFIX
 							+ ((Button) e.widget).getData(PORT_ID_KEY);
 
 					if (inputFieldList != null) {
 						mappingTableItemList.clear();
-						for (FilterProperties properties : inputFieldList) {
-
-							property = new LookupMapProperty();
-							property.setSource_Field(inputPortID + "."
-									+ properties.getPropertyname());
-							property.setOutput_Field(properties
-									.getPropertyname());
-							mappingTableItemList.add(property);
-						}
+						copyFieldsWhenCopyOfIsSelected(inputFieldList, inputPortID);
 						mappingTableViewer.refresh();
 
 					}
-
 				}
 			});
 		}
@@ -262,6 +252,16 @@ public class JoinMapDialog extends Dialog {
 				SWT.DEFAULT));
 	}
 
+	private void copyFieldsWhenCopyOfIsSelected(List<FilterProperties> inputFieldList, String inputPortID) {
+		mappingTableItemList.clear();
+		for (FilterProperties properties : inputFieldList) {
+			LookupMapProperty property = new LookupMapProperty();
+			property.setSource_Field(inputPortID + "." + properties.getPropertyname());
+			property.setOutput_Field(properties.getPropertyname());
+			mappingTableItemList.add(property);
+		}
+	}
+	
 	private void creatFieldMappingSection(Composite composite) {
 
 		Composite composite_2 = new Composite(composite, SWT.NONE);
@@ -845,6 +845,10 @@ public class JoinMapDialog extends Dialog {
 			radioButtonMap.get(joinMappingGrid.getButtonText()).setSelection(
 					true);
 			mappingTableViewer.getTable().setEnabled(false);
+			String inputPortID=StringUtils.remove(joinMappingGrid.getButtonText(), Constants.COPY_FROM_INPUT_PORT_PROPERTY);
+			copyFieldsWhenCopyOfIsSelected(inputPorts.get(Integer.parseInt(StringUtils.remove(inputPortID, Constants.INPUT_SOCKET_TYPE))), inputPortID);
+			
+
 		} else {
 			radioButtonMap.get(NO_COPY).setSelection(true);
 		}

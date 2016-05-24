@@ -222,7 +222,7 @@ public class Constants {
 	
 	//Types of UI- Schema 
 	public static final String FIXEDWIDTH_GRID_ROW = "FixedWidth";
-	public static final String MIXEDSCHEMA_GRID_ROW = "MixedSchema";		
+	public static final String MIXEDSCHEMA_GRID_ROW = "MixedScheme";		
 	public static final String GENERATE_RECORD_GRID_ROW="GenerateRecord";
 	public static final String GENERIC_GRID_ROW="Generic";
 	public static final String PACKAGE = "package";
@@ -239,5 +239,5 @@ public class Constants {
 
 	// Temporary property names of component 
 	public static String SCHEMA_FIELD_SEQUENCE = "schema_field_sequence";
-	
+	public static String COPY_FROM_INPUT_PORT_PROPERTY = "Copy of ";
 }
