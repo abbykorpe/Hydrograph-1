@@ -34,7 +34,7 @@ import org.eclipse.swt.widgets.Widget;
 
 
 public class DelimiterFocusOutListener implements IELTListener{
-	ControlDecoration txtDecorator;
+	private ControlDecoration txtDecorator;
 
 	@Override
 	public int getListenerType() {

@@ -17,6 +17,12 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+/**
+ * Validation Rule to check if String property value is blank. 
+ * 
+ * @author Bitwise
+ */
+
 public class NonBlankStringValidatorRule implements IValidator{
 
 	private String errorMessage;

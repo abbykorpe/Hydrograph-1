@@ -17,7 +17,7 @@ package hydrograph.ui.propertywindow.factory;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.widgets.listeners.DelimiterFocusInListener;
 import hydrograph.ui.propertywindow.widgets.listeners.DelimiterFocusOutListener;
-import hydrograph.ui.propertywindow.widgets.listeners.DelimiterModify;
+import hydrograph.ui.propertywindow.widgets.listeners.DelimiterModifyListener;
 import hydrograph.ui.propertywindow.widgets.listeners.DirectoryDialogSelectionListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTBrowseFileListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTCheckFileExtensionListener;
@@ -99,7 +99,7 @@ public class ListenerFactory {
 		JOIN_INPUT_COUNT_FOCUS_OUT(JoinInputCountFocusOutListener.class),
 		DELIMITER_FOCUS_IN(DelimiterFocusInListener.class),
 		DELIMITER_FOCUS_OUT(DelimiterFocusOutListener.class),
-		DELIMITER_MODIFY(DelimiterModify.class);
+		DELIMITER_MODIFY(DelimiterModifyListener.class);
 		
 		
 		Class<?> clazz = null;

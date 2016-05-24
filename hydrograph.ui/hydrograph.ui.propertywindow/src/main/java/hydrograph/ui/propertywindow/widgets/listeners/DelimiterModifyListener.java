@@ -34,7 +34,7 @@ import org.eclipse.swt.widgets.Widget;
  * @author BITWISE 
  */
 
-public class DelimiterModify  implements IELTListener{
+public class DelimiterModifyListener  implements IELTListener{
 	private ControlDecoration txtDecorator;
 
 	@Override
