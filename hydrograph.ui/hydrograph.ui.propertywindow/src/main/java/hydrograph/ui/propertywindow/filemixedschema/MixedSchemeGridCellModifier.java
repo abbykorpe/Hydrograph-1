@@ -158,7 +158,7 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 			mixedSchemeGridRow.setLength(((String) value).trim());
 		}
 		else if (ELTSchemaGridWidget.DELIMITER.equals(property)) {
-			mixedSchemeGridRow.setDelimiter(((String) value).trim());
+			mixedSchemeGridRow.setDelimiter(((String) value));
 		}		
 
 		if (isResetNeeded(mixedSchemeGridRow, property)){

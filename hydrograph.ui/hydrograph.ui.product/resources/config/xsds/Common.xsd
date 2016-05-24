@@ -175,6 +175,13 @@
 		          </appinfo>
         	</annotation>
 		</enumeration>
+		<enumeration value="NON_BLANK_STRING_VALIDATOR">
+			 <annotation>
+		          <appinfo>
+		            <jaxb:typesafeEnumMember name="NonBlankStringValidatorRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
 		<enumeration value="SCHEMA_GRID_VALIDATOR">
 			 <annotation>
 		          <appinfo>

@@ -468,7 +468,8 @@ public class ConverterHelper {
 		if (object.getLength() != null && !object.getLength().trim().isEmpty()) {
 			typeBaseField.getOtherAttributes().put(new QName(Constants.LENGTH_QNAME), object.getLength());
 		}
-		if (object.getDelimiter() != null && !object.getDelimiter().trim().isEmpty()) {
+		
+		if (object.getDelimiter() != null && !object.getDelimiter().isEmpty()) {
 			typeBaseField.getOtherAttributes().put(new QName(Constants.DELIMITER_QNAME), object.getDelimiter());
 		}		
 		return typeBaseField;

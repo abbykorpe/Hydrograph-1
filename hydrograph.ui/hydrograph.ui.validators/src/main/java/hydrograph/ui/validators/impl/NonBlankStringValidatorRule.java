@@ -10,6 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+
 package hydrograph.ui.validators.impl;
 
 import java.util.Map;
@@ -17,15 +18,14 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * This rule checks if String entered in text box is empty.(allows white spaces)
+ * Validation Rule to check if String property value is blank. 
  * 
- * Author: Bitwise
+ * @author Bitwise
  */
 
+public class NonBlankStringValidatorRule implements IValidator{
 
-
-public class NonEmptyStringValidatorRule implements IValidator{
-private String errorMessage;
+	private String errorMessage;
 	
 	@Override
 	public boolean validateMap(Object object, String propertyName) {
@@ -40,10 +40,10 @@ private String errorMessage;
 	@Override
 	public boolean validate(Object object, String propertyName) {
 		String value = (String)object;
-		if(StringUtils.isNotEmpty(value)){
+		if(StringUtils.isNotBlank(value)){
 			return true;
 		}
-		errorMessage = propertyName + " is mandatory";
+		errorMessage = propertyName + " can not be blank";
 		return false;
 	}
 

@@ -59,7 +59,7 @@ public class WidgetHelper {
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.LABEL_DELIMITER);
 		textBoxConfig.setGrabExcessSpace(true);
-		addTextBoxListeners(textBoxConfig);
+		addDelimiterTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
 	}
 	
@@ -293,6 +293,14 @@ public class WidgetHelper {
 		listeners.add(Listners.NORMAL_FOCUS_OUT);
 		listeners.add(Listners.EVENT_CHANGE);
 		listeners.add(Listners.MODIFY);
+	}
+	
+	private void addDelimiterTextBoxListeners(TextBoxWithLableConfig textBoxConfig) {
+		List<Listners> listeners = textBoxConfig.getListeners();
+		listeners.add(Listners.DELIMITER_FOCUS_IN);
+		listeners.add(Listners.DELIMITER_FOCUS_OUT);
+		listeners.add(Listners.EVENT_CHANGE);
+		listeners.add(Listners.DELIMITER_MODIFY);
 	}
 	
 	private DropDownConfig populateTrueFalseConfig(String name){
