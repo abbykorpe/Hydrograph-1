@@ -22,7 +22,10 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
-
+import org.eclipse.jdt.internal.ui.refactoring.reorg.DeleteAction;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.navigator.CommonNavigator;
 
 /**
  * 
@@ -33,8 +36,14 @@ public class DeleteHandler extends AbstractHandler implements IHandler{
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+		IWorkbenchPart part = HandlerUtil.getActivePart(event);
+		if(part instanceof CommonNavigator){
+			DeleteAction action=new DeleteAction(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart().getSite());
+			action.run();
+		}
+		
 		IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		if (editor instanceof ELTGraphicalEditor) {
+		if (part instanceof ELTGraphicalEditor) {
 			((ELTGraphicalEditor) editor).deleteSelection();
 			((ELTGraphicalEditor) editor).hideToolTip();
 		}

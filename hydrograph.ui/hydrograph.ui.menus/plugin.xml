@@ -186,6 +186,66 @@
             class="hydrograph.ui.menus.handlers.AboutDialogHandler"
             commandId="com.bitwise.help.aboutaccelero">
        </handler>
+       <handler
+             class="hydrograph.ui.menus.handlers.DeleteHandler"
+             commandId="org.eclipse.ui.edit.delete">
+          <activeWhen>
+             <with
+                   variable="activePartId">
+                <equals
+                      value="hydrograph.ui.project.structure.navigator">
+                </equals>
+             </with>
+          </activeWhen>
+          <enabledWhen>
+             <with
+                   variable="selection">
+                <count
+                      value="+">
+                </count>
+             </with>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="hydrograph.ui.menus.handlers.CopyHandler"
+             commandId="org.eclipse.ui.edit.copy">
+          <enabledWhen>
+             <with
+                   variable="selection">
+                <count
+                      value="+">
+                </count>
+             </with>
+          </enabledWhen>
+          <activeWhen>
+             <with
+                   variable="activePartId">
+                <equals
+                      value="hydrograph.ui.project.structure.navigator">
+                </equals>
+             </with>
+          </activeWhen>
+       </handler>
+       <handler
+             class="hydrograph.ui.menus.handlers.PasteHandler"
+             commandId="org.eclipse.ui.edit.paste">
+          <activeWhen>
+             <with
+                   variable="activePartId">
+                <equals
+                      value="hydrograph.ui.project.structure.navigator">
+                </equals>
+             </with>
+          </activeWhen>
+          <enabledWhen>
+             <with
+                   variable="selection">
+                <count
+                      value="+">
+                </count>
+             </with>
+          </enabledWhen>
+       </handler>
    </extension>
    		
    <extension

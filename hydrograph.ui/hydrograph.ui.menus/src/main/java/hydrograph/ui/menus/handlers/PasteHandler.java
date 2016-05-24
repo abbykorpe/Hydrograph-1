@@ -22,15 +22,22 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
-
+import org.eclipse.jdt.internal.ui.refactoring.reorg.PasteAction;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.navigator.CommonNavigator;
 
 public class PasteHandler extends AbstractHandler implements IHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
+		IWorkbenchPart part = HandlerUtil.getActivePart(event);
+		if(part instanceof CommonNavigator){
+			PasteAction action = new PasteAction(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart().getSite());
+			action.run();
+		}
 		IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		if(editor instanceof ELTGraphicalEditor)((ELTGraphicalEditor)editor).pasteSelection();
+		if(part instanceof ELTGraphicalEditor)((ELTGraphicalEditor)editor).pasteSelection();
 		return null;
 	}
 
