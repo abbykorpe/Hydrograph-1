@@ -48,7 +48,7 @@
 						<product>
 							<id>hydrograph.ui.perspective.ID</id>
 							<rootFolders>
-								<macosx>ELTTool.app</macosx>
+								<macosx>Hydrograph.app</macosx>
 							</rootFolders>
 						</product>
 					</products>
@@ -112,7 +112,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\ELTTool.app\Contents\Eclipse</outputDirectory>
+							<outputDirectory>target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\Hydrograph.app\Contents\Eclipse</outputDirectory>
 							<resources>
 								<resource>
 									<directory>resources</directory>
@@ -127,7 +127,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\ELTTool.app</outputDirectory>
+							<outputDirectory>target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\Hydrograph.app</outputDirectory>
 							<resources>
 								<resource>
 									<directory>resources</directory>
@@ -137,7 +137,7 @@
 					</execution>
 				</executions>
 			</plugin>
-	        <plugin>
+	       <!--  <plugin>
                    	<groupId>org.apache.maven.plugins</groupId>
 	                <artifactId>maven-antrun-plugin</artifactId>
 	                <version>1.8</version>
@@ -151,13 +151,13 @@
 			           <configuration>
 			         	<target>
 					    <copy
-						file="target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\ELTTool.app\Contents\Eclipse\eclipse.ini"
-						todir="target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\ELTTool.app\Contents\MacOS\" />
+						file="target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\Hydrograph.app\Contents\Eclipse\eclipse.ini"
+						todir="target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\Hydrograph.app\Contents\MacOS\" />
 				        </target>
 		            </configuration>
 		         </execution>
 	          </executions>
-         </plugin>	
+         </plugin>	 -->
 		</plugins>
 	</build>
 </project>
