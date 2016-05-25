@@ -63,7 +63,6 @@ public class FilterUiConverter extends TransformUiConverter{
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.FILTER.value());
 		
-		validateComponentProperties(propertyMap);
 	}
 
 	private OperationClassProperty getOperationClass() {

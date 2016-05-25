@@ -72,7 +72,6 @@ public class CumulateUiConverter extends TransformUiConverter {
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.CUMULATE.value());
 		
-		validateComponentProperties(propertyMap);
 	}
 
 	private Map<String, String> getSecondaryKeys() {

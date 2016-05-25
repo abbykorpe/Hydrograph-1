@@ -55,7 +55,7 @@ public class TransformComponentUiConverter extends TransformUiConverter {
 		container.getComponentNames().add(componentName);
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.TRANSFORM.value());
-		validateComponentProperties(propertyMap);
+		
 	}
 
 

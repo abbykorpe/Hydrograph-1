@@ -77,7 +77,6 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		uiComponent.setProperties(propertyMap);
-		validateComponentProperties(propertyMap);
 	}
 
 	/*

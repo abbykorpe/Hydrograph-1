@@ -64,7 +64,7 @@ import hydrograph.engine.jaxb.operationstypes.Normalize;
 			uiComponent.setProperties(propertyMap);
 			uiComponent.setType(UIComponentsConstants.NORMALIZE.value());
 			
-			validateComponentProperties(propertyMap);
+			
 		}
 
 

@@ -55,7 +55,7 @@ public class UnionAllUiConverter extends StraightpullUiConverter {
 		container.getComponentNames().add(unionAll.getId());
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.UNION_ALL.value());
-		validateComponentProperties(propertyMap);
+		
 	}
 
 	protected void getInPort(TypeStraightPullComponent straightPullComponent) {

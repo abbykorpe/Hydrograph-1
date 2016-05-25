@@ -121,10 +121,6 @@ public abstract class UiConverter {
 	 */
 	protected abstract Map<String, String> getRuntimeProperties();
 
-	protected Map<String, Object> validateComponentProperties(Map<String, Object> properties) {
-		return uiComponent.validateComponentProperties();
-	}
-
 	protected String getInputSocketType(TypeBaseInSocket inSocket) {
 		if (inSocket.getType() != null)
 			return inSocket.getType();

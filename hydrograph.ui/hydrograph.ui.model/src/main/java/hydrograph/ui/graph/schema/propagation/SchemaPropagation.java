@@ -146,9 +146,14 @@ public class SchemaPropagation {
 	}
 
 	private void setSchemaMapOfComponent(Component component, ComponentsOutputSchema componentsOutputSchema) {
+		LOGGER.debug("Storing Component-Output-Schema to component :"+component.getComponentLabel().getLabelContents());
 		if (!StringUtils.equals(Constants.SUBJOB_COMPONENT_CATEGORY, component.getCategory())) {
 			Map<String, ComponentsOutputSchema> newComponentsOutputSchemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
-			newComponentsOutputSchemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema.copy());
+			if (componentsOutputSchema == null) {
+				newComponentsOutputSchemaMap.put(Constants.FIXED_OUTSOCKET_ID, new ComponentsOutputSchema());
+			} else {
+				newComponentsOutputSchemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema.copy());
+			}
 			component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, newComponentsOutputSchemaMap);
 			if(StringUtils.equalsIgnoreCase(component.getCategory(), Constants.OUTPUT)){
 				updateSchema(component,componentsOutputSchema);
