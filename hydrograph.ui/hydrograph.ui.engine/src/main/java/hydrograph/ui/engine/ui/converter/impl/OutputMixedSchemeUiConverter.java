@@ -71,7 +71,7 @@ public class OutputMixedSchemeUiConverter extends OutputUiConverter {
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(fileMixedScheme.getId());
 		uiComponent.setProperties(propertyMap);
-		validateComponentProperties(propertyMap);
+		
 
 	}
 	

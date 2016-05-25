@@ -81,7 +81,7 @@ public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(fileDelimited.getId());
 		uiComponent.setProperties(propertyMap);
-		validateComponentProperties(propertyMap);
+		
 	}
 
 	private Object getCharSet() {

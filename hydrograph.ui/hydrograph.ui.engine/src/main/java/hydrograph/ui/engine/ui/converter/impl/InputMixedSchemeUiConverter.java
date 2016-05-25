@@ -69,7 +69,6 @@ public class InputMixedSchemeUiConverter extends InputUiConverter {
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(fileMixedSchema.getId());
 		uiComponent.setProperties(propertyMap);
-		validateComponentProperties(propertyMap);
 	}
 	
 	private Object getCharSet() {

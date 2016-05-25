@@ -81,7 +81,6 @@ public class InputFileDelimitedUiConverter extends InputUiConverter {
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 
 		uiComponent.setProperties(propertyMap);
-		validateComponentProperties(propertyMap);
 	}
 
 	private Object getCharSet() {

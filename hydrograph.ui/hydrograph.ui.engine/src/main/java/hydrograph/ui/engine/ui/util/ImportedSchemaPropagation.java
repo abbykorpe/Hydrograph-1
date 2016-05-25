@@ -55,6 +55,18 @@ public class ImportedSchemaPropagation {
 		}
 		schemaPropagationForTransformCategory(container);
 		removeTempraryProperties(container);
+		validateAllComponents(container);
+	}
+
+	// Validates properties of all components present in graph
+	private void validateAllComponents(Container container) {
+
+		if (container != null) {
+			for (Component component : container.getChildren()) {
+				component.validateComponentProperties();
+			}
+		}
+
 	}
 
 	private ComponentsOutputSchema getComponentOutputSchemaFromInputPort(Component component, String inputPortId) {

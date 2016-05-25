@@ -60,7 +60,7 @@ public class UniqueSequenceUiConverter extends TransformUiConverter {
 		container.getComponentNames().add(componentName);
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(Constants.UNIQUE_SEQUENCE_TYPE);
-		validateComponentProperties(propertyMap);
+		
 	}
 
 	protected void getOutPort(TypeOperationsComponent operationsComponent) {

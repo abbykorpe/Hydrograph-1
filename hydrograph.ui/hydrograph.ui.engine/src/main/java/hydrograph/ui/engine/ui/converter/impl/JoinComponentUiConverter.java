@@ -73,7 +73,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.JOIN.value());
-		validateComponentProperties(propertyMap);
+		
 	}
 
 	private List<JoinConfigProperty> getJoinConfigProperty() {
