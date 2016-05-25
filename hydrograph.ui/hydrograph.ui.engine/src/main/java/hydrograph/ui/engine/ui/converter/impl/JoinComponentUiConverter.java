@@ -159,6 +159,12 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 						&& !outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()){
 					propertyMap.put(Constants.JOIN_MAP_FIELD, getJoinMappingGrid(outSocket));
 					createPassThroughAndMappingFieldsForSchemaPropagation(outSocket);
+				} else if(outSocket.getCopyOfInsocket()!=null){
+					JoinMappingGrid joinMappingGrid = new JoinMappingGrid();
+					joinMappingGrid.setButtonText(Constants.COPY_FROM_INPUT_PORT_PROPERTY+outSocket.getCopyOfInsocket().getInSocketId());
+					joinMappingGrid.setIsSelected(true);
+					propertyMap.put(Constants.JOIN_MAP_FIELD,joinMappingGrid);
+					copySchemaFromInputPort(outSocket.getCopyOfInsocket().getInSocketId());
 				}
 			}
 
@@ -169,6 +175,8 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 		}
 			
 	}
+
+
 
 	private JoinMappingGrid getJoinMappingGrid(TypeOperationsOutSocket outSocket) {
 		String dot_separator = ".";

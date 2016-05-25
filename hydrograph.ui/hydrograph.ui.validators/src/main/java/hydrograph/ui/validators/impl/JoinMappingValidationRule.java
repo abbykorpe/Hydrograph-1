@@ -45,6 +45,11 @@ public class JoinMappingValidationRule implements IValidator{
 			errorMessage = propertyName + " is mandatory";
 			return false;
 		}
+		if(joinMappingGrid.isSelected() && joinMappingGrid.getButtonText()!=null){
+			return true;
+		}
+		
+		
 		List<List<FilterProperties>> lookupInputProperties = joinMappingGrid.getLookupInputProperties();
 		List<LookupMapProperty> lookupMapProperties = joinMappingGrid.getLookupMapProperties();
 		if(lookupInputProperties == null || 

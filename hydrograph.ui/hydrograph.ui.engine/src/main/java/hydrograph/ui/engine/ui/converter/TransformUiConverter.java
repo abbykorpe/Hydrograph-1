@@ -369,5 +369,8 @@ public abstract class TransformUiConverter extends UiConverter {
 		propertyMap.put(Constants.SCHEMA_FIELD_SEQUENCE, schemaFieldSequence);
 	}
 	
-	
+	protected void copySchemaFromInputPort(String inSocketId) {
+		if(StringUtils.isNotBlank(inSocketId))
+		propertyMap.put(Constants.COPY_FROM_INPUT_PORT_PROPERTY, inSocketId);
+	}
 }

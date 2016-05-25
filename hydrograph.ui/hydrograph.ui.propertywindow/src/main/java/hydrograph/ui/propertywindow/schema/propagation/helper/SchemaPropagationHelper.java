@@ -142,4 +142,37 @@ public class SchemaPropagationHelper {
 		return availableFields;
 	}
 
+
+	/**
+	 * Compares basic properties of grid rows to determine whether they are equal or not.
+	 * 
+	 * @param sourceGridRow
+	 * @param targetGridRow
+	 * @return
+	 */
+	public boolean isGridRowEqual(GridRow sourceGridRow, GridRow targetGridRow) {
+		if (!StringUtils.equalsIgnoreCase(sourceGridRow.getFieldName(), targetGridRow.getFieldName())
+				|| !StringUtils.equalsIgnoreCase(sourceGridRow.getDateFormat(), targetGridRow.getDateFormat())
+				|| !StringUtils.equalsIgnoreCase(sourceGridRow.getScale(), targetGridRow.getScale())
+				|| !StringUtils.equalsIgnoreCase(sourceGridRow.getDataTypeValue(), targetGridRow.getDataTypeValue())
+				|| !StringUtils.equalsIgnoreCase(sourceGridRow.getPrecision(), targetGridRow.getPrecision())
+				|| !StringUtils.equalsIgnoreCase(sourceGridRow.getDescription(), targetGridRow.getDescription()) ) {
+		
+			return false;
+		}
+		if (sourceGridRow.getDataType() != null && targetGridRow.getDataType() != null) {
+				if (!sourceGridRow.getDataType().equals(targetGridRow.getDataType())) {
+					return false;
+				}
+		}else{
+				return false;
+			}
+		if (sourceGridRow.getScaleType() != null && targetGridRow.getScaleType() != null) {
+			if (!sourceGridRow.getScaleType().equals(targetGridRow.getScaleType())) {
+				return false;
+			}
+		} 
+		return true;
+	}
+
 }

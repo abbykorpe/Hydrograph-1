@@ -365,7 +365,7 @@ public class JoinMapGrid extends Dialog {
 				0, 90, 20 }, NONE);
 		for (int i = 1, k = 0; i < radio.length; i++, k++) {
 			radio[i] = widget.buttonWidget(composite_3, SWT.RADIO, new int[] {
-					0, j, 90, 20 }, "Copy of in" + k);
+					0, j, 90, 20 }, Constants.COPY_FROM_INPUT_PORT_PROPERTY +"in" + k);
 			j = j + 20;
 		}
 		scrolledComposite_1.setContent(composite_3);

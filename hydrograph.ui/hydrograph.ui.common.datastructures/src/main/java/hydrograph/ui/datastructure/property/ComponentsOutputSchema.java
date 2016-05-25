@@ -205,8 +205,8 @@ public class ComponentsOutputSchema implements IDataStructure {
 		List<GridRow> schemaGrid = new ArrayList<>();
 		
 		if (gridRow instanceof MixedSchemeGridRow) {
-			for (MixedSchemeGridRow mixedSchemeGridRow : mixedSchemeGridRowsOutputFields) {
-				schemaGrid.add(mixedSchemeGridRow);
+			for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
+				schemaGrid.add(convertFixedWidthSchemaToMixedSchemaGridRow(fixedWidthGridRow));
 			}
 		} else if(gridRow instanceof FixedWidthGridRow){
 			for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
