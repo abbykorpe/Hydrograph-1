@@ -28,6 +28,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 
 /**
+ * @author Bitwise
  * Handler to Paste component on canvas and Project Explorer 
  *
  */

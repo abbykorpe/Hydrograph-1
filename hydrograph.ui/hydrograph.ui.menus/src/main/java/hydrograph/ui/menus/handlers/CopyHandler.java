@@ -29,6 +29,7 @@ import org.eclipse.jdt.internal.ui.refactoring.reorg.CopyToClipboardAction;
 import org.eclipse.ui.navigator.CommonNavigator;
 
 /**
+ * @author Bitwise
  * Handler to Copy component from canvas and Project Explorer 
  *
  */
