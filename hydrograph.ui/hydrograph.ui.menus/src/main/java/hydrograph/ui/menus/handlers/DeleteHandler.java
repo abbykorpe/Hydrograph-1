@@ -29,7 +29,7 @@ import org.eclipse.ui.navigator.CommonNavigator;
 
 /**
  * 
- * Handler to delete component on canvas 
+ * Handler to delete component on canvas and Project Explorer 
  *
  */
 public class DeleteHandler extends AbstractHandler implements IHandler{
@@ -42,12 +42,11 @@ public class DeleteHandler extends AbstractHandler implements IHandler{
 			action.run();
 		}
 		
-		IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		if (part instanceof ELTGraphicalEditor) {
+			IEditorPart editor = HandlerUtil.getActiveEditor(event);
 			((ELTGraphicalEditor) editor).deleteSelection();
 			((ELTGraphicalEditor) editor).hideToolTip();
 		}
-
 		return null;
 	}
 }

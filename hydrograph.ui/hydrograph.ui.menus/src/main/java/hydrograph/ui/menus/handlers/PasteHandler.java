@@ -27,6 +27,11 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 
+/**
+ * Handler to Paste component on canvas and Project Explorer 
+ *
+ */
+
 public class PasteHandler extends AbstractHandler implements IHandler {
 
 	@Override
@@ -36,8 +41,11 @@ public class PasteHandler extends AbstractHandler implements IHandler {
 			PasteAction action = new PasteAction(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart().getSite());
 			action.run();
 		}
-		IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		if(part instanceof ELTGraphicalEditor)((ELTGraphicalEditor)editor).pasteSelection();
+		
+		if(part instanceof ELTGraphicalEditor){
+			IEditorPart editor = HandlerUtil.getActiveEditor(event);
+			((ELTGraphicalEditor)editor).pasteSelection();
+		}
 		return null;
 	}
 
