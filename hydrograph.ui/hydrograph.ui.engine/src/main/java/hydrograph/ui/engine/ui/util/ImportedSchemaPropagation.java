@@ -72,10 +72,9 @@ public class ImportedSchemaPropagation {
 	private void schemaPropagationForTransformCategory(Container container) {
 		for (Component component : container.getChildren()) {
 			if (StringUtils.equalsIgnoreCase(component.getCategory(), Constants.TRANSFORM)) {
-				if (component.getProperties().get(Constants.SCHEMA_TO_PROPAGATE) != null && 
-						component.getProperties().get(Constants.SCHEMA_TO_PROPAGATE) instanceof Map) {
-					Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) component
-							.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
+				Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) component
+						.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
+				if (schemaMap != null) {
 					SchemaPropagation.INSTANCE.continuousSchemaPropagation(component, schemaMap);
 					addSchemaForTransformComponents(component);
 				}else if(component.getProperties().get(Constants.COPY_FROM_INPUT_PORT_PROPERTY)!=null){

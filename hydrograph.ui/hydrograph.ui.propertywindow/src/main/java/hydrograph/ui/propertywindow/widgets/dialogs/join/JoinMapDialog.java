@@ -238,7 +238,6 @@ public class JoinMapDialog extends Dialog {
 							+ ((Button) e.widget).getData(PORT_ID_KEY);
 
 					if (inputFieldList != null) {
-						mappingTableItemList.clear();
 						copyFieldsWhenCopyOfIsSelected(inputFieldList, inputPortID);
 						mappingTableViewer.refresh();
 

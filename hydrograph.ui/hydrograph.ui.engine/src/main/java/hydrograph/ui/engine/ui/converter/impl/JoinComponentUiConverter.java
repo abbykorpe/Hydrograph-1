@@ -164,7 +164,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 					joinMappingGrid.setButtonText(Constants.COPY_FROM_INPUT_PORT_PROPERTY+outSocket.getCopyOfInsocket().getInSocketId());
 					joinMappingGrid.setIsSelected(true);
 					propertyMap.put(Constants.JOIN_MAP_FIELD,joinMappingGrid);
-					copySchemaFromInsputPort(outSocket.getCopyOfInsocket().getInSocketId());
+					copySchemaFromInputPort(outSocket.getCopyOfInsocket().getInSocketId());
 				}
 			}
 

@@ -697,14 +697,14 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		if (this.schemaGridRowList.size() == componentsOutputSchema.getFixedWidthGridRowsOutputFields().size()) {
 			for (GridRow gridRowOfSchemaGrid : this.schemaGridRowList) {
 				propagatedGridRow = componentsOutputSchema.getSchemaGridRow(gridRowOfSchemaGrid);
-				if (propagatedGridRow == null)
-						return true;
-				if (propagatedGridRow != null && !SchemaPropagationHelper.INSTANCE.isGridRowEqual(gridRowOfSchemaGrid,propagatedGridRow))
-						return true;
+				if (propagatedGridRow == null || ( propagatedGridRow != null
+						&& !SchemaPropagationHelper.INSTANCE.isGridRowEqual(gridRowOfSchemaGrid, propagatedGridRow)) ){
+					return true;
 				}
-			return false;
 			}
-					
+			return false;
+		}
+
 		return true;
 	}
 
