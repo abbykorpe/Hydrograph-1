@@ -302,7 +302,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		List<String> oprationFieldList = getOperationFieldList();
 
 		if (schemaGridRowList != null ) {
-			if(!SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName())){
+			if(!SchemaSyncUtility.isTransformSchemaSyncAllow(getComponent().getComponentName())){
 			Schema schemaForInternalPropagation = getSchemaForInternalPropagation();
 			if(schemaForInternalPropagation!=null){
 
@@ -327,7 +327,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			
 		}
 		
-		if (!propertyDialog.isCancelPressed() && SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()) && !isSchemaInSync()){
+		if (!propertyDialog.isCancelPressed() && SchemaSyncUtility.isTransformSchemaSyncAllow(getComponent().getComponentName()) && !isSchemaInSync()){
 				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
 				int dialogResult =dialog.open();
 				if(dialogResult == 0){
@@ -567,8 +567,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 
 		if(transformSchemaType){
+
 			createSchemaGridSection(container.getContainerControl(),tableHeight, tableWidth);
-			if(SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()))
+			if(SchemaSyncUtility.isTransformSchemaSyncAllow(getComponent().getComponentName()))
+
 				createPullInternallyPropagatedSchema(container.getContainerControl());
 		}
 		else{
@@ -1409,6 +1411,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					}
 				} else if (!SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName())) {
 					originalSchema.getGridRow().add(row.copy());
+
 				}
 			}
 
@@ -1428,7 +1431,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 
 		} else {
-			if(!SchemaSyncUtility.isSchemaSyncAllow( getComponent().getComponentName()))
+			if(!SchemaSyncUtility.isTransformSchemaSyncAllow( getComponent().getComponentName()))
 			{			
 			if (schema.getGridRow().size() != 0) {
 				table.clearAll();

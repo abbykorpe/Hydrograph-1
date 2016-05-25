@@ -87,7 +87,7 @@ public class SchemaSyncUtility {
 	    return list2;
 	}
 	
-	public static boolean isSchemaSyncAllow(String componentName){
+	public static boolean isTransformSchemaSyncAllow(String componentName){
 		return Constants.TRANSFORM.equalsIgnoreCase(componentName)
 				|| Constants.AGGREGATE.equalsIgnoreCase(componentName) 
 				|| Constants.NORMALIZE.equalsIgnoreCase(componentName) 
