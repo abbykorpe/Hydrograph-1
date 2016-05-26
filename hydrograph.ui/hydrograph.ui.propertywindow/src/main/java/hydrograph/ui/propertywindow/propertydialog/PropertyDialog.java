@@ -128,6 +128,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		getShell().addControlListener(new ControlListener() {
 			@Override
 			public void controlResized(ControlEvent e) {
+				
 				Shell shell = (Shell) e.getSource();
 				Rectangle rect = shell.getClientArea();
 				ELTSchemaGridWidget.changeHeightOfSchemaTableWithRespectToPropertyWindow(rect.height - 640);
