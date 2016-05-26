@@ -1,5 +1,7 @@
 package hydrograph.ui.graph.editor;
 
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+
 import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.junit.Assert;

@@ -11,7 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package test.java;
+package hydrograph.ui.project.structure;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -27,6 +27,7 @@ import org.junit.Test;
 
 import hydrograph.ui.project.structure.natures.ProjectNature;
 import hydrograph.ui.project.structure.wizard.ProjectStructureCreator;
+import hydrograph.ui.project.structure.wizard.ProjectStructureCreator.InvalidProjectNameException;
  
  
 /**
@@ -50,7 +51,7 @@ public class TestProjectStructure {
 	 */
     @Test(expected = ProjectStructureCreator.InvalidProjectNameException.class)
     public void testCreateProjectWithNullNameArg() {
-        ProjectStructureCreator.INSTANCE.createProject(null, null);
+    	ProjectStructureCreator.INSTANCE.createProject(null, null);
     }
     
 	/**
