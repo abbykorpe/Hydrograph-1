@@ -39,9 +39,12 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -122,6 +125,18 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 
 		propertyDialogBuilder = new PropertyDialogBuilder(container,propertyTree,componentProperties,propertyDialogButtonBar,component,this);
 		propertyDialogBuilder.buildPropertyWindow();
+		getShell().addControlListener(new ControlListener() {
+			@Override
+			public void controlResized(ControlEvent e) {
+				Shell shell = (Shell) e.getSource();
+				Rectangle rect = shell.getClientArea();
+				ELTSchemaGridWidget.changeHeightOfSchemaTableWithRespectToPropertyWindow(rect.height - 640);
+			}
+
+			@Override
+			public void controlMoved(ControlEvent e) {
+			}
+		});
 
 		return container;
 	}

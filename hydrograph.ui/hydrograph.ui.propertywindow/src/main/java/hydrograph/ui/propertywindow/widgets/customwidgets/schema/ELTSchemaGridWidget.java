@@ -146,7 +146,7 @@ import org.slf4j.Logger;
 public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private static Logger logger = LogFactory.INSTANCE.getLogger(ELTSchemaGridWidget.class);
-
+	public static ColumnLayoutData cld_composite;
 	public static final String FIELDNAME = Messages.FIELDNAME;
 	public static final String DATEFORMAT = Messages.DATEFORMAT;
 	public static final String DATATYPE = Messages.DATATYPE;
@@ -162,6 +162,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String DEFAULT_VALUE =Messages.DEFAULT_VALUE;
 	public static final String SCHEMA_TAB ="Schema";
 	public static final String OPERATION ="operation";
+	private static final int tableHeight=340;
+	private static final int tableWidth=360;
 	
 
 	protected boolean transformSchemaType=false;
@@ -558,7 +560,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 
 		if(transformSchemaType){
-			createSchemaGridSection(container.getContainerControl(), 340, 360);
+			createSchemaGridSection(container.getContainerControl(),tableHeight, tableWidth);
 			if(SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()))
 				createPullSchemaFromTransform(container.getContainerControl());
 		}
@@ -1081,7 +1083,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				container);
 		gridSubGroup.createContainerWidget();
 
-		ColumnLayoutData cld_composite = new ColumnLayoutData();
+	    cld_composite = new ColumnLayoutData();
 		cld_composite.heightHint = 260;
 		cld_composite.widthHint = 400;
 		gridSubGroup.getContainerControl().setLayoutData(cld_composite);
@@ -1611,5 +1613,9 @@ public List<FilterProperties> convertSchemaToFilterProperty(){
 		}
 	return outputFileds;
 }
+
+	public static void changeHeightOfSchemaTableWithRespectToPropertyWindow(int changeHeight) {
+		cld_composite.heightHint = tableHeight + changeHeight;
+	}
 	
 }
