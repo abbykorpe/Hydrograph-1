@@ -100,6 +100,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 /**
  * 
@@ -1065,7 +1067,7 @@ public class MultiParameterFileDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fileDialog = new FileDialog(browseBtn.getShell(),
-						SWT.OPEN);
+						SWT.OPEN|SWT.MULTI);
 				fileDialog
 						.setText(MultiParameterFileDialogConstants.OPEN_FILE_DIALOG_NAME);
 
@@ -1075,47 +1077,47 @@ public class MultiParameterFileDialog extends Dialog {
 									+ "/"
 									+ MultiParameterFileDialogConstants.GLOBAL_PARAMETER_DIRECTORY_NAME);
 				}
-
+				String absoluteFileName;
 				String[] filterExt = { "*.properties" };
 				fileDialog.setFilterExtensions(filterExt);
 				String firstFile = fileDialog.open();
-				if (firstFile != null) {
-					parameterFileTextBox.setText(firstFile);
-
-					if (isExistInParameterFileList(firstFile)) {
-						MessageBox messageBox = new MessageBox(new Shell(),
-								SWT.ICON_INFORMATION | SWT.OK);
-
-						messageBox.setText(MessageType.INFO.messageType());
-						messageBox.setMessage(ErrorMessages.FILE_EXIST);
-						messageBox.open();
-						return;
-					}
-
-					parameterFiles.add(new ParameterFile(fileDialog
-							.getFileName(), firstFile, false));
-
+				IPath iPath=new Path(firstFile);
+				iPath=iPath.removeLastSegments(1);
+				String path= iPath.toOSString()+"\\";
+				if(ifDuplicate(fileDialog.getFileNames(),path))
+				{	
+					MessageBox messageBox = new MessageBox(new Shell(),
+					SWT.ICON_INFORMATION | SWT.OK);
+					messageBox.setText(MessageType.INFO.messageType());
+					messageBox.setMessage(ErrorMessages.FILE_EXIST);
+					messageBox.open();
+					return;
+				}
+				for(String fileName: fileDialog.getFileNames()){
+					if (fileName != null) {
+						absoluteFileName=path+fileName;
+						parameterFileTextBox.setText(absoluteFileName);
+						parameterFiles.add(new ParameterFile(fileName,
+							absoluteFileName,false));
 					try {
-						ParameterFileManager parameterFileManager = new ParameterFileManager(
-								firstFile);
-						parameterTableViewer
+							ParameterFileManager parameterFileManager = new ParameterFileManager(
+								absoluteFileName);
+							parameterTableViewer
 								.setData(
 										MultiParameterFileDialogConstants.CURRENT_PARAM_FILE,
-										firstFile);
-						Map<String, String> parameterMap = new LinkedHashMap<>();
-						parameterMap = parameterFileManager.getParameterMap();
-						setGridData(parameters, parameterMap);
+										absoluteFileName);
+							Map<String, String> parameterMap = new LinkedHashMap<>();
+							parameterMap = parameterFileManager.getParameterMap();
+							setGridData(parameters, parameterMap);
 					} catch (IOException ioException) {
-						MessageBox messageBox = new MessageBox(new Shell(),
+							MessageBox messageBox = new MessageBox(new Shell(),
 								SWT.ICON_ERROR | SWT.OK);
-
-						messageBox.setText(MessageType.ERROR.messageType());
-						messageBox
+							messageBox.setText(MessageType.ERROR.messageType());
+							messageBox
 								.setMessage(ErrorMessages.UNABLE_TO_POPULATE_PARAM_FILE
 										+ ioException.getMessage());
-						messageBox.open();
-
-						logger.debug("Unable to populate parameter file",
+							messageBox.open();
+							logger.debug("Unable to populate parameter file",
 								ioException.getMessage());
 					}
 
@@ -1123,6 +1125,7 @@ public class MultiParameterFileDialog extends Dialog {
 					parameterTableViewer.refresh();
 					populateParameterSearchBox();
 				}
+			}
 			}
 		});
 		browseBtn.setText(MultiParameterFileDialogConstants.ADD_BUTTON_TEXT);
@@ -1236,6 +1239,18 @@ public class MultiParameterFileDialog extends Dialog {
 				true, true, 1, 1));
 	}
 
+	private boolean ifDuplicate(String file[], String path) {
+		String fileName = "";
+		for (int i = 0; i < file.length; i++) {
+			fileName = path + file[i];
+			 for (int j = 0; j < parameterFiles.size(); j++){
+				if(parameterFiles.get(j).getPath().equals(fileName))
+					return true;
+			 }
+		}
+		return false;
+	}
+	
 	private boolean isExistInParameterFileList(String firstFile) {
 		for (ParameterFile file : parameterFiles) {
 			if (firstFile.equals(file.getPath())) {
