@@ -1514,5 +1514,4 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			}
 		return outputFileds;
 	}
-
 }

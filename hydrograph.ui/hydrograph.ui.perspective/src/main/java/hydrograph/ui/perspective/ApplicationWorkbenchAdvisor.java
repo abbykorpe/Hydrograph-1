@@ -27,6 +27,7 @@ import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.EditorPart;
+import hydrograph.ui.perspective.TitleBarPartListener;
 
 import theme.ThemeHelper;
 
@@ -37,10 +38,6 @@ import theme.ThemeHelper;
  */
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	
-	private String windowTitlePrefix="ELT Development - ";
-	private String windowTitleSuffix=" - Hydrograph";
-	private String windowTitleDefault="ELT Development - Hydrograph";
-	private IWorkbenchWindowConfigurer configurer;
 	private static final String PERSPECTIVE_ID = "hydrograph.ui.perspective.ETLPerspective"; //$NON-NLS-1$
 	
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
@@ -49,43 +46,11 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
     	 configurer.setShowProgressIndicator(true);
     	 configurer.setShowFastViewBars(true);
     	 configurer.setShowStatusLine(true);
-    	 this.configurer=configurer;
-    	 attachPartListeners(configurer.getWindow().getPartService());
+    	 configurer.getWindow().getPartService().addPartListener(new TitleBarPartListener());
         return new ApplicationWorkbenchWindowAdvisor(configurer);
     }
 
-	private void attachPartListeners(IPartService partService) {
-		partService.addPartListener(new IPartListener() {
-			
-			@Override
-			public void partOpened(IWorkbenchPart part) {
-				//do-nothing
-			}
-			
-			@Override
-			public void partDeactivated(IWorkbenchPart part) {
-				
-			}
-			
-			@Override
-			public void partClosed(IWorkbenchPart part) {
-			}
-			
-			@Override
-			public void partBroughtToTop(IWorkbenchPart part) {
-			}
-			
-			@Override
-			public void partActivated(IWorkbenchPart part) {
-				if(part instanceof EditorPart){
-					configurer.getWindow().getShell().setText(windowTitlePrefix+((EditorPart)part).getTitleToolTip()+windowTitleSuffix);
-				}else
-					if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences()!=null
-							&& PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences().length==0)
-					configurer.getWindow().getShell().setText(windowTitleDefault);
-			}
-		});
-	}
+	
 	
 	public String getInitialWindowPerspectiveId() {
 		return PERSPECTIVE_ID;
