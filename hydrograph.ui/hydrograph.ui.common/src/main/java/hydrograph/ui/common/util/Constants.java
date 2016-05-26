@@ -234,7 +234,7 @@ public class Constants {
 	public static String SCHEMA_NOT_SYNC_MESSAGE="Schema Not In Sync";
 	public static String SYNC_WARNING="Sync Warning";
 	public static String SYNC_CONFIRM="Confirm";
-	public static String SYNC_CONFIRM_MESSAGE="Do you want to sync schema ?, It will override existing schema";
+	public static String SYNC_CONFIRM_MESSAGE="Do you want to sync schema? It will override existing schema.";
 	public static String CLICK_TO_FOCUS="Click to focus";
 
 	// Temporary property names of component 

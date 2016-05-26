@@ -634,7 +634,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		int returnCode =0;
 		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES| SWT.CANCEL |SWT.NO);
 		messageBox.setMessage(Messages.MESSAGE_FOR_FETCHING_PROPAGATED_SCHEMA);
-		messageBox.setText(Messages.TITLE_FOR_MESSAGE_BOX_OF_FETCHING_PROPAGATED_SCHEMA);
+		messageBox.setText(Messages.INFORMATION);
 		returnCode=messageBox.open();
 		if(returnCode!=SWT.CANCEL){
 			if (!schemaGridRowList.isEmpty()) {
