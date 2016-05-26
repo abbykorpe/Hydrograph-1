@@ -74,6 +74,8 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.slf4j.Logger;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 
 
 /**
@@ -126,7 +128,8 @@ public class FieldDialog extends Dialog {
 
 	// Add New Property After Validating old properties
 	private void addNewProperty(TableViewer tv, String fieldName) {
-
+		if (isPropertyAlreadyExists(fieldName))
+			return;
 		isAnyUpdatePerformed = true;
 		FilterProperties filter = new FilterProperties();
 		if (fieldName == null)
@@ -550,7 +553,6 @@ public class FieldDialog extends Dialog {
 		dropTarget.addDropListener(new DropTargetAdapter() {
 			public void drop(DropTargetEvent event) {
 				for (String fieldName : getformatedData((String) event.data))
-					if (!isPropertyAlreadyExists(fieldName))
 						addNewProperty(targetTableViewer, fieldName);
 				if (propertyList.size() >= 1) {
 					deleteButton.setEnabled(true);
@@ -567,6 +569,12 @@ public class FieldDialog extends Dialog {
 	public void createSourceTable(Composite container) {
 
 		sourceTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
+		sourceTableViewer.addDoubleClickListener(new IDoubleClickListener() {
+			public void doubleClick(DoubleClickEvent event) {
+				if(sourceTable.getSelection().length==1)
+				addNewProperty(targetTableViewer, sourceTable.getSelection()[0].getText());
+			}
+		});
 		sourceTable = sourceTableViewer.getTable();
 		sourceTable.setLinesVisible(true);
 		sourceTable.setHeaderVisible(true);
