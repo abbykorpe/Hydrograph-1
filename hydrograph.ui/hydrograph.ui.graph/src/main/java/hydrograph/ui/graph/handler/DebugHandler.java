@@ -25,6 +25,7 @@ import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.utility.CanvasUtils;
+import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
@@ -209,10 +210,7 @@ public class DebugHandler  extends AbstractHandler {
 		 
 		addDebugJob(currentJobName, job);
 		
-		List<String> externalSchemaFiles=getExternalSchemaList();
-		List<String> subJobList = getSubJobList();
-		
-		JobManager.INSTANCE.executeJobInDebug(job, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername(),externalSchemaFiles,subJobList);
+		JobManager.INSTANCE.executeJobInDebug(job, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
 		CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();		
 		return null;
 	}
@@ -231,52 +229,6 @@ public class DebugHandler  extends AbstractHandler {
 
 	public static void setJobMap(Map<String, Job> jobMap) {
 		DebugHandler.jobMap = jobMap;
-	}
-	
-	private List<String> getExternalSchemaList() {
-		ArrayList<String> externalSchemaPathList=new ArrayList<>();
-		try{
-		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		if (editor != null && editor instanceof ELTGraphicalEditor) {
-			GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor)
-					.getAdapter(GraphicalViewer.class);
-			for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();) {
-				EditPart editPart = (EditPart) ite.next();
-				if (editPart instanceof ComponentEditPart) {
-					Component component = ((ComponentEditPart) editPart).getCastedModel();
-					Schema  schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
-					if(schema!=null && schema.getIsExternal()){
-						System.out.println(schema.getExternalSchemaPath());
-						externalSchemaPathList.add(schema.getExternalSchemaPath());
-					}
-				}
-			}
-		}
-		}catch (Exception e) {
-			logger.error("Error occurred while fetching external schema files path.");
-		}
-		return externalSchemaPathList;
-	}
-
-
-	private List<String> getSubJobList() {
-		ArrayList<String> subJobList=new ArrayList<>();
-		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		if (editor != null && editor instanceof ELTGraphicalEditor) {
-			GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor)
-					.getAdapter(GraphicalViewer.class);
-			for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();) {
-				EditPart editPart = (EditPart) ite.next();
-				if (editPart instanceof ComponentEditPart) {
-					Component component = ((ComponentEditPart) editPart).getCastedModel();
-					if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
-					  String subJobPath=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
-					  subJobList.add(subJobPath);
-					}
-				}
-			}
-		}
-		return subJobList;
 	}
 
 }

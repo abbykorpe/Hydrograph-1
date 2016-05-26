@@ -13,17 +13,27 @@
 
 package hydrograph.ui.graph.utility;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.GradleCommandConstants;
 import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.model.Component;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
+import org.eclipse.ui.PlatformUI;
 
 public class JobScpAndProcessUtility {
 
@@ -171,4 +181,45 @@ public class JobScpAndProcessUtility {
 		String files=StringUtils.join(directories, ",");
 		return files;
 	}
+	
+	public List<String> getExternalSchemaList() {
+		ArrayList<String> externalSchemaPathList=new ArrayList<>();
+		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if (editor != null && editor instanceof ELTGraphicalEditor) {
+			GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor)
+					.getAdapter(GraphicalViewer.class);
+			for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();) {
+				EditPart editPart = (EditPart) ite.next();
+				if (editPart instanceof ComponentEditPart) {
+					Component component = ((ComponentEditPart) editPart).getCastedModel();
+					Schema  schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+					if(schema!=null && schema.getIsExternal()){
+						externalSchemaPathList.add(schema.getExternalSchemaPath());
+					}
+				}
+			}
+		}
+		return externalSchemaPathList;
+	}
+	
+	public List<String> getSubJobList() {
+		ArrayList<String> subJobList=new ArrayList<>();
+		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if (editor != null && editor instanceof ELTGraphicalEditor) {
+			GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor)
+					.getAdapter(GraphicalViewer.class);
+			for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();) {
+				EditPart editPart = (EditPart) ite.next();
+				if (editPart instanceof ComponentEditPart) {
+					Component component = ((ComponentEditPart) editPart).getCastedModel();
+					if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
+					  String subJobPath=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
+					  subJobList.add(subJobPath);
+					}
+				}
+			}
+		}
+		return subJobList;
+	}
+	
 }

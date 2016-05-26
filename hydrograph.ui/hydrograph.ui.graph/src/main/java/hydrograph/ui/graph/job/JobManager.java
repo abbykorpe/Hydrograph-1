@@ -26,6 +26,7 @@ import hydrograph.ui.graph.handler.RemoveDebugHandler;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.CanvasUtils;
+import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.dialog.MultiParameterFileDialog;
@@ -40,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -160,7 +162,9 @@ public class JobManager {
 	 * @param job
 	 *            - {@link Job} to execute
 	 */
-	public void executeJob(final Job job, String uniqueJobId,List<String> externalSchemaFiles,List<String> subJobList) {
+	public void executeJob(final Job job, String uniqueJobId) {
+		List<String> externalSchemaFiles;
+		List<String> subJobList;
 		enableRunJob(false);
 		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
 
@@ -195,13 +199,22 @@ public class JobManager {
 		job.setPassword(clusterPassword);
 		job.setHost(runConfigDialog.getHost());
 		job.setRemoteMode(runConfigDialog.isRemoteMode());
-
-		gefCanvas.disableRunningJobResource(); 
 		
-			launchJob(job, gefCanvas, parameterGrid, xmlPath,externalSchemaFiles,subJobList);
+		if(runConfigDialog.isRemoteMode()){
+			externalSchemaFiles=JobScpAndProcessUtility.INSTANCE.getExternalSchemaList();
+			subJobList=JobScpAndProcessUtility.INSTANCE.getSubJobList();
+		}else{
+			externalSchemaFiles=Collections.EMPTY_LIST;
+			subJobList=Collections.EMPTY_LIST;
+		}
+		gefCanvas.disableRunningJobResource(); 
+		launchJob(job, gefCanvas, parameterGrid, xmlPath,externalSchemaFiles,subJobList);
 	}
 
-	public void executeJobInDebug(final Job job, boolean isRemote, String userName,List<String> externalSchemaFiles,List<String> subJobList) {
+	public void executeJobInDebug(final Job job, boolean isRemote, String userName) {
+	
+		List<String> externalSchemaFiles;
+		List<String> subJobList;
 		enableRunJob(false);
 		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
 
@@ -227,6 +240,14 @@ public class JobManager {
 		job.setUsername(userName);
 		job.setRemoteMode(isRemote);
 		job.setHost(job.getIpAddress());
+
+		if(isRemote){
+			externalSchemaFiles=JobScpAndProcessUtility.INSTANCE.getExternalSchemaList();
+			subJobList=JobScpAndProcessUtility.INSTANCE.getSubJobList();
+		}else{
+			externalSchemaFiles=Collections.EMPTY_LIST;
+			subJobList=Collections.EMPTY_LIST;
+		}
 
 		gefCanvas.disableRunningJobResource();
 
