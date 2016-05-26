@@ -65,6 +65,7 @@ import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSourceEvent;
@@ -117,7 +118,7 @@ public class MultiParameterFileDialog extends Dialog {
 	private TableViewer parameterTableViewer;
 	private TableViewer parameterSearchTableViewer;
 	private Text parameterFileTextBox;
-
+	private SashForm mainSashForm;
 	private List<ParameterFile> parameterFiles;
 	private List<Parameter> parameters;
 	private List<ParameterWithFilePath> parameterSearchBoxItems;
@@ -183,19 +184,27 @@ public class MultiParameterFileDialog extends Dialog {
 
 		getShell().setText(
 				MultiParameterFileDialogConstants.PARAMETER_FILE_DIALOG_TEXT);
-
+		
 		container_1 = (Composite) super.createDialogArea(parent);
-
+		mainSashForm = new SashForm(container_1, SWT.HORIZONTAL);
+		mainSashForm.setSashWidth(1);
+		GridData gd_mainSashForm = new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0);
+		gd_mainSashForm.heightHint = 476;
+		gd_mainSashForm.widthHint = 851;
+		mainSashForm.setLayoutData(gd_mainSashForm);
 		createParameterFilesBox(container_1);
 		populateFilePathTableViewer();
 
-		Composite composite = createParameterFileViewOuterComposite(container_1);
-		createViewParameterFileBox(composite);
+		Composite composite = createParameterFileViewOuterComposite(mainSashForm);
+		SashForm childSashForm=new SashForm(composite, SWT.VERTICAL);
+		childSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		createViewParameterFileBox(childSashForm);
 		ParameterFile jobSpecificFile = getJobSpecificFile();
 		if (jobSpecificFile != null)
 			populateViewParameterFileBox(jobSpecificFile);
 
-		createParameterSearchBox(composite);
+		createParameterSearchBox(childSashForm);
 
 		return container_1;
 	}
@@ -806,9 +815,9 @@ public class MultiParameterFileDialog extends Dialog {
 	}
 
 	private void createParameterFilesBox(Composite container) {
-		container_1.setLayout(new GridLayout(2, false));
+		mainSashForm.setLayout(new GridLayout(2, false));
 
-		Composite composite_1 = new Composite(container_1, SWT.NONE);
+		Composite composite_1 = new Composite(mainSashForm, SWT.NONE);
 		GridData gd_composite_1 = new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1);
 		gd_composite_1.widthHint = 100;
