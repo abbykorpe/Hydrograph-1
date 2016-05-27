@@ -119,10 +119,8 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	protected Control createDialogArea(Composite parent) {
 		createPropertyDialogContainer(parent);
 		propertyDialogButtonBar = new PropertyDialogButtonBar(container);
-
 		propertyDialogBuilder = new PropertyDialogBuilder(container,propertyTree,componentProperties,propertyDialogButtonBar,component,this);
 		propertyDialogBuilder.buildPropertyWindow();
-
 		return container;
 	}
 

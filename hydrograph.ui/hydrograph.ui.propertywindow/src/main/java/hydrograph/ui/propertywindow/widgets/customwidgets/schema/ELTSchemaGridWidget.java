@@ -107,6 +107,8 @@ import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TableViewerFocusCellManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -117,6 +119,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -146,7 +149,7 @@ import org.slf4j.Logger;
 public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private static Logger logger = LogFactory.INSTANCE.getLogger(ELTSchemaGridWidget.class);
-
+	private ColumnLayoutData compositeOfOutsideTable;
 	public static final String FIELDNAME = Messages.FIELDNAME;
 	public static final String DATEFORMAT = Messages.DATEFORMAT;
 	public static final String DATATYPE = Messages.DATATYPE;
@@ -162,6 +165,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String DEFAULT_VALUE =Messages.DEFAULT_VALUE;
 	public static final String SCHEMA_TAB ="Schema";
 	public static final String OPERATION ="operation";
+	private static final int tableHeight=340;
+	private static final int tableWidth=360;
 	
 
 	protected boolean transformSchemaType=false;
@@ -558,7 +563,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 
 		if(transformSchemaType){
-			createSchemaGridSection(container.getContainerControl(), 340, 360);
+			createSchemaGridSection(container.getContainerControl(),tableHeight, tableWidth);
 			if(SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()))
 				createPullSchemaFromTransform(container.getContainerControl());
 		}
@@ -570,6 +575,20 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			createSchemaGridSection(container.getContainerControl(), 250, 360);
 			createExternalSchemaSection(container.getContainerControl());
 		}
+		tableComposite.getShell().addControlListener(new ControlListener() {
+			
+			@Override
+			public void controlResized(ControlEvent e) {
+				Shell shell = (Shell) e.getSource();
+				Rectangle schemaTable = shell.getClientArea();
+				compositeOfOutsideTable.heightHint = tableHeight + (schemaTable.height - 640);
+			}
+			
+			@Override
+			public void controlMoved(ControlEvent e) {
+			}
+		});
+	
 		populateSchemaTypeWidget();
 	}
 
@@ -1081,10 +1100,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				container);
 		gridSubGroup.createContainerWidget();
 
-		ColumnLayoutData cld_composite = new ColumnLayoutData();
-		cld_composite.heightHint = 260;
-		cld_composite.widthHint = 400;
-		gridSubGroup.getContainerControl().setLayoutData(cld_composite);
+	    compositeOfOutsideTable = new ColumnLayoutData();
+		compositeOfOutsideTable.heightHint = 260;
+		compositeOfOutsideTable.widthHint = 400;
+		gridSubGroup.getContainerControl().setLayoutData(compositeOfOutsideTable);
 
 		Composite composite = new Composite(gridSubGroup.getContainerControl(),
 				SWT.NONE);
@@ -1611,5 +1630,7 @@ public List<FilterProperties> convertSchemaToFilterProperty(){
 		}
 	return outputFileds;
 }
+
+
 	
 }
