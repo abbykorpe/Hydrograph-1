@@ -113,14 +113,20 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 	protected void doItemFill(IContributionItem ci, int index) {
 		
 		StructuredSelection s=(StructuredSelection)SubJobUtility.getCurrentEditor().getViewer().getSelection();
-			if (s.getFirstElement() instanceof ComponentEditPart && (StringUtils.equalsIgnoreCase(ci.getId(),"team.main")||
-				StringUtils.equalsIgnoreCase(ci.getId(),"replaceWithMenu")|| StringUtils.equalsIgnoreCase(ci.getId(),"additions"))){
+			String team = "team.main";
+			String replaceWith = "replaceWithMenu";
+			String separator = "additions";
+			if (s.getFirstElement() instanceof ComponentEditPart && (StringUtils.equalsIgnoreCase(ci.getId(),team)||
+				StringUtils.equalsIgnoreCase(ci.getId(),replaceWith)|| StringUtils.equalsIgnoreCase(ci.getId(),separator))){
 					return;
 			}
 	
-			if((StringUtils.equalsIgnoreCase(ci.getId(),"org.eclipse.debug.ui.contextualLaunch.debug.submenu")||
-				StringUtils.equalsIgnoreCase(ci.getId(),"org.eclipse.debug.ui.contextualLaunch.run.submenu")||
-				StringUtils.equalsIgnoreCase(ci.getId(),"compareWithMenu"))){
+			String runAs = "org.eclipse.debug.ui.contextualLaunch.debug.submenu";
+			String debugAs = "org.eclipse.debug.ui.contextualLaunch.run.submenu";
+			String compareWith = "compareWithMenu";
+			if((StringUtils.equalsIgnoreCase(ci.getId(),runAs)||
+				StringUtils.equalsIgnoreCase(ci.getId(),debugAs)||
+				StringUtils.equalsIgnoreCase(ci.getId(),compareWith))){
 					return ;
 			}	
 		super.doItemFill(ci, index);
