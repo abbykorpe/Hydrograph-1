@@ -38,6 +38,12 @@ import org.eclipse.ui.actions.ActionFactory;
 public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 	/** The editor's action registry. */
 	private ActionRegistry actionRegistry;
+	private static final String team = "team.main";
+	private static final String replaceWith = "replaceWithMenu";
+	private static final String separator = "additions";
+	private static final String runAs = "org.eclipse.debug.ui.contextualLaunch.debug.submenu";
+	private static final String debugAs = "org.eclipse.debug.ui.contextualLaunch.run.submenu";
+	private static final String compareWith = "compareWithMenu";
 	
 	/**
 	 * Instantiate a new menu context provider for the specified EditPartViewer
@@ -113,17 +119,12 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 	protected void doItemFill(IContributionItem ci, int index) {
 		
 		StructuredSelection s=(StructuredSelection)SubJobUtility.getCurrentEditor().getViewer().getSelection();
-			String team = "team.main";
-			String replaceWith = "replaceWithMenu";
-			String separator = "additions";
+			
 			if (s.getFirstElement() instanceof ComponentEditPart && (StringUtils.equalsIgnoreCase(ci.getId(),team)||
 				StringUtils.equalsIgnoreCase(ci.getId(),replaceWith)|| StringUtils.equalsIgnoreCase(ci.getId(),separator))){
 					return;
 			}
 	
-			String runAs = "org.eclipse.debug.ui.contextualLaunch.debug.submenu";
-			String debugAs = "org.eclipse.debug.ui.contextualLaunch.run.submenu";
-			String compareWith = "compareWithMenu";
 			if((StringUtils.equalsIgnoreCase(ci.getId(),runAs)||
 				StringUtils.equalsIgnoreCase(ci.getId(),debugAs)||
 				StringUtils.equalsIgnoreCase(ci.getId(),compareWith))){
