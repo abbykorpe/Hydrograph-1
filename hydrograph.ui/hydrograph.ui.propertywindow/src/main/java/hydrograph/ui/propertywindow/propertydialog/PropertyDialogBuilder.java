@@ -142,7 +142,7 @@ public class PropertyDialogBuilder {
 					if (schemaWidget instanceof ELTSchemaGridWidget) {
 						ELTSchemaGridWidget eltSchemaGridWidget = (ELTSchemaGridWidget) schemaWidget;
 						if (!eltSchemaGridWidget.isExternal()) {
-							if (!SchemaSyncUtility.isTransformSchemaSyncAllow(component.getComponentName()) && schemaWidget.getSchemaForInternalPropagation().getGridRow().size() != 0) {
+							if (!SchemaSyncUtility.isSchemaSyncAllow(component.getComponentName()) && schemaWidget.getSchemaForInternalPropagation().getGridRow().size() != 0) {
 								eltSchemaGridWidget.enableDisableButtons(schemaWidget.getSchemaForInternalPropagation()
 										.getGridRow().size());
 							} else {
@@ -257,7 +257,7 @@ public class PropertyDialogBuilder {
 
 		AbstractWidget widget = WidgetFactory.INSTANCE.getWidget(property.getPropertyRenderer(),componentConfigProp,
 				componentMiscellaneousProperties,propertyDialogButtonBar);
-		if(property.getPropertyName().equalsIgnoreCase("join_config"));
+		
 		widget.setEltComponenetProperties(eltComponenetProperties);
 		
 		widget.setSchemaForInternalPapogation(setSchemaForInternalPapogation);

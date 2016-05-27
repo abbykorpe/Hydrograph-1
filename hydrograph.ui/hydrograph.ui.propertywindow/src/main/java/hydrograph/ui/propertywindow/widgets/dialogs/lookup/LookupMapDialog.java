@@ -12,13 +12,17 @@
  ******************************************************************************/
 package hydrograph.ui.propertywindow.widgets.dialogs.lookup;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
+import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEditingSupport;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.utils.JoinMapDialogConstants;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
@@ -30,6 +34,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -75,6 +80,7 @@ import org.eclipse.swt.widgets.TableItem;
  *
  */
 public class LookupMapDialog extends Dialog {
+	private Component component;
 	private LookupMappingGrid lookupMappingGrid;
 	private List<List<FilterProperties>> inputPorts;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
@@ -83,6 +89,7 @@ public class LookupMapDialog extends Dialog {
 	private LookupMappingGrid oldLookupMappingGrid;
 	private LookupMappingGrid newLookupMappingGrid;
 	private List<String> allInputFields;
+	private Button btnPull;
 	private Button btnDown;
 	private Button btnUp;
 	private Button btnDelete;
@@ -97,6 +104,7 @@ public class LookupMapDialog extends Dialog {
 	private static final String IN0_HEADER = "Input Fields(in0)";
 	private static final String IN1_HEADER = "Input Fields(in1)";
 	
+	private static final String PULL_BUTTON_TEXT="Pull";
 	private static final String ADD_BUTTON_TEXT="Add";
 	private static final String DELETE_BUTTON_TEXT="Delete";
 	private static final String UP_BUTTON_TEXT="Up";
@@ -118,13 +126,13 @@ public class LookupMapDialog extends Dialog {
 				| SWT.RESIZE);
 	}
 
-	public LookupMapDialog(Shell parentShell, LookupMappingGrid lookupPropertyGrid,
+	public LookupMapDialog(Shell parentShell, Component component, LookupMappingGrid lookupPropertyGrid,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL
 				| SWT.RESIZE);
 		this.lookupMappingGrid = lookupPropertyGrid;
-
+		this.component=component;
 		inputPorts = new ArrayList<>();
 
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
@@ -441,13 +449,15 @@ public class LookupMapDialog extends Dialog {
 		lblMappingView.setText("Output Mapping");
 
 		Composite outputMappingButtonsComposite = new Composite(mappingHeaderComposite, SWT.NONE);
-		GridLayout gl_outputMappingButtonsComposite = new GridLayout(4, false);
+		GridLayout gl_outputMappingButtonsComposite = new GridLayout(5, false);
 		gl_outputMappingButtonsComposite.verticalSpacing = 0;
 		gl_outputMappingButtonsComposite.marginWidth = 0;
 		gl_outputMappingButtonsComposite.marginHeight = 0;
 		outputMappingButtonsComposite.setLayout(gl_outputMappingButtonsComposite);
 		outputMappingButtonsComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true,
 				true, 1, 1));
+		
+		createPullButton(outputMappingButtonsComposite);
 
 		createAddButton(outputMappingButtonsComposite);
 
@@ -458,6 +468,25 @@ public class LookupMapDialog extends Dialog {
 		createDownButton(outputMappingButtonsComposite);
 	}
 
+	private void createPullButton(Composite composite_11) {
+		btnPull = new Button(composite_11, SWT.NONE);
+		btnPull.setText(PULL_BUTTON_TEXT);
+		btnPull.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Constants.SYNC_CONFIRM_MESSAGE, MessageDialog.QUESTION, new String[] {"Ok", "Cancel" }, 0);
+				int dialogResult =dialog.open();
+				if(dialogResult == 0){
+					//syncTransformFieldsWithSchema();
+					Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+					SchemaSyncUtility.pullLookupSchemaInMapping(schema, component);
+				}
+				mappingTableViewer.refresh();
+				//refreshButtonStatus();
+			}
+		});
+	}
+	
 	private void createDownButton(Composite composite_11) {
 		btnDown = new Button(composite_11, SWT.NONE);
 		btnDown.setText(DOWN_BUTTON_TEXT);
@@ -623,7 +652,7 @@ public class LookupMapDialog extends Dialog {
 			}
 
 		}
-		TableViewer in0TableViewer = new TableViewer(inputComposite2, SWT.BORDER | SWT.FULL_SELECTION);
+		TableViewer in0TableViewer = new TableViewer(inputComposite2, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		in0Table = in0TableViewer.getTable();
 		in0Table.setLinesVisible(true);
 		in0Table.setHeaderVisible(true);
@@ -684,7 +713,7 @@ public class LookupMapDialog extends Dialog {
 
 		}
 		
-		TableViewer in1TableViewer = new TableViewer(inputComposite2, SWT.BORDER | SWT.FULL_SELECTION);
+		TableViewer in1TableViewer = new TableViewer(inputComposite2, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		in1Table = in1TableViewer.getTable();
 		in1Table.setHeaderVisible(true);
 		in1Table.setLinesVisible(true);
