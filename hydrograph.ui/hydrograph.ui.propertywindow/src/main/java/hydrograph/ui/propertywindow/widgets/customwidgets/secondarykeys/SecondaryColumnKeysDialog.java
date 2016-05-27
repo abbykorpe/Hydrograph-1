@@ -212,7 +212,6 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		dropTarget.addDropListener(new DropTargetAdapter() {
 			public void drop(DropTargetEvent event) {
 				for (String fieldName : getformatedData((String) event.data))
-					if (!isPropertyAlreadyExists(fieldName))
 						addNewProperty(targetTableViewer, fieldName);
 				if (propertyList.size() >= 1) {
 					deleteButton.setEnabled(true);
@@ -266,6 +265,13 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	private void createSourceTable(Composite composite_2) {
 		sourceTable = new Table(composite_2, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
+		sourceTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				if(sourceTable.getSelection().length==1)
+					addNewProperty(targetTableViewer, sourceTable.getSelection()[0].getText());
+			}
+		});
 		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2);
 		gd_table.widthHint = 221;
 		gd_table.heightHint = 407;
@@ -489,6 +495,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	// Add New Property After Validating old properties
 	private void addNewProperty(TableViewer tv, String fieldName) {
+		if (isPropertyAlreadyExists(fieldName))
+			return ;
 		isAnyUpdatePerformed = true;
 		SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
 		if (fieldName == null)
