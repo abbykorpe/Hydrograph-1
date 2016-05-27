@@ -42,7 +42,7 @@ public class DeleteHandler extends AbstractHandler implements IHandler{
 			action.run();
 		}
 		
-		if (part instanceof ELTGraphicalEditor) {
+		else if (part instanceof ELTGraphicalEditor) {
 			IEditorPart editor = HandlerUtil.getActiveEditor(event);
 			((ELTGraphicalEditor) editor).deleteSelection();
 			((ELTGraphicalEditor) editor).hideToolTip();
