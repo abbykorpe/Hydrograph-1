@@ -63,6 +63,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
@@ -79,7 +80,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -154,6 +154,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private Map<String,List<String>> duplicateFieldMap;
 	private ControlDecoration isFieldNameAlphanumericDecorator;
 	private ControlDecoration fieldNameDecorator;
+	private SashForm mainSashForm;
+	private SashForm middleSashForm;
 	
 	
 	
@@ -185,22 +187,22 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		container = (Composite) super.createDialogArea(parent);
-		container.setLayout(new FillLayout(SWT.HORIZONTAL));
+		container.setLayout(new GridLayout(3, false));
 
 		container.getShell().setText(Messages.TRANSFORM_EDITOR);
 
 		propertyDialogButtonBar = new PropertyDialogButtonBar(container);
+		mainSashForm = new SashForm(container, SWT.SMOOTH);
+		mainSashForm.setSashWidth(1);
+		mainSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0));
+		createInputFieldTable(mainSashForm);
 
-		composite_1 = new Composite(container, SWT.NONE);
-		composite_1.setForeground(SWTResourceManager.getColor(SWT.COLOR_TITLE_INACTIVE_FOREGROUND));
-		composite_1.setLayout(new GridLayout(3, false));
-		createInputFieldTable(composite_1);
+		createOperationClassGrid(mainSashForm);
 
-		createOperationClassGrid(composite_1);
+		createOutputFieldTable(mainSashForm);
+		mainSashForm.setWeights(new int[] {71, 242, 87});
 
-		createOutputFieldTable(composite_1);
-
-		return container;
+		return mainSashForm;
 	}
 
 	private void createInputFieldTable(Composite container) {
@@ -241,17 +243,17 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 	private void createOutputFieldTable(Composite composite) {
 
-		Composite rightComposite = new Composite(composite, SWT.NONE);
-		rightComposite.setLayout(new GridLayout(1, false));
+		Composite outputComposite = new Composite(composite, SWT.NONE);
+		outputComposite.setLayout(new GridLayout(1, false));
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gridData.widthHint = 250;
-		rightComposite.setLayoutData(gridData);
+		outputComposite.setLayoutData(gridData);
 
-		Composite buttonComposite = new Composite(rightComposite, SWT.NONE);
+		Composite buttonComposite = new Composite(outputComposite, SWT.NONE);
 		buttonComposite.setLayout(new GridLayout(3, false));
 		buttonComposite.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 
-		Composite outputFieldComposite = new Composite(rightComposite, SWT.NONE);
+		Composite outputFieldComposite = new Composite(outputComposite, SWT.NONE);
 		outputFieldComposite.setLayout(new GridLayout(1, false));
 		outputFieldComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		Button btnPull = new Button(buttonComposite, SWT.NONE);
@@ -367,15 +369,18 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		Composite middleComposite = new Composite(parentComposite, SWT.NONE);
 		middleComposite.setLayout(new GridLayout(1, false));
-		middleComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-
 		Composite topAddButtonComposite = new Composite(middleComposite, SWT.NONE);
-
 		GridData gd_topAddButtonComposite = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
-
+		gd_topAddButtonComposite.heightHint = 30;
 		topAddButtonComposite.setLayoutData(gd_topAddButtonComposite);
+		middleSashForm = new SashForm(middleComposite, SWT.SMOOTH|SWT.VERTICAL|SWT.BORDER);
+		middleSashForm.setSashWidth(1);
+		middleSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0));
+		
 
-		scrolledComposite = new ScrolledComposite(middleComposite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		
+
+		scrolledComposite = new ScrolledComposite(middleSashForm, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLUE));
 		scrolledComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		scrolledComposite.setLayout(new GridLayout(1, false));
@@ -466,7 +471,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			}
 
 		}
-		createMapAndPassthroughTable(middleComposite);
+		createMapAndPassthroughTable(middleSashForm);
+		middleSashForm.setWeights(new int[] {56, 54, 23});
 
 	}
 
