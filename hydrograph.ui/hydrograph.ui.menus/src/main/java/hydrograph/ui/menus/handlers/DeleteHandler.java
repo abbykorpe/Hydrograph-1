@@ -22,23 +22,31 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
-
+import org.eclipse.jdt.internal.ui.refactoring.reorg.DeleteAction;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.navigator.CommonNavigator;
 
 /**
- * 
- * Handler to delete component on canvas 
+ * @author Bitwise
+ * Handler to delete component on canvas and Project Explorer 
  *
  */
 public class DeleteHandler extends AbstractHandler implements IHandler{
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		if (editor instanceof ELTGraphicalEditor) {
+		IWorkbenchPart part = HandlerUtil.getActivePart(event);
+		if(part instanceof CommonNavigator){
+			DeleteAction action=new DeleteAction(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart().getSite());
+			action.run();
+		}
+		
+		else if (part instanceof ELTGraphicalEditor) {
+			IEditorPart editor = HandlerUtil.getActiveEditor(event);
 			((ELTGraphicalEditor) editor).deleteSelection();
 			((ELTGraphicalEditor) editor).hideToolTip();
 		}
-
 		return null;
 	}
 }
