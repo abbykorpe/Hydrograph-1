@@ -18,7 +18,7 @@ import hydrograph.engine.utilities.Constants;
 
 public enum HiveParquetDatatypeMapping {
 
-	STRING(DataType.COMMON), INTEGER(DataType.INTEGER), DATE(DataType.COMMON), LONG(
+	STRING(DataType.COMMON), INTEGER(DataType.INTEGER), DATE(DataType.DATE), LONG(
 			DataType.LONG), BOOLEAN(DataType.COMMON), FLOAT(DataType.COMMON), DOUBLE(
 			DataType.COMMON), SHORT(DataType.SHORT), BIGDECIMAL(
 			DataType.BIGDECIMAL), TIMESTAMP(DataType.TIMESTAMP);
@@ -39,6 +39,24 @@ public enum HiveParquetDatatypeMapping {
 						.toLowerCase();
 			}
 		},
+
+		DATE {
+			private final String TIME_STAMP = "hh:mm:ss";
+			private final String SQL_TIMESTAMP = "java.sql.TimeStamp";
+			private final String DATE_STRING = "Date";
+
+			@Override
+			String getMapping(SchemaField schemaField,
+					AssemblyEntityBase assemblyEntityBase) {
+				return getTypeNameFromDataType(
+						schemaField.getFieldDataType().contains(DATE_STRING)
+								&& schemaField.getFieldFormat().toLowerCase()
+										.contains(TIME_STAMP) ? SQL_TIMESTAMP
+								: schemaField.getFieldDataType()).toUpperCase();
+			}
+
+		},
+
 		SHORT {
 			@Override
 			public String getMapping(SchemaField schemaField,
@@ -109,5 +127,6 @@ public enum HiveParquetDatatypeMapping {
 	public String getMappingType(SchemaField schemaField,
 			AssemblyEntityBase assemblyEntityBase) {
 		return hiveType.getMapping(schemaField, assemblyEntityBase);
+
 	}
 }

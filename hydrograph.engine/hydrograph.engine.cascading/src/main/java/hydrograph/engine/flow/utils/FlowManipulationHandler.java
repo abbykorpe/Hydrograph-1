@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.main.Graph;
 import hydrograph.engine.utilities.OrderedProperties;
 import hydrograph.engine.utilities.OrderedPropertiesHelper;
@@ -34,6 +35,8 @@ public class FlowManipulationHandler {
 
 	private static Logger LOG = LoggerFactory.getLogger(FlowManipulationHandler.class);
 	private static List<TypeBaseComponent> jaxbComponents;
+	private static TypeProperties jaxbJobLevelRuntimeProperties;
+	private static String jobName;
 
 	/**
 	 * @param flowManipulationContext
@@ -42,6 +45,8 @@ public class FlowManipulationHandler {
 	public static HydrographJob execute(FlowManipulationContext flowManipulationContext) {
 
 		jaxbComponents = flowManipulationContext.getJaxbMainGraph();
+		jaxbJobLevelRuntimeProperties = flowManipulationContext.getJaxbJobLevelRuntimeProperties();
+		jobName = flowManipulationContext.getGraphName();
 		OrderedProperties properties = new OrderedProperties();
 		try {
 			properties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties");
@@ -61,6 +66,8 @@ public class FlowManipulationHandler {
 	private static HydrographJob getJaxbObject() {
 		Graph graph = new Graph();
 		graph.getInputsOrOutputsOrStraightPulls().addAll(jaxbComponents);
+		graph.setRuntimeProperties(jaxbJobLevelRuntimeProperties);
+		graph.setName(jobName);
 		return new HydrographJob(graph);
 	}
 

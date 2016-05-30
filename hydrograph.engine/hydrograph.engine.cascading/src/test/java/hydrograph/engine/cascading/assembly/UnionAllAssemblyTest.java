@@ -56,16 +56,14 @@ public class UnionAllAssemblyTest {
 	public void TestSimpleUnionAllComponentWorking() {
 		Plunger plunger = new Plunger();
 
-		Data file1 = new DataBuilder(new Fields("col1", "col2", "col3"))
-				.addTuple("C1R1", "C2R1", "C3R1")
+		Data file1 = new DataBuilder(new Fields("col1", "col2", "col3")).addTuple("C1R1", "C2R1", "C3R1")
 				.addTuple("C1R2", "C2R2", "C3R2").build();
 		Pipe pipe1 = plunger.newNamedPipe("pipe1", file1); // pipe corresponding
 															// to an input of
 															// unionAll
 															// component
 
-		Data file2 = new DataBuilder(new Fields("col1", "col2", "col3"))
-				.addTuple("C1R3", "C2R3", "C3R3")
+		Data file2 = new DataBuilder(new Fields("col1", "col2", "col3")).addTuple("C1R3", "C2R3", "C3R3")
 				.addTuple("C1R4", "C2R4", "C3R4").build();
 		Pipe pipe2 = plunger.newNamedPipe("pipe2", file2); // pipe corresponding
 															// to an input of
@@ -80,8 +78,7 @@ public class UnionAllAssemblyTest {
 		parameters.addInputPipe(pipe1); // first input to unionAll component
 		parameters.addInputPipe(pipe2); // second input to unionAll component
 		parameters.addInputFields(new Fields("col1", "col2", "col3")); // list
-																		// of
-																		// fields
+		parameters.addInputFields(new Fields("col1", "col2", "col3")); // fields
 																		// on
 																		// input
 																		// of
@@ -98,11 +95,21 @@ public class UnionAllAssemblyTest {
 
 		// parameters.s("testunionAll"); //set the name of the component
 
-		UnionAllAssembly unionAll = new UnionAllAssembly(unionAllEntity,
-				parameters); // create a dummy component to be tested
+		UnionAllAssembly unionAll = new UnionAllAssembly(unionAllEntity, parameters); // create
+																						// a
+																						// dummy
+																						// component
+																						// to
+																						// be
+																						// tested
 
-		Bucket bucket = plunger.newBucket(new Fields("col1", "col2", "col3"),
-				unionAll); // create bucket for the unionAll sub assembly
+		Bucket bucket = plunger.newBucket(new Fields("col1", "col2", "col3"), unionAll); // create
+																							// bucket
+																							// for
+																							// the
+																							// unionAll
+																							// sub
+																							// assembly
 
 		List<Tuple> actual = bucket.result().asTupleList(); // get results from
 															// bucket
@@ -130,32 +137,28 @@ public class UnionAllAssemblyTest {
 	public void TestUnionAllComponentWithFourInputs() {
 		Plunger plunger = new Plunger();
 
-		Data file1 = new DataBuilder(new Fields("col1", "col2", "col3"))
-				.addTuple("C1R1", "C2R1", "C3R1")
+		Data file1 = new DataBuilder(new Fields("col1", "col2", "col3")).addTuple("C1R1", "C2R1", "C3R1")
 				.addTuple("C1R2", "C2R2", "C3R2").build();
 		Pipe pipe1 = plunger.newNamedPipe("pipe1", file1); // pipe corresponding
 															// to an input of
 															// unionAll
 															// component
 
-		Data file2 = new DataBuilder(new Fields("col1", "col2", "col3"))
-				.addTuple("C1R3", "C2R3", "C3R3")
+		Data file2 = new DataBuilder(new Fields("col1", "col2", "col3")).addTuple("C1R3", "C2R3", "C3R3")
 				.addTuple("C1R4", "C2R4", "C3R4").build();
 		Pipe pipe2 = plunger.newNamedPipe("pipe2", file2); // pipe corresponding
 															// to an input of
 															// unionAll
 															// component
 
-		Data file3 = new DataBuilder(new Fields("col1", "col2", "col3"))
-				.addTuple("C1R5", "C2R5", "C3R5")
+		Data file3 = new DataBuilder(new Fields("col1", "col2", "col3")).addTuple("C1R5", "C2R5", "C3R5")
 				.addTuple("C1R6", "C2R6", "C3R6").build();
 		Pipe pipe3 = plunger.newNamedPipe("pipe3", file3); // pipe corresponding
 															// to an input of
 															// unionAll
 															// component
 
-		Data file4 = new DataBuilder(new Fields("col1", "col2", "col3"))
-				.addTuple("C1R7", "C2R7", "C3R7")
+		Data file4 = new DataBuilder(new Fields("col1", "col2", "col3")).addTuple("C1R7", "C2R7", "C3R7")
 				.addTuple("C1R8", "C2R8", "C3R8").build();
 		Pipe pipe4 = plunger.newNamedPipe("pipe4", file4); // pipe corresponding
 															// to an input of
@@ -174,9 +177,9 @@ public class UnionAllAssemblyTest {
 		parameters.addInputPipe(pipe3); // third input to unionAll component
 		parameters.addInputPipe(pipe4); // fourth input to unionAll component
 		parameters.addInputFields(new Fields("col1", "col2", "col3")); // list
-																		// of
-																		// fields
-																		// on
+		parameters.addInputFields(new Fields("col1", "col2", "col3")); // of
+		parameters.addInputFields(new Fields("col1", "col2", "col3")); // fields
+		parameters.addInputFields(new Fields("col1", "col2", "col3")); // on
 																		// input
 																		// of
 																		// unionAll
@@ -193,13 +196,21 @@ public class UnionAllAssemblyTest {
 		// parameters.setComponentName("testunionAll"); //set the name of the
 		// component
 
-		UnionAllAssembly unionAllAssembly = new UnionAllAssembly(
-				unionAllEntity, parameters); // create a dummy component to be
-												// tested
+		UnionAllAssembly unionAllAssembly = new UnionAllAssembly(unionAllEntity, parameters); // create
+																								// a
+																								// dummy
+																								// component
+																								// to
+																								// be
+																								// tested
 
-		Bucket bucket = plunger.newBucket(new Fields("col1", "col2", "col3"),
-				unionAllAssembly); // create bucket for the unionAll sub
-									// assembly
+		Bucket bucket = plunger.newBucket(new Fields("col1", "col2", "col3"), unionAllAssembly); // create
+																									// bucket
+																									// for
+																									// the
+																									// unionAll
+																									// sub
+																									// assembly
 
 		List<Tuple> actual = bucket.result().asTupleList(); // get results from
 															// bucket
@@ -233,16 +244,14 @@ public class UnionAllAssemblyTest {
 	public void TestReAligningInputFieldsInUnionAllComponent() {
 		Plunger plunger = new Plunger();
 
-		Data file1 = new DataBuilder(new Fields("col1", "col3", "col2"))
-				.addTuple("C1R1", "C3R1", "C2R1")
+		Data file1 = new DataBuilder(new Fields("col1", "col3", "col2")).addTuple("C1R1", "C3R1", "C2R1")
 				.addTuple("C1R2", "C3R2", "C2R2").build();
 		Pipe pipe1 = plunger.newNamedPipe("pipe1", file1); // pipe corresponding
 															// to an input of
 															// unionAll
 															// component
 
-		Data file2 = new DataBuilder(new Fields("col1", "col2", "col3"))
-				.addTuple("C1R3", "C2R3", "C3R3")
+		Data file2 = new DataBuilder(new Fields("col1", "col2", "col3")).addTuple("C1R3", "C2R3", "C3R3")
 				.addTuple("C1R4", "C2R4", "C3R4").build();
 		Pipe pipe2 = plunger.newNamedPipe("pipe2", file2); // pipe corresponding
 															// to an input of
@@ -258,7 +267,7 @@ public class UnionAllAssemblyTest {
 		parameters.addInputPipe(pipe2); // second input to unionAll component
 
 		parameters.addInputFields(new Fields("col1", "col2", "col3")); // list
-																		// of
+		parameters.addInputFields(new Fields("col1", "col2", "col3")); // of
 																		// fields
 																		// on
 																		// input
@@ -278,13 +287,21 @@ public class UnionAllAssemblyTest {
 		// parameters.setComponentName("testunionAll"); //set the name of the
 		// component
 
-		UnionAllAssembly unionAllAssembly = new UnionAllAssembly(
-				unionAllEntity, parameters); // create a dummy component to be
-												// tested
+		UnionAllAssembly unionAllAssembly = new UnionAllAssembly(unionAllEntity, parameters); // create
+																								// a
+																								// dummy
+																								// component
+																								// to
+																								// be
+																								// tested
 
-		Bucket bucket = plunger.newBucket(new Fields("col1", "col2", "col3"),
-				unionAllAssembly); // create bucket for the unionAll sub
-									// assembly
+		Bucket bucket = plunger.newBucket(new Fields("col1", "col2", "col3"), unionAllAssembly); // create
+																									// bucket
+																									// for
+																									// the
+																									// unionAll
+																									// sub
+																									// assembly
 
 		List<Tuple> actual = bucket.result().asTupleList(); // get results from
 															// bucket

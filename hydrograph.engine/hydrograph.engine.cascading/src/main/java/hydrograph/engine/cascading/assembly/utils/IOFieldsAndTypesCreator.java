@@ -34,7 +34,7 @@ public class IOFieldsAndTypesCreator<T extends AssemblyEntityBase> {
 	private String[] fieldToRangeValue;
 	private String[] fieldFromRangeValue;
 	private String[] fieldLengthOrDelimiter;
-
+	private Type[] typefieldLengthDelimiter;
 	private AssemblyEntityBase assemblyEntityBase;
 
 	public IOFieldsAndTypesCreator(T entity) {
@@ -81,6 +81,7 @@ public class IOFieldsAndTypesCreator<T extends AssemblyEntityBase> {
 		fieldFromRangeValue = new String[sizeOfFieldList];
 		fieldToRangeValue = new String[sizeOfFieldList];
 		fieldLengthOrDelimiter = new String[sizeOfFieldList];
+		typefieldLengthDelimiter = new Type[sizeOfFieldList];
 
 		for (int i = 0; i < sizeOfFieldList; i++) {
 			SchemaField schemaField = assemblyEntityBase.getFieldsList().get(i);
@@ -95,6 +96,8 @@ public class IOFieldsAndTypesCreator<T extends AssemblyEntityBase> {
 			fieldFromRangeValue[i] = schemaField.getFieldFromRangeValue();
 			fieldToRangeValue[i] = schemaField.getFieldToRangeValue();
 			fieldLengthOrDelimiter[i] = schemaField.getFieldLengthDelimiter();
+			typefieldLengthDelimiter[i] = schemaField
+					.getTypeFieldLengthDelimiter();
 		}
 	}
 
@@ -162,6 +165,16 @@ public class IOFieldsAndTypesCreator<T extends AssemblyEntityBase> {
 	 */
 	public String[] getFieldLengthOrDelimiter() {
 		return fieldLengthOrDelimiter;
+	}
+
+	/**
+	 * This method returns type whether it is field length value or delimiter
+	 * value used for all fields.
+	 * 
+	 * @return Type[]
+	 */
+	public Type[] getTypeFieldLengthDelimiter() {
+		return typefieldLengthDelimiter;
 	}
 
 	/**
@@ -254,4 +267,5 @@ public class IOFieldsAndTypesCreator<T extends AssemblyEntityBase> {
 		}
 		return "";
 	}
+
 }

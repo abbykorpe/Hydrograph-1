@@ -16,6 +16,7 @@ import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.schemapropagation.SchemaFieldHandler;
 
 import java.util.List;
@@ -29,17 +30,36 @@ public class FlowManipulationContext {
 	private List<TypeBaseComponent> jaxbMainGraph;
 	private String jobId;
 	private String basePath;
+	private TypeProperties jaxbJobLevelRuntimeProperties;
+	private String graphName;
 
 	public FlowManipulationContext(HydrographJob hydrographJob, HydrographDebugInfo bhsDebug,
 			SchemaFieldHandler schemaFieldHandler, String jobId, String basePath) {
-		this.jaxbMainGraph = hydrographJob.getJAXBObject()
-				.getInputsOrOutputsOrStraightPulls();
+		this.jaxbMainGraph = hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls();
+		this.jaxbJobLevelRuntimeProperties = hydrographJob.getJAXBObject().getRuntimeProperties();
+		this.graphName = hydrographJob.getJAXBObject().getName();
+		this.jobId = jobId;
 		this.jaxbDebugGraph = bhsDebug;
 		this.schemaFieldMap = schemaFieldHandler;
-		this.jobId = jobId;
 		this.basePath = basePath;
 	}
 	
+	public String getGraphName() {
+		return graphName;
+	}
+
+	public void setGraphName(String graphName) {
+		this.graphName = graphName;
+	}
+
+	public TypeProperties getJaxbJobLevelRuntimeProperties() {
+		return jaxbJobLevelRuntimeProperties;
+	}
+
+	public void setJaxbJobLevelRuntimeProperties(TypeProperties jaxbRuntimeProperties) {
+		this.jaxbJobLevelRuntimeProperties = jaxbRuntimeProperties;
+	}
+
 	public String getJobId(){
 		return jobId;
 	}
