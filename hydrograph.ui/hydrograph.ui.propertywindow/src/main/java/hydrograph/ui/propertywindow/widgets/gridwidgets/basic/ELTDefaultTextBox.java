@@ -48,6 +48,12 @@ public class ELTDefaultTextBox extends AbstractELTWidget{
 		if (OSValidator.isMac()) {
 			gd_defaultELTTextBox.horizontalIndent=2;
 		}
+		else{
+			gd_defaultELTTextBox.horizontalIndent=-2;
+		}
+		
+		
+		
 		gd_defaultELTTextBox.widthHint = textboxWidth;
 		defaultELTTextBox.setLayoutData(gd_defaultELTTextBox);
 		defaultELTTextBox.setText(defaultTextMessage);
