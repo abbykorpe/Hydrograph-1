@@ -12,44 +12,34 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
-import hydrograph.engine.cascading.assembly.generator.base.GeneratorBase;
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.main.Graph;
-import hydrograph.engine.utilities.PropertiesHelper;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hydrograph.engine.cascading.assembly.generator.base.GeneratorBase;
+import hydrograph.engine.cascading.assembly.utils.ComponentAssemblyMapping;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.main.Graph;
+
 public class AssemblyGeneratorFactory {
 
 	Map<String, GeneratorBase> assemblyGeneratorMap = new HashMap<String, GeneratorBase>();
-	public static final String COMPONENT_ASSEMBLY_MAP_FILE = "componentAssemblyMap.properties";
-	private Properties componentAssemblyMapProperties;
-	private static Logger LOG = LoggerFactory
-			.getLogger(AssemblyGeneratorFactory.class);
+	private static Logger LOG = LoggerFactory.getLogger(AssemblyGeneratorFactory.class);
 
 	public AssemblyGeneratorFactory(Graph graph) {
-		componentAssemblyMapProperties = PropertiesHelper
-				.getProperties(COMPONENT_ASSEMBLY_MAP_FILE);
-		LOG.info("Creating assembly generator map");
-		LOG.info("Reading " + COMPONENT_ASSEMBLY_MAP_FILE + " file for component mapping");
 		generateAssemblyGeneratorMap(graph.getInputsOrOutputsOrStraightPulls());
 		LOG.info("Assembly generator map created successfully");
 	}
 
 	private void generateAssemblyGeneratorMap(List<TypeBaseComponent> obj) {
 		for (TypeBaseComponent eachObj : obj) {
-			assemblyGeneratorMap.put(
-					eachObj.getId(),
-					getAssemblyGeneratorObject(componentAssemblyMapProperties,
-							eachObj));
+			assemblyGeneratorMap.put(eachObj.getId(), getAssemblyGeneratorObject(eachObj));
+
 		}
 	}
 
@@ -58,28 +48,26 @@ public class AssemblyGeneratorFactory {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private GeneratorBase getAssemblyGeneratorObject(
-			Properties componentAssemblyMap, TypeBaseComponent baseComponent) {
+	private GeneratorBase getAssemblyGeneratorObject(TypeBaseComponent baseComponent) {
 		Class assemblyClass;
+		ComponentAssemblyMapping componentAssemblyMapping = ComponentAssemblyMapping
+				.valueOf(baseComponent.getClass().getSimpleName().toUpperCase());
 
 		try {
-			assemblyClass = Class.forName(componentAssemblyMap
-					.getProperty(baseComponent.getClass().getCanonicalName()));
+			assemblyClass = Class.forName(componentAssemblyMapping.getMappingType(baseComponent));
 		} catch (ClassNotFoundException e) {
 			throw new AssemblyFactoryException(e);
 		}
 		Constructor constructor;
 		try {
-			constructor = assemblyClass
-					.getDeclaredConstructor(TypeBaseComponent.class);
+			constructor = assemblyClass.getDeclaredConstructor(TypeBaseComponent.class);
 		} catch (SecurityException e) {
 			throw new AssemblyFactoryException(e);
 		} catch (NoSuchMethodException e) {
 			throw new AssemblyFactoryException(e);
 		}
 		try {
-			return (GeneratorBase) constructor
-					.newInstance(baseComponent);
+			return (GeneratorBase) constructor.newInstance(baseComponent);
 		} catch (IllegalArgumentException e) {
 			throw new AssemblyFactoryException(e);
 		} catch (InstantiationException e) {

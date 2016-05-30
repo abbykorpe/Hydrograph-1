@@ -12,16 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.InputFileMixedSchemeEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
-import hydrograph.engine.cascading.scheme.TextDelimitedAndFixedWidth;
-
 import java.io.IOException;
-import java.lang.reflect.Type;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,12 +23,18 @@ import cascading.scheme.Scheme;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.InputFileMixedSchemeEntity;
+import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.scheme.TextDelimitedAndFixedWidth;
 
 public class InputFileMixedSchemeAssembly extends BaseComponent {
 
 	private static final long serialVersionUID = 7857965970250755857L;
-	private static Logger LOG = LoggerFactory
-			.getLogger(InputFileMixedSchemeAssembly.class);
+	private static Logger LOG = LoggerFactory.getLogger(InputFileMixedSchemeAssembly.class);
 
 	Pipe pipe;
 	@SuppressWarnings("rawtypes")
@@ -62,8 +59,7 @@ public class InputFileMixedSchemeAssembly extends BaseComponent {
 
 	@Override
 	protected void createAssembly() {
-		fieldsCreator = new IOFieldsAndTypesCreator<InputFileMixedSchemeEntity>(
-				inputFileMixedSchemeEntity);
+		fieldsCreator = new IOFieldsAndTypesCreator<InputFileMixedSchemeEntity>(inputFileMixedSchemeEntity);
 		try {
 			generateTapsAndPipes();
 			flowDef = flowDef.addSource(pipe, tap);
@@ -71,15 +67,12 @@ public class InputFileMixedSchemeAssembly extends BaseComponent {
 			if (LOG.isTraceEnabled()) {
 				LOG.trace(inputFileMixedSchemeEntity.toString());
 			}
-			for (OutSocket outSocket : inputFileMixedSchemeEntity
-					.getOutSocketList()) {
+			for (OutSocket outSocket : inputFileMixedSchemeEntity.getOutSocketList()) {
 				LOG.trace("Creating input file mixed scheme assembly for '"
-						+ inputFileMixedSchemeEntity.getComponentId()
-						+ "' for socket: '" + outSocket.getSocketId()
+						+ inputFileMixedSchemeEntity.getComponentId() + "' for socket: '" + outSocket.getSocketId()
 						+ "' of type: '" + outSocket.getSocketType() + "'");
 				setOutLink(outSocket.getSocketType(), outSocket.getSocketId(),
-						inputFileMixedSchemeEntity.getComponentId(), pipe,
-						scheme.getSourceFields());
+						inputFileMixedSchemeEntity.getComponentId(), pipe, scheme.getSourceFields());
 			}
 		} catch (Exception e) {
 			LOG.error("", e);
@@ -88,12 +81,11 @@ public class InputFileMixedSchemeAssembly extends BaseComponent {
 
 	@SuppressWarnings("unchecked")
 	public void generateTapsAndPipes() throws IOException {
-		try{
+		try {
 			prepareScheme();
-		}
-		catch(Exception e) {
-			LOG.error("Error in preparing scheme for component '"
-					+ inputFileMixedSchemeEntity.getComponentId() + "': " + e.getMessage());
+		} catch (Exception e) {
+			LOG.error("Error in preparing scheme for component '" + inputFileMixedSchemeEntity.getComponentId() + "': "
+					+ e.getMessage());
 			throw new RuntimeException(e);
 		}
 		flowDef = componentParameters.getFlowDef();
@@ -108,22 +100,10 @@ public class InputFileMixedSchemeAssembly extends BaseComponent {
 
 	public void prepareScheme() {
 
-		String[] fieldLengthDelimiter = new String[inputFileMixedSchemeEntity
-				.getFieldsList().size()];
-		Type[] typefieldLengthDelimiter = new Type[inputFileMixedSchemeEntity
-				.getFieldsList().size()];
-		for (int i = 0; i < inputFileMixedSchemeEntity.getFieldsList().size(); i++) {
-			fieldLengthDelimiter[i] = inputFileMixedSchemeEntity
-					.getFieldsList().get(i).getFieldLengthDelimiter();
-			typefieldLengthDelimiter[i] = inputFileMixedSchemeEntity
-					.getFieldsList().get(i).getTypeFieldLengthDelimiter();
-		}
-
 		Fields inputFields = fieldsCreator.makeFieldsWithTypes();
-		scheme = new TextDelimitedAndFixedWidth(inputFields,
-				fieldLengthDelimiter, typefieldLengthDelimiter,
-				inputFields.getTypes(), inputFileMixedSchemeEntity.getStrict(),
-				inputFileMixedSchemeEntity.getSafe(),
+		scheme = new TextDelimitedAndFixedWidth(inputFields, fieldsCreator.getFieldLengthOrDelimiter(),
+				fieldsCreator.getTypeFieldLengthDelimiter(), inputFields.getTypes(),
+				inputFileMixedSchemeEntity.getStrict(), inputFileMixedSchemeEntity.getSafe(),
 				inputFileMixedSchemeEntity.getCharset());
 
 	}

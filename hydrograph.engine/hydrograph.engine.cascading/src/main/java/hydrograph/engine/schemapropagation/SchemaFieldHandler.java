@@ -33,9 +33,9 @@ import java.util.Set;
 
 public class SchemaFieldHandler {
 
-	private static List<TypeBaseComponent> jaxbGraph;
-	private static Map<String, TypeBaseComponent> componentMap;
-	private static Map<String, Set<SchemaField>> schemaFields;
+	private List<TypeBaseComponent> jaxbGraph;
+	private Map<String, TypeBaseComponent> componentMap;
+	private Map<String, Set<SchemaField>> schemaFields;
 
 	public SchemaFieldHandler(List<TypeBaseComponent> jaxbGraphlist) {
 		jaxbGraph = jaxbGraphlist;
@@ -43,16 +43,15 @@ public class SchemaFieldHandler {
 		schemaFields = new HashMap<String, Set<SchemaField>>();
 	}
 
-	public static Map<String, Set<SchemaField>> getSchemaFieldMap() {
+	public Map<String, Set<SchemaField>> getSchemaFieldMap() {
 		generateSchemaFields();
 		return schemaFields;
 	}
 
-	private static void generateSchemaFields() {
+	private void generateSchemaFields() {
 		for (String componentId : getOrderedComponentsList(jaxbGraph)) {
 			TypeBaseComponent baseComponent = componentMap.get(componentId);
-			OperationHandler operationHandler = new OperationHandler(
-					baseComponent, schemaFields);
+			OperationHandler operationHandler = new OperationHandler(baseComponent, schemaFields);
 
 			if (baseComponent instanceof TypeInputComponent) {
 				schemaFields.putAll(operationHandler.getInputFields());
@@ -61,8 +60,7 @@ public class SchemaFieldHandler {
 				schemaFields.putAll(operationHandler.getOutputFields());
 
 			} else if (baseComponent instanceof TypeStraightPullComponent) {
-				schemaFields.putAll(operationHandler
-						.getStraightPullSchemaFields());
+				schemaFields.putAll(operationHandler.getStraightPullSchemaFields());
 			} else if (baseComponent instanceof TypeOperationsComponent) {
 
 				schemaFields.putAll(operationHandler.getOperation());
@@ -72,8 +70,7 @@ public class SchemaFieldHandler {
 		}
 	}
 
-	private static List<String> getOrderedComponentsList(
-			List<TypeBaseComponent> jaxbGraph) {
+	private List<String> getOrderedComponentsList(List<TypeBaseComponent> jaxbGraph) {
 		HashMap<String, Integer> componentDependencies = new HashMap<String, Integer>();
 		ArrayList<String> orderedComponents = new ArrayList<String>();
 		Queue<String> resolvedComponents = new LinkedList<String>();
@@ -82,21 +79,18 @@ public class SchemaFieldHandler {
 
 			int intitialDependency;
 
-			intitialDependency = SocketUtilities.getInSocketList(component)
-					.size();
+			intitialDependency = SocketUtilities.getInSocketList(component).size();
 
 			if (intitialDependency == 0) {
 				resolvedComponents.add(component.getId());
 			} else {
-				componentDependencies
-						.put(component.getId(), intitialDependency);
+				componentDependencies.put(component.getId(), intitialDependency);
 			}
 			componentMap.put(component.getId(), component);
 		}
 
 		if (resolvedComponents.isEmpty() && !componentDependencies.isEmpty()) {
-			throw new RuntimeException(
-					"Unable to find any source component in graph " + jaxbGraph);
+			throw new RuntimeException("Unable to find any source component in graph " + jaxbGraph);
 		}
 
 		while (!resolvedComponents.isEmpty()) {
@@ -112,14 +106,11 @@ public class SchemaFieldHandler {
 
 			for (TypeBaseOutSocket link : outSocketList) {
 				// get the dependent component
-				String targetComponent = getDependentComponent(link.getId(),
-						component);
+				String targetComponent = getDependentComponent(link.getId(), component);
 
 				if (targetComponent == null)
-					throw new RuntimeException(
-							"Unable to find Depenedent components in traversal for "
-									+ component
-									+ ". This may be due to circular dependecies or unlinked components. ");
+					throw new RuntimeException("Unable to find Depenedent components in traversal for " + component
+							+ ". This may be due to circular dependecies or unlinked components. ");
 
 				// decrease the dependency by one
 				Integer dependency = componentDependencies.get(targetComponent);
@@ -144,29 +135,23 @@ public class SchemaFieldHandler {
 				components = components + ",  " + componentID;
 			}
 
-			throw new RuntimeException(
-					"Unable to include following components in traversal"
-							+ components
-							+ ". This may be due to circular dependecies or unlinked components. Please inspect and remove circular dependencies.");
+			throw new RuntimeException("Unable to include following components in traversal" + components
+					+ ". This may be due to circular dependecies or unlinked components. Please inspect and remove circular dependencies.");
 		}
 
 		return orderedComponents;
 	}
 
-	private static String getDependentComponent(String socketId,
-			String componentID) {
+	private String getDependentComponent(String socketId, String componentID) {
 		for (TypeBaseComponent component : jaxbGraph) {
-			List<? extends TypeBaseInSocket> inSocketList = SocketUtilities
-					.getInSocketList(component);
+			List<? extends TypeBaseInSocket> inSocketList = SocketUtilities.getInSocketList(component);
 			for (TypeBaseInSocket inSocket : inSocketList) {
-				if (inSocket.getFromComponentId().equals(componentID)
-						&& inSocket.getFromSocketId().equals(socketId))
+				if (inSocket.getFromComponentId().equals(componentID) && inSocket.getFromSocketId().equals(socketId))
 					return component.getId();
 			}
 		}
-		throw new RuntimeException(
-				"Dependent component not found for component with id '"
-						+ componentID + "' and socket id '" + socketId + "'");
+		throw new RuntimeException("Dependent component not found for component with id '" + componentID
+				+ "' and socket id '" + socketId + "'");
 	}
 
 }

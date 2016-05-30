@@ -60,14 +60,13 @@ public class OutSocketUtils {
 	 * @return an array of {@link String}
 	 */
 
-	
 	public static String[] getPassThroughFieldsFromOutSocket(List<PassThroughField> passThroughFieldsList,
 			Fields allInputFields) {
 		String[] passFields = null;
 		if (passThroughFieldsList != null) {
 
 			boolean areAllPassFields = OutSocketUtils.checkIfAllFieldsArePassthrough(passThroughFieldsList);
-			
+
 			if (areAllPassFields) {
 				passFields = new String[allInputFields.size()];
 				for (int i = 0; i < allInputFields.size(); i++) {
@@ -84,7 +83,6 @@ public class OutSocketUtils {
 		return passFields;
 	}
 
-
 	private static boolean checkIfAllFieldsArePassthrough(List<PassThroughField> passThroughFieldsList) {
 		boolean result = false;
 		for (PassThroughField currentField : passThroughFieldsList) {
@@ -99,16 +97,17 @@ public class OutSocketUtils {
 	}
 
 	/**
-	 * Creates an object of an array of {@link String} from the list of
-	 * {@link MapField}
+	 * Returns a {@link Map}<{@link String}, {@link String}> containing the
+	 * source and target map fields from the list of {@link MapField}
 	 * 
 	 * @param mapFieldsList
-	 *            the list of {@link MapField} which contains information of Map
-	 *            Field of out socket of component
+	 *            the list of {@link MapField} which contains information of map
+	 *            fields for out socket of component
 	 *            <p>
 	 *            The method returns {@code null} if the {@code mapFieldsList}
 	 *            parameter is null
-	 * @return an array of {@link String}
+	 * @return Returns a {@link Map}<{@link String}, {@link String}> containing the
+	 * source and target map fields
 	 */
 	public static Map<String, String> getMapFieldsFromOutSocket(List<MapField> mapFieldsList) {
 		Map<String, String> mapFields = new LinkedHashMap<String, String>();

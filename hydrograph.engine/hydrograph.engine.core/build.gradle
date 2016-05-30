@@ -87,4 +87,5 @@ dependencies {
 	jaxb 'javax.xml.bind:jaxb-api:2.2.7'
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile 'org.slf4j:slf4j-log4j12:1.7.12'
+    compile 'commons-lang:commons-lang:2.6'
 }

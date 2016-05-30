@@ -22,7 +22,9 @@ import hydrograph.engine.cascading.assembly.base.OutputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.hive.text.scheme.HiveTextTableDescriptor;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
+import hydrograph.engine.cascading.utilities.DataTypeCoerce;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
@@ -150,7 +152,38 @@ public class OutputFileHiveTextAssembly extends OutputFileHiveBase {
 				testField[i++] = inputfield;
 			}
 		}
-		return new Fields(testField).applyTypes(fieldsCreator.getTypes());
+		return new Fields(testField).applyTypes(getTypes());
+	}
 
+	/**
+	 * The datatype support for text to skip the partition key write in file.
+	 */
+	private Type[] getTypes() {
+		Type[] typeArr = new Type[fieldsCreator.getFieldDataTypes().length
+				- outputFileHiveTextEntity.getPartitionKeys().length];
+		int i = 0;
+		int j = 0;
+		for (String dataTypes : fieldsCreator.getFieldDataTypes()) {
+			if (!Arrays.asList(outputFileHiveTextEntity.getPartitionKeys())
+					.contains(fieldsCreator.getFieldNames()[i])) {
+				try {
+					typeArr[j++] = DataTypeCoerce.convertClassToCoercibleType(
+							Class.forName(dataTypes),
+							fieldsCreator.getFieldFormat()[i],
+							fieldsCreator.getFieldScale()[i],
+							fieldsCreator.getFieldScaleType()[i]);
+				} catch (ClassNotFoundException e) {
+					throw new RuntimeException(
+							"'"
+									+ dataTypes
+									+ "' class not found while applying cascading datatypes for component '"
+									+ outputFileHiveTextEntity.getComponentId()
+									+ "' ", e);
+				}
+
+			}
+			i++;
+		}
+		return typeArr;
 	}
 }
