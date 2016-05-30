@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
-
+import hydrograph.engine.jaxb.outputtypes.TextFileDelimited.Quote;
 public class OutputFileDelimitedConverter extends OutputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
@@ -65,6 +65,11 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 		fileDelimited.setSafe(getBoolean(PropertyNameConstants.IS_SAFE.value()));
 		fileDelimited.setCharset(charset);
 		fileDelimited.setRuntimeProperties(getRuntimeProperties());
+		if (properties.get(PropertyNameConstants.QUOTE.value()) != null) {
+			Quote quote = new Quote();
+			quote.setValue((String) properties.get(PropertyNameConstants.QUOTE.value()));
+			fileDelimited.setQuote(quote);
+		}
 		fileDelimited.setOverWrite(getTrueFalse(PropertyNameConstants.OVER_WRITE.value()));
 	}
 

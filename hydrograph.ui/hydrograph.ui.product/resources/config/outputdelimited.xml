@@ -17,7 +17,7 @@
 		name="OFDelimited" nameInPalette="File Delimited" defaultNamePrefix="OFDelimited" 
 		description="Used to write output in delimited text format."
 		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Delimited.html"
-		acronym="ODelim">
+		acronym="Delim">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true" >
@@ -46,7 +46,12 @@
 			usage="REQUIRED" propertyHelpText="Specifies Delimiter present in the input file.">
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
-
+	
+		<tns:property dataType="string" name="quote" value="" renderer="QUOTE_WIDGET"
+ 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+ 			usage="OPTIONAL" propertyHelpText="Specifies Quote present in the input file.">
+ 		</tns:property>
+		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="overWrite" value="True"
 			renderer="OVERWRITE_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL" propertyHelpText="If ‘Overwrite’ property is true, the output location will be overwritten. Existing file / folder contents will be deleted.">
