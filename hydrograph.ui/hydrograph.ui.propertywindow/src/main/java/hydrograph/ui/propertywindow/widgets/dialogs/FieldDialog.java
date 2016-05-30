@@ -443,13 +443,7 @@ public class FieldDialog extends Dialog {
 			public void mouseUp(MouseEvent e) {
 				targetTable.getParent().setFocus();
 				addNewProperty(targetTableViewer, null);
-				if (propertyList.size() >= 1) {
-					deleteButton.setEnabled(true);
-				} 
-				if (propertyList.size() >= 2) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				}
+				enableControlButons();
 			}
 
 		});
@@ -486,13 +480,7 @@ public class FieldDialog extends Dialog {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				addNewProperty(targetTableViewer, null);
-				if (propertyList.size() >= 1) {
-					deleteButton.setEnabled(true);
-				} 
-				if (propertyList.size() >= 2) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				}
+				enableControlButons();
 			}
 
 			@Override
@@ -554,13 +542,7 @@ public class FieldDialog extends Dialog {
 			public void drop(DropTargetEvent event) {
 				for (String fieldName : getformatedData((String) event.data))
 						addNewProperty(targetTableViewer, fieldName);
-				if (propertyList.size() >= 1) {
-					deleteButton.setEnabled(true);
-				}
-				if (propertyList.size() >= 2) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				}
+				enableControlButons();
 			}
 		});
 
@@ -571,8 +553,10 @@ public class FieldDialog extends Dialog {
 		sourceTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
 		sourceTableViewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
-				if(sourceTable.getSelection().length==1)
+				if(sourceTable.getSelection().length==1){
 				addNewProperty(targetTableViewer, sourceTable.getSelection()[0].getText());
+				enableControlButons();
+				}
 			}
 		});
 		sourceTable = sourceTableViewer.getTable();
@@ -776,5 +760,15 @@ public class FieldDialog extends Dialog {
 		}else{
 			return super.close();
 		}		
+	}
+
+	private void enableControlButons() {
+		if (propertyList.size() >= 1) {
+			deleteButton.setEnabled(true);
+		}
+		if (propertyList.size() >= 2) {
+			upButton.setEnabled(true);
+			downButton.setEnabled(true);
+		}
 	}
 }
