@@ -213,13 +213,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			public void drop(DropTargetEvent event) {
 				for (String fieldName : getformatedData((String) event.data))
 						addNewProperty(targetTableViewer, fieldName);
-				if (propertyList.size() >= 1) {
-					deleteButton.setEnabled(true);
-				} 
-				if (propertyList.size() >= 2) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				}
+				enableControlButtons();
 			}
 		});
 
@@ -230,13 +224,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				addNewProperty(targetTableViewer, null);
-				if (propertyList.size() >= 1) {
-					deleteButton.setEnabled(true);
-				} 
-				if (propertyList.size() >= 2) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				}
+				enableControlButtons();
 			}
 
 			@Override
@@ -268,8 +256,10 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		sourceTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				if(sourceTable.getSelection().length==1)
+				if(sourceTable.getSelection().length==1){
 					addNewProperty(targetTableViewer, sourceTable.getSelection()[0].getText());
+					enableControlButtons();
+				}
 			}
 		});
 		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2);
@@ -462,13 +452,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				addNewProperty(targetTableViewer, null);
-				if (propertyList.size() >= 1) {
-					deleteButton.setEnabled(true);
-				}
-				if (propertyList.size() >= 2) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				}
+				enableControlButtons();
 			}
 
 		});
@@ -732,5 +716,15 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		}else{
 			return super.close();
 		}		
+	}
+
+	private void enableControlButtons() {
+		if (propertyList.size() >= 1) {
+			deleteButton.setEnabled(true);
+		} 
+		if (propertyList.size() >= 2) {
+			upButton.setEnabled(true);
+			downButton.setEnabled(true);
+		}
 	}
 }
