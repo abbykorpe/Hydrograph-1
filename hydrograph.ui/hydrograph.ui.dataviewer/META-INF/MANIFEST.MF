@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Dataviewer
+Bundle-SymbolicName: hydrograph.ui.dataviewer;singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Bundle-Activator: hydrograph.ui.dataviewer.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.json;bundle-version="1.0.0",
+ hydrograph.ui.common;bundle-version="0.0.1"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ClassPath: .,
+ lib/csvjdbc-1.0-29.jar
+Export-Package: hydrograph.ui.dataviewer
