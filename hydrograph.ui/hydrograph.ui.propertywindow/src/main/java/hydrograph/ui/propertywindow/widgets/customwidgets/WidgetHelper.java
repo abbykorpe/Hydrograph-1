@@ -94,7 +94,7 @@ public class WidgetHelper {
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Constants.PHASE);
 		addTextBoxListeners(textBoxConfig);
-		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
+		textBoxConfig.getListeners().add(Listners.VERIFY_TWO_DIGIT_NUMERIC_LISTENER);
 		textBoxConfig.setWidgetWidth(78);
 		return textBoxConfig;
 	}

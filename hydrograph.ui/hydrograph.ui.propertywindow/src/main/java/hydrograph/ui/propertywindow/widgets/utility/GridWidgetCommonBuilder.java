@@ -25,6 +25,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 
 
 /**
@@ -92,6 +93,11 @@ public abstract class GridWidgetCommonBuilder {
 	 */
 	protected void addTextEditor(Table table, CellEditor[] cellEditor, int position){
 		cellEditor[position]=new TextCellEditor(table);
+		if(position == 3 || position == 4){
+ 			TextCellEditor editor = (TextCellEditor) cellEditor[position];
+ 			Text txt = (Text) editor.getControl();
+ 			txt.setTextLimit(2);
+ 		}
 	}
 	
 	/**
