@@ -136,7 +136,7 @@ public class TransformAssemblyTest {
 		// assert the actual results with expected results
 		assertThat(actual.size(), is(2));
 
-		// Use HashSet so that order of records does not matter while comparison
+		// Use HashSet so that order of fields does not matter while comparison
 		Set<Tuple> output = new HashSet<Tuple>(actual);
 
 		Set<Tuple> expectedOutput = new HashSet<Tuple>();
@@ -150,6 +150,7 @@ public class TransformAssemblyTest {
 	 * Unit test without any transform operation, to mimic drop fields
 	 * functionality
 	 */
+
 	@Test
 	public void noOperationWithMapFieldsTest() {
 
@@ -211,7 +212,7 @@ public class TransformAssemblyTest {
 		// assert the actual results with expected results
 		assertThat(actual.size(), is(2));
 
-		// Use HashSet so that order of records does not matter while comparison
+		// Use HashSet so that order of fields does not matter while comparison
 		Set<Tuple> output = new HashSet<Tuple>(actual);
 
 		Set<Tuple> expectedOutput = new HashSet<Tuple>();
@@ -224,6 +225,7 @@ public class TransformAssemblyTest {
 	/**
 	 * Unit test for testing renaming of fields in transform component
 	 */
+
 	@Test
 	public void transformComponentWithWildCardPassthroughFields() {
 
@@ -298,7 +300,7 @@ public class TransformAssemblyTest {
 		// assert the actual results with expected results
 		assertThat(actual.size(), is(2));
 
-		// Use HashSet so that order of records does not matter while comparison
+		// Use HashSet so that order of fields does not matter while comparison
 		Set<Tuple> output = new HashSet<Tuple>(actual);
 
 		Set<Tuple> expectedOutput = new HashSet<Tuple>();
@@ -377,8 +379,13 @@ public class TransformAssemblyTest {
 		// create a dummy component to be tested
 		TransformAssembly transform = new TransformAssembly(transformEntity, parameters);
 
-		// create bucket for the transform sub assembly
-		Bucket bucket = plunger.newBucket(new Fields("new.id", "new.name", "new.city"), transform);
+		Bucket bucket = plunger.newBucket(new Fields("new.id", "new.name", "new.city"), transform); // create
+																									// bucket
+																									// for
+																									// the
+																									// transform
+																									// sub
+																									// assembly
 
 		List<Tuple> actual = bucket.result().asTupleList(); // get results from
 															// bucket
@@ -386,7 +393,7 @@ public class TransformAssemblyTest {
 		// assert the actual results with expected results
 		assertThat(actual.size(), is(2));
 
-		// Use HashSet so that order of records does not matter while comparison
+		// Use HashSet so that order of fields does not matter while comparison
 		Set<Tuple> output = new HashSet<Tuple>(actual);
 
 		Set<Tuple> expectedOutput = new HashSet<Tuple>();
@@ -399,6 +406,7 @@ public class TransformAssemblyTest {
 	/**
 	 * Unit test for testing user properties in transform component
 	 */
+
 	@Test
 	public void userPropertiesTest() {
 
@@ -475,7 +483,7 @@ public class TransformAssemblyTest {
 		// assert the actual results with expected results
 		assertThat(actual.size(), is(2));
 
-		// Use HashSet so that order of records does not matter while comparison
+		// Use HashSet so that order of fields does not matter while comparison
 		Set<Tuple> output = new HashSet<Tuple>(actual);
 
 		Set<Tuple> expectedOutput = new HashSet<Tuple>();
@@ -488,6 +496,7 @@ public class TransformAssemblyTest {
 	/**
 	 * Unit test with multiple transform operations
 	 */
+
 	@Test
 	public void simpleTransformWithMultipleOperationTest() {
 
@@ -581,7 +590,7 @@ public class TransformAssemblyTest {
 		// assert the actual results with expected results
 		assertThat(actual.size(), is(2));
 
-		// Use HashSet so that order of records does not matter while comparison
+		// Use HashSet so that order of fields does not matter while comparison
 		Set<Tuple> output = new HashSet<Tuple>(actual);
 
 		Set<Tuple> expectedOutput = new HashSet<Tuple>();
@@ -673,7 +682,7 @@ public class TransformAssemblyTest {
 		// assert the actual results with expected results
 		assertThat(actual.size(), is(2));
 
-		// Use HashSet so that order of records does not matter while comparison
+		// Use HashSet so that order of fields does not matter while comparison
 		Set<Tuple> output = new HashSet<Tuple>(actual);
 
 		Set<Tuple> expectedOutput = new HashSet<Tuple>();
@@ -759,7 +768,7 @@ public class TransformAssemblyTest {
 		// assert the actual results with expected results
 		assertThat(actual.size(), is(2));
 
-		// Use HashSet so that order of records does not matter while comparison
+		// Use HashSet so that order of fields does not matter while comparison
 		Set<Tuple> output = new HashSet<Tuple>(actual);
 
 		Set<Tuple> expectedOutput = new HashSet<Tuple>();
@@ -844,7 +853,7 @@ public class TransformAssemblyTest {
 		// assert the actual results with expected results
 		assertThat(actual.size(), is(2));
 
-		// Use HashSet so that order of records does not matter while comparison
+		// Use HashSet so that order of fields does not matter while comparison
 		Set<Tuple> output = new HashSet<Tuple>(actual);
 
 		Set<Tuple> expectedOutput = new HashSet<Tuple>();
@@ -929,7 +938,7 @@ public class TransformAssemblyTest {
 		// assert the actual results with expected results
 		assertThat(actual.size(), is(2));
 
-		// Use HashSet so that order of records does not matter while comparison
+		// Use HashSet so that order of fields does not matter while comparison
 		Set<Tuple> output = new HashSet<Tuple>(actual);
 
 		Set<Tuple> expectedOutput = new HashSet<Tuple>();
@@ -1015,7 +1024,7 @@ public class TransformAssemblyTest {
 		// assert the actual results with expected results
 		assertThat(actual.size(), is(2));
 
-		// Use HashSet so that order of records does not matter while comparison
+		// Use HashSet so that order of fields does not matter while comparison
 		Set<Tuple> output = new HashSet<Tuple>(actual);
 
 		Set<Tuple> expectedOutput = new HashSet<Tuple>();
@@ -1100,7 +1109,7 @@ public class TransformAssemblyTest {
 		// assert the actual results with expected results
 		assertThat(actual.size(), is(2));
 
-		// Use HashSet so that order of records does not matter while comparison
+		// Use HashSet so that order of fields does not matter while comparison
 		Set<Tuple> output = new HashSet<Tuple>(actual);
 
 		Set<Tuple> expectedOutput = new HashSet<Tuple>();

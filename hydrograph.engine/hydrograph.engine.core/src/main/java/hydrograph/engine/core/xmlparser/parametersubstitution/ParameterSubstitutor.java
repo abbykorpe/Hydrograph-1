@@ -12,9 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.core.xmlparser.parametersubstitution;
 
+import hydrograph.engine.core.utilities.XmlUtilities;
+
 import java.util.HashMap;
 import java.util.Stack;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,6 +130,12 @@ public class ParameterSubstitutor {
 								+ " to substitute");
 			}
 
+			// if parameter key to be substituted is in quotes("") then escape
+			// special characters from its value
+			if (isParameterPresentInQuotes(mutable, startIndex, endIndex)) {
+				parameterValue = StringEscapeUtils.escapeXml(parameterValue);
+			}
+			
 			// add current parameter to stack to check for circular loop later
 			unresolvedParameters.push(parameterName);
 
@@ -150,6 +159,12 @@ public class ParameterSubstitutor {
 		// check for next substitution and do it if available
 		substituteMutable(mutable, unresolvedParameters);
 
+	}
+
+	private boolean isParameterPresentInQuotes(StringBuilder mutable,
+			int startIndex, int endIndex) {
+		return "\"".equals(mutable.substring(startIndex - 1, startIndex))
+				&& "\"".equals(mutable.substring(endIndex + 1, endIndex + 2));
 	}
 
 	public class ParameterSubstitutorException extends RuntimeException {

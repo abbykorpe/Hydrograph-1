@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,14 +9,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package hydrograph.engine.cascading.assembly;
-
-import hydrograph.engine.assembly.entity.UnionAllEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.functions.CopyFields;
 
 import java.util.ArrayList;
 
@@ -25,8 +19,15 @@ import org.slf4j.LoggerFactory;
 
 import cascading.pipe.Each;
 import cascading.pipe.Merge;
+import cascading.pipe.OperatorException;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.UnionAllEntity;
+import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.functions.CopyFields;
+import jline.internal.Log;
 
 public class UnionAllAssembly extends BaseComponent {
 
@@ -49,16 +50,16 @@ public class UnionAllAssembly extends BaseComponent {
 					+ unionAllEntity.getOutSocket().getSocketId() + "' of type: '"
 					+ unionAllEntity.getOutSocket().getSocketType() + "'");
 
-			Fields firstInputFields = componentParameters.getInputFields();
+			ArrayList<Fields> fieldList = componentParameters.getInputFieldsList();
 
-			Pipe[] inputPipes = alignfields(componentParameters.getInputPipes(), firstInputFields);
+			Pipe[] inputPipes = alignfields(componentParameters.getInputPipes(), fieldList);
 
 			Pipe outPipe = new Merge(unionAllEntity.getComponentId() + "_merged_out", inputPipes);
 
 			setHadoopProperties(outPipe.getStepConfigDef());
 
 			setOutLink("out", unionAllEntity.getOutSocket().getSocketId(), unionAllEntity.getComponentId(), outPipe,
-					firstInputFields);
+					fieldList.get(0));
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			throw new RuntimeException(e.getMessage());
@@ -66,11 +67,27 @@ public class UnionAllAssembly extends BaseComponent {
 
 	}
 
-	private Pipe[] alignfields(ArrayList<Pipe> arrayList, Fields requiredFields) {
+	private String generateMessageForAllFields(ArrayList<Fields> fieldList) {
+
+		String fields = null;
+		for (int i = 0; i < fieldList.size(); i++) {
+			if (fields == null)
+				fields = "[" + fieldList.get(i) + "],";
+			else if (i != fieldList.size() - 1)
+				fields = fields + "[" + fieldList.get(i) + "],";
+			else
+				fields = fields + "[" + fieldList.get(i) + "]";
+		}
+
+		return fields;
+	}
+
+	private Pipe[] alignfields(ArrayList<Pipe> arrayList, ArrayList<Fields> fieldList) {
 		Pipe[] inputPipes = new Pipe[componentParameters.getInputPipes().size()];
 		int i = 0;
 		for (Pipe eachPipe : arrayList) {
-			inputPipes[i++] = new Each(eachPipe, requiredFields, new CopyFields(requiredFields), Fields.RESULTS);
+			inputPipes[i] = new Each(eachPipe, fieldList.get(i), new CopyFields(fieldList.get(i)), Fields.RESULTS);
+			i++;
 		}
 		return inputPipes;
 	}
