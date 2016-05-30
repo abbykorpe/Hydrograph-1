@@ -91,7 +91,7 @@ public class UniqueSequenceConverter extends TransformConverter {
 		TypeOperationOutputFields operationOutputFields = new TypeOperationOutputFields();
 		TypeBaseField baseField = new TypeBaseField();
 		baseField.setName(newFieldName);
-		baseField.setType(FieldDataTypes.JAVA_LANG_INTEGER);
+		baseField.setType(FieldDataTypes.JAVA_LANG_LONG);
 		operationOutputFields.getField().add(baseField);
 		return operationOutputFields;
 	}
