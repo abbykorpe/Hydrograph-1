@@ -1,7 +1,7 @@
 =====================================================================================================
 Features Added:
 =====================================================================================================
-1.<date> - [developer names] - description
+Sr.No. <date> - [developer names] - description
 
 
 
@@ -9,7 +9,7 @@ Features Added:
 Issues/Defects fixed:
 =====================================================================================================
 
-1. <GitHub Issue #> - [fixed by] - description
+Sr.No. <GitHub Issue #> - [fixed by] - description
 1. <> - [rakesh kanchalwar] - Deleting a row in schema table does not highlight consecutive row
 
 
