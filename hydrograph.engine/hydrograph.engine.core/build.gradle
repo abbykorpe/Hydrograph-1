@@ -1,0 +1,90 @@
+apply from: '../version.gradle'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'com.github.jacobono.jaxb'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+sourceCompatibility = 1.7
+
+group = 'hydrograph'
+archivesBaseName = 'hydrograph.engine.core'
+
+//compileJava.dependsOn xjc
+
+sourceSets{
+   	main.java.srcDir 'src/main/java'
+    test.java.srcDir 'src/test/java'
+    main.resources.srcDir 'src/main/resources'
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': archivesBaseName,
+                'Implementation-Version': version
+    }
+
+	from ('src/main/resources') {
+ 	'newxmlschema/.*'  
+    }
+}
+
+    
+jaxb {
+	xjc {
+	  xsdDir = "hydrograph.engine.core/src/main/resources/newxmlschema"
+	}
+}
+
+uploadArchives {
+    repositories {
+        mavenLocal()
+    }
+}
+
+buildscript {
+	repositories {
+	 	jcenter()
+	}
+
+	dependencies {
+		classpath 'com.github.jacobono:gradle-jaxb-plugin:1.3.6'
+	}
+}
+  
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+             artifact (testJar) { 
+                classifier = 'tests'
+            }
+             artifact (sourcesJar) { 
+                classifier = 'sources'
+            }
+                      
+              pom.withXml {
+                asNode().dependencies.'*'.findAll() {
+                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+                        dep.name == it.artifactId.text()
+                    }
+                }.each() {
+                    it.scope*.value = 'compile'
+                }
+            }
+        }
+    }
+}
+
+dependencies { 
+	jaxb 'com.sun.xml.bind:jaxb-xjc:2.2.7-b41'
+	jaxb 'com.sun.xml.bind:jaxb-impl:2.2.7-b41'
+	jaxb 'javax.xml.bind:jaxb-api:2.2.7'
+    compile 'org.slf4j:slf4j-api:1.7.12'
+    compile 'org.slf4j:slf4j-log4j12:1.7.12'
+}

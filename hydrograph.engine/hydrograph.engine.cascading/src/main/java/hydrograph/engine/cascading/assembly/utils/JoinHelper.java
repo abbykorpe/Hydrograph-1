@@ -1,0 +1,353 @@
+/*******************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
+package hydrograph.engine.cascading.assembly.utils;
+
+import hydrograph.engine.assembly.entity.elements.MapField;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.assembly.entity.elements.PassThroughField;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import cascading.tuple.Fields;
+
+public class JoinHelper {
+	ComponentParameters parameters = new ComponentParameters();
+
+	public JoinHelper(ComponentParameters params) {
+		super();
+		this.parameters = params;
+	}
+
+	Map<String, Map<Fields, Fields>> fileMap;
+
+	@SuppressWarnings("rawtypes")
+	public Fields getMapTargetFields(OutSocket outSocket) {
+
+		// Map<Fields, Fields> fieldMap = getAllMapFields(outSocket);
+
+		Set<Fields> rawTargetFields = getRawTargetFields(outSocket);
+		Fields targetFields = new Fields();
+		// fileMap = new LinkedHashMap<String, Map<Fields, Fields>>();
+
+		fileMap = getFieldsMap(outSocket);
+
+		if (fileMap == null) {
+			return null;
+		}
+		int i = 0;
+
+		for (Entry<String, Map<Fields, Fields>> fieldsMapEntry : fileMap
+				.entrySet()) {
+			Map<Fields, Fields> fieldsMap = fieldsMapEntry.getValue();
+			String socketId = fieldsMapEntry.getKey();
+			Fields inputFields = null;
+			for (int j = 0; j < parameters.getinSocketId().size(); j++) {
+				if (socketId
+						.equalsIgnoreCase(parameters.getinSocketId().get(j))) {
+					inputFields = parameters.getInputFieldsList().get(j);
+				}
+			}
+
+			for (Entry<Fields, Fields> e : fieldsMap.entrySet()) {
+				Fields fields = e.getKey();
+				String field = fields.get(0).toString();
+				// get one to one field mapping
+				if (!field.equals("*") && !field.endsWith(".*"))
+					if (targetFields.contains(fields)) {
+						targetFields = targetFields.append(fields.rename(
+								fields, new Fields("in" + i + "." + fields)));
+					} else {
+						targetFields = targetFields.append(fields);
+					}
+
+				// get wildcard field mapping
+				if (field.endsWith(".*") || field.equals("*")) {
+					String targetPrefix = field.replaceAll("\\*$", "");
+					String sourcePrefix = e.getValue().get(0).toString()
+							.replaceAll("\\*$", "");
+
+					for (Comparable inputFieldName : inputFields) {
+						if (inputFieldName.toString().startsWith(sourcePrefix)) {
+							String fieldName = inputFieldName.toString()
+									.replaceAll("^" + sourcePrefix,
+											targetPrefix);
+
+							if (!rawTargetFields
+									.contains(new Fields(fieldName))
+									&& !fieldsMap.values().contains(
+											new Fields(inputFieldName))) {
+
+								targetFields = targetFields.append(new Fields(
+										fieldName));
+							}
+						}
+					}
+				}
+			}
+
+			/*
+			 * for (Fields fields : fieldsMap.keySet()) { String field =
+			 * fields.get(0).toString();
+			 * 
+			 * //get one to one field mapping if (!field.equals("*") &&
+			 * !field.endsWith(".*")) targetFields =
+			 * targetFields.append(fields);
+			 * 
+			 * //get wildcard field mapping if (field.endsWith(".*") ||
+			 * field.equals("*")) { String targetPrefix =
+			 * field.replaceAll("\\*$", ""); String sourcePrefix =
+			 * fieldsMap.get(fields).get(0) .toString().replaceAll("\\*$", "");
+			 * 
+			 * for (Comparable inputFieldName : inputFields) { if
+			 * (inputFieldName.toString().startsWith(sourcePrefix)) { String
+			 * fieldName = inputFieldName.toString() .replaceAll("^" +
+			 * sourcePrefix, targetPrefix);
+			 * 
+			 * if (!rawTargetFields.contains(new Fields(fieldName)) &&
+			 * !fieldsMap.values().contains( new Fields(inputFieldName))) {
+			 * 
+			 * targetFields = targetFields.append(new Fields( fieldName)); } } }
+			 * } }
+			 */
+			i++;
+		}
+
+		return targetFields;
+
+	}
+
+	private Map<String, Map<Fields, Fields>> getFieldsMap(OutSocket outSocket) {
+		Map<String, Map<Fields, Fields>> fileMap = new LinkedHashMap<String, Map<Fields, Fields>>();
+		Map<Fields, Fields> fieldsMaps = null;
+
+		for (String socketID : parameters.getinSocketId()) {
+
+			if (outSocket.getMapFieldsList().size() == 0
+					&& outSocket.getPassThroughFieldsList().size() == 0
+					&& outSocket.getCopyOfInSocketId() != null) {
+				if (fileMap.get(socketID) == null) {
+					fieldsMaps = new LinkedHashMap<Fields, Fields>();
+				}
+				for (int j = 0; j < parameters.getinSocketId().size(); j++) {
+					if (parameters.getinSocketId().get(j)
+							.equals(outSocket.getCopyOfInSocketId())) {
+						Fields copyFieldsOfInSocketId = parameters
+								.getCopyOfInSocket(socketID);
+						for (int i = 0; i < copyFieldsOfInSocketId.size(); i++) {
+							fieldsMaps.put(
+									new Fields(copyFieldsOfInSocketId.get(i)),
+									new Fields(copyFieldsOfInSocketId.get(i)));
+							fileMap.put(socketID, fieldsMaps);
+						}
+					}
+				}
+
+			} else {
+
+				for (MapField mapField : outSocket.getMapFieldsList()) {
+					if (fileMap.get(mapField.getInSocketId()) == null) {
+						fieldsMaps = new LinkedHashMap<Fields, Fields>();
+					}
+					if (mapField.getInSocketId().equalsIgnoreCase(socketID)) {
+
+						fieldsMaps.put(new Fields(mapField.getName()),
+								new Fields(mapField.getSourceName()));
+						fileMap.put(mapField.getInSocketId(), fieldsMaps);
+					}
+
+				}
+
+				for (PassThroughField passThroughField : outSocket
+						.getPassThroughFieldsList()) {
+
+					if (passThroughField.getInSocketId().equalsIgnoreCase(
+							socketID)) {
+						if (fileMap.get(passThroughField.getInSocketId()) == null) {
+							fieldsMaps = new LinkedHashMap<Fields, Fields>();
+						} else {
+							fieldsMaps = fileMap.get(passThroughField
+									.getInSocketId());
+						}
+						fieldsMaps.put(new Fields(passThroughField.getName()),
+								new Fields(passThroughField.getName()));
+						fileMap.put(passThroughField.getInSocketId(),
+								fieldsMaps);
+					}
+
+				}
+
+			}
+		}
+
+		// }
+		return fileMap;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public Fields getMapSourceFields(String inSocketId, OutSocket outSocket,
+			int i) {
+		Fields sourceFields = new Fields();
+
+		Map<Fields, Fields> fieldMap = getMapFields(outSocket, inSocketId);
+
+		Set<Fields> rawTargetFields = getRawTargetFields(outSocket);
+		Set<Fields> rawSourceFields = getRawSourceFields(fieldMap);
+		Fields inputFields = parameters.getInputFieldsList().get(i);
+
+		if (fieldMap == null) {
+			return null;
+		}
+
+		for (Fields fields : fieldMap.keySet()) {
+			String field = fields.get(0).toString();
+
+			// get one to one field mapping
+			if (!field.equals("*") && !field.endsWith(".*"))
+				sourceFields = sourceFields.append(fields);
+
+			// get wildcard field mapping
+			if (field.endsWith(".*") || field.equals("*")) {
+				String prefix = field.replaceAll("\\*$", "");
+				String targetPrefix = "";
+				targetPrefix = getKeyFromValue(fieldMap, field);
+				targetPrefix = targetPrefix.replace("*", "");
+
+				for (Comparable inputFieldName : inputFields) {
+					if (inputFieldName.toString().startsWith(prefix)) {
+						if (!rawSourceFields
+								.contains(new Fields(inputFieldName))
+								&& !rawTargetFields.contains(new Fields(
+										targetPrefix + inputFieldName))) {
+							sourceFields = sourceFields.append(new Fields(
+									inputFieldName));
+						}
+					}
+				}
+			}
+
+		}
+
+		return sourceFields;
+	}
+
+	public static String getKeyFromValue(Map<Fields, Fields> fieldsMap,
+			String value) {
+
+		for (Entry<Fields, Fields> e : fieldsMap.entrySet()) {
+			if (e.getKey().get(0).equals(value)) {
+				return (String) e.getValue().get(0);
+			}
+		}
+
+		/*
+		 * for (Fields targetField : fieldsMap.keySet()) { if
+		 * (fieldsMap.get(targetField).get(0).equals(value)) { return (String)
+		 * targetField.get(0); } }
+		 */
+		return null;
+	}
+
+	private Set<Fields> getRawSourceFields(Map<Fields, Fields> fieldMap) {
+		Set<Fields> rawSourceFields = new LinkedHashSet<Fields>();
+
+		if (fieldMap == null) {
+			return null;
+		}
+
+		rawSourceFields.addAll(fieldMap.keySet());
+
+		return rawSourceFields;
+	}
+
+	private Set<Fields> getRawTargetFields(OutSocket outSocket) {
+		Set<Fields> rawTargetFields = new LinkedHashSet<Fields>();
+		for (PassThroughField passthroughFields : outSocket
+				.getPassThroughFieldsList()) {
+			rawTargetFields.add(new Fields(passthroughFields.getName()));
+		}
+
+		// }
+
+		// rawTargetFields.addAll(fieldMap.values());
+		return rawTargetFields;
+	}
+
+	private Map<Fields, Fields> getMapFields(OutSocket outSocket,
+			String inSocketId) {
+		Map<Fields, Fields> fieldMap = new LinkedHashMap<Fields, Fields>();
+
+		if (outSocket.getMapFieldsList().size() == 0
+				&& outSocket.getPassThroughFieldsList().size() == 0
+				&& outSocket.getCopyOfInSocketId() != null) {
+
+			Fields copyFieldsOfInSocketId = parameters
+					.getCopyOfInSocket(inSocketId);
+			for (int i = 0; i < copyFieldsOfInSocketId.size(); i++) {
+				fieldMap.put(new Fields(copyFieldsOfInSocketId.get(i)),
+						new Fields(copyFieldsOfInSocketId.get(i)));
+			}
+		} else {
+
+			for (MapField mapField : outSocket.getMapFieldsList()) {
+				if (mapField.getInSocketId().equalsIgnoreCase(inSocketId)) {
+					fieldMap.put(new Fields(mapField.getSourceName()),
+							new Fields(mapField.getName()));
+				}
+			}
+			for (PassThroughField passthroughFields : outSocket
+					.getPassThroughFieldsList()) {
+				if (passthroughFields.getInSocketId().equalsIgnoreCase(
+						inSocketId)) {
+					if (fieldMap.containsKey(new Fields(passthroughFields
+							.getName()))) {
+						throw new RuntimeException(
+								"Pass Through Fields:'"
+										+ passthroughFields.getName()
+										+ "' is already defined as Map Field in Out Socket '"
+										+ outSocket.getSocketId()
+										+ "' of join component");
+					} else {
+						fieldMap.put(new Fields(passthroughFields.getName()),
+								new Fields(passthroughFields.getName()));
+					}
+
+				}
+
+			}
+		}
+		return fieldMap;
+	}
+
+	private Map<Fields, Fields> getAllMapFields(OutSocket outSocket) {
+		Map<Fields, Fields> fieldMap = new LinkedHashMap<Fields, Fields>();
+
+		for (MapField mapField : outSocket.getMapFieldsList()) {
+			fieldMap.put(new Fields(mapField.getSourceName()), new Fields(
+					mapField.getName()));
+
+		}
+
+		for (PassThroughField passthroughFields : outSocket
+				.getPassThroughFieldsList()) {
+			fieldMap.put(new Fields(passthroughFields.getName()), new Fields(
+					passthroughFields.getName()));
+		}
+		return fieldMap;
+	}
+
+}
