@@ -108,6 +108,11 @@
          point="org.eclipse.ui.navigator.navigatorContent">
       <commonWizard
             type="new"
+            wizardId="hydrograph.ui.graph.job.wizard">
+         <enablement></enablement>
+      </commonWizard>
+      <commonWizard
+            type="new"
             wizardId="hydrograph.ui.project.structure.wizard">
          <enablement></enablement>
       </commonWizard>
