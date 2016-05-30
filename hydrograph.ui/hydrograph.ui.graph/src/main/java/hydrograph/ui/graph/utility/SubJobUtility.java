@@ -120,7 +120,7 @@ public class SubJobUtility {
 		if (file != null) {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			try {
-				out.write(getCurrentEditor().fromObjectToXML(container).getBytes());
+				out.write(CanvasUtils.INSTANCE.fromObjectToXML(container).getBytes());
 				if (file.exists())
 					file.setContents(new ByteArrayInputStream(out.toByteArray()), true, false, null);
 				else
@@ -341,9 +341,9 @@ public class SubJobUtility {
 
 				if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
 					InputStream inp = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
-					container = (Container) getCurrentEditor().fromXMLToObject(inp);
+					container = (Container)CanvasUtils.INSTANCE.fromXMLToObject(inp);
 				} else if (jobFileIPath !=null && isFileExistsOnLocalFileSystem(jobFileIPath))
-					container = (Container) getCurrentEditor().fromXMLToObject(
+					container = (Container) CanvasUtils.INSTANCE.fromXMLToObject(
 							new FileInputStream(jobFileIPath.toFile()));
 
 				updateContainerAndSubjob(container, selectedSubjobComponent, jobFileIPath);
@@ -471,10 +471,10 @@ public class SubJobUtility {
 			try {
 				if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
 					InputStream inp = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
-					subJobContainer = (Container) getCurrentEditor().fromXMLToObject(inp);
+					subJobContainer = (Container) CanvasUtils.INSTANCE.fromXMLToObject(inp);
 				} else {
 					if (isFileExistsOnLocalFileSystem(jobFileIPath))
-						subJobContainer = (Container) getCurrentEditor().fromXMLToObject(
+						subJobContainer = (Container) CanvasUtils.INSTANCE.fromXMLToObject(
 								new FileInputStream(jobFileIPath.toFile()));
 				}
 				if (subJobContainer != null && subJobComponent != null && subJobContainer.getSubjobVersion() != versionStoredInSubjobComponent) {

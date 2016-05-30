@@ -14,7 +14,11 @@
  
 package hydrograph.ui.engine.util;
 
-import hydrograph.ui.engine.constants.PropertyNameConstants;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.main.Graph;
+import hydrograph.engine.jaxb.main.ObjectFactory;
 import hydrograph.ui.engine.converter.Converter;
 import hydrograph.ui.engine.converter.ConverterFactory;
 import hydrograph.ui.engine.xpath.ComponentXpath;
@@ -40,15 +44,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.main.Graph;
-import hydrograph.engine.jaxb.main.ObjectFactory;
 
 
 

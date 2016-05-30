@@ -166,7 +166,7 @@ public class JobManager {
 		List<String> externalSchemaFiles;
 		List<String> subJobList;
 		enableRunJob(false);
-		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
+		final DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
 
 		if (!saveJobBeforeExecute(gefCanvas)){
 			return;
@@ -216,7 +216,7 @@ public class JobManager {
 		List<String> externalSchemaFiles;
 		List<String> subJobList;
 		enableRunJob(false);
-		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
+		final DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
 
 		if (!saveJobBeforeExecute(gefCanvas)){
 			return;
@@ -370,11 +370,11 @@ public class JobManager {
 	}
 
 	private boolean saveJobBeforeExecute(final DefaultGEFCanvas gefCanvas) {
-		if (gefCanvas.getParameterFile() == null || CanvasUtils.isDirtyEditor()){
+		if (gefCanvas.getParameterFile() == null || CanvasUtils.INSTANCE.isDirtyEditor()) {
 			try {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 				enableRunJob(true);
-				if (gefCanvas.getParameterFile() == null || CanvasUtils.isDirtyEditor()){
+				if (gefCanvas.getParameterFile() == null || CanvasUtils.INSTANCE.isDirtyEditor()) {
 					return false;
 				} else {
 					return true;

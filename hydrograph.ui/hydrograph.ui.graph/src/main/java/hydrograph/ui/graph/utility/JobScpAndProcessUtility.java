@@ -21,15 +21,20 @@ import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.GradleCommandConstants;
 import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
@@ -38,7 +43,7 @@ import org.eclipse.ui.PlatformUI;
 public class JobScpAndProcessUtility {
 
 	public static final JobScpAndProcessUtility INSTANCE = new JobScpAndProcessUtility();
-	
+	private List<String> externalSchemaPathList=new ArrayList<>();	
 	
 	private JobScpAndProcessUtility(){
 		
@@ -183,7 +188,7 @@ public class JobScpAndProcessUtility {
 	}
 	
 	public List<String> getExternalSchemaList() {
-		ArrayList<String> externalSchemaPathList=new ArrayList<>();
+		externalSchemaPathList.clear();
 		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if (editor != null && editor instanceof ELTGraphicalEditor) {
 			GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor)
@@ -212,14 +217,42 @@ public class JobScpAndProcessUtility {
 				EditPart editPart = (EditPart) ite.next();
 				if (editPart instanceof ComponentEditPart) {
 					Component component = ((ComponentEditPart) editPart).getCastedModel();
+					Schema  schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+					if(schema!=null && schema.getIsExternal()){
+						externalSchemaPathList.add(schema.getExternalSchemaPath());
+					}
 					if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
 					  String subJobPath=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
 					  subJobList.add(subJobPath);
+					  checkNestedSubJob(subJobList, subJobPath);
 					}
 				}
 			}
 		}
 		return subJobList;
+	}
+
+	private void checkNestedSubJob(ArrayList<String> subJobList,String subJobPath) {
+			Object obj=null;
+			try {
+				obj = CanvasUtils.INSTANCE.fromXMLToObject(new FileInputStream(new File(JobManager.getAbsolutePathFromFile(new Path(subJobPath)))));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		  if(obj!=null && obj instanceof Container){
+			  Container container = (Container) obj;
+			  for (Component component : container.getChildren()) {
+					Schema  schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+					if(schema!=null && schema.getIsExternal()){
+						externalSchemaPathList.add(schema.getExternalSchemaPath());
+					}
+					if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
+						  String subJob=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
+						  subJobList.add(subJob);
+						  checkNestedSubJob(subJobList, subJob);
+					}
+			}
+		  }
 	}
 	
 }

@@ -174,7 +174,7 @@ task executeRemoteJob() {
 
         println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList
 		
-		command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList
+		def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList
    		sshToRemoteServer(host,username,password,command)
     }
 }
@@ -226,7 +226,7 @@ task executeDebugRemoteJob() {
         def basePath = basePath;
         
         println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList + " -debugxmlpath " + debugJobXML + " -jobid " + jobId + " -basepath " + basePath
-        command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath
+        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath
 		sshToRemoteServer(host,username,password,command)
     }
 }
@@ -326,7 +326,7 @@ def getArgsForDebugRunJob() {
 task killRemoteJob() << {
     if(jobprocessid !=null){
         println "Gradle is Killing remote job"
-		command="sh "+properties.runUtility+" -k " + jobprocessid
+		def command="sh "+properties.runUtility+" -k " + jobprocessid
         sshToRemoteServer(host,username,password,command)
      }
 }
@@ -355,6 +355,7 @@ createDirectories.onlyIf {
 
 task scpSchemaFiles() {
     doLast {
+    println 'Copying external schema files...'
     def files=externalSchemaFiles;
 	def schemaFiles = files.split(",");
 	def sampleMap = [:]
@@ -379,6 +380,7 @@ scpSchemaFiles.onlyIf {
 
 task scpSubJobFiles() {
     doLast {
+    println 'Copying subjob files...'
     def files=subJobFiles;
 	def schemaFiles = files.split(",");
 	def sampleMap = [:]
@@ -415,8 +417,6 @@ def scpToRemoteServer(def fileToMove,def toDirectoryPath ,def username,def host,
             	    	classpath: configurations.sshAntTask.asPath
                 	)
      	
-     		  	 println 'Copying external schema files...'
-     		
           try {
   		 	  	ant.scp(
                    	 	file: fileToMove,

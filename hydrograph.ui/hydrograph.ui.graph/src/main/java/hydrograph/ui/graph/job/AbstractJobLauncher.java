@@ -14,12 +14,11 @@
  
 package hydrograph.ui.graph.job;
 
-import java.util.List;
-
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
+
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;

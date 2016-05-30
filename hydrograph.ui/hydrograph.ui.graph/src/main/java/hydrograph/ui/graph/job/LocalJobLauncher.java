@@ -15,9 +15,6 @@
 package hydrograph.ui.graph.job;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
@@ -25,7 +22,6 @@ import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;

@@ -15,26 +15,19 @@ package hydrograph.ui.graph.handler;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
-import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.debugconverter.DebugConverter;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.utility.CanvasUtils;
-import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
@@ -47,8 +40,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
@@ -142,12 +133,12 @@ public class DebugHandler  extends AbstractHandler {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 				JobManager.INSTANCE.enableRunJob(true);
 				if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
-					CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();					
+					CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();					
 					return null;
 				}
 			}catch(Exception e){
 				logger.debug("Unable to save graph ", e);
-				CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();
+				CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();
 					JobManager.INSTANCE.enableRunJob(true);
 			}
 		}
@@ -176,7 +167,7 @@ public class DebugHandler  extends AbstractHandler {
 			setBaseEnabled(true);
 			JobManager.INSTANCE.enableRunJob(true);
 			//JobManager.INSTANCE.enableDebugJob(true);
-			CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();			
+			CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();			
 			return null;
 		}
 		
@@ -211,7 +202,7 @@ public class DebugHandler  extends AbstractHandler {
 		addDebugJob(currentJobName, job);
 		
 		JobManager.INSTANCE.executeJobInDebug(job, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
-		CanvasUtils.getComponentCanvas().restoreMenuToolContextItemsState();		
+		CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();		
 		return null;
 	}
  

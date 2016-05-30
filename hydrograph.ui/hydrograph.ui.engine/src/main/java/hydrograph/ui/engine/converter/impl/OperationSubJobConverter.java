@@ -14,10 +14,14 @@
  
 package hydrograph.ui.engine.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
+import hydrograph.engine.jaxb.operationstypes.Subjob;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.PathUtility;
 import hydrograph.ui.engine.converter.SubjobConverter;
-import hydrograph.ui.engine.helper.ConverterHelper;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -26,12 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
-import hydrograph.engine.jaxb.operationstypes.Subjob;
 
 /**
  * Operation type sub graph converter

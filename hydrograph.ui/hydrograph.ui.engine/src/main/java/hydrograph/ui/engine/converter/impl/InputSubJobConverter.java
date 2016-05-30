@@ -14,13 +14,15 @@
  
 package hydrograph.ui.engine.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
+import hydrograph.engine.jaxb.inputtypes.Subjob;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.PathUtility;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.InputConverter;
-import hydrograph.ui.engine.helper.ConverterHelper;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -29,11 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseField;
-import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
-import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
-import hydrograph.engine.jaxb.inputtypes.Subjob;
 /**
  * 
  * @author Bitwise
