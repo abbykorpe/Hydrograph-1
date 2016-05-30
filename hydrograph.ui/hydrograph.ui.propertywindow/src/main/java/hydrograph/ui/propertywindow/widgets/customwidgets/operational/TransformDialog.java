@@ -260,7 +260,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		btnPull.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Constants.SYNC_CONFIRM_MESSAGE, MessageDialog.QUESTION, new String[] {"Ok", "Cancel" }, 0);
+				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Constants.SYNC_CONFIRM_MESSAGE, MessageDialog.QUESTION, new String[] {"OK", "Cancel" }, 0);
 				int dialogResult =dialog.open();
 				if(dialogResult == 0){
 					syncTransformFieldsWithSchema();
@@ -1514,5 +1514,4 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			}
 		return outputFileds;
 	}
-
 }

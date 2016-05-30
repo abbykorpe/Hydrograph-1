@@ -29,6 +29,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
@@ -202,17 +203,20 @@ public class DebugHelper {
 	 *
 	 */
 	public boolean hasMoreWatchPoints(){
-		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		if(editor!=null){
-			GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
-			for (Object objectEditPart : graphicalViewer.getEditPartRegistry().values()){
-				if(objectEditPart instanceof ComponentEditPart){
-					List<PortEditPart> portEditParts = ((EditPart) objectEditPart).getChildren();
-					for(AbstractGraphicalEditPart part : portEditParts) {	
-						if(part instanceof PortEditPart){
-							boolean isWatch = ((PortEditPart)part).getPortFigure().isWatched();
-							if(isWatch){
-								return isWatch;
+		IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if(activeEditor instanceof ELTGraphicalEditor){
+			ELTGraphicalEditor editor=(ELTGraphicalEditor) activeEditor;
+			if(editor!=null){
+				GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
+				for (Object objectEditPart : graphicalViewer.getEditPartRegistry().values()){
+					if(objectEditPart instanceof ComponentEditPart){
+						List<PortEditPart> portEditParts = ((EditPart) objectEditPart).getChildren();
+						for(AbstractGraphicalEditPart part : portEditParts) {	
+							if(part instanceof PortEditPart){
+								boolean isWatch = ((PortEditPart)part).getPortFigure().isWatched();
+								if(isWatch){
+									return isWatch;
+								}
 							}
 						}
 					}
