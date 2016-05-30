@@ -80,8 +80,8 @@ public class ELTGridDeleteSelectionListener extends ELTSelectionTaskListener{
 					tableViewer.editElement(tableViewer.getElementAt(gridsList.size() - 1), 0);
 				}
 				else if(gridsList.size() > indexes[0]){//deleted element from middle of the list
-					table.select(indexes[0]);//select the element from at the same location
-					tableViewer.editElement(tableViewer.getElementAt(indexes[0]), 0);
+					table.select( indexes[0] == 0 ? 0 : (indexes[0] - 1) );//select the element from at the previous location
+					tableViewer.editElement(tableViewer.getElementAt(indexes[0] == 0 ? 0 : (indexes[0] - 1)), 0);
 				}
 			}
 			else if(indexes.length >= 2){//multiple items are selected for deletion
