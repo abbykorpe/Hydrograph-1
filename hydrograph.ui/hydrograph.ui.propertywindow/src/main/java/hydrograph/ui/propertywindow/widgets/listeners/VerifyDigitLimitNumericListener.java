@@ -35,11 +35,12 @@ import org.eclipse.swt.widgets.Widget;
  * the VerifyTwoDigitNumericListener event occurs, that object's appropriate
  * method is invoked.
  * 
- * @see VerifyTwoDigitNumericListener
+ * @see VerifyDigitLimitNumericListener
  */
-public class VerifyTwoDigitNumericListener  implements IELTListener{
+public class VerifyDigitLimitNumericListener  implements IELTListener{
 
 	private ControlDecoration txtDecorator;
+	private int characterLimit;
 	
 	@Override
 	public int getListenerType() {
@@ -53,6 +54,7 @@ public class VerifyTwoDigitNumericListener  implements IELTListener{
 		final Widget[] widgetList = widgets;	
 		if (helpers != null) {
 			txtDecorator = (ControlDecoration) helpers.get(HelperType.CONTROL_DECORATION);
+			characterLimit = (int) helpers.get(HelperType.CHARACTER_LIMIT);
 		}
 
 		
@@ -60,7 +62,7 @@ public class VerifyTwoDigitNumericListener  implements IELTListener{
 			@Override
 			public void handleEvent(Event event) {
 				Text text = (Text)widgetList[0];
-				text.setTextLimit(2);
+				text.setTextLimit(characterLimit);
 				String string=event.text;
 				Matcher matchs=Pattern.compile("[\\d]*").matcher(string);
 				if(!matchs.matches()){

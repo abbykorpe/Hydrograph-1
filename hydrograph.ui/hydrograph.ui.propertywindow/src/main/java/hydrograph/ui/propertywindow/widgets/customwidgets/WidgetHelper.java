@@ -90,9 +90,10 @@ public class WidgetHelper {
 	/**
 	 * Configuration to customize text box as phase property 
 	 */
-	public WidgetConfig getPhaseWidgetConfig(){
+	public WidgetConfig getPhaseWidgetConfig(int characterLimit){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Constants.PHASE);
+		textBoxConfig.setCharacterLimit(characterLimit);
 		addTextBoxListeners(textBoxConfig);
 		textBoxConfig.getListeners().add(Listners.VERIFY_TWO_DIGIT_NUMERIC_LISTENER);
 		textBoxConfig.setWidgetWidth(78);
