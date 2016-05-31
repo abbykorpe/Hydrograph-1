@@ -43,7 +43,6 @@ import org.eclipse.ui.PlatformUI;
 public class JobScpAndProcessUtility {
 
 	public static final JobScpAndProcessUtility INSTANCE = new JobScpAndProcessUtility();
-	private List<String> externalSchemaPathList=new ArrayList<>();	
 	
 	private JobScpAndProcessUtility(){
 		
@@ -188,7 +187,7 @@ public class JobScpAndProcessUtility {
 	}
 	
 	public List<String> getExternalSchemaList() {
-		externalSchemaPathList.clear();
+		List<String> externalSchemaPathList=new ArrayList<>();	
 		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if (editor != null && editor instanceof ELTGraphicalEditor) {
 			GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor)
@@ -201,6 +200,10 @@ public class JobScpAndProcessUtility {
 					if(schema!=null && schema.getIsExternal()){
 						externalSchemaPathList.add(schema.getExternalSchemaPath());
 					}
+					if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
+						  String subJobPath=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
+						  checkSubJobForExternalSchema(externalSchemaPathList, subJobPath); 
+						}
 				}
 			}
 		}
@@ -217,10 +220,6 @@ public class JobScpAndProcessUtility {
 				EditPart editPart = (EditPart) ite.next();
 				if (editPart instanceof ComponentEditPart) {
 					Component component = ((ComponentEditPart) editPart).getCastedModel();
-					Schema  schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
-					if(schema!=null && schema.getIsExternal()){
-						externalSchemaPathList.add(schema.getExternalSchemaPath());
-					}
 					if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
 					  String subJobPath=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
 					  subJobList.add(subJobPath);
@@ -232,20 +231,16 @@ public class JobScpAndProcessUtility {
 		return subJobList;
 	}
 
-	private void checkNestedSubJob(ArrayList<String> subJobList,String subJobPath) {
+	private void checkNestedSubJob(List<String> subJobList,String subJobPath) {
 			Object obj=null;
 			try {
 				obj = CanvasUtils.INSTANCE.fromXMLToObject(new FileInputStream(new File(JobManager.getAbsolutePathFromFile(new Path(subJobPath)))));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-		  if(obj!=null && obj instanceof Container){
+			if(obj!=null && obj instanceof Container){
 			  Container container = (Container) obj;
 			  for (Component component : container.getChildren()) {
-					Schema  schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
-					if(schema!=null && schema.getIsExternal()){
-						externalSchemaPathList.add(schema.getExternalSchemaPath());
-					}
 					if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
 						  String subJob=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
 						  subJobList.add(subJob);
@@ -253,6 +248,29 @@ public class JobScpAndProcessUtility {
 					}
 			}
 		  }
+	}
+	
+	
+	private void checkSubJobForExternalSchema(List<String> externalSchemaPathList,String subJobPath) {
+		Object obj=null;
+		try {
+			obj = CanvasUtils.INSTANCE.fromXMLToObject(new FileInputStream(new File(JobManager.getAbsolutePathFromFile(new Path(subJobPath)))));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		if(obj!=null && obj instanceof Container){
+		  Container container = (Container) obj;
+		  for (Component component : container.getChildren()) {
+			  	Schema  schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+				if(schema!=null && schema.getIsExternal()){
+					externalSchemaPathList.add(schema.getExternalSchemaPath());
+				}
+				if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
+					  String subJob=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
+					  checkSubJobForExternalSchema(externalSchemaPathList, subJob);
+				}
+		  	}
+		}
 	}
 	
 }
