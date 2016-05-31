@@ -95,7 +95,7 @@ public class WidgetHelper {
 		textBoxConfig.setName(Constants.PHASE);
 		textBoxConfig.setCharacterLimit(characterLimit);
 		addTextBoxListeners(textBoxConfig);
-		textBoxConfig.getListeners().add(Listners.VERIFY_TWO_DIGIT_NUMERIC_LISTENER);
+		textBoxConfig.getListeners().add(Listners.VERIFY_DIGIT_LIMIT_NUMERIC_LISTENER);
 		textBoxConfig.setWidgetWidth(78);
 		return textBoxConfig;
 	}

@@ -83,7 +83,7 @@ public class ListenerFactory {
 		BROWSE_FILE_LISTNER(ELTBrowseFileListener.class),
 		ENABLE_BUTTON(ELTEnableButtonListener.class),
 		VERIFY_NUMERIC(ELTVerifyNumbericListener.class),
-		VERIFY_TWO_DIGIT_NUMERIC_LISTENER(VerifyDigitLimitNumericListener.class),
+		VERIFY_DIGIT_LIMIT_NUMERIC_LISTENER(VerifyDigitLimitNumericListener.class),
 		GRID_MOUSE_DOUBLE_CLICK(ELTGridMouseDoubleClickListener.class),
 		GRID_MOUSE_DOWN(ELTGridMouseDownListener.class),
 		GRID_ADD_SELECTION(ELTGridAddSelectionListener.class),
