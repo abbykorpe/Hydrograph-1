@@ -341,7 +341,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					tableViewer.refresh();
 				}*/
 				
-			}
+			}/*else{
+				tableViewer.setInput(schemaGridRowList);
+				tableViewer.refresh();
+			}*/
 		
 		if (!schemaGridRowList.isEmpty()) {
 			for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
@@ -370,7 +373,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		property.put(propertyName, schema);
 		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), schemaMap);//
-
+		System.out.println(this.properties);
 		return property;
 	}
 	
@@ -1498,6 +1501,7 @@ private void syncInternallyPropagatedSchema(){
 	eLTDetails.setGrids(schemaGridRowList);
 	tableViewer.setInput(schemaGridRowList);
 	tableViewer.refresh();
+	//this.properties = schema;  //Remove this.Kanchan
 
 }
 
@@ -1530,10 +1534,9 @@ private void syncSchema(){
 	}
 	else{
 		schemaGridRowList=schema.getGridRow();
-//		tableViewer.setInput(schemaGridRowList);
-//		tableViewer.refresh();
-		System.out.println(tableViewer);
-	}
+		tableViewer.setInput(schemaGridRowList);
+		tableViewer.refresh(); 
+	} 
 }
 
 

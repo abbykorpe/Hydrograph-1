@@ -131,19 +131,26 @@ public class ELTLookupMapWidget extends AbstractWidget {
 			 List<GridRow> outputSchemaGridRowList = new LinkedList<>();
 			 
 			 for(LookupMapProperty row : lookupMapRows){
+				 System.out.println("Row: "+row.getSource_Field()+ "->"+row.getOutput_Field());
 				 if(!ParameterUtil.isParameter(row.getSource_Field())){
 					 GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
-					 GridRow outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
+					 GridRow outputFieldSchema = null;
 
-					 if(inputFieldSchema==null)
-						 continue;
-
+					 if(inputFieldSchema==null){
+						 SchemaPropagationHelper schemaPropagationHelper = new SchemaPropagationHelper();
+						 outputFieldSchema = schemaPropagationHelper.createSchemaGridRow(row.getOutput_Field());
+					 }else{
+						 outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
+					 }
+						
+					 if(row.getSource_Field().trim().length()>0){
 					 if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
 						 finalPassThroughFields.add(row.getOutput_Field());
 						 passThroughFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
 					 }else{
 						 finalMapFields.put(row.getSource_Field().split("\\.")[1], row.getOutput_Field());
 						 mapFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+					 }
 					 }
 
 					 outputSchemaGridRowList.add(outputFieldSchema);
@@ -236,9 +243,9 @@ public class ELTLookupMapWidget extends AbstractWidget {
 		return property;
 	}
 
-	@Override
+	@Override  
 	public boolean isWidgetValid() {
-		return validateAgainstValidationRule(lookupMappingGrid);
+		return validateAgainstValidationRule(lookupMappingGrid); 
 	}
 
 	
