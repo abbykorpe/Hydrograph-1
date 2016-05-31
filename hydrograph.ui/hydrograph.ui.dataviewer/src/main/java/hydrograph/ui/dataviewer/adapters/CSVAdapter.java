@@ -1,5 +1,6 @@
 package hydrograph.ui.dataviewer.adapters;
 
+import hydrograph.ui.dataviewer.DebugDataViewer;
 import hydrograph.ui.dataviewer.constants.ADVConstants;
 import hydrograph.ui.dataviewer.datastructures.ColumnData;
 import hydrograph.ui.dataviewer.datastructures.RowData;
@@ -12,6 +13,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.eclipse.swt.widgets.Display;
 
 public class CSVAdapter {
 
@@ -28,12 +31,13 @@ public class CSVAdapter {
 	
 	private Connection connection;
 	private Statement statement;
+	private DebugDataViewer debugDataViewer;
 	
 	
-	private int PAGE_SIZE;
-	private long OFFSET;
+	volatile private int PAGE_SIZE;
+	volatile private long OFFSET;
 	
-	public CSVAdapter(String databaseName, String tableName,List<Schema> tableSchema,int PAGE_SIZE,long INITIAL_OFFSET) {
+	public CSVAdapter(String databaseName, String tableName,List<Schema> tableSchema,int PAGE_SIZE,long INITIAL_OFFSET, DebugDataViewer debugDataViewer) {
 		this.databaseName = databaseName;
 		this.tableName = tableName;
 		this.tableSchema = tableSchema;
@@ -42,6 +46,7 @@ public class CSVAdapter {
 		columnCount = 0;
 		this.PAGE_SIZE = PAGE_SIZE;
 		this.OFFSET = INITIAL_OFFSET;
+		this.debugDataViewer = debugDataViewer;
 		initializeAdapter();
 	}
 	
@@ -70,7 +75,6 @@ public class CSVAdapter {
 			//initializeRowCount();
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -99,7 +103,6 @@ public class CSVAdapter {
 	public Long getRowCount() {
 		
 		if(rowCount==null && rowCountFetchInProgress == false){
-			System.out.println("+++ Executing thread");
 			rowCountFetchInProgress=true;
 			new Thread() {
 	            public void run() {
@@ -109,8 +112,18 @@ public class CSVAdapter {
 	    						+ tableName);
 	    				rowCountResultSet.next();
 	    				rowCount = rowCountResultSet.getLong(1);
+	    				
+	    				
+	    				//Do not Remove below code- 
+	    				//Reason: We can not draw outside Display Thread. But in this code I am drawing.
+	    				//Reference: https://wiki.eclipse.org/FAQ_Why_do_I_get_an_invalid_thread_access_exception%3F
+	    				Display.getDefault().asyncExec(new Runnable() {
+	    				    public void run() {
+	    				    	debugDataViewer.setDefaultStatusMessage();
+	    				    }
+	    				});
+	    				
 	    			} catch (SQLException e) {
-	    				// TODO Auto-generated catch block
 	    				e.printStackTrace();
 	    			}
 	            }
@@ -132,29 +145,29 @@ public class CSVAdapter {
 	}
 
 	public int next() {
-		tableData.clear();
 		
 		OFFSET = OFFSET+PAGE_SIZE;
-				
-		/*if(OFFSET>numberOfRecords){
-			return ADVConstants.EOF;
-		}*/
 		
+		if(rowCount!=null){
+			if(OFFSET>rowCount){
+				OFFSET = rowCount - PAGE_SIZE;
+				return ADVConstants.EOF;
+			}
+		}
+		
+		tableData.clear();
 		try {
 			ResultSet results = statement.executeQuery("SELECT * FROM " + tableName
 					+ " LIMIT " + PAGE_SIZE + " OFFSET " + OFFSET);
 			while (results.next()) {
 				List<ColumnData> row = new LinkedList<>();
 				for (int index = 0; index < columnCount; index++) {
-					// row.add(new CellData("String",
-					// results.getString(index+1)));
 					row.add(new ColumnData(results.getString(index + 1),
 							tableSchema.get(index)));
 				}
 				tableData.add(new RowData(row));
 			}			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return ADVConstants.ERROR;
 		}
@@ -164,29 +177,25 @@ public class CSVAdapter {
 	
 	
 	public int previous() {
-		tableData.clear();
-		
-		OFFSET = OFFSET+PAGE_SIZE;
+		OFFSET = OFFSET-PAGE_SIZE;
 		
 		if(OFFSET<0){
+			OFFSET=0;
 			return ADVConstants.BOF;
 		}
-		
+		tableData.clear();
 		try {
 			ResultSet results = statement.executeQuery("SELECT * FROM " + tableName
 					+ " LIMIT " + PAGE_SIZE + " OFFSET " + OFFSET);
 			while (results.next()) {
 				List<ColumnData> row = new LinkedList<>();
 				for (int index = 0; index < columnCount; index++) {
-					// row.add(new CellData("String",
-					// results.getString(index+1)));
 					row.add(new ColumnData(results.getString(index + 1),
 							tableSchema.get(index)));
 				}
 				tableData.add(new RowData(row));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return ADVConstants.ERROR;
 		}
@@ -200,29 +209,41 @@ public class CSVAdapter {
 			while (results.next()) {
 				List<ColumnData> row = new LinkedList<>();
 				for (int index = 1; index <= columnCount; index++) {
-					// row.add(new CellData("String",
-					// results.getString(index+1)));
 					row.add(new ColumnData(results.getString(index),
 							tableSchema.get(index-1)));
 				}
 				tableData.add(new RowData(row));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public void jumpToPage(long pageNumber) {
+	public int jumpToPage(long pageNumber) {
+		
+		List tempTableData  = new LinkedList<>();
+		
+		tempTableData.addAll(tableData);
+		
 		tableData.clear();
 		
-		OFFSET = 0;
+		long tempOffset=0;
+		tempOffset = OFFSET;
 		OFFSET = (pageNumber * PAGE_SIZE) - PAGE_SIZE;
+		
+		Long numberOfRecords = getRowCount();
+		if (numberOfRecords!=null) {
+			if(OFFSET>=rowCount){
+				OFFSET = rowCount - PAGE_SIZE;
+				//return ADVConstants.EOF;
+			}
+		}
 		
 		try {
 			ResultSet results = statement.executeQuery("SELECT * FROM " + tableName
 					+ " LIMIT " + PAGE_SIZE + " OFFSET " + OFFSET);
 			int rowIndex=0;
+			
 			while (results.next()) {
 				List<ColumnData> row = new LinkedList<>();
 				for (int index = 0; index < columnCount; index++) {
@@ -232,10 +253,30 @@ public class CSVAdapter {
 				tableData.add(new RowData(row,rowIndex));
 				rowIndex++;
 			}
+			
+			if (tableData.isEmpty()) {
+				OFFSET = tempOffset;
+				tableData.addAll(tempTableData);
+				return ADVConstants.EOF;
+			}
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return ADVConstants.ERROR;
 		}
+		return 0;
+	}
+
+	private int getNumberOfRecordsInResultSet(ResultSet results)
+			throws SQLException {
+		int numberOfRecords= 0;
+		if (results != null)   
+		{   
+			results.last();  
+			numberOfRecords = results.getRow();
+			results.beforeFirst(); 
+		}
+		return numberOfRecords;
 	}
 	
 	public void dispose() {
@@ -243,7 +284,6 @@ public class CSVAdapter {
 			statement.close();
 			connection.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
