@@ -99,10 +99,21 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 				{
 					return Messages.LENGTH_OR_DELIMITER_MUST_NOT_BE_BLANK;
 				}	
+				else if(!(fixedWidthGridRow.getLength().matches("\\d+")))
+				{
+					return Messages.LENGTH_MUST_BE_AN_INTEGER_VALUE;
+				}
+				
+				else if(StringUtils.isNotBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isNotBlank(fixedWidthGridRow.getLength()))
+				{
+					return "only specify Length or Delimiter";
+				}
+				
+				
 			}
 			else
 			{
-				if(StringUtils.isBlank(fixedWidthGridRow.getLength()))
+			if(StringUtils.isBlank(fixedWidthGridRow.getLength()))
 			{
 				return Messages.LENGTH_MUST_NOT_BE_BLANK;
 			}	

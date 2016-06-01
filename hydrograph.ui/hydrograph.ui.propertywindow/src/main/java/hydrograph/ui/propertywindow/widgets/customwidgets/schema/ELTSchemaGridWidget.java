@@ -1675,10 +1675,18 @@ public void highlightInvalidRowWithRedColor(GridRow gridRow)
 				FixedWidthGridRow fixedWidthGridRow=(FixedWidthGridRow)gridRow;
 				if(fixedWidthGridRow instanceof MixedSchemeGridRow)
 				{
-					if(StringUtils.isBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isBlank(fixedWidthGridRow.getLength()))
+					if((StringUtils.isBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isBlank(fixedWidthGridRow.getLength())))
 					{
 						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
 					}	
+					else if(StringUtils.isNotBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isNotBlank(fixedWidthGridRow.getLength()))	
+					{
+						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+					}
+					else if(StringUtils.isNotBlank(fixedWidthGridRow.getLength())&& !(fixedWidthGridRow.getLength().matches("\\d+")))	
+					{
+						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+					}
 					else
 					{
 						item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
