@@ -23,8 +23,6 @@ import hydrograph.ui.dataviewer.datastructures.Schema;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -50,8 +48,6 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -68,25 +64,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 public class DebugDataViewer extends ApplicationWindow {
 	private Composite composite_1;
 	private Text text;
 	private Text text_1;
-	//private Table table;
 	private Composite composite_4;
-	//private Table table_1;
 	private CTabFolder tabFolder;
 	
-	//private static List<RowData> dataList = new LinkedList<>();
-
 	private StatusLineManager statusLineManager;
 	private TableViewer gridViewTableViewer;
 	
@@ -157,7 +147,6 @@ public class DebugDataViewer extends ApplicationWindow {
 		{
 			tabFolder = new CTabFolder(container, SWT.BORDER);
 			tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-			//tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 			tabFolder.setSelectionBackground(new Color(null, 14,76,145));
 			tabFolder.setBackground(SWTResourceManager.getColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
 			tabFolder.setSelectionForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
@@ -175,198 +164,225 @@ public class DebugDataViewer extends ApplicationWindow {
 			}
 		}
 		{
-			Composite composite_2 = new Composite(container, SWT.NONE);
-			composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-			GridLayout gl_composite_2 = new GridLayout(2, false);
-			gl_composite_2.verticalSpacing = 0;
-			gl_composite_2.marginWidth = 0;
-			gl_composite_2.marginHeight = 0;
-			gl_composite_2.horizontalSpacing = 0;
-			composite_2.setLayout(gl_composite_2);
-			{
-				Composite composite_3 = new Composite(composite_2, SWT.NONE);
-				composite_3.setLayout(new GridLayout(3, false));
-				{
-					Button button = new Button(composite_3, SWT.NONE);
-					button.addSelectionListener(new SelectionAdapter() {
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-							int retCode = csvAdapter.previous();
-							gridViewTableViewer.refresh();
-							
-							if(retCode == ADVConstants.BOF){
-								appendStatusMessage("Begining of file reached");
-							}else if(retCode == ADVConstants.ERROR){
-								statusLineManager.setErrorMessage("Error while featching record");
-							}else{
-								setDefaultStatusMessage();
-							}
-						}
-					});
-					button.setText("Previous");
-					windowControls.add(button);
-				}
-				{
-					text = new Text(composite_3, SWT.BORDER | SWT.CENTER);
-					text.setEnabled(false);
-					text.setEditable(false);
-					GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-					gd_text.widthHint = 178;
-					text.setLayoutData(gd_text);
-					
-				}
-				{
-					Button button = new Button(composite_3, SWT.NONE);
-					button.addSelectionListener(new SelectionAdapter() {
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-							
-							Display.getDefault().asyncExec(new Runnable() {
-		    				    public void run() {
-		    				    	setProgressStatusMessage("Please wait, fetching next page records ");
-		    				    }
-		    				});
-							
-							
-							int retCode = csvAdapter.next();
-							gridViewTableViewer.refresh();
-							
-							if(retCode == ADVConstants.EOF){
-								appendStatusMessage("End of file reached");
-							}else if(retCode == ADVConstants.ERROR){
-								statusLineManager.setErrorMessage("Error while featching record");
-							}else{
-								setDefaultStatusMessage();
-							}
-							
-						}
-					});
-					button.setText("Next");
-					windowControls.add(button);
-				}
-			}
-			{
-				Composite composite_3 = new Composite(composite_2, SWT.NONE);
-				composite_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
-				composite_3.setLayout(new GridLayout(3, false));
-				{
-					Label label = new Label(composite_3, SWT.NONE);
-					label.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-					label.setText("Jump to Page: ");
-				}
-				{
-					text_1 = new Text(composite_3, SWT.BORDER);
-					text_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-					text_1.addVerifyListener(new VerifyListener() {  
-					    @Override  
-					    public void verifyText(VerifyEvent e) {
-					        /* Notice how we combine the old and new below */
-					        String currentText = ((Text)e.widget).getText();
-					        String pageNumberText =  currentText.substring(0, e.start) + e.text + currentText.substring(e.end);
-					        try{ 
-					        	long pageNumber = Long.valueOf(pageNumberText);  
-					            if(pageNumber <1 ){  
-					                e.doit = false;  
-					            }  
-					        }  
-					        catch(NumberFormatException ex){  
-					            if(!pageNumberText.equals(""))
-					                e.doit = false;  
-					        }  
-					    }  
-					});	
-					windowControls.add(text_1);
-				}
-				{
-					final Button button = new Button(composite_3, SWT.NONE);
-					button.addSelectionListener(new SelectionAdapter() {
-						@Override
-						public void widgetSelected(final SelectionEvent e) {
-							
-							setProgressStatusMessage("Please wait, fetching page " + text_1.getText());
-							//getShell().setEnabled(false);
-							setWindowControlsEnabled(false);
-							
-							final Long  pageNumberToJump = Long.valueOf(text_1.getText());
-							Job job = new Job("My Job") {
-								  @Override
-								  protected IStatus run(IProgressMonitor monitor) {
-								    // do something long running
-								    //... 
-									 									  
-									  final int retCode = csvAdapter.jumpToPage(pageNumberToJump);
-										
-								    // If you want to update the UI
-									  //((Button)e.getSource()).getDisplay().asyncExec(new Runnable() {
-									  
-									  Display.getDefault().asyncExec(new Runnable() {
-								      @Override
-								      public void run() {
-								        // do something in the user interface
-								        // e.g. set a text field
-								    	  gridViewTableViewer.refresh();
-									       
-											setWindowControlsEnabled(true);
-								    	  if(retCode == ADVConstants.EOF){
-												appendStatusMessage("End of file reached");
-											}else if(retCode == ADVConstants.ERROR){
-												statusLineManager.setErrorMessage("Error while featching record");
-											}else{
-												setDefaultStatusMessage();
-											}
-								      }
-								    });
-								    return Status.OK_STATUS;
-								  }
-								};
-
-								// Start the Job
-								job.schedule(); 
-							
-							System.out.println("UI is running");
-							/*new Thread(){
-								public void run() {
-									Display.getDefault().asyncExec(new Runnable() {
-				    				    public void run() {
-				    				    	int retCode = csvAdapter.jumpToPage(Long.valueOf(text_1.getText()));
-											gridViewTableViewer.refresh();
-											
-											if(retCode == ADVConstants.EOF){
-												appendStatusMessage("End of file reached");
-											}else if(retCode == ADVConstants.ERROR){
-												statusLineManager.setErrorMessage("Error while featching record");
-											}else{
-												setDefaultStatusMessage();
-											}
-											//getShell().setEnabled(true);
-											setWindowControlsEnabled(true);
-				    				    }
-				    				});
-								};
-							}.start();*/
-							
-							
-							
-							/*int retCode = csvAdapter.jumpToPage(Long.valueOf(text_1.getText()));
-							gridViewTableViewer.refresh();
-							
-							if(retCode == ADVConstants.EOF){
-								appendStatusMessage("End of file reached");
-							}else if(retCode == ADVConstants.ERROR){
-								statusLineManager.setErrorMessage("Error while featching record");
-							}else{
-								setDefaultStatusMessage();
-							}*/
-						}
-					});
-					button.setText("Go");
-					windowControls.add(button);
-				}
-			}
+			createPaginationPanel(container);
 		}
 		
 		setDefaultStatusMessage();
 		return container;
+	}
+
+
+	private void createPaginationPanel(Composite container) {
+		Composite composite_2 = new Composite(container, SWT.NONE);
+		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		GridLayout gl_composite_2 = new GridLayout(2, false);
+		gl_composite_2.verticalSpacing = 0;
+		gl_composite_2.marginWidth = 0;
+		gl_composite_2.marginHeight = 0;
+		gl_composite_2.horizontalSpacing = 0;
+		composite_2.setLayout(gl_composite_2);
+		{
+			createPageSwitchPanel(composite_2);
+		}
+		{
+			createPageJumpPanel(composite_2);
+		}
+	}
+
+
+	private void createPageJumpPanel(Composite composite_2) {
+		Composite composite_3 = new Composite(composite_2, SWT.NONE);
+		composite_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+		composite_3.setLayout(new GridLayout(3, false));
+		{
+			createJumpPageLabel(composite_3);
+		}
+		{
+			createJumpPageTextBox(composite_3);
+		}
+		{
+			createJumpPageButton(composite_3);
+		}
+	}
+
+
+	private void createJumpPageButton(Composite composite_3) {
+		final Button button = new Button(composite_3, SWT.NONE);
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				
+				setProgressStatusMessage("Please wait, fetching page " + text_1.getText());
+				setWindowControlsEnabled(false);
+				
+				final Long  pageNumberToJump = Long.valueOf(text_1.getText());
+				Job job = new Job("JumpToPage") {
+					  @Override
+					  protected IStatus run(IProgressMonitor monitor) {
+						  final int retCode = csvAdapter.jumpToPage(pageNumberToJump);
+							
+						  Display.getDefault().asyncExec(new Runnable() {
+					      @Override
+					      public void run() {
+					    	  gridViewTableViewer.refresh();
+						       
+								setWindowControlsEnabled(true);
+					    	  if(retCode == ADVConstants.EOF){
+									appendStatusMessage("End of file reached");
+								}else if(retCode == ADVConstants.ERROR){
+									statusLineManager.setErrorMessage("Error while featching record");
+								}else{
+									setDefaultStatusMessage();
+								}
+					      }
+					    });
+					    return Status.OK_STATUS;
+					  }
+					};
+					
+					job.schedule();
+			}
+		});
+		button.setText("Go");
+		windowControls.add(button);
+	}
+
+
+	private void createJumpPageTextBox(Composite composite_3) {
+		text_1 = new Text(composite_3, SWT.BORDER);
+		text_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		text_1.addVerifyListener(new VerifyListener() {  
+		    @Override  
+		    public void verifyText(VerifyEvent e) {
+		        String currentText = ((Text)e.widget).getText();
+		        String pageNumberText =  currentText.substring(0, e.start) + e.text + currentText.substring(e.end);
+		        try{ 
+		        	long pageNumber = Long.valueOf(pageNumberText);  
+		            if(pageNumber <1 ){  
+		                e.doit = false;  
+		            }  
+		        }  
+		        catch(NumberFormatException ex){  
+		            if(!pageNumberText.equals(""))
+		                e.doit = false;  
+		        }  
+		    }  
+		});	
+		windowControls.add(text_1);
+	}
+
+
+	private void createJumpPageLabel(Composite composite_3) {
+		Label label = new Label(composite_3, SWT.NONE);
+		label.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		label.setText("Jump to Page: ");
+	}
+
+
+	private void createPageSwitchPanel(Composite composite_2) {
+		Composite composite_3 = new Composite(composite_2, SWT.NONE);
+		composite_3.setLayout(new GridLayout(3, false));
+		{
+			createPreviousPageButton(composite_3);
+		}
+		{
+			createPageNumberDisplay(composite_3);
+			
+		}
+		{
+			createNextPageButton(composite_3);
+		}
+	}
+
+
+	private void createNextPageButton(Composite composite_3) {
+		Button button = new Button(composite_3, SWT.NONE);
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+				setProgressStatusMessage("Please wait, fetching next page records");
+				setWindowControlsEnabled(false);
+				
+				Job job = new Job("NextPage") {
+					  @Override
+					  protected IStatus run(IProgressMonitor monitor) {
+						  final int retCode = csvAdapter.next();
+							
+						  Display.getDefault().asyncExec(new Runnable() {
+					      @Override
+					      public void run() {
+					    	  gridViewTableViewer.refresh();
+					    	  setWindowControlsEnabled(true);
+								if(retCode == ADVConstants.EOF){
+									appendStatusMessage("End of file reached");
+								}else if(retCode == ADVConstants.ERROR){
+									statusLineManager.setErrorMessage("Error while featching record");
+								}else{
+									setDefaultStatusMessage();
+								}
+					      }
+					    });
+					    return Status.OK_STATUS;
+					  }
+					};
+					
+					job.schedule();
+			}
+		});
+		button.setText("Next");
+		windowControls.add(button);
+	}
+
+
+	private void createPageNumberDisplay(Composite composite_3) {
+		text = new Text(composite_3, SWT.BORDER | SWT.CENTER);
+		text.setEnabled(false);
+		text.setEditable(false);
+		GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_text.widthHint = 178;
+		text.setLayoutData(gd_text);
+	}
+
+
+	private void createPreviousPageButton(Composite composite_3) {
+		Button button = new Button(composite_3, SWT.NONE);
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+				setProgressStatusMessage("Please wait, fetching next page records");
+				setWindowControlsEnabled(false);
+				
+				Job job = new Job("PreviousPage") {
+					  @Override
+					  protected IStatus run(IProgressMonitor monitor) {
+						  final int retCode = csvAdapter.previous();
+							
+						  Display.getDefault().asyncExec(new Runnable() {
+					      @Override
+					      public void run() {
+					    	  gridViewTableViewer.refresh();
+					    	  setWindowControlsEnabled(true);
+					    	  if(retCode == ADVConstants.BOF){
+									appendStatusMessage("Begining of file reached");
+								}else if(retCode == ADVConstants.ERROR){
+									statusLineManager.setErrorMessage("Error while featching record");
+								}else{
+									setDefaultStatusMessage();
+								}
+					      }
+					    });
+					    return Status.OK_STATUS;
+					  }
+					};
+					
+					job.schedule();
+				
+			}
+		});
+		button.setText("Previous");
+		windowControls.add(button);
 	}
 	
 	
