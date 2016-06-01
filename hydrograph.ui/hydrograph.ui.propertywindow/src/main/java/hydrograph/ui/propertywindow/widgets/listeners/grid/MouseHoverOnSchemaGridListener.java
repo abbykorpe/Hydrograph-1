@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
 
 public class MouseHoverOnSchemaGridListener extends MouseActionListener{
+	
 	Table table=null;
 	private Shell tip=null;
 	private Label label=null;
@@ -106,7 +107,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 				
 				else if(StringUtils.isNotBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isNotBlank(fixedWidthGridRow.getLength()))
 				{
-					return "only specify Length or Delimiter";
+					return Messages.ONLY_SPECIFY_LENGTH_OR_DELIMITER;
 				}
 				
 				
