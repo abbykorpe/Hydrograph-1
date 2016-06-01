@@ -160,8 +160,16 @@ public class Messages extends NLS {
 	public static String OutputFieldAlreadyExists;
 	public static String FieldNameAlreadyExists;
 	public static String ABSOLUTE_PATH_TEXT;
-
-
+	public static String SCALETYPE_MUST_NOT_BE_NONE;
+	public static String SCALE_MUST_CONTAINS_NUMBER_ONLY_0_9;
+	public static String SCALE_MUST_NOT_BE_BLANK;
+	public static String PRECISION_MUST_CONTAINS_NUMBER_ONLY_0_9;
+	public static String PRECISION_MUST_NOT_BE_BLANK;
+	public static String DATE_FORMAT_MUST_NOT_BE_BLANK;
+	public static String LENGTH_MUST_BE_AN_INTEGER_VALUE;
+	public static String LENGTH_MUST_NOT_BE_BLANK ;
+	public static String LENGTH_OR_DELIMITER_MUST_NOT_BE_BLANK;
+	
 	public static String OPERATION_ID_PREFIX;
     public static String OPERATION_LIST_EMPTY;
     public static String PULL_BUTTON_LABEL;

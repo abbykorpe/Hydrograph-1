@@ -15,7 +15,6 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
-
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -124,12 +123,12 @@ public class SchemaGridLabelProvider implements ITableLabelProvider , ITableColo
 
   @Override
 	public Color getBackground(Object element, int columnIndex) {
-
 		return new Color(Display.getDefault(), new RGB(255, 255, 230));
 	}
 
 	@Override
 	public Color getForeground(Object element, int columnIndex) {
-		return new Color(Display.getDefault(), new RGB(100, 0, 0));
-	} 
+		//return new Color(Display.getDefault(), new RGB(100, 0, 0));
+		return null;
+	}
 }

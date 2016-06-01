@@ -194,6 +194,7 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 		}
 		resetDateFormat(generateRecordSchemaGridRow, property);
 		viewer.refresh();
+		generateRecordsGridWidget.highlightInvalidRowWithRedColor(generateRecordSchemaGridRow);
 		generateRecordsGridWidget.showHideErrorSymbol(generateRecordsGridWidget.isWidgetValid());
 	}
 

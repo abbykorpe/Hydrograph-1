@@ -15,6 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 
 import java.util.ArrayList;
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -76,23 +77,16 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 
 	@Override
 	protected void addValidators() {
-		editors[0].setValidator(new ELTCellEditorFieldValidator(table, schemaGridRowList, fieldNameDecorator,isFieldNameAlphanumericDecorator,propertyDialogButtonBar));
-		editors[2].setValidator(new ELTCellEditorIsEmptyValidator(fieldEmptyDecorator));
-		editors[3].setValidator(new ELTCellEditorIsNumericValidator(precisionDecorator)); 
-		editors[4].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator)); 
+	    editors[0].setValidator(new ELTCellEditorFieldValidator(table, schemaGridRowList, fieldNameDecorator,isFieldNameAlphanumericDecorator,propertyDialogButtonBar));
 	}
 	//Adding the decorator to show error message when field name same.
 	@Override
 	protected void setDecorator() {
 		fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAMEERROR);
-		fieldEmptyDecorator = WidgetUtility.addDecorator(editors[2].getControl(), Messages.EMPTYFIELDMESSAGE);
 		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);	
-		precisionDecorator = WidgetUtility.addDecorator(editors[3].getControl(),Messages.SCALEERROR);
-		scaleDecorator = WidgetUtility.addDecorator(editors[4].getControl(),Messages.SCALEERROR);
-		fieldNameDecorator.setMarginWidth(8);
-		scaleDecorator.setMarginWidth(8);
+	    fieldNameDecorator.setMarginWidth(8);
 		isFieldNameAlphanumericDecorator.setMarginWidth(8);
-
+	   
 	}
 
 	@Override
@@ -110,7 +104,7 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 		showHideErrorSymbol(validateAgainstValidationRule(propogatedSchema));
 		
 	}
-  
+		
 	@Override
 	public void addModifyListener(final Property property,  ArrayList<AbstractWidget> widgetList) {
 	      attachListener();

@@ -15,6 +15,9 @@
 package hydrograph.ui.propertywindow.fixedwidthschema;
 
 import java.util.ArrayList;
+
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -83,24 +86,13 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	@Override
 	protected void addValidators() {
 		editors[0].setValidator(new ELTCellEditorFieldValidator(table, schemaGridRowList, fieldNameDecorator,isFieldNameAlphanumericDecorator,propertyDialogButtonBar));
-		editors[2].setValidator(new ELTCellEditorIsEmptyValidator(fieldEmptyDecorator));
-		editors[3].setValidator(new ELTCellEditorIsNumericValidator(precisionDecorator)); 
-		editors[4].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator)); 
-		editors[7].setValidator(new ELTCellEditorIsNumericValidator(lengthDecorator)); 
 	}
 	//Adding the decorator to show error message when field name same.
 	@Override
 	protected void setDecorator() {
 		fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAMEERROR);
-		fieldEmptyDecorator = WidgetUtility.addDecorator(editors[2].getControl(), Messages.EMPTYFIELDMESSAGE);
-		precisionDecorator = WidgetUtility.addDecorator(editors[3].getControl(),Messages.SCALEERROR);
-		scaleDecorator = WidgetUtility.addDecorator(editors[4].getControl(),Messages.SCALEERROR);
-		lengthDecorator = WidgetUtility.addDecorator(editors[7].getControl(),Messages.LENGTHERROR);
 		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);
 		fieldNameDecorator.setMarginWidth(8);
-		scaleDecorator.setMarginWidth(8);
-		lengthDecorator.setMarginWidth(8);
-		isFieldNameAlphanumericDecorator.setMarginWidth(8);
 	}
 
 	@Override
@@ -117,5 +109,5 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
 	  attachListener();
 	}
-	
+
 }

@@ -164,8 +164,8 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 			fixedWidthGridRow.setPrecision("");
 		}
 		resetDateFormat(fixedWidthGridRow, property);
-
 		viewer.refresh();
+		eltFixedWidget.highlightInvalidRowWithRedColor(fixedWidthGridRow);
 		eltFixedWidget.showHideErrorSymbol(eltFixedWidget.isWidgetValid());
 	}
 	
