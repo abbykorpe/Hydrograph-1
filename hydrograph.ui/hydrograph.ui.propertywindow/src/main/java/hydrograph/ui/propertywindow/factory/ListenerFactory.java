@@ -46,11 +46,17 @@ import hydrograph.ui.propertywindow.widgets.listeners.OperationClassComboChangeL
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusInListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusOutListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyDigitLimitNumericListener;
+import hydrograph.ui.propertywindow.widgets.listeners.grid.DisposeSchemaGridListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridAddSelectionListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDeleteAllSelectionListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDeleteSelectionListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridMouseDoubleClickListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridMouseDownListener;
+import hydrograph.ui.propertywindow.widgets.listeners.grid.KeyDownSchemaGridListener;
+import hydrograph.ui.propertywindow.widgets.listeners.grid.MouseDownSchemaGridListener;
+import hydrograph.ui.propertywindow.widgets.listeners.grid.MouseExitSchemaGridListener;
+import hydrograph.ui.propertywindow.widgets.listeners.grid.MouseHoverOnSchemaGridListener;
+import hydrograph.ui.propertywindow.widgets.listeners.grid.MouseMoveOnSchemaGridListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.transform.ELTTransformDeleteSelectionListener;
 
 import org.slf4j.Logger;
@@ -101,8 +107,13 @@ public class ListenerFactory {
 		JOIN_INPUT_COUNT_FOCUS_OUT(JoinInputCountFocusOutListener.class),
 		DELIMITER_FOCUS_IN(DelimiterFocusInListener.class),
 		DELIMITER_FOCUS_OUT(DelimiterFocusOutListener.class),
-		DELIMITER_MODIFY(DelimiterModifyListener.class);
-		
+		DELIMITER_MODIFY(DelimiterModifyListener.class),
+		KEY_DOWN_LISTENER(KeyDownSchemaGridListener.class),
+		DISPOSE_LISTENER(DisposeSchemaGridListener.class),
+		MOUSE_DOWN_LISTENER(MouseDownSchemaGridListener.class),
+		MOUSE_EXIT_LISTENER(MouseExitSchemaGridListener.class),
+		MOUSE_HOVER_LISTENER(MouseHoverOnSchemaGridListener.class),
+		MOUSE_MOVE_LISTENER(MouseMoveOnSchemaGridListener.class);
 		
 		Class<?> clazz = null;
 		private Listners(Class<?> clazz) {

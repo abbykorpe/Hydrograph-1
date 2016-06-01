@@ -126,14 +126,22 @@ class SchemaGridCellModifier implements ICellModifier {
 			basicSchemaGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]);
 		}
 		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
+		{
 			basicSchemaGridRow.setDateFormat( ((String) value).trim()); 
+		}	
 		else if (ELTSchemaGridWidget.PRECISION.equals(property))
+		{	
 			basicSchemaGridRow.setPrecision(((String) value).trim()); 
+		}
 		else if (ELTSchemaGridWidget.SCALE.equals(property))
-			basicSchemaGridRow.setScale(((String) value).trim());
+			{
+			 basicSchemaGridRow.setScale(((String) value).trim());
+			}
+			
 		else if (ELTSchemaGridWidget.SCALE_TYPE.equals(property)){
 			basicSchemaGridRow.setScaleType((Integer)value); 
 			basicSchemaGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[(Integer)value]);
+			
 		}
 		else if (ELTSchemaGridWidget.FIELD_DESCRIPTION.equals(property))
 			basicSchemaGridRow.setDescription(((String) value).trim());
@@ -145,11 +153,9 @@ class SchemaGridCellModifier implements ICellModifier {
 			basicSchemaGridRow.setScaleType(0);
 			basicSchemaGridRow.setPrecision("");
 		}
-
 		resetDateFormat(basicSchemaGridRow, property);
-        
 		viewer.refresh();
-		;
+		eltGenericSchemaGridWidget.highlightInvalidRowWithRedColor(basicSchemaGridRow);
 		eltGenericSchemaGridWidget.showHideErrorSymbol(eltGenericSchemaGridWidget.isWidgetValid());
 	}
 

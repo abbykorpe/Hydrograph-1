@@ -16,9 +16,11 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
@@ -30,7 +32,7 @@ import org.eclipse.swt.widgets.Display;
  * @author Bitwise 
  *
  */
-public class SchemaGridLabelProvider implements ITableLabelProvider , ITableColorProvider {
+public class SchemaGridLabelProvider  extends CellLabelProvider implements ITableLabelProvider , ITableColorProvider {
   /**
    * Returns the image
    * 
@@ -124,12 +126,20 @@ public class SchemaGridLabelProvider implements ITableLabelProvider , ITableColo
 
   @Override
 	public Color getBackground(Object element, int columnIndex) {
-
 		return new Color(Display.getDefault(), new RGB(255, 255, 230));
 	}
 
 	@Override
 	public Color getForeground(Object element, int columnIndex) {
-		return new Color(Display.getDefault(), new RGB(100, 0, 0));
-	} 
+		//return new Color(Display.getDefault(), new RGB(100, 0, 0));
+		return null;
+	}
+
+	@Override
+	public void update(ViewerCell cell) {
+		// TODO Auto-generated method stub
+	}
+	public String getToolTipText(Object element) {
+		return "***********";
+	}
 }

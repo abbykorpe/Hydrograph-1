@@ -258,7 +258,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 		this.properties = componentConfigrationProperty.getPropertyValue();
-
 	}
 
 	private List<String> getSchemaFields(List<GridRow> schemaGridRowList2) {
@@ -836,7 +835,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		addImportExportButtons(containerControl);
 
 		populateWidgetExternalSchema();
-
 	}
 	
 	private String getAbsolutePath(IFileEditorInput input){
@@ -1187,6 +1185,17 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					table, deleteButton.getSWTWidgetControl(), upButton
 							.getSWTWidgetControl(), downButton
 							.getSWTWidgetControl());
+			eltTable.attachListener(ListenerFactory.Listners.MOUSE_HOVER_LISTENER
+					.getListener(), propertyDialogButtonBar, helper, table);
+			
+			eltTable.attachListener(ListenerFactory.Listners.MOUSE_MOVE_LISTENER
+					.getListener(), propertyDialogButtonBar, helper, table);
+			eltTable.attachListener(ListenerFactory.Listners.DISPOSE_LISTENER
+					.getListener(), propertyDialogButtonBar, helper, table);
+			
+			eltTable.attachListener(ListenerFactory.Listners.KEY_DOWN_LISTENER
+					.getListener(), propertyDialogButtonBar, helper, table);
+			
 			eltTable.attachListener(
 					ListenerFactory.Listners.GRID_MOUSE_DOWN.getListener(),
 					propertyDialogButtonBar, helper, editors[0].getControl());
@@ -1445,6 +1454,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 			}
 		}
+		highlightInvalidRowWithRedColor(null);
 	}
 
 	private List<String> getExitingSchemaFieldNames(Schema originalSchema) {
@@ -1632,5 +1642,62 @@ public List<FilterProperties> convertSchemaToFilterProperty(){
 }
 
 
-	
+public void highlightInvalidRowWithRedColor(GridRow gridRow)
+{ 
+	for(TableItem item:table.getItems())
+	{
+		if(gridRow==null)
+	    gridRow=(GridRow)item.getData();	
+	    if(StringUtils.equalsIgnoreCase(item.getText(),gridRow.getFieldName()))
+		{
+			if((StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), "java.math.BigDecimal"))&&(StringUtils.isBlank(gridRow.getPrecision()) || StringUtils.isBlank(gridRow.getScale()) ||
+				StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), "none")||
+					!(gridRow.getScale().matches("\\d+"))||!(gridRow.getPrecision().matches("\\d+"))
+					))
+			{
+				item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+				
+			}
+			else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),"java.util.Date") && (StringUtils.isBlank(gridRow.getDateFormat()) ))
+			{
+				item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+			}
+			else if(gridRow instanceof FixedWidthGridRow && !(gridRow instanceof GenerateRecordSchemaGridRow))
+			{
+			
+				FixedWidthGridRow fixedWidthGridRow=(FixedWidthGridRow)gridRow;
+				if(fixedWidthGridRow instanceof MixedSchemeGridRow)
+				{
+					if(StringUtils.isBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isBlank(fixedWidthGridRow.getLength()))
+					{
+						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+					}	
+					else
+					{
+						item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+					}	
+					
+				}
+				else
+				{
+				if(StringUtils.isBlank(fixedWidthGridRow.getLength())||!(fixedWidthGridRow.getLength().matches("\\d+")))
+				{
+					item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+				}	
+				else
+				{
+					item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+				}	
+				}	
+			}	
+			else
+			{
+				item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+			}	
+			gridRow=null;
+		}	
+	    
+	}	
+}
+
 }

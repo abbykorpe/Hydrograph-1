@@ -170,6 +170,7 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 		resetDateFormat(mixedSchemeGridRow, property);
 
 		viewer.refresh();
+		mixedSchemeWidget.highlightInvalidRowWithRedColor(mixedSchemeGridRow);
 		mixedSchemeWidget.showHideErrorSymbol(mixedSchemeWidget.isWidgetValid());
 	}
 	
