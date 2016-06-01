@@ -17,7 +17,7 @@
 		name="OFixedWidth" nameInPalette="File Fixed Width" defaultNamePrefix="OFixedWidth" 
 		description="Used to write output in fixed width text format."
 		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Fixed_Width.html"
-		acronym="Fxd">
+		acronym="OFxd">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">

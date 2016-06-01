@@ -18,7 +18,7 @@
 		name="IHiveParquet" nameInPalette="Hive Parquet" defaultNamePrefix="IHiveParquet" 
 		description="Reads parquet file as input and performs Hive job."
 		helpFilePath="/hydrograph.ui.help/html/Components/Input_Hive_Parquet.html"
-		acronym="HPrqt">
+		acronym="IHPrq">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">

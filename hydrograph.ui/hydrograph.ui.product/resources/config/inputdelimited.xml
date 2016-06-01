@@ -17,7 +17,7 @@
 		name="IFDelimited" nameInPalette="File Delimited" defaultNamePrefix="IFDelimited" 
 		description="Used to read any delimited text file."
 		helpFilePath="/hydrograph.ui.help/html/Components/Input_File_Delimited.html"
-		acronym="Delim">
+		acronym="IDelim">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">

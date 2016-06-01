@@ -17,10 +17,10 @@
 
 	<tns:component paletteIconPath="/icons/input_subjob_palette.png"
 		canvasIconPath="/icons/input_subjob_canvas.png" name="InputSubjobComponent"
-		nameInPalette="Input Subjob" defaultNamePrefix="InSubjob"
+		nameInPalette="Input Subjob Socket" defaultNamePrefix="InSubjob"
 		description="Represents the in sockets for a subjob."
 		helpFilePath="/hydrograph.ui.help/html/Components/InputSubjob.html" 
-		acronym="ISubJ" >
+		acronym="ISubS" >
 		<tns:category>SUBJOB</tns:category>
 		
 			<tns:port>

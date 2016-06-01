@@ -17,7 +17,7 @@
 		name="OHiveTextFile" nameInPalette="Hive Text File" defaultNamePrefix="OHive_TextFile" 
 		description="Takes text file as input and performs Hive job."
 		helpFilePath="/hydrograph.ui.help/html/Components/Output_Hive_Text.html"
-		acronym="HTxt">
+		acronym="OHTxt">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">

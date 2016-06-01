@@ -17,7 +17,7 @@
 		name="IFileMixedScheme" nameInPalette="File Mixed Scheme" defaultNamePrefix="IFMixedScheme" 
 		description="Used to read any Fixed Width text file and delimiter can be applied record level."
 		helpFilePath="/hydrograph.ui.help/html/Components/Input_File_Fixed_Width.html"
-		acronym="Mix">
+		acronym="IMix">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
