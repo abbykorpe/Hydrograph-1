@@ -22,7 +22,9 @@ import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
@@ -52,19 +54,48 @@ public class ELTGridDeleteSelectionListener extends ELTSelectionTaskListener{
 		propertyDialogButtonBar.enableApplyButton(true);
 		ELTGridDetails gridDetails = (ELTGridDetails) helpers.get(HelperType.SCHEMA_GRID);
 		
-		Table table =gridDetails.getTableViewer().getTable();
-		int temp = table.getSelectionIndex();
-		int[] indexs=table.getSelectionIndices();
-		if (temp == -1) {
+		TableViewer tableViewer = gridDetails.getTableViewer();
+		Table table = tableViewer.getTable();
+		int[] indexes=table.getSelectionIndices();
+		if (table.getSelectionIndex() == -1) {
 			WidgetUtility.errorMessage("Please Select row to delete");
 		} else {
-			table.remove(indexs);
-			ArrayList tempList= new ArrayList();
-			for (int index :indexs) { 
-				GridRow test =(GridRow) gridDetails.getGrids().get(index);
-				tempList.add(test);
+			table.remove(indexes);
+			List listOfItemsToRemove= new ArrayList();
+			for (int index : indexes) { 
+				listOfItemsToRemove.add(gridDetails.getGrids().get(index));
 			}
-			 gridDetails.getGrids().removeAll(tempList);
+			List<GridRow> gridsList = gridDetails.getGrids();
+			gridsList.removeAll(listOfItemsToRemove);
+			
+			
+			//highlight after deletion
+			if(indexes.length == 1 && gridsList.size() > 0){//only one item is deleted
+				if(gridsList.size() == 1){//list contains only one element
+					table.select(0);// select the first element
+					tableViewer.editElement(tableViewer.getElementAt(0), 0);
+				}
+				else if(gridsList.size() == indexes[0]){//deleted last item 
+					table.select(gridsList.size() - 1);//select the last element which now at the end of the list
+					tableViewer.editElement(tableViewer.getElementAt(gridsList.size() - 1), 0);
+				}
+				else if(gridsList.size() > indexes[0]){//deleted element from middle of the list
+					table.select( indexes[0] == 0 ? 0 : (indexes[0] - 1) );//select the element from at the previous location
+					tableViewer.editElement(tableViewer.getElementAt(indexes[0] == 0 ? 0 : (indexes[0] - 1)), 0);
+				}
+			}
+			else if(indexes.length >= 2){//multiple items are selected for deletion
+				if(indexes[0] == 0){//delete from 0 to ...
+					if(gridsList.size() >= 1){//list contains only one element
+						table.select(0);//select the remaining element
+						tableViewer.editElement(tableViewer.getElementAt(0), 0);
+					}
+				}
+				else{//delete started from element other than 0th element
+					table.select((indexes[0])-1);//select element before the start of selection   
+					tableViewer.editElement(tableViewer.getElementAt((indexes[0])-1), 0);
+				}
+			}
 		}
 		
 		if (gridDetails.getGrids().size() >= 1) {

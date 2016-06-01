@@ -70,7 +70,6 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EventObject;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -95,22 +94,22 @@ import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
-import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.FocusCellOwnerDrawHighlighter;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
-import org.eclipse.jface.viewers.TableViewerFocusCellManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -1224,27 +1223,35 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		downButton.setEnabled(false);
 		deleteButton.setEnabled(false);
 
-		TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(
-				tableViewer, new FocusCellOwnerDrawHighlighter(tableViewer));
-		ColumnViewerEditorActivationStrategy activationSupport = new ColumnViewerEditorActivationStrategy(
-				tableViewer) {
-			protected boolean isEditorActivationEvent(
-					ColumnViewerEditorActivationEvent event) {
-				if (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION) {
-					EventObject source = event.sourceEvent;
-					if (source instanceof MouseEvent
-							&& ((MouseEvent) source).button == 3)
-						return false;
-				}
-				return super.isEditorActivationEvent(event)
-						|| (event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED && event.keyCode == SWT.F2);
-			}
-		};
-		TableViewerEditor.create(tableViewer, focusCellManager,
-				activationSupport, ColumnViewerEditor.TABBING_HORIZONTAL
+		TableViewerEditor.create(tableViewer, new ColumnViewerEditorActivationStrategy(tableViewer),
+				ColumnViewerEditor.KEYBOARD_ACTIVATION
 						| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
 						| ColumnViewerEditor.TABBING_VERTICAL
-						| ColumnViewerEditor.KEYBOARD_ACTIVATION);
+						| ColumnViewerEditor.TABBING_HORIZONTAL);
+
+		tableViewer.getControl().addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// Do - Nothing
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.keyCode == SWT.F2) {
+					if (tableViewer.getSelection() != null) {
+						StructuredSelection selection = (StructuredSelection) tableViewer.getSelection();
+						if (selection.size() == 1) {
+							GridRow gridRow = (GridRow) selection.getFirstElement();
+							int index = schemaGridRowList.indexOf(gridRow);
+							if (index > -1) {
+								tableViewer.editElement(tableViewer.getElementAt(index), 0);
+							}
+						}
+					}
+				}
+			}
+		});
 
 		populateWidget();
 		scrolledComposite.setContent(tableComposite);
