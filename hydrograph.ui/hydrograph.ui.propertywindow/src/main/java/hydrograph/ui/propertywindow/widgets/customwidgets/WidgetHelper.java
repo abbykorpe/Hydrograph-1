@@ -93,8 +93,9 @@ public class WidgetHelper {
 	public WidgetConfig getPhaseWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Constants.PHASE);
+		textBoxConfig.setCharacterLimit(2);
 		addTextBoxListeners(textBoxConfig);
-		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
+		textBoxConfig.getListeners().add(Listners.VERIFY_DIGIT_LIMIT_NUMERIC_LISTENER);
 		textBoxConfig.setWidgetWidth(78);
 		return textBoxConfig;
 	}

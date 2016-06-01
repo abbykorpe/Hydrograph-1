@@ -388,7 +388,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-
+		boolean isWatch = false;
 		IWorkbenchPart partView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 
 		IHydrographConsole currentConsoleView = (IHydrographConsole) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
@@ -396,6 +396,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 		if (partView instanceof ELTGraphicalEditor) {
 			if (getActiveProject() != null) {
+				isWatch = DebugHelper.INSTANCE.hasMoreWatchPoints();
 				ConsolePlugin plugin = ConsolePlugin.getDefault();
 				IConsoleManager consoleManager = plugin.getConsoleManager();
 
@@ -444,7 +445,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 		super.selectionChanged(part, selection);
 		
-		boolean isWatch = DebugHelper.INSTANCE.hasMoreWatchPoints();
 		if(isWatch){
 			((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
 		}else{
@@ -1218,7 +1218,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		deleteDebugFiles();
  
 		closeSocket();
-		logger.info("Socket closed @ 8004");
 	}
 	
 	private void closeSocket()  {
@@ -1230,6 +1229,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			try {
 				if(serverSocket!=null)
 				serverSocket.close();
+				logger.info("Socket closed @"+DebugHelper.INSTANCE.restServicePort());
 			} catch (IOException e1) {
 				logger.error(e.getMessage());
 			}

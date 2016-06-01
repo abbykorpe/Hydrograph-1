@@ -138,6 +138,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
 		helper.put(HelperType.CURRENT_COMPONENT, getComponent());
+		helper.put(HelperType.CHARACTER_LIMIT, textBoxConfig.getCharacterLimit());
 		return helper;
 	}
 	

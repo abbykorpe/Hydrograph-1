@@ -45,6 +45,7 @@ import hydrograph.ui.propertywindow.widgets.listeners.JoinInputCountFocusOutList
 import hydrograph.ui.propertywindow.widgets.listeners.OperationClassComboChangeListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusInListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusOutListener;
+import hydrograph.ui.propertywindow.widgets.listeners.VerifyDigitLimitNumericListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridAddSelectionListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDeleteAllSelectionListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDeleteSelectionListener;
@@ -82,6 +83,7 @@ public class ListenerFactory {
 		BROWSE_FILE_LISTNER(ELTBrowseFileListener.class),
 		ENABLE_BUTTON(ELTEnableButtonListener.class),
 		VERIFY_NUMERIC(ELTVerifyNumbericListener.class),
+		VERIFY_DIGIT_LIMIT_NUMERIC_LISTENER(VerifyDigitLimitNumericListener.class),
 		GRID_MOUSE_DOUBLE_CLICK(ELTGridMouseDoubleClickListener.class),
 		GRID_MOUSE_DOWN(ELTGridMouseDownListener.class),
 		GRID_ADD_SELECTION(ELTGridAddSelectionListener.class),
