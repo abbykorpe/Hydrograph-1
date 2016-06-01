@@ -99,6 +99,7 @@ import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.swt.SWT;
@@ -107,6 +108,8 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -1225,6 +1228,30 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
 						| ColumnViewerEditor.TABBING_VERTICAL
 						| ColumnViewerEditor.TABBING_HORIZONTAL);
+
+		tableViewer.getControl().addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// Do - Nothing
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.keyCode == SWT.F2) {
+					if (tableViewer.getSelection() != null) {
+						StructuredSelection selection = (StructuredSelection) tableViewer.getSelection();
+						if (selection.size() == 1) {
+							GridRow gridRow = (GridRow) selection.getFirstElement();
+							int index = schemaGridRowList.indexOf(gridRow);
+							if (index > -1) {
+								tableViewer.editElement(tableViewer.getElementAt(index), 0);
+							}
+						}
+					}
+				}
+			}
+		});
 
 		populateWidget();
 		scrolledComposite.setContent(tableComposite);
