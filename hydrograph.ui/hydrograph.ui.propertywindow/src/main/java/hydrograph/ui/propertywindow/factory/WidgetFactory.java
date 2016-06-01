@@ -89,7 +89,7 @@ public class WidgetFactory {
 
 		TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET(TextBoxWithIsParameterCheckBoxWidget.class,WidgetHelper.INSTANCE.getSequenceFieldWidgetConfig()),
 		DELIMETER_WIDGET(DelimiterWidget.class, WidgetHelper.INSTANCE.getDelimiterWidgetConfig()),
-		PHASE_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getPhaseWidgetConfig(2)),
+		PHASE_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getPhaseWidgetConfig()),
 		QUOTE_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getQuoteWidgetConfig()),
 		DATABASE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getDatabaseNameWidgetConfig()),
 		TABLE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getTableNameWidgetConfig()),
