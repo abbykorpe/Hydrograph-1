@@ -122,9 +122,4 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 		attachListener();
 		
 	}
-	public void highlightInvalidRowWithRedColor(BasicSchemaGridRow basicSchemaGridRow)
-	{ 
-		super.highlightInvalidRowWithRedColor(basicSchemaGridRow);
-	}
-
 }

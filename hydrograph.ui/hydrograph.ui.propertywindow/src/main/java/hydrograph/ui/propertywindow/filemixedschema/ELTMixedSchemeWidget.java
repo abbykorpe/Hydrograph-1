@@ -15,7 +15,6 @@ package hydrograph.ui.propertywindow.filemixedschema;
 
 import java.util.ArrayList;
 
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -25,8 +24,6 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.SchemaGridContentProvider;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
-import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTCellEditorIsEmptyValidator;
-import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTCellEditorIsNumericValidator;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
@@ -114,10 +111,5 @@ public class ELTMixedSchemeWidget extends ELTSchemaGridWidget {
 	@Override
 	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
 		attachListener();
-	}
-	
-	public void highlightInvalidRowWithRedColor(BasicSchemaGridRow basicSchemaGridRow)
-	{ 
-		super.highlightInvalidRowWithRedColor(basicSchemaGridRow);
 	}
 }

@@ -104,11 +104,7 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 		showHideErrorSymbol(validateAgainstValidationRule(propogatedSchema));
 		
 	}
-	public void highlightInvalidRowWithRedColor(BasicSchemaGridRow basicSchemaGridRow)
-	{ 
-		super.highlightInvalidRowWithRedColor(basicSchemaGridRow);
-	}
-	
+		
 	@Override
 	public void addModifyListener(final Property property,  ArrayList<AbstractWidget> widgetList) {
 	      attachListener();

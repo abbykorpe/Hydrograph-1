@@ -10,10 +10,8 @@ import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.MouseActionListener;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -22,9 +20,6 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
 
 public class MouseHoverOnSchemaGridListener extends MouseActionListener{
-	private static final String LENGTH_MUST_BE_AN_INTEGER_VALUE = "Length must be an Integer value";
-	private static final String LENGTH_MUST_NOT_BE_BLANK = "Length must not be blank";
-	private static final String LENGTH_OR_DELIMITER_MUST_NOT_BE_BLANK = "Length or delimiter must not be blank";
 	Table table=null;
 	private Shell tip=null;
 	private Label label=null;

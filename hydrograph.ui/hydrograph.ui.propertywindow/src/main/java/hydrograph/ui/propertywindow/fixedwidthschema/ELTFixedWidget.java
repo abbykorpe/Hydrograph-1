@@ -110,9 +110,4 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	  attachListener();
 	}
 
-	public void highlightInvalidRowWithRedColor(GridRow basicSchemaGridRow)
-	{ 
-		super.highlightInvalidRowWithRedColor(basicSchemaGridRow);
-	}
-	
 }
