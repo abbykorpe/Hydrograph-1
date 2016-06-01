@@ -17,7 +17,7 @@
 		name="IHiveTextFile" nameInPalette="Hive Text File" defaultNamePrefix="IHiveTextFile" 
 		description="Reads text file as input and performs Hive job."
 		helpFilePath="/hydrograph.ui.help/html/Components/Input_Hive_Text.html"
-		acronym="HTxt">
+		acronym="IHTxt">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">

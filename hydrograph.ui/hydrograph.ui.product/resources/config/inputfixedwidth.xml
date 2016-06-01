@@ -17,7 +17,7 @@
 		name="IFixedWidth" nameInPalette="File Fixed Width" defaultNamePrefix="IFixedWidth" 
 		description="Used to read any Fixed Width text file."
 		helpFilePath="/hydrograph.ui.help/html/Components/Input_File_Fixed_Width.html"
-		acronym="Fxd">
+		acronym="IFxd">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">

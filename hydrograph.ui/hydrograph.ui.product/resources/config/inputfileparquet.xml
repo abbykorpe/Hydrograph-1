@@ -16,7 +16,7 @@
 		name="IFParquet" nameInPalette="File Parquet" defaultNamePrefix="IFParquet" 
 		description="This is IFParquet component."
 		helpFilePath="/hydrograph.ui.help/html/Components/Input_File_Parquet.html"
-		acronym="FPrqt">
+		acronym="IFPrq">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">

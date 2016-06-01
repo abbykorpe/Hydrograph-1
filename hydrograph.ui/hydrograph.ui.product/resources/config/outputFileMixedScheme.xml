@@ -17,7 +17,7 @@
 		name="OFMixedScheme" nameInPalette="File Mixed Scheme" defaultNamePrefix="OFMixedScheme" 
 		description="Used to write output in Mixed Scheme text format."
 		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Fixed_Width.html"
-		acronym="Mix">
+		acronym="OMix">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">

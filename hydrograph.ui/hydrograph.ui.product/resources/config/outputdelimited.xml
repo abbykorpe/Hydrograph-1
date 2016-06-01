@@ -17,7 +17,7 @@
 		name="OFDelimited" nameInPalette="File Delimited" defaultNamePrefix="OFDelimited" 
 		description="Used to write output in delimited text format."
 		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Delimited.html"
-		acronym="Delim">
+		acronym="ODelim">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true" >
