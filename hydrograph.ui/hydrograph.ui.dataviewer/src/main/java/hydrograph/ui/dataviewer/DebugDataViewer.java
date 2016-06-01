@@ -18,6 +18,7 @@ import hydrograph.ui.dataviewer.actions.UnformattedViewAction;
 import hydrograph.ui.dataviewer.actions.ViewDataGridMenuCreator;
 import hydrograph.ui.dataviewer.adapters.CSVAdapter;
 import hydrograph.ui.dataviewer.constants.ADVConstants;
+import hydrograph.ui.dataviewer.datastructures.ColumnData;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.datastructures.Schema;
 
@@ -52,6 +53,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
@@ -78,13 +80,30 @@ public class DebugDataViewer extends ApplicationWindow {
 	private CTabFolder tabFolder;
 	
 	private StatusLineManager statusLineManager;
-	private TableViewer gridViewTableViewer;
+	
 	
 	private CSVAdapter csvAdapter;
 	private List<Schema> tableSchema = new LinkedList<>();
-	
-	
+		
 	private List<Control> windowControls;
+	
+	
+	private static List<RowData> gridViewData;
+	private static List<RowData> formattedViewData;
+	private static List<RowData> unformattedViewData;
+	
+	private StyledText unformattedViewDataUIContainer;
+	private StyledText formattedViewDataUIContainer;
+	private TableViewer horizontalViewUIContainer;
+	private TableViewer gridViewUIContainer;
+	
+	private static String GRID_VIEW_NAME="GRID_VIEW";
+	private static String HORIZONTAL_VIEW_NAME="HORIZONTAL_VIEW";
+	private static String FORMATTED_VIEW_NAME="FORMATTED_VIEW";
+	private static String UNFORMATTED_VIEW_NAME="UNFORMATTED_VIEW";
+	
+	
+	
 	/**
 	 * Create the application window,
 	 */
@@ -95,42 +114,43 @@ public class DebugDataViewer extends ApplicationWindow {
 		addMenuBar();
 		addStatusLine();
 		windowControls = new LinkedList<>();
+		gridViewData = new LinkedList<>();
 	}
 
 	
 	private void populateSchemaList() {
-		tableSchema.add(new Schema("java.lang.String", null));
-		tableSchema.add(new Schema("java.lang.String", null));
-		tableSchema.add(new Schema("java.lang.Integer", null));
-		tableSchema.add(new Schema("java.lang.Long", null));
-		tableSchema.add(new Schema("java.lang.Double", null));
-		tableSchema.add(new Schema("java.lang.Double", null));
-		tableSchema.add(new Schema("java.lang.Float", null));
-		tableSchema.add(new Schema("java.lang.Float", null));
-		tableSchema.add(new Schema("java.lang.Short", null));
-		tableSchema.add(new Schema("java.util.Date", "YYYY-MM-DD"));
-		tableSchema.add(new Schema("java.util.Date", "DDMMYYYY"));
-		tableSchema.add(new Schema("java.util.Date", "DD.MMM.YYYY"));
-		tableSchema.add(new Schema("java.util.Date", "yyyy-MM-dd HH:mm:ss"));
-		tableSchema.add(new Schema("java.util.Date", "yyyy-MM-dd hh:mm:ss"));
-		tableSchema.add(new Schema("java.util.Date", "ddMMyy"));
-		tableSchema.add(new Schema("java.math.BigDecimal", null));
-		tableSchema.add(new Schema("java.lang.String", null));
-		tableSchema.add(new Schema("java.lang.String", null));
-		tableSchema.add(new Schema("java.lang.Integer", null));
-		tableSchema.add(new Schema("java.lang.Long", null));
-		tableSchema.add(new Schema("java.lang.Double", null));
-		tableSchema.add(new Schema("java.lang.Double", null));
-		tableSchema.add(new Schema("java.lang.Float", null));
-		tableSchema.add(new Schema("java.lang.Float", null));
-		tableSchema.add(new Schema("java.lang.Short", null));
-		tableSchema.add(new Schema("java.util.Date", "YYYY-MM-DD"));
-		tableSchema.add(new Schema("java.util.Date", "DDMMYYYY"));
-		tableSchema.add(new Schema("java.util.Date", "DD.MMM.YYYY"));
-		tableSchema.add(new Schema("java.util.Date", "yyyy-MM-dd HH:mm:ss"));
-		tableSchema.add(new Schema("java.util.Date", "yyyy-MM-dd hh:mm:ss"));
-		tableSchema.add(new Schema("java.util.Date", "ddMMyy"));
-		tableSchema.add(new Schema("java.math.BigDecimal", null));
+		tableSchema.add(new Schema("f_string","java.lang.String", null));
+		tableSchema.add(new Schema("f_string1","java.lang.String", null));
+		tableSchema.add(new Schema("f_int","java.lang.Integer", null));
+		tableSchema.add(new Schema("f_long","java.lang.Long", null));
+		tableSchema.add(new Schema("f_double1","java.lang.Double", null));
+		tableSchema.add(new Schema("f_double2","java.lang.Double", null));
+		tableSchema.add(new Schema("f_float1","java.lang.Float", null));
+		tableSchema.add(new Schema("f_float2","java.lang.Float", null));
+		tableSchema.add(new Schema("f_short","java.lang.Short", null));
+		tableSchema.add(new Schema("f_date1","java.util.Date", "YYYY-MM-DD"));
+		tableSchema.add(new Schema("f_date2","java.util.Date", "DDMMYYYY"));
+		tableSchema.add(new Schema("f_date3","java.util.Date", "DD.MMM.YYYY"));
+		tableSchema.add(new Schema("f_date4","java.util.Date", "yyyy-MM-dd HH:mm:ss"));
+		tableSchema.add(new Schema("f_date5","java.util.Date", "yyyy-MM-dd hh:mm:ss"));
+		tableSchema.add(new Schema("f_date6","java.util.Date", "ddMMyy"));
+		tableSchema.add(new Schema("f_bigDecimal","java.math.BigDecimal", null));
+		tableSchema.add(new Schema("f_string3","java.lang.String", null));
+		tableSchema.add(new Schema("f_string4","java.lang.String", null));
+		tableSchema.add(new Schema("f_int1","java.lang.Integer", null));
+		tableSchema.add(new Schema("f_long3","java.lang.Long", null));
+		tableSchema.add(new Schema("f_double3","java.lang.Double", null));
+		tableSchema.add(new Schema("f_double4","java.lang.Double", null));
+		tableSchema.add(new Schema("f_float3","java.lang.Float", null));
+		tableSchema.add(new Schema("f_float4","java.lang.Float", null));
+		tableSchema.add(new Schema("f_short1","java.lang.Short", null));
+		tableSchema.add(new Schema("f_date7","java.util.Date", "YYYY-MM-DD"));
+		tableSchema.add(new Schema("f_date21","java.util.Date", "DDMMYYYY"));
+		tableSchema.add(new Schema("f_date32","java.util.Date", "DD.MMM.YYYY"));
+		tableSchema.add(new Schema("f_date41","java.util.Date", "yyyy-MM-dd HH:mm:ss"));
+		tableSchema.add(new Schema("f_date51","java.util.Date", "yyyy-MM-dd hh:mm:ss"));
+		tableSchema.add(new Schema("f_date61","java.util.Date", "ddMMyy"));
+		tableSchema.add(new Schema("f_bigDecimal1","java.math.BigDecimal", null));
 	}
 	
 	/**
@@ -162,6 +182,20 @@ public class DebugDataViewer extends ApplicationWindow {
 			{
 				createUnformattedViewTabItem();
 			}
+			
+			tabFolder.addSelectionListener(new SelectionListener() {
+				
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					updateView();
+				}
+				
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
 		}
 		{
 			createPaginationPanel(container);
@@ -172,6 +206,20 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 
+	private void updateView(){
+		CTabItem tabItem = tabFolder.getSelection();
+		if(tabItem.getData("VIEW_NAME").equals(GRID_VIEW_NAME)){
+			gridViewUIContainer.refresh();
+		}else if(tabItem.getData("VIEW_NAME").equals(HORIZONTAL_VIEW_NAME)){
+			
+		}else if(tabItem.getData("VIEW_NAME").equals(FORMATTED_VIEW_NAME)){
+			updateFormattedView();
+		}else if(tabItem.getData("VIEW_NAME").equals(UNFORMATTED_VIEW_NAME)){
+			updateUnformattedView();
+		}
+	}
+	
+	
 	private void createPaginationPanel(Composite container) {
 		Composite composite_2 = new Composite(container, SWT.NONE);
 		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -220,11 +268,13 @@ public class DebugDataViewer extends ApplicationWindow {
 					  @Override
 					  protected IStatus run(IProgressMonitor monitor) {
 						  final int retCode = csvAdapter.jumpToPage(pageNumberToJump);
-							
+						  updateDataViewLists();
+						  
 						  Display.getDefault().asyncExec(new Runnable() {
 					      @Override
 					      public void run() {
-					    	  gridViewTableViewer.refresh();
+					    	  //gridViewTableViewer.refresh();
+					    	  updateView();
 						       
 								setWindowControlsEnabled(true);
 					    	  if(retCode == ADVConstants.EOF){
@@ -238,6 +288,8 @@ public class DebugDataViewer extends ApplicationWindow {
 					    });
 					    return Status.OK_STATUS;
 					  }
+
+					
 					};
 					
 					job.schedule();
@@ -247,6 +299,12 @@ public class DebugDataViewer extends ApplicationWindow {
 		windowControls.add(button);
 	}
 
+	private void updateDataViewLists() {
+		gridViewData.clear();
+		gridViewData.addAll(csvAdapter.getTableData());
+		formattedViewData = csvAdapter.getTableData();
+		unformattedViewData = csvAdapter.getTableData();
+	}
 
 	private void createJumpPageTextBox(Composite composite_3) {
 		text_1 = new Text(composite_3, SWT.BORDER);
@@ -308,11 +366,15 @@ public class DebugDataViewer extends ApplicationWindow {
 					  @Override
 					  protected IStatus run(IProgressMonitor monitor) {
 						  final int retCode = csvAdapter.next();
-							
+						  
+						  updateDataViewLists();
+						  
 						  Display.getDefault().asyncExec(new Runnable() {
 					      @Override
 					      public void run() {
-					    	  gridViewTableViewer.refresh();
+					    	 /* gridViewTableViewer.refresh();
+					    	  updateUnformattedView();*/
+					    	  updateView();
 					    	  setWindowControlsEnabled(true);
 								if(retCode == ADVConstants.EOF){
 									appendStatusMessage("End of file reached");
@@ -344,6 +406,9 @@ public class DebugDataViewer extends ApplicationWindow {
 		text.setLayoutData(gd_text);
 	}
 
+	private void updatePageNumberDisplayPanel(){
+		text.setText(csvAdapter.getPageStatusNumber());
+	}
 
 	private void createPreviousPageButton(Composite composite_3) {
 		Button button = new Button(composite_3, SWT.NONE);
@@ -359,10 +424,13 @@ public class DebugDataViewer extends ApplicationWindow {
 					  protected IStatus run(IProgressMonitor monitor) {
 						  final int retCode = csvAdapter.previous();
 							
+						  updateDataViewLists();
+						  
 						  Display.getDefault().asyncExec(new Runnable() {
 					      @Override
 					      public void run() {
-					    	  gridViewTableViewer.refresh();
+					    	  //gridViewTableViewer.refresh();
+					    	  updateView();
 					    	  setWindowControlsEnabled(true);
 					    	  if(retCode == ADVConstants.BOF){
 									appendStatusMessage("Begining of file reached");
@@ -406,6 +474,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		stringBuilder.append("Showing records from " + csvAdapter.getOFFSET() + " to " + (csvAdapter.getOFFSET() + csvAdapter.getPAGE_SIZE()) + " | ");
 		statusLineManager.setMessage(stringBuilder.toString().substring(0,stringBuilder.length() -2));
 		
+		updatePageNumberDisplayPanel();
 	}
 
 	
@@ -429,36 +498,98 @@ public class DebugDataViewer extends ApplicationWindow {
 		statusLineManager.setMessage(stringBuilder.toString().substring(0,stringBuilder.length() -2));
 	}
 
+	
+	private void updateUnformattedView(){
+		unformattedViewDataUIContainer.setText("");
+		StringBuilder stringBuilder = new StringBuilder();
+		for(RowData rowData : unformattedViewData){
+			//unformattedViewDataUIContainer.append(rowData);
+			String row="";
+			for(ColumnData columnData : rowData.getColumns()){
+				row = row + columnData.getValue() + ",";
+			}
+			stringBuilder.append(row.substring(0, row.length() -1) + "\n");
+			
+			
+		}
+		unformattedViewDataUIContainer.setText(stringBuilder.toString());
+	}
+	
 	private void createUnformattedViewTabItem() {
 		CTabItem tbtmUnformattedView = new CTabItem(tabFolder, SWT.CLOSE);
+		tbtmUnformattedView.setData("VIEW_NAME", UNFORMATTED_VIEW_NAME);
 		tbtmUnformattedView.setText("Unformatted View");
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
 			tbtmUnformattedView.setControl(composite);
 			composite.setLayout(new GridLayout(1, false));
 			{
-				StyledText styledText = new StyledText(composite, SWT.BORDER);
-				styledText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+				unformattedViewDataUIContainer = new StyledText(composite, SWT.BORDER | SWT.READ_ONLY | SWT.V_SCROLL | SWT.H_SCROLL);
+				unformattedViewDataUIContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 			}
 		}
 	}
-
+	
+	private int getMaxLengthColumn(){
+		
+		int lenght=0;
+		
+		for(Schema schema: tableSchema){
+			if(schema.getColumnName().length() > lenght){
+				lenght = schema.getColumnName().length();
+			}
+		}
+		
+		return lenght;
+	}
+	
+	
+	private void updateFormattedView(){
+		formattedViewDataUIContainer.setText("");
+		StringBuilder stringBuilder = new StringBuilder();
+		int rowNumber=0;
+		
+		int maxLenghtColumn = getMaxLengthColumn();
+		
+		maxLenghtColumn+=5;
+		String format="\t\t%-" + maxLenghtColumn + "s: %s\n";   
+		
+		for(RowData rowData : formattedViewData){
+			stringBuilder.append("Record: " + rowNumber + "\n\n");
+			
+			stringBuilder.append("{\n");
+			int columnIndex=0;
+			for(Schema schema: tableSchema){
+				ColumnData columnData = rowData.getColumns().get(columnIndex);
+				String tempString = String.format(format, schema.getColumnName(),columnData.getValue());
+				stringBuilder.append(tempString);
+				columnIndex++;
+			}
+			stringBuilder.append("}\n");
+			stringBuilder.append("----------------------------------\n");
+		}
+		formattedViewDataUIContainer.setText(stringBuilder.toString());
+	}
 	private void createFormatedViewTabItem() {
 		CTabItem tbtmFormattedView = new CTabItem(tabFolder, SWT.CLOSE);
+		tbtmFormattedView.setData("VIEW_NAME", FORMATTED_VIEW_NAME);
 		tbtmFormattedView.setText("Formatted view");
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
 			tbtmFormattedView.setControl(composite);
 			composite.setLayout(new GridLayout(1, false));
 			{
-				StyledText styledText = new StyledText(composite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-				styledText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+				formattedViewDataUIContainer = new StyledText(composite, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL);
+				formattedViewDataUIContainer.setFont(SWTResourceManager.getFont("Courier New", 9, SWT.NORMAL));
+				formattedViewDataUIContainer.setEditable(false);
+				formattedViewDataUIContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 			}
 		}
 	}
 
 	private void createHorizantalViewTabItem() {
 		CTabItem tbtmHorizantalView = new CTabItem(tabFolder, SWT.CLOSE);
+		tbtmHorizantalView.setData("VIEW_NAME", "HORIZANTAL_VIEW");
 		tbtmHorizantalView.setText("Horizantal view");
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
@@ -478,8 +609,8 @@ public class DebugDataViewer extends ApplicationWindow {
 					gl_composite_4.horizontalSpacing = 0;
 					composite_4.setLayout(gl_composite_4);
 					{
-						TableViewer tableViewer = new TableViewer(composite_4, SWT.BORDER | SWT.FULL_SELECTION);
-						Table table_1 = tableViewer.getTable();
+						horizontalViewUIContainer = new TableViewer(composite_4, SWT.BORDER | SWT.FULL_SELECTION);
+						Table table_1 = horizontalViewUIContainer.getTable();
 						table_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 					}
 				}
@@ -491,6 +622,7 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private void createGridViewTabItem() {
 		CTabItem tbtmGridview = new CTabItem(tabFolder, SWT.NONE);
+		tbtmGridview.setData("VIEW_NAME", GRID_VIEW_NAME);
 		tbtmGridview.setText("Grid view");
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
@@ -518,8 +650,8 @@ public class DebugDataViewer extends ApplicationWindow {
 					composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 							1));
 					{
-						gridViewTableViewer = new TableViewer(composite_1, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
-						Table table = gridViewTableViewer.getTable();
+						gridViewUIContainer = new TableViewer(composite_1, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
+						Table table = gridViewUIContainer.getTable();
 						table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 						table.setLinesVisible(true);
 						table.setHeaderVisible(true);
@@ -538,17 +670,18 @@ public class DebugDataViewer extends ApplicationWindow {
 				
 				installMouseWheelScrollRecursively(scrolledComposite);
 				
-				createGridViewTableColumns(gridViewTableViewer);
-				setTableLayoutToMappingTable(gridViewTableViewer);
-				gridViewTableViewer.setContentProvider(new ArrayContentProvider());
-										
-				gridViewTableViewer.setInput(csvAdapter.getGridViewData());
-				gridViewTableViewer.refresh();
+				createGridViewTableColumns(gridViewUIContainer);
+				setTableLayoutToMappingTable(gridViewUIContainer);
+				gridViewUIContainer.setContentProvider(new ArrayContentProvider());
 				
-				for (int i = 0, n = gridViewTableViewer.getTable().getColumnCount(); i < n; i++)
-					gridViewTableViewer.getTable().getColumn(i).pack();
+				updateDataViewLists();
+				gridViewUIContainer.setInput(gridViewData);
+				gridViewUIContainer.refresh();
 				
-				gridViewTableViewer.refresh();
+				for (int i = 0, n = gridViewUIContainer.getTable().getColumnCount(); i < n; i++)
+					gridViewUIContainer.getTable().getColumn(i).pack();
+				
+				gridViewUIContainer.refresh();
 			}
 		}
 	}

@@ -1,11 +1,18 @@
 package hydrograph.ui.dataviewer.datastructures;
 
 public class Schema {
+	String columnName;
 	String dataType;
 	String dateFormat;
 	
 	public Schema(String dataType, String dateFormat) {
 		super();
+		this.dataType = dataType;
+		this.dateFormat = dateFormat;
+	}
+	public Schema(String columnName, String dataType, String dateFormat) {
+		super();
+		this.columnName = columnName;
 		this.dataType = dataType;
 		this.dateFormat = dateFormat;
 	}
@@ -20,6 +27,14 @@ public class Schema {
 	}
 	public void setDateFormat(String dateFormat) {
 		this.dateFormat = dateFormat;
+	}
+	
+	
+	public String getColumnName() {
+		return columnName;
+	}
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
 	}
 	/*@Override
 	public String toString() {

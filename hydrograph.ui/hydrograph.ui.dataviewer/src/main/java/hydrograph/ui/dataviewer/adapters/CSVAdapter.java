@@ -100,6 +100,16 @@ public class CSVAdapter {
 
 	}
 
+	
+	public String getPageStatusNumber(){
+		if (getRowCount() !=null ) {
+			return String.valueOf((OFFSET+PAGE_SIZE)/PAGE_SIZE) + "/" + String.valueOf(getRowCount()/PAGE_SIZE);
+		}else{
+			return String.valueOf((OFFSET+PAGE_SIZE)/PAGE_SIZE);
+		}
+	}
+	
+	
 	public Long getRowCount() {
 		
 		if(rowCount==null && rowCountFetchInProgress == false){
@@ -135,7 +145,7 @@ public class CSVAdapter {
 		
 	}
 
-	public List<RowData> getGridViewData() {
+	public List<RowData> getTableData() {
 		return tableData;
 	}
 
@@ -219,25 +229,37 @@ public class CSVAdapter {
 		}
 	}
 
+	
+	private long getCurrentPageNumber(){
+		return (OFFSET+PAGE_SIZE)/PAGE_SIZE;
+	}
+	
+	
+	
 	public int jumpToPage(long pageNumber) {
 		
-		List tempTableData  = new LinkedList<>();
-		
-		tempTableData.addAll(tableData);
-		
-		tableData.clear();
+		Long numberOfRecords = getRowCount();
+		if (numberOfRecords!=null) {
+			long numberOfPages = numberOfRecords/PAGE_SIZE;
+			if((getCurrentPageNumber() ==numberOfPages) && (pageNumber>=numberOfPages)){
+				return ADVConstants.EOF;
+			}
+		}
 		
 		long tempOffset=0;
 		tempOffset = OFFSET;
 		OFFSET = (pageNumber * PAGE_SIZE) - PAGE_SIZE;
 		
-		Long numberOfRecords = getRowCount();
+		
 		if (numberOfRecords!=null) {
 			if(OFFSET>=rowCount){
 				OFFSET = rowCount - PAGE_SIZE;
-				//return ADVConstants.EOF;
 			}
 		}
+		
+		List tempTableData  = new LinkedList<>();		
+		tempTableData.addAll(tableData);		
+		tableData.clear();
 		
 		try {
 			ResultSet results = statement.executeQuery("SELECT * FROM " + tableName
