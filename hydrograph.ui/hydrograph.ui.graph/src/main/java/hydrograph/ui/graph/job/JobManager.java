@@ -96,9 +96,13 @@ public class JobManager {
 	 */
 	private DefaultGEFCanvas getComponentCanvas() {		
 		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
+		{
 			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		}
 		else
+		{
 			return null;
+		}
 	}
 
 	/**
@@ -292,14 +296,15 @@ public class JobManager {
 		
 	    String activeProjectLocation=MultiParameterFileUIUtils.getActiveProjectLocation();
 	 
-		FileInputStream fin;
+		FileInputStream fin=null;
+		ObjectInputStream ois=null;
 		List<ParameterFile> filepathList = new LinkedList<>();
 		
 		updateParameterFileListWithJobSpecificFile(filepathList,activeProjectLocation);
 		
 		try {
 			fin = new FileInputStream(activeProjectLocation + PROJECT_METADATA_FILE);
-			ObjectInputStream ois = new ObjectInputStream(fin);
+			ois = new ObjectInputStream(fin);
 			filepathList.addAll((LinkedList<ParameterFile>)ois.readObject());
 		} catch (FileNotFoundException fileNotfoundException) {
 			logger.debug("Unable to read file" , fileNotfoundException);
@@ -307,6 +312,16 @@ public class JobManager {
 			logger.debug("Unable to read file" , ioException);
 		} catch (ClassNotFoundException classNotFoundException) {
 			logger.debug("Unable to read file" , classNotFoundException);
+		}finally{
+			if(fin!=null || ois!=null)
+			{
+				try {
+					fin.close();
+					ois.close();
+				} catch (IOException e) {
+					logger.debug(e.getMessage());
+				}
+			}
 		}
 	    
 		MultiParameterFileDialog parameterFileDialog = new MultiParameterFileDialog(Display.getDefault().getActiveShell(), activeProjectLocation);
@@ -386,7 +401,9 @@ public class JobManager {
 				jobToKill.setJobStatus(JobStatus.KILLED);
 			}else{
 				if(runningJobsMap.get(jobId) != null)
+				{
 					((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
+				}
 			}
 		}		
 	}

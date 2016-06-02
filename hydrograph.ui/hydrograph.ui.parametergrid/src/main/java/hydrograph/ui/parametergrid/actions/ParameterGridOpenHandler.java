@@ -24,6 +24,7 @@ import hydrograph.ui.parametergrid.constants.MultiParameterFileDialogConstants;
 import hydrograph.ui.parametergrid.dialog.MultiParameterFileDialog;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,10 +60,14 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 	 */
 	private DefaultGEFCanvas getComponentCanvas() {
 		if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
+		{
 			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 					.getActiveEditor();
+		}
 		else
+		{
 			return null;
+		}
 	}
 
 	@Override
@@ -91,7 +96,7 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 	}
 
 	private List<ParameterFile> getParameterFileList(String activeProjectLocation) {
-		FileInputStream fileInputStream;
+		FileInputStream fileInputStream = null;
 		List<ParameterFile> parameterFileList = new LinkedList<>();
 
 		updateParameterFileListWithJobSpecificFile(parameterFileList,activeProjectLocation);
@@ -102,6 +107,14 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 			parameterFileList.addAll((LinkedList<ParameterFile>) objectInputStream.readObject());
 		} catch (Exception exception) {
 			logger.debug("Unable to read project.metadata file, this might be a new project", exception);
+		}finally{
+			if(fileInputStream!=null){
+			try {
+				fileInputStream.close();
+			} catch (IOException e) {
+				logger.debug(e.getMessage());
+			}
+			}
 		}
 		return parameterFileList;
 	}

@@ -39,9 +39,10 @@ public class ViewDataServiceInitiator {
 	
 	public static void startService(){
 	
+		ServerSocket serverSocket=null;
 		try{
 			int portNumber = Integer.parseInt(DebugHelper.INSTANCE.restServicePort());
-			ServerSocket serverSocket = new ServerSocket(portNumber, 1, InetAddress.getLocalHost());
+			serverSocket = new ServerSocket(portNumber, 1, InetAddress.getLocalHost());
 			if(!serverSocket.isClosed()){
 				startServer();
 			}
@@ -54,6 +55,15 @@ public class ViewDataServiceInitiator {
 			logger.error("Host is not known", unknownHostException);
 		} catch (IOException ioException) {
 			logger.error("Failure in IO", ioException);
+		}finally{
+			if(serverSocket!=null)
+			{
+				try {
+					serverSocket.close();
+				} catch (IOException e) {
+					logger.debug(e.getMessage());
+				}
+			}
 		}
 	}
 

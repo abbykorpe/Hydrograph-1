@@ -582,7 +582,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		Map<String, PaletteDrawer> categoryPaletteConatiner = new HashMap<>();
 		for (CategoryType category : CategoryType.values()) {
 			if(category.name().equalsIgnoreCase(Constants.DUMMY_COMPONENT_CATEGORY))
+			{
 				continue;
+			}
 			PaletteDrawer p = createPaletteContainer(category.name());
 			addContainerToPalette(palette, p);
 			categoryPaletteConatiner.put(category.name(), p);
@@ -795,7 +797,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void setDirty(boolean dirty){
 		this.dirty = dirty;
 		if (dirty)
+		{
 			setMainGraphDirty(dirty);
+		}
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
@@ -851,7 +855,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 		//get map from file
 		Map<String,String> currentParameterMap = getCurrentParameterMap();
-		if(currentParameterMap == null) return;
+		if(currentParameterMap == null)
+			{
+			return;
+			}
 		List<String> letestParameterList = getLatestParameterList();
 
 		Map<String,String> newParameterMap = new LinkedHashMap<>();
@@ -956,7 +963,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		String fileName = getParameterFile();
 		if(StringUtils.isNotBlank(fileName)){
 			parameterFile = new File(fileName);
-		}else return null;
+		}else
+			{
+			return null;
+			}
 		if(!parameterFile.exists()){
 			try {
 				parameterFile.createNewFile();
@@ -1226,15 +1236,17 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			serverSocket = new ServerSocket(Integer.parseInt(DebugHelper.INSTANCE.restServicePort()));
 		} catch (IOException e) {
 			logger.error(e.getMessage());
+		}finally{
 			try {
 				if(serverSocket!=null)
 				serverSocket.close();
 				logger.info("Socket closed @"+DebugHelper.INSTANCE.restServicePort());
-			} catch (IOException e1) {
-				logger.error(e.getMessage());
+			} catch (IOException e) {
+				logger.debug(e.getMessage());
 			}
 		}
 	}
+	
 	
 	private void deleteDebugFiles() {
 		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");

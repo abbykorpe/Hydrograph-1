@@ -147,19 +147,32 @@ public class FilterOperationClassUtility  {
 			java.nio.file.Path path =Paths.get(filePath); 
 			String classFile=path.getFileName().toString();
 			String name = "";
+			BufferedReader br=null;
 			try { 
-				BufferedReader r = new BufferedReader(new FileReader(filePath));
-				String firstLine= r.readLine();
+				br = new BufferedReader(new FileReader(filePath));
+				String firstLine= br.readLine();
 				if(firstLine.contains(Constants.PACKAGE)){
 					name= firstLine.replaceFirst(Constants.PACKAGE, "").replace(";", "");
 					if(!name.equalsIgnoreCase(""))
+					{
 						name=name+"."+classFile.substring(0, classFile.lastIndexOf('.'));
+					}
 					
 				}else
+				{
 					name=classFile.substring(0, classFile.lastIndexOf('.'));
+				}
 				
 			} catch (IOException e) { 
 				logger.debug("Unable to read file " + filePath,e );
+			}finally{
+				if(br!=null){
+					try {
+						br.close();
+					} catch (IOException e) {
+						logger.debug(e.getMessage() );   
+					}
+				}
 			}
 			fileName.setText(name.trim());
 			filePath = resource.getRawLocation().toOSString();
@@ -198,7 +211,9 @@ public class FilterOperationClassUtility  {
 				fileFullPath = file.getRawLocation().toOSString();
 			}
 			else
+			{
 				fileFullPath=fileName;
+			}
 			File fileToEditor = new File(fileFullPath);
 			if (fileToEditor.exists()) {
 				IFileStore fileStore = EFS.getLocalFileSystem().getStore(

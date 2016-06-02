@@ -231,14 +231,24 @@ public class UiConverterUtil {
 
 	private StringBuilder readFileContentInString(File inputFile) {
 		StringBuilder inputStringBuilder = new StringBuilder();
+		BufferedReader br=null;
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(inputFile));
+			br= new BufferedReader(new FileReader(inputFile));
 			String sCurrentLine = null;
 			while ((sCurrentLine = br.readLine()) != null) {
 				inputStringBuilder.append(sCurrentLine);
 			}
 		} catch (IOException e) {
 			LOGGER.error("Failed to read the xml file", e);
+		}finally{
+			if(br!=null)
+			{
+				try {
+					br.close();
+				} catch (IOException e) {
+					LOGGER.debug(e.getMessage());
+				}
+			}
 		}
 		return inputStringBuilder;
 	}
@@ -259,9 +269,13 @@ public class UiConverterUtil {
 				
 				if (isMultiplePortAllowed) {
 					if (linkingData.getSourceTerminal().contains("out"))
+					{
 						linkingData.setSourceTerminal(FIXED_OUTPUT_PORT);
+					}
 					else if (linkingData.getSourceTerminal().contains("unused"))
+					{
 						linkingData.setSourceTerminal(FIXED_UNUSED_PORT);
+					}
 				}
 			}
 		}
