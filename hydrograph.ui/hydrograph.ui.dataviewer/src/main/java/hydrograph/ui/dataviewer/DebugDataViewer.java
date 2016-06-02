@@ -22,6 +22,7 @@ import hydrograph.ui.dataviewer.constants.PreferenceConstants;
 import hydrograph.ui.dataviewer.datastructures.ColumnData;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -239,6 +240,9 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 		
 		setDefaultStatusMessage();
+		
+		java.util.Date date = new java.util.Date();
+		System.out.println("+++ ADV End: " + new Timestamp(date.getTime()));
 		return container;
 	}
 

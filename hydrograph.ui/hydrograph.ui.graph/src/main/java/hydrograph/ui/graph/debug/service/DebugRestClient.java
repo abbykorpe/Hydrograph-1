@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Timestamp;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -41,6 +42,39 @@ public class DebugRestClient {
 	
 	public DebugRestClient() {
 		 
+	}
+	
+	
+	public String calltoReadService(String ipAddress, String portNumber, String basePath, String jobId, String componentId, String socketId, String userId, String password,String FILE_SIZE_TO_READ) throws  IOException {
+
+		HttpClient httpClient = new HttpClient();
+
+		PostMethod postMethod = new PostMethod("http://" + ipAddress + ":"
+				+ portNumber + "/read");
+		postMethod.addParameter("jobId", jobId);
+		postMethod.addParameter("componentId", componentId);
+		postMethod.addParameter("socketId", socketId);
+		postMethod.addParameter("basePath", basePath);
+		postMethod.addParameter("userId", userId);
+		postMethod.addParameter("password", password);
+		postMethod.addParameter("file_size", FILE_SIZE_TO_READ);
+		postMethod.addParameter("host_name", ipAddress);
+
+		java.util.Date date = new java.util.Date();
+		System.out.println("+++ Start: " + new Timestamp(date.getTime()));
+
+		int response = httpClient.executeMethod(postMethod);
+		System.out.println("response: " + response);
+		InputStream inputStream = postMethod.getResponseBodyAsStream();
+
+		byte[] buffer = new byte[1024 * 1024 * 5];
+		String path = null;
+		int length;
+		while ((length = inputStream.read(buffer)) > 0) {
+			path = new String(buffer);
+		}
+		System.out.println("response of service: "+path);
+		return path;
 	}
 	
 	/**
