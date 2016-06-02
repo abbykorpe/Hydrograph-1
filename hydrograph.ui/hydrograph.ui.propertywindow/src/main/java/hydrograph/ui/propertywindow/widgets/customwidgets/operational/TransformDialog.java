@@ -402,12 +402,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		addLabel.setToolTipText(Messages.ADD_OPERATION_CONTROL);
 		
 		addLabel.addMouseListener(new MouseAdapter() {
-		
 			@Override
 			public void mouseUp(MouseEvent e) {
-				if(Constants.NORMALIZE.equalsIgnoreCase(component.getComponentName()))
-					addLabel.setEnabled(false);
-			
 				addOperations();
 			}
 		});
@@ -425,7 +421,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 				} else {
 					OperationClassDeleteDialog operationClassDeleteDialog = new OperationClassDeleteDialog(deleteLabel
-							.getShell(), transformMapping.getMappingSheetRows(), expandBar,addLabel);
+							.getShell(), transformMapping.getMappingSheetRows(), expandBar);
 					operationClassDeleteDialog.open();
 					refreshOutputTable();
 					showHideValidationMessage();
@@ -443,10 +439,16 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			for (MappingSheetRow mappingSheetRow : transformMapping.getMappingSheetRows()) {
 				addExpandItem(scrolledComposite, mappingSheetRow, mappingSheetRow.getOperationID());
 				setDuplicateOperationInputFieldMap(mappingSheetRow);
-				if(Constants.NORMALIZE.equalsIgnoreCase(component.getComponentName()))
-					addLabel.setEnabled(false);
+				 if(Constants.NORMALIZE.equalsIgnoreCase(component.getComponentName())){
+						addLabel.setEnabled(false);
+						deleteLabel.setEnabled(false);
+					}	
 			}
 
+		}else if(Constants.NORMALIZE.equalsIgnoreCase(component.getComponentName())){
+			addOperations();
+			addLabel.setEnabled(false);
+			deleteLabel.setEnabled(false);
 		}
 		createMapAndPassthroughTable(middleSashForm);
 		middleSashForm.setWeights(new int[] {56, 54, 23});

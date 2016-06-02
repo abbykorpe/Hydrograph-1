@@ -22,17 +22,16 @@ import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
 
 public class OperationClassDeleteDialog extends Dialog {
 
@@ -43,18 +42,16 @@ public class OperationClassDeleteDialog extends Dialog {
 	List<String> checkedElements = new ArrayList<>();
 	private ExpandBar expandBar;
 	private CheckboxTableViewer checkboxTableViewer;
-	private Label addLabel;
 
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param parentShell
 	 */
-	public OperationClassDeleteDialog(Shell parentShell, List<MappingSheetRow> mappingSheetRowList, ExpandBar expandBar,Label addLabel) {
+	public OperationClassDeleteDialog(Shell parentShell, List<MappingSheetRow> mappingSheetRowList, ExpandBar expandBar) {
 		super(parentShell);
 		this.mappingSheetRowList = mappingSheetRowList;
 		this.expandBar = expandBar;
-		this.addLabel=addLabel;
 	}
 
 	/**
@@ -117,7 +114,6 @@ public class OperationClassDeleteDialog extends Dialog {
 							break;
 						}
 					}
-					addLabel.setEnabled(true);
 					expandItem.dispose();
 
 					break;
