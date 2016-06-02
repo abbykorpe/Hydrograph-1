@@ -1496,11 +1496,12 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	}
 	
 	private void addOperations() {
-		if (expandBar.getItemCount() > 1)
+		if (expandBar.getItemCount() > 1){
 			for (ExpandItem expandItem : expandBar.getItems()) {
 				expandItem.setExpanded(false);
 
 			}
+		}
 
 		List<FilterProperties> inputFieldList = new ArrayList<>();
 		List<FilterProperties> outputList = new ArrayList<>();
