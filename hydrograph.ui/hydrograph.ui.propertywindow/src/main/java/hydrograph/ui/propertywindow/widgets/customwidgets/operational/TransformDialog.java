@@ -376,9 +376,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		middleSashForm = new SashForm(middleComposite, SWT.SMOOTH|SWT.VERTICAL|SWT.BORDER);
 		middleSashForm.setSashWidth(1);
 		middleSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0));
-		
-
-		
 
 		scrolledComposite = new ScrolledComposite(middleSashForm, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLUE));
@@ -400,42 +397,14 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		expandBar.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
 
 		
-		Label addLabel = widget.labelWidget(topAddButtonComposite, SWT.CENTER, new int[] { 184, 10, 20, 15 }, "",
+		final Label addLabel = widget.labelWidget(topAddButtonComposite, SWT.CENTER, new int[] { 184, 10, 20, 15 }, "",
 				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
 		addLabel.setToolTipText(Messages.ADD_OPERATION_CONTROL);
+		
 		addLabel.addMouseListener(new MouseAdapter() {
-
 			@Override
 			public void mouseUp(MouseEvent e) {
-				if (expandBar.getItemCount() > 1)
-					for (ExpandItem expandItem : expandBar.getItems()) {
-						expandItem.setExpanded(false);
-
-					}
-
-				List<FilterProperties> inputFieldList = new ArrayList<>();
-				List<FilterProperties> outputList = new ArrayList<>();
-				List<NameValueProperty> nameValueProperty = new ArrayList<>();
-				int n = transformMapping.getMappingSheetRows().size() + 1;
-				String operationID = Messages.OPERATION_ID_PREFIX + n;
-				
-				for(int i=0;i<expandBar.getItemCount();i++)
-				{
-					Text text= (Text) expandBar.getItems()[i].getData();
-					if(StringUtils.equalsIgnoreCase(operationID, text.getText()))
-					{
-						 n++;
-						 operationID = Messages.OPERATION_ID_PREFIX + n;
-						 i=-1;
-					}
-				}	
-              
-				mappingSheetRow = new MappingSheetRow(inputFieldList, outputList, operationID, Messages.CUSTOM, "",
-						nameValueProperty, false, "", false, "");
-
-				transformMapping.getMappingSheetRows().add(mappingSheetRow);
-
-				addExpandItem(scrolledComposite, mappingSheetRow, operationID);
+				addOperations();
 			}
 		});
 
@@ -446,6 +415,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
+				
 				if (transformMapping.getMappingSheetRows().isEmpty()) {
 					WidgetUtility.errorMessage(Messages.OPERATION_LIST_EMPTY);
 
@@ -464,12 +434,21 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		lblOperationsControl.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
 		lblOperationsControl.setBounds(50, 10, 129, 28);
 		lblOperationsControl.setText(Messages.OPERATION_CONTROL);
+
 		if (!transformMapping.getMappingSheetRows().isEmpty()) {
 			for (MappingSheetRow mappingSheetRow : transformMapping.getMappingSheetRows()) {
 				addExpandItem(scrolledComposite, mappingSheetRow, mappingSheetRow.getOperationID());
 				setDuplicateOperationInputFieldMap(mappingSheetRow);
+				 if(Constants.NORMALIZE.equalsIgnoreCase(component.getComponentName())){
+						addLabel.setEnabled(false);
+						deleteLabel.setEnabled(false);
+					}	
 			}
 
+		}else if(Constants.NORMALIZE.equalsIgnoreCase(component.getComponentName())){
+			addOperations();
+			addLabel.setEnabled(false);
+			deleteLabel.setEnabled(false);
 		}
 		createMapAndPassthroughTable(middleSashForm);
 		middleSashForm.setWeights(new int[] {56, 54, 23});
@@ -994,6 +973,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		});
 
+		
 		Label deleteLabel = widget.labelWidget(operationalOutputFieldComposite, SWT.CENTER,
 				new int[] { 90, 3, 20, 15 }, "",
 				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
@@ -1513,5 +1493,38 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				outputFileds.add(filterProperty);
 			}
 		return outputFileds;
+	}
+	
+	private void addOperations() {
+		if (expandBar.getItemCount() > 1){
+			for (ExpandItem expandItem : expandBar.getItems()) {
+				expandItem.setExpanded(false);
+
+			}
+		}
+
+		List<FilterProperties> inputFieldList = new ArrayList<>();
+		List<FilterProperties> outputList = new ArrayList<>();
+		List<NameValueProperty> nameValueProperty = new ArrayList<>();
+		int n = transformMapping.getMappingSheetRows().size() + 1;
+		String operationID = Messages.OPERATION_ID_PREFIX + n;
+		
+		for(int i=0;i<expandBar.getItemCount();i++)
+		{
+			Text text= (Text) expandBar.getItems()[i].getData();
+			if(StringUtils.equalsIgnoreCase(operationID, text.getText()))
+			{
+				 n++;
+				 operationID = Messages.OPERATION_ID_PREFIX + n;
+				 i=-1;
+			}
+		}	
+      
+		mappingSheetRow = new MappingSheetRow(inputFieldList, outputList, operationID, Messages.CUSTOM, "",
+				nameValueProperty, false, "", false, "");
+
+		transformMapping.getMappingSheetRows().add(mappingSheetRow);
+
+		addExpandItem(scrolledComposite, mappingSheetRow, operationID);
 	}
 }
