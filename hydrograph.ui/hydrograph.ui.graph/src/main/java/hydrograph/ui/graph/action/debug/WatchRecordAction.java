@@ -14,11 +14,15 @@
 package hydrograph.ui.graph.action.debug;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.dataviewer.DebugDataViewer;
+import hydrograph.ui.dataviewer.ReloadInformation;
+import hydrograph.ui.dataviewer.datastructures.StatusMessage;
+import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
-import hydrograph.ui.graph.debug.service.DebugDataWizard;
 import hydrograph.ui.graph.debug.service.DebugRestClient;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
@@ -29,14 +33,28 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -47,8 +65,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.slf4j.Logger;
  
 /**
@@ -59,8 +75,9 @@ import org.slf4j.Logger;
 public class WatchRecordAction extends SelectionAction {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(WatchRecordAction.class);
 	private boolean isWatcher;
-	private WatchRecordInner watchRecordInner = new WatchRecordInner();
-	 
+	WatchRecordInner watchRecordInner = new WatchRecordInner();
+	
+	private HashMap<String,DebugDataViewer> dataViewerMap;
 	
 	public WatchRecordAction(IWorkbenchPart part) {
 		super(part);
@@ -74,6 +91,8 @@ public class WatchRecordAction extends SelectionAction {
 		setText(Messages.WATCH_RECORD_TEXT);
 		setId(Constants.WATCH_RECORD_ID);
 		setEnabled(true);
+		dataViewerMap = new LinkedHashMap<>();
+		JobManager.INSTANCE.setDataViewerMap(dataViewerMap);
 	}
 	
 	private boolean createWatchCommand(List<Object> selectedObjects) throws CoreException  {
@@ -131,9 +150,38 @@ public class WatchRecordAction extends SelectionAction {
 		return false;
 	}
 	
-
-	private void readViewDataInRemoteMode() {
-		JSONArray jsonArray = null;
+	
+	private String getLocalADVData() {
+		String basePath = null,ipAddress = null,userID = null,password = null,port_no = null;
+		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
+		if(job!=null){
+			basePath = job.getBasePath();
+			ipAddress = "localhost";
+			userID = job.getUserId();
+			password = job.getPassword();
+			port_no = DebugHelper.INSTANCE.restServicePort();
+		}
+		
+		
+		DebugRestClient debugRestClient = new DebugRestClient();
+		try {
+			
+			 String remoteFilePath = debugRestClient.calltoReadService(ipAddress, port_no,
+			 basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(),
+			 watchRecordInner.getSocketId(), "userID", "password", Utils.getFileSize());
+			 return remoteFilePath;
+		} catch (IOException exception) {
+			logger.error("Connection failed", exception);
+			messageDialog(Messages.REMOTE_MODE_TEXT);
+			return null;
+		} catch (Exception exception) {
+			logger.error("Exception while calling rest service: ", exception);
+			messageDialog(Messages.REMOTE_MODE_TEXT);
+			return null;
+		}
+	}
+		
+	private String getRemoteADVData() {
 		String basePath = null,ipAddress = null,userID = null,password = null,port_no = null;
 		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
 		if(job!=null){
@@ -143,71 +191,27 @@ public class WatchRecordAction extends SelectionAction {
 			password = job.getPassword();
 			port_no = job.getPortNumber();
 		}
-		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
+		
 		logger.info("Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}",
 				new Object[] { basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId() });
 		DebugRestClient debugRestClient = new DebugRestClient();
-			try {
-				jsonArray = debugRestClient.callRestService(ipAddress, port_no, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password);
-			} catch (IOException exception) {
-				logger.error("Connection failed", exception);
-				messageDialog(Messages.REMOTE_MODE_TEXT);
-				return;
-			}catch(JSONException exception){
-				logger.error("Service failed to response in JSON format", exception);
-				messageDialog(Messages.REMOTE_MODE_TEXT);
-				return;
-			}
-		
-		if(jsonArray == null || jsonArray.length() == 0){
+		try {
+			
+			 String remoteFilePath = debugRestClient.calltoReadService(ipAddress, port_no,
+			 basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(),
+			 watchRecordInner.getSocketId(), userID, password, Utils.getFileSize());
+			 return remoteFilePath;
+		} catch (IOException exception) {
+			logger.error("Connection failed", exception);
 			messageDialog(Messages.REMOTE_MODE_TEXT);
-		}else{
-			DebugDataWizard debugRemoteWizard = new DebugDataWizard(Display.getDefault().getActiveShell(), jsonArray, false);
-			debugRemoteWizard.open();
+			return null;
+		} catch (Exception exception) {
+			logger.error("Exception while calling rest service: ", exception);
+			messageDialog(Messages.REMOTE_MODE_TEXT);
+			return null;
 		}
 	}
-	
-	private void readViewDataInLocalMode()   {
-		JSONArray jsonArray = null;
-		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
-		if(job == null){
-			messageDialog(Messages.REMOTE_MODE_TEXT);
-			return;
-		}
-		String basePath = job.getBasePath();
-		String ipAddress = "localhost";//job.getIpAddress();
-		String userID = job.getUserId();
-		String password = job.getPassword();
-		String port = DebugHelper.INSTANCE.restServicePort();
-		
-		logger.debug("BasePath :{}", basePath);
-		logger.debug("jobid: {}", watchRecordInner.getUniqueJobId());
-		logger.debug("componetid: {} :{}", watchRecordInner.getComponentId());
-		logger.debug("socketid :{}", watchRecordInner.getSocketId());
-		
-		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
-		DebugRestClient debugRestClient = new DebugRestClient();
-			try {
-				jsonArray = debugRestClient.callRestService(ipAddress, port, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), "userid", "password");
-			} catch (IOException exception) {
-				logger.error("Connection failed", exception);
-				messageDialog(Messages.REMOTE_MODE_TEXT);
-				return;
-			}catch(JSONException exception){
-				logger.error("Service failed to response in JSON format", exception);
-				messageDialog(Messages.REMOTE_MODE_TEXT);
-				return;
-			}
-		
-		if(jsonArray == null || jsonArray.length() == 0){
-			messageDialog(Messages.REMOTE_MODE_TEXT);
-		}else{
-			DebugDataWizard debugRemoteWizard = new DebugDataWizard(Display.getDefault().getActiveShell(), jsonArray, false);
-			debugRemoteWizard.open();
-		}
-	}
-	
-	
+
 	private boolean isLocalDebugMode(){
 		logger.debug("getRunningMode: "+ JobManager.INSTANCE.isLocalMode());
 		return JobManager.INSTANCE.isLocalMode();
@@ -246,31 +250,174 @@ public class WatchRecordAction extends SelectionAction {
 		}
 	}
 	
+	public static String getActiveProjectLocation() {
+		IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActivePart();
+		IFile file = (IFile) workbenchPart.getSite().getPage().getActiveEditor().getEditorInput()
+				.getAdapter(IFile.class);
+		IProject project = file.getProject();
+		String activeProjectLocation = project.getLocation().toOSString();
+		return activeProjectLocation;
+	}
 	
 	
+	private void deleteDownloadedViewDataFile(Job job) {
+
+		try{
+			HttpClient httpClient = new HttpClient();
+
+			String host=job.getIpAddress();
+			String port;
+			if(isLocalDebugMode()){
+				System.out.println("Yes");
+				host="localhost";
+			}
+						
+			
+			PostMethod postMethod = new PostMethod("http://" + host + ":" + job.getPortNumber() + "/deleteLocalDebugFile");
+			postMethod.addParameter("jobId", watchRecordInner.getUniqueJobId());
+			postMethod.addParameter("componentId", watchRecordInner.getComponentId());
+			postMethod.addParameter("socketId", watchRecordInner.getSocketId());
+
+			int response = httpClient.executeMethod(postMethod);
+			System.out.println("response: " + response);
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+	}
 	
 	@Override
 	public void run() {
-		super.run();
 		
-		 try {
+		final ReloadInformation reloadInformation = new ReloadInformation();
+		
+		String tempCopyPath = Utils.getDebugPath();
+		tempCopyPath=tempCopyPath.trim();
+		
+		
+		if(OSValidator.isWindows()){
+			if(tempCopyPath.startsWith("/")){
+				tempCopyPath = tempCopyPath.replaceFirst("/", "").replace("/", "\\");
+			}			 
+		}
+		
+		try {
 			createWatchCommand(getSelectedObjects());
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-		 
-		 if(!isWatcher){
-			 messageDialog(Messages.MESSAGES_BEFORE_CLOSE_WINDOW);
-		 }else{
-			 if(isLocalDebugMode()){
-					readViewDataInLocalMode();
-			 }else{
-					readViewDataInRemoteMode();
-			 }
-		 }
+		
+		
+		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
+		
+		if(job==null){
+			messageDialog("Looks like you forgot to run the job");
+			return;
+		}
+		
+		
+		String windowName = job.getUniqueJobId() + "_" + watchRecordInner.getComponentId() + "_"
+				+ watchRecordInner.getSocketId();
+		if (dataViewerMap.keySet().contains(windowName)) {
+			dataViewerMap.get(windowName).getShell().setActive();
+			return;
+		}
+		
+		String watchFile = null;
+		String watchFileName = null;
+		if (!isWatcher) {
+			messageDialog(Messages.MESSAGES_BEFORE_CLOSE_WINDOW);
+		} else {
+			if (isLocalDebugMode()) {
+				watchFile = getLocalADVData();
+
+				watchFileName = watchFile.substring(watchFile.lastIndexOf("/") + 1, watchFile.length()).replace(".csv", "");
+				try {
+					String destinationFile;
+					if(OSValidator.isWindows()){
+						destinationFile = (tempCopyPath + "\\" + watchFileName.trim() + ".csv").trim();
+					}else{
+						destinationFile = (tempCopyPath + "/" + watchFileName.trim() + ".csv").trim();
+					}
+					
+					String sourceFile = watchFile.trim();
+					
+					File file = new File(destinationFile);
+					if(!file.exists()) { 
+						Files.copy(Paths.get(sourceFile), Paths.get(destinationFile), StandardCopyOption.REPLACE_EXISTING);
+						deleteDownloadedViewDataFile(job);
+					}
+				} catch (IOException e) {
+					messageDialog("Unable to fetach debug file");
+					logger.debug("Unable to fetach debug file",e);
+					return;
+				}
+
+			} else {
+				watchFile = getRemoteADVData();
+				watchFileName = watchFile.substring(watchFile.lastIndexOf("/") + 1, watchFile.length()).replace(".csv", "");
+
+				String destinationFile;
+				if(OSValidator.isWindows()){
+					destinationFile = (tempCopyPath + "\\" + watchFileName.trim() + ".csv").trim();
+				}else{
+					destinationFile = (tempCopyPath + "/" + watchFileName.trim() + ".csv").trim();
+				}
+				File file = new File(destinationFile);
+				if(!file.exists()) { 
+					ScpFrom scpFrom = new ScpFrom();
+					scpFrom.scpFileFromRemoteServer(job.getIpAddress(), job.getUsername(), job.getPassword(), watchFile.trim(),
+							tempCopyPath);
+					deleteDownloadedViewDataFile(job);
+				}
+			}
+		}
+		
+		
+		final String dataViewerFilePath= tempCopyPath.trim();
+		final String dataViewerFileh= watchFileName.trim();
+		final String dataViewerWindowName = windowName;
+		
+		
+		reloadInformation.setComponentID(watchRecordInner.getComponentId());
+		reloadInformation.setComponentSocketID(watchRecordInner.getSocketId());
+		reloadInformation.setUniqueJobID(watchRecordInner.getUniqueJobId());
+		if (isLocalDebugMode()) {
+			reloadInformation.setHost("localhost");
+			reloadInformation.setIsLocalJob(true);
+		}else{
+			reloadInformation.setHost(job.getHost());
+			reloadInformation.setIsLocalJob(false);
+		}
+		reloadInformation.setPassword(job.getPassword());
+		reloadInformation.setUsername(job.getUserId());		
+		reloadInformation.setBasepath(job.getBasePath());
+		reloadInformation.setPort(job.getPortNumber());
+		
+		Display.getDefault().asyncExec(new Runnable() {
+		      @Override
+		      public void run() {
+		    	  try {
+
+		  			DebugDataViewer window = new DebugDataViewer(dataViewerFilePath, dataViewerFileh, dataViewerWindowName,reloadInformation);
+		  			window.setBlockOnOpen(true);
+		  			dataViewerMap.put(dataViewerWindowName, window);
+		  			
+		  			window.open();
+		  		} catch (Exception e) {
+		  			logger.debug("Unable to open debug window",e);
+		  			messageDialog("Unable to open debug window");
+		  		}
+		  		dataViewerMap.remove(dataViewerWindowName);
+		      }
+		    });
+		
+		dataViewerMap.get(dataViewerWindowName).getShell().setActive();
+		
 	}
 }
-
 
 class WatchRecordInner{
 	private String componentId;

@@ -18,9 +18,9 @@ import hydrograph.ui.dataviewer.actions.UnformattedViewAction;
 import hydrograph.ui.dataviewer.actions.ViewDataGridMenuCreator;
 import hydrograph.ui.dataviewer.adapters.CSVAdapter;
 import hydrograph.ui.dataviewer.constants.ADVConstants;
+import hydrograph.ui.dataviewer.constants.PreferenceConstants;
 import hydrograph.ui.dataviewer.datastructures.ColumnData;
 import hydrograph.ui.dataviewer.datastructures.RowData;
-import hydrograph.ui.dataviewer.datastructures.Schema;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +36,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -103,7 +104,9 @@ public class DebugDataViewer extends ApplicationWindow {
 	private static String FORMATTED_VIEW_NAME="FORMATTED_VIEW";
 	private static String UNFORMATTED_VIEW_NAME="UNFORMATTED_VIEW";
 	
-	
+	private String database;
+	private String tableName;
+	private IPreferenceStore iPreferenceStore;
 	
 	/**
 	 * Create the application window,
@@ -118,6 +121,34 @@ public class DebugDataViewer extends ApplicationWindow {
 		gridViewData = new LinkedList<>();
 	}
 
+	
+	/**
+	 * Create the application window,
+	 */
+	public DebugDataViewer(String filePath,String fileName) {
+		super(null);
+		createActions();
+		addCoolBar(SWT.FLAT);
+		addMenuBar();
+		addStatusLine();
+		windowControls = new LinkedList<>();
+		gridViewData = new LinkedList<>();
+		this.database = filePath;
+		this.tableName = fileName;
+	}
+	
+	public DebugDataViewer(IPreferenceStore iPreferenceStore, String fileName) {
+		super(null);
+		createActions();
+		addCoolBar(SWT.FLAT);
+		addMenuBar();
+		addStatusLine();
+		windowControls = new LinkedList<>();
+		gridViewData = new LinkedList<>();
+		//this.database = filePath;
+		this.iPreferenceStore = iPreferenceStore;
+		this.tableName = fileName;
+	}
 	
 	/*private void populateSchemaList() {
 		tableSchema.add(new Schema("f_string","java.lang.String", null));
@@ -154,15 +185,20 @@ public class DebugDataViewer extends ApplicationWindow {
 		tableSchema.add(new Schema("f_bigDecimal1","java.math.BigDecimal", null));
 	}*/
 	
+	
+
+
 	/**
 	 * Create contents of the application window.
 	 * @param parent
 	 */
 	@Override
 	protected Control createContents(Composite parent) {
-		//populateSchemaList();
-		csvAdapter = new CSVAdapter("C:\\Users\\shrirangk\\Desktop\\DataViewerPOC", "Generated_Records", 200, 0,this);
 		
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		
+		csvAdapter = new CSVAdapter(preferenceStore.getString(PreferenceConstants.TEMPPATH), tableName,Integer.valueOf(preferenceStore.getString(PreferenceConstants.RECORDSLIMIT)), 0,this);
+				
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		{
@@ -827,7 +863,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		menuManager.add(fileMenu);
 		fileMenu.setVisible(true);
 
-		fileMenu.add(new ExportAction("Export"));
+		fileMenu.add(new ExportAction("Export",this));
 		fileMenu.add(new FilterAction("Filter"));
 		fileMenu.add(new GoAction("Go"));
 		fileMenu.add(new StopAction("Stop"));
@@ -864,7 +900,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		ToolBarManager toolBarManager = new ToolBarManager();
 		coolBarManager.add(toolBarManager);
 		Action action;
-		action = new ExportAction("Export");
+		action = new ExportAction("Export",this);
 		addtoolbarAction(
 				toolBarManager,
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/export.png"),
@@ -1012,5 +1048,10 @@ public class DebugDataViewer extends ApplicationWindow {
 				installMouseWheelScrollRecursively(scroller, child);
 			}
 		}
+	}
+
+
+	public TableViewer getTableViewer() {
+		return gridViewUIContainer;
 	}
 }
