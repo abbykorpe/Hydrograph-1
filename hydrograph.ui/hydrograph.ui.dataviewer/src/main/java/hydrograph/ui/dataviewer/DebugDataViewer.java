@@ -83,10 +83,11 @@ public class DebugDataViewer extends ApplicationWindow {
 	
 	
 	private CSVAdapter csvAdapter;
-	private List<Schema> tableSchema = new LinkedList<>();
+	//private List<Schema> tableSchema = new LinkedList<>();
 		
 	private List<Control> windowControls;
 	
+	private List<String> columnList;
 	
 	private static List<RowData> gridViewData;
 	private static List<RowData> formattedViewData;
@@ -118,7 +119,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 	
-	private void populateSchemaList() {
+	/*private void populateSchemaList() {
 		tableSchema.add(new Schema("f_string","java.lang.String", null));
 		tableSchema.add(new Schema("f_string1","java.lang.String", null));
 		tableSchema.add(new Schema("f_int","java.lang.Integer", null));
@@ -151,7 +152,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		tableSchema.add(new Schema("f_date51","java.util.Date", "yyyy-MM-dd hh:mm:ss"));
 		tableSchema.add(new Schema("f_date61","java.util.Date", "ddMMyy"));
 		tableSchema.add(new Schema("f_bigDecimal1","java.math.BigDecimal", null));
-	}
+	}*/
 	
 	/**
 	 * Create contents of the application window.
@@ -159,8 +160,8 @@ public class DebugDataViewer extends ApplicationWindow {
 	 */
 	@Override
 	protected Control createContents(Composite parent) {
-		populateSchemaList();
-		csvAdapter = new CSVAdapter("C:\\Users\\shrirangk\\Desktop\\DataViewerPOC", "Generated_Records", tableSchema, 200, 0,this);
+		//populateSchemaList();
+		csvAdapter = new CSVAdapter("C:\\Users\\shrirangk\\Desktop\\DataViewerPOC", "Generated_Records", 200, 0,this);
 		
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
@@ -192,7 +193,7 @@ public class DebugDataViewer extends ApplicationWindow {
 				
 				@Override
 				public void widgetDefaultSelected(SelectionEvent e) {
-					// TODO Auto-generated method stub
+					// DO Nothing
 					
 				}
 			});
@@ -534,9 +535,9 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		int lenght=0;
 		
-		for(Schema schema: tableSchema){
-			if(schema.getColumnName().length() > lenght){
-				lenght = schema.getColumnName().length();
+		for(String columnName: csvAdapter.getColumnList()){
+			if(columnName.length() > lenght){
+				lenght = columnName.length();
 			}
 		}
 		
@@ -559,9 +560,9 @@ public class DebugDataViewer extends ApplicationWindow {
 			
 			stringBuilder.append("{\n");
 			int columnIndex=0;
-			for(Schema schema: tableSchema){
+			for(String columnName: csvAdapter.getColumnList()){
 				ColumnData columnData = rowData.getColumns().get(columnIndex);
-				String tempString = String.format(format, schema.getColumnName(),columnData.getValue());
+				String tempString = String.format(format, columnName,columnData.getValue());
 				stringBuilder.append(tempString);
 				columnIndex++;
 			}
@@ -600,8 +601,13 @@ public class DebugDataViewer extends ApplicationWindow {
 				scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 				scrolledComposite.setExpandHorizontal(true);
 				scrolledComposite.setExpandVertical(true);
+				
+				Composite stackLayoutComposite = new Composite(scrolledComposite, SWT.NONE);
+				StackLayout stackLayout  = new StackLayout();
+				stackLayoutComposite.setLayout(stackLayout);
+				
 				{
-					composite_4 = new Composite(scrolledComposite, SWT.NONE);
+					composite_4 = new Composite(stackLayoutComposite, SWT.NONE);
 					GridLayout gl_composite_4 = new GridLayout(1, false);
 					gl_composite_4.verticalSpacing = 0;
 					gl_composite_4.marginWidth = 0;
@@ -611,14 +617,46 @@ public class DebugDataViewer extends ApplicationWindow {
 					{
 						horizontalViewUIContainer = new TableViewer(composite_4, SWT.BORDER | SWT.FULL_SELECTION);
 						Table table_1 = horizontalViewUIContainer.getTable();
+						table_1.setLinesVisible(true);
 						table_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 					}
+					stackLayout.topControl = composite_1;
 				}
-				scrolledComposite.setContent(composite_4);
-				scrolledComposite.setMinSize(composite_4.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+				//scrolledComposite.setContent(composite_4);
+				//scrolledComposite.setMinSize(composite_4.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+				
+				scrolledComposite.getShowFocusedControl();
+				scrolledComposite.setShowFocusedControl(true);
+				
+				
+				scrolledComposite.setContent(stackLayoutComposite);
+				scrolledComposite.setMinSize(stackLayoutComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+				
+				installMouseWheelScrollRecursively(scrolledComposite);
+				
+				createHorizontalViewTableColumns(horizontalViewUIContainer);
+				setTableLayoutToMappingTable(horizontalViewUIContainer);
+				horizontalViewUIContainer.setContentProvider(new ArrayContentProvider());
+				
+				updateDataViewLists();
+				horizontalViewUIContainer.setInput(gridViewData);
+				horizontalViewUIContainer.refresh();
+				
+				for (int i = 0, n = horizontalViewUIContainer.getTable().getColumnCount(); i < n; i++)
+					horizontalViewUIContainer.getTable().getColumn(i).pack();
+				
+				horizontalViewUIContainer.refresh();
 			}
 		}
 	}
+
+	private void createHorizontalViewTableColumns(
+			TableViewer horizontalViewUIContainer2) {
+		
+		// TODO Auto-generated method stub
+		
+	}
+
 
 	private void createGridViewTabItem() {
 		CTabItem tbtmGridview = new CTabItem(tabFolder, SWT.NONE);
@@ -700,7 +738,30 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 	}
 	
+	private void createGridViewTableIndexColumn(final TableViewer tableViewer){
+		final TableViewerColumn tableViewerColumn = new TableViewerColumn(
+				tableViewer, SWT.NONE);
+		TableColumn tblclmnItem = tableViewerColumn.getColumn();
+		tblclmnItem.setWidth(100);
+		//tblclmnItem.setText("SR.No");
+		//tableViewerColumn.getColumn().setData("ID", index);
+		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
+
+			@Override
+			public Color getBackground(Object element) {
+				return SWTResourceManager.getColor(SWT.COLOR_GRAY);
+			}
+			
+			@Override
+			public String getText(Object element) {
+				RowData p = (RowData) element;
+				return String.valueOf(p.getRowNumber());
+			}					
+		});
+	}
 	private void createGridViewTableColumns(final TableViewer tableViewer) {
+		
+		createGridViewTableIndexColumn(tableViewer);
 		try {
 			int index = 0;
 			for(String columnName: csvAdapter.getColumnList()){
@@ -724,7 +785,6 @@ public class DebugDataViewer extends ApplicationWindow {
 				index++;
 			}
 		} catch (Exception e) {
-			//TODO - remove stack trace
 			e.printStackTrace();
 		}
 

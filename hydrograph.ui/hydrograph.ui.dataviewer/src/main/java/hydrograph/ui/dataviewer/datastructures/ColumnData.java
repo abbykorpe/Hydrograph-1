@@ -9,6 +9,12 @@ public class ColumnData {
 		this.value = value;
 		this.schema = schema;
 	}
+	
+	public ColumnData(String value) {
+		super();
+		this.value = value;
+	}
+	
 	public String getValue() {
 		return value;
 	}

@@ -25,7 +25,7 @@ public class CSVAdapter {
 	private List<String> columnList;
 	private int columnCount;
 	private Long rowCount=null;
-	private List<Schema> tableSchema = new LinkedList<>();
+	//private List<Schema> tableSchema = new LinkedList<>();
 	
 	private boolean rowCountFetchInProgress;
 	
@@ -37,10 +37,22 @@ public class CSVAdapter {
 	volatile private int PAGE_SIZE;
 	volatile private long OFFSET;
 	
-	public CSVAdapter(String databaseName, String tableName,List<Schema> tableSchema,int PAGE_SIZE,long INITIAL_OFFSET, DebugDataViewer debugDataViewer) {
+	/*public CSVAdapter(String databaseName, String tableName,List<Schema> tableSchema,int PAGE_SIZE,long INITIAL_OFFSET, DebugDataViewer debugDataViewer) {
 		this.databaseName = databaseName;
 		this.tableName = tableName;
 		this.tableSchema = tableSchema;
+		tableData = new LinkedList<>();
+		columnList = new LinkedList<>();
+		columnCount = 0;
+		this.PAGE_SIZE = PAGE_SIZE;
+		this.OFFSET = INITIAL_OFFSET;
+		this.debugDataViewer = debugDataViewer;
+		initializeAdapter();
+	}*/
+	
+	public CSVAdapter(String databaseName, String tableName,int PAGE_SIZE,long INITIAL_OFFSET, DebugDataViewer debugDataViewer) {
+		this.databaseName = databaseName;
+		this.tableName = tableName;
 		tableData = new LinkedList<>();
 		columnList = new LinkedList<>();
 		columnCount = 0;
@@ -169,13 +181,17 @@ public class CSVAdapter {
 		try {
 			ResultSet results = statement.executeQuery("SELECT * FROM " + tableName
 					+ " LIMIT " + PAGE_SIZE + " OFFSET " + OFFSET);
+			int rowNumber=1;
 			while (results.next()) {
 				List<ColumnData> row = new LinkedList<>();
 				for (int index = 0; index < columnCount; index++) {
-					row.add(new ColumnData(results.getString(index + 1),
-							tableSchema.get(index)));
+					/*row.add(new ColumnData(results.getString(index + 1),
+							tableSchema.get(index)));*/
+					row.add(new ColumnData(results.getString(index + 1)));
 				}
-				tableData.add(new RowData(row));
+				
+				tableData.add(new RowData(row,rowNumber));
+				rowNumber++;
 			}			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -197,13 +213,16 @@ public class CSVAdapter {
 		try {
 			ResultSet results = statement.executeQuery("SELECT * FROM " + tableName
 					+ " LIMIT " + PAGE_SIZE + " OFFSET " + OFFSET);
+			int rowNumber=1;
 			while (results.next()) {
 				List<ColumnData> row = new LinkedList<>();
 				for (int index = 0; index < columnCount; index++) {
-					row.add(new ColumnData(results.getString(index + 1),
-							tableSchema.get(index)));
+					/*row.add(new ColumnData(results.getString(index + 1),
+							tableSchema.get(index)));*/
+					row.add(new ColumnData(results.getString(index + 1)));
 				}
-				tableData.add(new RowData(row));
+				tableData.add(new RowData(row,rowNumber));
+				rowNumber++;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -216,13 +235,16 @@ public class CSVAdapter {
 		try {
 			ResultSet results = statement.executeQuery("SELECT * FROM " + tableName
 					+ " LIMIT " + PAGE_SIZE + " OFFSET " + OFFSET);
+			int rowIndex=1;
 			while (results.next()) {
 				List<ColumnData> row = new LinkedList<>();
 				for (int index = 1; index <= columnCount; index++) {
-					row.add(new ColumnData(results.getString(index),
-							tableSchema.get(index-1)));
+					/*row.add(new ColumnData(results.getString(index),
+							tableSchema.get(index-1)));*/
+					row.add(new ColumnData(results.getString(index)));
 				}
-				tableData.add(new RowData(row));
+				tableData.add(new RowData(row,rowIndex));
+				rowIndex++;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -264,13 +286,14 @@ public class CSVAdapter {
 		try {
 			ResultSet results = statement.executeQuery("SELECT * FROM " + tableName
 					+ " LIMIT " + PAGE_SIZE + " OFFSET " + OFFSET);
-			int rowIndex=0;
+			int rowIndex=1;
 			
 			while (results.next()) {
 				List<ColumnData> row = new LinkedList<>();
 				for (int index = 0; index < columnCount; index++) {
-					row.add(new ColumnData(results.getString(index + 1),
-							tableSchema.get(index)));
+					/*row.add(new ColumnData(results.getString(index + 1),
+							tableSchema.get(index)));*/
+					row.add(new ColumnData(results.getString(index + 1)));
 				}
 				tableData.add(new RowData(row,rowIndex));
 				rowIndex++;

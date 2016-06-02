@@ -12,7 +12,6 @@ public class RowData {
 		super();
 		this.columns = columns;
 	}
-
 	
 	public RowData(List columns,int rowNumber) {
 		super();
