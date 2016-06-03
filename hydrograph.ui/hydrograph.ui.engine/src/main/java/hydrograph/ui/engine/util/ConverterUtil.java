@@ -128,10 +128,12 @@ public class ConverterUtil {
 		marshaller.marshal(graph, out);
 	 	 
 		out = ComponentXpath.INSTANCE.addParameters(out);
-		if (outPutFile.exists())
+		if (outPutFile.exists()){
 			outPutFile.setContents(new ByteArrayInputStream(out.toByteArray()), true,false, null);
-		else
+		}
+		else{
 			outPutFile.create(new ByteArrayInputStream(out.toByteArray()),true, null);
+			}
 		
 	}
 
