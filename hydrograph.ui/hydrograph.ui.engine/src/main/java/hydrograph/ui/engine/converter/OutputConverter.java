@@ -38,15 +38,23 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-
+/**
+ * 
+ * Converter for output type component.
+ *
+ */
 public abstract class OutputConverter extends Converter {
 
 	public OutputConverter(Component comp) {
 		super(comp);
 	}
-
+	
+	/** The Constant LOGGER. */
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
 
+	/*
+	 * prepare xml and adding In Socket. 
+	 */
 	@Override
 	public void prepareForXML() {
 		super.prepareForXML();
@@ -74,16 +82,19 @@ public abstract class OutputConverter extends Converter {
 		if (schema != null) {
 			if ( schema.getIsExternal()) {
 				TypeExternalSchema typeExternalSchema = new TypeExternalSchema();
-				if(PathUtility.INSTANCE.isAbsolute(schema.getExternalSchemaPath()))
+				if(PathUtility.INSTANCE.isAbsolute(schema.getExternalSchemaPath())){
 					typeExternalSchema.setUri(schema.getExternalSchemaPath());
-				else
+				}
+				else{
 					typeExternalSchema.setUri("../"+schema.getExternalSchemaPath());
-
+				}
 				typeBaseRecord.setName(Constants.EXTERNAL_SCHEMA);
 				typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().add(typeExternalSchema);
-			} else{
+			}
+			else{
 				typeBaseRecord.setName(Constants.INTERNAL_SCHEMA);
-				typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().addAll(getFieldOrRecord(schema.getGridRow()));}
+				typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().addAll(getFieldOrRecord(schema.getGridRow()));
+			}
 		}
 		return typeBaseRecord;
 	}

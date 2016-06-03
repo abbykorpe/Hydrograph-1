@@ -23,12 +23,23 @@ import hydrograph.ui.graph.model.Component;
 
 import java.util.List;
 
+/**
+ * Abstract subjob converter for all types of sub job (Operation,Input,Output and Command)
+ */
 public abstract class SubjobConverter extends Converter {
 	
+	/**
+	 * Instantiates a new subjob converter.
+	 *
+	 * @param comp the comp
+	 */
 	public SubjobConverter(Component comp) {
 		super(comp);
 	}
 
+	/**
+	 * Adding In and Out Socket for subjob.
+	 */
 	@Override
 	public void prepareForXML(){
 		super.prepareForXML();
@@ -37,15 +48,23 @@ public abstract class SubjobConverter extends Converter {
 	}
 	
 	/**
-	 * Returns {@link List} of classes of type {@link TypeTransformOutSocket}
+	 * Returns {@link List} of classes of type {@link TypeTransformOutSocket}.
+	 *
 	 * @return {@link List}
 	 */
 	protected abstract  List<TypeOperationsOutSocket> getOutSocket();
 	
 	/**
-	 * Returns {@link List} of classes of type {@link TypeTransformOperation} 
+	 * Returns {@link List} of classes of type {@link TypeTransformOperation} .
+	 *
 	 * @return {@link List}
 	 */
 	protected abstract List<TypeTransformOperation> getOperations();
+	
+	/**
+	 * Gets the in socket.
+	 *
+	 * @return the in socket
+	 */
 	public abstract List<TypeBaseInSocket> getInSocket();
 }

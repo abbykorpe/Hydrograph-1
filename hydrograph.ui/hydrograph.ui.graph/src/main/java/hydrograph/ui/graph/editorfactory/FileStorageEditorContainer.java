@@ -14,8 +14,6 @@
  
 package hydrograph.ui.graph.editorfactory;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.utility.CanvasUtils;
@@ -34,34 +32,42 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.slf4j.Logger;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FileStorageEditorContainer.
  */
 public class FileStorageEditorContainer implements IGenrateContainerData {
+	
+	/** The Constant logger. */
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FileStorageEditorContainer.class);
-	private final FileStoreEditorInput fileStrorageEditorInput;
+	
+	/** The file storage editor input. */
+	private final FileStoreEditorInput fileStorageEditorInput;
+	
+	/** The elt graphical editor instance. */
 	private final ELTGraphicalEditor eltGraphicalEditorInstance;
 	
 	/**
 	 * Instantiates a new file storage editor container.
 	 * 
 	 * @param editorInput
-	 *            the editor input
 	 * @param eltGraphicalEditorInstance
-	 *            the elt graphical editor instance
 	 */
 	public FileStorageEditorContainer(IEditorInput editorInput,
 			ELTGraphicalEditor eltGraphicalEditorInstance) {
-		this.fileStrorageEditorInput = (FileStoreEditorInput) editorInput;
+		this.fileStorageEditorInput = (FileStoreEditorInput) editorInput;
 		this.eltGraphicalEditorInstance = eltGraphicalEditorInstance;
 	}
 
+	/**
+	 * Generate Container from xml,Setting FileStorageEditor Input into Ifile
+	 * @return Container
+	 * @throws IOException
+	 */
 	@Override
 	public Container getEditorInput() throws IOException {
-		logger.debug("storeEditorInput - Setting FileStrorageEditor Input into Ifile");
+		logger.debug("storeEditorInput - Setting FileStorageEditor Input into Ifile");
 		Container con = null;
-		File file = new File(fileStrorageEditorInput.getToolTipText());
+		File file = new File(fileStorageEditorInput.getToolTipText());
 		FileInputStream fs = new FileInputStream(file);
 		con = (Container) CanvasUtils.INSTANCE.fromXMLToObject(fs);
 		this.eltGraphicalEditorInstance.setPartName(file.getName());
@@ -69,10 +75,16 @@ public class FileStorageEditorContainer implements IGenrateContainerData {
 		return con;
 	}
 
+	/**
+	 * Storing FileStorageEditor input into Ifile
+	 * 
+	 * Generate Container from xml
+	 * @throws IOException
+	 */	
 	@Override
 	public void storeEditorInput() throws IOException, CoreException {
-		logger.debug("storeEditorInput - Storing FileStrorageEditor input into Ifile");
-		File file = new File(fileStrorageEditorInput.getToolTipText());
+		logger.debug("storeEditorInput - Storing FileStorageEditor input into Ifile");
+		File file = new File(fileStorageEditorInput.getToolTipText());
 		FileOutputStream fsout = new FileOutputStream(file);
 		fsout.write(CanvasUtils.INSTANCE.fromObjectToXML(
 				eltGraphicalEditorInstance.getContainer()).getBytes());

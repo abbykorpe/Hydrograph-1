@@ -32,15 +32,41 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.slf4j.Logger;
 
 
+/**
+ * The Class DebugLocalJobLauncher run the job in debug mode locally.
+ * 
+ */
 public class DebugLocalJobLauncher extends AbstractJobLauncher{
 
+	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE.getLogger(DebugLocalJobLauncher.class);
+	
+	/** The Constant BUILD_SUCCESSFUL. */
 	private static final String BUILD_SUCCESSFUL="BUILD SUCCESSFUL";
+	
+	/** The Constant BUILD_FAILED. */
 	private static final String BUILD_FAILED="BUILD FAILED";
+	
+	/** The Constant JOB_FAILED. */
 	private static final String JOB_FAILED="JOB FAILED";
+	
+	/** The Constant JOB_COMPLETED_SUCCESSFULLY. */
 	private static final String JOB_COMPLETED_SUCCESSFULLY="JOB COMPLETED SUCCESSFULLY";
 	
 	
+	/**
+	 * Run the job in debug mode locally.
+	 * 
+	 * @param xmlPath
+	 * @param debugXmlPath
+	 * @param paramFile
+	 * @param job
+	 * @param gefCanvas
+	 * @param externalSchemaFiles Empty list required only in remote run.
+	 * @param subJobList Empty list required only in remote run.
+	 * 
+	 * 
+	 */
 	@Override
 	public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFile, Job job,	DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		String projectName = xmlPath.split("/", 2)[0];
@@ -66,6 +92,14 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 		
 	}
 
+	/**
+	 * Execute command.
+	 *
+	 * @param job the job
+	 * @param project the project
+	 * @param gradleCommand the gradle command
+	 * @param gefCanvas the gef canvas
+	 */
 	private void executeCommand(Job job, IProject project, String gradleCommand, DefaultGEFCanvas gefCanvas) {
 		ProcessBuilder processBuilder = JobScpAndProcessUtility.INSTANCE.getProcess(project, gradleCommand);
 		try {
@@ -82,11 +116,27 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 		}
 	}
 	
+	/**
+	 * Gets the executute job command.
+	 *
+	 * @param xmlPath the xml path
+	 * @param paramFile the param file
+	 * @param debugXmlPath the debug xml path
+	 * @param job the job
+	 * @return the executute job command
+	 */
 	private String getExecututeJobCommand(String xmlPath, String paramFile, String debugXmlPath, Job job) {
 		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB + GradleCommandConstants.GPARAM_PARAM_FILE + paramFile + GradleCommandConstants.GPARAM_JOB_XML +  xmlPath.split("/", 2)[1] +
 				GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH + job.getBasePath() + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId();
 	}
 	
+	/**
+	 * Log process logs asynchronously.
+	 *
+	 * @param joblogger the joblogger
+	 * @param process the process
+	 * @param job the job
+	 */
 	private void logProcessLogsAsynchronously(final JobLogger joblogger, final Process process, final Job job) {
 
 		InputStream stream = process.getInputStream();
@@ -124,10 +174,10 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 		joblogger.close();
 	}
 
+
 	@Override
 	public void launchJob(String xmlPath, String paramFile, Job job,
 			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
-		// TODO Auto-generated method stub
 		
 	}
 }

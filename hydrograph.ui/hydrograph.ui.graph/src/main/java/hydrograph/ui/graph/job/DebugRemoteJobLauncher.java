@@ -37,13 +37,36 @@ import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
 
 
+/**
+ * The Class DebugRemoteJobLauncher run the job on remote server in debug mode. 
+ */
 public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 
+	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE.getLogger(DebugRemoteJobLauncher.class);
+	
+	/** The Constant BUILD_SUCCESSFUL. */
 	private static final String BUILD_SUCCESSFUL = "BUILD SUCCESSFUL";
+	
+	/** The Constant JOB_KILLED_SUCCESSFULLY. */
 	private static final String JOB_KILLED_SUCCESSFULLY = "JOB KILLED SUCCESSFULLY";
+	
+	/** The Constant JOB_COMPLETED_SUCCESSFULLY. */
 	private static final String JOB_COMPLETED_SUCCESSFULLY = "JOB COMPLETED SUCCESSFULLY";
 
+	/**
+	 * Run the job on remote server in debug mode.
+	 * 
+	 * @param xmlPath
+	 * @param debugXmlPath
+	 * @param paramFile
+	 * @param job
+	 * @param gefCanvas
+	 * @param externalSchemaFiles list required to move external schema files on remote server
+	 * @param subJobList list required to move sub job xml to remote server.
+	 * 
+	 * 
+	 */
 	@Override
 	public void launchJobInDebug(String xmlPath, String debugXmlPath,
 			 String paramFile, Job job,
@@ -58,14 +81,14 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		job.setJobStatus(JobStatus.RUNNING);
 		JobLogger joblogger;
 		
-		gradleCommand = JobScpAndProcessUtility.INSTANCE.getCreateDirectoryCommand(job,paramFile,xmlPath,projectName,new ArrayList<String>(externalSchemaFiles),new ArrayList<>(subJobList));
+		gradleCommand = JobScpAndProcessUtility.INSTANCE.getCreateDirectoryCommand(job,paramFile,xmlPath,projectName,externalSchemaFiles,subJobList);
 		
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
-		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			return;
 		}
-		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			return;
 		}
 		
@@ -81,11 +104,11 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getSubjobScpCommand(subJobFullPath,job);
 		
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
-		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			return;
 		}
-		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			return;
 		}
 		}
@@ -102,43 +125,43 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 			gradleCommand = JobScpAndProcessUtility.INSTANCE.getSchemaScpCommand(schemaFilesFullPath,job);
 		
 			joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
-			if (job.getJobStatus().equals(JobStatus.FAILED)) {
+			if (JobStatus.FAILED.equals(job.getJobStatus())) {
 				releaseResources(job, gefCanvas, joblogger);
 				return;
 			}
-			if (job.getJobStatus().equals(JobStatus.KILLED)) {
+			if (JobStatus.KILLED.equals(job.getJobStatus())) {
 				return;
 			}
 		}
 		// ---------------------------- code to copy jar file
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getLibararyScpCommand(job);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, true, true);
-		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			return;
 		}
-		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			return;
 		}
 		// ----------------------------- Code to copy job xml
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getJobXMLScpCommand(xmlPath, debugXmlPath, job);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
-		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			return;
 		}
-		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			return;
 		}
 
 		// ----------------------------- Code to copy parameter file
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getParameterFileScpCommand(paramFile, job);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
-		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			return;
 		}
-		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			return;
 		}
 
@@ -146,11 +169,11 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getExecututeJobCommand(xmlPath, debugXmlPath, paramFile, job);
 		job.setJobStatus(JobStatus.SSHEXEC);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
-		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			return;
 		}
-		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 			((RunJobHandler) RunStopButtonCommunicator.RunDebugJob.getHandler()).setRunJobEnabled(false);
 			return;
@@ -161,6 +184,13 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		
 	}
 	
+	/**
+	 * Release resources.
+	 *
+	 * @param job the job
+	 * @param gefCanvas the gef canvas
+	 * @param joblogger the joblogger
+	 */
 	private void releaseResources(Job job, DefaultGEFCanvas gefCanvas, JobLogger joblogger) {
 		enableLockedResources(gefCanvas);
 		refreshProject(gefCanvas);
@@ -173,6 +203,17 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		}
 	}
 
+	/**
+	 * Execute command.
+	 *
+	 * @param job the job
+	 * @param project the project
+	 * @param gradleCommand the gradle command
+	 * @param gefCanvas the gef canvas
+	 * @param logSystemInfo the log system info
+	 * @param logJobStartInfo the log job start info
+	 * @return the job logger
+	 */
 	private JobLogger executeCommand(Job job, IProject project, String gradleCommand, DefaultGEFCanvas gefCanvas,
 			boolean logSystemInfo, boolean logJobStartInfo) {
 		ProcessBuilder processBuilder = JobScpAndProcessUtility.INSTANCE.getProcess(project, gradleCommand);
@@ -191,6 +232,14 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		return null;
 	}
 			
+	/**
+	 * Log process logs asynchronously.
+	 *
+	 * @param joblogger the joblogger
+	 * @param process the process
+	 * @param job the job
+	 * @param gefCanvas the gef canvas
+	 */
 	private void logProcessLogsAsynchronously(final JobLogger joblogger, final Process process, final Job job,
 			DefaultGEFCanvas gefCanvas) {
 		InputStream stream = process.getInputStream();
@@ -262,7 +311,6 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 	@Override
 	public void launchJob(String xmlPath, String paramFile, Job job,
 			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
-		// TODO Auto-generated method stub
 		
 	}
 

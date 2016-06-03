@@ -32,14 +32,20 @@ import java.util.List;
 import org.slf4j.Logger;
 
 /**
- * Operation type sub graph converter
- * @author Bitwise
+ * Operation type sub graph converter,having both in and out sockets.
  *
+ * @author Bitwise
  */
 public class OperationSubJobConverter extends SubjobConverter {
 
+	/** The Constant logger. */
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OperationSubJobConverter.class);
 
+	/**
+	 * Instantiates a new operation sub job converter.
+	 *
+	 * @param component the component
+	 */
 	public OperationSubJobConverter(Component component) {
 		super(component);
 		this.baseComponent = new Subjob();
@@ -47,9 +53,9 @@ public class OperationSubJobConverter extends SubjobConverter {
 		this.properties = component.getProperties();
 	}
 
-	/*
+	/**
 	 * 
-	 *Prepare Operation type sub graph.
+	 * Generating XML for Component.
 	 */
 	@Override
 	public void prepareForXML() {
@@ -59,10 +65,12 @@ public class OperationSubJobConverter extends SubjobConverter {
 		if (properties.get(Constants.JOB_PATH) != null) {
 			Subjob.Path path = new Subjob.Path();
 			String subJobFile=((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION);
-			if(PathUtility.INSTANCE.isAbsolute(subJobFile))
+			if(PathUtility.INSTANCE.isAbsolute(subJobFile)){
 				path.setUri(subJobFile);
-			else
+			}
+			else{
 				path.setUri("../"+subJobFile);
+			}
 
 			subjob.setPath(path); 
 		}
@@ -70,6 +78,10 @@ public class OperationSubJobConverter extends SubjobConverter {
 		 
 	}
  
+	/**
+	 * Adding out socket for operation subgraph component.
+	 * @return out socket list
+	 */
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
 		logger.debug("Generating TypeOperationsOutSocket data for : {}", properties.get(Constants.PARAM_NAME));
@@ -93,6 +105,10 @@ public class OperationSubJobConverter extends SubjobConverter {
 		return null;
 	}
 
+	/**
+	 * Adding In socket for operation type subgraph component.
+	 * @return in socket list
+	 */
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
 		logger.debug("Generating TypeBaseInSocket data for :{}", component.getProperties().get(Constants.PARAM_NAME));

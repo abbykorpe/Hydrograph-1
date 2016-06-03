@@ -39,8 +39,14 @@ import org.slf4j.Logger;
  */
 public class OutputSubJobConverter extends OutputConverter {
 
+	/** The Constant logger. */
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputSubJobConverter.class);
 
+	/**
+	 * Instantiates a new output sub job converter.
+	 *
+	 * @param component the component
+	 */
 	public OutputSubJobConverter(Component component) {
 		super(component);
 		this.baseComponent = new Subjob();
@@ -48,6 +54,9 @@ public class OutputSubJobConverter extends OutputConverter {
 		this.properties = component.getProperties();
 	}
 
+	/**
+	 * Generating XML for component
+	 */
 	@Override
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
@@ -56,10 +65,12 @@ public class OutputSubJobConverter extends OutputConverter {
 		if(properties.get(Constants.JOB_PATH)!=null){
 			Subjob.Path path = new Subjob.Path();
 			String subJobFile=((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION);
-			if(PathUtility.INSTANCE.isAbsolute(subJobFile))
+			if(PathUtility.INSTANCE.isAbsolute(subJobFile)){
 				path.setUri(subJobFile);
-			else
+			}
+			else{
 				path.setUri("../"+subJobFile);
+			}
 
 			subjob.setPath(path);
 		}
@@ -68,6 +79,10 @@ public class OutputSubJobConverter extends OutputConverter {
 		
 	}
 
+	/**
+	 * Update OutputInSocket for component.
+	 * return outputInSocket
+	 */
 	@Override
 	protected List<TypeOutputInSocket> getOutInSocket() {
 		logger.debug("getInOutSocket - Generating TypeOutputInSocket data");
@@ -86,6 +101,9 @@ public class OutputSubJobConverter extends OutputConverter {
 
 	}
 
+	/**
+	 * Generate Base Field 
+	 */
 	@Override
 	protected List<TypeBaseField> getFieldOrRecord(List<GridRow> gridRowList) {
 		logger.debug("Generating data for {} for property {}", new Object[] { properties.get(Constants.PARAM_NAME),

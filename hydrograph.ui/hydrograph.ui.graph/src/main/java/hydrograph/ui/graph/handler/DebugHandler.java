@@ -46,44 +46,76 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 
-
 /**
+ * Handler use to run the job on debug mode.
  * @author Bitwise
  *
  */
 public class DebugHandler  extends AbstractHandler {
+	
+	/** The logger. */
 	private Logger logger = LogFactory.INSTANCE.getLogger(DebugHandler.class);
+	
+	/** The job map. */
 	private static Map<String,Job> jobMap = new HashMap<>();	
+	
+	/** The current job Ipath. */
 	private IPath currentJobIPath=null;
+	
+	/** The unique job id. */
 	private String uniqueJobID =null;
+	
+	/** The base path. */
 	private String basePath = null;
+	
+	/** The current job name. */
 	private String currentJobName = null;
 	 
 	
 	
+	/**
+	 * Instantiates a new debug handler.
+	 */
 	public DebugHandler(){
 		RunStopButtonCommunicator.RunDebugJob.setHandler(this);
 	}
 
 	/**
-	 * Enable disable debug button
-	 * 
-	 * @param enable
+	 * Enable disable debug button.
+	 *
+	 * @param enable the new debug job enabled
 	 */
 	public void setDebugJobEnabled(boolean enable){
 		setBaseEnabled(enable);
 	}
 	
+	/**
+	 * Gets the job.
+	 *
+	 * @param jobName the job name
+	 * @return the job
+	 */
 	public static Job getJob(String jobName) {
 		return jobMap.get(jobName);
 	}
 	
 	 
+	/**
+	 * Adds the debug job.
+	 *
+	 * @param jobId the job id
+	 * @param debugJob the debug job
+	 */
 	public void addDebugJob(String jobId, Job debugJob){
 		jobMap.put(jobId, debugJob);
 		
 	}
 	
+	/**
+	 * Gets the component canvas.
+	 *
+	 * @return the component canvas
+	 */
 	private DefaultGEFCanvas getComponentCanvas() {		
 		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
 			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -91,10 +123,20 @@ public class DebugHandler  extends AbstractHandler {
 			return null;
 	}
 	
+	/**
+	 * Checks if is dirty editor.
+	 *
+	 * @return true, if is dirty editor
+	 */
 	private boolean isDirtyEditor(){
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty();
 	}
 
+	/**
+	 * Creates the debug xml.
+	 *
+	 * @throws Exception the exception
+	 */
 	private void createDebugXml() throws Exception{
 		String currentJobPath=null;
 		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -123,6 +165,9 @@ public class DebugHandler  extends AbstractHandler {
 		}
 	}
 	
+	/*
+	 * execute method launch the job in debug mode.
+	 */
 	@Override
 	public Object execute(ExecutionEvent event){
 		closeOpenedDataViewerWindows();
@@ -155,10 +200,6 @@ public class DebugHandler  extends AbstractHandler {
 		
 		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell(), true);
 		runConfigDialog.open();
-		if (!runConfigDialog.proceedToRunGraph()) {
-			//JobManager.INSTANCE.enableDebugJob(true);
-	
-		}
 		String clusterPassword = runConfigDialog.getClusterPassword()!=null ? runConfigDialog.getClusterPassword():"";
 		basePath = runConfigDialog.getBasePath();
 		String host = runConfigDialog.getHost();
@@ -166,7 +207,6 @@ public class DebugHandler  extends AbstractHandler {
 		if(!runConfigDialog.proceedToRunGraph()){
 			setBaseEnabled(true);
 			JobManager.INSTANCE.enableRunJob(true);
-			//JobManager.INSTANCE.enableDebugJob(true);
 			CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();			
 			return null;
 		}
@@ -206,18 +246,38 @@ public class DebugHandler  extends AbstractHandler {
 		return null;
 	}
  
+	/**
+	 * Gets the job id.
+	 *
+	 * @return the job id
+	 */
 	public String getJobId() {
 		return uniqueJobID;
 	}
 
+	/**
+	 * Gets the base path.
+	 *
+	 * @return the base path
+	 */
 	public String getBasePath() {
 		return basePath;
 	}
 
+	/**
+	 * Gets the job map.
+	 *
+	 * @return the job map
+	 */
 	public static Map<String, Job> getJobMap() {
 		return jobMap;
 	}
 
+	/**
+	 * Sets the job map.
+	 *
+	 * @param jobMap the job map
+	 */
 	public static void setJobMap(Map<String, Job> jobMap) {
 		DebugHandler.jobMap = jobMap;
 	}

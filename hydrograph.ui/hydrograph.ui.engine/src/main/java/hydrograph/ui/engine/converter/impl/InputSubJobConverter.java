@@ -32,14 +32,19 @@ import java.util.List;
 
 import org.slf4j.Logger;
 /**
- * 
- * @author Bitwise
- *Input type sub graph converter.
+ * The Class InputSubJobConverter.
+ * Input type sub graph converter.
  */
 public class InputSubJobConverter extends InputConverter {
 
+	/** The Constant logger. */
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputSubJobConverter.class);
 	
+	/**
+	 * Instantiates a new input sub job converter.
+	 *
+	 * @param component the component
+	 */
 	public InputSubJobConverter(Component component) {
 		super(component);
 		this.baseComponent = new Subjob();
@@ -47,6 +52,9 @@ public class InputSubJobConverter extends InputConverter {
 		this.properties = component.getProperties();
 	}
 
+	/**
+	 * Generating XML for Component.
+	 */
 	@Override
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
@@ -55,10 +63,12 @@ public class InputSubJobConverter extends InputConverter {
 		Subjob.Path path = new Subjob.Path();
 		if(properties.get(Constants.JOB_PATH)!=null){
 			String subJobFile=((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION);
-			if(PathUtility.INSTANCE.isAbsolute(subJobFile))
+			if(PathUtility.INSTANCE.isAbsolute(subJobFile)){
 				path.setUri(subJobFile);
-			else
+			}
+			else{
 				path.setUri("../"+subJobFile);
+			}
 			
 			subjob.setPath(path);
 		}
@@ -66,6 +76,10 @@ public class InputSubJobConverter extends InputConverter {
 		
 	}
 
+	/**
+	 * Adding out socket for input subgraph component.
+	 * @return in socket list
+	 */
 	@Override
 	protected List<TypeInputOutSocket> getInOutSocket() {
 		List<TypeInputOutSocket> outSockets = new ArrayList<>();
@@ -80,6 +94,9 @@ public class InputSubJobConverter extends InputConverter {
 		return outSockets;
 	}
 
+	/**
+	 * Generate Base Field 
+	 */
 	@Override
 	protected List<TypeBaseField> getFieldOrRecord(List<GridRow> gridList) {
 		logger.debug("Generating data for {} for property {}", new Object[] { properties.get(Constants.PARAM_NAME),

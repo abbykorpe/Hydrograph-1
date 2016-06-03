@@ -48,13 +48,33 @@ import org.slf4j.Logger;
 
 
 
+/**
+ * The Class ConverterUtil.
+ */
 public class ConverterUtil {
+	
+	/** The Constant LOGGER. */
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ConverterUtil.class);
+	
+	/** The Constant INSTANCE. */
 	public static final ConverterUtil INSTANCE = new ConverterUtil();
+	
+	/**
+	 * Instantiates a new converter util.
+	 */
 	private ConverterUtil(){
 		
 	}
 	
+	/**
+	 * Convert container to xml.
+	 *
+	 * @param container
+	 * @param validate
+	 * @param outPutFile
+	 * @param externalOutputFile
+	 * @throws Exception
+	 */
 	public void convertToXML(Container container, boolean validate, IFile outPutFile,  IFileStore externalOutputFile) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
 		LOGGER.debug("Creating converter based on component");
 			Graph graph = new ObjectFactory().createGraph();
@@ -73,6 +93,13 @@ public class ConverterUtil {
 	}
 	
 	
+	/**
+	 * Gets the graph name.
+	 *
+	 * @param outPutFile the out put file
+	 * @param externalOutputFile the external output file
+	 * @return the graph name
+	 */
 	private String getGraphName(IFile outPutFile, IFileStore externalOutputFile) {
 		if (outPutFile != null && StringUtils.isNotBlank(outPutFile.getName()))
 			return outPutFile.getName();
@@ -81,6 +108,14 @@ public class ConverterUtil {
 		return null;
 	}
 
+	/**
+	 * Marshall.
+	 *
+	 * @param graph
+	 * @param validate
+	 * @param outPutFile
+	 * @param externalOutputFile
+	 */
 	private void marshall(Graph graph, boolean validate,IFile outPutFile, IFileStore externalOutputFile) {
 		LOGGER.debug("Marshaling generated object into target XML");
 		ByteArrayOutputStream out = null;
@@ -104,6 +139,16 @@ public class ConverterUtil {
 		}
 	}
 
+	/**
+	 * Store file into local file system.
+	 *
+	 * @param graph
+	 * @param externalOutputFile
+	 * @param out
+	 * @throws CoreException the core exception
+	 * @throws JAXBException the JAXB exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private void storeFileIntoLocalFileSystem(Graph graph, IFileStore externalOutputFile, ByteArrayOutputStream out) throws CoreException, JAXBException, IOException {
 		File externalFile=externalOutputFile.toLocalFile(0, null);
 		OutputStream outputStream = new FileOutputStream (externalFile.getAbsolutePath().replace(".job", ".xml")); 
@@ -118,6 +163,15 @@ public class ConverterUtil {
 		
 	}
 
+	/**
+	 * Store file into workspace.
+	 *
+	 * @param graph the graph
+	 * @param outPutFile the out put file
+	 * @param out the out
+	 * @throws JAXBException the JAXB exception
+	 * @throws CoreException the core exception
+	 */
 	private void storeFileIntoWorkspace(Graph graph, IFile outPutFile, ByteArrayOutputStream out) throws JAXBException, CoreException {
 		
 		JAXBContext jaxbContext = JAXBContext.newInstance(graph.getClass());
@@ -136,6 +190,12 @@ public class ConverterUtil {
 		
 	}
 
+	/**
+	 * Gets the runtime properties.
+	 *
+	 * @param container the container
+	 * @return the runtime properties
+	 */
 	private TypeProperties getRuntimeProperties(Container container) {
 		TypeProperties typeProperties = null;
 		Map<String, String> runtimeProps = container.getGraphRuntimeProperties();

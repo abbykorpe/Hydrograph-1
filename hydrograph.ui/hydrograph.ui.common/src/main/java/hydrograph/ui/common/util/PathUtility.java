@@ -16,11 +16,27 @@ package hydrograph.ui.common.util;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
+/**
+ *  Utility class to check path is absolute.
+ */
 public class PathUtility {
+	
+	/** The Constant INSTANCE. */
 	public static final PathUtility INSTANCE = new PathUtility();
+	
+	/**
+	 * Instantiates a new path utility.
+	 */
 	private PathUtility(){
 		
 	}
+	
+	/**
+	 * Checks if path is absolute.
+	 *
+	 * @param filePath
+	 * @return true, if is absolute
+	 */
 	public boolean isAbsolute(String filePath){
 		IPath path = new Path(filePath);
 		return path.isAbsolute();

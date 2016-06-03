@@ -44,10 +44,12 @@ public class CommandSubjobConverter extends Converter {
 		if (properties.get(Constants.JOB_PATH) != null) {
 			Subjob.Path path = new Subjob.Path();
 			String subJobFile=((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION);
-			if(PathUtility.INSTANCE.isAbsolute(subJobFile))
+			if(PathUtility.INSTANCE.isAbsolute(subJobFile)){
 				path.setUri(subJobFile);
-			else
+			}
+			else{
 				path.setUri("../"+subJobFile);
+			}
 			subjob.setPath(path);
 		}
 		subjob.setSubjobParameter(getRuntimeProperties());

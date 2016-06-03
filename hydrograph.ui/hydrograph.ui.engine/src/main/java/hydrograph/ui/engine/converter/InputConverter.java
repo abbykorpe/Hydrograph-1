@@ -31,12 +31,17 @@ import hydrograph.ui.logging.factory.LogFactory;
 import java.util.List;
 
 import org.slf4j.Logger;
-
+/**
+ * 
+ * Converter for input type component.
+ *
+ */
 public abstract class InputConverter extends Converter {
 	public InputConverter(Component comp) {
 		super(comp);
 	}
 
+	/** The Constant LOGGER. */
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(InputConverter.class);
 	
 	@Override
