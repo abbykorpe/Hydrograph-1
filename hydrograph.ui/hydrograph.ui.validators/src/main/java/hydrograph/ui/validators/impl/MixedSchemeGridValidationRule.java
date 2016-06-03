@@ -129,7 +129,7 @@ public class MixedSchemeGridValidationRule implements IValidator {
 					return false;
 				}
 				if (StringUtils.isNotBlank(mixedSchemeGridRow.getLength())
-						&& StringUtils.isEmpty(mixedSchemeGridRow.getDelimiter())) {
+						&& StringUtils.isNotEmpty(mixedSchemeGridRow.getDelimiter())) {
 					errorMessage = "Either Length Or Delimiter should be given";
 					return false;
 				}
