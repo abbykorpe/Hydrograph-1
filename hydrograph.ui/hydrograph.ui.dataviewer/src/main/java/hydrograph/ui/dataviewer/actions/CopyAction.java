@@ -1,10 +1,12 @@
 package hydrograph.ui.dataviewer.actions;
 
+import hydrograph.ui.dataviewer.DebugDataViewer;
+
 import org.eclipse.jface.action.Action;
 
 public class CopyAction extends Action {
 	
-	public CopyAction(String menuItem) {
+	public CopyAction(String menuItem, DebugDataViewer debugDataViewer) {
 		super(menuItem);
 	}
 	@Override

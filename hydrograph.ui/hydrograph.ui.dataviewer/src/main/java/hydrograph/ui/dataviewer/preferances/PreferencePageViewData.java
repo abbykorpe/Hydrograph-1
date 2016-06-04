@@ -3,6 +3,7 @@ package hydrograph.ui.dataviewer.preferances;
 
 
 import hydrograph.ui.dataviewer.Activator;
+import hydrograph.ui.dataviewer.constants.PreferenceConstants;
 
 import java.io.File;
 
@@ -15,6 +16,7 @@ import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -34,6 +36,7 @@ public class PreferencePageViewData extends FieldEditorPreferencePage implements
 	private IntegerFieldEditor memoryFieldEditor;
 	private IntegerFieldEditor recordLimitFieldEditor;
 	
+	private StringFieldEditor stringFieldEditor;
 	
 	public PreferencePageViewData() {
 		super(GRID);
@@ -88,6 +91,12 @@ public class PreferencePageViewData extends FieldEditorPreferencePage implements
 		recordLimitFieldEditor.setEmptyStringAllowed(false);
 		recordLimitFieldEditor.setErrorMessage("Record Limit value should be an integer");
 		addField(recordLimitFieldEditor);
+		
+		
+		stringFieldEditor = new StringFieldEditor(PreferenceConstants.FILENAME, "&File Name", getFieldEditorParent());
+		stringFieldEditor.setEmptyStringAllowed(false);
+		//stringFieldEditor.setErrorMessage("Record Limit value should be an integer");
+		addField(stringFieldEditor);
 	}
 	
 	
@@ -112,7 +121,7 @@ public class PreferencePageViewData extends FieldEditorPreferencePage implements
 		
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		preferenceStore.setDefault(PreferenceConstants.MEMORYSIZE, "100");
-		preferenceStore.setDefault(PreferenceConstants.RECORDSLIMIT, "200");
+		preferenceStore.setDefault(PreferenceConstants.RECORDSLIMIT, "100");
 		setPreferenceStore(preferenceStore);
 		
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());

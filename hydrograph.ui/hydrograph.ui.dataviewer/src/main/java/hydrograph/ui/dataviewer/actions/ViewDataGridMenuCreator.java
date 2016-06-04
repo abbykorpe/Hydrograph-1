@@ -1,6 +1,5 @@
 package hydrograph.ui.dataviewer.actions;
 
-import hydrograph.ui.dataviewer.CSVDataViewer;
 import hydrograph.ui.dataviewer.DebugDataViewer;
 
 import org.eclipse.jface.action.ActionContributionItem;
@@ -10,14 +9,10 @@ import org.eclipse.swt.widgets.Menu;
 
 public class ViewDataGridMenuCreator implements IMenuCreator{
 
-	CSVDataViewer csvDataViewer;
+	ActionFactory actionFactory;
 
-	public ViewDataGridMenuCreator(CSVDataViewer csvDataViewer) {
-		this.csvDataViewer = csvDataViewer;
-	}
-
-	public ViewDataGridMenuCreator(DebugDataViewer debugDataViewer) {
-		// TODO Auto-generated constructor stub
+	public ViewDataGridMenuCreator(ActionFactory actionFactory) {
+		this.actionFactory = actionFactory;
 	}
 
 	@Override
@@ -27,12 +22,24 @@ public class ViewDataGridMenuCreator implements IMenuCreator{
 	@Override
 	public Menu getMenu(Control parent) {
 		Menu menu=new Menu(parent);
-		ActionContributionItem gridViewMenuitem=new ActionContributionItem(new GridViewAction("Grid View",csvDataViewer));
-		ActionContributionItem horizontalViewMenuItem=new ActionContributionItem(new HorizontalViewAction("Horizontal View"));
-		ActionContributionItem unformattedViewMenuItem=new ActionContributionItem(new UnformattedViewAction("Formatted View",csvDataViewer));
+		
+		/*ActionContributionItem gridViewMenuitem=new ActionContributionItem(new GridViewAction("Grid View",debugDataViewer));
+		ActionContributionItem horizontalViewMenuItem=new ActionContributionItem(new HorizontalViewAction("Horizontal View",debugDataViewer));
+		ActionContributionItem formattedViewMenuItem=new ActionContributionItem(new FormattedViewAction("Formatted View",debugDataViewer));
+		ActionContributionItem unformattedViewMenuItem=new ActionContributionItem(new UnformattedViewAction("Unformatted View",debugDataViewer));*/
+		
+		ActionContributionItem gridViewMenuitem=new ActionContributionItem(actionFactory.getAction("GridViewAction"));
+		//ActionContributionItem horizontalViewMenuItem=new ActionContributionItem(actionFactory.getAction("HorizontalViewAction"));
+		ActionContributionItem formattedViewMenuItem=new ActionContributionItem(actionFactory.getAction("FormattedViewAction"));
+		ActionContributionItem unformattedViewMenuItem=new ActionContributionItem(actionFactory.getAction("UnformattedViewAction"));
+		
 		gridViewMenuitem.fill(menu, 0);
-		horizontalViewMenuItem.fill(menu, 1);
+		/*horizontalViewMenuItem.fill(menu, 1);
+		formattedViewMenuItem.fill(menu,2);
+		unformattedViewMenuItem.fill(menu,3);*/
+		formattedViewMenuItem.fill(menu,1);
 		unformattedViewMenuItem.fill(menu,2);
+		
 		return menu;
 	}
 

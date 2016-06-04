@@ -4,17 +4,17 @@ import hydrograph.ui.dataviewer.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
 
-public class UnformattedViewAction extends Action {
-	private DebugDataViewer debugDataViewer;
+public class FormattedViewAction extends Action {
 	
-	public UnformattedViewAction(String menuItem,
+	private DebugDataViewer debugDataViewer;
+	public FormattedViewAction(String menuItem,
 			DebugDataViewer debugDataViewer) {
 		super(menuItem);
 		this.debugDataViewer = debugDataViewer;
 	}
 	@Override
 	public void run() {
-		debugDataViewer.createUnformattedViewTabItem();
+		debugDataViewer.createFormatedViewTabItem();
 		super.run();
 	}
 }

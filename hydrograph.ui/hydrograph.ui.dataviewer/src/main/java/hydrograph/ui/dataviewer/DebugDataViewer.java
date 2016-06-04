@@ -1,26 +1,16 @@
 package hydrograph.ui.dataviewer;
 
 import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.dataviewer.actions.ClearAction;
-import hydrograph.ui.dataviewer.actions.CloseAction;
-import hydrograph.ui.dataviewer.actions.CopyAction;
-import hydrograph.ui.dataviewer.actions.ExportAction;
-import hydrograph.ui.dataviewer.actions.FilterAction;
-import hydrograph.ui.dataviewer.actions.FindAction;
-import hydrograph.ui.dataviewer.actions.GoAction;
-import hydrograph.ui.dataviewer.actions.GridViewAction;
-import hydrograph.ui.dataviewer.actions.HorizontalViewAction;
-import hydrograph.ui.dataviewer.actions.PreferencesAction;
-import hydrograph.ui.dataviewer.actions.ReloadAction;
-import hydrograph.ui.dataviewer.actions.SelectAllAction;
-import hydrograph.ui.dataviewer.actions.StopAction;
-import hydrograph.ui.dataviewer.actions.UnformattedViewAction;
+import hydrograph.ui.dataviewer.actions.ActionFactory;
 import hydrograph.ui.dataviewer.actions.ViewDataGridMenuCreator;
 import hydrograph.ui.dataviewer.adapters.CSVAdapter;
 import hydrograph.ui.dataviewer.constants.ADVConstants;
-import hydrograph.ui.dataviewer.constants.PreferenceConstants;
+import hydrograph.ui.dataviewer.constants.Views;
 import hydrograph.ui.dataviewer.datastructures.ColumnData;
 import hydrograph.ui.dataviewer.datastructures.RowData;
+import hydrograph.ui.dataviewer.listeners.DataViewerListeners;
+import hydrograph.ui.dataviewer.utilities.Utils;
+import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
 
 import java.sql.Timestamp;
 import java.util.LinkedList;
@@ -37,7 +27,6 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.layout.TableColumnLayout;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -75,39 +64,35 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 public class DebugDataViewer extends ApplicationWindow {
-	private Composite composite_1;
-	private Text text;
-	private Text text_1;
-	private Composite composite_4;
+	
 	private CTabFolder tabFolder;
 	
+	private StyledText unformattedViewTextarea;
+	private StyledText formattedViewTextarea;
+	private TableViewer horizontalViewTableViewer;
+	private TableViewer gridViewTableViewer;
+	private Text pageNumberDisplayTextBox;
+	private Text jumpPageTextBox;
+	private Button jumpPageButton;
+	private Button nextPageButton;
 	private StatusLineManager statusLineManager;
 	
-	
 	private CSVAdapter csvAdapter;
-	//private List<Schema> tableSchema = new LinkedList<>();
-		
 	private List<Control> windowControls;
-	
-	private List<String> columnList;
 	
 	private static List<RowData> gridViewData;
 	private static List<RowData> formattedViewData;
 	private static List<RowData> unformattedViewData;
 	
-	private StyledText unformattedViewDataUIContainer;
-	private StyledText formattedViewDataUIContainer;
-	private TableViewer horizontalViewUIContainer;
-	private TableViewer gridViewUIContainer;
-	
-	private static String GRID_VIEW_NAME="GRID_VIEW";
-	private static String HORIZONTAL_VIEW_NAME="HORIZONTAL_VIEW";
-	private static String FORMATTED_VIEW_NAME="FORMATTED_VIEW";
-	private static String UNFORMATTED_VIEW_NAME="UNFORMATTED_VIEW";
-	
 	private String database;
 	private String tableName;
-	private IPreferenceStore iPreferenceStore;
+	
+	private String windowName="Debug Data viewer";
+	
+	private ActionFactory actionFactory;
+	
+	private DataViewLoader dataViewLoader;
+	private DataViewerListeners dataViewerListeners;
 	
 	/**
 	 * Create the application window,
@@ -120,13 +105,14 @@ public class DebugDataViewer extends ApplicationWindow {
 		addStatusLine();
 		windowControls = new LinkedList<>();
 		gridViewData = new LinkedList<>();
+		actionFactory = new ActionFactory(this);
 	}
 
 	
 	/**
 	 * Create the application window,
 	 */
-	public DebugDataViewer(String filePath,String fileName) {
+	public DebugDataViewer(String filePath,String fileName,String windowName) {
 		super(null);
 		createActions();
 		addCoolBar(SWT.FLAT);
@@ -136,58 +122,17 @@ public class DebugDataViewer extends ApplicationWindow {
 		gridViewData = new LinkedList<>();
 		this.database = filePath;
 		this.tableName = fileName;
+		actionFactory = new ActionFactory(this);
+		
+		if(windowName!=null)
+			this.windowName = "Data Viewer - " + windowName;
+		
 	}
 	
-	public DebugDataViewer(IPreferenceStore iPreferenceStore, String fileName) {
-		super(null);
-		createActions();
-		addCoolBar(SWT.FLAT);
-		addMenuBar();
-		addStatusLine();
-		windowControls = new LinkedList<>();
-		gridViewData = new LinkedList<>();
-		//this.database = filePath;
-		this.iPreferenceStore = iPreferenceStore;
-		this.tableName = fileName;
+	
+	public String getWindowName() {
+		return windowName;
 	}
-	
-	/*private void populateSchemaList() {
-		tableSchema.add(new Schema("f_string","java.lang.String", null));
-		tableSchema.add(new Schema("f_string1","java.lang.String", null));
-		tableSchema.add(new Schema("f_int","java.lang.Integer", null));
-		tableSchema.add(new Schema("f_long","java.lang.Long", null));
-		tableSchema.add(new Schema("f_double1","java.lang.Double", null));
-		tableSchema.add(new Schema("f_double2","java.lang.Double", null));
-		tableSchema.add(new Schema("f_float1","java.lang.Float", null));
-		tableSchema.add(new Schema("f_float2","java.lang.Float", null));
-		tableSchema.add(new Schema("f_short","java.lang.Short", null));
-		tableSchema.add(new Schema("f_date1","java.util.Date", "YYYY-MM-DD"));
-		tableSchema.add(new Schema("f_date2","java.util.Date", "DDMMYYYY"));
-		tableSchema.add(new Schema("f_date3","java.util.Date", "DD.MMM.YYYY"));
-		tableSchema.add(new Schema("f_date4","java.util.Date", "yyyy-MM-dd HH:mm:ss"));
-		tableSchema.add(new Schema("f_date5","java.util.Date", "yyyy-MM-dd hh:mm:ss"));
-		tableSchema.add(new Schema("f_date6","java.util.Date", "ddMMyy"));
-		tableSchema.add(new Schema("f_bigDecimal","java.math.BigDecimal", null));
-		tableSchema.add(new Schema("f_string3","java.lang.String", null));
-		tableSchema.add(new Schema("f_string4","java.lang.String", null));
-		tableSchema.add(new Schema("f_int1","java.lang.Integer", null));
-		tableSchema.add(new Schema("f_long3","java.lang.Long", null));
-		tableSchema.add(new Schema("f_double3","java.lang.Double", null));
-		tableSchema.add(new Schema("f_double4","java.lang.Double", null));
-		tableSchema.add(new Schema("f_float3","java.lang.Float", null));
-		tableSchema.add(new Schema("f_float4","java.lang.Float", null));
-		tableSchema.add(new Schema("f_short1","java.lang.Short", null));
-		tableSchema.add(new Schema("f_date7","java.util.Date", "YYYY-MM-DD"));
-		tableSchema.add(new Schema("f_date21","java.util.Date", "DDMMYYYY"));
-		tableSchema.add(new Schema("f_date32","java.util.Date", "DD.MMM.YYYY"));
-		tableSchema.add(new Schema("f_date41","java.util.Date", "yyyy-MM-dd HH:mm:ss"));
-		tableSchema.add(new Schema("f_date51","java.util.Date", "yyyy-MM-dd hh:mm:ss"));
-		tableSchema.add(new Schema("f_date61","java.util.Date", "ddMMyy"));
-		tableSchema.add(new Schema("f_bigDecimal1","java.math.BigDecimal", null));
-	}*/
-	
-	
-
 
 	/**
 	 * Create contents of the application window.
@@ -195,71 +140,62 @@ public class DebugDataViewer extends ApplicationWindow {
 	 */
 	@Override
 	protected Control createContents(Composite parent) {
-		
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		
-		csvAdapter = new CSVAdapter(preferenceStore.getString(PreferenceConstants.TEMPPATH), tableName,Integer.valueOf(preferenceStore.getString(PreferenceConstants.RECORDSLIMIT)), 0,this);
-				
+		setDataViewerWindowTitle();
+		initializeDataFileAdapter();
+
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
-		{
-			tabFolder = new CTabFolder(container, SWT.BORDER);
-			tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-			tabFolder.setSelectionBackground(new Color(null, 14,76,145));
-			tabFolder.setBackground(SWTResourceManager.getColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
-			tabFolder.setSelectionForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-			{
-				createGridViewTabItem();
-			}
-			{
-				createHorizantalViewTabItem();
-			}
-			{
-				createFormatedViewTabItem();
-			}
-			{
-				createUnformattedViewTabItem();
-			}
-			
-			tabFolder.addSelectionListener(new SelectionListener() {
-				
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					updateView();
-				}
-				
-				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-					// DO Nothing
-					
-				}
-			});
-		}
-		{
-			createPaginationPanel(container);
-		}
+
+		tabFolder = new CTabFolder(container, SWT.BORDER);
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
+				1));
+		tabFolder.setSelectionBackground(new Color(null, 14, 76, 145));
+		tabFolder.setBackground(SWTResourceManager
+				.getColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
+		tabFolder.setSelectionForeground(Display.getCurrent().getSystemColor(
+				SWT.COLOR_WHITE));
+
+		dataViewLoader = new DataViewLoader(unformattedViewTextarea,
+				formattedViewTextarea, horizontalViewTableViewer,
+				gridViewTableViewer, gridViewData, formattedViewData,
+				unformattedViewData, csvAdapter, tabFolder);
+
+		dataViewerListeners = new DataViewerListeners();
 		
-		setDefaultStatusMessage();
+		createGridViewTabItem();
+		createPaginationPanel(container);		
 		
+		
+		dataViewerListeners.setCsvAdapter(csvAdapter);
+		dataViewerListeners.setDataViewLoader(dataViewLoader);
+		dataViewerListeners.setPageNumberDisplayTextBox(pageNumberDisplayTextBox);
+		dataViewerListeners.setStatusLineManager(statusLineManager);
+		dataViewerListeners.setWindowControls(windowControls);
+		dataViewerListeners.setJumpPageTextBox(jumpPageTextBox);
+		
+		dataViewerListeners.addTabFolderSelectionChangeListener(tabFolder);
+		
+		dataViewerListeners.setDefaultStatusMessage();
+
 		java.util.Date date = new java.util.Date();
 		System.out.println("+++ ADV End: " + new Timestamp(date.getTime()));
+		
+		jumpPageTextBox.setEnabled(false);
+		jumpPageButton.setEnabled(false);
 		return container;
+
 	}
 
 
-	private void updateView(){
-		CTabItem tabItem = tabFolder.getSelection();
-		if(tabItem.getData("VIEW_NAME").equals(GRID_VIEW_NAME)){
-			gridViewUIContainer.refresh();
-		}else if(tabItem.getData("VIEW_NAME").equals(HORIZONTAL_VIEW_NAME)){
-			
-		}else if(tabItem.getData("VIEW_NAME").equals(FORMATTED_VIEW_NAME)){
-			updateFormattedView();
-		}else if(tabItem.getData("VIEW_NAME").equals(UNFORMATTED_VIEW_NAME)){
-			updateUnformattedView();
-		}
+	private void initializeDataFileAdapter() {
+		csvAdapter = new CSVAdapter(database, tableName,Utils.getDefaultPageSize(), 0,this);
 	}
-	
+
+
+	private void setDataViewerWindowTitle() {
+		getShell().setText(windowName);
+	}
+
 	
 	private void createPaginationPanel(Composite container) {
 		Composite composite_2 = new Composite(container, SWT.NONE);
@@ -270,12 +206,10 @@ public class DebugDataViewer extends ApplicationWindow {
 		gl_composite_2.marginHeight = 0;
 		gl_composite_2.horizontalSpacing = 0;
 		composite_2.setLayout(gl_composite_2);
-		{
-			createPageSwitchPanel(composite_2);
-		}
-		{
-			createPageJumpPanel(composite_2);
-		}
+		
+		createPageSwitchPanel(composite_2);
+		createPageJumpPanel(composite_2);
+
 	}
 
 
@@ -296,61 +230,17 @@ public class DebugDataViewer extends ApplicationWindow {
 
 
 	private void createJumpPageButton(Composite composite_3) {
-		final Button button = new Button(composite_3, SWT.NONE);
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				
-				setProgressStatusMessage("Please wait, fetching page " + text_1.getText());
-				setWindowControlsEnabled(false);
-				
-				final Long  pageNumberToJump = Long.valueOf(text_1.getText());
-				Job job = new Job("JumpToPage") {
-					  @Override
-					  protected IStatus run(IProgressMonitor monitor) {
-						  final int retCode = csvAdapter.jumpToPage(pageNumberToJump);
-						  updateDataViewLists();
-						  
-						  Display.getDefault().asyncExec(new Runnable() {
-					      @Override
-					      public void run() {
-					    	  //gridViewTableViewer.refresh();
-					    	  updateView();
-						       
-								setWindowControlsEnabled(true);
-					    	  if(retCode == ADVConstants.EOF){
-									appendStatusMessage("End of file reached");
-								}else if(retCode == ADVConstants.ERROR){
-									statusLineManager.setErrorMessage("Error while featching record");
-								}else{
-									setDefaultStatusMessage();
-								}
-					      }
-					    });
-					    return Status.OK_STATUS;
-					  }
-
-					
-					};
-					
-					job.schedule();
-			}
-		});
-		button.setText("Go");
-		windowControls.add(button);
-	}
-
-	private void updateDataViewLists() {
-		gridViewData.clear();
-		gridViewData.addAll(csvAdapter.getTableData());
-		formattedViewData = csvAdapter.getTableData();
-		unformattedViewData = csvAdapter.getTableData();
+		jumpPageButton = new Button(composite_3, SWT.NONE);
+		dataViewerListeners.attachJumpToPageListener(jumpPageButton,nextPageButton);
+		jumpPageButton.setText("Go");
+		jumpPageButton.setData("CONTROL_NAME","JUMP_BUTTON");
+		windowControls.add(jumpPageButton);
 	}
 
 	private void createJumpPageTextBox(Composite composite_3) {
-		text_1 = new Text(composite_3, SWT.BORDER);
-		text_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		text_1.addVerifyListener(new VerifyListener() {  
+		jumpPageTextBox = new Text(composite_3, SWT.BORDER);
+		jumpPageTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		jumpPageTextBox.addVerifyListener(new VerifyListener() {  
 		    @Override  
 		    public void verifyText(VerifyEvent e) {
 		        String currentText = ((Text)e.widget).getText();
@@ -367,7 +257,11 @@ public class DebugDataViewer extends ApplicationWindow {
 		        }  
 		    }  
 		});	
-		windowControls.add(text_1);
+		
+		dataViewerListeners.attachJumpToPageListener(jumpPageTextBox,nextPageButton);
+		jumpPageTextBox.setData("CONTROL_NAME","JUMP_TEXT");
+		windowControls.add(jumpPageTextBox);
+		
 	}
 
 
@@ -381,127 +275,64 @@ public class DebugDataViewer extends ApplicationWindow {
 	private void createPageSwitchPanel(Composite composite_2) {
 		Composite composite_3 = new Composite(composite_2, SWT.NONE);
 		composite_3.setLayout(new GridLayout(3, false));
-		{
-			createPreviousPageButton(composite_3);
-		}
-		{
-			createPageNumberDisplay(composite_3);
-			
-		}
-		{
-			createNextPageButton(composite_3);
-		}
+		
+		createPreviousPageButton(composite_3);
+		createPageNumberDisplay(composite_3);
+		createNextPageButton(composite_3);
+		
 	}
 
 
 	private void createNextPageButton(Composite composite_3) {
-		Button button = new Button(composite_3, SWT.NONE);
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				
-				setProgressStatusMessage("Please wait, fetching next page records");
-				setWindowControlsEnabled(false);
-				
-				Job job = new Job("NextPage") {
-					  @Override
-					  protected IStatus run(IProgressMonitor monitor) {
-						  final int retCode = csvAdapter.next();
-						  
-						  updateDataViewLists();
-						  
-						  Display.getDefault().asyncExec(new Runnable() {
-					      @Override
-					      public void run() {
-					    	 /* gridViewTableViewer.refresh();
-					    	  updateUnformattedView();*/
-					    	  updateView();
-					    	  setWindowControlsEnabled(true);
-								if(retCode == ADVConstants.EOF){
-									appendStatusMessage("End of file reached");
-								}else if(retCode == ADVConstants.ERROR){
-									statusLineManager.setErrorMessage("Error while featching record");
-								}else{
-									setDefaultStatusMessage();
-								}
-					      }
-					    });
-					    return Status.OK_STATUS;
-					  }
-					};
-					
-					job.schedule();
-			}
-		});
-		button.setText("Next");
-		windowControls.add(button);
+		nextPageButton = new Button(composite_3, SWT.NONE);
+		dataViewerListeners.attachNextPageButtonListener(nextPageButton);
+		nextPageButton.setText("Next");
+		nextPageButton.setData("CONTROL_NAME","NEXT_BUTTON");
+		windowControls.add(nextPageButton);
+		
 	}
 
 
 	private void createPageNumberDisplay(Composite composite_3) {
-		text = new Text(composite_3, SWT.BORDER | SWT.CENTER);
-		text.setEnabled(false);
-		text.setEditable(false);
+		pageNumberDisplayTextBox = new Text(composite_3, SWT.BORDER | SWT.CENTER);
+		pageNumberDisplayTextBox.setEnabled(false);
+		pageNumberDisplayTextBox.setEditable(false);
 		GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_text.widthHint = 178;
-		text.setLayoutData(gd_text);
-	}
-
-	private void updatePageNumberDisplayPanel(){
-		text.setText(csvAdapter.getPageStatusNumber());
+		pageNumberDisplayTextBox.setLayoutData(gd_text);
+		
+		//csvAdapter.getRowCount();
+		
+		Job job = new Job("Fetaching total number of rows") {
+			  @Override
+			  protected IStatus run(IProgressMonitor monitor) {
+				  csvAdapter.fetchRowCount();
+				  
+				  Display.getDefault().asyncExec(new Runnable() {
+			      @Override
+			      public void run() {
+			    	 dataViewerListeners.setDefaultStatusMessage();
+			    	 jumpPageButton.setEnabled(true);
+			    	 jumpPageTextBox.setEnabled(true);
+			      }
+			    });
+			    return Status.OK_STATUS;
+			  }
+			};
+			
+			job.schedule();
 	}
 
 	private void createPreviousPageButton(Composite composite_3) {
 		Button button = new Button(composite_3, SWT.NONE);
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				
-				setProgressStatusMessage("Please wait, fetching next page records");
-				setWindowControlsEnabled(false);
-				
-				Job job = new Job("PreviousPage") {
-					  @Override
-					  protected IStatus run(IProgressMonitor monitor) {
-						  final int retCode = csvAdapter.previous();
-							
-						  updateDataViewLists();
-						  
-						  Display.getDefault().asyncExec(new Runnable() {
-					      @Override
-					      public void run() {
-					    	  //gridViewTableViewer.refresh();
-					    	  updateView();
-					    	  setWindowControlsEnabled(true);
-					    	  if(retCode == ADVConstants.BOF){
-									appendStatusMessage("Begining of file reached");
-								}else if(retCode == ADVConstants.ERROR){
-									statusLineManager.setErrorMessage("Error while featching record");
-								}else{
-									setDefaultStatusMessage();
-								}
-					      }
-					    });
-					    return Status.OK_STATUS;
-					  }
-					};
-					
-					job.schedule();
-				
-			}
-		});
+		dataViewerListeners.attachPreviousPageButtonListener(button);
 		button.setText("Previous");
+		button.setData("CONTROL_NAME","PREVIOUS_BUTTON");
+		
 		windowControls.add(button);
 	}
 	
-	
-	public void setWindowControlsEnabled(boolean enabled){
-		for(Control control: windowControls){
-			control.setEnabled(enabled);
-		}
-	}
-
-	public void setDefaultStatusMessage() {
+	/*public void setDefaultStatusMessage() {
 		StringBuilder stringBuilder = new StringBuilder();
 		
 		statusLineManager.setErrorMessage(null);
@@ -515,117 +346,63 @@ public class DebugDataViewer extends ApplicationWindow {
 		stringBuilder.append("Showing records from " + csvAdapter.getOFFSET() + " to " + (csvAdapter.getOFFSET() + csvAdapter.getPAGE_SIZE()) + " | ");
 		statusLineManager.setMessage(stringBuilder.toString().substring(0,stringBuilder.length() -2));
 		
-		updatePageNumberDisplayPanel();
-	}
+		dataViewerListeners.updatePageNumberDisplayPanel();
+	}*/
 
 	
-	public void setProgressStatusMessage(String message){
-		statusLineManager.setMessage(message);
-	}
-	
-	private void appendStatusMessage(String Message) {
-		StringBuilder stringBuilder = new StringBuilder();
+	public void createUnformattedViewTabItem() {
 		
-		if(csvAdapter.getRowCount()!=null){
-			stringBuilder.append("Record Count: " + csvAdapter.getRowCount() + " | ");
-		}else{
-			stringBuilder.append("Counting number of records... | ");
+		if(isViewTabExist(Views.UNFORMATTED_VIEW_NAME)){
+			CTabItem item=getViewTabItem(Views.UNFORMATTED_VIEW_NAME);
+			tabFolder.setSelection(item);
+			dataViewLoader.reloadloadViews();
+			return;
 		}
 		
-		stringBuilder.append("Showing records from " + csvAdapter.getOFFSET() + " to " + (csvAdapter.getOFFSET() + csvAdapter.getPAGE_SIZE()) + " | ");
-		
-		stringBuilder.append(Message + " | ");
-		
-		statusLineManager.setMessage(stringBuilder.toString().substring(0,stringBuilder.length() -2));
-	}
-
-	
-	private void updateUnformattedView(){
-		unformattedViewDataUIContainer.setText("");
-		StringBuilder stringBuilder = new StringBuilder();
-		for(RowData rowData : unformattedViewData){
-			//unformattedViewDataUIContainer.append(rowData);
-			String row="";
-			for(ColumnData columnData : rowData.getColumns()){
-				row = row + columnData.getValue() + ",";
-			}
-			stringBuilder.append(row.substring(0, row.length() -1) + "\n");
-			
-			
-		}
-		unformattedViewDataUIContainer.setText(stringBuilder.toString());
-	}
-	
-	private void createUnformattedViewTabItem() {
 		CTabItem tbtmUnformattedView = new CTabItem(tabFolder, SWT.CLOSE);
-		tbtmUnformattedView.setData("VIEW_NAME", UNFORMATTED_VIEW_NAME);
+		tbtmUnformattedView.setData("VIEW_NAME", Views.UNFORMATTED_VIEW_NAME);
 		tbtmUnformattedView.setText("Unformatted View");
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
 			tbtmUnformattedView.setControl(composite);
 			composite.setLayout(new GridLayout(1, false));
 			{
-				unformattedViewDataUIContainer = new StyledText(composite, SWT.BORDER | SWT.READ_ONLY | SWT.V_SCROLL | SWT.H_SCROLL);
-				unformattedViewDataUIContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-			}
-		}
-	}
-	
-	private int getMaxLengthColumn(){
-		
-		int lenght=0;
-		
-		for(String columnName: csvAdapter.getColumnList()){
-			if(columnName.length() > lenght){
-				lenght = columnName.length();
+				unformattedViewTextarea = new StyledText(composite, SWT.BORDER | SWT.READ_ONLY | SWT.V_SCROLL | SWT.H_SCROLL);
+				unformattedViewTextarea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 			}
 		}
 		
-		return lenght;
+		tabFolder.setSelection(tbtmUnformattedView);
+		dataViewLoader.setUnformattedViewTextarea(unformattedViewTextarea);
+		dataViewLoader.reloadloadViews();
 	}
 	
-	
-	private void updateFormattedView(){
-		formattedViewDataUIContainer.setText("");
-		StringBuilder stringBuilder = new StringBuilder();
-		int rowNumber=0;
+	public void createFormatedViewTabItem() {
 		
-		int maxLenghtColumn = getMaxLengthColumn();
-		
-		maxLenghtColumn+=5;
-		String format="\t\t%-" + maxLenghtColumn + "s: %s\n";   
-		
-		for(RowData rowData : formattedViewData){
-			stringBuilder.append("Record: " + rowNumber + "\n\n");
-			
-			stringBuilder.append("{\n");
-			int columnIndex=0;
-			for(String columnName: csvAdapter.getColumnList()){
-				ColumnData columnData = rowData.getColumns().get(columnIndex);
-				String tempString = String.format(format, columnName,columnData.getValue());
-				stringBuilder.append(tempString);
-				columnIndex++;
-			}
-			stringBuilder.append("}\n");
-			stringBuilder.append("----------------------------------\n");
+		if(isViewTabExist(Views.FORMATTED_VIEW_NAME)){
+			CTabItem item=getViewTabItem(Views.FORMATTED_VIEW_NAME);
+			tabFolder.setSelection(item);
+			dataViewLoader.reloadloadViews();
+			return;
 		}
-		formattedViewDataUIContainer.setText(stringBuilder.toString());
-	}
-	private void createFormatedViewTabItem() {
+		
 		CTabItem tbtmFormattedView = new CTabItem(tabFolder, SWT.CLOSE);
-		tbtmFormattedView.setData("VIEW_NAME", FORMATTED_VIEW_NAME);
+		tbtmFormattedView.setData("VIEW_NAME", Views.FORMATTED_VIEW_NAME);
 		tbtmFormattedView.setText("Formatted view");
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
 			tbtmFormattedView.setControl(composite);
 			composite.setLayout(new GridLayout(1, false));
 			{
-				formattedViewDataUIContainer = new StyledText(composite, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL);
-				formattedViewDataUIContainer.setFont(SWTResourceManager.getFont("Courier New", 9, SWT.NORMAL));
-				formattedViewDataUIContainer.setEditable(false);
-				formattedViewDataUIContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+				formattedViewTextarea = new StyledText(composite, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL);
+				formattedViewTextarea.setFont(SWTResourceManager.getFont("Courier New", 9, SWT.NORMAL));
+				formattedViewTextarea.setEditable(false);
+				formattedViewTextarea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 			}
 		}
+		tabFolder.setSelection(tbtmFormattedView);
+		dataViewLoader.setFormattedViewTextarea(formattedViewTextarea);
+		dataViewLoader.reloadloadViews();
 	}
 
 	private void createHorizantalViewTabItem() {
@@ -647,7 +424,7 @@ public class DebugDataViewer extends ApplicationWindow {
 				stackLayoutComposite.setLayout(stackLayout);
 				
 				{
-					composite_4 = new Composite(stackLayoutComposite, SWT.NONE);
+					Composite composite_4 = new Composite(stackLayoutComposite, SWT.NONE);
 					GridLayout gl_composite_4 = new GridLayout(1, false);
 					gl_composite_4.verticalSpacing = 0;
 					gl_composite_4.marginWidth = 0;
@@ -655,15 +432,13 @@ public class DebugDataViewer extends ApplicationWindow {
 					gl_composite_4.horizontalSpacing = 0;
 					composite_4.setLayout(gl_composite_4);
 					{
-						horizontalViewUIContainer = new TableViewer(composite_4, SWT.BORDER | SWT.FULL_SELECTION);
-						Table table_1 = horizontalViewUIContainer.getTable();
+						horizontalViewTableViewer = new TableViewer(composite_4, SWT.BORDER | SWT.FULL_SELECTION);
+						Table table_1 = horizontalViewTableViewer.getTable();
 						table_1.setLinesVisible(true);
 						table_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 					}
-					stackLayout.topControl = composite_1;
+					stackLayout.topControl = composite_4;
 				}
-				//scrolledComposite.setContent(composite_4);
-				//scrolledComposite.setMinSize(composite_4.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 				
 				scrolledComposite.getShowFocusedControl();
 				scrolledComposite.setShowFocusedControl(true);
@@ -674,33 +449,52 @@ public class DebugDataViewer extends ApplicationWindow {
 				
 				installMouseWheelScrollRecursively(scrolledComposite);
 				
-				createHorizontalViewTableColumns(horizontalViewUIContainer);
-				setTableLayoutToMappingTable(horizontalViewUIContainer);
-				horizontalViewUIContainer.setContentProvider(new ArrayContentProvider());
+				//createHorizontalViewTableColumns(horizontalViewTableViewer);
+				setTableLayoutToMappingTable(horizontalViewTableViewer);
+				horizontalViewTableViewer.setContentProvider(new ArrayContentProvider());
 				
-				updateDataViewLists();
-				horizontalViewUIContainer.setInput(gridViewData);
-				horizontalViewUIContainer.refresh();
+				dataViewLoader.updateDataViewLists();
+				horizontalViewTableViewer.setInput(gridViewData);
+				horizontalViewTableViewer.refresh();
 				
-				for (int i = 0, n = horizontalViewUIContainer.getTable().getColumnCount(); i < n; i++)
-					horizontalViewUIContainer.getTable().getColumn(i).pack();
+				for (int i = 0, n = horizontalViewTableViewer.getTable().getColumnCount(); i < n; i++)
+					horizontalViewTableViewer.getTable().getColumn(i).pack();
 				
-				horizontalViewUIContainer.refresh();
+				horizontalViewTableViewer.refresh();
 			}
 		}
 	}
-
-	private void createHorizontalViewTableColumns(
-			TableViewer horizontalViewUIContainer2) {
+	
+	private boolean isViewTabExist(String viewName){
 		
-		// TODO Auto-generated method stub
-		
+		for(int index=0;index<tabFolder.getItemCount();index++){
+			if(viewName.equals(tabFolder.getItem(index).getData("VIEW_NAME"))){
+				return true;
+			}
+		}
+		return false;
 	}
-
-
-	private void createGridViewTabItem() {
+	
+	private CTabItem getViewTabItem(String viewName){
+		
+		for(int index=0;index<tabFolder.getItemCount();index++){
+			if(viewName.equals(tabFolder.getItem(index).getData("VIEW_NAME"))){
+				return tabFolder.getItem(index);
+			}
+		}
+		return null;
+	}
+	
+	public void createGridViewTabItem() {
+		
+		if(isViewTabExist(Views.GRID_VIEW_NAME)){
+			CTabItem item=getViewTabItem(Views.GRID_VIEW_NAME);
+			tabFolder.setSelection(item);
+			return;
+		}
+		
 		CTabItem tbtmGridview = new CTabItem(tabFolder, SWT.NONE);
-		tbtmGridview.setData("VIEW_NAME", GRID_VIEW_NAME);
+		tbtmGridview.setData("VIEW_NAME", Views.GRID_VIEW_NAME);
 		tbtmGridview.setText("Grid view");
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
@@ -718,7 +512,7 @@ public class DebugDataViewer extends ApplicationWindow {
 				StackLayout stackLayout  = new StackLayout();
 				stackLayoutComposite.setLayout(stackLayout);
 				{
-					composite_1 = new Composite(stackLayoutComposite, SWT.NONE);
+					Composite composite_1 = new Composite(stackLayoutComposite, SWT.NONE);
 					GridLayout gl_composite_1 = new GridLayout(1, false);
 					gl_composite_1.verticalSpacing = 0;
 					gl_composite_1.marginWidth = 0;
@@ -728,8 +522,8 @@ public class DebugDataViewer extends ApplicationWindow {
 					composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 							1));
 					{
-						gridViewUIContainer = new TableViewer(composite_1, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
-						Table table = gridViewUIContainer.getTable();
+						gridViewTableViewer = new TableViewer(composite_1, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
+						Table table = gridViewTableViewer.getTable();
 						table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 						table.setLinesVisible(true);
 						table.setHeaderVisible(true);
@@ -748,34 +542,60 @@ public class DebugDataViewer extends ApplicationWindow {
 				
 				installMouseWheelScrollRecursively(scrolledComposite);
 				
-				createGridViewTableColumns(gridViewUIContainer);
-				setTableLayoutToMappingTable(gridViewUIContainer);
-				gridViewUIContainer.setContentProvider(new ArrayContentProvider());
+				createGridViewTableColumns(gridViewTableViewer);
+				TableColumnLayout layout = setTableLayoutToMappingTable(gridViewTableViewer);
+				gridViewTableViewer.setContentProvider(new ArrayContentProvider());
+				gridViewTableViewer.setInput(gridViewData);
 				
-				updateDataViewLists();
-				gridViewUIContainer.setInput(gridViewData);
-				gridViewUIContainer.refresh();
+				dataViewLoader.setGridViewTableViewer(gridViewTableViewer);
+				dataViewLoader.updateDataViewLists();
 				
-				for (int i = 0, n = gridViewUIContainer.getTable().getColumnCount(); i < n; i++)
-					gridViewUIContainer.getTable().getColumn(i).pack();
+				/*gridViewTableViewer.refresh();
 				
-				gridViewUIContainer.refresh();
+				for (int i = 0, n = gridViewTableViewer.getTable().getColumnCount(); i < n; i++)
+					gridViewTableViewer.getTable().getColumn(i).pack();
+								
+				gridViewTableViewer.refresh();
+				
+				for (int i = 0; i < gridViewTableViewer.getTable().getColumnCount(); i++)
+					gridViewTableViewer.getTable().getColumn(i).pack();*/
+				
+				Table table = gridViewTableViewer.getTable();
+				
+				for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
+					table.getColumn(columnIndex).pack();
+				}
+				gridViewTableViewer.refresh();
+				for (int i = 0; i < table.getColumnCount(); i++) {
+					layout.setColumnData(table.getColumn(i), new ColumnWeightData(1));
+				}
+				gridViewTableViewer.refresh();
+				for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
+					table.getColumn(columnIndex).pack();
+				}
+												
+				gridViewTableViewer.refresh();
 			}
 		}
+		
 	}
 	
-	private void setTableLayoutToMappingTable(TableViewer tableViewer) {
+	private TableColumnLayout setTableLayoutToMappingTable(TableViewer tableViewer) {
 		Table table =tableViewer.getTable();
 		TableColumnLayout layout = new TableColumnLayout();
 		tableViewer.getControl().getParent().setLayout(layout);
 
-		for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
+		/*for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
 			table.getColumn(columnIndex).pack();
 		}
 
 		for (int i = 0; i < table.getColumnCount(); i++) {
 			layout.setColumnData(table.getColumn(i), new ColumnWeightData(1));
-		}
+		}*/
+		
+		
+		tableViewer.refresh();
+		return layout;
 	}
 	
 	private void createGridViewTableIndexColumn(final TableViewer tableViewer){
@@ -845,6 +665,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	 */
 	@Override
 	protected MenuManager createMenuManager() {
+		actionFactory = new ActionFactory(this);
 		MenuManager menuManager = new MenuManager("menu");
 		menuManager.setVisible(true);
 
@@ -867,29 +688,43 @@ public class DebugDataViewer extends ApplicationWindow {
 		menuManager.add(fileMenu);
 		fileMenu.setVisible(true);
 
-		fileMenu.add(new ExportAction("Export",this));
-		fileMenu.add(new FilterAction("Filter"));
-		fileMenu.add(new GoAction("Go"));
-		fileMenu.add(new StopAction("Stop"));
-		fileMenu.add(new ClearAction("Clear"));
-		fileMenu.add(new CloseAction("Close"));
+		fileMenu.add(actionFactory.getAction("ExportAction"));
+		fileMenu.add(actionFactory.getAction("FilterAction"));
 	}
 	
 	private void createEditMenu(MenuManager menuManager) {
 		MenuManager editMenu = createMenu(menuManager, "Edit");
-		editMenu.add(new SelectAllAction("Select All"));
-		editMenu.add(new CopyAction("Copy"));
-		editMenu.add(new FilterAction("Find"));
+		menuManager.add(editMenu);
+		editMenu.setVisible(true);
+		
+		/*editMenu.add(new SelectAllAction("Select All",this));
+		editMenu.add(new CopyAction("Copy",this));
+		editMenu.add(new FindAction("Find",this));*/
+		editMenu.add(actionFactory.getAction("SelectAllAction"));
+		editMenu.add(actionFactory.getAction("CopyAction"));
+		editMenu.add(actionFactory.getAction("FindAction"));
 	}
 
 	private void createViewMenu(MenuManager menuManager) {
 		MenuManager viewMenu = createMenu(menuManager, "View");
-		viewMenu.add(new GridViewAction("Grid View", this));
-		viewMenu.add(new HorizontalViewAction("Horizontal View"));
-		viewMenu.add(new UnformattedViewAction("Formatted View", this));
+		menuManager.add(viewMenu);
+		viewMenu.setVisible(true);
+		
+		/*viewMenu.add(new GridViewAction("Grid View", this));
+		viewMenu.add(new HorizontalViewAction("Horizontal View",this));
+		viewMenu.add(new UnformattedViewAction("Unformatted View", this));
+		viewMenu.add(new FormattedViewAction("Formatted View", this));
 		viewMenu.add(new Separator());
 		viewMenu.add(new ReloadAction("Reload", this));
-		viewMenu.add(new PreferencesAction("Preferences"));
+		viewMenu.add(new PreferencesAction("Preferences",this));*/
+		
+		viewMenu.add(actionFactory.getAction("GridViewAction"));
+		//viewMenu.add(actionFactory.getAction("HorizontalViewAction"));
+		viewMenu.add(actionFactory.getAction("FormattedViewAction"));
+		viewMenu.add(actionFactory.getAction("UnformattedViewAction"));
+		viewMenu.add(new Separator());
+		viewMenu.add(actionFactory.getAction("ReloadAction"));
+		viewMenu.add(actionFactory.getAction("PreferencesAction"));
 	}
 	
 
@@ -901,29 +736,28 @@ public class DebugDataViewer extends ApplicationWindow {
 	protected CoolBarManager createCoolBarManager(int style) {
 		CoolBarManager coolBarManager = new CoolBarManager(style);
 
+		actionFactory = new ActionFactory(this);
+		
 		ToolBarManager toolBarManager = new ToolBarManager();
 		coolBarManager.add(toolBarManager);
-		Action action;
-		action = new ExportAction("Export",this);
+		/*Action action;
+		action = new ExportAction("Export",this);*/
 		addtoolbarAction(
 				toolBarManager,
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/export.png"),
-				action);
-		action = new FindAction("Find", this);
+				actionFactory.getAction("ExportAction"));
 		addtoolbarAction(
 				toolBarManager,
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/lookup.png"),
-				action);
-		action = new ReloadAction("Reload", this);
+				actionFactory.getAction("FindAction"));
 		addtoolbarAction(
 				toolBarManager,
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/refresh.png"),
-				action);
-		action = new FilterAction("Filter");
+				actionFactory.getAction("ReloadAction"));
 		addtoolbarAction(
 				toolBarManager,
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/filter.png"),
-				action);
+				actionFactory.getAction("FilterAction"));
 		Action dropDownAction = new Action("", SWT.DROP_DOWN) {
 		};
 		dropDownAction.setImageDescriptor(new ImageDescriptor() {
@@ -934,7 +768,7 @@ public class DebugDataViewer extends ApplicationWindow {
 						+ "/icons/advicons/switchview.png");
 			}
 		});
-		dropDownAction.setMenuCreator(new ViewDataGridMenuCreator(this));
+		dropDownAction.setMenuCreator(new ViewDataGridMenuCreator(actionFactory));
 		toolBarManager.add(dropDownAction);
 
 		return coolBarManager;
@@ -1056,6 +890,8 @@ public class DebugDataViewer extends ApplicationWindow {
 
 
 	public TableViewer getTableViewer() {
-		return gridViewUIContainer;
+		return gridViewTableViewer;
 	}
+
+	
 }

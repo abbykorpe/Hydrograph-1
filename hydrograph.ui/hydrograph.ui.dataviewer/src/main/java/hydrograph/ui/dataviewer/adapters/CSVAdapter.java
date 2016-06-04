@@ -4,7 +4,6 @@ import hydrograph.ui.dataviewer.DebugDataViewer;
 import hydrograph.ui.dataviewer.constants.ADVConstants;
 import hydrograph.ui.dataviewer.datastructures.ColumnData;
 import hydrograph.ui.dataviewer.datastructures.RowData;
-import hydrograph.ui.dataviewer.datastructures.Schema;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,8 +13,6 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.swt.widgets.Display;
-
 public class CSVAdapter {
 
 	private static List<RowData> tableData;
@@ -24,8 +21,7 @@ public class CSVAdapter {
 	private String tableName;
 	private List<String> columnList;
 	private int columnCount;
-	private Long rowCount=null;
-	//private List<Schema> tableSchema = new LinkedList<>();
+	volatile private Long rowCount=null;
 	
 	private boolean rowCountFetchInProgress;
 	
@@ -36,20 +32,7 @@ public class CSVAdapter {
 	
 	volatile private int PAGE_SIZE;
 	volatile private long OFFSET;
-	
-	/*public CSVAdapter(String databaseName, String tableName,List<Schema> tableSchema,int PAGE_SIZE,long INITIAL_OFFSET, DebugDataViewer debugDataViewer) {
-		this.databaseName = databaseName;
-		this.tableName = tableName;
-		this.tableSchema = tableSchema;
-		tableData = new LinkedList<>();
-		columnList = new LinkedList<>();
-		columnCount = 0;
-		this.PAGE_SIZE = PAGE_SIZE;
-		this.OFFSET = INITIAL_OFFSET;
-		this.debugDataViewer = debugDataViewer;
-		initializeAdapter();
-	}*/
-	
+
 	public CSVAdapter(String databaseName, String tableName,int PAGE_SIZE,long INITIAL_OFFSET, DebugDataViewer debugDataViewer) {
 		this.databaseName = databaseName;
 		this.tableName = tableName;
@@ -60,14 +43,6 @@ public class CSVAdapter {
 		this.OFFSET = INITIAL_OFFSET;
 		this.debugDataViewer = debugDataViewer;
 		initializeAdapter();
-	}
-	
-	public int getPAGE_SIZE() {
-		return PAGE_SIZE;
-	}
-
-	public long getOFFSET() {
-		return OFFSET;
 	}
 
 	private void initializeAdapter() {
@@ -83,9 +58,6 @@ public class CSVAdapter {
 			initializeColumnCount(resultSet);
 			initializeColumnList(resultSet);
 			initializeTableData();
-						
-			//initializeRowCount();
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -102,29 +74,39 @@ public class CSVAdapter {
 	private void initializeColumnCount(ResultSet resultSet) throws SQLException {
 		columnCount = resultSet.getMetaData().getColumnCount();
 	}
-
-	public List<String> getColumnList() {
-		return columnList;
-	}
-
-	public int getColumnCount() {
-		return columnCount;
-
-	}
-
 	
+	private void initializeTableData() {	
+		try {
+			ResultSet results = statement.executeQuery("SELECT * FROM " + tableName
+					+ " LIMIT " + PAGE_SIZE + " OFFSET " + OFFSET);
+			int rowIndex=1;
+			while (results.next()) {
+				List<ColumnData> row = new LinkedList<>();
+				for (int index = 1; index <= columnCount; index++) {
+					row.add(new ColumnData(results.getString(index)));
+				}
+				tableData.add(new RowData(row,rowIndex));
+				rowIndex++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public String getPageStatusNumber(){
 		if (getRowCount() !=null ) {
-			return String.valueOf((OFFSET+PAGE_SIZE)/PAGE_SIZE) + "/" + String.valueOf(getRowCount()/PAGE_SIZE);
+			if((getRowCount()%PAGE_SIZE)!=0)
+				return String.valueOf((OFFSET+PAGE_SIZE)/PAGE_SIZE) + "/" + String.valueOf((getRowCount()/PAGE_SIZE)+1);
+			else
+				return String.valueOf((OFFSET+PAGE_SIZE)/PAGE_SIZE) + "/" + String.valueOf((getRowCount()/PAGE_SIZE));
 		}else{
 			return String.valueOf((OFFSET+PAGE_SIZE)/PAGE_SIZE);
 		}
 	}
-	
-	
+		
 	public Long getRowCount() {
 		
-		if(rowCount==null && rowCountFetchInProgress == false){
+		/*if(rowCount==null && rowCountFetchInProgress == false){
 			rowCountFetchInProgress=true;
 			new Thread() {
 	            public void run() {
@@ -135,10 +117,6 @@ public class CSVAdapter {
 	    				rowCountResultSet.next();
 	    				rowCount = rowCountResultSet.getLong(1);
 	    				
-	    				
-	    				//Do not Remove below code- 
-	    				//Reason: We can not draw outside Display Thread. But in this code I am drawing.
-	    				//Reference: https://wiki.eclipse.org/FAQ_Why_do_I_get_an_invalid_thread_access_exception%3F
 	    				Display.getDefault().asyncExec(new Runnable() {
 	    				    public void run() {
 	    				    	debugDataViewer.setDefaultStatusMessage();
@@ -151,33 +129,69 @@ public class CSVAdapter {
 	            }
 	        }.start();
 			
-		}
+		}*/
 		
 		return rowCount;
 		
 	}
+	
+	public void fetchRowCount() {
+		try {
+    		ResultSet rowCountResultSet;
+			rowCountResultSet = statement.executeQuery("SELECT COUNT(1) FROM "
+					+ tableName);
+			rowCountResultSet.next();
+			rowCount = rowCountResultSet.getLong(1);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private long getCurrentPageNumber(){
+		return (OFFSET+PAGE_SIZE)/PAGE_SIZE;
+	}
+
 
 	public List<RowData> getTableData() {
 		return tableData;
 	}
-
-	public List<RowData> getHorizantalViewData() {
-
-		return null;
+	
+	public List<String> getColumnList() {
+		return columnList;
 	}
 
+	public int getColumnCount() {
+		return columnCount;
+
+	}
+	
+	public int getPAGE_SIZE() {
+		return PAGE_SIZE;
+	}
+
+	public long getOFFSET() {
+		return OFFSET;
+	}
+		
 	public int next() {
 		
 		OFFSET = OFFSET+PAGE_SIZE;
 		
 		if(rowCount!=null){
-			if(OFFSET>rowCount){
+			if(OFFSET>=rowCount){
 				OFFSET = rowCount - PAGE_SIZE;
+				if(OFFSET<0){
+					OFFSET = 0;
+				}
 				return ADVConstants.EOF;
 			}
 		}
 		
-		tableData.clear();
+		
+		List<RowData> tempTableData = new LinkedList<>();
+		
+		
 		try {
 			ResultSet results = statement.executeQuery("SELECT * FROM " + tableName
 					+ " LIMIT " + PAGE_SIZE + " OFFSET " + OFFSET);
@@ -185,14 +199,20 @@ public class CSVAdapter {
 			while (results.next()) {
 				List<ColumnData> row = new LinkedList<>();
 				for (int index = 0; index < columnCount; index++) {
-					/*row.add(new ColumnData(results.getString(index + 1),
-							tableSchema.get(index)));*/
 					row.add(new ColumnData(results.getString(index + 1)));
 				}
 				
-				tableData.add(new RowData(row,rowNumber));
+				tempTableData.add(new RowData(row,rowNumber));
 				rowNumber++;
-			}			
+			}		
+			
+			if(tempTableData.size()!=0){
+				tableData.clear();
+				tableData.addAll(tempTableData);
+			}else{
+				OFFSET = rowCount - PAGE_SIZE;
+				return ADVConstants.EOF;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return ADVConstants.ERROR;
@@ -217,8 +237,6 @@ public class CSVAdapter {
 			while (results.next()) {
 				List<ColumnData> row = new LinkedList<>();
 				for (int index = 0; index < columnCount; index++) {
-					/*row.add(new ColumnData(results.getString(index + 1),
-							tableSchema.get(index)));*/
 					row.add(new ColumnData(results.getString(index + 1)));
 				}
 				tableData.add(new RowData(row,rowNumber));
@@ -230,33 +248,6 @@ public class CSVAdapter {
 		}
 		return 0;
 	}
-	
-	private void initializeTableData() {	
-		try {
-			ResultSet results = statement.executeQuery("SELECT * FROM " + tableName
-					+ " LIMIT " + PAGE_SIZE + " OFFSET " + OFFSET);
-			int rowIndex=1;
-			while (results.next()) {
-				List<ColumnData> row = new LinkedList<>();
-				for (int index = 1; index <= columnCount; index++) {
-					/*row.add(new ColumnData(results.getString(index),
-							tableSchema.get(index-1)));*/
-					row.add(new ColumnData(results.getString(index)));
-				}
-				tableData.add(new RowData(row,rowIndex));
-				rowIndex++;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	
-	private long getCurrentPageNumber(){
-		return (OFFSET+PAGE_SIZE)/PAGE_SIZE;
-	}
-	
-	
 	
 	public int jumpToPage(long pageNumber) {
 		
@@ -272,17 +263,17 @@ public class CSVAdapter {
 		tempOffset = OFFSET;
 		OFFSET = (pageNumber * PAGE_SIZE) - PAGE_SIZE;
 		
-		
 		if (numberOfRecords!=null) {
 			if(OFFSET>=rowCount){
 				OFFSET = rowCount - PAGE_SIZE;
+				if(OFFSET<0){
+					OFFSET=0;
+				}	
 			}
 		}
 		
-		List tempTableData  = new LinkedList<>();		
-		tempTableData.addAll(tableData);		
-		tableData.clear();
-		
+		List<RowData> tempTableData  = new LinkedList<>();		
+
 		try {
 			ResultSet results = statement.executeQuery("SELECT * FROM " + tableName
 					+ " LIMIT " + PAGE_SIZE + " OFFSET " + OFFSET);
@@ -291,19 +282,22 @@ public class CSVAdapter {
 			while (results.next()) {
 				List<ColumnData> row = new LinkedList<>();
 				for (int index = 0; index < columnCount; index++) {
-					/*row.add(new ColumnData(results.getString(index + 1),
-							tableSchema.get(index)));*/
 					row.add(new ColumnData(results.getString(index + 1)));
 				}
-				tableData.add(new RowData(row,rowIndex));
+				tempTableData.add(new RowData(row,rowIndex));
 				rowIndex++;
 			}
 			
-			if (tableData.isEmpty()) {
+			
+			if(tempTableData.size()!=0){
+				tableData.clear();
+				tableData.addAll(tempTableData);				
+			}else{
 				OFFSET = tempOffset;
-				tableData.addAll(tempTableData);
 				return ADVConstants.EOF;
 			}
+			
+			
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -312,17 +306,6 @@ public class CSVAdapter {
 		return 0;
 	}
 
-	private int getNumberOfRecordsInResultSet(ResultSet results)
-			throws SQLException {
-		int numberOfRecords= 0;
-		if (results != null)   
-		{   
-			results.last();  
-			numberOfRecords = results.getRow();
-			results.beforeFirst(); 
-		}
-		return numberOfRecords;
-	}
 	
 	public void dispose() {
 		try {
@@ -332,4 +315,6 @@ public class CSVAdapter {
 			e.printStackTrace();
 		}
 	}
+
+	
 }

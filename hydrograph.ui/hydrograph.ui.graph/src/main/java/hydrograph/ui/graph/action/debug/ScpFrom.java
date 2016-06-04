@@ -107,11 +107,14 @@ public class ScpFrom {
 			java.util.Date datex = new java.util.Date();
 			System.out.println("+++ End: " + new Timestamp(datex.getTime()));
 		} catch (Exception e) {
-			System.out.println(e);
+			System.out.println(e.getMessage().toString());
+			e.printStackTrace();
 			try {
 				if (fos != null)
 					fos.close();
 			} catch (Exception ee) {
+				System.out.println(e.getMessage().toString());
+				e.printStackTrace();
 			}
 			return "error";
 		}
@@ -240,11 +243,14 @@ public class ScpFrom {
 			System.out.println("+++ End: " + new Timestamp(datex.getTime()));
 			System.exit(0);
 		} catch (Exception e) {
-			System.out.println(e);
+			System.out.println(e.getMessage().toString());
+			e.printStackTrace();
 			try {
 				if (fos != null)
 					fos.close();
 			} catch (Exception ee) {
+				System.out.println(e.getMessage().toString());
+				e.printStackTrace();
 			}
 		}
 

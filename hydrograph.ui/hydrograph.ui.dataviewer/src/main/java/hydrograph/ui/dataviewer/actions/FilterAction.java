@@ -1,10 +1,12 @@
 package hydrograph.ui.dataviewer.actions;
 
+import hydrograph.ui.dataviewer.DebugDataViewer;
+
 import org.eclipse.jface.action.Action;
 
 public class FilterAction extends Action {
 	
-	public FilterAction(String menuItem) {
+	public FilterAction(String menuItem, DebugDataViewer debugDataViewer) {
 		super(menuItem);
 	}
 	@Override

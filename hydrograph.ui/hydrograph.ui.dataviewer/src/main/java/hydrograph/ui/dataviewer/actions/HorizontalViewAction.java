@@ -1,10 +1,12 @@
 package hydrograph.ui.dataviewer.actions;
 
+import hydrograph.ui.dataviewer.DebugDataViewer;
+
 import org.eclipse.jface.action.Action;
 
 public class HorizontalViewAction extends Action{
 	
-	public HorizontalViewAction(String menuItem) {
+	public HorizontalViewAction(String menuItem, DebugDataViewer debugDataViewer) {
 		super(menuItem);
 	}
 	@Override
