@@ -1534,7 +1534,12 @@ private void syncTransformWithSchema(){
 		schema.setGridRow(new ArrayList<>(schemaGridRowList));
 	}
 	else{
-		schemaGridRowList=schema.getGridRow();
+		schemaGridRowList=new ArrayList<>(schema.getGridRow());
+		ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
+		eLTDetails.setGrids(schemaGridRowList); 
+		tableViewer.setInput(schemaGridRowList);
+		tableViewer.refresh(); 
+		
 	}
 }
 
