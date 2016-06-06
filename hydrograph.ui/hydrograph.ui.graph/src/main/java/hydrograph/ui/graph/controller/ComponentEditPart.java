@@ -410,7 +410,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				adjustExistingPorts();
 				getCastedModel().incrementLeftSidePorts(newInPortCount, prevInPortCount);
 
-			}else if(prevInPortCount > newInPortCount){
+			}else{
 				//decrement the ports
 				List<String> portsToBeRemoved = populateInPortsToBeRemoved(prevInPortCount, newInPortCount);
 				getCastedModel().decrementPorts(portsToBeRemoved);
@@ -453,7 +453,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				adjustExistingPorts();
 				getCastedModel().incrementRightSidePorts(newOutPortCount, prevOutPortCount);
 
-			}else if(prevOutPortCount > newOutPortCount){
+			}else{
 				//decrement the ports
 				List<String> portsToBeRemoved = populateOutPortsToBeRemoved(prevOutPortCount, newOutPortCount);
 				getCastedModel().decrementPorts(portsToBeRemoved);
@@ -489,7 +489,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				getCastedModel().changeUnusedPortCount(newUnunsedPortCount);
 				adjustExistingPorts();
 				getCastedModel().incrementBottomSidePorts(newUnunsedPortCount, prevUnusedportCount);
-			}else if(prevUnusedportCount > newUnunsedPortCount){
+			}else{
 				//decrement the ports
 				List<String> portsToBeRemoved = populateUnusedPortsToBeRemoved(prevUnusedportCount, newUnunsedPortCount);
 				getCastedModel().decrementPorts(portsToBeRemoved);

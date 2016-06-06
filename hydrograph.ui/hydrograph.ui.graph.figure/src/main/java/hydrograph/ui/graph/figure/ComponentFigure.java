@@ -615,7 +615,6 @@ public class ComponentFigure extends Figure implements Validator {
 		if (componentCanvas != null) {
 			if (componentCanvas.getComponentTooltip() != null) {
 				componentCanvas.getComponentTooltip().setVisible(false);
-				if (componentCanvas != null)
 					componentCanvas.issueToolTip(null, null);
 			}
 		}
