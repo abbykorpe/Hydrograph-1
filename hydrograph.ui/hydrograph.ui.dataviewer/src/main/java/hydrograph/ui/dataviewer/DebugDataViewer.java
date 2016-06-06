@@ -10,6 +10,7 @@ import hydrograph.ui.dataviewer.constants.Views;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.listeners.DataViewerListeners;
+import hydrograph.ui.dataviewer.preferances.ViewDataPreferences;
 import hydrograph.ui.dataviewer.support.StatusManager;
 import hydrograph.ui.dataviewer.utilities.SWTResourceManager;
 import hydrograph.ui.dataviewer.utilities.Utils;
@@ -25,6 +26,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.CoolBarManager;
 import org.eclipse.jface.action.MenuManager;
@@ -93,6 +97,14 @@ public class DebugDataViewer extends ApplicationWindow {
 	
 	private DataViewLoader dataViewLoader;
 	private DataViewerListeners dataViewerListeners;
+	private ViewDataPreferences viewDataPreferences=new ViewDataPreferences();
+	private static final String PLUGIN_NAME="hydrograph.ui.dataviewer";
+    private static final String DELIMITER="delimiter";
+    private static final String QUOTE_CHARACTOR="quoteCharactor";
+    private static final String INCLUDE_HEADERS="includeHeader";
+    private static final String DEFAULT_DELIMITER= ",";
+    private static final String DEFAULT_QUOTE_CHARACTOR="\"";
+    private static final String DEFAULT="default";
 	
 	
 	private StatusManager statusManager;
@@ -668,7 +680,25 @@ public class DebugDataViewer extends ApplicationWindow {
 		viewMenu.add(actionFactory.getAction("UnformattedViewAction"));
 		viewMenu.add(new Separator());
 		viewMenu.add(actionFactory.getAction("ReloadAction"));
+		viewDataPreferences = getViewDataPreferencesFromPreferenceFile();
 		viewMenu.add(actionFactory.getAction("PreferencesAction"));
+	}
+	
+	
+	
+	
+	public ViewDataPreferences getViewDataPreferencesFromPreferenceFile() {
+		boolean includeHeaderValue = false;
+		IScopeContext context = new InstanceScope();
+		IEclipsePreferences eclipsePreferences = context.getNode(PLUGIN_NAME);
+		String delimiter = eclipsePreferences.get(DELIMITER, DEFAULT);
+		String quoteCharactor = eclipsePreferences.get(QUOTE_CHARACTOR,DEFAULT);
+		String includeHeader = eclipsePreferences.get(INCLUDE_HEADERS, DEFAULT);
+		delimiter = delimiter.equalsIgnoreCase(DEFAULT) ? DEFAULT_DELIMITER : delimiter;
+		quoteCharactor = quoteCharactor.equalsIgnoreCase(DEFAULT) ? DEFAULT_QUOTE_CHARACTOR : quoteCharactor;
+		includeHeaderValue = includeHeader.equalsIgnoreCase(DEFAULT) ? true : false;
+		ViewDataPreferences viewDataPreferences = new ViewDataPreferences(delimiter, quoteCharactor, includeHeaderValue);
+		return viewDataPreferences;
 	}
 	
 
@@ -835,5 +865,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		return gridViewTableViewer;
 	}
 
+	public ViewDataPreferences getViewDataPreferences() {
+		return viewDataPreferences;
+	}
 	
 }
