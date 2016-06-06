@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +13,18 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
+
+
+
+
+
+
+
 import hydrograph.engine.assembly.entity.OutputFileAvroEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.avro.scheme.AvroDescriptor;
-import hydrograph.engine.cascading.avro.scheme.CustomAvroScheme;
+import hydrograph.engine.cascading.scheme.avro.AvroDescriptor;
+import hydrograph.engine.cascading.scheme.avro.CustomAvroScheme;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +36,7 @@ import cascading.tap.SinkMode;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
 
-public class OutputFileAvroAssembly extends BaseComponent {
+public class OutputFileAvroAssembly extends BaseComponent<OutputFileAvroEntity> {
 
 	private static final long serialVersionUID = 4184919036703029509L;
 	private OutputFileAvroEntity outputFileAvroEntity;
@@ -42,17 +49,17 @@ public class OutputFileAvroAssembly extends BaseComponent {
 	private static Logger LOG = LoggerFactory
 			.getLogger(OutputFileAvroAssembly.class);
 
-	public OutputFileAvroAssembly(AssemblyEntityBase assemblyEntityBase,
+	public OutputFileAvroAssembly(OutputFileAvroEntity assemblyEntityBase,
 			ComponentParameters componentParameters) {
 		super(assemblyEntityBase, componentParameters);
 	}
 
 	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		outputFileAvroEntity = (OutputFileAvroEntity) assemblyEntityBase;
-	}
 
-	@Override
+
+
+
+
 	protected void createAssembly() {
 
 		if (LOG.isTraceEnabled()) {
@@ -74,22 +81,22 @@ public class OutputFileAvroAssembly extends BaseComponent {
 	@SuppressWarnings("unchecked")
 	public void prepareScheme() {
 		String[] outputFields = new String[outputFileAvroEntity
-				.getSchemaFieldsList().size()];
+				.getFieldsList().size()];
 		String[] fieldDataTypes = new String[outputFileAvroEntity
-				.getSchemaFieldsList().size()];
+				.getFieldsList().size()];
 		int[] fieldScale = new int[outputFileAvroEntity
-				.getSchemaFieldsList().size()];
+				.getFieldsList().size()];
 		int[] fieldPrecision = new int[outputFileAvroEntity
-				.getSchemaFieldsList().size()];
-		for (int i = 0; i < outputFileAvroEntity.getSchemaFieldsList()
+				.getFieldsList().size()];
+		for (int i = 0; i < outputFileAvroEntity.getFieldsList()
 				.size(); i++) {
-			outputFields[i] = outputFileAvroEntity.getSchemaFieldsList()
+			outputFields[i] = outputFileAvroEntity.getFieldsList()
 					.get(i).getFieldName();
-			fieldDataTypes[i] = outputFileAvroEntity.getSchemaFieldsList()
+			fieldDataTypes[i] = outputFileAvroEntity.getFieldsList()
 					.get(i).getFieldDataType();
-			fieldScale[i] = outputFileAvroEntity.getSchemaFieldsList()
+			fieldScale[i] = outputFileAvroEntity.getFieldsList()
 					.get(i).getFieldScale();
-			fieldPrecision[i] = outputFileAvroEntity.getSchemaFieldsList()
+			fieldPrecision[i] = outputFileAvroEntity.getFieldsList()
 					.get(i).getFieldPrecision();
 		}
 		Fields fields = new Fields(outputFields);
@@ -113,5 +120,10 @@ public class OutputFileAvroAssembly extends BaseComponent {
 			}
 		}
 		return types;
+	}
+
+	@Override
+	public void initializeEntity(OutputFileAvroEntity assemblyEntityBase) {
+		this.outputFileAvroEntity=assemblyEntityBase;
 	}
 }

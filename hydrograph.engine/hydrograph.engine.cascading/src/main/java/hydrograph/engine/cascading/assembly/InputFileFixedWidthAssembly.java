@@ -12,14 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.InputFileFixedWidthEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
-import hydrograph.engine.cascading.scheme.TextFixedWidth;
-
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -32,8 +24,14 @@ import cascading.scheme.Scheme;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.InputFileFixedWidthEntity;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.scheme.TextFixedWidth;
 
-public class InputFileFixedWidthAssembly extends BaseComponent {
+public class InputFileFixedWidthAssembly extends BaseComponent<InputFileFixedWidthEntity> {
 
 	/**
 	 * 
@@ -52,14 +50,9 @@ public class InputFileFixedWidthAssembly extends BaseComponent {
 
 	private IOFieldsAndTypesCreator<InputFileFixedWidthEntity> fieldsCreator;
 
-	public InputFileFixedWidthAssembly(AssemblyEntityBase baseComponentEntity,
+	public InputFileFixedWidthAssembly(InputFileFixedWidthEntity baseComponentEntity,
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		inputFileFixedWidthEntity = (InputFileFixedWidthEntity) assemblyEntityBase;
 	}
 
 	@Override
@@ -127,6 +120,11 @@ public class InputFileFixedWidthAssembly extends BaseComponent {
 				inputFileFixedWidthEntity.isSafe(),
 				inputFileFixedWidthEntity.getCharset());
 
+	}
+
+	@Override
+	public void initializeEntity(InputFileFixedWidthEntity assemblyEntityBase) {
+		this.inputFileFixedWidthEntity=assemblyEntityBase;
 	}
 
 }

@@ -12,14 +12,16 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class HashJoinEntity extends AssemblyEntityBase {
+import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
+import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
+import hydrograph.engine.assembly.entity.elements.Operation;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+
+public class HashJoinEntity extends OperationAssemblyEntity {
 
 	private List<OutSocket> outSocketList;
 	private List<JoinKeyFields> joinKeyFields;
@@ -101,5 +103,10 @@ public class HashJoinEntity extends AssemblyEntityBase {
 
 	public String getMatch() {
 		return match;
+	}
+
+	@Override
+	public List<Operation> getOperationsList() {
+		return new ArrayList<>();
 	}
 }

@@ -12,16 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.TransformEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
-import hydrograph.engine.cascading.assembly.handlers.TransformCustomHandler;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
-
 import java.util.Arrays;
 import java.util.Map;
 
@@ -31,22 +21,24 @@ import org.slf4j.LoggerFactory;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.TransformEntity;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
+import hydrograph.engine.cascading.assembly.handlers.TransformCustomHandler;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
-public class TransformAssembly extends BaseComponent {
+public class TransformAssembly extends BaseComponent<TransformEntity> {
 
 	private static final long serialVersionUID = 8050470302089972525L;
 	private TransformEntity transformEntity;
 	private static Logger LOG = LoggerFactory.getLogger(TransformAssembly.class);
-	private OperationFieldsCreator operationFieldsCreator;
+	private OperationFieldsCreator<TransformEntity> operationFieldsCreator;
 
-	public TransformAssembly(AssemblyEntityBase baseComponentEntity, ComponentParameters componentParameters) {
+	public TransformAssembly(TransformEntity baseComponentEntity, ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		transformEntity = (TransformEntity) assemblyEntityBase;
 	}
 
 	@Override
@@ -58,7 +50,7 @@ public class TransformAssembly extends BaseComponent {
 		for (OutSocket outSocket : transformEntity.getOutSocketList()) {
 			LOG.trace("Creating transform assembly for '" + transformEntity.getComponentId() + "' for socket: '"
 					+ outSocket.getSocketId() + "' of type: '" + outSocket.getSocketType() + "'");
-			operationFieldsCreator = new OperationFieldsCreator<AssemblyEntityBase>(transformEntity,
+			operationFieldsCreator = new OperationFieldsCreator<TransformEntity>(transformEntity,
 					componentParameters, outSocket);
 			createAssemblyForOutSocket(outSocket);
 		}
@@ -97,6 +89,11 @@ public class TransformAssembly extends BaseComponent {
 		setOutLink(outSocket.getSocketType(), outSocket.getSocketId(), transformEntity.getComponentId(), transformPipe,
 				transfromHandler.getOutputFields());
 
+	}
+
+	@Override
+	public void initializeEntity(TransformEntity assemblyEntityBase) {
+		this.transformEntity=assemblyEntityBase;
 	}
 
 }

@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.LookupEntity;
 import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
 import hydrograph.engine.cascading.assembly.LookupAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.OperationAssemblyGene
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Lookup;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 public class LookupAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
@@ -55,7 +54,7 @@ public class LookupAssemblyGenerator extends OperationAssemblyGeneratorBase {
 		LOG.trace("Initializing hash join entity for component: "
 				+ jaxbLookup.getId());
 		lookupEntity.setComponentId(jaxbLookup.getId());
-		lookupEntity.setPhase(jaxbLookup.getPhase().intValue());
+		lookupEntity.setPhase(jaxbLookup.getPhase());
 
 		if (jaxbLookup.getOutSocket() == null) {
 			throw new NullPointerException("No out socket defined for hash join component: " + jaxbLookup.getId());
@@ -80,7 +79,7 @@ public class LookupAssemblyGenerator extends OperationAssemblyGeneratorBase {
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<LookupEntity> getAssembly() {
 		return lookupAssembly;
 	}
 

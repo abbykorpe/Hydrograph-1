@@ -12,13 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.OutputFileFixedWidthEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
-import hydrograph.engine.cascading.scheme.TextFixedWidth;
-
 import java.util.Arrays;
 
 import org.slf4j.Logger;
@@ -31,8 +24,13 @@ import cascading.tap.SinkMode;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.OutputFileFixedWidthEntity;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.scheme.TextFixedWidth;
 
-public class OutputFileFixedWidthAssembly extends BaseComponent {
+public class OutputFileFixedWidthAssembly extends BaseComponent<OutputFileFixedWidthEntity> {
 
 	/**
 	 * 
@@ -50,8 +48,8 @@ public class OutputFileFixedWidthAssembly extends BaseComponent {
 
 	private IOFieldsAndTypesCreator<OutputFileFixedWidthEntity> fieldsCreator;
 
-	public OutputFileFixedWidthAssembly(AssemblyEntityBase parameters, ComponentParameters componentParameters) {
-		super(parameters, componentParameters);
+	public OutputFileFixedWidthAssembly(OutputFileFixedWidthEntity outputFileFixedWidthEntity, ComponentParameters componentParameters) {
+		super(outputFileFixedWidthEntity, componentParameters);
 	}
 
 	@Override
@@ -78,11 +76,6 @@ public class OutputFileFixedWidthAssembly extends BaseComponent {
 			LOG.error(e.getMessage(), e);
 			throw new RuntimeException(e.getMessage());
 		}
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		outputFileFixedWidthEntity = (OutputFileFixedWidthEntity) assemblyEntityBase;
 	}
 
 	public void prepareScheme() {
@@ -114,5 +107,10 @@ public class OutputFileFixedWidthAssembly extends BaseComponent {
 			outTap = new Hfs(scheme, filePathToWrite, SinkMode.REPLACE);
 		else
 			outTap = new Hfs(scheme, filePathToWrite, SinkMode.KEEP);
+	}
+
+	@Override
+	public void initializeEntity(OutputFileFixedWidthEntity assemblyEntityBase) {
+		this.outputFileFixedWidthEntity=assemblyEntityBase;
 	}
 }

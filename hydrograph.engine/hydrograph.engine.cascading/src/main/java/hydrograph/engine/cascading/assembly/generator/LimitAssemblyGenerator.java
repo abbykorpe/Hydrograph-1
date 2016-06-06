@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.LimitEntity;
 import hydrograph.engine.assembly.entity.utils.StraightPullEntityUtils;
 import hydrograph.engine.cascading.assembly.LimitAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.StraightPullAssemblyG
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.straightpulltypes.Limit;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 public class LimitAssemblyGenerator extends StraightPullAssemblyGeneratorBase {
 
@@ -62,7 +61,7 @@ public class LimitAssemblyGenerator extends StraightPullAssemblyGeneratorBase {
 		LOG.trace("Initializing limit entity for component: "
 				+ jaxbLimit.getId());
 		limitEntity.setComponentId(jaxbLimit.getId());
-		limitEntity.setPhase(jaxbLimit.getPhase().intValue());
+		limitEntity.setPhase(jaxbLimit.getPhase());
 		limitEntity.setMaxRecord(jaxbLimit.getMaxRecords().getValue());
 		limitEntity.setRuntimeProperties(StraightPullEntityUtils
 				.extractRuntimeProperties(jaxbLimit.getRuntimeProperties()));
@@ -77,7 +76,7 @@ public class LimitAssemblyGenerator extends StraightPullAssemblyGeneratorBase {
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<LimitEntity> getAssembly() {
 		return limitAssembly;
 	}
 }

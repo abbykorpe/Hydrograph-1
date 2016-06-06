@@ -36,7 +36,8 @@ import cascading.tuple.Fields;
  * @author gurdits
  *
  */
-public abstract class BaseComponent extends SubAssembly {
+public abstract class BaseComponent<T extends AssemblyEntityBase> extends
+		SubAssembly {
 
 	private static final long serialVersionUID = -804998221607089402L;
 	private HashMap<String, HashMap<String, Pipe>> outLinksMap;
@@ -46,7 +47,7 @@ public abstract class BaseComponent extends SubAssembly {
 	private Map<String, Fields> outFieldsMap;
 	private static Logger LOG = LoggerFactory.getLogger(BaseComponent.class);
 
-	public BaseComponent(AssemblyEntityBase baseComponentEntity,
+	public BaseComponent(T baseComponentEntity,
 			ComponentParameters componentParameters) {
 		this.outLinksMap = new HashMap<String, HashMap<String, Pipe>>();
 		this.outLinksFields = new HashMap<String, HashMap<String, Fields>>();
@@ -57,7 +58,7 @@ public abstract class BaseComponent extends SubAssembly {
 		if (LOG.isTraceEnabled()) {
 			logComponentParameterInfo();
 		}
-		castEntityFromBase(baseComponentEntity);
+		initializeEntity(baseComponentEntity);
 		createAssembly();
 		setOutLinksToTails();
 	}
@@ -93,8 +94,7 @@ public abstract class BaseComponent extends SubAssembly {
 	 *            the {@link AssemblyEntityBase} object to cast to specific
 	 *            entity object
 	 */
-	public abstract void castEntityFromBase(
-			AssemblyEntityBase assemblyEntityBase);
+	public abstract void initializeEntity(T assemblyEntityBase);
 
 	protected abstract void createAssembly();
 

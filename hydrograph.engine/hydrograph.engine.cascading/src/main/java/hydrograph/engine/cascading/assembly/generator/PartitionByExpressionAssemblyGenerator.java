@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.PartitionByExpressionEntity;
 import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
 import hydrograph.engine.cascading.assembly.PartitionByExpressionAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.OperationAssemblyGene
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.PartitionByExpression;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 public class PartitionByExpressionAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
@@ -60,7 +59,7 @@ public class PartitionByExpressionAssemblyGenerator extends OperationAssemblyGen
 		LOG.trace("Initializing aggregate entity for component: " + jaxbPartitionByExpression.getId());
 
 		partitionByExpressionEntity.setComponentId(jaxbPartitionByExpression.getId());
-		partitionByExpressionEntity.setPhase(jaxbPartitionByExpression.getPhase().intValue());
+		partitionByExpressionEntity.setPhase(jaxbPartitionByExpression.getPhase());
 
 		// check if operation is present
 		if (jaxbPartitionByExpression.getOperation() != null) {
@@ -90,7 +89,7 @@ public class PartitionByExpressionAssemblyGenerator extends OperationAssemblyGen
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<PartitionByExpressionEntity> getAssembly() {
 		return partitionByExpressionAssembly;
 	}
 }

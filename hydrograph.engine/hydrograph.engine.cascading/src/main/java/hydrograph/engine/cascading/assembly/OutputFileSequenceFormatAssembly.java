@@ -12,11 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.OutputFileSequenceFormatEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +21,11 @@ import cascading.scheme.hadoop.SequenceFile;
 import cascading.tap.SinkMode;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
+import hydrograph.engine.assembly.entity.OutputFileSequenceFormatEntity;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 
-public class OutputFileSequenceFormatAssembly extends BaseComponent {
+public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSequenceFormatEntity> {
 
 	/**
 	 * 
@@ -42,14 +40,8 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent {
 	SequenceFile scheme;
 	private static Logger LOG = LoggerFactory.getLogger(OutputFileSequenceFormatAssembly.class);
 
-	public OutputFileSequenceFormatAssembly(AssemblyEntityBase parameters, ComponentParameters componentParameters) {
-		super(parameters, componentParameters);
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase graphTypeImpl) {
-		outputFileSequenceFormatEntity = (OutputFileSequenceFormatEntity) graphTypeImpl;
-
+	public OutputFileSequenceFormatAssembly(OutputFileSequenceFormatEntity outputFileSequenceFormatEntity, ComponentParameters componentParameters) {
+		super(outputFileSequenceFormatEntity, componentParameters);
 	}
 
 	@Override
@@ -85,6 +77,11 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent {
 	public void prepareScheme() {
 
 		scheme = new SequenceFile(componentParameters.getInputFields());
+	}
+
+	@Override
+	public void initializeEntity(OutputFileSequenceFormatEntity assemblyEntityBase) {
+		this.outputFileSequenceFormatEntity=assemblyEntityBase;
 	}
 
 }

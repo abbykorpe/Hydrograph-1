@@ -27,7 +27,7 @@ public class RunProgramTest {
 	public void setUp() {
 		RunProgramEntity runProgramEntity = new RunProgramEntity();
 		runProgramEntity.setComponentId("run-program");
-		runProgramEntity.setPhase(0);
+		runProgramEntity.setPhase("0");
 		runProgramEntity.setCommand("dir");
 		try {
 			runProgram = new RunProgram(runProgramEntity);

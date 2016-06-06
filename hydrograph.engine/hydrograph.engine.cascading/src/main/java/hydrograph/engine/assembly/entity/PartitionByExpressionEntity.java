@@ -12,14 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import java.util.ArrayList;
+import java.util.List;
+
+import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
 import hydrograph.engine.assembly.entity.elements.Operation;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 
-import java.util.List;
 
-
-public class PartitionByExpressionEntity extends AssemblyEntityBase {
+public class PartitionByExpressionEntity extends OperationAssemblyEntity {
 	private long numPartitions;
 	private Operation operation;
 	private List<OutSocket> outSocketList;
@@ -41,6 +42,10 @@ public class PartitionByExpressionEntity extends AssemblyEntityBase {
 	}
 	public void setOutSocketList(List<OutSocket> outSocketList) {
 		this.outSocketList = outSocketList;
+	}
+	@Override
+	public List<Operation> getOperationsList() {
+		return new ArrayList<>();
 	}
 	
 	

@@ -12,14 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-
 import java.util.Arrays;
 import java.util.List;
 
-public class InputFileParquetEntity extends AssemblyEntityBase {
+import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
+
+public class InputFileParquetEntity extends IOAssemblyEntity {
 
 	private String path;
 	private List<OutSocket> outSocketList;

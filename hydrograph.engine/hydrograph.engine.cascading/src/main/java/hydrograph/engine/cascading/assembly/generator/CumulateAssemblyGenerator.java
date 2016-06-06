@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.CumulateEntity;
 import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
 import hydrograph.engine.cascading.assembly.CumulateAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.OperationAssemblyGene
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Cumulate;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 public class CumulateAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
@@ -60,7 +59,7 @@ public class CumulateAssemblyGenerator extends OperationAssemblyGeneratorBase {
 	public void initializeEntity() {
 		LOG.trace("Initializing cumulate entity for component: " + jaxbCumulate.getId());
 		cumulateEntity.setComponentId(jaxbCumulate.getId());
-		cumulateEntity.setPhase(jaxbCumulate.getPhase().intValue());
+		cumulateEntity.setPhase(jaxbCumulate.getPhase());
 
 		// check if operation is present
 		if (jaxbCumulate.getOperation() != null && jaxbCumulate.getOperation().size() > 0) {
@@ -98,7 +97,7 @@ public class CumulateAssemblyGenerator extends OperationAssemblyGeneratorBase {
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<CumulateEntity> getAssembly() {
 		return cumulateAssembly;
 	}
 }

@@ -13,7 +13,6 @@
 package hydrograph.engine.cascading.assembly;
 
 import hydrograph.engine.assembly.entity.CumulateEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.assembly.entity.elements.KeyField;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
@@ -35,21 +34,16 @@ import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
-public class CumulateAssembly extends BaseComponent {
+public class CumulateAssembly extends BaseComponent<CumulateEntity> {
 
 	private static final long serialVersionUID = 8050470302089972525L;
 	private CumulateEntity cumulateEntity;
 	private static Logger LOG = LoggerFactory.getLogger(CumulateAssembly.class);
-	private OperationFieldsCreator operationFieldsCreator;
+	private OperationFieldsCreator<CumulateEntity> operationFieldsCreator;
 
-	public CumulateAssembly(AssemblyEntityBase assemblyEntityBase, ComponentParameters parameters) {
+	public CumulateAssembly(CumulateEntity assemblyEntityBase,
+			ComponentParameters parameters) {
 		super(assemblyEntityBase, parameters);
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		cumulateEntity = (CumulateEntity) assemblyEntityBase;
 	}
 
 	@Override
@@ -59,13 +53,26 @@ public class CumulateAssembly extends BaseComponent {
 				LOG.trace(cumulateEntity.toString());
 			}
 			for (OutSocket outSocket : cumulateEntity.getOutSocketList()) {
-				LOG.trace("Creating cumulate assembly for '" + cumulateEntity.getComponentId() + "' for socket: '"
-						+ outSocket.getSocketId() + "' of type: '" + outSocket.getSocketType() + "'");
-				operationFieldsCreator = new OperationFieldsCreator<AssemblyEntityBase>(cumulateEntity,
-						componentParameters, outSocket);
-				LOG.debug("Cumulate Assembly: [ InputFields List : " + Arrays.toString(operationFieldsCreator.getOperationalInputFieldsList().toArray()) + ", OperationProperties List : "
-						+ Arrays.toString(operationFieldsCreator.getOperationalOperationPropertiesList().toArray()) + ", OutputFieldsList : " + Arrays.toString(operationFieldsCreator.getOperationalOutputFieldsList().toArray())
-						+ " , TransformClass List : " + Arrays.toString(operationFieldsCreator.getOperationalTransformClassList().toArray()) + ", PassThrough Fields : "
+				LOG.trace("Creating cumulate assembly for '"
+						+ cumulateEntity.getComponentId() + "' for socket: '"
+						+ outSocket.getSocketId() + "' of type: '"
+						+ outSocket.getSocketType() + "'");
+				operationFieldsCreator = new OperationFieldsCreator<CumulateEntity>(
+						cumulateEntity, componentParameters, outSocket);
+				LOG.debug("Cumulate Assembly: [ InputFields List : "
+						+ Arrays.toString(operationFieldsCreator
+								.getOperationalInputFieldsList().toArray())
+						+ ", OperationProperties List : "
+						+ Arrays.toString(operationFieldsCreator
+								.getOperationalOperationPropertiesList()
+								.toArray())
+						+ ", OutputFieldsList : "
+						+ Arrays.toString(operationFieldsCreator
+								.getOperationalOutputFieldsList().toArray())
+						+ " , TransformClass List : "
+						+ Arrays.toString(operationFieldsCreator
+								.getOperationalTransformClassList().toArray())
+						+ ", PassThrough Fields : "
 						+ operationFieldsCreator.getPassThroughFields() + "]");
 				createAssemblyForOutSocket(outSocket);
 			}
@@ -78,34 +85,42 @@ public class CumulateAssembly extends BaseComponent {
 	private void createAssemblyForOutSocket(OutSocket outSocket) {
 
 		// initialize the out socket fields
-		Fields passThroughFields = operationFieldsCreator.getPassThroughFields();
-		Map<String, String> mapFields = OutSocketUtils.getMapFieldsFromOutSocket(outSocket.getMapFieldsList());
+		Fields passThroughFields = operationFieldsCreator
+				.getPassThroughFields();
+		Map<String, String> mapFields = OutSocketUtils
+				.getMapFieldsFromOutSocket(outSocket.getMapFieldsList());
 		Fields operationFields = new Fields(
-				OutSocketUtils.getOperationFieldsFromOutSocket(outSocket.getOperationFieldList()));
+				OutSocketUtils.getOperationFieldsFromOutSocket(outSocket
+						.getOperationFieldList()));
 
-		Pipe scanSortPipe = new Pipe(cumulateEntity.getComponentId() + "_out", componentParameters.getInputPipe());
+		Pipe scanSortPipe = new Pipe(cumulateEntity.getComponentId() + "_out",
+				componentParameters.getInputPipe());
 
 		// perform groupby operation on keys
 		Fields keyFields = getFieldsFromKeyFields(cumulateEntity.getKeyFields());
-		Fields secondaryKeyFields = getFieldsFromKeyFields(cumulateEntity.getSecondaryKeyFields());
+		Fields secondaryKeyFields = getFieldsFromKeyFields(cumulateEntity
+				.getSecondaryKeyFields());
 
 		scanSortPipe = new GroupBy(scanSortPipe, keyFields, secondaryKeyFields);
 
 		// get the object of fieldmanupulating handler to handle i/o fields
 		FieldManupulatingHandler fieldManupulatingHandler = new FieldManupulatingHandler(
 				operationFieldsCreator.getOperationalInputFieldsList(),
-				operationFieldsCreator.getOperationalOutputFieldsList(), keyFields, passThroughFields, mapFields,
-				operationFields);
+				operationFieldsCreator.getOperationalOutputFieldsList(),
+				keyFields, passThroughFields, mapFields, operationFields);
 
-		CumulateCustomHandler scanHandler = new CumulateCustomHandler(fieldManupulatingHandler,
+		CumulateCustomHandler scanHandler = new CumulateCustomHandler(
+				fieldManupulatingHandler,
 				operationFieldsCreator.getOperationalOperationPropertiesList(),
 				operationFieldsCreator.getOperationalTransformClassList());
 
 		setHadoopProperties(scanSortPipe.getStepConfigDef());
 
-		scanSortPipe = new Every(scanSortPipe, scanHandler.getInputFields(), scanHandler, Fields.RESULTS);
+		scanSortPipe = new Every(scanSortPipe, scanHandler.getInputFields(),
+				scanHandler, Fields.RESULTS);
 
-		setOutLink(outSocket.getSocketType(), outSocket.getSocketId(), cumulateEntity.getComponentId(), scanSortPipe,
+		setOutLink(outSocket.getSocketType(), outSocket.getSocketId(),
+				cumulateEntity.getComponentId(), scanSortPipe,
 				fieldManupulatingHandler.getOutputFields());
 
 	}
@@ -134,10 +149,16 @@ public class CumulateAssembly extends BaseComponent {
 		i = 0;
 		for (KeyField eachField : keyFields) {
 			if (eachField.getSortOrder().equalsIgnoreCase("desc")) {
-				fields.setComparator(eachField.getName(), Collections.reverseOrder());
+				fields.setComparator(eachField.getName(),
+						Collections.reverseOrder());
 			}
 			i++;
 		}
 		return fields;
+	}
+
+	@Override
+	public void initializeEntity(CumulateEntity assemblyEntityBase) {
+		this.cumulateEntity = (CumulateEntity) assemblyEntityBase;
 	}
 }

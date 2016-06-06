@@ -12,7 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.OutputFileHiveParquetEntity;
+import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.assembly.entity.utils.OutputEntityUtils;
 import hydrograph.engine.cascading.assembly.OutputFileHiveParquetAssembly;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
@@ -22,13 +29,6 @@ import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.ohiveparquet.HivePartitionFieldsType;
 import hydrograph.engine.jaxb.outputtypes.ParquetHiveFile;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 public class OutputFileHiveParquetAssemblyGenerator extends
 		OutputAssemblyGeneratorBase {
@@ -65,8 +65,7 @@ public class OutputFileHiveParquetAssemblyGenerator extends
 		LOG.trace("Initializing output file Hive parquet entity for component: "
 				+ jaxbHiveParquetFile.getId());
 		outputFileHiveParquetEntity.setComponentId(jaxbHiveParquetFile.getId());
-		outputFileHiveParquetEntity.setPhase(jaxbHiveParquetFile.getPhase()
-				.intValue());
+		outputFileHiveParquetEntity.setPhase(jaxbHiveParquetFile.getPhase());
 		outputFileHiveParquetEntity
 				.setFieldsList(OutputEntityUtils
 						.extractOutputFields(jaxbHiveParquetFile.getInSocket()
@@ -126,7 +125,7 @@ public class OutputFileHiveParquetAssemblyGenerator extends
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<HiveEntityBase> getAssembly() {
 		return outputFileHiveParquetAssembly;
 	}
 }

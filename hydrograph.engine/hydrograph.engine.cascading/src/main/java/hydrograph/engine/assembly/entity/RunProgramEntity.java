@@ -12,9 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import java.util.ArrayList;
+import java.util.List;
 
-public class RunProgramEntity extends AssemblyEntityBase {
+import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
+import hydrograph.engine.assembly.entity.elements.Operation;
+
+public class RunProgramEntity extends OperationAssemblyEntity {
 	private String command;
 
 	/**
@@ -50,5 +54,10 @@ public class RunProgramEntity extends AssemblyEntityBase {
 			str.append(command);
 		}
 		return str.toString();
+	}
+
+	@Override
+	public List<Operation> getOperationsList() {
+		return new ArrayList<>();
 	}
 }

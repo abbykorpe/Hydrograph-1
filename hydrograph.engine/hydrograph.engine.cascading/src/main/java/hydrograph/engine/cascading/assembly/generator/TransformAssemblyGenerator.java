@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.TransformEntity;
 import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
 import hydrograph.engine.cascading.assembly.TransformAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.OperationAssemblyGene
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Transform;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 public class TransformAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
@@ -63,7 +62,7 @@ public class TransformAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
 		LOG.trace("Initializing transform entity for component: " + jaxbTransform.getId());
 		transformEntity.setComponentId(jaxbTransform.getId());
-		transformEntity.setPhase(jaxbTransform.getPhase().intValue());
+		transformEntity.setPhase(jaxbTransform.getPhase());
 
 		// check if operation is present
 		if (jaxbTransform.getOperation() != null && jaxbTransform.getOperation().size() > 0) {
@@ -100,7 +99,7 @@ public class TransformAssemblyGenerator extends OperationAssemblyGeneratorBase {
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<TransformEntity> getAssembly() {
 		return transformAssembly;
 	}
 }

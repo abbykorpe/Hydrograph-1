@@ -13,7 +13,6 @@
 package hydrograph.engine.cascading.assembly;
 
 import hydrograph.engine.assembly.entity.CloneEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
@@ -23,20 +22,16 @@ import org.slf4j.LoggerFactory;
 
 import cascading.pipe.Pipe;
 
-public class CloneAssembly extends BaseComponent {
+public class CloneAssembly extends BaseComponent<CloneEntity> {
 
 	private static final long serialVersionUID = 8145806669418685707L;
 
 	CloneEntity cloneEntity;
 	private static Logger LOG = LoggerFactory.getLogger(CloneAssembly.class);
 
-	public CloneAssembly(AssemblyEntityBase baseComponentEntity, ComponentParameters componentParameters) {
+	public CloneAssembly(CloneEntity baseComponentEntity,
+			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		cloneEntity = (CloneEntity) assemblyEntityBase;
 	}
 
 	@Override
@@ -49,16 +44,25 @@ public class CloneAssembly extends BaseComponent {
 			Pipe clonePipe;
 			for (OutSocket outSocket : cloneEntity.getOutSocketList()) {
 
-				LOG.trace("Creating clone assembly for '" + cloneEntity.getComponentId() + "' for socket: '"
-						+ outSocket.getSocketId() + "' of type: '" + outSocket.getSocketType() + "'");
-				clonePipe = new Pipe(cloneEntity.getComponentId() + "_out" + outSocket.getSocketId(), inputPipes);
+				LOG.trace("Creating clone assembly for '"
+						+ cloneEntity.getComponentId() + "' for socket: '"
+						+ outSocket.getSocketId() + "' of type: '"
+						+ outSocket.getSocketType() + "'");
+				clonePipe = new Pipe(cloneEntity.getComponentId() + "_out"
+						+ outSocket.getSocketId(), inputPipes);
 				setHadoopProperties(clonePipe.getStepConfigDef());
-				setOutLink(outSocket.getSocketType(), outSocket.getSocketId(), cloneEntity.getComponentId(), clonePipe,
+				setOutLink(outSocket.getSocketType(), outSocket.getSocketId(),
+						cloneEntity.getComponentId(), clonePipe,
 						componentParameters.getInputFields());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			throw new RuntimeException(e.getMessage());
 		}
+	}
+
+	@Override
+	public void initializeEntity(CloneEntity assemblyEntityBase) {
+		this.cloneEntity = assemblyEntityBase;
 	}
 }

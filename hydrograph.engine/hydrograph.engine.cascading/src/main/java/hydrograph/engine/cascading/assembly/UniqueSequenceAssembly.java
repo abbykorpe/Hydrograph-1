@@ -12,8 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Each;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
 import hydrograph.engine.assembly.entity.UniqueSequenceEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.assembly.entity.elements.Operation;
 import hydrograph.engine.assembly.entity.elements.OperationField;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
@@ -21,14 +26,7 @@ import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.functions.UniqueSequenceNumberOperation;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Each;
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
-
-public class UniqueSequenceAssembly extends BaseComponent {
+public class UniqueSequenceAssembly extends BaseComponent<UniqueSequenceEntity> {
 
 	/**
 	 * 
@@ -38,13 +36,8 @@ public class UniqueSequenceAssembly extends BaseComponent {
 	private Fields outputFieldsList;
 	private static Logger LOG = LoggerFactory.getLogger(UniqueSequenceAssembly.class);
 
-	public UniqueSequenceAssembly(AssemblyEntityBase parameters, ComponentParameters componentParameters) {
-		super(parameters, componentParameters);
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		uniqueSequenceEntity = (UniqueSequenceEntity) assemblyEntityBase;
+	public UniqueSequenceAssembly(UniqueSequenceEntity uniqueSequenceEntity, ComponentParameters componentParameters) {
+		super(uniqueSequenceEntity, componentParameters);
 	}
 
 	@Override
@@ -98,5 +91,10 @@ public class UniqueSequenceAssembly extends BaseComponent {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public void initializeEntity(UniqueSequenceEntity assemblyEntityBase) {
+		this.uniqueSequenceEntity=assemblyEntityBase;
 	}
 }

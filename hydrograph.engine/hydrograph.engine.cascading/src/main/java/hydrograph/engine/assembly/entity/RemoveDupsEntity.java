@@ -12,15 +12,17 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.KeyField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.constants.Keep;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RemoveDupsEntity extends AssemblyEntityBase {
+import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
+import hydrograph.engine.assembly.entity.elements.KeyField;
+import hydrograph.engine.assembly.entity.elements.Operation;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.cascading.assembly.constants.Keep;
+
+public class RemoveDupsEntity extends OperationAssemblyEntity {
 
 	private KeyField[] keyFields;
 	private KeyField[] secondaryKeyFields;
@@ -90,6 +92,11 @@ public class RemoveDupsEntity extends AssemblyEntityBase {
 			str.append(Arrays.toString(outSocketList.toArray()));
 		}
 		return str.toString();
+	}
+
+	@Override
+	public List<Operation> getOperationsList() {
+		return new ArrayList<>();
 	}
 	
 }

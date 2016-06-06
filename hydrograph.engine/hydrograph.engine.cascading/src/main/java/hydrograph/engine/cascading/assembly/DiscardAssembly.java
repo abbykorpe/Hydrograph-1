@@ -12,20 +12,18 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.DiscardEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.tap.NullTap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
 import cascading.tap.Tap;
+import hydrograph.engine.assembly.entity.DiscardEntity;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.tap.NullTap;
 
-public class DiscardAssembly extends BaseComponent {
+public class DiscardAssembly extends BaseComponent<DiscardEntity> {
 
 	/**
 	 * 
@@ -39,13 +37,8 @@ public class DiscardAssembly extends BaseComponent {
 	private DiscardEntity discardEntity;
 	private static Logger LOG = LoggerFactory.getLogger(DiscardAssembly.class);
 
-	public DiscardAssembly(AssemblyEntityBase assemblyEntityBase, ComponentParameters componentParameters) {
+	public DiscardAssembly(DiscardEntity assemblyEntityBase, ComponentParameters componentParameters) {
 		super(assemblyEntityBase, componentParameters);
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		discardEntity = (DiscardEntity) assemblyEntityBase;
 	}
 
 	@Override
@@ -67,5 +60,10 @@ public class DiscardAssembly extends BaseComponent {
 			LOG.error(e.getMessage(), e);
 			throw new RuntimeException(e.getMessage());
 		}
+	}
+
+	@Override
+	public void initializeEntity(DiscardEntity assemblyEntityBase) {
+		this.discardEntity=assemblyEntityBase;
 	}
 }

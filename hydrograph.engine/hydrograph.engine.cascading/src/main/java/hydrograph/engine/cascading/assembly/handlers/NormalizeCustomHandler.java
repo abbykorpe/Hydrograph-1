@@ -94,21 +94,16 @@ public class NormalizeCustomHandler extends
 			OperationCall<CustomHandlerContext<NormalizeTransformBase>> operationCall) {
 
 		CustomHandlerContext<NormalizeTransformBase> context = new CustomHandlerContext<NormalizeTransformBase>(
-				fieldManupulatingHandler, transformClassName);
-		int counter = -1;
-		for (NormalizeTransformBase transformInstance : context
-				.getTransformInstances()) {
-			counter = counter + 1;
+			fieldManupulatingHandler, transformClassName);
 
-			context.setUserObject(new NormalizeOutputDispatcher(operationCall));
+		context.setUserObject(new NormalizeOutputDispatcher(operationCall));
 
-			LOG.trace("calling prepare method of: "
-					+ context.getSingleTransformInstance().getClass().getName());
+		LOG.trace("calling prepare method of: "
+				+ context.getSingleTransformInstance().getClass().getName());
 
-			LOG.trace("calling prepare method of: "
-					+ transformInstance.getClass().getName());
-			transformInstance.prepare(userProperties.get(counter));
-		}
+		LOG.trace("calling prepare method of: "
+				+  context.getSingleTransformInstance().getClass().getName());
+		context.getSingleTransformInstance().prepare(userProperties.get(0));
 
 		operationCall.setContext(context);
 
@@ -136,24 +131,26 @@ public class NormalizeCustomHandler extends
 		// fieldManupulatingHandler.getMapFields(), context.getMapRow(),
 		// context.getPassThroughRow(), context.getOperationRow());
 
-		for (NormalizeTransformBase transformInstance : context
-				.getTransformInstances()) {
-			LOG.trace("calling normalize method of: "
-					+ transformInstance.getClass().getName());
-			try {
-				transformInstance.Normalize(ReusableRowHelper.extractFromTuple(
-						fieldManupulatingHandler.getInputPositions(), call
-								.getArguments().getTuple(), context
-								.getSingleInputRow()), context
-						.getSingleOutputRow(),
-						(NormalizeOutputDispatcher) context.getUserObject());
+		LOG.trace("calling normalize method of: "
+				+ context.getSingleTransformInstance().getClass().getName());
+		try {
+			context.getTransformInstances()
+					.get(0)
+					.Normalize(ReusableRowHelper.extractFromTuple(
+									fieldManupulatingHandler
+											.getInputPositions(), call
+											.getArguments().getTuple(), context
+											.getSingleInputRow()),
+							context.getSingleOutputRow(),
+							(NormalizeOutputDispatcher) context.getUserObject());
 
-			} catch (Exception e) {
-				LOG.error("Exception in normalize method of: "
-						+ transformInstance.getClass().getName()
-						+ ".\nRow being processed: " + call.getArguments(), e);
-				throw e;
-			}
+		} catch (Exception e) {
+			LOG.error(
+					"Exception in normalize method of: "
+						+ context.getSingleTransformInstance().getClass()
+								.getName() + ".\nRow being processed: "
+						+ call.getArguments(), e);
+			throw e;
 		}
 
 	}
@@ -165,12 +162,9 @@ public class NormalizeCustomHandler extends
 		CustomHandlerContext<NormalizeTransformBase> context = call
 				.getContext();
 
-		for (NormalizeTransformBase transformInstance : context
-				.getTransformInstances()) {
-			LOG.trace("calling cleanup method of: "
-					+ transformInstance.getClass().getName());
-			transformInstance.cleanup();
-		}
+		LOG.trace("calling cleanup method of: "
+				+ context.getSingleTransformInstance().getClass().getName());
+		context.getSingleTransformInstance().cleanup();
 
 	}
 

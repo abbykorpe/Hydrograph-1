@@ -12,13 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.utils;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OperationField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -26,8 +19,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
+import hydrograph.engine.assembly.entity.elements.Operation;
+import hydrograph.engine.assembly.entity.elements.OperationField;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 
-public class OperationFieldsCreator<T extends AssemblyEntityBase> {
+public class OperationFieldsCreator<T extends OperationAssemblyEntity> {
 
 	private ArrayList<Fields> inputFieldsList;
 	private ArrayList<Fields> outputFieldsList;
@@ -35,7 +34,7 @@ public class OperationFieldsCreator<T extends AssemblyEntityBase> {
 	private ArrayList<Properties> operationPropertiesList;
 	private Fields initPassThroughFields;
 	private boolean isOperationExistinOperationField;
-	private AssemblyEntityBase assemblyEntityBase;
+	private OperationAssemblyEntity assemblyEntityBase;
 	private OutSocket outSocket;
 	private ComponentParameters componentParameters;
 

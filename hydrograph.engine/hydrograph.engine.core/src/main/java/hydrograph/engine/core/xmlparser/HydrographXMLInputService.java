@@ -66,7 +66,6 @@ public class HydrographXMLInputService implements HydrographInputService {
 			hydrographJob = hydrographJobGenerator.createHydrographJob(
 					parseExternalSchema.getXmlDom(),
 					config.getProperty("xsdLocation"));
-
 			LOG.info("Graph: '" + hydrographJob.getJAXBObject().getName()
 					+ "' parsed successfully");
 			return hydrographJob;
@@ -88,7 +87,6 @@ public class HydrographXMLInputService implements HydrographInputService {
 				throw new HydrographXMLInputServiceException("job id is required for Debugging");
 			if(XmlParsingUtils.getBasePath(args)==null)
 				throw new HydrographXMLInputServiceException("base path is required for Debugging");
-			// String xmlContents = XmlParsingUtils.getXMLStringFromPath(path);
 			LOG.info("Parsing for Debug graph file: " + path + " started");
 			ParameterSubstitutor parameterSubstitutor = new ParameterSubstitutor(
 					getUserParameters(args));

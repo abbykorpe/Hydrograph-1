@@ -12,15 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import java.util.Arrays;
+import java.util.List;
+
+import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
 import hydrograph.engine.assembly.entity.elements.KeyField;
 import hydrograph.engine.assembly.entity.elements.Operation;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 
-import java.util.Arrays;
-import java.util.List;
-
-public class AggregateEntity extends AssemblyEntityBase {
+public class AggregateEntity extends OperationAssemblyEntity {
 
 	private KeyField[] keyFields;
 	private KeyField[] secondaryKeyFields;

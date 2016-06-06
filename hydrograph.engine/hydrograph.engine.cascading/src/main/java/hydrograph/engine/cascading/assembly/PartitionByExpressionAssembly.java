@@ -12,15 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.PartitionByExpressionEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.functions.CustomTuplesPartitioner;
-import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression;
-import hydrograph.engine.utilities.UserClassLoader;
-
 import java.util.LinkedList;
 
 import org.slf4j.Logger;
@@ -29,8 +20,15 @@ import org.slf4j.LoggerFactory;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.PartitionByExpressionEntity;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.functions.CustomTuplesPartitioner;
+import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression;
+import hydrograph.engine.utilities.UserClassLoader;
 
-public class PartitionByExpressionAssembly extends BaseComponent {
+public class PartitionByExpressionAssembly extends BaseComponent<PartitionByExpressionEntity> {
 
 	private PartitionByExpressionEntity partitionByExpressionEntity;
 
@@ -41,10 +39,9 @@ public class PartitionByExpressionAssembly extends BaseComponent {
 
 	private static Logger LOG = LoggerFactory.getLogger(PartitionByExpressionAssembly.class);
 
-	public PartitionByExpressionAssembly(AssemblyEntityBase baseComponentEntity,
+	public PartitionByExpressionAssembly(PartitionByExpressionEntity baseComponentEntity,
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
-		// TODO Auto-generated constructor stub
 	}
 
 	private void initAssembly() {
@@ -117,8 +114,8 @@ public class PartitionByExpressionAssembly extends BaseComponent {
 	}
 
 	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		partitionByExpressionEntity = (PartitionByExpressionEntity) assemblyEntityBase;
+	public void initializeEntity(PartitionByExpressionEntity assemblyEntityBase) {
+		this.partitionByExpressionEntity=assemblyEntityBase;
 	}
 
 }

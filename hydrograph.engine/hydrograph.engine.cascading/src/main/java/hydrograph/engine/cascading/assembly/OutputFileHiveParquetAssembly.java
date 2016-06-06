@@ -13,12 +13,11 @@
 package hydrograph.engine.cascading.assembly;
 
 import hydrograph.engine.assembly.entity.OutputFileHiveParquetEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.base.OutputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.hive.parquet.scheme.HiveParquetScheme;
-import hydrograph.engine.cascading.hive.parquet.scheme.HiveParquetTableDescriptor;
+import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetScheme;
+import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetTableDescriptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,8 @@ import cascading.tap.SinkMode;
 import cascading.tap.hive.HivePartitionTap;
 import cascading.tap.hive.HiveTap;
 
-public class OutputFileHiveParquetAssembly extends OutputFileHiveBase {
+public class OutputFileHiveParquetAssembly extends
+		OutputFileHiveBase<OutputFileHiveParquetEntity> {
 
 	private static final long serialVersionUID = 6015895554773455760L;
 	private static Logger LOG = LoggerFactory
@@ -35,7 +35,8 @@ public class OutputFileHiveParquetAssembly extends OutputFileHiveBase {
 	private HiveParquetTableDescriptor tableDesc;
 	private OutputFileHiveParquetEntity outputFileHiveParquetEntity;
 
-	public OutputFileHiveParquetAssembly(AssemblyEntityBase assemblyEntityBase,
+	public OutputFileHiveParquetAssembly(
+			OutputFileHiveParquetEntity assemblyEntityBase,
 			ComponentParameters componentParameters) {
 		super(assemblyEntityBase, componentParameters);
 	}
@@ -46,8 +47,9 @@ public class OutputFileHiveParquetAssembly extends OutputFileHiveBase {
 		tableDesc = new HiveParquetTableDescriptor(
 				outputFileHiveParquetEntity.getDatabaseName(),
 				outputFileHiveParquetEntity.getTableName(), outputFields,
-				fieldsCreator.hiveParquetDataTypeMapping(outputFileHiveParquetEntity
-						.getFieldsList()),
+				fieldsCreator
+						.hiveParquetDataTypeMapping(outputFileHiveParquetEntity
+								.getFieldsList()),
 				outputFileHiveParquetEntity.getPartitionKeys(),
 				getHiveExternalTableLocationPath(outputFileHiveParquetEntity
 						.getExternalTablePathUri()));

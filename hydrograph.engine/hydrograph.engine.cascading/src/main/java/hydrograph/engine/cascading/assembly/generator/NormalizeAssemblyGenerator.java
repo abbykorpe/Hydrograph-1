@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.NormalizeEntity;
 import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
 import hydrograph.engine.cascading.assembly.NormalizeAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.OperationAssemblyGene
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Normalize;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 public class NormalizeAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
@@ -61,7 +60,7 @@ public class NormalizeAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
 		LOG.trace("Initializing normalize entity for component: " + jaxbNormalize.getId());
 		normalizeEntity.setComponentId(jaxbNormalize.getId());
-		normalizeEntity.setPhase(jaxbNormalize.getPhase().intValue());
+		normalizeEntity.setPhase(jaxbNormalize.getPhase());
 		// check if operation is present
 		if (jaxbNormalize.getOperation() != null && jaxbNormalize.getOperation().size() > 0) {
 
@@ -96,7 +95,7 @@ public class NormalizeAssemblyGenerator extends OperationAssemblyGeneratorBase {
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<NormalizeEntity> getAssembly() {
 		return normalizeCustomAssembly;
 	}
 }

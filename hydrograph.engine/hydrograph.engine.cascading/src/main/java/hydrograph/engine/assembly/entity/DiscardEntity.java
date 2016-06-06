@@ -12,9 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DiscardEntity extends AssemblyEntityBase {
+import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
+import hydrograph.engine.assembly.entity.elements.Operation;
+
+public class DiscardEntity extends OperationAssemblyEntity {
 
 	/**
 	 * Returns a string with the values for all the members of this entity
@@ -29,5 +33,10 @@ public class DiscardEntity extends AssemblyEntityBase {
 		StringBuilder str = new StringBuilder("Discard entity information\n");
 		str.append(super.toString());
 		return str.toString();
+	}
+
+	@Override
+	public List<Operation> getOperationsList() {
+		return new ArrayList<>();
 	}
 }

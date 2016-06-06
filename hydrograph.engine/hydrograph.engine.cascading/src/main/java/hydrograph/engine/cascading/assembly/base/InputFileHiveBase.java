@@ -12,13 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.base;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.base.HiveEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
-
 import java.util.Arrays;
 
 import org.apache.hadoop.fs.Path;
@@ -30,8 +23,13 @@ import cascading.pipe.Pipe;
 import cascading.scheme.Scheme;
 import cascading.tap.Tap;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.base.HiveEntityBase;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
 
-public abstract class InputFileHiveBase extends BaseComponent {
+public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 
 	/**
 	 * Hive Input File Component - read records as input from Hive Table.
@@ -54,7 +52,7 @@ public abstract class InputFileHiveBase extends BaseComponent {
 	private static Logger LOG = LoggerFactory
 			.getLogger(InputFileHiveBase.class);
 
-	public InputFileHiveBase(AssemblyEntityBase baseComponentEntity,
+	public InputFileHiveBase(HiveEntityBase baseComponentEntity,
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
@@ -68,8 +66,8 @@ public abstract class InputFileHiveBase extends BaseComponent {
 	 * case the AssemblyEntityBase to hiveBaseEntity
 	 */
 	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		hiveEntityBase = (HiveEntityBase) assemblyEntityBase;
+	public void initializeEntity(HiveEntityBase assemblyEntityBase) {
+		hiveEntityBase = assemblyEntityBase;
 		castHiveEntityFromBase(hiveEntityBase);
 	}
 

@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.cascading.hive.text.scheme;
+package hydrograph.engine.cascading.scheme.hive.text;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

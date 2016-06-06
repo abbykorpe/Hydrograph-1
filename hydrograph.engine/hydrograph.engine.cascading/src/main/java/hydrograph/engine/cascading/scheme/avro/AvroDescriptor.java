@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.cascading.avro.scheme;
+package hydrograph.engine.cascading.scheme.avro;
 
 import cascading.tuple.Fields;
 

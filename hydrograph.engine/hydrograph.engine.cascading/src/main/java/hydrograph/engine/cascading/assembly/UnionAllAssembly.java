@@ -12,6 +12,11 @@
  */
 package hydrograph.engine.cascading.assembly;
 
+import hydrograph.engine.assembly.entity.UnionAllEntity;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.functions.CopyFields;
+
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -19,24 +24,18 @@ import org.slf4j.LoggerFactory;
 
 import cascading.pipe.Each;
 import cascading.pipe.Merge;
-import cascading.pipe.OperatorException;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.UnionAllEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.functions.CopyFields;
-import jline.internal.Log;
 
-public class UnionAllAssembly extends BaseComponent {
+public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 
 	private static final long serialVersionUID = -1271944466197184074L;
 	private static Logger LOG = LoggerFactory.getLogger(UnionAllAssembly.class);
 
 	private UnionAllEntity unionAllEntity;
 
-	public UnionAllAssembly(AssemblyEntityBase baseComponentEntity, ComponentParameters componentParameters) {
+	public UnionAllAssembly(UnionAllEntity baseComponentEntity,
+			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
 
@@ -46,20 +45,25 @@ public class UnionAllAssembly extends BaseComponent {
 			if (LOG.isTraceEnabled()) {
 				LOG.trace(unionAllEntity.toString());
 			}
-			LOG.trace("Creating union all assembly for '" + unionAllEntity.getComponentId() + "' for socket: '"
-					+ unionAllEntity.getOutSocket().getSocketId() + "' of type: '"
+			LOG.trace("Creating union all assembly for '"
+					+ unionAllEntity.getComponentId() + "' for socket: '"
+					+ unionAllEntity.getOutSocket().getSocketId()
+					+ "' of type: '"
 					+ unionAllEntity.getOutSocket().getSocketType() + "'");
 
-			ArrayList<Fields> fieldList = componentParameters.getInputFieldsList();
+			ArrayList<Fields> fieldList = componentParameters
+					.getInputFieldsList();
 
-			Pipe[] inputPipes = alignfields(componentParameters.getInputPipes(), fieldList);
+			Pipe[] inputPipes = alignfields(
+					componentParameters.getInputPipes(), fieldList);
 
-			Pipe outPipe = new Merge(unionAllEntity.getComponentId() + "_merged_out", inputPipes);
+			Pipe outPipe = new Merge(unionAllEntity.getComponentId()
+					+ "_merged_out", inputPipes);
 
 			setHadoopProperties(outPipe.getStepConfigDef());
 
-			setOutLink("out", unionAllEntity.getOutSocket().getSocketId(), unionAllEntity.getComponentId(), outPipe,
-					fieldList.get(0));
+			setOutLink("out", unionAllEntity.getOutSocket().getSocketId(),
+					unionAllEntity.getComponentId(), outPipe, fieldList.get(0));
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			throw new RuntimeException(e.getMessage());
@@ -82,19 +86,21 @@ public class UnionAllAssembly extends BaseComponent {
 		return fields;
 	}
 
-	private Pipe[] alignfields(ArrayList<Pipe> arrayList, ArrayList<Fields> fieldList) {
+	private Pipe[] alignfields(ArrayList<Pipe> arrayList,
+			ArrayList<Fields> fieldList) {
 		Pipe[] inputPipes = new Pipe[componentParameters.getInputPipes().size()];
 		int i = 0;
 		for (Pipe eachPipe : arrayList) {
-			inputPipes[i] = new Each(eachPipe, fieldList.get(i), new CopyFields(fieldList.get(i)), Fields.RESULTS);
+			inputPipes[i] = new Each(eachPipe, fieldList.get(i),
+					new CopyFields(fieldList.get(i)), Fields.RESULTS);
 			i++;
 		}
 		return inputPipes;
 	}
 
 	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		unionAllEntity = (UnionAllEntity) assemblyEntityBase;
+	public void initializeEntity(UnionAllEntity assemblyEntityBase) {
+		this.unionAllEntity = assemblyEntityBase;
 	}
 
 }

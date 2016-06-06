@@ -12,16 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.GenerateRecordEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
-import hydrograph.engine.cascading.tap.MemorySourceTap;
-import hydrograph.engine.cascading.tuplegenerator.GenerateDataEntity;
-import hydrograph.engine.cascading.tuplegenerator.RandomTupleGenerator;
-
 import java.io.IOException;
 
 import org.slf4j.Logger;
@@ -31,8 +21,16 @@ import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
 import cascading.tap.Tap;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.GenerateRecordEntity;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.tap.MemorySourceTap;
+import hydrograph.engine.cascading.tuplegenerator.GenerateDataEntity;
+import hydrograph.engine.cascading.tuplegenerator.RandomTupleGenerator;
 
-public class GenerateRecordAssembly extends BaseComponent {
+public class GenerateRecordAssembly extends BaseComponent<GenerateRecordEntity> {
 
 	private static final long serialVersionUID = -4353128451811282091L;
 
@@ -45,7 +43,7 @@ public class GenerateRecordAssembly extends BaseComponent {
 	private static Logger LOG = LoggerFactory.getLogger(GenerateRecordAssembly.class);
 	private IOFieldsAndTypesCreator<GenerateRecordEntity> fieldsCreator;
 
-	public GenerateRecordAssembly(AssemblyEntityBase baseComponentEntity, ComponentParameters componentParameters) {
+	public GenerateRecordAssembly(GenerateRecordEntity baseComponentEntity, ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
 
@@ -90,11 +88,6 @@ public class GenerateRecordAssembly extends BaseComponent {
 		}
 	}
 
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		generateRecordEntity = (GenerateRecordEntity) assemblyEntityBase;
-	}
-
 	public void generateTapsAndPipes() throws IOException {
 		flowDef = componentParameters.getFlowDef();
 
@@ -108,5 +101,10 @@ public class GenerateRecordAssembly extends BaseComponent {
 		pipes = new Pipe(generateRecordEntity.getComponentId());
 		setHadoopProperties(pipes.getStepConfigDef());
 		setHadoopProperties(tap.getStepConfigDef());
+	}
+
+	@Override
+	public void initializeEntity(GenerateRecordEntity assemblyEntityBase) {
+		this.generateRecordEntity=assemblyEntityBase;
 	}	
 }

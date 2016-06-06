@@ -12,8 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.hive.scheme;
 
-import hydrograph.engine.cascading.hive.parquet.scheme.HiveParquetScheme;
-
 import java.io.IOException;
 import java.util.Properties;
 
@@ -30,6 +28,7 @@ import cascading.tap.hadoop.Hfs;
 import cascading.tap.hive.HivePartitionTap;
 import cascading.tap.hive.HiveTableDescriptor;
 import cascading.tap.hive.HiveTap;
+import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetScheme;
 
 public class HivePartRead {
 

@@ -24,7 +24,7 @@ import java.util.List;
  * @author bitwise1
  *
  */
-public class HiveEntityBase extends AssemblyEntityBase {
+public class HiveEntityBase extends IOAssemblyEntity {
 	private List<OutSocket> outSocketList;
 	private List<SchemaField> schemaFieldsList;
 	private String[] partitionKeys;

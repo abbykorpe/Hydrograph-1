@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.RemoveDupsEntity;
 import hydrograph.engine.assembly.entity.utils.StraightPullEntityUtils;
 import hydrograph.engine.cascading.assembly.RemoveDupsAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.StraightPullAssemblyG
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.straightpulltypes.RemoveDups;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 public class RemoveDupsAssemblyGenerator extends
 		StraightPullAssemblyGeneratorBase {
@@ -65,7 +64,7 @@ public class RemoveDupsAssemblyGenerator extends
 		LOG.trace("Initializing remove dups entity for component: "
 				+ jaxbRemoveDups.getId());
 		removeDupsEntity.setComponentId(jaxbRemoveDups.getId());
-		removeDupsEntity.setPhase(jaxbRemoveDups.getPhase().intValue());
+		removeDupsEntity.setPhase(jaxbRemoveDups.getPhase());
 		removeDupsEntity.setKeep(jaxbRemoveDups.getKeep().getValue().name());
 		removeDupsEntity.setKeyFields(StraightPullEntityUtils
 				.extractKeyFields(jaxbRemoveDups.getPrimaryKeys()));
@@ -86,7 +85,7 @@ public class RemoveDupsAssemblyGenerator extends
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<RemoveDupsEntity> getAssembly() {
 		return removeDupsAssembly;
 	}
 }

@@ -12,15 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-
 import java.util.List;
 
 import cascading.flow.FlowDef;
+import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
 
-public class InputFileSequenceFormatEntity extends AssemblyEntityBase {
+public class InputFileSequenceFormatEntity extends IOAssemblyEntity {
 
 	private String path;
 	private FlowDef flowdef;
@@ -34,7 +33,7 @@ public class InputFileSequenceFormatEntity extends AssemblyEntityBase {
 		return fieldsList;
 	}
 
-	public void setFieldList(List<SchemaField> fieldsList) {
+	public void setFieldsList(List<SchemaField> fieldsList) {
 		this.fieldsList = fieldsList;
 	}
 

@@ -12,18 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity.base;
 
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 public class AssemblyEntityBase {
 
 	private String componentId;
 	private Properties runtimeProperties;
-	private Integer phase;
+	private String phase;
 
 	/**
 	 * @return the componentId
@@ -58,7 +53,7 @@ public class AssemblyEntityBase {
 	/**
 	 * @return the phase
 	 */
-	public Integer getPhase() {
+	public String getPhase() {
 		return phase;
 	}
 
@@ -66,16 +61,8 @@ public class AssemblyEntityBase {
 	 * @param phase
 	 *            the phase to set
 	 */
-	public void setPhase(Integer phase) {
+	public void setPhase(String phase) {
 		this.phase = phase;
-	}
-
-	public List<SchemaField> getFieldsList() {
-		return new ArrayList<>();
-	}
-
-	public List<Operation> getOperationsList() {
-		return new ArrayList<>();
 	}
 
 	public boolean isOperationPresent() {

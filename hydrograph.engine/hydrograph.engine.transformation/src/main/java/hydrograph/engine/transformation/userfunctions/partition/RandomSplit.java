@@ -45,39 +45,44 @@ public class RandomSplit implements CustomPartitionExpression,Serializable{
 		String[] outSocketProp;
 		double sum=0;
 		randomVal=new Random();
-		
-		if(props.getProperty("WEIGHTS")!=null)
-			weightProp=props.getProperty("WEIGHTS").split(",");
-		else
-			throw new PartitionByExpressionException("WEIGHTS property not passed in partition by expression");
-		
-		if(props.getProperty("PORTS")!=null)
-			outSocketProp=props.getProperty("PORTS").split(",");
-		else
-			throw new PartitionByExpressionException("PORTS property not passed in partition by expression");
-		
-		if(weightProp.length!=outSocketProp.length)
-			throw new PartitionByExpressionException("weights and ports are not mapping correctly");
-		
-		if(props.getProperty("SEED")!=null){
-			randomVal.setSeed(Long.parseLong(props.getProperty("SEED")));
-		}
-		
-		for(int i=0;i<weightProp.length;i++){
-			double parsedWeight=Double.parseDouble(weightProp[i]);
-			weightPortMap.put(outSocketProp[i], parsedWeight);
-			sum=sum+parsedWeight;
-		}
-		
-		if(sum>1)
-			throw new PartitionByExpressionException("Sum of weights is greater than zero");
-		
-		if(sum<1)
-		{
-			for(String portId:weightPortMap.keySet()){
-				weightPortMap.put(portId, weightPortMap.get(portId)/sum);
+		if ( props != null ) {
+			if(props.getProperty("WEIGHTS")!=null)
+				weightProp=props.getProperty("WEIGHTS").split(",");
+			else
+				throw new PartitionByExpressionException("WEIGHTS property not passed in partition by expression");
+			
+			if(props.getProperty("PORTS")!=null)
+				outSocketProp=props.getProperty("PORTS").split(",");
+			else
+				throw new PartitionByExpressionException("PORTS property not passed in partition by expression");
+			
+			if(weightProp.length!=outSocketProp.length)
+				throw new PartitionByExpressionException("weights and ports are not mapping correctly");
+			
+			if(props.getProperty("SEED")!=null){
+				randomVal.setSeed(Long.parseLong(props.getProperty("SEED")));
 			}
+			
+			for(int i=0;i<weightProp.length;i++){
+				double parsedWeight=Double.parseDouble(weightProp[i]);
+				weightPortMap.put(outSocketProp[i], parsedWeight);
+				sum=sum+parsedWeight;
+			}
+			
+			if(sum>1)
+				throw new PartitionByExpressionException("Sum of weights is greater than zero");
+			
+			if(sum<1)
+			{
+				for(String portId:weightPortMap.keySet()){
+					weightPortMap.put(portId, weightPortMap.get(portId)/sum);
+				}
+			}
+		} else {
+			throw new RuntimeException(
+					"properties 'WEIGHT', PORTS and 'SEED' are missing in the operation RandomSplit.");
 		}
+		
 	}
 	
 	/**

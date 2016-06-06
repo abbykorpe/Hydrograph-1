@@ -12,16 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.NormalizeEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
-import hydrograph.engine.cascading.assembly.handlers.NormalizeCustomHandler;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
-
 import java.util.Arrays;
 import java.util.Map;
 
@@ -31,27 +21,27 @@ import org.slf4j.LoggerFactory;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.NormalizeEntity;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
+import hydrograph.engine.cascading.assembly.handlers.NormalizeCustomHandler;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
-public class NormalizeAssembly extends BaseComponent {
+public class NormalizeAssembly extends BaseComponent<NormalizeEntity> {
 
 	private static final long serialVersionUID = 3161412718941460364L;
 
 	private static Logger LOG = LoggerFactory
 			.getLogger(NormalizeAssembly.class);
 	private NormalizeEntity normalizeEntity;
-	private OperationFieldsCreator operationFieldsCreator;
+	private OperationFieldsCreator<NormalizeEntity> operationFieldsCreator;
 
-	public NormalizeAssembly(AssemblyEntityBase baseComponentEntity,
+	public NormalizeAssembly(NormalizeEntity baseComponentEntity,
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
-
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		normalizeEntity = (NormalizeEntity) assemblyEntityBase;
-
 	}
 
 	@Override
@@ -65,7 +55,7 @@ public class NormalizeAssembly extends BaseComponent {
 						+ normalizeEntity.getComponentId() + "' for socket: '"
 						+ outSocket.getSocketId() + "' of type: '"
 						+ outSocket.getSocketType() + "'");
-				operationFieldsCreator = new OperationFieldsCreator<AssemblyEntityBase>(
+				operationFieldsCreator = new OperationFieldsCreator<NormalizeEntity>(
 						normalizeEntity, componentParameters, outSocket);
 				LOG.debug("Normalize Assembly: [ InputFields List : "
 						+ Arrays.toString(operationFieldsCreator
@@ -124,6 +114,11 @@ public class NormalizeAssembly extends BaseComponent {
 		setOutLink(outSocket.getSocketType(), outSocket.getSocketId(),
 				normalizeEntity.getComponentId(), normalizePipe,
 				fieldManupulatingHandler.getOutputFields());
+	}
+
+	@Override
+	public void initializeEntity(NormalizeEntity assemblyEntityBase) {
+		this.normalizeEntity=assemblyEntityBase;
 	}
 
 }

@@ -24,7 +24,6 @@ import hydrograph.engine.jaxb.inputtypes.SequenceInputFile;
 import hydrograph.engine.jaxb.main.Graph;
 import hydrograph.engine.jaxb.outputtypes.SequenceOutputFile;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -45,7 +44,7 @@ public class JAXBTraversal {
 	public static final String DEFAULT_OUT_SOCKET = "out0";
 	public static final String DEFAULT_IN_SOCKET = "in0";
 	private static Logger LOG = LoggerFactory.getLogger(JAXBTraversal.class);
-	private SortedSet<BigInteger> flowCount = new TreeSet<BigInteger>();
+	private SortedSet<String> flowCount = new TreeSet<String>();
 
 	private List<TypeBaseComponent> jaxbGraph;
 	private List<LinkInfo> phaseChangeOriginalLinks;
@@ -111,7 +110,7 @@ public class JAXBTraversal {
 		throw new GraphTraversalException("Component not present for the component id: " + componentId);
 	}
 	
-	public List<String> getOrderedComponentsList(BigInteger phase) {
+	public List<String> getOrderedComponentsList(String phase) {
 		HashMap<String, Integer> componentDependencies = new HashMap<String, Integer>();
 		ArrayList<String> orderedComponents = new ArrayList<String>();
 		Queue<String> resolvedComponents = new LinkedList<String>();
@@ -225,7 +224,7 @@ public class JAXBTraversal {
 		throw new GraphTraversalException("Component not found with id '" + componentID +"'");
 	}
 	
-	public SortedSet<BigInteger> getFlowsNumber() {
+	public SortedSet<String> getFlowsNumber() {
 		return flowCount;
 	}
 
@@ -318,7 +317,7 @@ public class JAXBTraversal {
 			List<? extends TypeBaseInSocket> inSocketList = SocketUtilities
 					.getInSocketList(component);
 			
-			BigInteger phase = component.getPhase();
+			String phase = component.getPhase();
 
 			for (TypeBaseInSocket inSocket : inSocketList) {
 				// get the dependent component
@@ -349,7 +348,7 @@ public class JAXBTraversal {
 	}
 
 	
-	public class GraphTraversalException extends RuntimeException {
+	private class GraphTraversalException extends RuntimeException {
 
 		private static final long serialVersionUID = -2396594973435552339L;
 

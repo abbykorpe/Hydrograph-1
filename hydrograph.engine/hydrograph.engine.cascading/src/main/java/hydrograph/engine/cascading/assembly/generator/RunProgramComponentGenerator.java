@@ -35,7 +35,7 @@ public class RunProgramComponentGenerator extends CommandComponentGeneratorBase 
 	@Override
 	public void initializeEntity() {
 		runProgramEntity.setComponentId(runProgram.getId());
-		runProgramEntity.setPhase(runProgram.getPhase().intValue());
+		runProgramEntity.setPhase(runProgram.getPhase());
 		runProgramEntity.setCommand(runProgram.getCommand().getValue());
 	}
 

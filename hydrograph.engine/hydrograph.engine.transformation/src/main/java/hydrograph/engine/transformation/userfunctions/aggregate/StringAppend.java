@@ -27,9 +27,10 @@ public class StringAppend implements AggregateTransformBase {
 	@Override
 	public void prepare(Properties props, ArrayList<String> inputFields,
 			ArrayList<String> outputFields, ArrayList<String> keyFields) {
-
-		filler = props.getProperty("filler") == null ? filler : props
-				.getProperty("filler");
+		if (props != null) {
+			filler = props.getProperty("filler") == null ? filler : props
+					.getProperty("filler");
+		} 
 
 	}
 

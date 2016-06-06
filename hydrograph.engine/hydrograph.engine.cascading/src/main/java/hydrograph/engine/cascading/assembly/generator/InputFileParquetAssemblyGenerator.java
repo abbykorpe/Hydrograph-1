@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.InputFileParquetEntity;
 import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
 import hydrograph.engine.cascading.assembly.InputFileParquetAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.InputAssemblyGenerato
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.inputtypes.ParquetFile;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 public class InputFileParquetAssemblyGenerator extends InputAssemblyGeneratorBase {
 
@@ -68,7 +67,7 @@ public class InputFileParquetAssemblyGenerator extends InputAssemblyGeneratorBas
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<InputFileParquetEntity> getAssembly() {
 		return inputFileParquetAssembly;
 	}
 

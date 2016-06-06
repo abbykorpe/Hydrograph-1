@@ -12,16 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.LookupEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.JoinHelper;
-import hydrograph.engine.cascading.joiners.HashJoinJoiner;
-import hydrograph.engine.cascading.joiners.HashJoinJoiner.Option;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +21,14 @@ import cascading.pipe.assembly.Rename;
 import cascading.pipe.assembly.Retain;
 import cascading.pipe.joiner.Joiner;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.LookupEntity;
+import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.JoinHelper;
+import hydrograph.engine.cascading.joiners.HashJoinJoiner;
+import hydrograph.engine.cascading.joiners.HashJoinJoiner.Option;
 
 /**
  * HashJoin Component for joining two or more files.
@@ -39,7 +37,7 @@ import cascading.tuple.Fields;
  * 
  */
 
-public class LookupAssembly extends BaseComponent {
+public class LookupAssembly extends BaseComponent<LookupEntity> {
 
 	private static final long serialVersionUID = 1L;
 	private LookupEntity lookupEntity;
@@ -51,14 +49,9 @@ public class LookupAssembly extends BaseComponent {
 	private Joiner joiner;
 	private JoinHelper joinHelper;
 
-	public LookupAssembly(LookupEntity hashJoinEntity,
+	public LookupAssembly(LookupEntity lookupEntity,
 			ComponentParameters componentParameters) {
-		super(hashJoinEntity, componentParameters);
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		lookupEntity = (LookupEntity) assemblyEntityBase;
+		super(lookupEntity, componentParameters);
 	}
 
 	@Override
@@ -236,6 +229,11 @@ public class LookupAssembly extends BaseComponent {
 			if (!inputSocketType.equals("driver"))
 				k++;
 		}
+	}
+
+	@Override
+	public void initializeEntity(LookupEntity assemblyEntityBase) {
+		this.lookupEntity=assemblyEntityBase;
 	}
 
 }

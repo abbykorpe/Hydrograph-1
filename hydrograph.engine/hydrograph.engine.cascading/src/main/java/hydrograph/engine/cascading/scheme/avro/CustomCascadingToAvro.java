@@ -24,7 +24,7 @@
  * limitations under the License.
  */
 
-package hydrograph.engine.cascading.avro.scheme;
+package hydrograph.engine.cascading.scheme.avro;
 
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;

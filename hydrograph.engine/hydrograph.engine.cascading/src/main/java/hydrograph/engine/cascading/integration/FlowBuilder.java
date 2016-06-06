@@ -29,6 +29,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
 import hydrograph.engine.jaxb.inputtypes.SequenceInputFile;
 import hydrograph.engine.jaxb.outputtypes.SequenceOutputFile;
 import hydrograph.engine.utilities.ComponentParameterBuilder;
+import hydrograph.engine.utilities.PlatformHelper;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -44,8 +45,10 @@ import org.slf4j.LoggerFactory;
 
 import cascading.cascade.Cascade;
 import cascading.cascade.CascadeConnector;
-import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
+import cascading.flow.FlowConnector;
+import cascading.flow.FlowDef;
 import cascading.flow.process.ProcessFlow;
+import cascading.flow.tez.Hadoop2TezFlowConnector;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.hadoop.BigDecimalSerialization;
 import cascading.tuple.hadoop.TupleSerializationProps;
@@ -67,20 +70,25 @@ public class FlowBuilder {
 
 		addSerializations(hadoopProps);
 
-		Hadoop2MR1FlowConnector flowConnector = new Hadoop2MR1FlowConnector(
-				hadoopProps);
+		FlowConnector flowConnector = PlatformHelper
+				.getHydrographEngineFlowConnector(hadoopProps);
+
 		Cascade[] cascades = new Cascade[traversal.getFlowsNumber().size()];
 		int phaseIndex = -1;
 		String flowName = "flow";
-		for (BigInteger phase : traversal.getFlowsNumber()) {
+		for (String phase : traversal.getFlowsNumber()) {
 			phaseIndex = phaseIndex + 1;
 			FlowContext flowContext = new FlowContext(hydrographJob, traversal,
 					hadoopProps);
 			traverseAndConnect(runtimeContext, flowContext, phase);
-
-			if (flowContext.getFlowDef().getSources().size() > 0) {
+			FlowDef flowDef = flowContext.getFlowDef();
+			if (flowConnector instanceof Hadoop2TezFlowConnector) {
+				flowDef = PlatformHelper
+						.addJarsToClassPathInCaseOfTezExecution(flowDef);
+			}
+			if (flowDef.getSources().size() > 0) {
 				flowContext.getCascadeDef().addFlow(
-						flowConnector.connect(flowContext.getFlowDef()));
+						flowConnector.connect(flowDef));
 			}
 			cascades[phaseIndex] = (new CascadeConnector().connect(flowContext
 					.getCascadeDef().setName(flowName + "_" + phaseIndex)));
@@ -96,7 +104,7 @@ public class FlowBuilder {
 	}
 
 	private void traverseAndConnect(RuntimeContext runtimeContext,
-			FlowContext flowContext, BigInteger phase) {
+			FlowContext flowContext, String phase) {
 
 		JAXBTraversal traversal = flowContext.getTraversal();
 

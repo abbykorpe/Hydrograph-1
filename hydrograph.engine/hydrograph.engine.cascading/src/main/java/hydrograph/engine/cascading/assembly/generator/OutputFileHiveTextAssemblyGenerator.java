@@ -12,7 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.OutputFileHiveTextEntity;
+import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.assembly.entity.utils.OutputEntityUtils;
 import hydrograph.engine.cascading.assembly.OutputFileHiveTextAssembly;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
@@ -23,13 +30,6 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.ohivetextfile.HivePartitionFieldsType;
 import hydrograph.engine.jaxb.outputtypes.HiveTextFile;
 import hydrograph.engine.utilities.GeneralUtilities;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 public class OutputFileHiveTextAssemblyGenerator extends
 		OutputAssemblyGeneratorBase {
@@ -64,8 +64,7 @@ public class OutputFileHiveTextAssemblyGenerator extends
 		LOG.trace("Initializing output file Hive Text entity for component: "
 				+ jaxbHiveTextFile.getId());
 		outputFileHiveTextEntity.setComponentId(jaxbHiveTextFile.getId());
-		outputFileHiveTextEntity.setPhase(jaxbHiveTextFile.getPhase()
-				.intValue());
+		outputFileHiveTextEntity.setPhase(jaxbHiveTextFile.getPhase());
 		outputFileHiveTextEntity
 				.setFieldsList(OutputEntityUtils
 						.extractOutputFields(jaxbHiveTextFile.getInSocket()
@@ -136,7 +135,7 @@ public class OutputFileHiveTextAssemblyGenerator extends
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<HiveEntityBase> getAssembly() {
 		return outputFileHiveTextAssembly;
 	}
 }

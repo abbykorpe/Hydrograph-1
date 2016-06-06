@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.InputFileSequenceFormatEntity;
 import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
 import hydrograph.engine.cascading.assembly.InputFileSequenceFormatAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.InputAssemblyGenerato
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.inputtypes.SequenceInputFile;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 public class InputFileSequenceAssemblyGenerator extends InputAssemblyGeneratorBase {
 
@@ -59,7 +58,7 @@ public class InputFileSequenceAssemblyGenerator extends InputAssemblyGeneratorBa
 
 		LOG.trace("Initializing input file delimited entity for component: " + jaxbFileSequenceFormat.getId());
 		inputFileSequenceFormatEntity.setComponentId(jaxbFileSequenceFormat.getId());
-		inputFileSequenceFormatEntity.setPhase(jaxbFileSequenceFormat.getPhase().intValue());
+		inputFileSequenceFormatEntity.setPhase(jaxbFileSequenceFormat.getPhase());
 
 		inputFileSequenceFormatEntity.setRuntimeProperties(
 				InputEntityUtils.extractRuntimeProperties(jaxbFileSequenceFormat.getRuntimeProperties()));
@@ -74,7 +73,7 @@ public class InputFileSequenceAssemblyGenerator extends InputAssemblyGeneratorBa
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<InputFileSequenceFormatEntity> getAssembly() {
 		return inputFileSequenceFormatAssembly;
 	}
 }

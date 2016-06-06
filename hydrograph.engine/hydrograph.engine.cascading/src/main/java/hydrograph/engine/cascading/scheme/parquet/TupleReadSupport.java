@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package hydrograph.engine.cascading.parquet.scheme;
+package hydrograph.engine.cascading.scheme.parquet;
 
 import java.util.Map;
 

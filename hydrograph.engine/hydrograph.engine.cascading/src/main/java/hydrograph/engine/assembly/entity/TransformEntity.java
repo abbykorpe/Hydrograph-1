@@ -12,15 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TransformEntity extends AssemblyEntityBase {
+import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
+import hydrograph.engine.assembly.entity.elements.Operation;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+
+public class TransformEntity extends OperationAssemblyEntity {
 
 	private boolean operationPresent;
 	private int numOperations;

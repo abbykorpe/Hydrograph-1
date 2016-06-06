@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.UniqueSequenceEntity;
 import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
 import hydrograph.engine.cascading.assembly.UniqueSequenceAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.OperationAssemblyGene
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.GenerateSequence;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 public class UniqueSequenceAssemblyGenerator extends
 		OperationAssemblyGeneratorBase {
@@ -57,8 +56,7 @@ public class UniqueSequenceAssemblyGenerator extends
 		LOG.trace("Initializing generate sequence entity for component: "
 				+ jaxbGenerateSequence.getId());
 		uniqueSequenceEntity.setComponentId(jaxbGenerateSequence.getId());
-		uniqueSequenceEntity.setPhase(jaxbGenerateSequence.getPhase()
-				.intValue());
+		uniqueSequenceEntity.setPhase(jaxbGenerateSequence.getPhase());
 		// check if operation is present
 		if (jaxbGenerateSequence.getOperation() != null) {
 			LOG.trace("Operation(s) present for unique sequence component: "
@@ -100,7 +98,7 @@ public class UniqueSequenceAssemblyGenerator extends
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<UniqueSequenceEntity> getAssembly() {
 		return uniqueSequenceAssembly;
 	}
 

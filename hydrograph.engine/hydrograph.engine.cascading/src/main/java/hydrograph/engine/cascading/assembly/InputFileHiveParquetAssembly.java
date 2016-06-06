@@ -12,19 +12,17 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.InputFileHiveParquetEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.base.HiveEntityBase;
-import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.hive.parquet.scheme.HiveParquetScheme;
-import hydrograph.engine.cascading.hive.parquet.scheme.HiveParquetTableDescriptor;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cascading.tap.hive.HivePartitionTap;
 import cascading.tap.hive.HiveTap;
+import hydrograph.engine.assembly.entity.InputFileHiveParquetEntity;
+import hydrograph.engine.assembly.entity.base.HiveEntityBase;
+import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetScheme;
+import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetTableDescriptor;
 
 public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 
@@ -37,7 +35,7 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 	private HiveParquetTableDescriptor tableDesc;
 	private InputFileHiveParquetEntity inputFileHiveParquetEntity;
 
-	public InputFileHiveParquetAssembly(AssemblyEntityBase baseComponentEntity,
+	public InputFileHiveParquetAssembly(InputFileHiveParquetEntity baseComponentEntity,
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}

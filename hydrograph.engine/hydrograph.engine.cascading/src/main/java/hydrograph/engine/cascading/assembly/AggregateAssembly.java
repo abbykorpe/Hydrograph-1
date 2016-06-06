@@ -13,7 +13,6 @@
 package hydrograph.engine.cascading.assembly;
 
 import hydrograph.engine.assembly.entity.AggregateEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.assembly.entity.elements.KeyField;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
@@ -35,22 +34,21 @@ import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
-public class AggregateAssembly extends BaseComponent {
+public class AggregateAssembly extends BaseComponent<AggregateEntity> {
 
 	private static final long serialVersionUID = 8050470302089972525L;
 
 	private AggregateEntity aggregateEntity;
 	private static Logger LOG = LoggerFactory.getLogger(AggregateAssembly.class);
-	private OperationFieldsCreator operationFieldsCreator;
+	private OperationFieldsCreator<AggregateEntity> operationFieldsCreator;
 
-	public AggregateAssembly(AssemblyEntityBase baseComponentEntity, ComponentParameters componentParameters) {
+	public AggregateAssembly(AggregateEntity baseComponentEntity, ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
 
 	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		aggregateEntity = (AggregateEntity) assemblyEntityBase;
+	public void initializeEntity(AggregateEntity assemblyEntityBase) {
+		aggregateEntity = assemblyEntityBase;
 	}
 
 	@Override
@@ -62,7 +60,7 @@ public class AggregateAssembly extends BaseComponent {
 			for (OutSocket outSocket : aggregateEntity.getOutSocketList()) {
 				LOG.trace("Creating aggregate assembly for '" + aggregateEntity.getComponentId() + "' for socket: '"
 						+ outSocket.getSocketId() + "' of type: '" + outSocket.getSocketType() + "'");
-				operationFieldsCreator = new OperationFieldsCreator<AssemblyEntityBase>(aggregateEntity,
+				operationFieldsCreator = new OperationFieldsCreator<AggregateEntity>(aggregateEntity,
 						componentParameters, outSocket);
 				createAssemblyForOutSocket(outSocket);
 			}
@@ -140,5 +138,5 @@ public class AggregateAssembly extends BaseComponent {
 			i++;
 		}
 		return fields;
-	}
+	}	
 }

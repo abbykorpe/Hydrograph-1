@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.OutputFileParquetEntity;
 import hydrograph.engine.assembly.entity.utils.OutputEntityUtils;
 import hydrograph.engine.cascading.assembly.OutputFileParquetAssembly;
@@ -21,13 +27,6 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.outputtypes.ParquetFile;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 public class OutputFileParquetAssemblyGenerator extends OutputAssemblyGeneratorBase {
 
@@ -60,7 +59,7 @@ public class OutputFileParquetAssemblyGenerator extends OutputAssemblyGeneratorB
 
 		LOG.trace("Initializing output file parquet entity for component: " + jaxbParquetFile.getId());
 		outputFileParquetEntity.setComponentId(jaxbParquetFile.getId());
-		outputFileParquetEntity.setPhase(jaxbParquetFile.getPhase().intValue());
+		outputFileParquetEntity.setPhase(jaxbParquetFile.getPhase());
 		outputFileParquetEntity.setPath(jaxbParquetFile.getPath().getUri());
 		outputFileParquetEntity.setFieldsList(OutputEntityUtils.extractOutputFields(
 				jaxbParquetFile.getInSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema()));
@@ -80,7 +79,7 @@ public class OutputFileParquetAssemblyGenerator extends OutputAssemblyGeneratorB
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<OutputFileParquetEntity> getAssembly() {
 		return outputFileParquetAssembly;
 	}
 }

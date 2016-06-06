@@ -12,6 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
+import java.lang.reflect.Type;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +31,7 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.TextDelimitedAndFixedWidth;
 
-public class OutputFileMixedSchemeAssembly extends BaseComponent {
+public class OutputFileMixedSchemeAssembly extends BaseComponent<OutputFileMixedSchemeEntity> {
 
 	private static final long serialVersionUID = -8758826605729474551L;
 
@@ -41,32 +43,32 @@ public class OutputFileMixedSchemeAssembly extends BaseComponent {
 	FlowDef flowDef;
 	String filePathToWrite;
 	private OutputFileMixedSchemeEntity outputFileMixedSchemeEntity;
-	private static Logger LOG = LoggerFactory.getLogger(OutputFileMixedSchemeAssembly.class);
+	private static Logger LOG = LoggerFactory
+			.getLogger(OutputFileMixedSchemeAssembly.class);
 
 	private IOFieldsAndTypesCreator<OutputFileMixedSchemeEntity> fieldsCreator;
 
-	public OutputFileMixedSchemeAssembly(AssemblyEntityBase parameters, ComponentParameters componentParameters) {
-		super(parameters, componentParameters);
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		outputFileMixedSchemeEntity = (OutputFileMixedSchemeEntity) assemblyEntityBase;
+	public OutputFileMixedSchemeAssembly(OutputFileMixedSchemeEntity outputFileMixedSchemeEntity,
+			ComponentParameters componentParameters) {
+		super(outputFileMixedSchemeEntity, componentParameters);
 	}
 
 	@Override
 	protected void createAssembly() {
-		fieldsCreator = new IOFieldsAndTypesCreator<OutputFileMixedSchemeEntity>(outputFileMixedSchemeEntity);
+		fieldsCreator = new IOFieldsAndTypesCreator<OutputFileMixedSchemeEntity>(
+				outputFileMixedSchemeEntity);
 		if (LOG.isTraceEnabled()) {
 			LOG.trace(outputFileMixedSchemeEntity.toString());
 		}
-		LOG.trace("Creating output file mixed scheme assembly for '" + outputFileMixedSchemeEntity.getComponentId()
-				+ "'");
+		LOG.trace("Creating output file mixed scheme assembly for '"
+				+ outputFileMixedSchemeEntity.getComponentId() + "'");
 		prepareAssembly();
-		Pipe sinkPipe = new Pipe(outputFileMixedSchemeEntity.getComponentId(), tailPipe);
+		Pipe sinkPipe = new Pipe(outputFileMixedSchemeEntity.getComponentId(),
+				tailPipe);
 		setHadoopProperties(outTap.getStepConfigDef());
 		setHadoopProperties(sinkPipe.getStepConfigDef());
-		flowDef = componentParameters.getFlowDef().addTailSink(sinkPipe, outTap);
+		flowDef = componentParameters.getFlowDef()
+				.addTailSink(sinkPipe, outTap);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -74,11 +76,12 @@ public class OutputFileMixedSchemeAssembly extends BaseComponent {
 		flowDef = componentParameters.getFlowDef();
 		filePathToWrite = outputFileMixedSchemeEntity.getPath();
 		tailPipe = componentParameters.getInputPipe();
-		try {
+		try{
 			prepareScheme();
-		} catch (Exception e) {
-			LOG.error("Error in preparing scheme for component '" + outputFileMixedSchemeEntity.getComponentId() + "': "
-					+ e.getMessage());
+		}
+		catch(Exception e) {
+			LOG.error("Error in preparing scheme for component '"
+					+ outputFileMixedSchemeEntity.getComponentId() + "': " + e.getMessage());
 			throw new RuntimeException(e);
 		}
 		if (outputFileMixedSchemeEntity.isOverWrite())
@@ -95,5 +98,10 @@ public class OutputFileMixedSchemeAssembly extends BaseComponent {
 				fieldsCreator.getTypeFieldLengthDelimiter(), outputFields.getTypes(),
 				outputFileMixedSchemeEntity.getStrict(), outputFileMixedSchemeEntity.getSafe(),
 				outputFileMixedSchemeEntity.getCharset());
+	}
+
+	@Override
+	public void initializeEntity(OutputFileMixedSchemeEntity assemblyEntityBase) {
+		this.outputFileMixedSchemeEntity=assemblyEntityBase;
 	}
 }

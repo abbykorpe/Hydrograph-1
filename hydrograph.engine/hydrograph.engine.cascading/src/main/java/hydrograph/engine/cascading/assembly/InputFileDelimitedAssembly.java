@@ -12,14 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.InputFileDelimitedEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
-import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
-
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -33,8 +25,14 @@ import cascading.scheme.hadoop.TextDelimited;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.InputFileDelimitedEntity;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
 
-public class InputFileDelimitedAssembly extends BaseComponent {
+public class InputFileDelimitedAssembly extends BaseComponent<InputFileDelimitedEntity> {
 
 	private static final long serialVersionUID = -2946197683137950707L;
 
@@ -49,14 +47,8 @@ public class InputFileDelimitedAssembly extends BaseComponent {
 
 	private IOFieldsAndTypesCreator<InputFileDelimitedEntity> fieldsCreator;
 
-	public InputFileDelimitedAssembly(AssemblyEntityBase baseComponentEntity, ComponentParameters componentParameters) {
+	public InputFileDelimitedAssembly(InputFileDelimitedEntity baseComponentEntity, ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		inputFileDelimitedEntity = (InputFileDelimitedEntity) assemblyEntityBase;
-
 	}
 
 	@Override
@@ -115,6 +107,11 @@ public class InputFileDelimitedAssembly extends BaseComponent {
 				inputFileDelimitedEntity.isSafe());
 		scheme = new TextDelimited(inputFields, null, inputFileDelimitedEntity.isHasHeader(), false,
 				inputFileDelimitedEntity.getCharset(), delimitedParser);
+	}
+
+	@Override
+	public void initializeEntity(InputFileDelimitedEntity assemblyEntityBase) {
+		this.inputFileDelimitedEntity=assemblyEntityBase;
 	}
 
 }

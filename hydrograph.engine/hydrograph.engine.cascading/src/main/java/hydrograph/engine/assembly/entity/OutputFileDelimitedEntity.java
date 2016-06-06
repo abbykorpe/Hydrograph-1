@@ -12,13 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-
 import java.util.Arrays;
 import java.util.List;
 
-public class OutputFileDelimitedEntity extends AssemblyEntityBase {
+import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
+
+public class OutputFileDelimitedEntity extends IOAssemblyEntity {
 
 	private String path;
 	private String charset;

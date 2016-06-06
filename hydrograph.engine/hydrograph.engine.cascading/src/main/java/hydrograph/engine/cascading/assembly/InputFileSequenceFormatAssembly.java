@@ -12,12 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.InputFileSequenceFormatEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-
 import java.io.IOException;
 
 import org.slf4j.Logger;
@@ -28,8 +22,12 @@ import cascading.pipe.Pipe;
 import cascading.scheme.hadoop.SequenceFile;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
+import hydrograph.engine.assembly.entity.InputFileSequenceFormatEntity;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 
-public class InputFileSequenceFormatAssembly extends BaseComponent {
+public class InputFileSequenceFormatAssembly extends BaseComponent<InputFileSequenceFormatEntity> {
 
 	private static final long serialVersionUID = 1875266476440018910L;
 
@@ -44,14 +42,8 @@ public class InputFileSequenceFormatAssembly extends BaseComponent {
 	private InputFileSequenceFormatEntity inputFileSequenceFormatEntity;
 	
 	
-	public InputFileSequenceFormatAssembly(AssemblyEntityBase assemblyEntityBase, ComponentParameters componentParameters) {
+	public InputFileSequenceFormatAssembly(InputFileSequenceFormatEntity assemblyEntityBase, ComponentParameters componentParameters) {
 		super(assemblyEntityBase, componentParameters);
-	}
-
-	
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		inputFileSequenceFormatEntity = (InputFileSequenceFormatEntity) assemblyEntityBase;
 	}
 
 	@Override
@@ -99,6 +91,11 @@ public class InputFileSequenceFormatAssembly extends BaseComponent {
 	protected void prepareScheme() {
 		scheme = new SequenceFile(componentParameters.getOutputFields());
 
+	}
+
+	@Override
+	public void initializeEntity(InputFileSequenceFormatEntity assemblyEntityBase) {
+		this.inputFileSequenceFormatEntity=assemblyEntityBase;
 	}
 
 }

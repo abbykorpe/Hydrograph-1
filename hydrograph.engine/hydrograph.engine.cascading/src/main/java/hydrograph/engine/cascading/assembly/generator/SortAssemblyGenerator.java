@@ -15,6 +15,12 @@
  */
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.SortEntity;
 import hydrograph.engine.assembly.entity.utils.StraightPullEntityUtils;
 import hydrograph.engine.cascading.assembly.SortAssembly;
@@ -23,13 +29,6 @@ import hydrograph.engine.cascading.assembly.generator.base.StraightPullAssemblyG
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.straightpulltypes.Sort;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 /**
  * @author Prabodh
@@ -93,7 +92,7 @@ public class SortAssemblyGenerator extends StraightPullAssemblyGeneratorBase {
 
 		LOG.trace("Initializing sort entity for component: " + jaxbSort.getId());
 		sortEntity.setComponentId(jaxbSort.getId());
-		sortEntity.setPhase(jaxbSort.getPhase().intValue());
+		sortEntity.setPhase(jaxbSort.getPhase());
 		sortEntity.setRuntimeProperties(
 				StraightPullEntityUtils.extractRuntimeProperties(jaxbSort.getRuntimeProperties()));
 		sortEntity.setKeyFields(StraightPullEntityUtils.extractKeyFields(jaxbSort.getPrimaryKeys()));
@@ -126,7 +125,7 @@ public class SortAssemblyGenerator extends StraightPullAssemblyGeneratorBase {
 	 * getAssembly ()
 	 */
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<SortEntity> getAssembly() {
 		return sortAssembly;
 	}
 }

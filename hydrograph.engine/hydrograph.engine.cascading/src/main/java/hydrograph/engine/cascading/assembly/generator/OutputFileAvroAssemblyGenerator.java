@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.OutputFileAvroEntity;
 import hydrograph.engine.assembly.entity.utils.OutputEntityUtils;
 import hydrograph.engine.cascading.assembly.OutputFileAvroAssembly;
@@ -21,13 +27,6 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.outputtypes.AvroFile;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 public class OutputFileAvroAssemblyGenerator extends OutputAssemblyGeneratorBase {
 
@@ -60,9 +59,9 @@ public class OutputFileAvroAssemblyGenerator extends OutputAssemblyGeneratorBase
 
 		LOG.trace("Initializing output file Avro entity for component: " + jaxbAvroFile.getId());
 		outputFileAvroEntity.setComponentId(jaxbAvroFile.getId());
-		outputFileAvroEntity.setPhase(jaxbAvroFile.getPhase().intValue());
+		outputFileAvroEntity.setPhase(jaxbAvroFile.getPhase());
 		outputFileAvroEntity.setPath(jaxbAvroFile.getPath().getUri());
-		outputFileAvroEntity.setSchemaFieldsList(OutputEntityUtils.extractOutputFields(
+		outputFileAvroEntity.setFieldsList(OutputEntityUtils.extractOutputFields(
 				jaxbAvroFile.getInSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema()));
 
 		outputFileAvroEntity.setRuntimeProperties(
@@ -80,7 +79,7 @@ public class OutputFileAvroAssemblyGenerator extends OutputAssemblyGeneratorBase
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<OutputFileAvroEntity> getAssembly() {
 		return outputFileAvroAssembly;
 	}
 }

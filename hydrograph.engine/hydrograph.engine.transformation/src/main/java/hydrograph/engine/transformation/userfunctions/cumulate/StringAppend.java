@@ -27,10 +27,10 @@ public class StringAppend implements CumulateTransformBase {
 	@Override
 	public void prepare(Properties props, ArrayList<String> inputFields,
 			ArrayList<String> outputFields, ArrayList<String> keyFields) {
-
+		if (props != null) {
 		filler = props.getProperty("filler") == null ? filler : props
 				.getProperty("filler");
-
+		}
 	}
 
 	@Override

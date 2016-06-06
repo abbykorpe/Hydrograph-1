@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.OutputFileDelimitedEntity;
 import hydrograph.engine.assembly.entity.utils.OutputEntityUtils;
 import hydrograph.engine.cascading.assembly.OutputFileDelimitedAssembly;
@@ -22,13 +28,6 @@ import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.outputtypes.TextFileDelimited;
 import hydrograph.engine.utilities.GeneralUtilities;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 public class OutputFileDelimitedAssemblyGenerator extends OutputAssemblyGeneratorBase {
 
@@ -63,7 +62,7 @@ public class OutputFileDelimitedAssemblyGenerator extends OutputAssemblyGenerato
 
 		LOG.trace("Initializing output file delimited entity for component: " + jaxbOutputFileDelimited.getId());
 		outputFileDelimitedEntity.setComponentId(jaxbOutputFileDelimited.getId());
-		outputFileDelimitedEntity.setPhase(jaxbOutputFileDelimited.getPhase().intValue());
+		outputFileDelimitedEntity.setPhase(jaxbOutputFileDelimited.getPhase());
 		outputFileDelimitedEntity.setPath(jaxbOutputFileDelimited.getPath().getUri());
 		outputFileDelimitedEntity.setSafe(
 				jaxbOutputFileDelimited.getSafe() != null ? jaxbOutputFileDelimited.getSafe().isValue() : false);
@@ -97,7 +96,7 @@ public class OutputFileDelimitedAssemblyGenerator extends OutputAssemblyGenerato
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<OutputFileDelimitedEntity> getAssembly() {
 		return outputFileDelimitedAssembly;
 	}
 }

@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.InputFileDelimitedEntity;
 import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
 import hydrograph.engine.cascading.assembly.InputFileDelimitedAssembly;
@@ -21,13 +27,6 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.inputtypes.TextFileDelimited;
 import hydrograph.engine.utilities.GeneralUtilities;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 public class InputFileDelimitedAssemblyGenerator extends InputAssemblyGeneratorBase {
 
@@ -62,7 +61,7 @@ public class InputFileDelimitedAssemblyGenerator extends InputAssemblyGeneratorB
 
 		LOG.trace("Initializing input file delimited entity for component: " + jaxbFileDelimited.getId());
 		inputFileDelimitedEntity.setComponentId(jaxbFileDelimited.getId());
-		inputFileDelimitedEntity.setPhase(jaxbFileDelimited.getPhase().intValue());
+		inputFileDelimitedEntity.setPhase(jaxbFileDelimited.getPhase());
 		inputFileDelimitedEntity.setPath(jaxbFileDelimited.getPath().getUri());
 		inputFileDelimitedEntity.setDelimiter(GeneralUtilities.parseHex(jaxbFileDelimited.getDelimiter().getValue()));
 		inputFileDelimitedEntity.setSafe(jaxbFileDelimited.getSafe() != null ? jaxbFileDelimited.getSafe().isValue() : false);
@@ -91,7 +90,7 @@ public class InputFileDelimitedAssemblyGenerator extends InputAssemblyGeneratorB
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<InputFileDelimitedEntity> getAssembly() {
 		return inputFileDelimitedAssembly;
 	}
 }

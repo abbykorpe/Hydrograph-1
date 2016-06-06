@@ -12,13 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.OutputFileParquetEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
-import hydrograph.engine.cascading.parquet.scheme.ParquetTupleScheme;
-
 import java.util.Arrays;
 
 import org.slf4j.Logger;
@@ -30,8 +23,13 @@ import cascading.scheme.Scheme;
 import cascading.tap.SinkMode;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.OutputFileParquetEntity;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.scheme.parquet.ParquetTupleScheme;
 
-public class OutputFileParquetAssembly extends BaseComponent {
+public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEntity> {
 
 	private static final long serialVersionUID = 4184919036703029509L;
 	private OutputFileParquetEntity outputFileParquetEntity;
@@ -46,14 +44,9 @@ public class OutputFileParquetAssembly extends BaseComponent {
 
 	private IOFieldsAndTypesCreator<OutputFileParquetEntity> fieldsCreator;
 
-	public OutputFileParquetAssembly(AssemblyEntityBase assemblyEntityBase,
+	public OutputFileParquetAssembly(OutputFileParquetEntity assemblyEntityBase,
 			ComponentParameters componentParameters) {
 		super(assemblyEntityBase, componentParameters);
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		outputFileParquetEntity = (OutputFileParquetEntity) assemblyEntityBase;
 	}
 
 	@Override
@@ -105,5 +98,10 @@ public class OutputFileParquetAssembly extends BaseComponent {
 			outTap = new Hfs(scheme, filePathToWrite, SinkMode.REPLACE);
 		else
 			outTap = new Hfs(scheme, filePathToWrite, SinkMode.KEEP);
+	}
+
+	@Override
+	public void initializeEntity(OutputFileParquetEntity assemblyEntityBase) {
+		this.outputFileParquetEntity=assemblyEntityBase;
 	}
 }

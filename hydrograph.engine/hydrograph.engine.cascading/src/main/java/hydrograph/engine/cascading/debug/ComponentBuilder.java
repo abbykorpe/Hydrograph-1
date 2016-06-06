@@ -14,13 +14,21 @@ package hydrograph.engine.cascading.debug;
 
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.core.utilities.SocketUtilities;
+import hydrograph.engine.jaxb.commontypes.BooleanValueType;
+import hydrograph.engine.jaxb.commontypes.StandardCharsets;
+import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeTrueFalse;
 import hydrograph.engine.jaxb.outputtypes.AvroFile;
 import hydrograph.engine.jaxb.outputtypes.AvroFile.Path;
+import hydrograph.engine.jaxb.outputtypes.TextFileDelimited;
+import hydrograph.engine.jaxb.outputtypes.TextFileDelimited.Charset;
+import hydrograph.engine.jaxb.outputtypes.TextFileDelimited.Delimiter;
+import hydrograph.engine.jaxb.outputtypes.TextFileDelimited.Quote;
 import hydrograph.engine.jaxb.straightpulltypes.Clone;
 import hydrograph.engine.jaxb.straightpulltypes.Limit;
 import hydrograph.engine.jaxb.straightpulltypes.Limit.MaxRecords;
@@ -91,15 +99,15 @@ public enum ComponentBuilder {
 			return limit;
 		}
 	},
-	OUTPUT_COMPONENT {
+	AVRO_OUTPUT_COMPONENT {
 		@Override
 		public TypeBaseComponent create(DebugContext debugContext) {
-			AvroFile textOutputFileDelimited = new AvroFile();
-			textOutputFileDelimited.setId(ComponentBuilderUtils
+			AvroFile avroOutputFile = new AvroFile();
+			avroOutputFile.setId(ComponentBuilderUtils
 					.generateUniqueComponentId(
 							debugContext.getPreviousComponentId(), "out1",
 							debugContext.getTypeBaseComponents()));
-			textOutputFileDelimited.setPhase(debugContext.getPhase());
+			avroOutputFile.setPhase(debugContext.getPhase());
 			Path path = new Path();
 
 			String pathUri = debugContext.getBasePath() + "/debug/"
@@ -108,7 +116,7 @@ public enum ComponentBuilder {
 					+ debugContext.getFromOutSocketId();
 
 			path.setUri(pathUri);
-			textOutputFileDelimited.setPath(path);
+			avroOutputFile.setPath(path);
 
 			Set<SchemaField> sf = debugContext.getSchemaFieldsMap().get(
 					debugContext.getFromComponentId() + "_"
@@ -119,7 +127,78 @@ public enum ComponentBuilder {
 			inSocket.setFromComponentId(debugContext.getPreviousComponentId());
 			inSocket.setFromSocketId("out0");
 			inSocket.setId("in0");
+			avroOutputFile.getInSocket().add(inSocket);
+			debugContext.getTypeBaseComponents().add(avroOutputFile);
+			return avroOutputFile;
+		}
+	},
+	TEXT_OUTPUT_COMPONENT {
+		@Override
+		public TypeBaseComponent create(DebugContext debugContext) {
+			TextFileDelimited textOutputFileDelimited = new TextFileDelimited();
+			// set ID
+			textOutputFileDelimited.setId(ComponentBuilderUtils
+					.generateUniqueComponentId(
+							debugContext.getPreviousComponentId(), "out1",
+							debugContext.getTypeBaseComponents()));
+			// set phase
+			textOutputFileDelimited.setPhase(debugContext.getPhase());
+
+			// set path
+			String pathUri = debugContext.getBasePath() + "/debug/"
+					+ debugContext.getJobId() + "/"
+					+ debugContext.getFromComponentId() + "_"
+					+ debugContext.getFromOutSocketId();
+			hydrograph.engine.jaxb.outputtypes.TextFileDelimited.Path path = new hydrograph.engine.jaxb.outputtypes.TextFileDelimited.Path();
+			path.setUri(pathUri);
+			textOutputFileDelimited.setPath(path);
+
+			// set overwrite option
+			TypeTrueFalse value = new TypeTrueFalse();
+			value.setValue(TrueFalse.TRUE);
+			textOutputFileDelimited.setOverWrite(value);
+
+			// set delimiter
+			Delimiter delimiter = new Delimiter();
+			delimiter.setValue(",");
+			textOutputFileDelimited.setDelimiter(delimiter);
+
+			// set has header
+			BooleanValueType hasHeader = new BooleanValueType();
+			hasHeader.setValue(true);
+			textOutputFileDelimited.setHasHeader(hasHeader);
+
+			// set safe
+			BooleanValueType safe = new BooleanValueType();
+			safe.setValue(true);
+			textOutputFileDelimited.setSafe(safe);
+
+			// set strict
+			BooleanValueType strict = new BooleanValueType();
+			strict.setValue(false);
+			textOutputFileDelimited.setStrict(strict);
+
+			// set charset
+			Charset charset = new Charset();
+			charset.setValue(StandardCharsets.UTF_8);
+			textOutputFileDelimited.setCharset(charset);
+
+			// set quote
+			Quote quote = new Quote();
+			quote.setValue("\"");
+			textOutputFileDelimited.setQuote(quote);
+
+			// set in socket
+			Set<SchemaField> sf = debugContext.getSchemaFieldsMap().get(
+					debugContext.getFromComponentId() + "_"
+							+ debugContext.getFromOutSocketId());
+			TypeOutputInSocket inSocket = JaxbSchemaFieldConverter
+					.convertToJaxb(sf);
+			inSocket.setFromComponentId(debugContext.getPreviousComponentId());
+			inSocket.setFromSocketId("out0");
+			inSocket.setId("in0");
 			textOutputFileDelimited.getInSocket().add(inSocket);
+
 			debugContext.getTypeBaseComponents().add(textOutputFileDelimited);
 			return textOutputFileDelimited;
 		}

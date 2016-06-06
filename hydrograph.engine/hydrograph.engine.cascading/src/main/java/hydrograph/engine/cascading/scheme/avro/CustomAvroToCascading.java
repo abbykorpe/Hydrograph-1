@@ -24,7 +24,7 @@
  * limitations under the License.
  */
 
-package hydrograph.engine.cascading.avro.scheme;
+package hydrograph.engine.cascading.scheme.avro;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -45,7 +45,7 @@ import org.apache.hadoop.io.BytesWritable;
 
 import cascading.tuple.Tuple;
 
-public class CustomeAvroToCascading {
+public class CustomAvroToCascading {
 
 	public static Object[] parseRecord(IndexedRecord record, Schema readerSchema) {
 

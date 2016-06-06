@@ -12,14 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class GenerateRecordEntity extends AssemblyEntityBase {
+public class GenerateRecordEntity extends IOAssemblyEntity{
 
 	private Integer recordCount;
 	private List<OutSocket> outSocketList;

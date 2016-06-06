@@ -12,6 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.InputFileMixedSchemeEntity;
 import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
 import hydrograph.engine.cascading.assembly.InputFileMixedSchemeAssembly;
@@ -21,15 +29,6 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.inputtypes.TextFileMixedScheme;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 public class InputFileMixedSchemeAssemblyGenerator extends
 		InputAssemblyGeneratorBase {
@@ -67,8 +66,7 @@ public class InputFileMixedSchemeAssemblyGenerator extends
 				+ jaxbTextFileMixedScheme.getId());
 		inputFileMixedSchemeEntity.setComponentId(jaxbTextFileMixedScheme
 				.getId());
-		inputFileMixedSchemeEntity.setPhase(jaxbTextFileMixedScheme.getPhase()
-				.intValue());
+		inputFileMixedSchemeEntity.setPhase(jaxbTextFileMixedScheme.getPhase());
 		inputFileMixedSchemeEntity.setCharset(jaxbTextFileMixedScheme
 				.getCharset() != null ? jaxbTextFileMixedScheme.getCharset()
 				.getValue().value() : "UTF-8");
@@ -104,7 +102,7 @@ public class InputFileMixedSchemeAssemblyGenerator extends
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<InputFileMixedSchemeEntity> getAssembly() {
 		return inputMixedFileAssembly;
 	}
 

@@ -12,22 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
 
 import java.util.List;
 
-public class OutputFileSequenceFormatEntity extends AssemblyEntityBase {
+public class OutputFileSequenceFormatEntity extends IOAssemblyEntity {
 
 	private String path;
-	private List<String> schemaFieldList;
-	
-	public List<String> getSchemaFieldsList() {
-		return schemaFieldList;
-	}
-
-	public void setSchemaFieldsList(List<String> schemaFieldList) {
-		this.schemaFieldList = schemaFieldList;
-	}
+	private List<SchemaField> schemaFieldList;
 
 	public String getPath() {
 		return path;
@@ -35,6 +28,16 @@ public class OutputFileSequenceFormatEntity extends AssemblyEntityBase {
 
 	public void setPath(String path) {
 		this.path = path;
+	}
+	
+	@Override
+	public List<SchemaField> getFieldsList() {
+		return schemaFieldList;
+	}
+	
+	@Override
+	public void setFieldsList(List<SchemaField> schemaFieldList) {
+		this.schemaFieldList=schemaFieldList;
 	}
 
 }

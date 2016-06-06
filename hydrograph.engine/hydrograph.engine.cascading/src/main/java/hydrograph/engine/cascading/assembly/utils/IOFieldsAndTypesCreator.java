@@ -20,8 +20,9 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
 
-public class IOFieldsAndTypesCreator<T extends AssemblyEntityBase> {
+public class IOFieldsAndTypesCreator<T extends IOAssemblyEntity> {
 
 	private String[] fieldNames;
 	private String[] fieldDataTypes;
@@ -35,7 +36,8 @@ public class IOFieldsAndTypesCreator<T extends AssemblyEntityBase> {
 	private String[] fieldFromRangeValue;
 	private String[] fieldLengthOrDelimiter;
 	private Type[] typefieldLengthDelimiter;
-	private AssemblyEntityBase assemblyEntityBase;
+
+	private IOAssemblyEntity assemblyEntityBase;
 
 	public IOFieldsAndTypesCreator(T entity) {
 		assemblyEntityBase = entity;
@@ -267,5 +269,4 @@ public class IOFieldsAndTypesCreator<T extends AssemblyEntityBase> {
 		}
 		return "";
 	}
-
 }

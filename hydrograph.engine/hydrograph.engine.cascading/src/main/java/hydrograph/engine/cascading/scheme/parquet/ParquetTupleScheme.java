@@ -10,10 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.cascading.parquet.scheme;
-
-import hydrograph.engine.cascading.hive.parquet.scheme.HiveParquetSchemeHelper;
-import hydrograph.engine.cascading.hive.parquet.scheme.WritableFactory;
+package hydrograph.engine.cascading.scheme.parquet;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,6 +40,8 @@ import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
 import cascading.tuple.TupleEntry;
+import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetSchemeHelper;
+import hydrograph.engine.cascading.scheme.hive.parquet.WritableFactory;
 
 /**
  * A Cascading Scheme that converts Parquet groups into Cascading tuples. If you

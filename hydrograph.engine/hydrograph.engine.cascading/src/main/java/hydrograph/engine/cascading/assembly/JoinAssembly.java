@@ -12,24 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.JoinEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.JoinHelper;
-import hydrograph.engine.cascading.filters.BlockAllFilter;
-import hydrograph.engine.cascading.filters.JoinGetUnmatchedRecordsFilter;
-import hydrograph.engine.cascading.filters.JoinOutLinkFilter;
-import hydrograph.engine.cascading.filters.JoinUnusedLinkFilter;
-import hydrograph.engine.utilities.ComponentHelper;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.primitives.Booleans;
 
 import cascading.pipe.Checkpoint;
 import cascading.pipe.CoGroup;
@@ -41,8 +30,17 @@ import cascading.pipe.joiner.Joiner;
 import cascading.pipe.joiner.MixedJoin;
 import cascading.pipe.joiner.OuterJoin;
 import cascading.tuple.Fields;
-
-import com.google.common.primitives.Booleans;
+import hydrograph.engine.assembly.entity.JoinEntity;
+import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.JoinHelper;
+import hydrograph.engine.cascading.filters.BlockAllFilter;
+import hydrograph.engine.cascading.filters.JoinGetUnmatchedRecordsFilter;
+import hydrograph.engine.cascading.filters.JoinOutLinkFilter;
+import hydrograph.engine.cascading.filters.JoinUnusedLinkFilter;
+import hydrograph.engine.utilities.ComponentHelper;
 
 /**
  * Join Component for joining two or more files.
@@ -51,7 +49,7 @@ import com.google.common.primitives.Booleans;
  * 
  */
 
-public class JoinAssembly extends BaseComponent {
+public class JoinAssembly extends BaseComponent<JoinEntity> {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory
@@ -465,8 +463,8 @@ public class JoinAssembly extends BaseComponent {
 	}
 
 	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		joinEntity = (JoinEntity) assemblyEntityBase;
+	public void initializeEntity(JoinEntity assemblyEntityBase) {
+		this.joinEntity=assemblyEntityBase;
 	}
 
 }

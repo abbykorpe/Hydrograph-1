@@ -12,14 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-
 import java.util.Arrays;
 import java.util.List;
 
-public class InputFileAvroEntity extends AssemblyEntityBase {
+import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
+
+public class InputFileAvroEntity extends IOAssemblyEntity {
 
 	private String path;
 	private List<OutSocket> outSocketList;
@@ -41,11 +41,11 @@ public class InputFileAvroEntity extends AssemblyEntityBase {
 		this.outSocketList = outSocketList;
 	}
 
-	public List<SchemaField> getSchemaFieldsList() {
+	public List<SchemaField> getFieldsList() {
 		return schemaFieldsList;
 	}
 
-	public void setSchemaFieldsList(List<SchemaField> schemaFieldsList) {
+	public void setFieldsList(List<SchemaField> schemaFieldsList) {
 		this.schemaFieldsList = schemaFieldsList;
 	}
 
@@ -75,5 +75,4 @@ public class InputFileAvroEntity extends AssemblyEntityBase {
 		}
 		return str.toString();
 	}
-
 }

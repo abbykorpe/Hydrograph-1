@@ -13,12 +13,11 @@
 package hydrograph.engine.cascading.assembly;
 
 import hydrograph.engine.assembly.entity.InputFileParquetEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
-import hydrograph.engine.cascading.parquet.scheme.ParquetTupleScheme;
+import hydrograph.engine.cascading.scheme.parquet.ParquetTupleScheme;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -33,7 +32,8 @@ import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
 
-public class InputFileParquetAssembly extends BaseComponent {
+public class InputFileParquetAssembly extends
+		BaseComponent<InputFileParquetEntity> {
 
 	private static final long serialVersionUID = -2946197683137950707L;
 	private InputFileParquetEntity inputFileParquetEntity;
@@ -50,14 +50,9 @@ public class InputFileParquetAssembly extends BaseComponent {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(InputFileParquetAssembly.class);
 
-	public InputFileParquetAssembly(AssemblyEntityBase baseComponentEntity,
+	public InputFileParquetAssembly(InputFileParquetEntity baseComponentEntity,
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		inputFileParquetEntity = (InputFileParquetEntity) assemblyEntityBase;
 	}
 
 	@Override
@@ -118,6 +113,11 @@ public class InputFileParquetAssembly extends BaseComponent {
 		scheme = new ParquetTupleScheme(inputFields,
 				fieldsCreator.hiveParquetDataTypeMapping(inputFileParquetEntity
 						.getFieldsList()));
+	}
+
+	@Override
+	public void initializeEntity(InputFileParquetEntity assemblyEntityBase) {
+		this.inputFileParquetEntity = assemblyEntityBase;
 	}
 
 }

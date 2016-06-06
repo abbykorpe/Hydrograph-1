@@ -16,12 +16,11 @@
 package hydrograph.engine.cascading.assembly;
 
 import hydrograph.engine.assembly.entity.OutputFileHiveTextEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.base.OutputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.hive.text.scheme.HiveTextTableDescriptor;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
+import hydrograph.engine.cascading.scheme.hive.text.HiveTextTableDescriptor;
 import hydrograph.engine.cascading.utilities.DataTypeCoerce;
 
 import java.lang.reflect.Type;
@@ -40,7 +39,7 @@ import cascading.tuple.Fields;
 /**
  * Hive Output File Component - records written as output into Hive Table
  */
-public class OutputFileHiveTextAssembly extends OutputFileHiveBase {
+public class OutputFileHiveTextAssembly extends OutputFileHiveBase<OutputFileHiveTextEntity> {
 
 	/**
 	 * 
@@ -54,7 +53,8 @@ public class OutputFileHiveTextAssembly extends OutputFileHiveBase {
 	private static Logger LOG = LoggerFactory
 			.getLogger(OutputFileHiveTextAssembly.class);
 
-	public OutputFileHiveTextAssembly(AssemblyEntityBase baseComponentEntity,
+	public OutputFileHiveTextAssembly(
+			OutputFileHiveTextEntity baseComponentEntity,
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
@@ -153,6 +153,7 @@ public class OutputFileHiveTextAssembly extends OutputFileHiveBase {
 			}
 		}
 		return new Fields(testField).applyTypes(getTypes());
+
 	}
 
 	/**

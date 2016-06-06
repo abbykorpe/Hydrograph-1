@@ -32,8 +32,9 @@ import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,12 +52,12 @@ public class OperationHandler {
 
 	public Map<String, Set<SchemaField>> getOperation() {
 
-		Map<String, Set<SchemaField>> newSchemaFields = new HashMap<String, Set<SchemaField>>();
+		Map<String, Set<SchemaField>> newSchemaFields = new LinkedHashMap<String, Set<SchemaField>>();
 		List<OutSocket> operationList = OperationEntityUtils
 				.extractOutSocketList(((TypeOperationsComponent) baseComponent)
 						.getOutSocket());
 		for (OutSocket outSocket : operationList) {
-			HashSet<SchemaField> schemaFieldList = new HashSet<SchemaField>();
+			HashSet<SchemaField> schemaFieldList = new LinkedHashSet<SchemaField>();
 			schemaFieldList.addAll(getPassThroughFields(outSocket,
 					baseComponent));
 			schemaFieldList.addAll(getMapFields(outSocket, baseComponent));
@@ -74,7 +75,7 @@ public class OperationHandler {
 
 	private Set<SchemaField> getCopyOfInsocket(OutSocket outSocket,
 			TypeBaseComponent baseComponent2) {
-		Set<SchemaField> schemaFieldsList = new HashSet<SchemaField>();
+		Set<SchemaField> schemaFieldsList = new LinkedHashSet<SchemaField>();
 		List<TypeBaseInSocket> baseInSocketList = ((TypeOperationsComponent) baseComponent)
 				.getInSocket();
 		if (outSocket.getCopyOfInSocketId() != null
@@ -94,7 +95,7 @@ public class OperationHandler {
 	private Set<SchemaField> getOperationFields(OutSocket outSocket,
 			TypeBaseComponent baseComponent) {
 		Map<String, HashSet<SchemaField>> schemaFieldMap = getOperationOutputFields(baseComponent);
-		Set<SchemaField> schemaFieldList = new HashSet<SchemaField>();
+		Set<SchemaField> schemaFieldList = new LinkedHashSet<SchemaField>();
 		for (OperationField operationFields : outSocket.getOperationFieldList()) {
 			schemaFieldList.add(getSchemaField(
 					schemaFieldMap.get(operationFields.getOperationId()),
@@ -107,8 +108,8 @@ public class OperationHandler {
 			TypeBaseComponent baseComponent) {
 		List<TypeTransformOperation> operationList = ((TypeOperationsComponent) baseComponent)
 				.getOperation();
-		Map<String, HashSet<SchemaField>> newSchemaFieldMap = new HashMap<String, HashSet<SchemaField>>();
-		HashSet<SchemaField> newSchemaFieldList = new HashSet<SchemaField>();
+		Map<String, HashSet<SchemaField>> newSchemaFieldMap = new LinkedHashMap<String, HashSet<SchemaField>>();
+		HashSet<SchemaField> newSchemaFieldList = new LinkedHashSet<SchemaField>();
 		for (TypeTransformOperation transformOperation : operationList) {
 			List<Object> outputFieldList = new ArrayList<Object>(
 					transformOperation.getOutputFields() != null ? transformOperation
@@ -124,7 +125,7 @@ public class OperationHandler {
 
 	private Set<SchemaField> getMapFields(OutSocket outSocket,
 			TypeBaseComponent baseComponent) {
-		Set<SchemaField> mapFieldsList = new HashSet<SchemaField>();
+		Set<SchemaField> mapFieldsList = new LinkedHashSet<SchemaField>();
 		for (MapField mapField : outSocket.getMapFieldsList()) {
 			mapFieldsList.add(generateMapFields(baseComponent, mapField));
 		}
@@ -153,7 +154,7 @@ public class OperationHandler {
 
 	private Set<SchemaField> getPassThroughFields(OutSocket outSocket,
 			TypeBaseComponent baseComponent) {
-		Set<SchemaField> schemaFieldList = new HashSet<SchemaField>();
+		Set<SchemaField> schemaFieldList = new LinkedHashSet<SchemaField>();
 
 		for (PassThroughField passthroughFields : outSocket
 				.getPassThroughFieldsList()) {
@@ -165,7 +166,7 @@ public class OperationHandler {
 
 	private Set<SchemaField> generatePassthroughFields(
 			TypeBaseComponent baseComponent, PassThroughField passthroughFields) {
-		Set<SchemaField> passThroughFieldsList = new HashSet<SchemaField>();
+		Set<SchemaField> passThroughFieldsList = new LinkedHashSet<SchemaField>();
 		List<? extends TypeBaseInSocket> inSocketList = SocketUtilities
 				.getInSocketList(baseComponent);
 		for (TypeBaseInSocket inSocket : inSocketList) {
@@ -202,7 +203,8 @@ public class OperationHandler {
 		List<Object> jaxbInFields = ((TypeInputComponent) baseComponent)
 				.getOutSocket().get(0).getSchema()
 				.getFieldOrRecordOrIncludeExternalSchema();
-		return new HashSet<>(InputEntityUtils.extractInputFields(jaxbInFields));
+		return new LinkedHashSet<>(
+				InputEntityUtils.extractInputFields(jaxbInFields));
 	}
 
 	private static Set<SchemaField> outputComponentSchemaFields(
@@ -217,7 +219,7 @@ public class OperationHandler {
 	}
 
 	public Map<String, Set<SchemaField>> getStraightPullSchemaFields() {
-		Map<String, Set<SchemaField>> tempSchemaFieldsMap = new HashMap<String, Set<SchemaField>>();
+		Map<String, Set<SchemaField>> tempSchemaFieldsMap = new LinkedHashMap<String, Set<SchemaField>>();
 		List<TypeBaseInSocket> baseInSocketList = ((TypeStraightPullComponent) baseComponent)
 				.getInSocket();
 		List<TypeStraightPullOutSocket> straightPullOutSocketList = ((TypeStraightPullComponent) baseComponent)
@@ -240,7 +242,7 @@ public class OperationHandler {
 	}
 
 	public Map<String, Set<SchemaField>> getInputFields() {
-		Map<String, Set<SchemaField>> tempSchemaFieldsMap = new HashMap<String, Set<SchemaField>>();
+		Map<String, Set<SchemaField>> tempSchemaFieldsMap = new LinkedHashMap<String, Set<SchemaField>>();
 		String outSocketId = ((TypeInputComponent) baseComponent)
 				.getOutSocket().get(0).getId();
 		tempSchemaFieldsMap.put(baseComponent.getId() + "_" + outSocketId,
@@ -249,7 +251,7 @@ public class OperationHandler {
 	}
 
 	public Map<String, Set<SchemaField>> getOutputFields() {
-		Map<String, Set<SchemaField>> tempSchemaFieldsMap = new HashMap<String, Set<SchemaField>>();
+		Map<String, Set<SchemaField>> tempSchemaFieldsMap = new LinkedHashMap<String, Set<SchemaField>>();
 		String inSocketId = ((TypeOutputComponent) baseComponent).getInSocket()
 				.get(0).getId();
 		tempSchemaFieldsMap.put(baseComponent.getId() + "_" + inSocketId,

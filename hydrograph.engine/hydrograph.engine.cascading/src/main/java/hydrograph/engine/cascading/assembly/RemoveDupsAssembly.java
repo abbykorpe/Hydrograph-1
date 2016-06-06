@@ -12,16 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.RemoveDupsEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.KeyField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.handlers.RemoveDupsHandler;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.filters.RemoveDupsOutLinkFilter;
-import hydrograph.engine.cascading.filters.RemoveDupsUnusedLinkFilter;
-
 import java.util.Collections;
 
 import org.slf4j.Logger;
@@ -33,8 +23,16 @@ import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
 import cascading.pipe.assembly.Retain;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.RemoveDupsEntity;
+import hydrograph.engine.assembly.entity.elements.KeyField;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.handlers.RemoveDupsHandler;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.filters.RemoveDupsOutLinkFilter;
+import hydrograph.engine.cascading.filters.RemoveDupsUnusedLinkFilter;
 
-public class RemoveDupsAssembly extends BaseComponent {
+public class RemoveDupsAssembly extends BaseComponent<RemoveDupsEntity> {
 
 	private static final long serialVersionUID = 8050470302089972525L;
 	private RemoveDupsEntity removeDupsEntity;
@@ -124,11 +122,6 @@ public class RemoveDupsAssembly extends BaseComponent {
 		return new Every(groupByPipe, handler.getInputFields(), handler, Fields.RESULTS);
 	}
 
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		removeDupsEntity = (RemoveDupsEntity) assemblyEntityBase;
-	}
-
 	/**
 	 * Creates an object of type {@link Fields} from array of {@link KeyField}
 	 * 
@@ -172,5 +165,10 @@ public class RemoveDupsAssembly extends BaseComponent {
 			Logger LOG = LoggerFactory.getLogger(NullOutSocketException.class);
 			LOG.error(this.getMessage(), this);
 		}
+	}
+
+	@Override
+	public void initializeEntity(RemoveDupsEntity assemblyEntityBase) {
+		this.removeDupsEntity=assemblyEntityBase;
 	}
 }

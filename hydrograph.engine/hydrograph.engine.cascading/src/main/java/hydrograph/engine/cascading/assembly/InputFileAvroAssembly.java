@@ -13,12 +13,11 @@
 package hydrograph.engine.cascading.assembly;
 
 import hydrograph.engine.assembly.entity.InputFileAvroEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.avro.scheme.AvroDescriptor;
-import hydrograph.engine.cascading.avro.scheme.CustomAvroScheme;
+import hydrograph.engine.cascading.scheme.avro.AvroDescriptor;
+import hydrograph.engine.cascading.scheme.avro.CustomAvroScheme;
 
 import java.io.IOException;
 
@@ -32,7 +31,7 @@ import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
 
-public class InputFileAvroAssembly extends BaseComponent {
+public class InputFileAvroAssembly extends BaseComponent<InputFileAvroEntity> {
 
 	private static final long serialVersionUID = -2946197683137950707L;
 	private InputFileAvroEntity inputFileAvroEntity;
@@ -51,14 +50,9 @@ public class InputFileAvroAssembly extends BaseComponent {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(InputFileAvroAssembly.class);
 
-	public InputFileAvroAssembly(AssemblyEntityBase baseComponentEntity,
+	public InputFileAvroAssembly(InputFileAvroEntity baseComponentEntity,
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		inputFileAvroEntity = (InputFileAvroEntity) assemblyEntityBase;
 	}
 
 	@Override
@@ -82,7 +76,11 @@ public class InputFileAvroAssembly extends BaseComponent {
 						scheme.getSourceFields());
 			}
 		} catch (Exception e) {
-			LOG.error("", e);
+			LOG.error(
+					"Error in creating assembly for component '"
+							+ inputFileAvroEntity.getComponentId() + "', Error: "
+							+ e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -99,33 +97,34 @@ public class InputFileAvroAssembly extends BaseComponent {
 
 	public void getSchemaFieldType() {
 		inputFields = new Fields();
-		fieldDataTypes = new String[inputFileAvroEntity.getSchemaFieldsList()
+		fieldDataTypes = new String[inputFileAvroEntity.getFieldsList()
 				.size()];
-		fieldScale = new int[inputFileAvroEntity.getSchemaFieldsList().size()];
-		fieldPrecision = new int[inputFileAvroEntity.getSchemaFieldsList()
+		fieldScale = new int[inputFileAvroEntity.getFieldsList().size()];
+		fieldPrecision = new int[inputFileAvroEntity.getFieldsList()
 				.size()];
-		fieldFormat = new String[inputFileAvroEntity.getSchemaFieldsList()
+		fieldFormat = new String[inputFileAvroEntity.getFieldsList()
 				.size()];
-		fieldScaleType = new String[inputFileAvroEntity.getSchemaFieldsList()
+		fieldScaleType = new String[inputFileAvroEntity.getFieldsList()
 				.size()];
-		for (int i = 0; i < inputFileAvroEntity.getSchemaFieldsList().size(); i++) {
+		for (int i = 0; i < inputFileAvroEntity.getFieldsList().size(); i++) {
 			inputFields = inputFields.append(new Fields(inputFileAvroEntity
-					.getSchemaFieldsList().get(i).getFieldName()));
-			fieldDataTypes[i] = inputFileAvroEntity.getSchemaFieldsList()
+					.getFieldsList().get(i).getFieldName()));
+			fieldDataTypes[i] = inputFileAvroEntity.getFieldsList()
 					.get(i).getFieldDataType();
-			fieldFormat[i] = inputFileAvroEntity.getSchemaFieldsList().get(i)
+			fieldFormat[i] = inputFileAvroEntity.getFieldsList().get(i)
 					.getFieldFormat() != null ? inputFileAvroEntity
-					.getSchemaFieldsList().get(i).getFieldFormat() : "";
-			fieldScale[i] = inputFileAvroEntity.getSchemaFieldsList().get(i)
+					.getFieldsList().get(i).getFieldFormat() : "";
+			fieldScale[i] = inputFileAvroEntity.getFieldsList().get(i)
 					.getFieldScale();
-			fieldPrecision[i] = inputFileAvroEntity.getSchemaFieldsList()
+			fieldPrecision[i] = inputFileAvroEntity.getFieldsList()
 					.get(i).getFieldPrecision();
-			fieldScaleType[i] = inputFileAvroEntity.getSchemaFieldsList()
+			fieldScaleType[i] = inputFileAvroEntity.getFieldsList()
 					.get(i).getFieldScaleType();
 		}
 	}
 
 	protected void prepareScheme() {
+		LOG.debug("Applying CustomAvroScheme to read data from avro file");
 		AvroDescriptor avroDescriptor = new AvroDescriptor(inputFields,
 				dataTypeMapping(fieldDataTypes), fieldPrecision, fieldScale);
 		scheme = new CustomAvroScheme(avroDescriptor);
@@ -137,10 +136,20 @@ public class InputFileAvroAssembly extends BaseComponent {
 			try {
 				types[i] = Class.forName(fieldDataTypes[i]);
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				throw new RuntimeException(
+						"'"
+								+ fieldDataTypes[i]
+								+ "' class not found while applying datatypes for component '"
+								+ inputFileAvroEntity.getComponentId()
+								+ "' ", e);
 			}
 		}
 		return types;
+	}
+
+	@Override
+	public void initializeEntity(InputFileAvroEntity assemblyEntityBase) {
+		this.inputFileAvroEntity=assemblyEntityBase;
 	}
 
 }

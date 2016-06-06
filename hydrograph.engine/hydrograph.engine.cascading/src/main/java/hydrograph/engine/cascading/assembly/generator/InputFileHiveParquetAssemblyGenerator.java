@@ -12,7 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.InputFileHiveParquetEntity;
+import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
 import hydrograph.engine.cascading.assembly.InputFileHiveParquetAssembly;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
@@ -21,13 +28,6 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFieldsType;
 import hydrograph.engine.jaxb.inputtypes.ParquetHiveFile;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 /**
  * @author Ganesh
@@ -111,7 +111,7 @@ public class InputFileHiveParquetAssemblyGenerator extends InputAssemblyGenerato
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<HiveEntityBase> getAssembly() {
 		return inputFileHiveParquetAssembly;
 	}
 }

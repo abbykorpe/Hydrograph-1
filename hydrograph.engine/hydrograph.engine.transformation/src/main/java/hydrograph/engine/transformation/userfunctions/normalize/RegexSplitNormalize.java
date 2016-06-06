@@ -25,12 +25,18 @@ public class RegexSplitNormalize implements NormalizeTransformBase {
 
 	@Override
 	public void prepare(Properties props) {
-		String regex = props.getProperty("regex");
-		if (regex == null) {
-			throw new RegexNotAvailableException(
-					"Property regex is not available to to splitting");
+		if (props != null ){
+			String regex = props.getProperty("regex");
+			if (regex == null) {
+				throw new RegexNotAvailableException(
+						"Property regex is not available to splitting");
+			}
+			regexSplitter = new RegexSplitter(regex);
+			
+		} else {
+			throw new RuntimeException(
+					"property 'regex' is missing in the operation RegexSplitNormalize.");
 		}
-		regexSplitter = new RegexSplitter(regex);
 
 	}
 

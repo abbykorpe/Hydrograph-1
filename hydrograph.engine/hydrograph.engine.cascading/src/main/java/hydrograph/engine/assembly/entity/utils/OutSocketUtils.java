@@ -12,14 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity.utils;
 
+import hydrograph.engine.assembly.entity.elements.MapField;
+import hydrograph.engine.assembly.entity.elements.OperationField;
+import hydrograph.engine.assembly.entity.elements.PassThroughField;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.elements.MapField;
-import hydrograph.engine.assembly.entity.elements.OperationField;
-import hydrograph.engine.assembly.entity.elements.PassThroughField;
 
 public class OutSocketUtils {
 
@@ -60,13 +61,14 @@ public class OutSocketUtils {
 	 * @return an array of {@link String}
 	 */
 
+	
 	public static String[] getPassThroughFieldsFromOutSocket(List<PassThroughField> passThroughFieldsList,
 			Fields allInputFields) {
 		String[] passFields = null;
 		if (passThroughFieldsList != null) {
 
 			boolean areAllPassFields = OutSocketUtils.checkIfAllFieldsArePassthrough(passThroughFieldsList);
-
+			
 			if (areAllPassFields) {
 				passFields = new String[allInputFields.size()];
 				for (int i = 0; i < allInputFields.size(); i++) {
@@ -82,6 +84,7 @@ public class OutSocketUtils {
 		}
 		return passFields;
 	}
+
 
 	private static boolean checkIfAllFieldsArePassthrough(List<PassThroughField> passThroughFieldsList) {
 		boolean result = false;

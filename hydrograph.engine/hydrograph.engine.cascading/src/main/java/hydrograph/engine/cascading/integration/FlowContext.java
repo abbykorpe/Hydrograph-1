@@ -12,6 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.integration;
 
+import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.helper.JAXBTraversal;
@@ -29,7 +30,7 @@ public class FlowContext {
 
 	private HydrographJob hydrographJob;
 	private JAXBTraversal traversal;
-	private HashMap<String, BaseComponent> assemblies;
+	private HashMap<String, BaseComponent<AssemblyEntityBase>> assemblies;
 	private FlowDef flowDef;
 	private CascadeDef cascadeDef;
 	private HadoopConfigProvider hadoopConfProvider;
@@ -39,7 +40,7 @@ public class FlowContext {
 		this.hydrographJob = hydrographJob;
 		this.traversal = traversal;
 		this.flowDef = FlowDef.flowDef();
-		this.assemblies = new HashMap<String, BaseComponent>();
+		this.assemblies = new HashMap<String, BaseComponent<AssemblyEntityBase>>();
 		this.cascadeDef = new CascadeDef();
 		this.hadoopConfProvider = new HadoopConfigProvider(hadoopProps);
 	}
@@ -56,11 +57,11 @@ public class FlowContext {
 		return traversal;
 	}
 
-	public HashMap<String, BaseComponent> getAssemblies() {
+	public HashMap<String, BaseComponent<AssemblyEntityBase>> getAssemblies() {
 		return assemblies;
 	}
 
-	public void setAssemblies(HashMap<String, BaseComponent> assemblies) {
+	public void setAssemblies(HashMap<String, BaseComponent<AssemblyEntityBase>> assemblies) {
 		this.assemblies = assemblies;
 	}
 

@@ -26,15 +26,22 @@ public class RandomSampling implements FilterBase{
 
 	@Override
 	public void prepare(Properties props, ArrayList<String> inputFields) {
-		this.randomVal=new Random();
-		
-		if(props.getProperty("WEIGHT")!=null)
-			this.weight=Double.parseDouble(props.getProperty("WEIGHT"));
-		else
-			throw new SampleException("WEIGHT property not passed in the filter");
-		
-		if(props.getProperty("SEED")!=null){
-			randomVal.setSeed(Long.parseLong(props.getProperty("SEED")));
+		this.randomVal = new Random();
+		if (props != null) {
+			if (props.getProperty("WEIGHT") != null)
+				this.weight = Double.parseDouble(props.getProperty("WEIGHT"));
+			else
+				throw new SampleException(
+						"WEIGHT property not passed in the filter");
+
+			if (props.getProperty("SEED") != null) {
+				randomVal.setSeed(Long.parseLong(props.getProperty("SEED")));
+			} else
+				throw new SampleException(
+						"WEIGHT property not passed in the filter");
+		} else {
+			throw new RuntimeException(
+					"properties 'WEIGHT' and 'SEED' are missing in the operation RandomSampling.");
 		}
 	}
 

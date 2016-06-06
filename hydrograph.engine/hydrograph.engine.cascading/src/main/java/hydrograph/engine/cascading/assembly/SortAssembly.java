@@ -12,13 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.SortEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.KeyField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-
 import java.util.Collections;
 
 import org.slf4j.Logger;
@@ -27,6 +20,11 @@ import org.slf4j.LoggerFactory;
 import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.SortEntity;
+import hydrograph.engine.assembly.entity.elements.KeyField;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 
 /**
  * Check for sort fields sequence. Apply data types on keys. Max-Core not
@@ -35,7 +33,7 @@ import cascading.tuple.Fields;
  * @author Prabodh
  * 
  */
-public class SortAssembly extends BaseComponent {
+public class SortAssembly extends BaseComponent<SortEntity> {
 	/**
 	 * 
 	 */
@@ -44,14 +42,8 @@ public class SortAssembly extends BaseComponent {
 	private SortEntity sortEntity;
 	private static Logger LOG = LoggerFactory.getLogger(SortAssembly.class);
 
-	public SortAssembly(AssemblyEntityBase baseComponentEntity, ComponentParameters componentParameters) {
+	public SortAssembly(SortEntity baseComponentEntity, ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
-
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		sortEntity = (SortEntity) assemblyEntityBase;
 	}
 
 	@Override
@@ -129,5 +121,10 @@ public class SortAssembly extends BaseComponent {
 			i++;
 		}
 		return fields;
+	}
+
+	@Override
+	public void initializeEntity(SortEntity assemblyEntityBase) {
+		this.sortEntity=assemblyEntityBase;
 	}
 }

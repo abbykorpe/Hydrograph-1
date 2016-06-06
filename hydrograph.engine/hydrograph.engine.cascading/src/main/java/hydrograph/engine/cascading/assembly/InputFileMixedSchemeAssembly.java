@@ -31,7 +31,7 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.TextDelimitedAndFixedWidth;
 
-public class InputFileMixedSchemeAssembly extends BaseComponent {
+public class InputFileMixedSchemeAssembly extends BaseComponent<InputFileMixedSchemeEntity> {
 
 	private static final long serialVersionUID = 7857965970250755857L;
 	private static Logger LOG = LoggerFactory.getLogger(InputFileMixedSchemeAssembly.class);
@@ -47,15 +47,11 @@ public class InputFileMixedSchemeAssembly extends BaseComponent {
 
 	private IOFieldsAndTypesCreator<InputFileMixedSchemeEntity> fieldsCreator;
 
-	public InputFileMixedSchemeAssembly(AssemblyEntityBase baseComponentEntity,
+	public InputFileMixedSchemeAssembly(InputFileMixedSchemeEntity baseComponentEntity,
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
 
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		inputFileMixedSchemeEntity = (InputFileMixedSchemeEntity) assemblyEntityBase;
-	}
 
 	@Override
 	protected void createAssembly() {
@@ -106,6 +102,12 @@ public class InputFileMixedSchemeAssembly extends BaseComponent {
 				inputFileMixedSchemeEntity.getStrict(), inputFileMixedSchemeEntity.getSafe(),
 				inputFileMixedSchemeEntity.getCharset());
 
+	}
+
+
+	@Override
+	public void initializeEntity(InputFileMixedSchemeEntity assemblyEntityBase) {
+		this.inputFileMixedSchemeEntity=assemblyEntityBase;
 	}
 
 }

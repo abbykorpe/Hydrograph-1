@@ -27,14 +27,19 @@ public class RegexSplitTransform implements TransformBase {
 	@Override
 	public void prepare(Properties props, ArrayList<String> inputFields,
 			ArrayList<String> outputFields) {
-		String regex = props.getProperty("regex");
-		if (regex == null) {
-			throw new RegexNotAvailableException(
-					"Property regex is not available for splitting");
+		if ( props != null ){
+			String regex = props.getProperty("regex");
+			if (regex == null) {
+				throw new RegexNotAvailableException(
+						"Property regex is not available for splitting");
+			}
+			regexSplitter = new RegexSplitter(regex);
+			
+			maxOutputfields = outputFields.size();
+		} else {
+			throw new RuntimeException(
+					"property 'regex' is missing in the operation RegexSplitTransform.");
 		}
-		regexSplitter = new RegexSplitter(regex);
-
-		maxOutputfields = outputFields.size();
 
 	}
 

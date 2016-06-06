@@ -12,9 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import java.util.ArrayList;
+import java.util.List;
 
-public class HplSqlEntity extends AssemblyEntityBase {
+import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
+import hydrograph.engine.assembly.entity.elements.Operation;
+
+public class HplSqlEntity extends OperationAssemblyEntity {
 	private String command;
 	private String uri = null;
 	private String query = null;
@@ -62,6 +66,11 @@ public class HplSqlEntity extends AssemblyEntityBase {
 	 */
 	public void setQuery(String query) {
 		this.query = query;
+	}
+
+	@Override
+	public List<Operation> getOperationsList() {
+		return new ArrayList<>();
 	}
 
 }

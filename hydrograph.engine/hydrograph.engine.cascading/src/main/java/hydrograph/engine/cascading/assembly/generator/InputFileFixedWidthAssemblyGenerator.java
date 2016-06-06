@@ -12,6 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.InputFileFixedWidthEntity;
 import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
 import hydrograph.engine.cascading.assembly.InputFileFixedWidthAssembly;
@@ -21,15 +29,6 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.inputtypes.TextFileFixedWidth;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 public class InputFileFixedWidthAssemblyGenerator extends
 		InputAssemblyGeneratorBase {
@@ -66,8 +65,7 @@ public class InputFileFixedWidthAssemblyGenerator extends
 				+ jaxbInputFileFixedWidth.getId());
 		inputFileFixedWidthEntity.setComponentId(jaxbInputFileFixedWidth
 				.getId());
-		inputFileFixedWidthEntity.setPhase(jaxbInputFileFixedWidth.getPhase()
-				.intValue());
+		inputFileFixedWidthEntity.setPhase(jaxbInputFileFixedWidth.getPhase());
 		inputFileFixedWidthEntity.setPath(jaxbInputFileFixedWidth.getPath()
 				.getUri());
 		inputFileFixedWidthEntity
@@ -99,7 +97,7 @@ public class InputFileFixedWidthAssemblyGenerator extends
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<InputFileFixedWidthEntity> getAssembly() {
 		return inputFileFixedWidthAssembly;
 	}
 

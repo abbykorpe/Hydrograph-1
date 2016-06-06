@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.InputFileAvroEntity;
 import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
 import hydrograph.engine.cascading.assembly.InputFileAvroAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.InputAssemblyGenerato
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.inputtypes.AvroFile;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 public class InputFileAvroAssemblyGenerator extends
 		InputAssemblyGeneratorBase {
@@ -64,7 +63,7 @@ public class InputFileAvroAssemblyGenerator extends
 		inputFileAvroEntity.setComponentId(jaxbAvroFile.getId());
 		inputFileAvroEntity.setPath(jaxbAvroFile.getPath().getUri());
 		inputFileAvroEntity
-				.setSchemaFieldsList(InputEntityUtils
+				.setFieldsList(InputEntityUtils
 						.extractInputFields(jaxbAvroFile.getOutSocket()
 								.get(0).getSchema()
 								.getFieldOrRecordOrIncludeExternalSchema()));
@@ -76,7 +75,7 @@ public class InputFileAvroAssemblyGenerator extends
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<InputFileAvroEntity> getAssembly() {
 		return inputFileAvroAssembly;
 	}
 

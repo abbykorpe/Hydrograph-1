@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.FilterEntity;
 import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
 import hydrograph.engine.cascading.assembly.FilterAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.OperationAssemblyGene
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Filter;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 public class FilterAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
@@ -55,7 +54,7 @@ public class FilterAssemblyGenerator extends OperationAssemblyGeneratorBase {
 		LOG.trace("Initializing filter entity for component: "
 				+ jaxbFilter.getId());
 		filterEntity.setComponentId(jaxbFilter.getId());
-		filterEntity.setPhase(jaxbFilter.getPhase().intValue());
+		filterEntity.setPhase(jaxbFilter.getPhase());
 
 		// check if operation is present
 		if (jaxbFilter.getOperation() != null) {
@@ -90,7 +89,7 @@ public class FilterAssemblyGenerator extends OperationAssemblyGeneratorBase {
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<FilterEntity> getAssembly() {
 		return filterAssembly;
 	}
 

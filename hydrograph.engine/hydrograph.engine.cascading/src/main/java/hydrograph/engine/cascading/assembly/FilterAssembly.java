@@ -12,22 +12,20 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.FilterEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.handlers.FilterCustomHandler;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.filters.RecordFilter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.FilterEntity;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.handlers.FilterCustomHandler;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.filters.RecordFilter;
 
-public class FilterAssembly extends BaseComponent {
+public class FilterAssembly extends BaseComponent<FilterEntity> {
 
 	/**
 	 * 
@@ -37,10 +35,9 @@ public class FilterAssembly extends BaseComponent {
 	private FilterEntity filterEntity;
 	private static Logger LOG = LoggerFactory.getLogger(FilterAssembly.class);
 
-	public FilterAssembly(AssemblyEntityBase baseComponentEntity,
+	public FilterAssembly(FilterEntity baseComponentEntity,
 			ComponentParameters parameters) {
 		super(baseComponentEntity, parameters);
-
 	}
 
 	@Override
@@ -92,8 +89,8 @@ public class FilterAssembly extends BaseComponent {
 	}
 
 	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		filterEntity = (FilterEntity) assemblyEntityBase;
+	public void initializeEntity(FilterEntity assemblyEntityBase) {
+		this.filterEntity=assemblyEntityBase;
 	}
 
 }

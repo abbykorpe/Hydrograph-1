@@ -36,15 +36,18 @@ import cascading.util.Util;
 public class HydrographDelimitedParser extends DelimitedParser {
 
 	private static final long serialVersionUID = 4546944494735373827L;
-	private static final Logger LOG = LoggerFactory.getLogger(HydrographDelimitedParser.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(HydrographDelimitedParser.class);
 
 	private boolean hasHeader = false;
 
-	public HydrographDelimitedParser(String delimiter, String quote, Class[] types) {
+	public HydrographDelimitedParser(String delimiter, String quote,
+			Class[] types) {
 		super(delimiter, quote, types);
 	}
 
-	public HydrographDelimitedParser(String delimiter, String quote, Class[] types, boolean strict, boolean safe) {
+	public HydrographDelimitedParser(String delimiter, String quote,
+			Class[] types, boolean strict, boolean safe) {
 		super(delimiter, quote, types, strict, safe);
 	}
 
@@ -66,7 +69,9 @@ public class HydrographDelimitedParser extends DelimitedParser {
 					if (coercibles[i] instanceof StringCoerce) {
 						result[i] = coercibles[i].canonical(split[i]);
 					} else {
-						result[i] = coercibles[i].canonical(split[i] == null ? null : split[i].toString().trim());
+						result[i] = coercibles[i]
+								.canonical(split[i] == null ? null : split[i]
+										.toString().trim());
 					}
 					// End custom code
 				} catch (Exception exception) {
@@ -74,7 +79,8 @@ public class HydrographDelimitedParser extends DelimitedParser {
 
 					if (!safe) {
 						// trap data
-						throw new TapException(getSafeMessage(split[i], i), exception, new Tuple(line));
+						throw new TapException(getSafeMessage(split[i], i),
+								exception, new Tuple(line));
 					}
 					if (LOG.isDebugEnabled())
 						LOG.debug(getSafeMessage(split[i], i), exception);
@@ -93,13 +99,17 @@ public class HydrographDelimitedParser extends DelimitedParser {
 	 * java.lang.Appendable)
 	 */
 	@Override
-	protected Appendable joinWithQuote(Iterable tuple, Appendable buffer) throws IOException {
+	protected Appendable joinWithQuote(Iterable tuple, Appendable buffer)
+			throws IOException {
 		int count = 0;
 		for (Object value : tuple) {
 
-			// to apply datatype while writing the file
-			if (!(types[count] instanceof DateType)) {
-				value = Coercions.coercibleTypeFor(types[count]).canonical(value);
+			if (!hasHeader) {
+				// to apply datatype while writing the file
+				if (!(types[count] instanceof DateType)) {
+					value = Coercions.coercibleTypeFor(types[count]).canonical(
+							value);
+				}
 			}
 
 			if (count != 0) {
@@ -118,6 +128,8 @@ public class HydrographDelimitedParser extends DelimitedParser {
 			}
 			count++;
 		}
+		hasHeader = false;
+		
 		return buffer;
 	}
 
@@ -129,7 +141,8 @@ public class HydrographDelimitedParser extends DelimitedParser {
 	 * java.lang.Appendable)
 	 */
 	@Override
-	protected Appendable joinNoQuote(Iterable tuple, Appendable buffer) throws IOException {
+	protected Appendable joinNoQuote(Iterable tuple, Appendable buffer)
+			throws IOException {
 		int count = 0;
 
 		for (Object value : tuple) {
@@ -137,7 +150,8 @@ public class HydrographDelimitedParser extends DelimitedParser {
 			if (!hasHeader) {
 				// to apply datatype while writing the file
 				if (!(types[count] instanceof DateType)) {
-					value = Coercions.coercibleTypeFor(types[count]).canonical(value);
+					value = Coercions.coercibleTypeFor(types[count]).canonical(
+							value);
 				}
 			}
 
@@ -164,7 +178,8 @@ public class HydrographDelimitedParser extends DelimitedParser {
 
 	private String getSafeMessage(Object object, int i) {
 		try {
-			return "field " + sourceFields.get(i) + " cannot be coerced from : " + object + " to: "
+			return "field " + sourceFields.get(i)
+					+ " cannot be coerced from : " + object + " to: "
 					+ Util.getTypeName(types[i]);
 		} catch (Exception e) {
 			return "field pos " + i + " cannot be coerced from: " + object

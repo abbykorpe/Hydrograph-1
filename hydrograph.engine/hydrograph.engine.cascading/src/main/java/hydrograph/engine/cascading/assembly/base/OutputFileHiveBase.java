@@ -12,6 +12,10 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.base;
 
+import hydrograph.engine.assembly.entity.base.HiveEntityBase;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+
 import java.util.Arrays;
 
 import org.apache.hadoop.fs.Path;
@@ -22,12 +26,8 @@ import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
 import cascading.scheme.Scheme;
 import cascading.tap.Tap;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.base.HiveEntityBase;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
 
-public abstract class OutputFileHiveBase extends BaseComponent {
+public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseComponent<HiveEntityBase> {
 
 	/**
 	 * Hive Output File Component - records written as output into Hive Table
@@ -50,14 +50,14 @@ public abstract class OutputFileHiveBase extends BaseComponent {
 
 	protected IOFieldsAndTypesCreator<HiveEntityBase> fieldsCreator;
 
-	public OutputFileHiveBase(AssemblyEntityBase baseComponentEntity,
+	public OutputFileHiveBase(HiveEntityBase baseComponentEntity,
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
 
 	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		hiveEntityBase = (HiveEntityBase) assemblyEntityBase;
+	public void initializeEntity(HiveEntityBase assemblyEntityBase) {
+		hiveEntityBase = assemblyEntityBase;
 		castHiveEntityFromBase(hiveEntityBase);
 	}
 

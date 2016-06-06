@@ -198,8 +198,7 @@
 				<xs:sequence>
 					<xs:element name="inSocket" type="normalize:type-in-socket"
 						minOccurs="1" maxOccurs="1" />
-					<xs:element name="operation" type="normalize:type-operation"
-						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="operation" type="normalize:type-operation"/>
 					<xs:element name="outSocket" type="normalize:type-out-socket"
 						minOccurs="1" maxOccurs="1" />
 					<xs:element name="runtimeProperties" type="cmn:type-properties"

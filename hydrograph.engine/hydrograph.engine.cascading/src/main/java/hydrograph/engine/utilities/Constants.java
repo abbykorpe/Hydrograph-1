@@ -28,6 +28,11 @@ public class Constants {
 	 * The default value of 'scale' attribute of big decimal fields used on input / output schema
 	 */
 	public static final int DEFAULT_SCALE = -999;
+	
+	
+	public static final String HYDROGRAPH_EXECUTION_ENGINE_TEZ="tez";
+	
+	public static final String HYDROGRAPH_EXECUTION_ENGINE_MR="mr";
 
 	/**
 	 * The default value of 'precision' attribute of big decimal fields used on input / output schema

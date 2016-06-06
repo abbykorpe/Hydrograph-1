@@ -12,13 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class OutputFileAvroEntity extends AssemblyEntityBase {
+public class OutputFileAvroEntity extends IOAssemblyEntity {
 
 	private String path;
 	private List<SchemaField> schemaFieldList;
@@ -32,11 +32,11 @@ public class OutputFileAvroEntity extends AssemblyEntityBase {
 		this.overWrite = overWrite;
 	}
 
-	public List<SchemaField> getSchemaFieldsList() {
+	public List<SchemaField> getFieldsList() {
 		return schemaFieldList;
 	}
 
-	public void setSchemaFieldsList(List<SchemaField> schemaFieldsList) {
+	public void setFieldsList(List<SchemaField> schemaFieldsList) {
 		this.schemaFieldList = schemaFieldsList;
 	}
 

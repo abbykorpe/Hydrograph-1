@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.UnionAllEntity;
 import hydrograph.engine.assembly.entity.utils.StraightPullEntityUtils;
 import hydrograph.engine.cascading.assembly.UnionAllAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.StraightPullAssemblyG
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.straightpulltypes.UnionAll;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 public class UnionAllAssemblyGenerator extends
 		StraightPullAssemblyGeneratorBase {
@@ -62,7 +61,7 @@ public class UnionAllAssemblyGenerator extends
 		LOG.trace("Initializing union all entity for component: "
 				+ jaxbUnionAll.getId());
 		unionAllEntity.setComponentId(jaxbUnionAll.getId());
-		unionAllEntity.setPhase(jaxbUnionAll.getPhase().intValue());
+		unionAllEntity.setPhase(jaxbUnionAll.getPhase());
 		unionAllEntity.setOutSocket(StraightPullEntityUtils.extractOutSocketList(
 				jaxbUnionAll.getOutSocket()).get(0));
 		unionAllEntity.setRuntimeProperties(StraightPullEntityUtils
@@ -76,7 +75,7 @@ public class UnionAllAssemblyGenerator extends
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<UnionAllEntity> getAssembly() {
 		return unionAllAssembly;
 	}
 }

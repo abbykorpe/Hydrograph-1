@@ -12,10 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import java.util.ArrayList;
+import java.util.List;
+
+import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
+import hydrograph.engine.assembly.entity.elements.Operation;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 
-public class UnionAllEntity extends AssemblyEntityBase {
+public class UnionAllEntity extends OperationAssemblyEntity {
 
 	private OutSocket outSocket;
 
@@ -46,5 +50,10 @@ public class UnionAllEntity extends AssemblyEntityBase {
 			str.append(outSocket.toString());
 		}
 		return str.toString();
+	}
+
+	@Override
+	public List<Operation> getOperationsList() {
+		return new ArrayList<>();
 	}
 }

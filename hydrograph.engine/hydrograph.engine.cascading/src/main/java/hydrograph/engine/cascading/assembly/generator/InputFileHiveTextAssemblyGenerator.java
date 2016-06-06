@@ -12,7 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.InputFileHiveTextEntity;
+import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
 import hydrograph.engine.cascading.assembly.InputFileHiveTextAssembly;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
@@ -22,13 +29,6 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFieldsType;
 import hydrograph.engine.jaxb.inputtypes.HiveTextFile;
 import hydrograph.engine.utilities.GeneralUtilities;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 public class InputFileHiveTextAssemblyGenerator extends
 InputAssemblyGeneratorBase {
@@ -84,7 +84,7 @@ InputAssemblyGeneratorBase {
 				.extractRuntimeProperties(jaxbHiveTextFile
 						.getRuntimeProperties()));
 		inputHiveFileEntity.setPartitionKeys(extractPartitionFields(jaxbHiveTextFile.getPartitionKeys()));
-		inputHiveFileEntity.setPhase(jaxbHiveTextFile.getPhase().intValue());
+		inputHiveFileEntity.setPhase(jaxbHiveTextFile.getPhase());
 	}
 
 
@@ -112,7 +112,7 @@ InputAssemblyGeneratorBase {
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<HiveEntityBase> getAssembly() {
 		return inputHiveFileAssembly;
 	}
 

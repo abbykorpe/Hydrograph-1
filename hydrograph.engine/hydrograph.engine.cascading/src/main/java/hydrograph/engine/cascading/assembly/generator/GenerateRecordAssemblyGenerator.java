@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.GenerateRecordEntity;
 import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
 import hydrograph.engine.cascading.assembly.GenerateRecordAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.InputAssemblyGenerato
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.inputtypes.GenerateRecord;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 public class GenerateRecordAssemblyGenerator extends InputAssemblyGeneratorBase {
 	private GenerateRecordAssembly generateRecord;
@@ -61,7 +60,7 @@ public class GenerateRecordAssemblyGenerator extends InputAssemblyGeneratorBase 
 
 		LOG.trace("Initializing generate record entity for component: " + jaxbGenerateRecord.getId());
 		generateRecordEntity.setComponentId(jaxbGenerateRecord.getId());
-		generateRecordEntity.setPhase(jaxbGenerateRecord.getPhase().intValue());
+		generateRecordEntity.setPhase(jaxbGenerateRecord.getPhase());
 		generateRecordEntity.setRecordCount(jaxbGenerateRecord.getRecordCount().getValue());
 
 		generateRecordEntity.setFieldsList(InputEntityUtils.extractInputFields(
@@ -78,7 +77,7 @@ public class GenerateRecordAssemblyGenerator extends InputAssemblyGeneratorBase 
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<GenerateRecordEntity> getAssembly() {
 		return generateRecord;
 	}
 }

@@ -24,7 +24,7 @@
  * limitations under the License.
  */
 
-package hydrograph.engine.cascading.avro.scheme;
+package hydrograph.engine.cascading.scheme.avro;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -313,7 +313,7 @@ public class CustomAvroScheme extends
 		Tuple tuple = sourceCall.getIncomingEntry().getTuple();
 		tuple.clear();
 
-		Object[] split = CustomeAvroToCascading.parseRecord(record, schema);
+		Object[] split = CustomAvroToCascading.parseRecord(record, schema);
 		tuple.addAll(split);
 
 		return true;

@@ -16,12 +16,11 @@
 package hydrograph.engine.cascading.assembly;
 
 import hydrograph.engine.assembly.entity.InputFileHiveTextEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.hive.text.scheme.HiveTextTableDescriptor;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
+import hydrograph.engine.cascading.scheme.hive.text.HiveTextTableDescriptor;
 import hydrograph.engine.cascading.utilities.DataTypeCoerce;
 
 import java.lang.reflect.Type;
@@ -46,7 +45,7 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 	 */
 	private static final long serialVersionUID = -2946197683137950707L;
 
-	protected InputFileHiveTextEntity inputFileHiveTextEntity;
+	protected InputFileHiveTextEntity inputHiveFileEntity;
 	@SuppressWarnings("rawtypes")
 	protected Scheme scheme;
 	private HiveTextTableDescriptor tableDesc;
@@ -54,7 +53,7 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 	private static Logger LOG = LoggerFactory
 			.getLogger(InputFileHiveTextAssembly.class);
 
-	public InputFileHiveTextAssembly(AssemblyEntityBase baseComponentEntity,
+	public InputFileHiveTextAssembly(InputFileHiveTextEntity baseComponentEntity,
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
@@ -71,30 +70,28 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 	 */
 	@Override
 	protected void prepareScheme() {
-		LOG.debug("Applying HiveParquetScheme to read data from Hive");
+		LOG.debug("Applying HiveTextScheme to read data from Hive");
 
 		// HiveTextTableDescriptor is developed specifically for handling
 		// Text File format with Hive. Hence, the object of table descriptor
 		// is created in its respective assembly and not in its base class.
 		tableDesc = new HiveTextTableDescriptor(
-				inputFileHiveTextEntity.getDatabaseName(),
+				inputHiveFileEntity.getDatabaseName(),
 
-				inputFileHiveTextEntity.getTableName(),
+				inputHiveFileEntity.getTableName(),
 				fieldsCreator.getFieldNames(),
-				fieldsCreator
-						.hiveParquetDataTypeMapping(inputFileHiveTextEntity
-								.getFieldsList()),
-				inputFileHiveTextEntity.getPartitionKeys(),
-				inputFileHiveTextEntity.getDelimiter(), "",
+				fieldsCreator.hiveParquetDataTypeMapping(inputHiveFileEntity
+						.getFieldsList()),
+				inputHiveFileEntity.getPartitionKeys(),
+				inputHiveFileEntity.getDelimiter(), "",
 				getHiveExternalTableLocationPath(), false);
 
 		Fields fields = getFieldsToWrite();
 		HydrographDelimitedParser delimitedParser = new HydrographDelimitedParser(
-				inputFileHiveTextEntity.getDelimiter(),
+				inputHiveFileEntity.getDelimiter(),
 
-				inputFileHiveTextEntity.getQuote(), null,
-				inputFileHiveTextEntity.isStrict(),
-				inputFileHiveTextEntity.isSafe());
+				inputHiveFileEntity.getQuote(), null,
+				inputHiveFileEntity.isStrict(), inputHiveFileEntity.isSafe());
 
 		scheme = new TextDelimited(fields, null, false, false, "UTF-8",
 				delimitedParser);
@@ -105,26 +102,11 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 		scheme.setSinkFields(fields);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.bitwiseglobal.cascading.assembly.base.InputFileHiveBase#initializeHiveTap
-	 * ()
-	 */
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.bitwiseglobal.cascading.assembly.base.InputFileHiveBase#initializeHiveTap
-	 * ()
-	 */
 	protected void initializeHiveTap() {
-		LOG.debug("Initializing Hive Tap using HiveParquetTableDescriptor");
+		LOG.debug("Initializing Hive Tap using HiveTextTableDescriptor");
 		hiveTap = new HiveTap(tableDesc, scheme, SinkMode.KEEP, true);
-		if (inputFileHiveTextEntity.getPartitionKeys() != null
-				&& inputFileHiveTextEntity.getPartitionKeys().length > 0) {
+		if (inputHiveFileEntity.getPartitionKeys() != null
+				&& inputHiveFileEntity.getPartitionKeys().length > 0) {
 			hiveTap = new HivePartitionTap((HiveTap) hiveTap);
 		}
 	}
@@ -142,7 +124,7 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 	 */
 	@Override
 	public void castHiveEntityFromBase(HiveEntityBase hiveEntityBase) {
-		inputFileHiveTextEntity = (InputFileHiveTextEntity) hiveEntityBase;
+		inputHiveFileEntity = (InputFileHiveTextEntity) hiveEntityBase;
 
 	}
 
@@ -151,10 +133,10 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 	 */
 	private Fields getFieldsToWrite() {
 		String[] testField = new String[fieldsCreator.getFieldNames().length
-				- inputFileHiveTextEntity.getPartitionKeys().length];
+				- inputHiveFileEntity.getPartitionKeys().length];
 		int i = 0;
 		for (String inputfield : fieldsCreator.getFieldNames()) {
-			if (!Arrays.asList(inputFileHiveTextEntity.getPartitionKeys())
+			if (!Arrays.asList(inputHiveFileEntity.getPartitionKeys())
 					.contains(inputfield)) {
 				testField[i++] = inputfield;
 			}
@@ -162,35 +144,31 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 		return new Fields(testField).applyTypes(getTypes());
 
 	}
-
+	
+	
 	/**
 	 * The datatype support for text to skip the partition key write in file.
 	 */
 	private Type[] getTypes() {
-		Type[] typeArr = new Type[fieldsCreator.getFieldDataTypes().length
-				- inputFileHiveTextEntity.getPartitionKeys().length];
+		Type[] typeArr = new Type[fieldsCreator.getFieldDataTypes().length -inputHiveFileEntity.getPartitionKeys().length];
 		int i = 0;
 		int j = 0;
 		for (String dataTypes : fieldsCreator.getFieldDataTypes()) {
-			if (!Arrays.asList(inputFileHiveTextEntity.getPartitionKeys())
-					.contains(fieldsCreator.getFieldNames()[i])) {
-
+			if(!Arrays.asList(inputHiveFileEntity.getPartitionKeys()).contains(fieldsCreator.getFieldNames()[i])){
 				try {
 					typeArr[j++] = DataTypeCoerce.convertClassToCoercibleType(
-							Class.forName(dataTypes),
-							fieldsCreator.getFieldFormat()[i],
-							fieldsCreator.getFieldScale()[i],
+							Class.forName(dataTypes), fieldsCreator.getFieldFormat()[i], fieldsCreator.getFieldScale()[i],
 							fieldsCreator.getFieldScaleType()[i]);
 				} catch (ClassNotFoundException e) {
 					throw new RuntimeException(
 							"'"
 									+ dataTypes
 									+ "' class not found while applying cascading datatypes for component '"
-									+ inputFileHiveTextEntity.getComponentId()
+									+ inputHiveFileEntity.getComponentId()
 									+ "' ", e);
 				}
 
-			}
+			}	
 			i++;
 		}
 		return typeArr;

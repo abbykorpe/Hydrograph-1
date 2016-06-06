@@ -12,16 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.HashJoinEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.JoinHelper;
-import hydrograph.engine.cascading.joiners.HashJoinJoiner;
-import hydrograph.engine.cascading.joiners.HashJoinJoiner.Option;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +21,14 @@ import cascading.pipe.assembly.Rename;
 import cascading.pipe.assembly.Retain;
 import cascading.pipe.joiner.Joiner;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.HashJoinEntity;
+import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.JoinHelper;
+import hydrograph.engine.cascading.joiners.HashJoinJoiner;
+import hydrograph.engine.cascading.joiners.HashJoinJoiner.Option;
 
 /**
  * HashJoin Component for joining two or more files.
@@ -39,7 +37,7 @@ import cascading.tuple.Fields;
  * 
  */
 
-public class HashJoinAssembly extends BaseComponent {
+public class HashJoinAssembly extends BaseComponent<HashJoinEntity> {
 
 	private static final long serialVersionUID = 1L;
 	private HashJoinEntity hashJoinEntity;
@@ -54,11 +52,6 @@ public class HashJoinAssembly extends BaseComponent {
 	public HashJoinAssembly(HashJoinEntity hashJoinEntity,
 			ComponentParameters componentParameters) {
 		super(hashJoinEntity, componentParameters);
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		hashJoinEntity = (HashJoinEntity) assemblyEntityBase;
 	}
 
 	@Override
@@ -204,5 +197,10 @@ public class HashJoinAssembly extends BaseComponent {
 			// to be done
 			inputPipes[i] = inputLink;
 		}
+	}
+
+	@Override
+	public void initializeEntity(HashJoinEntity assemblyEntityBase) {
+		this.hashJoinEntity=assemblyEntityBase;
 	}
 }

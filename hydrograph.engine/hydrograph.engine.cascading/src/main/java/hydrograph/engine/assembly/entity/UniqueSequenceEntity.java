@@ -12,14 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class UniqueSequenceEntity extends AssemblyEntityBase {
+import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
+import hydrograph.engine.assembly.entity.elements.Operation;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+
+public class UniqueSequenceEntity extends OperationAssemblyEntity {
 
 	private List<OutSocket> outSocketList;
 	// private Map<String, InSocket> inSocketMap;
@@ -138,5 +139,10 @@ public class UniqueSequenceEntity extends AssemblyEntityBase {
 			str.append(Arrays.toString(outSocketList.toArray()));
 		}
 		return str.toString();
+	}
+
+	@Override
+	public List<Operation> getOperationsList() {
+		return new ArrayList<>();
 	}
 }

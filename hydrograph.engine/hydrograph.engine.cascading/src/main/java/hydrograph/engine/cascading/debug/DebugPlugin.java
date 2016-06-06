@@ -81,7 +81,25 @@ public class DebugPlugin implements ManipulatorListener {
 		debugContext.setPhase(baseComponent.getPhase());
 		debugContext.setSchemaFieldsMap(schemaFieldsMap);
 		debugContext.setTypeBaseComponents(componentList);
-		return ComponentBuilder.OUTPUT_COMPONENT.create(debugContext);
+		return ComponentBuilder.TEXT_OUTPUT_COMPONENT.create(debugContext);
+	}
+
+	private TypeBaseComponent generateOutputAvroComponent(
+			TypeBaseComponent baseComponent,
+			List<TypeBaseComponent> componentList, DebugPoint debug,
+			Map<String, Set<SchemaField>> schemaFieldsMap,
+			TypeBaseComponent component, String jobId, String basePath) {
+
+		DebugContext debugContext = new DebugContext();
+		debugContext.setBasePath(basePath);
+		debugContext.setJobId(jobId);
+		debugContext.setPreviousComponentId(component.getId());
+		debugContext.setFromComponentId(debug.getFromComponentId());
+		debugContext.setFromOutSocketId(debug.getOutSocketId());
+		debugContext.setPhase(baseComponent.getPhase());
+		debugContext.setSchemaFieldsMap(schemaFieldsMap);
+		debugContext.setTypeBaseComponents(componentList);
+		return ComponentBuilder.AVRO_OUTPUT_COMPONENT.create(debugContext);
 	}
 
 	private TypeBaseComponent generateLimitComponent(

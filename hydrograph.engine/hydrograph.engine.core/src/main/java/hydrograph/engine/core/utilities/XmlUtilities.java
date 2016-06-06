@@ -26,17 +26,20 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class XmlUtilities {
 
-	private static Logger LOG = LoggerFactory
-			.getLogger(XmlUtilities.class);
 	
 	public static Document getXMLDocument(String xmlContent) {
 
@@ -52,12 +55,10 @@ public class XmlUtilities {
 				xmlDocument = documentBuilder.parse(new InputSource(
 						new StringReader(xmlContent)));
 			} catch (SAXException | IOException e) {
-				// TODO Auto-generated catch block
-				LOG.error("", e);
+				throw new RuntimeException(e);
 			}
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 		return xmlDocument;
 
@@ -69,19 +70,27 @@ public class XmlUtilities {
 		try {
 			transformer = tf.newTransformer();
 		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 		StringWriter writer = new StringWriter();
 		try {
 			transformer.transform(new DOMSource(doc), new StreamResult(writer));
 		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 		String output = writer.getBuffer().toString();
 		return output;
 	}
 	
+	public static NodeList getComponentsWithAttribute(Node xmlDocument, String attribute) throws XPathExpressionException{
+		XPathFactory xPathfactory = XPathFactory.newInstance();
+		XPath xpath = xPathfactory.newXPath();
+		XPathExpression expr = null;
+		NodeList n1 = null;
+			expr = xpath.compile("//*[@"+attribute+"]");
+			n1 = (NodeList) expr.evaluate(xmlDocument, XPathConstants.NODESET);
+		return n1;
+		
+	}
 }

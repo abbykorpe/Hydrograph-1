@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.AggregateEntity;
 import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
 import hydrograph.engine.cascading.assembly.AggregateAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.OperationAssemblyGene
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Aggregate;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 public class AggregateAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
@@ -61,7 +60,7 @@ public class AggregateAssemblyGenerator extends OperationAssemblyGeneratorBase {
 	public void initializeEntity() {
 		LOG.trace("Initializing aggregate entity for component: " + jaxbAggregate.getId());
 		aggregateEntity.setComponentId(jaxbAggregate.getId());
-		aggregateEntity.setPhase(jaxbAggregate.getPhase().intValue());
+		aggregateEntity.setPhase(jaxbAggregate.getPhase());
 
 		// check if operation is present
 		if (jaxbAggregate.getOperation() != null && jaxbAggregate.getOperation().size() > 0) {
@@ -101,7 +100,7 @@ public class AggregateAssemblyGenerator extends OperationAssemblyGeneratorBase {
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<AggregateEntity> getAssembly() {
 		return aggregateCustomAssembly;
 	}
 }

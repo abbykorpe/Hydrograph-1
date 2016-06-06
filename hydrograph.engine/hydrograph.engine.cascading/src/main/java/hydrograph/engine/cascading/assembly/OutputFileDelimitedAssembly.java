@@ -12,13 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.OutputFileDelimitedEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
-import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
-
 import java.util.Arrays;
 
 import org.slf4j.Logger;
@@ -32,8 +25,13 @@ import cascading.tap.SinkMode;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.OutputFileDelimitedEntity;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
 
-public class OutputFileDelimitedAssembly extends BaseComponent {
+public class OutputFileDelimitedAssembly extends BaseComponent<OutputFileDelimitedEntity>{
 
 	/**
 	 * 
@@ -51,13 +49,13 @@ public class OutputFileDelimitedAssembly extends BaseComponent {
 
 	private IOFieldsAndTypesCreator<OutputFileDelimitedEntity> fieldsCreator;
 
-	public OutputFileDelimitedAssembly(AssemblyEntityBase parameters, ComponentParameters componentParameters) {
+	public OutputFileDelimitedAssembly(OutputFileDelimitedEntity parameters, ComponentParameters componentParameters) {
 		super(parameters, componentParameters);
 	}
 
 	@Override
-	public void castEntityFromBase(AssemblyEntityBase graphTypeImpl) {
-		outputFileDelimitedEntity = (OutputFileDelimitedEntity) graphTypeImpl;
+	public void initializeEntity(OutputFileDelimitedEntity graphTypeImpl) {
+		outputFileDelimitedEntity = graphTypeImpl;
 	}
 
 	@Override

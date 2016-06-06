@@ -15,7 +15,6 @@ package hydrograph.engine.cascading.debug;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,7 @@ public class DebugContext {
 	private String fromComponentId;
 	private String fromOutSocketId;
 	private String fromOutSocketType;
-	private BigInteger phase;
+	private String phase;
 	private List<TypeBaseComponent> typeBaseComponents;
 	private Map<String, Set<SchemaField>> schemaFieldsMap;
 	private Map<String, Object> params;
@@ -78,11 +77,11 @@ public class DebugContext {
 		this.fromOutSocketId = fromOutSocketId;
 	}
 
-	public BigInteger getPhase() {
+	public String getPhase() {
 		return phase;
 	}
 
-	public void setPhase(BigInteger phase) {
+	public void setPhase(String phase) {
 		this.phase = phase;
 	}
 

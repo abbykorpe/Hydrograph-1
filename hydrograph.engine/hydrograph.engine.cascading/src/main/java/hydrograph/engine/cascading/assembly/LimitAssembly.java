@@ -12,20 +12,18 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.LimitEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cascading.operation.filter.Limit;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
+import hydrograph.engine.assembly.entity.LimitEntity;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 
-public class LimitAssembly extends BaseComponent {
+public class LimitAssembly extends BaseComponent<LimitEntity> {
 
 	/**
 	 * 
@@ -35,15 +33,9 @@ public class LimitAssembly extends BaseComponent {
 	private LimitEntity limitEntity;
 	private static Logger LOG = LoggerFactory.getLogger(LimitAssembly.class);
 
-	public LimitAssembly(AssemblyEntityBase parameters,
+	public LimitAssembly(LimitEntity limitEntity,
 			ComponentParameters componentParameters) {
-		super(parameters, componentParameters);
-
-	}
-
-	@Override
-	public void castEntityFromBase(AssemblyEntityBase assemblyEntityBase) {
-		limitEntity = (LimitEntity) assemblyEntityBase;
+		super(limitEntity, componentParameters);
 	}
 
 	@Override
@@ -75,5 +67,10 @@ public class LimitAssembly extends BaseComponent {
 			LOG.error(e.getMessage(), e);
 			throw new RuntimeException(e.getMessage());
 		}
+	}
+
+	@Override
+	public void initializeEntity(LimitEntity assemblyEntityBase) {
+		this.limitEntity=assemblyEntityBase;
 	}
 }

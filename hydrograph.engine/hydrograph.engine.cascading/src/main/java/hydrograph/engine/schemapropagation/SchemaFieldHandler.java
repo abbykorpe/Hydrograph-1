@@ -25,6 +25,7 @@ import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class SchemaFieldHandler {
 	public SchemaFieldHandler(List<TypeBaseComponent> jaxbGraphlist) {
 		jaxbGraph = jaxbGraphlist;
 		componentMap = new HashMap<String, TypeBaseComponent>();
-		schemaFields = new HashMap<String, Set<SchemaField>>();
+		schemaFields = new LinkedHashMap<String, Set<SchemaField>>();
 	}
 
 	public Map<String, Set<SchemaField>> getSchemaFieldMap() {

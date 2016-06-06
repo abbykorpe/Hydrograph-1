@@ -12,6 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.OutputFileFixedWidthEntity;
 import hydrograph.engine.assembly.entity.utils.OutputEntityUtils;
 import hydrograph.engine.cascading.assembly.OutputFileFixedWidthAssembly;
@@ -21,10 +24,6 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.outputtypes.TextFileFixedWidth;
-
-import java.util.Map;
-
-import cascading.tap.Tap;
 
 public class OutputFileFixedWidthAssemblyGenerator extends OutputAssemblyGeneratorBase {
 
@@ -57,7 +56,7 @@ public class OutputFileFixedWidthAssemblyGenerator extends OutputAssemblyGenerat
 	public void initializeEntity() {
 
 		outputFileFixedWidthEntity.setComponentId(jaxbOutputFileFixedWidth.getId());
-		outputFileFixedWidthEntity.setPhase(jaxbOutputFileFixedWidth.getPhase().intValue());
+		outputFileFixedWidthEntity.setPhase(jaxbOutputFileFixedWidth.getPhase());
 		outputFileFixedWidthEntity.setPath(jaxbOutputFileFixedWidth.getPath().getUri());
 		outputFileFixedWidthEntity.setSafe(
 				jaxbOutputFileFixedWidth.getSafe() != null ? jaxbOutputFileFixedWidth.getSafe().isValue() : false);
@@ -83,7 +82,7 @@ public class OutputFileFixedWidthAssemblyGenerator extends OutputAssemblyGenerat
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<OutputFileFixedWidthEntity> getAssembly() {
 		return outputFileFixedWidthAssembly;
 	}
 }

@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.DiscardEntity;
 import hydrograph.engine.cascading.assembly.DiscardAssembly;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
@@ -19,13 +25,6 @@ import hydrograph.engine.cascading.assembly.generator.base.OutputAssemblyGenerat
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.outputtypes.Discard;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 
 public class DiscardAssemblyGenerator extends OutputAssemblyGeneratorBase {
 
@@ -61,7 +60,7 @@ public class DiscardAssemblyGenerator extends OutputAssemblyGeneratorBase {
 		LOG.trace("Initializing discard entity for component: "
 				+ jaxbDiscard.getId());
 		discardEntity.setComponentId(jaxbDiscard.getId());
-		discardEntity.setPhase(jaxbDiscard.getPhase().intValue());
+		discardEntity.setPhase(jaxbDiscard.getPhase());
 	}
 
 	@Override
@@ -71,7 +70,7 @@ public class DiscardAssemblyGenerator extends OutputAssemblyGeneratorBase {
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<DiscardEntity> getAssembly() {
 		return discardAssembly;
 	}
 }

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package hydrograph.engine.cascading.parquet.scheme;
+package hydrograph.engine.cascading.scheme.parquet;
 
 import java.math.BigDecimal;
 import java.util.Calendar;

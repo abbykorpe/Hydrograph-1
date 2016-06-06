@@ -12,16 +12,16 @@
  *******************************************************************************/
 package hydrograph.engine.core.xmlparser.subjob;
 
+import hydrograph.engine.core.utilities.XmlUtilities;
+import hydrograph.engine.core.xmlparser.XmlParsingUtils;
+import hydrograph.engine.core.xmlparser.parametersubstitution.ParameterSubstitutor;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-
-import hydrograph.engine.core.utilities.XmlUtilities;
-import hydrograph.engine.core.xmlparser.XmlParsingUtils;
-import hydrograph.engine.core.xmlparser.parametersubstitution.ParameterSubstitutor;
 
 public class ReadSubjob {
 
@@ -36,10 +36,13 @@ public class ReadSubjob {
 	private static final String TYPE = "xsi:type";
 	private static final Object SUBJOBPARAMETER = "subjobParameter";
 	private static final String COMMANDS = "commands";
+	private static final String PHASE = "phase";
 
 	private Document xmlDocument = null;
 	private String xmlContent;
 	private ParameterSubstitutor parameterSubstitutor;
+	private String subjobPath;
+
 	public ReadSubjob(String xmlContent) {
 		this.xmlContent = xmlContent;
 	}
@@ -48,7 +51,8 @@ public class ReadSubjob {
 		return getSubjobDocument(xmlContent);
 	}
 
-	private Document getSubjobDocument(String xmlContents) throws FileNotFoundException {
+	private Document getSubjobDocument(String xmlContents)
+			throws FileNotFoundException {
 		xmlDocument = XmlUtilities.getXMLDocument(removeComments(xmlContents));
 		Document subjobDocument = getSubjob(xmlDocument);
 		return subjobDocument;
@@ -58,22 +62,32 @@ public class ReadSubjob {
 		return xmlContents.replaceAll("<!--[\\s\\S]*?-->", "");
 	}
 
-	private Document getSubjob(Document xmlDocument) throws FileNotFoundException {
+	private Document getSubjob(Document xmlDocument)
+			throws FileNotFoundException {
 		Node parentNode = xmlDocument.getFirstChild();
-		String subjobComponentId;
+		String subjobComponentId, subjobComponentPhase;
 		for (int i = 0; i < parentNode.getChildNodes().getLength(); i++) {
 			if (isSubjobPresent(parentNode.getChildNodes().item(i))) {
 				Node subjobNode = parentNode.getChildNodes().item(i);
-				subjobComponentId = subjobNode.getAttributes()
-						.getNamedItem(ID).getNodeValue();
+				subjobComponentId = subjobNode.getAttributes().getNamedItem(ID)
+						.getNodeValue();
+
+				subjobComponentPhase = subjobNode.getAttributes().getNamedItem(
+						PHASE) == null ? "0" : subjobNode.getAttributes()
+						.getNamedItem(PHASE).getNodeValue();
+
 				String subjobXml = EMPTY;
 				subjobXml = readSubjob(subjobNode);
 				if (!subjobXml.isEmpty()) {
 					Document subjobXmlDocument = XmlUtilities
 							.getXMLDocument(removeComments(subjobXml));
 					subjobXmlDocument = getSubjob(subjobXmlDocument);
-					xmlDocument = parseSubjob(xmlDocument,
-							subjobXmlDocument, subjobComponentId);
+					xmlDocument = parseSubjob(xmlDocument, subjobXmlDocument,
+							subjobComponentId, subjobComponentPhase);
+				} else {
+					throw new RuntimeException(
+							"Subjob XML contents empty. Subjob ID: '"
+									+ subjobComponentId + "'. Subjob path : " + subjobPath );
 				}
 			}
 		}
@@ -81,9 +95,10 @@ public class ReadSubjob {
 	}
 
 	private Document parseSubjob(Document parentXmlDocument,
-			Document subjobXmlDocument, String subjobComponentId) {
+			Document subjobXmlDocument, String subjobComponentId,
+			String subjobComponentPhase) {
 		ParseSubjob subjobParser = new ParseSubjob(parentXmlDocument,
-				subjobXmlDocument, subjobComponentId);
+				subjobXmlDocument, subjobComponentId, subjobComponentPhase);
 		return subjobParser.expandSubjob();
 
 	}
@@ -97,9 +112,8 @@ public class ReadSubjob {
 
 	private String readSubjob(Node subjobNode) throws FileNotFoundException {
 		for (int j = 0; j < subjobNode.getChildNodes().getLength(); j++) {
-
 			if (subjobNode.getChildNodes().item(j).getNodeName().equals(PATH)) {
-				String subjobPath = subjobNode.getChildNodes().item(j)
+				 subjobPath = subjobNode.getChildNodes().item(j)
 						.getAttributes().getNamedItem(URI).getNodeValue();
 				if (isSubjobExists(subjobPath)) {
 					parameterSubstitutor = new ParameterSubstitutor(

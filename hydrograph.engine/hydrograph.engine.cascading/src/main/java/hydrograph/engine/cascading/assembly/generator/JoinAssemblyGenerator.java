@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.JoinEntity;
 import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
 import hydrograph.engine.cascading.assembly.JoinAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.OperationAssemblyGene
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Join;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 public class JoinAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
@@ -55,7 +54,7 @@ public class JoinAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
 		LOG.trace("Initializing join entity for component: " + jaxbJoin.getId());
 		joinEntity.setComponentId(jaxbJoin.getId());
-		joinEntity.setPhase(jaxbJoin.getPhase().intValue());
+		joinEntity.setPhase(jaxbJoin.getPhase());
 
 		if (jaxbJoin.getOutSocket() == null) {
 			throw new NullPointerException(
@@ -76,7 +75,7 @@ public class JoinAssemblyGenerator extends OperationAssemblyGeneratorBase {
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<JoinEntity> getAssembly() {
 		return joinSubAssembly;
 	}
 

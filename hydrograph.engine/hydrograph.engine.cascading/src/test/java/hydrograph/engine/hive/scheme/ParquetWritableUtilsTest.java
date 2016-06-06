@@ -12,8 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.hive.scheme;
 
-import hydrograph.engine.cascading.hive.parquet.scheme.ParquetWritableUtils;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cascading.tuple.Tuple;
+import hydrograph.engine.cascading.scheme.hive.parquet.ParquetWritableUtils;
 
 public class ParquetWritableUtilsTest {
 

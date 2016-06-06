@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.HashJoinEntity;
 import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
 import hydrograph.engine.cascading.assembly.HashJoinAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.OperationAssemblyGene
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.HashJoin;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 public class HashJoinAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
@@ -55,7 +54,7 @@ public class HashJoinAssemblyGenerator extends OperationAssemblyGeneratorBase {
 		LOG.trace("Initializing hash join entity for component: "
 				+ jaxbHashJoin.getId());
 		hashJoinEntity.setComponentId(jaxbHashJoin.getId());
-		hashJoinEntity.setPhase(jaxbHashJoin.getPhase().intValue());
+		hashJoinEntity.setPhase(jaxbHashJoin.getPhase());
 
 		if (jaxbHashJoin.getOutSocket() == null) {
 			throw new NullPointerException("No out socket defined for hash join component: " + jaxbHashJoin.getId());
@@ -80,7 +79,7 @@ public class HashJoinAssemblyGenerator extends OperationAssemblyGeneratorBase {
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<HashJoinEntity> getAssembly() {
 		return hashJoinAssembly;
 	}
 

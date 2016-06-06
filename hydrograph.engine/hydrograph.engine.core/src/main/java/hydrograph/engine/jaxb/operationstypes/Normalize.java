@@ -30,7 +30,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
  *     &lt;restriction base="{hydrograph/engine/jaxb/commontypes}type-operations-component">
  *       &lt;sequence>
  *         &lt;element name="inSocket" type="{hydrograph/engine/jaxb/normalize}type-in-socket"/>
- *         &lt;element name="operation" type="{hydrograph/engine/jaxb/normalize}type-operation" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="operation" type="{hydrograph/engine/jaxb/normalize}type-operation"/>
  *         &lt;element name="outSocket" type="{hydrograph/engine/jaxb/normalize}type-out-socket"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>

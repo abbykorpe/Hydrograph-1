@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Pipe;
 import hydrograph.engine.assembly.entity.CloneEntity;
 import hydrograph.engine.assembly.entity.utils.StraightPullEntityUtils;
 import hydrograph.engine.cascading.assembly.CloneAssembly;
@@ -20,13 +26,6 @@ import hydrograph.engine.cascading.assembly.generator.base.StraightPullAssemblyG
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.straightpulltypes.Clone;
-
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Pipe;
 
 public class CloneAssemblyGenerator extends StraightPullAssemblyGeneratorBase {
 
@@ -60,7 +59,7 @@ public class CloneAssemblyGenerator extends StraightPullAssemblyGeneratorBase {
 		LOG.trace("Initializing clone entity for component: "
 				+ jaxbClone.getId());
 		cloneEntity.setComponentId(jaxbClone.getId());
-		cloneEntity.setPhase(jaxbClone.getPhase().intValue());
+		cloneEntity.setPhase(jaxbClone.getPhase());
 		cloneEntity.setOutSocketList(StraightPullEntityUtils
 				.extractOutSocketList(jaxbClone.getOutSocket()));
 		cloneEntity.setRuntimeProperties(StraightPullEntityUtils
@@ -73,7 +72,7 @@ public class CloneAssemblyGenerator extends StraightPullAssemblyGeneratorBase {
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<CloneEntity> getAssembly() {
 		return cloneAssembly;
 	}
 }

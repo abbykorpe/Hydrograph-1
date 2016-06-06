@@ -12,8 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.hive.scheme;
 
-import hydrograph.engine.cascading.hive.parquet.scheme.HiveParquetScheme;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -34,6 +32,7 @@ import cascading.tap.hive.HiveTableDescriptor;
 import cascading.tap.hive.HiveTap;
 import cascading.tuple.Fields;
 import cascading.tuple.type.DateType;
+import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetScheme;
 
 public class ParquetHiveTest {
 

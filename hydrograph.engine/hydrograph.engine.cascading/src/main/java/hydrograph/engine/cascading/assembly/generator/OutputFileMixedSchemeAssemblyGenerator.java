@@ -12,6 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.Map;
+
+import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.OutputFileMixedSchemeEntity;
 import hydrograph.engine.assembly.entity.utils.OutputEntityUtils;
 import hydrograph.engine.cascading.assembly.OutputFileMixedSchemeAssembly;
@@ -21,10 +24,6 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.outputtypes.TextFileMixedScheme;
-
-import java.util.Map;
-
-import cascading.tap.Tap;
 
 public class OutputFileMixedSchemeAssemblyGenerator extends OutputAssemblyGeneratorBase {
 
@@ -57,7 +56,7 @@ public class OutputFileMixedSchemeAssemblyGenerator extends OutputAssemblyGenera
 	public void initializeEntity() {
 
 		outputFileMixedSchemeEntity.setComponentId(jaxbTextFileMixedScheme.getId());
-		outputFileMixedSchemeEntity.setPhase(jaxbTextFileMixedScheme.getPhase().intValue());
+		outputFileMixedSchemeEntity.setPhase(jaxbTextFileMixedScheme.getPhase());
 		outputFileMixedSchemeEntity.setCharset(jaxbTextFileMixedScheme.getCharset() != null
 				? jaxbTextFileMixedScheme.getCharset().getValue().value() : "UTF-8");
 
@@ -87,7 +86,7 @@ public class OutputFileMixedSchemeAssemblyGenerator extends OutputAssemblyGenera
 	}
 
 	@Override
-	public BaseComponent getAssembly() {
+	public BaseComponent<OutputFileMixedSchemeEntity> getAssembly() {
 		return outputMixedFileAssembly;
 	}
 }
