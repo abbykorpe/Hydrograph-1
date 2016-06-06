@@ -111,16 +111,18 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 		Schema schema = null;
 		List<GridRow> gridRowList = new ArrayList<>();
 
-		if (outSocket.getSchema() != null
-				&& outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema().size() != 0) {
+		if (outSocket.getSchema() != null &&
+				outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema().size() != 0) {
 			schema = new Schema();
 			for (Object record : outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema()) {
 				if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
 					schema.setIsExternal(true);
-					if (StringUtils.isNotBlank(((TypeExternalSchema) record).getUri()))
+					if (StringUtils.isNotBlank(((TypeExternalSchema) record).getUri())){
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
-						gridRowList.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(), Constants.GENERATE_RECORD_GRID_ROW));
-						schema.setGridRow(gridRowList);
+					}
+					gridRowList.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(),
+							Constants.GENERATE_RECORD_GRID_ROW));
+					schema.setGridRow(gridRowList);
 				} else {
 					gridRowList.add(getGenerateRecordsSchemaGridRow(record));
 					schema.setGridRow(gridRowList);

@@ -182,9 +182,10 @@ public class RunConfigDialog extends Dialog {
      		
 			@Override
 			public void modifyText(ModifyEvent event) {
-				if (txtDecorator == null)
+				if (txtDecorator == null){
 					txtDecorator = WidgetUtility.addDecorator(basepathText,Messages.ABSOLUTE_PATH_TEXT);
-					txtDecorator.hide();
+				}
+				txtDecorator.hide();
 				Text text = (Text)event.widget;
 				String data = text.getText();
 				IPath path = new Path(data);

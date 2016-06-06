@@ -123,10 +123,12 @@ public class InputFileDelimitedUiConverter extends InputUiConverter {
 			for (Object record : outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema()) {
 				if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
 					schema.setIsExternal(true);
-					if (((TypeExternalSchema) record).getUri() != null)
+					if (((TypeExternalSchema) record).getUri() != null){
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
-						gridRowList.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(),Constants.GENERIC_GRID_ROW));
-						schema.setGridRow(gridRowList);
+					}
+					gridRowList.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(),
+							Constants.GENERIC_GRID_ROW));
+					schema.setGridRow(gridRowList);
 				} else {
 					gridRowList.add(converterUiHelper.getSchema(record));
 					schema.setGridRow(gridRowList);

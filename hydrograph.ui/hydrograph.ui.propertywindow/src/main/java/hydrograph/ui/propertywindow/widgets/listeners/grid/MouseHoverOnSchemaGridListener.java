@@ -52,8 +52,9 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 		  table=(Table)widgets[0];
 	      TableItem item = table.getItem(new Point(event.x, event.y));
          if (item != null && item.getForeground().getRed()==255) {
-           if (tip != null && !tip.isDisposed())
-           tip.dispose();
+           if (tip != null && !tip.isDisposed()){
+        	   tip.dispose();
+           }
            tip = new Shell(table.getShell(), SWT.ON_TOP | SWT.TOOL);
            tip.setLayout(new FormLayout());
            label = new Label(tip, SWT.NONE);

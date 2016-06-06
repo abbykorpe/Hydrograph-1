@@ -141,10 +141,11 @@ public class LookupConverter extends TransformConverter {
 				TypeFieldName field = new TypeFieldName();
 				field.setName("");
 				typeFieldNameList.add(field);
-				for (String fieldName : keyList) 
+				for (String fieldName : keyList){ 
 					parameterFieldNames.append(fieldName+ " ");
-					converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), 
-							ComponentXpathConstants.LOOKUP_KEYS.value().replace("$inSocketId", socketID),true);
+				}
+				converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), 
+					ComponentXpathConstants.LOOKUP_KEYS.value().replace("$inSocketId", socketID),true);
 				
 			}
 

@@ -111,7 +111,8 @@ public class FilterConverter extends TransformConverter {
 						operationField.setInSocketId(Constants.FIXED_INSOCKET_ID);
 						operationFiledList.add(operationField);
 					} else {
-						converterHelper.addParamTag(this.ID, fieldName,	ComponentXpathConstants.FILTER_INPUT_FIELDS.value(),false);
+						converterHelper.addParamTag(this.ID, fieldName,	
+								ComponentXpathConstants.FILTER_INPUT_FIELDS.value(),false);
 					}
 				}
 			} else {
@@ -119,10 +120,11 @@ public class FilterConverter extends TransformConverter {
 				TypeInputField operationField = new TypeInputField();
 				operationField.setName("");
 				operationFiledList.add(operationField);
-				for (String fieldName : componentOperationFields) 
+				for (String fieldName : componentOperationFields){ 
 					parameterFieldNames.append(fieldName+ " ");
-					converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), ComponentXpathConstants.FILTER_INPUT_FIELDS.value(),true);
-				
+				}
+				converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), 
+						ComponentXpathConstants.FILTER_INPUT_FIELDS.value(),true);
 			}
 		}
 		return operationFiledList;

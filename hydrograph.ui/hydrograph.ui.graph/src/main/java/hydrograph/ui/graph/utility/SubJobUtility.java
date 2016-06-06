@@ -10,8 +10,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
- 
 package hydrograph.ui.graph.utility;
 
 import hydrograph.ui.common.util.CanvasDataAdpater;
@@ -29,7 +27,6 @@ import hydrograph.ui.logging.factory.LogFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -388,17 +385,18 @@ public class SubJobUtility {
 	public void updateParametersInGrid(Component selectedSubjobComponent, IPath subJobJobFileIPath) {
 		Map<String, String> parameterPropertyMap = (Map<String, String>) selectedSubjobComponent.getProperties().get(
 				Constants.RUNTIME_PROPERTY_NAME);
-		if (parameterPropertyMap == null)
+		if (parameterPropertyMap == null){
 			parameterPropertyMap = new HashMap<String, String>();
-			String content = getCurrentEditor().getStringValueFromXMLFile(subJobJobFileIPath);
-				CanvasDataAdpater canvasDataAdpater = new CanvasDataAdpater(content);
-				canvasDataAdpater.fetchData();
-				for (String parameterName : canvasDataAdpater.getParameterList()) {
-					if (!parameterPropertyMap.containsKey(parameterName))
-						parameterPropertyMap.put(parameterName, "");
-				}
-				selectedSubjobComponent.getProperties().put(Constants.RUNTIME_PROPERTY_NAME, parameterPropertyMap);
 		}
+		String content = getCurrentEditor().getStringValueFromXMLFile(subJobJobFileIPath);
+		CanvasDataAdpater canvasDataAdpater = new CanvasDataAdpater(content);
+		canvasDataAdpater.fetchData();
+		for (String parameterName : canvasDataAdpater.getParameterList()) {
+			if (!parameterPropertyMap.containsKey(parameterName))
+				parameterPropertyMap.put(parameterName, "");
+		}
+		selectedSubjobComponent.getProperties().put(Constants.RUNTIME_PROPERTY_NAME, parameterPropertyMap);
+	}
 
 
 	

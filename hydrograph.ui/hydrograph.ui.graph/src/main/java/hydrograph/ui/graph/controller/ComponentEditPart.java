@@ -334,8 +334,9 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			
 			changePortSettings();
 			
-			if(!StringUtils.equals(Constants.UPDATE_AVAILABLE,currentStatus))
-			updateComponentStatus();			
+			if(!StringUtils.equals(Constants.UPDATE_AVAILABLE,currentStatus)){
+				updateComponentStatus();			
+			}
 			refresh();
 			
 			adjustExistingPorts();
