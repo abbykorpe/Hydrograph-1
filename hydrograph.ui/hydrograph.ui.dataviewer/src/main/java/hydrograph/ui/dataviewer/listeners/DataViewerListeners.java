@@ -1,16 +1,18 @@
 package hydrograph.ui.dataviewer.listeners;
 
 import hydrograph.ui.dataviewer.adapters.CSVAdapter;
-import hydrograph.ui.dataviewer.constants.ADVConstants;
+import hydrograph.ui.dataviewer.constants.StatusConstants;
+import hydrograph.ui.dataviewer.constants.ControlConstants;
+import hydrograph.ui.dataviewer.datastructures.StatusMessage;
+import hydrograph.ui.dataviewer.support.StatusManager;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
 
-import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.KeyEvent;
@@ -22,31 +24,25 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
-import org.relique.jdbc.csv.CsvDatabaseMetaData;
+import org.eclipse.swt.widgets.Widget;
 
 public class DataViewerListeners {
 	private DataViewLoader dataViewLoader;
-	private Text jumpPageTextBox;
-	private StatusLineManager statusLineManager;
+	private StatusManager statusManager;
 	private CSVAdapter csvAdapter;
-	private Text pageNumberDisplayTextBox;
-	private List<Control> windowControls;
-	
+	private Map<String,Control> windowControls;
 	
 	public DataViewerListeners(){
 		
 	}
 	
 	public DataViewerListeners(DataViewLoader dataViewLoader,
-			Text jumpPageTextBox, StatusLineManager statusLineManager,
-			CSVAdapter csvAdapter, Text pageNumberDisplayTextBox,
-			List<Control> windowControls) {
+			StatusManager statusManager,
+			CSVAdapter csvAdapter,Map<String,Control> windowControls) {
 		super();
 		this.dataViewLoader = dataViewLoader;
-		this.jumpPageTextBox = jumpPageTextBox;
-		this.statusLineManager = statusLineManager;
+		this.statusManager = statusManager;
 		this.csvAdapter = csvAdapter;
-		this.pageNumberDisplayTextBox = pageNumberDisplayTextBox;
 		this.windowControls = windowControls;
 	}
 	
@@ -54,23 +50,15 @@ public class DataViewerListeners {
 		this.dataViewLoader = dataViewLoader;
 	}
 
-	public void setJumpPageTextBox(Text jumpPageTextBox) {
-		this.jumpPageTextBox = jumpPageTextBox;
-	}
-
-	public void setStatusLineManager(StatusLineManager statusLineManager) {
-		this.statusLineManager = statusLineManager;
-	}
-
 	public void setCsvAdapter(CSVAdapter csvAdapter) {
 		this.csvAdapter = csvAdapter;
 	}
-
-	public void setPageNumberDisplayTextBox(Text pageNumberDisplayTextBox) {
-		this.pageNumberDisplayTextBox = pageNumberDisplayTextBox;
+	
+	public void setStatusManager(StatusManager statusManager) {
+		this.statusManager = statusManager;
 	}
 
-	public void setWindowControls(List<Control> windowControls) {
+	public void setWindowControls(Map<String, Control> windowControls) {
 		this.windowControls = windowControls;
 	}
 
@@ -90,148 +78,94 @@ public class DataViewerListeners {
 		});
 	}
 	
-	public void attachJumpToPageListener(final Button button,final Button nextPageButton) {
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				
-				
-				if(jumpPageTextBox.getText().isEmpty()){
-					appendStatusMessage("Jump page number can not be blank");
-					return;
-				}
-				
-				setProgressStatusMessage("Please wait, fetching page " + jumpPageTextBox.getText());
-				setWindowControlsEnabled(false);
-				
-				
-				final Long  pageNumberToJump = Long.valueOf(jumpPageTextBox.getText());
-				Job job = new Job("JumpToPage") {
-					  @Override
-					  protected IStatus run(IProgressMonitor monitor) {
-						  final int retCode = csvAdapter.jumpToPage(pageNumberToJump);
-						  dataViewLoader.updateDataViewLists();
-						  
-						  Display.getDefault().asyncExec(new Runnable() {
-					      @Override
-					      public void run() {
-					    	  dataViewLoader.reloadloadViews();
-						       
-								setWindowControlsEnabled(true);
-					    	  if(retCode == ADVConstants.EOF){
-									appendStatusMessage("End of file reached");
-									nextPageButton.setEnabled(false);
-								}else if(retCode == ADVConstants.ERROR){
-									statusLineManager.setErrorMessage("Error while featching record");
-								}else{
-									setDefaultStatusMessage();
-								}
-					      }
-					    });
-					    return Status.OK_STATUS;
-					  }
+	
+	private void jumpPageListener(){
+		Text jumpPageTextBox = ((Text)windowControls.get(ControlConstants.JUMP_TEXT));
+		
+		if(((Text)windowControls.get(ControlConstants.JUMP_TEXT)).getText().isEmpty()){
+			statusManager.setStatus(new StatusMessage(StatusConstants.ERROR, "Jump page number can not be blank"));
+			return;
+		}
+		
+		statusManager.setStatus(new StatusMessage(StatusConstants.PROGRESS, "Please wait, fetching page " + jumpPageTextBox.getText()));
+		statusManager.setAllWindowControlsEnabled(false);
+		
+		final Long  pageNumberToJump = Long.valueOf(jumpPageTextBox.getText());
+		Job job = new Job("JumpToPage") {
+			  @Override
+			  protected IStatus run(IProgressMonitor monitor) {
+				  final StatusMessage status = csvAdapter.jumpToPage(pageNumberToJump);
+				  dataViewLoader.updateDataViewLists();
+				  
+				  Display.getDefault().asyncExec(new Runnable() {
+			      @Override
+			      public void run() {
+			    	  dataViewLoader.reloadloadViews();
+			    	  statusManager.setAllWindowControlsEnabled(true);
+			    	  statusManager.setStatus(status);
+			      }
+			    });
+			    return Status.OK_STATUS;
+			  }
 
-					
-					};
-					
-					job.schedule();
-			}
-		});
+			
+			};
+			
+			job.schedule();
 	}
 	
-	
-	public void attachJumpToPageListener(final Text text, final Button nextPageButton) {
-		text.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
+	public void attachJumpToPageListener(final Widget widget) {
+		
+		if(widget instanceof Text){
+			((Text)widget).addKeyListener(new KeyListener() {
 				
-				if(e.keyCode == SWT.KEYPAD_CR){
-					
-					if(jumpPageTextBox.getText().isEmpty()){
-						appendStatusMessage("Jump page number can not be blank");
-						return;
+				@Override
+				public void keyReleased(KeyEvent e) {
+					if(e.keyCode == SWT.KEYPAD_CR || e.keyCode == 13){
+						jumpPageListener();
 					}
-					
-					setProgressStatusMessage("Please wait, fetching page "
-							+ jumpPageTextBox.getText());
-					setWindowControlsEnabled(false);
-
-					final Long pageNumberToJump = Long.valueOf(jumpPageTextBox
-							.getText());
-					Job job = new Job("JumpToPage") {
-						@Override
-						protected IStatus run(IProgressMonitor monitor) {
-							final int retCode = csvAdapter
-									.jumpToPage(pageNumberToJump);
-							dataViewLoader.updateDataViewLists();
-
-							Display.getDefault().asyncExec(new Runnable() {
-								@Override
-								public void run() {
-									dataViewLoader.reloadloadViews();
-
-									setWindowControlsEnabled(true);
-									if (retCode == ADVConstants.EOF) {
-										appendStatusMessage("End of file reached");
-										nextPageButton.setEnabled(false);
-									} else if (retCode == ADVConstants.ERROR) {
-										statusLineManager
-												.setErrorMessage("Error while featching record");
-									} else {
-										setDefaultStatusMessage();
-									}
-									text.setFocus();
-								}
-								
-							});
-							return Status.OK_STATUS;
-						}
-
-					};
-
-					job.schedule();
 				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					// DO Nothing
+					
+				}
+			});
+		}
+		
+		if(widget instanceof Button){
+			((Button)widget).addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					jumpPageListener();
+				}
+			});
+		}
 	}
-	
 	
 	public void attachPreviousPageButtonListener(Button button) {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
+
+				statusManager.setStatus(new StatusMessage(StatusConstants.PROGRESS,"Please wait, fetching next page records"));
 				
-				setProgressStatusMessage("Please wait, fetching next page records");
-				setWindowControlsEnabled(false);
+				statusManager.setAllWindowControlsEnabled(false);
 				
 				Job job = new Job("PreviousPage") {
 					  @Override
 					  protected IStatus run(IProgressMonitor monitor) {
-						  final int retCode = csvAdapter.previous();
+						  final StatusMessage status = csvAdapter.previous();
 							
 						  dataViewLoader.updateDataViewLists();
 						  
 						  Display.getDefault().asyncExec(new Runnable() {
 					      @Override
 					      public void run() {
-					    	  //gridViewTableViewer.refresh();
 					    	  dataViewLoader.reloadloadViews();
-					    	  setWindowControlsEnabled(true);
-					    	  if(retCode == ADVConstants.BOF){
-									appendStatusMessage("Begining of file reached");
-									 ((Button)e.widget).setEnabled(false);
-								}else if(retCode == ADVConstants.ERROR){
-									statusLineManager.setErrorMessage("Error while featching record");
-								}else{
-									setDefaultStatusMessage();
-								}
+					    	  statusManager.setAllWindowControlsEnabled(true);
+					    	  statusManager.setStatus(status);
 					      }
 					    });
 					    return Status.OK_STATUS;
@@ -248,32 +182,22 @@ public class DataViewerListeners {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				
-				setProgressStatusMessage("Please wait, fetching next page records");
-				setWindowControlsEnabled(false);
+				statusManager.setStatus(new StatusMessage(StatusConstants.PROGRESS,"Please wait, fetching next page records"));
+				statusManager.setAllWindowControlsEnabled(false);
 				
 				Job job = new Job("NextPage") {
 					  @Override
 					  protected IStatus run(IProgressMonitor monitor) {
-						  final int retCode = csvAdapter.next();
+						  final StatusMessage status = csvAdapter.next();
 						  
 						  dataViewLoader.updateDataViewLists();
 						  
 						  Display.getDefault().asyncExec(new Runnable() {
 					      @Override
 					      public void run() {
-					    	 /* gridViewTableViewer.refresh();
-					    	  updateUnformattedView();*/
 					    	  dataViewLoader.reloadloadViews();
-					    	  setWindowControlsEnabled(true);
-								if(retCode == ADVConstants.EOF){
-									appendStatusMessage("End of file reached");
-									 ((Button)e.widget).setEnabled(false);
-								}else if(retCode == ADVConstants.ERROR){
-									statusLineManager.setErrorMessage("Error while featching record");
-								}else{
-									setDefaultStatusMessage();
-								}
+					    	  statusManager.setAllWindowControlsEnabled(true);
+					    	  statusManager.setStatus(status);
 					      }
 					    });
 					    return Status.OK_STATUS;
@@ -283,60 +207,5 @@ public class DataViewerListeners {
 					job.schedule();
 			}
 		});
-	}
-	
-	public void setProgressStatusMessage(String message){
-		statusLineManager.setMessage(message);
-	}
-	
-	private void appendStatusMessage(String Message) {
-		StringBuilder stringBuilder = new StringBuilder();
-		
-		if(csvAdapter.getRowCount()!=null){
-			stringBuilder.append("Record Count: " + csvAdapter.getRowCount() + " | ");
-		}else{
-			stringBuilder.append("Counting number of records... | ");
-		}
-		
-		stringBuilder.append("Showing records from " + csvAdapter.getOFFSET() + " to " + (csvAdapter.getOFFSET() + csvAdapter.getPAGE_SIZE()) + " | ");
-		
-		stringBuilder.append(Message + " | ");
-		
-		statusLineManager.setMessage(stringBuilder.toString().substring(0,stringBuilder.length() -2));
-	}
-	
-	public void setDefaultStatusMessage() {
-		StringBuilder stringBuilder = new StringBuilder();
-		
-		statusLineManager.setErrorMessage(null);
-		
-		if(csvAdapter.getRowCount()!=null){
-			stringBuilder.append("Record Count: " + csvAdapter.getRowCount() + " | ");
-		}else{
-			stringBuilder.append("Counting number of records... | ");
-		}
-		
-		stringBuilder.append("Showing records from " + csvAdapter.getOFFSET() + " to " + (csvAdapter.getOFFSET() + csvAdapter.getPAGE_SIZE()) + " | ");
-		statusLineManager.setMessage(stringBuilder.toString().substring(0,stringBuilder.length() -2));
-		
-		updatePageNumberDisplayPanel();
-	}
-
-	
-	public void setWindowControlsEnabled(boolean enabled){
-		for(Control control: windowControls){
-			control.setEnabled(enabled);
-			if(csvAdapter.getRowCount()==null){
-				if(control.getData("CONTROL_NAME")!=null){
-					if(control.getData("CONTROL_NAME").equals("JUMP_BUTTON") || control.getData("CONTROL_NAME").equals("JUMP_TEXT")){
-						control.setEnabled(false);
-					}
-				}
-			}
-		}
-	}
-	
-	public void updatePageNumberDisplayPanel(){
-		pageNumberDisplayTextBox.setText(csvAdapter.getPageStatusNumber());
 	}
 }

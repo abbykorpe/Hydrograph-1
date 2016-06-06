@@ -4,17 +4,22 @@ import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.actions.ActionFactory;
 import hydrograph.ui.dataviewer.actions.ViewDataGridMenuCreator;
 import hydrograph.ui.dataviewer.adapters.CSVAdapter;
-import hydrograph.ui.dataviewer.constants.ADVConstants;
+import hydrograph.ui.dataviewer.constants.ControlConstants;
+import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.constants.Views;
-import hydrograph.ui.dataviewer.datastructures.ColumnData;
 import hydrograph.ui.dataviewer.datastructures.RowData;
+import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.listeners.DataViewerListeners;
+import hydrograph.ui.dataviewer.support.StatusManager;
+import hydrograph.ui.dataviewer.utilities.SWTResourceManager;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
+import hydrograph.ui.logging.factory.LogFactory;
 
-import java.sql.Timestamp;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -42,9 +47,6 @@ import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
@@ -57,13 +59,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.wb.swt.SWTResourceManager;
+import org.slf4j.Logger;
 
 public class DebugDataViewer extends ApplicationWindow {
+	
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(DebugDataViewer.class);
 	
 	private CTabFolder tabFolder;
 	
@@ -71,14 +76,9 @@ public class DebugDataViewer extends ApplicationWindow {
 	private StyledText formattedViewTextarea;
 	private TableViewer horizontalViewTableViewer;
 	private TableViewer gridViewTableViewer;
-	private Text pageNumberDisplayTextBox;
-	private Text jumpPageTextBox;
-	private Button jumpPageButton;
-	private Button nextPageButton;
-	private StatusLineManager statusLineManager;
 	
 	private CSVAdapter csvAdapter;
-	private List<Control> windowControls;
+	private Map<String,Control> windowControls;
 	
 	private static List<RowData> gridViewData;
 	private static List<RowData> formattedViewData;
@@ -94,6 +94,9 @@ public class DebugDataViewer extends ApplicationWindow {
 	private DataViewLoader dataViewLoader;
 	private DataViewerListeners dataViewerListeners;
 	
+	
+	private StatusManager statusManager;
+	
 	/**
 	 * Create the application window,
 	 */
@@ -103,7 +106,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		addCoolBar(SWT.FLAT);
 		addMenuBar();
 		addStatusLine();
-		windowControls = new LinkedList<>();
+		windowControls = new LinkedHashMap<>();
 		gridViewData = new LinkedList<>();
 		actionFactory = new ActionFactory(this);
 	}
@@ -118,7 +121,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		addCoolBar(SWT.FLAT);
 		addMenuBar();
 		addStatusLine();
-		windowControls = new LinkedList<>();
+		windowControls = new LinkedHashMap<>();
 		gridViewData = new LinkedList<>();
 		this.database = filePath;
 		this.tableName = fileName;
@@ -141,7 +144,17 @@ public class DebugDataViewer extends ApplicationWindow {
 	@Override
 	protected Control createContents(Composite parent) {
 		setDataViewerWindowTitle();
-		initializeDataFileAdapter();
+		try{
+			initializeDataFileAdapter();
+		} catch (Exception e) {
+			MessageBox messageBox = new MessageBox(new Shell());
+			messageBox.setText("Error");
+			messageBox.setMessage("Unable to load debug file - " + e.getMessage());
+			messageBox.open();
+			logger.debug("Unable to load debug file",e);
+			getShell().close();
+			return null;
+		}
 
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
@@ -168,34 +181,27 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		dataViewerListeners.setCsvAdapter(csvAdapter);
 		dataViewerListeners.setDataViewLoader(dataViewLoader);
-		dataViewerListeners.setPageNumberDisplayTextBox(pageNumberDisplayTextBox);
-		dataViewerListeners.setStatusLineManager(statusLineManager);
 		dataViewerListeners.setWindowControls(windowControls);
-		dataViewerListeners.setJumpPageTextBox(jumpPageTextBox);
 		
 		dataViewerListeners.addTabFolderSelectionChangeListener(tabFolder);
 		
-		dataViewerListeners.setDefaultStatusMessage();
-
-		java.util.Date date = new java.util.Date();
-		System.out.println("+++ ADV End: " + new Timestamp(date.getTime()));
+		dataViewerListeners.setStatusManager(statusManager);
+		statusManager.setCsvAdapter(csvAdapter);
+		statusManager.setWindowControls(windowControls);
+		statusManager.setStatus(new StatusMessage(StatusConstants.SUCCESS));
 		
-		jumpPageTextBox.setEnabled(false);
-		jumpPageButton.setEnabled(false);
+		//statusManager.enableJumpPagePanel(false);
+		statusManager.enableInitialPaginationContols();
 		return container;
-
 	}
 
-
-	private void initializeDataFileAdapter() {
+	private void initializeDataFileAdapter() throws Exception {
 		csvAdapter = new CSVAdapter(database, tableName,Utils.getDefaultPageSize(), 0,this);
 	}
-
 
 	private void setDataViewerWindowTitle() {
 		getShell().setText(windowName);
 	}
-
 	
 	private void createPaginationPanel(Composite container) {
 		Composite composite_2 = new Composite(container, SWT.NONE);
@@ -217,28 +223,24 @@ public class DebugDataViewer extends ApplicationWindow {
 		Composite composite_3 = new Composite(composite_2, SWT.NONE);
 		composite_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		composite_3.setLayout(new GridLayout(3, false));
-		{
-			createJumpPageLabel(composite_3);
-		}
-		{
-			createJumpPageTextBox(composite_3);
-		}
-		{
-			createJumpPageButton(composite_3);
-		}
+
+		createJumpPageLabel(composite_3);
+
+		createJumpPageTextBox(composite_3);
+
+		createJumpPageButton(composite_3);
+
 	}
 
-
 	private void createJumpPageButton(Composite composite_3) {
-		jumpPageButton = new Button(composite_3, SWT.NONE);
-		dataViewerListeners.attachJumpToPageListener(jumpPageButton,nextPageButton);
+		Button jumpPageButton = new Button(composite_3, SWT.NONE);
+		dataViewerListeners.attachJumpToPageListener(jumpPageButton);
 		jumpPageButton.setText("Go");
-		jumpPageButton.setData("CONTROL_NAME","JUMP_BUTTON");
-		windowControls.add(jumpPageButton);
+		windowControls.put(ControlConstants.JUMP_BUTTON,jumpPageButton);
 	}
 
 	private void createJumpPageTextBox(Composite composite_3) {
-		jumpPageTextBox = new Text(composite_3, SWT.BORDER);
+		Text jumpPageTextBox = new Text(composite_3, SWT.BORDER);
 		jumpPageTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		jumpPageTextBox.addVerifyListener(new VerifyListener() {  
 		    @Override  
@@ -258,9 +260,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		    }  
 		});	
 		
-		dataViewerListeners.attachJumpToPageListener(jumpPageTextBox,nextPageButton);
-		jumpPageTextBox.setData("CONTROL_NAME","JUMP_TEXT");
-		windowControls.add(jumpPageTextBox);
+		dataViewerListeners.attachJumpToPageListener(jumpPageTextBox);
+		windowControls.put(ControlConstants.JUMP_TEXT,jumpPageTextBox);
 		
 	}
 
@@ -284,36 +285,34 @@ public class DebugDataViewer extends ApplicationWindow {
 
 
 	private void createNextPageButton(Composite composite_3) {
-		nextPageButton = new Button(composite_3, SWT.NONE);
+		Button nextPageButton = new Button(composite_3, SWT.NONE);
 		dataViewerListeners.attachNextPageButtonListener(nextPageButton);
 		nextPageButton.setText("Next");
-		nextPageButton.setData("CONTROL_NAME","NEXT_BUTTON");
-		windowControls.add(nextPageButton);
+		windowControls.put(ControlConstants.NEXT_BUTTON,nextPageButton);
 		
 	}
 
 
 	private void createPageNumberDisplay(Composite composite_3) {
-		pageNumberDisplayTextBox = new Text(composite_3, SWT.BORDER | SWT.CENTER);
+		Text pageNumberDisplayTextBox = new Text(composite_3, SWT.BORDER | SWT.CENTER);
 		pageNumberDisplayTextBox.setEnabled(false);
 		pageNumberDisplayTextBox.setEditable(false);
 		GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_text.widthHint = 178;
 		pageNumberDisplayTextBox.setLayoutData(gd_text);
 		
-		//csvAdapter.getRowCount();
+		windowControls.put(ControlConstants.PAGE_NUMBER_DISPLAY, pageNumberDisplayTextBox);
 		
 		Job job = new Job("Fetaching total number of rows") {
 			  @Override
 			  protected IStatus run(IProgressMonitor monitor) {
-				  csvAdapter.fetchRowCount();
+				  final StatusMessage status = csvAdapter.fetchRowCount();
 				  
 				  Display.getDefault().asyncExec(new Runnable() {
 			      @Override
 			      public void run() {
-			    	 dataViewerListeners.setDefaultStatusMessage();
-			    	 jumpPageButton.setEnabled(true);
-			    	 jumpPageTextBox.setEnabled(true);
+			    	  statusManager.setStatus(status);
+			    	  statusManager.enableJumpPagePanel(true);
 			      }
 			    });
 			    return Status.OK_STATUS;
@@ -326,32 +325,11 @@ public class DebugDataViewer extends ApplicationWindow {
 	private void createPreviousPageButton(Composite composite_3) {
 		Button button = new Button(composite_3, SWT.NONE);
 		dataViewerListeners.attachPreviousPageButtonListener(button);
-		button.setText("Previous");
-		button.setData("CONTROL_NAME","PREVIOUS_BUTTON");
-		
-		windowControls.add(button);
+		button.setText("Previous");		
+		windowControls.put(ControlConstants.PREVIOUS_BUTTON,button);
 	}
-	
-	/*public void setDefaultStatusMessage() {
-		StringBuilder stringBuilder = new StringBuilder();
 		
-		statusLineManager.setErrorMessage(null);
-		
-		if(csvAdapter.getRowCount()!=null){
-			stringBuilder.append("Record Count: " + csvAdapter.getRowCount() + " | ");
-		}else{
-			stringBuilder.append("Counting number of records... | ");
-		}
-		
-		stringBuilder.append("Showing records from " + csvAdapter.getOFFSET() + " to " + (csvAdapter.getOFFSET() + csvAdapter.getPAGE_SIZE()) + " | ");
-		statusLineManager.setMessage(stringBuilder.toString().substring(0,stringBuilder.length() -2));
-		
-		dataViewerListeners.updatePageNumberDisplayPanel();
-	}*/
-
-	
-	public void createUnformattedViewTabItem() {
-		
+	public void createUnformattedViewTabItem() {		
 		if(isViewTabExist(Views.UNFORMATTED_VIEW_NAME)){
 			CTabItem item=getViewTabItem(Views.UNFORMATTED_VIEW_NAME);
 			tabFolder.setSelection(item);
@@ -449,7 +427,6 @@ public class DebugDataViewer extends ApplicationWindow {
 				
 				installMouseWheelScrollRecursively(scrolledComposite);
 				
-				//createHorizontalViewTableColumns(horizontalViewTableViewer);
 				setTableLayoutToMappingTable(horizontalViewTableViewer);
 				horizontalViewTableViewer.setContentProvider(new ArrayContentProvider());
 				
@@ -549,17 +526,7 @@ public class DebugDataViewer extends ApplicationWindow {
 				
 				dataViewLoader.setGridViewTableViewer(gridViewTableViewer);
 				dataViewLoader.updateDataViewLists();
-				
-				/*gridViewTableViewer.refresh();
-				
-				for (int i = 0, n = gridViewTableViewer.getTable().getColumnCount(); i < n; i++)
-					gridViewTableViewer.getTable().getColumn(i).pack();
 								
-				gridViewTableViewer.refresh();
-				
-				for (int i = 0; i < gridViewTableViewer.getTable().getColumnCount(); i++)
-					gridViewTableViewer.getTable().getColumn(i).pack();*/
-				
 				Table table = gridViewTableViewer.getTable();
 				
 				for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
@@ -581,18 +548,8 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 	
 	private TableColumnLayout setTableLayoutToMappingTable(TableViewer tableViewer) {
-		Table table =tableViewer.getTable();
 		TableColumnLayout layout = new TableColumnLayout();
 		tableViewer.getControl().getParent().setLayout(layout);
-
-		/*for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
-			table.getColumn(columnIndex).pack();
-		}
-
-		for (int i = 0; i < table.getColumnCount(); i++) {
-			layout.setColumnData(table.getColumn(i), new ColumnWeightData(1));
-		}*/
-		
 		
 		tableViewer.refresh();
 		return layout;
@@ -603,8 +560,7 @@ public class DebugDataViewer extends ApplicationWindow {
 				tableViewer, SWT.NONE);
 		TableColumn tblclmnItem = tableViewerColumn.getColumn();
 		tblclmnItem.setWidth(100);
-		//tblclmnItem.setText("SR.No");
-		//tableViewerColumn.getColumn().setData("ID", index);
+
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 
 			@Override
@@ -697,9 +653,6 @@ public class DebugDataViewer extends ApplicationWindow {
 		menuManager.add(editMenu);
 		editMenu.setVisible(true);
 		
-		/*editMenu.add(new SelectAllAction("Select All",this));
-		editMenu.add(new CopyAction("Copy",this));
-		editMenu.add(new FindAction("Find",this));*/
 		editMenu.add(actionFactory.getAction("SelectAllAction"));
 		editMenu.add(actionFactory.getAction("CopyAction"));
 		editMenu.add(actionFactory.getAction("FindAction"));
@@ -709,17 +662,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		MenuManager viewMenu = createMenu(menuManager, "View");
 		menuManager.add(viewMenu);
 		viewMenu.setVisible(true);
-		
-		/*viewMenu.add(new GridViewAction("Grid View", this));
-		viewMenu.add(new HorizontalViewAction("Horizontal View",this));
-		viewMenu.add(new UnformattedViewAction("Unformatted View", this));
-		viewMenu.add(new FormattedViewAction("Formatted View", this));
-		viewMenu.add(new Separator());
-		viewMenu.add(new ReloadAction("Reload", this));
-		viewMenu.add(new PreferencesAction("Preferences",this));*/
-		
+				
 		viewMenu.add(actionFactory.getAction("GridViewAction"));
-		//viewMenu.add(actionFactory.getAction("HorizontalViewAction"));
 		viewMenu.add(actionFactory.getAction("FormattedViewAction"));
 		viewMenu.add(actionFactory.getAction("UnformattedViewAction"));
 		viewMenu.add(new Separator());
@@ -740,8 +684,6 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		ToolBarManager toolBarManager = new ToolBarManager();
 		coolBarManager.add(toolBarManager);
-		/*Action action;
-		action = new ExportAction("Export",this);*/
 		addtoolbarAction(
 				toolBarManager,
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/export.png"),
@@ -794,7 +736,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	 */
 	@Override
 	protected StatusLineManager createStatusLineManager() {
-		statusLineManager = new StatusLineManager();
+		StatusLineManager statusLineManager = new StatusLineManager();
 		
 		//DO NOTE DELETE BELOW CODE - this will be used as new feature
 		
@@ -810,7 +752,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		 
 		 //statusLineManager.appendToGroup(statusLineManager.BEGIN_GROUP, readOnlyStatus);
 		 statusLineManager.appendToGroup(statusLineManager.END_GROUP, readOnlyStatus2);*/
-		 
+		statusManager = new StatusManager();
+		statusManager.setStatusLineManager(statusLineManager);
 		return statusLineManager;
 	}
 
@@ -838,7 +781,6 @@ public class DebugDataViewer extends ApplicationWindow {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("New Application");
 	}
 
 	/**

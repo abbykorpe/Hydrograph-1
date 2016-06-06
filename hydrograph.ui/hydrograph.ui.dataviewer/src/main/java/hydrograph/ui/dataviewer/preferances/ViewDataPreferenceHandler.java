@@ -15,7 +15,6 @@ public class ViewDataPreferenceHandler extends AbstractHandler{
 		try {
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewData);
 		} catch (PartInitException e) {
-			//logger.error("Failed to show view : ", e);
 			e.printStackTrace();
 		}
 			   

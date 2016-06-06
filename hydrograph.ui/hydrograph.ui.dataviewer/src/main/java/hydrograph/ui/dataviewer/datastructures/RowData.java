@@ -6,14 +6,8 @@ import java.util.List;
 public class RowData {
 	int rowNumber;
 	List<ColumnData> columns;
-	
-	
-	public RowData(List columns) {
-		super();
-		this.columns = columns;
-	}
-	
-	public RowData(List columns,int rowNumber) {
+
+	public RowData(List<ColumnData> columns,int rowNumber) {
 		super();
 		this.columns = columns;
 		this.rowNumber = rowNumber;
@@ -23,8 +17,6 @@ public class RowData {
 	public List<ColumnData> getColumns() {
 		return columns;
 	}
-
-
 
 	public void setColumns(List<ColumnData> columns) {
 		this.columns = columns;
@@ -42,16 +34,8 @@ public class RowData {
 
 	@Override
 	public String toString() {
-		return "{\"columns\":" + columns + "}";
+		return "RowData [rowNumber=" + rowNumber + ", columns=" + columns + "]";
 	}
-
-
-
-	/*@Override
-	public String toString() {
-		return "DataObject2 [\n	columns=" + columns + "\n]";
-	}*/
-	
 	
 	
 }

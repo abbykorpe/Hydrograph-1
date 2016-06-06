@@ -25,15 +25,10 @@ public class DataViewLoader {
 
 	private CSVAdapter csvAdapter;
 	private CTabFolder tabFolder;
-	
-	
 
-	public DataViewLoader(StyledText unformattedViewTextarea,
-			StyledText formattedViewTextarea,
-			TableViewer horizontalViewTableViewer,
-			TableViewer gridViewTableViewer, List<RowData> gridViewData,
-			List<RowData> formattedViewData, List<RowData> unformattedViewData,
-			CSVAdapter csvAdapter, CTabFolder tabFolder) {
+	public DataViewLoader(StyledText unformattedViewTextarea, StyledText formattedViewTextarea,
+			TableViewer horizontalViewTableViewer, TableViewer gridViewTableViewer, List<RowData> gridViewData,
+			List<RowData> formattedViewData, List<RowData> unformattedViewData, CSVAdapter csvAdapter, CTabFolder tabFolder) {
 		super();
 		this.unformattedViewTextarea = unformattedViewTextarea;
 		this.formattedViewTextarea = formattedViewTextarea;
@@ -45,18 +40,14 @@ public class DataViewLoader {
 		this.csvAdapter = csvAdapter;
 		this.tabFolder = tabFolder;
 	}
-	
+
 	public void setUnformattedViewTextarea(StyledText unformattedViewTextarea) {
 		this.unformattedViewTextarea = unformattedViewTextarea;
 	}
 
-
-
 	public void setHorizontalViewTableViewer(TableViewer horizontalViewTableViewer) {
 		this.horizontalViewTableViewer = horizontalViewTableViewer;
 	}
-
-
 
 	public void setGridViewTableViewer(TableViewer gridViewTableViewer) {
 		this.gridViewTableViewer = gridViewTableViewer;
@@ -90,14 +81,11 @@ public class DataViewLoader {
 		CTabItem tabItem = tabFolder.getSelection();
 		if (tabItem.getData("VIEW_NAME").equals(Views.GRID_VIEW_NAME)) {
 			gridViewTableViewer.refresh();
-		} else if (tabItem.getData("VIEW_NAME").equals(
-				Views.HORIZONTAL_VIEW_NAME)) {
-			
-		} else if (tabItem.getData("VIEW_NAME").equals(
-				Views.FORMATTED_VIEW_NAME)) {
+		} else if (tabItem.getData("VIEW_NAME").equals(Views.HORIZONTAL_VIEW_NAME)) {
+
+		} else if (tabItem.getData("VIEW_NAME").equals(Views.FORMATTED_VIEW_NAME)) {
 			reloadFormattedView();
-		} else if (tabItem.getData("VIEW_NAME").equals(
-				Views.UNFORMATTED_VIEW_NAME)) {
+		} else if (tabItem.getData("VIEW_NAME").equals(Views.UNFORMATTED_VIEW_NAME)) {
 			reloadUnformattedView();
 		}
 	}
@@ -105,8 +93,6 @@ public class DataViewLoader {
 	private void reloadFormattedView() {
 		formattedViewTextarea.setText("");
 		StringBuilder stringBuilder = new StringBuilder();
-		int rowNumber = 0;
-
 		int maxLenghtColumn = getMaxLengthColumn();
 
 		maxLenghtColumn += 5;
@@ -119,8 +105,7 @@ public class DataViewLoader {
 			int columnIndex = 0;
 			for (String columnName : csvAdapter.getColumnList()) {
 				ColumnData columnData = rowData.getColumns().get(columnIndex);
-				String tempString = String.format(format, columnName,
-						columnData.getValue());
+				String tempString = String.format(format, columnName, columnData.getValue());
 				stringBuilder.append(tempString);
 				columnIndex++;
 			}
@@ -143,7 +128,6 @@ public class DataViewLoader {
 		unformattedViewTextarea.setText(stringBuilder.toString());
 
 		for (RowData rowData : unformattedViewData) {
-			// unformattedViewDataUIContainer.append(rowData);
 			String row = "";
 			for (ColumnData columnData : rowData.getColumns()) {
 				row = row + columnData.getValue() + ",";

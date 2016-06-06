@@ -27,8 +27,10 @@ public class ColumnData {
 	public void setSchema(Schema schema) {
 		this.schema = schema;
 	}
+
 	@Override
 	public String toString() {
-		return "{\"value\":\"" + value + "\",\"schema\":" + schema + "}";
+		return "ColumnData [value=" + value + ", schema=" + schema + "]";
 	}
+	
 }

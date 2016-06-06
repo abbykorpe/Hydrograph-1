@@ -1,7 +1,5 @@
 package hydrograph.ui.dataviewer.preferances;
 
-
-
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.constants.PreferenceConstants;
 
@@ -29,8 +27,6 @@ import org.eclipse.ui.PlatformUI;
 
 public class PreferencePageViewData extends FieldEditorPreferencePage implements IWorkbenchPreferencePage{
 	
-	//private static final Logger logger = LogFactory.INSTANCE.getLogger(PreferencePageViewData.class);
-
 	private DirectoryFieldEditor tempPathFieldEditor;
 	private DirectoryFieldEditor defaultPathFieldEditor;
 	private IntegerFieldEditor memoryFieldEditor;
@@ -48,27 +44,19 @@ public class PreferencePageViewData extends FieldEditorPreferencePage implements
 		Composite parent = getFieldEditorParent();
 		tempPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.TEMPPATH, "&Temp Path", 
 				getFieldEditorParent());
-		//tempPathFieldEditor.setEmptyStringAllowed(false);
 		IPath path = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		tempPathFieldEditor.setFilterPath(new File(""+path));
 		addField(tempPathFieldEditor);
 		
 		defaultPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.DEFAULTPATH, "&Export Default Path", 
 				getFieldEditorParent());
-		//defaultPathFieldEditor.setEmptyStringAllowed(false);
 		defaultPathFieldEditor.setFilterPath(new File(""+path));
 		addField(defaultPathFieldEditor);
 		
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new RowLayout());
 		composite.setBounds(200, 0, 300, 150);
-		
-		/*Label labl = new Label(composite, SWT.BORDER);
-		labl.setText("     ");
-		labl.setEnabled(false);
-		labl.setVisible(false);
-		labl.setBounds(0, 0, 100, 16);*/
-		
+				
 		Composite composite1 = new Composite(parent, SWT.None);
 		composite1.setLayout(new RowLayout());
 		composite1.setBounds(0, 4, 300, 80);
@@ -95,7 +83,6 @@ public class PreferencePageViewData extends FieldEditorPreferencePage implements
 		
 		stringFieldEditor = new StringFieldEditor(PreferenceConstants.FILENAME, "&File Name", getFieldEditorParent());
 		stringFieldEditor.setEmptyStringAllowed(false);
-		//stringFieldEditor.setErrorMessage("Record Limit value should be an integer");
 		addField(stringFieldEditor);
 	}
 	
@@ -103,16 +90,6 @@ public class PreferencePageViewData extends FieldEditorPreferencePage implements
 	@Override
 	protected void checkState() {
 		super.checkState();
-		/*if(isValid())
-			return;
-		
-		if(memoryFieldEditor.getStringValue() != null){
-			setErrorMessage("Must have define memory size");
-			setValid(true);
-		}else{
-			setErrorMessage(null);
-			setValid(false);
-		}*/
 	}
 	
 
