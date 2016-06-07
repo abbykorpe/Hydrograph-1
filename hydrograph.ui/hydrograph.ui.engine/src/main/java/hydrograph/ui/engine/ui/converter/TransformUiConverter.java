@@ -363,8 +363,10 @@ public abstract class TransformUiConverter extends UiConverter {
 		}
 		if (schemaMap == null) {
 			schemaMap = new LinkedHashMap<>();
-		}
+		 }
+		if(operationsOutSockets!=null){
 		schemaMap.put(operationsOutSockets.getId(), componentsOutputSchema);
+		}
 		propertyMap.put(Constants.SCHEMA_TO_PROPAGATE, schemaMap);
 		propertyMap.put(Constants.SCHEMA_FIELD_SEQUENCE, schemaFieldSequence);
 	}

@@ -19,7 +19,6 @@ import hydrograph.ui.common.component.config.Property;
 import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.LookupConfigProperty;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.figure.ComponentBorder;
 import hydrograph.ui.graph.figure.ComponentFigure;
@@ -28,7 +27,6 @@ import hydrograph.ui.graph.figure.PortFigure;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.ComponentLabel;
 import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.PortTypeEnum;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
 import hydrograph.ui.graph.propertywindow.ELTPropertyWindow;
 import hydrograph.ui.graph.utility.SubJobUtility;
@@ -328,7 +326,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 							+ getCastedModel().getSize().width);
 			if(eltPropertyWindow.isPropertyChanged() && Constants.SUBJOB_COMPONENT.equalsIgnoreCase(getCastedModel().getComponentName())){
 				SubJobUtility subJobUtility=new SubJobUtility();
-				subJobUtility.updateSubgjobProperty((ComponentEditPart)this,null,null);
+				subJobUtility.updateSubjobProperty((ComponentEditPart)this,null,null);
 			} 
 			if(eltPropertyWindow.isPropertyChanged())
 			{updateSubjobVersion();}

@@ -58,7 +58,7 @@ public class LinkReconnectSourceCommand extends Command {
 	@Override
 	public boolean canExecute() {
 		
-		if (newSource != null)
+		if (newSource != null){
 			if (newSource.equals(oldTarget)) {
 				return false;
 			}
@@ -77,9 +77,12 @@ public class LinkReconnectSourceCommand extends Command {
 					}
 				}
 			}
-			
 		}
-		return true;
+	 return true;
+   }
+		else{
+			return false;
+		}
 	}
 
 	@Override
