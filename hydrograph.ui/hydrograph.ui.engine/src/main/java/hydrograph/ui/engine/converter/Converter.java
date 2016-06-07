@@ -199,10 +199,14 @@ public abstract class Converter {
 	protected String getSubJobAbsolutePath(String subJobPath) {
 		String absolutePath = subJobPath;
 		IPath ipath=new Path(subJobPath);
+		try{
 			if (ResourcesPlugin.getWorkspace().getRoot().getFile(ipath).exists())
 				absolutePath= ResourcesPlugin.getWorkspace().getRoot().getFile(ipath).getLocation().toString();
 			else if (ipath.toFile().exists())
 				absolutePath= ipath.toFile().getAbsolutePath();
+		}catch(Exception exception){
+			logger.warn("Exception occurred while getting absolute path for "+subJobPath,exception);
+		}
 		return absolutePath;
 	}
 	

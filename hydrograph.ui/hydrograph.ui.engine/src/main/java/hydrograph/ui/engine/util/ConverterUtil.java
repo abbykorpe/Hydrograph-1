@@ -14,7 +14,6 @@
  
 package hydrograph.ui.engine.util;
 
-import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.Converter;
 import hydrograph.ui.engine.converter.ConverterFactory;
 import hydrograph.ui.engine.xpath.ComponentXpath;

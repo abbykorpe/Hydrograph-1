@@ -24,7 +24,6 @@ import hydrograph.ui.parametergrid.constants.MultiParameterFileDialogConstants;
 import hydrograph.ui.parametergrid.dialog.MultiParameterFileDialog;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.LinkedList;
