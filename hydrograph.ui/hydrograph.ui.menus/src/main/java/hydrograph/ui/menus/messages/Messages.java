@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package hydrograph.ui.menus.messages;
 
 import org.eclipse.osgi.util.NLS;
@@ -32,8 +31,10 @@ public class Messages extends NLS {
 	public static String SELECT_FILE_LABEL_TEXT;
 	public static String IMPORT_WINDOW_TITLE_TEXT;
 	public static String INVALID_TARGET_FILE_ERROR;
-	public static String EXCEPTION_OCCURED;	
-	
+	public static String EXCEPTION_OCCURED;
+	public static String INF_FILTER_BASE_CLASS;
+	public static String INF_AGGREGATOR_BASE_CLASS;
+	public static String INF_TRANFORM_BASE_CLASS;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
@@ -41,5 +42,5 @@ public class Messages extends NLS {
 
 	private Messages() {
 	}
-	
+
 }

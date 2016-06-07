@@ -249,16 +249,44 @@
                   value="hydrograph.ui.graph.job.wizard">
             </parameter>
          </command>
-         <command
-               commandId="org.eclipse.ui.newWizard"
-               id="hydrograph.ui.menus.NewMenu.Class"
-               label="Class"
-               style="push">
-            <parameter
-                  name="newWizardId"
-                  value="org.eclipse.jdt.ui.wizards.NewClassCreationWizard">
-            </parameter>
-         </command>
+         <menu
+               icon="resources/icons/class_obj.gif"
+               label="Custom Class"
+               mnemonic="C">
+            <command
+                  commandId="org.eclipse.ui.newWizard"
+                  icon="resources/icons/newclass_wiz.gif"
+                  id="hydrograph.ui.menus.NewMenu.Class"
+                  label="Class"
+                  mnemonic="C"
+                  style="push">
+               <parameter
+                     name="newWizardId"
+                     value="org.eclipse.jdt.ui.wizards.NewClassCreationWizard">
+               </parameter>
+            </command>
+            <command
+                  commandId="hydrograph.ui.menus.new.newFilterClass"
+                  icon="resources/icons/filter_palette.png"
+                  label="Filter Class"
+                  mnemonic="F"
+                  style="push">
+            </command>
+            <command
+                  commandId="hydrograph.ui.menus.new.newAggClass"
+                  icon="resources/icons/aggregate_palette.png"
+                  label="Aggregate Class"
+                  mnemonic="A"
+                  style="push">
+            </command>
+            <command
+                  commandId="hydrograph.ui.menus.new.newTranformClass"
+                  icon="resources/icons/transform_palette.png"
+                  label="Tranform Class"
+                  mnemonic="T"
+                  style="push">
+            </command>
+         </menu>
          <command
                commandId="org.eclipse.ui.newWizard"
                id="hydrograph.ui.toolbar.xmlfile"
