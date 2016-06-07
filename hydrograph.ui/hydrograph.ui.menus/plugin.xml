@@ -23,6 +23,18 @@
 	         id="com.bitwise.help.aboutaccelero"
             name="About Accelero">
      </command>
+     <command
+           id="hydrograph.ui.menus.new.newFilterClass"
+           name="Filter Class">
+     </command>
+     <command
+           id="hydrograph.ui.menus.new.newAggClass"
+           name="Aggregate Class">
+     </command>
+     <command
+           id="hydrograph.ui.menus.new.newTranformClass"
+           name="Tranform Class">
+     </command>
    </extension>
 	  <extension
          point="org.eclipse.ui.handlers">
@@ -246,6 +258,18 @@
              </with>
           </enabledWhen>
        </handler>
+       <handler
+             class="hydrograph.ui.menus.handlers.NewCustomClassHandler"
+             commandId="hydrograph.ui.menus.new.newFilterClass">
+       </handler>
+       <handler
+             class="hydrograph.ui.menus.handlers.NewCustomClassHandler"
+             commandId="hydrograph.ui.menus.new.newAggClass">
+       </handler>
+       <handler
+             class="hydrograph.ui.menus.handlers.NewCustomClassHandler"
+             commandId="hydrograph.ui.menus.new.newTranformClass">
+       </handler>
    </extension>
    		
    <extension
@@ -262,17 +286,44 @@
                   id="hydrograph.ui.menus.NewMenu"
                   label="New"
                    mnemonic ="N">
-                <command
-                     commandId="org.eclipse.ui.newWizard"
-                     id="hydrograph.ui.menus.NewMenu.Class"
-                     label="Class"
-                     style="push"
-                     mnemonic ="C">
-                  <parameter
-                        name="newWizardId"
-                        value="org.eclipse.jdt.ui.wizards.NewClassCreationWizard">
-                  </parameter>
-               </command>
+               <menu
+                     icon="icons/class_obj.gif"
+                     label="Custom Class"
+                     mnemonic="C">
+                  <command
+                        commandId="org.eclipse.ui.newWizard"
+                        icon="icons/newclass_wiz.gif"
+                        id="hydrograph.ui.menus.NewMenu.Class"
+                        label="Class"
+                        mnemonic="C"
+                        style="push">
+                     <parameter
+                           name="newWizardId"
+                           value="org.eclipse.jdt.ui.wizards.NewClassCreationWizard">
+                     </parameter>
+                  </command>
+                  <command
+                        commandId="hydrograph.ui.menus.new.newFilterClass"
+                        icon="icons/filter_palette.png"
+                        label="Filter Class"
+                        mnemonic="F"
+                        style="push">
+                  </command>
+                  <command
+                        commandId="hydrograph.ui.menus.new.newAggClass"
+                        icon="icons/aggregate_palette.png"
+                        label="Aggregate Class"
+                        mnemonic="A"
+                        style="push">
+                  </command>
+                  <command
+                        commandId="hydrograph.ui.menus.new.newTranformClass"
+                        icon="icons/transform_palette.png"
+                        label="Tranform Class"
+                        mnemonic="T"
+                        style="push">
+                  </command>
+               </menu>
                <command
                      commandId="org.eclipse.ui.newWizard"
                      id="hydrograph.ui.menus.NewMenu.XmlFile"
