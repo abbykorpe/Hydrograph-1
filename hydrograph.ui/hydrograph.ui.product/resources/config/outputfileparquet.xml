@@ -32,7 +32,7 @@
 		<tns:property dataType="string" group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS"
 			name="schema" renderer="SCHEMA_WIDGET" type="USER" showAsTooltip="FALSE"
 			tooltipDataType="NONE" usage="REQUIRED">
-			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>
+			<tns:validator>HIVE_PARQUET_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="Path"

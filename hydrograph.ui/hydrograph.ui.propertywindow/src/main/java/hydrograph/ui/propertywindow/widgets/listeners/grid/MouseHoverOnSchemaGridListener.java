@@ -20,6 +20,7 @@ import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.listeners.MouseActionListener;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
@@ -37,7 +38,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 	Table table=null;
 	private Shell tip=null;
 	private Label label=null;
-	
+	private String componentType;
 	@Override
 	public int getListenerType() {
 		return SWT.MouseHover;
@@ -49,7 +50,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 			ListenerHelper helpers,Event event,Widget... widgets) {
 		
 		  table=(Table)widgets[0];
-		 
+		  componentType=(String)helpers.get(HelperType.COMPONENT_TYPE);
 	      TableItem item = table.getItem(new Point(event.x, event.y));
          if (item != null && item.getForeground().getRed()==255) {
            if (tip != null && !tip.isDisposed())
@@ -82,11 +83,11 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 			return Messages.DATE_FORMAT_MUST_NOT_BE_BLANK;
 		if((StringUtils.equalsIgnoreCase(basicSchemaGridRow.getDataTypeValue(), "java.math.BigDecimal")))
 		{			 
-			if((StringUtils.isBlank(basicSchemaGridRow.getPrecision())))
+			if(StringUtils.isBlank(basicSchemaGridRow.getPrecision())&& (StringUtils.containsIgnoreCase(componentType, "hive")||StringUtils.containsIgnoreCase(componentType, "parquet")))
 			{
 		    return Messages.PRECISION_MUST_NOT_BE_BLANK;
 		    }	
-			else if(!(basicSchemaGridRow.getPrecision().matches("\\d+")))
+			else if(!(basicSchemaGridRow.getPrecision().matches("\\d+")) &&StringUtils.isNotBlank(basicSchemaGridRow.getPrecision()))
 			{
 				return Messages.PRECISION_MUST_CONTAINS_NUMBER_ONLY_0_9;
 			}	

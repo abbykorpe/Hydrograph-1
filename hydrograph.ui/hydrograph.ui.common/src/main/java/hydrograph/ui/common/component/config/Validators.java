@@ -50,6 +50,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="KEY_FIELDS_VALIDATOR"/>
  *     &lt;enumeration value="SORT_KEY_FIELDS_VALIDATOR"/>
  *     &lt;enumeration value="TRANSFORM_MAPPING_VALIDATOR"/>
+ *     &lt;enumeration value="HIVE_PARQUET_VALIDATOR"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -92,7 +93,9 @@ public enum Validators {
     @XmlEnumValue("SORT_KEY_FIELDS_VALIDATOR")
     SortComponentKeysFieldsValidationRule("SORT_KEY_FIELDS_VALIDATOR"),
     @XmlEnumValue("TRANSFORM_MAPPING_VALIDATOR")
-    TransformMappingValidationRule("TRANSFORM_MAPPING_VALIDATOR");
+    TransformMappingValidationRule("TRANSFORM_MAPPING_VALIDATOR"),
+    @XmlEnumValue("HIVE_PARQUET_VALIDATOR")
+    HiveParquetSchemaValidationRule("HIVE_PARQUET_VALIDATOR");
     private final String value;
 
     Validators(String v) {

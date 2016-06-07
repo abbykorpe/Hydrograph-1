@@ -227,6 +227,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected abstract ICellModifier getCellModifier();
 	private ScrolledComposite scrolledComposite;
 	private Composite tableComposite;
+	private String componentType;
 	/**
 	 * Adds the validators.
 	 */
@@ -256,7 +257,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
-
+		componentType=(String)componentMiscellaneousProperties.getComponentMiscellaneousProperty("componentType");
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 		this.properties = componentConfigrationProperty.getPropertyValue();
 	}
@@ -1069,6 +1070,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 				ELTGridDetails value = new ELTGridDetails(schemaGridRowList, tableViewer,(Label) fieldError.getSWTWidgetControl(), gridWidgetBuilder);
 				helper.put(HelperType.SCHEMA_GRID, value);
+				helper.put(HelperType.COMPONENT_TYPE,componentType);
 		}
 		return helper;
 	}
@@ -1180,6 +1182,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		addValidators();
 		try {
+			
 			eltTable.attachListener(
 					ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK
 							.getListener(), propertyDialogButtonBar, helper,
@@ -1664,17 +1667,49 @@ public void highlightInvalidRowWithRedColor(GridRow gridRow)
 	    gridRow=(GridRow)item.getData();	
 	    if(StringUtils.equalsIgnoreCase(item.getText(),gridRow.getFieldName()))
 		{
-			if((StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), "java.math.BigDecimal"))&&(StringUtils.isBlank(gridRow.getPrecision()) || StringUtils.isBlank(gridRow.getScale()) ||
-				StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), "none")||
-					!(gridRow.getScale().matches("\\d+"))||!(gridRow.getPrecision().matches("\\d+"))
-					))
+		
+	    	
+	    	if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), "java.math.BigDecimal"))
+	    	{
+	    		if(StringUtils.containsIgnoreCase(componentType, "hive")||StringUtils.containsIgnoreCase(componentType, "parquet"))
+	    		{
+	    			if(StringUtils.isBlank(gridRow.getPrecision())|| StringUtils.isBlank(gridRow.getScale()) ||
+		    				StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), "none")||
+							!(gridRow.getScale().matches("\\d+"))||!(gridRow.getPrecision().matches("\\d+"))
+							)
+	    			{
+	    				item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+	    			}
+	    			else
+					{
+						item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+					}	
+	    		}	
+	    		else if(StringUtils.isBlank(gridRow.getScale()) ||
+	    				StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), "none")||
+						!(gridRow.getScale().matches("\\d+"))||(!(gridRow.getPrecision().matches("\\d+"))&& StringUtils.isNotBlank(gridRow.getPrecision()))
+						)
+	    		{
+	    			item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+	    		}	
+	    		else
+				{
+					item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+				}	
+	    	}	
+	    	
+	    	
+			
+			else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),"java.util.Date"))
 			{
+				if((StringUtils.isBlank(gridRow.getDateFormat())))
 				item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+				else
+				{
+					item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+				}	
 				
-			}
-			else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),"java.util.Date") && (StringUtils.isBlank(gridRow.getDateFormat()) ))
-			{
-				item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+				
 			}
 			else if(gridRow instanceof FixedWidthGridRow && !(gridRow instanceof GenerateRecordSchemaGridRow))
 			{
@@ -1712,10 +1747,7 @@ public void highlightInvalidRowWithRedColor(GridRow gridRow)
 				}	
 				}	
 			}	
-			else
-			{
-				item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-			}	
+			
 			gridRow=null;
 		}	
 	    

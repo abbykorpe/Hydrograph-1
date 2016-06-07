@@ -111,11 +111,6 @@ public class MixedSchemeGridValidationRule implements IValidator {
 				return false;
 			}
 			
-			if(StringUtils.equalsIgnoreCase(DATA_TYPE_BIG_DECIMAL, gridRow.getDataTypeValue()) && (StringUtils.isBlank(gridRow.getPrecision()))){
-				errorMessage = "Precision cannot be blank or none for Big Decimal data type";
-				return false;
-			}
-
 			if (mixedSchemeGrid) {
 				MixedSchemeGridRow mixedSchemeGridRow = (MixedSchemeGridRow) gridRow;
 				if (mixedSchemeGridRow.getLength().equals("0") || mixedSchemeGridRow.getLength().contains("-")) {
