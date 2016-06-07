@@ -216,7 +216,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 				}
 
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			if (JobManager.INSTANCE.getRunningJobsMap().containsKey(job.getLocalJobID()))
 				logger.info("Error occured while reading run job log", e);
 		} finally {

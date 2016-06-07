@@ -1066,7 +1066,7 @@ public abstract class Component extends Model {
 				}
 
 			}
-		} catch (Exception e) {
+		} catch ( IllegalAccessException | InstantiationException e) {
 			logger.debug("Unable to clone Component ", e);
 		}
 		component.setType(getType());

@@ -115,7 +115,7 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 				return true;
 			else if (jobFilePath.toFile().exists())
 				return true;
-		} catch (Exception exception) {
+		} catch (SecurityException exception) {
 			LOGGER.error("Error occured while cheking file on local file system", exception);
 		}
 		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.YES

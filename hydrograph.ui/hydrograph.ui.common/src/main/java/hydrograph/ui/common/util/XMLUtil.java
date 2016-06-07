@@ -15,13 +15,17 @@ package hydrograph.ui.common.util;
 
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -29,6 +33,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.slf4j.Logger;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * 
@@ -57,7 +62,7 @@ public class XMLUtil {
             Document doc = builder.parse( new InputSource( new StringReader( xmlString ) ) );            
             
             return doc;
-        } catch (Exception e) {  
+        } catch (ParserConfigurationException| SAXException| IOException e) {  
         	logger.debug("Unable to convert string to Document",e);  
         } 
         return null;
@@ -89,7 +94,7 @@ public class XMLUtil {
 			DOMSource source = new DOMSource(xmlDoc);
 			transformer.transform(source, result);
 			return result.getWriter().toString();	
-		}catch(Exception e){
+		}catch(TransformerException e){
 			logger.debug("Unable to format XML string",e);
 		}
 		

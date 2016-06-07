@@ -39,14 +39,11 @@ public class ViewDataServiceInitiator {
 	
 	public static void startService(){
 	
-		ServerSocket serverSocket=null;
-		try{
-			int portNumber = Integer.parseInt(DebugHelper.INSTANCE.restServicePort());
-			serverSocket = new ServerSocket(portNumber, 1, InetAddress.getLocalHost());
+		int portNumber = Integer.parseInt(DebugHelper.INSTANCE.restServicePort());
+		try(ServerSocket serverSocket= new ServerSocket(portNumber, 1, InetAddress.getLocalHost())){
 			if(!serverSocket.isClosed()){
 				startServer();
 			}
-
 		}catch(BindException bindException){
 			logger.error("Server is already started on port or is used by other process", bindException);
 		} catch (InterruptedException interruptedException) {
@@ -55,15 +52,6 @@ public class ViewDataServiceInitiator {
 			logger.error("Host is not known", unknownHostException);
 		} catch (IOException ioException) {
 			logger.error("Failure in IO", ioException);
-		}finally{
-			if(serverSocket!=null)
-			{
-				try {
-					serverSocket.close();
-				} catch (IOException e) {
-					logger.debug(e.getMessage());
-				}
-			}
 		}
 	}
 

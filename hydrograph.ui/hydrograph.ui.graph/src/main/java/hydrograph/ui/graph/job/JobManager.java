@@ -95,12 +95,10 @@ public class JobManager {
 	 * @return {@link DefaultGEFCanvas}
 	 */
 	private DefaultGEFCanvas getComponentCanvas() {		
-		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
-		{
+		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas){
 			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		}
-		else
-		{
+		else{
 			return null;
 		}
 	}
@@ -149,19 +147,19 @@ public class JobManager {
 		enableRunJob(false);
 		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
 
-		if (!saveJobBeforeExecute(gefCanvas)) {
+		if (!saveJobBeforeExecute(gefCanvas)){
 			return;
 		}
 
 		RunConfigDialog runConfigDialog = getRunConfiguration();
 
-		if (!runConfigDialog.proceedToRunGraph()) {
+		if (!runConfigDialog.proceedToRunGraph()){
 			enableRunJob(true);
 			return;
 		}
 		
 		final MultiParameterFileDialog parameterGrid = getParameterFileDialog();
-		if (parameterGrid.canRunGraph() == false) {
+		if (parameterGrid.canRunGraph() == false){
 			logger.debug("Not running graph");
 			enableRunJob(true);
 			return;
@@ -169,7 +167,7 @@ public class JobManager {
 		logger.debug("property File :" + parameterGrid.getParameterFilesForExecution());
 
 		final String xmlPath = getJobXMLPath();
-		if (xmlPath == null) {
+		if (xmlPath == null){
 			WidgetUtility.errorMessage(Messages.OPEN_GRAPH_TO_RUN);
 			return;
 		}
@@ -190,12 +188,12 @@ public class JobManager {
 		enableRunJob(false);
 		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
 
-		if (!saveJobBeforeExecute(gefCanvas)) {
+		if (!saveJobBeforeExecute(gefCanvas)){
 			return;
 		}
 		
 		final MultiParameterFileDialog parameterGrid = getParameterFileDialog();
-		if (parameterGrid.canRunGraph() == false) {
+		if (parameterGrid.canRunGraph() == false){
 			logger.debug("Not running graph");
 			enableRunJob(true);
 			return;
@@ -204,7 +202,7 @@ public class JobManager {
 
 		final String xmlPath = getJobXMLPath();
 		String debugXmlPath = getJobDebugXMLPath();
-		if (xmlPath == null) {
+		if (xmlPath == null){
 			WidgetUtility.errorMessage(Messages.OPEN_GRAPH_TO_RUN);
 			return;
 		}
@@ -220,7 +218,7 @@ public class JobManager {
 		
 	private void launchJob(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
 			final String xmlPath) {
-		if (job.isRemoteMode()) {
+		if (job.isRemoteMode()){
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -245,7 +243,7 @@ public class JobManager {
 
 	private void launchJobWithDebugParameter(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
 			final String xmlPath, final String debugXmlPath, final String basePath, final String uniqueJobId) {
-		if (job.isRemoteMode()) {
+		if (job.isRemoteMode()){
 			setLocalMode(false);
 			new Thread(new Runnable() {
 				@Override
@@ -296,15 +294,12 @@ public class JobManager {
 		
 	    String activeProjectLocation=MultiParameterFileUIUtils.getActiveProjectLocation();
 	 
-		FileInputStream fin=null;
-		ObjectInputStream ois=null;
+		
 		List<ParameterFile> filepathList = new LinkedList<>();
 		
 		updateParameterFileListWithJobSpecificFile(filepathList,activeProjectLocation);
 		
-		try {
-			fin = new FileInputStream(activeProjectLocation + PROJECT_METADATA_FILE);
-			ois = new ObjectInputStream(fin);
+		try(ObjectInputStream ois= new ObjectInputStream(new FileInputStream(activeProjectLocation + PROJECT_METADATA_FILE))){			
 			filepathList.addAll((LinkedList<ParameterFile>)ois.readObject());
 		} catch (FileNotFoundException fileNotfoundException) {
 			logger.debug("Unable to read file" , fileNotfoundException);
@@ -312,18 +307,7 @@ public class JobManager {
 			logger.debug("Unable to read file" , ioException);
 		} catch (ClassNotFoundException classNotFoundException) {
 			logger.debug("Unable to read file" , classNotFoundException);
-		}finally{
-			if(fin!=null || ois!=null)
-			{
-				try {
-					fin.close();
-					ois.close();
-				} catch (IOException e) {
-					logger.debug(e.getMessage());
-				}
-			}
 		}
-	    
 		MultiParameterFileDialog parameterFileDialog = new MultiParameterFileDialog(Display.getDefault().getActiveShell(), activeProjectLocation);
 		parameterFileDialog.setParameterFiles(filepathList);
 		parameterFileDialog.open();
@@ -332,7 +316,7 @@ public class JobManager {
 	}
 	
 	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList, String activeProjectLocation) {
-		if (OSValidator.isWindows()) {
+		if (OSValidator.isWindows()){
 			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(), activeProjectLocation + "\\"
 					+ PARAMETER_FILE_DIR + "\\" + getComponentCanvas().getJobName() + PARAMETER_FILE_EXTENTION, true));
 		} else {
@@ -348,11 +332,11 @@ public class JobManager {
 	}
 
 	private boolean saveJobBeforeExecute(final DefaultGEFCanvas gefCanvas) {
-		if (gefCanvas.getParameterFile() == null || CanvasUtils.isDirtyEditor()) {
+		if (gefCanvas.getParameterFile() == null || CanvasUtils.isDirtyEditor()){
 			try {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 				enableRunJob(true);
-				if (gefCanvas.getParameterFile() == null || CanvasUtils.isDirtyEditor()) {
+				if (gefCanvas.getParameterFile() == null || CanvasUtils.isDirtyEditor()){
 					return false;
 				} else {
 					return true;
@@ -378,7 +362,7 @@ public class JobManager {
 
 		jobToKill.setJobStatus(JobStatus.KILLED);
 
-		if (jobToKill.getRemoteJobProcessID() != null) {
+		if (jobToKill.getRemoteJobProcessID() != null){
 			killRemoteProcess(jobToKill,gefCanvas);
 		}
 
@@ -400,8 +384,7 @@ public class JobManager {
 			if(messageBox.open() == SWT.YES){
 				jobToKill.setJobStatus(JobStatus.KILLED);
 			}else{
-				if(runningJobsMap.get(jobId) != null)
-				{
+				if(runningJobsMap.get(jobId) != null){
 					((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
 				}
 			}
@@ -421,11 +404,11 @@ public class JobManager {
 
 		String gradleCommand = getKillJobCommand(job);
 		String[] runCommand = new String[3];
-		if (OSValidator.isWindows()) {
+		if (OSValidator.isWindows()){
 			String[] command = { Messages.CMD, "/c", gradleCommand };
 			runCommand = command;
 
-		} else if (OSValidator.isMac()) {
+		} else if (OSValidator.isMac()){
 			String[] command = { Messages.SHELL, "-c", gradleCommand };
 			runCommand = command;
 		}
@@ -444,7 +427,7 @@ public class JobManager {
 	private void releaseResources(Job job, DefaultGEFCanvas gefCanvas, JobLogger joblogger) {
 		enableLockedResources(gefCanvas);
 		refreshProject(gefCanvas);
-		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
+		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())){
 			JobManager.INSTANCE.enableRunJob(true);
 		}
 		JobManager.INSTANCE.removeJob(job.getCanvasName());
@@ -499,10 +482,10 @@ public class JobManager {
 					while ((line = reader.readLine()) != null) {
 						joblogger.logMessage(line);
 					}
-				} catch (Exception e) {
+				} catch (IOException e) {
 					logger.info("Error occured while reading run job log", e);
 				} finally {
-					if (reader != null) {
+					if (reader != null){
 						try {
 							reader.close();
 						} catch (IOException e) {

@@ -66,6 +66,7 @@ import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -138,6 +139,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.slf4j.Logger;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -487,7 +489,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			validator.validate(new StreamSource(xml));
 			return true;
 		}
-		catch(Exception ex)
+		catch( SAXException| IOException ex)
 		{
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + "-\n" + ex.getMessage());
 			logger.error(Messages.IMPORT_XML_FORMAT_ERROR);

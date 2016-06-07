@@ -126,7 +126,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			try {
 				AbstractEditPolicy editPolicy = (AbstractEditPolicy) Class.forName(generalPolicy.getValue()).newInstance();
 				installEditPolicy(generalPolicy.getName(), editPolicy);
-			} catch (Exception exception) {
+			} catch (ClassNotFoundException| InstantiationException | IllegalAccessException exception) {
 				logger.error("Failed to apply policies", exception);
 				throw exception;
 			}

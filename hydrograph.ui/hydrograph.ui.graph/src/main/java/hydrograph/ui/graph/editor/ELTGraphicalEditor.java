@@ -68,6 +68,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.URL;
@@ -1117,7 +1118,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			obj = xs.fromXML(xml);
 			logger.debug("Sucessfully converted JAVA Object from XML Data");
 			xml.close();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			logger.error("Failed to convert from XML to Graph due to : {}", e);
 			MessageDialog.openError(new Shell(), "Error", "Invalid graph file.");
 		}
@@ -1137,12 +1138,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 		XStream xs = new XStream();
 		xs.autodetectAnnotations(true);
-		try {
 			str = str + xs.toXML(object);
 			logger.debug( "Sucessfully converted XML from JAVA Object");
-		} catch (Exception e) {
-			logger.error("Failed to convert from Object to XML", e);
-		}
 		return str;
 	}
 
@@ -1171,7 +1168,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			logger.warn("Failed to create the engine xml", eexception);
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Failed to create the engine xml", eexception.getMessage());
 			//			
-		}catch (Exception exception) {
+		}catch (InstantiationException|IllegalAccessException| InvocationTargetException| NoSuchMethodException exception) {
 			logger.error("Failed to create the engine xml", exception);
 			Status status = new Status(IStatus.ERROR, "hydrograph.ui.graph",
 					"Failed to create Engine XML " + exception.getMessage());
@@ -1192,7 +1189,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		} catch (EngineException eexception) {
 			logger.warn("Failed to create the engine xml", eexception);
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Failed to create the engine xml", eexception.getMessage());
-		}catch (Exception exception) {
+		}catch ( InstantiationException| IllegalAccessException| InvocationTargetException| NoSuchMethodException exception) {
 			logger.error("Failed to create the engine xml", exception);
 			Status status = new Status(IStatus.ERROR, "hydrograph.ui.graph",
 					"Failed to create Engine XML " + exception.getMessage());
@@ -1442,7 +1439,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				if (inputStream != null)
 					content = new Scanner(inputStream).useDelimiter("\\Z").next();
 				return content;
-			} catch (Exception exception) {
+			} catch (FileNotFoundException | CoreException exception) {
 				logger.error("Exception occurred while fetching data from " + xmlPath.toString(), exception);
 			} finally {
 				if (inputStream != null) {

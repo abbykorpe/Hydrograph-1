@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +57,7 @@ public class ConverterUtil {
 		
 	}
 	
-	public void convertToXML(Container container, boolean validate, IFile outPutFile,  IFileStore externalOutputFile) throws Exception{
+	public void convertToXML(Container container, boolean validate, IFile outPutFile,  IFileStore externalOutputFile) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
 		LOGGER.debug("Creating converter based on component");
 			Graph graph = new ObjectFactory().createGraph();
 			graph.setName(getGraphName(outPutFile,externalOutputFile));
@@ -92,7 +93,7 @@ public class ConverterUtil {
 				storeFileIntoLocalFileSystem(graph,externalOutputFile,out);
 			
 			
-		} catch (Exception exception) {
+		} catch (JAXBException |CoreException| IOException exception) {
 			LOGGER.error("Failed in marshal", exception);
 		}finally{
 			if(out != null){

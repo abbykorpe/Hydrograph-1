@@ -128,7 +128,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			logger.info("Error occured while reading run job log", e);
 		} finally {
 			if (reader != null) {

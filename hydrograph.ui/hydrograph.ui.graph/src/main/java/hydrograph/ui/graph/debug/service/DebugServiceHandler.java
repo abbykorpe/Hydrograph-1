@@ -31,8 +31,6 @@ public class DebugServiceHandler  implements IDebugService{
 	@Override
 	public void deleteDebugFiles() {
 		logger.info("call to api to remove debug files::::::::");
-		try {
-		
 		Map<String, Job> jobMap = DebugHandler.getJobMap();
 		
 		Set<String> keySet = jobMap.keySet();
@@ -56,8 +54,6 @@ public class DebugServiceHandler  implements IDebugService{
 				logger.error("No files available to remove", exception);
 			}
 		}*/
-    	} catch (Exception exception) {
-    		logger.error("Failes to call DebugApi", exception);
-		}
+    	
 	}
 }

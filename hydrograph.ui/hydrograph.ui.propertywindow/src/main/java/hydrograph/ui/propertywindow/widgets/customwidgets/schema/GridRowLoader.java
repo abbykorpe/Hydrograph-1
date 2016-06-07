@@ -34,6 +34,8 @@ import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -53,6 +55,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -216,7 +219,7 @@ public class GridRowLoader {
 			logger.warn(Messages.IMPORT_XML_FORMAT_ERROR);
 			return schemaGridRowListToImport;
 		}
-		catch (Exception e) {
+		catch (FileNotFoundException e) {
 			logger.warn(Messages.IMPORT_XML_ERROR);
 			return schemaGridRowListToImport;
 		}
@@ -403,7 +406,7 @@ public class GridRowLoader {
 			validator.validate(new StreamSource(xml));
 			return true;
 		}
-		catch(Exception ex)
+		catch( SAXException| IOException ex)
 		{
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + "-\n" + ex.getMessage());
 			logger.error(Messages.IMPORT_XML_FORMAT_ERROR);

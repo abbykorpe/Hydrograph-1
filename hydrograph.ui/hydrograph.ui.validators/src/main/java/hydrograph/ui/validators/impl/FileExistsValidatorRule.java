@@ -18,6 +18,7 @@ import hydrograph.ui.common.util.Constants;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -66,7 +67,7 @@ public class FileExistsValidatorRule implements IValidator{
 				else if (jobFilePath.toFile().exists())
 					return true;
 			}
-		} catch (Exception e) {
+		} catch (PatternSyntaxException|SecurityException e) {
 
 		}
 		return false;
