@@ -39,13 +39,11 @@ public class ViewDataServiceInitiator {
 	
 	public static void startService(){
 	
-		try{
-			int portNumber = Integer.parseInt(DebugHelper.INSTANCE.restServicePort());
-			ServerSocket serverSocket = new ServerSocket(portNumber, 1, InetAddress.getLocalHost());
+		int portNumber = Integer.parseInt(DebugHelper.INSTANCE.restServicePort());
+		try(ServerSocket serverSocket= new ServerSocket(portNumber, 1, InetAddress.getLocalHost())){
 			if(!serverSocket.isClosed()){
 				startServer();
 			}
-
 		}catch(BindException bindException){
 			logger.error("Server is already started on port or is used by other process", bindException);
 		} catch (InterruptedException interruptedException) {

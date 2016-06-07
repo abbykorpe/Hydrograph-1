@@ -71,7 +71,7 @@ public class FileLogger extends AbstractJobLogger{
 			logFileStream.flush();
 			
 			logger.debug("Written log to file with timestamp -  log message- {}",message);
-		}catch (Exception e) {
+		}catch (IOException e) {
 			logger.debug("Exception while logging joblog to file ", e);			
 		}
 	}
@@ -129,7 +129,7 @@ public class FileLogger extends AbstractJobLogger{
 			logFileStream.newLine();
 			logFileStream.flush();
 			logger.debug("Written log to file with no timestamp -  log message- {}",message);
-		}catch (Exception e) {
+		}catch (IOException e) {
 			logger.debug("Exception while logging joblog to file ", e);			
 		}		
 	}

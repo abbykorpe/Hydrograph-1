@@ -48,7 +48,7 @@ public class XMLTextContainer {
 	 */
 	
 	public String launchXMLTextContainerWindow() {
-		try {
+		try{
 			String xmlText = this.xmlText;
 			Shell shell = new Shell(Display.getDefault().getActiveShell(), SWT.WRAP | SWT.MAX | SWT.APPLICATION_MODAL);
 
@@ -85,7 +85,8 @@ public class XMLTextContainer {
 					shell.getDisplay().sleep();
 				}
 			}
-		} catch (Exception e) {
+		}catch(Exception e)
+		{
 			LOGGER.error("Error occurred while creating XML text container widget", e);
 		}
 		return getXmlText();

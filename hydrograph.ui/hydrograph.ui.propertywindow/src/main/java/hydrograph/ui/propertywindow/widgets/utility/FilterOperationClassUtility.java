@@ -63,6 +63,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
@@ -101,8 +102,7 @@ public class FilterOperationClassUtility  {
 		OperationClassConfig operationClassConfig = (OperationClassConfig) widgetConfig;
 		Operations operations = XMLConfigUtil.INSTANCE.getComponent(FilterOperationClassUtility.getComponentName()).getOperations();
 		TypeInfo typeInfo=operations.getInterface();
-		if (operationClassConfig.getComponentName().equalsIgnoreCase(typeInfo.getName()))
-		{
+		if (operationClassConfig.getComponentName().equalsIgnoreCase(typeInfo.getName())){
 			interfaceList.add(typeInfo.getClazz());
 		}
 		page.setSuperInterfaces(interfaceList, true);  
@@ -117,7 +117,7 @@ public class FilterOperationClassUtility  {
 			});
 		}
 		wizard.run();
-		if (page.isPageComplete()) {
+		if (page.isPageComplete()){
 			if(!page.getPackageText().equalsIgnoreCase("")){
 				fileNameTextBox.setText(page.getPackageText()+"."
 						+ page.getTypeName());
@@ -141,23 +141,22 @@ public class FilterOperationClassUtility  {
 	public static void browseFile(String filterExtension, Text fileName) {
 		ResourceFileSelectionDialog dialog = new ResourceFileSelectionDialog(
 				"Project", "Select Java Class (.java)", new String[] { filterExtension });
-		if (dialog.open() == IDialogConstants.OK_ID) {
+		if (dialog.open() == IDialogConstants.OK_ID){
 			IResource resource = (IResource) dialog.getFirstResult();
 			String filePath = resource.getRawLocation().toOSString();
 			java.nio.file.Path path =Paths.get(filePath); 
 			String classFile=path.getFileName().toString();
 			String name = "";
-			try { 
-				BufferedReader r = new BufferedReader(new FileReader(filePath));
-				String firstLine= r.readLine();
+			try(BufferedReader reader= new BufferedReader(new FileReader(filePath))){ 
+				String firstLine= reader.readLine();
 				if(firstLine.contains(Constants.PACKAGE)){
 					name= firstLine.replaceFirst(Constants.PACKAGE, "").replace(";", "");
-					if(!name.equalsIgnoreCase(""))
+					if(!name.equalsIgnoreCase("")){
 						name=name+"."+classFile.substring(0, classFile.lastIndexOf('.'));
-					
-				}else
+					}
+				}else{
 					name=classFile.substring(0, classFile.lastIndexOf('.'));
-				
+				}	
 			} catch (IOException e) { 
 				logger.debug("Unable to read file " + filePath,e );
 			}
@@ -178,7 +177,7 @@ public class FilterOperationClassUtility  {
 		try {
 			String fileFullPath;
 			String fileName="";
-			if (filePath != null) {
+			if (filePath != null){
 				String projectPath=(String) filePath.getData("path");
 				if(!projectPath.isEmpty()){
 					String splitedProjectPath[]=projectPath.split("/");
@@ -191,16 +190,16 @@ public class FilterOperationClassUtility  {
 			}
 
 			File fileToOpen = new File(fileName);
-			if(!fileToOpen.isFile())
-			{
+			if(!fileToOpen.isFile()){
 				Path path = new Path(fileName);
 				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 				fileFullPath = file.getRawLocation().toOSString();
 			}
-			else
+			else{
 				fileFullPath=fileName;
+			}
 			File fileToEditor = new File(fileFullPath);
-			if (fileToEditor.exists()) {
+			if (fileToEditor.exists()){
 				IFileStore fileStore = EFS.getLocalFileSystem().getStore(
 						fileToEditor.toURI());
 				IWorkbenchPage page = PlatformUI.getWorkbench()
@@ -208,7 +207,7 @@ public class FilterOperationClassUtility  {
 				IDE.openEditorOnFileStore(page, fileStore);
 				return true;
 			}
-		} catch (Exception e) {
+		} catch (PartInitException e) {
 			return false;
 		}
 		return false;
@@ -287,7 +286,7 @@ public class FilterOperationClassUtility  {
 
 	private static void setIJavaProject() {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		if ((page.getActiveEditor().getEditorInput().getClass()).isAssignableFrom(FileEditorInput.class)) {
+		if ((page.getActiveEditor().getEditorInput().getClass()).isAssignableFrom(FileEditorInput.class)){
 			IFileEditorInput input = (IFileEditorInput) page.getActiveEditor().getEditorInput();
 			IFile file = input.getFile();
 			IProject activeProject = file.getProject();
@@ -302,12 +301,12 @@ public class FilterOperationClassUtility  {
 
 
 	public static void enableAndDisableButtons(boolean value,boolean checkboxValue) {
-		if (checkboxValue==false) {
+		if (checkboxValue==false){
 			createBtn.setEnabled(value);
 			browseBtn.setEnabled(value);
 			btnCheckButton.setEnabled(!value);
 		}
-		if (checkboxValue==true) {
+		if (checkboxValue==true){
 			btnCheckButton.setEnabled(value);
 			openBtn.setEnabled(!value);
 			createBtn.setEnabled(!value);
@@ -331,7 +330,7 @@ public class FilterOperationClassUtility  {
 				.getOperations();
 		List<TypeInfo> typeInfos = operations.getStdOperation();
 		for (int i = 0; i < typeInfos.size(); i++) {
-			if (typeInfos.get(i).getName().equalsIgnoreCase(operationName)) {
+			if (typeInfos.get(i).getName().equalsIgnoreCase(operationName)){
 				operationClassName = typeInfos.get(i).getClazz();
 				break;
 			}

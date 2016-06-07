@@ -432,7 +432,7 @@ public class SubJobUtility {
 		}
 	}
 
-	public static boolean isFileExistsOnLocalFileSystem(IPath jobFilePath) throws Exception {
+	public static boolean isFileExistsOnLocalFileSystem(IPath jobFilePath){
 		if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists())
 			return true;
 		else if (jobFilePath.toFile().exists())

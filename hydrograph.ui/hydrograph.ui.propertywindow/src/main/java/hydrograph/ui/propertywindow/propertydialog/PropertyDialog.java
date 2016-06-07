@@ -39,6 +39,8 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -375,7 +377,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 			imagePath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.APP_ICON;
 			Image shellImage = new Image(newShell.getDisplay(), imagePath);
 			newShell.setImage(shellImage);
-		}catch(Exception e){
+		}catch(SWTError e){
 			logger.debug("Unable to access image" , e);
 		}
 	}

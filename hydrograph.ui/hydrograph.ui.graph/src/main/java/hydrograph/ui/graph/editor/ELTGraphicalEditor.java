@@ -68,6 +68,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.URL;
@@ -582,7 +583,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		Map<String, PaletteDrawer> categoryPaletteConatiner = new HashMap<>();
 		for (CategoryType category : CategoryType.values()) {
 			if(category.name().equalsIgnoreCase(Constants.DUMMY_COMPONENT_CATEGORY))
+			{
 				continue;
+			}
 			PaletteDrawer p = createPaletteContainer(category.name());
 			addContainerToPalette(palette, p);
 			categoryPaletteConatiner.put(category.name(), p);
@@ -795,7 +798,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void setDirty(boolean dirty){
 		this.dirty = dirty;
 		if (dirty)
+		{
 			setMainGraphDirty(dirty);
+		}
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
@@ -851,7 +856,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 		//get map from file
 		Map<String,String> currentParameterMap = getCurrentParameterMap();
-		if(currentParameterMap == null) return;
+		if(currentParameterMap == null)
+			{
+			return;
+			}
 		List<String> letestParameterList = getLatestParameterList();
 
 		Map<String,String> newParameterMap = new LinkedHashMap<>();
@@ -956,7 +964,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		String fileName = getParameterFile();
 		if(StringUtils.isNotBlank(fileName)){
 			parameterFile = new File(fileName);
-		}else return null;
+		}else
+			{
+			return null;
+			}
 		if(!parameterFile.exists()){
 			try {
 				parameterFile.createNewFile();
@@ -1107,7 +1118,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			obj = xs.fromXML(xml);
 			logger.debug("Sucessfully converted JAVA Object from XML Data");
 			xml.close();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			logger.error("Failed to convert from XML to Graph due to : {}", e);
 			MessageDialog.openError(new Shell(), "Error", "Invalid graph file.");
 		}
@@ -1127,12 +1138,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 		XStream xs = new XStream();
 		xs.autodetectAnnotations(true);
-		try {
 			str = str + xs.toXML(object);
 			logger.debug( "Sucessfully converted XML from JAVA Object");
-		} catch (Exception e) {
-			logger.error("Failed to convert from Object to XML", e);
-		}
 		return str;
 	}
 
@@ -1161,7 +1168,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			logger.warn("Failed to create the engine xml", eexception);
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Failed to create the engine xml", eexception.getMessage());
 			//			
-		}catch (Exception exception) {
+		}catch (InstantiationException|IllegalAccessException| InvocationTargetException| NoSuchMethodException exception) {
 			logger.error("Failed to create the engine xml", exception);
 			Status status = new Status(IStatus.ERROR, "hydrograph.ui.graph",
 					"Failed to create Engine XML " + exception.getMessage());
@@ -1182,7 +1189,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		} catch (EngineException eexception) {
 			logger.warn("Failed to create the engine xml", eexception);
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Failed to create the engine xml", eexception.getMessage());
-		}catch (Exception exception) {
+		}catch ( InstantiationException| IllegalAccessException| InvocationTargetException| NoSuchMethodException exception) {
 			logger.error("Failed to create the engine xml", exception);
 			Status status = new Status(IStatus.ERROR, "hydrograph.ui.graph",
 					"Failed to create Engine XML " + exception.getMessage());
@@ -1226,15 +1233,17 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			serverSocket = new ServerSocket(Integer.parseInt(DebugHelper.INSTANCE.restServicePort()));
 		} catch (IOException e) {
 			logger.error(e.getMessage());
+		}finally{
 			try {
 				if(serverSocket!=null)
 				serverSocket.close();
 				logger.info("Socket closed @"+DebugHelper.INSTANCE.restServicePort());
-			} catch (IOException e1) {
-				logger.error(e.getMessage());
+			} catch (IOException e) {
+				logger.debug(e.getMessage());
 			}
 		}
 	}
+	
 	
 	private void deleteDebugFiles() {
 		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");
@@ -1430,7 +1439,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				if (inputStream != null)
 					content = new Scanner(inputStream).useDelimiter("\\Z").next();
 				return content;
-			} catch (Exception exception) {
+			} catch (FileNotFoundException | CoreException exception) {
 				logger.error("Exception occurred while fetching data from " + xmlPath.toString(), exception);
 			} finally {
 				if (inputStream != null) {

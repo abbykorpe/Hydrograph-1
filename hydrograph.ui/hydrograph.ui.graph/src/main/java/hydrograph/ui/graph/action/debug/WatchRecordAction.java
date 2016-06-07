@@ -59,7 +59,7 @@ import org.slf4j.Logger;
 public class WatchRecordAction extends SelectionAction {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(WatchRecordAction.class);
 	private boolean isWatcher;
-	WatchRecordInner watchRecordInner = new WatchRecordInner();
+	private WatchRecordInner watchRecordInner = new WatchRecordInner();
 	 
 	
 	public WatchRecordAction(IWorkbenchPart part) {
@@ -157,11 +157,7 @@ public class WatchRecordAction extends SelectionAction {
 				logger.error("Service failed to response in JSON format", exception);
 				messageDialog(Messages.REMOTE_MODE_TEXT);
 				return;
-			}catch (Exception exception){
-				logger.error("Exception while calling rest service: ", exception);
-				messageDialog(Messages.REMOTE_MODE_TEXT);
-				return;
-		}
+			}
 		
 		if(jsonArray == null || jsonArray.length() == 0){
 			messageDialog(Messages.REMOTE_MODE_TEXT);
@@ -201,11 +197,7 @@ public class WatchRecordAction extends SelectionAction {
 				logger.error("Service failed to response in JSON format", exception);
 				messageDialog(Messages.REMOTE_MODE_TEXT);
 				return;
-			}catch (Exception exception){
-				logger.error("Exception while calling rest service: ", exception);
-				messageDialog(Messages.REMOTE_MODE_TEXT);
-				return;
-		}
+			}
 		
 		if(jsonArray == null || jsonArray.length() == 0){
 			messageDialog(Messages.REMOTE_MODE_TEXT);

@@ -17,6 +17,10 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.controller.ContainerEditPart;
 
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.NotEnabledException;
+import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -28,7 +32,7 @@ import org.eclipse.ui.handlers.IHandlerService;
 
 
 public class GraphRuntimePropertiesAction  extends SelectionAction{
-	PasteAction pasteAction;
+	private PasteAction pasteAction;
 	
 	public GraphRuntimePropertiesAction(IWorkbenchPart part, IAction action) {
 		super(part);
@@ -74,7 +78,7 @@ public class GraphRuntimePropertiesAction  extends SelectionAction{
 		IHandlerService handlerService = (IHandlerService)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getService(IHandlerService.class);
 		try {
 		  handlerService.executeCommand(Constants.GRAPH_PROPERTY_COMMAND_ID, null);
-		  } catch (Exception ex) {
+		  } catch ( ExecutionException| NotDefinedException| NotEnabledException| NotHandledException ex) {
 		    throw new RuntimeException(Constants.GRAPH_PROPERTY_COMMAND_ID + "not found");
 		    
 		    }

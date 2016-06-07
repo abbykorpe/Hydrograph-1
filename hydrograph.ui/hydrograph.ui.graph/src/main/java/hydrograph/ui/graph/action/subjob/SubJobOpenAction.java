@@ -120,14 +120,10 @@ public class SubJobOpenAction extends SelectionAction{
 									MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
 											"Subjob File does not exists");
 								
-							} catch (IllegalArgumentException exception) {
+							} catch (CoreException | IllegalArgumentException exception) {
 								logger.error("Unable to open subjob" + exception);
 								MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
 										"Unable to open subjob : Invalid file path\n" + exception.getMessage());
-							} catch (Exception exception) {
-								logger.error("Unable to open subjob" + exception);
-								MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
-										"Unable to open subjob :" + exception.getMessage());
 							}
 						} else
 							MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
