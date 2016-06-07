@@ -323,7 +323,7 @@ public class SubJobUtility {
 	 * @param componentEditPart
 	 *            the component edit part
 	 */
-	public void updateSubgjobProperty(ComponentEditPart componentEditPart, String filePath,
+	public void updateSubjobProperty(ComponentEditPart componentEditPart, String filePath,
 			Component selectedSubjobComponent) {
 		IPath jobFileIPath = null;
 		Container container = null;
@@ -476,7 +476,7 @@ public class SubJobUtility {
 						subJobContainer = (Container) getCurrentEditor().fromXMLToObject(
 								new FileInputStream(jobFileIPath.toFile()));
 				}
-				if (subJobContainer.getSubjobVersion() != versionStoredInSubjobComponent) {
+				if (subJobComponent != null && subJobContainer.getSubjobVersion() != versionStoredInSubjobComponent) {
 					subJobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(),
 							Constants.UPDATE_AVAILABLE);
 				}
