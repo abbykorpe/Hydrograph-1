@@ -126,7 +126,7 @@ public class LimitValueGrid extends Dialog {
 		combo = new Combo(composite, SWT.READ_ONLY);
 		combo.setBounds(132, 18, 181, 23);
 		combo.setItems((String[])ITEMS.toArray());
-		combo.select(0);
+		combo.select(2);
 		combo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

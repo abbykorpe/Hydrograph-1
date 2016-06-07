@@ -49,7 +49,7 @@ public class PreferencePageViewData extends FieldEditorPreferencePage implements
 	private BooleanFieldEditor includeHeaders;
 	public final static String PREFERENCE_FILE_PATH = Platform.getInstallLocation().getURL().getPath() + "config/Preferences/preferences.properties";
 	private static final String DELIMITER="Delimiter";
-	private static final String QUOTE_CHARACTOR="Quote Charactor";
+	private static final String QUOTE_CHARACTOR="Quote Character";
 	private static final String INCLUDE_HEADERS="Include Headers";
 	private static final String DELIMITER_PROPERTY="delimiter";
 	private static final String QUOTE_CHARACTOR_PROPERTY="quoteCharactor";

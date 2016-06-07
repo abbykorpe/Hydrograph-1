@@ -15,6 +15,7 @@ package hydrograph.ui.graph.handler;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.dataviewer.DebugDataViewer;
 import hydrograph.ui.graph.debugconverter.DebugConverter;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
@@ -97,11 +98,11 @@ public class DebugHandler  extends AbstractHandler {
 	private void createDebugXml() throws Exception{
 		String currentJobPath=null;
 		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
+		if(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)
+		{}
+		else
 			currentJobIPath=new Path(eltGraphicalEditor.getTitleToolTip());
-		}
-		
-		DebugConverter converter = new DebugConverter();
+			DebugConverter converter = new DebugConverter();
 			
 		try {
 			uniqueJobID= eltGraphicalEditor.generateUniqueJobId();
@@ -110,14 +111,25 @@ public class DebugHandler  extends AbstractHandler {
 			currentJobIPath = currentJobIPath.removeLastSegments(1).append(currentJobPath);
 			
 			converter.marshall(converter.getParam(), ResourcesPlugin.getWorkspace().getRoot().getFile(currentJobIPath));
-		} catch (JAXBException | IOException  | CoreException exception) {
-			logger.error(exception.getMessage(), exception);
+		} catch (JAXBException | IOException e) {
+			logger.error(e.getMessage(), e);
+		} catch (CoreException e) {
+			logger.error(e.getMessage(), e);
 		}
 	}
 
+	private void closeOpenedDataViewerWindows(){
+		
+		for(DebugDataViewer debugDataViewer:JobManager.INSTANCE.getDataViewerMap().values()){
+			debugDataViewer.close();
+		}
+	}
 	
 	@Override
 	public Object execute(ExecutionEvent event){
+		closeOpenedDataViewerWindows();
+		
+		
 		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 			try{
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);

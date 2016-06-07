@@ -133,7 +133,12 @@ public class CSVAdapter {
 	}
 
 	public long getCurrentPageNumber() {
-		return (OFFSET + PAGE_SIZE) / PAGE_SIZE;
+		if(((OFFSET + PAGE_SIZE) % PAGE_SIZE) !=0){
+			return ((OFFSET + PAGE_SIZE) / PAGE_SIZE)+1;
+		}else{
+			return (OFFSET + PAGE_SIZE) / PAGE_SIZE;
+		}
+		
 	}
 
 	public List<RowData> getTableData() {
@@ -160,9 +165,9 @@ public class CSVAdapter {
 	public StatusMessage next() {
 		adjustOffsetForNext();
 
-		if ((OFFSET + PAGE_SIZE) >= rowCount || OFFSET == 0) {
+		/*if ((OFFSET + PAGE_SIZE) >= rowCount || OFFSET == 0) {
 			return new StatusMessage(StatusConstants.EOF, "End of file reached");
-		}
+		}*/
 
 		try (ResultSet results = statement.executeQuery("SELECT * FROM " + tableName + " LIMIT " + PAGE_SIZE + " OFFSET "
 				+ OFFSET)) {
@@ -178,8 +183,13 @@ public class CSVAdapter {
 			e.printStackTrace();
 			return new StatusMessage(StatusConstants.ERROR, "Error while featching record");
 		}
-
-		return new StatusMessage(StatusConstants.SUCCESS);
+		
+		if ((OFFSET + PAGE_SIZE) >= rowCount || OFFSET == 0) {
+			return new StatusMessage(StatusConstants.EOF, "End of file reached");
+		}else{
+			return new StatusMessage(StatusConstants.SUCCESS);
+		}
+		
 	}
 
 	private void adjustOffsetForNext() {
@@ -196,9 +206,7 @@ public class CSVAdapter {
 
 	public StatusMessage previous() {
 		adjustOffsetForPrevious();
-		if (OFFSET == 0) {
-			return new StatusMessage(StatusConstants.BOF, "Begining of file reached");
-		}
+		
 		tableData.clear();
 		try (ResultSet results = statement.executeQuery("SELECT * FROM " + tableName + " LIMIT " + PAGE_SIZE + " OFFSET "
 				+ OFFSET)) {
@@ -208,7 +216,12 @@ public class CSVAdapter {
 			e.printStackTrace();
 			return new StatusMessage(StatusConstants.ERROR, "Error while featching record");
 		}
-		return new StatusMessage(StatusConstants.SUCCESS);
+		
+		if (OFFSET == 0) {
+			return new StatusMessage(StatusConstants.BOF, "Beginning of file reached");
+		}else{
+			return new StatusMessage(StatusConstants.SUCCESS);
+		}
 	}
 
 	private void adjustOffsetForPrevious() {
@@ -248,10 +261,11 @@ public class CSVAdapter {
 			return new StatusMessage(StatusConstants.ERROR, "Error while featching record");
 		}
 		
-		if (getCurrentPageNumber() == (long) getTotalNumberOfPages() && (pageNumber >= getTotalNumberOfPages())) {
+		//if (getCurrentPageNumber() == (long) getTotalNumberOfPages() && (pageNumber >= getTotalNumberOfPages())) {
+		if (pageNumber >= getTotalNumberOfPages()) {
 			return new StatusMessage(StatusConstants.EOF, "End of file reached");
 		}else if(getCurrentPageNumber()==1){
-			return new StatusMessage(StatusConstants.BOF, "Begining of file reached");
+			return new StatusMessage(StatusConstants.BOF, "Beginning of file reached");
 		}else{
 			return new StatusMessage(StatusConstants.SUCCESS);
 		}
