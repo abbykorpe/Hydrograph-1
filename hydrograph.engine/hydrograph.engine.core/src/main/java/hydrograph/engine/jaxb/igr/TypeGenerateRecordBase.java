@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.inputtypes.GenerateRecord;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-generate-record-base")
+@XmlType(name = "type-generate-record-base", namespace = "hydrograph/engine/jaxb/igr")
 @XmlSeeAlso({
     GenerateRecord.class
 })

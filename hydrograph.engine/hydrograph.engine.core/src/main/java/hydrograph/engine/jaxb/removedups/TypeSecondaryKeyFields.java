@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-secondary-key-fields", propOrder = {
+@XmlType(name = "type-secondary-key-fields", namespace = "hydrograph/engine/jaxb/removedups", propOrder = {
     "field"
 })
 public class TypeSecondaryKeyFields {

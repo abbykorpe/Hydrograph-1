@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-mixed-out-socket")
+@XmlType(name = "type-input-mixed-out-socket", namespace = "hydrograph/engine/jaxb/ifmixedscheme")
 public class TypeInputMixedOutSocket
     extends TypeInputOutSocket
 {

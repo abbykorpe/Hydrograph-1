@@ -22,7 +22,6 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.aggregate.AggregateBase;
 import hydrograph.engine.jaxb.cumulate.CumulateBase;
-import hydrograph.engine.jaxb.hashjoin.HashjoinBase;
 import hydrograph.engine.jaxb.join.JoinBase;
 import hydrograph.engine.jaxb.lookup.LookupBase;
 import hydrograph.engine.jaxb.operationstypes.Filter;
@@ -56,7 +55,7 @@ import hydrograph.engine.jaxb.subjob.SubjobBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-operations-component", propOrder = {
+@XmlType(name = "type-operations-component", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "inSocket",
     "operation",
     "outSocket",
@@ -72,7 +71,6 @@ import hydrograph.engine.jaxb.subjob.SubjobBase;
     CumulateBase.class,
     LookupBase.class,
     SubjobBase.class,
-    HashjoinBase.class,
     PartitionByExpressionBase.class
 })
 public abstract class TypeOperationsComponent

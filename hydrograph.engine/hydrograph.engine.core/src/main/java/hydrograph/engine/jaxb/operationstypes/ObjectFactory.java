@@ -58,14 +58,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link HashJoin }
-     * 
-     */
-    public HashJoin createHashJoin() {
-        return new HashJoin();
-    }
-
-    /**
      * Create an instance of {@link PartitionByExpression }
      * 
      */
@@ -143,14 +135,6 @@ public class ObjectFactory {
      */
     public Subjob.Path createSubjobPath() {
         return new Subjob.Path();
-    }
-
-    /**
-     * Create an instance of {@link HashJoin.Match }
-     * 
-     */
-    public HashJoin.Match createHashJoinMatch() {
-        return new HashJoin.Match();
     }
 
     /**

@@ -70,7 +70,7 @@ import hydrograph.engine.jaxb.ohivetextfile.TypeOutputHiveTextFileDelimitedBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "hiveTextFile", propOrder = {
+@XmlType(name = "hiveTextFile", namespace = "hydrograph/engine/jaxb/outputtypes", propOrder = {
     "partitionKeys",
     "databaseName",
     "tableName",

@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-pbe-out-socket")
+@XmlType(name = "type-pbe-out-socket", namespace = "hydrograph/engine/jaxb/partitionByExpression")
 public class TypePbeOutSocket
     extends TypeOperationsOutSocket
 {

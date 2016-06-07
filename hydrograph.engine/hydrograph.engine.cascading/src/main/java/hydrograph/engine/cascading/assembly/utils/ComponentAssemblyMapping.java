@@ -33,7 +33,6 @@ public enum ComponentAssemblyMapping {
 	CUMULATE(AssemblyType.CUMULATE),
 	TRANSFORM(AssemblyType.TRANSFORM),
 	JOIN(AssemblyType.JOIN),
-	HASHJOIN(AssemblyType.HASHJOIN),
 	LOOKUP(AssemblyType.LOOKUP),
 	GENERATESEQUENCE(AssemblyType.GENERATESEQUENCE),
 	NORMALIZE(AssemblyType.NORMALIZE),

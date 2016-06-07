@@ -49,7 +49,7 @@ import hydrograph.engine.jaxb.partitionbyexpression.PartitionByExpressionBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "partitionByExpression", propOrder = {
+@XmlType(name = "partitionByExpression", namespace = "hydrograph/engine/jaxb/operationstypes", propOrder = {
     "noOfPartitions"
 })
 public class PartitionByExpression
