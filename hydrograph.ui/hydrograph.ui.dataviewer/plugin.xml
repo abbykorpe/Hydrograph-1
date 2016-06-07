@@ -2,36 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.ui.commands">
-      <command
-            id="hydrograph.ui.dataviewer.openadv"
-            name="Open ADV">
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="hydrograph.ui.dataviewer.actions.ADVOpenHandler"
-            commandId="hydrograph.ui.dataviewer.openadv">
-      </handler>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            allPopups="false"
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-         <toolbar
-               id="hydrograph.ui.graph.toolbar1">
-            <command
-                  commandId="hydrograph.ui.dataviewer.openadv"
-                  icon="icons/adv.png"
-                  label="Open ADV"
-                  style="push">
-            </command>
-         </toolbar>
-      </menuContribution>
-   </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             class="hydrograph.ui.dataviewer.preferances.PreferencePageViewData"

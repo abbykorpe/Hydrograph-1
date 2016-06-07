@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.json;bundle-version="1.0.0",
  hydrograph.ui.common;bundle-version="0.0.1",
  org.eclipse.core.resources;bundle-version="3.7.101",
- org.slf4j.api;bundle-version="1.7.2",
+ org.slf4j.api,
  hydrograph.ui.logging;bundle-version="0.0.1"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
@@ -25,6 +25,7 @@ Export-Package: hydrograph.ui.dataviewer,
  hydrograph.ui.dataviewer.constants,
  hydrograph.ui.dataviewer.datastructures,
  hydrograph.ui.dataviewer.support,
+ hydrograph.ui.dataviewer.utilities,
  org.relique.io,
  org.relique.jdbc.csv,
  org.relique.jdbc.dbf

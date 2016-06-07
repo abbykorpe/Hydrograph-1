@@ -1,7 +1,9 @@
 package hydrograph.ui.dataviewer.preferances;
 
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.constants.PreferenceConstants;
+import hydrograph.ui.dataviewer.utilities.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -29,6 +32,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
@@ -40,7 +44,6 @@ public class PreferencePageViewData extends FieldEditorPreferencePage implements
 	private IntegerFieldEditor memoryFieldEditor;
 	private IntegerFieldEditor recordLimitFieldEditor;
 	
-	private StringFieldEditor stringFieldEditor;
 	private StringFieldEditor delimiter;
 	private StringFieldEditor quoteCharactor;
 	private BooleanFieldEditor includeHeaders;
@@ -64,7 +67,7 @@ public class PreferencePageViewData extends FieldEditorPreferencePage implements
 	@Override
 	protected void createFieldEditors() {
 		Composite parent = getFieldEditorParent();
-		tempPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.TEMPPATH, "&Temp Path", 
+		tempPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, "&View Data File Temp Path", 
 				getFieldEditorParent());
 		IPath path = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		tempPathFieldEditor.setFilterPath(new File(""+path));
@@ -83,29 +86,20 @@ public class PreferencePageViewData extends FieldEditorPreferencePage implements
 		composite1.setLayout(new RowLayout());
 		composite1.setBounds(0, 4, 300, 80);
 		
-		Text lbl = new Text(composite1, SWT.None|SWT.READ_ONLY);
-		lbl.setText("Memory size should be define in MB");
-		lbl.setEnabled(false);
-		
-		
 		Label lb= new Label(parent, SWT.None);
 		lb.setText("          ");
 		
 		
-		memoryFieldEditor = new IntegerFieldEditor(PreferenceConstants.MEMORYSIZE, "&Memory Size", getFieldEditorParent());
+		memoryFieldEditor = new IntegerFieldEditor(PreferenceConstants.VIEW_DATA_FILE_SIZE, "&View Data File Size(MB)", getFieldEditorParent());
 		memoryFieldEditor.setEmptyStringAllowed(false);
 		memoryFieldEditor.setErrorMessage("Memory Size value should be an integer");
 		addField(memoryFieldEditor);
 		
-		recordLimitFieldEditor = new IntegerFieldEditor(PreferenceConstants.RECORDSLIMIT, "&Record Limit", getFieldEditorParent());
+		recordLimitFieldEditor = new IntegerFieldEditor(PreferenceConstants.VIEW_DATA_PAGE_SIZE, "&Page Size", getFieldEditorParent());
 		recordLimitFieldEditor.setEmptyStringAllowed(false);
-		recordLimitFieldEditor.setErrorMessage("Record Limit value should be an integer");
+		recordLimitFieldEditor.setErrorMessage("Page Size value should be an integer");
 		addField(recordLimitFieldEditor);
 		
-		
-		stringFieldEditor = new StringFieldEditor(PreferenceConstants.FILENAME, "&File Name", getFieldEditorParent());
-		stringFieldEditor.setEmptyStringAllowed(false);
-		addField(stringFieldEditor);
 		Composite composite3 = new Composite(parent, SWT.None);
 		composite3.setLayout(new RowLayout());
 		
@@ -135,6 +129,8 @@ public class PreferencePageViewData extends FieldEditorPreferencePage implements
 		super.checkState();
 	}
 	
+	
+	
 
 	@Override
 	public void init(IWorkbench workbench) {
@@ -142,8 +138,11 @@ public class PreferencePageViewData extends FieldEditorPreferencePage implements
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		try {
 			readExportDataPreferencesFromPropertyFile(preferenceStore);
-			preferenceStore.setDefault(PreferenceConstants.MEMORYSIZE, "100");
-			preferenceStore.setDefault(PreferenceConstants.RECORDSLIMIT, "100");
+			preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_FILE_SIZE, "100");
+			preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_PAGE_SIZE, "100");
+			
+			preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH,Utils.getInstallationPath() );
+			
 			setPreferenceStore(preferenceStore);
 			setPreferenceStore(Activator.getDefault().getPreferenceStore());
 			setDescription("A demonstration of a preference page to View Data");
@@ -198,8 +197,8 @@ public class PreferencePageViewData extends FieldEditorPreferencePage implements
 	@Override
 	protected void performDefaults() {
 		IPreferenceStore preferenceStore = getPreferenceStore();
-		memoryFieldEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.MEMORYSIZE));
-		recordLimitFieldEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.RECORDSLIMIT));
+		memoryFieldEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.VIEW_DATA_FILE_SIZE));
+		recordLimitFieldEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.VIEW_DATA_PAGE_SIZE));
 		delimiter.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.DELIMITER));
 		quoteCharactor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.QUOTE_CHARACTOR));
 		includeHeaders.loadDefault();

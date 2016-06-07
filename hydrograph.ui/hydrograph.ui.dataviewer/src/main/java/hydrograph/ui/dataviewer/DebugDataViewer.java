@@ -51,6 +51,8 @@ import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
+import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
@@ -204,9 +206,13 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		//statusManager.enableJumpPagePanel(false);
 		statusManager.enableInitialPaginationContols();
+		
 		return container;
 	}
 
+	
+	
+	
 	private void initializeDataFileAdapter() throws Exception {
 		csvAdapter = new CSVAdapter(database, tableName,Utils.getDefaultPageSize(), 0,this);
 	}
