@@ -273,6 +273,13 @@
 		          </appinfo>
         	</annotation>
 		</enumeration>
+		<enumeration value="HIVE_PARQUET_VALIDATOR">
+			 <annotation>
+		          <appinfo> 
+		            <jaxb:typesafeEnumMember name="HiveParquetSchemaValidationRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
 	</restriction>
 	</simpleType>
 </schema>

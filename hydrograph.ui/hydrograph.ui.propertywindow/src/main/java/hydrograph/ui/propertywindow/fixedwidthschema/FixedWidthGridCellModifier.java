@@ -18,11 +18,13 @@ import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GeneralGridWidgetBuilder;
 import hydrograph.ui.propertywindow.widgets.utility.DataType;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.TableItem;
 
 
 /**
@@ -125,10 +127,11 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 
 	@Override
 	public void modify(Object element, String property, Object value) {
+		Object object=null;
 		if (element instanceof Item)
-			element = ((Item) element).getData();
+			object = ((Item) element).getData();
 
-		FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) element;
+		FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) object;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			fixedWidthGridRow.setFieldName(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)) {
@@ -165,7 +168,7 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		}
 		resetDateFormat(fixedWidthGridRow, property);
 		viewer.refresh();
-		eltFixedWidget.highlightInvalidRowWithRedColor(fixedWidthGridRow);
+		SchemaRowValidation.INSTANCE.highlightInvalidRowWithRedColor(fixedWidthGridRow, (TableItem)element,eltFixedWidget.getTable(), eltFixedWidget.getComponentType());
 		eltFixedWidget.showHideErrorSymbol(eltFixedWidget.isWidgetValid());
 	}
 	

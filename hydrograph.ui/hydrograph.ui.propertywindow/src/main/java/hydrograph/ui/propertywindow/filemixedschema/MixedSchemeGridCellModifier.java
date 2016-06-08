@@ -17,11 +17,13 @@ import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GeneralGridWidgetBuilder;
 import hydrograph.ui.propertywindow.widgets.utility.DataType;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.TableItem;
 
 /**
  * The Class MixedSchemeGridCellModifier.
@@ -126,10 +128,12 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 
 	@Override
 	public void modify(Object element, String property, Object value) {
+		Object object=null;
 		if (element instanceof Item)
-			element = ((Item) element).getData();
-
-		MixedSchemeGridRow mixedSchemeGridRow = (MixedSchemeGridRow) element;
+			{
+			object=((Item) element).getData();
+			}
+		MixedSchemeGridRow mixedSchemeGridRow = (MixedSchemeGridRow) object;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			mixedSchemeGridRow.setFieldName(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)) {
@@ -168,9 +172,8 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 			mixedSchemeGridRow.setPrecision("");
 		}
 		resetDateFormat(mixedSchemeGridRow, property);
-
 		viewer.refresh();
-		mixedSchemeWidget.highlightInvalidRowWithRedColor(mixedSchemeGridRow);
+		SchemaRowValidation.INSTANCE.highlightInvalidRowWithRedColor(mixedSchemeGridRow,(TableItem)element,mixedSchemeWidget.getTable(), mixedSchemeWidget.getComponentType());
 		mixedSchemeWidget.showHideErrorSymbol(mixedSchemeWidget.isWidgetValid());
 	}
 	
