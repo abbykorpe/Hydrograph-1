@@ -101,7 +101,8 @@ public class JoinConverter extends TransformConverter {
 							typeKeyField.getField().add(fieldName);
 						} else {
 							converterHelper.addParamTag(this.ID, key, 
-									ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", keyFields.get(i).getPortIndex()), false);
+								ComponentXpathConstants.JOIN_KEYS.value()
+								.replace("$inSocketId", keyFields.get(i).getPortIndex()), false);
 						}
 					}
 				}else{
@@ -109,10 +110,11 @@ public class JoinConverter extends TransformConverter {
 					TypeFieldName field = new TypeFieldName();
 					field.setName("");
 					typeKeyField.getField().add(field);
-					for (String fieldName : keyList) 
+					for (String fieldName : keyList){ 
 						parameterFieldNames.append(fieldName+ " ");
-						converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), 
-								ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", keyFields.get(i).getPortIndex()),true);
+					}
+					converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), 
+							ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", keyFields.get(i).getPortIndex()),true);
 					
 				}
 			}

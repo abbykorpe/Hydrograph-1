@@ -101,10 +101,12 @@ public class OutputMixedSchemeUiConverter extends OutputUiConverter {
 			for (Object record : inSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema()) {
 				if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
 					schema.setIsExternal(true);
-					if (((TypeExternalSchema) record).getUri() != null)
+					if (((TypeExternalSchema) record).getUri() != null){
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
-						gridRow.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(),	Constants.MIXEDSCHEMA_GRID_ROW));
-						schema.setGridRow(gridRow);
+					}
+					gridRow.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(),
+							Constants.MIXEDSCHEMA_GRID_ROW));
+					schema.setGridRow(gridRow);
 				} else {
 					gridRow.add(converterUiHelper.getMixedScheme(record));
 					schema.setGridRow(gridRow);

@@ -1235,11 +1235,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			logger.error(e.getMessage());
 		}finally{
 			try {
-				if(serverSocket!=null)
-				serverSocket.close();
-				logger.info("Socket closed @"+DebugHelper.INSTANCE.restServicePort());
+				if(serverSocket!=null){
+					serverSocket.close();
+					logger.info("Socket closed @" + DebugHelper.INSTANCE.restServicePort());
+				}
 			} catch (IOException e) {
-				logger.debug(e.getMessage());
+				logger.error(e.getMessage());
 			}
 		}
 	}

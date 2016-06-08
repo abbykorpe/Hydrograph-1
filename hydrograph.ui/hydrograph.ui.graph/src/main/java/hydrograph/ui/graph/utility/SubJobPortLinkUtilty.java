@@ -56,15 +56,17 @@ public class SubJobPortLinkUtilty {
 						Link linkNew = new Link();
 						linkNew.setTarget(entry.getKey());
 						linkNew.setSource(inputSubComponent); 
-						if(entry.getKey() instanceof UnionallComponent)
-						linkNew.setTargetTerminal(Constants.IN_0);
-						else
-						linkNew.setTargetTerminal(Constants.INPUT_SOCKET_TYPE+j);
-						linkNew.setSourceTerminal(Constants.OUTPUT_SOCKET_TYPE+outPort);
+						if(entry.getKey() instanceof UnionallComponent){
+							linkNew.setTargetTerminal(Constants.IN_0);
+						}
+						else{
+							linkNew.setTargetTerminal(Constants.INPUT_SOCKET_TYPE + j);
+						}
+						linkNew.setSourceTerminal(Constants.OUTPUT_SOCKET_TYPE + outPort);
 						entry.getKey().connectInput(linkNew);
 						inputSubComponent.connectOutput(linkNew);
 						outPort++; 
-						}	
+					}	
 					
 					inputSubComponent.getProperties().put(Constants.TYPE, Constants.INPUT_SUBJOB);							   	
 				   	container.addSubJobChild((Component) entry.getKey());
@@ -113,7 +115,7 @@ public class SubJobPortLinkUtilty {
 							if(cacheInputSubjobComp.get(entry.getKey())==null){
 								container.addSubJobChild(entry.getKey());
 								clipboardList.remove(entry.getKey());
-								}							
+							}							
 
 		   	}
 		   	if(cacheOutSubjobComp.size()>0){
@@ -131,45 +133,44 @@ public class SubJobPortLinkUtilty {
 		   	return outSubComponent;
 		}
 		 
-/**
- * Gets the max x coordinate.
- *
- * @param container the container
- * @return the max x coordinate
- */
-public static int getMaxXCoordinate(Container container){
-	int maxXCoordinate=Integer.MIN_VALUE;
-	for (Component component : container.getChildren()) {
-		 if(component.getLocation().x > maxXCoordinate){
-			 maxXCoordinate = component.getLocation().x ;
-	        }
+	/**
+	 * Gets the max x coordinate.
+	 *
+	 * @param container the container
+	 * @return the max x coordinate
+	 */
+	public static int getMaxXCoordinate(Container container){
+		int maxXCoordinate=Integer.MIN_VALUE;
+		for (Component component : container.getChildren()) {
+			 if(component.getLocation().x > maxXCoordinate){
+				 maxXCoordinate = component.getLocation().x ;
+		     }
+		}
+		return maxXCoordinate;
 	}
-	return maxXCoordinate;
-}
-
-/**
- * Fix component size.
- *
- * @param component the component
- * @param portCount the port count
- */
-public static void fixComponentSize(Component component,int portCount){
+	
+	/**
+	 * Fix component size.
+	 *
+	 * @param component the component
+	 * @param portCount the port count
+	 */
+	public static void fixComponentSize(Component component,int portCount){
 		Dimension newSize = component.getSize();
 		component.setSize(newSize.expand(0, portCount * 15));
-}
-
-/**
- * Sets the xy coordinate.
- *
- * @param component the component
- * @param x the x Coordinate
- * @param y the y Coordinate
- */
-public static void setXYCoordinate(Component component,int x ,int y){
-Point point = new Point();
-point.x=x;
-point.y=y;
-component.setLocation(point);
-}
+	}
 	
+	/**
+	 * Sets the xy coordinate.
+	 *
+	 * @param component the component
+	 * @param x the x Coordinate
+	 * @param y the y Coordinate
+	 */
+	public static void setXYCoordinate(Component component,int x ,int y){
+		Point point = new Point();
+		point.x = x;
+		point.y = y;
+		component.setLocation(point);
+	}
 }

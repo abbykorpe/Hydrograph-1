@@ -97,11 +97,11 @@ public class DebugHandler  extends AbstractHandler {
 	private void createDebugXml() throws Exception{
 		String currentJobPath=null;
 		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		if(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)
-		{}
-		else
+		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
 			currentJobIPath=new Path(eltGraphicalEditor.getTitleToolTip());
-			DebugConverter converter = new DebugConverter();
+		}
+		
+		DebugConverter converter = new DebugConverter();
 			
 		try {
 			uniqueJobID= eltGraphicalEditor.generateUniqueJobId();
@@ -110,10 +110,8 @@ public class DebugHandler  extends AbstractHandler {
 			currentJobIPath = currentJobIPath.removeLastSegments(1).append(currentJobPath);
 			
 			converter.marshall(converter.getParam(), ResourcesPlugin.getWorkspace().getRoot().getFile(currentJobIPath));
-		} catch (JAXBException | IOException e) {
-			logger.error(e.getMessage(), e);
-		} catch (CoreException e) {
-			logger.error(e.getMessage(), e);
+		} catch (JAXBException | IOException  | CoreException exception) {
+			logger.error(exception.getMessage(), exception);
 		}
 	}
 

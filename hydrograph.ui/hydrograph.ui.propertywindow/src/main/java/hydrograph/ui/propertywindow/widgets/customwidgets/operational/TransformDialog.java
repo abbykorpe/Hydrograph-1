@@ -675,8 +675,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			}
 		});
 		
-		if (mappingSheetRow.getOperationClassPath() != null)
-		operationClassTextBox.setText(mappingSheetRow.getOperationClassPath());
+		if (mappingSheetRow.getOperationClassPath() != null){
+			operationClassTextBox.setText(mappingSheetRow.getOperationClassPath());
+		}
 
 		operationClassTextBox.setEditable(false);
 		operationClassTextBox.setData(mappingSheetRow.getOperationID());
