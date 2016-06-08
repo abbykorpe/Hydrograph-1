@@ -1069,6 +1069,7 @@ public abstract class Component extends Model {
 		} catch ( IllegalAccessException | InstantiationException e) {
 			logger.debug("Unable to clone Component ", e);
 		}
+		if(component!=null){
 		component.setType(getType());
 		component.setCategory(getCategory());
 		component.setParent(getParent());
@@ -1096,9 +1097,10 @@ public abstract class Component extends Model {
 		component.setInPortCount(leftPortCount);
 		component.setOutPortCount(rightPortCount);
 		component.setUnusedPortCount(bottomPortCount);
+		}
 		return component;
 	}
-
+	
 	/**
 	 * 
 	 * Set tooltip information

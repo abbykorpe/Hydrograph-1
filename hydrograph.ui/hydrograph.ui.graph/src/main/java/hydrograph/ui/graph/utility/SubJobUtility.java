@@ -342,7 +342,7 @@ public class SubJobUtility {
 				if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
 					InputStream inp = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
 					container = (Container) getCurrentEditor().fromXMLToObject(inp);
-				} else if (isFileExistsOnLocalFileSystem(jobFileIPath))
+				} else if (jobFileIPath !=null && isFileExistsOnLocalFileSystem(jobFileIPath))
 					container = (Container) getCurrentEditor().fromXMLToObject(
 							new FileInputStream(jobFileIPath.toFile()));
 
@@ -476,11 +476,12 @@ public class SubJobUtility {
 						subJobContainer = (Container) getCurrentEditor().fromXMLToObject(
 								new FileInputStream(jobFileIPath.toFile()));
 				}
+				if(subJobContainer!=null){
 				if (subJobComponent != null && subJobContainer.getSubjobVersion() != versionStoredInSubjobComponent) {
 					subJobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(),
 							Constants.UPDATE_AVAILABLE);
 				}
-
+			  }
 			} catch (Exception exception) {
 				logger.error("Exception occurred while updating Subjob version", exception);
 			}
