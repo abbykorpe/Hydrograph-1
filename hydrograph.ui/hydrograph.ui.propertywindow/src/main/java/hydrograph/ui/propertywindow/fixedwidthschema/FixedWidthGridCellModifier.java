@@ -18,6 +18,7 @@ import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GeneralGridWidgetBuilder;
 import hydrograph.ui.propertywindow.widgets.utility.DataType;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -165,7 +166,7 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 		}
 		resetDateFormat(fixedWidthGridRow, property);
 		viewer.refresh();
-		eltFixedWidget.highlightInvalidRowWithRedColor(fixedWidthGridRow);
+		SchemaRowValidation.highlightInvalidRowWithRedColor(fixedWidthGridRow, eltFixedWidget.getTable(), eltFixedWidget.getComponentType());
 		eltFixedWidget.showHideErrorSymbol(eltFixedWidget.isWidgetValid());
 	}
 	

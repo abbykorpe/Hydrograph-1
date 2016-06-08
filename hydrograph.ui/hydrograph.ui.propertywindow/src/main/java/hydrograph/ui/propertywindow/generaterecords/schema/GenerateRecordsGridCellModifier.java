@@ -18,6 +18,7 @@ import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GeneralGridWidgetBuilder;
 import hydrograph.ui.propertywindow.widgets.utility.DataType;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -194,7 +195,7 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 		}
 		resetDateFormat(generateRecordSchemaGridRow, property);
 		viewer.refresh();
-		generateRecordsGridWidget.highlightInvalidRowWithRedColor(generateRecordSchemaGridRow);
+		SchemaRowValidation.highlightInvalidRowWithRedColor(generateRecordSchemaGridRow, generateRecordsGridWidget.getTable(), generateRecordsGridWidget.getComponentType());
 		generateRecordsGridWidget.showHideErrorSymbol(generateRecordsGridWidget.isWidgetValid());
 	}
 

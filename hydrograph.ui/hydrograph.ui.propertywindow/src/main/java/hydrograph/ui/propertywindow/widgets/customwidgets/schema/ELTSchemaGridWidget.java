@@ -60,6 +60,7 @@ import hydrograph.ui.propertywindow.widgets.listeners.grid.GridChangeListener;
 import hydrograph.ui.propertywindow.widgets.utility.GridComparator;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import hydrograph.ui.propertywindow.widgets.utility.MouseWheelScrollingOnComposite;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
@@ -227,12 +228,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected abstract ICellModifier getCellModifier();
 	private ScrolledComposite scrolledComposite;
 	private Composite tableComposite;
-	private String componentType;
+	protected String componentType;
 	/**
 	 * Adds the validators.
 	 */
 	protected abstract void addValidators();
 
+	
 	/**
 	 * Sets the decorator.
 	 */
@@ -1466,7 +1468,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 			}
 		}
-		highlightInvalidRowWithRedColor(null);
+		SchemaRowValidation.highlightInvalidRowWithRedColor(null, table,componentType);
 	}
 
 	private List<String> getExitingSchemaFieldNames(Schema originalSchema) {
@@ -1658,172 +1660,11 @@ public List<FilterProperties> convertSchemaToFilterProperty(){
 	return outputFileds;
 }
 
-
-public void highlightInvalidRowWithRedColor(GridRow gridRow)
-{ 
-	for(TableItem item:table.getItems())
-	{
-		if(gridRow==null)
-	    gridRow=(GridRow)item.getData();	
-	    if(StringUtils.equalsIgnoreCase(item.getText(),gridRow.getFieldName()))
-		{
-		
-	    	
-	    	if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), "java.math.BigDecimal"))
-	    	{
-	    		if(StringUtils.containsIgnoreCase(componentType, "hive")||StringUtils.containsIgnoreCase(componentType, "parquet"))
-	    		{
-	    			if(StringUtils.isBlank(gridRow.getPrecision())|| StringUtils.isBlank(gridRow.getScale()) ||
-		    				StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), "none")||
-							!(gridRow.getScale().matches("\\d+"))||!(gridRow.getPrecision().matches("\\d+"))
-							)
-	    			{
-	    				item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-	    			}
-	    			else
-					{
-						item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-					}	
-	    		}	
-	    		else if(StringUtils.isBlank(gridRow.getScale()) ||
-	    				StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), "none")||
-						!(gridRow.getScale().matches("\\d+"))||(!(gridRow.getPrecision().matches("\\d+"))&& StringUtils.isNotBlank(gridRow.getPrecision()))
-						)
-	    		{
-	    			item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-	    		}	
-	    		else if(gridRow instanceof FixedWidthGridRow && !(gridRow instanceof GenerateRecordSchemaGridRow))
-				{
-				
-					FixedWidthGridRow fixedWidthGridRow=(FixedWidthGridRow)gridRow;
-					if(fixedWidthGridRow instanceof MixedSchemeGridRow)
-					{
-						if((StringUtils.isBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isBlank(fixedWidthGridRow.getLength())))
-						{
-							item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-						}	
-						else if(StringUtils.isNotBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isNotBlank(fixedWidthGridRow.getLength()))	
-						{
-							item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-						}
-						else if(StringUtils.isNotBlank(fixedWidthGridRow.getLength())&& !(fixedWidthGridRow.getLength().matches("\\d+")))	
-						{
-							item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-						}
-						else
-						{
-							item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-						}	
-						
-					}
-					else
-					{
-					if(StringUtils.isBlank(fixedWidthGridRow.getLength())||!(fixedWidthGridRow.getLength().matches("\\d+")))
-					{
-						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-					}	
-					else
-					{
-						item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-					}	
-					}	
-				}	
-	    		else
-				{
-					item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-				}	
-	    	}	
-	    	
-	    	
-			
-			else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),"java.util.Date"))
-			{
-				if((StringUtils.isBlank(gridRow.getDateFormat())))
-				item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-				else if(gridRow instanceof FixedWidthGridRow && !(gridRow instanceof GenerateRecordSchemaGridRow))
-				{
-				
-					FixedWidthGridRow fixedWidthGridRow=(FixedWidthGridRow)gridRow;
-					if(fixedWidthGridRow instanceof MixedSchemeGridRow)
-					{
-						if((StringUtils.isBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isBlank(fixedWidthGridRow.getLength())))
-						{
-							item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-						}	
-						else if(StringUtils.isNotBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isNotBlank(fixedWidthGridRow.getLength()))	
-						{
-							item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-						}
-						else if(StringUtils.isNotBlank(fixedWidthGridRow.getLength())&& !(fixedWidthGridRow.getLength().matches("\\d+")))	
-						{
-							item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-						}
-						else
-						{
-							item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-						}	
-						
-					}
-					else
-					{
-					if(StringUtils.isBlank(fixedWidthGridRow.getLength())||!(fixedWidthGridRow.getLength().matches("\\d+")))
-					{
-						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-					}	
-					else
-					{
-						item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-					}	
-					}	
-				}	
-				else
-				{
-					item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-				}	
-				
-				
-			}
-			else if(gridRow instanceof FixedWidthGridRow && !(gridRow instanceof GenerateRecordSchemaGridRow))
-			{
-			
-				FixedWidthGridRow fixedWidthGridRow=(FixedWidthGridRow)gridRow;
-				if(fixedWidthGridRow instanceof MixedSchemeGridRow)
-				{
-					if((StringUtils.isBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isBlank(fixedWidthGridRow.getLength())))
-					{
-						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-					}	
-					else if(StringUtils.isNotBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isNotBlank(fixedWidthGridRow.getLength()))	
-					{
-						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-					}
-					else if(StringUtils.isNotBlank(fixedWidthGridRow.getLength())&& !(fixedWidthGridRow.getLength().matches("\\d+")))	
-					{
-						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-					}
-					else
-					{
-						item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-					}	
-					
-				}
-				else
-				{
-				if(StringUtils.isBlank(fixedWidthGridRow.getLength())||!(fixedWidthGridRow.getLength().matches("\\d+")))
-				{
-					item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
-				}	
-				else
-				{
-					item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-				}	
-				}	
-			}	
-			
-			gridRow=null;
-		}	
-	    
-	}	
+public Table getTable() {
+	return table;
 }
 
+public String getComponentType() {
+	return componentType;
+}
 }

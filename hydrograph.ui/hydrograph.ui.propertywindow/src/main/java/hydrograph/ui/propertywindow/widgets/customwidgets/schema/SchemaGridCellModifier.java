@@ -16,6 +16,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.propertywindow.widgets.utility.DataType;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -155,7 +156,7 @@ class SchemaGridCellModifier implements ICellModifier {
 		}
 		resetDateFormat(basicSchemaGridRow, property);
 		viewer.refresh();
-		eltGenericSchemaGridWidget.highlightInvalidRowWithRedColor(basicSchemaGridRow);
+		SchemaRowValidation.highlightInvalidRowWithRedColor(basicSchemaGridRow, eltGenericSchemaGridWidget.getTable(), eltGenericSchemaGridWidget.getComponentType());
 		eltGenericSchemaGridWidget.showHideErrorSymbol(eltGenericSchemaGridWidget.isWidgetValid());
 	}
 

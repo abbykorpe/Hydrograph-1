@@ -17,6 +17,7 @@ import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GeneralGridWidgetBuilder;
 import hydrograph.ui.propertywindow.widgets.utility.DataType;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -168,9 +169,8 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 			mixedSchemeGridRow.setPrecision("");
 		}
 		resetDateFormat(mixedSchemeGridRow, property);
-
 		viewer.refresh();
-		mixedSchemeWidget.highlightInvalidRowWithRedColor(mixedSchemeGridRow);
+		SchemaRowValidation.highlightInvalidRowWithRedColor(mixedSchemeGridRow, mixedSchemeWidget.getTable(), mixedSchemeWidget.getComponentType());
 		mixedSchemeWidget.showHideErrorSymbol(mixedSchemeWidget.isWidgetValid());
 	}
 	
