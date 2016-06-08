@@ -476,13 +476,11 @@ public class SubJobUtility {
 						subJobContainer = (Container) getCurrentEditor().fromXMLToObject(
 								new FileInputStream(jobFileIPath.toFile()));
 				}
-				if(subJobContainer!=null){
-				if (subJobComponent != null && subJobContainer.getSubjobVersion() != versionStoredInSubjobComponent) {
+				if (subJobContainer != null && subJobComponent != null && subJobContainer.getSubjobVersion() != versionStoredInSubjobComponent) {
 					subJobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(),
 							Constants.UPDATE_AVAILABLE);
 				}
-			  }
-			} catch (Exception exception) {
+			  } catch (Exception exception) {
 				logger.error("Exception occurred while updating Subjob version", exception);
 			}
 		}
