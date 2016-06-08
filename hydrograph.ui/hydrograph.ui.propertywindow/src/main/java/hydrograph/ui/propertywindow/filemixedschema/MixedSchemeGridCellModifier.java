@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.TableItem;
 
 /**
  * The Class MixedSchemeGridCellModifier.
@@ -127,10 +128,12 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 
 	@Override
 	public void modify(Object element, String property, Object value) {
+		Object object=null;
 		if (element instanceof Item)
-			element = ((Item) element).getData();
-
-		MixedSchemeGridRow mixedSchemeGridRow = (MixedSchemeGridRow) element;
+			{
+			object=((Item) element).getData();
+			}
+		MixedSchemeGridRow mixedSchemeGridRow = (MixedSchemeGridRow) object;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			mixedSchemeGridRow.setFieldName(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)) {
@@ -170,7 +173,7 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 		}
 		resetDateFormat(mixedSchemeGridRow, property);
 		viewer.refresh();
-		SchemaRowValidation.highlightInvalidRowWithRedColor(mixedSchemeGridRow, mixedSchemeWidget.getTable(), mixedSchemeWidget.getComponentType());
+		SchemaRowValidation.INSTANCE.highlightInvalidRowWithRedColor(mixedSchemeGridRow,(TableItem)element,mixedSchemeWidget.getTable(), mixedSchemeWidget.getComponentType());
 		mixedSchemeWidget.showHideErrorSymbol(mixedSchemeWidget.isWidgetValid());
 	}
 	

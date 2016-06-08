@@ -27,6 +27,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.TableItem;
 
 
 /**
@@ -195,7 +196,7 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 		}
 		resetDateFormat(generateRecordSchemaGridRow, property);
 		viewer.refresh();
-		SchemaRowValidation.highlightInvalidRowWithRedColor(generateRecordSchemaGridRow, generateRecordsGridWidget.getTable(), generateRecordsGridWidget.getComponentType());
+		SchemaRowValidation.INSTANCE.highlightInvalidRowWithRedColor(generateRecordSchemaGridRow,(TableItem)element,generateRecordsGridWidget.getTable(), generateRecordsGridWidget.getComponentType());
 		generateRecordsGridWidget.showHideErrorSymbol(generateRecordsGridWidget.isWidgetValid());
 	}
 

@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.TableItem;
 
 
 
@@ -110,10 +111,13 @@ class SchemaGridCellModifier implements ICellModifier {
 
 	@Override
 	public void modify(Object element, String property, Object value) {
+		Object object=null;
 		if (element instanceof Item)
-			element = ((Item) element).getData();
-
-		BasicSchemaGridRow basicSchemaGridRow = (BasicSchemaGridRow) element;
+		{
+			object = ((Item) element).getData();
+			
+		}
+		BasicSchemaGridRow basicSchemaGridRow = (BasicSchemaGridRow) object;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			basicSchemaGridRow.setFieldName(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)){
@@ -156,7 +160,7 @@ class SchemaGridCellModifier implements ICellModifier {
 		}
 		resetDateFormat(basicSchemaGridRow, property);
 		viewer.refresh();
-		SchemaRowValidation.highlightInvalidRowWithRedColor(basicSchemaGridRow, eltGenericSchemaGridWidget.getTable(), eltGenericSchemaGridWidget.getComponentType());
+		SchemaRowValidation.INSTANCE.highlightInvalidRowWithRedColor(basicSchemaGridRow, (TableItem)element,eltGenericSchemaGridWidget.getTable(), eltGenericSchemaGridWidget.getComponentType());
 		eltGenericSchemaGridWidget.showHideErrorSymbol(eltGenericSchemaGridWidget.isWidgetValid());
 	}
 

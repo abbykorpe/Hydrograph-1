@@ -1468,7 +1468,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 			}
 		}
-		SchemaRowValidation.highlightInvalidRowWithRedColor(null, table,componentType);
+		SchemaRowValidation.INSTANCE.highlightInvalidRowWithRedColor(null, null,table,componentType);
 	}
 
 	private List<String> getExitingSchemaFieldNames(Schema originalSchema) {
