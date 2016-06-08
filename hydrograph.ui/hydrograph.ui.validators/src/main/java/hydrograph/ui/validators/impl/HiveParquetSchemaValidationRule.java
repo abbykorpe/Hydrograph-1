@@ -1,10 +1,8 @@
 package hydrograph.ui.validators.impl;
 
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.logging.factory.LogFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -57,14 +55,9 @@ public class HiveParquetSchemaValidationRule implements IValidator{
 		
 		/*this list is used for checking duplicate names in the grid*/
 		List<String> uniqueNamesList = new ArrayList<>();
-		boolean fixedWidthGrid = false;
 		if(gridRowList == null || gridRowList.isEmpty()){
 			errorMessage = propertyName + " is mandatory";
 			return false;
-		}
-		GridRow gridRowTest = gridRowList.iterator().next();
-		if(FixedWidthGridRow.class.isAssignableFrom(gridRowTest.getClass())){
-			fixedWidthGrid = true;
 		}
 		for (GridRow gridRow : gridRowList) {
 			if(StringUtils.isBlank(gridRow.getFieldName())){
@@ -103,13 +96,6 @@ public class HiveParquetSchemaValidationRule implements IValidator{
 				return false;
 			}
 			
-			if(fixedWidthGrid){
-				FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) gridRow;
-				if(StringUtils.isBlank(fixedWidthGridRow.getLength())){
-					errorMessage = "Length is mandatory";
-					return false;
-				}
-			}
 			if(uniqueNamesList.isEmpty() || !uniqueNamesList.contains(gridRow.getFieldName())){
 				uniqueNamesList.add(gridRow.getFieldName());
 			}
