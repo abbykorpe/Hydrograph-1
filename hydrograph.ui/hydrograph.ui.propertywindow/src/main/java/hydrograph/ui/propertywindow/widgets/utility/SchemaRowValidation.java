@@ -11,6 +11,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
 public class SchemaRowValidation {
+	private static final String NONE = "none";
+	private static final String REGULAR_EXPRESSION_FOR_NUMBER = "\\d+";
 	private static final String JAVA_UTIL_DATE = "java.util.Date";
 	private static final String PARQUET = "parquet";
 	private static final String HIVE = "hive";
@@ -55,7 +57,7 @@ public class SchemaRowValidation {
 		{
 			if((StringUtils.isBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isBlank(fixedWidthGridRow.getLength()))
 			   ||(StringUtils.isNotBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isNotBlank(fixedWidthGridRow.getLength()))
-			   ||(StringUtils.isNotBlank(fixedWidthGridRow.getLength())&& !(fixedWidthGridRow.getLength().matches("\\d+")))
+			   ||(StringUtils.isNotBlank(fixedWidthGridRow.getLength())&& !(fixedWidthGridRow.getLength().matches(REGULAR_EXPRESSION_FOR_NUMBER)))
 			   )
 			{
 				setRedColor(tableItem);
@@ -67,7 +69,7 @@ public class SchemaRowValidation {
 			
 		}
 		else{
-		if(StringUtils.isBlank(fixedWidthGridRow.getLength())||!(fixedWidthGridRow.getLength().matches("\\d+"))){
+		if(StringUtils.isBlank(fixedWidthGridRow.getLength())||!(fixedWidthGridRow.getLength().matches(REGULAR_EXPRESSION_FOR_NUMBER))){
 			setRedColor(tableItem);
 		}	
 		else{
@@ -98,8 +100,8 @@ public class SchemaRowValidation {
 			String componentType, TableItem tableItem) {
 		if(StringUtils.containsIgnoreCase(componentType, HIVE)||StringUtils.containsIgnoreCase(componentType, PARQUET)){
 			if(StringUtils.isBlank(gridRow.getPrecision())|| StringUtils.isBlank(gridRow.getScale()) ||
-					StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), "none")||
-					!(gridRow.getScale().matches("\\d+"))||!(gridRow.getPrecision().matches("\\d+"))
+					StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), NONE)||
+					!(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))||!(gridRow.getPrecision().matches(REGULAR_EXPRESSION_FOR_NUMBER))
 					){
 				setRedColor(tableItem);
 			}
@@ -108,8 +110,8 @@ public class SchemaRowValidation {
 			}	
 		}	
 		else if(StringUtils.isBlank(gridRow.getScale()) ||
-				StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), "none")||
-				!(gridRow.getScale().matches("\\d+"))||(!(gridRow.getPrecision().matches("\\d+"))&&
+				StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), NONE)||
+				!(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))||(!(gridRow.getPrecision().matches(REGULAR_EXPRESSION_FOR_NUMBER))&&
 				 StringUtils.isNotBlank(gridRow.getPrecision()))
 				){
 			setRedColor(tableItem);

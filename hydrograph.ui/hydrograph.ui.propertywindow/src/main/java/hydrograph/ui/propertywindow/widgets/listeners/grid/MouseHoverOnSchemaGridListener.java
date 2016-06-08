@@ -38,7 +38,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 	Table table=null;
 	private Shell tip=null;
 	private Label label=null;
-	private String componentType;
+	
 	@Override
 	public int getListenerType() {
 		return SWT.MouseHover;
@@ -50,7 +50,6 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 			ListenerHelper helpers,Event event,Widget... widgets) {
 		
 		  table=(Table)widgets[0];
-		  componentType=(String)helpers.get(HelperType.COMPONENT_TYPE);
 	      TableItem item = table.getItem(new Point(event.x, event.y));
          if (item != null && item.getForeground().getRed()==255) {
            if (tip != null && !tip.isDisposed())
@@ -63,7 +62,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
            label.setBackground(table.getParent().getShell().getDisplay()
                .getSystemColor(SWT.COLOR_INFO_BACKGROUND));
            label.setData("_TABLEITEM", item);
-           label.setText(setAppropriateToolTipMessage(item));
+           label.setText(setAppropriateToolTipMessage(item,(String)helpers.get(HelperType.COMPONENT_TYPE)));
            label.addListener(SWT.MouseExit,ListenerFactory.Listners.DISPOSE_LISTENER
 					.getListener().getListener(propertyDialogButtonBar, helpers, widgets) );
            label.addListener(SWT.MouseDown,ListenerFactory.Listners.DISPOSE_LISTENER
@@ -76,7 +75,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
            table.setData("label", label);
 	}
 }
-	private String setAppropriateToolTipMessage(TableItem item)
+	private String setAppropriateToolTipMessage(TableItem item,String componentType)
 	{
 		GridRow basicSchemaGridRow=(GridRow)item.getData();
 		if(StringUtils.equalsIgnoreCase(basicSchemaGridRow.getDataTypeValue(),"java.util.Date") && (StringUtils.isBlank(basicSchemaGridRow.getDateFormat())))

@@ -36,8 +36,8 @@ public class HiveParquetSchemaValidationRule implements IValidator{
 			return false;
 		}
 		else if(schema.getIsExternal()){
-			errorMessage = propertyName + " is mandatory";
 			if(StringUtils.isBlank(schema.getExternalSchemaPath())){
+				errorMessage = propertyName + " is mandatory";
 				return false;
 			}
 		}
