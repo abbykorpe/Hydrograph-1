@@ -59,7 +59,8 @@ public class ParameterWithFilePath extends Parameter{
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if(obj!=null){
+		 if (this == obj)
 			return true;
 		if (!super.equals(obj))
 			return false;
@@ -73,7 +74,8 @@ public class ParameterWithFilePath extends Parameter{
 			return false;
 		return true;
 	}
-
+		return false;
+}
 	@Override
 	public String toString() {
 		return parameterFile + "\n" + super.toString();

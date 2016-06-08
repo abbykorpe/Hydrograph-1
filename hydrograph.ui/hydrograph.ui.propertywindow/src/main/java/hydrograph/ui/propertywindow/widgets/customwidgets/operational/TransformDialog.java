@@ -1306,11 +1306,12 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					isOperationInputFieldDuplicate = true;
 					break;
 				}
-
 			}
-			set.clear();
+				if(set!=null){
+				set.clear();
+				}
+			}
 		}
-	}
 
 	/**
 	 * Create contents of the button bar.
