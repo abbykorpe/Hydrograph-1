@@ -29,6 +29,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -348,7 +349,7 @@ public class SubJobUtility {
 
 				updateContainerAndSubjob(container, selectedSubjobComponent, jobFileIPath);
 
-			} catch (Exception e) {
+			} catch (CoreException | IOException e) {
 				logger.error("Cannot update subgrap-component's property..", e);
 				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", "Invalid graph file.");
 			}
@@ -480,7 +481,10 @@ public class SubJobUtility {
 					subJobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(),
 							Constants.UPDATE_AVAILABLE);
 				}
-			  } catch (Exception exception) {
+
+
+			} catch (CoreException |IOException exception) {
+
 				logger.error("Exception occurred while updating Subjob version", exception);
 			}
 		}

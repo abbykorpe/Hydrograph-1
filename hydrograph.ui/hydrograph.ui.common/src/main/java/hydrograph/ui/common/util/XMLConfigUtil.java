@@ -96,7 +96,7 @@ public class XMLConfigUtil {
 				}
 				validateAndFillComponentConfigList(componentList);
 				return componentList;
-			}catch(Exception exception){
+			}catch(JAXBException | SAXException | IOException exception){
 				Status status = new Status(IStatus.ERROR,Activator.PLUGIN_ID, "XML read failed", exception);
 				StatusManager.getManager().handle(status, StatusManager.BLOCK);
 				logger.error(exception.getMessage());
