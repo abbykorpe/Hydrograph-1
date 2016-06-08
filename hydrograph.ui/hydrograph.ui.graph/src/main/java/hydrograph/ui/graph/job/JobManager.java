@@ -471,7 +471,7 @@ public class JobManager {
 	private void logKillProcessLogsAsyncronously(final Process process, final Job job, final DefaultGEFCanvas gefCanvas) {
 		final JobLogger joblogger = initJobLogger(gefCanvas);
 		new Thread(new Runnable() {
-			InputStream stream = process.getInputStream();
+			private InputStream stream = process.getInputStream();
 
 			public void run() {
 				BufferedReader reader = null;
