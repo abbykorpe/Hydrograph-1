@@ -53,7 +53,7 @@ public class ExportAction extends Action {
     private static final String INFORMATION="Information";
     private String ERROR_MESSAGE="File is open.Please close it to replace it.";
 	
- private static final String LABEL="Export";
+ private static final String LABEL="Export Data";
     
     public ExportAction(DebugDataViewer debugDataViewer) {
     	super(LABEL);
