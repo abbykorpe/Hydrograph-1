@@ -128,6 +128,10 @@ public class DebugDataViewer extends ApplicationWindow {
     private static final String DEFAULT_DELIMITER= ",";
     private static final String DEFAULT_QUOTE_CHARACTOR="\"";
     private static final String DEFAULT="default";
+    private static final String FILE_SIZE="VIEW_DATA_FILE_SIZE";
+    private static final String PAGE_SIZE="VIEW_DATA_PAGE_SIZE";
+    private static final String DEFAULT_FILE_SIZE="100";
+    private static final String DEFAULT_PAGE_SIZE="100";
 	
     private ReloadInformation reloadInformation;
 	
@@ -753,10 +757,14 @@ public class DebugDataViewer extends ApplicationWindow {
 		String delimiter = eclipsePreferences.get(DELIMITER, DEFAULT);
 		String quoteCharactor = eclipsePreferences.get(QUOTE_CHARACTOR,DEFAULT);
 		String includeHeader = eclipsePreferences.get(INCLUDE_HEADERS, DEFAULT);
+		String fileSize=eclipsePreferences.get(FILE_SIZE,DEFAULT);
+		String pageSize=eclipsePreferences.get(PAGE_SIZE,DEFAULT);
 		delimiter = delimiter.equalsIgnoreCase(DEFAULT) ? DEFAULT_DELIMITER : delimiter;
 		quoteCharactor = quoteCharactor.equalsIgnoreCase(DEFAULT) ? DEFAULT_QUOTE_CHARACTOR : quoteCharactor;
 		includeHeaderValue = includeHeader.equalsIgnoreCase(DEFAULT) ? true : false;
-		ViewDataPreferences viewDataPreferences = new ViewDataPreferences(delimiter, quoteCharactor, includeHeaderValue);
+		fileSize = fileSize.equalsIgnoreCase(DEFAULT) ? DEFAULT_FILE_SIZE : fileSize;
+		pageSize = pageSize.equalsIgnoreCase(DEFAULT) ? DEFAULT_PAGE_SIZE : pageSize;
+		ViewDataPreferences viewDataPreferences = new ViewDataPreferences(delimiter, quoteCharactor, includeHeaderValue,fileSize,pageSize);
 		return viewDataPreferences;
 	}
 	
