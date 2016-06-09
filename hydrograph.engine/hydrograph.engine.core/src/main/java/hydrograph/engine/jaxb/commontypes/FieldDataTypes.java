@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "field-data-types")
+@XmlType(name = "field-data-types", namespace = "hydrograph/engine/jaxb/commontypes")
 @XmlEnum
 public enum FieldDataTypes {
 

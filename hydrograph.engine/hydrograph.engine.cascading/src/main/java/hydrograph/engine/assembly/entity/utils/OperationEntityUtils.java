@@ -594,31 +594,6 @@ public class OperationEntityUtils {
 		return keyFieldsList;
 	}
 
-	public static List<JoinKeyFields> extractKeyFieldsListFromOutSocketsForHashJoin(
-			List<hydrograph.engine.jaxb.hashjoin.TypeKeyFields> list) {
-		if (list == null) {
-			throw new NullPointerException("Out socket cannot be null");
-		}
-
-		List<JoinKeyFields> keyFieldsList = new ArrayList<JoinKeyFields>();
-		String[] fieldNames;
-
-		for (hydrograph.engine.jaxb.hashjoin.TypeKeyFields keyField : list) {
-			int i = 0;
-			fieldNames = new String[keyField.getField().size()];
-			for (TypeFieldName keyFields : keyField.getField()) {
-				fieldNames[i] = keyFields.getName();
-				i++;
-			}
-
-			JoinKeyFields mapFields = new JoinKeyFields(
-					keyField.getInSocketId(), true, fieldNames);
-			keyFieldsList.add(mapFields);
-		}
-
-		return keyFieldsList;
-	}
-
 	/**
 	 * Extracts the key fields from the
 	 * {@link hydrograph.engine.jaxb.aggregate.TypeSecondaryKeyFields} object

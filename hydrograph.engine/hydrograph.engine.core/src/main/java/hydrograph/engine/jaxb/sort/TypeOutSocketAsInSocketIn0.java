@@ -37,7 +37,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-outSocket-as-inSocket-in0")
+@XmlType(name = "type-outSocket-as-inSocket-in0", namespace = "hydrograph/engine/jaxb/sort")
 public class TypeOutSocketAsInSocketIn0
     extends TypeOutSocketAsInSocket
 {

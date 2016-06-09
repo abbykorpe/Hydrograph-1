@@ -19,7 +19,6 @@
 	xmlns:gen_seq="hydrograph/engine/jaxb/generatesequence"
 	xmlns:cumulate="hydrograph/engine/jaxb/cumulate"
 	xmlns:lookup="hydrograph/engine/jaxb/lookup"
-	xmlns:hashjoin="hydrograph/engine/jaxb/hashjoin"
 	xmlns:normalize="hydrograph/engine/jaxb/normalize"
 	xmlns:pbe="hydrograph/engine/jaxb/partitionByExpression"
 	xmlns:subjob="hydrograph/engine/jaxb/subjob" xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -45,8 +44,6 @@
 		namespace="hydrograph/engine/jaxb/normalize" />
 	<xs:import schemaLocation="./subjob/subjob-types.xsd"
 		namespace="hydrograph/engine/jaxb/subjob" />
-			<xs:import schemaLocation="./hashjoin/hashjoin-types.xsd"
-		namespace="hydrograph/engine/jaxb/hashjoin" />
 	<xs:import
 		schemaLocation="./partition-by-expression/partition-by-expression-types.xsd"
 		namespace="hydrograph/engine/jaxb/partitionByExpression" />
@@ -172,25 +169,6 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-
-
-	<xs:complexType name="hashJoin">
-		<xs:complexContent>
-			<xs:extension base="hashjoin:hashjoin-base">
-				<xs:sequence>
-					<xs:element name="keys" type="hashjoin:type-key-fields"
-						minOccurs="2" maxOccurs="unbounded" />
-					<xs:element name="match" minOccurs="1" maxOccurs="1" >
-						<xs:complexType>
-							<xs:attribute name="value" type="cmn:match_value"
-								 default="first" />
-						</xs:complexType>
-					</xs:element>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-
 
 	<xs:complexType name="normalize">
 		<xs:complexContent>

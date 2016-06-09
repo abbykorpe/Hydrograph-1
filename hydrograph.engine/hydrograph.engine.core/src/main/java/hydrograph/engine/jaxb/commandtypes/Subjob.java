@@ -52,7 +52,7 @@ import hydrograph.engine.jaxb.commontypes.TypeProperties;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "subjob", propOrder = {
+@XmlType(name = "subjob", namespace = "hydrograph/engine/jaxb/commandtypes", propOrder = {
     "path",
     "runtimeProperties",
     "subjobParameter"

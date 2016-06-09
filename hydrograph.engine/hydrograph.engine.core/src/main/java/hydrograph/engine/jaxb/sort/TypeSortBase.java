@@ -43,7 +43,7 @@ import hydrograph.engine.jaxb.straightpulltypes.Sort;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-sort-base")
+@XmlType(name = "type-sort-base", namespace = "hydrograph/engine/jaxb/sort")
 @XmlSeeAlso({
     Sort.class
 })

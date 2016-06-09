@@ -48,7 +48,7 @@ import hydrograph.engine.jaxb.transform.TypeTransformInSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-base-inSocket")
+@XmlType(name = "type-base-inSocket", namespace = "hydrograph/engine/jaxb/commontypes")
 @XmlSeeAlso({
     TypeBaseInSocketFixedIn0 .class,
     TypeOutputInSocket.class,
@@ -62,7 +62,6 @@ import hydrograph.engine.jaxb.transform.TypeTransformInSocket;
     hydrograph.engine.jaxb.lookup.TypeInSocket.class,
     hydrograph.engine.jaxb.normalize.TypeInSocket.class,
     hydrograph.engine.jaxb.subjob.TypeInSocket.class,
-    hydrograph.engine.jaxb.hashjoin.TypeInSocket.class,
     TypePbeInSocket.class
 })
 public class TypeBaseInSocket {

@@ -51,7 +51,7 @@ import hydrograph.engine.jaxb.subjob.SubjobBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "subjob", propOrder = {
+@XmlType(name = "subjob", namespace = "hydrograph/engine/jaxb/operationstypes", propOrder = {
     "path",
     "subjobParameter"
 })
