@@ -1,10 +1,34 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package hydrograph.ui.dataviewer;
 
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.actions.ActionFactory;
+import hydrograph.ui.dataviewer.actions.CopyAction;
+import hydrograph.ui.dataviewer.actions.ExportAction;
+import hydrograph.ui.dataviewer.actions.FilterAction;
+import hydrograph.ui.dataviewer.actions.FindAction;
+import hydrograph.ui.dataviewer.actions.FormattedViewAction;
+import hydrograph.ui.dataviewer.actions.GridViewAction;
+import hydrograph.ui.dataviewer.actions.PreferencesAction;
+import hydrograph.ui.dataviewer.actions.ReloadAction;
+import hydrograph.ui.dataviewer.actions.SelectAllAction;
+import hydrograph.ui.dataviewer.actions.UnformattedViewAction;
 import hydrograph.ui.dataviewer.actions.ViewDataGridMenuCreator;
 import hydrograph.ui.dataviewer.adapters.CSVAdapter;
 import hydrograph.ui.dataviewer.constants.ControlConstants;
+import hydrograph.ui.dataviewer.constants.MenuConstants;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.constants.Views;
 import hydrograph.ui.dataviewer.datastructures.RowData;
@@ -51,8 +75,6 @@ import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
-import org.eclipse.swt.events.ShellEvent;
-import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
@@ -108,6 +130,7 @@ public class DebugDataViewer extends ApplicationWindow {
     private static final String DEFAULT_QUOTE_CHARACTOR="\"";
     private static final String DEFAULT="default";
 	
+    private ReloadInformation reloadInformation;
 	
 	private StatusManager statusManager;
 	
@@ -128,8 +151,9 @@ public class DebugDataViewer extends ApplicationWindow {
 	
 	/**
 	 * Create the application window,
+	 * @param reloadInformation 
 	 */
-	public DebugDataViewer(String filePath,String fileName,String windowName) {
+	public DebugDataViewer(String filePath,String fileName,String windowName, ReloadInformation reloadInformation) {
 		super(null);
 		createActions();
 		addCoolBar(SWT.FLAT);
@@ -144,11 +168,26 @@ public class DebugDataViewer extends ApplicationWindow {
 		if(windowName!=null)
 			this.windowName = "Data Viewer - " + windowName;
 		
+		
+		this.reloadInformation = reloadInformation;
 	}
 	
 	
+	public ReloadInformation getReloadInformation() {
+		return reloadInformation;
+	}
+
+
 	public String getWindowName() {
 		return windowName;
+	}
+	
+	public CSVAdapter getCsvAdapter() {
+		return csvAdapter;
+	}
+	
+	public DataViewLoader getDataViewLoader() {
+		return dataViewLoader;
 	}
 
 	/**
@@ -209,11 +248,12 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		return container;
 	}
-
 	
+	public StatusManager getStatusManager() {
+		return statusManager;
+	}
 	
-	
-	private void initializeDataFileAdapter() throws Exception {
+	public void initializeDataFileAdapter() throws Exception {
 		csvAdapter = new CSVAdapter(database, tableName,Utils.getDefaultPageSize(), 0,this);
 	}
 
@@ -535,7 +575,7 @@ public class DebugDataViewer extends ApplicationWindow {
 				scrolledComposite.setContent(stackLayoutComposite);
 				scrolledComposite.setMinSize(stackLayoutComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 				
-				installMouseWheelScrollRecursively(scrolledComposite);
+				/*installMouseWheelScrollRecursively(scrolledComposite);
 				
 				createGridViewTableColumns(gridViewTableViewer);
 				TableColumnLayout layout = setTableLayoutToMappingTable(gridViewTableViewer);
@@ -557,8 +597,20 @@ public class DebugDataViewer extends ApplicationWindow {
 				gridViewTableViewer.refresh();
 				for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
 					table.getColumn(columnIndex).pack();
-				}
-												
+				}*/
+							
+				
+				
+				createGridViewTableColumns(gridViewTableViewer);
+				
+				gridViewTableViewer.setContentProvider(new ArrayContentProvider());
+				gridViewTableViewer.setInput(gridViewData);
+				
+				dataViewLoader.setGridViewTableViewer(gridViewTableViewer);
+				dataViewLoader.updateDataViewLists();
+				
+				gridViewTableViewer.getTable().getColumn(0).pack();				
+				
 				gridViewTableViewer.refresh();
 			}
 		}
@@ -640,7 +692,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	@Override
 	protected MenuManager createMenuManager() {
 		actionFactory = new ActionFactory(this);
-		MenuManager menuManager = new MenuManager("menu");
+		MenuManager menuManager = new MenuManager(MenuConstants.MENU);
 		menuManager.setVisible(true);
 
 		createFileMenu(menuManager);
@@ -658,36 +710,36 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 	
 	private void createFileMenu(MenuManager menuManager) {
-		MenuManager fileMenu = createMenu(menuManager, "File");
+		MenuManager fileMenu = createMenu(menuManager, MenuConstants.FILE);
 		menuManager.add(fileMenu);
 		fileMenu.setVisible(true);
 
-		fileMenu.add(actionFactory.getAction("ExportAction"));
-		fileMenu.add(actionFactory.getAction("FilterAction"));
+		fileMenu.add(actionFactory.getAction(ExportAction.class.getName()));
+		fileMenu.add(actionFactory.getAction(FilterAction.class.getName()));
 	}
 	
 	private void createEditMenu(MenuManager menuManager) {
-		MenuManager editMenu = createMenu(menuManager, "Edit");
+		MenuManager editMenu = createMenu(menuManager, MenuConstants.EDIT);
 		menuManager.add(editMenu);
 		editMenu.setVisible(true);
 		
-		editMenu.add(actionFactory.getAction("SelectAllAction"));
-		editMenu.add(actionFactory.getAction("CopyAction"));
-		editMenu.add(actionFactory.getAction("FindAction"));
+		editMenu.add(actionFactory.getAction(SelectAllAction.class.getName()));
+		editMenu.add(actionFactory.getAction(CopyAction.class.getName()));
+		editMenu.add(actionFactory.getAction(FindAction.class.getName()));
 	}
 
 	private void createViewMenu(MenuManager menuManager) {
-		MenuManager viewMenu = createMenu(menuManager, "View");
+		MenuManager viewMenu = createMenu(menuManager, MenuConstants.VIEW);
 		menuManager.add(viewMenu);
 		viewMenu.setVisible(true);
 				
-		viewMenu.add(actionFactory.getAction("GridViewAction"));
-		viewMenu.add(actionFactory.getAction("FormattedViewAction"));
-		viewMenu.add(actionFactory.getAction("UnformattedViewAction"));
+		viewMenu.add(actionFactory.getAction(GridViewAction.class.getName()));
+		viewMenu.add(actionFactory.getAction(FormattedViewAction.class.getName()));
+		viewMenu.add(actionFactory.getAction(UnformattedViewAction.class.getName()));
 		viewMenu.add(new Separator());
-		viewMenu.add(actionFactory.getAction("ReloadAction"));
+		viewMenu.add(actionFactory.getAction(ReloadAction.class.getName()));
 		viewDataPreferences = getViewDataPreferencesFromPreferenceFile();
-		viewMenu.add(actionFactory.getAction("PreferencesAction"));
+		viewMenu.add(actionFactory.getAction(PreferencesAction.class.getName()));
 	}
 	
 	
@@ -723,19 +775,19 @@ public class DebugDataViewer extends ApplicationWindow {
 		addtoolbarAction(
 				toolBarManager,
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/export.png"),
-				actionFactory.getAction("ExportAction"));
+				actionFactory.getAction(ExportAction.class.getName()));
 		addtoolbarAction(
 				toolBarManager,
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/lookup.png"),
-				actionFactory.getAction("FindAction"));
+				actionFactory.getAction(FindAction.class.getName()));
 		addtoolbarAction(
 				toolBarManager,
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/refresh.png"),
-				actionFactory.getAction("ReloadAction"));
+				actionFactory.getAction(ReloadAction.class.getName()));
 		addtoolbarAction(
 				toolBarManager,
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/filter.png"),
-				actionFactory.getAction("FilterAction"));
+				actionFactory.getAction(FilterAction.class.getName()));
 		Action dropDownAction = new Action("", SWT.DROP_DOWN) {
 		};
 		dropDownAction.setImageDescriptor(new ImageDescriptor() {
@@ -866,13 +918,18 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 	}
 
-
 	public TableViewer getTableViewer() {
 		return gridViewTableViewer;
 	}
 
 	public ViewDataPreferences getViewDataPreferences() {
 		return viewDataPreferences;
+	}
+	
+	@Override
+	public boolean close() {
+		csvAdapter.dispose();
+		return super.close();
 	}
 	
 }

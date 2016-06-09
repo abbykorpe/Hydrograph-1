@@ -1,3 +1,16 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package hydrograph.ui.dataviewer.actions;
 
 import hydrograph.ui.dataviewer.DebugDataViewer;
@@ -37,15 +50,14 @@ public class ExportAction extends Action {
     private static final String DEFAILT_FILE_NAME="export_data.csv";
     private static final String INFORMATION="Information";
 	
-	public ExportAction(String menuItem) {
-		super(menuItem);
-		this.debugDataViewer = debugDataViewer;
+    private static final String LABEL="Export";
+    
+    public ExportAction(DebugDataViewer debugDataViewer) {
+    	super(LABEL);
+    	this.debugDataViewer = debugDataViewer;
 	}
+    
 	
-	public ExportAction(String menuItem, DebugDataViewer debugDataViewer) {
-		super(menuItem);
-		this.debugDataViewer = debugDataViewer;
-	}
 	@Override
 	public void run() {
 		ViewDataPreferences viewDataPreferences = debugDataViewer.getViewDataPreferences();
@@ -63,7 +75,6 @@ public class ExportAction extends Action {
 		FileDialog fileDialog = new FileDialog(Display.getDefault().getActiveShell(), SWT.SAVE);
 		String filePath = getPathOfFileDialog(fileDialog);
 		writeDataInFile(exportedfileDataList, filePath);
-		showInformationMessage(filePath);
 	}
 
 	private void showInformationMessage(String filePath) {
@@ -79,11 +90,19 @@ public class ExportAction extends Action {
 	private void writeDataInFile(List<String[]> fileDataList, String filePath) {
 		CSVWriter writer;
 		try {
-			writer = new CSVWriter(new FileWriter(filePath), delimiter.toCharArray()[0],quoteCharactor.toCharArray()[0]);
+			FileWriter fileWriter=new FileWriter(filePath);
+			writer = new CSVWriter(fileWriter, delimiter.toCharArray()[0],quoteCharactor.toCharArray()[0]);
 			writer.writeAll(fileDataList, false);
 			writer.close();
+			showInformationMessage(filePath);
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.OK| SWT.ICON_ERROR);
+			messageBox.setText("Error");
+			messageBox.setMessage("File already is in use.Please close it to replace it.");
+			int response=messageBox.open();
+			if(response==SWT.OK)
+			{
+			}
 		}
 	}
 
@@ -121,8 +140,8 @@ public class ExportAction extends Action {
 	private void addHeadersInList(TableViewer tableViewer, List<String[]> fileDataList, TableColumn[] columns) {
 		if (header) {
 			String[] tablecolumns = new String[tableViewer.getTable().getColumnCount()];
-			for (int k = 0; k < columns.length; k++) {
-				tablecolumns[k] = columns[k].getText();
+			for (int k = 0; k < columns.length-1; k++) {
+				tablecolumns[k] = columns[k+1].getText();
 			}
 			fileDataList.add(tablecolumns);
 		}
@@ -134,7 +153,7 @@ public class ExportAction extends Action {
 		List<RowData> eachRowData = new ArrayList<RowData>();
 		for (int index = 0; index < items.length; index++) {
 			List<ColumnData> columnData = new ArrayList<ColumnData>();
-			for (int j = 0; j < tableViewer.getTable().getColumnCount(); j++) {
+			for (int j = 1; j < tableViewer.getTable().getColumnCount(); j++) {
 				columnData.add(new ColumnData(items[index].getText(j), null));
 			}
 			RowData rowData = new RowData(columnData, i);
@@ -143,4 +162,5 @@ public class ExportAction extends Action {
 		}
 		return eachRowData;
 	}
+	
 }

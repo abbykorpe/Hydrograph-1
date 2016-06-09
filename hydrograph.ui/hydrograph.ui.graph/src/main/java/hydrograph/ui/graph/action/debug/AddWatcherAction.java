@@ -106,12 +106,10 @@ public class AddWatcherAction extends SelectionAction{
 	@Override
 	public void run() {
 		super.run();
-		limitValueGrid();
 		List<Object> selectedObjects =getSelectedObjects();
-		if(watcherSelection){
-		addWatchPoint(selectedObjects);
-		 
-		}
+		limitValue = -1L;
+		((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
+		addWatchPoint(selectedObjects);		 
 	}
 
 	@Override
