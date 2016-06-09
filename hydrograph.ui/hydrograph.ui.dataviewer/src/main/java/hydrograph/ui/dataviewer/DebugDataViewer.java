@@ -63,7 +63,6 @@ import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.ApplicationWindow;
@@ -246,6 +245,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		//statusManager.enableJumpPagePanel(false);
 		statusManager.enableInitialPaginationContols();
 		
+		tabFolder.setSelection(0);
+		
 		return container;
 	}
 	
@@ -397,7 +398,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		CTabItem tbtmUnformattedView = new CTabItem(tabFolder, SWT.CLOSE);
 		tbtmUnformattedView.setData("VIEW_NAME", Views.UNFORMATTED_VIEW_NAME);
-		tbtmUnformattedView.setText("Unformatted View");
+		tbtmUnformattedView.setText(Views.UNFORMATTED_VIEW_DISPLAY_NAME);
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
 			tbtmUnformattedView.setControl(composite);
@@ -424,7 +425,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		CTabItem tbtmFormattedView = new CTabItem(tabFolder, SWT.CLOSE);
 		tbtmFormattedView.setData("VIEW_NAME", Views.FORMATTED_VIEW_NAME);
-		tbtmFormattedView.setText("Formatted view");
+		tbtmFormattedView.setText(Views.FORMATTED_VIEW_DISPLAYE_NAME);
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
 			tbtmFormattedView.setControl(composite);
@@ -444,7 +445,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	private void createHorizantalViewTabItem() {
 		CTabItem tbtmHorizantalView = new CTabItem(tabFolder, SWT.CLOSE);
 		tbtmHorizantalView.setData("VIEW_NAME", "HORIZANTAL_VIEW");
-		tbtmHorizantalView.setText("Horizantal view");
+		tbtmHorizantalView.setText(Views.HORIZONTAL_VIEW_DISPLAY_NAME);
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
 			tbtmHorizantalView.setControl(composite);
@@ -530,7 +531,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		CTabItem tbtmGridview = new CTabItem(tabFolder, SWT.NONE);
 		tbtmGridview.setData("VIEW_NAME", Views.GRID_VIEW_NAME);
-		tbtmGridview.setText("Grid view");
+		tbtmGridview.setText(Views.GRID_VIEW_DISPLAY_NAME);
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
 			tbtmGridview.setControl(composite);
@@ -789,6 +790,11 @@ public class DebugDataViewer extends ApplicationWindow {
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/filter.png"),
 				actionFactory.getAction(FilterAction.class.getName()));
 		Action dropDownAction = new Action("", SWT.DROP_DOWN) {
+			@Override
+			public void run() {
+				tabFolder.showItem(tabFolder.getItem(0));
+				tabFolder.setSelection(0);
+			}
 		};
 		dropDownAction.setImageDescriptor(new ImageDescriptor() {
 
@@ -798,6 +804,7 @@ public class DebugDataViewer extends ApplicationWindow {
 						+ "/icons/advicons/switchview.png");
 			}
 		});
+		
 		dropDownAction.setMenuCreator(new ViewDataGridMenuCreator(actionFactory));
 		toolBarManager.add(dropDownAction);
 
