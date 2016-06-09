@@ -17,7 +17,6 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.dataviewer.DebugDataViewer;
 import hydrograph.ui.dataviewer.ReloadInformation;
-import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
@@ -33,7 +32,6 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -51,10 +49,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -75,7 +70,7 @@ import org.slf4j.Logger;
 public class WatchRecordAction extends SelectionAction {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(WatchRecordAction.class);
 	private boolean isWatcher;
-	WatchRecordInner watchRecordInner = new WatchRecordInner();
+	private WatchRecordInner watchRecordInner = new WatchRecordInner();
 	
 	private HashMap<String,DebugDataViewer> dataViewerMap;
 	
@@ -318,7 +313,7 @@ public class WatchRecordAction extends SelectionAction {
 		}
 		
 		
-		String windowName = job.getUniqueJobId() + "_" + watchRecordInner.getComponentId() + "_"
+		String windowName = job.getLocalJobID().replace(".", "_") + "_" + watchRecordInner.getComponentId() + "_"
 				+ watchRecordInner.getSocketId();
 		if (dataViewerMap.keySet().contains(windowName)) {
 			dataViewerMap.get(windowName).getShell().setActive();
@@ -369,9 +364,9 @@ public class WatchRecordAction extends SelectionAction {
 				if(!file.exists()) { 
 					ScpFrom scpFrom = new ScpFrom();
 					scpFrom.scpFileFromRemoteServer(job.getIpAddress(), job.getUsername(), job.getPassword(), watchFile.trim(),
-							tempCopyPath);
-					deleteDownloadedViewDataFile(job);
+							tempCopyPath);					
 				}
+				deleteDownloadedViewDataFile(job);
 			}
 		}
 		
