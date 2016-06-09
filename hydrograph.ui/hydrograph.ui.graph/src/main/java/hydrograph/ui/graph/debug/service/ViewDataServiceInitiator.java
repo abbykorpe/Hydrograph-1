@@ -37,28 +37,8 @@ import org.slf4j.Logger;
 public class ViewDataServiceInitiator {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ViewDataServiceInitiator.class);
 	
-	public static void startService(){
-	
-		/*try{
-			int portNumber = Integer.parseInt(DebugHelper.INSTANCE.restServicePort());
-			ServerSocket serverSocket = new ServerSocket(portNumber, 1, InetAddress.getLocalHost());
-			if(!serverSocket.isClosed()){
-				serverSocket.close();
-				startServer();
-			}
-
-		}catch(BindException bindException){
-			logger.error("Server is already started on port or is used by other process", bindException);
-		} catch (InterruptedException interruptedException) {
-			logger.error("Server process has been interrupted", interruptedException);
-		} catch (UnknownHostException unknownHostException) {
-			logger.error("Host is not known", unknownHostException);
-		} catch (IOException ioException) {
-			logger.error("Failure in IO", ioException);
-		}*/
+	public static void startService(){	
 		try{
-			startServer();
-
 			startServer();
 		}catch(BindException bindException){
 			logger.error("Server is already started on port or is used by other process", bindException);
@@ -73,15 +53,15 @@ public class ViewDataServiceInitiator {
 
 	private static void startServer() throws InterruptedException, IOException {
 		if(OSValidator.isWindows()){
-			//ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "start", "/b", "java","-jar", getInstallationPath()});
 			String command= "java -classpath " + getInstallationConfigPath().trim() + ";" + getInstallationPath() + " hydrograph.server.debug.service.DebugService";
 			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", command});
 			builder.start();
 		}
 		else if(OSValidator.isMac()){
-			String params= getInstallationConfigPath().trim() + ":" + getInstallationPath() + " hydrograph.server.debug.service.DebugService";
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"java", "-cp", params});
-			builder.start();
+			String command="java -cp " + getInstallationConfigPath().trim() + ":" + getInstallationPath() + " hydrograph.server.debug.service.DebugService";
+            ProcessBuilder builder = new ProcessBuilder(new String[]{"bash", "-c", command});
+            builder.start();
+
 		}
 		else if(OSValidator.isUnix()){
 			new ProcessBuilder(new String[]{"java", "-jar", getInstallationPath()}).start();
