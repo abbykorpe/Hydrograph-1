@@ -22,4 +22,5 @@ public class PreferenceConstants {
 	public static final String QUOTE_CHARACTOR = "quoteCharactor";
 	public static final String INCLUDE_HEADER = "includeHeader";
 	public static final String DEFAULTPATH = "exportDataDefaultpath";
+	public static final String PURGE_DATA_FILES = "purgeDataFiles";
 }

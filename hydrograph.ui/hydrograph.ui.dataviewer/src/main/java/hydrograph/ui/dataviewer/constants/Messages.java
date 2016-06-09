@@ -13,6 +13,27 @@
 
 package hydrograph.ui.dataviewer.constants;
 
-public class Messages {
+import org.eclipse.osgi.util.NLS;
+
+public class Messages extends NLS{
+	private static final String BUNDLE_NAME = "resources.messages";
+	
+	/*view data preferences*/
+	public static String MEMORY_FIELD_MESSAGE;
+	public static String INTEGER_FIELD_VALIDATION;
+	public static String PAGE_SIZE_WARNING;
+	public static String DELIMITER_WARNING;
+	public static String DELIMITER_VALUE_MATCH_ERROR;
+	public static String CHARACTER_LENGTH_ERROR;
+	public static String QUOTE_WARNING;
+	public static String QUOTE_VALUE_MATCH_ERROR;
+	
+	static {
+		// initialize resource bundle
+		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
+	}
+
+	private Messages() {
+	}
 	
 }
