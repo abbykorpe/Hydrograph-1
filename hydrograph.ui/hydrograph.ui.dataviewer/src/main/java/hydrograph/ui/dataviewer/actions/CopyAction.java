@@ -20,13 +20,15 @@ import org.eclipse.jface.action.Action;
 public class CopyAction extends Action {
 	
 	private static final String LABEL="Copy";
+	private DebugDataViewer debugDataViewer;
+	
 	public CopyAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
+		this.debugDataViewer = debugDataViewer;
 	}
 	@Override
 	public void run() {
-		System.out.println("CopyAction");
-		super.run();
+		debugDataViewer.copySelectedAsTabDelimited();
 	}
 
 }

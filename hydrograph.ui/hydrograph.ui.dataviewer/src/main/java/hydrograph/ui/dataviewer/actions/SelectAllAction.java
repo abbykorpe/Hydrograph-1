@@ -29,7 +29,6 @@ public class SelectAllAction extends Action{
 	
 	@Override
 	public void run() {
-		System.out.println("SelectAllAction");
-		super.run();
+		debugDataViewer.selectAll();
 	}
 }

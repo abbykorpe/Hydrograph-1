@@ -31,6 +31,7 @@ import hydrograph.ui.dataviewer.constants.ControlConstants;
 import hydrograph.ui.dataviewer.constants.MenuConstants;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.constants.Views;
+import hydrograph.ui.dataviewer.datastructures.ColumnData;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.listeners.DataViewerListeners;
@@ -72,6 +73,11 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.VerifyEvent;
@@ -85,6 +91,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -568,7 +575,7 @@ public class DebugDataViewer extends ApplicationWindow {
 						table.setLinesVisible(true);
 						table.setHeaderVisible(true);
 						table.showSelection();
-						
+						addListenersToGridViewTableViewer();
 					}
 					stackLayout.topControl = composite_1;
 				}
@@ -946,5 +953,54 @@ public class DebugDataViewer extends ApplicationWindow {
 		csvAdapter.dispose();
 		return super.close();
 	}
-	
+
+	// Used to add listeners to GridViewTableViewer
+	private void addListenersToGridViewTableViewer() {
+		gridViewTableViewer.getControl().addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {/* DO-nothing */
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.stateMask == SWT.CTRL && e.keyCode == 'a') {
+					selectAll();
+				}
+				else if (e.stateMask == SWT.CTRL && e.keyCode == 'c') {
+					copySelectedAsTabDelimited();
+				}
+			}
+		});
+	}
+
+	/**
+	 * This method is used to mark all rows of advance data viewer as selected.
+	 * 
+	 */
+	public void selectAll() {
+		Table table = getTableViewer().getTable();
+		table.setSelection(0, table.getItemCount() - 1);
+	}
+
+	/**
+	 * This method is used to copy all selected rows as tab delimited
+	 * 
+	 */
+	public void copySelectedAsTabDelimited() {
+		StringBuffer stringBuffer = new StringBuffer();
+		for (Item item : gridViewTableViewer.getTable().getSelection()) {
+			RowData rowData = (RowData) item.getData();
+			for (ColumnData columnData : rowData.getColumns()) {
+				stringBuffer.append(columnData.getValue() + "\t");
+			}
+			stringBuffer.append("\n");
+		}
+		Clipboard cb = new Clipboard(Display.getCurrent());
+		TextTransfer textTransfer = TextTransfer.getInstance();
+		String textData = stringBuffer.toString();
+		cb.setContents(new Object[] { textData }, new Transfer[] { textTransfer });
+		cb.dispose();
+	}
+
 }
