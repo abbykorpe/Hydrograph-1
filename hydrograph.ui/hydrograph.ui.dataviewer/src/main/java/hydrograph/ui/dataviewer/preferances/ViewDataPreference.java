@@ -128,7 +128,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		bt1.setBounds(0, 0, 20, 10);
 		bt1.setVisible(false);
 		
-		tempPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, " &Temp Path", group);
+		tempPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, " Local Temp Path", group);
 		new Label(group, SWT.NONE);
 		new Label(group, SWT.NONE);
 		tempPathFieldEditor.setPreferenceStore(getPreferenceStore());
@@ -145,7 +145,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		grpExportData.setLayoutData(gd_grpExportData);
 		grpExportData.setText("Export Data");
 		
-		delimeterEditor = new StringFieldEditor(PreferenceConstants.DELIMITER, " &Delimiter  ", grpExportData);
+		delimeterEditor = new StringFieldEditor(PreferenceConstants.DELIMITER, " Delimiter  ", grpExportData);
 		delimeterEditor.setEmptyStringAllowed(false);
 		delimeterEditor.setPropertyChangeListener(new IPropertyChangeListener() {
 			@Override
@@ -175,7 +175,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		b1.setText("");
 		b1.setVisible(false);
 		
-		quoteEditor = new StringFieldEditor(PreferenceConstants.QUOTE_CHARACTOR, " &Quote Character    ", grpExportData);
+		quoteEditor = new StringFieldEditor(PreferenceConstants.QUOTE_CHARACTOR, " Quote Character    ", grpExportData);
 		quoteEditor.setPropertyChangeListener(new IPropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
@@ -204,17 +204,17 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		b2.setText("");
 		b2.setVisible(false);
 		
-		defaultPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.DEFAULTPATH, " &Default Path  ", grpExportData);
+		defaultPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.DEFAULTPATH, " Default Path  ", grpExportData);
 		defaultPathFieldEditor.setPreferenceStore(getPreferenceStore());
 		defaultPathFieldEditor.load();
 		
-		booleanFieldEditor = new BooleanFieldEditor(PreferenceConstants.INCLUDE_HEADER, " &Include Headers  ", SWT.DEFAULT, composite);
+		booleanFieldEditor = new BooleanFieldEditor(PreferenceConstants.INCLUDE_HEADER, " Include Headers  ", SWT.DEFAULT, composite);
 		getPreferenceStore().setDefault(PreferenceConstants.INCLUDE_HEADER, true);
 		booleanFieldEditor.setPreferenceStore(getPreferenceStore());
 		booleanFieldEditor.setPreferenceStore(getPreferenceStore());
 		booleanFieldEditor.load();
 		
-		pergeEditor = new BooleanFieldEditor(PreferenceConstants.PURGE_DATA_FILES, " &Purge View Data Files  ", composite);
+		pergeEditor = new BooleanFieldEditor(PreferenceConstants.PURGE_DATA_FILES, " Purge View Data Files  ", composite);
 		getPreferenceStore().setDefault(PreferenceConstants.PURGE_DATA_FILES, true);
 		pergeEditor.setPreferenceStore(getPreferenceStore());
 		pergeEditor.load();
