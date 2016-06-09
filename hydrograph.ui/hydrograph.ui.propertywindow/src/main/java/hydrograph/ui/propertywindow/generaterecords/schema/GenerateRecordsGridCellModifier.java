@@ -150,10 +150,13 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 	 */
 	@Override
 	public void modify(Object element, String property, Object value) {
+		Object object=null;
 		if (element instanceof Item)
-			element = ((Item) element).getData();
+		{	
+			object=((Item) element).getData();
+		}	
 
-		GenerateRecordSchemaGridRow generateRecordSchemaGridRow = (GenerateRecordSchemaGridRow) element;
+		GenerateRecordSchemaGridRow generateRecordSchemaGridRow = (GenerateRecordSchemaGridRow) object;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			generateRecordSchemaGridRow.setFieldName(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
