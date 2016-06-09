@@ -189,6 +189,9 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 							else
 								minPermissibleRangeValue = minPermissibleRangeValue.concat("9");
 						}
+						
+						if(minPermissibleRangeValue.equals("-"))
+							minPermissibleRangeValue = "0";
 
 						if (scaleLength != 0) {
 							int decimalPosition = fieldLength - scaleLength;
@@ -203,6 +206,11 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 							maxPermissibleRangeValue = maxPermissibleRangeValue.substring(0, decimalPosition - 1)
 									+ "." + maxPermissibleRangeValue.substring(decimalPosition);
 
+						}
+						
+						if(fieldLength == 0){
+							minPermissibleRangeValue="0";
+							maxPermissibleRangeValue="0";
 						}
 						
 						BigDecimal minRangeValue = new BigDecimal(minPermissibleRangeValue);
@@ -262,6 +270,15 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 								minPermissibleRangeValue = minPermissibleRangeValue.concat("9");
 						}
 						
+						if(minPermissibleRangeValue.equals("-"))
+							minPermissibleRangeValue = "0";
+						
+						if(fieldLength == 0){
+							minPermissibleRangeValue="0";
+							maxPermissibleRangeValue="0";
+						}
+							
+						
 						BigDecimal minRangeValue = new BigDecimal(minPermissibleRangeValue);
 						BigDecimal maxRangeValue = new BigDecimal(maxPermissibleRangeValue);
 					
@@ -269,20 +286,16 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 						if (rangeFrom != null && fieldLength > 0 && rangeTo != null) {
 							if (rangeFrom.compareTo(minRangeValue) < 0)
 								return Messages.RANGE_FROM_LESS_THAN_MIN_PERMISSIBLE_VALUE;
+							else if (rangeTo.compareTo(maxRangeValue) > 0)
+								return Messages.RANGE_TO_GREATER_THAN_MAX_PERMISSIBLE_VALUE;
 						} else if(rangeFrom != null && fieldLength > 0 && rangeTo == null){
 							if (rangeFrom.compareTo(maxRangeValue) > 0)
 								return Messages.RANGE_FROM_GREATER_THAN_MAX_PERMISSIBLE_VALUE;
-						}
-
-						if (rangeTo != null && fieldLength > 0 && rangeFrom != null) {
-							if (rangeTo.compareTo(maxRangeValue) > 0)
-								return Messages.RANGE_TO_GREATER_THAN_MAX_PERMISSIBLE_VALUE;
 						} else if(rangeTo != null && fieldLength > 0 && rangeFrom == null){
 							if (rangeTo.compareTo(minRangeValue) < 0)
 								return Messages.RANGE_TO_LESS_THAN_MIN_PERMISSIBLE_VALUE;
 						}
 					}
-						
 				}
 			}
 		}
