@@ -18,6 +18,7 @@ import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.MultiParameterFileUIUtils;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
+import hydrograph.ui.dataviewer.DebugDataViewer;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.debug.service.ViewDataServiceInitiator;
 import hydrograph.ui.graph.handler.DebugHandler;
@@ -38,6 +39,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -73,6 +75,7 @@ public class JobManager {
 	private static final String PARAMETER_FILE_EXTENTION=".properties";
 	private static final String DEBUG_FILE_EXTENTION="_debug.xml";
 	public static final String PROJECT_METADATA_FILE="\\project.metadata";
+	private HashMap<String,DebugDataViewer> dataViewerMap;
 	
 	public boolean isLocalMode() {
 		return localMode;
@@ -81,6 +84,17 @@ public class JobManager {
 	public void setLocalMode(boolean localMode) {
 		this.localMode = localMode;
 	}
+	
+	public HashMap<String, DebugDataViewer> getDataViewerMap() {
+		return dataViewerMap;
+	}
+
+	public void setDataViewerMap(HashMap<String, DebugDataViewer> dataViewerMap) {
+		this.dataViewerMap = dataViewerMap;
+	}
+
+
+
 
 	private String activeCanvas;
 	

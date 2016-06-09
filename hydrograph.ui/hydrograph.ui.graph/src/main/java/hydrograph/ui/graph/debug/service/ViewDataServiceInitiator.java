@@ -39,11 +39,27 @@ public class ViewDataServiceInitiator {
 	
 	public static void startService(){
 	
-		int portNumber = Integer.parseInt(DebugHelper.INSTANCE.restServicePort());
-		try(ServerSocket serverSocket= new ServerSocket(portNumber, 1, InetAddress.getLocalHost())){
+		/*try{
+			int portNumber = Integer.parseInt(DebugHelper.INSTANCE.restServicePort());
+			ServerSocket serverSocket = new ServerSocket(portNumber, 1, InetAddress.getLocalHost());
 			if(!serverSocket.isClosed()){
+				serverSocket.close();
 				startServer();
 			}
+
+		}catch(BindException bindException){
+			logger.error("Server is already started on port or is used by other process", bindException);
+		} catch (InterruptedException interruptedException) {
+			logger.error("Server process has been interrupted", interruptedException);
+		} catch (UnknownHostException unknownHostException) {
+			logger.error("Host is not known", unknownHostException);
+		} catch (IOException ioException) {
+			logger.error("Failure in IO", ioException);
+		}*/
+		try{
+			startServer();
+
+			startServer();
 		}catch(BindException bindException){
 			logger.error("Server is already started on port or is used by other process", bindException);
 		} catch (InterruptedException interruptedException) {
@@ -57,11 +73,14 @@ public class ViewDataServiceInitiator {
 
 	private static void startServer() throws InterruptedException, IOException {
 		if(OSValidator.isWindows()){
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "start", "/b", "java","-jar", getInstallationPath()});
+			//ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "start", "/b", "java","-jar", getInstallationPath()});
+			String command= "java -classpath " + getInstallationConfigPath().trim() + ";" + getInstallationPath() + " hydrograph.server.debug.service.DebugService";
+			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", command});
 			builder.start();
 		}
 		else if(OSValidator.isMac()){
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"java", "-jar", getInstallationPath()});
+			String params= getInstallationConfigPath().trim() + ":" + getInstallationPath() + " hydrograph.server.debug.service.DebugService";
+			ProcessBuilder builder = new ProcessBuilder(new String[]{"java", "-cp", params});
 			builder.start();
 		}
 		else if(OSValidator.isUnix()){
@@ -79,5 +98,15 @@ public class ViewDataServiceInitiator {
 		}
 		
 		return path + "config/service/" + restServiceJar;
+	}
+	
+	private static String getInstallationConfigPath()  {
+		String path = Platform.getInstallLocation().getURL().getPath();
+		String restServiceJar = DebugHelper.INSTANCE.restServiceJar();
+		if(StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/") && OSValidator.isWindows()){
+			path = StringUtils.substring(path, 1);
+		}
+		
+		return path + "config/service/config" ;
 	}
 }

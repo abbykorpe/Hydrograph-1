@@ -32,10 +32,12 @@ Require-Bundle: org.eclipse.ui,
  org.json;bundle-version="1.0.0",
  org.apache.commons.httpclient;bundle-version="3.1.0",
  ch.qos.logback.classic,
- org.eclipse.core.expressions
+ org.eclipse.core.expressions,
+ hydrograph.ui.dataviewer;bundle-version="0.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Import-Package: com.thoughtworks.xstream,
+Import-Package: com.jcraft.jsch;version="0.1.44",
+ com.thoughtworks.xstream,
  hydrograph.ui.graph.model,
  hydrograph.ui.graph.model.processor,
  org.eclipse.core.filesystem,
