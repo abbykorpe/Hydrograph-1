@@ -101,6 +101,10 @@ public class ReloadAction extends Action {
 	@Override
 	public void run() {
 		
+		//TODO - Please delete this code once internal preferences are in place
+		if(1==1)
+			return;
+		
 		this.debugDataViewer.getCsvAdapter().dispose();
 
 		reloadInformation = debugDataViewer.getReloadInformation();
