@@ -13,6 +13,7 @@
 
 package hydrograph.ui.dataviewer.actions;
 
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.dataviewer.DebugDataViewer;
 import hydrograph.ui.dataviewer.datastructures.ColumnData;
 import hydrograph.ui.dataviewer.datastructures.RowData;
@@ -40,7 +41,10 @@ public class CopyAction extends Action {
 	public CopyAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
 		this.debugDataViewer = debugDataViewer;
-		setAccelerator(SWT.CTRL + 'C');
+		if (OSValidator.isWindows())
+			setAccelerator(SWT.CTRL + 'c');
+		if (OSValidator.isMac())
+			setAccelerator(SWT.COMMAND + 'c');
 	}
 	@Override
 	public void run() {
