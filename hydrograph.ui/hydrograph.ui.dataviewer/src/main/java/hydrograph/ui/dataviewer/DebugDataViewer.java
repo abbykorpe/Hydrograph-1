@@ -192,7 +192,15 @@ public class DebugDataViewer extends ApplicationWindow {
 	public DataViewLoader getDataViewLoader() {
 		return dataViewLoader;
 	}
+	
+	public StyledText getUnformattedViewTextarea() {
+		return unformattedViewTextarea;
+	}
 
+
+	public StyledText getFormattedViewTextarea() {
+		return formattedViewTextarea;
+	}
 	/**
 	 * Create contents of the application window.
 	 * @param parent
@@ -230,7 +238,6 @@ public class DebugDataViewer extends ApplicationWindow {
 				unformattedViewData, csvAdapter, tabFolder);
 
 		dataViewerListeners = new DataViewerListeners();
-		
 		createGridViewTabItem();
 		createPaginationPanel(container);		
 		
@@ -568,7 +575,6 @@ public class DebugDataViewer extends ApplicationWindow {
 						table.setLinesVisible(true);
 						table.setHeaderVisible(true);
 						table.showSelection();
-						
 					}
 					stackLayout.topControl = composite_1;
 				}
@@ -946,5 +952,5 @@ public class DebugDataViewer extends ApplicationWindow {
 		csvAdapter.dispose();
 		return super.close();
 	}
-	
+
 }

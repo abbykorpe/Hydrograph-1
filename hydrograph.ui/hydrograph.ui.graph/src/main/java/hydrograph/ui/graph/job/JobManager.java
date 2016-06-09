@@ -22,6 +22,7 @@ import hydrograph.ui.dataviewer.DebugDataViewer;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.debug.service.ViewDataServiceInitiator;
 import hydrograph.ui.graph.handler.DebugHandler;
+import hydrograph.ui.graph.handler.RemoveDebugHandler;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.CanvasUtils;
@@ -149,6 +150,7 @@ public class JobManager {
 		((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
 		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
 		((DebugHandler)RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(enabled);
+		((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(enabled);
 	}
 	
 	/**
