@@ -16,7 +16,16 @@ package hydrograph.ui.dataviewer.actions;
 import hydrograph.ui.dataviewer.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
-
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Table;
+/**
+ * 
+ * 
+ * Select all action 
+ * 
+ * @author Bitwise
+ *
+ */
 public class SelectAllAction extends Action{
 	
 	private static final String LABEL="Select All";
@@ -25,10 +34,24 @@ public class SelectAllAction extends Action{
 	public SelectAllAction(DebugDataViewer debugDataViewer) {
     	super(LABEL);
     	this.debugDataViewer = debugDataViewer;
+    	setAccelerator(SWT.CTRL + 'a');
 	}
 	
 	@Override
 	public void run() {
-		debugDataViewer.selectAll();
+		if (debugDataViewer.getUnformattedViewTextarea()!=null && debugDataViewer.getUnformattedViewTextarea().isVisible())
+			debugDataViewer.getUnformattedViewTextarea().selectAll();
+		else if (debugDataViewer.getFormattedViewTextarea()!=null && debugDataViewer.getFormattedViewTextarea().isVisible())
+			debugDataViewer.getFormattedViewTextarea().selectAll();
+		else
+			selectAll();
 	}
+
+	
+	// This method is used to mark all rows of advance data viewer as selected.
+	public void selectAll() {
+		Table table = debugDataViewer.getTableViewer().getTable();
+		table.setSelection(0, table.getItemCount() - 1);
+	}
+	
 }
