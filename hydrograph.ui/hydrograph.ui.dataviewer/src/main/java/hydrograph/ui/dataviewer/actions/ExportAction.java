@@ -13,6 +13,7 @@
 
 package hydrograph.ui.dataviewer.actions;
 
+import hydrograph.ui.common.util.ConvertHexValues;
 import hydrograph.ui.dataviewer.DebugDataViewer;
 import hydrograph.ui.dataviewer.datastructures.ColumnData;
 import hydrograph.ui.dataviewer.datastructures.RowData;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -49,15 +51,14 @@ public class ExportAction extends Action {
     private static final String DEFAULT="default";
     private static final String DEFAILT_FILE_NAME="export_data.csv";
     private static final String INFORMATION="Information";
+    private String ERROR_MESSAGE="File is open.Please close it to replace it.";
 	
-    private static final String LABEL="Export";
+ private static final String LABEL="Export";
     
     public ExportAction(DebugDataViewer debugDataViewer) {
     	super(LABEL);
     	this.debugDataViewer = debugDataViewer;
 	}
-    
-	
 	@Override
 	public void run() {
 		ViewDataPreferences viewDataPreferences = debugDataViewer.getViewDataPreferences();
@@ -74,7 +75,11 @@ public class ExportAction extends Action {
 		addRowsDataInList(tableViewer, eachRowData, exportedfileDataList);
 		FileDialog fileDialog = new FileDialog(Display.getDefault().getActiveShell(), SWT.SAVE);
 		String filePath = getPathOfFileDialog(fileDialog);
-		writeDataInFile(exportedfileDataList, filePath);
+		try {
+			writeDataInFile(exportedfileDataList, filePath);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void showInformationMessage(String filePath) {
@@ -87,23 +92,33 @@ public class ExportAction extends Action {
 		}
 	}
 
-	private void writeDataInFile(List<String[]> fileDataList, String filePath) {
-		CSVWriter writer;
+	private void writeDataInFile(List<String[]> fileDataList, String filePath) throws IOException {
+		CSVWriter writer = null;
+		FileWriter fileWriter = null;
 		try {
-			FileWriter fileWriter=new FileWriter(filePath);
-			writer = new CSVWriter(fileWriter, delimiter.toCharArray()[0],quoteCharactor.toCharArray()[0]);
-			writer.writeAll(fileDataList, false);
-			writer.close();
-			showInformationMessage(filePath);
+			if (filePath != null) {
+				if (StringUtils.length(ConvertHexValues.parseHex(delimiter)) == 1 && StringUtils.length(ConvertHexValues.parseHex(quoteCharactor)) == 1){
+					fileWriter = new FileWriter(filePath);
+					writer = new CSVWriter(fileWriter, ConvertHexValues.parseHex(delimiter).toCharArray()[0],
+							ConvertHexValues.parseHex(quoteCharactor).toCharArray()[0]);
+				writer.writeAll(fileDataList, false);
+				showInformationMessage(filePath);
+				}
+			}
 		} catch (IOException e1) {
-			MessageBox messageBox = new MessageBox(new Shell(), SWT.OK| SWT.ICON_ERROR);
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.OK | SWT.ICON_ERROR);
 			messageBox.setText("Error");
-			messageBox.setMessage("File already is in use.Please close it to replace it.");
-			int response=messageBox.open();
-			if(response==SWT.OK)
-			{
+			messageBox.setMessage(ERROR_MESSAGE);
+			int response = messageBox.open();
+			if (response == SWT.OK) {
+			}
+		} finally {
+			if(fileWriter!=null && writer!=null){
+			fileWriter.close();
+			writer.close();
 			}
 		}
+
 	}
 
 	private String getPathOfFileDialog(FileDialog fileDialog) {
@@ -129,7 +144,7 @@ public class ExportAction extends Action {
 	private void addRowsDataInList(TableViewer tableViewer, List<RowData> eachRowData, List<String[]> fileDataList) {
 		for (RowData rowData : eachRowData) {
 			List<ColumnData> columnDatas = rowData.getColumns();
-			String[] eachrowdata = new String[tableViewer.getTable().getColumnCount()];
+			String[] eachrowdata = new String[tableViewer.getTable().getColumnCount()-1];
 			for (int j = 0; j < columnDatas.size(); j++) {
 				eachrowdata[j] = columnDatas.get(j).getValue();
 			}
@@ -139,7 +154,7 @@ public class ExportAction extends Action {
 
 	private void addHeadersInList(TableViewer tableViewer, List<String[]> fileDataList, TableColumn[] columns) {
 		if (header) {
-			String[] tablecolumns = new String[tableViewer.getTable().getColumnCount()];
+			String[] tablecolumns = new String[tableViewer.getTable().getColumnCount()-1];
 			for (int k = 0; k < columns.length-1; k++) {
 				tablecolumns[k] = columns[k+1].getText();
 			}
@@ -162,5 +177,4 @@ public class ExportAction extends Action {
 		}
 		return eachRowData;
 	}
-	
 }

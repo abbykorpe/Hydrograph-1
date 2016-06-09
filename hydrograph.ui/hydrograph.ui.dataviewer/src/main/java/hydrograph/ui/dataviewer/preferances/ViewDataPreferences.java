@@ -17,18 +17,23 @@ public class ViewDataPreferences {
 	private String delimiter;
 	private String quoteCharactor;
 	private Boolean includeHeaders;
+	private String fileSize;
+	private String pageSize;
 
 	public ViewDataPreferences() {
 		delimiter = ",";
 		quoteCharactor = "\"";
 		includeHeaders = true;
+		fileSize="100";
+		pageSize="100";
 
 	}
-
-	public ViewDataPreferences(String delimiter, String quoteCharactor, boolean includeHeaders) {
+	public ViewDataPreferences(String delimiter, String quoteCharactor, boolean includeHeaders,String fileSize,String pageSize) {
 		this.delimiter=delimiter;
 		this.quoteCharactor=quoteCharactor;
 		this.includeHeaders=includeHeaders;
+		this.fileSize=fileSize;
+		this.pageSize=pageSize;
 	}
 
 	public String getDelimiter() {
@@ -54,5 +59,17 @@ public class ViewDataPreferences {
 	public void setIncludeHeaders(Boolean includeHeaders) {
 		this.includeHeaders = includeHeaders;
 	}
-
+	public String getFileSize() {
+		return fileSize;
+	}
+	public void setFileSize(String fileSize) {
+		this.fileSize = fileSize;
+	}
+	public String getPageSize() {
+		return pageSize;
+	}
+	public void setPageSize(String pageSize) {
+		this.pageSize = pageSize;
+	}
+	
 }
