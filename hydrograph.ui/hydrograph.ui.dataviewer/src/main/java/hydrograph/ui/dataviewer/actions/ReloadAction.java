@@ -92,7 +92,7 @@ public class ReloadAction extends Action {
 		postMethod.addParameter(DebugServicePostParameters.BASE_PATH, reloadInformation.getBasepath());
 		postMethod.addParameter(DebugServicePostParameters.USER_ID, reloadInformation.getUsername());
 		postMethod.addParameter(DebugServicePostParameters.PASSWORD, reloadInformation.getPassword());
-		postMethod.addParameter(DebugServicePostParameters.FILE_SIZE, viewDataPreferences.getFileSize());
+		postMethod.addParameter(DebugServicePostParameters.FILE_SIZE, Integer.toString(viewDataPreferences.getFileSize()));
 		postMethod.addParameter(DebugServicePostParameters.HOST_NAME, reloadInformation.getHost());
 		return postMethod;
 	}
@@ -157,7 +157,7 @@ public class ReloadAction extends Action {
 		deleteCSVDebugDataFile();
 		
 		try {
-			this.debugDataViewer.getCsvAdapter().reinitializeAdapter(Integer.parseInt(viewDataPreferences.getPageSize()));
+			this.debugDataViewer.getCsvAdapter().reinitializeAdapter(viewDataPreferences.getPageSize());
 		} catch (Exception e) {
 			Utils.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_LOAD_DEBUG_FILE);
 			this.debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_LOAD_DEBUG_FILE));

@@ -770,7 +770,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		includeHeaderValue = includeHeader.equalsIgnoreCase(DEFAULT) ? true : false;
 		fileSize = fileSize.equalsIgnoreCase(DEFAULT) ? DEFAULT_FILE_SIZE : fileSize;
 		pageSize = pageSize.equalsIgnoreCase(DEFAULT) ? DEFAULT_PAGE_SIZE : pageSize;
-		ViewDataPreferences viewDataPreferences = new ViewDataPreferences(delimiter, quoteCharactor, includeHeaderValue,fileSize,pageSize);
+		ViewDataPreferences viewDataPreferences = new ViewDataPreferences(delimiter, quoteCharactor, includeHeaderValue,Integer.parseInt(fileSize),Integer.parseInt(pageSize));
 		return viewDataPreferences;
 	}
 	
