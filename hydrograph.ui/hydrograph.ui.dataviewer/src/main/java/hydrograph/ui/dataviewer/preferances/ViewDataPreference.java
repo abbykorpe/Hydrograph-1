@@ -227,7 +227,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		Label lblNewLabel = new Label(group_1, SWT.NONE);
 		lblNewLabel.setBounds(10, 52, 139, 298);
 		lblNewLabel.setText(" ");
-		lblNewLabel.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, true, 3, 3));
 		
 		return null;
 	}
