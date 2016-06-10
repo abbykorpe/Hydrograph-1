@@ -50,7 +50,7 @@ import com.opencsv.CSVWriter;
  */
 public class ExportAction extends Action {
 	private DebugDataViewer debugDataViewer;
-	private Boolean isIncludeHeadersChecked;
+	private Boolean headerEnabled;
 	private String delimiter;
 	private String quoteCharactor;
 	private static final String EXPORT_FILE = "Export File";
@@ -74,12 +74,12 @@ public class ExportAction extends Action {
 		ViewDataPreferences viewDataPreferences = debugDataViewer.getViewDataPreferences();
 		delimiter = viewDataPreferences.getDelimiter();
 		quoteCharactor = viewDataPreferences.getQuoteCharactor();
-		isIncludeHeadersChecked = viewDataPreferences.getIncludeHeaders();
+		headerEnabled = viewDataPreferences.getIncludeHeaders();
 		TableViewer tableViewer = debugDataViewer.getTableViewer();
 		List<RowData> eachRowData = getListOfRowData(tableViewer);
 		List<String[]> exportedfileDataList = new ArrayList<String[]>();
 		TableColumn[] columns = tableViewer.getTable().getColumns();
-		if (isIncludeHeadersChecked != null) {
+		if (headerEnabled != null) {
 			addHeadersInList(tableViewer, exportedfileDataList, columns);
 		}
 		addRowsDataInList(tableViewer, eachRowData, exportedfileDataList);
@@ -88,7 +88,7 @@ public class ExportAction extends Action {
 		try {
 			writeDataInFile(exportedfileDataList, filePath);
 		} catch (IOException e) {
-			logger.error("Error occur while writing data in csv File" + e.getMessage());
+			logger.error("Error occur while writing data in csv File: " , e);
 		}
 	}
 
@@ -98,6 +98,7 @@ public class ExportAction extends Action {
 		messageBox.setMessage(message);
 		int response = messageBox.open();
 		if (response == SWT.OK) {
+			// do nothing
 		}
 	}
 
@@ -159,7 +160,7 @@ public class ExportAction extends Action {
 	}
 
 	private void addHeadersInList(TableViewer tableViewer, List<String[]> fileDataList, TableColumn[] columns) {
-		if (isIncludeHeadersChecked) {
+		if (headerEnabled) {
 			String[] tablecolumns = new String[tableViewer.getTable().getColumnCount() - 1];
 			for (int k = 0; k < columns.length - 1; k++) {
 				tablecolumns[k] = columns[k + 1].getText();
