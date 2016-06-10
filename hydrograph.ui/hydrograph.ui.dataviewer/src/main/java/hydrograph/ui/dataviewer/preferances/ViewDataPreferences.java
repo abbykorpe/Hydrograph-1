@@ -13,22 +13,28 @@
 
 package hydrograph.ui.dataviewer.preferances;
 
+/**
+ * This class is responsible for storing View Data Preferences
+ * 
+ * @author Bitwise
+ *
+ */
 public class ViewDataPreferences {
 	private String delimiter;
 	private String quoteCharactor;
 	private Boolean includeHeaders;
-	private String fileSize;
-	private String pageSize;
+	private int fileSize;
+	private int pageSize;
 
 	public ViewDataPreferences() {
 		delimiter = ",";
 		quoteCharactor = "\"";
 		includeHeaders = true;
-		fileSize="100";
-		pageSize="100";
+		fileSize=100;
+		pageSize=100;
 
 	}
-	public ViewDataPreferences(String delimiter, String quoteCharactor, boolean includeHeaders,String fileSize,String pageSize) {
+	public ViewDataPreferences(String delimiter, String quoteCharactor, boolean includeHeaders,int fileSize,int pageSize) {
 		this.delimiter=delimiter;
 		this.quoteCharactor=quoteCharactor;
 		this.includeHeaders=includeHeaders;
@@ -59,17 +65,16 @@ public class ViewDataPreferences {
 	public void setIncludeHeaders(Boolean includeHeaders) {
 		this.includeHeaders = includeHeaders;
 	}
-	public String getFileSize() {
+	public int getFileSize() {
 		return fileSize;
 	}
-	public void setFileSize(String fileSize) {
+	public void setFileSize(int fileSize) {
 		this.fileSize = fileSize;
 	}
-	public String getPageSize() {
+	public int getPageSize() {
 		return pageSize;
 	}
-	public void setPageSize(String pageSize) {
+	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
-	
 }
