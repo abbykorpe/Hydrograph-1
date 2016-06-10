@@ -24,6 +24,7 @@ import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.debug.service.DebugRestClient;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
+import hydrograph.ui.graph.debugconverter.SchemaHelper;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.handler.DebugHandler;
 import hydrograph.ui.graph.job.Job;
@@ -34,7 +35,6 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -113,6 +113,7 @@ public class WatchRecordAction extends SelectionAction {
 				}
 				
 				isWatcher = checkWatcher(link.getSource(), link.getSourceTerminal());
+				
 				return true;
 			}	
 		}
@@ -267,7 +268,6 @@ public class WatchRecordAction extends SelectionAction {
 			String host=job.getIpAddress();
 			String port;
 			if(isLocalDebugMode()){
-				System.out.println("Yes");
 				host="localhost";
 			}
 						
@@ -278,7 +278,6 @@ public class WatchRecordAction extends SelectionAction {
 			postMethod.addParameter("socketId", watchRecordInner.getSocketId());
 
 			int response = httpClient.executeMethod(postMethod);
-			System.out.println("response: " + response);
 
 		}catch(Exception e){
 			e.printStackTrace();
@@ -416,6 +415,8 @@ public class WatchRecordAction extends SelectionAction {
 			}
 		}
 		
+		String path = dataViewerFilePath+dataViewerFileh;
+		SchemaHelper.INSTANCE.exportSchemaGridData(getSelectedObjects(), path);
 		
 		Display.getDefault().asyncExec(new Runnable() {
 		      @Override
@@ -434,8 +435,9 @@ public class WatchRecordAction extends SelectionAction {
 		  		dataViewerMap.remove(dataViewerWindowName);
 		      }
 		    });
-		
-		dataViewerMap.get(dataViewerWindowName).getShell().setActive();
+		if(dataViewerMap.get(dataViewerWindowName)!=null){
+			dataViewerMap.get(dataViewerWindowName).getShell().setActive();
+		}
 		
 	}
 }

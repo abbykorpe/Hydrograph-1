@@ -45,6 +45,7 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
@@ -235,90 +236,120 @@ public class GridRowLoader {
 	 * 
 	 */
 	public void exportXMLfromGridRows(List<GridRow> schemaGridRowList){
-		JAXBContext jaxbContext;
 		Schema schema = new Schema();
 		fields= new Fields();
 
 		try {
 			if(StringUtils.isNotBlank(schemaFile.getPath())){
-
-				jaxbContext = JAXBContext.newInstance(Schema.class);
-				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-				for (GridRow gridRow : schemaGridRowList) {
-					Field field = new Field();
-					field.setName(gridRow.getFieldName());
-					field.setType(FieldDataTypes.fromValue(gridRow.getDataTypeValue()));
-					if(StringUtils.isNotBlank(gridRow.getDateFormat()))
-						field.setFormat(gridRow.getDateFormat());
-					if(StringUtils.isNotBlank(gridRow.getPrecision()))
-						field.setPrecision(Integer.parseInt(gridRow.getPrecision()));
-					if(StringUtils.isNotBlank(gridRow.getScale()))
-						field.setScale(Integer.parseInt(gridRow.getScale()));
-					if(gridRow.getScaleTypeValue()!=null){
-						if(!gridRow.getScaleTypeValue().equals("") && !gridRow.getScaleTypeValue().equals(Messages.SCALE_TYPE_NONE)){
-							field.setScaleType(ScaleTypes.fromValue(gridRow.getScaleTypeValue()));
-						}
-					}
-					if(StringUtils.isNotBlank(gridRow.getDescription())){
-						field.setDescription(gridRow.getDescription());
-					}
-
-					if(gridRow instanceof FixedWidthGridRow){
-						if(StringUtils.isNotBlank(((FixedWidthGridRow)gridRow).getLength())){
-							field.setLength(new BigInteger(((FixedWidthGridRow)gridRow).getLength()));
-						}
-
-					}
-					
-					if(gridRow instanceof MixedSchemeGridRow){
-						
-						if(StringUtils.isNotBlank(((MixedSchemeGridRow)gridRow).getLength())){
-							field.setLength(new BigInteger(((MixedSchemeGridRow)gridRow).getLength()));
-						}
-						
-						if(StringUtils.isNotBlank(((MixedSchemeGridRow)gridRow).getDelimiter())){
-							field.setDelimiter((((MixedSchemeGridRow)gridRow).getDelimiter()));
-						}
-
-					}
-
-					if(gridRow instanceof GenerateRecordSchemaGridRow){
-						if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow)gridRow).getLength())){
-							field.setLength(new BigInteger(((GenerateRecordSchemaGridRow)gridRow).getLength()));
-						}
-						if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow) gridRow).getRangeFrom()))
-							field.setRangeFrom((((GenerateRecordSchemaGridRow) gridRow).getRangeFrom()));
-						if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow) gridRow).getRangeTo()))
-							field.setRangeTo(((GenerateRecordSchemaGridRow) gridRow).getRangeTo());
-						if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow) gridRow).getDefaultValue()))
-							field.setDefault(((GenerateRecordSchemaGridRow) gridRow).getDefaultValue());
-
-					}
-
-					fields.getField().add(field);
-					
-					
-				}
-				schema.setFields(fields);
-				jaxbMarshaller.marshal(schema, schemaFile);
+				exportFile(schemaGridRowList, schema);
 				MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.EXPORTED_SCHEMA);
-				
 			}else{
-				
 				logger.error(Messages.EXPORT_XML_EMPTY_FILENAME);
 				throw new Exception(Messages.EXPORT_XML_EMPTY_FILENAME);
 			}
-
 		} catch (JAXBException e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"+ ((e.getCause() != null)? e.getLinkedException().getMessage():e.getMessage()));
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n" +
+					((e.getCause() != null)? e.getLinkedException().getMessage():e.getMessage()));
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}catch (Exception e) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"+e.getMessage());
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}
 
+	}
+	
+	/**
+	 * The method exports schema rows from schema grid into schema file.
+	 * 
+	 */
+	public void exportXMLfromGridRowsWithoutMessage(List<GridRow> schemaGridRowList){
+		Schema schema = new Schema();
+		fields= new Fields();
+
+		try {
+			if(StringUtils.isNotBlank(schemaFile.getPath())){
+				exportFile(schemaGridRowList, schema);
+			}else{
+				logger.error(Messages.EXPORT_XML_EMPTY_FILENAME);
+				throw new Exception(Messages.EXPORT_XML_EMPTY_FILENAME);
+			}
+		} catch (JAXBException e) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n" 
+					+ ((e.getCause() != null)? e.getLinkedException().getMessage():e.getMessage()));
+			logger.error(Messages.EXPORT_XML_ERROR);
+		}catch (Exception e) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"
+					+e.getMessage());
+			logger.error(Messages.EXPORT_XML_ERROR);
+		}
+
+	}
+
+
+
+	private void exportFile(List<GridRow> schemaGridRowList, Schema schema)	throws JAXBException, PropertyException {
+		JAXBContext jaxbContext;
+		jaxbContext = JAXBContext.newInstance(Schema.class);
+		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+		for (GridRow gridRow : schemaGridRowList) {
+			Field field = new Field();
+			field.setName(gridRow.getFieldName());
+			field.setType(FieldDataTypes.fromValue(gridRow.getDataTypeValue()));
+			if(StringUtils.isNotBlank(gridRow.getDateFormat())){
+				field.setFormat(gridRow.getDateFormat());
+			}
+			if(StringUtils.isNotBlank(gridRow.getPrecision())){
+				field.setPrecision(Integer.parseInt(gridRow.getPrecision()));
+			}
+			if(StringUtils.isNotBlank(gridRow.getScale())){
+				field.setScale(Integer.parseInt(gridRow.getScale()));
+			}
+			if(gridRow.getScaleTypeValue()!=null){
+				if(!gridRow.getScaleTypeValue().equals("") && !gridRow.getScaleTypeValue().equals(Messages.SCALE_TYPE_NONE)){
+					field.setScaleType(ScaleTypes.fromValue(gridRow.getScaleTypeValue()));
+				}
+			}
+			if(StringUtils.isNotBlank(gridRow.getDescription())){
+				field.setDescription(gridRow.getDescription());
+			}
+
+			if(gridRow instanceof FixedWidthGridRow){
+				if(StringUtils.isNotBlank(((FixedWidthGridRow)gridRow).getLength())){
+					field.setLength(new BigInteger(((FixedWidthGridRow)gridRow).getLength()));
+				}
+			}
+			
+			if(gridRow instanceof MixedSchemeGridRow){
+				if(StringUtils.isNotBlank(((MixedSchemeGridRow)gridRow).getLength())){
+					field.setLength(new BigInteger(((MixedSchemeGridRow)gridRow).getLength()));
+				}
+				
+				if(StringUtils.isNotBlank(((MixedSchemeGridRow)gridRow).getDelimiter())){
+					field.setDelimiter((((MixedSchemeGridRow)gridRow).getDelimiter()));
+				}
+
+			}
+
+			if(gridRow instanceof GenerateRecordSchemaGridRow){
+				if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow)gridRow).getLength())){
+					field.setLength(new BigInteger(((GenerateRecordSchemaGridRow)gridRow).getLength()));
+				}
+				if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow) gridRow).getRangeFrom())){
+					field.setRangeFrom((((GenerateRecordSchemaGridRow) gridRow).getRangeFrom()));
+				}
+				if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow) gridRow).getRangeTo())){
+					field.setRangeTo(((GenerateRecordSchemaGridRow) gridRow).getRangeTo());
+				}
+				if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow) gridRow).getDefaultValue())){
+					field.setDefault(((GenerateRecordSchemaGridRow) gridRow).getDefaultValue());
+				}
+			}
+			fields.getField().add(field);
+		}
+		schema.setFields(fields);
+		jaxbMarshaller.marshal(schema, schemaFile);
 	}
 	
 
@@ -343,25 +374,26 @@ public class GridRowLoader {
 		GridRow gridRow = new GenerateRecordSchemaGridRow();
 		populateCommonFields(gridRow, field);
 
-		if(field.getLength()!=null)
+		if(field.getLength()!=null){
 			((GenerateRecordSchemaGridRow) gridRow).setLength(String.valueOf(field.getLength()));
-		else
+		}else{
 			((GenerateRecordSchemaGridRow) gridRow).setLength("");
-
-		if(field.getDefault()!=null)
+		}
+		if(field.getDefault()!=null){
 			((GenerateRecordSchemaGridRow) gridRow).setDefaultValue((String.valueOf(field.getDefault())));
-		else
+		}else{
 			((GenerateRecordSchemaGridRow) gridRow).setDefaultValue((String.valueOf("")));
-
-		if(field.getRangeFrom()!=null)
+		}
+		if(field.getRangeFrom()!=null){
 			((GenerateRecordSchemaGridRow) gridRow).setRangeFrom(String.valueOf(field.getRangeFrom()));
-		else
+		}else{
 			((GenerateRecordSchemaGridRow) gridRow).setRangeFrom("");
-
-		if(field.getRangeFrom()!=null)
+		}
+		if(field.getRangeFrom()!=null){
 			((GenerateRecordSchemaGridRow) gridRow).setRangeTo(String.valueOf(field.getRangeTo()));
-		else
+		}else{
 			((GenerateRecordSchemaGridRow) gridRow).setRangeTo("");
+		}
 		return gridRow;
 	}
 
@@ -371,10 +403,11 @@ public class GridRowLoader {
 		GridRow gridRow = new FixedWidthGridRow();
 		populateCommonFields(gridRow, field);
 		
-		if(field.getLength()!=null)
+		if(field.getLength()!=null){
 			((FixedWidthGridRow) gridRow).setLength(String.valueOf(field.getLength()));
-		else
+		}else{
 			((FixedWidthGridRow) gridRow).setLength("");
+		}
 		return gridRow;
 	}
 	
@@ -382,16 +415,16 @@ public class GridRowLoader {
 		GridRow gridRow = new MixedSchemeGridRow();
 		populateCommonFields(gridRow, field);
 		
-		if(field.getLength()!=null)
+		if(field.getLength()!=null){
 			((MixedSchemeGridRow) gridRow).setLength(String.valueOf(field.getLength()));
-		else
+		}else{
 			((MixedSchemeGridRow) gridRow).setLength("");
-		
-		if(field.getDelimiter()!=null)
+		}
+		if(field.getDelimiter()!=null){
 			((MixedSchemeGridRow)gridRow).setDelimiter(field.getDelimiter());
-		else
+		}else{
 			((MixedSchemeGridRow) gridRow).setDelimiter("");
-		
+		}
 		return gridRow;
 	}
 
@@ -433,11 +466,11 @@ public class GridRowLoader {
 		gridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(field.getType().value()));
 		gridRow.setDataTypeValue(GridWidgetCommonBuilder.getDataTypeValue()[GridWidgetCommonBuilder.getDataTypeByValue(field.getType().value())]);
 		
-		if(field.getFormat()!=null)
+		if(field.getFormat()!=null){
 			gridRow.setDateFormat(field.getFormat());
-		else
+		}else{
 			gridRow.setDateFormat("");
-		
+		}
 		if(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.equals(field.getType())){
 			populateBigDecimal(gridRow, field);
 		}else{
