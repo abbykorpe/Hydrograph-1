@@ -338,4 +338,13 @@ public class ComponentsOutputSchema implements IDataStructure {
 		return newComponentsOutputSchema;
 	}
 
+	public List<GridRow> getGridRowList(){
+		List<GridRow> gridRows=new ArrayList<>();
+		for(GridRow gridRow : fixedWidthGridRowsOutputFields)
+		{
+			gridRows.add(gridRow.copy());
+		}
+		return gridRows;
+	}
+	
 }

@@ -45,6 +45,7 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
@@ -242,67 +243,7 @@ public class GridRowLoader {
 		try {
 			if(StringUtils.isNotBlank(schemaFile.getPath())){
 
-				jaxbContext = JAXBContext.newInstance(Schema.class);
-				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-				for (GridRow gridRow : schemaGridRowList) {
-					Field field = new Field();
-					field.setName(gridRow.getFieldName());
-					field.setType(FieldDataTypes.fromValue(gridRow.getDataTypeValue()));
-					if(StringUtils.isNotBlank(gridRow.getDateFormat()))
-						field.setFormat(gridRow.getDateFormat());
-					if(StringUtils.isNotBlank(gridRow.getPrecision()))
-						field.setPrecision(Integer.parseInt(gridRow.getPrecision()));
-					if(StringUtils.isNotBlank(gridRow.getScale()))
-						field.setScale(Integer.parseInt(gridRow.getScale()));
-					if(gridRow.getScaleTypeValue()!=null){
-						if(!gridRow.getScaleTypeValue().equals("") && !gridRow.getScaleTypeValue().equals(Messages.SCALE_TYPE_NONE)){
-							field.setScaleType(ScaleTypes.fromValue(gridRow.getScaleTypeValue()));
-						}
-					}
-					if(StringUtils.isNotBlank(gridRow.getDescription())){
-						field.setDescription(gridRow.getDescription());
-					}
-
-					if(gridRow instanceof FixedWidthGridRow){
-						if(StringUtils.isNotBlank(((FixedWidthGridRow)gridRow).getLength())){
-							field.setLength(new BigInteger(((FixedWidthGridRow)gridRow).getLength()));
-						}
-
-					}
-					
-					if(gridRow instanceof MixedSchemeGridRow){
-						
-						if(StringUtils.isNotBlank(((MixedSchemeGridRow)gridRow).getLength())){
-							field.setLength(new BigInteger(((MixedSchemeGridRow)gridRow).getLength()));
-						}
-						
-						if(StringUtils.isNotBlank(((MixedSchemeGridRow)gridRow).getDelimiter())){
-							field.setDelimiter((((MixedSchemeGridRow)gridRow).getDelimiter()));
-						}
-
-					}
-
-					if(gridRow instanceof GenerateRecordSchemaGridRow){
-						if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow)gridRow).getLength())){
-							field.setLength(new BigInteger(((GenerateRecordSchemaGridRow)gridRow).getLength()));
-						}
-						if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow) gridRow).getRangeFrom()))
-							field.setRangeFrom((((GenerateRecordSchemaGridRow) gridRow).getRangeFrom()));
-						if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow) gridRow).getRangeTo()))
-							field.setRangeTo(((GenerateRecordSchemaGridRow) gridRow).getRangeTo());
-						if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow) gridRow).getDefaultValue()))
-							field.setDefault(((GenerateRecordSchemaGridRow) gridRow).getDefaultValue());
-
-					}
-
-					fields.getField().add(field);
-					
-					
-				}
-				schema.setFields(fields);
-				jaxbMarshaller.marshal(schema, schemaFile);
+				exportFile(schemaGridRowList, schema);
 				MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.EXPORTED_SCHEMA);
 				
 			}else{
@@ -319,6 +260,104 @@ public class GridRowLoader {
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}
 
+	}
+	
+	/**
+	 * The method exports schema rows from schema grid into schema file.
+	 * 
+	 */
+	public void exportXMLfromGridRowsWithoutMessage(List<GridRow> schemaGridRowList){
+		JAXBContext jaxbContext;
+		Schema schema = new Schema();
+		fields= new Fields();
+
+		try {
+			if(StringUtils.isNotBlank(schemaFile.getPath())){
+
+				exportFile(schemaGridRowList, schema);
+				
+			}else{
+				
+				logger.error(Messages.EXPORT_XML_EMPTY_FILENAME);
+				throw new Exception(Messages.EXPORT_XML_EMPTY_FILENAME);
+			}
+
+		} catch (JAXBException e) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"+ ((e.getCause() != null)? e.getLinkedException().getMessage():e.getMessage()));
+			logger.error(Messages.EXPORT_XML_ERROR);
+		}catch (Exception e) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"+e.getMessage());
+			logger.error(Messages.EXPORT_XML_ERROR);
+		}
+
+	}
+
+
+
+	private void exportFile(List<GridRow> schemaGridRowList, Schema schema)
+			throws JAXBException, PropertyException {
+		JAXBContext jaxbContext;
+		jaxbContext = JAXBContext.newInstance(Schema.class);
+		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+		for (GridRow gridRow : schemaGridRowList) {
+			Field field = new Field();
+			field.setName(gridRow.getFieldName());
+			field.setType(FieldDataTypes.fromValue(gridRow.getDataTypeValue()));
+			if(StringUtils.isNotBlank(gridRow.getDateFormat()))
+				field.setFormat(gridRow.getDateFormat());
+			if(StringUtils.isNotBlank(gridRow.getPrecision()))
+				field.setPrecision(Integer.parseInt(gridRow.getPrecision()));
+			if(StringUtils.isNotBlank(gridRow.getScale()))
+				field.setScale(Integer.parseInt(gridRow.getScale()));
+			if(gridRow.getScaleTypeValue()!=null){
+				if(!gridRow.getScaleTypeValue().equals("") && !gridRow.getScaleTypeValue().equals(Messages.SCALE_TYPE_NONE)){
+					field.setScaleType(ScaleTypes.fromValue(gridRow.getScaleTypeValue()));
+				}
+			}
+			if(StringUtils.isNotBlank(gridRow.getDescription())){
+				field.setDescription(gridRow.getDescription());
+			}
+
+			if(gridRow instanceof FixedWidthGridRow){
+				if(StringUtils.isNotBlank(((FixedWidthGridRow)gridRow).getLength())){
+					field.setLength(new BigInteger(((FixedWidthGridRow)gridRow).getLength()));
+				}
+
+			}
+			
+			if(gridRow instanceof MixedSchemeGridRow){
+				
+				if(StringUtils.isNotBlank(((MixedSchemeGridRow)gridRow).getLength())){
+					field.setLength(new BigInteger(((MixedSchemeGridRow)gridRow).getLength()));
+				}
+				
+				if(StringUtils.isNotBlank(((MixedSchemeGridRow)gridRow).getDelimiter())){
+					field.setDelimiter((((MixedSchemeGridRow)gridRow).getDelimiter()));
+				}
+
+			}
+
+			if(gridRow instanceof GenerateRecordSchemaGridRow){
+				if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow)gridRow).getLength())){
+					field.setLength(new BigInteger(((GenerateRecordSchemaGridRow)gridRow).getLength()));
+				}
+				if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow) gridRow).getRangeFrom()))
+					field.setRangeFrom((((GenerateRecordSchemaGridRow) gridRow).getRangeFrom()));
+				if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow) gridRow).getRangeTo()))
+					field.setRangeTo(((GenerateRecordSchemaGridRow) gridRow).getRangeTo());
+				if(StringUtils.isNotBlank(((GenerateRecordSchemaGridRow) gridRow).getDefaultValue()))
+					field.setDefault(((GenerateRecordSchemaGridRow) gridRow).getDefaultValue());
+
+			}
+
+			fields.getField().add(field);
+			
+			
+		}
+		schema.setFields(fields);
+		jaxbMarshaller.marshal(schema, schemaFile);
 	}
 	
 

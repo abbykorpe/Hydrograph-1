@@ -13,8 +13,13 @@
 
 package hydrograph.ui.graph.action.debug;
 
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.dataviewer.DebugDataViewer;
 import hydrograph.ui.dataviewer.ReloadInformation;
 import hydrograph.ui.dataviewer.utilities.Utils;
@@ -24,6 +29,7 @@ import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.debug.service.DebugRestClient;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
+import hydrograph.ui.graph.debugconverter.SchemaHelper;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.handler.DebugHandler;
 import hydrograph.ui.graph.job.Job;
@@ -31,19 +37,30 @@ import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GridRowLoader;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -68,6 +85,10 @@ import org.slf4j.Logger;
 /**
  * The Class WatchRecordAction used to view data at watch points after job execution
  * @author Bitwise
+ *
+ */
+/**
+ * @author vibhort
  *
  */
 public class WatchRecordAction extends SelectionAction {
@@ -113,6 +134,12 @@ public class WatchRecordAction extends SelectionAction {
 				}
 				
 				isWatcher = checkWatcher(link.getSource(), link.getSourceTerminal());
+				
+				if(isWatcher){
+					schemaGrid(selectedObjects);
+					importSchemaXml();
+				}
+				
 				return true;
 			}	
 		}
@@ -148,6 +175,58 @@ public class WatchRecordAction extends SelectionAction {
 		return false;
 	}
 	
+	
+	private void schemaGrid(List<Object> selectedObjects){
+		for(Object obj:selectedObjects){
+			if(obj instanceof LinkEditPart)	{
+				Link link = (Link)((LinkEditPart)obj).getModel();
+				Schema viewData = null;
+				ComponentsOutputSchema  componentsOutputSchema = null;
+				Object hashMap1 = null;
+				File file = new File("C:\\Users\\vibhort\\workspace_github_new\\github_ui_clone\\Thesis\\hydrograph.ui\\hydrograph.ui.graph\\resources\\test2.xml");
+				Map<String, Object> hashMap = link.getSource().getProperties();
+				for(Entry<String, Object> entry : hashMap.entrySet()){
+					if(entry.getKey().equalsIgnoreCase("schema")){
+						viewData = (Schema) entry.getValue();
+					}else if(entry.getKey().equalsIgnoreCase("output_schema_map")){
+						hashMap1 = entry.getValue();
+					}
+				}
+				
+				for(Entry<String, Object> entry : ((Map<String, Object>) hashMap1).entrySet()){
+					if(entry.getKey().equalsIgnoreCase("out0")){
+						componentsOutputSchema = (ComponentsOutputSchema) entry.getValue();
+					}
+				}
+				
+				List<GridRow> gridRow1 = componentsOutputSchema.getGridRowList();
+				GridRowLoader gridRowLoader = new GridRowLoader("Generic", file);
+				gridRowLoader.exportXMLfromGridRowsWithoutMessage(gridRow1);
+			 
+			}
+		}
+	}
+	
+	private Fields importSchemaXml(){
+		File file = new File("C:\\Users\\vibhort\\workspace_github_new\\github_ui_clone\\Thesis\\hydrograph.ui\\hydrograph.ui.graph\\resources\\test2.xml");
+		try {
+			InputStream stream = new FileInputStream(file);
+			JAXBContext jaxbContext = JAXBContext.newInstance(hydrograph.ui.common.schema.Schema.class);
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			hydrograph.ui.common.schema.Schema schema = (hydrograph.ui.common.schema.Schema) jaxbUnmarshaller.unmarshal(file);
+			Fields fields = schema.getFields();
+			for(Field fd : fields.getField()){
+				logger.debug("Type:{}, Name:{}, Format:{}"+fd.getType(),fd.getName(),fd.getFormat());
+			}
+			return fields;
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	private String getLocalADVData() {
 		String basePath = null,ipAddress = null,userID = null,password = null,port_no = null;
@@ -375,7 +454,9 @@ public class WatchRecordAction extends SelectionAction {
 		
 		
 		final String dataViewerFilePath= tempCopyPath.trim();
+		System.out.println("Path::"+dataViewerFilePath);
 		final String dataViewerFileh= watchFileName.trim();
+		System.out.println("File name"+dataViewerFileh);
 		final String dataViewerWindowName = windowName;
 		
 		
@@ -416,6 +497,9 @@ public class WatchRecordAction extends SelectionAction {
 			}
 		}
 		
+		String path = dataViewerFilePath+dataViewerFileh;
+		SchemaHelper.INSTANCE.exportSchemaGridData(getSelectedObjects(), path);
+		SchemaHelper.INSTANCE.importSchemaXml(path);
 		
 		Display.getDefault().asyncExec(new Runnable() {
 		      @Override
@@ -434,7 +518,7 @@ public class WatchRecordAction extends SelectionAction {
 		  		dataViewerMap.remove(dataViewerWindowName);
 		      }
 		    });
-		
+		if(dataViewerMap.get(dataViewerWindowName)!=null)
 		dataViewerMap.get(dataViewerWindowName).getShell().setActive();
 		
 	}
