@@ -726,7 +726,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		fileMenu.setVisible(true);
 
 		fileMenu.add(actionFactory.getAction(ExportAction.class.getName()));
-		fileMenu.add(actionFactory.getAction(FilterAction.class.getName()));
+		//fileMenu.add(actionFactory.getAction(FilterAction.class.getName()));
 	}
 	
 	private void createEditMenu(MenuManager menuManager) {
@@ -736,7 +736,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		editMenu.add(actionFactory.getAction(SelectAllAction.class.getName()));
 		editMenu.add(actionFactory.getAction(CopyAction.class.getName()));
-		editMenu.add(actionFactory.getAction(FindAction.class.getName()));
+		//editMenu.add(actionFactory.getAction(FindAction.class.getName()));
 	}
 
 	private void createViewMenu(MenuManager menuManager) {
@@ -791,18 +791,18 @@ public class DebugDataViewer extends ApplicationWindow {
 				toolBarManager,
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/export.png"),
 				actionFactory.getAction(ExportAction.class.getName()));
-		addtoolbarAction(
+		/*addtoolbarAction(
 				toolBarManager,
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/lookup.png"),
-				actionFactory.getAction(FindAction.class.getName()));
+				actionFactory.getAction(FindAction.class.getName()));*/
 		addtoolbarAction(
 				toolBarManager,
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/refresh.png"),
 				actionFactory.getAction(ReloadAction.class.getName()));
-		addtoolbarAction(
+		/*addtoolbarAction(
 				toolBarManager,
 				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/filter.png"),
-				actionFactory.getAction(FilterAction.class.getName()));
+				actionFactory.getAction(FilterAction.class.getName()));*/
 		Action dropDownAction = new Action("", SWT.DROP_DOWN) {
 			@Override
 			public void run() {

@@ -33,4 +33,4 @@ Export-Package: hydrograph.ui.dataviewer,
  org.relique.io,
  org.relique.jdbc.csv,
  org.relique.jdbc.dbf
-Import-Package: com.jcraft.jsch;version="0.1.44"
+Import-Package: com.jcraft.jsch

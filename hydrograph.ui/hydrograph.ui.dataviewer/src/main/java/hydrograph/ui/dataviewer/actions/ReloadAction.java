@@ -16,158 +16,233 @@ package hydrograph.ui.dataviewer.actions;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.dataviewer.DebugDataViewer;
 import hydrograph.ui.dataviewer.ReloadInformation;
+import hydrograph.ui.dataviewer.constants.DebugServiceMethods;
+import hydrograph.ui.dataviewer.constants.DebugServicePostParameters;
+import hydrograph.ui.dataviewer.constants.MessageBoxText;
+import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.preferances.ViewDataPreferences;
-import hydrograph.ui.dataviewer.utilities.ScpFrom;
+import hydrograph.ui.dataviewer.utilities.SCPUtility;
 import hydrograph.ui.dataviewer.utilities.Utils;
+import hydrograph.ui.logging.factory.LogFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.sql.Timestamp;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.eclipse.jface.action.Action;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
 
+/**
+ * 
+ * ReloadAction reload the data from debug file based on file size and page size preferences from internal preference window
+ * 
+ * @author Bitwise
+ * 
+ */
 public class ReloadAction extends Action {
+
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(ReloadAction.class);
+
 	private ReloadInformation reloadInformation;
-	private String windowName;
 	private DebugDataViewer debugDataViewer;
-	ViewDataPreferences viewDataPreferences;
-
-	private String fileSize;
-	private int pageSize;
-
-	private static final String LABEL="Reload";
+	private ViewDataPreferences viewDataPreferences;
 	
+	private static final String LABEL = "Reload";
+	private static final String LOCAL_HOST="localhost";
+
 	public ReloadAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
-		
-		viewDataPreferences = debugDataViewer.getViewDataPreferences();
 		this.debugDataViewer = debugDataViewer;
-		
-
 	}
 
-	private void messageDialog(String message) {
-		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.APPLICATION_MODAL | SWT.OK);
-		messageBox.setText("Alert");
-		messageBox.setMessage(message);
-		messageBox.open();
-	}
-
-	public String getDebugFile() throws IOException {
-
-		
-		HttpClient httpClient = new HttpClient();
-
-		PostMethod postMethod = new PostMethod("http://" + reloadInformation.getHost() + ":" + reloadInformation.getPort()
-				+ "/read");
-		postMethod.addParameter("jobId", reloadInformation.getUniqueJobID());
-		postMethod.addParameter("componentId", reloadInformation.getComponentID());
-		postMethod.addParameter("socketId", reloadInformation.getComponentSocketID());
-		postMethod.addParameter("basePath", reloadInformation.getBasepath());
-		postMethod.addParameter("userId", reloadInformation.getUsername());
-		postMethod.addParameter("password", reloadInformation.getPassword());
-		postMethod.addParameter("file_size", fileSize);
-		postMethod.addParameter("host_name", reloadInformation.getHost());
-
-		java.util.Date date = new java.util.Date();
-		System.out.println("+++ Start: " + new Timestamp(date.getTime()));
-
-		int response = httpClient.executeMethod(postMethod);
-		System.out.println("response: " + response);
-		InputStream inputStream = postMethod.getResponseBodyAsStream();
-
-		byte[] buffer = new byte[1024 * 1024 * 5];
-		String path = null;
-		int length;
-		while ((length = inputStream.read(buffer)) > 0) {
-			path = new String(buffer);
-		}
-		System.out.println("response of service: " + path);
+	private String getDebugFilePathFromDebugService() throws IOException {
+		PostMethod postMethod = getDebugFilePostMethod();
+		executePostMethod(postMethod);
+		String path = getDebugFilePathFromPostResponse(postMethod).trim();
 		return path;
 	}
 
-	@Override
-	public void run() {
-		
-		//TODO - Please delete this code once internal preferences are in place
-		if(1==1)
-			return;
-		
-		this.debugDataViewer.getCsvAdapter().dispose();
-
-		reloadInformation = debugDataViewer.getReloadInformation();
-		fileSize = Utils.getFileSize();
-
-		String tempCopyPath = Utils.getDebugPath();
-		tempCopyPath = tempCopyPath.trim();
-
-		if (OSValidator.isWindows()) {
-			if (tempCopyPath.startsWith("/")) {
-				tempCopyPath = tempCopyPath.replaceFirst("/", "").replace("/", "\\");
-			}
+	private String getDebugFilePathFromPostResponse(PostMethod postMethod) throws IOException {
+		String path = null;
+		InputStream inputStream = postMethod.getResponseBodyAsStream();
+		byte[] buffer = new byte[1024];
+		while ((inputStream.read(buffer)) > 0) {
+			path = new String(buffer);
 		}
+		return path;
+	}
 
-		String watchFile = null;
-		String watchFileName = null;
+	private void executePostMethod(PostMethod postMethod) throws IOException, HttpException {
+		HttpClient httpClient = new HttpClient();
+		httpClient.executeMethod(postMethod);
+	}
 
-		try {
-			watchFile = getDebugFile();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	private PostMethod getDebugFilePostMethod() {
+		PostMethod postMethod = new PostMethod(getDebugServiceURL());
+		postMethod.addParameter(DebugServicePostParameters.JOB_ID, reloadInformation.getUniqueJobID());
+		postMethod.addParameter(DebugServicePostParameters.COMPONENT_ID, reloadInformation.getComponentID());
+		postMethod.addParameter(DebugServicePostParameters.SOCKET_ID, reloadInformation.getComponentSocketID());
+		postMethod.addParameter(DebugServicePostParameters.BASE_PATH, reloadInformation.getBasepath());
+		postMethod.addParameter(DebugServicePostParameters.USER_ID, reloadInformation.getUsername());
+		postMethod.addParameter(DebugServicePostParameters.PASSWORD, reloadInformation.getPassword());
+		postMethod.addParameter(DebugServicePostParameters.FILE_SIZE, viewDataPreferences.getFileSize());
+		postMethod.addParameter(DebugServicePostParameters.HOST_NAME, reloadInformation.getHost());
+		return postMethod;
+	}
 
-		if (reloadInformation.getIsLocalJob()) {
-			watchFileName = watchFile.substring(watchFile.lastIndexOf("/") + 1, watchFile.length()).replace(".csv", "");
-			String destinationFile;
-			if(OSValidator.isWindows()){
-				destinationFile = (tempCopyPath + "\\" + watchFileName.trim() + ".csv").trim();
-			}else{
-				destinationFile = (tempCopyPath + "/" + watchFileName.trim() + ".csv").trim();
-			}
-			String sourceFile = watchFile.trim();
-
-			try {
-				Files.copy(Paths.get(sourceFile), Paths.get(destinationFile), StandardCopyOption.REPLACE_EXISTING);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		} else {
-			watchFileName = watchFile.substring(watchFile.lastIndexOf("/") + 1, watchFile.length()).replace(".csv", "");
-			ScpFrom scpFrom = new ScpFrom();
-			scpFrom.scpFileFromRemoteServer(reloadInformation.getHost(), reloadInformation.getUsername(),
-					reloadInformation.getPassword(), watchFile.trim(), tempCopyPath);
-		}
-		
-		try{
-			this.debugDataViewer.getCsvAdapter().reinitializeAdapter(100);
-		} catch (Exception e) {
-			MessageBox messageBox = new MessageBox(new Shell());
-			messageBox.setText("Error");
-			messageBox.setMessage("Unable to load debug file - " + e.getMessage());
-			messageBox.open();
-		}
-		
-		this.debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.SUCCESS));
-		this.debugDataViewer.getStatusManager().enableInitialPaginationContols();
-		this.debugDataViewer.getDataViewLoader().reloadloadViews();
-		
+	private String getDebugServiceURL() {
+		return "http://" + reloadInformation.getHost() + ":" + reloadInformation.getPort()
+				+ DebugServiceMethods.GET_DEBUG_FILE_PATH;
 	}
 
 	
+	private void deleteCSVDebugDataFile() {
+		try{
+			HttpClient httpClient = new HttpClient();
+
+			String host=reloadInformation.getHost();
+			if(reloadInformation.getIsLocalJob()){
+				host=LOCAL_HOST;
+			}
+						
+			PostMethod postMethod = new PostMethod("http://" + host + ":" + reloadInformation.getPort() + DebugServiceMethods.DELETE_DEBUG_CSV_FILE);
+			postMethod.addParameter(DebugServicePostParameters.JOB_ID, reloadInformation.getUniqueJobID());
+			postMethod.addParameter(DebugServicePostParameters.COMPONENT_ID, reloadInformation.getComponentID());
+			postMethod.addParameter(DebugServicePostParameters.SOCKET_ID, reloadInformation.getComponentSocketID());
+			
+			httpClient.executeMethod(postMethod);
+
+		}catch(Exception e){
+			logger.debug("Unable to delete debug csv file");
+		}		
+	}
 	
+	@Override
+	public void run() {
+		
+		viewDataPreferences = debugDataViewer.getViewDataPreferences();
+		
+		closeExistingDebugFileConnection();		
+		loadNewDebugFileInformation();
+
+		String dataViewerFilePath = getLocalDataViewerFileLocation();
+
+		String csvDebugFileLocation = getCSVDebugFileLocation();
+		if(csvDebugFileLocation==null){
+			return;
+		}
+		
+		String csvDebugFileName = getCSVDebugFileName(csvDebugFileLocation);
+		
+		if (reloadInformation.getIsLocalJob()) {			
+			String dataViewerFileAbsolutePath = getDataViewerFileAbsolutePath(dataViewerFilePath, csvDebugFileName);
+			int returnCode=copyCSVDebugFileAtDataViewerDebugFileLocation(csvDebugFileLocation, dataViewerFileAbsolutePath);
+			if(StatusConstants.ERROR == returnCode){
+				return;
+			}
+		} else {
+			int returnCode=scpRemoteCSVDebugFileToDataViewerDebugFileLocation(dataViewerFilePath, csvDebugFileLocation);
+			if(StatusConstants.ERROR == returnCode){
+				return;
+			}
+		}
+
+		deleteCSVDebugDataFile();
+		
+		try {
+			this.debugDataViewer.getCsvAdapter().reinitializeAdapter(Integer.parseInt(viewDataPreferences.getPageSize()));
+		} catch (Exception e) {
+			Utils.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_LOAD_DEBUG_FILE);
+			this.debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_LOAD_DEBUG_FILE));
+			updateDataViewerViews();
+			return;
+		}
+
+		this.debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.SUCCESS));
+		this.debugDataViewer.getStatusManager().enableInitialPaginationContols();
+		updateDataViewerViews();
+
+	}
+
+	private void updateDataViewerViews() {
+		this.debugDataViewer.getDataViewLoader().updateDataViewLists();
+		this.debugDataViewer.getDataViewLoader().reloadloadViews();
+	}
+
+	private int scpRemoteCSVDebugFileToDataViewerDebugFileLocation(String dataViewerFilePath, String csvDebugFileLocation) {
+		SCPUtility scpFrom = new SCPUtility();
+		try {
+			scpFrom.scpFileFromRemoteServer(reloadInformation.getHost(), reloadInformation.getUsername(),
+					reloadInformation.getPassword(), csvDebugFileLocation.trim(), dataViewerFilePath);
+		} catch (Exception e) {
+			logger.debug("unable to copy Debug csv file to data viewer file location",e);
+			Utils.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_LOAD_DEBUG_FILE);
+			return StatusConstants.ERROR;
+		}
+		return StatusConstants.SUCCESS;		
+	}
+
+	private int copyCSVDebugFileAtDataViewerDebugFileLocation(String csvDebugFileLocation, String dataViewerFileAbsolutePath) {
+		try {
+			Files.copy(Paths.get(csvDebugFileLocation), Paths.get(dataViewerFileAbsolutePath), StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			logger.debug("unable to copy Debug csv file to data viewer file location",e);
+			Utils.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_LOAD_DEBUG_FILE);
+			return StatusConstants.ERROR;
+		}
+		
+		return StatusConstants.SUCCESS;
+	}
+
+	private String getDataViewerFileAbsolutePath(String dataViewerFilePath, String csvDebugFileName) {
+		String dataViewerFile;
+		if (OSValidator.isWindows()) {
+			dataViewerFile = (dataViewerFilePath + "\\" + csvDebugFileName.trim() + ".csv").trim();
+		} else {
+			dataViewerFile = (dataViewerFilePath + "/" + csvDebugFileName.trim() + ".csv").trim();
+		}
+		return dataViewerFile;
+	}
+
+	private String getCSVDebugFileName(String csvDebugFileLocation) {
+		String csvDebugFileName = csvDebugFileLocation.substring(csvDebugFileLocation.lastIndexOf("/") + 1, csvDebugFileLocation.length()).replace(".csv", "");
+		return csvDebugFileName;
+	}
+
+	private String getCSVDebugFileLocation() {
+		String csvDebugFileLocation = null;		
+		try {
+			csvDebugFileLocation = getDebugFilePathFromDebugService();
+		} catch (IOException e) {
+			Utils.showMessage(MessageBoxText.ERROR,Messages.UNABLE_TO_LOAD_DEBUG_FILE + e.getMessage());
+			logger.debug("Failed to get csv debug file path from service", e);
+		}
+		return csvDebugFileLocation;
+	}
+
+	private String getLocalDataViewerFileLocation() {
+		String debugFileLocation = Utils.getDebugPath().trim();
+		if (OSValidator.isWindows()) {
+			if (debugFileLocation.startsWith("/")) {
+				debugFileLocation = debugFileLocation.replaceFirst("/", "").replace("/", "\\");
+			}
+		}
+		return debugFileLocation;
+	}
+
+	private void loadNewDebugFileInformation() {
+		reloadInformation = debugDataViewer.getReloadInformation();
+	}
+
+	private void closeExistingDebugFileConnection() {
+		this.debugDataViewer.getCsvAdapter().dispose();
+	}
+
 }
