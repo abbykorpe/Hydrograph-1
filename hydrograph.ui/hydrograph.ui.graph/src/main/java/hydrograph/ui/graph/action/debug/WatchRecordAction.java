@@ -395,7 +395,7 @@ public class WatchRecordAction extends SelectionAction {
 		reloadInformation.setPort(job.getPortNumber());
 		
 		
-		BufferedReader br;
+		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new FileReader(dataViewerFilePath + dataViewerFileh + ".csv"));
 			if (br.readLine() == null) {
@@ -403,9 +403,18 @@ public class WatchRecordAction extends SelectionAction {
 			    return;
 			}
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}     
+			 messageDialog("Unable to read debug file");
+			logger.debug("Unable to read debug file",e1);
+			return;
+		}finally{
+			try {
+				if(br != null){
+					br.close();
+				}					
+			} catch (IOException e) {
+				logger.debug("Unable to close debug file",e);
+			}
+		}
 		
 		
 		Display.getDefault().asyncExec(new Runnable() {
