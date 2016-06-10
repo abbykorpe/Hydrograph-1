@@ -37,7 +37,7 @@ import com.thoughtworks.xstream.XStream;
 public class CanvasUtils {
 	
 	public static final CanvasUtils INSTANCE = new CanvasUtils();
-	Logger logger = LogFactory.INSTANCE.getLogger(CanvasUtils.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(CanvasUtils.class);
 	
 	private CanvasUtils() {
 	}

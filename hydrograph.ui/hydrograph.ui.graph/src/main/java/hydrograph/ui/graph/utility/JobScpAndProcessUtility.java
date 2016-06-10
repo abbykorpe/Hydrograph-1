@@ -24,6 +24,7 @@ import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,22 +40,40 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
-
+import org.slf4j.Logger;
+/**
+ * 
+ * JobScpAndProcessUtility use to create gradle command and process builder.
+ * 
+ * @author Bitwise
+ *
+ */
 public class JobScpAndProcessUtility {
 
+	private static Logger logger = LogFactory.INSTANCE.getLogger(JobScpAndProcessUtility.class);
 	public static final JobScpAndProcessUtility INSTANCE = new JobScpAndProcessUtility();
 	
 	private JobScpAndProcessUtility(){
 		
 	}
-	
+	/**
+	 * Gradle command to SCP project jar at remote server.
+	 * @param job
+	 * @return command
+	 */
 	public  String getLibararyScpCommand(Job job) {
 		String command = GradleCommandConstants.GCMD_SCP_JAR + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword();
 		return command;
 	}
-
+	/**
+	 * Gradle command to SCP job xml at remote server.
+	 * @param xmlPath
+	 * @param debugXmlPath
+	 * @param job
+	 * @return command
+	 */
 	public  String getJobXMLScpCommand(String xmlPath, String debugXmlPath, Job job) {
 		String command=GradleCommandConstants.GCMD_SCP_JOB_XML + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
@@ -65,14 +84,26 @@ public class JobScpAndProcessUtility {
 		
 		return command;
 	}
-
+	/**
+	 * Gradle command to SCP param file at remote server.
+	 * @param paramFile
+	 * @param job
+	 * @return command
+	 */
 	public  String getParameterFileScpCommand(String paramFile, Job job) {
 		String command =GradleCommandConstants.GCMD_SCP_PARM_FILE + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE + "\""+ paramFile+"\"";
 		return command;
 	}
- 
+	/**
+	 * Gradle command to execute job on remote server.
+	 * @param xmlPath
+	 * @param debugXmlPath
+	 * @param paramFile
+	 * @param job
+	 * @return command
+	 */
 	public  String getExecututeJobCommand(String xmlPath,String debugXmlPath, String paramFile, Job job) {
 		String command =GradleCommandConstants.GCMD_EXECUTE_REMOTE_JOB + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
@@ -142,6 +173,13 @@ public class JobScpAndProcessUtility {
 				+ job.getPassword() + GradleCommandConstants.GPARAM_JOB_XML + xmlPath +GradleCommandConstants.GPARAM_MOVE_PARAM_FILE +project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_PARAM + GradleCommandConstants.GPARAM_MOVE_SCHEMA_FILES + schemaFiles + GradleCommandConstants.GPARAM_MOVE_SUBJOB_FILES + subJobFiles + GradleCommandConstants.GPARAM_MOVE_JAR + project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_LIB ;
 	}
 
+	/**
+	 * 
+	 * Create process builder as per operating system.
+	 * @param project
+	 * @param gradleCommand
+	 * @return process builder
+	 */
 	public  ProcessBuilder getProcess(IProject project, String gradleCommand) {
 		String[] runCommand = new String[3];
 		if (OSValidator.isWindows()) {
@@ -158,9 +196,13 @@ public class JobScpAndProcessUtility {
 		processBuilder.redirectErrorStream(true);
 		return processBuilder;
 
-	}
+	} 
 
-	
+	/**
+	 * Remove file name and return directory path.
+	 * @param path
+	 * @return
+	 */
 	public  String getDirectoryPath(String path){
 		if(path.length() > 0 )
 		{
@@ -175,6 +217,12 @@ public class JobScpAndProcessUtility {
 		return "";
 	}
 	
+	/**
+	 * Create directory comma separated string from list.
+	 * 
+	 * @param fileList
+	 * @return
+	 */
 	private String getCommaSeparatedDirectories(List<String> fileList ){
 		List<String> directories = new ArrayList<>();
 		for (String schemaFile : fileList) {
@@ -186,6 +234,10 @@ public class JobScpAndProcessUtility {
 		return files;
 	}
 	
+	/**
+	 * Collect all external schema files from active editor, also check for subjob and nested subjob. 
+	 * @return list of external schema files.
+	 */
 	public List<String> getExternalSchemaList() {
 		List<String> externalSchemaPathList=new ArrayList<>();	
 		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -210,6 +262,10 @@ public class JobScpAndProcessUtility {
 		return externalSchemaPathList;
 	}
 	
+	/**
+	 * Collect all subjob file from active editor, also check for nested subjob. 
+	 * @return list of subjob.
+	 */
 	public List<String> getSubJobList() {
 		ArrayList<String> subJobList=new ArrayList<>();
 		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -231,12 +287,17 @@ public class JobScpAndProcessUtility {
 		return subJobList;
 	}
 
+	/**
+	 * Check for subjob container and nested subjob.
+	 * @param subJobList
+	 * @param subJobPath
+	 */
 	private void checkNestedSubJob(List<String> subJobList,String subJobPath) {
 			Object obj=null;
 			try {
 				obj = CanvasUtils.INSTANCE.fromXMLToObject(new FileInputStream(new File(JobManager.getAbsolutePathFromFile(new Path(subJobPath)))));
 			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				logger.error("subjob xml not found "+e);
 			}
 			if(obj!=null && obj instanceof Container){
 			  Container container = (Container) obj;
@@ -250,13 +311,17 @@ public class JobScpAndProcessUtility {
 		  }
 	}
 	
-	
+	/**
+	 * Check nested subjob to collect external schema files.
+	 * @param externalSchemaPathList
+	 * @param subJobPath
+	 */
 	private void checkSubJobForExternalSchema(List<String> externalSchemaPathList,String subJobPath) {
 		Object obj=null;
 		try {
 			obj = CanvasUtils.INSTANCE.fromXMLToObject(new FileInputStream(new File(JobManager.getAbsolutePathFromFile(new Path(subJobPath)))));
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("subjob xml not found "+e);
 		}
 		if(obj!=null && obj instanceof Container){
 		  Container container = (Container) obj;

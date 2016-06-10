@@ -49,16 +49,25 @@ import org.slf4j.Logger;
 
 
 /**
+ * The Class ExternalSchemaFileSelectionDialog.
+ *
  * @author Bitwise
  */
 public class ExternalSchemaFileSelectionDialog extends ElementTreeSelectionDialog {
 
+	/** The Constant logger. */
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ExternalSchemaFileSelectionDialog.class);
 	
+    /** The extensions. */
     private String[] extensions;
+    
+    /** The elt default text. */
     private AbstractELTWidget eltDefaultText;
+    
+    /** The filter operation class utility. */
     private FilterOperationClassUtility filterOperationClassUtility ;
     
+    /** The content provider. */
     private static ITreeContentProvider contentProvider = new ITreeContentProvider() {
         public Object[] getChildren(Object element) {
             if (element instanceof IContainer) {
@@ -90,12 +99,14 @@ public class ExternalSchemaFileSelectionDialog extends ElementTreeSelectionDialo
         } 
     };
 
+    /** The Constant OK. */
     private static final IStatus OK = new Status(IStatus.OK, "0", 0, "", null);
+    
+    /** The Constant ERROR. */
     private static final IStatus ERROR = new Status(IStatus.ERROR, "1", 1, "", null);
 
-    /*
-     * Validator
-     */
+
+    /** The validator. */
     private ISelectionStatusValidator validator = new ISelectionStatusValidator() {
         public IStatus validate(Object[] selection) {
         	if(selection.length == 1 && selection[0] instanceof IFile)
@@ -115,14 +126,12 @@ public class ExternalSchemaFileSelectionDialog extends ElementTreeSelectionDialo
     };
 
 	/**
-	 * Instantiates a new resource file selection dialog.
-	 * 
-	 * @param title
-	 *            the title
-	 * @param message
-	 *            the message
-	 * @param type
-	 *            the type
+	 * Instantiates a new external schema selection dialog including validator for schema extension
+	 *
+	 * @param title            the title
+	 * @param message            the message
+	 * @param type            the type
+	 * @param filterOperationClassUtility the filter operation class utility
 	 */
     public ExternalSchemaFileSelectionDialog(String title, String message, String[] type,FilterOperationClassUtility filterOperationClassUtility) {
         this(Display.getDefault().getActiveShell(), WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider(),
@@ -150,8 +159,10 @@ public class ExternalSchemaFileSelectionDialog extends ElementTreeSelectionDialo
         super(parent, labelProvider, contentProvider);
     } 
 
-    /*
-     * Show projects
+    /**
+     * Compute input.
+     *
+     * @return the object[]
      */
     private Object[] computeInput() {
         /*
@@ -169,6 +180,7 @@ public class ExternalSchemaFileSelectionDialog extends ElementTreeSelectionDialo
         try {
             ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_ONE, null);
         } catch (CoreException e) {
+        	logger.debug("Unable to refresh local file");
         }
         List<IProject> openProjects = new ArrayList<IProject>(projects.length);
         for (int i = 0; i < projects.length; i++) {
@@ -179,8 +191,11 @@ public class ExternalSchemaFileSelectionDialog extends ElementTreeSelectionDialo
         return openProjects.toArray();
     }
 
-    /*
-     * Check file extension
+    /**
+     * Check extension.
+     *
+     * @param name the name
+     * @return true, if successful
      */
     private boolean checkExtension(String name) {
         if (name.equals("*")) {
@@ -194,9 +209,12 @@ public class ExternalSchemaFileSelectionDialog extends ElementTreeSelectionDialo
         } 
         return false;
     } 
+    
+    /* (non-Javadoc)
+     * @see org.eclipse.ui.dialogs.ElementTreeSelectionDialog#createDialogArea(org.eclipse.swt.widgets.Composite)
+     */
     @Override
     protected Control createDialogArea(Composite parent) {
-    	// TODO Auto-generated method stub
     	Composite composite=super.createDialogArea(parent).getParent();
 		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(composite);
 		eltSuDefaultSubgroupComposite.createContainerWidget();
@@ -210,9 +228,11 @@ public class ExternalSchemaFileSelectionDialog extends ElementTreeSelectionDialo
     }
 
 
+/* (non-Javadoc)
+ * @see org.eclipse.ui.dialogs.SelectionStatusDialog#okPressed()
+ */
 @Override
 protected void okPressed() {
-	// TODO Auto-generated method stub
 	filterOperationClassUtility.setFileNameTextBoxValue(((Text)eltDefaultText.getSWTWidgetControl()).getText());
 	super.okPressed();
 }

@@ -377,19 +377,19 @@ public class RunConfigDialog extends Dialog {
 	private void populateTextBoxes(Enumeration e) {
 		while (e.hasMoreElements()) {
 			String key = (String) e.nextElement();
-			if (key.equals(LOCAL_MODE)
+			if (LOCAL_MODE.equals(key)
 					&& buildProps.getProperty(key).equals("true")) {
 				btnLocalMode.setSelection(true);
 				btnRemoteMode.setSelection(false);
 
-			} else if (key.equals(REMOTE_MODE)
+			} else if (REMOTE_MODE.equals(key)
 					&& buildProps.getProperty(key).equals("true")) {
 				btnRemoteMode.setSelection(true);
 				btnLocalMode.setSelection(false);
 				compositeServerDetails.setVisible(true);
 				compositePathConfig.setVisible(true);
-			} else if (!(key.equals(LOCAL_MODE) || key.equals(REMOTE_MODE))) {
-				if(!key.equalsIgnoreCase("password") && textBoxes.get(key)!=null)
+			} else if (!(LOCAL_MODE.equals(key) || REMOTE_MODE.equals(key))) {
+				if(!"password".equalsIgnoreCase(key) && textBoxes.get(key)!=null)
 				{
 					textBoxes.get(key).setText(buildProps.getProperty(key));
 				}
@@ -433,7 +433,7 @@ public class RunConfigDialog extends Dialog {
 				IDialogConstants.CANCEL_LABEL, false);
 
 	}
-
+	
 	@Override
 	protected void okPressed() {
 		remoteMode = btnRemoteMode.getSelection();

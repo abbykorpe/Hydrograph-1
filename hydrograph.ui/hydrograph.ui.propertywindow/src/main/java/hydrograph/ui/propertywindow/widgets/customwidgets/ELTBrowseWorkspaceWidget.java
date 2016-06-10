@@ -53,41 +53,55 @@ import org.slf4j.Logger;
 
 
 /**
- * The Class ELTBrowseWorkspaceWidget.
- * 
+ * The Class ELTBrowseWorkspaceWidget use to open dialog window of current workspace.
+ * The dialog window can be use to import and export file with specified extension
  * @author Bitwise
  */
 public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 	
+	/** The sub job path. */
 	private Text subJobPath;
+	
+	/** The properties. */
 	private Object properties;
+	
+	/** The property name. */
 	private String propertyName;
+	
+	/** The txt decorator. */
 	private ControlDecoration txtDecorator;
+	
+	/** The decorator. */
 	private ControlDecoration decorator;
 
+	/** The logger. */
 	private Logger LOGGER = LogFactory.INSTANCE.getLogger(ELTBrowseWorkspaceWidget.class);
+	
 	/**
 	 * Instantiates a new ELT file path widget.
 	 * 
-	 * @param componentConfigrationProperty
-	 *            the component configration property
+	 * @param componentConfigurationProperty
+	 *            the component configuration property
 	 * @param componentMiscellaneousProperties
 	 *            the component miscellaneous properties
 	 * @param propertyDialogButtonBar
 	 *            the property dialog button bar
 	 */
 	public ELTBrowseWorkspaceWidget(
-			ComponentConfigrationProperty componentConfigrationProperty,
+			ComponentConfigrationProperty componentConfigurationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
-		super(componentConfigrationProperty, componentMiscellaneousProperties,
+		super(componentConfigurationProperty, componentMiscellaneousProperties,
 				propertyDialogButtonBar);
 
-		this.properties =  componentConfigrationProperty.getPropertyValue();
-		this.propertyName = componentConfigrationProperty.getPropertyName();
+		this.properties =  componentConfigurationProperty.getPropertyValue();
+		this.propertyName = componentConfigurationProperty.getPropertyName();
 	}
 	
 
+	/* (non-Javadoc)
+	 * @see hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget#attachToPropertySubGroup(hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget)
+	 */
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 		
@@ -163,12 +177,15 @@ public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 					propertyDialogButtonBar, helper,subJobPath);
 
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			LOGGER.error("Fail to attach listener.");
 		}
 		
 		populateWidget();
 	}
 
+	/**
+	 * Populate widget.
+	 */
 	private void populateWidget(){		
 		String property = (String)properties;
 		if(StringUtils.isNotBlank(property)){
@@ -179,21 +196,28 @@ public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 		else{
 			subJobPath.setText("");
 			decorator.show();
-			//setToolTipMessage(toolTipErrorMessage)
 		}
 	}
 
+	/**
+	 * Sets the tool tip error message.
+	 */
 	private void setToolTipErrorMessage(){
 		String toolTipErrorMessage = null;
-		if(decorator.isVisible())
+		if(decorator.isVisible()){
 			toolTipErrorMessage = decorator.getDescriptionText();
+		}
 		
-		if(txtDecorator.isVisible())
+		if(txtDecorator.isVisible()){
 			toolTipErrorMessage = toolTipErrorMessage + "\n" + txtDecorator.getDescriptionText();
+		}
 		
 		setToolTipMessage(toolTipErrorMessage);
 	}
 	
+	/* (non-Javadoc)
+	 * @see hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget#getProperties()
+	 */
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
 		LinkedHashMap<String, Object> property=new LinkedHashMap<>();
@@ -204,16 +228,27 @@ public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 	}
 
 	
+	/* (non-Javadoc)
+	 * @see hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget#isWidgetValid()
+	 */
 	public boolean isWidgetValid() {
 		 return validateAgainstValidationRule(subJobPath.getText());
 	}
 
 
+	/**
+	 * Gets the text box.
+	 *
+	 * @return the text box
+	 */
 	public Text getTextBox() {
 		return subJobPath;
 	}
 
 
+	/* (non-Javadoc)
+	 * @see hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget#addModifyListener(hydrograph.ui.propertywindow.property.Property, java.util.ArrayList)
+	 */
 	@Override
 	public void addModifyListener(final Property property, final ArrayList<AbstractWidget> widgetList) {
 		subJobPath.addModifyListener(new ModifyListener() {

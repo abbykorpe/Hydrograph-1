@@ -73,7 +73,7 @@ import org.slf4j.Logger;
 
 
 /**
- * The Class FilterOperationClassUtility.
+ * The Class FilterOperationClassUtility use to create operation class widget,new class wizard and selection dialog window. 
  * 
  * @author Bitwise
  */
@@ -105,7 +105,8 @@ public class FilterOperationClassUtility  {
 		OperationClassConfig operationClassConfig = (OperationClassConfig) widgetConfig;
 		Operations operations = XMLConfigUtil.INSTANCE.getComponent(FilterOperationClassUtility.getComponentName()).getOperations();
 		TypeInfo typeInfo=operations.getInterface();
-		if (operationClassConfig.getComponentName().equalsIgnoreCase(typeInfo.getName())){
+		if (operationClassConfig.getComponentName().equalsIgnoreCase(typeInfo.getName()))
+		{
 			interfaceList.add(typeInfo.getClazz());
 		}
 		page.setSuperInterfaces(interfaceList, true);  
@@ -134,7 +135,7 @@ public class FilterOperationClassUtility  {
 	}
 
 	/**
-	 * Browse file.
+	 * Open browse file dialog according extensions.
 	 * 
 	 * @param filterExtension
 	 *            the filter extension
@@ -157,7 +158,12 @@ public class FilterOperationClassUtility  {
 		}
 		
 	}
-
+	/**
+	 * 
+	 * Open selection dialog for schema files, File selection restricted to ".schema" extension. 
+	 * @param filterExtension
+	 * @param fileName
+	 */
 	private void browseSchemaSelectionDialog(String filterExtension, Text fileName) {
 		String externalSchemaTextBoxValue = "";
 		ExternalSchemaFileSelectionDialog dialog = new ExternalSchemaFileSelectionDialog("Project",
@@ -181,7 +187,12 @@ public class FilterOperationClassUtility  {
 			fileName.setText(externalSchemaTextBoxValue);
 		}
 	}
-
+	
+	/**
+	 * Open selection dialog for Java files, File selection restricted to ".java" extension.
+	 * @param filterExtension
+	 * @param fileName
+	 */
 	private void browseJavaSelectionDialog(String filterExtension, Text fileName) {
 		ResourceFileSelectionDialog dialog = new ResourceFileSelectionDialog(
 				"Project", "Select Java Class (.java)", new String[] { filterExtension });
@@ -198,36 +209,51 @@ public class FilterOperationClassUtility  {
 					if(!name.equalsIgnoreCase("")){
 						name=name+"."+classFile.substring(0, classFile.lastIndexOf('.'));
 					}
+					
 				}else{
 					name=classFile.substring(0, classFile.lastIndexOf('.'));
-				}	
+				}
+				
 			} catch (IOException e) { 
-				logger.debug("Unable to read file " + filePath,e );
+				logger.error("Unable to read file " + filePath,e );
 			}
 			fileName.setText(name.trim());
 			filePath = resource.getRawLocation().toOSString();
 			fileName.setData("path", resource.getFullPath().toString());
 }
 	} 
-
+	/**
+	 * Open selection dialog for job files, File selection restricted to ".job" extension.
+	 * @param filterExtension
+	 * @param fileName
+	 */
 	private void browseJobSelectionDialog(String filterExtension, Text fileName) {
 		ResourceFileSelectionDialog dialog = new ResourceFileSelectionDialog(
 				"Project", "Select Sub Job (.job)", new String[] { filterExtension });
 		if (dialog.open() == IDialogConstants.OK_ID) {
 			IResource resource = (IResource) dialog.getFirstResult();
 			String filePath = resource.getFullPath().toString();
-			if(isFileExistsOnLocalFileSystem(new Path(filePath), fileName))
+			if(isFileExistsOnLocalFileSystem(new Path(filePath), fileName)){
 				fileName.setText(filePath.substring(1));
 			}
+		}
 	}
 	
+	/**
+	 * Check if file exist on local file system. 
+	 * @param jobFilePath
+	 * @param textBox
+	 * @return
+	 */
 	private boolean isFileExistsOnLocalFileSystem(IPath jobFilePath, Text textBox) {
 		jobFilePath=jobFilePath.removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH);
 		try {
-			if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists())
+			if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists()){
 				return true;
-			else if (jobFilePath.toFile().exists())
+			}
+			else if (jobFilePath.toFile().exists()){
 				return true;
+			}
 		} catch (Exception exception) {
 			logger.error("Error occured while cheking file on local file system", exception);
 		}
@@ -239,8 +265,10 @@ public class FilterOperationClassUtility  {
 		if (response == SWT.YES) {
 			jobFilePath=jobFilePath.removeFileExtension().addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH);
 			textBox.setText(jobFilePath.toString().substring(1));
-		}else
+		}
+		else{
 			textBox.setText("");
+		}
 		return false;
 	}
 
@@ -248,7 +276,7 @@ public class FilterOperationClassUtility  {
 	
 	
 	/**
-	 * Open file editor.
+	 * Open file editor to view java file.
 	 * 
 	 * @param fileName
 	 *            the file name
@@ -289,12 +317,26 @@ public class FilterOperationClassUtility  {
 				return true;
 			}
 		} catch (PartInitException e) {
+			logger.error("Fail to open file");
 			return false;
 		}
 		return false;
 
 	}
-
+	/**
+	 * 
+	 * Operation class widget creation 
+	 * @param composite
+	 * @param eltOperationClassDialogButtonBar
+	 * @param combo
+	 * @param isParameterCheckbox
+	 * @param fileNameTextBox
+	 * @param tootlTipErrorMessage
+	 * @param widgetConfig
+	 * @param eltOperationClassDialog
+	 * @param propertyDialogButtonBar
+	 * @param opeartionClassDialogButtonBar
+	 */
 	public static void createOperationalClass(
 			Composite composite,
 			PropertyDialogButtonBar eltOperationClassDialogButtonBar,
@@ -361,8 +403,8 @@ public class FilterOperationClassUtility  {
 			createButton.attachListener(ListenerFactory.Listners.CREATE_NEW_CLASS.getListener(),eltOperationClassDialogButtonBar, helper,comboOfOperaationClasses,fileName);
 			combo.attachListener(ListenerFactory.Listners.COMBO_CHANGE.getListener(),eltOperationClassDialogButtonBar, helper,comboOfOperaationClasses,fileName,btnCheckButton);
 			isParameterCheckbox.attachListener(ListenerFactory.Listners.ENABLE_BUTTON.getListener(),eltOperationClassDialogButtonBar, null,btnCheckButton,browseButton.getSWTWidgetControl(),createButton.getSWTWidgetControl(),openButton.getSWTWidgetControl());
-		} catch (Exception e1) {
-			e1.printStackTrace(); 
+		} catch (Exception e) {
+			logger.error("Fail to attach listener "+e); 
 		} 
 	}
 
@@ -381,7 +423,11 @@ public class FilterOperationClassUtility  {
 		return iJavaProject;
 	}
 
-
+	/**
+	 * Enable and disable new class creation button and open editor button base on isParam checkbox.
+	 * @param value
+	 * @param checkboxValue
+	 */
 	public static void enableAndDisableButtons(boolean value,boolean checkboxValue) {
 		if (checkboxValue==false) {
 			createBtn.setEnabled(value);
@@ -395,6 +441,7 @@ public class FilterOperationClassUtility  {
 			browseBtn.setEnabled(!value);
 		} 
 	}
+	
 	public static void setComponentName(String name) {
 		componentName = name;
 	}
@@ -406,6 +453,12 @@ public class FilterOperationClassUtility  {
 	public static boolean isCheckBoxSelected() {
 		return btnCheckButton.getSelection();
 	}
+	
+	/**
+	 * Set Operation 
+	 * @param operationName
+	 * @param textBox
+	 */
 	public static void setOperationClassNameInTextBox(String operationName, Text textBox) {
 		String operationClassName = null;
 		Operations operations = XMLConfigUtil.INSTANCE.getComponent(FilterOperationClassUtility.getComponentName())

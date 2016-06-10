@@ -211,6 +211,12 @@ public class JobManager {
 		launchJob(job, gefCanvas, parameterGrid, xmlPath,externalSchemaFiles,subJobList);
 	}
 
+	/**
+	 * This method responsible to run the job in debug mode
+	 * @param job
+	 * @param isRemote
+	 * @param userName
+	 */
 	public void executeJobInDebug(final Job job, boolean isRemote, String userName) {
 	
 		List<String> externalSchemaFiles;
@@ -253,7 +259,17 @@ public class JobManager {
 
 		launchJobWithDebugParameter(job, gefCanvas, parameterGrid, xmlPath, debugXmlPath,externalSchemaFiles,subJobList);
 	}
-		
+	
+	/**
+	 * Check for remote or local run and start the job in new thread.  
+	 * 
+	 * @param job
+	 * @param gefCanvas
+	 * @param parameterGrid
+	 * @param xmlPath
+	 * @param externalSchemaFiles
+	 * @param subJobList
+	 */
 	private void launchJob(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
 			final String xmlPath,final List<String> externalSchemaFiles,final List<String> subJobList) {
 		if (job.isRemoteMode()) {
@@ -279,6 +295,18 @@ public class JobManager {
 		}
 	}
 
+	/**
+	 * 
+	 * Check for remote or local mode and start debug run in new thread.
+	 *   
+	 * @param job
+	 * @param gefCanvas
+	 * @param parameterGrid
+	 * @param xmlPath
+	 * @param debugXmlPath
+	 * @param externalSchemaFiles
+	 * @param subJobList
+	 */
 	private void launchJobWithDebugParameter(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
 			final String xmlPath, final String debugXmlPath,final List<String> externalSchemaFiles,final List<String> subJobList) {
 		if (job.isRemoteMode()) {
@@ -312,6 +340,10 @@ public class JobManager {
 		return clusterPassword;
 	}
 
+	/**
+	 * Get xml file path from active editor.
+	 * @return
+	 */
 	private String getJobXMLPath() {
 		IEditorPart iEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
@@ -537,7 +569,12 @@ public class JobManager {
 
 		}).start();
 	}
-
+	
+	/**
+	 * Create Gradle command to kill the job.
+	 * @param job
+	 * @return
+	 */
 	private String getKillJobCommand(Job job) {
 		return GradleCommandConstants.GCMD_KILL_REMOTE_JOB + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
@@ -578,11 +615,17 @@ public class JobManager {
 		return runningJobsMap;
 	}
 
+	/**
+	 * Check if the file path is absolute else return workspace file path
+	 * @param jobFilePath
+	 * @return
+	 */
 	public static String getAbsolutePathFromFile(IPath jobFilePath) {
-		if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists())
+		if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists()) {
 			return ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).getLocation().toString();
-		else if (jobFilePath.toFile().exists())
+		} else if (jobFilePath.toFile().exists()) {
 			return jobFilePath.toFile().getAbsolutePath();
+		}
 		return "";
 	}
 	

@@ -17,11 +17,8 @@ package hydrograph.ui.graph.job;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -31,16 +28,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.ui.parts.GraphicalEditor;
-import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 
@@ -72,18 +64,18 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getCreateDirectoryCommand(job,paramFile,xmlPath,projectName,new ArrayList<String>(externalSchemaFiles),new ArrayList<>(subJobList));
 		
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
-		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			return;
 		}
-		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			return;
 		}
 		
 		
 		/*
 		 * Created list having relative and absolute # separated path, 
-		 * the path is split in gradle script,Using absolute path we move the schema file to relative path directory of remote server   
+		 * the path is split in gradle script,Using absolute path we move the subjob to remote server   
 		 */
 		if(!subJobList.isEmpty()){
 		List<String> subJobFullPath = new ArrayList<>();
@@ -93,11 +85,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getSubjobScpCommand(subJobFullPath,job);
 		
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
-		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			return;
 		}
-		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			return;
 		}
 		}
@@ -105,7 +97,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		
 		/*
 		 * Created list having relative and absolute # separated path, 
-		 * the path is split in gradle script, Using absolute path we move the schema file to relative path directory of remote server   
+		 * the path is split in gradle script, Using absolute path we move external schema file to remote server   
 		 */
 		if(!externalSchemaFiles.isEmpty()){
 		List<String> schemaFilesFullPath = new ArrayList<>();
@@ -115,43 +107,43 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getSchemaScpCommand(schemaFilesFullPath,job);
 		
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
-		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			return;
 		}
-		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			return;
 		}
 		}
 
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getLibararyScpCommand(job);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, true, true);
-		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			return;
 		}
-		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			return;
 		}
 		// ----------------------------- Code to copy job xml
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getJobXMLScpCommand(xmlPath,"", job);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
-		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			return;
 		}
-		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			return;
 		}
 
 		// ----------------------------- Code to copy parameter file
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getParameterFileScpCommand(paramFile, job);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
-		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			return;
 		}
-		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			return;
 		}
 
@@ -159,11 +151,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getExecututeJobCommand(xmlPath,"", paramFile, job);
 		job.setJobStatus(JobStatus.SSHEXEC);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
-		if (job.getJobStatus().equals(JobStatus.FAILED)) {
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			return;
 		}
-		if (job.getJobStatus().equals(JobStatus.KILLED)) {
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 			((RunJobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
 			return;
