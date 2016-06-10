@@ -338,6 +338,12 @@ public class ComponentsOutputSchema implements IDataStructure {
 		return newComponentsOutputSchema;
 	}
 
+	/**
+	 * This methods returns schema-grid row list
+	 * 
+	 * @param fieldName
+	 * @return
+	 */
 	public List<GridRow> getGridRowList(){
 		List<GridRow> gridRows=new ArrayList<>();
 		for(GridRow gridRow : fixedWidthGridRowsOutputFields)
