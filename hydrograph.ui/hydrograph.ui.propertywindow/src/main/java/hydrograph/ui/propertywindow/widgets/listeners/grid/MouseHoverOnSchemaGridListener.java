@@ -95,7 +95,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 	}
 	
 	
-	private String setToolTipForDateIfBlank(GridRow gridRow){
+	private String setToolTipForDateFormatIfBlank(GridRow gridRow){
 		return Messages.DATE_FORMAT_MUST_NOT_BE_BLANK;
 	}
 	
@@ -328,7 +328,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 		
 		if(StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
 				&& StringUtils.isBlank(generateRecordSchemaGridRow.getDateFormat())){
-			return setToolTipForDateIfBlank(generateRecordSchemaGridRow);
+			return setToolTipForDateFormatIfBlank(generateRecordSchemaGridRow);
 		}else if((StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL))){
 			return setToolTipForBigDecimal(generateRecordSchemaGridRow, componentType);			
 		}
@@ -356,6 +356,13 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 				MixedSchemeGridRow mixedSchemeGridRow = (MixedSchemeGridRow) fixedWidthGridRow;
 				return setToolTipForMixedSchemeGridRow(mixedSchemeGridRow, componentType);
 			}else{
+				if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
+						&& StringUtils.isBlank(gridRow.getDateFormat())){
+					return setToolTipForDateFormatIfBlank(gridRow);
+				}else if((StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL))){
+					return setToolTipForBigDecimal(gridRow, componentType);
+				}
+				
 				if(StringUtils.isBlank(fixedWidthGridRow.getLength())){
 					return Messages.LENGTH_MUST_NOT_BE_BLANK;
 				}else if(!(fixedWidthGridRow.getLength().matches("\\d+"))){
@@ -365,7 +372,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 		}else if(gridRow instanceof BasicSchemaGridRow){
 			if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
 					&& StringUtils.isBlank(gridRow.getDateFormat())){
-				return setToolTipForDateIfBlank(gridRow);
+				return setToolTipForDateFormatIfBlank(gridRow);
 			}else if((StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL))){
 				return setToolTipForBigDecimal(gridRow, componentType);			
 			}
@@ -375,6 +382,13 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 	
 
 	private String setToolTipForMixedSchemeGridRow(MixedSchemeGridRow mixedSchemeGridRow, String componentType){
+		
+		if(StringUtils.equalsIgnoreCase(mixedSchemeGridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
+				&& StringUtils.isBlank(mixedSchemeGridRow.getDateFormat())){
+			return setToolTipForDateFormatIfBlank(mixedSchemeGridRow);
+		}else if((StringUtils.equalsIgnoreCase(mixedSchemeGridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL))){
+			return setToolTipForBigDecimal(mixedSchemeGridRow, componentType);			
+		}
 		
 		if(StringUtils.isBlank(mixedSchemeGridRow.getDelimiter())
 				&& StringUtils.isBlank(mixedSchemeGridRow.getLength())){
