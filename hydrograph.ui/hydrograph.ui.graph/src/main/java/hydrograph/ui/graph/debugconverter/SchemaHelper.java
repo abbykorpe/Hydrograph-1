@@ -16,19 +16,16 @@ package hydrograph.ui.graph.debugconverter;
 
 import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.common.schema.Schema;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GridRowLoader;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,12 +35,13 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
 
 /**
- * This class is used for schema file operations
+ * This class is used for schema file operations at watchers
  *  
  * @author  Bitwise
  *
@@ -61,38 +59,35 @@ public class SchemaHelper {
 	 * @param schemaFilePath
 	 */
 	public void exportSchemaGridData(List<Object> selectedObjects , String schemaFilePath){
-		if(schemaFilePath!=null){
+		if(StringUtils.isNotBlank(schemaFilePath)){
+			schemaFilePath=((IPath)new Path(schemaFilePath)).removeFileExtension()
+					.addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toString();
+			for(Object obj : selectedObjects){
+				if(obj instanceof LinkEditPart)	{
+					Link link = (Link)((LinkEditPart)obj).getModel();
+					ComponentsOutputSchema  componentsOutputSchema = null;
+					Object schemaFields = null;
+					File file = new File(schemaFilePath);
+					Map<String, Object> hashMap = link.getSource().getProperties();
+					for(Entry<String, Object> entry : hashMap.entrySet()){
+						 if(entry.getKey().equalsIgnoreCase(Constants.SCHEMA_TO_PROPAGATE)){
+							schemaFields = entry.getValue();
+							break;
+						}
+					}
 					
-		schemaFilePath=((IPath)new Path(schemaFilePath)).removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toString();
-		for(Object obj:selectedObjects){
-			if(obj instanceof LinkEditPart)	{
-				Link link = (Link)((LinkEditPart)obj).getModel();
-				Schema viewData = null;
-				ComponentsOutputSchema  componentsOutputSchema = null;
-				Object hashMap1 = null;
-				File file = new File(schemaFilePath);
-				Map<String, Object> hashMap = link.getSource().getProperties();
-				for(Entry<String, Object> entry : hashMap.entrySet()){
-					if(entry.getKey().equalsIgnoreCase(Constants.SCHEMA_PROPERTY_NAME)){
-						viewData = (Schema) entry.getValue();
-					}else if(entry.getKey().equalsIgnoreCase(Constants.SCHEMA_TO_PROPAGATE)){
-						hashMap1 = entry.getValue();
+					for(Entry<String, Object> entry : ((Map<String, Object>) schemaFields).entrySet()){
+						if(entry.getKey().equalsIgnoreCase(Constants.FIXED_OUTSOCKET_ID)){
+							componentsOutputSchema = (ComponentsOutputSchema) entry.getValue();
+						}
 					}
+					
+					List<GridRow> gridRowList = componentsOutputSchema.getGridRowList();
+					GridRowLoader gridRowLoader = new GridRowLoader(Constants.GENERIC_GRID_ROW, file);
+					gridRowLoader.exportXMLfromGridRowsWithoutMessage(gridRowList);
 				}
-				
-				for(Entry<String, Object> entry : ((Map<String, Object>) hashMap1).entrySet()){
-					if(entry.getKey().equalsIgnoreCase(Constants.FIXED_OUTSOCKET_ID)){
-						componentsOutputSchema = (ComponentsOutputSchema) entry.getValue();
-					}
-				}
-				
-				List<GridRow> gridRow1 = componentsOutputSchema.getGridRowList();
-				GridRowLoader gridRowLoader = new GridRowLoader(Constants.GENERIC_GRID_ROW, file);
-				gridRowLoader.exportXMLfromGridRowsWithoutMessage(gridRow1);
-			 
 			}
 		}
-			}
 	}
 	
 	/**
@@ -103,21 +98,20 @@ public class SchemaHelper {
 	public Fields importSchemaXml(String schemaFilePath){
 		List<GridRow> schemaGridRowListToImport = new ArrayList<>();
 		File file = new File(schemaFilePath);
-		try {
-			InputStream stream = new FileInputStream(file);
-			JAXBContext jaxbContext = JAXBContext.newInstance(hydrograph.ui.common.schema.Schema.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			hydrograph.ui.common.schema.Schema schema = (hydrograph.ui.common.schema.Schema) jaxbUnmarshaller.unmarshal(file);
-			Fields fields = schema.getFields();
-			for(Field fd : fields.getField()){
-				logger.debug("Type:{}, Name:{}, Format:{}"+fd.getType(),fd.getName(),fd.getFormat());
+		Fields fields = new Fields();
+		if(!file.exists()){
+			try {
+				JAXBContext jaxbContext = JAXBContext.newInstance(Schema.class);
+				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+				Schema schema = (Schema) jaxbUnmarshaller.unmarshal(file);
+				fields = schema.getFields();
+				for(Field field : fields.getField()){
+					logger.debug("Type:{}, Name:{}, Format:{}" + field.getType(),field.getName(),field.getFormat());
+				}
+			} catch (JAXBException jaxbException) {
+				logger.error("Invalid xml file", jaxbException);
 			}
-			return fields;
-		} catch (FileNotFoundException fileNotFoundException) {
-			logger.error("File not found", fileNotFoundException);
-		} catch (JAXBException jaxbException) {
-			logger.error("Invalid xml file", jaxbException);
 		}
-		return null;
+		return fields;
 	}
 }

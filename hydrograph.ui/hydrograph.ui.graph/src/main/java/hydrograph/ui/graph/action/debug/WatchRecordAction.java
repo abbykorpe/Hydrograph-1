@@ -417,7 +417,6 @@ public class WatchRecordAction extends SelectionAction {
 		
 		String path = dataViewerFilePath+dataViewerFileh;
 		SchemaHelper.INSTANCE.exportSchemaGridData(getSelectedObjects(), path);
-		SchemaHelper.INSTANCE.importSchemaXml(path);
 		
 		Display.getDefault().asyncExec(new Runnable() {
 		      @Override
@@ -436,8 +435,9 @@ public class WatchRecordAction extends SelectionAction {
 		  		dataViewerMap.remove(dataViewerWindowName);
 		      }
 		    });
-		if(dataViewerMap.get(dataViewerWindowName)!=null)
-		dataViewerMap.get(dataViewerWindowName).getShell().setActive();
+		if(dataViewerMap.get(dataViewerWindowName)!=null){
+			dataViewerMap.get(dataViewerWindowName).getShell().setActive();
+		}
 		
 	}
 }
