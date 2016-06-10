@@ -64,23 +64,89 @@ public class DateFunctions {
 	 * @return string representation of date in new date format
 	 *         <p>
 	 *         the method returns null if any parameter is null
+	 * @deprecated This method is deprecated, Use
+	 *             {@link DateFunctions#dateFormatter(String inputValue, String oldFormat, String newFormat)}
+	 *             instead
 	 * @throws ParseException
 	 *             if the date value passed in {@code inputValue} does not match
 	 *             the {@code oldFormat}
 	 */
-	public static <T> String dateFormatter(T inputValue, String oldFormat,
-			String newFormat) throws ParseException {
+	@Deprecated
+	public static <T> String dateFormatter(T inputValue, String oldFormat, String newFormat) throws ParseException {
 		if (inputValue == null || oldFormat == null || newFormat == null)
 			return null;
 
-		String oldDateString = String.valueOf(StandardFunctionHelper
-				.convertComparableObjectToString(inputValue));
+		String oldDateString = String.valueOf(StandardFunctionHelper.convertComparableObjectToString(inputValue));
 		String newDateString = null;
 
 		SimpleDateFormat sdf = new SimpleDateFormat(oldFormat);
 		sdf.setLenient(false);
 		Date date = null;
 		date = sdf.parse(oldDateString);
+		sdf.applyPattern(newFormat);
+		newDateString = sdf.format(date);
+
+		return newDateString;
+	}
+
+	/**
+	 * Formats and converts a date value into string representation in the
+	 * desired new date format
+	 * 
+	 * @param inputValue
+	 *            the date value in old format
+	 * @param oldFormat
+	 *            the date format of the date passed in {@code inputValue}
+	 * @param newFormat
+	 *            the desired date format
+	 * @return string representation of date in new date format
+	 *         <p>
+	 *         the method returns null if any parameter is null
+	 * @throws ParseException
+	 *             if the date value passed in {@code inputValue} does not match
+	 *             the {@code oldFormat}
+	 */
+	public static String dateFormatter(String inputValue, String oldFormat, String newFormat) throws ParseException {
+		if (inputValue == null || oldFormat == null || newFormat == null)
+			return null;
+		String newDateString = null;
+
+		SimpleDateFormat sdf = new SimpleDateFormat(oldFormat);
+		sdf.setLenient(false);
+		Date date = null;
+		date = sdf.parse(inputValue);
+		sdf.applyPattern(newFormat);
+		newDateString = sdf.format(date);
+
+		return newDateString;
+	}
+
+	/**
+	 * Formats and converts a date value into string representation in the
+	 * desired new date format
+	 * 
+	 * @param inputValue
+	 *            the date value in old format
+	 * @param oldFormat
+	 *            the date format of the date passed in {@code inputValue}
+	 * @param newFormat
+	 *            the desired date format
+	 * @return string representation of date in new date format
+	 *         <p>
+	 *         the method returns null if any parameter is null
+	 * @throws ParseException
+	 *             if the date value passed in {@code inputValue} does not match
+	 *             the {@code oldFormat}
+	 */
+	public static String dateFormatter(Date inputValue, String oldFormat, String newFormat) throws ParseException {
+		if (inputValue == null || oldFormat == null || newFormat == null)
+			return null;
+		String newDateString = null;
+
+		SimpleDateFormat sdf = new SimpleDateFormat(oldFormat);
+		sdf.setLenient(false);
+		String date = null;
+		date = sdf.format(inputValue);
 		sdf.applyPattern(newFormat);
 		newDateString = sdf.format(date);
 
@@ -98,12 +164,15 @@ public class DateFunctions {
 	 * @return a date object of the corresponding date value
 	 *         <p>
 	 *         the method returns null if any parameter is null
+	 * @deprecated This method is deprecated, Use
+	 *             {@link DateFunctions#getDateFromString(String inputDateInStringFormat, String dateFormat)}
+	 *             instead
 	 * @throws ParseException
 	 *             if the date value passed in {@code inputDateInStringFormat}
 	 *             does not match the {@code dateFormat}
 	 */
-	public static <T> Date getDateFromString(T inputDateInStringFormat,
-			String dateFormat) throws ParseException {
+	@Deprecated
+	public static <T> Date getDateFromString(T inputDateInStringFormat, String dateFormat) throws ParseException {
 		if (inputDateInStringFormat == null || dateFormat == null)
 			return null;
 
@@ -111,6 +180,56 @@ public class DateFunctions {
 		sdf.setLenient(false);
 		Date date = sdf.parse((String) inputDateInStringFormat);
 		return date;
+	}
+
+	/**
+	 * Returns a date object from a string date value
+	 * 
+	 * @param inputDateInStringFormat
+	 *            the date value in string
+	 * @param dateFormat
+	 *            the date format of the date value passed in
+	 *            {@code inputDateInStringFormat}
+	 * @return a date object of the corresponding date value
+	 *         <p>
+	 *         the method returns null if any parameter is null
+	 * @throws ParseException
+	 *             if the date value passed in {@code inputDateInStringFormat}
+	 *             does not match the {@code dateFormat}
+	 */
+	public static Date getDateFromString(String inputDateInStringFormat, String dateFormat) throws ParseException {
+		if (inputDateInStringFormat == null || dateFormat == null)
+			return null;
+
+		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+		sdf.setLenient(false);
+		Date date = sdf.parse(inputDateInStringFormat);
+		return date;
+	}
+
+	/**
+	 * Returns a string value of the date
+	 * 
+	 * @param inputDate
+	 *            the date to fetch the string value
+	 * @param dateFormat
+	 *            the date format of the date value passed in {@code inputDate}
+	 * @return a string value of the date
+	 *         <p>
+	 *         the method returns null if any parameter is null
+	 *         
+	 * @throws ParseException
+	 *             if the date value passed in {@code inputDate} does not match
+	 *             the {@code dateFormat}
+	 */
+	public static <T> String getStringDateFromDateObject(T inputDate, String dateFormat) throws ParseException {
+		if (inputDate == null || dateFormat == null)
+			return null;
+
+		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+		sdf.setLenient(false);
+		String stringDate = sdf.format(inputDate);
+		return stringDate;
 	}
 
 	/**
@@ -127,8 +246,7 @@ public class DateFunctions {
 	 *             if the date value passed in {@code inputDate} does not match
 	 *             the {@code dateFormat}
 	 */
-	public static <T> String getStringDateFromDateObject(T inputDate,
-			String dateFormat) throws ParseException {
+	public static  String getStringDateFromDateObject(Date inputDate, String dateFormat) throws ParseException {
 		if (inputDate == null || dateFormat == null)
 			return null;
 
@@ -153,8 +271,7 @@ public class DateFunctions {
 	 *         {@code dateFormat}
 	 */
 	public static boolean validateStringDate(String inputDate, String dateFormat) {
-		if (dateFormat != null && !dateFormat.equals("") && inputDate != null
-				&& !inputDate.equals("")) {
+		if (dateFormat != null && !dateFormat.equals("") && inputDate != null && !inputDate.equals("")) {
 			SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
 			sdf.setLenient(false);
 			try {

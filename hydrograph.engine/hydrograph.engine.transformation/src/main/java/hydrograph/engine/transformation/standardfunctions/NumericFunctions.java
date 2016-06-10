@@ -29,8 +29,11 @@ public class NumericFunctions {
 	 *            the value from which the decimals are to be retained
 	 * @return the decimals from the {@code inputValue}
 	 * 
-	 * @deprecated Use {@link #decimalStrip(T, includeDecimalPoint)} instead
+	 * @deprecated This method is deprecated, Use
+	 *             {@link NumericFunctions#decimalStrip(String inputValue)}
+	 *             instead
 	 */
+	@SuppressWarnings("unchecked")
 	@Deprecated
 	public static <T> T decimalStrip(T inputValue) {
 		if (inputValue == null)
@@ -54,6 +57,33 @@ public class NumericFunctions {
 	}
 
 	/**
+	 * Retains just the decimal numbers 0-9 excluding the decimal point from the
+	 * {@code inputValue}
+	 * 
+	 * @param inputValue
+	 *            the value from which the decimals are to be retained
+	 * @return the decimals from the {@code inputValue}
+	 */
+	public static String decimalStrip(String inputValue) {
+		if (inputValue == null)
+			return null;
+
+		String filter = inputValue.replaceAll("[^0-9-]", "");
+		if (!filter.equals("")) {
+			String regx = "^(-)(0+)(.*)|^(0+)(.*)";
+			Matcher match = Pattern.compile(regx).matcher(filter);
+			if (match.find()) {
+				if (match.group(1) != null)
+					return (match.group(1) + match.group(3));
+				else
+					return (match.group(5));
+			}
+			return (filter);
+		}
+		return "0";
+	}
+
+	/**
 	 * Retains just the decimal numbers 0-9 including decimal point as specified
 	 * in {@code decimalPoint} from the {@code inputValue}
 	 * 
@@ -61,7 +91,12 @@ public class NumericFunctions {
 	 *            the value from which the decimals are to be retained
 	 * @param includeDecimalPoint
 	 * @return the decimals from the {@code inputValue}
+	 * @deprecated This method is deprecated, Use
+	 *             {@link NumericFunctions#decimalStrip(String inputValue, String decimal_point)}
+	 *             instead
 	 */
+	@SuppressWarnings("unchecked")
+	@Deprecated
 	public static <T> T decimalStrip(T inputValue, T decimal_point) {
 		if (inputValue == null)
 			return null;
@@ -82,6 +117,35 @@ public class NumericFunctions {
 			return (T) (filter);
 		}
 		return (T) "0";
+	}
+
+	/**
+	 * Retains just the decimal numbers 0-9 including decimal point as specified
+	 * in {@code decimalPoint} from the {@code inputValue}
+	 * 
+	 * @param inputValue
+	 *            the value from which the decimals are to be retained
+	 * @param includeDecimalPoint
+	 * @return the decimals from the {@code inputValue}
+	 */
+	public static String decimalStrip(String inputValue, String decimal_point) {
+		if (inputValue == null)
+			return null;
+
+		String filter = inputValue.replaceAll("[^0-9-\\" + decimal_point + "]", "");
+		// filter = input.replaceAll("[\\.]+$", "");
+		if (!filter.equals("")) {
+			String regx = "^(-)(0+)(.*)|^(0+)(.*)";
+			Matcher match = Pattern.compile(regx).matcher(filter);
+			if (match.find()) {
+				if (match.group(1) != null)
+					return (match.group(1) + match.group(3));
+				else
+					return (match.group(5));
+			}
+			return (filter);
+		}
+		return "0";
 	}
 
 	/**
@@ -141,9 +205,9 @@ public class NumericFunctions {
 			n1 = (Integer) n;
 		return r.nextInt(n1);
 	}
-	
-	public static <T> Double getDoubleFromComparable(T inputValue){
+
+	public static <T> Double getDoubleFromComparable(T inputValue) {
 		return Double.parseDouble(convertComparableObjectToString(inputValue));
 	}
-	
+
 }

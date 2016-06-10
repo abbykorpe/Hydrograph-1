@@ -24,7 +24,9 @@ public class StringFunctions {
 	 * @param inputValue
 	 *            the value whose length is to be retrieved
 	 * @return Length of the {@code inputValue}
-	 * @deprecated Use {@link java.lang.String#length()} instead
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringLength(String inputValue)}
+	 *             instead
 	 */
 	@Deprecated
 	public static <T> Integer stringLength(T inputValue) {
@@ -37,13 +39,31 @@ public class StringFunctions {
 	}
 
 	/**
+	 * Returns string length of the {@code inputValue}
+	 * 
+	 * @param inputValue
+	 *            the value whose length is to be retrieved
+	 * @return Length of the {@code inputValue}
+	 */
+	public static Integer stringLength(String inputValue) {
+		if (inputValue == null)
+			return null;
+
+		return inputValue.length();
+	}
+
+	/**
 	 * Trims the spaces from LHS and RHS of the {@code inputValue}
 	 * 
 	 * @param inputValue
 	 *            the value whose spaces are to be trimmed
 	 * @return {@code inputValue} with spaces removed from LHS and RHS
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringLRTrim(String inputValue)}
+	 *             instead
 	 */
 	@SuppressWarnings("unchecked")
+	@Deprecated
 	public static <T> T stringLRTrim(T inputValue) {
 		if (inputValue == null)
 			return null;
@@ -55,13 +75,30 @@ public class StringFunctions {
 	}
 
 	/**
+	 * Trims the spaces from LHS and RHS of the {@code inputValue}
+	 * 
+	 * @param inputValue
+	 *            the value whose spaces are to be trimmed
+	 * @return {@code inputValue} with spaces removed from LHS and RHS
+	 */
+	public static String stringLRTrim(String inputValue) {
+		if (inputValue == null)
+			return null;
+		return inputValue.trim();
+	}
+
+	/**
 	 * Trims the spaces from the RHS of the {@code inputValue}
 	 * 
 	 * @param inputValue
 	 *            the value whose spaces are to be trimmed
 	 * @return {@code inputValue} with spaces removed from RHS
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringRightTrim(String inputValue)}
+	 *             instead
 	 */
 	@SuppressWarnings("unchecked")
+	@Deprecated
 	public static <T> T stringRightTrim(T inputValue) {
 		if (inputValue == null)
 			return null;
@@ -73,13 +110,31 @@ public class StringFunctions {
 	}
 
 	/**
+	 * Trims the spaces from the RHS of the {@code inputValue}
+	 * 
+	 * @param inputValue
+	 *            the value whose spaces are to be trimmed
+	 * @return {@code inputValue} with spaces removed from RHS
+	 */
+	public static String stringRightTrim(String inputValue) {
+		if (inputValue == null)
+			return null;
+
+		return inputValue.replaceFirst("\\s+$", "");
+	}
+
+	/**
 	 * Trims the spaces from the LHS of the {@code inputValue}
 	 * 
 	 * @param inputValue
 	 *            the value whose spaces are to be trimmed
 	 * @return {@code inputValue} with spaces removed from LHS
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringLeftTrim(String inputValue)}
+	 *             instead
 	 */
 	@SuppressWarnings("unchecked")
+	@Deprecated
 	public static <T> T stringLeftTrim(T inputValue) {
 		if (inputValue == null)
 			return null;
@@ -88,6 +143,44 @@ public class StringFunctions {
 			return (T) ((String) inputValue).replaceFirst("\\s+", "");
 		else
 			return inputValue;
+	}
+
+	/**
+	 * Trims the spaces from the LHS of the {@code inputValue}
+	 * 
+	 * @param inputValue
+	 *            the value whose spaces are to be trimmed
+	 * @return {@code inputValue} with spaces removed from LHS
+	 */
+	public static String stringLeftTrim(String inputValue) {
+		if (inputValue == null)
+			return null;
+
+		return inputValue.replaceFirst("\\s+", "");
+	}
+
+	/**
+	 * Replaces source string with the target string in the {@code inputValue}
+	 * 
+	 * @param inputValue
+	 *            the value in which the source string is to be replaced with
+	 *            target string
+	 * @param srcString
+	 *            the source string to be replaced in {@code inputValue}
+	 * @param tgtString
+	 *            the target string to replace in {@code inputValue}
+	 * @return inputValue with source string replaced with target string
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringReplace(String inputValue, String srcString, String tgtString)}
+	 *             instead
+	 */
+	@SuppressWarnings("unchecked")
+	@Deprecated
+	public static <T> T stringReplace(T inputValue, String srcString, String tgtString) {
+		if (inputValue == null || srcString == null || tgtString == null)
+			return null;
+
+		return (T) ((String) inputValue).replaceAll(srcString, tgtString);
 	}
 
 	/**
@@ -102,12 +195,45 @@ public class StringFunctions {
 	 *            the target string to replace in {@code inputValue}
 	 * @return inputValue with source string replaced with target string
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T stringReplace(T inputValue, String srcString, String tgtString) {
+	public static String stringReplace(String inputValue, String srcString, String tgtString) {
 		if (inputValue == null || srcString == null || tgtString == null)
 			return null;
 
-		return (T) ((String) inputValue).replaceAll(srcString, tgtString);
+		return inputValue.replaceAll(srcString, tgtString);
+	}
+
+	/**
+	 * Replace source string with the target string from the given offset in the
+	 * {@code inputValue}
+	 * 
+	 * @param inputValue
+	 *            the value in which the source string is to be replaced with
+	 *            target string
+	 * @param srcString
+	 *            the source string to be replaced in {@code inputValue}
+	 * @param tgtString
+	 *            the target string to replace in {@code inputValue}
+	 * @param startOffset
+	 *            the starting offset from where to start the replacement
+	 * @return inputValue with source string replaced with target string from
+	 *         the given offset
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringReplace(String inputValue, String srcString, String tgtString, int startOffset)}
+	 *             instead
+	 */
+	@SuppressWarnings("unchecked")
+	@Deprecated
+	public static <T> T stringReplace(T inputValue, String srcString, String tgtString, int startOffset) {
+		if (inputValue == null || srcString == null || tgtString == null)
+			return null;
+
+		String input = (String) inputValue;
+
+		String pre = input.substring(0, startOffset);
+		String post = input.substring(startOffset);
+
+		return (T) pre.concat(post.replace(srcString, tgtString));
+
 	}
 
 	/**
@@ -126,17 +252,16 @@ public class StringFunctions {
 	 * @return inputValue with source string replaced with target string from
 	 *         the given offset
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T stringReplace(T inputValue, String srcString, String tgtString, int startOffset) {
+	public static String stringReplace(String inputValue, String srcString, String tgtString, int startOffset) {
 		if (inputValue == null || srcString == null || tgtString == null)
 			return null;
 
-		String input = (String) inputValue;
+		String input = inputValue;
 
 		String pre = input.substring(0, startOffset);
 		String post = input.substring(startOffset);
 
-		return (T) pre.concat(post.replace(srcString, tgtString));
+		return pre.concat(post.replace(srcString, tgtString));
 
 	}
 
@@ -148,14 +273,40 @@ public class StringFunctions {
 	 * @param anotherString
 	 *            the second string to compare
 	 * @return if the strings are equal return 0 else return 1 or -1
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringCompare(String inputValue, String anotherString)}
+	 *             instead
 	 */
 	@SuppressWarnings("rawtypes")
+	@Deprecated
 	public static <T> Integer stringCompare(Comparable inputValue, T anotherString) {
 		if (inputValue == null || anotherString == null)
 			return null;
 
 		int result = StandardFunctionHelper.convertComparableObjectToString(inputValue)
 				.compareTo(StandardFunctionHelper.convertComparableObjectToString(anotherString));
+		if (result < 0)
+			return -1;
+		else if (result > 0)
+			return 1;
+		else
+			return result;
+	}
+
+	/**
+	 * Compares two strings
+	 * 
+	 * @param inputValue
+	 *            the first string to compare
+	 * @param anotherString
+	 *            the second string to compare
+	 * @return if the strings are equal return 0 else return 1 or -1
+	 */
+	public static Integer stringCompare(String inputValue, String anotherString) {
+		if (inputValue == null || anotherString == null)
+			return null;
+
+		int result = inputValue.compareTo(anotherString);
 		if (result < 0)
 			return -1;
 		else if (result > 0)
@@ -175,8 +326,12 @@ public class StringFunctions {
 	 *         <p>
 	 *         {@code null} if any of the values specified in
 	 *         {@code appendValue} is {@code null}
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringConcat(String inputValue, String[] appendValue)}
+	 *             instead
 	 */
 	@SuppressWarnings("unchecked")
+	@Deprecated
 	public static <T> T stringConcat(T inputValue, T... appendValue) {
 		if (inputValue == null)
 			return null;
@@ -196,6 +351,36 @@ public class StringFunctions {
 	}
 
 	/**
+	 * Appends given string values to the {@code inputValue}
+	 * 
+	 * @param inputValue
+	 *            the string to append the value(s) to
+	 * @param appendValue
+	 *            the value(s) to append to
+	 * @return The concatenated string
+	 *         <p>
+	 *         {@code null} if any of the values specified in
+	 *         {@code appendValue} is {@code null}
+	 */
+	public static String stringConcat(String inputValue, String... appendValue) {
+		if (inputValue == null)
+			return null;
+		if (appendValue == null)
+			return null;
+
+		String input = "" + inputValue;
+
+		for (String str : appendValue) {
+			if (str == null)
+				return null;
+
+			input += str;
+		}
+
+		return input;
+	}
+
+	/**
 	 * Returns substring from the start position till the specified length
 	 * 
 	 * @param inputValue
@@ -206,8 +391,12 @@ public class StringFunctions {
 	 * @param length
 	 *            the length of the substring to be retrieved
 	 * @return Substring from the given {@code inputValue}
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringSubString(String inputValue, int start, int length)}
+	 *             instead
 	 */
 	@SuppressWarnings("unchecked")
+	@Deprecated
 	public static <T> T stringSubString(T inputValue, int start, int length) {
 		if (inputValue == null)
 			return null;
@@ -229,6 +418,60 @@ public class StringFunctions {
 	}
 
 	/**
+	 * Returns substring from the start position till the specified length
+	 * 
+	 * @param inputValue
+	 *            the string whose substring is to be fetched
+	 * @param start
+	 *            the starting position of the substring to be retrieved. The
+	 *            index starts with 1
+	 * @param length
+	 *            the length of the substring to be retrieved
+	 * @return Substring from the given {@code inputValue}
+	 */
+	public static String stringSubString(String inputValue, int start, int length) {
+		if (inputValue == null)
+			return null;
+
+		if (start < 1)
+			start = 1;
+
+		if (length < 1)
+			length = 0;
+
+		if (start > inputValue.length())
+			return "";
+
+		if (start + length > inputValue.length())
+			return inputValue.substring(start - 1);
+
+		return inputValue.substring(start - 1, start + length - 1);
+	}
+
+	/**
+	 * Returns the first index of the {@code searchString} within the
+	 * {@code inputValue}
+	 * 
+	 * @param inputValue
+	 *            the value from which index is to be retrieved
+	 * @param searchString
+	 *            the search string whose first index is to be retrieved
+	 * @return the first index of the {@code searchString} within the
+	 *         {@code inputValue}
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringIndex(String inputValue, String searchString)}
+	 *             instead
+	 */
+	@Deprecated
+	public static <T> Integer stringIndex(T inputValue, String searchString) {
+		if (inputValue == null)
+			return null;
+
+		String input = (String) inputValue;
+		return input.indexOf(searchString) + 1;
+	}
+
+	/**
 	 * Returns the first index of the {@code searchString} within the
 	 * {@code inputValue}
 	 * 
@@ -239,12 +482,11 @@ public class StringFunctions {
 	 * @return the first index of the {@code searchString} within the
 	 *         {@code inputValue}
 	 */
-	public static <T> Integer stringIndex(T inputValue, String searchString) {
+	public static Integer stringIndex(String inputValue, String searchString) {
 		if (inputValue == null)
 			return null;
 
-		String input = (String) inputValue;
-		return input.indexOf(searchString) + 1;
+		return inputValue.indexOf(searchString) + 1;
 	}
 
 	/**
@@ -259,13 +501,65 @@ public class StringFunctions {
 	 *            the starting offset from where to start the search
 	 * @return the first index of the {@code searchString} within the
 	 *         {@code inputValue} from the given offset
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringIndex(String inputValue, String searchString, int offset)}
+	 *             instead
 	 */
+	@Deprecated
 	public static <T> Integer stringIndex(T inputValue, String searchString, int offset) {
 		if (inputValue == null)
 			return null;
 
 		String input = (String) inputValue;
 		return input.indexOf(searchString, offset) + 1;
+	}
+
+	/**
+	 * Returns the first index of the {@code searchString} within the
+	 * {@code inputValue} from the given offset
+	 * 
+	 * @param inputValue
+	 *            the value from which index is to be retrieved
+	 * @param searchString
+	 *            the search string whose first index is to be retrieved
+	 * @param offset
+	 *            the starting offset from where to start the search
+	 * @return the first index of the {@code searchString} within the
+	 *         {@code inputValue} from the given offset
+	 * 
+	 */
+	public static Integer stringIndex(String inputValue, String searchString, int offset) {
+		if (inputValue == null)
+			return null;
+
+		return inputValue.indexOf(searchString, offset) + 1;
+	}
+
+	/**
+	 * Returns the last index of the {@code searchString} within the
+	 * {@code inputValue} in case the {@code searchString} is present multiple
+	 * times
+	 * 
+	 * @param inputValue
+	 *            the value from which index is to be retrieved
+	 * @param searchString
+	 *            the search string whose last index is to be retrieved
+	 * @return the last index of the {@code searchString} within the
+	 *         {@code inputValue}
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringRightIndex(String inputValue, String searchString)}
+	 *             instead
+	 */
+	@Deprecated
+	public static <T> Integer stringRightIndex(T inputValue, String searchString) {
+		if (inputValue == null)
+			return null;
+
+		String input = (String) inputValue;
+		if (input.lastIndexOf(searchString) == stringLength(input)) {
+			return 1;
+		}
+		return input.lastIndexOf(searchString) + 1;
 	}
 
 	/**
@@ -280,15 +574,42 @@ public class StringFunctions {
 	 * @return the last index of the {@code searchString} within the
 	 *         {@code inputValue}
 	 */
-	public static <T> Integer stringRightIndex(T inputValue, String searchString) {
+	public static Integer stringRightIndex(String inputValue, String searchString) {
+		if (inputValue == null)
+			return null;
+
+		if (inputValue.lastIndexOf(searchString) == stringLength(inputValue)) {
+			return 1;
+		}
+		return inputValue.lastIndexOf(searchString) + 1;
+	}
+
+	/**
+	 * Returns the last index of the {@code searchString} within the
+	 * {@code inputValue} from the given offset
+	 * 
+	 * @param inputValue
+	 *            the value from which index is to be retrieved
+	 * @param searchString
+	 *            the search string whose last index is to be retrieved
+	 * @param offset
+	 *            the starting offset from where to start the search
+	 * @return the last index of the {@code searchString} within the
+	 *         {@code inputValue} from the given offset
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringRightIndex(String inputValue, String searchString, int offset)}
+	 *             instead
+	 */
+	@Deprecated
+	public static <T> Integer stringRightIndex(T inputValue, String searchString, int offset) {
 		if (inputValue == null)
 			return null;
 
 		String input = (String) inputValue;
-		if (input.lastIndexOf(searchString) == stringLength(input)) {
+		if (input.lastIndexOf(searchString) == input.length()) {
 			return 1;
 		}
-		return input.lastIndexOf(searchString) + 1;
+		return input.lastIndexOf(searchString, offset) + 1;
 	}
 
 	/**
@@ -304,15 +625,54 @@ public class StringFunctions {
 	 * @return the last index of the {@code searchString} within the
 	 *         {@code inputValue} from the given offset
 	 */
-	public static <T> Integer stringRightIndex(T inputValue, String searchString, int offset) {
+	public static <T> Integer stringRightIndex(String inputValue, String searchString, int offset) {
+		if (inputValue == null)
+			return null;
+
+		if (inputValue.lastIndexOf(searchString) == inputValue.length()) {
+			return 1;
+		}
+		return inputValue.lastIndexOf(searchString, offset) + 1;
+	}
+
+	/**
+	 * Returns all the characters from {@code searchString} present in
+	 * {@code inputValue}
+	 * 
+	 * @param inputValue
+	 *            the input value from which the characters are to be fetched
+	 * @param searchString
+	 *            the string containing characters to search
+	 * @return all the characters from {@code searchString} present in
+	 *         {@code inputValue}
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringFilter(String inputValue, String searchString)}
+	 *             instead
+	 */
+	@Deprecated
+	public static <T> String stringFilter(T inputValue, String searchString) {
 		if (inputValue == null)
 			return null;
 
 		String input = (String) inputValue;
-		if (input.lastIndexOf(searchString) == input.length()) {
-			return 1;
+
+		char[] inputChars = input.toCharArray();
+		char[] searchStringChars = searchString.toCharArray();
+		List<Character> returnset = new LinkedList<Character>();
+
+		for (int i = 0; i < inputChars.length; i++) {
+			for (int j = 0; j < searchStringChars.length; j++) {
+				if (inputChars[i] == searchStringChars[j]) {
+					returnset.add(inputChars[i]);
+					break;
+				}
+			}
 		}
-		return input.lastIndexOf(searchString, offset) + 1;
+		String returnString = "";
+		for (Character c : returnset) {
+			returnString += c;
+		}
+		return returnString;
 	}
 
 	/**
@@ -326,13 +686,11 @@ public class StringFunctions {
 	 * @return all the characters from {@code searchString} present in
 	 *         {@code inputValue}
 	 */
-	public static <T> String stringFilter(T inputValue, String searchString) {
+	public static String stringFilter(String inputValue, String searchString) {
 		if (inputValue == null)
 			return null;
 
-		String input = (String) inputValue;
-
-		char[] inputChars = input.toCharArray();
+		char[] inputChars = inputValue.toCharArray();
 		char[] searchStringChars = searchString.toCharArray();
 		List<Character> returnset = new LinkedList<Character>();
 
@@ -360,7 +718,11 @@ public class StringFunctions {
 	 * @param searchString
 	 *            the string containing characters to be removed
 	 * @return string with all the characters from {@code searchString} removed
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringDeFilter(String inputValue, String searchString)}
+	 *             instead
 	 */
+	@Deprecated
 	public static <T> String stringDeFilter(T inputValue, String searchString) {
 		if (inputValue == null)
 			return null;
@@ -368,6 +730,43 @@ public class StringFunctions {
 		String input = (String) inputValue;
 
 		char[] inputChars = input.toCharArray();
+		char[] searchStringChars = searchString.toCharArray();
+		List<Character> returnset = new LinkedList<Character>();
+		boolean flag = false;
+		for (int i = 0; i < inputChars.length; i++) {
+			flag = false;
+			for (int j = 0; j < searchStringChars.length; j++) {
+				if (inputChars[i] == searchStringChars[j]) {
+					flag = true;
+					break;
+				}
+			}
+			if (!flag) {
+				returnset.add(inputChars[i]);
+			}
+		}
+		String returnString = "";
+		for (Character c : returnset) {
+			returnString += c;
+		}
+		return returnString;
+	}
+
+	/**
+	 * Removes all the characters from {@code searchString} from
+	 * {@code inputValue}
+	 * 
+	 * @param inputValue
+	 *            the input value from which the characters are to be removed
+	 * @param searchString
+	 *            the string containing characters to be removed
+	 * @return string with all the characters from {@code searchString} removed
+	 */
+	public static String stringDeFilter(String inputValue, String searchString) {
+		if (inputValue == null)
+			return null;
+
+		char[] inputChars = inputValue.toCharArray();
 		char[] searchStringChars = searchString.toCharArray();
 		List<Character> returnset = new LinkedList<Character>();
 		boolean flag = false;
@@ -399,6 +798,34 @@ public class StringFunctions {
 	 *            the expected length of the resulting string
 	 * @return the {@code inputValue} with spaces padded on the left
 	 */
+	public static <T> String stringLeftPad(String inputValue, int expectedLength) {
+		if (inputValue == null)
+			return null;
+
+		if (inputValue.length() > expectedLength)
+			return inputValue;
+
+		String returnString = "";
+		for (int i = 0; i < (expectedLength - inputValue.length()); i++)
+			returnString += " ";
+
+		returnString += inputValue;
+		return returnString;
+	}
+
+	/**
+	 * Left pads the {@code inputValue} with spaces
+	 * 
+	 * @param inputValue
+	 *            the input value to left pad
+	 * @param expectedLength
+	 *            the expected length of the resulting string
+	 * @return the {@code inputValue} with spaces padded on the left
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringLeftPad(String inputValue, int expectedLength)}
+	 *             instead
+	 */
+	@Deprecated
 	public static <T> String stringLeftPad(T inputValue, int expectedLength) {
 		if (inputValue == null)
 			return null;
@@ -427,7 +854,11 @@ public class StringFunctions {
 	 * 
 	 * @return the {@code inputValue} with {@code paddingCharacter} padded on
 	 *         the left
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringLeftPad(String inputValue, int expectedLength, T paddingCharacter)}
+	 *             instead
 	 */
+	@Deprecated
 	public static <T> String stringLeftPad(T inputValue, int expectedLength, T paddingCharacter) {
 		if (inputValue == null)
 			return null;
@@ -445,6 +876,34 @@ public class StringFunctions {
 	}
 
 	/**
+	 * Left pads the {@code inputValue} with {@code paddingCharacter}
+	 * 
+	 * @param inputValue
+	 *            the input value to left pad
+	 * @param expectedLength
+	 *            the expected length of the resulting string
+	 * @param paddingCharacter
+	 *            the character to pad on the left
+	 * 
+	 * @return the {@code inputValue} with {@code paddingCharacter} padded on
+	 *         the left
+	 */
+	public static <T> String stringLeftPad(String inputValue, int expectedLength, T paddingCharacter) {
+		if (inputValue == null)
+			return null;
+
+		if (inputValue.length() > expectedLength)
+			return inputValue;
+
+		String returnString = "";
+		for (int i = 0; i < (expectedLength - inputValue.length()); i++)
+			returnString += paddingCharacter;
+
+		returnString += inputValue;
+		return returnString;
+	}
+
+	/**
 	 * Splits the {@code inputValue} on the provided {@code separator}
 	 * 
 	 * @param inputValue
@@ -453,8 +912,12 @@ public class StringFunctions {
 	 *            the separator to split the {@code inputValue} on
 	 * @return an array of strings computed by splitting {@code inputValue} on
 	 *         the provided {@code separator}
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringSplit(String inputValue, String separator)}
+	 *             instead
 	 */
 	@SuppressWarnings("unchecked")
+	@Deprecated
 	public static <T> T[] stringSplit(T inputValue, String separator) {
 		if (inputValue == null || separator == null)
 			return null;
@@ -464,12 +927,32 @@ public class StringFunctions {
 	}
 
 	/**
+	 * Splits the {@code inputValue} on the provided {@code separator}
+	 * 
+	 * @param inputValue
+	 *            the input value to split
+	 * @param separator
+	 *            the separator to split the {@code inputValue} on
+	 * @return an array of strings computed by splitting {@code inputValue} on
+	 *         the provided {@code separator}
+	 */
+	public static String[] stringSplit(String inputValue, String separator) {
+		if (inputValue == null || separator == null)
+			return null;
+		String delim = Pattern.quote(separator);
+		String[] returnArray = inputValue.split(delim, -1);
+		return returnArray;
+	}
+
+	/**
 	 * Converts the string to upper case
 	 * 
 	 * @param inputValue
 	 *            the input value to convert to upper case
 	 * @return the {@code inputValue} in upper case
-	 * @deprecated Use {@link String#toUpperCase()} instead
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringUpper(String inputValue)}
+	 *             instead
 	 */
 	@Deprecated
 	public static <T> String stringUpper(T inputValue) {
@@ -480,12 +963,28 @@ public class StringFunctions {
 	}
 
 	/**
+	 * Converts the string to upper case
+	 * 
+	 * @param inputValue
+	 *            the input value to convert to upper case
+	 * @return the {@code inputValue} in upper case
+	 */
+	public static String stringUpper(String inputValue) {
+		if (inputValue == null)
+			return null;
+
+		return inputValue.toUpperCase();
+	}
+
+	/**
 	 * Converts the string to lower case
 	 * 
 	 * @param inputValue
 	 *            the input value to convert to lower case
 	 * @return the {@code inputValue} in lower case
-	 * @deprecated Use {@link String#toLowerCase()} instead
+	 * @deprecated This method is deprecated, Use
+	 *             {@link StringFunctions#stringLower(String inputValue)}
+	 *             instead
 	 */
 	@Deprecated
 	public static <T> String stringLower(T inputValue) {
@@ -494,4 +993,19 @@ public class StringFunctions {
 
 		return ((String) inputValue).toLowerCase();
 	}
+
+	/**
+	 * Converts the string to lower case
+	 * 
+	 * @param inputValue
+	 *            the input value to convert to lower case
+	 * @return the {@code inputValue} in lower case
+	 */
+	public static String stringLower(String inputValue) {
+		if (inputValue == null)
+			return null;
+
+		return inputValue.toLowerCase();
+	}
+
 }
