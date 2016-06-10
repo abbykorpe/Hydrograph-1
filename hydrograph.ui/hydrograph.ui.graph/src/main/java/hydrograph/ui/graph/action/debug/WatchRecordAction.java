@@ -268,7 +268,6 @@ public class WatchRecordAction extends SelectionAction {
 			String host=job.getIpAddress();
 			String port;
 			if(isLocalDebugMode()){
-				System.out.println("Yes");
 				host="localhost";
 			}
 						
@@ -279,7 +278,6 @@ public class WatchRecordAction extends SelectionAction {
 			postMethod.addParameter("socketId", watchRecordInner.getSocketId());
 
 			int response = httpClient.executeMethod(postMethod);
-			System.out.println("response: " + response);
 
 		}catch(Exception e){
 			e.printStackTrace();
@@ -376,9 +374,7 @@ public class WatchRecordAction extends SelectionAction {
 		
 		
 		final String dataViewerFilePath= tempCopyPath.trim();
-		System.out.println("Path::"+dataViewerFilePath);
 		final String dataViewerFileh= watchFileName.trim();
-		System.out.println("File name"+dataViewerFileh);
 		final String dataViewerWindowName = windowName;
 		
 		
