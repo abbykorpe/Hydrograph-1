@@ -28,7 +28,6 @@ import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -327,24 +326,17 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			
 		}
 		
-		if (!propertyDialog.isCancelPressed() && SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()) && !isSchemaInSync()){
+		if (!propertyDialog.isCancelPressed() && SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()) &&
+				!isSchemaInSync()){
 				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
 				int dialogResult =dialog.open();
 				
 				if(dialogResult == 0){
 					//syncTransformWithSchema();
 					syncSchema();
-					
-				}/*else{
-					Schema schema = getSchemaForInternalPropagation();
-					schemaGridRowList=schema.getGridRow();
-					tableViewer.refresh();
-				}*/
 				
-			}/*else{
-				tableViewer.setInput(schemaGridRowList);
-				tableViewer.refresh();
-			}*/
+			}
+		}
 		
 		if (!schemaGridRowList.isEmpty()) {
 			for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
@@ -1410,6 +1402,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public void refresh() {
 		
 		Schema schema = getSchemaForInternalPropagation();
+
 		Schema originalSchema = (Schema) getComponent().getProperties().get("schema");
 		if (originalSchema != null && !originalSchema.getGridRow().isEmpty()) {
 			
@@ -1531,11 +1524,14 @@ private void syncSchema(){
 	
 	if(StringUtils.endsWithIgnoreCase(SCHEMA_TAB, propertyDialog.getSelectedTab())){
 		SchemaSyncUtility.pushSchemaToMapping(getComponent(), schemaGridRowList);
+		schema.setGridRow(new ArrayList<>(schemaGridRowList));
 	}
 	else{
-		schemaGridRowList=schema.getGridRow();
+		schemaGridRowList=new ArrayList<>(schema.getGridRow());
+		ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
+		eLTDetails.setGrids(schemaGridRowList); 
 		tableViewer.setInput(schemaGridRowList);
-		tableViewer.refresh(); 
+		tableViewer.refresh();
 	} 
 }
 
@@ -1650,8 +1646,76 @@ public List<FilterProperties> convertSchemaToFilterProperty(){
 	return outputFileds;
 }
 
+
 public Table getTable() {
 	return table;
+}
+
+public void highlightInvalidRowWithRedColor(GridRow gridRow)
+{ 
+	for(TableItem item:table.getItems())
+	{
+		if(gridRow==null)
+	    gridRow=(GridRow)item.getData();	
+	    if(StringUtils.equalsIgnoreCase(item.getText(),gridRow.getFieldName()))
+		{
+			if((StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), "java.math.BigDecimal"))&&(StringUtils.isBlank(gridRow.getPrecision()) || StringUtils.isBlank(gridRow.getScale()) ||
+				StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), "none")||
+					!(gridRow.getScale().matches("\\d+"))||!(gridRow.getPrecision().matches("\\d+"))
+					))
+			{
+				item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+				
+			}
+			else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),"java.util.Date") && (StringUtils.isBlank(gridRow.getDateFormat()) ))
+			{
+				item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+			}
+			else if(gridRow instanceof FixedWidthGridRow && !(gridRow instanceof GenerateRecordSchemaGridRow))
+			{
+			
+				FixedWidthGridRow fixedWidthGridRow=(FixedWidthGridRow)gridRow;
+				if(fixedWidthGridRow instanceof MixedSchemeGridRow)
+				{
+					if((StringUtils.isBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isBlank(fixedWidthGridRow.getLength())))
+					{
+						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+					}	
+					else if(StringUtils.isNotBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isNotBlank(fixedWidthGridRow.getLength()))	
+					{
+						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+					}
+					else if(StringUtils.isNotBlank(fixedWidthGridRow.getLength())&& !(fixedWidthGridRow.getLength().matches("\\d+")))	
+					{
+						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+					}
+					else
+					{
+						item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+					}	
+					
+				}
+				else
+				{
+				if(StringUtils.isBlank(fixedWidthGridRow.getLength())||!(fixedWidthGridRow.getLength().matches("\\d+")))
+				{
+					item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+				}	
+				else
+				{
+					item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+				}	
+				}	
+			}	
+			else
+			{
+				item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+			}	
+			gridRow=null;
+		}	
+	    
+	}	
+
 }
 
 public String getComponentType() {
