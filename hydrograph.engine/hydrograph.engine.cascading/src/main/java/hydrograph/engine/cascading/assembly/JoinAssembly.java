@@ -442,9 +442,9 @@ public class JoinAssembly extends BaseComponent<JoinEntity> {
 
 		Fields combinedSourceFields = new Fields();
 
-		for (int i = 0; i < componentParameters.getInputPipes().size(); i++) {
+		for (int i = 0; i < componentParameters.getinSocketId().size(); i++) {
 			sourceFields = joinHelper.getMapSourceFields(componentParameters
-					.getinSocketId().get(i), outSocket, i);
+					.getinSocketId().get(i), outSocket/*, i*/);
 
 			if (sourceFields == null)
 				continue;

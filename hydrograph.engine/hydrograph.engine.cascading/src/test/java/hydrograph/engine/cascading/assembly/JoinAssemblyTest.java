@@ -80,7 +80,8 @@ public class JoinAssemblyTest {
 
 		parameters.addInputFields(new Fields("col1", "col2", "col3"));
 		parameters.addInputFields(new Fields("col1", "col4", "col5"));
-
+		parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in0", new Fields("col1", "col4", "col5"));
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
 
@@ -169,6 +170,9 @@ public class JoinAssemblyTest {
 
 		parameters.addInputFields(new Fields("col1", "col2", "col3"));
 		parameters.addInputFields(new Fields("col1", "col4", "col5"));
+		
+		parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
 
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
@@ -254,6 +258,10 @@ public class JoinAssemblyTest {
 		parameters.addInputFields(new Fields("col1", "G1.col2", "G1.col3"));
 		parameters.addInputFields(new Fields("col1", "col4", "col5"));
 
+		parameters.addCopyOfInSocket("in0", new Fields("col1", "G1.col2", "G1.col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
+
+		
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
 
@@ -343,6 +351,9 @@ public class JoinAssemblyTest {
 		parameters.addInputFields(new Fields("col1", "col2", "col3"));
 		parameters.addInputFields(new Fields("col1", "col4", "col5"));
 
+		parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
+		
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
 
@@ -432,6 +443,9 @@ public class JoinAssemblyTest {
 		parameters.addInputFields(new Fields("col1", "col2", "col3"));
 		parameters.addInputFields(new Fields("col1", "col4", "col5"));
 
+		parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
+		
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
 
@@ -521,6 +535,9 @@ public class JoinAssemblyTest {
 		parameters.addInputFields(new Fields("in0.col1", "col2", "in0.col3"));
 		parameters.addInputFields(new Fields("col1", "col4", "col5"));
 
+		parameters.addCopyOfInSocket("in0", new Fields("in0.col1", "col2", "in0.col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
+		
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
 
@@ -607,9 +624,10 @@ public class JoinAssemblyTest {
 		parameters.addInputPipe(pipe1); // first input to join component
 		parameters.addInputPipe(pipe2); // second input to join component
 
+		parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col3"));
 		parameters.addInputFields(new Fields("col1", "col2", "col3"));
 		parameters.addInputFields(new Fields("col1", "col4", "col3"));
-
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
 
@@ -699,6 +717,7 @@ public class JoinAssemblyTest {
 
 		parameters.addinSocketId("in0");
 		parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
 		parameters.addinSocketId("in1");
 
 		JoinEntity joinEntity = new JoinEntity();
@@ -917,6 +936,11 @@ public class JoinAssemblyTest {
 		parameters.addInputFields(new Fields("col1", "col4", "col5"));
 		parameters.addInputFields(new Fields("col1", "col6", "col7"));
 
+		parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
+		parameters.addCopyOfInSocket("in2", new Fields("col1", "col6", "col7"));
+
+		
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
 		parameters.addinSocketId("in2");
@@ -1008,6 +1032,9 @@ public class JoinAssemblyTest {
 		parameters.addInputFields(new Fields("col1", "col2", "col3"));
 		parameters.addInputFields(new Fields("col1", "col4", "col5"));
 
+		parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
+		
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
 
@@ -1101,6 +1128,10 @@ public class JoinAssemblyTest {
 		parameters.addInputFields(new Fields("col1", "col4", "col5"));
 		parameters.addInputFields(new Fields("col1", "col6", "col7"));
 
+		parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
+		parameters.addCopyOfInSocket("in2", new Fields("col1", "col6", "col7"));
+		
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
 		parameters.addinSocketId("in2");
@@ -1191,6 +1222,9 @@ public class JoinAssemblyTest {
 		parameters.addInputFields(new Fields("col1", "col2", "col3"));
 		parameters.addInputFields(new Fields("col1", "col4", "col5"));
 
+	/*	parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
+	*/	
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
 
@@ -1296,6 +1330,10 @@ public class JoinAssemblyTest {
 		parameters.addInputFields(new Fields("col1", "col4", "col5"));
 		parameters.addInputFields(new Fields("col1", "col6", "col7"));
 
+		parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
+		parameters.addCopyOfInSocket("in2", new Fields("col1", "col6", "col7"));
+
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
 		parameters.addinSocketId("in2");
@@ -1389,6 +1427,9 @@ public class JoinAssemblyTest {
 		parameters.addInputFields(new Fields("col1", "col2", "col3"));
 		parameters.addInputFields(new Fields("col1", "col4", "col5"));
 
+		parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
+
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
 
@@ -1477,6 +1518,9 @@ public class JoinAssemblyTest {
 		parameters.addInputFields(new Fields("col1", "col2", "col3"));
 		parameters.addInputFields(new Fields("col1", "col4", "col5"));
 
+		parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
+		
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
 
@@ -1569,6 +1613,9 @@ public class JoinAssemblyTest {
 		parameters.addInputFields(new Fields("col1", "col2", "col3"));
 		parameters.addInputFields(new Fields("col1", "col4", "col5"));
 
+		parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
+
 		parameters.addinSocketId("in0");
 		parameters.addinSocketId("in1");
 
@@ -1657,6 +1704,7 @@ public class JoinAssemblyTest {
 
 		parameters.addinSocketId("in0");
 		parameters.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters.addCopyOfInSocket("in1", new Fields("col1", "col4", "col5"));
 		parameters.addinSocketId("in1");
 
 		JoinEntity joinEntity = new JoinEntity();
@@ -1718,6 +1766,309 @@ public class JoinAssemblyTest {
 		Assert.assertEquals(expectedOutput, output);
 	}
 
+	/**
+	 * Integration test of two join assemblies with copyOfInSocket in the outSocket
+	 */
+	@Test
+	public void testCopyOfInsocketOfTwoJoinWithThreeInputsHavingSameSchema(){
+		Plunger plunger = new Plunger();
+
+		Data file1 = new DataBuilder(new Fields("col1", "col2", "col3"))
+				.addTuple("C1R1", "C2R1", "C3R1")
+				.addTuple("C1R2", "C2R2", "C3R2").build();
+
+		// pipe corresponding to an input 1 of join component
+		Pipe pipe1 = plunger.newNamedPipe("pipe1", file1);
+
+		Data file2 = new DataBuilder(new Fields("col1", "col2", "col3"))
+				.addTuple("C1R1", "C4R1", "C5R1")
+				.addTuple("C1R3", "C4R3", "C5R3").build();
+
+		// pipe corresponding to an input 2 of join component
+		Pipe pipe2 = plunger.newNamedPipe("pipe2", file2);
+
+		ComponentParameters parameters_1 = new ComponentParameters();
+
+		parameters_1.addInputPipe(pipe1); // first input to join component
+		parameters_1.addInputPipe(pipe2); // second input to join component
+		parameters_1.addInputFields(new Fields("col1", "col2", "col3"));
+		parameters_1.addInputFields(new Fields("col1", "col2", "col3"));
+
+		parameters_1.addinSocketId("in0");
+		parameters_1.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters_1.addCopyOfInSocket("in1", new Fields("col1", "col2", "col3"));
+		parameters_1.addinSocketId("in1");
+		
+		JoinEntity join_1_Entity = new JoinEntity();
+
+		// set the name of the component
+		join_1_Entity.setComponentId("testJoin_1");
+
+		// set key fields
+		ArrayList<JoinKeyFields> keyFields_1_List = new ArrayList<JoinKeyFields>();
+		keyFields_1_List.add(new JoinKeyFields("in0", true, new String[] { "col1" }));
+		keyFields_1_List.add(new JoinKeyFields("in1", true, new String[] { "col1" }));
+		join_1_Entity.setKeyFields(keyFields_1_List);
+
+		// create outSocket
+		OutSocket outSocket1 = new OutSocket("out0");
+		outSocket1.setSocketType("out");
+		outSocket1.setCopyOfInSocketId("in0");
+		
+		// add outSocket in list
+		List<OutSocket> outSocketList = new ArrayList<>();
+		outSocketList.add(outSocket1);
+		join_1_Entity.setOutSocketList(outSocketList);
+		
+		List<MapField> mapFieldsList = new ArrayList<>();
+		outSocket1.setMapFieldsList(mapFieldsList);
+		
+		List<PassThroughField> passThroughFieldsList1 = new ArrayList<>();
+		outSocket1.setPassThroughFieldsList(passThroughFieldsList1);
+		
+		JoinAssembly join = new JoinAssembly(join_1_Entity, parameters_1);
+
+		Bucket bucket_1 = plunger.newBucket(new Fields("col1", "col2", "col3"),
+				join.getOutLink("out", "out0", "testJoin_1"));
+
+		List<Tuple> actual_1 = bucket_1.result().asTupleList(); // get results from
+		// bucket
+
+		// assert the actual results with expected results
+		assertThat(actual_1.size(), is(1));
+
+		// Use HashSet so that order of fields does not matter while comparison
+		Set<Tuple> output_1 = new HashSet<Tuple>(actual_1);
+
+		Set<Tuple> expectedOutput_1 = new HashSet<Tuple>();
+		expectedOutput_1.add(new Tuple("C1R1", "C2R1", "C3R1"));
+
+		Assert.assertEquals(expectedOutput_1, output_1);
+		
+		Plunger plunger2 = new Plunger();
+		ComponentParameters parameters_2 = new ComponentParameters();
+		Data file3 = new DataBuilder(new Fields("col1", "col2", "col3"))
+				.addTuple("C1R1", "C2R4", "C3R4")
+				.addTuple("C1R4", "C2R4", "C3R4").build();
+
+		// pipe corresponding to an input 3 of join component
+		Pipe pipe3 = plunger2.newNamedPipe("pipe3", file3);
+
+		parameters_2.addInputPipe(pipe3); // first input to join component
+		parameters_2.addInputPipe(plunger2.newNamedPipe("join_1_pipe", bucket_1.result())); // second input to join component
+		parameters_2.addInputFields(new Fields("col1", "col2", "col3"));
+		parameters_2.addInputFields(new Fields("col1", "col2", "col3"));
+
+		parameters_2.addinSocketId("in0");
+		parameters_2.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters_2.addCopyOfInSocket("in1", new Fields("col1", "col2", "col3"));
+		parameters_2.addinSocketId("in1");
+		
+		JoinEntity join_2_Entity = new JoinEntity();
+
+		// set the name of the component
+		join_2_Entity.setComponentId("testJoin_2");
+
+		// set key fields
+		ArrayList<JoinKeyFields> keyFields_2_List = new ArrayList<JoinKeyFields>();
+		keyFields_2_List.add(new JoinKeyFields("in0", true, new String[] { "col1" }));
+		keyFields_2_List.add(new JoinKeyFields("in1", true, new String[] { "col1" }));
+		join_2_Entity.setKeyFields(keyFields_2_List);
+
+		// create outSocket
+		OutSocket outSocket2 = new OutSocket("out0");
+		outSocket2.setSocketType("out");
+		outSocket2.setCopyOfInSocketId("in0");
+		
+		// add outSocket in list
+		List<OutSocket> outSocketList_2 = new ArrayList<>();
+		outSocketList_2.add(outSocket2);
+		join_2_Entity.setOutSocketList(outSocketList_2);
+		
+		List<MapField> mapFieldsList_2 = new ArrayList<>();
+		outSocket2.setMapFieldsList(mapFieldsList_2);
+		
+		List<PassThroughField> passThroughFieldsList2 = new ArrayList<>();
+		outSocket2.setPassThroughFieldsList(passThroughFieldsList2);
+		
+		JoinAssembly join_2 = new JoinAssembly(join_2_Entity, parameters_2);
+		
+		Bucket bucket_2 = plunger2.newBucket(new Fields("col1", "col2", "col3"),
+				join_2.getOutLink("out", "out0", "testJoin_2"));
+
+		List<Tuple> actual_2 = bucket_2.result().asTupleList(); // get results from
+		// bucket
+
+		// assert the actual results with expected results
+		assertThat(actual_2.size(), is(1));
+
+		// Use HashSet so that order of fields does not matter while comparison
+		Set<Tuple> output_2 = new HashSet<Tuple>(actual_2);
+
+		Set<Tuple> expectedOutput_2 = new HashSet<Tuple>();
+		expectedOutput_2.add(new Tuple("C1R1", "C2R4", "C3R4"));
+
+		Set<Tuple> unexpectedOutput_2 = new HashSet<Tuple>();
+		unexpectedOutput_2.add(new Tuple("C1R1", "C2R1", "C3R1"));
+
+		Assert.assertEquals(expectedOutput_2, output_2);
+		Assert.assertNotEquals(unexpectedOutput_2, output_2);
+	}
+	
+	/**
+	 * Integration test of two join assemblies with mapFields and passThroughFields in the outSocket 
+	 */
+	@Test
+	public void testMapAndPassthroughFieldsOfTwoJoinWithThreeInputsHavingSameSchema(){
+		Plunger plunger = new Plunger();
+
+		Data file1 = new DataBuilder(new Fields("col1", "col2", "col3"))
+				.addTuple("C1R1", "C2R1", "C3R1")
+				.addTuple("C1R2", "C2R2", "C3R2").build();
+
+		// pipe corresponding to an input 1 of join component
+		Pipe pipe1 = plunger.newNamedPipe("pipe1", file1);
+
+		Data file2 = new DataBuilder(new Fields("col1", "col2", "col3"))
+				.addTuple("C1R1", "C4R1", "C5R1")
+				.addTuple("C1R3", "C4R3", "C5R3").build();
+
+		// pipe corresponding to an input 2 of join component
+		Pipe pipe2 = plunger.newNamedPipe("pipe2", file2);
+
+		ComponentParameters parameters_1 = new ComponentParameters();
+
+		parameters_1.addInputPipe(pipe1); // first input to join component
+		parameters_1.addInputPipe(pipe2); // second input to join component
+		parameters_1.addInputFields(new Fields("col1", "col2", "col3"));
+		parameters_1.addInputFields(new Fields("col1", "col2", "col3"));
+
+		parameters_1.addinSocketId("in0");
+		parameters_1.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters_1.addCopyOfInSocket("in1", new Fields("col1", "col2", "col3"));
+		parameters_1.addinSocketId("in1");
+		
+		JoinEntity join_1_Entity = new JoinEntity();
+
+		// set the name of the component
+		join_1_Entity.setComponentId("testJoin_1");
+
+		// set key fields
+		ArrayList<JoinKeyFields> keyFields_1_List = new ArrayList<JoinKeyFields>();
+		keyFields_1_List.add(new JoinKeyFields("in0", true, new String[] { "col1" }));
+		keyFields_1_List.add(new JoinKeyFields("in1", true, new String[] { "col1" }));
+		join_1_Entity.setKeyFields(keyFields_1_List);
+
+		// create outSocket
+		OutSocket outSocket1 = new OutSocket("out0");
+		outSocket1.setSocketType("out");
+		
+		// add outSocket in list
+		List<OutSocket> outSocketList = new ArrayList<>();
+		outSocketList.add(outSocket1);
+		join_1_Entity.setOutSocketList(outSocketList);
+		
+		List<MapField> mapFieldsList = new ArrayList<>();
+		mapFieldsList.add(new MapField("col2", "col2_in1", "in1"));
+		mapFieldsList.add(new MapField("col3", "col3_in0", "in0"));
+		outSocket1.setMapFieldsList(mapFieldsList);
+		
+		List<PassThroughField> passThroughFieldsList1 = new ArrayList<>();
+		passThroughFieldsList1.add(new PassThroughField("col1", "in0"));
+		outSocket1.setPassThroughFieldsList(passThroughFieldsList1);
+		
+		JoinAssembly join = new JoinAssembly(join_1_Entity, parameters_1);
+
+		Bucket bucket_1 = plunger.newBucket(new Fields("col3_in0", "col1", "col2_in1"),
+				join.getOutLink("out", "out0", "testJoin_1"));
+
+		List<Tuple> actual_1 = bucket_1.result().asTupleList(); // get results from
+		// bucket
+
+		// assert the actual results with expected results
+		assertThat(actual_1.size(), is(1));
+
+		// Use HashSet so that order of fields does not matter while comparison
+		Set<Tuple> output_1 = new HashSet<Tuple>(actual_1);
+
+		Set<Tuple> expectedOutput_1 = new HashSet<Tuple>();
+		expectedOutput_1.add(new Tuple("C3R1", "C1R1", "C4R1"));
+
+		Assert.assertEquals(expectedOutput_1, output_1);
+		
+		Plunger plunger2 = new Plunger();
+		ComponentParameters parameters_2 = new ComponentParameters();
+		Data file3 = new DataBuilder(new Fields("col1", "col2", "col3"))
+				.addTuple("C1R1", "C2R4", "C3R4")
+				.addTuple("C1R4", "C2R4", "C3R4").build();
+
+		// pipe corresponding to an input 3 of join component
+		Pipe pipe3 = plunger2.newNamedPipe("pipe3", file3);
+
+		parameters_2.addInputPipe(pipe3); // first input to join component
+		parameters_2.addInputPipe(plunger2.newNamedPipe("join_1_pipe", bucket_1.result())); // second input to join component
+		parameters_2.addInputFields(new Fields("col1", "col2", "col3"));
+		parameters_2.addInputFields(new Fields("col1", "col2_in1", "col3_in0"));
+
+		parameters_2.addinSocketId("in0");
+		parameters_2.addCopyOfInSocket("in0", new Fields("col1", "col2", "col3"));
+		parameters_2.addCopyOfInSocket("in1", new Fields("col1", "col2_in1", "col3_in0"));
+		parameters_2.addinSocketId("in1");
+		
+		JoinEntity join_2_Entity = new JoinEntity();
+
+		// set the name of the component
+		join_2_Entity.setComponentId("testJoin_2");
+
+		// set key fields
+		ArrayList<JoinKeyFields> keyFields_2_List = new ArrayList<JoinKeyFields>();
+		keyFields_2_List.add(new JoinKeyFields("in0", true, new String[] { "col1" }));
+		keyFields_2_List.add(new JoinKeyFields("in1", true, new String[] { "col1" }));
+		join_2_Entity.setKeyFields(keyFields_2_List);
+
+		// create outSocket
+		OutSocket outSocket2 = new OutSocket("out0");
+		outSocket2.setSocketType("out");
+//		outSocket2.setCopyOfInSocketId("in0");
+		
+		// add outSocket in list
+		List<OutSocket> outSocketList_2 = new ArrayList<>();
+		outSocketList_2.add(outSocket2);
+		join_2_Entity.setOutSocketList(outSocketList_2);
+		
+		List<MapField> mapFieldsList_2 = new ArrayList<>();
+		
+		outSocket2.setMapFieldsList(mapFieldsList_2);
+		
+		List<PassThroughField> passThroughFieldsList2 = new ArrayList<>();
+		passThroughFieldsList2.add(new PassThroughField("col1", "in0"));
+		passThroughFieldsList2.add(new PassThroughField("col2_in1", "in1"));
+		passThroughFieldsList2.add(new PassThroughField("col3", "in0"));
+		outSocket2.setPassThroughFieldsList(passThroughFieldsList2);
+		
+		JoinAssembly join_2 = new JoinAssembly(join_2_Entity, parameters_2);
+		
+		Bucket bucket_2 = plunger2.newBucket(new Fields("col1", "col2_in1", "col3"),
+				join_2.getOutLink("out", "out0", "testJoin_2"));
+
+		List<Tuple> actual_2 = bucket_2.result().asTupleList(); // get results from
+		// bucket
+
+		// assert the actual results with expected results
+		assertThat(actual_2.size(), is(1));
+
+		// Use HashSet so that order of fields does not matter while comparison
+		Set<Tuple> output_2 = new HashSet<Tuple>(actual_2);
+
+		Set<Tuple> expectedOutput_2 = new HashSet<Tuple>();
+		expectedOutput_2.add(new Tuple("C1R1", "C3R4", "C4R1"));
+
+		Set<Tuple> unexpectedOutput_2 = new HashSet<Tuple>();
+		unexpectedOutput_2.add(new Tuple("C1R1", "C2R1", "C3R1"));
+
+		Assert.assertEquals(expectedOutput_2, output_2);
+		Assert.assertNotEquals(unexpectedOutput_2, output_2);
+	}
 	/*
 	 * Negative test cases start
 	 *//**

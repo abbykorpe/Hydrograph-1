@@ -124,7 +124,7 @@ public class LookupAssembly extends BaseComponent<LookupEntity> {
 				index = 0;
 
 			sourceFields = joinHelper.getMapSourceFields(componentParameters
-					.getinSocketId().get(i), outSocket, i);
+					.getinSocketId().get(i), outSocket);
 			if (sourceFields == null)
 				continue;
 

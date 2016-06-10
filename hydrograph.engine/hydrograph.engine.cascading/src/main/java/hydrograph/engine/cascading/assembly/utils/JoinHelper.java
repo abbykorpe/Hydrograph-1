@@ -26,11 +26,11 @@ import java.util.Set;
 import cascading.tuple.Fields;
 
 public class JoinHelper {
-	ComponentParameters parameters = new ComponentParameters();
+	ComponentParameters componentParameters = new ComponentParameters();
 
 	public JoinHelper(ComponentParameters params) {
 		super();
-		this.parameters = params;
+		this.componentParameters = params;
 	}
 
 	Map<String, Map<Fields, Fields>> fileMap;
@@ -38,11 +38,8 @@ public class JoinHelper {
 	@SuppressWarnings("rawtypes")
 	public Fields getMapTargetFields(OutSocket outSocket) {
 
-		// Map<Fields, Fields> fieldMap = getAllMapFields(outSocket);
-
 		Set<Fields> rawTargetFields = getRawTargetFields(outSocket);
 		Fields targetFields = new Fields();
-		// fileMap = new LinkedHashMap<String, Map<Fields, Fields>>();
 
 		fileMap = getFieldsMap(outSocket);
 
@@ -56,10 +53,10 @@ public class JoinHelper {
 			Map<Fields, Fields> fieldsMap = fieldsMapEntry.getValue();
 			String socketId = fieldsMapEntry.getKey();
 			Fields inputFields = null;
-			for (int j = 0; j < parameters.getinSocketId().size(); j++) {
+			for (int j = 0; j < componentParameters.getinSocketId().size(); j++) {
 				if (socketId
-						.equalsIgnoreCase(parameters.getinSocketId().get(j))) {
-					inputFields = parameters.getInputFieldsList().get(j);
+						.equalsIgnoreCase(componentParameters.getinSocketId().get(j))) {
+					inputFields = componentParameters.getInputFieldsList().get(j);
 				}
 			}
 
@@ -100,30 +97,6 @@ public class JoinHelper {
 				}
 			}
 
-			/*
-			 * for (Fields fields : fieldsMap.keySet()) { String field =
-			 * fields.get(0).toString();
-			 * 
-			 * //get one to one field mapping if (!field.equals("*") &&
-			 * !field.endsWith(".*")) targetFields =
-			 * targetFields.append(fields);
-			 * 
-			 * //get wildcard field mapping if (field.endsWith(".*") ||
-			 * field.equals("*")) { String targetPrefix =
-			 * field.replaceAll("\\*$", ""); String sourcePrefix =
-			 * fieldsMap.get(fields).get(0) .toString().replaceAll("\\*$", "");
-			 * 
-			 * for (Comparable inputFieldName : inputFields) { if
-			 * (inputFieldName.toString().startsWith(sourcePrefix)) { String
-			 * fieldName = inputFieldName.toString() .replaceAll("^" +
-			 * sourcePrefix, targetPrefix);
-			 * 
-			 * if (!rawTargetFields.contains(new Fields(fieldName)) &&
-			 * !fieldsMap.values().contains( new Fields(inputFieldName))) {
-			 * 
-			 * targetFields = targetFields.append(new Fields( fieldName)); } } }
-			 * } }
-			 */
 			i++;
 		}
 
@@ -132,42 +105,41 @@ public class JoinHelper {
 	}
 
 	private Map<String, Map<Fields, Fields>> getFieldsMap(OutSocket outSocket) {
-		Map<String, Map<Fields, Fields>> fileMap = new LinkedHashMap<String, Map<Fields, Fields>>();
+		Map<String, Map<Fields, Fields>> fieldAndInSocketIdMap = new LinkedHashMap<String, Map<Fields, Fields>>();
 		Map<Fields, Fields> fieldsMaps = null;
 
-		for (String socketID : parameters.getinSocketId()) {
-
+		for (String socketID : componentParameters.getinSocketId()) {
+//			Check if outSocket contains copyOfInSocketId
 			if (outSocket.getMapFieldsList().size() == 0
 					&& outSocket.getPassThroughFieldsList().size() == 0
 					&& outSocket.getCopyOfInSocketId() != null) {
-				if (fileMap.get(socketID) == null) {
+				if (fieldAndInSocketIdMap.get(socketID) == null) {
 					fieldsMaps = new LinkedHashMap<Fields, Fields>();
 				}
-				for (int j = 0; j < parameters.getinSocketId().size(); j++) {
-					if (parameters.getinSocketId().get(j)
+				
+					if (socketID
 							.equals(outSocket.getCopyOfInSocketId())) {
-						Fields copyFieldsOfInSocketId = parameters
+						Fields copyFieldsOfInSocketId = componentParameters
 								.getCopyOfInSocket(socketID);
 						for (int i = 0; i < copyFieldsOfInSocketId.size(); i++) {
 							fieldsMaps.put(
 									new Fields(copyFieldsOfInSocketId.get(i)),
 									new Fields(copyFieldsOfInSocketId.get(i)));
-							fileMap.put(socketID, fieldsMaps);
+							fieldAndInSocketIdMap.put(socketID, fieldsMaps);
 						}
-					}
 				}
 
 			} else {
-
+//				Populate map for mapFields and passThroughFields
 				for (MapField mapField : outSocket.getMapFieldsList()) {
-					if (fileMap.get(mapField.getInSocketId()) == null) {
+					if (fieldAndInSocketIdMap.get(mapField.getInSocketId()) == null) {
 						fieldsMaps = new LinkedHashMap<Fields, Fields>();
 					}
 					if (mapField.getInSocketId().equalsIgnoreCase(socketID)) {
 
 						fieldsMaps.put(new Fields(mapField.getName()),
 								new Fields(mapField.getSourceName()));
-						fileMap.put(mapField.getInSocketId(), fieldsMaps);
+						fieldAndInSocketIdMap.put(mapField.getInSocketId(), fieldsMaps);
 					}
 
 				}
@@ -177,15 +149,15 @@ public class JoinHelper {
 
 					if (passThroughField.getInSocketId().equalsIgnoreCase(
 							socketID)) {
-						if (fileMap.get(passThroughField.getInSocketId()) == null) {
+						if (fieldAndInSocketIdMap.get(passThroughField.getInSocketId()) == null) {
 							fieldsMaps = new LinkedHashMap<Fields, Fields>();
 						} else {
-							fieldsMaps = fileMap.get(passThroughField
+							fieldsMaps = fieldAndInSocketIdMap.get(passThroughField
 									.getInSocketId());
 						}
 						fieldsMaps.put(new Fields(passThroughField.getName()),
 								new Fields(passThroughField.getName()));
-						fileMap.put(passThroughField.getInSocketId(),
+						fieldAndInSocketIdMap.put(passThroughField.getInSocketId(),
 								fieldsMaps);
 					}
 
@@ -195,19 +167,18 @@ public class JoinHelper {
 		}
 
 		// }
-		return fileMap;
+		return fieldAndInSocketIdMap;
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Fields getMapSourceFields(String inSocketId, OutSocket outSocket,
-			int i) {
+	public Fields getMapSourceFields(String inSocketId, OutSocket outSocket) {
 		Fields sourceFields = new Fields();
 
 		Map<Fields, Fields> fieldMap = getMapFields(outSocket, inSocketId);
 
 		Set<Fields> rawTargetFields = getRawTargetFields(outSocket);
 		Set<Fields> rawSourceFields = getRawSourceFields(fieldMap);
-		Fields inputFields = parameters.getInputFieldsList().get(i);
+		Fields inputFields = componentParameters.getCopyOfInSocket(inSocketId);
 
 		if (fieldMap == null) {
 			return null;
@@ -254,11 +225,6 @@ public class JoinHelper {
 			}
 		}
 
-		/*
-		 * for (Fields targetField : fieldsMap.keySet()) { if
-		 * (fieldsMap.get(targetField).get(0).equals(value)) { return (String)
-		 * targetField.get(0); } }
-		 */
 		return null;
 	}
 
@@ -281,28 +247,26 @@ public class JoinHelper {
 			rawTargetFields.add(new Fields(passthroughFields.getName()));
 		}
 
-		// }
-
-		// rawTargetFields.addAll(fieldMap.values());
 		return rawTargetFields;
 	}
 
 	private Map<Fields, Fields> getMapFields(OutSocket outSocket,
 			String inSocketId) {
 		Map<Fields, Fields> fieldMap = new LinkedHashMap<Fields, Fields>();
-
+//		Check if outSocket contains copyOfInSocketId 
 		if (outSocket.getMapFieldsList().size() == 0
 				&& outSocket.getPassThroughFieldsList().size() == 0
 				&& outSocket.getCopyOfInSocketId() != null) {
-
-			Fields copyFieldsOfInSocketId = parameters
-					.getCopyOfInSocket(inSocketId);
-			for (int i = 0; i < copyFieldsOfInSocketId.size(); i++) {
-				fieldMap.put(new Fields(copyFieldsOfInSocketId.get(i)),
-						new Fields(copyFieldsOfInSocketId.get(i)));
+			if (outSocket.getCopyOfInSocketId().equals(inSocketId)){
+				Fields copyFieldsOfInSocketId = componentParameters
+						.getCopyOfInSocket(inSocketId);
+				for (int i = 0; i < copyFieldsOfInSocketId.size(); i++) {
+					fieldMap.put(new Fields(copyFieldsOfInSocketId.get(i)),
+							new Fields(copyFieldsOfInSocketId.get(i)));
+				}
 			}
 		} else {
-
+//			Populate map for mapFields and passThroughFields 
 			for (MapField mapField : outSocket.getMapFieldsList()) {
 				if (mapField.getInSocketId().equalsIgnoreCase(inSocketId)) {
 					fieldMap.put(new Fields(mapField.getSourceName()),
@@ -329,23 +293,6 @@ public class JoinHelper {
 				}
 
 			}
-		}
-		return fieldMap;
-	}
-
-	private Map<Fields, Fields> getAllMapFields(OutSocket outSocket) {
-		Map<Fields, Fields> fieldMap = new LinkedHashMap<Fields, Fields>();
-
-		for (MapField mapField : outSocket.getMapFieldsList()) {
-			fieldMap.put(new Fields(mapField.getSourceName()), new Fields(
-					mapField.getName()));
-
-		}
-
-		for (PassThroughField passthroughFields : outSocket
-				.getPassThroughFieldsList()) {
-			fieldMap.put(new Fields(passthroughFields.getName()), new Fields(
-					passthroughFields.getName()));
 		}
 		return fieldMap;
 	}
