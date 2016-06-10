@@ -32,7 +32,10 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -390,6 +393,29 @@ public class WatchRecordAction extends SelectionAction {
 		reloadInformation.setUsername(job.getUserId());		
 		reloadInformation.setBasepath(job.getBasePath());
 		reloadInformation.setPort(job.getPortNumber());
+		
+		
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(dataViewerFilePath + dataViewerFileh + ".csv"));
+			if (br.readLine() == null) {
+			    messageDialog("Unable to show record, empty debug file");
+			    return;
+			}
+		} catch (Exception e1) {
+			 messageDialog("Unable to read debug file");
+			logger.debug("Unable to read debug file",e1);
+			return;
+		}finally{
+			try {
+				if(br != null){
+					br.close();
+				}					
+			} catch (IOException e) {
+				logger.debug("Unable to close debug file",e);
+			}
+		}
+		
 		
 		Display.getDefault().asyncExec(new Runnable() {
 		      @Override

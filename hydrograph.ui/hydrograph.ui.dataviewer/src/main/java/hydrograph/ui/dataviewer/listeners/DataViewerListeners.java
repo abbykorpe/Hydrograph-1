@@ -179,6 +179,7 @@ public class DataViewerListeners {
 					    	  dataViewLoader.reloadloadViews();
 					    	  statusManager.setAllWindowControlsEnabled(true);
 					    	  statusManager.setStatus(status);
+					    	  statusManager.clearJumpToText();
 					      }
 					    });
 					    return Status.OK_STATUS;
@@ -211,6 +212,7 @@ public class DataViewerListeners {
 					    	  dataViewLoader.reloadloadViews();
 					    	  statusManager.setAllWindowControlsEnabled(true);
 					    	  statusManager.setStatus(status);
+					    	  statusManager.clearJumpToText();
 					      }
 					    });
 					    return Status.OK_STATUS;

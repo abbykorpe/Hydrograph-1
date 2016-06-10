@@ -162,11 +162,13 @@ public class ReloadAction extends Action {
 			Utils.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_LOAD_DEBUG_FILE);
 			this.debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_LOAD_DEBUG_FILE));
 			updateDataViewerViews();
+			this.debugDataViewer.getStatusManager().clearJumpToText();
 			return;
 		}
 
 		this.debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.SUCCESS));
 		this.debugDataViewer.getStatusManager().enableInitialPaginationContols();
+		this.debugDataViewer.getStatusManager().clearJumpToText();
 		updateDataViewerViews();
 
 	}
