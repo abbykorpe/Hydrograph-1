@@ -145,7 +145,7 @@ import org.xml.sax.SAXException;
 
 
 /**
- * The Class ELTSchemaGridWidget.
+ * The Class ELTSchemaGridWidget common widget for all component schema grid.
  * 
  * @author Bitwise
  */

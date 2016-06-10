@@ -300,7 +300,7 @@ public class RunConfigDialog extends Dialog {
 		textBoxes.put("runUtility", textRunUtility);
 
 		Label lblJobXml = new Label(compositePathConfig, SWT.NONE);
-		lblJobXml.setText("Directory");
+		lblJobXml.setText("Project Path");
 		lblJobXml.setBounds(24, 98, 70, 15);
 		formToolkit.adapt(lblJobXml, true, true);
 
@@ -310,7 +310,7 @@ public class RunConfigDialog extends Dialog {
 		textBoxes.put("remoteDirectory", textDirectory);
 
 		Label lblPathConfiguration = new Label(compositePathConfig, SWT.NONE);
-		lblPathConfiguration.setText("Path Configuration");
+		lblPathConfiguration.setText("Remote Path Configuration");
 		lblPathConfiguration.setFont(SWTResourceManager.getFont("Segoe UI", 9,
 				SWT.BOLD));
 		lblPathConfiguration.setBounds(24, 22, 113, 15);

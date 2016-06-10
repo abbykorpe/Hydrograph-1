@@ -58,8 +58,7 @@ public class ELTSchemaDialogSelectionListener implements IELTListener {
 			@Override
 			public void handleEvent(Event event) {
 				if(event.type==SWT.Selection){
-					FilterOperationClassUtility filterOperationClassUtility = new FilterOperationClassUtility();
-					filterOperationClassUtility.browseFile(file_extension,((Text) widgets[0]));
+					FilterOperationClassUtility.INSTANCE.browseFile(file_extension,((Text) widgets[0]));
 						propertyDialogButtonBar.enableApplyButton(true);
 						txtDecorator.hide();
 				}

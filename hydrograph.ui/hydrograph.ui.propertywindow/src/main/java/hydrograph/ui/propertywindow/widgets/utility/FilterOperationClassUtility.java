@@ -80,14 +80,20 @@ import org.slf4j.Logger;
 public class FilterOperationClassUtility  {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterOperationClassUtility.class);
+	public static final FilterOperationClassUtility INSTANCE = new FilterOperationClassUtility();
+
 	private static IJavaProject iJavaProject;
-	private static Button createBtn;
-	private static Button browseBtn;
-	private static Button openBtn;
-	private static Button btnCheckButton;
-	private static String componentName;
+	private Button createBtn;
+	private Button browseBtn;
+	private Button openBtn;
+	private Button btnCheckButton;
+	private String componentName;
 	private String fileNameTextBoxValue;
 
+	private FilterOperationClassUtility(){
+		
+	}
+	
 	/**
 	 * Creates the new class wizard.
 	 * 
@@ -95,7 +101,7 @@ public class FilterOperationClassUtility  {
 	 *            the file name
 	 * @param widgetConfig 
 	 */
-	public static void createNewClassWizard(Text fileNameTextBox, WidgetConfig widgetConfig) {
+	public void createNewClassWizard(Text fileNameTextBox, WidgetConfig widgetConfig) {
 		OpenNewClassWizardAction wizard = new OpenNewClassWizardAction();
 		wizard.setOpenEditorOnFinish(false);
 		final NewClassWizardPage page = new NewClassWizardPage();
@@ -103,7 +109,7 @@ public class FilterOperationClassUtility  {
 		page.setMethodStubSelection(false, false, true, true);
 		List<String> interfaceList = new ArrayList<String>();
 		OperationClassConfig operationClassConfig = (OperationClassConfig) widgetConfig;
-		Operations operations = XMLConfigUtil.INSTANCE.getComponent(FilterOperationClassUtility.getComponentName()).getOperations();
+		Operations operations = XMLConfigUtil.INSTANCE.getComponent(getComponentName()).getOperations();
 		TypeInfo typeInfo=operations.getInterface();
 		if (operationClassConfig.getComponentName().equalsIgnoreCase(typeInfo.getName()))
 		{
@@ -282,7 +288,7 @@ public class FilterOperationClassUtility  {
 	 *            the file name
 	 * @return true, if successful
 	 */
-	public static boolean openFileEditor(Text filePath,String pathFile) {
+	public boolean openFileEditor(Text filePath,String pathFile) {
 		try {
 			String fileFullPath;
 			String fileName="";
@@ -337,7 +343,7 @@ public class FilterOperationClassUtility  {
 	 * @param propertyDialogButtonBar
 	 * @param opeartionClassDialogButtonBar
 	 */
-	public static void createOperationalClass(
+	public void createOperationalClass(
 			Composite composite,
 			PropertyDialogButtonBar eltOperationClassDialogButtonBar,
 			AbstractELTWidget combo, AbstractELTWidget isParameterCheckbox,
@@ -428,7 +434,7 @@ public class FilterOperationClassUtility  {
 	 * @param value
 	 * @param checkboxValue
 	 */
-	public static void enableAndDisableButtons(boolean value,boolean checkboxValue) {
+	public void enableAndDisableButtons(boolean value,boolean checkboxValue) {
 		if (checkboxValue==false) {
 			createBtn.setEnabled(value);
 			browseBtn.setEnabled(value);
@@ -442,15 +448,15 @@ public class FilterOperationClassUtility  {
 		} 
 	}
 	
-	public static void setComponentName(String name) {
+	public  void setComponentName(String name) {
 		componentName = name;
 	}
 
-	public static String getComponentName() {
+	public  String getComponentName() {
 		return componentName;
 	}
 
-	public static boolean isCheckBoxSelected() {
+	public boolean isCheckBoxSelected() {
 		return btnCheckButton.getSelection();
 	}
 	
@@ -459,9 +465,9 @@ public class FilterOperationClassUtility  {
 	 * @param operationName
 	 * @param textBox
 	 */
-	public static void setOperationClassNameInTextBox(String operationName, Text textBox) {
+	public void setOperationClassNameInTextBox(String operationName, Text textBox) {
 		String operationClassName = null;
-		Operations operations = XMLConfigUtil.INSTANCE.getComponent(FilterOperationClassUtility.getComponentName())
+		Operations operations = XMLConfigUtil.INSTANCE.getComponent(getComponentName())
 				.getOperations();
 		List<TypeInfo> typeInfos = operations.getStdOperation();
 		for (int i = 0; i < typeInfos.size(); i++) {

@@ -137,7 +137,7 @@ public class ELTOpenFileEditorListener implements IELTListener{
 	private void discardChangesAndOpenOpeartionClassInEditor(
 			final Widget[] widgetList,
 			IOperationClassDialog operationClassDialog) {
-		boolean flag = FilterOperationClassUtility.openFileEditor(
+		boolean flag = FilterOperationClassUtility.INSTANCE.openFileEditor(
 				((Text) widgetList[1]), null);
 		if (!flag) {
 			WidgetUtility.errorMessage(Messages.FILE_NOT_FOUND);
@@ -149,7 +149,7 @@ public class ELTOpenFileEditorListener implements IELTListener{
 	private void saveChangesAndOpenOpeartionClassInEditor(
 			final Widget[] widgetList,
 			IOperationClassDialog operationClassDialog) {
-		boolean flag = FilterOperationClassUtility.openFileEditor(
+		boolean flag = FilterOperationClassUtility.INSTANCE.openFileEditor(
 				((Text) widgetList[1]), null);
 		if (!flag) {
 			WidgetUtility.errorMessage(Messages.FILE_NOT_FOUND);
@@ -160,7 +160,7 @@ public class ELTOpenFileEditorListener implements IELTListener{
 	
 	private void openInbuiltOperationClass(String operationName, PropertyDialogButtonBar propertyDialogButtonBar) {
 		String operationClassName = null;
-		Operations operations = XMLConfigUtil.INSTANCE.getComponent(FilterOperationClassUtility.getComponentName())
+		Operations operations = XMLConfigUtil.INSTANCE.getComponent(FilterOperationClassUtility.INSTANCE.getComponentName())
 				.getOperations();
 		List<TypeInfo> typeInfos = operations.getStdOperation();
 		for (int i = 0; i < typeInfos.size(); i++) {

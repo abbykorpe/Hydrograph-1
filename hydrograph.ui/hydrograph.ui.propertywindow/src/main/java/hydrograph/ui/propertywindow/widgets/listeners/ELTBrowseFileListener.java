@@ -55,8 +55,7 @@ public class ELTBrowseFileListener implements IELTListener{
 		Listener listener=new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				FilterOperationClassUtility filterOperationClassUtility = new FilterOperationClassUtility();
-				filterOperationClassUtility.browseFile(file_extension, (Text) widgetList[0]);
+				FilterOperationClassUtility.INSTANCE.browseFile(file_extension, (Text) widgetList[0]);
 				propertyDialogButtonBar.enableApplyButton(true);
 				}
 		};
