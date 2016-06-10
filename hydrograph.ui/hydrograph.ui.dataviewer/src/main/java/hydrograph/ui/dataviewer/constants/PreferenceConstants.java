@@ -13,6 +13,13 @@
 
 package hydrograph.ui.dataviewer.constants;
 
+/**
+ * 
+ * PreferenceConstants class holds preference page constants
+ * 
+ * @author Bitwise
+ *
+ */
 public class PreferenceConstants {
 
 	public static final String VIEW_DATA_TEMP_FILEPATH = "TEMP_DEBUG_FILEPATH";
@@ -23,4 +30,7 @@ public class PreferenceConstants {
 	public static final String INCLUDE_HEADER = "includeHeader";
 	public static final String DEFAULTPATH = "exportDataDefaultpath";
 	public static final String PURGE_DATA_FILES = "purgeDataFiles";
+	
+	public static final String DEFAULT_VIEW_DATA_PAGE_SIZE="100";
+	public static final String DEFAULT_VIEW_DATA_FILE_SIZE="50";
 }

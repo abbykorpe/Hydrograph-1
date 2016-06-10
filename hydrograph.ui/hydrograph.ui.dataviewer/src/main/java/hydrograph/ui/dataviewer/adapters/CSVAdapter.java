@@ -114,6 +114,7 @@ public class CSVAdapter {
 	
 
 	private void initializeColumnList(ResultSet resultSet) throws SQLException {
+		columnList.clear();
 		for (int index = 1; index <= columnCount; index++) {
 			columnList.add(resultSet.getMetaData().getColumnName(index));
 		}
@@ -124,7 +125,7 @@ public class CSVAdapter {
 	}
 
 	private void initializeTableData() throws Exception {
-
+		tableData.clear();
 		ResultSet results = statement.executeQuery("SELECT * FROM " + tableName + " LIMIT " + PAGE_SIZE + " OFFSET " + OFFSET);
 		int rowIndex = 1;
 		while (results.next()) {
