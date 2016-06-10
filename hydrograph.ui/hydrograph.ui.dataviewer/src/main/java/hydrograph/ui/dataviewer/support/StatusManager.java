@@ -66,7 +66,7 @@ public class StatusManager {
 		
 		StringBuilder stringBuilder = new StringBuilder();
 		
-		stringBuilder.append("Showing records from " + csvAdapter.getOFFSET()
+		stringBuilder.append("Showing records from " + (csvAdapter.getOFFSET() + 1)
 				+ " to " + (csvAdapter.getOFFSET() + csvAdapter.getPAGE_SIZE())
 				+ " | ");
 		
@@ -145,6 +145,10 @@ public class StatusManager {
 		}
 	}
 
+	public void clearJumpToText(){
+		((Text)windowControls.get(ControlConstants.JUMP_TEXT)).setText("");
+	}
+	
 	public void enableInitialPaginationContols(){
 		if(csvAdapter.getRowCount()!=null){
 			if(((long)csvAdapter.getTotalNumberOfPages()) == csvAdapter.getCurrentPageNumber()){

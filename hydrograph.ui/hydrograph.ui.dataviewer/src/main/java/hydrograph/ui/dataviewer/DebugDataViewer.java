@@ -17,8 +17,6 @@ import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.actions.ActionFactory;
 import hydrograph.ui.dataviewer.actions.CopyAction;
 import hydrograph.ui.dataviewer.actions.ExportAction;
-import hydrograph.ui.dataviewer.actions.FilterAction;
-import hydrograph.ui.dataviewer.actions.FindAction;
 import hydrograph.ui.dataviewer.actions.FormattedViewAction;
 import hydrograph.ui.dataviewer.actions.GridViewAction;
 import hydrograph.ui.dataviewer.actions.PreferencesAction;
@@ -157,7 +155,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	 * @param reloadInformation 
 	 */
 	public DebugDataViewer(String filePath,String fileName,String windowName, ReloadInformation reloadInformation) {
-		super(null);
+		super(new Shell(SWT.CLOSE|SWT.MAX|SWT.MIN));
 		createActions();
 		addCoolBar(SWT.FLAT);
 		addMenuBar();
