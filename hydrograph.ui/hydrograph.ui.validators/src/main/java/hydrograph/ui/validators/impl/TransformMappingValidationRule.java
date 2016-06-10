@@ -22,6 +22,8 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.mapping.ErrorObject;
+import hydrograph.ui.datastructure.property.mapping.InputField;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 
@@ -89,7 +91,15 @@ public class TransformMappingValidationRule implements IValidator{
 				   }
 			}
 			
-		}	
+		}
+		
+		for (NameValueProperty nameValueProperty : mapOrPassthroughfields) {
+			if(!transformMapping.getInputFields().contains(new InputField(nameValueProperty.getPropertyName(), new ErrorObject(false, "")))){
+				 errorMessage = propertyName + " Input field not present.";		
+				 return false;
+			}
+		}
+		
 		List<FilterProperties> filterProperties = new ArrayList<>();
 
 		for (NameValueProperty nameValue : transformMapping.getMapAndPassthroughField()) {

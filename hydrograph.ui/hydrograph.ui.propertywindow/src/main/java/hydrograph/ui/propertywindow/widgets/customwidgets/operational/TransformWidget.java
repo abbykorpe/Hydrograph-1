@@ -88,7 +88,7 @@ public class TransformWidget extends AbstractWidget {
 		}
 
 		this.propertyName = componentConfigrationProperty.getPropertyName();
-
+ 
 	}
 
 	/**
@@ -108,7 +108,8 @@ public class TransformWidget extends AbstractWidget {
 
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(EDIT).grabExcessHorizontalSpace(false);
 		transformComposite.attachWidget(eltDefaultButton);
-
+		getPropagatedSChema();
+		
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -119,13 +120,12 @@ public class TransformWidget extends AbstractWidget {
 				TransformMapping oldATMappings = (TransformMapping) transformMapping.clone();
 
 				TransformDialog transformDialog=new TransformDialog(new Shell(),getComponent(),widgetConfig,transformMapping);
+				
 				transformDialog.open();
-
-
 
 				if(transformDialog.isCancelPressed())
 				{
-					transformMapping=oldATMappings;
+					transformMapping=oldATMappings; 
 				}
 			 	
 				if(transformDialog.isOkPressed())
@@ -148,22 +148,11 @@ public class TransformWidget extends AbstractWidget {
 				if(transformDialog.isYesButtonPressed()){
 					propertyDialog.pressOK();	
 				}
-				transformMapping.getInputFields().clear();
 
 			}
 		});
 		propagateOuputFieldsToSchemaTabFromTransformWidget();
 	}
-
-	// PLEASE DO NOT REMOVE THE CODE
-	/*private void initSchemaObject() {
-		Schema schemaForInternalPapogation = new Schema();
-		schemaForInternalPapogation.setIsExternal(false);
-		List<GridRow> gridRows = new ArrayList<>();
-		schemaForInternalPapogation.setGridRow(gridRows);
-		schemaForInternalPapogation.setExternalSchemaPath("");
-		setSchemaForInternalPapogation(schemaForInternalPapogation);
-	}*/
 
 	private void propagateOuputFieldsToSchemaTabFromTransformWidget() {
 
@@ -239,7 +228,11 @@ public class TransformWidget extends AbstractWidget {
 		}
 		return null;
 	}
-
+	/**
+	 * Return gridrow object if schema is present on source component else return null.
+	 * @param fieldName
+	 * @return 
+	 */
 	private GridRow getFieldSchema(String fieldName) {
 		List<GridRow> schemaGridRows = getInputFieldSchema();
 		for (GridRow schemaGridRow : schemaGridRows) {
@@ -249,7 +242,10 @@ public class TransformWidget extends AbstractWidget {
 		}
 		return null;
 	}
-
+	/**
+	 * Get Input schema from target link.
+	 * @return
+	 */
 	private List<GridRow> getInputFieldSchema() {
 		ComponentsOutputSchema outputSchema = null;
 		List<GridRow> schemaGridRows = new LinkedList<>();
@@ -263,6 +259,10 @@ public class TransformWidget extends AbstractWidget {
 		return schemaGridRows;
 	}
 
+	/**
+	 * Add Map field to internal schema object.
+	 * @param mapFields
+	 */
 	private void addMapFieldsToSchema(Map<String, String> mapFields) {
 		BasicSchemaGridRow tempSchemaGridRow = null;
 		Schema schema = getSchemaForInternalPropagation();
@@ -279,8 +279,7 @@ public class TransformWidget extends AbstractWidget {
 				schemaGridRow.setFieldName(entry.getKey());
 			}
 			else{
-				SchemaPropagationHelper schemaPropagationHelper = new SchemaPropagationHelper();
-				schemaGridRow = schemaPropagationHelper.createSchemaGridRow(entry.getKey());
+				schemaGridRow = SchemaPropagationHelper.INSTANCE.createSchemaGridRow(entry.getKey());
 			}
 				if (!currentFieldsInProppogatedSchemaObject.contains(entry.getKey()) && !schema.getGridRow().contains(schemaGridRow)) {
 							schema.getGridRow().add(schemaGridRow);
@@ -296,7 +295,10 @@ public class TransformWidget extends AbstractWidget {
 		}
 
 	}
-
+	/**
+	 * Add Pass through field to schema 
+	 * @param passThroughFields
+	 */
 	private void addPassthroughFieldsToSchema(List<String> passThroughFields) {
 		Schema schema = getSchemaForInternalPropagation();
 		List<String> currentFieldsInProppogatedSchemaObject = new LinkedList<>();
@@ -318,9 +320,15 @@ public class TransformWidget extends AbstractWidget {
 						}
 					}
 				}
-			}}
+			}else{
+				schema.getGridRow().add(SchemaPropagationHelper.INSTANCE.createSchemaGridRow(passThroughField));
+			}
+			}
 	}
-
+	/**
+	 * 	Add Operation field to internal schema object
+	 * 	@param operationFields
+	 */
 	private void addOperationFieldsToSchema(List<FilterProperties> operationFields) {
 		Schema schema = getSchemaForInternalPropagation();
 		GridRow schemaGridRow=null;
@@ -328,8 +336,6 @@ public class TransformWidget extends AbstractWidget {
 		for (GridRow gridRow : schema.getGridRow()) {
 			currentFieldsInProppogatedSchemaObject.add(gridRow.getFieldName());
 		}
-
-		SchemaPropagationHelper schemaPropagationHelper = new SchemaPropagationHelper();
 
 		for (FilterProperties operationField : operationFields) {
 			if(!ParameterUtil.isParameter(operationField.getPropertyname())){
@@ -339,7 +345,7 @@ public class TransformWidget extends AbstractWidget {
 					schemaGridRow=schemaGridRow.copy();
 				}
 				else
-					schemaGridRow = schemaPropagationHelper.createSchemaGridRow(operationField.getPropertyname());
+					schemaGridRow = SchemaPropagationHelper.INSTANCE.createSchemaGridRow(operationField.getPropertyname());
 
 
 
@@ -401,7 +407,6 @@ public class TransformWidget extends AbstractWidget {
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		transformMapping.getInputFields().clear();
 		property.put(propertyName, transformMapping);
 
 		return property;
@@ -410,14 +415,15 @@ public class TransformWidget extends AbstractWidget {
 	private void getPropagatedSChema() {
 		ComponentsOutputSchema outputSchema = null;
 		InputField inputField = null;
-		List<InputField> inputFieldsList = transformMapping.getInputFields();
+		transformMapping.getInputFields().clear();
 		for (Link link : getComponent().getTargetConnections()) {
 			outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
-			if (outputSchema != null)
+			if (outputSchema != null){
 				for (FixedWidthGridRow row : outputSchema.getFixedWidthGridRowsOutputFields()) {
 					inputField = new InputField(row.getFieldName(), new ErrorObject(false, ""));
-					inputFieldsList.add(inputField);
+						transformMapping.getInputFields().add(inputField);
 				}
+			}
 		}
 	}
 
