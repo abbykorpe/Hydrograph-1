@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -54,21 +55,23 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 	private static final String JAVA_LANG_LONG = "java.lang.Long";
 	
 	@Override
-	public int getListenerType() {
+	public int getListenerType(){
 		return SWT.MouseHover;
 	}
 	
 	@Override
-	public void mouseAction(
-			PropertyDialogButtonBar propertyDialogButtonBar,
-			ListenerHelper helpers,Event event,Widget... widgets) {
+	public void mouseAction(PropertyDialogButtonBar propertyDialogButtonBar,
+			ListenerHelper helpers,Event event,Widget... widgets){
 		
 		  table=(Table)widgets[0];
 	      TableItem item = table.getItem(new Point(event.x, event.y));
-         if (item != null && item.getForeground().getRed()==255) {
-           if (tip != null && !tip.isDisposed()){
+	      
+	      if (item != null && item.getForeground().getRed()==255){
+	    	  
+	    	  if (tip != null && !tip.isDisposed()){
         	   tip.dispose();
-           }
+	    	  }
+	    	  
            tip = new Shell(table.getShell(), SWT.ON_TOP | SWT.TOOL);
            tip.setLayout(new FormLayout());
            label = new Label(tip, SWT.NONE);
@@ -88,253 +91,300 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
            tip.setVisible(true);
            table.setData("tip",tip);
            table.setData("label", label);
+	      }
 	}
-}
-	private String setAppropriateToolTipMessage(TableItem item,String componentType)
-	{
-		GridRow basicSchemaGridRow=(GridRow)item.getData();
-		if(StringUtils.equalsIgnoreCase(basicSchemaGridRow.getDataTypeValue(), JAVA_UTIL_DATE) && (StringUtils.isBlank(basicSchemaGridRow.getDateFormat())))
-			return Messages.DATE_FORMAT_MUST_NOT_BE_BLANK;
-		if((StringUtils.equalsIgnoreCase(basicSchemaGridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL)))
-		{			 
-			if(StringUtils.isBlank(basicSchemaGridRow.getPrecision())&& (StringUtils.containsIgnoreCase(componentType, "hive")||StringUtils.containsIgnoreCase(componentType, "parquet")))
-			{
-		    return Messages.PRECISION_MUST_NOT_BE_BLANK;
-		    }	
-			else if(!(basicSchemaGridRow.getPrecision().matches("\\d+")) &&StringUtils.isNotBlank(basicSchemaGridRow.getPrecision()))
-			{
-				return Messages.PRECISION_MUST_CONTAINS_NUMBER_ONLY_0_9;
-			}	
-			else if((StringUtils.isBlank(basicSchemaGridRow.getScale())))
-			{
-				 return Messages.SCALE_MUST_NOT_BE_BLANK;
-			}
-			else if(!(basicSchemaGridRow.getScale().matches("\\d+")))
-			{
-				return Messages.SCALE_MUST_CONTAINS_NUMBER_ONLY_0_9;
-			}	
-			else if(StringUtils.equalsIgnoreCase(basicSchemaGridRow.getScaleTypeValue(),"none"))
-			{
-				return Messages.SCALETYPE_MUST_NOT_BE_NONE;
-			}	
+	
+	
+	private String setToolTipForDateIfBlank(GridRow gridRow){
+		return Messages.DATE_FORMAT_MUST_NOT_BE_BLANK;
+	}
+	
+	private String setToolTipForBigDecimal(GridRow gridRow, String componentType){
+		
+		if(StringUtils.isBlank(gridRow.getPrecision())
+				&& (StringUtils.containsIgnoreCase(componentType, "hive")
+						||StringUtils.containsIgnoreCase(componentType, "parquet"))){
+	    return Messages.PRECISION_MUST_NOT_BE_BLANK;
+	    }else if(!(gridRow.getPrecision().matches("\\d+")) &&
+	    		StringUtils.isNotBlank(gridRow.getPrecision())){
+			return Messages.PRECISION_MUST_CONTAINS_NUMBER_ONLY_0_9;
+		}else if((StringUtils.isBlank(gridRow.getScale()))){
+			 return Messages.SCALE_MUST_NOT_BE_BLANK;
+		}else if(!(gridRow.getScale().matches("\\d+"))){
+			return Messages.SCALE_MUST_CONTAINS_NUMBER_ONLY_0_9;
+		}else if(StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(),"none")){
+			return Messages.SCALETYPE_MUST_NOT_BE_NONE;
 		}
 		
-		if(basicSchemaGridRow instanceof GenerateRecordSchemaGridRow){
-			
-			GenerateRecordSchemaGridRow generateRecordSchemaGridRow = (GenerateRecordSchemaGridRow) basicSchemaGridRow;
+		return "";
+	}
+	
+	
+	private String setToolTipForDateSchemaRange(GenerateRecordSchemaGridRow generateRecordSchemaGridRow){
+		
+		Date rangeFromDate = null, rangeToDate = null;
+		SimpleDateFormat formatter = new SimpleDateFormat(generateRecordSchemaGridRow.getDateFormat());
 
-			if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom())
-					|| StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo())) {
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom())){
+			try{
+				rangeFromDate = formatter.parse(generateRecordSchemaGridRow.getRangeFrom());
+			}catch (ParseException e){
+				return Messages.RANGE_FROM_DATE_INCORRECT_PATTERN;
+			}
+		}
 
-				if (StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_UTIL_DATE)) {
-					
-					Date rangeFromDate = null, rangeToDate = null;
-					SimpleDateFormat formatter = new SimpleDateFormat(generateRecordSchemaGridRow.getDateFormat());
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo())){
+			try{
+				rangeToDate = formatter.parse(generateRecordSchemaGridRow.getRangeTo());
+			}catch (ParseException e){
+				return Messages.RANGE_TO_DATE_INCORRECT_PATTERN;
+			}
+		}
 
-					if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom())) {
-						try {
-							rangeFromDate = formatter.parse(generateRecordSchemaGridRow.getRangeFrom());
-						} catch (ParseException e) {
-							return Messages.RANGE_FROM_DATE_INCORRECT_PATTERN;
-						}
-					}
+		if (rangeFromDate != null && rangeToDate != null && rangeFromDate.after(rangeToDate)){
+			return Messages.RANGE_FROM_GREATER_THAN_RANGE_TO;
+		}
+		
+		return "";
+	}
+	
+	
+	private String setToolTipForBigDecimalSchemaRange(GenerateRecordSchemaGridRow generateRecordSchemaGridRow){
+		BigDecimal rangeFrom = null, rangeTo = null;
 
-					if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo())) {
-						try {
-							rangeToDate = formatter.parse(generateRecordSchemaGridRow.getRangeTo());
-						} catch (ParseException e) {
-							return Messages.RANGE_TO_DATE_INCORRECT_PATTERN;
-						}
-					}
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom())){
+			rangeFrom = new BigDecimal(generateRecordSchemaGridRow.getRangeFrom());
+		}
+		
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo())){
+			rangeTo = new BigDecimal(generateRecordSchemaGridRow.getRangeTo());
+		}
 
-					if (rangeFromDate != null && rangeToDate != null && rangeFromDate.after(rangeToDate))
-						return Messages.RANGE_FROM_GREATER_THAN_RANGE_TO;
+		if (rangeFrom != null && rangeTo != null){
+			if (rangeFrom.compareTo(rangeTo) > 0){
+				return Messages.RANGE_FROM_GREATER_THAN_RANGE_TO;
+			}
+		}
 
-				} else if (StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL)) {
+		int fieldLength = 0, scaleLength = 0;
 
-					BigDecimal rangeFrom = null, rangeTo = null;
+		if (!generateRecordSchemaGridRow.getLength().isEmpty()){
+			fieldLength = Integer.parseInt(generateRecordSchemaGridRow.getLength());
+		}
 
-					if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom()))
-						rangeFrom = new BigDecimal(generateRecordSchemaGridRow.getRangeFrom());
-					if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo()))
-						rangeTo = new BigDecimal(generateRecordSchemaGridRow.getRangeTo());
+		if (!generateRecordSchemaGridRow.getScale().isEmpty()){
+			scaleLength = Integer.parseInt(generateRecordSchemaGridRow.getScale());
+		}
 
-					if (rangeFrom != null && rangeTo != null) {
-						if (rangeFrom.compareTo(rangeTo) > 0)
-							return Messages.RANGE_FROM_GREATER_THAN_RANGE_TO;
-					}
+		if (fieldLength < 0){
+			return Messages.FIELD_LENGTH_LESS_THAN_ZERO;
+		}else if (scaleLength < 0){
+			return Messages.FIELD_SCALE_LESS_THAN_ZERO;
+		}else if (scaleLength >= fieldLength){
+			return Messages.FIELD_SCALE_NOT_LESS_THAN_FIELD_LENGTH;
+		}else{
 
-					int fieldLength = 0, scaleLength = 0;
+			String minPermissibleRangeValue = "", maxPermissibleRangeValue = "";
 
-					if (!generateRecordSchemaGridRow.getLength().isEmpty())
-						fieldLength = Integer.parseInt(generateRecordSchemaGridRow.getLength());
-
-					if (!generateRecordSchemaGridRow.getScale().isEmpty())
-						scaleLength = Integer.parseInt(generateRecordSchemaGridRow.getScale());
-
-					if (fieldLength < 0)
-						return Messages.FIELD_LENGTH_LESS_THAN_ZERO;
-					else if (scaleLength < 0)
-						return Messages.FIELD_SCALE_LESS_THAN_ZERO;
-					else if (scaleLength >= fieldLength)
-						return Messages.FIELD_SCALE_NOT_LESS_THAN_FIELD_LENGTH;
-					else {
-
-						String minPermissibleRangeValue = "", maxPermissibleRangeValue = "";
-
-						for (int i = 1; i <= fieldLength; i++) {
-							maxPermissibleRangeValue = maxPermissibleRangeValue.concat("9");
-							if (minPermissibleRangeValue.trim().length() == 0)
-								minPermissibleRangeValue = minPermissibleRangeValue.concat("-");
-							else
-								minPermissibleRangeValue = minPermissibleRangeValue.concat("9");
-						}
-						
-						if(minPermissibleRangeValue.equals("-"))
-							minPermissibleRangeValue = "0";
-
-						if (scaleLength != 0) {
-							int decimalPosition = fieldLength - scaleLength;
-
-							if (decimalPosition == 1) {
-								minPermissibleRangeValue = "0";
-								maxPermissibleRangeValue = maxPermissibleRangeValue.replaceFirst("9", ".");
-							} else
-								minPermissibleRangeValue = minPermissibleRangeValue.substring(0, decimalPosition - 1)
-										+ "." + minPermissibleRangeValue.substring(decimalPosition);
-							
-							maxPermissibleRangeValue = maxPermissibleRangeValue.substring(0, decimalPosition - 1)
-									+ "." + maxPermissibleRangeValue.substring(decimalPosition);
-
-						}
-						
-						if(fieldLength == 0){
-							minPermissibleRangeValue="0";
-							maxPermissibleRangeValue="0";
-						}
-						
-						BigDecimal minRangeValue = new BigDecimal(minPermissibleRangeValue);
-						BigDecimal maxRangeValue = new BigDecimal(maxPermissibleRangeValue);
-
-						if (rangeFrom != null && fieldLength > 0 && rangeTo != null) {
-							if (rangeFrom.compareTo(minRangeValue) < 0)
-								return Messages.RANGE_FROM_LESS_THAN_MIN_PERMISSIBLE_VALUE;
-						} else if(rangeFrom != null && fieldLength > 0 && rangeTo == null){
-							if (rangeFrom.compareTo(maxRangeValue) > 0)
-								return Messages.RANGE_FROM_GREATER_THAN_MAX_PERMISSIBLE_VALUE;
-						}
-
-						if (rangeTo != null && fieldLength > 0 && rangeFrom != null) {
-							if (rangeTo.compareTo(maxRangeValue) > 0)
-								return Messages.RANGE_TO_GREATER_THAN_MAX_PERMISSIBLE_VALUE;
-						} else if(rangeTo != null && fieldLength > 0 && rangeFrom == null){
-							if (rangeTo.compareTo(minRangeValue) < 0)
-								return Messages.RANGE_TO_LESS_THAN_MIN_PERMISSIBLE_VALUE;
-						}
-					}
-
-				} else if (StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_LANG_DOUBLE)
-						|| StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_LANG_FLOAT)
-						|| StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_LANG_INTEGER)
-						|| StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_LANG_LONG)
-						|| StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_LANG_SHORT)) {
-
-					BigDecimal rangeFrom = null, rangeTo = null;
-
-					if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom()))
-						rangeFrom = new BigDecimal(generateRecordSchemaGridRow.getRangeFrom());
-					if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo()))
-						rangeTo = new BigDecimal(generateRecordSchemaGridRow.getRangeTo());
-
-					if (rangeFrom != null && rangeTo != null) {
-						if (rangeFrom.compareTo(rangeTo) > 0)
-							return Messages.RANGE_FROM_GREATER_THAN_RANGE_TO;
-					}
-					
-					int fieldLength = 0;
-
-					if (!generateRecordSchemaGridRow.getLength().isEmpty())
-						fieldLength = Integer.parseInt(generateRecordSchemaGridRow.getLength());
-
-					if (fieldLength < 0) {
-						return Messages.FIELD_LENGTH_LESS_THAN_ZERO;
-					} else {
-
-						String minPermissibleRangeValue = "", maxPermissibleRangeValue = "";
-
-						for (int i = 1; i <= fieldLength; i++) {
-							maxPermissibleRangeValue = maxPermissibleRangeValue.concat("9");
-							if (minPermissibleRangeValue.trim().length() == 0)
-								minPermissibleRangeValue = minPermissibleRangeValue.concat("-");
-							else
-								minPermissibleRangeValue = minPermissibleRangeValue.concat("9");
-						}
-						
-						if(minPermissibleRangeValue.equals("-"))
-							minPermissibleRangeValue = "0";
-						
-						if(fieldLength == 0){
-							minPermissibleRangeValue="0";
-							maxPermissibleRangeValue="0";
-						}
-							
-						
-						BigDecimal minRangeValue = new BigDecimal(minPermissibleRangeValue);
-						BigDecimal maxRangeValue = new BigDecimal(maxPermissibleRangeValue);
-					
-						
-						if (rangeFrom != null && fieldLength > 0 && rangeTo != null) {
-							if (rangeFrom.compareTo(minRangeValue) < 0)
-								return Messages.RANGE_FROM_LESS_THAN_MIN_PERMISSIBLE_VALUE;
-							else if (rangeTo.compareTo(maxRangeValue) > 0)
-								return Messages.RANGE_TO_GREATER_THAN_MAX_PERMISSIBLE_VALUE;
-						} else if(rangeFrom != null && fieldLength > 0 && rangeTo == null){
-							if (rangeFrom.compareTo(maxRangeValue) > 0)
-								return Messages.RANGE_FROM_GREATER_THAN_MAX_PERMISSIBLE_VALUE;
-						} else if(rangeTo != null && fieldLength > 0 && rangeFrom == null){
-							if (rangeTo.compareTo(minRangeValue) < 0)
-								return Messages.RANGE_TO_LESS_THAN_MIN_PERMISSIBLE_VALUE;
-						}
-					}
+			for (int i = 1; i <= fieldLength; i++){
+				maxPermissibleRangeValue = maxPermissibleRangeValue.concat("9");
+				
+				if (minPermissibleRangeValue.trim().length() == 0){
+					minPermissibleRangeValue = minPermissibleRangeValue.concat("-");
+				}else{
+					minPermissibleRangeValue = minPermissibleRangeValue.concat("9");
 				}
 			}
+			
+			if(minPermissibleRangeValue.equals("-")){
+				minPermissibleRangeValue = "0";
+			}
+
+			if (scaleLength != 0){
+				int decimalPosition = fieldLength - scaleLength;
+
+				if (decimalPosition == 1){
+					minPermissibleRangeValue = "0";
+					maxPermissibleRangeValue = maxPermissibleRangeValue.replaceFirst("9", ".");
+				}else{
+					minPermissibleRangeValue = minPermissibleRangeValue.substring(0, decimalPosition - 1)
+							+ "." + minPermissibleRangeValue.substring(decimalPosition);
+				}
+				
+				maxPermissibleRangeValue = maxPermissibleRangeValue.substring(0, decimalPosition - 1)
+						+ "." + maxPermissibleRangeValue.substring(decimalPosition);
+			}
+			
+			if(fieldLength == 0){
+				minPermissibleRangeValue="0";
+				maxPermissibleRangeValue="0";
+			}
+			
+			BigDecimal minRangeValue = new BigDecimal(minPermissibleRangeValue);
+			BigDecimal maxRangeValue = new BigDecimal(maxPermissibleRangeValue);
+
+			return setToolTipIfSchemaRangeAndLengthIsInvalid(rangeFrom, fieldLength, rangeTo, minRangeValue, maxRangeValue);
+		}
+	}
+		
+	
+	private String setToolTipForDoubleFloatIntegerLongShortSchemaRange(
+			GenerateRecordSchemaGridRow generateRecordSchemaGridRow){
+		BigDecimal rangeFrom = null, rangeTo = null;
+
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom())){
+			rangeFrom = new BigDecimal(generateRecordSchemaGridRow.getRangeFrom());
 		}
 		
-		if(basicSchemaGridRow instanceof FixedWidthGridRow)
-		{
-			FixedWidthGridRow fixedWidthGridRow=(FixedWidthGridRow)basicSchemaGridRow;
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo())){
+			rangeTo = new BigDecimal(generateRecordSchemaGridRow.getRangeTo());
+		}
+
+		if (rangeFrom != null && rangeTo != null){
+			if (rangeFrom.compareTo(rangeTo) > 0){
+				return Messages.RANGE_FROM_GREATER_THAN_RANGE_TO;
+			}
+		}
+		
+		int fieldLength = 0;
+
+		if (!generateRecordSchemaGridRow.getLength().isEmpty()){
+			fieldLength = Integer.parseInt(generateRecordSchemaGridRow.getLength());
+		}
+
+		if (fieldLength < 0){
+			return Messages.FIELD_LENGTH_LESS_THAN_ZERO;
+		}else{
+
+			String minPermissibleRangeValue = "", maxPermissibleRangeValue = "";
+
+			for (int i = 1; i <= fieldLength; i++){
+				maxPermissibleRangeValue = maxPermissibleRangeValue.concat("9");
+				
+				if (minPermissibleRangeValue.trim().length() == 0){
+					minPermissibleRangeValue = minPermissibleRangeValue.concat("-");
+				}else{
+					minPermissibleRangeValue = minPermissibleRangeValue.concat("9");
+				}
+			}
 			
-			if(fixedWidthGridRow instanceof MixedSchemeGridRow)
-			{
-				if(StringUtils.isBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isBlank(fixedWidthGridRow.getLength()))
-				{
-					return Messages.LENGTH_OR_DELIMITER_MUST_NOT_BE_BLANK;
-				}	
-				else if(!(fixedWidthGridRow.getLength().matches("\\d+")))
-				{
+			if(minPermissibleRangeValue.equals("-")){
+				minPermissibleRangeValue = "0";
+			}
+			
+			if(fieldLength == 0){
+				minPermissibleRangeValue="0";
+				maxPermissibleRangeValue="0";
+			}
+				
+			
+			BigDecimal minRangeValue = new BigDecimal(minPermissibleRangeValue);
+			BigDecimal maxRangeValue = new BigDecimal(maxPermissibleRangeValue);
+		
+			return setToolTipIfSchemaRangeAndLengthIsInvalid(rangeFrom, fieldLength, rangeTo, minRangeValue, maxRangeValue);
+		}
+	}
+
+	
+	private String setToolTipIfSchemaRangeAndLengthIsInvalid(BigDecimal rangeFrom, int fieldLength, BigDecimal rangeTo,
+			BigDecimal minRangeValue, BigDecimal maxRangeValue){
+		
+		if (rangeFrom != null && fieldLength > 0 && rangeTo != null){
+			if (rangeFrom.compareTo(minRangeValue) < 0){
+				return Messages.RANGE_FROM_LESS_THAN_MIN_PERMISSIBLE_VALUE;
+			}else if (rangeTo.compareTo(maxRangeValue) > 0){
+				return Messages.RANGE_TO_GREATER_THAN_MAX_PERMISSIBLE_VALUE;
+			}
+		}else if(rangeFrom != null && fieldLength > 0 && rangeTo == null){
+			if (rangeFrom.compareTo(maxRangeValue) > 0){
+				return Messages.RANGE_FROM_GREATER_THAN_MAX_PERMISSIBLE_VALUE;
+			}
+		}else if(rangeTo != null && fieldLength > 0 && rangeFrom == null){
+			if (rangeTo.compareTo(minRangeValue) < 0){
+				return Messages.RANGE_TO_LESS_THAN_MIN_PERMISSIBLE_VALUE;
+			}
+		}
+		return "";
+	}
+
+	private String setToolTipForSchemaRange(GenerateRecordSchemaGridRow generateRecordSchemaGridRow){
+		
+		if (StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_UTIL_DATE)){
+			return setToolTipForDateSchemaRange(generateRecordSchemaGridRow);
+		}else if (StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL)){
+			return setToolTipForBigDecimalSchemaRange(generateRecordSchemaGridRow);
+		}else if (StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_LANG_DOUBLE)
+				|| StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_LANG_FLOAT)
+				|| StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_LANG_INTEGER)
+				|| StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_LANG_LONG)
+				|| StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_LANG_SHORT)){
+			return setToolTipForDoubleFloatIntegerLongShortSchemaRange(generateRecordSchemaGridRow);
+		}
+		return "";
+	}
+	
+	
+	private String setToolTipForGenerateRecordGridRow(GenerateRecordSchemaGridRow generateRecordSchemaGridRow, String componentType){
+		
+		if(StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
+				&& StringUtils.isBlank(generateRecordSchemaGridRow.getDateFormat())){
+			return setToolTipForDateIfBlank(generateRecordSchemaGridRow);
+		}else if((StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL))){
+			return setToolTipForBigDecimal(generateRecordSchemaGridRow, componentType);			
+		}
+
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom())
+				|| StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo())){
+			return setToolTipForSchemaRange(generateRecordSchemaGridRow);			
+		}
+		return "";
+	}
+	
+	
+	private String setAppropriateToolTipMessage(TableItem item, String componentType){
+		
+		GridRow gridRow=(GridRow)item.getData();
+		
+		if(gridRow instanceof FixedWidthGridRow){
+			
+			FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow)gridRow;
+			
+			if(fixedWidthGridRow instanceof GenerateRecordSchemaGridRow){
+				GenerateRecordSchemaGridRow generateRecordSchemaGridRow = (GenerateRecordSchemaGridRow) fixedWidthGridRow;
+				return setToolTipForGenerateRecordGridRow(generateRecordSchemaGridRow, componentType);
+			}else if(fixedWidthGridRow instanceof MixedSchemeGridRow){
+				MixedSchemeGridRow mixedSchemeGridRow = (MixedSchemeGridRow) fixedWidthGridRow;
+				return setToolTipForMixedSchemeGridRow(mixedSchemeGridRow, componentType);
+			}else{
+				if(StringUtils.isBlank(fixedWidthGridRow.getLength())){
+					return Messages.LENGTH_MUST_NOT_BE_BLANK;
+				}else if(!(fixedWidthGridRow.getLength().matches("\\d+"))){
 					return Messages.LENGTH_MUST_BE_AN_INTEGER_VALUE;
 				}
-				
-				else if(StringUtils.isNotBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isNotBlank(fixedWidthGridRow.getLength()))
-				{
-					return Messages.ONLY_SPECIFY_LENGTH_OR_DELIMITER;
-				}
-				
-				
 			}
-			else
-			{
-			if(StringUtils.isBlank(fixedWidthGridRow.getLength()))
-			{
-				return Messages.LENGTH_MUST_NOT_BE_BLANK;
-			}	
-			else if(!(fixedWidthGridRow.getLength().matches("\\d+")))
-			{
-				return Messages.LENGTH_MUST_BE_AN_INTEGER_VALUE;
+		}else if(gridRow instanceof BasicSchemaGridRow){
+			if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
+					&& StringUtils.isBlank(gridRow.getDateFormat())){
+				return setToolTipForDateIfBlank(gridRow);
+			}else if((StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL))){
+				return setToolTipForBigDecimal(gridRow, componentType);			
 			}
-			
-			}
-		}	
-			return "";
+		}
+		return "";
+	}
+	
+
+	private String setToolTipForMixedSchemeGridRow(MixedSchemeGridRow mixedSchemeGridRow, String componentType){
+		
+		if(StringUtils.isBlank(mixedSchemeGridRow.getDelimiter())
+				&& StringUtils.isBlank(mixedSchemeGridRow.getLength())){
+			return Messages.LENGTH_OR_DELIMITER_MUST_NOT_BE_BLANK;
+		}else if(!(mixedSchemeGridRow.getLength().matches("\\d+"))){
+			return Messages.LENGTH_MUST_BE_AN_INTEGER_VALUE;
+		}else if(StringUtils.isNotBlank(mixedSchemeGridRow.getDelimiter()) 
+				&& StringUtils.isNotBlank(mixedSchemeGridRow.getLength())){
+			return Messages.ONLY_SPECIFY_LENGTH_OR_DELIMITER;
+		}
+		return "";
 	}
 }
