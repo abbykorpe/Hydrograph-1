@@ -13,14 +13,25 @@
 
 package hydrograph.ui.dataviewer.constants;
 
+/**
+ * 
+ * Constants for Data viewer views
+ * 
+ * @author Bitwise
+ *
+ */
 public class Views {
-	public static String GRID_VIEW_NAME="GRID_VIEW";
-	public static String HORIZONTAL_VIEW_NAME="HORIZONTAL_VIEW";
-	public static String FORMATTED_VIEW_NAME="FORMATTED_VIEW";
-	public static String UNFORMATTED_VIEW_NAME="UNFORMATTED_VIEW";
+	public static final String GRID_VIEW_NAME="GRID_VIEW";
+	public static final String HORIZONTAL_VIEW_NAME="HORIZONTAL_VIEW";
+	public static final String FORMATTED_VIEW_NAME="FORMATTED_VIEW";
+	public static final String UNFORMATTED_VIEW_NAME="UNFORMATTED_VIEW";
 	
-	public static String GRID_VIEW_DISPLAY_NAME="Grid View";
-	public static String HORIZONTAL_VIEW_DISPLAY_NAME="Horizontal View";
-	public static String FORMATTED_VIEW_DISPLAYE_NAME="Formatted Text View";
-	public static String UNFORMATTED_VIEW_DISPLAY_NAME="Unformatted Text View";
+	public static final String GRID_VIEW_DISPLAY_NAME="Grid View";
+	public static final String HORIZONTAL_VIEW_DISPLAY_NAME="Horizontal View";
+	public static final String FORMATTED_VIEW_DISPLAYE_NAME="Formatted Text View";
+	public static final String UNFORMATTED_VIEW_DISPLAY_NAME="Unformatted Text View";
+		
+	public static final String VIEW_NAME_KEY="VIEW_NAME";
+	
+	public static final String COLUMN_ID_KEY="ID";
 }

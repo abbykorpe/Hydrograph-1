@@ -319,6 +319,9 @@ public class WatchRecordAction extends SelectionAction {
 				+ watchRecordInner.getSocketId();
 		if (dataViewerMap.keySet().contains(windowName)) {
 			dataViewerMap.get(windowName).getShell().setActive();
+			//dataViewerMap.get(windowName).getShell().open();
+			//dataViewerMap.get(windowName).getShell().setMaximized(true);
+			//dataViewerMap.get(windowName).getShell().setMinimumSize(dataViewerMap.get(windowName).getShell().getSize().x, dataViewerMap.get(windowName).getShell().getSize().y);
 			return;
 		}
 		

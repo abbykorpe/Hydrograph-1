@@ -13,6 +13,13 @@
 
 package hydrograph.ui.dataviewer.datastructures;
 
+/**
+ * 
+ * Status message to be displayed in status bar
+ * 
+ * @author Bitwise
+ *
+ */
 public class StatusMessage {
 	private int returnCode;
 	private String returnMessage="";
@@ -26,12 +33,28 @@ public class StatusMessage {
 		this.returnCode = returnCode;
 	}
 
+	/**
+	 * 
+	 * Get return code
+	 * 
+	 * @return return code
+	 */
 	public int getReturnCode() {
 		return returnCode;
 	}
 
+	/**
+	 * 
+	 * Get status Message
+	 * 
+	 * @return status message 
+	 */
 	public String getStatusMessage() {
 		return returnMessage;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "StatusMessage [returnCode=" + returnCode + ", returnMessage=" + returnMessage + "]";
+	}
 }

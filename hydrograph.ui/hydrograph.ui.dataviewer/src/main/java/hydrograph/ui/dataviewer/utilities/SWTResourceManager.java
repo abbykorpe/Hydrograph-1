@@ -157,7 +157,7 @@ public class SWTResourceManager {
 			try {
 				image = getImage(new FileInputStream(path));
 				m_imageMap.put(path, image);
-			} catch (Exception e) {
+			} catch (IOException e) {
 				logger.error("Failed to get image ", e); 
 				image = getMissingImage();
 				m_imageMap.put(path, image);				
@@ -181,7 +181,7 @@ public class SWTResourceManager {
 			try {
 				image = getImage(clazz.getResourceAsStream(path));
 				m_imageMap.put(key, image);
-			} catch (Exception e) {
+			} catch (IOException e) {
 				logger.error("Failed to get image ", e);
 				image = getMissingImage();
 				m_imageMap.put(key, image);

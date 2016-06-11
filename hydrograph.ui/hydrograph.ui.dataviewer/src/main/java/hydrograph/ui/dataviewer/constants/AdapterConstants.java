@@ -11,19 +11,16 @@
  * limitations under the License.
  ******************************************************************************/
 
-package hydrograph.ui.dataviewer.actions;
+package hydrograph.ui.dataviewer.constants;
 
-import org.eclipse.jface.action.Action;
-
-public class StopAction extends Action {
-	
-	public StopAction(String menuItem) {
-		super(menuItem);
-	}
-	@Override
-	public void run() {
-		System.out.println("Stop action");
-		super.run();
-	}
-
+/**
+ * 
+ * AdapterConstants class hold constants for Data viewer adapter
+ * 
+ * @author Bitwise
+ *
+ */
+public class AdapterConstants {
+	public static String CSV_DRIVER_CLASS="org.relique.jdbc.csv.CsvDriver";
+	public static String CSV_DRIVER_CONNECTION_PREFIX="jdbc:relique:csv:";
 }

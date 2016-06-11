@@ -18,36 +18,29 @@ import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 
+/**
+ * 
+ * Creates drop down menu to switch view on coolbar
+ * 
+ * @author Bitwise
+ *
+ */
 public class ViewDataGridMenuCreator implements IMenuCreator{
 
-	ActionFactory actionFactory;
+	private ActionFactory actionFactory;
 
 	public ViewDataGridMenuCreator(ActionFactory actionFactory) {
 		this.actionFactory = actionFactory;
 	}
 
 	@Override
-	public void dispose() {
-	}
-
-	@Override
 	public Menu getMenu(Control parent) {
-		Menu menu=new Menu(parent);
-		
-		/*ActionContributionItem gridViewMenuitem=new ActionContributionItem(new GridViewAction("Grid View",debugDataViewer));
-		ActionContributionItem horizontalViewMenuItem=new ActionContributionItem(new HorizontalViewAction("Horizontal View",debugDataViewer));
-		ActionContributionItem formattedViewMenuItem=new ActionContributionItem(new FormattedViewAction("Formatted View",debugDataViewer));
-		ActionContributionItem unformattedViewMenuItem=new ActionContributionItem(new UnformattedViewAction("Unformatted View",debugDataViewer));*/
-		
+		Menu menu=new Menu(parent);		
 		ActionContributionItem gridViewMenuitem=new ActionContributionItem(actionFactory.getAction(GridViewAction.class.getName()));
-		//ActionContributionItem horizontalViewMenuItem=new ActionContributionItem(actionFactory.getAction("HorizontalViewAction"));
 		ActionContributionItem formattedViewMenuItem=new ActionContributionItem(actionFactory.getAction(FormattedViewAction.class.getName()));
 		ActionContributionItem unformattedViewMenuItem=new ActionContributionItem(actionFactory.getAction(UnformattedViewAction.class.getName()));
 		
 		gridViewMenuitem.fill(menu, 0);
-		/*horizontalViewMenuItem.fill(menu, 1);
-		formattedViewMenuItem.fill(menu,2);
-		unformattedViewMenuItem.fill(menu,3);*/
 		formattedViewMenuItem.fill(menu,1);
 		unformattedViewMenuItem.fill(menu,2);
 		
@@ -59,5 +52,8 @@ public class ViewDataGridMenuCreator implements IMenuCreator{
 		return parent;
 	}
 
-
+	@Override
+	public void dispose() {
+		//Nothing to do
+	}
 }

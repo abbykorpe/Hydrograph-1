@@ -33,4 +33,5 @@ public class PreferenceConstants {
 	
 	public static final String DEFAULT_VIEW_DATA_PAGE_SIZE="100";
 	public static final String DEFAULT_VIEW_DATA_FILE_SIZE="50";
+	public static final Long INITIAL_OFFSET=0L;
 }

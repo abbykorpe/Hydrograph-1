@@ -15,7 +15,7 @@ package hydrograph.ui.dataviewer.constants;
 
 /**
  * 
- * Class hold type of message box 
+ * Class hold types of message box 
  * 
  * @author Bitwise
  *

@@ -13,6 +13,7 @@
 
 package hydrograph.ui.dataviewer;
 
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.actions.ActionFactory;
 import hydrograph.ui.dataviewer.actions.CopyAction;
@@ -24,9 +25,12 @@ import hydrograph.ui.dataviewer.actions.ReloadAction;
 import hydrograph.ui.dataviewer.actions.SelectAllAction;
 import hydrograph.ui.dataviewer.actions.UnformattedViewAction;
 import hydrograph.ui.dataviewer.actions.ViewDataGridMenuCreator;
-import hydrograph.ui.dataviewer.adapters.CSVAdapter;
+import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.constants.ControlConstants;
 import hydrograph.ui.dataviewer.constants.MenuConstants;
+import hydrograph.ui.dataviewer.constants.MessageBoxText;
+import hydrograph.ui.dataviewer.constants.Messages;
+import hydrograph.ui.dataviewer.constants.PreferenceConstants;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.constants.Views;
 import hydrograph.ui.dataviewer.datastructures.RowData;
@@ -49,7 +53,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.CoolBarManager;
@@ -84,7 +87,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -102,15 +104,15 @@ public class DebugDataViewer extends ApplicationWindow {
 	private TableViewer horizontalViewTableViewer;
 	private TableViewer gridViewTableViewer;
 	
-	private CSVAdapter csvAdapter;
+	private DataViewerAdapter dataViewerAdapter;
 	private Map<String,Control> windowControls;
 	
-	private static List<RowData> gridViewData;
-	private static List<RowData> formattedViewData;
-	private static List<RowData> unformattedViewData;
+	private List<RowData> gridViewData;
+	private List<RowData> formattedViewData;
+	private List<RowData> unformattedViewData;
 	
-	private String database;
-	private String tableName;
+	private String debugFileLocation;
+	private String debugFileName;
 	
 	private String windowName="Debug Data viewer";
 	
@@ -119,7 +121,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	private DataViewLoader dataViewLoader;
 	private DataViewerListeners dataViewerListeners;
 	private ViewDataPreferences viewDataPreferences=new ViewDataPreferences();
-	private static final String PLUGIN_NAME="hydrograph.ui.dataviewer";
+	
     private static final String DELIMITER="delimiter";
     private static final String QUOTE_CHARACTOR="quoteCharactor";
     private static final String INCLUDE_HEADERS="includeHeader";
@@ -135,9 +137,13 @@ public class DebugDataViewer extends ApplicationWindow {
 	
 	private StatusManager statusManager;
 	
+	
+	private Action dropDownAction;
 	/**
 	 * Create the application window,
+	 * @wbp.parser.constructor
 	 */
+	@Deprecated
 	public DebugDataViewer() {
 		super(null);
 		createActions();
@@ -148,12 +154,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		gridViewData = new LinkedList<>();
 		actionFactory = new ActionFactory(this);
 	}
-
 	
-	/**
-	 * Create the application window,
-	 * @param reloadInformation 
-	 */
 	public DebugDataViewer(String filePath,String fileName,String windowName, ReloadInformation reloadInformation) {
 		super(new Shell(SWT.CLOSE|SWT.MAX|SWT.MIN));
 		createActions();
@@ -162,8 +163,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		addStatusLine();
 		windowControls = new LinkedHashMap<>();
 		gridViewData = new LinkedList<>();
-		this.database = filePath;
-		this.tableName = fileName;
+		this.debugFileLocation = filePath;
+		this.debugFileName = fileName;
 		actionFactory = new ActionFactory(this);
 		
 		if(windowName!=null)
@@ -173,29 +174,51 @@ public class DebugDataViewer extends ApplicationWindow {
 		this.reloadInformation = reloadInformation;
 	}
 	
-	
+	/**
+	 * 
+	 * Get reload information to reload debug file
+	 * 
+	 * @return {@link ReloadInformation}
+	 */
 	public ReloadInformation getReloadInformation() {
 		return reloadInformation;
 	}
-
-
-	public String getWindowName() {
-		return windowName;
+	
+	/**
+	 * 
+	 * Get data viewer adapter
+	 * 
+	 * @return {@link DataViewerAdapter}
+	 */
+	public DataViewerAdapter getDataViewerAdapter() {
+		return dataViewerAdapter;
 	}
 	
-	public CSVAdapter getCsvAdapter() {
-		return csvAdapter;
-	}
-	
+	/**
+	 * get data view loader
+	 *  
+	 * @return {@link DataViewLoader}
+	 */
 	public DataViewLoader getDataViewLoader() {
 		return dataViewLoader;
 	}
 	
+	/**
+	 * 
+	 * get Unformatted View Textarea
+	 * 
+	 * @return {@link StyledText}
+	 */
 	public StyledText getUnformattedViewTextarea() {
 		return unformattedViewTextarea;
 	}
 
-
+	/**
+	 * 
+	 * Get Formatted View Textarea
+	 * 
+	 * @return {@link StyledText}
+	 */
 	public StyledText getFormattedViewTextarea() {
 		return formattedViewTextarea;
 	}
@@ -206,14 +229,13 @@ public class DebugDataViewer extends ApplicationWindow {
 	@Override
 	protected Control createContents(Composite parent) {
 		setDataViewerWindowTitle();
+		getShell().setMinimumSize(ControlConstants.DATA_VIEWER_MINIMUM_SIZE);
+		
 		try{
 			initializeDataFileAdapter();
 		} catch (Exception e) {
-			MessageBox messageBox = new MessageBox(new Shell());
-			messageBox.setText("Error");
-			messageBox.setMessage("Unable to load debug file - " + e.getMessage());
-			messageBox.open();
-			logger.debug("Unable to load debug file",e);
+			Utils.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_LOAD_DEBUG_FILE + e.getMessage());
+			logger.error("Unable to load debug file",e);
 			getShell().close();
 			return null;
 		}
@@ -233,38 +255,41 @@ public class DebugDataViewer extends ApplicationWindow {
 		dataViewLoader = new DataViewLoader(unformattedViewTextarea,
 				formattedViewTextarea, horizontalViewTableViewer,
 				gridViewTableViewer, gridViewData, formattedViewData,
-				unformattedViewData, csvAdapter, tabFolder);
+				unformattedViewData, dataViewerAdapter, tabFolder);
 
 		dataViewerListeners = new DataViewerListeners();
 		createGridViewTabItem();
 		createPaginationPanel(container);		
 		
 		
-		dataViewerListeners.setCsvAdapter(csvAdapter);
+		dataViewerListeners.setDataViewerAdpater(dataViewerAdapter);
 		dataViewerListeners.setDataViewLoader(dataViewLoader);
-		dataViewerListeners.setWindowControls(windowControls);
-		
-		dataViewerListeners.addTabFolderSelectionChangeListener(tabFolder);
-		
+		dataViewerListeners.setWindowControls(windowControls);		
+		dataViewerListeners.addTabFolderSelectionChangeListener(tabFolder);		
 		dataViewerListeners.setStatusManager(statusManager);
-		statusManager.setCsvAdapter(csvAdapter);
+		
+		statusManager.setDataViewerAdapter(dataViewerAdapter);
 		statusManager.setWindowControls(windowControls);
 		statusManager.setStatus(new StatusMessage(StatusConstants.SUCCESS));
 		
-		//statusManager.enableJumpPagePanel(false);
-		statusManager.enableInitialPaginationContols();
-		
+		statusManager.enableInitialPaginationContols();		
 		tabFolder.setSelection(0);
 		
 		return container;
 	}
 	
+	/**
+	 * 
+	 * Get status manager
+	 * 
+	 * @return {@link StatusManager}
+	 */
 	public StatusManager getStatusManager() {
 		return statusManager;
 	}
 	
-	public void initializeDataFileAdapter() throws Exception {
-		csvAdapter = new CSVAdapter(database, tableName,Utils.getDefaultPageSize(), 0,this);
+	private void initializeDataFileAdapter() throws Exception {
+		dataViewerAdapter = new DataViewerAdapter(debugFileLocation, debugFileName,Utils.getDefaultPageSize(), PreferenceConstants.INITIAL_OFFSET,this);
 	}
 
 	private void setDataViewerWindowTitle() {
@@ -283,7 +308,6 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		createPageSwitchPanel(composite_2);
 		createPageJumpPanel(composite_2);
-
 	}
 
 
@@ -302,8 +326,8 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private void createJumpPageButton(Composite composite_3) {
 		Button jumpPageButton = new Button(composite_3, SWT.NONE);
-		dataViewerListeners.attachJumpToPageListener(jumpPageButton);
-		jumpPageButton.setText("Go");
+		dataViewerListeners.attachJumpPageListener(jumpPageButton);
+		jumpPageButton.setText(ControlConstants.JUMP_BUTTON_DISPLAY_TEXT);
 		windowControls.put(ControlConstants.JUMP_BUTTON,jumpPageButton);
 	}
 
@@ -328,7 +352,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		    }  
 		});	
 		
-		dataViewerListeners.attachJumpToPageListener(jumpPageTextBox);
+		dataViewerListeners.attachJumpPageListener(jumpPageTextBox);
 		windowControls.put(ControlConstants.JUMP_TEXT,jumpPageTextBox);
 		
 	}
@@ -337,7 +361,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	private void createJumpPageLabel(Composite composite_3) {
 		Label label = new Label(composite_3, SWT.NONE);
 		label.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		label.setText("Jump to Page: ");
+		label.setText(ControlConstants.JUMP_TO_PAGE_LABEL_TEXT);
 	}
 
 
@@ -347,15 +371,14 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		createPreviousPageButton(composite_3);
 		createPageNumberDisplay(composite_3);
-		createNextPageButton(composite_3);
-		
+		createNextPageButton(composite_3);		
 	}
 
 
 	private void createNextPageButton(Composite composite_3) {
 		Button nextPageButton = new Button(composite_3, SWT.NONE);
 		dataViewerListeners.attachNextPageButtonListener(nextPageButton);
-		nextPageButton.setText("Next");
+		nextPageButton.setText(ControlConstants.NEXT_BUTTON_DISPLAY_TEXT);
 		windowControls.put(ControlConstants.NEXT_BUTTON,nextPageButton);
 		
 	}
@@ -371,32 +394,43 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		windowControls.put(ControlConstants.PAGE_NUMBER_DISPLAY, pageNumberDisplayTextBox);
 		
-		Job job = new Job("Fetaching total number of rows") {
-			  @Override
-			  protected IStatus run(IProgressMonitor monitor) {
-				  final StatusMessage status = csvAdapter.fetchRowCount();
-				  
-				  Display.getDefault().asyncExec(new Runnable() {
-			      @Override
-			      public void run() {
-			    	  statusManager.setStatus(status);
-			    	  statusManager.enableJumpPagePanel(true);
-			      }
-			    });
-			    return Status.OK_STATUS;
-			  }
-			};
-			
-			job.schedule();
+		submitRecordCountJob();
+	}
+
+	private void submitRecordCountJob() {
+		Job job = new Job(Messages.FETCHING_TOTAL_NUMBER_OF_RECORDS) {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				final StatusMessage status = dataViewerAdapter.fetchRowCount();
+
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						statusManager.getStatusLineManager().getProgressMonitor().done();
+						statusManager.setStatus(status);
+						statusManager.enableJumpPagePanel(true);
+
+					}
+				});
+				return Status.OK_STATUS;
+			}
+		};
+
+		job.schedule();
 	}
 
 	private void createPreviousPageButton(Composite composite_3) {
 		Button button = new Button(composite_3, SWT.NONE);
 		dataViewerListeners.attachPreviousPageButtonListener(button);
-		button.setText("Previous");		
+		button.setText(ControlConstants.PREVIOUS_BUTTON_DISPLAY_TEXT);		
 		windowControls.put(ControlConstants.PREVIOUS_BUTTON,button);
 	}
 		
+	/**
+	 * 
+	 * Create unformatted view tab in data viewer tab folder
+	 * 
+	 */
 	public void createUnformattedViewTabItem() {		
 		if(isViewTabExist(Views.UNFORMATTED_VIEW_NAME)){
 			CTabItem item=getViewTabItem(Views.UNFORMATTED_VIEW_NAME);
@@ -406,7 +440,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 		
 		CTabItem tbtmUnformattedView = new CTabItem(tabFolder, SWT.CLOSE);
-		tbtmUnformattedView.setData("VIEW_NAME", Views.UNFORMATTED_VIEW_NAME);
+		tbtmUnformattedView.setData(Views.VIEW_NAME_KEY, Views.UNFORMATTED_VIEW_NAME);
 		tbtmUnformattedView.setText(Views.UNFORMATTED_VIEW_DISPLAY_NAME);
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
@@ -423,8 +457,12 @@ public class DebugDataViewer extends ApplicationWindow {
 		dataViewLoader.reloadloadViews();
 	}
 	
+	/**
+	 * 
+	 * Create formatted view tab in data viewer tab folder
+	 * 
+	 */
 	public void createFormatedViewTabItem() {
-		
 		if(isViewTabExist(Views.FORMATTED_VIEW_NAME)){
 			CTabItem item=getViewTabItem(Views.FORMATTED_VIEW_NAME);
 			tabFolder.setSelection(item);
@@ -433,7 +471,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 		
 		CTabItem tbtmFormattedView = new CTabItem(tabFolder, SWT.CLOSE);
-		tbtmFormattedView.setData("VIEW_NAME", Views.FORMATTED_VIEW_NAME);
+		tbtmFormattedView.setData(Views.VIEW_NAME_KEY, Views.FORMATTED_VIEW_NAME);
 		tbtmFormattedView.setText(Views.FORMATTED_VIEW_DISPLAYE_NAME);
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
@@ -453,7 +491,7 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private void createHorizantalViewTabItem() {
 		CTabItem tbtmHorizantalView = new CTabItem(tabFolder, SWT.CLOSE);
-		tbtmHorizantalView.setData("VIEW_NAME", "HORIZANTAL_VIEW");
+		tbtmHorizantalView.setData(Views.VIEW_NAME_KEY, Views.HORIZONTAL_VIEW_NAME);
 		tbtmHorizantalView.setText(Views.HORIZONTAL_VIEW_DISPLAY_NAME);
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
@@ -510,28 +548,30 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 	}
 	
-	private boolean isViewTabExist(String viewName){
-		
+	private boolean isViewTabExist(String viewName){		
 		for(int index=0;index<tabFolder.getItemCount();index++){
-			if(viewName.equals(tabFolder.getItem(index).getData("VIEW_NAME"))){
+			if(viewName.equals(tabFolder.getItem(index).getData(Views.VIEW_NAME_KEY))){
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	private CTabItem getViewTabItem(String viewName){
-		
+	private CTabItem getViewTabItem(String viewName){		
 		for(int index=0;index<tabFolder.getItemCount();index++){
-			if(viewName.equals(tabFolder.getItem(index).getData("VIEW_NAME"))){
+			if(viewName.equals(tabFolder.getItem(index).getData(Views.VIEW_NAME_KEY))){
 				return tabFolder.getItem(index);
 			}
 		}
 		return null;
 	}
 	
-	public void createGridViewTabItem() {
-		
+	/**
+	 * 
+	 * Create grid view tab Item
+	 * 
+	 */
+	public void createGridViewTabItem() {		
 		if(isViewTabExist(Views.GRID_VIEW_NAME)){
 			CTabItem item=getViewTabItem(Views.GRID_VIEW_NAME);
 			tabFolder.setSelection(item);
@@ -539,12 +579,11 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 		
 		CTabItem tbtmGridview = new CTabItem(tabFolder, SWT.NONE);
-		tbtmGridview.setData("VIEW_NAME", Views.GRID_VIEW_NAME);
+		tbtmGridview.setData(Views.VIEW_NAME_KEY, Views.GRID_VIEW_NAME);
 		tbtmGridview.setText(Views.GRID_VIEW_DISPLAY_NAME);
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
-			tbtmGridview.setControl(composite);
-			
+			tbtmGridview.setControl(composite);		
 			
 			composite.setLayout(new GridLayout(1, false));
 			{
@@ -583,31 +622,6 @@ public class DebugDataViewer extends ApplicationWindow {
 				
 				scrolledComposite.setContent(stackLayoutComposite);
 				scrolledComposite.setMinSize(stackLayoutComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-				
-				/*installMouseWheelScrollRecursively(scrolledComposite);
-				
-				createGridViewTableColumns(gridViewTableViewer);
-				TableColumnLayout layout = setTableLayoutToMappingTable(gridViewTableViewer);
-				gridViewTableViewer.setContentProvider(new ArrayContentProvider());
-				gridViewTableViewer.setInput(gridViewData);
-				
-				dataViewLoader.setGridViewTableViewer(gridViewTableViewer);
-				dataViewLoader.updateDataViewLists();
-								
-				Table table = gridViewTableViewer.getTable();
-				
-				for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
-					table.getColumn(columnIndex).pack();
-				}
-				gridViewTableViewer.refresh();
-				for (int i = 0; i < table.getColumnCount(); i++) {
-					layout.setColumnData(table.getColumn(i), new ColumnWeightData(1));
-				}
-				gridViewTableViewer.refresh();
-				for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
-					table.getColumn(columnIndex).pack();
-				}*/
-							
 				
 				
 				createGridViewTableColumns(gridViewTableViewer);
@@ -654,44 +668,35 @@ public class DebugDataViewer extends ApplicationWindow {
 			}					
 		});
 	}
+
 	private void createGridViewTableColumns(final TableViewer tableViewer) {
-		
+
 		createGridViewTableIndexColumn(tableViewer);
-		try {
-			int index = 0;
-			for(String columnName: csvAdapter.getColumnList()){
-				final TableViewerColumn tableViewerColumn = new TableViewerColumn(
-						tableViewer, SWT.NONE);
-				TableColumn tblclmnItem = tableViewerColumn.getColumn();
-				tblclmnItem.setWidth(100);
-				tblclmnItem.setText(columnName);
-				tableViewerColumn.getColumn().setData("ID", index);
-				tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
+		int index = 0;
+		for (String columnName : dataViewerAdapter.getColumnList()) {
+			final TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+			TableColumn tblclmnItem = tableViewerColumn.getColumn();
+			tblclmnItem.setWidth(100);
+			tblclmnItem.setText(columnName);
+			tableViewerColumn.getColumn().setData(Views.COLUMN_ID_KEY, index);
+			tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 
-					@Override
-					public String getText(Object element) {
-						RowData p = (RowData) element;
-						return p.getColumns()
-								.get((int) tableViewerColumn.getColumn()
-										.getData("ID")).getValue();
-					}					
-				});
-				
-				index++;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+				@Override
+				public String getText(Object element) {
+					RowData p = (RowData) element;
+					return p.getFields().get((int) tableViewerColumn.getColumn().getData(Views.COLUMN_ID_KEY)).getValue();
+				}
+			});
+
+			index++;
 		}
-
-	}
-	
-	
-	
+	}	
+		
 	/**
 	 * Create the actions.
 	 */
 	private void createActions() {
-		// Create the actions
+		// Do Nothing
 	}
 
 	/**
@@ -751,13 +756,15 @@ public class DebugDataViewer extends ApplicationWindow {
 		viewMenu.add(actionFactory.getAction(PreferencesAction.class.getName()));
 	}
 	
-	
-	
-	
+	/**
+	 * 
+	 * Get data viewer preferences from preference file
+	 * 
+	 * @return {@link ViewDataPreferences}
+	 */
 	public ViewDataPreferences getViewDataPreferencesFromPreferenceFile() {
 		boolean includeHeaderValue = false;
-		IScopeContext context = new InstanceScope();
-		IEclipsePreferences eclipsePreferences = context.getNode(PLUGIN_NAME);
+		IEclipsePreferences eclipsePreferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
 		String delimiter = eclipsePreferences.get(DELIMITER, DEFAULT);
 		String quoteCharactor = eclipsePreferences.get(QUOTE_CHARACTOR,DEFAULT);
 		String includeHeader = eclipsePreferences.get(INCLUDE_HEADERS, DEFAULT);
@@ -772,7 +779,6 @@ public class DebugDataViewer extends ApplicationWindow {
 		return viewDataPreferences;
 	}
 	
-
 	/**
 	 * Create the coolbar manager.
 	 * @return the coolbar manager
@@ -787,21 +793,21 @@ public class DebugDataViewer extends ApplicationWindow {
 		coolBarManager.add(toolBarManager);
 		addtoolbarAction(
 				toolBarManager,
-				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/export.png"),
-				actionFactory.getAction(ExportAction.class.getName()));
+				(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_EXPORT),
+				actionFactory.getAction(ExportAction.class.getName()));		
 		/*addtoolbarAction(
 				toolBarManager,
-				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/lookup.png"),
+				(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_FIND),
 				actionFactory.getAction(FindAction.class.getName()));*/
 		addtoolbarAction(
 				toolBarManager,
-				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/refresh.png"),
-				actionFactory.getAction(ReloadAction.class.getName()));
+				(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_RELOAD),
+				actionFactory.getAction(ReloadAction.class.getName()));		
 		/*addtoolbarAction(
 				toolBarManager,
-				(XMLConfigUtil.CONFIG_FILES_PATH + "/icons/advicons/filter.png"),
+				(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_FILTER),
 				actionFactory.getAction(FilterAction.class.getName()));*/
-		Action dropDownAction = new Action("", SWT.DROP_DOWN) {
+		dropDownAction = new Action("", SWT.DROP_DOWN) {
 			@Override
 			public void run() {
 				tabFolder.showItem(tabFolder.getItem(0));
@@ -813,7 +819,7 @@ public class DebugDataViewer extends ApplicationWindow {
 			@Override
 			public ImageData getImageData() {
 				return new ImageData(XMLConfigUtil.CONFIG_FILES_PATH
-						+ "/icons/advicons/switchview.png");
+						+ ImagePathConstant.DATA_VIEWER_SWITCH_VIEW);
 			}
 		});
 		
@@ -844,42 +850,14 @@ public class DebugDataViewer extends ApplicationWindow {
 	@Override
 	protected StatusLineManager createStatusLineManager() {
 		StatusLineManager statusLineManager = new StatusLineManager();
-		
-		//DO NOTE DELETE BELOW CODE - this will be used as new feature
-		
-		 /*StatusField readOnlyStatus = new StatusField(10, "Hello", "test Hello"); 
-		 StatusField readOnlyStatus2 = new StatusField(10, "Hi", "test Hi"); 
-		
-		 statusLineManager.add(readOnlyStatus);
-		 statusLineManager.add(new Separator("Group1"));
-		 statusLineManager.add(readOnlyStatus2);
-		 
-		 
-		 statusLineManager.insert(0, readOnlyStatus);
-		 
-		 //statusLineManager.appendToGroup(statusLineManager.BEGIN_GROUP, readOnlyStatus);
-		 statusLineManager.appendToGroup(statusLineManager.END_GROUP, readOnlyStatus2);*/
+		statusLineManager.appendToGroup(StatusLineManager.END_GROUP, new Separator(StatusLineManager.END_GROUP));
+		statusLineManager.appendToGroup(StatusLineManager.END_GROUP, dropDownAction);
 		statusManager = new StatusManager();
 		statusManager.setStatusLineManager(statusLineManager);
+		
 		return statusLineManager;
 	}
 
-
-	
-	/**
-	 * Launch the application.
-	 * @param args
-	 */
-	public static void main(String args[]) {
-		try {
-			DebugDataViewer window = new DebugDataViewer();
-			window.setBlockOnOpen(true);
-			window.open();
-			Display.getCurrent().dispose();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Configure the shell.
@@ -905,7 +883,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	 * @param scrollable
 	 *            the scrolledComposite to wheel-scroll
 	 */
-	private static void installMouseWheelScrollRecursively(
+	private void installMouseWheelScrollRecursively(
 			final ScrolledComposite scrollable) {
 		MouseWheelListener scroller = createMouseWheelScroller(scrollable);
 		if (scrollable.getParent() != null)
@@ -913,7 +891,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		installMouseWheelScrollRecursively(scroller, scrollable);
 	}
 
-	private static MouseWheelListener createMouseWheelScroller(
+	private MouseWheelListener createMouseWheelScroller(
 			final ScrolledComposite scrollable) {
 		return new MouseWheelListener() {
 
@@ -926,7 +904,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		};
 	}
 
-	private static void installMouseWheelScrollRecursively(
+	private void installMouseWheelScrollRecursively(
 			MouseWheelListener scroller, Control c) {
 		c.addMouseWheelListener(scroller);
 		if (c instanceof Composite) {
@@ -937,17 +915,29 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 	}
 
+	/**
+	 * 
+	 * Get grid view tableviewer
+	 * 
+	 * @return {@link TableViewer}
+	 */
 	public TableViewer getTableViewer() {
 		return gridViewTableViewer;
 	}
 
+	/**
+	 * 
+	 * Get View Data Preferences
+	 * 
+	 * @return {@link ViewDataPreferences}
+	 */
 	public ViewDataPreferences getViewDataPreferences() {
 		return viewDataPreferences;
 	}
 	
 	@Override
 	public boolean close() {
-		csvAdapter.dispose();
+		dataViewerAdapter.closeConnection();
 		return super.close();
 	}
 

@@ -15,7 +15,7 @@ package hydrograph.ui.dataviewer.actions;
 
 import hydrograph.ui.common.util.ConvertHexValues;
 import hydrograph.ui.dataviewer.DebugDataViewer;
-import hydrograph.ui.dataviewer.datastructures.ColumnData;
+import hydrograph.ui.dataviewer.datastructures.RowField;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.preferances.ViewDataPreferences;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -150,7 +150,7 @@ public class ExportAction extends Action {
 
 	private void addRowsDataInList(TableViewer tableViewer, List<RowData> rowDataList, List<String[]> fileDataList) {
 		for (RowData rowData : rowDataList) {
-			List<ColumnData> columnDataList = rowData.getColumns();
+			List<RowField> columnDataList = rowData.getFields();
 			String[] eachRowData = new String[tableViewer.getTable().getColumnCount() - 1];
 			for (int j = 0; j < columnDataList.size(); j++) {
 				eachRowData[j] = columnDataList.get(j).getValue();
@@ -174,9 +174,9 @@ public class ExportAction extends Action {
 		int i = 1;
 		List<RowData> eachRowData = new ArrayList<RowData>();
 		for (int index = 0; index < items.length; index++) {
-			List<ColumnData> columnData = new ArrayList<ColumnData>();
+			List<RowField> columnData = new ArrayList<RowField>();
 			for (int j = 1; j < tableViewer.getTable().getColumnCount(); j++) {
-				columnData.add(new ColumnData(items[index].getText(j), null));
+				columnData.add(new RowField(items[index].getText(j)));
 			}
 			RowData rowData = new RowData(columnData, i);
 			eachRowData.add(rowData);

@@ -17,6 +17,13 @@ import hydrograph.ui.dataviewer.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
 
+/**
+ * 
+ * Shows formated view
+ * 
+ * @author Bitwise
+ *
+ */
 public class FormattedViewAction extends Action {
 	
 	private DebugDataViewer debugDataViewer;

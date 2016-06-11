@@ -34,7 +34,25 @@ public class Messages extends NLS{
 	public static String CHARACTER_LENGTH_ERROR;
 	public static String QUOTE_WARNING;
 	public static String QUOTE_VALUE_MATCH_ERROR;
+	public static String UNABLE_TO_RELOAD_DEBUG_FILE;
 	public static String UNABLE_TO_LOAD_DEBUG_FILE;
+	
+	public static String INVALID_DEBUG_FILE;
+	public static String END_OF_FILE;
+	public static String BEGINING_OF_FILE;
+	public static String ERROR_WHILE_FETCHING_RECORDS;
+	public static String JUMP_To_PAGE_OPERATION_NOT_ALLOWED;
+	
+	public static String JUMP_PAGE_TEXTBOX_CAN_NOTE_BE_EMPTY;
+	public static String FETCHING_PAGE;
+	public static String FETCHING_PREVIOUS_PAGE;
+	public static String FETCHING_NEXT_PAGE;
+	public static String SHOWING_RECORDS_FROM;
+	public static String ROW_COUNT;
+	
+	public static String FETCHING_TOTAL_NUMBER_OF_RECORDS;
+	
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

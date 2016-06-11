@@ -14,6 +14,7 @@
 package hydrograph.ui.dataviewer.utilities;
 
 import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.constants.MessageBoxText;
 import hydrograph.ui.dataviewer.constants.PreferenceConstants;
 
@@ -37,8 +38,6 @@ import org.eclipse.swt.widgets.MessageBox;
  */
 public class Utils {
 
-	private static String PREFERANCE_CONTEXT_PLUGIN_NAME = "hydrograph.ui.dataviewer";
-
 	/**
 	 * 
 	 * Returns debug file size from preferences
@@ -46,7 +45,7 @@ public class Utils {
 	 * @return {@link String}
 	 */
 	public static String getFileSize() {
-		String fileSize = Platform.getPreferencesService().getString(PREFERANCE_CONTEXT_PLUGIN_NAME,
+		String fileSize = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
 				PreferenceConstants.VIEW_DATA_FILE_SIZE, PreferenceConstants.DEFAULT_VIEW_DATA_FILE_SIZE, null);
 		return fileSize;
 	}
@@ -75,7 +74,7 @@ public class Utils {
 	 * @return {@link String}
 	 */
 	public static String getDebugPath() {
-		String debugPath = Platform.getPreferencesService().getString(PREFERANCE_CONTEXT_PLUGIN_NAME,
+		String debugPath = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
 				PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, getInstallationPath(), null);
 		return debugPath;
 	}
@@ -87,7 +86,7 @@ public class Utils {
 	 * @return int
 	 */
 	public static int getDefaultPageSize() {
-		String pageSize = Platform.getPreferencesService().getString(PREFERANCE_CONTEXT_PLUGIN_NAME,
+		String pageSize = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
 				PreferenceConstants.VIEW_DATA_PAGE_SIZE, PreferenceConstants.DEFAULT_VIEW_DATA_PAGE_SIZE, null);
 		return Integer.valueOf(pageSize);
 	}
