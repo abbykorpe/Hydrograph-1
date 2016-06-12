@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.CoreException;
@@ -73,7 +74,7 @@ public class WatchRecordAction extends SelectionAction {
 	private boolean isWatcher;
 	private WatchRecordInner watchRecordInner = new WatchRecordInner();
 
-	private HashMap<String, DebugDataViewer> dataViewerMap;
+	private Map<String, DebugDataViewer> dataViewerMap;
 
 	private static final String DEBUG_DATA_FILE_EXTENTION=".csv";
 	
@@ -81,7 +82,7 @@ public class WatchRecordAction extends SelectionAction {
 		super(part);
 		setLazyEnablementCalculation(true);
 	}
-
+	
 	@Override
 	protected void init() {
 		super.init();
@@ -232,7 +233,7 @@ public class WatchRecordAction extends SelectionAction {
 		
 		//Delete csv debug file after copy
 		final String dataViewerFilePath= getDataViewerDebugFilePath().trim();
-		final String dataViewerFileh= csvDebugFileName.trim();
+		final String dataViewerFile= csvDebugFileName.trim();
 		final String dataViewerWindowTitle = dataViewerWindowName;		
 		try {
 			DebugServiceClient.INSTANCE.deleteDebugFile(jobDetails);
@@ -241,22 +242,22 @@ public class WatchRecordAction extends SelectionAction {
 		}
 		
 		//Check for empty csv debug file
-		if(isEmptyDebugCSVFile(dataViewerFilePath, dataViewerFileh)){
+		if(isEmptyDebugCSVFile(dataViewerFilePath, dataViewerFile)){
 			MessageBox.INSTANCE.showMessage(MessageBox.ERROR,Messages.EMPTY_DEBUG_FILE);
 			logger.error("Empty debug file");
 		    return;
 		}
 		
 		//Export Debug file schema
-		String path = dataViewerFilePath+dataViewerFileh;
-		SchemaHelper.INSTANCE.exportSchemaGridData(getSelectedObjects(), path);
-		
+		String tempSchemaFilePath = dataViewerFilePath+dataViewerFile;
+		SchemaHelper.INSTANCE.exportSchemaGridData(getSelectedObjects(), tempSchemaFilePath);
+				
 		//Open data viewer window
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					DebugDataViewer window = new DebugDataViewer(dataViewerFilePath, dataViewerFileh, dataViewerWindowTitle,
+					DebugDataViewer window = new DebugDataViewer(dataViewerFilePath, dataViewerFile, dataViewerWindowTitle,
 							jobDetails);
 					window.setBlockOnOpen(true);
 					dataViewerMap.put(dataViewerWindowTitle, window);

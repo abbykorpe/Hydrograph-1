@@ -76,7 +76,7 @@ public class JobManager {
 	private static final String PARAMETER_FILE_EXTENTION=".properties";
 	private static final String DEBUG_FILE_EXTENTION="_debug.xml";
 	public static final String PROJECT_METADATA_FILE="\\project.metadata";
-	private HashMap<String,DebugDataViewer> dataViewerMap;
+	private Map<String,DebugDataViewer> dataViewerMap;
 	
 	public boolean isLocalMode() {
 		return localMode;
@@ -86,12 +86,12 @@ public class JobManager {
 		this.localMode = localMode;
 	}
 	
-	public HashMap<String, DebugDataViewer> getDataViewerMap() {
+	public Map<String, DebugDataViewer> getDataViewerMap() {
 		return dataViewerMap;
 	}
 
-	public void setDataViewerMap(HashMap<String, DebugDataViewer> dataViewerMap) {
-		this.dataViewerMap = dataViewerMap;
+	public void setDataViewerMap(Map<String, DebugDataViewer> dataViewerMap2) {
+		this.dataViewerMap = dataViewerMap2;
 	}
 
 

@@ -1219,11 +1219,25 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		removeSubjobProperties(isDirty());
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
+		
+		closeDataViewerWindows();
+		
 		deleteDebugFiles();
- 
+		
 		closeSocket();
 	}
 	
+	private void closeDataViewerWindows() {
+		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");
+		Job job = DebugHandler.getJob(currentJob);
+		
+		for(String windowName:JobManager.INSTANCE.getDataViewerMap().keySet()){
+			if(StringUtils.contains(windowName, job.getConsoleName().replace(".", "_"))){
+				JobManager.INSTANCE.getDataViewerMap().get(windowName).close();
+			}
+		}
+	}
+
 	private void closeSocket()  {
         int portPID;
         try {
