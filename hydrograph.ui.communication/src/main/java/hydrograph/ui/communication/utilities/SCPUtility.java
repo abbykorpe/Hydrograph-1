@@ -11,7 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package hydrograph.ui.dataviewer.utilities;
+package hydrograph.ui.communication.utilities;
 
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -39,7 +39,11 @@ import com.jcraft.jsch.UserInfo;
  */
 public class SCPUtility {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(SCPUtility.class);
-	private static String SCP_ERROR="Unable to scp file";
+	public static SCPUtility INSTANCE = new SCPUtility();
+	
+	private SCPUtility(){
+		
+	}
 	
 	/**
 	 * 

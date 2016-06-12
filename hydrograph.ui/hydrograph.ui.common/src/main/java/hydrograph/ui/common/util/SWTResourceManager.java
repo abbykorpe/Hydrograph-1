@@ -22,7 +22,7 @@
  * Contributors:
  *    Google, Inc. - initial API and implementation
  *******************************************************************************/
-package hydrograph.ui.dataviewer.utilities;
+package hydrograph.ui.common.util;
 
 import hydrograph.ui.logging.factory.LogFactory;
 

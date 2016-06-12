@@ -11,49 +11,22 @@
  * limitations under the License.
  ******************************************************************************/
 
-package hydrograph.ui.dataviewer.datastructures;
-
-import java.util.List;
+package hydrograph.ui.communication.debugservice.constants;
 
 /**
- * Table Row representation 
+ * 
+ * The class to hold constants for debug service post method
  * 
  * @author Bitwise
  *
  */
-public class RowData {
-	private int rowNumber;
-	private List<RowField> fields;
-
-	public RowData(List<RowField> columns,int rowNumber) {
-		super();
-		this.fields = columns;
-		this.rowNumber = rowNumber;
-	}
-	
-	/**
-	 * 
-	 * Get row field list
-	 * 
-	 * @return list of fields
-	 */
-	public List<RowField> getFields() {
-		return fields;
-	}
-
-	/**
-	 * 
-	 * Get row number
-	 * 
-	 * @return row number
-	 */
-	public int getRowNumber() {
-		return rowNumber;
-	}
-
-	@Override
-	public String toString() {
-		return "RowData [rowNumber=" + rowNumber + ", fields=" + fields + "]";
-	}
-	
+public class DebugServicePostParameters {
+	public static String JOB_ID = "jobId";	
+	public static String COMPONENT_ID = "componentId";
+	public static String SOCKET_ID = "socketId";
+	public static String BASE_PATH = "basePath";
+	public static String USER_ID = "userId";
+	public static String PASSWORD = "password";
+	public static String FILE_SIZE = "file_size";
+	public static String HOST_NAME = "host_name";
 }

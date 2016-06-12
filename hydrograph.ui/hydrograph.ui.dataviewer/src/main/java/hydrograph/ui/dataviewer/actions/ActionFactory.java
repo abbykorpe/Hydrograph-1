@@ -18,7 +18,7 @@ import java.util.LinkedHashMap;
 
 import org.eclipse.jface.action.Action;
 
-import hydrograph.ui.dataviewer.DebugDataViewer;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 /**
  * 

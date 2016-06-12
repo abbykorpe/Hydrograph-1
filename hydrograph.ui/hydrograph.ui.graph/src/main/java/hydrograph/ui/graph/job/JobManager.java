@@ -18,7 +18,7 @@ import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.MultiParameterFileUIUtils;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
-import hydrograph.ui.dataviewer.DebugDataViewer;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.debug.service.ViewDataServiceInitiator;
 import hydrograph.ui.graph.handler.DebugHandler;

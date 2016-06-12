@@ -11,49 +11,16 @@
  * limitations under the License.
  ******************************************************************************/
 
-package hydrograph.ui.dataviewer.datastructures;
-
-import java.util.List;
+package hydrograph.ui.communication.debugservice.constants;
 
 /**
- * Table Row representation 
+ * 
+ * This class hold debug service method calls
  * 
  * @author Bitwise
  *
  */
-public class RowData {
-	private int rowNumber;
-	private List<RowField> fields;
-
-	public RowData(List<RowField> columns,int rowNumber) {
-		super();
-		this.fields = columns;
-		this.rowNumber = rowNumber;
-	}
-	
-	/**
-	 * 
-	 * Get row field list
-	 * 
-	 * @return list of fields
-	 */
-	public List<RowField> getFields() {
-		return fields;
-	}
-
-	/**
-	 * 
-	 * Get row number
-	 * 
-	 * @return row number
-	 */
-	public int getRowNumber() {
-		return rowNumber;
-	}
-
-	@Override
-	public String toString() {
-		return "RowData [rowNumber=" + rowNumber + ", fields=" + fields + "]";
-	}
-	
+public class DebugServiceMethods {
+	public static String GET_DEBUG_FILE_PATH = "/read";
+	public static String DELETE_DEBUG_CSV_FILE="/deleteLocalDebugFile";
 }

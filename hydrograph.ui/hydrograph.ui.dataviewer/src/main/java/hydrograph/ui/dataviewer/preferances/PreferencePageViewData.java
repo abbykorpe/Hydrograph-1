@@ -150,7 +150,7 @@ public class PreferencePageViewData extends FieldEditorPreferencePage implements
 			preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_FILE_SIZE, "100");
 			preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_PAGE_SIZE, "100");
 			
-			preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH,Utils.getInstallationPath() );
+			preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH,Utils.INSTANCE.getInstallationPath() );
 			
 			setPreferenceStore(preferenceStore);
 			setPreferenceStore(Activator.getDefault().getPreferenceStore());

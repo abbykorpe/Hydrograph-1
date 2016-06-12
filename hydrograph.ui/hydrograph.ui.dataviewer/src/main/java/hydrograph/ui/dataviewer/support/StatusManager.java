@@ -21,7 +21,7 @@ import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;

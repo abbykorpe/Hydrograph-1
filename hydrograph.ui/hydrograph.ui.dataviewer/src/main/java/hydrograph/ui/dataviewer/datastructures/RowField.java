@@ -21,7 +21,7 @@ package hydrograph.ui.dataviewer.datastructures;
  *
  */
 public class RowField {
-	String value;
+	private String value;
 		
 	public RowField(String value) {
 		this.value = value;

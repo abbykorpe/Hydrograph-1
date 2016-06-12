@@ -14,7 +14,7 @@
 package hydrograph.ui.dataviewer.actions;
 
 import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.dataviewer.DebugDataViewer;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;

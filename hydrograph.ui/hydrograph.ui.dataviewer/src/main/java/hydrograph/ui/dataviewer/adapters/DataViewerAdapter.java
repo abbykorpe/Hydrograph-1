@@ -13,13 +13,14 @@
 
 package hydrograph.ui.dataviewer.adapters;
 
-import hydrograph.ui.dataviewer.DebugDataViewer;
 import hydrograph.ui.dataviewer.constants.AdapterConstants;
 import hydrograph.ui.dataviewer.constants.Messages;
+import hydrograph.ui.dataviewer.constants.PreferenceConstants;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.datastructures.RowField;
 import hydrograph.ui.dataviewer.datastructures.RowData;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.sql.Connection;
@@ -111,7 +112,7 @@ public class DataViewerAdapter {
 	 */
 	public void reinitializeAdapter(int pageSize) throws Exception {		
 		this.pageSize = pageSize;
-		this.offset = 0;
+		this.offset = PreferenceConstants.INITIAL_OFFSET;
 		initializeAdapter();
 	}
 

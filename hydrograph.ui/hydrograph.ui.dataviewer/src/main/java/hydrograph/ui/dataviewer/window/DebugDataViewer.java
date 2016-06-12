@@ -11,10 +11,13 @@
  * limitations under the License.
  ******************************************************************************/
 
-package hydrograph.ui.dataviewer;
+package hydrograph.ui.dataviewer.window;
 
+import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.SWTResourceManager;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.actions.ActionFactory;
 import hydrograph.ui.dataviewer.actions.CopyAction;
 import hydrograph.ui.dataviewer.actions.ExportAction;
@@ -38,7 +41,6 @@ import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.listeners.DataViewerListeners;
 import hydrograph.ui.dataviewer.preferances.ViewDataPreferences;
 import hydrograph.ui.dataviewer.support.StatusManager;
-import hydrograph.ui.dataviewer.utilities.SWTResourceManager;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -133,7 +135,7 @@ public class DebugDataViewer extends ApplicationWindow {
     private static final String DEFAULT_FILE_SIZE="100";
     private static final String DEFAULT_PAGE_SIZE="100";
 	
-    private ReloadInformation reloadInformation;
+    private JobDetails reloadInformation;
 	
 	private StatusManager statusManager;
 	
@@ -152,10 +154,9 @@ public class DebugDataViewer extends ApplicationWindow {
 		addStatusLine();
 		windowControls = new LinkedHashMap<>();
 		gridViewData = new LinkedList<>();
-		actionFactory = new ActionFactory(this);
 	}
 	
-	public DebugDataViewer(String filePath,String fileName,String windowName, ReloadInformation reloadInformation) {
+	public DebugDataViewer(String filePath,String fileName,String windowName, JobDetails reloadInformation) {
 		super(new Shell(SWT.CLOSE|SWT.MAX|SWT.MIN));
 		createActions();
 		addCoolBar(SWT.FLAT);
@@ -165,7 +166,6 @@ public class DebugDataViewer extends ApplicationWindow {
 		gridViewData = new LinkedList<>();
 		this.debugFileLocation = filePath;
 		this.debugFileName = fileName;
-		actionFactory = new ActionFactory(this);
 		
 		if(windowName!=null)
 			this.windowName = "Data Viewer - " + windowName;
@@ -178,9 +178,9 @@ public class DebugDataViewer extends ApplicationWindow {
 	 * 
 	 * Get reload information to reload debug file
 	 * 
-	 * @return {@link ReloadInformation}
+	 * @return {@link JobDetails}
 	 */
-	public ReloadInformation getReloadInformation() {
+	public JobDetails getReloadInformation() {
 		return reloadInformation;
 	}
 	
@@ -234,7 +234,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		try{
 			initializeDataFileAdapter();
 		} catch (Exception e) {
-			Utils.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_LOAD_DEBUG_FILE + e.getMessage());
+			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_LOAD_DEBUG_FILE + e.getMessage());
 			logger.error("Unable to load debug file",e);
 			getShell().close();
 			return null;
@@ -289,7 +289,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 	
 	private void initializeDataFileAdapter() throws Exception {
-		dataViewerAdapter = new DataViewerAdapter(debugFileLocation, debugFileName,Utils.getDefaultPageSize(), PreferenceConstants.INITIAL_OFFSET,this);
+		dataViewerAdapter = new DataViewerAdapter(debugFileLocation, debugFileName,Utils.INSTANCE.getDefaultPageSize(), PreferenceConstants.INITIAL_OFFSET,this);
 	}
 
 	private void setDataViewerWindowTitle() {
@@ -705,7 +705,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	 */
 	@Override
 	protected MenuManager createMenuManager() {
-		actionFactory = new ActionFactory(this);
+		//actionFactory = new ActionFactory(this);
 		MenuManager menuManager = new MenuManager(MenuConstants.MENU);
 		menuManager.setVisible(true);
 

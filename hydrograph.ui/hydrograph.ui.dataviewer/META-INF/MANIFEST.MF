@@ -16,21 +16,14 @@ Require-Bundle: org.eclipse.ui,
  hydrograph.ui.common.datastructures;bundle-version="0.0.1",
  org.apache.commons.httpclient,
  org.apache.commons.lang,
- hydrograph.ui.propertywindow;bundle-version="0.0.1"
+ hydrograph.ui.propertywindow;bundle-version="0.0.1",
+ hydrograph.ui.communication;bundle-version="0.0.1"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .,
  lib/csvjdbc-1.0-29.jar,
- lib/commons-lang3-3.4.jar,
  lib/opencsv-3.7.jar
-Export-Package: hydrograph.ui.dataviewer,
- hydrograph.ui.dataviewer.actions,
- hydrograph.ui.dataviewer.adapters,
- hydrograph.ui.dataviewer.constants,
- hydrograph.ui.dataviewer.datastructures,
- hydrograph.ui.dataviewer.support,
+Export-Package: hydrograph.ui.dataviewer.constants,
  hydrograph.ui.dataviewer.utilities,
- org.relique.io,
- org.relique.jdbc.csv,
- org.relique.jdbc.dbf
+ hydrograph.ui.dataviewer.window
 Import-Package: com.jcraft.jsch

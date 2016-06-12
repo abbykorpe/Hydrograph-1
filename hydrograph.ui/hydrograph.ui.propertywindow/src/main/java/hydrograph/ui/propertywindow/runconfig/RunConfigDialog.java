@@ -108,6 +108,8 @@ public class RunConfigDialog extends Dialog {
 	private String host;
 	private boolean remoteMode=false;
 	private boolean isDebug;
+	
+	private static String LOCAL_HOST="localhost";
 	//private EmptyTextListener textPortNoListener;
 	/**
 	 * Create the dialog.
@@ -586,7 +588,12 @@ public class RunConfigDialog extends Dialog {
 	};
 	
 	public String getHost(){
-		return this.host;
+		if(remoteMode){
+			return this.host;
+		}else{
+			return LOCAL_HOST;
+		}
+		
 	}
 	
 	public String getUsername(){

@@ -13,9 +13,9 @@
 
 package hydrograph.ui.dataviewer.actions;
 
-import hydrograph.ui.dataviewer.DebugDataViewer;
 import hydrograph.ui.dataviewer.preferances.ViewDataPreferences;
 import hydrograph.ui.dataviewer.preferances.ViewDataPreferencesDialog;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Shell;

@@ -14,10 +14,10 @@
 package hydrograph.ui.dataviewer.actions;
 
 import hydrograph.ui.common.util.ConvertHexValues;
-import hydrograph.ui.dataviewer.DebugDataViewer;
 import hydrograph.ui.dataviewer.datastructures.RowField;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.preferances.ViewDataPreferences;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.FileWriter;
@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;

@@ -267,7 +267,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	@Override
 	public void init(IWorkbench workbench) {
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, Utils.getInstallationPath());
+		preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, Utils.INSTANCE.getInstallationPath());
 		preferenceStore.setDefault(PreferenceConstants.DEFAULTPATH, "");
 		preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_FILE_SIZE, "100");
 		preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_PAGE_SIZE, "100");
