@@ -57,8 +57,7 @@ public class DataViewerAdapter {
 	private Connection connection;
 	private Statement statement;
 
-	public DataViewerAdapter(String databaseName, String tableName, int PAGE_SIZE, long INITIAL_OFFSET, DebugDataViewer debugDataViewer)
-			throws Exception {
+	public DataViewerAdapter(String databaseName, String tableName, int PAGE_SIZE, long INITIAL_OFFSET, DebugDataViewer debugDataViewer) throws ClassNotFoundException, SQLException {
 		this.databaseName = databaseName;
 		this.tableName = tableName;
 		viewerData = new LinkedList<>();
@@ -72,30 +71,20 @@ public class DataViewerAdapter {
 	/**
 	 * 
 	 * Initialize adapter
-	 * 
-	 * @throws Exception
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public void initializeAdapter() throws Exception {
+	public void initializeAdapter() throws ClassNotFoundException, SQLException{
 		ResultSet resultSet = null;
-		try {
-			createConnection();
 
-			String sql = new ViewDataQueryBuilder(tableName).limit(0).getQuery(); 
-			resultSet = statement.executeQuery(sql);
+		createConnection();
+		String sql = new ViewDataQueryBuilder(tableName).limit(0).getQuery();
+		resultSet = statement.executeQuery(sql);
 
-			initializeColumnCount(resultSet);
-			initializeColumnList(resultSet);
-			initializeTableData();
-			resultSet.close();
-		} catch (Exception e) {
-			if (statement != null)
-				statement.close();
-
-			if (connection != null)
-				connection.close();
-			throw e;
-		}
-
+		initializeColumnCount(resultSet);
+		initializeColumnList(resultSet);
+		initializeTableData();
+		resultSet.close();
 	}
 
 	private void createConnection() throws ClassNotFoundException, SQLException {
@@ -108,9 +97,10 @@ public class DataViewerAdapter {
 	 * Re-initialize adapter with given page size
 	 * 
 	 * @param pageSize
-	 * @throws Exception
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public void reinitializeAdapter(int pageSize) throws Exception {		
+	public void reinitializeAdapter(int pageSize) throws ClassNotFoundException, SQLException  {		
 		this.pageSize = pageSize;
 		this.offset = PreferenceConstants.INITIAL_OFFSET;
 		initializeAdapter();
@@ -127,7 +117,7 @@ public class DataViewerAdapter {
 		columnCount = resultSet.getMetaData().getColumnCount();
 	}
 
-	private void initializeTableData() throws Exception {
+	private void initializeTableData() throws SQLException  {
 		viewerData.clear();
 		
 		String sql = new ViewDataQueryBuilder(tableName).limit(pageSize).offset(offset).getQuery(); 
@@ -438,8 +428,13 @@ public class DataViewerAdapter {
 	 */
 	public void closeConnection() {
 		try {
-			statement.close();
-			connection.close();
+			if(statement!=null){
+				statement.close();
+			}
+			
+			if(connection!=null){
+				connection.close();
+			}			
 		} catch (SQLException e) {
 			logger.warn("Unable to close csv connection", e);			
 		}

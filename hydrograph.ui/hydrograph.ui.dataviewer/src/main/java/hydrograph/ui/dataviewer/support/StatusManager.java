@@ -247,11 +247,11 @@ public class StatusManager {
 		if(dataViewerAdapter.getCurrentPageNumber()==1){
 			enablePreviousPageButton(false);
 		}
-		if(dataViewerAdapter.getRowCount()==null)
+		if(dataViewerAdapter.getRowCount()==null){
 			enableJumpPagePanel(false);
-		else
+		}else{
 			enableJumpPagePanel(true);
-		
+		}
 	}	
 }
 

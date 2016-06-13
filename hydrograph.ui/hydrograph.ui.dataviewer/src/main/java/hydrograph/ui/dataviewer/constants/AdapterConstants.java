@@ -21,6 +21,6 @@ package hydrograph.ui.dataviewer.constants;
  *
  */
 public class AdapterConstants {
-	public static String CSV_DRIVER_CLASS="org.relique.jdbc.csv.CsvDriver";
-	public static String CSV_DRIVER_CONNECTION_PREFIX="jdbc:relique:csv:";
+	public static final String CSV_DRIVER_CLASS="org.relique.jdbc.csv.CsvDriver";
+	public static final String CSV_DRIVER_CONNECTION_PREFIX="jdbc:relique:csv:";
 }

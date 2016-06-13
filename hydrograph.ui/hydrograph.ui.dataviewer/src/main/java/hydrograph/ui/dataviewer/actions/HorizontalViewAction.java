@@ -25,7 +25,6 @@ public class HorizontalViewAction extends Action{
 	}
 	@Override
 	public void run() {
-		System.out.println("HorizontalViewAction");
 		super.run();
 	}
 }

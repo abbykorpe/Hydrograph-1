@@ -181,7 +181,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private boolean dirty=false;
 	private PaletteRoot paletteRoot = null;
 
-	Logger logger = LogFactory.INSTANCE.getLogger(ELTGraphicalEditor.class);
+	private Logger logger = LogFactory.INSTANCE.getLogger(ELTGraphicalEditor.class);
 	public static final String ID = "hydrograph.ui.graph.etlgraphicaleditor";
 	private Container container;
 	private final Point defaultComponentLocation = new Point(0, 0);

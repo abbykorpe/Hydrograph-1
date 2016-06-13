@@ -23,11 +23,11 @@ import java.util.List;
  */
 public class RowData {
 	private int rowNumber;
-	private List<RowField> fields;
+	private List<RowField> rowFields;
 
-	public RowData(List<RowField> columns,int rowNumber) {
+	public RowData(List<RowField> rowFields,int rowNumber) {
 		super();
-		this.fields = columns;
+		this.rowFields = rowFields;
 		this.rowNumber = rowNumber;
 	}
 	
@@ -37,8 +37,8 @@ public class RowData {
 	 * 
 	 * @return list of fields
 	 */
-	public List<RowField> getFields() {
-		return fields;
+	public List<RowField> getRowFields() {
+		return rowFields;
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class RowData {
 
 	@Override
 	public String toString() {
-		return "RowData [rowNumber=" + rowNumber + ", fields=" + fields + "]";
+		return "RowData [rowNumber=" + rowNumber + ", fields=" + rowFields + "]";
 	}
 	
 }

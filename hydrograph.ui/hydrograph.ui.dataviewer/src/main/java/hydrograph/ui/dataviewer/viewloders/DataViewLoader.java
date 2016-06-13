@@ -138,7 +138,7 @@ public class DataViewLoader {
 			stringBuilder.append("{\n");
 			int columnIndex = 0;
 			for (String columnName : dataViewerAdapter.getColumnList()) {
-				RowField columnData = rowData.getFields().get(columnIndex);
+				RowField columnData = rowData.getRowFields().get(columnIndex);
 				String tempString = String.format(format, columnName, columnData.getValue());
 				stringBuilder.append(tempString);
 				columnIndex++;
@@ -158,7 +158,7 @@ public class DataViewLoader {
 
 		for (RowData rowData : unformattedViewData) {
 			String row = "";
-			for (RowField columnData : rowData.getFields()) {
+			for (RowField columnData : rowData.getRowFields()) {
 				row = row + columnData.getValue() + ",";
 			}
 			stringBuilder.append(row.substring(0, row.length() - 1) + "\n");

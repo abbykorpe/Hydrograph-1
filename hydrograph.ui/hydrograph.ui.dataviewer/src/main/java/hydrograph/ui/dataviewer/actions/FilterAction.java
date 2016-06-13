@@ -28,7 +28,6 @@ public class FilterAction extends Action {
 	}
 	@Override
 	public void run() {
-		System.out.println("filter action");
 		super.run();
 	}
 }

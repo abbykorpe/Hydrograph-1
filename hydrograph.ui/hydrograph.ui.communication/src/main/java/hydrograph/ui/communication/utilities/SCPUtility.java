@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 
@@ -54,59 +55,48 @@ public class SCPUtility {
 	 * @param password
 	 * @param remoteFile
 	 * @param localFile
-	 * @throws Exception
+	 * @throws JSchException 
+	 * @throws IOException 
 	 */
-	public void scpFileFromRemoteServer(String host, String user, String password, String remoteFile, String localFile) throws Exception {
-		FileOutputStream fos = null;
-		try {
-
-			String prefix = null;
-			if (new File(localFile).isDirectory()) {
-				prefix = localFile + File.separator;
-			}
-
-			JSch jsch = new JSch();
-			Session session = jsch.getSession(user, host, 22);
-
-			// username and password will be given via UserInfo interface.
-			UserInfo userInfo = new UserInformation(password);
-			session.setUserInfo(userInfo);
-			session.connect();
-
-			// exec 'scp -f remoteFile' remotely
-			String command = "scp -f " + remoteFile;
-			Channel channel = session.openChannel("exec");
-			((ChannelExec) channel).setCommand(command);
-
-			// get I/O streams for remote scp
-			OutputStream out = channel.getOutputStream();
-			InputStream in = channel.getInputStream();
-
-			channel.connect();
-
-			byte[] buf = new byte[1024];
-
-			// send '\0'
-			buf[0] = 0;
-			out.write(buf, 0, 1);
-			out.flush();
-
-			fos = readRemoteFileAndWriteToLocalFile(localFile, fos, prefix, out, in, buf);
-						
-			session.disconnect();
-
-		} catch (Exception e) {
-			try {
-				if (fos != null)
-					fos.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			throw e;
+	public void scpFileFromRemoteServer(String host, String user, String password, String remoteFile, String localFile) throws JSchException, IOException {
+		
+		String prefix = null;
+		if (new File(localFile).isDirectory()) {
+			prefix = localFile + File.separator;
 		}
+
+		JSch jsch = new JSch();
+		Session session = jsch.getSession(user, host, 22);
+
+		// username and password will be given via UserInfo interface.
+		UserInfo userInfo = new UserInformation(password);
+		session.setUserInfo(userInfo);
+		session.connect();
+
+		// exec 'scp -f remoteFile' remotely
+		String command = "scp -f " + remoteFile;
+		Channel channel = session.openChannel("exec");
+		((ChannelExec) channel).setCommand(command);
+
+		// get I/O streams for remote scp
+		OutputStream out = channel.getOutputStream();
+		InputStream in = channel.getInputStream();
+
+		channel.connect();
+
+		byte[] buf = new byte[1024];
+
+		// send '\0'
+		buf[0] = 0;
+		out.write(buf, 0, 1);
+		out.flush();
+		
+		readRemoteFileAndWriteToLocalFile(localFile, prefix, out, in, buf);
+
+		session.disconnect();		
 	}
 
-	private FileOutputStream readRemoteFileAndWriteToLocalFile(String localFile, FileOutputStream fos, String prefix,
+	private void readRemoteFileAndWriteToLocalFile(String localFile, String prefix,
 			OutputStream out, InputStream in, byte[] buf) throws IOException, FileNotFoundException {
 		while (true) {
 			int c = checkAck(in);
@@ -143,29 +133,30 @@ public class SCPUtility {
 			out.flush();
 
 			// read a content of local file
-			fos = new FileOutputStream(prefix == null ? localFile : prefix + file);
-			int foo;
-			while (true) {
-				if (buf.length < filesize)
-					foo = buf.length;
-				else
-					foo = (int) filesize;
-				foo = in.read(buf, 0, foo);
-				if (foo < 0) {
-					// error
-					break;
+			try (FileOutputStream fos = new FileOutputStream(prefix == null ? localFile : prefix + file)){
+				int foo;
+				while (true) {
+					if (buf.length < filesize)
+						foo = buf.length;
+					else
+						foo = (int) filesize;
+					foo = in.read(buf, 0, foo);
+					if (foo < 0) {
+						// error
+						break;
+					}
+					fos.write(buf, 0, foo);
+					filesize -= foo;
+					if (filesize == 0L)
+						break;
 				}
-				fos.write(buf, 0, foo);
-				filesize -= foo;
-				if (filesize == 0L)
-					break;
+			} catch (IOException e) {
+				throw e;
 			}
-			fos.close();
-			fos = null;
 
 			if (checkAck(in) != 0) {
 				//System.exit(0);
-				return null;
+				return;
 			}
 
 			// send '\0'
@@ -173,7 +164,6 @@ public class SCPUtility {
 			out.write(buf, 0, 1);
 			out.flush();
 		}
-		return fos;
 	}
 
 	private int checkAck(InputStream in) throws IOException {

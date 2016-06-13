@@ -16,7 +16,7 @@ package hydrograph.ui.dataviewer.actions;
 import hydrograph.ui.common.util.ConvertHexValues;
 import hydrograph.ui.dataviewer.datastructures.RowField;
 import hydrograph.ui.dataviewer.datastructures.RowData;
-import hydrograph.ui.dataviewer.preferances.ViewDataPreferences;
+import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -150,7 +150,7 @@ public class ExportAction extends Action {
 
 	private void addRowsDataInList(TableViewer tableViewer, List<RowData> rowDataList, List<String[]> fileDataList) {
 		for (RowData rowData : rowDataList) {
-			List<RowField> columnDataList = rowData.getFields();
+			List<RowField> columnDataList = rowData.getRowFields();
 			String[] eachRowData = new String[tableViewer.getTable().getColumnCount() - 1];
 			for (int j = 0; j < columnDataList.size(); j++) {
 				eachRowData[j] = columnDataList.get(j).getValue();

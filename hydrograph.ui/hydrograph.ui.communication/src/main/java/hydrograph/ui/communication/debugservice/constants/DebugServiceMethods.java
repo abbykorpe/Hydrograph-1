@@ -21,6 +21,6 @@ package hydrograph.ui.communication.debugservice.constants;
  *
  */
 public class DebugServiceMethods {
-	public static String GET_DEBUG_FILE_PATH = "/read";
-	public static String DELETE_DEBUG_CSV_FILE="/deleteLocalDebugFile";
+	public static final String GET_DEBUG_FILE_PATH = "/read";
+	public static final String DELETE_DEBUG_CSV_FILE="/deleteLocalDebugFile";
 }

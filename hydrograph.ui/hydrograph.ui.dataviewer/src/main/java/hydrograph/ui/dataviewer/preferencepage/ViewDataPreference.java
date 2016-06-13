@@ -11,7 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package hydrograph.ui.dataviewer.preferances;
+package hydrograph.ui.dataviewer.preferencepage;
 
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.constants.Messages;

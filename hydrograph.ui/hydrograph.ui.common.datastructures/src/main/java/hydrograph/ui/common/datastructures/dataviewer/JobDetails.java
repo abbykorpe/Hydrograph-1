@@ -30,10 +30,10 @@ public class JobDetails {
 	private String componentID;
 	private String componentSocketID;
 
-	boolean isRemote;
+	private boolean isRemote;
 
-	public JobDetails(String host, String port, String username, String password, String basepath,
-			String uniqueJobID, String componentID, String componentSocketID, boolean isRemote) {
+	public JobDetails(String host, String port, String username, String password, String basepath, String uniqueJobID,
+			String componentID, String componentSocketID, boolean isRemote) {
 		this.host = host;
 		this.port = port;
 		this.username = username;
@@ -90,12 +90,11 @@ public class JobDetails {
 		return isRemote;
 	}
 
-
 	@Override
 	public String toString() {
-		return "DebugServiceClientInformation [host=" + host + ", port=" + port + ", username=" + username + ", basepath="
-				+ basepath + ", uniqueJobID=" + uniqueJobID + ", componentID=" + componentID + ", componentSocketID="
-				+ componentSocketID + ", isRemote=" + isRemote + "]";
+		return "JobDetails [host=" + host + ", port=" + port + ", basepath=" + basepath + ", uniqueJobID="
+				+ uniqueJobID + ", componentID=" + componentID + ", componentSocketID=" + componentSocketID
+				+ ", isRemote=" + isRemote + "]";
 	}
 	
 }

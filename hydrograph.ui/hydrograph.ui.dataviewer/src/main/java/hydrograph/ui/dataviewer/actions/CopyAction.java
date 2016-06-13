@@ -61,7 +61,7 @@ public class CopyAction extends Action {
 		StringBuffer stringBuffer = new StringBuffer();
 		for (Item item : debugDataViewer.getTableViewer().getTable().getSelection()) {
 			RowData rowData = (RowData) item.getData();
-			for (RowField columnData : rowData.getFields()) {
+			for (RowField columnData : rowData.getRowFields()) {
 				stringBuffer.append(columnData.getValue() + "\t");
 			}
 			stringBuffer.append("\n");

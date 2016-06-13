@@ -21,7 +21,7 @@ package hydrograph.ui.dataviewer.constants;
  *
  */
 public class MessageBoxText {
-	public static String ERROR="Error";
-	public static String WARNING="Warning";
-	public static String INFO="Information";
+	public static final String ERROR="Error";
+	public static final String WARNING="Warning";
+	public static final String INFO="Information";
 }

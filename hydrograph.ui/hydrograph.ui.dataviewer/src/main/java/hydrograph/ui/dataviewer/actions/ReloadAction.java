@@ -21,22 +21,27 @@ import hydrograph.ui.dataviewer.constants.MessageBoxText;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
-import hydrograph.ui.dataviewer.preferances.ViewDataPreferences;
+import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.SQLException;
 
+import org.apache.commons.httpclient.HttpException;
 import org.eclipse.jface.action.Action;
 import org.slf4j.Logger;
 
+import com.jcraft.jsch.JSchException;
+
 /**
  * 
- * ReloadAction reload the data from debug file based on file size and page size preferences from internal preference window
+ * ReloadAction reloads the data from debug file based on file size and page size preferences from internal preference window
  * 
  * @author Bitwise
  * 
@@ -60,12 +65,20 @@ public class ReloadAction extends Action {
 		return DebugServiceClient.INSTANCE.getDebugFile(jobDetails, Integer.toString(viewDataPreferences.getFileSize())).trim();
 	}
 	
-	private void deleteCSVDebugDataFile() {
-		try{
+	private void deleteCSVDebugDataFile() {		
+		
+		try {
 			DebugServiceClient.INSTANCE.deleteDebugFile(jobDetails);
-		}catch(Exception e){
+		} catch (NumberFormatException e) {
 			logger.warn("Unable to delete debug csv file",e);
-		}		
+		} catch (HttpException e) {
+			logger.warn("Unable to delete debug csv file",e);
+		} catch (MalformedURLException e) {
+			logger.warn("Unable to delete debug csv file",e);
+		} catch (IOException e) {
+			logger.warn("Unable to delete debug csv file",e);
+		}
+			
 	}
 	
 	@Override
@@ -102,14 +115,17 @@ public class ReloadAction extends Action {
 		
 		try {
 			this.debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize());
-		} catch (Exception e) {
+		} catch (ClassNotFoundException | SQLException e1) {
 			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_RELOAD_DEBUG_FILE);
 			this.debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_RELOAD_DEBUG_FILE));
 			updateDataViewerViews();
 			this.debugDataViewer.getStatusManager().clearJumpToPageText();
+			if(this.debugDataViewer.getDataViewerAdapter()!=null){
+				this.debugDataViewer.getDataViewerAdapter().closeConnection();
+			}
 			return;
 		}
-
+		
 		this.debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.SUCCESS));
 		this.debugDataViewer.getStatusManager().enableInitialPaginationContols();
 		this.debugDataViewer.getStatusManager().clearJumpToPageText();
@@ -123,27 +139,26 @@ public class ReloadAction extends Action {
 	}
 
 	private int scpRemoteCSVDebugFileToDataViewerDebugFileLocation(String dataViewerFilePath, String csvDebugFileLocation) {
-		
 		try {
 			SCPUtility.INSTANCE.scpFileFromRemoteServer(jobDetails.getHost(), jobDetails.getUsername(),
 					jobDetails.getPassword(), csvDebugFileLocation.trim(), dataViewerFilePath);
-		} catch (Exception e) {
+		} catch (JSchException | IOException e) {
 			logger.error("unable to copy Debug csv file to data viewer file location",e);
 			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_RELOAD_DEBUG_FILE);
 			return StatusConstants.ERROR;
 		}
+		
 		return StatusConstants.SUCCESS;		
 	}
 
 	private int copyCSVDebugFileAtDataViewerDebugFileLocation(String csvDebugFileLocation, String dataViewerFileAbsolutePath) {
 		try {
 			Files.copy(Paths.get(csvDebugFileLocation), Paths.get(dataViewerFileAbsolutePath), StandardCopyOption.REPLACE_EXISTING);
-		} catch (Exception e) {
+		} catch (IOException e) {
 			logger.error("unable to copy Debug csv file to data viewer file location",e);
 			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_RELOAD_DEBUG_FILE);
 			return StatusConstants.ERROR;
 		}
-		
 		return StatusConstants.SUCCESS;
 	}
 
@@ -184,7 +199,7 @@ public class ReloadAction extends Action {
 	}
 
 	private void loadNewDebugFileInformation() {
-		jobDetails = debugDataViewer.getReloadInformation();
+		jobDetails = debugDataViewer.getJobDetails();
 	}
 
 	private void closeExistingDebugFileConnection() {

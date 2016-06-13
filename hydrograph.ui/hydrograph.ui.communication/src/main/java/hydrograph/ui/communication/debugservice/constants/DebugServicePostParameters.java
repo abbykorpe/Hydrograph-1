@@ -21,12 +21,12 @@ package hydrograph.ui.communication.debugservice.constants;
  *
  */
 public class DebugServicePostParameters {
-	public static String JOB_ID = "jobId";	
-	public static String COMPONENT_ID = "componentId";
-	public static String SOCKET_ID = "socketId";
-	public static String BASE_PATH = "basePath";
-	public static String USER_ID = "userId";
-	public static String PASSWORD = "password";
-	public static String FILE_SIZE = "file_size";
-	public static String HOST_NAME = "host_name";
+	public static final String JOB_ID = "jobId";	
+	public static final String COMPONENT_ID = "componentId";
+	public static final String SOCKET_ID = "socketId";
+	public static final String BASE_PATH = "basePath";
+	public static final String USER_ID = "userId";
+	public static final String PASSWORD = "password";
+	public static final String FILE_SIZE = "file_size";
+	public static final String HOST_NAME = "host_name";
 }

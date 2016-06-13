@@ -40,15 +40,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -62,6 +63,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
+
+import com.jcraft.jsch.JSchException;
 
 /**
  * The Class WatchRecordAction used to view data at watch points after job execution
@@ -211,25 +214,39 @@ public class WatchRecordAction extends SelectionAction {
 		final JobDetails jobDetails = getJobDetails(job);
 		String csvDebugFileAbsolutePath = null;
 		String csvDebugFileName = null;
+		
 		try {
 			csvDebugFileAbsolutePath = DebugServiceClient.INSTANCE.getDebugFile(jobDetails, Utils.INSTANCE.getFileSize()).trim();
-			csvDebugFileName = csvDebugFileAbsolutePath.substring(csvDebugFileAbsolutePath.lastIndexOf("/") + 1,
-					csvDebugFileAbsolutePath.length()).replace(DEBUG_DATA_FILE_EXTENTION, "").trim();
-		} catch (Exception e1) {
+		} catch (NumberFormatException e4) {
 			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
-			logger.error("Unable to fetch debug file", e1);
+			logger.error("Unable to fetch debug file", e4);
+			return;
+		} catch (HttpException e4) {
+			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
+			logger.error("Unable to fetch debug file", e4);
+			return;
+		} catch (MalformedURLException e4) {
+			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
+			logger.error("Unable to fetch debug file", e4);
+			return;
+		} catch (IOException e4) {
+			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
+			logger.error("Unable to fetch debug file", e4);
 			return;
 		}
+		csvDebugFileName = csvDebugFileAbsolutePath.substring(csvDebugFileAbsolutePath.lastIndexOf("/") + 1,
+				csvDebugFileAbsolutePath.length()).replace(DEBUG_DATA_FILE_EXTENTION, "").trim();
 				
 		//Copy csv debug file to Data viewers temporary file location
 		String dataViewerDebugFile = getDataViewerDebugFile(csvDebugFileName);		
 		try {
 			copyCSVDebugFileToDataViewerStagingArea(jobDetails, csvDebugFileAbsolutePath, dataViewerDebugFile);
-		} catch (Exception e3) {
+		} catch (IOException | JSchException e1) {
 			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
-			logger.error("Unable to fetch debug file", e3);
+			logger.error("Unable to fetch debug file", e1);
 			return;
 		}
+		
 		
 		//Delete csv debug file after copy
 		final String dataViewerFilePath= getDataViewerDebugFilePath().trim();
@@ -237,8 +254,14 @@ public class WatchRecordAction extends SelectionAction {
 		final String dataViewerWindowTitle = dataViewerWindowName;		
 		try {
 			DebugServiceClient.INSTANCE.deleteDebugFile(jobDetails);
-		} catch (Exception e2) {
-			logger.warn("Unable to delete debug file",e2);
+		} catch (NumberFormatException e1) {
+			logger.warn("Unable to delete debug file",e1);
+		} catch (HttpException e1) {
+			logger.warn("Unable to delete debug file",e1);
+		} catch (MalformedURLException e1) {
+			logger.warn("Unable to delete debug file",e1);
+		} catch (IOException e1) {
+			logger.warn("Unable to delete debug file",e1);
 		}
 		
 		//Check for empty csv debug file
@@ -256,16 +279,12 @@ public class WatchRecordAction extends SelectionAction {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				try {
-					DebugDataViewer window = new DebugDataViewer(dataViewerFilePath, dataViewerFile, dataViewerWindowTitle,
-							jobDetails);
-					window.setBlockOnOpen(true);
-					dataViewerMap.put(dataViewerWindowTitle, window);
-					window.open();
-				} catch (Exception e) {
-					logger.debug(Messages.UNABLE_TO_OPEN_DATA_VIEWER, e);
-					MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_OPEN_DATA_VIEWER);
-				}
+				
+				DebugDataViewer window = new DebugDataViewer(dataViewerFilePath, dataViewerFile, dataViewerWindowTitle,
+						jobDetails);
+				window.setBlockOnOpen(true);
+				dataViewerMap.put(dataViewerWindowTitle, window);
+				window.open();
 				dataViewerMap.remove(dataViewerWindowTitle);
 			}
 		});
@@ -293,8 +312,7 @@ public class WatchRecordAction extends SelectionAction {
 		return false;
 	}
 
-	private void copyCSVDebugFileToDataViewerStagingArea(JobDetails jobDetails, String csvDebugFileAbsolutePath, String dataViewerDebugFile)
-			throws Exception {
+	private void copyCSVDebugFileToDataViewerStagingArea(JobDetails jobDetails, String csvDebugFileAbsolutePath, String dataViewerDebugFile) throws IOException, JSchException{
 		if (!jobDetails.isRemote()) {
 			String sourceFile = csvDebugFileAbsolutePath.trim();
 			File file = new File(dataViewerDebugFile);

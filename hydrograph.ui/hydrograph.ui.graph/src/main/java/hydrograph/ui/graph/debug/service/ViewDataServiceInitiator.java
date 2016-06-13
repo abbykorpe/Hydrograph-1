@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.Platform;
 import org.slf4j.Logger;
 
 /**
- * The Class ViewDataServiceInitiator is used to start rest service in local mode @portNo#8004
+ * The Class ViewDataServiceInitiator is used to start rest service in local mode
  * @author Bitwise
  *
  */
