@@ -13,6 +13,9 @@ allprojects {
     apply plugin: 'idea'
     apply plugin: 'java'
     apply plugin: 'eclipse'
+    apply plugin: 'maven'
+	
+	//project.version=version
 	
     sourceSets{
         main.java.srcDir 'src/main/java'
@@ -31,21 +34,29 @@ allprojects {
 	task sourcesJar( type: Jar, dependsOn: classes ) {
     from sourceSets.main.allSource
     classifier = 'sources'
-  }
+    }
 }
 
 jar {
 	manifest {
         attributes 'Implementation-Title': 'hydrograph.engine',
-                'Implementation-Version': version,
-                'Main-Class': 'hydrograph.engine.commandline.utilities.BHSExecution'
+                //'Implementation-Version': version,
+                'Main-Class': 'hydrograph.engine.commandline.utilities.HydrographExecution'
     }
+    version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar 
     
     dependsOn { subprojects.jar }
     subprojects.each { proj ->
         from { zipTree(proj.jar.archivePath) }
     }
 }
+
+task writePom {
+    pom {
+        project {
+           }
+    	}.writeTo("$buildDir/pom.xml")
+	}
 
 task wrapper(type: Wrapper) {
   gradleVersion = '1.9'

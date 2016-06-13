@@ -8,7 +8,6 @@ sourceCompatibility = 1.7
 
 group = 'hydrograph'
 archivesBaseName = 'hydrograph.engine.cascading'
-
 ext.cascadingVersion = '3.0.1'
 ext.hadoopVersion = '2.6.0'
 ext.hiveVersion = '1.2.0'
@@ -44,10 +43,18 @@ publishing {
 
 jar {
     manifest {
-        attributes 'Implementation-Title': archivesBaseName,
-                'Implementation-Version': version
+        attributes 'Implementation-Title': archivesBaseName
+                //,'Implementation-Version': version
     }
+    version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar
 }
+
+task writePom {
+    pom {
+        project {
+           }
+    	}.writeTo("$buildDir/pom.xml")
+	}
 
 test {
     exclude '**/CascadingTestCase*'
@@ -75,7 +82,6 @@ repositories {
     }
 
 }
-
 
 dependencies {
 	compile group: 'cascading.avro', name: 'avro-scheme', version: '2.5.0'

@@ -10,11 +10,19 @@ archivesBaseName = 'hydrograph.engine.transform'
 
 jar {
     manifest {
-        attributes 'Implementation-Title': archivesBaseName,
-                'Implementation-Version': version
+        attributes 'Implementation-Title': archivesBaseName
+                //,'Implementation-Version': version
     }
+    version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar 
 }
 
+task writePom {
+    pom {
+        project {
+           }
+    	}.writeTo("$buildDir/pom.xml")
+	}
+	
 publishing {
     publications {
         mavenJava(MavenPublication) {
