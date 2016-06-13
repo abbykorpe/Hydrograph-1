@@ -924,7 +924,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	}
 
-
 	
 	public String  generateUniqueJobId() throws NoSuchAlgorithmException{
 		SecureRandom random =  SecureRandom.getInstance("SHA1PRNG");
@@ -1025,8 +1024,24 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void doSaveAs() {
+		Map<String, String> currentParameterMap = getCurrentParameterMap();
 		IFile file=opeSaveAsDialog();
 		saveJob(file);
+		copyParameterFile(currentParameterMap);
+	}
+
+
+	private void copyParameterFile(Map<String, String> currentParameterMap) {
+		
+		ParameterFileManager parameterFilemanager = new ParameterFileManager(getParameterFile());
+		
+		try {
+			parameterFilemanager.storeParameters(currentParameterMap);
+		} catch (IOException io) {
+			logger.error("Failed to copy parameterMap to .properties file");
+		}
+		
+		refreshParameterFileInProjectExplorer();
 	}
 
 	public void saveJob(IFile file) {
