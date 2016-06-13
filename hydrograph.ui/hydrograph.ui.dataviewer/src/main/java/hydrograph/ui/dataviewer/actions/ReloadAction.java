@@ -93,6 +93,8 @@ public class ReloadAction extends Action {
 
 		String csvDebugFileLocation = getCSVDebugFileLocation();
 		if(csvDebugFileLocation==null){
+			logger.error("No debug file recieved from service");
+			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_LOAD_DEBUG_FILE);
 			return;
 		}
 		

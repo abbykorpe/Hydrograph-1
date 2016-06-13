@@ -110,8 +110,10 @@ public class StatusManager {
 					+ STATUS_MESSAGE_SEPARATOR);
 		} 
 		
-		if (!StringUtils.isEmpty(status.getStatusMessage()))
+		if (!StringUtils.isEmpty(status.getStatusMessage())){
 			stringBuilder.append(status.getStatusMessage() + STATUS_MESSAGE_SEPARATOR);
+		}
+			
 		
 				
 		
