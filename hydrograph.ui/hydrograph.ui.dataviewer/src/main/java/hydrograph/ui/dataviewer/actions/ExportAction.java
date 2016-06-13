@@ -14,8 +14,10 @@
 package hydrograph.ui.dataviewer.actions;
 
 import hydrograph.ui.common.util.ConvertHexValues;
-import hydrograph.ui.dataviewer.datastructures.RowField;
+import hydrograph.ui.dataviewer.Activator;
+import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.datastructures.RowData;
+import hydrograph.ui.dataviewer.datastructures.RowField;
 import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -54,13 +56,11 @@ public class ExportAction extends Action {
 	private String delimiter;
 	private String quoteCharactor;
 	private static final String EXPORT_FILE = "Export File";
-	private static final String PLUGIN_NAME = "hydrograph.ui.dataviewer";
 	private static final String EXPORT_DATA_DEFAULT_PATH = "exportDataDefaultpath";
 	private static final String DEFAULT = "default";
 	private static final String DEFAILT_FILE_NAME = "export_data.csv";
 	private static final String INFORMATION = "Information";
 	private static final String ERROR = "Error";
-	private String ERROR_MESSAGE = "File is open. Please close it to replace it.";
 	private Logger logger = LogFactory.INSTANCE.getLogger(ExportAction.class);
 	private static final String LABEL = "Export Data";
 
@@ -85,24 +85,17 @@ public class ExportAction extends Action {
 		addRowsDataInList(tableViewer, eachRowData, exportedfileDataList);
 		FileDialog fileDialog = new FileDialog(Display.getDefault().getActiveShell(), SWT.SAVE);
 		String filePath = getPathOfFileDialog(fileDialog);
-		try {
-			writeDataInFile(exportedfileDataList, filePath);
-		} catch (IOException e) {
-			logger.error("Error occur while writing data in csv File: " , e);
-		}
+		writeDataInFile(exportedfileDataList, filePath);
 	}
 
 	private void showMessage(String message, String messageBoxTitle, int icon) {
 		MessageBox messageBox = new MessageBox(new Shell(), SWT.OK | icon);
 		messageBox.setText(messageBoxTitle);
 		messageBox.setMessage(message);
-		int response = messageBox.open();
-		if (response == SWT.OK) {
-			// do nothing
-		}
+		messageBox.open();
 	}
 
-	private void writeDataInFile(List<String[]> fileDataList, String filePath) throws IOException {
+	private void writeDataInFile(List<String[]> fileDataList, String filePath){
 		CSVWriter writer = null;
 		FileWriter fileWriter = null;
 		try {
@@ -117,13 +110,21 @@ public class ExportAction extends Action {
 				}
 			}
 		} catch (IOException e1) {
-			showMessage(ERROR_MESSAGE, ERROR, SWT.ICON_ERROR);
+			showMessage(Messages.ERROR_MESSAGE, ERROR, SWT.ICON_ERROR);
 		} finally {
 			if (fileWriter != null) {
-				fileWriter.close();
+				try {
+					fileWriter.close();
+				} catch (IOException e) {
+					logger.error("Stream of File writer is not closing",e);
+				}
 			}
 			if (writer != null) {
-				writer.close();
+				try {
+					writer.close();
+				} catch (IOException e) {
+					logger.error("Stream of CSV writer is not closing",e);
+				}
 			}
 		}
 	}
@@ -141,8 +142,8 @@ public class ExportAction extends Action {
 	}
 
 	private String readExportDataDefaultPathFromFile() {
-		IScopeContext context = new InstanceScope();
-		IEclipsePreferences eclipsePreferences = context.getNode(PLUGIN_NAME);
+		IScopeContext context = InstanceScope.INSTANCE;
+		IEclipsePreferences eclipsePreferences = context.getNode(Activator.PLUGIN_ID);
 		String exportDataDefaultpath = eclipsePreferences.get(EXPORT_DATA_DEFAULT_PATH, DEFAULT);
 		exportDataDefaultpath = exportDataDefaultpath.equalsIgnoreCase(DEFAULT) ? " " : exportDataDefaultpath;
 		return exportDataDefaultpath;
