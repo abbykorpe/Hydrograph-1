@@ -54,7 +54,6 @@ public class ELTLookupMapWidget extends AbstractWidget {
 
 	private String propertyName;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-	private ELTLookupMapWizard lookupMapWizard;
 	private LookupMappingGrid lookupMappingGrid;
 	private List<AbstractWidget> widgets;
 	
@@ -131,7 +130,7 @@ public class ELTLookupMapWidget extends AbstractWidget {
 			 List<GridRow> outputSchemaGridRowList = new LinkedList<>();
 			 
 			 for(LookupMapProperty row : lookupMapRows){
-				 System.out.println("Row: "+row.getSource_Field()+ "->"+row.getOutput_Field());
+
 				 if(!ParameterUtil.isParameter(row.getSource_Field())){
 					 GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
 					 GridRow outputFieldSchema = null;

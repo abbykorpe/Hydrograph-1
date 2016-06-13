@@ -364,8 +364,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		property.put(Constants.SCHEMA_TO_PROPAGATE,schemaMap);
 
 		property.put(propertyName, schema);
-		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), schemaMap);//
-		System.out.println(this.properties);
+		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), schemaMap);
 		return property;
 	}
 	
@@ -1403,6 +1402,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		
 		Schema schema = getSchemaForInternalPropagation();
 
+
 		Schema originalSchema = (Schema) getComponent().getProperties().get("schema");
 		if (originalSchema != null && !originalSchema.getGridRow().isEmpty()) {
 			
@@ -1410,12 +1410,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			List<String> operationFieldList = getOperationFieldList();
 
 			for (GridRow row : schema.getGridRow()) {
+
 				if (existingFields.contains(row)) {
 					if (!operationFieldList.contains(row.getFieldName())) {
 						originalSchema.getGridRow().set(existingFields.indexOf(row), row.copy());
 					}
 				} else if (!SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName())) {
-					originalSchema.getGridRow().add(row.copy());
+
 				}
 			}
 
@@ -1427,7 +1428,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				eLTDetails.setGrids(schemaGridRowList);
 				tableViewer.setInput(schemaGridRowList);
 				tableViewer.refresh();
-				toggleSchema(true);
+				toggleSchema(true); 
 			}
 			if (!originalSchema.getIsExternal()) {
 				external = false;
