@@ -355,13 +355,16 @@ public class WatchRecordAction extends SelectionAction {
 	private String getDataViewerDebugFilePath() {
 		String dataViewerDebugFilePath = Utils.INSTANCE.getDataViewerDebugFilePath();
 		dataViewerDebugFilePath=dataViewerDebugFilePath.trim();
-		
-		
+				
 		if(OSValidator.isWindows()){
 			if(dataViewerDebugFilePath.startsWith("/")){
 				dataViewerDebugFilePath = dataViewerDebugFilePath.replaceFirst("/", "").replace("/", "\\");
-			}			 
+			}		
+			dataViewerDebugFilePath = dataViewerDebugFilePath + "\\";
+		}else{
+			dataViewerDebugFilePath = dataViewerDebugFilePath + "/";
 		}
+		
 		return dataViewerDebugFilePath;
 	}	
 }
@@ -372,8 +375,7 @@ class WatchRecordInner {
 	private String currentJob;
 	private String uniqueJobId;
 
-	public WatchRecordInner() {
-		// TODO Auto-generated constructor stub
+	public WatchRecordInner() {		
 	}
 
 	public String getUniqueJobId() {
