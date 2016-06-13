@@ -15,13 +15,13 @@ package hydrograph.ui.dataviewer.constants;
 
 /**
  * 
- * Class hold type of message box 
+ * Class hold types of message box 
  * 
  * @author Bitwise
  *
  */
 public class MessageBoxText {
-	public static String ERROR="Error";
-	public static String WARNING="Warning";
-	public static String INFO="Information";
+	public static final String ERROR="Error";
+	public static final String WARNING="Warning";
+	public static final String INFO="Information";
 }

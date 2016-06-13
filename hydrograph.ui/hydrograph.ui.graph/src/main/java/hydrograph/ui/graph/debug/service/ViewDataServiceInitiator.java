@@ -19,24 +19,20 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.IOException;
 import java.net.BindException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.UnknownHostException;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
 import org.slf4j.Logger;
 
-
-
 /**
- * The Class ViewDataServiceInitiator is used to start rest service in local mode @portNo#8004
- * @author vibhort
+ * The Class ViewDataServiceInitiator is used to start rest service in local mode
+ * @author Bitwise
  *
  */
 public class ViewDataServiceInitiator {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ViewDataServiceInitiator.class);
-	
+	private static final String DRIVER_CLASS = " hydrograph.server.debug.service.DebugService";
 	public static void startService(){	
 		try{
 			startServer();
@@ -53,12 +49,12 @@ public class ViewDataServiceInitiator {
 
 	private static void startServer() throws InterruptedException, IOException {
 		if(OSValidator.isWindows()){
-			String command= "java -classpath " + getInstallationConfigPath().trim() + ";" + getInstallationPath() + " hydrograph.server.debug.service.DebugService";
+			String command= "java -classpath " + getInstallationConfigPath().trim() + ";" + getInstallationPath() + DRIVER_CLASS;
 			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", command});
 			builder.start();
 		}
 		else if(OSValidator.isMac()){
-			String command="java -cp " + getInstallationConfigPath().trim() + ":" + getInstallationPath() + " hydrograph.server.debug.service.DebugService";
+			String command="java -cp " + getInstallationConfigPath().trim() + ":" + getInstallationPath() + DRIVER_CLASS;
             ProcessBuilder builder = new ProcessBuilder(new String[]{"bash", "-c", command});
             builder.start();
 
@@ -82,7 +78,6 @@ public class ViewDataServiceInitiator {
 	
 	private static String getInstallationConfigPath()  {
 		String path = Platform.getInstallLocation().getURL().getPath();
-		String restServiceJar = DebugHelper.INSTANCE.restServiceJar();
 		if(StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/") && OSValidator.isWindows()){
 			path = StringUtils.substring(path, 1);
 		}

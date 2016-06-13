@@ -13,43 +13,77 @@
 
 package hydrograph.ui.dataviewer.support;
 
-import hydrograph.ui.dataviewer.adapters.CSVAdapter;
+import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
+import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.constants.ControlConstants;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * Data viewer status and controls manager
+ * 
+ * @author Bitwise
+ *
+ */
 public class StatusManager {
+	private static final String STATUS_MESSAGE_SEPARATOR = " | ";
 	private StatusLineManager statusLineManager;
-	private CSVAdapter csvAdapter;
+	private DataViewerAdapter dataViewerAdapter;
 	private Map<String,Control> windowControls;
 	
-	public StatusManager(){
-		
-	}
-
+	/**
+	 * 
+	 * Get data viewer status bar
+	 * 
+	 * @return {@link StatusLineManager}
+	 */
 	public StatusLineManager getStatusLineManager() {
 		return statusLineManager;
 	}
 	
-	public void setCsvAdapter(CSVAdapter csvAdapter) {
-		this.csvAdapter = csvAdapter;
+	/**
+	 * 
+	 * Set {@link DataViewerAdapter}
+	 * 
+	 * @param dataViewerAdapter
+	 */
+	public void setDataViewerAdapter(DataViewerAdapter dataViewerAdapter) {
+		this.dataViewerAdapter = dataViewerAdapter;
 	}
 
+	/**
+	 * 
+	 * Set list of window controls
+	 * 
+	 * @param windowControls
+	 */
 	public void setWindowControls(Map<String,Control> windowControls) {
 		this.windowControls = windowControls;
 	}
 
+	/**
+	 * 
+	 * Set {@link StatusLineManager}
+	 * 
+	 * @param statusLineManager
+	 */
 	public void setStatusLineManager(StatusLineManager statusLineManager) {
 		this.statusLineManager = statusLineManager;
 	}	
 	
+	/**
+	 * 
+	 * Set status in status data viewer status bar
+	 * 
+	 * @param status
+	 */
 	public void setStatus(StatusMessage status) {
 		
 		statusLineManager.setErrorMessage(null);
@@ -66,18 +100,20 @@ public class StatusManager {
 		
 		StringBuilder stringBuilder = new StringBuilder();
 		
-		stringBuilder.append("Showing records from " + (csvAdapter.getOFFSET() + 1)
-				+ " to " + (csvAdapter.getOFFSET() + csvAdapter.getPAGE_SIZE())
-				+ " | ");
+		stringBuilder.append(Messages.SHOWING_RECORDS_FROM + " " + (dataViewerAdapter.getOffset() + 1)
+				+ " to " + (dataViewerAdapter.getOffset() + dataViewerAdapter.getPageSize())
+				+ STATUS_MESSAGE_SEPARATOR);
 		
 		
-		if (csvAdapter.getRowCount() != null) {
-			stringBuilder.append("Record Count: " + csvAdapter.getRowCount()
-					+ " | ");
+		if (dataViewerAdapter.getRowCount() != null) {
+			stringBuilder.append(Messages.ROW_COUNT + " " + dataViewerAdapter.getRowCount()
+					+ STATUS_MESSAGE_SEPARATOR);
 		} 
 		
-		if (!StringUtils.isEmpty(status.getStatusMessage()))
-			stringBuilder.append(status.getStatusMessage() + " | ");
+		if (!StringUtils.isEmpty(status.getStatusMessage())){
+			stringBuilder.append(status.getStatusMessage() + STATUS_MESSAGE_SEPARATOR);
+		}
+			
 		
 				
 		
@@ -87,85 +123,137 @@ public class StatusManager {
 		updatePageNumberDisplayPanel();
 	}
 	
-	
+	/**
+	 * Append status message
+	 * 
+	 * @param message
+	 */
 	public void appendStatusMessage(String message) {
-		statusLineManager.setMessage(" | " + message);
+		statusLineManager.setMessage(STATUS_MESSAGE_SEPARATOR + message);
 	}
 		
-	
+	/**
+	 * 
+	 * Enable/Disable jump page panel from data viewer window 
+	 * 
+	 * @param enabled
+	 */
 	public void enableJumpPagePanel(boolean enabled){
 		windowControls.get(ControlConstants.JUMP_BUTTON).setEnabled(enabled);
 		windowControls.get(ControlConstants.JUMP_TEXT).setEnabled(enabled);
-		if(csvAdapter.getRowCount()!=null){
-			if(((long)csvAdapter.getTotalNumberOfPages()) == csvAdapter.getCurrentPageNumber()){
+		if(dataViewerAdapter.getRowCount()!=null){
+			if(((long)dataViewerAdapter.getTotalNumberOfPages()) == dataViewerAdapter.getCurrentPageNumber()){
 				windowControls.get(ControlConstants.NEXT_BUTTON).setEnabled(false);
 			}
 		}
 	}
 	
+	/**
+	 * 
+	 * Enable/Disable NEXT/PREVIOUS page buttons from data viewer window 
+	 * 
+	 * @param enabled
+	 */
 	public void enablePageSwitchPanel(boolean enabled){
 		windowControls.get(ControlConstants.PREVIOUS_BUTTON).setEnabled(enabled);
 		windowControls.get(ControlConstants.NEXT_BUTTON).setEnabled(enabled);
 	}
 	
+	/**
+	 * 
+	 * Enable/Disable NEXT page buttons from data viewer window 
+	 * 
+	 * @param enabled
+	 */
 	public void enableNextPageButton(boolean enabled){
 		windowControls.get(ControlConstants.NEXT_BUTTON).setEnabled(enabled);
 		
 	}
 	
+	/**
+	 * 
+	 * Enable/Disable PREVIOUS page buttons from data viewer window 
+	 * 
+	 * @param enabled
+	 */
 	public void enablePreviousPageButton(boolean enabled){
 		windowControls.get(ControlConstants.PREVIOUS_BUTTON).setEnabled(enabled);
 	}
 	
+	/**
+	 * 
+	 * Enable/Disable Pagination Panel from data viewer window 
+	 * 
+	 * @param enabled
+	 */
 	public void enablePaginationPanel(boolean enabled){
 		for(String control:windowControls.keySet()){
 			windowControls.get(control).setEnabled(enabled);
 		}
 	}
 	
+	/**
+	 * Update page number display panel from data viewer window 
+	 * 
+	 */
 	public void updatePageNumberDisplayPanel(){
-		((Text)windowControls.get(ControlConstants.PAGE_NUMBER_DISPLAY)).setText(csvAdapter.getPageStatusNumber());
+		((Text)windowControls.get(ControlConstants.PAGE_NUMBER_DISPLAY)).setText(dataViewerAdapter.getPagePageStatus());
 	}
 
+	/**
+	 * 
+	 * Set all controls enabled or disabled based status of row count
+	 * 
+	 * @param enabled
+	 */
 	public void setAllWindowControlsEnabled(boolean enabled) {
 		for(String control: windowControls.keySet()){
 			windowControls.get(control).setEnabled(enabled);
 		}
 		
-		if(csvAdapter.getRowCount()==null){
+		if(dataViewerAdapter.getRowCount()==null){
 			enableJumpPagePanel(false);
 		}else{		
-			if(((long)csvAdapter.getTotalNumberOfPages()) == csvAdapter.getCurrentPageNumber()){
+			if(((long)dataViewerAdapter.getTotalNumberOfPages()) == dataViewerAdapter.getCurrentPageNumber()){
 				enableNextPageButton(false);
 			}
 		}
 		
-		if(csvAdapter.getCurrentPageNumber()==1){
+		if(dataViewerAdapter.getCurrentPageNumber()==1){
 			enablePreviousPageButton(false);
 		}
 	}
 
-	public void clearJumpToText(){
+	/**
+	 * 
+	 * Clear jump page text box from data viewer window 
+	 * 
+	 */
+	public void clearJumpToPageText(){
 		((Text)windowControls.get(ControlConstants.JUMP_TEXT)).setText("");
 	}
 	
+	/**
+	 * Enables initial pagination panel controls
+	 * 
+	 */
 	public void enableInitialPaginationContols(){
-		if(csvAdapter.getRowCount()!=null){
-			if(((long)csvAdapter.getTotalNumberOfPages()) == csvAdapter.getCurrentPageNumber()){
+		if(dataViewerAdapter.getRowCount()!=null){
+			if(((long)dataViewerAdapter.getTotalNumberOfPages()) == dataViewerAdapter.getCurrentPageNumber()){
 				enableNextPageButton(false);
 			}else{
 				enableNextPageButton(true);
 			}
 		}
 		
-		if(csvAdapter.getCurrentPageNumber()==1){
+		if(dataViewerAdapter.getCurrentPageNumber()==1){
 			enablePreviousPageButton(false);
 		}
-		if(csvAdapter.getRowCount()==null)
+		if(dataViewerAdapter.getRowCount()==null){
 			enableJumpPagePanel(false);
-		else
+		}else{
 			enableJumpPagePanel(true);
-		
+		}
 	}	
 }
 

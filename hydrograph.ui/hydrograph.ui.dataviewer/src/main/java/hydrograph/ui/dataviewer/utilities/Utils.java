@@ -14,6 +14,7 @@
 package hydrograph.ui.dataviewer.utilities;
 
 import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.constants.MessageBoxText;
 import hydrograph.ui.dataviewer.constants.PreferenceConstants;
 
@@ -36,17 +37,20 @@ import org.eclipse.swt.widgets.MessageBox;
  *
  */
 public class Utils {
-
-	private static String PREFERANCE_CONTEXT_PLUGIN_NAME = "hydrograph.ui.dataviewer";
-
+	public static Utils INSTANCE= new Utils();
+		
+	private Utils(){
+		
+	}
+	
 	/**
 	 * 
 	 * Returns debug file size from preferences
 	 * 
 	 * @return {@link String}
 	 */
-	public static String getFileSize() {
-		String fileSize = Platform.getPreferencesService().getString(PREFERANCE_CONTEXT_PLUGIN_NAME,
+	public String getFileSize() {
+		String fileSize = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
 				PreferenceConstants.VIEW_DATA_FILE_SIZE, PreferenceConstants.DEFAULT_VIEW_DATA_FILE_SIZE, null);
 		return fileSize;
 	}
@@ -57,7 +61,7 @@ public class Utils {
 	 * 
 	 * @return {@link String}
 	 */
-	public static String getInstallationPath() {
+	public String getInstallationPath() {
 		String installationPath = Platform.getInstallLocation().getURL().getPath();
 		if (OSValidator.isWindows()) {
 			if (installationPath.startsWith("/")) {
@@ -74,8 +78,8 @@ public class Utils {
 	 * 
 	 * @return {@link String}
 	 */
-	public static String getDebugPath() {
-		String debugPath = Platform.getPreferencesService().getString(PREFERANCE_CONTEXT_PLUGIN_NAME,
+	public String getDataViewerDebugFilePath() {
+		String debugPath = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
 				PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, getInstallationPath(), null);
 		return debugPath;
 	}
@@ -86,13 +90,13 @@ public class Utils {
 	 * 
 	 * @return int
 	 */
-	public static int getDefaultPageSize() {
-		String pageSize = Platform.getPreferencesService().getString(PREFERANCE_CONTEXT_PLUGIN_NAME,
+	public int getDefaultPageSize() {
+		String pageSize = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
 				PreferenceConstants.VIEW_DATA_PAGE_SIZE, PreferenceConstants.DEFAULT_VIEW_DATA_PAGE_SIZE, null);
 		return Integer.valueOf(pageSize);
 	}
 
-	private static int getMessageBoxIcon(String messageBoxType){
+	private int getMessageBoxIcon(String messageBoxType){
 		if(StringUtils.equals(MessageBoxText.ERROR, messageBoxType)){
 			return SWT.ICON_ERROR;
 		}else if(StringUtils.equals(MessageBoxText.WARNING, messageBoxType)){
@@ -109,7 +113,7 @@ public class Utils {
 	 * @param messageBoxTitle - Message box title
 	 * @param message - Message to be displayed 
 	 */
-	public static void showMessage(String messageBoxTitle, String message) {
+	public void showMessage(String messageBoxTitle, String message) {
 		int shellStyle= SWT.APPLICATION_MODAL | SWT.OK | getMessageBoxIcon(messageBoxTitle);
 		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(),shellStyle);
 		messageBox.setText(messageBoxTitle);

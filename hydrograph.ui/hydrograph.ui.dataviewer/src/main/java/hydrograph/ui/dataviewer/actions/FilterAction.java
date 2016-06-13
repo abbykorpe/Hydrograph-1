@@ -13,7 +13,7 @@
 
 package hydrograph.ui.dataviewer.actions;
 
-import hydrograph.ui.dataviewer.DebugDataViewer;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
 
@@ -28,7 +28,6 @@ public class FilterAction extends Action {
 	}
 	@Override
 	public void run() {
-		System.out.println("filter action");
 		super.run();
 	}
 }

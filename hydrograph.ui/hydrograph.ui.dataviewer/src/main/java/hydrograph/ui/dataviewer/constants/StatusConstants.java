@@ -13,6 +13,13 @@
 
 package hydrograph.ui.dataviewer.constants;
 
+/**
+ * 
+ * Status constants
+ * 
+ * @author Bitwise
+ *
+ */
 public class StatusConstants {
 	public static final int EOF=1;
 	public static final int BOF=-1;

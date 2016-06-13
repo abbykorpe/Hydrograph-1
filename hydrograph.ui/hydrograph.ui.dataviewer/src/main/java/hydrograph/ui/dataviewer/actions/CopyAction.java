@@ -14,9 +14,9 @@
 package hydrograph.ui.dataviewer.actions;
 
 import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.dataviewer.DebugDataViewer;
-import hydrograph.ui.dataviewer.datastructures.ColumnData;
+import hydrograph.ui.dataviewer.datastructures.RowField;
 import hydrograph.ui.dataviewer.datastructures.RowData;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
@@ -61,7 +61,7 @@ public class CopyAction extends Action {
 		StringBuffer stringBuffer = new StringBuffer();
 		for (Item item : debugDataViewer.getTableViewer().getTable().getSelection()) {
 			RowData rowData = (RowData) item.getData();
-			for (ColumnData columnData : rowData.getColumns()) {
+			for (RowField columnData : rowData.getRowFields()) {
 				stringBuffer.append(columnData.getValue() + "\t");
 			}
 			stringBuffer.append("\n");

@@ -281,5 +281,6 @@
 	    <module>hydrograph.ui.platformspecificplugins</module>
 	    <module>hydrograph.ui.validators</module>
 		<module>hydrograph.ui.dataviewer</module>
+		<module>hydrograph.ui.communication</module>
 	</modules>
 </project>

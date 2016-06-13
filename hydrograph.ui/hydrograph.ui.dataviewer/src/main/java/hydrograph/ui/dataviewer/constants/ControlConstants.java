@@ -13,10 +13,26 @@
 
 package hydrograph.ui.dataviewer.constants;
 
+import org.eclipse.swt.graphics.Point;
+
+/**
+ * 
+ * Constants for controls on Data viewer
+ * 
+ * @author Bitwise
+ *
+ */
 public class ControlConstants {
-	public static String PREVIOUS_BUTTON="PREVIOUS_BUTTON";
-	public static String NEXT_BUTTON="NEXT_BUTTON";
-	public static String JUMP_BUTTON="JUMP_BUTTON";
-	public static String JUMP_TEXT="JUMP_TEXT";
-	public static String PAGE_NUMBER_DISPLAY="PAGE_NUMBER_DISPLAY";
+	public static final String PREVIOUS_BUTTON="PREVIOUS_BUTTON";
+	public static final String NEXT_BUTTON="NEXT_BUTTON";
+	public static final String JUMP_BUTTON="JUMP_BUTTON";
+	public static final String JUMP_TEXT="JUMP_TEXT";
+	public static final String PAGE_NUMBER_DISPLAY="PAGE_NUMBER_DISPLAY";
+	
+	public static final String PREVIOUS_BUTTON_DISPLAY_TEXT="Previous";
+	public static final String NEXT_BUTTON_DISPLAY_TEXT="Next";
+	public static final String JUMP_BUTTON_DISPLAY_TEXT="Go";	
+	public static final String JUMP_TO_PAGE_LABEL_TEXT="Jump to Page: ";	
+	
+	public static final Point DATA_VIEWER_MINIMUM_SIZE=new Point(848, 469);
 }

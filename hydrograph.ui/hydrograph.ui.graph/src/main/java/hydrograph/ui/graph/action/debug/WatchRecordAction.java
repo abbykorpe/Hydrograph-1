@@ -1,28 +1,30 @@
 /********************************************************************************
-  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
-  * http://www.apache.org/licenses/LICENSE-2.0
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  ******************************************************************************/
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 
 package hydrograph.ui.graph.action.debug;
 
+import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.dataviewer.DebugDataViewer;
-import hydrograph.ui.dataviewer.ReloadInformation;
+import hydrograph.ui.communication.debugservice.DebugServiceClient;
+import hydrograph.ui.communication.utilities.SCPUtility;
+import hydrograph.ui.dataviewer.constants.MessageBoxText;
 import hydrograph.ui.dataviewer.utilities.Utils;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
-import hydrograph.ui.graph.debug.service.DebugRestClient;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.debugconverter.SchemaHelper;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
@@ -31,25 +33,24 @@ import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -58,31 +59,33 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
- 
+
+import com.jcraft.jsch.JSchException;
+
 /**
  * The Class WatchRecordAction used to view data at watch points after job execution
+ * 
  * @author Bitwise
- *
+ * 
  */
 public class WatchRecordAction extends SelectionAction {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(WatchRecordAction.class);
 	private boolean isWatcher;
 	private WatchRecordInner watchRecordInner = new WatchRecordInner();
-	
-	private HashMap<String,DebugDataViewer> dataViewerMap;
+
+	private Map<String, DebugDataViewer> dataViewerMap;
+
+	private static final String DEBUG_DATA_FILE_EXTENTION=".csv";
 	
 	public WatchRecordAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(true);
 	}
-
-
+	
 	@Override
 	protected void init() {
 		super.init();
@@ -92,54 +95,54 @@ public class WatchRecordAction extends SelectionAction {
 		dataViewerMap = new LinkedHashMap<>();
 		JobManager.INSTANCE.setDataViewerMap(dataViewerMap);
 	}
-	
-	private boolean createWatchCommand(List<Object> selectedObjects) throws CoreException  {
-		for(Object obj:selectedObjects){
-			if(obj instanceof LinkEditPart)	{
-				Link link = (Link)((LinkEditPart)obj).getModel();
+
+	private void createWatchCommand() throws CoreException {
+		List<Object> selectedObjects = getSelectedObjects();
+		for (Object obj : selectedObjects) {
+			if (obj instanceof LinkEditPart) {
+				Link link = (Link) ((LinkEditPart) obj).getModel();
 				String componentId = link.getSource().getComponentLabel().getLabelContents();
 				Component component = link.getSource();
-				if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
+				if (StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)) {
 					String str = DebugHelper.INSTANCE.getSubgraphComponent(component);
-					String[] str1 = StringUtils.split(str,".");
+					String[] str1 = StringUtils.split(str, ".");
 					String componentID = str1[0];
 					String socketId = str1[1];
-					watchRecordInner.setComponentId(link.getSource().getComponentLabel().getLabelContents()+"."+componentID);
+					watchRecordInner
+							.setComponentId(link.getSource().getComponentLabel().getLabelContents() + "." + componentID);
 					watchRecordInner.setSocketId(socketId);
-				}else{
+				} else {
 					watchRecordInner.setComponentId(componentId);
 					String socketId = link.getSourceTerminal();
 					watchRecordInner.setSocketId(socketId);
 				}
-				
+
 				isWatcher = checkWatcher(link.getSource(), link.getSourceTerminal());
-				
-				return true;
-			}	
+			}
 		}
-		return false;
 	}
-	
+
 	private boolean checkWatcher(Component selectedComponent, String portName) {
-		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActiveEditor();
 		IPath path = new Path(editor.getTitleToolTip());
 		String currentJob = path.lastSegment().replace(Constants.JOB_EXTENSION, "");
 		watchRecordInner.setCurrentJob(currentJob);
-		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
+		GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor).getAdapter(GraphicalViewer.class);
 		String uniqueJobId = editor.getJobId();
 		watchRecordInner.setUniqueJobId(uniqueJobId);
-		 
+
 		for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator.hasNext();) {
 			EditPart editPart = (EditPart) iterator.next();
-			if(editPart instanceof ComponentEditPart) {
-				Component comp = ((ComponentEditPart)editPart).getCastedModel();
-				if(comp.equals(selectedComponent)){
+			if (editPart instanceof ComponentEditPart) {
+				Component comp = ((ComponentEditPart) editPart).getCastedModel();
+				if (comp.equals(selectedComponent)) {
 					List<PortEditPart> portEditParts = editPart.getChildren();
-					for(AbstractGraphicalEditPart part:portEditParts) {	
-						if(part instanceof PortEditPart){
-							String port_Name = ((PortEditPart)part).getCastedModel().getTerminal();
-							if(port_Name.equals(portName)){
-								return ((PortEditPart)part).getPortFigure().isWatched();
+					for (AbstractGraphicalEditPart part : portEditParts) {
+						if (part instanceof PortEditPart) {
+							String port_Name = ((PortEditPart) part).getCastedModel().getTerminal();
+							if (port_Name.equals(portName)) {
+								return ((PortEditPart) part).getPortFigure().isWatched();
 							}
 						}
 					}
@@ -148,333 +151,263 @@ public class WatchRecordAction extends SelectionAction {
 		}
 		return false;
 	}
-	
-	
-	private String getLocalADVData() {
-		String basePath = null,ipAddress = null,userID = null,password = null,port_no = null;
-		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
-		if(job!=null){
-			basePath = job.getBasePath();
-			ipAddress = "localhost";
-			userID = job.getUserId();
-			password = job.getPassword();
-			port_no = DebugHelper.INSTANCE.restServicePort();
-		}
-		
-		
-		DebugRestClient debugRestClient = new DebugRestClient();
-		try {
-			
-			 String remoteFilePath = debugRestClient.calltoReadService(ipAddress, port_no,
-			 basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(),
-			 watchRecordInner.getSocketId(), "userID", "password", Utils.getFileSize());
-			 return remoteFilePath;
-		} catch (IOException exception) {
-			logger.error("Connection failed", exception);
-			messageDialog(Messages.REMOTE_MODE_TEXT);
-			return null;
-		} catch (Exception exception) {
-			logger.error("Exception while calling rest service: ", exception);
-			messageDialog(Messages.REMOTE_MODE_TEXT);
-			return null;
-		}
-	}
-		
-	private String getRemoteADVData() {
-		String basePath = null,ipAddress = null,userID = null,password = null,port_no = null;
-		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
-		if(job!=null){
-			basePath = job.getBasePath();
-			ipAddress = job.getIpAddress();
-			userID = job.getUserId();
-			password = job.getPassword();
-			port_no = job.getPortNumber();
-		}
-		
-		logger.info("Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}",
-				new Object[] { basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId() });
-		DebugRestClient debugRestClient = new DebugRestClient();
-		try {
-			
-			 String remoteFilePath = debugRestClient.calltoReadService(ipAddress, port_no,
-			 basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(),
-			 watchRecordInner.getSocketId(), userID, password, Utils.getFileSize());
-			 return remoteFilePath;
-		} catch (IOException exception) {
-			logger.error("Connection failed", exception);
-			messageDialog(Messages.REMOTE_MODE_TEXT);
-			return null;
-		} catch (Exception exception) {
-			logger.error("Exception while calling rest service: ", exception);
-			messageDialog(Messages.REMOTE_MODE_TEXT);
-			return null;
-		}
-	}
 
-	private boolean isLocalDebugMode(){
-		logger.debug("getRunningMode: "+ JobManager.INSTANCE.isLocalMode());
-		return JobManager.INSTANCE.isLocalMode();
-	}
-	
-	private void messageDialog(String message){
-		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.APPLICATION_MODAL | SWT.OK);
-		messageBox.setText(Messages.DEBUG_ALERT_MESSAGE); 
-		messageBox.setMessage(message);
-		messageBox.open();
-	}
-	
 	@Override
 	protected boolean calculateEnabled() {
-		int count =0;
+		int count = 0;
 		List<Object> selectedObject = getSelectedObjects();
-		
+
 		try {
-			createWatchCommand(selectedObject);
+			createWatchCommand();
 		} catch (CoreException exception) {
 			logger.error(exception.getMessage(), exception);
 		}
-		
-		if(!selectedObject.isEmpty() && isWatcher){
-			for(Object obj : selectedObject){
-				if(obj instanceof LinkEditPart)	{
+
+		if (!selectedObject.isEmpty() && isWatcher) {
+			for (Object obj : selectedObject) {
+				if (obj instanceof LinkEditPart) {
 					count++;
 				}
 			}
 		}
-		
-		if(count == 1){
+
+		if (count == 1) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
-	
-	public static String getActiveProjectLocation() {
-		IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActivePart();
-		IFile file = (IFile) workbenchPart.getSite().getPage().getActiveEditor().getEditorInput()
-				.getAdapter(IFile.class);
-		IProject project = file.getProject();
-		String activeProjectLocation = project.getLocation().toOSString();
-		return activeProjectLocation;
-	}
-	
-	
-	private void deleteDownloadedViewDataFile(Job job) {
 
-		try{
-			HttpClient httpClient = new HttpClient();
-
-			String host=job.getIpAddress();
-			String port;
-			if(isLocalDebugMode()){
-				host="localhost";
-			}
-						
-			
-			PostMethod postMethod = new PostMethod("http://" + host + ":" + job.getPortNumber() + "/deleteLocalDebugFile");
-			postMethod.addParameter("jobId", watchRecordInner.getUniqueJobId());
-			postMethod.addParameter("componentId", watchRecordInner.getComponentId());
-			postMethod.addParameter("socketId", watchRecordInner.getSocketId());
-
-			int response = httpClient.executeMethod(postMethod);
-
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		
-	}
-	
 	@Override
-	public void run() {
-		
-		final ReloadInformation reloadInformation = new ReloadInformation();
-		
-		String tempCopyPath = Utils.getDebugPath();
-		tempCopyPath=tempCopyPath.trim();
-		
-		
-		if(OSValidator.isWindows()){
-			if(tempCopyPath.startsWith("/")){
-				tempCopyPath = tempCopyPath.replaceFirst("/", "").replace("/", "\\");
-			}			 
-		}
-		
+	public void run() {			
+		//Create watch command
 		try {
-			createWatchCommand(getSelectedObjects());
+			createWatchCommand();
 		} catch (CoreException e) {
-			e.printStackTrace();
+			logger.error("Unable to create watch command",e);
+			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_CREATE_WATCH_RECORD);
+			return;
 		}
 		
-		
-		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
-		
+		// Check if job is executed in debug mode
+		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());		
 		if(job==null){
-			messageDialog("Looks like you forgot to run the job");
+			MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.FORGOT_TO_EXECUTE_DEBUG_JOB);
 			return;
 		}
 		
-		
-		String windowName = job.getLocalJobID().replace(".", "_") + "_" + watchRecordInner.getComponentId() + "_"
+		//Create data viewer window name, if window exist reopen same window
+		String dataViewerWindowName = job.getLocalJobID().replace(".", "_") + "_" + watchRecordInner.getComponentId() + "_"
 				+ watchRecordInner.getSocketId();
-		if (dataViewerMap.keySet().contains(windowName)) {
-			dataViewerMap.get(windowName).getShell().setActive();
+		if (dataViewerMap.keySet().contains(dataViewerWindowName)) {
+			dataViewerMap.get(dataViewerWindowName).getShell().setActive();
 			return;
 		}
 		
-		String watchFile = null;
-		String watchFileName = null;
+		// Check if watcher exist
 		if (!isWatcher) {
-			messageDialog(Messages.MESSAGES_BEFORE_CLOSE_WINDOW);
-		} else {
-			if (isLocalDebugMode()) {
-				watchFile = getLocalADVData();
-
-				watchFileName = watchFile.substring(watchFile.lastIndexOf("/") + 1, watchFile.length()).replace(".csv", "");
-				try {
-					String destinationFile;
-					if(OSValidator.isWindows()){
-						destinationFile = (tempCopyPath + "\\" + watchFileName.trim() + ".csv").trim();
-					}else{
-						destinationFile = (tempCopyPath + "/" + watchFileName.trim() + ".csv").trim();
-					}
-					
-					String sourceFile = watchFile.trim();
-					
-					File file = new File(destinationFile);
-					if(!file.exists()) { 
-						Files.copy(Paths.get(sourceFile), Paths.get(destinationFile), StandardCopyOption.REPLACE_EXISTING);
-						deleteDownloadedViewDataFile(job);
-					}
-				} catch (IOException e) {
-					messageDialog("Unable to fetach debug file");
-					logger.debug("Unable to fetach debug file",e);
-					return;
-				}
-
-			} else {
-				watchFile = getRemoteADVData();
-				watchFileName = watchFile.substring(watchFile.lastIndexOf("/") + 1, watchFile.length()).replace(".csv", "");
-
-				String destinationFile;
-				if(OSValidator.isWindows()){
-					destinationFile = (tempCopyPath + "\\" + watchFileName.trim() + ".csv").trim();
-				}else{
-					destinationFile = (tempCopyPath + "/" + watchFileName.trim() + ".csv").trim();
-				}
-				File file = new File(destinationFile);
-				if(!file.exists()) { 
-					ScpFrom scpFrom = new ScpFrom();
-					scpFrom.scpFileFromRemoteServer(job.getIpAddress(), job.getUsername(), job.getPassword(), watchFile.trim(),
-							tempCopyPath);					
-				}
-				deleteDownloadedViewDataFile(job);
-			}
+			MessageBox.INSTANCE.showMessage(MessageBox.INFO, Messages.MESSAGES_BEFORE_CLOSE_WINDOW);
+			return;
 		}
+				
+		// Get csv debug file name and location 
+		final JobDetails jobDetails = getJobDetails(job);
+		String csvDebugFileAbsolutePath = null;
+		String csvDebugFileName = null;
 		
-		
-		final String dataViewerFilePath= tempCopyPath.trim();
-		final String dataViewerFileh= watchFileName.trim();
-		final String dataViewerWindowName = windowName;
-		
-		
-		reloadInformation.setComponentID(watchRecordInner.getComponentId());
-		reloadInformation.setComponentSocketID(watchRecordInner.getSocketId());
-		reloadInformation.setUniqueJobID(watchRecordInner.getUniqueJobId());
-		if (isLocalDebugMode()) {
-			reloadInformation.setHost("localhost");
-			reloadInformation.setIsLocalJob(true);
-		}else{
-			reloadInformation.setHost(job.getHost());
-			reloadInformation.setIsLocalJob(false);
-		}
-		reloadInformation.setPassword(job.getPassword());
-		reloadInformation.setUsername(job.getUserId());		
-		reloadInformation.setBasepath(job.getBasePath());
-		reloadInformation.setPort(job.getPortNumber());
-		
-		
-		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(dataViewerFilePath + dataViewerFileh + ".csv"));
-			if (br.readLine() == null) {
-			    messageDialog("Unable to show record, empty debug file");
-			    return;
+			csvDebugFileAbsolutePath = DebugServiceClient.INSTANCE.getDebugFile(jobDetails, Utils.INSTANCE.getFileSize()).trim();
+		} catch (NumberFormatException e4) {
+			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
+			logger.error("Unable to fetch debug file", e4);
+			return;
+		} catch (HttpException e4) {
+			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
+			logger.error("Unable to fetch debug file", e4);
+			return;
+		} catch (MalformedURLException e4) {
+			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
+			logger.error("Unable to fetch debug file", e4);
+			return;
+		} catch (IOException e4) {
+			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
+			logger.error("Unable to fetch debug file", e4);
+			return;
+		}
+		csvDebugFileName = csvDebugFileAbsolutePath.substring(csvDebugFileAbsolutePath.lastIndexOf("/") + 1,
+				csvDebugFileAbsolutePath.length()).replace(DEBUG_DATA_FILE_EXTENTION, "").trim();
+				
+		//Copy csv debug file to Data viewers temporary file location
+		String dataViewerDebugFile = getDataViewerDebugFile(csvDebugFileName);		
+		try {
+			copyCSVDebugFileToDataViewerStagingArea(jobDetails, csvDebugFileAbsolutePath, dataViewerDebugFile);
+		} catch (IOException | JSchException e1) {
+			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
+			logger.error("Unable to fetch debug file", e1);
+			return;
+		}
+		
+		
+		//Delete csv debug file after copy
+		final String dataViewerFilePath= getDataViewerDebugFilePath().trim();
+		final String dataViewerFile= csvDebugFileName.trim();
+		final String dataViewerWindowTitle = dataViewerWindowName;		
+		try {
+			DebugServiceClient.INSTANCE.deleteDebugFile(jobDetails);
+		} catch (NumberFormatException e1) {
+			logger.warn("Unable to delete debug file",e1);
+		} catch (HttpException e1) {
+			logger.warn("Unable to delete debug file",e1);
+		} catch (MalformedURLException e1) {
+			logger.warn("Unable to delete debug file",e1);
+		} catch (IOException e1) {
+			logger.warn("Unable to delete debug file",e1);
+		}
+		
+		//Check for empty csv debug file
+		if(isEmptyDebugCSVFile(dataViewerFilePath, dataViewerFile)){
+			MessageBox.INSTANCE.showMessage(MessageBox.ERROR,Messages.EMPTY_DEBUG_FILE);
+			logger.error("Empty debug file");
+		    return;
+		}
+		
+		//Export Debug file schema
+		String tempSchemaFilePath = dataViewerFilePath+dataViewerFile;
+		SchemaHelper.INSTANCE.exportSchemaGridData(getSelectedObjects(), tempSchemaFilePath);
+				
+		//Open data viewer window
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				
+				DebugDataViewer window = new DebugDataViewer(dataViewerFilePath, dataViewerFile, dataViewerWindowTitle,
+						jobDetails);
+				window.setBlockOnOpen(true);
+				dataViewerMap.put(dataViewerWindowTitle, window);
+				window.open();
+				dataViewerMap.remove(dataViewerWindowTitle);
+			}
+		});
+	}
+
+	private boolean isEmptyDebugCSVFile(String dataViewerFilePath, final String dataViewerFileh) {
+		BufferedReader bufferedReader = null;
+		try {
+			bufferedReader = new BufferedReader(new FileReader(dataViewerFilePath + dataViewerFileh + DEBUG_DATA_FILE_EXTENTION));
+			if (bufferedReader.readLine() == null) {
+			    return true;
 			}
 		} catch (Exception e1) {
-			 messageDialog("Unable to read debug file");
-			logger.debug("Unable to read debug file",e1);
-			return;
+			logger.error(Messages.UNABLE_TO_READ_DEBUG_FILE,e1);
+			return true;
 		}finally{
 			try {
-				if(br != null){
-					br.close();
+				if(bufferedReader != null){
+					bufferedReader.close();
 				}					
 			} catch (IOException e) {
-				logger.debug("Unable to close debug file",e);
+				logger.error(Messages.UNABLE_TO_READ_DEBUG_FILE,e);
 			}
 		}
-		
-		String path = dataViewerFilePath+dataViewerFileh;
-		SchemaHelper.INSTANCE.exportSchemaGridData(getSelectedObjects(), path);
-		
-		Display.getDefault().asyncExec(new Runnable() {
-		      @Override
-		      public void run() {
-		    	  try {
+		return false;
+	}
 
-		  			DebugDataViewer window = new DebugDataViewer(dataViewerFilePath, dataViewerFileh, dataViewerWindowName,reloadInformation);
-		  			window.setBlockOnOpen(true);
-		  			dataViewerMap.put(dataViewerWindowName, window);
-		  			
-		  			window.open();
-		  		} catch (Exception e) {
-		  			logger.debug("Unable to open debug window",e);
-		  			messageDialog("Unable to open debug window");
-		  		}
-		  		dataViewerMap.remove(dataViewerWindowName);
-		      }
-		    });
-		if(dataViewerMap.get(dataViewerWindowName)!=null){
-			dataViewerMap.get(dataViewerWindowName).getShell().setActive();
+	private void copyCSVDebugFileToDataViewerStagingArea(JobDetails jobDetails, String csvDebugFileAbsolutePath, String dataViewerDebugFile) throws IOException, JSchException{
+		if (!jobDetails.isRemote()) {
+			String sourceFile = csvDebugFileAbsolutePath.trim();
+			File file = new File(dataViewerDebugFile);
+			if (!file.exists()) {
+				Files.copy(Paths.get(sourceFile), Paths.get(dataViewerDebugFile), StandardCopyOption.REPLACE_EXISTING);
+			}
+		} else {
+			File file = new File(dataViewerDebugFile);
+			if (!file.exists()) {				
+				SCPUtility.INSTANCE.scpFileFromRemoteServer(jobDetails.getHost(), jobDetails.getUsername(), jobDetails.getPassword(),
+						csvDebugFileAbsolutePath.trim(), getDataViewerDebugFilePath());
+			}
+		}
+	}
+
+	private String getDataViewerDebugFile(String csvDebugFileName) {
+		String dataViewerDebugFile = getDataViewerDebugFilePath();
+		if (OSValidator.isWindows()) {
+			dataViewerDebugFile = (dataViewerDebugFile + "\\" + csvDebugFileName.trim() + DEBUG_DATA_FILE_EXTENTION).trim();
+		} else {
+			dataViewerDebugFile = (dataViewerDebugFile + "/" + csvDebugFileName.trim() + DEBUG_DATA_FILE_EXTENTION).trim();
+		}
+		return dataViewerDebugFile;
+	}
+
+	private JobDetails getJobDetails(Job job) {
+		final JobDetails jobDetails = new JobDetails(
+				job.getHost(), 
+				job.getPortNumber(), 
+				job.getUserId(), 
+				job.getPassword(), 
+				job.getBasePath(),
+				watchRecordInner.getUniqueJobId(), 
+				watchRecordInner.getComponentId(), 
+				watchRecordInner.getSocketId(),
+				job.isRemoteMode());
+		return jobDetails;
+	}
+
+	private String getDataViewerDebugFilePath() {
+		String dataViewerDebugFilePath = Utils.INSTANCE.getDataViewerDebugFilePath();
+		dataViewerDebugFilePath=dataViewerDebugFilePath.trim();
+				
+		if(OSValidator.isWindows()){
+			if(dataViewerDebugFilePath.startsWith("/")){
+				dataViewerDebugFilePath = dataViewerDebugFilePath.replaceFirst("/", "").replace("/", "\\");
+			}		
+			dataViewerDebugFilePath = dataViewerDebugFilePath + "\\";
+		}else{
+			dataViewerDebugFilePath = dataViewerDebugFilePath + "/";
 		}
 		
-	}
+		return dataViewerDebugFilePath;
+	}	
 }
 
-class WatchRecordInner{
+class WatchRecordInner {
 	private String componentId;
 	private String socketId;
 	private String currentJob;
 	private String uniqueJobId;
-	
-	public WatchRecordInner() {
-		// TODO Auto-generated constructor stub
+
+	public WatchRecordInner() {		
 	}
-	
+
 	public String getUniqueJobId() {
 		return uniqueJobId;
 	}
+
 	public void setUniqueJobId(String uniqueJobId) {
 		this.uniqueJobId = uniqueJobId;
 	}
+
 	public String getComponentId() {
 		return componentId;
 	}
+
 	public void setComponentId(String componentId) {
 		this.componentId = componentId;
 	}
+
 	public String getSocketId() {
 		return socketId;
 	}
+
 	public void setSocketId(String socketId) {
 		this.socketId = socketId;
 	}
+
 	public String getCurrentJob() {
 		return currentJob;
 	}
+
 	public void setCurrentJob(String currentJob) {
 		this.currentJob = currentJob;
 	}
-	 
+
 }

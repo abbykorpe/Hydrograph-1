@@ -18,19 +18,20 @@ import java.util.LinkedHashMap;
 
 import org.eclipse.jface.action.Action;
 
-import hydrograph.ui.dataviewer.DebugDataViewer;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
+/**
+ * 
+ * ActionFactory instantiates all actions and make them accessible wherever needed 
+ * 
+ * @author Bitwise
+ *
+ */
 public class ActionFactory {
 	private DebugDataViewer debugDataViewer;
 	private HashMap<String,Action> actionMap;
-	
-	
-	public ActionFactory(){
-		createAllActions();
-	}
-	
+		
 	public ActionFactory(DebugDataViewer debugDataViewer) {
-		super();
 		this.debugDataViewer = debugDataViewer;
 		actionMap = new LinkedHashMap<>();
 		createAllActions();
@@ -63,6 +64,13 @@ public class ActionFactory {
 		
 	}
 	
+	/**
+	 * 
+	 * Get action
+	 * 
+	 * @param action
+	 * @return {@link Action}
+	 */
 	public Action getAction(String action){
 		return actionMap.get(action);
 	}

@@ -32,5 +32,11 @@ public class ImagePathConstant {
 	public static final String COMPONENT_WARN_ICON = "/icons/warn.png";
 	public static final String COMPONENT_ERROR_ICON = "/icons/error.png";
 	public static final String COMPONENT_UPDATE_ICON = "/icons/update.png";
+	
+	public static final String DATA_VIEWER_EXPORT="/icons/advicons/export.png";
+	public static final String DATA_VIEWER_FIND="/icons/advicons/lookup.png";
+	public static final String DATA_VIEWER_RELOAD="/icons/advicons/refresh.png";
+	public static final String DATA_VIEWER_FILTER="/icons/advicons/filter.png";
+	public static final String DATA_VIEWER_SWITCH_VIEW="/icons/advicons/switchview.png";
 
 }

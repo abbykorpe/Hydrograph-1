@@ -15,39 +15,45 @@ package hydrograph.ui.dataviewer.datastructures;
 
 import java.util.List;
 
+/**
+ * Table Row representation 
+ * 
+ * @author Bitwise
+ *
+ */
 public class RowData {
-	int rowNumber;
-	List<ColumnData> columns;
+	private int rowNumber;
+	private List<RowField> rowFields;
 
-	public RowData(List<ColumnData> columns,int rowNumber) {
+	public RowData(List<RowField> rowFields,int rowNumber) {
 		super();
-		this.columns = columns;
+		this.rowFields = rowFields;
 		this.rowNumber = rowNumber;
 	}
 	
-	
-	public List<ColumnData> getColumns() {
-		return columns;
+	/**
+	 * 
+	 * Get row field list
+	 * 
+	 * @return list of fields
+	 */
+	public List<RowField> getRowFields() {
+		return rowFields;
 	}
 
-	public void setColumns(List<ColumnData> columns) {
-		this.columns = columns;
-	}
-	
+	/**
+	 * 
+	 * Get row number
+	 * 
+	 * @return row number
+	 */
 	public int getRowNumber() {
 		return rowNumber;
 	}
 
-
-	public void setRowNumber(int rowNumber) {
-		this.rowNumber = rowNumber;
-	}
-
-
 	@Override
 	public String toString() {
-		return "RowData [rowNumber=" + rowNumber + ", columns=" + columns + "]";
+		return "RowData [rowNumber=" + rowNumber + ", fields=" + rowFields + "]";
 	}
-	
 	
 }

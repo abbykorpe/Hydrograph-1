@@ -13,7 +13,7 @@
 
 package hydrograph.ui.dataviewer.actions;
 
-import hydrograph.ui.dataviewer.DebugDataViewer;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
 
@@ -25,7 +25,6 @@ public class HorizontalViewAction extends Action{
 	}
 	@Override
 	public void run() {
-		System.out.println("HorizontalViewAction");
 		super.run();
 	}
 }

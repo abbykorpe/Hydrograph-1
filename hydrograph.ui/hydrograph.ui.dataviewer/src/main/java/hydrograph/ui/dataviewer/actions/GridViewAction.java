@@ -13,10 +13,17 @@
 
 package hydrograph.ui.dataviewer.actions;
 
-import hydrograph.ui.dataviewer.DebugDataViewer;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
 
+/**
+ * 
+ * Shows Grid view
+ * 
+ * @author Bitwise
+ *
+ */
 public class GridViewAction extends Action {
 	private DebugDataViewer debugDataViewer;
 	private static final String LABEL="Grid View";

@@ -13,7 +13,8 @@
 
 package hydrograph.ui.dataviewer.listeners;
 
-import hydrograph.ui.dataviewer.adapters.CSVAdapter;
+import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
+import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.constants.ControlConstants;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
@@ -39,42 +40,64 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
+/**
+ * 
+ * DataViewerListeners holds all listener for Data viewer
+ * 
+ * @author Bitwise
+ * 
+ */
 public class DataViewerListeners {
 	private DataViewLoader dataViewLoader;
 	private StatusManager statusManager;
-	private CSVAdapter csvAdapter;
-	private Map<String,Control> windowControls;
-	
-	public DataViewerListeners(){
-		
-	}
-	
-	public DataViewerListeners(DataViewLoader dataViewLoader,
-			StatusManager statusManager,
-			CSVAdapter csvAdapter,Map<String,Control> windowControls) {
-		super();
-		this.dataViewLoader = dataViewLoader;
-		this.statusManager = statusManager;
-		this.csvAdapter = csvAdapter;
-		this.windowControls = windowControls;
-	}
-	
+	private DataViewerAdapter dataViewerAdapter;
+	private Map<String, Control> windowControls;
+	private static final int ENTER_KEY_CODE=13;
+
+	/**
+	 * 
+	 * Set data view loader
+	 * 
+	 */
 	public void setDataViewLoader(DataViewLoader dataViewLoader) {
 		this.dataViewLoader = dataViewLoader;
 	}
 
-	public void setCsvAdapter(CSVAdapter csvAdapter) {
-		this.csvAdapter = csvAdapter;
+	/**
+	 * 
+	 * Set {@link DataViewerAdapter}
+	 * 
+	 */
+	public void setDataViewerAdpater(DataViewerAdapter dataViewerAdapter) {
+		this.dataViewerAdapter = dataViewerAdapter;
 	}
-	
+
+	/**
+	 * 
+	 * set {@link StatusManager}
+	 * 
+	 * @param statusManager
+	 */
 	public void setStatusManager(StatusManager statusManager) {
 		this.statusManager = statusManager;
 	}
 
+	/**
+	 * 
+	 * Set data viewer window control list
+	 * 
+	 * @param windowControls
+	 */
 	public void setWindowControls(Map<String, Control> windowControls) {
 		this.windowControls = windowControls;
 	}
 
+	/**
+	 * 
+	 * Attach data viewer tab folder listener. This listener loads data in selected view
+	 * 
+	 * @param tabFolder
+	 */
 	public void addTabFolderSelectionChangeListener(CTabFolder tabFolder) {
 		tabFolder.addSelectionListener(new SelectionListener() {
 
@@ -86,69 +109,74 @@ public class DataViewerListeners {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// DO Nothing
-
 			}
 		});
 	}
-	
-	
-	private void jumpPageListener(){
-		Text jumpPageTextBox = ((Text)windowControls.get(ControlConstants.JUMP_TEXT));
-		
-		if(((Text)windowControls.get(ControlConstants.JUMP_TEXT)).getText().isEmpty()){
-			statusManager.setStatus(new StatusMessage(StatusConstants.ERROR, "Jump page number can not be blank"));
+
+	private void jumpPageListener() {
+		final Text jumpPageTextBox = ((Text) windowControls.get(ControlConstants.JUMP_TEXT));
+
+		if (((Text) windowControls.get(ControlConstants.JUMP_TEXT)).getText().isEmpty()) {
+			statusManager.setStatus(new StatusMessage(StatusConstants.ERROR, Messages.JUMP_PAGE_TEXTBOX_CAN_NOTE_BE_EMPTY));
 			return;
 		}
-		
-		statusManager.setStatus(new StatusMessage(StatusConstants.PROGRESS, "Please wait, fetching page " + jumpPageTextBox.getText()));
+
+		String statusMessage=Messages.FETCHING_PAGE + " " + jumpPageTextBox.getText();
+		statusManager.setStatus(new StatusMessage(StatusConstants.PROGRESS, statusMessage));
 		statusManager.setAllWindowControlsEnabled(false);
 		
-		final Long  pageNumberToJump = Long.valueOf(jumpPageTextBox.getText());
-		Job job = new Job("JumpToPage") {
-			  @Override
-			  protected IStatus run(IProgressMonitor monitor) {
-				  final StatusMessage status = csvAdapter.jumpToPage(pageNumberToJump);
-				  dataViewLoader.updateDataViewLists();
-				  
-				  Display.getDefault().asyncExec(new Runnable() {
-			      @Override
-			      public void run() {
-			    	  dataViewLoader.reloadloadViews();
-			    	  statusManager.setAllWindowControlsEnabled(true);
-			    	  statusManager.setStatus(status);
-			      }
-			    });
-			    return Status.OK_STATUS;
-			  }
-
-			
-			};
-			
-			job.schedule();
-	}
-	
-	public void attachJumpToPageListener(final Widget widget) {
+		Long pageNumberToJump = Long.valueOf(jumpPageTextBox.getText());
 		
-		if(widget instanceof Text){
-			((Text)widget).addKeyListener(new KeyListener() {
-				
+		executeJumpPageJob(statusMessage, pageNumberToJump);
+	}
+
+	private void executeJumpPageJob(String statusMessage, final Long pageNumberToJump) {
+		Job job = new Job(statusMessage) {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+
+				final StatusMessage status = dataViewerAdapter.jumpToPage(pageNumberToJump);
+				dataViewLoader.updateDataViewLists();
+
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						refreshDataViewerWindow(status);
+					}
+				});
+				return Status.OK_STATUS;
+			}
+
+		};
+		job.schedule();
+	}
+
+	/**
+	 * 
+	 * Attach jump page listener. 
+	 * The listener can be attached to only Button and Text box
+	 * 
+	 * @param widget
+	 */
+	public void attachJumpPageListener(final Widget widget) {
+		if (widget instanceof Text) {
+			((Text) widget).addKeyListener(new KeyListener() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					if(e.keyCode == SWT.KEYPAD_CR || e.keyCode == 13){
+					if (e.keyCode == SWT.KEYPAD_CR || e.keyCode == ENTER_KEY_CODE) {
 						jumpPageListener();
 					}
 				}
-				
+
 				@Override
 				public void keyPressed(KeyEvent e) {
-					// DO Nothing
-					
+					// Nothing to do
 				}
 			});
 		}
-		
-		if(widget instanceof Button){
-			((Button)widget).addSelectionListener(new SelectionAdapter() {
+
+		if (widget instanceof Button) {
+			((Button) widget).addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
 					jumpPageListener();
@@ -156,71 +184,80 @@ public class DataViewerListeners {
 			});
 		}
 	}
-	
+
+	/**
+	 * 
+	 * Attach Previous page listener.
+	 * 
+	 * @param button
+	 */
 	public void attachPreviousPageButtonListener(Button button) {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 
-				statusManager.setStatus(new StatusMessage(StatusConstants.PROGRESS,"Please wait, fetching next page records"));
-				
+				statusManager.setStatus(new StatusMessage(StatusConstants.PROGRESS, Messages.FETCHING_PREVIOUS_PAGE));
 				statusManager.setAllWindowControlsEnabled(false);
-				
-				Job job = new Job("PreviousPage") {
-					  @Override
-					  protected IStatus run(IProgressMonitor monitor) {
-						  final StatusMessage status = csvAdapter.previous();
-							
-						  dataViewLoader.updateDataViewLists();
-						  
-						  Display.getDefault().asyncExec(new Runnable() {
-					      @Override
-					      public void run() {
-					    	  dataViewLoader.reloadloadViews();
-					    	  statusManager.setAllWindowControlsEnabled(true);
-					    	  statusManager.setStatus(status);
-					    	  statusManager.clearJumpToText();
-					      }
-					    });
-					    return Status.OK_STATUS;
-					  }
-					};
-					
-					job.schedule();
-				
+
+				Job job = new Job(Messages.FETCHING_PREVIOUS_PAGE) {
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						final StatusMessage status = dataViewerAdapter.previous();
+
+						dataViewLoader.updateDataViewLists();
+
+						Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								refreshDataViewerWindow(status);
+								statusManager.clearJumpToPageText();
+							}							
+						});
+						return Status.OK_STATUS;
+					}
+				};
+				job.schedule();
 			}
 		});
 	}
 	
+	/**
+	 * 
+	 * Attach next page listener
+	 * 
+	 * @param button
+	 */
 	public void attachNextPageButtonListener(Button button) {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				statusManager.setStatus(new StatusMessage(StatusConstants.PROGRESS,"Please wait, fetching next page records"));
+				statusManager.setStatus(new StatusMessage(StatusConstants.PROGRESS, Messages.FETCHING_NEXT_PAGE));
 				statusManager.setAllWindowControlsEnabled(false);
-				
-				Job job = new Job("NextPage") {
-					  @Override
-					  protected IStatus run(IProgressMonitor monitor) {
-						  final StatusMessage status = csvAdapter.next();
-						  
-						  dataViewLoader.updateDataViewLists();
-						  
-						  Display.getDefault().asyncExec(new Runnable() {
-					      @Override
-					      public void run() {
-					    	  dataViewLoader.reloadloadViews();
-					    	  statusManager.setAllWindowControlsEnabled(true);
-					    	  statusManager.setStatus(status);
-					    	  statusManager.clearJumpToText();
-					      }
-					    });
-					    return Status.OK_STATUS;
-					  }
-					};
-					
-					job.schedule();
+
+				Job job = new Job(Messages.FETCHING_NEXT_PAGE) {
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						final StatusMessage status = dataViewerAdapter.next();
+						dataViewLoader.updateDataViewLists();
+						Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								refreshDataViewerWindow(status);
+								statusManager.clearJumpToPageText();
+							}
+						});
+						return Status.OK_STATUS;
+					}
+				};
+
+				job.schedule();
 			}
 		});
+	}
+	
+	private void refreshDataViewerWindow(final StatusMessage status) {
+		dataViewLoader.reloadloadViews();
+		statusManager.setAllWindowControlsEnabled(true);
+		statusManager.setStatus(status);
 	}
 }
