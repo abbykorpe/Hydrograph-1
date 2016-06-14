@@ -15,12 +15,15 @@ package hydrograph.ui.graph.editor;
 
 import hydrograph.ui.common.component.config.CategoryType;
 import hydrograph.ui.common.component.config.Component;
+import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.interfaces.console.IHydrographConsole;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
 import hydrograph.ui.common.util.CanvasDataAdpater;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.communication.debugservice.DebugServiceClient;
+import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.engine.exceptions.EngineException;
 import hydrograph.ui.engine.util.ConverterUtil;
 import hydrograph.ui.graph.action.ComponentHelpAction;
@@ -82,6 +85,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
@@ -1215,6 +1219,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");
 		Job job = DebugHandler.getJob(currentJob);
 		deleteDebugFileFromWorkspace();
+		deleteSchemaAndDataViewerFiles();
+		deleteBasePathDebugFiles(job);
 		if(job == null){
 			logger.debug("current job {} wasn't found in Debughandler's map",currentJob);
 			return ;
@@ -1239,7 +1245,42 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 	}
 	
-
+	private void deleteSchemaAndDataViewerFiles(){
+		String dataViewerDirectoryPath = Utils.INSTANCE.getDataViewerDebugFilePath();
+		
+		for( JobDetails j :this.container.getJobDetailsInGraph()){
+			String dataViewerCSVFilePath = j.getUniqueJobID()+"_"+j.getComponentID()+"_"+j.getComponentSocketID()+".csv";
+			String dataViewerCSVFilePathToBeDeleted = dataViewerDirectoryPath+"\\"+dataViewerCSVFilePath;
+			IPath path = new Path(dataViewerCSVFilePathToBeDeleted);
+			path.toFile().delete();
+			logger.debug("Deleted Data Viewer csv file {}", dataViewerCSVFilePathToBeDeleted);
+			
+			String dataViewerSchemaFilePath = j.getUniqueJobID()+"_"+j.getComponentID()+"_"+j.getComponentSocketID()+".xml";
+			String dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+"\\"+dataViewerSchemaFilePath;
+			path = new Path(dataViewerSchemaFilePathToBeDeleted);
+			path.toFile().delete();
+			logger.debug("Deleted Data Viewer schema file {}", dataViewerSchemaFilePathToBeDeleted);
+		}
+	}
+	
+	private void deleteBasePathDebugFiles(Job job){
+		
+		for( JobDetails j :this.container.getJobDetailsInGraph()){
+			
+			try {
+				DebugServiceClient.INSTANCE.deleteBasePathFiles(j);
+			} catch (NumberFormatException e) {
+				logger.warn("Unable to delete debug Base path file",e);
+			} catch (HttpException e) {
+				logger.warn("Unable to delete debug Base path file",e);
+			} catch (MalformedURLException e) {
+				logger.warn("Unable to delete debug Base path file",e);
+			} catch (IOException e) {
+				logger.warn("Unable to delete debug Base path file",e);
+			}
+		}
+	}
+	
 	
 	private void removeSubjobProperties(Boolean isDirty) {
 		if (isDirty) {
@@ -1263,6 +1304,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		if ( StringUtils.isNotBlank(jobFilePath)) {
 			file = new File(jobFilePath);
 		}
+		
 		if (file != null) {
 			XStream xStream = new XStream();
 			Container container = (Container) xStream.fromXML(file);

@@ -85,4 +85,19 @@ public class DebugServiceClient {
 		}
 		return path;
 	}
+	
+	public void deleteSchemaFile(JobDetails jobDetails)
+			throws NumberFormatException, HttpException, MalformedURLException, IOException {
+		executePostMethod(Provider.INSTANCE.getDeleteDebugFileMethod(jobDetails));
+	}
+	public void deleteDataViewerFile(JobDetails jobDetails)
+			throws NumberFormatException, HttpException, MalformedURLException, IOException {
+		executePostMethod(Provider.INSTANCE.getDeleteDebugFileMethod(jobDetails));
+	}
+	
+	public void deleteBasePathFiles(JobDetails jobDetails) 
+			throws NumberFormatException, HttpException, MalformedURLException, IOException{
+		executePostMethod(Provider.INSTANCE.getDeleteBasePathFileMethod(jobDetails));
+	}
+	
 }

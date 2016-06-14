@@ -84,4 +84,18 @@ public class Provider {
 		
 		return postMethod;
 	}
+	
+	public PostMethod getDeleteBasePathFileMethod(JobDetails jobDetails) throws NumberFormatException, MalformedURLException {
+		
+		URL url = new URL(POST_PROTOCOL, jobDetails.getHost(), Integer.valueOf(jobDetails.getPort()), DebugServiceMethods.DELETE_BASEPATH_FILES);
+		
+		PostMethod postMethod = new PostMethod(url.toString());
+		postMethod.addParameter(DebugServicePostParameters.JOB_ID, jobDetails.getUniqueJobID());
+		postMethod.addParameter(DebugServicePostParameters.BASE_PATH, jobDetails.getBasepath());
+		postMethod.addParameter(DebugServicePostParameters.COMPONENT_ID, jobDetails.getComponentID());
+		postMethod.addParameter(DebugServicePostParameters.SOCKET_ID, jobDetails.getComponentSocketID());
+		postMethod.addParameter(DebugServicePostParameters.USER_ID, jobDetails.getUsername());
+		postMethod.addParameter(DebugServicePostParameters.PASSWORD, jobDetails.getPassword());
+		return postMethod;
+	}
 }

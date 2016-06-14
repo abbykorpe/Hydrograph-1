@@ -14,6 +14,7 @@
  
 package hydrograph.ui.graph.model;
 
+import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.model.helper.LoggerUtil;
 
@@ -57,9 +58,11 @@ public class Container extends Model {
 	private Object subjobComponentEditPart;
 	private long subjobVersion=1;
 	private Map<String,String> graphRuntimeProperties;
+	private List<JobDetails> jobDetailsInGraph;
+	
 	
 	public Container(){
-		
+		jobDetailsInGraph = new ArrayList<JobDetails>();
 	}
 	
 	
@@ -327,6 +330,11 @@ public class Container extends Model {
 			graphRuntimeProperties = new LinkedHashMap<String, String>();
 		}
 		return graphRuntimeProperties;
+	}
+
+
+	public List<JobDetails> getJobDetailsInGraph() {
+		return jobDetailsInGraph;
 	}
 	
 }
