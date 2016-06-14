@@ -44,7 +44,8 @@ public class ListenerHelper {
 		OPERATION_CLASS_DIALOG_APPLY_BUTTON, 
 		CHARACTER_LIMIT,
 		COMPONENT_TYPE,
-		PROPERTY_DIALOG_BUTTON_BAR;
+		PROPERTY_DIALOG_BUTTON_BAR,
+		FILE_EXTENSION;
 	}
 	
 	private Map<HelperType, Object> helpers;

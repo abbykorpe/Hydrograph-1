@@ -152,15 +152,15 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		AbstractELTWidget comboOfOperationClasses = new ELTDefaultCombo().defaultText(optionsOfComboOfOperationClasses)
 				.comboBoxWidth(90);
 
-		FilterOperationClassUtility.createOperationalClass(composite, operationClassDialogButtonBar,
+		FilterOperationClassUtility.INSTANCE.createOperationalClass(composite, operationClassDialogButtonBar,
 				comboOfOperationClasses, isParameterCheckbox, fileNameText, tootlTipErrorMessage, widgetConfig, this,
 				propertyDialogButtonBar, opeartionClassDialogButtonBar);
 		fileName = (Text) fileNameText.getSWTWidgetControl();
 		fileName.setData(PATH, mappingSheetRow.getOperationClassFullPath());
 		operationClasses = (Combo) comboOfOperationClasses.getSWTWidgetControl();
         
-		FilterOperationClassUtility.enableAndDisableButtons(true, false);
-		FilterOperationClassUtility.setComponentName(componentName);
+		FilterOperationClassUtility.INSTANCE.enableAndDisableButtons(true, false);
+		FilterOperationClassUtility.INSTANCE.setComponentName(componentName);
 		isParameterCheckBox = (Button) isParameterCheckbox.getSWTWidgetControl();
 		alphanumericDecorator = WidgetUtility.addDecorator(fileName, Messages.CHARACTERSET);
 		emptyDecorator = WidgetUtility.addDecorator(fileName, Messages.OperationClassBlank);
@@ -317,12 +317,12 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 			isParameterCheckBox.setSelection(mappingSheetRow.isClassParameter());
 			if (!StringUtils.equalsIgnoreCase(Messages.CUSTOM, mappingSheetRow.getComboBoxValue())) {
 				fileName.setEnabled(false);
-				FilterOperationClassUtility.enableAndDisableButtons(false, false);
+				FilterOperationClassUtility.INSTANCE.enableAndDisableButtons(false, false);
 				isParameterCheckBox.setEnabled(false);
 			} else {
 				isParameterCheckBox.setEnabled(true);
 				if (isParameterCheckBox.getSelection()) {
-					FilterOperationClassUtility.enableAndDisableButtons(true, true);
+					FilterOperationClassUtility.INSTANCE.enableAndDisableButtons(true, true);
 				}
 			}
 		} else {

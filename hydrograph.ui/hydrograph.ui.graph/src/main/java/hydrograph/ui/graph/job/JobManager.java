@@ -26,6 +26,7 @@ import hydrograph.ui.graph.handler.RemoveDebugHandler;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.CanvasUtils;
+import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.dialog.MultiParameterFileDialog;
@@ -40,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -50,6 +52,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
@@ -160,8 +163,10 @@ public class JobManager {
 	 *            - {@link Job} to execute
 	 */
 	public void executeJob(final Job job, String uniqueJobId) {
+		List<String> externalSchemaFiles;
+		List<String> subJobList;
 		enableRunJob(false);
-		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
+		final DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
 
 		if (!saveJobBeforeExecute(gefCanvas)){
 			return;
@@ -194,15 +199,30 @@ public class JobManager {
 		job.setPassword(clusterPassword);
 		job.setHost(runConfigDialog.getHost());
 		job.setRemoteMode(runConfigDialog.isRemoteMode());
-
-		gefCanvas.disableRunningJobResource();
 		
-			launchJob(job, gefCanvas, parameterGrid, xmlPath);
+		if(runConfigDialog.isRemoteMode()){
+			externalSchemaFiles=JobScpAndProcessUtility.INSTANCE.getExternalSchemaList();
+			subJobList=JobScpAndProcessUtility.INSTANCE.getSubJobList();
+		}else{
+			externalSchemaFiles=Collections.EMPTY_LIST;
+			subJobList=Collections.EMPTY_LIST;
+		}
+		gefCanvas.disableRunningJobResource(); 
+		launchJob(job, gefCanvas, parameterGrid, xmlPath,externalSchemaFiles,subJobList);
 	}
 
-	public void executeJobInDebug(final Job job, String uniqueJobId, boolean isRemote, String userName) {
+	/**
+	 * This method responsible to run the job in debug mode
+	 * @param job
+	 * @param isRemote
+	 * @param userName
+	 */
+	public void executeJobInDebug(final Job job, boolean isRemote, String userName) {
+	
+		List<String> externalSchemaFiles;
+		List<String> subJobList;
 		enableRunJob(false);
-		final DefaultGEFCanvas gefCanvas = CanvasUtils.getComponentCanvas();
+		final DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
 
 		if (!saveJobBeforeExecute(gefCanvas)){
 			return;
@@ -227,19 +247,37 @@ public class JobManager {
 		job.setRemoteMode(isRemote);
 		job.setHost(job.getIpAddress());
 
+		if(isRemote){
+			externalSchemaFiles=JobScpAndProcessUtility.INSTANCE.getExternalSchemaList();
+			subJobList=JobScpAndProcessUtility.INSTANCE.getSubJobList();
+		}else{
+			externalSchemaFiles=Collections.EMPTY_LIST;
+			subJobList=Collections.EMPTY_LIST;
+		}
+
 		gefCanvas.disableRunningJobResource();
 
-		launchJobWithDebugParameter(job, gefCanvas, parameterGrid, xmlPath, debugXmlPath, job.getBasePath(), uniqueJobId);
+		launchJobWithDebugParameter(job, gefCanvas, parameterGrid, xmlPath, debugXmlPath,externalSchemaFiles,subJobList);
 	}
-		
+	
+	/**
+	 * Check for remote or local run and start the job in new thread.  
+	 * 
+	 * @param job
+	 * @param gefCanvas
+	 * @param parameterGrid
+	 * @param xmlPath
+	 * @param externalSchemaFiles
+	 * @param subJobList
+	 */
 	private void launchJob(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
-			final String xmlPath) {
-		if (job.isRemoteMode()){
+			final String xmlPath,final List<String> externalSchemaFiles,final List<String> subJobList) {
+		if (job.isRemoteMode()) {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new RemoteJobLauncher();
-					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas);
+					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles,subJobList);
 				}
 
 			}).start();
@@ -250,22 +288,34 @@ public class JobManager {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new LocalJobLauncher();
-					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas);
+					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles,subJobList);
 				}
 
 			}).start();
 		}
 	}
 
+	/**
+	 * 
+	 * Check for remote or local mode and start debug run in new thread.
+	 *   
+	 * @param job
+	 * @param gefCanvas
+	 * @param parameterGrid
+	 * @param xmlPath
+	 * @param debugXmlPath
+	 * @param externalSchemaFiles
+	 * @param subJobList
+	 */
 	private void launchJobWithDebugParameter(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
-			final String xmlPath, final String debugXmlPath, final String basePath, final String uniqueJobId) {
-		if (job.isRemoteMode()){
+			final String xmlPath, final String debugXmlPath,final List<String> externalSchemaFiles,final List<String> subJobList) {
+		if (job.isRemoteMode()) {
 			setLocalMode(false);
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new DebugRemoteJobLauncher();
-					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, basePath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas, uniqueJobId);
+					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath,  parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles,subJobList);
 				}
 
 			}).start();
@@ -277,7 +327,7 @@ public class JobManager {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new DebugLocalJobLauncher();
-					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, basePath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas, uniqueJobId);
+					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas, externalSchemaFiles,subJobList);
 				}
 
 			}).start();
@@ -290,6 +340,10 @@ public class JobManager {
 		return clusterPassword;
 	}
 
+	/**
+	 * Get xml file path from active editor.
+	 * @return
+	 */
 	private String getJobXMLPath() {
 		IEditorPart iEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
@@ -348,11 +402,11 @@ public class JobManager {
 	}
 
 	private boolean saveJobBeforeExecute(final DefaultGEFCanvas gefCanvas) {
-		if (gefCanvas.getParameterFile() == null || CanvasUtils.isDirtyEditor()){
+		if (gefCanvas.getParameterFile() == null || CanvasUtils.INSTANCE.isDirtyEditor()) {
 			try {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 				enableRunJob(true);
-				if (gefCanvas.getParameterFile() == null || CanvasUtils.isDirtyEditor()){
+				if (gefCanvas.getParameterFile() == null || CanvasUtils.INSTANCE.isDirtyEditor()) {
 					return false;
 				} else {
 					return true;
@@ -515,7 +569,12 @@ public class JobManager {
 
 		}).start();
 	}
-
+	
+	/**
+	 * Create Gradle command to kill the job.
+	 * @param job
+	 * @return
+	 */
 	private String getKillJobCommand(Job job) {
 		return GradleCommandConstants.GCMD_KILL_REMOTE_JOB + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
@@ -554,6 +613,20 @@ public class JobManager {
 
 	public Map<String, Job> getRunningJobsMap() {
 		return runningJobsMap;
+	}
+
+	/**
+	 * Check if the file path is absolute else return workspace file path
+	 * @param jobFilePath
+	 * @return
+	 */
+	public static String getAbsolutePathFromFile(IPath jobFilePath) {
+		if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists()) {
+			return ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).getLocation().toString();
+		} else if (jobFilePath.toFile().exists()) {
+			return jobFilePath.toFile().getAbsolutePath();
+		}
+		return "";
 	}
 	
 }

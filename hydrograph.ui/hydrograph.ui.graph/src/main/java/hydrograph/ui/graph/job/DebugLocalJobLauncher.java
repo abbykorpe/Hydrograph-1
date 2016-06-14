@@ -15,35 +15,60 @@
 package hydrograph.ui.graph.job;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
+import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.slf4j.Logger;
 
 
+/**
+ * The Class DebugLocalJobLauncher run the job in debug mode locally.
+ * 
+ */
 public class DebugLocalJobLauncher extends AbstractJobLauncher{
 
+	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE.getLogger(DebugLocalJobLauncher.class);
+	
+	/** The Constant BUILD_SUCCESSFUL. */
 	private static final String BUILD_SUCCESSFUL="BUILD SUCCESSFUL";
+	
+	/** The Constant BUILD_FAILED. */
 	private static final String BUILD_FAILED="BUILD FAILED";
+	
+	/** The Constant JOB_FAILED. */
 	private static final String JOB_FAILED="JOB FAILED";
+	
+	/** The Constant JOB_COMPLETED_SUCCESSFULLY. */
 	private static final String JOB_COMPLETED_SUCCESSFULLY="JOB COMPLETED SUCCESSFULLY";
 	
 	
+	/**
+	 * Run the job in debug mode locally.
+	 * 
+	 * @param xmlPath
+	 * @param debugXmlPath
+	 * @param paramFile
+	 * @param job
+	 * @param gefCanvas
+	 * @param externalSchemaFiles Empty list required only in remote run.
+	 * @param subJobList Empty list required only in remote run.
+	 * 
+	 * 
+	 */
 	@Override
-	public void launchJobInDebug(String xmlPath, String debugXmlPath, String basePath, String paramFile, Job job,	DefaultGEFCanvas gefCanvas, String uniqueJobId) {
+	public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFile, Job job,	DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		String projectName = xmlPath.split("/", 2)[0];
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		job.setJobProjectDirectory(project.getLocation().toOSString());
@@ -54,7 +79,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 		((RunJobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
 		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 		
-		gradleCommand = getExecututeJobCommand(xmlPath, paramFile, debugXmlPath, basePath, uniqueJobId);
+		gradleCommand = getExecututeJobCommand(xmlPath, paramFile, debugXmlPath,job);
 		executeCommand(job, project, gradleCommand, gefCanvas);
 
 		job.setJobStatus(JobStatus.SUCCESS);
@@ -67,8 +92,16 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 		
 	}
 
+	/**
+	 * Execute command.
+	 *
+	 * @param job the job
+	 * @param project the project
+	 * @param gradleCommand the gradle command
+	 * @param gefCanvas the gef canvas
+	 */
 	private void executeCommand(Job job, IProject project, String gradleCommand, DefaultGEFCanvas gefCanvas) {
-		ProcessBuilder processBuilder = getProcess(project, gradleCommand);
+		ProcessBuilder processBuilder = JobScpAndProcessUtility.INSTANCE.getProcess(project, gradleCommand);
 		try {
 			Process process = processBuilder.start();
 
@@ -83,29 +116,27 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 		}
 	}
 	
-	private String getExecututeJobCommand(String xmlPath, String paramFile, String debugXmlPath, String basePath, String uniqueJobId) {
-		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB + GradleCommandConstants.GPARAM_PARAM_FILE + "\""+ paramFile+"\"" + GradleCommandConstants.GPARAM_JOB_XML +  xmlPath.split("/", 2)[1] +
-				GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH + basePath + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +uniqueJobId;
+	/**
+	 * Gets the executute job command.
+	 *
+	 * @param xmlPath the xml path
+	 * @param paramFile the param file
+	 * @param debugXmlPath the debug xml path
+	 * @param job the job
+	 * @return the executute job command
+	 */
+	private String getExecututeJobCommand(String xmlPath, String paramFile, String debugXmlPath, Job job) {
+		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB + GradleCommandConstants.GPARAM_PARAM_FILE + paramFile + GradleCommandConstants.GPARAM_JOB_XML +  xmlPath.split("/", 2)[1] +
+				GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH + job.getBasePath() + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId();
 	}
 	
-	private ProcessBuilder getProcess(IProject project, String gradleCommand) {
-		String[] runCommand = new String[3];
-		if (OSValidator.isWindows()) {
-			String[] command = { Messages.CMD, "/c", gradleCommand };
-			runCommand = command;
-
-		} else if (OSValidator.isMac()) {
-			String[] command = { Messages.SHELL, "-c", gradleCommand };
-			runCommand = command;
-		}
-
-		ProcessBuilder processBuilder = new ProcessBuilder(runCommand);
-		processBuilder.directory(new File(project.getLocation().toOSString()));
-		processBuilder.redirectErrorStream(true);
-		return processBuilder;
-
-	}
-	
+	/**
+	 * Log process logs asynchronously.
+	 *
+	 * @param joblogger the joblogger
+	 * @param process the process
+	 * @param job the job
+	 */
 	private void logProcessLogsAsynchronously(final JobLogger joblogger, final Process process, final Job job) {
 
 		InputStream stream = process.getInputStream();
@@ -143,10 +174,10 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 		joblogger.close();
 	}
 
+
 	@Override
 	public void launchJob(String xmlPath, String paramFile, Job job,
-			DefaultGEFCanvas gefCanvas) {
-		// TODO Auto-generated method stub
+			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		
 	}
 }

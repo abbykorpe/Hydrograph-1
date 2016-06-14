@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="FIXED_WIDGET"/>
  *     &lt;enumeration value="RUNTIME_PROPERTIES_WIDGET"/>
  *     &lt;enumeration value="FILE_PATH_WIDGET"/>
+ *     &lt;enumeration value="BROWSE_WORKSPACE_WIDGET"/>
  *     &lt;enumeration value="CHARACTER_SET_WIDGET"/>
  *     &lt;enumeration value="DELIMETER_WIDGET"/>
  *     &lt;enumeration value="PHASE_WIDGET"/>
@@ -94,6 +95,7 @@ public enum PropertyRenderer {
     FIXED_WIDGET,
     RUNTIME_PROPERTIES_WIDGET,
     FILE_PATH_WIDGET,
+    BROWSE_WORKSPACE_WIDGET,
     CHARACTER_SET_WIDGET,
     DELIMETER_WIDGET,
     PHASE_WIDGET,

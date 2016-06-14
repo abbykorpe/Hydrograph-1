@@ -15,8 +15,17 @@
 package hydrograph.ui.graph.utility;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.InputStream;
+import java.io.Serializable;
+
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+
+import com.thoughtworks.xstream.XStream;
 
 
 /**
@@ -26,13 +35,19 @@ import org.eclipse.ui.PlatformUI;
  *
  */
 public class CanvasUtils {
+	
+	public static final CanvasUtils INSTANCE = new CanvasUtils();
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(CanvasUtils.class);
+	
+	private CanvasUtils() {
+	}
 	/**
 	 * 
 	 * Returns instance of active canvas
 	 * 
 	 * @return {@link DefaultGEFCanvas}
 	 */
-	public static DefaultGEFCanvas getComponentCanvas() {
+	public DefaultGEFCanvas getComponentCanvas() {
 		if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
 			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 					.getActiveEditor();
@@ -46,7 +61,54 @@ public class CanvasUtils {
 	 * 
 	 * @return boolean
 	 */
-	public static boolean isDirtyEditor() {
+	public boolean isDirtyEditor() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty();
+	}
+	
+	/**
+	 * From xml to object.
+	 * 
+	 * @param xml
+	 *            the xml
+	 * @return the object
+	 */
+	public Object fromXMLToObject(InputStream xml) {
+
+		Object obj = null;
+
+		XStream xs = new XStream();
+		xs.autodetectAnnotations(true);
+		try {
+
+			obj = xs.fromXML(xml);
+			logger.debug("Sucessfully converted JAVA Object from XML Data");
+			xml.close();
+		} catch (Exception e) {
+			logger.error("Failed to convert from XML to Graph due to : {}", e);
+			MessageDialog.openError(new Shell(), "Error", "Invalid graph file.");
+		}
+		return obj;
+	}
+
+	/**
+	 * From object to xml.
+	 * 
+	 * @param object
+	 *            the object
+	 * @return the string
+	 */
+	public String fromObjectToXML(Serializable object) {
+
+		String str = "<!-- It is recommended to avoid changes to xml data -->\n\n";
+
+		XStream xs = new XStream();
+		xs.autodetectAnnotations(true);
+		try {
+			str = str + xs.toXML(object);
+			logger.debug( "Sucessfully converted XML from JAVA Object");
+		} catch (Exception e) {
+			logger.error("Failed to convert from Object to XML", e);
+		}
+		return str;
 	}
 }

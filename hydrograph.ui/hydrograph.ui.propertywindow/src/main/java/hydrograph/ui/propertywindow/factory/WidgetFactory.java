@@ -27,6 +27,7 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.DelimiterWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.DropDownWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.ELTBrowseWorkspaceWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTComponentBaseType;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTComponentNameWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTComponentType;
@@ -74,6 +75,7 @@ public class WidgetFactory {
 		TRANSFORM_SCHEMA_WIDGET(TransformSchemaWidget.class),
 		GENERATE_RECORDS_SCHEMA_WIDGET(GenerateRecordsGridWidget.class),
 		FILE_PATH_WIDGET(ELTFilePathWidget.class),
+		BROWSE_WORKSPACE_WIDGET(ELTBrowseWorkspaceWidget.class),
 		COMPONENT_NAME_WIDGET(ELTComponentNameWidget.class),
 		
 		COMPONENT_BASETYPE_WIDGET(ELTComponentBaseType.class),

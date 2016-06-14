@@ -15,18 +15,17 @@
 package hydrograph.ui.graph.job;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
+import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -48,7 +47,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 	private static final String JOB_COMPLETED_SUCCESSFULLY="JOB COMPLETED SUCCESSFULLY";
 
 	@Override
-	public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas) {
+	public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		String projectName = xmlPath.split("/", 2)[0];
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		job.setJobProjectDirectory(project.getLocation().toOSString());
@@ -73,7 +72,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 	}
 
 	private void executeCommand(Job job, IProject project, String gradleCommand, DefaultGEFCanvas gefCanvas) {
-		ProcessBuilder processBuilder = getProcess(project, gradleCommand);
+		ProcessBuilder processBuilder = JobScpAndProcessUtility.INSTANCE.getProcess(project, gradleCommand);
 		try {
 			Process process = processBuilder.start();
 
@@ -86,24 +85,6 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		} catch (IOException e) {
 			logger.debug("Unable to execute the job", e);
 		}
-	}
-
-	private ProcessBuilder getProcess(IProject project, String gradleCommand) {
-		String[] runCommand = new String[3];
-		if (OSValidator.isWindows()) {
-			String[] command = { Messages.CMD, "/c", gradleCommand };
-			runCommand = command;
-
-		} else if (OSValidator.isMac()) {
-			String[] command = { Messages.SHELL, "-c", gradleCommand };
-			runCommand = command;
-		}
-
-		ProcessBuilder processBuilder = new ProcessBuilder(runCommand);
-		processBuilder.directory(new File(project.getLocation().toOSString()));
-		processBuilder.redirectErrorStream(true);
-		return processBuilder;
-
 	}
 
 	private String getExecututeJobCommand(String xmlPath, String paramFile) {
@@ -149,8 +130,8 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 
 	@Override
 	public void launchJobInDebug(String xmlPath, String debugXmlPath,
-			String basePath, String paramFile, Job job,
-			DefaultGEFCanvas gefCanvas, String uniqueJobID) {
+			 String paramFile, Job job,
+			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		// TODO Auto-generated method stub
 		
 	}

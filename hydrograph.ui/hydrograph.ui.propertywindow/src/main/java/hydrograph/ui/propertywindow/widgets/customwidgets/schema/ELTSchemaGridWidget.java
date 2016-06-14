@@ -87,8 +87,9 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -144,7 +145,7 @@ import org.xml.sax.SAXException;
 
 
 /**
- * The Class ELTSchemaGridWidget.
+ * The Class ELTSchemaGridWidget common widget for all component schema grid.
  * 
  * @author Bitwise
  */
@@ -822,15 +823,15 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
+		helper.put(HelperType.FILE_EXTENSION,"schema");
 
 		try {
 			eltDefaultTextBox.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(),
 					propertyDialogButtonBar, null, eltDefaultTextBox.getSWTWidgetControl());
 			eltDefaultTextBox.attachListener(ListenerFactory.Listners.MODIFY.getListener(), propertyDialogButtonBar,
 					helper, eltDefaultTextBox.getSWTWidgetControl());
-			eltDefaultButton.attachListener(ListenerFactory.Listners.SCHEMA_DIALOG_SELECTION.getListener(),
-					propertyDialogButtonBar, helper, eltDefaultButton.getSWTWidgetControl(),
-					eltDefaultTextBox.getSWTWidgetControl());
+			eltDefaultButton.attachListener(ListenerFactory.Listners.BROWSE_FILE_LISTNER.getListener(),
+					propertyDialogButtonBar, helper,extSchemaPathText);
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -841,31 +842,21 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		populateWidgetExternalSchema();
 	}
 	
-	private String getAbsolutePath(IFileEditorInput input){
-		Path path = (Path) input.getFile().getRawLocation().makeAbsolute();
-		String device = path.getDevice();
-		String absolutePath = "";
-		String pathOfFile = "";
-		if(device != null){
-			absolutePath=device;
-		}
-		for(String segment: path.segments()){
-			absolutePath += "/" + segment;
-		}	
-		String workSpacePath = absolutePath.substring(0, absolutePath.indexOf("/" + "jobs"));
-		if(extSchemaPathText.getText().startsWith("/")){
-			pathOfFile=workSpacePath.concat(extSchemaPathText.getText());
-		}
-		else{
-			pathOfFile=workSpacePath.concat("/"+extSchemaPathText.getText());
-		}
-		return pathOfFile;
-	}
-	
 	private File getPath(){
 		IEditorInput input = (IEditorInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
 		File schemaFile=null;
-		if(!(input instanceof IFileEditorInput)){
+		if(input instanceof IFileEditorInput){
+			String schemaPath = extSchemaPathText.getText();
+			if(!new File(schemaPath).isAbsolute()){
+				IWorkspace workspace = ResourcesPlugin.getWorkspace();
+				workspace.getRoot().getLocation();
+				schemaFile = new File(workspace.getRoot().getLocation()+"/"+schemaPath);
+			}
+			else {
+				schemaFile = new File(schemaPath);
+			}
+		}
+		else{
 			String schemaPath = extSchemaPathText.getText();
 			if(!new File(schemaPath).isAbsolute()){
 				Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, 
@@ -874,19 +865,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				return schemaFile;
 			}
 			else {
-				schemaFile = new File(schemaPath);
-				
+				schemaFile = new File(schemaPath);				
 			}
 		}
-		else if(input instanceof IFileEditorInput){
-			String schemaPath = extSchemaPathText.getText();
-			if(!new File(schemaPath).isAbsolute()){
-				schemaFile = new File(getAbsolutePath((IFileEditorInput)input));
-			}
-			else {
-				schemaFile = new File(schemaPath);
-			}
-		}return schemaFile;
+		return schemaFile;
 	}
 	
 	private void addImportExportButtons(Composite containerControl) {

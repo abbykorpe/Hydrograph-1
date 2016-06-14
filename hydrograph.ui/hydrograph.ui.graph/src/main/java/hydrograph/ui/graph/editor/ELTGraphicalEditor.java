@@ -52,6 +52,7 @@ import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
+import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.utils.ParameterFileManager;
@@ -997,7 +998,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 */
 	public void createOutputStream(OutputStream out) throws IOException {
 
-		out.write(fromObjectToXML(getContainer()).getBytes());
+		out.write(CanvasUtils.INSTANCE.fromObjectToXML(getContainer()).getBytes());
 	}
 
 	/**
@@ -1091,53 +1092,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				}
 			}
 		}
-	}
-
-
-
-	/**
-	 * From xml to object.
-	 * 
-	 * @param xml
-	 *            the xml
-	 * @return the object
-	 */
-	public Object fromXMLToObject(InputStream xml) {
-
-		Object obj = null;
-
-		XStream xs = new XStream();
-		xs.autodetectAnnotations(true);
-		try {
-
-			obj = xs.fromXML(xml);
-			logger.debug("Sucessfully converted JAVA Object from XML Data");
-			xml.close();
-		} catch (IOException e) {
-			logger.error("Failed to convert from XML to Graph due to : {}", e);
-			MessageDialog.openError(new Shell(), "Error", "Invalid graph file.");
-		}
-		return obj;
-	}
-
-	/**
-	 * From object to xml.
-	 * 
-	 * @param object
-	 *            the object
-	 * @return the string
-	 */
-	public String fromObjectToXML(Serializable object) {
-
-		String str = "<!-- It is recommended to avoid changes to xml data -->\n\n";
-
-		XStream xs = new XStream();
-		xs.autodetectAnnotations(true);
-
-		str = str + xs.toXML(object);
-		logger.debug("Sucessfully converted XML from JAVA Object");
-		
-		return str;
 	}
 
 	/**

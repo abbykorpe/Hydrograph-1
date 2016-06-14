@@ -69,9 +69,7 @@ public class RunConfigDialog extends Dialog {
 	private Text textUser;
 	private Text textPassword;
 	private Text textRunUtility;
-	private Text textJobXML;
-	private Text textLibs;
-	private Text textParamFiles;
+	private Text textDirectory;
 	private Text basepathText;
 	private Text txtPortNo;
  
@@ -97,9 +95,7 @@ public class RunConfigDialog extends Dialog {
 	private final String USER_NAME = "userName";
 
 	private final String RUN_UTILITY = "runUtility";
-	private final String JOB_XML = "remoteJobXMLDir";
-	private final String LIB_PATH = "remoteLibDir";
-	private final String PARAM_FILE = "remoteParameterFileDir";
+	private final String REMOTE_DIRECTORY = "remoteDirectory";
 	private final String Base_PATH = "basePath";
 	private final String PORT_NO = "remotePortNo";
 
@@ -287,7 +283,7 @@ public class RunConfigDialog extends Dialog {
 		compositePathConfig = new Composite(container, SWT.BORDER);
 		GridData gd_compositePathConfig = new GridData(SWT.CENTER, SWT.BOTTOM,
 				false, false, 1, 1);
-		gd_compositePathConfig.heightHint = 256;
+		gd_compositePathConfig.heightHint = 400;
 		gd_compositePathConfig.widthHint = 349;
 		compositePathConfig.setLayoutData(gd_compositePathConfig);
 		formToolkit.adapt(compositePathConfig);
@@ -304,37 +300,17 @@ public class RunConfigDialog extends Dialog {
 		textBoxes.put("runUtility", textRunUtility);
 
 		Label lblJobXml = new Label(compositePathConfig, SWT.NONE);
-		lblJobXml.setText("Job XML");
+		lblJobXml.setText("Project Path");
 		lblJobXml.setBounds(24, 98, 70, 15);
 		formToolkit.adapt(lblJobXml, true, true);
 
-		textJobXML = new Text(compositePathConfig, SWT.BORDER);
-		textJobXML.setBounds(110, 92, 206, 21);
-		formToolkit.adapt(textJobXML, true, true);
-		textBoxes.put("remoteJobXMLDir", textJobXML);
-
-		Label lblLibs = new Label(compositePathConfig, SWT.NONE);
-		lblLibs.setText("Jar Files");
-		lblLibs.setBounds(24, 138, 70, 15);
-		formToolkit.adapt(lblLibs, true, true);
-
-		textLibs = new Text(compositePathConfig, SWT.BORDER);
-		textLibs.setBounds(110, 132, 206, 21);
-		formToolkit.adapt(textLibs, true, true);
-		textBoxes.put("remoteLibDir", textLibs);
-
-		Label lblParamFiles = new Label(compositePathConfig, SWT.NONE);
-		lblParamFiles.setText("Param Files");
-		lblParamFiles.setBounds(24, 175, 70, 15);
-		formToolkit.adapt(lblParamFiles, true, true);
-
-		textParamFiles = new Text(compositePathConfig, SWT.BORDER);
-		textParamFiles.setBounds(110, 169, 206, 21);
-		formToolkit.adapt(textParamFiles, true, true);
-		textBoxes.put("remoteParameterFileDir", textParamFiles);
+		textDirectory = new Text(compositePathConfig, SWT.BORDER);
+		textDirectory.setBounds(110, 92, 206, 21);
+		formToolkit.adapt(textDirectory, true, true);
+		textBoxes.put("remoteDirectory", textDirectory);
 
 		Label lblPathConfiguration = new Label(compositePathConfig, SWT.NONE);
-		lblPathConfiguration.setText("Path Configuration");
+		lblPathConfiguration.setText("Remote Path Configuration");
 		lblPathConfiguration.setFont(SWTResourceManager.getFont("Segoe UI", 9,
 				SWT.BOLD));
 		lblPathConfiguration.setBounds(24, 22, 113, 15);
@@ -342,17 +318,13 @@ public class RunConfigDialog extends Dialog {
 		
 		Label lblPortNo = new Label(compositePathConfig, SWT.NONE);
 		lblPortNo.setText("Port No");
-		lblPortNo.setBounds(24, 210, 70, 15);
+		lblPortNo.setBounds(24, 138, 70, 15);
 		formToolkit.adapt(lblPortNo, true, true);
 		
 		txtPortNo = new Text(compositePathConfig, SWT.BORDER);
-		txtPortNo.setBounds(110, 210, 206, 21);
+		txtPortNo.setBounds(110, 132, 206, 21);
 		formToolkit.adapt(txtPortNo, true, true);
 		textBoxes.put("remotePortNo", txtPortNo);
-		
-		/*Label label = new Label(compositePathConfig, SWT.READ_ONLY);
-		label.setBounds(110, 236, 100, 20);
-		label.setText("Default_Port_No#8004");*/
 		
 		if(!isDebug){
      		lblPortNo.setVisible(false);
@@ -405,19 +377,22 @@ public class RunConfigDialog extends Dialog {
 	private void populateTextBoxes(Enumeration e) {
 		while (e.hasMoreElements()) {
 			String key = (String) e.nextElement();
-			if (key.equals(LOCAL_MODE)
+			if (LOCAL_MODE.equals(key)
 					&& buildProps.getProperty(key).equals("true")) {
 				btnLocalMode.setSelection(true);
 				btnRemoteMode.setSelection(false);
 
-			} else if (key.equals(REMOTE_MODE)
+			} else if (REMOTE_MODE.equals(key)
 					&& buildProps.getProperty(key).equals("true")) {
 				btnRemoteMode.setSelection(true);
 				btnLocalMode.setSelection(false);
 				compositeServerDetails.setVisible(true);
 				compositePathConfig.setVisible(true);
-			} else if (!(key.equals(LOCAL_MODE) || key.equals(REMOTE_MODE))) {
-				textBoxes.get(key).setText(buildProps.getProperty(key));
+			} else if (!(LOCAL_MODE.equals(key) || REMOTE_MODE.equals(key))) {
+				if(!"password".equalsIgnoreCase(key) && textBoxes.get(key)!=null)
+				{
+					textBoxes.get(key).setText(buildProps.getProperty(key));
+				}
 			}
 		}
 	}
@@ -458,7 +433,7 @@ public class RunConfigDialog extends Dialog {
 				IDialogConstants.CANCEL_LABEL, false);
 
 	}
-
+	
 	@Override
 	protected void okPressed() {
 		remoteMode = btnRemoteMode.getSelection();
@@ -471,9 +446,7 @@ public class RunConfigDialog extends Dialog {
 			buildProps.put(HOST, textEdgeNode.getText());
 			buildProps.put(USER_NAME, textUser.getText());
 			buildProps.put(RUN_UTILITY, textRunUtility.getText());
-			buildProps.put(JOB_XML, textJobXML.getText());
-			buildProps.put(LIB_PATH, textLibs.getText() );
-			buildProps.put(PARAM_FILE, textParamFiles.getText());
+			buildProps.put(REMOTE_DIRECTORY, textDirectory.getText());
 			buildProps.put(Base_PATH, basepathText.getText()); 
 			buildProps.put(PORT_NO, txtPortNo.getText());
 
@@ -521,7 +494,7 @@ public class RunConfigDialog extends Dialog {
 	@Override
 	protected Point getInitialSize() {
 		if(btnRemoteMode.getSelection()){
-			return new Point(380, 671);
+			return new Point(380, 580); 
 		}else{
 			return new Point(380, 190);
 		}
@@ -579,7 +552,7 @@ public class RunConfigDialog extends Dialog {
 				compositePathConfig.setVisible(false);
 
 			} else if (button.getText().equals("Remote")) {
-				container.getShell().setSize(380, 671);
+				container.getShell().setSize(380,580);
 				compositeServerDetails.setVisible(true);
 				compositePathConfig.setVisible(true);
 			}
