@@ -89,7 +89,7 @@ public class SchemaHelper {
 											file = new File(filePath);
 											GridRowLoader gridRowLoader = new GridRowLoader(Constants.GENERIC_GRID_ROW, file);
 											gridRowLoader.exportXMLfromGridRowsWithoutMessage(gridRowList);
-											logger.debug("schema file created.");
+											logger.debug("schema file created for : {}, {}", componentName, socketName);
 										}
 									}
 								 }
