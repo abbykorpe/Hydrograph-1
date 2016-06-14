@@ -1032,8 +1032,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 	public Object getDataViewerWindowTitle() {
-		// TODO Auto-generated method stub
-		return null;
+		return dataViewerWindowName;
 	}
 
 }

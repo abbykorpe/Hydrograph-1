@@ -194,6 +194,7 @@ public class WatchRecordAction extends SelectionAction {
 			return;
 		}
 		
+		
 		//Create data viewer window name, if window exist reopen same window
 		String dataViewerWindowName = job.getLocalJobID().replace(".", "_") + "_" + watchRecordInner.getComponentId() + "_"
 				+ watchRecordInner.getSocketId();
