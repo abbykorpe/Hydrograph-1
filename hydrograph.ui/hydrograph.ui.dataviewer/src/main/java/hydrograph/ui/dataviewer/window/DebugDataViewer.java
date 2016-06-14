@@ -17,7 +17,6 @@ import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.SWTResourceManager;
 import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.actions.ActionFactory;
 import hydrograph.ui.dataviewer.actions.CopyAction;
@@ -47,21 +46,17 @@ import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.httpclient.HttpException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.CoolBarManager;
@@ -330,20 +325,6 @@ public class DebugDataViewer extends ApplicationWindow {
 	protected Control createContents(Composite parent) {
 		setDataViewerWindowTitle();
 		getShell().setMinimumSize(ControlConstants.DATA_VIEWER_MINIMUM_SIZE);
-
-		/*try {
-			initializeDataFileAdapter();
-		} catch (ClassNotFoundException | SQLException e) {
-			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_LOAD_DEBUG_FILE + e.getMessage());
-			logger.error("Unable to load debug file", e);
-			getShell().close();
-			
-			if(dataViewerAdapter!=null){
-				dataViewerAdapter.closeConnection();
-			}
-			
-			return null;
-		}*/
 
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));

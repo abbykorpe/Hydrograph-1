@@ -71,23 +71,16 @@ public class DataViewerFileManager {
 		
 		try {
 			csvDebugFileAbsolutePath = DebugServiceClient.INSTANCE.getDebugFile(jobDetails, Utils.INSTANCE.getFileSize()).trim();
-		} catch (NumberFormatException e4) {
+		} catch (NumberFormatException | HttpException  | MalformedURLException e4) {
 			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 			logger.error("Unable to fetch debug file", e4);
 			return StatusConstants.ERROR;
-		} catch (HttpException e4) {
-			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
-			logger.error("Unable to fetch debug file", e4);
-			return StatusConstants.ERROR;
-		} catch (MalformedURLException e4) {
-			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
-			logger.error("Unable to fetch debug file", e4);
-			return StatusConstants.ERROR;
-		} catch (IOException e4) {
+		}  catch (IOException e4) {
 			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 			logger.error("Unable to fetch debug file", e4);
 			return StatusConstants.ERROR;
 		}
+		
 		csvDebugFileName = csvDebugFileAbsolutePath.substring(csvDebugFileAbsolutePath.lastIndexOf("/") + 1,
 				csvDebugFileAbsolutePath.length()).replace(DEBUG_DATA_FILE_EXTENTION, "").trim();
 				
@@ -106,11 +99,7 @@ public class DataViewerFileManager {
 		dataViewerFileName= csvDebugFileName.trim();	
 		try {
 			DebugServiceClient.INSTANCE.deleteDebugFile(jobDetails);
-		} catch (NumberFormatException e1) {
-			logger.warn("Unable to delete debug file",e1);
-		} catch (HttpException e1) {
-			logger.warn("Unable to delete debug file",e1);
-		} catch (MalformedURLException e1) {
+		} catch (NumberFormatException | HttpException  | MalformedURLException e1) {
 			logger.warn("Unable to delete debug file",e1);
 		} catch (IOException e1) {
 			logger.warn("Unable to delete debug file",e1);
@@ -135,23 +124,13 @@ public class DataViewerFileManager {
 	}
 
 	private boolean isEmptyDebugCSVFile(String dataViewerFilePath, final String dataViewerFileh) {
-		BufferedReader bufferedReader = null;
-		try {
-			bufferedReader = new BufferedReader(new FileReader(dataViewerFilePath + dataViewerFileh + DEBUG_DATA_FILE_EXTENTION));
+		try(BufferedReader bufferedReader = new BufferedReader(new FileReader(dataViewerFilePath + dataViewerFileh + DEBUG_DATA_FILE_EXTENTION))) {
 			if (bufferedReader.readLine() == null) {
 			    return true;
 			}
 		} catch (Exception e1) {
 			logger.error("Unable to read debug file",e1);
 			return true;
-		}finally{
-			try {
-				if(bufferedReader != null){
-					bufferedReader.close();
-				}					
-			} catch (IOException e) {
-				logger.error("Unable to read debug file",e);
-			}
 		}
 		return false;
 	}
