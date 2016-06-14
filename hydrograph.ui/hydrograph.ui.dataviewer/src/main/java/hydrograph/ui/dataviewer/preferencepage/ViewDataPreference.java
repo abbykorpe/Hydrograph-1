@@ -199,7 +199,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 					setMessage(null);
 				}
 				
-				//validationForHexaDecimalValue(value);
+				validationForHexaDecimalValue(value);
 				Notification note =validateQuoteCharacter();
 				if(note.hasErrors()){
 					setValid(false);
@@ -259,7 +259,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 
 	private void validationForHexaDecimalValue(String value){
 		if(StringUtils.length(ConvertHexValues.parseHex(value)) != 1){
-			setErrorMessage("HexaDecimal value length should not greater 1");
+			setErrorMessage(Messages.SINGLE_CHARACTOR_ERROR_MESSAGE);
 			setValid(false);
 		}else{
 			setErrorMessage(null);
@@ -270,7 +270,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	private void validationForIntegerValue(String value){
 		if(StringUtils.isNotBlank(value) && value.matches("\\d+")){
 			if(Integer.parseInt(value)<=0){
-				setErrorMessage("Value should be grater than 0");
+				setErrorMessage(Messages.NUMERIC_VALUE_ACCPECTED);
 				setValid(false);
 			}else{
 				setErrorMessage(null);

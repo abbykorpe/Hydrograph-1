@@ -42,7 +42,7 @@ public class ViewDataSchemaHelper {
 	public static ViewDataSchemaHelper INSTANCE = new ViewDataSchemaHelper();
 	
 	
-	public ViewDataSchemaHelper() {
+	private ViewDataSchemaHelper() {
 	}
 	
 	/**

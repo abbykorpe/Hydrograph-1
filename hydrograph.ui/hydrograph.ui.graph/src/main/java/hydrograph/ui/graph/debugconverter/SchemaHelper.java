@@ -50,7 +50,7 @@ public class SchemaHelper {
 	public static SchemaHelper INSTANCE = new SchemaHelper();
 
 	
-	public SchemaHelper() {
+	private SchemaHelper() {
 	}
 	
 	/**
