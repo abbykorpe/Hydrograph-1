@@ -104,7 +104,7 @@ task scpJobXML() {
 					scpToRemoteServer(jobXML,project.name+ "/" +getFilePath(jobXML),username,host,password,properties.remoteDirectory)
 
     		        if(project.hasProperty('debugJobXML')){
-						scpToRemoteServer(jobXML,project.name+ "/" +getFilePath(debugJobXML),username,host,password,properties.remoteDirectory)
+						scpToRemoteServer(debugJobXML,project.name+ "/" +getFilePath(debugJobXML),username,host,password,properties.remoteDirectory)
             		}
 		    }
 }
