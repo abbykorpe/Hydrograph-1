@@ -46,10 +46,8 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.handlers.HandlerUtil;
 import org.slf4j.Logger;
 
 /**
@@ -64,11 +62,10 @@ public class WatchRecordAction extends SelectionAction {
 	private WatchRecordInner watchRecordInner = new WatchRecordInner();
 
 	private static Map<String, DebugDataViewer> dataViewerMap;
-	
+
 	public WatchRecordAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(true);
-		
 	}
 	
 	@Override
@@ -79,7 +76,6 @@ public class WatchRecordAction extends SelectionAction {
 		setEnabled(true);
 		dataViewerMap = new LinkedHashMap<>();
 		JobManager.INSTANCE.setDataViewerMap(dataViewerMap);
-		
 	}
 
 	private void createWatchCommand() throws CoreException {
@@ -198,9 +194,11 @@ public class WatchRecordAction extends SelectionAction {
 		}
 				
 		final JobDetails jobDetails = getJobDetails(job);
+
 		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
 		editor.getContainer().getJobDetailsInGraph().add(jobDetails);
+
 		
 		final String dataViewerWindowTitle = dataViewerWindowName;	
 
