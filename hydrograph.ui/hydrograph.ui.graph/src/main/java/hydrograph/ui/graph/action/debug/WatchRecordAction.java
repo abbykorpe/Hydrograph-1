@@ -77,10 +77,8 @@ public class WatchRecordAction extends SelectionAction {
 	private boolean isWatcher;
 	private WatchRecordInner watchRecordInner = new WatchRecordInner();
 
-	private Map<String, DebugDataViewer> dataViewerMap;
+	private static Map<String, DebugDataViewer> dataViewerMap;
 
-	private static final String DEBUG_DATA_FILE_EXTENTION=".csv";
-	
 	public WatchRecordAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(true);
@@ -210,132 +208,20 @@ public class WatchRecordAction extends SelectionAction {
 			return;
 		}
 				
-		// Get csv debug file name and location 
 		final JobDetails jobDetails = getJobDetails(job);
-		String csvDebugFileAbsolutePath = null;
-		String csvDebugFileName = null;
+		final String dataViewerWindowTitle = dataViewerWindowName;	
 		
-		try {
-			csvDebugFileAbsolutePath = DebugServiceClient.INSTANCE.getDebugFile(jobDetails, Utils.INSTANCE.getFileSize()).trim();
-		} catch (NumberFormatException e4) {
-			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
-			logger.error("Unable to fetch debug file", e4);
-			return;
-		} catch (HttpException e4) {
-			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
-			logger.error("Unable to fetch debug file", e4);
-			return;
-		} catch (MalformedURLException e4) {
-			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
-			logger.error("Unable to fetch debug file", e4);
-			return;
-		} catch (IOException e4) {
-			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
-			logger.error("Unable to fetch debug file", e4);
-			return;
-		}
-		csvDebugFileName = csvDebugFileAbsolutePath.substring(csvDebugFileAbsolutePath.lastIndexOf("/") + 1,
-				csvDebugFileAbsolutePath.length()).replace(DEBUG_DATA_FILE_EXTENTION, "").trim();
-				
-		//Copy csv debug file to Data viewers temporary file location
-		String dataViewerDebugFile = getDataViewerDebugFile(csvDebugFileName);		
-		try {
-			copyCSVDebugFileToDataViewerStagingArea(jobDetails, csvDebugFileAbsolutePath, dataViewerDebugFile);
-		} catch (IOException | JSchException e1) {
-			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
-			logger.error("Unable to fetch debug file", e1);
-			return;
-		}
-		
-		
-		//Delete csv debug file after copy
-		final String dataViewerFilePath= getDataViewerDebugFilePath().trim();
-		final String dataViewerFile= csvDebugFileName.trim();
-		final String dataViewerWindowTitle = dataViewerWindowName;		
-		try {
-			DebugServiceClient.INSTANCE.deleteDebugFile(jobDetails);
-		} catch (NumberFormatException e1) {
-			logger.warn("Unable to delete debug file",e1);
-		} catch (HttpException e1) {
-			logger.warn("Unable to delete debug file",e1);
-		} catch (MalformedURLException e1) {
-			logger.warn("Unable to delete debug file",e1);
-		} catch (IOException e1) {
-			logger.warn("Unable to delete debug file",e1);
-		}
-		
-		//Check for empty csv debug file
-		if(isEmptyDebugCSVFile(dataViewerFilePath, dataViewerFile)){
-			MessageBox.INSTANCE.showMessage(MessageBox.ERROR,Messages.EMPTY_DEBUG_FILE);
-			logger.error("Empty debug file");
-		    return;
-		}
-		
-		//Export Debug file schema
-		String tempSchemaFilePath = dataViewerFilePath+dataViewerFile;
-		SchemaHelper.INSTANCE.exportSchemaGridData(getSelectedObjects(), tempSchemaFilePath);
-				
 		//Open data viewer window
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				
-				DebugDataViewer window = new DebugDataViewer(dataViewerFilePath, dataViewerFile, dataViewerWindowTitle,
-						jobDetails);
-				window.setBlockOnOpen(true);
+				DebugDataViewer window = new DebugDataViewer(jobDetails,dataViewerWindowTitle);
 				dataViewerMap.put(dataViewerWindowTitle, window);
+				window.setBlockOnOpen(true);
 				window.open();
-				dataViewerMap.remove(dataViewerWindowTitle);
+				dataViewerMap.remove(window.getDataViewerWindowTitle());
 			}
 		});
-	}
-
-	private boolean isEmptyDebugCSVFile(String dataViewerFilePath, final String dataViewerFileh) {
-		BufferedReader bufferedReader = null;
-		try {
-			bufferedReader = new BufferedReader(new FileReader(dataViewerFilePath + dataViewerFileh + DEBUG_DATA_FILE_EXTENTION));
-			if (bufferedReader.readLine() == null) {
-			    return true;
-			}
-		} catch (Exception e1) {
-			logger.error(Messages.UNABLE_TO_READ_DEBUG_FILE,e1);
-			return true;
-		}finally{
-			try {
-				if(bufferedReader != null){
-					bufferedReader.close();
-				}					
-			} catch (IOException e) {
-				logger.error(Messages.UNABLE_TO_READ_DEBUG_FILE,e);
-			}
-		}
-		return false;
-	}
-
-	private void copyCSVDebugFileToDataViewerStagingArea(JobDetails jobDetails, String csvDebugFileAbsolutePath, String dataViewerDebugFile) throws IOException, JSchException{
-		if (!jobDetails.isRemote()) {
-			String sourceFile = csvDebugFileAbsolutePath.trim();
-			File file = new File(dataViewerDebugFile);
-			if (!file.exists()) {
-				Files.copy(Paths.get(sourceFile), Paths.get(dataViewerDebugFile), StandardCopyOption.REPLACE_EXISTING);
-			}
-		} else {
-			File file = new File(dataViewerDebugFile);
-			if (!file.exists()) {				
-				SCPUtility.INSTANCE.scpFileFromRemoteServer(jobDetails.getHost(), jobDetails.getUsername(), jobDetails.getPassword(),
-						csvDebugFileAbsolutePath.trim(), getDataViewerDebugFilePath());
-			}
-		}
-	}
-
-	private String getDataViewerDebugFile(String csvDebugFileName) {
-		String dataViewerDebugFile = getDataViewerDebugFilePath();
-		if (OSValidator.isWindows()) {
-			dataViewerDebugFile = (dataViewerDebugFile + "\\" + csvDebugFileName.trim() + DEBUG_DATA_FILE_EXTENTION).trim();
-		} else {
-			dataViewerDebugFile = (dataViewerDebugFile + "/" + csvDebugFileName.trim() + DEBUG_DATA_FILE_EXTENTION).trim();
-		}
-		return dataViewerDebugFile;
 	}
 
 	private JobDetails getJobDetails(Job job) {
@@ -351,22 +237,6 @@ public class WatchRecordAction extends SelectionAction {
 				job.isRemoteMode());
 		return jobDetails;
 	}
-
-	private String getDataViewerDebugFilePath() {
-		String dataViewerDebugFilePath = Utils.INSTANCE.getDataViewerDebugFilePath();
-		dataViewerDebugFilePath=dataViewerDebugFilePath.trim();
-				
-		if(OSValidator.isWindows()){
-			if(dataViewerDebugFilePath.startsWith("/")){
-				dataViewerDebugFilePath = dataViewerDebugFilePath.replaceFirst("/", "").replace("/", "\\");
-			}		
-			dataViewerDebugFilePath = dataViewerDebugFilePath + "\\";
-		}else{
-			dataViewerDebugFilePath = dataViewerDebugFilePath + "/";
-		}
-		
-		return dataViewerDebugFilePath;
-	}	
 }
 
 class WatchRecordInner {

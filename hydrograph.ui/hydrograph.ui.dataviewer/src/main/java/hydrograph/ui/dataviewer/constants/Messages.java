@@ -50,6 +50,7 @@ public class Messages extends NLS{
 	public static String SHOWING_RECORDS_FROM;
 	public static String ROW_COUNT;
 	public static String FETCHING_TOTAL_NUMBER_OF_RECORDS;
+
 	public static String ERROR_MESSAGE;
 	public static String NUMERIC_VALUE_ACCPECTED ;
 	public static String FILE_SIZE_BLANK ;
@@ -67,6 +68,11 @@ public class Messages extends NLS{
 	public static String PAGE_SIZE_HELP_TEXT;
 
 
+
+	public static String LOADING_DEBUG_FILE;
+	public static String UNABLE_TO_FETCH_DEBUG_FILE;
+	public static String UNABLE_TO_READ_DEBUG_FILE;
+		
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

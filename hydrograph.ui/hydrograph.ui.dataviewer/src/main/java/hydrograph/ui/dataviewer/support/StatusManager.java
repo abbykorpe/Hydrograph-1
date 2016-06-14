@@ -238,6 +238,7 @@ public class StatusManager {
 	 * 
 	 */
 	public void enableInitialPaginationContols(){
+		enablePageSwitchPanel(true);
 		if(dataViewerAdapter.getRowCount()!=null){
 			if(((long)dataViewerAdapter.getTotalNumberOfPages()) == dataViewerAdapter.getCurrentPageNumber()){
 				enableNextPageButton(false);

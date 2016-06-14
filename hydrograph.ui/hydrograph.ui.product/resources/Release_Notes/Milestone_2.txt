@@ -8,6 +8,11 @@ Sr.No. <date> - [developer names] - description
 Issues/Defects fixed:
 =====================================================================================================
 Sr.No. <GitHub Issue #> - [fixed by] - description
+1. Load button located on the View Data window should be disabled till
+   loading the fresh data in the data grid window and proper loading icon
+   should display on the screen #573  - [ Shrirang S Kumbhar] 
+2. Data viewer window is taking too much time to load data, so show data
+   viewer window first and then load data into it #574 - [ Shrirang S Kumbhar] 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

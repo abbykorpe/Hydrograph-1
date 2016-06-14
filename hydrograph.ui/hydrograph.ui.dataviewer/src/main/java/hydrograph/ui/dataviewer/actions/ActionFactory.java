@@ -75,5 +75,10 @@ public class ActionFactory {
 		return actionMap.get(action);
 	}
 	
+	public void enableAllActions(boolean enabled){
+		for(String action: actionMap.keySet()){
+			actionMap.get(action).setEnabled(enabled);
+		}
+	}
 	
 }
