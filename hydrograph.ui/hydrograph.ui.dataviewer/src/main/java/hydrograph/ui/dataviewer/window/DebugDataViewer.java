@@ -56,6 +56,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.CoolBarManager;
@@ -144,7 +145,6 @@ public class DebugDataViewer extends ApplicationWindow {
 	private static final String DEFAULT_PAGE_SIZE = "100";
 
 	private JobDetails jobDetails;
-
 	private StatusManager statusManager;
 
 	private Action dropDownAction;
