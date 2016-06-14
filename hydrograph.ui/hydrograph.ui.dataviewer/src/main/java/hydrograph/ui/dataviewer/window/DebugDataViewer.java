@@ -17,6 +17,7 @@ import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.SWTResourceManager;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.actions.ActionFactory;
 import hydrograph.ui.dataviewer.actions.CopyAction;
@@ -38,6 +39,7 @@ import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.constants.Views;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
+import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
 import hydrograph.ui.dataviewer.listeners.DataViewerListeners;
 import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
 import hydrograph.ui.dataviewer.support.StatusManager;
@@ -45,12 +47,15 @@ import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.httpclient.HttpException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -125,8 +130,6 @@ public class DebugDataViewer extends ApplicationWindow {
 	private String debugFileLocation;
 	private String debugFileName;
 
-	private String windowName = "Debug Data viewer";
-
 	private ActionFactory actionFactory;
 
 	private DataViewLoader dataViewLoader;
@@ -149,6 +152,8 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private Action dropDownAction;
 
+	private String dataViewerWindowName;
+	
 	/**
 	 * Create the application window,
 	 * 
@@ -165,24 +170,108 @@ public class DebugDataViewer extends ApplicationWindow {
 		gridViewData = new LinkedList<>();
 	}
 
-	public DebugDataViewer(String filePath, String fileName, String windowName, JobDetails reloadInformation) {
+	
+	public DebugDataViewer( JobDetails jobDetails, String dataViewerWindowName) {
 		super(new Shell(SWT.CLOSE | SWT.MAX | SWT.MIN));
 		createActions();
 		addCoolBar(SWT.FLAT);
 		addMenuBar();
-		addStatusLine();
+		addStatusLine();	
+		this.jobDetails = jobDetails;
+		this.dataViewerWindowName = dataViewerWindowName;
 		windowControls = new LinkedHashMap<>();
 		gridViewData = new LinkedList<>();
-		this.debugFileLocation = filePath;
-		this.debugFileName = fileName;
-
-		if (windowName != null){
-			this.windowName = "Data Viewer - " + windowName;
-		}			
-
-		this.jobDetails = reloadInformation;
 	}
 
+	private void downloadDebugFiles() {
+		Job job = new Job(Messages.LOADING_DEBUG_FILE) {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				disbleDataViewerUIControls();
+
+				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(jobDetails);
+				int returnCode = dataViewerFileManager.downloadDataViewerFiles();
+
+				if (StatusConstants.ERROR == returnCode) {
+					getShell().close();
+				}
+
+				debugFileName = dataViewerFileManager.getDataViewerFileName();
+				debugFileLocation = dataViewerFileManager.getDataViewerFilePath();
+
+				showDataInDebugViewer();
+
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
+	}
+	
+	private void loadDebugFileInDataViewer() {
+		statusManager.getStatusLineManager().getProgressMonitor().done();
+
+		dataViewLoader = new DataViewLoader(unformattedViewTextarea, formattedViewTextarea, horizontalViewTableViewer,
+				gridViewTableViewer, gridViewData, formattedViewData, unformattedViewData, dataViewerAdapter, tabFolder);
+
+		dataViewerListeners.setDataViewerAdpater(dataViewerAdapter);
+		dataViewerListeners.setDataViewLoader(dataViewLoader);
+
+		statusManager.setDataViewerAdapter(dataViewerAdapter);
+		statusManager.setStatus(new StatusMessage(StatusConstants.SUCCESS));
+		statusManager.enableInitialPaginationContols();
+		statusManager.clearJumpToPageText();
+
+		dataViewLoader.updateDataViewLists();
+
+		updateGridViewTable();
+
+		dataViewLoader.reloadloadViews();
+		statusManager.enableInitialPaginationContols();
+		actionFactory.enableAllActions(true);
+		submitRecordCountJob();
+	}
+	
+	private void showDataInDebugViewer() {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					initializeDataFileAdapter();
+				} catch (ClassNotFoundException | SQLException e) {
+					Utils.INSTANCE.showMessage(MessageBoxText.ERROR,
+							Messages.UNABLE_TO_LOAD_DEBUG_FILE + e.getMessage());
+					logger.error("Unable to load debug file", e);					
+
+					if (dataViewerAdapter != null) {
+						dataViewerAdapter.closeConnection();
+					}
+					getShell().close();
+				}
+				loadDebugFileInDataViewer();
+			}
+		});
+	}
+
+	public void disbleDataViewerUIControls() {
+		Display.getDefault().asyncExec(new Runnable() {					
+			@Override
+			public void run() {
+				statusManager.enablePaginationPanel(false);
+				actionFactory.enableAllActions(false);
+				statusManager.getStatusLineManager().getProgressMonitor().beginTask(Messages.LOADING_DEBUG_FILE, IProgressMonitor.UNKNOWN);
+			}
+		});
+	}
+	
+	/**
+	 * Get Action factory
+	 * 
+	 * @return {@link ActionFactory}
+	 */
+	public ActionFactory getActionFactory() {
+		return actionFactory;
+	}
+	
 	/**
 	 * 
 	 * Get reload information to reload debug file
@@ -242,7 +331,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		setDataViewerWindowTitle();
 		getShell().setMinimumSize(ControlConstants.DATA_VIEWER_MINIMUM_SIZE);
 
-		try {
+		/*try {
 			initializeDataFileAdapter();
 		} catch (ClassNotFoundException | SQLException e) {
 			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_LOAD_DEBUG_FILE + e.getMessage());
@@ -254,7 +343,7 @@ public class DebugDataViewer extends ApplicationWindow {
 			}
 			
 			return null;
-		}
+		}*/
 
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
@@ -265,26 +354,19 @@ public class DebugDataViewer extends ApplicationWindow {
 		tabFolder.setBackground(SWTResourceManager.getColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
 		tabFolder.setSelectionForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 
-		dataViewLoader = new DataViewLoader(unformattedViewTextarea, formattedViewTextarea, horizontalViewTableViewer,
-				gridViewTableViewer, gridViewData, formattedViewData, unformattedViewData, dataViewerAdapter, tabFolder);
-
-		dataViewerListeners = new DataViewerListeners();
 		createGridViewTabItem();
-		createPaginationPanel(container);
-
-		dataViewerListeners.setDataViewerAdpater(dataViewerAdapter);
-		dataViewerListeners.setDataViewLoader(dataViewLoader);
+		
+		dataViewerListeners = new DataViewerListeners();		
 		dataViewerListeners.setWindowControls(windowControls);
 		dataViewerListeners.addTabFolderSelectionChangeListener(tabFolder);
 		dataViewerListeners.setStatusManager(statusManager);
-
-		statusManager.setDataViewerAdapter(dataViewerAdapter);
+		
 		statusManager.setWindowControls(windowControls);
-		statusManager.setStatus(new StatusMessage(StatusConstants.SUCCESS));
-
-		statusManager.enableInitialPaginationContols();
+		createPaginationPanel(container);
+		
 		tabFolder.setSelection(0);
-
+		downloadDebugFiles();
+		
 		return container;
 	}
 
@@ -304,7 +386,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 	private void setDataViewerWindowTitle() {
-		getShell().setText(windowName);
+		getShell().setText("Debug Data viewer - " + dataViewerWindowName);
 	}
 
 	private void createPaginationPanel(Composite container) {
@@ -399,13 +481,23 @@ public class DebugDataViewer extends ApplicationWindow {
 
 		windowControls.put(ControlConstants.PAGE_NUMBER_DISPLAY, pageNumberDisplayTextBox);
 
-		submitRecordCountJob();
+		//submitRecordCountJob();
 	}
 
-	private void submitRecordCountJob() {
+	public void submitRecordCountJob() {
 		Job job = new Job(Messages.FETCHING_TOTAL_NUMBER_OF_RECORDS) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
+				
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						statusManager.getStatusLineManager().getProgressMonitor().beginTask(Messages.FETCHING_TOTAL_NUMBER_OF_RECORDS, IProgressMonitor.UNKNOWN);
+					}
+				});
+				
 				final StatusMessage status = dataViewerAdapter.fetchRowCount();
 
 				Display.getDefault().asyncExec(new Runnable() {
@@ -629,20 +721,24 @@ public class DebugDataViewer extends ApplicationWindow {
 				scrolledComposite.setContent(stackLayoutComposite);
 				scrolledComposite.setMinSize(stackLayoutComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
-				createGridViewTableColumns(gridViewTableViewer);
-
-				gridViewTableViewer.setContentProvider(new ArrayContentProvider());
-				gridViewTableViewer.setInput(gridViewData);
-
-				dataViewLoader.setGridViewTableViewer(gridViewTableViewer);
-				dataViewLoader.updateDataViewLists();
-
-				gridViewTableViewer.getTable().getColumn(0).pack();
-
-				gridViewTableViewer.refresh();
+				//updateGridViewTable();
 			}
 		}
 
+	}
+
+	private void updateGridViewTable() {
+		createGridViewTableColumns(gridViewTableViewer);
+
+		gridViewTableViewer.setContentProvider(new ArrayContentProvider());
+		gridViewTableViewer.setInput(gridViewData);
+
+		dataViewLoader.setGridViewTableViewer(gridViewTableViewer);
+		dataViewLoader.updateDataViewLists();
+
+		gridViewTableViewer.getTable().getColumn(0).pack();
+
+		gridViewTableViewer.refresh();
 	}
 
 	private TableColumnLayout setTableLayoutToMappingTable(TableViewer tableViewer) {
@@ -948,8 +1044,15 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	@Override
 	public boolean close() {
-		dataViewerAdapter.closeConnection();
+		if(dataViewerAdapter!=null){
+			dataViewerAdapter.closeConnection();
+		}		
 		return super.close();
+	}
+
+	public Object getDataViewerWindowTitle() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

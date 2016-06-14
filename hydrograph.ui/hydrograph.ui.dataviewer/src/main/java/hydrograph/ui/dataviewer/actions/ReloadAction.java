@@ -34,7 +34,13 @@ import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 
 import org.apache.commons.httpclient.HttpException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.jcraft.jsch.JSchException;
@@ -47,18 +53,19 @@ import com.jcraft.jsch.JSchException;
  * 
  */
 public class ReloadAction extends Action {
-
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ReloadAction.class);
 
 	private JobDetails jobDetails;
 	private DebugDataViewer debugDataViewer;
-	private ViewDataPreferences viewDataPreferences;
-	
+	private ViewDataPreferences viewDataPreferences;	
 	private static final String LABEL = "Reload";
 
+	private Integer lastDownloadedFileSize;
+	
 	public ReloadAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
 		this.debugDataViewer = debugDataViewer;
+		lastDownloadedFileSize = Integer.valueOf(Utils.INSTANCE.getFileSize());
 	}
 
 	private String getDebugFilePathFromDebugService() throws IOException {
@@ -83,10 +90,66 @@ public class ReloadAction extends Action {
 	
 	@Override
 	public void run() {
+		viewDataPreferences = debugDataViewer.getViewDataPreferences();		
 		
-		viewDataPreferences = debugDataViewer.getViewDataPreferences();
+		Job job = new Job(Messages.LOADING_DEBUG_FILE) {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				
+				debugDataViewer.disbleDataViewerUIControls();
+				
+				if(lastDownloadedFileSize!=viewDataPreferences.getFileSize()){
+					int returnCode=downloadDebugFile();	
+					
+					if(StatusConstants.ERROR == returnCode){
+						return Status.CANCEL_STATUS;
+					}			
+				}
+				
+				try {
+					closeExistingDebugFileConnection();
+					if(lastDownloadedFileSize!=viewDataPreferences.getFileSize()){
+						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize(),true);	
+					}else{
+						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize(),false);
+					}
+					
+				} catch (ClassNotFoundException | SQLException e1) {
+					Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_RELOAD_DEBUG_FILE);
+					if(debugDataViewer.getDataViewerAdapter()!=null){
+						debugDataViewer.getDataViewerAdapter().closeConnection();
+					}
+					debugDataViewer.close();
+				}
+				
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						debugDataViewer.getStatusManager().getStatusLineManager().getProgressMonitor().done();
+						debugDataViewer.getActionFactory().enableAllActions(true);
+						
+						debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.SUCCESS));
+						debugDataViewer.getStatusManager().enableInitialPaginationContols();
+						debugDataViewer.getStatusManager().clearJumpToPageText();
+						updateDataViewerViews();
+						if(lastDownloadedFileSize!=viewDataPreferences.getFileSize()){
+							debugDataViewer.submitRecordCountJob();
+						}					
+						lastDownloadedFileSize = viewDataPreferences.getFileSize();
+					}
+				});
+				
+				return Status.OK_STATUS;
+					
+			}
+		};
 		
-		closeExistingDebugFileConnection();		
+		job.schedule();
+	}
+
+	
+	private int downloadDebugFile(){
 		loadNewDebugFileInformation();
 
 		String dataViewerFilePath = getLocalDataViewerFileLocation();
@@ -95,46 +158,23 @@ public class ReloadAction extends Action {
 		if(csvDebugFileLocation==null){
 			logger.error("No debug file recieved from service");
 			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_LOAD_DEBUG_FILE);
-			return;
+			return StatusConstants.ERROR;
 		}
 		
 		String csvDebugFileName = getCSVDebugFileName(csvDebugFileLocation);
 		
+		int returnCode;
 		if (!jobDetails.isRemote()) {			
 			String dataViewerFileAbsolutePath = getDataViewerFileAbsolutePath(dataViewerFilePath, csvDebugFileName);
-			int returnCode=copyCSVDebugFileAtDataViewerDebugFileLocation(csvDebugFileLocation, dataViewerFileAbsolutePath);
-			if(StatusConstants.ERROR == returnCode){
-				return;
-			}
+			 returnCode=copyCSVDebugFileAtDataViewerDebugFileLocation(csvDebugFileLocation, dataViewerFileAbsolutePath);
+			 deleteCSVDebugDataFile();
 		} else {
-			int returnCode=scpRemoteCSVDebugFileToDataViewerDebugFileLocation(dataViewerFilePath, csvDebugFileLocation);
-			if(StatusConstants.ERROR == returnCode){
-				return;
-			}
+			 returnCode=scpRemoteCSVDebugFileToDataViewerDebugFileLocation(dataViewerFilePath, csvDebugFileLocation);
+			 deleteCSVDebugDataFile();
 		}
-
-		deleteCSVDebugDataFile();
-		
-		try {
-			this.debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize());
-		} catch (ClassNotFoundException | SQLException e1) {
-			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_RELOAD_DEBUG_FILE);
-			this.debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_RELOAD_DEBUG_FILE));
-			updateDataViewerViews();
-			this.debugDataViewer.getStatusManager().clearJumpToPageText();
-			if(this.debugDataViewer.getDataViewerAdapter()!=null){
-				this.debugDataViewer.getDataViewerAdapter().closeConnection();
-			}
-			return;
-		}
-		
-		this.debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.SUCCESS));
-		this.debugDataViewer.getStatusManager().enableInitialPaginationContols();
-		this.debugDataViewer.getStatusManager().clearJumpToPageText();
-		updateDataViewerViews();
-
+		return returnCode;
 	}
-
+	
 	private void updateDataViewerViews() {
 		this.debugDataViewer.getDataViewLoader().updateDataViewLists();
 		this.debugDataViewer.getDataViewLoader().reloadloadViews();
