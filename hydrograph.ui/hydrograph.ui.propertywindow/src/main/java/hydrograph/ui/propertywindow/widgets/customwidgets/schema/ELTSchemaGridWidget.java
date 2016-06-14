@@ -1382,51 +1382,45 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		});
 	}
 
-
-
-
 	public List<GridRow> getSchemaGridRowList() {
 		return schemaGridRowList;
 	}
 
 	public void setSchemaGridRowList(List<GridRow> schemaGridRowList) {
 		this.schemaGridRowList = schemaGridRowList;
-	}
-
+	} 
+	/**
+	 * Called on tab switch, Its use to propagate internal schema from source to target.
+	 * propagation is restricted for components having pull schema feature. 
+	 */
 	@Override
 	public void refresh() {
 
 		Schema schema = getSchemaForInternalPropagation();
-		if (this.properties != null) {
-			Schema originalSchema = (Schema) this.properties;
-			List<GridRow> existingFields = getExitingSchemaFields(originalSchema);
-
-			List<String> existingFieldNames = getExitingSchemaFieldNames(originalSchema);
-
+		Schema originalSchema = (Schema) getComponent().getProperties().get("schema");
+		if (originalSchema != null && !originalSchema.getGridRow().isEmpty()) {
+			
+			List<GridRow> existingFields = new ArrayList<>(originalSchema.getGridRow());
 			List<String> operationFieldList = getOperationFieldList();
 			for (GridRow row : schema.getGridRow()) {
-				if (row != null) {
-					if (existingFieldNames.contains(row.getFieldName().trim())) {
-						if (existingFields.contains(row)) {
-							for (int index = 0; index < originalSchema.getGridRow().size(); index++) {
-								if (originalSchema.getGridRow().get(index).getFieldName().equals(row.getFieldName().trim())) {
-									if (!operationFieldList.contains(row.getFieldName()))
-										originalSchema.getGridRow().set(index, row.copy());
-								}
-							}
-						}
-					} 
-					else if(!SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()))
-							originalSchema.getGridRow().add(row.copy());
+				if (existingFields.contains(row)) {
+					if (!operationFieldList.contains(row.getFieldName())) {
+						originalSchema.getGridRow().set(existingFields.indexOf(row), row.copy());
+					}
+				} else if (!SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName())) {
+					originalSchema.getGridRow().add(row.copy());
 				}
 			}
+
 			table.clearAll();
 			
 			if (tableViewer != null) {
-				schemaGridRowList = originalSchema.getGridRow();
+				schemaGridRowList = new ArrayList<>(originalSchema.getGridRow());
+				ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
+				eLTDetails.setGrids(schemaGridRowList);
 				tableViewer.setInput(schemaGridRowList);
 				tableViewer.refresh();
-				toggleSchema(true);
+				toggleSchema(true); 
 			}
 			if (!originalSchema.getIsExternal()) {
 				external = false;
@@ -1440,7 +1434,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				table.clearAll();
 				if (!schema.getIsExternal()) {
 					if (tableViewer != null) {
-						schemaGridRowList = schema.getGridRow();
+						schemaGridRowList = new ArrayList<>(schema.getGridRow());
+						ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
+						eLTDetails.setGrids(schemaGridRowList); 
 						tableViewer.setInput(schemaGridRowList);
 						tableViewer.refresh();
 						external = false;
@@ -1451,23 +1447,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 		}
 		SchemaRowValidation.INSTANCE.highlightInvalidRowWithRedColor(null, null,table,componentType);
-	}
-
-	private List<String> getExitingSchemaFieldNames(Schema originalSchema) {
-		List<String> list = new ArrayList<>();
-		for (GridRow row : originalSchema.getGridRow()) {
-			list.add(row.getFieldName());
-		}
-		return list;
-	}
-
-	private List<GridRow> getExitingSchemaFields(Schema originalSchema) {
-		List<GridRow> list = new ArrayList<>();
-
-		for (GridRow row : originalSchema.getGridRow()) {
-			list.add((GridRow) row.copy());
-		}
-		return list;
 	}
 
 	public boolean isTransformSchemaType() {
