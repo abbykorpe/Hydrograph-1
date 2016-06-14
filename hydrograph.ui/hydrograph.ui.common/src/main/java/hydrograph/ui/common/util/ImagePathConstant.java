@@ -38,5 +38,7 @@ public class ImagePathConstant {
 	public static final String DATA_VIEWER_RELOAD="/icons/advicons/refresh.png";
 	public static final String DATA_VIEWER_FILTER="/icons/advicons/filter.png";
 	public static final String DATA_VIEWER_SWITCH_VIEW="/icons/advicons/switchview.png";
+	public static final String WARNING_ICON="/icons/advicons/warning.png";
+	
 
 }

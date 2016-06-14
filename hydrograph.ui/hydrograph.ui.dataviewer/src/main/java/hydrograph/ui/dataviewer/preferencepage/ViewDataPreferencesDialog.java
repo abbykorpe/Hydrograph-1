@@ -16,6 +16,8 @@ package hydrograph.ui.dataviewer.preferencepage;
 
 
 import hydrograph.ui.common.util.ConvertHexValues;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.constants.Messages;
 
@@ -345,10 +347,7 @@ public class ViewDataPreferencesDialog extends Dialog {
 		warningImageLabel = new Label(composite, SWT.NONE);
 		warningImageLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		
-		Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
-		URL fullPathString = BundleUtility.find(bundle, "icons/warning.png");
-		Image image = ImageDescriptor.createFromURL(fullPathString).createImage();
-		warningImageLabel.setImage(image);
+		warningImageLabel.setImage(new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.WARNING_ICON));
 
 		warningLabel = new Label(composite, SWT.NONE);
 		warningLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, true, 1, 1));
