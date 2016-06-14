@@ -26,7 +26,6 @@ import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
-import hydrograph.ui.graph.debugconverter.SchemaHelper;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.handler.DebugHandler;
 import hydrograph.ui.graph.job.Job;
@@ -211,7 +210,7 @@ public class WatchRecordAction extends SelectionAction {
 				
 		final JobDetails jobDetails = getJobDetails(job);
 		final String dataViewerWindowTitle = dataViewerWindowName;	
-		
+
 		//Open data viewer window
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override

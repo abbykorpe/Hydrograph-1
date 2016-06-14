@@ -15,8 +15,10 @@ package hydrograph.ui.graph.handler;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.debugconverter.DebugConverter;
+import hydrograph.ui.graph.debugconverter.SchemaHelper;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
@@ -242,10 +244,21 @@ public class DebugHandler  extends AbstractHandler {
 		addDebugJob(currentJobName, job);
 		
 		JobManager.INSTANCE.executeJobInDebug(job, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
-		CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();		
+		CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();	
+		
+		exportSchemaFile();
+		
 		return null;
 	}
  
+	private void exportSchemaFile(){
+		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		String jobId = editor.getJobId();
+		String path = Utils.INSTANCE.getDataViewerDebugFilePath();
+		String filePath = path + jobId;
+		SchemaHelper.INSTANCE.exportSchemaFile(filePath);
+	}
+	
 	/**
 	 * Gets the job id.
 	 *

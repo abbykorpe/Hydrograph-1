@@ -14,30 +14,29 @@
 
 package hydrograph.ui.graph.debugconverter;
 
-import hydrograph.ui.common.schema.Field;
-import hydrograph.ui.common.schema.Fields;
-import hydrograph.ui.common.schema.Schema;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.graph.controller.LinkEditPart;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.controller.PortEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GridRowLoader;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 /**
@@ -58,60 +57,48 @@ public class SchemaHelper {
 	 * @param selectedObjects
 	 * @param schemaFilePath
 	 */
-	public void exportSchemaGridData(List<Object> selectedObjects , String schemaFilePath){
-		if(StringUtils.isNotBlank(schemaFilePath)){
-			schemaFilePath=((IPath)new Path(schemaFilePath)).removeFileExtension()
-					.addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toString();
-			for(Object obj : selectedObjects){
-				if(obj instanceof LinkEditPart)	{
-					Link link = (Link)((LinkEditPart)obj).getModel();
-					ComponentsOutputSchema  componentsOutputSchema = null;
-					Object schemaFields = null;
-					File file = new File(schemaFilePath);
-					Map<String, Object> hashMap = link.getSource().getProperties();
-					for(Entry<String, Object> entry : hashMap.entrySet()){
-						 if(entry.getKey().equalsIgnoreCase(Constants.SCHEMA_TO_PROPAGATE)){
-							schemaFields = entry.getValue();
-							break;
+	public void exportSchemaFile(String schemaFilePath){
+		File file = null;
+		String socketName = null;
+		ComponentsOutputSchema  componentsOutputSchema = null;
+		
+		IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if(activeEditor instanceof ELTGraphicalEditor){
+			ELTGraphicalEditor editor=(ELTGraphicalEditor) activeEditor;
+			if(editor!=null){
+				GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
+				for (Object objectEditPart : graphicalViewer.getEditPartRegistry().values()){
+					if(objectEditPart instanceof ComponentEditPart){
+						List<Link> links = ((ComponentEditPart) objectEditPart).getCastedModel().getSourceConnections();
+						
+						for(Link link : links){
+							 String componentName = link.getSource().getComponentLabel().getLabelContents();
+							 Object obj = link.getSource().getComponentEditPart();
+							 List<PortEditPart> portEditPart = ((EditPart) obj).getChildren();
+							 
+							 for(AbstractGraphicalEditPart part : portEditPart){
+								 if(part instanceof PortEditPart){
+									 boolean isWatch = ((PortEditPart)part).getPortFigure().isWatched();
+									 if(isWatch){
+										socketName = ((PortEditPart)part).getPortFigure().getTerminal();
+										componentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+										if(StringUtils.isNotBlank(schemaFilePath)){
+											String path = schemaFilePath.trim() + "_" + componentName + "_" + socketName;
+											String filePath=((IPath)new Path(path)).removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toString();
+											List<GridRow> gridRowList = componentsOutputSchema.getGridRowList();
+											file = new File(filePath);
+											GridRowLoader gridRowLoader = new GridRowLoader(Constants.GENERIC_GRID_ROW, file);
+											gridRowLoader.exportXMLfromGridRowsWithoutMessage(gridRowList);
+										}
+									}
+								 }
+							 }
 						}
 					}
-					
-					for(Entry<String, Object> entry : ((Map<String, Object>) schemaFields).entrySet()){
-						if(entry.getKey().equalsIgnoreCase(Constants.FIXED_OUTSOCKET_ID)){
-							componentsOutputSchema = (ComponentsOutputSchema) entry.getValue();
-						}
-					}
-					
-					List<GridRow> gridRowList = componentsOutputSchema.getGridRowList();
-					GridRowLoader gridRowLoader = new GridRowLoader(Constants.GENERIC_GRID_ROW, file);
-					gridRowLoader.exportXMLfromGridRowsWithoutMessage(gridRowList);
 				}
 			}
 		}
+		
 	}
-	
-	/**
-	 * This function will read schema file and return schema fields
-	 * @param schemaFilePath
-	 * @return
-	 */
-	public Fields importSchemaXml(String schemaFilePath){
-		List<GridRow> schemaGridRowListToImport = new ArrayList<>();
-		File file = new File(schemaFilePath);
-		Fields fields = new Fields();
-		if(!file.exists()){
-			try {
-				JAXBContext jaxbContext = JAXBContext.newInstance(Schema.class);
-				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-				Schema schema = (Schema) jaxbUnmarshaller.unmarshal(file);
-				fields = schema.getFields();
-				for(Field field : fields.getField()){
-					logger.debug("Type:{}, Name:{}, Format:{}" + field.getType(),field.getName(),field.getFormat());
-				}
-			} catch (JAXBException jaxbException) {
-				logger.error("Invalid xml file", jaxbException);
-			}
-		}
-		return fields;
-	}
+	 
 }
