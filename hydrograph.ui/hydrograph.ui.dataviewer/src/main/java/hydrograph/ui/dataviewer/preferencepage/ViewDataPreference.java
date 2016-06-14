@@ -13,6 +13,7 @@
 
 package hydrograph.ui.dataviewer.preferencepage;
 
+import hydrograph.ui.common.util.ConvertHexValues;
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.PreferenceConstants;
@@ -98,6 +99,8 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			public void propertyChange(PropertyChangeEvent event) {
 				String value = event.getNewValue().toString();
 				validationForIntegerField(value);
+				validationForIntegerValue(memoryFieldEditor.getStringValue());
+				
 			}
 		});
 		memoryFieldEditor.setPreferenceStore(getPreferenceStore());
@@ -108,12 +111,20 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		bt.setBounds(0, 0, 20, 10);
 		bt.setVisible(false);
 		pageSizeEditor = new IntegerFieldEditor(PreferenceConstants.VIEW_DATA_PAGE_SIZE, " &Page Size                ", group, 6);
+		pageSizeEditor.setEmptyStringAllowed(false);
 		pageSizeEditor.setPropertyChangeListener(new IPropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
+				int pageSize = 0;
 				String value = event.getNewValue().toString();
+				
 				validationForIntegerField(value);
-				int pageSize = Integer.parseInt(value);
+				validationForIntegerValue(pageSizeEditor.getStringValue());
+
+				if(value.matches("\\d+")){
+					pageSize = Integer.parseInt(pageSizeEditor.getStringValue());
+				}
+				
 				if(pageSize > 5000){
 					setMessage(Messages.PAGE_SIZE_WARNING, 2);
 				}else{
@@ -157,6 +168,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 				}else{
 					setMessage(null);
 				}
+				
 				Notification note =validateDelimiter();
 				if(note.hasErrors()){
 					setValid(false);
@@ -165,6 +177,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 					setErrorMessage(null);
 					setValid(true);
 				}
+				validationForHexaDecimalValue(value);
 			}
 		});
 		delimeterEditor.setPreferenceStore(getPreferenceStore());
@@ -185,6 +198,8 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 				}else{
 					setMessage(null);
 				}
+				
+				//validationForHexaDecimalValue(value);
 				Notification note =validateQuoteCharacter();
 				if(note.hasErrors()){
 					setValid(false);
@@ -242,6 +257,28 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		return notification;
 	}
 
+	private void validationForHexaDecimalValue(String value){
+		if(StringUtils.length(ConvertHexValues.parseHex(value)) != 1){
+			setErrorMessage("HexaDecimal value length should not greater 1");
+			setValid(false);
+		}else{
+			setErrorMessage(null);
+			setValid(true);
+		}
+	}
+	
+	private void validationForIntegerValue(String value){
+		if(StringUtils.isNotBlank(value) && value.matches("\\d+")){
+			if(Integer.parseInt(value)<=0){
+				setErrorMessage("Value should be grater than 0");
+				setValid(false);
+			}else{
+				setErrorMessage(null);
+				setValid(true);
+			}
+		}
+	}
+	
 	private Notification validateQuoteCharacter(){
 		Notification notification = new Notification();
 		if(quoteEditor.getStringValue().equalsIgnoreCase(delimeterEditor.getStringValue())){

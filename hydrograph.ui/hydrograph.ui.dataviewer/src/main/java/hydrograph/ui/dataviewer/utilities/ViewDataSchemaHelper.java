@@ -42,16 +42,19 @@ public class ViewDataSchemaHelper {
 	public static ViewDataSchemaHelper INSTANCE = new ViewDataSchemaHelper();
 	
 	
+	public ViewDataSchemaHelper() {
+	}
+	
 	/**
 	 * This function will read schema file and return schema fields
 	 * @param schemaFilePath
-	 * @return
+	 * @return Fields
 	 */
-	public Fields importSchemaXml(String schemaFilePath){
+	public Fields getFieldsFromSchema(String schemaFilePath){
+		Fields fields = null;
 		if(StringUtils.isNotBlank(schemaFilePath)){
 			String filePath=((IPath)new Path(schemaFilePath)).removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toString();
 			File file = new File(filePath);
-			Fields fields = null;
 			if(file.exists()){
 				try {
 					JAXBContext jaxbContext = JAXBContext.newInstance(Schema.class);
@@ -62,11 +65,10 @@ public class ViewDataSchemaHelper {
 						logger.debug("Type:{}, Name:{}, Format:{}" + field.getType(),field.getName(),field.getFormat());
 					}
 				} catch (JAXBException jaxbException) {
-					logger.error("Invalid xml file", jaxbException);
+					logger.error("Invalid xml file: ", jaxbException);
 				}
 			}
-			return fields;
 		}
-		return null;
+		return fields;
 	}
 }

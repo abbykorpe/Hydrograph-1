@@ -50,11 +50,11 @@ public class SchemaHelper {
 	public static SchemaHelper INSTANCE = new SchemaHelper();
 
 	
-	
+	public SchemaHelper() {
+	}
 	
 	/**
 	 * This function will write schema in xml file
-	 * @param selectedObjects
 	 * @param schemaFilePath
 	 */
 	public void exportSchemaFile(String schemaFilePath){
@@ -89,6 +89,7 @@ public class SchemaHelper {
 											file = new File(filePath);
 											GridRowLoader gridRowLoader = new GridRowLoader(Constants.GENERIC_GRID_ROW, file);
 											gridRowLoader.exportXMLfromGridRowsWithoutMessage(gridRowList);
+											logger.debug("schema file created.");
 										}
 									}
 								 }
