@@ -1420,7 +1420,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				eLTDetails.setGrids(schemaGridRowList);
 				tableViewer.setInput(schemaGridRowList);
 				tableViewer.refresh();
-				toggleSchema(true); 
+				toggleSchema(true);
 			}
 			if (!originalSchema.getIsExternal()) {
 				external = false;
