@@ -1,4 +1,4 @@
-version = new Version(major: 0, minor:1, revision: 5)
+version = new Version(major: 0, minor:1, revision: 7)
 gradle.taskGraph.whenReady { taskGraph ->version.release = taskGraph.hasTask(release)}
 
 task release {
