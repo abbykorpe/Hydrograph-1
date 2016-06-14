@@ -332,7 +332,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				int dialogResult =dialog.open();
 				
 				if(dialogResult == 0){
-					//syncTransformWithSchema();
 					syncSchema();
 				
 			}
@@ -1495,30 +1494,7 @@ private void syncInternallyPropagatedSchema(){
 	eLTDetails.setGrids(schemaGridRowList);
 	tableViewer.setInput(schemaGridRowList);
 	tableViewer.refresh();
-	//this.properties = schema;  //Remove this.Kanchan
-
 }
-
-/*private void syncTransformWithSchema(){
-	
-	Schema schema = getSchemaForInternalPropagation();
-	if(StringUtils.endsWithIgnoreCase(SCHEMA_TAB,propertyDialog.getSelectedTab())){
-		TransformMapping transformMapping= (TransformMapping) getComponent().getProperties().get(OPERATION);
-		List<FilterProperties> filterProperties = convertSchemaToFilterProperty();
-		SchemaSyncUtility.removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
-		List<NameValueProperty> outputFileds =getComponentSchemaAsProperty();
-		SchemaSyncUtility.filterCommonMapFields(outputFileds, transformMapping);
-		schema.setGridRow(new ArrayList<>(schemaGridRowList));
-	}
-	else{
-		schemaGridRowList=new ArrayList<>(schema.getGridRow());
-		ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
-		eLTDetails.setGrids(schemaGridRowList); 
-		tableViewer.setInput(schemaGridRowList);
-		tableViewer.refresh(); 
-		
-	}
-}*/
 
 private void syncSchema(){
 	Schema schema = getSchemaForInternalPropagation();
