@@ -56,6 +56,16 @@ public class Messages extends NLS {
 	public static String FIELD_DESCRIPTION;
 	public static String RANGE_FROM;
 	public static String RANGE_TO;
+	public static String RANGE_FROM_GREATER_THAN_RANGE_TO;
+	public static String RANGE_FROM_LESS_THAN_MIN_PERMISSIBLE_VALUE;
+	public static String RANGE_TO_LESS_THAN_MIN_PERMISSIBLE_VALUE;
+	public static String RANGE_FROM_GREATER_THAN_MAX_PERMISSIBLE_VALUE;
+	public static String RANGE_TO_GREATER_THAN_MAX_PERMISSIBLE_VALUE;
+	public static String RANGE_FROM_DATE_INCORRECT_PATTERN;
+	public static String RANGE_TO_DATE_INCORRECT_PATTERN;
+	public static String FIELD_LENGTH_LESS_THAN_ZERO;
+	public static String FIELD_SCALE_LESS_THAN_ZERO;
+	public static String FIELD_SCALE_NOT_LESS_THAN_FIELD_LENGTH;
 	public static String DEFAULT_VALUE;
 	public static String FIELDNAMEERROR;
 	public static String FIELDPHASE;
