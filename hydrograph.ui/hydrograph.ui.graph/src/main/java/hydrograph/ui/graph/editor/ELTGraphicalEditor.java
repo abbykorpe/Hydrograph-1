@@ -403,7 +403,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 				String consoleName;
 				if (part.getTitle().contains(".job")) {
-					consoleName = (getActiveProject() + "." + part.getTitle()).replace(".job", "");
+					consoleName = getActiveProject() + "." + part.getTitle().replace(".job", "");
 				} else {
 					consoleName = DEFAULT_CONSOLE;
 				}
@@ -433,12 +433,23 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					if(JobStatus.KILLED.equals(job.getJobStatus()) || JobStatus.SUCCESS.equals(job.getJobStatus())){
 						enableRunJob(true);
 					}else{
-							enableRunJob(false);					
+						if(job.isRemoteMode()){
+							enableRunJob(false);
+						}else{
+                            ((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
+                            ((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+                            ((DebugHandler)RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(false);
+                           	((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
+                      }
 					}
-					
 				}else{
 					logger.debug("enabling run job button");
 					enableRunJob(true);
+					if(isWatch){
+						((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
+					}else{
+						((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
+					}
 				}
 			}
 
@@ -446,11 +457,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 		super.selectionChanged(part, selection);
 		
-		if(isWatch){
-			((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
-		}else{
-			((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
-		}
+		
 	}
 
 	
