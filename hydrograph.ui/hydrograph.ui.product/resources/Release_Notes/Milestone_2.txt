@@ -23,6 +23,8 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 10.#610  [Vibhor Tyagi] Temp Path(Global Preferences Window) : When Temp Path Do Not End with '/' Then Schema XML is Getting Generated Into Previous Folder Of Given Path
 11.#576  [vibhor Tyagi] Preferances : Validation is not present if user enter page size as 0 in the global and local preferances
 11.#581  [vibhor Tyagi] Global and Local Preferences window:Validation Needs to be Applied for Preferences Windows When User Enters Invalid Value (e.g. 0) in File Size Text Window
+12.#437  [Nikhil Deokar] Schema Tab: Added Range From and Range To validation
+13.#441  [Nikhil Deokar] Creating Parameter file on Save As event
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
