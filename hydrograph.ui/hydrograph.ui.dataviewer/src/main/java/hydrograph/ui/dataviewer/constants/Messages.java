@@ -24,6 +24,8 @@ import org.eclipse.osgi.util.NLS;
  */
 public class Messages extends NLS{
 	private static final String BUNDLE_NAME = "resources.messages";
+
+	
 	
 	/*view data preferences*/
 	public static String MEMORY_FIELD_MESSAGE;
@@ -58,6 +60,11 @@ public class Messages extends NLS{
 	public static String WARNING_MESSAGE;
 	public static String MEMORY_OVERFLOW_EXCEPTION;
 	public static String DUPLICATE_ERROR_MESSAGE;
+	public static String DELIMITER_HELP_TEXT;
+	public static String QUOTE_CHARACTOR_HELP_TEXT;
+	public static String INCLUDE_HEADER_HELP_TEXT;
+	public static String FILE_SIZE_HELP_TEXT;
+	public static String PAGE_SIZE_HELP_TEXT;
 
 
 	static {

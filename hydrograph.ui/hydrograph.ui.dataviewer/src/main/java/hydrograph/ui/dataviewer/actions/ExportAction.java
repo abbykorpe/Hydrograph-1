@@ -95,35 +95,18 @@ public class ExportAction extends Action {
 		messageBox.open();
 	}
 
-	private void writeDataInFile(List<String[]> fileDataList, String filePath){
-		CSVWriter writer = null;
-		FileWriter fileWriter = null;
-		try {
-			if (filePath != null) {
-				if (StringUtils.length(ConvertHexValues.parseHex(delimiter)) == 1
-						&& StringUtils.length(ConvertHexValues.parseHex(quoteCharactor)) == 1) {
-					fileWriter = new FileWriter(filePath);
-					writer = new CSVWriter(fileWriter, ConvertHexValues.parseHex(delimiter).toCharArray()[0],
-							ConvertHexValues.parseHex(quoteCharactor).toCharArray()[0]);
+	private void writeDataInFile(List<String[]> fileDataList, String filePath) {
+		if (filePath != null) {
+			if (StringUtils.length(ConvertHexValues.parseHex(delimiter)) == 1
+					&& StringUtils.length(ConvertHexValues.parseHex(quoteCharactor)) == 1) {
+				try (FileWriter fileWriter = new FileWriter(filePath);
+						CSVWriter writer = new CSVWriter(fileWriter,
+								ConvertHexValues.parseHex(delimiter).toCharArray()[0], ConvertHexValues.parseHex(
+										quoteCharactor).toCharArray()[0])) {
 					writer.writeAll(fileDataList, false);
 					showMessage("Data exported to " + filePath + " successfully.", INFORMATION, SWT.ICON_INFORMATION);
-				}
-			}
-		} catch (IOException e1) {
-			showMessage(Messages.ERROR_MESSAGE, ERROR, SWT.ICON_ERROR);
-		} finally {
-			if (fileWriter != null) {
-				try {
-					fileWriter.close();
-				} catch (IOException e) {
-					logger.error("Stream of File writer is not closing",e);
-				}
-			}
-			if (writer != null) {
-				try {
-					writer.close();
-				} catch (IOException e) {
-					logger.error("Stream of CSV writer is not closing",e);
+				} catch (IOException e1) {
+					showMessage(Messages.ERROR_MESSAGE, ERROR, SWT.ICON_ERROR);
 				}
 			}
 		}

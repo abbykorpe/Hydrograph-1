@@ -77,14 +77,9 @@ public class ViewDataPreferencesDialog extends Dialog {
 	private ControlDecoration quoteCharactorDuplicateDecorator;
 	private ControlDecoration delimiterEmptyDecorator;
 	private ControlDecoration quoteCharactorEmptyDecorator;
+	private ControlDecoration fileSizeZeroDecorator;
+	private ControlDecoration pageSizeZeroDecorator;
 	private String REGEX = "[\\d]*";
-	
-	public static void main(String[] args) {
-		ViewDataPreferencesDialog viewDataPreferencesDialog=new ViewDataPreferencesDialog(new Shell());
-		ViewDataPreferences viewDataPreferences=new ViewDataPreferences(",","\"",true,10,10);
-		viewDataPreferencesDialog.setViewDataPreferences(viewDataPreferences);
-		viewDataPreferencesDialog.open();
-	}
 	
 	/**
 	 * Create the dialog.
@@ -113,12 +108,12 @@ public class ViewDataPreferencesDialog extends Dialog {
 		Label delimiterLabel = new Label(composite, SWT.NONE);
 		delimiterLabel.setBounds(22, 22, 55, 15);
 		delimiterLabel.setText("Delimiter");
-		setCursorTooltip(delimiterLabel,"Fields in the exported file will be separated with this character.");
+		setCursorTooltip(delimiterLabel,Messages.DELIMITER_HELP_TEXT);
 		
 		Label quoteCharactorLabel = new Label(composite, SWT.NONE);
 		quoteCharactorLabel.setBounds(22, 61, 94, 15);
 		quoteCharactorLabel.setText("Quote Character");
-		setCursorTooltip(quoteCharactorLabel, "If delimiter appears in data the field will be enclosed within this character.");
+		setCursorTooltip(quoteCharactorLabel,Messages.QUOTE_CHARACTOR_HELP_TEXT);
 		
 		delimiterTextBox = new Text(composite, SWT.BORDER);
 		delimiterTextBox.setBounds(132, 19, 86, 21);
@@ -129,17 +124,17 @@ public class ViewDataPreferencesDialog extends Dialog {
 		includeHeardersCheckBox = new Button(composite, SWT.CHECK);
 		includeHeardersCheckBox.setBounds(578, 21, 109, 16);
 		includeHeardersCheckBox.setText("Include Headers");
-		setCursorTooltip(includeHeardersCheckBox,"Include header of the file being exported.");
+		setCursorTooltip(includeHeardersCheckBox,Messages.INCLUDE_HEADER_HELP_TEXT);
 		
 		Label fileSizeLabel = new Label(composite, SWT.NONE);
 		fileSizeLabel.setBounds(301, 22, 76, 15);
 		fileSizeLabel.setText("File Size (MB)");
-		setCursorTooltip(fileSizeLabel,"Maximum amount of data which can be viewed in this viewer(divided in multiple pages).");
+		setCursorTooltip(fileSizeLabel,Messages.FILE_SIZE_HELP_TEXT);
 		
 		Label pageSizeLabel = new Label(composite, SWT.NONE);
 		pageSizeLabel.setBounds(301, 61, 55, 15);
 		pageSizeLabel.setText("Page Size");
-		setCursorTooltip(pageSizeLabel,"Number of records which can be displayed on a single page.");
+		setCursorTooltip(pageSizeLabel,Messages.PAGE_SIZE_HELP_TEXT);
 		fileSizeTextBox = new Text(composite, SWT.BORDER);
 		fileSizeTextBox.setBounds(414, 19, 76, 21);
 
@@ -160,6 +155,8 @@ public class ViewDataPreferencesDialog extends Dialog {
 		quoteCharactorDuplicateDecorator = addDecorator(quoteCharactorTextBox, Messages.DUPLICATE_ERROR_MESSAGE);
 		delimiterEmptyDecorator = addDecorator(delimiterTextBox, Messages.DELIMITER_BLANK);
 		quoteCharactorEmptyDecorator = addDecorator(quoteCharactorTextBox, Messages.QUOTE_CHARACTOR_BLANK);
+		fileSizeZeroDecorator=addDecorator(fileSizeTextBox,Messages.NUMERIC_VALUE_ACCPECTED);
+		pageSizeZeroDecorator=addDecorator(pageSizeTextBox,Messages.NUMERIC_VALUE_ACCPECTED);
 		pageSizeIntegerDecorator.hide();
 		fileSizeIntegerDecorator.hide();
 		fileSizeEmptyDecorator.hide();
@@ -170,6 +167,8 @@ public class ViewDataPreferencesDialog extends Dialog {
 		quoteCharactorDuplicateDecorator.hide();
 		delimiterEmptyDecorator.hide();
 		quoteCharactorEmptyDecorator.hide();
+		fileSizeZeroDecorator.hide();
+		pageSizeZeroDecorator.hide();
 
 		delimiterTextBox.addVerifyListener(new VerifyListener() {
 			@Override
@@ -258,7 +257,7 @@ public class ViewDataPreferencesDialog extends Dialog {
 		fileSizeTextBox.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				isTextBoxEmpty(e, fileSizeEmptyDecorator);
+				isTextBoxEmpty(e, fileSizeEmptyDecorator,fileSizeZeroDecorator);
 			}
 		});
 
@@ -316,7 +315,7 @@ public class ViewDataPreferencesDialog extends Dialog {
 						warningLabel.setVisible(false);
 					}
 				}
-				isTextBoxEmpty(e, pageSizeEmptyDecorator);
+				isTextBoxEmpty(e, pageSizeEmptyDecorator,pageSizeZeroDecorator);
 			}
 		});
 	}
@@ -453,7 +452,8 @@ public class ViewDataPreferencesDialog extends Dialog {
 		if (quoteCharactorDuplicateDecorator.isVisible() || quoteSingleCharactorDecorator.isVisible()
 				|| fileSizeEmptyDecorator.isVisible() || pageSizeEmptyDecorator.isVisible()
 				|| delimiterDuplicateDecorator.isVisible() || delimiterSingleCharactorDecorator.isVisible()
-				|| delimiterEmptyDecorator.isVisible()||quoteCharactorEmptyDecorator.isVisible()) {
+				|| delimiterEmptyDecorator.isVisible()||quoteCharactorEmptyDecorator.isVisible()
+				|| fileSizeZeroDecorator.isVisible() || pageSizeZeroDecorator.isVisible()) {
 			getButton(0).setEnabled(false);
 		} else {
 			getButton(0).setEnabled(true);
@@ -491,13 +491,20 @@ public class ViewDataPreferencesDialog extends Dialog {
 		}
 	}
 
-	private void isTextBoxEmpty(ModifyEvent e, ControlDecoration emptyDecorator) {
+	private void isTextBoxEmpty(ModifyEvent e, ControlDecoration emptyDecorator,ControlDecoration zeroDecorator) {
 		emptyDecorator.hide();
+		zeroDecorator.hide();
 		String fileSize = ((Text) e.widget).getText();
 		if (!fileSize.isEmpty()) {
 			emptyDecorator.hide();
+			if (Integer.parseInt(fileSize) == 0) {
+				zeroDecorator.show();
+				getButton(0).setEnabled(false);
+			} else {
+				zeroDecorator.hide();
+				getButton(0).setEnabled(true);
+			}
 			enableAndDisableOkButtonIfAnyDecoratorIsVisible();
-
 		} else {
 			getButton(0).setEnabled(false);
 			emptyDecorator.show();
