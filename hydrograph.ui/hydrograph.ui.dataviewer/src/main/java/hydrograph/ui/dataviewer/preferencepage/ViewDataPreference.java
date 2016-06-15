@@ -177,7 +177,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 					setErrorMessage(null);
 					setValid(true);
 				}
-				validationForHexaDecimalValue(value);
 			}
 		});
 		delimeterEditor.setPreferenceStore(getPreferenceStore());
@@ -199,7 +198,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 					setMessage(null);
 				}
 				
-				validationForHexaDecimalValue(value);
 				Notification note =validateQuoteCharacter();
 				if(note.hasErrors()){
 					setValid(false);
@@ -251,22 +249,15 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		if(delimeterEditor.getStringValue().equalsIgnoreCase(quoteEditor.getStringValue())){
 			notification.addError(Messages.DELIMITER_VALUE_MATCH_ERROR);
 		}
-		if(delimeterEditor.getStringValue().length() > 1){
+		if(StringUtils.length(ConvertHexValues.parseHex(delimeterEditor.getStringValue())) != 1){
+			notification.addError(Messages.SINGLE_CHARACTOR_ERROR_MESSAGE);
+		}
+		if(delimeterEditor.getStringValue().length() > 1 && StringUtils.length(ConvertHexValues.parseHex(quoteEditor.getStringValue())) != 1){
 			notification.addError(Messages.CHARACTER_LENGTH_ERROR);
 		}
 		return notification;
 	}
 
-	private void validationForHexaDecimalValue(String value){
-		if(StringUtils.length(ConvertHexValues.parseHex(value)) != 1){
-			setErrorMessage(Messages.SINGLE_CHARACTOR_ERROR_MESSAGE);
-			setValid(false);
-		}else{
-			setErrorMessage(null);
-			setValid(true);
-		}
-	}
-	
 	private void validationForIntegerValue(String value){
 		if(StringUtils.isNotBlank(value) && value.matches("\\d+")){
 			if(Integer.parseInt(value)<=0){
@@ -284,7 +275,10 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		if(quoteEditor.getStringValue().equalsIgnoreCase(delimeterEditor.getStringValue())){
 			notification.addError(Messages.QUOTE_VALUE_MATCH_ERROR);
 		}
-		if(quoteEditor.getStringValue().length() > 1){
+		if(StringUtils.length(ConvertHexValues.parseHex(quoteEditor.getStringValue())) != 1){
+			notification.addError(Messages.SINGLE_CHARACTOR_ERROR_MESSAGE);
+		}
+		if(quoteEditor.getStringValue().length() > 1 && StringUtils.length(ConvertHexValues.parseHex(quoteEditor.getStringValue())) != 1){
 			notification.addError(Messages.CHARACTER_LENGTH_ERROR);
 		}
 		return notification;

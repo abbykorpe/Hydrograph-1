@@ -14,7 +14,6 @@
  
 package hydrograph.ui.graph.model;
 
-import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.model.helper.LoggerUtil;
 
