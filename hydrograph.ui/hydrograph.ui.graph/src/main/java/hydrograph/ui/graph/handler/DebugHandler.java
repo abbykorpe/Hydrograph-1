@@ -301,6 +301,7 @@ public class DebugHandler  extends AbstractHandler {
 					logger.warn("Unable to delete debug Base path file",e);
 				}
 			}
+			dataViewFileIds.clear();
 		}
 	}
  
