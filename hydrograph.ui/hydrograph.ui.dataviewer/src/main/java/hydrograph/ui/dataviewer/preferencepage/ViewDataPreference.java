@@ -206,7 +206,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 					setErrorMessage(null);
 					setValid(true);
 				}
-				 
 			}
 		});
 		
