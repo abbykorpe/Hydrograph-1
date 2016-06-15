@@ -85,17 +85,16 @@ public class Provider {
 		return postMethod;
 	}
 	
-	public PostMethod getDeleteBasePathFileMethod(JobDetails jobDetails) throws NumberFormatException, MalformedURLException {
+	public PostMethod getDeleteBasePathFileMethod(String host, String port, String uniqJobID, String basePath, String user, String password
+			) throws NumberFormatException, MalformedURLException {
 		
-		URL url = new URL(POST_PROTOCOL, jobDetails.getHost(), Integer.valueOf(jobDetails.getPort()), DebugServiceMethods.DELETE_BASEPATH_FILES);
+		URL url = new URL(POST_PROTOCOL, host, Integer.valueOf(port), DebugServiceMethods.DELETE_BASEPATH_FILES);
 		
 		PostMethod postMethod = new PostMethod(url.toString());
-		postMethod.addParameter(DebugServicePostParameters.JOB_ID, jobDetails.getUniqueJobID());
-		postMethod.addParameter(DebugServicePostParameters.BASE_PATH, jobDetails.getBasepath());
-		postMethod.addParameter(DebugServicePostParameters.COMPONENT_ID, jobDetails.getComponentID());
-		postMethod.addParameter(DebugServicePostParameters.SOCKET_ID, jobDetails.getComponentSocketID());
-		postMethod.addParameter(DebugServicePostParameters.USER_ID, jobDetails.getUsername());
-		postMethod.addParameter(DebugServicePostParameters.PASSWORD, jobDetails.getPassword());
+		postMethod.addParameter(DebugServicePostParameters.JOB_ID, uniqJobID);
+		postMethod.addParameter(DebugServicePostParameters.BASE_PATH, basePath);
+		postMethod.addParameter(DebugServicePostParameters.USER_ID, user);
+		postMethod.addParameter(DebugServicePostParameters.PASSWORD, password);
 		return postMethod;
 	}
 }

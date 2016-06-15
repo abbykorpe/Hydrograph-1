@@ -86,9 +86,9 @@ public class DebugServiceClient {
 		return path;
 	}
 	
-	public void deleteBasePathFiles(JobDetails jobDetails) 
+	public void deleteBasePathFiles(String host, String port, String uniqueJobID, String basePath, String user, String password) 
 			throws NumberFormatException, HttpException, MalformedURLException, IOException{
-		executePostMethod(Provider.INSTANCE.getDeleteBasePathFileMethod(jobDetails));
+		executePostMethod(Provider.INSTANCE.getDeleteBasePathFileMethod(host, port, uniqueJobID, basePath, user, password));
 	}
 	
 }

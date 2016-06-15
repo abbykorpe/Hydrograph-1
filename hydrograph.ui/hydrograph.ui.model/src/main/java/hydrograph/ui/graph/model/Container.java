@@ -58,11 +58,10 @@ public class Container extends Model {
 	private Object subjobComponentEditPart;
 	private long subjobVersion=1;
 	private Map<String,String> graphRuntimeProperties;
-	private List<JobDetails> jobDetailsInGraph;
 	
 	
 	public Container(){
-		jobDetailsInGraph = new ArrayList<JobDetails>();
+		
 	}
 	
 	
@@ -331,10 +330,4 @@ public class Container extends Model {
 		}
 		return graphRuntimeProperties;
 	}
-
-
-	public List<JobDetails> getJobDetailsInGraph() {
-		return jobDetailsInGraph;
-	}
-	
 }

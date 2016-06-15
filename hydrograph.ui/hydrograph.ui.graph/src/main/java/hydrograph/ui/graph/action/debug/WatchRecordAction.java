@@ -195,11 +195,6 @@ public class WatchRecordAction extends SelectionAction {
 				
 		final JobDetails jobDetails = getJobDetails(job);
 
-		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActiveEditor();
-		editor.getContainer().getJobDetailsInGraph().add(jobDetails);
-
-		
 		final String dataViewerWindowTitle = dataViewerWindowName;	
 
 		//Open data viewer window

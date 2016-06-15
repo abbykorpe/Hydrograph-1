@@ -1250,34 +1250,30 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private void deleteSchemaAndDataViewerFiles(){
 		String dataViewerDirectoryPath = Utils.INSTANCE.getDataViewerDebugFilePath();
 		
-		for( JobDetails j :this.container.getJobDetailsInGraph()){
-			String dataViewerCSVFilePath = j.getUniqueJobID()+"_"+j.getComponentID()+"_"+j.getComponentSocketID()+CSV_EXTENSION;
-			String dataViewerCSVFilePathToBeDeleted = dataViewerDirectoryPath+"\\"+dataViewerCSVFilePath;
-			IPath path = new Path(dataViewerCSVFilePathToBeDeleted);
-			boolean deleted = path.toFile().delete();
-			if(deleted)
-				logger.debug("Deleted Data Viewer csv file {}", dataViewerCSVFilePathToBeDeleted);
-			else
-				logger.warn("Unable to delete Viewer csv file {}", dataViewerCSVFilePathToBeDeleted);
-			
-			String dataViewerSchemaFilePath = j.getUniqueJobID()+"_"+j.getComponentID()+"_"+j.getComponentSocketID()+XML_EXTENSION;
-			String dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+"\\"+dataViewerSchemaFilePath;
-			path = new Path(dataViewerSchemaFilePathToBeDeleted);
-			path.toFile().delete();
-			deleted = path.toFile().delete();
-			if(deleted)
-				logger.debug("Deleted Data Viewer schema file {}", dataViewerSchemaFilePathToBeDeleted);
-			else
-				logger.warn("Unable to delete Viewer schema file {}", dataViewerSchemaFilePathToBeDeleted);
+		IPath path = new Path(dataViewerDirectoryPath);
+		boolean deleted = false;
+		if(path.toFile().isDirectory()){
+			String[] fileList = path.toFile().list();
+			for (String file: fileList){
+				if(file.contains(this.uniqueJobId)){
+					String dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+"\\" + file;
+					path = new Path(dataViewerSchemaFilePathToBeDeleted);
+					deleted = path.toFile().delete();
+					if(deleted){
+						logger.debug("Deleted Data Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
+					}else{
+						logger.warn("Unable to delete Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
+					}
+				}
+			}
 		}
 	}
 	
 	private void deleteBasePathDebugFiles(Job job){
-		
-		for( JobDetails j :this.container.getJobDetailsInGraph()){
-			
+		if(Utils.INSTANCE.isPurgeViewDataPrefSet()){
 			try {
-				DebugServiceClient.INSTANCE.deleteBasePathFiles(j);
+				DebugServiceClient.INSTANCE.deleteBasePathFiles(job.getHost(), job.getPortNumber(), this.uniqueJobId, job.getBasePath(),
+						job.getUserId(), job.getPassword());
 			} catch (NumberFormatException e) {
 				logger.warn("Unable to delete debug Base path file",e);
 			} catch (HttpException e) {
@@ -1288,6 +1284,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				logger.warn("Unable to delete debug Base path file",e);
 			}
 		}
+		
 	}
 	
 	
