@@ -252,9 +252,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		if(StringUtils.length(ConvertHexValues.parseHex(delimeterEditor.getStringValue())) != 1){
 			notification.addError(Messages.SINGLE_CHARACTOR_ERROR_MESSAGE);
 		}
-		if(delimeterEditor.getStringValue().length() > 1 && StringUtils.length(ConvertHexValues.parseHex(quoteEditor.getStringValue())) != 1){
-			notification.addError(Messages.CHARACTER_LENGTH_ERROR);
-		}
 		return notification;
 	}
 
@@ -277,9 +274,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		}
 		if(StringUtils.length(ConvertHexValues.parseHex(quoteEditor.getStringValue())) != 1){
 			notification.addError(Messages.SINGLE_CHARACTOR_ERROR_MESSAGE);
-		}
-		if(quoteEditor.getStringValue().length() > 1 && StringUtils.length(ConvertHexValues.parseHex(quoteEditor.getStringValue())) != 1){
-			notification.addError(Messages.CHARACTER_LENGTH_ERROR);
 		}
 		return notification;
 	}
