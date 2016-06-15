@@ -381,13 +381,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
 		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
 		((DebugHandler)RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(enabled);
-		if (enabled) {
-			((RemoveDebugHandler) RunStopButtonCommunicator.Removewatcher.getHandler())
-					.setRemoveWatcherEnabled(DebugHelper.INSTANCE.hasMoreWatchPoints());
-		} else {
-			((RemoveDebugHandler) RunStopButtonCommunicator.Removewatcher.getHandler())
-					.setRemoveWatcherEnabled(enabled);
-		}
+		((RemoveDebugHandler) RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(enabled);
 	}
 
 	
