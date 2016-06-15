@@ -84,4 +84,31 @@ public class Provider {
 		
 		return postMethod;
 	}
+	
+	/**
+	 * 
+	 * Get post method to delete basepath debug files
+	 * 
+	 * @param host
+	 * @param port
+	 * @param unique job ID
+	 * @param base path
+	 * @param User
+	 * @param password
+	 * @return {@link PostMethod}
+	 * @throws NumberFormatException
+	 * @throws MalformedURLException
+	 */
+	public PostMethod getDeleteBasePathFileMethod(String host, String port, String uniqJobID, String basePath, String user, String password
+			) throws NumberFormatException, MalformedURLException {
+		
+		URL url = new URL(POST_PROTOCOL, host, Integer.valueOf(port), DebugServiceMethods.DELETE_BASEPATH_FILES);
+		
+		PostMethod postMethod = new PostMethod(url.toString());
+		postMethod.addParameter(DebugServicePostParameters.JOB_ID, uniqJobID);
+		postMethod.addParameter(DebugServicePostParameters.BASE_PATH, basePath);
+		postMethod.addParameter(DebugServicePostParameters.USER_ID, user);
+		postMethod.addParameter(DebugServicePostParameters.PASSWORD, password);
+		return postMethod;
+	}
 }

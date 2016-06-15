@@ -194,6 +194,7 @@ public class WatchRecordAction extends SelectionAction {
 		}
 				
 		final JobDetails jobDetails = getJobDetails(job);
+
 		final String dataViewerWindowTitle = dataViewerWindowName;	
 
 		//Open data viewer window
