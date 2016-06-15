@@ -129,7 +129,9 @@ public class JobLogger {
 	 */
 	public void logMessage(String message){
 		for(AbstractJobLogger jobLogger: loggers){
-			jobLogger.log(message);
+			if(!message.trim().isEmpty()){
+				jobLogger.log(message);
+			}
 			logger.debug("Logged message {} on {}", message, jobLogger.getClass().getName());
 		}
 	}

@@ -22,6 +22,7 @@ import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.actions.ActionFactory;
 import hydrograph.ui.dataviewer.actions.CopyAction;
+import hydrograph.ui.dataviewer.actions.DatasetInformationAction;
 import hydrograph.ui.dataviewer.actions.ExportAction;
 import hydrograph.ui.dataviewer.actions.FormattedViewAction;
 import hydrograph.ui.dataviewer.actions.GridViewAction;
@@ -899,6 +900,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		createFileMenu(menuManager);
 		createEditMenu(menuManager);
 		createViewMenu(menuManager);
+		createWindowMenu(menuManager);
 
 		return menuManager;
 	}
@@ -922,6 +924,18 @@ public class DebugDataViewer extends ApplicationWindow {
 		fileMenu.add(actionFactory.getAction(ExportAction.class.getName()));
 		// fileMenu.add(actionFactory.getAction(FilterAction.class.getName()));
 	}
+
+
+	
+	private void createWindowMenu(MenuManager menuManager) {
+		MenuManager windowMenu = createMenu(menuManager, MenuConstants.WINDOW);
+		menuManager.add(windowMenu);
+		windowMenu.setVisible(true);
+
+		windowMenu.add(actionFactory.getAction(DatasetInformationAction.class.getName()));
+		//fileMenu.add(actionFactory.getAction(FilterAction.class.getName()));
+	}
+	
 
 	private void createEditMenu(MenuManager menuManager) {
 		MenuManager editMenu = createMenu(menuManager, MenuConstants.EDIT);
@@ -1141,6 +1155,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		return super.close();
 	}
 
+
 	public Object getDataViewerWindowTitle() {
 		return dataViewerWindowName;
 	}
@@ -1149,3 +1164,5 @@ public class DebugDataViewer extends ApplicationWindow {
 		this.dataViewerMap = dataViewerMap;
 	}
 }
+
+
