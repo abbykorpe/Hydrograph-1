@@ -67,11 +67,10 @@ public class Messages extends NLS{
 	public static String FILE_SIZE_HELP_TEXT;
 	public static String PAGE_SIZE_HELP_TEXT;
 
-
-
 	public static String LOADING_DEBUG_FILE;
 	public static String UNABLE_TO_FETCH_DEBUG_FILE;
 	public static String UNABLE_TO_READ_DEBUG_FILE;
+	public static String EMPTY_DEBUG_FILE;
 		
 	static {
 		// initialize resource bundle

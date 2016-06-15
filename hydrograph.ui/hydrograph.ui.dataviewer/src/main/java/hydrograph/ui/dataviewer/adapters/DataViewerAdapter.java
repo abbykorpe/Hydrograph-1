@@ -99,25 +99,11 @@ public class DataViewerAdapter {
 	 * @param pageSize
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
-	 *//*
-	public void reinitializeAdapter(int pageSize) throws ClassNotFoundException, SQLException  {		
-		this.pageSize = pageSize;
-		this.offset = PreferenceConstants.INITIAL_OFFSET;
-		rowCount=null;
-		initializeAdapter();
-	}*/
-	
-	/**
-	 * Re-initialize adapter with given page size
-	 * 
-	 * @param pageSize
-	 * @throws SQLException 
-	 * @throws ClassNotFoundException 
 	 */
-	public void reinitializeAdapter(int pageSize,boolean restRowCount) throws ClassNotFoundException, SQLException  {		
+	public void reinitializeAdapter(int pageSize,boolean resetRowCount) throws ClassNotFoundException, SQLException  {		
 		this.pageSize = pageSize;
 		this.offset = PreferenceConstants.INITIAL_OFFSET;
-		if(restRowCount){
+		if(resetRowCount){
 			rowCount=null;
 		}
 		initializeAdapter();

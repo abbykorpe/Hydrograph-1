@@ -14,6 +14,8 @@
 package hydrograph.ui.dataviewer.window;
 
 import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.SWTResourceManager;
 import hydrograph.ui.common.util.XMLConfigUtil;
@@ -43,10 +45,12 @@ import hydrograph.ui.dataviewer.listeners.DataViewerListeners;
 import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
 import hydrograph.ui.dataviewer.support.StatusManager;
 import hydrograph.ui.dataviewer.utilities.Utils;
+import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -149,6 +153,8 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private String dataViewerWindowName;
 	
+	private Fields dataViewerFileSchema;
+	
 	/**
 	 * Create the application window,
 	 * 
@@ -180,15 +186,25 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private void downloadDebugFiles() {
 		Job job = new Job(Messages.LOADING_DEBUG_FILE) {
+			private String SCHEMA_FILE_EXTENTION=".xml";
+
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				disbleDataViewerUIControls();
 
 				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(jobDetails);
-				int returnCode = dataViewerFileManager.downloadDataViewerFiles();
+				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles();
 
-				if (StatusConstants.ERROR == returnCode) {
-					getShell().close();
+				if (StatusConstants.ERROR == statusMessage.getReturnCode()) {
+					Display.getDefault().asyncExec(new Runnable() {
+						
+						@Override
+						public void run() {
+							Utils.INSTANCE.showMessage(MessageBoxText.ERROR, statusMessage.getStatusMessage());
+							getShell().close();
+						}
+					});
+					return Status.CANCEL_STATUS;
 				}
 
 				debugFileName = dataViewerFileManager.getDataViewerFileName();
@@ -196,6 +212,8 @@ public class DebugDataViewer extends ApplicationWindow {
 
 				showDataInDebugViewer();
 
+				dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + debugFileName + SCHEMA_FILE_EXTENTION);
+				
 				return Status.OK_STATUS;
 			}
 		};
@@ -770,8 +788,24 @@ public class DebugDataViewer extends ApplicationWindow {
 				}
 			});
 
+			if(dataViewerFileSchema!=null){
+				tableViewerColumn.getColumn().setToolTipText(getColumnToolTip(dataViewerFileSchema.getField().get(index)));
+			}
 			index++;
 		}
+	}
+	
+	private String getColumnToolTip(Field field){
+		String tooltipText;
+		if(field.getType().value().equals(Date.class.getName())){
+			tooltipText = "Field Name: " + field.getName() + "\n" + 
+					  	  "Data type: " + field.getType().value().split("\\.")[2] + "\n" +
+					      "Format: " + field.getFormat() + "\n";
+		}else{
+			tooltipText = "Field Name: " + field.getName() + "\n" + 
+					  	  "Data type: " + field.getType().value().split("\\.")[2] + "\n";
+		}
+		return tooltipText;
 	}
 
 	/**
