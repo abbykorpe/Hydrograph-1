@@ -28,7 +28,6 @@ import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
-import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.dialog.MultiParameterFileDialog;
@@ -44,7 +43,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -155,10 +153,13 @@ public class JobManager {
 		((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
 		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
 		((DebugHandler)RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(enabled);
-		if(DebugHelper.INSTANCE.hasMoreWatchPoints())
-			((RemoveDebugHandler) RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
-		else
-			((RemoveDebugHandler) RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
+		if (enabled) {
+			((RemoveDebugHandler) RunStopButtonCommunicator.Removewatcher.getHandler())
+					.setRemoveWatcherEnabled(DebugHelper.INSTANCE.hasMoreWatchPoints());
+		} else {
+			((RemoveDebugHandler) RunStopButtonCommunicator.Removewatcher.getHandler())
+					.setRemoveWatcherEnabled(enabled);
+		}
 	}
 	
 	/**
