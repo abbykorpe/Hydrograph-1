@@ -16,16 +16,14 @@ import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.communication.utilities.SCPUtility;
-import hydrograph.ui.dataviewer.constants.MessageBoxText;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
+import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -64,21 +62,18 @@ public class DataViewerFileManager {
 	 * 
 	 * @return error code
 	 */
-	public int downloadDataViewerFiles(){
+	public StatusMessage downloadDataViewerFiles(){
 		// Get csv debug file name and location 
 		String csvDebugFileAbsolutePath = null;
 		String csvDebugFileName = null;
-		
 		try {
 			csvDebugFileAbsolutePath = DebugServiceClient.INSTANCE.getDebugFile(jobDetails, Utils.INSTANCE.getFileSize()).trim();
 		} catch (NumberFormatException | HttpException  | MalformedURLException e4) {
-			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 			logger.error("Unable to fetch debug file", e4);
-			return StatusConstants.ERROR;
+			return new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 		}  catch (IOException e4) {
-			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 			logger.error("Unable to fetch debug file", e4);
-			return StatusConstants.ERROR;
+			return new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 		}
 		
 		csvDebugFileName = csvDebugFileAbsolutePath.substring(csvDebugFileAbsolutePath.lastIndexOf("/") + 1,
@@ -89,9 +84,8 @@ public class DataViewerFileManager {
 		try {
 			copyCSVDebugFileToDataViewerStagingArea(jobDetails, csvDebugFileAbsolutePath, dataViewerDebugFile);
 		} catch (IOException | JSchException e1) {
-			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 			logger.error("Unable to fetch debug file", e1);
-			return StatusConstants.ERROR;
+			return new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 		}
 				
 		//Delete csv debug file after copy
@@ -107,12 +101,11 @@ public class DataViewerFileManager {
 		
 		//Check for empty csv debug file
 		if(isEmptyDebugCSVFile(dataViewerFilePath, dataViewerFileName)){
-			Utils.INSTANCE.showMessage(MessageBoxText.ERROR,Messages.UNABLE_TO_READ_DEBUG_FILE);
 			logger.error("Empty debug file");
-		    return StatusConstants.ERROR;
+		    return new StatusMessage(StatusConstants.ERROR,Messages.EMPTY_DEBUG_FILE);
 		}
 		
-		return StatusConstants.SUCCESS;
+		return new StatusMessage(StatusConstants.SUCCESS);
 	}
 	
 	public String getDataViewerFilePath() {
@@ -124,15 +117,12 @@ public class DataViewerFileManager {
 	}
 
 	private boolean isEmptyDebugCSVFile(String dataViewerFilePath, final String dataViewerFileh) {
-		try(BufferedReader bufferedReader = new BufferedReader(new FileReader(dataViewerFilePath + dataViewerFileh + DEBUG_DATA_FILE_EXTENTION))) {
-			if (bufferedReader.readLine() == null) {
-			    return true;
-			}
-		} catch (Exception e1) {
-			logger.error("Unable to read debug file",e1);
+		File file = new File(dataViewerFilePath + dataViewerFileh + DEBUG_DATA_FILE_EXTENTION);
+		if(file.length()==0){
 			return true;
+		}else{
+			return false;
 		}
-		return false;
 	}
 	
 	private void copyCSVDebugFileToDataViewerStagingArea(JobDetails jobDetails, String csvDebugFileAbsolutePath, String dataViewerDebugFile) throws IOException, JSchException{
