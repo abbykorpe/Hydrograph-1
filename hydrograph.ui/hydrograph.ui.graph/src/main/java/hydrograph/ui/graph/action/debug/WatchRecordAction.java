@@ -15,11 +15,7 @@ package hydrograph.ui.graph.action.debug;
 
 import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.communication.debugservice.DebugServiceClient;
-import hydrograph.ui.communication.utilities.SCPUtility;
 import hydrograph.ui.dataviewer.constants.MessageBoxText;
-import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
@@ -35,20 +31,11 @@ import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -62,8 +49,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
-
-import com.jcraft.jsch.JSchException;
 
 /**
  * The Class WatchRecordAction used to view data at watch points after job execution
@@ -218,8 +203,8 @@ public class WatchRecordAction extends SelectionAction {
 				DebugDataViewer window = new DebugDataViewer(jobDetails,dataViewerWindowTitle);
 				dataViewerMap.put(dataViewerWindowTitle, window);
 				window.setBlockOnOpen(true);
+				window.setDataViewerMap(dataViewerMap);
 				window.open();
-				dataViewerMap.remove(window.getDataViewerWindowTitle());
 			}
 		});
 	}
