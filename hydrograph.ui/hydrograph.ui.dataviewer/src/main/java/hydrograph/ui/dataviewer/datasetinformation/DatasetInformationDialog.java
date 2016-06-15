@@ -33,7 +33,15 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.help.ViewContextComputer;
+
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 public class DatasetInformationDialog extends Dialog {
 	
@@ -48,7 +56,7 @@ public class DatasetInformationDialog extends Dialog {
 	
 	private Table table;
 	DatasetInformationDetail datasetInformationDetail = new DatasetInformationDetail();
-	
+	ViewDataSchemaHelper viewDataSchemaHelper;
 	private List<GridRow> gridRowList=new ArrayList<>();
 	
 	/**
@@ -58,7 +66,7 @@ public class DatasetInformationDialog extends Dialog {
 	
 	public DatasetInformationDialog(Shell parentShell) {
 		super(parentShell);
-		//setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL | SWT.RESIZE);
+		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL | SWT.RESIZE);
 		
 	}
 	
@@ -210,54 +218,74 @@ public class DatasetInformationDialog extends Dialog {
 		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnItem_3 = tableViewerColumn_3.getColumn();
 		tblclmnItem_3.setWidth(100);
-		tblclmnItem_3.setText("Data Type Value");
+		tblclmnItem_3.setText("Precision");
 		
 		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnItem_4 = tableViewerColumn_4.getColumn();
 		tblclmnItem_4.setWidth(100);
-		tblclmnItem_4.setText("Precision");
+		tblclmnItem_4.setText("Scale");
 		
 		TableViewerColumn tableViewerColumn_5 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnItem_5 = tableViewerColumn_5.getColumn();
 		tblclmnItem_5.setWidth(100);
-		tblclmnItem_5.setText("Scale");
+		tblclmnItem_5.setText("Scale Type");
 		
 		TableViewerColumn tableViewerColumn_6 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnItem_6 = tableViewerColumn_6.getColumn();
 		tblclmnItem_6.setWidth(100);
-		tblclmnItem_6.setText("Scale Type Value");
+		tblclmnItem_6.setText("Description");
 		
-		TableViewerColumn tableViewerColumn_7 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnItem_7 = tableViewerColumn_7.getColumn();
-		tblclmnItem_7.setWidth(100);
-		tblclmnItem_7.setText("Scale Type");
-		
-		TableViewerColumn tableViewerColumn_8 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnItem_8 = tableViewerColumn_8.getColumn();
-		tblclmnItem_8.setWidth(100);
-		tblclmnItem_8.setText("Description");
-		
-		
-		
-		GridRow gridRow=new GridRow();
-		gridRow.setDataType(12);
-		gridRow.setDataTypeValue("Interger");
-		gridRow.setDateFormat("Date/Month/Year");
-		gridRow.setDescription("Test");
-		gridRow.setFieldName("Hello");
-		gridRow.setPrecision("10");
-		gridRow.setScale("hajh");
-		gridRow.setScaleType(20);
-		gridRow.setScaleTypeValue("Integer");
-		gridRowList.add(gridRow);
-		gridRowList.add(gridRow);
-		gridRowList.add(gridRow);
+		loadSchemaData();
 		tableViewer.setContentProvider(new DatasetContentProvider());
 		tableViewer.setLabelProvider(new DatasetLabelProvider());
 		tableViewer.setInput(gridRowList);
 		tableViewer.refresh();
 		
 		return container;
+	}
+
+	public void loadSchemaData() {
+		String schemaFilePath="C:\\Users\\ashikah\\Desktop\\input.xml";
+		Fields fields = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(schemaFilePath);
+		for(Field field : fields.getField()){
+			GridRow gridRow=new GridRow();
+			gridRow.setFieldName(field.getName());
+			gridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(field.getType().value()));
+			gridRow.setDataTypeValue(GridWidgetCommonBuilder.getDataTypeValue()[GridWidgetCommonBuilder.getDataTypeByValue(field.getType().value())]);
+			
+			if(field.getFormat()!=null){
+				gridRow.setDateFormat(field.getFormat());
+			}else{
+				gridRow.setDateFormat("");
+			}
+			if(field.getPrecision()!= null){
+				gridRow.setPrecision(Integer.toString(field.getPrecision()));
+			}
+			else{
+				gridRow.setPrecision("ABC");
+			}
+			if(gridRow.getScale() != null){
+				gridRow.setScale(Integer.toString(field.getScale()));
+			}
+			else{
+				gridRow.setScale("");
+			}
+			
+			if(field.getDescription()!=null)
+				gridRow.setDescription(field.getDescription());
+			else{
+				gridRow.setDescription("");
+			}
+			if(field.getScaleType()!=null){
+				gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(field.getScaleType().value()));	
+				gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[GridWidgetCommonBuilder.getScaleTypeByValue(field.getScaleType().value())]);
+			}else{
+				gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(Messages.SCALE_TYPE_NONE));
+				gridRow.setScaleTypeValue(GridWidgetCommonBuilder.getScaleTypeValue()[Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
+			}
+			
+			gridRowList.add(gridRow);
+		}
 	}
 	
 
