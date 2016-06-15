@@ -155,6 +155,8 @@ public class DebugDataViewer extends ApplicationWindow {
 	
 	private Fields dataViewerFileSchema;
 	
+	private Map<String, DebugDataViewer> dataViewerMap;
+	
 	/**
 	 * Create the application window,
 	 * 
@@ -1062,6 +1064,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		if(dataViewerAdapter!=null){
 			dataViewerAdapter.closeConnection();
 		}		
+		dataViewerMap.remove(dataViewerWindowName);
 		return super.close();
 	}
 
@@ -1069,4 +1072,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		return dataViewerWindowName;
 	}
 
+	public void setDataViewerMap(Map<String, DebugDataViewer> dataViewerMap) {
+		this.dataViewerMap = dataViewerMap;
+	}
 }
