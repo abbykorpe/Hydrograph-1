@@ -199,6 +199,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	
 	private static final String DEFAULT_CONSOLE = "NewConsole";
 	private static final String CONSOLE_VIEW_ID = "hydrograph.ui.project.structure.console.HydrographConsole";
+	private static final String CSV_EXTENSION=".csv";
+	private static final String XML_EXTENSION=".xml";
 
 	private String uniqueJobId;
 	private String jobId;
@@ -1249,17 +1251,24 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		String dataViewerDirectoryPath = Utils.INSTANCE.getDataViewerDebugFilePath();
 		
 		for( JobDetails j :this.container.getJobDetailsInGraph()){
-			String dataViewerCSVFilePath = j.getUniqueJobID()+"_"+j.getComponentID()+"_"+j.getComponentSocketID()+".csv";
+			String dataViewerCSVFilePath = j.getUniqueJobID()+"_"+j.getComponentID()+"_"+j.getComponentSocketID()+CSV_EXTENSION;
 			String dataViewerCSVFilePathToBeDeleted = dataViewerDirectoryPath+"\\"+dataViewerCSVFilePath;
 			IPath path = new Path(dataViewerCSVFilePathToBeDeleted);
-			path.toFile().delete();
-			logger.debug("Deleted Data Viewer csv file {}", dataViewerCSVFilePathToBeDeleted);
+			boolean deleted = path.toFile().delete();
+			if(deleted)
+				logger.debug("Deleted Data Viewer csv file {}", dataViewerCSVFilePathToBeDeleted);
+			else
+				logger.warn("Unable to delete Viewer csv file {}", dataViewerCSVFilePathToBeDeleted);
 			
-			String dataViewerSchemaFilePath = j.getUniqueJobID()+"_"+j.getComponentID()+"_"+j.getComponentSocketID()+".xml";
+			String dataViewerSchemaFilePath = j.getUniqueJobID()+"_"+j.getComponentID()+"_"+j.getComponentSocketID()+XML_EXTENSION;
 			String dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+"\\"+dataViewerSchemaFilePath;
 			path = new Path(dataViewerSchemaFilePathToBeDeleted);
 			path.toFile().delete();
-			logger.debug("Deleted Data Viewer schema file {}", dataViewerSchemaFilePathToBeDeleted);
+			deleted = path.toFile().delete();
+			if(deleted)
+				logger.debug("Deleted Data Viewer schema file {}", dataViewerSchemaFilePathToBeDeleted);
+			else
+				logger.warn("Unable to delete Viewer schema file {}", dataViewerSchemaFilePathToBeDeleted);
 		}
 	}
 	
