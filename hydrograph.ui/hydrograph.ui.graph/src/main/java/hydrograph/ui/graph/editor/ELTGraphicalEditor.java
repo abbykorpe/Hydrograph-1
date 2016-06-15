@@ -15,7 +15,6 @@ package hydrograph.ui.graph.editor;
 
 import hydrograph.ui.common.component.config.CategoryType;
 import hydrograph.ui.common.component.config.Component;
-import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.interfaces.console.IHydrographConsole;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
@@ -199,8 +198,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	
 	private static final String DEFAULT_CONSOLE = "NewConsole";
 	private static final String CONSOLE_VIEW_ID = "hydrograph.ui.project.structure.console.HydrographConsole";
-	private static final String CSV_EXTENSION=".csv";
-	private static final String XML_EXTENSION=".xml";
 
 	private String uniqueJobId;
 	private String jobId;
