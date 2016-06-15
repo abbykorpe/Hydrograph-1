@@ -35,6 +35,15 @@ allprojects {
     from sourceSets.main.allSource
     classifier = 'sources'
     }
+   
+}
+
+subprojects{
+
+    artifacts {
+	archives testJar
+	archives sourcesJar
+    }
 }
 
 jar {
