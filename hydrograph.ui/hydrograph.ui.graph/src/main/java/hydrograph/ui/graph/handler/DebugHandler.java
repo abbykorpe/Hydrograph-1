@@ -33,6 +33,7 @@ import java.net.MalformedURLException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
@@ -77,7 +78,7 @@ public class DebugHandler  extends AbstractHandler {
 	/** The current job name. */
 	private String currentJobName = null;
 	
-	private ArrayList<String> dataViewFileIds =  new ArrayList<String>();
+	private List<String> dataViewFileIds =  new ArrayList<String>();
 	
 	 
 	
@@ -252,6 +253,8 @@ public class DebugHandler  extends AbstractHandler {
 		
 		deletePreviousRunsDataviewCsvXmlFiles();
 		deletePreviousRunsBasePathDebugFiles(host, portNumber, uniqueJobID, basePath, userId, clusterPassword);
+		dataViewFileIds.clear();
+		
 		
 		JobManager.INSTANCE.executeJobInDebug(job, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
 		CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();	
@@ -301,7 +304,6 @@ public class DebugHandler  extends AbstractHandler {
 					logger.warn("Unable to delete debug Base path file",e);
 				}
 			}
-			dataViewFileIds.clear();
 		}
 	}
  

@@ -86,6 +86,21 @@ public class DebugServiceClient {
 		return path;
 	}
 	
+	/**
+	 * 
+	 * Method to delete debug base files
+	 * 
+	 * @param host
+	 * @param port
+	 * @param unique job ID
+	 * @param base path
+	 * @param User
+	 * @param password
+	 * @throws NumberFormatException
+	 * @throws HttpException
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 */
 	public void deleteBasePathFiles(String host, String port, String uniqueJobID, String basePath, String user, String password) 
 			throws NumberFormatException, HttpException, MalformedURLException, IOException{
 		executePostMethod(Provider.INSTANCE.getDeleteBasePathFileMethod(host, port, uniqueJobID, basePath, user, password));

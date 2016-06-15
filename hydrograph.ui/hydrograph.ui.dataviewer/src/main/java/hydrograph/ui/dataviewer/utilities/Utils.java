@@ -96,6 +96,12 @@ public class Utils {
 		return Integer.valueOf(pageSize);
 	}
 	
+	/**
+	 * 
+	 * Returns boolean value if base path debug files are to be deleted
+	 * 
+	 * @return boolean
+	 */
 	public Boolean isPurgeViewDataPrefSet() {
 		Boolean purgeViewDataPref = Platform.getPreferencesService().getBoolean(Activator.PLUGIN_ID, 
 				PreferenceConstants.PURGE_DATA_FILES, true, null);
