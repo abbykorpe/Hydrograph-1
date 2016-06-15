@@ -46,7 +46,7 @@
      <command
            id="hydrograph.ui.menus.new.newTranformClass"
            name="Tranform Class">
-     </command>
+     </command>     <command           id="hydrograph.ui.menus.new.newNormalizeClass"           name="Normalize Class">     </command>     <command           id="hydrograph.ui.menus.new.newCumulateClass"           name="Cumulate Class">     </command>
    </extension>
 	  <extension
          point="org.eclipse.ui.handlers">
@@ -281,7 +281,7 @@
        <handler
              class="hydrograph.ui.menus.handlers.NewCustomClassHandler"
              commandId="hydrograph.ui.menus.new.newTranformClass">
-       </handler>
+       </handler>       <handler             class="hydrograph.ui.menus.handlers.NewCustomClassHandler"             commandId="hydrograph.ui.menus.new.newCumulateClass">       </handler>       <handler             class="hydrograph.ui.menus.handlers.NewCustomClassHandler"             commandId="hydrograph.ui.menus.new.newNormalizeClass">       </handler>
    </extension>
    		
    <extension
@@ -306,7 +306,7 @@
                         commandId="org.eclipse.ui.newWizard"
                         icon="icons/newclass_wiz.gif"
                         id="hydrograph.ui.menus.NewMenu.Class"
-                        label="Class"
+                        label="Empty Class"
                         mnemonic="C"
                         style="push">
                      <parameter
@@ -334,7 +334,7 @@
                         label="Tranform Class"
                         mnemonic="T"
                         style="push">
-                  </command>
+                  </command>                  <command                        commandId="hydrograph.ui.menus.new.newNormalizeClass"                        icon="icons/aggregate_palette.png"                        label="Normalize Class"                        mnemonic="N"                        style="push">                  </command>                  <command                        commandId="hydrograph.ui.menus.new.newCumulateClass"                        icon="icons/aggregate_palette.png"                        label="Cumulate Class"                        mnemonic="U"                        style="push">                  </command>
                </menu>
                <command
                      commandId="org.eclipse.ui.newWizard"
