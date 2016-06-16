@@ -1,0 +1,280 @@
+/*******************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
+package hydrograph.server.debug.service;
+
+import hydrograph.server.debug.api.DebugFilesReader;
+import hydrograph.server.debug.api.UserPassCallbackHandler;
+import hydrograph.server.debug.utilities.Constants;
+import hydrograph.server.debug.utilities.ServiceUtilities;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.URL;
+import java.security.PrivilegedAction;
+import java.sql.Timestamp;
+import java.util.Date;
+
+import javax.security.auth.Subject;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.security.UserGroupInformation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import spark.Request;
+import spark.Response;
+import spark.Route;
+import spark.Spark;
+
+/**
+ * @author Bitwise
+ * 
+ */
+public class DebugService implements PrivilegedAction<Object> {
+	private static final Logger LOG = LoggerFactory.getLogger(DebugService.class);
+
+	public DebugService() {
+	}
+
+	private void start() {
+		int portNumber = Constants.DEFAULT_PORT_NUMBER;
+		try {
+			portNumber = Integer
+					.parseInt(ServiceUtilities.getServiceConfigResourceBundle().getString(Constants.PORT_ID));
+			LOG.debug("Port number '" + portNumber + "' fetched from properties file");
+		} catch (Exception e) {
+			LOG.error("Error fetching port number. Defaulting to " + Constants.DEFAULT_PORT_NUMBER, e);
+		}
+		Spark.setPort(portNumber);
+
+		Spark.post(new Route("/read") {
+			@Override
+			public Object handle(Request request, Response response) {
+				LOG.info("************************read endpoint - started************************");
+				LOG.info("+++ Start: " + new Timestamp((new Date()).getTime()));
+				String jobId = request.queryParams(Constants.JOB_ID);
+				String componentId = request.queryParams(Constants.COMPONENT_ID);
+				String socketId = request.queryParams(Constants.SOCKET_ID);
+				String basePath = request.queryParams(Constants.BASE_PATH);
+
+				// String host = request.queryParams(Constants.HOST);
+				String userID = request.queryParams(Constants.USER_ID);
+				String password = request.queryParams(Constants.PASSWORD);
+
+				double sizeOfData = Double.parseDouble(request.queryParams(Constants.FILE_SIZE)) * 1024 * 1024;
+				LOG.info("Base Path: {}, Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}, DataSize:{}",
+						new Object[] { basePath, jobId, componentId, socketId, userID, sizeOfData });
+
+				String batchID = jobId + "_" + componentId + "_" + socketId;
+				String tempLocationPath = ServiceUtilities.getServiceConfigResourceBundle()
+						.getString(Constants.TEMP_LOCATION_PATH);
+				String filePath = tempLocationPath + "/" + batchID + ".csv";
+				try {
+					readFileFromHDFS(basePath + "/debug/" + jobId + "/" + componentId + "_" + socketId, sizeOfData,
+							filePath, userID, password);
+					LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
+				} catch (Exception e) {
+					LOG.error("Error in reading debug files", e);
+					return "error";
+				}
+				return filePath;
+			}
+		});
+
+		Spark.post(new Route("/delete") {
+			@Override
+			public Object handle(Request request, Response response) {
+				LOG.info("************************delete endpoint - started************************");
+				LOG.info("+++ Start: " + new Timestamp((new Date()).getTime()));
+				response.type("text/json");
+				String jobId = request.queryParams(Constants.JOB_ID);
+				String basePath = request.queryParams(Constants.BASE_PATH);
+				String componentId = request.queryParams(Constants.COMPONENT_ID);
+				String socketId = request.queryParams(Constants.SOCKET_ID);
+				String userID = request.queryParams(Constants.USER_ID);
+				String password = request.queryParams(Constants.PASSWORD);
+
+				LOG.info("Base Path: {}, Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}",
+						new Object[] { basePath, jobId, componentId, socketId, userID });
+
+				try {
+					removeDebugFiles(basePath, jobId, componentId, socketId, userID, password);
+					LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
+				} catch (Exception e) {
+					LOG.error("Error in deleting debug files", e);
+				}
+				return "error";
+			}
+		});
+
+		Spark.post(new Route("/deleteLocalDebugFile") {
+			@Override
+			public Object handle(Request request, Response response) {
+				String error = "";
+				LOG.info("+++ Start: " + new Timestamp((new Date()).getTime()));
+				LOG.info("************************deleteLocalDebugFile endpoint - started************************");
+				try {
+					String jobId = request.queryParams(Constants.JOB_ID);
+					String componentId = request.queryParams(Constants.COMPONENT_ID);
+					String socketId = request.queryParams(Constants.SOCKET_ID);
+					String batchID = jobId + "_" + componentId + "_" + socketId;
+					String tempLocationPath = ServiceUtilities.getServiceConfigResourceBundle()
+							.getString(Constants.TEMP_LOCATION_PATH);
+
+					LOG.info("Job Id: {}, Component Id: {}, Socket ID: {}, TemporaryPath: {}",
+							new Object[] { jobId, componentId, socketId, tempLocationPath });
+					LOG.debug("File to be deleted: " + tempLocationPath + "/" + batchID + ".csv");
+					File file = new File(tempLocationPath + "/" + batchID + ".csv");
+					file.delete();
+					LOG.trace("Local debug file deleted successfully.");
+					return "Success";
+				} catch (Exception e) {
+					LOG.error("Error in deleting local debug file.", e);
+					error = e.getMessage();
+				}
+				LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
+				return "Local file delete failed. Error: " +  error;
+			}
+		});
+
+		// TODO : Keep this for test
+		Spark.post(new Route("/post") {
+
+			@Override
+			public Object handle(Request request, Response response) {
+				response.type("text/json");
+				return "calling post...";
+			}
+		});
+
+		// TODO : Keep this for test
+		Spark.get(new Route("/test") {
+
+			@Override
+			public Object handle(Request request, Response response) {
+				response.type("text/json");
+				response.status(200);
+				response.body("Test successful!");
+				return "Test successful!";
+			}
+		});
+	}
+
+	public static void main(String[] args) {
+		DebugService service = new DebugService();
+		service.start();
+	}
+
+	private void readFileFromHDFS(String filePath, double sizeOfData, String remoteFileName, String user,
+			String password) {
+		try {
+			Path pt = new Path(filePath);
+			LOG.debug("Reading Debug file:" + filePath);
+			Configuration conf = new Configuration();
+
+			String hdfsConfigPath = ServiceUtilities.getServiceConfigResourceBundle()
+					.getString(Constants.HDFS_SITE_CONFIG_PATH);
+
+			String coreSiteConfigPath = ServiceUtilities.getServiceConfigResourceBundle()
+					.getString(Constants.CORE_SITE_CONFIG_PATH);
+
+			// LOG.info("In remote mode class loader::"
+			// + conf.getClassLoader().toString());
+
+			LOG.debug("Loading hdfs-site.xml:" + hdfsConfigPath);
+			conf.addResource(new Path(hdfsConfigPath));
+			LOG.debug("Loading hdfs-site.xml:" + coreSiteConfigPath);
+			conf.addResource(new Path(coreSiteConfigPath));
+
+			// apply kerberos token
+			String isKerberosEnable = ServiceUtilities.getServiceConfigResourceBundle()
+					.getString(Constants.ENABLE_KERBEROS);
+			if (Boolean.parseBoolean(isKerberosEnable)) {
+				LOG.info("Applying Kerberos token for user:" + user);
+				getKerberosToken(user, password.toCharArray(), conf);
+			} else {
+				LOG.info("Kerberos is disabled");
+			}
+			FileSystem fs = FileSystem.get(conf);
+			FileStatus[] status = fs.listStatus(pt);
+			OutputStream os = new FileOutputStream(remoteFileName);
+			int numOfBytes = 0;
+			for (int i = 0; i < status.length; i++) {
+				BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(status[i].getPath())));
+				String line = "";
+				line = br.readLine();
+				if (line != null) {
+					os.write((line + "\n").toString().getBytes());
+					numOfBytes += line.toString().length();
+					while ((line = br.readLine()) != null) {
+						numOfBytes += line.toString().length();
+						// line = br.readLine();
+						if (numOfBytes <= sizeOfData) {
+							os.write((line + "\n").toString().getBytes());
+						} else {
+							break;
+						}
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void removeDebugFiles(String basePath, String jobId, String componentId, String socketId, String userID,
+			String password) {
+		try {
+			DebugFilesReader debugFilesReader = new DebugFilesReader(basePath, jobId, componentId, socketId, userID,
+					password);
+			debugFilesReader.delete();
+		} catch (Exception e) {
+			LOG.error("Error while deleting the debug file", e);
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void getKerberosToken(String user, char[] password, Configuration configuration)
+			throws LoginException, IOException {
+		LOG.trace("Entering method getKerberosToken() for user: " + user);
+		URL url = DebugFilesReader.class.getClassLoader().getResource("jaas.conf");
+		System.setProperty("java.security.auth.login.config", url.toExternalForm());
+
+		LOG.info("Generating Kerberos ticket for user: " + user);
+		UserGroupInformation.setConfiguration(configuration);
+
+		LoginContext lc = new LoginContext("EntryName", new UserPassCallbackHandler(user, password));
+		lc.login();
+
+		Subject subject = lc.getSubject();
+		UserGroupInformation.loginUserFromSubject(subject);
+		Subject.doAs(subject, this);
+		LOG.info("Kerberos ticket successfully generated for user: " + user);
+	}
+
+	@Override
+	public Object run() {
+		LOG.trace("Entering method run()");
+		return null;
+	}
+}

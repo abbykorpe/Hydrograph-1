@@ -1,0 +1,77 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+group = 'hygrograph'
+archivesBaseName = 'hydrograph.server'
+sourceCompatibility = 1.7
+version = '0.1'
+ext.hadoopVersion = '2.6.0'
+
+buildscript {
+  repositories {
+     jcenter()
+  }
+  dependencies {
+    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
+  }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url 'http://conjars.org/repo/'
+    }
+    maven {
+        url 'http://maven.twttr.com/'
+    }
+}
+
+dependencies {
+	compile group: 'cascading.avro', name: 'avro-scheme', version: '2.5.0'
+	compile (group: 'org.apache.hadoop', name: 'hadoop-common', version: hadoopVersion) {
+		exclude group: 'javax.servlet', module: 'servlet-api'
+	}
+	compile (group: 'org.apache.hadoop', name: 'hadoop-hdfs', version: hadoopVersion) {
+		exclude group: 'javax.servlet', module: 'servlet-api'
+	}
+	compile (group: 'org.apache.avro', name: 'avro-mapred', version: '1.7.7') {
+		exclude group: 'org.mortbay.jetty', module: 'servlet-api'
+	}
+	compile group: 'com.sparkjava', name: 'spark-core', version: '1.1.1'
+	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.12'
+	compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.12'
+	
+	testCompile 'junit:junit:4.11'
+}	
+	
+jar {
+  manifest {
+  	attributes(
+  		'Main-Class': 'hydrograph.server.debug.service.DebugService'
+  	)
+    attributes(
+      "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
+    )
+    exclude '**/*.properties'
+  }
+}
+
+task writePom {
+    pom {
+        project {
+           }
+    	}.writeTo("$buildDir/pom.xml")
+	}
+ 
+//ToDo: keep this for test
+
+// task copyToLib(type: Copy) {
+//    into "$buildDir/output/lib"
+//    from configurations.runtime
+//}
+	
+test {
+    exclude '**/DebugFileReaderTest*'
+}
