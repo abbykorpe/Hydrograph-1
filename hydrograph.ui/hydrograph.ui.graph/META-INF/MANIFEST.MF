@@ -44,4 +44,5 @@ Import-Package: com.jcraft.jsch;version="0.1.44",
  org.eclipse.core.filesystem,
  org.eclipse.jdt.ui.wizards
 Export-Package: hydrograph.ui.graph.controller,
- hydrograph.ui.graph.editor
+ hydrograph.ui.graph.editor,
+ hydrograph.ui.graph.job
