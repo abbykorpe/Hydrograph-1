@@ -37,6 +37,11 @@ public class SchemaPropagationHelper {
 
 	public final static SchemaPropagationHelper INSTANCE = new SchemaPropagationHelper();
 
+	
+	private SchemaPropagationHelper(){
+		
+	}
+	
 	public Map<String, List<String>> getFieldsForFilterWidget(Component component) {
 		Map<String, List<String>> propagatedFiledMap = new HashMap<String, List<String>>();
 		List<String> genratedProperty = null;
