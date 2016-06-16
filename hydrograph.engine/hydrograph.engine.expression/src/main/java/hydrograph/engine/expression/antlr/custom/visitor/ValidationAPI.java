@@ -1,42 +1,84 @@
 package hydrograph.engine.expression.antlr.custom.visitor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import hydrograph.engine.expression.antlr.DescriptiveErrorListener;
-import hydrograph.engine.expression.antlr.ExprssionEditorLexer;
-import hydrograph.engine.expression.antlr.ExprssionEditorParser;
+import bsh.EvalError;
+import bsh.Interpreter;
+import hydrograph.engine.expression.antlr.ExpressionEditorLexer;
+import hydrograph.engine.expression.antlr.ExpressionEditorParser;
 
 public class ValidationAPI {
+
+	private static String PACKAGE_NAME = "import hydrograph.engine.transformation.standardfunctions.StringFunctions; "
+			+ "import hydrograph.engine.transformation.standardfunctions.DateFunctions;"
+			+ "import hydrograph.engine.transformation.standardfunctions.NumericFunctions; ";
+	private static Map<Class<?>, Object> schemaFieldsMap = new HashMap<Class<?>, Object>();
+
+	private static void put() {
+		schemaFieldsMap.put(String.class, "Hello World");
+		schemaFieldsMap.put(Integer.class, 1);
+		schemaFieldsMap.put(Float.class, 12.3);
+	}
 
 	private ValidationAPI() {
 	}
 
-	public static String getValidExpression(String expr) {
+	private static ExpressionEditorParser.BlockContext generateAntlrTree(String expr) {
 		ANTLRInputStream stream = new ANTLRInputStream(expr);
-		ExprssionEditorLexer lexer = new ExprssionEditorLexer(stream);
+		ExpressionEditorLexer lexer = new ExpressionEditorLexer(stream);
 		CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-		ExprssionEditorParser parser = new ExprssionEditorParser(tokenStream);
+		ExpressionEditorParser parser = new ExpressionEditorParser(tokenStream);
 		parser.removeErrorListeners();
 		parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
 		lexer.removeErrorListeners();
 		lexer.addErrorListener(DescriptiveErrorListener.INSTANCE);
-
-		ExprssionEditorParser.BlockContext tree = parser.block();
-
-		CustomExpressionVisitor customExpressionVisitor = new CustomExpressionVisitor();
-		customExpressionVisitor.visit(tree);
-		return customExpressionVisitor.getExpression();
+		return parser.block();
 	}
 
 	public static boolean isExpressionValid(String expr) {
 		try {
-			getValidExpression(expr);
+			CustomExpressionVisitor customExpressionVisitor = new CustomExpressionVisitor();
+			customExpressionVisitor.visit(generateAntlrTree(expr));
 			return true;
 		} catch (Exception e) {
-			 e.printStackTrace();
+			throw e;
 		}
-		return false;
+	}
+
+	public static String getValidExpression(String expr) {
+		if (isExpressionValid(expr))
+			return PACKAGE_NAME + expr;
+		return expr;
+
+	}
+
+	public static void checkExpressionValid(String expr) {
+		isExpressionValid(expr);
+	}
+
+	public static <T> int compile(String expr, Map<String, Class<?>> schemaFields) {
+		try {
+			Interpreter interpreter = new Interpreter();
+			CustomExpressionVisitor customExpressionVisitor = new CustomExpressionVisitor();
+			customExpressionVisitor.visit(generateAntlrTree(expr));
+			for (String field : customExpressionVisitor.getFieldList()) {
+				if (schemaFields.get(field) != null)
+					interpreter.set(field, get(schemaFields.get(field)));
+			}
+			interpreter.eval(getValidExpression(expr));
+			return 1;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static <T> T get(Class<T> type) {
+		put();
+		return type.cast(schemaFieldsMap.get(type));
 
 	}
 

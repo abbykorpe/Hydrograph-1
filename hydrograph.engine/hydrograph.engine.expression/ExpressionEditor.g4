@@ -1,4 +1,4 @@
-grammar exprssion_editor;
+grammar ExpressionEditor;
 
 
 //----------------------> Block
@@ -15,7 +15,7 @@ blockStatement
 //----------------------> Expression
 expression
     :  primary
-         |   expression '.' Identifier
+//         |   expression '.' JavaIdentifier
          |   expression ('++' | '--')
          |   ('+'|'-'|'++'|'--') expression
          |   ('~'|'!') expression
@@ -33,7 +33,7 @@ expression
          |   expression '?' expression ':' expression
      ;
 
-primary : literal | functions | Identifier ;
+primary : literal | functions | javaIdentifier ;
 
 expressionList
     :   expression (',' expression)*
@@ -62,9 +62,9 @@ LPAREN          : '(';
 RPAREN          : ')';
 
 
-functions : Identifier LPAREN functions RPAREN
+functions : javaIdentifier LPAREN functions RPAREN
     |literal
-    |Identifier
+    |javaIdentifier
     ;
 
  literal
@@ -326,17 +326,19 @@ ZeroToThree
 // §3.10.7 The Null Literal
 
 NullLiteral
-    :   'null'
-    ;
+    :   'null';
 
+identifiertoken : javaIdentifier;
 
-     Identifier
+javaIdentifier: Identifier;
+
+Identifier
          :   JavaLetter JavaLetterOrDigit*
          ;
 
      fragment
      JavaLetter
-         :   [a-zA-Z$_] // these are the "java letters" below 0x7F
+         :   [a-zA-Z$_.] // these are the "java letters" below 0x7F
          |   // covers all characters above 0x7F which are not a surrogate
              ~[\u0000-\u007F\uD800-\uDBFF]
              {Character.isJavaIdentifierStart(_input.LA(-1))}?
@@ -347,7 +349,7 @@ NullLiteral
 
      fragment
      JavaLetterOrDigit
-         :   [a-zA-Z0-9$_] // these are the "java letters or digits" below 0x7F
+         :   [a-zA-Z0-9$_.] // these are the "java letters or digits" below 0x7F
          |   // covers all characters above 0x7F which are not a surrogate
              ~[\u0000-\u007F\uD800-\uDBFF]
              {Character.isJavaIdentifierPart(_input.LA(-1))}?
