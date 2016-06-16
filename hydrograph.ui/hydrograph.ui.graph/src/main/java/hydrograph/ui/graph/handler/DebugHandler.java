@@ -15,6 +15,7 @@ package hydrograph.ui.graph.handler;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
@@ -269,12 +270,17 @@ public class DebugHandler  extends AbstractHandler {
 
 		IPath path = new Path(dataViewerDirectoryPath);
 		boolean deleted = false;
+		String dataViewerSchemaFilePathToBeDeleted = "";
 		if(path.toFile().isDirectory()){
 			String[] fileList = path.toFile().list();
 			for (String file: fileList){
 				for (String previousFileID: dataViewFileIds){
 					if(file.contains(previousFileID)){
-						String dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+"\\" + file;
+						if (OSValidator.isWindows()){
+							dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+ "\\" + file;
+						}else{
+							dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+ "/" + file;
+						}
 						path = new Path(dataViewerSchemaFilePathToBeDeleted);
 						deleted = path.toFile().delete();
 						if(deleted){
