@@ -14,7 +14,7 @@ ext.hiveVersion = '1.2.0'
 ext.tezVersion = '0.7.0'
 
 project.ext.setTestingProperties = {
-System.properties[ 'test.data.path' ] = new String( "${projectDir}/../elt-cascading/src/test/resources/data/" )
+System.properties[ 'test.data.path' ] = new String( "${projectDir}/../hydrograph.engine.cascading/src/test/resources/data/" )
 }
 
 jar {
