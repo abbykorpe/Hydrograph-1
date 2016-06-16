@@ -20,6 +20,7 @@ import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
 import hydrograph.ui.common.util.CanvasDataAdpater;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.dataviewer.utilities.Utils;
@@ -1249,11 +1250,16 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		
 		IPath path = new Path(dataViewerDirectoryPath);
 		boolean deleted = false;
+		String dataViewerSchemaFilePathToBeDeleted = "";
 		if(path.toFile().isDirectory()){
 			String[] fileList = path.toFile().list();
 			for (String file: fileList){
 				if(file.contains(this.uniqueJobId)){
-					String dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+"\\" + file;
+					if (OSValidator.isWindows()){
+						dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+ "\\" + file;
+					}else{
+						dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+ "/" + file;
+					}
 					path = new Path(dataViewerSchemaFilePathToBeDeleted);
 					deleted = path.toFile().delete();
 					if(deleted){
