@@ -28,8 +28,7 @@ public class JaxbSchemaFieldConverter {
 	private JaxbSchemaFieldConverter() {
 	}
 
-	public static TypeOutputInSocket convertToJaxb(
-			Set<SchemaField> schemaFieldList) {
+	public static TypeOutputInSocket convertToJaxb(Set<SchemaField> schemaFieldList) {
 		TypeOutputInSocket typeOutputInSocket = new TypeOutputInSocket();
 		TypeBaseRecord record = new TypeBaseRecord();
 		for (SchemaField schemaField : schemaFieldList) {
@@ -39,48 +38,39 @@ public class JaxbSchemaFieldConverter {
 			setFieldPrecision(schemaField, typeBaseField);
 			// setFieldScaleType(schemaField, typeBaseField);
 			setFieldFormat(schemaField, typeBaseField);
-			 typeBaseField.setType(FieldDataTypes.fromValue(schemaField
-			 .getFieldDataType()));
-			//typeBaseField.setType(FieldDataTypes.JAVA_LANG_STRING);
+			typeBaseField.setType(FieldDataTypes.fromValue(schemaField.getFieldDataType()));
+			// typeBaseField.setType(FieldDataTypes.JAVA_LANG_STRING);
 			record.getFieldOrRecordOrIncludeExternalSchema().add(typeBaseField);
 		}
 		typeOutputInSocket.setSchema(record);
 		return typeOutputInSocket;
 	}
 
-	public static void setFieldScale(SchemaField schemaField,
-			TypeBaseField typeBaseField) {
-		if (schemaField.getFieldScale() != 0)
-			typeBaseField.setScale(schemaField.getFieldScale());
+	public static void setFieldScale(SchemaField schemaField, TypeBaseField typeBaseField) {
+		typeBaseField.setScale(schemaField.getFieldScale());
 	}
 
-	public static void setFieldPrecision(SchemaField schemaField,
-			TypeBaseField typeBaseField) {
-		if (schemaField.getFieldPrecision() != 0)
-			typeBaseField.setPrecision(schemaField.getFieldPrecision());
+	public static void setFieldPrecision(SchemaField schemaField, TypeBaseField typeBaseField) {
+		typeBaseField.setPrecision(schemaField.getFieldPrecision());
 	}
 
-	public static void setFieldScaleType(SchemaField schemaField,
-			TypeBaseField typeBaseField) {
+	public static void setFieldScaleType(SchemaField schemaField, TypeBaseField typeBaseField) {
 		if (schemaField.getFieldScaleType().equals(ScaleTypeList.EXPLICIT))
 			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
 		else
 			typeBaseField.setScaleType(ScaleTypeList.IMPLICIT);
 	}
 
-	public static void setFieldFormat(SchemaField schemaField,
-			TypeBaseField typeBaseField) {
+	public static void setFieldFormat(SchemaField schemaField, TypeBaseField typeBaseField) {
 		if (schemaField.getFieldFormat() != null) {
 			typeBaseField.setFormat(schemaField.getFieldFormat());
 		}
 	}
 
-	public static void setFieldLength(SchemaField schemaField,
-			TypeBaseField typeBaseField) {
+	public static void setFieldLength(SchemaField schemaField, TypeBaseField typeBaseField) {
 		QName qname = new QName("length");
 		if (schemaField.getFieldLength() != 0)
-			typeBaseField.getOtherAttributes().put(qname,
-					String.valueOf(schemaField.getFieldLength()));
+			typeBaseField.getOtherAttributes().put(qname, String.valueOf(schemaField.getFieldLength()));
 		else
 			typeBaseField.getOtherAttributes().put(qname, String.valueOf(0));
 
