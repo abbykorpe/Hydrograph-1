@@ -8,11 +8,10 @@ Sr.No. <date> - [developer names] - description
 Issues/Defects fixed:
 =====================================================================================================
 Sr.No. <GitHub Issue #> - [fixed by] - description
-1. Load button located on the View Data window should be disabled till
-   loading the fresh data in the data grid window and proper loading icon
-   should display on the screen #573  - [ Shrirang S Kumbhar] 
-2. Data viewer window is taking too much time to load data, so show data
-   viewer window first and then load data into it #574 - [ Shrirang S Kumbhar]
+1. #573  [ Shrirang S Kumbhar] Load button located on the View Data window should be disabled till loading the fresh data 
+							   in the data grid window and proper loading icon should display on the screen.
+2. #574  [ Shrirang S Kumbhar] Data viewer window is taking too much time to load data, so show data viewer window first 
+							   and then load data into it.
 3. #569  [Nitin Gupta] Job is getting locked if user close console and job window while job is running (Current production)   
 4. #618  [Nitin Gupta] STOP button remains enabled even after complete job execution   
 5. #569  [Nitin Gupta] Job is getting locked if user close console and job window while job is running (Current production)
@@ -22,9 +21,10 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 9. #419  [Shashank Karnik] Output Component: Error bubble is getting removed if user pulls schema from the previous component and the click on cancel button 
 10.#610  [Vibhor Tyagi] Temp Path(Global Preferences Window) : When Temp Path Do Not End with '/' Then Schema XML is Getting Generated Into Previous Folder Of Given Path
 11.#576  [vibhor Tyagi] Preferances : Validation is not present if user enter page size as 0 in the global and local preferances
-11.#581  [vibhor Tyagi] Global and Local Preferences window:Validation Needs to be Applied for Preferences Windows When User Enters Invalid Value (e.g. 0) in File Size Text Window
-12.#437  [Nikhil Deokar] Schema Tab: Added Range From and Range To validation
-13.#441  [Nikhil Deokar] Creating Parameter file on Save As event
+12.#581  [vibhor Tyagi] Global and Local Preferences window:Validation Needs to be Applied for Preferences Windows When User Enters Invalid Value (e.g. 0) in File Size Text Window
+13.#437  [Nikhil Deokar] Schema Tab: Added Range From and Range To validation
+14.#441  [Nikhil Deokar] Creating Parameter file on Save As event
+15.#497  [Nikhil Deokar] Updated Component tooltip in Component Palette.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
