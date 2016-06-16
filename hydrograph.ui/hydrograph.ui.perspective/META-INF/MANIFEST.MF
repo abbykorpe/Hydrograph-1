@@ -27,6 +27,8 @@ Require-Bundle: org.eclipse.ui,
  org.slf4j.api,
  org.junit,
  hydrograph.ui.logging;bundle-version="0.0.1",
- hydrograph.ui.common;bundle-version="0.0.1"
+ hydrograph.ui.common;bundle-version="0.0.1",
+ hydrograph.ui.graph;bundle-version="0.0.1"
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.ui.console
+Import-Package: org.apache.commons.lang,
+ org.eclipse.ui.console

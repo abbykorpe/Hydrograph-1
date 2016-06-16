@@ -46,6 +46,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -487,9 +488,22 @@ public class JobManager {
 		processBuilder.redirectErrorStream(true);
 		try {
 			Process process = processBuilder.start();
+			if(gefCanvas!=null)
 			logKillProcessLogsAsyncronously(process, job, gefCanvas);
 		} catch (IOException e) {
 			logger.debug("Unable to kill the job", e);
+		}
+	}
+	
+	/**
+	 * This method kills all running remote job. 
+	 * 
+	 */
+	public void killALLRemoteProcess() {
+		for (Entry<String, Job> entry : JobManager.INSTANCE.getRunningJobsMap().entrySet()) {
+			if ( entry.getValue().isRemoteMode()) {
+				killRemoteProcess( entry.getValue(), null);
+			}
 		}
 	}
 

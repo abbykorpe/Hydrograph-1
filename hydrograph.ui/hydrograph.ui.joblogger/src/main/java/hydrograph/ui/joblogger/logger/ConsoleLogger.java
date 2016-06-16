@@ -23,7 +23,6 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.slf4j.Logger;
 
-
 /**
  * 
  * Class to create Console logger
@@ -46,7 +45,8 @@ public class ConsoleLogger extends AbstractJobLogger{
 	
 	@Override
 	public void log(String message) {
-		messageConsoleStream.println(getLogStamp() + message);
+		if(messageConsoleStream!=null && !messageConsoleStream.isClosed())
+			messageConsoleStream.println(getLogStamp() + message);
 		logger.debug("logged message on console - message - {}" , message );
 	}
 	

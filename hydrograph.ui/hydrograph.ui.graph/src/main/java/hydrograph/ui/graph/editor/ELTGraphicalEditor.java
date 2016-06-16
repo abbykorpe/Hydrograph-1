@@ -83,6 +83,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 import org.apache.commons.httpclient.HttpException;
@@ -1187,10 +1188,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		closeDataViewerWindows();
 		
 		deleteDebugFiles();
-		
+		enableRunningJobResource() ;
 		closeSocket();
 	}
 	
+
 	private void closeDataViewerWindows() {
 		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");
 		Job job = DebugHandler.getJob(currentJob);
@@ -1225,9 +1227,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			logger.debug("current job {} wasn't found in Debughandler's map",currentJob);
 			return ;
 		}
-		
 		DebugHandler.getJobMap().remove(currentJob);
-		
 	}
 
 	private void deleteDebugFileFromWorkspace() {
@@ -1513,7 +1513,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void enableRunningJobResource() {
-		viewer.getControl().setEnabled(true);
+		if(viewer!=null && viewer.getControl()!=null){
+			viewer.getControl().setEnabled(true);
+		}
 		enableRunningGraphResource(getEditorInput(), getPartName());
 
 	}
