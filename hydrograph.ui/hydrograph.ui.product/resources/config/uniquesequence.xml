@@ -17,7 +17,7 @@
 	<tns:component paletteIconPath="/icons/unique_sequence_palette.png"
 		canvasIconPath="/icons/unique_sequence_canvas.png" name="UniqueSequence"
 		nameInPalette="Unique Sequence" defaultNamePrefix="UniqueSeq" 
-		description="Generates unique sequence of integer values."
+		description="Generates a unique number for records flowing through this component."
 		helpFilePath="/hydrograph.ui.help/html/Components/Unique_Sequence.html"
 		acronym="UnqSeq">
 		<tns:category>TRANSFORM</tns:category>

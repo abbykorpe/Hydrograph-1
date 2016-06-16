@@ -18,7 +18,7 @@
 	<tns:component paletteIconPath="/icons/normalize_palette.png" 
 		canvasIconPath="/icons/normalize_canvas.png" name="Normalize" 
 		nameInPalette="Normalize" defaultNamePrefix="Normalize" 
-		description="Normalize merges many into one."
+		description="Used to generate multiple records out of a single record."
 		helpFilePath="/hydrograph.ui.help/html/Components/Normalize.html"
 		acronym="Nrmlz">
 		<tns:category>TRANSFORM</tns:category>
