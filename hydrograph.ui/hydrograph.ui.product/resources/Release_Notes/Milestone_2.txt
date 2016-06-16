@@ -12,7 +12,9 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
    loading the fresh data in the data grid window and proper loading icon
    should display on the screen #573  - [ Shrirang S Kumbhar] 
 2. Data viewer window is taking too much time to load data, so show data
-   viewer window first and then load data into it #574 - [ Shrirang S Kumbhar] 
+   viewer window first and then load data into it #574 - [ Shrirang S Kumbhar]
+3. Job is getting locked if user close console and job window while 
+   job is running (Current production) #569 - [Nitin Gupta]  
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

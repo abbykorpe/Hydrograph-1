@@ -1513,8 +1513,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void enableRunningJobResource() {
-		if(viewer!=null && viewer.getControl()!=null)
+		if(viewer!=null && viewer.getControl()!=null){
 			viewer.getControl().setEnabled(true);
+		}
 		enableRunningGraphResource(getEditorInput(), getPartName());
 
 	}
