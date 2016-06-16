@@ -150,7 +150,7 @@ public class DataViewLoader {
 			stringBuilder.append("{\n");
 			int columnIndex = 0;
 			for (String columnName : dataViewerAdapter.getColumnList()) {
-				RowField columnData = rowData.getRowFields().get(columnIndex);
+				RowField columnData = rowData.getRowFields().get((int)dataViewerAdapter.getAllColumnsMap().get(columnName));
 				String tempString = String.format(format, columnName, columnData.getValue());
 				stringBuilder.append(tempString);
 				columnIndex++;
@@ -181,7 +181,7 @@ public class DataViewLoader {
 
 	private void addHeaderLineToUnformattedViewTextArea(StringBuilder stringBuilder) {
 		String header = "";
-		for (String columnName : dataViewerAdapter.getColumnList()) {
+		for (String columnName : dataViewerAdapter.getUnformatted()) {
 			header = header + columnName + ",";
 		}
 		stringBuilder.append(header.substring(0, header.length() - 1) + "\n");

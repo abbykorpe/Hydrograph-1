@@ -30,6 +30,7 @@ import hydrograph.ui.dataviewer.actions.PreferencesAction;
 import hydrograph.ui.dataviewer.actions.ReloadAction;
 import hydrograph.ui.dataviewer.actions.ResetSort;
 import hydrograph.ui.dataviewer.actions.SelectAllAction;
+import hydrograph.ui.dataviewer.actions.SelectColumnAction;
 import hydrograph.ui.dataviewer.actions.UnformattedViewAction;
 import hydrograph.ui.dataviewer.actions.ViewDataGridMenuCreator;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
@@ -158,7 +159,6 @@ public class DebugDataViewer extends ApplicationWindow {
 	private StatusManager statusManager;
 
 	private Action dropDownAction;
-
 	private String dataViewerWindowName;
 	
 	private Fields dataViewerFileSchema;
@@ -358,7 +358,8 @@ public class DebugDataViewer extends ApplicationWindow {
 	public DataViewLoader getDataViewLoader() {
 		return dataViewLoader;
 	}
-
+	
+		
 	/**
 	 * 
 	 * get Unformatted View Textarea
@@ -369,6 +370,10 @@ public class DebugDataViewer extends ApplicationWindow {
 		return unformattedViewTextarea;
 	}
 
+	public List<String> getColumnList(){
+		return dataViewerAdapter.getColumnList();
+	}
+	
 	/**
 	 * 
 	 * Get Formatted View Textarea
@@ -762,7 +767,6 @@ public class DebugDataViewer extends ApplicationWindow {
 
 				scrolledComposite.setContent(stackLayoutComposite);
 				scrolledComposite.setMinSize(stackLayoutComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
 				//updateGridViewTable();
 			}
 		}
@@ -811,10 +815,11 @@ public class DebugDataViewer extends ApplicationWindow {
 		});
 	}
 
-	private void createGridViewTableColumns(final TableViewer tableViewer) {
+	public void createGridViewTableColumns(final TableViewer tableViewer) {
 
 		createGridViewTableIndexColumn(tableViewer);
 		int index = 0;
+		
 		for (String columnName : dataViewerAdapter.getColumnList()) {
 			final TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 			TableColumn tblclmnItem = tableViewerColumn.getColumn();
@@ -827,7 +832,7 @@ public class DebugDataViewer extends ApplicationWindow {
 				@Override
 				public String getText(Object element) {
 					RowData p = (RowData) element;
-					return p.getRowFields().get((int) tableViewerColumn.getColumn().getData(Views.COLUMN_ID_KEY))
+					return p.getRowFields().get((int)dataViewerAdapter.getAllColumnsMap().get(tableViewerColumn.getColumn().getText()))
 							.getValue();
 				}
 			});
@@ -972,6 +977,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		editMenu.add(actionFactory.getAction(SelectAllAction.class.getName()));
 		editMenu.add(actionFactory.getAction(CopyAction.class.getName()));
 		// editMenu.add(actionFactory.getAction(FindAction.class.getName()));
+		editMenu.add(actionFactory.getAction(SelectColumnAction.class.getName()));
 	}
 
 	private void createViewMenu(MenuManager menuManager) {
@@ -1055,10 +1061,11 @@ public class DebugDataViewer extends ApplicationWindow {
 		 * addtoolbarAction( toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_FILTER),
 		 * actionFactory.getAction(FilterAction.class.getName()));
 		 */
-		
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.RESET_SORT),
 				actionFactory.getAction(ResetSort.class.getName()));
 		
+		addtoolbarAction(toolBarManager,(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.TABLE_ICON),
+				actionFactory.getAction(SelectColumnAction.class.getName()));
 		dropDownAction = new Action("", SWT.DROP_DOWN) {
 			@Override
 			public void run() {

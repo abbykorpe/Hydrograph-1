@@ -28,8 +28,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 /**
@@ -56,12 +58,15 @@ public class DataViewerAdapter {
 
 	private Connection connection;
 	private Statement statement;
-
+	private List<String> unformatted;
+	private Map<String,Integer> allColumnsMap;
 	public DataViewerAdapter(String databaseName, String tableName, int PAGE_SIZE, long INITIAL_OFFSET, DebugDataViewer debugDataViewer) throws ClassNotFoundException, SQLException {
 		this.databaseName = databaseName;
 		this.tableName = tableName;
 		viewerData = new LinkedList<>();
 		columnList = new LinkedList<>();
+		unformatted = new LinkedList<>();
+		allColumnsMap= new HashMap<String,Integer>();
 		columnCount = 0;
 		this.pageSize = PAGE_SIZE;
 		this.offset = INITIAL_OFFSET;
@@ -113,7 +118,8 @@ public class DataViewerAdapter {
 		columnList.clear();
 		for (int index = 1; index <= columnCount; index++) {
 			columnList.add(resultSet.getMetaData().getColumnName(index));
-		}
+			allColumnsMap.put(resultSet.getMetaData().getColumnName(index), index-1);
+		}unformatted.addAll(columnList);
 	}
 
 	private void initializeColumnCount(ResultSet resultSet) throws SQLException {
@@ -232,7 +238,15 @@ public class DataViewerAdapter {
 	public List<String> getColumnList() {
 		return columnList;
 	}
-
+	
+	public List<String> getUnformatted() {
+		return unformatted;
+	}
+	
+	public Map getAllColumnsMap() {
+		return allColumnsMap;
+	}
+	
 	/**
 	 * 
 	 * Get number of columns
@@ -441,6 +455,10 @@ public class DataViewerAdapter {
 		} catch (SQLException e) {
 			logger.warn("Unable to close csv connection", e);			
 		}
+	}
+	
+	public void setColumnList(List<String> columnList) {
+		this.columnList = columnList;
 	}
 
 }
