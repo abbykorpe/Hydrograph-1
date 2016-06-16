@@ -251,9 +251,8 @@ public class DebugHandler  extends AbstractHandler {
 		job.setRemoteMode(runConfigDialog.isRemoteMode());
 		 
 		addDebugJob(currentJobName, job);
-		
 		deletePreviousRunsDataviewCsvXmlFiles();
-		deletePreviousRunsBasePathDebugFiles(host, portNumber, uniqueJobID, basePath, userId, clusterPassword);
+		deletePreviousRunsBasePathDebugFiles(host, job.getPortNumber(), uniqueJobID, basePath, userId, clusterPassword);
 		dataViewFileIds.clear();
 		
 		
