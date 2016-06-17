@@ -81,7 +81,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		composite.setToolTipText("Export Data");
 		composite.setLayout(new GridLayout(3, false));
 		
-		final Group group = new Group(composite, SWT.None);
+		Group group = new Group(composite, SWT.None);
 		group.setText("General");
 		
 		GridLayout gl_composite_3 = new GridLayout(3, true);
@@ -105,37 +105,37 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		memoryFieldEditor.setPropertyChangeListener(new IPropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
-				String value = event.getNewValue().toString();
-				
-				validationForIntegerField(value, memoryFieldEditor, Messages.FILE_INTEGER_FIELD_VALIDATION);
+				validationForIntegerField(memoryFieldEditor.getStringValue(), memoryFieldEditor, Messages.FILE_INTEGER_FIELD_VALIDATION);
 				validationForIntegerValue(memoryFieldEditor.getStringValue(), memoryFieldEditor, Messages.File_FIELD_NUMERIC_VALUE_ACCPECTED);
 			}
 		});
 		memoryFieldEditor.setPreferenceStore(getPreferenceStore());
 		memoryFieldEditor.load();
 		
-		Button bt = new Button(group, SWT.None);
-		bt.setText("mb");
-		bt.setBounds(0, 0, 20, 10);
-		bt.setVisible(false);
+		Button unusedButton0 = new Button(group, SWT.None);
+		unusedButton0.setText("mb");
+		unusedButton0.setBounds(0, 0, 20, 10);
+		unusedButton0.setVisible(false);
+		
 		pageSizeEditor = new IntegerFieldEditor(PreferenceConstants.VIEW_DATA_PAGE_SIZE, " Page Size", group, 6);
 		pageSizeEditor.setErrorMessage(null);
 		pageSizeEditor.setFocus();
 		pageSizeEditor.setPreferenceStore(getPreferenceStore());
 		pageSizeEditor.load();
-		Button bt1 = new Button(group, SWT.None);
-		bt1.setText("mb");
-		bt1.setBounds(0, 0, 20, 10);
-		bt1.setVisible(false);
+		
+		Button unusedButton1 = new Button(group, SWT.None);
+		unusedButton1.setText("unused");
+		unusedButton1.setBounds(0, 0, 20, 10);
+		unusedButton1.setVisible(false);
 		
 		pageSizeEditor.setPropertyChangeListener(new IPropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
 				int pageSize = 0;
 				String value = event.getNewValue().toString();
-				validationForIntegerField(value, pageSizeEditor, Messages.PAGE_INTEGER_FIELD_VALIDATION);
-				validationForIntegerValue(pageSizeEditor.getStringValue(),pageSizeEditor, Messages.PAGE_FIELD_NUMERIC_VALUE_ACCPECTED);
-				if(value.matches("\\d+")){
+				validationForIntegerField(pageSizeEditor.getStringValue(), pageSizeEditor, Messages.PAGE_INTEGER_FIELD_VALIDATION);
+				validationForIntegerValue(pageSizeEditor.getStringValue(), pageSizeEditor, Messages.PAGE_FIELD_NUMERIC_VALUE_ACCPECTED);
+				if(value.equalsIgnoreCase("true")){
 					pageSize = Integer.parseInt(pageSizeEditor.getStringValue());
 				}
 				if(pageSize > 5000){
@@ -166,7 +166,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		tempPathFieldEditor.load();
 		
 	 
-		final Group grpExportData = new Group(composite, SWT.NONE);
+		Group grpExportData = new Group(composite, SWT.NONE);
 		GridData gd_grpExportData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1);
 		gd_grpExportData.widthHint = 610;
 		gd_grpExportData.heightHint = 92;
@@ -191,7 +191,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 					checkState();
 				} 
 				
-				
 				Notification note1 =validateQuoteCharacter();
 				if(note1.hasErrors()){
 					setValid(false);
@@ -202,7 +201,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 					quoteEditor.setErrorMessage("");
 					checkState();
 				}
-				
 				
 				if(value.length() == 1 && !value.equalsIgnoreCase(",")){
 					setMessage(Messages.DELIMITER_WARNING, 2);
@@ -224,9 +222,9 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		delimiterEditor.setPreferenceStore(getPreferenceStore());
 		delimiterEditor.load();
 		
-		Button b1 = new Button(grpExportData, SWT.None);
-		b1.setText("");
-		b1.setVisible(false);
+		Button unusedButton2 = new Button(grpExportData, SWT.None);
+		unusedButton2.setText("");
+		unusedButton2.setVisible(false);
 		
 		quoteEditor = new StringFieldEditor(PreferenceConstants.QUOTE_CHARACTOR, " Quote Character", grpExportData);
 		quoteEditor.setErrorMessage(null);
@@ -257,7 +255,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 					delimiterEditor.setErrorMessage("");
 					checkState();
 				}
-				
 				if(value.length() == 1 && !value.equalsIgnoreCase("\"")){
 					setMessage(Messages.QUOTE_WARNING, 2);
 				}else{ setMessage(null); }
@@ -279,9 +276,9 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		quoteEditor.setPreferenceStore(getPreferenceStore());
 		quoteEditor.load();
 		
-		Button b2 =new Button(grpExportData, SWT.None);
-		b2.setText("");
-		b2.setVisible(false);
+		Button unusedButton3 =new Button(grpExportData, SWT.None);
+		unusedButton3.setText("");
+		unusedButton3.setVisible(false);
 		
 		defaultPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.DEFAULTPATH, " Default Path", grpExportData);
 		defaultPathFieldEditor.setErrorMessage(null);
@@ -334,7 +331,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			int size = editorList.size();
 			for(int i=0; i<size; i++){
 				FieldEditor fieldEditor = editorList.get(i);
-				
 				if(StringUtils.isNotBlank(((StringFieldEditor)fieldEditor).getErrorMessage())){
 					setErrorMessage(((StringFieldEditor)fieldEditor).getErrorMessage());
 					 setValid(false);
@@ -349,8 +345,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	
 	private Notification validateDelimiter(){
 		Notification notification = new Notification();
-		if(delimiterEditor.getStringValue().equalsIgnoreCase(quoteEditor.getStringValue()) && quoteEditor.getStringValue()
-				.equalsIgnoreCase(delimiterEditor.getStringValue())){
+		if(delimiterEditor.getStringValue().equalsIgnoreCase(quoteEditor.getStringValue())){
 			notification.addError(Messages.DELIMITER_VALUE_MATCH_ERROR);
 		}
 		if(StringUtils.length(ConvertHexValues.parseHex(delimiterEditor.getStringValue())) != 1){
@@ -376,8 +371,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	
 	private Notification validateQuoteCharacter(){
 		Notification notification = new Notification();
-		if(quoteEditor.getStringValue().equalsIgnoreCase(delimiterEditor.getStringValue()) && delimiterEditor.getStringValue()
-				.equalsIgnoreCase(quoteEditor.getStringValue())){
+		if(quoteEditor.getStringValue().equalsIgnoreCase(delimiterEditor.getStringValue())){
 			notification.addError(Messages.QUOTE_VALUE_MATCH_ERROR);
 		}
 		if(StringUtils.length(ConvertHexValues.parseHex(quoteEditor.getStringValue())) != 1){
