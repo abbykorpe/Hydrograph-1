@@ -27,6 +27,7 @@ import hydrograph.ui.dataviewer.actions.FormattedViewAction;
 import hydrograph.ui.dataviewer.actions.GridViewAction;
 import hydrograph.ui.dataviewer.actions.PreferencesAction;
 import hydrograph.ui.dataviewer.actions.ReloadAction;
+import hydrograph.ui.dataviewer.actions.ResetSort;
 import hydrograph.ui.dataviewer.actions.SelectAllAction;
 import hydrograph.ui.dataviewer.actions.UnformattedViewAction;
 import hydrograph.ui.dataviewer.actions.ViewDataGridMenuCreator;
@@ -43,13 +44,18 @@ import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
 import hydrograph.ui.dataviewer.listeners.DataViewerListeners;
 import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
+import hydrograph.ui.dataviewer.support.SortDataType;
+import hydrograph.ui.dataviewer.support.SortOrder;
 import hydrograph.ui.dataviewer.support.StatusManager;
+import hydrograph.ui.dataviewer.support.TypeBasedComparator;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.awt.Image;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -83,6 +89,8 @@ import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
@@ -157,6 +165,13 @@ public class DebugDataViewer extends ApplicationWindow {
 	
 	private Map<String, DebugDataViewer> dataViewerMap;
 	
+	private SortOrder sortOrder;
+	
+	private org.eclipse.swt.graphics.Image ascending;
+	private org.eclipse.swt.graphics.Image decending;
+	
+	private TableColumn recentlySortedColumn;
+	
 	/**
 	 * Create the application window,
 	 * 
@@ -184,6 +199,10 @@ public class DebugDataViewer extends ApplicationWindow {
 		this.dataViewerWindowName = dataViewerWindowName;
 		windowControls = new LinkedHashMap<>();
 		gridViewData = new LinkedList<>();
+		sortOrder=SortOrder.ASC;
+		
+		ascending=new org.eclipse.swt.graphics.Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
+		decending=new org.eclipse.swt.graphics.Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
 	}
 
 	private void downloadDebugFiles() {
@@ -481,8 +500,6 @@ public class DebugDataViewer extends ApplicationWindow {
 		pageNumberDisplayTextBox.setLayoutData(gd_text);
 
 		windowControls.put(ControlConstants.PAGE_NUMBER_DISPLAY, pageNumberDisplayTextBox);
-
-		//submitRecordCountJob();
 	}
 
 	public void submitRecordCountJob() {
@@ -494,7 +511,6 @@ public class DebugDataViewer extends ApplicationWindow {
 					
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
 						statusManager.getStatusLineManager().getProgressMonitor().beginTask(Messages.FETCHING_TOTAL_NUMBER_OF_RECORDS, IProgressMonitor.UNKNOWN);
 					}
 				});
@@ -779,6 +795,8 @@ public class DebugDataViewer extends ApplicationWindow {
 			TableColumn tblclmnItem = tableViewerColumn.getColumn();
 			tblclmnItem.setWidth(100);
 			tblclmnItem.setText(columnName);
+			//tblclmnItem.setImage(new org.eclipse.swt.graphics.Image(device, ImageData imageData = new ImageData(imagePath);))
+			
 			tableViewerColumn.getColumn().setData(Views.COLUMN_ID_KEY, index);
 			tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 
@@ -793,8 +811,56 @@ public class DebugDataViewer extends ApplicationWindow {
 			if(dataViewerFileSchema!=null){
 				tableViewerColumn.getColumn().setToolTipText(getColumnToolTip(dataViewerFileSchema.getField().get(index)));
 			}
+			
+			tableViewerColumn.getColumn().addSelectionListener(new SelectionListener() {
+				
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					
+					if(recentlySortedColumn!=null){
+						recentlySortedColumn.setImage(null);
+					}
+					
+					int columnIndex=(int) e.widget.getData(Views.COLUMN_ID_KEY);
+					String columnDataType=dataViewerFileSchema.getField().get(columnIndex).getType().value();
+					String dateFormat = dataViewerFileSchema.getField().get(columnIndex).getFormat();
+					
+					if(sortOrder==null || SortOrder.ASC == sortOrder){
+						Collections.sort(gridViewData,new TypeBasedComparator(SortOrder.DSC, columnIndex, getSortType(columnDataType), dateFormat));
+						sortOrder=SortOrder.DSC;
+						((TableColumn)e.widget).setImage(decending);
+					}else{
+						Collections.sort(gridViewData,new TypeBasedComparator(SortOrder.ASC, columnIndex, getSortType(columnDataType), dateFormat));
+						sortOrder=SortOrder.ASC;
+						((TableColumn)e.widget).setImage(ascending);
+					}
+					dataViewLoader.reloadloadViews();
+					recentlySortedColumn = ((TableColumn)e.widget);
+										
+				}
+				
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+					// TODO - Sort logic
+				}
+			});
+			
 			index++;
 		}
+	}
+	
+	public TableColumn getRecentlySortedColumn() {
+		return recentlySortedColumn;
+	}
+	
+	private static SortDataType getSortType(String sortDataType) {
+
+		for (SortDataType sortDataTypeObject : SortDataType.values()) {
+			if (sortDataTypeObject.getDataType().equals(sortDataType)) {
+				return sortDataTypeObject;
+			}
+		}
+		return null;
 	}
 	
 	private String getColumnToolTip(Field field){
@@ -935,6 +1001,10 @@ public class DebugDataViewer extends ApplicationWindow {
 		 * addtoolbarAction( toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_FILTER),
 		 * actionFactory.getAction(FilterAction.class.getName()));
 		 */
+		
+		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON),
+				actionFactory.getAction(ResetSort.class.getName()));
+		
 		dropDownAction = new Action("", SWT.DROP_DOWN) {
 			@Override
 			public void run() {

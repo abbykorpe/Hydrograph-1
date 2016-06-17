@@ -22,6 +22,7 @@ import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
+import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -40,7 +41,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.jcraft.jsch.JSchException;
@@ -62,10 +62,13 @@ public class ReloadAction extends Action {
 
 	private Integer lastDownloadedFileSize;
 	
+	private DataViewerUtility dataViewerUtility;
+	
 	public ReloadAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
 		this.debugDataViewer = debugDataViewer;
 		lastDownloadedFileSize = Integer.valueOf(Utils.INSTANCE.getFileSize());
+		dataViewerUtility = new DataViewerUtility(this.debugDataViewer);
 	}
 
 	private String getDebugFilePathFromDebugService() throws IOException {
@@ -90,7 +93,8 @@ public class ReloadAction extends Action {
 	
 	@Override
 	public void run() {
-		viewDataPreferences = debugDataViewer.getViewDataPreferences();		
+		viewDataPreferences = debugDataViewer.getViewDataPreferences();
+		dataViewerUtility.resetSort();
 		
 		Job job = new Job(Messages.LOADING_DEBUG_FILE) {
 			@Override

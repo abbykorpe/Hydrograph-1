@@ -14,13 +14,13 @@
 package hydrograph.ui.graph.handler;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
+import hydrograph.ui.graph.utility.DataViewerUtility;
 
 import java.util.Map;
 
@@ -50,13 +50,6 @@ public class RunJobHandler{
 		else
 			return null;
 	}
-
-	private void closeOpenedDataViewerWindows() {
-
-		for (DebugDataViewer debugDataViewer : JobManager.INSTANCE.getDataViewerMap().values()) {
-			debugDataViewer.close();
-		}
-	}
 	
 	/*
 	 * 
@@ -64,7 +57,7 @@ public class RunJobHandler{
 	 */ 
 	public Object execute(RunConfigDialog runConfigDialog) {
 		
-		closeOpenedDataViewerWindows();
+		DataViewerUtility.INSTANCE.closeDataViewerWindows();
 		
 		((ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()).getViewer().deselectAll();
 		String consoleName = getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
