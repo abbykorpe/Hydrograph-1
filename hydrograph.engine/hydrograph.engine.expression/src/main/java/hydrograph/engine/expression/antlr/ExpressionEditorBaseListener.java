@@ -148,18 +148,6 @@ public class ExpressionEditorBaseListener implements ExpressionEditorListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIdentifiertoken(ExpressionEditorParser.IdentifiertokenContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitIdentifiertoken(ExpressionEditorParser.IdentifiertokenContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterJavaIdentifier(ExpressionEditorParser.JavaIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}

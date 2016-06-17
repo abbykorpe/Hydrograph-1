@@ -77,12 +77,6 @@ public interface ExpressionEditorVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLiteral(ExpressionEditorParser.LiteralContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ExpressionEditorParser#identifiertoken}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIdentifiertoken(ExpressionEditorParser.IdentifiertokenContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link ExpressionEditorParser#javaIdentifier}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

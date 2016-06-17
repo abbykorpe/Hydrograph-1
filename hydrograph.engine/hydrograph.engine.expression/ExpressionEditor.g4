@@ -60,9 +60,9 @@ parExpression
 
 LPAREN          : '(';
 RPAREN          : ')';
+DOT             : '.';
 
-
-functions : javaIdentifier LPAREN functions RPAREN
+functions : javaIdentifier (DOT javaIdentifier)? LPAREN functions (',' functions)* RPAREN
     |literal
     |javaIdentifier
     ;
@@ -76,7 +76,7 @@ functions : javaIdentifier LPAREN functions RPAREN
      |   NullLiteral
      ;
 
-// ยง3.10.1 Integer Literals
+// ง3.10.1 Integer Literals
 
 IntegerLiteral
     :   DecimalIntegerLiteral
@@ -206,7 +206,7 @@ BinaryDigitOrUnderscore
     |   '_'
     ;
 
-// ยง3.10.2 Floating-Point Literals
+// ง3.10.2 Floating-Point Literals
 
 FloatingPointLiteral
     :   DecimalFloatingPointLiteral
@@ -267,14 +267,14 @@ BinaryExponentIndicator
     :   [pP]
     ;
 
-// ยง3.10.3 Boolean Literals
+// ง3.10.3 Boolean Literals
 
 BooleanLiteral
     :   'true'
     |   'false'
     ;
 
-// ยง3.10.4 Character Literals
+// ง3.10.4 Character Literals
 
 CharacterLiteral
     :   '\'' SingleCharacter '\''
@@ -285,7 +285,7 @@ fragment
 SingleCharacter
     :   ~['\\]
     ;
-// ยง3.10.5 String Literals
+// ง3.10.5 String Literals
 StringLiteral
     :   '"' StringCharacters? '"'
     ;
@@ -298,7 +298,7 @@ StringCharacter
     :   ~["\\]
     |   EscapeSequence
     ;
-// ยง3.10.6 Escape Sequences for Character and String Literals
+// ง3.10.6 Escape Sequences for Character and String Literals
 fragment
 EscapeSequence
     :   '\\' [btnfr"'\\]
@@ -323,12 +323,12 @@ ZeroToThree
     :   [0-3]
     ;
 
-// ยง3.10.7 The Null Literal
+// ง3.10.7 The Null Literal
 
 NullLiteral
     :   'null';
 
-identifiertoken : javaIdentifier;
+
 
 javaIdentifier: Identifier;
 
@@ -338,7 +338,7 @@ Identifier
 
      fragment
      JavaLetter
-         :   [a-zA-Z$_.] // these are the "java letters" below 0x7F
+         :   [a-zA-Z$_] // these are the "java letters" below 0x7F
          |   // covers all characters above 0x7F which are not a surrogate
              ~[\u0000-\u007F\uD800-\uDBFF]
              {Character.isJavaIdentifierStart(_input.LA(-1))}?
@@ -349,7 +349,7 @@ Identifier
 
      fragment
      JavaLetterOrDigit
-         :   [a-zA-Z0-9$_.] // these are the "java letters or digits" below 0x7F
+         :   [a-zA-Z0-9$_] // these are the "java letters or digits" below 0x7F
          |   // covers all characters above 0x7F which are not a surrogate
              ~[\u0000-\u007F\uD800-\uDBFF]
              {Character.isJavaIdentifierPart(_input.LA(-1))}?

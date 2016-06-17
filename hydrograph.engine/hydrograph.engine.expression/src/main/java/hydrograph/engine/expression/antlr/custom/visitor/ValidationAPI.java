@@ -1,12 +1,13 @@
 package hydrograph.engine.expression.antlr.custom.visitor;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import bsh.EvalError;
 import bsh.Interpreter;
 import hydrograph.engine.expression.antlr.ExpressionEditorLexer;
 import hydrograph.engine.expression.antlr.ExpressionEditorParser;
@@ -20,8 +21,14 @@ public class ValidationAPI {
 
 	private static void put() {
 		schemaFieldsMap.put(String.class, "Hello World");
-		schemaFieldsMap.put(Integer.class, 1);
-		schemaFieldsMap.put(Float.class, 12.3);
+		schemaFieldsMap.put(Integer.class, 100);
+		schemaFieldsMap.put(Float.class, 100.55);
+		schemaFieldsMap.put(Double.class, 100.33);
+		schemaFieldsMap.put(Boolean.class, true);
+		schemaFieldsMap.put(Long.class, 100000);
+		schemaFieldsMap.put(Short.class, 10);
+		schemaFieldsMap.put(BigDecimal.class, 10000.55);
+		schemaFieldsMap.put(Date.class, new Date());
 	}
 
 	private ValidationAPI() {
@@ -79,7 +86,6 @@ public class ValidationAPI {
 	private static <T> T get(Class<T> type) {
 		put();
 		return type.cast(schemaFieldsMap.get(type));
-
 	}
 
 }

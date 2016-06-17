@@ -118,16 +118,6 @@ public interface ExpressionEditorListener extends ParseTreeListener {
 	 */
 	void exitLiteral(ExpressionEditorParser.LiteralContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ExpressionEditorParser#identifiertoken}.
-	 * @param ctx the parse tree
-	 */
-	void enterIdentifiertoken(ExpressionEditorParser.IdentifiertokenContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ExpressionEditorParser#identifiertoken}.
-	 * @param ctx the parse tree
-	 */
-	void exitIdentifiertoken(ExpressionEditorParser.IdentifiertokenContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link ExpressionEditorParser#javaIdentifier}.
 	 * @param ctx the parse tree
 	 */
