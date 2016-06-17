@@ -30,6 +30,15 @@ public class Messages extends NLS{
 	/*view data preferences*/
 	public static String MEMORY_FIELD_MESSAGE;
 	public static String INTEGER_FIELD_VALIDATION;
+	public static String FILE_INTEGER_FIELD_VALIDATION;
+	public static String PAGE_INTEGER_FIELD_VALIDATION;
+	
+	public static String DELIMITER_SINGLE_CHARACTOR_ERROR_MESSAGE;
+	public static String QUOTE_SINGLE_CHARACTOR_ERROR_MESSAGE;
+	
+	public static String File_FIELD_NUMERIC_VALUE_ACCPECTED;
+	public static String PAGE_FIELD_NUMERIC_VALUE_ACCPECTED;
+	
 	public static String PAGE_SIZE_WARNING;
 	public static String DELIMITER_WARNING;
 	public static String DELIMITER_VALUE_MATCH_ERROR;
