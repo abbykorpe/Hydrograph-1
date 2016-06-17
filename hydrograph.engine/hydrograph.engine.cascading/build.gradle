@@ -2,11 +2,9 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
-apply from: '../version.gradle'
 
 sourceCompatibility = 1.7
 
-group = 'hydrograph'
 archivesBaseName = 'hydrograph.engine.cascading'
 ext.cascadingVersion = '3.0.1'
 ext.hadoopVersion = '2.6.0'
@@ -98,4 +96,3 @@ task writePom {
            }
     	}.writeTo("$buildDir/pom.xml")
 	}
-	

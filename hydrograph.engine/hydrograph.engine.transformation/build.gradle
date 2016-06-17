@@ -1,11 +1,10 @@
-apply from: '../version.gradle'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.7
-group = 'hydrograph'
-archivesBaseName = 'hydrograph.engine.transformation'
+
+archivesBaseName = 'hydrograph.engine.transform'
 
 jar {
     manifest {
