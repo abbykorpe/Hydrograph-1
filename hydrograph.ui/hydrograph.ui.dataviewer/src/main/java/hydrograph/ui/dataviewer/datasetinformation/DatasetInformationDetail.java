@@ -19,8 +19,8 @@ package hydrograph.ui.dataviewer.datasetinformation;
 
 public class DatasetInformationDetail {
 	
-	private String remoteFilePath="";
-	private String localFilePath="";
+	
+	private String viewDataFilePath="";
 	private String chunkFilePath="";
 	private String sizeOfData;
 	private String noOfRecords="";
@@ -28,59 +28,84 @@ public class DatasetInformationDetail {
 	private String delimeter="";
 	private String quote="";
 	private String filterExpression="";
+	private String edgeNode="";
+	private String userName="";
 	
+	public String getViewDataFilePath() {
+		return viewDataFilePath;
+	}
 	
-	public String getRemoteFilePath() {
-		return remoteFilePath;
+	public void setViewDataFilePath(String viewDataFilePath) {
+		this.viewDataFilePath = viewDataFilePath;
 	}
-	public void setRemoteFilePath(String remoteFilePath) {
-		this.remoteFilePath = remoteFilePath;
+	
+	public String getEdgeNode() {
+		return edgeNode;
 	}
-	public String getLocalFilePath() {
-		return localFilePath;
+	
+	public void setEdgeNode(String edgeNode) {
+		this.edgeNode = edgeNode;
 	}
-	public void setLocalFilePath(String localFilePath) {
-		this.localFilePath = localFilePath;
+	
+	public String getUserName() {
+		return userName;
 	}
+	
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
 	public String getChunkFilePath() {
 		return chunkFilePath;
 	}
+	
 	public void setChunkFilePath(String chunkFilePath) {
 		this.chunkFilePath = chunkFilePath;
 	}
+	
 	public String getSizeOfData() {
 		return sizeOfData;
 	}
+	
 	public void setSizeOfData(String integerFieldEditor) {
 		this.sizeOfData = integerFieldEditor;
 	}
+	
 	public String getNoOfRecords() {
 		return noOfRecords;
 	}
+	
 	public void setNoOfRecords(String noOfRecords) {
 		this.noOfRecords = noOfRecords;
 	}
+	
 	public String getPageSize() {
 		return pageSize;
 	}
+	
 	public void setPageSize(String pageSize) {
 		this.pageSize = pageSize;
 	}
 	public String getDelimeter() {
 		return delimeter;
 	}
+	
 	public void setDelimeter(String delimeter) {
 		this.delimeter = delimeter;
 	}
+	
 	public String getQuote() {
 		return quote;
 	}
+	
 	public void setQuote(String quote) {
 		this.quote = quote;
 	}
+	
 	public String getFilterExpression() {
 		return filterExpression;
 	}
+	
 	public void setFilterExpression(String filterExpression) {
 		this.filterExpression = filterExpression;
 	}

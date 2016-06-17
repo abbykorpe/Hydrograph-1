@@ -13,6 +13,8 @@
 package hydrograph.ui.dataviewer.datasetinformation;
 
 import hydrograph.ui.datastructure.property.GridRow;
+
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -74,20 +76,17 @@ public class DatasetLabelProvider implements ITableLabelProvider, ITableColorPro
 		case 0:
 			return gridRow.getFieldName();
 		case 1:
-			return Integer.toString(gridRow.getDataType());
+			String[] dataTypeCanonicalName=StringUtils.split(gridRow.getDataTypeValue(),"."); 
+			return dataTypeCanonicalName[dataTypeCanonicalName.length-1];
 		case 2:
 			return gridRow.getDateFormat();
 		case 3:
-			return gridRow.getDataTypeValue();
-		case 4 :
 			return gridRow.getPrecision();
-		case 5:
+		case 4 :
 			return gridRow.getScale();
-		case 6:
+		case 5:
 			return gridRow.getScaleTypeValue();
-		case 7:
-			return Integer.toBinaryString(gridRow.getScaleType());
-		case 8:
+		case 6:
 			return gridRow.getDescription();
 		}
 		return null;

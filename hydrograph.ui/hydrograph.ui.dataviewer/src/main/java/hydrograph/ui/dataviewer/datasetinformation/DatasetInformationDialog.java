@@ -35,28 +35,30 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.help.ViewContextComputer;
 
+import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.dataviewer.constants.DatasetInformationConstants;
+import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
 import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 public class DatasetInformationDialog extends Dialog {
 	
-	private Text text;
-	private Text text_1;
-	private Text text_2;
-	private Text text_3;
-	private Text text_4;
-	private Text text_5;
-	private Text text_6;
-	private Text text_7;
 	
 	private Table table;
-	DatasetInformationDetail datasetInformationDetail = new DatasetInformationDetail();
+	DatasetInformationDetail datasetInformationDetail;
+	DebugDataViewer debugDataViewer;
 	ViewDataSchemaHelper viewDataSchemaHelper;
+	private JobDetails jobDetails;
+	private String debugFileLocation;
+	private String debugFileName;
+	private Fields dataViewerFileSchema;
+	private String SCHEMA_FILE_EXTENTION=".xml";
 	private List<GridRow> gridRowList=new ArrayList<>();
 	
 	/**
@@ -78,7 +80,7 @@ public class DatasetInformationDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Dataset Information");
+		newShell.setText("Dataset Information - " + debugDataViewer.getDataViewerWindowTitle());
 	}
 
 	/**
@@ -91,6 +93,7 @@ public class DatasetInformationDialog extends Dialog {
 		
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(1, false));
+		container.getShell().setMinimumSize(700, 300);
 		
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
@@ -100,7 +103,7 @@ public class DatasetInformationDialog extends Dialog {
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		TabItem tbtmGeneral = new TabItem(tabFolder, SWT.NONE);
-		tbtmGeneral.setText("General");
+		tbtmGeneral.setText(DatasetInformationConstants.GENERAL);
 		
 		Composite composite_1 = new Composite(tabFolder, SWT.NONE);
 		tbtmGeneral.setControl(composite_1);
@@ -110,84 +113,95 @@ public class DatasetInformationDialog extends Dialog {
 		composite_2.setLayout(new GridLayout(2, false));
 		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Label lblFilePathOfRemoteRun = new Label(composite_2, SWT.NONE);
-		lblFilePathOfRemoteRun.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblFilePathOfRemoteRun.setText(" View Data File Path on Remote Run");
+		Label lblFilePath = new Label(composite_2, SWT.NONE);
+		lblFilePath.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblFilePath.setText(DatasetInformationConstants.VIEW_DATA_FILE);
+		lblFilePath.setAlignment(SWT.RIGHT);
+		
+		Label labelPath = new Label(composite_2, SWT.NONE |SWT.READ_ONLY);
+		labelPath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		labelPath.setText(datasetInformationDetail.getViewDataFilePath());
 		
 		
-		text = new Text(composite_2, SWT.BORDER );
-		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		text.setEditable(false);
-		text.setText(datasetInformationDetail.getRemoteFilePath());
+		Label lblEdgeNode = new Label(composite_2, SWT.NONE);
+		lblEdgeNode.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblEdgeNode.setText(DatasetInformationConstants.EDGE_NODE);
+		lblEdgeNode.setAlignment(SWT.RIGHT);
 		
+		Label labelNode = new Label(composite_2, SWT.NONE |SWT.READ_ONLY);
+		labelNode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		labelNode.setText(datasetInformationDetail.getEdgeNode());
 		
-		Label lblFilePathOfLocalRun = new Label(composite_2, SWT.NONE);
-		lblFilePathOfLocalRun.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblFilePathOfLocalRun.setText(" View Data File Path on Local Run");
+		if(jobDetails.isRemote()){
+		Label lblUserName = new Label(composite_2, SWT.NONE);
+		lblUserName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblUserName.setText(DatasetInformationConstants.USERNAME);
+		lblUserName.setAlignment(SWT.RIGHT);
 		
-		text_1 = new Text(composite_2, SWT.BORDER);
-		text_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		text_1.setEditable(false);
-		text_1.setText(datasetInformationDetail.getLocalFilePath());
+		Label lblUserName1 = new Label(composite_2, SWT.NONE |SWT.READ_ONLY);
+		lblUserName1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		lblUserName1.setText(datasetInformationDetail.getUserName());
+		}
 		
 		Label lblFilePathOfChunks = new Label(composite_2, SWT.NONE);
 		lblFilePathOfChunks.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblFilePathOfChunks.setText("View Data File Path of Chunks Downloaded");
+		lblFilePathOfChunks.setText(DatasetInformationConstants.LOCALCHUNKDATA);
+		lblFilePathOfChunks.setAlignment(SWT.RIGHT);
 		
-		text_2 = new Text(composite_2, SWT.BORDER);
-		text_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		text_2.setEditable(false);
-		text_2.setText(datasetInformationDetail.getChunkFilePath());
+		Label labelChunk = new Label(composite_2, SWT.NONE |SWT.READ_ONLY);
+		labelChunk.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		labelChunk.setText(datasetInformationDetail.getChunkFilePath());
 		
-		Label lblSizeOfData = new Label(composite_2, SWT.NONE);
-		lblSizeOfData.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblSizeOfData.setText("View Data File Size(MB)");
+		Label lblData = new Label(composite_2, SWT.NONE);
+		lblData.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblData.setText(DatasetInformationConstants.FILESIZE);
+		lblData.setAlignment(SWT.RIGHT);
 		
-		text_3 = new Text(composite_2, SWT.BORDER);
-		text_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		text_3.setEditable(false);
-		text_3.setText(datasetInformationDetail.getSizeOfData());
+		Label labelSizeOfData = new Label(composite_2, SWT.NONE |SWT.READ_ONLY);
+		labelSizeOfData.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		labelSizeOfData.setText(datasetInformationDetail.getSizeOfData());
 		
-		Label lblNoOfRecords = new Label(composite_2, SWT.NONE);
-		lblNoOfRecords.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblNoOfRecords.setText("No of Records in View Data File");
-		
-		
-		text_5 = new Text(composite_2, SWT.BORDER);
-		text_5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		text_5.setEditable(false);
-		text_5.setText(datasetInformationDetail.getNoOfRecords());
+		Label lblRecords = new Label(composite_2, SWT.NONE);
+		lblRecords.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblRecords.setText(DatasetInformationConstants.NOOFRECORDS);
+		lblRecords.setAlignment(SWT.RIGHT);
 		
 		
-		Label lblPageSize = new Label(composite_2, SWT.NONE);
-		lblPageSize.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblPageSize.setText("View Data File Page Size");
+		Label labelNoOfRecords = new Label(composite_2, SWT.NONE |SWT.READ_ONLY);
+		labelNoOfRecords.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		labelNoOfRecords.setText(datasetInformationDetail.getNoOfRecords());
 		
-		text_4 = new Text(composite_2, SWT.BORDER);
-		text_4.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		text_4.setEditable(false);
-		text_4.setText(datasetInformationDetail.getPageSize());
+		
+		Label lblPage = new Label(composite_2, SWT.NONE);
+		lblPage.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblPage.setText(DatasetInformationConstants.PAGESIZE);
+		lblPage.setAlignment(SWT.RIGHT);
+		
+		Label labelPageSize = new Label(composite_2, SWT.NONE |SWT.READ_ONLY);
+		labelPageSize.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		labelPageSize.setText(datasetInformationDetail.getPageSize());
 		
 		Label lblDelimiter = new Label(composite_2, SWT.NONE);
 		lblDelimiter.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblDelimiter.setText("Delimiter");
+		lblDelimiter.setText(DatasetInformationConstants.DELIMETER);
+		lblDelimiter.setAlignment(SWT.RIGHT);
 		
-		text_6 = new Text(composite_2, SWT.BORDER);
-		text_6.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		text_6.setEditable(false);
-		text_6.setText(datasetInformationDetail.getDelimeter());
+		Label labelDelimeter1 = new Label(composite_2, SWT.NONE |SWT.READ_ONLY);
+		labelDelimeter1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		labelDelimeter1.setText(datasetInformationDetail.getDelimeter());
 		
 		Label lblQuote = new Label(composite_2, SWT.NONE);
 		lblQuote.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblQuote.setText("Quote");
+		lblQuote.setText(DatasetInformationConstants.QUOTE);
+		lblQuote.setAlignment(SWT.RIGHT);
 		
-		text_7 = new Text(composite_2, SWT.BORDER);
-		text_7.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		text_7.setEditable(false);
-		text_7.setText(datasetInformationDetail.getQuote());
+		Label labelQuote1 = new Label(composite_2, SWT.NONE |SWT.READ_ONLY);
+		labelQuote1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		labelQuote1.setText(datasetInformationDetail.getQuote());
+	
 		
 		TabItem tbtmSchema = new TabItem(tabFolder, SWT.NONE);
-		tbtmSchema.setText("Schema");
+		tbtmSchema.setText(DatasetInformationConstants.SCHEMA);
 		
 		Composite composite_3 = new Composite(tabFolder, SWT.NONE);
 		tbtmSchema.setControl(composite_3);
@@ -202,38 +216,38 @@ public class DatasetInformationDialog extends Dialog {
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnItem = tableViewerColumn.getColumn();
 		tblclmnItem.setWidth(100);
-		tblclmnItem.setText("Field Name");
+		tblclmnItem.setText(DatasetInformationConstants.FEILDNAME);
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider());
 		
 		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnItem_1 = tableViewerColumn_1.getColumn();
 		tblclmnItem_1.setWidth(100);
-		tblclmnItem_1.setText("Data Type");
+		tblclmnItem_1.setText(DatasetInformationConstants.DATATYPE);
 		
 		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnItem_2 = tableViewerColumn_2.getColumn();
 		tblclmnItem_2.setWidth(100);
-		tblclmnItem_2.setText("Date Format");
+		tblclmnItem_2.setText(DatasetInformationConstants.DATEFORMAT);
 		
 		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnItem_3 = tableViewerColumn_3.getColumn();
 		tblclmnItem_3.setWidth(100);
-		tblclmnItem_3.setText("Precision");
+		tblclmnItem_3.setText(DatasetInformationConstants.PRECISION);
 		
 		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnItem_4 = tableViewerColumn_4.getColumn();
 		tblclmnItem_4.setWidth(100);
-		tblclmnItem_4.setText("Scale");
+		tblclmnItem_4.setText(DatasetInformationConstants.SCALE);
 		
 		TableViewerColumn tableViewerColumn_5 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnItem_5 = tableViewerColumn_5.getColumn();
 		tblclmnItem_5.setWidth(100);
-		tblclmnItem_5.setText("Scale Type");
+		tblclmnItem_5.setText(DatasetInformationConstants.SCALETYPE);
 		
 		TableViewerColumn tableViewerColumn_6 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnItem_6 = tableViewerColumn_6.getColumn();
 		tblclmnItem_6.setWidth(100);
-		tblclmnItem_6.setText("Description");
+		tblclmnItem_6.setText(DatasetInformationConstants.DESCRIPTION);
 		
 		loadSchemaData();
 		tableViewer.setContentProvider(new DatasetContentProvider());
@@ -245,13 +259,18 @@ public class DatasetInformationDialog extends Dialog {
 	}
 
 	public void loadSchemaData() {
-		String schemaFilePath="C:\\Users\\ashikah\\Desktop\\input.xml";
-		Fields fields = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(schemaFilePath);
-		for(Field field : fields.getField()){
+		
+			jobDetails = debugDataViewer.getJobDetails();
+			debugFileName = debugDataViewer.getDebugFileName();
+	 		debugFileLocation = debugDataViewer.getDebugFileLocation();
+	 		
+		dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + debugFileName +SCHEMA_FILE_EXTENTION);
+		for(Field field : dataViewerFileSchema.getField()){
 			GridRow gridRow=new GridRow();
+			
 			gridRow.setFieldName(field.getName());
 			gridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(field.getType().value()));
-			gridRow.setDataTypeValue(GridWidgetCommonBuilder.getDataTypeValue()[GridWidgetCommonBuilder.getDataTypeByValue(field.getType().value())]);
+			gridRow.setDataTypeValue(field.getType().value());
 			
 			if(field.getFormat()!=null){
 				gridRow.setDateFormat(field.getFormat());
@@ -259,12 +278,12 @@ public class DatasetInformationDialog extends Dialog {
 				gridRow.setDateFormat("");
 			}
 			if(field.getPrecision()!= null){
-				gridRow.setPrecision(Integer.toString(field.getPrecision()));
+				gridRow.setPrecision(String.valueOf(field.getPrecision()));
 			}
 			else{
-				gridRow.setPrecision("ABC");
+				gridRow.setPrecision("");
 			}
-			if(gridRow.getScale() != null){
+			if(field.getScale()!= null){
 				gridRow.setScale(Integer.toString(field.getScale()));
 			}
 			else{
@@ -304,10 +323,12 @@ public class DatasetInformationDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(736, 419);
+		return new Point(683, 323);
 	}
 
-	public void setData(DatasetInformationDetail datasetInformationDetail) {
+	public void setData(DatasetInformationDetail datasetInformationDetail,DebugDataViewer debugDataViewer,JobDetails jobDetails) {
+		this.debugDataViewer = debugDataViewer;
 		this.datasetInformationDetail=datasetInformationDetail;
+		this.jobDetails = jobDetails;
 	}
 }

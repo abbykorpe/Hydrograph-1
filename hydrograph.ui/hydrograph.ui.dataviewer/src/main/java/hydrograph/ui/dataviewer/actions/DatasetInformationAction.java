@@ -12,11 +12,16 @@
  ******************************************************************************/
 package hydrograph.ui.dataviewer.actions;
 
+
+import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
+import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.datasetinformation.DatasetInformationDetail;
 import hydrograph.ui.dataviewer.datasetinformation.DatasetInformationDialog;
 import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
+
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
@@ -27,15 +32,19 @@ import org.eclipse.ui.PlatformUI;
 
 public class DatasetInformationAction extends Action {
 
-	ViewDataPreferences viewDataPreferences;
-	DebugDataViewer debugDataViewer;
-	DataViewerAdapter csvAdapter;
+	private ViewDataPreferences viewDataPreferences;
+	private DebugDataViewer debugDataViewer;
+	private DataViewerAdapter csvAdapter;
+	private String debugFileLocation= new String();
+	private String debugFileName="";
+	private static final String DEBUG_DATA_FILE_EXTENTION=".csv";
 	
 	private static final String LABEL="Dataset Information";
 	
 	public DatasetInformationAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
 		this.debugDataViewer=debugDataViewer;
+		
 	}
 
 	@Override
@@ -43,25 +52,32 @@ public class DatasetInformationAction extends Action {
 		
 		 Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 		 if(shell != null){
+			 
+			   JobDetails jobDetails = debugDataViewer.getJobDetails();
+			 	
+			 	debugFileLocation = debugDataViewer.getDebugFileLocation();
+			 	debugFileName = debugDataViewer.getDebugFileName();
 			 	csvAdapter=debugDataViewer.getDataViewerAdapter();
 			  	viewDataPreferences=debugDataViewer.getViewDataPreferences();
 			  	
 	    	  	DatasetInformationDialog datasetInformationDetailDialog = new DatasetInformationDialog(shell);
 			 
 					DatasetInformationDetail datasetInformationDetail = new DatasetInformationDetail();
-					datasetInformationDetail.setChunkFilePath("<<<<<<<<<< Not Available >>>>>>>>>>>");
+					datasetInformationDetail.setChunkFilePath(debugFileLocation+debugFileName+DEBUG_DATA_FILE_EXTENTION);
 					datasetInformationDetail.setDelimeter(viewDataPreferences.getDelimiter());
-					datasetInformationDetail.setLocalFilePath("<<<<<<<<<< Not Available >>>>>>>>>>>");
+					datasetInformationDetail.setEdgeNode(jobDetails.getHost());
 					datasetInformationDetail.setNoOfRecords(Long.toString(csvAdapter.getRowCount()));
 					datasetInformationDetail.setPageSize(Integer.toString(viewDataPreferences.getPageSize()));
 					datasetInformationDetail.setQuote(viewDataPreferences.getQuoteCharactor());
-					datasetInformationDetail.setRemoteFilePath("<<<<<<<<<< Not Available >>>>>>>>>>>");
+					datasetInformationDetail.setViewDataFilePath(jobDetails.getBasepath());
 					datasetInformationDetail.setSizeOfData(Integer.toString(viewDataPreferences.getFileSize()));
-					datasetInformationDetailDialog.setData(datasetInformationDetail);
+					datasetInformationDetail.setUserName(jobDetails.getUsername());
+					datasetInformationDetailDialog.setData(datasetInformationDetail,debugDataViewer,jobDetails);
 	    	  	
 					datasetInformationDetailDialog.open();
 					super.run();
 					
 		 }
 	}
+	
 }

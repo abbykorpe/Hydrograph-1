@@ -232,6 +232,8 @@ public class DebugDataViewer extends ApplicationWindow {
 
 				debugFileName = dataViewerFileManager.getDataViewerFileName();
 				debugFileLocation = dataViewerFileManager.getDataViewerFilePath();
+				setDebugFileLocation(debugFileLocation);
+				setDebugFileName(debugFileName);
 
 				showDataInDebugViewer();
 
@@ -243,6 +245,26 @@ public class DebugDataViewer extends ApplicationWindow {
 		job.schedule();
 	}
 	
+	public String getDebugFileLocation() {
+		return debugFileLocation;
+	}
+
+
+	public void setDebugFileLocation(String debugFileLocation) {
+		this.debugFileLocation = debugFileLocation;
+	}
+
+
+	public String getDebugFileName() {
+		return debugFileName;
+	}
+
+
+	public void setDebugFileName(String debugFileName) {
+		this.debugFileName = debugFileName;
+	}
+
+
 	private void loadDebugFileInDataViewer() {
 		statusManager.getStatusLineManager().getProgressMonitor().done();
 
