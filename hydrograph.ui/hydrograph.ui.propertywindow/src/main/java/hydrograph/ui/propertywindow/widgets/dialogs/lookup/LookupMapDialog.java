@@ -115,7 +115,7 @@ public class LookupMapDialog extends Dialog {
 	private Table in0Table;
 	
 	/**
-	 * Create the dialog.
+	 * Create the Lookup mapping dialog.
 	 * 
 	 * @param parentShell
 	 * @wbp.parser.constructor
@@ -549,19 +549,11 @@ public class LookupMapDialog extends Dialog {
 					WidgetUtility.errorMessage("Select Rows to delete");
 				} else {
 					table.remove(indexs);
-					//TODO - Do not remove below(commented) code - kept for referance
-					//List<LookupMapProperty> mappingsToRemove = new ArrayList<>();
 					int itemsRemoved=0;
 					for (int index : indexs) {
-						//TODO - Do not remove below(commented) code - kept for referance 
-						/*LookupMapProperty parameter = mappingTableItemList
-								.get(index);
-						mappingsToRemove.add(parameter);*/
 						mappingTableItemList.remove(index-itemsRemoved);
 						itemsRemoved++;
 					}
-					//TODO - Do not remove below(commented) code - kept for referance 
-					//mappingTableItemList.removeAll(mappingsToRemove);
 					mappingTableViewer.getTable().removeAll();
 					mappingTableViewer.refresh();
 				}

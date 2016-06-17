@@ -101,6 +101,12 @@ public class SchemaSyncUtility {
 	    return list2;
 	}
 	
+	/**
+	 * Returns if schema sync is allowed for the component name passed as parameter.
+	 *
+	 * @param componentName
+	 * @return boolean value if schema sync is allowed
+	 */
 	public boolean isSchemaSyncAllow(String componentName){
 		return Constants.TRANSFORM.equalsIgnoreCase(componentName)
 				|| Constants.AGGREGATE.equalsIgnoreCase(componentName) 
@@ -110,7 +116,12 @@ public class SchemaSyncUtility {
 				|| Constants.JOIN.equalsIgnoreCase(componentName);
 	}
 
-	
+	/**
+	 * Push the schema from schema tab to Mapping in General tab
+	 *
+	 * @param component
+	 * @param schemaGridRowList
+	 */
 	public void pushSchemaToMapping( Component component, List<GridRow> schemaGridRowList) {
 		if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()) ||
 		   Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName()) ||
@@ -124,6 +135,12 @@ public class SchemaSyncUtility {
 		}
 	}
 
+	/**
+	 * Push the schema from schema tab to Mapping in General tab for Lookup component
+	 *
+	 * @param component
+	 * @param schemaGridRowList
+	 */
 	public void pushSchemaToLookupMapping( Component component,
 			List<GridRow> schemaGridRowList) {
 		LookupMappingGrid lookupMappingGrid = (LookupMappingGrid) component.getProperties().get(LOOKUP_MAP);
@@ -139,6 +156,13 @@ public class SchemaSyncUtility {
 		}
 	}
 	
+	/**
+	 * Pull the schema from schema tab to Mapping in General tab for Lookup component
+	 *
+	 * @param schema
+	 * @param component
+	 * @return The list of schema grid rows to be shown in mapping.
+	 */
 	public List<LookupMapProperty> pullLookupSchemaInMapping(Schema schema, Component component) {
 		LookupMappingGrid lookupMappingGrid = (LookupMappingGrid) component.getProperties().get(LOOKUP_MAP);
 		List<String> lookupMapOutputs = getOutputFieldsFromMapping(lookupMappingGrid);
