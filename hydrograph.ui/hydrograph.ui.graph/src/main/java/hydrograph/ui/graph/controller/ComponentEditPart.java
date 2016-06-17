@@ -334,6 +334,8 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			
 			changePortSettings();
 			
+			adjustComponentLabelPosition();
+			
 			if(!StringUtils.equals(Constants.UPDATE_AVAILABLE,currentStatus)){
 				updateComponentStatus();			
 			}
@@ -625,6 +627,18 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		}
 		componentFigure.repaint();
 		
+	}
+	
+	private void adjustComponentLabelPosition(){
+		List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
+		for(AbstractGraphicalEditPart part:childrenEditParts)
+		{
+			if(part instanceof ComponentLabelEditPart){ 
+				ComponentLabelEditPart componentLabelEditPart = (ComponentLabelEditPart) part;
+				componentLabelEditPart.adjustLabelFigure(getCastedModel().getLocation(), getCastedModel().getSize());
+				break;
+			}
+		}
 	}
 	
 	public void updateComponentStatus(){
