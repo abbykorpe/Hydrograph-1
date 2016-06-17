@@ -434,6 +434,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				
 				logger.debug("job.isDebugMode: {}",job==null?"FALSE":job.isDebugMode());
 				if(job!=null){
+					if(JobStatus.FAILED.equals(job.getJobStatus()) ){
+						JobManager.INSTANCE.getDataViewerMap().remove(consoleName);
+						enableRunJob(true);
+					}else{
 					if(JobStatus.KILLED.equals(job.getJobStatus()) || JobStatus.SUCCESS.equals(job.getJobStatus())){
 						enableRunJob(true);
 					}else{
@@ -444,7 +448,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
                             ((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
                             ((DebugHandler)RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(false);
                            	((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
-                      }
+							}
+						}
 					}
 				}else{
 					logger.debug("enabling run job button");
