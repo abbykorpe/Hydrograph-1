@@ -13,8 +13,10 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
    should display on the screen #573  - [ Shrirang S Kumbhar] 
 2. Data viewer window is taking too much time to load data, so show data
    viewer window first and then load data into it #574 - [ Shrirang S Kumbhar]
-3. Job is getting locked if user close console and job window while 
-   job is running (Current production) #569 - [Nitin Gupta]  
+3. #569  [Nitin Gupta] Job is getting locked if user close console and job window while job is running (Current production)   
+4. #618  [Nitin Gupta] STOP button remains enabled even after complete job execution   
+5. #569  [Nitin Gupta] Job is getting locked if user close console and job window while job is running (Current production)
+6. #554  [Nitin Gupta] When user clicks on canvas while job run, Run, Debug and Remove watcher buttons are getting enabled   
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
