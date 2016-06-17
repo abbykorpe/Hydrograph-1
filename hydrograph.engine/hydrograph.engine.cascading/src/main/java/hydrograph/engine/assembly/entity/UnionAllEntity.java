@@ -12,23 +12,23 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
+import hydrograph.engine.assembly.entity.base.StraightPullEntityBase;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-
-public class UnionAllEntity extends OperationAssemblyEntity {
-
-	private OutSocket outSocket;
+public class UnionAllEntity extends StraightPullEntityBase {
 
 	public OutSocket getOutSocket() {
-		return outSocket;
+		return getOutSocketList().get(0); // UnionAllEntity has provision for
+											// just 1 out socket
 	}
 
 	public void setOutSocket(OutSocket outSocket) {
-		this.outSocket = outSocket;
+		List<OutSocket> listOutSocket = new ArrayList<OutSocket>();
+		listOutSocket.add(outSocket);
+		setOutSocketList(listOutSocket);
 	}
 
 	/**
@@ -46,14 +46,10 @@ public class UnionAllEntity extends OperationAssemblyEntity {
 		str.append(super.toString());
 
 		str.append("Out socket(s): ");
-		if (outSocket != null) {
-			str.append(outSocket.toString());
+		if (getOutSocket() != null) {
+			str.append(getOutSocket().toString());
 		}
 		return str.toString();
 	}
 
-	@Override
-	public List<Operation> getOperationsList() {
-		return new ArrayList<>();
-	}
 }

@@ -15,10 +15,10 @@ package hydrograph.engine.assembly.entity;
 import java.util.Arrays;
 import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
+import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 
-public class OutputFileFixedWidthEntity extends IOAssemblyEntity {
+public class OutputFileFixedWidthEntity extends InputOutputEntityBase {
 
 	private String path;
 	private boolean strict;
@@ -92,6 +92,7 @@ public class OutputFileFixedWidthEntity extends IOAssemblyEntity {
 		str.append(" | strict: " + strict);
 		str.append(" | safe: " + safe);
 		str.append(" | charset: " + charset);
+		str.append(" | Overwrite: " + overWrite);
 
 		str.append("\nfields: ");
 		if (fieldsList != null) {

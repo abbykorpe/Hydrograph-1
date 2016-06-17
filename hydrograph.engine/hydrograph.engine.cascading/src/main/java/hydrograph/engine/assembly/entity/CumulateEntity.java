@@ -12,22 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import java.util.Arrays;
-import java.util.List;
-
-import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
+import hydrograph.engine.assembly.entity.base.OperationEntityBase;
 import hydrograph.engine.assembly.entity.elements.KeyField;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
 
-public class CumulateEntity extends OperationAssemblyEntity {
+import java.util.Arrays;
+
+public class CumulateEntity extends OperationEntityBase {
 
 	private KeyField[] keyFields;
 	private KeyField[] secondaryKeyFields;
-	private boolean operationPresent;
-	private int numOperations;
-	private List<Operation> operationList;
-	private List<OutSocket> outSocketList;
 
 	/**
 	 * @return keyFields
@@ -60,66 +53,6 @@ public class CumulateEntity extends OperationAssemblyEntity {
 	}
 
 	/**
-	 * @return the numOperations
-	 */
-	public int getNumOperations() {
-		return numOperations;
-	}
-
-	/**
-	 * @param numOperations
-	 *            the numOperations to set
-	 */
-	public void setNumOperations(int numOperations) {
-		this.numOperations = numOperations;
-	}
-
-	/**
-	 * @return the operationPresent
-	 */
-	public boolean isOperationPresent() {
-		return operationPresent;
-	}
-
-	/**
-	 * @param operationPresent
-	 *            the operationPresent to set
-	 */
-	public void setOperationPresent(boolean operationPresent) {
-		this.operationPresent = operationPresent;
-	}
-
-	public void setOperationsList(List<Operation> operationList) {
-		this.operationList = operationList;
-		if (operationList != null) {
-			operationPresent = true;
-			numOperations = operationList.size();
-		} else {
-			operationPresent = false;
-			numOperations = 0;
-		}
-	}
-
-	public List<Operation> getOperationsList() {
-		return this.operationList;
-	}
-
-	/**
-	 * @return the outSocketList
-	 */
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-
-	/**
-	 * @param outSocketList
-	 *            the outSocketList to set
-	 */
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
-	}
-
-	/**
 	 * Returns a string with the values for all the members of this entity
 	 * object.
 	 * <p>
@@ -142,19 +75,19 @@ public class CumulateEntity extends OperationAssemblyEntity {
 			str.append(Arrays.toString(secondaryKeyFields));
 		}
 
-		if (operationPresent) {
-			str.append("\n" + numOperations
+		if (isOperationPresent()) {
+			str.append("\n" + getNumOperations()
 					+ " operation(s) present, Operation info: ");
-			if (operationList != null) {
-				str.append(Arrays.toString(operationList.toArray()));
+			if (getOperationsList() != null) {
+				str.append(Arrays.toString(getOperationsList().toArray()));
 			}
 		} else {
 			str.append("Operation not present\n");
 		}
 
 		str.append("\nOut socket(s): ");
-		if (outSocketList != null) {
-			str.append(Arrays.toString(outSocketList.toArray()));
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
 		}
 		return str.toString();
 	}

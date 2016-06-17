@@ -27,7 +27,7 @@ import cascading.tuple.Fields;
 import hydrograph.engine.assembly.entity.OutputFileFixedWidthEntity;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.TextFixedWidth;
 
 public class OutputFileFixedWidthAssembly extends BaseComponent<OutputFileFixedWidthEntity> {
@@ -46,7 +46,7 @@ public class OutputFileFixedWidthAssembly extends BaseComponent<OutputFileFixedW
 	private OutputFileFixedWidthEntity outputFileFixedWidthEntity;
 	private static Logger LOG = LoggerFactory.getLogger(OutputFileFixedWidthAssembly.class);
 
-	private IOFieldsAndTypesCreator<OutputFileFixedWidthEntity> fieldsCreator;
+	private InputOutputFieldsAndTypesCreator<OutputFileFixedWidthEntity> fieldsCreator;
 
 	public OutputFileFixedWidthAssembly(OutputFileFixedWidthEntity outputFileFixedWidthEntity, ComponentParameters componentParameters) {
 		super(outputFileFixedWidthEntity, componentParameters);
@@ -55,7 +55,7 @@ public class OutputFileFixedWidthAssembly extends BaseComponent<OutputFileFixedW
 	@Override
 	protected void createAssembly() {
 		try {
-		fieldsCreator = new IOFieldsAndTypesCreator<OutputFileFixedWidthEntity>(outputFileFixedWidthEntity);
+		fieldsCreator = new InputOutputFieldsAndTypesCreator<OutputFileFixedWidthEntity>(outputFileFixedWidthEntity);
 			LOG.debug("OutputFile Fixed Width Component: [ Fields List : "
 					+ Arrays.toString(fieldsCreator.getFieldNames()) + ", Field Types : "
 					+ Arrays.toString(fieldsCreator.getFieldDataTypes()) + ", Field Length : "

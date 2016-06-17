@@ -12,16 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import java.util.ArrayList;
+import hydrograph.engine.assembly.entity.base.StraightPullEntityBase;
+import hydrograph.engine.assembly.entity.elements.KeyField;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+
 import java.util.Arrays;
 import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.KeyField;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-
-public class SortEntity extends OperationAssemblyEntity {
+public class SortEntity extends StraightPullEntityBase {
 	private KeyField[] keyFields;
 	private KeyField[] secondaryKeyFields;
 	private List<OutSocket> outSocketList;
@@ -64,7 +62,8 @@ public class SortEntity extends OperationAssemblyEntity {
 	}
 
 	/**
-	 * @param outSocketList the outSocketList to set
+	 * @param outSocketList
+	 *            the outSocketList to set
 	 */
 	public void setOutSocketList(List<OutSocket> outSocketList) {
 		this.outSocketList = outSocketList;
@@ -101,8 +100,4 @@ public class SortEntity extends OperationAssemblyEntity {
 		return str.toString();
 	}
 
-	@Override
-	public List<Operation> getOperationsList() {
-		return new ArrayList<>();
-	}
 }

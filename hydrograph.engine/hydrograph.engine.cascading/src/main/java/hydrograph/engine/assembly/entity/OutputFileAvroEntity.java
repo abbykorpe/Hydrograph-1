@@ -12,16 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
 
 import java.util.Arrays;
-import java.util.List;
 
-public class OutputFileAvroEntity extends IOAssemblyEntity {
+public class OutputFileAvroEntity extends InputOutputEntityBase {
 
 	private String path;
-	private List<SchemaField> schemaFieldList;
 	private boolean overWrite;
 
 	public boolean isOverWrite() {
@@ -30,14 +27,6 @@ public class OutputFileAvroEntity extends IOAssemblyEntity {
 
 	public void setOverWrite(boolean overWrite) {
 		this.overWrite = overWrite;
-	}
-
-	public List<SchemaField> getFieldsList() {
-		return schemaFieldList;
-	}
-
-	public void setFieldsList(List<SchemaField> schemaFieldsList) {
-		this.schemaFieldList = schemaFieldsList;
 	}
 
 	public String getPath() {
@@ -63,8 +52,8 @@ public class OutputFileAvroEntity extends IOAssemblyEntity {
 		str.append("Path: " + path);
 
 		str.append("\nfields: ");
-		if (schemaFieldList != null) {
-			str.append(Arrays.toString(schemaFieldList.toArray()));
+		if (getFieldsList() != null) {
+			str.append(Arrays.toString(getFieldsList().toArray()));
 		}
 		return str.toString();
 	}

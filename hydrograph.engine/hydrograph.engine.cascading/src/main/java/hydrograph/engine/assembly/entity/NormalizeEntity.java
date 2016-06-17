@@ -12,58 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
+import hydrograph.engine.assembly.entity.base.OperationEntityBase;
+
 import java.util.Arrays;
-import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-
-public class NormalizeEntity extends OperationAssemblyEntity {
-
-	private List<Operation> operationList;
-	private List<OutSocket> outSocketList;
-	private boolean operationPresent;
-	private int numOperations;
-
-	public List<Operation> getOperationsList() {
-		return operationList;
-	}
-
-	public void setOperationsList(List<Operation> operationList) {
-		this.operationList = operationList;
-		if (operationList != null) {
-			operationPresent = true;
-			numOperations = operationList.size();
-		} else {
-			operationPresent = false;
-			numOperations = 0;
-		}
-	}
-
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
-	}
-
-	public boolean isOperationPresent() {
-		return operationPresent;
-	}
-
-	public void setOperationPresent(boolean operationPresent) {
-		this.operationPresent = operationPresent;
-	}
-
-	public int getNumOperations() {
-		return numOperations;
-	}
-
-	public void setNumOperations(int numOperations) {
-		this.numOperations = numOperations;
-	}
+public class NormalizeEntity extends OperationEntityBase {
 
 	/**
 	 * Returns a string with the values for all the members of this entity
@@ -79,19 +32,19 @@ public class NormalizeEntity extends OperationAssemblyEntity {
 		StringBuilder str = new StringBuilder("Normalize entity information\n");
 		str.append(super.toString());
 
-		if (operationPresent) {
-			str.append(numOperations
+		if (isOperationPresent()) {
+			str.append(getNumOperations()
 					+ " operation(s) present, Operation info: ");
-			if (operationList != null) {
-				str.append(Arrays.toString(operationList.toArray()));
+			if (getOperationsList() != null) {
+				str.append(Arrays.toString(getOperationsList().toArray()));
 			}
 		} else {
 			str.append("Operation not present\n");
 		}
 
 		str.append("\nOut socket(s): ");
-		if (outSocketList != null) {
-			str.append(Arrays.toString(outSocketList.toArray()));
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
 		}
 		return str.toString();
 	}

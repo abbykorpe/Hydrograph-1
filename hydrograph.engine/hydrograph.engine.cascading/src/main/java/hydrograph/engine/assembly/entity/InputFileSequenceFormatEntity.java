@@ -12,37 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import java.util.List;
+import java.util.Arrays;
 
-import cascading.flow.FlowDef;
-import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
 
-public class InputFileSequenceFormatEntity extends IOAssemblyEntity {
+public class InputFileSequenceFormatEntity extends InputOutputEntityBase {
 
 	private String path;
-	private FlowDef flowdef;
-	private List<OutSocket> outSocketList;
-	private List<SchemaField> fieldsList;
 
 	public InputFileSequenceFormatEntity() {
-	}
-
-	public List<SchemaField> getFieldsList() {
-		return fieldsList;
-	}
-
-	public void setFieldsList(List<SchemaField> fieldsList) {
-		this.fieldsList = fieldsList;
-	}
-
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
 	}
 
 	public String getPath() {
@@ -53,13 +31,29 @@ public class InputFileSequenceFormatEntity extends IOAssemblyEntity {
 		this.path = path;
 	}
 
+	/**
+	 * Returns a string with the values for all the members of this entity
+	 * object.
+	 * <p>
+	 * Use cautiously as this is a very heavy operation.
+	 * 
+	 * @see hydrograph.engine.assembly.entity.base.AssemblyEntityBase#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder str = new StringBuilder("Input file Sequence format entity info:\n");
+		str.append(super.toString());
+		str.append("Path: " + getPath());
 
-	public FlowDef getFlowdef() {
-		return flowdef;
+		str.append("\nfields: ");
+		if (getFieldsList() != null) {
+			str.append(Arrays.toString(getFieldsList().toArray()));
+		}
+
+		str.append("\nout socket(s): ");
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
+		}
+		return str.toString();
 	}
-
-	public void setFlowdef(FlowDef flowdef) {
-		this.flowdef = flowdef;
-	}
-
 }

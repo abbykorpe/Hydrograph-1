@@ -19,14 +19,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
+import hydrograph.engine.assembly.entity.base.OperationEntityBase;
 import hydrograph.engine.assembly.entity.elements.Operation;
 import hydrograph.engine.assembly.entity.elements.OperationField;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 
-public class OperationFieldsCreator<T extends OperationAssemblyEntity> {
+public class OperationFieldsCreator<T extends OperationEntityBase> {
 
 	private ArrayList<Fields> inputFieldsList;
 	private ArrayList<Fields> outputFieldsList;
@@ -34,7 +34,7 @@ public class OperationFieldsCreator<T extends OperationAssemblyEntity> {
 	private ArrayList<Properties> operationPropertiesList;
 	private Fields initPassThroughFields;
 	private boolean isOperationExistinOperationField;
-	private OperationAssemblyEntity assemblyEntityBase;
+	private OperationEntityBase assemblyEntityBase;
 	private OutSocket outSocket;
 	private ComponentParameters componentParameters;
 

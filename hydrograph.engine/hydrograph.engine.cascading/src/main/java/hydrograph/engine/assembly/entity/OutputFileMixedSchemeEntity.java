@@ -15,10 +15,10 @@ package hydrograph.engine.assembly.entity;
 import java.util.Arrays;
 import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
+import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 
-public class OutputFileMixedSchemeEntity extends IOAssemblyEntity {
+public class OutputFileMixedSchemeEntity extends InputOutputEntityBase {
 
 	private String path;
 	private String charset;

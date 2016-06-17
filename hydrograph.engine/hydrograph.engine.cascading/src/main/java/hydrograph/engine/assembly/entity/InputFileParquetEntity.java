@@ -15,15 +15,13 @@ package hydrograph.engine.assembly.entity;
 import java.util.Arrays;
 import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
+import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 
-public class InputFileParquetEntity extends IOAssemblyEntity {
+public class InputFileParquetEntity extends InputOutputEntityBase {
 
 	private String path;
-	private List<OutSocket> outSocketList;
-	private List<SchemaField> schemaFieldsList;
 
 	public String getPath() {
 		return path;
@@ -31,22 +29,6 @@ public class InputFileParquetEntity extends IOAssemblyEntity {
 
 	public void setPath(String path) {
 		this.path = path;
-	}
-
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
-	}
-
-	public List<SchemaField> getFieldsList() {
-		return schemaFieldsList;
-	}
-
-	public void setFieldsList(List<SchemaField> schemaFieldsList) {
-		this.schemaFieldsList = schemaFieldsList;
 	}
 
 	/**
@@ -65,13 +47,13 @@ public class InputFileParquetEntity extends IOAssemblyEntity {
 		str.append("Path: " + path);
 
 		str.append("\nfields: ");
-		if (schemaFieldsList != null) {
-			str.append(Arrays.toString(schemaFieldsList.toArray()));
+		if (getFieldsList() != null) {
+			str.append(Arrays.toString(getFieldsList().toArray()));
 		}
 
 		str.append("\nout socket(s): ");
-		if (outSocketList != null) {
-			str.append(Arrays.toString(outSocketList.toArray()));
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
 		}
 		return str.toString();
 	}

@@ -12,8 +12,39 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
+import java.util.Arrays;
+
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 
 public class InputFileHiveParquetEntity extends HiveEntityBase {
-	
+	/**
+	 * Returns a string with the values for all the members of this entity
+	 * object.
+	 * <p>
+	 * Use cautiously as this is a very heavy operation.
+	 * 
+	 * @see hydrograph.engine.assembly.entity.base.AssemblyEntityBase#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder str = new StringBuilder(
+				"Input file hive parquet entity info:\n");
+		str.append(super.toString());
+		str.append("Database: " + getDatabaseName());
+		str.append(" | Table: " + getTableName());
+		str.append(" | External Table Path: " + getExternalTablePathUri());
+		str.append(" | Partition Fields: "
+				+ Arrays.toString(getPartitionKeys()));
+
+		str.append("\nfields: ");
+		if (getFieldsList() != null) {
+			str.append(Arrays.toString(getFieldsList().toArray()));
+		}
+
+		str.append("\nout socket(s): ");
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
+		}
+		return str.toString();
+	}
 }

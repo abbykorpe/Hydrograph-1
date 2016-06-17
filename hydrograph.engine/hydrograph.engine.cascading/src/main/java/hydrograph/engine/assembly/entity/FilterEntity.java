@@ -12,83 +12,31 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
+import hydrograph.engine.assembly.entity.base.OperationEntityBase;
+import hydrograph.engine.assembly.entity.elements.Operation;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
+public class FilterEntity extends OperationEntityBase {
 
-public class FilterEntity extends OperationAssemblyEntity {
-
-	private List<OutSocket> outSocketList;
-	private int numOperations;
-	private boolean operationPresent;
 	private Operation operation;
 
-	// private List<String[]> passThroughFieldsList;
-
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
-	}
-
-	/**
-	 * @return the numOperations
-	 */
-	public int getNumOperations() {
-		return numOperations;
-	}
-
-	/**
-	 * @param numOperations
-	 *            the numOperations to set
-	 */
-	public void setNumOperations(int numOperations) {
-		this.numOperations = numOperations;
-	}
-
-	/**
-	 * @return the operationPresent
-	 */
-	public boolean isOperationPresent() {
-		return operationPresent;
-	}
-
-	/**
-	 * @param operationPresent
-	 *            the operationPresent to set
-	 */
-	public void setOperationPresent(boolean operationPresent) {
-		this.operationPresent = operationPresent;
-	}
-
-	/**
-	 * @param operation
-	 *            the operation to set
+	/*
+	 * @param operation the operation to set
 	 */
 	public void setOperation(Operation operation) {
-		this.operation = operation;
-		if (operation != null) {
-			operationPresent = true;
-			numOperations = 1; // FilterEntity has provision for just 1
-								// operation
-		}
-		else{
-			operationPresent = false;
-			numOperations = 0;
-		}
+		List<Operation> operationList = new ArrayList<Operation>();
+		operationList.add(operation);
+		setOperationsList(operationList);
 	}
 
 	/**
 	 * @return the operation
 	 */
 	public Operation getOperation() {
-		return this.operation;
+		return this.getOperationsList().get(0);
 	}
 
 	/**
@@ -104,8 +52,8 @@ public class FilterEntity extends OperationAssemblyEntity {
 		StringBuilder str = new StringBuilder("Filter entity information\n");
 		str.append(super.toString());
 
-		if (operationPresent) {
-			str.append(numOperations
+		if (isOperationPresent()) {
+			str.append(getNumOperations()
 					+ " operation(s) present, Operation info: ");
 			if (operation != null) {
 				str.append(operation.toString());
@@ -115,13 +63,9 @@ public class FilterEntity extends OperationAssemblyEntity {
 		}
 
 		str.append("\nOut socket(s): ");
-		if (outSocketList != null) {
-			str.append(Arrays.toString(outSocketList.toArray()));
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
 		}
 		return str.toString();
 	}
-
-	@Override
-	public List<Operation> getOperationsList() {
-		return new ArrayList<>();
-	}}
+}

@@ -12,19 +12,18 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
+import hydrograph.engine.assembly.entity.base.StraightPullEntityBase;
+import hydrograph.engine.assembly.entity.elements.Operation;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
+public class LimitEntity extends StraightPullEntityBase {
 
-public class LimitEntity extends OperationAssemblyEntity {
-
-	private List<OutSocket> outSocketList;
 	private Long maxRecord;
-	
+
 	/**
 	 * @return the maxRecord
 	 */
@@ -33,26 +32,13 @@ public class LimitEntity extends OperationAssemblyEntity {
 	}
 
 	/**
-	 * @param maxRecord the maxRecord to set
+	 * @param maxRecord
+	 *            the maxRecord to set
 	 */
 	public void setMaxRecord(Long maxRecord) {
 		this.maxRecord = maxRecord;
 	}
 
-	/**
-	 * @return the outSocketList
-	 */
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-
-	/**
-	 * @param outSocketList the outSocketList to set
-	 */
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
-	}
-	
 	/**
 	 * Returns a string with the values for all the members of this entity
 	 * object.
@@ -70,14 +56,9 @@ public class LimitEntity extends OperationAssemblyEntity {
 		str.append("max record: " + maxRecord);
 
 		str.append("\nOut socket(s): ");
-		if (outSocketList != null) {
-			str.append(Arrays.toString(outSocketList.toArray()));
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
 		}
 		return str.toString();
-	}
-
-	@Override
-	public List<Operation> getOperationsList() {
-		return new ArrayList<>();
 	}
 }

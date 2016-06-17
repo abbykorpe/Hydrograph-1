@@ -28,7 +28,7 @@ import cascading.tuple.Fields;
 import hydrograph.engine.assembly.entity.OutputFileDelimitedEntity;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
 
 public class OutputFileDelimitedAssembly extends BaseComponent<OutputFileDelimitedEntity>{
@@ -47,7 +47,7 @@ public class OutputFileDelimitedAssembly extends BaseComponent<OutputFileDelimit
 	Scheme scheme;
 	private static Logger LOG = LoggerFactory.getLogger(OutputFileDelimitedAssembly.class);
 
-	private IOFieldsAndTypesCreator<OutputFileDelimitedEntity> fieldsCreator;
+	private InputOutputFieldsAndTypesCreator<OutputFileDelimitedEntity> fieldsCreator;
 
 	public OutputFileDelimitedAssembly(OutputFileDelimitedEntity parameters, ComponentParameters componentParameters) {
 		super(parameters, componentParameters);
@@ -61,7 +61,7 @@ public class OutputFileDelimitedAssembly extends BaseComponent<OutputFileDelimit
 	@Override
 	protected void createAssembly() {
 		try {
-		fieldsCreator = new IOFieldsAndTypesCreator<OutputFileDelimitedEntity>(outputFileDelimitedEntity);
+		fieldsCreator = new InputOutputFieldsAndTypesCreator<OutputFileDelimitedEntity>(outputFileDelimitedEntity);
 			LOG.debug("OutputFile Delimited Component: [ Fields List : "
 					+ Arrays.toString(fieldsCreator.getFieldNames()) + ", Field Types : "
 					+ Arrays.toString(fieldsCreator.getFieldDataTypes()) + ", Delimiter : '"

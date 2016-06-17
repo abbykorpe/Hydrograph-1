@@ -25,7 +25,7 @@ import hydrograph.engine.assembly.entity.GenerateRecordEntity;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.tap.MemorySourceTap;
 import hydrograph.engine.cascading.tuplegenerator.GenerateDataEntity;
 import hydrograph.engine.cascading.tuplegenerator.RandomTupleGenerator;
@@ -41,7 +41,7 @@ public class GenerateRecordAssembly extends BaseComponent<GenerateRecordEntity> 
 	FlowDef flowDef;
 	private RandomTupleGenerator tupleGenerator;
 	private static Logger LOG = LoggerFactory.getLogger(GenerateRecordAssembly.class);
-	private IOFieldsAndTypesCreator<GenerateRecordEntity> fieldsCreator;
+	private InputOutputFieldsAndTypesCreator<GenerateRecordEntity> fieldsCreator;
 
 	public GenerateRecordAssembly(GenerateRecordEntity baseComponentEntity, ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
@@ -66,7 +66,7 @@ public class GenerateRecordAssembly extends BaseComponent<GenerateRecordEntity> 
 	@Override
 	protected void createAssembly() {
 		try {
-		fieldsCreator = new IOFieldsAndTypesCreator<GenerateRecordEntity>(generateRecordEntity);
+		fieldsCreator = new InputOutputFieldsAndTypesCreator<GenerateRecordEntity>(generateRecordEntity);
 			generateTapsAndPipes();
 			flowDef = flowDef.addSource(pipes, tap);
 

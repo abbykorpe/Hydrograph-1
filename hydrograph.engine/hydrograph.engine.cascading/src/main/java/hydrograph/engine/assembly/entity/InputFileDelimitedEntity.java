@@ -12,45 +12,19 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
+import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
+
 import java.util.Arrays;
-import java.util.List;
 
-import cascading.flow.FlowDef;
-import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+public class InputFileDelimitedEntity extends InputOutputEntityBase {
 
-public class InputFileDelimitedEntity extends IOAssemblyEntity{
-
-	private String path;
 	private String quote = null;
 	private boolean hasHeader = false;
-	private FlowDef flowdef;
 	private String delimiter;
 	private boolean safe = false;
 	private boolean strict = true;
 	private String charset = "UTF-8";
-	private List<OutSocket> outSocketList;
-	private List<SchemaField> fieldsList;
-
-	public InputFileDelimitedEntity() {
-	}
-
-	public List<SchemaField> getFieldsList() {
-		return fieldsList;
-	}
-
-	public void setFieldsList(List<SchemaField> fieldsList) {
-		this.fieldsList = fieldsList;
-	}
-
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
-	}
+	private String path;
 
 	public String getPath() {
 		return path;
@@ -82,14 +56,6 @@ public class InputFileDelimitedEntity extends IOAssemblyEntity{
 
 	public void setStrict(boolean strict) {
 		this.strict = strict;
-	}
-
-	public FlowDef getFlowdef() {
-		return flowdef;
-	}
-
-	public void setFlowdef(FlowDef flowdef) {
-		this.flowdef = flowdef;
 	}
 
 	public String getDelimiter() {
@@ -126,9 +92,10 @@ public class InputFileDelimitedEntity extends IOAssemblyEntity{
 	 */
 	@Override
 	public String toString() {
-		StringBuilder str = new StringBuilder("Input file delimited entity info:\n");
+		StringBuilder str = new StringBuilder(
+				"Input file delimited entity info:\n");
 		str.append(super.toString());
-		str.append("Path: " + path);
+		str.append("Path: " + getPath());
 		str.append(" | quote: " + quote);
 		str.append(" | has header: " + hasHeader);
 		str.append(" | delimiter: " + delimiter);
@@ -137,13 +104,13 @@ public class InputFileDelimitedEntity extends IOAssemblyEntity{
 		str.append(" | charset: " + charset);
 
 		str.append("\nfields: ");
-		if (fieldsList != null) {
-			str.append(Arrays.toString(fieldsList.toArray()));
+		if (getFieldsList() != null) {
+			str.append(Arrays.toString(getFieldsList().toArray()));
 		}
 
 		str.append("\nout socket(s): ");
-		if (outSocketList != null) {
-			str.append(Arrays.toString(outSocketList.toArray()));
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
 		}
 		return str.toString();
 	}

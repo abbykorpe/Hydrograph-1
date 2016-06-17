@@ -43,7 +43,7 @@ public enum HiveParquetDatatypeMapping {
 		DATE {
 			private final String TIME_STAMP = "hh:mm:ss";
 			private final String SQL_TIMESTAMP = "java.sql.TimeStamp";
-			private final String DATE_STRING = "Date";
+			private final String DATE_STRING = "java.util.Date";
 
 			@Override
 			String getMapping(SchemaField schemaField,
@@ -52,7 +52,7 @@ public enum HiveParquetDatatypeMapping {
 						schemaField.getFieldDataType().contains(DATE_STRING)
 								&& schemaField.getFieldFormat().toLowerCase()
 										.contains(TIME_STAMP) ? SQL_TIMESTAMP
-								: schemaField.getFieldDataType()).toUpperCase();
+								: schemaField.getFieldDataType()).toLowerCase();
 			}
 
 		},

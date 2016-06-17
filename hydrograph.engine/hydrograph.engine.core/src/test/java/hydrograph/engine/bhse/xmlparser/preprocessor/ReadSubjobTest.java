@@ -49,7 +49,6 @@ public class ReadSubjobTest {
 
 			xmlContents = XmlUtilities
 					.getXMLStringFromDocument(expandedXmlDocument);
-			System.out.println(xmlContents);
 			Assert.assertTrue(xmlContents.contains("<inputs id=\"inputSubjob.input1\" phase=\"0.0\" xsi:type=\"it:textFileDelimited\">"));
 			Assert.assertTrue(xmlContents.contains("<schema name=\"zxc\">"));
 			Assert.assertTrue(xmlContents.contains("<operations id=\"inputSubjob.reformat\" phase=\"0.0\" xsi:type=\"op:transform\">"));

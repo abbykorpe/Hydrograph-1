@@ -28,7 +28,7 @@ import hydrograph.engine.assembly.entity.OutputFileMixedSchemeEntity;
 import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.TextDelimitedAndFixedWidth;
 
 public class OutputFileMixedSchemeAssembly extends BaseComponent<OutputFileMixedSchemeEntity> {
@@ -46,7 +46,7 @@ public class OutputFileMixedSchemeAssembly extends BaseComponent<OutputFileMixed
 	private static Logger LOG = LoggerFactory
 			.getLogger(OutputFileMixedSchemeAssembly.class);
 
-	private IOFieldsAndTypesCreator<OutputFileMixedSchemeEntity> fieldsCreator;
+	private InputOutputFieldsAndTypesCreator<OutputFileMixedSchemeEntity> fieldsCreator;
 
 	public OutputFileMixedSchemeAssembly(OutputFileMixedSchemeEntity outputFileMixedSchemeEntity,
 			ComponentParameters componentParameters) {
@@ -55,7 +55,7 @@ public class OutputFileMixedSchemeAssembly extends BaseComponent<OutputFileMixed
 
 	@Override
 	protected void createAssembly() {
-		fieldsCreator = new IOFieldsAndTypesCreator<OutputFileMixedSchemeEntity>(
+		fieldsCreator = new InputOutputFieldsAndTypesCreator<OutputFileMixedSchemeEntity>(
 				outputFileMixedSchemeEntity);
 		if (LOG.isTraceEnabled()) {
 			LOG.trace(outputFileMixedSchemeEntity.toString());

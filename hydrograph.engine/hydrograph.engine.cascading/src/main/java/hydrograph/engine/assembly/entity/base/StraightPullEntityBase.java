@@ -12,11 +12,18 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity.base;
 
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+
 import java.util.List;
 
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+public class StraightPullEntityBase extends AssemblyEntityBase {
+	private List<OutSocket> outSocketList;
 
-public abstract class IOAssemblyEntity extends AssemblyEntityBase{
-	public abstract List<SchemaField> getFieldsList();
-	public abstract void setFieldsList(List<SchemaField> fieldsList);
+	public List<OutSocket> getOutSocketList() {
+		return outSocketList;
+	}
+
+	public void setOutSocketList(List<OutSocket> outSocketList) {
+		this.outSocketList = outSocketList;
+	}
 }
