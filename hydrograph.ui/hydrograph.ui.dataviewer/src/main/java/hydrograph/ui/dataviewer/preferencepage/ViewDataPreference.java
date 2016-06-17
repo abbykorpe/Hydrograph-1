@@ -57,12 +57,12 @@ import org.eclipse.ui.PlatformUI;
 public class ViewDataPreference extends PreferencePage implements IWorkbenchPreferencePage{
 	private BooleanFieldEditor booleanFieldEditor;
 	private IntegerFieldEditor pageSizeEditor;
-	private StringFieldEditor delimeterEditor;
+	private StringFieldEditor delimiterEditor;
 	private StringFieldEditor quoteEditor;
 	private IntegerFieldEditor memoryFieldEditor;
 	private DirectoryFieldEditor tempPathFieldEditor;
 	private DirectoryFieldEditor defaultPathFieldEditor;
-	private BooleanFieldEditor pergeEditor;
+	private BooleanFieldEditor purgeEditor;
 	private List<FieldEditor> editorList;
 	
 	public ViewDataPreference() {
@@ -173,29 +173,43 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		grpExportData.setLayoutData(gd_grpExportData);
 		grpExportData.setText("Export Data");
 		
-		delimeterEditor = new StringFieldEditor(PreferenceConstants.DELIMITER, " Delimiter", grpExportData);
-		delimeterEditor.setErrorMessage(null);
-		delimeterEditor.setFocus();
-		delimeterEditor.setPropertyChangeListener(new IPropertyChangeListener() {
+		delimiterEditor = new StringFieldEditor(PreferenceConstants.DELIMITER, " Delimiter", grpExportData);
+		delimiterEditor.setErrorMessage(null);
+		delimiterEditor.setFocus();
+		delimiterEditor.setPropertyChangeListener(new IPropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
 				String value = event.getNewValue().toString();
 				Notification note = validateDelimiter();
 				if(note.hasErrors()){
 					setValid(false);
-					delimeterEditor.setErrorMessage(note.errorMessage());
+					delimiterEditor.setErrorMessage(note.errorMessage());
 					setErrorMessage(note.errorMessage());
 				}else{
 					setErrorMessage(null);
-					delimeterEditor.setErrorMessage("");
+					delimiterEditor.setErrorMessage("");
 					checkState();
 				} 
+				
+				
+				Notification note1 =validateQuoteCharacter();
+				if(note1.hasErrors()){
+					setValid(false);
+					quoteEditor.setErrorMessage(note1.errorMessage());
+					setErrorMessage(note1.errorMessage());
+				}else{
+					setErrorMessage(null);
+					quoteEditor.setErrorMessage("");
+					checkState();
+				}
+				
+				
 				if(value.length() == 1 && !value.equalsIgnoreCase(",")){
 					setMessage(Messages.DELIMITER_WARNING, 2);
 				}else{ setMessage(null); }
 			}
 		});
-		delimeterEditor.getTextControl(grpExportData).addFocusListener(new FocusListener() {
+		delimiterEditor.getTextControl(grpExportData).addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) { }
 			@Override
@@ -207,8 +221,8 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 				}else{ setMessage(null); }
 			}
 		});
-		delimeterEditor.setPreferenceStore(getPreferenceStore());
-		delimeterEditor.load();
+		delimiterEditor.setPreferenceStore(getPreferenceStore());
+		delimiterEditor.load();
 		
 		Button b1 = new Button(grpExportData, SWT.None);
 		b1.setText("");
@@ -232,6 +246,18 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 					quoteEditor.setErrorMessage("");
 					checkState();
 				} 
+				
+				Notification note1 = validateDelimiter();
+				if(note1.hasErrors()){
+					setValid(false);
+					delimiterEditor.setErrorMessage(note1.errorMessage());
+					setErrorMessage(note1.errorMessage());
+				}else{
+					setErrorMessage(null);
+					delimiterEditor.setErrorMessage("");
+					checkState();
+				}
+				
 				if(value.length() == 1 && !value.equalsIgnoreCase("\"")){
 					setMessage(Messages.QUOTE_WARNING, 2);
 				}else{ setMessage(null); }
@@ -269,10 +295,10 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		booleanFieldEditor.setPreferenceStore(getPreferenceStore());
 		booleanFieldEditor.load();
 		
-		pergeEditor = new BooleanFieldEditor(PreferenceConstants.PURGE_DATA_FILES, " Purge View Data Files  ", composite);
+		purgeEditor = new BooleanFieldEditor(PreferenceConstants.PURGE_DATA_FILES, " Purge View Data Files  ", composite);
 		getPreferenceStore().setDefault(PreferenceConstants.PURGE_DATA_FILES, true);
-		pergeEditor.setPreferenceStore(getPreferenceStore());
-		pergeEditor.load();
+		purgeEditor.setPreferenceStore(getPreferenceStore());
+		purgeEditor.load();
 		
 		Composite composite01 = new Composite(parent, SWT.None);
 		composite01.setBounds(200, 0, 300, 650);
@@ -284,11 +310,9 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		lblNewLabel.setText(" ");
 		
 		addFields(memoryFieldEditor);
-		addFields(booleanFieldEditor);
 		addFields(defaultPathFieldEditor);
-		addFields(delimeterEditor);
+		addFields(delimiterEditor);
 		addFields(pageSizeEditor);
-		addFields(pergeEditor);
 		addFields(quoteEditor);
 		addFields(tempPathFieldEditor);
 		
@@ -310,25 +334,11 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			int size = editorList.size();
 			for(int i=0; i<size; i++){
 				FieldEditor fieldEditor = editorList.get(i);
-				 if(fieldEditor instanceof IntegerFieldEditor){
-					 if(StringUtils.isNotBlank(((StringFieldEditor)fieldEditor).getErrorMessage())){
-						 setErrorMessage(((StringFieldEditor)fieldEditor).getErrorMessage());
-						 setValid(false);
-						 break;
-					 }
-				}else if(fieldEditor instanceof DirectoryFieldEditor){
-					 if(StringUtils.isNotBlank(((DirectoryFieldEditor)fieldEditor).getErrorMessage())){
-						 setErrorMessage(((DirectoryFieldEditor)fieldEditor).getErrorMessage());
-						 setValid(false);
-						 break;
-					 }
-				}else if(fieldEditor instanceof StringFieldEditor){
-					if(StringUtils.isNotBlank(((StringFieldEditor)fieldEditor).getErrorMessage())){
-						getMessage();
-						 setErrorMessage(((StringFieldEditor)fieldEditor).getErrorMessage());
-						 setValid(false);
-						 break;
-					 }
+				
+				if(StringUtils.isNotBlank(((StringFieldEditor)fieldEditor).getErrorMessage())){
+					setErrorMessage(((StringFieldEditor)fieldEditor).getErrorMessage());
+					 setValid(false);
+					 break;
 				}else{
 					setValid(true);
 				}
@@ -339,10 +349,11 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	
 	private Notification validateDelimiter(){
 		Notification notification = new Notification();
-		if(delimeterEditor.getStringValue().equalsIgnoreCase(quoteEditor.getStringValue())){
+		if(delimiterEditor.getStringValue().equalsIgnoreCase(quoteEditor.getStringValue()) && quoteEditor.getStringValue()
+				.equalsIgnoreCase(delimiterEditor.getStringValue())){
 			notification.addError(Messages.DELIMITER_VALUE_MATCH_ERROR);
 		}
-		if(StringUtils.length(ConvertHexValues.parseHex(delimeterEditor.getStringValue())) != 1){
+		if(StringUtils.length(ConvertHexValues.parseHex(delimiterEditor.getStringValue())) != 1){
 			notification.addError(Messages.SINGLE_CHARACTOR_ERROR_MESSAGE);
 		}
 		return notification;
@@ -365,7 +376,8 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	
 	private Notification validateQuoteCharacter(){
 		Notification notification = new Notification();
-		if(quoteEditor.getStringValue().equalsIgnoreCase(delimeterEditor.getStringValue())){
+		if(quoteEditor.getStringValue().equalsIgnoreCase(delimiterEditor.getStringValue()) && delimiterEditor.getStringValue()
+				.equalsIgnoreCase(quoteEditor.getStringValue())){
 			notification.addError(Messages.QUOTE_VALUE_MATCH_ERROR);
 		}
 		if(StringUtils.length(ConvertHexValues.parseHex(quoteEditor.getStringValue())) != 1){
@@ -411,17 +423,17 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		defaultPathFieldEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.DEFAULTPATH));
 		pageSizeEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.VIEW_DATA_PAGE_SIZE));
 		memoryFieldEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.VIEW_DATA_FILE_SIZE));
-		delimeterEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.DELIMITER));
+		delimiterEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.DELIMITER));
 		quoteEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.QUOTE_CHARACTOR));
 		booleanFieldEditor.loadDefault();
-		pergeEditor.loadDefault();
+		purgeEditor.loadDefault();
 	}
 	
 	@Override
 	protected void performApply() {
 		memoryFieldEditor.store();
 		pageSizeEditor.store();
-		delimeterEditor.store();
+		delimiterEditor.store();
 		quoteEditor.store();
 		tempPathFieldEditor.store();
 		defaultPathFieldEditor.store();
@@ -433,12 +445,12 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	public boolean performOk() {
 		memoryFieldEditor.store();
 		pageSizeEditor.store();
-		delimeterEditor.store();
+		delimiterEditor.store();
 		quoteEditor.store();
 		tempPathFieldEditor.store();
 		defaultPathFieldEditor.store();
 		booleanFieldEditor.store();
-		pergeEditor.store();
+		purgeEditor.store();
 		
 		return super.performOk();
 	}
