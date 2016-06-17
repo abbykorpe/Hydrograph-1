@@ -303,12 +303,6 @@ public class SchemaRowValidation{
 		GenerateRecordSchemaGridRow generateRecordSchemaGridRow = (GenerateRecordSchemaGridRow) gridRow;
 		boolean isRedColor = false;
 		
-		if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL)){
-			executeIfDataTypeIsBigDecimal(gridRow, componentType, tableItem);
-		}else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),JAVA_UTIL_DATE)){
-			executeIfDataTypeIsDate(gridRow, tableItem);	
-		}
-		
 		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom())
 				|| StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo())){
 			if (StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_UTIL_DATE)){				
@@ -327,9 +321,12 @@ public class SchemaRowValidation{
 		if (isRedColor){
 			setRedColor(tableItem);
 		}else{
-			setBlackColor(tableItem);
+			if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL)){
+				executeIfDataTypeIsBigDecimal(gridRow, componentType, tableItem);
+			}else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),JAVA_UTIL_DATE)){
+				executeIfDataTypeIsDate(gridRow, tableItem);	
+			}
 		}
-			
 	}
 
 
