@@ -66,6 +66,8 @@ public class SelectColumnAction extends Action {
 	
 	/**
 	 * Get list of Available Columns
+	 *
+	 * @return List
 	 */
 	public List<String> getAllColumns() {
 		return allColumns;
@@ -73,6 +75,8 @@ public class SelectColumnAction extends Action {
 	
 	/**
 	 * set list of Available Columns
+	 *
+	 * @param allColumns
 	 */
 	public void setAllColumns(List<String> allColumns) {
 		this.allColumns = allColumns;
@@ -80,6 +84,8 @@ public class SelectColumnAction extends Action {
 	
 	/**
 	 * Get list of Selected Columns
+	 * 
+	 *  @return List
 	 */
 	public List<String> getSelectedColumns() {
 		return selectedColumns;
@@ -87,6 +93,8 @@ public class SelectColumnAction extends Action {
 	
 	/**
 	 * Set list of Available Columns
+	 *
+	 * @param selectedColumns
 	 */
 	public void setSelectedColumns(List<String> selectedColumns) {
 		this.selectedColumns = selectedColumns;

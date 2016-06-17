@@ -54,6 +54,10 @@ public class SelectColumnActionDialog extends Dialog {
 	private Label moveDownLable;
 	private Button okButton;
 
+	/**
+	 * @param parentShell
+	 * @param selectColumnAction
+	 */
 	public SelectColumnActionDialog(Shell parentShell,SelectColumnAction selectColumnAction) {
 		super(parentShell);
 		this.selectColumnAction=selectColumnAction;
@@ -72,10 +76,10 @@ public class SelectColumnActionDialog extends Dialog {
 		SashForm sashForm = new SashForm(container, SWT.NONE);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		Shell sh=container.getShell();
-		sh.setText("Select Columns");
-		Image table = new Image(sh.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.TABLE_ICON);
-		sh.setImage(table);
+		Shell shell=container.getShell();
+		shell.setText("Select Columns");
+		Image table = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.TABLE_ICON);
+		shell.setImage(table);
 		
 		Composite allColumnsComposite = new Composite(sashForm, SWT.NONE);
 		allColumnsComposite.setLayout(new GridLayout(2, false));
@@ -100,22 +104,22 @@ public class SelectColumnActionDialog extends Dialog {
 		
 		Label selectAllLabel = new Label(allColumnsControlButtons, SWT.NONE);
 		selectAllLabel.setBounds(6, 70, 25, 25);
-		Image selectAllColumns = new Image(sh.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.SELECT_ALL_ICON);
+		Image selectAllColumns = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.SELECT_ALL_ICON);
 		selectAllLabel.setImage(selectAllColumns);
 		
 		Label selectLabel = new Label(allColumnsControlButtons, SWT.NONE);
 		selectLabel.setBounds(6, 110, 25, 25);
-		Image select = new Image(sh.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SELECT_ICON);
+		Image select = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SELECT_ICON);
 		selectLabel.setImage(select);
 		
 		Label disSelectLabel = new Label(allColumnsControlButtons, SWT.NONE);
 		disSelectLabel.setBounds(6, 150, 25, 25);
-		Image disSelect = new Image(sh.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DISSELECT_ICON);
+		Image disSelect = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DISSELECT_ICON);
 		disSelectLabel.setImage(disSelect);
 		
 		Label removeAll = new Label(allColumnsControlButtons, SWT.NONE);
 		removeAll.setBounds(6, 190, 25, 25);
-		Image disSelectAll = new Image(sh.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DISSELECT_ALL_ICON);
+		Image disSelectAll = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DISSELECT_ALL_ICON);
 		removeAll.setImage(disSelectAll);
 		
 		Composite selectColumnComposite = new Composite(sashForm, SWT.NONE);
@@ -136,15 +140,28 @@ public class SelectColumnActionDialog extends Dialog {
 		
 		moveUpLable = new Label(moveElementsComposite, SWT.NONE);
 		moveUpLable.setBounds(0, 114, 24, 24);
-		Image up = new Image(sh.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.UP_ICON);
+		Image up = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.UP_ICON);
 		moveUpLable.setImage(up);
 		
 		moveDownLable = new Label(moveElementsComposite, SWT.NONE);
 		moveDownLable .setBounds(0, 160, 24, 25);
-		Image down= new Image(sh.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DOWN_ICON);
+		Image down= new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DOWN_ICON);
 		moveDownLable.setImage(down);
 		sashForm.setWeights(new int[] {294, 277});
 
+		addListeners(selectAllLabel, selectLabel, disSelectLabel, removeAll);
+		return container;
+	}
+
+	/**
+	 * @param selectAllLabel
+	 * @param selectLabel
+	 * @param disSelectLabel
+	 * @param removeAll
+	 * Add listners to move data up/down/left/right
+	 */
+	private void addListeners(Label selectAllLabel, Label selectLabel,
+			Label disSelectLabel, Label removeAll) {
 		selectLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -289,7 +306,6 @@ public class SelectColumnActionDialog extends Dialog {
 			}
 
 		});
-		return container;
 	}
 	/**
 	 * Initialize the window
