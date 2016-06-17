@@ -29,7 +29,6 @@ import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
-import hydrograph.ui.propertywindow.widgets.customwidgets.lookupproperty.ELTLookupMapWizard;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.lookup.LookupMapDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
@@ -136,8 +135,7 @@ public class ELTLookupMapWidget extends AbstractWidget {
 				GridRow outputFieldSchema = null;
 
 				if(inputFieldSchema==null){
-					SchemaPropagationHelper schemaPropagationHelper = new SchemaPropagationHelper();
-					outputFieldSchema = schemaPropagationHelper.createSchemaGridRow(row.getOutput_Field());
+					outputFieldSchema = SchemaPropagationHelper.INSTANCE.createSchemaGridRow(row.getOutput_Field());
 				}else{
 					outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
 				}

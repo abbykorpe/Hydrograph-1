@@ -301,7 +301,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		List<String> oprationFieldList = getOperationFieldList();
 
 		if (schemaGridRowList != null ) {
-			if(!SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName())){
+			if(!SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName())){
 			Schema schemaForInternalPropagation = getSchemaForInternalPropagation();
 			if(schemaForInternalPropagation!=null){
 
@@ -326,7 +326,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			
 		}
 		
-		if (!propertyDialog.isCancelPressed() && SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()) &&
+		if (!propertyDialog.isCancelPressed() && SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName()) &&
 				!isSchemaInSync()){
 				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
 				int dialogResult =dialog.open();
@@ -570,7 +570,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		if(transformSchemaType){
 
 			createSchemaGridSection(container.getContainerControl(),tableHeight, tableWidth);
-			if(SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()))
+			if(SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName()))
 
 				createPullInternallyPropagatedSchema(container.getContainerControl());
 		}
@@ -1414,8 +1414,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					if (!operationFieldList.contains(row.getFieldName())) {
 						originalSchema.getGridRow().set(existingFields.indexOf(row), row.copy());
 					}
-				} else if (!SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName())) {
-
+				} else if (!SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName())) {
+					originalSchema.getGridRow().add(row.copy());
 				}
 			}
 
@@ -1435,7 +1435,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 
 		} else {
-			if(!SchemaSyncUtility.isSchemaSyncAllow( getComponent().getComponentName()))
+			if(!SchemaSyncUtility.INSTANCE.isSchemaSyncAllow( getComponent().getComponentName()))
 			{			
 			if (schema.getGridRow().size() != 0) {
 				table.clearAll();
@@ -1500,7 +1500,7 @@ private void syncSchema(){
 	Schema schema = getSchemaForInternalPropagation();
 	
 	if(StringUtils.endsWithIgnoreCase(SCHEMA_TAB, propertyDialog.getSelectedTab())){
-		SchemaSyncUtility.pushSchemaToMapping(getComponent(), schemaGridRowList);
+		SchemaSyncUtility.INSTANCE.pushSchemaToMapping(getComponent(), schemaGridRowList);
 		schema.setGridRow(new ArrayList<>(schemaGridRowList));
 	}
 	else{

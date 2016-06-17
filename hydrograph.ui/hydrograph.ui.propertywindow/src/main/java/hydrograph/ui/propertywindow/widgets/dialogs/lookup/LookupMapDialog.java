@@ -471,17 +471,21 @@ public class LookupMapDialog extends Dialog {
 	private void createPullButton(Composite composite_11) {
 		btnPull = new Button(composite_11, SWT.NONE);
 		btnPull.setText(PULL_BUTTON_TEXT);
+		
 		btnPull.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Constants.SYNC_CONFIRM_MESSAGE, MessageDialog.QUESTION, new String[] {"Ok", "Cancel" }, 0);
 				int dialogResult =dialog.open();
+				List<LookupMapProperty> pulledLookupMapProperties = null;
 				if(dialogResult == 0){
 					//syncTransformFieldsWithSchema();
 					Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
-					SchemaSyncUtility.pullLookupSchemaInMapping(schema, component);
+					pulledLookupMapProperties = SchemaSyncUtility.INSTANCE.pullLookupSchemaInMapping(schema, component);
 				}
-				mappingTableViewer.refresh();
+				mappingTableViewer.setInput(pulledLookupMapProperties);
+				mappingTableItemList = pulledLookupMapProperties;
+				mappingTableViewer.refresh(); 
 				//refreshButtonStatus();
 			}
 		});
@@ -799,7 +803,7 @@ public class LookupMapDialog extends Dialog {
 				&& !lookupMappingGrid.getLookupMapProperties().isEmpty()) {
 			mappingTableItemList = lookupMappingGrid.getLookupMapProperties();
 		} else {
-			mappingTableItemList = new LinkedList<>();
+			mappingTableItemList = new ArrayList<>();
 		}
 
 		mappingTableViewer.setInput(mappingTableItemList);

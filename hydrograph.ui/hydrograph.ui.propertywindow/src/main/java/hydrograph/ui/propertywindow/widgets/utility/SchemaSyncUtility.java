@@ -38,6 +38,12 @@ public class SchemaSyncUtility {
 	public static final String OPERATION = "operation";
 	public static final String LOOKUP_MAP = "hash_join_map";
 
+	public static SchemaSyncUtility INSTANCE= new SchemaSyncUtility();
+	
+	private SchemaSyncUtility(){
+		
+	}
+	
 	/**
 	 * Add and remove data from map fields those are not present in outer schema, use to sync outer schema with transform and aggregate internal fields.
 	 *
@@ -45,7 +51,7 @@ public class SchemaSyncUtility {
 	 * @param transformMapping the transform mapping
 	 * @return the list
 	 */
-	public static List<NameValueProperty> filterCommonMapFields(List<NameValueProperty> outSchema, TransformMapping transformMapping) {
+	public List<NameValueProperty> filterCommonMapFields(List<NameValueProperty> outSchema, TransformMapping transformMapping) {
 		List<NameValueProperty> mapNameValueProperties = transformMapping.getMapAndPassthroughField();
 		for (NameValueProperty nameValueProperty : outSchema) {
 			boolean isPresent=false;
@@ -74,7 +80,7 @@ public class SchemaSyncUtility {
 	 * @param outSchema the out schema
 	 * @param mappingSheetRow the mapping sheet row
 	 */
-	public static void removeOpFields(List<FilterProperties> outSchema, List<MappingSheetRow> mappingSheetRow){
+	public void removeOpFields(List<FilterProperties> outSchema, List<MappingSheetRow> mappingSheetRow){
 		for (MappingSheetRow mapSheetRow : mappingSheetRow) {
 					mapSheetRow.getOutputList().retainAll(outSchema);
 		}
@@ -87,7 +93,7 @@ public class SchemaSyncUtility {
 	 * @param list2 the list2
 	 * @return the list
 	 */
-	public static List<FilterProperties> unionFilter(List<FilterProperties> list1, List<FilterProperties> list2) {
+	public List<FilterProperties> unionFilter(List<FilterProperties> list1, List<FilterProperties> list2) {
 	    for (FilterProperties filterProperties : list1) {
 	    	if(!list2.contains(filterProperties))
 	    		list2.add(filterProperties);
@@ -95,7 +101,7 @@ public class SchemaSyncUtility {
 	    return list2;
 	}
 	
-	public static boolean isSchemaSyncAllow(String componentName){
+	public boolean isSchemaSyncAllow(String componentName){
 		return Constants.TRANSFORM.equalsIgnoreCase(componentName)
 				|| Constants.AGGREGATE.equalsIgnoreCase(componentName) 
 				|| Constants.NORMALIZE.equalsIgnoreCase(componentName) 
@@ -105,7 +111,7 @@ public class SchemaSyncUtility {
 	}
 
 	
-	public static void pushSchemaToMapping( Component component, List<GridRow> schemaGridRowList) {
+	public void pushSchemaToMapping( Component component, List<GridRow> schemaGridRowList) {
 		if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()) ||
 		   Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName()) ||
 		   Constants.NORMALIZE.equalsIgnoreCase(component.getComponentName()) ||
@@ -118,7 +124,7 @@ public class SchemaSyncUtility {
 		}
 	}
 
-	public static void pushSchemaToLookupMapping( Component component,
+	public void pushSchemaToLookupMapping( Component component,
 			List<GridRow> schemaGridRowList) {
 		LookupMappingGrid lookupMappingGrid = (LookupMappingGrid) component.getProperties().get(LOOKUP_MAP);
 		List<String> lookupMapOutputs = getOutputFieldsFromMapping(lookupMappingGrid);
@@ -133,7 +139,7 @@ public class SchemaSyncUtility {
 		}
 	}
 	
-	public static void pullLookupSchemaInMapping(Schema schema, Component component) {
+	public List<LookupMapProperty> pullLookupSchemaInMapping(Schema schema, Component component) {
 		LookupMappingGrid lookupMappingGrid = (LookupMappingGrid) component.getProperties().get(LOOKUP_MAP);
 		List<String> lookupMapOutputs = getOutputFieldsFromMapping(lookupMappingGrid);
 		
@@ -148,10 +154,10 @@ public class SchemaSyncUtility {
 				lookupMappingGrid.getLookupMapProperties().add(l);
 			}
 		}
-		
+		return lookupMappingGrid.getLookupMapProperties();
 	}
 
-	private static List<String> getOutputFieldsFromMapping(
+	private List<String> getOutputFieldsFromMapping(
 			LookupMappingGrid lookupMappingGrid) {
 		List<String> lookupMapOutputs = new ArrayList<>();
 		for (LookupMapProperty l : lookupMappingGrid.getLookupMapProperties()) {
@@ -160,16 +166,16 @@ public class SchemaSyncUtility {
 		return lookupMapOutputs;
 	}
 
-	private static void pushSchemaToTransformMapping(
+	private void pushSchemaToTransformMapping(
 			Component component, List<GridRow> schemaGridRowList) {
 		TransformMapping transformMapping= (TransformMapping) component.getProperties().get(OPERATION);
 		List<FilterProperties> filterProperties = convertSchemaToFilterProperty(schemaGridRowList);
-		SchemaSyncUtility.removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
+		SchemaSyncUtility.INSTANCE.removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
 		List<NameValueProperty> outputFileds =getComponentSchemaAsProperty(schemaGridRowList);
-		SchemaSyncUtility.filterCommonMapFields(outputFileds, transformMapping);
+		SchemaSyncUtility.INSTANCE.filterCommonMapFields(outputFileds, transformMapping);
 	}
 	
-	public static List<FilterProperties> convertSchemaToFilterProperty(List<GridRow> schemaGridRowList){
+	public List<FilterProperties> convertSchemaToFilterProperty(List<GridRow> schemaGridRowList){
 		List<FilterProperties> outputFileds = new ArrayList<>();
 			for (GridRow gridRow : schemaGridRowList) {
 				FilterProperties filterProperty = new FilterProperties();
@@ -179,7 +185,7 @@ public class SchemaSyncUtility {
 		return outputFileds;
 	}
 	
-	public static List<LookupMapProperty> getComponentSchemaAsLookupMapProperty(List<GridRow> schemaGridRowList){
+	public List<LookupMapProperty> getComponentSchemaAsLookupMapProperty(List<GridRow> schemaGridRowList){
 		List<LookupMapProperty> outputFields = new ArrayList<>();
 			for (GridRow gridRow : schemaGridRowList) {
 				LookupMapProperty lookupMapProperty = new LookupMapProperty();
@@ -190,7 +196,7 @@ public class SchemaSyncUtility {
 		return outputFields;
 	}
 	
-	public static List<LookupMapProperty> getOutputFieldsFromSchemaToRetain(List<GridRow> schemaGridRowList, List<LookupMapProperty> list){
+	public List<LookupMapProperty> getOutputFieldsFromSchemaToRetain(List<GridRow> schemaGridRowList, List<LookupMapProperty> list){
 		List<LookupMapProperty> outputFieldsToRetain = new ArrayList<>();
 		for (LookupMapProperty l : list) {
 			for(GridRow gridRow : schemaGridRowList){
@@ -204,7 +210,7 @@ public class SchemaSyncUtility {
 		return outputFieldsToRetain;
 	}
 	
-	public static List<NameValueProperty> getComponentSchemaAsProperty(List<GridRow> schemaGridRowList){
+	public List<NameValueProperty> getComponentSchemaAsProperty(List<GridRow> schemaGridRowList){
 		List<NameValueProperty> outputFileds = new ArrayList<>();
 			for (GridRow gridRow : schemaGridRowList) {
 				NameValueProperty nameValueProperty = new NameValueProperty();
