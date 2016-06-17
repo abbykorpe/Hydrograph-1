@@ -328,12 +328,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		
 		if (!propertyDialog.isCancelPressed() && SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName()) &&
 				!isSchemaInSync()){
-				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
-				int dialogResult =dialog.open();
-				
-				if(dialogResult == 0){
-					syncSchema();
-				
+			MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
+			int dialogResult =dialog.open();
+
+			if(dialogResult == 0){
+				syncSchema();
 			}
 		}
 		
@@ -568,14 +567,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 
 		if(transformSchemaType){
-
 			createSchemaGridSection(container.getContainerControl(),tableHeight, tableWidth);
-			if(SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName()))
-
+			if(SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName())){
 				createPullInternallyPropagatedSchema(container.getContainerControl());
+			}
 		}
 		else{
-			
+
 			createSchemaTypesSection(container.getContainerControl());
 			if (StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT))
 				createPullPropagtedSchemaButton(container.getContainerControl());
@@ -583,19 +581,19 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			createExternalSchemaSection(container.getContainerControl());
 		}
 		tableComposite.getShell().addControlListener(new ControlListener() {
-			
+
 			@Override
 			public void controlResized(ControlEvent e) {
 				Shell shell = (Shell) e.getSource();
 				Rectangle schemaTable = shell.getClientArea();
 				compositeOfOutsideTable.heightHint = tableHeight + (schemaTable.height - 640);
 			}
-			
+
 			@Override
 			public void controlMoved(ControlEvent e) {
 			}
 		});
-	
+
 		populateSchemaTypeWidget();
 	}
 
