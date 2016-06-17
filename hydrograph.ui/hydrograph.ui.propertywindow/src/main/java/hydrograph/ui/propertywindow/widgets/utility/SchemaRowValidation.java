@@ -158,62 +158,65 @@ public class SchemaRowValidation{
 			}
 		}
 
-		int fieldLength = 0, scaleLength = 0;
-
 		if (!generateRecordSchemaGridRow.getLength().isEmpty()){
+			int fieldLength = 0, scaleLength = 0;
 			fieldLength = Integer.parseInt(generateRecordSchemaGridRow.getLength());
-		}
+		
+			if (!generateRecordSchemaGridRow.getScale().isEmpty()){
+				scaleLength = Integer.parseInt(generateRecordSchemaGridRow.getScale());
+			}
 
-		if (!generateRecordSchemaGridRow.getScale().isEmpty()){
-			scaleLength = Integer.parseInt(generateRecordSchemaGridRow.getScale());
-		}
+			if (fieldLength < 0){
+				return true;
+			}else if (scaleLength < 0){
+				return true;
+			}else if (scaleLength >= fieldLength){
+				return true;
+			}else{
 
-		if (fieldLength < 0){
-			return true;
-		}else if (scaleLength < 0){
-			return true;
-		}else if (scaleLength >= fieldLength){
-			return true;
-		}else{
+				String minPermissibleRangeValue = "", maxPermissibleRangeValue = "";
 
-			String minPermissibleRangeValue = "", maxPermissibleRangeValue = "";
-
-			for (int i = 1; i <= fieldLength; i++){
-				maxPermissibleRangeValue = maxPermissibleRangeValue.concat("9");
-				if (minPermissibleRangeValue.trim().length() == 0){
-					minPermissibleRangeValue = minPermissibleRangeValue.concat("-");
-				}else{
-					minPermissibleRangeValue = minPermissibleRangeValue.concat("9");
+				for (int i = 1; i <= fieldLength; i++){
+					maxPermissibleRangeValue = maxPermissibleRangeValue.concat("9");
+					if (minPermissibleRangeValue.trim().length() == 0){
+						minPermissibleRangeValue = minPermissibleRangeValue.concat("-");
+					}else{
+						minPermissibleRangeValue = minPermissibleRangeValue.concat("9");
+					}
 				}
-			}
 			
-			if(minPermissibleRangeValue.equals("-")){
-				minPermissibleRangeValue = "0";
-			}
-
-			if (scaleLength != 0){
-				int decimalPosition = fieldLength - scaleLength;
-
-				if (decimalPosition == 1){
+				if(minPermissibleRangeValue.equals("-")){
 					minPermissibleRangeValue = "0";
-					maxPermissibleRangeValue = maxPermissibleRangeValue.replaceFirst("9", ".");
-				}else{
-					minPermissibleRangeValue = minPermissibleRangeValue.substring(0, decimalPosition - 1)
-							+ "." + minPermissibleRangeValue.substring(decimalPosition);
 				}
 				
-				maxPermissibleRangeValue = maxPermissibleRangeValue.substring(0, decimalPosition - 1)
-						+ "." + maxPermissibleRangeValue.substring(decimalPosition);
-			}
-			
-			BigDecimal minRangeValue = new BigDecimal(minPermissibleRangeValue);
-			BigDecimal maxRangeValue = new BigDecimal(maxPermissibleRangeValue);
+				if (scaleLength != 0){
+					int decimalPosition = fieldLength - scaleLength;
 
-			if(checkIfSchemaRangeAndLengethIsInvalid(rangeFrom, fieldLength, rangeTo, minRangeValue, maxRangeValue)){
-				return true;
-			}			
+					if (decimalPosition == 1){
+						minPermissibleRangeValue = "0";
+						maxPermissibleRangeValue = maxPermissibleRangeValue.replaceFirst("9", ".");
+					}else{
+						minPermissibleRangeValue = minPermissibleRangeValue.substring(0, decimalPosition - 1)
+							+ "." + minPermissibleRangeValue.substring(decimalPosition);
+					}
+				
+					maxPermissibleRangeValue = maxPermissibleRangeValue.substring(0, decimalPosition - 1)
+						+ "." + maxPermissibleRangeValue.substring(decimalPosition);
+				}
+				
+				if(fieldLength == 0){
+					minPermissibleRangeValue = "0";
+					maxPermissibleRangeValue = "0";
+				}
+			
+				BigDecimal minRangeValue = new BigDecimal(minPermissibleRangeValue);
+				BigDecimal maxRangeValue = new BigDecimal(maxPermissibleRangeValue);
+
+				if(checkIfSchemaRangeAndLengethIsInvalid(rangeFrom, fieldLength, rangeTo, minRangeValue, maxRangeValue)){
+					return true;
+				}			
+			}
 		}
-		
 		return false;
 	}
 	
@@ -255,37 +258,40 @@ public class SchemaRowValidation{
 			}
 		}
 		
-		int fieldLength = 0;
-
 		if (!generateRecordSchemaGridRow.getLength().isEmpty()){
-			fieldLength = Integer.parseInt(generateRecordSchemaGridRow.getLength());
-		}
+			int fieldLength = Integer.parseInt(generateRecordSchemaGridRow.getLength());
+		
+			if (fieldLength < 0){
+				return true;
+			}else{
 
-		if (fieldLength < 0){
-			return true;
-		}else{
+				String minPermissibleRangeValue = "", maxPermissibleRangeValue = "";
 
-			String minPermissibleRangeValue = "", maxPermissibleRangeValue = "";
-
-			for (int i = 1; i <= fieldLength; i++){
-				maxPermissibleRangeValue = maxPermissibleRangeValue.concat("9");
-				if (minPermissibleRangeValue.trim().length() == 0){
-					minPermissibleRangeValue = minPermissibleRangeValue.concat("-");
-				}else{
-					minPermissibleRangeValue = minPermissibleRangeValue.concat("9");
+				for (int i = 1; i <= fieldLength; i++){
+					maxPermissibleRangeValue = maxPermissibleRangeValue.concat("9");
+					if (minPermissibleRangeValue.trim().length() == 0){
+						minPermissibleRangeValue = minPermissibleRangeValue.concat("-");
+					}else{
+						minPermissibleRangeValue = minPermissibleRangeValue.concat("9");
+					}
 				}
-			}
+				
+				if(fieldLength == 0){
+					minPermissibleRangeValue = "0";
+					maxPermissibleRangeValue = "0";
+				}
 			
-			if(minPermissibleRangeValue.equals("-")){
-				minPermissibleRangeValue = "0";
-			}
+				if(minPermissibleRangeValue.equals("-")){
+					minPermissibleRangeValue = "0";
+				}
 			
-			BigDecimal minRangeValue = new BigDecimal(minPermissibleRangeValue);
-			BigDecimal maxRangeValue = new BigDecimal(maxPermissibleRangeValue);
+				BigDecimal minRangeValue = new BigDecimal(minPermissibleRangeValue);
+				BigDecimal maxRangeValue = new BigDecimal(maxPermissibleRangeValue);
 		
 			
-			if(checkIfSchemaRangeAndLengethIsInvalid(rangeFrom, fieldLength, rangeTo, minRangeValue, maxRangeValue)){
-				return true;
+				if(checkIfSchemaRangeAndLengethIsInvalid(rangeFrom, fieldLength, rangeTo, minRangeValue, maxRangeValue)){
+					return true;
+				}
 			}
 		}
 		return false;
