@@ -1,3 +1,68 @@
-task build{
-   println 'This is test build for engine code'
+apply from: 'version.gradle'
+group = 'hydrograph'
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
+  }
+}
+
+allprojects {
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'maven'
+	
+	//project.version=version
+	
+    sourceSets{
+        main.java.srcDir 'src/main/java'
+        main.resources.srcDir 'src/main/resources'
+        test.java.srcDir 'src/test/java'
+    }
+	dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+	}
+	
+	task testJar(type: Jar, dependsOn: classes) {
+	classifier = 'tests'
+	from sourceSets.test.output
+	}
+	
+	task sourcesJar( type: Jar, dependsOn: classes ) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+    }
+}
+
+jar {
+	manifest {
+        attributes 'Implementation-Title': 'hydrograph.engine',
+                //'Implementation-Version': version,
+                'Main-Class': 'hydrograph.engine.commandline.utilities.HydrographExecution'
+    }
+    version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar 
+    
+    dependsOn { subprojects.jar }
+    subprojects.each { proj ->
+        from { zipTree(proj.jar.archivePath) }
+    }
+}
+
+task writePom {
+    pom {
+        project {
+           }
+    	}.writeTo("$buildDir/pom.xml")
+	}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '1.9'
+  distributionUrl = 'http://services.gradle.org/distributions/gradle-1.9-all.zip'
+}
+
+repositories {
+    mavenCentral()
 }
