@@ -86,7 +86,13 @@ public class ComponentLabelEditPart extends AbstractGraphicalEditPart implements
 		
 	}
 
-
+	
+	/**
+	 * Adjusts the position of the component label at center in case if port count is increased
+	 * 
+	 * @param component's position
+	 * @param component's size
+	 */
 	public void adjustLabelFigure(Point compLocation, Dimension compSize) {
 		Point p = new Point((compLocation.x + 1 +(compSize.width/2) - 50), (compLocation.y + 1));
 		getFigure().setLocation(p);

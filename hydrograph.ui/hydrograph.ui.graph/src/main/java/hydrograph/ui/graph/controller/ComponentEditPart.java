@@ -631,11 +631,10 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	
 	private void adjustComponentLabelPosition(){
 		List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
-		ComponentLabelEditPart componentLabelEditPart = null;
 		for(AbstractGraphicalEditPart part:childrenEditParts)
 		{
 			if(part instanceof ComponentLabelEditPart){ 
-				componentLabelEditPart = (ComponentLabelEditPart) part;
+				ComponentLabelEditPart componentLabelEditPart = (ComponentLabelEditPart) part;
 				componentLabelEditPart.adjustLabelFigure(getCastedModel().getLocation(), getCastedModel().getSize());
 				break;
 			}
