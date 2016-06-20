@@ -98,8 +98,9 @@ public class ELTLookupMapWidget extends AbstractWidget {
 					if(widget instanceof ELTGenericSchemaGridWidget)
 					{
 						ELTGenericSchemaGridWidget eltGenericSchemaGridWidget =(ELTGenericSchemaGridWidget) widget;
-						if(internalSchema!=null )
+						if(internalSchema!=null ){
 							eltGenericSchemaGridWidget.validateInternalSchemaPropogatedData(internalSchema);
+						}
 
 					}	
 				}	
@@ -110,8 +111,9 @@ public class ELTLookupMapWidget extends AbstractWidget {
 
 
 	private Schema propagateInternalSchema() {
-		if(lookupMappingGrid ==null)
+		if(lookupMappingGrid ==null){
 			return null;
+		}
 
 		Schema internalSchema = getSchemaForInternalPropagation();			 
 		internalSchema.getGridRow().clear();
@@ -203,10 +205,11 @@ public class ELTLookupMapWidget extends AbstractWidget {
 	private GridRow getInputFieldSchema(String source_Field) {		
 
 		String[] source = source_Field.split("\\.");
-		if(source.length == 2)
+		if(source.length == 2){
 			return getInputFieldSchema(source[1],source[0]);
-		else
+		}else{
 			return null;
+		}
 	}
 
 	private GridRow getInputFieldSchema(String fieldName,String linkNumber) {
@@ -216,12 +219,13 @@ public class ELTLookupMapWidget extends AbstractWidget {
 
 			if(linkNumber.equals(link.getTargetTerminal())){				
 				outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
-				if (outputSchema != null)
+				if (outputSchema != null){
 					for (GridRow row : outputSchema.getSchemaGridOutputFields(null)) {
 						if(row.getFieldName().equals(fieldName)){
 							return row.copy();
 						}
 					}
+				}
 			}
 		}
 		return null;
