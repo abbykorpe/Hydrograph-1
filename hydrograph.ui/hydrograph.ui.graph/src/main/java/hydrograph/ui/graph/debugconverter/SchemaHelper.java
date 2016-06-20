@@ -15,6 +15,7 @@
 package hydrograph.ui.graph.debugconverter;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.graph.controller.ComponentEditPart;
@@ -102,4 +103,32 @@ public class SchemaHelper {
 		
 	}
 	 
+	 
+	/**
+	 * This function will return file path with validation
+	 * @param path
+	 * @return validPath
+	 */
+	public String validatePath(String path){
+		String validPath = null;
+		if(OSValidator.isWindows()){
+			if(StringUtils.endsWith(path, "\\")){
+				return path;
+			}else{
+				validPath = path + "\\";
+				return validPath;
+			}
+		}
+		else if(OSValidator.isMac()){
+			if(StringUtils.endsWith(path, "/")){
+				return path;
+			}else{
+				validPath = path + "/";
+				return validPath;
+			}
+		}
+		else if(OSValidator.isUnix()){
+		}
+		return validPath;
+	}
 }
