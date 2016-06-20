@@ -212,7 +212,7 @@ public class DebugHandler{
 		IFile file=ResourcesPlugin.getWorkspace().getRoot().getFile(currentJobIPath);
 		job.setDebugFilePath(file.getFullPath().toString());
 		
-		String portNumber ="";
+		String portNumber = Utils.INSTANCE.getServicePortNo();
 		
 		if(!StringUtils.isEmpty(portNumber)){
 			job.setPortNumber(portNumber);

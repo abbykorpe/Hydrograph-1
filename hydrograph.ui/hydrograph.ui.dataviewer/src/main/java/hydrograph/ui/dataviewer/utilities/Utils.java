@@ -133,4 +133,15 @@ public class Utils {
 		messageBox.setMessage(message);
 		messageBox.open();
 	}
+	
+	/**
+	 * Get service port no
+	 * @return port no
+	 */
+	public String getServicePortNo(){
+		String portNo = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
+				PreferenceConstants.PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
+		return portNo;
+		
+	}
 }

@@ -17,8 +17,7 @@ package hydrograph.ui.graph.job;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.handler.DebugHandler;
-import hydrograph.ui.graph.handler.RunJobHandler;
+import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
@@ -175,6 +174,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+			((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(true);
 			return;
 		}
 
@@ -260,6 +260,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 				if (job.getRemoteJobProcessID() != null) {
 					if (JobStatus.KILLED.equals(job.getJobStatus())) {
 						((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+						((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(true);
 						JobManager.INSTANCE.killJob(job.getConsoleName(), gefCanvas);
 						joblogger.logMessage("Killing job with job remote process id: " + job.getRemoteJobProcessID());
 						break;

@@ -19,19 +19,15 @@ import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
-import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -65,11 +61,7 @@ public class RunJobHandler{
 	/*
 	 * 
 	 * Execute command to run the job.
-	 * 
-	 * @see
-	 * org.eclipse.core.commands.AbstractHandler#execute(org.eclipse.core.commands
-	 * .ExecutionEvent)
-	 */
+	 */ 
 	public Object execute(RunConfigDialog runConfigDialog) {
 		
 		closeOpenedDataViewerWindows();
