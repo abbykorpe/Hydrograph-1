@@ -313,12 +313,20 @@ public class DebugHandler  extends AbstractHandler {
 	}
  
 	private void exportSchemaFile(){
+		String validPath = null;
+		String filePath = null;
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		String jobId = editor.getJobId();
 		dataViewFileIds.add(jobId);
 		String path = Utils.INSTANCE.getDataViewerDebugFilePath();
-		String filePath = path + jobId;
-		SchemaHelper.INSTANCE.exportSchemaFile(filePath);
+		if(StringUtils.isNotBlank(path)){
+			logger.debug("validating file path : {}", path);
+			validPath = SchemaHelper.INSTANCE.validatePath(path);
+			filePath = validPath + jobId;
+			SchemaHelper.INSTANCE.exportSchemaFile(filePath);
+		}else{
+			logger.debug("File path does not exist : {}", path);
+		}
 	}
 	
 	/**
