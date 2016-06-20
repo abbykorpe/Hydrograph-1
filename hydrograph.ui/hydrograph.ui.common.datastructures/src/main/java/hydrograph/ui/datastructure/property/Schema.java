@@ -31,6 +31,7 @@ import org.apache.commons.lang.StringUtils;
  */
 
 public class Schema implements IDataStructure{
+	private static final String RELATIVE_PATH_PREFIX = "../";
 	private String externalSchemaPath;
 	private Boolean isExternal;
 	private List<GridRow> gridRow;
@@ -45,6 +46,8 @@ public class Schema implements IDataStructure{
 	}
 
 	public void setExternalSchemaPath(String externalSchemaPath) {
+		if(StringUtils.startsWith(externalSchemaPath, RELATIVE_PATH_PREFIX))
+			externalSchemaPath=StringUtils.replace(externalSchemaPath, RELATIVE_PATH_PREFIX,"");
 		this.externalSchemaPath = externalSchemaPath;
 	}
 
