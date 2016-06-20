@@ -345,7 +345,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		setCancelPressed(true);
 		boolean windowValidityStaus = Boolean.TRUE;
 		for (AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()) {
-			LinkedHashMap<String, Object> properties= customWidget.getEltComponenetProperties().getComponentConfigurationProperties();
+			Map<String, Object> properties= customWidget.getEltComponenetProperties().getComponentConfigurationProperties();
 			
 			if (properties != null) {
 				windowValidityStaus = validateWidget(windowValidityStaus, customWidget,properties);
@@ -395,7 +395,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	}
 
 	
-	private boolean validateWidget(Boolean windowValidityStaus, AbstractWidget customWidget,LinkedHashMap<String, Object> properties) {
+	private boolean validateWidget(Boolean windowValidityStaus, AbstractWidget customWidget,Map<String, Object> properties) {
 		List<String> validators = ComponentCacheUtil.INSTANCE.getValidatorsForProperty(
 				(String) this.componentProperties.getComponentMiscellaneousProperty(Constants.COMPONENT_ORIGINAL_NAME), 
 				customWidget.getPropertyName());

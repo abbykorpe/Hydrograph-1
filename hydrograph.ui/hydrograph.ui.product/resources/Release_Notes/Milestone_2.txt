@@ -18,7 +18,8 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 5. #569  [Nitin Gupta] Job is getting locked if user close console and job window while job is running (Current production)
 6. #554  [Nitin Gupta] When user clicks on canvas while job run, Run, Debug and Remove watcher buttons are getting enabled].
 7. #583  [Nitin Gupta] Import Job: Schema and File Path of Input Component is Not Imported On Job Import  
-8. #494  [Prateem Tadas] Graph property window and runtime window bugs
+8. #494  [Prateem Tadas] Graph property window and runtime window bugs   
+9. #419  [Shashank Karnik] Output Component: Error bubble is getting removed if user pulls schema from the previous component and the click on cancel button 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
