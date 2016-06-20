@@ -35,6 +35,8 @@ public class NewCustomClassHandler extends AbstractHandler implements IHandler {
 	private static final String FILTER_CLASS = "hydrograph.ui.menus.new.newFilterClass";
 	private static final String AGGREGATOR_CLASS = "hydrograph.ui.menus.new.newAggClass";
 	private static final String TRANFORM_CLASS = "hydrograph.ui.menus.new.newTranformClass";
+	private static final String CUMULATE_CLASS = "hydrograph.ui.menus.new.newCumulateClass";
+	private static final String NORMALISE_CLASS = "hydrograph.ui.menus.new.newNormalizeClass";
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -55,6 +57,10 @@ public class NewCustomClassHandler extends AbstractHandler implements IHandler {
 				interfaceList.add(Messages.INF_AGGREGATOR_BASE_CLASS);
 			} else if (ClassType.equalsIgnoreCase(TRANFORM_CLASS)) {
 				interfaceList.add(Messages.INF_TRANFORM_BASE_CLASS);
+			}else if (ClassType.equalsIgnoreCase(CUMULATE_CLASS)) {
+				interfaceList.add(Messages.INF_CUMULATE_BASE_CLASS);
+			}else if (ClassType.equalsIgnoreCase(NORMALISE_CLASS)) {
+				interfaceList.add(Messages.INF_NORMALIZE_BASE_CLASS);
 			}
 
 			page.setMethodStubSelection(false, false,true, true);
