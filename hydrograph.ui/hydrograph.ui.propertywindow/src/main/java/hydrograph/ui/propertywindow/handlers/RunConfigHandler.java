@@ -21,7 +21,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 
 /**
@@ -36,7 +35,7 @@ public class RunConfigHandler extends AbstractHandler implements IHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		 
-		 RunConfigDialog runConfig = new RunConfigDialog(Display.getDefault().getActiveShell(), false);
+		 RunConfigDialog runConfig = new RunConfigDialog(Display.getDefault().getActiveShell());
 			try{
 				runConfig.open();
 			}catch(IllegalArgumentException e){

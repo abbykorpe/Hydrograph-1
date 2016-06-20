@@ -175,7 +175,6 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
-			((RunJobHandler) RunStopButtonCommunicator.RunDebugJob.getHandler()).setRunJobEnabled(false);
 			return;
 		}
 
@@ -196,8 +195,6 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		refreshProject(gefCanvas);
 		joblogger.logJobEndInfo();
 		joblogger.close();
-		((DebugHandler) RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(true);
-		
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
 			JobManager.INSTANCE.enableRunJob(true);
 		}
@@ -263,7 +260,6 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 				if (job.getRemoteJobProcessID() != null) {
 					if (JobStatus.KILLED.equals(job.getJobStatus())) {
 						((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
-						((RunJobHandler) RunStopButtonCommunicator.RunDebugJob.getHandler()).setRunJobEnabled(false);
 						JobManager.INSTANCE.killJob(job.getConsoleName(), gefCanvas);
 						joblogger.logMessage("Killing job with job remote process id: " + job.getRemoteJobProcessID());
 						break;

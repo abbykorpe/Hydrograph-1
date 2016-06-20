@@ -21,6 +21,7 @@ import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.utility.CanvasUtils;
+import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
 import java.util.Map;
 
@@ -30,6 +31,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -39,20 +41,8 @@ import org.eclipse.ui.PlatformUI;
  * @version 1.0
  * @since 2015-10-27
  */
-public class RunJobHandler extends AbstractHandler {
+public class RunJobHandler{
 
-	public RunJobHandler() {
-		RunStopButtonCommunicator.RunJob.setHandler(this);
-	}
-
-	/**
-	 * Enable disable run button
-	 * 
-	 * @param enable
-	 */
-	public void setRunJobEnabled(boolean enable) {
-		setBaseEnabled(enable);
-	}
 
 	private Job getJob(String localJobID, String consoleName, String canvasName) {
 		return new Job(localJobID, consoleName, canvasName, null, null, null, null);
@@ -80,8 +70,7 @@ public class RunJobHandler extends AbstractHandler {
 	 * org.eclipse.core.commands.AbstractHandler#execute(org.eclipse.core.commands
 	 * .ExecutionEvent)
 	 */
-	@Override
-	public Object execute(ExecutionEvent event) {
+	public Object execute(RunConfigDialog runConfigDialog) {
 		
 		closeOpenedDataViewerWindows();
 		
@@ -89,20 +78,16 @@ public class RunJobHandler extends AbstractHandler {
 		String consoleName = getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
 		String canvasName = consoleName;
 		String localJobID = consoleName;
-		
-		
+
 		if (validateGraphProperties()){
-			
 			if(isConfirmedByUser()){
-				
-				JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null);
+				JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null,runConfigDialog);
 			}
 				
 		}else{
 		
-			JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null);
+			JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null,runConfigDialog);
 		}
-		
 		CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();		
 		return null;
 	}

@@ -14,7 +14,6 @@
 package hydrograph.ui.propertywindow.runconfig;
 
 import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.utils.SWTResourceManager;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.io.ByteArrayInputStream;
@@ -38,13 +37,13 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -71,7 +70,6 @@ public class RunConfigDialog extends Dialog {
 	private Text textRunUtility;
 	private Text textDirectory;
 	private Text basepathText;
-	private Text txtPortNo;
  
 
 	private boolean runGraph;
@@ -80,7 +78,7 @@ public class RunConfigDialog extends Dialog {
 	private String edgeNodeText;
 	private String userId;
 	private String basePath;
-	private String port_no;
+	private boolean isDebug;
 
 	private Composite compositeServerDetails, compositePathConfig;
 	private Button btnLocalMode, btnRemoteMode, okButton;
@@ -97,13 +95,11 @@ public class RunConfigDialog extends Dialog {
 	private final String RUN_UTILITY = "runUtility";
 	private final String REMOTE_DIRECTORY = "remoteDirectory";
 	private final String Base_PATH = "basePath";
-	private final String PORT_NO = "remotePortNo";
 
 	private Composite container;
 	private String username;
 	private String host;
 	private boolean remoteMode=false;
-	private boolean isDebug;
 	
 	private static String LOCAL_HOST="localhost";
 	//private EmptyTextListener textPortNoListener;
@@ -112,12 +108,11 @@ public class RunConfigDialog extends Dialog {
 	 * 
 	 * @param parentShell
 	 */
-	public RunConfigDialog(Shell parentShell, boolean isDebug) {
+	public RunConfigDialog(Shell parentShell) {
 		super(parentShell);
 		this.runGraph = false;
 		buildProps = new Properties();
 		textBoxes = new HashMap<>();
-		this.isDebug = isDebug;
 
 	}
 
@@ -130,51 +125,54 @@ public class RunConfigDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 
 		container = (Composite) super.createDialogArea(parent);
-		container.setLayout(new GridLayout(2, false));
-
-		container.getShell().setText("Run Configuration Settings");
-
-		new Label(container, SWT.NONE);
-
+		container.setLayout(new GridLayout(1, false));
+		
 		Composite compositeRunMode = new Composite(container, SWT.BORDER);
-		GridData gd_compositeRunMode = new GridData(SWT.LEFT, SWT.CENTER,
-				false, false, 1, 1);
-		gd_compositeRunMode.heightHint = 100;
-		gd_compositeRunMode.widthHint = 351;
-		compositeRunMode.setLayoutData(gd_compositeRunMode);
-		formToolkit.adapt(compositeRunMode);
-		formToolkit.paintBordersFor(compositeRunMode);
+		compositeRunMode.setBackground(new Color(null,255,255,255));
+		compositeRunMode.setLayout(null);
+		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_composite.heightHint = 77;
+		gd_composite.widthHint = 346;
+		compositeRunMode.setLayoutData(gd_composite);
 
 		Label lblRunMode = new Label(compositeRunMode, SWT.NONE);
-		lblRunMode.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
-		lblRunMode.setBounds(22, 21, 76, 15);
+		lblRunMode.setFont(new Font(null,"Segoe UI", 9, SWT.BOLD));
+		lblRunMode.setBounds(20, 0, 62, 15);
 		formToolkit.adapt(lblRunMode, true, true);
 		lblRunMode.setText("Run Mode");
-		new Label(container, SWT.NONE);
 
 		btnLocalMode = new Button(compositeRunMode, SWT.RADIO);
-		btnLocalMode.setBounds(109, 21, 94, 16);
-		formToolkit.adapt(btnLocalMode, true, true);
+		btnLocalMode.setBounds(20, 21, 90, 16);
 		btnLocalMode.setText("Local");
-		new Label(container, SWT.NONE);
+		formToolkit.adapt(btnLocalMode, true, true);
+
 		btnLocalMode.setSelection(true);
 		btnLocalMode.addSelectionListener(selectionListener);
 
-		btnRemoteMode = new Button(compositeRunMode, SWT.RADIO );
-		btnRemoteMode.setBounds(109, 43, 76, 16);
-		formToolkit.adapt(btnRemoteMode, true, true);
+		btnRemoteMode = new Button(compositeRunMode, SWT.RADIO);
+		btnRemoteMode.setBounds(20, 49, 90, 16);
 		btnRemoteMode.setText("Remote");
-		new Label(container, SWT.NONE);
+		formToolkit.adapt(btnRemoteMode, true, true);
      	btnRemoteMode.addSelectionListener(selectionListener);
-     	
-     	Label lblBasePath = new Label(compositeRunMode, SWT.NONE);
-     	lblBasePath.setBounds(22, 70, 70, 15);
-		formToolkit.adapt(lblBasePath, true, true);
-		lblBasePath.setText("Base Path");
+    	
+     	Label lblDebug = new Label(compositeRunMode, SWT.NONE);
+     	lblDebug.setBounds(143, 22, 43, 16);
+		formToolkit.adapt(lblDebug, true, true);
+		lblDebug.setText("isDebug");
 		
-     	basepathText = new Text(compositeRunMode, SWT.BORDER);
-     	basepathText.setBounds(109, 70, 206, 21);
-     	 
+		final Button isDebugCheck = new Button(compositeRunMode, SWT.CHECK);
+		isDebugCheck.setBounds(192, 21, 93, 16);
+		formToolkit.adapt(isDebugCheck, true, true);
+
+		final Label lblBasePath = new Label(compositeRunMode, SWT.NONE);
+		lblBasePath.setBounds(129, 49, 55, 15);
+		lblBasePath.setText("Base Path");
+		lblBasePath.setVisible(false);
+		formToolkit.adapt(lblBasePath, true, true);
+		
+		basepathText = new Text(compositeRunMode, SWT.BORDER);
+		basepathText.setBounds(191, 44, 141, 21);
+ 		basepathText.setVisible(false);
      	basepathText.addModifyListener(new ModifyListener() {
      		ControlDecoration txtDecorator = null;
      		
@@ -200,67 +198,67 @@ public class RunConfigDialog extends Dialog {
 			}
 		});
 	 
-     	EmptyTextListener textEdgeNodeListener1 = new EmptyTextListener("Base Path");
+     	final EmptyTextListener textEdgeNodeListener1 = new EmptyTextListener("Base Path");
      	basepathText.addModifyListener(textEdgeNodeListener1);
      	
-     	if(!isDebug){
-     		basepathText.removeModifyListener(textEdgeNodeListener1);
-     		lblBasePath.setVisible(false);
-     		basepathText.setVisible(false);
-     	}else{
-     		lblBasePath.setVisible(true);
-     		basepathText.setVisible(true);
-     	}
+     	isDebugCheck.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(!isDebugCheck.getSelection()){
+		     		basepathText.removeModifyListener(textEdgeNodeListener1);
+		     		lblBasePath.setVisible(false);
+		     		basepathText.setVisible(false);
+		     		isDebug=false;
+		     	}else{
+		     		
+		     		lblBasePath.setVisible(true);
+		     		basepathText.setVisible(true);
+		     		isDebug=true;
+		     	}
+			}
+		});
      	 
 		formToolkit.adapt(basepathText, true, true);
 		textBoxes.put("basePath", basepathText);
 
 		compositeServerDetails = new Composite(container, SWT.BORDER);
-		GridData gd_compositeServerDetails = new GridData(SWT.LEFT, SWT.CENTER,
-				false, false, 1, 1);
-		gd_compositeServerDetails.widthHint = 350;
-		gd_compositeServerDetails.heightHint = 162;
-		compositeServerDetails.setLayoutData(gd_compositeServerDetails);
-		formToolkit.adapt(compositeServerDetails);
-		formToolkit.paintBordersFor(compositeServerDetails);
-
+		compositeServerDetails.setBackground(new Color(null,255,255,255));
+		GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_composite_1.widthHint = 345;
+		gd_composite_1.heightHint = 110; 
+		compositeServerDetails.setLayoutData(gd_composite_1);
+		
 		Label lblServerDetails = new Label(compositeServerDetails, SWT.NONE);
-
-		FontDescriptor boldDescriptor = FontDescriptor.createFrom(
-				lblServerDetails.getFont()).setStyle(SWT.BOLD);
-		Font boldFont = boldDescriptor
-				.createFont(lblServerDetails.getDisplay());
-		lblServerDetails.setFont(boldFont);
-
-		lblServerDetails.setFont(boldFont);
-		lblServerDetails.setBounds(24, 10, 84, 15);
+		lblServerDetails.setFont(new Font(null,"Segoe UI", 9, SWT.BOLD));
+		lblServerDetails.setBounds(25, 0, 86, 15);
 		formToolkit.adapt(lblServerDetails, true, true);
 		lblServerDetails.setText("Server Details");
+		
 
 		Label lblEdgeNode = new Label(compositeServerDetails, SWT.NONE);
-		lblEdgeNode.setBounds(24, 37, 70, 15);
+		lblEdgeNode.setBounds(25, 24, 55, 15);
 		formToolkit.adapt(lblEdgeNode, true, true);
 		lblEdgeNode.setText("Edge Node");
 
 		Label lblUser = new Label(compositeServerDetails, SWT.NONE);
-		lblUser.setBounds(24, 79, 55, 15);
+		lblUser.setBounds(25, 54, 55, 15);
 		formToolkit.adapt(lblUser, true, true);
 		lblUser.setText("User");
 
 		Label lblPassword = new Label(compositeServerDetails, SWT.NONE);
-		lblPassword.setBounds(24, 116, 57, 21);
+		lblPassword.setBounds(25, 81, 55, 15);
 		formToolkit.adapt(lblPassword, true, true);
 		lblPassword.setText("Password");
 
 		textEdgeNode = new Text(compositeServerDetails, SWT.BORDER);
-		textEdgeNode.setBounds(110, 31, 206, 21);
+		textEdgeNode.setBounds(115, 21, 220, 21);
 		EmptyTextListener textEdgeNodeListener = new EmptyTextListener("Edge Node");
 		textEdgeNode.addModifyListener(textEdgeNodeListener);
 		formToolkit.adapt(textEdgeNode, true, true);
 		textBoxes.put("host", textEdgeNode);
 
 		textUser = new Text(compositeServerDetails, SWT.BORDER);
-		textUser.setBounds(110, 73, 206, 21);
+		textUser.setBounds(115, 48, 220, 21);
 		EmptyTextListener textUserListener = new EmptyTextListener("Host");
 		textUser.addModifyListener(textUserListener);
 		formToolkit.adapt(textUser, true, true);
@@ -268,7 +266,7 @@ public class RunConfigDialog extends Dialog {
 
 		textPassword = new Text(compositeServerDetails, SWT.PASSWORD
 				| SWT.BORDER);
-		textPassword.setBounds(110, 116, 206, 21);
+		textPassword.setBounds(115, 75, 220, 21);
 		EmptyTextListener textPasswordListener = new EmptyTextListener("Password");
 		textPassword.addModifyListener(textPasswordListener);
 		formToolkit.adapt(textPassword, true, true);
@@ -276,66 +274,39 @@ public class RunConfigDialog extends Dialog {
 
 		compositeServerDetails.setVisible(false);
 
-		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
-
 		compositePathConfig = new Composite(container, SWT.BORDER);
-		GridData gd_compositePathConfig = new GridData(SWT.CENTER, SWT.BOTTOM,
-				false, false, 1, 1);
-		gd_compositePathConfig.heightHint = 400;
-		gd_compositePathConfig.widthHint = 349;
-		compositePathConfig.setLayoutData(gd_compositePathConfig);
-		formToolkit.adapt(compositePathConfig);
-		formToolkit.paintBordersFor(compositePathConfig);
+		compositePathConfig.setBackground(new Color(null,255,255,255)); 
+		GridData gd_composite_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_composite_2.heightHint = 88;
+		gd_composite_2.widthHint = 344;
+		compositePathConfig.setLayoutData(gd_composite_2);
+
+		Label lblPathConfiguration = new Label(compositePathConfig, SWT.NONE);
+		lblPathConfiguration.setFont(new Font(null,"Segoe UI", 9, SWT.BOLD));
+		formToolkit.adapt(lblPathConfiguration, true, true);
+		lblPathConfiguration.setBounds(27, 0, 160, 15);
+		lblPathConfiguration.setText("Remote Path Configuration");
 
 		Label lblRunUtility = new Label(compositePathConfig, SWT.NONE);
 		lblRunUtility.setText("Run Utility");
-		lblRunUtility.setBounds(24, 60, 70, 15);
+		lblRunUtility.setBounds(27, 29, 62, 15);
 		formToolkit.adapt(lblRunUtility, true, true);
 
 		textRunUtility = new Text(compositePathConfig, SWT.BORDER);
-		textRunUtility.setBounds(110, 54, 206, 21);
+		textRunUtility.setBounds(117, 26, 217, 21);
 		formToolkit.adapt(textRunUtility, true, true);
 		textBoxes.put("runUtility", textRunUtility);
 
 		Label lblJobXml = new Label(compositePathConfig, SWT.NONE);
 		lblJobXml.setText("Project Path");
-		lblJobXml.setBounds(24, 98, 70, 15);
+		lblJobXml.setBounds(27, 59, 70, 15);
 		formToolkit.adapt(lblJobXml, true, true);
 
 		textDirectory = new Text(compositePathConfig, SWT.BORDER);
-		textDirectory.setBounds(110, 92, 206, 21);
+		textDirectory.setBounds(117, 53, 217, 21);
 		formToolkit.adapt(textDirectory, true, true);
 		textBoxes.put("remoteDirectory", textDirectory);
-
-		Label lblPathConfiguration = new Label(compositePathConfig, SWT.NONE);
-		lblPathConfiguration.setText("Remote Path Configuration");
-		lblPathConfiguration.setFont(SWTResourceManager.getFont("Segoe UI", 9,
-				SWT.BOLD));
-		lblPathConfiguration.setBounds(24, 22, 113, 15);
-		formToolkit.adapt(lblPathConfiguration, true, true);
-		
-		Label lblPortNo = new Label(compositePathConfig, SWT.NONE);
-		lblPortNo.setText("Port No");
-		lblPortNo.setBounds(24, 138, 70, 15);
-		formToolkit.adapt(lblPortNo, true, true);
-		
-		txtPortNo = new Text(compositePathConfig, SWT.BORDER);
-		txtPortNo.setBounds(110, 132, 206, 21);
-		formToolkit.adapt(txtPortNo, true, true);
-		textBoxes.put("remotePortNo", txtPortNo);
-		
-		if(!isDebug){
-     		lblPortNo.setVisible(false);
-     		txtPortNo.setVisible(false);
-     	}else{
-     		lblPortNo.setVisible(true);
-     		txtPortNo.setVisible(true);
-     	}
-
 		compositePathConfig.setVisible(false);
-	 
 
 		loadbuildProperties();
 
@@ -414,10 +385,10 @@ public class RunConfigDialog extends Dialog {
 	public String getBasePath(){
 		return this.basePath;
 	}
+	
 	 
-	public String getPortNo(){
-		return this.port_no;
-	}
+
+
 	/**
 	 * Create contents of the button bar.
 	 * 
@@ -448,7 +419,6 @@ public class RunConfigDialog extends Dialog {
 			buildProps.put(RUN_UTILITY, textRunUtility.getText());
 			buildProps.put(REMOTE_DIRECTORY, textDirectory.getText());
 			buildProps.put(Base_PATH, basepathText.getText()); 
-			buildProps.put(PORT_NO, txtPortNo.getText());
 
 			buildProps.store(out, null);
 
@@ -470,7 +440,6 @@ public class RunConfigDialog extends Dialog {
 		this.username = textUser.getText();
 		this.host = textEdgeNode.getText();
 		this.basePath = basepathText.getText();
-		this.port_no = txtPortNo.getText();
 		
 		try {
 			checkBuildProperties(btnRemoteMode.getSelection());
@@ -494,9 +463,9 @@ public class RunConfigDialog extends Dialog {
 	@Override
 	protected Point getInitialSize() {
 		if(btnRemoteMode.getSelection()){
-			return new Point(380, 580); 
+			return new Point(365, 394);
 		}else{
-			return new Point(380, 190);
+			return new Point(365, 181);
 		}
 		
 	}
@@ -520,7 +489,7 @@ public class RunConfigDialog extends Dialog {
 			if (StringUtils.isEmpty(textPassword.getText()))
 				note.addError("Password not specified");
 		}
-		if (isDebug && StringUtils.isEmpty(basepathText.getText()))
+		if ( isDebug && StringUtils.isEmpty(basepathText.getText()))
 			note.addError("Base Path not specified");
 		
 		IPath path = new Path(basepathText.getText());
@@ -547,12 +516,12 @@ public class RunConfigDialog extends Dialog {
 			Button button = ((Button) event.widget);
 
 			if (button.getText().equals("Local")) {
-				container.getShell().setSize(380, 190);
+				container.getShell().setSize(365, 181);
 				compositeServerDetails.setVisible(false);
 				compositePathConfig.setVisible(false);
 
 			} else if (button.getText().equals("Remote")) {
-				container.getShell().setSize(380,580);
+				container.getShell().setSize(365, 394);
 				compositeServerDetails.setVisible(true);
 				compositePathConfig.setVisible(true);
 			}
@@ -576,4 +545,9 @@ public class RunConfigDialog extends Dialog {
 	public boolean isRemoteMode() {
 		return remoteMode;
 	}
+
+	public boolean isDebug() {
+		return isDebug;
+	}
+
 }

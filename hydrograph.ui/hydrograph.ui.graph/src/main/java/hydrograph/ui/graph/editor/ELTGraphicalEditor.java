@@ -46,6 +46,7 @@ import hydrograph.ui.graph.editorfactory.GenrateContainerData;
 import hydrograph.ui.graph.factory.ComponentsEditPartFactory;
 import hydrograph.ui.graph.factory.CustomPaletteEditPartFactory;
 import hydrograph.ui.graph.handler.DebugHandler;
+import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.RemoveDebugHandler;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
@@ -83,7 +84,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
 
 import org.apache.commons.httpclient.HttpException;
@@ -383,9 +383,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 	private void enableRunJob(boolean enabled){
-		((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
+		((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
 		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
-		((DebugHandler)RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(enabled);
 		((RemoveDebugHandler) RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(enabled);
 	}
 
@@ -444,9 +443,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						if(job.isRemoteMode()){
 							enableRunJob(false);
 						}else{
-                            ((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
+                            ((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
                             ((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
-                            ((DebugHandler)RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(false);
                            	((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
 							}
 						}
