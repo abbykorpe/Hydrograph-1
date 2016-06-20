@@ -24,8 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
@@ -301,6 +299,7 @@ public class RuntimePropertyDialog extends Dialog {
             @Override
 			public void mouseUp(MouseEvent e) {
 				table.getParent().setFocus();
+				tableViewer.getControl().getShell().setFocus();
 				addNewProperty(tableViewer);
 				if (propertyList.size() >= 1) {
 					deleteButton.setEnabled(true);
@@ -524,10 +523,10 @@ public class RuntimePropertyDialog extends Dialog {
 	private boolean validate() {
 		int propertyCounter = 0;
 		for (RuntimeProperties runtimeProperties : propertyList) {
-			if (runtimeProperties.getPropertyName().trim().isEmpty() || runtimeProperties.getPropertyValue().trim().isEmpty()) {
+			if (runtimeProperties.getPropertyName().trim().isEmpty()) {
 				table.setSelection(propertyCounter);
 				lblPropertyError.setVisible(true);
-				lblPropertyError.setText(Messages.EmptyFiledNotification);
+				lblPropertyError.setText(Messages.EmptyNameNotification);
 				return false;
 			}
 			propertyCounter++;
@@ -605,4 +604,10 @@ public class RuntimePropertyDialog extends Dialog {
 	public boolean isOkPressedAfterUpdate(){
 		return this.okPressedAfterUpdate;
 	}
+	
+	public boolean isOkPressed(){
+		
+		return this.okPressed;
+	}
+	
 }

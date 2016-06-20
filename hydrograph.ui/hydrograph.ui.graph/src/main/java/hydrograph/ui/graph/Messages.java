@@ -11,14 +11,13 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package hydrograph.ui.graph;
 
 import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "resources.messages"; //$NON-NLS-1$
-	
+
 	public static String GRADLE_RUN;
 	public static String XMLPATH;
 	public static String PARAM_FILE;
@@ -33,24 +32,24 @@ public class Messages extends NLS {
 	public static String HOST;
 	public static String USERNAME;
 	public static String PROCESS_ID;
-	
+
 	public static String JOB_EXT;
 	public static String PROPERTIES_EXT;
 	public static String XML_EXT;
-	 
+
 	public static String OPEN_GRAPH_TO_RUN;
 	public static String KILL_JOB_MESSAGEBOX_TITLE;
 	public static String KILL_JOB_MESSAGE;
 
 	public static String GRADLE_TASK_FAILED;
 	public static String CURRENT_JOB_ID;
-	
+
 	public static String MESSAGES_BEFORE_CLOSE_WINDOW;
 	public static String JOB_ID;
 	public static String BASE_PATH;
 	public static String DEBUG_ALERT_MESSAGE;
 	public static String NO_RECORD_FETCHED;
-	
+
 	public static String REMOTE_MODE_TEXT;
 	public static String DEBUG_WIZARD_TEXT;
 	public static String DEBUG_DEFAULT;
@@ -74,14 +73,17 @@ public class Messages extends NLS {
 	public static String FILE_END_MESSAGE;
 	public static String NEW_JOB;
 	public static String OPEN_PROJECT_ERROR_MESSAGE;
-	
+
 	public static String UNABLE_TO_CREATE_WATCH_RECORD;
 	public static String FORGOT_TO_EXECUTE_DEBUG_JOB;
 	public static String UNABLE_TO_FETCH_DEBUG_FILE;
 	public static String EMPTY_DEBUG_FILE;
 	public static String UNABLE_TO_OPEN_DATA_VIEWER;
 	public static String UNABLE_TO_READ_DEBUG_FILE;
-	
+
+	public static String CONFIRM_FOR_GRAPH_PROPS_RUN_JOB;
+	public static String CONFIRM_FOR_GRAPH_PROPS_RUN_JOB_TITLE;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -281,6 +281,15 @@
 		          </appinfo>
         	</annotation>
 		</enumeration>
+		<enumeration value="RUNTIME_PROPERTY_VALIDATOR">
+			 <annotation>
+		          <appinfo> 
+		            <jaxb:typesafeEnumMember name="RuntimePropertyValueValidationRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
+		
+		
 	</restriction>
 	</simpleType>
 </schema>
