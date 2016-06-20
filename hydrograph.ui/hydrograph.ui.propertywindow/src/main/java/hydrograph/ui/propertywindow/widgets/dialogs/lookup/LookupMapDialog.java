@@ -46,6 +46,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -71,6 +72,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 
 /**
  * 
@@ -150,11 +153,13 @@ public class LookupMapDialog extends Dialog {
 		container.setLayout(new GridLayout(1, false));
 		container.getShell().setText(DIALOG_TITLE);
 		
-		Composite composite = createOuterMostComposite(container);
+		SashForm composite = new SashForm(container, SWT.SMOOTH);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		createInputFieldSection(composite);
 
 		creatFieldMappingSection(composite);
+		composite.setWeights(new int[] {267, 618});
 
 		populateLookupMapDialog();
 		return container;
@@ -613,7 +618,14 @@ public class LookupMapDialog extends Dialog {
 		inputScrolledComposite.setExpandHorizontal(true);
 		inputScrolledComposite.setExpandVertical(true);
 
-		Composite inputComposite2 = new Composite(inputScrolledComposite, SWT.NONE);
+		final SashForm inputComposite2 = new SashForm(inputScrolledComposite, SWT.VERTICAL);
+		inputComposite2.addControlListener(new ControlAdapter() {
+			@Override
+			public void controlResized(ControlEvent e) {
+				in0Table.getColumn(0).setWidth(inputComposite2.getSize().x-5);
+				in1Table.getColumn(0).setWidth(inputComposite2.getSize().x-5);
+			}
+		});
 		inputComposite2.setLayout(new GridLayout(1, false));
 		
 		addIn0InputFields(inputComposite2);
@@ -658,7 +670,7 @@ public class LookupMapDialog extends Dialog {
 		TableViewerColumn in0TableViewerColumn = new TableViewerColumn(
 				in0TableViewer, SWT.NONE);
 		TableColumn in0TblclmnInputFields = in0TableViewerColumn.getColumn();
-		in0TblclmnInputFields.setWidth(225);
+		in0TblclmnInputFields.setWidth(230);
 		in0TblclmnInputFields.setText(IN0_HEADER);
 
 		in0TableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
