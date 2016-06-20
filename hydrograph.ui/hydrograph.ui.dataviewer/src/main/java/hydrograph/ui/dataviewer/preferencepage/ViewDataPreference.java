@@ -292,12 +292,22 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		defaultPathFieldEditor.load();
 		
 		Group grpServiceDetails = new Group(composite, SWT.NONE);
-		GridData gd_grpServiceDetails = new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1);
-		gd_grpServiceDetails.widthHint = 587;
-		grpServiceDetails.setLayoutData(gd_grpServiceDetails);
+		GridLayout gl_grpServiceDetails = new GridLayout(1, true);
+		GridData gd_grpServiceDetailsData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
+		gd_grpServiceDetailsData.widthHint = 584;
+		gd_grpServiceDetailsData.heightHint = 34;
+		grpServiceDetails.setLayoutData(gd_grpServiceDetailsData);
+		grpServiceDetails.setLayout(gl_grpServiceDetails);
 		grpServiceDetails.setText("Service Details");
 		
-		portNo = new IntegerFieldEditor(PreferenceConstants.PORT_NO, " Port No        ", grpServiceDetails, 4);
+		Composite grpServiceDetailsCmposite = new Composite(grpServiceDetails, SWT.None);
+		grpServiceDetailsCmposite.setBounds(0, 0, 280, 16);
+		GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_composite_1.heightHint = 26;
+		gd_composite_1.widthHint = 477;
+		grpServiceDetailsCmposite.setLayoutData(gd_composite_1);
+
+		portNo = new IntegerFieldEditor(PreferenceConstants.PORT_NO, "Port No                   ", grpServiceDetailsCmposite,4);
 		portNo.setPropertyChangeListener(new IPropertyChangeListener() {
 			
 			@Override
@@ -309,8 +319,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		});
 		portNo.setPreferenceStore(getPreferenceStore());
 		portNo.load();
-		
-		
+		 
 		booleanFieldEditor = new BooleanFieldEditor(PreferenceConstants.INCLUDE_HEADER, " Include Headers  ", SWT.DEFAULT, composite);
 		getPreferenceStore().setDefault(PreferenceConstants.INCLUDE_HEADER, true);
 		booleanFieldEditor.setPreferenceStore(getPreferenceStore());
