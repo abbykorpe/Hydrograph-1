@@ -74,6 +74,8 @@ public class Constants {
 	public static final String TRANSFORM = "TRANSFORM";
 	public static final String AGGREGATE = "AGGREGATE";
 	public static final String CUMULATE = "CUMULATE";
+	public static final String LOOKUP = "LOOKUP";
+	public static final String JOIN = "JOIN";
 	public static final String AGGREGATE_DISPLAYNAME = "Aggregate";
 	public static final String TRANSFORM_DISPLAYNAME = "Transform";
 	public static final String CUMULATE_DISPLAYNAME = "Cumulate";

@@ -190,7 +190,7 @@ public class FixedWidthGridCellModifier implements ICellModifier{
 					||DataType.SHORT_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.FLOAT_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
- 					||DataType.DOUBLE_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
+					||DataType.DOUBLE_CLASS.equals(fixedWidthGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(fixedWidthGridRow.getDataTypeValue())){
 				return true;
 			}	

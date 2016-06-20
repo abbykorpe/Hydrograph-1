@@ -28,7 +28,6 @@ import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -302,7 +301,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		List<String> oprationFieldList = getOperationFieldList();
 
 		if (schemaGridRowList != null ) {
-			if(!SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName())){
+			if(!SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName())){
 			Schema schemaForInternalPropagation = getSchemaForInternalPropagation();
 			if(schemaForInternalPropagation!=null){
 
@@ -327,13 +326,15 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			
 		}
 		
-		if (!propertyDialog.isCancelPressed() && SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()) && !isSchemaInSync()){
-				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
-				int dialogResult =dialog.open();
-				if(dialogResult == 0){
-					syncTransformWithSchema();
-				}
+		if (!propertyDialog.isCancelPressed() && SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName()) &&
+				!isSchemaInSync()){
+			MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
+			int dialogResult =dialog.open();
+
+			if(dialogResult == 0){
+				syncSchema();
 			}
+		}
 		
 		if (!schemaGridRowList.isEmpty()) {
 			for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
@@ -361,8 +362,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		property.put(Constants.SCHEMA_TO_PROPAGATE,schemaMap);
 
 		property.put(propertyName, schema);
-		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), schemaMap);//
-
+		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), schemaMap);
 		return property;
 	}
 	
@@ -568,11 +568,12 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		if(transformSchemaType){
 			createSchemaGridSection(container.getContainerControl(),tableHeight, tableWidth);
-			if(SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName()))
-				createPullSchemaFromTransform(container.getContainerControl());
+			if(SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName())){
+				createPullInternallyPropagatedSchema(container.getContainerControl());
+			}
 		}
 		else{
-			
+
 			createSchemaTypesSection(container.getContainerControl());
 			if (StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT))
 				createPullPropagtedSchemaButton(container.getContainerControl());
@@ -580,19 +581,19 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			createExternalSchemaSection(container.getContainerControl());
 		}
 		tableComposite.getShell().addControlListener(new ControlListener() {
-			
+
 			@Override
 			public void controlResized(ControlEvent e) {
 				Shell shell = (Shell) e.getSource();
 				Rectangle schemaTable = shell.getClientArea();
 				compositeOfOutsideTable.heightHint = tableHeight + (schemaTable.height - 640);
 			}
-			
+
 			@Override
 			public void controlMoved(ControlEvent e) {
 			}
 		});
-	
+
 		populateSchemaTypeWidget();
 	}
 
@@ -732,11 +733,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	}
 
 	// Adds the browse button
-	private void createPullSchemaFromTransform(Composite containerControl) {
+	private void createPullInternallyPropagatedSchema(Composite containerControl) {
 		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(containerControl);
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(2);
-		ELTDefaultButton btnPull = new ELTDefaultButton(Messages.PULL_FROM_TRANSFORM);
+		ELTDefaultButton btnPull = new ELTDefaultButton(Messages.PULL_SCHEMA);
 		btnPull.buttonWidth(150);
 		eltSuDefaultSubgroupComposite.attachWidget(btnPull);
 		((Button)btnPull.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
@@ -746,7 +747,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Constants.SYNC_CONFIRM_MESSAGE, MessageDialog.QUESTION, new String[] {"OK", "Cancel" }, 0);
 				int dialogResult =dialog.open();
 				if(dialogResult == 0){
-					syncSchemaFromTransform();
+					syncInternallyPropagatedSchema();
 					showHideErrorSymbol(applySchemaValidationRule());
 					enableDisableButtons(schemaGridRowList.size());
 					propertyDialogButtonBar.enableApplyButton(true);
@@ -1395,19 +1396,23 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 */
 	@Override
 	public void refresh() {
-
+		
 		Schema schema = getSchemaForInternalPropagation();
+
+
 		Schema originalSchema = (Schema) getComponent().getProperties().get("schema");
 		if (originalSchema != null && !originalSchema.getGridRow().isEmpty()) {
 			
 			List<GridRow> existingFields = new ArrayList<>(originalSchema.getGridRow());
 			List<String> operationFieldList = getOperationFieldList();
+
 			for (GridRow row : schema.getGridRow()) {
+
 				if (existingFields.contains(row)) {
 					if (!operationFieldList.contains(row.getFieldName())) {
 						originalSchema.getGridRow().set(existingFields.indexOf(row), row.copy());
 					}
-				} else if (!SchemaSyncUtility.isSchemaSyncAllow(getComponent().getComponentName())) {
+				} else if (!SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName())) {
 					originalSchema.getGridRow().add(row.copy());
 				}
 			}
@@ -1420,7 +1425,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				eLTDetails.setGrids(schemaGridRowList);
 				tableViewer.setInput(schemaGridRowList);
 				tableViewer.refresh();
-				toggleSchema(true);
+				toggleSchema(true); 
 			}
 			if (!originalSchema.getIsExternal()) {
 				external = false;
@@ -1428,7 +1433,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			}
 
 		} else {
-			if(!SchemaSyncUtility.isSchemaSyncAllow( getComponent().getComponentName()))
+			if(!SchemaSyncUtility.INSTANCE.isSchemaSyncAllow( getComponent().getComponentName()))
 			{			
 			if (schema.getGridRow().size() != 0) {
 				table.clearAll();
@@ -1480,25 +1485,20 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		return schemaGridRowList.size();
 	}
 
-private void syncSchemaFromTransform(){
+private void syncInternallyPropagatedSchema(){
 	Schema schema =getSchemaForInternalPropagation();
 	schemaGridRowList=new ArrayList<>(schema.getGridRow());
 	ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
 	eLTDetails.setGrids(schemaGridRowList);
 	tableViewer.setInput(schemaGridRowList);
 	tableViewer.refresh();
-
 }
 
-private void syncTransformWithSchema(){
-	
+private void syncSchema(){
 	Schema schema = getSchemaForInternalPropagation();
-	if(StringUtils.endsWithIgnoreCase(SCHEMA_TAB,propertyDialog.getSelectedTab())){
-		TransformMapping transformMapping= (TransformMapping) getComponent().getProperties().get(OPERATION);
-		List<FilterProperties> filterProperties = convertSchemaToFilterProperty();
-		SchemaSyncUtility.removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
-		List<NameValueProperty> outputFileds =getComponentSchemaAsProperty();
-		SchemaSyncUtility.filterCommonMapFields(outputFileds, transformMapping);
+	
+	if(StringUtils.endsWithIgnoreCase(SCHEMA_TAB, propertyDialog.getSelectedTab())){
+		SchemaSyncUtility.INSTANCE.pushSchemaToMapping(getComponent(), schemaGridRowList);
 		schema.setGridRow(new ArrayList<>(schemaGridRowList));
 	}
 	else{
@@ -1506,10 +1506,10 @@ private void syncTransformWithSchema(){
 		ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
 		eLTDetails.setGrids(schemaGridRowList); 
 		tableViewer.setInput(schemaGridRowList);
-		tableViewer.refresh(); 
-		
-	}
+		tableViewer.refresh();
+	} 
 }
+
 
 
 private boolean isSchemaInSync(){
@@ -1620,6 +1620,7 @@ public List<FilterProperties> convertSchemaToFilterProperty(){
 		}
 	return outputFileds;
 }
+
 
 public Table getTable() {
 	return table;

@@ -1063,7 +1063,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		}
 		temporaryOutputFieldMap.put(OUTPUT_FIELD,transformMapping.getOutputFieldList());
 
-		SchemaSyncUtility.unionFilter(convertNameValueToFilterProperties(transformMapping.getMapAndPassthroughField()),
+		SchemaSyncUtility.INSTANCE.unionFilter(convertNameValueToFilterProperties(transformMapping.getMapAndPassthroughField()),
 				validatorOutputFields);
 		for (MappingSheetRow mappingSheetRow1 : transformMapping.getMappingSheetRows()) {
 			List<FilterProperties> operationOutputFieldList=mappingSheetRow1.getOutputList();
@@ -1074,10 +1074,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
                 	  nonParameterOutputFieldList.add(filterProperties);
                  
             } 
-            SchemaSyncUtility.unionFilter(nonParameterOutputFieldList,validatorOutputFields);
+            SchemaSyncUtility.INSTANCE.unionFilter(nonParameterOutputFieldList,validatorOutputFields);
 
 		}
-		SchemaSyncUtility.unionFilter(transformMapping.getOutputFieldList(), validatorOutputFields);
+		SchemaSyncUtility.INSTANCE.unionFilter(transformMapping.getOutputFieldList(), validatorOutputFields);
 		
 		outputFieldViewer.setInput(validatorOutputFields);
 		outputFieldViewer.refresh();
@@ -1453,9 +1453,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	 */
 	private void syncTransformFieldsWithSchema() {
 		List<FilterProperties> filterProperties = convertSchemaToFilterProperty();
-		SchemaSyncUtility.removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
+		SchemaSyncUtility.INSTANCE.removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
 		List<NameValueProperty> outputFileds= getComponentSchemaAsProperty();
-		SchemaSyncUtility.filterCommonMapFields(outputFileds, transformMapping);
+		SchemaSyncUtility.INSTANCE.filterCommonMapFields(outputFileds, transformMapping);
 		refreshOutputTable();
 		for(ExpandItem item:expandBar.getItems())
 		{

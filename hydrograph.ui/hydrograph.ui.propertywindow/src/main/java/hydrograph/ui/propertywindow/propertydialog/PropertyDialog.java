@@ -297,7 +297,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	
 	 protected Point getDefaultSize()
 	  {
-	    return getShell().computeSize(450, 560, true);
+	    return getShell().computeSize(450, 620, true);
 	  }
 	
 	@Override
