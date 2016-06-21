@@ -60,20 +60,24 @@ public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 		uiComponent.setComponentLabel(fileDelimited.getId());
 		propertyMap.put(PropertyNameConstants.HAS_HEADER.value(),
 				convertBooleanValue(fileDelimited.getHasHeader(), PropertyNameConstants.HAS_HEADER.value()));
-		if (fileDelimited.getPath() != null)
+		if (fileDelimited.getPath() != null){
 			propertyMap.put(PropertyNameConstants.PATH.value(), fileDelimited.getPath().getUri());
+		}
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
 				convertBooleanValue(fileDelimited.getStrict(), PropertyNameConstants.STRICT.value()));
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
 				convertBooleanValue(fileDelimited.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
 		
-		if (StringUtils.isNotEmpty(getValue(PropertyNameConstants.DELIMITER.value())))
+		if (StringUtils.isNotEmpty(getValue(PropertyNameConstants.DELIMITER.value()))){
 			propertyMap.put(PropertyNameConstants.DELIMITER.value(), getValue(PropertyNameConstants.DELIMITER.value()));
-		else if (fileDelimited.getDelimiter() != null && StringUtils.isNotEmpty(fileDelimited.getDelimiter().getValue()))
+		}
+		else if (fileDelimited.getDelimiter() != null && StringUtils.isNotEmpty(fileDelimited.getDelimiter().getValue())){
 				propertyMap.put(PropertyNameConstants.DELIMITER.value(), fileDelimited.getDelimiter().getValue());
-		if(fileDelimited.getQuote()!=null)
+		}
+		if(fileDelimited.getQuote()!=null){
 			 propertyMap.put(PropertyNameConstants.QUOTE.value(), fileDelimited.getQuote().getValue());
+		}
 		propertyMap.put(PropertyNameConstants.OVER_WRITE.value(),
 				convertToTrueFalseValue(fileDelimited.getOverWrite(), PropertyNameConstants.OVER_WRITE.value()));
 		

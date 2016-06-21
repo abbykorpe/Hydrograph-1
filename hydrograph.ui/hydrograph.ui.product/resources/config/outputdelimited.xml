@@ -43,7 +43,7 @@
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="delimiter"
 			value="|" renderer="DELIMETER_WIDGET" type="USER" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Specifies Delimiter present in the input file.">
+			usage="REQUIRED" propertyHelpText="Specify Delimiter present in the input file.">
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 	
