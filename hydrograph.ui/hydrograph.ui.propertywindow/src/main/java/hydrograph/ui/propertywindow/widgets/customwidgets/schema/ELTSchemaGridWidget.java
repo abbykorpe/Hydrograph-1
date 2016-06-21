@@ -328,7 +328,12 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		
 		if (!propertyDialog.isCancelPressed() && SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName()) &&
 				!isSchemaInSync()){
-			MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
+			MessageDialog dialog = null;
+			if(StringUtils.endsWithIgnoreCase(SCHEMA_TAB, propertyDialog.getSelectedTab())){
+				dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE_MOVE_CHANGES_TO_MAPPING, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
+			}else{
+				dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE_MOVE_CHANGES_TO_SCHEMA, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.LATER }, 0);
+			}
 			int dialogResult =dialog.open();
 
 			if(dialogResult == 0){

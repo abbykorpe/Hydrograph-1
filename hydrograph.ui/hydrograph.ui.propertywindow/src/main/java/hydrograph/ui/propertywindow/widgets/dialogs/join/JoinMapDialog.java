@@ -694,7 +694,7 @@ public class JoinMapDialog extends Dialog {
 		ExpandBar expandBar = new ExpandBar(composite_7, SWT.V_SCROLL);
 		expandBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 				1));
-
+		expandBar.setBackground(new Color(null, 240, 240, 240));
 		populateInputFieldExpandBarSection(expandBar);
 
 		expandBar.getItem(0).setExpanded(true);
