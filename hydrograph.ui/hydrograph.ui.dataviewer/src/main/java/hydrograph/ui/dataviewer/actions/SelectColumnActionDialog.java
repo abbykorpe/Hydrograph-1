@@ -45,7 +45,6 @@ import org.eclipse.swt.widgets.Shell;
  *
  */
 public class SelectColumnActionDialog extends Dialog {
-	SelectColumnAction selectColumnAction;
 	private java.util.List<String> allColumns;
 	private java.util.List<String> selectedColumns;
 	private List listAllComlumns;
@@ -57,14 +56,16 @@ public class SelectColumnActionDialog extends Dialog {
 	/**
 	 * @param parentShell
 	 * @param selectColumnAction
+	 * @param selectedColumns2 
+	 * @param allColumns2 
 	 */
-	public SelectColumnActionDialog(Shell parentShell,SelectColumnAction selectColumnAction) {
+	public SelectColumnActionDialog(Shell parentShell, java.util.List<String> allColumns, java.util.List<String> selectedColumns) {
 		super(parentShell);
-		this.selectColumnAction=selectColumnAction;
-		allColumns=new ArrayList<String>(selectColumnAction.getAllColumns());
-		selectedColumns=new ArrayList<String>(selectColumnAction.getSelectedColumns());
+		this.allColumns  = new ArrayList<>();
+		this.allColumns.addAll(allColumns);
+		this.selectedColumns = new ArrayList<>();
+		this.selectedColumns.addAll(selectedColumns);
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL | SWT.RESIZE |SWT.MIN |SWT.MAX );
-	
 	}
 	
 	/**
@@ -93,7 +94,6 @@ public class SelectColumnActionDialog extends Dialog {
 		listAllComlumns = new List(allColumnsComposite, SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL);
 		listAllComlumns.setItems(Arrays.copyOf(allColumns.toArray(),allColumns.toArray().length,String[].class));
 		listAllComlumns.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		allColumns.size();
 
 		Composite allColumnsControlButtons = new Composite(allColumnsComposite, SWT.NONE);
 		allColumnsControlButtons.setLayout(null);
@@ -158,10 +158,9 @@ public class SelectColumnActionDialog extends Dialog {
 	 * @param selectLabel
 	 * @param disSelectLabel
 	 * @param removeAll
-	 * Add listners to move data up/down/left/right
+	 * Add listeners to move data up/down/left/right
 	 */
-	private void addListeners(Label selectAllLabel, Label selectLabel,
-			Label disSelectLabel, Label removeAll) {
+	private void addListeners(Label selectAllLabel, Label selectLabel,Label disSelectLabel, Label removeAll) {
 		selectLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -187,9 +186,9 @@ public class SelectColumnActionDialog extends Dialog {
 						allColumns.add(string);
 						listAllComlumns.add(string);
 					}
-					selectColumnAction.setAllColumns(allColumns);
-					if(listSelectedColumns.getItemCount()==0)
-					okButton.setEnabled(false);
+					if(listSelectedColumns.getItemCount()==0){
+						okButton.setEnabled(false);
+					}
 				}
 			}
 		});
@@ -216,8 +215,9 @@ public class SelectColumnActionDialog extends Dialog {
 				allColumns.addAll(selectedColumns);
 				selectedColumns.clear();
 				listSelectedColumns.removeAll();
-				if(listSelectedColumns.getItemCount()==0)
+				if(listSelectedColumns.getItemCount()==0){
 				okButton.setEnabled(false);
+				}
 			}
 		});
 		
@@ -273,6 +273,7 @@ public class SelectColumnActionDialog extends Dialog {
 			}
 
 		});
+		
 		listSelectedColumns.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e){
@@ -284,9 +285,9 @@ public class SelectColumnActionDialog extends Dialog {
 						allColumns.add(string);
 						listAllComlumns.add(string);
 					}
-					selectColumnAction.setAllColumns(allColumns);
-					if(listSelectedColumns.getItemCount()==0)
+					if(listSelectedColumns.getItemCount()==0){
 					okButton.setEnabled(false);
+					}
 				}
 			}
 		});
@@ -307,6 +308,7 @@ public class SelectColumnActionDialog extends Dialog {
 
 		});
 	}
+	
 	/**
 	 * Initialize the window
 	 */
@@ -316,16 +318,15 @@ public class SelectColumnActionDialog extends Dialog {
 	
 	@Override
 	public void okPressed(){
-		selectColumnAction.setAllColumns(allColumns);
-		selectColumnAction.setSelectedColumns(Arrays.asList(listSelectedColumns.getItems()));
 		super.okPressed();
 	}
 	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		okButton=createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,true);
-		if(listSelectedColumns.getItemCount()==0)
-		okButton.setEnabled(false);
+		if(listSelectedColumns.getItemCount()==0){
+			okButton.setEnabled(false);
+		}
 		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
 	}
 	
@@ -337,5 +338,13 @@ public class SelectColumnActionDialog extends Dialog {
 	@Override
 	public boolean close() {
 		return super.close();
+	}
+
+	public java.util.List<String> getAllColumns() {
+		return allColumns;
+	}
+
+	public java.util.List<String> getSelectedColumns() {
+		return selectedColumns;
 	}
 }

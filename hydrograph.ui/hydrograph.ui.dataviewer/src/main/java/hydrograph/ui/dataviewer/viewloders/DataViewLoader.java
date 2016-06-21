@@ -18,6 +18,7 @@ import hydrograph.ui.dataviewer.constants.Views;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.datastructures.RowField;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.TableViewer;
@@ -140,20 +141,15 @@ public class DataViewLoader {
 		formattedViewTextarea.setText("");
 		StringBuilder stringBuilder = new StringBuilder();
 		int maxLenghtColumn = getMaxLengthColumn();
-
 		maxLenghtColumn += 5;
 		String format = "\t\t%-" + maxLenghtColumn + "s: %s\n";
-
-		for (RowData rowData : formattedViewData) {
+		for (RowData rowData : new ArrayList<>(formattedViewData)) {
 			stringBuilder.append(RECORD + rowData.getRowNumber() + "\n\n");
-
 			stringBuilder.append("{\n");
-			int columnIndex = 0;
 			for (String columnName : dataViewerAdapter.getColumnList()) {
 				RowField columnData = rowData.getRowFields().get((int)dataViewerAdapter.getAllColumnsMap().get(columnName));
 				String tempString = String.format(format, columnName, columnData.getValue());
 				stringBuilder.append(tempString);
-				columnIndex++;
 			}
 			stringBuilder.append("}\n");
 			stringBuilder.append(RECORD_SEPARATOR);
@@ -181,7 +177,7 @@ public class DataViewLoader {
 
 	private void addHeaderLineToUnformattedViewTextArea(StringBuilder stringBuilder) {
 		String header = "";
-		for (String columnName : dataViewerAdapter.getUnformatted()) {
+		for (String columnName : new ArrayList<String>(dataViewerAdapter.getAllColumnsMap().keySet())) {
 			header = header + columnName + ",";
 		}
 		stringBuilder.append(header.substring(0, header.length() - 1) + "\n");

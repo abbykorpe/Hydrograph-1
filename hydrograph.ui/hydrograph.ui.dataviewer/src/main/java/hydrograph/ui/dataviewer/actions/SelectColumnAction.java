@@ -46,22 +46,38 @@ public class SelectColumnAction extends Action {
 
 	@Override
 	public void run() {
-		if(allColumns.size()==0 && selectedColumns.size()==0)
-		allColumns.addAll(debugDataViewer.getColumnList());
-		SelectColumnActionDialog sc = new SelectColumnActionDialog(Display.getDefault().getActiveShell(), this);
-		if (sc.open() != 1) {
-			for (int index = debugDataViewer.getDataViewerAdapter()
-					.getColumnList().size(); index >= 0; index--) {
-				debugDataViewer.getTableViewer().getTable().getColumns()[index]
-						.dispose();
-			}
-			debugDataViewer.getTableViewer().refresh();
-			debugDataViewer.getDataViewerAdapter().setColumnList(this.getSelectedColumns());
-			TableViewer t = debugDataViewer.getTableViewer();
-			debugDataViewer.createGridViewTableColumns(t);
-			debugDataViewer.getDataViewLoader().reloadloadViews();
+		if(allColumns.size()==0 && selectedColumns.size()==0){
+			allColumns.addAll(debugDataViewer.getColumnList());
+		}
+		SelectColumnActionDialog selectColumnActionDialog = new SelectColumnActionDialog(Display.getDefault().getActiveShell(), allColumns,selectedColumns);
+		if (selectColumnActionDialog.open() != 1) {
+			selectedColumns.clear();
+			allColumns.clear();
+			selectedColumns.addAll(selectColumnActionDialog.getSelectedColumns());
+			allColumns.addAll(selectColumnActionDialog.getAllColumns());
+			dipose();
+			recreateViews();
 		}
 		super.run();
+	}
+
+	/**
+	 * Dispose the current view
+	 */
+	public void dipose() {
+		for (int index = debugDataViewer.getTableViewer().getTable().getColumns().length-1; index >= 0; index--) {
+			debugDataViewer.getTableViewer().getTable().getColumns()[index].dispose();
+		}
+		debugDataViewer.getDataViewerAdapter().setColumnList(selectedColumns);
+	}
+
+	/**
+	 * Recreate views with user's input
+	 */
+	private void recreateViews() {
+		TableViewer tableViewer=debugDataViewer.getTableViewer();
+		debugDataViewer.createGridViewTableColumns(tableViewer);
+		debugDataViewer.getDataViewLoader().reloadloadViews();
 	}
 	
 	/**
