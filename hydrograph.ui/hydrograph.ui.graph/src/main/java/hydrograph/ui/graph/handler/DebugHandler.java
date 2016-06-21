@@ -24,7 +24,6 @@ import hydrograph.ui.graph.debugconverter.SchemaHelper;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
-import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
@@ -41,15 +40,12 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
@@ -59,7 +55,7 @@ import org.slf4j.Logger;
  * @author Bitwise
  *
  */
-public class DebugHandler  extends AbstractHandler {
+public class DebugHandler{
 	
 	/** The logger. */
 	private Logger logger = LogFactory.INSTANCE.getLogger(DebugHandler.class);
@@ -80,25 +76,6 @@ public class DebugHandler  extends AbstractHandler {
 	private String currentJobName = null;
 	
 	private List<String> dataViewFileIds =  new ArrayList<String>();
-	
-	 
-	
-	
-	/**
-	 * Instantiates a new debug handler.
-	 */
-	public DebugHandler(){
-		RunStopButtonCommunicator.RunDebugJob.setHandler(this);
-	}
-
-	/**
-	 * Enable disable debug button.
-	 *
-	 * @param enable the new debug job enabled
-	 */
-	public void setDebugJobEnabled(boolean enable){
-		setBaseEnabled(enable);
-	}
 	
 	/**
 	 * Gets the job.
@@ -179,8 +156,7 @@ public class DebugHandler  extends AbstractHandler {
 	/*
 	 * execute method launch the job in debug mode.
 	 */
-	@Override
-	public Object execute(ExecutionEvent event){
+	public Object execute(RunConfigDialog runConfigDialog){
 		closeOpenedDataViewerWindows();
 		
 		
@@ -209,14 +185,11 @@ public class DebugHandler  extends AbstractHandler {
 			logger.error(e.getMessage(), e);
 		}
 		
-		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell(), true);
-		runConfigDialog.open();
 		String clusterPassword = runConfigDialog.getClusterPassword()!=null ? runConfigDialog.getClusterPassword():"";
 		basePath = runConfigDialog.getBasePath();
 		String host = runConfigDialog.getHost();
 		String userId = runConfigDialog.getUserId();
 		if(!runConfigDialog.proceedToRunGraph()){
-			setBaseEnabled(true);
 			JobManager.INSTANCE.enableRunJob(true);
 			CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();			
 			return null;
@@ -239,7 +212,7 @@ public class DebugHandler  extends AbstractHandler {
 		IFile file=ResourcesPlugin.getWorkspace().getRoot().getFile(currentJobIPath);
 		job.setDebugFilePath(file.getFullPath().toString());
 		
-		String portNumber =runConfigDialog.getPortNo();
+		String portNumber = Utils.INSTANCE.getServicePortNo();
 		
 		if(!StringUtils.isEmpty(portNumber)){
 			job.setPortNumber(portNumber);
@@ -368,4 +341,5 @@ public class DebugHandler  extends AbstractHandler {
 		DebugHandler.jobMap = jobMap;
 	}
 
+	
 }

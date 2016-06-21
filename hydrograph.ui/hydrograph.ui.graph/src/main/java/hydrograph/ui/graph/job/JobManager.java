@@ -21,9 +21,8 @@ import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.debug.service.ViewDataServiceInitiator;
-import hydrograph.ui.graph.handler.DebugHandler;
+import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.RemoveDebugHandler;
-import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
@@ -150,9 +149,8 @@ public class JobManager {
 	 * @param enabled
 	 */
 	public void enableRunJob(boolean enabled) {
-		((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
+		((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
 		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
-		((DebugHandler)RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(enabled);
 		((RemoveDebugHandler) RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(enabled);
 	}
 	
@@ -162,7 +160,7 @@ public class JobManager {
 	 * @param job
 	 *            - {@link Job} to execute
 	 */
-	public void executeJob(final Job job, String uniqueJobId) {
+	public void executeJob(final Job job, String uniqueJobId,RunConfigDialog runConfigDialog) {
 		List<String> externalSchemaFiles;
 		List<String> subJobList;
 		enableRunJob(false);
@@ -171,8 +169,6 @@ public class JobManager {
 		if (!saveJobBeforeExecute(gefCanvas)){
 			return;
 		}
-
-		RunConfigDialog runConfigDialog = getRunConfiguration();
 
 		if (!runConfigDialog.proceedToRunGraph()){
 			enableRunJob(true);
@@ -393,12 +389,6 @@ public class JobManager {
 			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(), activeProjectLocation + "/"
 					+ PARAMETER_FILE_DIR + "/" + getComponentCanvas().getJobName() + PARAMETER_FILE_EXTENTION, true));
 		}
-	}
-
-	private RunConfigDialog getRunConfiguration() {
-		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell(), false);
-		runConfigDialog.open();
-		return runConfigDialog;
 	}
 
 	private boolean saveJobBeforeExecute(final DefaultGEFCanvas gefCanvas) {

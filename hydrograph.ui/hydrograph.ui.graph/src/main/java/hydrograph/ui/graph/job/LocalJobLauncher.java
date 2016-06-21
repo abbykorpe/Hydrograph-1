@@ -15,6 +15,7 @@
 package hydrograph.ui.graph.job;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
@@ -55,7 +56,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		String gradleCommand;
 
 		job.setJobStatus(JobStatus.RUNNING);
-		((RunJobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
+		((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
 		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 		
 		gradleCommand = getExecututeJobCommand(xmlPath, paramFile);

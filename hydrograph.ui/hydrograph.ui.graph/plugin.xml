@@ -47,7 +47,7 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="hydrograph.ui.graph.handler.RunJobHandler"
+            class="hydrograph.ui.graph.handler.JobHandler"
             commandId="hydrograph.ui.graph.command.runjob">
        <activeWhen>
    			 <with variable="activeEditorId">
@@ -67,19 +67,6 @@
             </with>
          </activeWhen>
 	 </handler>
-      <handler
-            class="hydrograph.ui.graph.handler.DebugHandler"
-            commandId="hydrograph.ui.graph.command.debug">
- 
-         <activeWhen>
-            <with
-                  variable="activeEditorId">
-               <equals
-                     value="hydrograph.ui.graph.etlgraphicaleditor">
-               </equals>
-            </with>
-         </activeWhen>
-      </handler>
       <handler
             class="hydrograph.ui.graph.handler.RemoveDebugHandler"
             commandId="hydrograph.ui.graph.command.removedebug">
@@ -232,13 +219,6 @@
                   label="Stop Job">
  				 </command>
  				 
- 				 <command
-                  commandId="hydrograph.ui.graph.command.debug"
-                  icon="resources/icons/debug_icon.png"
-                  label="Debug"
- 
-                  style="push">
-            </command>
       <separator
             name="hydrograph.ui.graph.separator4">
       </separator>

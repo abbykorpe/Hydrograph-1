@@ -58,8 +58,9 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	private BooleanFieldEditor booleanFieldEditor;
 	private IntegerFieldEditor pageSizeEditor;
 	private StringFieldEditor delimiterEditor;
-	private StringFieldEditor quoteEditor;
 	private IntegerFieldEditor memoryFieldEditor;
+	private IntegerFieldEditor portNo;
+	private StringFieldEditor quoteEditor;
 	private DirectoryFieldEditor tempPathFieldEditor;
 	private DirectoryFieldEditor defaultPathFieldEditor;
 	private BooleanFieldEditor purgeEditor;
@@ -286,6 +287,35 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		defaultPathFieldEditor.setPreferenceStore(getPreferenceStore());
 		defaultPathFieldEditor.load();
 		
+		Group grpServiceDetails = new Group(composite, SWT.NONE);
+		GridLayout gl_grpServiceDetails = new GridLayout(1, true);
+		GridData gd_grpServiceDetailsData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
+		gd_grpServiceDetailsData.widthHint = 584;
+		gd_grpServiceDetailsData.heightHint = 34;
+		grpServiceDetails.setLayoutData(gd_grpServiceDetailsData);
+		grpServiceDetails.setLayout(gl_grpServiceDetails);
+		grpServiceDetails.setText("Service Details");
+		
+		Composite grpServiceDetailsCmposite = new Composite(grpServiceDetails, SWT.None);
+		grpServiceDetailsCmposite.setBounds(0, 0, 280, 16);
+		GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_composite_1.heightHint = 26;
+		gd_composite_1.widthHint = 505;
+		grpServiceDetailsCmposite.setLayoutData(gd_composite_1);
+
+		portNo = new IntegerFieldEditor(PreferenceConstants.PORT_NO, "Port No               ", grpServiceDetailsCmposite,4);
+		portNo.setPropertyChangeListener(new IPropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent event) {
+				String value = event.getNewValue().toString();
+				validationForIntegerField(value,portNo,Messages.PORTNO_FIELD_VALIDATION);
+				
+			}
+		});
+		portNo.setPreferenceStore(getPreferenceStore());
+		portNo.load();
+		 
 		booleanFieldEditor = new BooleanFieldEditor(PreferenceConstants.INCLUDE_HEADER, " Include Headers  ", SWT.DEFAULT, composite);
 		getPreferenceStore().setDefault(PreferenceConstants.INCLUDE_HEADER, true);
 		booleanFieldEditor.setPreferenceStore(getPreferenceStore());
@@ -298,12 +328,12 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		purgeEditor.load();
 		
 		Composite composite01 = new Composite(parent, SWT.None);
-		composite01.setBounds(200, 0, 300, 650);
+		composite01.setBounds(200, 0, 300, 450);
 		composite01.setLayout(new GridLayout(1, false));
 		Group group_1 = new Group(composite01, SWT.NONE);
 		group_1.setVisible(false);
 		Label lblNewLabel = new Label(group_1, SWT.NONE);
-		lblNewLabel.setBounds(10, 52, 139, 298);
+		lblNewLabel.setBounds(10, 52, 139, 100);
 		lblNewLabel.setText(" ");
 		
 		addFields(memoryFieldEditor);
@@ -405,6 +435,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		preferenceStore.setDefault(PreferenceConstants.QUOTE_CHARACTOR, "\"");
 		preferenceStore.setDefault(PreferenceConstants.INCLUDE_HEADER, true);
 		preferenceStore.setDefault(PreferenceConstants.PURGE_DATA_FILES, true);
+		preferenceStore.setDefault(PreferenceConstants.PORT_NO, "8004");
 		
 		setPreferenceStore(preferenceStore);
 	}
@@ -419,6 +450,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		memoryFieldEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.VIEW_DATA_FILE_SIZE));
 		delimiterEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.DELIMITER));
 		quoteEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.QUOTE_CHARACTOR));
+		portNo.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.PORT_NO));
 		booleanFieldEditor.loadDefault();
 		purgeEditor.loadDefault();
 	}
@@ -433,6 +465,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		defaultPathFieldEditor.store();
 		booleanFieldEditor.store();
 		pageSizeEditor.store();
+		portNo.store();
 	}
 	
 	@Override
@@ -445,7 +478,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		defaultPathFieldEditor.store();
 		booleanFieldEditor.store();
 		purgeEditor.store();
-		
+		portNo.store();
 		return super.performOk();
 	}
 }
