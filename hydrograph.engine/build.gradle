@@ -1,5 +1,5 @@
 apply from: 'version.gradle'
-group = 'hydrograph'
+
 buildscript {
   repositories {
     jcenter()
@@ -9,13 +9,18 @@ buildscript {
   }
 }
 
+subprojects{
+apply from: '../version.gradle'
+}
+
 allprojects {
     apply plugin: 'idea'
     apply plugin: 'java'
     apply plugin: 'eclipse'
     apply plugin: 'maven'
 	
-	//project.version=version
+	group = 'hydrograph'
+	version=version	
 	
     sourceSets{
         main.java.srcDir 'src/main/java'
@@ -27,9 +32,9 @@ allprojects {
 	}
 	
 	task testJar(type: Jar, dependsOn: classes) {
-		classifier = 'tests'
-		from sourceSets.test.output
-		manifest {
+	classifier = 'tests'
+	from sourceSets.test.output
+	manifest {
         attributes 'Implementation-Title': archivesBaseName
                 //,'Implementation-Version': version
 	    }
@@ -37,17 +42,19 @@ allprojects {
 	}
 	
 	task sourcesJar( type: Jar, dependsOn: classes ) {
-	    from sourceSets.main.allSource
-	    classifier = 'sources'
-		manifest {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+    manifest {
         attributes 'Implementation-Title': archivesBaseName
                 //,'Implementation-Version': version
 	    }
 	    version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar 
-	}   
+    }
+   
 }
 
 subprojects{
+
     artifacts {
 	archives testJar
 	archives sourcesJar
