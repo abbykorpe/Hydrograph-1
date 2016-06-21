@@ -265,7 +265,12 @@
       <toc
             file="html/references/Job_Examples.html">
       </toc>
-      
+      <toc
+            file="xml/Components/inputFileParquet.xml">
+      </toc>
+      <toc
+            file="xml/Components/inputFileMixedScheme.xml">
+      </toc>
    </extension>
 
 </plugin>

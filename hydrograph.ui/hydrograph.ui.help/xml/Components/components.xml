@@ -80,4 +80,10 @@
    <topic href="html/Components/Normalize.html" label="Normalize">
       <anchor id="Normalize"/>
    </topic>
+   <topic href="html/Components/Input_File_Parquet.html" label="Input File Parquet">
+      <anchor id="Input_File_Parquet"/>
+   </topic>
+   <topic href="html/Components/Input_File_Mixed_Scheme.html" label="Input File Mixed Scheme">
+      <anchor id="InputFileMixedScheme"/>
+   </topic>
 </toc>

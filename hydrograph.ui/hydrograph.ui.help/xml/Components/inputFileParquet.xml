@@ -13,7 +13,7 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Clone" link_to="xml\Components\components.xml#GenerateRecords"> 
-	<topic label="Properties"  href="html/Components/Generate_Records_Properties.html"> 
+<toc label="Input File Parquet" link_to="xml\Components\components.xml#Input_File_Parquet"> 
+	<topic label="Properties"  href="html/Components/Input_File_Parquet_Properties.html"> 
 	</topic>
 </toc>
