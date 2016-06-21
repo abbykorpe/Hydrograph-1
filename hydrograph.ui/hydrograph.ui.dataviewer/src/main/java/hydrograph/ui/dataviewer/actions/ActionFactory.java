@@ -49,7 +49,7 @@ public class ActionFactory {
 		FormattedViewAction formattedViewAction = new FormattedViewAction(debugDataViewer);
 		ReloadAction reloadAction = new ReloadAction(debugDataViewer);
 		PreferencesAction preferencesAction= new PreferencesAction(debugDataViewer);
-		ResetSort resetSort = new ResetSort();
+		ResetSort resetSort = new ResetSort(debugDataViewer);
 		
 		
 		actionMap.put(ExportAction.class.getName(), exportAction);

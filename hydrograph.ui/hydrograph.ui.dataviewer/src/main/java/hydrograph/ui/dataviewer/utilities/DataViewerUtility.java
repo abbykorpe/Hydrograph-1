@@ -26,17 +26,8 @@ import hydrograph.ui.dataviewer.window.DebugDataViewer;
  */
 public class DataViewerUtility {
 	public final static DataViewerUtility INSTANCE = new DataViewerUtility();
-	private DebugDataViewer debugDataViewer;
 	
 	private DataViewerUtility() {
-	}
-	
-	/**
-	 * Set reference to data viewer window
-	 * @param debugDataViewer
-	 */
-	public void setDebugDataViewer(DebugDataViewer debugDataViewer) {
-		this.debugDataViewer = debugDataViewer;
 	}
 	
 	/**
@@ -44,7 +35,7 @@ public class DataViewerUtility {
 	 * Reset sort on data viewer
 	 * 
 	 */
-	public void resetSort(){
+	public void resetSort(DebugDataViewer debugDataViewer){
 		debugDataViewer.getRecentlySortedColumn().setImage(null);
 		debugDataViewer.getDataViewLoader().updateDataViewLists();
 		debugDataViewer.getDataViewLoader().reloadloadViews();

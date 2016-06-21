@@ -107,6 +107,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 /**
@@ -203,10 +204,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		formattedViewData = new LinkedList<>();
 		sortOrder=SortOrder.ASC;
 		
-		DataViewerUtility.INSTANCE.setDebugDataViewer(this);
-		
-		ascending=new org.eclipse.swt.graphics.Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
-		descending=new org.eclipse.swt.graphics.Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
+		ascending=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
+		descending=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
 	}
 
 	private void downloadDebugFiles() {
@@ -384,6 +383,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		dataViewerListeners.setWindowControls(windowControls);
 		dataViewerListeners.addTabFolderSelectionChangeListener(tabFolder);
 		dataViewerListeners.setStatusManager(statusManager);
+		dataViewerListeners.setDebugDataViewer(this);
 		
 		statusManager.setWindowControls(windowControls);
 		createPaginationPanel(container);
@@ -1140,7 +1140,6 @@ public class DebugDataViewer extends ApplicationWindow {
 			dataViewerAdapter.closeConnection();
 		}		
 		dataViewerMap.remove(dataViewerWindowName);
-		DataViewerUtility.INSTANCE.setDebugDataViewer(null);
 		return super.close();
 	}
 
