@@ -100,7 +100,6 @@ public class RunConfigDialog extends Dialog {
 
 	private static String LOCAL_HOST = "localhost";
 
-	// private EmptyTextListener textPortNoListener;
 	/**
 	 * Create the dialog.
 	 * 
@@ -154,7 +153,7 @@ public class RunConfigDialog extends Dialog {
 		btnRemoteMode.addSelectionListener(selectionListener);
 
 		Label lblDebug = new Label(compositeRunMode, SWT.NONE);
-		lblDebug.setBounds(143, 22, 43, 16);
+		lblDebug.setBounds(129, 22, 57, 16);
 		formToolkit.adapt(lblDebug, true, true);
 		lblDebug.setText("isDebug");
 
@@ -167,30 +166,28 @@ public class RunConfigDialog extends Dialog {
 		lblBasePath.setText("Base Path");
 		lblBasePath.setVisible(false);
 		formToolkit.adapt(lblBasePath, true, true);
-
 		basepathText = new Text(compositeRunMode, SWT.BORDER);
 		basepathText.setBounds(191, 44, 141, 21);
 		basepathText.setVisible(false);
+		
+		final ControlDecoration basePathTxtDecorator = WidgetUtility.addDecorator(basepathText, Messages.ABSOLUTE_PATH_TEXT);
+
 		basepathText.addModifyListener(new ModifyListener() {
-			ControlDecoration txtDecorator = null;
 
 			@Override
 			public void modifyText(ModifyEvent event) {
-				if (txtDecorator == null) {
-					txtDecorator = WidgetUtility.addDecorator(basepathText, Messages.ABSOLUTE_PATH_TEXT);
-				}
-				txtDecorator.hide();
+				basePathTxtDecorator.hide();
 				Text text = (Text) event.widget;
 				String data = text.getText();
 				IPath path = new Path(data);
 				// ^(?!-)[a-z0-9-]+(?<!-)(/(?!-)[a-z0-9-]+(?<!-))*$
 				Matcher matchs = Pattern.compile("^(?!-)[a-z0-9-]+(?<!-)(/(?!-)[a-z0-9-]+(?<!-))*$").matcher(data);
 				if (!path.isAbsolute()) {
-					txtDecorator.setMarginWidth(3);
-					txtDecorator.show();
+					basePathTxtDecorator.setMarginWidth(3);
+					basePathTxtDecorator.show();
 				} else {
-					txtDecorator.hide();
-					txtDecorator.setMarginWidth(3);
+					basePathTxtDecorator.hide();
+					basePathTxtDecorator.setMarginWidth(3);
 				}
 
 			}
@@ -207,6 +204,7 @@ public class RunConfigDialog extends Dialog {
 					lblBasePath.setVisible(false);
 					basepathText.setVisible(false);
 					isDebug = false;
+					basePathTxtDecorator.hide();
 				} else {
 
 					lblBasePath.setVisible(true);
@@ -233,7 +231,7 @@ public class RunConfigDialog extends Dialog {
 		lblServerDetails.setText("Server Details");
 
 		Label lblEdgeNode = new Label(compositeServerDetails, SWT.NONE);
-		lblEdgeNode.setBounds(25, 24, 55, 15);
+		lblEdgeNode.setBounds(25, 24, 67, 15);
 		formToolkit.adapt(lblEdgeNode, true, true);
 		lblEdgeNode.setText("Edge Node");
 
@@ -401,7 +399,6 @@ public class RunConfigDialog extends Dialog {
 			buildProps.put(RUN_UTILITY, textRunUtility.getText());
 			buildProps.put(REMOTE_DIRECTORY, textDirectory.getText());
 			buildProps.put(Base_PATH, basepathText.getText());
-
 			buildProps.store(out, null);
 
 			String buildPropFilePath = buildPropFilePath();
@@ -475,10 +472,6 @@ public class RunConfigDialog extends Dialog {
 		if (isDebug && !path.isAbsolute()) {
 			note.addError("Base Path should not be relative");
 		}
-
-		/*
-		 * if(isDebug && StringUtils.isEmpty(txtPortNo.getText())){ note.addError("Port Value not specified"); }
-		 */
 
 		return note;
 	}
