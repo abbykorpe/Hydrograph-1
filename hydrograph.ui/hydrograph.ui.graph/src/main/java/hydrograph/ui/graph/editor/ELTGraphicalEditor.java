@@ -1226,12 +1226,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");
 		Job job = DebugHandler.getJob(currentJob);
 		deleteDebugFileFromWorkspace();
-		deleteSchemaAndDataViewerFiles();
-		deleteBasePathDebugFiles(job);
+		
 		if(job == null){
 			logger.debug("current job {} wasn't found in Debughandler's map",currentJob);
 			return ;
 		}
+		deleteSchemaAndDataViewerFiles();
+		deleteBasePathDebugFiles(job);
 		DebugHandler.getJobMap().remove(currentJob);
 	}
 
@@ -1266,11 +1267,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+ "/" + file;
 					}
 					path = new Path(dataViewerSchemaFilePathToBeDeleted);
-					deleted = path.toFile().delete();
-					if(deleted){
-						logger.debug("Deleted Data Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
-					}else{
-						logger.warn("Unable to delete Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
+					if(path.toFile().exists()){
+						deleted = path.toFile().delete();
+						if(deleted){
+							logger.debug("Deleted Data Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
+						}else{
+							logger.warn("Unable to delete Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
+						}
 					}
 				}
 			}
