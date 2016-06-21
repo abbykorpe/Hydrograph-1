@@ -181,6 +181,17 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
 				String value = event.getNewValue().toString();
+				
+				Notification note1 =validateQuoteCharacter();
+				if(note1.hasErrors()){
+					setValid(false);
+					quoteEditor.setErrorMessage(note1.errorMessage());
+					setErrorMessage(note1.errorMessage());
+				}else{
+					setErrorMessage(null);
+					quoteEditor.setErrorMessage("");
+				}
+				
 				Notification note = validateDelimiter();
 				if(note.hasErrors()){
 					setValid(false);
@@ -191,18 +202,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 					delimiterEditor.setErrorMessage("");
 					checkState();
 				} 
-				
-				Notification note1 =validateQuoteCharacter();
-				if(note1.hasErrors()){
-					setValid(false);
-					quoteEditor.setErrorMessage(note1.errorMessage());
-					setErrorMessage(note1.errorMessage());
-				}else{
-					setErrorMessage(null);
-					quoteEditor.setErrorMessage("");
-					checkState();
-				}
-				
 				if(value.length() == 1 && !value.equalsIgnoreCase(",")){
 					setMessage(Messages.DELIMITER_WARNING, 2);
 				}else{ setMessage(null); }
@@ -235,16 +234,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
 				String value = event.getNewValue().toString();
-				Notification note =validateQuoteCharacter();
-				if(note.hasErrors()){
-					setValid(false);
-					quoteEditor.setErrorMessage(note.errorMessage());
-					setErrorMessage(note.errorMessage());
-				}else{
-					setErrorMessage(null);
-					quoteEditor.setErrorMessage("");
-					checkState();
-				} 
 				
 				Notification note1 = validateDelimiter();
 				if(note1.hasErrors()){
@@ -256,6 +245,16 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 					delimiterEditor.setErrorMessage("");
 					checkState();
 				}
+				Notification note =validateQuoteCharacter();
+				if(note.hasErrors()){
+					setValid(false);
+					quoteEditor.setErrorMessage(note.errorMessage());
+					setErrorMessage(note.errorMessage());
+				}else{
+					setErrorMessage(null);
+					quoteEditor.setErrorMessage("");
+					checkState();
+				} 
 				if(value.length() == 1 && !value.equalsIgnoreCase("\"")){
 					setMessage(Messages.QUOTE_WARNING, 2);
 				}else{ setMessage(null); }
