@@ -304,16 +304,16 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		grpServiceDetailsCmposite.setBounds(0, 0, 280, 16);
 		GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_composite_1.heightHint = 26;
-		gd_composite_1.widthHint = 477;
+		gd_composite_1.widthHint = 505;
 		grpServiceDetailsCmposite.setLayoutData(gd_composite_1);
 
-		portNo = new IntegerFieldEditor(PreferenceConstants.PORT_NO, "Port No                   ", grpServiceDetailsCmposite,4);
+		portNo = new IntegerFieldEditor(PreferenceConstants.PORT_NO, "Port No               ", grpServiceDetailsCmposite,4);
 		portNo.setPropertyChangeListener(new IPropertyChangeListener() {
 			
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
 				String value = event.getNewValue().toString();
-				validationForIntegerField(value);
+				validationForIntegerField(value,portNo,Messages.PORTNO_FIELD_VALIDATION);
 				
 			}
 		});
@@ -327,6 +327,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		booleanFieldEditor.load();
 		
 		purgeEditor = new BooleanFieldEditor(PreferenceConstants.PURGE_DATA_FILES, " Purge View Data Files  ", composite);
+		new Label(composite, SWT.NONE);
 		getPreferenceStore().setDefault(PreferenceConstants.PURGE_DATA_FILES, true);
 		purgeEditor.setPreferenceStore(getPreferenceStore());
 		purgeEditor.load();

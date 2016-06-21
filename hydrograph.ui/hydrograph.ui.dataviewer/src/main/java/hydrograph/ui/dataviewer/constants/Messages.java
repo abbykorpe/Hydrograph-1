@@ -80,6 +80,7 @@ public class Messages extends NLS{
 	public static String UNABLE_TO_FETCH_DEBUG_FILE;
 	public static String UNABLE_TO_READ_DEBUG_FILE;
 	public static String EMPTY_DEBUG_FILE;
+	public static String PORTNO_FIELD_VALIDATION;
 		
 	static {
 		// initialize resource bundle
