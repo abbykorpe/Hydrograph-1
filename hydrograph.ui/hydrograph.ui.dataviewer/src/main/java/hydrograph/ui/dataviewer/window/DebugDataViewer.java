@@ -955,7 +955,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		windowMenu.setVisible(true);
 
 		windowMenu.add(actionFactory.getAction(DatasetInformationAction.class.getName()));
-		//fileMenu.add(actionFactory.getAction(FilterAction.class.getName()));
+		
 	}
 	
 

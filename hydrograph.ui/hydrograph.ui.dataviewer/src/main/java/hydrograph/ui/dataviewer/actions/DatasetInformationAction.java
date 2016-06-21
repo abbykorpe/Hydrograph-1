@@ -14,15 +14,13 @@ package hydrograph.ui.dataviewer.actions;
 
 
 import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
-import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.datasetinformation.DatasetInformationDetail;
 import hydrograph.ui.dataviewer.datasetinformation.DatasetInformationDialog;
 import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
-
-
 import org.eclipse.jface.action.Action;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
@@ -32,14 +30,13 @@ import org.eclipse.ui.PlatformUI;
 
 public class DatasetInformationAction extends Action {
 
-	private ViewDataPreferences viewDataPreferences;
-	private DebugDataViewer debugDataViewer;
-	private DataViewerAdapter csvAdapter;
-	private String debugFileLocation= new String();
-	private String debugFileName="";
-	private static final String DEBUG_DATA_FILE_EXTENTION=".csv";
-	
 	private static final String LABEL="Dataset Information";
+	private DebugDataViewer debugDataViewer;
+	
+	/**
+	 *
+	 * @param debugDataViewer
+	 */
 	
 	public DatasetInformationAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
@@ -52,7 +49,12 @@ public class DatasetInformationAction extends Action {
 		
 		 Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 		 if(shell != null){
-			 
+			 	ViewDataPreferences viewDataPreferences;
+				DataViewerAdapter csvAdapter;
+				String debugFileLocation= new String();
+				String debugFileName="";
+				final String DEBUG_DATA_FILE_EXTENTION=".csv";
+				
 			   JobDetails jobDetails = debugDataViewer.getJobDetails();
 			 	
 			 	debugFileLocation = debugDataViewer.getDebugFileLocation();
@@ -60,7 +62,7 @@ public class DatasetInformationAction extends Action {
 			 	csvAdapter=debugDataViewer.getDataViewerAdapter();
 			  	viewDataPreferences=debugDataViewer.getViewDataPreferences();
 			  	
-	    	  	DatasetInformationDialog datasetInformationDetailDialog = new DatasetInformationDialog(shell);
+	    	  	DatasetInformationDialog datasetInformationDetailDialog = new DatasetInformationDialog(Display.getCurrent().getActiveShell());
 			 
 					DatasetInformationDetail datasetInformationDetail = new DatasetInformationDetail();
 					datasetInformationDetail.setChunkFilePath(debugFileLocation+debugFileName+DEBUG_DATA_FILE_EXTENTION);
