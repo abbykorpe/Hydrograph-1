@@ -15,7 +15,7 @@ blockStatement
 //----------------------> Expression
 expression
     :  primary
-//         |   expression '.' JavaIdentifier
+         |   '(' expression ')'
          |   expression ('++' | '--')
          |   ('+'|'-'|'++'|'--') expression
          |   ('~'|'!') expression
@@ -45,8 +45,7 @@ arithmeticOperator : '+'|'-'|'++'|'--';
 
 //----------------------> Statememt
 statement
-    :   'if' parExpression statement ('else' statement)?
-    |   statementExpression ';';
+    :    statementExpression ';';
 
 statementExpression
     :   expression
