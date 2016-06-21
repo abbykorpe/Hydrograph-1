@@ -48,7 +48,6 @@ import hydrograph.ui.dataviewer.support.SortDataType;
 import hydrograph.ui.dataviewer.support.SortOrder;
 import hydrograph.ui.dataviewer.support.StatusManager;
 import hydrograph.ui.dataviewer.support.TypeBasedComparator;
-import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
@@ -107,7 +106,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 /**
