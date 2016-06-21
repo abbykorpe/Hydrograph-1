@@ -233,7 +233,8 @@ public class Constants {
 	public static final String EXTERNAL_SCHEMA = "External";
 	public static final String INTERNAL_SCHEMA = "Internal";
 
-	public static String SCHEMA_NOT_SYNC_MESSAGE="Schema Not In Sync";
+	public static String SCHEMA_NOT_SYNC_MESSAGE_MOVE_CHANGES_TO_MAPPING="Schema Not In Sync. Do you want to move changes from schema to mapping?";
+	public static String SCHEMA_NOT_SYNC_MESSAGE_MOVE_CHANGES_TO_SCHEMA="Schema Not In Sync. Do you want to move changes from mapping to schema?";
 	public static String SYNC_WARNING="Sync Warning";
 	public static String SYNC_CONFIRM="Confirm";
 	public static String SYNC_CONFIRM_MESSAGE="Do you want to sync schema? It will override existing schema.";

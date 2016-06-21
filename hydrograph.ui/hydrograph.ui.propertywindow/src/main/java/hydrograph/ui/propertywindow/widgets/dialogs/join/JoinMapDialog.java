@@ -624,9 +624,13 @@ public class JoinMapDialog extends Dialog {
 					int itemsRemoved=0;
 					for (int index : indexs) {
 						mappingTableItemList.remove(index-itemsRemoved);
+						if(index-itemsRemoved-1 != -1){
+							table.setSelection(index-itemsRemoved-1);
+						}else{
+							table.setSelection(0);
+						}
 						itemsRemoved++;
 					}
-					mappingTableViewer.getTable().removeAll();
 					mappingTableViewer.refresh();
 				}
 				refreshButtonStatus();
@@ -690,7 +694,7 @@ public class JoinMapDialog extends Dialog {
 		ExpandBar expandBar = new ExpandBar(composite_7, SWT.V_SCROLL);
 		expandBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 				1));
-
+		expandBar.setBackground(new Color(null, 240, 240, 240));
 		populateInputFieldExpandBarSection(expandBar);
 
 		expandBar.getItem(0).setExpanded(true);

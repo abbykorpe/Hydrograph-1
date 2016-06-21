@@ -4,6 +4,7 @@ Features Added:
 Sr.No. <date> - [developer names] - description
 1. <14-Jun-16> - [Rahul Mahajan] - 	Create project directory structure dynamically on remote server to run subjob,
 									nested subjob and job having external schema. 
+2. <21-Jun-16> - [Kanchan Kauthale] Make lookup mapping window stretchable, auto adjust contents of the window accordingly
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
@@ -25,6 +26,10 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 13.#437  [Nikhil Deokar] Schema Tab: Added Range From and Range To validation
 14.#441  [Nikhil Deokar] Creating Parameter file on Save As event
 15.#497  [Nikhil Deokar] Updated Component tooltip in Component Palette.
+16.#273  [Kanchan Kauthale] Two red stars are getting displayed on the window when user specify blank value in the phase text box.
+17.#546  [Kanchan Kauthale] Join Component : Join component heading text is shifing to the extreme left side when user increse port count.
+18.#544  [Kanchan Kauthale] Aggregate/Transform : In Schema tab,'Pull From Operation Editor' Text is not Appearing Properly on Pull from Operation Editor Button
+19.#520  [Kanchan Kauthale] Make lookup mapping window stretchable, auto adjust contents of the window accordingly
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
