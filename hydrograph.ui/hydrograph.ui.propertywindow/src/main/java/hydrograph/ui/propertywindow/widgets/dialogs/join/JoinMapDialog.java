@@ -624,9 +624,13 @@ public class JoinMapDialog extends Dialog {
 					int itemsRemoved=0;
 					for (int index : indexs) {
 						mappingTableItemList.remove(index-itemsRemoved);
+						if(index-itemsRemoved-1 != -1){
+							table.setSelection(index-itemsRemoved-1);
+						}else{
+							table.setSelection(0);
+						}
 						itemsRemoved++;
 					}
-					mappingTableViewer.getTable().removeAll();
 					mappingTableViewer.refresh();
 				}
 				refreshButtonStatus();
