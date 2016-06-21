@@ -15,7 +15,7 @@
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/output_file_palette.png" canvasIconPath="/icons/output_file_canvas.png"
 		name="OFParquet" nameInPalette="File Parquet" defaultNamePrefix="OFParquet" 
-		description="This is OFParquet component."
+		description="Used to write a Parquet file."
 		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Parquet.html"
 		acronym="OFPrq">
 		<tns:category>OUTPUT</tns:category>

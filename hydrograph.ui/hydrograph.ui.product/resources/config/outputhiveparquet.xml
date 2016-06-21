@@ -15,7 +15,7 @@
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd">
 	<tns:component paletteIconPath="/icons/hive_palette.png" canvasIconPath="/icons/hive_canvas.png"
 		name="OHiveParquet" nameInPalette="Hive Parquet" defaultNamePrefix="OHive_Parquet" 
-		description="Takes parquet file as input and performs Hive job."
+		description="Used to write data from Hive tables stored in Parquet format."
 		helpFilePath="/hydrograph.ui.help/html/Components/Output_Hive_Parquet.html"
 		acronym="OHPrq">
 		<tns:category>OUTPUT</tns:category>
