@@ -251,10 +251,11 @@ public class DebugHandler  extends AbstractHandler {
 		job.setRemoteMode(runConfigDialog.isRemoteMode());
 		 
 		addDebugJob(currentJobName, job);
-		deletePreviousRunsDataviewCsvXmlFiles();
-		deletePreviousRunsBasePathDebugFiles(host, job.getPortNumber(), uniqueJobID, basePath, userId, clusterPassword);
-		dataViewFileIds.clear();
-		
+		if(!dataViewFileIds.isEmpty()){
+			deletePreviousRunsDataviewCsvXmlFiles();
+			deletePreviousRunsBasePathDebugFiles(host, job.getPortNumber(), uniqueJobID, basePath, userId, clusterPassword);
+			dataViewFileIds.clear();
+		}
 		
 		JobManager.INSTANCE.executeJobInDebug(job, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
 		CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();	
@@ -281,11 +282,13 @@ public class DebugHandler  extends AbstractHandler {
 							dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+ "/" + file;
 						}
 						path = new Path(dataViewerSchemaFilePathToBeDeleted);
-						deleted = path.toFile().delete();
-						if(deleted){
-							logger.debug("Deleted Data Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
-						}else{
-							logger.warn("Unable to delete Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
+						if(path.toFile().exists()){
+							deleted = path.toFile().delete();
+							if(deleted){
+								logger.debug("Deleted Data Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
+							}else{
+								logger.warn("Unable to delete Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
+							}
 						}
 					}
 				}
