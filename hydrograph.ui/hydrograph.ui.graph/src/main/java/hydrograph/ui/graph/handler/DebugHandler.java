@@ -18,13 +18,13 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.dataviewer.utilities.Utils;
-import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.debugconverter.DebugConverter;
 import hydrograph.ui.graph.debugconverter.SchemaHelper;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.utility.CanvasUtils;
+import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
@@ -145,20 +145,12 @@ public class DebugHandler{
 			logger.error(exception.getMessage(), exception);
 		} 
 	}
-
-	private void closeOpenedDataViewerWindows(){
-		
-		for(DebugDataViewer debugDataViewer:JobManager.INSTANCE.getDataViewerMap().values()){
-			debugDataViewer.close();
-		}
-	}
 	
 	/*
 	 * execute method launch the job in debug mode.
 	 */
 	public Object execute(RunConfigDialog runConfigDialog){
-		closeOpenedDataViewerWindows();
-		
+		DataViewerUtility.INSTANCE.closeDataViewerWindows();
 		
 		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 			try{

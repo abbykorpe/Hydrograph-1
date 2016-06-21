@@ -19,7 +19,9 @@ import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.constants.ControlConstants;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.support.StatusManager;
+import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import java.util.Map;
 
@@ -53,7 +55,7 @@ public class DataViewerListeners {
 	private DataViewerAdapter dataViewerAdapter;
 	private Map<String, Control> windowControls;
 	private static final int ENTER_KEY_CODE=13;
-
+	private DebugDataViewer debugDataViewer;
 	/**
 	 * 
 	 * Set data view loader
@@ -92,6 +94,16 @@ public class DataViewerListeners {
 		this.windowControls = windowControls;
 	}
 
+	/**
+	 * 
+	 * Set debug data viewer
+	 * 
+	 * @param debugDataViewer
+	 */
+	public void setDebugDataViewer(DebugDataViewer debugDataViewer) {
+		this.debugDataViewer = debugDataViewer;
+	}
+	
 	/**
 	 * 
 	 * Attach data viewer tab folder listener. This listener loads data in selected view
@@ -142,6 +154,7 @@ public class DataViewerListeners {
 					@Override
 					public void run() {
 						refreshDataViewerWindow(status);
+						DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
 					}
 				});
 				return Status.OK_STATUS;
@@ -211,6 +224,7 @@ public class DataViewerListeners {
 							public void run() {
 								refreshDataViewerWindow(status);
 								statusManager.clearJumpToPageText();
+								DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
 							}							
 						});
 						return Status.OK_STATUS;
@@ -244,6 +258,7 @@ public class DataViewerListeners {
 							public void run() {
 								refreshDataViewerWindow(status);
 								statusManager.clearJumpToPageText();
+								DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
 							}
 						});
 						return Status.OK_STATUS;

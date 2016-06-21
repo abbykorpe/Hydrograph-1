@@ -57,6 +57,7 @@ import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
 import hydrograph.ui.graph.utility.CanvasUtils;
+import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.utils.ParameterFileManager;
@@ -1203,25 +1204,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
 		
-		closeDataViewerWindows();
+		DataViewerUtility.INSTANCE.closeDataViewerWindows();
 		
 		deleteDebugFiles();
 		enableRunningJobResource() ;
 		closeSocket();
 	}
 	
-
-	private void closeDataViewerWindows() {
-		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");
-		Job job = DebugHandler.getJob(currentJob);
-		
-		for(String windowName:JobManager.INSTANCE.getDataViewerMap().keySet()){
-			if(StringUtils.contains(windowName, job.getConsoleName().replace(".", "_"))){
-				JobManager.INSTANCE.getDataViewerMap().get(windowName).close();
-			}
-		}
-	}
-
 	private void closeSocket()  {
         int portPID;
         try {

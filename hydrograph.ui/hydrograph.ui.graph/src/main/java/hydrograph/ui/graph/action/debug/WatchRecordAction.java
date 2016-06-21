@@ -31,6 +31,7 @@ import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -74,7 +75,8 @@ public class WatchRecordAction extends SelectionAction {
 		setText(Messages.WATCH_RECORD_TEXT);
 		setId(Constants.WATCH_RECORD_ID);
 		setEnabled(true);
-		dataViewerMap = new LinkedHashMap<>();
+		dataViewerMap = new HashMap<>();
+		
 		JobManager.INSTANCE.setDataViewerMap(dataViewerMap);
 	}
 
