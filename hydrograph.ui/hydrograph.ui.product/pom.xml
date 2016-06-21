@@ -154,10 +154,10 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\Hydrograph.app\Contents\MacOS\</outputDirectory>
+							<outputDirectory>target/products/hydrograph.ui.perspective.ID/macosx/cocoa/x86_64/Hydrograph.app/Contents/MacOS/</outputDirectory>
 							<resources>
 								<resource>
-									<directory>target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\Hydrograph.app\Contents\Eclipse\</directory>
+									<directory>target/products/hydrograph.ui.perspective.ID/macosx/cocoa/x86_64/Hydrograph.app/Contents/Eclipse/</directory>
 									<includes>
                                      <include>hydrograph.ini</include>
                                     </includes>
