@@ -27,7 +27,7 @@ public class ValidationAPITest {
 		Map<String, Class<?>> schemaFields = new HashMap<String, Class<?>>();
 		schemaFields.put("f1", Date.class);
 		DiagnosticCollector<JavaFileObject> dig = ValidationAPI.compile(
-				"(1==1) ?12: 20;",
+				"StringFunctions.match(\"HELLO WORLD\",DateFunctions.getStringDateFromDateObject(f1, \"\"))?1:0;",
 				schemaFields);
 
 		Assert.assertTrue(dig.getDiagnostics().size() <= 0);
