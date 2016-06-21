@@ -48,12 +48,12 @@ import hydrograph.ui.dataviewer.support.SortDataType;
 import hydrograph.ui.dataviewer.support.SortOrder;
 import hydrograph.ui.dataviewer.support.StatusManager;
 import hydrograph.ui.dataviewer.support.TypeBasedComparator;
+import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import java.awt.Image;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Date;
@@ -168,7 +168,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	private SortOrder sortOrder;
 	
 	private org.eclipse.swt.graphics.Image ascending;
-	private org.eclipse.swt.graphics.Image decending;
+	private org.eclipse.swt.graphics.Image descending;
 	
 	private TableColumn recentlySortedColumn;
 	
@@ -186,6 +186,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		addStatusLine();
 		windowControls = new LinkedHashMap<>();
 		gridViewData = new LinkedList<>();
+		formattedViewData = new LinkedList<>();
 	}
 
 	
@@ -199,10 +200,13 @@ public class DebugDataViewer extends ApplicationWindow {
 		this.dataViewerWindowName = dataViewerWindowName;
 		windowControls = new LinkedHashMap<>();
 		gridViewData = new LinkedList<>();
+		formattedViewData = new LinkedList<>();
 		sortOrder=SortOrder.ASC;
 		
-		ascending=new org.eclipse.swt.graphics.Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
-		decending=new org.eclipse.swt.graphics.Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
+		DataViewerUtility.INSTANCE.setDebugDataViewer(this);
+		
+		ascending=new org.eclipse.swt.graphics.Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
+		descending=new org.eclipse.swt.graphics.Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
 	}
 
 	private void downloadDebugFiles() {
@@ -523,7 +527,7 @@ public class DebugDataViewer extends ApplicationWindow {
 						statusManager.getStatusLineManager().getProgressMonitor().done();
 						statusManager.setStatus(status);
 						statusManager.enableJumpPagePanel(true);
-
+						actionFactory.getAction(ResetSort.class.getName()).setEnabled(false);
 					}
 				});
 				return Status.OK_STATUS;
@@ -795,7 +799,6 @@ public class DebugDataViewer extends ApplicationWindow {
 			TableColumn tblclmnItem = tableViewerColumn.getColumn();
 			tblclmnItem.setWidth(100);
 			tblclmnItem.setText(columnName);
-			//tblclmnItem.setImage(new org.eclipse.swt.graphics.Image(device, ImageData imageData = new ImageData(imagePath);))
 			
 			tableViewerColumn.getColumn().setData(Views.COLUMN_ID_KEY, index);
 			tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
@@ -828,20 +831,22 @@ public class DebugDataViewer extends ApplicationWindow {
 					if(sortOrder==null || SortOrder.ASC == sortOrder){
 						Collections.sort(gridViewData,new TypeBasedComparator(SortOrder.DSC, columnIndex, getSortType(columnDataType), dateFormat));
 						sortOrder=SortOrder.DSC;
-						((TableColumn)e.widget).setImage(decending);
+						((TableColumn)e.widget).setImage(descending);
 					}else{
 						Collections.sort(gridViewData,new TypeBasedComparator(SortOrder.ASC, columnIndex, getSortType(columnDataType), dateFormat));
 						sortOrder=SortOrder.ASC;
 						((TableColumn)e.widget).setImage(ascending);
 					}
+					dataViewLoader.syncOtherViewsDataWithGridViewData();
 					dataViewLoader.reloadloadViews();
 					recentlySortedColumn = ((TableColumn)e.widget);
+					actionFactory.getAction(ResetSort.class.getName()).setEnabled(true);
 										
 				}
 				
 				@Override
 				public void widgetDefaultSelected(SelectionEvent e) {
-					// TODO - Sort logic
+					// Do Nothing
 				}
 			});
 			
@@ -1002,7 +1007,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		 * actionFactory.getAction(FilterAction.class.getName()));
 		 */
 		
-		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON),
+		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.RESET_SORT),
 				actionFactory.getAction(ResetSort.class.getName()));
 		
 		dropDownAction = new Action("", SWT.DROP_DOWN) {
@@ -1135,6 +1140,7 @@ public class DebugDataViewer extends ApplicationWindow {
 			dataViewerAdapter.closeConnection();
 		}		
 		dataViewerMap.remove(dataViewerWindowName);
+		DataViewerUtility.INSTANCE.setDebugDataViewer(null);
 		return super.close();
 	}
 

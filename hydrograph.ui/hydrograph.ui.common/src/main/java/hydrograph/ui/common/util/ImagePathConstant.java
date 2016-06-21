@@ -40,5 +40,8 @@ public class ImagePathConstant {
 	public static final String DATA_VIEWER_SWITCH_VIEW="/icons/advicons/switchview.png";
 	public static final String WARNING_ICON="/icons/advicons/warning.png";
 	
+	public static final String SORT_ASC="/icons/advicons/sort_asc.png";
+	public static final String SORT_DESC="/icons/advicons/sort_desc.png";
+	public static final String RESET_SORT="/icons/advicons/reset_sort.png";
 
 }

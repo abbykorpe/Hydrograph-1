@@ -19,6 +19,7 @@ import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.constants.ControlConstants;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.support.StatusManager;
+import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
 
 import java.util.Map;
@@ -142,6 +143,7 @@ public class DataViewerListeners {
 					@Override
 					public void run() {
 						refreshDataViewerWindow(status);
+						DataViewerUtility.INSTANCE.resetSort();
 					}
 				});
 				return Status.OK_STATUS;
@@ -211,6 +213,7 @@ public class DataViewerListeners {
 							public void run() {
 								refreshDataViewerWindow(status);
 								statusManager.clearJumpToPageText();
+								DataViewerUtility.INSTANCE.resetSort();
 							}							
 						});
 						return Status.OK_STATUS;
@@ -244,6 +247,7 @@ public class DataViewerListeners {
 							public void run() {
 								refreshDataViewerWindow(status);
 								statusManager.clearJumpToPageText();
+								DataViewerUtility.INSTANCE.resetSort();
 							}
 						});
 						return Status.OK_STATUS;

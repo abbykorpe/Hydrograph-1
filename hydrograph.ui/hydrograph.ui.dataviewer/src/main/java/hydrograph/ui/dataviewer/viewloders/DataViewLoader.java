@@ -91,11 +91,23 @@ public class DataViewLoader {
 	 */
 	public void updateDataViewLists() {
 		gridViewData.clear();
+		formattedViewData.clear();
 		gridViewData.addAll(dataViewerAdapter.getFileData());
-		formattedViewData = dataViewerAdapter.getFileData();
+		formattedViewData.addAll(gridViewData);
 		unformattedViewData = dataViewerAdapter.getFileData();
 	}
-
+	
+	/**
+	 * 
+	 * Synchronizes other views data with grid view data.
+	 * This method generally called when user sorts data in grid view.
+	 * 
+	 */
+	public void syncOtherViewsDataWithGridViewData(){
+		formattedViewData.clear();
+		formattedViewData.addAll(gridViewData);
+	}
+	
 	private int getMaxLengthColumn() {
 		int lenght = 0;
 		for (String columnName : dataViewerAdapter.getColumnList()) {
