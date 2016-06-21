@@ -12,18 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import java.util.ArrayList;
+import hydrograph.engine.assembly.entity.base.OperationEntityBase;
+import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
+
 import java.util.Arrays;
 import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
+public class LookupEntity extends OperationEntityBase {
 
-public class LookupEntity extends OperationAssemblyEntity {
-
-	private List<OutSocket> outSocketList;
 	private List<JoinKeyFields> joinKeyFields;
 	private String match;
 
@@ -40,14 +36,6 @@ public class LookupEntity extends OperationAssemblyEntity {
 	 */
 	public void setKeyFields(List<JoinKeyFields> joinKeyFields) {
 		this.joinKeyFields = joinKeyFields;
-	}
-
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
 	}
 
 	public int getAllKeyFieldSize() {
@@ -89,24 +77,19 @@ public class LookupEntity extends OperationAssemblyEntity {
 		}
 
 		str.append("\nout socket: ");
-		if (outSocketList != null) {
-			str.append(Arrays.toString(outSocketList.toArray()));
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
 		}
 
 		return str.toString();
 	}
 
 	public void setMatch(String match) {
-		this.match = match; 
-		
+		this.match = match;
+
 	}
 
 	public String getMatch() {
 		return match;
-	}
-
-	@Override
-	public List<Operation> getOperationsList() {
-		return new ArrayList<>();
 	}
 }

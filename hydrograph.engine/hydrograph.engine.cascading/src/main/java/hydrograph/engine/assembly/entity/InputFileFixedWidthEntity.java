@@ -12,38 +12,19 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
 
 import java.util.Arrays;
-import java.util.List;
 
-public class InputFileFixedWidthEntity extends IOAssemblyEntity {
+public class InputFileFixedWidthEntity extends InputOutputEntityBase {
 
-	private String path;
 	private boolean strict = true;
 	private boolean safe = false;
 	private String charset = "UTF-8";
-	private List<OutSocket> outSocketList;
-	private List<SchemaField> fieldsList;
+	private String path;
 
-
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
-	}
-
-	@Override
-	public List<SchemaField> getFieldsList() {
-		return fieldsList;
-	}
-
-	public void setFieldsList(List<SchemaField> fieldsList) {
-		this.fieldsList = fieldsList;
+	public String getPath() {
+		return path;
 	}
 
 	public void setPath(String path) {
@@ -62,10 +43,6 @@ public class InputFileFixedWidthEntity extends IOAssemblyEntity {
 		this.charset = charset;
 	}
 
-	public String getPath() {
-		return path;
-	}
-
 	public boolean isStrict() {
 		return strict;
 	}
@@ -77,7 +54,7 @@ public class InputFileFixedWidthEntity extends IOAssemblyEntity {
 	public String getCharset() {
 		return charset;
 	}
-	
+
 	/**
 	 * Returns a string with the values for all the members of this entity
 	 * object.
@@ -87,22 +64,23 @@ public class InputFileFixedWidthEntity extends IOAssemblyEntity {
 	 * @see hydrograph.engine.assembly.entity.base.AssemblyEntityBase#toString()
 	 */
 	@Override
-	public String toString() {		
-		StringBuilder str = new StringBuilder("Input file fixed width entity info:\n");
+	public String toString() {
+		StringBuilder str = new StringBuilder(
+				"Input file fixed width entity info:\n");
 		str.append(super.toString());
-		str.append("Path: " + path);
+		str.append("Path: " + getPath());
 		str.append(" | strict: " + strict);
 		str.append(" | safe: " + safe);
 		str.append(" | charset: " + charset);
 
 		str.append("\nfields: ");
-		if (fieldsList != null) {
-			str.append(Arrays.toString(fieldsList.toArray()));
+		if (getFieldsList() != null) {
+			str.append(Arrays.toString(getFieldsList().toArray()));
 		}
-		
+
 		str.append("\nout socket(s): ");
-		if (outSocketList != null) {
-			str.append(Arrays.toString(outSocketList.toArray()));
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
 		}
 		return str.toString();
 	}

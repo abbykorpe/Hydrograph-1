@@ -28,7 +28,7 @@ import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.TextDelimitedAndFixedWidth;
 
 public class InputFileMixedSchemeAssembly extends BaseComponent<InputFileMixedSchemeEntity> {
@@ -45,7 +45,7 @@ public class InputFileMixedSchemeAssembly extends BaseComponent<InputFileMixedSc
 
 	private InputFileMixedSchemeEntity inputFileMixedSchemeEntity;
 
-	private IOFieldsAndTypesCreator<InputFileMixedSchemeEntity> fieldsCreator;
+	private InputOutputFieldsAndTypesCreator<InputFileMixedSchemeEntity> fieldsCreator;
 
 	public InputFileMixedSchemeAssembly(InputFileMixedSchemeEntity baseComponentEntity,
 			ComponentParameters componentParameters) {
@@ -55,7 +55,7 @@ public class InputFileMixedSchemeAssembly extends BaseComponent<InputFileMixedSc
 
 	@Override
 	protected void createAssembly() {
-		fieldsCreator = new IOFieldsAndTypesCreator<InputFileMixedSchemeEntity>(inputFileMixedSchemeEntity);
+		fieldsCreator = new InputOutputFieldsAndTypesCreator<InputFileMixedSchemeEntity>(inputFileMixedSchemeEntity);
 		try {
 			generateTapsAndPipes();
 			flowDef = flowDef.addSource(pipe, tap);

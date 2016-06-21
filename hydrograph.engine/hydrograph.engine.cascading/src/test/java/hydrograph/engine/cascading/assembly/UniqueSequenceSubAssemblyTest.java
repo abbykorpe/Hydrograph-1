@@ -18,7 +18,6 @@ import hydrograph.engine.assembly.entity.elements.Operation;
 import hydrograph.engine.assembly.entity.elements.OperationField;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.elements.PassThroughField;
-import hydrograph.engine.cascading.assembly.UniqueSequenceAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.utilites.AssemblyBuildHelper;
 
@@ -43,7 +42,8 @@ public class UniqueSequenceSubAssemblyTest {
 		FlowDef flowDef = FlowDef.flowDef();
 		Fields fields = new Fields("f1", "count");
 
-		Pipe pipes = AssemblyBuildHelper.generateInputPipes(fields, flowDef, uniqueSequenceInput);
+		Pipe pipes = AssemblyBuildHelper.generateInputPipes(fields, flowDef,
+				uniqueSequenceInput);
 
 		ComponentParameters params = new ComponentParameters();
 
@@ -60,13 +60,14 @@ public class UniqueSequenceSubAssemblyTest {
 		operation.setOperationId("operation1");
 		operation.setOperationOutputFields(new String[] { "uniqSeq" });
 		operationList.add(operation);
-		generateEntity.setOperationList(operationList);
+		generateEntity.setOperationsList(operationList);
 
 		// create outSocket
 		OutSocket outSocket1 = new OutSocket("out0");
 
 		List<OperationField> operationFieldsList = new ArrayList<>();
-		OperationField operationField = new OperationField("uniqSeq", "operation1");
+		OperationField operationField = new OperationField("uniqSeq",
+				"operation1");
 		operationFieldsList.add(operationField);
 		outSocket1.setOperationFieldList(operationFieldsList);
 
@@ -80,10 +81,12 @@ public class UniqueSequenceSubAssemblyTest {
 		outSocketList.add(outSocket1);
 		generateEntity.setOutSocketList(outSocketList);
 
-		UniqueSequenceAssembly uniSeqSubAssembly = new UniqueSequenceAssembly(generateEntity, params);
+		UniqueSequenceAssembly uniSeqSubAssembly = new UniqueSequenceAssembly(
+				generateEntity, params);
 
 		AssemblyBuildHelper.generateOutputPipes(
-				uniSeqSubAssembly.getOutLink("out", "out0", generateEntity.getComponentId()), outPath, flowDef);
+				uniSeqSubAssembly.getOutLink("out", "out0",
+						generateEntity.getComponentId()), outPath, flowDef);
 
 		Flow flow = new Hadoop2MR1FlowConnector().connect(flowDef);
 		flow.complete();

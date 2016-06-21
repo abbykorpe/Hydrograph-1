@@ -12,18 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
+import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
+
 import java.util.Arrays;
-import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-
-public class InputFileAvroEntity extends IOAssemblyEntity {
-
+public class InputFileAvroEntity extends InputOutputEntityBase {
 	private String path;
-	private List<OutSocket> outSocketList;
-	private List<SchemaField> schemaFieldsList;
 
 	public String getPath() {
 		return path;
@@ -31,22 +25,6 @@ public class InputFileAvroEntity extends IOAssemblyEntity {
 
 	public void setPath(String path) {
 		this.path = path;
-	}
-
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
-	}
-
-	public List<SchemaField> getFieldsList() {
-		return schemaFieldsList;
-	}
-
-	public void setFieldsList(List<SchemaField> schemaFieldsList) {
-		this.schemaFieldsList = schemaFieldsList;
 	}
 
 	/**
@@ -59,19 +37,18 @@ public class InputFileAvroEntity extends IOAssemblyEntity {
 	 */
 	@Override
 	public String toString() {
-		StringBuilder str = new StringBuilder(
-				"Input file Avro entity info:\n");
+		StringBuilder str = new StringBuilder("Input file Avro entity info:\n");
 		str.append(super.toString());
-		str.append("Path: " + path);
+		str.append("Path: " + getPath());
 
 		str.append("\nfields: ");
-		if (schemaFieldsList != null) {
-			str.append(Arrays.toString(schemaFieldsList.toArray()));
+		if (getFieldsList() != null) {
+			str.append(Arrays.toString(getFieldsList().toArray()));
 		}
 
 		str.append("\nout socket(s): ");
-		if (outSocketList != null) {
-			str.append(Arrays.toString(outSocketList.toArray()));
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
 		}
 		return str.toString();
 	}

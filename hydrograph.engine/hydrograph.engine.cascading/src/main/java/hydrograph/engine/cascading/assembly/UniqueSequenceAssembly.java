@@ -12,12 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Each;
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
 import hydrograph.engine.assembly.entity.UniqueSequenceEntity;
 import hydrograph.engine.assembly.entity.elements.Operation;
 import hydrograph.engine.assembly.entity.elements.OperationField;
@@ -25,6 +19,13 @@ import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.functions.UniqueSequenceNumberOperation;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.pipe.Each;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
 
 public class UniqueSequenceAssembly extends BaseComponent<UniqueSequenceEntity> {
 
@@ -34,9 +35,11 @@ public class UniqueSequenceAssembly extends BaseComponent<UniqueSequenceEntity> 
 	private static final long serialVersionUID = 7136851169742722787L;
 	private UniqueSequenceEntity uniqueSequenceEntity;
 	private Fields outputFieldsList;
-	private static Logger LOG = LoggerFactory.getLogger(UniqueSequenceAssembly.class);
+	private static Logger LOG = LoggerFactory
+			.getLogger(UniqueSequenceAssembly.class);
 
-	public UniqueSequenceAssembly(UniqueSequenceEntity uniqueSequenceEntity, ComponentParameters componentParameters) {
+	public UniqueSequenceAssembly(UniqueSequenceEntity uniqueSequenceEntity,
+			ComponentParameters componentParameters) {
 		super(uniqueSequenceEntity, componentParameters);
 	}
 
@@ -47,20 +50,29 @@ public class UniqueSequenceAssembly extends BaseComponent<UniqueSequenceEntity> 
 				LOG.trace(uniqueSequenceEntity.toString());
 			}
 			for (OutSocket outSocket : uniqueSequenceEntity.getOutSocketList()) {
-				LOG.trace("Creating unique sequence assembly for '" + uniqueSequenceEntity.getComponentId()
-						+ "' for socket: '" + outSocket.getSocketId() + "' of type: '" + outSocket.getSocketType()
-						+ "'");
+				LOG.trace("Creating unique sequence assembly for '"
+						+ uniqueSequenceEntity.getComponentId()
+						+ "' for socket: '" + outSocket.getSocketId()
+						+ "' of type: '" + outSocket.getSocketType() + "'");
 
 				initializeOperationFieldsForOutSocket(outSocket);
-				UniqueSequenceNumberOperation seqNo = new UniqueSequenceNumberOperation(outputFieldsList);
+				UniqueSequenceNumberOperation seqNo = new UniqueSequenceNumberOperation(
+						outputFieldsList);
 
-				Pipe uniSeqPipe = new Pipe(uniqueSequenceEntity.getComponentId() + "_out",
+				Pipe uniSeqPipe = new Pipe(
+						uniqueSequenceEntity.getComponentId() + "_out",
 						componentParameters.getInputPipe());
 				setHadoopProperties(uniSeqPipe.getStepConfigDef());
-				uniSeqPipe = new Each(uniSeqPipe, Fields.NONE, seqNo, Fields.ALL);
+				uniSeqPipe = new Each(uniSeqPipe, Fields.NONE, seqNo,
+						Fields.ALL);
 
-				setOutLink(outSocket.getSocketType(), outSocket.getSocketId(), uniqueSequenceEntity.getComponentId(),
-						uniSeqPipe, componentParameters.getInputFields().append(outputFieldsList));
+				setOutLink(
+						outSocket.getSocketType(),
+						outSocket.getSocketId(),
+						uniqueSequenceEntity.getComponentId(),
+						uniSeqPipe,
+						componentParameters.getInputFields().append(
+								outputFieldsList));
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -73,19 +85,26 @@ public class UniqueSequenceAssembly extends BaseComponent<UniqueSequenceEntity> 
 
 		// check if the unique sequence component has operation(s)
 		if (uniqueSequenceEntity.isOperationPresent()) {
-			for (Operation eachOperation : uniqueSequenceEntity.getOperationList()) {
-				if (isOperationIDExistsInOperationFields(eachOperation.getOperationId(), outSocket)) {
-					outputFieldsList = outputFieldsList.append(new Fields(eachOperation.getOperationOutputFields()));
+			for (Operation eachOperation : uniqueSequenceEntity
+					.getOperationsList()) {
+				if (isOperationIDExistsInOperationFields(
+						eachOperation.getOperationId(), outSocket)) {
+					outputFieldsList = outputFieldsList.append(new Fields(
+							eachOperation.getOperationOutputFields()));
 				} else {
-					LOG.info("Operation: '" + eachOperation.getOperationId() + "' of unique sequence component '"
-							+ uniqueSequenceEntity.getComponentId() + "' not used in out socket");
+					LOG.info("Operation: '" + eachOperation.getOperationId()
+							+ "' of unique sequence component '"
+							+ uniqueSequenceEntity.getComponentId()
+							+ "' not used in out socket");
 				}
 			}
 		}
 	}
 
-	private boolean isOperationIDExistsInOperationFields(String operationId, OutSocket outSocket) {
-		for (OperationField eachOperationField : outSocket.getOperationFieldList()) {
+	private boolean isOperationIDExistsInOperationFields(String operationId,
+			OutSocket outSocket) {
+		for (OperationField eachOperationField : outSocket
+				.getOperationFieldList()) {
 			if (eachOperationField.getOperationId().equals(operationId)) {
 				return true;
 			}
@@ -95,6 +114,6 @@ public class UniqueSequenceAssembly extends BaseComponent<UniqueSequenceEntity> 
 
 	@Override
 	public void initializeEntity(UniqueSequenceEntity assemblyEntityBase) {
-		this.uniqueSequenceEntity=assemblyEntityBase;
+		this.uniqueSequenceEntity = assemblyEntityBase;
 	}
 }

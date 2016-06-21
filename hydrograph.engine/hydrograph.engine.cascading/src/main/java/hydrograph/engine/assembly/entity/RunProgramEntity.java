@@ -15,10 +15,10 @@ package hydrograph.engine.assembly.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
+import hydrograph.engine.assembly.entity.base.OperationEntityBase;
 import hydrograph.engine.assembly.entity.elements.Operation;
 
-public class RunProgramEntity extends OperationAssemblyEntity {
+public class RunProgramEntity extends OperationEntityBase {
 	private String command;
 
 	/**

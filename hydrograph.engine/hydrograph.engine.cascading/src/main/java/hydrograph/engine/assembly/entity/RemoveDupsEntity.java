@@ -12,30 +12,21 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
+import hydrograph.engine.assembly.entity.base.StraightPullEntityBase;
 import hydrograph.engine.assembly.entity.elements.KeyField;
 import hydrograph.engine.assembly.entity.elements.Operation;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.constants.Keep;
 
-public class RemoveDupsEntity extends OperationAssemblyEntity {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class RemoveDupsEntity extends StraightPullEntityBase {
 
 	private KeyField[] keyFields;
 	private KeyField[] secondaryKeyFields;
 	private String keep;
-	private List<OutSocket> outSocketList;
-
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
-	}
 
 	public KeyField[] getKeyFields() {
 		return keyFields;
@@ -60,7 +51,7 @@ public class RemoveDupsEntity extends OperationAssemblyEntity {
 	public void setKeep(String string) {
 		this.keep = string;
 	}
-	
+
 	/**
 	 * Returns a string with the values for all the members of this entity
 	 * object.
@@ -72,7 +63,8 @@ public class RemoveDupsEntity extends OperationAssemblyEntity {
 	@Override
 	public String toString() {
 
-		StringBuilder str = new StringBuilder("Remove dups entity information\n");
+		StringBuilder str = new StringBuilder(
+				"Remove dups entity information\n");
 		str.append(super.toString());
 
 		str.append("Key fields: ");
@@ -84,19 +76,13 @@ public class RemoveDupsEntity extends OperationAssemblyEntity {
 		if (secondaryKeyFields != null) {
 			str.append(Arrays.toString(secondaryKeyFields));
 		}
-		
+
 		str.append("\nKeep: " + keep);
 
 		str.append("\nOut socket(s): ");
-		if (outSocketList != null) {
-			str.append(Arrays.toString(outSocketList.toArray()));
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
 		}
 		return str.toString();
 	}
-
-	@Override
-	public List<Operation> getOperationsList() {
-		return new ArrayList<>();
-	}
-	
 }

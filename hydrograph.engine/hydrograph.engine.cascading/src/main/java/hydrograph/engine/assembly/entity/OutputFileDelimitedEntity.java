@@ -12,13 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
+import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
+
 import java.util.Arrays;
-import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-
-public class OutputFileDelimitedEntity extends IOAssemblyEntity {
+public class OutputFileDelimitedEntity extends InputOutputEntityBase {
 
 	private String path;
 	private String charset;
@@ -27,7 +25,6 @@ public class OutputFileDelimitedEntity extends IOAssemblyEntity {
 	private boolean strict;
 	private boolean hasHeader;
 	String quote;
-	private List<SchemaField> fieldsList;
 	private boolean overWrite;
 
 	public boolean isOverWrite() {
@@ -40,14 +37,6 @@ public class OutputFileDelimitedEntity extends IOAssemblyEntity {
 
 	public String getQuote() {
 		return quote;
-	}
-
-	public List<SchemaField> getFieldsList() {
-		return fieldsList;
-	}
-
-	public void setFieldsList(List<SchemaField> fieldsList) {
-		this.fieldsList = fieldsList;
 	}
 
 	public void setQuote(String quote) {
@@ -103,7 +92,8 @@ public class OutputFileDelimitedEntity extends IOAssemblyEntity {
 	}
 
 	/**
-	 * @param strict the strict to set
+	 * @param strict
+	 *            the strict to set
 	 */
 	public void setStrict(boolean strict) {
 		this.strict = strict;
@@ -119,18 +109,20 @@ public class OutputFileDelimitedEntity extends IOAssemblyEntity {
 	 */
 	@Override
 	public String toString() {
-		StringBuilder str = new StringBuilder("Output file delimited entity info:\n");
+		StringBuilder str = new StringBuilder(
+				"Output file delimited entity info:\n");
 		str.append(super.toString());
 		str.append("Path: " + path);
+		str.append(" | delimiter: " + delimiter);
 		str.append(" | quote: " + quote);
 		str.append(" | has header: " + hasHeader);
-		str.append(" | delimiter: " + delimiter);
 		str.append(" | safe: " + safe);
 		str.append(" | charset: " + charset);
+		str.append(" | Overwrite: " + overWrite);
 
 		str.append("\nfields: ");
-		if (fieldsList != null) {
-			str.append(Arrays.toString(fieldsList.toArray()));
+		if (getFieldsList() != null) {
+			str.append(Arrays.toString(getFieldsList().toArray()));
 		}
 		return str.toString();
 	}

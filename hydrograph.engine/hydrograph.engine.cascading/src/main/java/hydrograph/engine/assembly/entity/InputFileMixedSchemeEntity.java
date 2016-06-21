@@ -15,26 +15,16 @@ package hydrograph.engine.assembly.entity;
 import java.util.Arrays;
 import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
+import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 
-public class InputFileMixedSchemeEntity extends IOAssemblyEntity {
+public class InputFileMixedSchemeEntity extends InputOutputEntityBase {
 
 	private String path;
 	private String charset;
 	private boolean safe;
-	private List<OutSocket> outSocketList;
-	private List<SchemaField> fieldsList;
 	private boolean strict;
-
-	public List<SchemaField> getFieldsList() {
-		return fieldsList;
-	}
-
-	public void setFieldsList(List<SchemaField> fieldsList) {
-		this.fieldsList = fieldsList;
-	}
 
 	public String getPath() {
 		return path;
@@ -68,14 +58,6 @@ public class InputFileMixedSchemeEntity extends IOAssemblyEntity {
 		this.strict = strict;
 	}
 
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
-	}
-	
 	/**
 	 * Returns a string with the values for all the members of this entity
 	 * object.
@@ -85,9 +67,10 @@ public class InputFileMixedSchemeEntity extends IOAssemblyEntity {
 	 * @see hydrograph.engine.assembly.entity.base.AssemblyEntityBase#toString()
 	 */
 	@Override
-	public String toString() {	
-	
-		StringBuilder str = new StringBuilder("Input file mixed scheme entity info:\n");
+	public String toString() {
+
+		StringBuilder str = new StringBuilder(
+				"Input file mixed scheme entity info:\n");
 		str.append(super.toString());
 		str.append("Path: " + path);
 		str.append(" | strict: " + strict);
@@ -95,13 +78,13 @@ public class InputFileMixedSchemeEntity extends IOAssemblyEntity {
 		str.append(" | charset: " + charset);
 
 		str.append("\nfields: ");
-		if (fieldsList != null) {
-			str.append(Arrays.toString(fieldsList.toArray()));
+		if (getFieldsList() != null) {
+			str.append(Arrays.toString(getFieldsList().toArray()));
 		}
-		
+
 		str.append("\nout socket(s): ");
-		if (outSocketList != null) {
-			str.append(Arrays.toString(outSocketList.toArray()));
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
 		}
 		return str.toString();
 	}

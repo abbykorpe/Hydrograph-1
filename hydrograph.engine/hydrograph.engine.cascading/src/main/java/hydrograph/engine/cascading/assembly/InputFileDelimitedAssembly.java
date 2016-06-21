@@ -29,7 +29,7 @@ import hydrograph.engine.assembly.entity.InputFileDelimitedEntity;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
 
 public class InputFileDelimitedAssembly extends BaseComponent<InputFileDelimitedEntity> {
@@ -45,7 +45,7 @@ public class InputFileDelimitedAssembly extends BaseComponent<InputFileDelimited
 	private InputFileDelimitedEntity inputFileDelimitedEntity;
 	private static Logger LOG = LoggerFactory.getLogger(InputFileDelimitedAssembly.class);
 
-	private IOFieldsAndTypesCreator<InputFileDelimitedEntity> fieldsCreator;
+	private InputOutputFieldsAndTypesCreator<InputFileDelimitedEntity> fieldsCreator;
 
 	public InputFileDelimitedAssembly(InputFileDelimitedEntity baseComponentEntity, ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
@@ -54,7 +54,7 @@ public class InputFileDelimitedAssembly extends BaseComponent<InputFileDelimited
 	@Override
 	protected void createAssembly() {
 		try {
-		fieldsCreator = new IOFieldsAndTypesCreator<InputFileDelimitedEntity>(inputFileDelimitedEntity);
+		fieldsCreator = new InputOutputFieldsAndTypesCreator<InputFileDelimitedEntity>(inputFileDelimitedEntity);
 		LOG.debug("InputFile Delimited Component: [ Fields List : " + Arrays.toString(fieldsCreator.getFieldNames()) + ", Field Types : "
 				+ Arrays.toString(fieldsCreator.getFieldDataTypes()) + ", Delimiter : '" + inputFileDelimitedEntity.getDelimiter()
 				+ "' , Path : " + inputFileDelimitedEntity.getPath() + ", Phase : "

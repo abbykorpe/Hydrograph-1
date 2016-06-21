@@ -12,41 +12,40 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
-import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.assembly.entity.base.OperationEntityBase;
 
-
-public class PartitionByExpressionEntity extends OperationAssemblyEntity {
+public class PartitionByExpressionEntity extends OperationEntityBase {
 	private long numPartitions;
-	private Operation operation;
-	private List<OutSocket> outSocketList;
-	
+
 	public long getNumPartitions() {
 		return numPartitions;
 	}
+
 	public void setNumPartitions(long numPartitions) {
 		this.numPartitions = numPartitions;
 	}
-	public Operation getOperation() {
-		return operation;
-	}
-	public void setOperation(Operation operation) {
-		this.operation = operation;
-	}
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
-	}
+
+	/**
+	 * Returns a string with the values for all the members of this entity
+	 * object.
+	 * <p>
+	 * Use cautiously as this is a very heavy operation.
+	 * 
+	 * @see hydrograph.engine.assembly.entity.base.AssemblyEntityBase#toString()
+	 */
 	@Override
-	public List<Operation> getOperationsList() {
-		return new ArrayList<>();
+	public String toString() {
+
+		StringBuilder str = new StringBuilder(
+				"Partition By Expression entity information\n");
+		str.append(super.toString());
+
+		str.append("\nOut socket(s): ");
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
+		}
+		return str.toString();
 	}
-	
-	
 }

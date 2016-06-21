@@ -12,7 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.utils;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.utilities.DataTypeCoerce;
 
@@ -20,9 +20,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
 
-public class IOFieldsAndTypesCreator<T extends IOAssemblyEntity> {
+public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 
 	private String[] fieldNames;
 	private String[] fieldDataTypes;
@@ -37,10 +36,10 @@ public class IOFieldsAndTypesCreator<T extends IOAssemblyEntity> {
 	private String[] fieldLengthOrDelimiter;
 	private Type[] typefieldLengthDelimiter;
 
-	private IOAssemblyEntity assemblyEntityBase;
+	private InputOutputEntityBase inputOutputEntityBase;
 
-	public IOFieldsAndTypesCreator(T entity) {
-		assemblyEntityBase = entity;
+	public InputOutputFieldsAndTypesCreator(T entity) {
+		inputOutputEntityBase = entity;
 		initialize();
 	}
 
@@ -71,7 +70,7 @@ public class IOFieldsAndTypesCreator<T extends IOAssemblyEntity> {
 	}
 
 	private void initialize() {
-		int sizeOfFieldList = assemblyEntityBase.getFieldsList().size();
+		int sizeOfFieldList = inputOutputEntityBase.getFieldsList().size();
 		fieldNames = new String[sizeOfFieldList];
 		fieldDataTypes = new String[sizeOfFieldList];
 		fieldFormat = new String[sizeOfFieldList];
@@ -86,7 +85,7 @@ public class IOFieldsAndTypesCreator<T extends IOAssemblyEntity> {
 		typefieldLengthDelimiter = new Type[sizeOfFieldList];
 
 		for (int i = 0; i < sizeOfFieldList; i++) {
-			SchemaField schemaField = assemblyEntityBase.getFieldsList().get(i);
+			SchemaField schemaField = inputOutputEntityBase.getFieldsList().get(i);
 			fieldNames[i] = schemaField.getFieldName();
 			fieldDataTypes[i] = schemaField.getFieldDataType();
 			fieldFormat[i] = schemaField.getFieldFormat();
@@ -256,7 +255,7 @@ public class IOFieldsAndTypesCreator<T extends IOAssemblyEntity> {
 					.valueOf(getTypeNameFromDataType(
 							eachSchemaField.getFieldDataType()).toUpperCase());
 			types[i++] = hiveParquetDataType.getMappingType(eachSchemaField,
-					assemblyEntityBase);
+					inputOutputEntityBase);
 		}
 		return types;
 	}

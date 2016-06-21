@@ -16,7 +16,7 @@ import hydrograph.engine.assembly.entity.InputFileParquetEntity;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.parquet.ParquetTupleScheme;
 
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class InputFileParquetAssembly extends
 	private FlowDef flowDef;
 	private Fields inputFields;
 
-	private IOFieldsAndTypesCreator<InputFileParquetEntity> fieldsCreator;
+	private InputOutputFieldsAndTypesCreator<InputFileParquetEntity> fieldsCreator;
 
 	private static final Logger LOG = LoggerFactory
 			.getLogger(InputFileParquetAssembly.class);
@@ -58,7 +58,7 @@ public class InputFileParquetAssembly extends
 	@Override
 	protected void createAssembly() {
 		try {
-			fieldsCreator = new IOFieldsAndTypesCreator<InputFileParquetEntity>(
+			fieldsCreator = new InputOutputFieldsAndTypesCreator<InputFileParquetEntity>(
 					inputFileParquetEntity);
 			LOG.debug("InputFile Parquet Component: [ Fields List : "
 					+ Arrays.toString(fieldsCreator.getFieldNames())

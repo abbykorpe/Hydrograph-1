@@ -92,7 +92,7 @@ public class TransformAssemblyTest {
 		operationList.add(operation);
 		transformEntity.setOperationsList(operationList);
 
-		transformEntity.addOperation(operation);
+		transformEntity.setOperation(operation);
 
 		// create outSocket
 		OutSocket outSocket1 = new OutSocket("out0");
@@ -258,7 +258,7 @@ public class TransformAssemblyTest {
 		operationList.add(operation);
 		transformEntity.setOperationsList(operationList);
 
-		transformEntity.addOperation(operation);
+		transformEntity.setOperation(operation);
 
 		// create outSocket
 		OutSocket outSocket1 = new OutSocket("out0");
@@ -1067,7 +1067,7 @@ public class TransformAssemblyTest {
 		operationList.add(operation);
 		transformEntity.setOperationsList(operationList);
 
-		transformEntity.addOperation(operation);
+		transformEntity.setOperation(operation);
 
 		// create outSocket
 		OutSocket outSocket1 = new OutSocket("out0");

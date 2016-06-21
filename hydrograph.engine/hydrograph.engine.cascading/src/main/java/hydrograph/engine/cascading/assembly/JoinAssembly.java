@@ -134,11 +134,11 @@ public class JoinAssembly extends BaseComponent<JoinEntity> {
 			inputFields = componentParameters.getInputFieldsList().get(i);
 
 			int[] inputFieldsPos = inputFields.getPos();
-			for (JoinKeyFields keyFieldsEntity : joinEntity.getKeyFields()) {
-				if (keyFieldsEntity.getInSocketId().equalsIgnoreCase(
+			for (JoinKeyFields joinKeyFields : joinEntity.getKeyFields()) {
+				if (joinKeyFields.getInSocketId().equalsIgnoreCase(
 						componentParameters.getinSocketId().get(i))) {
-					keyFields = keyFieldsEntity.getFields();
-					joinTypes[i] = keyFieldsEntity.isRecordRequired();
+					keyFields = joinKeyFields.getFields();
+					joinTypes[i] = joinKeyFields.isRecordRequired();
 				}
 			}
 

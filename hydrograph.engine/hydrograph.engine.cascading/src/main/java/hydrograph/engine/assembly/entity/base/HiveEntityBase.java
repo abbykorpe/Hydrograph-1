@@ -15,107 +15,91 @@
  */
 package hydrograph.engine.assembly.entity.base;
 
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-
-import java.util.List;
 
 /**
  * @author bitwise1
  *
  */
-public class HiveEntityBase extends IOAssemblyEntity {
-	private List<OutSocket> outSocketList;
-	private List<SchemaField> schemaFieldsList;
+public class HiveEntityBase extends InputOutputEntityBase {
 	private String[] partitionKeys;
 	protected String databaseName;
 	protected String tableName;
 	private String externalTablePathUri;
 	private boolean overWrite;
-	/**
-	 * @return the outSocketList
-	 */
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-	/**
-	 * @param outSocketList the outSocketList to set
-	 */
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
-	}
-	/**
-	 * @return the schemaFieldsList
-	 */
-	public List<SchemaField> getFieldsList() {
-		return schemaFieldsList;
-	}
-	/**
-	 * @param schemaFieldsList the schemaFieldsList to set
-	 */
-	public void setFieldsList(List<SchemaField> schemaFieldsList) {
-		this.schemaFieldsList = schemaFieldsList;
-	}
+
 	/**
 	 * @return the partitionKeys
 	 */
 	public String[] getPartitionKeys() {
 		return partitionKeys;
 	}
+
 	/**
-	 * @param partitionKeys the partitionKeys to set
+	 * @param partitionKeys
+	 *            the partitionKeys to set
 	 */
 	public void setPartitionKeys(String[] partitionKeys) {
 		this.partitionKeys = partitionKeys;
 	}
+
 	/**
 	 * @return the databaseName
 	 */
 	public String getDatabaseName() {
 		return databaseName;
 	}
+
 	/**
-	 * @param databaseName the databaseName to set
+	 * @param databaseName
+	 *            the databaseName to set
 	 */
 	public void setDatabaseName(String databaseName) {
 		this.databaseName = databaseName;
 	}
+
 	/**
 	 * @return the tableName
 	 */
 	public String getTableName() {
 		return tableName;
 	}
+
 	/**
-	 * @param tableName the tableName to set
+	 * @param tableName
+	 *            the tableName to set
 	 */
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
+
 	/**
 	 * @return the externalTablePathUri
 	 */
 	public String getExternalTablePathUri() {
 		return externalTablePathUri;
 	}
+
 	/**
-	 * @param externalTablePathUri the externalTablePathUri to set
+	 * @param externalTablePathUri
+	 *            the externalTablePathUri to set
 	 */
 	public void setExternalTablePathUri(String externalTablePathUri) {
 		this.externalTablePathUri = externalTablePathUri;
 	}
+
 	/**
 	 * @return the overWrite
 	 */
 	public boolean getOverWrite() {
 		return overWrite;
 	}
+
 	/**
-	 * @param overWrite the overWrite to set
+	 * @param overWrite
+	 *            the overWrite to set
 	 */
 	public void setOverWrite(boolean overWrite) {
 		this.overWrite = overWrite;
 	}
-	
-	
+
 }

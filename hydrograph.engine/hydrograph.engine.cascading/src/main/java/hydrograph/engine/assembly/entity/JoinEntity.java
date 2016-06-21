@@ -12,21 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import java.util.ArrayList;
+import hydrograph.engine.assembly.entity.base.OperationEntityBase;
+import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
+
 import java.util.Arrays;
 import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
+public class JoinEntity extends OperationEntityBase {
 
-public class JoinEntity extends OperationAssemblyEntity {
-
-	private List<OutSocket> outSocketList;
 	private List<JoinKeyFields> joinKeyFields;
-
-	// private Map<String, InSocket> inSocketMap;
 
 	/**
 	 * @return the joinKeyFields
@@ -43,34 +37,16 @@ public class JoinEntity extends OperationAssemblyEntity {
 		this.joinKeyFields = joinKeyFields;
 	}
 
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
-	}
-
 	public int getAllKeyFieldSize() {
-		//int i = 0;
+		// int i = 0;
 		return joinKeyFields.size();
-		/*for (JoinKeyFields keyFields2 : joinKeyFields) {
-			i = i + keyFields2.getFields().size();
-		}
-
-		return i;*/
+		/*
+		 * for (JoinKeyFields keyFields2 : joinKeyFields) { i = i +
+		 * keyFields2.getFields().size(); }
+		 * 
+		 * return i;
+		 */
 	}
-
-	/*public boolean[] getAllJoinTypes() {
-		joinKeyFields.get(0).getInSocketId()
-		boolean[] joinTypes = new boolean[joinKeyFields.size()];
-		int i = 0;
-		for (JoinKeyFields keyFields2 : joinKeyFields) {
-			joinTypes[i] = keyFields2.isJoinType();
-			i++;
-		}
-		return joinTypes;
-	}*/
 
 	/**
 	 * Returns a string with the values for all the members of this entity
@@ -91,14 +67,9 @@ public class JoinEntity extends OperationAssemblyEntity {
 		}
 
 		str.append("\nout socket(s): ");
-		if (outSocketList != null) {
-			str.append(Arrays.toString(outSocketList.toArray()));
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
 		}
 		return str.toString();
-	}
-
-	@Override
-	public List<Operation> getOperationsList() {
-		return new ArrayList<>();
 	}
 }

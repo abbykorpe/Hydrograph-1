@@ -14,7 +14,7 @@ package hydrograph.engine.cascading.assembly.base;
 
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 
 import java.util.Arrays;
 
@@ -48,7 +48,7 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 	private static Logger LOG = LoggerFactory
 			.getLogger(OutputFileHiveBase.class);
 
-	protected IOFieldsAndTypesCreator<HiveEntityBase> fieldsCreator;
+	protected InputOutputFieldsAndTypesCreator<HiveEntityBase> fieldsCreator;
 
 	public OutputFileHiveBase(HiveEntityBase baseComponentEntity,
 			ComponentParameters componentParameters) {
@@ -113,7 +113,7 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 	 */
 	@Override
 	protected void createAssembly() {
-		fieldsCreator = new IOFieldsAndTypesCreator<HiveEntityBase>(
+		fieldsCreator = new InputOutputFieldsAndTypesCreator<HiveEntityBase>(
 				hiveEntityBase);
 		prepareAssembly(); // exception handled separately within
 

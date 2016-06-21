@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.IOAssemblyEntity;
+import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 
 import java.util.List;
 
-public class OutputFileSequenceFormatEntity extends IOAssemblyEntity {
+public class OutputFileSequenceFormatEntity extends InputOutputEntityBase {
 
 	private String path;
 	private List<SchemaField> schemaFieldList;

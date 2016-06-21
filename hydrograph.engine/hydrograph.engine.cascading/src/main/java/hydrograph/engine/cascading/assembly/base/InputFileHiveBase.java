@@ -27,7 +27,7 @@ import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 
 public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 
@@ -47,7 +47,7 @@ public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 
 	protected final static String TIME_STAMP = "hh:mm:ss";
 
-	protected IOFieldsAndTypesCreator<HiveEntityBase> fieldsCreator;
+	protected InputOutputFieldsAndTypesCreator<HiveEntityBase> fieldsCreator;
 
 	private static Logger LOG = LoggerFactory
 			.getLogger(InputFileHiveBase.class);
@@ -82,7 +82,7 @@ public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 	 */
 	@Override
 	protected void createAssembly() {
-		fieldsCreator = new IOFieldsAndTypesCreator<HiveEntityBase>(hiveEntityBase);
+		fieldsCreator = new InputOutputFieldsAndTypesCreator<HiveEntityBase>(hiveEntityBase);
 		generateTapsAndPipes(); // exception handled separately within
 		try {
 			flowDef = flowDef.addSource(pipe, hiveTap);

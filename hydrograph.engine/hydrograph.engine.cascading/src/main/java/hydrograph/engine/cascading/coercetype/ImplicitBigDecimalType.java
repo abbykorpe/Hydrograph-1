@@ -132,6 +132,6 @@ public class ImplicitBigDecimalType implements CoercibleType<BigDecimal> {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Class getCanonicalType() {
-		return ImplicitBigDecimalType.class;
+		return BigDecimal.class;
 	}
 }

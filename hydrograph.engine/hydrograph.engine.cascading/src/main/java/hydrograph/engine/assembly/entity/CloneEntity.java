@@ -12,29 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import hydrograph.engine.assembly.entity.base.OperationAssemblyEntity;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.assembly.entity.base.StraightPullEntityBase;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-public class CloneEntity extends OperationAssemblyEntity {
-
-	private List<OutSocket> outSocketList;
-
-	public CloneEntity() {
-
-	}
-
-	public List<OutSocket> getOutSocketList() {
-		return outSocketList;
-	}
-
-	public void setOutSocketList(List<OutSocket> outSocketList) {
-		this.outSocketList = outSocketList;
-	}
+public class CloneEntity extends StraightPullEntityBase {
 
 	/**
 	 * Returns a string with the values for all the members of this entity
@@ -50,14 +32,9 @@ public class CloneEntity extends OperationAssemblyEntity {
 		StringBuilder str = new StringBuilder("Clone entity information\n");
 		str.append(super.toString());
 		str.append("Out socket(s):");
-		if (outSocketList != null) {
-			str.append(Arrays.toString(outSocketList.toArray()));
+		if (getOutSocketList() != null) {
+			str.append(Arrays.toString(getOutSocketList().toArray()));
 		}
 		return str.toString();
-	}
-
-	@Override
-	public List<Operation> getOperationsList() {
-		return new ArrayList<>();
 	}
 }

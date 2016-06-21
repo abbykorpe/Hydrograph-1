@@ -10,38 +10,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.assembly.entity;
+package hydrograph.engine.assembly.entity.base;
 
 import java.util.List;
 
-import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 
-public class DiscardEntity extends InputOutputEntityBase {
+public abstract class InputOutputEntityBase extends AssemblyEntityBase {
+	private List<OutSocket> outSocketList;
+	private List<SchemaField> schemaFieldsList;
 
 	/**
-	 * Returns a string with the values for all the members of this entity
-	 * object.
-	 * <p>
-	 * Use cautiously as this is a very heavy operation.
-	 * 
-	 * @see hydrograph.engine.assembly.entity.base.AssemblyEntityBase#toString()
+	 * @return the outSocketList
 	 */
-	@Override
-	public String toString() {
-		StringBuilder str = new StringBuilder("Discard entity information\n");
-		str.append(super.toString());
-		return str.toString();
+	public List<OutSocket> getOutSocketList() {
+		return outSocketList;
 	}
 
-	@Override
+	/**
+	 * @param outSocketList
+	 *            the outSocketList to set
+	 */
+	public void setOutSocketList(List<OutSocket> outSocketList) {
+		this.outSocketList = outSocketList;
+	}
+
+	/**
+	 * @return the schemaFieldsList
+	 */
 	public List<SchemaField> getFieldsList() {
-		return null;
+		return schemaFieldsList;
 	}
 
-	@Override
-	public void setFieldsList(List<SchemaField> fieldsList) {
-
+	/**
+	 * @param schemaFieldsList
+	 *            the schemaFieldsList to set
+	 */
+	public void setFieldsList(List<SchemaField> schemaFieldsList) {
+		this.schemaFieldsList = schemaFieldsList;
 	}
-
 }

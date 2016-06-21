@@ -26,7 +26,7 @@ import cascading.tuple.Fields;
 import hydrograph.engine.assembly.entity.OutputFileParquetEntity;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.IOFieldsAndTypesCreator;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.parquet.ParquetTupleScheme;
 
 public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEntity> {
@@ -42,7 +42,7 @@ public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEn
 	private static Logger LOG = LoggerFactory
 			.getLogger(OutputFileParquetAssembly.class);
 
-	private IOFieldsAndTypesCreator<OutputFileParquetEntity> fieldsCreator;
+	private InputOutputFieldsAndTypesCreator<OutputFileParquetEntity> fieldsCreator;
 
 	public OutputFileParquetAssembly(OutputFileParquetEntity assemblyEntityBase,
 			ComponentParameters componentParameters) {
@@ -52,7 +52,7 @@ public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEn
 	@Override
 	protected void createAssembly() {
 		try {
-			fieldsCreator = new IOFieldsAndTypesCreator<OutputFileParquetEntity>(
+			fieldsCreator = new InputOutputFieldsAndTypesCreator<OutputFileParquetEntity>(
 					outputFileParquetEntity);
 			LOG.debug("OutputFile Parquet Component: [ Fields List : "
 					+ Arrays.toString(fieldsCreator.getFieldNames())

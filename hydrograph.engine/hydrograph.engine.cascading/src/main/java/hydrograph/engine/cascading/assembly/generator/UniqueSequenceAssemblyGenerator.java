@@ -66,7 +66,7 @@ public class UniqueSequenceAssemblyGenerator extends
 			uniqueSequenceEntity.setNumOperations(jaxbGenerateSequence
 					.getOperation().size());
 			uniqueSequenceEntity.setOperationPresent(true);
-			uniqueSequenceEntity.setOperationList(OperationEntityUtils
+			uniqueSequenceEntity.setOperationsList(OperationEntityUtils
 					.extractOperations(jaxbGenerateSequence.getOperation()));
 		} else {
 			LOG.trace("Operation not present for unique sequence component: "
