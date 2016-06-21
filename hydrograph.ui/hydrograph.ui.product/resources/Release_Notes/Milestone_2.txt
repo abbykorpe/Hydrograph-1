@@ -5,6 +5,7 @@ Sr.No. <date> - [developer names] - description
 1. <14-Jun-16> - [Rahul Mahajan] - 	Create project directory structure dynamically on remote server to run subjob,
 									nested subjob and job having external schema. 
 2. <21-Jun-16> - [Kanchan Kauthale] Make lookup mapping window stretchable, auto adjust contents of the window accordingly
+3. <21-Jun-16> - [Shrirang Kumbhar] - Added sort functionality to data viewer
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
@@ -30,6 +31,9 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 17.#546  [Kanchan Kauthale] Join Component : Join component heading text is shifing to the extreme left side when user increse port count.
 18.#544  [Kanchan Kauthale] Aggregate/Transform : In Schema tab,'Pull From Operation Editor' Text is not Appearing Properly on Pull from Operation Editor Button
 19.#520  [Kanchan Kauthale] Make lookup mapping window stretchable, auto adjust contents of the window accordingly
+12.#613  [Shrirang Kumbhar] View Data Windows are not Getting Closed on Tool Close Event
+13.#612  [Shrirang Kumbhar] Multiple View Data Windows are Not Getting Closed on Job Re-run Event 
+14.#605  [Shrirang Kumbhar] Data View: User is not able to sort data on data viewer window
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
