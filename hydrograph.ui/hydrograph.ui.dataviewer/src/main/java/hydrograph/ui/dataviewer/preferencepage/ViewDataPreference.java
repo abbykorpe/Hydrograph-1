@@ -161,10 +161,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			}
 		});
 		tempPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, " Local Temp Path", group);
-		new Label(group, SWT.NONE);
-		new Label(group, SWT.NONE);
-		new Label(group, SWT.NONE);
-		new Label(group, SWT.NONE);
 		tempPathFieldEditor.setPreferenceStore(getPreferenceStore());
 		tempPathFieldEditor.setFocus();
 		tempPathFieldEditor.setErrorMessage(null);
@@ -327,7 +323,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		booleanFieldEditor.load();
 		
 		purgeEditor = new BooleanFieldEditor(PreferenceConstants.PURGE_DATA_FILES, " Purge View Data Files  ", composite);
-		new Label(composite, SWT.NONE);
 		getPreferenceStore().setDefault(PreferenceConstants.PURGE_DATA_FILES, true);
 		purgeEditor.setPreferenceStore(getPreferenceStore());
 		purgeEditor.load();
