@@ -82,33 +82,33 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	protected Control createContents(Composite parent) {
 		final Composite parentComposite = new Composite(parent, SWT.None);
 		parentComposite.setToolTipText("Export Data");
-		GridData compositeData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 3, 3);
-		compositeData.heightHint = 390;
-		compositeData.widthHint = 650;
-		compositeData.grabExcessHorizontalSpace = true;
-		compositeData.grabExcessVerticalSpace = true;
+		GridData parentCompositeData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 3, 3);
+		parentCompositeData.heightHint = 390;
+		parentCompositeData.widthHint = 650;
+		parentCompositeData.grabExcessHorizontalSpace = true;
+		parentCompositeData.grabExcessVerticalSpace = true;
 		parentComposite.setLayout(new GridLayout(3, false));
-		parentComposite.setLayoutData(compositeData);
+		parentComposite.setLayoutData(parentCompositeData);
 		
-		Group groupForGeneral = new Group(parentComposite, SWT.None);
-		groupForGeneral.setText("General");
+		Group generalGroup = new Group(parentComposite, SWT.None);
+		generalGroup.setText("General");
 		
-		GridLayout group_0Layout = new GridLayout(4, true);
-		group_0Layout.verticalSpacing = 0;
-		group_0Layout.marginWidth = 0;
-		group_0Layout.marginHeight = 0;
-		group_0Layout.horizontalSpacing = 0;
+		GridLayout generalGroupLayout = new GridLayout(4, true);
+		generalGroupLayout.verticalSpacing = 0;
+		generalGroupLayout.marginWidth = 0;
+		generalGroupLayout.marginHeight = 0;
+		generalGroupLayout.horizontalSpacing = 0;
 		GridData gridData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 3, 3);
 		gridData.heightHint =110;
 		gridData.widthHint = 580;
 		gridData.horizontalSpan = 3;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
-		groupForGeneral.setLayoutData(gridData);
-		groupForGeneral.setLayout(group_0Layout);
+		generalGroup.setLayoutData(gridData);
+		generalGroup.setLayout(generalGroupLayout);
 		
 		
-		memoryFieldEditor =new IntegerFieldEditor(PreferenceConstants.VIEW_DATA_FILE_SIZE, " File Size (MB)", groupForGeneral, 6);
+		memoryFieldEditor =new IntegerFieldEditor(PreferenceConstants.VIEW_DATA_FILE_SIZE, " File Size (MB)", generalGroup, 6);
 		memoryFieldEditor.setErrorMessage(null);
 		memoryFieldEditor.setFocus();
 		memoryFieldEditor.setPropertyChangeListener(new IPropertyChangeListener() {
@@ -121,18 +121,18 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		memoryFieldEditor.setPreferenceStore(getPreferenceStore());
 		memoryFieldEditor.load();
 		
-		Button unusedButton0 = new Button(groupForGeneral, SWT.None);
-		unusedButton0.setText("unused");
+		Button unusedButton0 = new Button(generalGroup, SWT.None);
+		unusedButton0.setText("mb");
 		unusedButton0.setBounds(0, 0, 20, 10);
 		unusedButton0.setVisible(false);
 		
-		pageSizeEditor = new IntegerFieldEditor(PreferenceConstants.VIEW_DATA_PAGE_SIZE, " Page Size", groupForGeneral, 6);
+		pageSizeEditor = new IntegerFieldEditor(PreferenceConstants.VIEW_DATA_PAGE_SIZE, " Page Size", generalGroup, 6);
 		pageSizeEditor.setErrorMessage(null);
 		pageSizeEditor.setFocus();
 		pageSizeEditor.setPreferenceStore(getPreferenceStore());
 		pageSizeEditor.load();
 		
-		Button unusedButton1 = new Button(groupForGeneral, SWT.None);
+		Button unusedButton1 = new Button(generalGroup, SWT.None);
 		unusedButton1.setText("unused");
 		unusedButton1.setBounds(0, 0, 20, 10);
 		unusedButton1.setVisible(false);
@@ -152,7 +152,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 				}else{ setMessage(null); }
 			}
 		});
-		pageSizeEditor.getTextControl(groupForGeneral).addFocusListener(new FocusListener() {
+		pageSizeEditor.getTextControl(generalGroup).addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) { }
 			@Override
@@ -168,33 +168,31 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 				}else{ setMessage(null); }
 			}
 		});
-		tempPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, " Local Temp Path", groupForGeneral);
+		tempPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, " Local Temp Path", generalGroup);
 		tempPathFieldEditor.setPreferenceStore(getPreferenceStore());
 		tempPathFieldEditor.setFocus();
 		tempPathFieldEditor.setErrorMessage(null);
 		tempPathFieldEditor.load();
-		new Label(groupForGeneral, SWT.NONE);
-		new Label(groupForGeneral, SWT.NONE);
 
 		
-		Composite warningComposite = new Composite(groupForGeneral, SWT.None);
+		Composite compositeInGeneral = new Composite(generalGroup, SWT.None);
 		GridData gdcompositeNote = new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1);
 		gdcompositeNote.heightHint = 16;
 		gdcompositeNote.widthHint = 500;
-		warningComposite.setLayoutData(gdcompositeNote);
-		Label lblNote = new Label(warningComposite, SWT.WRAP);
+		compositeInGeneral.setLayoutData(gdcompositeNote);
+		Label lblNote = new Label(compositeInGeneral, SWT.WRAP);
 		lblNote.setBounds(4, 0, 40, 20);
 		lblNote.setText("Note : ");
 		FontData fontData = lblNote.getFont().getFontData()[0];
-		Font font = new Font(warningComposite.getDisplay(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
+		Font font = new Font(compositeInGeneral.getDisplay(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
 		lblNote.setFont(font);
-		Label lblmsg = new Label(warningComposite, SWT.WRAP);
+		Label lblmsg = new Label(compositeInGeneral, SWT.WRAP);
 		lblmsg.setBounds(44, 0, 308, 18);
 		lblmsg.setText(Messages.MEMORY_OVERFLOW_EXCEPTION);
 		
 	 
-		Group grpForExportData = new Group(parentComposite, SWT.NONE);
-		grpForExportData.setText("Export Data");
+		Group grpExportData = new Group(parentComposite, SWT.NONE);
+		grpExportData.setText("Export Data");
 		
 		GridLayout grpExportLayout = new GridLayout();
 		grpExportLayout.verticalSpacing = 0;
@@ -207,11 +205,11 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		gd_grpExportData.grabExcessHorizontalSpace = true;
 		gd_grpExportData.grabExcessVerticalSpace = true;
 		
-		grpForExportData.setLayoutData(gd_grpExportData);
-		grpForExportData.setLayout(grpExportLayout);
+		grpExportData.setLayoutData(gd_grpExportData);
+		grpExportData.setLayout(grpExportLayout);
 		
 		
-		delimiterEditor = new StringFieldEditor(PreferenceConstants.DELIMITER, " Delimiter", grpForExportData);
+		delimiterEditor = new StringFieldEditor(PreferenceConstants.DELIMITER, " Delimiter", grpExportData);
 		delimiterEditor.setErrorMessage(null);
 		delimiterEditor.setFocus();
 		delimiterEditor.setPropertyChangeListener(new IPropertyChangeListener() {
@@ -244,7 +242,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 				}else{ setMessage(null); }
 			}
 		});
-		delimiterEditor.getTextControl(grpForExportData).addFocusListener(new FocusListener() {
+		delimiterEditor.getTextControl(grpExportData).addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) { }
 			@Override
@@ -259,11 +257,11 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		delimiterEditor.setPreferenceStore(getPreferenceStore());
 		delimiterEditor.load();
 		
-		Button unusedButton2 = new Button(grpForExportData, SWT.None);
+		Button unusedButton2 = new Button(grpExportData, SWT.None);
 		unusedButton2.setText("");
 		unusedButton2.setVisible(false);
 		
-		quoteEditor = new StringFieldEditor(PreferenceConstants.QUOTE_CHARACTOR, " Quote Character", grpForExportData);
+		quoteEditor = new StringFieldEditor(PreferenceConstants.QUOTE_CHARACTOR, " Quote Character", grpExportData);
 		quoteEditor.setErrorMessage(null);
 		quoteEditor.setFocus();
 		
@@ -297,7 +295,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 				}else{ setMessage(null); }
 			}
 		});
-		quoteEditor.getTextControl(grpForExportData).addFocusListener(new FocusListener() {
+		quoteEditor.getTextControl(grpExportData).addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) { }
 			@Override
@@ -313,34 +311,34 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		quoteEditor.setPreferenceStore(getPreferenceStore());
 		quoteEditor.load();
 		
-		Button unusedButton3 =new Button(grpForExportData, SWT.None);
+		Button unusedButton3 =new Button(grpExportData, SWT.None);
 		unusedButton3.setText("");
 		unusedButton3.setVisible(false);
 		
-		defaultPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.DEFAULTPATH, " Default Path", grpForExportData);
+		defaultPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.DEFAULTPATH, " Default Path", grpExportData);
 		defaultPathFieldEditor.setErrorMessage(null);
 		defaultPathFieldEditor.setFocus();
 		defaultPathFieldEditor.setPreferenceStore(getPreferenceStore());
 		defaultPathFieldEditor.load();
 		
-		new Label(grpForExportData, SWT.None).setText(" Include Header ");
-		Composite headerComposite = new Composite(grpForExportData, SWT.None);
+		new Label(grpExportData, SWT.None).setText(" Include Header ");
+		Composite headerComposite = new Composite(grpExportData, SWT.None);
 		headerComposite.setBounds(0, 0, 20, 16);
 		
-		Composite exportGroupWarning = new Composite(grpForExportData, SWT.None);
-		GridData exportGroupData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1);
-		exportGroupData.heightHint = 20;
-		exportGroupData.widthHint = 580;
-		exportGroupWarning.setLayoutData(exportGroupData);
-		Label label = new Label(exportGroupWarning, SWT.None);
-		label.setBounds(4, 0, 38, 16);
-		label.setText("Note : ");
-		FontData WarningFontData = lblNote.getFont().getFontData()[0];
-		Font warningFont = new Font(warningComposite.getDisplay(), new FontData(WarningFontData.getName(), WarningFontData.getHeight(), SWT.BOLD));
-		label.setFont(warningFont);
-		Label warningLabel = new Label(exportGroupWarning, SWT.None);
-		warningLabel.setBounds(42, 0, 500, 16);
-		warningLabel.setText(Messages.WARNING_MESSAGE);
+		Composite com = new Composite(grpExportData, SWT.None);
+		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1);
+		gd.heightHint = 20;
+		gd.widthHint = 600;
+		com.setLayoutData(gd);
+		Label lb = new Label(com, SWT.None);
+		lb.setBounds(4, 0, 38, 16);
+		lb.setText("Note : ");
+		FontData messageFontData = lblNote.getFont().getFontData()[0];
+		Font messageFont = new Font(compositeInGeneral.getDisplay(), new FontData(messageFontData.getName(), messageFontData.getHeight(), SWT.BOLD));
+		lb.setFont(messageFont);
+		Label labelMsg = new Label(com, SWT.None);
+		labelMsg.setBounds(42, 0, 500, 16);
+		labelMsg.setText(Messages.WARNING_MESSAGE);
 		
 		Group grpServiceDetails = new Group(parentComposite, SWT.NONE);
 		GridLayout gl_grpServiceDetails = new GridLayout(1, true);
@@ -355,7 +353,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		GridData serviceGridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		serviceGridData.heightHint = 26;
 		serviceGridData.widthHint = 530;
-		grpServiceDetailsCmposite.setLayout(new GridLayout(11, true));
+		grpServiceDetailsCmposite.setLayout(new GridLayout());
 		grpServiceDetailsCmposite.setLayoutData(serviceGridData);
 
 		portNo = new IntegerFieldEditor(PreferenceConstants.PORT_NO, "Port No               ", grpServiceDetailsCmposite, 4);
@@ -381,12 +379,11 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		
 		new Label(parentComposite, SWT.None).setText("   Purge View Data Files ");
 		Composite purgeComposite = new Composite(parentComposite, SWT.None);
-		GridData purgeGridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		purgeGridData.heightHint = 18;
-		purgeComposite.setLayoutData(purgeGridData);
+		GridData purgeCompositeData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		purgeCompositeData.heightHint = 18;
+		purgeComposite.setLayoutData(purgeCompositeData);
 		 
 		purgeEditor = new BooleanFieldEditor(PreferenceConstants.PURGE_DATA_FILES, "", purgeComposite);
-		new Label(parentComposite, SWT.NONE);
 		getPreferenceStore().setDefault(PreferenceConstants.PURGE_DATA_FILES, true);
 		purgeEditor.setPreferenceStore(getPreferenceStore());
 		purgeEditor.load();
