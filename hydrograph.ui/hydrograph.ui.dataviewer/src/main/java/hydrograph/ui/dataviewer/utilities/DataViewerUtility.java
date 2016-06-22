@@ -36,7 +36,9 @@ public class DataViewerUtility {
 	 * 
 	 */
 	public void resetSort(DebugDataViewer debugDataViewer){
+		if(debugDataViewer.getRecentlySortedColumn()!=null && !debugDataViewer.getRecentlySortedColumn().isDisposed()){
 		debugDataViewer.getRecentlySortedColumn().setImage(null);
+		}
 		debugDataViewer.getDataViewLoader().updateDataViewLists();
 		debugDataViewer.getDataViewLoader().reloadloadViews();
 		debugDataViewer.getActionFactory().getAction(ResetSort.class.getName()).setEnabled(false);

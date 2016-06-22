@@ -167,11 +167,15 @@ public class DebugDataViewer extends ApplicationWindow {
 	
 	private SortOrder sortOrder;
 	
+	public SortOrder getSortOrder() {
+		return sortOrder;
+	}
+
 	private org.eclipse.swt.graphics.Image ascending;
 	private org.eclipse.swt.graphics.Image descending;
 	
 	private TableColumn recentlySortedColumn;
-	
+	private String sortedColumnName;
 	/**
 	 * Create the application window,
 	 * 
@@ -190,6 +194,11 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 	
+	public String getSortedColumnName() {
+		return sortedColumnName;
+	}
+
+
 	public DebugDataViewer( JobDetails jobDetails, String dataViewerWindowName) {
 		super(null);
 		createActions();
@@ -826,7 +835,7 @@ public class DebugDataViewer extends ApplicationWindow {
 			tblclmnItem.setWidth(100);
 			tblclmnItem.setText(columnName);
 			
-			tableViewerColumn.getColumn().setData(Views.COLUMN_ID_KEY, index);
+			tableViewerColumn.getColumn().setData(Views.COLUMN_ID_KEY, (int)dataViewerAdapter.getAllColumnsMap().get(tableViewerColumn.getColumn().getText()));
 			tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 
 				@Override
@@ -846,7 +855,7 @@ public class DebugDataViewer extends ApplicationWindow {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					
-					if(recentlySortedColumn!=null){
+					if(recentlySortedColumn!=null && !recentlySortedColumn.isDisposed()){
 						recentlySortedColumn.setImage(null);
 					}
 					
@@ -867,7 +876,7 @@ public class DebugDataViewer extends ApplicationWindow {
 					dataViewLoader.reloadloadViews();
 					recentlySortedColumn = ((TableColumn)e.widget);
 					actionFactory.getAction(ResetSort.class.getName()).setEnabled(true);
-										
+					sortedColumnName=((TableColumn)e.widget).getText();
 				}
 				
 				@Override
@@ -884,6 +893,11 @@ public class DebugDataViewer extends ApplicationWindow {
 		return recentlySortedColumn;
 	}
 	
+	public void setRecentlySortedColumn(TableColumn recentlySortedColumn) {
+		this.recentlySortedColumn = recentlySortedColumn;
+	}
+
+
 	private static SortDataType getSortType(String sortDataType) {
 
 		for (SortDataType sortDataTypeObject : SortDataType.values()) {

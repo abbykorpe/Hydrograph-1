@@ -19,6 +19,10 @@ import java.util.List;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
 
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.dataviewer.support.SortOrder;
+import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.dataviewer.actions.SelectColumnActionDialog;
 
@@ -36,7 +40,8 @@ public class SelectColumnAction extends Action {
 	private List<String> allColumns;
 	private List<String> selectedColumns;
 	private static final String menuItem = "Select Columns";
-
+	private org.eclipse.swt.graphics.Image sortType;
+	private boolean isSortingEnable;
 	public SelectColumnAction(DebugDataViewer debugDataViewer) {
 		super(menuItem);
 		this.debugDataViewer = debugDataViewer;
@@ -49,6 +54,7 @@ public class SelectColumnAction extends Action {
 		if(allColumns.size()==0 && selectedColumns.size()==0){
 			allColumns.addAll(debugDataViewer.getColumnList());
 		}
+		isSortingEnable=false;
 		SelectColumnActionDialog selectColumnActionDialog = new SelectColumnActionDialog(Display.getDefault().getActiveShell(), allColumns,selectedColumns);
 		if (selectColumnActionDialog.open() != 1) {
 			selectedColumns.clear();
@@ -66,6 +72,7 @@ public class SelectColumnAction extends Action {
 	 */
 	public void dipose() {
 		for (int index = debugDataViewer.getTableViewer().getTable().getColumns().length-1; index >= 0; index--) {
+			debugDataViewer.getTableViewer().getTable().getColumns()[index].setImage(null);
 			debugDataViewer.getTableViewer().getTable().getColumns()[index].dispose();
 		}
 		debugDataViewer.getDataViewerAdapter().setColumnList(selectedColumns);
@@ -75,9 +82,27 @@ public class SelectColumnAction extends Action {
 	 * Recreate views with user's input
 	 */
 	private void recreateViews() {
+		String sortColumnsName=debugDataViewer.getSortedColumnName();
+		if(debugDataViewer.getSortOrder()==SortOrder.ASC){
+			sortType=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
+		}
+		else {
+			sortType=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
+		}
 		TableViewer tableViewer=debugDataViewer.getTableViewer();
 		debugDataViewer.createGridViewTableColumns(tableViewer);
 		debugDataViewer.getDataViewLoader().reloadloadViews();
+		debugDataViewer.getTableViewer().getTable().getColumn(0).pack();
+		for (int index = debugDataViewer.getTableViewer().getTable().getColumns().length-1; index >= 0; index--) {
+			if(debugDataViewer.getTableViewer().getTable().getColumns()[index].getText().equals(sortColumnsName)){
+				debugDataViewer.getTableViewer().getTable().getColumn(index).setImage(sortType);
+				debugDataViewer.setRecentlySortedColumn(debugDataViewer.getTableViewer().getTable().getColumn(index));
+				isSortingEnable=true;
+			}
+		}
+		if(!isSortingEnable){
+			DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
+		}
 	}
 	
 	/**
