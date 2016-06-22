@@ -36,6 +36,8 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -78,29 +80,35 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	 */
 	@Override
 	protected Control createContents(Composite parent) {
-		final Composite composite = new Composite(parent, SWT.None);
-		composite.setToolTipText("Export Data");
-		composite.setLayout(new GridLayout(3, false));
+		final Composite parentComposite = new Composite(parent, SWT.None);
+		parentComposite.setToolTipText("Export Data");
+		GridData parentCompositeData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 3, 3);
+		parentCompositeData.heightHint = 390;
+		parentCompositeData.widthHint = 650;
+		parentCompositeData.grabExcessHorizontalSpace = true;
+		parentCompositeData.grabExcessVerticalSpace = true;
+		parentComposite.setLayout(new GridLayout(3, false));
+		parentComposite.setLayoutData(parentCompositeData);
 		
-		Group group = new Group(composite, SWT.None);
-		group.setText("General");
+		Group generalGroup = new Group(parentComposite, SWT.None);
+		generalGroup.setText("General");
 		
-		GridLayout gl_composite_3 = new GridLayout(3, true);
-		gl_composite_3.verticalSpacing = 0;
-		gl_composite_3.marginWidth = 0;
-		gl_composite_3.marginHeight = 0;
-		gl_composite_3.horizontalSpacing = 0;
+		GridLayout generalGroupLayout = new GridLayout(4, true);
+		generalGroupLayout.verticalSpacing = 0;
+		generalGroupLayout.marginWidth = 0;
+		generalGroupLayout.marginHeight = 0;
+		generalGroupLayout.horizontalSpacing = 0;
 		GridData gridData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 3, 3);
-		gridData.heightHint = 90;
-		gridData.widthHint = 610;
+		gridData.heightHint =110;
+		gridData.widthHint = 580;
 		gridData.horizontalSpan = 3;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
-		group.setLayoutData(gridData);
-		group.setLayout(gl_composite_3);
+		generalGroup.setLayoutData(gridData);
+		generalGroup.setLayout(generalGroupLayout);
 		
 		
-		memoryFieldEditor =new IntegerFieldEditor(PreferenceConstants.VIEW_DATA_FILE_SIZE, " File Size (MB)", group, 6);
+		memoryFieldEditor =new IntegerFieldEditor(PreferenceConstants.VIEW_DATA_FILE_SIZE, " File Size (MB)", generalGroup, 6);
 		memoryFieldEditor.setErrorMessage(null);
 		memoryFieldEditor.setFocus();
 		memoryFieldEditor.setPropertyChangeListener(new IPropertyChangeListener() {
@@ -113,18 +121,18 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		memoryFieldEditor.setPreferenceStore(getPreferenceStore());
 		memoryFieldEditor.load();
 		
-		Button unusedButton0 = new Button(group, SWT.None);
-		unusedButton0.setText("mb");
+		Button unusedButton0 = new Button(generalGroup, SWT.None);
+		unusedButton0.setText("unused");
 		unusedButton0.setBounds(0, 0, 20, 10);
 		unusedButton0.setVisible(false);
 		
-		pageSizeEditor = new IntegerFieldEditor(PreferenceConstants.VIEW_DATA_PAGE_SIZE, " Page Size", group, 6);
+		pageSizeEditor = new IntegerFieldEditor(PreferenceConstants.VIEW_DATA_PAGE_SIZE, " Page Size", generalGroup, 6);
 		pageSizeEditor.setErrorMessage(null);
 		pageSizeEditor.setFocus();
 		pageSizeEditor.setPreferenceStore(getPreferenceStore());
 		pageSizeEditor.load();
 		
-		Button unusedButton1 = new Button(group, SWT.None);
+		Button unusedButton1 = new Button(generalGroup, SWT.None);
 		unusedButton1.setText("unused");
 		unusedButton1.setBounds(0, 0, 20, 10);
 		unusedButton1.setVisible(false);
@@ -144,7 +152,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 				}else{ setMessage(null); }
 			}
 		});
-		pageSizeEditor.getTextControl(group).addFocusListener(new FocusListener() {
+		pageSizeEditor.getTextControl(generalGroup).addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) { }
 			@Override
@@ -160,19 +168,46 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 				}else{ setMessage(null); }
 			}
 		});
-		tempPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, " Local Temp Path", group);
+		tempPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, " Local Temp Path", generalGroup);
 		tempPathFieldEditor.setPreferenceStore(getPreferenceStore());
 		tempPathFieldEditor.setFocus();
 		tempPathFieldEditor.setErrorMessage(null);
 		tempPathFieldEditor.load();
+
+		
+		Composite compositeInGeneral = new Composite(generalGroup, SWT.None);
+		GridData gdcompositeNote = new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1);
+		gdcompositeNote.heightHint = 16;
+		gdcompositeNote.widthHint = 500;
+		compositeInGeneral.setLayoutData(gdcompositeNote);
+		Label lblNote = new Label(compositeInGeneral, SWT.WRAP);
+		lblNote.setBounds(4, 0, 40, 20);
+		lblNote.setText("Note : ");
+		FontData fontData = lblNote.getFont().getFontData()[0];
+		Font font = new Font(compositeInGeneral.getDisplay(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
+		lblNote.setFont(font);
+		Label lblmsg = new Label(compositeInGeneral, SWT.WRAP);
+		lblmsg.setBounds(44, 0, 308, 18);
+		lblmsg.setText(Messages.MEMORY_OVERFLOW_EXCEPTION);
 		
 	 
-		Group grpExportData = new Group(composite, SWT.NONE);
-		GridData gd_grpExportData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1);
-		gd_grpExportData.widthHint = 610;
-		gd_grpExportData.heightHint = 92;
-		grpExportData.setLayoutData(gd_grpExportData);
+		Group grpExportData = new Group(parentComposite, SWT.NONE);
 		grpExportData.setText("Export Data");
+		
+		GridLayout grpExportLayout = new GridLayout();
+		grpExportLayout.verticalSpacing = 0;
+		grpExportLayout.marginWidth = 0;
+		grpExportLayout.marginHeight = 0;
+		grpExportLayout.horizontalSpacing = 0;
+		GridData gd_grpExportData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 3, 3);
+		gd_grpExportData.widthHint = 580;
+		gd_grpExportData.heightHint = 130;
+		gd_grpExportData.grabExcessHorizontalSpace = true;
+		gd_grpExportData.grabExcessVerticalSpace = true;
+		
+		grpExportData.setLayoutData(gd_grpExportData);
+		grpExportData.setLayout(grpExportLayout);
+		
 		
 		delimiterEditor = new StringFieldEditor(PreferenceConstants.DELIMITER, " Delimiter", grpExportData);
 		delimiterEditor.setErrorMessage(null);
@@ -223,7 +258,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		delimiterEditor.load();
 		
 		Button unusedButton2 = new Button(grpExportData, SWT.None);
-		unusedButton2.setText("");
+		unusedButton2.setText("unused");
 		unusedButton2.setVisible(false);
 		
 		quoteEditor = new StringFieldEditor(PreferenceConstants.QUOTE_CHARACTOR, " Quote Character", grpExportData);
@@ -286,54 +321,73 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		defaultPathFieldEditor.setPreferenceStore(getPreferenceStore());
 		defaultPathFieldEditor.load();
 		
-		Group grpServiceDetails = new Group(composite, SWT.NONE);
+		new Label(grpExportData, SWT.None).setText(" Include Header ");
+		Composite headerComposite = new Composite(grpExportData, SWT.None);
+		headerComposite.setBounds(0, 0, 20, 16);
+		
+		Composite com = new Composite(grpExportData, SWT.None);
+		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1);
+		gd.heightHint = 20;
+		gd.widthHint = 600;
+		com.setLayoutData(gd);
+		Label lb = new Label(com, SWT.None);
+		lb.setBounds(4, 4, 38, 16);
+		lb.setText("Note : ");
+		FontData messageFontData = lblNote.getFont().getFontData()[0];
+		Font messageFont = new Font(compositeInGeneral.getDisplay(), new FontData(messageFontData.getName(), messageFontData.getHeight(), SWT.BOLD));
+		lb.setFont(messageFont);
+		Label labelMsg = new Label(com, SWT.None);
+		labelMsg.setBounds(42, 4, 500, 16);
+		labelMsg.setText(Messages.WARNING_MESSAGE);
+		
+		Group grpServiceDetails = new Group(parentComposite, SWT.NONE);
 		GridLayout gl_grpServiceDetails = new GridLayout(1, true);
 		GridData gd_grpServiceDetailsData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
-		gd_grpServiceDetailsData.widthHint = 584;
+		gd_grpServiceDetailsData.widthHint = 580;
 		gd_grpServiceDetailsData.heightHint = 34;
 		grpServiceDetails.setLayoutData(gd_grpServiceDetailsData);
 		grpServiceDetails.setLayout(gl_grpServiceDetails);
 		grpServiceDetails.setText("Service Details");
 		
 		Composite grpServiceDetailsCmposite = new Composite(grpServiceDetails, SWT.None);
-		grpServiceDetailsCmposite.setBounds(0, 0, 280, 16);
-		GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_composite_1.heightHint = 26;
-		gd_composite_1.widthHint = 505;
-		grpServiceDetailsCmposite.setLayoutData(gd_composite_1);
+		GridData serviceGridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		serviceGridData.heightHint = 26;
+		serviceGridData.widthHint = 530;
+		grpServiceDetailsCmposite.setLayout(new GridLayout());
+		grpServiceDetailsCmposite.setLayoutData(serviceGridData);
 
-		portNo = new IntegerFieldEditor(PreferenceConstants.PORT_NO, "Port No               ", grpServiceDetailsCmposite,4);
+		portNo = new IntegerFieldEditor(PreferenceConstants.PORT_NO, "Port No               ", grpServiceDetailsCmposite, 4);
 		portNo.setPropertyChangeListener(new IPropertyChangeListener() {
-			
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
 				String value = event.getNewValue().toString();
 				validationForIntegerField(value,portNo,Messages.PORTNO_FIELD_VALIDATION);
-				
 			}
 		});
 		portNo.setPreferenceStore(getPreferenceStore());
 		portNo.load();
 		 
-		booleanFieldEditor = new BooleanFieldEditor(PreferenceConstants.INCLUDE_HEADER, " Include Headers  ", SWT.DEFAULT, composite);
+		booleanFieldEditor = new BooleanFieldEditor(PreferenceConstants.INCLUDE_HEADER, "", SWT.DEFAULT, headerComposite);
 		getPreferenceStore().setDefault(PreferenceConstants.INCLUDE_HEADER, true);
 		booleanFieldEditor.setPreferenceStore(getPreferenceStore());
 		booleanFieldEditor.setPreferenceStore(getPreferenceStore());
 		booleanFieldEditor.load();
 		
-		purgeEditor = new BooleanFieldEditor(PreferenceConstants.PURGE_DATA_FILES, " Purge View Data Files  ", composite);
+		Button unusedButton4 = new Button(parentComposite, SWT.None);
+		unusedButton4.setText("unused");
+		unusedButton4.setVisible(false);
+		
+		new Label(parentComposite, SWT.None).setText("   Purge View Data Files ");
+		Composite purgeComposite = new Composite(parentComposite, SWT.None);
+		GridData purgeCompositeData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		purgeCompositeData.heightHint = 18;
+		purgeComposite.setLayoutData(purgeCompositeData);
+		 
+		purgeEditor = new BooleanFieldEditor(PreferenceConstants.PURGE_DATA_FILES, "", purgeComposite);
 		getPreferenceStore().setDefault(PreferenceConstants.PURGE_DATA_FILES, true);
 		purgeEditor.setPreferenceStore(getPreferenceStore());
 		purgeEditor.load();
 		
-		Composite composite01 = new Composite(parent, SWT.None);
-		composite01.setBounds(200, 0, 300, 450);
-		composite01.setLayout(new GridLayout(1, false));
-		Group group_1 = new Group(composite01, SWT.NONE);
-		group_1.setVisible(false);
-		Label lblNewLabel = new Label(group_1, SWT.NONE);
-		lblNewLabel.setBounds(10, 52, 139, 100);
-		lblNewLabel.setText(" ");
 		
 		addFields(memoryFieldEditor);
 		addFields(defaultPathFieldEditor);

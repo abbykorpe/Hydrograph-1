@@ -41,7 +41,7 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 26.#605  [Shrirang Kumbhar] Data View: User is not able to sort data on data viewer window
 27.#577  [Sonia Raheja][vibhor Tyagi]Global and Local Preferences: OK button functionality is not working if user enters hex value in the delimiter and in quote character text box window.
 28.#558  [Prateem Tadas] Dummy Component :Rename to Unknown
-29.#520  [Kanchan Kauthale] Make lookup mapping window stretchable, auto adjust contents of the window accordingly
+29.#563  [vibhor Tyagi] Global Preference Window: Scroll Bar Appears on View Data Option 
 30.#576  [vibhor Tyagi] Preferances : Validation is not present if user enter page size as 0 in the global and local preferances
 31.#581  [vibhor Tyagi] Global and Local Preferences window:Validation Needs to be Applied for Preferences Windows When User Enters Invalid Value (e.g. 0) in File Size Text Window
 32.#437  [Nikhil Deokar] Schema Tab: Added Range From and Range To validation
