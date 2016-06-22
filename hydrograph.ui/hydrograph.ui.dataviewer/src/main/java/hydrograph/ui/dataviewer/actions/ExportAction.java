@@ -61,8 +61,7 @@ public class ExportAction extends Action {
 	private static final String DEFAILT_FILE_NAME = "export_data.csv";
 	private static final String INFORMATION = "Information";
 	private static final String ERROR = "Error";
-	private Logger logger = LogFactory.INSTANCE.getLogger(ExportAction.class);
-	private static final String LABEL = "Export Data";
+	private static final String LABEL = "&Export Data";
 
 	public ExportAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);

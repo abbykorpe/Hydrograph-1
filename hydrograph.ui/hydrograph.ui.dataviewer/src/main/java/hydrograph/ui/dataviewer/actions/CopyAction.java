@@ -35,7 +35,7 @@ import org.eclipse.swt.widgets.Item;
  */
 public class CopyAction extends Action {
 	
-	private static final String LABEL="Copy";
+	private static final String LABEL="&Copy";
 	private DebugDataViewer debugDataViewer;
 	
 	public CopyAction(DebugDataViewer debugDataViewer) {

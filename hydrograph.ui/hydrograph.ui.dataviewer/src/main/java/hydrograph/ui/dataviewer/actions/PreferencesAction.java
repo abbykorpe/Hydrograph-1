@@ -24,7 +24,7 @@ public class PreferencesAction extends Action {
 	private ViewDataPreferences viewDataPreferences;
 	private DebugDataViewer debugDataViewer;
 	
-	private static final String LABEL="Preferences";
+	private static final String LABEL="&Preferences";
 	
 	public PreferencesAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
