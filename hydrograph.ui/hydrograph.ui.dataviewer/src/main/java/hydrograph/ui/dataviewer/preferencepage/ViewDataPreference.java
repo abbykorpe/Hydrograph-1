@@ -122,7 +122,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		memoryFieldEditor.load();
 		
 		Button unusedButton0 = new Button(generalGroup, SWT.None);
-		unusedButton0.setText("mb");
+		unusedButton0.setText("unused");
 		unusedButton0.setBounds(0, 0, 20, 10);
 		unusedButton0.setVisible(false);
 		
@@ -258,7 +258,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		delimiterEditor.load();
 		
 		Button unusedButton2 = new Button(grpExportData, SWT.None);
-		unusedButton2.setText("");
+		unusedButton2.setText("unused");
 		unusedButton2.setVisible(false);
 		
 		quoteEditor = new StringFieldEditor(PreferenceConstants.QUOTE_CHARACTOR, " Quote Character", grpExportData);
