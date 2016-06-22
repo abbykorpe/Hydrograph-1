@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="OUTPUT"/>
  *     &lt;enumeration value="TRANSFORM"/>
  *     &lt;enumeration value="STRAIGHTPULL"/>
- *     &lt;enumeration value="DUMMY"/>
+ *     &lt;enumeration value="UNKNOWN"/>
  *     &lt;enumeration value="SUBJOB"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
@@ -51,7 +51,7 @@ public enum CategoryType {
     OUTPUT,
     TRANSFORM,
     STRAIGHTPULL,
-    DUMMY,
+    UNKNOWN,
     SUBJOB;
 
     public String value() {

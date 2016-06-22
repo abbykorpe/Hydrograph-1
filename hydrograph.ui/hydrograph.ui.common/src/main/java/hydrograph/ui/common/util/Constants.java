@@ -89,8 +89,8 @@ public class Constants {
 	public static final String INPUT_SOCKET_TYPE = "in";
 	public static final String OUTPUT_SOCKET_TYPE = "out";
 	public static final String UNUSED_SOCKET_TYPE = "unused";
-	public static final String DUMMY_COMPONENT_CATEGORY = "DUMMY";
-	public static final String DUMMY_COMPONENT = "DummyComponent";
+	public static final String UNKNOWN_COMPONENT_CATEGORY = "UNKNOWN";
+	public static final String UNKNOWN_COMPONENT = "UnknownComponent";
 	
 	public static final String LOOKUP_CONFIG_FIELD = "hash_join";
 	public static final String LOOKUP_MAP_FIELD = "hash_join_map";

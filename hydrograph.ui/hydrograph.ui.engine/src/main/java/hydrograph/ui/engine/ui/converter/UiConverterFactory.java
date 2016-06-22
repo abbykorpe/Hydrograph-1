@@ -18,7 +18,7 @@ import hydrograph.ui.engine.ui.converter.impl.AggregateUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.CloneUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.CumulateUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.DiscardUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.DummyUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.UnknownUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.FilterUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.GenerateRecordsUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputFileDelimitedUiConverter;
@@ -187,6 +187,6 @@ public class UiConverterFactory {
 			return new OutputMixedSchemeUiConverter(typeBaseComponent, container);
 		}			
 
-		return new DummyUiConverter(typeBaseComponent,container);
+		return new UnknownUiConverter(typeBaseComponent,container);
 	}
 }
