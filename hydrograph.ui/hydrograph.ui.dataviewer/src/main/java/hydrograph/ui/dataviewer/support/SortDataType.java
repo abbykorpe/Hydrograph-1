@@ -36,7 +36,7 @@ public enum SortDataType {
 	STRING {
 		@Override
 		protected int compareTo(String cell_1, String cell_2, String parameter) {
-			return cell_1.compareTo(cell_2);
+			return cell_1.compareToIgnoreCase(cell_2);
 		}
 		@Override
 		public String getDataType() {
