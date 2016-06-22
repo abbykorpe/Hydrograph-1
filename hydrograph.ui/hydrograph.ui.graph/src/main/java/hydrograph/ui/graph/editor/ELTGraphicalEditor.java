@@ -597,7 +597,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private void createShapesDrawer(PaletteRoot palette) throws RuntimeException, SAXException, IOException {
 		Map<String, PaletteDrawer> categoryPaletteConatiner = new HashMap<>();
 		for (CategoryType category : CategoryType.values()) {
-			if(category.name().equalsIgnoreCase(Constants.DUMMY_COMPONENT_CATEGORY)){
+			if(category.name().equalsIgnoreCase(Constants.UNKNOWN_COMPONENT_CATEGORY)){
 				continue;
 			}				
 			PaletteDrawer p = createPaletteContainer(category.name());
@@ -616,7 +616,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		for (Component componentConfig : componentsConfig) {
 			Class<?> clazz = DynamicClassProcessor.INSTANCE.createClass(componentConfig);
 
-			if(componentConfig.getName().equalsIgnoreCase(Constants.DUMMY_COMPONENT)){
+			if(componentConfig.getName().equalsIgnoreCase(Constants.UNKNOWN_COMPONENT)){
 				continue;
 			}
 

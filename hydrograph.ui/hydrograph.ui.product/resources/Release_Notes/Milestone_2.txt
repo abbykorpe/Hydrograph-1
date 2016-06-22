@@ -39,6 +39,7 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 25.#612  [Shrirang Kumbhar] Multiple View Data Windows are Not Getting Closed on Job Re-run Event 
 26.#605  [Shrirang Kumbhar] Data View: User is not able to sort data on data viewer window
 27.#577  [Sonia Raheja][vibhor Tyagi]Global and Local Preferences: OK button functionality is not working if user enters hex value in the delimiter and in quote character text box window.
+28.#558  [Prateem Tadas] Dummy Component :Rename to Unknown
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
