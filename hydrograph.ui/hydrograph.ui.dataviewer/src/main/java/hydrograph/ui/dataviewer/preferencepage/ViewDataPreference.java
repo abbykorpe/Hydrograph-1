@@ -331,13 +331,13 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		gd.widthHint = 600;
 		com.setLayoutData(gd);
 		Label lb = new Label(com, SWT.None);
-		lb.setBounds(4, 0, 38, 16);
+		lb.setBounds(4, 4, 38, 16);
 		lb.setText("Note : ");
 		FontData messageFontData = lblNote.getFont().getFontData()[0];
 		Font messageFont = new Font(compositeInGeneral.getDisplay(), new FontData(messageFontData.getName(), messageFontData.getHeight(), SWT.BOLD));
 		lb.setFont(messageFont);
 		Label labelMsg = new Label(com, SWT.None);
-		labelMsg.setBounds(42, 0, 500, 16);
+		labelMsg.setBounds(42, 4, 500, 16);
 		labelMsg.setText(Messages.WARNING_MESSAGE);
 		
 		Group grpServiceDetails = new Group(parentComposite, SWT.NONE);
