@@ -122,6 +122,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeExpressionOutputFields }
+     * 
+     */
+    public TypeExpressionOutputFields createTypeExpressionOutputFields() {
+        return new TypeExpressionOutputFields();
+    }
+
+    /**
      * Create an instance of {@link TypeTrueFalse }
      * 
      */
@@ -167,6 +175,14 @@ public class ObjectFactory {
      */
     public TypeTransformOperation createTypeTransformOperation() {
         return new TypeTransformOperation();
+    }
+
+    /**
+     * Create an instance of {@link TypeTransformExpression }
+     * 
+     */
+    public TypeTransformExpression createTypeTransformExpression() {
+        return new TypeTransformExpression();
     }
 
     /**

@@ -52,7 +52,7 @@ import hydrograph.engine.jaxb.transform.TypeTransformOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-operations-out-socket", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
+@XmlType(name = "type-operations-out-socket", propOrder = {
     "copyOfInsocket",
     "passThroughFieldOrOperationFieldOrMapField"
 })

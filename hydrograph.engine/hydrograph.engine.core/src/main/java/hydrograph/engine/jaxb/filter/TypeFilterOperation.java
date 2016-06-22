@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-filter-operation", namespace = "hydrograph/engine/jaxb/filter")
+@XmlType(name = "type-filter-operation")
 public class TypeFilterOperation
     extends TypeTransformOperation
 {

@@ -43,7 +43,7 @@ import hydrograph.engine.jaxb.straightpulltypes.Limit;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-limit-base", namespace = "hydrograph/engine/jaxb/limit")
+@XmlType(name = "type-limit-base")
 @XmlSeeAlso({
     Limit.class
 })

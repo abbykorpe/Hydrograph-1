@@ -62,14 +62,14 @@ public class CumulateAssemblyGenerator extends OperationAssemblyGeneratorBase {
 		cumulateEntity.setPhase(jaxbCumulate.getPhase());
 
 		// check if operation is present
-		if (jaxbCumulate.getOperation() != null && jaxbCumulate.getOperation().size() > 0) {
+		if (jaxbCumulate.getOperationOrExpression() != null && jaxbCumulate.getOperationOrExpression().size() > 0) {
 
 			LOG.trace("Operation(s) present for cumulate component: " + jaxbCumulate.getId() + ", processing");
 			// set the number of operations in the transform component and set
 			// operation present to true
-			cumulateEntity.setNumOperations(jaxbCumulate.getOperation().size());
+			cumulateEntity.setNumOperations(jaxbCumulate.getOperationOrExpression().size());
 			cumulateEntity.setOperationPresent(true);
-			cumulateEntity.setOperationsList(OperationEntityUtils.extractOperations(jaxbCumulate.getOperation()));
+			cumulateEntity.setOperationsList(OperationEntityUtils.extractOperations(jaxbCumulate.getOperationOrExpression()));
 		} else {
 			LOG.trace("Operation not present for cumulate component: " + jaxbCumulate.getId()
 					+ ", skipped operation processing");

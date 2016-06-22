@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.inputtypes.SubjobInput;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-file-delimited-subjob", namespace = "hydrograph/engine/jaxb/ifsubjob")
+@XmlType(name = "type-input-file-delimited-subjob")
 @XmlSeeAlso({
     SubjobInput.class
 })

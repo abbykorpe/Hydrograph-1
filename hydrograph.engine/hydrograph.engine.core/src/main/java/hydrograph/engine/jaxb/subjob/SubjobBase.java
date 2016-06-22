@@ -43,7 +43,7 @@ import hydrograph.engine.jaxb.operationstypes.Subjob;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "subjob-base", namespace = "hydrograph/engine/jaxb/subjob")
+@XmlType(name = "subjob-base")
 @XmlSeeAlso({
     Subjob.class
 })

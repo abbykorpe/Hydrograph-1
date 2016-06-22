@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-generate-record-record", namespace = "hydrograph/engine/jaxb/igr")
+@XmlType(name = "type-generate-record-record")
 public class TypeGenerateRecordRecord
     extends TypeBaseRecord
 {
