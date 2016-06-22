@@ -6,6 +6,7 @@ Sr.No. <date> - [developer names] - description
 									nested subjob and job having external schema. 
 2. <21-Jun-16> - [Kanchan Kauthale] Make lookup mapping window stretchable, auto adjust contents of the window accordingly
 3. <21-Jun-16> - [Shrirang Kumbhar] - Added sort functionality to data viewer
+4. <22-Jun-16> - [Shrirang Kumbhar] - Debug Data viewer window does not appear in task bar #628
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
@@ -47,6 +48,8 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 33.#441  [Nikhil Deokar] Creating Parameter file on Save As event
 34.#501  [Ashika Holkar] Multiple date and time in console log   
 35.#106  [Akhilesh Joshi]Keyboard shortcuts for cut / copy / paste / delete and refresh are not working in project explorer
+15.#628  [Shrirang kumbhar] Debug Data viewer window does not appear in task bar 
+16.#636  [Shrirang kumbhar] Debug Service: Exception handling and error reporting if unable to create debug files
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

@@ -191,7 +191,7 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	
 	public DebugDataViewer( JobDetails jobDetails, String dataViewerWindowName) {
-		super(new Shell(SWT.CLOSE | SWT.MAX | SWT.MIN));
+		super(null);
 		createActions();
 		addCoolBar(SWT.FLAT);
 		addMenuBar();

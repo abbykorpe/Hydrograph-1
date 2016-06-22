@@ -28,6 +28,7 @@ import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.security.NoSuchAlgorithmException;
@@ -57,6 +58,9 @@ import org.slf4j.Logger;
  */
 public class DebugHandler{
 	
+	/** Default debug service port */
+	private static final String DEFAULT_DEBUG_SERVICE_PORT = "8004";
+
 	/** The logger. */
 	private Logger logger = LogFactory.INSTANCE.getLogger(DebugHandler.class);
 	
@@ -209,7 +213,7 @@ public class DebugHandler{
 		if(!StringUtils.isEmpty(portNumber)){
 			job.setPortNumber(portNumber);
 		}else{
-			job.setPortNumber("8004");
+			job.setPortNumber(DEFAULT_DEBUG_SERVICE_PORT);
 		}
 		job.setDebugMode(true);
 		job.setPassword(clusterPassword);
@@ -290,10 +294,21 @@ public class DebugHandler{
 		if(StringUtils.isNotBlank(path)){
 			logger.debug("validating file path : {}", path);
 			validPath = SchemaHelper.INSTANCE.validatePath(path);
+			
+			createDirectoryIfNotExist(validPath);
+			
 			filePath = validPath + jobId;
 			SchemaHelper.INSTANCE.exportSchemaFile(filePath);
 		}else{
 			logger.debug("File path does not exist : {}", path);
+		}
+	}
+
+
+	private void createDirectoryIfNotExist(String validPath) {
+		File directory = new File(validPath);
+		if(!directory.exists()){
+			directory.mkdirs();
 		}
 	}
 	
