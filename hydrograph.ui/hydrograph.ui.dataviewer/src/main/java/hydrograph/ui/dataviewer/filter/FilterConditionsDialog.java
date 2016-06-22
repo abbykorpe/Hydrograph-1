@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.fieldassist.ComboContentAdapter;
@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -62,7 +63,6 @@ public class FilterConditionsDialog extends Dialog {
 	private static final String FIELD_EDITOR = "field_editor";
 	private static final String CONDITIONAL_EDITOR = "conditional_editor";
 	private static final String VALUE_EDITOR = "vale_editor";
-	private static int GROUP_COLUMNS_COUNT = 0;
 	
 	private Map<String,String[]> typeBasedConditionalOperators = new HashMap<>();
 	
@@ -74,8 +74,6 @@ public class FilterConditionsDialog extends Dialog {
 	
 	private List<Condition> localConditionsList; 
 	private List<Condition> remoteConditionsList; 
-	//Map for adding group index with list of list of row indexes
-	private TreeMap<Integer,List<List<Integer>>> groupSelectionMap;
 	
 	public void setRelationalOperators(String[] relationalOperators) {
 		this.relationalOperators = relationalOperators;
@@ -96,7 +94,6 @@ public class FilterConditionsDialog extends Dialog {
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.RESIZE);
 		localConditionsList = new ArrayList<>();
 		remoteConditionsList = new ArrayList<>();
-		groupSelectionMap = new TreeMap<>();
 		
 		typeBasedConditionalOperators.put("java.lang.String", new String[]{"like", "in", "not in"});
 		typeBasedConditionalOperators.put("java.lang.Integer", new String[]{"<", "<=", ">", ">=", "!=", "="});
@@ -178,10 +175,6 @@ public class FilterConditionsDialog extends Dialog {
 		buttonComposite.setLayout(new GridLayout(2, false));
 		buttonComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		
-		Button btnAddGrp = new Button(buttonComposite, SWT.NONE);
-		btnAddGrp.setText("Create Group");
-		btnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer));
-		
 		Button btnOk = new Button(buttonComposite, SWT.NONE);
 		btnOk.setText("OK");
 		btnOk.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(remoteConditionsList));
@@ -237,11 +230,6 @@ public class FilterConditionsDialog extends Dialog {
 		Composite buttonComposite = new Composite(composite, SWT.NONE);
 		buttonComposite.setLayout(new GridLayout(2, false));
 		buttonComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		Button btnAddGrp = new Button(buttonComposite, SWT.NONE);
-		
-		btnAddGrp.setText("Create Group");
-		btnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer));
-	
 		
 		Button btnOk = new Button(buttonComposite, SWT.NONE);
 		btnOk.setText("OK");
@@ -502,29 +490,6 @@ public class FilterConditionsDialog extends Dialog {
 		};
 	}
 	
-	private CellLabelProvider getDummyColumn(final TableViewer tableViewer,	final List<Condition> conditionsList) {
-		return new CellLabelProvider() {
-
-			@Override
-			public void update(ViewerCell cell) {
-				final TableItem item = (TableItem) cell.getItem();
-				
-				if (item.getData("UPDATED3") == null) {
-					item.setData("UPDATED3", "TRUE");
-				} else {
-					return;
-				}
-
-				item.addDisposeListener(new DisposeListener() {
-
-					@Override
-					public void widgetDisposed(DisposeEvent e) {
-					}
-				});
-			}
-		};
-	}
-	
 	private TableViewerColumn createTableColumns(TableViewer tableViewer, String columnLabel) {
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tableColumn = tableViewerColumn.getColumn();
@@ -616,127 +581,4 @@ public class FilterConditionsDialog extends Dialog {
 	protected void createButtonsForButtonBar(Composite parent) {
 		//super.createButtonsForButtonBar(parent);
 	}
-	
-private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer) {
-		
-		SelectionListener listener = new SelectionListener() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			
-			      
-				storeGroupSelection(tableViewer) ;              			     
-			     
-				GROUP_COLUMNS_COUNT++;
-			    
-			  
-			    TableColumn[] columns = tableViewer.getTable().getColumns();
-			   
-			    TableItem[] items = tableViewer.getTable().getItems();
-			   
-			    for (int i = 0; i < items.length; i++) {
-			    	items[i].dispose();
-				}
-			    
-			    for (TableColumn tc : columns) {
-			    	
-			     tc.dispose();
-							    	
-				}
-			    
-			    redrawAllColumns(tableViewer);
-			   			 
-			      
-			}
-			
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		};
-		
-		return listener;
-	}
-
-	
-	
-	private void redrawAllColumns(TableViewer tableViewer){
-		
-		TableViewerColumn addButtonTableViewerColumn = createTableColumns(
-				tableViewer, "");
-		addButtonTableViewerColumn.setLabelProvider(getAddButtonCellProvider(
-				tableViewer, remoteConditionsList));
-
-		TableViewerColumn removeButtonTableViewerColumn = createTableColumns(
-				tableViewer, "");
-		removeButtonTableViewerColumn
-				.setLabelProvider(getRemoveButtonCellProvider(tableViewer,
-						remoteConditionsList));
-
-		TableViewerColumn groupButtonTableViewerColumn = createTableColumns(
-				tableViewer, "Group");
-		groupButtonTableViewerColumn
-				.setLabelProvider(getGroupCheckCellProvider(tableViewer,
-						remoteConditionsList));
-
-		for(int i=0; i<GROUP_COLUMNS_COUNT; i++){
-			TableViewerColumn dummyTableViewerColumn = createTableColumns(
-					tableViewer, "");
-			dummyTableViewerColumn
-					.setLabelProvider(getDummyColumn(tableViewer,
-							remoteConditionsList));	
-		}
-		
-		TableViewerColumn relationalDropDownColumn = createTableColumns(
-				tableViewer, "Relational Operator");
-		relationalDropDownColumn.setLabelProvider(getRelationalCellProvider(
-				tableViewer, remoteConditionsList));
-
-		TableViewerColumn fieldNameDropDownColumn = createTableColumns(
-				tableViewer, "Field Name");
-		fieldNameDropDownColumn.setLabelProvider(getFieldNamecellProvider(
-				tableViewer, remoteConditionsList));
-
-		TableViewerColumn conditionalDropDownColumn = createTableColumns(
-				tableViewer, "Conditional Operator");
-		conditionalDropDownColumn.setLabelProvider(getConditionalCellProvider(
-				tableViewer, remoteConditionsList));
-
-		TableViewerColumn valueTextBoxColumn = createTableColumns(tableViewer,
-				"Value");
-		valueTextBoxColumn.setLabelProvider(getValueCellProvider(tableViewer,
-				remoteConditionsList));
-		
-		tableViewer.refresh();
-	}
-
-
-	private void storeGroupSelection(TableViewer tableViewer){
-		
-		
-		List<List<Integer>> grpList = new ArrayList<>();
-		List<Integer> selectionList = new ArrayList<>();
-		
-		
-		 TableItem[] items = tableViewer.getTable().getItems();
-		
-		   for (TableItem tableItem : items) {
-			   Button button = (Button) tableItem.getData(GROUP_CHECKBOX);
-			   if(button.getSelection()){
-			   selectionList.add(tableViewer.getTable().indexOf(tableItem));
-			   }
-		}
-		   
-		   grpList.add(selectionList);
-		   if(groupSelectionMap.isEmpty()){
-			   groupSelectionMap.put(1, grpList); 
-		   }else{
-			   groupSelectionMap.put(groupSelectionMap.lastKey()+1,grpList);
-		   }
-		  
-		
-	}
-	
 }

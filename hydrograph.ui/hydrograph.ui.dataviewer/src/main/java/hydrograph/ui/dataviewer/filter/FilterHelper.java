@@ -5,6 +5,7 @@ import hydrograph.ui.dataviewer.filter.Condition;
 import java.util.List;
 import java.util.Map;
  
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.SelectionEvent;
@@ -13,7 +14,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
@@ -192,6 +192,4 @@ public class FilterHelper {
 		};
 		return listener;
 	}
-	
-
 }
