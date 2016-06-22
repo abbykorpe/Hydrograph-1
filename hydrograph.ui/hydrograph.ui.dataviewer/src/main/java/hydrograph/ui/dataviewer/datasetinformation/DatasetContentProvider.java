@@ -18,7 +18,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 /**
- * 
+ *  This class provides the input elements to display in Schema grid
  * @author Bitwise
  */
 public class DatasetContentProvider implements IStructuredContentProvider {

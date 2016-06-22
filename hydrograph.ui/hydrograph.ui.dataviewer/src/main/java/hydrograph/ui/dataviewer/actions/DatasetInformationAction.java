@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 /**
+ * This class is responsible to show information for View Data debug file
  * @author Bitwise
  */
 

@@ -22,7 +22,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
 /**
- * 
+ * DatasetLabelProvider class is used to display columns
  * @author Bitwise
  */
 

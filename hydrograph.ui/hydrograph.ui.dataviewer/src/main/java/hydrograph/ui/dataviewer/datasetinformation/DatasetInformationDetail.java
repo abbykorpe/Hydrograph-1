@@ -13,7 +13,7 @@
 package hydrograph.ui.dataviewer.datasetinformation;
 
 /**
- * 
+ * This class stores the values of Data set Information Window
  * @author Bitwise
  */
 

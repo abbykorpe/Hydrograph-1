@@ -44,6 +44,10 @@ import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 
+/**
+ * Data set Information Window
+ * @author Bitwise
+ */
 public class DatasetInformationDialog extends Dialog {
 	
 	
