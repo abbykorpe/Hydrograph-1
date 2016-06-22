@@ -26,7 +26,7 @@ import org.eclipse.jface.action.Action;
  */
 public class UnformattedViewAction extends Action {
 	private DebugDataViewer debugDataViewer;
-	private static final String LABEL="Unformatted Text View";
+	private static final String LABEL="&Unformatted Text View";
 	
 	public UnformattedViewAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);

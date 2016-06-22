@@ -31,7 +31,7 @@ import org.eclipse.ui.PlatformUI;
 
 public class DatasetInformationAction extends Action {
 
-	private static final String LABEL="Dataset Information";
+	private static final String LABEL="Dataset &Information";
 	private DebugDataViewer debugDataViewer;
 	
 	/**

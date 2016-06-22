@@ -58,7 +58,7 @@ public class ReloadAction extends Action {
 	private JobDetails jobDetails;
 	private DebugDataViewer debugDataViewer;
 	private ViewDataPreferences viewDataPreferences;	
-	private static final String LABEL = "Reload";
+	private static final String LABEL = "&Reload";
 
 	private Integer lastDownloadedFileSize;
 	

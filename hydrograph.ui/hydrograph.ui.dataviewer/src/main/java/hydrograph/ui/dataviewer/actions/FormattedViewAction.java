@@ -27,7 +27,7 @@ import org.eclipse.jface.action.Action;
 public class FormattedViewAction extends Action {
 	
 	private DebugDataViewer debugDataViewer;
-	private static final String LABEL="Formatted Text View";
+	private static final String LABEL="&Formatted Text View";
 	public FormattedViewAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
 		this.debugDataViewer = debugDataViewer;

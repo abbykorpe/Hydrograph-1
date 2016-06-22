@@ -29,10 +29,10 @@ public class ControlConstants {
 	public static final String JUMP_TEXT="JUMP_TEXT";
 	public static final String PAGE_NUMBER_DISPLAY="PAGE_NUMBER_DISPLAY";
 	
-	public static final String PREVIOUS_BUTTON_DISPLAY_TEXT="Previous";
-	public static final String NEXT_BUTTON_DISPLAY_TEXT="Next";
+	public static final String PREVIOUS_BUTTON_DISPLAY_TEXT="&Previous";
+	public static final String NEXT_BUTTON_DISPLAY_TEXT="&Next";
 	public static final String JUMP_BUTTON_DISPLAY_TEXT="Go";	
-	public static final String JUMP_TO_PAGE_LABEL_TEXT="Jump to Page: ";	
+	public static final String JUMP_TO_PAGE_LABEL_TEXT="&Jump to Page: ";	
 	
 	public static final Point DATA_VIEWER_MINIMUM_SIZE=new Point(848, 469);
 }

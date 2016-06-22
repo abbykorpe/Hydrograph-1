@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Table;
  */
 public class SelectAllAction extends Action{
 	
-	private static final String LABEL="Select All";
+	private static final String LABEL="Select &All";
 	private DebugDataViewer debugDataViewer;
 	
 	public SelectAllAction(DebugDataViewer debugDataViewer) {

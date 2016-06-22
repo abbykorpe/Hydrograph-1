@@ -26,7 +26,7 @@ import org.eclipse.jface.action.Action;
  */
 public class GridViewAction extends Action {
 	private DebugDataViewer debugDataViewer;
-	private static final String LABEL="Grid View";
+	private static final String LABEL="&Grid View";
 	public GridViewAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
 		this.debugDataViewer = debugDataViewer;

@@ -922,6 +922,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		createFileMenu(menuManager);
 		createEditMenu(menuManager);
 		createViewMenu(menuManager);
+		createDataMenu(menuManager);
 		createWindowMenu(menuManager);
 
 		return menuManager;
@@ -991,6 +992,20 @@ public class DebugDataViewer extends ApplicationWindow {
 		viewMenu.add(actionFactory.getAction(PreferencesAction.class.getName()));
 	}
 
+	
+	private void createDataMenu(MenuManager menuManager) {
+		MenuManager dataMenu = createMenu(menuManager, MenuConstants.Data);
+		menuManager.add(dataMenu);
+		dataMenu.setVisible(true);
+
+		if (actionFactory == null) {
+			actionFactory = new ActionFactory(this);
+		}
+		
+		dataMenu.add(actionFactory.getAction(ResetSort.class.getName()));
+	
+	}
+	
 	/**
 	 * 
 	 * Get data viewer preferences from preference file

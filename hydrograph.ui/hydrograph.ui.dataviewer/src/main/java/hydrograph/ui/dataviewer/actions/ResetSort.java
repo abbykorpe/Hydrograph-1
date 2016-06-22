@@ -28,8 +28,9 @@ import org.eclipse.jface.action.Action;
 public class ResetSort extends Action {
 
 	private DebugDataViewer debugDataViewer;
-	
+	private static final String LABEL = "Re&set Sort";
 	public ResetSort(DebugDataViewer debugDataViewer) {
+		super(LABEL);
 		this.debugDataViewer = debugDataViewer;
 	}
 
