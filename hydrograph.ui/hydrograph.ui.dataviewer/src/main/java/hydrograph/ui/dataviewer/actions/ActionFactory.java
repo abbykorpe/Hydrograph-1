@@ -49,8 +49,12 @@ public class ActionFactory {
 		FormattedViewAction formattedViewAction = new FormattedViewAction(debugDataViewer);
 		ReloadAction reloadAction = new ReloadAction(debugDataViewer);
 		PreferencesAction preferencesAction= new PreferencesAction(debugDataViewer);
+		DatasetInformationAction datasetInformationAction = new DatasetInformationAction(debugDataViewer);
 		ResetSort resetSort = new ResetSort(debugDataViewer);
 		
+
+		
+
 		
 		actionMap.put(ExportAction.class.getName(), exportAction);
 		actionMap.put(FilterAction.class.getName(), filterAction);
@@ -63,8 +67,12 @@ public class ActionFactory {
 		actionMap.put(FormattedViewAction.class.getName(), formattedViewAction);
 		actionMap.put(ReloadAction.class.getName(), reloadAction);
 		actionMap.put(PreferencesAction.class.getName(), preferencesAction);
+		actionMap.put(DatasetInformationAction.class.getName(), datasetInformationAction);
 		actionMap.put(ResetSort.class.getName(), resetSort);
 		
+
+		
+
 	}
 	
 	/**

@@ -10,19 +10,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+ 
+package hydrograph.ui.dataviewer.datasetinformation;
 
-package hydrograph.ui.dataviewer.constants;
+import java.util.List;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.Viewer;
 
 /**
- * Menus constants
- * 
+ *  This class provides the input elements to display in Schema grid
  * @author Bitwise
- *
  */
-public class MenuConstants {
-	public static final String MENU="menu";
-	public static final String FILE="File";
-	public static final String EDIT="Edit";
-	public static final String VIEW="View";
-	public static final String WINDOW="Window";
+public class DatasetContentProvider implements IStructuredContentProvider {
+	
+	@Override
+	public void dispose() {
+		// Do nothing
+		
+	}
+
+	@Override
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		// Do nothing
+		
+	}
+
+	@Override
+	public Object[] getElements(Object inputElement) {
+		return ((List) inputElement).toArray();
+	}
 }
