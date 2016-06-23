@@ -12,6 +12,9 @@
  ******************************************************************************/
 package hydrograph.ui.graph.handler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
@@ -27,6 +30,8 @@ import org.eclipse.swt.widgets.Display;
  */
 public class JobHandler extends AbstractHandler {
 
+	private List<String> dataViewFileIds =  new ArrayList<String>();
+	
 	/**
 	 * Instantiates a new job handler.
 	 */
@@ -59,7 +64,7 @@ public class JobHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		RunConfigDialog runConfigDialog = getRunConfiguration();
 		if(runConfigDialog.isDebug()){
-			new DebugHandler().execute(runConfigDialog);
+			new DebugHandler(dataViewFileIds).execute(runConfigDialog);
 		}
 		else{
 			new RunJobHandler().execute(runConfigDialog);

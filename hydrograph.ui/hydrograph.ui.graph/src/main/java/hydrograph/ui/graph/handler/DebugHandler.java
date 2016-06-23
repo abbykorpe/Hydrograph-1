@@ -58,6 +58,8 @@ import org.slf4j.Logger;
  */
 public class DebugHandler{
 	
+	
+
 	/** Default debug service port */
 	private static final String DEFAULT_DEBUG_SERVICE_PORT = "8004";
 
@@ -79,7 +81,13 @@ public class DebugHandler{
 	/** The current job name. */
 	private String currentJobName = null;
 	
-	private List<String> dataViewFileIds =  new ArrayList<String>();
+	private List<String> dataViewFileIds;
+	
+	
+	public DebugHandler(List<String> dataViewFileIds) {
+		super();
+		this.dataViewFileIds = dataViewFileIds;
+	}
 	
 	/**
 	 * Gets the job.
