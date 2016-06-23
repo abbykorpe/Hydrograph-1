@@ -2,6 +2,10 @@ package hydrograph.ui.dataviewer.filter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
+
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +26,10 @@ import org.eclipse.swt.widgets.Text;
 public class FilterHelper {
 	
 	public static final FilterHelper INSTANCE = new FilterHelper();
+	private String filterType;
+	private DataViewerAdapter dataViewerAdapter;
+	private DebugDataViewer debugDataViewer;
+	private FilterConditionsDialog filterConditionsDialog;
 	private FilterHelper() {
 	}
 	
@@ -192,6 +200,25 @@ public class FilterHelper {
 				}
 				
 				System.out.println(buffer);
+				if(filterType!=null && filterType.equalsIgnoreCase("local"))
+				{
+					try {
+
+						dataViewerAdapter.setFilterCondition(buffer.toString());
+						dataViewerAdapter.initializeTableData();
+						debugDataViewer.getDataViewLoader().updateDataViewLists();
+						debugDataViewer.getDataViewLoader().reloadloadViews();
+
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+				else
+				{
+					System.out.println("**** Nothing");
+				}
+			
+				filterConditionsDialog.close();
 			}
 			
 			@Override
@@ -339,5 +366,17 @@ public class FilterHelper {
 			}
 		};
 		return listner;
+	}
+	public void setFilterType(String filterType) {
+		this.filterType=filterType;
+	}
+
+	public void setDataViewerAdapter(DataViewerAdapter dataViewerAdapter, FilterConditionsDialog filterConditionsDialog) {
+		this.dataViewerAdapter=dataViewerAdapter;
+		this.filterConditionsDialog=filterConditionsDialog;
+	}
+
+	public void setDebugDataViewer(DebugDataViewer debugDataViewer) {
+		this.debugDataViewer=debugDataViewer;
 	}
 }

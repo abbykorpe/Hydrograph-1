@@ -13,14 +13,30 @@
 
 package hydrograph.ui.dataviewer.actions;
 
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.FieldDataTypes;
+import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.dataviewer.filter.FilterConditionsDialog;
+import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
+import hydrograph.ui.logging.factory.LogFactory;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
 
 public class FilterAction extends Action {
 	
 	private static final String LABEL="Filter";
 	private DebugDataViewer debugDataViewer;
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterAction.class);
+	private String SCHEMA_FILE_EXTENTION=".xml";
+	
+	
 	
 	public FilterAction(DebugDataViewer debugDataViewer) {
     	super(LABEL);
@@ -28,6 +44,27 @@ public class FilterAction extends Action {
 	}
 	@Override
 	public void run() {
-		super.run();
+		FilterConditionsDialog filterConditionsDialog=new FilterConditionsDialog(new Shell());
+		filterConditionsDialog.setFieldsAndTypes(getFieldsAndTypes());
+		try {
+			filterConditionsDialog.setDebugDataViewerAdapterAndViewer(debugDataViewer.getDataViewerAdapter(),debugDataViewer);
+			filterConditionsDialog.open();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private Map<String, String> getFieldsAndTypes() {
+		Map<String, String> fieldsAndTypes = new HashMap<>();
+		String debugFileName = debugDataViewer.getDebugFileName();
+		String debugFileLocation = debugDataViewer.getDebugFileLocation();
+
+		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation
+				+ debugFileName + SCHEMA_FILE_EXTENTION);
+		for (Field field : dataViewerFileSchema.getField()) {
+			FieldDataTypes fieldDataTypes = field.getType();
+			fieldsAndTypes.put(field.getName(), fieldDataTypes.value());
+		}
+		return fieldsAndTypes;
 	}
 }

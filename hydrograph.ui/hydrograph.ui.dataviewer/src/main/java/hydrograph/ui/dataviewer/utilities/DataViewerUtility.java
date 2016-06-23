@@ -35,6 +35,7 @@ public class DataViewerUtility {
 	 * Reset sort on data viewer
 	 * 
 	 */
+<<<<<<< HEAD
 	public void resetSort(DebugDataViewer debugDataViewer) {
 		if (debugDataViewer.getRecentlySortedColumn() != null
 				&& !debugDataViewer.getRecentlySortedColumn().isDisposed()) {
@@ -42,6 +43,11 @@ public class DataViewerUtility {
 			debugDataViewer.setSortedColumnName(null);
 			debugDataViewer.setRecentlySortedColumn(null);
 		}
+=======
+	public void resetSort(DebugDataViewer debugDataViewer){
+		
+		debugDataViewer.getRecentlySortedColumn().setImage(null);
+>>>>>>> Changes related to local filtering
 		debugDataViewer.getDataViewLoader().updateDataViewLists();
 		debugDataViewer.getDataViewLoader().reloadloadViews();
 		debugDataViewer.getActionFactory().getAction(ResetSort.class.getName()).setEnabled(false);

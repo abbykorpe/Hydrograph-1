@@ -2,6 +2,11 @@ package hydrograph.ui.dataviewer.filter;
 
 import hydrograph.ui.common.util.ImagePathConstant;
 
+import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
+import hydrograph.ui.logging.factory.LogFactory;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import java.util.TreeMap;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.fieldassist.ComboContentAdapter;
@@ -39,6 +45,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.slf4j.Logger;
 
 public class FilterConditionsDialog extends Dialog {
 	private static final String VALUE_TEXT_BOX = "valueTextBox";
@@ -71,7 +78,7 @@ public class FilterConditionsDialog extends Dialog {
 	private RetainFilter retainLocalFilter;
 	private RetainFilter retainRemoteFilter;
 	
-	private String relationalOperators[];
+	private String relationalOperators[] = new String[]{"and", "or"};
 	private String fieldNames[];
 	private Map<String, String> fieldsAndTypes;
 	private TableViewer remoteTableViewer;
@@ -79,10 +86,12 @@ public class FilterConditionsDialog extends Dialog {
 	
 	private List<Condition> localConditionsList; 
 	private List<Condition> remoteConditionsList; 
+	//Map for adding group index with list of list of row indexes
+	private TreeMap<Integer,List<List<Integer>>> groupSelectionMap;
+	private DataViewerAdapter dataViewerAdapter;
+	private DebugDataViewer debugDataViewer;
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConditionsDialog.class);
 	
-	public void setRelationalOperators(String[] relationalOperators) {
-		this.relationalOperators = relationalOperators;
-	}
 	
 	public void setFieldsAndTypes(Map<String, String> fieldsAndTypes) {
 		this.fieldsAndTypes = fieldsAndTypes;
@@ -91,7 +100,7 @@ public class FilterConditionsDialog extends Dialog {
 	}
 	
 	/**
-	 * Create the dialog.
+	 * Create the dialog.	
 	 * @param parentShell
 	 */
 	public FilterConditionsDialog(Shell parentShell) {
@@ -145,6 +154,24 @@ public class FilterConditionsDialog extends Dialog {
 		
 		createRemoteTabItem(tabFolder, remoteTableViewer);
 		createLocalTabItem(tabFolder, localTableViewer);
+		FilterHelper.INSTANCE.setDataViewerAdapter(dataViewerAdapter,this);
+		FilterHelper.INSTANCE.setDebugDataViewer(debugDataViewer);
+		tabFolder.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				TabItem tabItem = (TabItem) e.item;
+				if (tabItem.getText().equalsIgnoreCase("local")) {
+					FilterHelper.INSTANCE.setFilterType("local");
+				} else {
+					FilterHelper.INSTANCE.setFilterType("remote");
+				}
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
 		
 		return container;
 	}
@@ -640,4 +667,132 @@ public class FilterConditionsDialog extends Dialog {
 	protected void createButtonsForButtonBar(Composite parent) {
 		//super.createButtonsForButtonBar(parent);
 	}
+	
+private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer) {
+		
+		SelectionListener listener = new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			
+			      
+				storeGroupSelection(tableViewer) ;              			     
+			     
+				GROUP_COLUMNS_COUNT++;
+			    
+			  
+			    TableColumn[] columns = tableViewer.getTable().getColumns();
+			   
+			    TableItem[] items = tableViewer.getTable().getItems();
+			   
+			    for (int i = 0; i < items.length; i++) {
+			    	items[i].dispose();
+				}
+			    
+			    for (TableColumn tc : columns) {
+			    	
+			     tc.dispose();
+							    	
+				}
+			    
+			    redrawAllColumns(tableViewer);
+			   			 
+			      
+			}
+			
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
+		
+		return listener;
+	}
+
+	
+	
+	private void redrawAllColumns(TableViewer tableViewer){
+		
+		TableViewerColumn addButtonTableViewerColumn = createTableColumns(
+				tableViewer, "");
+		addButtonTableViewerColumn.setLabelProvider(getAddButtonCellProvider(
+				tableViewer, remoteConditionsList));
+
+		TableViewerColumn removeButtonTableViewerColumn = createTableColumns(
+				tableViewer, "");
+		removeButtonTableViewerColumn
+				.setLabelProvider(getRemoveButtonCellProvider(tableViewer,
+						remoteConditionsList));
+
+		TableViewerColumn groupButtonTableViewerColumn = createTableColumns(
+				tableViewer, "Group");
+		groupButtonTableViewerColumn
+				.setLabelProvider(getGroupCheckCellProvider(tableViewer,
+						remoteConditionsList));
+
+		for(int i=0; i<GROUP_COLUMNS_COUNT; i++){
+			TableViewerColumn dummyTableViewerColumn = createTableColumns(
+					tableViewer, "");
+			dummyTableViewerColumn
+					.setLabelProvider(getDummyColumn(tableViewer,
+							remoteConditionsList));	
+		}
+		
+		TableViewerColumn relationalDropDownColumn = createTableColumns(
+				tableViewer, "Relational Operator");
+		relationalDropDownColumn.setLabelProvider(getRelationalCellProvider(
+				tableViewer, remoteConditionsList));
+
+		TableViewerColumn fieldNameDropDownColumn = createTableColumns(
+				tableViewer, "Field Name");
+		fieldNameDropDownColumn.setLabelProvider(getFieldNamecellProvider(
+				tableViewer, remoteConditionsList));
+
+		TableViewerColumn conditionalDropDownColumn = createTableColumns(
+				tableViewer, "Conditional Operator");
+		conditionalDropDownColumn.setLabelProvider(getConditionalCellProvider(
+				tableViewer, remoteConditionsList));
+
+		TableViewerColumn valueTextBoxColumn = createTableColumns(tableViewer,
+				"Value");
+		valueTextBoxColumn.setLabelProvider(getValueCellProvider(tableViewer,
+				remoteConditionsList));
+		
+		tableViewer.refresh();
+	}
+
+
+	private void storeGroupSelection(TableViewer tableViewer){
+		List<List<Integer>> grpList = new ArrayList<>();
+		List<Integer> selectionList = new ArrayList<>();
+		
+		
+		 TableItem[] items = tableViewer.getTable().getItems();
+		
+		   for (TableItem tableItem : items) {
+			   Button button = (Button) tableItem.getData(GROUP_CHECKBOX);
+			   if(button.getSelection()){
+			   selectionList.add(tableViewer.getTable().indexOf(tableItem));
+			   }
+		}
+		   
+		   grpList.add(selectionList);
+		   if(groupSelectionMap.isEmpty()){
+			   groupSelectionMap.put(1, grpList); 
+		   }else{
+			   groupSelectionMap.put(groupSelectionMap.lastKey()+1,grpList);
+		   }
+		  
+		
+	}
+
+	public void setDebugDataViewerAdapterAndViewer(DataViewerAdapter adapter, DebugDataViewer dataViewer)
+			throws ClassNotFoundException, SQLException {
+		dataViewerAdapter = adapter;
+		debugDataViewer = dataViewer;
+	}
+
+	
 }

@@ -29,7 +29,7 @@ public class ViewDataQueryBuilder {
 
 	private List<String> columns = new ArrayList<String>();
 	private String table;
-	private List<String> wheres = new ArrayList<String>();
+	private String wheres;
 	private Integer limit;
 	private Long offset;
 
@@ -62,8 +62,8 @@ public class ViewDataQueryBuilder {
 	 * @param name
 	 * @return {@link ViewDataQueryBuilder}
 	 */
-	public ViewDataQueryBuilder where(String expr) {
-		wheres.add(expr);
+	public ViewDataQueryBuilder setwhereCondition(String filterCondition) {
+		wheres=filterCondition;
 		return this;
 	}
 
@@ -90,7 +90,7 @@ public class ViewDataQueryBuilder {
 	 * 
 	 * @return - sql
 	 */
-	public String getQuery() {
+	public String getQuery(String filterCondition) {
 
 		StringBuilder sql = new StringBuilder("SELECT ");
 
@@ -101,7 +101,9 @@ public class ViewDataQueryBuilder {
 		}
 
 		appendTableName(sql, table, " FROM ");
-		appendClause(sql, wheres, " WHERE ", " AND ");
+		if (filterCondition != null && !filterCondition.isEmpty()) {
+			appendWhereClause(sql, filterCondition, " WHERE ");
+		}
 
 		if (limit != null)
 			appendLimit(sql, limit, " LIMIT ");
@@ -110,6 +112,11 @@ public class ViewDataQueryBuilder {
 			appendOffset(sql, offset, " OFFSET ");
 
 		return sql.toString();
+	}
+	private void appendWhereClause(StringBuilder sql,String whereCondition, String sectionName) {
+		
+		sql.append(sectionName+whereCondition);
+		
 	}
 
 	private void appendClause(StringBuilder sql, List<String> list, String sectionName, String separator) {
