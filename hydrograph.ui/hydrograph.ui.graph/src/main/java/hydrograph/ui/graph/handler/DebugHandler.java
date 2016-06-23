@@ -32,7 +32,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +78,12 @@ public class DebugHandler{
 	/** The current job name. */
 	private String currentJobName = null;
 	
-	private List<String> dataViewFileIds =  new ArrayList<String>();
+	private List<String> dataViewFileIds;
+	
+	
+	public DebugHandler(List<String> dataViewFileIds) {
+		this.dataViewFileIds = dataViewFileIds;
+	}
 	
 	/**
 	 * Gets the job.
