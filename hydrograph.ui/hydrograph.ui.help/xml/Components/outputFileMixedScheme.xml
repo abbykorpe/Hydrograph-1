@@ -13,7 +13,7 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Output File Delimited" link_to="xml\Components\components.xml#OutputFileDelimited"> 
-	<topic label="Properties"  href="html/Components/Output_File_Delimited_Properties.html"> 
+<toc label="Output File Mixed Scheme" link_to="xml\Components\components.xml#OutputFileMixedScheme"> 
+	<topic label="Properties"  href="html/Components/Output_File_Mixed_Scheme_Properties.html"> 
 	</topic>
 </toc>

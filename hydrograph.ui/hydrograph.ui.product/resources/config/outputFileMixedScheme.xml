@@ -16,7 +16,7 @@
 	<tns:component paletteIconPath="/icons/output_file_palette.png" canvasIconPath="/icons/output_file_canvas.png"
 		name="OFMixedScheme" nameInPalette="File Mixed Scheme" defaultNamePrefix="OFMixedScheme" 
 		description="Used to write files with combination of delimited and fixed width fields."
-		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Fixed_Width.html"
+		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Mixed_Scheme.html"
 		acronym="OMix">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
