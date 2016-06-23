@@ -32,7 +32,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,8 +57,6 @@ import org.slf4j.Logger;
  */
 public class DebugHandler{
 	
-	
-
 	/** Default debug service port */
 	private static final String DEFAULT_DEBUG_SERVICE_PORT = "8004";
 
@@ -85,7 +82,6 @@ public class DebugHandler{
 	
 	
 	public DebugHandler(List<String> dataViewFileIds) {
-		super();
 		this.dataViewFileIds = dataViewFileIds;
 	}
 	
