@@ -197,6 +197,11 @@ public class DebugDataViewer extends ApplicationWindow {
 	public String getSortedColumnName() {
 		return sortedColumnName;
 	}
+	
+
+	public void setSortedColumnName(String sortedColumnName) {
+		this.sortedColumnName = sortedColumnName;
+	}
 
 
 	public DebugDataViewer( JobDetails jobDetails, String dataViewerWindowName) {

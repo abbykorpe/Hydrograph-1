@@ -102,6 +102,8 @@ public class SelectColumnAction extends Action {
 		}
 		if(!isSortingEnable){
 			DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
+			debugDataViewer.setRecentlySortedColumn(null);
+			debugDataViewer.setSortedColumnName(null);
 		}
 	}
 	
