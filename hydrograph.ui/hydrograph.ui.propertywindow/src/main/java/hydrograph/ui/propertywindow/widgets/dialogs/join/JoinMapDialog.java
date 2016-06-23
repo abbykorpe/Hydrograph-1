@@ -45,6 +45,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -55,10 +56,14 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -95,7 +100,7 @@ public class JoinMapDialog extends Dialog {
 	private Button btnUp;
 	private Button btnDelete;
 	private Button btnAdd;
-
+	
 	private static final String PORT_ID_KEY = "PORT_ID";
 	private static final String NO_COPY="None";
 	private static final String INPUT_PORT_ID_PREFIX="in";
@@ -152,13 +157,15 @@ public class JoinMapDialog extends Dialog {
 		container.setLayout(new GridLayout(1, false));
 		container.getShell().setText(DIALOG_TITLE);
 		
-		Composite composite = createOuterMostComposite(container);
+		SashForm composite = new SashForm(container, SWT.SMOOTH);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		createInputFieldExpandBarSection(composite);
 
 		creatFieldMappingSection(composite);
 
 		createCopyInputToOutputFieldSection(composite);
+		composite.setWeights(new int[] {215, 559, 116});
 
 		populateJoinMapDialog();
 		return container;
@@ -655,18 +662,6 @@ public class JoinMapDialog extends Dialog {
 		});
 	}
 
-	private Composite createOuterMostComposite(Composite container) {
-		Composite composite = new Composite(container, SWT.NONE);
-		GridLayout gl_composite = new GridLayout(3, false);
-		gl_composite.verticalSpacing = 0;
-		gl_composite.marginWidth = 0;
-		gl_composite.marginHeight = 0;
-		composite.setLayout(gl_composite);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
-				1));
-		return composite;
-	}
-
 	private void createInputFieldExpandBarSection(Composite composite) {
 		Composite composite_1 = new Composite(composite, SWT.NONE);
 		GridLayout gl_composite_1 = new GridLayout(1, false);
@@ -677,23 +672,24 @@ public class JoinMapDialog extends Dialog {
 		composite_1.setLayout(gl_composite_1);
 		GridData gd_composite_1 = new GridData(SWT.FILL, SWT.FILL, false, true,
 				1, 1);
-		gd_composite_1.widthHint = 269;
+		gd_composite_1.widthHint = 276;
 		composite_1.setLayoutData(gd_composite_1);
 		composite_1.setBounds(0, 0, 64, 64);
 
-		ScrolledComposite scrolledComposite_1 = new ScrolledComposite(
-				composite_1, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		final ScrolledComposite scrolledComposite_1 = new ScrolledComposite(
+				composite_1, SWT.BORDER  );
 		scrolledComposite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
 				true, true, 1, 1));
 		scrolledComposite_1.setExpandHorizontal(true);
 		scrolledComposite_1.setExpandVertical(true);
-
+		
 		Composite composite_7 = new Composite(scrolledComposite_1, SWT.NONE);
 		composite_7.setLayout(new GridLayout(1, false));
 
-		ExpandBar expandBar = new ExpandBar(composite_7, SWT.V_SCROLL);
+		final ExpandBar expandBar = new ExpandBar(composite_7, SWT.V_SCROLL | SWT.H_SCROLL);
 		expandBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 				1));
+		
 		expandBar.setBackground(new Color(null, 240, 240, 240));
 		populateInputFieldExpandBarSection(expandBar);
 
@@ -702,6 +698,17 @@ public class JoinMapDialog extends Dialog {
 		scrolledComposite_1.setContent(composite_7);
 		scrolledComposite_1.setMinSize(composite_7.computeSize(SWT.DEFAULT,
 				SWT.DEFAULT));
+		
+		
+		composite_7.addControlListener(new ControlAdapter() {
+			@Override
+			public void controlResized(ControlEvent e) {
+				
+				for(ExpandItem expandItem:expandBar.getItems()){
+					((TableColumn)expandItem.getData("TableColumn")).setWidth(scrolledComposite_1.getSize().x);
+				}
+			}
+		});
 	}
 
 	private void populateInputFieldExpandBarSection(ExpandBar expandBar) {
@@ -730,6 +737,7 @@ public class JoinMapDialog extends Dialog {
 				}
 
 			}
+			
 			addExpandItem(expandBar, inputPortFieldList, i);
 		}
 	}
@@ -738,23 +746,25 @@ public class JoinMapDialog extends Dialog {
 			List<FilterProperties> inputPortFieldList, int portNumber) {
 		ExpandItem xpndtmItem = new ExpandItem(expandBar, SWT.NONE);
 		xpndtmItem.setText(EXPAND_ITEM_TEXT_PREFIX + portNumber);
-
+		
 		Composite composite_13 = new Composite(expandBar, SWT.NONE);
 		xpndtmItem.setControl(composite_13);
 		composite_13.setLayout(new GridLayout(1, false));
 
 		TableViewer tableViewer_1 = new TableViewer(composite_13, SWT.BORDER
-				| SWT.FULL_SELECTION | SWT.MULTI);
+				| SWT.FULL_SELECTION | SWT.MULTI );
 		final Table table_1 = tableViewer_1.getTable();
 		table_1.setLinesVisible(true);
 		table_1.setHeaderVisible(true);
 		table_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tableViewer_1.setContentProvider(new ArrayContentProvider());
-
+		
+		
 		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(
 				tableViewer_1, SWT.NONE);
+		
 		TableColumn tblclmnInputFields = tableViewerColumn_2.getColumn();
-		tblclmnInputFields.setWidth(229);
+		
 		tblclmnInputFields.setText(INPUT_TABLE_COLUMN_TEXT);
 
 		tableViewerColumn_2.setLabelProvider(new ColumnLabelProvider() {
@@ -766,6 +776,7 @@ public class JoinMapDialog extends Dialog {
 		});
 
 		tableViewer_1.setInput(inputPortFieldList);
+		xpndtmItem.setData("TableColumn", table_1.getColumn(0));
 
 		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
 		final String portLabel = INPUT_PORT_ID_PREFIX + portNumber + ".";
@@ -780,8 +791,26 @@ public class JoinMapDialog extends Dialog {
 			}
 		});
 
-		xpndtmItem.setHeight(150);
+		xpndtmItem.setHeight(190);
+		
+		if(portNumber==0 || portNumber==1){
+			xpndtmItem.setExpanded(true);
+		}
+		table_1.addControlListener(new ControlListener() {
 
+			@Override
+			public void controlResized(ControlEvent e) {
+				Table table = (Table) e.widget;
+				Rectangle area = table.getClientArea();
+				int totalAreaWidth = area.width;
+				int diff = totalAreaWidth - (table.getColumn(0).getWidth());
+				table.getColumn(0).setWidth(diff + table.getColumn(0).getWidth());
+			}
+
+			@Override
+			public void controlMoved(ControlEvent e) {
+			}
+		});
 	}
 
 	private String addDelimeter(String portLabel, TableItem[] selectedTableItems) {
