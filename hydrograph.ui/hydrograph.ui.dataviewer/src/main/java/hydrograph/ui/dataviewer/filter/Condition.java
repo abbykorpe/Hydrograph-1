@@ -13,6 +13,15 @@ public class Condition{
 		this.value = "";
 	}
 	
+	public Condition copy(Condition source){
+		Condition condition = new Condition();
+		condition.setFieldName(source.getFieldName());
+		condition.setRelationalOperator(source.getRelationalOperator());
+		condition.setConditionalOperator(source.getConditionalOperator());
+		condition.setValue(source.getValue());
+		return condition;
+	}
+	
 	public String getFieldName() {
 		return fieldName;
 	}

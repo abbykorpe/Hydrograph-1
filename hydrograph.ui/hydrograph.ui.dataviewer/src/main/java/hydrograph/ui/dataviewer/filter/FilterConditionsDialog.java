@@ -1,12 +1,14 @@
 package hydrograph.ui.dataviewer.filter;
 
+import hydrograph.ui.common.util.ImagePathConstant;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
+import java.util.TreeMap;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.fieldassist.ComboContentAdapter;
@@ -28,7 +30,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -65,6 +67,9 @@ public class FilterConditionsDialog extends Dialog {
 	private static final String VALUE_EDITOR = "vale_editor";
 	
 	private Map<String,String[]> typeBasedConditionalOperators = new HashMap<>();
+	private FilterConditions originalFilterConditions;
+	private RetainFilter retainLocalFilter;
+	private RetainFilter retainRemoteFilter;
 	
 	private String relationalOperators[];
 	private String fieldNames[];
@@ -95,12 +100,29 @@ public class FilterConditionsDialog extends Dialog {
 		localConditionsList = new ArrayList<>();
 		remoteConditionsList = new ArrayList<>();
 		
-		typeBasedConditionalOperators.put("java.lang.String", new String[]{"like", "in", "not in"});
-		typeBasedConditionalOperators.put("java.lang.Integer", new String[]{"<", "<=", ">", ">=", "!=", "="});
-		typeBasedConditionalOperators.put("java.util.Date", new String[]{"<", "<=", ">", ">=", "!=", "="});
-		typeBasedConditionalOperators.put("java.math.BigDecimal", new String[]{"<", "<=", ">", ">=", "!=", "="});
+		typeBasedConditionalOperators.put("java.lang.String", new String[]{"LIKE","IN ","NOT IN"}); 
+		typeBasedConditionalOperators.put("java.lang.Integer", new String[]{">", "<", "<=", ">=", "!=", "=", "LIKE", "IN", "NOT IN"}); 
+		typeBasedConditionalOperators.put("java.util.Date", new String[]{">", "<", "<=",">=", "!=", "=", "LIKE", "IN", "NOT IN"}); 
+		typeBasedConditionalOperators.put("java.math.BigDecimal", new String[]{">", "<", "<=", ">=", "!=", "=", "LIKE", "IN","NOT IN"});
+		typeBasedConditionalOperators.put("java.math.Long", new String[]{">", "<", "<=", ">=", "!=", "=", "LIKE", "IN", "NOT IN"});
+		typeBasedConditionalOperators.put("java.math.Short", new String[]{">", "<", "<=", ">=", "!=", "=", "LIKE", "IN", "NOT IN"});
+		typeBasedConditionalOperators.put("java.math.Float", new String[]{">", "<", "<=", ">=", "!=", "=", "LIKE", "IN", "NOT IN"});
+		typeBasedConditionalOperators.put("java.math.Double", new String[]{">", "<", "<=", ">=", "!=", "=", "LIKE", "IN", "NOT IN"});
+
 	}
 
+	public void setFilterConditions(FilterConditions filterConditions) {
+		this.originalFilterConditions = filterConditions;
+		localConditionsList.addAll(FilterHelper.INSTANCE.cloneList(filterConditions.getLocalConditions()));
+		remoteConditionsList.addAll(FilterHelper.INSTANCE.cloneList(filterConditions.getRemoteConditions()));
+		retainLocalFilter.setRetainFilter(originalFilterConditions.getRetainLocal());
+		retainRemoteFilter.setRetainFilter(originalFilterConditions.getRetainRemote());
+	}
+	
+	public FilterConditions getFilterConditions() {
+		return originalFilterConditions;
+	}
+	
 	/**
 	 * Create contents of the dialog.
 	 * @param parent
@@ -140,6 +162,7 @@ public class FilterConditionsDialog extends Dialog {
 		tableViewer = new TableViewer(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		tableViewer.setContentProvider(new ArrayContentProvider());
 		Table table = tableViewer.getTable();
+		
 		table.setHeaderVisible(true);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
@@ -172,16 +195,32 @@ public class FilterConditionsDialog extends Dialog {
 		
 		
 		Composite buttonComposite = new Composite(composite, SWT.NONE);
-		buttonComposite.setLayout(new GridLayout(2, false));
+		buttonComposite.setLayout(new GridLayout(6, false));
 		buttonComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		
+		Button retainButton = new Button(buttonComposite, SWT.CHECK);
+		retainButton.setText("Retain Remote Filter");
+		retainButton.addSelectionListener(FilterHelper.INSTANCE.getRetainButtonListener(retainRemoteFilter));
+		
+		Button btnAddGrp = new Button(buttonComposite, SWT.NONE);
+		btnAddGrp.setText("Create Group");
+		btnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer));
+		
+		Button clearButton = new Button(buttonComposite, SWT.NONE);
+		clearButton.setText("Clear");
+		clearButton.addSelectionListener(FilterHelper.INSTANCE.getClearButtonListener(tableViewer, remoteConditionsList));
 		
 		Button btnOk = new Button(buttonComposite, SWT.NONE);
 		btnOk.setText("OK");
-		btnOk.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(remoteConditionsList));
+		btnOk.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(remoteConditionsList, fieldsAndTypes));
 		
 		Button btnCancel = new Button(buttonComposite, SWT.NONE);
 		btnCancel.setText("Cancel");
 		
+		Button applyButton = new Button(buttonComposite, SWT.NONE);
+		applyButton.setText("Apply");
+		applyButton.addSelectionListener(FilterHelper.INSTANCE.getApplyButtonListener(originalFilterConditions, 
+				remoteConditionsList, retainRemoteFilter));
 	}
 
 	private void createLocalTabItem(TabFolder tabFolder, TableViewer tableViewer) {
@@ -228,16 +267,32 @@ public class FilterConditionsDialog extends Dialog {
 		
 		
 		Composite buttonComposite = new Composite(composite, SWT.NONE);
-		buttonComposite.setLayout(new GridLayout(2, false));
+		buttonComposite.setLayout(new GridLayout(6, false));
 		buttonComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		
+		Button retainButton = new Button(buttonComposite, SWT.CHECK);
+		retainButton.setText("Retain Local Filter");
+		retainButton.addSelectionListener(FilterHelper.INSTANCE.getRetainButtonListener(retainLocalFilter));
+		
+		Button btnAddGrp = new Button(buttonComposite, SWT.NONE);
+		btnAddGrp.setText("Create Group");
+		btnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer));
+	
+		Button clearButton = new Button(buttonComposite, SWT.NONE);
+		clearButton.setText("Clear");
+		clearButton.addSelectionListener(FilterHelper.INSTANCE.getClearButtonListener(tableViewer, localConditionsList));
 		
 		Button btnOk = new Button(buttonComposite, SWT.NONE);
 		btnOk.setText("OK");
-		btnOk.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(localConditionsList));
+		btnOk.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(localConditionsList, fieldsAndTypes));
 		
 		Button btnCancel = new Button(buttonComposite, SWT.NONE);
 		btnCancel.setText("Cancel");
 		
+		Button applyButton = new Button(buttonComposite, SWT.NONE);
+		applyButton.setText("Apply");
+		applyButton.addSelectionListener(FilterHelper.INSTANCE.getApplyButtonListener(originalFilterConditions, 
+				localConditionsList, retainLocalFilter));
 	}
 
 	private CellLabelProvider getValueCellProvider(final TableViewer tableViewer, final List<Condition> conditionsList) {
@@ -345,8 +400,8 @@ public class FilterConditionsDialog extends Dialog {
 					});
 				}
 				else{
-					Combo combo = (Combo) item.getData(FIELD_NAMES);
-					combo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getFieldName());
+					Combo fieldNameCombo = (Combo) item.getData(FIELD_NAMES);
+					fieldNameCombo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getFieldName());
 				}
 			}
 		};
@@ -441,7 +496,7 @@ public class FilterConditionsDialog extends Dialog {
 					return;
 				}
 				addButtonInTable(tableViewer, item, REMOVE, REMOVE_BUTTON_PANE, REMOVE_EDITOR, cell.getColumnIndex(), 
-						FilterHelper.INSTANCE.removeButtonListener(tableViewer, conditionsList));
+						FilterHelper.INSTANCE.removeButtonListener(tableViewer, conditionsList), ImagePathConstant.DELETE_BUTTON);
 				item.addDisposeListener(new DisposeListener() {
 					
 					@Override
@@ -472,7 +527,7 @@ public class FilterConditionsDialog extends Dialog {
 					return;
 				}
 				addButtonInTable(tableViewer, item, ADD, ADD_BUTTON_PANE, ADD_EDITOR, cell.getColumnIndex(), 
-						FilterHelper.INSTANCE.addButtonListener(tableViewer,conditionsList));
+						FilterHelper.INSTANCE.addButtonListener(tableViewer,conditionsList), ImagePathConstant.ADD_BUTTON);
 				item.addDisposeListener(new DisposeListener() {
 					
 					@Override
@@ -507,6 +562,7 @@ public class FilterConditionsDialog extends Dialog {
 		text.setData(ROW_INDEX, tableViewer.getTable().indexOf(tableItem));
 		tableItem.setData(textBoxName, text);
 		tableItem.setData(valueTextPane, buttonPane);
+		text.addModifyListener(FilterHelper.INSTANCE.getTextModifyListener());
 		
 		final TableEditor editor = new TableEditor(tableViewer.getTable());
 		editor.grabHorizontal = true;
@@ -527,7 +583,7 @@ public class FilterConditionsDialog extends Dialog {
 		tableItem.setData(comboName, combo);
 		tableItem.setData(comboPaneName, buttonPane);
 		combo.addSelectionListener(dropDownSelectionListener);
-		
+		combo.addModifyListener(FilterHelper.INSTANCE.getComboModifyListener());
 		new AutoCompleteField(combo, new ComboContentAdapter(), combo.getItems());
 		
 		final TableEditor editor = new TableEditor(tableViewer.getTable());
@@ -540,16 +596,19 @@ public class FilterConditionsDialog extends Dialog {
 	}
 
 	private void addButtonInTable(TableViewer tableViewer, TableItem tableItem, String columnName, 
-			String buttonPaneName, String editorName, int columnIndex, SelectionListener buttonSelectionListener) {
+			String buttonPaneName, String editorName, int columnIndex, SelectionListener buttonSelectionListener,
+			String imagePath) {
 		final Composite buttonPane = new Composite(tableViewer.getTable(), SWT.NONE);
 		buttonPane.setLayout(new FillLayout());
 		final Button button = new Button(buttonPane, SWT.NONE);
-		button.setText(columnName);
+		//button.setText(columnName);
 		button.setData(ROW_INDEX, tableViewer.getTable().indexOf(tableItem));
 		tableItem.setData(columnName, button);
 		tableItem.setData(buttonPaneName, buttonPane);
-		
 		button.addSelectionListener(buttonSelectionListener);
+		//TODO to be enabled once integrated
+		//button.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + imagePath));
+		
 		final TableEditor editor = new TableEditor(tableViewer.getTable());
 		editor.grabHorizontal = true;
 		editor.grabVertical = true;
