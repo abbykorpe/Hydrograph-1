@@ -47,6 +47,7 @@
 		<enumeration value="GENERATE_RECORDS_SCHEMA_WIDGET" />
 		<enumeration value="TRANSFORM_SCHEMA_WIDGET" />
 			<enumeration value="SCHEMA_WIDGET" />
+			<enumeration value="HIVE_PARQUET_WIDGET" />
 			<enumeration value="FIELD_SEQUENCE_WIDGET" />
 			<enumeration value="FIXED_WIDGET"/>
 			<enumeration value="RUNTIME_PROPERTIES_WIDGET" />

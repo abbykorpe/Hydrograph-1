@@ -20,6 +20,7 @@ import hydrograph.ui.propertywindow.filemixedschema.ELTMixedSchemeWidget;
 import hydrograph.ui.propertywindow.fixedwidthschema.ELTFixedWidget;
 import hydrograph.ui.propertywindow.fixedwidthschema.TransformSchemaWidget;
 import hydrograph.ui.propertywindow.generaterecords.schema.GenerateRecordsGridWidget;
+import hydrograph.ui.propertywindow.hivesparquechema.HiveParqueSchemaWidget;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -70,6 +71,7 @@ public class WidgetFactory {
 	
 	public enum Widgets{
 		SCHEMA_WIDGET(ELTGenericSchemaGridWidget.class),
+		HIVE_PARQUET_WIDGET(HiveParqueSchemaWidget.class),
 		FIXED_WIDGET(ELTFixedWidget.class),
 		MIXED_SCHEME(ELTMixedSchemeWidget.class),		
 		TRANSFORM_SCHEMA_WIDGET(TransformSchemaWidget.class),

@@ -60,12 +60,8 @@ public class SchemaGridLabelProvider implements ITableLabelProvider , ITableColo
     case 1:
     	 return GeneralGridWidgetBuilder.getDataTypeKey()[schemaGrid.getDataType().intValue()];   
     case 2:
-    	 return schemaGrid.getDateFormat();
-    case 3:
-   	 	 return schemaGrid.getPrecision();
-    case 4:
    	 	 return schemaGrid.getScale(); 
-    case 5:
+    case 3:
     	if(schemaGrid.getScaleType()!=null)
     	{
     	return GeneralGridWidgetBuilder.getScaleTypeKey()[schemaGrid.getScaleType().intValue()];
@@ -74,6 +70,10 @@ public class SchemaGridLabelProvider implements ITableLabelProvider , ITableColo
     	{
     		return GeneralGridWidgetBuilder.getScaleTypeKey()[0];
     	}
+    case 4:
+   	 return schemaGrid.getDateFormat();
+    case 5:
+  	 	 return schemaGrid.getPrecision();
     case 6:
      	 return schemaGrid.getDescription(); 
     }
