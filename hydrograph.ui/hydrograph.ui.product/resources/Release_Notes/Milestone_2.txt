@@ -50,6 +50,7 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 33.#441  [Nikhil Deokar] Creating Parameter file on Save As event
 34.#501  [Ashika Holkar] Multiple date and time in console log   
 35.#106  [Akhilesh Joshi]Keyboard shortcuts for cut / copy / paste / delete and refresh are not working in project explorer
+36.#440  [Vibhor Tyagi] Multiple Components: Schema Coulmns Need to be Re-Arranged
 15.#628  [Shrirang kumbhar] Debug Data viewer window does not appear in task bar 
 16.#636  [Shrirang kumbhar] Debug Service: Exception handling and error reporting if unable to create debug files 
 =====================================================================================================
