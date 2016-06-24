@@ -31,8 +31,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -118,7 +116,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			public void modifyText(ModifyEvent event) {
 				String value = ((Text)event.getSource()).getText();
 				validationForIntegerField(value, memoryFieldEditor, Messages.FILE_INTEGER_FIELD_VALIDATION);
-				validationForIntegerValue(value, memoryFieldEditor, Messages.File_FIELD_NUMERIC_VALUE_ACCPECTED);
 			}
 		});
 		memoryFieldEditor.getTextControl(generalGroup).addFocusListener(new FocusListener() {
@@ -128,7 +125,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			public void focusGained(FocusEvent event) {
 				String value = ((Text)event.getSource()).getText();
 				validationForIntegerField(value, memoryFieldEditor, Messages.FILE_INTEGER_FIELD_VALIDATION);
-				validationForIntegerValue(value, memoryFieldEditor, Messages.File_FIELD_NUMERIC_VALUE_ACCPECTED);
 			}
 		});
 		memoryFieldEditor.setPreferenceStore(getPreferenceStore());
@@ -154,7 +150,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			public void modifyText(ModifyEvent event) {
 				String value = ((Text)event.getSource()).getText();
 				validationForIntegerField(value, pageSizeEditor, Messages.PAGE_INTEGER_FIELD_VALIDATION);
-				validationForIntegerValue(value, pageSizeEditor, Messages.PAGE_FIELD_NUMERIC_VALUE_ACCPECTED);
 			}
 		});
 		pageSizeEditor.getTextControl(generalGroup).addFocusListener(new FocusListener() {
@@ -164,7 +159,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			public void focusGained(FocusEvent event) {
 				String value = ((Text)event.getSource()).getText();
 				validationForIntegerField(value, pageSizeEditor, Messages.PAGE_INTEGER_FIELD_VALIDATION);
-				validationForIntegerValue(value, pageSizeEditor, Messages.PAGE_FIELD_NUMERIC_VALUE_ACCPECTED);
 			}
 		});
 		tempPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, " Local Temp Path", generalGroup);
@@ -216,16 +210,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			public void focusLost(FocusEvent e) { }
 			@Override
 			public void focusGained(FocusEvent event) {
-				Notification note1 =validateQuoteCharacter();
-				if(note1.hasErrors()){
-					setValid(false);
-					quoteEditor.setErrorMessage(note1.errorMessage());
-					setErrorMessage(note1.errorMessage());
-				}else{
-					setErrorMessage(null);
-					quoteEditor.setErrorMessage("");
-				}
-				
 				Notification note = validateDelimiter();
 				if(note.hasErrors()){
 					setValid(false);
@@ -251,16 +235,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		quoteEditor.getTextControl(grpExportData).addModifyListener(new ModifyListener(){
 			@Override
 			public void modifyText(ModifyEvent e) {
-				Notification note1 = validateDelimiter();
-				if(note1.hasErrors()){
-					setValid(false);
-					delimiterEditor.setErrorMessage(note1.errorMessage());
-					setErrorMessage(note1.errorMessage());
-				}else{
-					setErrorMessage(null);
-					delimiterEditor.setErrorMessage("");
-					checkState();
-				}
 				Notification note =validateQuoteCharacter();
 				if(note.hasErrors()){
 					setValid(false);
@@ -278,16 +252,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			public void focusLost(FocusEvent e) { }
 			@Override
 			public void focusGained(FocusEvent event) {
-				Notification note1 = validateDelimiter();
-				if(note1.hasErrors()){
-					setValid(false);
-					delimiterEditor.setErrorMessage(note1.errorMessage());
-					setErrorMessage(note1.errorMessage());
-				}else{
-					setErrorMessage(null);
-					delimiterEditor.setErrorMessage("");
-					checkState();
-				}
 				Notification note =validateQuoteCharacter();
 				if(note.hasErrors()){
 					setValid(false);
@@ -304,16 +268,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		delimiterEditor.getTextControl(grpExportData).addModifyListener(new ModifyListener(){
 			@Override
 			public void modifyText(ModifyEvent e) {
-				Notification note1 =validateQuoteCharacter();
-				if(note1.hasErrors()){
-					setValid(false);
-					quoteEditor.setErrorMessage(note1.errorMessage());
-					setErrorMessage(note1.errorMessage());
-				}else{
-					setErrorMessage(null);
-					quoteEditor.setErrorMessage("");
-				}
-				
 				Notification note = validateDelimiter();
 				if(note.hasErrors()){
 					setValid(false);
@@ -375,10 +329,10 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		grpServiceDetailsCmposite.setLayoutData(serviceGridData);
 
 		portNo = new IntegerFieldEditor(PreferenceConstants.PORT_NO, "Port No               ", grpServiceDetailsCmposite, 4);
-		portNo.setPropertyChangeListener(new IPropertyChangeListener() {
+		portNo.getTextControl(grpServiceDetailsCmposite).addModifyListener(new ModifyListener() {
 			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				String value = event.getNewValue().toString();
+			public void modifyText(ModifyEvent event) {
+				String value = ((Text)event.getSource()).getText();
 				validationForIntegerField(value,portNo,Messages.PORTNO_FIELD_VALIDATION);
 			}
 		});
@@ -419,6 +373,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		addFields(delimiterEditor);
 		addFields(pageSizeEditor);
 		addFields(quoteEditor);
+		addFields(portNo);
 		
 		return null;
 	}
@@ -461,20 +416,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	}
 
 	
-	private void validationForIntegerValue(String value , IntegerFieldEditor editor, String message){
-		if(StringUtils.isNotBlank(value) && value.matches("\\d+")){
-			if(Integer.parseInt(value)<=0){
-				setErrorMessage(message);
-				editor.setErrorMessage(message);
-				setValid(false);
-			}else{
-				setValid(true);
-				editor.setErrorMessage("");
-				checkState();
-			}
-		}
-	}
-	
 	private Notification validateQuoteCharacter(){
 		Notification notification = new Notification();
 		if(quoteEditor.getStringValue().equalsIgnoreCase(delimiterEditor.getStringValue())){
@@ -487,7 +428,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	}
 	
 	private void validationForIntegerField(String value, IntegerFieldEditor editor, String message){
-		if(!StringUtils.isNotBlank(value) || !value.matches("\\d+")){
+		if(StringUtils.isBlank(value) || !value.matches("\\d+") || value.equalsIgnoreCase("0")){
 			setErrorMessage(message);
 			editor.setErrorMessage(message);
 			setValid(false);
