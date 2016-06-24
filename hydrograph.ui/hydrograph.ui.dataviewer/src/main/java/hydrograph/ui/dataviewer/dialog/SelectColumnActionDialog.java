@@ -11,7 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package hydrograph.ui.dataviewer.actions;
+package hydrograph.ui.dataviewer.dialog;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ import org.eclipse.swt.widgets.Shell;
 
 /**
  * 
- * SelectColumnActionDialog allows to choose columns to be visible
+ * SelectColumnActionDialog allows to choose columns to be visible in data viewer
  * 
  * @author Bitwise
  *
@@ -52,7 +52,10 @@ public class SelectColumnActionDialog extends Dialog {
 	private Label moveUpLable;
 	private Label moveDownLable;
 	private Button okButton;
-
+	private static final String SELECT_COLUMNS = "Select Columns";
+	private static final String ALL_COLUMNS = "All Columns";
+	private static final String SELECTED_COLUMNS = "Selected Columns";
+	private static final String SKIP = "skip";
 	/**
 	 * @param parentShell
 	 * @param selectColumnAction
@@ -78,7 +81,7 @@ public class SelectColumnActionDialog extends Dialog {
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		Shell shell=container.getShell();
-		shell.setText("Select Columns");
+		shell.setText(SELECT_COLUMNS);
 		Image table = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.TABLE_ICON);
 		shell.setImage(table);
 		
@@ -88,7 +91,7 @@ public class SelectColumnActionDialog extends Dialog {
 		GridData gd_lblAllColumns = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_lblAllColumns.widthHint = 141;
 		allColumnsLabel.setLayoutData(gd_lblAllColumns);
-		allColumnsLabel.setText("All Columns");
+		allColumnsLabel.setText(ALL_COLUMNS);
 		new Label(allColumnsComposite, SWT.NONE);
 		
 		listAllComlumns = new List(allColumnsComposite, SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL);
@@ -114,18 +117,18 @@ public class SelectColumnActionDialog extends Dialog {
 		
 		Label disSelectLabel = new Label(allColumnsControlButtons, SWT.NONE);
 		disSelectLabel.setBounds(6, 150, 25, 25);
-		Image disSelect = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DISSELECT_ICON);
+		Image disSelect = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DESELECT_ICON);
 		disSelectLabel.setImage(disSelect);
 		
 		Label removeAll = new Label(allColumnsControlButtons, SWT.NONE);
 		removeAll.setBounds(6, 190, 25, 25);
-		Image disSelectAll = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DISSELECT_ALL_ICON);
+		Image disSelectAll = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DESELECT_ALL_ICON);
 		removeAll.setImage(disSelectAll);
 		
 		Composite selectColumnComposite = new Composite(sashForm, SWT.NONE);
 		selectColumnComposite.setLayout(new GridLayout(2, false));
 		Label selectedColumnsLabel = new Label(selectColumnComposite, SWT.NONE);
-		selectedColumnsLabel.setText("Selected Columns");
+		selectedColumnsLabel.setText(SELECTED_COLUMNS);
 		new Label(selectColumnComposite, SWT.NONE);
 		
 		listSelectedColumns = new List(selectColumnComposite, SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL);
@@ -163,7 +166,7 @@ public class SelectColumnActionDialog extends Dialog {
 	private void addListeners(Label selectAllLabel, Label selectLabel,Label disSelectLabel, Label removeAll) {
 		selectLabel.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseUp(MouseEvent e) {
 				if (listAllComlumns.getSelection().length > 0) {
 					for (String string : listAllComlumns.getSelection()) {
 						allColumns.remove(string);
@@ -178,7 +181,7 @@ public class SelectColumnActionDialog extends Dialog {
 		
 		disSelectLabel.addMouseListener(new MouseAdapter(){
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseUp(MouseEvent e) {
 				if (listSelectedColumns.getSelection().length > 0) {
 					for (String string : listSelectedColumns.getSelection()) {
 						selectedColumns.remove(string);
@@ -195,7 +198,7 @@ public class SelectColumnActionDialog extends Dialog {
 		
 		selectAllLabel.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseUp(MouseEvent e) {
 				for (int i = 0; i < allColumns.size(); i++) {
 					listSelectedColumns.add(allColumns.get(i));
 				}
@@ -208,7 +211,7 @@ public class SelectColumnActionDialog extends Dialog {
 
 		removeAll.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseUp(MouseEvent e) {
 				for (int i = 0; i < selectedColumns.size(); i++) {
 					listAllComlumns.add(selectedColumns.get(i));
 				}
@@ -223,11 +226,11 @@ public class SelectColumnActionDialog extends Dialog {
 		
 		moveDownLable.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseUp(MouseEvent e) {
 				int[] indices = listSelectedColumns.getSelectionIndices();
 				Map<Integer, String> map = new HashMap<Integer, String>();
 				if (Arrays.asList(indices).contains(selectedColumns.size() - 1))
-					map.put(indices[indices.length - 1], "skip");
+					map.put(indices[indices.length - 1], SKIP);
 				for (int index = indices.length - 1; index >= 0; index--) {
 					if (indices[index] < listSelectedColumns.getItemCount() - 1 && !map.containsKey(indices[index] + 1)) {
 						Collections.swap(selectedColumns, indices[index],indices[index] + 1);
@@ -242,18 +245,18 @@ public class SelectColumnActionDialog extends Dialog {
 						}
 						listSelectedColumns.setSelection(temp2);
 					}else
-						map.put(indices[index], "skip");
+						map.put(indices[index], SKIP);
 				}
 			}
 		});
 		
 		moveUpLable.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseUp(MouseEvent e) {
 				int[] indices = listSelectedColumns.getSelectionIndices();
 				Map<Integer, String> map = new HashMap<Integer, String>();
 				if (Arrays.asList(indices).contains(0))
-					map.put(0, "skip");
+					map.put(0, SKIP);
 				for (int index : indices) {
 					if (index > 0 && !map.containsKey(index - 1)) {
 						Collections.swap(selectedColumns, index, index - 1);
@@ -268,7 +271,7 @@ public class SelectColumnActionDialog extends Dialog {
 						}
 						listSelectedColumns.setSelection(temp2);
 					} else
-						map.put(index, "skip");
+						map.put(index, SKIP);
 				}
 			}
 
@@ -317,11 +320,6 @@ public class SelectColumnActionDialog extends Dialog {
 	}
 	
 	@Override
-	public void okPressed(){
-		super.okPressed();
-	}
-	
-	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		okButton=createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,true);
 		if(listSelectedColumns.getItemCount()==0){
@@ -329,21 +327,23 @@ public class SelectColumnActionDialog extends Dialog {
 		}
 		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
 	}
-	
-	@Override
-	protected void cancelPressed() {
-		super.cancelPressed();
-	}
-	
 	@Override
 	public boolean close() {
 		return super.close();
 	}
 
+	/**
+	 * Return all columns List
+	 * @return List
+	 */
 	public java.util.List<String> getAllColumns() {
 		return allColumns;
 	}
 
+	/**
+	 * Return list for selected columns
+	 * @return List
+	 */
 	public java.util.List<String> getSelectedColumns() {
 		return selectedColumns;
 	}

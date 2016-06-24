@@ -15,35 +15,32 @@ package hydrograph.ui.dataviewer.actions;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
-
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.dataviewer.dialog.SelectColumnActionDialog;
 import hydrograph.ui.dataviewer.support.SortOrder;
 import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
-import hydrograph.ui.dataviewer.actions.SelectColumnActionDialog;
-
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
+
 
 /**
  * 
- * SelectColumnAction maintain users preferences 
+ * Action For selecting columns
  * 
  * @author Bitwise
  *
  */
 public class SelectColumnAction extends Action {
-	DebugDataViewer debugDataViewer;
+	private DebugDataViewer debugDataViewer;
 	private List<String> allColumns;
 	private List<String> selectedColumns;
-	private static final String menuItem = "Select Columns";
-	private org.eclipse.swt.graphics.Image sortType;
+	private static final String LABEL = "Select Columns";
+	private Image sortType;
 	private boolean isSortingEnable;
 	public SelectColumnAction(DebugDataViewer debugDataViewer) {
-		super(menuItem);
+		super(LABEL);
 		this.debugDataViewer = debugDataViewer;
 		allColumns=new ArrayList<String>();
 		selectedColumns= new ArrayList<String>();
@@ -61,16 +58,15 @@ public class SelectColumnAction extends Action {
 			allColumns.clear();
 			selectedColumns.addAll(selectColumnActionDialog.getSelectedColumns());
 			allColumns.addAll(selectColumnActionDialog.getAllColumns());
-			dipose();
+			diposeTable();
 			recreateViews();
 		}
-		super.run();
 	}
 
 	/**
 	 * Dispose the current view
 	 */
-	public void dipose() {
+	private void diposeTable() {
 		for (int index = debugDataViewer.getTableViewer().getTable().getColumns().length-1; index >= 0; index--) {
 			debugDataViewer.getTableViewer().getTable().getColumns()[index].setImage(null);
 			debugDataViewer.getTableViewer().getTable().getColumns()[index].dispose();
@@ -83,11 +79,11 @@ public class SelectColumnAction extends Action {
 	 */
 	private void recreateViews() {
 		String sortColumnsName=debugDataViewer.getSortedColumnName();
-		if(debugDataViewer.getSortOrder()==SortOrder.ASC){
-			sortType=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
+		if(SortOrder.ASC == debugDataViewer.getSortOrder()){
+			sortType=debugDataViewer.getAscending();
 		}
 		else {
-			sortType=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
+			sortType=debugDataViewer.getDescending();
 		}
 		TableViewer tableViewer=debugDataViewer.getTableViewer();
 		debugDataViewer.createGridViewTableColumns(tableViewer);
@@ -106,25 +102,7 @@ public class SelectColumnAction extends Action {
 			debugDataViewer.setSortedColumnName(null);
 		}
 	}
-	
-	/**
-	 * Get list of Available Columns
-	 *
-	 * @return List
-	 */
-	public List<String> getAllColumns() {
-		return allColumns;
-	}
-	
-	/**
-	 * set list of Available Columns
-	 *
-	 * @param allColumns
-	 */
-	public void setAllColumns(List<String> allColumns) {
-		this.allColumns = allColumns;
-	}
-	
+
 	/**
 	 * Get list of Selected Columns
 	 * 
@@ -132,14 +110,5 @@ public class SelectColumnAction extends Action {
 	 */
 	public List<String> getSelectedColumns() {
 		return selectedColumns;
-	}
-	
-	/**
-	 * Set list of Available Columns
-	 *
-	 * @param selectedColumns
-	 */
-	public void setSelectedColumns(List<String> selectedColumns) {
-		this.selectedColumns = selectedColumns;
 	}
 }

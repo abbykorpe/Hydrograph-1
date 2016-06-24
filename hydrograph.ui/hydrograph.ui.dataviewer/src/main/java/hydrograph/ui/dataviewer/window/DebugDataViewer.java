@@ -54,7 +54,7 @@ import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
 import hydrograph.ui.logging.factory.LogFactory;
-
+import org.eclipse.swt.graphics.Image;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Date;
@@ -171,8 +171,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		return sortOrder;
 	}
 
-	private org.eclipse.swt.graphics.Image ascending;
-	private org.eclipse.swt.graphics.Image descending;
+	private Image ascending;
+	private Image descending;
 	
 	private TableColumn recentlySortedColumn;
 	private String sortedColumnName;
@@ -194,11 +194,20 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 	
+	/**
+	 * @return Sorted Column Name
+	 */
 	public String getSortedColumnName() {
 		return sortedColumnName;
 	}
 	
 
+	/**
+	 * 
+	 * Set name of sorted column 
+	 * 
+	 * @param sortedColumnName
+	 */
 	public void setSortedColumnName(String sortedColumnName) {
 		this.sortedColumnName = sortedColumnName;
 	}
@@ -220,6 +229,29 @@ public class DebugDataViewer extends ApplicationWindow {
 		ascending=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
 		descending=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
 	}
+
+	/**
+	 * 
+	 * Get image for ascending order
+	 * 
+	 * @return ASC Image
+	 */
+	
+
+	public Image getAscending() {
+		return ascending;
+	}
+
+	/**
+	 * 
+	 *Get image for descending order
+	 * 
+	 * @return DES Image
+	 */
+	public Image getDescending() {
+		return descending;
+	}
+
 
 	private void downloadDebugFiles() {
 		Job job = new Job(Messages.LOADING_DEBUG_FILE) {
@@ -384,6 +416,12 @@ public class DebugDataViewer extends ApplicationWindow {
 		return unformattedViewTextarea;
 	}
 
+	/**
+	 * 
+	 * Get list of columns
+	 * 
+	 * @return
+	 */
 	public List<String> getColumnList(){
 		return dataViewerAdapter.getColumnList();
 	}
@@ -840,19 +878,22 @@ public class DebugDataViewer extends ApplicationWindow {
 			tblclmnItem.setWidth(100);
 			tblclmnItem.setText(columnName);
 			
-			tableViewerColumn.getColumn().setData(Views.COLUMN_ID_KEY, (int)dataViewerAdapter.getAllColumnsMap().get(tableViewerColumn.getColumn().getText()));
+			tableViewerColumn.getColumn().setData(Views.COLUMN_ID_KEY,
+					(int) dataViewerAdapter.getAllColumnsMap().get(tableViewerColumn.getColumn().getText()));
 			tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 
 				@Override
 				public String getText(Object element) {
 					RowData p = (RowData) element;
-					return p.getRowFields().get((int)dataViewerAdapter.getAllColumnsMap().get(tableViewerColumn.getColumn().getText()))
-							.getValue();
+					return p.getRowFields()
+							.get((int) dataViewerAdapter.getAllColumnsMap()
+									.get(tableViewerColumn.getColumn().getText())).getValue();
 				}
 			});
 
 			if(dataViewerFileSchema!=null){
-				tableViewerColumn.getColumn().setToolTipText(getColumnToolTip(dataViewerFileSchema.getField().get(index)));
+				tableViewerColumn.getColumn().setToolTipText(
+						getColumnToolTip(dataViewerFileSchema.getField().get(index)));
 			}
 			
 			tableViewerColumn.getColumn().addSelectionListener(new SelectionListener() {

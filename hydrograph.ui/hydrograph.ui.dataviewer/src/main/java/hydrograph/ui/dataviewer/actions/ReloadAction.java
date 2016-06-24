@@ -89,7 +89,6 @@ public class ReloadAction extends Action {
 	public void run() {
 		viewDataPreferences = debugDataViewer.getViewDataPreferences();
 		DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
-		final SelectColumnAction selectColumnAction =(SelectColumnAction) debugDataViewer.getActionFactory().getAction(SelectColumnAction.class.getName());
 		Job job = new Job(Messages.LOADING_DEBUG_FILE) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
@@ -109,9 +108,10 @@ public class ReloadAction extends Action {
 					if(lastDownloadedFileSize!=viewDataPreferences.getFileSize()){
 						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize(),true);	
 					}else{
+						SelectColumnAction selectColumnAction =(SelectColumnAction) debugDataViewer.getActionFactory().getAction(SelectColumnAction.class.getName());
 						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize(),false);
 						if(selectColumnAction.getSelectedColumns().size()!=0){
-							selectColumnAction.debugDataViewer.getDataViewerAdapter().setColumnList(selectColumnAction.getSelectedColumns());
+							debugDataViewer.getDataViewerAdapter().setColumnList(selectColumnAction.getSelectedColumns());
 						}
 					}
 					

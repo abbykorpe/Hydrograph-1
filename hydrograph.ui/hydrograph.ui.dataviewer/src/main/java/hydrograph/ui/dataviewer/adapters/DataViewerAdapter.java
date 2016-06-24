@@ -28,7 +28,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -238,6 +237,12 @@ public class DataViewerAdapter {
 		return columnList;
 	}
 		
+	/**
+	 * 
+	 * Get map of all columns and index
+	 * 
+	 * @return Map of columns and corresponding index
+	 */
 	public Map getAllColumnsMap() {
 		return allColumnsMap;
 	}
@@ -452,6 +457,12 @@ public class DataViewerAdapter {
 		}
 	}
 	
+	/**
+	 * 
+	 * Update the columns list
+	 * 
+	 * @param columnList
+	 */
 	public void setColumnList(List<String> columnList) {
 		this.columnList.clear();
 		this.columnList.addAll(columnList);
