@@ -26,14 +26,12 @@ import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
-
 import org.apache.commons.httpclient.HttpException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -42,7 +40,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
-
 import com.jcraft.jsch.JSchException;
 
 /**
@@ -92,7 +89,6 @@ public class ReloadAction extends Action {
 	public void run() {
 		viewDataPreferences = debugDataViewer.getViewDataPreferences();
 		DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
-		
 		Job job = new Job(Messages.LOADING_DEBUG_FILE) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
@@ -112,7 +108,11 @@ public class ReloadAction extends Action {
 					if(lastDownloadedFileSize!=viewDataPreferences.getFileSize()){
 						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize(),true);	
 					}else{
+						SelectColumnAction selectColumnAction =(SelectColumnAction) debugDataViewer.getActionFactory().getAction(SelectColumnAction.class.getName());
 						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize(),false);
+						if(selectColumnAction.getSelectedColumns().size()!=0){
+							debugDataViewer.getDataViewerAdapter().setColumnList(selectColumnAction.getSelectedColumns());
+						}
 					}
 					
 				} catch (ClassNotFoundException | SQLException e1) {
@@ -146,7 +146,6 @@ public class ReloadAction extends Action {
 					
 			}
 		};
-		
 		job.schedule();
 	}
 

@@ -19,7 +19,7 @@ import java.util.LinkedHashMap;
 import org.eclipse.jface.action.Action;
 
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
-
+import hydrograph.ui.dataviewer.actions.SelectColumnAction;
 /**
  * 
  * ActionFactory instantiates all actions and make them accessible wherever needed 
@@ -51,10 +51,7 @@ public class ActionFactory {
 		PreferencesAction preferencesAction= new PreferencesAction(debugDataViewer);
 		DatasetInformationAction datasetInformationAction = new DatasetInformationAction(debugDataViewer);
 		ResetSort resetSort = new ResetSort(debugDataViewer);
-		
-
-		
-
+		SelectColumnAction selectColumnAction= new SelectColumnAction(debugDataViewer);
 		
 		actionMap.put(ExportAction.class.getName(), exportAction);
 		actionMap.put(FilterAction.class.getName(), filterAction);
@@ -69,10 +66,7 @@ public class ActionFactory {
 		actionMap.put(PreferencesAction.class.getName(), preferencesAction);
 		actionMap.put(DatasetInformationAction.class.getName(), datasetInformationAction);
 		actionMap.put(ResetSort.class.getName(), resetSort);
-		
-
-		
-
+		actionMap.put(SelectColumnAction.class.getName(),selectColumnAction);
 	}
 	
 	/**

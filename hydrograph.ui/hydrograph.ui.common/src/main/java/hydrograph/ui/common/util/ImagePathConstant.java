@@ -39,6 +39,13 @@ public class ImagePathConstant {
 	public static final String DATA_VIEWER_FILTER="/icons/advicons/filter.png";
 	public static final String DATA_VIEWER_SWITCH_VIEW="/icons/advicons/switchview.png";
 	public static final String WARNING_ICON="/icons/advicons/warning.png";
+	public static final String TABLE_ICON = "/icons/advicons/table.png";
+	public static final String DESELECT_ALL_ICON = "/icons/advicons/deselectAll.png";
+	public static final String DESELECT_ICON = "/icons/advicons/deselect.png";
+	public static final String DOWN_ICON = "/icons/advicons/down.png";
+	public static final String UP_ICON = "/icons/advicons/up.png";
+	public static final String SELECT_ICON = "/icons/advicons/select.png";
+	public static final String SELECT_ALL_ICON = "/icons/advicons/selectAll.png";
 	
 	public static final String SORT_ASC="/icons/advicons/sort_asc.png";
 	public static final String SORT_DESC="/icons/advicons/sort_desc.png";

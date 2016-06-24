@@ -30,6 +30,7 @@ import hydrograph.ui.dataviewer.actions.PreferencesAction;
 import hydrograph.ui.dataviewer.actions.ReloadAction;
 import hydrograph.ui.dataviewer.actions.ResetSort;
 import hydrograph.ui.dataviewer.actions.SelectAllAction;
+import hydrograph.ui.dataviewer.actions.SelectColumnAction;
 import hydrograph.ui.dataviewer.actions.UnformattedViewAction;
 import hydrograph.ui.dataviewer.actions.ViewDataGridMenuCreator;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
@@ -53,7 +54,7 @@ import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
 import hydrograph.ui.logging.factory.LogFactory;
-
+import org.eclipse.swt.graphics.Image;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Date;
@@ -158,7 +159,6 @@ public class DebugDataViewer extends ApplicationWindow {
 	private StatusManager statusManager;
 
 	private Action dropDownAction;
-
 	private String dataViewerWindowName;
 	
 	private Fields dataViewerFileSchema;
@@ -167,11 +167,15 @@ public class DebugDataViewer extends ApplicationWindow {
 	
 	private SortOrder sortOrder;
 	
-	private org.eclipse.swt.graphics.Image ascending;
-	private org.eclipse.swt.graphics.Image descending;
+	public SortOrder getSortOrder() {
+		return sortOrder;
+	}
+
+	private Image ascending;
+	private Image descending;
 	
 	private TableColumn recentlySortedColumn;
-	
+	private String sortedColumnName;
 	/**
 	 * Create the application window,
 	 * 
@@ -190,6 +194,25 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 	
+	/**
+	 * @return Sorted Column Name
+	 */
+	public String getSortedColumnName() {
+		return sortedColumnName;
+	}
+	
+
+	/**
+	 * 
+	 * Set name of sorted column 
+	 * 
+	 * @param sortedColumnName
+	 */
+	public void setSortedColumnName(String sortedColumnName) {
+		this.sortedColumnName = sortedColumnName;
+	}
+
+
 	public DebugDataViewer( JobDetails jobDetails, String dataViewerWindowName) {
 		super(null);
 		createActions();
@@ -206,6 +229,29 @@ public class DebugDataViewer extends ApplicationWindow {
 		ascending=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
 		descending=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
 	}
+
+	/**
+	 * 
+	 * Get image for ascending order
+	 * 
+	 * @return ASC Image
+	 */
+	
+
+	public Image getAscendingIcon() {
+		return ascending;
+	}
+
+	/**
+	 * 
+	 *Get image for descending order
+	 * 
+	 * @return DES Image
+	 */
+	public Image getDescendingIcon() {
+		return descending;
+	}
+
 
 	private void downloadDebugFiles() {
 		Job job = new Job(Messages.LOADING_DEBUG_FILE) {
@@ -358,7 +404,8 @@ public class DebugDataViewer extends ApplicationWindow {
 	public DataViewLoader getDataViewLoader() {
 		return dataViewLoader;
 	}
-
+	
+		
 	/**
 	 * 
 	 * get Unformatted View Textarea
@@ -369,6 +416,16 @@ public class DebugDataViewer extends ApplicationWindow {
 		return unformattedViewTextarea;
 	}
 
+	/**
+	 * 
+	 * Get list of columns
+	 * 
+	 * @return
+	 */
+	public List<String> getColumnList(){
+		return dataViewerAdapter.getColumnList();
+	}
+	
 	/**
 	 * 
 	 * Get Formatted View Textarea
@@ -762,7 +819,6 @@ public class DebugDataViewer extends ApplicationWindow {
 
 				scrolledComposite.setContent(stackLayoutComposite);
 				scrolledComposite.setMinSize(stackLayoutComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
 				//updateGridViewTable();
 			}
 		}
@@ -811,29 +867,33 @@ public class DebugDataViewer extends ApplicationWindow {
 		});
 	}
 
-	private void createGridViewTableColumns(final TableViewer tableViewer) {
+	public void createGridViewTableColumns(final TableViewer tableViewer) {
 
 		createGridViewTableIndexColumn(tableViewer);
 		int index = 0;
+		
 		for (String columnName : dataViewerAdapter.getColumnList()) {
 			final TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 			TableColumn tblclmnItem = tableViewerColumn.getColumn();
 			tblclmnItem.setWidth(100);
 			tblclmnItem.setText(columnName);
 			
-			tableViewerColumn.getColumn().setData(Views.COLUMN_ID_KEY, index);
+			tableViewerColumn.getColumn().setData(Views.COLUMN_ID_KEY,
+					(int) dataViewerAdapter.getAllColumnsMap().get(tableViewerColumn.getColumn().getText()));
 			tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 
 				@Override
 				public String getText(Object element) {
 					RowData p = (RowData) element;
-					return p.getRowFields().get((int) tableViewerColumn.getColumn().getData(Views.COLUMN_ID_KEY))
-							.getValue();
+					return p.getRowFields()
+							.get((int) dataViewerAdapter.getAllColumnsMap()
+									.get(tableViewerColumn.getColumn().getText())).getValue();
 				}
 			});
 
 			if(dataViewerFileSchema!=null){
-				tableViewerColumn.getColumn().setToolTipText(getColumnToolTip(dataViewerFileSchema.getField().get(index)));
+				tableViewerColumn.getColumn().setToolTipText(
+						getColumnToolTip(dataViewerFileSchema.getField().get(index)));
 			}
 			
 			tableViewerColumn.getColumn().addSelectionListener(new SelectionListener() {
@@ -841,7 +901,7 @@ public class DebugDataViewer extends ApplicationWindow {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					
-					if(recentlySortedColumn!=null){
+					if(recentlySortedColumn!=null && !recentlySortedColumn.isDisposed()){
 						recentlySortedColumn.setImage(null);
 					}
 					
@@ -862,7 +922,7 @@ public class DebugDataViewer extends ApplicationWindow {
 					dataViewLoader.reloadloadViews();
 					recentlySortedColumn = ((TableColumn)e.widget);
 					actionFactory.getAction(ResetSort.class.getName()).setEnabled(true);
-										
+					sortedColumnName=((TableColumn)e.widget).getText();
 				}
 				
 				@Override
@@ -879,6 +939,11 @@ public class DebugDataViewer extends ApplicationWindow {
 		return recentlySortedColumn;
 	}
 	
+	public void setRecentlySortedColumn(TableColumn recentlySortedColumn) {
+		this.recentlySortedColumn = recentlySortedColumn;
+	}
+
+
 	private static SortDataType getSortType(String sortDataType) {
 
 		for (SortDataType sortDataTypeObject : SortDataType.values()) {
@@ -972,6 +1037,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		editMenu.add(actionFactory.getAction(SelectAllAction.class.getName()));
 		editMenu.add(actionFactory.getAction(CopyAction.class.getName()));
 		// editMenu.add(actionFactory.getAction(FindAction.class.getName()));
+		editMenu.add(actionFactory.getAction(SelectColumnAction.class.getName()));
 	}
 
 	private void createViewMenu(MenuManager menuManager) {
@@ -1055,10 +1121,11 @@ public class DebugDataViewer extends ApplicationWindow {
 		 * addtoolbarAction( toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_FILTER),
 		 * actionFactory.getAction(FilterAction.class.getName()));
 		 */
-		
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.RESET_SORT),
 				actionFactory.getAction(ResetSort.class.getName()));
 		
+		addtoolbarAction(toolBarManager,(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.TABLE_ICON),
+				actionFactory.getAction(SelectColumnAction.class.getName()));
 		dropDownAction = new Action("", SWT.DROP_DOWN) {
 			@Override
 			public void run() {
