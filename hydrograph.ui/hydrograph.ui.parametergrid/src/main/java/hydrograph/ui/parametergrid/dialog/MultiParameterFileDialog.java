@@ -580,7 +580,7 @@ public class MultiParameterFileDialog extends Dialog {
 		});
 		Image addButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
 		btnAdd_1.setImage(addButtonImage);
-		//btnAdd_1.setText(MultiParameterFileDialogConstants.ADD_BUTTON_TEXT);
+		
 
 		Button btnDelete = new Button(composite_8, SWT.NONE);
 		btnDelete.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
@@ -608,7 +608,7 @@ public class MultiParameterFileDialog extends Dialog {
 		});
 		Image deleteButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
 		btnDelete.setImage(deleteButtonImage);
-		//btnDelete.setText(MultiParameterFileDialogConstants.DELETE_BUTTON_TEXT);
+		
 
 		Button btnUp = new Button(composite_8, SWT.NONE);
 		btnUp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1,
@@ -631,7 +631,7 @@ public class MultiParameterFileDialog extends Dialog {
 		});
 		Image upButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
 		btnUp.setImage(upButtonImage);
-		//btnUp.setText(MultiParameterFileDialogConstants.UP_BUTTON_TEXT);
+		
 
 		Button btnDown = new Button(composite_8, SWT.NONE);
 		btnDown.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
@@ -654,7 +654,6 @@ public class MultiParameterFileDialog extends Dialog {
 		});
 		Image downButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
 		btnDown.setImage(downButtonImage);
-		//btnDown.setText(MultiParameterFileDialogConstants.DOWN_BUTTON_TEXT);
 
 		Button btnSave = new Button(composite_8, SWT.NONE);
 		btnSave.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
@@ -667,7 +666,7 @@ public class MultiParameterFileDialog extends Dialog {
 		});
 		Image saveButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SAVE_BUTTON);
 		btnSave.setImage(saveButtonImage);
-		//btnSave.setText(MultiParameterFileDialogConstants.SAVE_BUTTON_TEXT);
+		
 
 		Composite composite_1 = new Composite(composite_4, SWT.NONE);
 		composite_1.setLayout(new GridLayout(1, false));
@@ -774,11 +773,12 @@ public class MultiParameterFileDialog extends Dialog {
 						}else{
 							parameters.get(index).setParameterValue("");
 						}
-
+						
 						parameterTableViewer.refresh();
+						
 					}
 				});
-
+				getShell().setFocus();
 				item.addDisposeListener(new DisposeListener() {
 
 					@Override
@@ -790,7 +790,7 @@ public class MultiParameterFileDialog extends Dialog {
 				});
 			}
 		});
-
+		
 		parameterTableViewer.setInput(parameters);
 
 		enableTabbing(filePathTableViewer);
@@ -1132,7 +1132,7 @@ public class MultiParameterFileDialog extends Dialog {
 		});
 		Image addImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
 		browseBtn.setImage(addImage);
-		//browseBtn.setText(MultiParameterFileDialogConstants.ADD_BUTTON_TEXT);
+		
 
 		Button btnReload = new Button(composite, SWT.NONE);
 		btnReload.addSelectionListener(new SelectionAdapter() {
@@ -1169,8 +1169,7 @@ public class MultiParameterFileDialog extends Dialog {
 		});
 		Image reloadImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_RELOAD);
 		btnReload.setImage(reloadImage);
-		//btnReload.setText(MultiParameterFileDialogConstants.RELOAD_BUTTON_TEXT);
-
+		
 		Button btnUp_1 = new Button(composite, SWT.NONE);
 		btnUp_1.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -1188,7 +1187,6 @@ public class MultiParameterFileDialog extends Dialog {
 		});
 		Image upImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
 		btnUp_1.setImage(upImage);
-		//btnUp_1.setText(MultiParameterFileDialogConstants.UP_BUTTON_TEXT);
 		
 		Button btnDown_1 = new Button(composite, SWT.NONE);
 		btnDown_1.addSelectionListener(new SelectionAdapter() {
@@ -1206,7 +1204,6 @@ public class MultiParameterFileDialog extends Dialog {
 		});
 		Image downImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
 		btnDown_1.setImage(downImage);
-		//btnDown_1.setText(MultiParameterFileDialogConstants.DOWN_BUTTON_TEXT);
 		
 		Composite composite_3 = new Composite(composite_2, SWT.NONE);
 		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,false, 1, 1));
