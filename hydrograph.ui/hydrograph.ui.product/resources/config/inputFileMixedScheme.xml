@@ -15,8 +15,8 @@
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/input_file_palette.png" canvasIconPath="/icons/input_file_canvas.png"
 		name="IFileMixedScheme" nameInPalette="File Mixed Scheme" defaultNamePrefix="IFMixedScheme" 
-		description="Used to read files with combination of delimited and fixed width fields."
-		helpFilePath="/hydrograph.ui.help/html/Components/Input_File_Fixed_Width.html"
+		description="Used to read any Mixed scheme Width  file and delimiter can be applied record level."
+		helpFilePath="/hydrograph.ui.help/html/Components/Input_File_Mixed_Scheme.html"
 		acronym="IMix">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
@@ -62,10 +62,8 @@
 		
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time.">
-		<tns:validator>RUNTIME_PROPERTY_VALIDATOR</tns:validator>
-		</tns:property>
-
+			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time."/>
+		
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Specifies the execution sequence \nof this component in the job flow.">
