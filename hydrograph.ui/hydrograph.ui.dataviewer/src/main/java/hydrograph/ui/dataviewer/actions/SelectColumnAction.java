@@ -80,10 +80,10 @@ public class SelectColumnAction extends Action {
 	private void recreateViews() {
 		String sortColumnsName=debugDataViewer.getSortedColumnName();
 		if(SortOrder.ASC == debugDataViewer.getSortOrder()){
-			sortType=debugDataViewer.getAscending();
+			sortType=debugDataViewer.getAscendingIcon();
 		}
 		else {
-			sortType=debugDataViewer.getDescending();
+			sortType=debugDataViewer.getDescendingIcon();
 		}
 		TableViewer tableViewer=debugDataViewer.getTableViewer();
 		debugDataViewer.createGridViewTableColumns(tableViewer);

@@ -238,7 +238,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	 */
 	
 
-	public Image getAscending() {
+	public Image getAscendingIcon() {
 		return ascending;
 	}
 
@@ -248,7 +248,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	 * 
 	 * @return DES Image
 	 */
-	public Image getDescending() {
+	public Image getDescendingIcon() {
 		return descending;
 	}
 

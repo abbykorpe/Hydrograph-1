@@ -327,10 +327,6 @@ public class SelectColumnActionDialog extends Dialog {
 		}
 		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
 	}
-	@Override
-	public boolean close() {
-		return super.close();
-	}
 
 	/**
 	 * Return all columns List
