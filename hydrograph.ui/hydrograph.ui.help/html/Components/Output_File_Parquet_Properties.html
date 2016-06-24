@@ -15,7 +15,6 @@ limitations under the License. -->
 	<title>Output File Parquet Properties</title>
 </head>
 <body>
-<p><strong><span style="color:#FF0000;"><img alt="" src="../images/app_icon.png" /></span></strong><span style="color:#FF0000;">Hydrograph Help</span></p>
 
 <p><font face="verdana, geneva, sans-serif"><span style="font-size: 28px;">Output File Parquet Properties</span></font></p>
 
@@ -30,18 +29,19 @@ limitations under the License. -->
 <p><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Display</b></span></span></p>
 
 <ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Name</b> - The Name field will specify the name of the component as desired by the user</span></span></li>
+	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Name</b> - The Name field will specify the name of the component as desired by the user.</span></span></li>
 	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Base Type</b> - Base Type signifies the basic operation area of the component. In this case it is of Base Type Output.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Type </b> - Type further categorizes the component to detailed operation that it intends to perform. Here it is of type Output Parquet.</span></span></li>
+	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Type </b> - Type further categorizes the component to detailed operation that it intends to perform. Here it is of type Output File Parquet.</span></span></li>
 </ul>
 
 <p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size:14px;"><b>Configuration</b></span></span></p>
 
 <ul>
 	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>File Path</b> - File path is used to specify the path where the Output parquet file will be generated after successful execution . User can either manually type the path in the text box provided or use the Browse button to search for a location to save the output file. Alternatively, the user can parameterize the File path where the parameter value will be resolved at run-time.</span></span></li>
+	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Overwrite</b> - This property accepts Boolean values True and False. It can also be parameterized and later on resolved during run-time. The Overwrite property when True, overwrites the output file.</span></span></li>
 	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Runtime Properties</b> -&nbsp;Runtime properties are used to override the Hadoop configurations specific to Output File Parquet component at run time. User is required to enter the Property Name and Value in the runtime properties grid.</span></span></li>
 	<p><img alt="" src="../images/Runtime_Properties_Grid.png" /></p>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Phase</b> - Phase simply accepts a numeric number starting from 0 and signifies the phase this component will execute in. By default this is 0.</span></span></li>
+	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Phase</b> - Phase simply accepts a numeric value starting from 0 to maximum 99 and signifies the phase this component will execute in. By default this is 0.</span></span></li>
 </ul>
 
 <p><font face="verdana, geneva, sans-serif"><span style="font-size: 14px;"><b>Schema tab: </b></span></font></p>
@@ -50,10 +50,13 @@ limitations under the License. -->
 <p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size:14px;"><b>Schema Types</b></span></span></p>
 <ul>
 	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Internal</b> - User is provided a Grid to enter the internal schema of the Output Parquet file.</span></span></li>
-	<ul><li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Field Name</b> - User needs to enter all the Field names in this column</span></span></li>
+	<ul><li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Field Name</b> - User needs to enter all the Field names in this column.</span></span></li>
 	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Data type</b> - By default "string" Data type has been selected for any field added to the Grid. User can select from different Data type values like "integer", "double", "float" etc.</span></span></li>
 	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Date Format</b> - User can specify desired date format like "YY-DD-MM", "YYYYMMDD" etc for a date field in this column.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Precision</b> - Precision for a double, float or bigdecimal field can be specified here.</span></span></li></ul>
+	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Precision</b> - Precision for a bigdecimal field can be specified here.</span></span></li>
+	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Scale</b> - Scale for a bigdecimal field can be specified here.</span></span></li>
+	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Scale Type</b> - Scale Type accepts values as implicit or explicit for bigdecimal field and none for other data types. Explicit considers the length of ' <b>.</b> ' and implicit ignores length of ' <b>.</b> ' for the bigdecimal field.</span></span></li>
+	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Field Description</b> - User can specify field description.</span></span></li></ul>
 	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>External</b> <ul>
 		<li><b>Import XML</b>- User can provide an external Hydrograph Schema file of XML format. A text box is provided to either manually type or use the Browse button to select the schema file from File system. The External schema file path is resolved during run time and replaced with the contents of the file in the Job XML.</li>
 		<li><b>Export XML</b>- User can provide an external directory path to export Hydrograph Schema file in XML format. A text box is provided to either manually type or use the Browse button to specify the output directory on File system. The External directory path is resolved during run time and the xml schema file is saved in it.</li>
