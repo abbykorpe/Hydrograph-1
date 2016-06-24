@@ -1,10 +1,20 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package hydrograph.ui.dataviewer.filter;
 
 import hydrograph.ui.common.util.ImagePathConstant;
-
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
-import hydrograph.ui.logging.factory.LogFactory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,9 +22,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.fieldassist.ComboContentAdapter;
@@ -36,7 +46,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -45,7 +54,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.slf4j.Logger;
 
 public class FilterConditionsDialog extends Dialog {
 	private static final String VALUE_TEXT_BOX = "valueTextBox";
@@ -90,7 +98,7 @@ public class FilterConditionsDialog extends Dialog {
 	private TreeMap<Integer,List<List<Integer>>> groupSelectionMap;
 	private DataViewerAdapter dataViewerAdapter;
 	private DebugDataViewer debugDataViewer;
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConditionsDialog.class);
+	//private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConditionsDialog.class);
 	
 	
 	public void setFieldsAndTypes(Map<String, String> fieldsAndTypes) {
@@ -371,6 +379,13 @@ public class FilterConditionsDialog extends Dialog {
 					Combo combo = addComboInTable(tableViewer, item, CONDITIONAL_OPERATORS, CONDITIONAL_COMBO_PANE, CONDITIONAL_EDITOR,
 							cell.getColumnIndex(), new String[]{}, 
 							FilterHelper.INSTANCE.getConditionalOperatorSelectionListener(conditionsList));
+					if(StringUtils.isNotBlank(conditionsList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
+						String fieldsName = conditionsList.get(tableViewer.getTable().indexOf(item)).getFieldName();
+						combo.setItems(typeBasedConditionalOperators.get(fieldsAndTypes.get(fieldsName)));
+					}
+					else{
+						combo.setItems(new String[]{});
+					}
 					combo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getConditionalOperator());
 					item.addDisposeListener(new DisposeListener() {
 						
@@ -390,6 +405,13 @@ public class FilterConditionsDialog extends Dialog {
 				}
 				else{
 					Combo combo = (Combo) item.getData(CONDITIONAL_OPERATORS);
+					if(StringUtils.isNotBlank(conditionsList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
+						String fieldsName = conditionsList.get(tableViewer.getTable().indexOf(item)).getFieldName();
+						combo.setItems(typeBasedConditionalOperators.get(fieldsAndTypes.get(fieldsName)));
+					}
+					else{
+						combo.setItems(new String[]{});
+					}
 					combo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getConditionalOperator());
 				}
 			}
