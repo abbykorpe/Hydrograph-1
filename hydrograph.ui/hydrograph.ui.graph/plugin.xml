@@ -364,6 +364,16 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+O">
       </key>
+      <key
+            commandId="org.eclipse.ui.newWizard"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+J">
+         <parameter
+               id="newWizardId"
+               value="hydrograph.ui.graph.job.wizard">
+         </parameter>
+      </key>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">

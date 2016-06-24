@@ -297,7 +297,7 @@
             <menu
                   id="hydrograph.ui.menus.NewMenu"
                   label="New"
-                   mnemonic ="N">
+                   mnemonic ="N">               <command                     commandId="org.eclipse.ui.newWizard"                     id="hydrograph.ui.graph.newJob"                     label="Job"                     mnemonic="J"                     style="push">                  <parameter                        name="newWizardId"                        value="hydrograph.ui.graph.job.wizard">                  </parameter>               </command>
                <menu
                      icon="icons/class_obj.gif"
                      label="Custom Class"
