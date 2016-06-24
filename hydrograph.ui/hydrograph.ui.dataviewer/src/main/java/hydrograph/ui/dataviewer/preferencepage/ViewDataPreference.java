@@ -31,11 +31,11 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
@@ -111,11 +111,20 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		memoryFieldEditor =new IntegerFieldEditor(PreferenceConstants.VIEW_DATA_FILE_SIZE, " File Size (MB)", generalGroup, 6);
 		memoryFieldEditor.setErrorMessage(null);
 		memoryFieldEditor.setFocus();
-		memoryFieldEditor.setPropertyChangeListener(new IPropertyChangeListener() {
+		memoryFieldEditor.getTextControl(generalGroup).addModifyListener(new ModifyListener() {
 			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				validationForIntegerField(memoryFieldEditor.getStringValue(), memoryFieldEditor, Messages.FILE_INTEGER_FIELD_VALIDATION);
-				validationForIntegerValue(memoryFieldEditor.getStringValue(), memoryFieldEditor, Messages.File_FIELD_NUMERIC_VALUE_ACCPECTED);
+			public void modifyText(ModifyEvent event) {
+				String value = ((Text)event.getSource()).getText();
+				validationForIntegerField(value, memoryFieldEditor, Messages.FILE_INTEGER_FIELD_VALIDATION);
+			}
+		});
+		memoryFieldEditor.getTextControl(generalGroup).addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) { }
+			@Override
+			public void focusGained(FocusEvent event) {
+				String value = ((Text)event.getSource()).getText();
+				validationForIntegerField(value, memoryFieldEditor, Messages.FILE_INTEGER_FIELD_VALIDATION);
 			}
 		});
 		memoryFieldEditor.setPreferenceStore(getPreferenceStore());
@@ -136,36 +145,20 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		unusedButton1.setText("unused");
 		unusedButton1.setBounds(0, 0, 20, 10);
 		unusedButton1.setVisible(false);
-		
-		pageSizeEditor.setPropertyChangeListener(new IPropertyChangeListener() {
+		pageSizeEditor.getTextControl(generalGroup).addModifyListener(new ModifyListener() {
 			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				int pageSize = 0;
-				String value = event.getNewValue().toString();
-				validationForIntegerField(pageSizeEditor.getStringValue(), pageSizeEditor, Messages.PAGE_INTEGER_FIELD_VALIDATION);
-				validationForIntegerValue(pageSizeEditor.getStringValue(), pageSizeEditor, Messages.PAGE_FIELD_NUMERIC_VALUE_ACCPECTED);
-				if(value.equalsIgnoreCase("true")){
-					pageSize = Integer.parseInt(pageSizeEditor.getStringValue());
-				}
-				if(pageSize > 5000){
-					setMessage(Messages.PAGE_SIZE_WARNING, 2);
-				}else{ setMessage(null); }
+			public void modifyText(ModifyEvent event) {
+				String value = ((Text)event.getSource()).getText();
+				validationForIntegerField(value, pageSizeEditor, Messages.PAGE_INTEGER_FIELD_VALIDATION);
 			}
 		});
 		pageSizeEditor.getTextControl(generalGroup).addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) { }
 			@Override
-			public void focusGained(FocusEvent e) {
-				Text text = (Text) e.getSource();
-				String value = text.getText();
-				int pageSize = 0;
-				if(value.matches("\\d+")){
-					pageSize = Integer.parseInt(pageSizeEditor.getStringValue());
-				}
-				if(pageSize > 5000){
-					setMessage(Messages.PAGE_SIZE_WARNING, 2);
-				}else{ setMessage(null); }
+			public void focusGained(FocusEvent event) {
+				String value = ((Text)event.getSource()).getText();
+				validationForIntegerField(value, pageSizeEditor, Messages.PAGE_INTEGER_FIELD_VALIDATION);
 			}
 		});
 		tempPathFieldEditor = new DirectoryFieldEditor(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, " Local Temp Path", generalGroup);
@@ -212,21 +205,11 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		delimiterEditor = new StringFieldEditor(PreferenceConstants.DELIMITER, " Delimiter", grpExportData);
 		delimiterEditor.setErrorMessage(null);
 		delimiterEditor.setFocus();
-		delimiterEditor.setPropertyChangeListener(new IPropertyChangeListener() {
+		delimiterEditor.getTextControl(grpExportData).addFocusListener(new FocusListener() {
 			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				String value = event.getNewValue().toString();
-				
-				Notification note1 =validateQuoteCharacter();
-				if(note1.hasErrors()){
-					setValid(false);
-					quoteEditor.setErrorMessage(note1.errorMessage());
-					setErrorMessage(note1.errorMessage());
-				}else{
-					setErrorMessage(null);
-					quoteEditor.setErrorMessage("");
-				}
-				
+			public void focusLost(FocusEvent e) { }
+			@Override
+			public void focusGained(FocusEvent event) {
 				Notification note = validateDelimiter();
 				if(note.hasErrors()){
 					setValid(false);
@@ -237,21 +220,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 					delimiterEditor.setErrorMessage("");
 					checkState();
 				} 
-				if(value.length() == 1 && !value.equalsIgnoreCase(",")){
-					setMessage(Messages.DELIMITER_WARNING, 2);
-				}else{ setMessage(null); }
-			}
-		});
-		delimiterEditor.getTextControl(grpExportData).addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent e) { }
-			@Override
-			public void focusGained(FocusEvent event) {
-				Text text = (Text) event.getSource();
-				String value = text.getText();
-				if(value.length() == 1 && !value.equalsIgnoreCase(",")){
-					setMessage(Messages.DELIMITER_WARNING, 2);
-				}else{ setMessage(null); }
 			}
 		});
 		delimiterEditor.setPreferenceStore(getPreferenceStore());
@@ -264,22 +232,9 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		quoteEditor = new StringFieldEditor(PreferenceConstants.QUOTE_CHARACTOR, " Quote Character", grpExportData);
 		quoteEditor.setErrorMessage(null);
 		quoteEditor.setFocus();
-		
-		quoteEditor.setPropertyChangeListener(new IPropertyChangeListener() {
+		quoteEditor.getTextControl(grpExportData).addModifyListener(new ModifyListener(){
 			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				String value = event.getNewValue().toString();
-				
-				Notification note1 = validateDelimiter();
-				if(note1.hasErrors()){
-					setValid(false);
-					delimiterEditor.setErrorMessage(note1.errorMessage());
-					setErrorMessage(note1.errorMessage());
-				}else{
-					setErrorMessage(null);
-					delimiterEditor.setErrorMessage("");
-					checkState();
-				}
+			public void modifyText(ModifyEvent e) {
 				Notification note =validateQuoteCharacter();
 				if(note.hasErrors()){
 					setValid(false);
@@ -290,9 +245,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 					quoteEditor.setErrorMessage("");
 					checkState();
 				} 
-				if(value.length() == 1 && !value.equalsIgnoreCase("\"")){
-					setMessage(Messages.QUOTE_WARNING, 2);
-				}else{ setMessage(null); }
 			}
 		});
 		quoteEditor.getTextControl(grpExportData).addFocusListener(new FocusListener() {
@@ -300,14 +252,34 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			public void focusLost(FocusEvent e) { }
 			@Override
 			public void focusGained(FocusEvent event) {
-				Text text = (Text) event.getSource();
-				String value = text.getText();
-				if(value.length() == 1 && !value.equalsIgnoreCase("\"")){
-					setMessage(Messages.QUOTE_WARNING, 2);
-				}else{ setMessage(null); }
+				Notification note =validateQuoteCharacter();
+				if(note.hasErrors()){
+					setValid(false);
+					quoteEditor.setErrorMessage(note.errorMessage());
+					setErrorMessage(note.errorMessage());
+				}else{
+					setErrorMessage(null);
+					quoteEditor.setErrorMessage("");
+					checkState();
+				} 
 			}
 		});
 		
+		delimiterEditor.getTextControl(grpExportData).addModifyListener(new ModifyListener(){
+			@Override
+			public void modifyText(ModifyEvent e) {
+				Notification note = validateDelimiter();
+				if(note.hasErrors()){
+					setValid(false);
+					delimiterEditor.setErrorMessage(note.errorMessage());
+					setErrorMessage(note.errorMessage());
+				}else{
+					setErrorMessage(null);
+					delimiterEditor.setErrorMessage("");
+					checkState();
+				} 
+			}
+		});
 		quoteEditor.setPreferenceStore(getPreferenceStore());
 		quoteEditor.load();
 		
@@ -357,10 +329,19 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		grpServiceDetailsCmposite.setLayoutData(serviceGridData);
 
 		portNo = new IntegerFieldEditor(PreferenceConstants.PORT_NO, "Port No               ", grpServiceDetailsCmposite, 4);
-		portNo.setPropertyChangeListener(new IPropertyChangeListener() {
+		portNo.getTextControl(grpServiceDetailsCmposite).addModifyListener(new ModifyListener() {
 			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				String value = event.getNewValue().toString();
+			public void modifyText(ModifyEvent event) {
+				String value = ((Text)event.getSource()).getText();
+				validationForIntegerField(value,portNo,Messages.PORTNO_FIELD_VALIDATION);
+			}
+		});
+		portNo.getTextControl(grpServiceDetailsCmposite).addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) { }
+			@Override
+			public void focusGained(FocusEvent event) {
+				String value = ((Text)event.getSource()).getText();
 				validationForIntegerField(value,portNo,Messages.PORTNO_FIELD_VALIDATION);
 			}
 		});
@@ -388,17 +369,14 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		purgeEditor.setPreferenceStore(getPreferenceStore());
 		purgeEditor.load();
 		
-		
 		addFields(memoryFieldEditor);
-		addFields(defaultPathFieldEditor);
 		addFields(delimiterEditor);
 		addFields(pageSizeEditor);
 		addFields(quoteEditor);
-		addFields(tempPathFieldEditor);
+		addFields(portNo);
 		
 		return null;
 	}
-
 
 
 	private void addFields(FieldEditor editor){
@@ -416,8 +394,8 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 				FieldEditor fieldEditor = editorList.get(i);
 				if(StringUtils.isNotBlank(((StringFieldEditor)fieldEditor).getErrorMessage())){
 					setErrorMessage(((StringFieldEditor)fieldEditor).getErrorMessage());
-					 setValid(false);
-					 break;
+					setValid(false);
+					break;
 				}else{
 					setValid(true);
 				}
@@ -438,20 +416,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	}
 
 	
-	private void validationForIntegerValue(String value , IntegerFieldEditor editor, String message){
-		if(StringUtils.isNotBlank(value) && value.matches("\\d+")){
-			if(Integer.parseInt(value)<=0){
-				setErrorMessage(message);
-				editor.setErrorMessage(message);
-				setValid(false);
-			}else{
-				setValid(true);
-				editor.setErrorMessage("");
-				checkState();
-			}
-		}
-	}
-	
 	private Notification validateQuoteCharacter(){
 		Notification notification = new Notification();
 		if(quoteEditor.getStringValue().equalsIgnoreCase(delimiterEditor.getStringValue())){
@@ -464,7 +428,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	}
 	
 	private void validationForIntegerField(String value, IntegerFieldEditor editor, String message){
-		if(!StringUtils.isNotBlank(value) || !value.matches("\\d+")){
+		if(StringUtils.isBlank(value) || !value.matches("\\d+") || value.equalsIgnoreCase("0")){
 			setErrorMessage(message);
 			editor.setErrorMessage(message);
 			setValid(false);

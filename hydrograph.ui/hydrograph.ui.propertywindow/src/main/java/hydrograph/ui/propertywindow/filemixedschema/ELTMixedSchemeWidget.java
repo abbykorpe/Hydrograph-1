@@ -59,7 +59,7 @@ public class ELTMixedSchemeWidget extends ELTSchemaGridWidget {
 
 	@Override
 	protected String[] getPropertiesToShow() {
-		return new String[]{ FIELDNAME, DATATYPE, DATEFORMAT, PRECISION, SCALE, SCALE_TYPE, FIELD_DESCRIPTION, LENGTH, DELIMITER};
+		return new String[]{ FIELDNAME, DATATYPE, LENGTH, DELIMITER, SCALE, SCALE_TYPE, DATEFORMAT, PRECISION, FIELD_DESCRIPTION};
 	}
 
 	@Override

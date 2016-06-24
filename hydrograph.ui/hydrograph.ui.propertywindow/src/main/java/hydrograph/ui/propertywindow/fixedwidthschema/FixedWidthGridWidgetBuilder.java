@@ -40,14 +40,13 @@ public class FixedWidthGridWidgetBuilder extends GridWidgetCommonBuilder {
 	private FixedWidthGridWidgetBuilder() {}
 	
 	public CellEditor[] createCellEditorList(Table table,int size){
-		
 		CellEditor[] cellEditor = createCellEditor(size);
 		addTextEditor(table,cellEditor, 0);
 		addComboBox(table, cellEditor, getDataTypeKey(), 1);
 		addTextEditor(table, cellEditor, 2);
 		addTextEditor(table, cellEditor, 3);
-		addTextEditor(table, cellEditor, 4);
-		addComboBox(table, cellEditor, getScaleTypeKey(), 5);
+		addComboBox(table, cellEditor, getScaleTypeKey(), 4);
+		addTextEditor(table, cellEditor, 5);
 		addTextEditor(table, cellEditor, 6);
 		addTextEditor(table, cellEditor, 7);
 		return cellEditor;

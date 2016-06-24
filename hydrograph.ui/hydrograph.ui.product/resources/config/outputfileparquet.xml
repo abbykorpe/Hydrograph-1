@@ -30,7 +30,7 @@
 			usage="REQUIRED"/>
 		
 		<tns:property dataType="string" group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS"
-			name="schema" renderer="SCHEMA_WIDGET" type="USER" showAsTooltip="FALSE"
+			name="schema" renderer="HIVE_PARQUET_WIDGET" type="USER" showAsTooltip="FALSE"
 			tooltipDataType="NONE" usage="REQUIRED">
 			<tns:validator>HIVE_PARQUET_VALIDATOR</tns:validator>
 		</tns:property>

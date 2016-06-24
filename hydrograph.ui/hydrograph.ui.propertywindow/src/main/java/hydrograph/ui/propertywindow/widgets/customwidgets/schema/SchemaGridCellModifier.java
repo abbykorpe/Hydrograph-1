@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.TableItem;
  * This class represents the cell modifier for the SchemaEditor program
  */
 
-class SchemaGridCellModifier implements ICellModifier {
+public class SchemaGridCellModifier implements ICellModifier {
 	private Viewer viewer;
    private ELTGenericSchemaGridWidget eltGenericSchemaGridWidget;
 	/**

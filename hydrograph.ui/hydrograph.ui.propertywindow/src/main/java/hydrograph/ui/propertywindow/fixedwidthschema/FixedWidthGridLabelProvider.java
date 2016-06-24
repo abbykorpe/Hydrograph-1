@@ -57,18 +57,17 @@ public class FixedWidthGridLabelProvider implements ITableLabelProvider,ITableCo
 	 */
 	public String getColumnText(Object element, int columnIndex) {
 		FixedWidthGridRow fixedGrid = (FixedWidthGridRow) element;
+		
 		switch (columnIndex) {
 		case 0:
 			return fixedGrid.getFieldName(); 
 		case 1:
 			return GridWidgetCommonBuilder.getDataTypeKey()[fixedGrid.getDataType().intValue()];   
 		case 2:
-			return fixedGrid.getDateFormat();
-		case 3:
-			return fixedGrid.getPrecision(); 
-		case 4: 
+			return fixedGrid.getLength().toString();
+		case 3: 
 			return fixedGrid.getScale().toString();
-		case 5:
+		case 4:
 			if(fixedGrid.getScaleType()!=null)
 			{
 			return GridWidgetCommonBuilder.getScaleTypeKey()[fixedGrid.getScaleType().intValue()];  
@@ -77,10 +76,12 @@ public class FixedWidthGridLabelProvider implements ITableLabelProvider,ITableCo
 			{
 				return GridWidgetCommonBuilder.getScaleTypeKey()[0];
 			}
+		case 5:
+			return fixedGrid.getDateFormat();
 		case 6: 
-			return fixedGrid.getDescription();
+			return fixedGrid.getPrecision(); 
 		case 7: 
-			return fixedGrid.getLength().toString();
+			return fixedGrid.getDescription();
 		}
 		return null;
 	}

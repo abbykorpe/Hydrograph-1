@@ -14,10 +14,6 @@
  
 package hydrograph.ui.propertywindow.fixedwidthschema;
 
-import java.util.ArrayList;
-
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -27,10 +23,10 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.SchemaGridContentProvider;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
-import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTCellEditorIsEmptyValidator;
-import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTCellEditorIsNumericValidator;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
+
+import java.util.ArrayList;
 
 
 /**
@@ -63,7 +59,7 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 
 	@Override
 	protected String[] getPropertiesToShow() {
-		return new String[]{ FIELDNAME, DATATYPE, DATEFORMAT, PRECISION, SCALE, SCALE_TYPE, FIELD_DESCRIPTION, LENGTH };
+		return new String[]{ FIELDNAME, DATATYPE, LENGTH, SCALE, SCALE_TYPE, DATEFORMAT, PRECISION, FIELD_DESCRIPTION };
 	}
 	
 	@Override
