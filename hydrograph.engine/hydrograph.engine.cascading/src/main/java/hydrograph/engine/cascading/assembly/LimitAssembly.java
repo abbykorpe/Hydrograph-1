@@ -52,7 +52,7 @@ public class LimitAssembly extends BaseComponent<LimitEntity> {
 
 			Limit limit = new Limit(limitEntity.getMaxRecord());
 
-			Pipe outPipes = new Pipe(limitEntity.getComponentId() + "_out",
+			Pipe outPipes = new Pipe("limit:"+limitEntity.getComponentId() + "_"+outSocket.getSocketId(),
 					componentParameters.getInputPipe());
 
 			setHadoopProperties(outPipes.getStepConfigDef());

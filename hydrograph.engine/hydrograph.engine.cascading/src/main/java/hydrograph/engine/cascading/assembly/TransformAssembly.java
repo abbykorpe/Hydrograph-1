@@ -66,7 +66,7 @@ public class TransformAssembly extends BaseComponent<TransformEntity> {
 	}
 
 	protected void createAssemblyForOutSocket(OutSocket outSocket) {
-		Pipe transformPipe = new Pipe(transformEntity.getComponentId() + "_out", componentParameters.getInputPipe());
+		Pipe transformPipe = new Pipe("transform:"+transformEntity.getComponentId() + "_"+outSocket.getSocketId(), componentParameters.getInputPipe());
 
 		// initialize the out socket fields
 		Fields passThroughFields = operationFieldsCreator.getPassThroughFields();

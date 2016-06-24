@@ -92,7 +92,7 @@ public class PartitionByExpressionAssembly extends BaseComponent<PartitionByExpr
 	}
 
 	private Pipe getNewPipe(String outSocketId, Pipe pipe) {
-		Pipe tempPipe = new Pipe(partitionByExpressionEntity.getComponentId() + "_" + outSocketId, pipe);
+		Pipe tempPipe = new Pipe("partitionByExpression:"+partitionByExpressionEntity.getComponentId() + "_" + outSocketId, pipe);
 		tempPipe = new Each(tempPipe, getNewPartitioner(outSocketId));
 
 		return tempPipe;

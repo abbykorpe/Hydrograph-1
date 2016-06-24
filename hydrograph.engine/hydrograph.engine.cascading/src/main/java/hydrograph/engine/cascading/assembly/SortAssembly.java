@@ -75,7 +75,7 @@ public class SortAssembly extends BaseComponent<SortEntity> {
 					LOG.debug("Secondary key fields for sort component: '" + sortEntity.getComponentId() + "':  "
 							+ secondaryKeyFields.toString());
 				}
-				Pipe sortOutput = new GroupBy(sortEntity.getComponentId() + "_out", componentParameters.getInputPipe(),
+				Pipe sortOutput = new GroupBy("sort:"+sortEntity.getComponentId() + "_"+outSocket.getSocketId(), componentParameters.getInputPipe(),
 						keyFields, secondaryKeyFields);
 
 				setHadoopProperties(sortOutput.getStepConfigDef());

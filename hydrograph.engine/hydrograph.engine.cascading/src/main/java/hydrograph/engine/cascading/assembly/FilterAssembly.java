@@ -68,8 +68,8 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 			isUnused = true;
 		}
 
-		Pipe filterPipe = new Pipe(filterEntity.getComponentId() + "_"
-				+ socketType, componentParameters.getInputPipe());
+		Pipe filterPipe = new Pipe("filter:"+filterEntity.getComponentId() + "_"
+				+ socketId, componentParameters.getInputPipe());
 
 		FilterCustomHandler filterCustomHandler = new FilterCustomHandler(
 				new Fields(filterEntity.getOperation()

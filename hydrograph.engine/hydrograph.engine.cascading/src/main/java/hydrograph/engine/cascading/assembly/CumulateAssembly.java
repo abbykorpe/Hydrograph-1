@@ -93,7 +93,7 @@ public class CumulateAssembly extends BaseComponent<CumulateEntity> {
 				OutSocketUtils.getOperationFieldsFromOutSocket(outSocket
 						.getOperationFieldList()));
 
-		Pipe scanSortPipe = new Pipe(cumulateEntity.getComponentId() + "_out",
+		Pipe scanSortPipe = new Pipe("cumulate:"+cumulateEntity.getComponentId() + "_"+outSocket.getSocketId(),
 				componentParameters.getInputPipe());
 
 		// perform groupby operation on keys

@@ -48,7 +48,7 @@ public class CloneAssembly extends BaseComponent<CloneEntity> {
 						+ cloneEntity.getComponentId() + "' for socket: '"
 						+ outSocket.getSocketId() + "' of type: '"
 						+ outSocket.getSocketType() + "'");
-				clonePipe = new Pipe(cloneEntity.getComponentId() + "_out"
+				clonePipe = new Pipe("clone:"+cloneEntity.getComponentId() + "_"
 						+ outSocket.getSocketId(), inputPipes);
 				setHadoopProperties(clonePipe.getStepConfigDef());
 				setOutLink(outSocket.getSocketType(), outSocket.getSocketId(),

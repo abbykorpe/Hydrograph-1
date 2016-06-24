@@ -23,9 +23,12 @@ import cascading.pipe.Pipe;
 import cascading.scheme.Scheme;
 import cascading.tap.Tap;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.InputFileHiveParquetEntity;
+import hydrograph.engine.assembly.entity.InputFileHiveTextEntity;
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.cascading.assembly.InputFileHiveParquetAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 
@@ -106,6 +109,7 @@ public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 				setOutLink(outSocket.getSocketType(), outSocket.getSocketId(),
 						hiveEntityBase.getComponentId(), pipe, new Fields(
 								fieldsArray));
+				
 			}
 		} catch (Exception e) {
 			LOG.error(
@@ -154,9 +158,21 @@ public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 		flowDef = componentParameters.getFlowDef();
 		initializeHiveTap();
 
-		pipe = new Pipe(hiveEntityBase.getComponentId());
+		
+		
+		pipe = new Pipe(getComponentType(hiveEntityBase)+":"+hiveEntityBase.getComponentId()+"_"+hiveEntityBase.getOutSocketList().get(0).getSocketId());
+		
 		setHadoopProperties(hiveTap.getStepConfigDef());
 		setHadoopProperties(pipe.getStepConfigDef());
+	}
+
+	private String getComponentType(HiveEntityBase hiveEntityBase2) {
+		if(hiveEntityBase2 instanceof InputFileHiveTextEntity)
+		return "inputFileHiveText";
+		else if(hiveEntityBase2 instanceof InputFileHiveParquetEntity)
+			return "inputFileHiveParquet";
+		else
+			return "InputFileHive";
 	}
 
 	protected Path getHiveExternalTableLocationPath() {

@@ -12,6 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.base;
 
+import hydrograph.engine.assembly.entity.OutputFileHiveParquetEntity;
+import hydrograph.engine.assembly.entity.OutputFileHiveTextEntity;
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
@@ -45,13 +47,11 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 	protected String[] outputFields;
 	protected final static String TIME_STAMP = "hh:mm:ss";
 
-	private static Logger LOG = LoggerFactory
-			.getLogger(OutputFileHiveBase.class);
+	private static Logger LOG = LoggerFactory.getLogger(OutputFileHiveBase.class);
 
 	protected InputOutputFieldsAndTypesCreator<HiveEntityBase> fieldsCreator;
 
-	public OutputFileHiveBase(HiveEntityBase baseComponentEntity,
-			ComponentParameters componentParameters) {
+	public OutputFileHiveBase(HiveEntityBase baseComponentEntity, ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
 
@@ -78,27 +78,24 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 	 */
 	protected abstract void initializeHiveTap();
 
-	protected void prepareAssembly() {		
-		outputFields = fieldsCreator.getFieldNames();		
-		LOG.debug("Hive Output Component: [ Database Name: "
-				+ hiveEntityBase.getDatabaseName() + ", Table Name: "
-				+ hiveEntityBase.getTableName() + ", Column Names: "
-				+ Arrays.toString(outputFields) + ", Partition Column: "
-				+ Arrays.toString(hiveEntityBase.getPartitionKeys()) + "]");
+	protected void prepareAssembly() {
+		outputFields = fieldsCreator.getFieldNames();
+		LOG.debug("Hive Output Component: [ Database Name: " + hiveEntityBase.getDatabaseName() + ", Table Name: "
+				+ hiveEntityBase.getTableName() + ", Column Names: " + Arrays.toString(outputFields)
+				+ ", Partition Column: " + Arrays.toString(hiveEntityBase.getPartitionKeys()) + "]");
 
 		if (LOG.isTraceEnabled()) {
 			LOG.trace(hiveEntityBase.toString());
 		}
-		LOG.trace("Creating output file Hive assembly for '"
-				+ hiveEntityBase.getComponentId() + "'");
+		LOG.trace("Creating output file Hive assembly for '" + hiveEntityBase.getComponentId() + "'");
 		flowDef = componentParameters.getFlowDef();
 		tailPipe = componentParameters.getInputPipe();
 
 		try {
 			prepareScheme();
 		} catch (Exception e) {
-			LOG.error("Error in preparing scheme for component '"
-					+ hiveEntityBase.getComponentId() + "': " + e.getMessage());
+			LOG.error("Error in preparing scheme for component '" + hiveEntityBase.getComponentId() + "': "
+					+ e.getMessage());
 			throw new RuntimeException(e);
 		}
 
@@ -113,22 +110,29 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 	 */
 	@Override
 	protected void createAssembly() {
-		fieldsCreator = new InputOutputFieldsAndTypesCreator<HiveEntityBase>(
-				hiveEntityBase);
+		fieldsCreator = new InputOutputFieldsAndTypesCreator<HiveEntityBase>(hiveEntityBase);
 		prepareAssembly(); // exception handled separately within
 
 		try {
-			Pipe sinkPipe = new Pipe(hiveEntityBase.getComponentId(), tailPipe);
+			Pipe sinkPipe = new Pipe(getComponentType(hiveEntityBase) + ":" + hiveEntityBase.getComponentId(),
+					tailPipe);
 			setHadoopProperties(hiveTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 			flowDef = flowDef.addTailSink(sinkPipe, hiveTap);
 		} catch (Exception e) {
-			LOG.error(
-					"Error in creating assembly for component '"
-							+ hiveEntityBase.getComponentId() + "', Error: "
-							+ e.getMessage(), e);
+			LOG.error("Error in creating assembly for component '" + hiveEntityBase.getComponentId() + "', Error: "
+					+ e.getMessage(), e);
 			throw new RuntimeException(e);
 		}
+	}
+
+	private String getComponentType(HiveEntityBase hiveEntityBase2) {
+		if (hiveEntityBase2 instanceof OutputFileHiveTextEntity)
+			return "outputFileHiveText";
+		else if (hiveEntityBase2 instanceof OutputFileHiveParquetEntity)
+			return "outputFileHiveParquet";
+		else
+			return "outputFileHive";
 	}
 
 	public Path getHiveExternalTableLocationPath(String externalPath) {

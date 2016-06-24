@@ -98,7 +98,7 @@ public class GenerateRecordAssembly extends BaseComponent<GenerateRecordEntity> 
 		// initializing each pipe and tap
 		tap = new MemorySourceTap(tupleGenerator, generateDataEntity.getInputFields(),
 				generateDataEntity.getRecordCount());
-		pipes = new Pipe(generateRecordEntity.getComponentId());
+		pipes = new Pipe("generateRecord:"+generateRecordEntity.getComponentId()+"_"+generateRecordEntity.getOutSocketList().get(0).getSocketId());
 		setHadoopProperties(pipes.getStepConfigDef());
 		setHadoopProperties(tap.getStepConfigDef());
 	}

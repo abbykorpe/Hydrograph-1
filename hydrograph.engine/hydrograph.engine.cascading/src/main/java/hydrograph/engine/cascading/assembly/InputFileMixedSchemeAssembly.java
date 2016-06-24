@@ -88,7 +88,7 @@ public class InputFileMixedSchemeAssembly extends BaseComponent<InputFileMixedSc
 
 		// initializing each pipe and tap
 		tap = new Hfs(scheme, inputFileMixedSchemeEntity.getPath());
-		pipe = new Pipe(inputFileMixedSchemeEntity.getComponentId());
+		pipe = new Pipe("inputFileMixedScheme:"+inputFileMixedSchemeEntity.getComponentId()+"_"+inputFileMixedSchemeEntity.getOutSocketList().get(0).getSocketId());
 
 		setHadoopProperties(tap.getStepConfigDef());
 		setHadoopProperties(pipe.getStepConfigDef());

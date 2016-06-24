@@ -59,8 +59,8 @@ public class UniqueSequenceAssembly extends BaseComponent<UniqueSequenceEntity> 
 				UniqueSequenceNumberOperation seqNo = new UniqueSequenceNumberOperation(
 						outputFieldsList);
 
-				Pipe uniSeqPipe = new Pipe(
-						uniqueSequenceEntity.getComponentId() + "_out",
+				Pipe uniSeqPipe = new Pipe("uniqueSequence:"+
+						uniqueSequenceEntity.getComponentId() + "_"+outSocket.getSocketId(),
 						componentParameters.getInputPipe());
 				setHadoopProperties(uniSeqPipe.getStepConfigDef());
 				uniSeqPipe = new Each(uniSeqPipe, Fields.NONE, seqNo,

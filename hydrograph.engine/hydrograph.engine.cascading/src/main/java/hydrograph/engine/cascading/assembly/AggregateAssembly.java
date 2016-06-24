@@ -86,7 +86,10 @@ public class AggregateAssembly extends BaseComponent<AggregateEntity> {
 		Fields operationFields = new Fields(
 				OutSocketUtils.getOperationFieldsFromOutSocket(outSocket.getOperationFieldList()));
 
-		Pipe sortAggPipe = new Pipe(aggregateEntity.getComponentId() + "_out", componentParameters.getInputPipe());
+		
+		Pipe sortAggPipe = new Pipe("aggregate:"+
+				aggregateEntity.getComponentId() + "_" + aggregateEntity.getOutSocketList().get(0).getSocketId(),
+				componentParameters.getInputPipe());
 
 		// perform groupby operation on keys
 		Fields keyFields = getFieldsFromKeyFields(aggregateEntity.getKeyFields());
@@ -138,5 +141,5 @@ public class AggregateAssembly extends BaseComponent<AggregateEntity> {
 			i++;
 		}
 		return fields;
-	}	
+	}
 }

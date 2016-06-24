@@ -68,7 +68,7 @@ public class LookupAssembly extends BaseComponent<LookupEntity> {
 
 				prepare(outSocket);
 
-				Pipe join = new HashJoin("joinresult", inputPipes,
+				Pipe join = new HashJoin("lookup:"+lookupEntity.getComponentId()+"_"+outSocket.getSocketId(), inputPipes,
 						uniqKeyFields, getJoinOutputFields(), joiner);
 
 				setHadoopProperties(join.getStepConfigDef());

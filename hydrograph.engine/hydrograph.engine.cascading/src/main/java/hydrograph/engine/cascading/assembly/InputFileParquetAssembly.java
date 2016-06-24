@@ -103,7 +103,7 @@ public class InputFileParquetAssembly extends
 		}
 		flowDef = componentParameters.getFlowDef();
 		tap = new Hfs(scheme, inputFileParquetEntity.getPath());
-		pipe = new Pipe(inputFileParquetEntity.getComponentId());
+		pipe = new Pipe("InputFileParquet:"+inputFileParquetEntity.getComponentId()+"_"+inputFileParquetEntity.getOutSocketList().get(0).getSocketId());
 
 		setHadoopProperties(tap.getStepConfigDef());
 		setHadoopProperties(pipe.getStepConfigDef());

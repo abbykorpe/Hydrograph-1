@@ -50,7 +50,7 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 			LOG.trace("Creating output file sequence format assembly for '"
 					+ outputFileSequenceFormatEntity.getComponentId() + "'");
 			prepareAssembly();
-			Pipe sinkPipe = new Pipe(outputFileSequenceFormatEntity.getComponentId(), tailPipe);
+			Pipe sinkPipe = new Pipe("outputFileSequenceFormat:"+outputFileSequenceFormatEntity.getComponentId(), tailPipe);
 			setHadoopProperties(outTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 			flowDef = flowDef.addTailSink(sinkPipe, outTap);

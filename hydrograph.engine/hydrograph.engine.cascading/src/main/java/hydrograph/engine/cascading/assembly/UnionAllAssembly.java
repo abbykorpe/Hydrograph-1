@@ -57,8 +57,8 @@ public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 			Pipe[] inputPipes = alignfields(
 					componentParameters.getInputPipes(), fieldList);
 
-			Pipe outPipe = new Merge(unionAllEntity.getComponentId()
-					+ "_merged_out", inputPipes);
+			Pipe outPipe = new Merge("unionAll:"+unionAllEntity.getComponentId()
+					+ "_"+unionAllEntity.getOutSocket().getSocketId(), inputPipes);
 
 			setHadoopProperties(outPipe.getStepConfigDef());
 

@@ -82,7 +82,7 @@ public class InputFileSequenceFormatAssembly extends BaseComponent<InputFileSequ
 
 		// initializing each pipe and tap
 		tap = new Hfs(scheme, componentParameters.getPathUri());
-		pipe = new Pipe(inputFileSequenceFormatEntity.getComponentId());
+		pipe = new Pipe("InputFileSequenceFormat:"+inputFileSequenceFormatEntity.getComponentId()+"_"+inputFileSequenceFormatEntity.getOutSocketList().get(0).getSocketId());
 
 		setHadoopProperties(pipe.getStepConfigDef());
 		setHadoopProperties(tap.getStepConfigDef());

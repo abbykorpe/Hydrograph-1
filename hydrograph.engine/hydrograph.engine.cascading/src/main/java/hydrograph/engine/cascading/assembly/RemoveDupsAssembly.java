@@ -77,7 +77,7 @@ public class RemoveDupsAssembly extends BaseComponent<RemoveDupsEntity> {
 		if (everyPipe == null) {
 			throw new NullOutSocketException(removeDupsEntity.getComponentId());
 		} else {
-			Pipe filterUnusedPipe = createFilterPipe("unused", everyPipe);
+			Pipe filterUnusedPipe = createFilterPipe("unused",outSocket.getSocketId(), everyPipe);
 			setOutLink(outSocket.getSocketType(), outSocket.getSocketId(), removeDupsEntity.getComponentId(),
 					filterUnusedPipe, componentParameters.getInputFields());
 		}
@@ -90,16 +90,16 @@ public class RemoveDupsAssembly extends BaseComponent<RemoveDupsEntity> {
 
 		sortDedupPipe = new GroupBy(componentParameters.getInputPipe(), keyFields, secondaryKeyFields);
 
-		everyPipe = createEveryPipe("out", sortDedupPipe);
-		Pipe filterOutPipe = createFilterPipe("out", everyPipe);
+		everyPipe = createEveryPipe("out", outSocket.getSocketId(),sortDedupPipe);
+		Pipe filterOutPipe = createFilterPipe("out", outSocket.getSocketId(),everyPipe);
 
 		setOutLink(outSocket.getSocketType(), outSocket.getSocketId(), removeDupsEntity.getComponentId(), filterOutPipe,
 				componentParameters.getInputFields());
 	}
 
-	private Pipe createFilterPipe(String linkType, Pipe everyPipe) {
+	private Pipe createFilterPipe(String linkType, String outSocketId, Pipe everyPipe) {
 
-		Pipe filterPipe = new Pipe(removeDupsEntity.getComponentId() + "_RemoveDupsFilter_" + linkType, everyPipe);
+		Pipe filterPipe = new Pipe("removeDups:"+removeDupsEntity.getComponentId() + "_RemoveDupsFilter_" + outSocketId, everyPipe);
 		setHadoopProperties(everyPipe.getStepConfigDef());
 
 		if (linkType.equals("unused")) {
@@ -111,8 +111,8 @@ public class RemoveDupsAssembly extends BaseComponent<RemoveDupsEntity> {
 		return filterPipe;
 	}
 
-	private Pipe createEveryPipe(String linkType, Pipe groupByPipe) {
-		groupByPipe = new Pipe(removeDupsEntity.getComponentId() + "_" + linkType, groupByPipe);
+	private Pipe createEveryPipe(String linkType, String outSocketId, Pipe groupByPipe) {
+		groupByPipe = new Pipe("removeDups:"+removeDupsEntity.getComponentId() + "_" + outSocketId, groupByPipe);
 
 		RemoveDupsHandler handler = new RemoveDupsHandler(linkType, removeDupsEntity.getKeep(),
 				componentParameters.getInputFields());
