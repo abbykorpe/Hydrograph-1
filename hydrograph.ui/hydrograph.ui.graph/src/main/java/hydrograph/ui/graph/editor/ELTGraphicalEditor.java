@@ -40,6 +40,7 @@ import hydrograph.ui.graph.action.debug.WatchRecordAction;
 import hydrograph.ui.graph.action.subjob.SubJobAction;
 import hydrograph.ui.graph.action.subjob.SubJobOpenAction;
 import hydrograph.ui.graph.action.subjob.SubJobUpdateAction;
+import hydrograph.ui.graph.command.ComponentSetConstraintCommand;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.editorfactory.GenrateContainerData;
@@ -107,6 +108,7 @@ import org.eclipse.draw2d.ViewportAwareConnectionLayerClippingStrategy;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.LayerConstants;
@@ -122,6 +124,7 @@ import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.palette.PaletteToolbar;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.requests.SimpleFactory;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -207,7 +210,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private static final Color palatteTextColor=new Color(null,51,51,51);
 	
-
 	/**
 	 * Instantiates a new ETL graphical editor.
 	 */
@@ -335,9 +337,18 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			}
 
 			@Override
-			public void keyPressed(KeyEvent e) {
-				setCustomToolUndoRedoStatus();
-				hideToolTip();
+			public void keyPressed(KeyEvent event){
+				if(((event.stateMask & SWT.CTRL) != 0 && (event.stateMask & SWT.SHIFT) != 0 
+						&& (event.keyCode == SWT.ARROW_DOWN || event.keyCode == SWT.ARROW_LEFT
+						|| event.keyCode == SWT.ARROW_RIGHT || event.keyCode == SWT.ARROW_UP ))){
+					
+					moveComponentWithArrowKey(event);
+				}
+				else{
+					setCustomToolUndoRedoStatus();
+					hideToolTip();
+				}
+				
 			}
 		});
 
@@ -383,6 +394,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		});
 	}
 
+	
 	private void enableRunJob(boolean enabled){
 		((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
 		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
@@ -520,6 +532,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		prepareZoomContributions(viewer);
 		configureKeyboardShortcuts();
 		//handleKeyStrokes(viewer);
+		
 	}
 
 	@Override
@@ -1611,9 +1624,39 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	    GraphicalViewerKeyHandler keyHandler = new GraphicalViewerKeyHandler(getGraphicalViewer());
 	    keyHandler.put(KeyStroke.getPressed(SWT.F4,0), getActionRegistry().getAction(Constants.SUBJOB_OPEN));
 	    getGraphicalViewer().setKeyHandler(keyHandler);
-
+	   
 	  }
-
+	
+	private void moveComponentWithArrowKey(KeyEvent event){
+		 ChangeBoundsRequest request = new ChangeBoundsRequest(org.eclipse.gef.RequestConstants.REQ_MOVE);
+		 List<EditPart> editPartsList = getGraphicalViewer().getSelectedEditParts();
+		 
+		 for(EditPart editPart : editPartsList ){
+			if(editPart instanceof ComponentEditPart){
+				hydrograph.ui.graph.model.Component component = (hydrograph.ui.graph.model.Component) editPart.getModel();
+			    org.eclipse.draw2d.geometry.Rectangle bounds = new org.eclipse.draw2d.geometry.Rectangle(component.getLocation(),component.getSize());
+			    switch (event.keyCode){
+				case SWT.ARROW_UP:
+					bounds.setLocation(bounds.x , bounds.y - 10);
+					break;
+				case SWT.ARROW_DOWN:
+					bounds.setLocation(bounds.x , bounds.y + 10);
+					break;
+				case SWT.ARROW_RIGHT:
+					bounds.setLocation(bounds.x + 10, bounds.y );
+					break;
+				case SWT.ARROW_LEFT:
+					bounds.setLocation(bounds.x - 10 , bounds.y );
+					break;
+					}
+		   
+		    ComponentSetConstraintCommand componentSetConstraintCommand = new ComponentSetConstraintCommand((hydrograph.ui.graph.model.Component) editPart.getModel(),request, bounds);
+			componentSetConstraintCommand.execute();
+			
+			}
+		}
+	}
+	
 	public GraphicalViewer getViewer() {
 		return viewer;
 	}
