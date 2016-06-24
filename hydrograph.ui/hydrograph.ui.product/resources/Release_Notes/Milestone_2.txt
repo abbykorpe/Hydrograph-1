@@ -52,7 +52,8 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 35.#106  [Akhilesh Joshi]Keyboard shortcuts for cut / copy / paste / delete and refresh are not working in project explorer
 36.#440  [Vibhor Tyagi] Multiple Components: Schema Coulmns Need to be Re-Arranged
 37.#628  [Shrirang kumbhar] Debug Data viewer window does not appear in task bar 
-38.#636  [Shrirang kumbhar] Debug Service: Exception handling and error reporting if unable to create debug files 
+38.#636  [Shrirang kumbhar] Debug Service: Exception handling and error reporting if unable to create debug files
+39.#481  [Ashika Holkar ] Parameter Grid Window: Add/Delete/Up/Down/Save buttons are not in sync with the other button of application
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
