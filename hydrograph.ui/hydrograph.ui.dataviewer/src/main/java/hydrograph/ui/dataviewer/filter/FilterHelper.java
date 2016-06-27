@@ -28,8 +28,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.TableViewer;
@@ -49,6 +54,15 @@ import com.google.gson.Gson;
 
 public class FilterHelper {
 	
+	private static final String LOCAL = "local";
+	private static final String REGEX_DIGIT = "\\d";
+	private static final String SINGLE_SPACE = " ";
+	private static final String OPEN_BRACKET = "(";
+	private static final String CLOSE_BRACKET = ")";
+	private static final String SINGLE_QOUTE = "'";
+	private static final String DELIM_COMMA = ",";
+	private static final String NOT_IN = "not in";
+	private static final String IN = "in";
 	private static final String TYPE_DATE = "java.util.Date";
 	private static final String TYPE_STRING = "java.lang.String";
 	public static final FilterHelper INSTANCE = new FilterHelper();
@@ -74,6 +88,19 @@ public class FilterHelper {
 			}
 		};
 		return listener;
+	}
+	
+	public Map<String, String[]> getTypeBasedOperatorMap(){
+		Map<String, String[]> typeBasedConditionalOperators = new HashMap<String, String[]>();
+		typeBasedConditionalOperators.put("java.lang.String", new String[]{"LIKE","IN ","NOT IN"}); 
+		typeBasedConditionalOperators.put("java.lang.Integer", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
+		typeBasedConditionalOperators.put("java.util.Date", new String[]{">", "<", "<=",">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
+		typeBasedConditionalOperators.put("java.math.BigDecimal", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN","NOT IN"});
+		typeBasedConditionalOperators.put("java.math.Long", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
+		typeBasedConditionalOperators.put("java.math.Short", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
+		typeBasedConditionalOperators.put("java.math.Float", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
+		typeBasedConditionalOperators.put("java.math.Double", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
+		return typeBasedConditionalOperators;
 	}
 	
 	public SelectionListener getFieldNameSelectionListener(final TableViewer tableViewer, final List<Condition> conditionsList,
@@ -211,27 +238,87 @@ public class FilterHelper {
 		return listener;
 	}
 	
-	public SelectionListener getOkButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes) {
+	public SelectionListener getOkButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes/*,
+			final Map<Integer,List<List<Integer>>> groupSelectionMap*/) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				StringBuffer buffer = new StringBuffer();
-				for(int index = 0; index < conditionsList.size(); index++){
-					Condition condition = conditionsList.get(index);
-					if(index !=0){
-						buffer.append(" ").append(condition.getRelationalOperator()).append(" ");
+				//TODO : temp for compilation
+				Map<Integer,List<List<Integer>>> groupSelectionMap = new TreeMap<Integer, List<List<Integer>>>();
+			
+				//put number of elements in the list
+				//1 2 3 4 5
+				List<String> actualStringList = new LinkedList<>();
+				for (int conditionIndex = 0; conditionIndex < conditionsList.size(); conditionIndex++) {
+					actualStringList.add(conditionIndex, String.valueOf((conditionIndex + 1)));
+				}
+				//start adding brackets for grouping
+				Set<Integer> treeSet  = (Set<Integer>) groupSelectionMap.keySet();
+				if(treeSet.size() > 0){
+					for (Integer position : treeSet) {
+					List<List<Integer>> groupsInColumn = groupSelectionMap.get(position);
+						for (int groupIndex = 0; groupIndex < groupsInColumn.size(); groupIndex++) {
+							List<Integer> group = groupsInColumn.get(groupIndex);
+							//add opening bracket before first element in the group
+							Integer firstItem = group.get(0);
+							Integer firstItemIndex = actualStringList.indexOf(String.valueOf(firstItem));
+							actualStringList.add(firstItemIndex, OPEN_BRACKET);
+							//add closing bracket after last element in the group							
+							Integer lastItem = group.get(group.size()-1);
+							Integer lastItemIndex = actualStringList.indexOf(String.valueOf(lastItem));
+							actualStringList.add(lastItemIndex + 1, CLOSE_BRACKET);
+						}
 					}
-					buffer.append(condition.getFieldName()).append(" ")
-					.append(condition.getConditionalOperator()).append(" ")
-					.append(getConditionValue(condition.getFieldName(), condition.getValue(), condition.getConditionalOperator(),
-							fieldsAndTypes));
 				}
 				
+				//start adding relational operators
+				int indexOfRelational = 1;
+				//start from 2nd index
+				for (int item = 2; item <= conditionsList.size(); item++) {
+					int indexOfItem = actualStringList.indexOf(String.valueOf(item));
+					while(true){
+						if((actualStringList.get(indexOfItem-1)).matches(REGEX_DIGIT) 
+								||(actualStringList.get(indexOfItem-1)).equalsIgnoreCase(CLOSE_BRACKET)){
+							actualStringList.add(indexOfItem, conditionsList.get(indexOfRelational).getRelationalOperator());
+							break;
+						}else{
+							indexOfItem = indexOfItem - 1;
+						}
+					}
+					indexOfRelational += 1;
+				}
+				
+				StringBuffer buffer = new StringBuffer();
+				for(int item = 0; item < conditionsList.size(); item++){
+					StringBuffer conditionString = new StringBuffer();
+					
+					Condition condition = conditionsList.get(item);
+					conditionString.append(condition.getFieldName()).append(SINGLE_SPACE).append(condition.getConditionalOperator()).append(SINGLE_SPACE)
+					.append(getConditionValue(condition.getFieldName(), condition.getValue(), condition.getConditionalOperator(),
+							fieldsAndTypes));
+					int index = actualStringList.indexOf(String.valueOf(item + 1));
+					actualStringList.set(index, conditionString.toString());
+				}
+				
+				for (String item : actualStringList) {
+					buffer.append(item + SINGLE_SPACE);
+				}
 				System.out.println(buffer);
-				if(filterType!=null && filterType.equalsIgnoreCase("local"))
+				
+				if(filterType!=null && filterType.equalsIgnoreCase(LOCAL))
 				{
 					showLocalFilteredData(buffer);
+					try {
+
+						dataViewerAdapter.setFilterCondition(StringUtils.trim(buffer.toString()));
+						dataViewerAdapter.initializeTableData();
+						debugDataViewer.getDataViewLoader().updateDataViewLists();
+						debugDataViewer.getDataViewLoader().reloadloadViews();
+
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 				}
 				else
 				{
@@ -359,18 +446,28 @@ public class FilterHelper {
 	protected String getConditionValue(String fieldName, String value, String conditional, Map<String, String> fieldsAndTypes) {
 		String trimmedCondition = StringUtils.trim(conditional);
 		String dataType = fieldsAndTypes.get(fieldName);
-		if(TYPE_STRING.equalsIgnoreCase(dataType) || 
-				TYPE_DATE.equalsIgnoreCase(dataType)){
-			if("in".equalsIgnoreCase(trimmedCondition) || "not in".equalsIgnoreCase(trimmedCondition)){
-				return "('" + value + "')";
+		if(TYPE_STRING.equalsIgnoreCase(dataType) || TYPE_DATE.equalsIgnoreCase(dataType)){
+			if(IN.equalsIgnoreCase(trimmedCondition) || NOT_IN.equalsIgnoreCase(trimmedCondition)){
+				if(StringUtils.isNotBlank(value) && value.contains(DELIM_COMMA)){
+					StringTokenizer tokenizer = new StringTokenizer(value, DELIM_COMMA);
+					StringBuffer temp = new StringBuffer();
+					int numberOfTokens = tokenizer.countTokens();
+					temp.append(OPEN_BRACKET); 
+					for (int index = 0; index < numberOfTokens; index++) {
+						temp.append(SINGLE_QOUTE).append(tokenizer.nextToken()).append(SINGLE_QOUTE);
+						if(index < numberOfTokens - 1){
+							temp.append(DELIM_COMMA);
+						}
+					}
+					temp.append(CLOSE_BRACKET);
+					return temp.toString();
+				}
 			}
-			else{
-				return "'" + value + "'";
-			}
+			return OPEN_BRACKET + SINGLE_QOUTE + value + SINGLE_QOUTE + CLOSE_BRACKET;
 		}
 		else{
-			if("in".equalsIgnoreCase(trimmedCondition) || "not in".equalsIgnoreCase(trimmedCondition)){
-				return "(" + value + ")";
+			if(IN.equalsIgnoreCase(trimmedCondition) || NOT_IN.equalsIgnoreCase(trimmedCondition)){
+				return OPEN_BRACKET + value + CLOSE_BRACKET;
 			}
 			else{
 				return value;

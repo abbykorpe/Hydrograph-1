@@ -120,16 +120,8 @@ public class FilterConditionsDialog extends Dialog {
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.RESIZE);
 		localConditionsList = new ArrayList<>();
 		remoteConditionsList = new ArrayList<>();
-		
-		typeBasedConditionalOperators.put("java.lang.String", new String[]{"LIKE","IN ","NOT IN"}); 
-		typeBasedConditionalOperators.put("java.lang.Integer", new String[]{">", "<", "<=", ">=", "!=", "=", "LIKE", "IN", "NOT IN"}); 
-		typeBasedConditionalOperators.put("java.util.Date", new String[]{">", "<", "<=",">=", "!=", "=", "LIKE", "IN", "NOT IN"}); 
-		typeBasedConditionalOperators.put("java.math.BigDecimal", new String[]{">", "<", "<=", ">=", "!=", "=", "LIKE", "IN","NOT IN"});
-		typeBasedConditionalOperators.put("java.math.Long", new String[]{">", "<", "<=", ">=", "!=", "=", "LIKE", "IN", "NOT IN"});
-		typeBasedConditionalOperators.put("java.math.Short", new String[]{">", "<", "<=", ">=", "!=", "=", "LIKE", "IN", "NOT IN"});
-		typeBasedConditionalOperators.put("java.math.Float", new String[]{">", "<", "<=", ">=", "!=", "=", "LIKE", "IN", "NOT IN"});
-		typeBasedConditionalOperators.put("java.math.Double", new String[]{">", "<", "<=", ">=", "!=", "=", "LIKE", "IN", "NOT IN"});
-
+		groupSelectionMap = new TreeMap<>();
+		typeBasedConditionalOperators = FilterHelper.INSTANCE.getTypeBasedOperatorMap();
 	}
 
 	public void setFilterConditions(FilterConditions filterConditions) {
