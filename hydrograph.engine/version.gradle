@@ -1,17 +1,9 @@
-version = new Version(major: 0, minor:1, revision: 7)
-gradle.taskGraph.whenReady { taskGraph ->version.release = taskGraph.hasTask(release)}
-
-task release {
-doFirst {
-println "Releasing application $version"
-		}
-}
+version = new Version(major: 0, minor:1, revision: 8)
 
 class Version {
 	int major, minor, revision
-	boolean release
+
 	String toString() {
-	release=false
-	"$major.$minor.$revision${release ? '' : '-SNAPSHOT'}"
+	"$major.$minor.$revision${'-SNAPSHOT'}"
 		}
 	}
