@@ -1404,11 +1404,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public void refresh() {
 		
 		Schema schema = getSchemaForInternalPropagation();
-		Schema originalSchema = (Schema) getComponent().getProperties().get("schema");
-//		if (originalSchema != null && !originalSchema.getGridRow().isEmpty()) {
-//
-//
-//		} else 
+
 		{
 			if(!SchemaSyncUtility.INSTANCE.isSchemaSyncAllow( getComponent().getComponentName())){
 

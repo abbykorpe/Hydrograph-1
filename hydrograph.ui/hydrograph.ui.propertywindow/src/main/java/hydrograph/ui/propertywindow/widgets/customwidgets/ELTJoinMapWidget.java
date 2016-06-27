@@ -133,10 +133,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 		for(LookupMapProperty row : lookupMapRows){
 			if(!ParameterUtil.isParameter(row.getSource_Field())){
 				GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
-				//GridRow outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
 				GridRow outputFieldSchema = null;
-				/*if(inputFieldSchema==null)
-					continue;*/
 				if(inputFieldSchema==null){
 					outputFieldSchema = SchemaPropagationHelper.INSTANCE.createSchemaGridRow(row.getOutput_Field());
 				}else{

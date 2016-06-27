@@ -544,7 +544,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		);
 		mapFieldAddLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
-		//change Flag Kanchan
 		mapFieldAddLabel.addMouseListener(new MouseAdapter() {
 
 			@Override
