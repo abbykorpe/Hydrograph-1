@@ -105,7 +105,8 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	        }
 		 operationInputfieldtableviewer.refresh();
 		 transformDialogNew.showHideValidationMessage();
-		
+		 transformDialogNew.getComponent().setLatestChangesInSchema(false);
+		//changeFlagKanchan
 		
 	}
 	

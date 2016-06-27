@@ -13,14 +13,20 @@
 package hydrograph.ui.propertywindow.widgets.dialogs.join;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
+import hydrograph.ui.datastructure.property.LookupMappingGrid;
+import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTJoinWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEditingSupport;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.utils.JoinMapDialogConstants;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
@@ -34,6 +40,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -62,6 +69,7 @@ import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -86,6 +94,7 @@ import org.eclipse.swt.widgets.TableItem;
  *
  */
 public class JoinMapDialog extends Dialog {
+	private Component component;
 	private JoinMappingGrid joinMappingGrid;
 	private List<List<FilterProperties>> inputPorts;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
@@ -96,6 +105,7 @@ public class JoinMapDialog extends Dialog {
 	private JoinMappingGrid oldJoinMappingGrid;
 	private JoinMappingGrid newJoinMappingGrid;
 	private List<String> allInputFields;
+	private Button btnPull;
 	private Button btnDown;
 	private Button btnUp;
 	private Button btnDelete;
@@ -112,10 +122,17 @@ public class JoinMapDialog extends Dialog {
 	private static final String FIELD_TOOLTIP_MESSAGE_DUPLICATE_FIELDS="Duplicate field";
 	private static final String MAPPING_TABLE_ITEM_DELIMILATOR="#";
 	
+	private static final String PULL_BUTTON_TEXT="Pull";
 	private static final String ADD_BUTTON_TEXT="Add";
 	private static final String DELETE_BUTTON_TEXT="Delete";
 	private static final String UP_BUTTON_TEXT="Up";
 	private static final String DOWN_BUTTON_TEXT="Down";
+	
+	private static final String PULL_TOOLTIP = "Pull schema";
+	private static final String ADD_TOOLTIP = "Add field";
+	private static final String DELETE_TOOLTIP = "Delete field";
+	private static final String UP_TOOLTIP = "Move field up";
+	private static final String DOWN_TOOLTIP = "Move field down";
 	
 	private static final String INPUT_TABLE_COLUMN_TEXT="Input Fields";
 	private static final String DIALOG_TITLE="Join Mapping Dialog";
@@ -132,13 +149,13 @@ public class JoinMapDialog extends Dialog {
 				| SWT.RESIZE);
 	}
 
-	public JoinMapDialog(Shell parentShell, JoinMappingGrid joinPropertyGrid,
+	public JoinMapDialog(Shell parentShell, Component component, JoinMappingGrid joinPropertyGrid,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL
 				| SWT.RESIZE);
 		this.joinMappingGrid = joinPropertyGrid;
-
+		this.component=component;
 		radioButtonMap = new LinkedHashMap<>();
 		inputPorts = new ArrayList<>();
 
@@ -553,7 +570,7 @@ public class JoinMapDialog extends Dialog {
 		lblMappingView.setText("Output Mapping");
 
 		Composite composite_11 = new Composite(composite_4, SWT.NONE);
-		GridLayout gl_composite_11 = new GridLayout(4, false);
+		GridLayout gl_composite_11 = new GridLayout(5, false);
 		gl_composite_11.verticalSpacing = 0;
 		gl_composite_11.marginWidth = 0;
 		gl_composite_11.marginHeight = 0;
@@ -561,6 +578,8 @@ public class JoinMapDialog extends Dialog {
 		composite_11.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true,
 				true, 1, 1));
 
+		createPullButton(composite_11);
+		
 		createAddButton(composite_11);
 
 		createDeleteButton(composite_11);
@@ -569,10 +588,37 @@ public class JoinMapDialog extends Dialog {
 
 		createDownButton(composite_11);
 	}
+	
+	private void createPullButton(Composite composite_11) {
+		btnPull = new Button(composite_11, SWT.NONE);
+		btnPull.setText(PULL_BUTTON_TEXT);
+		btnPull.setToolTipText(PULL_TOOLTIP);
+		
+		btnPull.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Constants.SYNC_OUTPUT_FIELDS_CONFIRM_MESSAGE, MessageDialog.QUESTION, new String[] {"Ok", "Cancel" }, 0);
+				int dialogResult =dialog.open();
+				List<LookupMapProperty> pulledJoinMapProperties = null;
+				if(dialogResult == 0){
+					//syncTransformFieldsWithSchema();
+					Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+					pulledJoinMapProperties = SchemaSyncUtility.INSTANCE.pullJoinSchemaInMapping(schema, component);
+				}
+				mappingTableViewer.setInput(pulledJoinMapProperties);
+				mappingTableItemList = pulledJoinMapProperties;
+				mappingTableViewer.refresh(); 
+				component.setLatestChangesInSchema(false);
+				refreshButtonStatus();
+			}
+		});
+	}
 
 	private void createDownButton(Composite composite_11) {
 		btnDown = new Button(composite_11, SWT.NONE);
 		btnDown.setText(DOWN_BUTTON_TEXT);
+		btnDown.setToolTipText(DOWN_TOOLTIP);
+		
 		btnDown.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -596,6 +642,8 @@ public class JoinMapDialog extends Dialog {
 	private void createUpButton(Composite composite_11) {
 		btnUp = new Button(composite_11, SWT.NONE);
 		btnUp.setText(UP_BUTTON_TEXT);
+		btnUp.setToolTipText(UP_TOOLTIP);
+		
 		btnUp.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -618,6 +666,8 @@ public class JoinMapDialog extends Dialog {
 	private void createDeleteButton(Composite composite_11) {
 		btnDelete = new Button(composite_11, SWT.NONE);
 		btnDelete.setText(DELETE_BUTTON_TEXT);
+		btnDelete.setToolTipText(DELETE_TOOLTIP);
+		
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -648,6 +698,8 @@ public class JoinMapDialog extends Dialog {
 	private void createAddButton(Composite composite_11) {
 		btnAdd = new Button(composite_11, SWT.NONE);
 		btnAdd.setText(ADD_BUTTON_TEXT);
+		btnAdd.setToolTipText(ADD_TOOLTIP);
+		
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

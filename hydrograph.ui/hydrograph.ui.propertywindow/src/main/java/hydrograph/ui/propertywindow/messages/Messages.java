@@ -159,7 +159,7 @@ public class Messages extends NLS {
 	public static String TEXT_FIELD_SHOULD_MATCH;
 	public static String BROWSE_BUTTON_TEXT;
 	public static  String TRANSFORM_EDITOR ;
-	public static  String LATER;
+	public static  String MANUAL_SYNC;
 	public static  String SYNC_NOW;
 	public static  String MAPPING_SHEET;
 	public static  String PERVIOUS_VALUE;

@@ -133,6 +133,8 @@ public abstract class Component extends Model {
 	private int componentLabelMargin;
 	 
 	private Map<String, Long> watcherTerminals;
+	
+	private boolean latestChangesInSchema=false;
 
 	@XStreamOmitField
 	private Map<String, PropertyToolTipInformation> tooltipInformation;
@@ -458,6 +460,14 @@ public abstract class Component extends Model {
 		return false;
 	}
 	
+	public boolean isLatestChangesInSchema() {
+		return latestChangesInSchema;
+	}
+
+	public void setLatestChangesInSchema(boolean latestChangesInSchema) {
+		this.latestChangesInSchema = latestChangesInSchema;
+	}
+
 	public void incrementLeftSidePorts(int newPortCount, int oldPortCount) {
 
 		for (int i = oldPortCount; i < newPortCount; i++) {
