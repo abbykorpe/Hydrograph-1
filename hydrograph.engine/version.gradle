@@ -1,9 +1,12 @@
-version = new Version(major: 0, minor:1, revision: 8)
+def getWorkingBranch() {
 
-class Version {
-	int major, minor, revision
+    def workingBranch = """git --git-dir=${rootDir}/../.git
+                               --work-tree=${rootDir}/..
+                               rev-parse --abbrev-ref HEAD""".execute().text.trim()
+    return workingBranch
+}
 
-	String toString() {
-	"$major.$minor.$revision${'-SNAPSHOT'}"
-		}
-	}
+if(getWorkingBranch()=='master')
+version = "0.1.7"
+else 
+version = "0.1.8-SNAPSHOT"
