@@ -13,6 +13,10 @@
 
 package hydrograph.ui.graph.utility;
 
+import hydrograph.ui.logging.factory.LogFactory;
+
+import org.slf4j.Logger;
+
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -23,7 +27,9 @@ import com.thoughtworks.xstream.XStream;
  */
 public class XStreamUtil {
 
+	private Logger LOGGER = LogFactory.INSTANCE.getLogger(XStreamUtil.class);
 	public static final XStreamUtil INSTANCE = new XStreamUtil();
+
 	private XStream xStream;
 
 	private XStreamUtil() { /* Singleton */
@@ -35,6 +41,7 @@ public class XStreamUtil {
 	 * @return
 	 */
 	public XStream getXStreamInstance() {
+		LOGGER.debug("Creating and configuring xstream instance");
 		xStream = new XStream();
 		addAlias();
 		addAnnotations();
