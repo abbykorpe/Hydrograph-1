@@ -76,8 +76,7 @@ public class CanvasUtils {
 
 		Object obj = null;
 
-		XStream xs = new XStream();
-		xs.autodetectAnnotations(true);
+		XStream xs = XStreamUtil.INSTANCE.getXStreamInstance();
 		try {
 
 			obj = xs.fromXML(xml);
