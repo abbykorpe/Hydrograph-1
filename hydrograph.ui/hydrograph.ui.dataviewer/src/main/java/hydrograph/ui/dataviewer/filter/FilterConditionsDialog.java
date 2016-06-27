@@ -15,6 +15,7 @@ package hydrograph.ui.dataviewer.filter;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
+import hydrograph.ui.logging.factory.LogFactory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.slf4j.Logger;
 
 public class FilterConditionsDialog extends Dialog {
 	private static final String VALUE_TEXT_BOX = "valueTextBox";
@@ -98,7 +100,9 @@ public class FilterConditionsDialog extends Dialog {
 	private TreeMap<Integer,List<List<Integer>>> groupSelectionMap;
 	private DataViewerAdapter dataViewerAdapter;
 	private DebugDataViewer debugDataViewer;
-	//private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConditionsDialog.class);
+	private static final String REMOTE="Remote";
+	private static final String LOCAL="local";
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConditionsDialog.class);
 	
 	
 	public void setFieldsAndTypes(Map<String, String> fieldsAndTypes) {
@@ -164,15 +168,16 @@ public class FilterConditionsDialog extends Dialog {
 		createLocalTabItem(tabFolder, localTableViewer);
 		FilterHelper.INSTANCE.setDataViewerAdapter(dataViewerAdapter,this);
 		FilterHelper.INSTANCE.setDebugDataViewer(debugDataViewer);
+		FilterHelper.INSTANCE.setFilterType(REMOTE);
 		tabFolder.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TabItem tabItem = (TabItem) e.item;
-				if (tabItem.getText().equalsIgnoreCase("local")) {
-					FilterHelper.INSTANCE.setFilterType("local");
+				if (tabItem.getText().equalsIgnoreCase(LOCAL)) {
+					FilterHelper.INSTANCE.setFilterType(LOCAL);
 				} else {
-					FilterHelper.INSTANCE.setFilterType("remote");
+					FilterHelper.INSTANCE.setFilterType(REMOTE);
 				}
 			}
 			

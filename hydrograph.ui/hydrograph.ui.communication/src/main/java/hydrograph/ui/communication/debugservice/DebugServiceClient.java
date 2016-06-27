@@ -68,7 +68,7 @@ public class DebugServiceClient {
 			throws NumberFormatException, HttpException, MalformedURLException, IOException {
 		PostMethod method = Provider.INSTANCE.getDebugFileMethod(jobDetails,fileSize);
 		executePostMethod(method);
-		return getDebugFilePathFromPostResponse(method);
+		return getFilePathFromPostResponse(method);
 	}
 	
 	private void executePostMethod(PostMethod postMethod) throws IOException, HttpException {
@@ -76,7 +76,7 @@ public class DebugServiceClient {
 		httpClient.executeMethod(postMethod);
 	}
 	
-	private String getDebugFilePathFromPostResponse(PostMethod postMethod) throws IOException {
+	private String getFilePathFromPostResponse(PostMethod postMethod) throws IOException {
 		String path = null;
 		InputStream inputStream = postMethod.getResponseBodyAsStream();
 		byte[] buffer = new byte[1024];
@@ -104,6 +104,11 @@ public class DebugServiceClient {
 	public void deleteBasePathFiles(String host, String port, String uniqueJobID, String basePath, String user, String password) 
 			throws NumberFormatException, HttpException, MalformedURLException, IOException{
 		executePostMethod(Provider.INSTANCE.getDeleteBasePathFileMethod(host, port, uniqueJobID, basePath, user, password));
+	}
+	public String getFilteredFile(String jsonObject,JobDetails jobDetails) throws NumberFormatException, HttpException, IOException {
+		PostMethod method=Provider.INSTANCE.getFilteredFileMethod(jsonObject, jobDetails);
+		executePostMethod(method);
+		return getFilePathFromPostResponse(method);
 	}
 	
 }

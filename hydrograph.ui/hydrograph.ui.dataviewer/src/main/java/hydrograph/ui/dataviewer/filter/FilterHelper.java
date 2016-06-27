@@ -12,9 +12,19 @@
  ******************************************************************************/
 package hydrograph.ui.dataviewer.filter;
 
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.communication.debugservice.DebugServiceClient;
+import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
+import hydrograph.ui.dataviewer.constants.Messages;
+import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
+import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
+import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +45,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.google.gson.Gson;
+
 public class FilterHelper {
 	
 	private static final String TYPE_DATE = "java.util.Date";
@@ -44,6 +56,9 @@ public class FilterHelper {
 	private DataViewerAdapter dataViewerAdapter;
 	private DebugDataViewer debugDataViewer;
 	private FilterConditionsDialog filterConditionsDialog;
+	private String SCHEMA_FILE_EXTENTION=".xml";
+	private String filteredFileLocation;
+	private String filteredFileName;
 	private FilterHelper() {
 	}
 	
@@ -216,23 +231,54 @@ public class FilterHelper {
 				System.out.println(buffer);
 				if(filterType!=null && filterType.equalsIgnoreCase("local"))
 				{
-					try {
-
-						dataViewerAdapter.setFilterCondition(buffer.toString());
-						dataViewerAdapter.initializeTableData();
-						debugDataViewer.getDataViewLoader().updateDataViewLists();
-						debugDataViewer.getDataViewLoader().reloadloadViews();
-
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
+					showLocalFilteredData(buffer);
 				}
 				else
 				{
-					System.out.println("**** Nothing");
+					showRemoteFilteredData(buffer);
 				}
 			
 				filterConditionsDialog.close();
+			}
+
+			private void showRemoteFilteredData(StringBuffer buffer) {
+				try {
+					String filterJson = createJsonObjectForRemoteFilter(buffer);
+					String filteredFilePath=DebugServiceClient.INSTANCE.getFilteredFile(filterJson, debugDataViewer.getJobDetails());
+					DataViewerFileManager dataViewerFileManager=new DataViewerFileManager();
+					dataViewerFileManager.downloadDataViewerFilterFile(filteredFilePath,debugDataViewer.getJobDetails());
+					filteredFileName = dataViewerFileManager.getDataViewerFileName();
+					filteredFileLocation = dataViewerFileManager.getDataViewerFilePath();
+					debugDataViewer.setDebugFileLocation(filteredFileLocation);
+					debugDataViewer.setDebugFileName(filteredFileName);
+					debugDataViewer.showDataInDebugViewer(true);
+					
+				} catch (NumberFormatException | IOException exception) {
+					exception.printStackTrace();
+				}
+			}
+
+			private void showLocalFilteredData(StringBuffer buffer) {
+				try {
+					dataViewerAdapter.setFilterCondition(buffer.toString());
+					dataViewerAdapter.initializeTableData();
+					debugDataViewer.getDataViewLoader().updateDataViewLists();
+					debugDataViewer.getDataViewLoader().reloadloadViews();
+
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+
+			private String createJsonObjectForRemoteFilter(StringBuffer buffer) {
+				Gson gson=new Gson();
+				RemoteFilterJson remoteFilterJson=new RemoteFilterJson();
+				remoteFilterJson.setCondition(buffer.toString());
+				remoteFilterJson.setSchema(getSchema());
+				remoteFilterJson.setFileSize(debugDataViewer.getViewDataPreferences().getFileSize());
+				remoteFilterJson.setJobDetails(debugDataViewer.getJobDetails());
+				String filterJson=gson.toJson(remoteFilterJson);
+				return filterJson;
 			}
 			
 			@Override
@@ -241,6 +287,75 @@ public class FilterHelper {
 		return listener;
 	}
 	
+	public List<GridRow> getSchema() {
+		List<GridRow> gridRowList = new ArrayList<>();
+		String debugFileName = debugDataViewer.getDebugFileName();
+		String debugFileLocation = debugDataViewer.getDebugFileLocation();
+
+		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE
+				.getFieldsFromSchema(debugFileLocation + debugFileName
+						+ SCHEMA_FILE_EXTENTION);
+		for (Field field : dataViewerFileSchema.getField()) {
+			GridRow gridRow = new GridRow();
+
+			gridRow.setFieldName(field.getName());
+			gridRow.setDataType(GridWidgetCommonBuilder
+					.getDataTypeByValue(field.getType().value()));
+			gridRow.setDataTypeValue(field.getType().value());
+
+			if (StringUtils.isNotEmpty(field.getFormat())) {
+				gridRow.setDateFormat(field.getFormat());
+			} else {
+				gridRow.setDateFormat("");
+			}
+			if (field.getPrecision() != null) {
+				gridRow.setPrecision(String.valueOf(field.getPrecision()));
+			} else {
+				gridRow.setPrecision("");
+			}
+			if (field.getScale() != null) {
+				gridRow.setScale(Integer.toString(field.getScale()));
+			} else {
+				gridRow.setScale("");
+			}
+
+			if (StringUtils.isNotEmpty(field.getDescription()))
+				gridRow.setDescription(field.getDescription());
+			else {
+				gridRow.setDescription("");
+			}
+			if (field.getScaleType() != null) {
+				gridRow.setScaleType(GridWidgetCommonBuilder
+						.getScaleTypeByValue(field.getScaleType().value()));
+				gridRow.setScaleTypeValue(GridWidgetCommonBuilder
+						.getScaleTypeValue()[GridWidgetCommonBuilder
+						.getScaleTypeByValue(field.getScaleType().value())]);
+			} else {
+				gridRow.setScaleType(GridWidgetCommonBuilder
+						.getScaleTypeByValue(Messages.SCALE_TYPE_NONE));
+				gridRow.setScaleTypeValue(GridWidgetCommonBuilder
+						.getScaleTypeValue()[Integer
+						.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
+			}
+
+			gridRowList.add(gridRow);
+		}
+		return gridRowList;
+}
+
+	public void setFilterType(String filterType) {
+		this.filterType=filterType;
+	}
+
+	public void setDataViewerAdapter(DataViewerAdapter dataViewerAdapter, FilterConditionsDialog filterConditionsDialog) {
+		this.dataViewerAdapter=dataViewerAdapter;
+		this.filterConditionsDialog=filterConditionsDialog;
+	}
+
+	public void setDebugDataViewer(DebugDataViewer debugDataViewer) {
+		this.debugDataViewer=debugDataViewer;
+	}
+
 	protected String getConditionValue(String fieldName, String value, String conditional, Map<String, String> fieldsAndTypes) {
 		String trimmedCondition = StringUtils.trim(conditional);
 		String dataType = fieldsAndTypes.get(fieldName);
@@ -382,17 +497,5 @@ public class FilterHelper {
 			}
 		};
 		return listner;
-	}
-	public void setFilterType(String filterType) {
-		this.filterType=filterType;
-	}
-
-	public void setDataViewerAdapter(DataViewerAdapter dataViewerAdapter, FilterConditionsDialog filterConditionsDialog) {
-		this.dataViewerAdapter=dataViewerAdapter;
-		this.filterConditionsDialog=filterConditionsDialog;
-	}
-
-	public void setDebugDataViewer(DebugDataViewer debugDataViewer) {
-		this.debugDataViewer=debugDataViewer;
 	}
 }

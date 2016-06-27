@@ -311,7 +311,7 @@ public class DebugDataViewer extends ApplicationWindow {
 				setDebugFileLocation(debugFileLocation);
 				setDebugFileName(debugFileName);
 
-				showDataInDebugViewer();
+				showDataInDebugViewer(false);
 
 				dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + debugFileName + SCHEMA_FILE_EXTENTION);
 				
@@ -341,7 +341,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 
-	private void loadDebugFileInDataViewer() {
+	public void loadDebugFileInDataViewer(boolean filterApplied) {
 		statusManager.getStatusLineManager().getProgressMonitor().done();
 
 		dataViewLoader = new DataViewLoader(unformattedViewTextarea, formattedViewTextarea, horizontalViewTableViewer,
@@ -357,7 +357,7 @@ public class DebugDataViewer extends ApplicationWindow {
 
 		dataViewLoader.updateDataViewLists();
 
-		updateGridViewTable();
+		updateGridViewTable(filterApplied);
 
 		dataViewLoader.reloadloadViews();
 		statusManager.enableInitialPaginationContols();
@@ -365,7 +365,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		submitRecordCountJob();
 	}
 	
-	private void showDataInDebugViewer() {
+	public void showDataInDebugViewer(final boolean filterApplied) {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -381,7 +381,7 @@ public class DebugDataViewer extends ApplicationWindow {
 					}
 					getShell().close();
 				}
-				loadDebugFileInDataViewer();
+				loadDebugFileInDataViewer(filterApplied);
 			}
 		});
 	}
@@ -515,6 +515,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		dataViewerAdapter = new DataViewerAdapter(debugFileLocation, debugFileName,
 				Utils.INSTANCE.getDefaultPageSize(), PreferenceConstants.INITIAL_OFFSET, this);
 	}
+	
+
 
 	private void setDataViewerWindowTitle() {
 		getShell().setText("Debug Data viewer - " + dataViewerWindowName);
@@ -1150,7 +1152,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		return currentSelection;
 	}
 	
-	private void updateGridViewTable() {
+	private void updateGridViewTable(boolean filterApplied) {
+		if(!filterApplied)
 		createGridViewTableColumns(gridViewTableViewer);
 
 		gridViewTableViewer.setContentProvider(new ArrayContentProvider());
