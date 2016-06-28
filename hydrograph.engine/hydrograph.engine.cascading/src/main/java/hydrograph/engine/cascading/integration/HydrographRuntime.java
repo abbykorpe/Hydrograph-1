@@ -159,11 +159,6 @@ public class HydrographRuntime implements HydrographRuntimeService {
 
 		}
 
-		// for (Flow cascadingFlow : runtimeContext.getCascadingFlows()) {
-		//
-		// cascadingFlow.complete();
-		// }
-
 		for (Cascade cascade : runtimeContext.getCascade()) {
 			cascade.complete();
 		}
@@ -242,7 +237,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 							// LOG.debug("Token String: " + tokenStr);
 						} catch (TException e) {
 							LOG.error(e.getMessage(), e);
-							throw e;
+							throw new RuntimeException(e);
 						}
 
 						// Create the token from the token string.
@@ -269,10 +264,10 @@ public class HydrographRuntime implements HydrographRuntimeService {
 			}
 		} catch (IOException e) {
 			LOG.error(e.getMessage(), e);
-			throw e;
+			throw new RuntimeException(e);
 		} catch (MetaException e) {
 			LOG.error(e.getMessage(), e);
-			throw e;
+			throw new RuntimeException(e);
 		}
 	}
 

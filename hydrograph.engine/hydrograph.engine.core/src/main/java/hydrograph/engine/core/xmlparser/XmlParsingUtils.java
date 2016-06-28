@@ -34,7 +34,6 @@ public class XmlParsingUtils {
 		try {
 			scan = new Scanner(xmlFile, getXMLEncoding(path));
 		} catch (FileNotFoundException e) {
-
 			throw new HydrographXMLInputServiceException(e);
 		}
 
@@ -68,11 +67,10 @@ public class XmlParsingUtils {
 		}
 
 		scan.close();
-
+		
 		try {
 			FileEncodingEnum.valueOf(encoding.replaceAll("-", "_"));
 		} catch (IllegalArgumentException e) {
-
 			throw new HydrographXMLInputServiceException("Unrecognized encoding \""
 					+ encoding + "\" in XML file.");
 		}
@@ -112,12 +110,6 @@ public class XmlParsingUtils {
 		// if path is not found from command line then check from config
 		path = config.getProperty(CommandLineOptionsProcessor.OPTION_XML_PATH);
 
-		// if not found in config also then raise an error, otherwise return
-		// from config
-		if (path == null) {
-			// throw new HydrographXMLInputServiceException(
-			// "No Debug-XML file path, either through command line or XMLFilePath input property is provided");
-		}
 		return path;
 
 	}

@@ -77,7 +77,7 @@ public class XmlUtilities {
 		try {
 			transformer.transform(new DOMSource(doc), new StreamResult(writer));
 		} catch (TransformerException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Error while transforming XML document to String : ", e);
 		}
 		String output = writer.getBuffer().toString();
 		return output;

@@ -93,13 +93,35 @@ public class CumulateCustomHandler extends
 			counter = counter + 1;
 			LOG.trace("calling prepare method of: "
 					+ transformInstance.getClass().getName());
-			transformInstance
-					.prepare(
-							props.get(counter),
-							context.getInputRow(counter).getFieldNames(),
-							context.getOutputRow(counter).getFieldNames(),
-							ReusableRowHelper
-									.getListFromFields(fieldManupulatingHandler.keyFields));
+			try {
+				transformInstance
+				.prepare(
+						props.get(counter),
+						context.getInputRow(counter).getFieldNames(),
+						context.getOutputRow(counter).getFieldNames(),
+						ReusableRowHelper
+						.getListFromFields(fieldManupulatingHandler.keyFields));
+				
+			} catch(Exception e) {
+				LOG.error("Exception in prepare method of: "
+						+ transformInstance.getClass().getName()
+						+ ".\nArguments passed to prepare() method are: \nProperties: "
+						+ props + "\nInput Fields: " 
+						+ Arrays.toString(context.getInputRow(counter).getFieldNames().toArray())
+						+ "\nOutput Fields: " 
+						+ Arrays.toString(context.getOutputRow(counter).getFieldNames().toArray())
+						+ "\nKey Fields: " 
+						+ Arrays.toString(ReusableRowHelper.getListFromFields(fieldManupulatingHandler.keyFields).toArray()), e);
+				throw new RuntimeException("Exception in prepare method of: "
+						+ transformInstance.getClass().getName()
+						+ ".\nArguments passed to prepare() method are: \nProperties: "
+						+ props + "\nInput Fields: " 
+						+ Arrays.toString(context.getInputRow(counter).getFieldNames().toArray())
+						+ "\nOutput Fields: " 
+						+ Arrays.toString(context.getOutputRow(counter).getFieldNames().toArray())
+						+ "\nKey Fields: " 
+						+ Arrays.toString(ReusableRowHelper.getListFromFields(fieldManupulatingHandler.keyFields).toArray()), e);
+			}
 		}
 
 		call.setContext(context);
@@ -128,8 +150,6 @@ public class CumulateCustomHandler extends
 
 		CustomHandlerContext<CumulateTransformBase> context = call.getContext();
 
-		// TupleEntry group = call.getGroup();
-
 		// get all the current argument values for this grouping
 		Iterator<TupleEntry> currentGroupOfTupleEntry = call
 				.getArgumentsIterator();
@@ -157,37 +177,13 @@ public class CumulateCustomHandler extends
 							+ transformInstance.getClass().getName()
 							+ ".\nRow being processed: "
 							+ currentTupleEntry, e);
-					throw e;
+					throw new RuntimeException("Exception in cumulate method of: "
+							+ transformInstance.getClass().getName()
+							+ ".\nRow being processed: "
+							+ currentTupleEntry, e);
 				}
 			}
 
-//			// set passthrough row copy pass through fields
-//			ReusableRowHelper.extractFromTuple(
-//					fieldManupulatingHandler.getInputPassThroughPositions(),
-//					currentTupleEntry.getTuple(), context.getPassThroughRow());
-//
-//			// set map row, copy map fields
-//			ReusableRowHelper.extractFromTuple(
-//					fieldManupulatingHandler.getMapSourceFieldPositions(),
-//					currentTupleEntry.getTuple(), context.getMapRow());
-//
-//			// set operation row from pass through row and map row
-//			ReusableRowHelper.setOperationRowFromPassThroughAndMapRow(
-//					fieldManupulatingHandler.getMapFields(),
-//					context.getMapRow(), context.getPassThroughRow(),
-//					context.getOperationRow());
-
-//	
-//
-//			// set operation row, copy operation fields
-//			ReusableRowHelper.extractOperationRowFromAllOutputRow(
-//					context.getAllOutputRow(), context.getOperationRow());
-//
-//			// Set all output fields in order
-//			ReusableRowHelper.setTupleEntryFromResuableRowAndReset(
-//					context.getOutputTupleEntry(), context.getOperationRow());
-
-			
 			// set output tuple entry with map field values
 			TupleHelper.setTupleOnPositions(fieldManupulatingHandler
 					.getMapSourceFieldPositions(), currentTupleEntry.getTuple(),

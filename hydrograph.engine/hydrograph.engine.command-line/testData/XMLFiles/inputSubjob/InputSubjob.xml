@@ -29,20 +29,20 @@
 		<hasHeader value="false" />
 	</inputs>
 	
-	<operations id="reformat" xsi:type="op:transform">
+	<operations id="reformat" xsi:type="op:transform" phase="0">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
 		<operation id="opt1" class="hydrograph.engine.test.TransformTest">
 			<inputFields>
 				<field name="name" inSocketId="in0" />
 			</inputFields>
 			<outputFields>
-				<field name="name" type="java.lang.String" />
+				<field name="new_name" type="java.lang.String" />
 			</outputFields>
 		</operation>
 		<outSocket id="out0">
 			<passThroughField name="*" inSocketId="in0" />
 			<mapField sourceName="city" name="new_city" inSocketId="in0" />
-			<operationField name="name" operationId="opt1" />
+			<operationField name="new_name" operationId="opt1" />
 		</outSocket>
 	</operations>
 	

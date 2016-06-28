@@ -21,6 +21,7 @@ import javax.xml.bind.JAXBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.core.core.HydrographJob;
@@ -58,21 +59,25 @@ public class HydrographXMLInputService implements HydrographInputService {
 		LOG.info("Parsing for graph file: " + path + " started");
 		ParameterSubstitutor parameterSubstitutor = new ParameterSubstitutor(
 				getUserParameters(args));
+		
 		try {
 			ParseExternalSchema parseExternalSchema = new ParseExternalSchema(
-					parameterSubstitutor, checkSubjobAndExpandXml(
-							parameterSubstitutor,
+					checkSubjobAndExpandXml(parameterSubstitutor,
 							XmlParsingUtils.getXMLStringFromPath(path)));
 			hydrographJob = hydrographJobGenerator.createHydrographJob(
 					parseExternalSchema.getXmlDom(),
 					config.getProperty("xsdLocation"));
+
+		} catch (FileNotFoundException e) {
+			LOG.error("Error while merging subjob and mainjob.", e);
+			throw new RuntimeException("Error while merging subjob and mainjob.", e);
+		} catch (SAXException e) {
+			LOG.error("Error while parsing XSD.", e);
+			throw new RuntimeException("Error while parsing XSD.", e);
+		}
 			LOG.info("Graph: '" + hydrographJob.getJAXBObject().getName()
 					+ "' parsed successfully");
 			return hydrographJob;
-		} catch (Exception e) {
-			LOG.error("", e);
-			 throw new HydrographXMLInputServiceException(e.getMessage());
-		}
 	}
 
 	@Override
@@ -90,20 +95,20 @@ public class HydrographXMLInputService implements HydrographInputService {
 			LOG.info("Parsing for Debug graph file: " + path + " started");
 			ParameterSubstitutor parameterSubstitutor = new ParameterSubstitutor(
 					getUserParameters(args));
+			Document debugXmlDoc = XmlUtilities
+					.getXMLDocument(parameterSubstitutor
+							.substitute(XmlParsingUtils
+									.getXMLStringFromPath(path)));
 			try {
-				ParseExternalSchema parseExternalSchema = new ParseExternalSchema(
-						parameterSubstitutor, checkSubjobAndExpandXml(
-								parameterSubstitutor,
-								XmlParsingUtils.getXMLStringFromPath(path)));
-				hydrographDebugInfo = hydrographJobGenerator.createHydrographDebugInfo(
-						parseExternalSchema.getXmlDom(),
-						config.getProperty("debugXSDLocation"));
-				LOG.info("Debug graph parsed successfully");
-				return hydrographDebugInfo;
-			} catch (Exception e) {
-				LOG.error("", e);
-				throw new HydrographXMLInputServiceException(e.getMessage());
+				hydrographDebugInfo = hydrographJobGenerator
+						.createHydrographDebugInfo(debugXmlDoc,
+								config.getProperty("debugXSDLocation"));
+			} catch (SAXException e) {
+				LOG.error("Error while parsing debug XSD.", e);
+				throw new RuntimeException("Error while parsing debug XSD.", e);
 			}
+			LOG.info("Debug graph parsed successfully");
+			return hydrographDebugInfo;
 		} else {
 			return null;
 		}

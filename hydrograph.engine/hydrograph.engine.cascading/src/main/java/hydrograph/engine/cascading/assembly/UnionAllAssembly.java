@@ -71,21 +71,6 @@ public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 
 	}
 
-	private String generateMessageForAllFields(ArrayList<Fields> fieldList) {
-
-		String fields = null;
-		for (int i = 0; i < fieldList.size(); i++) {
-			if (fields == null)
-				fields = "[" + fieldList.get(i) + "],";
-			else if (i != fieldList.size() - 1)
-				fields = fields + "[" + fieldList.get(i) + "],";
-			else
-				fields = fields + "[" + fieldList.get(i) + "]";
-		}
-
-		return fields;
-	}
-
 	private Pipe[] alignfields(ArrayList<Pipe> arrayList,
 			ArrayList<Fields> fieldList) {
 		Pipe[] inputPipes = new Pipe[componentParameters.getInputPipes().size()];
