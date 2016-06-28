@@ -86,9 +86,11 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -850,13 +852,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	
 	private File getPath(){
 		IEditorInput input = (IEditorInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
+		
 		File schemaFile=null;
 		if(input instanceof IFileEditorInput){
 			String schemaPath = extSchemaPathText.getText();
-			if(!new File(schemaPath).isAbsolute()){
+			if(!schemaPath.isEmpty()&& !new File(schemaPath).isAbsolute()){
 				IWorkspace workspace = ResourcesPlugin.getWorkspace();
-				workspace.getRoot().getLocation();
-				schemaFile = new File(workspace.getRoot().getLocation()+"/"+schemaPath);
+				schemaFile = new File(workspace.getRoot().getFile(new Path(schemaPath)).getLocation().toOSString());
 			}
 			else {
 				schemaFile = new File(schemaPath);
