@@ -91,7 +91,7 @@ public class ImplicitBigDecimalType implements CoercibleType<BigDecimal> {
 		} catch (Exception e) {
 			LOG.error("Exception while coercing BigDecimal from '" + value
 					+ "', scale: '" + scale + "', class: '" + from + "'", e);
-			throw e;
+			throw new RuntimeException(e);
 		}
 		throw new CascadingException("unknown type coercion requested from: "
 				+ Util.getTypeName(from));
@@ -122,7 +122,7 @@ public class ImplicitBigDecimalType implements CoercibleType<BigDecimal> {
 		} catch (Exception e) {
 			LOG.error("Exception while coercing BigDecimal from '" + value
 					+ "', scale: '" + scale + "', type: '" + type + "'", e);
-			throw e;
+			throw new RuntimeException(e);		
 		}
 
 		throw new CascadingException("unknown type coercion requested from: "

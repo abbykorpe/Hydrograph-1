@@ -122,34 +122,47 @@ public class ParseSubjob {
 								.getAttributes().getNamedItem(TYPE).getNodeValue())) {
 							// if source component is not of type subjobInput or subjobOutput
 							// update phase of this component according to the phase of source component 
-							String fromComponentPhase = fromComponent.item(0)
-									.getAttributes().getNamedItem(PHASE).getNodeValue();
-							for (int j = 0; j < phaseLevel; j++) {
-								if (Integer.parseInt(thisComponentPhase
-										.split("\\.")[j]) < Integer.parseInt(fromComponentPhase
-												.split("\\.")[j])) {
-									// if main phase is less than source component phase then throw error 
-									// else update the subphase of this component with the subphase of source component
-									if (j > 0) {
-										componentsWithPhaseAttribute
-												.item(componentWithPhase).getAttributes()
-												.getNamedItem(PHASE).setNodeValue(fromComponentPhase);
-									} else {
-										throw new RuntimeException(
-												"Phase of source component cannot be greater than target component. Source component '"
-														+ fromComponentId
-														+ "' has phase "
-														+ fromComponentPhase.split("\\.")[0]
-														+ " and target component '"
-														+ componentsWithPhaseAttribute
-																.item(componentWithPhase)
-																.getAttributes()
-																.getNamedItem(ID)
-																.getNodeValue()
-														+ "' has phase "
-														+ thisComponentPhase.split("\\.")[0]);
+							if (fromComponent.item(0)
+									.getAttributes().getNamedItem(PHASE) != null){
+								String fromComponentPhase = fromComponent.item(0)
+										.getAttributes().getNamedItem(PHASE).getNodeValue();
+								for (int j = 0; j < phaseLevel; j++) {
+									if (Integer.parseInt(thisComponentPhase
+											.split("\\.")[j]) < Integer.parseInt(fromComponentPhase
+													.split("\\.")[j])) {
+										// if main phase is less than source component phase then throw error 
+										// else update the subphase of this component with the subphase of source component
+										if (j > 0) {
+											componentsWithPhaseAttribute
+											.item(componentWithPhase).getAttributes()
+											.getNamedItem(PHASE).setNodeValue(fromComponentPhase);
+										} else {
+											throw new RuntimeException(
+													"Phase of source component cannot be greater than target component. Source component '"
+															+ fromComponentId
+															+ "' has phase "
+															+ fromComponentPhase.split("\\.")[0]
+																	+ " and target component '"
+																	+ componentsWithPhaseAttribute
+																	.item(componentWithPhase)
+																	.getAttributes()
+																	.getNamedItem(ID)
+																	.getNodeValue()
+																	+ "' has phase "
+																	+ thisComponentPhase.split("\\.")[0]);
+										}
 									}
 								}
+							} else {
+								throw new RuntimeException(
+										"Phase attribute is not present for '"
+												+ fromComponent.item(0)
+														.getAttributes()
+														.getNamedItem(TYPE)
+														.getNodeValue()
+														.split(":")[1]
+												+ "' component with Id '"
+												+ fromComponentId + "'");
 							}
 						}
 					}
@@ -241,14 +254,27 @@ public class ParseSubjob {
 				.getNodeValue();
 		componentNode.getAttributes().getNamedItem(ID)
 				.setNodeValue(subjobName + "." + componentId);
+		if (componentId.equals("reformat")){
+			System.out.println(componentId);
+		}
 		if (!isSubjobIOComponent(componentNode.getAttributes()
 				.getNamedItem(TYPE).getNodeValue())) {
-			String componentPhase = this.subjobPhase.split("\\.")[0]
-					+ "."
-					+ componentNode.getAttributes().getNamedItem(PHASE)
-							.getNodeValue();
-			componentNode.getAttributes().getNamedItem(PHASE)
-					.setNodeValue(componentPhase);
+			if (componentNode.getAttributes().getNamedItem(PHASE) == null){
+				throw new RuntimeException("Phase attribute is not present for '" 
+						+ componentNode.getAttributes()
+						.getNamedItem(TYPE).getNodeValue().split(":")[1] + "' component with Id '"
+						+ componentNode.getAttributes().getNamedItem(ID).getNodeValue() +"'");
+			} else {
+				String componentPhase = this.subjobPhase.split("\\.")[0]
+						+ "."
+						+ componentNode.getAttributes().getNamedItem(PHASE)
+						.getNodeValue();
+				componentNode.getAttributes().getNamedItem(PHASE)
+				.setNodeValue(componentPhase);
+			}
+
+					
+			
 		}
 		return componentNode;
 	}

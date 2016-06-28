@@ -134,7 +134,7 @@ public class DataGeneratorTest {
 		try {
 			assertTrue(sdf.parse(date) instanceof Date);
 		} catch (ParseException e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -163,8 +163,7 @@ public class DataGeneratorTest {
 			Date actualDt = sdf.parse(actualDate);
 			assertTrue(actualDt.compareTo(fromDt) >= 1);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -180,8 +179,7 @@ public class DataGeneratorTest {
 			Date actualDt = sdf.parse(actualDate);
 			assertTrue(actualDt.compareTo(toDt) >= -1);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -199,8 +197,7 @@ public class DataGeneratorTest {
 			assertTrue(actualDt.compareTo(toDt) >= -1
 					&& actualDt.compareTo(fromDt) >= 1);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -219,7 +216,7 @@ public class DataGeneratorTest {
 		try {
 			assertTrue(date == sdf.parse(expectedDate).getTime());
 		} catch (ParseException e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -234,7 +231,7 @@ public class DataGeneratorTest {
 			long actualDate = DataGenerator.getToLongDate("yyyy-MM-dd", toDate);
 			assertTrue(actualDate <= toDt.getTime());
 		} catch (ParseException e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -251,8 +248,7 @@ public class DataGeneratorTest {
 			assertTrue(actualDate >= fromDt.getTime()
 					&& actualDate <= toDt.getTime());
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 	}
 

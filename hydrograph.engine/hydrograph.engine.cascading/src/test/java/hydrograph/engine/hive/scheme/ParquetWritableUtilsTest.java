@@ -64,7 +64,7 @@ public class ParquetWritableUtilsTest {
 				obj.add(tuple.getObject(i));
 			}
 		} catch (SerDeException e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -77,7 +77,7 @@ public class ParquetWritableUtilsTest {
 			Assert.assertTrue(writable.get()[1] instanceof BytesWritable);
 			Assert.assertEquals("hive", new String(bw.get()));
 		} catch (Exception e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -88,7 +88,7 @@ public class ParquetWritableUtilsTest {
 					(StructObjectInspector) io);
 			Assert.assertTrue(writable.get()[2] instanceof HiveDecimalWritable);
 		} catch (Exception e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -99,7 +99,7 @@ public class ParquetWritableUtilsTest {
 					(StructObjectInspector) io);
 			Assert.assertTrue(writable.get()[3] instanceof ArrayWritable);
 		} catch (Exception e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 	}
 }

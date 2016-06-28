@@ -122,19 +122,17 @@ public class PropertiesLoader {
 					try {
 						reader.close();
 					} catch (IOException e) {
-						LOG.error("", e);
+						LOG.error("Error closing the properties file: "
+								+ propFileName, e);
+						throw new RuntimeException(
+								"Error closing the properties file: "
+										+ propFileName, e);
 					}
 				}
 			}
 		}
 
 		LOG.info("Loading property file " + propFileName);
-
-		/*
-		 * try { properties
-		 * .load(PropertiesLoader.class.getResourceAsStream(propFileName)); }
-		 * catch (Exception e) { throw new UnableToLoadPropertiesException(e); }
-		 */
 
 		return properties;
 

@@ -146,11 +146,5 @@ public class SocketUtilities {
 			List<Object> x = outSocketList
 					.getPassThroughFieldOrOperationFieldOrMapField();
 		}
-		/*
-		 * else if (typeBaseOutSocket instanceof TypeStraightPullOutSocket){
-		 * TypeStraightPullOutSocket outSocketList1 =
-		 * (TypeStraightPullOutSocket) typeBaseOutSocket; List<Object> x =
-		 * outSocketList1.getCopyOfInsocket(); }
-		 */
 	}
 }

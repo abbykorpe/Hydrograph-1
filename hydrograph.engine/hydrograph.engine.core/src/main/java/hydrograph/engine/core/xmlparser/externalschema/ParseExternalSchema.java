@@ -32,7 +32,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import hydrograph.engine.core.xmlparser.XmlParsingUtils;
-import hydrograph.engine.core.xmlparser.parametersubstitution.ParameterSubstitutor;
 
 public class ParseExternalSchema {
 
@@ -48,19 +47,17 @@ public class ParseExternalSchema {
 	private DocumentBuilder documentBuilder;
 	private Document xmlDocument = null;
 	private String xmlContent;
-	private ParameterSubstitutor parameterSubstitutor;
 
-	public ParseExternalSchema(ParameterSubstitutor parameterSubstitutor,
-			String xmlContent) {
-		this.xmlContent = parameterSubstitutor.substitute(xmlContent);
-		this.parameterSubstitutor = parameterSubstitutor;
+	public ParseExternalSchema(String xmlContent) {
+		
+		this.xmlContent = xmlContent;
 	}
 
-	public Document getXmlDom() {
+	public Document getXmlDom() throws FileNotFoundException {
 		return getExternalSchemaDocument(xmlContent);
 	}
 
-	private Document getExternalSchemaDocument(String xmlContents) {
+	private Document getExternalSchemaDocument(String xmlContents) throws FileNotFoundException {
 		LOG.info("Parsing external schemas");
 		builderFactory.setValidating(false);
 		builderFactory.setNamespaceAware(true);
@@ -70,10 +67,10 @@ public class ParseExternalSchema {
 				xmlDocument = documentBuilder.parse(new InputSource(
 						new StringReader(xmlContents)));
 			} catch (SAXException | IOException e) {
-				LOG.error("", e);
+				throw new RuntimeException(e);
 			}
 		} catch (ParserConfigurationException e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 		NodeList externalNodes = xmlDocument
 				.getElementsByTagName(EXTERNAL_SCHEMA);
@@ -108,13 +105,13 @@ public class ParseExternalSchema {
 		}
 	}
 
-	private List<Node> createNodes(Node parent) {
+	private List<Node> createNodes(Node parent) throws FileNotFoundException {
 		List<Node> nodeList = new ArrayList<Node>();
 		Document xmlDocument2 = null;
 		try {
 			documentBuilder = builderFactory.newDocumentBuilder();
 		} catch (ParserConfigurationException e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 		for (int i = 0; i < parent.getChildNodes().getLength(); i++) {
 			if (parent.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -124,22 +121,16 @@ public class ParseExternalSchema {
 					String path = parent.getChildNodes().item(i)
 							.getAttributes().getNamedItem(URI).getNodeValue();
 					if (!new File(path).exists()) {
-						try {
 							throw new FileNotFoundException(
 									"External schema file doesn't exist: "
 											+ path);
-						} catch (FileNotFoundException e) {
-							LOG.error("", e);
-						}
 					}
 					try {
-						String xml = parameterSubstitutor
-								.substitute(XmlParsingUtils
-										.getXMLStringFromPath(path));
+						String xml = XmlParsingUtils.getXMLStringFromPath(path);
 						xmlDocument2 = documentBuilder.parse(new InputSource(
 								new StringReader(xml)));
 					} catch (SAXException | IOException e) {
-						LOG.error("", e);
+						throw new RuntimeException(e);
 					}
 					nodeList.addAll(createNodes(xmlDocument2.getElementsByTagName("fields").item(0)));
 				}

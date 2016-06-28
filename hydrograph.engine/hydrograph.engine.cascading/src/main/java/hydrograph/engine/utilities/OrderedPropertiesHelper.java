@@ -62,7 +62,7 @@ public class OrderedPropertiesHelper {
 		} catch (IOException e) {
 			LOG.error("Error reading properties file: '" + propertyFileName
 					+ "'");
-			throw e;
+			throw new RuntimeException(e);
 		}
 
 		try {

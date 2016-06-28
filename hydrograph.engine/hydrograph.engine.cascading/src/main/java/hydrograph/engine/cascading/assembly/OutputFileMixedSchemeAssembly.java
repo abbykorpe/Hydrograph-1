@@ -12,8 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import java.lang.reflect.Type;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +23,6 @@ import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
 import hydrograph.engine.assembly.entity.OutputFileMixedSchemeEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;

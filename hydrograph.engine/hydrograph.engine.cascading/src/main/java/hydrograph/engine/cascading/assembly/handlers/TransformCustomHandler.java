@@ -85,9 +85,25 @@ public class TransformCustomHandler extends BaseOperation<CustomHandlerContext<T
 			counter = counter + 1;
 
 			LOG.trace("calling prepare method for: " + transformInstance.getClass().getName());
-
+			try {
 			transformInstance.prepare(props.get(counter), context.getInputRow(counter).getFieldNames(),
 					context.getOutputRow(counter).getFieldNames());
+			}  catch(Exception e) {
+				LOG.error("Exception in prepare method of: "
+						+ transformInstance.getClass().getName()
+						+ ".\nArguments passed to prepare() method are: \nProperties: "
+						+ props + "\nInput Fields: " 
+						+ Arrays.toString(context.getInputRow(counter).getFieldNames().toArray())
+						+ "\nOutput Fields: " 
+						+ Arrays.toString(context.getOutputRow(counter).getFieldNames().toArray()), e);
+				throw new RuntimeException("Exception in prepare method of: "
+						+ transformInstance.getClass().getName()
+						+ ".\nArguments passed to prepare() method are: \nProperties: "
+						+ props + "\nInput Fields: " 
+						+ Arrays.toString(context.getInputRow(counter).getFieldNames().toArray())
+						+ "\nOutput Fields: " 
+						+ Arrays.toString(context.getOutputRow(counter).getFieldNames().toArray()), e);
+			}
 		}
 	}
 
@@ -98,31 +114,15 @@ public class TransformCustomHandler extends BaseOperation<CustomHandlerContext<T
 
 		Tuple inputTuple = new Tuple(call.getArguments().getTuple());
 
-		// copy the field values of map fields into a temporary object
-		// ReusableRowHelper.extractFromTuple(
-		// fieldManupulatingHandler.getMapSourceFieldPositions(),
-		// inputTuple, context.getMapRow());
-
 		// copy the field values of map fields outputTupleEntry
 		TupleHelper.setTupleOnPositions(fieldManupulatingHandler.getMapSourceFieldPositions(),
 				call.getArguments().getTuple(), fieldManupulatingHandler.getMapTargetFieldPositions(),
 				call.getContext().getOutputTupleEntry().getTuple());
 
-		// // copy the field values of pass through fields into a temporary
-		// object
-		// ReusableRowHelper.extractFromTuple(
-		// fieldManupulatingHandler.getInputPassThroughPositions(),
-		// inputTuple, context.getPassThroughRow());
-
 		// copy the field values of pass through fields into a temporary object
 		TupleHelper.setTupleOnPositions(fieldManupulatingHandler.getInputPassThroughPositions(),
 				call.getArguments().getTuple(), fieldManupulatingHandler.getOutputPassThroughPositions(),
 				call.getContext().getOutputTupleEntry().getTuple());
-
-		// // set operation row from pass through row and map row
-		// ReusableRowHelper.setOperationRowFromPassThroughAndMapRow(
-		// fieldManupulatingHandler.getMapFields(), context.getMapRow(),
-		// context.getPassThroughRow(), context.getOperationRow());
 
 		int counter = -1;
 		for (TransformBase transformInstance : context.getTransformInstances()) {
@@ -136,15 +136,10 @@ public class TransformCustomHandler extends BaseOperation<CustomHandlerContext<T
 			} catch (Exception e) {
 				LOG.error("Exception in tranform method of: " + transformInstance.getClass().getName()
 						+ ".\nRow being processed: " + call.getArguments(), e);
-				throw e;
+				throw new RuntimeException("Exception in tranform method of: " + transformInstance.getClass().getName()
+						+ ".\nRow being processed: " + call.getArguments(), e);
 			}
 		}
-		// // set operation row, copy operation fields
-		// ReusableRowHelper.extractOperationRowFromAllOutputRow(
-		// context.getAllOutputRow(), context.getOperationRow());
-		//
-		// ReusableRowHelper.setTupleEntryFromResuableRowAndReset(call
-		// .getContext().getOutputTupleEntry(), context.getOperationRow());
 
 		// Set all output fields in order
 		ReusableRowHelper.setTupleEntryFromResuableRowsAndReset(call.getContext().getOutputTupleEntry(),

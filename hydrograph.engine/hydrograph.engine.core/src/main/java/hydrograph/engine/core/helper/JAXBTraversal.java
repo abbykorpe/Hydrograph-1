@@ -254,8 +254,6 @@ public class JAXBTraversal {
 			
 			graph.getInputsOrOutputsOrStraightPulls().add(jaxbSequenceInputFile);
 
-			//TypeBaseInSocket newInSocket = getCopyOfInSocket(inSocket);
-			
 			inSocket.setFromComponentId(sequenceInputComponentId);
 			inSocket.setFromSocketId(DEFAULT_OUT_SOCKET);
 			

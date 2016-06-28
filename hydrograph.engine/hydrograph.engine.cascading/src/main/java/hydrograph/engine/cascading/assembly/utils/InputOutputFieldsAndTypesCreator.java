@@ -234,7 +234,7 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 						Class.forName(string), fieldFormat[i], fieldScale[i],
 						fieldScaleType[i]);
 			} catch (ClassNotFoundException e) {
-				// LOG.error("", e);
+				throw new RuntimeException("Unsupported data type : " + string , e);
 			}
 			i++;
 		}
@@ -264,8 +264,7 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 		try {
 			return Class.forName(javaDataType).getSimpleName();
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			throw new RuntimeException("Unsupported data type : " + javaDataType,e);
 		}
-		return "";
 	}
 }

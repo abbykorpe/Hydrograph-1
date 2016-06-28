@@ -100,10 +100,20 @@ public class NormalizeCustomHandler extends
 
 		LOG.trace("calling prepare method of: "
 				+ context.getSingleTransformInstance().getClass().getName());
-
-		LOG.trace("calling prepare method of: "
-				+  context.getSingleTransformInstance().getClass().getName());
-		context.getSingleTransformInstance().prepare(userProperties.get(0));
+		try {
+			context.getSingleTransformInstance().prepare(userProperties.get(0));
+		} catch (Exception e) {
+			LOG.error(
+					"Exception in prepare method of: "
+							+ context.getSingleTransformInstance().getClass().getName()
+							+ ".\nArguments passed to prepare() method are: \nProperties: "
+							+ userProperties, e);
+			throw new RuntimeException(
+					"Exception in prepare method of: "
+							+ context.getSingleTransformInstance().getClass().getName()
+							+ ".\nArguments passed to prepare() method are: \nProperties: "
+							+ userProperties, e);
+		}
 
 		operationCall.setContext(context);
 
@@ -115,21 +125,6 @@ public class NormalizeCustomHandler extends
 			FunctionCall<CustomHandlerContext<NormalizeTransformBase>> call) {
 		CustomHandlerContext<NormalizeTransformBase> context = call
 				.getContext();
-		//
-		// // set passthrough row copy pass through fields
-		// ReusableRowHelper.extractFromTuple(fieldManupulatingHandler
-		// .getInputPassThroughPositions(), call.getArguments().getTuple(),
-		// context.getPassThroughRow());
-		//
-		// // set map row, copy map fields
-		// ReusableRowHelper.extractFromTuple(fieldManupulatingHandler
-		// .getMapSourceFieldPositions(), call.getArguments().getTuple(),
-		// context.getMapRow());
-		//
-		// // set operation row from pass through row and map row
-		// ReusableRowHelper.setOperationRowFromPassThroughAndMapRow(
-		// fieldManupulatingHandler.getMapFields(), context.getMapRow(),
-		// context.getPassThroughRow(), context.getOperationRow());
 
 		LOG.trace("calling normalize method of: "
 				+ context.getSingleTransformInstance().getClass().getName());
@@ -150,7 +145,10 @@ public class NormalizeCustomHandler extends
 						+ context.getSingleTransformInstance().getClass()
 								.getName() + ".\nRow being processed: "
 						+ call.getArguments(), e);
-			throw e;
+			throw new RuntimeException("Exception in normalize method of: "
+					+ context.getSingleTransformInstance().getClass()
+					.getName() + ".\nRow being processed: "
+					+ call.getArguments(), e);
 		}
 
 	}
@@ -189,24 +187,6 @@ public class NormalizeCustomHandler extends
 			LOG.trace("entering sendOutput method");
 			CustomHandlerContext<NormalizeTransformBase> context = call
 					.getContext();
-
-			// // set operation row, copy operation fields
-			// ReusableRowHelper.extractOperationRowFromAllOutputRow(
-			// context.getAllOutputRow(), context.getOperationRow());
-
-			// ReusableRowHelper.setTupleEntryFromResuableRow(
-			// context.getOutputTupleEntry(), context.getPassThroughRow());
-			//
-			// ReusableRowHelper.setTupleEntryFromResuableRow(call.getContext()
-			// .getOutputTupleEntry(), context.getOperationRow());
-
-			// ReusableRowHelper
-			// .setTupleEntryFromResuableRowAndReset(
-			// context.getOutputTupleEntry(),
-			// context.getSingleOutputRow());
-
-			// ReusableRowHelper.setTupleEntryFromResuableRow(call.getContext()
-			// .getOutputTupleEntry(), context.getOperationRow());
 
 			// set output tuple entry with map field values
 			TupleHelper.setTupleOnPositions(fieldManupulatingHandler
