@@ -47,10 +47,6 @@ public class HydrographJobGenerator {
 
 		graph = (Graph) unmarshaller.unmarshal(new StringReader(xmlContent));
 
-		/*
-		 * GraphParser graphParser = new GraphParser(
-		 * XMLDocumentFactory.getDomFromString(xmlContent));
-		 */
 		HydrographJob hydrographJob = new HydrographJob(graph);
 
 		return hydrographJob;
@@ -65,10 +61,6 @@ public class HydrographJobGenerator {
 
 		debug = (Debug) unmarshaller.unmarshal(new StringReader(xmlContent));
 
-		/*
-		 * GraphParser graphParser = new GraphParser(
-		 * XMLDocumentFactory.getDomFromString(xmlContent));
-		 */
 		HydrographDebugInfo hydrographDebugInfo = new HydrographDebugInfo(debug);
 
 		return hydrographDebugInfo;
@@ -87,7 +79,7 @@ public class HydrographJobGenerator {
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public HydrographJob createHydrographJob(Document graphDocument, String xsdLocation) throws SAXException, IOException {
+	public HydrographJob createHydrographJob(Document graphDocument, String xsdLocation) throws SAXException {
 		try {
 			SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			Schema schema = sf.newSchema(ClassLoader.getSystemResource(xsdLocation));
@@ -102,9 +94,9 @@ public class HydrographJobGenerator {
 			return hydrographJob;
 
 		} catch (JAXBException e) {
-			LOG.error("", e);
+			LOG.error("Error while creating JAXB objects from job XML.", e);
+			throw new RuntimeException("Error while creating JAXB objects from job XML.", e);
 		}
-		return null;
 	}
 
 	/**
@@ -128,13 +120,12 @@ public class HydrographJobGenerator {
 			unmarshaller.setSchema(schema);
 			unmarshaller.setEventHandler(new ComponentValidationEventHandler());
 			debug = (Debug) unmarshaller.unmarshal(graphDocument);
-			// HydrographJob bhsGraph = new HydrographJob(graph);
 			HydrographDebugInfo hydrographDebugInfo = new HydrographDebugInfo(debug);
 			LOG.trace("DebugJAXB object created successfully");
 			return hydrographDebugInfo;
 		} catch (JAXBException e) {
-			LOG.error("", e);
+			LOG.error("Error while creating JAXB objects from debug XML.", e);
+			throw new RuntimeException("Error while creating JAXB objects from debug XML.", e);
 		}
-		return null;
 	}
 }

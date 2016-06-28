@@ -32,7 +32,6 @@ import hydrograph.engine.utilities.ComponentParameterBuilder;
 import hydrograph.engine.utilities.PlatformHelper;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -226,9 +225,9 @@ public class FlowBuilder {
 			} catch (NullPointerException exception) {
 				// hack to get around npe thrown when fs reaches root directory
 				// if (!(fileSystem instanceof NativeS3FileSystem))
-				throw exception;
+				throw new RuntimeException(exception);
 			} catch (IOException e) {
-				LOG.error("", e);
+				throw new RuntimeException(e);
 			}
 
 		}

@@ -36,7 +36,7 @@
 		</outSocket>
 	</straightPulls>
 
-	<outputs id="output2" xsi:type="ot:textFileDelimited">
+	<outputs id="output2" xsi:type="ot:textFileDelimited" phase="0">
 		<inSocket fromComponentId="clone" fromSocketId="out0" id="in0">
 			<schema name="outSchema">
 				<field name="id" type="java.lang.String" />

@@ -12,8 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.core.xmlparser.parametersubstitution;
 
-import hydrograph.engine.core.utilities.XmlUtilities;
-
 import java.util.HashMap;
 import java.util.Stack;
 

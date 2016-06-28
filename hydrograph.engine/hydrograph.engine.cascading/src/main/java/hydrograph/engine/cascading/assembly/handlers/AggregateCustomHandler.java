@@ -85,9 +85,31 @@ public class AggregateCustomHandler extends BaseOperation<CustomHandlerContext<A
 		for (AggregateTransformBase transformInstance : context.getTransformInstances()) {
 			counter = counter + 1;
 			LOG.trace("calling prepare method of: " + transformInstance.getClass().getName());
+			try {
 			transformInstance.prepare(props.get(counter), context.getInputRow(counter).getFieldNames(),
 					context.getOutputRow(counter).getFieldNames(),
 					ReusableRowHelper.getListFromFields(fieldManupulatingHandler.keyFields));
+			
+			}  catch(Exception e) {
+				LOG.error("Exception in prepare method of: "
+						+ transformInstance.getClass().getName()
+						+ ".\nArguments passed to prepare() method are: \nProperties: "
+						+ props + "\nInput Fields: " 
+						+ Arrays.toString(context.getInputRow(counter).getFieldNames().toArray())
+						+ "\nOutput Fields: " 
+						+ Arrays.toString(context.getOutputRow(counter).getFieldNames().toArray())
+						+ "\nKey Fields: " 
+						+ Arrays.toString(ReusableRowHelper.getListFromFields(fieldManupulatingHandler.keyFields).toArray()), e);
+				throw new RuntimeException("Exception in prepare method of: "
+						+ transformInstance.getClass().getName()
+						+ ".\nArguments passed to prepare() method are: \nProperties: "
+						+ props + "\nInput Fields: " 
+						+ Arrays.toString(context.getInputRow(counter).getFieldNames().toArray())
+						+ "\nOutput Fields: " 
+						+ Arrays.toString(context.getOutputRow(counter).getFieldNames().toArray())
+						+ "\nKey Fields: " 
+						+ Arrays.toString(ReusableRowHelper.getListFromFields(fieldManupulatingHandler.keyFields).toArray()), e);
+			}
 		}
 
 		call.setContext(context);
@@ -122,26 +144,12 @@ public class AggregateCustomHandler extends BaseOperation<CustomHandlerContext<A
 			} catch (Exception e) {
 				LOG.error("Exception in aggregate method of: " + transformInstance.getClass().getName()
 						+ ".\nRow being processed: " + call.getArguments(), e);
-				throw e;
+				throw new RuntimeException("Exception in aggregate method of: " + transformInstance.getClass().getName()
+						+ ".\nRow being processed: " + call.getArguments(), e);
 			}
 		}
 
 		call.getContext().setUserObject(call.getArguments().getTuple());
-
-		// // set passthrough row, copy pass through fields
-		// ReusableRowHelper.extractFromTuple(fieldManupulatingHandler
-		// .getInputPassThroughPositions(), call.getArguments().getTuple(),
-		// context.getPassThroughRow());
-
-		// // set map row, copy map fields
-		// ReusableRowHelper.extractFromTuple(fieldManupulatingHandler
-		// .getMapSourceFieldPositions(), call.getArguments().getTuple(),
-		// context.getMapRow());
-
-		// // set operation row from pass through row and map row
-		// ReusableRowHelper.setOperationRowFromPassThroughAndMapRow(
-		// fieldManupulatingHandler.getMapFields(), context.getMapRow(),
-		// context.getPassThroughRow(), context.getOperationRow());
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -156,14 +164,6 @@ public class AggregateCustomHandler extends BaseOperation<CustomHandlerContext<A
 			counter = counter + 1;
 			transformInstance.onCompleteGroup(context.getOutputRow(counter));
 		}
-
-		// // set operation row, copy operation fields
-		// ReusableRowHelper.extractOperationRowFromAllOutputRow(
-		// context.getAllOutputRow(), context.getOperationRow());
-		//
-		//
-		// ReusableRowHelper.setTupleEntryFromResuableRowAndReset(call
-		// .getContext().getOutputTupleEntry(), context.getOperationRow());
 
 		// set output tuple entry with map field values
 		TupleHelper.setTupleOnPositions(fieldManupulatingHandler.getMapSourceFieldPositions(),

@@ -57,7 +57,7 @@ public class ReadSubjobTest {
 			Assert.assertTrue(xmlContents.contains("<inSocket fromComponentId=\"inputSubjob.reformat\" fromSocketId=\"out0\" id=\"in0\">"));
 
 		} catch (IOException e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -93,7 +93,7 @@ public class ReadSubjobTest {
 			Assert.assertTrue(xmlContents.contains("<inSocket fromComponentId=\"operationSubjob.clone\" fromSocketId=\"out1\" id=\"in0\">"));
 			
 		} catch (IOException e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 	}
 	

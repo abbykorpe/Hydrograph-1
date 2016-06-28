@@ -51,8 +51,7 @@ public class FlowManipulationHandler {
 		try {
 			properties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException("Error reading the properties file: RegisterPlugin.properties" + e);
 		}
 
 		for (Object pluginClass : properties.keySet()) {
@@ -80,13 +79,12 @@ public class FlowManipulationHandler {
 			return inst.execute(flowManipulationContext);
 
 		} catch (ClassNotFoundException e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		} catch (NoSuchMethodException | SecurityException e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 }

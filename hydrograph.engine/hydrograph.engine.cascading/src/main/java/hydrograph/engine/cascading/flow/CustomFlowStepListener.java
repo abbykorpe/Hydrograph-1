@@ -73,6 +73,7 @@ public class CustomFlowStepListener implements FlowStepListener {
 					}
 				} catch (Exception e) {
 					LOG.error("", e);
+					throw new RuntimeException(e);
 				}
 			}
 		}

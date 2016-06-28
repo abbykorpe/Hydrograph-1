@@ -132,6 +132,7 @@ public class HiveParquetScheme extends Scheme<JobConf, RecordReader, OutputColle
 			outputCollector.collect(null, parRow);
 		} catch (SerDeException e) {
 			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 
 	}

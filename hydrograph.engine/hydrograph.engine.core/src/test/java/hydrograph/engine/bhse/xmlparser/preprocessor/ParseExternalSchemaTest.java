@@ -44,7 +44,7 @@ public class ParseExternalSchemaTest {
 			String xmlContents = XmlParsingUtils.getXMLStringFromPath(args[1]);
 
 			ParseExternalSchema parseExternalSchema = new ParseExternalSchema(
-					parameterSubstitutor, xmlContents);
+					parameterSubstitutor.substitute(xmlContents));
 
 			Document xmlDom = parseExternalSchema.getXmlDom();
 

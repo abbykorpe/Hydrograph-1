@@ -17,6 +17,7 @@ import hydrograph.engine.cascading.assembly.context.RecordFilterContext;
 import hydrograph.engine.cascading.utilities.ReusableRowHelper;
 import hydrograph.engine.transformation.userfunctions.base.FilterBase;
 
+import java.util.Arrays;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -67,9 +68,25 @@ public class FilterCustomHandler implements RecordFilterHandlerBase {
 
 		LOG.trace("calling prepare method of: "
 				+ context.getSingleTransformInstance().getClass().getName());
-		context.getSingleTransformInstance().prepare(userProperties,
-				context.getSingleInputRow().getFieldNames());
-
+		try {
+			context.getSingleTransformInstance().prepare(userProperties,
+					context.getSingleInputRow().getFieldNames());
+		} catch (Exception e) {
+			LOG.error(
+					"Exception in prepare method of: "
+							+ context.getSingleTransformInstance().getClass().getName()
+							+ ".\nArguments passed to prepare() method are: \nProperties: "
+							+ userProperties
+							+ "\nInput Fields: "
+							+ Arrays.toString(context.getSingleInputRow().getFieldNames().toArray()), e);
+			throw new RuntimeException(
+					"Exception in prepare method of: "
+							+ context.getSingleTransformInstance().getClass().getName()
+							+ ".\nArguments passed to prepare() method are: \nProperties: "
+							+ userProperties
+							+ "\nInput Fields: "
+							+ Arrays.toString(context.getSingleInputRow().getFieldNames().toArray()), e);
+		}
 		return context;
 	}
 
@@ -93,7 +110,9 @@ public class FilterCustomHandler implements RecordFilterHandlerBase {
 			LOG.error("Exception in isRemove method of: "
 					+ context.getSingleTransformInstance().getClass().getName()
 					+ ".\nRow being processed: " + call.getArguments(), e);
-			throw e;
+			throw new RuntimeException("Exception in isRemove method of: "
+					+ context.getSingleTransformInstance().getClass().getName()
+					+ ".\nRow being processed: " + call.getArguments(), e);
 		}
 	}
 

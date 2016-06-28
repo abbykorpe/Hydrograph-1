@@ -69,7 +69,7 @@ public class DelimitedAndFixedWidthHelper {
 								+ "\nDatatypes in scheme: "
 								+ Arrays.toString(types)
 								+ "\nSafe was set to: " + safe, e);
-				throw e;
+				throw new RuntimeException(e);			
 			}
 		} else {
 			return new Object[lengthsAndDelimiters.length];
@@ -200,6 +200,7 @@ public class DelimitedAndFixedWidthHelper {
 						}
 					} catch (IOException e) {
 						LOG.error("", e);
+						throw new RuntimeException(e);
 					}
 					counter++;
 					continue;
