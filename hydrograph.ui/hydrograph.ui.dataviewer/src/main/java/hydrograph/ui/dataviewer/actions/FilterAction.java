@@ -50,7 +50,7 @@ public class FilterAction extends Action {
 			filterConditionsDialog.setDebugDataViewerAdapterAndViewer(debugDataViewer.getDataViewerAdapter(),debugDataViewer);
 			filterConditionsDialog.open();
 		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+			logger.error("Error while setting debug data viewer and debug data viewer adaptor",e);
 		}
 	}
 

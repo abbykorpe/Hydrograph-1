@@ -22,6 +22,7 @@ import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
 import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
+import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 import java.io.IOException;
@@ -49,6 +50,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.slf4j.Logger;
 
 import com.google.gson.Gson;
 
@@ -73,6 +75,7 @@ public class FilterHelper {
 	private String SCHEMA_FILE_EXTENTION=".xml";
 	private String filteredFileLocation;
 	private String filteredFileName;
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterHelper.class);
 	private FilterHelper() {
 	}
 	
@@ -341,7 +344,7 @@ public class FilterHelper {
 					debugDataViewer.showDataInDebugViewer(true);
 					
 				} catch (NumberFormatException | IOException exception) {
-					exception.printStackTrace();
+					logger.error("Error occuring while showing remote filtered data",exception);
 				}
 			}
 
@@ -352,8 +355,8 @@ public class FilterHelper {
 					debugDataViewer.getDataViewLoader().updateDataViewLists();
 					debugDataViewer.getDataViewLoader().reloadloadViews();
 
-				} catch (SQLException e1) {
-					e1.printStackTrace();
+				} catch (SQLException exception) {
+					logger.error("Error occuring while showing local filtered data",exception);
 				}
 			}
 
@@ -462,8 +465,13 @@ public class FilterHelper {
 					temp.append(CLOSE_BRACKET);
 					return temp.toString();
 				}
+				else{
+					return OPEN_BRACKET + SINGLE_QOUTE + value + SINGLE_QOUTE + CLOSE_BRACKET;
+				}
 			}
-			return OPEN_BRACKET + SINGLE_QOUTE + value + SINGLE_QOUTE + CLOSE_BRACKET;
+			else{
+				return SINGLE_QOUTE + value + SINGLE_QOUTE;
+			}
 		}
 		else{
 			if(IN.equalsIgnoreCase(trimmedCondition) || NOT_IN.equalsIgnoreCase(trimmedCondition)){

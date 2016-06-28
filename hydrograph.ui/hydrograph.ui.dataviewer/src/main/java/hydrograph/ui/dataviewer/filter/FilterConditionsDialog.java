@@ -13,9 +13,9 @@
 package hydrograph.ui.dataviewer.filter;
 
 import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
-import hydrograph.ui.logging.factory.LogFactory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -40,6 +40,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -55,7 +56,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.slf4j.Logger;
 
 public class FilterConditionsDialog extends Dialog {
 	private static final String VALUE_TEXT_BOX = "valueTextBox";
@@ -652,8 +652,7 @@ public class FilterConditionsDialog extends Dialog {
 		tableItem.setData(columnName, button);
 		tableItem.setData(buttonPaneName, buttonPane);
 		button.addSelectionListener(buttonSelectionListener);
-		//TODO to be enabled once integrated
-		//button.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + imagePath));
+		button.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + imagePath));
 		
 		final TableEditor editor = new TableEditor(tableViewer.getTable());
 		editor.grabHorizontal = true;
