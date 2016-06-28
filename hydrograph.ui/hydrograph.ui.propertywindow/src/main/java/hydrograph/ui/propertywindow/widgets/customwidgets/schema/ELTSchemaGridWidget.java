@@ -18,7 +18,11 @@ import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
+
 import hydrograph.ui.common.util.ParameterUtil;
+
+import hydrograph.ui.common.util.OSValidator;
+
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
@@ -120,6 +124,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -210,10 +215,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private String propertyName;
 	private ListenerHelper helper;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-
-
-	protected ELTDefaultLable upButton, downButton, addButton, deleteButton;
-
+ 
+    private ELTDefaultButton addButton , deleteButton,upButton, downButton;
 	private Button browseButton, importButton, exportButton;
 	
 	private MenuItem copyMenuItem, pasteMenuItem;
@@ -1100,6 +1103,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		buttonSubGroup.createContainerWidget();
 
 		buttonSubGroup.numberOfBasicWidgets(4);
+	
 
 		addAddButton(buttonSubGroup);
 		addDeleteButton(buttonSubGroup);
@@ -1220,6 +1224,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					upButton.getSWTWidgetControl(),
 					downButton.getSWTWidgetControl());
 			
+			
+			
+			
 			deleteButton.attachListener(
 					ListenerFactory.Listners.GRID_DELETE_SELECTION
 							.getListener(), propertyDialogButtonBar, helper,
@@ -1338,30 +1345,46 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	}
 
 	private void addAddButton(ELTSchemaSubgroupComposite buttonSubGroup) {
-		addButton = new ELTDefaultLable("");
-		addButton.lableWidth(25);
+		addButton = new ELTDefaultButton("");
+		if(OSValidator.isMac()){
+		addButton.buttonWidth(35);
+		addButton.buttonHeight(45);
+		}
+		addButton.buttonWidth(35);
+		addButton.buttonHeight(25);
 		buttonSubGroup.attachWidget(addButton);
 		addButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
 		addButton.setToolTipText(addButtonTooltip);
 	}
 
 	private void addDeleteButton(ELTSchemaSubgroupComposite buttonSubGroup) {
-		deleteButton = new ELTDefaultLable("");
-		deleteButton.lableWidth(25);
+		deleteButton = new ELTDefaultButton("");
+		if(OSValidator.isMac()){
+			deleteButton.buttonWidth(35);
+			deleteButton.buttonHeight(45);
+			}
+		deleteButton.buttonWidth(35);
+		deleteButton.buttonHeight(25);
 		buttonSubGroup.attachWidget(deleteButton);
 		deleteButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
 		deleteButton.setToolTipText(removeButtonTooltip);
 	}
 
 	private void addUpButton(ELTSchemaSubgroupComposite buttonSubGroup) {
-		upButton = new ELTDefaultLable("");
-		upButton.lableWidth(25);
+		upButton = new ELTDefaultButton("");
+		if(OSValidator.isMac()){
+			upButton.buttonWidth(35);
+			upButton.buttonHeight(45);
+			}
+		upButton.buttonWidth(35);
+		upButton.buttonHeight(25);
 		buttonSubGroup.attachWidget(upButton);
 		upButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
 		upButton.setToolTipText(upButtonTooltip);
-		upButton.addMouseUpListener(new MouseAdapter() {
+		((Button)upButton.getSWTWidgetControl()).addMouseListener(new MouseAdapter() {
+		 
 			@Override
-			public void mouseUp(MouseEvent e) {
+			public void mouseDown(MouseEvent e) {
 				propertyDialogButtonBar.enableApplyButton(true);
 				int[] indexes=table.getSelectionIndices();
 				for(int index :indexes)
@@ -1372,26 +1395,33 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						tableViewer.refresh();
 
 					}
-				}
+				}	
+				
 			}
+		 
+		
 		});
+
+			
 	}
 
 	private void addDownButton(ELTSchemaSubgroupComposite buttonSubGroup) {
-		downButton = new ELTDefaultLable("");
-		downButton.lableWidth(25);
+		downButton = new ELTDefaultButton("");
+		if(OSValidator.isMac()){
+			downButton.buttonWidth(35);
+			downButton.buttonHeight(45);
+			}
+		downButton.buttonWidth(35);
+		downButton.buttonHeight(25);
 		buttonSubGroup.attachWidget(downButton);
 
 		downButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
 		downButton.setToolTipText(downButtonTooltip);
-
-
-		downButton.addMouseUpListener(new MouseAdapter() {
-
-
+		
+		((Button)downButton.getSWTWidgetControl()).addMouseListener(new MouseAdapter() {
+			 
 			@Override
-			public void mouseUp(MouseEvent e) {
-
+			public void mouseDown(MouseEvent e) {
 				propertyDialogButtonBar.enableApplyButton(true);
 				int[] indexes = table.getSelectionIndices();
 				for (int i = indexes.length - 1; i > -1; i--) {
@@ -1401,10 +1431,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						tableViewer.refresh();
 
 					}
-				}
-
+				
+			}
+		 
 			}
 		});
+		
+		
 	}
 
 	public List<GridRow> getSchemaGridRowList() {
@@ -1552,27 +1585,34 @@ private boolean isSchemaInSync(){
 					});
 
 		}
-
-		deleteButton.addMouseUpListener(new MouseAdapter() {
-
+		
+		((Button)deleteButton.getSWTWidgetControl()).addSelectionListener(new SelectionListener() {
 			@Override
-			public void mouseUp(MouseEvent e) {
+			public void widgetSelected(SelectionEvent e) {/*Do-Nothing*/}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
 				if (table.getItemCount() == 0) {
 					showHideErrorSymbol(isWidgetValid());
 				}
 				scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,
 						SWT.DEFAULT));
+			}			
+			
+		});
+
+		
+		((Button)addButton.getSWTWidgetControl()).addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {/*Do-Nothing*/}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,
+						SWT.DEFAULT));				
 			}
 		});
 		
-		addButton.addMouseUpListener(new MouseAdapter() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-				scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,
-						SWT.DEFAULT));
-			}
-			
-		});
 	}
 
 	protected boolean applySchemaValidationRule() {
