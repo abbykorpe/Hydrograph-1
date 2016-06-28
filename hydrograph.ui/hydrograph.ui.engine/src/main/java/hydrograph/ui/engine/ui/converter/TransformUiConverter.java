@@ -96,7 +96,7 @@ public abstract class TransformUiConverter extends UiConverter {
 						new LinkingData(inSocket.getFromComponentId(),
 								operationsComponent.getId(), inSocket
 										.getFromSocketId(), inSocket.getId()));
-				uiComponent.getPorts().get(inSocket.getId()).setPortType(PortTypeEnum.fromValue(inSocket.getType()));
+				uiComponent.getPorts().get(inSocket.getId()).setPortType(PortTypeEnum.IN);
 			}
 		}
 	}
