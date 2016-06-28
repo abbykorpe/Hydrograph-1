@@ -136,7 +136,6 @@ public class FilterConditionsDialog extends Dialog {
 		retainLocalFilter.setRetainFilter(filterConditions.getRetainLocal());
 		
 		retainRemoteFilter.setRetainFilter(filterConditions.getRetainRemote());
-		remoteFilter=originalFilterConditions.getRetainRemote();
 	}
 	
 	public boolean ifSetLocalFilter(){

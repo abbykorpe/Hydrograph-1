@@ -54,6 +54,7 @@ public class ActionFactory {
 		SelectColumnAction selectColumnAction= new SelectColumnAction(debugDataViewer);
 		AutoExpandColumns autoExpandColumns = new AutoExpandColumns(debugDataViewer);
 		ClearFilter clearFilter= new ClearFilter(debugDataViewer);
+
 		
 		actionMap.put(ExportAction.class.getName(), exportAction);
 		actionMap.put(FilterAction.class.getName(), filterAction);
