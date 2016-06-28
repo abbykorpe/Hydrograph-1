@@ -54,6 +54,8 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 37.#628  [Shrirang kumbhar] Debug Data viewer window does not appear in task bar 
 38.#636  [Shrirang kumbhar] Debug Service: Exception handling and error reporting if unable to create debug files
 39.#481  [Ashika Holkar ] Parameter Grid Window: Add/Delete/Up/Down/Save buttons are not in sync with the other button of application
+40.#172  [Nitin Gupta] Join Component icon and lookup icon size is getting enlarged if user import any xml file
+41.#164  [Nitin Gupta]  User should be able to delete multiple rows by selecting rows with control keys in schema grid
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
