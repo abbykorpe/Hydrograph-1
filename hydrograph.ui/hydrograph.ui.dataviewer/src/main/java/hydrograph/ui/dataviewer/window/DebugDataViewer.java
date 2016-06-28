@@ -1373,11 +1373,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		windowMenu.setVisible(true);
 
 		windowMenu.add(actionFactory.getAction(DatasetInformationAction.class.getName()));
-<<<<<<< HEAD
 		windowMenu.add(actionFactory.getAction(AutoExpandColumns.class.getName()));
-=======
-		
->>>>>>> Retain Filter condition
 	}
 	
 
@@ -1484,16 +1480,13 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		addtoolbarAction(toolBarManager,(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.TABLE_ICON),
 				actionFactory.getAction(SelectColumnAction.class.getName()));
-<<<<<<< HEAD
+
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.FIND_DATA), 
 				actionFactory.getAction(FindAction.class.getName()));
 		
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.AUTO_ADJUST_COLUMNS), 
 				actionFactory.getAction(AutoExpandColumns.class.getName()));
 		
-=======
-
->>>>>>> Retain Filter condition
 		dropDownAction = new Action("", SWT.DROP_DOWN) {
 			@Override
 			public void run() {
@@ -1636,13 +1629,10 @@ public class DebugDataViewer extends ApplicationWindow {
 		this.dataViewerMap = dataViewerMap;
 	}
 	
-<<<<<<< HEAD
 	public CTabFolder getCurrentView(){
 		return tabFolder;
 	}
 
-=======
->>>>>>> Retain Filter condition
 	public void setConditions(FilterConditions conditons) {
 		this.conditions=conditons;
 	}

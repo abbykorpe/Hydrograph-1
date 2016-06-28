@@ -38,6 +38,8 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.fieldassist.AutoCompleteField;
+import org.eclipse.jface.fieldassist.ComboContentAdapter;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -79,20 +81,6 @@ public class FilterHelper {
 	private FilterHelper() {
 	}
 	
-	public  Listener getTextBoxListener(final List<Condition> conditionsList) {
-		Listener listener = new Listener() {
-			
-			@Override
-			public void handleEvent(Event event) {
-				Text text = (Text)event.widget;
-				int index = (int) text.getData(FilterConditionsDialog.ROW_INDEX);
-				Condition filterConditions = conditionsList.get(index);
-				filterConditions.setValue(text.getText());
-			}
-		};
-		return listener;
-	}
-	
 	public Map<String, String[]> getTypeBasedOperatorMap(){
 		Map<String, String[]> typeBasedConditionalOperators = new HashMap<String, String[]>();
 		typeBasedConditionalOperators.put("java.lang.String", new String[]{"LIKE","IN ","NOT IN"}); 
@@ -103,11 +91,41 @@ public class FilterHelper {
 		typeBasedConditionalOperators.put("java.math.Short", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
 		typeBasedConditionalOperators.put("java.math.Float", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
 		typeBasedConditionalOperators.put("java.math.Double", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
+		typeBasedConditionalOperators.put("java.lang.Boolean", new String[]{"<>", "=", "LIKE", "IN", "NOT IN"});
 		return typeBasedConditionalOperators;
 	}
 	
+	public  Listener getTextBoxListener(final List<Condition> conditionsList, 
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
+		Listener listener = new Listener() {
+			
+			@Override
+			public void handleEvent(Event event) {
+				Text text = (Text)event.widget;
+				int index = (int) text.getData(FilterConditionsDialog.ROW_INDEX);
+				Condition filterConditions = conditionsList.get(index);
+				filterConditions.setValue(text.getText());
+				toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+				validateText(text);
+			}
+		};
+		return listener;
+	}
+	
+	private void toggleOkApplyButton(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
+			final String[] fieldNames, final Button okButton, final Button applyButton) {
+		if(FilterValidator.INSTANCE.isAllFilterConditionsValid(conditionsList, fieldsAndTypes, fieldNames)){
+			okButton.setEnabled(true);
+			applyButton.setEnabled(true);
+		}
+		else{
+			okButton.setEnabled(false);
+			applyButton.setEnabled(false);
+		}
+	}
+	
 	public SelectionListener getFieldNameSelectionListener(final TableViewer tableViewer, final List<Condition> conditionsList,
-			final Map<String, String> fieldsAndTypes, final Map<String,String[]> typeBasedConditionalOperators) {
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
@@ -122,10 +140,60 @@ public class FilterHelper {
 					String fieldType = fieldsAndTypes.get(fieldName);
 					TableItem item = tableViewer.getTable().getItem(index);
 					Combo conditionalCombo = (Combo) item.getData(FilterConditionsDialog.CONDITIONAL_OPERATORS);
-					conditionalCombo.setItems(typeBasedConditionalOperators.get(fieldType));
-					//validateCombo(conditionalCombo);
+					conditionalCombo.setItems(FilterHelper.INSTANCE.getTypeBasedOperatorMap().get(fieldType));
+					new AutoCompleteField(conditionalCombo, new ComboContentAdapter(), conditionalCombo.getItems());
 				}
 				validateCombo(source);
+				toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		};
+		return listener;
+	}
+	
+	public ModifyListener getFieldNameModifyListener(final TableViewer tableViewer, final List<Condition> conditionsList,
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
+		ModifyListener listener = new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				Combo source = (Combo) e.getSource();
+				int index = (int) source.getData(FilterConditionsDialog.ROW_INDEX);
+				Condition filterConditions = conditionsList.get(index);
+				String fieldName = source.getText();
+				filterConditions.setFieldName(fieldName);
+				
+				if(StringUtils.isNotBlank(fieldName)){
+					String fieldType = fieldsAndTypes.get(fieldName);
+					TableItem item = tableViewer.getTable().getItem(index);
+					Combo conditionalCombo = (Combo) item.getData(FilterConditionsDialog.CONDITIONAL_OPERATORS);
+					if(conditionalCombo != null && StringUtils.isNotBlank(fieldType)){
+						conditionalCombo.setText(filterConditions.getFieldName());
+						conditionalCombo.setItems(FilterHelper.INSTANCE.getTypeBasedOperatorMap().get(fieldType));
+						new AutoCompleteField(conditionalCombo, new ComboContentAdapter(), conditionalCombo.getItems());
+					}
+				}
+				validateCombo(source);
+				toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+			}
+		};
+		return listener;
+	}
+	
+/*	private void processFieldName(TableViewer tableViewer, Combo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes, String[] fieldNames, Button okButton, Button applyButton){
+	
+	}*/
+	
+	public SelectionListener getConditionalOperatorSelectionListener(final List<Condition> conditionsList, 
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
+		SelectionListener listener = new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Combo source = (Combo) e.getSource();
+				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 			
 			@Override
@@ -134,16 +202,36 @@ public class FilterHelper {
 		return listener;
 	}
 	
-	public SelectionListener getConditionalOperatorSelectionListener(final List<Condition> conditionsList) {
+	public ModifyListener getConditionalOperatorModifyListener(final List<Condition> conditionsList, 
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
+		ModifyListener listener = new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				Combo source = (Combo) e.getSource();
+				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+			}
+		};
+		return listener;
+	}
+	
+	private void processConditionalOperator(Combo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes,
+			String[] fieldNames, Button okButton, Button applyButton){
+		int index = (int) source.getData(FilterConditionsDialog.ROW_INDEX);
+		Condition filterConditions = conditionsList.get(index);
+		filterConditions.setConditionalOperator(source.getText());
+		validateCombo(source);
+		toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+	}
+	
+	public SelectionListener getRelationalOpSelectionListener(final List<Condition> conditionsList,  
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Combo source = (Combo) e.getSource();
-				int index = (int) source.getData(FilterConditionsDialog.ROW_INDEX);
-				Condition filterConditions = conditionsList.get(index);
-				filterConditions.setConditionalOperator(source.getText());
-				validateCombo(source);
+				processRelationalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 			
 			@Override
@@ -152,22 +240,29 @@ public class FilterHelper {
 		return listener;
 	}
 	
-	public SelectionListener getRelationalOpSelectionListener(final List<Condition> conditionsList) {
-		SelectionListener listener = new SelectionListener() {
+	public ModifyListener getRelationalOpModifyListener(final List<Condition> conditionsList,  
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
+		ModifyListener listener = new ModifyListener() {
 			
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void modifyText(ModifyEvent e) {
 				Combo source = (Combo) e.getSource();
-				int index = (int) source.getData(FilterConditionsDialog.ROW_INDEX);
-				Condition filterConditions = conditionsList.get(index);
-				filterConditions.setRelationalOperator(source.getText());
-				validateCombo(source);
+				processRelationalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {}
 		};
 		return listener;
+	}
+	
+	private void processRelationalOperator(Combo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes,
+			String[] fieldNames, Button okButton, Button applyButton){
+		int index = (int) source.getData(FilterConditionsDialog.ROW_INDEX);
+		Condition filterConditions = conditionsList.get(index);
+		filterConditions.setRelationalOperator(source.getText());
+		if(index != 0){
+			validateCombo(source);
+		}
+		toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 	}
 	
 	public SelectionListener addButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList) {
@@ -180,23 +275,6 @@ public class FilterHelper {
 				conditionsList.add(index, new Condition());
 				tableViewer.refresh();
 			}
-			
-		/*	private void updateIndexes(TableItem tabItem, int index) {
-				Button addButton = (Button) tabItem.getData(ADD);
-				addButton.setData(ROW_INDEX, index);
-				Button removeButton = (Button) tabItem.getData(REMOVE);
-				removeButton.setData(ROW_INDEX, index);
-				
-				Combo conditionalCombo = (Combo) tabItem.getData(CONDITIONAL_OPERATORS);
-				conditionalCombo.setData(ROW_INDEX, index);
-				Combo fieldNamesCombo = (Combo) tabItem.getData(FIELD_NAMES);
-				fieldNamesCombo.setData(ROW_INDEX, index);
-				Combo relationalOperatorsCombo = (Combo) tabItem.getData(RELATIONAL_OPERATORS);
-				relationalOperatorsCombo.setData(ROW_INDEX, index);
-				
-				Text text = (Text)tabItem.getData(VALUE_TEXT_BOX);
-				text.setData(ROW_INDEX, index);
-			}*/
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {}
@@ -217,23 +295,6 @@ public class FilterHelper {
 				}
 				tableViewer.refresh();
 			}
-			
-			/*private void updateIndexes(TableItem tabItem, int index) {
-				Button addButton = (Button) tabItem.getData(ADD);
-				addButton.setData(ROW_INDEX, index);
-				Button removeButton = (Button) tabItem.getData(REMOVE);
-				removeButton.setData(ROW_INDEX, index);
-				
-				Combo conditionalCombo = (Combo) tabItem.getData(CONDITIONAL_OPERATORS);
-				conditionalCombo.setData(ROW_INDEX, index);
-				Combo fieldNamesCombo = (Combo) tabItem.getData(FIELD_NAMES);
-				fieldNamesCombo.setData(ROW_INDEX, index);
-				Combo relationalOperatorsCombo = (Combo) tabItem.getData(RELATIONAL_OPERATORS);
-				relationalOperatorsCombo.setData(ROW_INDEX, index);
-				
-				Text text = (Text)tabItem.getData(VALUE_TEXT_BOX);
-				text.setData(ROW_INDEX, index);
-			}*/
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {}
@@ -483,43 +544,6 @@ public class FilterHelper {
 		}
 	}
 
-	public ModifyListener getTextModifyListener() {
-		return new ModifyListener() {
-			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				Text text = (Text)e.widget;
-				validateText(text);
-			}
-		};
-	}
-	
-	public ModifyListener getComboModifyListener() {
-		return new ModifyListener() {
-			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				Combo combo = (Combo)e.widget;
-				validateCombo(combo);
-			}
-		};
-	}
-
-	public SelectionListener getComboSelectionListener() {
-		return new SelectionListener() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Combo combo = (Combo)e.widget;
-				validateCombo(combo);
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		};
-	}
-	
 	private boolean validateCombo(Combo combo){
 		if((Arrays.asList(combo.getItems())).contains(combo.getText())){
 			combo.setBackground(new Color(null, 255, 255, 255));
