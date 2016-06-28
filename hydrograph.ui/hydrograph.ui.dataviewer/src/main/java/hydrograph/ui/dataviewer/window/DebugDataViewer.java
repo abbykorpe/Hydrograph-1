@@ -13,6 +13,7 @@
 
 package hydrograph.ui.dataviewer.window;
 
+
 import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
@@ -22,6 +23,7 @@ import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.actions.ActionFactory;
 import hydrograph.ui.dataviewer.actions.AutoExpandColumns;
+import hydrograph.ui.dataviewer.actions.ClearFilter;
 import hydrograph.ui.dataviewer.actions.CopyAction;
 import hydrograph.ui.dataviewer.actions.DatasetInformationAction;
 import hydrograph.ui.dataviewer.actions.ExportAction;
@@ -48,6 +50,7 @@ import hydrograph.ui.dataviewer.constants.Views;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
+import hydrograph.ui.dataviewer.filter.FilterConditions;
 import hydrograph.ui.dataviewer.listeners.DataViewerListeners;
 import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
 import hydrograph.ui.dataviewer.support.SortDataType;
@@ -125,20 +128,20 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
-
 /**
  * 
  * Data viewer window
  * 
  * @author Bitwise
- *
+ * 
  */
 public class DebugDataViewer extends ApplicationWindow {
 
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(DebugDataViewer.class);
+	private static final Logger logger = LogFactory.INSTANCE
+			.getLogger(DebugDataViewer.class);
 
 	private CTabFolder tabFolder;
-
+	private FilterConditions conditions;
 	private StyledText unformattedViewTextarea;
 	private StyledText formattedViewTextarea;
 	private TableViewer horizontalViewTableViewer;
@@ -176,11 +179,11 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private Action dropDownAction;
 	private String dataViewerWindowName;
-	
+
 	private Fields dataViewerFileSchema;
-	
+
 	private Map<String, DebugDataViewer> dataViewerMap;
-	
+
 	private SortOrder sortOrder;
 		
 	private TableCursor tableCursor;
@@ -215,21 +218,23 @@ public class DebugDataViewer extends ApplicationWindow {
 		formattedViewData = new LinkedList<>();
 	}
 
-	public DebugDataViewer( JobDetails jobDetails, String dataViewerWindowName) {
+	public DebugDataViewer(JobDetails jobDetails, String dataViewerWindowName) {
 		super(null);
 		createActions();
 		addCoolBar(SWT.FLAT);
 		addMenuBar();
-		addStatusLine();	
+		addStatusLine();
 		this.jobDetails = jobDetails;
 		this.dataViewerWindowName = dataViewerWindowName;
 		windowControls = new LinkedHashMap<>();
 		gridViewData = new LinkedList<>();
 		formattedViewData = new LinkedList<>();
-		sortOrder=SortOrder.ASC;
-		
-		ascending=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
-		descending=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
+		sortOrder = SortOrder.ASC;
+
+		ascending = new org.eclipse.swt.graphics.Image(Display.getDefault(),
+				XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
+		descending = new org.eclipse.swt.graphics.Image(Display.getDefault(),
+				XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
 	}
 
 	/**
@@ -285,21 +290,24 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private void downloadDebugFiles() {
 		Job job = new Job(Messages.LOADING_DEBUG_FILE) {
-			private String SCHEMA_FILE_EXTENTION=".xml";
+			private String SCHEMA_FILE_EXTENTION = ".xml";
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				disbleDataViewerUIControls();
 
-				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(jobDetails);
-				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles();
+				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(
+						jobDetails);
+				final StatusMessage statusMessage = dataViewerFileManager
+						.downloadDataViewerFiles();
 
 				if (StatusConstants.ERROR == statusMessage.getReturnCode()) {
 					Display.getDefault().asyncExec(new Runnable() {
-						
+
 						@Override
 						public void run() {
-							Utils.INSTANCE.showMessage(MessageBoxText.ERROR, statusMessage.getStatusMessage());
+							Utils.INSTANCE.showMessage(MessageBoxText.ERROR,
+									statusMessage.getStatusMessage());
 							getShell().close();
 						}
 					});
@@ -307,34 +315,34 @@ public class DebugDataViewer extends ApplicationWindow {
 				}
 
 				debugFileName = dataViewerFileManager.getDataViewerFileName();
-				debugFileLocation = dataViewerFileManager.getDataViewerFilePath();
+				debugFileLocation = dataViewerFileManager
+						.getDataViewerFilePath();
 				setDebugFileLocation(debugFileLocation);
 				setDebugFileName(debugFileName);
 
 				showDataInDebugViewer(false);
 
-				dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + debugFileName + SCHEMA_FILE_EXTENTION);
-				
+				dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE
+						.getFieldsFromSchema(debugFileLocation + debugFileName
+								+ SCHEMA_FILE_EXTENTION);
+
 				return Status.OK_STATUS;
 			}
 		};
 		job.schedule();
 	}
-	
+
 	public String getDebugFileLocation() {
 		return debugFileLocation;
 	}
-
 
 	public void setDebugFileLocation(String debugFileLocation) {
 		this.debugFileLocation = debugFileLocation;
 	}
 
-
 	public String getDebugFileName() {
 		return debugFileName;
 	}
-
 
 	public void setDebugFileName(String debugFileName) {
 		this.debugFileName = debugFileName;
@@ -344,8 +352,10 @@ public class DebugDataViewer extends ApplicationWindow {
 	public void loadDebugFileInDataViewer(boolean filterApplied) {
 		statusManager.getStatusLineManager().getProgressMonitor().done();
 
-		dataViewLoader = new DataViewLoader(unformattedViewTextarea, formattedViewTextarea, horizontalViewTableViewer,
-				gridViewTableViewer, gridViewData, formattedViewData, unformattedViewData, dataViewerAdapter, tabFolder);
+		dataViewLoader = new DataViewLoader(unformattedViewTextarea,
+				formattedViewTextarea, horizontalViewTableViewer,
+				gridViewTableViewer, gridViewData, formattedViewData,
+				unformattedViewData, dataViewerAdapter, tabFolder);
 
 		dataViewerListeners.setDataViewerAdpater(dataViewerAdapter);
 		dataViewerListeners.setDataViewLoader(dataViewLoader);
@@ -372,9 +382,12 @@ public class DebugDataViewer extends ApplicationWindow {
 				try {
 					initializeDataFileAdapter();
 				} catch (ClassNotFoundException | SQLException e) {
-					Utils.INSTANCE.showMessage(MessageBoxText.ERROR,
-							Messages.UNABLE_TO_LOAD_DEBUG_FILE + e.getMessage());
-					logger.error("Unable to load debug file", e);					
+					Utils.INSTANCE
+							.showMessage(
+									MessageBoxText.ERROR,
+									Messages.UNABLE_TO_LOAD_DEBUG_FILE
+											+ e.getMessage());
+					logger.error("Unable to load debug file", e);
 
 					if (dataViewerAdapter != null) {
 						dataViewerAdapter.closeConnection();
@@ -387,16 +400,20 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 	public void disbleDataViewerUIControls() {
-		Display.getDefault().asyncExec(new Runnable() {					
+		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				statusManager.enablePaginationPanel(false);
 				actionFactory.enableAllActions(false);
-				statusManager.getStatusLineManager().getProgressMonitor().beginTask(Messages.LOADING_DEBUG_FILE, IProgressMonitor.UNKNOWN);
+				statusManager
+						.getStatusLineManager()
+						.getProgressMonitor()
+						.beginTask(Messages.LOADING_DEBUG_FILE,
+								IProgressMonitor.UNKNOWN);
 			}
 		});
 	}
-	
+
 	/**
 	 * Get Action factory
 	 * 
@@ -405,7 +422,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	public ActionFactory getActionFactory() {
 		return actionFactory;
 	}
-	
+
 	/**
 	 * 
 	 * Get reload information to reload debug file
@@ -479,25 +496,28 @@ public class DebugDataViewer extends ApplicationWindow {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		tabFolder = new CTabFolder(container, SWT.BORDER);
-		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
+				1));
 		tabFolder.setSelectionBackground(new Color(null, 14, 76, 145));
-		tabFolder.setBackground(SWTResourceManager.getColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
-		tabFolder.setSelectionForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+		tabFolder.setBackground(SWTResourceManager
+				.getColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
+		tabFolder.setSelectionForeground(Display.getCurrent().getSystemColor(
+				SWT.COLOR_WHITE));
 
 		createGridViewTabItem();
-		
-		dataViewerListeners = new DataViewerListeners();		
+
+		dataViewerListeners = new DataViewerListeners();
 		dataViewerListeners.setWindowControls(windowControls);
 		dataViewerListeners.addTabFolderSelectionChangeListener(tabFolder);
 		dataViewerListeners.setStatusManager(statusManager);
 		dataViewerListeners.setDebugDataViewer(this);
-		
+
 		statusManager.setWindowControls(windowControls);
 		createPaginationPanel(container);
-		
+
 		tabFolder.setSelection(0);
 		downloadDebugFiles();
-		
+
 		return container;
 	}
 
@@ -511,9 +531,11 @@ public class DebugDataViewer extends ApplicationWindow {
 		return statusManager;
 	}
 
-	private void initializeDataFileAdapter() throws ClassNotFoundException, SQLException {
-		dataViewerAdapter = new DataViewerAdapter(debugFileLocation, debugFileName,
-				Utils.INSTANCE.getDefaultPageSize(), PreferenceConstants.INITIAL_OFFSET, this);
+	private void initializeDataFileAdapter() throws ClassNotFoundException,
+			SQLException {
+		dataViewerAdapter = new DataViewerAdapter(debugFileLocation,
+				debugFileName, Utils.INSTANCE.getDefaultPageSize(),
+				PreferenceConstants.INITIAL_OFFSET, this);
 	}
 	
 
@@ -524,7 +546,8 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private void createPaginationPanel(Composite container) {
 		Composite composite_2 = new Composite(container, SWT.NONE);
-		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+				false, 1, 1));
 		GridLayout gl_composite_2 = new GridLayout(2, false);
 		gl_composite_2.verticalSpacing = 0;
 		gl_composite_2.marginWidth = 0;
@@ -538,7 +561,8 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private void createPageJumpPanel(Composite composite_2) {
 		Composite composite_3 = new Composite(composite_2, SWT.NONE);
-		composite_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+		composite_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true,
+				false, 1, 1));
 		composite_3.setLayout(new GridLayout(3, false));
 
 		createJumpPageLabel(composite_3);
@@ -558,12 +582,14 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private void createJumpPageTextBox(Composite composite_3) {
 		Text jumpPageTextBox = new Text(composite_3, SWT.BORDER);
-		jumpPageTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		jumpPageTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
 		jumpPageTextBox.addVerifyListener(new VerifyListener() {
 			@Override
 			public void verifyText(VerifyEvent e) {
 				String currentText = ((Text) e.widget).getText();
-				String pageNumberText = currentText.substring(0, e.start) + e.text + currentText.substring(e.end);
+				String pageNumberText = currentText.substring(0, e.start)
+						+ e.text + currentText.substring(e.end);
 				try {
 					long pageNumber = Long.valueOf(pageNumberText);
 					if (pageNumber < 1) {
@@ -583,7 +609,8 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private void createJumpPageLabel(Composite composite_3) {
 		Label label = new Label(composite_3, SWT.NONE);
-		label.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		label.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false,
+				1, 1));
 		label.setText(ControlConstants.JUMP_TO_PAGE_LABEL_TEXT);
 	}
 
@@ -605,38 +632,49 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 	private void createPageNumberDisplay(Composite composite_3) {
-		Text pageNumberDisplayTextBox = new Text(composite_3, SWT.BORDER | SWT.CENTER);
+		Text pageNumberDisplayTextBox = new Text(composite_3, SWT.BORDER
+				| SWT.CENTER);
 		pageNumberDisplayTextBox.setEnabled(false);
 		pageNumberDisplayTextBox.setEditable(false);
 		GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_text.widthHint = 178;
 		pageNumberDisplayTextBox.setLayoutData(gd_text);
 
-		windowControls.put(ControlConstants.PAGE_NUMBER_DISPLAY, pageNumberDisplayTextBox);
+		windowControls.put(ControlConstants.PAGE_NUMBER_DISPLAY,
+				pageNumberDisplayTextBox);
 	}
 
 	public void submitRecordCountJob() {
 		Job job = new Job(Messages.FETCHING_TOTAL_NUMBER_OF_RECORDS) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				
+
 				Display.getDefault().asyncExec(new Runnable() {
-					
+
 					@Override
 					public void run() {
-						statusManager.getStatusLineManager().getProgressMonitor().beginTask(Messages.FETCHING_TOTAL_NUMBER_OF_RECORDS, IProgressMonitor.UNKNOWN);
+						statusManager
+								.getStatusLineManager()
+								.getProgressMonitor()
+								.beginTask(
+										Messages.FETCHING_TOTAL_NUMBER_OF_RECORDS,
+										IProgressMonitor.UNKNOWN);
 					}
 				});
-				
+
 				final StatusMessage status = dataViewerAdapter.fetchRowCount();
 
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
-						statusManager.getStatusLineManager().getProgressMonitor().done();
+						statusManager.getStatusLineManager()
+								.getProgressMonitor().done();
 						statusManager.setStatus(status);
 						statusManager.enableJumpPagePanel(true);
-						actionFactory.getAction(ResetSort.class.getName()).setEnabled(false);
+						actionFactory.getAction(ResetSort.class.getName())
+								.setEnabled(false);
+						actionFactory.getAction(ClearFilter.class.getName())
+								.setEnabled(false);
 					}
 				});
 				return Status.OK_STATUS;
@@ -667,16 +705,18 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 
 		CTabItem tbtmUnformattedView = new CTabItem(tabFolder, SWT.CLOSE);
-		tbtmUnformattedView.setData(Views.VIEW_NAME_KEY, Views.UNFORMATTED_VIEW_NAME);
+		tbtmUnformattedView.setData(Views.VIEW_NAME_KEY,
+				Views.UNFORMATTED_VIEW_NAME);
 		tbtmUnformattedView.setText(Views.UNFORMATTED_VIEW_DISPLAY_NAME);
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
 			tbtmUnformattedView.setControl(composite);
 			composite.setLayout(new GridLayout(1, false));
 			{
-				unformattedViewTextarea = new StyledText(composite, SWT.BORDER | SWT.READ_ONLY | SWT.V_SCROLL
-						| SWT.H_SCROLL);
-				unformattedViewTextarea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+				unformattedViewTextarea = new StyledText(composite, SWT.BORDER
+						| SWT.READ_ONLY | SWT.V_SCROLL | SWT.H_SCROLL);
+				unformattedViewTextarea.setLayoutData(new GridData(SWT.FILL,
+						SWT.FILL, true, true, 1, 1));
 			}
 		}
 
@@ -699,18 +739,21 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 
 		CTabItem tbtmFormattedView = new CTabItem(tabFolder, SWT.CLOSE);
-		tbtmFormattedView.setData(Views.VIEW_NAME_KEY, Views.FORMATTED_VIEW_NAME);
+		tbtmFormattedView.setData(Views.VIEW_NAME_KEY,
+				Views.FORMATTED_VIEW_NAME);
 		tbtmFormattedView.setText(Views.FORMATTED_VIEW_DISPLAYE_NAME);
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
 			tbtmFormattedView.setControl(composite);
 			composite.setLayout(new GridLayout(1, false));
 			{
-				formattedViewTextarea = new StyledText(composite, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL
-						| SWT.V_SCROLL);
-				formattedViewTextarea.setFont(SWTResourceManager.getFont("Courier New", 9, SWT.NORMAL));
+				formattedViewTextarea = new StyledText(composite, SWT.BORDER
+						| SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL);
+				formattedViewTextarea.setFont(SWTResourceManager.getFont(
+						"Courier New", 9, SWT.NORMAL));
 				formattedViewTextarea.setEditable(false);
-				formattedViewTextarea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+				formattedViewTextarea.setLayoutData(new GridData(SWT.FILL,
+						SWT.FILL, true, true, 1, 1));
 			}
 		}
 		tabFolder.setSelection(tbtmFormattedView);
@@ -720,25 +763,29 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private void createHorizantalViewTabItem() {
 		CTabItem tbtmHorizantalView = new CTabItem(tabFolder, SWT.CLOSE);
-		tbtmHorizantalView.setData(Views.VIEW_NAME_KEY, Views.HORIZONTAL_VIEW_NAME);
+		tbtmHorizantalView.setData(Views.VIEW_NAME_KEY,
+				Views.HORIZONTAL_VIEW_NAME);
 		tbtmHorizantalView.setText(Views.HORIZONTAL_VIEW_DISPLAY_NAME);
 		{
 			Composite composite = new Composite(tabFolder, SWT.NONE);
 			tbtmHorizantalView.setControl(composite);
 			composite.setLayout(new GridLayout(1, false));
 			{
-				ScrolledComposite scrolledComposite = new ScrolledComposite(composite, SWT.BORDER | SWT.H_SCROLL
-						| SWT.V_SCROLL);
-				scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+				ScrolledComposite scrolledComposite = new ScrolledComposite(
+						composite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+				scrolledComposite.setLayoutData(new GridData(SWT.FILL,
+						SWT.FILL, true, true, 1, 1));
 				scrolledComposite.setExpandHorizontal(true);
 				scrolledComposite.setExpandVertical(true);
 
-				Composite stackLayoutComposite = new Composite(scrolledComposite, SWT.NONE);
+				Composite stackLayoutComposite = new Composite(
+						scrolledComposite, SWT.NONE);
 				StackLayout stackLayout = new StackLayout();
 				stackLayoutComposite.setLayout(stackLayout);
 
 				{
-					Composite composite_4 = new Composite(stackLayoutComposite, SWT.NONE);
+					Composite composite_4 = new Composite(stackLayoutComposite,
+							SWT.NONE);
 					GridLayout gl_composite_4 = new GridLayout(1, false);
 					gl_composite_4.verticalSpacing = 0;
 					gl_composite_4.marginWidth = 0;
@@ -746,10 +793,12 @@ public class DebugDataViewer extends ApplicationWindow {
 					gl_composite_4.horizontalSpacing = 0;
 					composite_4.setLayout(gl_composite_4);
 					{
-						horizontalViewTableViewer = new TableViewer(composite_4, SWT.BORDER | SWT.FULL_SELECTION);
+						horizontalViewTableViewer = new TableViewer(
+								composite_4, SWT.BORDER | SWT.FULL_SELECTION);
 						Table table_1 = horizontalViewTableViewer.getTable();
 						table_1.setLinesVisible(true);
-						table_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+						table_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
+								true, true, 1, 1));
 					}
 					stackLayout.topControl = composite_4;
 				}
@@ -758,18 +807,21 @@ public class DebugDataViewer extends ApplicationWindow {
 				scrolledComposite.setShowFocusedControl(true);
 
 				scrolledComposite.setContent(stackLayoutComposite);
-				scrolledComposite.setMinSize(stackLayoutComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+				scrolledComposite.setMinSize(stackLayoutComposite.computeSize(
+						SWT.DEFAULT, SWT.DEFAULT));
 
 				installMouseWheelScrollRecursively(scrolledComposite);
 
 				setTableLayoutToMappingTable(horizontalViewTableViewer);
-				horizontalViewTableViewer.setContentProvider(new ArrayContentProvider());
+				horizontalViewTableViewer
+						.setContentProvider(new ArrayContentProvider());
 
 				dataViewLoader.updateDataViewLists();
 				horizontalViewTableViewer.setInput(gridViewData);
 				horizontalViewTableViewer.refresh();
 
-				for (int i = 0, n = horizontalViewTableViewer.getTable().getColumnCount(); i < n; i++)
+				for (int i = 0, n = horizontalViewTableViewer.getTable()
+						.getColumnCount(); i < n; i++)
 					horizontalViewTableViewer.getTable().getColumn(i).pack();
 
 				horizontalViewTableViewer.refresh();
@@ -779,7 +831,8 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private boolean isViewTabExist(String viewName) {
 		for (int index = 0; index < tabFolder.getItemCount(); index++) {
-			if (viewName.equals(tabFolder.getItem(index).getData(Views.VIEW_NAME_KEY))) {
+			if (viewName.equals(tabFolder.getItem(index).getData(
+					Views.VIEW_NAME_KEY))) {
 				return true;
 			}
 		}
@@ -788,7 +841,8 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private CTabItem getViewTabItem(String viewName) {
 		for (int index = 0; index < tabFolder.getItemCount(); index++) {
-			if (viewName.equals(tabFolder.getItem(index).getData(Views.VIEW_NAME_KEY))) {
+			if (viewName.equals(tabFolder.getItem(index).getData(
+					Views.VIEW_NAME_KEY))) {
 				return tabFolder.getItem(index);
 			}
 		}
@@ -816,28 +870,33 @@ public class DebugDataViewer extends ApplicationWindow {
 
 			composite.setLayout(new GridLayout(1, false));
 			{
-				ScrolledComposite scrolledComposite = new ScrolledComposite(composite, SWT.BORDER | SWT.H_SCROLL
-						| SWT.V_SCROLL);
-				scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+				ScrolledComposite scrolledComposite = new ScrolledComposite(
+						composite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+				scrolledComposite.setLayoutData(new GridData(SWT.FILL,
+						SWT.FILL, true, true, 1, 1));
 				scrolledComposite.setExpandHorizontal(true);
 				scrolledComposite.setExpandVertical(true);
 
-				Composite stackLayoutComposite = new Composite(scrolledComposite, SWT.NONE);
+				Composite stackLayoutComposite = new Composite(
+						scrolledComposite, SWT.NONE);
 				StackLayout stackLayout = new StackLayout();
 				stackLayoutComposite.setLayout(stackLayout);
 				{
-					Composite composite_1 = new Composite(stackLayoutComposite, SWT.NONE);
+					Composite composite_1 = new Composite(stackLayoutComposite,
+							SWT.NONE);
 					GridLayout gl_composite_1 = new GridLayout(1, false);
 					gl_composite_1.verticalSpacing = 0;
 					gl_composite_1.marginWidth = 0;
 					gl_composite_1.marginHeight = 0;
 					gl_composite_1.horizontalSpacing = 0;
 					composite_1.setLayout(gl_composite_1);
-					composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+					composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
+							true, true, 1, 1));
 					{
 						gridViewTableViewer = new TableViewer(composite_1, SWT.BORDER| SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
 						Table table = gridViewTableViewer.getTable();
-						table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+						table.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
+								true, true, 1, 1));
 						table.setLinesVisible(true);
 						table.setHeaderVisible(true);
 												
@@ -885,6 +944,8 @@ public class DebugDataViewer extends ApplicationWindow {
 				scrolledComposite.setMinSize(stackLayoutComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 				
 				attachCellNavigator();
+
+				// updateGridViewTable();
 			}
 		}
 
@@ -1167,7 +1228,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		gridViewTableViewer.refresh();
 	}
 
-	private TableColumnLayout setTableLayoutToMappingTable(TableViewer tableViewer) {
+	private TableColumnLayout setTableLayoutToMappingTable(
+			TableViewer tableViewer) {
 		TableColumnLayout layout = new TableColumnLayout();
 		tableViewer.getControl().getParent().setLayout(layout);
 
@@ -1176,7 +1238,8 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 	private void createGridViewTableIndexColumn(final TableViewer tableViewer) {
-		final TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		final TableViewerColumn tableViewerColumn = new TableViewerColumn(
+				tableViewer, SWT.NONE);
 		TableColumn tblclmnItem = tableViewerColumn.getColumn();
 		tblclmnItem.setWidth(100);
 
@@ -1214,13 +1277,16 @@ public class DebugDataViewer extends ApplicationWindow {
 		int index = 0;
 		
 		for (String columnName : dataViewerAdapter.getColumnList()) {
-			final TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+			final TableViewerColumn tableViewerColumn = new TableViewerColumn(
+					tableViewer, SWT.NONE);
 			TableColumn tblclmnItem = tableViewerColumn.getColumn();
 			tblclmnItem.setWidth(100);
 			tblclmnItem.setText(columnName);
 			
 			tableViewerColumn.getColumn().setData(Views.COLUMN_ID_KEY,
 					(int) dataViewerAdapter.getAllColumnsMap().get(tableViewerColumn.getColumn().getText()));
+
+			tableViewerColumn.getColumn().setData(Views.COLUMN_ID_KEY, index);
 			tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 
 				@Override
@@ -1275,7 +1341,7 @@ public class DebugDataViewer extends ApplicationWindow {
 			index++;
 		}
 	}
-	
+
 	public TableColumn getRecentlySortedColumn() {
 		return recentlySortedColumn;
 	}
@@ -1294,16 +1360,17 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 		return null;
 	}
-	
-	private String getColumnToolTip(Field field){
+
+	private String getColumnToolTip(Field field) {
 		String tooltipText;
-		if(field.getType().value().equals(Date.class.getName())){
-			tooltipText = "Field Name: " + field.getName() + "\n" + 
-					  	  "Data type: " + field.getType().value().split("\\.")[2] + "\n" +
-					      "Format: " + field.getFormat() + "\n";
-		}else{
-			tooltipText = "Field Name: " + field.getName() + "\n" + 
-					  	  "Data type: " + field.getType().value().split("\\.")[2] + "\n";
+		if (field.getType().value().equals(Date.class.getName())) {
+			tooltipText = "Field Name: " + field.getName() + "\n"
+					+ "Data type: " + field.getType().value().split("\\.")[2]
+					+ "\n" + "Format: " + field.getFormat() + "\n";
+		} else {
+			tooltipText = "Field Name: " + field.getName() + "\n"
+					+ "Data type: " + field.getType().value().split("\\.")[2]
+					+ "\n";
 		}
 		return tooltipText;
 	}
@@ -1349,13 +1416,11 @@ public class DebugDataViewer extends ApplicationWindow {
 		if (actionFactory == null) {
 			actionFactory = new ActionFactory(this);
 		}
-		
+
 		fileMenu.add(actionFactory.getAction(ExportAction.class.getName()));
-		fileMenu.add(actionFactory.getAction(FilterAction.class.getName()));
+		// fileMenu.add(actionFactory.getAction(FilterAction.class.getName()));
 	}
 
-
-	
 	private void createWindowMenu(MenuManager menuManager) {
 		MenuManager windowMenu = createMenu(menuManager, MenuConstants.WINDOW);
 		menuManager.add(windowMenu);
@@ -1364,7 +1429,6 @@ public class DebugDataViewer extends ApplicationWindow {
 		windowMenu.add(actionFactory.getAction(DatasetInformationAction.class.getName()));
 		windowMenu.add(actionFactory.getAction(AutoExpandColumns.class.getName()));
 	}
-	
 
 	private void createEditMenu(MenuManager menuManager) {
 		MenuManager editMenu = createMenu(menuManager, MenuConstants.EDIT);
@@ -1374,7 +1438,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		if (actionFactory == null) {
 			actionFactory = new ActionFactory(this);
 		}
-		
+
 		editMenu.add(actionFactory.getAction(SelectAllAction.class.getName()));
 		editMenu.add(actionFactory.getAction(CopyAction.class.getName()));
 		editMenu.add(actionFactory.getAction(FindAction.class.getName()));
@@ -1389,17 +1453,18 @@ public class DebugDataViewer extends ApplicationWindow {
 		if (actionFactory == null) {
 			actionFactory = new ActionFactory(this);
 		}
-		
+
 		viewMenu.add(actionFactory.getAction(GridViewAction.class.getName()));
-		viewMenu.add(actionFactory.getAction(FormattedViewAction.class.getName()));
-		viewMenu.add(actionFactory.getAction(UnformattedViewAction.class.getName()));
+		viewMenu.add(actionFactory.getAction(FormattedViewAction.class
+				.getName()));
+		viewMenu.add(actionFactory.getAction(UnformattedViewAction.class
+				.getName()));
 		viewMenu.add(new Separator());
 		viewMenu.add(actionFactory.getAction(ReloadAction.class.getName()));
 		viewDataPreferences = getViewDataPreferencesFromPreferenceFile();
 		viewMenu.add(actionFactory.getAction(PreferencesAction.class.getName()));
 	}
 
-	
 	private void createDataMenu(MenuManager menuManager) {
 		MenuManager dataMenu = createMenu(menuManager, MenuConstants.Data);
 		menuManager.add(dataMenu);
@@ -1408,11 +1473,12 @@ public class DebugDataViewer extends ApplicationWindow {
 		if (actionFactory == null) {
 			actionFactory = new ActionFactory(this);
 		}
-		
+
 		dataMenu.add(actionFactory.getAction(ResetSort.class.getName()));
-	
+		dataMenu.add(actionFactory.getAction(FilterAction.class.getName()));
+		dataMenu.add(actionFactory.getAction(ClearFilter.class.getName()));
 	}
-	
+
 	/**
 	 * 
 	 * Get data viewer preferences from preference file
@@ -1421,19 +1487,27 @@ public class DebugDataViewer extends ApplicationWindow {
 	 */
 	public ViewDataPreferences getViewDataPreferencesFromPreferenceFile() {
 		boolean includeHeaderValue = false;
-		IEclipsePreferences eclipsePreferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+		IEclipsePreferences eclipsePreferences = InstanceScope.INSTANCE
+				.getNode(Activator.PLUGIN_ID);
 		String delimiter = eclipsePreferences.get(DELIMITER, DEFAULT);
-		String quoteCharactor = eclipsePreferences.get(QUOTE_CHARACTOR, DEFAULT);
+		String quoteCharactor = eclipsePreferences
+				.get(QUOTE_CHARACTOR, DEFAULT);
 		String includeHeader = eclipsePreferences.get(INCLUDE_HEADERS, DEFAULT);
 		String fileSize = eclipsePreferences.get(FILE_SIZE, DEFAULT);
 		String pageSize = eclipsePreferences.get(PAGE_SIZE, DEFAULT);
-		delimiter = delimiter.equalsIgnoreCase(DEFAULT) ? DEFAULT_DELIMITER : delimiter;
-		quoteCharactor = quoteCharactor.equalsIgnoreCase(DEFAULT) ? DEFAULT_QUOTE_CHARACTOR : quoteCharactor;
-		includeHeaderValue = includeHeader.equalsIgnoreCase(DEFAULT) ? true : false;
-		fileSize = fileSize.equalsIgnoreCase(DEFAULT) ? DEFAULT_FILE_SIZE : fileSize;
-		pageSize = pageSize.equalsIgnoreCase(DEFAULT) ? DEFAULT_PAGE_SIZE : pageSize;
-		ViewDataPreferences viewDataPreferences = new ViewDataPreferences(delimiter, quoteCharactor,
-				includeHeaderValue, Integer.parseInt(fileSize), Integer.parseInt(pageSize));
+		delimiter = delimiter.equalsIgnoreCase(DEFAULT) ? DEFAULT_DELIMITER
+				: delimiter;
+		quoteCharactor = quoteCharactor.equalsIgnoreCase(DEFAULT) ? DEFAULT_QUOTE_CHARACTOR
+				: quoteCharactor;
+		includeHeaderValue = includeHeader.equalsIgnoreCase(DEFAULT) ? true
+				: false;
+		fileSize = fileSize.equalsIgnoreCase(DEFAULT) ? DEFAULT_FILE_SIZE
+				: fileSize;
+		pageSize = pageSize.equalsIgnoreCase(DEFAULT) ? DEFAULT_PAGE_SIZE
+				: pageSize;
+		ViewDataPreferences viewDataPreferences = new ViewDataPreferences(
+				delimiter, quoteCharactor, includeHeaderValue,
+				Integer.parseInt(fileSize), Integer.parseInt(pageSize));
 		return viewDataPreferences;
 	}
 
@@ -1450,13 +1524,23 @@ public class DebugDataViewer extends ApplicationWindow {
 
 		ToolBarManager toolBarManager = new ToolBarManager();
 		coolBarManager.add(toolBarManager);
-		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_EXPORT),
+		addtoolbarAction(
+				toolBarManager,
+				(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_EXPORT),
 				actionFactory.getAction(ExportAction.class.getName()));
 
-		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_RELOAD),
+		/*
+		 * addtoolbarAction( toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH +
+		 * ImagePathConstant.DATA_VIEWER_FIND),
+		 * actionFactory.getAction(FindAction.class.getName()));
+		 */
+		addtoolbarAction(
+				toolBarManager,
+				(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_RELOAD),
 				actionFactory.getAction(ReloadAction.class.getName()));
 		/*
-		 * addtoolbarAction( toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_FILTER),
+		 * addtoolbarAction( toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH +
+		 * ImagePathConstant.DATA_VIEWER_FILTER),
 		 * actionFactory.getAction(FilterAction.class.getName()));
 		 */
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.RESET_SORT),
@@ -1481,17 +1565,20 @@ public class DebugDataViewer extends ApplicationWindow {
 
 			@Override
 			public ImageData getImageData() {
-				return new ImageData(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_SWITCH_VIEW);
+				return new ImageData(XMLConfigUtil.CONFIG_FILES_PATH
+						+ ImagePathConstant.DATA_VIEWER_SWITCH_VIEW);
 			}
 		});
 
-		dropDownAction.setMenuCreator(new ViewDataGridMenuCreator(actionFactory));
+		dropDownAction
+				.setMenuCreator(new ViewDataGridMenuCreator(actionFactory));
 		toolBarManager.add(dropDownAction);
 
 		return coolBarManager;
 	}
 
-	private void addtoolbarAction(ToolBarManager toolBarManager, final String imagePath, Action action) {
+	private void addtoolbarAction(ToolBarManager toolBarManager,
+			final String imagePath, Action action) {
 
 		ImageDescriptor exportImageDescriptor = new ImageDescriptor() {
 			@Override
@@ -1512,8 +1599,10 @@ public class DebugDataViewer extends ApplicationWindow {
 	@Override
 	protected StatusLineManager createStatusLineManager() {
 		StatusLineManager statusLineManager = new StatusLineManager();
-		statusLineManager.appendToGroup(StatusLineManager.END_GROUP, new Separator(StatusLineManager.END_GROUP));
-		statusLineManager.appendToGroup(StatusLineManager.END_GROUP, dropDownAction);
+		statusLineManager.appendToGroup(StatusLineManager.END_GROUP,
+				new Separator(StatusLineManager.END_GROUP));
+		statusLineManager.appendToGroup(StatusLineManager.END_GROUP,
+				dropDownAction);
 		statusManager = new StatusManager();
 		statusManager.setStatusLineManager(statusLineManager);
 
@@ -1539,32 +1628,36 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 	/**
-	 * make wheel scrolling available by installing a wheel listener on this scrollable's parent and hierarchy of
-	 * children
+	 * make wheel scrolling available by installing a wheel listener on this
+	 * scrollable's parent and hierarchy of children
 	 * 
 	 * @param scrollable
 	 *            the scrolledComposite to wheel-scroll
 	 */
-	private void installMouseWheelScrollRecursively(final ScrolledComposite scrollable) {
+	private void installMouseWheelScrollRecursively(
+			final ScrolledComposite scrollable) {
 		MouseWheelListener scroller = createMouseWheelScroller(scrollable);
-		if (scrollable.getParent() != null){
+		if (scrollable.getParent() != null) {
 			scrollable.getParent().addMouseWheelListener(scroller);
-		}			
+		}
 		installMouseWheelScrollRecursively(scroller, scrollable);
 	}
 
-	private MouseWheelListener createMouseWheelScroller(final ScrolledComposite scrollable) {
+	private MouseWheelListener createMouseWheelScroller(
+			final ScrolledComposite scrollable) {
 		return new MouseWheelListener() {
 
 			@Override
 			public void mouseScrolled(MouseEvent e) {
 				Point currentScroll = scrollable.getOrigin();
-				scrollable.setOrigin(currentScroll.x, currentScroll.y - (e.count * 5));
+				scrollable.setOrigin(currentScroll.x, currentScroll.y
+						- (e.count * 5));
 			}
 		};
 	}
 
-	private void installMouseWheelScrollRecursively(MouseWheelListener scroller, Control c) {
+	private void installMouseWheelScrollRecursively(
+			MouseWheelListener scroller, Control c) {
 		c.addMouseWheelListener(scroller);
 		if (c instanceof Composite) {
 			Composite comp = (Composite) c;
@@ -1596,13 +1689,12 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	@Override
 	public boolean close() {
-		if(dataViewerAdapter!=null){
+		if (dataViewerAdapter != null) {
 			dataViewerAdapter.closeConnection();
-		}		
+		}
 		dataViewerMap.remove(dataViewerWindowName);
 		return super.close();
 	}
-
 
 	public Object getDataViewerWindowTitle() {
 		return dataViewerWindowName;
@@ -1615,6 +1707,11 @@ public class DebugDataViewer extends ApplicationWindow {
 	public CTabFolder getCurrentView(){
 		return tabFolder;
 	}
+
+	public void setConditions(FilterConditions conditons) {
+		this.conditions=conditons;
+	}
+	public FilterConditions getConditions(){
+		return conditions;
+	}
 }
-
-

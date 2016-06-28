@@ -103,6 +103,8 @@ public class FilterConditionsDialog extends Dialog {
 	private static final String REMOTE="Remote";
 	private static final String LOCAL="local";
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConditionsDialog.class);
+	private boolean localFilter=false;
+	private boolean remoteFilter=false;
 	
 	
 	public void setFieldsAndTypes(Map<String, String> fieldsAndTypes) {
@@ -117,21 +119,45 @@ public class FilterConditionsDialog extends Dialog {
 	 */
 	public FilterConditionsDialog(Shell parentShell) {
 		super(parentShell);
-		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.RESIZE);
+		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.RESIZE|SWT.APPLICATION_MODAL);
 		localConditionsList = new ArrayList<>();
 		remoteConditionsList = new ArrayList<>();
 		groupSelectionMap = new TreeMap<>();
 		typeBasedConditionalOperators = FilterHelper.INSTANCE.getTypeBasedOperatorMap();
+		
+		retainLocalFilter= new RetainFilter();
+		retainRemoteFilter= new RetainFilter();
 	}
 
 	public void setFilterConditions(FilterConditions filterConditions) {
 		this.originalFilterConditions = filterConditions;
 		localConditionsList.addAll(FilterHelper.INSTANCE.cloneList(filterConditions.getLocalConditions()));
 		remoteConditionsList.addAll(FilterHelper.INSTANCE.cloneList(filterConditions.getRemoteConditions()));
-		retainLocalFilter.setRetainFilter(originalFilterConditions.getRetainLocal());
-		retainRemoteFilter.setRetainFilter(originalFilterConditions.getRetainRemote());
+		retainLocalFilter.setRetainFilter(filterConditions.getRetainLocal());
+		
+		retainRemoteFilter.setRetainFilter(filterConditions.getRetainRemote());
+		remoteFilter=originalFilterConditions.getRetainRemote();
 	}
 	
+	public boolean ifSetLocalFilter(){
+		return retainLocalFilter.getRetainFilter();
+		
+	}
+	
+	public boolean ifSetRemoteFilter(){
+		
+		return retainRemoteFilter.getRetainFilter();
+	}
+	
+	
+	public List<Condition> getRemoteConditionsList() {
+		return remoteConditionsList;
+	}
+
+	public void setRemoteConditionsList(List<Condition> remoteConditionsList) {
+		this.remoteConditionsList = remoteConditionsList;
+	}
+
 	public FilterConditions getFilterConditions() {
 		return originalFilterConditions;
 	}
@@ -222,7 +248,9 @@ public class FilterConditionsDialog extends Dialog {
 		valueTextBoxColumn.setLabelProvider(getValueCellProvider(tableViewer, remoteConditionsList));
 		
 		tableViewer.setInput(remoteConditionsList);
-		remoteConditionsList.add(0, new Condition());
+		if(remoteConditionsList.isEmpty()){
+			remoteConditionsList.add(0, new Condition());
+		}
 		tableViewer.refresh();
 		
 		
@@ -233,6 +261,9 @@ public class FilterConditionsDialog extends Dialog {
 		Button retainButton = new Button(buttonComposite, SWT.CHECK);
 		retainButton.setText("Retain Remote Filter");
 		retainButton.addSelectionListener(FilterHelper.INSTANCE.getRetainButtonListener(retainRemoteFilter));
+		if(retainRemoteFilter.getRetainFilter() == true){
+			retainButton.setSelection(true);
+		}
 		
 		Button btnAddGrp = new Button(buttonComposite, SWT.NONE);
 		btnAddGrp.setText("Create Group");
@@ -294,7 +325,9 @@ public class FilterConditionsDialog extends Dialog {
 		valueTextBoxColumn.setLabelProvider(getValueCellProvider(tableViewer, localConditionsList));
 		
 		tableViewer.setInput(localConditionsList);
-		localConditionsList.add(0, new Condition());
+		if(localConditionsList.isEmpty()){
+			localConditionsList.add(0, new Condition());
+		}
 		tableViewer.refresh();
 		
 		
@@ -305,7 +338,10 @@ public class FilterConditionsDialog extends Dialog {
 		Button retainButton = new Button(buttonComposite, SWT.CHECK);
 		retainButton.setText("Retain Local Filter");
 		retainButton.addSelectionListener(FilterHelper.INSTANCE.getRetainButtonListener(retainLocalFilter));
-		
+		if(retainLocalFilter.getRetainFilter() == true){
+			retainButton.setSelection(true);
+		}
+		 	
 		Button btnAddGrp = new Button(buttonComposite, SWT.NONE);
 		btnAddGrp.setText("Create Group");
 		btnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer));
@@ -802,8 +838,15 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 		   }else{
 			   groupSelectionMap.put(groupSelectionMap.lastKey()+1,grpList);
 		   }
-		  
-		
+	}
+	
+	public FilterConditions getOriginalFilterConditions() {
+		return originalFilterConditions;
+	}
+
+	public void setOriginalFilterConditions(
+			FilterConditions originalFilterConditions) {
+		this.originalFilterConditions = originalFilterConditions;
 	}
 
 	public void setDebugDataViewerAdapterAndViewer(DataViewerAdapter adapter, DebugDataViewer dataViewer)
@@ -812,5 +855,17 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 		debugDataViewer = dataViewer;
 	}
 
+	public FilterConditions getConditions(){
+		return originalFilterConditions;
+		
+	}
+
+	public List<Condition> getLocalConditionsList() {
+		return localConditionsList;
+	}
+
+	public void setLocalConditionsList(List<Condition> localConditionsList) {
+		this.localConditionsList = localConditionsList;
+	}
 	
 }

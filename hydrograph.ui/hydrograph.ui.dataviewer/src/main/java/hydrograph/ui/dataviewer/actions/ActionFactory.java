@@ -53,7 +53,7 @@ public class ActionFactory {
 		ResetSort resetSort = new ResetSort(debugDataViewer);
 		SelectColumnAction selectColumnAction= new SelectColumnAction(debugDataViewer);
 		AutoExpandColumns autoExpandColumns = new AutoExpandColumns(debugDataViewer);
-		
+		ClearFilter clearFilter= new ClearFilter(debugDataViewer);
 		
 		actionMap.put(ExportAction.class.getName(), exportAction);
 		actionMap.put(FilterAction.class.getName(), filterAction);
@@ -70,6 +70,7 @@ public class ActionFactory {
 		actionMap.put(ResetSort.class.getName(), resetSort);
 		actionMap.put(SelectColumnAction.class.getName(),selectColumnAction);
 		actionMap.put(AutoExpandColumns.class.getName(),autoExpandColumns);
+		actionMap.put(ClearFilter.class.getName(), clearFilter);
 	}
 	
 	/**

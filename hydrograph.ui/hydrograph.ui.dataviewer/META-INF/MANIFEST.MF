@@ -24,7 +24,9 @@ Bundle-ClassPath: .,
  lib/csvjdbc-1.0-29.jar,
  lib/opencsv-3.7.jar,
  lib/gson-2.7.jar
-Export-Package: hydrograph.ui.dataviewer.constants,
+Export-Package: hydrograph.ui.dataviewer.adapters,
+ hydrograph.ui.dataviewer.constants,
+ hydrograph.ui.dataviewer.filter,
  hydrograph.ui.dataviewer.utilities,
  hydrograph.ui.dataviewer.window
 Import-Package: com.jcraft.jsch

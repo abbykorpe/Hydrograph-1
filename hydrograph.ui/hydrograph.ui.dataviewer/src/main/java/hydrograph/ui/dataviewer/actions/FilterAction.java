@@ -16,6 +16,7 @@ package hydrograph.ui.dataviewer.actions;
 import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.FieldDataTypes;
 import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.dataviewer.filter.FilterConditions;
 import hydrograph.ui.dataviewer.filter.FilterConditionsDialog;
 import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
@@ -35,23 +36,41 @@ public class FilterAction extends Action {
 	private DebugDataViewer debugDataViewer;
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterAction.class);
 	private String SCHEMA_FILE_EXTENTION=".xml";
-	
+	private FilterConditions filterConditions;
 	
 	
 	public FilterAction(DebugDataViewer debugDataViewer) {
     	super(LABEL);
     	this.debugDataViewer = debugDataViewer;
+    	filterConditions=new FilterConditions();
 	}
 	@Override
 	public void run() {
 		FilterConditionsDialog filterConditionsDialog=new FilterConditionsDialog(new Shell());
+
 		filterConditionsDialog.setFieldsAndTypes(getFieldsAndTypes());
 		try {
 			filterConditionsDialog.setDebugDataViewerAdapterAndViewer(debugDataViewer.getDataViewerAdapter(),debugDataViewer);
-			filterConditionsDialog.open();
+			if (debugDataViewer.getConditions()!=null){
+				filterConditionsDialog.setFilterConditions(debugDataViewer.getConditions());
+			}
+			if(filterConditionsDialog.open() !=1){
+				if(filterConditionsDialog.ifSetLocalFilter()){
+					filterConditions.setLocalConditions(filterConditionsDialog.getLocalConditionsList());
+					filterConditions.setRetainLocal(filterConditionsDialog.ifSetLocalFilter());
+				}
+				if(filterConditionsDialog.ifSetRemoteFilter()){
+					filterConditions.setRemoteConditions(filterConditionsDialog.getRemoteConditionsList());
+					filterConditions.setRetainRemote(filterConditionsDialog.ifSetRemoteFilter());
+				}
+				filterConditionsDialog.setOriginalFilterConditions(filterConditions);
+			}
+			debugDataViewer.setConditions(filterConditionsDialog.getOriginalFilterConditions());
 		} catch (ClassNotFoundException | SQLException e) {
 			logger.error("Error while setting debug data viewer and debug data viewer adaptor",e);
 		}
+		
+		
 	}
 
 	private Map<String, String> getFieldsAndTypes() {

@@ -13,7 +13,7 @@
 package hydrograph.ui.dataviewer.filter;
 
 public class RetainFilter {
-	private boolean retainFilter;
+	private boolean retainFilter=false;
 
 	public boolean getRetainFilter() {
 		return retainFilter;

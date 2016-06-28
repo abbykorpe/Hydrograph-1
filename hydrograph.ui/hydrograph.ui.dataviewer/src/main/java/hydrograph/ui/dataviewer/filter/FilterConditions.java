@@ -12,6 +12,7 @@
  ******************************************************************************/
 package hydrograph.ui.dataviewer.filter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,13 +21,18 @@ public class FilterConditions {
 	Map<Integer,List<List<Integer>>> groupSelectionMap = new HashMap<>();
 	private List<Condition> localConditions;
 	private List<Condition> remoteConditions;
-	private boolean retainLocal;
-	private boolean retainRemote;
+	private boolean retainLocal=false;
+	private boolean retainRemote=false;
 	
+	public FilterConditions() {
+		localConditions = new ArrayList<>();
+		remoteConditions = new ArrayList<>();
+	}
 	public List<Condition> getLocalConditions() {
 		return localConditions;
 	}
 	public void setLocalConditions(List<Condition> localConditions) {
+		this.localConditions.clear();
 		this.localConditions = localConditions;
 	}
 	public List<Condition> getRemoteConditions() {
