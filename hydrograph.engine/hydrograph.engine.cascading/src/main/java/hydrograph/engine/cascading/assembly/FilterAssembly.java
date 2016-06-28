@@ -24,6 +24,7 @@ import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.handlers.FilterCustomHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.filters.RecordFilter;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class FilterAssembly extends BaseComponent<FilterEntity> {
 
@@ -68,8 +69,8 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 			isUnused = true;
 		}
 
-		Pipe filterPipe = new Pipe("filter:"+filterEntity.getComponentId() + "_"
-				+ socketId, componentParameters.getInputPipe());
+		Pipe filterPipe = new Pipe(ComponentHelper.getComponentName("filter",filterEntity.getComponentId() ,
+				 socketId), componentParameters.getInputPipe());
 
 		FilterCustomHandler filterCustomHandler = new FilterCustomHandler(
 				new Fields(filterEntity.getOperation()

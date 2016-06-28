@@ -31,6 +31,7 @@ import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class InputFileDelimitedAssembly extends BaseComponent<InputFileDelimitedEntity> {
 
@@ -93,7 +94,7 @@ public class InputFileDelimitedAssembly extends BaseComponent<InputFileDelimited
 
 		// initializing each pipe and tap
 		tap = new Hfs(scheme, inputFileDelimitedEntity.getPath());
-		pipe = new Pipe("inputFileDelimited:"+inputFileDelimitedEntity.getComponentId()+"_"+inputFileDelimitedEntity.getOutSocketList().get(0).getSocketId());
+		pipe = new Pipe(ComponentHelper.getComponentName("inputFileDelimited",inputFileDelimitedEntity.getComponentId(),inputFileDelimitedEntity.getOutSocketList().get(0).getSocketId()));
 
 		setHadoopProperties(pipe.getStepConfigDef());
 		setHadoopProperties(tap.getStepConfigDef());

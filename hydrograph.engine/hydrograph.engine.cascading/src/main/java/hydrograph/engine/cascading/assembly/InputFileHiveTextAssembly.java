@@ -19,6 +19,7 @@ import hydrograph.engine.assembly.entity.InputFileHiveTextEntity;
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.HiveTypeToCoercibleTypeMapping;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
 import hydrograph.engine.cascading.scheme.hive.text.HiveTextTableDescriptor;
 import hydrograph.engine.cascading.utilities.DataTypeCoerce;
@@ -26,6 +27,7 @@ import hydrograph.engine.cascading.utilities.DataTypeCoerce;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
+import org.apache.hadoop.conf.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +35,8 @@ import cascading.scheme.Scheme;
 import cascading.scheme.hadoop.TextDelimited;
 import cascading.tap.SinkMode;
 import cascading.tap.hive.HivePartitionTap;
+import cascading.tap.hive.HiveTableDescriptor;
+import cascading.tap.hive.HiveTableDescriptor.Factory;
 import cascading.tap.hive.HiveTap;
 import cascading.tuple.Fields;
 
@@ -75,18 +79,22 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 		// HiveTextTableDescriptor is developed specifically for handling
 		// Text File format with Hive. Hence, the object of table descriptor
 		// is created in its respective assembly and not in its base class.
+		
+		HiveTableDescriptor.Factory factory = new Factory(new Configuration());
+		HiveTableDescriptor tb = factory.newInstance(inputHiveFileEntity.getDatabaseName(),
+				inputHiveFileEntity.getTableName());
+		
 		tableDesc = new HiveTextTableDescriptor(
-				inputHiveFileEntity.getDatabaseName(),
+				tb.getDatabaseName(),
 
-				inputHiveFileEntity.getTableName(),
-				fieldsCreator.getFieldNames(),
-				fieldsCreator.hiveParquetDataTypeMapping(inputHiveFileEntity
-						.getFieldsList()),
-				inputHiveFileEntity.getPartitionKeys(),
-				inputHiveFileEntity.getDelimiter(), "",
+				tb.getTableName(),
+				tb.getColumnNames(),
+				tb.getColumnTypes(),
+				tb.getPartitionKeys(),
+				tb.getDelimiter(), "",
 				getHiveExternalTableLocationPath(), false);
 
-		Fields fields = getFieldsToWrite();
+		Fields fields = getFieldsToWrite(tb);
 		HydrographDelimitedParser delimitedParser = new HydrographDelimitedParser(
 				inputHiveFileEntity.getDelimiter(),
 
@@ -131,17 +139,30 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 	/**
 	 * @return Fields.
 	 */
-	private Fields getFieldsToWrite() {
-		String[] testField = new String[fieldsCreator.getFieldNames().length
-				- inputHiveFileEntity.getPartitionKeys().length];
+//	private Fields getFieldsToWrite() {
+//		String[] testField = new String[fieldsCreator.getFieldNames().length
+//				- inputHiveFileEntity.getPartitionKeys().length];
+//		int i = 0;
+//		for (String inputfield : fieldsCreator.getFieldNames()) {
+//			if (!Arrays.asList(inputHiveFileEntity.getPartitionKeys())
+//					.contains(inputfield)) {
+//				testField[i++] = inputfield;
+//			}
+//		}
+//		return new Fields(testField).applyTypes(getTypes());
+//
+//	}
+	
+	private Fields getFieldsToWrite(HiveTableDescriptor tb) {
+		String[] testField = new String[tb.getColumnNames().length - tb.getPartitionKeys().length];
 		int i = 0;
-		for (String inputfield : fieldsCreator.getFieldNames()) {
-			if (!Arrays.asList(inputHiveFileEntity.getPartitionKeys())
-					.contains(inputfield)) {
+		for (String inputfield : tb.getColumnNames()) {
+			if (!Arrays.asList(tb.getPartitionKeys()).contains(inputfield)) {
 				testField[i++] = inputfield;
 			}
 		}
-		return new Fields(testField).applyTypes(getTypes());
+
+		return new Fields(testField).applyTypes(getTypes(tb));
 
 	}
 	
@@ -149,29 +170,49 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 	/**
 	 * The datatype support for text to skip the partition key write in file.
 	 */
-	private Type[] getTypes() {
-		Type[] typeArr = new Type[fieldsCreator.getFieldDataTypes().length -inputHiveFileEntity.getPartitionKeys().length];
-		int i = 0;
-		int j = 0;
-		for (String dataTypes : fieldsCreator.getFieldDataTypes()) {
-			if(!Arrays.asList(inputHiveFileEntity.getPartitionKeys()).contains(fieldsCreator.getFieldNames()[i])){
-				try {
-					typeArr[j++] = DataTypeCoerce.convertClassToCoercibleType(
-							Class.forName(dataTypes), fieldsCreator.getFieldFormat()[i], fieldsCreator.getFieldScale()[i],
-							fieldsCreator.getFieldScaleType()[i]);
-				} catch (ClassNotFoundException e) {
-					throw new RuntimeException(
-							"'"
-									+ dataTypes
-									+ "' class not found while applying cascading datatypes for component '"
-									+ inputHiveFileEntity.getComponentId()
-									+ "' ", e);
-				}
+//	private Type[] getTypes() {
+//		Type[] typeArr = new Type[fieldsCreator.getFieldDataTypes().length -inputHiveFileEntity.getPartitionKeys().length];
+//		int i = 0;
+//		int j = 0;
+//		for (String dataTypes : fieldsCreator.getFieldDataTypes()) {
+//			if(!Arrays.asList(inputHiveFileEntity.getPartitionKeys()).contains(fieldsCreator.getFieldNames()[i])){
+//				try {
+//					typeArr[j++] = DataTypeCoerce.convertClassToCoercibleType(
+//							Class.forName(dataTypes), fieldsCreator.getFieldFormat()[i], fieldsCreator.getFieldScale()[i],
+//							fieldsCreator.getFieldScaleType()[i]);
+//				} catch (ClassNotFoundException e) {
+//					throw new RuntimeException(
+//							"'"
+//									+ dataTypes
+//									+ "' class not found while applying cascading datatypes for component '"
+//									+ inputHiveFileEntity.getComponentId()
+//									+ "' ", e);
+//				}
+//
+//			}	
+//			i++;
+//		}
+//		return typeArr;
+//	}
+	
+	private Type[] getTypes(HiveTableDescriptor tb) {
 
-			}	
-			i++;
+		Type[] types = new Type[tb.getColumnTypes().length - tb.getPartitionKeys().length];
+		String[] colTypes = tb.getColumnTypes();
+
+		for (int i = 0; i < types.length; i++) {
+
+			HiveTypeToCoercibleTypeMapping hiveTo = null;
+			if (colTypes[i].contains("decimal")) {
+				hiveTo = HiveTypeToCoercibleTypeMapping.valueOf("DECIMAL");
+			} else
+				hiveTo = HiveTypeToCoercibleTypeMapping.valueOf(colTypes[i].toUpperCase());
+
+			types[i] = hiveTo.getMappingType(colTypes[i]);
+
 		}
-		return typeArr;
+
+		return types;
 	}
 
 }

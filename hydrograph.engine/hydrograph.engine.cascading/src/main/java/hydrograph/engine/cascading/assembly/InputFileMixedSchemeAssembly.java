@@ -29,6 +29,7 @@ import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.TextDelimitedAndFixedWidth;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class InputFileMixedSchemeAssembly extends BaseComponent<InputFileMixedSchemeEntity> {
 
@@ -87,7 +88,7 @@ public class InputFileMixedSchemeAssembly extends BaseComponent<InputFileMixedSc
 
 		// initializing each pipe and tap
 		tap = new Hfs(scheme, inputFileMixedSchemeEntity.getPath());
-		pipe = new Pipe("inputFileMixedScheme:"+inputFileMixedSchemeEntity.getComponentId()+"_"+inputFileMixedSchemeEntity.getOutSocketList().get(0).getSocketId());
+		pipe = new Pipe(ComponentHelper.getComponentName("inputFileMixedScheme",inputFileMixedSchemeEntity.getComponentId(),inputFileMixedSchemeEntity.getOutSocketList().get(0).getSocketId()));
 
 		setHadoopProperties(tap.getStepConfigDef());
 		setHadoopProperties(pipe.getStepConfigDef());

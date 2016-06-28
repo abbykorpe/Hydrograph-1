@@ -22,6 +22,7 @@ import hydrograph.engine.assembly.entity.LimitEntity;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class LimitAssembly extends BaseComponent<LimitEntity> {
 
@@ -52,7 +53,7 @@ public class LimitAssembly extends BaseComponent<LimitEntity> {
 
 			Limit limit = new Limit(limitEntity.getMaxRecord());
 
-			Pipe outPipes = new Pipe("limit:"+limitEntity.getComponentId() + "_"+outSocket.getSocketId(),
+			Pipe outPipes = new Pipe(ComponentHelper.getComponentName("limit:",limitEntity.getComponentId() ,outSocket.getSocketId()),
 					componentParameters.getInputPipe());
 
 			setHadoopProperties(outPipes.getStepConfigDef());

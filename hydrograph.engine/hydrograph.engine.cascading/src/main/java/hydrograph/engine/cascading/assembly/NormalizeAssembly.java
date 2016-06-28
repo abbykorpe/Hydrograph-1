@@ -29,6 +29,7 @@ import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
 import hydrograph.engine.cascading.assembly.handlers.NormalizeCustomHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class NormalizeAssembly extends BaseComponent<NormalizeEntity> {
 
@@ -96,8 +97,8 @@ public class NormalizeAssembly extends BaseComponent<NormalizeEntity> {
 				passThroughFields, mapFields, operationFields);
 		NormalizeCustomHandler normalizeCustomHandler = null;
 
-		Pipe normalizePipe = new Pipe("normalize:"+
-				normalizeEntity.getComponentId() + "_"+outSocket.getSocketId(),
+		Pipe normalizePipe = new Pipe(ComponentHelper.getComponentName("normalize",
+				normalizeEntity.getComponentId(),outSocket.getSocketId()),
 				componentParameters.getInputPipe());
 
 		normalizeCustomHandler = new NormalizeCustomHandler(

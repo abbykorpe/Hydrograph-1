@@ -38,5 +38,7 @@ public class Constants {
 	 * The default value of 'precision' attribute of big decimal fields used on input / output schema
 	 */
 	public static final int DEFAULT_PRECISION = -999;
+	
+	public static final String PIPE_NAME_APPENDER="%%";
 
 }

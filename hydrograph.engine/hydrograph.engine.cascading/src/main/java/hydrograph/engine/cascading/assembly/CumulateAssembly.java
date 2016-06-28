@@ -21,6 +21,7 @@ import hydrograph.engine.cascading.assembly.handlers.CumulateCustomHandler;
 import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
+import hydrograph.engine.utilities.ComponentHelper;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -93,7 +94,7 @@ public class CumulateAssembly extends BaseComponent<CumulateEntity> {
 				OutSocketUtils.getOperationFieldsFromOutSocket(outSocket
 						.getOperationFieldList()));
 
-		Pipe scanSortPipe = new Pipe("cumulate:"+cumulateEntity.getComponentId() + "_"+outSocket.getSocketId(),
+		Pipe scanSortPipe = new Pipe(ComponentHelper.getComponentName("cumulate",cumulateEntity.getComponentId(),outSocket.getSocketId()),
 				componentParameters.getInputPipe());
 
 		// perform groupby operation on keys

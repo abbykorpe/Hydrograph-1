@@ -92,7 +92,7 @@ public class JoinAssembly extends BaseComponent<JoinEntity> {
 					+ joinEntity.getComponentId() + "' for socket: '"
 					+ outSocket.getSocketId() + "' of type: '"
 					+ outSocket.getSocketType() + "'");
-			Pipe join = new CoGroup("join:"+joinEntity.getComponentId()+"_"+outSocket.getSocketId(),inputLinks, uniqKeyFields,
+			Pipe join = new CoGroup(ComponentHelper.getComponentName("join",joinEntity.getComponentId(),outSocket.getSocketId()),inputLinks, uniqKeyFields,
 					getJoinOutputFields(outSocket), joiner);
 			setHadoopProperties(join.getStepConfigDef());
 
@@ -386,7 +386,7 @@ public class JoinAssembly extends BaseComponent<JoinEntity> {
 							+ unusedSocket.getSocketId() + "' of type: '"
 							+ unusedSocket.getSocketType() + "'");
 
-					unMatched = new Pipe("join:"+joinEntity.getComponentId() + "_"+unusedSocket.getSocketId(), allUnMatched);
+					unMatched = new Pipe(ComponentHelper.getComponentName("join",joinEntity.getComponentId() ,unusedSocket.getSocketId()), allUnMatched);
 
 					if (Booleans.contains(getAllJoinTypes(), true)) {
 						unMatched = new Each(unMatched, new Fields(

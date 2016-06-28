@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
+import cascading.pipe.assembly.Retain;
 import cascading.scheme.Scheme;
 import cascading.tap.Tap;
 import cascading.tuple.Fields;
@@ -31,6 +32,7 @@ import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.assembly.InputFileHiveParquetAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 
@@ -52,19 +54,17 @@ public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 
 	protected InputOutputFieldsAndTypesCreator<HiveEntityBase> fieldsCreator;
 
-	private static Logger LOG = LoggerFactory
-			.getLogger(InputFileHiveBase.class);
+	private static Logger LOG = LoggerFactory.getLogger(InputFileHiveBase.class);
 
-	public InputFileHiveBase(HiveEntityBase baseComponentEntity,
-			ComponentParameters componentParameters) {
+	public InputFileHiveBase(HiveEntityBase baseComponentEntity, ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * hydrograph.engine.cascading.assembly.base.BaseComponent#castEntityFromBase
+	 * @see hydrograph.engine.cascading.assembly.base.BaseComponent#
+	 * castEntityFromBase
 	 * (hydrograph.engine.assembly.entity.base.AssemblyEntityBase) This method
 	 * case the AssemblyEntityBase to hiveBaseEntity
 	 */
@@ -95,27 +95,22 @@ public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 			}
 			for (OutSocket outSocket : hiveEntityBase.getOutSocketList()) {
 
-				String[] fieldsArray = new String[hiveEntityBase
-						.getFieldsList().size()];
+				String[] fieldsArray = new String[hiveEntityBase.getFieldsList().size()];
 				int i = 0;
 				for (SchemaField Fields : hiveEntityBase.getFieldsList()) {
 					fieldsArray[i++] = Fields.getFieldName();
 				}
 
-				LOG.trace("Creating input file hive parquet assembly for '"
-						+ hiveEntityBase.getComponentId() + "' for socket: '"
-						+ outSocket.getSocketId() + "' of type: '"
-						+ outSocket.getSocketType() + "'");
-				setOutLink(outSocket.getSocketType(), outSocket.getSocketId(),
-						hiveEntityBase.getComponentId(), pipe, new Fields(
-								fieldsArray));
-				
+				LOG.trace("Creating input file hive parquet assembly for '" + hiveEntityBase.getComponentId()
+						+ "' for socket: '" + outSocket.getSocketId() + "' of type: '" + outSocket.getSocketType()
+						+ "'");
+				setOutLink(outSocket.getSocketType(), outSocket.getSocketId(), hiveEntityBase.getComponentId(), pipe,
+						new Fields(fieldsArray));
+
 			}
 		} catch (Exception e) {
-			LOG.error(
-					"Error in creating assembly for component '"
-							+ hiveEntityBase.getComponentId() + "', Error: "
-							+ e.getMessage(), e);
+			LOG.error("Error in creating assembly for component '" + hiveEntityBase.getComponentId() + "', Error: "
+					+ e.getMessage(), e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -138,38 +133,45 @@ public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 	public void generateTapsAndPipes() {
 
 		// initializing each pipe and tap
-		LOG.debug("Hive Input Component '" + hiveEntityBase.getComponentId()
-				+ "': [ Database Name: " + hiveEntityBase.getDatabaseName()
-				+ ", Table Name: " + hiveEntityBase.getTableName()
-				+ ", Column Names: "
-				+ Arrays.toString(fieldsCreator.getFieldNames())
-				+ ", Partition Column: "
+		LOG.debug("Hive Input Component '" + hiveEntityBase.getComponentId() + "': [ Database Name: "
+				+ hiveEntityBase.getDatabaseName() + ", Table Name: " + hiveEntityBase.getTableName()
+				+ ", Column Names: " + Arrays.toString(fieldsCreator.getFieldNames()) + ", Partition Column: "
 				+ Arrays.toString(hiveEntityBase.getPartitionKeys()) + "]");
 
 		// scheme and tap to be initialized in its specific assembly
 		try {
 			prepareScheme();
 		} catch (Exception e) {
-			LOG.error("Error in preparing scheme for component '"
-					+ hiveEntityBase.getComponentId() + "': " + e.getMessage());
+			LOG.error("Error in preparing scheme for component '" + hiveEntityBase.getComponentId() + "': "
+					+ e.getMessage());
 			throw new RuntimeException(e);
 		}
 
 		flowDef = componentParameters.getFlowDef();
 		initializeHiveTap();
 
-		
-		
-		pipe = new Pipe(getComponentType(hiveEntityBase)+":"+hiveEntityBase.getComponentId()+"_"+hiveEntityBase.getOutSocketList().get(0).getSocketId());
-		
+		pipe = new Pipe(ComponentHelper.getComponentName(getComponentType(hiveEntityBase),
+				hiveEntityBase.getComponentId(), hiveEntityBase.getOutSocketList().get(0).getSocketId()));
+		pipe = new Retain(pipe, new Fields(getFieldsFromSchemaFields()));
+
 		setHadoopProperties(hiveTap.getStepConfigDef());
 		setHadoopProperties(pipe.getStepConfigDef());
 	}
 
+	private String[] getFieldsFromSchemaFields() {
+		String[] fields = new String[hiveEntityBase.getFieldsList().size()];
+		int i = 0;
+		for (SchemaField field : hiveEntityBase.getFieldsList()) {
+			fields[i++] = field.getFieldName();
+		}
+
+		return fields;
+	}
+
 	private String getComponentType(HiveEntityBase hiveEntityBase2) {
-		if(hiveEntityBase2 instanceof InputFileHiveTextEntity)
-		return "inputFileHiveText";
-		else if(hiveEntityBase2 instanceof InputFileHiveParquetEntity)
+		if (hiveEntityBase2 instanceof InputFileHiveTextEntity)
+			return "inputFileHiveText";
+		else if (hiveEntityBase2 instanceof InputFileHiveParquetEntity)
 			return "inputFileHiveParquet";
 		else
 			return "InputFileHive";

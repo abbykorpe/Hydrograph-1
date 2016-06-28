@@ -31,6 +31,7 @@ import hydrograph.engine.cascading.assembly.handlers.RemoveDupsHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.filters.RemoveDupsOutLinkFilter;
 import hydrograph.engine.cascading.filters.RemoveDupsUnusedLinkFilter;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class RemoveDupsAssembly extends BaseComponent<RemoveDupsEntity> {
 
@@ -99,7 +100,7 @@ public class RemoveDupsAssembly extends BaseComponent<RemoveDupsEntity> {
 
 	private Pipe createFilterPipe(String linkType, String outSocketId, Pipe everyPipe) {
 
-		Pipe filterPipe = new Pipe("removeDups:"+removeDupsEntity.getComponentId() + "_RemoveDupsFilter_" + outSocketId, everyPipe);
+		Pipe filterPipe = new Pipe(ComponentHelper.getComponentName("removeDups",removeDupsEntity.getComponentId() , "_RemoveDupsFilter_" + outSocketId), everyPipe);
 		setHadoopProperties(everyPipe.getStepConfigDef());
 
 		if (linkType.equals("unused")) {

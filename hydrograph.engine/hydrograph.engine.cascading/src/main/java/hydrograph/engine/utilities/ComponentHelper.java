@@ -16,6 +16,7 @@ import cascading.operation.Insert;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 
 public class ComponentHelper {
 
@@ -29,12 +30,17 @@ public class ComponentHelper {
 	 * @param constantValue
 	 * @return pipe array with appended field
 	 */
-	public static <T> Pipe addConstantField(Pipe inputFile, String fieldName,
-			T constantValue) {
+	public static <T> Pipe addConstantField(Pipe inputFile, String fieldName, T constantValue) {
 
-		inputFile = new Each(inputFile, Fields.ALL,// inputFields,
+		inputFile = new Each(inputFile, Fields.ALL, // inputFields,
 				new Insert(new Fields(fieldName), constantValue), Fields.ALL);
 
 		return inputFile;
+	}
+
+	public static String getComponentName(String component, String componentId, String outsocketId) {
+
+		
+		return component+Constants.PIPE_NAME_APPENDER+componentId+"_"+outsocketId;
 	}
 }
