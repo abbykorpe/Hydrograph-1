@@ -58,6 +58,18 @@ import com.google.gson.Gson;
 
 public class FilterHelper {
 	
+	public static final FilterHelper INSTANCE = new FilterHelper();
+
+	public static final String TYPE_BOOLEAN = "java.lang.Boolean";
+	public static final String TYPE_DOUBLE = "java.math.Double";
+	public static final String TYPE_FLOAT = "java.math.Float";
+	public static final String TYPE_SHORT = "java.math.Short";
+	public static final String TYPE_LONG = "java.math.Long";
+	public static final String TYPE_DECIMAL = "java.math.BigDecimal";
+	public static final String TYPE_INTEGER = "java.lang.Integer";
+	public static final String TYPE_DATE = "java.util.Date";
+	public static final String TYPE_STRING = "java.lang.String";
+	
 	private static final String LOCAL = "local";
 	private static final String REGEX_DIGIT = "\\d";
 	private static final String SINGLE_SPACE = " ";
@@ -67,9 +79,6 @@ public class FilterHelper {
 	private static final String DELIM_COMMA = ",";
 	private static final String NOT_IN = "not in";
 	private static final String IN = "in";
-	private static final String TYPE_DATE = "java.util.Date";
-	private static final String TYPE_STRING = "java.lang.String";
-	public static final FilterHelper INSTANCE = new FilterHelper();
 	private String filterType;
 	private DataViewerAdapter dataViewerAdapter;
 	private DebugDataViewer debugDataViewer;
@@ -83,15 +92,15 @@ public class FilterHelper {
 	
 	public Map<String, String[]> getTypeBasedOperatorMap(){
 		Map<String, String[]> typeBasedConditionalOperators = new HashMap<String, String[]>();
-		typeBasedConditionalOperators.put("java.lang.String", new String[]{"LIKE","IN ","NOT IN"}); 
-		typeBasedConditionalOperators.put("java.lang.Integer", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
-		typeBasedConditionalOperators.put("java.util.Date", new String[]{">", "<", "<=",">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
-		typeBasedConditionalOperators.put("java.math.BigDecimal", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN","NOT IN"});
-		typeBasedConditionalOperators.put("java.math.Long", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
-		typeBasedConditionalOperators.put("java.math.Short", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
-		typeBasedConditionalOperators.put("java.math.Float", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
-		typeBasedConditionalOperators.put("java.math.Double", new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
-		typeBasedConditionalOperators.put("java.lang.Boolean", new String[]{"<>", "=", "LIKE", "IN", "NOT IN"});
+		typeBasedConditionalOperators.put(TYPE_STRING, new String[]{"LIKE","IN ","NOT IN"}); 
+		typeBasedConditionalOperators.put(TYPE_INTEGER, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
+		typeBasedConditionalOperators.put(TYPE_DATE, new String[]{">", "<", "<=",">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
+		typeBasedConditionalOperators.put(TYPE_DECIMAL, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN","NOT IN"});
+		typeBasedConditionalOperators.put(TYPE_LONG, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
+		typeBasedConditionalOperators.put(TYPE_SHORT, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
+		typeBasedConditionalOperators.put(TYPE_FLOAT, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
+		typeBasedConditionalOperators.put(TYPE_DOUBLE, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
+		typeBasedConditionalOperators.put(TYPE_BOOLEAN, new String[]{"<>", "="});
 		return typeBasedConditionalOperators;
 	}
 	
@@ -105,8 +114,8 @@ public class FilterHelper {
 				int index = (int) text.getData(FilterConditionsDialog.ROW_INDEX);
 				Condition filterConditions = conditionsList.get(index);
 				filterConditions.setValue(text.getText());
-				toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 				validateText(text);
+				toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 		};
 		return listener;
@@ -510,7 +519,7 @@ public class FilterHelper {
 	protected String getConditionValue(String fieldName, String value, String conditional, Map<String, String> fieldsAndTypes) {
 		String trimmedCondition = StringUtils.trim(conditional);
 		String dataType = fieldsAndTypes.get(fieldName);
-		if(TYPE_STRING.equalsIgnoreCase(dataType) || TYPE_DATE.equalsIgnoreCase(dataType)){
+		if(TYPE_STRING.equalsIgnoreCase(dataType) || TYPE_DATE.equalsIgnoreCase(dataType) || TYPE_BOOLEAN.equalsIgnoreCase(dataType)){
 			if(IN.equalsIgnoreCase(trimmedCondition) || NOT_IN.equalsIgnoreCase(trimmedCondition)){
 				if(StringUtils.isNotBlank(value) && value.contains(DELIM_COMMA)){
 					StringTokenizer tokenizer = new StringTokenizer(value, DELIM_COMMA);
