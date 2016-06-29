@@ -12,19 +12,12 @@
  ******************************************************************************/
 package hydrograph.ui.dataviewer.filter;
 
-import hydrograph.ui.common.schema.Field;
-import hydrograph.ui.common.schema.Fields;
-import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
-import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
-import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
 import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
-import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -96,7 +89,7 @@ public class FilterHelper {
 	
 	public Map<String, String[]> getTypeBasedOperatorMap(){
 		Map<String, String[]> typeBasedConditionalOperators = new HashMap<String, String[]>();
-		typeBasedConditionalOperators.put(TYPE_STRING, new String[]{"LIKE","IN ","NOT IN"}); 
+		typeBasedConditionalOperators.put(TYPE_STRING, new String[]{"LIKE","IN","NOT IN"}); 
 		typeBasedConditionalOperators.put(TYPE_INTEGER, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
 		typeBasedConditionalOperators.put(TYPE_DATE, new String[]{">", "<", "<=",">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
 		typeBasedConditionalOperators.put(TYPE_BIGDECIMAL, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN","NOT IN"});
@@ -202,10 +195,6 @@ public class FilterHelper {
 		return listener;
 	}
 	
-/*	private void processFieldName(TableViewer tableViewer, Combo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes, String[] fieldNames, Button okButton, Button applyButton){
-	
-	}*/
-	
 	public SelectionListener getConditionalOperatorSelectionListener(final List<Condition> conditionsList, 
 			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
 		SelectionListener listener = new SelectionListener() {
@@ -285,7 +274,8 @@ public class FilterHelper {
 		toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 	}
 	
-	public SelectionListener addButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList) {
+	public SelectionListener addButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList, 
+			final List<Condition> dummyList) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
@@ -293,6 +283,8 @@ public class FilterHelper {
 				Button button = (Button) e.getSource();
 				int index = (int) button.getData(FilterConditionsDialog.ROW_INDEX);
 				conditionsList.add(index, new Condition());
+				dummyList.clear();
+				dummyList.addAll(cloneList(conditionsList));
 				tableViewer.refresh();
 			}
 			
@@ -302,7 +294,8 @@ public class FilterHelper {
 		return listener;
 	}
 
-	public SelectionListener removeButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList) {
+	public SelectionListener removeButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList, 
+			final List<Condition> dummyList) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
@@ -312,6 +305,8 @@ public class FilterHelper {
 					int removeIndex = (int) button.getData(FilterConditionsDialog.ROW_INDEX);
 					
 					conditionsList.remove(removeIndex);
+					dummyList.clear();
+					dummyList.addAll(cloneList(conditionsList));
 				}
 				tableViewer.refresh();
 			}
@@ -610,11 +605,14 @@ public class FilterHelper {
 		return listner;
 	}
    
-	public SelectionAdapter getAddAtEndListener(final TableViewer tableViewer, final List<Condition> conditionList) {
+	public SelectionAdapter getAddAtEndListener(final TableViewer tableViewer, final List<Condition> conditionList, 
+			final List<Condition> dummyList) {
         return new SelectionAdapter() {
               @Override
               public void widgetSelected(SelectionEvent e) {
                     conditionList.add(conditionList.size(), new Condition());
+                    dummyList.clear();
+    				dummyList.addAll(cloneList(conditionList));
                     tableViewer.refresh();
               }
         };

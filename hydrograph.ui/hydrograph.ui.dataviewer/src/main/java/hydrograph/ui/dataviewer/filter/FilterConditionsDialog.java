@@ -18,7 +18,6 @@ import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import org.eclipse.swt.events.MouseListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +40,7 @@ import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -101,6 +100,8 @@ public class FilterConditionsDialog extends Dialog {
 	
 	private List<Condition> localConditionsList; 
 	private List<Condition> remoteConditionsList; 
+	private List<Condition> dummyList = new ArrayList<>();
+	
 	//Map for adding group index with list of list of row indexes
 	private TreeMap<Integer,List<List<Integer>>> groupSelectionMap;
 	private DataViewerAdapter dataViewerAdapter;
@@ -145,7 +146,6 @@ public class FilterConditionsDialog extends Dialog {
 		localConditionsList.addAll(FilterHelper.INSTANCE.cloneList(filterConditions.getLocalConditions()));
 		remoteConditionsList.addAll(FilterHelper.INSTANCE.cloneList(filterConditions.getRemoteConditions()));
 		retainLocalFilter.setRetainFilter(filterConditions.getRetainLocal());
-		
 		retainRemoteFilter.setRetainFilter(filterConditions.getRetainRemote());
 	}
 	
@@ -239,7 +239,7 @@ public class FilterConditionsDialog extends Dialog {
 		buttonComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		
         Button btnAddRowAt = new Button(buttonComposite, SWT.NONE);
-        btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, remoteConditionsList));
+        btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, remoteConditionsList, dummyList));
         btnAddRowAt.setText("Add Row at End");
 
         
@@ -293,10 +293,12 @@ public class FilterConditionsDialog extends Dialog {
 		TableViewerColumn valueTextBoxColumn = createTableColumns(tableViewer, "Value", 150);
 		valueTextBoxColumn.setLabelProvider(getValueCellProvider(tableViewer, remoteConditionsList, true));
 		
-		tableViewer.setInput(remoteConditionsList);
 		if(remoteConditionsList.isEmpty()){
 			remoteConditionsList.add(0, new Condition());
 		}
+		dummyList.clear();
+		dummyList.addAll(FilterHelper.INSTANCE.cloneList(remoteConditionsList));
+		tableViewer.setInput(remoteConditionsList);
 		tableViewer.refresh();
 		
 	}
@@ -340,7 +342,7 @@ public class FilterConditionsDialog extends Dialog {
 		buttonComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		
         Button btnAddRowAt = new Button(buttonComposite, SWT.NONE);
-        btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, localConditionsList));
+        btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, localConditionsList, dummyList));
         btnAddRowAt.setText("Add Row at End");
 
         
@@ -394,10 +396,12 @@ public class FilterConditionsDialog extends Dialog {
 		TableViewerColumn valueTextBoxColumn = createTableColumns(tableViewer, "Value", 150);
 		valueTextBoxColumn.setLabelProvider(getValueCellProvider(tableViewer, localConditionsList, false));
 		
-		tableViewer.setInput(localConditionsList);
 		if(localConditionsList.isEmpty()){
 			localConditionsList.add(0, new Condition());
 		}
+		dummyList.clear();
+		dummyList.addAll(FilterHelper.INSTANCE.cloneList(localConditionsList));
+		tableViewer.setInput(localConditionsList);
 		tableViewer.refresh();
 		
 	}
@@ -425,7 +429,7 @@ public class FilterConditionsDialog extends Dialog {
 										fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
 					}
 					
-					text.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getValue());
+					text.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getValue());
 					item.addDisposeListener(new DisposeListener() {
 						
 						@Override
@@ -443,7 +447,7 @@ public class FilterConditionsDialog extends Dialog {
 					});
 				} else {
 					Text text = (Text) item.getData(VALUE_TEXT_BOX);
-					text.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getValue());
+					text.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getValue());
 				}
 			}
 		};
@@ -477,14 +481,14 @@ public class FilterConditionsDialog extends Dialog {
 										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton));
 					}
 					
-					if(StringUtils.isNotBlank(conditionsList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
-						String fieldsName = conditionsList.get(tableViewer.getTable().indexOf(item)).getFieldName();
+					if(StringUtils.isNotBlank(dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
+						String fieldsName = dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName();
 						combo.setItems(typeBasedConditionalOperators.get(fieldsAndTypes.get(fieldsName)));
 					}
 					else{
 						combo.setItems(new String[]{});
 					}
-					combo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getConditionalOperator());
+					combo.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getConditionalOperator());
 					item.addDisposeListener(new DisposeListener() {
 						
 						@Override
@@ -503,14 +507,14 @@ public class FilterConditionsDialog extends Dialog {
 				}
 				else{
 					Combo combo = (Combo) item.getData(CONDITIONAL_OPERATORS);
-					if(StringUtils.isNotBlank(conditionsList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
-						String fieldsName = conditionsList.get(tableViewer.getTable().indexOf(item)).getFieldName();
+					if(StringUtils.isNotBlank(dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
+						String fieldsName = dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName();
 						combo.setItems(typeBasedConditionalOperators.get(fieldsAndTypes.get(fieldsName)));
 					}
 					else{
 						combo.setItems(new String[]{});
 					}
-					combo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getConditionalOperator());
+					combo.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getConditionalOperator());
 				}
 			}
 		};
@@ -543,7 +547,7 @@ public class FilterConditionsDialog extends Dialog {
 												conditionsList, fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
 					}
 				
-					combo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getFieldName());
+					combo.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getFieldName());
 					item.addDisposeListener(new DisposeListener() {
 						
 						@Override
@@ -562,7 +566,7 @@ public class FilterConditionsDialog extends Dialog {
 				}
 				else{
 					Combo fieldNameCombo = (Combo) item.getData(FIELD_NAMES);
-					fieldNameCombo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getFieldName());
+					fieldNameCombo.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getFieldName());
 				}
 			}
 		};
@@ -597,7 +601,7 @@ public class FilterConditionsDialog extends Dialog {
 										fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
 					}
 					
-					combo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getRelationalOperator());
+					combo.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getRelationalOperator());
 					if(tableViewer.getTable().indexOf(item) == 0){
 						combo.setVisible(false);
 					}
@@ -622,7 +626,7 @@ public class FilterConditionsDialog extends Dialog {
 				}
 				else{
 					Combo combo = (Combo) item.getData(RELATIONAL_OPERATORS);
-					combo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getRelationalOperator());
+					combo.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getRelationalOperator());
 				}
 			}
 		};
@@ -642,7 +646,7 @@ public class FilterConditionsDialog extends Dialog {
 					return;
 				}
 				addCheckButtonInTable(tableViewer, item, GROUP_CHECKBOX, GROUP_CHECKBOX_PANE, GROUP_EDITOR, cell.getColumnIndex(), 
-						FilterHelper.INSTANCE.removeButtonListener(tableViewer, conditionsList));
+						FilterHelper.INSTANCE.removeButtonListener(tableViewer, conditionsList, dummyList));
 				item.addDisposeListener(new DisposeListener() {
 					
 					@Override
@@ -673,7 +677,7 @@ public class FilterConditionsDialog extends Dialog {
 					return;
 				}
 				addButtonInTable(tableViewer, item, REMOVE, REMOVE_BUTTON_PANE, REMOVE_EDITOR, cell.getColumnIndex(), 
-						FilterHelper.INSTANCE.removeButtonListener(tableViewer, conditionsList), ImagePathConstant.DELETE_BUTTON);
+						FilterHelper.INSTANCE.removeButtonListener(tableViewer, conditionsList, dummyList), ImagePathConstant.DELETE_BUTTON);
 				item.addDisposeListener(new DisposeListener() {
 					
 					@Override
@@ -704,7 +708,7 @@ public class FilterConditionsDialog extends Dialog {
 					return;
 				}
 				addButtonInTable(tableViewer, item, ADD, ADD_BUTTON_PANE, ADD_EDITOR, cell.getColumnIndex(), 
-						FilterHelper.INSTANCE.addButtonListener(tableViewer,conditionsList), ImagePathConstant.ADD_BUTTON);
+						FilterHelper.INSTANCE.addButtonListener(tableViewer,conditionsList, dummyList), ImagePathConstant.ADD_BUTTON);
 				item.addDisposeListener(new DisposeListener() {
 					
 					@Override

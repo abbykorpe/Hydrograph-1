@@ -25,14 +25,6 @@ public class Condition{
 		this.value = "";
 	}
 	
-	@Deprecated
-	public Condition(String fieldName, String relationalOperator, String conditionalOperation, String value) {
-		this.fieldName = fieldName;
-		this.relationalOperator = relationalOperator;
-		this.conditionalOperator = conditionalOperation;
-		this.value = value;
-	}
-	
 	public Condition copy(Condition source){
 		Condition condition = new Condition();
 		condition.setFieldName(source.getFieldName());
