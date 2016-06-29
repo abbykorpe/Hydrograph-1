@@ -141,13 +141,13 @@ public class ELTJoinMapWidget extends AbstractWidget {
 				}
 
 				if(row.getSource_Field().trim().length()>0){
-				if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
-					finalPassThroughFields.add(row.getOutput_Field());
-					passThroughFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
-				}else{
-					finalMapFields.put(row.getSource_Field().split("\\.")[1], row.getOutput_Field());
-					mapFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
-				}
+					if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
+						finalPassThroughFields.add(row.getOutput_Field());
+						passThroughFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+					}else{
+						finalMapFields.put(row.getSource_Field().split("\\.")[1], row.getOutput_Field());
+						mapFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+					}
 				}
 				outputSchemaGridRowList.add(outputFieldSchema);
 			}

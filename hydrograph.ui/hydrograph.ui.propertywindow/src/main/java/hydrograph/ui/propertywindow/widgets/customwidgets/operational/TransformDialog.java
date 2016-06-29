@@ -954,7 +954,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		Label addLabel = widget.labelWidget(operationalOutputFieldComposite, SWT.CENTER, new int[] { 60, 3, 20, 15 },
 				"", new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
 		addLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
-		//Change flag Kanchan
 		addLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
