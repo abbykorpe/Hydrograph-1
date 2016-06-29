@@ -200,9 +200,13 @@ public class DebugDataViewer extends ApplicationWindow {
 	private Image descending;
 	
 	private TableColumn recentlySortedColumn;
+<<<<<<< HEAD
 	private String sortedColumnName;
 	
 	private FilterConditions conditions;
+=======
+
+>>>>>>> show data in data viewer according to retaining local and remote filter.
 	/**
 	 * Create the application window,
 	 * 
@@ -297,8 +301,15 @@ public class DebugDataViewer extends ApplicationWindow {
 			protected IStatus run(IProgressMonitor monitor) {
 				disbleDataViewerUIControls();
 
+<<<<<<< HEAD
 				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(jobDetails);
 				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles();
+=======
+				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(
+						jobDetails);
+				final StatusMessage statusMessage = dataViewerFileManager
+						.downloadDataViewerFiles(getConditions());
+>>>>>>> show data in data viewer according to retaining local and remote filter.
 
 				if (StatusConstants.ERROR == statusMessage.getReturnCode()) {
 					Display.getDefault().asyncExec(new Runnable() {
@@ -316,8 +327,19 @@ public class DebugDataViewer extends ApplicationWindow {
 				debugFileLocation = dataViewerFileManager.getDataViewerFilePath();
 				setDebugFileLocation(debugFileLocation);
 				setDebugFileName(debugFileName);
-
-				showDataInDebugViewer(false);
+				if (getConditions() != null) {
+					if (getConditions().getRetainLocal() || getConditions().getRetainRemote()) {
+						showDataInDebugViewer(true, false);
+					}
+					 else {
+							showDataInDebugViewer(false, false);
+					}
+					
+				}
+				else
+				{
+					showDataInDebugViewer(false, false);
+				}
 
 				dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + debugFileName + SCHEMA_FILE_EXTENTION);
 				
@@ -347,7 +369,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 
-	public void loadDebugFileInDataViewer(boolean filterApplied) {
+	public void loadDebugFileInDataViewer(boolean filterApplied, boolean remoteOkPressed) {
 		statusManager.getStatusLineManager().getProgressMonitor().done();
 
 		dataViewLoader = new DataViewLoader(unformattedViewTextarea, formattedViewTextarea, horizontalViewTableViewer,
@@ -363,7 +385,7 @@ public class DebugDataViewer extends ApplicationWindow {
 
 		dataViewLoader.updateDataViewLists();
 
-		updateGridViewTable(filterApplied);
+		updateGridViewTable(filterApplied,remoteOkPressed);
 
 		dataViewLoader.reloadloadViews();
 		statusManager.enableInitialPaginationContols();
@@ -371,12 +393,12 @@ public class DebugDataViewer extends ApplicationWindow {
 		submitRecordCountJob();
 	}
 	
-	public void showDataInDebugViewer(final boolean filterApplied) {
+	public void showDataInDebugViewer(final boolean filterApplied, final boolean remoteOkPressed) {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					initializeDataFileAdapter();
+					initializeDataFileAdapter(filterApplied,getConditions());
 				} catch (ClassNotFoundException | SQLException e) {
 					Utils.INSTANCE.showMessage(MessageBoxText.ERROR,
 							Messages.UNABLE_TO_LOAD_DEBUG_FILE + e.getMessage());
@@ -387,7 +409,7 @@ public class DebugDataViewer extends ApplicationWindow {
 					}
 					getShell().close();
 				}
-				loadDebugFileInDataViewer(filterApplied);
+				loadDebugFileInDataViewer(filterApplied,remoteOkPressed);
 			}
 		});
 	}
@@ -517,9 +539,27 @@ public class DebugDataViewer extends ApplicationWindow {
 		return statusManager;
 	}
 
+<<<<<<< HEAD
 	private void initializeDataFileAdapter() throws ClassNotFoundException, SQLException {
 		dataViewerAdapter = new DataViewerAdapter(debugFileLocation, debugFileName,
 				Utils.INSTANCE.getDefaultPageSize(), PreferenceConstants.INITIAL_OFFSET, this);
+=======
+	private void initializeDataFileAdapter(boolean filterApplied, FilterConditions filterConditions) throws ClassNotFoundException,
+			SQLException {
+		
+		if(filterConditions!=null && filterApplied)
+		{
+			dataViewerAdapter=new DataViewerAdapter(debugFileLocation,
+					debugFileName, Utils.INSTANCE.getDefaultPageSize(),
+					PreferenceConstants.INITIAL_OFFSET, this,filterConditions.getLocalCondition());
+		}
+		else
+		{
+			dataViewerAdapter = new DataViewerAdapter(debugFileLocation,
+					debugFileName, Utils.INSTANCE.getDefaultPageSize(),
+					PreferenceConstants.INITIAL_OFFSET, this);
+		}
+>>>>>>> show data in data viewer according to retaining local and remote filter.
 	}
 	
 
@@ -920,6 +960,7 @@ public class DebugDataViewer extends ApplicationWindow {
 					previousCellSize = new Point(currentCellSize.x,currentCellSize.y);
 				}
 
+<<<<<<< HEAD
 				if (!controlResized) {
 					controlResized = true;
 
@@ -1163,6 +1204,10 @@ public class DebugDataViewer extends ApplicationWindow {
 	
 	private void updateGridViewTable(boolean filterApplied) {
 		if(!filterApplied)
+=======
+	private void updateGridViewTable(boolean filterApplied, boolean remoteOkPressed) {
+		if(!remoteOkPressed)
+>>>>>>> show data in data viewer according to retaining local and remote filter.
 		createGridViewTableColumns(gridViewTableViewer);
 
 		gridViewTableViewer.setContentProvider(new ArrayContentProvider());
@@ -1639,6 +1684,8 @@ public class DebugDataViewer extends ApplicationWindow {
 	public FilterConditions getConditions(){
 		return conditions;
 	}
+	
+
 }
 
 

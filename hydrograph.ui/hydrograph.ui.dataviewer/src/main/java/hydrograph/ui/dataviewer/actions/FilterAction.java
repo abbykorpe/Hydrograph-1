@@ -18,6 +18,7 @@ import hydrograph.ui.common.schema.FieldDataTypes;
 import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.dataviewer.filter.FilterConditions;
 import hydrograph.ui.dataviewer.filter.FilterConditionsDialog;
+import hydrograph.ui.dataviewer.filter.FilterHelper;
 import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -56,10 +57,12 @@ public class FilterAction extends Action {
 			}
 			if(filterConditionsDialog.open() !=1){
 				if(filterConditionsDialog.ifSetLocalFilter()){
+					filterConditions.setLocalCondition(FilterHelper.INSTANCE.getLocalCondition());
 					filterConditions.setLocalConditions(filterConditionsDialog.getLocalConditionsList());
 					filterConditions.setRetainLocal(filterConditionsDialog.ifSetLocalFilter());
 				}
 				if(filterConditionsDialog.ifSetRemoteFilter()){
+					filterConditions.setRemoteCondition(FilterHelper.INSTANCE.getRemoteCondition());
 					filterConditions.setRemoteConditions(filterConditionsDialog.getRemoteConditionsList());
 					filterConditions.setRetainRemote(filterConditionsDialog.ifSetRemoteFilter());
 				}

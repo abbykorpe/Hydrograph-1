@@ -13,15 +13,24 @@
 package hydrograph.ui.dataviewer.filemanager;
 
 import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.communication.utilities.SCPUtility;
+import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
+import hydrograph.ui.dataviewer.filter.FilterConditions;
+import hydrograph.ui.dataviewer.filter.RemoteFilterJson;
+import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.utilities.Utils;
+import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,10 +38,14 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
+import com.google.gson.Gson;
 import com.jcraft.jsch.JSchException;
 
 /**
@@ -64,15 +77,38 @@ public class DataViewerFileManager {
 	/**
 	 * 
 	 * Donload debug file in data viewer wrokspace
+	 * @param filterConditions 
 	 * 
 	 * @return error code
 	 */
-	public StatusMessage downloadDataViewerFiles(){
+	public StatusMessage downloadDataViewerFiles(FilterConditions filterConditions){
+
 		// Get csv debug file name and location 
 		String csvDebugFileAbsolutePath = null;
 		String csvDebugFileName = null;
 		try {
-			csvDebugFileAbsolutePath = DebugServiceClient.INSTANCE.getDebugFile(jobDetails, Utils.INSTANCE.getFileSize()).trim();
+			if (filterConditions != null) {
+				if (!filterConditions.getRetainRemote()) {
+					csvDebugFileAbsolutePath = getDebugFileAbsolutePath();
+				} else {
+					csvDebugFileAbsolutePath = getDebugFileAbsolutePath();
+					if (csvDebugFileAbsolutePath != null) {
+					String	debugFileName = csvDebugFileAbsolutePath
+								.substring(csvDebugFileAbsolutePath.lastIndexOf("/") + 1, csvDebugFileAbsolutePath.length())
+								.replace(DEBUG_DATA_FILE_EXTENTION, "").trim();
+						if (debugFileName != null) {
+							csvDebugFileName = getDataViewerDebugFile(debugFileName);
+						}
+					}
+					
+					String filterJson = createJsonObjectForRemoteFilter(filterConditions, csvDebugFileName);
+					csvDebugFileAbsolutePath = DebugServiceClient.INSTANCE.getFilteredFile(filterJson, jobDetails);
+				}
+			}
+			else
+			{
+				csvDebugFileAbsolutePath = getDebugFileAbsolutePath();
+			}
 		} catch (NumberFormatException | HttpException  | MalformedURLException e4) {
 			logger.error("Unable to fetch debug file", e4);
 			return new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_FETCH_DEBUG_FILE);
@@ -80,29 +116,49 @@ public class DataViewerFileManager {
 			logger.error("Unable to fetch debug file", e4);
 			return new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 		}
-		
-		csvDebugFileName = csvDebugFileAbsolutePath.substring(csvDebugFileAbsolutePath.lastIndexOf("/") + 1,
-				csvDebugFileAbsolutePath.length()).replace(DEBUG_DATA_FILE_EXTENTION, "").trim();
+		if (csvDebugFileAbsolutePath != null) {
+			csvDebugFileName = csvDebugFileAbsolutePath
+					.substring(csvDebugFileAbsolutePath.lastIndexOf("/") + 1, csvDebugFileAbsolutePath.length())
+					.replace(DEBUG_DATA_FILE_EXTENTION, "").trim();
+		}
 				
 		//Copy csv debug file to Data viewers temporary file location
-		String dataViewerDebugFile = getDataViewerDebugFile(csvDebugFileName);		
-		try {
-			copyCSVDebugFileToDataViewerStagingArea(jobDetails, csvDebugFileAbsolutePath, dataViewerDebugFile);
-		} catch (IOException | JSchException e1) {
-			logger.error("Unable to fetch debug file", e1);
-			return new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_FETCH_DEBUG_FILE);
+		if (csvDebugFileName != null) {
+			String dataViewerDebugFile = getDataViewerDebugFile(csvDebugFileName);
+			try {
+				copyCSVDebugFileToDataViewerStagingArea(jobDetails, csvDebugFileAbsolutePath, dataViewerDebugFile);
+			} catch (IOException | JSchException e1) {
+				logger.error("Unable to fetch debug file", e1);
+				return new StatusMessage(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
+			}
+
+			// Delete csv debug file after copy
+			deleteFileOnRemote(jobDetails, csvDebugFileName);
+
+			// Check for empty csv debug file
+			if (isEmptyDebugCSVFile(dataViewerFilePath, dataViewerFileName)) {
+				logger.error("Empty debug file");
+				return new StatusMessage(StatusConstants.ERROR, Messages.EMPTY_DEBUG_FILE);
+			}
 		}
-				
-		//Delete csv debug file after copy
-		deleteFileOnRemote(jobDetails, csvDebugFileName);
-		
-		//Check for empty csv debug file
-		if(isEmptyDebugCSVFile(dataViewerFilePath, dataViewerFileName)){
-			logger.error("Empty debug file");
-		    return new StatusMessage(StatusConstants.ERROR,Messages.EMPTY_DEBUG_FILE);
-		}
-		
 		return new StatusMessage(StatusConstants.SUCCESS);
+	}
+
+	private String getDebugFileAbsolutePath() throws HttpException, MalformedURLException, IOException {
+		String csvDebugFileAbsolutePath = DebugServiceClient.INSTANCE.getDebugFile(jobDetails,
+				Utils.INSTANCE.getFileSize()).trim();
+		return csvDebugFileAbsolutePath;
+	}
+
+	private String createJsonObjectForRemoteFilter(FilterConditions filterConditions, String csvDebugFileName) {
+		Gson gson=new Gson();
+		RemoteFilterJson remoteFilterJson=new RemoteFilterJson();
+		remoteFilterJson.setCondition(filterConditions.getRemoteCondition());
+		remoteFilterJson.setSchema(DataViewerUtility.INSTANCE.getSchema(csvDebugFileName));
+		remoteFilterJson.setFileSize(Integer.parseInt(Utils.INSTANCE.getFileSize().trim()));
+		remoteFilterJson.setJobDetails(jobDetails);
+		String filterJson=gson.toJson(remoteFilterJson);
+		return filterJson;
 	}
 	
 	public String getDataViewerFilePath() {
@@ -148,7 +204,6 @@ public class DataViewerFileManager {
 				SCPUtility.INSTANCE.scpFileFromRemoteServer(jobDetails.getHost(), jobDetails.getUsername(), jobDetails.getPassword(),
 						csvFilterFileAbsolutePath.trim(), getDataViewerDebugFilePath());
 		}
-		
 	}
 
 	private String getDataViewerDebugFile(String csvDebugFileName) {
@@ -214,4 +269,5 @@ public class DataViewerFileManager {
 			logger.warn("Unable to delete debug file",e1);
 		}
 	}
+
 }

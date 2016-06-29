@@ -20,6 +20,7 @@ import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
+import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -87,6 +88,8 @@ public class FilterHelper {
 	private String SCHEMA_FILE_EXTENTION=".xml";
 	private String filteredFileLocation;
 	private String filteredFileName;
+	private String localCondition;
+	private String remoteCondition;
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterHelper.class);
 	private FilterHelper() {
 	}
@@ -120,6 +123,13 @@ public class FilterHelper {
 			}
 		};
 		return listener;
+	}
+	public String getLocalCondition() {
+		return localCondition;
+	}
+
+	public String getRemoteCondition() {
+		return remoteCondition;
 	}
 	
 	private void toggleOkApplyButton(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
@@ -382,127 +392,67 @@ public class FilterHelper {
 				
 				if(filterType!=null && filterType.equalsIgnoreCase(LOCAL))
 				{
-					showLocalFilteredData(buffer);
-					try {
-
-						dataViewerAdapter.setFilterCondition(StringUtils.trim(buffer.toString()));
-						dataViewerAdapter.initializeTableData();
-						debugDataViewer.getDataViewLoader().updateDataViewLists();
-						debugDataViewer.getDataViewLoader().reloadloadViews();
-
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
+					
+					localCondition=buffer.toString();
+					showLocalFilteredData(StringUtils.trim(buffer.toString()));
 				}
 				else
 				{
-					showRemoteFilteredData(buffer);
+					remoteCondition=buffer.toString();
+					showRemoteFilteredData(StringUtils.trim(buffer.toString()));
 				}
 			
 				filterConditionsDialog.close();
 			}
 
-			private void showRemoteFilteredData(StringBuffer buffer) {
-				try {
-					String filterJson = createJsonObjectForRemoteFilter(buffer);
-					String filteredFilePath=DebugServiceClient.INSTANCE.getFilteredFile(filterJson, debugDataViewer.getJobDetails());
-					DataViewerFileManager dataViewerFileManager=new DataViewerFileManager();
-					dataViewerFileManager.downloadDataViewerFilterFile(filteredFilePath,debugDataViewer.getJobDetails());
-					filteredFileName = dataViewerFileManager.getDataViewerFileName();
-					filteredFileLocation = dataViewerFileManager.getDataViewerFilePath();
-					debugDataViewer.setDebugFileLocation(filteredFileLocation);
-					debugDataViewer.setDebugFileName(filteredFileName);
-					debugDataViewer.showDataInDebugViewer(true);
-					
-				} catch (NumberFormatException | IOException exception) {
-					logger.error("Error occuring while showing remote filtered data",exception);
-				}
-			}
-
-			private void showLocalFilteredData(StringBuffer buffer) {
-				try {
-					dataViewerAdapter.setFilterCondition(buffer.toString());
-					dataViewerAdapter.initializeTableData();
-					debugDataViewer.getDataViewLoader().updateDataViewLists();
-					debugDataViewer.getDataViewLoader().reloadloadViews();
-
-				} catch (SQLException exception) {
-					logger.error("Error occuring while showing local filtered data",exception);
-				}
-			}
-
-			private String createJsonObjectForRemoteFilter(StringBuffer buffer) {
-				Gson gson=new Gson();
-				RemoteFilterJson remoteFilterJson=new RemoteFilterJson();
-				remoteFilterJson.setCondition(buffer.toString());
-				remoteFilterJson.setSchema(getSchema());
-				remoteFilterJson.setFileSize(debugDataViewer.getViewDataPreferences().getFileSize());
-				remoteFilterJson.setJobDetails(debugDataViewer.getJobDetails());
-				String filterJson=gson.toJson(remoteFilterJson);
-				return filterJson;
-			}
-			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {}
 		};
 		return listener;
 	}
 	
-	public List<GridRow> getSchema() {
-		List<GridRow> gridRowList = new ArrayList<>();
-		String debugFileName = debugDataViewer.getDebugFileName();
-		String debugFileLocation = debugDataViewer.getDebugFileLocation();
-
-		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE
-				.getFieldsFromSchema(debugFileLocation + debugFileName
-						+ SCHEMA_FILE_EXTENTION);
-		for (Field field : dataViewerFileSchema.getField()) {
-			GridRow gridRow = new GridRow();
-
-			gridRow.setFieldName(field.getName());
-			gridRow.setDataType(GridWidgetCommonBuilder
-					.getDataTypeByValue(field.getType().value()));
-			gridRow.setDataTypeValue(field.getType().value());
-
-			if (StringUtils.isNotEmpty(field.getFormat())) {
-				gridRow.setDateFormat(field.getFormat());
-			} else {
-				gridRow.setDateFormat("");
-			}
-			if (field.getPrecision() != null) {
-				gridRow.setPrecision(String.valueOf(field.getPrecision()));
-			} else {
-				gridRow.setPrecision("");
-			}
-			if (field.getScale() != null) {
-				gridRow.setScale(Integer.toString(field.getScale()));
-			} else {
-				gridRow.setScale("");
-			}
-
-			if (StringUtils.isNotEmpty(field.getDescription()))
-				gridRow.setDescription(field.getDescription());
-			else {
-				gridRow.setDescription("");
-			}
-			if (field.getScaleType() != null) {
-				gridRow.setScaleType(GridWidgetCommonBuilder
-						.getScaleTypeByValue(field.getScaleType().value()));
-				gridRow.setScaleTypeValue(GridWidgetCommonBuilder
-						.getScaleTypeValue()[GridWidgetCommonBuilder
-						.getScaleTypeByValue(field.getScaleType().value())]);
-			} else {
-				gridRow.setScaleType(GridWidgetCommonBuilder
-						.getScaleTypeByValue(Messages.SCALE_TYPE_NONE));
-				gridRow.setScaleTypeValue(GridWidgetCommonBuilder
-						.getScaleTypeValue()[Integer
-						.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
-			}
-
-			gridRowList.add(gridRow);
+	
+	private void showRemoteFilteredData(String buffer) {
+		try {
+			String filterJson = createJsonObjectForRemoteFilter(buffer);
+			String filteredFilePath=DebugServiceClient.INSTANCE.getFilteredFile(filterJson, debugDataViewer.getJobDetails());
+			DataViewerFileManager dataViewerFileManager=new DataViewerFileManager();
+			dataViewerFileManager.downloadDataViewerFilterFile(filteredFilePath,debugDataViewer.getJobDetails());
+			filteredFileName = dataViewerFileManager.getDataViewerFileName();
+			filteredFileLocation = dataViewerFileManager.getDataViewerFilePath();
+			debugDataViewer.setDebugFileLocation(filteredFileLocation);
+			debugDataViewer.setDebugFileName(filteredFileName);
+			debugDataViewer.showDataInDebugViewer(true,true);
+			
+		} catch (NumberFormatException | IOException exception) {
+			logger.error("Error occuring while showing remote filtered data",exception);
 		}
-		return gridRowList;
-}
+	}
+
+	private void showLocalFilteredData(String buffer) {
+		try {
+			dataViewerAdapter.setFilterCondition(buffer);
+			dataViewerAdapter.initializeTableData();
+			debugDataViewer.getDataViewLoader().updateDataViewLists();
+			debugDataViewer.getDataViewLoader().reloadloadViews();
+
+		} catch (SQLException exception) {
+			logger.error("Error occuring while showing local filtered data",exception);
+		}
+	}
+
+	public String createJsonObjectForRemoteFilter(String buffer) {
+		Gson gson=new Gson();
+		RemoteFilterJson remoteFilterJson=new RemoteFilterJson();
+		remoteFilterJson.setCondition(buffer);
+		remoteFilterJson.setSchema(DataViewerUtility.INSTANCE.getSchema(debugDataViewer.getDebugFileLocation()+debugDataViewer.getDebugFileName()+SCHEMA_FILE_EXTENTION));
+		remoteFilterJson.setFileSize(debugDataViewer.getViewDataPreferences().getFileSize());
+		remoteFilterJson.setJobDetails(debugDataViewer.getJobDetails());
+		String filterJson=gson.toJson(remoteFilterJson);
+		return filterJson;
+	}
+	
+
 
 	public void setFilterType(String filterType) {
 		this.filterType=filterType;

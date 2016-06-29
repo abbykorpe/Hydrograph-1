@@ -79,6 +79,19 @@ public class DataViewerAdapter {
 		this.debugDataViewer=debugDataViewer;
 		initializeAdapter();
 	}
+	
+	public DataViewerAdapter(String databaseName, String tableName, int PAGE_SIZE, long INITIAL_OFFSET, DebugDataViewer debugDataViewer,String filterCondition) throws ClassNotFoundException, SQLException {
+		this.databaseName = databaseName;
+		this.tableName = tableName;
+		viewerData = new LinkedList<>();
+		columnList = new LinkedList<>();
+		columnCount = 0;
+		this.pageSize = PAGE_SIZE;
+		this.offset = INITIAL_OFFSET;
+		this.debugDataViewer=debugDataViewer;
+		this.filterCondition=filterCondition;
+		initializeAdapter();
+	}
 
 	/**
 	 * 
