@@ -220,7 +220,7 @@ public class FilterConditionsDialog extends Dialog {
 
 	private void createRemoteTabItem(TabFolder tabFolder, TableViewer tableViewer) {
 		TabItem tbtmLocal = new TabItem(tabFolder, SWT.NONE);
-		tbtmLocal.setText("Remote");
+		tbtmLocal.setText("Original");
 		
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		tbtmLocal.setControl(composite);
@@ -323,7 +323,7 @@ public class FilterConditionsDialog extends Dialog {
 
 	private void createLocalTabItem(TabFolder tabFolder, TableViewer tableViewer) {
 		TabItem tbtmLocal = new TabItem(tabFolder, SWT.NONE);
-		tbtmLocal.setText("Local");
+		tbtmLocal.setText("Downloaded");
 		
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		tbtmLocal.setControl(composite);
