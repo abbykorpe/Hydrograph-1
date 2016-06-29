@@ -83,6 +83,8 @@ public class Messages extends NLS{
 	public static String PORTNO_FIELD_VALIDATION;
 	public static String SCALE_TYPE_NONE;
 	public static String UNABLE_TO_FETCH_FILTER_FILE;
+	public static String GROUP_CLAUSE_ALREADY_EXISTS;
+	public static String CANNOT_CREATE_GROUP_CLAUSE;
 		
 	static {
 		// initialize resource bundle

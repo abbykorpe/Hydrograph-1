@@ -13,7 +13,6 @@
 package hydrograph.ui.dataviewer.filter;
 
 import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -43,7 +42,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -61,13 +60,14 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
+
 public class FilterConditionsDialog extends Dialog {
 	private static final String VALUE_TEXT_BOX = "valueTextBox";
 	private static final String FIELD_NAMES = "fieldNames";
 	private static final String RELATIONAL_OPERATORS = "relationalOperators";
 	private static final String REMOVE = "-";
 	private static final String ADD = "+";
-	private static final String GROUP_CHECKBOX = "groupCheckBox";
+	public static final String GROUP_CHECKBOX = "groupCheckBox";
 	public static final String CONDITIONAL_OPERATORS = "conditionalOperators";
 	public static final String ROW_INDEX = "rowIndex";
 	
@@ -86,6 +86,7 @@ public class FilterConditionsDialog extends Dialog {
 	private static final String FIELD_EDITOR = "field_editor";
 	private static final String CONDITIONAL_EDITOR = "conditional_editor";
 	private static final String VALUE_EDITOR = "vale_editor";
+	public static int GROUP_COLUMNS_COUNT = 0;
 	
 	private Map<String,String[]> typeBasedConditionalOperators = new HashMap<>();
 	private FilterConditions originalFilterConditions;
@@ -100,8 +101,6 @@ public class FilterConditionsDialog extends Dialog {
 	
 	private List<Condition> localConditionsList; 
 	private List<Condition> remoteConditionsList; 
-	private List<Condition> dummyList = new ArrayList<>();
-	
 	//Map for adding group index with list of list of row indexes
 	private TreeMap<Integer,List<List<Integer>>> groupSelectionMap;
 	private DataViewerAdapter dataViewerAdapter;
@@ -109,14 +108,13 @@ public class FilterConditionsDialog extends Dialog {
 	private static final String REMOTE="Remote";
 	private static final String LOCAL="local";
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConditionsDialog.class);
-	private boolean localFilter=false;
-	private boolean remoteFilter=false;
 	
 	Button localOkButton;
 	Button localApplyButton;
 	Button remoteOkButton;
 	Button remoteApplyButton;
-	
+	public Button remoteBtnAddGrp;
+	public Button localBtnAddGrp;
 	public void setFieldsAndTypes(Map<String, String> fieldsAndTypes) {
 		this.fieldsAndTypes = fieldsAndTypes;
 		fieldNames = (String[]) this.fieldsAndTypes.keySet().toArray(new String[this.fieldsAndTypes.size()]);
@@ -133,7 +131,7 @@ public class FilterConditionsDialog extends Dialog {
 		localConditionsList = new ArrayList<>();
 		remoteConditionsList = new ArrayList<>();
 		groupSelectionMap = new TreeMap<>();
-		typeBasedConditionalOperators = FilterHelper.INSTANCE.getTypeBasedOperatorMap();
+		
 		
 		retainLocalFilter= new RetainFilter();
 		retainRemoteFilter= new RetainFilter();
@@ -146,6 +144,7 @@ public class FilterConditionsDialog extends Dialog {
 		localConditionsList.addAll(FilterHelper.INSTANCE.cloneList(filterConditions.getLocalConditions()));
 		remoteConditionsList.addAll(FilterHelper.INSTANCE.cloneList(filterConditions.getRemoteConditions()));
 		retainLocalFilter.setRetainFilter(filterConditions.getRetainLocal());
+		
 		retainRemoteFilter.setRetainFilter(filterConditions.getRetainRemote());
 	}
 	
@@ -220,7 +219,7 @@ public class FilterConditionsDialog extends Dialog {
 
 	private void createRemoteTabItem(TabFolder tabFolder, TableViewer tableViewer) {
 		TabItem tbtmLocal = new TabItem(tabFolder, SWT.NONE);
-		tbtmLocal.setText("Original");
+		tbtmLocal.setText("Remote");
 		
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		tbtmLocal.setControl(composite);
@@ -239,7 +238,7 @@ public class FilterConditionsDialog extends Dialog {
 		buttonComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		
         Button btnAddRowAt = new Button(buttonComposite, SWT.NONE);
-        btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, remoteConditionsList, dummyList));
+        btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, remoteConditionsList));
         btnAddRowAt.setText("Add Row at End");
 
         
@@ -250,9 +249,10 @@ public class FilterConditionsDialog extends Dialog {
 			retainButton.setSelection(true);
 		}
 		
-		Button btnAddGrp = new Button(buttonComposite, SWT.NONE);
-		btnAddGrp.setText("Create Group");
-		btnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer));
+		remoteBtnAddGrp = new Button(buttonComposite, SWT.NONE);
+		remoteBtnAddGrp.setText("Create Group");		
+		remoteBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer));
+		remoteBtnAddGrp.setEnabled(false);
 		
 		Button clearButton = new Button(buttonComposite, SWT.NONE);
 		clearButton.setText("Clear");
@@ -260,7 +260,7 @@ public class FilterConditionsDialog extends Dialog {
 		
 		remoteOkButton = new Button(buttonComposite, SWT.NONE);
 		remoteOkButton.setText("OK");
-		remoteOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(remoteConditionsList, fieldsAndTypes));
+		remoteOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(remoteConditionsList, fieldsAndTypes,groupSelectionMap));
 		
 		Button btnCancel = new Button(buttonComposite, SWT.NONE);
 		btnCancel.setText("Cancel");
@@ -278,7 +278,7 @@ public class FilterConditionsDialog extends Dialog {
 		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, remoteConditionsList));
 		
 		TableViewerColumn groupButtonTableViewerColumn = createTableColumns(tableViewer, "", 40);
-		groupButtonTableViewerColumn.setLabelProvider(getGroupCheckCellProvider(tableViewer, remoteConditionsList));
+		groupButtonTableViewerColumn.setLabelProvider(getGroupCheckCellProvider(tableViewer, remoteConditionsList,remoteBtnAddGrp));
 		
 		TableViewerColumn relationalDropDownColumn = createTableColumns(tableViewer, "Relational Operator", 120);
 		relationalDropDownColumn.setLabelProvider(getRelationalCellProvider(tableViewer, remoteConditionsList, true));
@@ -293,12 +293,10 @@ public class FilterConditionsDialog extends Dialog {
 		TableViewerColumn valueTextBoxColumn = createTableColumns(tableViewer, "Value", 150);
 		valueTextBoxColumn.setLabelProvider(getValueCellProvider(tableViewer, remoteConditionsList, true));
 		
+		tableViewer.setInput(remoteConditionsList);
 		if(remoteConditionsList.isEmpty()){
 			remoteConditionsList.add(0, new Condition());
 		}
-		dummyList.clear();
-		dummyList.addAll(FilterHelper.INSTANCE.cloneList(remoteConditionsList));
-		tableViewer.setInput(remoteConditionsList);
 		tableViewer.refresh();
 		
 	}
@@ -323,7 +321,7 @@ public class FilterConditionsDialog extends Dialog {
 
 	private void createLocalTabItem(TabFolder tabFolder, TableViewer tableViewer) {
 		TabItem tbtmLocal = new TabItem(tabFolder, SWT.NONE);
-		tbtmLocal.setText("Downloaded");
+		tbtmLocal.setText("Local");
 		
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		tbtmLocal.setControl(composite);
@@ -342,7 +340,7 @@ public class FilterConditionsDialog extends Dialog {
 		buttonComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		
         Button btnAddRowAt = new Button(buttonComposite, SWT.NONE);
-        btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, localConditionsList, dummyList));
+        btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, localConditionsList));
         btnAddRowAt.setText("Add Row at End");
 
         
@@ -353,9 +351,10 @@ public class FilterConditionsDialog extends Dialog {
 			retainButton.setSelection(true);
 		}
 		 	
-		Button btnAddGrp = new Button(buttonComposite, SWT.NONE);
-		btnAddGrp.setText("Create Group");
-		btnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer));
+		localBtnAddGrp = new Button(buttonComposite, SWT.NONE);
+		localBtnAddGrp.setText("Create Group");
+		localBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer));
+		localBtnAddGrp.setEnabled(false);
 	
 		Button clearButton = new Button(buttonComposite, SWT.NONE);
 		clearButton.setText("Clear");
@@ -363,7 +362,7 @@ public class FilterConditionsDialog extends Dialog {
 		
 		localOkButton = new Button(buttonComposite, SWT.NONE);
 		localOkButton.setText("OK");
-		localOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(localConditionsList, fieldsAndTypes));
+		localOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(localConditionsList, fieldsAndTypes,groupSelectionMap));
 		
 		Button btnCancel = new Button(buttonComposite, SWT.NONE);
 		btnCancel.setText("Cancel");
@@ -381,7 +380,7 @@ public class FilterConditionsDialog extends Dialog {
 		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, localConditionsList));
 		
 		TableViewerColumn groupButtonTableViewerColumn = createTableColumns(tableViewer, "", 40);
-		groupButtonTableViewerColumn.setLabelProvider(getGroupCheckCellProvider(tableViewer, localConditionsList));
+		groupButtonTableViewerColumn.setLabelProvider(getGroupCheckCellProvider(tableViewer, localConditionsList,localBtnAddGrp));
 		
 		TableViewerColumn relationalDropDownColumn = createTableColumns(tableViewer, "Relational Operator", 120);
 		relationalDropDownColumn.setLabelProvider(getRelationalCellProvider(tableViewer, localConditionsList, false));
@@ -396,12 +395,10 @@ public class FilterConditionsDialog extends Dialog {
 		TableViewerColumn valueTextBoxColumn = createTableColumns(tableViewer, "Value", 150);
 		valueTextBoxColumn.setLabelProvider(getValueCellProvider(tableViewer, localConditionsList, false));
 		
+		tableViewer.setInput(localConditionsList);
 		if(localConditionsList.isEmpty()){
 			localConditionsList.add(0, new Condition());
 		}
-		dummyList.clear();
-		dummyList.addAll(FilterHelper.INSTANCE.cloneList(localConditionsList));
-		tableViewer.setInput(localConditionsList);
 		tableViewer.refresh();
 		
 	}
@@ -429,7 +426,7 @@ public class FilterConditionsDialog extends Dialog {
 										fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
 					}
 					
-					text.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getValue());
+					text.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getValue());
 					item.addDisposeListener(new DisposeListener() {
 						
 						@Override
@@ -447,7 +444,7 @@ public class FilterConditionsDialog extends Dialog {
 					});
 				} else {
 					Text text = (Text) item.getData(VALUE_TEXT_BOX);
-					text.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getValue());
+					text.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getValue());
 				}
 			}
 		};
@@ -481,14 +478,14 @@ public class FilterConditionsDialog extends Dialog {
 										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton));
 					}
 					
-					if(StringUtils.isNotBlank(dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
-						String fieldsName = dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName();
+					if(StringUtils.isNotBlank(conditionsList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
+						String fieldsName = conditionsList.get(tableViewer.getTable().indexOf(item)).getFieldName();
 						combo.setItems(typeBasedConditionalOperators.get(fieldsAndTypes.get(fieldsName)));
 					}
 					else{
 						combo.setItems(new String[]{});
 					}
-					combo.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getConditionalOperator());
+					combo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getConditionalOperator());
 					item.addDisposeListener(new DisposeListener() {
 						
 						@Override
@@ -507,14 +504,14 @@ public class FilterConditionsDialog extends Dialog {
 				}
 				else{
 					Combo combo = (Combo) item.getData(CONDITIONAL_OPERATORS);
-					if(StringUtils.isNotBlank(dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
-						String fieldsName = dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName();
+					if(StringUtils.isNotBlank(conditionsList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
+						String fieldsName = conditionsList.get(tableViewer.getTable().indexOf(item)).getFieldName();
 						combo.setItems(typeBasedConditionalOperators.get(fieldsAndTypes.get(fieldsName)));
 					}
 					else{
 						combo.setItems(new String[]{});
 					}
-					combo.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getConditionalOperator());
+					combo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getConditionalOperator());
 				}
 			}
 		};
@@ -547,7 +544,7 @@ public class FilterConditionsDialog extends Dialog {
 												conditionsList, fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
 					}
 				
-					combo.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getFieldName());
+					combo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getFieldName());
 					item.addDisposeListener(new DisposeListener() {
 						
 						@Override
@@ -566,7 +563,7 @@ public class FilterConditionsDialog extends Dialog {
 				}
 				else{
 					Combo fieldNameCombo = (Combo) item.getData(FIELD_NAMES);
-					fieldNameCombo.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getFieldName());
+					fieldNameCombo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getFieldName());
 				}
 			}
 		};
@@ -601,7 +598,7 @@ public class FilterConditionsDialog extends Dialog {
 										fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
 					}
 					
-					combo.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getRelationalOperator());
+					combo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getRelationalOperator());
 					if(tableViewer.getTable().indexOf(item) == 0){
 						combo.setVisible(false);
 					}
@@ -626,13 +623,13 @@ public class FilterConditionsDialog extends Dialog {
 				}
 				else{
 					Combo combo = (Combo) item.getData(RELATIONAL_OPERATORS);
-					combo.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getRelationalOperator());
+					combo.setText((conditionsList.get(tableViewer.getTable().indexOf(item))).getRelationalOperator());
 				}
 			}
 		};
 	}
 
-	private CellLabelProvider getGroupCheckCellProvider(final TableViewer tableViewer, final List<Condition> conditionsList) {
+	private CellLabelProvider getGroupCheckCellProvider(final TableViewer tableViewer, final List<Condition> conditionsList, final Button btnAddGrp) {
 		return new CellLabelProvider() {
 			
 			@Override
@@ -646,7 +643,7 @@ public class FilterConditionsDialog extends Dialog {
 					return;
 				}
 				addCheckButtonInTable(tableViewer, item, GROUP_CHECKBOX, GROUP_CHECKBOX_PANE, GROUP_EDITOR, cell.getColumnIndex(), 
-						FilterHelper.INSTANCE.removeButtonListener(tableViewer, conditionsList, dummyList));
+						FilterHelper.INSTANCE.checkButtonListener(tableViewer, conditionsList,btnAddGrp));
 				item.addDisposeListener(new DisposeListener() {
 					
 					@Override
@@ -677,7 +674,8 @@ public class FilterConditionsDialog extends Dialog {
 					return;
 				}
 				addButtonInTable(tableViewer, item, REMOVE, REMOVE_BUTTON_PANE, REMOVE_EDITOR, cell.getColumnIndex(), 
-						FilterHelper.INSTANCE.removeButtonListener(tableViewer, conditionsList, dummyList), ImagePathConstant.DELETE_BUTTON);
+						removeButtonListener(tableViewer, conditionsList,groupSelectionMap),  null
+						/*ImagePathConstant.DELETE_BUTTON*/);
 				item.addDisposeListener(new DisposeListener() {
 					
 					@Override
@@ -708,7 +706,7 @@ public class FilterConditionsDialog extends Dialog {
 					return;
 				}
 				addButtonInTable(tableViewer, item, ADD, ADD_BUTTON_PANE, ADD_EDITOR, cell.getColumnIndex(), 
-						FilterHelper.INSTANCE.addButtonListener(tableViewer,conditionsList, dummyList), ImagePathConstant.ADD_BUTTON);
+						FilterHelper.INSTANCE.addButtonListener(tableViewer,conditionsList,groupSelectionMap), ImagePathConstant.ADD_BUTTON);
 				item.addDisposeListener(new DisposeListener() {
 					
 					@Override
@@ -726,25 +724,69 @@ public class FilterConditionsDialog extends Dialog {
 		};
 	}
 	
-	private CellLabelProvider getDummyColumn(final TableViewer tableViewer,	final List<Condition> conditionsList) {
+	private CellLabelProvider getDummyColumn(final TableViewer tableViewer,	final List<Condition> conditionsList, final Integer columnIndex) {
+		
 		return new CellLabelProvider() {
 
 			@Override
 			public void update(ViewerCell cell) {
+				
 				final TableItem item = (TableItem) cell.getItem();
 				
-				if (item.getData("UPDATED3") == null) {
-					item.setData("UPDATED3", "TRUE");
-				} else {
-					return;
-				}
+				List<List<Integer>> checkedGrpRowIndices = groupSelectionMap.get(columnIndex);
+				
+				if (cell.getColumnIndex() == (columnIndex + 3)) {
 
-				item.addDisposeListener(new DisposeListener() {
+					if (null != checkedGrpRowIndices
+							&& !checkedGrpRowIndices.isEmpty()) {
 
-					@Override
-					public void widgetDisposed(DisposeEvent e) {
+						List tempList = new ArrayList();
+						for (List<Integer> checkedIndex : checkedGrpRowIndices) {
+							tempList.addAll(checkedIndex);
+						}
+						int indexOf = tableViewer.getTable().indexOf(item);
+						
+						if(tempList.contains(indexOf)){
+							
+							for (int i = 0; i < checkedGrpRowIndices.size(); i++) {
+								
+								if((checkedGrpRowIndices.get(i)).contains(indexOf)){
+									
+									cell.setBackground(FilterHelper.INSTANCE.getColor(i));
+									break;
+								}
+							}	
+						}
+						else{
+							cell.setBackground(new Color(null, 255,255,255));
+						}
+							
+						
+						
+						
+						
+							/*for (Integer i : checkedIndex) {
+									
+								if (tableViewer.getTable().indexOf(item) == i) {
+
+									cell.setBackground(FilterHelper.INSTANCE.getColor(columnIndex));*/
+									
+									/*if(!isRemoveButtonAdded){
+									
+										addButtonInTable(tableViewer, item, "remove", "removegrp", "removegrpeditor", cell.getColumnIndex(), 
+												removeGroupListner(tableViewer,groupSelectionMap,cell.getColumnIndex()));
+										isRemoveButtonAdded=true;
+										
+										
+									}*/
+									
+								/*	
+								}
+
+							}*/
+
 					}
-				});
+				}
 			}
 		};
 	}
@@ -756,7 +798,8 @@ public class FilterConditionsDialog extends Dialog {
 		tableColumn.setText(columnLabel);
 		return tableViewerColumn;
 	}
-
+	
+	
 	private Text addTextBoxInTable(TableViewer tableViewer, TableItem tableItem, String textBoxName, 
 			String valueTextPane, String editorName, int columnIndex, Listener listener) {
 		final Composite buttonPane = new Composite(tableViewer.getTable(), SWT.NONE);
@@ -811,7 +854,7 @@ public class FilterConditionsDialog extends Dialog {
 		tableItem.setData(columnName, button);
 		tableItem.setData(buttonPaneName, buttonPane);
 		button.addSelectionListener(buttonSelectionListener);
-		button.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + imagePath));
+		//button.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + imagePath));
 		
 		final TableEditor editor = new TableEditor(tableViewer.getTable());
 		editor.grabHorizontal = true;
@@ -827,6 +870,7 @@ public class FilterConditionsDialog extends Dialog {
 		buttonPane.setLayout(new FillLayout());
 		final Button button = new Button(buttonPane, SWT.CHECK);
 		button.setData(ROW_INDEX, tableViewer.getTable().indexOf(tableItem));
+		button.addSelectionListener(buttonSelectionListener);
 		tableItem.setData(columnName, button);
 		tableItem.setData(groupPaneName, buttonPane);
 		
@@ -853,30 +897,19 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 			public void widgetSelected(SelectionEvent e) {
 			
 			      
-				storeGroupSelection(tableViewer) ;              			     
+				if(storeGroupSelection(tableViewer)){              			     
 			     
-				GROUP_COLUMNS_COUNT++;
-			    
-			  
-			    TableColumn[] columns = tableViewer.getTable().getColumns();
-			   
-			    TableItem[] items = tableViewer.getTable().getItems();
-			   
-			    for (int i = 0; i < items.length; i++) {
-			    	items[i].dispose();
-				}
-			    
-			    for (TableColumn tc : columns) {
-			    	
-			     tc.dispose();
-							    	
-				}
+				   
+				FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
 			    
 			    redrawAllColumns(tableViewer);
 			   			 
 			      
+			 }
+				
+			 
+				
 			}
-			
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -890,58 +923,48 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 
 	
 	
-	private void redrawAllColumns(TableViewer tableViewer){
+	public void redrawAllColumns(TableViewer tableViewer){
 		
-		/*TableViewerColumn addButtonTableViewerColumn = createTableColumns(
-				tableViewer, "");
-		addButtonTableViewerColumn.setLabelProvider(getAddButtonCellProvider(
-				tableViewer, remoteConditionsList));
-
-		TableViewerColumn removeButtonTableViewerColumn = createTableColumns(
-				tableViewer, "");
-		removeButtonTableViewerColumn
-				.setLabelProvider(getRemoveButtonCellProvider(tableViewer,
-						remoteConditionsList));
-
-		TableViewerColumn groupButtonTableViewerColumn = createTableColumns(
-				tableViewer, "Group");
-		groupButtonTableViewerColumn
-				.setLabelProvider(getGroupCheckCellProvider(tableViewer,
-						remoteConditionsList));
-
+		
+		TableViewerColumn addButtonTableViewerColumn = createTableColumns(tableViewer, "", 28);
+		addButtonTableViewerColumn.setLabelProvider(getAddButtonCellProvider(tableViewer, remoteConditionsList));
+		
+		TableViewerColumn removeButtonTableViewerColumn = createTableColumns(tableViewer, "", 28);
+		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, remoteConditionsList));
+		
+		TableViewerColumn groupButtonTableViewerColumn = createTableColumns(tableViewer, "", 40);
+		groupButtonTableViewerColumn.setLabelProvider(getGroupCheckCellProvider(tableViewer, remoteConditionsList,remoteBtnAddGrp));
+		
 		for(int i=0; i<GROUP_COLUMNS_COUNT; i++){
-			TableViewerColumn dummyTableViewerColumn = createTableColumns(
-					tableViewer, "");
-			dummyTableViewerColumn
-					.setLabelProvider(getDummyColumn(tableViewer,
-							remoteConditionsList));	
+			TableViewerColumn dummyTableViewerColumn = createTableColumns(tableViewer, "Grp"+i,20);
+			dummyTableViewerColumn.setLabelProvider(getDummyColumn(tableViewer,remoteConditionsList, i));	
 		}
 		
-		TableViewerColumn relationalDropDownColumn = createTableColumns(
-				tableViewer, "Relational Operator");
-		relationalDropDownColumn.setLabelProvider(getRelationalCellProvider(
-				tableViewer, remoteConditionsList));
-
-		TableViewerColumn fieldNameDropDownColumn = createTableColumns(
-				tableViewer, "Field Name");
-		fieldNameDropDownColumn.setLabelProvider(getFieldNameCellProvider(
-				tableViewer, remoteConditionsList, remoteOkButton));
-
-		TableViewerColumn conditionalDropDownColumn = createTableColumns(
-				tableViewer, "Conditional Operator");
-		conditionalDropDownColumn.setLabelProvider(getConditionalCellProvider(
-				tableViewer, remoteConditionsList));
-
-		TableViewerColumn valueTextBoxColumn = createTableColumns(tableViewer,
-				"Value");
-		valueTextBoxColumn.setLabelProvider(getValueCellProvider(tableViewer,
-				remoteConditionsList));
 		
-		tableViewer.refresh();*/
+		TableViewerColumn relationalDropDownColumn = createTableColumns(tableViewer, "Relational Operator", 120);
+		relationalDropDownColumn.setLabelProvider(getRelationalCellProvider(tableViewer, remoteConditionsList, true));
+		
+		
+		TableViewerColumn fieldNameDropDownColumn = createTableColumns(tableViewer, "Field Name", 150);
+		fieldNameDropDownColumn.setLabelProvider(getFieldNameCellProvider(tableViewer, remoteConditionsList, true));
+		
+		TableViewerColumn conditionalDropDownColumn = createTableColumns(tableViewer, "Conditional Operator", 130);
+		conditionalDropDownColumn.setLabelProvider(getConditionalCellProvider(tableViewer, remoteConditionsList, true));
+		
+		TableViewerColumn valueTextBoxColumn = createTableColumns(tableViewer, "Value", 150);
+		valueTextBoxColumn.setLabelProvider(getValueCellProvider(tableViewer, remoteConditionsList, true));
+		
+		
+		
+		remoteBtnAddGrp.setEnabled(false);
+		
+		tableViewer.refresh();
 	}
 
 
-	private void storeGroupSelection(TableViewer tableViewer){
+	private boolean storeGroupSelection(TableViewer tableViewer){
+		
+		boolean retVal=false;
 		List<List<Integer>> grpList = new ArrayList<>();
 		List<Integer> selectionList = new ArrayList<>();
 		
@@ -954,14 +977,102 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 			   selectionList.add(tableViewer.getTable().indexOf(tableItem));
 			   }
 		}
-		   
-		   grpList.add(selectionList);
-		   if(groupSelectionMap.isEmpty()){
-			   groupSelectionMap.put(1, grpList); 
-		   }else{
-			   groupSelectionMap.put(groupSelectionMap.lastKey()+1,grpList);
-		   }
+		  
+			
+		if (groupSelectionMap.isEmpty()) {
+			
+			GROUP_COLUMNS_COUNT++;
+			grpList.add(selectionList);
+			groupSelectionMap.put(0, grpList);
+			retVal=true;
+
+		} else {
+			if (FilterHelper.INSTANCE.validatUserGroupSelection(groupSelectionMap, selectionList)) {
+
+				if(FilterHelper.INSTANCE.isColumnModifiable(groupSelectionMap, selectionList)){
+					
+					retVal=true;
+					
+				}else{
+				
+				GROUP_COLUMNS_COUNT++;
+				
+				grpList.add(selectionList);
+
+				Map<Integer, List<List<Integer>>> tempMap = new TreeMap<>();
+
+				tempMap.putAll(groupSelectionMap);
+
+				groupSelectionMap.clear();
+
+				groupSelectionMap.put(0, grpList);
+
+				for (int i = 0; i < tempMap.size(); i++) {
+
+					groupSelectionMap.put(i + 1, tempMap.get(i));
+
+				}
+				retVal=true;
+				FilterHelper.INSTANCE.reArrangeGroups(groupSelectionMap, selectionList);
+				
+				}
+			} 
+		}
+	
+		return retVal;  
+		
 	}
+	
+	public SelectionListener removeGroupListner(final TableViewer tableViewer, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap, final int columnIndex) {
+		SelectionListener listener = new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+				groupSelectionMap.remove(columnIndex);
+				GROUP_COLUMNS_COUNT--;
+							
+				tableViewer.refresh();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
+		
+		return listener;
+	}
+	
+	public SelectionListener removeButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap) {
+		SelectionListener listener = new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(conditionsList.size() > 1){
+					Button button = (Button) e.getSource();
+					int removeIndex = (int) button.getData(FilterConditionsDialog.ROW_INDEX);
+					
+					conditionsList.remove(removeIndex);
+					boolean isRemoveAllColumns = FilterHelper.INSTANCE.refreshGroupSelections(tableViewer,removeIndex, "DEL", groupSelectionMap);
+					
+					if(isRemoveAllColumns){
+						FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
+						redrawAllColumns(tableViewer);
+					}
+					
+				}
+				tableViewer.refresh();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		};
+		return listener;
+	}
+	
+	
 	
 	public FilterConditions getOriginalFilterConditions() {
 		return originalFilterConditions;

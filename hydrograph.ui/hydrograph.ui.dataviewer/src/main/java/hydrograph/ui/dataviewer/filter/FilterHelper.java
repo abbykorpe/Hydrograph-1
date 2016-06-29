@@ -14,6 +14,7 @@ package hydrograph.ui.dataviewer.filter;
 
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
+import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
 import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
@@ -31,10 +32,12 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.fieldassist.ComboContentAdapter;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -45,6 +48,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
@@ -89,7 +95,7 @@ public class FilterHelper {
 	
 	public Map<String, String[]> getTypeBasedOperatorMap(){
 		Map<String, String[]> typeBasedConditionalOperators = new HashMap<String, String[]>();
-		typeBasedConditionalOperators.put(TYPE_STRING, new String[]{"LIKE","IN","NOT IN"}); 
+		typeBasedConditionalOperators.put(TYPE_STRING, new String[]{"LIKE","IN ","NOT IN"}); 
 		typeBasedConditionalOperators.put(TYPE_INTEGER, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
 		typeBasedConditionalOperators.put(TYPE_DATE, new String[]{">", "<", "<=",">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
 		typeBasedConditionalOperators.put(TYPE_BIGDECIMAL, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN","NOT IN"});
@@ -195,6 +201,10 @@ public class FilterHelper {
 		return listener;
 	}
 	
+/*	private void processFieldName(TableViewer tableViewer, Combo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes, String[] fieldNames, Button okButton, Button applyButton){
+	
+	}*/
+	
 	public SelectionListener getConditionalOperatorSelectionListener(final List<Condition> conditionsList, 
 			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
 		SelectionListener listener = new SelectionListener() {
@@ -274,8 +284,7 @@ public class FilterHelper {
 		toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 	}
 	
-	public SelectionListener addButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList, 
-			final List<Condition> dummyList) {
+	public SelectionListener addButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
@@ -283,8 +292,10 @@ public class FilterHelper {
 				Button button = (Button) e.getSource();
 				int index = (int) button.getData(FilterConditionsDialog.ROW_INDEX);
 				conditionsList.add(index, new Condition());
-				dummyList.clear();
-				dummyList.addAll(cloneList(conditionsList));
+				
+				FilterHelper.INSTANCE.refreshGroupSelections(tableViewer, index, "ADD", groupSelectionMap);
+				
+				
 				tableViewer.refresh();
 			}
 			
@@ -294,44 +305,24 @@ public class FilterHelper {
 		return listener;
 	}
 
-	public SelectionListener removeButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList, 
-			final List<Condition> dummyList) {
-		SelectionListener listener = new SelectionListener() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(conditionsList.size() > 1){
-					Button button = (Button) e.getSource();
-					int removeIndex = (int) button.getData(FilterConditionsDialog.ROW_INDEX);
-					
-					conditionsList.remove(removeIndex);
-					dummyList.clear();
-					dummyList.addAll(cloneList(conditionsList));
-				}
-				tableViewer.refresh();
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {}
-		};
-		return listener;
-	}
 	
-	public SelectionListener getOkButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes/*,
-			final Map<Integer,List<List<Integer>>> groupSelectionMap*/) {
+	
+	public SelectionListener getOkButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
+			final Map<Integer,List<List<Integer>>> groupSelectionMap) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				//TODO : temp for compilation
-				Map<Integer,List<List<Integer>>> groupSelectionMap = new TreeMap<Integer, List<List<Integer>>>();
+			//	Map<Integer,List<List<Integer>>> groupSelectionMap = new TreeMap<Integer, List<List<Integer>>>();
 			
 				//put number of elements in the list
 				//1 2 3 4 5
 				List<String> actualStringList = new LinkedList<>();
 				for (int conditionIndex = 0; conditionIndex < conditionsList.size(); conditionIndex++) {
-					actualStringList.add(conditionIndex, String.valueOf((conditionIndex + 1)));
+					actualStringList.add(conditionIndex, String.valueOf((conditionIndex)));
 				}
+				System.out.println(actualStringList);
 				//start adding brackets for grouping
 				Set<Integer> treeSet  = (Set<Integer>) groupSelectionMap.keySet();
 				if(treeSet.size() > 0){
@@ -354,7 +345,7 @@ public class FilterHelper {
 				//start adding relational operators
 				int indexOfRelational = 1;
 				//start from 2nd index
-				for (int item = 2; item <= conditionsList.size(); item++) {
+				for (int item = 1; item < conditionsList.size(); item++) {
 					int indexOfItem = actualStringList.indexOf(String.valueOf(item));
 					while(true){
 						if((actualStringList.get(indexOfItem-1)).matches(REGEX_DIGIT) 
@@ -366,6 +357,7 @@ public class FilterHelper {
 						}
 					}
 					indexOfRelational += 1;
+					System.out.println(actualStringList);
 				}
 				
 				StringBuffer buffer = new StringBuffer();
@@ -376,7 +368,7 @@ public class FilterHelper {
 					conditionString.append(condition.getFieldName()).append(SINGLE_SPACE).append(condition.getConditionalOperator()).append(SINGLE_SPACE)
 					.append(getConditionValue(condition.getFieldName(), condition.getValue(), condition.getConditionalOperator(),
 							fieldsAndTypes));
-					int index = actualStringList.indexOf(String.valueOf(item + 1));
+					int index = actualStringList.indexOf(String.valueOf(item));
 					actualStringList.set(index, conditionString.toString());
 				}
 				
@@ -386,8 +378,7 @@ public class FilterHelper {
 				System.out.println(buffer);
 				
 				if(filterType!=null && filterType.equalsIgnoreCase(LOCAL))
-				{
-					
+				{	
 					localCondition=buffer.toString();
 					showLocalFilteredData(StringUtils.trim(buffer.toString()));
 				}
@@ -400,6 +391,8 @@ public class FilterHelper {
 				filterConditionsDialog.close();
 			}
 
+			
+			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {}
 		};
@@ -420,7 +413,7 @@ public class FilterHelper {
 			debugDataViewer.showDataInDebugViewer(true,true);
 			
 		} catch (NumberFormatException | IOException exception) {
-			logger.error("Error occuring while showing remote filtered data",exception);
+		logger.error("Error occuring while showing remote filtered data",exception);
 		}
 	}
 
@@ -461,7 +454,7 @@ public class FilterHelper {
 	public void setDebugDataViewer(DebugDataViewer debugDataViewer) {
 		this.debugDataViewer=debugDataViewer;
 	}
-
+	
 	protected String getConditionValue(String fieldName, String value, String conditional, Map<String, String> fieldsAndTypes) {
 		String trimmedCondition = StringUtils.trim(conditional);
 		String dataType = fieldsAndTypes.get(fieldName);
@@ -605,17 +598,342 @@ public class FilterHelper {
 		return listner;
 	}
    
-	public SelectionAdapter getAddAtEndListener(final TableViewer tableViewer, final List<Condition> conditionList, 
-			final List<Condition> dummyList) {
+	public SelectionAdapter getAddAtEndListener(final TableViewer tableViewer, final List<Condition> conditionList) {
         return new SelectionAdapter() {
               @Override
               public void widgetSelected(SelectionEvent e) {
                     conditionList.add(conditionList.size(), new Condition());
-                    dummyList.clear();
-    				dummyList.addAll(cloneList(conditionList));
                     tableViewer.refresh();
               }
         };
   }
+	
+	public SelectionListener checkButtonListener(final TableViewer tableViewer,
+			final List<Condition> conditionsList, final Button btnAddGrp) {
+		SelectionListener listener = new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int count=0;
+				boolean isEnabled=false;
+				List<Integer> selectionPattern= new ArrayList<>();
+				TableItem[] items = tableViewer.getTable().getItems();
+				
+				   for (TableItem tableItem : items) {
+					   Button button = (Button) tableItem.getData(FilterConditionsDialog.GROUP_CHECKBOX);
+					   if(button.getSelection()){
+					     count++;
+					     selectionPattern.add(tableViewer.getTable().indexOf(tableItem));				     
+					    
+					   }
+				   }
+				   
+				if(count>=2){
+					if(validateCheckSequence(selectionPattern)){
+					 
+						isEnabled=true;
+					}						
+				}
+				
+				btnAddGrp.setEnabled(isEnabled);	
+		
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		};
+		return listener;
+	}
+	
+	
+	
+	private boolean validateCheckSequence(List<Integer> selectionPattern){
+		
+		  boolean retval=true;
+		  
+		  for(int i=0;i<selectionPattern.size()-1;i++){
+			  
+			  if((selectionPattern.get(i+1)-selectionPattern.get(i))>1){
+				 
+				  retval=false;
+				  break;
+				  
+			  }
+			  
+		  }
+			
+			
+			
+			return retval;
+		}
+	
+	public boolean validatUserGroupSelection(Map<Integer,List<List<Integer>>> groupSelectionMap,List<Integer> selectionList){
+		
+		boolean retValue=true;
+		
+		for (int key : groupSelectionMap.keySet()) {
+
+			List<List<Integer>> groups = groupSelectionMap.get(key);
+
+			for (List<Integer> grp : groups) {
+
+				if (selectionList.size() == grp.size()) {
+
+					if (!ListUtils.isEqualList(selectionList, grp) && ListUtils.intersection(selectionList, grp).size()==0) {
+
+						retValue = true;
+						
+					}else if(ListUtils.isEqualList(selectionList, grp)){
+						
+						if (createErrorDialog(Messages.GROUP_CLAUSE_ALREADY_EXISTS).open() == SWT.OK) {
+							retValue=false;
+							break;
+						}
+											
+					}else if(ListUtils.intersection(selectionList, grp).size() > 0){
+													
+						if (createErrorDialog(Messages.CANNOT_CREATE_GROUP_CLAUSE).open() == SWT.OK) {
+							retValue=false;
+							break;
+						}
+						
+						}
+
+				
+					
+				}else {
+
+					if (ListUtils.isEqualList(ListUtils.intersection(selectionList, grp), grp)) {
+
+						retValue = true;
+
+					} else if(ListUtils.isEqualList(ListUtils.intersection(grp,selectionList),selectionList)){
+					    	
+					    	retValue=true;
+					    	
+				   }else if (ListUtils.intersection(selectionList, grp).size() == 0) {
+
+						retValue = true;
+						
+						
+					}else{
+						
+						if (createErrorDialog(Messages.CANNOT_CREATE_GROUP_CLAUSE).open() == SWT.OK) {
+						
+						retValue=false;
+						break;
+						}
+					}
+
+				}
+
+			}
+			
+			if(!retValue){ break; }
+
+		}
+		
+		
+		
+		
+		return retValue;
+				
+	}
+	
+	
+	public boolean isColumnModifiable(TreeMap<Integer,List<List<Integer>>> groupSelectionMap,List<Integer> selectionList){
+		
+		boolean retValue = false;
+
+		for(int i=groupSelectionMap.lastKey();i>=0;i--){
+			
+			retValue=true;
+			
+			List<List<Integer>> groups = new ArrayList<>(groupSelectionMap.get(i));
+		  
+			for (List<Integer> grp : groups) {
+			
+				if (ListUtils.intersection(selectionList, grp).size()>0) {
+				
+					retValue=false;
+												
+				}
+		    }
+		
+			if(retValue){
+			groupSelectionMap.get(i).add(selectionList);
+			break;
+			}
+		}
+		
+		return retValue;
+			
+	}
+	
+	
+	public MessageBox createErrorDialog(String errorMessage) {
+		MessageBox messageBox = new MessageBox(new Shell(), SWT.ERROR | SWT.OK);
+		messageBox.setMessage(errorMessage);
+		messageBox.setText("Error");
+		return messageBox;
+	}
+	
+	
+	public Color getColor(int colorIndex){
+		
+		Map<Integer,Color> colorMap = new HashMap();
+		
+		colorMap.put(0, new Color(null,255,196,196)); // Light yellow
+		colorMap.put(1, new Color(null,176,255,176)); //Light green
+		colorMap.put(2, new Color(null,149,255,255)); //Light blue
+		colorMap.put(3, new Color(null,254,194,224)); //Light Pink
+		colorMap.put(4, new Color(null,147,194,147)); 
+		colorMap.put(5, new Color(null,255,81,168)); 
+	
+	   return colorMap.get(colorIndex);
+	}
+	
+	public boolean refreshGroupSelections(TableViewer tableViewer, int indexOfRow,String addOrDeleteRow,TreeMap<Integer,List<List<Integer>>> groupSelectionMap){
+		
+		    boolean isRemoveColumn = false;
+			
+			for(int key:groupSelectionMap.keySet()){
+				
+			  List<List<Integer>> groups = groupSelectionMap.get(key);
+
+			  boolean isNewIndexAddedorRemoved=false;
+				
+			  for (List<Integer> grp : groups) {
+					
+				 
+				  List<Integer> tempGrp= new ArrayList<>(grp);
+					
+												
+							
+							if("ADD".equalsIgnoreCase(addOrDeleteRow)){
+
+								for (int i = 0; i < grp.size(); i++) {
+									
+									if(grp.get(i)>=indexOfRow){
+									    										
+										grp.set(i, grp.get(i) + 1);
+									}
+								
+								}
+							 if(tempGrp.contains(indexOfRow)){
+								if(!isNewIndexAddedorRemoved && tempGrp.get(0)!=indexOfRow){//other than starting index then add row.
+									
+									grp.add(tempGrp.indexOf(indexOfRow),indexOfRow);
+									isNewIndexAddedorRemoved=true;
+									
+								   }
+								 }
+								
+							}else if("DEL".equalsIgnoreCase(addOrDeleteRow)){
+								
+								if(tempGrp.contains(indexOfRow)){
+									
+								if(!isNewIndexAddedorRemoved){//other than starting index then add row.
+									
+									grp.remove(grp.indexOf(indexOfRow));
+									
+																		
+									if(grp.size()==1){
+										
+										grp.clear();
+										
+									List tempList=new ArrayList<>(); 
+											for (List lst : groupSelectionMap.get(key)) {
+												tempList.addAll(lst);
+											}
+											
+											if(tempList.isEmpty()){
+												
+												FilterConditionsDialog.GROUP_COLUMNS_COUNT--;							
+											
+												groupSelectionMap.remove(key);																								  							
+											     
+												isRemoveColumn=true;
+											}
+											
+										}
+									}
+									isNewIndexAddedorRemoved=true;
+									
+								 }
+								
+								
+								for (int i = 0; i < grp.size(); i++) {
+									
+									if(grp.get(i)>=indexOfRow){
+									    										
+										grp.set(i, grp.get(i) -1);
+									}
+								
+								}
+							}
+						 
+							tempGrp.clear();	
+				}
+				
+			}
+			
+			
+			return isRemoveColumn;
+		}
+			
+			
+		
+	public void reArrangeGroups(TreeMap<Integer, List<List<Integer>>> groupSelectionMap,
+			List<Integer> selectionList) {
+		
+		List<Integer> tempList = new ArrayList<>();
+		int lastKey=groupSelectionMap.lastKey();
+		for (int i = lastKey; i >= 0; i--) {
+
+			List<List<Integer>> groups =groupSelectionMap.get(i);
+
+			for (int j=0; j<=groups.size()-1;j++) {
+
+				if (selectionList.size()< groups.get(j).size()&& ListUtils.intersection(selectionList, groups.get(j)).size() > 0) {
+					
+					
+					tempList.addAll(groups.get(j));
+					groups.get(j).clear();
+					groups.set(j,new ArrayList<Integer>(selectionList));					
+					selectionList.clear();
+					selectionList.addAll(tempList);
+					
+					
+
+				}
+
+			}
+			tempList.clear();
+		}
+	}
+	
+ public void disposeAllColumns(TableViewer tableViewer){
+	 
+     TableColumn[] columns = tableViewer.getTable().getColumns();
+	   
+	    TableItem[] items = tableViewer.getTable().getItems();
+	   
+	    for (int i = 0; i < items.length; i++) {
+	    	items[i].dispose();
+		}
+	    
+	    for (TableColumn tc : columns) {
+	    	
+	     tc.dispose();
+					    	
+		}
+	 
+	 
+ }	
 
 }

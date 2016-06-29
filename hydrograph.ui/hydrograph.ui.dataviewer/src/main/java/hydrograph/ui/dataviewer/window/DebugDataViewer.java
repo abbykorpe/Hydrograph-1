@@ -200,13 +200,9 @@ public class DebugDataViewer extends ApplicationWindow {
 	private Image descending;
 	
 	private TableColumn recentlySortedColumn;
-<<<<<<< HEAD
 	private String sortedColumnName;
 	
 	private FilterConditions conditions;
-=======
-
->>>>>>> show data in data viewer according to retaining local and remote filter.
 	/**
 	 * Create the application window,
 	 * 
@@ -301,15 +297,8 @@ public class DebugDataViewer extends ApplicationWindow {
 			protected IStatus run(IProgressMonitor monitor) {
 				disbleDataViewerUIControls();
 
-<<<<<<< HEAD
 				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(jobDetails);
 				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles();
-=======
-				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(
-						jobDetails);
-				final StatusMessage statusMessage = dataViewerFileManager
-						.downloadDataViewerFiles(getConditions());
->>>>>>> show data in data viewer according to retaining local and remote filter.
 
 				if (StatusConstants.ERROR == statusMessage.getReturnCode()) {
 					Display.getDefault().asyncExec(new Runnable() {
@@ -539,11 +528,6 @@ public class DebugDataViewer extends ApplicationWindow {
 		return statusManager;
 	}
 
-<<<<<<< HEAD
-	private void initializeDataFileAdapter() throws ClassNotFoundException, SQLException {
-		dataViewerAdapter = new DataViewerAdapter(debugFileLocation, debugFileName,
-				Utils.INSTANCE.getDefaultPageSize(), PreferenceConstants.INITIAL_OFFSET, this);
-=======
 	private void initializeDataFileAdapter(boolean filterApplied, FilterConditions filterConditions) throws ClassNotFoundException,
 			SQLException {
 		
@@ -559,7 +543,6 @@ public class DebugDataViewer extends ApplicationWindow {
 					debugFileName, Utils.INSTANCE.getDefaultPageSize(),
 					PreferenceConstants.INITIAL_OFFSET, this);
 		}
->>>>>>> show data in data viewer according to retaining local and remote filter.
 	}
 	
 
@@ -960,7 +943,6 @@ public class DebugDataViewer extends ApplicationWindow {
 					previousCellSize = new Point(currentCellSize.x,currentCellSize.y);
 				}
 
-<<<<<<< HEAD
 				if (!controlResized) {
 					controlResized = true;
 
@@ -1204,10 +1186,6 @@ public class DebugDataViewer extends ApplicationWindow {
 	
 	private void updateGridViewTable(boolean filterApplied) {
 		if(!filterApplied)
-=======
-	private void updateGridViewTable(boolean filterApplied, boolean remoteOkPressed) {
-		if(!remoteOkPressed)
->>>>>>> show data in data viewer according to retaining local and remote filter.
 		createGridViewTableColumns(gridViewTableViewer);
 
 		gridViewTableViewer.setContentProvider(new ArrayContentProvider());
