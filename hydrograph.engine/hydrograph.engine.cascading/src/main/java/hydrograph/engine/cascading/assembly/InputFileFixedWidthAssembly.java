@@ -30,6 +30,7 @@ import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.TextFixedWidth;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class InputFileFixedWidthAssembly extends BaseComponent<InputFileFixedWidthEntity> {
 
@@ -100,7 +101,7 @@ public class InputFileFixedWidthAssembly extends BaseComponent<InputFileFixedWid
 
 		// initializing each pipe and tap
 		tap = new Hfs(scheme, inputFileFixedWidthEntity.getPath());
-		pipe = new Pipe(inputFileFixedWidthEntity.getComponentId());
+		pipe = new Pipe(ComponentHelper.getComponentName("inputFileFixedWidth",inputFileFixedWidthEntity.getComponentId(),inputFileFixedWidthEntity.getOutSocketList().get(0).getSocketId()));
 		setHadoopProperties(tap.getStepConfigDef());
 		setHadoopProperties(pipe.getStepConfigDef());
 	}

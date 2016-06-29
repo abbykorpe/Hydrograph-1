@@ -26,6 +26,7 @@ import hydrograph.engine.assembly.entity.InputFileSequenceFormatEntity;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class InputFileSequenceFormatAssembly extends BaseComponent<InputFileSequenceFormatEntity> {
 
@@ -36,13 +37,12 @@ public class InputFileSequenceFormatAssembly extends BaseComponent<InputFileSequ
 	private Tap tap;
 	private SequenceFile scheme;
 	private FlowDef flowDef;
-	private static Logger LOG = LoggerFactory
-			.getLogger(InputFileSequenceFormatAssembly.class);
+	private static Logger LOG = LoggerFactory.getLogger(InputFileSequenceFormatAssembly.class);
 
 	private InputFileSequenceFormatEntity inputFileSequenceFormatEntity;
-	
-	
-	public InputFileSequenceFormatAssembly(InputFileSequenceFormatEntity assemblyEntityBase, ComponentParameters componentParameters) {
+
+	public InputFileSequenceFormatAssembly(InputFileSequenceFormatEntity assemblyEntityBase,
+			ComponentParameters componentParameters) {
 		super(assemblyEntityBase, componentParameters);
 	}
 
@@ -51,16 +51,13 @@ public class InputFileSequenceFormatAssembly extends BaseComponent<InputFileSequ
 		try {
 			generateTapsAndPipes();
 			flowDef = flowDef.addSource(pipe, tap);
-			for (OutSocket outSocket : inputFileSequenceFormatEntity
-					.getOutSocketList()) {
+			for (OutSocket outSocket : inputFileSequenceFormatEntity.getOutSocketList()) {
 
 				LOG.trace("Creating input file sequence format assembly for '"
-						+ inputFileSequenceFormatEntity.getComponentId()
-						+ "' for socket: '" + outSocket.getSocketId()
+						+ inputFileSequenceFormatEntity.getComponentId() + "' for socket: '" + outSocket.getSocketId()
 						+ "' of type: '" + outSocket.getSocketType() + "'");
 				setOutLink(outSocket.getSocketType(), outSocket.getSocketId(),
-						inputFileSequenceFormatEntity.getComponentId(), pipe,
-						scheme.getSourceFields());
+						inputFileSequenceFormatEntity.getComponentId(), pipe, scheme.getSourceFields());
 			}
 
 		} catch (Exception e) {
@@ -70,24 +67,25 @@ public class InputFileSequenceFormatAssembly extends BaseComponent<InputFileSequ
 	}
 
 	public void generateTapsAndPipes() throws IOException {
-		try{
+		try {
 			prepareScheme();
-		}
-		catch(Exception e) {
-			LOG.error("Error in preparing scheme for component '"
-					+ inputFileSequenceFormatEntity.getComponentId() + "': " + e.getMessage());
+		} catch (Exception e) {
+			LOG.error("Error in preparing scheme for component '" + inputFileSequenceFormatEntity.getComponentId()
+					+ "': " + e.getMessage());
 			throw new RuntimeException(e);
 		}
 		flowDef = componentParameters.getFlowDef();
 
 		// initializing each pipe and tap
 		tap = new Hfs(scheme, componentParameters.getPathUri());
-		pipe = new Pipe(inputFileSequenceFormatEntity.getComponentId());
+		pipe = new Pipe(ComponentHelper.getComponentName("inputFileSequenceFormat",
+				inputFileSequenceFormatEntity.getComponentId(),
+				inputFileSequenceFormatEntity.getOutSocketList().get(0).getSocketId()));
 
 		setHadoopProperties(pipe.getStepConfigDef());
 		setHadoopProperties(tap.getStepConfigDef());
 	}
-	
+
 	protected void prepareScheme() {
 		scheme = new SequenceFile(componentParameters.getOutputFields());
 
@@ -95,7 +93,7 @@ public class InputFileSequenceFormatAssembly extends BaseComponent<InputFileSequ
 
 	@Override
 	public void initializeEntity(InputFileSequenceFormatEntity assemblyEntityBase) {
-		this.inputFileSequenceFormatEntity=assemblyEntityBase;
+		this.inputFileSequenceFormatEntity = assemblyEntityBase;
 	}
 
 }

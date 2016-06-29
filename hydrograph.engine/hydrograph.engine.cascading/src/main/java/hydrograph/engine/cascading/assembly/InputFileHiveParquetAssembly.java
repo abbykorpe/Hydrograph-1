@@ -12,11 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
+import org.apache.hadoop.conf.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cascading.tap.hive.HivePartitionTap;
+import cascading.tap.hive.HiveTableDescriptor;
 import cascading.tap.hive.HiveTap;
+import cascading.tap.hive.HiveTableDescriptor.Factory;
 import hydrograph.engine.assembly.entity.InputFileHiveParquetEntity;
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
@@ -47,13 +50,17 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 		// HiveParquetTableDescriptor is developed specifically for handling
 		// Parquet File format with Hive. Hence, the object of table descriptor
 		// is created in its respective assembly and not in its base class.
+		
+		HiveTableDescriptor.Factory factory = new Factory(new Configuration());
+		HiveTableDescriptor tb = factory.newInstance(inputFileHiveParquetEntity.getDatabaseName(),
+				inputFileHiveParquetEntity.getTableName());
+		
 		tableDesc = new HiveParquetTableDescriptor(
-				inputFileHiveParquetEntity.getDatabaseName(),
-				inputFileHiveParquetEntity.getTableName(),
-				fieldsCreator.getFieldNames(),
-				fieldsCreator.hiveParquetDataTypeMapping(inputFileHiveParquetEntity
-						.getFieldsList()),
-				inputFileHiveParquetEntity.getPartitionKeys(),
+				tb.getDatabaseName(),
+				tb.getTableName(),
+				tb.getColumnNames(),
+				tb.getColumnTypes(),
+				tb.getPartitionKeys(),
 				getHiveExternalTableLocationPath());
 		scheme = new HiveParquetScheme(tableDesc);
 		scheme.setSourceFields(tableDesc.toFields());

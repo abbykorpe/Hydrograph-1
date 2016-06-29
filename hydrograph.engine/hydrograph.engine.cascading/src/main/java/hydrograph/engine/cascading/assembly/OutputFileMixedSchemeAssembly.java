@@ -60,7 +60,7 @@ public class OutputFileMixedSchemeAssembly extends BaseComponent<OutputFileMixed
 		LOG.trace("Creating output file mixed scheme assembly for '"
 				+ outputFileMixedSchemeEntity.getComponentId() + "'");
 		prepareAssembly();
-		Pipe sinkPipe = new Pipe(outputFileMixedSchemeEntity.getComponentId(),
+		Pipe sinkPipe = new Pipe("outputFileMixedScheme:"+outputFileMixedSchemeEntity.getComponentId(),
 				tailPipe);
 		setHadoopProperties(outTap.getStepConfigDef());
 		setHadoopProperties(sinkPipe.getStepConfigDef());

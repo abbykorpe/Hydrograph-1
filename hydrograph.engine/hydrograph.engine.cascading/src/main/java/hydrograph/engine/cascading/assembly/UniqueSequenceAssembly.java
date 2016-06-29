@@ -19,6 +19,7 @@ import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.functions.UniqueSequenceNumberOperation;
+import hydrograph.engine.utilities.ComponentHelper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,8 +60,8 @@ public class UniqueSequenceAssembly extends BaseComponent<UniqueSequenceEntity> 
 				UniqueSequenceNumberOperation seqNo = new UniqueSequenceNumberOperation(
 						outputFieldsList);
 
-				Pipe uniSeqPipe = new Pipe(
-						uniqueSequenceEntity.getComponentId() + "_out",
+				Pipe uniSeqPipe = new Pipe(ComponentHelper.getComponentName("uniqueSequence",
+						uniqueSequenceEntity.getComponentId(),outSocket.getSocketId()),
 						componentParameters.getInputPipe());
 				setHadoopProperties(uniSeqPipe.getStepConfigDef());
 				uniSeqPipe = new Each(uniSeqPipe, Fields.NONE, seqNo,

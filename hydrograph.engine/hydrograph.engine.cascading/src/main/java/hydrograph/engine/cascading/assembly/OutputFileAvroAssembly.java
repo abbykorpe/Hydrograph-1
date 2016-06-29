@@ -71,7 +71,7 @@ public class OutputFileAvroAssembly extends BaseComponent<OutputFileAvroEntity> 
 		filePathToWrite = outputFileAvroEntity.getPath();
 		tailPipe = componentParameters.getInputPipe();
 		prepareScheme();
-		Pipe sinkPipe = new Pipe(outputFileAvroEntity.getComponentId(),
+		Pipe sinkPipe = new Pipe("outputFileAvro:"+outputFileAvroEntity.getComponentId(),
 				tailPipe);
 		setHadoopProperties(outTap.getStepConfigDef());
 		setHadoopProperties(sinkPipe.getStepConfigDef());

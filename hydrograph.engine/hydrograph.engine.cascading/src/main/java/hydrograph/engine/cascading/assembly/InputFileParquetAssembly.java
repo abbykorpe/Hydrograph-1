@@ -18,6 +18,7 @@ import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.parquet.ParquetTupleScheme;
+import hydrograph.engine.utilities.ComponentHelper;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -32,8 +33,7 @@ import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
 
-public class InputFileParquetAssembly extends
-		BaseComponent<InputFileParquetEntity> {
+public class InputFileParquetAssembly extends BaseComponent<InputFileParquetEntity> {
 
 	private static final long serialVersionUID = -2946197683137950707L;
 	private InputFileParquetEntity inputFileParquetEntity;
@@ -47,8 +47,7 @@ public class InputFileParquetAssembly extends
 
 	private InputOutputFieldsAndTypesCreator<InputFileParquetEntity> fieldsCreator;
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(InputFileParquetAssembly.class);
+	private static final Logger LOG = LoggerFactory.getLogger(InputFileParquetAssembly.class);
 
 	public InputFileParquetAssembly(InputFileParquetEntity baseComponentEntity,
 			ComponentParameters componentParameters) {
@@ -58,14 +57,10 @@ public class InputFileParquetAssembly extends
 	@Override
 	protected void createAssembly() {
 		try {
-			fieldsCreator = new InputOutputFieldsAndTypesCreator<InputFileParquetEntity>(
-					inputFileParquetEntity);
-			LOG.debug("InputFile Parquet Component: [ Fields List : "
-					+ Arrays.toString(fieldsCreator.getFieldNames())
-					+ ", Field Types : "
-					+ Arrays.toString(fieldsCreator.getFieldDataTypes())
-					+ " , Path : " + inputFileParquetEntity.getPath()
-					+ ", Phase : " + inputFileParquetEntity.getPhase() + "]");
+			fieldsCreator = new InputOutputFieldsAndTypesCreator<InputFileParquetEntity>(inputFileParquetEntity);
+			LOG.debug("InputFile Parquet Component: [ Fields List : " + Arrays.toString(fieldsCreator.getFieldNames())
+					+ ", Field Types : " + Arrays.toString(fieldsCreator.getFieldDataTypes()) + " , Path : "
+					+ inputFileParquetEntity.getPath() + ", Phase : " + inputFileParquetEntity.getPhase() + "]");
 			inputFields = fieldsCreator.makeFields();
 
 			generateTapsAndPipes();
@@ -74,16 +69,13 @@ public class InputFileParquetAssembly extends
 			if (LOG.isTraceEnabled()) {
 				LOG.trace(inputFileParquetEntity.toString());
 			}
-			for (OutSocket outSocket : inputFileParquetEntity
-					.getOutSocketList()) {
+			for (OutSocket outSocket : inputFileParquetEntity.getOutSocketList()) {
 
-				LOG.trace("Creating input file parquet assembly for '"
-						+ inputFileParquetEntity.getComponentId()
-						+ "' for socket: '" + outSocket.getSocketId()
-						+ "' of type: '" + outSocket.getSocketType() + "'");
-				setOutLink(outSocket.getSocketType(), outSocket.getSocketId(),
-						inputFileParquetEntity.getComponentId(), pipe,
-						scheme.getSourceFields());
+				LOG.trace("Creating input file parquet assembly for '" + inputFileParquetEntity.getComponentId()
+						+ "' for socket: '" + outSocket.getSocketId() + "' of type: '" + outSocket.getSocketType()
+						+ "'");
+				setOutLink(outSocket.getSocketType(), outSocket.getSocketId(), inputFileParquetEntity.getComponentId(),
+						pipe, scheme.getSourceFields());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -96,14 +88,14 @@ public class InputFileParquetAssembly extends
 		try {
 			prepareScheme();
 		} catch (Exception e) {
-			LOG.error("Error in preparing scheme for component '"
-					+ inputFileParquetEntity.getComponentId() + "': "
+			LOG.error("Error in preparing scheme for component '" + inputFileParquetEntity.getComponentId() + "': "
 					+ e.getMessage());
 			throw new RuntimeException(e);
 		}
 		flowDef = componentParameters.getFlowDef();
 		tap = new Hfs(scheme, inputFileParquetEntity.getPath());
-		pipe = new Pipe(inputFileParquetEntity.getComponentId());
+		pipe = new Pipe(ComponentHelper.getComponentName("inputFileParquet", inputFileParquetEntity.getComponentId(),
+				inputFileParquetEntity.getOutSocketList().get(0).getSocketId()));
 
 		setHadoopProperties(tap.getStepConfigDef());
 		setHadoopProperties(pipe.getStepConfigDef());
@@ -111,8 +103,7 @@ public class InputFileParquetAssembly extends
 
 	protected void prepareScheme() {
 		scheme = new ParquetTupleScheme(inputFields,
-				fieldsCreator.hiveParquetDataTypeMapping(inputFileParquetEntity
-						.getFieldsList()));
+				fieldsCreator.hiveParquetDataTypeMapping(inputFileParquetEntity.getFieldsList()));
 	}
 
 	@Override

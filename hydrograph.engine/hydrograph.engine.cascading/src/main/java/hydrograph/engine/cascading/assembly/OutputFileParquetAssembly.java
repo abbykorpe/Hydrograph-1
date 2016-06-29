@@ -76,7 +76,7 @@ public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEn
 						+ e.getMessage());
 				throw new RuntimeException(e);
 			}
-			Pipe sinkPipe = new Pipe(outputFileParquetEntity.getComponentId(),
+			Pipe sinkPipe = new Pipe("outputFileParquet:"+outputFileParquetEntity.getComponentId(),
 					tailPipe);
 			setHadoopProperties(outTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
