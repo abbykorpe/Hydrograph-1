@@ -88,7 +88,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 			public void widgetSelected(SelectionEvent e) {
 				getPropagatedSchema();
 				
-				JoinMapDialog joinMapDialog = new JoinMapDialog(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
+				JoinMapDialog joinMapDialog = new JoinMapDialog(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), getComponent(),
 						joinMappingGrid,propertyDialogButtonBar);
 				joinMapDialog.open();
 				Schema internalSchema=propagateInternalSchema();
@@ -114,48 +114,51 @@ public class ELTJoinMapWidget extends AbstractWidget {
 	private Schema propagateInternalSchema() {
 		if(joinMappingGrid ==null)
 			return null;
-		
-			 Schema internalSchema = getSchemaForInternalPropagation();			 
-			 internalSchema.getGridRow().clear();
-			 
-			 
-			 List<String> finalPassThroughFields=new LinkedList<String>();
-			 Map<String, String> finalMapFields=new LinkedHashMap<String, String>();
-			 
-			Map<String,String> passThroughFieldsPortInfo = new LinkedHashMap<>();
-			Map<String,String> mapFieldsPortInfo = new LinkedHashMap<>();
-			 
-			 
-			 List<LookupMapProperty> lookupMapRows = joinMappingGrid.clone().getLookupMapProperties();
-			 
-			 List<GridRow> outputSchemaGridRowList = new LinkedList<>();
-			 
-			 for(LookupMapProperty row : lookupMapRows){
-				 if(!ParameterUtil.isParameter(row.getSource_Field())){
-					 GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
-					 GridRow outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
 
-					 if(inputFieldSchema==null)
-						 continue;
+		Schema internalSchema = getSchemaForInternalPropagation();			 
+		internalSchema.getGridRow().clear();
 
-					 if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
-						 finalPassThroughFields.add(row.getOutput_Field());
-						 passThroughFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
-					 }else{
-						 finalMapFields.put(row.getSource_Field().split("\\.")[1], row.getOutput_Field());
-						 mapFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
-					 }
 
-					 outputSchemaGridRowList.add(outputFieldSchema);
-				 }
-			 }
-			 
-			 addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(finalMapFields, finalPassThroughFields,passThroughFieldsPortInfo,mapFieldsPortInfo);
-			 
-			 
-			 internalSchema.getGridRow().addAll(outputSchemaGridRowList);
-			 return internalSchema;
-		
+		List<String> finalPassThroughFields=new LinkedList<String>();
+		Map<String, String> finalMapFields=new LinkedHashMap<String, String>();
+
+		Map<String,String> passThroughFieldsPortInfo = new LinkedHashMap<>();
+		Map<String,String> mapFieldsPortInfo = new LinkedHashMap<>();
+
+
+		List<LookupMapProperty> lookupMapRows = joinMappingGrid.clone().getLookupMapProperties();
+
+		List<GridRow> outputSchemaGridRowList = new LinkedList<>();
+
+		for(LookupMapProperty row : lookupMapRows){
+			if(!ParameterUtil.isParameter(row.getSource_Field())){
+				GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
+				GridRow outputFieldSchema = null;
+				if(inputFieldSchema==null){
+					outputFieldSchema = SchemaPropagationHelper.INSTANCE.createSchemaGridRow(row.getOutput_Field());
+				}else{
+					outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
+				}
+
+				if(row.getSource_Field().trim().length()>0){
+					if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
+						finalPassThroughFields.add(row.getOutput_Field());
+						passThroughFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+					}else{
+						finalMapFields.put(row.getSource_Field().split("\\.")[1], row.getOutput_Field());
+						mapFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+					}
+				}
+				outputSchemaGridRowList.add(outputFieldSchema);
+			}
+		}
+
+		addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(finalMapFields, finalPassThroughFields,passThroughFieldsPortInfo,mapFieldsPortInfo);
+
+
+		internalSchema.getGridRow().addAll(outputSchemaGridRowList);
+		return internalSchema;
+
 	}
 	
 	private void addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(Map<String, String> mapFields,

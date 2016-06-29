@@ -15,6 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.listeners.grid;
 
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTSelectionTaskListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
@@ -111,5 +112,6 @@ public class ELTGridDeleteSelectionListener extends ELTSelectionTaskListener{
 			((Label) widgets[2]).setEnabled(false);
 			((Label) widgets[3]).setEnabled(false);
 		}
+		((Component)helpers.get(HelperType.COMPONENT)).setLatestChangesInSchema(true);
 	}
 }

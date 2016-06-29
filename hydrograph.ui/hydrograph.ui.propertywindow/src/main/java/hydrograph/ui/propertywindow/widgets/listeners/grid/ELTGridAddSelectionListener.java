@@ -14,6 +14,7 @@
  
 package hydrograph.ui.propertywindow.widgets.listeners.grid;
 
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTSelectionTaskListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
@@ -59,5 +60,6 @@ public class ELTGridAddSelectionListener extends ELTSelectionTaskListener{
 		gridCommonBuilder.setRowSequence(rowSequence);
 		gridCommonBuilder.createDefaultSchema(eltGridDetails.getGrids(), eltGridDetails.getTableViewer(), eltGridDetails.getLabel());
 		rowSequence++;
+		((Component)helpers.get(HelperType.COMPONENT)).setLatestChangesInSchema(true);
 	}
 }

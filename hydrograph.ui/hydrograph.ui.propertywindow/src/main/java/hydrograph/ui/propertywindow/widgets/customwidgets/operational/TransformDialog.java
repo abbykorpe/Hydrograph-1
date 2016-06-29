@@ -136,7 +136,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private TableViewer operationalOutputFieldTableViewer;
 	private Label operationInputaddButton;
 	private Label operationInputDeleteButton;
-	private Composite composite_1;
 	private ScrolledComposite scrolledComposite;
 	private TableViewer inputFieldTableViewer;
 	private TableViewer mappingTableViewer;
@@ -558,7 +557,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					int currentSize = transformMapping.getMapAndPassthroughField().size();
 					int i = currentSize == 0 ? currentSize : currentSize - 1;
 					mappingTableViewer.editElement(mappingTableViewer.getElementAt(i), 0);
-
+					component.setLatestChangesInSchema(false);
 				}
 
 			}
@@ -968,7 +967,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					int i = mappingSheetRow.getOutputList().size() == 0 ? mappingSheetRow.getOutputList().size()
 							: mappingSheetRow.getOutputList().size() - 1;
 					operationalOutputFieldTableViewer.editElement(operationOutputtableViewer.getElementAt(i), 0);
-
+					component.setLatestChangesInSchema(false);
 				}
 			}
 
@@ -1355,6 +1354,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 	public TransformMapping getATMapping() {
 		return transformMapping;
+	}
+
+	public Component getComponent() {
+		return component;
 	}
 
 	public void pressOK() {

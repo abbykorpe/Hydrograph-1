@@ -233,11 +233,11 @@ public class Constants {
 	public static final String EXTERNAL_SCHEMA = "External";
 	public static final String INTERNAL_SCHEMA = "Internal";
 
-	public static String SCHEMA_NOT_SYNC_MESSAGE_MOVE_CHANGES_TO_MAPPING="Schema Not In Sync. Do you want to move changes from schema to mapping?";
-	public static String SCHEMA_NOT_SYNC_MESSAGE_MOVE_CHANGES_TO_SCHEMA="Schema Not In Sync. Do you want to move changes from mapping to schema?";
+	public static String SCHEMA_NOT_SYNC_MESSAGE="Fields in schema and mapping are not in sync.";
 	public static String SYNC_WARNING="Sync Warning";
 	public static String SYNC_CONFIRM="Confirm";
 	public static String SYNC_CONFIRM_MESSAGE="Do you want to sync schema? It will override existing schema.";
+	public static String SYNC_OUTPUT_FIELDS_CONFIRM_MESSAGE="Do you want to pull output fields from schema? It will over write existing Output fields.";
 	public static String CLICK_TO_FOCUS="Click to focus";
 
 	// Temporary property names of component 

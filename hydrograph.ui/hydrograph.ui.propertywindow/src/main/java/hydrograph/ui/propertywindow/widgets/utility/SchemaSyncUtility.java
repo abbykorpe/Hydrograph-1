@@ -16,6 +16,7 @@ package hydrograph.ui.propertywindow.widgets.utility;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
 import hydrograph.ui.datastructure.property.NameValueProperty;
@@ -37,6 +38,7 @@ public class SchemaSyncUtility {
 
 	public static final String OPERATION = "operation";
 	public static final String LOOKUP_MAP = "hash_join_map";
+	public static final String JOIN_MAP = "join_mapping";
 
 	public static SchemaSyncUtility INSTANCE= new SchemaSyncUtility();
 	
@@ -131,7 +133,28 @@ public class SchemaSyncUtility {
 		}else if(Constants.LOOKUP.equalsIgnoreCase(component.getComponentName())){
 			pushSchemaToLookupMapping( component, schemaGridRowList);
 		}else if(Constants.JOIN.equalsIgnoreCase(component.getComponentName())){
-			
+			pushSchemaToJoinMapping( component, schemaGridRowList);
+		}
+	}
+	
+	/**
+	 * Push the schema from schema tab to Mapping in General tab for Lookup component
+	 *
+	 * @param component
+	 * @param schemaGridRowList
+	 */
+	public void pushSchemaToJoinMapping( Component component,
+			List<GridRow> schemaGridRowList) {
+		JoinMappingGrid joinMappingGrid = (JoinMappingGrid) component.getProperties().get(JOIN_MAP);
+		List<String> joinMapOutputs = getOutputFieldsFromJoinMapping(joinMappingGrid);
+		List<LookupMapProperty> outputFieldsFromSchema = getComponentSchemaAsLookupMapProperty(schemaGridRowList);
+		List<LookupMapProperty> outputFieldsFromSchemaToRetain = getOutputFieldsFromSchemaToRetain(schemaGridRowList, joinMappingGrid.getLookupMapProperties());
+		
+		joinMappingGrid.setLookupMapProperties(outputFieldsFromSchemaToRetain);
+		for (LookupMapProperty l : outputFieldsFromSchema){
+			if(!joinMapOutputs.contains(l.getOutput_Field())){
+				joinMappingGrid.getLookupMapProperties().add(l);
+			}
 		}
 	}
 
@@ -144,7 +167,7 @@ public class SchemaSyncUtility {
 	public void pushSchemaToLookupMapping( Component component,
 			List<GridRow> schemaGridRowList) {
 		LookupMappingGrid lookupMappingGrid = (LookupMappingGrid) component.getProperties().get(LOOKUP_MAP);
-		List<String> lookupMapOutputs = getOutputFieldsFromMapping(lookupMappingGrid);
+		List<String> lookupMapOutputs = getOutputFieldsFromLookupMapping(lookupMappingGrid);
 		List<LookupMapProperty> outputFieldsFromSchema = getComponentSchemaAsLookupMapProperty(schemaGridRowList);
 		List<LookupMapProperty> outputFieldsFromSchemaToRetain = getOutputFieldsFromSchemaToRetain(schemaGridRowList, lookupMappingGrid.getLookupMapProperties());
 		
@@ -157,6 +180,32 @@ public class SchemaSyncUtility {
 	}
 	
 	/**
+	 * Pull the schema from schema tab to Mapping in General tab for Join component
+	 *
+	 * @param schema
+	 * @param component
+	 * @return The list of schema grid rows to be shown in mapping.
+	 */
+	public List<LookupMapProperty> pullJoinSchemaInMapping(Schema schema, Component component) {
+		JoinMappingGrid joinMappingGrid = (JoinMappingGrid) component.getProperties().get(JOIN_MAP);
+		List<String> lookupMapOutputs = getOutputFieldsFromJoinMapping(joinMappingGrid);
+		
+		List<LookupMapProperty> outputFieldsFromSchema = getComponentSchemaAsLookupMapProperty(schema.getGridRow());
+		
+		List<LookupMapProperty> outputFieldsFromSchemaToRetain = getOutputFieldsFromSchemaToRetain(schema.getGridRow(), joinMappingGrid.getLookupMapProperties());
+		
+		joinMappingGrid.getLookupMapProperties().retainAll(outputFieldsFromSchemaToRetain);
+		
+		for (LookupMapProperty l : outputFieldsFromSchema){
+			if(!lookupMapOutputs.contains(l.getOutput_Field())){
+				joinMappingGrid.getLookupMapProperties().add(l);
+			}
+		}
+		return joinMappingGrid.getLookupMapProperties();
+	}
+	
+	
+	/**
 	 * Pull the schema from schema tab to Mapping in General tab for Lookup component
 	 *
 	 * @param schema
@@ -165,7 +214,7 @@ public class SchemaSyncUtility {
 	 */
 	public List<LookupMapProperty> pullLookupSchemaInMapping(Schema schema, Component component) {
 		LookupMappingGrid lookupMappingGrid = (LookupMappingGrid) component.getProperties().get(LOOKUP_MAP);
-		List<String> lookupMapOutputs = getOutputFieldsFromMapping(lookupMappingGrid);
+		List<String> lookupMapOutputs = getOutputFieldsFromLookupMapping(lookupMappingGrid);
 		
 		List<LookupMapProperty> outputFieldsFromSchema = getComponentSchemaAsLookupMapProperty(schema.getGridRow());
 		
@@ -181,10 +230,19 @@ public class SchemaSyncUtility {
 		return lookupMappingGrid.getLookupMapProperties();
 	}
 
-	private List<String> getOutputFieldsFromMapping(
+	private List<String> getOutputFieldsFromLookupMapping(
 			LookupMappingGrid lookupMappingGrid) {
 		List<String> lookupMapOutputs = new ArrayList<>();
 		for (LookupMapProperty l : lookupMappingGrid.getLookupMapProperties()) {
+			lookupMapOutputs.add(l.getOutput_Field());
+		}
+		return lookupMapOutputs;
+	}
+	
+	private List<String> getOutputFieldsFromJoinMapping(
+			JoinMappingGrid joinMappingGrid) {
+		List<String> lookupMapOutputs = new ArrayList<>();
+		for (LookupMapProperty l : joinMappingGrid.getLookupMapProperties()) {
 			lookupMapOutputs.add(l.getOutput_Field());
 		}
 		return lookupMapOutputs;
