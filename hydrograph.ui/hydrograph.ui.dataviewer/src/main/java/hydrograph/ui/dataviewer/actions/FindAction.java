@@ -13,19 +13,34 @@
 
 package hydrograph.ui.dataviewer.actions;
 
+import hydrograph.ui.dataviewer.find.FindViewDataDialog;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.swt.widgets.Display;
 
 public class FindAction extends Action{
 	
 	private static final String LABEL="Find";
+	private DebugDataViewer debugDataViewer;
 	public FindAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
+		this.debugDataViewer = debugDataViewer;
+		
+	/*	if (OSValidator.isWindows())
+			setAccelerator(SWT.CTRL + 'f');
+		if (OSValidator.isMac())
+			setAccelerator(SWT.COMMAND + 'f');*/
+		
 	}
 	@Override
 	public void run() {
-		super.run();
+		
+		//if(debugDataViewer.getTableViewer().getTable().getItems().length != 0){
+			FindViewDataDialog findViewDataDialog = new FindViewDataDialog(Display.getDefault().getActiveShell(), debugDataViewer.getTableViewer(),
+					debugDataViewer.getFormattedViewTextarea(), debugDataViewer.getUnformattedViewTextarea(), debugDataViewer.getCurrentView());
+			findViewDataDialog.open();
+		//}
 	}
 
 }
