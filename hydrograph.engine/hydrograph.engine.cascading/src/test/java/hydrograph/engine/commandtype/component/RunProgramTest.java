@@ -32,7 +32,7 @@ public class RunProgramTest {
 		try {
 			runProgram = new RunProgram(runProgramEntity);
 		} catch (Throwable e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 

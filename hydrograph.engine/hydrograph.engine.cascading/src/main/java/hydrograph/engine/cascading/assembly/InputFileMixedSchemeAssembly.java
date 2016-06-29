@@ -24,7 +24,6 @@ import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
 import hydrograph.engine.assembly.entity.InputFileMixedSchemeEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
@@ -71,7 +70,7 @@ public class InputFileMixedSchemeAssembly extends BaseComponent<InputFileMixedSc
 						inputFileMixedSchemeEntity.getComponentId(), pipe, scheme.getSourceFields());
 			}
 		} catch (Exception e) {
-			LOG.error("", e);
+			throw new RuntimeException(e);
 		}
 	}
 
