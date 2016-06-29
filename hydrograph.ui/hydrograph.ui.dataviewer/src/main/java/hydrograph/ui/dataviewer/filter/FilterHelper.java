@@ -43,6 +43,7 @@ import org.eclipse.jface.fieldassist.ComboContentAdapter;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
@@ -61,11 +62,11 @@ public class FilterHelper {
 	public static final FilterHelper INSTANCE = new FilterHelper();
 
 	public static final String TYPE_BOOLEAN = "java.lang.Boolean";
-	public static final String TYPE_DOUBLE = "java.math.Double";
-	public static final String TYPE_FLOAT = "java.math.Float";
-	public static final String TYPE_SHORT = "java.math.Short";
-	public static final String TYPE_LONG = "java.math.Long";
-	public static final String TYPE_DECIMAL = "java.math.BigDecimal";
+	public static final String TYPE_DOUBLE = "java.lang.Double";
+	public static final String TYPE_FLOAT = "java.lang.Float";
+	public static final String TYPE_SHORT = "java.lang.Short";
+	public static final String TYPE_LONG = "java.lang.Long";
+	public static final String TYPE_BIGDECIMAL = "java.math.BigDecimal";
 	public static final String TYPE_INTEGER = "java.lang.Integer";
 	public static final String TYPE_DATE = "java.util.Date";
 	public static final String TYPE_STRING = "java.lang.String";
@@ -95,7 +96,7 @@ public class FilterHelper {
 		typeBasedConditionalOperators.put(TYPE_STRING, new String[]{"LIKE","IN ","NOT IN"}); 
 		typeBasedConditionalOperators.put(TYPE_INTEGER, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
 		typeBasedConditionalOperators.put(TYPE_DATE, new String[]{">", "<", "<=",">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
-		typeBasedConditionalOperators.put(TYPE_DECIMAL, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN","NOT IN"});
+		typeBasedConditionalOperators.put(TYPE_BIGDECIMAL, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN","NOT IN"});
 		typeBasedConditionalOperators.put(TYPE_LONG, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
 		typeBasedConditionalOperators.put(TYPE_SHORT, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
 		typeBasedConditionalOperators.put(TYPE_FLOAT, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
@@ -114,7 +115,7 @@ public class FilterHelper {
 				int index = (int) text.getData(FilterConditionsDialog.ROW_INDEX);
 				Condition filterConditions = conditionsList.get(index);
 				filterConditions.setValue(text.getText());
-				validateText(text);
+				validateText(text, filterConditions.getFieldName(), fieldsAndTypes);
 				toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 		};
@@ -179,7 +180,7 @@ public class FilterHelper {
 					TableItem item = tableViewer.getTable().getItem(index);
 					Combo conditionalCombo = (Combo) item.getData(FilterConditionsDialog.CONDITIONAL_OPERATORS);
 					if(conditionalCombo != null && StringUtils.isNotBlank(fieldType)){
-						conditionalCombo.setText(filterConditions.getFieldName());
+						conditionalCombo.setText(filterConditions.getConditionalOperator());
 						conditionalCombo.setItems(FilterHelper.INSTANCE.getTypeBasedOperatorMap().get(fieldType));
 						new AutoCompleteField(conditionalCombo, new ComboContentAdapter(), conditionalCombo.getItems());
 					}
@@ -563,8 +564,9 @@ public class FilterHelper {
 		}
 	}
 	
-	private boolean validateText(Text text) {
-		if(StringUtils.isNotBlank(text.getText())){
+	private boolean validateText(Text text, String fieldName, Map<String, String> fieldsAndTypes) {
+		String type = FilterValidator.INSTANCE.getType(fieldName, fieldsAndTypes);
+		if(StringUtils.isNotBlank(text.getText()) && FilterValidator.INSTANCE.validateDataBasedOnTypes(type, text.getText())){
 			text.setBackground(new Color(null, 255, 255, 255));
 			return true;
 		}else {
@@ -604,14 +606,16 @@ public class FilterHelper {
 		return tempList;
 	}
 
-	public SelectionListener getApplyButtonListener(final FilterConditions originalFilterConditions,
+	public SelectionListener getRemoteApplyButtonListener(final FilterConditions originalFilterConditions,
 			final List<Condition> remoteConditionsList, final RetainFilter retainFilter) {
 		SelectionListener listner = new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				originalFilterConditions.setRemoteConditions(remoteConditionsList);
-				originalFilterConditions.setRetainRemote(retainFilter.getRetainFilter());
+				if(retainFilter.getRetainFilter()){
+					originalFilterConditions.setRemoteConditions(remoteConditionsList);
+					originalFilterConditions.setRetainRemote(retainFilter.getRetainFilter());
+				}
 			}
 			
 			@Override
@@ -621,6 +625,25 @@ public class FilterHelper {
 		return listner;
 	}
 
+	public SelectionListener getLocalApplyButtonListener(final FilterConditions originalFilterConditions,
+			final List<Condition> localConditionsList, final RetainFilter retainFilter) {
+		SelectionListener listner = new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(retainFilter.getRetainFilter()){
+					originalFilterConditions.setLocalConditions(localConditionsList);
+					originalFilterConditions.setRetainLocal(retainFilter.getRetainFilter());
+				}
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		};
+		return listner;
+	}
+	
 	public SelectionListener getRetainButtonListener(final RetainFilter retainFilter) {
 		SelectionListener listner = new SelectionListener() {
 			
@@ -636,4 +659,15 @@ public class FilterHelper {
 		};
 		return listner;
 	}
+   
+	public SelectionAdapter getAddAtEndListener(final TableViewer tableViewer, final List<Condition> conditionList) {
+        return new SelectionAdapter() {
+              @Override
+              public void widgetSelected(SelectionEvent e) {
+                    conditionList.add(conditionList.size(), new Condition());
+                    tableViewer.refresh();
+              }
+        };
+  }
+
 }

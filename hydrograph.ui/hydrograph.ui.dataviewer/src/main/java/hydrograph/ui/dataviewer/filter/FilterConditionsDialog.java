@@ -18,6 +18,7 @@ import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import org.eclipse.swt.events.MouseListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,6 +41,7 @@ import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -134,6 +136,8 @@ public class FilterConditionsDialog extends Dialog {
 		
 		retainLocalFilter= new RetainFilter();
 		retainRemoteFilter= new RetainFilter();
+		typeBasedConditionalOperators = FilterHelper.INSTANCE.getTypeBasedOperatorMap();
+		this.originalFilterConditions = new FilterConditions();
 	}
 
 	public void setFilterConditions(FilterConditions filterConditions) {
@@ -230,10 +234,15 @@ public class FilterConditionsDialog extends Dialog {
 		table.setHeaderVisible(true);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
-		Composite buttonComposite = new Composite(composite, SWT.NONE);
-		buttonComposite.setLayout(new GridLayout(6, false));
+		final Composite buttonComposite = new Composite(composite, SWT.NONE);
+		buttonComposite.setLayout(new GridLayout(7, false));
 		buttonComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		
+        Button btnAddRowAt = new Button(buttonComposite, SWT.NONE);
+        btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, remoteConditionsList));
+        btnAddRowAt.setText("Add Row at End");
+
+        
 		Button retainButton = new Button(buttonComposite, SWT.CHECK);
 		retainButton.setText("Retain Remote Filter");
 		retainButton.addSelectionListener(FilterHelper.INSTANCE.getRetainButtonListener(retainRemoteFilter));
@@ -255,11 +264,11 @@ public class FilterConditionsDialog extends Dialog {
 		
 		Button btnCancel = new Button(buttonComposite, SWT.NONE);
 		btnCancel.setText("Cancel");
-		
+		btnCancel.addMouseListener(getCancelButtonListener());
 
 		remoteApplyButton = new Button(buttonComposite, SWT.NONE);
 		remoteApplyButton.setText("Apply");
-		remoteApplyButton.addSelectionListener(FilterHelper.INSTANCE.getApplyButtonListener(originalFilterConditions, 
+		remoteApplyButton.addSelectionListener(FilterHelper.INSTANCE.getRemoteApplyButtonListener(originalFilterConditions, 
 				remoteConditionsList, retainRemoteFilter));
 		
 		TableViewerColumn addButtonTableViewerColumn = createTableColumns(tableViewer, "", 28);
@@ -292,6 +301,24 @@ public class FilterConditionsDialog extends Dialog {
 		
 	}
 
+	private MouseListener getCancelButtonListener() {
+		return new MouseListener() {
+			
+			@Override
+			public void mouseUp(org.eclipse.swt.events.MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseDown(org.eclipse.swt.events.MouseEvent e) {
+				cancelPressed();
+			}
+			
+			@Override
+			public void mouseDoubleClick(org.eclipse.swt.events.MouseEvent e) {
+			}
+		};
+	}
+
 	private void createLocalTabItem(TabFolder tabFolder, TableViewer tableViewer) {
 		TabItem tbtmLocal = new TabItem(tabFolder, SWT.NONE);
 		tbtmLocal.setText("Local");
@@ -309,9 +336,14 @@ public class FilterConditionsDialog extends Dialog {
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		Composite buttonComposite = new Composite(composite, SWT.NONE);
-		buttonComposite.setLayout(new GridLayout(6, false));
+		buttonComposite.setLayout(new GridLayout(7, false));
 		buttonComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		
+        Button btnAddRowAt = new Button(buttonComposite, SWT.NONE);
+        btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, localConditionsList));
+        btnAddRowAt.setText("Add Row at End");
+
+        
 		Button retainButton = new Button(buttonComposite, SWT.CHECK);
 		retainButton.setText("Retain Local Filter");
 		retainButton.addSelectionListener(FilterHelper.INSTANCE.getRetainButtonListener(retainLocalFilter));
@@ -333,10 +365,11 @@ public class FilterConditionsDialog extends Dialog {
 		
 		Button btnCancel = new Button(buttonComposite, SWT.NONE);
 		btnCancel.setText("Cancel");
+		btnCancel.addMouseListener(getCancelButtonListener());
 		
 		localApplyButton = new Button(buttonComposite, SWT.NONE);
 		localApplyButton.setText("Apply");
-		localApplyButton.addSelectionListener(FilterHelper.INSTANCE.getApplyButtonListener(originalFilterConditions, 
+		localApplyButton.addSelectionListener(FilterHelper.INSTANCE.getLocalApplyButtonListener(originalFilterConditions, 
 				localConditionsList, retainLocalFilter));
 		
 		TableViewerColumn addButtonTableViewerColumn = createTableColumns(tableViewer, "", 28);
@@ -954,4 +987,9 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 		this.localConditionsList = localConditionsList;
 	}
 	
+	@Override
+	protected void cancelPressed() {
+		setReturnCode(CANCEL);
+		close();
+	}
 }
