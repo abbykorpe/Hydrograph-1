@@ -134,6 +134,7 @@ public abstract class Component extends Model {
 	 
 	private Map<String, Long> watcherTerminals;
 	
+	@XStreamOmitField
 	private boolean latestChangesInSchema=false;
 
 	@XStreamOmitField
