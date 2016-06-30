@@ -10,20 +10,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.server.debug.utilities;
+package hydrograph.server.debug.lingual.json;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.util.List;
 
-public class ScpFileTest {
-	public static void main(String[] args) {
-		System.out.println("+++ Start: "
-				+ new Timestamp((new Date()).getTime()));
-		ScpFrom scpFrom = new ScpFrom();
-		scpFrom.scpFileFromRemoteServer("10.130.248.53", "hduser",
-				"Bitwise2012", "/tmp/generateRecord_input1_out0.csv",
-				"C:\\Users\\Bhaveshs\\git\\elt-debug");
-		System.out.println("+++ End: "
-				+ new Timestamp((new Date()).getTime()));
+public class RemoteFilterJson {
+	private String condition;
+	private List<GridRow> schema;
+	private int fileSize;
+	private JobDetails jobDetails;
+	
+	public String getCondition() {
+		return condition;
 	}
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
+	public List<GridRow> getSchema() {
+		return schema;
+	}
+	public void setSchema(List<GridRow> schema) {
+		this.schema = schema;
+	}
+	public int getFileSize() {
+		return fileSize;
+	}
+	public void setFileSize(int fileSize) {
+		this.fileSize = fileSize;
+	}
+	public JobDetails getJobDetails() {
+		return jobDetails;
+	}
+	public void setJobDetails(JobDetails jobDetails) {
+		this.jobDetails = jobDetails;
+	}
+	
+	
+	
+
 }

@@ -12,7 +12,17 @@
  *******************************************************************************/
 package hydrograph.server.debug.utilities;
 
+import hydrograph.server.debug.service.DebugService;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Locale;
 import java.util.ResourceBundle;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The utility class for the service. This class is meant to be stateless and
@@ -27,6 +37,9 @@ public class ServiceUtilities {
 
 	private static String SERVICE_CONFIG = "ServiceConfig";
 
+	private static final Logger LOG = LoggerFactory
+			.getLogger(DebugService.class);
+
 	/**
 	 * 
 	 */
@@ -36,6 +49,7 @@ public class ServiceUtilities {
 
 	/**
 	 * Returns the {@link ResourceBundle} object for the service config file
+	 * 
 	 * @return the {@link ResourceBundle} object for the service config file
 	 */
 	public static ResourceBundle getServiceConfigResourceBundle() {
@@ -43,7 +57,39 @@ public class ServiceUtilities {
 	}
 
 	private static ResourceBundle getResourceBundle(String resource) {
-		return ResourceBundle.getBundle(SERVICE_CONFIG);
+		ResourceBundle resBundl = ResourceBundle.getBundle(SERVICE_CONFIG);
+
+		// Try to get ServiceConfig.properties file from the config folder of
+		// the project
+		// Can also use the default one provided in the package.
+		String basePath = DebugService.class.getProtectionDomain()
+				.getCodeSource().getLocation().getPath();
+		basePath = basePath.substring(0, basePath.lastIndexOf("/"));
+		basePath = basePath.substring(0, basePath.lastIndexOf("/"))
+				+ "/config/";
+
+		LOG.info("Base Path:" + basePath);
+
+		File file = new File(basePath);
+
+		LOG.info("FILE PATH: " + basePath);
+
+		if (file.exists()) {
+			LOG.info("Using ServiceConfig from: " + basePath);
+
+			try {
+				URL[] resourceURLs = { file.toURI().toURL() };
+				URLClassLoader urlLoader = new URLClassLoader(resourceURLs);
+				resBundl = ResourceBundle.getBundle("ServiceConfigOverride",
+						Locale.getDefault(), urlLoader);
+				LOG.info("PORT:" + resBundl.getString(Constants.PORT_ID));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		return resBundl;
 	}
 
 }

@@ -195,7 +195,7 @@ public enum ComponentBuilder {
 			TypeOutputInSocket inSocket = JaxbSchemaFieldConverter
 					.convertToJaxb(sf);
 			inSocket.setFromComponentId(debugContext.getPreviousComponentId());
-			inSocket.setFromSocketId("out0");
+			inSocket.setFromSocketId("out1");
 			inSocket.setId("in0");
 			textOutputFileDelimited.getInSocket().add(inSocket);
 
