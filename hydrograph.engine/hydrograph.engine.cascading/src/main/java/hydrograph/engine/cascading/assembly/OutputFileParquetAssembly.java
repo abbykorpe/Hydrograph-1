@@ -28,6 +28,7 @@ import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.parquet.ParquetTupleScheme;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEntity> {
 
@@ -39,8 +40,7 @@ public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEn
 	private Pipe tailPipe;
 	private FlowDef flowDef;
 	private Hfs outTap;
-	private static Logger LOG = LoggerFactory
-			.getLogger(OutputFileParquetAssembly.class);
+	private static Logger LOG = LoggerFactory.getLogger(OutputFileParquetAssembly.class);
 
 	private InputOutputFieldsAndTypesCreator<OutputFileParquetEntity> fieldsCreator;
 
@@ -52,31 +52,26 @@ public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEn
 	@Override
 	protected void createAssembly() {
 		try {
-			fieldsCreator = new InputOutputFieldsAndTypesCreator<OutputFileParquetEntity>(
-					outputFileParquetEntity);
-			LOG.debug("OutputFile Parquet Component: [ Fields List : "
-					+ Arrays.toString(fieldsCreator.getFieldNames())
-					+ ", Field Types : "
-					+ Arrays.toString(fieldsCreator.getFieldDataTypes())
-					+ " , Path : " + outputFileParquetEntity.getPath()
-					+ ", Phase : " + outputFileParquetEntity.getPhase() + "]");
+			fieldsCreator = new InputOutputFieldsAndTypesCreator<OutputFileParquetEntity>(outputFileParquetEntity);
+			LOG.debug("OutputFile Parquet Component: [ Fields List : " + Arrays.toString(fieldsCreator.getFieldNames())
+					+ ", Field Types : " + Arrays.toString(fieldsCreator.getFieldDataTypes()) + " , Path : "
+					+ outputFileParquetEntity.getPath() + ", Phase : " + outputFileParquetEntity.getPhase() + "]");
 			if (LOG.isTraceEnabled()) {
 				LOG.trace(outputFileParquetEntity.toString());
 			}
-			LOG.trace("Creating output file parquet assembly for '"
-					+ outputFileParquetEntity.getComponentId() + "'");
+			LOG.trace("Creating output file parquet assembly for '" + outputFileParquetEntity.getComponentId() + "'");
 			flowDef = componentParameters.getFlowDef();
 			filePathToWrite = outputFileParquetEntity.getPath();
 			tailPipe = componentParameters.getInputPipe();
 			try {
 				prepareScheme();
 			} catch (Exception e) {
-				LOG.error("Error in preparing scheme for component '"
-						+ outputFileParquetEntity.getComponentId() + "': "
+				LOG.error("Error in preparing scheme for component '" + outputFileParquetEntity.getComponentId() + "': "
 						+ e.getMessage());
 				throw new RuntimeException(e);
 			}
-			Pipe sinkPipe = new Pipe("outputFileParquet:"+outputFileParquetEntity.getComponentId(),
+			Pipe sinkPipe = new Pipe(
+					ComponentHelper.getComponentName("outputFileParquet", outputFileParquetEntity.getComponentId(), ""),
 					tailPipe);
 			setHadoopProperties(outTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
@@ -91,9 +86,7 @@ public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEn
 	public void prepareScheme() {
 		Fields fields = fieldsCreator.makeFields();
 		scheme = new ParquetTupleScheme(fields,
-				fieldsCreator
-						.hiveParquetDataTypeMapping(outputFileParquetEntity
-								.getFieldsList()));
+				fieldsCreator.hiveParquetDataTypeMapping(outputFileParquetEntity.getFieldsList()));
 		if (outputFileParquetEntity.isOverWrite())
 			outTap = new Hfs(scheme, filePathToWrite, SinkMode.REPLACE);
 		else
@@ -102,6 +95,6 @@ public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEn
 
 	@Override
 	public void initializeEntity(OutputFileParquetEntity assemblyEntityBase) {
-		this.outputFileParquetEntity=assemblyEntityBase;
+		this.outputFileParquetEntity = assemblyEntityBase;
 	}
 }

@@ -40,7 +40,9 @@ public class ComponentHelper {
 
 	public static String getComponentName(String component, String componentId, String outsocketId) {
 
-		
-		return component+Constants.PIPE_NAME_APPENDER+componentId+"_"+outsocketId;
+		if (outsocketId == null || outsocketId.equals(""))
+			return component + Constants.PIPE_NAME_APPENDER + componentId;
+		else
+			return component + Constants.PIPE_NAME_APPENDER + componentId + "_" + outsocketId;
 	}
 }
