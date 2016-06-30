@@ -105,9 +105,9 @@ public class FilterConditionsDialog extends Dialog {
 	private TreeMap<Integer,List<List<Integer>>> groupSelectionMap;
 	private DataViewerAdapter dataViewerAdapter;
 	private DebugDataViewer debugDataViewer;
-	private static final String REMOTE="Remote";
-	private static final String LOCAL="local";
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConditionsDialog.class);
+	private static final String ORIGINAL="Original";
+	private static final String DOWNLOADED="Downloaded";
+	//private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConditionsDialog.class);
 	
 	Button localOkButton;
 	Button localApplyButton;
@@ -195,16 +195,16 @@ public class FilterConditionsDialog extends Dialog {
 		createLocalTabItem(tabFolder, localTableViewer);
 		FilterHelper.INSTANCE.setDataViewerAdapter(dataViewerAdapter,this);
 		FilterHelper.INSTANCE.setDebugDataViewer(debugDataViewer);
-		FilterHelper.INSTANCE.setFilterType(REMOTE);
+		FilterHelper.INSTANCE.setFilterType(ORIGINAL);
 		tabFolder.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TabItem tabItem = (TabItem) e.item;
-				if (tabItem.getText().equalsIgnoreCase(LOCAL)) {
-					FilterHelper.INSTANCE.setFilterType(LOCAL);
+				if (tabItem.getText().equalsIgnoreCase(DOWNLOADED)) {
+					FilterHelper.INSTANCE.setFilterType(DOWNLOADED);
 				} else {
-					FilterHelper.INSTANCE.setFilterType(REMOTE);
+					FilterHelper.INSTANCE.setFilterType(ORIGINAL);
 				}
 			}
 			

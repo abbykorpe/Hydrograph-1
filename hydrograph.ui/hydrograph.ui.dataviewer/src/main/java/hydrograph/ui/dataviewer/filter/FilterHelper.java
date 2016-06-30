@@ -71,7 +71,7 @@ public class FilterHelper {
 	public static final String TYPE_DATE = "java.util.Date";
 	public static final String TYPE_STRING = "java.lang.String";
 	
-	private static final String LOCAL = "local";
+	private static final String DOWNLOADED="Downloaded";
 	private static final String REGEX_DIGIT = "\\d";
 	private static final String SINGLE_SPACE = " ";
 	private static final String OPEN_BRACKET = "(";
@@ -377,7 +377,7 @@ public class FilterHelper {
 				}
 				System.out.println(buffer);
 				
-				if(filterType!=null && filterType.equalsIgnoreCase(LOCAL))
+				if(filterType!=null && filterType.equalsIgnoreCase(DOWNLOADED))
 				{	
 					localCondition=buffer.toString();
 					showLocalFilteredData(StringUtils.trim(buffer.toString()));
