@@ -49,7 +49,6 @@ import hydrograph.ui.graph.factory.CustomPaletteEditPartFactory;
 import hydrograph.ui.graph.handler.DebugHandler;
 import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.RemoveDebugHandler;
-import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
@@ -115,6 +114,7 @@ import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -338,9 +338,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 			@Override
 			public void keyPressed(KeyEvent event){
-				if(((event.stateMask & SWT.CTRL) != 0 && (event.stateMask & SWT.SHIFT) != 0 
+				if(((event.stateMask & SWT.CTRL) != 0 
 						&& (event.keyCode == SWT.ARROW_DOWN || event.keyCode == SWT.ARROW_LEFT
-						|| event.keyCode == SWT.ARROW_RIGHT || event.keyCode == SWT.ARROW_UP ))){
+						|| event.keyCode == SWT.ARROW_RIGHT || event.keyCode == SWT.ARROW_UP))){
 					
 					moveComponentWithArrowKey(event);
 				}
@@ -1627,14 +1627,17 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	   
 	  }
 	
-	private void moveComponentWithArrowKey(KeyEvent event){
+	
+	private void moveComponentWithArrowKey(KeyEvent event){ 
+		 CompoundCommand compoundCommand = new CompoundCommand();
+		 ComponentSetConstraintCommand componentSetConstraintCommand = null;
 		 ChangeBoundsRequest request = new ChangeBoundsRequest(org.eclipse.gef.RequestConstants.REQ_MOVE);
 		 List<EditPart> editPartsList = getGraphicalViewer().getSelectedEditParts();
-		 
 		 for(EditPart editPart : editPartsList ){
 			if(editPart instanceof ComponentEditPart){
 				hydrograph.ui.graph.model.Component component = (hydrograph.ui.graph.model.Component) editPart.getModel();
 			    org.eclipse.draw2d.geometry.Rectangle bounds = new org.eclipse.draw2d.geometry.Rectangle(component.getLocation(),component.getSize());
+			    
 			    switch (event.keyCode){
 				case SWT.ARROW_UP:
 					bounds.setLocation(bounds.x , bounds.y - 10);
@@ -1643,27 +1646,30 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					bounds.setLocation(bounds.x , bounds.y + 10);
 					break;
 				case SWT.ARROW_RIGHT:
-					bounds.setLocation(bounds.x + 10, bounds.y );
+					bounds.setLocation(bounds.x + 10, bounds.y);
 					break;
 				case SWT.ARROW_LEFT:
-					bounds.setLocation(bounds.x - 10 , bounds.y );
+					bounds.setLocation(bounds.x - 10 , bounds.y);
 					break;
-					}
-		   
-		    ComponentSetConstraintCommand componentSetConstraintCommand = new ComponentSetConstraintCommand((hydrograph.ui.graph.model.Component) editPart.getModel(),request, bounds);
-			componentSetConstraintCommand.execute();
+			   } 
 			
-			}
-		}
+		    componentSetConstraintCommand = new ComponentSetConstraintCommand((hydrograph.ui.graph.model.Component) editPart.getModel(),request, bounds);
+		    compoundCommand.add(componentSetConstraintCommand);
+
+			   }
+		  }
+		 
+		 getCommandStack().execute(compoundCommand);
+		 
 	}
 	
 	public GraphicalViewer getViewer() {
 		return viewer;
 	}
-
+	
 	@Override
 	public void restoreMenuToolContextItemsState() {
 		ContributionItemManager.UndoRedoDefaultBarManager.changeUndoRedoStatus(getViewer());
 	}
-	
+
 }
