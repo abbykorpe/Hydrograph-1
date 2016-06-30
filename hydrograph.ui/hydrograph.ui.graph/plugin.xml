@@ -339,6 +339,7 @@
             class="hydrograph.ui.graph.editor.ELTGraphicalEditor"
             default="false"
             extensions="job"
+            icon="resources/icons/job_icon.png"
             id="hydrograph.ui.graph.etlgraphicaleditor"
             name="ELT Graphical Editor">
       </editor>
