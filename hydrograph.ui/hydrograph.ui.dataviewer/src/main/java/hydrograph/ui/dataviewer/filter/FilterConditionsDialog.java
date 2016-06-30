@@ -251,7 +251,7 @@ public class FilterConditionsDialog extends Dialog {
 		
 		remoteBtnAddGrp = new Button(buttonComposite, SWT.NONE);
 		remoteBtnAddGrp.setText("Create Group");		
-		remoteBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer));
+		//remoteBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer));
 		remoteBtnAddGrp.setEnabled(false);
 		
 		Button clearButton = new Button(buttonComposite, SWT.NONE);
@@ -353,7 +353,7 @@ public class FilterConditionsDialog extends Dialog {
 		 	
 		localBtnAddGrp = new Button(buttonComposite, SWT.NONE);
 		localBtnAddGrp.setText("Create Group");
-		localBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer));
+	//	localBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer));
 		localBtnAddGrp.setEnabled(false);
 	
 		Button clearButton = new Button(buttonComposite, SWT.NONE);
@@ -643,7 +643,7 @@ public class FilterConditionsDialog extends Dialog {
 					return;
 				}
 				addCheckButtonInTable(tableViewer, item, GROUP_CHECKBOX, GROUP_CHECKBOX_PANE, GROUP_EDITOR, cell.getColumnIndex(), 
-						FilterHelper.INSTANCE.checkButtonListener(tableViewer, conditionsList,btnAddGrp));
+						/*FilterHelper.INSTANCE.checkButtonListener(tableViewer, conditionsList,btnAddGrp)*/null);
 				item.addDisposeListener(new DisposeListener() {
 					
 					@Override
