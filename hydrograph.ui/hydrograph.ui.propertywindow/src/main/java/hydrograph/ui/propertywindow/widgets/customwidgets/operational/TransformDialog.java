@@ -965,7 +965,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				operationalInputFieldTableViewer, operationOutputtableViewer);
 		DragDropUtility.INSTANCE.applyDrop(operationalInputFieldTableViewer, dragDropTransformOpImpnew);
 
-		Button addLabel = widget.buttonWidget(operationalOutputFieldComposite, SWT.CENTER, new int[] { 60, 3, 20, 15 },"");
+		Button addLabel = widget.buttonWidget(operationalOutputFieldComposite, SWT.CENTER, new int[] { 60, -1, 20, 15 },"");
 		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addLabel.setImage(addImage);
 		addLabel.setSize(30, 25);
@@ -990,7 +990,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		});
 
 		
-		Button deleteLabel = widget.buttonWidget(operationalOutputFieldComposite, SWT.CENTER,new int[] { 90, 3, 20, 15 }, "");
+		Button deleteLabel = widget.buttonWidget(operationalOutputFieldComposite, SWT.CENTER,new int[] { 90, -1, 20, 15 }, "");
 		Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		deleteLabel.setImage(deleteImage);
 		deleteLabel.setSize(30, 25);
@@ -1247,13 +1247,13 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editor[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);	
 		
 		editors[0].setValidator(new TransformCellEditorFieldValidator(fieldNameDecorator,isFieldNameAlphanumericDecorator));
-		operationInputaddButton = widget.buttonWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 60, 3, 20,15 }, "");
+		operationInputaddButton = widget.buttonWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 60, -1, 20,15 }, "");
 		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		operationInputaddButton.setImage(addImage);
 		operationInputaddButton.setSize(30, 25);
 		operationInputaddButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		
-		operationInputDeleteButton = widget.buttonWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 90, 3,20, 15 }, "");
+		operationInputDeleteButton = widget.buttonWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 90, -1,20, 15 }, "");
 		 Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		 operationInputDeleteButton.setImage(deleteImage);
 		 operationInputDeleteButton.setSize(30, 25);
