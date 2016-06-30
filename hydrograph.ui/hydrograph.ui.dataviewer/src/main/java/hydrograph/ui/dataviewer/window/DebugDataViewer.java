@@ -94,8 +94,8 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.TableCursor;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -889,6 +889,51 @@ public class DebugDataViewer extends ApplicationWindow {
 	private void attachCellNavigator(){
 		tableCursor = new TableCursor(gridViewTableViewer.getTable(), SWT.NONE);
 		tableCursor.setBackground(DataViewerColors.COLOR_CELL_SELECTION);
+		
+		tableCursor.addControlListener(new ControlListener() {
+			private Point previousCellSize;
+			private boolean controlResized;
+			@Override
+			public void controlResized(ControlEvent e) {				
+				ViewerCell cell = gridViewTableViewer.getCell(getActualTableCursorLocation());
+				
+				if(cell==null){
+					return;
+				}
+				
+				Point currentCellSize=new Point(cell.getBounds().width,cell.getBounds().height);
+				
+				if(previousCellSize==null){					
+					previousCellSize = new Point(currentCellSize.x,currentCellSize.y);
+				}
+
+				if (!controlResized) {
+					controlResized = true;
+
+					tableCursor.setSize(currentCellSize.x + 4, currentCellSize.y + 4);
+					
+					Point currentLocation = tableCursor.getLocation();
+					System.out.println("currentLocation: " + currentLocation.toString() + ":: " + tableCursor.getSize());		
+					
+					tableCursor.setLocation(currentLocation.x - 2, currentLocation.y - 2);
+					
+					Point newcurrentLocation = tableCursor.getLocation();
+					System.out.println("NewLocation: " + newcurrentLocation.toString() + ":: " + tableCursor.getSize());	
+					
+					previousCellSize = new Point(currentCellSize.x, currentCellSize.y);
+				} else {
+					controlResized = false;
+				}
+						
+			}
+			
+			@Override
+			public void controlMoved(ControlEvent e) {
+				// Nothing to do
+				
+			}
+		});
+		
 		tableCursor.addKeyListener(new KeyListener() {
 			
 			@Override
@@ -912,13 +957,13 @@ public class DebugDataViewer extends ApplicationWindow {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if((e.keyCode == SWT.SHIFT) && shiftKeyPressed==false){
-					selectionStartPoint = tableCursor.getLocation();
+					selectionStartPoint = getActualTableCursorLocation();
 					startCell = getCellId(selectionStartPoint,gridViewTableViewer);
 					shiftKeyPressed = true;
 				}
 				
 				if((e.keyCode == SWT.CTRL || e.keyCode == SWT.COMMAND) && ctrlKeyPressed==false){
-					selectionStartPoint = tableCursor.getLocation();
+					selectionStartPoint = getActualTableCursorLocation();
 					startCell = getCellId(selectionStartPoint,gridViewTableViewer);
 					ctrlKeyPressed = true;
 				}
@@ -980,8 +1025,8 @@ public class DebugDataViewer extends ApplicationWindow {
 			}
 
 			private void selectCellsOnArrowKeys(final TableViewer tableViewer, KeyEvent e) {
-				if((e.stateMask & SWT.SHIFT) != 0){	        		
-					Point selectionEndPoint = tableCursor.getLocation();					
+				if((e.stateMask & SWT.SHIFT) != 0){	        						
+					Point selectionEndPoint = getActualTableCursorLocation();
 					List<Point> cellsTobeSelected = getCellRectangle(startCell,selectionEndPoint,tableViewer,true);
 					if(cellsTobeSelected!=null){
 						clearSelection(currentSelection,tableViewer);
@@ -989,19 +1034,6 @@ public class DebugDataViewer extends ApplicationWindow {
 						currentSelection.addAll(cellsTobeSelected);
 					}
 				}
-			}
-		});
-		
-		tableCursor.addFocusListener(new FocusListener() {
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-				clearSelection(currentSelection, gridViewTableViewer);
-			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-				// Nothing to do
 			}
 		});
 		
@@ -1025,6 +1057,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	 * 
 	 */
 	public void redrawTableCursor(){
+		clearSelection(currentSelection, gridViewTableViewer);
 		tableCursor.forceFocus();
 		tableCursor.redraw();
 	}
@@ -1036,6 +1069,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	 */
 	public void selectAllCells(){
 		selectionStartPoint = new Point(0, 0);
+		startCell = new Point(0, 0);
 		Point selectionEndPoint = new Point(gridViewTableViewer.getTable().getItemCount()-1, gridViewTableViewer.getTable().getColumnCount()-1);			
 		List<Point> cellsTobeSelected = getCellRectangle(startCell,selectionEndPoint,gridViewTableViewer,false);
 		if(cellsTobeSelected!=null){
@@ -1054,7 +1088,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		if(currentSelection.size() > 0){
 			return currentSelection;
 		}else{
-			Point cell=getCellId(tableCursor.getLocation(), gridViewTableViewer);
+			Point cell=getCellId(getActualTableCursorLocation(), gridViewTableViewer);
 			List currentCell= new ArrayList<>();
 			if(cell!=null){
 				currentCell.add(cell);
@@ -1062,6 +1096,10 @@ public class DebugDataViewer extends ApplicationWindow {
 			return currentCell;
 		}
 		
+	}
+	
+	private Point getActualTableCursorLocation(){
+		return new Point(tableCursor.getLocation().x + 2, tableCursor.getLocation().y+2);
 	}
 	
 	private void highlightCells(List<Point> cellsTobeHighlight,TableViewer tableViewer) {

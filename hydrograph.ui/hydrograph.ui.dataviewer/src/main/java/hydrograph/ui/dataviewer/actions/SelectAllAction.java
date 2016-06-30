@@ -34,10 +34,13 @@ public class SelectAllAction extends Action{
 	public SelectAllAction(DebugDataViewer debugDataViewer) {
     	super(LABEL);
     	this.debugDataViewer = debugDataViewer;
-		if (OSValidator.isWindows())
+		if (OSValidator.isWindows()){
 			setAccelerator(SWT.CTRL + 'a');
-		if (OSValidator.isMac())
+		}
+			
+		if (OSValidator.isMac()){
 			setAccelerator(SWT.COMMAND + 'a');
+		}	
 	}
 	
 	@Override

@@ -9,6 +9,7 @@ Sr.No. <date> - [developer names] - description
 4. <22-Jun-16> - [Shrirang Kumbhar] - Debug Data viewer window does not appear in task bar #628
 5  <22-Jun-16> - [Shrirang Kumbhar] - Data View window: Upon hitting Alt button from keyboard menu shortcut are not getting highlighted #589
 6. <22-Jun-16> - [Shrirang Kumbhar] - Data View Window: Short-Cut is missing for Next and Previous button #585
+7. <30-Jun-16> - [Shrirang Kumbhar] - Added data viewer cell navigator and selector
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
