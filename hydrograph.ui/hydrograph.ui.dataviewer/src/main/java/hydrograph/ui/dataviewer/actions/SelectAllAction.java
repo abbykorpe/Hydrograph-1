@@ -18,7 +18,6 @@ import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Table;
 /**
  * 
  * 
@@ -43,19 +42,12 @@ public class SelectAllAction extends Action{
 	
 	@Override
 	public void run() {
-		if (debugDataViewer.getUnformattedViewTextarea()!=null && debugDataViewer.getUnformattedViewTextarea().isVisible())
+		if (debugDataViewer.getUnformattedViewTextarea()!=null && debugDataViewer.getUnformattedViewTextarea().isVisible()){
 			debugDataViewer.getUnformattedViewTextarea().selectAll();
-		else if (debugDataViewer.getFormattedViewTextarea()!=null && debugDataViewer.getFormattedViewTextarea().isVisible())
+		}else if (debugDataViewer.getFormattedViewTextarea()!=null && debugDataViewer.getFormattedViewTextarea().isVisible()){
 			debugDataViewer.getFormattedViewTextarea().selectAll();
-		else
-			selectAll();
+		}else{
+			debugDataViewer.selectAllCells();
+		}
 	}
-
-	
-	// This method is used to mark all rows of advance data viewer as selected.
-	public void selectAll() {
-		Table table = debugDataViewer.getTableViewer().getTable();
-		table.setSelection(0, table.getItemCount() - 1);
-	}
-	
 }
