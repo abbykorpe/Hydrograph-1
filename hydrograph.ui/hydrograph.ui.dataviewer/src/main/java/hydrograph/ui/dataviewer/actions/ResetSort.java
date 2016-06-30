@@ -36,7 +36,7 @@ public class ResetSort extends Action {
 
 	@Override
 	public void run() {
-		debugDataViewer.redrawTableCursor();
 		DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
+		debugDataViewer.redrawTableCursor();
 	}
 }

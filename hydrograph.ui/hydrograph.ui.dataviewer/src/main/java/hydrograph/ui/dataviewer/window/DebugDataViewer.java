@@ -855,11 +855,11 @@ public class DebugDataViewer extends ApplicationWindow {
 					        	clearSelection(currentSelection,gridViewTableViewer);
 					        	if(e.button == 1 && (e.stateMask & SWT.SHIFT) != 0){	        		
 					        		selectionEndPoint = new Point(e.x, e.y);
-					        		List<Point> cellsTobeSelected = getCellRectangle(startCell,selectionEndPoint,gridViewTableViewer,true);
-					        		if(cellsTobeSelected!=null){
+					        		List<Point> cellsToBeSelected = getCellRectangle(startCell,selectionEndPoint,gridViewTableViewer,true);
+					        		if(cellsToBeSelected!=null){
 					        			clearSelection(currentSelection,gridViewTableViewer);
-					        			highlightCells(cellsTobeSelected, gridViewTableViewer);
-					        			currentSelection.addAll(cellsTobeSelected);
+					        			highlightCells(cellsToBeSelected, gridViewTableViewer);
+					        			currentSelection.addAll(cellsToBeSelected);
 					        		}
 					        	}
 					        }
@@ -913,12 +913,8 @@ public class DebugDataViewer extends ApplicationWindow {
 					tableCursor.setSize(currentCellSize.x + 4, currentCellSize.y + 4);
 					
 					Point currentLocation = tableCursor.getLocation();
-					System.out.println("currentLocation: " + currentLocation.toString() + ":: " + tableCursor.getSize());		
 					
 					tableCursor.setLocation(currentLocation.x - 2, currentLocation.y - 2);
-					
-					Point newcurrentLocation = tableCursor.getLocation();
-					System.out.println("NewLocation: " + newcurrentLocation.toString() + ":: " + tableCursor.getSize());	
 					
 					previousCellSize = new Point(currentCellSize.x, currentCellSize.y);
 				} else {
@@ -1027,11 +1023,11 @@ public class DebugDataViewer extends ApplicationWindow {
 			private void selectCellsOnArrowKeys(final TableViewer tableViewer, KeyEvent e) {
 				if((e.stateMask & SWT.SHIFT) != 0){	        						
 					Point selectionEndPoint = getActualTableCursorLocation();
-					List<Point> cellsTobeSelected = getCellRectangle(startCell,selectionEndPoint,tableViewer,true);
-					if(cellsTobeSelected!=null){
+					List<Point> cellsToBeSelected = getCellRectangle(startCell,selectionEndPoint,tableViewer,true);
+					if(cellsToBeSelected!=null){
 						clearSelection(currentSelection,tableViewer);
-						highlightCells(cellsTobeSelected, tableViewer);
-						currentSelection.addAll(cellsTobeSelected);
+						highlightCells(cellsToBeSelected, tableViewer);
+						currentSelection.addAll(cellsToBeSelected);
 					}
 				}
 			}
@@ -1071,11 +1067,11 @@ public class DebugDataViewer extends ApplicationWindow {
 		selectionStartPoint = new Point(0, 0);
 		startCell = new Point(0, 0);
 		Point selectionEndPoint = new Point(gridViewTableViewer.getTable().getItemCount()-1, gridViewTableViewer.getTable().getColumnCount()-1);			
-		List<Point> cellsTobeSelected = getCellRectangle(startCell,selectionEndPoint,gridViewTableViewer,false);
-		if(cellsTobeSelected!=null){
+		List<Point> cellsToBeSelected = getCellRectangle(startCell,selectionEndPoint,gridViewTableViewer,false);
+		if(cellsToBeSelected!=null){
 			clearSelection(currentSelection,gridViewTableViewer);
-			highlightCells(cellsTobeSelected, gridViewTableViewer);
-			currentSelection.addAll(cellsTobeSelected);
+			highlightCells(cellsToBeSelected, gridViewTableViewer);
+			currentSelection.addAll(cellsToBeSelected);
 		}
 	}
 	
@@ -1102,8 +1098,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		return new Point(tableCursor.getLocation().x + 2, tableCursor.getLocation().y+2);
 	}
 	
-	private void highlightCells(List<Point> cellsTobeHighlight,TableViewer tableViewer) {
-		for(Point cell : cellsTobeHighlight){
+	private void highlightCells(List<Point> cellsToBeHighlight,TableViewer tableViewer) {
+		for(Point cell : cellsToBeHighlight){
 			tableViewer.getTable().getItem(cell.x).setBackground(cell.y, DataViewerColors.COLOR_CELL_SELECTION);	
 		}
 	}
