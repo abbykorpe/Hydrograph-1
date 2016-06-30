@@ -870,7 +870,9 @@ public class FilterConditionsDialog extends Dialog {
 		buttonPane.setLayout(new FillLayout());
 		final Button button = new Button(buttonPane, SWT.CHECK);
 		button.setData(ROW_INDEX, tableViewer.getTable().indexOf(tableItem));
-		button.addSelectionListener(buttonSelectionListener);
+		if(null != buttonSelectionListener){
+			button.addSelectionListener(buttonSelectionListener);
+		}
 		tableItem.setData(columnName, button);
 		tableItem.setData(groupPaneName, buttonPane);
 		
