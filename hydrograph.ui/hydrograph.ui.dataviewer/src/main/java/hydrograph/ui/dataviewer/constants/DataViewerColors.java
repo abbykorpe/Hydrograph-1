@@ -10,33 +10,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+package hydrograph.ui.dataviewer.constants;
 
-package hydrograph.ui.dataviewer.actions;
-
-import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
-import hydrograph.ui.dataviewer.window.DebugDataViewer;
-
-import org.eclipse.jface.action.Action;
+import org.eclipse.swt.graphics.Color;
 
 /**
- * 
- * Reset sort action
+ * Color constants
  * 
  * @author Bitwise
  *
  */
-public class ResetSort extends Action {
-
-	private DebugDataViewer debugDataViewer;
-	private static final String LABEL = "Re&set Sort";
-	public ResetSort(DebugDataViewer debugDataViewer) {
-		super(LABEL);
-		this.debugDataViewer = debugDataViewer;
-	}
-
-	@Override
-	public void run() {
-		DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
-		debugDataViewer.redrawTableCursor();
-	}
+public class DataViewerColors {
+	public static final Color COLOR_WHITE=new Color(null, 255, 255, 255);
+	public static final Color COLOR_CELL_SELECTION=new Color(null, 218, 234, 255);
 }

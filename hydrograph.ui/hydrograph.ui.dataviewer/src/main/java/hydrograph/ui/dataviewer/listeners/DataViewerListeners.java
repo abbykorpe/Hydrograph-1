@@ -155,6 +155,7 @@ public class DataViewerListeners {
 					public void run() {
 						refreshDataViewerWindow(status);
 						DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
+						debugDataViewer.redrawTableCursor();
 					}
 				});
 				return Status.OK_STATUS;
@@ -225,6 +226,7 @@ public class DataViewerListeners {
 								refreshDataViewerWindow(status);
 								statusManager.clearJumpToPageText();
 								DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
+								debugDataViewer.redrawTableCursor();
 							}							
 						});
 						return Status.OK_STATUS;
@@ -259,6 +261,7 @@ public class DataViewerListeners {
 								refreshDataViewerWindow(status);
 								statusManager.clearJumpToPageText();
 								DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
+								debugDataViewer.redrawTableCursor();
 							}
 						});
 						return Status.OK_STATUS;

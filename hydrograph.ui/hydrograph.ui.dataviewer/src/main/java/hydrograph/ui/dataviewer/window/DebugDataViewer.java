@@ -35,6 +35,7 @@ import hydrograph.ui.dataviewer.actions.UnformattedViewAction;
 import hydrograph.ui.dataviewer.actions.ViewDataGridMenuCreator;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.constants.ControlConstants;
+import hydrograph.ui.dataviewer.constants.DataViewerColors;
 import hydrograph.ui.dataviewer.constants.MenuConstants;
 import hydrograph.ui.dataviewer.constants.MessageBoxText;
 import hydrograph.ui.dataviewer.constants.Messages;
@@ -54,8 +55,9 @@ import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
 import hydrograph.ui.logging.factory.LogFactory;
-import org.eclipse.swt.graphics.Image;
+
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -79,8 +81,11 @@ import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -88,6 +93,12 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.custom.TableCursor;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -95,6 +106,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -107,6 +119,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
@@ -166,16 +179,22 @@ public class DebugDataViewer extends ApplicationWindow {
 	private Map<String, DebugDataViewer> dataViewerMap;
 	
 	private SortOrder sortOrder;
+		
+	private TableCursor tableCursor;
+	private Point selectionStartPoint ;
+	private Point startCell=null;
 	
-	public SortOrder getSortOrder() {
-		return sortOrder;
-	}
-
+	private volatile boolean shiftKeyPressed;
+	private volatile boolean ctrlKeyPressed;
+	private List<Point> currentSelection = new ArrayList<>();
+	
 	private Image ascending;
 	private Image descending;
 	
 	private TableColumn recentlySortedColumn;
 	private String sortedColumnName;
+	
+	
 	/**
 	 * Create the application window,
 	 * 
@@ -192,26 +211,6 @@ public class DebugDataViewer extends ApplicationWindow {
 		gridViewData = new LinkedList<>();
 		formattedViewData = new LinkedList<>();
 	}
-
-	
-	/**
-	 * @return Sorted Column Name
-	 */
-	public String getSortedColumnName() {
-		return sortedColumnName;
-	}
-	
-
-	/**
-	 * 
-	 * Set name of sorted column 
-	 * 
-	 * @param sortedColumnName
-	 */
-	public void setSortedColumnName(String sortedColumnName) {
-		this.sortedColumnName = sortedColumnName;
-	}
-
 
 	public DebugDataViewer( JobDetails jobDetails, String dataViewerWindowName) {
 		super(null);
@@ -230,6 +229,34 @@ public class DebugDataViewer extends ApplicationWindow {
 		descending=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
 	}
 
+	/**
+	 * @return Sorted Column Name
+	 */
+	public String getSortedColumnName() {
+		return sortedColumnName;
+	}
+	
+	/**
+	 * 
+	 * Returns sort order
+	 * 
+	 * @return
+	 */
+	public SortOrder getSortOrder() {
+		return sortOrder;
+	}
+	
+	/**
+	 * 
+	 * Set name of sorted column 
+	 * 
+	 * @param sortedColumnName
+	 */
+	public void setSortedColumnName(String sortedColumnName) {
+		this.sortedColumnName = sortedColumnName;
+	}
+
+	
 	/**
 	 * 
 	 * Get image for ascending order
@@ -804,12 +831,45 @@ public class DebugDataViewer extends ApplicationWindow {
 					composite_1.setLayout(gl_composite_1);
 					composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 					{
-						gridViewTableViewer = new TableViewer(composite_1, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
+						gridViewTableViewer = new TableViewer(composite_1, SWT.BORDER| SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
 						Table table = gridViewTableViewer.getTable();
 						table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 						table.setLinesVisible(true);
 						table.setHeaderVisible(true);
-						table.showSelection();
+												
+						gridViewTableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+							private boolean update;
+						    @Override
+						    public void selectionChanged(SelectionChangedEvent event) {
+						    	if (!update) {
+						            update = true;
+						            gridViewTableViewer.setSelection(null);
+						            update = false;
+						        }
+						    }
+						});
+						
+						gridViewTableViewer.getTable().addMouseListener(new MouseAdapter() {
+							private Point selectionEndPoint ;			
+					        public void mouseDown(MouseEvent e) {
+					        	clearSelection(currentSelection,gridViewTableViewer);
+					        	if(e.button == 1 && (e.stateMask & SWT.SHIFT) != 0){	        		
+					        		selectionEndPoint = new Point(e.x, e.y);
+					        		List<Point> cellsToBeSelected = getCellRectangle(startCell,selectionEndPoint,gridViewTableViewer,true);
+					        		if(cellsToBeSelected!=null){
+					        			clearSelection(currentSelection,gridViewTableViewer);
+					        			highlightCells(cellsToBeSelected, gridViewTableViewer);
+					        			currentSelection.addAll(cellsToBeSelected);
+					        		}
+					        	}
+					        }
+					        
+					        @Override
+					        public void mouseUp(MouseEvent e) {
+					        	
+					        }
+					    });
+						
 					}
 					stackLayout.topControl = composite_1;
 				}
@@ -819,12 +879,275 @@ public class DebugDataViewer extends ApplicationWindow {
 
 				scrolledComposite.setContent(stackLayoutComposite);
 				scrolledComposite.setMinSize(stackLayoutComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-				//updateGridViewTable();
+				
+				attachCellNavigator();
 			}
 		}
 
 	}
+	
+	private void attachCellNavigator(){
+		tableCursor = new TableCursor(gridViewTableViewer.getTable(), SWT.NONE);
+		tableCursor.setBackground(DataViewerColors.COLOR_CELL_SELECTION);
+		
+		tableCursor.addControlListener(new ControlListener() {
+			private Point previousCellSize;
+			private boolean controlResized;
+			@Override
+			public void controlResized(ControlEvent e) {				
+				ViewerCell cell = gridViewTableViewer.getCell(getActualTableCursorLocation());
+				
+				if(cell==null){
+					return;
+				}
+				
+				Point currentCellSize=new Point(cell.getBounds().width,cell.getBounds().height);
+				
+				if(previousCellSize==null){					
+					previousCellSize = new Point(currentCellSize.x,currentCellSize.y);
+				}
 
+				if (!controlResized) {
+					controlResized = true;
+
+					tableCursor.setSize(currentCellSize.x + 4, currentCellSize.y + 4);
+					
+					Point currentLocation = tableCursor.getLocation();
+					
+					tableCursor.setLocation(currentLocation.x - 2, currentLocation.y - 2);
+					
+					previousCellSize = new Point(currentCellSize.x, currentCellSize.y);
+				} else {
+					controlResized = false;
+				}
+						
+			}
+			
+			@Override
+			public void controlMoved(ControlEvent e) {
+				// Nothing to do
+				
+			}
+		});
+		
+		tableCursor.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent e) {				
+				if(e.keyCode == SWT.SHIFT){
+					selectionStartPoint = new Point(-1, -1);
+					shiftKeyPressed = false;
+					return;
+				}
+				
+				if(e.keyCode == SWT.CTRL || e.keyCode == SWT.COMMAND){
+					ctrlKeyPressed = false;
+					return;
+				}
+				
+				if(!((e.stateMask & SWT.SHIFT) != 0)){
+					clearSelection(currentSelection,gridViewTableViewer);
+				}
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if((e.keyCode == SWT.SHIFT) && shiftKeyPressed==false){
+					selectionStartPoint = getActualTableCursorLocation();
+					startCell = getCellId(selectionStartPoint,gridViewTableViewer);
+					shiftKeyPressed = true;
+				}
+				
+				if((e.keyCode == SWT.CTRL || e.keyCode == SWT.COMMAND) && ctrlKeyPressed==false){
+					selectionStartPoint = getActualTableCursorLocation();
+					startCell = getCellId(selectionStartPoint,gridViewTableViewer);
+					ctrlKeyPressed = true;
+				}
+				
+				
+				if(ctrlKeyPressed && !shiftKeyPressed){
+					if(e.keyCode == SWT.ARROW_RIGHT){
+						tableCursor.setSelection(gridViewTableViewer.getTable().indexOf(tableCursor.getRow()), gridViewTableViewer.getTable().getColumnCount()-1);
+						return;	
+					}
+					
+					if(e.keyCode == SWT.ARROW_LEFT){
+						tableCursor.setSelection(gridViewTableViewer.getTable().indexOf(tableCursor.getRow()), 0);
+						return;	
+					}
+					
+					if(e.keyCode == SWT.ARROW_UP){
+						tableCursor.setSelection(0, tableCursor.getColumn());
+						return;	
+					}
+					
+					if(e.keyCode == SWT.ARROW_DOWN){
+						tableCursor.setSelection(gridViewTableViewer.getTable().getItemCount()-1, tableCursor.getColumn());
+						return;	
+					}
+				}
+				
+				if (shiftKeyPressed && ctrlKeyPressed) {
+					if(e.keyCode == SWT.ARROW_RIGHT){
+						tableCursor.setSelection(gridViewTableViewer.getTable().indexOf(tableCursor.getRow()), gridViewTableViewer.getTable().getColumnCount()-1);
+						selectCellsOnArrowKeys(gridViewTableViewer, e);
+						return;	
+					}
+					
+					if(e.keyCode == SWT.ARROW_LEFT){
+						tableCursor.setSelection(gridViewTableViewer.getTable().indexOf(tableCursor.getRow()), 0);
+						selectCellsOnArrowKeys(gridViewTableViewer, e);
+						return;	
+					}
+					
+					if(e.keyCode == SWT.ARROW_UP){
+						tableCursor.setSelection(0, tableCursor.getColumn());
+						selectCellsOnArrowKeys(gridViewTableViewer, e);
+						return;	
+					}
+					
+					if(e.keyCode == SWT.ARROW_DOWN){
+						tableCursor.setSelection(gridViewTableViewer.getTable().getItemCount()-1, tableCursor.getColumn());
+						selectCellsOnArrowKeys(gridViewTableViewer, e);
+						return;	
+					}
+					
+				}
+				
+				if ((e.keyCode == SWT.ARROW_UP) || (e.keyCode == SWT.ARROW_DOWN) || (e.keyCode == SWT.ARROW_LEFT) || (e.keyCode == SWT.ARROW_RIGHT) ) {
+					selectCellsOnArrowKeys(gridViewTableViewer, e);
+				}				
+				
+			}
+
+			private void selectCellsOnArrowKeys(final TableViewer tableViewer, KeyEvent e) {
+				if((e.stateMask & SWT.SHIFT) != 0){	        						
+					Point selectionEndPoint = getActualTableCursorLocation();
+					List<Point> cellsToBeSelected = getCellRectangle(startCell,selectionEndPoint,tableViewer,true);
+					if(cellsToBeSelected!=null){
+						clearSelection(currentSelection,tableViewer);
+						highlightCells(cellsToBeSelected, tableViewer);
+						currentSelection.addAll(cellsToBeSelected);
+					}
+				}
+			}
+		});
+		
+	}
+	
+	private void clearSelection(List<Point> currentSelection,TableViewer tableViewer){
+    	for(Point cell: currentSelection){
+    		tableViewer.getTable().getItem(cell.x).setBackground(cell.y, DataViewerColors.COLOR_WHITE);
+    		if(cell.y==0){
+    			tableViewer.getTable().getItem(cell.x).setBackground(cell.y, SWTResourceManager.getColor(SWT.COLOR_GRAY));	
+    		}
+		}
+    		
+		currentSelection.clear();
+		tableCursor.redraw();
+    }
+	
+	/**
+	 * 
+	 * Redraw table cursor
+	 * 
+	 */
+	public void redrawTableCursor(){
+		clearSelection(currentSelection, gridViewTableViewer);
+		tableCursor.forceFocus();
+		tableCursor.redraw();
+	}
+	
+	/**
+	 * 
+	 * Highlight all cells
+	 * 
+	 */
+	public void selectAllCells(){
+		selectionStartPoint = new Point(0, 0);
+		startCell = new Point(0, 0);
+		Point selectionEndPoint = new Point(gridViewTableViewer.getTable().getItemCount()-1, gridViewTableViewer.getTable().getColumnCount()-1);			
+		List<Point> cellsToBeSelected = getCellRectangle(startCell,selectionEndPoint,gridViewTableViewer,false);
+		if(cellsToBeSelected!=null){
+			clearSelection(currentSelection,gridViewTableViewer);
+			highlightCells(cellsToBeSelected, gridViewTableViewer);
+			currentSelection.addAll(cellsToBeSelected);
+		}
+	}
+	
+	/**
+	 * Get List of selected cells
+	 * 
+	 * @return list of {@link Point}
+	 */
+	public List<Point> getSelectedCell(){
+		if(currentSelection.size() > 0){
+			return currentSelection;
+		}else{
+			Point cell=getCellId(getActualTableCursorLocation(), gridViewTableViewer);
+			List currentCell= new ArrayList<>();
+			if(cell!=null){
+				currentCell.add(cell);
+			}
+			return currentCell;
+		}
+		
+	}
+	
+	private Point getActualTableCursorLocation(){
+		return new Point(tableCursor.getLocation().x + 2, tableCursor.getLocation().y+2);
+	}
+	
+	private void highlightCells(List<Point> cellsToBeHighlight,TableViewer tableViewer) {
+		for(Point cell : cellsToBeHighlight){
+			tableViewer.getTable().getItem(cell.x).setBackground(cell.y, DataViewerColors.COLOR_CELL_SELECTION);	
+		}
+	}
+	
+	private Point getCellId(Point mouseLocation,TableViewer tableViewer){
+		ViewerCell cell = tableViewer.getCell(mouseLocation);
+		if(cell==null){
+			return null;
+		}
+		int columnIndex = cell.getColumnIndex();				
+		int rowIndex = tableViewer.getTable().indexOf((TableItem)cell.getItem())  ;
+		return new Point(rowIndex, columnIndex);
+	}
+
+	private List<Point> getCellRectangle(Point startCell,Point selectionEndPoint,TableViewer tableViewer,boolean mouseLocation){
+    	List<Point> currentSelection = new ArrayList<>();
+    	
+    	Point endCell=null;
+    	if(mouseLocation){
+    		endCell = getCellId(selectionEndPoint,tableViewer);
+    	}else{
+    		endCell = new Point(selectionEndPoint.x, selectionEndPoint.y);
+    	}
+				
+		if(startCell==null || endCell==null){
+			return null;
+		}
+		
+		int minX = Math.min(startCell.x, endCell.x);
+		int minY = Math.min(startCell.y, endCell.y);
+		
+		int maxX = Math.max(startCell.x, endCell.x);
+		int maxY = Math.max(startCell.y, endCell.y);
+		
+		int tmpMaxY;
+		while(minX<=maxX){
+			tmpMaxY = maxY;
+			while(minY<=tmpMaxY){
+				Point cell = new Point(maxX,tmpMaxY);
+				currentSelection.add(cell);
+				tmpMaxY--;
+			}
+			maxX--;
+		}
+		
+		return currentSelection;
+	}
+	
 	private void updateGridViewTable() {
 		createGridViewTableColumns(gridViewTableViewer);
 
@@ -863,6 +1186,19 @@ public class DebugDataViewer extends ApplicationWindow {
 			public String getText(Object element) {
 				RowData p = (RowData) element;
 				return String.valueOf(p.getRowNumber());
+			}
+		});
+		
+		tableViewerColumn.getColumn().addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectAllCells();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// Do Nothing				
 			}
 		});
 	}

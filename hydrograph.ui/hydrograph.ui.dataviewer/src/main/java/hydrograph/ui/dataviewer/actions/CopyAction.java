@@ -14,8 +14,6 @@
 package hydrograph.ui.dataviewer.actions;
 
 import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.dataviewer.datastructures.RowField;
-import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
@@ -23,8 +21,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Item;
 
 /**
  * 
@@ -41,36 +39,51 @@ public class CopyAction extends Action {
 	public CopyAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
 		this.debugDataViewer = debugDataViewer;
-		if (OSValidator.isWindows())
+		if (OSValidator.isWindows()){
 			setAccelerator(SWT.CTRL + 'c');
-		if (OSValidator.isMac())
+		}
+			
+		if (OSValidator.isMac()){
 			setAccelerator(SWT.COMMAND + 'c');
+		}
 	}
 	@Override
 	public void run() {
-		if (debugDataViewer.getUnformattedViewTextarea()!=null && debugDataViewer.getUnformattedViewTextarea().isVisible())
+		if (debugDataViewer.getUnformattedViewTextarea()!=null && debugDataViewer.getUnformattedViewTextarea().isVisible()){
 			debugDataViewer.getUnformattedViewTextarea().copy();
-		else if (debugDataViewer.getFormattedViewTextarea()!=null && debugDataViewer.getFormattedViewTextarea().isVisible())
+		}else if (debugDataViewer.getFormattedViewTextarea()!=null && debugDataViewer.getFormattedViewTextarea().isVisible()){
 			debugDataViewer.getFormattedViewTextarea().copy();
-		else
+		}else{
 			copySelectedAsTabDelimited();
+		}	
 	}
 	
 	// This method is used to copy all selected rows as tab delimited
 	private void copySelectedAsTabDelimited() {
 		StringBuffer stringBuffer = new StringBuffer();
-		for (Item item : debugDataViewer.getTableViewer().getTable().getSelection()) {
-			RowData rowData = (RowData) item.getData();
-			for (RowField columnData : rowData.getRowFields()) {
-				stringBuffer.append(columnData.getValue() + "\t");
+		int totalRowCount = debugDataViewer.getTableViewer().getTable().getItemCount();
+		int totalColumnCount = debugDataViewer.getTableViewer().getTable().getColumnCount();
+		boolean hasRow=false;
+		for (int rowCount = 0; rowCount < totalRowCount; rowCount++) {
+			for (int columnCount = 0; columnCount < totalColumnCount; columnCount++) {
+				Point cell = new Point(rowCount, columnCount);
+				if(debugDataViewer.getSelectedCell().contains(cell)){
+					stringBuffer.append(debugDataViewer.getTableViewer().getTable().getItem(rowCount).getText(columnCount) + "\t");
+					hasRow=true;
+				}
+				cell=null;
 			}
-			stringBuffer.append("\n");
+			if(hasRow){
+				stringBuffer.append("\n");
+				hasRow=false;
+			}				
 		}
 		Clipboard cb = new Clipboard(Display.getCurrent());
 		TextTransfer textTransfer = TextTransfer.getInstance();
 		String textData = stringBuffer.toString();
 		cb.setContents(new Object[] { textData }, new Transfer[] { textTransfer });
 		cb.dispose();
+		
 	}
 	
 }

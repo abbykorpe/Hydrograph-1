@@ -87,6 +87,7 @@ public class ReloadAction extends Action {
 	
 	@Override
 	public void run() {
+		
 		viewDataPreferences = debugDataViewer.getViewDataPreferences();
 		DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
 		Job job = new Job(Messages.LOADING_DEBUG_FILE) {
@@ -139,6 +140,7 @@ public class ReloadAction extends Action {
 						}					
 						lastDownloadedFileSize = viewDataPreferences.getFileSize();
 						DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
+						debugDataViewer.redrawTableCursor();
 					}
 				});
 				
