@@ -597,7 +597,9 @@ public class JoinMapDialog extends Dialog {
 	
 	private void createPullButton(Composite composite_11) {
 		btnPull = new Button(composite_11, SWT.NONE);
-		btnPull.setText(PULL_BUTTON_TEXT);
+		Image pullButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.PULL_BUTTON);
+		btnPull.setImage(pullButtonImage);
+		//btnPull.setText(PULL_BUTTON_TEXT);
 		btnPull.setToolTipText(PULL_TOOLTIP);
 		
 		btnPull.addSelectionListener(new SelectionAdapter() {

@@ -112,11 +112,11 @@ public class LookupMapDialog extends Dialog {
 	private static final String IN0_HEADER = "Input Fields(in0)";
 	private static final String IN1_HEADER = "Input Fields(in1)";
 	
-	private static final String PULL_BUTTON_TEXT="Pull";
-	private static final String ADD_BUTTON_TEXT="Add";
-	private static final String DELETE_BUTTON_TEXT="Delete";
-	private static final String UP_BUTTON_TEXT="Up";
-	private static final String DOWN_BUTTON_TEXT="Down";
+//	private static final String PULL_BUTTON_TEXT="Pull";
+//	private static final String ADD_BUTTON_TEXT="Add";
+//	private static final String DELETE_BUTTON_TEXT="Delete";
+//	private static final String UP_BUTTON_TEXT="Up";
+//	private static final String DOWN_BUTTON_TEXT="Down";
 	
 	private static final String PULL_TOOLTIP = "Pull schema";
 	private static final String ADD_TOOLTIP = "Add field";
