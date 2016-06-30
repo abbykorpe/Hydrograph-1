@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 package hydrograph.server.debug.utilities;
 
 /**
@@ -88,6 +76,11 @@ public class Constants {
 	 * The URL parameter for user id sent in the request object to the service
 	 */
 	public static final String USER_ID = "userId";
+	
+	/**
+	 * The json key for schema and condition set in ServiceConfig.properties file
+	 */
+	public static final String JSON = "json_object";
 
 	/**
 	 * The URL parameter for password sent in the request object to the service
@@ -127,5 +120,6 @@ public class Constants {
 	public static final char DEFAULT_QUOTE_CHARACTER = '"';
 
 	public static final String HOST = "host_name";
+	
 
 }
