@@ -121,8 +121,12 @@ public class JoinMapDialog extends Dialog {
 	private static final String FIELD_TOOLTIP_MESSAGE_FIELD_CANT_BE_EMPTY="Field can not be empty";
 	private static final String FIELD_TOOLTIP_MESSAGE_DUPLICATE_FIELDS="Duplicate field";
 	private static final String MAPPING_TABLE_ITEM_DELIMILATOR="#";
+
 	
 	private static final String PULL_BUTTON_TEXT="Pull";
+
+	private Shell shell;
+
 	private static final String ADD_BUTTON_TEXT="Add";
 	private static final String DELETE_BUTTON_TEXT="Delete";
 	private static final String UP_BUTTON_TEXT="Up";
@@ -145,6 +149,7 @@ public class JoinMapDialog extends Dialog {
 	 */@Deprecated
 	public JoinMapDialog(Shell parentShell) {
 		super(parentShell);
+		this.shell = parentShell;
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL
 				| SWT.RESIZE);
 	}
@@ -152,6 +157,7 @@ public class JoinMapDialog extends Dialog {
 	public JoinMapDialog(Shell parentShell, Component component, JoinMappingGrid joinPropertyGrid,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
+		this.shell = parentShell;
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL
 				| SWT.RESIZE);
 		this.joinMappingGrid = joinPropertyGrid;
@@ -616,9 +622,10 @@ public class JoinMapDialog extends Dialog {
 
 	private void createDownButton(Composite composite_11) {
 		btnDown = new Button(composite_11, SWT.NONE);
-		btnDown.setText(DOWN_BUTTON_TEXT);
 		btnDown.setToolTipText(DOWN_TOOLTIP);
-		
+		Image downButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
+		btnDown.setImage(downButtonImage);
+		//btnDown.setText(DOWN_BUTTON_TEXT);
 		btnDown.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -641,9 +648,10 @@ public class JoinMapDialog extends Dialog {
 
 	private void createUpButton(Composite composite_11) {
 		btnUp = new Button(composite_11, SWT.NONE);
-		btnUp.setText(UP_BUTTON_TEXT);
 		btnUp.setToolTipText(UP_TOOLTIP);
-		
+		//btnUp.setText(UP_BUTTON_TEXT);
+		Image upButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
+		btnUp.setImage(upButtonImage);
 		btnUp.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -664,10 +672,13 @@ public class JoinMapDialog extends Dialog {
 	}
 
 	private void createDeleteButton(Composite composite_11) {
-		btnDelete = new Button(composite_11, SWT.NONE);
-		btnDelete.setText(DELETE_BUTTON_TEXT);
-		btnDelete.setToolTipText(DELETE_TOOLTIP);
 		
+		btnDelete = new Button(composite_11, SWT.NONE);
+		btnDelete.setToolTipText(DELETE_TOOLTIP);
+		//btnDelete.setText(DELETE_BUTTON_TEXT);
+		Image deleteButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
+		btnDelete.setImage(deleteButtonImage);
+
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -697,9 +708,10 @@ public class JoinMapDialog extends Dialog {
 
 	private void createAddButton(Composite composite_11) {
 		btnAdd = new Button(composite_11, SWT.NONE);
-		btnAdd.setText(ADD_BUTTON_TEXT);
 		btnAdd.setToolTipText(ADD_TOOLTIP);
-		
+		//btnAdd.setText(ADD_BUTTON_TEXT);
+		Image addButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
+		btnAdd.setImage(addButtonImage);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

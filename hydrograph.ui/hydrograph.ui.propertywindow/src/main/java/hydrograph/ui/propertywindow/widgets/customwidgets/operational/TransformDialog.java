@@ -14,6 +14,7 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
@@ -134,8 +135,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private Button isParam;
 	private TableViewer operationalInputFieldTableViewer;
 	private TableViewer operationalOutputFieldTableViewer;
-	private Label operationInputaddButton;
-	private Label operationInputDeleteButton;
+	private Button operationInputaddButton;
+	private Button operationInputDeleteButton;
+	private Composite composite_1;
+
 	private ScrolledComposite scrolledComposite;
 	private TableViewer inputFieldTableViewer;
 	private TableViewer mappingTableViewer;
@@ -155,12 +158,13 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private ControlDecoration fieldNameDecorator;
 	private SashForm mainSashForm;
 	private SashForm middleSashForm;
-	
+	private Shell shell;
 	
 	
 	public TransformDialog(Shell parentShell, Component component, WidgetConfig widgetConfig, TransformMapping atMapping) {
 
 		super(parentShell);
+		this.shell = parentShell;
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.transformMapping = atMapping;
 		isYesButtonPressed = false;
@@ -255,6 +259,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		Composite outputFieldComposite = new Composite(outputComposite, SWT.NONE);
 		outputFieldComposite.setLayout(new GridLayout(1, false));
 		outputFieldComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
 		Button btnPull = new Button(buttonComposite, SWT.NONE);
 		btnPull.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -267,11 +272,14 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			}
 		});
 		btnPull.setBounds(20, 10, 20, 20);
-
-		btnPull.setText(Messages.PULL_BUTTON_LABEL);
+		Image pullButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.PULL_BUTTON);
+		btnPull.setImage(pullButtonImage);
+		
+		//btnPull.setText(Messages.PULL_BUTTON_LABEL);
 	
-		Label addLabel = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 60, 3, 20, 15 }, "", new Image(
-				null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		Button addLabel = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 60, 3, 20, 15 }, "");
+		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
+		addLabel.setImage(addImage);
 		addLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		addLabel.addMouseListener(new MouseAdapter() {
 			@Override
@@ -296,8 +304,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		
 		
 		
-		Label deletLabel = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 160, 10, 20, 15 }, "",
-				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+		Button deletLabel = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 160, 10, 20, 15 }, "");
+		Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+		deletLabel.setImage(deleteImage);
 		deletLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deletLabel.addMouseListener(new MouseAdapter() {
 
@@ -370,8 +379,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		middleComposite.setLayout(new GridLayout(1, false));
 		Composite topAddButtonComposite = new Composite(middleComposite, SWT.NONE);
 		GridData gd_topAddButtonComposite = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
-		gd_topAddButtonComposite.heightHint = 30;
+		gd_topAddButtonComposite.heightHint = 40;
 		topAddButtonComposite.setLayoutData(gd_topAddButtonComposite);
+		
 		middleSashForm = new SashForm(middleComposite, SWT.SMOOTH|SWT.VERTICAL|SWT.BORDER);
 		middleSashForm.setSashWidth(1);
 		middleSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0));
@@ -396,8 +406,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		expandBar.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
 
 		
-		final Label addLabel = widget.labelWidget(topAddButtonComposite, SWT.CENTER, new int[] { 184, 10, 20, 15 }, "",
-				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		final Button addLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 184, 10, 20, 15 }, "");
+		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
+		addLabel.setImage(addImage);
+		addLabel.setSize(30, 25);
 		addLabel.setToolTipText(Messages.ADD_OPERATION_CONTROL);
 		
 		addLabel.addMouseListener(new MouseAdapter() {
@@ -407,8 +419,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			}
 		});
 
-		final Label deleteLabel = widget.labelWidget(topAddButtonComposite, SWT.CENTER, new int[] { 213, 10, 20, 15 },
-				"", new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+		final Button deleteLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 220, 10, 20, 15 },"");
+		Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+		deleteLabel.setSize(30, 25);
+		deleteLabel.setImage(deleteImage);
 		deleteLabel.setToolTipText(Messages.DELETE_OPERATION_CONTROL);
 		deleteLabel.addMouseListener(new MouseAdapter() {
 
@@ -539,10 +553,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		lblNewLabel.setText(Messages.MAP_FIELD);
 	
 
-		Label mapFieldAddLabel = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 635, 10, 20, 15 }, "",
-				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON)
-
-		);
+		Button mapFieldAddLabel = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 635, 10, 20, 15 }, "");
+		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
+		mapFieldAddLabel.setImage(addImage);
 		mapFieldAddLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		mapFieldAddLabel.addMouseListener(new MouseAdapter() {
 
@@ -563,8 +576,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			}
 		});
 
-		Label mapFieldDeletLabel = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 665, 10, 20, 15 }, "",
-				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+		Button mapFieldDeletLabel = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 665, 10, 20, 15 }, "");
+		Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+		mapFieldDeletLabel.setImage(deleteImage);
 		mapFieldDeletLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 
 		mapFieldDeletLabel.addMouseListener(new MouseAdapter() {
@@ -951,8 +965,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				operationalInputFieldTableViewer, operationOutputtableViewer);
 		DragDropUtility.INSTANCE.applyDrop(operationalInputFieldTableViewer, dragDropTransformOpImpnew);
 
-		Label addLabel = widget.labelWidget(operationalOutputFieldComposite, SWT.CENTER, new int[] { 60, 3, 20, 15 },
-				"", new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		Button addLabel = widget.buttonWidget(operationalOutputFieldComposite, SWT.CENTER, new int[] { 60, 3, 20, 15 },"");
+		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
+		addLabel.setImage(addImage);
+		addLabel.setSize(30, 25);
 		addLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		addLabel.addMouseListener(new MouseAdapter() {
 			@Override
@@ -974,9 +990,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		});
 
 		
-		Label deleteLabel = widget.labelWidget(operationalOutputFieldComposite, SWT.CENTER,
-				new int[] { 90, 3, 20, 15 }, "",
-				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+		Button deleteLabel = widget.buttonWidget(operationalOutputFieldComposite, SWT.CENTER,new int[] { 90, 3, 20, 15 }, "");
+		Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+		deleteLabel.setImage(deleteImage);
+		deleteLabel.setSize(30, 25);
 		deleteLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deleteLabel.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1230,11 +1247,16 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editor[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);	
 		
 		editors[0].setValidator(new TransformCellEditorFieldValidator(fieldNameDecorator,isFieldNameAlphanumericDecorator));
-		operationInputaddButton = widget.labelWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 60, 3, 20,
-				15 }, "", new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		operationInputaddButton = widget.buttonWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 60, 3, 20,15 }, "");
+		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
+		operationInputaddButton.setImage(addImage);
+		operationInputaddButton.setSize(30, 25);
 		operationInputaddButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
-		operationInputDeleteButton = widget.labelWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 90, 3,
-				20, 15 }, "", new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+		
+		operationInputDeleteButton = widget.buttonWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 90, 3,20, 15 }, "");
+		 Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+		 operationInputDeleteButton.setImage(deleteImage);
+		 operationInputDeleteButton.setSize(30, 25);
 		operationInputDeleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		
 		isFieldNameAlphanumericDecorator.setMarginWidth(8);

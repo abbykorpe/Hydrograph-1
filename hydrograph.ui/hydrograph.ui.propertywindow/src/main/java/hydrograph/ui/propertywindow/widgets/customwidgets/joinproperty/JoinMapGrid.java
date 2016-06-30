@@ -116,10 +116,10 @@ public class JoinMapGrid extends Dialog {
 	private List<String> nonMappedFieldList=new ArrayList<>();
 	private HashMap<String, List<String>> inputFieldMap=new HashMap<String, List<String>>();
 	private String IN="in";
-	private Label deleteButton;
-	private Label upButton;
-	private Label downButton;
-
+	private Button deleteButton;
+	private Button upButton;
+	private Button downButton;
+	private Shell shell;
 
 	/**
 	 * Create the dialog.
@@ -129,6 +129,7 @@ public class JoinMapGrid extends Dialog {
 	 */
 	public JoinMapGrid(Shell parentShell, JoinMappingGrid joinPropertyGrid, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
+		this.shell = parentShell;
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP
 				| SWT.APPLICATION_MODAL);
 		this.joinMappingGrid = joinPropertyGrid;
@@ -646,8 +647,9 @@ public class JoinMapGrid extends Dialog {
 	}
     
 	private void createLabel(Composite parent) {
-		Label addButton = widget.labelWidget(parent, SWT.CENTER | SWT.PUSH, new int[] { 0, 0, 25, 20 }, "", new Image(null,
-				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		Button addButton = widget.buttonWidget(parent, SWT.CENTER | SWT.PUSH, new int[] { 0, 0, 25, 20 }, "");
+		Image addImage = new Image(shell.getDisplay(),XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.ADD_ICON);
+		addButton.setImage(addImage);
 		addButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 
 		addButton.addMouseListener(new MouseAdapter() {
@@ -665,8 +667,9 @@ public class JoinMapGrid extends Dialog {
 			}
 		});
 
-	    deleteButton = widget.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 }, "", new Image(null,
-				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+	    deleteButton = widget.buttonWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 }, "");
+	    Image deleteImage = new Image(shell.getDisplay(),XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+	    deleteButton.setImage(deleteImage);
 	    deleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deleteButton.addMouseListener(new MouseAdapter() {
 
@@ -693,8 +696,9 @@ public class JoinMapGrid extends Dialog {
 			}
 		});
 
-		upButton = widget.labelWidget(parent, SWT.CENTER, new int[] { 50, 0, 25, 20 }, "", new Image(null,
-				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.UP_ICON));
+		upButton = widget.buttonWidget(parent, SWT.CENTER, new int[] { 50, 0, 25, 20 }, "");
+		 Image upImage = new Image(shell.getDisplay(),XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.UP_ICON);
+		 upButton.setImage(upImage);
 		upButton.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		upButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -725,8 +729,9 @@ public class JoinMapGrid extends Dialog {
 
 		});
 
-		downButton = widget.labelWidget(parent, SWT.CENTER, new int[] { 74, 0, 25, 20 }, "", new Image(null,
-				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DOWN_ICON));
+		downButton = widget.buttonWidget(parent, SWT.CENTER, new int[] { 74, 0, 25, 20 }, "");
+		 Image downImage = new Image(shell.getDisplay(),XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DOWN_ICON);
+		 downButton.setImage(downImage);
 		downButton.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		downButton.addMouseListener(new MouseAdapter() {
 			@Override

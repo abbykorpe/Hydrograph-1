@@ -62,6 +62,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -113,9 +114,9 @@ public class FieldDialog extends Dialog {
 	PropertyDialogButtonBar propertyDialogButtonBar;
 	private boolean closeDialog;
 	private boolean okPressed;
-	private Label deleteButton;
-	private Label upButton;
-	private Label downButton;
+	private Button deleteButton;
+	private Button upButton;
+	private Button downButton;
 	private static final String INFORMATION="Information";
 
 	public FieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
@@ -279,28 +280,28 @@ public class FieldDialog extends Dialog {
 		composite_1.setLayout(new GridLayout(4, false));
 		ColumnLayoutData cld_composite_1 = new ColumnLayoutData();
 		cld_composite_1.horizontalAlignment = ColumnLayoutData.RIGHT;
-		cld_composite_1.heightHint = 28;
+		cld_composite_1.heightHint = 31;
 		composite_1.setLayoutData(cld_composite_1);
 
-		Label addButton = new Label(composite_1, SWT.NONE);
+		Button addButton = new Button(composite_1, SWT.NONE);
 		addButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		addButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON));
 		attachAddButtonListern(addButton);
 
-		deleteButton = new Label(composite_1, SWT.NONE);
+		deleteButton = new Button(composite_1, SWT.NONE);
 		deleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON));
 		attachDeleteButtonListener(deleteButton);
 
-		upButton = new Label(composite_1, SWT.NONE);
+		upButton = new Button(composite_1, SWT.NONE);
 		upButton.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON));
 		attachUpButtonListener(upButton);
 
-		downButton = new Label(composite_1, SWT.NONE);
+		downButton = new Button(composite_1, SWT.NONE);
 		downButton.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		downButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON));
@@ -310,7 +311,7 @@ public class FieldDialog extends Dialog {
 		downButton.setEnabled(false);
 	}
 
-	private void attachDownButtonListerner(Label downButton) {
+	private void attachDownButtonListerner(Button downButton) {
 		downButton.addMouseListener(new MouseListener() {
 			int index1 = 0, index2 = 0;
 
@@ -351,7 +352,7 @@ public class FieldDialog extends Dialog {
 
 	}
 
-	private void attachUpButtonListener(Label upButton) {
+	private void attachUpButtonListener(Button upButton) {
 		upButton.addMouseListener(new MouseListener() {
 			int index1 = 0, index2 = 0;
 
@@ -391,7 +392,7 @@ public class FieldDialog extends Dialog {
 
 	}
 
-	private void attachDeleteButtonListener(final Label deleteButton) {
+	private void attachDeleteButtonListener(final Button deleteButton) {
 		deleteButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -425,7 +426,7 @@ public class FieldDialog extends Dialog {
 
 	}
 
-	private void attachAddButtonListern(Label addButton) {
+	private void attachAddButtonListern(Button addButton) {
 		addButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {

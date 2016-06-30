@@ -113,12 +113,13 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	private PropertyDialogButtonBar opeartionClassDialogButtonBar;
 	private Button cancelButton;
     private OperationClassProperty operationClassProperty;
-
+    private Shell shell;
 	private Composite buttonComposite;
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
 
 	public ELTOperationClassDialog(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar, OperationClassProperty operationClassProperty, WidgetConfig widgetConfig, String componentName) {
 		super(parentShell);
+		this.shell =parentShell;
 		setShellStyle(SWT.CLOSE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.operationClassProperty = operationClassProperty;
 		this.widgetConfig = widgetConfig;
@@ -201,8 +202,10 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		table_2.getColumn(0).setWidth(252);
 		table_2.getColumn(1).setWidth(259);
 
-		Label addButton = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 360, 17, 20, 15 }, "", new Image(
-				null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		Button addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 360, 17, 20, 15 }, "");
+		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
+		addButton.setImage(addImage);
+		addButton.setSize(30, 25);
 		addButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -222,9 +225,10 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 
 		});
 
-		Label deleteButton = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 390, 17, 20, 15 }, "",
-				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
-
+		Button deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 390, 17, 20, 15 }, "");
+		Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+		deleteButton.setImage(deleteImage);
+		deleteButton.setSize(30, 25);
 		deleteButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -248,9 +252,10 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 
 		});
 
-		Label upButton = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 420, 17, 20, 15 }, "", new Image(
-				null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON));
-
+		Button upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 420, 17, 20, 15 }, "");
+		Image upImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON);
+		upButton.setImage(upImage);
+		upButton.setSize(30, 25);
 		upButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -267,8 +272,11 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 			}
 
 		});
-		Label downButton = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 450, 17, 20, 15 }, "",
-				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON));
+		
+		Button downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 450, 17, 20, 15 }, "");
+		Image downImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON);
+		downButton.setImage(downImage);
+		downButton.setSize(30, 25);
 		downButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
