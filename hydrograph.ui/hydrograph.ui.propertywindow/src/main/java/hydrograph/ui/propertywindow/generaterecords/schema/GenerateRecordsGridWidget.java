@@ -15,6 +15,8 @@
 package hydrograph.ui.propertywindow.generaterecords.schema;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -57,8 +59,21 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 	 * @see hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget#getPropertiesToShow()
 	 */
 	@Override
-	protected String[] getPropertiesToShow() {
-		return new String[]{ FIELDNAME, DATATYPE, DATEFORMAT, PRECISION, SCALE, SCALE_TYPE, FIELD_DESCRIPTION, LENGTH, RANGE_FROM, RANGE_TO, DEFAULT_VALUE };
+	protected Map<String, Integer> getPropertiesToShow() {
+		Map<String, Integer> columns = new HashMap<>();
+		columns.put(FIELDNAME, 0);
+		columns.put(DATATYPE, 1);
+		columns.put(DATEFORMAT, 2);
+		columns.put(PRECISION, 3);
+		columns.put(SCALE, 4);
+		columns.put(SCALE_TYPE, 5);
+		columns.put(FIELD_DESCRIPTION, 6);
+		columns.put(LENGTH, 7);
+		columns.put(RANGE_FROM, 8);
+		columns.put(RANGE_TO, 9);
+		columns.put(DEFAULT_VALUE, 10);
+		return columns;
+		//return new String[]{ FIELDNAME, DATATYPE, DATEFORMAT, PRECISION, SCALE, SCALE_TYPE, FIELD_DESCRIPTION, LENGTH, RANGE_FROM, RANGE_TO, DEFAULT_VALUE };
 	}
 
 	/* (non-Javadoc)

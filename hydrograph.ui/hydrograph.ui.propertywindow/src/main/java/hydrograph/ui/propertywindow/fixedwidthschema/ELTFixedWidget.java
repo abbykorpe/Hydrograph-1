@@ -27,6 +27,8 @@ import hydrograph.ui.propertywindow.widgets.listeners.grid.schema.ELTCellEditorF
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -58,8 +60,19 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	}
 
 	@Override
-	protected String[] getPropertiesToShow() {
-		return new String[]{ FIELDNAME, DATATYPE, LENGTH, SCALE, SCALE_TYPE, DATEFORMAT, PRECISION, FIELD_DESCRIPTION };
+	protected Map<String, Integer> getPropertiesToShow() {
+		Map<String, Integer> columns = new HashMap<>();
+		columns.put(FIELDNAME, 0);
+		columns.put(DATATYPE, 1);
+		columns.put(LENGTH, 2);
+		columns.put(SCALE, 3);
+		columns.put(SCALE_TYPE, 4);
+		columns.put(DATEFORMAT, 5);
+		columns.put(PRECISION, 6);
+		columns.put(FIELD_DESCRIPTION, 7);
+		
+		//sequence: FIELDNAME, DATATYPE, LENGTH, SCALE, SCALE_TYPE, DATEFORMAT, PRECISION, FIELD_DESCRIPTION 
+		return columns;
 	}
 	
 	@Override
