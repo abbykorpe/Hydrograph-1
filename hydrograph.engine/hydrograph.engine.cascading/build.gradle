@@ -2,7 +2,6 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
-apply from: '../version.gradle'
 
 sourceCompatibility = 1.7
 
@@ -90,6 +89,7 @@ dependencies {
     compile group: 'cascading', name: 'cascading-local', version: cascadingVersion //required for plunger
     compile group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion
     //compile group: 'cascading', name: 'cascading-hadoop', version: cascadingVersion //using hadoop2-mr1 instead
+    compile group: 'cascading', name: 'cascading-hadoop2-io', version: cascadingVersion //required for plunger
 
     compile group: 'org.apache.hadoop', name: 'hadoop-common', version: hadoopVersion //required for plunger
 
