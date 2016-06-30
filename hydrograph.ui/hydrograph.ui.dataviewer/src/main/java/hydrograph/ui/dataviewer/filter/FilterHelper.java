@@ -313,9 +313,6 @@ public class FilterHelper {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//TODO : temp for compilation
-			//	Map<Integer,List<List<Integer>>> groupSelectionMap = new TreeMap<Integer, List<List<Integer>>>();
-			
 				//put number of elements in the list
 				//1 2 3 4 5
 				List<String> actualStringList = new LinkedList<>();
@@ -554,6 +551,8 @@ public class FilterHelper {
 					originalFilterConditions.setRemoteConditions(remoteConditionsList);
 					originalFilterConditions.setRetainRemote(retainFilter.getRetainFilter());
 				}
+				Button button = (Button) e.widget;
+				button.setEnabled(false);
 			}
 			
 			@Override
@@ -573,6 +572,8 @@ public class FilterHelper {
 					originalFilterConditions.setLocalConditions(localConditionsList);
 					originalFilterConditions.setRetainLocal(retainFilter.getRetainFilter());
 				}
+				Button button = (Button) e.widget;
+				button.setEnabled(false);
 			}
 			
 			@Override
