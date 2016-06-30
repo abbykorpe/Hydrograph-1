@@ -17,6 +17,7 @@ import hydrograph.engine.assembly.entity.OutputFileHiveTextEntity;
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
+import hydrograph.engine.utilities.ComponentHelper;
 
 import java.util.Arrays;
 
@@ -114,8 +115,8 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 		prepareAssembly(); // exception handled separately within
 
 		try {
-			Pipe sinkPipe = new Pipe(getComponentType(hiveEntityBase) + ":" + hiveEntityBase.getComponentId(),
-					tailPipe);
+			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName(getComponentType(hiveEntityBase),
+					hiveEntityBase.getComponentId(), ""), tailPipe);
 			setHadoopProperties(hiveTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 			flowDef = flowDef.addTailSink(sinkPipe, hiveTap);

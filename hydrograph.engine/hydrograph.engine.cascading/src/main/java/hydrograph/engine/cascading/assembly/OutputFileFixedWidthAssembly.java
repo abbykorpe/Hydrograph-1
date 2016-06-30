@@ -29,6 +29,7 @@ import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.TextFixedWidth;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class OutputFileFixedWidthAssembly extends BaseComponent<OutputFileFixedWidthEntity> {
 
@@ -48,14 +49,16 @@ public class OutputFileFixedWidthAssembly extends BaseComponent<OutputFileFixedW
 
 	private InputOutputFieldsAndTypesCreator<OutputFileFixedWidthEntity> fieldsCreator;
 
-	public OutputFileFixedWidthAssembly(OutputFileFixedWidthEntity outputFileFixedWidthEntity, ComponentParameters componentParameters) {
+	public OutputFileFixedWidthAssembly(OutputFileFixedWidthEntity outputFileFixedWidthEntity,
+			ComponentParameters componentParameters) {
 		super(outputFileFixedWidthEntity, componentParameters);
 	}
 
 	@Override
 	protected void createAssembly() {
 		try {
-		fieldsCreator = new InputOutputFieldsAndTypesCreator<OutputFileFixedWidthEntity>(outputFileFixedWidthEntity);
+			fieldsCreator = new InputOutputFieldsAndTypesCreator<OutputFileFixedWidthEntity>(
+					outputFileFixedWidthEntity);
 			LOG.debug("OutputFile Fixed Width Component: [ Fields List : "
 					+ Arrays.toString(fieldsCreator.getFieldNames()) + ", Field Types : "
 					+ Arrays.toString(fieldsCreator.getFieldDataTypes()) + ", Field Length : "
@@ -68,7 +71,8 @@ public class OutputFileFixedWidthAssembly extends BaseComponent<OutputFileFixedW
 			LOG.trace("Creating output file fixed width assembly for '" + outputFileFixedWidthEntity.getComponentId()
 					+ "'");
 			prepareAssembly();
-			Pipe sinkPipe = new Pipe("outputFileFixedWidth:"+outputFileFixedWidthEntity.getComponentId(), tailPipe);
+			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileFixedWidth",
+					outputFileFixedWidthEntity.getComponentId(), ""), tailPipe);
 			setHadoopProperties(outTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 			flowDef = flowDef.addTailSink(sinkPipe, outTap);
@@ -111,6 +115,6 @@ public class OutputFileFixedWidthAssembly extends BaseComponent<OutputFileFixedW
 
 	@Override
 	public void initializeEntity(OutputFileFixedWidthEntity assemblyEntityBase) {
-		this.outputFileFixedWidthEntity=assemblyEntityBase;
+		this.outputFileFixedWidthEntity = assemblyEntityBase;
 	}
 }
