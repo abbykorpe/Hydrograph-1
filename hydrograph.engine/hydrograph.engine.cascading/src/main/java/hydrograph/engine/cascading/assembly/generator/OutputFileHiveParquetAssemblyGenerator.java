@@ -12,6 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -28,6 +30,7 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.ohiveparquet.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.ohiveparquet.PartitionFieldBasicType;
 import hydrograph.engine.jaxb.outputtypes.ParquetHiveFile;
 
 public class OutputFileHiveParquetAssemblyGenerator extends
@@ -103,19 +106,29 @@ public class OutputFileHiveParquetAssemblyGenerator extends
 	private String[] extractPartitionFields(
 			HivePartitionFieldsType hivePartitionFieldsType) {
 		String[] partitionKeys;
+		List<String> partitionFieldsList = new ArrayList<String>();
 		if (hivePartitionFieldsType != null
 				&& hivePartitionFieldsType.getField() != null) {
-			partitionKeys = new String[hivePartitionFieldsType.getField()
-					.size()];
-			for (int i = 0; i < hivePartitionFieldsType.getField().size(); i++) {
-				partitionKeys[i] = hivePartitionFieldsType.getField().get(i)
-						.getName();
-			}
+			partitionFieldsList = getPartitionFieldsList(
+					hivePartitionFieldsType.getField(), partitionFieldsList);
+			partitionKeys = partitionFieldsList
+					.toArray(new String[partitionFieldsList.size()]);
+			return partitionKeys;
 		} else {
 			return new String[0];
 		}
-		return partitionKeys;
 
+	}
+
+	private List<String> getPartitionFieldsList(
+			PartitionFieldBasicType partitionFieldBasicType,
+			List<String> partitionFieldsList) {
+		partitionFieldsList.add(partitionFieldBasicType.getName());
+		if (partitionFieldBasicType.getField() != null) {
+			getPartitionFieldsList(partitionFieldBasicType.getField(),
+					partitionFieldsList);
+		}
+		return partitionFieldsList;
 	}
 
 	@Override

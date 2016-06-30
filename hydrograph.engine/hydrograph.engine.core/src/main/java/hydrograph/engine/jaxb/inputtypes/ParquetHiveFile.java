@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.inputtypes;
 
@@ -19,6 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFilterType;
 import hydrograph.engine.jaxb.ihiveparquet.HivePathType;
 import hydrograph.engine.jaxb.ihiveparquet.HiveType;
 import hydrograph.engine.jaxb.ihiveparquet.TypeInputFileDelimitedBase;
@@ -35,6 +24,7 @@ import hydrograph.engine.jaxb.ihiveparquet.TypeInputFileDelimitedBase;
  *     &lt;extension base="{hydrograph/engine/jaxb/ihiveparquet}type-input-file-delimited-base">
  *       &lt;sequence>
  *         &lt;element name="partitionKeys" type="{hydrograph/engine/jaxb/ihiveparquet}hive_partition_fields_type" minOccurs="0"/>
+ *         &lt;element name="partitionFilter" type="{hydrograph/engine/jaxb/ihiveparquet}hive_partition_filter_type" minOccurs="0"/>
  *         &lt;element name="databaseName" type="{hydrograph/engine/jaxb/ihiveparquet}hive_type"/>
  *         &lt;element name="tableName" type="{hydrograph/engine/jaxb/ihiveparquet}hive_type"/>
  *         &lt;element name="externalTablePath" type="{hydrograph/engine/jaxb/ihiveparquet}hive_path_type" minOccurs="0"/>
@@ -50,6 +40,7 @@ import hydrograph.engine.jaxb.ihiveparquet.TypeInputFileDelimitedBase;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "parquetHiveFile", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
     "partitionKeys",
+    "partitionFilter",
     "databaseName",
     "tableName",
     "externalTablePath",
@@ -60,6 +51,7 @@ public class ParquetHiveFile
 {
 
     protected HivePartitionFieldsType partitionKeys;
+    protected HivePartitionFilterType partitionFilter;
     @XmlElement(required = true)
     protected HiveType databaseName;
     @XmlElement(required = true)
@@ -89,6 +81,30 @@ public class ParquetHiveFile
      */
     public void setPartitionKeys(HivePartitionFieldsType value) {
         this.partitionKeys = value;
+    }
+
+    /**
+     * Gets the value of the partitionFilter property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link HivePartitionFilterType }
+     *     
+     */
+    public HivePartitionFilterType getPartitionFilter() {
+        return partitionFilter;
+    }
+
+    /**
+     * Sets the value of the partitionFilter property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link HivePartitionFilterType }
+     *     
+     */
+    public void setPartitionFilter(HivePartitionFilterType value) {
+        this.partitionFilter = value;
     }
 
     /**
