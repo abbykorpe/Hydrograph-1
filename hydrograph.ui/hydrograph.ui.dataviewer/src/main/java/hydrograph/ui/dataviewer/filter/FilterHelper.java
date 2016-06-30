@@ -95,7 +95,7 @@ public class FilterHelper {
 	
 	public Map<String, String[]> getTypeBasedOperatorMap(){
 		Map<String, String[]> typeBasedConditionalOperators = new HashMap<String, String[]>();
-		typeBasedConditionalOperators.put(TYPE_STRING, new String[]{"LIKE","IN ","NOT IN"}); 
+		typeBasedConditionalOperators.put(TYPE_STRING, new String[]{"LIKE","IN","NOT IN"}); 
 		typeBasedConditionalOperators.put(TYPE_INTEGER, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
 		typeBasedConditionalOperators.put(TYPE_DATE, new String[]{">", "<", "<=",">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
 		typeBasedConditionalOperators.put(TYPE_BIGDECIMAL, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN","NOT IN"});
@@ -201,10 +201,6 @@ public class FilterHelper {
 		return listener;
 	}
 	
-/*	private void processFieldName(TableViewer tableViewer, Combo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes, String[] fieldNames, Button okButton, Button applyButton){
-	
-	}*/
-	
 	public SelectionListener getConditionalOperatorSelectionListener(final List<Condition> conditionsList, 
 			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
 		SelectionListener listener = new SelectionListener() {
@@ -284,7 +280,8 @@ public class FilterHelper {
 		toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 	}
 	
-	public SelectionListener addButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap) {
+	public SelectionListener addButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList, 
+			final List<Condition> dummyList, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
@@ -292,10 +289,9 @@ public class FilterHelper {
 				Button button = (Button) e.getSource();
 				int index = (int) button.getData(FilterConditionsDialog.ROW_INDEX);
 				conditionsList.add(index, new Condition());
-				
+				dummyList.clear();
+				dummyList.addAll(cloneList(conditionsList));
 				FilterHelper.INSTANCE.refreshGroupSelections(tableViewer, index, "ADD", groupSelectionMap);
-				
-				
 				tableViewer.refresh();
 			}
 			
@@ -304,7 +300,6 @@ public class FilterHelper {
 		};
 		return listener;
 	}
-
 	
 	
 	public SelectionListener getOkButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
@@ -410,7 +405,7 @@ public class FilterHelper {
 			debugDataViewer.showDataInDebugViewer(true,true);
 			
 		} catch (NumberFormatException | IOException exception) {
-		logger.error("Error occuring while showing remote filtered data",exception);
+			logger.error("Error occuring while showing remote filtered data",exception);
 		}
 	}
 
@@ -599,11 +594,14 @@ public class FilterHelper {
 		return listner;
 	}
    
-	public SelectionAdapter getAddAtEndListener(final TableViewer tableViewer, final List<Condition> conditionList) {
+	public SelectionAdapter getAddAtEndListener(final TableViewer tableViewer, final List<Condition> conditionList, 
+			final List<Condition> dummyList) {
         return new SelectionAdapter() {
               @Override
               public void widgetSelected(SelectionEvent e) {
                     conditionList.add(conditionList.size(), new Condition());
+                    dummyList.clear();
+    				dummyList.addAll(cloneList(conditionList));
                     tableViewer.refresh();
               }
         };

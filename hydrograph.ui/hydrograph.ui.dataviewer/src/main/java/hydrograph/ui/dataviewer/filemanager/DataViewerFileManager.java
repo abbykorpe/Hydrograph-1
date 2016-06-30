@@ -13,13 +13,9 @@
 package hydrograph.ui.dataviewer.filemanager;
 
 import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
-import hydrograph.ui.common.schema.Field;
-import hydrograph.ui.common.schema.Fields;
-import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.communication.utilities.SCPUtility;
-import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
@@ -27,10 +23,8 @@ import hydrograph.ui.dataviewer.filter.FilterConditions;
 import hydrograph.ui.dataviewer.filter.RemoteFilterJson;
 import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.utilities.Utils;
-import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,11 +32,8 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.google.gson.Gson;

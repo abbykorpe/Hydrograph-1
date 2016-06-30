@@ -298,7 +298,7 @@ public class DebugDataViewer extends ApplicationWindow {
 				disbleDataViewerUIControls();
 
 				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(jobDetails);
-				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles();
+				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles(getConditions());
 
 				if (StatusConstants.ERROR == statusMessage.getReturnCode()) {
 					Display.getDefault().asyncExec(new Runnable() {
@@ -1184,7 +1184,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		return currentSelection;
 	}
 	
-	private void updateGridViewTable(boolean filterApplied) {
+	private void updateGridViewTable(boolean filterApplied, boolean remoteOkPressed) {
 		if(!filterApplied)
 		createGridViewTableColumns(gridViewTableViewer);
 

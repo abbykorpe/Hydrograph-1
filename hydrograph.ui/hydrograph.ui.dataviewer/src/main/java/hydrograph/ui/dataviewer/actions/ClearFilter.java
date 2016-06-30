@@ -1,6 +1,5 @@
 package hydrograph.ui.dataviewer.actions;
 
-import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;

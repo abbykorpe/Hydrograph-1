@@ -1,12 +1,7 @@
 package hydrograph.ui.dataviewer.filter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 import org.eclipse.swt.widgets.Display;
 

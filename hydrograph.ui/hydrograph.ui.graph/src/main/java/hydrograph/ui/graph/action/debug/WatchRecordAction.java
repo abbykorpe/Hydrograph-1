@@ -216,11 +216,6 @@ public class WatchRecordAction extends SelectionAction {
 				window.open();
 				
 				watcherAndConditon.put(watcherId,window.getConditions());
-				
-				System.out.println("String::"+window.getConditions());
-				System.out.println("COMPONENT"+watchRecordInner.getComponentId()+"SocketId"+watchRecordInner.getSocketId());
-				
-				
 			}
 		});
 	}

@@ -23,16 +23,9 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .,
  lib/csvjdbc-1.0-29.jar,
-<<<<<<< HEAD
  lib/opencsv-3.7.jar,
  lib/gson-2.7.jar
-Export-Package: hydrograph.ui.dataviewer.constants,
- hydrograph.ui.dataviewer.adapters,
-=======
- lib/gson-2.7.jar,
- lib/opencsv-3.7.jar
 Export-Package: hydrograph.ui.dataviewer.adapters,
->>>>>>> show data in data viewer according to retaining local and remote filter.
  hydrograph.ui.dataviewer.constants,
  hydrograph.ui.dataviewer.filter,
  hydrograph.ui.dataviewer.utilities,
