@@ -68,7 +68,6 @@ public abstract class GridWidgetCommonBuilder {
 	 *            the size
 	 * @return the cell editor[]
 	 */
-	//public abstract CellEditor[] createCellEditorList(Table table,int size);
 	
 	public abstract CellEditor[] createCellEditorList(Table table,
 			Map<String, Integer> columns) ;

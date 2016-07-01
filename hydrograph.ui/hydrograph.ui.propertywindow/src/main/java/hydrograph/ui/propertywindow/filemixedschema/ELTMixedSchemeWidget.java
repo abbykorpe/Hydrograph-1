@@ -71,7 +71,6 @@ public class ELTMixedSchemeWidget extends ELTSchemaGridWidget {
 		columns.put(DATEFORMAT, 6);
 		columns.put(PRECISION, 7);
 		columns.put(FIELD_DESCRIPTION, 8);
-		//return new String[]{ FIELDNAME, DATATYPE, LENGTH, DELIMITER, SCALE, SCALE_TYPE, DATEFORMAT, PRECISION, FIELD_DESCRIPTION};
 		return columns;
 	}
 

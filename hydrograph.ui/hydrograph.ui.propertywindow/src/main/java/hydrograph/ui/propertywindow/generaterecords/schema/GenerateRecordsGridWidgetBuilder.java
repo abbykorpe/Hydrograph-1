@@ -106,6 +106,5 @@ public class GenerateRecordsGridWidgetBuilder extends GridWidgetCommonBuilder {
 		addTextEditor(table, cellEditor, columns, Messages.RANGE_TO);
 		addTextEditor(table, cellEditor, columns, Messages.DEFAULT_VALUE);
 		return cellEditor;
-		//FIELDNAME, DATATYPE, DATEFORMAT, PRECISION, SCALE, SCALE_TYPE, FIELD_DESCRIPTION, LENGTH, RANGE_FROM, RANGE_TO, DEFAULT_VALUE };
 	}
 }

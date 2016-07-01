@@ -80,8 +80,6 @@ public class HiveParqueSchemaWidgetBuilder extends GridWidgetCommonBuilder{
 		addTextEditor(table, cellEditor, columns, Messages.DATEFORMAT);
 		addTextEditor(table, cellEditor, columns, Messages.FIELD_DESCRIPTION);
 		
-		//sequence: FIELDNAME, DATATYPE, PRECISION, SCALE, SCALE_TYPE, DATEFORMAT, FIELD_DESCRIPTION
-		
 		return cellEditor;
 	}
 

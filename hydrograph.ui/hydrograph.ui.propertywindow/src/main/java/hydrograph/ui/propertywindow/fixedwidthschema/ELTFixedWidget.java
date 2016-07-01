@@ -71,7 +71,6 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 		columns.put(PRECISION, 6);
 		columns.put(FIELD_DESCRIPTION, 7);
 		
-		//sequence: FIELDNAME, DATATYPE, LENGTH, SCALE, SCALE_TYPE, DATEFORMAT, PRECISION, FIELD_DESCRIPTION 
 		return columns;
 	}
 	

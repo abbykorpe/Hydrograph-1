@@ -80,7 +80,6 @@ public class MixedSchemeGridWidgetBuilder extends GridWidgetCommonBuilder{
 		addTextEditor(table, cellEditor, columns, Messages.PRECISION);
 		addTextEditor(table, cellEditor, columns, Messages.FIELD_DESCRIPTION);
 		return cellEditor;
-		//{ FIELDNAME, DATATYPE, LENGTH, DELIMITER, SCALE, SCALE_TYPE, DATEFORMAT, PRECISION, FIELD_DESCRIPTION};
 	}
 
 }
