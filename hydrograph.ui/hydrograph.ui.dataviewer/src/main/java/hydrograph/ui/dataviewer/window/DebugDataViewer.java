@@ -1191,7 +1191,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 	
 	private void updateGridViewTable(boolean filterApplied, boolean remoteOkPressed) {
-		if(!filterApplied)
+		if(!remoteOkPressed)
 		createGridViewTableColumns(gridViewTableViewer);
 
 		gridViewTableViewer.setContentProvider(new ArrayContentProvider());
