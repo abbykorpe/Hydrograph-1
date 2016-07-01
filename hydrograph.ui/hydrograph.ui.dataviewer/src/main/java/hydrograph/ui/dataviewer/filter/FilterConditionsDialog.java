@@ -20,6 +20,7 @@ import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,7 +121,11 @@ public class FilterConditionsDialog extends Dialog {
 	public void setFieldsAndTypes(Map<String, String> fieldsAndTypes) {
 		this.fieldsAndTypes = fieldsAndTypes;
 		fieldNames = (String[]) this.fieldsAndTypes.keySet().toArray(new String[this.fieldsAndTypes.size()]);
-		Arrays.sort(fieldNames);
+		Arrays.sort(fieldNames, new Comparator<String>() {
+			public int compare(String string1, String string2) {
+				return string1.compareToIgnoreCase(string2);
+			};
+		});
 	}
 	
 	/**

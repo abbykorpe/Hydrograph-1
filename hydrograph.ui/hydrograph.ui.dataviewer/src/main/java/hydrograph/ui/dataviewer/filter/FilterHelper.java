@@ -96,13 +96,13 @@ public class FilterHelper {
 	public Map<String, String[]> getTypeBasedOperatorMap(){
 		Map<String, String[]> typeBasedConditionalOperators = new HashMap<String, String[]>();
 		typeBasedConditionalOperators.put(TYPE_STRING, new String[]{"LIKE","IN","NOT IN"}); 
-		typeBasedConditionalOperators.put(TYPE_INTEGER, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
-		typeBasedConditionalOperators.put(TYPE_DATE, new String[]{">", "<", "<=",">=", "<>", "=", "LIKE", "IN", "NOT IN"}); 
-		typeBasedConditionalOperators.put(TYPE_BIGDECIMAL, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN","NOT IN"});
-		typeBasedConditionalOperators.put(TYPE_LONG, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
-		typeBasedConditionalOperators.put(TYPE_SHORT, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
-		typeBasedConditionalOperators.put(TYPE_FLOAT, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
-		typeBasedConditionalOperators.put(TYPE_DOUBLE, new String[]{">", "<", "<=", ">=", "<>", "=", "LIKE", "IN", "NOT IN"});
+		typeBasedConditionalOperators.put(TYPE_INTEGER, new String[]{">", "<", "<=", ">=", "<>", "=", "IN", "NOT IN"}); 
+		typeBasedConditionalOperators.put(TYPE_DATE, new String[]{">", "<", "<=",">=", "<>", "=",  "IN", "NOT IN"}); 
+		typeBasedConditionalOperators.put(TYPE_BIGDECIMAL, new String[]{">", "<", "<=", ">=", "<>", "=",  "IN","NOT IN"});
+		typeBasedConditionalOperators.put(TYPE_LONG, new String[]{">", "<", "<=", ">=", "<>", "=",  "IN", "NOT IN"});
+		typeBasedConditionalOperators.put(TYPE_SHORT, new String[]{">", "<", "<=", ">=", "<>", "=",  "IN", "NOT IN"});
+		typeBasedConditionalOperators.put(TYPE_FLOAT, new String[]{">", "<", "<=", ">=", "<>", "=",  "IN", "NOT IN"});
+		typeBasedConditionalOperators.put(TYPE_DOUBLE, new String[]{">", "<", "<=", ">=", "<>", "=",  "IN", "NOT IN"});
 		typeBasedConditionalOperators.put(TYPE_BOOLEAN, new String[]{"<>", "="});
 		return typeBasedConditionalOperators;
 	}
