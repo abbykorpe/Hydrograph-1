@@ -72,6 +72,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -203,6 +204,8 @@ public class DebugDataViewer extends ApplicationWindow {
 	private String sortedColumnName;
 	
 	private FilterConditions conditions;
+	private String localCondition = "";
+	private String remoteCondition = "";
 	/**
 	 * Create the application window,
 	 * 
@@ -536,6 +539,9 @@ public class DebugDataViewer extends ApplicationWindow {
 			dataViewerAdapter=new DataViewerAdapter(debugFileLocation,
 					debugFileName, Utils.INSTANCE.getDefaultPageSize(),
 					PreferenceConstants.INITIAL_OFFSET, this,filterConditions.getLocalCondition());
+			if(StringUtils.isEmpty(filterConditions.getLocalCondition())){
+				setLocalCondition("");
+			}
 		}
 		else
 		{
@@ -1658,11 +1664,46 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	public void setConditions(FilterConditions conditons) {
 		this.conditions=conditons;
+		if(!StringUtils.isEmpty(conditions.getLocalCondition())){
+			this.localCondition=conditons.getLocalCondition();
+		}
+		if(!StringUtils.isEmpty(conditions.getRemoteCondition())){
+			this.remoteCondition = conditons.getRemoteCondition();
+		}
 	}
 	public FilterConditions getConditions(){
 		return conditions;
 	}
 	
+
+	public String getLocalCondition() {
+		return localCondition;
+	}
+	
+	public void setLocalCondition(String localCondition) {
+		this.localCondition = localCondition;
+		enableDisableFilter();
+	}
+
+
+	public String getRemoteCondition() {
+		return remoteCondition;
+	}
+
+
+	public void setRemoteCondition(String remoteCondition) {
+		this.remoteCondition = remoteCondition;
+		enableDisableFilter();
+	}
+	
+	public void enableDisableFilter(){
+		if(StringUtils.isEmpty(remoteCondition) && StringUtils.isEmpty(localCondition)){
+			actionFactory.getAction(ClearFilter.class.getName()).setEnabled(false);
+		}
+		else{
+			actionFactory.getAction(ClearFilter.class.getName()).setEnabled(true);
+		}
+	}
 
 }
 

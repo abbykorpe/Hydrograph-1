@@ -30,6 +30,8 @@ public class DatasetInformationDetail {
 	private String filterExpression="";
 	private String edgeNode="";
 	private String userName="";
+	private String localFilter="";
+	private String remoteFilter="";
 	
 	public String getViewDataFilePath() {
 		return viewDataFilePath;
@@ -108,6 +110,21 @@ public class DatasetInformationDetail {
 	
 	public void setFilterExpression(String filterExpression) {
 		this.filterExpression = filterExpression;
+	}
+	public String getLocalFilter() {
+		return localFilter;
+	}
+
+	public void setLocalFilter(String localFilter) {
+		this.localFilter = localFilter;
+	}
+
+	public String getRemoteFilter() {
+		return remoteFilter;
+	}
+
+	public void setRemoteFilter(String remoteFilter) {
+		this.remoteFilter = remoteFilter;
 	}
 	
 

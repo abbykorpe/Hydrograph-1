@@ -94,7 +94,7 @@ public class DatasetInformationDialog extends Dialog {
 		final Composite container = (Composite) super.createDialogArea(parent);
 				
 		container.setLayout(new GridLayout(1, false));
-		container.getShell().setMinimumSize(700, 300);
+		container.getShell().setMinimumSize(700, 350);
 		
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
@@ -154,6 +154,12 @@ public class DatasetInformationDialog extends Dialog {
 		
 		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getQuote());
 		
+		createLabel(composite_2,DatasetInformationConstants.LOCAL_FILTER_CONDITION);
+		setLabelValue(composite_2,datasetInformationDetail.getLocalFilter());
+		
+		createLabel(composite_2,DatasetInformationConstants.REMOTE_FILTER_CONDITION);
+		setLabelValue(composite_2,datasetInformationDetail.getRemoteFilter());
+	
 		TabItem tbtmSchema = new TabItem(tabFolder, SWT.NONE);
 		tbtmSchema.setText(DatasetInformationConstants.SCHEMA);
 		
@@ -311,7 +317,7 @@ public class DatasetInformationDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(721, 323);
+		return new Point(721, 350);
 	}
 
 	/**

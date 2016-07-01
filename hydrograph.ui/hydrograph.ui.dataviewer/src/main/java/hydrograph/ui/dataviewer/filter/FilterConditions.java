@@ -23,8 +23,8 @@ public class FilterConditions {
 	private List<Condition> remoteConditions;
 	private boolean retainLocal=false;
 	private boolean retainRemote=false;
-	private String localCondition;
-	private String remoteCondition;
+	private String localCondition="";
+	private String remoteCondition="";
 	
 	public FilterConditions() {
 		localConditions = new ArrayList<>();

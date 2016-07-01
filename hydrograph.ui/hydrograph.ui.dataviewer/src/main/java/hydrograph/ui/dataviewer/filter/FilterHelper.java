@@ -86,8 +86,8 @@ public class FilterHelper {
 	private FilterConditionsDialog filterConditionsDialog;
 	private String SCHEMA_FILE_EXTENTION=".xml";
 	private String filteredFileLocation;
-	private String filteredFileName;
-	private String localCondition;
+	private String filteredFileName = "";
+	private String localCondition = "";
 	private String remoteCondition;
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterHelper.class);
 	private FilterHelper() {
@@ -373,11 +373,13 @@ public class FilterHelper {
 				{	
 					localCondition=buffer.toString();
 					showLocalFilteredData(StringUtils.trim(buffer.toString()));
+					debugDataViewer.setLocalCondition(localCondition);
 				}
 				else
 				{
 					remoteCondition=buffer.toString();
 					showRemoteFilteredData(StringUtils.trim(buffer.toString()));
+					debugDataViewer.setRemoteCondition(remoteCondition);
 				}
 			
 				filterConditionsDialog.close();

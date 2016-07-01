@@ -33,7 +33,6 @@ public class DatasetInformationAction extends Action {
 
 	private static final String LABEL="Dataset &Information";
 	private DebugDataViewer debugDataViewer;
-	
 	/**
 	 *
 	 * @param debugDataViewer
@@ -76,6 +75,9 @@ public class DatasetInformationAction extends Action {
 					datasetInformationDetail.setSizeOfData(Integer.toString(viewDataPreferences.getFileSize()));
 					datasetInformationDetail.setUserName(jobDetails.getUsername());
 					datasetInformationDetailDialog.setData(datasetInformationDetail,debugDataViewer,jobDetails);
+					datasetInformationDetail.setLocalFilter(debugDataViewer.getLocalCondition());
+					datasetInformationDetail.setRemoteFilter(debugDataViewer.getRemoteCondition());
+					
 	    	  	
 					datasetInformationDetailDialog.open();
 					super.run();
