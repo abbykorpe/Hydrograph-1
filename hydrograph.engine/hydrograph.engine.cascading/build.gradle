@@ -5,14 +5,39 @@ apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.7
 
+group = 'hydrograph'
 archivesBaseName = 'hydrograph.engine.cascading'
-ext.cascadingVersion = '3.0.1'
+ext.cascadingVersion = '3.1.0'
 ext.hadoopVersion = '2.6.0'
 ext.hiveVersion = '1.2.0'
 ext.tezVersion = '0.7.0'
 
 project.ext.setTestingProperties = {
-System.properties[ 'test.data.path' ] = new String( "${projectDir}/../hydrograph.engine.cascading/src/test/resources/data/" )
+System.properties[ 'test.data.path' ] = new String( "${projectDir}/../elt-cascading/src/test/resources/data/" )
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact (testJar) { 
+                classifier = 'tests'
+            }
+             artifact (sourcesJar) { 
+                classifier = 'sources'
+            }
+            
+            pom.withXml {
+                asNode().dependencies.'*'.findAll() {
+                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+                        dep.name == it.artifactId.text()
+                    }
+                }.each() {
+                    it.scope*.value = 'compile'
+                }
+            }
+        }
+    }
 }
 
 jar {
@@ -22,6 +47,13 @@ jar {
     }
     version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar
 }
+
+task writePom {
+    pom {
+        project {
+           }
+    	}.writeTo("$buildDir/pom.xml")
+	}
 
 test {
     exclude '**/CascadingTestCase*'
@@ -57,6 +89,7 @@ dependencies {
     compile group: 'cascading', name: 'cascading-local', version: cascadingVersion //required for plunger
     compile group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion
     //compile group: 'cascading', name: 'cascading-hadoop', version: cascadingVersion //using hadoop2-mr1 instead
+    compile group: 'cascading', name: 'cascading-hadoop2-io', version: cascadingVersion //required for plunger
 
     compile group: 'org.apache.hadoop', name: 'hadoop-common', version: hadoopVersion //required for plunger
 
@@ -89,10 +122,3 @@ dependencies {
     testCompile 'org.mockito:mockito-core:1.9.5' //required by plunger
     testCompile 'commons-io:commons-io:2.4' //required by plunger
 }
-
-task writePom {
-    pom {
-        project {
-           }
-    	}.writeTo("$buildDir/pom.xml")
-	}

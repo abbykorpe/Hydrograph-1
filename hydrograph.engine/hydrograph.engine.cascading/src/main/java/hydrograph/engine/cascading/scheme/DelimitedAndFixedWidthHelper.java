@@ -307,8 +307,12 @@ public class DelimitedAndFixedWidthHelper {
 
 	public static boolean isLastFixedWidthFieldNewLineField(
 			String[] lengthsAndDelimiters) {
-		return Integer
-				.parseInt(lengthsAndDelimiters[lengthsAndDelimiters.length - 1]) == 1;
+		try {
+			return Integer
+					.parseInt(lengthsAndDelimiters[lengthsAndDelimiters.length - 1]) == 1;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	public static String checkIfDelimiterIsRegexChar(

@@ -58,6 +58,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link PartitionFieldBasicType }
+     * 
+     */
+    public PartitionFieldBasicType createPartitionFieldBasicType() {
+        return new PartitionFieldBasicType();
+    }
+
+    /**
      * Create an instance of {@link TypeOutputHiveTextFileDelimitedBase }
      * 
      */
