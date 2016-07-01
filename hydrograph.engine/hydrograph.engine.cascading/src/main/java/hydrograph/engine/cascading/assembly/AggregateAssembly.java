@@ -21,6 +21,7 @@ import hydrograph.engine.cascading.assembly.handlers.AggregateCustomHandler;
 import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
+import hydrograph.engine.utilities.ComponentHelper;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -86,7 +87,10 @@ public class AggregateAssembly extends BaseComponent<AggregateEntity> {
 		Fields operationFields = new Fields(
 				OutSocketUtils.getOperationFieldsFromOutSocket(outSocket.getOperationFieldList()));
 
-		Pipe sortAggPipe = new Pipe(aggregateEntity.getComponentId() + "_out", componentParameters.getInputPipe());
+		
+		Pipe sortAggPipe = new Pipe(ComponentHelper.getComponentName("aggregate",
+				aggregateEntity.getComponentId(), aggregateEntity.getOutSocketList().get(0).getSocketId()),
+				componentParameters.getInputPipe());
 
 		// perform groupby operation on keys
 		Fields keyFields = getFieldsFromKeyFields(aggregateEntity.getKeyFields());
@@ -138,5 +142,5 @@ public class AggregateAssembly extends BaseComponent<AggregateEntity> {
 			i++;
 		}
 		return fields;
-	}	
+	}
 }

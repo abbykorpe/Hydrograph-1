@@ -52,10 +52,10 @@ public class DebugPlugin implements ManipulatorListener {
 					baseComponent.getId())) {
 				TypeBaseComponent clone = generateReplicateComponent(
 						baseComponent, mainGraphList, debug);
-				TypeBaseComponent limit = generateLimitComponent(baseComponent,
-						mainGraphList, debug.getLimit(), clone);
+//				TypeBaseComponent limit = generateLimitComponent(baseComponent,
+//						mainGraphList, debug.getLimit(), clone);
 				generateOutputTextComponent(baseComponent, mainGraphList,
-						debug, schemaFieldsMap, limit,
+						debug, schemaFieldsMap, clone,
 						manipulationContext.getJobId(),
 						manipulationContext.getBasePath());
 				return mainGraphList;

@@ -30,6 +30,7 @@ import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class OutputFileDelimitedAssembly extends BaseComponent<OutputFileDelimitedEntity>{
 
@@ -73,7 +74,7 @@ public class OutputFileDelimitedAssembly extends BaseComponent<OutputFileDelimit
 			LOG.trace(
 					"Creating output file delimited assembly for '" + outputFileDelimitedEntity.getComponentId() + "'");
 			prepareAssembly();
-			Pipe sinkPipe = new Pipe(outputFileDelimitedEntity.getComponentId(), tailPipe);
+			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileDelimited",outputFileDelimitedEntity.getComponentId(),""), tailPipe);
 			setHadoopProperties(outTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 			flowDef = flowDef.addTailSink(sinkPipe, outTap);

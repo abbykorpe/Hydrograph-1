@@ -25,6 +25,7 @@ import hydrograph.engine.assembly.entity.elements.KeyField;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.utilities.ComponentHelper;
 
 /**
  * Check for sort fields sequence. Apply data types on keys. Max-Core not
@@ -75,7 +76,7 @@ public class SortAssembly extends BaseComponent<SortEntity> {
 					LOG.debug("Secondary key fields for sort component: '" + sortEntity.getComponentId() + "':  "
 							+ secondaryKeyFields.toString());
 				}
-				Pipe sortOutput = new GroupBy(sortEntity.getComponentId() + "_out", componentParameters.getInputPipe(),
+				Pipe sortOutput = new GroupBy(ComponentHelper.getComponentName("sort",sortEntity.getComponentId() , outSocket.getSocketId()), componentParameters.getInputPipe(),
 						keyFields, secondaryKeyFields);
 
 				setHadoopProperties(sortOutput.getStepConfigDef());

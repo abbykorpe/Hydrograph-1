@@ -22,6 +22,7 @@ import hydrograph.engine.assembly.entity.DiscardEntity;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.tap.NullTap;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class DiscardAssembly extends BaseComponent<DiscardEntity> {
 
@@ -52,7 +53,7 @@ public class DiscardAssembly extends BaseComponent<DiscardEntity> {
 			inputPipes = componentParameters.getInputPipe();
 
 			nullTap = new NullTap();
-			Pipe sinkPipe = new Pipe(discardEntity.getComponentId(), inputPipes);
+			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("discard", discardEntity.getComponentId(),""), inputPipes);
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 
 			flowDef = flowDef.addTailSink(sinkPipe, nullTap);
@@ -64,6 +65,6 @@ public class DiscardAssembly extends BaseComponent<DiscardEntity> {
 
 	@Override
 	public void initializeEntity(DiscardEntity assemblyEntityBase) {
-		this.discardEntity=assemblyEntityBase;
+		this.discardEntity = assemblyEntityBase;
 	}
 }

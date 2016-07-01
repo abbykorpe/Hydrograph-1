@@ -29,6 +29,7 @@ import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
 import hydrograph.engine.cascading.assembly.handlers.TransformCustomHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class TransformAssembly extends BaseComponent<TransformEntity> {
 
@@ -66,7 +67,7 @@ public class TransformAssembly extends BaseComponent<TransformEntity> {
 	}
 
 	protected void createAssemblyForOutSocket(OutSocket outSocket) {
-		Pipe transformPipe = new Pipe(transformEntity.getComponentId() + "_out", componentParameters.getInputPipe());
+		Pipe transformPipe = new Pipe(ComponentHelper.getComponentName("transform",transformEntity.getComponentId() ,outSocket.getSocketId()), componentParameters.getInputPipe());
 
 		// initialize the out socket fields
 		Fields passThroughFields = operationFieldsCreator.getPassThroughFields();

@@ -24,6 +24,7 @@ import cascading.tap.hadoop.Hfs;
 import hydrograph.engine.assembly.entity.OutputFileSequenceFormatEntity;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSequenceFormatEntity> {
 
@@ -40,7 +41,8 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 	SequenceFile scheme;
 	private static Logger LOG = LoggerFactory.getLogger(OutputFileSequenceFormatAssembly.class);
 
-	public OutputFileSequenceFormatAssembly(OutputFileSequenceFormatEntity outputFileSequenceFormatEntity, ComponentParameters componentParameters) {
+	public OutputFileSequenceFormatAssembly(OutputFileSequenceFormatEntity outputFileSequenceFormatEntity,
+			ComponentParameters componentParameters) {
 		super(outputFileSequenceFormatEntity, componentParameters);
 	}
 
@@ -50,7 +52,8 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 			LOG.trace("Creating output file sequence format assembly for '"
 					+ outputFileSequenceFormatEntity.getComponentId() + "'");
 			prepareAssembly();
-			Pipe sinkPipe = new Pipe(outputFileSequenceFormatEntity.getComponentId(), tailPipe);
+			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileSequenceFormat",
+					outputFileSequenceFormatEntity.getComponentId(), ""), tailPipe);
 			setHadoopProperties(outTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 			flowDef = flowDef.addTailSink(sinkPipe, outTap);
@@ -81,7 +84,7 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 
 	@Override
 	public void initializeEntity(OutputFileSequenceFormatEntity assemblyEntityBase) {
-		this.outputFileSequenceFormatEntity=assemblyEntityBase;
+		this.outputFileSequenceFormatEntity = assemblyEntityBase;
 	}
 
 }

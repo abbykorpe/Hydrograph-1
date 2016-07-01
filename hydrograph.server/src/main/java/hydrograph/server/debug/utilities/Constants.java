@@ -88,6 +88,11 @@ public class Constants {
 	 * The URL parameter for user id sent in the request object to the service
 	 */
 	public static final String USER_ID = "userId";
+	
+	/**
+	 * The json key for schema and condition set in ServiceConfig.properties file
+	 */
+	public static final String JSON = "json_object";
 
 	/**
 	 * The URL parameter for password sent in the request object to the service
@@ -127,5 +132,6 @@ public class Constants {
 	public static final char DEFAULT_QUOTE_CHARACTER = '"';
 
 	public static final String HOST = "host_name";
+	
 
 }
