@@ -41,9 +41,6 @@ public class FixedWidthGridWidgetBuilder extends GridWidgetCommonBuilder {
 	
 	private FixedWidthGridWidgetBuilder() {}
 	
-	public CellEditor[] createCellEditorList(Table table,int size){
-		return null;
-	}
 
 	/*
 	 * Table mouse click event.
