@@ -91,19 +91,8 @@ public class ELTLookupMapWidget extends AbstractWidget {
 				lookupMapDialog.open();
 
 
-				Schema internalSchema=propagateInternalSchema();
+				propagateInternalSchema();
 				showHideErrorSymbol(widgets);
-				for(AbstractWidget widget:widgets)
-				{
-					if(widget instanceof ELTGenericSchemaGridWidget)
-					{
-						ELTGenericSchemaGridWidget eltGenericSchemaGridWidget =(ELTGenericSchemaGridWidget) widget;
-						if(internalSchema!=null ){
-							eltGenericSchemaGridWidget.validateInternalSchemaPropogatedData(internalSchema);
-						}
-
-					}	
-				}	
 			}
 		});
 		propagateInternalSchema();
