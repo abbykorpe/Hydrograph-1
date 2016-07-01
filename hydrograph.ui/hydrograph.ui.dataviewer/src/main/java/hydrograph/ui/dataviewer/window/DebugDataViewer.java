@@ -24,6 +24,7 @@ import hydrograph.ui.dataviewer.actions.ActionFactory;
 import hydrograph.ui.dataviewer.actions.CopyAction;
 import hydrograph.ui.dataviewer.actions.DatasetInformationAction;
 import hydrograph.ui.dataviewer.actions.ExportAction;
+import hydrograph.ui.dataviewer.actions.FindAction;
 import hydrograph.ui.dataviewer.actions.FormattedViewAction;
 import hydrograph.ui.dataviewer.actions.GridViewAction;
 import hydrograph.ui.dataviewer.actions.PreferencesAction;
@@ -475,7 +476,20 @@ public class DebugDataViewer extends ApplicationWindow {
 
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
-
+		
+		/*getShell().getDisplay().addFilter(SWT.KeyDown, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				if(((event.stateMask & SWT.CTRL) == SWT.CTRL) && (event.keyCode == 'f'))
+                {
+					if(gridViewTableViewer.getTable().getItems().length != 0){
+						FindViewDataDialog findBox = new FindViewDataDialog(Display.getCurrent().getActiveShell(), gridViewTableViewer, 
+								formattedViewTextarea, unformattedViewTextarea, tabFolder.getSelection());
+						findBox.open();
+					}
+                }
+			}
+		});*/
 		tabFolder = new CTabFolder(container, SWT.BORDER);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tabFolder.setSelectionBackground(new Color(null, 14, 76, 145));
@@ -1372,7 +1386,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		editMenu.add(actionFactory.getAction(SelectAllAction.class.getName()));
 		editMenu.add(actionFactory.getAction(CopyAction.class.getName()));
-		// editMenu.add(actionFactory.getAction(FindAction.class.getName()));
+		editMenu.add(actionFactory.getAction(FindAction.class.getName()));
 		editMenu.add(actionFactory.getAction(SelectColumnAction.class.getName()));
 	}
 
@@ -1462,6 +1476,9 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		addtoolbarAction(toolBarManager,(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.TABLE_ICON),
 				actionFactory.getAction(SelectColumnAction.class.getName()));
+		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.FIND_DATA), 
+				actionFactory.getAction(FindAction.class.getName()));
+		
 		dropDownAction = new Action("", SWT.DROP_DOWN) {
 			@Override
 			public void run() {
@@ -1602,6 +1619,10 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	public void setDataViewerMap(Map<String, DebugDataViewer> dataViewerMap) {
 		this.dataViewerMap = dataViewerMap;
+	}
+	
+	public CTabFolder getCurrentView(){
+		return tabFolder;
 	}
 }
 
