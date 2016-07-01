@@ -76,6 +76,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -191,7 +192,17 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected Table table;
 
 	protected GridWidgetCommonBuilder gridWidgetBuilder = getGridWidgetBuilder();
-	protected final String[] PROPS = getPropertiesToShow();
+	protected Map<String, Integer> columns = getPropertiesToShow();
+	protected final String[] PROPS =  populateColumns();
+	
+	String[] populateColumns(){	
+		String[] cols = new String[columns.size()];
+		for (Entry<String, Integer> mapEntry : columns.entrySet()) {
+		    cols[mapEntry.getValue()] = mapEntry.getKey();
+		}
+		return cols;	
+	}
+	
 	protected boolean external;
 	private Object properties;
 	private String propertyName;
@@ -218,7 +229,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	
 	List<GridRow> copiedGridRows=new ArrayList<GridRow>();
 
-	protected abstract String[] getPropertiesToShow();
+	protected abstract Map<String, Integer> getPropertiesToShow();
 
 	protected abstract GridWidgetCommonBuilder getGridWidgetBuilder();
 
@@ -243,7 +254,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected abstract void setDecorator();
 
 	public ELTSchemaGridWidget() {
-
+		populateColumns();
 	}
 
 	/**
@@ -1147,7 +1158,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			table.getColumn(columnIndex).pack();
 			table.getColumn(columnIndex).setWidth(94);
 		}
-		editors = gridWidgetBuilder.createCellEditorList(table, PROPS.length);
+		editors = gridWidgetBuilder.createCellEditorList(table, columns);
 		tableViewer.setCellEditors(editors);
 		
 		// enables the tab functionality

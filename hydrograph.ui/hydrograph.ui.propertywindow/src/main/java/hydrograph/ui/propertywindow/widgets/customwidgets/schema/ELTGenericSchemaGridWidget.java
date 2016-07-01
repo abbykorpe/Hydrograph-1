@@ -26,6 +26,8 @@ import hydrograph.ui.propertywindow.widgets.listeners.grid.schema.ELTCellEditorF
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Class ELTGenericSchemaGridWidget.
@@ -51,8 +53,18 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 	}
 	
 	@Override
-	protected String[] getPropertiesToShow() {
-		return new String[]{ FIELDNAME, DATATYPE, SCALE, SCALE_TYPE, DATEFORMAT, PRECISION, FIELD_DESCRIPTION };
+	protected Map<String, Integer> getPropertiesToShow() {
+		Map<String, Integer> columns = new HashMap<>();
+		columns.put(FIELDNAME, 0);
+		columns.put(DATATYPE, 1);
+		columns.put(SCALE, 2);
+		columns.put(SCALE_TYPE, 3);
+		columns.put(DATEFORMAT, 4);
+		columns.put(PRECISION, 5);
+		columns.put(FIELD_DESCRIPTION, 6);
+		
+		return columns;
+		//sequence: FIELDNAME, DATATYPE, SCALE, SCALE_TYPE, DATEFORMAT, PRECISION, FIELD_DESCRIPTION
 	}
 
 	@Override

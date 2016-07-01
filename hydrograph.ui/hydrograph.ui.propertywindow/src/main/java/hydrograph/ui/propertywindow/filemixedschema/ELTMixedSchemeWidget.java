@@ -14,6 +14,8 @@
 package hydrograph.ui.propertywindow.filemixedschema;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -58,8 +60,18 @@ public class ELTMixedSchemeWidget extends ELTSchemaGridWidget {
 	
 
 	@Override
-	protected String[] getPropertiesToShow() {
-		return new String[]{ FIELDNAME, DATATYPE, LENGTH, DELIMITER, SCALE, SCALE_TYPE, DATEFORMAT, PRECISION, FIELD_DESCRIPTION};
+	protected Map<String, Integer> getPropertiesToShow() {
+		Map<String, Integer> columns = new HashMap<>();
+		columns.put(FIELDNAME, 0);
+		columns.put(DATATYPE, 1);
+		columns.put(LENGTH, 2);
+		columns.put(DELIMITER, 3);
+		columns.put(SCALE, 4);
+		columns.put(SCALE_TYPE, 5);
+		columns.put(DATEFORMAT, 6);
+		columns.put(PRECISION, 7);
+		columns.put(FIELD_DESCRIPTION, 8);
+		return columns;
 	}
 
 	@Override
