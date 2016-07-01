@@ -58,6 +58,8 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 40.#172  [Nitin Gupta] Join Component icon and lookup icon size is getting enlarged if user import any xml file
 41.#164  [Nitin Gupta]  User should be able to delete multiple rows by selecting rows with control keys in schema grid
 42.#557  [Kalyan Rajpoot] Job Canvas: Components should move in job canvas using arrow keys
+43.#675  [Ashika Holkar] Vertical/Horizontal Scroll Bar Need To be Added on DataSet Information Window
+
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
