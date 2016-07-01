@@ -46,7 +46,6 @@ import hydrograph.ui.dataviewer.constants.Views;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
-import hydrograph.ui.dataviewer.find.FindViewDataDialog;
 import hydrograph.ui.dataviewer.listeners.DataViewerListeners;
 import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
 import hydrograph.ui.dataviewer.support.SortDataType;
@@ -117,9 +116,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -479,7 +476,8 @@ public class DebugDataViewer extends ApplicationWindow {
 
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
-		getShell().getDisplay().addFilter(SWT.KeyDown, new Listener() {
+		
+		/*getShell().getDisplay().addFilter(SWT.KeyDown, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
 				if(((event.stateMask & SWT.CTRL) == SWT.CTRL) && (event.keyCode == 'f'))
@@ -491,9 +489,7 @@ public class DebugDataViewer extends ApplicationWindow {
 					}
                 }
 			}
-		});
-		
-		
+		});*/
 		tabFolder = new CTabFolder(container, SWT.BORDER);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tabFolder.setSelectionBackground(new Color(null, 14, 76, 145));
@@ -1390,7 +1386,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		editMenu.add(actionFactory.getAction(SelectAllAction.class.getName()));
 		editMenu.add(actionFactory.getAction(CopyAction.class.getName()));
-		// editMenu.add(actionFactory.getAction(FindAction.class.getName()));
+		editMenu.add(actionFactory.getAction(FindAction.class.getName()));
 		editMenu.add(actionFactory.getAction(SelectColumnAction.class.getName()));
 	}
 
@@ -1625,8 +1621,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		this.dataViewerMap = dataViewerMap;
 	}
 	
-	public CTabItem getCurrentView(){
-		return tabFolder.getSelection();
+	public CTabFolder getCurrentView(){
+		return tabFolder;
 	}
 }
 

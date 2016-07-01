@@ -13,21 +13,20 @@
 
 package hydrograph.ui.dataviewer.find;
 
-import java.util.LinkedList;
-
+import hydrograph.ui.dataviewer.actions.FindAction;
 import hydrograph.ui.dataviewer.constants.Views;
-import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.custom.LineStyleEvent;
-import org.eclipse.swt.custom.LineStyleListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -41,6 +40,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -60,27 +60,34 @@ public class FindViewDataDialog extends Dialog{
 	public static final int CLOSE = 9999;
 	private TableViewer debugDataViewer;
 	private StyledText formatedStyledText;
-	private CTabItem cTabItem;
-	private Text text;
+	private StyledText unFormatedStyledText;
+	private CTabFolder cTabFolder;
+	private Text findText;
 	private int findRowIndex=0;
-	private int findColIndex=0;
-	private int cursor = -1;
+	private int findColIndex=1;
 	private int prevColSelection = 0;
 	private int prevRowSelection = 0;
-	
-	
+	private int formattedViewPrevLineIndex = 0;
+	private int formattedViewNextLineIndex = 0;
+	private int unFormattedViewPrevLineIndex = 0;
+	private int unFormattedViewNextLineIndex = 0;
+	private String textData = null;
+	private Label label;
+	private FindAction findAction;
+	private Button btnNext;
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 * @param debugDataViewer 
 	 */
 	public FindViewDataDialog(Shell parentShell, TableViewer debugDataViewer, StyledText formatedStyledText, StyledText unFormatedStyledText, 
-			CTabItem cTabItem) {
+			CTabFolder cTabFolder) {
 		super(parentShell);
-		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.RESIZE);
+		setShellStyle(SWT.CLOSE | SWT.TITLE);
 		this.debugDataViewer = debugDataViewer;
 		this.formatedStyledText = formatedStyledText;
-		this.cTabItem = cTabItem;
+		this.unFormatedStyledText = unFormatedStyledText;
+		this.cTabFolder = cTabFolder;
 	}
 
 	/**
@@ -96,29 +103,32 @@ public class FindViewDataDialog extends Dialog{
 		parentCompositeData.widthHint = 300;
 		parentCompositeData.grabExcessHorizontalSpace = true;
 		parentCompositeData.grabExcessVerticalSpace = true;
+			
 		container.setLayout(new GridLayout(3, false));
 		container.setLayoutData(parentCompositeData);
 		
-
+		
 		container.getShell().addShellListener(new ShellListener() {
 			@Override
 			public void shellIconified(ShellEvent e) {}
 			@Override
 			public void shellDeiconified(ShellEvent e) {}
 			@Override
-			public void shellDeactivated(ShellEvent e) {	}
+			public void shellDeactivated(ShellEvent e) {}
 			@Override
 			public void shellClosed(ShellEvent e) {
-				CTabItem tabItem = cTabItem;
+				CTabItem tabItem = cTabFolder.getSelection();
 				if (tabItem.getData("VIEW_NAME").equals(Views.GRID_VIEW_NAME)) {
 					logger.debug("Grid View");
-					changeTableItemBgColor(debugDataViewer);
+					clearTableItemBgColor(debugDataViewer);
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.HORIZONTAL_VIEW_NAME)) {
 					logger.debug("HORIZONTAL View");
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.FORMATTED_VIEW_NAME)) {
 					logger.debug("FORMATTED View");
+					clearStyledTextBgColor(formatedStyledText, textData);
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.UNFORMATTED_VIEW_NAME)) {
 					logger.debug("UNFORMATTED View");
+					clearStyledTextBgColor(unFormatedStyledText, textData);
 				}
 			}
 			@Override
@@ -150,8 +160,8 @@ public class FindViewDataDialog extends Dialog{
 		lblFind.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblFind.setText("Find:  ");
 		
-		text = new Text(composite, SWT.BORDER);
-		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		findText = new Text(composite, SWT.BORDER);
+		findText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		new Label(composite_1, SWT.None).setVisible(false);
 		
@@ -168,21 +178,33 @@ public class FindViewDataDialog extends Dialog{
 		btnPrevious.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				CTabItem tabItem = cTabItem;
+				textData = findText.getText();
+				CTabItem tabItem = cTabFolder.getSelection();
 				if (tabItem.getData("VIEW_NAME").equals(Views.GRID_VIEW_NAME)) {
-					logger.debug("Grid View");
+					logger.debug("---------Grid View on Prev---------");
 					reverseTableTraverse();
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.HORIZONTAL_VIEW_NAME)) {
 					logger.debug("HORIZONTAL View");
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.FORMATTED_VIEW_NAME)) {
-					logger.debug("FORMATTED View");
+					logger.debug("------------FORMATTED View on Prev------------------------------");
+					
+					isTextExist(formatedStyledText, textData);
+					int[] resultIndex =StyledTextEventListener.INSTANCE.prevButtonListener(formatedStyledText, textData, formattedViewPrevLineIndex, formattedViewNextLineIndex);
+					formattedViewPrevLineIndex = resultIndex[0];
+					formattedViewNextLineIndex = resultIndex[1];
+					
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.UNFORMATTED_VIEW_NAME)) {
-					logger.debug("UNFORMATTED View");
+					logger.debug("------------UNFORMATTED View on Prev------------");
+					
+					isTextExist(unFormatedStyledText, textData);
+					int[] resultIndex =StyledTextEventListener.INSTANCE.prevButtonListener(unFormatedStyledText, textData, unFormattedViewPrevLineIndex, unFormattedViewNextLineIndex);
+					unFormattedViewPrevLineIndex = resultIndex[0];
+					unFormattedViewNextLineIndex = resultIndex[1];
 				}
 			}
 		});
 		
-		final Button btnNext = new Button(composite_2, SWT.NONE);
+		btnNext = new Button(composite_2, SWT.NONE);
 		btnNext.setBounds(81, 0, 78, 25);
 		btnNext.setText("Next");
 		btnNext.setEnabled(false);
@@ -191,16 +213,41 @@ public class FindViewDataDialog extends Dialog{
 		btnNext.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				CTabItem tabItem = cTabItem;
+				CTabItem tabItem = cTabFolder.getSelection();
 				if (tabItem.getData("VIEW_NAME").equals(Views.GRID_VIEW_NAME)) {
-					logger.debug("Grid View");
+					logger.debug("--------Grid View on Next--------");
+					textData = findText.getText();
+					isExistInTable(debugDataViewer, textData);
 					forwardTableTraverse();
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.HORIZONTAL_VIEW_NAME)) {
 					logger.debug("HORIZONTAL View");
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.FORMATTED_VIEW_NAME)) {
-					logger.debug("FORMATTED View");
+					logger.debug("---------------------------FORMATTED View on Next-------------------------");
+					isTextExist(formatedStyledText, textData);
+					if(textData != null && !textData.equalsIgnoreCase(findText.getText())){
+						formattedViewPrevLineIndex = 0;
+						formattedViewNextLineIndex = 0;
+						textData = findText.getText();
+					}else{
+						textData = findText.getText();
+					} 
+					int[] resultIndex = StyledTextEventListener.INSTANCE.nextButtonListener(formatedStyledText, textData, formattedViewPrevLineIndex, formattedViewNextLineIndex);
+					formattedViewPrevLineIndex = resultIndex[0];
+					formattedViewNextLineIndex = resultIndex[1];
+					
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.UNFORMATTED_VIEW_NAME)) {
-					logger.debug("UNFORMATTED View");
+					logger.debug("---------------------------UNFORMATTED View on Next-------------------------");
+					isTextExist(unFormatedStyledText, textData);
+					if(textData != null && !textData.equalsIgnoreCase(findText.getText())){
+						unFormattedViewPrevLineIndex = 0;
+						unFormattedViewNextLineIndex = 0;
+						textData = findText.getText();
+					}else{
+						textData = findText.getText();
+					}
+					int[] resultIndex = StyledTextEventListener.INSTANCE.nextButtonListener(unFormatedStyledText, textData, unFormattedViewPrevLineIndex, unFormattedViewNextLineIndex);
+					unFormattedViewPrevLineIndex = resultIndex[0];
+					unFormattedViewNextLineIndex = resultIndex[1];
 				}
 			}
 		});
@@ -214,27 +261,31 @@ public class FindViewDataDialog extends Dialog{
 		btnAll.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				CTabItem tabItem = cTabItem;
+				CTabItem tabItem = cTabFolder.getSelection();
+				textData = findText.getText();
 				if (tabItem.getData("VIEW_NAME").equals(Views.GRID_VIEW_NAME)) {
-					logger.debug("Grid View");
+					logger.debug("-----------Grid View on All----------------");
+					isExistInTable(debugDataViewer, textData);
 					selectAllInTable();
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.HORIZONTAL_VIEW_NAME)) {
 					logger.debug("HORIZONTAL View");
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.FORMATTED_VIEW_NAME)) {
-					logger.debug("FORMATTED View");
-					CharSequence cs = text.getText();
-					if(formatedStyledText.getText().contains(cs)){
-						formatedStyledText.redraw();
-					}
+					logger.debug("-----------FORMATTED View on All--------------");
+					clearStyledTextBgColor(formatedStyledText, textData);
+					isTextExist(formatedStyledText, textData);
+					StyledTextEventListener.INSTANCE.allButtonListener(formatedStyledText, textData, null, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));  
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.UNFORMATTED_VIEW_NAME)) {
-					logger.debug("UNFORMATTED View");
+					logger.debug("UNFORMATTED View on All--------------");
+					isTextExist(unFormatedStyledText, textData);
+					clearStyledTextBgColor(unFormatedStyledText, textData);
+					StyledTextEventListener.INSTANCE.allButtonListener(unFormatedStyledText, textData, null, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY)); 
 				}
 			}
 		});
 	 
-		styleListnr(formatedStyledText);
 		
-		text.addModifyListener(new ModifyListener() {
+		
+		findText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent event) {
 				Text txt = (Text)event.widget;
@@ -249,96 +300,79 @@ public class FindViewDataDialog extends Dialog{
 				}
 			}
 		});
-
-		//findEditor();
 		
 		return container;
 	}
 	
-	private void styleListnr(StyledText styledText){
-		if(styledText == null){
+	private void isTextExist(StyledText styledText, String text){
+		if(styledText.getText().indexOf(text, 0) < 0){
+			label.setVisible(true);
 			return;
-		}
-		styledText.addLineStyleListener(new LineStyleListener() {
-			@Override
-			public void lineGetStyle(LineStyleEvent event) {
-				String line = event.lineText;
-				LinkedList list = new LinkedList();
-			        while( (cursor = line.indexOf(text.getText(), cursor+1)) >= 0) {
-			          list.add(getHighlightStyle(event.lineOffset+cursor, text.getText().length()));
-			          event.styles = (StyleRange[]) list.toArray(new StyleRange[list.size()]);
-			          break;
-			        }
-			}
-			});
-	}
-	
-	private void  findEditor(){
-		CTabItem tabItem = cTabItem;
-		if (tabItem.getData("VIEW_NAME").equals(Views.GRID_VIEW_NAME)) {
-			logger.debug("Grid View");
-		} else if (tabItem.getData("VIEW_NAME").equals(Views.HORIZONTAL_VIEW_NAME)) {
-			logger.debug("HORIZONTAL View");
-		} else if (tabItem.getData("VIEW_NAME").equals(Views.FORMATTED_VIEW_NAME)) {
-			logger.debug("FORMATTED View");
-		} else if (tabItem.getData("VIEW_NAME").equals(Views.UNFORMATTED_VIEW_NAME)) {
-			logger.debug("UNFORMATTED View");
+		}else{
+			label.setVisible(false);
 		}
 	}
 	
 	private void forwardTableTraverse(){
+		TableItem previousSelectedTableItem = null;
 		if(debugDataViewer.getData("SELECTED_ROW_INDEX")!=null){
-			TableItem previousSelectedTableItem=debugDataViewer.getTable().getItem((int) debugDataViewer.getData("SELECTED_ROW_INDEX"));
-			int colIndex=(int) debugDataViewer.getData("SEELCTED_COLUMN_INDEX");
-			previousSelectedTableItem.setBackground(colIndex, Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+			previousSelectedTableItem = debugDataViewer.getTable().getItem((int) debugDataViewer.getData("SELECTED_ROW_INDEX"));
 		}
 		Table table = debugDataViewer.getTable();
 		TableItem[] tableItems = table.getItems();
 		if(findColIndex == prevColSelection && findRowIndex == prevRowSelection){
 			findColIndex++;
 		}
-		if(findRowIndex<0){findRowIndex =0;}
+		if(findRowIndex<0){
+			findRowIndex = 0;
+		}
 		for(;findRowIndex<tableItems.length;findRowIndex++){
 			TableItem tableItem = tableItems[findRowIndex];
 			for(;findColIndex <= table.getColumnCount();findColIndex++){
-				CharSequence cs = text.getText();
-				if(tableItem.getText(findColIndex).contains(cs)){
-					System.out.println("In Next Button Row: "+findRowIndex +" &col: "+findColIndex);
+				if(StringUtils.containsIgnoreCase(tableItem.getText(findColIndex), findText.getText())){
+					if(prevColSelection>0){
+						previousSelectedTableItem.setBackground(prevColSelection, Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+					}
+					label.setVisible(false);
 					table.showItem(tableItem);
 					table.showColumn(table.getColumn(findColIndex));
-					tableItem.setBackground(findColIndex,Display.getDefault().getSystemColor(SWT.COLOR_DARK_YELLOW));
+					tableItem.setBackground(findColIndex, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
 					debugDataViewer.setData("SELECTED_ROW_INDEX", findRowIndex);
 					debugDataViewer.setData("SEELCTED_COLUMN_INDEX", findColIndex);
+					prevColSelection = findColIndex;
 					findColIndex++;
 					return;
 				}
 			}
-			findColIndex=0;
+			findColIndex=1;
 		}
 	}
 	
 	private void reverseTableTraverse(){
+		TableItem previousSelectedTableItem = null;
 		if(debugDataViewer.getData("SELECTED_ROW_INDEX")!=null){
-			TableItem previousSelectedTableItem=debugDataViewer.getTable().getItem((int) debugDataViewer.getData("SELECTED_ROW_INDEX"));
+			previousSelectedTableItem = debugDataViewer.getTable().getItem((int) debugDataViewer.getData("SELECTED_ROW_INDEX"));
 			findRowIndex = (int) debugDataViewer.getData("SELECTED_ROW_INDEX");
 			findColIndex = (int) debugDataViewer.getData("SEELCTED_COLUMN_INDEX");
-			previousSelectedTableItem.setBackground(findColIndex, Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 			findColIndex -= 1;
 		}
-		 System.out.println("Index:::"+debugDataViewer.getData("SELECTED_ROW_INDEX")+":::"+debugDataViewer.getData("SEELCTED_COLUMN_INDEX"));
 		Table table = debugDataViewer.getTable();
 		TableItem[] tableItems = table.getItems();
 		for(; findRowIndex >=0; findRowIndex--){
 			TableItem tableItem = tableItems[findRowIndex];
 			if(findColIndex < 0){ findColIndex = table.getColumnCount(); }
 			for( ; findColIndex >= 0 ;findColIndex--){
-				CharSequence cs = text.getText();
-				if(tableItem.getText(findColIndex).contains(cs)){
-					System.out.println("In prev Button Row: "+findRowIndex +" &col: "+findColIndex);
+				if(StringUtils.containsIgnoreCase(tableItem.getText(findColIndex), findText.getText())){
+					if(prevColSelection > 0){
+						previousSelectedTableItem.setBackground(prevColSelection, Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+					}
+					label.setVisible(false);
 					table.showItem(tableItem);
 					table.showColumn(table.getColumn(findColIndex));
-					tableItem.setBackground(findColIndex,Display.getDefault().getSystemColor(SWT.COLOR_DARK_YELLOW));
-					debugDataViewer.setData("SELECTED_ROW_INDEX", findRowIndex);
+					tableItem.setBackground(findColIndex,Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
+					if(findColIndex<=0){debugDataViewer.setData("SELECTED_ROW_INDEX", findRowIndex-1);}else{
+						debugDataViewer.setData("SELECTED_ROW_INDEX", findRowIndex);
+					}
 					debugDataViewer.setData("SEELCTED_COLUMN_INDEX", findColIndex);
 					prevColSelection = findColIndex;
 					prevRowSelection = findRowIndex;
@@ -350,79 +384,135 @@ public class FindViewDataDialog extends Dialog{
 	
 	private void selectAllInTable(){
 		findRowIndex = 0;
-		findColIndex = 0;
+		findColIndex = 1;
 		Table table = debugDataViewer.getTable();
 		TableItem[] tableItems = table.getItems();
 		
 		for(;findRowIndex<tableItems.length;findRowIndex++){
 			TableItem tableItem = tableItems[findRowIndex];
 			for(;findColIndex <= table.getColumnCount();findColIndex++){
-				CharSequence cs = text.getText();
-				if(tableItem.getText(findColIndex).contains(cs)){
+				if(StringUtils.containsIgnoreCase(tableItem.getText(findColIndex), findText.getText())){
+					label.setVisible(false);
 					table.showItem(tableItem);
 					table.showColumn(table.getColumn(findColIndex));
-					tableItem.setBackground(findColIndex,Display.getDefault().getSystemColor(SWT.COLOR_DARK_YELLOW));
+					tableItem.setBackground(findColIndex, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
 					debugDataViewer.setData("SELECTED_ROW_INDEX", findRowIndex);
 					debugDataViewer.setData("SEELCTED_COLUMN_INDEX", findColIndex);
-					findColIndex++;
 				}
 			}
-			findColIndex=0;
+			findColIndex=1;
 		}
 	}
 	
-	  private StyleRange getHighlightStyle(int startOffset, int length) {
-		    StyleRange styleRange = new StyleRange();
-		    styleRange.start = startOffset;
-		    styleRange.length = length;
-		    styleRange.background = Display.getDefault().getSystemColor(SWT.COLOR_YELLOW);
-		    return styleRange;
+	  private void clearStyledTextBgColor(StyledText styledText, String textData){
+		  if(StringUtils.isBlank(textData) || styledText == null){
+			  return;
+		  }else{
+			  StyleRange[] prevRanges = new StyleRange[1];
+			  prevRanges[0] = new StyleRange(0, 1, null, Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+			  styledText.replaceStyleRanges(0, styledText.getText().length(), prevRanges);
 		  }
-	  
-	  private void clear(StyledText styledText){
-		  StyleRange style3 = new StyleRange();
-		    style3.start = 0;
-		    style3.length = styledText.getText().length();
-		    style3.background = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
-		    styledText.setStyleRange(style3);
 	  }
 	 
 	  
-	  private void changeTableItemBgColor(TableViewer debugDataViewer){
+	  private void isExistInTable(TableViewer tableViewer, String text){
+		  if(tableViewer == null){
+			  return;
+		  }
+		  Table table = tableViewer.getTable();
+		  TableItem[] tableItems = table.getItems();
+		  for(int i=0;i<tableItems.length;i++){
+			TableItem tableItem = tableItems[i];
+			for(int j=1;j <= table.getColumnCount()-1;j++){
+				if(StringUtils.contains(tableItem.getText(j), text)){
+					label.setVisible(false);
+					return;
+				}else{
+					label.setVisible(true);
+				}
+				
+			}
+		  }
+	  }
+	  
+	  private void clearTableItemBgColor(TableViewer debugDataViewer){
 		  if(debugDataViewer == null){
 			  return;
 		  }
 		  Table table = debugDataViewer.getTable();
-			TableItem[] tableItems = table.getItems();
-			for(int i=0;i<tableItems.length;i++){
-				TableItem tableItem = tableItems[i];
-				for(int j=0;j <= table.getColumnCount()-1;j++){
-					tableItem.getText(j);
-					tableItem.setBackground(j,Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-					}
-				}
-			
-			debugDataViewer.setData("SELECTED_ROW_INDEX", null);
-			debugDataViewer.setData("SEELCTED_COLUMN_INDEX", null);
+		  TableItem[] tableItems = table.getItems();
+		  for(int i=0;i<tableItems.length;i++){
+			TableItem tableItem = tableItems[i];
+			for(int j=1;j <= table.getColumnCount()-1;j++){
+				tableItem.getText(j);
+				tableItem.setBackground(j, Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+			}
+		  }
+		
+		  debugDataViewer.setData("SELECTED_ROW_INDEX", null);
+		  debugDataViewer.setData("SEELCTED_COLUMN_INDEX", null);
 	  }
+	  
 	/**
 	 * Return the initial size of the dialog.
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(530, 168);
+		return new Point(530, 153);
 	}
 	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		Button closeButton = createButton(parent, CLOSE, "Close", true);
+		
+		parent.setLayout(new GridLayout(1,false));
+		GridData gridData = new GridData(SWT.FILL, SWT.TOP, true, false, 0, 0);
+		parent.setLayoutData(gridData);
+		
+		label=new  Label(parent, SWT.NONE);
+		label.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, 0, 0));
+		label.setText("String Not Found");		
+		label.setVisible(false);
+		
+		final Button closeButton = createButton(parent, CLOSE, "Close", true);
 		closeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				changeTableItemBgColor(debugDataViewer);
-				clear(formatedStyledText);
+				clearTableItemBgColor(debugDataViewer);
+				clearStyledTextBgColor(formatedStyledText, textData);
+				clearStyledTextBgColor(unFormatedStyledText, textData);
 				close();
 			}
 		});
+		
+		
+		closeButton.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {}
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(btnNext.isEnabled() ){
+					btnNext.setFocus();
+					btnNext.notifyListeners(SWT.Selection, new Event());
+				}else{
+					closeButton.setFocus();
+				}
+			}
+		});
 	}
+
+	public int open(FindAction findAction) {
+		this.findAction=findAction;
+		findAction.isOpened=true;
+		return this.open();
+	}
+	
+	@Override
+	public boolean close() {
+		this.findAction.isOpened=false;
+		return super.close();
+	}
+
+	
+	
+	
 }
