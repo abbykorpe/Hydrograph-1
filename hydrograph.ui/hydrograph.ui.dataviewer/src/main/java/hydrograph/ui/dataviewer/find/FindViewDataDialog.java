@@ -75,10 +75,15 @@ public class FindViewDataDialog extends Dialog{
 	private Label label;
 	private FindAction findAction;
 	private Button btnNext;
+	
+	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 * @param debugDataViewer 
+	 * @param formatedStyledText
+	 * @param unFormatedStyledText
+	 * @param cTabFolder
 	 */
 	public FindViewDataDialog(Shell parentShell, TableViewer debugDataViewer, StyledText formatedStyledText, StyledText unFormatedStyledText, 
 			CTabFolder cTabFolder) {
