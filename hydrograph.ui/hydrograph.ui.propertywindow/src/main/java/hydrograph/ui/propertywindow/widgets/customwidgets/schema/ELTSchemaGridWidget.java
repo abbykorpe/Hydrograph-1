@@ -1346,12 +1346,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private void addAddButton(ELTSchemaSubgroupComposite buttonSubGroup) {
 		addButton = new ELTDefaultButton("");
-		if(OSValidator.isMac()){
 		addButton.buttonWidth(35);
-		addButton.buttonHeight(45);
-		}
-		addButton.buttonWidth(35);
-		addButton.buttonHeight(25);
+		addButton.buttonHeight(35);
 		buttonSubGroup.attachWidget(addButton);
 		addButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
 		addButton.setToolTipText(addButtonTooltip);
@@ -1359,12 +1355,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private void addDeleteButton(ELTSchemaSubgroupComposite buttonSubGroup) {
 		deleteButton = new ELTDefaultButton("");
-		if(OSValidator.isMac()){
-			deleteButton.buttonWidth(35);
-			deleteButton.buttonHeight(45);
-			}
 		deleteButton.buttonWidth(35);
-		deleteButton.buttonHeight(25);
+		deleteButton.buttonHeight(35);
 		buttonSubGroup.attachWidget(deleteButton);
 		deleteButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
 		deleteButton.setToolTipText(removeButtonTooltip);
@@ -1372,12 +1364,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private void addUpButton(ELTSchemaSubgroupComposite buttonSubGroup) {
 		upButton = new ELTDefaultButton("");
-		if(OSValidator.isMac()){
-			upButton.buttonWidth(35);
-			upButton.buttonHeight(45);
-			}
 		upButton.buttonWidth(35);
-		upButton.buttonHeight(25);
+		upButton.buttonHeight(35);
 		buttonSubGroup.attachWidget(upButton);
 		upButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
 		upButton.setToolTipText(upButtonTooltip);
@@ -1407,12 +1395,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private void addDownButton(ELTSchemaSubgroupComposite buttonSubGroup) {
 		downButton = new ELTDefaultButton("");
-		if(OSValidator.isMac()){
-			downButton.buttonWidth(35);
-			downButton.buttonHeight(45);
-			}
 		downButton.buttonWidth(35);
-		downButton.buttonHeight(25);
+		downButton.buttonHeight(35);
 		buttonSubGroup.attachWidget(downButton);
 
 		downButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
