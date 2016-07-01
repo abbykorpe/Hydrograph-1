@@ -35,9 +35,9 @@ import java.util.TreeMap;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
-import org.eclipse.jface.fieldassist.ComboContentAdapter;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -45,7 +45,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
@@ -80,7 +79,6 @@ public class FilterHelper {
 	private static final String DELIM_COMMA = ",";
 	private static final String NOT_IN = "not in";
 	private static final String IN = "in";
-	private String filterType;
 	private DataViewerAdapter dataViewerAdapter;
 	private DebugDataViewer debugDataViewer;
 	private FilterConditionsDialog filterConditionsDialog;
@@ -149,7 +147,7 @@ public class FilterHelper {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Combo source = (Combo) e.getSource();
+				CCombo source = (CCombo) e.getSource();
 				int index = (int) source.getData(FilterConditionsDialog.ROW_INDEX);
 				Condition filterConditions = conditionsList.get(index);
 				String fieldName = source.getText();
@@ -158,9 +156,9 @@ public class FilterHelper {
 				if(StringUtils.isNotBlank(fieldName)){
 					String fieldType = fieldsAndTypes.get(fieldName);
 					TableItem item = tableViewer.getTable().getItem(index);
-					Combo conditionalCombo = (Combo) item.getData(FilterConditionsDialog.CONDITIONAL_OPERATORS);
+					CCombo conditionalCombo = (CCombo) item.getData(FilterConditionsDialog.CONDITIONAL_OPERATORS);
 					conditionalCombo.setItems(FilterHelper.INSTANCE.getTypeBasedOperatorMap().get(fieldType));
-					new AutoCompleteField(conditionalCombo, new ComboContentAdapter(), conditionalCombo.getItems());
+					new AutoCompleteField(conditionalCombo, new CComboContentAdapter(), conditionalCombo.getItems());
 				}
 				validateCombo(source);
 				toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
@@ -178,7 +176,7 @@ public class FilterHelper {
 			
 			@Override
 			public void modifyText(ModifyEvent e) {
-				Combo source = (Combo) e.getSource();
+				CCombo source = (CCombo) e.getSource();
 				int index = (int) source.getData(FilterConditionsDialog.ROW_INDEX);
 				Condition filterConditions = conditionsList.get(index);
 				String fieldName = source.getText();
@@ -187,11 +185,11 @@ public class FilterHelper {
 				if(StringUtils.isNotBlank(fieldName)){
 					String fieldType = fieldsAndTypes.get(fieldName);
 					TableItem item = tableViewer.getTable().getItem(index);
-					Combo conditionalCombo = (Combo) item.getData(FilterConditionsDialog.CONDITIONAL_OPERATORS);
+					CCombo conditionalCombo = (CCombo) item.getData(FilterConditionsDialog.CONDITIONAL_OPERATORS);
 					if(conditionalCombo != null && StringUtils.isNotBlank(fieldType)){
 						conditionalCombo.setText(filterConditions.getConditionalOperator());
 						conditionalCombo.setItems(FilterHelper.INSTANCE.getTypeBasedOperatorMap().get(fieldType));
-						new AutoCompleteField(conditionalCombo, new ComboContentAdapter(), conditionalCombo.getItems());
+						new AutoCompleteField(conditionalCombo, new CComboContentAdapter(), conditionalCombo.getItems());
 					}
 				}
 				validateCombo(source);
@@ -207,7 +205,7 @@ public class FilterHelper {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Combo source = (Combo) e.getSource();
+				CCombo source = (CCombo) e.getSource();
 				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 			
@@ -223,14 +221,14 @@ public class FilterHelper {
 			
 			@Override
 			public void modifyText(ModifyEvent e) {
-				Combo source = (Combo) e.getSource();
+				CCombo source = (CCombo) e.getSource();
 				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 		};
 		return listener;
 	}
 	
-	private void processConditionalOperator(Combo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes,
+	private void processConditionalOperator(CCombo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes,
 			String[] fieldNames, Button okButton, Button applyButton){
 		int index = (int) source.getData(FilterConditionsDialog.ROW_INDEX);
 		Condition filterConditions = conditionsList.get(index);
@@ -245,7 +243,7 @@ public class FilterHelper {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Combo source = (Combo) e.getSource();
+				CCombo source = (CCombo) e.getSource();
 				processRelationalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 			
@@ -261,7 +259,7 @@ public class FilterHelper {
 			
 			@Override
 			public void modifyText(ModifyEvent e) {
-				Combo source = (Combo) e.getSource();
+				CCombo source = (CCombo) e.getSource();
 				processRelationalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 			
@@ -269,7 +267,7 @@ public class FilterHelper {
 		return listener;
 	}
 	
-	private void processRelationalOperator(Combo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes,
+	private void processRelationalOperator(CCombo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes,
 			String[] fieldNames, Button okButton, Button applyButton){
 		int index = (int) source.getData(FilterConditionsDialog.ROW_INDEX);
 		Condition filterConditions = conditionsList.get(index);
@@ -303,7 +301,7 @@ public class FilterHelper {
 	
 	
 	public SelectionListener getOkButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
-			final Map<Integer,List<List<Integer>>> groupSelectionMap) {
+			final Map<Integer,List<List<Integer>>> groupSelectionMap, final String dataset,final FilterConditions originalFilterConditions) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
@@ -369,19 +367,32 @@ public class FilterHelper {
 				}
 				System.out.println(buffer);
 				
-				if(filterType!=null && filterType.equalsIgnoreCase(DOWNLOADED))
+				if(dataset.equalsIgnoreCase(DOWNLOADED))
 				{	
+					if(!originalFilterConditions.getRetainRemote()){
+						originalFilterConditions.setRemoteCondition("");
+						originalFilterConditions.getLocalConditions().clear();
+						filterConditionsDialog.getRemoteConditionsList().clear();
+						debugDataViewer.setRemoteCondition("");
+						remoteCondition="";
+					}
 					localCondition=buffer.toString();
 					showLocalFilteredData(StringUtils.trim(buffer.toString()));
 					debugDataViewer.setLocalCondition(localCondition);
 				}
 				else
 				{
+					if(!originalFilterConditions.getRetainLocal()){
+						originalFilterConditions.setLocalCondition("");
+						originalFilterConditions.getLocalConditions().clear();
+						filterConditionsDialog.getLocalConditionsList().clear();
+						debugDataViewer.setLocalCondition("");
+						localCondition = "";
+					}
 					remoteCondition=buffer.toString();
 					showRemoteFilteredData(StringUtils.trim(buffer.toString()));
 					debugDataViewer.setRemoteCondition(remoteCondition);
 				}
-			
 				filterConditionsDialog.close();
 			}
 
@@ -417,7 +428,14 @@ public class FilterHelper {
 			dataViewerAdapter.initializeTableData();
 			debugDataViewer.getDataViewLoader().updateDataViewLists();
 			debugDataViewer.getDataViewLoader().reloadloadViews();
-
+			int noOfFilteredRows=dataViewerAdapter.getFileData().size();
+			int pageSize=debugDataViewer.getViewDataPreferences().getPageSize();
+			if (noOfFilteredRows < pageSize) {
+				debugDataViewer.getStatusManager().enableNextPageButton(false);
+				debugDataViewer.getStatusManager().updatePageNumberDisplayPanelIfFilteredDataSizeIsLessthanPageSize();
+			} else {
+				debugDataViewer.getStatusManager().enableNextPageButton(true);
+			}
 		} catch (SQLException exception) {
 			logger.error("Error occuring while showing local filtered data",exception);
 		}
@@ -436,9 +454,9 @@ public class FilterHelper {
 	
 
 
-	public void setFilterType(String filterType) {
-		this.filterType=filterType;
-	}
+//	public void setFilterType(String filterType) {
+//		this.filterType=filterType;
+//	}
 
 	public void setDataViewerAdapter(DataViewerAdapter dataViewerAdapter, FilterConditionsDialog filterConditionsDialog) {
 		this.dataViewerAdapter=dataViewerAdapter;
@@ -486,7 +504,7 @@ public class FilterHelper {
 		}
 	}
 
-	private boolean validateCombo(Combo combo){
+	private boolean validateCombo(CCombo combo){
 		if((Arrays.asList(combo.getItems())).contains(combo.getText())){
 			combo.setBackground(new Color(null, 255, 255, 255));
 			return true;
@@ -507,27 +525,7 @@ public class FilterHelper {
 		}
 	}
 
-	public SelectionListener getClearButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList) {
-		SelectionListener listner = new SelectionListener() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				conditionsList.clear();
-				TableItem[] items = tableViewer.getTable().getItems();
 
-				for (int i = 0; i < items.length; i++) {
-					items[i].dispose();
-				}
-				conditionsList.add(0, new Condition());
-				tableViewer.refresh();
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		};
-		return listner;
-	}
 
 	public List<Condition> cloneList(List<Condition> conditionsList) {
 		List<Condition> tempList = new ArrayList<>();
@@ -846,7 +844,12 @@ public class FilterHelper {
 									if(grp.size()==1){
 										
 										grp.clear();
+									}
+									
+									if(reArrangeGroupsAfterDeleteRow(groupSelectionMap, grp)&& groupSelectionMap.lastKey()!=key){
 										
+										grp.clear();
+									}
 									List tempList=new ArrayList<>(); 
 											for (List lst : groupSelectionMap.get(key)) {
 												tempList.addAll(lst);
@@ -854,14 +857,10 @@ public class FilterHelper {
 											
 											if(tempList.isEmpty()){
 												
-												FilterConditionsDialog.GROUP_COLUMNS_COUNT--;							
-											
-												groupSelectionMap.remove(key);																								  							
-											     
 												isRemoveColumn=true;
 											}
 											
-										}
+										
 									}
 									isNewIndexAddedorRemoved=true;
 									
@@ -889,8 +888,9 @@ public class FilterHelper {
 			
 			
 		
-	public void reArrangeGroups(TreeMap<Integer, List<List<Integer>>> groupSelectionMap,
-			List<Integer> selectionList) {
+	public void reArrangeGroups(TreeMap<Integer, List<List<Integer>>> groupSelectionMap,List<Integer> selectionList) {
+		
+	
 		
 		List<Integer> tempList = new ArrayList<>();
 		int lastKey=groupSelectionMap.lastKey();
@@ -909,32 +909,93 @@ public class FilterHelper {
 					selectionList.clear();
 					selectionList.addAll(tempList);
 					
-					
+				
+			}
+			tempList.clear();
+		  }
+		}
+	}
+	
+	public boolean reArrangeGroupsAfterDeleteRow(
+			TreeMap<Integer, List<List<Integer>>> groupSelectionMap,
+			List<Integer> selectionList) {
+
+		boolean retValue = false;
+
+		int lastKey = groupSelectionMap.lastKey();
+		int count = 0;
+
+		for (int i = lastKey; i >= 0; i--) {
+
+			List<List<Integer>> groups = groupSelectionMap.get(i);
+
+			for (int j = 0; j <= groups.size() - 1; j++) {
+
+				if (selectionList.size() == groups.get(j).size()
+						&& ListUtils.isEqualList(selectionList, groups.get(j))) {
+
+					count++;
+
+					if (count >= 2) {
+						retValue = true;
+					}
 
 				}
 
 			}
-			tempList.clear();
+
 		}
+		return retValue;
 	}
 	
- public void disposeAllColumns(TableViewer tableViewer){
+	
+	
+	 public void disposeAllColumns(TableViewer tableViewer){
+		 
+	     TableColumn[] columns = tableViewer.getTable().getColumns();
+		   
+		    TableItem[] items = tableViewer.getTable().getItems();
+		   
+		    for (int i = 0; i < items.length; i++) {
+		    	items[i].dispose();
+			}
+		    
+		    for (TableColumn tc : columns) {
+		    	
+		     tc.dispose();
+						    	
+			}
+	 }	
 	 
-     TableColumn[] columns = tableViewer.getTable().getColumns();
-	   
-	    TableItem[] items = tableViewer.getTable().getItems();
-	   
-	    for (int i = 0; i < items.length; i++) {
-	    	items[i].dispose();
-		}
-	    
-	    for (TableColumn tc : columns) {
-	    	
-	     tc.dispose();
-					    	
-		}
-	 
-	 
- }	
-
+	 public void reArrangeGroupColumns(TreeMap<Integer, List<List<Integer>>> groupSelectionMap){
+		 
+		 TreeMap<Integer, List<List<Integer>>> tempMap = new TreeMap(groupSelectionMap);
+		 	
+		 for(int key:tempMap.keySet()){
+				
+			  List<List<Integer>> groups = tempMap.get(key);
+	
+			   List tempList=new ArrayList<>();
+				
+			  for (List<Integer> grp : groups) {
+				
+				  	tempList.addAll(grp);
+					
+			  	}
+			  
+			  if(tempList.isEmpty()){
+				 
+				for(int i=key ;i<tempMap.size()-1;i++){
+					
+					groupSelectionMap.put(i, tempMap.get(i+1));
+					
+				}
+				
+				groupSelectionMap.remove(groupSelectionMap.lastKey());
+			  
+			  }
+			  
+			  
+		 	}
+	 }
 }

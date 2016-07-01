@@ -21,11 +21,8 @@ import hydrograph.ui.common.util.SWTResourceManager;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.actions.ActionFactory;
-<<<<<<< HEAD
 import hydrograph.ui.dataviewer.actions.AutoExpandColumns;
 import hydrograph.ui.dataviewer.actions.ClearFilter;
-=======
->>>>>>> Retain Filter condition
 import hydrograph.ui.dataviewer.actions.CopyAction;
 import hydrograph.ui.dataviewer.actions.DatasetInformationAction;
 import hydrograph.ui.dataviewer.actions.ExportAction;
