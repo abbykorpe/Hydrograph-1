@@ -85,6 +85,7 @@ public class DataViewerAdapter {
 		this.tableName = tableName;
 		viewerData = new LinkedList<>();
 		columnList = new LinkedList<>();
+		allColumnsMap= new LinkedHashMap<String,Integer>();
 		columnCount = 0;
 		this.pageSize = PAGE_SIZE;
 		this.offset = INITIAL_OFFSET;
