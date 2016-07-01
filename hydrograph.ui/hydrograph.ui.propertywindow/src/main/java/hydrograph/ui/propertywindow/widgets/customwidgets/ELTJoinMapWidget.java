@@ -91,18 +91,8 @@ public class ELTJoinMapWidget extends AbstractWidget {
 				JoinMapDialog joinMapDialog = new JoinMapDialog(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), getComponent(),
 						joinMappingGrid,propertyDialogButtonBar);
 				joinMapDialog.open();
-				Schema internalSchema=propagateInternalSchema();
+				propagateInternalSchema();
 				showHideErrorSymbol(widgets);
-				for(AbstractWidget widget:widgets)
-				{
-					if(widget instanceof ELTGenericSchemaGridWidget)
-					{
-						ELTGenericSchemaGridWidget eltGenericSchemaGridWidget =(ELTGenericSchemaGridWidget) widget;
-						if(internalSchema!=null )
-						eltGenericSchemaGridWidget.validateInternalSchemaPropogatedData(internalSchema);
-						
-					}	
-				}
 			}
 		});
 		

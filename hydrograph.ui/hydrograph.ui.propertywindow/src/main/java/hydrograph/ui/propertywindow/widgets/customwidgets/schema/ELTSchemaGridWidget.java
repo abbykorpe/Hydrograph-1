@@ -1490,6 +1490,7 @@ private void syncSchema(){
 		eLTDetails.setGrids(schemaGridRowList); 
 		tableViewer.setInput(schemaGridRowList);
 		tableViewer.refresh();
+		showHideErrorSymbol(isWidgetValid());
 	} 
 }
 
