@@ -218,10 +218,10 @@ public class FindViewDataDialog extends Dialog{
 		btnNext.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				textData = findText.getText();
 				CTabItem tabItem = cTabFolder.getSelection();
 				if (tabItem.getData("VIEW_NAME").equals(Views.GRID_VIEW_NAME)) {
 					logger.debug("--------Grid View on Next--------");
-					textData = findText.getText();
 					isExistInTable(debugDataViewer, textData);
 					forwardTableTraverse();
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.HORIZONTAL_VIEW_NAME)) {
@@ -229,6 +229,7 @@ public class FindViewDataDialog extends Dialog{
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.FORMATTED_VIEW_NAME)) {
 					logger.debug("---------------------------FORMATTED View on Next-------------------------");
 					isTextExist(formatedStyledText, textData);
+					clearStyledTextBgColor(formatedStyledText, textData);
 					if(textData != null && !textData.equalsIgnoreCase(findText.getText())){
 						formattedViewPrevLineIndex = 0;
 						formattedViewNextLineIndex = 0;
@@ -243,6 +244,7 @@ public class FindViewDataDialog extends Dialog{
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.UNFORMATTED_VIEW_NAME)) {
 					logger.debug("---------------------------UNFORMATTED View on Next-------------------------");
 					isTextExist(unFormatedStyledText, textData);
+					clearStyledTextBgColor(unFormatedStyledText, textData);
 					if(textData != null && !textData.equalsIgnoreCase(findText.getText())){
 						unFormattedViewPrevLineIndex = 0;
 						unFormattedViewNextLineIndex = 0;
