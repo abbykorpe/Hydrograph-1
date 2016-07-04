@@ -16,7 +16,7 @@ public class ForceError {
 
 	/**
 	 * Throws a runtime exception with the error message
-	 * 
+	 * @see raiseError("Raised Force Error")
 	 * @param errorMessage
 	 *            the error message to log
 	 */

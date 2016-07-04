@@ -12,12 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.standardfunctions;
 
-import static hydrograph.engine.transformation.standardfunctions.StandardFunctionHelper.convertComparableObjectToString;
+import static hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper.convertComparableObjectToString;
 
 import java.math.BigDecimal;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper;
 
 public class NumericFunctions {
 
@@ -25,6 +27,7 @@ public class NumericFunctions {
 	 * Retains just the decimal numbers 0-9 excluding the decimal point from the
 	 * {@code inputValue}
 	 * 
+	 * @see decimalStrip("Hello123")
 	 * @param inputValue
 	 *            the value from which the decimals are to be retained
 	 * @return the decimals from the {@code inputValue}
@@ -60,6 +63,7 @@ public class NumericFunctions {
 	 * Retains just the decimal numbers 0-9 excluding the decimal point from the
 	 * {@code inputValue}
 	 * 
+	 * @see decimalStrip("Hello123")
 	 * @param inputValue
 	 *            the value from which the decimals are to be retained
 	 * @return the decimals from the {@code inputValue}
@@ -87,6 +91,7 @@ public class NumericFunctions {
 	 * Retains just the decimal numbers 0-9 including decimal point as specified
 	 * in {@code decimalPoint} from the {@code inputValue}
 	 * 
+	 * @see decimalStrip("Hello.123",".")
 	 * @param inputValue
 	 *            the value from which the decimals are to be retained
 	 * @param includeDecimalPoint
@@ -123,6 +128,7 @@ public class NumericFunctions {
 	 * Retains just the decimal numbers 0-9 including decimal point as specified
 	 * in {@code decimalPoint} from the {@code inputValue}
 	 * 
+	 * @see decimalStrip("Hello.123",".")
 	 * @param inputValue
 	 *            the value from which the decimals are to be retained
 	 * @param includeDecimalPoint
@@ -151,6 +157,7 @@ public class NumericFunctions {
 	/**
 	 * Returns the absolute value of the argument
 	 * 
+	 * @see mathAbs(0004.1)
 	 * @param inputValue
 	 *            whose absolute value is to be determined
 	 * @return the absolute value of the argument
@@ -177,6 +184,7 @@ public class NumericFunctions {
 	 * (inclusive) and the specified value (exclusive), drawn from this random
 	 * number generator's sequence.
 	 * 
+	 * @see random(100)
 	 * @param n
 	 *            the bound on the random number to be returned. Must be
 	 *            positive.
