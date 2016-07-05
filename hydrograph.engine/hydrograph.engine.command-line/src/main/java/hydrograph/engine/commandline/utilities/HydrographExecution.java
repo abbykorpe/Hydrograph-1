@@ -14,9 +14,11 @@ package hydrograph.engine.commandline.utilities;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hydrograph.engine.core.commandlineparser.CLIParser;
 import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.core.HydrographRuntimeService;
@@ -42,27 +44,33 @@ public class HydrographExecution {
 	}
 
 	public static void main(String args[]) throws Exception {
+		
+		if(CLIParser.isArgumentOptionPresent(args, "help")){
+			CLIParser.printUsage();
+		}else
+		{
 		HydrographExecution execution = new HydrographExecution();
 		execution.run(args);
+		}
 	}
 
 	public void run(String[] args) throws Exception {
 		hydrographJob = createHydrographJob(args);
 		bhsDebug = createHydrographDebugInfo(args);
 		initialization(args, hydrographJob, bhsDebug,
-				hydrographXmlInputService.getJobId(args),
-				hydrographXmlInputService.getBasePath(args));
+				CLIParser.getJobId(args),
+				CLIParser.getBasePath(args));
 		prepareToExecute();
 		finalExecute();
 	}
 
-	private HydrographJob createHydrographJob(String[] args) throws JAXBException {
+	private HydrographJob createHydrographJob(String[] args) throws JAXBException, ParseException {
 		LOG.info("Invoking input service");
 		return hydrographXmlInputService.parseHydrographJob(
 				propertiesLoader.getInputServiceProperties(), args);
 	}
 
-	private HydrographDebugInfo createHydrographDebugInfo(String[] args) throws JAXBException {
+	private HydrographDebugInfo createHydrographDebugInfo(String[] args) throws JAXBException, ParseException {
 		LOG.info("Invoking input service");
 		return hydrographXmlInputService.parseHydrographDebugInfo(
 				propertiesLoader.getInputServiceProperties(), args);
@@ -76,12 +84,12 @@ public class HydrographExecution {
 				bhsDebug, jobId,basePath);
 	}
 
-	private void prepareToExecute() {
+	private void prepareToExecute() throws ParseException {
 		runtimeService.prepareToExecute();
 		LOG.info("Preparation completed. Now starting execution");
 	}
 
-	private void finalExecute() {
+	private void finalExecute() throws ParseException {
 		try {
 			runtimeService.execute();
 		} finally {

@@ -16,6 +16,7 @@ import java.util.Iterator;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.cli.ParseException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class JsonService {
 		runtime = new HydrographRuntime();
 	}
 
-	public void executeGraph(String[] args) throws JSONException, JAXBException {
+	public void executeGraph(String[] args) throws JSONException, JAXBException, ParseException {
 		hydrographJob = inputService.parseParameters(args);
 		LOG.info("Hydrograph job '" + hydrographJob.getJAXBObject().getName() + "' generated successfully!");
 
@@ -45,7 +46,7 @@ public class JsonService {
 				+ "' runtime processing completed successfully!");
 	}
 
-	public static void main(String[] args) throws JSONException, JAXBException {
+	public static void main(String[] args) throws JSONException, JAXBException, ParseException {
 		JsonService josJsonService = new JsonService();
 		JSONObject obj = new JSONObject();
 		JSONObject obj1 = new JSONObject();
@@ -64,7 +65,7 @@ public class JsonService {
 				+ "' runtime processing completed successfully!");
 	}
 
-	public String[] setArguments(JSONObject obj) throws JSONException, JAXBException {
+	public String[] setArguments(JSONObject obj) throws JSONException, JAXBException, ParseException {
 		StringBuffer sb = new StringBuffer();
 		String[] args = parse(obj, sb, null);
 		executeGraph(args);

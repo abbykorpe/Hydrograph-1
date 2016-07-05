@@ -13,6 +13,7 @@
 package hydrograph.engine.cascading.integration;
 
 import hydrograph.engine.cascading.assembly.generator.AssemblyGeneratorFactory;
+import hydrograph.engine.core.commandlineparser.CLIParser;
 import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.core.HydrographRuntimeService;
@@ -29,6 +30,7 @@ import hydrograph.engine.utilities.HiveConfigurationMapping;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.conf.HiveConf;
@@ -58,7 +60,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 	private FlowManipulationContext flowManipulationContext;
 	private static Logger LOG = LoggerFactory.getLogger(HydrographRuntime.class);
 
-	public void executeProcess(String[] args, HydrographJob hydrographJob) {
+	public void executeProcess(String[] args, HydrographJob hydrographJob) throws ParseException {
 		this.args = args;
 		config = PropertiesLoader.getInstance();
 		LOG.info("Invoking initialize on runtime service");
@@ -140,23 +142,23 @@ public class HydrographRuntime implements HydrographRuntimeService {
 	}
 
 	@Override
-	public void prepareToExecute() {
+	public void prepareToExecute() throws ParseException {
 		flowBuilder.buildFlow(runtimeContext);
 
-		if (GeneralUtilities.IsArgOptionPresent(args,
-				CommandLineOptionsProcessor.OPTION_DOT_PATH)) {
+		if (CLIParser.isArgumentOptionPresent(args,
+				CLIParser.OPTION_DOT_PATH)) {
 			writeDotFiles();
 		}
 
 	}
 
 	@Override
-	public void execute() {
-		if (GeneralUtilities.IsArgOptionPresent(args,
-				CommandLineOptionsProcessor.OPTION_NO_EXECUTION)) {
+	public void execute() throws ParseException {
+		if (CLIParser.isArgumentOptionPresent(args,
+				CLIParser.OPTION_NO_EXECUTION)) {
 			LOG.info(CommandLineOptionsProcessor.OPTION_NO_EXECUTION
 					+ " option is provided so skipping execution");
-
+			return;
 		}
 
 		for (Cascade cascade : runtimeContext.getCascade()) {
@@ -175,13 +177,15 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		return runtimeContext.getCascadingFlows();
 	}
 
-	private void writeDotFiles() {
+	private void writeDotFiles() throws ParseException {
 
-		String basePath = CommandLineOptionsProcessor.getDotPath(args);
+		
+		
+		String basePath = CLIParser.getDotFilePath(args);
 
 		if (basePath == null) {
 			throw new HydrographRuntimeException(
-					CommandLineOptionsProcessor.OPTION_DOT_PATH
+					CLIParser.OPTION_DOT_PATH
 							+ " option is provided but is not followed by path");
 		}
 		LOG.info("Dot files will be written under " + basePath);
