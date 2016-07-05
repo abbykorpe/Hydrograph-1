@@ -13,10 +13,13 @@
 
 package hydrograph.ui.dataviewer.actions;
 
-import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.SWTResourceManager;
+import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -33,19 +36,14 @@ import org.eclipse.swt.widgets.Display;
  */
 public class CopyAction extends Action {
 	
-	private static final String LABEL="&Copy";
+	private static final String LABEL="&Copy@Ctrl+C";
 	private DebugDataViewer debugDataViewer;
 	
 	public CopyAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
 		this.debugDataViewer = debugDataViewer;
-		if (OSValidator.isWindows()){
-			setAccelerator(SWT.CTRL + 'c');
-		}
-			
-		if (OSValidator.isMac()){
-			setAccelerator(SWT.COMMAND + 'c');
-		}
+		setAccelerator(SWT.MOD1 | 'c');
+		setImageDescriptor(ImageDescriptor.createFromImage(SWTResourceManager.getImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COPY_ICON)));
 	}
 	@Override
 	public void run() {

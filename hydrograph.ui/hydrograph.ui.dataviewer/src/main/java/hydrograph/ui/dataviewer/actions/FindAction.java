@@ -13,7 +13,6 @@
 
 package hydrograph.ui.dataviewer.actions;
 
-import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.dataviewer.find.FindViewDataDialog;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
@@ -21,18 +20,22 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
+/**
+ * 
+ * FindAction responsible to find text from currently selected view
+ * 
+ * @author Bitwise
+ *
+ */
 public class FindAction extends Action{
 	public boolean isOpened;
-	private static final String LABEL="Find";
+	private static final String LABEL="Find@Ctrl+F";
 	private DebugDataViewer debugDataViewer;
 	public FindAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
 		this.debugDataViewer = debugDataViewer;
 		
-		if (OSValidator.isWindows())
-			setAccelerator(SWT.CTRL + 'f');
-		if (OSValidator.isMac())
-			setAccelerator(SWT.COMMAND + 'f');
+		setAccelerator(SWT.MOD1 | 'f');
 	}
 	@Override
 	public void run() {

@@ -10,6 +10,7 @@ Sr.No. <date> - [developer names] - description
 5  <22-Jun-16> - [Shrirang Kumbhar] - Data View window: Upon hitting Alt button from keyboard menu shortcut are not getting highlighted #589
 6. <22-Jun-16> - [Shrirang Kumbhar] - Data View Window: Short-Cut is missing for Next and Previous button #585
 7. <30-Jun-16> - [Shrirang Kumbhar] - Added data viewer cell navigator and selector
+8. <05-Jul-16> - [Shrirang Kumbhar] - Data view window : Column cells should be auto expanded to the length of column names #701
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
@@ -59,7 +60,8 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 41.#164  [Nitin Gupta]  User should be able to delete multiple rows by selecting rows with control keys in schema grid
 42.#557  [Kalyan Rajpoot] Job Canvas: Components should move in job canvas using arrow keys
 43.#675  [Ashika Holkar] Vertical/Horizontal Scroll Bar Need To be Added on DataSet Information Window
-
+45.#727  [Shrirang Kumbhar] Select All and Copy short cut text should as per the generic standard 
+46.#676  [Shrirang Kumbhar] Copy icon is missing in edit menu on data viewer window 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

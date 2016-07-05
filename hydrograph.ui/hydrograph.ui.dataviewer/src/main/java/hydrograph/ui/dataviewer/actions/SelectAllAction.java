@@ -13,7 +13,6 @@
 
 package hydrograph.ui.dataviewer.actions;
 
-import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
@@ -28,19 +27,13 @@ import org.eclipse.swt.SWT;
  */
 public class SelectAllAction extends Action{
 	
-	private static final String LABEL="Select &All";
+	private static final String LABEL="Select &All@Ctrl+A";
 	private DebugDataViewer debugDataViewer;
 	
 	public SelectAllAction(DebugDataViewer debugDataViewer) {
     	super(LABEL);
     	this.debugDataViewer = debugDataViewer;
-		if (OSValidator.isWindows()){
-			setAccelerator(SWT.CTRL + 'a');
-		}
-			
-		if (OSValidator.isMac()){
-			setAccelerator(SWT.COMMAND + 'a');
-		}	
+    	setAccelerator(SWT.MOD1 | 'a');
 	}
 	
 	@Override
