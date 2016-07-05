@@ -867,7 +867,7 @@ public class DebugDataViewer extends ApplicationWindow {
 					composite_1.setLayout(gl_composite_1);
 					composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 					{
-						gridViewTableViewer = new TableViewer(composite_1, SWT.BORDER| SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
+						gridViewTableViewer = new TableViewer(composite_1, SWT.BORDER| SWT.FULL_SELECTION | SWT.MULTI);
 						Table table = gridViewTableViewer.getTable();
 						table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 						table.setLinesVisible(true);

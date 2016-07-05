@@ -60,8 +60,10 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 41.#164  [Nitin Gupta]  User should be able to delete multiple rows by selecting rows with control keys in schema grid
 42.#557  [Kalyan Rajpoot] Job Canvas: Components should move in job canvas using arrow keys
 43.#675  [Ashika Holkar] Vertical/Horizontal Scroll Bar Need To be Added on DataSet Information Window
+44.#556  [Vibhor Tyagi] Global: When Delimiter /Quote Field is Left Blank Then It Does Not Shows Any Error Message on Window and User is Able to Proceed With the Blank Field.
 45.#727  [Shrirang Kumbhar] Select All and Copy short cut text should as per the generic standard 
 46.#676  [Shrirang Kumbhar] Copy icon is missing in edit menu on data viewer window 
+
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
