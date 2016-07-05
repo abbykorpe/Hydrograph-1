@@ -950,58 +950,54 @@ public class FilterHelper {
 	
 	
 	
- public void disposeAllColumns(TableViewer tableViewer){
-	 
-     TableColumn[] columns = tableViewer.getTable().getColumns();
-	   
-	    TableItem[] items = tableViewer.getTable().getItems();
-	   
-	    for (int i = 0; i < items.length; i++) {
-	    	items[i].dispose();
-		}
-	    
-	    for (TableColumn tc : columns) {
-	    	
-	     tc.dispose();
-					    	
-		}
-	 
-	 
- }	
- 
- public void reArrangeGroupColumns(TreeMap<Integer, List<List<Integer>>> groupSelectionMap){
-	 
-	 TreeMap<Integer, List<List<Integer>>> tempMap = new TreeMap(groupSelectionMap);
-	 	
-	 for(int key:tempMap.keySet()){
-			
-		  List<List<Integer>> groups = tempMap.get(key);
-
-		   List tempList=new ArrayList<>();
-			
-		  for (List<Integer> grp : groups) {
-			
-			  	tempList.addAll(grp);
-				
-		  	}
-		  
-		  if(tempList.isEmpty()){
-			 
-			for(int i=key ;i<tempMap.size()-1;i++){
-				
-				groupSelectionMap.put(i, tempMap.get(i+1));
-				
+	 public void disposeAllColumns(TableViewer tableViewer){
+		 
+	     TableColumn[] columns = tableViewer.getTable().getColumns();
+		   
+		    TableItem[] items = tableViewer.getTable().getItems();
+		   
+		    for (int i = 0; i < items.length; i++) {
+		    	items[i].dispose();
 			}
-			
-			groupSelectionMap.remove(groupSelectionMap.lastKey());
-		  
-		  }
-		  
-		  
-	 	}
+		    
+		    for (TableColumn tc : columns) {
+		    	
+		     tc.dispose();
+						    	
+			}
+	 }	
 	 
-	 
- }
- 
+	 public void reArrangeGroupColumns(TreeMap<Integer, List<List<Integer>>> groupSelectionMap){
+		 
+		 TreeMap<Integer, List<List<Integer>>> tempMap = new TreeMap(groupSelectionMap);
+		 	
+		 for(int key:tempMap.keySet()){
+				
+			  List<List<Integer>> groups = tempMap.get(key);
+	
+			   List tempList=new ArrayList<>();
+				
+			  for (List<Integer> grp : groups) {
+				
+				  	tempList.addAll(grp);
+					
+			  	}
+			  
+			  if(tempList.isEmpty()){
+				 
+				for(int i=key ;i<tempMap.size()-1;i++){
+					
+					groupSelectionMap.put(i, tempMap.get(i+1));
+					
+				}
+				
+				groupSelectionMap.remove(groupSelectionMap.lastKey());
+			  
+			  }
+			  
+			  
+		 	}
+		 
+	 }
  
 }
