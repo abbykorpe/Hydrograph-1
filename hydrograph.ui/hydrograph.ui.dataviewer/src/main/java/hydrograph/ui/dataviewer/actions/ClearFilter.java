@@ -25,7 +25,8 @@ public class ClearFilter extends Action {
 		debugDataViewer.setRemoteCondition("");
 		debugDataViewer.setConditions(new FilterConditions());
 		debugDataViewer.getDataViewerAdapter().setFilterCondition("");
-		debugDataViewer.getActionFactory().getAction(ReloadAction.class.getName()).run();
+		((ReloadAction)debugDataViewer.getActionFactory().getAction(ReloadAction.class.getName())).setIfFilterReset(true);
+		((ReloadAction)debugDataViewer.getActionFactory().getAction(ReloadAction.class.getName())).run();
 		debugDataViewer.enableDisableFilter();
 		
 		//DataViewerUtility.INSTANCE.resetSort(debugDataViewer);

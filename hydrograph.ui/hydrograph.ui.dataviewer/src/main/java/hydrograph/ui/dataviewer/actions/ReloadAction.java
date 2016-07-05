@@ -58,7 +58,7 @@ public class ReloadAction extends Action {
 	private static final String LABEL = "&Reload";
 
 	private Integer lastDownloadedFileSize;
-	
+	public boolean ifFilterReset = false;
 	public ReloadAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
 		this.debugDataViewer = debugDataViewer;
@@ -96,7 +96,7 @@ public class ReloadAction extends Action {
 				
 				debugDataViewer.disbleDataViewerUIControls();
 				
-				if(lastDownloadedFileSize!=viewDataPreferences.getFileSize()){
+				if(lastDownloadedFileSize!=viewDataPreferences.getFileSize() || ifFilterReset){
 					int returnCode=downloadDebugFile();	
 					
 					if(StatusConstants.ERROR == returnCode){
@@ -106,8 +106,9 @@ public class ReloadAction extends Action {
 				
 				try {
 					closeExistingDebugFileConnection();
-					if(lastDownloadedFileSize!=viewDataPreferences.getFileSize()){
+					if(lastDownloadedFileSize!=viewDataPreferences.getFileSize()|| ifFilterReset){
 						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize(),true);	
+						setIfFilterReset(false);
 					}else{
 						SelectColumnAction selectColumnAction =(SelectColumnAction) debugDataViewer.getActionFactory().getAction(SelectColumnAction.class.getName());
 						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize(),false);
@@ -135,7 +136,7 @@ public class ReloadAction extends Action {
 						debugDataViewer.getStatusManager().enableInitialPaginationContols();
 						debugDataViewer.getStatusManager().clearJumpToPageText();
 						updateDataViewerViews();
-						if(lastDownloadedFileSize!=viewDataPreferences.getFileSize()){
+						if(lastDownloadedFileSize!=viewDataPreferences.getFileSize() || ifFilterReset){
 							debugDataViewer.submitRecordCountJob();
 						}					
 						lastDownloadedFileSize = viewDataPreferences.getFileSize();
@@ -250,5 +251,12 @@ public class ReloadAction extends Action {
 	private void closeExistingDebugFileConnection() {
 		this.debugDataViewer.getDataViewerAdapter().closeConnection();
 	}
-
+	
+	public boolean getIfFilterReset(){
+		return ifFilterReset;
+	}
+	public void setIfFilterReset(boolean ifFilterReset){
+		this.ifFilterReset = ifFilterReset;
+	}
+	
 }
