@@ -235,17 +235,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		quoteEditor.getTextControl(grpExportData).addModifyListener(new ModifyListener(){
 			@Override
 			public void modifyText(ModifyEvent e) {
-				Notification note =validateQuoteCharacter();
-				if(note.hasErrors()){
-					setValid(false);
-					quoteEditor.setErrorMessage(note.errorMessage());
-					setErrorMessage(note.errorMessage());
-				}else{
-					setErrorMessage(null);
-					quoteEditor.setErrorMessage("");
-					checkState();
-				} 
-				
 				Notification note1 = validateDelimiter();
 				if(note1.hasErrors()){
 					setValid(false);
@@ -254,6 +243,17 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 				}else{
 					setErrorMessage(null);
 					delimiterEditor.setErrorMessage("");
+					checkState();
+				} 
+				
+				Notification note =validateQuoteCharacter();
+				if(note.hasErrors()){
+					setValid(false);
+					quoteEditor.setErrorMessage(note.errorMessage());
+					setErrorMessage(note.errorMessage());
+				}else{
+					setErrorMessage(null);
+					quoteEditor.setErrorMessage("");
 					checkState();
 				} 
 			}
