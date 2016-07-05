@@ -14,6 +14,7 @@ package hydrograph.engine.bhse.xmlparser.preprocessor;
 
 import java.io.IOException;
 
+import org.apache.commons.cli.ParseException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class ParseExternalSchemaTest {
 			.getLogger(ParseExternalSchemaTest.class);
 	
 	@Test
-	public void itShouldGetTheExternalFields() {
+	public void itShouldGetTheExternalFields() throws ParseException {
 
 		String[] args = new String[] { "-xmlpath",
 				"testData/XMLFiles/DelimitedInputAndOutput.xml", "-param",
