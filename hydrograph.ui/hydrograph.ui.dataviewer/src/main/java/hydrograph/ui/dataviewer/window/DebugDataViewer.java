@@ -476,20 +476,6 @@ public class DebugDataViewer extends ApplicationWindow {
 
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
-		
-		/*getShell().getDisplay().addFilter(SWT.KeyDown, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				if(((event.stateMask & SWT.CTRL) == SWT.CTRL) && (event.keyCode == 'f'))
-                {
-					if(gridViewTableViewer.getTable().getItems().length != 0){
-						FindViewDataDialog findBox = new FindViewDataDialog(Display.getCurrent().getActiveShell(), gridViewTableViewer, 
-								formattedViewTextarea, unformattedViewTextarea, tabFolder.getSelection());
-						findBox.open();
-					}
-                }
-			}
-		});*/
 		tabFolder = new CTabFolder(container, SWT.BORDER);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tabFolder.setSelectionBackground(new Color(null, 14, 76, 145));

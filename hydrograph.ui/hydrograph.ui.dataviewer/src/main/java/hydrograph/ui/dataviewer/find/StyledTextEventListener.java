@@ -15,6 +15,7 @@ package hydrograph.ui.dataviewer.find;
 
 import hydrograph.ui.logging.factory.LogFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -46,7 +47,8 @@ public class StyledTextEventListener {
 	 */
 	public int[] prevButtonListener(StyledText styledText, String text, int prevLineIndex, int nextLineIndex){
 		logger.debug("StyledText prev button selected");
-		int lastIndex = styledText.getText().lastIndexOf(text, prevLineIndex-1);
+		int lastIndex = StringUtils.lastIndexOf(StringUtils.lowerCase(styledText.getText()), StringUtils.lowerCase(text), prevLineIndex-1);
+		
 		if(lastIndex < 0 ){
 			styledText.setSelection(prevLineIndex);
 			nextLineIndex = 0;
@@ -63,7 +65,7 @@ public class StyledTextEventListener {
 	}
 	
 	/**
-	 * The function will move cursor in forward direction.
+	 * The function will move the cursor in forward direction.
 	 * @param styledText
 	 * @param text
 	 * @param prevLineIndex
@@ -72,7 +74,8 @@ public class StyledTextEventListener {
 	 */
 	public int[] nextButtonListener(StyledText styledText, String text, int prevLineIndex, int nextLineIndex){
 		logger.debug("StyledText next button selected");
-		int txtIndex = styledText.getText().indexOf(text, nextLineIndex);
+		int txtIndex = StringUtils.indexOf(StringUtils.lowerCase(styledText.getText()), StringUtils.lowerCase(text), nextLineIndex);
+		
 		if(txtIndex < 0){
 			styledText.setSelection(prevLineIndex);
 			nextLineIndex =0;
@@ -101,7 +104,8 @@ public class StyledTextEventListener {
 		if(styledText == null){return;}
 		int index = 0;
 		for(;index < styledText.getText().length();){
-			  int lastIndex = styledText.getText().indexOf(text, index);
+			  int lastIndex = StringUtils.indexOf(StringUtils.lowerCase(styledText.getText()), StringUtils.lowerCase(text), index);
+			  
 			  if(lastIndex < 0){return;}
 			  else{
 				  setStyledRange(styledText, lastIndex, text.length(), null, background);
