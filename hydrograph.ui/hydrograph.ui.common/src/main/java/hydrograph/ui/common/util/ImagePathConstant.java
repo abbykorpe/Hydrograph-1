@@ -52,5 +52,7 @@ public class ImagePathConstant {
 	public static final String SORT_DESC="/icons/advicons/sort_desc.png";
 	public static final String RESET_SORT="/icons/advicons/reset_sort.png";
 	public static final String FIND_DATA="/icons/advicons/lookup.png";
+	public static final String AUTO_ADJUST_COLUMNS = "/icons/advicons/autoadjustcolumns.png";
+	public static final String COPY_ICON =  "/icons/advicons/copy_icon.png";
 
 }

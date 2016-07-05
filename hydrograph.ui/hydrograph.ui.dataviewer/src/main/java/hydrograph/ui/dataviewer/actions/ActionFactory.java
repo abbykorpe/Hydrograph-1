@@ -52,6 +52,8 @@ public class ActionFactory {
 		DatasetInformationAction datasetInformationAction = new DatasetInformationAction(debugDataViewer);
 		ResetSort resetSort = new ResetSort(debugDataViewer);
 		SelectColumnAction selectColumnAction= new SelectColumnAction(debugDataViewer);
+		AutoExpandColumns autoExpandColumns = new AutoExpandColumns(debugDataViewer);
+		
 		
 		actionMap.put(ExportAction.class.getName(), exportAction);
 		actionMap.put(FilterAction.class.getName(), filterAction);
@@ -67,6 +69,7 @@ public class ActionFactory {
 		actionMap.put(DatasetInformationAction.class.getName(), datasetInformationAction);
 		actionMap.put(ResetSort.class.getName(), resetSort);
 		actionMap.put(SelectColumnAction.class.getName(),selectColumnAction);
+		actionMap.put(AutoExpandColumns.class.getName(),autoExpandColumns);
 	}
 	
 	/**

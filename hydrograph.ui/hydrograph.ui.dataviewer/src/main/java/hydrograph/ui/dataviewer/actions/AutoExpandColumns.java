@@ -13,36 +13,35 @@
 
 package hydrograph.ui.dataviewer.actions;
 
-import hydrograph.ui.dataviewer.find.FindViewDataDialog;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.TableColumn;
 
 /**
  * 
- * FindAction responsible to find text from currently selected view
+ * Action to auto expand grid view columns
  * 
  * @author Bitwise
  *
  */
-public class FindAction extends Action{
-	public boolean isOpened;
-	private static final String LABEL="Find@Ctrl+F";
+public class AutoExpandColumns extends Action {
+	private static final String LABEL="Auto E&xapand Columns@Ctrl+X";
 	private DebugDataViewer debugDataViewer;
-	public FindAction(DebugDataViewer debugDataViewer) {
+	
+	public AutoExpandColumns(DebugDataViewer debugDataViewer){
 		super(LABEL);
+		setAccelerator(SWT.MOD1 | 'x');
 		this.debugDataViewer = debugDataViewer;
-		
-		setAccelerator(SWT.MOD1 | 'f');
 	}
+	
+	
 	@Override
 	public void run() {
-		if(!isOpened){
-			FindViewDataDialog findViewDataDialog = new FindViewDataDialog(Display.getDefault().getActiveShell(), debugDataViewer.getTableViewer(),
-					debugDataViewer.getFormattedViewTextarea(), debugDataViewer.getUnformattedViewTextarea(), debugDataViewer.getCurrentView());
-			findViewDataDialog.open(this);
+		for(TableColumn tableColumn : this.debugDataViewer.getTableViewer().getTable().getColumns()){
+			tableColumn.pack();
 		}
+		
 	}
 }

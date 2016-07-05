@@ -21,6 +21,7 @@ import hydrograph.ui.common.util.SWTResourceManager;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.actions.ActionFactory;
+import hydrograph.ui.dataviewer.actions.AutoExpandColumns;
 import hydrograph.ui.dataviewer.actions.CopyAction;
 import hydrograph.ui.dataviewer.actions.DatasetInformationAction;
 import hydrograph.ui.dataviewer.actions.ExportAction;
@@ -1357,7 +1358,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		windowMenu.setVisible(true);
 
 		windowMenu.add(actionFactory.getAction(DatasetInformationAction.class.getName()));
-		
+		windowMenu.add(actionFactory.getAction(AutoExpandColumns.class.getName()));
 	}
 	
 
@@ -1447,10 +1448,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		coolBarManager.add(toolBarManager);
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_EXPORT),
 				actionFactory.getAction(ExportAction.class.getName()));
-		/*
-		 * addtoolbarAction( toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_FIND),
-		 * actionFactory.getAction(FindAction.class.getName()));
-		 */
+
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_RELOAD),
 				actionFactory.getAction(ReloadAction.class.getName()));
 		/*
@@ -1464,6 +1462,9 @@ public class DebugDataViewer extends ApplicationWindow {
 				actionFactory.getAction(SelectColumnAction.class.getName()));
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.FIND_DATA), 
 				actionFactory.getAction(FindAction.class.getName()));
+		
+		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.AUTO_ADJUST_COLUMNS), 
+				actionFactory.getAction(AutoExpandColumns.class.getName()));
 		
 		dropDownAction = new Action("", SWT.DROP_DOWN) {
 			@Override
