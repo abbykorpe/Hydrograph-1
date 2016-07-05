@@ -13,6 +13,8 @@
 
 package hydrograph.engine.jaxb.ihivetextfile;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -20,16 +22,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for hive_partition_fields_type complex type.
+ * <p>Java class for hive_partition_filter_type complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="hive_partition_fields_type">
+ * &lt;complexType name="hive_partition_filter_type">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="field" type="{hydrograph/engine/jaxb/ihivetextfile}partition_field_basic_type"/>
+ *       &lt;sequence maxOccurs="unbounded">
+ *         &lt;element name="partitionColumn" type="{hydrograph/engine/jaxb/ihivetextfile}partition_column"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -39,36 +41,41 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "hive_partition_fields_type", namespace = "hydrograph/engine/jaxb/ihivetextfile", propOrder = {
-    "field"
+@XmlType(name = "hive_partition_filter_type", namespace = "hydrograph/engine/jaxb/ihivetextfile", propOrder = {
+    "partitionColumn"
 })
-public class HivePartitionFieldsType {
+public class HivePartitionFilterType {
 
     @XmlElement(required = true)
-    protected PartitionFieldBasicType field;
+    protected List<PartitionColumn> partitionColumn;
 
     /**
-     * Gets the value of the field property.
+     * Gets the value of the partitionColumn property.
      * 
-     * @return
-     *     possible object is
-     *     {@link PartitionFieldBasicType }
-     *     
-     */
-    public PartitionFieldBasicType getField() {
-        return field;
-    }
-
-    /**
-     * Sets the value of the field property.
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the partitionColumn property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link PartitionFieldBasicType }
-     *     
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getPartitionColumn().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link PartitionColumn }
+     * 
+     * 
      */
-    public void setField(PartitionFieldBasicType value) {
-        this.field = value;
+    public List<PartitionColumn> getPartitionColumn() {
+        if (partitionColumn == null) {
+            partitionColumn = new ArrayList<PartitionColumn>();
+        }
+        return this.partitionColumn;
     }
 
 }

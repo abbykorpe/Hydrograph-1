@@ -12,12 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.InputFileHiveTextEntity;
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
@@ -27,11 +21,23 @@ import hydrograph.engine.cascading.assembly.generator.base.InputAssemblyGenerato
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFilterType;
+import hydrograph.engine.jaxb.ihivetextfile.PartitionColumn;
+import hydrograph.engine.jaxb.ihivetextfile.PartitionFieldBasicType;
 import hydrograph.engine.jaxb.inputtypes.HiveTextFile;
 import hydrograph.engine.utilities.GeneralUtilities;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.tap.Tap;
+
 public class InputFileHiveTextAssemblyGenerator extends
-InputAssemblyGeneratorBase {
+		InputAssemblyGeneratorBase {
 
 	private HiveTextFile jaxbHiveTextFile;
 	private InputFileHiveTextEntity inputHiveFileEntity;
@@ -67,26 +73,79 @@ InputAssemblyGeneratorBase {
 		inputHiveFileEntity.setComponentId(jaxbHiveTextFile.getId());
 
 		inputHiveFileEntity
-		.setFieldsList(InputEntityUtils
-				.extractInputFields(jaxbHiveTextFile.getOutSocket()
-						.get(0).getSchema()
-						.getFieldOrRecordOrIncludeExternalSchema()));
+				.setFieldsList(InputEntityUtils
+						.extractInputFields(jaxbHiveTextFile.getOutSocket()
+								.get(0).getSchema()
+								.getFieldOrRecordOrIncludeExternalSchema()));
 		inputHiveFileEntity.setOutSocketList(InputEntityUtils
 				.extractOutSocket(jaxbHiveTextFile.getOutSocket()));
-		inputHiveFileEntity.setDelimiter(GeneralUtilities.parseHex(jaxbHiveTextFile.getDelimiter().getValue()));
-		inputHiveFileEntity.setDatabaseName(jaxbHiveTextFile.getDatabaseName().getValue());
-		inputHiveFileEntity.setTableName(jaxbHiveTextFile.getTableName().getValue());
-		inputHiveFileEntity.setExternalTablePathUri(jaxbHiveTextFile.getExternalTablePath() != null?jaxbHiveTextFile.getExternalTablePath().getUri():null);
-		inputHiveFileEntity.setQuote(jaxbHiveTextFile.getQuote() != null?jaxbHiveTextFile.getQuote().getValue():"");
-		inputHiveFileEntity.setSafe(jaxbHiveTextFile.getSafe() != null?jaxbHiveTextFile.getSafe().isValue():false);
-		inputHiveFileEntity.setStrict(jaxbHiveTextFile.getStrict() != null?jaxbHiveTextFile.getStrict().isValue():false);
+		inputHiveFileEntity.setDelimiter(GeneralUtilities
+				.parseHex(jaxbHiveTextFile.getDelimiter().getValue()));
+		inputHiveFileEntity.setDatabaseName(jaxbHiveTextFile.getDatabaseName()
+				.getValue());
+		inputHiveFileEntity.setTableName(jaxbHiveTextFile.getTableName()
+				.getValue());
+		inputHiveFileEntity.setExternalTablePathUri(jaxbHiveTextFile
+				.getExternalTablePath() != null ? jaxbHiveTextFile
+				.getExternalTablePath().getUri() : null);
+		inputHiveFileEntity
+				.setQuote(jaxbHiveTextFile.getQuote() != null ? jaxbHiveTextFile
+						.getQuote().getValue() : "");
+		inputHiveFileEntity
+				.setSafe(jaxbHiveTextFile.getSafe() != null ? jaxbHiveTextFile
+						.getSafe().isValue() : false);
+		inputHiveFileEntity
+				.setStrict(jaxbHiveTextFile.getStrict() != null ? jaxbHiveTextFile
+						.getStrict().isValue() : false);
 		inputHiveFileEntity.setRuntimeProperties(InputEntityUtils
 				.extractRuntimeProperties(jaxbHiveTextFile
 						.getRuntimeProperties()));
-		inputHiveFileEntity.setPartitionKeys(extractPartitionFields(jaxbHiveTextFile.getPartitionKeys()));
+		inputHiveFileEntity
+				.setPartitionKeys(extractPartitionFields(jaxbHiveTextFile
+						.getPartitionKeys()));
 		inputHiveFileEntity.setPhase(jaxbHiveTextFile.getPhase());
+		inputHiveFileEntity
+				.setPartitionFilterRegex(createPartitionFilterRegex(jaxbHiveTextFile
+						.getPartitionFilter()));
 	}
 
+	private String createPartitionFilterRegex(
+			HivePartitionFilterType hivePartitionFilterType) {
+		if (hivePartitionFilterType != null
+				&& hivePartitionFilterType.getPartitionColumn() != null) {
+			String partitionRegex = "";
+			String regex = "";
+			int numberOfPartitionKeys = inputHiveFileEntity.getPartitionKeys().length;
+			for (PartitionColumn partitionColumn : hivePartitionFilterType
+					.getPartitionColumn()) {
+				if (partitionRegex != "") {
+					partitionRegex = partitionRegex + "|";
+				}
+				regex = "";
+				regex = buildRegex(partitionColumn, regex);
+				if (!(regex.split("\t").length == numberOfPartitionKeys)) {
+					regex = regex + "\t.*";
+				} else {
+					regex = regex + "\\b";
+				}
+				partitionRegex = partitionRegex + regex;
+			}
+			return partitionRegex;
+		} else {
+			return "";
+		}
+	}
+
+	private String buildRegex(PartitionColumn partitionColumn,
+			String partitionRegex) {
+		partitionRegex = partitionRegex + partitionColumn.getValue();
+		if (partitionColumn.getPartitionColumn() != null) {
+			partitionRegex = partitionRegex + "\t";
+			partitionRegex = buildRegex(partitionColumn.getPartitionColumn(),
+					partitionRegex);
+		}
+		return partitionRegex;
+	}
 
 	/**
 	 * This method extracts partition keys from {@link HivePartitionFieldsType}
@@ -98,17 +157,31 @@ InputAssemblyGeneratorBase {
 	 * @param hivePartitionFieldsType
 	 * @return String[]
 	 */
-	private String[] extractPartitionFields(HivePartitionFieldsType hivePartitionFieldsType) {
+	private String[] extractPartitionFields(
+			HivePartitionFieldsType hivePartitionFieldsType) {
 		String[] partitionKeys;
-		if (hivePartitionFieldsType != null && hivePartitionFieldsType.getField() != null) {
-		 partitionKeys = new String[hivePartitionFieldsType.getField().size()];
-		for (int i = 0; i < hivePartitionFieldsType.getField().size(); i++) {
-			partitionKeys[i] = hivePartitionFieldsType.getField().get(i).getName();
-		}
-		}else{
+		List<String> partitionFieldsList = new ArrayList<String>();
+		if (hivePartitionFieldsType != null
+				&& hivePartitionFieldsType.getField() != null) {
+			partitionFieldsList = getPartitionFieldsList(
+					hivePartitionFieldsType.getField(), partitionFieldsList);
+			partitionKeys = partitionFieldsList
+					.toArray(new String[partitionFieldsList.size()]);
+			return partitionKeys;
+		} else {
 			return new String[0];
 		}
-		return partitionKeys;
+	}
+
+	private List<String> getPartitionFieldsList(
+			PartitionFieldBasicType partitionFieldBasicType,
+			List<String> partitionFieldsList) {
+		partitionFieldsList.add(partitionFieldBasicType.getName());
+		if (partitionFieldBasicType.getField() != null) {
+			getPartitionFieldsList(partitionFieldBasicType.getField(),
+					partitionFieldsList);
+		}
+		return partitionFieldsList;
 	}
 
 	@Override

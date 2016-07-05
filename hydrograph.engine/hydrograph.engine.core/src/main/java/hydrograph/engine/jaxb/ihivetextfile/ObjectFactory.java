@@ -58,11 +58,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link PartitionFieldBasicType }
+     * 
+     */
+    public PartitionFieldBasicType createPartitionFieldBasicType() {
+        return new PartitionFieldBasicType();
+    }
+
+    /**
      * Create an instance of {@link TypeInputHiveTextFileDelimitedBase }
      * 
      */
     public TypeInputHiveTextFileDelimitedBase createTypeInputHiveTextFileDelimitedBase() {
         return new TypeInputHiveTextFileDelimitedBase();
+    }
+
+    /**
+     * Create an instance of {@link PartitionColumn }
+     * 
+     */
+    public PartitionColumn createPartitionColumn() {
+        return new PartitionColumn();
     }
 
     /**
@@ -87,6 +103,14 @@ public class ObjectFactory {
      */
     public FieldBasicType createFieldBasicType() {
         return new FieldBasicType();
+    }
+
+    /**
+     * Create an instance of {@link HivePartitionFilterType }
+     * 
+     */
+    public HivePartitionFilterType createHivePartitionFilterType() {
+        return new HivePartitionFilterType();
     }
 
 }

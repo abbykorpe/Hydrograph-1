@@ -22,7 +22,6 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.HiveTypeToCoercibleTypeMapping;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
 import hydrograph.engine.cascading.scheme.hive.text.HiveTextTableDescriptor;
-import hydrograph.engine.cascading.utilities.DataTypeCoerce;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -31,6 +30,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cascading.operation.regex.RegexFilter;
 import cascading.scheme.Scheme;
 import cascading.scheme.hadoop.TextDelimited;
 import cascading.tap.SinkMode;
@@ -54,9 +54,11 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 	protected Scheme scheme;
 	private HiveTextTableDescriptor tableDesc;
 
-	private static Logger LOG = LoggerFactory.getLogger(InputFileHiveTextAssembly.class);
+	private static Logger LOG = LoggerFactory
+			.getLogger(InputFileHiveTextAssembly.class);
 
-	public InputFileHiveTextAssembly(InputFileHiveTextEntity baseComponentEntity,
+	public InputFileHiveTextAssembly(
+			InputFileHiveTextEntity baseComponentEntity,
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
@@ -80,20 +82,25 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 		// is created in its respective assembly and not in its base class.
 
 		HiveTableDescriptor.Factory factory = new Factory(new Configuration());
-		HiveTableDescriptor tb = factory.newInstance(inputHiveFileEntity.getDatabaseName(),
+		HiveTableDescriptor tb = factory.newInstance(
+				inputHiveFileEntity.getDatabaseName(),
 				inputHiveFileEntity.getTableName());
 
 		tableDesc = new HiveTextTableDescriptor(tb.getDatabaseName(),
 
-				tb.getTableName(), tb.getColumnNames(), tb.getColumnTypes(), tb.getPartitionKeys(), tb.getDelimiter(),
-				"", getHiveExternalTableLocationPath(), false);
+		tb.getTableName(), tb.getColumnNames(), tb.getColumnTypes(),
+				tb.getPartitionKeys(), tb.getDelimiter(), "",
+				getHiveExternalTableLocationPath(), false);
 
 		Fields fields = getFieldsToWrite(tb);
-		HydrographDelimitedParser delimitedParser = new HydrographDelimitedParser(inputHiveFileEntity.getDelimiter(),
+		HydrographDelimitedParser delimitedParser = new HydrographDelimitedParser(
+				inputHiveFileEntity.getDelimiter(),
 
-				inputHiveFileEntity.getQuote(), null, inputHiveFileEntity.isStrict(), inputHiveFileEntity.isSafe());
+				inputHiveFileEntity.getQuote(), null,
+				inputHiveFileEntity.isStrict(), inputHiveFileEntity.isSafe());
 
-		scheme = new TextDelimited(fields, null, false, false, "UTF-8", delimitedParser);
+		scheme = new TextDelimited(fields, null, false, false, "UTF-8",
+				delimitedParser);
 
 		// scheme = new
 		// TextDelimited(fields,inputHiveFileEntity.getDelimiter());
@@ -104,9 +111,25 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 	protected void initializeHiveTap() {
 		LOG.debug("Initializing Hive Tap using HiveTextTableDescriptor");
 		hiveTap = new HiveTap(tableDesc, scheme, SinkMode.KEEP, true);
-		if (inputHiveFileEntity.getPartitionKeys() != null && inputHiveFileEntity.getPartitionKeys().length > 0) {
+		if (inputHiveFileEntity.getPartitionKeys() != null
+				&& inputHiveFileEntity.getPartitionKeys().length > 0) {
 			hiveTap = new HivePartitionTap((HiveTap) hiveTap);
+			if (isPartitionFilterEnabled())
+				addPartitionFilter(((HivePartitionTap) hiveTap));
 		}
+	}
+
+	private boolean isPartitionFilterEnabled() {
+		if ("".equals(inputHiveFileEntity.getPartitionFilterRegex()))
+			return false;
+		else
+			return true;
+	}
+
+	private void addPartitionFilter(HivePartitionTap hivePartitionTap) {
+		hivePartitionTap.addSourcePartitionFilter(new Fields(
+				inputHiveFileEntity.getPartitionKeys()), new RegexFilter(
+				inputHiveFileEntity.getPartitionFilterRegex()));
 	}
 
 	/*
@@ -130,7 +153,8 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 	 * @return Fields.
 	 */
 	private Fields getFieldsToWrite(HiveTableDescriptor tb) {
-		String[] testField = new String[tb.getColumnNames().length - tb.getPartitionKeys().length];
+		String[] testField = new String[tb.getColumnNames().length
+				- tb.getPartitionKeys().length];
 		int i = 0;
 		for (String inputfield : tb.getColumnNames()) {
 			if (!Arrays.asList(tb.getPartitionKeys()).contains(inputfield)) {
@@ -147,7 +171,8 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 	 */
 	private Type[] getTypes(HiveTableDescriptor tb) {
 
-		Type[] types = new Type[tb.getColumnTypes().length - tb.getPartitionKeys().length];
+		Type[] types = new Type[tb.getColumnTypes().length
+				- tb.getPartitionKeys().length];
 		String[] colTypes = tb.getColumnTypes();
 
 		for (int i = 0; i < types.length; i++) {
@@ -156,7 +181,8 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 			if (colTypes[i].contains("decimal")) {
 				hiveTo = HiveTypeToCoercibleTypeMapping.valueOf("DECIMAL");
 			} else
-				hiveTo = HiveTypeToCoercibleTypeMapping.valueOf(colTypes[i].toUpperCase());
+				hiveTo = HiveTypeToCoercibleTypeMapping.valueOf(colTypes[i]
+						.toUpperCase());
 
 			types[i] = hiveTo.getMappingType(colTypes[i]);
 

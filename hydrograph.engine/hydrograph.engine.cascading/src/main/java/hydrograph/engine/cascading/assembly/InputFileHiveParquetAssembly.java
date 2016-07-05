@@ -12,20 +12,23 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import org.apache.hadoop.conf.Configuration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tap.hive.HivePartitionTap;
-import cascading.tap.hive.HiveTableDescriptor;
-import cascading.tap.hive.HiveTap;
-import cascading.tap.hive.HiveTableDescriptor.Factory;
 import hydrograph.engine.assembly.entity.InputFileHiveParquetEntity;
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetScheme;
 import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetTableDescriptor;
+
+import org.apache.hadoop.conf.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cascading.operation.regex.RegexFilter;
+import cascading.tap.hive.HivePartitionTap;
+import cascading.tap.hive.HiveTableDescriptor;
+import cascading.tap.hive.HiveTableDescriptor.Factory;
+import cascading.tap.hive.HiveTap;
+import cascading.tuple.Fields;
 
 public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 
@@ -38,7 +41,8 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 	private HiveParquetTableDescriptor tableDesc;
 	private InputFileHiveParquetEntity inputFileHiveParquetEntity;
 
-	public InputFileHiveParquetAssembly(InputFileHiveParquetEntity baseComponentEntity,
+	public InputFileHiveParquetAssembly(
+			InputFileHiveParquetEntity baseComponentEntity,
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
@@ -50,18 +54,15 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 		// HiveParquetTableDescriptor is developed specifically for handling
 		// Parquet File format with Hive. Hence, the object of table descriptor
 		// is created in its respective assembly and not in its base class.
-		
+
 		HiveTableDescriptor.Factory factory = new Factory(new Configuration());
-		HiveTableDescriptor tb = factory.newInstance(inputFileHiveParquetEntity.getDatabaseName(),
+		HiveTableDescriptor tb = factory.newInstance(
+				inputFileHiveParquetEntity.getDatabaseName(),
 				inputFileHiveParquetEntity.getTableName());
-		
-		tableDesc = new HiveParquetTableDescriptor(
-				tb.getDatabaseName(),
-				tb.getTableName(),
-				tb.getColumnNames(),
-				tb.getColumnTypes(),
-				tb.getPartitionKeys(),
-				getHiveExternalTableLocationPath());
+
+		tableDesc = new HiveParquetTableDescriptor(tb.getDatabaseName(),
+				tb.getTableName(), tb.getColumnNames(), tb.getColumnTypes(),
+				tb.getPartitionKeys(), getHiveExternalTableLocationPath());
 		scheme = new HiveParquetScheme(tableDesc);
 		scheme.setSourceFields(tableDesc.toFields());
 		scheme.setSinkFields(tableDesc.toFields());
@@ -81,7 +82,23 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 		if (inputFileHiveParquetEntity.getPartitionKeys() != null
 				&& inputFileHiveParquetEntity.getPartitionKeys().length > 0) {
 			hiveTap = new HivePartitionTap((HiveTap) hiveTap);
+			if (isPartitionFilterEnabled())
+				addPartitionFilter(((HivePartitionTap) hiveTap));
 		}
+	}
+
+	private boolean isPartitionFilterEnabled() {
+		if ("".equals(inputFileHiveParquetEntity.getPartitionFilterRegex()))
+			return false;
+		else
+			return true;
+	}
+
+	private void addPartitionFilter(HivePartitionTap hivePartitionTap) {
+		hivePartitionTap.addSourcePartitionFilter(
+				new Fields(inputFileHiveParquetEntity.getPartitionKeys()),
+				new RegexFilter(inputFileHiveParquetEntity
+						.getPartitionFilterRegex()));
 	}
 
 	/*

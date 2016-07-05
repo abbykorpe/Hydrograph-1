@@ -15,7 +15,6 @@
  */
 package hydrograph.engine.assembly.entity.base;
 
-
 /**
  * @author bitwise1
  *
@@ -26,6 +25,7 @@ public class HiveEntityBase extends InputOutputEntityBase {
 	protected String tableName;
 	private String externalTablePathUri;
 	private boolean overWrite;
+	private String partitionFilterRegex;
 
 	/**
 	 * @return the partitionKeys
@@ -100,6 +100,21 @@ public class HiveEntityBase extends InputOutputEntityBase {
 	 */
 	public void setOverWrite(boolean overWrite) {
 		this.overWrite = overWrite;
+	}
+
+	/**
+	 * @return the partitionFilterRegex
+	 */
+	public String getPartitionFilterRegex() {
+		return partitionFilterRegex;
+	}
+
+	/**
+	 * @param partitionFilterRegex
+	 *            the partitionFilterRegex to set
+	 */
+	public void setPartitionFilterRegex(String partitionFilterRegex) {
+		this.partitionFilterRegex = partitionFilterRegex;
 	}
 
 }

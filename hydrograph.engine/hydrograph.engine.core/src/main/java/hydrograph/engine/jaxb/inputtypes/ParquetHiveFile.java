@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFilterType;
 import hydrograph.engine.jaxb.ihiveparquet.HivePathType;
 import hydrograph.engine.jaxb.ihiveparquet.HiveType;
 import hydrograph.engine.jaxb.ihiveparquet.TypeInputFileDelimitedBase;
@@ -35,6 +36,7 @@ import hydrograph.engine.jaxb.ihiveparquet.TypeInputFileDelimitedBase;
  *     &lt;extension base="{hydrograph/engine/jaxb/ihiveparquet}type-input-file-delimited-base">
  *       &lt;sequence>
  *         &lt;element name="partitionKeys" type="{hydrograph/engine/jaxb/ihiveparquet}hive_partition_fields_type" minOccurs="0"/>
+ *         &lt;element name="partitionFilter" type="{hydrograph/engine/jaxb/ihiveparquet}hive_partition_filter_type" minOccurs="0"/>
  *         &lt;element name="databaseName" type="{hydrograph/engine/jaxb/ihiveparquet}hive_type"/>
  *         &lt;element name="tableName" type="{hydrograph/engine/jaxb/ihiveparquet}hive_type"/>
  *         &lt;element name="externalTablePath" type="{hydrograph/engine/jaxb/ihiveparquet}hive_path_type" minOccurs="0"/>
@@ -50,6 +52,7 @@ import hydrograph.engine.jaxb.ihiveparquet.TypeInputFileDelimitedBase;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "parquetHiveFile", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
     "partitionKeys",
+    "partitionFilter",
     "databaseName",
     "tableName",
     "externalTablePath",
@@ -60,6 +63,7 @@ public class ParquetHiveFile
 {
 
     protected HivePartitionFieldsType partitionKeys;
+    protected HivePartitionFilterType partitionFilter;
     @XmlElement(required = true)
     protected HiveType databaseName;
     @XmlElement(required = true)
@@ -89,6 +93,30 @@ public class ParquetHiveFile
      */
     public void setPartitionKeys(HivePartitionFieldsType value) {
         this.partitionKeys = value;
+    }
+
+    /**
+     * Gets the value of the partitionFilter property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link HivePartitionFilterType }
+     *     
+     */
+    public HivePartitionFilterType getPartitionFilter() {
+        return partitionFilter;
+    }
+
+    /**
+     * Sets the value of the partitionFilter property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link HivePartitionFilterType }
+     *     
+     */
+    public void setPartitionFilter(HivePartitionFilterType value) {
+        this.partitionFilter = value;
     }
 
     /**
