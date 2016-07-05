@@ -59,9 +59,13 @@ public class FilterAction extends Action {
 					filterConditions.setLocalCondition(FilterHelper.INSTANCE.getLocalCondition());
 					filterConditions.setLocalConditions(filterConditionsDialog.getLocalConditionsList());
 					filterConditions.setRetainLocal(filterConditionsDialog.ifSetLocalFilter());
+					filterConditions.setLocalGroupSelectionMap(filterConditionsDialog.getLocalGroupSelections());
+					
 					filterConditions.setRemoteCondition(FilterHelper.INSTANCE.getRemoteCondition());
 					filterConditions.setRemoteConditions(filterConditionsDialog.getRemoteConditionsList());
 					filterConditions.setRetainRemote(filterConditionsDialog.ifSetRemoteFilter());
+					filterConditions.setRemoteGroupSelectionMap(filterConditionsDialog.getRemoteGroupSelections());
+					
 					filterConditionsDialog.setOriginalFilterConditions(filterConditions);
 			}
 			debugDataViewer.setConditions(filterConditionsDialog.getOriginalFilterConditions());
