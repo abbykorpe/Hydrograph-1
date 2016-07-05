@@ -65,7 +65,7 @@ public class HydrographXMLInputService implements HydrographInputService {
 		try {
 			ParseExternalSchema parseExternalSchema = new ParseExternalSchema(
 					checkSubjobAndExpandXml(parameterSubstitutor,
-							XmlParsingUtils.getXMLStringFromPath(path)));
+							XmlParsingUtils.getXMLStringFromPath(path)), parameterSubstitutor);
 			hydrographJob = hydrographJobGenerator.createHydrographJob(
 					parseExternalSchema.getXmlDom(),
 					config.getProperty("xsdLocation"));
