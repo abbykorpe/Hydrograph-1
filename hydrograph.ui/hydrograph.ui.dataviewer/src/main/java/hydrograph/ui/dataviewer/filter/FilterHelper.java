@@ -950,22 +950,17 @@ public class FilterHelper {
 	
 	
 	
-	 public void disposeAllColumns(TableViewer tableViewer){
-		 
-	     TableColumn[] columns = tableViewer.getTable().getColumns();
-		   
-		    TableItem[] items = tableViewer.getTable().getItems();
-		   
-		    for (int i = 0; i < items.length; i++) {
-		    	items[i].dispose();
-			}
-		    
-		    for (TableColumn tc : columns) {
-		    	
-		     tc.dispose();
-						    	
-			}
-	 }	
+	public void disposeAllColumns(TableViewer tableViewer){
+		 TableColumn[] columns = tableViewer.getTable().getColumns();
+		 TableItem[] items = tableViewer.getTable().getItems();
+		 for (int i = 0; i < items.length; i++) {
+			 items[i].dispose();
+		 }
+	    
+	    for (TableColumn tc : columns) {
+	    	tc.dispose();
+		}
+	}	
 	 
 	 public void reArrangeGroupColumns(TreeMap<Integer, List<List<Integer>>> groupSelectionMap){
 		 
