@@ -32,6 +32,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import hydrograph.engine.core.xmlparser.XmlParsingUtils;
+import hydrograph.engine.core.xmlparser.parametersubstitution.ParameterSubstitutor;
 
 public class ParseExternalSchema {
 
@@ -48,8 +49,10 @@ public class ParseExternalSchema {
 	private Document xmlDocument = null;
 	private String xmlContent;
 
-	public ParseExternalSchema(String xmlContent) {
-		
+	private ParameterSubstitutor parameterSubstitutor = null;
+
+	public ParseExternalSchema(String xmlContent, ParameterSubstitutor parameterSubstitutor) {
+		this.parameterSubstitutor = parameterSubstitutor;
 		this.xmlContent = xmlContent;
 	}
 
@@ -126,7 +129,7 @@ public class ParseExternalSchema {
 											+ path);
 					}
 					try {
-						String xml = XmlParsingUtils.getXMLStringFromPath(path);
+						String xml = parameterSubstitutor.substitute(XmlParsingUtils.getXMLStringFromPath(path));
 						xmlDocument2 = documentBuilder.parse(new InputSource(
 								new StringReader(xml)));
 					} catch (SAXException | IOException e) {

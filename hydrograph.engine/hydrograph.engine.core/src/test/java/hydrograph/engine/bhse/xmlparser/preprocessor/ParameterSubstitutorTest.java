@@ -12,49 +12,43 @@
  *******************************************************************************/
 package hydrograph.engine.bhse.xmlparser.preprocessor;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 
-import org.apache.commons.cli.ParseException;
-import org.junit.Assert;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
 import hydrograph.engine.core.xmlparser.XmlParsingUtils;
-import hydrograph.engine.core.xmlparser.externalschema.ParseExternalSchema;
 import hydrograph.engine.core.xmlparser.parametersubstitution.ParameterSubstitutor;
 import hydrograph.engine.core.xmlparser.parametersubstitution.UserParameters;
 
-public class ParseExternalSchemaTest {
+import org.apache.commons.cli.ParseException;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class ParameterSubstitutorTest {
 	private static Logger LOG = LoggerFactory
-			.getLogger(ParseExternalSchemaTest.class);
-	
+			.getLogger(ParameterSubstitutorTest.class);
 	@Test
-	public void itShouldGetTheExternalFields() throws ParseException {
-
+	public void itShouldSubstitueParameters() {
 		String[] args = new String[] { "-xmlpath",
 				"testData/XMLFiles/DelimitedInputAndOutput.xml", "-param",
-				"PATH=testData/Input/delimitedInputFile","-param","PATH2=testData/XMLFiles/schema2.xml",
-				"-param", "input=input'1","-param", "out&put=output"};
-		try {
-			ParameterSubstitutor parameterSubstitutor = new ParameterSubstitutor(
-					new UserParameters(args));
+				"input=input'1","-param",
+				"out&put=output" };
+		ParameterSubstitutor parameterSubstitutor = null;
+			try {
+				parameterSubstitutor = new ParameterSubstitutor(
+						new UserParameters(args));
+			} catch (IOException e) {
+				LOG.error("",e);
+				throw new RuntimeException(e);
+			} catch (ParseException e) {
+				LOG.error("",e);
+				throw new RuntimeException(e);
+			}
 
-			String xmlContents = XmlParsingUtils.getXMLStringFromPath(args[1]);
-
-			ParseExternalSchema parseExternalSchema = new ParseExternalSchema(
-					parameterSubstitutor.substitute(xmlContents), parameterSubstitutor);
-
-			Document xmlDom = parseExternalSchema.getXmlDom();
-
-			NodeList nodes = xmlDom.getElementsByTagName("schema");
-
-			Assert.assertEquals(3,nodes.item(0).getChildNodes().getLength());
-		} catch (IOException e) {
-			LOG.error("", e);
-		}
+			String xmlContents = parameterSubstitutor.substitute(XmlParsingUtils.getXMLStringFromPath(args[1]));
+			assertTrue(xmlContents.contains("input&apos;1"));
+			assertTrue(xmlContents.contains("output"));
 	}
+
 }
