@@ -94,7 +94,7 @@ public class DatasetInformationDialog extends Dialog {
 		final Composite container = (Composite) super.createDialogArea(parent);
 				
 		container.setLayout(new GridLayout(1, false));
-		container.getShell().setMinimumSize(700, 350);
+		container.getShell().setMinimumSize(700, 400);
 		
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
@@ -317,7 +317,7 @@ public class DatasetInformationDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(721, 350);
+		return new Point(721, 400);
 	}
 
 	/**

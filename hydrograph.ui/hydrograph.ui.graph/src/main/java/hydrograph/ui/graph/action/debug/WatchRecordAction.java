@@ -214,7 +214,15 @@ public class WatchRecordAction extends SelectionAction {
 					window.setConditions(watcherAndConditon.get(watcherId));
 				}
 				window.open();
-				
+				if(!window.getConditions().getRetainLocal()){
+					window.getConditions().setLocalCondition("");
+					window.getConditions().getLocalConditions().clear();
+				}
+				if(!window.getConditions().getRetainRemote()){
+					window.getConditions().setRemoteCondition("");
+					window.getConditions().getRemoteConditions().clear();
+				}
+					
 				watcherAndConditon.put(watcherId,window.getConditions());
 			}
 		});

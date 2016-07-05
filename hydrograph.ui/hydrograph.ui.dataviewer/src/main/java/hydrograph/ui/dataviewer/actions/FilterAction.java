@@ -56,17 +56,13 @@ public class FilterAction extends Action {
 				filterConditionsDialog.setFilterConditions(debugDataViewer.getConditions());
 			}
 			if(filterConditionsDialog.open() !=1){
-				if(filterConditionsDialog.ifSetLocalFilter()){
 					filterConditions.setLocalCondition(FilterHelper.INSTANCE.getLocalCondition());
 					filterConditions.setLocalConditions(filterConditionsDialog.getLocalConditionsList());
 					filterConditions.setRetainLocal(filterConditionsDialog.ifSetLocalFilter());
-				}
-				if(filterConditionsDialog.ifSetRemoteFilter()){
 					filterConditions.setRemoteCondition(FilterHelper.INSTANCE.getRemoteCondition());
 					filterConditions.setRemoteConditions(filterConditionsDialog.getRemoteConditionsList());
 					filterConditions.setRetainRemote(filterConditionsDialog.ifSetRemoteFilter());
-				}
-				filterConditionsDialog.setOriginalFilterConditions(filterConditions);
+					filterConditionsDialog.setOriginalFilterConditions(filterConditions);
 			}
 			debugDataViewer.setConditions(filterConditionsDialog.getOriginalFilterConditions());
 		} catch (ClassNotFoundException | SQLException e) {

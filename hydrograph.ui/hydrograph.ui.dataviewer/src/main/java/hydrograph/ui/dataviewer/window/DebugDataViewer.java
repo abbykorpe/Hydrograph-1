@@ -1661,7 +1661,7 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	public void setConditions(FilterConditions conditons) {
 		this.conditions=conditons;
-		if(!StringUtils.isEmpty(conditions.getLocalCondition())){
+		if(!StringUtils.isEmpty(conditions.getLocalCondition()) && conditons.getRetainLocal()){
 			this.localCondition=conditons.getLocalCondition();
 		}
 		if(!StringUtils.isEmpty(conditions.getRemoteCondition())){
