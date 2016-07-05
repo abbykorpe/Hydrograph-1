@@ -43,7 +43,6 @@ import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.custom.ScrolledComposite;
 
 /**
  * Data set Information Window
@@ -61,7 +60,6 @@ public class DatasetInformationDialog extends Dialog {
 	private Fields dataViewerFileSchema;
 	private String SCHEMA_FILE_EXTENTION=".xml";
 	private List<GridRow> gridRowList=new ArrayList<>();
-	private Composite genralTabDatacomposite;
 	
 	/**
 	 * Create the dialog.
@@ -91,8 +89,10 @@ public class DatasetInformationDialog extends Dialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		
+		
 		final Composite container = (Composite) super.createDialogArea(parent);
-				
+		
 		container.setLayout(new GridLayout(1, false));
 		container.getShell().setMinimumSize(700, 400);
 		
@@ -106,53 +106,51 @@ public class DatasetInformationDialog extends Dialog {
 		TabItem tbtmGeneral = new TabItem(tabFolder, SWT.NONE);
 		tbtmGeneral.setText(DatasetInformationConstants.GENERAL);
 		
-		ScrolledComposite scrolledComposite = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		tbtmGeneral.setControl(scrolledComposite);
-		scrolledComposite.setExpandHorizontal(true);
-		scrolledComposite.setExpandVertical(true);
+		Composite composite_1 = new Composite(tabFolder, SWT.NONE);
+		tbtmGeneral.setControl(composite_1);
+		composite_1.setLayout(new GridLayout(1, false));
 		
-	
+		Composite composite_2 = new Composite(composite_1, SWT.NONE);
+		composite_2.setLayout(new GridLayout(2, false));
+		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		genralTabDatacomposite = new Composite(scrolledComposite, SWT.NONE);
-		genralTabDatacomposite.setLayout(new GridLayout(2, false));
+		createLabel(composite_2,DatasetInformationConstants.VIEW_DATA_FILE);
 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.VIEW_DATA_FILE);
+		setLabelValue(composite_2,datasetInformationDetail.getViewDataFilePath());
 		
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getViewDataFilePath());
+		createLabel(composite_2,DatasetInformationConstants.EDGE_NODE);
 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.EDGE_NODE);
-		
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getEdgeNode());
+		setLabelValue(composite_2,datasetInformationDetail.getEdgeNode());
 	
 		if(jobDetails.isRemote()){
-			createLabel(genralTabDatacomposite,DatasetInformationConstants.USERNAME);
+			createLabel(composite_2,DatasetInformationConstants.USERNAME);
 		
-			setLabelValue(genralTabDatacomposite,datasetInformationDetail.getUserName());
+			setLabelValue(composite_2,datasetInformationDetail.getUserName());
 		}
 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.LOCALCHUNKDATA);
+		createLabel(composite_2,DatasetInformationConstants.LOCALCHUNKDATA);
 		
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getChunkFilePath());
+		setLabelValue(composite_2,datasetInformationDetail.getChunkFilePath());
 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.FILESIZE);
+		createLabel(composite_2,DatasetInformationConstants.FILESIZE);
 		
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getSizeOfData());
+		setLabelValue(composite_2,datasetInformationDetail.getSizeOfData());
 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.NOOFRECORDS);
+		createLabel(composite_2,DatasetInformationConstants.NOOFRECORDS);
 		
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getNoOfRecords());
+		setLabelValue(composite_2,datasetInformationDetail.getNoOfRecords());
 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.PAGESIZE);
+		createLabel(composite_2,DatasetInformationConstants.PAGESIZE);
 		
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getPageSize());
+		setLabelValue(composite_2,datasetInformationDetail.getPageSize());
 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.DELIMETER);
+		createLabel(composite_2,DatasetInformationConstants.DELIMETER);
 		
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getDelimeter());
+		setLabelValue(composite_2,datasetInformationDetail.getDelimeter());
 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.QUOTE);
+		createLabel(composite_2,DatasetInformationConstants.QUOTE);
 		
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getQuote());
+		setLabelValue(composite_2,datasetInformationDetail.getQuote());
 		
 		createLabel(composite_2,DatasetInformationConstants.LOCAL_FILTER_CONDITION);
 		setLabelValue(composite_2,datasetInformationDetail.getLocalFilter());
@@ -163,12 +161,8 @@ public class DatasetInformationDialog extends Dialog {
 		TabItem tbtmSchema = new TabItem(tabFolder, SWT.NONE);
 		tbtmSchema.setText(DatasetInformationConstants.SCHEMA);
 		
-		ScrolledComposite scrolledComposite1 = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		tbtmSchema.setControl(scrolledComposite1);
-		scrolledComposite1.setExpandHorizontal(true);
-		scrolledComposite1.setExpandVertical(true);
-		
-		Composite composite_3 = new Composite(scrolledComposite1, SWT.NONE);
+		Composite composite_3 = new Composite(tabFolder, SWT.NONE);
+		tbtmSchema.setControl(composite_3);
 		composite_3.setLayout(new GridLayout(1, false));
 		
 		TableViewer tableViewer = new TableViewer(composite_3, SWT.BORDER | SWT.FULL_SELECTION);
@@ -206,12 +200,6 @@ public class DatasetInformationDialog extends Dialog {
 		tableViewer.setInput(gridRowList);
 		tableViewer.refresh();
 		
-		scrolledComposite.setContent(genralTabDatacomposite);
-		scrolledComposite.setMinSize(genralTabDatacomposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		
-		scrolledComposite1.setContent(composite_3);
-		scrolledComposite1.setMinSize(composite_3.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		
 		return container;
 	}
 
@@ -233,7 +221,7 @@ public class DatasetInformationDialog extends Dialog {
 	 */
 	public void setLabelValue(Composite composite_2, String value) {
 		Label labelValue= new Label(composite_2, SWT.NONE |SWT.READ_ONLY);
-		labelValue.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		labelValue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		labelValue.setText(value);
 	}
 
@@ -242,9 +230,8 @@ public class DatasetInformationDialog extends Dialog {
 	 * @param composite_2
 	 */
 	public void createLabel(Composite composite_2, String windowLabelName) {
-		
 		Label lblName = new Label(composite_2, SWT.NONE);
-		lblName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+		lblName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblName.setText(windowLabelName);
 		lblName.setAlignment(SWT.RIGHT);
 	}
