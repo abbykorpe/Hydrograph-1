@@ -18,6 +18,7 @@ import hydrograph.ui.common.component.config.Operations;
 import hydrograph.ui.common.component.config.TypeInfo;
 import hydrograph.ui.common.datastructures.tooltip.TootlTipErrorMessage;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.OperationClassProperty;
@@ -69,7 +70,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Label;
+
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
@@ -205,7 +206,12 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		Button addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 360, 17, 20, 15 }, "");
 		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addButton.setImage(addImage);
-		addButton.setSize(30, 25);
+		if(OSValidator.isMac()){
+			addButton.setSize(40, 30);
+		} else {
+			addButton.setSize(30, 25);
+		}
+		
 		addButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -228,7 +234,13 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		Button deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 390, 17, 20, 15 }, "");
 		Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		deleteButton.setImage(deleteImage);
-		deleteButton.setSize(30, 25);
+		if(OSValidator.isMac()){
+			deleteButton.setSize(40, 30);
+		} else {
+			deleteButton.setSize(30, 25);
+		}
+		
+		
 		deleteButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -255,7 +267,12 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		Button upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 420, 17, 20, 15 }, "");
 		Image upImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON);
 		upButton.setImage(upImage);
-		upButton.setSize(30, 25);
+		if(OSValidator.isMac()){
+			upButton.setSize(40, 30);
+		} else {
+			upButton.setSize(30, 25);
+		}
+		
 		upButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -276,7 +293,13 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		Button downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 450, 17, 20, 15 }, "");
 		Image downImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON);
 		downButton.setImage(downImage);
-		downButton.setSize(30, 25);
+		if(OSValidator.isMac()){
+			downButton.setSize(40, 30);
+		} else {
+			downButton.setSize(30, 25);
+		}
+		
+		
 		downButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {

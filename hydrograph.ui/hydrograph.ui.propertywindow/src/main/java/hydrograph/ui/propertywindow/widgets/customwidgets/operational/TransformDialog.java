@@ -15,6 +15,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
@@ -280,6 +281,11 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		Button addLabel = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 60, 3, 20, 15 }, "");
 		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addLabel.setImage(addImage);
+		if(OSValidator.isMac()){
+			addLabel.setSize(40, 30);
+		} else{
+			addLabel.setSize(30, 25);
+		}
 		addLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		addLabel.addMouseListener(new MouseAdapter() {
 			@Override
@@ -307,6 +313,11 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		Button deletLabel = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 160, 10, 20, 15 }, "");
 		Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		deletLabel.setImage(deleteImage);
+		if(OSValidator.isMac()){
+			deletLabel.setSize(40, 30);
+		} else{
+			deletLabel.setSize(30, 25);
+		}
 		deletLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deletLabel.addMouseListener(new MouseAdapter() {
 
@@ -409,7 +420,12 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		final Button addLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 184, 10, 20, 15 }, "");
 		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addLabel.setImage(addImage);
-		addLabel.setSize(30, 25);
+		if(OSValidator.isMac()){
+			addLabel.setSize(42, 30);
+		}else{
+			addLabel.setSize(30, 25);
+		}
+		
 		addLabel.setToolTipText(Messages.ADD_OPERATION_CONTROL);
 		
 		addLabel.addMouseListener(new MouseAdapter() {
@@ -421,7 +437,12 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		final Button deleteLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 220, 10, 20, 15 },"");
 		Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
-		deleteLabel.setSize(30, 25);
+		if(OSValidator.isMac()){
+			deleteLabel.setSize(40, 28);
+		} else{
+			deleteLabel.setSize(30, 25);
+		}
+		
 		deleteLabel.setImage(deleteImage);
 		deleteLabel.setToolTipText(Messages.DELETE_OPERATION_CONTROL);
 		deleteLabel.addMouseListener(new MouseAdapter() {
@@ -968,7 +989,12 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		Button addLabel = widget.buttonWidget(operationalOutputFieldComposite, SWT.CENTER, new int[] { 60, -1, 20, 15 },"");
 		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addLabel.setImage(addImage);
-		addLabel.setSize(30, 25);
+		if(OSValidator.isMac()){
+			addLabel.setSize(40, 30);
+		} else{
+			addLabel.setSize(30, 25);
+		}
+		
 		addLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		addLabel.addMouseListener(new MouseAdapter() {
 			@Override
@@ -993,7 +1019,13 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		Button deleteLabel = widget.buttonWidget(operationalOutputFieldComposite, SWT.CENTER,new int[] { 90, -1, 20, 15 }, "");
 		Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		deleteLabel.setImage(deleteImage);
-		deleteLabel.setSize(30, 25);
+		if(OSValidator.isMac()){
+			deleteLabel.setSize(40, 30);
+		} else{
+			deleteLabel.setSize(30, 25);
+		}
+		
+		
 		deleteLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deleteLabel.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1250,13 +1282,23 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		operationInputaddButton = widget.buttonWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 60, -1, 20,15 }, "");
 		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		operationInputaddButton.setImage(addImage);
-		operationInputaddButton.setSize(30, 25);
+		if(OSValidator.isMac()){
+			operationInputaddButton.setSize(40, 30);
+		} else{
+			operationInputaddButton.setSize(30, 25);
+		}
+		
 		operationInputaddButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		
 		operationInputDeleteButton = widget.buttonWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 90, -1,20, 15 }, "");
 		 Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		 operationInputDeleteButton.setImage(deleteImage);
-		 operationInputDeleteButton.setSize(30, 25);
+			if(OSValidator.isMac()){
+				operationInputDeleteButton.setSize(40, 30);
+			} else{
+				operationInputDeleteButton.setSize(30, 25);
+			}
+		 
 		operationInputDeleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		
 		isFieldNameAlphanumericDecorator.setMarginWidth(8);

@@ -58,7 +58,7 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 36.#440  [Vibhor Tyagi] Multiple Components: Schema Coulmns Need to be Re-Arranged
 37.#628  [Shrirang kumbhar] Debug Data viewer window does not appear in task bar 
 38.#636  [Shrirang kumbhar] Debug Service: Exception handling and error reporting if unable to create debug files
-39.#481  [Ashika Holkar ] Parameter Grid Window: Add/Delete/Up/Down/Save buttons are not in sync with the other button of application
+39.#481  [Ashika Holkar] Parameter Grid Window: Add/Delete/Up/Down/Save buttons are not in sync with the other button of application
 40.#172  [Nitin Gupta] Join Component icon and lookup icon size is getting enlarged if user import any xml file
 41.#164  [Nitin Gupta]  User should be able to delete multiple rows by selecting rows with control keys in schema grid
 42.#557  [Kalyan Rajpoot] Job Canvas: Components should move in job canvas using arrow keys
@@ -72,6 +72,12 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 50.#725  [Vibhor Tyagi] View Data Filter: Cell with Current Cursor Position Moves Down and Changes the Cell Value When User Searches For String in Current Page
 51.#732  [Vibhor Tyagi] View Data Filter: Search Values are Getting Skipped When User Switch to Other Page
 52.#734  [Vibhor Tyagi] View Data Find: Prev/Next String Search is not Going Recursively When User Reaches Start/End of the page
+53.#727  [Shrirang Kumbhar] Select All and Copy short cut text should as per the generic standard 
+54.#676  [Shrirang Kumbhar] Copy icon is missing in edit menu on data viewer window 
+55.#714  [Ashika Holkar] Add/ Delete/ up and Down buttons are not in sync with other window on Lookup Mapping and Join Mapping window
+56.#729  [Ashika Holkar] Parameter File Dialog: Focus should be on the OK button
+
+
 
 =====================================================================================================
 Notes for QA:
