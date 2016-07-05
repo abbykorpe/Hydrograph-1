@@ -114,7 +114,6 @@ public class ExportAction extends Action {
 	private String getPathOfFileDialog(FileDialog fileDialog) {
 		fileDialog.setText(EXPORT_FILE);
 		String exportDataDefaultpath = readExportDataDefaultPathFromFile();
-		
 		if (exportDataDefaultpath.equalsIgnoreCase(" ")) {
 			fileDialog.setFilterPath(null);
 		} else {
