@@ -76,9 +76,6 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 54.#676  [Shrirang Kumbhar] Copy icon is missing in edit menu on data viewer window 
 55.#714  [Ashika Holkar] Add/ Delete/ up and Down buttons are not in sync with other window on Lookup Mapping and Join Mapping window
 56.#729  [Ashika Holkar] Parameter File Dialog: Focus should be on the OK button
-
-
-
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
