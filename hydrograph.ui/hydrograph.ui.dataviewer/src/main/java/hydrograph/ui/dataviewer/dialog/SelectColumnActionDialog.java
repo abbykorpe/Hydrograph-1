@@ -26,6 +26,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -150,6 +152,18 @@ public class SelectColumnActionDialog extends Dialog {
 		moveDownLable .setBounds(0, 160, 24, 25);
 		Image down= new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DOWN_ICON);
 		moveDownLable.setImage(down);
+		
+		Button sortAll = new Button(allColumnsControlButtons, SWT.NONE);
+		sortAll.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Collections.sort(allColumns);
+				listAllComlumns.setItems(Arrays.copyOf(allColumns.toArray(),allColumns.toArray().length,String[].class));
+			}
+		});
+		sortAll.setBounds(6, 10, 43, 25);
+		sortAll.setText("Sort all");
+		
 		sashForm.setWeights(new int[] {294, 277});
 
 		addListeners(selectAllLabel, selectLabel, disSelectLabel, removeAll);

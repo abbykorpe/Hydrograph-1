@@ -48,6 +48,7 @@ public class SelectColumnAction extends Action {
 
 	@Override
 	public void run() {
+		debugDataViewer.getColumnList();
 		if(allColumns.size()==0 && selectedColumns.size()==0){
 			allColumns.addAll(debugDataViewer.getColumnList());
 		}
@@ -63,10 +64,12 @@ public class SelectColumnAction extends Action {
 		}
 	}
 
+	
+
 	/**
 	 * Dispose the current view
 	 */
-	private void diposeTable() {
+	public void diposeTable() {
 		for (int index = debugDataViewer.getTableViewer().getTable().getColumns().length-1; index >= 0; index--) {
 			debugDataViewer.getTableViewer().getTable().getColumns()[index].setImage(null);
 			debugDataViewer.getTableViewer().getTable().getColumns()[index].dispose();
@@ -77,7 +80,7 @@ public class SelectColumnAction extends Action {
 	/**
 	 * Recreate views with user's input
 	 */
-	private void recreateViews() {
+	public void recreateViews() {
 		String sortColumnsName=debugDataViewer.getSortedColumnName();
 		if(SortOrder.ASC == debugDataViewer.getSortOrder()){
 			sortType=debugDataViewer.getAscendingIcon();
@@ -110,5 +113,12 @@ public class SelectColumnAction extends Action {
 	 */
 	public List<String> getSelectedColumns() {
 		return selectedColumns;
+	}
+	public void setAllColumns(List<String> allColumns) {
+		this.allColumns = allColumns;
+	}
+
+	public void setSelectedColumns(List<String> selectedColumns) {
+		this.selectedColumns = selectedColumns;
 	}
 }
