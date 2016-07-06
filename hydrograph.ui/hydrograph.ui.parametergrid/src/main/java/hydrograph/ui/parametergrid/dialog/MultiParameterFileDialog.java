@@ -777,7 +777,7 @@ public class MultiParameterFileDialog extends Dialog {
 						
 					}
 				});
-				getShell().setFocus();
+				
 				item.addDisposeListener(new DisposeListener() {
 
 					@Override
@@ -791,7 +791,7 @@ public class MultiParameterFileDialog extends Dialog {
 		});
 		
 		parameterTableViewer.setInput(parameters);
-
+		getShell().setFocus();		
 		enableTabbing(filePathTableViewer);
 		setTableLayoutToMappingTable(parameterTableViewer);
 	}
@@ -1242,7 +1242,8 @@ public class MultiParameterFileDialog extends Dialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,true);
+		 Button okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,true);
+		okButton.setFocus();
 		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
 	}
 
