@@ -123,14 +123,7 @@ public class JoinMapDialog extends Dialog {
 	private static final String MAPPING_TABLE_ITEM_DELIMILATOR="#";
 
 	
-	private static final String PULL_BUTTON_TEXT="Pull";
-
-	private Shell shell;
-
-	private static final String ADD_BUTTON_TEXT="Add";
-	private static final String DELETE_BUTTON_TEXT="Delete";
-	private static final String UP_BUTTON_TEXT="Up";
-	private static final String DOWN_BUTTON_TEXT="Down";
+	
 	
 	private static final String PULL_TOOLTIP = "Pull schema";
 	private static final String ADD_TOOLTIP = "Add field";
@@ -149,7 +142,7 @@ public class JoinMapDialog extends Dialog {
 	 */@Deprecated
 	public JoinMapDialog(Shell parentShell) {
 		super(parentShell);
-		this.shell = parentShell;
+	
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL
 				| SWT.RESIZE);
 	}
@@ -157,7 +150,7 @@ public class JoinMapDialog extends Dialog {
 	public JoinMapDialog(Shell parentShell, Component component, JoinMappingGrid joinPropertyGrid,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
-		this.shell = parentShell;
+		
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL
 				| SWT.RESIZE);
 		this.joinMappingGrid = joinPropertyGrid;
@@ -597,9 +590,8 @@ public class JoinMapDialog extends Dialog {
 	
 	private void createPullButton(Composite composite_11) {
 		btnPull = new Button(composite_11, SWT.NONE);
-		Image pullButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.PULL_BUTTON);
+		Image pullButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.PULL_BUTTON);
 		btnPull.setImage(pullButtonImage);
-		//btnPull.setText(PULL_BUTTON_TEXT);
 		btnPull.setToolTipText(PULL_TOOLTIP);
 		
 		btnPull.addSelectionListener(new SelectionAdapter() {
@@ -625,9 +617,9 @@ public class JoinMapDialog extends Dialog {
 	private void createDownButton(Composite composite_11) {
 		btnDown = new Button(composite_11, SWT.NONE);
 		btnDown.setToolTipText(DOWN_TOOLTIP);
-		Image downButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
+		Image downButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
 		btnDown.setImage(downButtonImage);
-		//btnDown.setText(DOWN_BUTTON_TEXT);
+		
 		btnDown.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -651,8 +643,7 @@ public class JoinMapDialog extends Dialog {
 	private void createUpButton(Composite composite_11) {
 		btnUp = new Button(composite_11, SWT.NONE);
 		btnUp.setToolTipText(UP_TOOLTIP);
-		//btnUp.setText(UP_BUTTON_TEXT);
-		Image upButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
+		Image upButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
 		btnUp.setImage(upButtonImage);
 		btnUp.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -677,8 +668,7 @@ public class JoinMapDialog extends Dialog {
 		
 		btnDelete = new Button(composite_11, SWT.NONE);
 		btnDelete.setToolTipText(DELETE_TOOLTIP);
-		//btnDelete.setText(DELETE_BUTTON_TEXT);
-		Image deleteButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
+		Image deleteButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
 		btnDelete.setImage(deleteButtonImage);
 
 		btnDelete.addSelectionListener(new SelectionAdapter() {
@@ -711,8 +701,7 @@ public class JoinMapDialog extends Dialog {
 	private void createAddButton(Composite composite_11) {
 		btnAdd = new Button(composite_11, SWT.NONE);
 		btnAdd.setToolTipText(ADD_TOOLTIP);
-		//btnAdd.setText(ADD_BUTTON_TEXT);
-		Image addButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
+		Image addButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
 		btnAdd.setImage(addButtonImage);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override

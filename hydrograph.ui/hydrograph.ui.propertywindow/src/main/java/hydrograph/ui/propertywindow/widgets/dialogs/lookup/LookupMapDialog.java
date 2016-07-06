@@ -102,7 +102,7 @@ public class LookupMapDialog extends Dialog {
 	private Button btnUp;
 	private Button btnDelete;
 	private Button btnAdd;
-	private Shell shell; 
+
 	private static final String FIELD_TOOLTIP_MESSAGE_NO_SUCH_INPUT_FIELD="No such input field";
 	private static final String FIELD_TOOLTIP_MESSAGE_FIELD_CANT_BE_EMPTY="Field can not be empty";
 	private static final String FIELD_TOOLTIP_MESSAGE_DUPLICATE_FIELDS="Duplicate field";
@@ -111,12 +111,6 @@ public class LookupMapDialog extends Dialog {
 	private static final String IN1_PREFIX = "in1.";
 	private static final String IN0_HEADER = "Input Fields(in0)";
 	private static final String IN1_HEADER = "Input Fields(in1)";
-	
-//	private static final String PULL_BUTTON_TEXT="Pull";
-//	private static final String ADD_BUTTON_TEXT="Add";
-//	private static final String DELETE_BUTTON_TEXT="Delete";
-//	private static final String UP_BUTTON_TEXT="Up";
-//	private static final String DOWN_BUTTON_TEXT="Down";
 	
 	private static final String PULL_TOOLTIP = "Pull schema";
 	private static final String ADD_TOOLTIP = "Add field";
@@ -136,7 +130,7 @@ public class LookupMapDialog extends Dialog {
 	 */@Deprecated
 	public LookupMapDialog(Shell parentShell) {
 		super(parentShell);
-		this.shell = parentShell;
+		
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL
 				| SWT.RESIZE);
 	}
@@ -144,7 +138,7 @@ public class LookupMapDialog extends Dialog {
 	public LookupMapDialog(Shell parentShell, Component component, LookupMappingGrid lookupPropertyGrid,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
-		this.shell = parentShell;
+		
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL
 				| SWT.RESIZE);
 		this.lookupMappingGrid = lookupPropertyGrid;
@@ -488,9 +482,8 @@ public class LookupMapDialog extends Dialog {
 
 	private void createPullButton(Composite composite_11) {
 		btnPull = new Button(composite_11, SWT.NONE);
-	Image pullButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.PULL_BUTTON);
+	Image pullButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.PULL_BUTTON);
 		btnPull.setImage(pullButtonImage);
-		//btnPull.setText(PULL_BUTTON_TEXT);
 		btnPull.setToolTipText(PULL_TOOLTIP);
 		
 		btnPull.addSelectionListener(new SelectionAdapter() {
@@ -515,10 +508,8 @@ public class LookupMapDialog extends Dialog {
 	
 	private void createDownButton(Composite composite_11) {
 		btnDown = new Button(composite_11, SWT.NONE);
-	Image downButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
+	Image downButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
 		btnDown.setImage(downButtonImage);
-		//btnDown.setText(DOWN_BUTTON_TEXT);
-
 		btnDown.setToolTipText(DOWN_TOOLTIP);
 		btnDown.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -542,9 +533,8 @@ public class LookupMapDialog extends Dialog {
 
 	private void createUpButton(Composite composite_11) {
 		btnUp = new Button(composite_11, SWT.NONE);
-		Image upButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
+		Image upButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
 		btnUp.setImage(upButtonImage);
-	//	btnUp.setText(UP_BUTTON_TEXT);
 		btnUp.setToolTipText(UP_TOOLTIP);
 		btnUp.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -567,8 +557,7 @@ public class LookupMapDialog extends Dialog {
 
 	private void createDeleteButton(Composite composite_11) {
 		btnDelete = new Button(composite_11, SWT.NONE);
-		//btnDelete.setText(DELETE_BUTTON_TEXT);
-		Image deleteButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
+		Image deleteButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
 		btnDelete.setImage(deleteButtonImage);
 		btnDelete.setToolTipText(DELETE_TOOLTIP);
 		btnDelete.addSelectionListener(new SelectionAdapter() {
@@ -601,8 +590,7 @@ public class LookupMapDialog extends Dialog {
 
 	private void createAddButton(Composite composite_11) {
 		btnAdd = new Button(composite_11, SWT.NONE);
-	//	btnAdd.setText(ADD_BUTTON_TEXT);
-		Image addButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
+		Image addButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
 		btnAdd.setImage(addButtonImage);
 		btnAdd.setToolTipText(ADD_TOOLTIP);
 		btnAdd.addSelectionListener(new SelectionAdapter() {

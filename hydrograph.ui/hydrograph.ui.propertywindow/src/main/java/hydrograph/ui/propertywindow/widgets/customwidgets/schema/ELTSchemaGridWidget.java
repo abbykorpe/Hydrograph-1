@@ -64,6 +64,7 @@ import hydrograph.ui.propertywindow.widgets.listeners.grid.GridChangeListener;
 import hydrograph.ui.propertywindow.widgets.utility.GridComparator;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import hydrograph.ui.propertywindow.widgets.utility.MouseWheelScrollingOnComposite;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
@@ -178,7 +179,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String OPERATION ="operation";
 	private static final int tableHeight=340;
 	private static final int tableWidth=360;
-	
+	private Integer windowButtonWidth = 35;
+	private Integer windowButtonHeight = 25;
+	private Integer macButtonWidth = 40;
+	private Integer macButtonHeight = 30;
 
 	protected boolean transformSchemaType=false;
 
@@ -1345,15 +1349,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	}
 
 	private void addAddButton(ELTSchemaSubgroupComposite buttonSubGroup) {
+		
 		addButton = new ELTDefaultButton("");
-		if(OSValidator.isMac()){
-			addButton.buttonWidth(40);
-			addButton.buttonHeight(30);
-		}
-		else{
-		addButton.buttonWidth(35);
-		addButton.buttonHeight(25);
-		}
+		
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		buttonSubGroup.attachWidget(addButton);
 		addButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
 		addButton.setToolTipText(addButtonTooltip);
@@ -1361,14 +1360,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private void addDeleteButton(ELTSchemaSubgroupComposite buttonSubGroup) {
 		deleteButton = new ELTDefaultButton("");
-		if(OSValidator.isMac()){
-			deleteButton.buttonWidth(40);
-			deleteButton.buttonHeight(30);
-		}
-		else{
-		deleteButton.buttonWidth(35);
-		deleteButton.buttonHeight(25);
-		}
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		buttonSubGroup.attachWidget(deleteButton);
 		deleteButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
 		deleteButton.setToolTipText(removeButtonTooltip);
@@ -1376,14 +1368,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private void addUpButton(ELTSchemaSubgroupComposite buttonSubGroup) {
 		upButton = new ELTDefaultButton("");
-		if(OSValidator.isMac()){
-			upButton.buttonWidth(40);
-			upButton.buttonHeight(30);
-		}
-		else{
-		upButton.buttonWidth(35);
-		upButton.buttonHeight(25);
-		}
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(upButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		buttonSubGroup.attachWidget(upButton);
 		upButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
 		upButton.setToolTipText(upButtonTooltip);
@@ -1413,14 +1398,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private void addDownButton(ELTSchemaSubgroupComposite buttonSubGroup) {
 		downButton = new ELTDefaultButton("");
-		if(OSValidator.isMac()){
-			downButton.buttonWidth(40);
-			downButton.buttonHeight(30);
-		}
-		else{
-		downButton.buttonWidth(35);
-		downButton.buttonHeight(25);
-		}
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(downButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		buttonSubGroup.attachWidget(downButton);
 
 		downButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);

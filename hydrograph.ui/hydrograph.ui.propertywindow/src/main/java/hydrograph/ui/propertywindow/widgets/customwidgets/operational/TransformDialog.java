@@ -15,7 +15,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.OSValidator;
+
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
@@ -39,6 +39,7 @@ import hydrograph.ui.propertywindow.widgets.filterproperty.ErrorLabelProvider;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
 import hydrograph.ui.propertywindow.widgets.utility.DragDropUtility;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
@@ -159,13 +160,15 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private ControlDecoration fieldNameDecorator;
 	private SashForm mainSashForm;
 	private SashForm middleSashForm;
-	private Shell shell;
+	private Integer windowButtonWidth = 30;
+	private Integer windowButtonHeight = 25;
+	private Integer macButtonWidth = 40;
+	private Integer macButtonHeight = 30;
 	
 	
 	public TransformDialog(Shell parentShell, Component component, WidgetConfig widgetConfig, TransformMapping atMapping) {
 
 		super(parentShell);
-		this.shell = parentShell;
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.transformMapping = atMapping;
 		isYesButtonPressed = false;
@@ -273,19 +276,15 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			}
 		});
 		btnPull.setBounds(20, 10, 20, 20);
-		Image pullButtonImage = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.PULL_BUTTON);
+		Image pullButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.PULL_BUTTON);
 		btnPull.setImage(pullButtonImage);
 		
-		//btnPull.setText(Messages.PULL_BUTTON_LABEL);
+	
 	
 		Button addLabel = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 60, 3, 20, 15 }, "");
 		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addLabel.setImage(addImage);
-		if(OSValidator.isMac()){
-			addLabel.setSize(40, 30);
-		} else{
-			addLabel.setSize(30, 25);
-		}
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addLabel,macButtonWidth,macButtonHeight,windowButtonWidth,windowButtonHeight);
 		addLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		addLabel.addMouseListener(new MouseAdapter() {
 			@Override
@@ -311,13 +310,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		
 		
 		Button deletLabel = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 160, 10, 20, 15 }, "");
-		Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		deletLabel.setImage(deleteImage);
-		if(OSValidator.isMac()){
-			deletLabel.setSize(40, 30);
-		} else{
-			deletLabel.setSize(30, 25);
-		}
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deletLabel,macButtonWidth,macButtonHeight,windowButtonWidth,windowButtonHeight);
 		deletLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deletLabel.addMouseListener(new MouseAdapter() {
 
@@ -418,14 +413,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		
 		final Button addLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 184, 10, 20, 15 }, "");
-		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
+		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addLabel.setImage(addImage);
-		if(OSValidator.isMac()){
-			addLabel.setSize(42, 30);
-		}else{
-			addLabel.setSize(30, 25);
-		}
-		
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addLabel,42,30,30,25);
 		addLabel.setToolTipText(Messages.ADD_OPERATION_CONTROL);
 		
 		addLabel.addMouseListener(new MouseAdapter() {
@@ -436,13 +426,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		});
 
 		final Button deleteLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 220, 10, 20, 15 },"");
-		Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
-		if(OSValidator.isMac()){
-			deleteLabel.setSize(40, 28);
-		} else{
-			deleteLabel.setSize(30, 25);
-		}
-		
+		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteLabel,40,28,30,25);
 		deleteLabel.setImage(deleteImage);
 		deleteLabel.setToolTipText(Messages.DELETE_OPERATION_CONTROL);
 		deleteLabel.addMouseListener(new MouseAdapter() {
@@ -575,7 +560,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	
 
 		Button mapFieldAddLabel = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 635, 10, 20, 15 }, "");
-		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
+		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		mapFieldAddLabel.setImage(addImage);
 		mapFieldAddLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		mapFieldAddLabel.addMouseListener(new MouseAdapter() {
@@ -598,7 +583,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		});
 
 		Button mapFieldDeletLabel = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 665, 10, 20, 15 }, "");
-		Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		mapFieldDeletLabel.setImage(deleteImage);
 		mapFieldDeletLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 
@@ -987,14 +972,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		DragDropUtility.INSTANCE.applyDrop(operationalInputFieldTableViewer, dragDropTransformOpImpnew);
 
 		Button addLabel = widget.buttonWidget(operationalOutputFieldComposite, SWT.CENTER, new int[] { 60, -1, 20, 15 },"");
-		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
+		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addLabel.setImage(addImage);
-		if(OSValidator.isMac()){
-			addLabel.setSize(40, 30);
-		} else{
-			addLabel.setSize(30, 25);
-		}
-		
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addLabel,macButtonWidth,macButtonHeight,windowButtonWidth,windowButtonHeight);
 		addLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		addLabel.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1017,15 +997,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		
 		Button deleteLabel = widget.buttonWidget(operationalOutputFieldComposite, SWT.CENTER,new int[] { 90, -1, 20, 15 }, "");
-		Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		deleteLabel.setImage(deleteImage);
-		if(OSValidator.isMac()){
-			deleteLabel.setSize(40, 30);
-		} else{
-			deleteLabel.setSize(30, 25);
-		}
-		
-		
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteLabel,macButtonWidth,macButtonHeight,windowButtonWidth,windowButtonHeight);
 		deleteLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deleteLabel.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1280,25 +1254,15 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		
 		editors[0].setValidator(new TransformCellEditorFieldValidator(fieldNameDecorator,isFieldNameAlphanumericDecorator));
 		operationInputaddButton = widget.buttonWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 60, -1, 20,15 }, "");
-		Image addImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
+		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		operationInputaddButton.setImage(addImage);
-		if(OSValidator.isMac()){
-			operationInputaddButton.setSize(40, 30);
-		} else{
-			operationInputaddButton.setSize(30, 25);
-		}
-		
+		 SchemaButtonsSyncUtility.INSTANCE.buttonSize(operationInputaddButton,macButtonWidth,macButtonHeight,windowButtonWidth,windowButtonHeight);
 		operationInputaddButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		
 		operationInputDeleteButton = widget.buttonWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 90, -1,20, 15 }, "");
-		 Image deleteImage = new Image(shell.getDisplay(), XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+		 Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		 operationInputDeleteButton.setImage(deleteImage);
-			if(OSValidator.isMac()){
-				operationInputDeleteButton.setSize(40, 30);
-			} else{
-				operationInputDeleteButton.setSize(30, 25);
-			}
-		 
+		 SchemaButtonsSyncUtility.INSTANCE.buttonSize(operationInputDeleteButton,macButtonWidth,macButtonHeight,windowButtonWidth,windowButtonHeight);
 		operationInputDeleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		
 		isFieldNameAlphanumericDecorator.setMarginWidth(8);
