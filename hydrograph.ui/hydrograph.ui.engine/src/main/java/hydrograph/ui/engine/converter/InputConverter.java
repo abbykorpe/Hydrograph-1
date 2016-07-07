@@ -20,6 +20,7 @@ import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
 import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.PathUtility;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -30,6 +31,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
 /**
  * 
@@ -71,7 +73,8 @@ public abstract class InputConverter extends Converter {
 		if(schema!=null){
 		if(schema.getIsExternal()){
 			TypeExternalSchema typeExternalSchema=new TypeExternalSchema();
-			if(PathUtility.INSTANCE.isAbsolute(schema.getExternalSchemaPath()))
+			if(PathUtility.INSTANCE.isAbsolute(schema.getExternalSchemaPath()) 
+					|| ParameterUtil.startsWithParameter(schema.getExternalSchemaPath(), Path.SEPARATOR))
 				typeExternalSchema.setUri(schema.getExternalSchemaPath());
 			else
 				typeExternalSchema.setUri("../"+schema.getExternalSchemaPath());
