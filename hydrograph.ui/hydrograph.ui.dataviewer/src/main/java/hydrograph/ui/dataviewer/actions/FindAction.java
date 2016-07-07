@@ -40,8 +40,7 @@ public class FindAction extends Action{
 	@Override
 	public void run() {
 		if(!isOpened){
-			FindViewDataDialog findViewDataDialog = new FindViewDataDialog(Display.getDefault().getActiveShell(), debugDataViewer.getTableViewer(),
-					debugDataViewer.getFormattedViewTextarea(), debugDataViewer.getUnformattedViewTextarea(), debugDataViewer.getCurrentView());
+			FindViewDataDialog findViewDataDialog = new FindViewDataDialog(Display.getDefault().getActiveShell(), debugDataViewer);
 			findViewDataDialog.open(this);
 		}
 	}
