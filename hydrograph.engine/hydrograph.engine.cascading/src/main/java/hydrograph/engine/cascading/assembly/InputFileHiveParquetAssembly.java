@@ -18,8 +18,10 @@ import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetScheme;
 import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetTableDescriptor;
+import hydrograph.engine.utilities.HiveConfigurationMapping;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +57,11 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 		// Parquet File format with Hive. Hence, the object of table descriptor
 		// is created in its respective assembly and not in its base class.
 
-		HiveTableDescriptor.Factory factory = new Factory(new Configuration());
+		Configuration conf=new Configuration();
+		conf.addResource(new Path(HiveConfigurationMapping
+				.getHiveConf("path_to_hive_site_xml")));
+		
+		HiveTableDescriptor.Factory factory = new Factory(conf);
 		HiveTableDescriptor tb = factory.newInstance(
 				inputFileHiveParquetEntity.getDatabaseName(),
 				inputFileHiveParquetEntity.getTableName());

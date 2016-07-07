@@ -14,6 +14,7 @@ package hydrograph.engine.bhse.xmlparser.preprocessor;
 
 import java.io.IOException;
 
+import org.apache.commons.cli.ParseException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class ReadSubjobTest {
 	private static Logger LOG = LoggerFactory.getLogger(ReadSubjobTest.class);
 
 	@Test
-	public void readInputSubjob() {
+	public void readInputSubjob() throws ParseException {
 
 		String[] args = new String[] { "-xmlpath",
 				"testData/XMLFiles/inputSubjob/Mainjob.xml",
@@ -62,7 +63,7 @@ public class ReadSubjobTest {
 	}
 	
 	@Test
-	public void readOperationSubjob() {
+	public void readOperationSubjob() throws ParseException {
 
 		String[] args = new String[] { "-xmlpath",
 				"testData/XMLFiles/operationSubjob/Mainjob.xml",

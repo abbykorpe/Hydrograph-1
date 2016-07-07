@@ -14,14 +14,16 @@ package hydrograph.engine.core.core;
 
 import java.util.Properties;
 
+import org.apache.commons.cli.ParseException;
+
 public interface HydrographRuntimeService {
 
 	public void initialize(Properties config, String[] args, HydrographJob bhsGraph,
 			HydrographDebugInfo hydrographDebugInfo, String jobId, String basePath);
 
-	public void prepareToExecute();
+	public void prepareToExecute() throws ParseException;
 
-	public void execute();
+	public void execute() throws ParseException;
 
 	public void oncomplete();
 

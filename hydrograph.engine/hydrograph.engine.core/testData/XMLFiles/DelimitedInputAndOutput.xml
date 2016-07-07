@@ -11,30 +11,22 @@
     limitations under the License.
  -->
 
-<p:graph name ="DelimitedInputAndOutput.xml" xmlns:it="http://www.bitwiseglobal.com/graph/inputtypes"
-	xmlns:ot="http://www.bitwiseglobal.com/graph/outputtypes" xmlns:spt="http://www.bitwiseglobal.com/graph/straightpulltypes"
-	xmlns:op="http://www.bitwiseglobal.com/graph/operationstypes" xmlns:ct="http://www.bitwiseglobal.com/graph/commandtypes"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.bitwiseglobal.com/graph/main"
-	xsi:schemaLocation="http://www.bitwiseglobal.com/graph/main ./main/main.xsd ">
-
-	<inputs id="input1" phase="1" xsi:type="it:text-file-delimited">
+<p:graph name="AggregateExample" xmlns:it="hydrograph/engine/jaxb/inputtypes"	xmlns:ot="hydrograph/engine/jaxb/outputtypes" xmlns:spt="hydrograph/engine/jaxb/straightpulltypes"	xmlns:op="hydrograph/engine/jaxb/operationstypes" xmlns:ct="hydrograph/engine/jaxb/commandtypes"	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="hydrograph/engine/jaxb/main"	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../hydrograph.engine.core/src/main/resources/newxmlschema/main/main.xsd  ">
+	<inputs id="@{input}" phase="0" xsi:type="it:textFileDelimited">
 		<outSocket id="out0">
 			<schema name="outSchema">
-				<include_external_schema uri="testData/XMLFiles/schema.xml" />
+				<includeExternalSchema uri="../hydrograph.engine.core/testData/XMLFiles/schema.xml" />
 			</schema>
 		</outSocket>
-		<dependsOn componentId="ll" />
-		<path uri="@{PATH}" />
+		<path uri="testData\input\delimitedInputFile" />
 		<delimiter value="," />
-		<has_header value="false" />
-		<safe value="true" />
-		<charset value="ISO-8859-1" />
-		<quote value="asd" />
+		<hasHeader value="false" />
+		<safe value="false" />
 	</inputs>
 
-	<outputs id="output1" xsi:type="ot:text-file-delimited">
-		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0">
-			<schema name="outSchema">
+	<outputs id="@{out&put}" xsi:type="ot:textFileDelimited">
+		<inSocket fromComponentId="@{input}" fromSocketId="out0" id="in0">
+			<schema name="inSchema">
 			<field name="id" type="java.lang.String" />
 				<field name="name" type="java.lang.String" />
 				<field name="city" type="java.lang.String" />
@@ -42,11 +34,6 @@
 		</inSocket>
 		<path uri="testData\output\DelimitedComponentsOp" />
 		<delimiter value="," />
-		<has_header value="true" />
-		<charset value="ISO-8859-1" />
-		<runtime_properties>
-			<property name="prop" value="propValue" />
-		</runtime_properties>
-		<!-- <quote value="asd" /> -->
+		<hasHeader value="true" />
 	</outputs>
 </p:graph>

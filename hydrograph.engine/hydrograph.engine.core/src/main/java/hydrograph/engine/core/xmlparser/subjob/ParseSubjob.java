@@ -254,9 +254,7 @@ public class ParseSubjob {
 				.getNodeValue();
 		componentNode.getAttributes().getNamedItem(ID)
 				.setNodeValue(subjobName + "." + componentId);
-		if (componentId.equals("reformat")){
-			System.out.println(componentId);
-		}
+
 		if (!isSubjobIOComponent(componentNode.getAttributes()
 				.getNamedItem(TYPE).getNodeValue())) {
 			if (componentNode.getAttributes().getNamedItem(PHASE) == null){

@@ -14,6 +14,9 @@ package hydrograph.engine.core.xmlparser.parametersubstitution;
 
 import java.io.IOException;
 
+import org.apache.commons.cli.ParseException;
+
+import hydrograph.engine.core.commandlineparser.CLIParser;
 import hydrograph.engine.core.utilities.GeneralUtilities;
 
 public class UserParameters implements IParameterBank {
@@ -22,9 +25,9 @@ public class UserParameters implements IParameterBank {
 	private FileParameters fileParameters = new FileParameters();
 	private IParameterBank commandLineParams;
 
-	public UserParameters(String[] args) throws IOException {
-		commandLineParams = optionProcessor.getParams(args);
-		String commaSeperatedPaths = optionProcessor.getParamFiles(args);
+	public UserParameters(String[] args) throws IOException, ParseException {
+		commandLineParams = CLIParser.getParameters(args);
+		String commaSeperatedPaths = CLIParser.getParameterFiles(args);
 		if (commaSeperatedPaths != null) {
 			fileParameters.loadCommaSeperatedFiles(commaSeperatedPaths);
 		}

@@ -16,13 +16,12 @@ import java.util.Properties;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.cli.ParseException;
+
 public interface HydrographInputService {
 
-	public HydrographJob parseHydrographJob(Properties config, String[] args) throws JAXBException;
+	public HydrographJob parseHydrographJob(Properties config, String[] args) throws JAXBException, ParseException;
 	
-	public HydrographDebugInfo parseHydrographDebugInfo(Properties config, String[] args) throws JAXBException;
+	public HydrographDebugInfo parseHydrographDebugInfo(Properties config, String[] args) throws JAXBException, ParseException;
 	
-	public String getJobId( String[] args);
-	
-	public String getBasePath( String[] args);
 }

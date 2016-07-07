@@ -12,6 +12,6 @@
  -->
 <fields>
 				<field name="id" type="java.lang.String" />
-				<include_external_schema uri="@{PATH2}" />
+				<includeExternalSchema uri="@{PATH2}" />
 				<field name="city" type="java.lang.String" />
 </fields>

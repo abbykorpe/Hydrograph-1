@@ -22,11 +22,13 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.HiveTypeToCoercibleTypeMapping;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
 import hydrograph.engine.cascading.scheme.hive.text.HiveTextTableDescriptor;
+import hydrograph.engine.utilities.HiveConfigurationMapping;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,8 +82,12 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 		// HiveTextTableDescriptor is developed specifically for handling
 		// Text File format with Hive. Hence, the object of table descriptor
 		// is created in its respective assembly and not in its base class.
+		
+		Configuration conf=new Configuration();
+		conf.addResource(new Path(HiveConfigurationMapping
+				.getHiveConf("path_to_hive_site_xml")));
 
-		HiveTableDescriptor.Factory factory = new Factory(new Configuration());
+		HiveTableDescriptor.Factory factory = new Factory(conf);
 		HiveTableDescriptor tb = factory.newInstance(
 				inputHiveFileEntity.getDatabaseName(),
 				inputHiveFileEntity.getTableName());
