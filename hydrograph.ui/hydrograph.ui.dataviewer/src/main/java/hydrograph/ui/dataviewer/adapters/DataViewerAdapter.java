@@ -125,7 +125,7 @@ public class DataViewerAdapter {
 		this.filterCondition = filterCondition;
 	}
 	
-	public String getDataTypeString() {
+	private String getDataTypeString() {
 		String dataTypeString="";
 		String debugFileName = debugDataViewer.getDebugFileName();
 		String debugFileLocation = debugDataViewer.getDebugFileLocation();

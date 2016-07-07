@@ -26,11 +26,11 @@ import org.eclipse.swt.widgets.TableColumn;
  * @author Bitwise
  *
  */
-public class AutoExpandColumns extends Action {
+public class AutoExpandColumnsAction extends Action {
 	private static final String LABEL="Auto E&xapand Columns@Ctrl+X";
 	private DebugDataViewer debugDataViewer;
 	
-	public AutoExpandColumns(DebugDataViewer debugDataViewer){
+	public AutoExpandColumnsAction(DebugDataViewer debugDataViewer){
 		super(LABEL);
 		setAccelerator(SWT.MOD1 | 'x');
 		this.debugDataViewer = debugDataViewer;

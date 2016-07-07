@@ -21,21 +21,6 @@ public class FilterConditions {
 	
 	private Map<Integer,List<List<Integer>>> localGroupSelectionMap = new TreeMap<>();
 	private Map<Integer,List<List<Integer>>> remoteGroupSelectionMap = new TreeMap<>();
-	
-	public Map<Integer, List<List<Integer>>> getLocalGroupSelectionMap() {
-		return localGroupSelectionMap;
-	}
-	public void setLocalGroupSelectionMap(
-			Map<Integer, List<List<Integer>>> localGroupSelectionMap) {
-		this.localGroupSelectionMap = localGroupSelectionMap;
-	}
-	public Map<Integer, List<List<Integer>>> getRemoteGroupSelectionMap() {
-		return remoteGroupSelectionMap;
-	}
-	public void setRemoteGroupSelectionMap(
-			Map<Integer, List<List<Integer>>> remoteGroupSelectionMap) {
-		this.remoteGroupSelectionMap = remoteGroupSelectionMap;
-	}
 	private List<Condition> localConditions;
 	private List<Condition> remoteConditions;
 	private boolean retainLocal=false;
@@ -86,5 +71,21 @@ public class FilterConditions {
 	public String getLocalCondition() {
 		return localCondition;
 	}
+	
+	public Map<Integer, List<List<Integer>>> getLocalGroupSelectionMap() {
+		return localGroupSelectionMap;
+	}
+	public void setLocalGroupSelectionMap(
+			Map<Integer, List<List<Integer>>> localGroupSelectionMap) {
+		this.localGroupSelectionMap = localGroupSelectionMap;
+	}
+	public Map<Integer, List<List<Integer>>> getRemoteGroupSelectionMap() {
+		return remoteGroupSelectionMap;
+	}
+	public void setRemoteGroupSelectionMap(
+			Map<Integer, List<List<Integer>>> remoteGroupSelectionMap) {
+		this.remoteGroupSelectionMap = remoteGroupSelectionMap;
+	}
 }
+
 

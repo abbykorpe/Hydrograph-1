@@ -60,14 +60,13 @@ public class DataViewerFileManager {
 		this.jobDetails = jobDetails;
 	}
 	
-	public DataViewerFileManager()
-	{
-		
+	public DataViewerFileManager(){
 	}
+
 	
 	/**
 	 * 
-	 * Donload debug file in data viewer wrokspace
+	 * Download debug file in data viewer workspace
 	 * @param filterConditions 
 	 * 
 	 * @return error code

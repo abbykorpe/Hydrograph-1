@@ -29,7 +29,6 @@ public class ViewDataQueryBuilder {
 
 	private List<String> columns = new ArrayList<String>();
 	private String table;
-	private String wheres;
 	private Integer limit;
 	private Long offset;
 
@@ -63,7 +62,6 @@ public class ViewDataQueryBuilder {
 	 * @return {@link ViewDataQueryBuilder}
 	 */
 	public ViewDataQueryBuilder setwhereCondition(String filterCondition) {
-		wheres=filterCondition;
 		return this;
 	}
 

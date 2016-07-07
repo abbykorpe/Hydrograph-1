@@ -28,15 +28,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
+/**
+ * Action class to initiate the Filter Window
+ * @author Bitwise
+ *
+ */
 public class FilterAction extends Action {
-	
-	private static final String LABEL="Filter";
-	private DebugDataViewer debugDataViewer;
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterAction.class);
-	private String SCHEMA_FILE_EXTENTION=".xml";
+	private static final String LABEL="Filter";
+	private static final String SCHEMA_FILE_EXTENTION=".xml";
+	
+	private DebugDataViewer debugDataViewer;
 	private FilterConditions filterConditions;
 	
 	
@@ -47,7 +51,7 @@ public class FilterAction extends Action {
 	}
 	@Override
 	public void run() {
-		FilterConditionsDialog filterConditionsDialog=new FilterConditionsDialog(new Shell());
+		FilterConditionsDialog filterConditionsDialog=new FilterConditionsDialog(debugDataViewer.getShell());
 
 		filterConditionsDialog.setFieldsAndTypes(getFieldsAndTypes());
 		try {
