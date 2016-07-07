@@ -154,10 +154,10 @@ public class DatasetInformationDialog extends Dialog {
 		
 		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getQuote());
 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.LOCAL_FILTER_CONDITION);
+		createLabel(genralTabDatacomposite,DatasetInformationConstants.DOWNLOADED_FILTER_CONDITION);
 		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getLocalFilter());
 		 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.REMOTE_FILTER_CONDITION);
+		createLabel(genralTabDatacomposite,DatasetInformationConstants.ORIGINAL_FILTER_CONDITION);
 		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getRemoteFilter());
 		
 		TabItem tbtmSchema = new TabItem(tabFolder, SWT.NONE);

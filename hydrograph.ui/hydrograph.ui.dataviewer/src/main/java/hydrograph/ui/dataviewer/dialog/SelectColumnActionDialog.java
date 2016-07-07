@@ -26,6 +26,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -33,6 +37,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
@@ -56,6 +61,7 @@ public class SelectColumnActionDialog extends Dialog {
 	private static final String ALL_COLUMNS = "All Columns";
 	private static final String SELECTED_COLUMNS = "Selected Columns";
 	private static final String SKIP = "skip";
+	private Image ascending=new Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
 	/**
 	 * @param parentShell
 	 * @param selectColumnAction
@@ -87,21 +93,41 @@ public class SelectColumnActionDialog extends Dialog {
 		
 		Composite allColumnsComposite = new Composite(sashForm, SWT.NONE);
 		allColumnsComposite.setLayout(new GridLayout(2, false));
-		Label allColumnsLabel = new Label(allColumnsComposite, SWT.NONE);
-		GridData gd_lblAllColumns = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_lblAllColumns.widthHint = 141;
-		allColumnsLabel.setLayoutData(gd_lblAllColumns);
-		allColumnsLabel.setText(ALL_COLUMNS);
+		
+		Composite lblAndBtncomposite = new Composite(allColumnsComposite, SWT.NONE);
+		lblAndBtncomposite.setLayout(new GridLayout(2, false));
+		GridData gd_lblAndBtncomposite = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
+		gd_lblAndBtncomposite.heightHint = 34;
+		lblAndBtncomposite.setLayoutData(gd_lblAndBtncomposite);
+		
+		Label lblAllColumns = new Label(lblAndBtncomposite, SWT.NONE);
+		GridData gd_lblNewLabel = new GridData(SWT.LEFT, SWT.TOP, true, false, 1, 1);
+		gd_lblNewLabel.widthHint = 79;
+		lblAllColumns.setLayoutData(gd_lblNewLabel);
+		lblAllColumns.setText(ALL_COLUMNS);
+		FontData[] allColumnFont = lblAllColumns.getFont().getFontData();
+		allColumnFont[0].setHeight(11);
+		lblAllColumns.setFont( new Font(shell.getDisplay(),allColumnFont[0]));
+		
+		Button sortAll = new Button(lblAndBtncomposite, SWT.NONE);
+		GridData gd_sortAll = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		gd_sortAll.widthHint = 18;
+		gd_sortAll.heightHint = 18;
+		sortAll.setLayoutData(gd_sortAll);
 		new Label(allColumnsComposite, SWT.NONE);
+		sortAll.setImage(ascending);
+		
 		
 		listAllComlumns = new List(allColumnsComposite, SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL);
 		listAllComlumns.setItems(Arrays.copyOf(allColumns.toArray(),allColumns.toArray().length,String[].class));
-		listAllComlumns.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_listAllComlumns = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_listAllComlumns.widthHint = 228;
+		listAllComlumns.setLayoutData(gd_listAllComlumns);
 
 		Composite allColumnsControlButtons = new Composite(allColumnsComposite, SWT.NONE);
 		allColumnsControlButtons.setLayout(null);
 		GridData gd_allColumnsControlButtons = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
-		gd_allColumnsControlButtons.widthHint = 31;
+		gd_allColumnsControlButtons.widthHint = 40;
 		gd_allColumnsControlButtons.heightHint = 41;
 		allColumnsControlButtons.setLayoutData(gd_allColumnsControlButtons);
 		
@@ -125,20 +151,46 @@ public class SelectColumnActionDialog extends Dialog {
 		Image disSelectAll = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DESELECT_ALL_ICON);
 		removeAll.setImage(disSelectAll);
 		
+		
+		
 		Composite selectColumnComposite = new Composite(sashForm, SWT.NONE);
 		selectColumnComposite.setLayout(new GridLayout(2, false));
-		Label selectedColumnsLabel = new Label(selectColumnComposite, SWT.NONE);
-		selectedColumnsLabel.setText(SELECTED_COLUMNS);
+		
+		Composite composite = new Composite(selectColumnComposite, SWT.NONE);
+		composite.setLayout(new GridLayout(2, false));
+		GridData gd_composite = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
+		gd_composite.heightHint = 34;
+		composite.setLayoutData(gd_composite);
+		
+		Label lblSelectedColumns = new Label(composite, SWT.NONE);
+		GridData gd_lblSelectedColumns = new GridData(SWT.FILL, SWT.BOTTOM, true, true, 1, 1);
+		gd_lblSelectedColumns.heightHint = 36;
+		gd_lblSelectedColumns.widthHint = 120;
+		lblSelectedColumns.setLayoutData(gd_lblSelectedColumns);
+		lblSelectedColumns.setText(SELECTED_COLUMNS);
+		FontData[] selectColumnFont = lblSelectedColumns.getFont().getFontData();
+		selectColumnFont[0].setHeight(11);
+		lblSelectedColumns.setFont( new Font(shell.getDisplay(),selectColumnFont[0]));
+		
+		
+		Button sortSelected = new Button(composite, SWT.NONE);
+		GridData gd_sortSelected = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
+		gd_sortSelected.heightHint = 18;
+		gd_sortSelected.widthHint = 18;
+		sortSelected.setLayoutData(gd_sortSelected);
+		sortSelected.setImage(ascending);
 		new Label(selectColumnComposite, SWT.NONE);
 		
 		listSelectedColumns = new List(selectColumnComposite, SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL);
-		listSelectedColumns.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_listSelectedColumns = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_listSelectedColumns.widthHint = 228;
+		listSelectedColumns.setLayoutData(gd_listSelectedColumns);
 		listSelectedColumns.setItems(Arrays.copyOf(selectedColumns.toArray(),selectedColumns.toArray().length,String[].class));
 
 		Composite moveElementsComposite = new Composite(selectColumnComposite, SWT.NONE);
 		GridData gd_moveElementsComposite = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
 		gd_moveElementsComposite.heightHint = 271;
-		gd_moveElementsComposite.widthHint = 25;
+		gd_moveElementsComposite.widthHint = 30;
 		moveElementsComposite.setLayoutData(gd_moveElementsComposite);
 		
 		moveUpLable = new Label(moveElementsComposite, SWT.NONE);
@@ -150,10 +202,29 @@ public class SelectColumnActionDialog extends Dialog {
 		moveDownLable .setBounds(0, 160, 24, 25);
 		Image down= new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DOWN_ICON);
 		moveDownLable.setImage(down);
-		sashForm.setWeights(new int[] {294, 277});
 
 		addListeners(selectAllLabel, selectLabel, disSelectLabel, removeAll);
+		sashForm.setWeights(new int[] {297, 274});
+
+		sortAll.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Collections.sort(allColumns);
+				listAllComlumns.setItems(Arrays.copyOf(allColumns.toArray(),allColumns.toArray().length,String[].class));
+			}
+		});
+		
+		sortSelected.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Collections.sort(selectedColumns);
+				listSelectedColumns.setItems(Arrays.copyOf(selectedColumns.toArray(),selectedColumns.toArray().length,String[].class));
+			}
+		});
+		
 		return container;
+		
+		
 	}
 
 	/**

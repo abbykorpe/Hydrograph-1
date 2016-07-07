@@ -12,6 +12,7 @@ Sr.No. <date> - [developer names] - description
 7. <30-Jun-16> - [Shrirang Kumbhar] - Added data viewer cell navigator and selector
 8. <05-Jul-16> - [Shrirang Kumbhar] - Data view window : Column cells should be auto expanded to the length of column names #701
 9. <07-Jul-16> - [Prateem Tadas, Sonia Raheja, Akhilesh Joshi, Rakesh Kanchalwar] - Filter Window
+10.<07-Jul-16> - [Akhilesh Joshi] - Select columns window
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
