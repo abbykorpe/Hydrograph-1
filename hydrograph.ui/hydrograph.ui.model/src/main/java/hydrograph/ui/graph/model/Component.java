@@ -1069,6 +1069,9 @@ public abstract class Component extends Model {
 					else if (entry.getValue() instanceof OutputSubjobComponent) {
 						clonedHashMap.put(entry.getKey(), null);
 					} 
+					else if (isWrapperType(entry.getValue().getClass())){
+						clonedHashMap.put(entry.getKey(), entry.getValue());
+					}
 					else  if(entry.getValue()!=null)
 					{   
 						IDataStructure c=(IDataStructure) entry.getValue();
@@ -1442,4 +1445,12 @@ public abstract class Component extends Model {
 			properties.put(Component.Props.VALIDITY_STATUS.getValue(), Component.ValidityStatus.VALID.name());
 		return properties;
 	}	
+	
+	public static boolean isWrapperType(Class<?> clazz) {
+		if (clazz == Boolean.class || clazz == Character.class || clazz == Byte.class || clazz == Short.class
+				|| clazz == Integer.class || clazz == Long.class || clazz == Float.class || clazz == Double.class) {
+			return true;
+		}
+		return false;
+	}
 }
