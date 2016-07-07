@@ -15,6 +15,7 @@
 package hydrograph.ui.validators.impl;
 
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -73,14 +74,23 @@ public class SchemaGridValidationRule implements IValidator {
 		/*this list is used for checking duplicate names in the grid*/
 		List<String> uniqueNamesList = new ArrayList<>();
 		boolean fixedWidthGrid = false;
+		boolean generateRecordSchemaGrid = false;
+		
 		if(gridRowList == null || gridRowList.isEmpty()){
 			errorMessage = propertyName + " is mandatory";
 			return false;
 		}
+		
 		GridRow gridRowTest = gridRowList.iterator().next();
+		
+		if(GenerateRecordSchemaGridRow.class.isAssignableFrom(gridRowTest.getClass())){
+			generateRecordSchemaGrid = true;
+		}
+		
 		if(FixedWidthGridRow.class.isAssignableFrom(gridRowTest.getClass())){
 			fixedWidthGrid = true;
 		}
+		
 		for (GridRow gridRow : gridRowList) {
 			if(StringUtils.isBlank(gridRow.getFieldName())){
 				errorMessage = "Field name can not be blank";
@@ -113,7 +123,7 @@ public class SchemaGridValidationRule implements IValidator {
 				return false;
 			}
 			
-			if(fixedWidthGrid){
+			if(fixedWidthGrid && !generateRecordSchemaGrid){
 				FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) gridRow;
 				if(StringUtils.isBlank(fixedWidthGridRow.getLength())){
 					errorMessage = "Length is mandatory";

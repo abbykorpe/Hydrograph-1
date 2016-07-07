@@ -32,7 +32,7 @@
 		<tns:property dataType="string" name="schema" renderer="GENERATE_RECORDS_SCHEMA_WIDGET" type="USER"
 			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="REQUIRED">
-			<tns:validator>TRANSFORM_SCHEMA_GRID_VALIDATOR</tns:validator>
+			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		
