@@ -214,12 +214,10 @@ public class FindViewDataDialog extends Dialog{
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.FORMATTED_VIEW_NAME)) {
 					logger.trace("------------FORMATTED View on Prev------------------------------");
 					checkPageNo();
-					System.out.println("Leng:"+formatedStyledText.getContent().getCharCount());
 					
 					if(!isTextExist(formatedStyledText, textData)){
 						clearStyledTextBgColor(formatedStyledText, textData);
 						int[] resultIndex =StyledTextEventListener.INSTANCE.prevButtonListener(formatedStyledText, textData, formattedViewPrevLineIndex, formattedViewNextLineIndex);
-						System.out.println("Leng:"+formatedStyledText.getText().length());
 						formattedViewPrevLineIndex = resultIndex[0];
 						formattedViewNextLineIndex = resultIndex[1];
 					}
