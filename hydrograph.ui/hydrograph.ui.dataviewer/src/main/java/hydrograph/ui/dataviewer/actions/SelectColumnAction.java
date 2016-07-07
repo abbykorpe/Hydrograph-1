@@ -114,10 +114,23 @@ public class SelectColumnAction extends Action {
 	public List<String> getSelectedColumns() {
 		return selectedColumns;
 	}
+	
+	/**
+	 * 
+	 * Set new column list
+	 * 
+	 * @param allColumns
+	 */
 	public void setAllColumns(List<String> allColumns) {
 		this.allColumns = allColumns;
 	}
 
+	/**
+	 * 
+	 * Set newly selected columns
+	 * 
+	 * @param selectedColumns
+	 */
 	public void setSelectedColumns(List<String> selectedColumns) {
 		this.selectedColumns = selectedColumns;
 	}

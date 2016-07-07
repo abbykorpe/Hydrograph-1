@@ -61,7 +61,7 @@ public class SelectColumnActionDialog extends Dialog {
 	private static final String ALL_COLUMNS = "All Columns";
 	private static final String SELECTED_COLUMNS = "Selected Columns";
 	private static final String SKIP = "skip";
-	Image ascending=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
+	private Image ascending=new Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
 	/**
 	 * @param parentShell
 	 * @param selectColumnAction
@@ -118,7 +118,7 @@ public class SelectColumnActionDialog extends Dialog {
 		sortAll.setImage(ascending);
 		
 		
-		listAllComlumns = new List(allColumnsComposite, SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL |SWT.SEARCH);
+		listAllComlumns = new List(allColumnsComposite, SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL);
 		listAllComlumns.setItems(Arrays.copyOf(allColumns.toArray(),allColumns.toArray().length,String[].class));
 		GridData gd_listAllComlumns = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_listAllComlumns.widthHint = 228;
