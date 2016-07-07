@@ -18,6 +18,7 @@ import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
@@ -89,6 +90,7 @@ import javax.xml.validation.Validator;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -865,11 +867,16 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		File schemaFile=null;
 		if(input instanceof IFileEditorInput){
 			String schemaPath = extSchemaPathText.getText();
-			if(!schemaPath.isEmpty()&& !new File(schemaPath).isAbsolute()){
+			if(!StringUtils.isEmpty(schemaPath) && !ParameterUtil.containsParameter(schemaPath, Path.SEPARATOR) &&!new File(schemaPath).isAbsolute()){
 				IWorkspace workspace = ResourcesPlugin.getWorkspace();
-				schemaFile = new File(workspace.getRoot().getFile(new Path(schemaPath)).getLocation().toOSString());
+				IPath relativePath=workspace.getRoot().getFile(new Path(schemaPath)).getLocation();
+				if(relativePath!=null)
+				schemaFile = new File(relativePath.toOSString());
+				else
+					schemaFile = new File(schemaPath);
 			}
-			else {
+			else
+			{
 				schemaFile = new File(schemaPath);
 			}
 		}
