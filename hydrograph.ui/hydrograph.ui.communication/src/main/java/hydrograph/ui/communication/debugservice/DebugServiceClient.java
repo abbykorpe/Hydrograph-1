@@ -105,8 +105,18 @@ public class DebugServiceClient {
 			throws NumberFormatException, HttpException, MalformedURLException, IOException{
 		executePostMethod(Provider.INSTANCE.getDeleteBasePathFileMethod(host, port, uniqueJobID, basePath, user, password));
 	}
-	public String getFilteredFile(String jsonObject,JobDetails jobDetails) throws NumberFormatException, HttpException, IOException {
-		PostMethod method=Provider.INSTANCE.getFilteredFileMethod(jsonObject, jobDetails);
+	
+	/**
+	 * Method to get file based on the filter condition
+	 * @param jsonString Filter condition string
+	 * @param jobDetails
+	 * @return
+	 * @throws NumberFormatException
+	 * @throws HttpException
+	 * @throws IOException
+	 */
+	public String getFilteredFile(String jsonString,JobDetails jobDetails) throws NumberFormatException, HttpException, IOException {
+		PostMethod method=Provider.INSTANCE.getFilteredFileMethod(jsonString, jobDetails);
 		executePostMethod(method);
 		return getFilePathFromPostResponse(method);
 	}

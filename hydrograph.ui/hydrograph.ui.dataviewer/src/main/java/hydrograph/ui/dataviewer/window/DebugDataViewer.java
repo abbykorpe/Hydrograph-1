@@ -21,8 +21,8 @@ import hydrograph.ui.common.util.SWTResourceManager;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.actions.ActionFactory;
-import hydrograph.ui.dataviewer.actions.AutoExpandColumns;
-import hydrograph.ui.dataviewer.actions.ClearFilter;
+import hydrograph.ui.dataviewer.actions.AutoExpandColumnsAction;
+import hydrograph.ui.dataviewer.actions.ClearFilterAction;
 import hydrograph.ui.dataviewer.actions.CopyAction;
 import hydrograph.ui.dataviewer.actions.DatasetInformationAction;
 import hydrograph.ui.dataviewer.actions.ExportAction;
@@ -127,7 +127,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
-import hydrograph.ui.dataviewer.actions.ClearFilter;
+import hydrograph.ui.dataviewer.actions.ClearFilterAction;
 import hydrograph.ui.dataviewer.filter.FilterConditions;
 /**
  * 
@@ -669,7 +669,7 @@ public class DebugDataViewer extends ApplicationWindow {
 						statusManager.setStatus(status);
 						statusManager.enableJumpPagePanel(true);
 						actionFactory.getAction(ResetSort.class.getName()).setEnabled(false);
-						actionFactory.getAction(ClearFilter.class.getName()).setEnabled(false);
+						actionFactory.getAction(ClearFilterAction.class.getName()).setEnabled(false);
 					}
 				});
 				return Status.OK_STATUS;
@@ -1399,7 +1399,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		windowMenu.setVisible(true);
 
 		windowMenu.add(actionFactory.getAction(DatasetInformationAction.class.getName()));
-		windowMenu.add(actionFactory.getAction(AutoExpandColumns.class.getName()));
+		windowMenu.add(actionFactory.getAction(AutoExpandColumnsAction.class.getName()));
 	}
 	
 
@@ -1448,7 +1448,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		dataMenu.add(actionFactory.getAction(ResetSort.class.getName()));
 		dataMenu.add(actionFactory.getAction(FilterAction.class.getName()));
-		dataMenu.add(actionFactory.getAction(ClearFilter.class.getName()));
+		dataMenu.add(actionFactory.getAction(ClearFilterAction.class.getName()));
 	}
 	
 	/**
@@ -1511,7 +1511,7 @@ public class DebugDataViewer extends ApplicationWindow {
 				actionFactory.getAction(FindAction.class.getName()));
 		
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.AUTO_ADJUST_COLUMNS), 
-				actionFactory.getAction(AutoExpandColumns.class.getName()));
+				actionFactory.getAction(AutoExpandColumnsAction.class.getName()));
 		
 		dropDownAction = new Action("", SWT.DROP_DOWN) {
 			@Override
@@ -1695,10 +1695,10 @@ public class DebugDataViewer extends ApplicationWindow {
 	
 	public void enableDisableFilter(){
 		if(StringUtils.isEmpty(remoteCondition) && StringUtils.isEmpty(localCondition)){
-			actionFactory.getAction(ClearFilter.class.getName()).setEnabled(false);
+			actionFactory.getAction(ClearFilterAction.class.getName()).setEnabled(false);
 		}
 		else{
-			actionFactory.getAction(ClearFilter.class.getName()).setEnabled(true);
+			actionFactory.getAction(ClearFilterAction.class.getName()).setEnabled(true);
 		}
 	}
 

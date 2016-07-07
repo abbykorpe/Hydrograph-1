@@ -183,12 +183,12 @@ public class FilterConditionsDialog extends Dialog {
 		return originalFilterConditions;
 	}
 	
-	public Map getLocalGroupSelections(){
+	public Map<Integer, List<List<Integer>>> getLocalGroupSelections(){
 		
 		return localGroupSelectionMap;
 	}
 	
-    public Map getRemoteGroupSelections(){
+    public Map<Integer, List<List<Integer>>> getRemoteGroupSelections(){
 		
 		return remoteGroupSelectionMap;
 	}

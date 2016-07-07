@@ -16,10 +16,7 @@ package hydrograph.ui.dataviewer.datasetinformation;
  * This class stores the values of Data set Information Window
  * @author Bitwise
  */
-
 public class DatasetInformationDetail {
-	
-	
 	private String viewDataFilePath="";
 	private String chunkFilePath="";
 	private String sizeOfData;

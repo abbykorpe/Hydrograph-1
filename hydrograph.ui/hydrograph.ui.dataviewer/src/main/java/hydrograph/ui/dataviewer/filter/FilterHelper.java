@@ -93,7 +93,7 @@ public class FilterHelper {
 	
 	public Map<String, String[]> getTypeBasedOperatorMap(){
 		Map<String, String[]> typeBasedConditionalOperators = new HashMap<String, String[]>();
-		typeBasedConditionalOperators.put(TYPE_STRING, new String[]{"LIKE","IN","NOT IN"}); 
+		typeBasedConditionalOperators.put(TYPE_STRING, new String[]{"LIKE", "NOT LIKE", "IN","NOT IN"}); 
 		typeBasedConditionalOperators.put(TYPE_INTEGER, new String[]{">", "<", "<=", ">=", "<>", "=", "IN", "NOT IN"}); 
 		typeBasedConditionalOperators.put(TYPE_DATE, new String[]{">", "<", "<=",">=", "<>", "=",  "IN", "NOT IN"}); 
 		typeBasedConditionalOperators.put(TYPE_BIGDECIMAL, new String[]{">", "<", "<=", ">=", "<>", "=",  "IN","NOT IN"});
