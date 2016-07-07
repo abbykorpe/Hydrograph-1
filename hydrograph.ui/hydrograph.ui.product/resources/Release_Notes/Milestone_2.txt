@@ -11,6 +11,7 @@ Sr.No. <date> - [developer names] - description
 6. <22-Jun-16> - [Shrirang Kumbhar] - Data View Window: Short-Cut is missing for Next and Previous button #585
 7. <30-Jun-16> - [Shrirang Kumbhar] - Added data viewer cell navigator and selector
 8. <05-Jul-16> - [Shrirang Kumbhar] - Data view window : Column cells should be auto expanded to the length of column names #701
+9. <07-Jul-16> - [Prateem Tadas, Sonia Raheja, Akhilesh Joshi, Rakesh Kanchalwar] - Filter Window
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
