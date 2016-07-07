@@ -47,10 +47,14 @@ public class StyledTextEventListener {
 	 */
 	public int[] prevButtonListener(StyledText styledText, String text, int prevLineIndex, int nextLineIndex){
 		logger.debug("StyledText prev button selected");
+		if(prevLineIndex == 0){
+			prevLineIndex = styledText.getText().length() - 1;
+		}
 		int lastIndex = StringUtils.lastIndexOf(StringUtils.lowerCase(styledText.getText()), StringUtils.lowerCase(text), prevLineIndex-1);
 		
 		if(lastIndex < 0 ){
 			styledText.setSelection(prevLineIndex);
+			prevLineIndex = styledText.getText().length() - 1;
 			nextLineIndex = 0;
 			return new int[]{prevLineIndex,nextLineIndex};
 		}else{
@@ -59,6 +63,7 @@ public class StyledTextEventListener {
 			setStyledRange(styledText, lastIndex, text.length(), null, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
 			styledText.setSelection(lastIndex);
 			prevLineIndex = lastIndex;
+			nextLineIndex = lastIndex + 1;
 			styledText.redraw();
 		}
 		return new int[]{prevLineIndex,nextLineIndex};
@@ -78,6 +83,7 @@ public class StyledTextEventListener {
 		
 		if(txtIndex < 0){
 			styledText.setSelection(prevLineIndex);
+			setStyledRange(styledText, prevLineIndex, text.length(), null, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
 			nextLineIndex =0;
 			return new int[]{prevLineIndex,nextLineIndex};
 		}else{

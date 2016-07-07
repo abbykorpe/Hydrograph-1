@@ -1702,6 +1702,20 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 	}
 
+	
+	/*
+	 * Get View Data Current Page in Grid View  
+	 */
+	public long getCurrentPage(){
+		return dataViewerAdapter.getCurrentPageNumber();
+	}
+	
+	/*
+	 * Get Table Cursor in TableViewer in Grid View  
+	 */
+	public TableCursor getTablecursor(){
+		return tableCursor;
+	}
 }
 
 
