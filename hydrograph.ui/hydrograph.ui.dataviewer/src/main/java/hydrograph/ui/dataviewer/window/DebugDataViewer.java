@@ -32,7 +32,7 @@ import hydrograph.ui.dataviewer.actions.FormattedViewAction;
 import hydrograph.ui.dataviewer.actions.GridViewAction;
 import hydrograph.ui.dataviewer.actions.PreferencesAction;
 import hydrograph.ui.dataviewer.actions.ReloadAction;
-import hydrograph.ui.dataviewer.actions.ResetColumns;
+import hydrograph.ui.dataviewer.actions.ResetColumnsAction;
 import hydrograph.ui.dataviewer.actions.ResetSort;
 import hydrograph.ui.dataviewer.actions.SelectAllAction;
 import hydrograph.ui.dataviewer.actions.SelectColumnAction;
@@ -1415,7 +1415,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		editMenu.add(actionFactory.getAction(CopyAction.class.getName()));
 		editMenu.add(actionFactory.getAction(FindAction.class.getName()));
 		editMenu.add(actionFactory.getAction(SelectColumnAction.class.getName()));
-		editMenu.add(actionFactory.getAction(ResetColumns.class.getName()));
+		editMenu.add(actionFactory.getAction(ResetColumnsAction.class.getName()));
 	}
 
 	private void createViewMenu(MenuManager menuManager) {

@@ -54,7 +54,7 @@ public class ActionFactory {
 		SelectColumnAction selectColumnAction= new SelectColumnAction(debugDataViewer);
 		AutoExpandColumnsAction autoExpandColumnsAction = new AutoExpandColumnsAction(debugDataViewer);
 		ClearFilterAction clearFilterAction= new ClearFilterAction(debugDataViewer);
-		ResetColumns resetColumns = new ResetColumns(debugDataViewer);
+		ResetColumnsAction resetColumns = new ResetColumnsAction(debugDataViewer);
 		
 		actionMap.put(ExportAction.class.getName(), exportAction);
 		actionMap.put(FilterAction.class.getName(), filterAction);
@@ -72,7 +72,7 @@ public class ActionFactory {
 		actionMap.put(SelectColumnAction.class.getName(),selectColumnAction);
 		actionMap.put(AutoExpandColumnsAction.class.getName(),autoExpandColumnsAction);
 		actionMap.put(ClearFilterAction.class.getName(), clearFilterAction);
-		actionMap.put(ResetColumns.class.getName(), resetColumns);
+		actionMap.put(ResetColumnsAction.class.getName(), resetColumns);
 	}
 	
 	/**
