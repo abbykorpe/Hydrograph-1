@@ -1070,7 +1070,7 @@ public abstract class Component extends Model {
 						clonedHashMap.put(entry.getKey(), null);
 					} 
 					else if (isWrapperType(entry.getValue().getClass())){
-						clonedHashMap.put(entry.getKey(), null);
+						clonedHashMap.put(entry.getKey(), entry.getValue());
 					}
 					else  if(entry.getValue()!=null)
 					{   
