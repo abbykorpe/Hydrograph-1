@@ -235,6 +235,17 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		quoteEditor.getTextControl(grpExportData).addModifyListener(new ModifyListener(){
 			@Override
 			public void modifyText(ModifyEvent e) {
+				Notification note1 = validateDelimiter();
+				if(note1.hasErrors()){
+					setValid(false);
+					delimiterEditor.setErrorMessage(note1.errorMessage());
+					setErrorMessage(note1.errorMessage());
+				}else{
+					setErrorMessage(null);
+					delimiterEditor.setErrorMessage("");
+					checkState();
+				} 
+				
 				Notification note =validateQuoteCharacter();
 				if(note.hasErrors()){
 					setValid(false);
@@ -276,6 +287,17 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 				}else{
 					setErrorMessage(null);
 					delimiterEditor.setErrorMessage("");
+					checkState();
+				} 
+				
+				Notification note1 =validateQuoteCharacter();
+				if(note1.hasErrors()){
+					setValid(false);
+					quoteEditor.setErrorMessage(note1.errorMessage());
+					setErrorMessage(note1.errorMessage());
+				}else{
+					setErrorMessage(null);
+					quoteEditor.setErrorMessage("");
 					checkState();
 				} 
 			}
@@ -406,11 +428,11 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	
 	private Notification validateDelimiter(){
 		Notification notification = new Notification();
-		if(delimiterEditor.getStringValue().equalsIgnoreCase(quoteEditor.getStringValue())){
+		if(StringUtils.isNotBlank(delimiterEditor.getStringValue()) &&delimiterEditor.getStringValue().equalsIgnoreCase(quoteEditor.getStringValue())){
 			notification.addError(Messages.DELIMITER_VALUE_MATCH_ERROR);
 		}
 		if(StringUtils.length(ConvertHexValues.parseHex(delimiterEditor.getStringValue())) != 1){
-			notification.addError(Messages.SINGLE_CHARACTOR_ERROR_MESSAGE);
+			notification.addError(Messages.DELIMITER_SINGLE_CHARACTOR_ERROR_MESSAGE);
 		}
 		return notification;
 	}
@@ -418,11 +440,11 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	
 	private Notification validateQuoteCharacter(){
 		Notification notification = new Notification();
-		if(quoteEditor.getStringValue().equalsIgnoreCase(delimiterEditor.getStringValue())){
+		if(StringUtils.isNotBlank(quoteEditor.getStringValue()) && quoteEditor.getStringValue().equalsIgnoreCase(delimiterEditor.getStringValue())){
 			notification.addError(Messages.QUOTE_VALUE_MATCH_ERROR);
 		}
 		if(StringUtils.length(ConvertHexValues.parseHex(quoteEditor.getStringValue())) != 1){
-			notification.addError(Messages.SINGLE_CHARACTOR_ERROR_MESSAGE);
+			notification.addError(Messages.QUOTE_SINGLE_CHARACTOR_ERROR_MESSAGE);
 		}
 		return notification;
 	}

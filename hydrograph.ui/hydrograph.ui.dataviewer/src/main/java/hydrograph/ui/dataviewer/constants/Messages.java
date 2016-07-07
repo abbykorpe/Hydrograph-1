@@ -28,7 +28,6 @@ public class Messages extends NLS{
 	
 	
 	/*view data preferences*/
-	public static String MEMORY_FIELD_MESSAGE;
 	public static String INTEGER_FIELD_VALIDATION;
 	public static String FILE_INTEGER_FIELD_VALIDATION;
 	public static String PAGE_INTEGER_FIELD_VALIDATION;
