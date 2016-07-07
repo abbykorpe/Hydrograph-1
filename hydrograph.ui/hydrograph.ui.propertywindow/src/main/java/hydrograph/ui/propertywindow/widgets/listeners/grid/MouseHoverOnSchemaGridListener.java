@@ -324,12 +324,16 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 	
 	private String setToolTipForGenerateRecordGridRow(GenerateRecordSchemaGridRow generateRecordSchemaGridRow, String componentType){
 		
+		String tooltip = null;
+		
 		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom())
 				|| StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo())){
-			return setToolTipForSchemaRange(generateRecordSchemaGridRow);			
+			tooltip = setToolTipForSchemaRange(generateRecordSchemaGridRow);			
 		}
 		
-		if(StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
+		if (tooltip.trim().length() != 0){
+			return tooltip;
+		}else if(StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
 				&& StringUtils.isBlank(generateRecordSchemaGridRow.getDateFormat())){
 			return setToolTipForDateFormatIfBlank(generateRecordSchemaGridRow);
 		}else if((StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL))){
