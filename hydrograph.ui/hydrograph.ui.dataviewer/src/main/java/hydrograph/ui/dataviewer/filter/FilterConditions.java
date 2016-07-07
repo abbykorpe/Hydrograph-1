@@ -19,8 +19,8 @@ import java.util.TreeMap;
 
 public class FilterConditions {
 	
-	Map<Integer,List<List<Integer>>> localGroupSelectionMap = new TreeMap<>();
-	Map<Integer,List<List<Integer>>> remoteGroupSelectionMap = new TreeMap<>();
+	private Map<Integer,List<List<Integer>>> localGroupSelectionMap = new TreeMap<>();
+	private Map<Integer,List<List<Integer>>> remoteGroupSelectionMap = new TreeMap<>();
 	
 	public Map<Integer, List<List<Integer>>> getLocalGroupSelectionMap() {
 		return localGroupSelectionMap;

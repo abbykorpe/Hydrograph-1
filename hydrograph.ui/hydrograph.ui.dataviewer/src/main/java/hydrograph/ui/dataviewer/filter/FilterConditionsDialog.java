@@ -262,7 +262,7 @@ public class FilterConditionsDialog extends Dialog {
 	
 		clearGroupsRemote.setBounds(102, 30, 82, 25);
 		clearGroupsRemote.setText("Clear Groups");
-		clearGroupsRemote.addSelectionListener(clearGroupsListner(tableViewer, remoteGroupSelectionMap, clearGroupsRemote,remoteBtnAddGrp,remoteConditionsList));
+		clearGroupsRemote.addSelectionListener(clearGroupsListner(tableViewer, remoteGroupSelectionMap, clearGroupsRemote,remoteBtnAddGrp,remoteConditionsList,true));
 		clearGroupsRemote.setEnabled(false);
 		
 		
@@ -305,7 +305,7 @@ public class FilterConditionsDialog extends Dialog {
 		TableViewerColumn groupButtonTableViewerColumn = createTableColumns(tableViewer, "", 40);
 		groupButtonTableViewerColumn.setLabelProvider(getGroupCheckCellProvider(tableViewer, remoteConditionsList,remoteBtnAddGrp));
 		
-		for (int key  : localGroupSelectionMap.keySet()) {	
+		for (int key  : remoteGroupSelectionMap.keySet()) {	
 			
 			TableViewerColumn dummyTableViewerColumn = createTableColumns(tableViewer, "",20);
 			dummyTableViewerColumn.setLabelProvider(getDummyColumn(tableViewer,remoteConditionsList, key,remoteGroupSelectionMap));	
@@ -396,7 +396,7 @@ public class FilterConditionsDialog extends Dialog {
 		Button clearGroupsLocal=new Button(composite_2,SWT.NONE);
 		clearGroupsLocal.setBounds(102, 30, 82, 25);
 		clearGroupsLocal.setText("Clear Groups");
-		clearGroupsLocal.addSelectionListener(clearGroupsListner(tableViewer, localGroupSelectionMap,clearGroupsLocal,localBtnAddGrp,localConditionsList));
+		clearGroupsLocal.addSelectionListener(clearGroupsListner(tableViewer, localGroupSelectionMap,clearGroupsLocal,localBtnAddGrp,localConditionsList,false));
 		clearGroupsLocal.setEnabled(false);
 		
 		localBtnAddGrp.setBounds(0, 30, 82, 25);
@@ -409,7 +409,7 @@ public class FilterConditionsDialog extends Dialog {
 		
 		Button clearButton = new Button(composite_1, SWT.NONE);
 		clearButton.setText("Clear");
-		clearButton.addSelectionListener(getClearButtonListener(tableViewer, localConditionsList,dummyList,originalFilterConditions,false,retainButton,localGroupSelectionMap, clearButton));
+		clearButton.addSelectionListener(getClearButtonListener(tableViewer, localConditionsList,dummyList,originalFilterConditions,false,retainButton,localGroupSelectionMap, localBtnAddGrp));
 		clearButton.setBounds(108, 31, 48, 25);
 		
 		localOkButton = new Button(composite_1, SWT.NONE);
@@ -1140,7 +1140,7 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 	}
 	
 	public SelectionListener clearGroupsListner(final TableViewer tableViewer, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap,
-			final Button clearGroups, final Button btnAddGrp, final  List<Condition> conditionsList) {
+			final Button clearGroups, final Button btnAddGrp, final  List<Condition> conditionsList,final boolean isRemote) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
@@ -1149,17 +1149,28 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 				dummyList.clear();
 				dummyList.addAll(FilterHelper.INSTANCE.cloneList(conditionsList));
 				groupSelectionMap.clear();
+				
+				if(isRemote){
+					originalFilterConditions.setRemoteGroupSelectionMap(groupSelectionMap);
+					
+				}else{
+					
+					originalFilterConditions.setLocalGroupSelectionMap(groupSelectionMap);				
+			   }
+				
 				FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
 				redrawAllColumns(tableViewer, conditionsList, btnAddGrp,groupSelectionMap);			
 				clearGroups.setEnabled(false);
+			
+				
 			}
-
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
 				
 			}
-		};
+		
+			};
 		
 		return listener;
 	}
@@ -1177,17 +1188,22 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 				conditionsList.clear();
 				dummyList.add(new Condition());
 				retainButton.setSelection(false);
+				
+				groupSelectionMap.clear(); 
+			
 				if(isRemote)
 				{
 					originalFilterConditions.setRetainRemote(false);
 					originalFilterConditions.setRemoteCondition("");
 					originalFilterConditions.setRemoteConditions(new ArrayList<Condition>());
 					debugDataViewer.setRemoteCondition("");
+					originalFilterConditions.setRemoteGroupSelectionMap(groupSelectionMap);
 				}else{
 					originalFilterConditions.setRetainLocal(false);
 					originalFilterConditions.setLocalCondition("");
 					originalFilterConditions.setLocalConditions(new ArrayList<Condition>());
 					debugDataViewer.setLocalCondition("");
+					originalFilterConditions.setLocalGroupSelectionMap(groupSelectionMap);
 				}
 //				originalFilterConditions
 				TableItem[] items = tableViewer.getTable().getItems();
@@ -1197,7 +1213,7 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 				}
 				conditionsList.add(0, new Condition());
 				
-				groupSelectionMap.clear();  
+				 
 				FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
 				redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap);
 				

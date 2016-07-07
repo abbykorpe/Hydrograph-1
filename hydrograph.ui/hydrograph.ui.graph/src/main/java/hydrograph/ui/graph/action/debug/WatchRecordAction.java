@@ -217,10 +217,12 @@ public class WatchRecordAction extends SelectionAction {
 				if(!window.getConditions().getRetainLocal()){
 					window.getConditions().setLocalCondition("");
 					window.getConditions().getLocalConditions().clear();
+					window.getConditions().getLocalGroupSelectionMap().clear();
 				}
 				if(!window.getConditions().getRetainRemote()){
 					window.getConditions().setRemoteCondition("");
 					window.getConditions().getRemoteConditions().clear();
+					window.getConditions().getRemoteGroupSelectionMap().clear();
 				}
 					
 				watcherAndConditon.put(watcherId,window.getConditions());

@@ -321,6 +321,7 @@ public class FilterHelper {
 						for (int groupIndex = 0; groupIndex < groupsInColumn.size(); groupIndex++) {
 							List<Integer> group = groupsInColumn.get(groupIndex);
 							//add opening bracket before first element in the group
+							if(!group.isEmpty()){
 							Integer firstItem = group.get(0);
 							Integer firstItemIndex = actualStringList.indexOf(String.valueOf(firstItem));
 							actualStringList.add(firstItemIndex, OPEN_BRACKET);
@@ -328,6 +329,7 @@ public class FilterHelper {
 							Integer lastItem = group.get(group.size()-1);
 							Integer lastItemIndex = actualStringList.indexOf(String.valueOf(lastItem));
 							actualStringList.add(lastItemIndex + 1, CLOSE_BRACKET);
+							}
 						}
 					}
 				}
