@@ -26,8 +26,8 @@ import hydrograph.ui.dataviewer.actions.ClearFilterAction;
 import hydrograph.ui.dataviewer.actions.CopyAction;
 import hydrograph.ui.dataviewer.actions.DatasetInformationAction;
 import hydrograph.ui.dataviewer.actions.ExportAction;
-import hydrograph.ui.dataviewer.actions.FindAction;
 import hydrograph.ui.dataviewer.actions.FilterAction;
+import hydrograph.ui.dataviewer.actions.FindAction;
 import hydrograph.ui.dataviewer.actions.FormattedViewAction;
 import hydrograph.ui.dataviewer.actions.GridViewAction;
 import hydrograph.ui.dataviewer.actions.PreferencesAction;
@@ -49,6 +49,7 @@ import hydrograph.ui.dataviewer.constants.Views;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
+import hydrograph.ui.dataviewer.filter.FilterConditions;
 import hydrograph.ui.dataviewer.listeners.DataViewerListeners;
 import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
 import hydrograph.ui.dataviewer.support.SortDataType;
@@ -127,8 +128,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
-import hydrograph.ui.dataviewer.actions.ClearFilterAction;
-import hydrograph.ui.dataviewer.filter.FilterConditions;
 /**
  * 
  * Data viewer window
@@ -1388,7 +1387,6 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 		
 		fileMenu.add(actionFactory.getAction(ExportAction.class.getName()));
-		//fileMenu.add(actionFactory.getAction(FilterAction.class.getName()));
 	}
 
 

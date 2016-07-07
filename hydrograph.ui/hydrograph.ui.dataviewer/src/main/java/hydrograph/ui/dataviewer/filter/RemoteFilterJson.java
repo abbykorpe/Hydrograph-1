@@ -23,12 +23,19 @@ import java.util.List;
  * @author Bitwise
  *
  */
-public class RemoteFilterJson {
+public class RemoteFilterJson{
 	private String condition;
 	private List<GridRow> schema;
 	private int fileSize;
 	private JobDetails jobDetails;
 	
+	public RemoteFilterJson(String condition, List<GridRow> schema, int fileSize, JobDetails jobDetails) {
+		this.condition = condition;
+		this.schema = schema;
+		this.fileSize = fileSize;
+		this.jobDetails = jobDetails;
+	}
+
 	public String getCondition() {
 		return condition;
 	}
@@ -53,8 +60,10 @@ public class RemoteFilterJson {
 	public void setJobDetails(JobDetails jobDetails) {
 		this.jobDetails = jobDetails;
 	}
-	
-	
-	
-
+	@Override
+	public String toString() {
+		return "RemoteFilterJson [condition=" + condition + ", schema="
+				+ schema + ", fileSize=" + fileSize + ", jobDetails="
+				+ jobDetails + "]";
+	}
 }

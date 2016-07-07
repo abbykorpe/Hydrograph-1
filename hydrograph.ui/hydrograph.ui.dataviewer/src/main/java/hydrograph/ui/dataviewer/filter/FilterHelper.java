@@ -17,6 +17,7 @@ import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
 import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
+import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -445,20 +446,15 @@ public class FilterHelper {
 
 	public String createJsonObjectForRemoteFilter(String buffer) {
 		Gson gson=new Gson();
-		RemoteFilterJson remoteFilterJson=new RemoteFilterJson();
-		remoteFilterJson.setCondition(buffer);
-		remoteFilterJson.setSchema(DataViewerUtility.INSTANCE.getSchema(debugDataViewer.getDebugFileLocation()+debugDataViewer.getDebugFileName()+SCHEMA_FILE_EXTENTION));
-		remoteFilterJson.setFileSize(debugDataViewer.getViewDataPreferences().getFileSize());
-		remoteFilterJson.setJobDetails(debugDataViewer.getJobDetails());
+		RemoteFilterJson remoteFilterJson = new RemoteFilterJson(buffer,
+				DataViewerUtility.INSTANCE.getSchema(debugDataViewer.getDebugFileLocation() + 
+						debugDataViewer.getDebugFileName()+SCHEMA_FILE_EXTENTION), 
+						debugDataViewer.getViewDataPreferences().getFileSize(), debugDataViewer.getJobDetails());
+		
 		String filterJson=gson.toJson(remoteFilterJson);
 		return filterJson;
 	}
 	
-
-
-//	public void setFilterType(String filterType) {
-//		this.filterType=filterType;
-//	}
 
 	public void setDataViewerAdapter(DataViewerAdapter dataViewerAdapter, FilterConditionsDialog filterConditionsDialog) {
 		this.dataViewerAdapter=dataViewerAdapter;

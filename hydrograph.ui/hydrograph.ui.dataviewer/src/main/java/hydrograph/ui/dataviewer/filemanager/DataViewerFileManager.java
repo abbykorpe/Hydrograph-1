@@ -142,11 +142,10 @@ public class DataViewerFileManager {
 
 	private String createJsonObjectForRemoteFilter(FilterConditions filterConditions, String csvDebugFileName) {
 		Gson gson=new Gson();
-		RemoteFilterJson remoteFilterJson=new RemoteFilterJson();
-		remoteFilterJson.setCondition(filterConditions.getRemoteCondition());
-		remoteFilterJson.setSchema(DataViewerUtility.INSTANCE.getSchema(csvDebugFileName));
-		remoteFilterJson.setFileSize(Integer.parseInt(Utils.INSTANCE.getFileSize().trim()));
-		remoteFilterJson.setJobDetails(jobDetails);
+		RemoteFilterJson remoteFilterJson=new RemoteFilterJson(filterConditions.getRemoteCondition(),
+				DataViewerUtility.INSTANCE.getSchema(csvDebugFileName), 
+				Integer.parseInt(Utils.INSTANCE.getFileSize().trim()),jobDetails);
+		
 		String filterJson=gson.toJson(remoteFilterJson);
 		return filterJson;
 	}

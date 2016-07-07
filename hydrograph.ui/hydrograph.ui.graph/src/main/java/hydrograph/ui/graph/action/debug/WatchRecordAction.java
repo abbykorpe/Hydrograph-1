@@ -175,7 +175,7 @@ public class WatchRecordAction extends SelectionAction {
 		}
 		
 		// Check if job is executed in debug mode
-		final Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());		
+		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());		
 		if(job==null){
 			MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.FORGOT_TO_EXECUTE_DEBUG_JOB);
 			return;

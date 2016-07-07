@@ -30,10 +30,11 @@ import org.slf4j.Logger;
  *
  */
 public class FilterValidator {
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterValidator.class);
-	List<String> relationalList = Arrays.asList(new String[]{"AND", "OR"});
-	
 	public static FilterValidator INSTANCE = new FilterValidator();
+
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterValidator.class);
+	private List<String> relationalList = Arrays.asList(new String[]{"AND", "OR"});
+	
 	
 	public boolean isAllFilterConditionsValid(List<Condition> conditionList, Map<String, String> fieldsAndTypes, String[] fieldNames){
 		Map<String, String[]> conditionalOperatorsMap = FilterHelper.INSTANCE.getTypeBasedOperatorMap();

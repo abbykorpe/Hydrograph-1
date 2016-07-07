@@ -12,6 +12,11 @@
  ******************************************************************************/
 package hydrograph.ui.dataviewer.filter;
 
+/**
+ * Retain Filter Flag
+ * @author Bitwise
+ *
+ */
 public class RetainFilter {
 	private boolean retainFilter=false;
 
