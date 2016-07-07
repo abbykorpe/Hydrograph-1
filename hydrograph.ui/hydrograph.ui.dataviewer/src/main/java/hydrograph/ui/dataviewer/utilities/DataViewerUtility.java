@@ -13,8 +13,19 @@
 
 package hydrograph.ui.dataviewer.utilities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.dataviewer.actions.ResetSort;
+import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
+import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 /**
  * 
@@ -46,4 +57,57 @@ public class DataViewerUtility {
 		debugDataViewer.getDataViewLoader().reloadloadViews();
 		debugDataViewer.getActionFactory().getAction(ResetSort.class.getName()).setEnabled(false);
 	}
+	
+	public List<GridRow> getSchema(String csvDebugFileName) {
+		List<GridRow> gridRowList = new ArrayList<>();
+
+		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE
+				.getFieldsFromSchema(csvDebugFileName);
+		for (Field field : dataViewerFileSchema.getField()) {
+			GridRow gridRow = new GridRow();
+
+			gridRow.setFieldName(field.getName());
+			gridRow.setDataType(GridWidgetCommonBuilder
+					.getDataTypeByValue(field.getType().value()));
+			gridRow.setDataTypeValue(field.getType().value());
+
+			if (StringUtils.isNotEmpty(field.getFormat())) {
+				gridRow.setDateFormat(field.getFormat());
+			} else {
+				gridRow.setDateFormat("");
+			}
+			if (field.getPrecision() != null) {
+				gridRow.setPrecision(String.valueOf(field.getPrecision()));
+			} else {
+				gridRow.setPrecision("");
+			}
+			if (field.getScale() != null) {
+				gridRow.setScale(Integer.toString(field.getScale()));
+			} else {
+				gridRow.setScale("");
+			}
+
+			if (StringUtils.isNotEmpty(field.getDescription()))
+				gridRow.setDescription(field.getDescription());
+			else {
+				gridRow.setDescription("");
+			}
+			if (field.getScaleType() != null) {
+				gridRow.setScaleType(GridWidgetCommonBuilder
+						.getScaleTypeByValue(field.getScaleType().value()));
+				gridRow.setScaleTypeValue(GridWidgetCommonBuilder
+						.getScaleTypeValue()[GridWidgetCommonBuilder
+						.getScaleTypeByValue(field.getScaleType().value())]);
+			} else {
+				gridRow.setScaleType(GridWidgetCommonBuilder
+						.getScaleTypeByValue(Messages.SCALE_TYPE_NONE));
+				gridRow.setScaleTypeValue(GridWidgetCommonBuilder
+						.getScaleTypeValue()[Integer
+						.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX)]);
+			}
+
+			gridRowList.add(gridRow);
+		}
+		return gridRowList;
+}
 }

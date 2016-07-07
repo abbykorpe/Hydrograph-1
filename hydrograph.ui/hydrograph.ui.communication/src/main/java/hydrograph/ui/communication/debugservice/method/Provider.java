@@ -111,4 +111,19 @@ public class Provider {
 		postMethod.addParameter(DebugServicePostParameters.PASSWORD, password);
 		return postMethod;
 	}
+	
+	/**
+	 * Method to get file based on the filter condition
+	 * @param jsonString Filter condition string
+	 * @param jobDetails
+	 * @return
+	 * @throws NumberFormatException
+	 * @throws MalformedURLException
+	 */
+	public PostMethod getFilteredFileMethod(String jsonString,JobDetails jobDetails) throws NumberFormatException, MalformedURLException {
+		URL url = new URL(POST_PROTOCOL,jobDetails.getHost(),Integer.valueOf(jobDetails.getPort()), DebugServiceMethods.GET_FILTERED_FILE_PATH);
+		PostMethod postMethod = new PostMethod(url.toString());
+		postMethod.addParameter(DebugServicePostParameters.FILTER_JSON_OBJECT,jsonString);
+		return postMethod;
+	}
 }

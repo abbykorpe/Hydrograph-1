@@ -16,6 +16,7 @@ package hydrograph.ui.graph.action.debug;
 import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.dataviewer.constants.MessageBoxText;
+import hydrograph.ui.dataviewer.filter.FilterConditions;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
@@ -68,7 +69,7 @@ public class WatchRecordAction extends SelectionAction {
 		super(part);
 		setLazyEnablementCalculation(true);
 	}
-	
+	private Map<String, FilterConditions> watcherAndConditon =new LinkedHashMap<String, FilterConditions>();
 	@Override
 	protected void init() {
 		super.init();
@@ -76,7 +77,7 @@ public class WatchRecordAction extends SelectionAction {
 		setId(Constants.WATCH_RECORD_ID);
 		setEnabled(true);
 		dataViewerMap = new HashMap<>();
-		
+		 
 		JobManager.INSTANCE.setDataViewerMap(dataViewerMap);
 	}
 
@@ -204,14 +205,32 @@ public class WatchRecordAction extends SelectionAction {
 			@Override
 			public void run() {
 				DebugDataViewer window = new DebugDataViewer(jobDetails,dataViewerWindowTitle);
+				String watcherId=watchRecordInner.getComponentId()+watchRecordInner.getComponentId();
 				dataViewerMap.put(dataViewerWindowTitle, window);
 				window.setBlockOnOpen(true);
 				window.setDataViewerMap(dataViewerMap);
+				if(watcherAndConditon.containsKey(watcherId))
+				{
+					window.setConditions(watcherAndConditon.get(watcherId));
+				}
 				window.open();
+				if(!window.getConditions().getRetainLocal()){
+					window.getConditions().setLocalCondition("");
+					window.getConditions().getLocalConditions().clear();
+					window.getConditions().getLocalGroupSelectionMap().clear();
+				}
+				if(!window.getConditions().getRetainRemote()){
+					window.getConditions().setRemoteCondition("");
+					window.getConditions().getRemoteConditions().clear();
+					window.getConditions().getRemoteGroupSelectionMap().clear();
+				}
+					
+				watcherAndConditon.put(watcherId,window.getConditions());
 			}
 		});
 	}
 
+	
 	private JobDetails getJobDetails(Job job) {
 		final JobDetails jobDetails = new JobDetails(
 				job.getHost(), 
@@ -232,7 +251,7 @@ class WatchRecordInner {
 	private String socketId;
 	private String currentJob;
 	private String uniqueJobId;
-
+	
 	public WatchRecordInner() {		
 	}
 

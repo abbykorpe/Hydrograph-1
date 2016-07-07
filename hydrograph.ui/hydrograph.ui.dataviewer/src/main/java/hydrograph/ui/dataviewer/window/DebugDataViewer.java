@@ -21,10 +21,12 @@ import hydrograph.ui.common.util.SWTResourceManager;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.actions.ActionFactory;
-import hydrograph.ui.dataviewer.actions.AutoExpandColumns;
+import hydrograph.ui.dataviewer.actions.AutoExpandColumnsAction;
+import hydrograph.ui.dataviewer.actions.ClearFilterAction;
 import hydrograph.ui.dataviewer.actions.CopyAction;
 import hydrograph.ui.dataviewer.actions.DatasetInformationAction;
 import hydrograph.ui.dataviewer.actions.ExportAction;
+import hydrograph.ui.dataviewer.actions.FilterAction;
 import hydrograph.ui.dataviewer.actions.FindAction;
 import hydrograph.ui.dataviewer.actions.FormattedViewAction;
 import hydrograph.ui.dataviewer.actions.GridViewAction;
@@ -47,6 +49,7 @@ import hydrograph.ui.dataviewer.constants.Views;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
+import hydrograph.ui.dataviewer.filter.FilterConditions;
 import hydrograph.ui.dataviewer.listeners.DataViewerListeners;
 import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
 import hydrograph.ui.dataviewer.support.SortDataType;
@@ -67,6 +70,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -124,7 +128,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
-
 /**
  * 
  * Data viewer window
@@ -196,7 +199,9 @@ public class DebugDataViewer extends ApplicationWindow {
 	private TableColumn recentlySortedColumn;
 	private String sortedColumnName;
 	
-	
+	private FilterConditions conditions;
+	private String localCondition = "";
+	private String remoteCondition = "";
 	/**
 	 * Create the application window,
 	 * 
@@ -214,6 +219,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		formattedViewData = new LinkedList<>();
 	}
 
+	
 	public DebugDataViewer( JobDetails jobDetails, String dataViewerWindowName) {
 		super(null);
 		createActions();
@@ -291,7 +297,7 @@ public class DebugDataViewer extends ApplicationWindow {
 				disbleDataViewerUIControls();
 
 				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(jobDetails);
-				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles();
+				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles(getConditions());
 
 				if (StatusConstants.ERROR == statusMessage.getReturnCode()) {
 					Display.getDefault().asyncExec(new Runnable() {
@@ -309,8 +315,19 @@ public class DebugDataViewer extends ApplicationWindow {
 				debugFileLocation = dataViewerFileManager.getDataViewerFilePath();
 				setDebugFileLocation(debugFileLocation);
 				setDebugFileName(debugFileName);
-
-				showDataInDebugViewer();
+				if (getConditions() != null) {
+					if (getConditions().getRetainLocal() || getConditions().getRetainRemote()) {
+						showDataInDebugViewer(true, false);
+					}
+					 else {
+							showDataInDebugViewer(false, false);
+					}
+					
+				}
+				else
+				{
+					showDataInDebugViewer(false, false);
+				}
 
 				dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + debugFileName + SCHEMA_FILE_EXTENTION);
 				
@@ -340,7 +357,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 
-	private void loadDebugFileInDataViewer() {
+	public void loadDebugFileInDataViewer(boolean filterApplied, boolean remoteOkPressed) {
 		statusManager.getStatusLineManager().getProgressMonitor().done();
 
 		dataViewLoader = new DataViewLoader(unformattedViewTextarea, formattedViewTextarea, horizontalViewTableViewer,
@@ -356,7 +373,7 @@ public class DebugDataViewer extends ApplicationWindow {
 
 		dataViewLoader.updateDataViewLists();
 
-		updateGridViewTable();
+		updateGridViewTable(filterApplied,remoteOkPressed);
 
 		dataViewLoader.reloadloadViews();
 		statusManager.enableInitialPaginationContols();
@@ -364,12 +381,12 @@ public class DebugDataViewer extends ApplicationWindow {
 		submitRecordCountJob();
 	}
 	
-	private void showDataInDebugViewer() {
+	public void showDataInDebugViewer(final boolean filterApplied, final boolean remoteOkPressed) {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					initializeDataFileAdapter();
+					initializeDataFileAdapter(filterApplied,getConditions());
 				} catch (ClassNotFoundException | SQLException e) {
 					Utils.INSTANCE.showMessage(MessageBoxText.ERROR,
 							Messages.UNABLE_TO_LOAD_DEBUG_FILE + e.getMessage());
@@ -380,7 +397,7 @@ public class DebugDataViewer extends ApplicationWindow {
 					}
 					getShell().close();
 				}
-				loadDebugFileInDataViewer();
+				loadDebugFileInDataViewer(filterApplied,remoteOkPressed);
 			}
 		});
 	}
@@ -510,10 +527,27 @@ public class DebugDataViewer extends ApplicationWindow {
 		return statusManager;
 	}
 
-	private void initializeDataFileAdapter() throws ClassNotFoundException, SQLException {
-		dataViewerAdapter = new DataViewerAdapter(debugFileLocation, debugFileName,
-				Utils.INSTANCE.getDefaultPageSize(), PreferenceConstants.INITIAL_OFFSET, this);
+	private void initializeDataFileAdapter(boolean filterApplied, FilterConditions filterConditions) throws ClassNotFoundException,
+			SQLException {
+		
+		if(filterConditions!=null && filterApplied)
+		{
+			dataViewerAdapter=new DataViewerAdapter(debugFileLocation,
+					debugFileName, Utils.INSTANCE.getDefaultPageSize(),
+					PreferenceConstants.INITIAL_OFFSET, this,filterConditions.getLocalCondition());
+			if(StringUtils.isEmpty(filterConditions.getLocalCondition())){
+				setLocalCondition("");
+			}
+		}
+		else
+		{
+			dataViewerAdapter = new DataViewerAdapter(debugFileLocation,
+					debugFileName, Utils.INSTANCE.getDefaultPageSize(),
+					PreferenceConstants.INITIAL_OFFSET, this);
+		}
 	}
+	
+
 
 	private void setDataViewerWindowTitle() {
 		getShell().setText("Debug Data viewer - " + dataViewerWindowName);
@@ -634,6 +668,7 @@ public class DebugDataViewer extends ApplicationWindow {
 						statusManager.setStatus(status);
 						statusManager.enableJumpPagePanel(true);
 						actionFactory.getAction(ResetSort.class.getName()).setEnabled(false);
+						actionFactory.getAction(ClearFilterAction.class.getName()).setEnabled(false);
 					}
 				});
 				return Status.OK_STATUS;
@@ -882,6 +917,8 @@ public class DebugDataViewer extends ApplicationWindow {
 				scrolledComposite.setMinSize(stackLayoutComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 				
 				attachCellNavigator();
+
+				//updateGridViewTable();
 			}
 		}
 
@@ -1149,7 +1186,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		return currentSelection;
 	}
 	
-	private void updateGridViewTable() {
+	private void updateGridViewTable(boolean filterApplied, boolean remoteOkPressed) {
+		if(!remoteOkPressed)
 		createGridViewTableColumns(gridViewTableViewer);
 
 		gridViewTableViewer.setContentProvider(new ArrayContentProvider());
@@ -1215,8 +1253,11 @@ public class DebugDataViewer extends ApplicationWindow {
 			tblclmnItem.setWidth(100);
 			tblclmnItem.setText(columnName);
 			
+
 			tableViewerColumn.getColumn().setData(Views.COLUMN_ID_KEY,
 					(int) dataViewerAdapter.getAllColumnsMap().get(tableViewerColumn.getColumn().getText()));
+
+			tableViewerColumn.getColumn().setData(Views.COLUMN_ID_KEY, index);
 			tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 
 				@Override
@@ -1267,7 +1308,6 @@ public class DebugDataViewer extends ApplicationWindow {
 					// Do Nothing
 				}
 			});
-			
 			index++;
 		}
 	}
@@ -1347,7 +1387,6 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 		
 		fileMenu.add(actionFactory.getAction(ExportAction.class.getName()));
-		// fileMenu.add(actionFactory.getAction(FilterAction.class.getName()));
 	}
 
 
@@ -1358,7 +1397,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		windowMenu.setVisible(true);
 
 		windowMenu.add(actionFactory.getAction(DatasetInformationAction.class.getName()));
-		windowMenu.add(actionFactory.getAction(AutoExpandColumns.class.getName()));
+		windowMenu.add(actionFactory.getAction(AutoExpandColumnsAction.class.getName()));
 	}
 	
 
@@ -1406,7 +1445,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		}
 		
 		dataMenu.add(actionFactory.getAction(ResetSort.class.getName()));
-	
+		dataMenu.add(actionFactory.getAction(FilterAction.class.getName()));
+		dataMenu.add(actionFactory.getAction(ClearFilterAction.class.getName()));
 	}
 	
 	/**
@@ -1449,6 +1489,10 @@ public class DebugDataViewer extends ApplicationWindow {
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_EXPORT),
 				actionFactory.getAction(ExportAction.class.getName()));
 
+		/*
+		 * addtoolbarAction( toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_FIND),
+		 * actionFactory.getAction(FindAction.class.getName()));
+		 */
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_RELOAD),
 				actionFactory.getAction(ReloadAction.class.getName()));
 		/*
@@ -1460,11 +1504,12 @@ public class DebugDataViewer extends ApplicationWindow {
 		
 		addtoolbarAction(toolBarManager,(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.TABLE_ICON),
 				actionFactory.getAction(SelectColumnAction.class.getName()));
+
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.FIND_DATA), 
 				actionFactory.getAction(FindAction.class.getName()));
 		
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.AUTO_ADJUST_COLUMNS), 
-				actionFactory.getAction(AutoExpandColumns.class.getName()));
+				actionFactory.getAction(AutoExpandColumnsAction.class.getName()));
 		
 		dropDownAction = new Action("", SWT.DROP_DOWN) {
 			@Override
@@ -1611,6 +1656,50 @@ public class DebugDataViewer extends ApplicationWindow {
 	public CTabFolder getCurrentView(){
 		return tabFolder;
 	}
+
+	public void setConditions(FilterConditions conditons) {
+		this.conditions=conditons;
+		if(!StringUtils.isEmpty(conditions.getLocalCondition()) && conditons.getRetainLocal()){
+			this.localCondition=conditons.getLocalCondition();
+		}
+		if(!StringUtils.isEmpty(conditions.getRemoteCondition())){
+			this.remoteCondition = conditons.getRemoteCondition();
+		}
+	}
+	public FilterConditions getConditions(){
+		return conditions;
+	}
+	
+
+	public String getLocalCondition() {
+		return localCondition;
+	}
+	
+	public void setLocalCondition(String localCondition) {
+		this.localCondition = localCondition;
+		enableDisableFilter();
+	}
+
+
+	public String getRemoteCondition() {
+		return remoteCondition;
+	}
+
+
+	public void setRemoteCondition(String remoteCondition) {
+		this.remoteCondition = remoteCondition;
+		enableDisableFilter();
+	}
+	
+	public void enableDisableFilter(){
+		if(StringUtils.isEmpty(remoteCondition) && StringUtils.isEmpty(localCondition)){
+			actionFactory.getAction(ClearFilterAction.class.getName()).setEnabled(false);
+		}
+		else{
+			actionFactory.getAction(ClearFilterAction.class.getName()).setEnabled(true);
+		}
+	}
+
 }
 
 

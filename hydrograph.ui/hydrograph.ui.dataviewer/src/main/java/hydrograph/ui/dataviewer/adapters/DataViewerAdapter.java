@@ -13,13 +13,17 @@
 
 package hydrograph.ui.dataviewer.adapters;
 
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.FieldDataTypes;
+import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.dataviewer.constants.AdapterConstants;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.PreferenceConstants;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
-import hydrograph.ui.dataviewer.datastructures.StatusMessage;
-import hydrograph.ui.dataviewer.datastructures.RowField;
 import hydrograph.ui.dataviewer.datastructures.RowData;
+import hydrograph.ui.dataviewer.datastructures.RowField;
+import hydrograph.ui.dataviewer.datastructures.StatusMessage;
+import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -32,7 +36,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Properties;
 import org.slf4j.Logger;
 /**
  * 
@@ -59,6 +63,10 @@ public class DataViewerAdapter {
 	private Connection connection;
 	private Statement statement;
 	private Map<String,Integer> allColumnsMap;
+	private String filterCondition;
+	private DebugDataViewer debugDataViewer;
+	private String SCHEMA_FILE_EXTENTION=".xml";
+
 	public DataViewerAdapter(String databaseName, String tableName, int PAGE_SIZE, long INITIAL_OFFSET, DebugDataViewer debugDataViewer) throws ClassNotFoundException, SQLException {
 		this.databaseName = databaseName;
 		this.tableName = tableName;
@@ -68,6 +76,21 @@ public class DataViewerAdapter {
 		columnCount = 0;
 		this.pageSize = PAGE_SIZE;
 		this.offset = INITIAL_OFFSET;
+		this.debugDataViewer=debugDataViewer;
+		initializeAdapter();
+	}
+	
+	public DataViewerAdapter(String databaseName, String tableName, int PAGE_SIZE, long INITIAL_OFFSET, DebugDataViewer debugDataViewer,String filterCondition) throws ClassNotFoundException, SQLException {
+		this.databaseName = databaseName;
+		this.tableName = tableName;
+		viewerData = new LinkedList<>();
+		columnList = new LinkedList<>();
+		allColumnsMap= new LinkedHashMap<String,Integer>();
+		columnCount = 0;
+		this.pageSize = PAGE_SIZE;
+		this.offset = INITIAL_OFFSET;
+		this.debugDataViewer=debugDataViewer;
+		this.filterCondition=filterCondition;
 		initializeAdapter();
 	}
 
@@ -81,7 +104,7 @@ public class DataViewerAdapter {
 		ResultSet resultSet = null;
 
 		createConnection();
-		String sql = new ViewDataQueryBuilder(tableName).limit(0).getQuery();
+		String sql = new ViewDataQueryBuilder(tableName).limit(0).getQuery(filterCondition);
 		resultSet = statement.executeQuery(sql);
 
 		initializeColumnCount(resultSet);
@@ -92,8 +115,29 @@ public class DataViewerAdapter {
 
 	private void createConnection() throws ClassNotFoundException, SQLException {
 		Class.forName(AdapterConstants.CSV_DRIVER_CLASS);
-		connection = DriverManager.getConnection(AdapterConstants.CSV_DRIVER_CONNECTION_PREFIX + databaseName);
+		Properties properties = new Properties();
+		properties.put("columnTypes",getDataTypeString().substring(0,getDataTypeString().length()-1));
+		connection = DriverManager.getConnection(AdapterConstants.CSV_DRIVER_CONNECTION_PREFIX + databaseName,properties);
 		statement = connection.createStatement();
+	}
+	
+	public void setFilterCondition(String filterCondition) {
+		this.filterCondition = filterCondition;
+	}
+	
+	private String getDataTypeString() {
+		String dataTypeString="";
+		String debugFileName = debugDataViewer.getDebugFileName();
+		String debugFileLocation = debugDataViewer.getDebugFileLocation();
+
+		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE
+				.getFieldsFromSchema(debugFileLocation + debugFileName
+						+ SCHEMA_FILE_EXTENTION);
+		for (Field field : dataViewerFileSchema.getField()) {
+			FieldDataTypes fieldDataTypes=field.getType();
+			dataTypeString=dataTypeString+fieldDataTypes.value().split("\\.")[2]+",";
+		}
+		return dataTypeString;
 	}
 	
 	/**
@@ -124,10 +168,17 @@ public class DataViewerAdapter {
 		columnCount = resultSet.getMetaData().getColumnCount();
 	}
 
-	private void initializeTableData() throws SQLException  {
+	public void initializeTableData() throws SQLException  {
 		viewerData.clear();
 		
-		String sql = new ViewDataQueryBuilder(tableName).limit(pageSize).offset(offset).getQuery(); 
+		String sql;
+		if (filterCondition!=null&& !filterCondition.isEmpty()) {
+			sql = new ViewDataQueryBuilder(tableName).limit(pageSize).offset(offset).getQuery(filterCondition);
+		}
+		else
+		{
+			sql = new ViewDataQueryBuilder(tableName).limit(pageSize).offset(offset).getQuery("");
+		}
 		ResultSet results = statement.executeQuery(sql);
 		int rowIndex = 1;
 		while (results.next()) {
@@ -190,7 +241,7 @@ public class DataViewerAdapter {
 	 * @return
 	 */
 	public StatusMessage fetchRowCount() {
-		String sql = new ViewDataQueryBuilder(tableName).column("COUNT(1)").getQuery();
+		String sql = new ViewDataQueryBuilder(tableName).column("COUNT(1)").getQuery(filterCondition);
 		try (ResultSet rowCountResultSet = statement.executeQuery(sql)) {
 			rowCountResultSet.next();
 			rowCount = rowCountResultSet.getLong(1);
@@ -286,7 +337,7 @@ public class DataViewerAdapter {
 	 */
 	public StatusMessage next() {
 		adjustOffsetForNext();
-		String sql = new ViewDataQueryBuilder(tableName).limit(pageSize).offset(offset).getQuery();
+		String sql = new ViewDataQueryBuilder(tableName).limit(pageSize).offset(offset).getQuery(filterCondition);
 		try (ResultSet results = statement.executeQuery(sql)) {
 			List<RowData> tempTableData = getRecords(results);
 			if (tempTableData.size() != 0) {
@@ -337,7 +388,7 @@ public class DataViewerAdapter {
 		
 		viewerData.clear();
 		
-		String sql = new ViewDataQueryBuilder(tableName).limit(pageSize).offset(offset).getQuery();
+		String sql = new ViewDataQueryBuilder(tableName).limit(pageSize).offset(offset).getQuery(filterCondition);
 		try (ResultSet results = statement.executeQuery(sql)) {
 
 			viewerData = getRecords(results);
@@ -380,7 +431,7 @@ public class DataViewerAdapter {
 		Long numberOfRecords = getRowCount();
 		long tempOffset = adjustOffsetForJump(pageNumber, numberOfRecords);
 
-		String sql = new ViewDataQueryBuilder(tableName).limit(pageSize).offset(offset).getQuery();
+		String sql = new ViewDataQueryBuilder(tableName).limit(pageSize).offset(offset).getQuery(filterCondition);
 		try (ResultSet results = statement.executeQuery(sql)) {
 			List<RowData> tempTableData = getRecords(results);
 

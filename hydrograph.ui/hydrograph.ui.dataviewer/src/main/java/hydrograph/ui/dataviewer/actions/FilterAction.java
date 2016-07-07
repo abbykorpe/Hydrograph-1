@@ -13,21 +13,84 @@
 
 package hydrograph.ui.dataviewer.actions;
 
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.FieldDataTypes;
+import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.dataviewer.filter.FilterConditions;
+import hydrograph.ui.dataviewer.filter.FilterConditionsDialog;
+import hydrograph.ui.dataviewer.filter.FilterHelper;
+import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
+import hydrograph.ui.logging.factory.LogFactory;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jface.action.Action;
+import org.slf4j.Logger;
 
+/**
+ * Action class to initiate the Filter Window
+ * @author Bitwise
+ *
+ */
 public class FilterAction extends Action {
-	
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterAction.class);
 	private static final String LABEL="Filter";
+	private static final String SCHEMA_FILE_EXTENTION=".xml";
+	
 	private DebugDataViewer debugDataViewer;
+	private FilterConditions filterConditions;
+	
 	
 	public FilterAction(DebugDataViewer debugDataViewer) {
     	super(LABEL);
     	this.debugDataViewer = debugDataViewer;
+    	filterConditions=new FilterConditions();
 	}
 	@Override
 	public void run() {
-		super.run();
+		FilterConditionsDialog filterConditionsDialog=new FilterConditionsDialog(debugDataViewer.getShell());
+
+		filterConditionsDialog.setFieldsAndTypes(getFieldsAndTypes());
+		try {
+			filterConditionsDialog.setDebugDataViewerAdapterAndViewer(debugDataViewer.getDataViewerAdapter(),debugDataViewer);
+			if (debugDataViewer.getConditions()!=null){
+				filterConditionsDialog.setFilterConditions(debugDataViewer.getConditions());
+			}
+			if(filterConditionsDialog.open() !=1){
+					filterConditions.setLocalCondition(FilterHelper.INSTANCE.getLocalCondition());
+					filterConditions.setLocalConditions(filterConditionsDialog.getLocalConditionsList());
+					filterConditions.setRetainLocal(filterConditionsDialog.ifSetLocalFilter());
+					filterConditions.setLocalGroupSelectionMap(filterConditionsDialog.getLocalGroupSelections());
+					
+					filterConditions.setRemoteCondition(FilterHelper.INSTANCE.getRemoteCondition());
+					filterConditions.setRemoteConditions(filterConditionsDialog.getRemoteConditionsList());
+					filterConditions.setRetainRemote(filterConditionsDialog.ifSetRemoteFilter());
+					filterConditions.setRemoteGroupSelectionMap(filterConditionsDialog.getRemoteGroupSelections());
+					
+					filterConditionsDialog.setOriginalFilterConditions(filterConditions);
+			}
+			debugDataViewer.setConditions(filterConditionsDialog.getOriginalFilterConditions());
+		} catch (ClassNotFoundException | SQLException e) {
+			logger.error("Error while setting debug data viewer and debug data viewer adaptor",e);
+		}
+		
+		
+	}
+
+	private Map<String, String> getFieldsAndTypes() {
+		Map<String, String> fieldsAndTypes = new HashMap<>();
+		String debugFileName = debugDataViewer.getDebugFileName();
+		String debugFileLocation = debugDataViewer.getDebugFileLocation();
+
+		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation
+				+ debugFileName + SCHEMA_FILE_EXTENTION);
+		for (Field field : dataViewerFileSchema.getField()) {
+			FieldDataTypes fieldDataTypes = field.getType();
+			fieldsAndTypes.put(field.getName(), fieldDataTypes.value());
+		}
+		return fieldsAndTypes;
 	}
 }

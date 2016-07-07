@@ -29,4 +29,5 @@ public class DebugServicePostParameters {
 	public static final String PASSWORD = "password";
 	public static final String FILE_SIZE = "file_size";
 	public static final String HOST_NAME = "host_name";
+	public static final String FILTER_JSON_OBJECT="json_object";
 }

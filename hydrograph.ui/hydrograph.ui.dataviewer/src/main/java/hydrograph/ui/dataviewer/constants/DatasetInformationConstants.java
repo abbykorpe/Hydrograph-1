@@ -38,4 +38,7 @@ public class DatasetInformationConstants {
 	public static final String SCALE = "Scale";
 	public static final String SCALETYPE = "Scale Type";
 	public static final String DESCRIPTION = "Description";
+	public static final String LOCAL_FILTER_CONDITION = "Local Filter condition  : ";
+	public static final String REMOTE_FILTER_CONDITION = "Remote Filter condition  : ";
+
 }
