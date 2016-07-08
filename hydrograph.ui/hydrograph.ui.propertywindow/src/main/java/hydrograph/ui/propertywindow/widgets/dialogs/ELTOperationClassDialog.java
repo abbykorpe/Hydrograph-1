@@ -18,6 +18,7 @@ import hydrograph.ui.common.component.config.Operations;
 import hydrograph.ui.common.component.config.TypeInfo;
 import hydrograph.ui.common.datastructures.tooltip.TootlTipErrorMessage;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.OperationClassProperty;
@@ -36,6 +37,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
 import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
@@ -69,7 +71,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Label;
+
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
@@ -113,12 +115,16 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	private PropertyDialogButtonBar opeartionClassDialogButtonBar;
 	private Button cancelButton;
     private OperationClassProperty operationClassProperty;
-
+    private Integer windowButtonWidth = 30;
+	private Integer windowButtonHeight = 25;
+	private Integer macButtonWidth = 40;
+	private Integer macButtonHeight = 30;
 	private Composite buttonComposite;
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
 
 	public ELTOperationClassDialog(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar, OperationClassProperty operationClassProperty, WidgetConfig widgetConfig, String componentName) {
 		super(parentShell);
+
 		setShellStyle(SWT.CLOSE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.operationClassProperty = operationClassProperty;
 		this.widgetConfig = widgetConfig;
@@ -201,8 +207,10 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		table_2.getColumn(0).setWidth(252);
 		table_2.getColumn(1).setWidth(259);
 
-		Label addButton = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 360, 17, 20, 15 }, "", new Image(
-				null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		Button addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 360, 17, 20, 15 }, "");
+		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
+		addButton.setImage(addImage);
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		addButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -222,9 +230,10 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 
 		});
 
-		Label deleteButton = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 390, 17, 20, 15 }, "",
-				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
-
+		Button deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 390, 17, 20, 15 }, "");
+		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+		deleteButton.setImage(deleteImage);
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		deleteButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -248,9 +257,10 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 
 		});
 
-		Label upButton = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 420, 17, 20, 15 }, "", new Image(
-				null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON));
-
+		Button upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 420, 17, 20, 15 }, "");
+		Image upImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON);
+		upButton.setImage(upImage);
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(upButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		upButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -267,8 +277,11 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 			}
 
 		});
-		Label downButton = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 450, 17, 20, 15 }, "",
-				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON));
+		
+		Button downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 450, 17, 20, 15 }, "");
+		Image downImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON);
+		downButton.setImage(downImage);
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(downButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		downButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {

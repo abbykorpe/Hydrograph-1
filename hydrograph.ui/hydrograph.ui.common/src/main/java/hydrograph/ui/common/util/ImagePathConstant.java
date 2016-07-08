@@ -26,6 +26,7 @@ public class ImagePathConstant {
 	public static final String MOVEUP_BUTTON = "/icons/up.png";
 	public static final String MOVEDOWN_BUTTON = "/icons/down.png";
 	public static final String SAVE_BUTTON = "/icons/save_o.png";
+	public static final String PULL_BUTTON = "/icons/pull_schema.png";
 	public static final String EDIT_BUTTON = "/icons/editImage.png";
 	public static final String APP_ICON = "/icons/app_icon.png";
 	public static final String UNCHECKALL_ICON = "/icons/uncheckall.png";
