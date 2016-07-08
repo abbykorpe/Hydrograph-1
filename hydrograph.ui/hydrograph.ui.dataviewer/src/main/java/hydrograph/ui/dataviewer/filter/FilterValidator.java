@@ -15,11 +15,13 @@ package hydrograph.ui.dataviewer.filter;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -66,12 +68,12 @@ public class FilterValidator {
 			String type = getType(fieldName, fieldsAndTypes);
 			List<String> operators = Arrays.asList(conditionalOperatorsMap.get(type));
 			if(!operators.contains(condition.getConditionalOperator())){
-				logger.trace("operator at {} is incorrect", operators);
+				logger.trace("operator at {} is incorrect", condition.getConditionalOperator());
 				return false;
 			}
 			
 			if(StringUtils.isNotBlank(value)){
-				if(!validateDataBasedOnTypes(type, value)){
+				if(!validateDataBasedOnTypes(type, value, condition.getConditionalOperator())){
 					return false;
 				}
 			}
@@ -84,44 +86,60 @@ public class FilterValidator {
 		return type;
 	}
 	
-	public boolean validateDataBasedOnTypes(String type, String value){
+	public boolean validateDataBasedOnTypes(String type, String value, String conditionalOperator){
 		try{
-			if(FilterHelper.TYPE_BOOLEAN.equals(type)){
-				Boolean convertedBoolean = Boolean.valueOf(value);
-				if(!StringUtils.equalsIgnoreCase(convertedBoolean.toString(), value)){
-					return false;
+			if("IN".equalsIgnoreCase(conditionalOperator) ||
+					"NOT IN".equalsIgnoreCase(conditionalOperator)){
+				if(value.contains(FilterConstants.DELIM_COMMA)){
+					StringTokenizer tokenizer = new StringTokenizer(value, FilterConstants.DELIM_COMMA);
+					int numberOfTokens = tokenizer.countTokens();
+					for (int index = 0; index < numberOfTokens; index++) {
+						validate(type, tokenizer.nextToken());
+					}
 				}
 			}
-			else if(FilterHelper.TYPE_DOUBLE.equals(type)){
-				Double.valueOf(value);
-			}
-			else if(FilterHelper.TYPE_FLOAT.equals(type)){
-				Float.valueOf(value);
-			}
-			else if(FilterHelper.TYPE_INTEGER.equals(type)){
-				Integer.valueOf(value);
-			}
-			else if(FilterHelper.TYPE_LONG.equals(type)){
-				Long.valueOf(value);
-			}
-			else if(FilterHelper.TYPE_SHORT.equals(type)){
-				Short.valueOf(value);
-			}
-			else if(FilterHelper.TYPE_STRING.equals(type)){
-				String.valueOf(value);
-			}
-			else if(FilterHelper.TYPE_BIGDECIMAL.equals(type)){
-				new BigDecimal(value);
-			}
-			else if(FilterHelper.TYPE_DATE.equals(type)){
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-				Date comp_date= sdf.parse(value);
-			}
+			
 		}
 		catch(Exception exception){
 			logger.trace("value can not be converted to {}", new Object[]{type});
 			return false;
 		}
 		return true;
+	}
+
+	private boolean validate(String type, String value) throws ParseException {
+		if(FilterHelper.TYPE_BOOLEAN.equals(type)){
+			Boolean convertedBoolean = Boolean.valueOf(value);
+			if(!StringUtils.equalsIgnoreCase(convertedBoolean.toString(), value)){
+				return false;
+			}
+		}
+		else if(FilterHelper.TYPE_DOUBLE.equals(type)){
+			Double.valueOf(value);
+		}
+		else if(FilterHelper.TYPE_FLOAT.equals(type)){
+			Float.valueOf(value);
+		}
+		else if(FilterHelper.TYPE_INTEGER.equals(type)){
+			Integer.valueOf(value);
+		}
+		else if(FilterHelper.TYPE_LONG.equals(type)){
+			Long.valueOf(value);
+		}
+		else if(FilterHelper.TYPE_SHORT.equals(type)){
+			Short.valueOf(value);
+		}
+		else if(FilterHelper.TYPE_STRING.equals(type)){
+			String.valueOf(value);
+		}
+		else if(FilterHelper.TYPE_BIGDECIMAL.equals(type)){
+			new BigDecimal(value);
+		}
+		else if(FilterHelper.TYPE_DATE.equals(type)){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+			sdf.parse(value);
+		}
+		return true;
+		
 	}
 }

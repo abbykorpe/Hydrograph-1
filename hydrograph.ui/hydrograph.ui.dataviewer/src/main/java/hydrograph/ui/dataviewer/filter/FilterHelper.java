@@ -116,7 +116,7 @@ public class FilterHelper {
 				int index = (int) text.getData(FilterConditionsDialog.ROW_INDEX);
 				Condition filterConditions = conditionsList.get(index);
 				filterConditions.setValue(text.getText());
-				validateText(text, filterConditions.getFieldName(), fieldsAndTypes);
+				validateText(text, filterConditions.getFieldName(), fieldsAndTypes, filterConditions.getConditionalOperator());
 				toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 		};
@@ -313,7 +313,7 @@ public class FilterHelper {
 				for (int conditionIndex = 0; conditionIndex < conditionsList.size(); conditionIndex++) {
 					actualStringList.add(conditionIndex, String.valueOf((conditionIndex)));
 				}
-				System.out.println(actualStringList);
+				logger.trace(actualStringList.toString());
 				//start adding brackets for grouping
 				Set<Integer> treeSet  = (Set<Integer>) groupSelectionMap.keySet();
 				if(treeSet.size() > 0){
@@ -350,7 +350,7 @@ public class FilterHelper {
 						}
 					}
 					indexOfRelational += 1;
-					System.out.println(actualStringList);
+					logger.trace(actualStringList.toString());
 				}
 				
 				StringBuffer buffer = new StringBuffer();
@@ -368,7 +368,7 @@ public class FilterHelper {
 				for (String item : actualStringList) {
 					buffer.append(item + SINGLE_SPACE);
 				}
-				System.out.println(buffer);
+				logger.debug("Query String : " + buffer);
 				
 				if(dataset.equalsIgnoreCase(DOWNLOADED))
 				{	
@@ -512,9 +512,9 @@ public class FilterHelper {
 		}
 	}
 	
-	private boolean validateText(Text text, String fieldName, Map<String, String> fieldsAndTypes) {
+	private boolean validateText(Text text, String fieldName, Map<String, String> fieldsAndTypes, String conditionalOperator) {
 		String type = FilterValidator.INSTANCE.getType(fieldName, fieldsAndTypes);
-		if(StringUtils.isNotBlank(text.getText()) && FilterValidator.INSTANCE.validateDataBasedOnTypes(type, text.getText())){
+		if(StringUtils.isNotBlank(text.getText()) && FilterValidator.INSTANCE.validateDataBasedOnTypes(type, text.getText(), conditionalOperator)){
 			text.setBackground(new Color(null, 255, 255, 255));
 			return true;
 		}else {
