@@ -206,6 +206,7 @@ public class FindViewDataDialog extends Dialog{
 							clearTableItemBgColor(debugDataViewer); 
 							flag = false;
 							findRowIndex = debugDataViewer.getTable().getItems().length - 1;
+							findColIndex = debugDataViewer.getTable().getColumnCount();
 							}
 						reverseTableTraverse(debugDataViewer, dataViewer.getTablecursor());
 					}
@@ -419,8 +420,8 @@ public class FindViewDataDialog extends Dialog{
 		TableItem previousSelectedTableItem = null;
 		if(debugDataViewer.getData("SELECTED_ROW_INDEX")!=null){
 			previousSelectedTableItem = debugDataViewer.getTable().getItem((int) debugDataViewer.getData("SELECTED_ROW_INDEX"));
-			findRowIndex = (int) debugDataViewer.getData("SELECTED_ROW_INDEX");
-			findColIndex = (int) debugDataViewer.getData("SEELCTED_COLUMN_INDEX");
+			//findRowIndex = (int) debugDataViewer.getData("SELECTED_ROW_INDEX");
+			//findColIndex = (int) debugDataViewer.getData("SEELCTED_COLUMN_INDEX");
 			findColIndex -= 1;
 		}
 		Table table = debugDataViewer.getTable();
@@ -448,6 +449,7 @@ public class FindViewDataDialog extends Dialog{
 					prevRowSelection = findRowIndex;
 					return ;
 				}
+				
 			}
 			if(findRowIndex == 0){ findRowIndex = tableItems.length; }
 		}
@@ -464,7 +466,7 @@ public class FindViewDataDialog extends Dialog{
 					label.setVisible(false);
 					table.showItem(tableItem);
 					table.showColumn(table.getColumn(colIndex));
-					tableCursor.setSelection(findRowIndex, findColIndex);
+					tableCursor.setSelection(rowIndex, colIndex);
 					tableCursor.setFocus();
 					tableCursor.setVisible(false);
 					tableItem.setBackground(colIndex, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
