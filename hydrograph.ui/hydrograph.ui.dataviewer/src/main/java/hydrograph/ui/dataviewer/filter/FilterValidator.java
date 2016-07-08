@@ -31,6 +31,7 @@ import org.slf4j.Logger;
  *
  */
 public class FilterValidator {
+
 	public static FilterValidator INSTANCE = new FilterValidator();
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterValidator.class);
@@ -87,8 +88,8 @@ public class FilterValidator {
 	
 	public boolean validateDataBasedOnTypes(String type, String value, String conditionalOperator){
 		try{
-			if("IN".equalsIgnoreCase(conditionalOperator) ||
-					"NOT IN".equalsIgnoreCase(conditionalOperator)){
+			if(FilterConstants.IN.equalsIgnoreCase(conditionalOperator) ||
+					FilterConstants.NOT_IN.equalsIgnoreCase(conditionalOperator)){
 				if(value.contains(FilterConstants.DELIM_COMMA)){
 					StringTokenizer tokenizer = new StringTokenizer(value, FilterConstants.DELIM_COMMA);
 					int numberOfTokens = tokenizer.countTokens();
@@ -135,7 +136,7 @@ public class FilterValidator {
 			new BigDecimal(value);
 		}
 		else if(FilterConstants.TYPE_DATE.equals(type)){
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+			SimpleDateFormat sdf = new SimpleDateFormat(FilterConstants.YYYY_MM_DD); 
 			sdf.parse(value);
 		}
 		return true;

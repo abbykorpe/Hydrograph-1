@@ -31,4 +31,6 @@ public class FilterConstants {
 	
 	public static final String AND = "AND";
 	public static final String OR = "OR";
+	
+	public static final String YYYY_MM_DD = "yyyy-MM-dd";
 }
