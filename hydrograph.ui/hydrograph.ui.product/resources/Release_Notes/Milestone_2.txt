@@ -86,9 +86,10 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 64.#780  [Nitin Gupta]Join component allows only 2 unused ports to be connected
 65.#782  [Rakesh Kanchalwar] Filter Window: Conditional operator is not getting refreshed upon selecting different data type fields 
 66.#786  [Ashika Holkar] View Data Filter : For Downloaded Dataset,Incorrect No. of records are Displayed in Bottom of View Data Window
-
 67.#799  [Nitin Gupta]Copy Paste Functionality is not working on job canvas. 
 68.#758  [Rakesh Kanchalwar] Filter Window: Window name to the Filter window is not proper
+69.#757  [Vibhor Tyagi] Find Functionality: When user clicks on 'All' button located in find window then focus is shifting to last instance in grid view whereas it remains same in other two views.
+
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
