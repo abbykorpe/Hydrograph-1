@@ -42,6 +42,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.ELTOperationClassWidge
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTRetentionLogicWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTXmlPropertiesContainer;
 import hydrograph.ui.propertywindow.widgets.customwidgets.SingleColumnWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.SingleColumnWidgetWithPropagatedSchema;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithLabelWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithLabelWidgetWithoutAnyValidation;
@@ -104,6 +105,7 @@ public class WidgetFactory {
 		FILTER_PROPERTY_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getOperationFieldsConfig()),
 		COLUMN_NAME_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getColumnNameConfig()),
 		PARTITION_KEYS_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getPartitionKeysConfig()),
+		PARTITION_KEYS_WIDGET_INPUT_HIVE(SingleColumnWidgetWithPropagatedSchema.class, WidgetHelper.INSTANCE.getPartitionKeysConfigInputHive()),
 		
 		OPERATIONAL_CLASS_WIDGET(ELTOperationClassWidget.class, WidgetHelper.INSTANCE.getOperationClassForFilterWidgetConfig()),
 		RUNTIME_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class,WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.RUNTIME_PROPERTY_LABEL,Constants.RUNTIME_PROPERTIES_WINDOW_LABEL)),

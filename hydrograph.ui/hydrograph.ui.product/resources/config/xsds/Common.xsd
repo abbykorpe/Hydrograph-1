@@ -92,6 +92,7 @@
 			<enumeration value="EXTERNAL_TABLE_PATH_WIDGET"/>
 			<enumeration value="MIXED_SCHEME"/>
 			<enumeration value="OVERWRITE_WIDGET"/>
+			<enumeration value="PARTITION_KEYS_WIDGET_INPUT_HIVE"/>
 		</restriction>
 	</simpleType>
 

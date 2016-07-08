@@ -73,22 +73,31 @@ public class SingleColumnWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
-				fieldDialog.setComponentName(gridConfig.getComponentName());
-				if (getProperties().get(propertyName) == null) {
-					setProperties(propertyName, new ArrayList<String>());
-				}
-				fieldDialog.setRuntimePropertySet(new ArrayList<String>(set));
-				fieldDialog.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
-				fieldDialog.open();
+				onDoubleClick();
+			}
 
-				setProperties(propertyName, fieldDialog.getFieldNameList());
-                showHideErrorSymbol(widgets);
-			} 
+			
 		});
 
 	}
 
+	
+	protected void onDoubleClick() {
+		FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
+		fieldDialog.setComponentName(gridConfig.getComponentName());
+		if (getProperties().get(propertyName) == null) {
+			setProperties(propertyName, new ArrayList<String>());
+		}
+		fieldDialog.setRuntimePropertySet(new ArrayList<String>(set));
+		fieldDialog.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
+		fieldDialog.open();
+
+		setProperties(propertyName, fieldDialog.getFieldNameList());
+        showHideErrorSymbol(widgets);
+	} 
+	
+	
+	
 	private void setProperties(String propertyName, Object properties) {
 		this.propertyName = propertyName;
 		this.set = (List<String>) properties;
@@ -107,7 +116,7 @@ public class SingleColumnWidget extends AbstractWidget {
 		gridConfig = (SingleColumnGridConfig) widgetConfig;
 	}
 
-	private List<String> getPropagatedSchema() {
+	protected List<String> getPropagatedSchema() {
 		return SchemaPropagationHelper.INSTANCE.getFieldsForFilterWidget(getComponent()).get(
 				Constants.INPUT_SOCKET_TYPE + 0);
 	}

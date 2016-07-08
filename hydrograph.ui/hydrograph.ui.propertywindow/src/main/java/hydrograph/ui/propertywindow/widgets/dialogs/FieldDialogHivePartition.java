@@ -21,12 +21,14 @@ import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.SingleColumnGridConfig;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,6 +57,8 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
@@ -87,8 +91,8 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
  * 
  */
 
-public class FieldDialog extends Dialog {
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(FieldDialog.class);
+public class FieldDialogHivePartition extends Dialog {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FieldDialogHivePartition.class);
 
 	private final List<FilterProperties> propertyList;
 	private List<String> fieldNameList;
@@ -114,17 +118,21 @@ public class FieldDialog extends Dialog {
 	PropertyDialogButtonBar propertyDialogButtonBar;
 	private boolean closeDialog;
 	private boolean okPressed;
-	private Button deleteButton;
-	private Button upButton;
-	private Button downButton;
+	private Label deleteButton;
+	private Label upButton;
+	private Label downButton;
 	private static final String INFORMATION="Information";
+	private Button partition_Key_Values;
+	private SingleColumnGridConfig gridConfig = null;
+	private LinkedHashMap<String, Object> listt;
 
-	public FieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
+	public FieldDialogHivePartition(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar,LinkedHashMap<String, Object> list) {
 		super(parentShell);
 
 		propertyList = new ArrayList<FilterProperties>();
 		fieldNameList = new ArrayList<String>();
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
+		this.listt=list;
 	}
 
 	// Add New Property After Validating old properties
@@ -247,6 +255,16 @@ public class FieldDialog extends Dialog {
 		container.setLayout(cl_container);
 
 		addButtonPanel(container);
+		
+		Composite composite_1 = new Composite(container, SWT.NONE);
+		composite_1.setLayout(new GridLayout(4, false));
+		ColumnLayoutData cld_composite_1 = new ColumnLayoutData();
+		cld_composite_1.horizontalAlignment = ColumnLayoutData.RIGHT;
+		cld_composite_1.heightHint = 28;
+		composite_1.setLayoutData(cld_composite_1);
+		partition_Key_Values = new Button(composite_1, IDialogConstants.OPEN_ID);
+		partition_Key_Values.setText("Add value");
+		attachPartitionButtonListerner(partition_Key_Values);
 
 		Composite tableComposite = new Composite(container, SWT.NONE);
 		tableComposite.setLayout(new GridLayout(2, false));
@@ -275,33 +293,33 @@ public class FieldDialog extends Dialog {
 		lblPropertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
 	}
 
-	protected Composite addButtonPanel(Composite container) {
+	private void addButtonPanel(Composite container) {
 		Composite composite_1 = new Composite(container, SWT.NONE);
 		composite_1.setLayout(new GridLayout(4, false));
 		ColumnLayoutData cld_composite_1 = new ColumnLayoutData();
 		cld_composite_1.horizontalAlignment = ColumnLayoutData.RIGHT;
-		cld_composite_1.heightHint = 31;
+		cld_composite_1.heightHint = 28;
 		composite_1.setLayoutData(cld_composite_1);
 
-		Button addButton = new Button(composite_1, SWT.NONE);
+		Label addButton = new Label(composite_1, SWT.NONE);
 		addButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		addButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON));
 		attachAddButtonListern(addButton);
 
-		deleteButton = new Button(composite_1, SWT.NONE);
+		deleteButton = new Label(composite_1, SWT.NONE);
 		deleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON));
 		attachDeleteButtonListener(deleteButton);
 
-		upButton = new Button(composite_1, SWT.NONE);
+		upButton = new Label(composite_1, SWT.NONE);
 		upButton.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON));
 		attachUpButtonListener(upButton);
 
-		downButton = new Button(composite_1, SWT.NONE);
+		downButton = new Label(composite_1, SWT.NONE);
 		downButton.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		downButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON));
@@ -309,10 +327,69 @@ public class FieldDialog extends Dialog {
 		deleteButton.setEnabled(false);
 		upButton.setEnabled(false);
 		downButton.setEnabled(false);
-		return composite_1;
 	}
+	
+	private void attachPartitionButtonListerner(Button partitionButton) {
+		partitionButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
 
-	private void attachDownButtonListerner(Button downButton) {
+				FieldDialogAddValue fieldDialog = new FieldDialogAddValue(new Shell(), propertyDialogButtonBar,listt);
+				//fieldDialog.setComponentName(gridConfig.getComponentName());
+				//if (getProperties().get(propertyName) == null) {
+				//	setProperties(propertyName, new ArrayList<String>());
+			//	}
+				//fieldDialog.setRuntimePropertySet(new ArrayList<String>(set));
+				//fieldDialog.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
+				fieldDialog.open();
+
+				//setProperties(propertyName, fieldDialog.getFieldNameList());
+               // showHideErrorSymbol(widgets);
+			} 
+		});
+		
+		
+		/*partitionButton.addMouseListener(new MouseListener() {
+			
+			
+			
+			int index1 = 0, index2 = 0;
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// Nothing to do
+				
+
+						FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
+						//fieldDialog.setComponentName(gridConfig.getComponentName());
+						//if (getProperties().get(propertyName) == null) {
+						//	setProperties(propertyName, new ArrayList<String>());
+						//}
+						//fieldDialog.setRuntimePropertySet(new ArrayList<String>(set));
+						//fieldDialog.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
+						fieldDialog.open();
+
+						//setProperties(propertyName, fieldDialog.getFieldNameList());
+		                //showHideErrorSymbol(widgets);
+					
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// Nothing to do
+
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				
+			}
+		});*/
+
+	}
+			
+
+	private void attachDownButtonListerner(Label downButton) {
 		downButton.addMouseListener(new MouseListener() {
 			int index1 = 0, index2 = 0;
 
@@ -353,7 +430,7 @@ public class FieldDialog extends Dialog {
 
 	}
 
-	private void attachUpButtonListener(Button upButton) {
+	private void attachUpButtonListener(Label upButton) {
 		upButton.addMouseListener(new MouseListener() {
 			int index1 = 0, index2 = 0;
 
@@ -393,7 +470,7 @@ public class FieldDialog extends Dialog {
 
 	}
 
-	private void attachDeleteButtonListener(final Button deleteButton) {
+	private void attachDeleteButtonListener(final Label deleteButton) {
 		deleteButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -427,7 +504,7 @@ public class FieldDialog extends Dialog {
 
 	}
 
-	private void attachAddButtonListern(Button addButton) {
+	private void attachAddButtonListern(Label addButton) {
 		addButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {

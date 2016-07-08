@@ -21,13 +21,16 @@ import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.SingleColumnWidgetInputHive;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,7 +65,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -87,8 +89,8 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
  * 
  */
 
-public class FieldDialog extends Dialog {
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(FieldDialog.class);
+public class FieldDialogAddValue extends Dialog {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FieldDialogAddValue.class);
 
 	private final List<FilterProperties> propertyList;
 	private List<String> fieldNameList;
@@ -114,17 +116,19 @@ public class FieldDialog extends Dialog {
 	PropertyDialogButtonBar propertyDialogButtonBar;
 	private boolean closeDialog;
 	private boolean okPressed;
-	private Button deleteButton;
-	private Button upButton;
-	private Button downButton;
+	private Label deleteButton;
+	private Label upButton;
+	private Label downButton;
 	private static final String INFORMATION="Information";
+	private LinkedHashMap<String, Object> list;
 
-	public FieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
+	public FieldDialogAddValue(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar,LinkedHashMap<String, Object> list) {
 		super(parentShell);
 
 		propertyList = new ArrayList<FilterProperties>();
 		fieldNameList = new ArrayList<String>();
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
+		this.list=list;
 	}
 
 	// Add New Property After Validating old properties
@@ -254,8 +258,10 @@ public class FieldDialog extends Dialog {
 		cld_composite_2.heightHint = 453;
 		tableComposite.setLayoutData(cld_composite_2);
 
-		createSourceTable(tableComposite);
+	//	createSourceTable(tableComposite);
 		createTargetTable(tableComposite);
+		new Label(tableComposite, SWT.NONE);
+		new Label(tableComposite, SWT.NONE);
 
 		addErrorLabel(container);
 		return container;
@@ -275,33 +281,33 @@ public class FieldDialog extends Dialog {
 		lblPropertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
 	}
 
-	protected Composite addButtonPanel(Composite container) {
+	private void addButtonPanel(Composite container) {
 		Composite composite_1 = new Composite(container, SWT.NONE);
 		composite_1.setLayout(new GridLayout(4, false));
 		ColumnLayoutData cld_composite_1 = new ColumnLayoutData();
 		cld_composite_1.horizontalAlignment = ColumnLayoutData.RIGHT;
-		cld_composite_1.heightHint = 31;
+		cld_composite_1.heightHint = 28;
 		composite_1.setLayoutData(cld_composite_1);
 
-		Button addButton = new Button(composite_1, SWT.NONE);
+		Label addButton = new Label(composite_1, SWT.NONE);
 		addButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		addButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON));
 		attachAddButtonListern(addButton);
 
-		deleteButton = new Button(composite_1, SWT.NONE);
+		deleteButton = new Label(composite_1, SWT.NONE);
 		deleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON));
 		attachDeleteButtonListener(deleteButton);
 
-		upButton = new Button(composite_1, SWT.NONE);
+		upButton = new Label(composite_1, SWT.NONE);
 		upButton.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON));
 		attachUpButtonListener(upButton);
 
-		downButton = new Button(composite_1, SWT.NONE);
+		downButton = new Label(composite_1, SWT.NONE);
 		downButton.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		downButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON));
@@ -309,10 +315,9 @@ public class FieldDialog extends Dialog {
 		deleteButton.setEnabled(false);
 		upButton.setEnabled(false);
 		downButton.setEnabled(false);
-		return composite_1;
 	}
 
-	private void attachDownButtonListerner(Button downButton) {
+	private void attachDownButtonListerner(Label downButton) {
 		downButton.addMouseListener(new MouseListener() {
 			int index1 = 0, index2 = 0;
 
@@ -353,7 +358,7 @@ public class FieldDialog extends Dialog {
 
 	}
 
-	private void attachUpButtonListener(Button upButton) {
+	private void attachUpButtonListener(Label upButton) {
 		upButton.addMouseListener(new MouseListener() {
 			int index1 = 0, index2 = 0;
 
@@ -393,7 +398,7 @@ public class FieldDialog extends Dialog {
 
 	}
 
-	private void attachDeleteButtonListener(final Button deleteButton) {
+	private void attachDeleteButtonListener(final Label deleteButton) {
 		deleteButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -427,7 +432,7 @@ public class FieldDialog extends Dialog {
 
 	}
 
-	private void attachAddButtonListern(Button addButton) {
+	private void attachAddButtonListern(Label addButton) {
 		addButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -473,10 +478,12 @@ public class FieldDialog extends Dialog {
 	private void createTargetTable(Composite container) {
 		targetTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI);
 		targetTable = targetTableViewer.getTable();
-		GridData gd_table_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		GridData gd_table_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2);
 		gd_table_1.heightHint = 449;
 		gd_table_1.widthHint = 285;
 		targetTable.setLayoutData(gd_table_1);
+		
+	
 
 		targetTable.addMouseListener(new MouseAdapter() {
 			@Override
@@ -503,16 +510,30 @@ public class FieldDialog extends Dialog {
 			}
 		});
 
+		
+		
 		targetTable.setBounds(196, 70, 324, 400);
 		targetTableViewer.setContentProvider(new ELTFilterContentProvider());
 		targetTableViewer.setLabelProvider(new ELTFilterLabelProvider());
 		targetTableViewer.setInput(propertyList);
 
-		TableColumn targetTableColumn = new TableColumn(targetTable, SWT.LEFT);
-		targetTableColumn.setText("Field Name");
-		targetTableColumn.setWidth(352);
-		targetTable.setHeaderVisible(true);
-		targetTable.setLinesVisible(true);
+		Set s = (Set) list.get("partitionKeys");
+		
+		Iterator it = s.iterator();
+		while(it.hasNext())
+		{
+			String fieldName=(String)it.next();
+			TableColumn targetTableColumn = new TableColumn(targetTable, SWT.LEFT);
+			targetTableColumn.setText(fieldName);
+			targetTableColumn.setWidth(256);
+			targetTable.setHeaderVisible(true);
+			targetTable.setLinesVisible(true);
+		}
+		
+		
+		
+		
+		
 
 		// enables the tab functionality
 		TableViewerEditor.create(targetTableViewer, new ColumnViewerEditorActivationStrategy(targetTableViewer),
@@ -550,7 +571,7 @@ public class FieldDialog extends Dialog {
 
 	}
 
-	public void createSourceTable(Composite container) {
+	/*public void createSourceTable(Composite container) {
 
 		sourceTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
 		sourceTableViewer.addDoubleClickListener(new IDoubleClickListener() {
@@ -583,7 +604,7 @@ public class FieldDialog extends Dialog {
 			}
 
 		});
-	}
+	}*/
 
 	/**
 	 * Validate.

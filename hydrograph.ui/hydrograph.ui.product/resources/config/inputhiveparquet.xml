@@ -52,7 +52,7 @@
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL" propertyHelpText="Displays the location of the file either Remote/Local."/>
 		
-		<tns:property dataType="string" name="partitionKeys" renderer="PARTITION_KEYS_WIDGET"
+		<tns:property dataType="string" name="partitionKeys" renderer="PARTITION_KEYS_WIDGET_INPUT_HIVE"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="OPTIONAL" propertyHelpText="Displays the user specific partition keys">
 			<tns:validator>KEY_FIELDS_VALIDATOR</tns:validator>
