@@ -14,6 +14,7 @@
  
 package hydrograph.ui.graph.controller;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.figure.ComponentFigure;
 import hydrograph.ui.graph.figure.ELTColorConstants;
 import hydrograph.ui.graph.figure.PortFigure;
@@ -78,6 +79,15 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 	private Point getPortLocation(int totalPortsOfThisType, String type, int sequence, int height, int width, int margin, 
 			PortAlignmentEnum portAlignment){
 
+		if (portAlignment == null) {
+			if (StringUtils.equalsIgnoreCase(type,Constants.INPUT_SOCKET_TYPE))
+				portAlignment = PortAlignmentEnum.LEFT;
+			else if (StringUtils.equalsIgnoreCase(type,Constants.OUTPUT_SOCKET_TYPE))
+				portAlignment = PortAlignmentEnum.RIGHT;
+			else if (StringUtils.equalsIgnoreCase(type,Constants.UNUSED_SOCKET_TYPE))
+				portAlignment = PortAlignmentEnum.BOTTOM;
+		}
+		
 		Point p = null ;
 		int portOffsetFactor = totalPortsOfThisType+1;
 		int portHeightOffset=height/portOffsetFactor;
