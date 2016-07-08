@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -35,7 +34,7 @@ public class FilterValidator {
 	public static FilterValidator INSTANCE = new FilterValidator();
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterValidator.class);
-	private List<String> relationalList = Arrays.asList(new String[]{"AND", "OR"});
+	private List<String> relationalList = Arrays.asList(new String[]{FilterConstants.AND, FilterConstants.OR});
 	
 	
 	public boolean isAllFilterConditionsValid(List<Condition> conditionList, Map<String, String> fieldsAndTypes, String[] fieldNames){
@@ -108,34 +107,34 @@ public class FilterValidator {
 	}
 
 	private boolean validate(String type, String value) throws ParseException {
-		if(FilterHelper.TYPE_BOOLEAN.equals(type)){
+		if(FilterConstants.TYPE_BOOLEAN.equals(type)){
 			Boolean convertedBoolean = Boolean.valueOf(value);
 			if(!StringUtils.equalsIgnoreCase(convertedBoolean.toString(), value)){
 				return false;
 			}
 		}
-		else if(FilterHelper.TYPE_DOUBLE.equals(type)){
+		else if(FilterConstants.TYPE_DOUBLE.equals(type)){
 			Double.valueOf(value);
 		}
-		else if(FilterHelper.TYPE_FLOAT.equals(type)){
+		else if(FilterConstants.TYPE_FLOAT.equals(type)){
 			Float.valueOf(value);
 		}
-		else if(FilterHelper.TYPE_INTEGER.equals(type)){
+		else if(FilterConstants.TYPE_INTEGER.equals(type)){
 			Integer.valueOf(value);
 		}
-		else if(FilterHelper.TYPE_LONG.equals(type)){
+		else if(FilterConstants.TYPE_LONG.equals(type)){
 			Long.valueOf(value);
 		}
-		else if(FilterHelper.TYPE_SHORT.equals(type)){
+		else if(FilterConstants.TYPE_SHORT.equals(type)){
 			Short.valueOf(value);
 		}
-		else if(FilterHelper.TYPE_STRING.equals(type)){
+		else if(FilterConstants.TYPE_STRING.equals(type)){
 			String.valueOf(value);
 		}
-		else if(FilterHelper.TYPE_BIGDECIMAL.equals(type)){
+		else if(FilterConstants.TYPE_BIGDECIMAL.equals(type)){
 			new BigDecimal(value);
 		}
-		else if(FilterHelper.TYPE_DATE.equals(type)){
+		else if(FilterConstants.TYPE_DATE.equals(type)){
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
 			sdf.parse(value);
 		}

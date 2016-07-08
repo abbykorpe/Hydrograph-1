@@ -17,7 +17,6 @@ import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
 import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
-import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -58,28 +57,10 @@ import org.slf4j.Logger;
 import com.google.gson.Gson;
 
 public class FilterHelper {
-	
-	public static final FilterHelper INSTANCE = new FilterHelper();
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterHelper.class);
 
-	public static final String TYPE_BOOLEAN = "java.lang.Boolean";
-	public static final String TYPE_DOUBLE = "java.lang.Double";
-	public static final String TYPE_FLOAT = "java.lang.Float";
-	public static final String TYPE_SHORT = "java.lang.Short";
-	public static final String TYPE_LONG = "java.lang.Long";
-	public static final String TYPE_BIGDECIMAL = "java.math.BigDecimal";
-	public static final String TYPE_INTEGER = "java.lang.Integer";
-	public static final String TYPE_DATE = "java.util.Date";
-	public static final String TYPE_STRING = "java.lang.String";
-	
+	public static final FilterHelper INSTANCE = new FilterHelper();
 	private static final String DOWNLOADED="Downloaded";
-	private static final String REGEX_DIGIT = "\\d";
-	private static final String SINGLE_SPACE = " ";
-	private static final String OPEN_BRACKET = "(";
-	private static final String CLOSE_BRACKET = ")";
-	private static final String SINGLE_QOUTE = "'";
-	private static final String DELIM_COMMA = ",";
-	private static final String NOT_IN = "not in";
-	private static final String IN = "in";
 	private DataViewerAdapter dataViewerAdapter;
 	private DebugDataViewer debugDataViewer;
 	private FilterConditionsDialog filterConditionsDialog;
@@ -88,21 +69,27 @@ public class FilterHelper {
 	private String filteredFileName = "";
 	private String localCondition = "";
 	private String remoteCondition;
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterHelper.class);
+	
 	private FilterHelper() {
 	}
 	
 	public Map<String, String[]> getTypeBasedOperatorMap(){
 		Map<String, String[]> typeBasedConditionalOperators = new HashMap<String, String[]>();
-		typeBasedConditionalOperators.put(TYPE_STRING, new String[]{"LIKE", "NOT LIKE", "IN","NOT IN"}); 
-		typeBasedConditionalOperators.put(TYPE_INTEGER, new String[]{">", "<", "<=", ">=", "<>", "=", "IN", "NOT IN"}); 
-		typeBasedConditionalOperators.put(TYPE_DATE, new String[]{">", "<", "<=",">=", "<>", "=",  "IN", "NOT IN"}); 
-		typeBasedConditionalOperators.put(TYPE_BIGDECIMAL, new String[]{">", "<", "<=", ">=", "<>", "=",  "IN","NOT IN"});
-		typeBasedConditionalOperators.put(TYPE_LONG, new String[]{">", "<", "<=", ">=", "<>", "=",  "IN", "NOT IN"});
-		typeBasedConditionalOperators.put(TYPE_SHORT, new String[]{">", "<", "<=", ">=", "<>", "=",  "IN", "NOT IN"});
-		typeBasedConditionalOperators.put(TYPE_FLOAT, new String[]{">", "<", "<=", ">=", "<>", "=",  "IN", "NOT IN"});
-		typeBasedConditionalOperators.put(TYPE_DOUBLE, new String[]{">", "<", "<=", ">=", "<>", "=",  "IN", "NOT IN"});
-		typeBasedConditionalOperators.put(TYPE_BOOLEAN, new String[]{"<>", "="});
+		String[] NUMERIC_CONDITIONS = new String[]{FilterConstants.GREATER_THAN, FilterConstants.LESS_THAN, 
+				FilterConstants.LESS_THAN_EQUALS, FilterConstants.GREATER_THAN_EQUALS, FilterConstants.NOT_EQUALS,
+				FilterConstants.EQUALS, FilterConstants.IN, FilterConstants.NOT_IN};
+
+		typeBasedConditionalOperators.put(FilterConstants.TYPE_STRING, new String[]{FilterConstants.NOT_EQUALS, FilterConstants.EQUALS, 
+				FilterConstants.LIKE, FilterConstants.NOT_LIKE, FilterConstants.IN, FilterConstants.NOT_IN}); 
+		typeBasedConditionalOperators.put(FilterConstants.TYPE_BOOLEAN, new String[]{FilterConstants.NOT_EQUALS, FilterConstants.EQUALS});
+		
+		typeBasedConditionalOperators.put(FilterConstants.TYPE_INTEGER, NUMERIC_CONDITIONS); 
+		typeBasedConditionalOperators.put(FilterConstants.TYPE_DATE, NUMERIC_CONDITIONS); 
+		typeBasedConditionalOperators.put(FilterConstants.TYPE_BIGDECIMAL, NUMERIC_CONDITIONS);
+		typeBasedConditionalOperators.put(FilterConstants.TYPE_LONG, NUMERIC_CONDITIONS);
+		typeBasedConditionalOperators.put(FilterConstants.TYPE_SHORT, NUMERIC_CONDITIONS);
+		typeBasedConditionalOperators.put(FilterConstants.TYPE_FLOAT, NUMERIC_CONDITIONS);
+		typeBasedConditionalOperators.put(FilterConstants.TYPE_DOUBLE, NUMERIC_CONDITIONS);
 		return typeBasedConditionalOperators;
 	}
 	
@@ -325,11 +312,11 @@ public class FilterHelper {
 							if(!group.isEmpty()){
 							Integer firstItem = group.get(0);
 							Integer firstItemIndex = actualStringList.indexOf(String.valueOf(firstItem));
-							actualStringList.add(firstItemIndex, OPEN_BRACKET);
+							actualStringList.add(firstItemIndex, FilterConstants.OPEN_BRACKET);
 							//add closing bracket after last element in the group							
 							Integer lastItem = group.get(group.size()-1);
 							Integer lastItemIndex = actualStringList.indexOf(String.valueOf(lastItem));
-							actualStringList.add(lastItemIndex + 1, CLOSE_BRACKET);
+							actualStringList.add(lastItemIndex + 1, FilterConstants.CLOSE_BRACKET);
 							}
 						}
 					}
@@ -341,8 +328,8 @@ public class FilterHelper {
 				for (int item = 1; item < conditionsList.size(); item++) {
 					int indexOfItem = actualStringList.indexOf(String.valueOf(item));
 					while(true){
-						if((actualStringList.get(indexOfItem-1)).matches(REGEX_DIGIT) 
-								||(actualStringList.get(indexOfItem-1)).equalsIgnoreCase(CLOSE_BRACKET)){
+						if((actualStringList.get(indexOfItem-1)).matches(FilterConstants.REGEX_DIGIT) 
+								||(actualStringList.get(indexOfItem-1)).equalsIgnoreCase(FilterConstants.CLOSE_BRACKET)){
 							actualStringList.add(indexOfItem, conditionsList.get(indexOfRelational).getRelationalOperator());
 							break;
 						}else{
@@ -358,7 +345,8 @@ public class FilterHelper {
 					StringBuffer conditionString = new StringBuffer();
 					
 					Condition condition = conditionsList.get(item);
-					conditionString.append(condition.getFieldName()).append(SINGLE_SPACE).append(condition.getConditionalOperator()).append(SINGLE_SPACE)
+					conditionString.append(condition.getFieldName()).append(FilterConstants.SINGLE_SPACE).
+					append(condition.getConditionalOperator()).append(FilterConstants.SINGLE_SPACE)
 					.append(getConditionValue(condition.getFieldName(), condition.getValue(), condition.getConditionalOperator(),
 							fieldsAndTypes));
 					int index = actualStringList.indexOf(String.valueOf(item));
@@ -366,7 +354,7 @@ public class FilterHelper {
 				}
 				
 				for (String item : actualStringList) {
-					buffer.append(item + SINGLE_SPACE);
+					buffer.append(item + FilterConstants.SINGLE_SPACE);
 				}
 				logger.debug("Query String : " + buffer);
 				
@@ -468,33 +456,35 @@ public class FilterHelper {
 	protected String getConditionValue(String fieldName, String value, String conditional, Map<String, String> fieldsAndTypes) {
 		String trimmedCondition = StringUtils.trim(conditional);
 		String dataType = fieldsAndTypes.get(fieldName);
-		if(TYPE_STRING.equalsIgnoreCase(dataType) || TYPE_DATE.equalsIgnoreCase(dataType) || TYPE_BOOLEAN.equalsIgnoreCase(dataType)){
-			if(IN.equalsIgnoreCase(trimmedCondition) || NOT_IN.equalsIgnoreCase(trimmedCondition)){
-				if(StringUtils.isNotBlank(value) && value.contains(DELIM_COMMA)){
-					StringTokenizer tokenizer = new StringTokenizer(value, DELIM_COMMA);
+		if(FilterConstants.TYPE_STRING.equalsIgnoreCase(dataType) || FilterConstants.TYPE_DATE.equalsIgnoreCase(dataType) 
+				|| FilterConstants.TYPE_BOOLEAN.equalsIgnoreCase(dataType)){
+			if(FilterConstants.IN.equalsIgnoreCase(trimmedCondition) || FilterConstants.NOT_IN.equalsIgnoreCase(trimmedCondition)){
+				if(StringUtils.isNotBlank(value) && value.contains(FilterConstants.DELIM_COMMA)){
+					StringTokenizer tokenizer = new StringTokenizer(value, FilterConstants.DELIM_COMMA);
 					StringBuffer temp = new StringBuffer();
 					int numberOfTokens = tokenizer.countTokens();
-					temp.append(OPEN_BRACKET); 
+					temp.append(FilterConstants.OPEN_BRACKET); 
 					for (int index = 0; index < numberOfTokens; index++) {
-						temp.append(SINGLE_QOUTE).append(tokenizer.nextToken()).append(SINGLE_QOUTE);
+						temp.append(FilterConstants.SINGLE_QOUTE).append(tokenizer.nextToken()).append(FilterConstants.SINGLE_QOUTE);
 						if(index < numberOfTokens - 1){
-							temp.append(DELIM_COMMA);
+							temp.append(FilterConstants.DELIM_COMMA);
 						}
 					}
-					temp.append(CLOSE_BRACKET);
+					temp.append(FilterConstants.CLOSE_BRACKET);
 					return temp.toString();
 				}
 				else{
-					return OPEN_BRACKET + SINGLE_QOUTE + value + SINGLE_QOUTE + CLOSE_BRACKET;
+					return FilterConstants.OPEN_BRACKET + FilterConstants.SINGLE_QOUTE 
+							+ value + FilterConstants.SINGLE_QOUTE + FilterConstants.CLOSE_BRACKET;
 				}
 			}
 			else{
-				return SINGLE_QOUTE + value + SINGLE_QOUTE;
+				return FilterConstants.SINGLE_QOUTE + value + FilterConstants.SINGLE_QOUTE;
 			}
 		}
 		else{
-			if(IN.equalsIgnoreCase(trimmedCondition) || NOT_IN.equalsIgnoreCase(trimmedCondition)){
-				return OPEN_BRACKET + value + CLOSE_BRACKET;
+			if(FilterConstants.IN.equalsIgnoreCase(trimmedCondition) || FilterConstants.NOT_IN.equalsIgnoreCase(trimmedCondition)){
+				return FilterConstants.OPEN_BRACKET + value + FilterConstants.CLOSE_BRACKET;
 			}
 			else{
 				return value;
@@ -638,8 +628,6 @@ public class FilterHelper {
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 		};

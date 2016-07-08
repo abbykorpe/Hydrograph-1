@@ -61,7 +61,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
-import org.eclipse.swt.widgets.Label;
 
 public class FilterConditionsDialog extends Dialog {
 	private static final String VALUE_TEXT_BOX = "valueTextBox";
@@ -87,7 +86,7 @@ public class FilterConditionsDialog extends Dialog {
 	private static final String RELATIONAL_EDITOR = "relational_editor";
 	private static final String FIELD_EDITOR = "field_editor";
 	private static final String CONDITIONAL_EDITOR = "conditional_editor";
-	private static final String VALUE_EDITOR = "vale_editor";
+	private static final String VALUE_EDITOR = "value_editor";
 	
 	
 	private Map<String,String[]> typeBasedConditionalOperators = new HashMap<>();
@@ -95,7 +94,7 @@ public class FilterConditionsDialog extends Dialog {
 	private RetainFilter retainLocalFilter;
 	private RetainFilter retainRemoteFilter;
 	
-	private String relationalOperators[] = new String[]{"AND", "OR"};
+	private String relationalOperators[] = new String[]{FilterConstants.AND, FilterConstants.OR};
 	private String fieldNames[];
 	private Map<String, String> fieldsAndTypes;
 	private TableViewer remoteTableViewer;
@@ -668,7 +667,8 @@ public class FilterConditionsDialog extends Dialog {
 		};
 	}
 
-	private CellLabelProvider getGroupCheckCellProvider(final TableViewer tableViewer, final List<Condition> conditionsList, final Button btnAddGrp) {
+	private CellLabelProvider getGroupCheckCellProvider(final TableViewer tableViewer, final List<Condition> conditionsList, 
+			final Button btnAddGrp) {
 		return new CellLabelProvider() {
 			
 			@Override
@@ -714,7 +714,8 @@ public class FilterConditionsDialog extends Dialog {
 					return;
 				}
 				addButtonInTable(tableViewer, item, REMOVE, REMOVE_BUTTON_PANE, REMOVE_EDITOR, cell.getColumnIndex(), 
-						removeButtonListener(tableViewer, conditionsList, dummyList,groupSelectionMap, btnAddGrp), ImagePathConstant.DELETE_BUTTON);
+						removeButtonListener(tableViewer, conditionsList, dummyList,groupSelectionMap, btnAddGrp), 
+						ImagePathConstant.DELETE_BUTTON);
 				item.addDisposeListener(new DisposeListener() {
 					
 					@Override
@@ -746,7 +747,8 @@ public class FilterConditionsDialog extends Dialog {
 					return;
 				}
 				addButtonInTable(tableViewer, item, ADD, ADD_BUTTON_PANE, ADD_EDITOR, cell.getColumnIndex(), 
-						FilterHelper.INSTANCE.addButtonListener(tableViewer,conditionsList, dummyList,groupSelectionMap), ImagePathConstant.ADD_BUTTON);
+						FilterHelper.INSTANCE.addButtonListener(tableViewer,conditionsList, dummyList,groupSelectionMap), 
+						ImagePathConstant.ADD_BUTTON);
 				item.addDisposeListener(new DisposeListener() {
 					
 					@Override
@@ -901,11 +903,8 @@ public class FilterConditionsDialog extends Dialog {
 		button.setData(editorName, editor);
 	}
 	
-
-	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		//super.createButtonsForButtonBar(parent);
 	}
 	
 private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer,final Button clearGroups,
@@ -927,15 +926,10 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 			   	clearGroups.setEnabled(true);		 
 			      
 			 }
-				
-			 
-				
 			}
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		};
 		
@@ -1141,8 +1135,6 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 			}
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		};
 		
