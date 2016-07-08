@@ -420,8 +420,6 @@ public class FindViewDataDialog extends Dialog{
 		TableItem previousSelectedTableItem = null;
 		if(debugDataViewer.getData("SELECTED_ROW_INDEX")!=null){
 			previousSelectedTableItem = debugDataViewer.getTable().getItem((int) debugDataViewer.getData("SELECTED_ROW_INDEX"));
-			//findRowIndex = (int) debugDataViewer.getData("SELECTED_ROW_INDEX");
-			//findColIndex = (int) debugDataViewer.getData("SEELCTED_COLUMN_INDEX");
 			findColIndex -= 1;
 		}
 		Table table = debugDataViewer.getTable();
