@@ -77,6 +77,8 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 55.#714  [Ashika Holkar] Add/ Delete/ up and Down buttons are not in sync with other window on Lookup Mapping and Join Mapping window
 56.#729  [Ashika Holkar] Parameter File Dialog: Focus should be on the OK button
 57.#730  [Ashika Holkar] Mixed/Fixed Scheme input/output File : Validation is not Displayed When Field Length is '0'
+58.#677  [Sonia Raheja] MacBook Pro - Unable to Export Data
+59.#647  [Nikhil Deokar] Schema Tab: Data type Name should start with capital letter enhancement.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
