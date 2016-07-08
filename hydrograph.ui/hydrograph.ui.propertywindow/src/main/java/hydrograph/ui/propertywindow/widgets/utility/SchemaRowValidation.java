@@ -93,7 +93,7 @@ public class SchemaRowValidation{
 		if(fixedWidthGridRow instanceof MixedSchemeGridRow){
 			if((StringUtils.isBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isBlank(fixedWidthGridRow.getLength()))
 			   ||(StringUtils.isNotBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isNotBlank(fixedWidthGridRow.getLength()))
-			   ||(StringUtils.isNotBlank(fixedWidthGridRow.getLength())&& (Integer.parseInt(fixedWidthGridRow.getLength())==0 ))
+			   ||(StringUtils.isNotBlank(fixedWidthGridRow.getLength()) && (Integer.parseInt(fixedWidthGridRow.getLength())==0 ))
 			   ||(StringUtils.isNotBlank(fixedWidthGridRow.getLength())&& !(fixedWidthGridRow.getLength().matches(REGULAR_EXPRESSION_FOR_NUMBER))) 
 			   ){
 				setRedColor(tableItem);

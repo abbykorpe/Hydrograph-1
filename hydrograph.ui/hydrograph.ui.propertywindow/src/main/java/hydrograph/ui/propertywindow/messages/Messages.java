@@ -180,7 +180,7 @@ public class Messages extends NLS {
 	public static String LENGTH_MUST_NOT_BE_BLANK ;
 	public static String LENGTH_OR_DELIMITER_MUST_NOT_BE_BLANK;
 	public static String ONLY_SPECIFY_LENGTH_OR_DELIMITER;
-	public static String LENGTH_SHOULD_NOT_BE_BLANK;
+	public static String LENGTH_SHOULD_NOT_BE_ZERO;
 	
 	public static String OPERATION_ID_PREFIX;
     public static String OPERATION_LIST_EMPTY;

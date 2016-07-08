@@ -372,7 +372,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 					return Messages.LENGTH_MUST_BE_AN_INTEGER_VALUE;
 				}
 				else if(Integer.parseInt(fixedWidthGridRow.getLength())==0){
-					return Messages.LENGTH_SHOULD_NOT_BE_BLANK;
+					return Messages.LENGTH_SHOULD_NOT_BE_ZERO;
 				}
 			}
 		}else if(gridRow instanceof BasicSchemaGridRow){
@@ -406,7 +406,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 			return Messages.ONLY_SPECIFY_LENGTH_OR_DELIMITER;
 		}
 		else if(Integer.parseInt(mixedSchemeGridRow.getLength())==0){
-			return Messages.LENGTH_SHOULD_NOT_BE_BLANK;
+			return Messages.LENGTH_SHOULD_NOT_BE_ZERO;
 		}
 		
 		return "";
