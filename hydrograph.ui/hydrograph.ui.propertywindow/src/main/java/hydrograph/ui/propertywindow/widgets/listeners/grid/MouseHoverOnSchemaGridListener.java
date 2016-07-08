@@ -371,6 +371,9 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 				}else if(!(fixedWidthGridRow.getLength().matches("\\d+"))){
 					return Messages.LENGTH_MUST_BE_AN_INTEGER_VALUE;
 				}
+				else if(Integer.parseInt(fixedWidthGridRow.getLength())==0){
+					return Messages.LENGTH_SHOULD_NOT_BE_BLANK;
+				}
 			}
 		}else if(gridRow instanceof BasicSchemaGridRow){
 			if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
@@ -402,6 +405,10 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 				&& StringUtils.isNotBlank(mixedSchemeGridRow.getLength())){
 			return Messages.ONLY_SPECIFY_LENGTH_OR_DELIMITER;
 		}
+		else if(Integer.parseInt(mixedSchemeGridRow.getLength())==0){
+			return Messages.LENGTH_SHOULD_NOT_BE_BLANK;
+		}
+		
 		return "";
 	}
 }
