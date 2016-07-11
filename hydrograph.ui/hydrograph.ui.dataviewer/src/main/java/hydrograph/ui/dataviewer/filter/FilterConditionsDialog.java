@@ -246,7 +246,12 @@ public class FilterConditionsDialog extends Dialog {
         Button clearGroupsRemote=new Button(composite_3,SWT.NONE);
         clearGroupsRemote.addSelectionListener(clearGroupsListner(tableViewer, remoteGroupSelectionMap, clearGroupsRemote,remoteBtnAddGrp,remoteConditionsList,true));
         clearGroupsRemote.setText("Clear Groups");
-        clearGroupsRemote.setEnabled(false);
+        if(remoteGroupSelectionMap.size()!=0 &&  remoteConditionsList.size() !=0)
+		{
+			clearGroupsRemote.setEnabled(true);
+		} else {
+			clearGroupsRemote.setEnabled(false);
+		}
         
         remoteBtnAddGrp = new Button(composite_3, SWT.NONE);
         remoteBtnAddGrp.setText("Create Group");		
@@ -365,7 +370,12 @@ public class FilterConditionsDialog extends Dialog {
         Button clearGroupsLocal=new Button(composite_3,SWT.NONE);
         clearGroupsLocal.addSelectionListener(clearGroupsListner(tableViewer, localGroupSelectionMap,clearGroupsLocal,localBtnAddGrp,localConditionsList,false));
         clearGroupsLocal.setText("Clear Groups");
-        clearGroupsLocal.setEnabled(false);
+        if(localGroupSelectionMap.size() !=0 && localConditionsList.size() !=0)
+		{
+			clearGroupsLocal.setEnabled(true);
+		} else {
+			clearGroupsLocal.setEnabled(false);
+		}
 
         localBtnAddGrp = new Button(composite_3, SWT.NONE);
         localBtnAddGrp.setText("Create Group");
@@ -513,7 +523,7 @@ public class FilterConditionsDialog extends Dialog {
 								FilterHelper.INSTANCE.getConditionalOperatorSelectionListener(conditionsList, 
 										fieldsAndTypes, fieldNames, localOkButton, localApplyButton),
 								FilterHelper.INSTANCE.getConditionalOperatorModifyListener(conditionsList, 
-										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton));
+										fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
 					}
 					
 					if(StringUtils.isNotBlank(dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
