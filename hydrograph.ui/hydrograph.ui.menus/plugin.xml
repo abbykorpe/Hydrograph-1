@@ -386,18 +386,11 @@
             <separator
                   name="hydrograph.ui.graph.separator1"
                   visible="true">
-            </separator>
+            </separator>            <command                  commandId="org.eclipse.ui.file.close"                  id="bitwise.close.id"                  label="Close"                  mnemonic="C"                  style="push">            </command>
             <command
                   commandId="org.eclipse.ui.file.closeAll"
                   label="Close All"
                   mnemonic="l"
-                  style="push">
-            </command>
-            <command
-                  commandId="org.eclipse.ui.file.close"
-                  id="bitwise.close.id"
-                  label="Close"
-                  mnemonic="C"
                   style="push">
             </command>
             <separator
