@@ -17,6 +17,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper;
+
 public class DateFunctions {
 
 	/**
@@ -55,6 +57,7 @@ public class DateFunctions {
 	 * Formats and converts a date value into string representation in the
 	 * desired new date format
 	 * 
+	 * @see dateFormatter("20150512", "yyyyMMdd", "dd-MM-yyyy")
 	 * @param inputValue
 	 *            the date value in old format
 	 * @param oldFormat
@@ -93,6 +96,7 @@ public class DateFunctions {
 	 * Formats and converts a date value into string representation in the
 	 * desired new date format
 	 * 
+	 * @see dateFormatter("20150512", "yyyyMMdd", "dd-MM-yyyy")
 	 * @param inputValue
 	 *            the date value in old format
 	 * @param oldFormat
@@ -125,6 +129,7 @@ public class DateFunctions {
 	 * Formats and converts a date value into string representation in the
 	 * desired new date format
 	 * 
+	 * @see dateFormatter(20150512, "yyyyMMdd", "dd-MM-yyyy")
 	 * @param inputValue
 	 *            the date value in old format
 	 * @param oldFormat
@@ -156,6 +161,7 @@ public class DateFunctions {
 	/**
 	 * Returns a date object from a string date value
 	 * 
+	 * @see getDateFromString("20150512", "yyyyMMdd")
 	 * @param inputDateInStringFormat
 	 *            the date value in string
 	 * @param dateFormat
@@ -185,6 +191,7 @@ public class DateFunctions {
 	/**
 	 * Returns a date object from a string date value
 	 * 
+	 * @see getDateFromString("20150512", "yyyyMMdd")
 	 * @param inputDateInStringFormat
 	 *            the date value in string
 	 * @param dateFormat
@@ -210,6 +217,7 @@ public class DateFunctions {
 	/**
 	 * Returns a string value of the date
 	 * 
+	 * @see getStringDateFromDateObject(20150512, "yyyyMMdd")
 	 * @param inputDate
 	 *            the date to fetch the string value
 	 * @param dateFormat
@@ -217,7 +225,7 @@ public class DateFunctions {
 	 * @return a string value of the date
 	 *         <p>
 	 *         the method returns null if any parameter is null
-	 *         
+	 * 
 	 * @throws ParseException
 	 *             if the date value passed in {@code inputDate} does not match
 	 *             the {@code dateFormat}
@@ -235,6 +243,7 @@ public class DateFunctions {
 	/**
 	 * Returns a string value of the date
 	 * 
+	 * @see getStringDateFromDateObject(20150512, "yyyyMMdd")
 	 * @param inputDate
 	 *            the date to fetch the string value
 	 * @param dateFormat
@@ -246,7 +255,7 @@ public class DateFunctions {
 	 *             if the date value passed in {@code inputDate} does not match
 	 *             the {@code dateFormat}
 	 */
-	public static  String getStringDateFromDateObject(Date inputDate, String dateFormat) throws ParseException {
+	public static String getStringDateFromDateObject(Date inputDate, String dateFormat) throws ParseException {
 		if (inputDate == null || dateFormat == null)
 			return null;
 
@@ -259,6 +268,7 @@ public class DateFunctions {
 	/**
 	 * Validates the string date value to the format specified
 	 * 
+	 * @see validateStringDate("20150512", "yyyyMMdd")
 	 * @param inputDate
 	 *            the date value in string to be validated
 	 * @param dateFormat

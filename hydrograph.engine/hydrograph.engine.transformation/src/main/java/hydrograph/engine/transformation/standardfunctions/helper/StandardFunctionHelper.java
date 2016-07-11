@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.transformation.standardfunctions;
+package hydrograph.engine.transformation.standardfunctions.helper;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -27,7 +27,7 @@ public class StandardFunctionHelper {
 	 * @param inputValue
 	 * @return String representation of the inputValue
 	 */
-	protected static <T> String convertComparableObjectToString(T inputValue) {
+	public static <T> String convertComparableObjectToString(T inputValue) {
 
 		if (inputValue instanceof String) {
 			return (String) inputValue;
@@ -61,7 +61,7 @@ public class StandardFunctionHelper {
 	 *         <p>
 	 *         {@code false} if the {@code inputValue} is not a string
 	 */
-	protected static <T> boolean checkValidity(T inputValue) {
+	public static <T> boolean checkValidity(T inputValue) {
 
 		if (inputValue instanceof String)
 			return true;

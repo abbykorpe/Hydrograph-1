@@ -63,7 +63,11 @@ public class JaxbSchemaFieldConverter {
 
 	public static void setFieldFormat(SchemaField schemaField, TypeBaseField typeBaseField) {
 		if (schemaField.getFieldFormat() != null) {
-			typeBaseField.setFormat(schemaField.getFieldFormat());
+			if (schemaField.getFieldDataType().toLowerCase().contains("date")) {
+				typeBaseField.setFormat("yyyy-MM-dd");
+			} else {
+				typeBaseField.setFormat(schemaField.getFieldFormat());
+			}
 		}
 	}
 

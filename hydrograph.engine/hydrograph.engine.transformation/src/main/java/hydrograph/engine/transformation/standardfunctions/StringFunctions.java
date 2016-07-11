@@ -16,11 +16,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper;
+
 public class StringFunctions {
 
 	/**
-	 * Returns string length of the {@code inputValue}
+	 * Returns string length of the {@code inputValue} ${stringLength(
+	 * "Hello World")}$
 	 * 
+	 * @see stringLength("Hello World")
 	 * @param inputValue
 	 *            the value whose length is to be retrieved
 	 * @return Length of the {@code inputValue}
@@ -41,6 +45,7 @@ public class StringFunctions {
 	/**
 	 * Returns string length of the {@code inputValue}
 	 * 
+	 * @see stringLength("Hello World")
 	 * @param inputValue
 	 *            the value whose length is to be retrieved
 	 * @return Length of the {@code inputValue}
@@ -55,6 +60,7 @@ public class StringFunctions {
 	/**
 	 * Trims the spaces from LHS and RHS of the {@code inputValue}
 	 * 
+	 * @see stringLRTrim(" Hello World ")
 	 * @param inputValue
 	 *            the value whose spaces are to be trimmed
 	 * @return {@code inputValue} with spaces removed from LHS and RHS
@@ -77,6 +83,7 @@ public class StringFunctions {
 	/**
 	 * Trims the spaces from LHS and RHS of the {@code inputValue}
 	 * 
+	 * @see stringLRTrim(" Hello World ")
 	 * @param inputValue
 	 *            the value whose spaces are to be trimmed
 	 * @return {@code inputValue} with spaces removed from LHS and RHS
@@ -90,6 +97,7 @@ public class StringFunctions {
 	/**
 	 * Trims the spaces from the RHS of the {@code inputValue}
 	 * 
+	 * @see stringRightTrim("Hello World ")
 	 * @param inputValue
 	 *            the value whose spaces are to be trimmed
 	 * @return {@code inputValue} with spaces removed from RHS
@@ -112,6 +120,7 @@ public class StringFunctions {
 	/**
 	 * Trims the spaces from the RHS of the {@code inputValue}
 	 * 
+	 * @see stringRightTrim("Hello World ")
 	 * @param inputValue
 	 *            the value whose spaces are to be trimmed
 	 * @return {@code inputValue} with spaces removed from RHS
@@ -126,6 +135,7 @@ public class StringFunctions {
 	/**
 	 * Trims the spaces from the LHS of the {@code inputValue}
 	 * 
+	 * @see stringLength(" Hello World")
 	 * @param inputValue
 	 *            the value whose spaces are to be trimmed
 	 * @return {@code inputValue} with spaces removed from LHS
@@ -148,6 +158,7 @@ public class StringFunctions {
 	/**
 	 * Trims the spaces from the LHS of the {@code inputValue}
 	 * 
+	 * @see stringLength(" Hello World")
 	 * @param inputValue
 	 *            the value whose spaces are to be trimmed
 	 * @return {@code inputValue} with spaces removed from LHS
@@ -162,6 +173,7 @@ public class StringFunctions {
 	/**
 	 * Replaces source string with the target string in the {@code inputValue}
 	 * 
+	 * @see stringReplace("Hello World","World","world!!")
 	 * @param inputValue
 	 *            the value in which the source string is to be replaced with
 	 *            target string
@@ -186,6 +198,7 @@ public class StringFunctions {
 	/**
 	 * Replaces source string with the target string in the {@code inputValue}
 	 * 
+	 * @see stringReplace("Hello World","World","world!!")
 	 * @param inputValue
 	 *            the value in which the source string is to be replaced with
 	 *            target string
@@ -206,6 +219,7 @@ public class StringFunctions {
 	 * Replace source string with the target string from the given offset in the
 	 * {@code inputValue}
 	 * 
+	 * @see stringReplace("Hello World","l","L",2)
 	 * @param inputValue
 	 *            the value in which the source string is to be replaced with
 	 *            target string
@@ -240,6 +254,7 @@ public class StringFunctions {
 	 * Replace source string with the target string from the given offset in the
 	 * {@code inputValue}
 	 * 
+	 * @see stringReplace("Hello World","l","L",2)
 	 * @param inputValue
 	 *            the value in which the source string is to be replaced with
 	 *            target string
@@ -268,6 +283,7 @@ public class StringFunctions {
 	/**
 	 * Compares two strings
 	 * 
+	 * @see stringCompare("Hello World","World")
 	 * @param inputValue
 	 *            the first string to compare
 	 * @param anotherString
@@ -296,6 +312,7 @@ public class StringFunctions {
 	/**
 	 * Compares two strings
 	 * 
+	 * @see stringCompare("Hello World","World")
 	 * @param inputValue
 	 *            the first string to compare
 	 * @param anotherString
@@ -318,6 +335,7 @@ public class StringFunctions {
 	/**
 	 * Appends given string values to the {@code inputValue}
 	 * 
+	 * @see stringConcat("Hello World","World")
 	 * @param inputValue
 	 *            the string to append the value(s) to
 	 * @param appendValue
@@ -353,6 +371,7 @@ public class StringFunctions {
 	/**
 	 * Appends given string values to the {@code inputValue}
 	 * 
+	 * @see stringConcat("Hello World","World")
 	 * @param inputValue
 	 *            the string to append the value(s) to
 	 * @param appendValue
@@ -383,6 +402,7 @@ public class StringFunctions {
 	/**
 	 * Returns substring from the start position till the specified length
 	 * 
+	 * @see stringSubString("Hello World",6,8)
 	 * @param inputValue
 	 *            the string whose substring is to be fetched
 	 * @param start
@@ -420,6 +440,7 @@ public class StringFunctions {
 	/**
 	 * Returns substring from the start position till the specified length
 	 * 
+	 * @see stringSubString("Hello World",6,8)
 	 * @param inputValue
 	 *            the string whose substring is to be fetched
 	 * @param start
@@ -452,6 +473,7 @@ public class StringFunctions {
 	 * Returns the first index of the {@code searchString} within the
 	 * {@code inputValue}
 	 * 
+	 * @see stringIndex("Hello World","World")
 	 * @param inputValue
 	 *            the value from which index is to be retrieved
 	 * @param searchString
@@ -475,6 +497,7 @@ public class StringFunctions {
 	 * Returns the first index of the {@code searchString} within the
 	 * {@code inputValue}
 	 * 
+	 * @see stringIndex("Hello World","World")
 	 * @param inputValue
 	 *            the value from which index is to be retrieved
 	 * @param searchString
@@ -493,6 +516,7 @@ public class StringFunctions {
 	 * Returns the first index of the {@code searchString} within the
 	 * {@code inputValue} from the given offset
 	 * 
+	 * @see stringIndex("Hello World","o",7)
 	 * @param inputValue
 	 *            the value from which index is to be retrieved
 	 * @param searchString
@@ -518,6 +542,7 @@ public class StringFunctions {
 	 * Returns the first index of the {@code searchString} within the
 	 * {@code inputValue} from the given offset
 	 * 
+	 * @see stringIndex("Hello World","o",7)
 	 * @param inputValue
 	 *            the value from which index is to be retrieved
 	 * @param searchString
@@ -540,6 +565,7 @@ public class StringFunctions {
 	 * {@code inputValue} in case the {@code searchString} is present multiple
 	 * times
 	 * 
+	 * @see stringRightIndex("Hello World","World")
 	 * @param inputValue
 	 *            the value from which index is to be retrieved
 	 * @param searchString
@@ -567,6 +593,7 @@ public class StringFunctions {
 	 * {@code inputValue} in case the {@code searchString} is present multiple
 	 * times
 	 * 
+	 * @see stringRightIndex("Hello World","World")
 	 * @param inputValue
 	 *            the value from which index is to be retrieved
 	 * @param searchString
@@ -588,6 +615,7 @@ public class StringFunctions {
 	 * Returns the last index of the {@code searchString} within the
 	 * {@code inputValue} from the given offset
 	 * 
+	 * @see stringRightIndex("Hello World","o",7)
 	 * @param inputValue
 	 *            the value from which index is to be retrieved
 	 * @param searchString
@@ -616,6 +644,7 @@ public class StringFunctions {
 	 * Returns the last index of the {@code searchString} within the
 	 * {@code inputValue} from the given offset
 	 * 
+	 * @see stringRightIndex("Hello World","o",7)
 	 * @param inputValue
 	 *            the value from which index is to be retrieved
 	 * @param searchString
@@ -639,6 +668,7 @@ public class StringFunctions {
 	 * Returns all the characters from {@code searchString} present in
 	 * {@code inputValue}
 	 * 
+	 * @see stringFilter("Hello World","World")
 	 * @param inputValue
 	 *            the input value from which the characters are to be fetched
 	 * @param searchString
@@ -679,6 +709,7 @@ public class StringFunctions {
 	 * Returns all the characters from {@code searchString} present in
 	 * {@code inputValue}
 	 * 
+	 * @see stringFilter("Hello World","World")
 	 * @param inputValue
 	 *            the input value from which the characters are to be fetched
 	 * @param searchString
@@ -713,6 +744,7 @@ public class StringFunctions {
 	 * Removes all the characters from {@code searchString} from
 	 * {@code inputValue}
 	 * 
+	 * @see stringDeFilter("Hello World","World")
 	 * @param inputValue
 	 *            the input value from which the characters are to be removed
 	 * @param searchString
@@ -756,6 +788,7 @@ public class StringFunctions {
 	 * Removes all the characters from {@code searchString} from
 	 * {@code inputValue}
 	 * 
+	 * @see stringDeFilter("Hello World","World")
 	 * @param inputValue
 	 *            the input value from which the characters are to be removed
 	 * @param searchString
@@ -792,6 +825,7 @@ public class StringFunctions {
 	/**
 	 * Left pads the {@code inputValue} with spaces
 	 * 
+	 * @see stringLeftPad(" Hello World",6)
 	 * @param inputValue
 	 *            the input value to left pad
 	 * @param expectedLength
@@ -816,6 +850,7 @@ public class StringFunctions {
 	/**
 	 * Left pads the {@code inputValue} with spaces
 	 * 
+	 * @see stringLeftPad(" Hello World",6)
 	 * @param inputValue
 	 *            the input value to left pad
 	 * @param expectedLength
@@ -845,6 +880,7 @@ public class StringFunctions {
 	/**
 	 * Left pads the {@code inputValue} with {@code paddingCharacter}
 	 * 
+	 * @see stringLeftPad(" Hello World",7,"H")
 	 * @param inputValue
 	 *            the input value to left pad
 	 * @param expectedLength
@@ -878,6 +914,7 @@ public class StringFunctions {
 	/**
 	 * Left pads the {@code inputValue} with {@code paddingCharacter}
 	 * 
+	 * @see stringLeftPad(" Hello World",7,"H")
 	 * @param inputValue
 	 *            the input value to left pad
 	 * @param expectedLength
@@ -906,6 +943,7 @@ public class StringFunctions {
 	/**
 	 * Splits the {@code inputValue} on the provided {@code separator}
 	 * 
+	 * @see stringSplit("Hello World"," ")
 	 * @param inputValue
 	 *            the input value to split
 	 * @param separator
@@ -929,6 +967,7 @@ public class StringFunctions {
 	/**
 	 * Splits the {@code inputValue} on the provided {@code separator}
 	 * 
+	 * @see stringSplit("Hello World"," ")
 	 * @param inputValue
 	 *            the input value to split
 	 * @param separator
@@ -947,6 +986,7 @@ public class StringFunctions {
 	/**
 	 * Converts the string to upper case
 	 * 
+	 * @see stringUpper("Hello World")
 	 * @param inputValue
 	 *            the input value to convert to upper case
 	 * @return the {@code inputValue} in upper case
@@ -965,6 +1005,7 @@ public class StringFunctions {
 	/**
 	 * Converts the string to upper case
 	 * 
+	 * @see stringUpper("Hello World")
 	 * @param inputValue
 	 *            the input value to convert to upper case
 	 * @return the {@code inputValue} in upper case
@@ -979,6 +1020,7 @@ public class StringFunctions {
 	/**
 	 * Converts the string to lower case
 	 * 
+	 * @see stringLower("Hello World")
 	 * @param inputValue
 	 *            the input value to convert to lower case
 	 * @return the {@code inputValue} in lower case
@@ -997,6 +1039,7 @@ public class StringFunctions {
 	/**
 	 * Converts the string to lower case
 	 * 
+	 * @see stringLower("Hello World")
 	 * @param inputValue
 	 *            the input value to convert to lower case
 	 * @return the {@code inputValue} in lower case
@@ -1006,6 +1049,24 @@ public class StringFunctions {
 			return null;
 
 		return inputValue.toLowerCase();
+	}
+
+	/**
+	 * Converts the string to lower case
+	 * 
+	 * @see stringMatch("Hello World","hello world")
+	 * @param inputValue1
+	 *            the input value
+	 * @param inputValue2
+	 *            the input value
+	 * @return {@code true} if {@code inputValue1} is match with
+	 *         {@code inputValue2} else {@code false}
+	 */
+	public static boolean stringMatch(String inputValue1, String inputValue2) {
+		if (inputValue1 == null || inputValue2 == null)
+			return false;
+
+		return inputValue1.equals(inputValue2);
 	}
 
 }
