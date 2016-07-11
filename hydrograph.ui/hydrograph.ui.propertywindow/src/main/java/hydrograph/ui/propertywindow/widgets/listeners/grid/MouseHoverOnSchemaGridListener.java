@@ -331,7 +331,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 			tooltip = setToolTipForSchemaRange(generateRecordSchemaGridRow);			
 		}
 		
-		if (tooltip.trim().length() != 0){
+		if (tooltip != null){
 			return tooltip;
 		}else if(StringUtils.equalsIgnoreCase(generateRecordSchemaGridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
 				&& StringUtils.isBlank(generateRecordSchemaGridRow.getDateFormat())){
