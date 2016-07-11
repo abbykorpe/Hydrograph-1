@@ -81,6 +81,8 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 59.#647  [Nikhil Deokar] Schema Tab: Data type Name should start with capital letter enhancement.
 60.#764  [Shrirang Kumbhar] View Data : Watcher is Not Getting Closed When Job is Getting Closed on Save as Event.
 61.#649  [Nikhil Deokar] Create new job option in file menu
+62.#..   [Ashika Holkar] Clear Groups button is not visible on reopening filter window 
+63.#..   [Akhilesh Joshi] Retain checkbox is not enabling ok apply button 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
