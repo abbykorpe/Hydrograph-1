@@ -123,7 +123,8 @@ public class RunConfigDialog extends Dialog {
 
 		container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(1, false));
-
+		container.getShell().setText("Run Configuration Settings");
+		
 		Composite compositeRunMode = new Composite(container, SWT.BORDER);
 		compositeRunMode.setBackground(new Color(null, 255, 255, 255));
 		compositeRunMode.setLayout(null);
@@ -153,12 +154,12 @@ public class RunConfigDialog extends Dialog {
 		btnRemoteMode.addSelectionListener(selectionListener);
 
 		Label lblDebug = new Label(compositeRunMode, SWT.NONE);
-		lblDebug.setBounds(129, 22, 57, 16);
+		lblDebug.setBounds(140, 22, 55, 16);
 		formToolkit.adapt(lblDebug, true, true);
-		lblDebug.setText("isDebug");
+		lblDebug.setText("View Data");
 
 		final Button isDebugCheck = new Button(compositeRunMode, SWT.CHECK);
-		isDebugCheck.setBounds(192, 21, 93, 16);
+		isDebugCheck.setBounds(200, 21, 81, 16);
 		formToolkit.adapt(isDebugCheck, true, true);
 
 		final Label lblBasePath = new Label(compositeRunMode, SWT.NONE);
