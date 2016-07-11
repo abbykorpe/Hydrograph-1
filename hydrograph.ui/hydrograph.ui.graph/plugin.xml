@@ -95,20 +95,6 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            allPopups="true"
-            locationURI="menu:hydrograph.ui.menus.NewMenu?before=hydrograph.ui.menus.NewMenu.Class">
-         <command
-               commandId="org.eclipse.ui.newWizard"
-               label="Job"
-               mnemonic="J"
-               style="push">
-            <parameter
-                  name="newWizardId"
-                  value="hydrograph.ui.graph.job.wizard">
-            </parameter>
-         </command>
-      </menuContribution>
-      <menuContribution
             allPopups="false"
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
@@ -117,7 +103,7 @@
             <command
                   commandId="org.eclipse.ui.newWizard"
                   icon="resources/icons/new_file_o.png"
-                  id="hydrograph.ui.graph.newJob"
+                  id="hydrograph.ui.menus.NewMenu"
                   label="Job"
                   style="pulldown">
                <parameter
@@ -230,108 +216,6 @@
       </command>
          </toolbar>
       </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="menu:hydrograph.ui.graph.newJob">
-         <command
-               commandId="org.eclipse.ui.newWizard"
-               label="Job"
-               style="push">
-            <parameter
-                  name="newWizardId"
-                  value="hydrograph.ui.graph.job.wizard">
-            </parameter>
-         </command>
-         <menu
-               icon="resources/icons/class_obj.gif"
-               label="Custom Class"
-               mnemonic="C">
-            <command
-                  commandId="org.eclipse.ui.newWizard"
-                  icon="resources/icons/newclass_wiz.gif"
-                  id="hydrograph.ui.menus.NewMenu.Class"
-                  label="Empty Class"
-                  mnemonic="C"
-                  style="push">
-               <parameter
-                     name="newWizardId"
-                     value="org.eclipse.jdt.ui.wizards.NewClassCreationWizard">
-               </parameter>
-            </command>
-            <command
-                  commandId="hydrograph.ui.menus.new.newFilterClass"
-                  icon="resources/icons/filter_palette.png"
-                  label="Filter Class"
-                  mnemonic="F"
-                  style="push">
-            </command>
-            <command
-                  commandId="hydrograph.ui.menus.new.newAggClass"
-                  icon="resources/icons/aggregate_palette.png"
-                  label="Aggregate Class"
-                  mnemonic="A"
-                  style="push">
-            </command>
-            <command
-                  commandId="hydrograph.ui.menus.new.newTranformClass"
-                  icon="resources/icons/transform_palette.png"
-                  label="Tranform Class"
-                  mnemonic="T"
-                  style="push">
-            </command>
-            <command
-                  commandId="hydrograph.ui.menus.new.newNormalizeClass"
-                  icon="resources/icons/aggregate_palette.png"
-                  label="Normalize Class"
-                  mnemonic="N"
-                  style="push">
-            </command>
-            <command
-                  commandId="hydrograph.ui.menus.new.newCumulateClass"
-                  icon="resources/icons/aggregate_palette.png"
-                  label="Cumulate Class"
-                  mnemonic="U"
-                  style="push">
-            </command>
-         </menu>
-         <command
-               commandId="org.eclipse.ui.newWizard"
-               id="hydrograph.ui.toolbar.xmlfile"
-               label="XML File"
-               style="push">
-            <parameter
-                  name="newWizardId"
-                  value="org.eclipse.wst.xml.ui.internal.wizards.NewXMLWizard">
-            </parameter>
-         </command>
-         <command
-               commandId="org.eclipse.ui.newWizard"
-               label="File"
-               style="push">
-            <parameter
-                  name="newWizardId"
-                  value="org.eclipse.ui.wizards.new.file">
-            </parameter>
-         </command>
-         <command
-               commandId="org.eclipse.ui.newWizard"
-               label="ELT Project"
-               mnemonic="&amp;E"
-               style="push">
-            <parameter
-                  name="newWizardId"
-                  value="hydrograph.ui.project.structure.wizard">
-            </parameter>
-         </command>
-         <separator
-               name="hydrograph.ui.menus.separator1"
-               visible="true">
-         </separator>
-         <command
-               commandId="org.eclipse.ui.newWizard"
-               label="&amp;Other...">
-         </command>
-      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.editors">
@@ -363,6 +247,16 @@
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+O">
+      </key>
+      <key
+            commandId="org.eclipse.ui.newWizard"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+J">
+         <parameter
+               id="newWizardId"
+               value="hydrograph.ui.graph.job.wizard">
+         </parameter>
       </key>
    </extension>
    <extension

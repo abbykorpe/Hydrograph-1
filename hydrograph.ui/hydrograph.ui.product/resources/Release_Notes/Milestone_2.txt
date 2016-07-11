@@ -80,6 +80,7 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 58.#677  [Sonia Raheja] MacBook Pro - Unable to Export Data
 59.#647  [Nikhil Deokar] Schema Tab: Data type Name should start with capital letter enhancement.
 60.#764  [Shrirang Kumbhar] View Data : Watcher is Not Getting Closed When Job is Getting Closed on Save as Event.
+61.#649  [Nikhil Deokar] Create new job option in file menu
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
