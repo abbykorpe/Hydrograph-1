@@ -1038,6 +1038,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void doSaveAs() {
+		
+		DataViewerUtility.INSTANCE.closeDataViewerWindows();		
+		deleteDebugFiles();
+		
 		Map<String, String> currentParameterMap = getCurrentParameterMap();
 		IFile file=opeSaveAsDialog();
 		saveJob(file);
