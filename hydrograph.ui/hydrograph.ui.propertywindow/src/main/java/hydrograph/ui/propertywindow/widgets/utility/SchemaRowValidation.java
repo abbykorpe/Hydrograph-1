@@ -326,6 +326,8 @@ public class SchemaRowValidation{
 				executeIfDataTypeIsBigDecimal(gridRow, componentType, tableItem);
 			}else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),JAVA_UTIL_DATE)){
 				executeIfDataTypeIsDate(gridRow, tableItem);	
+			}else{
+				setBlackColor(tableItem);
 			}
 		}
 	}
