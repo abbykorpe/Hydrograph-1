@@ -72,7 +72,7 @@
                mnemonic="r">
             <command
                   commandId="org.eclipse.ui.perspectives.showPerspective"
-                  label="Open perspective"
+                  label="Open Perspective"
                   mnemonic="O"
                   style="push">
             </command>
