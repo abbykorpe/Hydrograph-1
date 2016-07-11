@@ -30,5 +30,4 @@ Export-Package: hydrograph.ui.dataviewer.adapters,
  hydrograph.ui.dataviewer.filter,
  hydrograph.ui.dataviewer.utilities,
  hydrograph.ui.dataviewer.window
-Import-Package: com.google.gson;version="2.2.4",
- com.jcraft.jsch
+Import-Package: com.jcraft.jsch
