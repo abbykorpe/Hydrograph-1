@@ -169,6 +169,7 @@ public class FilterHelper {
 					String fieldType = fieldsAndTypes.get(fieldName);
 					TableItem item = tableViewer.getTable().getItem(index);
 					CCombo conditionalCombo = (CCombo) item.getData(FilterConditionsDialog.CONDITIONAL_OPERATORS);
+					conditionalCombo.setText("");
 					conditionalCombo.setItems(FilterHelper.INSTANCE.getTypeBasedOperatorMap().get(fieldType));
 					new AutoCompleteField(conditionalCombo, new CComboContentAdapter(), conditionalCombo.getItems());
 				}
