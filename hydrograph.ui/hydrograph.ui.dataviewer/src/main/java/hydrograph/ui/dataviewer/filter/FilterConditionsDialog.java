@@ -243,6 +243,7 @@ public class FilterConditionsDialog extends Dialog {
         btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, remoteConditionsList, dummyList));
         btnAddRowAt.setText("Add Row at End");
         
+        remoteBtnAddGrp = new Button(composite_3, SWT.NONE);
         Button clearGroupsRemote=new Button(composite_3,SWT.NONE);
         clearGroupsRemote.addSelectionListener(clearGroupsListner(tableViewer, remoteGroupSelectionMap, clearGroupsRemote,remoteBtnAddGrp,remoteConditionsList,true));
         clearGroupsRemote.setText("Clear Groups");
@@ -253,7 +254,7 @@ public class FilterConditionsDialog extends Dialog {
 			clearGroupsRemote.setEnabled(false);
 		}
         
-        remoteBtnAddGrp = new Button(composite_3, SWT.NONE);
+        
         remoteBtnAddGrp.setText("Create Group");		
         remoteBtnAddGrp.setEnabled(false);
         remoteBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer,clearGroupsRemote,remoteConditionsList, remoteBtnAddGrp,remoteGroupSelectionMap));
@@ -367,6 +368,7 @@ public class FilterConditionsDialog extends Dialog {
         btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, localConditionsList, dummyList));
         btnAddRowAt.setText("Add Row at End");
         
+        localBtnAddGrp = new Button(composite_3, SWT.NONE);
         Button clearGroupsLocal=new Button(composite_3,SWT.NONE);
         clearGroupsLocal.addSelectionListener(clearGroupsListner(tableViewer, localGroupSelectionMap,clearGroupsLocal,localBtnAddGrp,localConditionsList,false));
         clearGroupsLocal.setText("Clear Groups");
@@ -377,7 +379,7 @@ public class FilterConditionsDialog extends Dialog {
 			clearGroupsLocal.setEnabled(false);
 		}
 
-        localBtnAddGrp = new Button(composite_3, SWT.NONE);
+        
         localBtnAddGrp.setText("Create Group");
         localBtnAddGrp.setEnabled(false);
         localBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer, clearGroupsLocal,localConditionsList,localBtnAddGrp,localGroupSelectionMap));
