@@ -42,9 +42,9 @@ import org.eclipse.swt.widgets.Shell;
 
 public class SingleColumnWidget extends AbstractWidget {
 
-	private String propertyName;
+	protected String propertyName;
 	private List<String> set;
-	private SingleColumnGridConfig gridConfig = null;
+	protected SingleColumnGridConfig gridConfig = null;
 	private ArrayList<AbstractWidget> widgets;
 
 	public SingleColumnWidget(ComponentConfigrationProperty componentConfigProp,
