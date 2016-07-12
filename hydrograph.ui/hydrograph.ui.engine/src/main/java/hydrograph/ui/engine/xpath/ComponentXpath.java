@@ -120,7 +120,7 @@ public class ComponentXpath {
 				parentNode = nodeList.item(i);
 				NodeList nNodeLst = (NodeList) nodeList.item(i);
 				for (int j = 0; j < nNodeLst.getLength(); j++) {
-					nNode = nNodeLst.item(i);
+					nNode = nNodeLst.item(j);
 					cloneNode = nNode.cloneNode(false);
 					cloneNode.setTextContent(entry.getValue().getNewNodeText());
 				}
