@@ -31,6 +31,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
@@ -76,9 +78,13 @@ public class FilterHelper {
 	
 	public Map<String, String[]> getTypeBasedOperatorMap(){
 		Map<String, String[]> typeBasedConditionalOperators = new HashMap<String, String[]>();
-		String[] NUMERIC_CONDITIONS = new String[]{FilterConstants.GREATER_THAN, FilterConstants.LESS_THAN, 
-				FilterConstants.LESS_THAN_EQUALS, FilterConstants.GREATER_THAN_EQUALS, FilterConstants.NOT_EQUALS,
-				FilterConstants.EQUALS, FilterConstants.IN, FilterConstants.NOT_IN,FilterConstants.BETWEEN};
+		String[] NUMERIC_CONDITIONS = new String[]{FilterConstants.GREATER_THAN, FilterConstants.FIELD_GREATER_THAN,
+				FilterConstants.LESS_THAN, FilterConstants.FIELD_LESS_THAN,
+				FilterConstants.LESS_THAN_EQUALS, FilterConstants.FIELD_LESS_THAN_EQUALS,
+				FilterConstants.GREATER_THAN_EQUALS,FilterConstants.FIELD_GREATER_THAN_EQUALS,
+				FilterConstants.NOT_EQUALS,FilterConstants.FIELD_NOT_EQUALS,
+				FilterConstants.EQUALS,FilterConstants.FIELD_EQUALS,
+				FilterConstants.IN, FilterConstants.NOT_IN};
 
 		typeBasedConditionalOperators.put(FilterConstants.TYPE_STRING, new String[]{FilterConstants.NOT_EQUALS, FilterConstants.EQUALS, 
 				FilterConstants.LIKE, FilterConstants.NOT_LIKE, FilterConstants.IN, FilterConstants.NOT_IN}); 
@@ -417,6 +423,14 @@ public class FilterHelper {
 					buffer.append(item + FilterConstants.SINGLE_SPACE);
 				}
 				logger.debug("Query String : " + buffer);
+				Pattern p = Pattern.compile("\\(Field\\)");
+				Matcher m = p.matcher(buffer);
+				StringBuffer temp = new StringBuffer();
+				while(m.find()){
+					m.appendReplacement(temp, "");
+				}
+				m.appendTail(temp);
+				buffer = new StringBuffer(temp);
 				
 				if(dataset.equalsIgnoreCase(DOWNLOADED))
 				{	
@@ -516,8 +530,8 @@ public class FilterHelper {
 	protected String getConditionValue(String fieldName, String value, String conditional, Map<String, String> fieldsAndTypes) {
 		String trimmedCondition = StringUtils.trim(conditional);
 		String dataType = fieldsAndTypes.get(fieldName);
-		if(FilterConstants.TYPE_STRING.equalsIgnoreCase(dataType) || FilterConstants.TYPE_DATE.equalsIgnoreCase(dataType) 
-				|| FilterConstants.TYPE_BOOLEAN.equalsIgnoreCase(dataType)){
+		if((FilterConstants.TYPE_STRING.equalsIgnoreCase(dataType) || FilterConstants.TYPE_DATE.equalsIgnoreCase(dataType) 
+				|| FilterConstants.TYPE_BOOLEAN.equalsIgnoreCase(dataType)) && !conditional.endsWith("(Field)")){
 			if(FilterConstants.IN.equalsIgnoreCase(trimmedCondition) || FilterConstants.NOT_IN.equalsIgnoreCase(trimmedCondition)){
 				if(StringUtils.isNotBlank(value) && value.contains(FilterConstants.DELIM_COMMA)){
 					StringTokenizer tokenizer = new StringTokenizer(value, FilterConstants.DELIM_COMMA);
@@ -564,7 +578,8 @@ public class FilterHelper {
 	
 	private boolean validateText(Text text, String fieldName, Map<String, String> fieldsAndTypes, String conditionalOperator) {
 		String type = FilterValidator.INSTANCE.getType(fieldName, fieldsAndTypes);
-		if(StringUtils.isNotBlank(text.getText()) && FilterValidator.INSTANCE.validateDataBasedOnTypes(type, text.getText(), conditionalOperator)){
+		if((StringUtils.isNotBlank(text.getText()) && FilterValidator.INSTANCE.validateDataBasedOnTypes(type, text.getText(), conditionalOperator)) ||
+				FilterValidator.INSTANCE.validateField(fieldsAndTypes,text.getText(),fieldName)){
 			text.setBackground(new Color(null, 255, 255, 255));
 			return true;
 		}else {
@@ -1042,4 +1057,3 @@ public class FilterHelper {
 	 }
  
 }
-

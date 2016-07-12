@@ -17,6 +17,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ import org.slf4j.Logger;
 public class FilterValidator {
 
 	public static FilterValidator INSTANCE = new FilterValidator();
-
+	public static final String FIELD= "Field";
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterValidator.class);
 	private List<String> relationalList = Arrays.asList(new String[]{FilterConstants.AND, FilterConstants.OR});
 	
@@ -79,7 +80,18 @@ public class FilterValidator {
 				return false;
 			}
 			
-			if(StringUtils.isNotBlank(value1)){
+			else {
+				if (condition.getConditionalOperator().contains(FIELD)) {
+					if (validateField(fieldsAndTypes, value1 ,fieldName)) {
+						return true;
+					}
+					else {
+						return false;
+					}
+					
+				}
+			
+				else if(StringUtils.isNotBlank(value1)){
 				if(!validateDataBasedOnTypes(type, value1, condition.getConditionalOperator())){
 					return false;
 				}
@@ -92,6 +104,7 @@ public class FilterValidator {
 				}
 			}
 		}
+		}
 		return true;
 	}
 	
@@ -99,6 +112,14 @@ public class FilterValidator {
 		String type = fieldsAndTypes.get(fieldName);
 		return type;
 	}
+	
+	public boolean validateField(Map<String,String> fieldsAndTypes, String value ,String field){
+		List<String> columnList = new ArrayList<String>(fieldsAndTypes.keySet());
+		if(columnList.contains(value) && fieldsAndTypes.get(value).equals(fieldsAndTypes.get(field))){
+			return true;
+		}
+	return false;
+} 
 	
 	public boolean validateDataBasedOnTypes(String type, String value, String conditionalOperator){
 		try{
@@ -113,6 +134,9 @@ public class FilterValidator {
 				}
 			}
 			else if (FilterConstants.BETWEEN.equalsIgnoreCase(conditionalOperator)) {
+				validate(type, value);
+			}
+			else{
 				validate(type, value);
 			}
 		}
