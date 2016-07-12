@@ -63,7 +63,8 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
 public class FilterConditionsDialog extends Dialog {
-	private static final String VALUE_TEXT_BOX = "valueTextBox";
+	private static final String VALUE1_TEXT_BOX = "value1TextBox";
+	private static final String VALUE2_TEXT_BOX = "value2TextBox";
 	private static final String FIELD_NAMES = "fieldNames";
 	private static final String RELATIONAL_OPERATORS = "relationalOperators";
 	private static final String REMOVE = "-";
@@ -78,7 +79,8 @@ public class FilterConditionsDialog extends Dialog {
 	private static final String RELATIONAL_COMBO_PANE = "relationalComboPane";
 	private static final String FIELD_COMBO_PANE = "fieldComboPane";
 	private static final String CONDITIONAL_COMBO_PANE = "conditionalComboPane";
-	private static final String VALUE_TEXT_PANE = "valueTextPane";
+	private static final String VALUE1_TEXT_PANE = "value1TextPane";
+	private static final String VALUE2_TEXT_PANE = "value2TextPane";
 	
 	private static final String ADD_EDITOR = "add_editor";
 	private static final String REMOVE_EDITOR = "remove_editor";
@@ -86,7 +88,8 @@ public class FilterConditionsDialog extends Dialog {
 	private static final String RELATIONAL_EDITOR = "relational_editor";
 	private static final String FIELD_EDITOR = "field_editor";
 	private static final String CONDITIONAL_EDITOR = "conditional_editor";
-	private static final String VALUE_EDITOR = "value_editor";
+	private static final String VALUE1_EDITOR = "value1_editor";
+	private static final String VALUE2_EDITOR = "value2_editor";
 	
 	
 	private Map<String,String[]> typeBasedConditionalOperators = new HashMap<>();
@@ -314,8 +317,11 @@ public class FilterConditionsDialog extends Dialog {
 		TableViewerColumn conditionalDropDownColumn = createTableColumns(tableViewer, "Conditional Operator", 130);
 		conditionalDropDownColumn.setLabelProvider(getConditionalCellProvider(tableViewer, remoteConditionsList, true));
 		
-		TableViewerColumn valueTextBoxColumn = createTableColumns(tableViewer, "Value", 150);
-		valueTextBoxColumn.setLabelProvider(getValueCellProvider(tableViewer, remoteConditionsList, true));
+		TableViewerColumn value1TextBoxColumn = createTableColumns(tableViewer, "Value1", 150);
+		value1TextBoxColumn.setLabelProvider(getValue1CellProvider(tableViewer, remoteConditionsList, true));
+		
+		TableViewerColumn value2TextBoxColumn = createTableColumns(tableViewer, "Value2", 150);
+		value2TextBoxColumn.setLabelProvider(getValue2CellProvider(tableViewer, remoteConditionsList, true));
 		
 		if(remoteConditionsList.isEmpty()){
 			remoteConditionsList.add(0, new Condition());
@@ -439,8 +445,11 @@ public class FilterConditionsDialog extends Dialog {
 		TableViewerColumn conditionalDropDownColumn = createTableColumns(tableViewer, "Conditional Operator", 130);
 		conditionalDropDownColumn.setLabelProvider(getConditionalCellProvider(tableViewer, localConditionsList, false));
 		
-		TableViewerColumn valueTextBoxColumn = createTableColumns(tableViewer, "Value", 150);
-		valueTextBoxColumn.setLabelProvider(getValueCellProvider(tableViewer, localConditionsList, false));
+		TableViewerColumn value1TextBoxColumn = createTableColumns(tableViewer, "Value1", 150);
+		value1TextBoxColumn.setLabelProvider(getValue1CellProvider(tableViewer, localConditionsList, false));
+
+		TableViewerColumn value2TextBoxColumn = createTableColumns(tableViewer, "Value2", 150);
+		value2TextBoxColumn.setLabelProvider(getValue2CellProvider(tableViewer, localConditionsList, false));
 		
 		if(localConditionsList.isEmpty()){
 			localConditionsList.add(0, new Condition());
@@ -453,7 +462,7 @@ public class FilterConditionsDialog extends Dialog {
 		
 	}
 
-	private CellLabelProvider getValueCellProvider(final TableViewer tableViewer, final List<Condition> conditionsList,
+	private CellLabelProvider getValue1CellProvider(final TableViewer tableViewer, final List<Condition> conditionsList,
 			final boolean isRemote) {
 		return new CellLabelProvider() {
 			
@@ -466,35 +475,97 @@ public class FilterConditionsDialog extends Dialog {
 					item.setData("ADDED_VALUE", "TRUE");
 					Text text;
 					if(isRemote){
-						text = addTextBoxInTable(tableViewer, item, VALUE_TEXT_BOX, VALUE_TEXT_PANE, VALUE_EDITOR, 
-								cell.getColumnIndex(),FilterHelper.INSTANCE.getTextBoxListener(conditionsList, 
+						text = addTextBoxInTable(tableViewer, item, VALUE1_TEXT_BOX, VALUE1_TEXT_PANE, VALUE1_EDITOR, 
+								cell.getColumnIndex(),FilterHelper.INSTANCE.getTextBoxValue1Listener(conditionsList, 
 										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton));
 					}
 					else {
-						text = addTextBoxInTable(tableViewer, item, VALUE_TEXT_BOX, VALUE_TEXT_PANE, VALUE_EDITOR, 
-								cell.getColumnIndex(),FilterHelper.INSTANCE.getTextBoxListener(conditionsList, 
+						text = addTextBoxInTable(tableViewer, item, VALUE1_TEXT_BOX, VALUE1_TEXT_PANE, VALUE1_EDITOR, 
+								cell.getColumnIndex(),FilterHelper.INSTANCE.getTextBoxValue1Listener(conditionsList, 
 										fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
 					}
 					
-					text.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getValue());
+					text.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getValue1());
 					item.addDisposeListener(new DisposeListener() {
 						
 						@Override
 						public void widgetDisposed(DisposeEvent e) {
 							if (item.getData("DISPOSED_VALUE") == null) {
 								item.setData("DISPOSED_VALUE", "TRUE");
-								Text valueText = (Text) item.getData(VALUE_TEXT_BOX);
-								((TableEditor)valueText.getData(VALUE_EDITOR)).dispose();
+								Text valueText = (Text) item.getData(VALUE1_TEXT_BOX);
+								((TableEditor) valueText.getData(VALUE1_EDITOR)).dispose();
 								valueText.dispose();
 								
-								Composite composite = (Composite)item.getData(VALUE_TEXT_PANE);
+								Composite composite = (Composite)item.getData(VALUE1_TEXT_PANE);
 								composite.dispose();
 							}
 						}
 					});
 				} else {
-					Text text = (Text) item.getData(VALUE_TEXT_BOX);
-					text.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getValue());
+					Text text = (Text) item.getData(VALUE1_TEXT_BOX);
+					text.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getValue1());
+				}
+			}
+		};
+	}
+	
+	private CellLabelProvider getValue2CellProvider(final TableViewer tableViewer, final List<Condition> conditionsList,
+			final boolean isRemote) {
+		return new CellLabelProvider() {
+			
+			@Override
+			public void update(ViewerCell cell) {
+				final TableItem item = (TableItem) cell.getItem();
+				// DO NOT REMOVE THIS CONDITION. The condition is return to
+				// prevent multiple updates on single item
+				if (item.getData("ADDED_VALUE2") == null) {
+					item.setData("ADDED_VALUE2", "TRUE");
+					Text text;
+					if(isRemote){
+						text = addTextBoxInTable(tableViewer, item, VALUE2_TEXT_BOX, VALUE2_TEXT_PANE, VALUE2_EDITOR, 
+								cell.getColumnIndex(),FilterHelper.INSTANCE.getTextBoxValue2Listener(conditionsList, 
+										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton));
+					}
+					else {
+						text = addTextBoxInTable(tableViewer, item, VALUE2_TEXT_BOX, VALUE2_TEXT_PANE, VALUE2_EDITOR, 
+								cell.getColumnIndex(),FilterHelper.INSTANCE.getTextBoxValue2Listener(conditionsList, 
+										fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
+					}
+					text.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getValue2());
+					for (Condition condition : conditionsList) {
+						if (condition.getConditionalOperator()
+								.equalsIgnoreCase(FilterConstants.BETWEEN)) {
+							text.setVisible(true);
+						} else {
+							text.setVisible(false);
+						}
+					}
+					item.addDisposeListener(new DisposeListener() {
+						
+						@Override
+						public void widgetDisposed(DisposeEvent e) {
+							if (item.getData("DISPOSED_VALUE2") == null) {
+								item.setData("DISPOSED_VALUE2", "TRUE");
+								Text valueText = (Text) item.getData(VALUE2_TEXT_BOX);
+								((TableEditor)valueText.getData(VALUE2_EDITOR)).dispose();
+								valueText.dispose();
+								
+								Composite composite = (Composite)item.getData(VALUE2_TEXT_PANE);
+								composite.dispose();
+							}
+						}
+					});
+				} else {
+					Text text = (Text) item.getData(VALUE2_TEXT_BOX);
+					text.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getValue2());
+					for (Condition condition : conditionsList) {
+						if (condition.getConditionalOperator()
+								.equalsIgnoreCase(FilterConstants.BETWEEN)) {
+							text.setVisible(true);
+						} else {
+							text.setVisible(false);
+						}
+					}
 				}
 			}
 		};
@@ -981,8 +1052,11 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 		TableViewerColumn conditionalDropDownColumn = createTableColumns(tableViewer, "Conditional Operator", 130);
 		conditionalDropDownColumn.setLabelProvider(getConditionalCellProvider(tableViewer, conditionsList, true));
 		
-		TableViewerColumn valueTextBoxColumn = createTableColumns(tableViewer, "Value", 150);
-		valueTextBoxColumn.setLabelProvider(getValueCellProvider(tableViewer, conditionsList, true));
+		TableViewerColumn value1TextBoxColumn = createTableColumns(tableViewer, "Value1", 150);
+		value1TextBoxColumn.setLabelProvider(getValue1CellProvider(tableViewer, conditionsList, true));
+		
+		TableViewerColumn valueTextBoxValue2Column = createTableColumns(tableViewer, "Value2", 150);
+		valueTextBoxValue2Column.setLabelProvider(getValue2CellProvider(tableViewer, conditionsList, true));
 		
 		
 		

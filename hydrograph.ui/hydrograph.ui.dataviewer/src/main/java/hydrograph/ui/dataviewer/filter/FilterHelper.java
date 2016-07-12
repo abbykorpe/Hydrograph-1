@@ -38,6 +38,7 @@ import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -61,6 +62,10 @@ public class FilterHelper {
 
 	public static final FilterHelper INSTANCE = new FilterHelper();
 	private static final String DOWNLOADED="Downloaded";
+	private static final String ROW_INDEX = "rowIndex";
+	private static final String CONDITIONAL_EDITOR = "conditional_editor";
+	private static final String AND = "AND";
+	private static final String VALUE2TEXTBOX = "value2TextBox";
 	private DataViewerAdapter dataViewerAdapter;
 	private DebugDataViewer debugDataViewer;
 	private FilterConditionsDialog filterConditionsDialog;
@@ -77,7 +82,7 @@ public class FilterHelper {
 		Map<String, String[]> typeBasedConditionalOperators = new HashMap<String, String[]>();
 		String[] NUMERIC_CONDITIONS = new String[]{FilterConstants.GREATER_THAN, FilterConstants.LESS_THAN, 
 				FilterConstants.LESS_THAN_EQUALS, FilterConstants.GREATER_THAN_EQUALS, FilterConstants.NOT_EQUALS,
-				FilterConstants.EQUALS, FilterConstants.IN, FilterConstants.NOT_IN};
+				FilterConstants.EQUALS, FilterConstants.IN, FilterConstants.NOT_IN,FilterConstants.BETWEEN};
 
 		typeBasedConditionalOperators.put(FilterConstants.TYPE_STRING, new String[]{FilterConstants.NOT_EQUALS, FilterConstants.EQUALS, 
 				FilterConstants.LIKE, FilterConstants.NOT_LIKE, FilterConstants.IN, FilterConstants.NOT_IN}); 
@@ -93,7 +98,7 @@ public class FilterHelper {
 		return typeBasedConditionalOperators;
 	}
 	
-	public  Listener getTextBoxListener(final List<Condition> conditionsList, 
+	public  Listener getTextBoxValue1Listener(final List<Condition> conditionsList, 
 			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
 		Listener listener = new Listener() {
 			
@@ -102,8 +107,25 @@ public class FilterHelper {
 				Text text = (Text)event.widget;
 				int index = (int) text.getData(FilterConditionsDialog.ROW_INDEX);
 				Condition filterConditions = conditionsList.get(index);
-				filterConditions.setValue(text.getText());
+				filterConditions.setValue1(text.getText());
 				validateText(text, filterConditions.getFieldName(), fieldsAndTypes, filterConditions.getConditionalOperator());
+				toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+			}
+		};
+		return listener;
+	}
+	
+	public  Listener getTextBoxValue2Listener(final List<Condition> conditionsList, 
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
+		Listener listener = new Listener() {
+			
+			@Override
+			public void handleEvent(Event event) {
+				Text text = (Text)event.widget;
+				int index = (int) text.getData(FilterConditionsDialog.ROW_INDEX);
+				Condition filterConditions = conditionsList.get(index);
+				filterConditions.setValue2(text.getText());
+				validateText(text, filterConditions.getFieldName(), fieldsAndTypes,filterConditions.getConditionalOperator());
 				toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 		};
@@ -194,13 +216,27 @@ public class FilterHelper {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				CCombo source = (CCombo) e.getSource();
+				TableItem tableItem = getTableItem(source);
+				Text text = (Text) tableItem.getData(VALUE2TEXTBOX);
+				String selectedValue = source.getItem(source.getSelectionIndex());
+				if (selectedValue.equalsIgnoreCase(FilterConstants.BETWEEN)) {
+					text.setVisible(true);
+				} else {
+					text.setVisible(false);
+				}
 				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
-			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {}
 		};
 		return listener;
+	}
+	
+	private TableItem getTableItem(CCombo source) {
+		int rowIndex = (int) source.getData(ROW_INDEX);
+		TableEditor tableEditor = (TableEditor) source.getData(CONDITIONAL_EDITOR);
+		TableItem tableItem = tableEditor.getItem();
+		return tableItem;
 	}
 	
 	public ModifyListener getConditionalOperatorModifyListener(final List<Condition> conditionsList, 
@@ -210,6 +246,16 @@ public class FilterHelper {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				CCombo source = (CCombo) e.getSource();
+				TableItem tableItem = getTableItem(source);
+				Condition condition = (Condition) tableItem.getData();
+				if (tableItem.getData(VALUE2TEXTBOX) != null) {
+					Text text = (Text) tableItem.getData(VALUE2TEXTBOX);
+					if (condition.getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
+						text.setVisible(true);
+					} else {
+						text.setVisible(false);
+					}
+				}
 				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 		};
@@ -345,10 +391,28 @@ public class FilterHelper {
 					StringBuffer conditionString = new StringBuffer();
 					
 					Condition condition = conditionsList.get(item);
-					conditionString.append(condition.getFieldName()).append(FilterConstants.SINGLE_SPACE).
-					append(condition.getConditionalOperator()).append(FilterConstants.SINGLE_SPACE)
-					.append(getConditionValue(condition.getFieldName(), condition.getValue(), condition.getConditionalOperator(),
-							fieldsAndTypes));
+					if (condition.getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
+						conditionString
+								.append(condition.getFieldName())
+								.append(FilterConstants.SINGLE_SPACE)
+								.append(condition.getConditionalOperator())
+								.append(FilterConstants.SINGLE_SPACE)
+								.append(getConditionValue(condition.getFieldName(), condition.getValue1(),
+										condition.getConditionalOperator(), fieldsAndTypes))
+								.append(FilterConstants.SINGLE_SPACE)
+								.append(AND)
+								.append(FilterConstants.SINGLE_SPACE)
+								.append(getConditionValue(condition.getFieldName(), condition.getValue2(),
+										condition.getConditionalOperator(), fieldsAndTypes));
+					} else {
+						conditionString
+								.append(condition.getFieldName())
+								.append(FilterConstants.SINGLE_SPACE)
+								.append(condition.getConditionalOperator())
+								.append(FilterConstants.SINGLE_SPACE)
+								.append(getConditionValue(condition.getFieldName(), condition.getValue1(),
+										condition.getConditionalOperator(), fieldsAndTypes));
+					}
 					int index = actualStringList.indexOf(String.valueOf(item));
 					actualStringList.set(index, conditionString.toString());
 				}
