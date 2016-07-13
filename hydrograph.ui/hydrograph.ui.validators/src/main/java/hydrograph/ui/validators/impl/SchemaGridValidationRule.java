@@ -34,6 +34,7 @@ public class SchemaGridValidationRule implements IValidator {
 	private static final String DATA_TYPE_DATE = "java.util.Date";
 	private static final String DATA_TYPE_BIG_DECIMAL = "java.math.BigDecimal";
 	private static final String SCALE_TYPE_NONE = "none";
+	private static final String REGULAR_EXPRESSION_FOR_NUMBER = "\\d+";
 	
 	String errorMessage;
 	
@@ -128,7 +129,10 @@ public class SchemaGridValidationRule implements IValidator {
 				if(StringUtils.isBlank(fixedWidthGridRow.getLength())){
 					errorMessage = "Length is mandatory";
 					return false;
-				}
+				} else if(!(fixedWidthGridRow.getLength().matches(REGULAR_EXPRESSION_FOR_NUMBER))|| (fixedWidthGridRow.getLength().equals("0"))){
+                errorMessage = "Length should be a positive Integer greater than 0";
+                return false;
+          }
 			}
 			if(uniqueNamesList.isEmpty() || !uniqueNamesList.contains(gridRow.getFieldName())){
 				uniqueNamesList.add(gridRow.getFieldName());
