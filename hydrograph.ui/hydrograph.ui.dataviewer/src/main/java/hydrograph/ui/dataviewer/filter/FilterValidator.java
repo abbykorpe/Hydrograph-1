@@ -46,15 +46,22 @@ public class FilterValidator {
 			String relationalOperator = condition.getRelationalOperator();
 			String fieldName = condition.getFieldName();
 			String conditional = condition.getConditionalOperator();
-			String value = condition.getValue();
+			String value1 = condition.getValue1();
+			String value2 = condition.getValue2();
 			if(index != 0 && StringUtils.isBlank(relationalOperator)){
 				logger.trace("Relational Operator at {} is blank" + index);
 				return false;
 			}
 			if(StringUtils.isBlank(fieldName) 
-					|| StringUtils.isBlank(conditional) || StringUtils.isBlank(value)){
+					|| StringUtils.isBlank(conditional) || StringUtils.isBlank(value1)){
 				logger.trace("Field name at {} is blank" + index);
 				return false;
+			}
+			if (FilterConstants.BETWEEN.equalsIgnoreCase(conditional)) {
+				if (StringUtils.isBlank(value2)) {
+					logger.trace("Value 2 at {} is blank" + index);
+					return false;
+				}
 			}
 			
 			if(index != 0 && !relationalList.contains(relationalOperator)){
@@ -72,9 +79,16 @@ public class FilterValidator {
 				return false;
 			}
 			
-			if(StringUtils.isNotBlank(value)){
-				if(!validateDataBasedOnTypes(type, value, condition.getConditionalOperator())){
+			if(StringUtils.isNotBlank(value1)){
+				if(!validateDataBasedOnTypes(type, value1, condition.getConditionalOperator())){
 					return false;
+				}
+			}
+			if (condition.getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
+				if (StringUtils.isNotBlank(value2)) {
+					if (!validateDataBasedOnTypes(type, value2, condition.getConditionalOperator())) {
+						return false;
+					}
 				}
 			}
 		}
@@ -98,7 +112,9 @@ public class FilterValidator {
 					}
 				}
 			}
-			
+			else if (FilterConstants.BETWEEN.equalsIgnoreCase(conditionalOperator)) {
+				validate(type, value);
+			}
 		}
 		catch(Exception exception){
 			logger.trace("value can not be converted to {}", new Object[]{type});

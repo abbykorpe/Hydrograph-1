@@ -28,9 +28,14 @@ public class FilterConstants {
 	public static final String IN = "IN";
 	public static final String NOT_LIKE = "NOT LIKE";
 	public static final String LIKE = "LIKE";
+	public static final String BETWEEN="BETWEEN";
 	
 	public static final String AND = "AND";
 	public static final String OR = "OR";
 	
 	public static final String YYYY_MM_DD = "yyyy-MM-dd";
+	
+	public static final String ROW_INDEX = "rowIndex";
+	public static final String CONDITIONAL_EDITOR = "conditional_editor";
+	public static final String VALUE2TEXTBOX = "value2TextBox";
 }
