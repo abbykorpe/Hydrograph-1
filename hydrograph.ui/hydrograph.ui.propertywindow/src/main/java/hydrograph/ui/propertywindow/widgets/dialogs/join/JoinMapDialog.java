@@ -772,7 +772,7 @@ public class JoinMapDialog extends Dialog {
 		composite_1.setBounds(0, 0, 64, 64);
 
 		final ScrolledComposite scrolledComposite_1 = new ScrolledComposite(
-				composite_1, SWT.BORDER  );
+				composite_1, SWT.BORDER | SWT.V_SCROLL );
 		scrolledComposite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
 				true, true, 1, 1));
 		scrolledComposite_1.setExpandHorizontal(true);
@@ -781,7 +781,7 @@ public class JoinMapDialog extends Dialog {
 		Composite composite_7 = new Composite(scrolledComposite_1, SWT.NONE);
 		composite_7.setLayout(new GridLayout(1, false));
 
-		final ExpandBar expandBar = new ExpandBar(composite_7, SWT.V_SCROLL | SWT.H_SCROLL);
+		final ExpandBar expandBar = new ExpandBar(composite_7, SWT.H_SCROLL);
 		expandBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 				1));
 		
@@ -887,10 +887,8 @@ public class JoinMapDialog extends Dialog {
 		});
 
 		xpndtmItem.setHeight(190);
+		xpndtmItem.setExpanded(true);
 		
-		if(portNumber==0 || portNumber==1){
-			xpndtmItem.setExpanded(true);
-		}
 		table_1.addControlListener(new ControlListener() {
 
 			@Override
