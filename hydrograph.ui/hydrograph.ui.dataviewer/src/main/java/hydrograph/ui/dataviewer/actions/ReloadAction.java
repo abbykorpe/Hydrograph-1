@@ -108,7 +108,6 @@ public class ReloadAction extends Action {
 					closeExistingDebugFileConnection();
 					if(lastDownloadedFileSize!=viewDataPreferences.getFileSize()|| ifFilterReset){
 						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize(),true);	
-						setIfFilterReset(false);
 					}else{
 						SelectColumnAction selectColumnAction =(SelectColumnAction) debugDataViewer.getActionFactory().getAction(SelectColumnAction.class.getName());
 						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize(),false);
@@ -138,6 +137,7 @@ public class ReloadAction extends Action {
 						updateDataViewerViews();
 						if(lastDownloadedFileSize!=viewDataPreferences.getFileSize() || ifFilterReset){
 							debugDataViewer.submitRecordCountJob();
+							setIfFilterReset(false);
 						}					
 						lastDownloadedFileSize = viewDataPreferences.getFileSize();
 						DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
