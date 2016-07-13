@@ -80,6 +80,6 @@ public class Condition{
 		return "FilterConditions [fieldName=" + fieldName
 				+ ", relationalOperator=" + relationalOperator
 				+ ", conditionalOperator=" + conditionalOperator
-				+ ", value1=" + value1 + value2TextBoxValue;
+				+ ", value1=" + value1 + value2TextBoxValue + "]";
 	}
 }
