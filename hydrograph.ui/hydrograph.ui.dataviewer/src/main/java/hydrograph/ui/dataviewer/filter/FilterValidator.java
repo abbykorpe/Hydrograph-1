@@ -58,8 +58,8 @@ public class FilterValidator {
 				return false;
 			}
 			if (FilterConstants.BETWEEN.equalsIgnoreCase(conditional)) {
-				if (StringUtils.isBlank(fieldName) || StringUtils.isBlank(conditional) || StringUtils.isBlank(value2)) {
-					logger.trace("Field name at {} is blank" + index);
+				if (StringUtils.isBlank(value2)) {
+					logger.trace("Value 2 at {} is blank" + index);
 					return false;
 				}
 			}

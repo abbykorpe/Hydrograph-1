@@ -62,10 +62,6 @@ public class FilterHelper {
 
 	public static final FilterHelper INSTANCE = new FilterHelper();
 	private static final String DOWNLOADED="Downloaded";
-	private static final String ROW_INDEX = "rowIndex";
-	private static final String CONDITIONAL_EDITOR = "conditional_editor";
-	private static final String AND = "AND";
-	private static final String VALUE2TEXTBOX = "value2TextBox";
 	private DataViewerAdapter dataViewerAdapter;
 	private DebugDataViewer debugDataViewer;
 	private FilterConditionsDialog filterConditionsDialog;
@@ -217,7 +213,7 @@ public class FilterHelper {
 			public void widgetSelected(SelectionEvent e) {
 				CCombo source = (CCombo) e.getSource();
 				TableItem tableItem = getTableItem(source);
-				Text text = (Text) tableItem.getData(VALUE2TEXTBOX);
+				Text text = (Text) tableItem.getData(FilterConstants.VALUE2TEXTBOX);
 				String selectedValue = source.getItem(source.getSelectionIndex());
 				if (selectedValue.equalsIgnoreCase(FilterConstants.BETWEEN)) {
 					text.setVisible(true);
@@ -233,8 +229,8 @@ public class FilterHelper {
 	}
 	
 	private TableItem getTableItem(CCombo source) {
-		int rowIndex = (int) source.getData(ROW_INDEX);
-		TableEditor tableEditor = (TableEditor) source.getData(CONDITIONAL_EDITOR);
+		int rowIndex = (int) source.getData(FilterConstants.ROW_INDEX);
+		TableEditor tableEditor = (TableEditor) source.getData(FilterConstants.CONDITIONAL_EDITOR);
 		TableItem tableItem = tableEditor.getItem();
 		return tableItem;
 	}
@@ -248,8 +244,8 @@ public class FilterHelper {
 				CCombo source = (CCombo) e.getSource();
 				TableItem tableItem = getTableItem(source);
 				Condition condition = (Condition) tableItem.getData();
-				if (tableItem.getData(VALUE2TEXTBOX) != null) {
-					Text text = (Text) tableItem.getData(VALUE2TEXTBOX);
+				if (tableItem.getData(FilterConstants.VALUE2TEXTBOX) != null) {
+					Text text = (Text) tableItem.getData(FilterConstants.VALUE2TEXTBOX);
 					if (condition.getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
 						text.setVisible(true);
 					} else {
@@ -400,7 +396,7 @@ public class FilterHelper {
 								.append(getConditionValue(condition.getFieldName(), condition.getValue1(),
 										condition.getConditionalOperator(), fieldsAndTypes))
 								.append(FilterConstants.SINGLE_SPACE)
-								.append(AND)
+								.append(FilterConstants.AND)
 								.append(FilterConstants.SINGLE_SPACE)
 								.append(getConditionValue(condition.getFieldName(), condition.getValue2(),
 										condition.getConditionalOperator(), fieldsAndTypes));

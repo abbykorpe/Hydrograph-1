@@ -34,4 +34,8 @@ public class FilterConstants {
 	public static final String OR = "OR";
 	
 	public static final String YYYY_MM_DD = "yyyy-MM-dd";
+	
+	public static final String ROW_INDEX = "rowIndex";
+	public static final String CONDITIONAL_EDITOR = "conditional_editor";
+	public static final String VALUE2TEXTBOX = "value2TextBox";
 }
