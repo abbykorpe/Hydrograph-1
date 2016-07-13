@@ -111,9 +111,6 @@ public class FilterValidator {
 						validate(type, tokenizer.nextToken());
 					}
 				}
-				else {
-					validate(type, value);
-				}
 			}
 			else if (FilterConstants.BETWEEN.equalsIgnoreCase(conditionalOperator)) {
 				validate(type, value);
