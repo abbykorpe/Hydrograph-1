@@ -2,6 +2,8 @@ package hydrograph.ui.propertywindow.widgets.hiveInput.dialog;
 
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.InputHivePartitionColumn;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty.PropertyContentProvider;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -31,6 +34,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -38,12 +43,14 @@ import org.eclipse.swt.widgets.TableColumn;
 public class FieldDialogForAddingValue extends Dialog {
 	
 	private Table table;
+	private Label lblError;
 	private TableViewer tableViewer;
-	private HivePartitionFieldDialog fieldDialog;
+	private HivePartitionFields fieldDialog;
 	private Map<String, List<InputHivePartitionColumn>> fieldsMap;
-	private List<HivePartitionFieldDialog> fieldsDialogList;
+	private List<HivePartitionFields> fieldsDialogList;
 	private Button buttonDelete;
 	private List<InputHivePartitionColumn> inputHivePartitionColumns;
+	private Composite container_1;
 	
 	
 	
@@ -65,14 +72,14 @@ public class FieldDialogForAddingValue extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 	
-		Composite container = (Composite) super.createDialogArea(parent);
+		container_1 = (Composite) super.createDialogArea(parent);
 		
-		addButtonPanel(container);
+		addButtonPanel(container_1);
 		
 		
-		Composite tableComposite = new Composite(container, SWT.NONE);
-		tableComposite.setLayout(new GridLayout(1, false));
+		Composite tableComposite = new Composite(container_1, SWT.NONE);
 		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		tableComposite.setLayout(new GridLayout(1, false));
 		
 		tableViewer = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		table = tableViewer.getTable();
@@ -104,6 +111,9 @@ public class FieldDialogForAddingValue extends Dialog {
 		
 		tableViewer.setContentProvider(new PropertyContentProvider());
 		tableViewer.setLabelProvider(new HiveFieldDialogLableProvider());
+		
+		fieldsDialogList=getSavedColumnData(fieldsMap);
+		
 		tableViewer.setInput(fieldsDialogList);
 		
 		CellEditor[] cellEditors= new CellEditor[fieldsMap.size()];
@@ -113,9 +123,17 @@ public class FieldDialogForAddingValue extends Dialog {
 		}
 		
 		tableViewer.setCellEditors(cellEditors);
+		
 		tableViewer.setData("Map", fieldsMap);
-		return container;
+		
+		//addErrorLabel(container);
+		
+		return container_1;
 	}
+	
+	
+	
+	
 	
 	
 	private String[] getColumnProperties(Set<String> keySet) {
@@ -130,12 +148,11 @@ public class FieldDialogForAddingValue extends Dialog {
 
 
 	protected void addButtonPanel(Composite container){
+		container_1.setLayout(new GridLayout(1, false));
 		
 		Composite btnsComposite = new Composite(container, SWT.NONE);
+		btnsComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		btnsComposite.setLayout(new GridLayout(2, false));
-		GridData gd_btnsComposite = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
-		gd_btnsComposite.heightHint = 35;
-		btnsComposite.setLayoutData(gd_btnsComposite);
 		
 		Button buttonAdd = new Button(btnsComposite, SWT.NONE);
 		buttonAdd.setBounds(0, 0, 75, 25);
@@ -152,7 +169,15 @@ public class FieldDialogForAddingValue extends Dialog {
 		
 	}
 	
-	
+	private void addErrorLabel(Composite container) {
+		 lblError = new Label(container, SWT.NONE);
+		 lblError.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
+		 lblError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		 lblError.setText(Messages.HIVE_FIELD_DIALOG_ERROR);
+		 lblError.setVisible(false);
+		 tableViewer.setData("Error", lblError);
+		
+	}
 	
 	private SelectionListener addButtonListner(TableViewer tableView) {
        SelectionListener listener = new SelectionListener() {
@@ -160,8 +185,8 @@ public class FieldDialogForAddingValue extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				
-				HivePartitionFieldDialog fieldDialog = 
-						new HivePartitionFieldDialog();
+				HivePartitionFields fieldDialog = 
+						new HivePartitionFields();
 				
 				List<String> rowFields=new ArrayList();
 				
@@ -173,6 +198,9 @@ public class FieldDialogForAddingValue extends Dialog {
 				tableViewer.refresh();
 				tableViewer.editElement(tableViewer.getElementAt(fieldsDialogList.size() - 1), 0);
 				
+				if (fieldsDialogList.size() >0) {
+					buttonDelete.setEnabled(true);
+				}
 			}
 
 			@Override
@@ -220,6 +248,17 @@ public class FieldDialogForAddingValue extends Dialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
+		
+		parent.setLayout(new GridLayout(1, false));
+		parent.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(1, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+		addErrorLabel(composite);
+		
+		
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,	true);
 		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
 	}
@@ -250,7 +289,7 @@ public class FieldDialogForAddingValue extends Dialog {
 			List<String> columnNameList= new ArrayList<>(fieldsMap.keySet()) ;
 			inputHivePartitionColumns = new ArrayList<>();
 							
-			for (HivePartitionFieldDialog hivePartitionFieldDialog  : fieldsDialogList) {
+			for (HivePartitionFields hivePartitionFieldDialog  : fieldsDialogList) {
 					
 				inputHivePartitionColumns.add(arrangeColumndata(new ArrayList(hivePartitionFieldDialog.getRowFields()),new ArrayList(columnNameList)));
 				
@@ -258,14 +297,20 @@ public class FieldDialogForAddingValue extends Dialog {
 			
 			fieldsMap.put(columnNameList.get(0), inputHivePartitionColumns);
 			
-			
-		}
-		
 		super.okPressed();
+		
+		}
 	}
 
 	private boolean validate() {
 		
+		for (HivePartitionFields hivePartitionFieldDialog : fieldsDialogList) {
+			if (hivePartitionFieldDialog.getRowFields().get(0).isEmpty()) {
+				
+				return false;
+			}
+			
+		}
 		return true;
 	}
 	
@@ -282,7 +327,7 @@ public class FieldDialogForAddingValue extends Dialog {
 			columnNameList.remove(0);
 			rowFields.remove(0);
 			
-			hivePartitionColumn.setInputHivePartitionColumn(arrangeColumndata(columnNameList,rowFields));
+			hivePartitionColumn.setInputHivePartitionColumn(arrangeColumndata(rowFields,columnNameList));
 					
 		}
 			
@@ -292,7 +337,42 @@ public class FieldDialogForAddingValue extends Dialog {
 		
 	}
 	
+	private List<HivePartitionFields> getSavedColumnData(Map<String, List<InputHivePartitionColumn>> fieldsMap){
+		
+		List<HivePartitionFields> fieldsDialogList = new ArrayList<>();
+		List<InputHivePartitionColumn> incomingList = fieldsMap.get(fieldsMap.keySet().iterator().next().toString());
+		
+		for (InputHivePartitionColumn inputHivePartitionColumn : incomingList) {
+			
+			HivePartitionFields tempObj = new HivePartitionFields();
+			tempObj.setRowFields(extractListFromObject(inputHivePartitionColumn,new ArrayList<String>(),fieldsMap.keySet()));
+			fieldsDialogList.add(tempObj);
+		}
+		
+		
+		return fieldsDialogList;
+	}
 	
+	
+	
+	private List<String> extractListFromObject(InputHivePartitionColumn hivePartitionColumn,List<String> temp, final Set<String> set){
+		
+		for (String colName : set) {
+			if (colName.equalsIgnoreCase(hivePartitionColumn.getName())) {
+
+				temp.add(hivePartitionColumn.getValue());
+			}
+		}  
+		
+		
+		if(null!=hivePartitionColumn.getInputHivePartitionColumn()){
+			extractListFromObject(hivePartitionColumn.getInputHivePartitionColumn(),temp, set);
+		}
+		
+		return temp;
+		
+		
+	}
 	
 	
 }

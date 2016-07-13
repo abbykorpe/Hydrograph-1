@@ -236,6 +236,9 @@ public class Messages extends NLS {
 	public static String FILE_NAME;
 	public static String SUBJOB_PATH;
 	
+	public static String HIVE_FIELD_DIALOG_ERROR;
+	public static String EMPTY_TARGET_FIELD_ERROR;
+	
 	
 	static {
 		// initialize resource bundle

@@ -1,6 +1,8 @@
-package hydrograph.ui.propertywindow.widgets.hiveInput.dialog;
+package hydrograph.ui.datastructure.property;
 
-public class InputHivePartitionColumn {
+import hydrograph.ui.common.cloneableinterface.IDataStructure;
+
+public class InputHivePartitionColumn  implements IDataStructure{
 	InputHivePartitionColumn inputHivePartitionColumn;
 	String name;
 	String value;
@@ -23,5 +25,12 @@ public class InputHivePartitionColumn {
 	}
 	public void setValue(String value) {
 		this.value = value;
+	}
+	
+	@Override
+	public Object clone() {
+		InputHivePartitionColumn column= new InputHivePartitionColumn();
+		//add clone related setters.
+		return column;
 	}
 }

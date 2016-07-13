@@ -19,9 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.Label;
 
 
 /**
@@ -68,7 +70,7 @@ public class HiveFieldDialogCellModifier implements ICellModifier {
 	 */
 	public Object getValue(Object element, String property) {
 		
-		HivePartitionFieldDialog hivePartitionFieldDialog=(HivePartitionFieldDialog)element;
+		HivePartitionFields hivePartitionFieldDialog=(HivePartitionFields)element;
 		List<String> list=hivePartitionFieldDialog.getRowFields();
 		return list.get(getIndex(property));
 		
@@ -93,14 +95,22 @@ public class HiveFieldDialogCellModifier implements ICellModifier {
 	 */
 	public void modify(Object element, String property, Object value) {
 		
+		Label errorLabel=(Label) viewer.getData("Error"); 
+		
 		if (element instanceof Item){
 			element = ((Item) element).getData();
 		}
 	
-		HivePartitionFieldDialog hivePartitionFieldDialog=(HivePartitionFieldDialog)element;
+		HivePartitionFields hivePartitionFieldDialog=(HivePartitionFields)element;
 		hivePartitionFieldDialog.getRowFields().set(getIndex(property), (String)value);
 		
-		
+		for(HivePartitionFields row:(List<HivePartitionFields>)viewer.getInput()){
+			if(StringUtils.isBlank(row.getRowFields().get(0))){
+				errorLabel.setVisible(true);
+				break;
+			}else
+				errorLabel.setVisible(false);
+		}
 		viewer.refresh();
 	}
 	

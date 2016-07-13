@@ -72,8 +72,8 @@ public abstract class Converter {
 		componentName = (String) properties.get(Constants.PARAM_NAME);
 		baseComponent.setId(componentName);
 		try {
-			baseComponent.setPhase(new BigInteger((String) properties
-					.get(Constants.PARAM_PHASE)));
+			baseComponent.setPhase((String) properties
+					.get(Constants.PARAM_PHASE));
 		} catch (NullPointerException | NumberFormatException nfe) {
 			logger.error("Phase id Empty or Invalid for : {}, {}",
 					new Object[]{baseComponent.getId(), nfe});

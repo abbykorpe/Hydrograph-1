@@ -14,6 +14,8 @@
  
 package hydrograph.ui.propertywindow.widgets.hiveInput.dialog;
 
+
+
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -21,7 +23,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
-
 /**
  * The Class PropertyLabelProvider.
  * 
@@ -54,7 +55,7 @@ public class HiveFieldDialogLableProvider implements ITableLabelProvider, ITable
 	 * @return String
 	 */
 	public String getColumnText(Object element, int columnIndex) {
-		HivePartitionFieldDialog property = (HivePartitionFieldDialog) element;
+		HivePartitionFields property = (HivePartitionFields) element;
 		
 			return property.getRowFields().get(columnIndex);
 	}

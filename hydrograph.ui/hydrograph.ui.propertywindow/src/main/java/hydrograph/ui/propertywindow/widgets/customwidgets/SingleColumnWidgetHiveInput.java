@@ -2,12 +2,12 @@ package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.InputHivePartitionColumn;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.hiveInput.dialog.FieldDialogWithAddValue;
-import hydrograph.ui.propertywindow.widgets.hiveInput.dialog.InputHivePartitionColumn;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -25,6 +25,13 @@ public class SingleColumnWidgetHiveInput extends SingleColumnWidget {
 			ComponentMiscellaneousProperties componentMiscProps,
 			PropertyDialogButtonBar propDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propDialogButtonBar);
+	}
+
+
+
+	protected void intialize(ComponentConfigrationProperty componentConfigProp) {
+		propertyName = componentConfigProp.getPropertyName();
+		setProperties(componentConfigProp.getPropertyName(), componentConfigProp.getPropertyValue());
 	}
 
 	

@@ -2,8 +2,8 @@ package hydrograph.ui.propertywindow.widgets.hiveInput.dialog;
 
 import java.util.List;
 
-public class HivePartitionFieldDialog {
-	
+public class HivePartitionFields {
+
 	List<String> rowFields;
 
 	public List<String> getRowFields() {
@@ -14,4 +14,5 @@ public class HivePartitionFieldDialog {
 		this.rowFields = rowFields;
 	}
 
+	
 }

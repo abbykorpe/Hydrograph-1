@@ -51,6 +51,10 @@ public class SingleColumnWidget extends AbstractWidget {
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propDialogButtonBar) {
 
 		super(componentConfigProp, componentMiscProps, propDialogButtonBar);
+		intialize(componentConfigProp);
+	}
+
+	protected void intialize(ComponentConfigrationProperty componentConfigProp) {
 		propertyName = componentConfigProp.getPropertyName();
 		setProperties(componentConfigProp.getPropertyName(), componentConfigProp.getPropertyValue());
 	}

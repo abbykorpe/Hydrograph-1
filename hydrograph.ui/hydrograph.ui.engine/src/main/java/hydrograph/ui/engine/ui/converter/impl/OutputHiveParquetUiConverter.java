@@ -99,9 +99,9 @@ public class OutputHiveParquetUiConverter extends OutputUiConverter {
 		if (typeHivePartitionFields != null) {
 
 			partitionKeySet = new ArrayList<String>();
-			for (FieldBasicType fieldName : typeHivePartitionFields.getField()) {
+			/*for (FieldBasicType fieldName : typeHivePartitionFields.getField()) {
 				partitionKeySet.add(fieldName.getName());
-			}
+			}*/
 		}
 		return partitionKeySet;
 	}
