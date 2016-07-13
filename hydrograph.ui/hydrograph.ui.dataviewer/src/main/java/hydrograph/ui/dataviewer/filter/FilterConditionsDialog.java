@@ -15,6 +15,7 @@ package hydrograph.ui.dataviewer.filter;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
+import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -62,6 +63,11 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
+/**
+ * Dialog for Data Viewer Filter conditions
+ * @author Bitwise
+ *
+ */
 public class FilterConditionsDialog extends Dialog {
 	private static final String VALUE1_TEXT_BOX = "value1TextBox";
 	private static final String VALUE2_TEXT_BOX = "value2TextBox";
@@ -71,7 +77,6 @@ public class FilterConditionsDialog extends Dialog {
 	private static final String ADD = "+";
 	public static final String GROUP_CHECKBOX = "groupCheckBox";
 	public static final String CONDITIONAL_OPERATORS = "conditionalOperators";
-	public static final String ROW_INDEX = "rowIndex";
 	
 	private static final String ADD_BUTTON_PANE = "addButtonPane";
 	private static final String REMOVE_BUTTON_PANE = "removeButtonPane";
@@ -90,7 +95,6 @@ public class FilterConditionsDialog extends Dialog {
 	private static final String CONDITIONAL_EDITOR = "conditional_editor";
 	private static final String VALUE1_EDITOR = "value1_editor";
 	private static final String VALUE2_EDITOR = "value2_editor";
-	
 	
 	private Map<String,String[]> typeBasedConditionalOperators = new HashMap<>();
 	private FilterConditions originalFilterConditions;
@@ -114,11 +118,8 @@ public class FilterConditionsDialog extends Dialog {
 	
 	private DataViewerAdapter dataViewerAdapter;
 	private DebugDataViewer debugDataViewer;
-	private static final String ORIGINAL="Original";
-	private static final String DOWNLOADED="Downloaded";
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConditionsDialog.class);
 
-	
 	Button localOkButton;
 	Button localApplyButton;
 	Button remoteOkButton;
@@ -164,38 +165,6 @@ public class FilterConditionsDialog extends Dialog {
 	
 	}
 	
-	public boolean ifSetLocalFilter(){
-		return retainLocalFilter.getRetainFilter();
-		
-	}
-	
-	public boolean ifSetRemoteFilter(){
-		
-		return retainRemoteFilter.getRetainFilter();
-	}
-	
-	
-	public List<Condition> getRemoteConditionsList() {
-		return remoteConditionsList;
-	}
-
-	public void setRemoteConditionsList(List<Condition> remoteConditionsList) {
-		this.remoteConditionsList = remoteConditionsList;
-	}
-
-	public FilterConditions getFilterConditions() {
-		return originalFilterConditions;
-	}
-	
-	public Map<Integer, List<List<Integer>>> getLocalGroupSelections(){
-		
-		return localGroupSelectionMap;
-	}
-	
-    public Map<Integer, List<List<Integer>>> getRemoteGroupSelections(){
-		
-		return remoteGroupSelectionMap;
-	}
 	/**
 	 * Create contents of the dialog.
 	 * @param parent
@@ -203,7 +172,7 @@ public class FilterConditionsDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
-		parent.getShell().setText("Viewer");
+		parent.getShell().setText(Messages.DATA_VIEWER + " " + Messages.FILTER);
 		container.setLayout(new GridLayout(1, false));
 		
 		Composite mainComposite = new Composite(container, SWT.NONE);
@@ -287,7 +256,7 @@ public class FilterConditionsDialog extends Dialog {
 
 		remoteApplyButton.addSelectionListener(FilterHelper.INSTANCE.getRemoteApplyButtonListener(originalFilterConditions, 
 		remoteConditionsList, retainRemoteFilter));
-		remoteOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(remoteConditionsList, fieldsAndTypes,remoteGroupSelectionMap,ORIGINAL,originalFilterConditions));
+		remoteOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(remoteConditionsList, fieldsAndTypes,remoteGroupSelectionMap,Messages.ORIGINAL,originalFilterConditions));
 		
 		if(retainRemoteFilter.getRetainFilter() == true){
 			retainButton.setSelection(true);
@@ -307,20 +276,20 @@ public class FilterConditionsDialog extends Dialog {
 			dummyTableViewerColumn.setLabelProvider(getDummyColumn(tableViewer,remoteConditionsList, key,remoteGroupSelectionMap));	
 		}
 		
-		TableViewerColumn relationalDropDownColumn = createTableColumns(tableViewer, "Relational Operator", 120);
+		TableViewerColumn relationalDropDownColumn = createTableColumns(tableViewer, Messages.RELATIONAL_OPERATOR, 120);
 		relationalDropDownColumn.setLabelProvider(getRelationalCellProvider(tableViewer, remoteConditionsList, true));
 		
 		
-		TableViewerColumn fieldNameDropDownColumn = createTableColumns(tableViewer, "Field Name", 150);
+		TableViewerColumn fieldNameDropDownColumn = createTableColumns(tableViewer, Messages.FIELD_NAME, 150);
 		fieldNameDropDownColumn.setLabelProvider(getFieldNameCellProvider(tableViewer, remoteConditionsList, true));
 		
-		TableViewerColumn conditionalDropDownColumn = createTableColumns(tableViewer, "Conditional Operator", 130);
+		TableViewerColumn conditionalDropDownColumn = createTableColumns(tableViewer, Messages.CONDITIONAL_OPERATOR, 130);
 		conditionalDropDownColumn.setLabelProvider(getConditionalCellProvider(tableViewer, remoteConditionsList, true));
 		
-		TableViewerColumn value1TextBoxColumn = createTableColumns(tableViewer, "Value1", 150);
+		TableViewerColumn value1TextBoxColumn = createTableColumns(tableViewer, Messages.VALUE1, 150);
 		value1TextBoxColumn.setLabelProvider(getValue1CellProvider(tableViewer, remoteConditionsList, true));
 		
-		TableViewerColumn value2TextBoxColumn = createTableColumns(tableViewer, "Value2", 150);
+		TableViewerColumn value2TextBoxColumn = createTableColumns(tableViewer, Messages.VALUE2, 150);
 		value2TextBoxColumn.setLabelProvider(getValue2CellProvider(tableViewer, remoteConditionsList, true));
 		
 		if(remoteConditionsList.isEmpty()){
@@ -401,7 +370,7 @@ public class FilterConditionsDialog extends Dialog {
 		
 		localOkButton = new Button(composite_4, SWT.NONE);
 		localOkButton.setText("OK");
-		localOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(localConditionsList, fieldsAndTypes,localGroupSelectionMap,DOWNLOADED,originalFilterConditions));
+		localOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(localConditionsList, fieldsAndTypes,localGroupSelectionMap, Messages.DOWNLOADED,originalFilterConditions));
 		
 		localApplyButton = new Button(composite_4, SWT.NONE);
 		localApplyButton.setText("Apply");
@@ -435,20 +404,20 @@ public class FilterConditionsDialog extends Dialog {
 			dummyTableViewerColumn.setLabelProvider(getDummyColumn(tableViewer,localConditionsList, key,localGroupSelectionMap));	
 		}
 		
-		TableViewerColumn relationalDropDownColumn = createTableColumns(tableViewer, "Relational Operator", 120);
+		TableViewerColumn relationalDropDownColumn = createTableColumns(tableViewer, Messages.RELATIONAL_OPERATOR, 120);
 		relationalDropDownColumn.setLabelProvider(getRelationalCellProvider(tableViewer, localConditionsList, false));
 		
 		
-		TableViewerColumn fieldNameDropDownColumn = createTableColumns(tableViewer, "Field Name", 150);
+		TableViewerColumn fieldNameDropDownColumn = createTableColumns(tableViewer, Messages.FIELD_NAME, 150);
 		fieldNameDropDownColumn.setLabelProvider(getFieldNameCellProvider(tableViewer, localConditionsList, false));
 		
-		TableViewerColumn conditionalDropDownColumn = createTableColumns(tableViewer, "Conditional Operator", 130);
+		TableViewerColumn conditionalDropDownColumn = createTableColumns(tableViewer, Messages.CONDITIONAL_OPERATOR, 130);
 		conditionalDropDownColumn.setLabelProvider(getConditionalCellProvider(tableViewer, localConditionsList, false));
 		
-		TableViewerColumn value1TextBoxColumn = createTableColumns(tableViewer, "Value1", 150);
+		TableViewerColumn value1TextBoxColumn = createTableColumns(tableViewer, Messages.VALUE1, 150);
 		value1TextBoxColumn.setLabelProvider(getValue1CellProvider(tableViewer, localConditionsList, false));
 
-		TableViewerColumn value2TextBoxColumn = createTableColumns(tableViewer, "Value2", 150);
+		TableViewerColumn value2TextBoxColumn = createTableColumns(tableViewer, Messages.VALUE2, 150);
 		value2TextBoxColumn.setLabelProvider(getValue2CellProvider(tableViewer, localConditionsList, false));
 		
 		if(localConditionsList.isEmpty()){
@@ -903,7 +872,7 @@ public class FilterConditionsDialog extends Dialog {
 		buttonPane.setLayout(new FillLayout());
 		final Text text = new Text(buttonPane, SWT.NONE);
 		text.addListener(SWT.Modify, listener);
-		text.setData(ROW_INDEX, tableViewer.getTable().indexOf(tableItem));
+		text.setData(FilterConstants.ROW_INDEX, tableViewer.getTable().indexOf(tableItem));
 		tableItem.setData(textBoxName, text);
 		tableItem.setData(valueTextPane, buttonPane);
 		//text.addModifyListener(FilterHelper.INSTANCE.getTextModifyListener());
@@ -924,7 +893,7 @@ public class FilterConditionsDialog extends Dialog {
 		buttonPane.setLayout(new FillLayout());
 		final CCombo combo = new CCombo(buttonPane, SWT.NONE);
 		combo.setItems(relationalOperators);
-		combo.setData(ROW_INDEX, tableViewer.getTable().indexOf(tableItem));
+		combo.setData(FilterConstants.ROW_INDEX, tableViewer.getTable().indexOf(tableItem));
 		tableItem.setData(comboName, combo);
 		tableItem.setData(comboPaneName, buttonPane);
 		combo.addSelectionListener(dropDownSelectionListener);
@@ -946,7 +915,7 @@ public class FilterConditionsDialog extends Dialog {
 		buttonPane.setLayout(new FillLayout());
 		final Button button = new Button(buttonPane, SWT.NONE);
 		//button.setText(columnName);
-		button.setData(ROW_INDEX, tableViewer.getTable().indexOf(tableItem));
+		button.setData(FilterConstants.ROW_INDEX, tableViewer.getTable().indexOf(tableItem));
 		tableItem.setData(columnName, button);
 		tableItem.setData(buttonPaneName, buttonPane);
 		button.addSelectionListener(buttonSelectionListener);
@@ -965,7 +934,7 @@ public class FilterConditionsDialog extends Dialog {
 		final Composite buttonPane = new Composite(tableViewer.getTable(), SWT.NONE);
 		buttonPane.setLayout(new FillLayout());
 		final Button button = new Button(buttonPane, SWT.CHECK);
-		button.setData(ROW_INDEX, tableViewer.getTable().indexOf(tableItem));
+		button.setData(FilterConstants.ROW_INDEX, tableViewer.getTable().indexOf(tableItem));
 		if(null != buttonSelectionListener){
 			button.addSelectionListener(buttonSelectionListener);
 		}
@@ -984,7 +953,7 @@ public class FilterConditionsDialog extends Dialog {
 	protected void createButtonsForButtonBar(Composite parent) {
 	}
 	
-private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer,final Button clearGroups,
+	private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer,final Button clearGroups,
 		final List<Condition> conditionsList,final Button btnAddGrp, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap) {
 		
 		SelectionListener listener = new SelectionListener() {
@@ -1036,20 +1005,20 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 		}
 		
 		
-		TableViewerColumn relationalDropDownColumn = createTableColumns(tableViewer, "Relational Operator", 120);
+		TableViewerColumn relationalDropDownColumn = createTableColumns(tableViewer, Messages.RELATIONAL_OPERATOR, 120);
 		relationalDropDownColumn.setLabelProvider(getRelationalCellProvider(tableViewer, conditionsList, true));
 		
 		
-		TableViewerColumn fieldNameDropDownColumn = createTableColumns(tableViewer, "Field Name", 150);
+		TableViewerColumn fieldNameDropDownColumn = createTableColumns(tableViewer, Messages.FIELD_NAME, 150);
 		fieldNameDropDownColumn.setLabelProvider(getFieldNameCellProvider(tableViewer, conditionsList, true));
 		
-		TableViewerColumn conditionalDropDownColumn = createTableColumns(tableViewer, "Conditional Operator", 130);
+		TableViewerColumn conditionalDropDownColumn = createTableColumns(tableViewer, Messages.CONDITIONAL_OPERATOR, 130);
 		conditionalDropDownColumn.setLabelProvider(getConditionalCellProvider(tableViewer, conditionsList, true));
 		
-		TableViewerColumn value1TextBoxColumn = createTableColumns(tableViewer, "Value1", 150);
+		TableViewerColumn value1TextBoxColumn = createTableColumns(tableViewer, Messages.VALUE1, 150);
 		value1TextBoxColumn.setLabelProvider(getValue1CellProvider(tableViewer, conditionsList, true));
 		
-		TableViewerColumn valueTextBoxValue2Column = createTableColumns(tableViewer, "Value2", 150);
+		TableViewerColumn valueTextBoxValue2Column = createTableColumns(tableViewer, Messages.VALUE2, 150);
 		valueTextBoxValue2Column.setLabelProvider(getValue2CellProvider(tableViewer, conditionsList, true));
 		
 		
@@ -1131,7 +1100,7 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 			public void widgetSelected(SelectionEvent e) {
 				if(conditionsList.size() > 1){
 					Button button = (Button) e.getSource();
-					int removeIndex = (int) button.getData(FilterConditionsDialog.ROW_INDEX);
+					int removeIndex = (int) button.getData(FilterConstants.ROW_INDEX);
 					
 					conditionsList.remove(removeIndex);				
 					dummyList.clear();
@@ -1272,6 +1241,39 @@ private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer
 			}
 		};
 		return listner;
+	}
+	
+	public boolean ifSetLocalFilter(){
+		return retainLocalFilter.getRetainFilter();
+		
+	}
+	
+	public boolean ifSetRemoteFilter(){
+		
+		return retainRemoteFilter.getRetainFilter();
+	}
+	
+	
+	public List<Condition> getRemoteConditionsList() {
+		return remoteConditionsList;
+	}
+
+	public void setRemoteConditionsList(List<Condition> remoteConditionsList) {
+		this.remoteConditionsList = remoteConditionsList;
+	}
+
+	public FilterConditions getFilterConditions() {
+		return originalFilterConditions;
+	}
+	
+	public Map<Integer, List<List<Integer>>> getLocalGroupSelections(){
+		
+		return localGroupSelectionMap;
+	}
+	
+    public Map<Integer, List<List<Integer>>> getRemoteGroupSelections(){
+		
+		return remoteGroupSelectionMap;
 	}
 }
 

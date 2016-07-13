@@ -69,7 +69,6 @@ public class FilterHelper {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterHelper.class);
 
 	public static final FilterHelper INSTANCE = new FilterHelper();
-	private static final String DOWNLOADED="Downloaded";
 	private DataViewerAdapter dataViewerAdapter;
 	private DebugDataViewer debugDataViewer;
 	private FilterConditionsDialog filterConditionsDialog;
@@ -114,7 +113,7 @@ public class FilterHelper {
 			@Override
 			public void handleEvent(Event event) {
 				Text text = (Text)event.widget;
-				int index = (int) text.getData(FilterConditionsDialog.ROW_INDEX);
+				int index = (int) text.getData(FilterConstants.ROW_INDEX);
 				Condition filterConditions = conditionsList.get(index);
 				filterConditions.setValue1(text.getText());
 				validateText(text, filterConditions.getFieldName(), fieldsAndTypes, filterConditions.getConditionalOperator());
@@ -131,7 +130,7 @@ public class FilterHelper {
 			@Override
 			public void handleEvent(Event event) {
 				Text text = (Text)event.widget;
-				int index = (int) text.getData(FilterConditionsDialog.ROW_INDEX);
+				int index = (int) text.getData(FilterConstants.ROW_INDEX);
 				Condition filterConditions = conditionsList.get(index);
 				filterConditions.setValue2(text.getText());
 				validateText(text, filterConditions.getFieldName(), fieldsAndTypes,filterConditions.getConditionalOperator());
@@ -167,7 +166,7 @@ public class FilterHelper {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				CCombo source = (CCombo) e.getSource();
-				int index = (int) source.getData(FilterConditionsDialog.ROW_INDEX);
+				int index = (int) source.getData(FilterConstants.ROW_INDEX);
 				Condition filterConditions = conditionsList.get(index);
 				String fieldName = source.getText();
 				filterConditions.setFieldName(fieldName);
@@ -201,7 +200,7 @@ public class FilterHelper {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				CCombo source = (CCombo) e.getSource();
-				int index = (int) source.getData(FilterConditionsDialog.ROW_INDEX);
+				int index = (int) source.getData(FilterConstants.ROW_INDEX);
 				Condition filterConditions = conditionsList.get(index);
 				String fieldName = source.getText();
 				filterConditions.setFieldName(fieldName);
@@ -277,7 +276,7 @@ public class FilterHelper {
 	
 	private void processConditionalOperator(CCombo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes,
 			String[] fieldNames, Button okButton, Button applyButton){
-		int index = (int) source.getData(FilterConditionsDialog.ROW_INDEX);
+		int index = (int) source.getData(FilterConstants.ROW_INDEX);
 		Condition filterConditions = conditionsList.get(index);
 		filterConditions.setConditionalOperator(source.getText());
 		validateCombo(source);
@@ -316,7 +315,7 @@ public class FilterHelper {
 	
 	private void processRelationalOperator(CCombo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes,
 			String[] fieldNames, Button okButton, Button applyButton){
-		int index = (int) source.getData(FilterConditionsDialog.ROW_INDEX);
+		int index = (int) source.getData(FilterConstants.ROW_INDEX);
 		Condition filterConditions = conditionsList.get(index);
 		filterConditions.setRelationalOperator(source.getText());
 		if(index != 0){
@@ -332,7 +331,7 @@ public class FilterHelper {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Button button = (Button) e.getSource();
-				int index = (int) button.getData(FilterConditionsDialog.ROW_INDEX);
+				int index = (int) button.getData(FilterConstants.ROW_INDEX);
 				conditionsList.add(index, new Condition());
 				dummyList.clear();
 				dummyList.addAll(cloneList(conditionsList));
@@ -443,8 +442,7 @@ public class FilterHelper {
 				m.appendTail(temp);
 				buffer = new StringBuffer(temp);
 				
-				if(dataset.equalsIgnoreCase(DOWNLOADED))
-				{	
+				if(dataset.equalsIgnoreCase(Messages.DOWNLOADED)){	
 					if(!originalFilterConditions.getRetainRemote()){
 						originalFilterConditions.setRemoteCondition("");
 						originalFilterConditions.getLocalConditions().clear();
@@ -456,8 +454,7 @@ public class FilterHelper {
 					showLocalFilteredData(StringUtils.trim(buffer.toString()));
 					debugDataViewer.setLocalCondition(localCondition);
 				}
-				else
-				{
+				else{
 					if(!originalFilterConditions.getRetainLocal()){
 						originalFilterConditions.setLocalCondition("");
 						originalFilterConditions.getLocalConditions().clear();
@@ -858,8 +855,6 @@ public class FilterHelper {
 		return isRemoveColumn;
 	}
 			
-			
-		
 	public void reArrangeGroups(TreeMap<Integer, List<List<Integer>>> groupSelectionMap,List<Integer> selectionList) {
 		List<Integer> tempList = new ArrayList<>();
 		int lastKey=groupSelectionMap.lastKey();

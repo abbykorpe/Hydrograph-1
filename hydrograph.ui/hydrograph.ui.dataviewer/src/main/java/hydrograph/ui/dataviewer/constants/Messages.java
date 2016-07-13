@@ -84,7 +84,17 @@ public class Messages extends NLS{
 	public static String UNABLE_TO_FETCH_FILTER_FILE;
 	public static String GROUP_CLAUSE_ALREADY_EXISTS;
 	public static String CANNOT_CREATE_GROUP_CLAUSE;
+	public static String DATA_VIEWER;
+	public static String FILTER;
 		
+	public static String VALUE2;
+	public static String VALUE1;
+	public static String CONDITIONAL_OPERATOR;
+	public static String FIELD_NAME;
+	public static String RELATIONAL_OPERATOR;
+	public static String ORIGINAL;
+	public static String DOWNLOADED;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
