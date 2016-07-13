@@ -19,7 +19,8 @@ import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
 import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
-
+import hydrograph.ui.dataviewer.constants.StatusConstants;
+import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -499,9 +500,11 @@ public class FilterHelper {
 		try {
 			dataViewerAdapter.setFilterCondition(buffer);
 			dataViewerAdapter.initializeTableData();
+			int noOfFilteredRows=dataViewerAdapter.getFileData().size();
+			dataViewerAdapter.setRowCount(Long.parseLong(String.valueOf(noOfFilteredRows)));
+			debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.SUCCESS));
 			debugDataViewer.getDataViewLoader().updateDataViewLists();
 			debugDataViewer.getDataViewLoader().reloadloadViews();
-			int noOfFilteredRows=dataViewerAdapter.getFileData().size();
 			int pageSize=debugDataViewer.getViewDataPreferences().getPageSize();
 			if (noOfFilteredRows < pageSize) {
 				debugDataViewer.getStatusManager().enableNextPageButton(false);
@@ -922,4 +925,7 @@ public class FilterHelper {
 			  }
 		 }
 	 }
+
+ 
 }
+

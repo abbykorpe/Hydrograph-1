@@ -233,6 +233,16 @@ public class DataViewerAdapter {
 	public Long getRowCount() {
 		return rowCount;
 	}
+	
+	/**
+	 * 
+	 * Set number of rows 
+	 * 
+	 * @return number of pages
+	 */
+	public void setRowCount(Long rowCount) {
+		this.rowCount = rowCount;
+	}
 
 	/**
 	 * 
