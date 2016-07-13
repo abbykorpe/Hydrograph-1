@@ -85,6 +85,7 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 63.#..   [Akhilesh Joshi] Retain checkbox is not enabling ok apply button 
 64.#780  [Nitin Gupta]Join component allows only 2 unused ports to be connected
 
+65.#782  [Rakesh Kanchalwar] Filter Window: Conditional operator is not getting refreshed upon selecting different data type fields 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

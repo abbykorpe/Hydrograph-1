@@ -59,6 +59,11 @@ import org.slf4j.Logger;
 
 import com.google.gson.Gson;
 
+/**
+ * Helper class for Filter Window
+ * @author Bitwise
+ *
+ */
 public class FilterHelper {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterHelper.class);
 
@@ -169,8 +174,12 @@ public class FilterHelper {
 					String fieldType = fieldsAndTypes.get(fieldName);
 					TableItem item = tableViewer.getTable().getItem(index);
 					CCombo conditionalCombo = (CCombo) item.getData(FilterConditionsDialog.CONDITIONAL_OPERATORS);
-					conditionalCombo.setText("");
-					conditionalCombo.setItems(FilterHelper.INSTANCE.getTypeBasedOperatorMap().get(fieldType));
+					String[] items = FilterHelper.INSTANCE.getTypeBasedOperatorMap().get(fieldType);
+					//if the current item is not in the item list, reset it
+					if(!Arrays.asList(items).contains(conditionalCombo.getText())){
+						conditionalCombo.setText("");
+					}
+					conditionalCombo.setItems(items);
 					new AutoCompleteField(conditionalCombo, new CComboContentAdapter(), conditionalCombo.getItems());
 				}
 				validateCombo(source);
@@ -236,7 +245,6 @@ public class FilterHelper {
 	}
 	
 	private TableItem getTableItem(CCombo source) {
-		int rowIndex = (int) source.getData(FilterConstants.ROW_INDEX);
 		TableEditor tableEditor = (TableEditor) source.getData(FilterConstants.CONDITIONAL_EDITOR);
 		TableItem tableItem = tableEditor.getItem();
 		return tableItem;
@@ -461,8 +469,6 @@ public class FilterHelper {
 				}
 				filterConditionsDialog.close();
 			}
-
-			
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {}
@@ -589,8 +595,6 @@ public class FilterHelper {
 		}
 	}
 
-
-
 	public List<Condition> cloneList(List<Condition> conditionsList) {
 		List<Condition> tempList = new ArrayList<>();
 		for (Condition condition : conditionsList) {
@@ -660,16 +664,16 @@ public class FilterHelper {
    
 	public SelectionAdapter getAddAtEndListener(final TableViewer tableViewer, final List<Condition> conditionList, 
 			final List<Condition> dummyList) {
-        return new SelectionAdapter() {
-              @Override
-              public void widgetSelected(SelectionEvent e) {
-                    conditionList.add(conditionList.size(), new Condition());
-                    dummyList.clear();
-    				dummyList.addAll(cloneList(conditionList));
-                    tableViewer.refresh();
-              }
-        };
-  }
+	    return new SelectionAdapter() {
+	          @Override
+	          public void widgetSelected(SelectionEvent e) {
+	                conditionList.add(conditionList.size(), new Condition());
+	                dummyList.clear();
+					dummyList.addAll(cloneList(conditionList));
+	                tableViewer.refresh();
+	          }
+	    };
+	}
 	
 	public SelectionListener checkButtonListener(final TableViewer tableViewer,
 			final List<Condition> conditionsList, final Button btnAddGrp) {
@@ -687,19 +691,14 @@ public class FilterHelper {
 					   if(button.getSelection()){
 					     count++;
 					     selectionPattern.add(tableViewer.getTable().indexOf(tableItem));				     
-					    
 					   }
 				   }
-				   
 				if(count>=2){
 					if(validateCheckSequence(selectionPattern)){
-					 
 						isEnabled=true;
 					}						
 				}
-				
 				btnAddGrp.setEnabled(isEnabled);	
-		
 			}
 
 			@Override
@@ -713,128 +712,76 @@ public class FilterHelper {
 	
 	
 	private boolean validateCheckSequence(List<Integer> selectionPattern){
-		
-		  boolean retval=true;
-		  
-		  for(int i=0;i<selectionPattern.size()-1;i++){
-			  
-			  if((selectionPattern.get(i+1)-selectionPattern.get(i))>1){
-				 
-				  retval=false;
-				  break;
-				  
-			  }
-			  
-		  }
-			
-			
-			
-			return retval;
+		boolean retval=true;
+		for(int i=0;i<selectionPattern.size()-1;i++){
+			if((selectionPattern.get(i+1)-selectionPattern.get(i))>1){
+				retval=false;
+				break;
+			}
 		}
+		return retval;
+	}
 	
 	public boolean validatUserGroupSelection(Map<Integer,List<List<Integer>>> groupSelectionMap,List<Integer> selectionList){
-		
 		boolean retValue=true;
-		
 		for (int key : groupSelectionMap.keySet()) {
-
 			List<List<Integer>> groups = groupSelectionMap.get(key);
-
 			for (List<Integer> grp : groups) {
-
 				if (selectionList.size() == grp.size()) {
-
 					if (!ListUtils.isEqualList(selectionList, grp) && ListUtils.intersection(selectionList, grp).size()==0) {
-
 						retValue = true;
-						
 					}else if(ListUtils.isEqualList(selectionList, grp)){
-						
 						if (createErrorDialog(Messages.GROUP_CLAUSE_ALREADY_EXISTS).open() == SWT.OK) {
 							retValue=false;
 							break;
 						}
-											
 					}else if(ListUtils.intersection(selectionList, grp).size() > 0){
-													
 						if (createErrorDialog(Messages.CANNOT_CREATE_GROUP_CLAUSE).open() == SWT.OK) {
 							retValue=false;
 							break;
 						}
-						
-						}
-
-				
-					
+					}
 				}else {
-
 					if (ListUtils.isEqualList(ListUtils.intersection(selectionList, grp), grp)) {
-
 						retValue = true;
-
 					} else if(ListUtils.isEqualList(ListUtils.intersection(grp,selectionList),selectionList)){
-					    	
 					    	retValue=true;
-					    	
 				   }else if (ListUtils.intersection(selectionList, grp).size() == 0) {
-
 						retValue = true;
-						
-						
 					}else{
-						
 						if (createErrorDialog(Messages.CANNOT_CREATE_GROUP_CLAUSE).open() == SWT.OK) {
-						
-						retValue=false;
-						break;
+							retValue=false;
+							break;
 						}
 					}
-
 				}
-
 			}
-			
-			if(!retValue){ break; }
-
+			if(!retValue){
+				break; 
+			}
 		}
-		
-		
-		
-		
 		return retValue;
-				
 	}
 	
 	
 	public boolean isColumnModifiable(TreeMap<Integer,List<List<Integer>>> groupSelectionMap,List<Integer> selectionList){
-		
 		boolean retValue = false;
-
 		for(int i=groupSelectionMap.lastKey();i>=0;i--){
-			
 			retValue=true;
-			
 			List<List<Integer>> groups = new ArrayList<>(groupSelectionMap.get(i));
-		  
 			for (List<Integer> grp : groups) {
-			
 				if (ListUtils.intersection(selectionList, grp).size()>0) {
-				
 					retValue=false;
-												
 				}
 		    }
 		
 			if(retValue){
-			groupSelectionMap.get(i).add(selectionList);
-			break;
+				groupSelectionMap.get(i).add(selectionList);
+				break;
 			}
 		}
-		
 		return retValue;
-			
 	}
-	
 	
 	public MessageBox createErrorDialog(String errorMessage) {
 		MessageBox messageBox = new MessageBox(new Shell(), SWT.ERROR | SWT.OK);
@@ -843,11 +790,8 @@ public class FilterHelper {
 		return messageBox;
 	}
 	
-	
 	public Color getColor(int colorIndex){
-		
-		Map<Integer,Color> colorMap = new HashMap();
-		
+		Map<Integer,Color> colorMap = new HashMap<>();
 		colorMap.put(0, new Color(null,255,196,196)); // Light yellow
 		colorMap.put(1, new Color(null,176,255,176)); //Light green
 		colorMap.put(2, new Color(null,149,255,255)); //Light blue
@@ -858,203 +802,123 @@ public class FilterHelper {
 	   return colorMap.get(colorIndex);
 	}
 	
-	public boolean refreshGroupSelections(TableViewer tableViewer, int indexOfRow,String addOrDeleteRow,TreeMap<Integer,List<List<Integer>>> groupSelectionMap){
-		
-		    boolean isRemoveColumn = false;
-			
-			for(int key:groupSelectionMap.keySet()){
-				
-			  List<List<Integer>> groups = groupSelectionMap.get(key);
-
-			  boolean isNewIndexAddedorRemoved=false;
-				
-			  for (List<Integer> grp : groups) {
-					
-				 
-				  List<Integer> tempGrp= new ArrayList<>(grp);
-					
-												
-							
-							if("ADD".equalsIgnoreCase(addOrDeleteRow)){
-
-								for (int i = 0; i < grp.size(); i++) {
-									
-									if(grp.get(i)>=indexOfRow){
-									    										
-										grp.set(i, grp.get(i) + 1);
-									}
-								
-								}
-							 if(tempGrp.contains(indexOfRow)){
-								if(!isNewIndexAddedorRemoved && tempGrp.get(0)!=indexOfRow){//other than starting index then add row.
-									
-									grp.add(tempGrp.indexOf(indexOfRow),indexOfRow);
-									isNewIndexAddedorRemoved=true;
-									
-								   }
-								 }
-								
-							}else if("DEL".equalsIgnoreCase(addOrDeleteRow)){
-								
-								if(tempGrp.contains(indexOfRow)){
-									
-								if(!isNewIndexAddedorRemoved){//other than starting index then add row.
-									
-									grp.remove(grp.indexOf(indexOfRow));
-									
-																		
-									if(grp.size()==1){
-										
-										grp.clear();
-									}
-									
-									if(reArrangeGroupsAfterDeleteRow(groupSelectionMap, grp)&& groupSelectionMap.lastKey()!=key){
-										
-										grp.clear();
-									}
-									List tempList=new ArrayList<>(); 
-											for (List lst : groupSelectionMap.get(key)) {
-												tempList.addAll(lst);
-											}
-											
-											if(tempList.isEmpty()){
-												
-												isRemoveColumn=true;
-											}
-											
-										
-									}
-									isNewIndexAddedorRemoved=true;
-									
-								 }
-								
-								
-								for (int i = 0; i < grp.size(); i++) {
-									
-									if(grp.get(i)>=indexOfRow){
-									    										
-										grp.set(i, grp.get(i) -1);
-									}
-								
-								}
+	public boolean refreshGroupSelections(TableViewer tableViewer, int indexOfRow,String addOrDeleteRow,
+		TreeMap<Integer,List<List<Integer>>> groupSelectionMap){
+		boolean isRemoveColumn = false;
+		for(int key:groupSelectionMap.keySet()){
+			List<List<Integer>> groups = groupSelectionMap.get(key);
+			boolean isNewIndexAddedorRemoved=false;
+			for (List<Integer> grp : groups) {
+				List<Integer> tempGrp= new ArrayList<>(grp);
+				if("ADD".equalsIgnoreCase(addOrDeleteRow)){
+					for (int i = 0; i < grp.size(); i++) {
+						if(grp.get(i)>=indexOfRow){
+							grp.set(i, grp.get(i) + 1);
+						}
+					}
+					if(tempGrp.contains(indexOfRow)){
+						if(!isNewIndexAddedorRemoved && tempGrp.get(0)!=indexOfRow){//other than starting index then add row.
+							grp.add(tempGrp.indexOf(indexOfRow),indexOfRow);
+							isNewIndexAddedorRemoved=true;
+						}
+					}
+				}else if("DEL".equalsIgnoreCase(addOrDeleteRow)){
+					if(tempGrp.contains(indexOfRow)){
+						if(!isNewIndexAddedorRemoved){//other than starting index then add row.
+							grp.remove(grp.indexOf(indexOfRow));
+							if(grp.size()==1){
+								grp.clear();
 							}
-						 
-							tempGrp.clear();	
+							if(reArrangeGroupsAfterDeleteRow(groupSelectionMap, grp)&& groupSelectionMap.lastKey()!=key){
+								grp.clear();
+							}
+							List tempList=new ArrayList<>(); 
+							for (List lst : groupSelectionMap.get(key)) {
+								tempList.addAll(lst);
+							}
+							if(tempList.isEmpty()){
+								isRemoveColumn=true;
+							}
+						}
+						isNewIndexAddedorRemoved=true;
+					}
+					for (int i = 0; i < grp.size(); i++) {
+						if(grp.get(i)>=indexOfRow){
+							grp.set(i, grp.get(i) -1);
+						}
+					}
 				}
-				
+				tempGrp.clear();	
 			}
-			
-			
-			return isRemoveColumn;
 		}
+		return isRemoveColumn;
+	}
 			
 			
 		
 	public void reArrangeGroups(TreeMap<Integer, List<List<Integer>>> groupSelectionMap,List<Integer> selectionList) {
-		
-	
-		
 		List<Integer> tempList = new ArrayList<>();
 		int lastKey=groupSelectionMap.lastKey();
 		for (int i = lastKey; i >= 0; i--) {
-
 			List<List<Integer>> groups =groupSelectionMap.get(i);
-
 			for (int j=0; j<=groups.size()-1;j++) {
-
-				if (selectionList.size()< groups.get(j).size()&& ListUtils.intersection(selectionList, groups.get(j)).size() > 0) {
-					
-					
+				if (selectionList.size()< groups.get(j).size()&& 
+						ListUtils.intersection(selectionList, groups.get(j)).size() > 0) {
 					tempList.addAll(groups.get(j));
 					groups.get(j).clear();
 					groups.set(j,new ArrayList<Integer>(selectionList));					
 					selectionList.clear();
 					selectionList.addAll(tempList);
-					
-				
+				}
+				tempList.clear();
 			}
-			tempList.clear();
-		  }
 		}
 	}
 	
-	public boolean reArrangeGroupsAfterDeleteRow(
-			TreeMap<Integer, List<List<Integer>>> groupSelectionMap,
+	public boolean reArrangeGroupsAfterDeleteRow(TreeMap<Integer, List<List<Integer>>> groupSelectionMap,
 			List<Integer> selectionList) {
-
 		boolean retValue = false;
-
 		int lastKey = groupSelectionMap.lastKey();
 		int count = 0;
-
 		for (int i = lastKey; i >= 0; i--) {
-
 			List<List<Integer>> groups = groupSelectionMap.get(i);
-
 			for (int j = 0; j <= groups.size() - 1; j++) {
-
-				if (selectionList.size() == groups.get(j).size()
-						&& ListUtils.isEqualList(selectionList, groups.get(j))) {
-
+				if (selectionList.size() == groups.get(j).size() && ListUtils.isEqualList(selectionList, groups.get(j))) {
 					count++;
-
 					if (count >= 2) {
 						retValue = true;
 					}
-
 				}
-
 			}
-
 		}
 		return retValue;
 	}
-	
-	
-	
+
 	public void disposeAllColumns(TableViewer tableViewer){
-		 TableColumn[] columns = tableViewer.getTable().getColumns();
-		 TableItem[] items = tableViewer.getTable().getItems();
-		 for (int i = 0; i < items.length; i++) {
-			 items[i].dispose();
-		 }
-	    
-	    for (TableColumn tc : columns) {
-	    	tc.dispose();
+		TableColumn[] columns = tableViewer.getTable().getColumns();
+		TableItem[] items = tableViewer.getTable().getItems();
+		for (int i = 0; i < items.length; i++) {
+			items[i].dispose();
+		}
+		for (TableColumn tc : columns) {
+			tc.dispose();
 		}
 	}	
 	 
 	 public void reArrangeGroupColumns(TreeMap<Integer, List<List<Integer>>> groupSelectionMap){
-		 
-		 TreeMap<Integer, List<List<Integer>>> tempMap = new TreeMap(groupSelectionMap);
-		 	
+		 Map<Integer, List<List<Integer>>> tempMap = new TreeMap<Integer, List<List<Integer>>>(groupSelectionMap);
 		 for(int key:tempMap.keySet()){
-				
 			  List<List<Integer>> groups = tempMap.get(key);
-	
-			   List tempList=new ArrayList<>();
-				
+			  List<Integer> tempList=new ArrayList<>();
 			  for (List<Integer> grp : groups) {
-				
 				  	tempList.addAll(grp);
-					
-			  	}
-			  
-			  if(tempList.isEmpty()){
-				 
-				for(int i=key ;i<tempMap.size()-1;i++){
-					
-					groupSelectionMap.put(i, tempMap.get(i+1));
-					
-				}
-				
-				groupSelectionMap.remove(groupSelectionMap.lastKey());
-			  
 			  }
-			  
-			  
-		 	}
-		 
+			  if(tempList.isEmpty()){
+				  for(int i=key ;i<tempMap.size()-1;i++){
+					  groupSelectionMap.put(i, tempMap.get(i+1));
+				  }
+				  groupSelectionMap.remove(groupSelectionMap.lastKey());
+			  }
+		 }
 	 }
- 
 }
