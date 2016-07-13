@@ -108,6 +108,10 @@ public class ReloadAction extends Action {
 					closeExistingDebugFileConnection();
 					if(lastDownloadedFileSize!=viewDataPreferences.getFileSize()|| ifFilterReset){
 						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize(),true);	
+
+
+						
+
 					}else{
 						SelectColumnAction selectColumnAction =(SelectColumnAction) debugDataViewer.getActionFactory().getAction(SelectColumnAction.class.getName());
 						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize(),false);
