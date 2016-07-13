@@ -12,6 +12,8 @@
  ******************************************************************************/
 package hydrograph.ui.dataviewer.filter;
 
+import org.apache.commons.lang.StringUtils;
+
 public class Condition{
 	private String fieldName;
 	private String relationalOperator;
@@ -74,9 +76,10 @@ public class Condition{
 
 	@Override
 	public String toString() {
+		String value2TextBoxValue = StringUtils.isNotBlank(value2)== true ?  ", value2=" + value2  : "";
 		return "FilterConditions [fieldName=" + fieldName
 				+ ", relationalOperator=" + relationalOperator
 				+ ", conditionalOperator=" + conditionalOperator
-				+ ", value=" + value1 + "]";
+				+ ", value1=" + value1 + value2TextBoxValue;
 	}
 }

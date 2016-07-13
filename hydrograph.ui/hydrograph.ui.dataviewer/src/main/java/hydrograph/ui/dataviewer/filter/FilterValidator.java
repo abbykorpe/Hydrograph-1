@@ -57,6 +57,12 @@ public class FilterValidator {
 				logger.trace("Field name at {} is blank" + index);
 				return false;
 			}
+			if (FilterConstants.BETWEEN.equalsIgnoreCase(conditional)) {
+				if (StringUtils.isBlank(fieldName) || StringUtils.isBlank(conditional) || StringUtils.isBlank(value2)) {
+					logger.trace("Field name at {} is blank" + index);
+					return false;
+				}
+			}
 			
 			if(index != 0 && !relationalList.contains(relationalOperator)){
 				logger.trace("Relational Operator at {} is incorrect", index);
@@ -76,6 +82,13 @@ public class FilterValidator {
 			if(StringUtils.isNotBlank(value1)){
 				if(!validateDataBasedOnTypes(type, value1, condition.getConditionalOperator())){
 					return false;
+				}
+			}
+			if (condition.getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
+				if (StringUtils.isNotBlank(value2)) {
+					if (!validateDataBasedOnTypes(type, value2, condition.getConditionalOperator())) {
+						return false;
+					}
 				}
 			}
 		}
@@ -98,8 +111,13 @@ public class FilterValidator {
 						validate(type, tokenizer.nextToken());
 					}
 				}
+				else {
+					validate(type, value);
+				}
 			}
-			
+			else if (FilterConstants.BETWEEN.equalsIgnoreCase(conditionalOperator)) {
+				validate(type, value);
+			}
 		}
 		catch(Exception exception){
 			logger.trace("value can not be converted to {}", new Object[]{type});

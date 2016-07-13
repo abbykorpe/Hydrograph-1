@@ -532,14 +532,7 @@ public class FilterConditionsDialog extends Dialog {
 										fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
 					}
 					text.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getValue2());
-					for (Condition condition : conditionsList) {
-						if (condition.getConditionalOperator()
-								.equalsIgnoreCase(FilterConstants.BETWEEN)) {
-							text.setVisible(true);
-						} else {
-							text.setVisible(false);
-						}
-					}
+					enableAndDisableValue2TextBox(dummyList, tableViewer.getTable().indexOf(item), text);
 					item.addDisposeListener(new DisposeListener() {
 						
 						@Override
@@ -558,17 +551,18 @@ public class FilterConditionsDialog extends Dialog {
 				} else {
 					Text text = (Text) item.getData(VALUE2_TEXT_BOX);
 					text.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getValue2());
-					for (Condition condition : conditionsList) {
-						if (condition.getConditionalOperator()
-								.equalsIgnoreCase(FilterConstants.BETWEEN)) {
-							text.setVisible(true);
-						} else {
-							text.setVisible(false);
-						}
-					}
+					enableAndDisableValue2TextBox(dummyList, tableViewer.getTable().indexOf(item), text);
 				}
 			}
 		};
+	}
+	
+	private void enableAndDisableValue2TextBox(final List<Condition> conditionsList, int index, Text text) {
+		if (conditionsList.get(index).getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
+			text.setVisible(true);
+		} else {
+			text.setVisible(false);
+		}
 	}
 
 	private CellLabelProvider getConditionalCellProvider(final TableViewer tableViewer, final List<Condition> conditionsList,
