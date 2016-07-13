@@ -89,7 +89,8 @@ public class FilterHelper {
 				FilterConstants.GREATER_THAN_EQUALS,FilterConstants.FIELD_GREATER_THAN_EQUALS,
 				FilterConstants.NOT_EQUALS,FilterConstants.FIELD_NOT_EQUALS,
 				FilterConstants.EQUALS,FilterConstants.FIELD_EQUALS,
-				FilterConstants.IN, FilterConstants.NOT_IN};
+				FilterConstants.IN, FilterConstants.NOT_IN,
+				FilterConstants.BETWEEN};
 
 		typeBasedConditionalOperators.put(FilterConstants.TYPE_STRING, new String[]{FilterConstants.NOT_EQUALS, FilterConstants.EQUALS, 
 				FilterConstants.LIKE, FilterConstants.NOT_LIKE, FilterConstants.IN, FilterConstants.NOT_IN}); 
