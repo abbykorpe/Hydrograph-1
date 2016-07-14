@@ -18,11 +18,7 @@ import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
-
 import hydrograph.ui.common.util.ParameterUtil;
-
-import hydrograph.ui.common.util.OSValidator;
-
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
@@ -77,12 +73,14 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -125,7 +123,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -1497,7 +1494,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 private void syncInternallyPropagatedSchema(){
 	Schema schema =getSchemaForInternalPropagation();
-	schemaGridRowList=new ArrayList<>(schema.getGridRow());
+	Set<GridRow> set = new HashSet<>(schema.getGridRow());
+	schemaGridRowList = new ArrayList<>(set);
 	ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
 	eLTDetails.setGrids(schemaGridRowList);
 	tableViewer.setInput(schemaGridRowList);
