@@ -86,6 +86,8 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 64.#780  [Nitin Gupta]Join component allows only 2 unused ports to be connected
 65.#782  [Rakesh Kanchalwar] Filter Window: Conditional operator is not getting refreshed upon selecting different data type fields 
 66.#786  [Ashika Holkar] View Data Filter : For Downloaded Dataset,Incorrect No. of records are Displayed in Bottom of View Data Window
+67.#799  [Nitin Gupta]Copy Paste Functionality is not working on job canvas. 
+
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
