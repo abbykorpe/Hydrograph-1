@@ -497,15 +497,14 @@ public class FilterHelper {
 		try {
 			dataViewerAdapter.setFilterCondition(buffer);
 			dataViewerAdapter.initializeTableData();
-			int noOfFilteredRows=dataViewerAdapter.getFileData().size();
-			dataViewerAdapter.setRowCount(Long.parseLong(String.valueOf(noOfFilteredRows)));
+			Long noOfFilteredRows=dataViewerAdapter.getNoOfFilteredRows();
+			dataViewerAdapter.setRowCount(noOfFilteredRows);
 			debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.SUCCESS));
 			debugDataViewer.getDataViewLoader().updateDataViewLists();
 			debugDataViewer.getDataViewLoader().reloadloadViews();
 			int pageSize=debugDataViewer.getViewDataPreferences().getPageSize();
 			if (noOfFilteredRows < pageSize) {
 				debugDataViewer.getStatusManager().enableNextPageButton(false);
-				debugDataViewer.getStatusManager().updatePageNumberDisplayPanelIfFilteredDataSizeIsLessthanPageSize();
 			} else {
 				debugDataViewer.getStatusManager().enableNextPageButton(true);
 			}
