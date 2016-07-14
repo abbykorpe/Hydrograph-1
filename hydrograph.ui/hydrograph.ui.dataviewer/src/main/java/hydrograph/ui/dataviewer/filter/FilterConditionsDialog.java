@@ -1066,6 +1066,11 @@ public class FilterConditionsDialog extends Dialog {
 					dummyList.addAll(FilterHelper.INSTANCE.cloneList(conditionsList));
 					boolean isRemoveAllColumns = FilterHelper.INSTANCE.refreshGroupSelections(tableViewer,removeIndex, "DEL", groupSelectionMap);
 					
+					TableItem[] items = tableViewer.getTable().getItems();
+					items[removeIndex].dispose();
+					FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
+					redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap);
+					
 					if(isRemoveAllColumns){
 						FilterHelper.INSTANCE.reArrangeGroupColumns(groupSelectionMap);
 						FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
