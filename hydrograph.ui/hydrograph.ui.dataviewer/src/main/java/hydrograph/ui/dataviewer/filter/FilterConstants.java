@@ -12,6 +12,11 @@
  ******************************************************************************/
 package hydrograph.ui.dataviewer.filter;
 
+/**
+ * Constants class for Data Viewer Filter Window 
+ * @author Bitwise
+ *
+ */
 public class FilterConstants {
 	public static final String DELIM_COMMA = ",";
 	public static final String TYPE_BOOLEAN = "java.lang.Boolean";

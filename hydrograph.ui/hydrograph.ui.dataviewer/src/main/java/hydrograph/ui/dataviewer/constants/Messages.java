@@ -25,8 +25,6 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS{
 	private static final String BUNDLE_NAME = "resources.messages";
 
-	
-	
 	/*view data preferences*/
 	public static String INTEGER_FIELD_VALIDATION;
 	public static String FILE_INTEGER_FIELD_VALIDATION;
@@ -84,7 +82,29 @@ public class Messages extends NLS{
 	public static String UNABLE_TO_FETCH_FILTER_FILE;
 	public static String GROUP_CLAUSE_ALREADY_EXISTS;
 	public static String CANNOT_CREATE_GROUP_CLAUSE;
+	public static String DATA_VIEWER;
+	public static String FILTER;
 		
+	public static String VALUE2;
+	public static String VALUE1;
+	public static String CONDITIONAL_OPERATOR;
+	public static String FIELD_NAME;
+	public static String RELATIONAL_OPERATOR;
+	public static String ORIGINAL;
+	public static String DOWNLOADED;
+	
+	public static String RETAIN_LOCAL_FILTER;
+	public static String RETAIN_REMOTE_FILTER;
+	public static String CLEAR_GROUPS;
+	public static String DOWNLOADED_DATASET;
+	public static String CLEAR;
+	public static String CANCEL2;
+	public static String APPLY;
+	public static String OK2;
+	public static String CREATE_GROUP;
+	public static String ADD_ROW_AT_END;
+	public static String ORIGINAL_DATASET;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

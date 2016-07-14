@@ -26,7 +26,7 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 4. #618  [Nitin Gupta] STOP button remains enabled even after complete job execution   
 5. #569  [Nitin Gupta] Job is getting locked if user close console and job window while job is running (Current production)
 6. #554  [Nitin Gupta] When user clicks on canvas while job run, Run, Debug and Remove watcher buttons are getting enabled].
-7. #583  [Nitin Gupta] Import Job: Schema and File Path of Input Component is Not Imported On Job Import  
+7. #583  [Nitin Gupta] Import 			Job: Schema and File Path of Input Component is Not Imported On Job Import  
 8. #494  [Prateem Tadas] Graph property window and runtime window bugs   
 9. #419  [Shashank Karnik] Output Component: Error bubble is getting removed if user pulls schema from the previous component and the click on cancel button 
 10.#610  [Vibhor Tyagi] Temp Path(Global Preferences Window) : When Temp Path Do Not End with '/' Then Schema XML is Getting Generated Into Previous Folder Of Given Path
@@ -86,8 +86,9 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 64.#780  [Nitin Gupta]Join component allows only 2 unused ports to be connected
 65.#782  [Rakesh Kanchalwar] Filter Window: Conditional operator is not getting refreshed upon selecting different data type fields 
 66.#786  [Ashika Holkar] View Data Filter : For Downloaded Dataset,Incorrect No. of records are Displayed in Bottom of View Data Window
-67.#799  [Nitin Gupta]Copy Paste Functionality is not working on job canvas. 
 
+67.#799  [Nitin Gupta]Copy Paste Functionality is not working on job canvas. 
+68.#758  [Rakesh Kanchalwar] Filter Window: Window name to the Filter window is not proper
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

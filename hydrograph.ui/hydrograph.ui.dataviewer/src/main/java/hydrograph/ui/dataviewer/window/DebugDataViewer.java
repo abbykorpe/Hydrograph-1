@@ -547,11 +547,9 @@ public class DebugDataViewer extends ApplicationWindow {
 					PreferenceConstants.INITIAL_OFFSET, this);
 		}
 	}
-	
-
 
 	private void setDataViewerWindowTitle() {
-		getShell().setText("Debug Data viewer - " + dataViewerWindowName);
+		getShell().setText(Messages.DATA_VIEWER + " - " + dataViewerWindowName);
 	}
 
 	private void createPaginationPanel(Composite container) {
