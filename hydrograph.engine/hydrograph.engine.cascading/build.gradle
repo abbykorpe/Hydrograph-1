@@ -48,12 +48,7 @@ jar {
     version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar
 }
 
-task writePom {
-    pom {
-        project {
-           }
-    	}.writeTo("$buildDir/pom.xml")
-	}
+
 
 test {
     exclude '**/CascadingTestCase*'
@@ -122,3 +117,10 @@ dependencies {
     testCompile 'org.mockito:mockito-core:1.9.5' //required by plunger
     testCompile 'commons-io:commons-io:2.4' //required by plunger
 }
+
+task writePom {
+    pom {
+        project {
+           }
+    	}.writeTo("$buildDir/pom.xml")
+	}
