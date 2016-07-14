@@ -110,12 +110,9 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 		}
 		List <String>list= new ArrayList<String>();
 		list.addAll(keys);
-		List<InputHivePartitionColumn> inputHivePartitionColumn=null;
-		
-		inputHivePartitionColumn = new ArrayList<InputHivePartitionColumn>();
+		List<InputHivePartitionColumn> inputHivePartitionColumn = new ArrayList<InputHivePartitionColumn>();
 
-		HiveTextFile hiveTextFile =  new HiveTextFile();
-		HivePartitionFilterType hivePartitionFilterType=hiveTextFile.getPartitionFilter();
+		HivePartitionFilterType hivePartitionFilterType=hiveTextfile.getPartitionFilter();
 		List<PartitionColumn> partitionColumn=hivePartitionFilterType.getPartitionColumn();
 
 		if(partitionColumn!=null)
@@ -124,10 +121,9 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 			{
 				InputHivePartitionColumn inputHivePartitionColumn3 = new InputHivePartitionColumn();
 				inputHivePartitionColumn3.setName(pc.getName());
-				inputHivePartitionColumn3.setName(pc.getValue());
+				inputHivePartitionColumn3.setValue(pc.getValue());
 			if(pc.getPartitionColumn()!=null)
 			{	
-			
 				addFilterKey(pc,inputHivePartitionColumn3);
 			}
 				inputHivePartitionColumn.add(inputHivePartitionColumn3);
@@ -176,10 +172,10 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 		return property;
 	}
 	
-	private void getKey(PartitionFieldBasicType partitionFieldBasicType)
+	private void getKey(PartitionFieldBasicType partition)
 	{
-		PartitionFieldBasicType partitionFieldBasicType1 = partitionFieldBasicType.getField();
-		property.put(partitionFieldBasicType.getName(),null);
+		PartitionFieldBasicType partitionFieldBasicType1 = partition.getField();
+		property.put(partitionFieldBasicType1.getName(),null);
 				if(partitionFieldBasicType1.getField()!=null)
 				{
 					getKey(partitionFieldBasicType1);

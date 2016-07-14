@@ -111,10 +111,10 @@ public class OutputHiveParquetUiConverter extends OutputUiConverter {
 		return property;
 	}
 	
-	private void getKey(PartitionFieldBasicType partitionFieldBasicType)
+	private void getKey(PartitionFieldBasicType partition)
 	{
-		PartitionFieldBasicType partitionFieldBasicType1 = partitionFieldBasicType.getField();
-				property.add(partitionFieldBasicType.getName());
+		PartitionFieldBasicType partitionFieldBasicType1 = partition.getField();
+				property.add(partitionFieldBasicType1.getName());
 				if(partitionFieldBasicType1.getField()!=null)
 				{
 					getKey(partitionFieldBasicType1);

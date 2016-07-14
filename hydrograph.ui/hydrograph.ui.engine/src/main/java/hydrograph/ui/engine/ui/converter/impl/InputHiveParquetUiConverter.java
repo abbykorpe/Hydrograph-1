@@ -169,10 +169,10 @@ public class InputHiveParquetUiConverter extends InputUiConverter {
 		return property;
 	}
 	
-	private void getKey(PartitionFieldBasicType partitionFieldBasicType)
+	private void getKey(PartitionFieldBasicType partition)
 	{
-		PartitionFieldBasicType partitionFieldBasicType1 = partitionFieldBasicType.getField();
-		property.put(partitionFieldBasicType.getName(),null);
+		PartitionFieldBasicType partitionFieldBasicType1 = partition.getField();
+		property.put(partitionFieldBasicType1.getName(),null);
 				if(partitionFieldBasicType1.getField()!=null)
 				{
 					getKey(partitionFieldBasicType1);
