@@ -39,6 +39,7 @@ import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.ohivetextfile.FieldBasicType;
 import hydrograph.engine.jaxb.ohivetextfile.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.ohivetextfile.PartitionFieldBasicType;
 import hydrograph.engine.jaxb.outputtypes.HiveTextFile;
 /**
  * The class OutputHiveTextFileUiConverter
@@ -51,6 +52,7 @@ public class OutputHiveTextFileUiConverter extends OutputUiConverter {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(OutputHiveTextFileUiConverter.class);
 	private HiveTextFile hiveTextfile;
+	private List<String> property;
 
 	public OutputHiveTextFileUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;
@@ -102,17 +104,30 @@ public class OutputHiveTextFileUiConverter extends OutputUiConverter {
 	 */
 	private List<String> getPartitionKeys() {
 		LOGGER.debug("Fetching Input Hive Parquet-Partition-Keys-Properties for -{}", componentName);
-		List<String> partitionKeySet = null;
+		property = new ArrayList<String>();
 		hiveTextfile = (HiveTextFile) typeBaseComponent;
 		HivePartitionFieldsType typeHivePartitionFields = hiveTextfile.getPartitionKeys();
 		if (typeHivePartitionFields != null) {
-
-			partitionKeySet = new ArrayList<String>();
-			/*for (FieldBasicType fieldName : typeHivePartitionFields.getField()) {
-				partitionKeySet.add(fieldName.getName());
-			}*/
+			if(typeHivePartitionFields.getField()!=null){
+			PartitionFieldBasicType partitionFieldBasicType = typeHivePartitionFields.getField();
+			property.add(partitionFieldBasicType.getName());
+			if(partitionFieldBasicType.getField()!=null)
+			{
+				getKey(partitionFieldBasicType);
+			}
+			}
 		}
-		return partitionKeySet;
+		return property;
+	}
+	
+	private void getKey(PartitionFieldBasicType partitionFieldBasicType)
+	{
+		PartitionFieldBasicType partitionFieldBasicType1 = partitionFieldBasicType.getField();
+				property.add(partitionFieldBasicType.getName());
+				if(partitionFieldBasicType1.getField()!=null)
+				{
+					getKey(partitionFieldBasicType1);
+				}
 	}
 
 
