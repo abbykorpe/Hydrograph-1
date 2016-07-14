@@ -79,9 +79,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -218,6 +220,9 @@ public class JoinMapDialog extends Dialog {
 				true, true, 1, 1));
 		scrolledComposite_2.setExpandHorizontal(true);
 		scrolledComposite_2.setExpandVertical(true);
+		scrolledComposite_2.setAlwaysShowScrollBars(false);
+		attachMouseScrollButtonListener(scrolledComposite_2);
+		
 
 		Composite composite_12 = new Composite(scrolledComposite_2, SWT.NONE);
 		composite_12.setLayout(new GridLayout(1, false));
@@ -272,6 +277,25 @@ public class JoinMapDialog extends Dialog {
 		scrolledComposite_2.setContent(composite_12);
 		scrolledComposite_2.setMinSize(composite_12.computeSize(SWT.DEFAULT,
 				SWT.DEFAULT));
+	}
+	
+	private void attachMouseScrollButtonListener(final ScrolledComposite scrolledComposite){
+		scrolledComposite.addListener(SWT.MouseWheel, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				int wheelCount = event.count;
+				wheelCount = (int) Math.ceil(wheelCount / 3.0f);
+				while (wheelCount < 0) {
+					scrolledComposite.getVerticalBar().setIncrement(4);
+					wheelCount++;
+				}
+
+				while (wheelCount > 0) {
+					scrolledComposite.getVerticalBar().setIncrement(-4);
+					wheelCount--;
+				}
+			}
+		});
 	}
 
 	private void copyFieldsWhenCopyOfIsSelected(List<FilterProperties> inputFieldList, String inputPortID) {
