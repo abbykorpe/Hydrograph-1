@@ -17,6 +17,7 @@ import hydrograph.ui.common.util.XMLConfigUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,7 +62,13 @@ public class SelectColumnActionDialog extends Dialog {
 	private static final String ALL_COLUMNS = "All Columns";
 	private static final String SELECTED_COLUMNS = "Selected Columns";
 	private static final String SKIP = "skip";
-	private Image ascending=new Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
+	private Image ascending = new Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
+	private Image descending = new Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
+	private boolean isAllColumnsAsce = false;
+	private boolean isSelectedColumnsAsce = false;
+	Button sortAll;
+	Button sortSelected;
+	Comparator comparator = Collections.reverseOrder();
 	/**
 	 * @param parentShell
 	 * @param selectColumnAction
@@ -109,7 +116,7 @@ public class SelectColumnActionDialog extends Dialog {
 		allColumnFont[0].setHeight(11);
 		lblAllColumns.setFont( new Font(shell.getDisplay(),allColumnFont[0]));
 		
-		Button sortAll = new Button(lblAndBtncomposite, SWT.NONE);
+		sortAll = new Button(lblAndBtncomposite, SWT.NONE);
 		GridData gd_sortAll = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		gd_sortAll.widthHint = 18;
 		gd_sortAll.heightHint = 18;
@@ -173,7 +180,7 @@ public class SelectColumnActionDialog extends Dialog {
 		lblSelectedColumns.setFont( new Font(shell.getDisplay(),selectColumnFont[0]));
 		
 		
-		Button sortSelected = new Button(composite, SWT.NONE);
+		sortSelected = new Button(composite, SWT.NONE);
 		GridData gd_sortSelected = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
 		gd_sortSelected.heightHint = 18;
 		gd_sortSelected.widthHint = 18;
@@ -209,16 +216,37 @@ public class SelectColumnActionDialog extends Dialog {
 		sortAll.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Collections.sort(allColumns);
-				listAllComlumns.setItems(Arrays.copyOf(allColumns.toArray(),allColumns.toArray().length,String[].class));
+				
+				if(!isAllColumnsAsce){
+					Collections.sort(allColumns);
+					listAllComlumns.setItems(Arrays.copyOf(allColumns.toArray(),allColumns.toArray().length,String[].class));
+					isAllColumnsAsce = true;
+					sortAll.setImage(ascending);
+				}
+				else{
+					Collections.sort(allColumns,comparator);
+					listAllComlumns.setItems(Arrays.copyOf(allColumns.toArray(),allColumns.toArray().length,String[].class));
+					isAllColumnsAsce = false;
+					sortAll.setImage(descending);
+				}
 			}
 		});
 		
 		sortSelected.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Collections.sort(selectedColumns);
-				listSelectedColumns.setItems(Arrays.copyOf(selectedColumns.toArray(),selectedColumns.toArray().length,String[].class));
+				if(!isSelectedColumnsAsce){
+					Collections.sort(selectedColumns);
+					listSelectedColumns.setItems(Arrays.copyOf(selectedColumns.toArray(),selectedColumns.toArray().length,String[].class));
+					sortSelected.setImage(ascending);
+					isSelectedColumnsAsce = true;
+				}
+				else{
+					Collections.sort(selectedColumns, comparator);
+					listSelectedColumns.setItems(Arrays.copyOf(selectedColumns.toArray(),selectedColumns.toArray().length,String[].class));
+					sortSelected.setImage(descending);
+					isSelectedColumnsAsce = false;
+				}
 			}
 		});
 		
