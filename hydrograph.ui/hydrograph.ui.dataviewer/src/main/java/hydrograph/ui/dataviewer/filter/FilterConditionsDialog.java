@@ -1200,6 +1200,7 @@ public class FilterConditionsDialog extends Dialog {
 				FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
 				redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap);
 				((ReloadAction)debugDataViewer.getActionFactory().getAction(ReloadAction.class.getName())).run();
+				debugDataViewer.submitRecordCountJob();
 				cancelPressed();
 			}
 			
