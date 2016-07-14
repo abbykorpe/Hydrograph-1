@@ -62,6 +62,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
+import hydrograph.ui.dataviewer.actions.ReloadAction;
 
 /**
  * Dialog for Data Viewer Filter conditions
@@ -254,7 +255,7 @@ public class FilterConditionsDialog extends Dialog {
 		
 		Button clearButton = new Button(composite_4, SWT.NONE);
 		clearButton.setText(Messages.CLEAR);
-		clearButton.addSelectionListener(getClearButtonListener(tableViewer, remoteConditionsList, dummyList, originalFilterConditions, true, clearButton, remoteGroupSelectionMap,remoteBtnAddGrp));
+		clearButton.addSelectionListener(getClearButtonListener(tableViewer, remoteConditionsList, dummyList, originalFilterConditions, true, retainButton, remoteGroupSelectionMap,remoteBtnAddGrp));
 
 		remoteApplyButton.addSelectionListener(FilterHelper.INSTANCE.getRemoteApplyButtonListener(originalFilterConditions, 
 		remoteConditionsList, retainRemoteFilter));
@@ -1171,14 +1172,18 @@ public class FilterConditionsDialog extends Dialog {
 					originalFilterConditions.setRemoteConditions(new ArrayList<Condition>());
 					debugDataViewer.setRemoteCondition("");
 					originalFilterConditions.setRemoteGroupSelectionMap(groupSelectionMap);
+					debugDataViewer.getDataViewerAdapter().setFilterCondition(debugDataViewer.getLocalCondition());
+					retainRemoteFilter.setRetainFilter(false);
+					((ReloadAction)debugDataViewer.getActionFactory().getAction(ReloadAction.class.getName())).setIfFilterReset(true);
 				}else{
 					originalFilterConditions.setRetainLocal(false);
 					originalFilterConditions.setLocalCondition("");
 					originalFilterConditions.setLocalConditions(new ArrayList<Condition>());
 					debugDataViewer.setLocalCondition("");
 					originalFilterConditions.setLocalGroupSelectionMap(groupSelectionMap);
+					debugDataViewer.getDataViewerAdapter().setFilterCondition(debugDataViewer.getRemoteCondition());
+					retainLocalFilter.setRetainFilter(false);
 				}
-//				originalFilterConditions
 				TableItem[] items = tableViewer.getTable().getItems();
 				tableViewer.refresh();
 				for (int i = 0; i < items.length; i++) {
@@ -1189,8 +1194,8 @@ public class FilterConditionsDialog extends Dialog {
 				 
 				FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
 				redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap);
-				
-				tableViewer.refresh();
+				((ReloadAction)debugDataViewer.getActionFactory().getAction(ReloadAction.class.getName())).run();
+				cancelPressed();
 			}
 			
 			
