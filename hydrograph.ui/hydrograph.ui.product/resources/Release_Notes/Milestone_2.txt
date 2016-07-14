@@ -91,7 +91,7 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 69.#757  [Vibhor Tyagi] Find Functionality: When user clicks on 'All' button located in find window then focus is shifting to last instance in grid view whereas it remains same in other two views.
 70.#..   [Vibhor Tyagi] MAC: Delete row button is not working properly 
 71.#805  [Vibhor Tyagi] MAC & Windows :Find Window Default Focus is not Set Properly
-
+72.#788  [Sonia Raheja] Filter(Downloaded Dataset) : Unnecessary Page Numbers are Displayed Which Does not Hold Any Data
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
