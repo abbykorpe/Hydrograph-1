@@ -16,18 +16,16 @@ package hydrograph.ui.project.structure.wizard;
 
 import hydrograph.ui.project.structure.CustomMessages;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
+
 
 /**
  * The Class CustomWizard.
@@ -52,19 +50,9 @@ public class CustomWizard extends Wizard implements INewWizard, IExecutableExten
 
 	@Override
 	public boolean performFinish() {
-		IPath iPath = null;
-		IProject project = null;
-		if (pageOne.getProjectLocationURI() != null && StringUtils.isNotBlank(pageOne.getProjectLocationURI().getPath())) {
-			iPath = new Path(pageOne.getProjectLocationURI().getPath());
-			if (!StringUtils.equals(iPath.lastSegment(), pageOne.getProjectName())) {
-				iPath = iPath.append(pageOne.getProjectName());
-			}
-				project = ProjectStructureCreator.INSTANCE.createProject(pageOne.getProjectName(), iPath.toFile().toURI());
-			} else {
-				project = ProjectStructureCreator.INSTANCE.createProject(pageOne.getProjectName(), null);
-		}
-			BasicNewProjectResourceWizard.updatePerspective(configurationElement);
-			return project!=null ? true : false;
+		IProject project = ProjectStructureCreator.INSTANCE.createProject(pageOne.getProjectName(), pageOne.getProjectLocationURI());
+	    BasicNewProjectResourceWizard.updatePerspective(configurationElement);
+	    return project!=null ? true : false;
 	}
 
 	@Override

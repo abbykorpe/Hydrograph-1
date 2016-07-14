@@ -41,6 +41,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Path;
@@ -271,11 +272,16 @@ public class ProjectStructureCreator {
 	 */
 	private IProject createBaseProject(String projectName, URI location) throws CoreException {
 		IProject newProject=null;
+		IPath iPath = null;
 		if(location==null){
 				newProject = createTheProjectAtSpecifiedLocation(projectName,location);
 		}
 		else{
-			URI newLocation=URI.create(location.toString());
+			iPath = new Path(location.getPath());
+			if (!StringUtils.equals(iPath.lastSegment(), projectName)) {
+				iPath = iPath.append(projectName);
+			}
+			URI newLocation=URI.create(iPath.toFile().toURI().toString());
 				newProject=	createTheProjectAtSpecifiedLocation(projectName, newLocation);
 		}
 		return newProject;
