@@ -95,6 +95,7 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 72.#788  [Sonia Raheja] Filter(Downloaded Dataset) : Unnecessary Page Numbers are Displayed Which Does not Hold Any Data
 73.#..   [Prateem Tadas]Hydrograph help window resize disabled. 
 74.#352  [Prateem Tadas] Available fields missing in Hive components.
+75.#717  [Kalyan Rajpoot] Lookup / Join Issues: Duplicate schema fields are getting displayed in the Join/Lookup schema tab.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
