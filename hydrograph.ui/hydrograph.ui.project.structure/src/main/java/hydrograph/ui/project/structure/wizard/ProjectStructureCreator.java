@@ -272,12 +272,12 @@ public class ProjectStructureCreator {
 	 */
 	private IProject createBaseProject(String projectName, URI location) throws CoreException {
 		IProject newProject=null;
-		IPath iPath = null;
+		
 		if(location==null){
 				newProject = createTheProjectAtSpecifiedLocation(projectName,location);
 		}
 		else{
-			iPath = new Path(location.getPath());
+			IPath iPath	 = new Path(location.getPath());
 			if (!StringUtils.equals(iPath.lastSegment(), projectName)) {
 				iPath = iPath.append(projectName);
 			}

@@ -19,7 +19,8 @@ public enum Extensions {
 	
 	JAVA("java"),
 	SCHEMA("schema"),
-	JOB("job");
+	JOB("job"),
+	XML("xml");
 	
 /** The extension. */
 private final String extension;
