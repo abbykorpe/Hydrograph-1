@@ -197,7 +197,7 @@ public class StatusManager {
 	 * 
 	 */
 	public void updatePageNumberDisplayPanel(){
-		((Text)windowControls.get(ControlConstants.PAGE_NUMBER_DISPLAY)).setText(dataViewerAdapter.getPagePageStatus());
+		((Text)windowControls.get(ControlConstants.PAGE_NUMBER_DISPLAY)).setText(dataViewerAdapter.getPageStatus());
 	}
 
 	/**

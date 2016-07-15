@@ -200,7 +200,7 @@ public class DataViewerAdapter {
 	 * 
 	 * @return Page Status e.g 10/100 or 10
 	 */
-	public String getPagePageStatus() {
+	public String getPageStatus() {
 		if (getTotalNumberOfPages() != null) {
 			if (getTotalNumberOfPages() == 0) {
 				return String.valueOf(getCurrentPageNumber()) + "/" + String.valueOf(getTotalNumberOfPages()+1);
