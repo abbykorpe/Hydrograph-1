@@ -47,6 +47,10 @@ public class WidgetHelper {
 	public WidgetConfig getPartitionKeysConfig(){
 		return populateSingleColumnGridConfig(Messages.LABEL_PARTITION_KEYS, Constants.PARTITION_KEYS_WINDOW_TITLE);
 	}
+	
+	public WidgetConfig getPartitionKeysConfigInputHive(){
+		return populateSingleColumnGridConfig(Messages.LABEL_PARTITION_KEYS, Constants.PARTITION_KEYS_WINDOW_TITLE);
+	}
 
 	public WidgetConfig getOperationFieldsConfig(){
 		return populateSingleColumnGridConfig(Messages.LABEL_OPERATION_FIELDS, Constants.OPERATION_FIELDS_WINDOW_TITLE);

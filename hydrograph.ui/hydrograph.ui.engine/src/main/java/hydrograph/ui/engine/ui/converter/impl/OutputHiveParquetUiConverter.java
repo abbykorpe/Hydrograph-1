@@ -38,6 +38,7 @@ import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.ohiveparquet.FieldBasicType;
 import hydrograph.engine.jaxb.ohiveparquet.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.ohiveparquet.PartitionFieldBasicType;
 import hydrograph.engine.jaxb.outputtypes.ParquetHiveFile;
 
 /**
@@ -50,6 +51,7 @@ public class OutputHiveParquetUiConverter extends OutputUiConverter {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(OutputHiveParquetUiConverter.class);
 	private ParquetHiveFile parquetHive;
+	private List<String> property;
 	
 	public OutputHiveParquetUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;
@@ -93,17 +95,30 @@ public class OutputHiveParquetUiConverter extends OutputUiConverter {
 	 */
 	private List<String> getPartitionKeys() {
 		LOGGER.debug("Fetching Input Hive Parquet-Partition-Keys-Properties for -{}", componentName);
-		List<String> partitionKeySet = null;
+		property = new ArrayList<String>();
 		parquetHive = (ParquetHiveFile) typeBaseComponent;
 		HivePartitionFieldsType typeHivePartitionFields = parquetHive.getPartitionKeys();
 		if (typeHivePartitionFields != null) {
-
-			partitionKeySet = new ArrayList<String>();
-			for (FieldBasicType fieldName : typeHivePartitionFields.getField()) {
-				partitionKeySet.add(fieldName.getName());
+			if(typeHivePartitionFields.getField()!=null){
+			PartitionFieldBasicType partitionFieldBasicType = typeHivePartitionFields.getField();
+			property.add(partitionFieldBasicType.getName());
+			if(partitionFieldBasicType.getField()!=null)
+			{
+				getKey(partitionFieldBasicType);
+			}
 			}
 		}
-		return partitionKeySet;
+		return property;
+	}
+	
+	private void getKey(PartitionFieldBasicType partition)
+	{
+		PartitionFieldBasicType partitionFieldBasicType1 = partition.getField();
+				property.add(partitionFieldBasicType1.getName());
+				if(partitionFieldBasicType1.getField()!=null)
+				{
+					getKey(partitionFieldBasicType1);
+				}
 	}
 
 	@Override

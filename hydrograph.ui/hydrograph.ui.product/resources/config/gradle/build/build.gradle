@@ -48,14 +48,13 @@ propertiesFile.withInputStream {
     properties.load(propertiesFile.newDataInputStream())
 }
 
-ext.cascadingVersion = '3.0.1'
+ext.cascadingVersion = '3.1.0'
 ext.hadoopVersion = '2.6.0'
 ext.hiveVersion = '1.2.0'
 
 dependencies {
 
-    //compile(group: 'hydrograph', name: 'hydrograph.engine.command-line', version: '0.1.6')
-    compile(group: 'hydrograph', name: 'hydrograph.engine.command-line', version: '0.1.7-wip')
+    compile(group: 'hydrograph', name: 'hydrograph.engine.command-line', version: '0.1.8-SNAPSHOT')
 
     compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
 }
@@ -257,7 +256,7 @@ def getArgsForRunJob() {
         argsArray[1] = jobXML
     }
     if (project.hasProperty("parameterFile")) {
-        argsArray[2] = "-paramFiles"
+        argsArray[2] = "-paramfiles"
         argsArray[3] = parameterFile
     }
     return argsArray

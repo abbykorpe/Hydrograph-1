@@ -92,6 +92,7 @@
 			<enumeration value="EXTERNAL_TABLE_PATH_WIDGET"/>
 			<enumeration value="MIXED_SCHEME"/>
 			<enumeration value="OVERWRITE_WIDGET"/>
+			<enumeration value="PARTITION_KEYS_WIDGET_INPUT_HIVE"/>
 		</restriction>
 	</simpleType>
 
@@ -286,6 +287,14 @@
 			 <annotation>
 		          <appinfo> 
 		            <jaxb:typesafeEnumMember name="RuntimePropertyValueValidationRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
+		
+		<enumeration value="HIVE_KEY_FIELDS_VALIDATOR">
+			 <annotation>
+		          <appinfo> 
+		            <jaxb:typesafeEnumMember name="HiveKeyFieldsValidationRule" />
 		          </appinfo>
         	</annotation>
 		</enumeration>

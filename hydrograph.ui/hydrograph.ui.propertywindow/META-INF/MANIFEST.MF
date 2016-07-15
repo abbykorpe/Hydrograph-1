@@ -50,5 +50,6 @@ Export-Package: hydrograph.ui.propertywindow,
  hydrograph.ui.propertywindow.widgets.customwidgets.schema,
  hydrograph.ui.propertywindow.widgets.gridwidgets.basic,
  hydrograph.ui.propertywindow.widgets.gridwidgets.container,
+ hydrograph.ui.propertywindow.widgets.hiveInput.dialog,
  hydrograph.ui.propertywindow.widgets.listeners,
  hydrograph.ui.propertywindow.widgets.utility

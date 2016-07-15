@@ -52,6 +52,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="TRANSFORM_MAPPING_VALIDATOR"/>
  *     &lt;enumeration value="HIVE_PARQUET_VALIDATOR"/>
  *     &lt;enumeration value="RUNTIME_PROPERTY_VALIDATOR"/>
+ *     &lt;enumeration value="HIVE_KEY_FIELDS_VALIDATOR"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -98,7 +99,10 @@ public enum Validators {
     @XmlEnumValue("HIVE_PARQUET_VALIDATOR")
     HiveParquetSchemaValidationRule("HIVE_PARQUET_VALIDATOR"),
     @XmlEnumValue("RUNTIME_PROPERTY_VALIDATOR")
-    RuntimePropertyValueValidationRule("RUNTIME_PROPERTY_VALIDATOR");
+    RuntimePropertyValueValidationRule("RUNTIME_PROPERTY_VALIDATOR"),
+    @XmlEnumValue("HIVE_KEY_FIELDS_VALIDATOR")
+    HiveKeyFieldsValidationRule("HIVE_KEY_FIELDS_VALIDATOR");
+    
     private final String value;
 
     Validators(String v) {
