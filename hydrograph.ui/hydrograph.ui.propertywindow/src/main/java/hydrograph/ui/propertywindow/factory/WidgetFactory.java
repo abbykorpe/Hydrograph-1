@@ -20,7 +20,6 @@ import hydrograph.ui.propertywindow.filemixedschema.ELTMixedSchemeWidget;
 import hydrograph.ui.propertywindow.fixedwidthschema.ELTFixedWidget;
 import hydrograph.ui.propertywindow.fixedwidthschema.TransformSchemaWidget;
 import hydrograph.ui.propertywindow.generaterecords.schema.GenerateRecordsGridWidget;
-import hydrograph.ui.propertywindow.hivesparquechema.HiveParqueSchemaWidget;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -72,7 +71,6 @@ public class WidgetFactory {
 	
 	public enum Widgets{
 		SCHEMA_WIDGET(ELTGenericSchemaGridWidget.class),
-		HIVE_PARQUET_WIDGET(HiveParqueSchemaWidget.class),
 		FIXED_WIDGET(ELTFixedWidget.class),
 		MIXED_SCHEME(ELTMixedSchemeWidget.class),		
 		TRANSFORM_SCHEMA_WIDGET(TransformSchemaWidget.class),
@@ -105,8 +103,8 @@ public class WidgetFactory {
 		FILTER_PROPERTY_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getOperationFieldsConfig()),
 		COLUMN_NAME_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getColumnNameConfig()),
 		PARTITION_KEYS_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getPartitionKeysConfig()),
-		PARTITION_KEYS_WIDGET_INPUT_HIVE(SingleColumnWidgetHiveInput.class, WidgetHelper.INSTANCE.getPartitionKeysConfigInputHive()),
 		
+		PARTITION_KEYS_WIDGET_INPUT_HIVE(SingleColumnWidgetHiveInput.class, WidgetHelper.INSTANCE.getPartitionKeysConfigInputHive()),
 		OPERATIONAL_CLASS_WIDGET(ELTOperationClassWidget.class, WidgetHelper.INSTANCE.getOperationClassForFilterWidgetConfig()),
 		RUNTIME_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class,WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.RUNTIME_PROPERTY_LABEL,Constants.RUNTIME_PROPERTIES_WINDOW_LABEL)),
 		SUBJOB_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class,WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.SUBJOB_PROPERTY_LABEL,Constants.SUBJOB_WINDOW_LABEL)),
