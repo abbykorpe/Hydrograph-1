@@ -20,7 +20,6 @@ import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
-import hydrograph.ui.datastructure.property.LookupMappingGrid;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -123,8 +122,6 @@ public class JoinMapDialog extends Dialog {
 	private static final String FIELD_TOOLTIP_MESSAGE_FIELD_CANT_BE_EMPTY="Field can not be empty";
 	private static final String FIELD_TOOLTIP_MESSAGE_DUPLICATE_FIELDS="Duplicate field";
 	private static final String MAPPING_TABLE_ITEM_DELIMILATOR="#";
-	private static final String MAPPING_WINDOW_DUPLICATE_FIELD = "Duplicate field in Mapping Window";
-
 	
 	
 	
@@ -405,53 +402,57 @@ public class JoinMapDialog extends Dialog {
 
 				String[] dropData = ((String) event.data).split(Pattern
 						.quote(MAPPING_TABLE_ITEM_DELIMILATOR));
-				for (String data : dropData) {
-					LookupMapProperty mappingTableItem = new LookupMapProperty();
-					mappingTableItem.setSource_Field(data);
-					mappingTableItem.setOutput_Field(data.split("\\.")[1]);
-					
-					Boolean addField = true;
-					if(getJoinConfigProperty()){
-						for(String value : getOutputFieldList()){
-							if(value.equalsIgnoreCase(data.split("\\.")[1])){
-						      WidgetUtility.errorMessage(Messages.Duplicate_Field_In_Mapping_Window);
-						      addField = false;
-							}
-						  }
-						}
-					
-					if(addField){
-					mappingTableItemList.add(mappingTableItem);
+				List<String> tempOutputFieldList = getOutputFieldList();
+				
+				if(getDuplicateDropAllowed()){
+					for (String data : dropData) {
+						dropItem(data);
 					}
-
-					mappingTableViewer.refresh();
+				}else{
+					for (String data : dropData) {
+						if(!tempOutputFieldList.contains(StringUtils.lowerCase(data.split("\\.")[1]))){
+							dropItem(data);
+						}
+						else{
+							WidgetUtility.errorMessage(Messages.MAPPING_WINDOW_DUPLICATE_FIELD);
+							break;
+						}
+					}
 				}
 				refreshButtonStatus();
 			}
 		});
 	}
 
+	private void dropItem(String data){
+		LookupMapProperty mappingTableItem = new LookupMapProperty();
+		mappingTableItem.setSource_Field(data);
+		mappingTableItem.setOutput_Field(data.split("\\.")[1]);
+		mappingTableItemList.add(mappingTableItem);
+		mappingTableViewer.refresh();
+	}
+	
 	private List<String> getOutputFieldList(){
 		List<String> outputFieldList = new LinkedList<>();
 		for(LookupMapProperty lookupMapProperty : mappingTableItemList){
-			outputFieldList.add(lookupMapProperty.getOutput_Field());
+			outputFieldList.add(StringUtils.lowerCase(lookupMapProperty.getOutput_Field()));
 		}
 		return outputFieldList;
 	}
 
-	private boolean getJoinConfigProperty(){
+	private boolean getDuplicateDropAllowed(){
 		List<JoinConfigProperty> configObject = (List) component.getProperties().get("join_config");
-			if(configObject.size() == 0){
-				return true;
+			if(configObject == null || configObject.size() == 0){
+				return false;
 			}
 			else{
-			for(int i = 0 ; i<configObject.size(); i++){
-				if(configObject.get(i).getRecordRequired() == 0){
-					return true;
+				for(int i = 0 ; i<configObject.size(); i++){
+					if(configObject.get(i).getRecordRequired() == 0){
+						return false;
 					}
 				}
 			}
-			return false;
+			return true;
 		}
 	
 	private void createOutputFieldColumnInMappingTable() {
