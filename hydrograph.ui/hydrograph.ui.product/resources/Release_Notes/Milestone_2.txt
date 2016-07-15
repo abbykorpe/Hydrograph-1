@@ -94,6 +94,7 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 71.#805  [Vibhor Tyagi] MAC & Windows :Find Window Default Focus is not Set Properly
 72.#788  [Sonia Raheja] Filter(Downloaded Dataset) : Unnecessary Page Numbers are Displayed Which Does not Hold Any Data
 73.#..   [Prateem Tadas]Hydrograph help window resize disabled. 
+74.#352  [Prateem Tadas] Available fields missing in Hive components.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
