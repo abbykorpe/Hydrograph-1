@@ -193,17 +193,17 @@ public class DataViewerAdapter {
 		results.close();
 	}
 
-	public long getNoOfFilteredRows(){
-		long rowCount = 0;
-		String sql = new ViewDataQueryBuilder(tableName).column("COUNT(*)").getQuery(filterCondition);
-		try (ResultSet rowCountResultSet = statement.executeQuery(sql)) {
-			rowCountResultSet.next();
-			rowCount = rowCountResultSet.getLong(1);
-		} catch (SQLException sqlException) {
-			logger.error("Error while counting the no of filtered rows", sqlException);
-		}
-		return rowCount;
-	}
+//	public long getNoOfFilteredRows(){
+//		long rowCount = 0;
+//		String sql = new ViewDataQueryBuilder(tableName).column("COUNT(*)").getQuery(filterCondition);
+//		try (ResultSet rowCountResultSet = statement.executeQuery(sql)) {
+//			rowCountResultSet.next();
+//			rowCount = rowCountResultSet.getLong(1);
+//		} catch (SQLException sqlException) {
+//			logger.error("Error while counting the no of filtered rows", sqlException);
+//		}
+//		return rowCount;
+//	}
 
 	/**
 	 * 
@@ -213,7 +213,12 @@ public class DataViewerAdapter {
 	 */
 	public String getPagePageStatus() {
 		if (getTotalNumberOfPages() != null) {
-			return String.valueOf(getCurrentPageNumber()) + "/" + String.valueOf(getTotalNumberOfPages());
+			if (getTotalNumberOfPages() == 0) {
+				return String.valueOf(getCurrentPageNumber()) + "/" + String.valueOf(getTotalNumberOfPages()+1);
+			} else {
+				return String.valueOf(getCurrentPageNumber()) + "/" + String.valueOf(getTotalNumberOfPages());
+			}
+
 		} else {
 			return String.valueOf(getCurrentPageNumber());
 		}

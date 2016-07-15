@@ -495,13 +495,16 @@ public class FilterHelper {
 
 	private void showLocalFilteredData(String buffer) {
 		try {
+			Long noOfFilteredRows = null;
 			dataViewerAdapter.setFilterCondition(buffer);
 			dataViewerAdapter.initializeTableData();
-			Long noOfFilteredRows=dataViewerAdapter.getNoOfFilteredRows();
-			dataViewerAdapter.setRowCount(noOfFilteredRows);
-			debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.SUCCESS));
+			debugDataViewer.submitRecordCountJob();
 			debugDataViewer.getDataViewLoader().updateDataViewLists();
 			debugDataViewer.getDataViewLoader().reloadloadViews();
+			StatusMessage statusMessage=dataViewerAdapter.fetchRowCount();
+			if (statusMessage.getReturnCode() == 0) {
+				noOfFilteredRows = dataViewerAdapter.getRowCount();
+			}
 			int pageSize=debugDataViewer.getViewDataPreferences().getPageSize();
 			if (noOfFilteredRows < pageSize) {
 				debugDataViewer.getStatusManager().enableNextPageButton(false);
