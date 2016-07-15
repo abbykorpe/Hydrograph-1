@@ -171,9 +171,9 @@ task executeRemoteJob() {
 			unixParameterFileList=unixParameterFileList.substring(0, unixParameterFileList.length() - 1);
 		}
 
-        println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList
+        println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList
 		
-		def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList
+		def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList
    		sshToRemoteServer(host,username,password,command)
     }
 }
@@ -224,8 +224,8 @@ task executeDebugRemoteJob() {
         def jobId = jobId;
         def basePath = basePath;
         
-        println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList + " -debugxmlpath " + debugJobXML + " -jobid " + jobId + " -basepath " + basePath
-        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars=lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath
+        println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList + " -debugxmlpath " + debugJobXML + " -jobid " + jobId + " -basepath " + basePath
+        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath
 		sshToRemoteServer(host,username,password,command)
     }
 }
@@ -296,7 +296,7 @@ def getArgsForDebugRunJob() {
     }
 
     if (project.hasProperty("parameterFile")) {
-        argsArray[2] = "-paramFiles"
+        argsArray[2] = "-paramfiles"
         argsArray[3] = parameterFile
     }
 
