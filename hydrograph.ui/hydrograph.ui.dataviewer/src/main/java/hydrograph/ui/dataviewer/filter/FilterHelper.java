@@ -495,20 +495,20 @@ public class FilterHelper {
 
 	private void showLocalFilteredData(String buffer) {
 		try {
-			Long noOfFilteredRows = null;
 			dataViewerAdapter.setFilterCondition(buffer);
 			dataViewerAdapter.initializeTableData();
 			debugDataViewer.submitRecordCountJob();
 			debugDataViewer.getDataViewLoader().updateDataViewLists();
 			debugDataViewer.getDataViewLoader().reloadloadViews();
 			StatusMessage statusMessage=dataViewerAdapter.fetchRowCount();
-			enableAndDisableNextButtonOfDataViewer(noOfFilteredRows, statusMessage);
+			enableAndDisableNextButtonOfDataViewer(statusMessage);
 		} catch (SQLException exception) {
 			logger.error("Error occuring while showing local filtered data",exception);
 		}
 	}
 
-	private void enableAndDisableNextButtonOfDataViewer(Long noOfFilteredRows, StatusMessage statusMessage) {
+	private void enableAndDisableNextButtonOfDataViewer(StatusMessage statusMessage) {
+		Long noOfFilteredRows = null;
 		if (statusMessage.getReturnCode() == 0) {
 			noOfFilteredRows = dataViewerAdapter.getRowCount();
 		}
