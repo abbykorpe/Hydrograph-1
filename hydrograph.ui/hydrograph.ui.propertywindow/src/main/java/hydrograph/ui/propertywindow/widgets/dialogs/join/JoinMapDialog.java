@@ -971,6 +971,13 @@ public class JoinMapDialog extends Dialog {
 		}
 		super.okPressed();
 	}
+	
+	@Override
+	protected void cancelPressed(){
+		joinMappingGrid.setLookupInputProperties(oldJoinMappingGrid.getLookupInputProperties());
+		joinMappingGrid.setLookupMapProperties(oldJoinMappingGrid.getLookupMapProperties());
+		super.cancelPressed();
+	}
 
 	private void populateJoinMapDialog() {
 
