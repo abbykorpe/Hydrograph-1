@@ -500,26 +500,19 @@ public class FilterHelper {
 			debugDataViewer.submitRecordCountJob();
 			debugDataViewer.getDataViewLoader().updateDataViewLists();
 			debugDataViewer.getDataViewLoader().reloadloadViews();
-			StatusMessage statusMessage=dataViewerAdapter.fetchRowCount();
-			enableAndDisableNextButtonOfDataViewer(statusMessage);
+			enableAndDisableNextButtonOfDataViewer();
 		} catch (SQLException exception) {
 			logger.error("Error occuring while showing local filtered data",exception);
 		}
 	}
 
-	private void enableAndDisableNextButtonOfDataViewer(StatusMessage statusMessage) {
-		Long noOfFilteredRows = null;
-		if (statusMessage.getReturnCode() == 0) {
-			noOfFilteredRows = dataViewerAdapter.getRowCount();
-		}
-		if (noOfFilteredRows != null) {
+	private void enableAndDisableNextButtonOfDataViewer() {
 			int pageSize = debugDataViewer.getViewDataPreferences().getPageSize();
-			if (noOfFilteredRows < pageSize) {
+			if (dataViewerAdapter.getRowCount() < pageSize) {
 				debugDataViewer.getStatusManager().enableNextPageButton(false);
 			} else {
 				debugDataViewer.getStatusManager().enableNextPageButton(true);
 			}
-		}
 	}
 
 	public String createJsonObjectForRemoteFilter(String buffer) {
