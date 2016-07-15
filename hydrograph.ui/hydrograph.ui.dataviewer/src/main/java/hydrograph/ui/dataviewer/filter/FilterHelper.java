@@ -502,17 +502,23 @@ public class FilterHelper {
 			debugDataViewer.getDataViewLoader().updateDataViewLists();
 			debugDataViewer.getDataViewLoader().reloadloadViews();
 			StatusMessage statusMessage=dataViewerAdapter.fetchRowCount();
-			if (statusMessage.getReturnCode() == 0) {
-				noOfFilteredRows = dataViewerAdapter.getRowCount();
-			}
-			int pageSize=debugDataViewer.getViewDataPreferences().getPageSize();
+			enableAndDisableNextButtonOfDataViewer(noOfFilteredRows, statusMessage);
+		} catch (SQLException exception) {
+			logger.error("Error occuring while showing local filtered data",exception);
+		}
+	}
+
+	private void enableAndDisableNextButtonOfDataViewer(Long noOfFilteredRows, StatusMessage statusMessage) {
+		if (statusMessage.getReturnCode() == 0) {
+			noOfFilteredRows = dataViewerAdapter.getRowCount();
+		}
+		if (noOfFilteredRows != null) {
+			int pageSize = debugDataViewer.getViewDataPreferences().getPageSize();
 			if (noOfFilteredRows < pageSize) {
 				debugDataViewer.getStatusManager().enableNextPageButton(false);
 			} else {
 				debugDataViewer.getStatusManager().enableNextPageButton(true);
 			}
-		} catch (SQLException exception) {
-			logger.error("Error occuring while showing local filtered data",exception);
 		}
 	}
 
