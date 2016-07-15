@@ -14,6 +14,7 @@ Sr.No. <date> - [developer names] - description
 9. <07-Jul-16> - [Prateem Tadas, Sonia Raheja, Akhilesh Joshi, Rakesh Kanchalwar] - Filter Window
 10.<07-Jul-16> - [Akhilesh Joshi] - Select columns window
 11.<07-Jul-16> - [Vibhor Tyagi] - View Data Find Feature
+12.<15-Jul-16> - [Rushikesh Pawale,Prateem Tadas] - Hive Partition Key Changes.
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
@@ -93,7 +94,6 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 71.#805  [Vibhor Tyagi] MAC & Windows :Find Window Default Focus is not Set Properly
 72.#788  [Sonia Raheja] Filter(Downloaded Dataset) : Unnecessary Page Numbers are Displayed Which Does not Hold Any Data
 73.#..   [Prateem Tadas]Hydrograph help window resize disabled. 
-
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
