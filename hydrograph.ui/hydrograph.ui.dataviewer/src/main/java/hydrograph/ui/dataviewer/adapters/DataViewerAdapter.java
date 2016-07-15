@@ -193,15 +193,21 @@ public class DataViewerAdapter {
 		results.close();
 	}
 
+
 	/**
 	 * 
 	 * Get page status
 	 * 
 	 * @return Page Status e.g 10/100 or 10
 	 */
-	public String getPagePageStatus() {
+	public String getPageStatus() {
 		if (getTotalNumberOfPages() != null) {
-			return String.valueOf(getCurrentPageNumber()) + "/" + String.valueOf(getTotalNumberOfPages());
+			if (getTotalNumberOfPages() == 0) {
+				return String.valueOf(getCurrentPageNumber()) + "/" + String.valueOf(getTotalNumberOfPages()+1);
+			} else {
+				return String.valueOf(getCurrentPageNumber()) + "/" + String.valueOf(getTotalNumberOfPages());
+			}
+
 		} else {
 			return String.valueOf(getCurrentPageNumber());
 		}
@@ -234,16 +240,6 @@ public class DataViewerAdapter {
 		return rowCount;
 	}
 	
-	/**
-	 * 
-	 * Set number of rows 
-	 * 
-	 * @return number of pages
-	 */
-	public void setRowCount(Long rowCount) {
-		this.rowCount = rowCount;
-	}
-
 	/**
 	 * 
 	 * Find row count

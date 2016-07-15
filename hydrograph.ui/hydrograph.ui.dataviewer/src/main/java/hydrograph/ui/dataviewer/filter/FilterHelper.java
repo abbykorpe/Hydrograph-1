@@ -497,21 +497,22 @@ public class FilterHelper {
 		try {
 			dataViewerAdapter.setFilterCondition(buffer);
 			dataViewerAdapter.initializeTableData();
-			int noOfFilteredRows=dataViewerAdapter.getFileData().size();
-			dataViewerAdapter.setRowCount(Long.parseLong(String.valueOf(noOfFilteredRows)));
-			debugDataViewer.getStatusManager().setStatus(new StatusMessage(StatusConstants.SUCCESS));
+			debugDataViewer.submitRecordCountJob();
 			debugDataViewer.getDataViewLoader().updateDataViewLists();
 			debugDataViewer.getDataViewLoader().reloadloadViews();
-			int pageSize=debugDataViewer.getViewDataPreferences().getPageSize();
-			if (noOfFilteredRows < pageSize) {
-				debugDataViewer.getStatusManager().enableNextPageButton(false);
-				debugDataViewer.getStatusManager().updatePageNumberDisplayPanelIfFilteredDataSizeIsLessthanPageSize();
-			} else {
-				debugDataViewer.getStatusManager().enableNextPageButton(true);
-			}
+			enableAndDisableNextButtonOfDataViewer();
 		} catch (SQLException exception) {
 			logger.error("Error occuring while showing local filtered data",exception);
 		}
+	}
+
+	private void enableAndDisableNextButtonOfDataViewer() {
+			int pageSize = debugDataViewer.getViewDataPreferences().getPageSize();
+			if (dataViewerAdapter.getRowCount() < pageSize) {
+				debugDataViewer.getStatusManager().enableNextPageButton(false);
+			} else {
+				debugDataViewer.getStatusManager().enableNextPageButton(true);
+			}
 	}
 
 	public String createJsonObjectForRemoteFilter(String buffer) {

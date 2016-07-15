@@ -197,10 +197,7 @@ public class StatusManager {
 	 * 
 	 */
 	public void updatePageNumberDisplayPanel(){
-		((Text)windowControls.get(ControlConstants.PAGE_NUMBER_DISPLAY)).setText(dataViewerAdapter.getPagePageStatus());
-	}
-	public void updatePageNumberDisplayPanelIfFilteredDataSizeIsLessthanPageSize(){
-		((Text)windowControls.get(ControlConstants.PAGE_NUMBER_DISPLAY)).setText("1/1");
+		((Text)windowControls.get(ControlConstants.PAGE_NUMBER_DISPLAY)).setText(dataViewerAdapter.getPageStatus());
 	}
 
 	/**
