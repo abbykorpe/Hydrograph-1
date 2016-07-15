@@ -400,7 +400,6 @@ public class FindViewDataDialog extends Dialog{
 					table.showItem(tableItem);
 					table.showColumn(table.getColumn(findColIndex));
 					tableCursor.setSelection(findRowIndex, findColIndex);
-					tableCursor.setFocus();
 					tableCursor.setVisible(false);
 					tableItem.setBackground(findColIndex, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
 					debugDataViewer.setData("SELECTED_ROW_INDEX", findRowIndex);
@@ -436,7 +435,6 @@ public class FindViewDataDialog extends Dialog{
 					table.showItem(tableItem);
 					table.showColumn(table.getColumn(findColIndex));
 					tableCursor.setSelection(findRowIndex, findColIndex);
-					tableCursor.setFocus();
 					tableCursor.setVisible(false);
 					tableItem.setBackground(findColIndex,Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
 					if(findColIndex<=0){debugDataViewer.setData("SELECTED_ROW_INDEX", findRowIndex-1);}else{
@@ -465,7 +463,6 @@ public class FindViewDataDialog extends Dialog{
 					table.showItem(tableItem);
 					table.showColumn(table.getColumn(colIndex));
 					tableCursor.setSelection(rowIndex, colIndex);
-					tableCursor.setFocus();
 					tableCursor.setVisible(false);
 					tableItem.setBackground(colIndex, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
 				}
