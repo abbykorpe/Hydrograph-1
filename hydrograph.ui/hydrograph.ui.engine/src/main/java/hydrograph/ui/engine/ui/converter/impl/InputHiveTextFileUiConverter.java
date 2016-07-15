@@ -81,7 +81,6 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 			propertyMap.put(PropertyNameConstants.EXTERNAL_TABLE_PATH.value(), (String)hiveTextfile.getExternalTablePath().getUri());
 		}
 		propertyMap.put(PropertyNameConstants.PARTITION_KEYS.value(), getPartitionKeys());
-		propertyMap.put(PropertyNameConstants.PARTITION_KEYS.value(), getPartitionFilter());
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
 				convertBooleanValue(hiveTextfile.getStrict(), PropertyNameConstants.STRICT.value()));
 		if (hiveTextfile.getDelimiter() != null)
@@ -100,9 +99,26 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 		container.getComponentNames().add(hiveTextfile.getId());
 		uiComponent.setProperties(propertyMap);
 	}
-
-	private LinkedHashMap<String, Object> getPartitionFilter()
-	{
+	
+	/*
+	 * returns Partition keys list
+	 */
+	private LinkedHashMap<String, Object> getPartitionKeys() {
+		LOGGER.debug("Fetching Input Hive Parquet-Partition-Keys-Properties for -{}", componentName);
+		property = new LinkedHashMap<String, Object>();
+		hiveTextfile = (HiveTextFile) typeBaseComponent;
+		HivePartitionFieldsType typeHivePartitionFields = hiveTextfile.getPartitionKeys();
+		if (typeHivePartitionFields != null) {
+			if(typeHivePartitionFields.getField()!=null){
+			PartitionFieldBasicType partitionFieldBasicType = typeHivePartitionFields.getField();
+			property.put(partitionFieldBasicType.getName(),null);
+			if(partitionFieldBasicType.getField()!=null)
+			{
+				getKey(partitionFieldBasicType);
+			}
+			}
+		}
+		
 		Set<String> keys=new HashSet<String>();
 		if(property!=null)
 		{
@@ -133,43 +149,7 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 		property.put(list.get(0),inputHivePartitionColumn);
 		
 		return property;
-	}
-	
-	private void addFilterKey(PartitionColumn partitionColumn1,InputHivePartitionColumn inputHivePartitionColumn1)
-	{
-		InputHivePartitionColumn inputHivePartitionColumn2 =inputHivePartitionColumn1.getInputHivePartitionColumn();
-			PartitionColumn partitionColumn2 = partitionColumn1.getPartitionColumn();
-			inputHivePartitionColumn2.setName(partitionColumn2.getName());
-		    inputHivePartitionColumn2.setValue(partitionColumn2.getValue());
-			inputHivePartitionColumn1.setInputHivePartitionColumn(inputHivePartitionColumn2);
-			if(partitionColumn2.getPartitionColumn()!=null)
-			{
-				if(partitionColumn2.getPartitionColumn().getValue()!="")
-				{
-				addFilterKey(partitionColumn2,inputHivePartitionColumn2);
-				}
-			}
-	}
-	
-	/*
-	 * returns Partition keys list
-	 */
-	private LinkedHashMap<String, Object> getPartitionKeys() {
-		LOGGER.debug("Fetching Input Hive Parquet-Partition-Keys-Properties for -{}", componentName);
-		property = new LinkedHashMap<String, Object>();
-		hiveTextfile = (HiveTextFile) typeBaseComponent;
-		HivePartitionFieldsType typeHivePartitionFields = hiveTextfile.getPartitionKeys();
-		if (typeHivePartitionFields != null) {
-			if(typeHivePartitionFields.getField()!=null){
-			PartitionFieldBasicType partitionFieldBasicType = typeHivePartitionFields.getField();
-			property.put(partitionFieldBasicType.getName(),null);
-			if(partitionFieldBasicType.getField()!=null)
-			{
-				getKey(partitionFieldBasicType);
-			}
-			}
-		}
-		return property;
+		
 	}
 	
 	private void getKey(PartitionFieldBasicType partition)
@@ -180,6 +160,22 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 				{
 					getKey(partitionFieldBasicType1);
 				}
+	}
+	
+	private void addFilterKey(PartitionColumn partitionColumn1,InputHivePartitionColumn inputHivePartitionColumn1)
+	{
+		InputHivePartitionColumn inputHivePartitionColumn2 = new InputHivePartitionColumn();
+			PartitionColumn partitionColumn2 = partitionColumn1.getPartitionColumn();
+			inputHivePartitionColumn2.setName(partitionColumn2.getName());
+		    inputHivePartitionColumn2.setValue(partitionColumn2.getValue());
+		    inputHivePartitionColumn1.setInputHivePartitionColumn(inputHivePartitionColumn2);
+			if(partitionColumn2.getPartitionColumn()!=null)
+			{
+				if(partitionColumn2.getPartitionColumn().getValue()!="")
+				{
+				addFilterKey(partitionColumn2,inputHivePartitionColumn2);
+				}
+			}
 	}
 	
 

@@ -41,10 +41,9 @@ import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.ihiveparquet.FieldBasicType;
 import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFilterType;
+import hydrograph.engine.jaxb.ihiveparquet.PartitionColumn;
 import hydrograph.engine.jaxb.ihiveparquet.PartitionFieldBasicType;
-import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFilterType;
-import hydrograph.engine.jaxb.ihivetextfile.PartitionColumn;
-import hydrograph.engine.jaxb.inputtypes.HiveTextFile;
 import hydrograph.engine.jaxb.inputtypes.ParquetHiveFile;
 /**
  * The class InputHiveParquetUiConverter
@@ -82,7 +81,6 @@ public class InputHiveParquetUiConverter extends InputUiConverter {
 			propertyMap.put(PropertyNameConstants.EXTERNAL_TABLE_PATH.value(), (String)parquetHive.getExternalTablePath().getUri());
 		}
 		propertyMap.put(PropertyNameConstants.PARTITION_KEYS.value(), getPartitionKeys());
-		propertyMap.put(PropertyNameConstants.PARTITION_KEYS.value(), getPartitionFilter());
 		
 		uiComponent.setComponentLabel(parquetHive.getId());
 		uiComponent.setType(UIComponentsConstants.HIVE_PARQUET.value());
@@ -92,62 +90,7 @@ public class InputHiveParquetUiConverter extends InputUiConverter {
 		container.getComponentNames().add(parquetHive.getId());
 		uiComponent.setProperties(propertyMap);
 	}
-	
-	private LinkedHashMap<String, Object> getPartitionFilter()
-	{
-		Set<String> keys=new HashSet<String>();
-		if(property!=null)
-		{
-		keys=property.keySet();
-		}
-		List <String>list= new ArrayList<String>();
-		list.addAll(keys);
-		List<InputHivePartitionColumn> inputHivePartitionColumn=null;
-		
-		inputHivePartitionColumn = new ArrayList<InputHivePartitionColumn>();
 
-		HiveTextFile hiveTextFile =  new HiveTextFile();
-		HivePartitionFilterType hivePartitionFilterType=hiveTextFile.getPartitionFilter();
-		List<PartitionColumn> partitionColumn=hivePartitionFilterType.getPartitionColumn();
-
-		if(partitionColumn!=null)
-		{
-			for(PartitionColumn pc:partitionColumn)
-			{
-				InputHivePartitionColumn inputHivePartitionColumn3 = new InputHivePartitionColumn();
-				inputHivePartitionColumn3.setName(pc.getName());
-				inputHivePartitionColumn3.setName(pc.getValue());
-			if(pc.getPartitionColumn()!=null)
-			{	
-			
-				addFilterKey(pc,inputHivePartitionColumn3);
-			}
-				inputHivePartitionColumn.add(inputHivePartitionColumn3);
-			}
-			
-		}
-		property.put(list.get(0),inputHivePartitionColumn);
-		
-		return property;
-	}
-	
-	private void addFilterKey(PartitionColumn partitionColumn1,InputHivePartitionColumn inputHivePartitionColumn1)
-	{
-		InputHivePartitionColumn inputHivePartitionColumn2 =inputHivePartitionColumn1.getInputHivePartitionColumn();
-			PartitionColumn partitionColumn2 = partitionColumn1.getPartitionColumn();
-			inputHivePartitionColumn2.setName(partitionColumn2.getName());
-		    inputHivePartitionColumn2.setValue(partitionColumn2.getValue());
-			inputHivePartitionColumn1.setInputHivePartitionColumn(inputHivePartitionColumn2);
-			if(partitionColumn2.getPartitionColumn()!=null)
-			{
-				if(partitionColumn2.getPartitionColumn().getValue()!="")
-				{
-				addFilterKey(partitionColumn2,inputHivePartitionColumn2);
-				}
-			}
-	}
-
-	
 	/*
 	 * returns Partition keys list
 	 */
@@ -166,7 +109,38 @@ public class InputHiveParquetUiConverter extends InputUiConverter {
 			}
 			}
 		}
+		
+		Set<String> keys=new HashSet<String>();
+		if(property!=null)
+		{
+		keys=property.keySet();
+		}
+		List <String>list= new ArrayList<String>();
+		list.addAll(keys);
+		List<InputHivePartitionColumn> inputHivePartitionColumn = new ArrayList<InputHivePartitionColumn>();
+
+		HivePartitionFilterType hivePartitionFilterType=parquetHive.getPartitionFilter();
+		List<PartitionColumn> partitionColumn=hivePartitionFilterType.getPartitionColumn();
+
+		if(partitionColumn!=null)
+		{
+			for(PartitionColumn pc:partitionColumn)
+			{
+				InputHivePartitionColumn inputHivePartitionColumn3 = new InputHivePartitionColumn();
+				inputHivePartitionColumn3.setName(pc.getName());
+				inputHivePartitionColumn3.setValue(pc.getValue());
+			if(pc.getPartitionColumn()!=null)
+			{	
+				addFilterKey(pc,inputHivePartitionColumn3);
+			}
+				inputHivePartitionColumn.add(inputHivePartitionColumn3);
+			}
+			
+		}
+		property.put(list.get(0),inputHivePartitionColumn);
+		
 		return property;
+		
 	}
 	
 	private void getKey(PartitionFieldBasicType partition)
@@ -177,6 +151,22 @@ public class InputHiveParquetUiConverter extends InputUiConverter {
 				{
 					getKey(partitionFieldBasicType1);
 				}
+	}
+	
+	private void addFilterKey(PartitionColumn partitionColumn1,InputHivePartitionColumn inputHivePartitionColumn1)
+	{
+		InputHivePartitionColumn inputHivePartitionColumn2 = new InputHivePartitionColumn();
+			PartitionColumn partitionColumn2 = partitionColumn1.getPartitionColumn();
+			inputHivePartitionColumn2.setName(partitionColumn2.getName());
+		    inputHivePartitionColumn2.setValue(partitionColumn2.getValue());
+		    inputHivePartitionColumn1.setInputHivePartitionColumn(inputHivePartitionColumn2);
+			if(partitionColumn2.getPartitionColumn()!=null)
+			{
+				if(partitionColumn2.getPartitionColumn().getValue()!="")
+				{
+				addFilterKey(partitionColumn2,inputHivePartitionColumn2);
+				}
+			}
 	}
 
 
