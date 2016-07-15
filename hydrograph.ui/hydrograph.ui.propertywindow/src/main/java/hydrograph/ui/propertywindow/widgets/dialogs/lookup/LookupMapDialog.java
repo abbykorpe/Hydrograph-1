@@ -77,8 +77,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 
 /**
  * 
@@ -823,6 +821,13 @@ public class LookupMapDialog extends Dialog {
 			propertyDialogButtonBar.enableApplyButton(true);
 		}
 		super.okPressed();
+	}
+	
+	@Override
+	protected void cancelPressed(){
+		lookupMappingGrid.setLookupInputProperties(oldLookupMappingGrid.getLookupInputProperties());
+		lookupMappingGrid.setLookupMapProperties(oldLookupMappingGrid.getLookupMapProperties());
+		super.cancelPressed();
 	}
 
 	private void populateLookupMapDialog() {
