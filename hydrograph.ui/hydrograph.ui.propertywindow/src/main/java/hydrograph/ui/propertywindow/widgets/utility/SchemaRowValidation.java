@@ -13,16 +13,17 @@
 
 package hydrograph.ui.propertywindow.widgets.utility;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -41,6 +42,8 @@ public class SchemaRowValidation{
 	private static final String JAVA_LANG_FLOAT = "java.lang.Float";
 	private static final String JAVA_LANG_SHORT = "java.lang.Short";
 	private static final String JAVA_LANG_LONG = "java.lang.Long";
+	private boolean dateFlag = false;
+	private boolean lengthFlag = false;
 	
 	
 	public static final SchemaRowValidation INSTANCE = new SchemaRowValidation();
@@ -97,16 +100,21 @@ public class SchemaRowValidation{
 			   ||(StringUtils.isNotBlank(fixedWidthGridRow.getLength())&& !(fixedWidthGridRow.getLength().matches(REGULAR_EXPRESSION_FOR_NUMBER))) 
 			   ){
 				setRedColor(tableItem);
+				lengthFlag = true;
 			}else{
 				setBlackColor(tableItem);
+				lengthFlag = false;
 			}
 		}else{
 			if(StringUtils.isBlank(fixedWidthGridRow.getLength())||!(fixedWidthGridRow.getLength().matches(REGULAR_EXPRESSION_FOR_NUMBER))|| (fixedWidthGridRow.getLength().equals("0"))){
 				setRedColor(tableItem);
+				lengthFlag = true;
 			}else{
 				setBlackColor(tableItem);
+				lengthFlag = false;
 			}
 		}
+		validateDateFormatAndLength(tableItem);
 	}
 	
 	
@@ -346,8 +354,10 @@ public class SchemaRowValidation{
 	private void executeIfDataTypeIsDate(GridRow gridRow, TableItem tableItem){
 		if((StringUtils.isBlank(gridRow.getDateFormat()))){
 			setRedColor(tableItem);
+			dateFlag = true;
 		}else{
 			setBlackColor(tableItem);
+			dateFlag = false;
 		}
 	}
 	
@@ -367,6 +377,14 @@ public class SchemaRowValidation{
 				StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), NONE)||
 				!(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))||(!(gridRow.getPrecision().matches(REGULAR_EXPRESSION_FOR_NUMBER))&&
 				 StringUtils.isNotBlank(gridRow.getPrecision()))){
+			setRedColor(tableItem);
+		}else{
+			setBlackColor(tableItem);
+		}
+	}
+	
+	private void validateDateFormatAndLength(TableItem tableItem){
+		if(dateFlag || lengthFlag){
 			setRedColor(tableItem);
 		}else{
 			setBlackColor(tableItem);
