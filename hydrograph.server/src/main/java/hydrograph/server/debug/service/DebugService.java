@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 package hydrograph.server.debug.service;
 
 import hydrograph.server.debug.lingual.LingualFilter;
@@ -32,6 +20,7 @@ import java.net.URL;
 import java.security.PrivilegedAction;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
@@ -403,24 +392,87 @@ public class DebugService implements PrivilegedAction<Object> {
 								Constants.TEMP_LOCATION_PATH);
 
 				String filePath = tempLocationPath + "/" + batchID + ".csv";
-
+				String UUID = generateUUID();
+				String uniqueId = batchID + "_" + UUID;
+				String linugalMetaDataPath = basePath + "/filter/" + UUID;
 				try {
 					String[] fieldNames = getFieldName(remoteFilterJson);
 					Type[] fieldTypes = getFieldType(remoteFilterJson);
-					new LingualFilter().filterData(batchID, basePath
-							+ "/debug/" + jobId + "/" + componentId + "_"
-							+ socketId, sizeOfDataInByte, filePath, username,
-							password, condition, fieldNames, fieldTypes);
+
+					Configuration conf = getConfiguration(username, password);
+					new LingualFilter().filterData(linugalMetaDataPath,
+							uniqueId, basePath + "/debug/" + jobId + "/"
+									+ componentId + "_" + socketId,
+							sizeOfDataInByte, filePath, condition, fieldNames,
+							fieldTypes, conf);
+
 					LOG.info("debug output path : " + filePath);
 					LOG.info("+++ Stop: "
 							+ new Timestamp((new Date()).getTime()));
 				} catch (Exception e) {
 					LOG.error("Error in reading debug files", e);
 					return "error";
+				} finally {
+					try {
+						System.gc();
+						deleteLingualResult(linugalMetaDataPath);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
-				// return "success";
 
 				return filePath;
+
+			}
+
+			private Configuration getConfiguration(String userId,
+					String password) throws LoginException, IOException {
+				Configuration conf = new Configuration();
+
+				// load hdfs-site.xml and core-site.xml
+				String hdfsConfigPath = ServiceUtilities
+						.getServiceConfigResourceBundle().getString(
+								Constants.HDFS_SITE_CONFIG_PATH);
+				String coreSiteConfigPath = ServiceUtilities
+						.getServiceConfigResourceBundle().getString(
+								Constants.CORE_SITE_CONFIG_PATH);
+				LOG.debug("Loading hdfs-site.xml:" + hdfsConfigPath);
+				conf.addResource(new Path(hdfsConfigPath));
+				LOG.debug("Loading hdfs-site.xml:" + coreSiteConfigPath);
+				conf.addResource(new Path(coreSiteConfigPath));
+
+				// apply kerberos token
+				applyKerberosToken(userId, password, conf);
+				return conf;
+			}
+
+			private void deleteLingualResult(String deletePath)
+					throws IOException {
+
+				Configuration configuration = new Configuration();
+				FileSystem fileSystem = FileSystem.get(configuration);
+				Path deletingFilePath = new Path(deletePath);
+
+				try {
+					if (!fileSystem.exists(deletingFilePath)) {
+						throw new PathNotFoundException(deletingFilePath
+								.toString());
+					} else {
+						boolean isDeleted = fileSystem.delete(deletingFilePath,
+								true);
+						if (isDeleted) {
+							fileSystem.deleteOnExit(deletingFilePath);
+						}
+						LOG.info("Deleted path : " + deletePath);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				fileSystem.close();
+			}
+
+			private String generateUUID() {
+				return String.valueOf(UUID.randomUUID());
 			}
 
 			private String parseSQLQueryToLingualQuery(
@@ -434,7 +486,6 @@ public class DebugService implements PrivilegedAction<Object> {
 				LingualQueryCreator customVisitor = new LingualQueryCreator(
 						remoteFilterJson.getSchema());
 				String condition = customVisitor.visit(parser.eval());
-				System.out.println("condition: " + condition);
 				return condition;
 			}
 
@@ -466,6 +517,7 @@ public class DebugService implements PrivilegedAction<Object> {
 				}
 				return fieldName;
 			}
+
 		});
 	}
 

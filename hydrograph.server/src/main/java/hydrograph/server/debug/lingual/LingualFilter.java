@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 package hydrograph.server.debug.lingual;
 
 import java.io.FileOutputStream;
@@ -22,7 +10,11 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Set;
 
+import org.apache.hadoop.conf.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,34 +26,52 @@ import org.slf4j.LoggerFactory;
  */
 public class LingualFilter {
 	static Logger LOG = LoggerFactory.getLogger(LingualFilter.class);
+	String resultSchema = null;
+	String processingSchema = null;
 
-	public void filterData(String uniqueID, String hdfsFilePath, double sizeOfDataInByte, String localDebugFilePath,
-			String userId, String password, String condition, String[] fieldNames, Type[] fieldTypes) {
-	
+	public void filterData(String linugalMetaDataPath, String uniqueID,
+			String hdfsFilePath, double sizeOfDataInByte,
+			String localDebugFilePath, String condition, String[] fieldNames,
+			Type[] fieldTypes, Configuration conf) {
+
 		String tableName = uniqueID + "_table";
 		String stereotypeName = uniqueID + "_stereo";
-		
+	//	resultSchema = uniqueID + "_resultSchema";
+		processingSchema = uniqueID + "_process";
 		try {
-			new LingualSchemaCreator().createCatalog(tableName, stereotypeName, hdfsFilePath, fieldNames, fieldTypes);
-			runJdbcQuery(getQuery(tableName, condition), sizeOfDataInByte, localDebugFilePath);
+			new LingualSchemaCreator().createCatalog(linugalMetaDataPath,
+					processingSchema,  tableName, stereotypeName,
+					hdfsFilePath, fieldNames, fieldTypes);
+			runJdbcQuery(getQuery(tableName, condition), getProperties(conf),
+					sizeOfDataInByte, localDebugFilePath);
+			
+			new LingualSchemaCreator().cleanUp(processingSchema);
 		} catch (ClassNotFoundException | IOException | SQLException e) {
-			e.printStackTrace();
-		} finally {
-			new LingualSchemaCreator().removeSteroTypeAndTable(tableName, stereotypeName);
+			LOG.error(e.getMessage());
 		}
 	}
 
+	private Properties getProperties(Configuration conf) {
+		Properties properties = new Properties();
+		properties.putAll(conf.getValByRegex(".*"));
+		return properties;
+	}
+
 	private String getQuery(String tableName, String condition) {
-		String query = "select * from  \"lingualSchema\".\"" + tableName + "\" where " + condition;
+		String query = "select * from  \"" + processingSchema + "\"" + ".\""
+				+ tableName + "\" where " + condition;
+		
 		return query;
 	}
 
-	private void runJdbcQuery(String query, double sizeOfDataInByte, String localDebugFile)
+	private void runJdbcQuery(String query, Properties properties,
+			double sizeOfDataInByte, String localDebugFile)
 			throws ClassNotFoundException, SQLException, IOException {
 		LOG.debug("Initializing Connection ");
 		Connection connection;
 		Class.forName("cascading.lingual.jdbc.Driver");
-		connection = DriverManager.getConnection("jdbc:lingual:hadoop2-mr1");
+		connection = DriverManager.getConnection("jdbc:lingual:hadoop2-mr1",
+				properties);
 		Statement statement = connection.createStatement();
 
 		LOG.debug("executing query: " + query);
@@ -71,8 +81,8 @@ public class LingualFilter {
 		resultSet.close();
 	}
 
-	private void writeFiles(ResultSet resultSet, double sizeOfDataInByte, String localDebugFile)
-			throws SQLException, IOException {
+	private void writeFiles(ResultSet resultSet, double sizeOfDataInByte,
+			String localDebugFile) throws SQLException, IOException {
 
 		String row = "";
 		ResultSetMetaData metaData = resultSet.getMetaData();
@@ -85,7 +95,8 @@ public class LingualFilter {
 		while (resultSet.next()) {
 			row = "";
 			for (int i = 1; i <= columnLength; i++) {
-				row = (resultSet.getObject(i) == null) ? "" : resultSet.getObject(i).toString();
+				row = (resultSet.getObject(i) == null) ? "" : resultSet
+						.getObject(i).toString();
 				if (i != columnLength) {
 					row += ",";
 				}
@@ -103,7 +114,8 @@ public class LingualFilter {
 		os.close();
 	}
 
-	private StringBuilder getColumnName(ResultSetMetaData metaData) throws SQLException {
+	private StringBuilder getColumnName(ResultSetMetaData metaData)
+			throws SQLException {
 		String columnName = "";
 		StringBuilder stringBuilder = new StringBuilder();
 		int numberOfColumn = metaData.getColumnCount();

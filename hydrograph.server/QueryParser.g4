@@ -1,46 +1,128 @@
 grammar QueryParser;
 
+eval
+:
+	leftBrace* expression
+	(
+		andOr leftBrace* expression rightBrace*
+	)* rightBrace*
+	| eval ';'
+;
 
-eval : leftBrace? expression (andOr leftBrace* expression rightBrace*)* rightBrace?
-   | eval ';';
+expression
+:
+	fieldname
+	(
+		condition
+		(
+			javaiden
+			| fieldname
+		)
+	)?
+	(
+		specialexpr
+	)?
+;
 
+leftBrace
+:
+	'('
+;
 
-expression : fieldname (condition javaiden)? (specialexpr)?;
+rightBrace
+:
+	')'
+;
 
-leftBrace: '(';
-rightBrace: ')';
+specialexpr
+:
+	'in' leftBrace javaiden rightBrace
+	| 'not in' leftBrace javaiden rightBrace
+	| 'between' javaiden andOr javaiden
+	| 'like' leftBrace? javaiden rightBrace?
+	| 'not like' leftBrace? javaiden rightBrace?
+	| 'IN' leftBrace javaiden rightBrace
+	| 'NOT IN' leftBrace javaiden rightBrace
+	| 'BETWEEN' javaiden andOr javaiden
+	| 'LIKE' javaiden
+	| 'NOT LIKE' javaiden
+;
 
-specialexpr :  'in' leftBrace javaiden rightBrace
-                          |'not in' javaiden rightBrace
-                          |'between'  javaiden andOr javaiden
-                           | 'like' leftBrace? javaiden rightBrace?
-                           | 'not like' leftBrace? javaiden rightBrace?
-                           |'IN' leftBrace javaiden rightBrace
-                          |'NOT IN'leftBrace javaiden rightBrace
-                          |'BETWEEN'  javaiden andOr javaiden
-                           | 'LIKE' javaiden
-                           | 'NOT LIKE' javaiden;
+andOr
+:
+	' or '
+	| ' and '
+	| ' OR '
+	| ' AND '
+;
 
-andOr : 'or' | 'and';
+condition
+:
+	'='
+	| '<'
+	| '<='
+	| '>'
+	| '>='
+	| '<>'
+;
 
-condition : '='
-           | '<'
-            |'<='
-            |'>'
-            |'>='
-            |'<>'
-           ;
+javaiden
+:
+	Identifier+
+;
 
+fieldname
+:
+	FieldIdentifier
+;
 
-javaiden : Identifier+ ;
+FieldIdentifier
+:
+	JavaLetter JavaLetterOrDigit*
+;
 
-fieldname:  Identifier+;
 Identifier
-         :   JavaLetterOrDigit+
-         ;
+:
+	Val+
+;
 
-     fragment
-     JavaLetterOrDigit
-         :   [a-zA-Z0-9-.$_,%'];
+fragment
+Val
+:
+	[a-zA-Z0-9-.$_,%@']
+;
 
-WS  :  [\t\r\n\u000C]+ -> skip;
+fragment
+JavaLetter
+:
+	[a-zA-Z$_] // these are the "java letters" below 0x7F
+
+	| // covers all characters above 0x7F which are not a surrogate
+	~[\u0000-\u007F\uD800-\uDBFF]
+	{Character.isJavaIdentifierStart(_input.LA(-1))}?
+
+	| // covers UTF-16 surrogate pairs encodings for U+10000 to U+10FFFF
+	[\uD800-\uDBFF] [\uDC00-\uDFFF]
+	{Character.isJavaIdentifierStart(Character.toCodePoint((char)_input.LA(-2), (char)_input.LA(-1)))}?
+
+;
+
+fragment
+JavaLetterOrDigit
+:
+	[a-zA-Z0-9$_] // these are the "java letters or digits" below 0x7F
+
+	| // covers all characters above 0x7F which are not a surrogate
+	~[\u0000-\u007F\uD800-\uDBFF]
+	{Character.isJavaIdentifierPart(_input.LA(-1))}?
+
+	| // covers UTF-16 surrogate pairs encodings for U+10000 to U+10FFFF
+	[\uD800-\uDBFF] [\uDC00-\uDFFF]
+	{Character.isJavaIdentifierPart(Character.toCodePoint((char)_input.LA(-2), (char)_input.LA(-1)))}?
+
+;
+
+WS
+:
+	[ \t\r\n\u000C]+ -> skip
+;
