@@ -121,7 +121,6 @@ public class FilterConditionsDialog extends Dialog {
 	
 	private DataViewerAdapter dataViewerAdapter;
 	private DebugDataViewer debugDataViewer;
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConditionsDialog.class);
 
 	Button localOkButton;
 	Button localApplyButton;
@@ -1200,7 +1199,6 @@ public class FilterConditionsDialog extends Dialog {
 				FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
 				redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap);
 				((ReloadAction)debugDataViewer.getActionFactory().getAction(ReloadAction.class.getName())).run();
-				debugDataViewer.submitRecordCountJob();
 				cancelPressed();
 			}
 			

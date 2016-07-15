@@ -212,7 +212,11 @@ public class WatchRecordAction extends SelectionAction {
 				if(watcherAndConditon.containsKey(watcherId))
 				{
 					window.setConditions(watcherAndConditon.get(watcherId));
+					if(watcherAndConditon.get(watcherId).isOverWritten()){
+						window.setOverWritten(watcherAndConditon.get(watcherId).isOverWritten());
+					}
 				}
+				
 				window.open();
 				if(!window.getConditions().getRetainLocal()){
 					window.getConditions().setLocalCondition("");

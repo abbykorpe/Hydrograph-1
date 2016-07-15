@@ -203,6 +203,9 @@ public class DebugDataViewer extends ApplicationWindow {
 	private FilterConditions conditions;
 	private String localCondition = "";
 	private String remoteCondition = "";
+	private boolean isOverWritten = false;
+	
+	
 	/**
 	 * Create the application window,
 	 * 
@@ -298,7 +301,8 @@ public class DebugDataViewer extends ApplicationWindow {
 				disbleDataViewerUIControls();
 
 				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(jobDetails);
-				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles(getConditions());
+				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles(getConditions(),isOverWritten);
+				setOverWritten(false);
 
 				if (StatusConstants.ERROR == statusMessage.getReturnCode()) {
 					Display.getDefault().asyncExec(new Runnable() {
@@ -1642,6 +1646,16 @@ public class DebugDataViewer extends ApplicationWindow {
 		}		
 		dataViewerMap.remove(dataViewerWindowName);
 		return super.close();
+	}
+
+
+	public boolean isOverWritten() {
+		return isOverWritten;
+	}
+
+
+	public void setOverWritten(boolean isOverWritten) {
+		this.isOverWritten = isOverWritten;
 	}
 
 

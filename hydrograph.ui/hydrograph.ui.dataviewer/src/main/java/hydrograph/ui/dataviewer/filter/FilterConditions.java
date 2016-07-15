@@ -27,7 +27,14 @@ public class FilterConditions {
 	private boolean retainRemote=false;
 	private String localCondition;
 	private String remoteCondition;
+	private boolean isOverWritten = false;
 	
+	public boolean isOverWritten() {
+		return isOverWritten;
+	}
+	public void setOverWritten(boolean isOverWritten) {
+		this.isOverWritten = isOverWritten;
+	}
 	public FilterConditions() {
 		localConditions = new ArrayList<>();
 		remoteConditions = new ArrayList<>();
