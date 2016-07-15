@@ -95,7 +95,7 @@ public class CustomAboutDialog extends TrayDialog {
 	 */
 	public CustomAboutDialog(Shell parentShell) {
 		super(parentShell);
-
+		setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL | SWT.WRAP); 
 		product = Platform.getProduct();
 
 		if (product != null) {
@@ -145,30 +145,6 @@ public class CustomAboutDialog extends TrayDialog {
 		newShell.setText(NLS.bind(WorkbenchMessages.AboutDialog_shellTitle,productName ));
 
 	}
-
-	/**
-	 * Add buttons to the dialog's button bar.
-	 * 
-	 * Subclasses should override.
-	 * 
-	 * @param parent
-	 *            the button bar composite
-	 */
-	//	    protected void createButtonsForButtonBar(Composite parent) {
-	//	        parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-	//
-	//	        createButton(parent, DETAILS_ID, WorkbenchMessages.AboutDialog_DetailsButton, false); 
-	//
-	//	        Label l = new Label(parent, SWT.NONE);
-	//	        l.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-	//	        GridLayout layout = (GridLayout) parent.getLayout();
-	//	        layout.numColumns++;
-	//	        layout.makeColumnsEqualWidth = false;
-	//
-	//	        Button b = createButton(parent, IDialogConstants.OK_ID,
-	//	                IDialogConstants.OK_LABEL, true);
-	//	        b.setFocus();
-	//	    }
 
 	/**
 	 * Creates and returns the contents of the upper part 
@@ -434,7 +410,13 @@ public class CustomAboutDialog extends TrayDialog {
 	protected boolean isResizable() {
 		return true;
 	}
-
+	
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		// create OK and Cancel buttons by default
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+				true);
+	}
 }
 
 
