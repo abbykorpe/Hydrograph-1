@@ -57,6 +57,7 @@ test {
     exclude '**/OutputFileHiveParquetFileTest*'
     exclude '**/InputFileHiveTextFileTest*'
     exclude '**/OutputFileHiveTextFileTest*'
+	exclude '**/RunProgramTest*'
 }
 
 uploadArchives {
