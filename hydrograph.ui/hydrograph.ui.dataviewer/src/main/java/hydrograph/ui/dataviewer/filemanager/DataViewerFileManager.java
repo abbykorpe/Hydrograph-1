@@ -71,7 +71,7 @@ public class DataViewerFileManager {
 	 * 
 	 * @return error code
 	 */
-	public StatusMessage downloadDataViewerFiles(FilterConditions filterConditions){
+	public StatusMessage downloadDataViewerFiles(FilterConditions filterConditions ,boolean isOverWritten){
 
 		// Get csv debug file name and location 
 		String csvDebugFileAbsolutePath = null;
@@ -116,7 +116,7 @@ public class DataViewerFileManager {
 		if (csvDebugFileName != null) {
 			String dataViewerDebugFile = getDataViewerDebugFile(csvDebugFileName);
 			try {
-				copyCSVDebugFileToDataViewerStagingArea(jobDetails, csvDebugFileAbsolutePath, dataViewerDebugFile);
+				copyCSVDebugFileToDataViewerStagingArea(jobDetails, csvDebugFileAbsolutePath, dataViewerDebugFile,isOverWritten);
 			} catch (IOException | JSchException e1) {
 				logger.error("Unable to fetch debug file", e1);
 				return new StatusMessage(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
@@ -167,16 +167,16 @@ public class DataViewerFileManager {
 		}
 	}
 	
-	private void copyCSVDebugFileToDataViewerStagingArea(JobDetails jobDetails, String csvDebugFileAbsolutePath, String dataViewerDebugFile) throws IOException, JSchException{
+	private void copyCSVDebugFileToDataViewerStagingArea(JobDetails jobDetails, String csvDebugFileAbsolutePath, String dataViewerDebugFile,boolean isOverWritten) throws IOException, JSchException{
 		if (!jobDetails.isRemote()) {
 			String sourceFile = csvDebugFileAbsolutePath.trim();
 			File file = new File(dataViewerDebugFile);
-			if (!file.exists()) {
+			if (!file.exists()|| isOverWritten) {
 				Files.copy(Paths.get(sourceFile), Paths.get(dataViewerDebugFile), StandardCopyOption.REPLACE_EXISTING);
 			}
 		} else {
 			File file = new File(dataViewerDebugFile);
-			if (!file.exists()) {				
+			if (!file.exists() || isOverWritten) {				
 				SCPUtility.INSTANCE.scpFileFromRemoteServer(jobDetails.getHost(), jobDetails.getUsername(), jobDetails.getPassword(),
 						csvDebugFileAbsolutePath.trim(), getDataViewerDebugFilePath());
 			}

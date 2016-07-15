@@ -98,6 +98,7 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 75.#717  [Kalyan Rajpoot] Lookup / Join Issues: Duplicate schema fields are getting displayed in the Join/Lookup schema tab.
 76.#763  [Kalyan Rajpoot] Join Component: Scroll bar does not appear on the Join Mapping Window if user more than 3 input ports
 77.#715  [Kalyan Rajpoot] Previously saved data is not getting loaded on clicking cancel button on Join/ Lookup mapping window. 
+
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

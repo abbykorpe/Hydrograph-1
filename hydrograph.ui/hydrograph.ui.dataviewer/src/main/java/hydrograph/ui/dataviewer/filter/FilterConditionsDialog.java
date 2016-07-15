@@ -121,7 +121,6 @@ public class FilterConditionsDialog extends Dialog {
 	
 	private DataViewerAdapter dataViewerAdapter;
 	private DebugDataViewer debugDataViewer;
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterConditionsDialog.class);
 
 	Button localOkButton;
 	Button localApplyButton;

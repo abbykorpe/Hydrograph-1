@@ -487,7 +487,8 @@ public class FilterHelper {
 			debugDataViewer.setDebugFileLocation(filteredFileLocation);
 			debugDataViewer.setDebugFileName(filteredFileName);
 			debugDataViewer.showDataInDebugViewer(true,true);
-			
+			debugDataViewer.setOverWritten(true);
+						
 		} catch (NumberFormatException | IOException exception) {
 			logger.error("Error occuring while showing remote filtered data",exception);
 		}
