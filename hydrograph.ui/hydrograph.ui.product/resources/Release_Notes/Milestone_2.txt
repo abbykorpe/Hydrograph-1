@@ -96,6 +96,7 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 73.#..   [Prateem Tadas]Hydrograph help window resize disabled. 
 74.#352  [Prateem Tadas] Available fields missing in Hive components.
 75.#717  [Kalyan Rajpoot] Lookup / Join Issues: Duplicate schema fields are getting displayed in the Join/Lookup schema tab.
+76.#763  [Kalyan Rajpoot] Join Component: Scroll bar does not appear on the Join Mapping Window if user more than 3 input ports
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
