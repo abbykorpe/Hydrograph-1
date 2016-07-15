@@ -141,7 +141,7 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 			{
 				mixedSchemeGridRow.setScaleType(2); 
 				mixedSchemeGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[2]);
-				mixedSchemeGridRow.setScale(String.valueOf(0));
+				mixedSchemeGridRow.setScale(String.valueOf(1));
 			}
 			mixedSchemeGridRow.setDataType((Integer) value);
 			mixedSchemeGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]); 

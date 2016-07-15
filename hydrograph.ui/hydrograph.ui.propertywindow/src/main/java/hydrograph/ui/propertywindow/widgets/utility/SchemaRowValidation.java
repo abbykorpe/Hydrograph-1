@@ -48,6 +48,11 @@ public class SchemaRowValidation{
 	
 	public static final SchemaRowValidation INSTANCE = new SchemaRowValidation();
 	
+	
+	private SchemaRowValidation(){
+		
+	}
+	
 	public void highlightInvalidRowWithRedColor(GridRow gridRow,TableItem item,Table table,String componentType ){ 
 		if(item==null){
 			for(TableItem tableItem:table.getItems()){		
@@ -87,7 +92,8 @@ public class SchemaRowValidation{
 			String componentType, TableItem tableItem){
 		
 		if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL)){
-			executeIfDataTypeIsBigDecimal(gridRow, componentType, tableItem);
+			if(executeIfDataTypeIsBigDecimal(gridRow, componentType, tableItem))
+				return;
 		}else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),JAVA_UTIL_DATE)){
 			executeIfDataTypeIsDate(gridRow, tableItem);	
 		}
@@ -362,7 +368,7 @@ public class SchemaRowValidation{
 	}
 	
 	
-	private void executeIfDataTypeIsBigDecimal(GridRow gridRow,
+	private boolean executeIfDataTypeIsBigDecimal(GridRow gridRow,
 			String componentType, TableItem tableItem){
 		if(StringUtils.containsIgnoreCase(componentType, HIVE)||StringUtils.containsIgnoreCase(componentType, PARQUET)){
 			if(StringUtils.isBlank(gridRow.getPrecision())|| StringUtils.isBlank(gridRow.getScale()) ||
@@ -370,16 +376,20 @@ public class SchemaRowValidation{
 					!(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))||!(gridRow.getPrecision().matches(REGULAR_EXPRESSION_FOR_NUMBER))
 					){
 				setRedColor(tableItem);
+				return true;
 			}else{
 				setBlackColor(tableItem);
+				return false;
 			}	
 		}else if(StringUtils.isBlank(gridRow.getScale()) ||
 				StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), NONE)||
 				!(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))||(!(gridRow.getPrecision().matches(REGULAR_EXPRESSION_FOR_NUMBER))&&
 				 StringUtils.isNotBlank(gridRow.getPrecision()))){
 			setRedColor(tableItem);
+			return true;
 		}else{
 			setBlackColor(tableItem);
+			return false;
 		}
 	}
 	

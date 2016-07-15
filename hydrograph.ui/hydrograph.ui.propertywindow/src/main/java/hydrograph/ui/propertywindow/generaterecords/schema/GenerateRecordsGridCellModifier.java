@@ -174,7 +174,7 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 			{
 				generateRecordSchemaGridRow.setScaleType(2); 
 				generateRecordSchemaGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[2]);
-				generateRecordSchemaGridRow.setScale(String.valueOf(0));
+				generateRecordSchemaGridRow.setScale(String.valueOf(1));
 			}
 			generateRecordSchemaGridRow.setDataType((Integer) value);
 			generateRecordSchemaGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer) value]);
