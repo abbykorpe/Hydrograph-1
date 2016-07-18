@@ -21,9 +21,9 @@ public interface HydrographRuntimeService {
 	public void initialize(Properties config, String[] args, HydrographJob bhsGraph,
 			HydrographDebugInfo hydrographDebugInfo, String jobId, String basePath);
 
-	public void prepareToExecute() throws ParseException;
+	public void prepareToExecute();
 
-	public void execute() throws ParseException;
+	public void execute();
 
 	public void oncomplete();
 
