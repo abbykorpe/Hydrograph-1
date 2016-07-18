@@ -34,6 +34,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.google.gson.Gson;
@@ -84,12 +85,12 @@ public class DataViewerFileManager {
 						csvDebugFileAbsolutePath = getDebugFileAbsolutePath();
 					} else {
 						csvDebugFileAbsolutePath = getDebugFileAbsolutePath();
-						csvDebugFileName = getFileName(csvDebugFileAbsolutePath, csvDebugFileName);
+						csvDebugFileName = getFileName(csvDebugFileAbsolutePath);
 						csvDebugFileAbsolutePath = getFilterFileAbsolutePath(filterConditions, csvDebugFileName);
 					}
 				} else {
 					csvDebugFileAbsolutePath = getDebugFileAbsolutePath();
-					csvDebugFileName = getFileName(csvDebugFileAbsolutePath, csvDebugFileName);
+					csvDebugFileName = getFileName(csvDebugFileAbsolutePath);
 					csvDebugFileAbsolutePath = getFilterFileAbsolutePath(filterConditions, csvDebugFileName);
 				}
 			}
@@ -111,7 +112,7 @@ public class DataViewerFileManager {
 		}
 				
 		//Copy csv debug file to Data viewers temporary file location
-		if (csvDebugFileName != null) {
+		if (StringUtils.isNotBlank(csvDebugFileName)) {
 			String dataViewerDebugFile = getDataViewerDebugFile(csvDebugFileName);
 			try {
 				if (!filterApplied) {
@@ -136,16 +137,17 @@ public class DataViewerFileManager {
 		return new StatusMessage(StatusConstants.SUCCESS);
 	}
 
-	private String getFileName(String csvDebugFileAbsolutePath, String csvDebugFileName) {
-		if (csvDebugFileAbsolutePath != null) {
+	private String getFileName(String csvDebugFileAbsolutePath) {
+		
+		if (StringUtils.isNotBlank(csvDebugFileAbsolutePath)) {
 		String	debugFileName = csvDebugFileAbsolutePath
 					.substring(csvDebugFileAbsolutePath.lastIndexOf("/") + 1, csvDebugFileAbsolutePath.length())
 					.replace(DEBUG_DATA_FILE_EXTENTION, "").trim();
 			if (debugFileName != null) {
-				csvDebugFileName = getDataViewerDebugFile(debugFileName);
+				return getDataViewerDebugFile(debugFileName);
 			}
 		}
-		return csvDebugFileName;
+		return null;
 	}
 
 	private String getFilterFileAbsolutePath(FilterConditions filterConditions, String csvDebugFileName)

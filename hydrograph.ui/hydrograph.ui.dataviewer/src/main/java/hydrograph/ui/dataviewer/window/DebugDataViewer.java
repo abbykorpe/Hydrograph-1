@@ -323,7 +323,7 @@ public class DebugDataViewer extends ApplicationWindow {
 				setDebugFileName(debugFileName);
 				if (getConditions() != null) {
 					if (getConditions().getRetainLocal() || getConditions().getRetainRemote()) {
-						showDataInDebugViewer(true, false);
+						showDataInDebugViewer(true,remoteOkPressed);
 					}
 					 else {
 						if (!filterApplied) {
