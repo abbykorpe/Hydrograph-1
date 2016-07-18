@@ -173,6 +173,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	private static final String PAGE_SIZE = "VIEW_DATA_PAGE_SIZE";
 	private static final String DEFAULT_FILE_SIZE = "100";
 	private static final String DEFAULT_PAGE_SIZE = "100";
+	private static String SCHEMA_FILE_EXTENTION=".xml";
 
 	private JobDetails jobDetails;
 	private StatusManager statusManager;
@@ -294,12 +295,11 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private void downloadDebugFiles() {
 		Job job = new Job(Messages.LOADING_DEBUG_FILE) {
-			private String SCHEMA_FILE_EXTENTION=".xml";
-
+			
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				disbleDataViewerUIControls();
-
+				
 				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(jobDetails);
 				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles(getConditions(),isOverWritten);
 				setOverWritten(false);
@@ -333,8 +333,6 @@ public class DebugDataViewer extends ApplicationWindow {
 				{
 					showDataInDebugViewer(false, false);
 				}
-
-				dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + debugFileName + SCHEMA_FILE_EXTENTION);
 				
 				return Status.OK_STATUS;
 			}
@@ -342,6 +340,27 @@ public class DebugDataViewer extends ApplicationWindow {
 		job.schedule();
 	}
 	
+	private void syncSchemaWithReceivedDataFile() {
+		List<Field> fieldList = dataViewerFileSchema.getField();
+		List<Field> newFieldList = new ArrayList<>();
+		for(String field: dataViewerAdapter.getColumnList()){
+			newFieldList.add(getField(fieldList,field));
+		}
+		dataViewerFileSchema.getField().clear();
+		dataViewerFileSchema.getField().addAll(newFieldList);
+	}
+
+
+	private Field getField(List<Field> fieldList, String name) {		
+		for(Field field: fieldList){
+			if(StringUtils.equals(field.getName(), name)){
+				return field;
+			}
+		}		
+		return null;
+	}
+
+
 	public String getDebugFileLocation() {
 		return debugFileLocation;
 	}
@@ -383,7 +402,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		dataViewLoader.reloadloadViews();
 		statusManager.enableInitialPaginationContols();
 		actionFactory.enableAllActions(true);
-		submitRecordCountJob();
+		submitRecordCountJob();		
 	}
 	
 	public void showDataInDebugViewer(final boolean filterApplied, final boolean remoteOkPressed) {
@@ -1246,10 +1265,10 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 	public void createGridViewTableColumns(final TableViewer tableViewer) {
-
 		createGridViewTableIndexColumn(tableViewer);
 		int index = 0;
-		
+		dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + debugFileName + SCHEMA_FILE_EXTENTION);
+		syncSchemaWithReceivedDataFile();
 		for (String columnName : dataViewerAdapter.getColumnList()) {
 			final TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 			TableColumn tblclmnItem = tableViewerColumn.getColumn();
@@ -1273,6 +1292,7 @@ public class DebugDataViewer extends ApplicationWindow {
 			});
 
 			if(dataViewerFileSchema!=null){
+				
 				tableViewerColumn.getColumn().setToolTipText(
 						getColumnToolTip(dataViewerFileSchema.getField().get(index)));
 			}
