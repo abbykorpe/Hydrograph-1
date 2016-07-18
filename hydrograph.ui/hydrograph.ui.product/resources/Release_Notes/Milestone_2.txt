@@ -113,8 +113,8 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 90.#809  [Shrirang Kumbhar] Data Viewer : Focus is not shifting to the Data viewer window if user minimize it and again tries to open by clicking watch records option 
 91.#715  [Kalyan Rajpoot] Previously saved data is not getting loaded on clicking cancel button on Join/ Lookup mapping window. 
 92.#821  [Shrirang Kumbhar] Data Viewer: Field Name and Data Type is not matching with the actual column present on the data viewer window
-
-
+93.#809  [Shrirang Kumbhar] Data Viewer : Focus is not shifting to the Data viewer window if user minimize it and again tries to open by clicking watch records option 
+94.#689  [Vibhor Tyagi] Mixed Schema: Validation is not Displayed When Date Format is Left Blank
 
 =====================================================================================================
 Notes for QA:

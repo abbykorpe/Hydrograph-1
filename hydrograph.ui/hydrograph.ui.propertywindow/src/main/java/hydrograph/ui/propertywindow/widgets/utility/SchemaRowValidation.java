@@ -13,16 +13,17 @@
 
 package hydrograph.ui.propertywindow.widgets.utility;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -41,9 +42,16 @@ public class SchemaRowValidation{
 	private static final String JAVA_LANG_FLOAT = "java.lang.Float";
 	private static final String JAVA_LANG_SHORT = "java.lang.Short";
 	private static final String JAVA_LANG_LONG = "java.lang.Long";
+	private boolean invalidDateFormat = false;
+	private boolean invalidLength = false;
 	
 	
 	public static final SchemaRowValidation INSTANCE = new SchemaRowValidation();
+	
+	
+	private SchemaRowValidation(){
+		
+	}
 	
 	public void highlightInvalidRowWithRedColor(GridRow gridRow,TableItem item,Table table,String componentType ){ 
 		if(item==null){
@@ -84,7 +92,8 @@ public class SchemaRowValidation{
 			String componentType, TableItem tableItem){
 		
 		if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL)){
-			executeIfDataTypeIsBigDecimal(gridRow, componentType, tableItem);
+			if(executeIfDataTypeIsBigDecimal(gridRow, componentType, tableItem))
+				return;
 		}else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),JAVA_UTIL_DATE)){
 			executeIfDataTypeIsDate(gridRow, tableItem);	
 		}
@@ -97,16 +106,21 @@ public class SchemaRowValidation{
 			   ||(StringUtils.isNotBlank(fixedWidthGridRow.getLength())&& !(fixedWidthGridRow.getLength().matches(REGULAR_EXPRESSION_FOR_NUMBER))) 
 			   ){
 				setRedColor(tableItem);
+				invalidLength = true;
 			}else{
 				setBlackColor(tableItem);
+				invalidLength = false;
 			}
 		}else{
 			if(StringUtils.isBlank(fixedWidthGridRow.getLength())||!(fixedWidthGridRow.getLength().matches(REGULAR_EXPRESSION_FOR_NUMBER))|| (fixedWidthGridRow.getLength().equals("0"))){
 				setRedColor(tableItem);
+				invalidLength = true;
 			}else{
 				setBlackColor(tableItem);
+				invalidLength = false;
 			}
 		}
+		validateDateFormatAndLength(tableItem);
 	}
 	
 	
@@ -145,11 +159,11 @@ public class SchemaRowValidation{
 		
 		BigDecimal rangeFrom = null, rangeTo = null;
 		
-		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom())){
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom()) && generateRecordSchemaGridRow.getRangeFrom().matches(REGULAR_EXPRESSION_FOR_NUMBER)){
 			rangeFrom = new BigDecimal(generateRecordSchemaGridRow.getRangeFrom());
 		}
 		
-		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo())){
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo()) && generateRecordSchemaGridRow.getRangeTo().matches(REGULAR_EXPRESSION_FOR_NUMBER)){
 			rangeTo = new BigDecimal(generateRecordSchemaGridRow.getRangeTo());
 		}
 		
@@ -346,27 +360,41 @@ public class SchemaRowValidation{
 	private void executeIfDataTypeIsDate(GridRow gridRow, TableItem tableItem){
 		if((StringUtils.isBlank(gridRow.getDateFormat()))){
 			setRedColor(tableItem);
+			invalidDateFormat = true;
 		}else{
 			setBlackColor(tableItem);
+			invalidDateFormat = false;
 		}
 	}
 	
 	
-	private void executeIfDataTypeIsBigDecimal(GridRow gridRow,
+	private boolean executeIfDataTypeIsBigDecimal(GridRow gridRow,
 			String componentType, TableItem tableItem){
 		if(StringUtils.containsIgnoreCase(componentType, HIVE)||StringUtils.containsIgnoreCase(componentType, PARQUET)){
 			if(StringUtils.isBlank(gridRow.getPrecision())|| StringUtils.isBlank(gridRow.getScale()) ||
 					StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), NONE)||
 					!(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))||!(gridRow.getPrecision().matches(REGULAR_EXPRESSION_FOR_NUMBER))
-					){
+					|| StringUtils.equalsIgnoreCase(gridRow.getScale(), "0")){
 				setRedColor(tableItem);
+				return true;
 			}else{
 				setBlackColor(tableItem);
+				return false;
 			}	
 		}else if(StringUtils.isBlank(gridRow.getScale()) ||
 				StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), NONE)||
 				!(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))||(!(gridRow.getPrecision().matches(REGULAR_EXPRESSION_FOR_NUMBER))&&
-				 StringUtils.isNotBlank(gridRow.getPrecision()))){
+				 StringUtils.isNotBlank(gridRow.getPrecision())) || StringUtils.equalsIgnoreCase(gridRow.getScale(), "0")){
+			setRedColor(tableItem);
+			return true;
+		}else{
+			setBlackColor(tableItem);
+			return false;
+		}
+	}
+	
+	private void validateDateFormatAndLength(TableItem tableItem){
+		if(invalidDateFormat || invalidLength){
 			setRedColor(tableItem);
 		}else{
 			setBlackColor(tableItem);

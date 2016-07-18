@@ -175,7 +175,7 @@ public class Messages extends NLS {
 	public static String FieldNameAlreadyExists;
 	public static String ABSOLUTE_PATH_TEXT;
 	public static String SCALETYPE_MUST_NOT_BE_NONE;
-	public static String SCALE_MUST_CONTAINS_NUMBER_ONLY_0_9;
+	public static String SCALE_SHOULD_BE_POSITIVE_INTEGER;
 	public static String SCALE_MUST_NOT_BE_BLANK;
 	public static String PRECISION_MUST_CONTAINS_NUMBER_ONLY_0_9;
 	public static String PRECISION_MUST_NOT_BE_BLANK;
