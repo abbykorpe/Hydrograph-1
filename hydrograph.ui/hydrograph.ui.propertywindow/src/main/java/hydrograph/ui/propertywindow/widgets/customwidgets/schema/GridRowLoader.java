@@ -54,7 +54,10 @@ import javax.xml.validation.Validator;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -95,6 +98,21 @@ public class GridRowLoader {
 		grids.clear();
 		try {
 			if(StringUtils.isNotBlank(schemaFile.getPath())){
+				
+				if(!schemaFile.getName().contains("."))	{
+					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+					messageBox.setText("Error");
+					logger.error(Messages.IMPORT_XML_IMPROPER_EXTENSION);
+					throw new Exception(Messages.IMPORT_XML_IMPROPER_EXTENSION);
+					}
+				
+				if(!(schemaFile.getPath().endsWith(".schema")) && !(schemaFile.getPath().endsWith(".xml"))){
+					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+					messageBox.setText("Error");
+					logger.error(Messages.IMPORT_XML_INCORRECT_FILE);
+					throw new Exception(Messages.IMPORT_XML_INCORRECT_FILE);
+					}
+				
 				
 				xml = new FileInputStream(schemaFile);
 				
@@ -241,6 +259,23 @@ public class GridRowLoader {
 
 		try {
 			if(StringUtils.isNotBlank(schemaFile.getPath())){
+				
+				if(!schemaFile.getName().contains("."))	{
+					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+					messageBox.setText("Error");
+					logger.error(Messages.EXPORT_XML_IMPROPER_EXTENSION);
+					throw new Exception(Messages.EXPORT_XML_IMPROPER_EXTENSION);
+					}
+				
+				if(!(schemaFile.getPath().endsWith(".schema")) && !(schemaFile.getPath().endsWith(".xml"))){
+					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+					messageBox.setText("Error");
+					logger.error(Messages.EXPORT_XML_INCORRECT_FILE);
+					throw new Exception(Messages.EXPORT_XML_INCORRECT_FILE);
+					}
+				
+			
+				
 				exportFile(schemaGridRowList, schema);
 				MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.EXPORTED_SCHEMA);
 			}else{

@@ -25,6 +25,7 @@ import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -113,7 +114,7 @@ public class ExternalSchemaFileSelectionDialog extends ElementTreeSelectionDialo
         	{
         		((Text)eltDefaultText.getSWTWidgetControl()).setText(((IFile) selection[0]).getName());
         	}
-        	if(extensions.length!=0 && Extensions.SCHEMA.toString().equalsIgnoreCase(extensions[0])){
+        	if(extensions.length!=0 && (Extensions.SCHEMA.toString().equalsIgnoreCase(extensions[0])  || Extensions.XML.toString().equalsIgnoreCase(extensions[0]))) {
         	 if(selection.length == 1 && selection[0] instanceof IFolder)
         	 {
         		 return OK;
@@ -198,12 +199,12 @@ public class ExternalSchemaFileSelectionDialog extends ElementTreeSelectionDialo
      * @return true, if successful
      */
     private boolean checkExtension(String name) {
-        if (name.equals("*")) {
+        if (StringUtils.equals(name,"*")) {
             return true;
         }
 
         for (int i = 0; i < extensions.length; i++) {
-            if (extensions[i].equals(name)) {
+            if (StringUtils.equals(extensions[i],name)) {
                 return true;
             }
         } 
