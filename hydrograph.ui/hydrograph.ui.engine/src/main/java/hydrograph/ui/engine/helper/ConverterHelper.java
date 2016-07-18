@@ -37,6 +37,7 @@ import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.engine.xpath.ComponentXpath;
@@ -50,6 +51,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -70,7 +72,7 @@ public class ConverterHelper {
 	protected Component component = null;
 	protected String componentName = null;
 	private static final String ID = "$id";
-
+	
 	public ConverterHelper(Component component) {
 		this.component = component;
 		this.properties = component.getProperties();
@@ -221,7 +223,51 @@ public class ConverterHelper {
 				outSocketList.add(outSocket);
 			}
 		}
+		
+		syncOutSocketWithSchemaTabList(outSocketList);
+		
 		return outSocketList;
+	}
+
+	private void syncOutSocketWithSchemaTabList(List<TypeOperationsOutSocket> outSocketList){
+		Schema componenetSchema = (Schema)component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+		if(outSocketList.size()==0 || componenetSchema==null){
+			return;
+		}
+		List<Object> fields = outSocketList.get(0).getPassThroughFieldOrOperationFieldOrMapField();
+		List<Object> newFieldList = new LinkedList<>();
+		
+		for(int index=0;index<componenetSchema.getGridRow().size();index++){
+			newFieldList.add(getField(componenetSchema.getGridRow().get(index).getFieldName(),fields));
+		}
+		
+		outSocketList.get(0).getPassThroughFieldOrOperationFieldOrMapField().clear();
+		outSocketList.get(0).getPassThroughFieldOrOperationFieldOrMapField().addAll(newFieldList);
+	}
+	
+
+	private Object getField(String fieldName, List<Object> fields) {
+		Object fieldToReturn = null;
+		for(Object field:fields){
+			if(field instanceof TypeInputField){				
+				if(StringUtils.equals(((TypeInputField)field).getName(), fieldName)){
+					fieldToReturn = field;
+					break;
+				}
+			}else if(field instanceof TypeMapField){
+				if(StringUtils.equals(((TypeMapField)field).getName(), fieldName)){
+					fieldToReturn = field;
+					break;
+				}
+			}else if(field instanceof TypeOperationField){
+				if(StringUtils.equals(((TypeOperationField)field).getName(), fieldName)){
+					fieldToReturn = field;
+					break;
+				}
+			}
+		}
+
+		return fieldToReturn;
 	}
 
 	private void setOutSocketProperties(TypeOperationsOutSocket outSocket, TransformMapping transformMapping,
