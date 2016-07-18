@@ -109,8 +109,13 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 86.#785  [Ashika Holkar] View Data Filter : Only One Page of Records Are Displayed On Clear Filte
 87.#674	 [Akhilesh Joshi] Unable to Reset the Selected Columns in View Data Window
 88.#654  [Ashika Holkar] Getting null pointer exception when user tries to provide external schema
-78.#821  [Shrirang Kumbhar] Data Viewer: Field Name and Data Type is not matching with the actual column present on the data viewer window
-79.#809  [Shrirang Kumbhar] Data Viewer : Focus is not shifting to the Data viewer window if user minimize it and again tries to open by clicking watch records option 
+89.#821  [Shrirang Kumbhar] Data Viewer: Field Name and Data Type is not matching with the actual column present on the data viewer window
+90.#809  [Shrirang Kumbhar] Data Viewer : Focus is not shifting to the Data viewer window if user minimize it and again tries to open by clicking watch records option 
+91.#715  [Kalyan Rajpoot] Previously saved data is not getting loaded on clicking cancel button on Join/ Lookup mapping window. 
+92.#821  [Shrirang Kumbhar] Data Viewer: Field Name and Data Type is not matching with the actual column present on the data viewer window
+
+
+
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

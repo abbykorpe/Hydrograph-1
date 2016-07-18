@@ -857,10 +857,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				Text operationClassTextBox = (Text) text.getData(OPERATION_CLASS_TEXT_BOX);
 				Text operationIDTextBox = (Text) text.getData(OPERATION_ID_TEXT_BOX);
 				Button btnNewButton = (Button) text.getData(BTN_NEW_BUTTON);
-				Label inputAdd = (Label) text.getData(INPUT_ADD_BUTTON);
-				Label inputDelete = (Label) text.getData(INPUT_DELETE_BUTTON);
-				Label outputAdd = (Label) text.getData(OUTPUT_ADD_BUTTON);
-				Label outputDelete = (Label) text.getData(OUTPUT_DELETE_BUTTON);
+				Button inputAdd = (Button) text.getData(INPUT_ADD_BUTTON);
+				Button inputDelete = (Button) text.getData(INPUT_DELETE_BUTTON);
+				Button outputAdd = (Button) text.getData(OUTPUT_ADD_BUTTON);
+				Button outputDelete = (Button) text.getData(OUTPUT_DELETE_BUTTON);
 
 				if (text.getSelection()) {
 					if (WidgetUtility.eltConfirmMessage(Messages.ALL_DATA_WILL_BE_LOST_DO_YOU_WISH_TO_CONTINUE)) {
