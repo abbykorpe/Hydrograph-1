@@ -80,6 +80,8 @@ public class InputHiveParquetConverter extends InputConverter {
 	
 	private HivePartitionFilterType getPartitionFilter()
 	{
+		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null)
+		{
 		LinkedHashMap<String, Object> property = (LinkedHashMap<String, Object>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
 		List<String> fieldValueSet = new ArrayList<String>();
 		fieldValueSet.addAll(property.keySet());
@@ -104,6 +106,8 @@ public class InputHiveParquetConverter extends InputConverter {
 			}
 		}
 		return hivePartitionFilterType;
+		}
+		return null;
 	}
 	
 	private void  addPartitionColumn(InputHivePartitionColumn partcol,PartitionColumn pcol)
@@ -159,7 +163,8 @@ public class InputHiveParquetConverter extends InputConverter {
 	 * returns HivePartitionFieldsType
 	 */
 	private HivePartitionFieldsType getPartitionKeys() {
-		//List<String> fieldValueSet = (List<String>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
+		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null)
+		{
 		LinkedHashMap<String, Object> property = (LinkedHashMap<String, Object>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
 		Set<String> fieldValueSet = new HashSet<String>();
 		fieldValueSet=(Set<String>) property.keySet();
@@ -180,6 +185,8 @@ public class InputHiveParquetConverter extends InputConverter {
 		}
 		}
 		return hivePartitionFieldsType;
+		}
+		return null;
 	}
 	
 	private void addPartitionKey(PartitionFieldBasicType partfbasic)
