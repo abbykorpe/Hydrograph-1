@@ -119,9 +119,6 @@ public class ExternalSchemaFileSelectionDialog extends ElementTreeSelectionDialo
         	 {
         		 return OK;
         	 }
-        	 else{
-        		
-        	 }
         	}
         	
             return selection.length == 1 && selection[0] instanceof IFile
