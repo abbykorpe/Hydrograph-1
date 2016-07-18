@@ -85,6 +85,7 @@ task scpJarFiles(dependsOn: ['build']) {
 				scpToRemoteServer(jarFile, project.name+"/lib",username,host,password,properties.remoteDirectory)
     	    } catch (Exception gradleException) {
         	    println '#Gradle failed to execute task#'
+        	    gradleException.printStackTrace();
         	}
 
 
@@ -128,6 +129,7 @@ task scpParameterFile() {
             }
         } catch (Exception gradleException) {
             println '#Gradle failed to execute task#'
+            gradleException.printStackTrace();
         }
 
     }
@@ -425,6 +427,7 @@ def scpToRemoteServer(def fileToMove,def toDirectoryPath ,def username,def host,
             	)
             } catch (Exception gradleException) {
             println '#Gradle failed to execute task#'
+            gradleException.printStackTrace();
         }
 }
 
@@ -445,6 +448,7 @@ def sshToRemoteServer(def host, def username, def password,def executeCommand ){
             )
         } catch (Exception gradleException) {
             println '#Gradle failed to execute task#'
+            gradleException.printStackTrace();
         }
 
 }
