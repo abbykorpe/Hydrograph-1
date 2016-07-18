@@ -115,6 +115,7 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 92.#821  [Shrirang Kumbhar] Data Viewer: Field Name and Data Type is not matching with the actual column present on the data viewer window
 93.#809  [Shrirang Kumbhar] Data Viewer : Focus is not shifting to the Data viewer window if user minimize it and again tries to open by clicking watch records option 
 94.#689  [Vibhor Tyagi] Mixed Schema: Validation is not Displayed When Date Format is Left Blank
+95.#817  [Akhilesh Joshi]Clear Button on Filter Window: Record Count is not getting refreshed on Clearing the filter bug medium
 
 =====================================================================================================
 Notes for QA:
