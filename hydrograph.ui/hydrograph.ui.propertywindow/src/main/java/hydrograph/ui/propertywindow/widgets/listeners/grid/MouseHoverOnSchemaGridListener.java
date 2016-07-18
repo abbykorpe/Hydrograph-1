@@ -13,11 +13,6 @@
 
 package hydrograph.ui.propertywindow.widgets.listeners.grid;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
@@ -29,6 +24,12 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.listeners.MouseActionListener;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -110,7 +111,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 			return Messages.PRECISION_MUST_CONTAINS_NUMBER_ONLY_0_9;
 		}else if((StringUtils.isBlank(gridRow.getScale()))){
 			 return Messages.SCALE_MUST_NOT_BE_BLANK;
-		}else if(!(gridRow.getScale().matches("\\d+"))){
+		}else if(!(gridRow.getScale().matches("\\d+")) || StringUtils.equalsIgnoreCase(gridRow.getScale(), "0")){
 			return Messages.SCALE_MUST_CONTAINS_NUMBER_ONLY_0_9;
 		}else if(StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(),"none")){
 			return Messages.SCALETYPE_MUST_NOT_BE_NONE;
@@ -232,11 +233,11 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 			GenerateRecordSchemaGridRow generateRecordSchemaGridRow){
 		BigDecimal rangeFrom = null, rangeTo = null;
 
-		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom())){
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom()) && generateRecordSchemaGridRow.getRangeFrom().matches("\\d+")){
 			rangeFrom = new BigDecimal(generateRecordSchemaGridRow.getRangeFrom());
 		}
 		
-		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo())){
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo()) && generateRecordSchemaGridRow.getRangeTo().matches("\\d+")){
 			rangeTo = new BigDecimal(generateRecordSchemaGridRow.getRangeTo());
 		}
 
@@ -359,6 +360,16 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 				MixedSchemeGridRow mixedSchemeGridRow = (MixedSchemeGridRow) fixedWidthGridRow;
 				return setToolTipForMixedSchemeGridRow(mixedSchemeGridRow, componentType);
 			}else{
+				
+				if(StringUtils.isBlank(fixedWidthGridRow.getLength())){
+					return Messages.LENGTH_MUST_NOT_BE_BLANK;
+				}else if(!(StringUtils.isBlank(fixedWidthGridRow.getLength())) && !(fixedWidthGridRow.getLength().matches("\\d+"))){
+					return Messages.LENGTH_MUST_BE_AN_INTEGER_VALUE;
+				}
+				else if(Integer.parseInt(fixedWidthGridRow.getLength())==0){
+					return Messages.LENGTH_SHOULD_NOT_BE_ZERO;
+				}
+				
 				if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
 						&& StringUtils.isBlank(gridRow.getDateFormat())){
 					return setToolTipForDateFormatIfBlank(gridRow);
@@ -366,14 +377,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 					return setToolTipForBigDecimal(gridRow, componentType);
 				}
 				
-				if(StringUtils.isBlank(fixedWidthGridRow.getLength())){
-					return Messages.LENGTH_MUST_NOT_BE_BLANK;
-				}else if(!(fixedWidthGridRow.getLength().matches("\\d+"))){
-					return Messages.LENGTH_MUST_BE_AN_INTEGER_VALUE;
-				}
-				else if(Integer.parseInt(fixedWidthGridRow.getLength())==0){
-					return Messages.LENGTH_SHOULD_NOT_BE_ZERO;
-				}
+				
 			}
 		}else if(gridRow instanceof BasicSchemaGridRow){
 			if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
@@ -389,24 +393,24 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 
 	private String setToolTipForMixedSchemeGridRow(MixedSchemeGridRow mixedSchemeGridRow, String componentType){
 		
-		if(StringUtils.equalsIgnoreCase(mixedSchemeGridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
-				&& StringUtils.isBlank(mixedSchemeGridRow.getDateFormat())){
-			return setToolTipForDateFormatIfBlank(mixedSchemeGridRow);
-		}else if((StringUtils.equalsIgnoreCase(mixedSchemeGridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL))){
-			return setToolTipForBigDecimal(mixedSchemeGridRow, componentType);			
-		}
-		
 		if(StringUtils.isBlank(mixedSchemeGridRow.getDelimiter())
 				&& StringUtils.isBlank(mixedSchemeGridRow.getLength())){
 			return Messages.LENGTH_OR_DELIMITER_MUST_NOT_BE_BLANK;
-		}else if(!(mixedSchemeGridRow.getLength().matches("\\d+"))){
+		}else if(StringUtils.isNotBlank(mixedSchemeGridRow.getLength()) && !(mixedSchemeGridRow.getLength().matches("\\d+"))){
 			return Messages.LENGTH_MUST_BE_AN_INTEGER_VALUE;
 		}else if(StringUtils.isNotBlank(mixedSchemeGridRow.getDelimiter()) 
 				&& StringUtils.isNotBlank(mixedSchemeGridRow.getLength())){
 			return Messages.ONLY_SPECIFY_LENGTH_OR_DELIMITER;
 		}
-		else if(Integer.parseInt(mixedSchemeGridRow.getLength())==0){
+		else if(StringUtils.isNotBlank(mixedSchemeGridRow.getLength()) && Integer.parseInt(mixedSchemeGridRow.getLength())==0){
 			return Messages.LENGTH_SHOULD_NOT_BE_ZERO;
+		}
+		
+		if(StringUtils.equalsIgnoreCase(mixedSchemeGridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
+				&& StringUtils.isBlank(mixedSchemeGridRow.getDateFormat())){
+			return setToolTipForDateFormatIfBlank(mixedSchemeGridRow);
+		}else if((StringUtils.equalsIgnoreCase(mixedSchemeGridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL))){
+			return setToolTipForBigDecimal(mixedSchemeGridRow, componentType);			
 		}
 		
 		return "";

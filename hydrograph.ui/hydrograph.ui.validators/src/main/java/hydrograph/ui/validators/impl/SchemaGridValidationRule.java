@@ -99,8 +99,9 @@ public class SchemaGridValidationRule implements IValidator {
 			}
 			
 			if(DATA_TYPE_BIG_DECIMAL.equalsIgnoreCase(gridRow.getDataTypeValue())){
-				if(StringUtils.isBlank(gridRow.getScale())){
-					errorMessage = "Scale can not be blank";
+				if(StringUtils.isBlank(gridRow.getScale()) || StringUtils.equalsIgnoreCase(gridRow.getScale(), "0") 
+						|| !(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))){
+					errorMessage = "Scale should be positive integer.";
 					return false;
 				}
 				try{

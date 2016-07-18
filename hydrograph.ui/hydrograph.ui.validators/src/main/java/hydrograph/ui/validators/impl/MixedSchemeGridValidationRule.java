@@ -32,6 +32,7 @@ public class MixedSchemeGridValidationRule implements IValidator {
 	private static final String DATA_TYPE_DATE = "java.util.Date";
 	private static final String DATA_TYPE_BIG_DECIMAL = "java.math.BigDecimal";
 	private static final String SCALE_TYPE_NONE = "none";
+	private static final String REGULAR_EXPRESSION_FOR_NUMBER = "\\d+";
 
 	String errorMessage;
 
@@ -86,7 +87,8 @@ public class MixedSchemeGridValidationRule implements IValidator {
 
 			if (DATA_TYPE_BIG_DECIMAL.equalsIgnoreCase(gridRow
 							.getDataTypeValue())) {
-				if (StringUtils.isBlank(gridRow.getScale())) {
+				if (StringUtils.isBlank(gridRow.getScale()) || StringUtils.equalsIgnoreCase(gridRow.getScale(), "0") 
+						|| !(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))) {
 					errorMessage = "Scale can not be blank";
 					return false;
 				}

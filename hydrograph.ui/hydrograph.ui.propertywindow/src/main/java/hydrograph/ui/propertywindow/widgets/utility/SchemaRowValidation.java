@@ -159,11 +159,11 @@ public class SchemaRowValidation{
 		
 		BigDecimal rangeFrom = null, rangeTo = null;
 		
-		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom())){
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom()) && generateRecordSchemaGridRow.getRangeFrom().matches("\\d+")){
 			rangeFrom = new BigDecimal(generateRecordSchemaGridRow.getRangeFrom());
 		}
 		
-		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo())){
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo()) && generateRecordSchemaGridRow.getRangeTo().matches("\\d+")){
 			rangeTo = new BigDecimal(generateRecordSchemaGridRow.getRangeTo());
 		}
 		
@@ -374,7 +374,7 @@ public class SchemaRowValidation{
 			if(StringUtils.isBlank(gridRow.getPrecision())|| StringUtils.isBlank(gridRow.getScale()) ||
 					StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), NONE)||
 					!(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))||!(gridRow.getPrecision().matches(REGULAR_EXPRESSION_FOR_NUMBER))
-					){
+					|| StringUtils.equalsIgnoreCase(gridRow.getScale(), "0")){
 				setRedColor(tableItem);
 				return true;
 			}else{
@@ -384,7 +384,7 @@ public class SchemaRowValidation{
 		}else if(StringUtils.isBlank(gridRow.getScale()) ||
 				StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), NONE)||
 				!(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))||(!(gridRow.getPrecision().matches(REGULAR_EXPRESSION_FOR_NUMBER))&&
-				 StringUtils.isNotBlank(gridRow.getPrecision()))){
+				 StringUtils.isNotBlank(gridRow.getPrecision())) || StringUtils.equalsIgnoreCase(gridRow.getScale(), "0")){
 			setRedColor(tableItem);
 			return true;
 		}else{
