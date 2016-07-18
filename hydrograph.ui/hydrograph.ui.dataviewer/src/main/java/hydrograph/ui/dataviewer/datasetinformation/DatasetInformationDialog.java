@@ -31,6 +31,8 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Text;
+
 import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
@@ -232,9 +234,10 @@ public class DatasetInformationDialog extends Dialog {
 	 * @param composite_2
 	 */
 	public void setLabelValue(Composite composite_2, String value) {
-		Label labelValue= new Label(composite_2, SWT.NONE |SWT.READ_ONLY);
-		labelValue.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-		labelValue.setText(value);
+		Text textValue= new Text(composite_2, SWT.NONE |SWT.READ_ONLY);
+		textValue.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		textValue.setEditable(false);
+		textValue.setText(value);
 	}
 
 	/**
