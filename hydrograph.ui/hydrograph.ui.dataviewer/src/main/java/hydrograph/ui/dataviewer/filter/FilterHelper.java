@@ -478,6 +478,7 @@ public class FilterHelper {
 	
 	private void showRemoteFilteredData(String buffer) {
 			debugDataViewer.downloadDebugFiles(true,true);
+			debugDataViewer.setOverWritten(true);
 	}
 
 	private void showLocalFilteredData(String buffer) {
