@@ -54,6 +54,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 	private static final String JAVA_LANG_FLOAT = "java.lang.Float";
 	private static final String JAVA_LANG_SHORT = "java.lang.Short";
 	private static final String JAVA_LANG_LONG = "java.lang.Long";
+	private static final String REGULAR_EXPRESSION_FOR_NUMBER = "\\d+";
 	
 	@Override
 	public int getListenerType(){
@@ -112,7 +113,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 		}else if((StringUtils.isBlank(gridRow.getScale()))){
 			 return Messages.SCALE_MUST_NOT_BE_BLANK;
 		}else if(!(gridRow.getScale().matches("\\d+")) || StringUtils.equalsIgnoreCase(gridRow.getScale(), "0")){
-			return Messages.SCALE_MUST_CONTAINS_NUMBER_ONLY_0_9;
+			return Messages.SCALE_SHOULD_BE_POSITIVE_INTEGER;
 		}else if(StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(),"none")){
 			return Messages.SCALETYPE_MUST_NOT_BE_NONE;
 		}
@@ -233,11 +234,11 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 			GenerateRecordSchemaGridRow generateRecordSchemaGridRow){
 		BigDecimal rangeFrom = null, rangeTo = null;
 
-		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom()) && generateRecordSchemaGridRow.getRangeFrom().matches("\\d+")){
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom()) && generateRecordSchemaGridRow.getRangeFrom().matches(REGULAR_EXPRESSION_FOR_NUMBER)){
 			rangeFrom = new BigDecimal(generateRecordSchemaGridRow.getRangeFrom());
 		}
 		
-		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo()) && generateRecordSchemaGridRow.getRangeTo().matches("\\d+")){
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo()) && generateRecordSchemaGridRow.getRangeTo().matches(REGULAR_EXPRESSION_FOR_NUMBER)){
 			rangeTo = new BigDecimal(generateRecordSchemaGridRow.getRangeTo());
 		}
 
@@ -363,7 +364,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 				
 				if(StringUtils.isBlank(fixedWidthGridRow.getLength())){
 					return Messages.LENGTH_MUST_NOT_BE_BLANK;
-				}else if(!(StringUtils.isBlank(fixedWidthGridRow.getLength())) && !(fixedWidthGridRow.getLength().matches("\\d+"))){
+				}else if(!(StringUtils.isBlank(fixedWidthGridRow.getLength())) && !(fixedWidthGridRow.getLength().matches(REGULAR_EXPRESSION_FOR_NUMBER))){
 					return Messages.LENGTH_MUST_BE_AN_INTEGER_VALUE;
 				}
 				else if(Integer.parseInt(fixedWidthGridRow.getLength())==0){
@@ -396,7 +397,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 		if(StringUtils.isBlank(mixedSchemeGridRow.getDelimiter())
 				&& StringUtils.isBlank(mixedSchemeGridRow.getLength())){
 			return Messages.LENGTH_OR_DELIMITER_MUST_NOT_BE_BLANK;
-		}else if(StringUtils.isNotBlank(mixedSchemeGridRow.getLength()) && !(mixedSchemeGridRow.getLength().matches("\\d+"))){
+		}else if(StringUtils.isNotBlank(mixedSchemeGridRow.getLength()) && !(mixedSchemeGridRow.getLength().matches(REGULAR_EXPRESSION_FOR_NUMBER))){
 			return Messages.LENGTH_MUST_BE_AN_INTEGER_VALUE;
 		}else if(StringUtils.isNotBlank(mixedSchemeGridRow.getDelimiter()) 
 				&& StringUtils.isNotBlank(mixedSchemeGridRow.getLength())){

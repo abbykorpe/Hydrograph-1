@@ -159,11 +159,11 @@ public class SchemaRowValidation{
 		
 		BigDecimal rangeFrom = null, rangeTo = null;
 		
-		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom()) && generateRecordSchemaGridRow.getRangeFrom().matches("\\d+")){
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeFrom()) && generateRecordSchemaGridRow.getRangeFrom().matches(REGULAR_EXPRESSION_FOR_NUMBER)){
 			rangeFrom = new BigDecimal(generateRecordSchemaGridRow.getRangeFrom());
 		}
 		
-		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo()) && generateRecordSchemaGridRow.getRangeTo().matches("\\d+")){
+		if (StringUtils.isNotBlank(generateRecordSchemaGridRow.getRangeTo()) && generateRecordSchemaGridRow.getRangeTo().matches(REGULAR_EXPRESSION_FOR_NUMBER)){
 			rangeTo = new BigDecimal(generateRecordSchemaGridRow.getRangeTo());
 		}
 		
