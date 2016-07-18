@@ -293,7 +293,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 
-	private void downloadDebugFiles() {
+	public void downloadDebugFiles(final boolean filterApplied,final boolean remoteOkPressed) {
 		Job job = new Job(Messages.LOADING_DEBUG_FILE) {
 			
 			@Override
@@ -301,8 +301,9 @@ public class DebugDataViewer extends ApplicationWindow {
 				disbleDataViewerUIControls();
 				
 				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(jobDetails);
-				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles(getConditions(),isOverWritten);
+				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles(filterApplied,getConditions(),isOverWritten);
 				setOverWritten(false);
+
 
 				if (StatusConstants.ERROR == statusMessage.getReturnCode()) {
 					Display.getDefault().asyncExec(new Runnable() {
@@ -322,18 +323,21 @@ public class DebugDataViewer extends ApplicationWindow {
 				setDebugFileName(debugFileName);
 				if (getConditions() != null) {
 					if (getConditions().getRetainLocal() || getConditions().getRetainRemote()) {
-						showDataInDebugViewer(true, false);
+						showDataInDebugViewer(true,remoteOkPressed);
 					}
 					 else {
+						if (!filterApplied) {
 							showDataInDebugViewer(false, false);
+						} else {
+							showDataInDebugViewer(false, remoteOkPressed);
+						}
 					}
-					
 				}
 				else
 				{
-					showDataInDebugViewer(false, false);
+					showDataInDebugViewer(false, remoteOkPressed);
 				}
-				
+				dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + debugFileName + SCHEMA_FILE_EXTENTION);
 				return Status.OK_STATUS;
 			}
 		};
@@ -381,7 +385,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 
-	public void loadDebugFileInDataViewer(boolean filterApplied, boolean remoteOkPressed) {
+	public void loadDebugFileInDataViewer(boolean remoteOkPressed) {
 		statusManager.getStatusLineManager().getProgressMonitor().done();
 
 		dataViewLoader = new DataViewLoader(unformattedViewTextarea, formattedViewTextarea, horizontalViewTableViewer,
@@ -397,7 +401,7 @@ public class DebugDataViewer extends ApplicationWindow {
 
 		dataViewLoader.updateDataViewLists();
 
-		updateGridViewTable(filterApplied,remoteOkPressed);
+		updateGridViewTable(remoteOkPressed);
 
 		dataViewLoader.reloadloadViews();
 		statusManager.enableInitialPaginationContols();
@@ -421,13 +425,13 @@ public class DebugDataViewer extends ApplicationWindow {
 					}
 					getShell().close();
 				}
-				loadDebugFileInDataViewer(filterApplied,remoteOkPressed);
+				loadDebugFileInDataViewer(remoteOkPressed);
 			}
 		});
 	}
 
 	public void disbleDataViewerUIControls() {
-		Display.getDefault().asyncExec(new Runnable() {					
+		Display.getDefault().syncExec(new Runnable() {					
 			@Override
 			public void run() {
 				statusManager.enablePaginationPanel(false);
@@ -536,7 +540,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		createPaginationPanel(container);
 		
 		tabFolder.setSelection(0);
-		downloadDebugFiles();
+		downloadDebugFiles(false,false);
 		
 		return container;
 	}
@@ -1208,7 +1212,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		return currentSelection;
 	}
 	
-	private void updateGridViewTable(boolean filterApplied, boolean remoteOkPressed) {
+	private void updateGridViewTable(boolean remoteOkPressed) {
 		if(!remoteOkPressed)
 		createGridViewTableColumns(gridViewTableViewer);
 

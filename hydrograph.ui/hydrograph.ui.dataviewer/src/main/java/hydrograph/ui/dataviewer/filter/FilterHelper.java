@@ -477,21 +477,8 @@ public class FilterHelper {
 	
 	
 	private void showRemoteFilteredData(String buffer) {
-		try {
-			String filterJson = createJsonObjectForRemoteFilter(buffer);
-			String filteredFilePath=DebugServiceClient.INSTANCE.getFilteredFile(filterJson, debugDataViewer.getJobDetails());
-			DataViewerFileManager dataViewerFileManager=new DataViewerFileManager();
-			dataViewerFileManager.downloadDataViewerFilterFile(filteredFilePath,debugDataViewer.getJobDetails());
-			filteredFileName = dataViewerFileManager.getDataViewerFileName();
-			filteredFileLocation = dataViewerFileManager.getDataViewerFilePath();
-			debugDataViewer.setDebugFileLocation(filteredFileLocation);
-			debugDataViewer.setDebugFileName(filteredFileName);
-			debugDataViewer.showDataInDebugViewer(true,true);
+			debugDataViewer.downloadDebugFiles(true,true);
 			debugDataViewer.setOverWritten(true);
-						
-		} catch (NumberFormatException | IOException exception) {
-			logger.error("Error occuring while showing remote filtered data",exception);
-		}
 	}
 
 	private void showLocalFilteredData(String buffer) {
