@@ -156,6 +156,7 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private String debugFileLocation;
 	private String debugFileName;
+	private Double downlodedFileSize;
 
 	private ActionFactory actionFactory;
 
@@ -319,8 +320,10 @@ public class DebugDataViewer extends ApplicationWindow {
 
 				debugFileName = dataViewerFileManager.getDataViewerFileName();
 				debugFileLocation = dataViewerFileManager.getDataViewerFilePath();
+				downlodedFileSize = dataViewerFileManager.getDebugFileSize();
 				setDebugFileLocation(debugFileLocation);
 				setDebugFileName(debugFileName);
+				setDownloadedFileSize(downlodedFileSize);
 				if (getConditions() != null) {
 					if (getConditions().getRetainLocal() || getConditions().getRetainRemote()) {
 						showDataInDebugViewer(true,remoteOkPressed);
@@ -373,7 +376,14 @@ public class DebugDataViewer extends ApplicationWindow {
 	public void setDebugFileLocation(String debugFileLocation) {
 		this.debugFileLocation = debugFileLocation;
 	}
-
+	
+	public void setDownloadedFileSize(Double downlodedFileSize) {
+		this.downlodedFileSize = downlodedFileSize;
+	}
+	
+	public Double getDownloadedFileSize() {
+		return downlodedFileSize;
+	}
 
 	public String getDebugFileName() {
 		return debugFileName;

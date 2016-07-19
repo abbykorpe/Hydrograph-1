@@ -28,6 +28,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -55,6 +56,8 @@ public class DataViewerFileManager {
 
 	private String dataViewerFilePath;
 	private String dataViewerFileName;
+	private Double debugFileSizeInKB;
+	
 	
 	public DataViewerFileManager(JobDetails jobDetails) {
 		super();
@@ -114,6 +117,7 @@ public class DataViewerFileManager {
 		//Copy csv debug file to Data viewers temporary file location
 		if (StringUtils.isNotBlank(csvDebugFileName)) {
 			String dataViewerDebugFile = getDataViewerDebugFile(csvDebugFileName);
+			
 			try {
 				if (!filterApplied) {
 					copyCSVDebugFileToDataViewerStagingArea(jobDetails, csvDebugFileAbsolutePath, dataViewerDebugFile,isOverWritten);
@@ -124,7 +128,13 @@ public class DataViewerFileManager {
 				logger.error("Unable to fetch debug file", e1);
 				return new StatusMessage(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 			}
-
+			
+			File debugFile = new File(dataViewerDebugFile);
+			Double debugFileSizeInByte = (double) debugFile.length();
+			Double debugFileSizeKB =(debugFileSizeInByte / 1024);
+		    debugFileSizeInKB = new BigDecimal(debugFileSizeKB).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+			 
+			 
 			// Delete csv debug file after copy
 			deleteFileOnRemote(jobDetails, csvDebugFileName);
 
@@ -182,6 +192,9 @@ public class DataViewerFileManager {
 		return dataViewerFileName;
 	}
 
+	public Double getDebugFileSize() {
+		return debugFileSizeInKB;
+	}
 	private boolean isEmptyDebugCSVFile(String dataViewerFilePath, final String dataViewerFileh) {
 		File file = new File(dataViewerFilePath + dataViewerFileh + DEBUG_DATA_FILE_EXTENTION);
 		if(file.length()==0){

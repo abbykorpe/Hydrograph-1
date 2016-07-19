@@ -40,5 +40,6 @@ public class DatasetInformationConstants {
 	public static final String DESCRIPTION = "Description";
 	public static final String DOWNLOADED_FILTER_CONDITION = "Downloaded Filter condition  : ";
 	public static final String ORIGINAL_FILTER_CONDITION = "Original Filter condition  : ";
+	public static final String ORIGINAL_FILE_SIZE = " Downloaded Chunk File Size (KB)  : ";
 
 }
