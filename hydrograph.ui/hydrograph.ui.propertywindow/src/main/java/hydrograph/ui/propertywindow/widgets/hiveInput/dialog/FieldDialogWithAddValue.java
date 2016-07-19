@@ -1,3 +1,16 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package hydrograph.ui.propertywindow.widgets.hiveInput.dialog;
 
 import hydrograph.ui.datastructure.property.InputHivePartitionColumn;
@@ -9,7 +22,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.collections.ListUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -22,10 +37,13 @@ import org.eclipse.swt.widgets.TableItem;
 public class FieldDialogWithAddValue extends FieldDialog {
 
 	private Map<String, List<InputHivePartitionColumn>> fieldsMap;
+	private PropertyDialogButtonBar propertyDialogButtonBar;
+	private boolean isAnyUpdatePerformed;
 	
-	public FieldDialogWithAddValue(Shell parentShell,
-			PropertyDialogButtonBar propertyDialogButtonBar) {
+	public FieldDialogWithAddValue(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar) {
+		
 		super(parentShell, propertyDialogButtonBar);
+		this.propertyDialogButtonBar=propertyDialogButtonBar;
 	}
 
 	
@@ -47,7 +65,7 @@ public class FieldDialogWithAddValue extends FieldDialog {
 				List<InputHivePartitionColumn> persitedList= new ArrayList<>();
 				if(!fieldsMap.isEmpty()){
 					
-					ArrayList arrayList = new ArrayList(fieldsMap.keySet());
+					ArrayList<String> arrayList = new ArrayList<>(fieldsMap.keySet());
 					if(null!=fieldsMap.get(arrayList.get(0)) && !fieldsMap.get(arrayList.get(0)).isEmpty()){
 						persitedList.addAll( fieldsMap.get(arrayList.get(0)));
 					}
@@ -68,6 +86,12 @@ public class FieldDialogWithAddValue extends FieldDialog {
 				addingValue.open();
 				
 				addingValue.setProperties(fieldsMap);
+				
+				if(persitedList.size()!=fieldsMap.get(fieldsMap.keySet().iterator().next().toString()).size()){
+					
+					isAnyUpdatePerformed=true;
+				}
+				
 				}else{
 					
 					if(createErrorDialog().open()==SWT.OK){}
@@ -102,10 +126,40 @@ public class FieldDialogWithAddValue extends FieldDialog {
 							new ArrayList<InputHivePartitionColumn>());
 				}
 			}
+		}else if(items.length!=fieldsMap.size()||isItemsNameChanged(items,fieldsMap.keySet())){
+			
+			List<InputHivePartitionColumn> incomingList = fieldsMap.get(fieldsMap.keySet().iterator().next().toString());
+			fieldsMap.clear();
+			
+			for (TableItem tableItem : items) {
+				fieldsMap.put((String) tableItem.getText(),
+						incomingList);
+			}
+			
 		}
+		
+			
+		if(isAnyUpdatePerformed){
+			propertyDialogButtonBar.enableApplyButton(true);
+		}
+		
 		super.okPressed();
 	}
 	
+	private boolean isItemsNameChanged(TableItem[] items, Set<String> keySet) {
+		
+		List<String> tempList = new ArrayList<>();
+		for (TableItem tableItem : items) {
+			tempList.add(tableItem.getText());
+		}
+		
+		if(!ListUtils.isEqualList(tempList, new ArrayList<>(keySet))){
+			return true;
+		}
+		return false;
+	}
+
+
 	public Map<String, List<InputHivePartitionColumn>> getFieldDialogRuntimeProperties(){
 		
 		return this.fieldsMap;

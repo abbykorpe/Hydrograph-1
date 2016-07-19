@@ -7,12 +7,14 @@ import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty.PropertyContentProvider;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.ListUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.CellEditor;
@@ -51,6 +53,7 @@ public class FieldDialogForAddingValue extends Dialog {
 	private Button buttonDelete;
 	private List<InputHivePartitionColumn> inputHivePartitionColumns;
 	private Composite container_1;
+	private Set<String> ColumnNames;
 	
 	
 	
@@ -75,7 +78,7 @@ public class FieldDialogForAddingValue extends Dialog {
 		container_1 = (Composite) super.createDialogArea(parent);
 		
 		addButtonPanel(container_1);
-		
+		parent.getShell().setText(Messages.PARTI_KEY_VALUE_DIALOG_NAME);
 		
 		Composite tableComposite = new Composite(container_1, SWT.NONE);
 		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -342,31 +345,58 @@ public class FieldDialogForAddingValue extends Dialog {
 		List<HivePartitionFields> fieldsDialogList = new ArrayList<>();
 		List<InputHivePartitionColumn> incomingList = fieldsMap.get(fieldsMap.keySet().iterator().next().toString());
 		
+		if(null==ColumnNames){
+			ColumnNames= new HashSet<>();
+		}
+		ColumnNames.clear();
+		
 		for (InputHivePartitionColumn inputHivePartitionColumn : incomingList) {
 			
 			HivePartitionFields tempObj = new HivePartitionFields();
-			tempObj.setRowFields(extractListFromObject(inputHivePartitionColumn,new ArrayList<String>(),fieldsMap.keySet()));
+			
+			
+			tempObj.setRowFields(extractListFromObject(inputHivePartitionColumn,new ArrayList<String>(),fieldsMap.keySet(),ColumnNames));
 			fieldsDialogList.add(tempObj);
+			
 		}
 		
+		for (String newColumn : checkIfNewColumnAdded(ColumnNames,fieldsMap.keySet())) {
+			for(HivePartitionFields tempRows:fieldsDialogList){
+				tempRows.getRowFields().add("");
+			}
+		} 
 		
 		return fieldsDialogList;
 	}
 	
 	
 	
-	private List<String> extractListFromObject(InputHivePartitionColumn hivePartitionColumn,List<String> temp, final Set<String> set){
+	private List<String> checkIfNewColumnAdded(Set<String> columnNames,Set<String> keySet) {
+		
+		if(!columnNames.isEmpty()&&!keySet.isEmpty()){
+		
+		return ListUtils.subtract(new ArrayList(keySet),new ArrayList(columnNames));
+		
+		}
+		
+		return new ArrayList<String>();
+	
+	}
+
+	private List<String> extractListFromObject(InputHivePartitionColumn hivePartitionColumn,List<String> temp, final Set<String> set, Set<String> columnNames){
 		
 		for (String colName : set) {
 			if (colName.equalsIgnoreCase(hivePartitionColumn.getName())) {
 
 				temp.add(hivePartitionColumn.getValue());
+				columnNames.add(hivePartitionColumn.getName());
+				
 			}
 		}  
 		
 		
 		if(null!=hivePartitionColumn.getInputHivePartitionColumn()){
-			extractListFromObject(hivePartitionColumn.getInputHivePartitionColumn(),temp, set);
+			extractListFromObject(hivePartitionColumn.getInputHivePartitionColumn(),temp, set, columnNames);
 		}
 		
 		return temp;

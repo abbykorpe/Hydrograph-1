@@ -243,6 +243,7 @@ public class Messages extends NLS {
 	
 	public static String HIVE_FIELD_DIALOG_ERROR;
 	public static String EMPTY_TARGET_FIELD_ERROR;
+	public static String PARTI_KEY_VALUE_DIALOG_NAME;
 	
 	
 	static {

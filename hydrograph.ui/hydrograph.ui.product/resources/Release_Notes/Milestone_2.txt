@@ -123,7 +123,10 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 100.#..  [Sonia Raheja] The Records information shown at the bottom of the data viewer window should be updated to display actual page size when its less than the one defined in preferences. This will probably happen on the last page of the result or when filter result returns records less than page size
 101.#..  [Sonia Raheja,Shashank Karnik]Focus is not Set to 'OK' Button on Hitting 'Enter' Key	
 102.#845  [Ashika Holkar] Dataset information displays requested file size. It should also display actual file size
-
+103.#850  [Prateem Tadas] Hive Component :‘Apply ‘ button is disabled when user does changes in partition key ‘Add Keys’ field
+104.#851  [Prateem Tadas] Hive Component: Partition key is not getting refreshed when there is change in field name
+105.#852  [Prateem Tadas] Hive Component: ArrayIndexOutofBound Exception Thrown When user adds more than one partition key and tries to add partition values
+106.#854  [Prateem Tadas] Hive Parquet input file - Window name is not present when user clicks on add values button located under partition key
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
