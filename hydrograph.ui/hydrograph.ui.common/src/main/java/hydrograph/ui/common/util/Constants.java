@@ -46,7 +46,6 @@ public class Constants {
 	public static final String ISO_8859_1 = "ISO-8859-1";
 	public static final String US_ASCII = "US-ASCII";
 	public static final String UTF_8 = "UTF-8";
-	public static final String IN_0 = "in0";
 	
 	public static final String TRUE = "True";
 	public static final String FALSE = "False";
