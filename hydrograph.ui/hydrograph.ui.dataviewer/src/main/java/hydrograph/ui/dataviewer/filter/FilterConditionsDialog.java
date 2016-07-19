@@ -197,7 +197,7 @@ public class FilterConditionsDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TabItem tabItem = (TabItem) e.item;
-				if (tabItem.getText().equalsIgnoreCase(Messages.ORIGINAL_DATASET)) {
+				if (StringUtils.equalsIgnoreCase(tabItem.getText(),Messages.ORIGINAL_DATASET)) {
 					parent.getShell().setDefaultButton(remoteOkButton);
 				} else {
 					parent.getShell().setDefaultButton(localOkButton);
@@ -206,8 +206,7 @@ public class FilterConditionsDialog extends Dialog {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
+				// Do nothing
 			}
 		});
 		FilterHelper.INSTANCE.setDataViewerAdapter(dataViewerAdapter,this);
