@@ -14,10 +14,10 @@ package hydrograph.ui.dataviewer.filter;
 
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.dataviewer.actions.ReloadAction;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
-import hydrograph.ui.logging.factory.LogFactory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -44,6 +44,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
@@ -62,8 +63,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.slf4j.Logger;
-import hydrograph.ui.dataviewer.actions.ReloadAction;
 
 /**
  * Dialog for Data Viewer Filter conditions
@@ -190,9 +189,7 @@ public class FilterConditionsDialog extends Dialog {
 		
 		createRemoteTabItem(tabFolder, remoteTableViewer);
 		createLocalTabItem(tabFolder, localTableViewer);
-		
-		parent.getShell().setDefaultButton(remoteOkButton);
-		tabFolder.addSelectionListener(new SelectionListener() {
+		tabFolder.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -202,11 +199,6 @@ public class FilterConditionsDialog extends Dialog {
 				} else {
 					parent.getShell().setDefaultButton(localOkButton);
 				}
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// Do nothing
 			}
 		});
 		FilterHelper.INSTANCE.setDataViewerAdapter(dataViewerAdapter,this);
@@ -233,12 +225,12 @@ public class FilterConditionsDialog extends Dialog {
 		Composite composite_3 = new Composite(composite, SWT.NONE);
 		composite_3.setLayout(new GridLayout(4, false));
         
-		Button btnAddRowAt = createButton(composite_3, 1, Messages.ADD_ROW_AT_END, true);
+		Button btnAddRowAt = createButton(composite_3, 1, Messages.ADD_ROW_AT_END, false);
 		btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, remoteConditionsList, dummyList));
         
-		remoteBtnAddGrp = createButton(composite_3, 2, Messages.CREATE_GROUP, true);
+		remoteBtnAddGrp = createButton(composite_3, 2, Messages.CREATE_GROUP, false);
 		
-		Button clearGroupsRemote=createButton(composite_3, 3, Messages.CLEAR_GROUPS, true);
+		Button clearGroupsRemote=createButton(composite_3, 3, Messages.CLEAR_GROUPS, false);
 		clearGroupsRemote.addSelectionListener(clearGroupsListner(tableViewer, remoteGroupSelectionMap, clearGroupsRemote,remoteBtnAddGrp,remoteConditionsList,true));
         if(remoteGroupSelectionMap.size()!=0 &&  remoteConditionsList.size() !=0)
 		{
@@ -263,14 +255,14 @@ public class FilterConditionsDialog extends Dialog {
 		remoteOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(remoteConditionsList, fieldsAndTypes,
 				remoteGroupSelectionMap,Messages.ORIGINAL,originalFilterConditions));
 		
-		Button btnCancel = createButton(composite_4, 2, Messages.CANCEL2, true);;
+		Button btnCancel = createButton(composite_4, 2, Messages.CANCEL2, false);;
 		btnCancel.addMouseListener(getCancelButtonListener());
 		
-		Button clearButton = createButton(composite_4, 3, Messages.CLEAR, true);
+		Button clearButton = createButton(composite_4, 3, Messages.CLEAR, false);
 		clearButton.addSelectionListener(getClearButtonListener(tableViewer, remoteConditionsList, dummyList, originalFilterConditions, true,
 				retainButton, remoteGroupSelectionMap,remoteBtnAddGrp));
 
-		remoteApplyButton = createButton(composite_4, 4, Messages.APPLY, true);
+		remoteApplyButton = createButton(composite_4, 4, Messages.APPLY, false);
 		remoteApplyButton.addSelectionListener(FilterHelper.INSTANCE.getRemoteApplyButtonListener(originalFilterConditions, 
 				remoteConditionsList, retainRemoteFilter));
 		
@@ -356,13 +348,13 @@ public class FilterConditionsDialog extends Dialog {
 		Composite composite_3 = new Composite(composite, SWT.NONE);
 		composite_3.setLayout(new GridLayout(4, false));
         
-		Button btnAddRowAt = createButton(composite_3, 1, Messages.ADD_ROW_AT_END, true);
+		Button btnAddRowAt = createButton(composite_3, 1, Messages.ADD_ROW_AT_END, false);
         btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, localConditionsList, dummyList));
         btnAddRowAt.setText(Messages.ADD_ROW_AT_END);
         
-        localBtnAddGrp = createButton(composite_3, 2, Messages.CREATE_GROUP, true);
+        localBtnAddGrp = createButton(composite_3, 2, Messages.CREATE_GROUP, false);
         
-        Button clearGroupsLocal=createButton(composite_3, 3, Messages.CLEAR_GROUPS, true);
+        Button clearGroupsLocal=createButton(composite_3, 3, Messages.CLEAR_GROUPS, false);
         clearGroupsLocal.addSelectionListener(clearGroupsListner(tableViewer, localGroupSelectionMap,clearGroupsLocal,localBtnAddGrp,localConditionsList,false));
         if(localGroupSelectionMap.size() !=0 && localConditionsList.size() !=0)
 		{
@@ -383,18 +375,18 @@ public class FilterConditionsDialog extends Dialog {
 		composite_4.setLayout(new GridLayout(4, false));
 		composite_4.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		
-		localOkButton = createButton(composite_4, 1, Messages.OK2,true);
+		localOkButton = createButton(composite_4, 1, Messages.OK2,false);
 		localOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(localConditionsList, fieldsAndTypes, 
 				localGroupSelectionMap, Messages.DOWNLOADED,originalFilterConditions));
 		
-		Button btnCancel = createButton(composite_4, 2, Messages.CANCEL2, true);
+		Button btnCancel = createButton(composite_4, 2, Messages.CANCEL2, false);
 		btnCancel.addMouseListener(getCancelButtonListener());
 		
-		Button clearButton = createButton(composite_4, 3, Messages.CLEAR, true);
+		Button clearButton = createButton(composite_4, 3, Messages.CLEAR, false);
 		clearButton.addSelectionListener(getClearButtonListener(tableViewer, localConditionsList,dummyList,originalFilterConditions,
 				false,retainButton,localGroupSelectionMap, localBtnAddGrp));
 		
-		localApplyButton = createButton(composite_4, 4, Messages.APPLY, true);
+		localApplyButton = createButton(composite_4, 4, Messages.APPLY, false);
 		localApplyButton.addSelectionListener(FilterHelper.INSTANCE.getLocalApplyButtonListener(originalFilterConditions, 
 				localConditionsList, retainLocalFilter));
 		
