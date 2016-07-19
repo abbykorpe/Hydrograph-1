@@ -14,13 +14,11 @@
  
 package hydrograph.ui.propertywindow.widgets.listeners.grid;
 
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ELTCellEditorIsNumericValidator.
  * 
@@ -29,7 +27,6 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 public class ELTCellEditorIsNumericValidator implements ICellEditorValidator {
 
 		private ControlDecoration scaleDecorator;
-		private PropertyDialogButtonBar propertyDialogButtonBar;
 	
 	/**
 	 * Instantiates a new ELT cell editor is numeric validator.
@@ -39,21 +36,19 @@ public class ELTCellEditorIsNumericValidator implements ICellEditorValidator {
 	 * @param propertyDialogButtonBar
 	 *            the property dialog button bar
 	 */
-	public ELTCellEditorIsNumericValidator(ControlDecoration scaleDecorator,PropertyDialogButtonBar propertyDialogButtonBar) {
+	public ELTCellEditorIsNumericValidator(ControlDecoration scaleDecorator) {
 		super();
 			this.scaleDecorator = scaleDecorator;
-			this.propertyDialogButtonBar=propertyDialogButtonBar;
 	}
 
 	@Override
 	public String isValid(Object value) {
 		String selectedGrid=(String) value;
-		if(!selectedGrid.matches("\\d+") && !selectedGrid.isEmpty()){     
+		if(StringUtils.isBlank(selectedGrid) || !selectedGrid.matches("\\d+")){     
 			scaleDecorator.show();   
 		return "Error";   
 	}else{  
 		scaleDecorator.hide(); 
-		    
 	}
 	return null; 
 	}

@@ -13,14 +13,20 @@
 
 package hydrograph.ui.perspective;
 
+import java.util.Map.Entry;
+
 import hydrograph.ui.common.debug.service.IDebugService;
 import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.perspective.config.ELTPerspectiveConfig;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.e4.ui.css.swt.dom.WidgetElement;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
@@ -33,7 +39,7 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
-
+import org.apache.commons.lang.StringUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -42,11 +48,11 @@ import org.osgi.framework.ServiceReference;
  * @author Bitwise
  */
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
-	private static final String CURRENT_THEME_ID = "hydrograph.ui.custom.ui.theme";
-	private static final String CONSOLE_ID = "hydrograph.ui.project.structure.console.HydrographConsole";
-	private static final String CONSOLE_TOOLBAR_CSS_ID="consoleToolbarColor";
-	private static final String WARNING_TITLE="Warning";
-	private static final String WARNING_MESSAGE="Current DPI setting is other than 100%. Recommended 100%.\nUpdate it from Control Panel -> Display settings.\n\nNote: DPI setting other than 100% may cause alignment issues.";
+	private static final String CURRENT_THEME_ID = "hydrograph.ui.custom.ui.theme"; //$NON-NLS-1$
+	private static final String CONSOLE_ID = "hydrograph.ui.project.structure.console.HydrographConsole"; //$NON-NLS-1$
+	private static final String CONSOLE_TOOLBAR_CSS_ID="consoleToolbarColor"; //$NON-NLS-1$
+	private static final String WARNING_TITLE="Warning"; //$NON-NLS-1$
+	private static final String WARNING_MESSAGE="Current DPI setting is other than 100%. Recommended 100%.\nUpdate it from Control Panel -> Display settings.\n\nNote: DPI setting other than 100% may cause alignment issues."; //$NON-NLS-1$
 	private static final int DPI_COORDINATE=96;
 	/**
 	 * Instantiates a new application workbench window advisor.
@@ -107,6 +113,26 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		WidgetElement.getEngine(widget).applyStyles(widget, true);
 	}
     
+	
+	@Override
+	public boolean preWindowShellClose() {
+		for (Entry<String, Job> entry : JobManager.INSTANCE.getRunningJobsMap().entrySet()) {
+			if (entry.getValue().isRemoteMode()) {
+				MessageBox box = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES
+						| SWT.CANCEL | SWT.NO);
+				box.setMessage(Messages.TOOL_EXT_MESSAGE);
+				box.setText(Messages.TOOL_EXIT_MESSAGE_BOX_TITLE);
+				int returCode = box.open();
+				if (returCode == SWT.YES) {
+					JobManager.INSTANCE.killALLRemoteProcess();
+				}else 
+					return false;
+				break;
+			}
+		}
+		return true;
+	}
+
 	@Override
     public void dispose() {
 		super.dispose();
@@ -117,5 +143,4 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 				debugService.deleteDebugFiles();
 			}
     }
-    
 }

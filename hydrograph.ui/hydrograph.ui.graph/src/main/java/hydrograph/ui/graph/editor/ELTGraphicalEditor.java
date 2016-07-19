@@ -20,7 +20,10 @@ import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
 import hydrograph.ui.common.util.CanvasDataAdpater;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.communication.debugservice.DebugServiceClient;
+import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.engine.exceptions.EngineException;
 import hydrograph.ui.engine.util.ConverterUtil;
 import hydrograph.ui.graph.action.ComponentHelpAction;
@@ -37,14 +40,15 @@ import hydrograph.ui.graph.action.debug.WatchRecordAction;
 import hydrograph.ui.graph.action.subjob.SubJobAction;
 import hydrograph.ui.graph.action.subjob.SubJobOpenAction;
 import hydrograph.ui.graph.action.subjob.SubJobUpdateAction;
+import hydrograph.ui.graph.command.ComponentSetConstraintCommand;
 import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.debug.service.DebugRestClient;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.editorfactory.GenrateContainerData;
 import hydrograph.ui.graph.factory.ComponentsEditPartFactory;
 import hydrograph.ui.graph.factory.CustomPaletteEditPartFactory;
 import hydrograph.ui.graph.handler.DebugHandler;
-import hydrograph.ui.graph.handler.RunJobHandler;
+import hydrograph.ui.graph.handler.JobHandler;
+import hydrograph.ui.graph.handler.RemoveDebugHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
@@ -52,6 +56,8 @@ import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
+import hydrograph.ui.graph.utility.CanvasUtils;
+import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.utils.ParameterFileManager;
@@ -66,9 +72,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
-import java.net.ServerSocket;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -82,6 +87,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
@@ -101,12 +107,14 @@ import org.eclipse.draw2d.ViewportAwareConnectionLayerClippingStrategy;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -116,6 +124,7 @@ import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.palette.PaletteToolbar;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.requests.SimpleFactory;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -181,7 +190,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private boolean dirty=false;
 	private PaletteRoot paletteRoot = null;
 
-	Logger logger = LogFactory.INSTANCE.getLogger(ELTGraphicalEditor.class);
+	private Logger logger = LogFactory.INSTANCE.getLogger(ELTGraphicalEditor.class);
 	public static final String ID = "hydrograph.ui.graph.etlgraphicaleditor";
 	private Container container;
 	private final Point defaultComponentLocation = new Point(0, 0);
@@ -201,7 +210,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private static final Color palatteTextColor=new Color(null,51,51,51);
 	
-
 	/**
 	 * Instantiates a new ETL graphical editor.
 	 */
@@ -329,9 +337,18 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			}
 
 			@Override
-			public void keyPressed(KeyEvent e) {
-				setCustomToolUndoRedoStatus();
-				hideToolTip();
+			public void keyPressed(KeyEvent event){
+				if(((event.stateMask & SWT.CTRL) != 0 
+						&& (event.keyCode == SWT.ARROW_DOWN || event.keyCode == SWT.ARROW_LEFT
+						|| event.keyCode == SWT.ARROW_RIGHT || event.keyCode == SWT.ARROW_UP))){
+					
+					moveComponentWithArrowKey(event);
+				}
+				else{
+					setCustomToolUndoRedoStatus();
+					hideToolTip();
+				}
+				
 			}
 		});
 
@@ -377,17 +394,18 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		});
 	}
 
+	
 	private void enableRunJob(boolean enabled){
-		((RunJobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
+		((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
 		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
-		((DebugHandler)RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(enabled);
+		((RemoveDebugHandler) RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(enabled);
 	}
 
 	
 	
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-
+		boolean isWatch = false;
 		IWorkbenchPart partView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 
 		IHydrographConsole currentConsoleView = (IHydrographConsole) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
@@ -395,12 +413,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 		if (partView instanceof ELTGraphicalEditor) {
 			if (getActiveProject() != null) {
+				isWatch = DebugHelper.INSTANCE.hasMoreWatchPoints();
 				ConsolePlugin plugin = ConsolePlugin.getDefault();
 				IConsoleManager consoleManager = plugin.getConsoleManager();
 
 				String consoleName;
 				if (part.getTitle().contains(".job")) {
-					consoleName = (getActiveProject() + "." + part.getTitle()).replace(".job", "");
+					consoleName = getActiveProject() + "." + part.getTitle().replace(".job", "");
 				} else {
 					consoleName = DEFAULT_CONSOLE;
 				}
@@ -427,23 +446,41 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				
 				logger.debug("job.isDebugMode: {}",job==null?"FALSE":job.isDebugMode());
 				if(job!=null){
+					if(JobStatus.FAILED.equals(job.getJobStatus()) ){
+						JobManager.INSTANCE.getDataViewerMap().remove(consoleName);
+						enableRunJob(true);
+					}else{
 					if(JobStatus.KILLED.equals(job.getJobStatus()) || JobStatus.SUCCESS.equals(job.getJobStatus())){
 						enableRunJob(true);
 					}else{
-							enableRunJob(false);					
+						if(job.isRemoteMode()){
+							enableRunJob(false);
+						}else{
+                            ((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
+                            ((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+                           	((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
+							}
+						}
 					}
-					
 				}else{
 					logger.debug("enabling run job button");
 					enableRunJob(true);
+					if(isWatch){
+						((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
+					}else{
+						((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
+					}
 				}
 			}
 
 		}
 
 		super.selectionChanged(part, selection);
+		
+		
 	}
 
+	
 	private void addDummyConsole(){
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
 		IConsoleManager consoleManager = plugin.getConsoleManager();
@@ -495,6 +532,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		prepareZoomContributions(viewer);
 		configureKeyboardShortcuts();
 		//handleKeyStrokes(viewer);
+		
 	}
 
 	@Override
@@ -572,8 +610,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private void createShapesDrawer(PaletteRoot palette) throws RuntimeException, SAXException, IOException {
 		Map<String, PaletteDrawer> categoryPaletteConatiner = new HashMap<>();
 		for (CategoryType category : CategoryType.values()) {
-			if(category.name().equalsIgnoreCase(Constants.DUMMY_COMPONENT_CATEGORY))
+			if(category.name().equalsIgnoreCase(Constants.UNKNOWN_COMPONENT_CATEGORY)){
 				continue;
+			}				
 			PaletteDrawer p = createPaletteContainer(category.name());
 			addContainerToPalette(palette, p);
 			categoryPaletteConatiner.put(category.name(), p);
@@ -590,7 +629,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		for (Component componentConfig : componentsConfig) {
 			Class<?> clazz = DynamicClassProcessor.INSTANCE.createClass(componentConfig);
 
-			if(componentConfig.getName().equalsIgnoreCase(Constants.DUMMY_COMPONENT)){
+			if(componentConfig.getName().equalsIgnoreCase(Constants.UNKNOWN_COMPONENT)){
 				continue;
 			}
 
@@ -785,8 +824,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	public void setDirty(boolean dirty){
 		this.dirty = dirty;
-		if (dirty)
+		if (dirty){
 			setMainGraphDirty(dirty);
+		}			
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
@@ -838,11 +878,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}	
 	}
 
-	private void saveParameters() {
+	public void saveParameters() {
 
 		//get map from file
 		Map<String,String> currentParameterMap = getCurrentParameterMap();
-		if(currentParameterMap == null) return;
+		if(currentParameterMap == null){
+			return;
+		}
 		List<String> letestParameterList = getLatestParameterList();
 
 		Map<String,String> newParameterMap = new LinkedHashMap<>();
@@ -896,7 +938,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	}
 
-
 	
 	public String  generateUniqueJobId() throws NoSuchAlgorithmException{
 		SecureRandom random =  SecureRandom.getInstance("SHA1PRNG");
@@ -947,7 +988,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		String fileName = getParameterFile();
 		if(StringUtils.isNotBlank(fileName)){
 			parameterFile = new File(fileName);
-		}else return null;
+		}else{
+			return null;
+		}
 		if(!parameterFile.exists()){
 			try {
 				parameterFile.createNewFile();
@@ -982,7 +1025,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 */
 	public void createOutputStream(OutputStream out) throws IOException {
 
-		out.write(fromObjectToXML(getContainer()).getBytes());
+		out.write(CanvasUtils.INSTANCE.fromObjectToXML(getContainer()).getBytes());
 	}
 
 	/**
@@ -995,8 +1038,31 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void doSaveAs() {
+		
+		DataViewerUtility.INSTANCE.closeDataViewerWindows();		
+		deleteDebugFiles();
+		
+		Map<String, String> currentParameterMap = getCurrentParameterMap();
 		IFile file=opeSaveAsDialog();
+		saveJob(file);
+		copyParameterFile(currentParameterMap);
+	}
 
+
+	private void copyParameterFile(Map<String, String> currentParameterMap) {
+		
+		ParameterFileManager parameterFilemanager = new ParameterFileManager(getParameterFile());
+		
+		try {
+			parameterFilemanager.storeParameters(currentParameterMap);
+		} catch (IOException io) {
+			logger.error("Failed to copy parameterMap to .properties file");
+		}
+		
+		refreshParameterFileInProjectExplorer();
+	}
+
+	public void saveJob(IFile file) {
 		if(file!=null){
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			try {
@@ -1075,55 +1141,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 	}
 
-
-
-	/**
-	 * From xml to object.
-	 * 
-	 * @param xml
-	 *            the xml
-	 * @return the object
-	 */
-	public Object fromXMLToObject(InputStream xml) {
-
-		Object obj = null;
-
-		XStream xs = new XStream();
-		xs.autodetectAnnotations(true);
-		try {
-
-			obj = xs.fromXML(xml);
-			logger.debug("Sucessfully converted JAVA Object from XML Data");
-			xml.close();
-		} catch (Exception e) {
-			logger.error("Failed to convert from XML to Graph due to : {}", e);
-			MessageDialog.openError(new Shell(), "Error", "Invalid graph file.");
-		}
-		return obj;
-	}
-
-	/**
-	 * From object to xml.
-	 * 
-	 * @param object
-	 *            the object
-	 * @return the string
-	 */
-	public String fromObjectToXML(Serializable object) {
-
-		String str = "<!-- It is recommended to avoid changes to xml data -->\n\n";
-
-		XStream xs = new XStream();
-		xs.autodetectAnnotations(true);
-		try {
-			str = str + xs.toXML(object);
-			logger.debug( "Sucessfully converted XML from JAVA Object");
-		} catch (Exception e) {
-			logger.error("Failed to convert from Object to XML", e);
-		}
-		return str;
-	}
-
 	/**
 	 * Genrate target xml.
 	 * 
@@ -1149,7 +1166,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			logger.warn("Failed to create the engine xml", eexception);
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Failed to create the engine xml", eexception.getMessage());
 			//			
-		}catch (Exception exception) {
+		}catch (InstantiationException|IllegalAccessException| InvocationTargetException| NoSuchMethodException exception) {
 			logger.error("Failed to create the engine xml", exception);
 			Status status = new Status(IStatus.ERROR, "hydrograph.ui.graph",
 					"Failed to create Engine XML " + exception.getMessage());
@@ -1170,7 +1187,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		} catch (EngineException eexception) {
 			logger.warn("Failed to create the engine xml", eexception);
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Failed to create the engine xml", eexception.getMessage());
-		}catch (Exception exception) {
+		}catch (InstantiationException| IllegalAccessException| InvocationTargetException| NoSuchMethodException exception) {
 			logger.error("Failed to create the engine xml", exception);
 			Status status = new Status(IStatus.ERROR, "hydrograph.ui.graph",
 					"Failed to create Engine XML " + exception.getMessage());
@@ -1203,59 +1220,39 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		removeSubjobProperties(isDirty());
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
+		
+		DataViewerUtility.INSTANCE.closeDataViewerWindows();
+		
 		deleteDebugFiles();
- 
+		enableRunningJobResource() ;
 		closeSocket();
-		logger.info("Socket closed @ 8004");
 	}
 	
 	private void closeSocket()  {
-		ServerSocket serverSocket = null;
-		try {
-			serverSocket = new ServerSocket(8004);
-		} catch (IOException e) {
-			logger.error(e.getMessage());
-			try {
-				serverSocket.close();
-			} catch (IOException e1) {
-				logger.error(e.getMessage());
-			}
-		}
-	}
+        int portPID;
+        try {
+              portPID = Integer.parseInt(DebugHelper.INSTANCE.getServicePortPID());
+              DebugHelper.INSTANCE.killPortProcess(portPID);
+        } catch (NumberFormatException e) {
+              logger.debug("Socket id is not correct");
+        } catch (IOException e) {
+              logger.debug("Socket is not closed.");
+        }
+  }
+
 	
 	private void deleteDebugFiles() {
 		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");
-		boolean isLocal = JobManager.INSTANCE.isLocalMode();
 		Job job = DebugHandler.getJob(currentJob);
 		deleteDebugFileFromWorkspace();
+		
 		if(job == null){
 			logger.debug("current job {} wasn't found in Debughandler's map",currentJob);
 			return ;
 		}
-		
-		
-		if(isLocal){
-			String basePath = job.getBasePath();
-			String userID = job.getUserId();
-			String password = job.getPassword();
-			String host = "localhost";
-			String port = DebugHelper.INSTANCE.restServicePort();
-			DebugRestClient debugRestClient = new DebugRestClient();
-			debugRestClient.removeDebugFiles(host, port, basePath, uniqueJobId, "componentId", "socketId", userID, password);
-			logger.debug("debug files removed from local");
-		}else{
-			String basePath = job.getBasePath();
-			String ipAddress = job.getIpAddress();
-			String userID = job.getUserId();
-			String password = job.getPassword();
-			String port_no = job.getPortNumber();
-			//ipAddress, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password
-			DebugRestClient debugRestClient = new DebugRestClient();
-			debugRestClient.removeDebugFiles(ipAddress, port_no, basePath, uniqueJobId, "componentId", "socketId", userID, password);
-			logger.debug("debug files removed from cluster");
-		}
+		deleteSchemaAndDataViewerFiles();
+		deleteBasePathDebugFiles(job);
 		DebugHandler.getJobMap().remove(currentJob);
-		
 	}
 
 	private void deleteDebugFileFromWorkspace() {
@@ -1273,7 +1270,53 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 	}
 	
-
+	private void deleteSchemaAndDataViewerFiles(){
+		String dataViewerDirectoryPath = Utils.INSTANCE.getDataViewerDebugFilePath();
+		
+		IPath path = new Path(dataViewerDirectoryPath);
+		boolean deleted = false;
+		String dataViewerSchemaFilePathToBeDeleted = "";
+		if(path.toFile().isDirectory()){
+			String[] fileList = path.toFile().list();
+			for (String file: fileList){
+				if(file.contains(this.uniqueJobId)){
+					if (OSValidator.isWindows()){
+						dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+ "\\" + file;
+					}else{
+						dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+ "/" + file;
+					}
+					path = new Path(dataViewerSchemaFilePathToBeDeleted);
+					if(path.toFile().exists()){
+						deleted = path.toFile().delete();
+						if(deleted){
+							logger.debug("Deleted Data Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
+						}else{
+							logger.warn("Unable to delete Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	private void deleteBasePathDebugFiles(Job job){
+		if(Utils.INSTANCE.isPurgeViewDataPrefSet()){
+			try {
+				DebugServiceClient.INSTANCE.deleteBasePathFiles(job.getHost(), job.getPortNumber(), this.uniqueJobId, job.getBasePath(),
+						job.getUserId(), job.getPassword());
+			} catch (NumberFormatException e) {
+				logger.warn("Unable to delete debug Base path file",e);
+			} catch (HttpException e) {
+				logger.warn("Unable to delete debug Base path file",e);
+			} catch (MalformedURLException e) {
+				logger.warn("Unable to delete debug Base path file",e);
+			} catch (IOException e) {
+				logger.warn("Unable to delete debug Base path file",e);
+			}
+		}
+		
+	}
+	
 	
 	private void removeSubjobProperties(Boolean isDirty) {
 		if (isDirty) {
@@ -1297,6 +1340,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		if ( StringUtils.isNotBlank(jobFilePath)) {
 			file = new File(jobFilePath);
 		}
+		
 		if (file != null) {
 			XStream xStream = new XStream();
 			Container container = (Container) xStream.fromXML(file);
@@ -1417,7 +1461,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				if (inputStream != null)
 					content = new Scanner(inputStream).useDelimiter("\\Z").next();
 				return content;
-			} catch (Exception exception) {
+			} catch (FileNotFoundException | CoreException exception) {
 				logger.error("Exception occurred while fetching data from " + xmlPath.toString(), exception);
 			} finally {
 				if (inputStream != null) {
@@ -1496,7 +1540,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void enableRunningJobResource() {
-		viewer.getControl().setEnabled(true);
+		if(viewer!=null && viewer.getControl()!=null){
+			viewer.getControl().setEnabled(true);
+		}
 		enableRunningGraphResource(getEditorInput(), getPartName());
 
 	}
@@ -1582,16 +1628,52 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	    GraphicalViewerKeyHandler keyHandler = new GraphicalViewerKeyHandler(getGraphicalViewer());
 	    keyHandler.put(KeyStroke.getPressed(SWT.F4,0), getActionRegistry().getAction(Constants.SUBJOB_OPEN));
 	    getGraphicalViewer().setKeyHandler(keyHandler);
-
+	   
 	  }
+	
+	
+	private void moveComponentWithArrowKey(KeyEvent event){ 
+		 CompoundCommand compoundCommand = new CompoundCommand();
+		 ComponentSetConstraintCommand componentSetConstraintCommand = null;
+		 ChangeBoundsRequest request = new ChangeBoundsRequest(org.eclipse.gef.RequestConstants.REQ_MOVE);
+		 List<EditPart> editPartsList = getGraphicalViewer().getSelectedEditParts();
+		 for(EditPart editPart : editPartsList ){
+			if(editPart instanceof ComponentEditPart){
+				hydrograph.ui.graph.model.Component component = (hydrograph.ui.graph.model.Component) editPart.getModel();
+			    org.eclipse.draw2d.geometry.Rectangle bounds = new org.eclipse.draw2d.geometry.Rectangle(component.getLocation(),component.getSize());
+			    
+			    switch (event.keyCode){
+				case SWT.ARROW_UP:
+					bounds.setLocation(bounds.x , bounds.y - 10);
+					break;
+				case SWT.ARROW_DOWN:
+					bounds.setLocation(bounds.x , bounds.y + 10);
+					break;
+				case SWT.ARROW_RIGHT:
+					bounds.setLocation(bounds.x + 10, bounds.y);
+					break;
+				case SWT.ARROW_LEFT:
+					bounds.setLocation(bounds.x - 10 , bounds.y);
+					break;
+			   } 
+			
+		    componentSetConstraintCommand = new ComponentSetConstraintCommand((hydrograph.ui.graph.model.Component) editPart.getModel(),request, bounds);
+		    compoundCommand.add(componentSetConstraintCommand);
 
+			   }
+		  }
+		 
+		 getCommandStack().execute(compoundCommand);
+		 
+	}
+	
 	public GraphicalViewer getViewer() {
 		return viewer;
 	}
-
+	
 	@Override
 	public void restoreMenuToolContextItemsState() {
 		ContributionItemManager.UndoRedoDefaultBarManager.changeUndoRedoStatus(getViewer());
 	}
-	
+
 }

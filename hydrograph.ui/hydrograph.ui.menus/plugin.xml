@@ -1,5 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.4"?>
+<?eclipse version="3.4"?><!--
+    Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+ -->
+
 <plugin>
 <extension
          point="org.eclipse.ui.commands">
@@ -24,6 +35,18 @@
 	         id="com.bitwise.help.aboutaccelero"
             name="About Accelero">
      </command>
+     <command
+           id="hydrograph.ui.menus.new.newFilterClass"
+           name="Filter Class">
+     </command>
+     <command
+           id="hydrograph.ui.menus.new.newAggClass"
+           name="Aggregate Class">
+     </command>
+     <command
+           id="hydrograph.ui.menus.new.newTranformClass"
+           name="Tranform Class">
+     </command>     <command           id="hydrograph.ui.menus.new.newNormalizeClass"           name="Normalize Class">     </command>     <command           id="hydrograph.ui.menus.new.newCumulateClass"           name="Cumulate Class">     </command>
    </extension>
 	  <extension
          point="org.eclipse.ui.handlers">
@@ -187,6 +210,78 @@
             class="hydrograph.ui.menus.handlers.AboutDialogHandler"
             commandId="com.bitwise.help.aboutaccelero">
        </handler>
+       <handler
+             class="hydrograph.ui.menus.handlers.DeleteHandler"
+             commandId="org.eclipse.ui.edit.delete">
+          <activeWhen>
+             <with
+                   variable="activePartId">
+                <equals
+                      value="hydrograph.ui.project.structure.navigator">
+                </equals>
+             </with>
+          </activeWhen>
+          <enabledWhen>
+             <with
+                   variable="selection">
+                <count
+                      value="+">
+                </count>
+             </with>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="hydrograph.ui.menus.handlers.CopyHandler"
+             commandId="org.eclipse.ui.edit.copy">
+          <enabledWhen>
+             <with
+                   variable="selection">
+                <count
+                      value="+">
+                </count>
+             </with>
+          </enabledWhen>
+          <activeWhen>
+             <with
+                   variable="activePartId">
+                <equals
+                      value="hydrograph.ui.project.structure.navigator">
+                </equals>
+             </with>
+          </activeWhen>
+       </handler>
+       <handler
+             class="hydrograph.ui.menus.handlers.PasteHandler"
+             commandId="org.eclipse.ui.edit.paste">
+          <activeWhen>
+             <with
+                   variable="activePartId">
+                <equals
+                      value="hydrograph.ui.project.structure.navigator">
+                </equals>
+             </with>
+          </activeWhen>
+          <enabledWhen>
+             <with
+                   variable="selection">
+                <count
+                      value="+">
+                </count>
+             </with>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="hydrograph.ui.menus.handlers.NewCustomClassHandler"
+             commandId="hydrograph.ui.menus.new.newFilterClass">
+       </handler>
+       <handler
+             class="hydrograph.ui.menus.handlers.NewCustomClassHandler"
+             commandId="hydrograph.ui.menus.new.newAggClass">
+       </handler>
+       <handler
+             class="hydrograph.ui.menus.handlers.NewCustomClassHandler"
+             commandId="hydrograph.ui.menus.new.newTranformClass">
+       </handler>       <handler             class="hydrograph.ui.menus.handlers.NewCustomClassHandler"             commandId="hydrograph.ui.menus.new.newCumulateClass">       </handler>       <handler             class="hydrograph.ui.menus.handlers.NewCustomClassHandler"             commandId="hydrograph.ui.menus.new.newNormalizeClass">       </handler>
    </extension>
    		
    <extension
@@ -202,18 +297,45 @@
             <menu
                   id="hydrograph.ui.menus.NewMenu"
                   label="New"
-                   mnemonic ="N">
-                <command
-                     commandId="org.eclipse.ui.newWizard"
-                     id="hydrograph.ui.menus.NewMenu.Class"
-                     label="Class"
-                     style="push"
-                     mnemonic ="C">
-                  <parameter
-                        name="newWizardId"
-                        value="org.eclipse.jdt.ui.wizards.NewClassCreationWizard">
-                  </parameter>
-               </command>
+                   mnemonic ="N">               <command                     commandId="org.eclipse.ui.newWizard"                     id="hydrograph.ui.graph.newJob"                     label="Job"                     mnemonic="J"                     style="push">                  <parameter                        name="newWizardId"                        value="hydrograph.ui.graph.job.wizard">                  </parameter>               </command>
+               <menu
+                     icon="icons/class_obj.gif"
+                     label="Custom Class"
+                     mnemonic="C">
+                  <command
+                        commandId="org.eclipse.ui.newWizard"
+                        icon="icons/newclass_wiz.gif"
+                        id="hydrograph.ui.menus.NewMenu.Class"
+                        label="Empty Class"
+                        mnemonic="C"
+                        style="push">
+                     <parameter
+                           name="newWizardId"
+                           value="org.eclipse.jdt.ui.wizards.NewClassCreationWizard">
+                     </parameter>
+                  </command>
+                  <command
+                        commandId="hydrograph.ui.menus.new.newFilterClass"
+                        icon="icons/filter_palette.png"
+                        label="Filter Class"
+                        mnemonic="F"
+                        style="push">
+                  </command>
+                  <command
+                        commandId="hydrograph.ui.menus.new.newAggClass"
+                        icon="icons/aggregate_palette.png"
+                        label="Aggregate Class"
+                        mnemonic="A"
+                        style="push">
+                  </command>
+                  <command
+                        commandId="hydrograph.ui.menus.new.newTranformClass"
+                        icon="icons/transform_palette.png"
+                        label="Tranform Class"
+                        mnemonic="T"
+                        style="push">
+                  </command>                  <command                        commandId="hydrograph.ui.menus.new.newNormalizeClass"                        icon="icons/aggregate_palette.png"                        label="Normalize Class"                        mnemonic="N"                        style="push">                  </command>                  <command                        commandId="hydrograph.ui.menus.new.newCumulateClass"                        icon="icons/aggregate_palette.png"                        label="Cumulate Class"                        mnemonic="U"                        style="push">                  </command>
+               </menu>
                <command
                      commandId="org.eclipse.ui.newWizard"
                      id="hydrograph.ui.menus.NewMenu.XmlFile"
@@ -264,18 +386,11 @@
             <separator
                   name="hydrograph.ui.graph.separator1"
                   visible="true">
-            </separator>
+            </separator>            <command                  commandId="org.eclipse.ui.file.close"                  id="bitwise.close.id"                  label="Close"                  mnemonic="C"                  style="push">            </command>
             <command
                   commandId="org.eclipse.ui.file.closeAll"
                   label="Close All"
                   mnemonic="l"
-                  style="push">
-            </command>
-            <command
-                  commandId="org.eclipse.ui.file.close"
-                  id="bitwise.close.id"
-                  label="Close"
-                  mnemonic="C"
                   style="push">
             </command>
             <separator
@@ -352,6 +467,10 @@
                   style="push"
                   mnemonic ="R">
             </command>
+            <separator
+                  name="hydrograph.ui.menus.separator1"
+                  visible="true">
+            </separator>
             <command
                   commandId="org.eclipse.ui.edit.cut"
                   label="Cut"
@@ -370,6 +489,10 @@
                   style="push"
                   mnemonic ="P">
             </command>
+            <separator
+                  name="hydrograph.ui.menus.separator2"
+                  visible="true">
+            </separator>
             <command
                   commandId="org.eclipse.ui.edit.delete"
                   label="Delete"
@@ -382,6 +505,16 @@
                   style="push"
                    mnemonic ="A">
             </command>
+         </menu>
+         <menu
+               id="org.eclipse.jdt.ui.source.menu"
+               label="Source"
+               mnemonic="S">
+         </menu>
+         <menu
+               id="org.eclipse.jdt.ui.refactoring.menu"
+               label="Refactor"
+               mnemonic="t">
          </menu>
          <menu
                id="hydrograph.ui.menus.WindowMenu"
@@ -405,12 +538,6 @@
                   mnemonic ="t">
             </command>
             <command
-                  commandId="org.eclipse.ui.window.preferences"
-                  label="Preferences"
-                  style="push"
-                  mnemonic ="f">
-            </command>
-            <command
                   commandId="com.bitwise.window.portLabels.showHide"
                   label="Show/Hide Port Labels"
                   style="toggle"
@@ -427,6 +554,16 @@
                      mnemonic ="O">
                </command>
             </menu>
+            <separator
+                  name="hydrograph.ui.menus.separator3"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="org.eclipse.ui.window.preferences"
+                  label="Preferences"
+                  mnemonic="f"
+                  style="push">
+            </command>
          </menu>
          <menu
                id="hydrograph.ui.menus.HelpMenu"
@@ -497,9 +634,9 @@
             class="hydrograph.ui.menus.importWizards.ImportEngineXmlWizard"
             icon="icons/import_xml_option.png"
             id="hydrograph.ui.menus.importWizards.ImportEngineXmlWizard"
-            name="Import Engine Xml">
+            name="Import Target XML">
          <description>
-            Import Engine XML file from the local file system into the workspace.
+            Import Target XML file from the local file system into the workspace.
          </description>
       </wizard>
    </extension>

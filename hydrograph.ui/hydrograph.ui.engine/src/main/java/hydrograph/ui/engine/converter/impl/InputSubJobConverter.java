@@ -14,12 +14,15 @@
  
 package hydrograph.ui.engine.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
+import hydrograph.engine.jaxb.inputtypes.Subjob;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.PathUtility;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.InputConverter;
-import hydrograph.ui.engine.helper.ConverterHelper;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -28,19 +31,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseField;
-import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
-import hydrograph.engine.jaxb.inputtypes.Subjob;
 /**
- * 
- * @author Bitwise
- *Input type sub graph converter.
+ * The Class InputSubJobConverter.
+ * Input type sub graph converter.
  */
 public class InputSubJobConverter extends InputConverter {
 
+	/** The Constant logger. */
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputSubJobConverter.class);
 	
+	/**
+	 * Instantiates a new input sub job converter.
+	 *
+	 * @param component the component
+	 */
 	public InputSubJobConverter(Component component) {
 		super(component);
 		this.baseComponent = new Subjob();
@@ -48,6 +52,9 @@ public class InputSubJobConverter extends InputConverter {
 		this.properties = component.getProperties();
 	}
 
+	/**
+	 * Generating XML for Component.
+	 */
 	@Override
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
@@ -55,14 +62,24 @@ public class InputSubJobConverter extends InputConverter {
 		Subjob subjob = (Subjob) baseComponent;
 		Subjob.Path path = new Subjob.Path();
 		if(properties.get(Constants.JOB_PATH)!=null){
-			String subJobFilePath = getSubJobAbsolutePath(((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION));
-			path.setUri(subJobFilePath);
+			String subJobFile=((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION);
+			if(PathUtility.INSTANCE.isAbsolute(subJobFile)){
+				path.setUri(subJobFile);
+			}
+			else{
+				path.setUri("../"+subJobFile);
+			}
+			
 			subjob.setPath(path);
 		}
 		subjob.setSubjobParameter(getRuntimeProperties());
 		
 	}
 
+	/**
+	 * Adding out socket for input subgraph component.
+	 * @return in socket list
+	 */
 	@Override
 	protected List<TypeInputOutSocket> getInOutSocket() {
 		List<TypeInputOutSocket> outSockets = new ArrayList<>();
@@ -77,6 +94,9 @@ public class InputSubJobConverter extends InputConverter {
 		return outSockets;
 	}
 
+	/**
+	 * Generate Base Field 
+	 */
 	@Override
 	protected List<TypeBaseField> getFieldOrRecord(List<GridRow> gridList) {
 		logger.debug("Generating data for {} for property {}", new Object[] { properties.get(Constants.PARAM_NAME),

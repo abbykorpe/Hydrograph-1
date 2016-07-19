@@ -16,6 +16,4 @@
 <toc label="Sort" link_to="xml\Components\components.xml#Sort"> 
 	<topic label="Properties"  href="html/Components/Sort_Properties.html"> 
 	</topic>
- <topic href="html/Components/Sort_Validations.html" label="Validations">
- </topic>
 </toc>

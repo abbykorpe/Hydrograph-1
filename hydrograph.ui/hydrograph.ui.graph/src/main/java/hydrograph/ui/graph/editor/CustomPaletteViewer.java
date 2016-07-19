@@ -122,7 +122,7 @@ public class CustomPaletteViewer extends PaletteViewer {
 		boolean matchFound = false;
 		for (Component componentConfig : componentsConfig) {
 			String componentName = componentConfig.getNameInPalette().toUpperCase();
-			if (Constants.DUMMY_COMPONENT.equalsIgnoreCase(componentConfig.getName()))
+			if (Constants.UNKNOWN_COMPONENT.equalsIgnoreCase(componentConfig.getName()))
 				continue;
 			if (componentName.contains(searchedString.trim())) {
 				CombinedTemplateCreationEntry component = getComponentToAddInContainer(editor, componentConfig);
@@ -141,7 +141,7 @@ public class CustomPaletteViewer extends PaletteViewer {
 	private void showAllContainers(final PaletteRoot paletteRoot, final ELTGraphicalEditor editor,
 			final Map<String, PaletteDrawer> categoryPaletteConatiner, final List<Component> componentsConfig) {
 		for (Component componentConfig : componentsConfig) {
-			if (Constants.DUMMY_COMPONENT.equalsIgnoreCase(componentConfig.getName()))
+			if (Constants.UNKNOWN_COMPONENT.equalsIgnoreCase(componentConfig.getName()))
 				continue;
 			CombinedTemplateCreationEntry component = getComponentToAddInContainer(editor, componentConfig);
 			
@@ -181,7 +181,7 @@ public class CustomPaletteViewer extends PaletteViewer {
 	private void createPaletteContainers(PaletteRoot paletteRoot, Map<String, PaletteDrawer> categoryPaletteConatiner,
 			ELTGraphicalEditor eLEtlGraphicalEditor) {
 		for (CategoryType category : CategoryType.values()) {
-			if (Constants.DUMMY_COMPONENT_CATEGORY.equalsIgnoreCase(category.name()))
+			if (Constants.UNKNOWN_COMPONENT_CATEGORY.equalsIgnoreCase(category.name()))
 				continue;
 			PaletteDrawer paletteDrawer = eLEtlGraphicalEditor.createPaletteContainer(category.name());
 			paletteDrawer.setInitialState(PaletteDrawer.INITIAL_STATE_OPEN);

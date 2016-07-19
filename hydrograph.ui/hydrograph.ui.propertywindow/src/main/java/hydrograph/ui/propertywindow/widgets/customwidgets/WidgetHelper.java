@@ -47,6 +47,10 @@ public class WidgetHelper {
 	public WidgetConfig getPartitionKeysConfig(){
 		return populateSingleColumnGridConfig(Messages.LABEL_PARTITION_KEYS, Constants.PARTITION_KEYS_WINDOW_TITLE);
 	}
+	
+	public WidgetConfig getPartitionKeysConfigInputHive(){
+		return populateSingleColumnGridConfig(Messages.LABEL_PARTITION_KEYS, Constants.PARTITION_KEYS_WINDOW_TITLE);
+	}
 
 	public WidgetConfig getOperationFieldsConfig(){
 		return populateSingleColumnGridConfig(Messages.LABEL_OPERATION_FIELDS, Constants.OPERATION_FIELDS_WINDOW_TITLE);
@@ -59,7 +63,7 @@ public class WidgetHelper {
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.LABEL_DELIMITER);
 		textBoxConfig.setGrabExcessSpace(true);
-		addTextBoxListeners(textBoxConfig);
+		addDelimiterTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
 	}
 	
@@ -93,8 +97,9 @@ public class WidgetHelper {
 	public WidgetConfig getPhaseWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Constants.PHASE);
+		textBoxConfig.setCharacterLimit(2);
 		addTextBoxListeners(textBoxConfig);
-		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
+		textBoxConfig.getListeners().add(Listners.VERIFY_DIGIT_LIMIT_NUMERIC_LISTENER);
 		textBoxConfig.setWidgetWidth(78);
 		return textBoxConfig;
 	}
@@ -293,6 +298,14 @@ public class WidgetHelper {
 		listeners.add(Listners.NORMAL_FOCUS_OUT);
 		listeners.add(Listners.EVENT_CHANGE);
 		listeners.add(Listners.MODIFY);
+	}
+	
+	private void addDelimiterTextBoxListeners(TextBoxWithLableConfig textBoxConfig) {
+		List<Listners> listeners = textBoxConfig.getListeners();
+		listeners.add(Listners.DELIMITER_FOCUS_IN);
+		listeners.add(Listners.DELIMITER_FOCUS_OUT);
+		listeners.add(Listners.EVENT_CHANGE);
+		listeners.add(Listners.DELIMITER_MODIFY);
 	}
 	
 	private DropDownConfig populateTrueFalseConfig(String name){

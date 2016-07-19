@@ -13,16 +13,25 @@
 
 package hydrograph.ui.engine.ui.converter;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeInputField;
+import hydrograph.engine.jaxb.commontypes.TypeMapField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.ui.common.component.config.Operations;
 import hydrograph.ui.common.component.config.TypeInfo;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
-import hydrograph.ui.datastructure.property.OperationClassProperty;
-import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
@@ -32,8 +41,10 @@ import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.graph.model.PortTypeEnum;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -41,17 +52,6 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseField;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeInputField;
-import hydrograph.engine.jaxb.commontypes.TypeMapField;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
-import com.thoughtworks.xstream.mapper.AttributeMapper;
 
 /**
  * The class TransformUiConverter
@@ -62,7 +62,6 @@ import com.thoughtworks.xstream.mapper.AttributeMapper;
 public abstract class TransformUiConverter extends UiConverter {
 	private static final Logger LOGGER = LogFactory.INSTANCE
 			.getLogger(TransformUiConverter.class);
-	private Schema schema;
 
 	/**
 	 * Generate common properties of transform-component that will appear in
@@ -97,7 +96,7 @@ public abstract class TransformUiConverter extends UiConverter {
 						new LinkingData(inSocket.getFromComponentId(),
 								operationsComponent.getId(), inSocket
 										.getFromSocketId(), inSocket.getId()));
-				uiComponent.getPorts().get(inSocket.getId()).setPortType(PortTypeEnum.fromValue(inSocket.getType()));
+				uiComponent.getPorts().get(inSocket.getId()).setPortType(PortTypeEnum.IN);
 			}
 		}
 	}
@@ -115,11 +114,11 @@ public abstract class TransformUiConverter extends UiConverter {
 			for (TypeOperationsOutSocket outSocket : operationsComponent
 					.getOutSocket()) {
 				uiComponent.engageOutputPort(outSocket.getId());
-				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null)
-					propertyMap
-							.put(Constants.PARAM_OPERATION,
-									getUiPassThroughOrOperationFieldsOrMapFieldGrid(outSocket));
-			}
+				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null){
+					propertyMap.put(Constants.PARAM_OPERATION,getUiPassThroughOrOperationFieldsOrMapFieldGrid(outSocket));
+					createPassThroughAndMappingFieldsForSchemaPropagation(outSocket);
+					}
+				}
 
 		}
 	}
@@ -226,11 +225,13 @@ public abstract class TransformUiConverter extends UiConverter {
 		List<FilterProperties> outputFieldList = new LinkedList<>();
 		if(item !=null ){
 			ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
-			List<GridRow> gridRow = new ArrayList<>();
+			List<GridRow> gridRowList = new ArrayList<>();
 			if (item.getOutputFields() != null) {
 
 				for (TypeBaseField record : item.getOutputFields().getField()) {
-					gridRow.add(converterUiHelper.getFixedWidthSchema(record));
+					GridRow gridRow=converterUiHelper.getFixedWidthSchema(record);
+					gridRowList.add(gridRow);
+					createPropagationDataForOperationFileds(gridRow);
 					FilterProperties filterProperties=new FilterProperties();
 					filterProperties.setPropertyname(record.getName());
 					outputFieldList.add(filterProperties);
@@ -239,6 +240,22 @@ public abstract class TransformUiConverter extends UiConverter {
 			}
 		}
 		return outputFieldList;
+	}
+
+	private void createPropagationDataForOperationFileds(GridRow gridRow) {
+		ComponentsOutputSchema componentsOutputSchema = null;
+		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) propertyMap.get(Constants.SCHEMA_TO_PROPAGATE);
+		if (schemaMap == null) {
+			schemaMap = new LinkedHashMap<>();
+			componentsOutputSchema = new ComponentsOutputSchema();
+			schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
+			 propertyMap.put(Constants.SCHEMA_TO_PROPAGATE, schemaMap);
+		} else if (schemaMap.get(Constants.FIXED_OUTSOCKET_ID) == null) {
+			componentsOutputSchema = new ComponentsOutputSchema();
+			schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
+		}
+		componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
+		componentsOutputSchema.addSchemaFields(gridRow);
 	}
 
 	private List<FilterProperties> getInputFieldList(TypeTransformOperation item) {
@@ -311,4 +328,51 @@ public abstract class TransformUiConverter extends UiConverter {
 		return runtimeMap;
 	}
 
+	/**
+	 * This method creates ComponentOutputSchema for pass-through and mapping fields of operation components. Also
+	 * maintains sequence of pass-through , mapping and operation filed sequence as a temporary property within component.
+	 * 
+	 * @param operationsOutSockets
+	 */
+	protected void createPassThroughAndMappingFieldsForSchemaPropagation(TypeOperationsOutSocket operationsOutSockets) {
+		ComponentsOutputSchema componentsOutputSchema = null;
+		List<String> schemaFieldSequence = null;
+		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) propertyMap
+				.get(Constants.SCHEMA_TO_PROPAGATE);
+		if (operationsOutSockets != null
+				&& !operationsOutSockets.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()) {
+			componentsOutputSchema = new ComponentsOutputSchema();
+			schemaFieldSequence = new ArrayList<>();
+			for (Object property : operationsOutSockets.getPassThroughFieldOrOperationFieldOrMapField()) {
+
+				if (property instanceof TypeInputField) {
+					schemaFieldSequence.add(((TypeInputField) property).getName());
+					componentsOutputSchema.getPassthroughFields().add(((TypeInputField) property).getName());
+					componentsOutputSchema.addSchemaFields(SchemaPropagationHelper.INSTANCE
+							.createFixedWidthGridRow(((TypeInputField) property).getName()));
+				} else if (property instanceof TypeMapField) {
+					schemaFieldSequence.add(((TypeMapField) property).getName());
+					componentsOutputSchema.getMapFields().put(((TypeMapField) property).getName(),
+							((TypeMapField) property).getSourceName());
+					componentsOutputSchema.addSchemaFields(SchemaPropagationHelper.INSTANCE
+							.createFixedWidthGridRow(((TypeMapField) property).getName()));
+				} else if (property instanceof TypeOperationField) {
+					schemaFieldSequence.add(((TypeOperationField) property).getName());
+				}
+			}
+		}
+		if (schemaMap == null) {
+			schemaMap = new LinkedHashMap<>();
+		 }
+		if(operationsOutSockets!=null){
+		schemaMap.put(operationsOutSockets.getId(), componentsOutputSchema);
+		}
+		propertyMap.put(Constants.SCHEMA_TO_PROPAGATE, schemaMap);
+		propertyMap.put(Constants.SCHEMA_FIELD_SEQUENCE, schemaFieldSequence);
+	}
+	
+	protected void copySchemaFromInputPort(String inSocketId) {
+		if(StringUtils.isNotBlank(inSocketId))
+		propertyMap.put(Constants.COPY_FROM_INPUT_PORT_PROPERTY, inSocketId);
+	}
 }

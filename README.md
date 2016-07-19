@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.com/capitalone/Hydrograph.svg?token=gPhqQtqsLvPLaT4qqGcg&branch=master)](https://travis-ci.com/capitalone/Hydrograph)
+[![Build Status](https://travis-ci.com/capitalone/Hydrograph.svg?token=vHFoUUpqWdpUPeR4RpJu&branch=master)](https://travis-ci.com/capitalone/Hydrograph)
+
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 # Hydrograph Logo TBD

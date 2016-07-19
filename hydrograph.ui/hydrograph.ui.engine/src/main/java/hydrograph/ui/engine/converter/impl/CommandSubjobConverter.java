@@ -15,6 +15,7 @@
 package hydrograph.ui.engine.converter.impl;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.PathUtility;
 import hydrograph.ui.engine.converter.Converter;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -42,13 +43,16 @@ public class CommandSubjobConverter extends Converter {
 		Subjob subjob = (Subjob) baseComponent;
 		if (properties.get(Constants.JOB_PATH) != null) {
 			Subjob.Path path = new Subjob.Path();
-			String subJobFilePath = getSubJobAbsolutePath(((String) properties.get(Constants.JOB_PATH)).replace(
-					Constants.JOB_EXTENSION, Constants.XML_EXTENSION));
-			path.setUri(subJobFilePath);
+			String subJobFile=((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION);
+			if(PathUtility.INSTANCE.isAbsolute(subJobFile)){
+				path.setUri(subJobFile);
+			}
+			else{
+				path.setUri("../"+subJobFile);
+			}
 			subjob.setPath(path);
 		}
 		subjob.setSubjobParameter(getRuntimeProperties());
-
 	}
 
 }

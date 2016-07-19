@@ -10,16 +10,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
 package hydrograph.ui.validators.impl;
 
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-public class NonEmptyStringValidatorRule implements IValidator{
+/**
+ * This rule checks if String entered in text box is empty.(allows white spaces)
+ * 
+ * Author: Bitwise
+ */
 
-	private String errorMessage;
+
+
+public class NonEmptyStringValidatorRule implements IValidator{
+private String errorMessage;
 	
 	@Override
 	public boolean validateMap(Object object, String propertyName) {
@@ -34,7 +40,7 @@ public class NonEmptyStringValidatorRule implements IValidator{
 	@Override
 	public boolean validate(Object object, String propertyName) {
 		String value = (String)object;
-		if(StringUtils.isNotBlank(value)){
+		if(StringUtils.isNotEmpty(value)){
 			return true;
 		}
 		errorMessage = propertyName + " is mandatory";

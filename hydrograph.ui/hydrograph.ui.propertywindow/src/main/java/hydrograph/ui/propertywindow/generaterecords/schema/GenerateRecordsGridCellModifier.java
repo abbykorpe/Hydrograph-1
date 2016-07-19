@@ -18,6 +18,7 @@ import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GeneralGridWidgetBuilder;
 import hydrograph.ui.propertywindow.widgets.utility.DataType;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -26,6 +27,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.TableItem;
 
 
 /**
@@ -67,18 +69,14 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 				return false;
 		}
 		if (ELTSchemaGridWidget.SCALE.equals(property)) {
-			if (Float.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue())
-					|| Double.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue())
-					|| BigDecimal.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue()))
+			if (BigDecimal.class.getCanonicalName().equalsIgnoreCase(generateRecordsSchemaGridRow.getDataTypeValue()))
 				return true;
 			else
 				return false;
 		}
 		if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(generateRecordsSchemaGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -93,9 +91,7 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 		}
 		if (ELTSchemaGridWidget.PRECISION.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(generateRecordsSchemaGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(generateRecordsSchemaGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -154,10 +150,13 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 	 */
 	@Override
 	public void modify(Object element, String property, Object value) {
+		Object object=null;
 		if (element instanceof Item)
-			element = ((Item) element).getData();
+		{	
+			object=((Item) element).getData();
+		}	
 
-		GenerateRecordSchemaGridRow generateRecordSchemaGridRow = (GenerateRecordSchemaGridRow) element;
+		GenerateRecordSchemaGridRow generateRecordSchemaGridRow = (GenerateRecordSchemaGridRow) object;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			generateRecordSchemaGridRow.setFieldName(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
@@ -175,7 +174,7 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 			{
 				generateRecordSchemaGridRow.setScaleType(2); 
 				generateRecordSchemaGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[2]);
-				generateRecordSchemaGridRow.setScale(String.valueOf(0));
+				generateRecordSchemaGridRow.setScale(String.valueOf(1));
 			}
 			generateRecordSchemaGridRow.setDataType((Integer) value);
 			generateRecordSchemaGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer) value]);
@@ -200,6 +199,7 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 		}
 		resetDateFormat(generateRecordSchemaGridRow, property);
 		viewer.refresh();
+		SchemaRowValidation.INSTANCE.highlightInvalidRowWithRedColor(generateRecordSchemaGridRow,(TableItem)element,generateRecordsGridWidget.getTable(), generateRecordsGridWidget.getComponentType());
 		generateRecordsGridWidget.showHideErrorSymbol(generateRecordsGridWidget.isWidgetValid());
 	}
 
@@ -219,6 +219,8 @@ public class GenerateRecordsGridCellModifier implements ICellModifier {
 					||DataType.STRING_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
+					||DataType.FLOAT_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
+					||DataType.DOUBLE_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(generateRecordSchemaGridRow.getDataTypeValue())){
 				return true;
 			}	

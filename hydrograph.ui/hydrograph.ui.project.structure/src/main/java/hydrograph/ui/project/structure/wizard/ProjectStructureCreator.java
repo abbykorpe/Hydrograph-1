@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -40,6 +41,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Path;
@@ -51,7 +53,9 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.slf4j.Logger;
-
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * Class to create the Custom Project Structure.
@@ -85,9 +89,18 @@ public class ProjectStructureCreator {
 	 * @return
 	 */
 	public IProject createProject(String projectName, URI location){
-
-		if(projectName == null || projectName.trim().length() <= 0)
+		if (StringUtils.isNotBlank(projectName) && projectName.contains(" ")){
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+			messageBox.setText("Error");
+			messageBox.setMessage("The Project Name has spaces");
+			if(messageBox.open()==SWT.OK)
+			{
+				return null;
+			}
+		}
+		else if(StringUtils.isBlank(projectName)){
 			throw new InvalidProjectNameException();
+		}
 		IProject project = null;
 		try {
 			project = createBaseProject(projectName, location);
@@ -259,11 +272,16 @@ public class ProjectStructureCreator {
 	 */
 	private IProject createBaseProject(String projectName, URI location) throws CoreException {
 		IProject newProject=null;
+		
 		if(location==null){
 				newProject = createTheProjectAtSpecifiedLocation(projectName,location);
 		}
 		else{
-			URI newLocation=URI.create(location.toString());
+			IPath iPath	 = new Path(location.getPath());
+			if (!StringUtils.equals(iPath.lastSegment(), projectName)) {
+				iPath = iPath.append(projectName);
+			}
+			URI newLocation=URI.create(iPath.toFile().toURI().toString());
 				newProject=	createTheProjectAtSpecifiedLocation(projectName, newLocation);
 		}
 		return newProject;

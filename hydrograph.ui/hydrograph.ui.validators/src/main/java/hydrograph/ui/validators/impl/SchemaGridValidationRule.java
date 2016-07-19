@@ -14,8 +14,8 @@
  
 package hydrograph.ui.validators.impl;
 
-import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -31,13 +31,10 @@ import org.slf4j.Logger;
 public class SchemaGridValidationRule implements IValidator {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(SchemaGridValidationRule.class); 
 
-	private static final String DATA_TYPE_DOUBLE = "java.lang.Double";
-	private static final String DATA_TYPE_FLOAT = "java.lang.Float"; 
 	private static final String DATA_TYPE_DATE = "java.util.Date";
 	private static final String DATA_TYPE_BIG_DECIMAL = "java.math.BigDecimal";
-	private static final String SCALE_TYPE_IMPLICIT ="implicit" ;
-	private static final String SCALE_TYPE_EXPLICIT = "explicit";
 	private static final String SCALE_TYPE_NONE = "none";
+	private static final String REGULAR_EXPRESSION_FOR_NUMBER = "\\d+";
 	
 	String errorMessage;
 	
@@ -78,25 +75,33 @@ public class SchemaGridValidationRule implements IValidator {
 		/*this list is used for checking duplicate names in the grid*/
 		List<String> uniqueNamesList = new ArrayList<>();
 		boolean fixedWidthGrid = false;
+		boolean generateRecordSchemaGrid = false;
+		
 		if(gridRowList == null || gridRowList.isEmpty()){
 			errorMessage = propertyName + " is mandatory";
 			return false;
 		}
+		
 		GridRow gridRowTest = gridRowList.iterator().next();
+		
+		if(GenerateRecordSchemaGridRow.class.isAssignableFrom(gridRowTest.getClass())){
+			generateRecordSchemaGrid = true;
+		}
+		
 		if(FixedWidthGridRow.class.isAssignableFrom(gridRowTest.getClass())){
 			fixedWidthGrid = true;
 		}
+		
 		for (GridRow gridRow : gridRowList) {
 			if(StringUtils.isBlank(gridRow.getFieldName())){
 				errorMessage = "Field name can not be blank";
 				return false;
 			}
 			
-			if(DATA_TYPE_DOUBLE.equalsIgnoreCase(gridRow.getDataTypeValue()) ||
-					DATA_TYPE_FLOAT.equalsIgnoreCase(gridRow.getDataTypeValue()) || 
-					DATA_TYPE_BIG_DECIMAL.equalsIgnoreCase(gridRow.getDataTypeValue())){
-				if(StringUtils.isBlank(gridRow.getScale())){
-					errorMessage = "Scale can not be blank";
+			if(DATA_TYPE_BIG_DECIMAL.equalsIgnoreCase(gridRow.getDataTypeValue())){
+				if(StringUtils.isBlank(gridRow.getScale()) || StringUtils.equalsIgnoreCase(gridRow.getScale(), "0") 
+						|| !(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))){
+					errorMessage = "Scale should be positive integer.";
 					return false;
 				}
 				try{
@@ -120,12 +125,15 @@ public class SchemaGridValidationRule implements IValidator {
 				return false;
 			}
 			
-			if(fixedWidthGrid){
+			if(fixedWidthGrid && !generateRecordSchemaGrid){
 				FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) gridRow;
 				if(StringUtils.isBlank(fixedWidthGridRow.getLength())){
 					errorMessage = "Length is mandatory";
 					return false;
-				}
+				} else if(!(fixedWidthGridRow.getLength().matches(REGULAR_EXPRESSION_FOR_NUMBER))|| (fixedWidthGridRow.getLength().equals("0"))){
+                errorMessage = "Length should be a positive Integer greater than 0";
+                return false;
+          }
 			}
 			if(uniqueNamesList.isEmpty() || !uniqueNamesList.contains(gridRow.getFieldName())){
 				uniqueNamesList.add(gridRow.getFieldName());

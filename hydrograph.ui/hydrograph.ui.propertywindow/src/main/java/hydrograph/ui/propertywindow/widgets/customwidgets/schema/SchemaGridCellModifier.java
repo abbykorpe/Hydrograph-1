@@ -16,11 +16,13 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.propertywindow.widgets.utility.DataType;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.TableItem;
 
 
 
@@ -29,7 +31,7 @@ import org.eclipse.swt.widgets.Item;
  * This class represents the cell modifier for the SchemaEditor program
  */
 
-class SchemaGridCellModifier implements ICellModifier {
+public class SchemaGridCellModifier implements ICellModifier {
 	private Viewer viewer;
    private ELTGenericSchemaGridWidget eltGenericSchemaGridWidget;
 	/**
@@ -57,9 +59,7 @@ class SchemaGridCellModifier implements ICellModifier {
 		}
 		if (ELTSchemaGridWidget.SCALE.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(basicSchemaGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -68,9 +68,7 @@ class SchemaGridCellModifier implements ICellModifier {
 
 		if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(basicSchemaGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -79,9 +77,7 @@ class SchemaGridCellModifier implements ICellModifier {
 
 		if (ELTSchemaGridWidget.PRECISION.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(basicSchemaGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(basicSchemaGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -115,10 +111,13 @@ class SchemaGridCellModifier implements ICellModifier {
 
 	@Override
 	public void modify(Object element, String property, Object value) {
+		Object object=null;
 		if (element instanceof Item)
-			element = ((Item) element).getData();
-
-		BasicSchemaGridRow basicSchemaGridRow = (BasicSchemaGridRow) element;
+		{
+			object = ((Item) element).getData();
+			
+		}
+		BasicSchemaGridRow basicSchemaGridRow = (BasicSchemaGridRow) object;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			basicSchemaGridRow.setFieldName(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)){
@@ -126,20 +125,28 @@ class SchemaGridCellModifier implements ICellModifier {
 			{
 				basicSchemaGridRow.setScaleType(2); 
 				basicSchemaGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[2]);
-				basicSchemaGridRow.setScale(String.valueOf(0));
+				basicSchemaGridRow.setScale(String.valueOf(1));
 			}
 			basicSchemaGridRow.setDataType((Integer)value);
 			basicSchemaGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]);
 		}
 		else if (ELTSchemaGridWidget.DATEFORMAT.equals(property))
+		{
 			basicSchemaGridRow.setDateFormat( ((String) value).trim()); 
+		}	
 		else if (ELTSchemaGridWidget.PRECISION.equals(property))
+		{	
 			basicSchemaGridRow.setPrecision(((String) value).trim()); 
+		}
 		else if (ELTSchemaGridWidget.SCALE.equals(property))
-			basicSchemaGridRow.setScale(((String) value).trim());
+			{
+			 basicSchemaGridRow.setScale(((String) value).trim());
+			}
+			
 		else if (ELTSchemaGridWidget.SCALE_TYPE.equals(property)){
 			basicSchemaGridRow.setScaleType((Integer)value); 
 			basicSchemaGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[(Integer)value]);
+			
 		}
 		else if (ELTSchemaGridWidget.FIELD_DESCRIPTION.equals(property))
 			basicSchemaGridRow.setDescription(((String) value).trim());
@@ -151,11 +158,9 @@ class SchemaGridCellModifier implements ICellModifier {
 			basicSchemaGridRow.setScaleType(0);
 			basicSchemaGridRow.setPrecision("");
 		}
-
 		resetDateFormat(basicSchemaGridRow, property);
-        
 		viewer.refresh();
-		;
+		SchemaRowValidation.INSTANCE.highlightInvalidRowWithRedColor(basicSchemaGridRow, (TableItem)element,eltGenericSchemaGridWidget.getTable(), eltGenericSchemaGridWidget.getComponentType());
 		eltGenericSchemaGridWidget.showHideErrorSymbol(eltGenericSchemaGridWidget.isWidgetValid());
 	}
 
@@ -177,6 +182,8 @@ class SchemaGridCellModifier implements ICellModifier {
 					||DataType.STRING_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
+					||DataType.FLOAT_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
+					||DataType.DOUBLE_CLASS.equals(basicSchemaGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(basicSchemaGridRow.getDataTypeValue())){
 				return true;
 			}	

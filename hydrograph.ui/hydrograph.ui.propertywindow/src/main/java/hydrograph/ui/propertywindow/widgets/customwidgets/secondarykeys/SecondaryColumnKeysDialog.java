@@ -60,6 +60,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -101,9 +102,9 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	private boolean closeDialog;
 	private boolean okPressed;
-	private Label deleteButton;
-	private Label upButton;
-	private Label downButton;
+	private Button deleteButton;
+	private Button upButton;
+	private Button downButton;
 	private static final String INFORMATION="Information";
 	
 	public SecondaryColumnKeysDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar, EditButtonWithLabelConfig buttonWithLabelConfig) {
@@ -212,15 +213,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		dropTarget.addDropListener(new DropTargetAdapter() {
 			public void drop(DropTargetEvent event) {
 				for (String fieldName : getformatedData((String) event.data))
-					if (!isPropertyAlreadyExists(fieldName))
 						addNewProperty(targetTableViewer, fieldName);
-				if (propertyList.size() >= 1) {
-					deleteButton.setEnabled(true);
-				} 
-				if (propertyList.size() >= 2) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				}
+				enableControlButtons();
 			}
 		});
 
@@ -231,13 +225,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				addNewProperty(targetTableViewer, null);
-				if (propertyList.size() >= 1) {
-					deleteButton.setEnabled(true);
-				} 
-				if (propertyList.size() >= 2) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				}
+				enableControlButtons();
 			}
 
 			@Override
@@ -266,6 +254,15 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	private void createSourceTable(Composite composite_2) {
 		sourceTable = new Table(composite_2, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
+		sourceTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				if(sourceTable.getSelection().length==1){
+					addNewProperty(targetTableViewer, sourceTable.getSelection()[0].getText());
+					enableControlButtons();
+				}
+			}
+		});
 		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2);
 		gd_table.widthHint = 221;
 		gd_table.heightHint = 407;
@@ -328,28 +325,28 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		composite_1.setLayout(new GridLayout(4, false));
 		ColumnLayoutData cld_composite_1 = new ColumnLayoutData();
 		cld_composite_1.horizontalAlignment = ColumnLayoutData.RIGHT;
-		cld_composite_1.heightHint = 28;
+		cld_composite_1.heightHint = 30;
 		composite_1.setLayoutData(cld_composite_1);
 
-		Label addButton = new Label(composite_1, SWT.NONE);
+		Button addButton = new Button(composite_1, SWT.NONE);
 		addButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		addButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON));
 		attachAddButtonListern(addButton);
 
-		deleteButton = new Label(composite_1, SWT.NONE);
+		deleteButton = new Button(composite_1, SWT.NONE);
 		deleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON));
 		attachDeleteButtonListener(deleteButton);
 
-		upButton = new Label(composite_1, SWT.NONE);
+		upButton = new Button(composite_1, SWT.NONE);
 		upButton.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON));
 		attachUpButtonListener(upButton);
 
-		downButton = new Label(composite_1, SWT.NONE);
+		downButton = new Button(composite_1, SWT.NONE);
 		downButton.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		downButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON));
@@ -359,7 +356,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		downButton.setEnabled(false);
 	}
 
-	private void attachDownButtonListerner(Label downButton) {
+	private void attachDownButtonListerner(Button downButton) {
 		downButton.addMouseListener(new MouseAdapter() {
 			int index1 = 0, index2 = 0;
        
@@ -392,7 +389,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	}
 
-	private void attachUpButtonListener(Label upButton) {
+	private void attachUpButtonListener(Button upButton) {
 		upButton.addMouseListener(new MouseAdapter() {
 			int index1 = 0, index2 = 0;
 
@@ -425,7 +422,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	}
 
-	private void attachDeleteButtonListener(final Label deleteButton) {
+	private void attachDeleteButtonListener(final Button deleteButton) {
 		deleteButton.addMouseListener(new MouseAdapter() {
 			
 			@Override
@@ -450,19 +447,13 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	}
 
-	private void attachAddButtonListern(Label addButton) {
+	private void attachAddButtonListern(Button addButton) {
 		addButton.addMouseListener(new MouseAdapter() {
 			
 			@Override
 			public void mouseUp(MouseEvent e) {
 				addNewProperty(targetTableViewer, null);
-				if (propertyList.size() >= 1) {
-					deleteButton.setEnabled(true);
-				}
-				if (propertyList.size() >= 2) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				}
+				enableControlButtons();
 			}
 
 		});
@@ -489,6 +480,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	// Add New Property After Validating old properties
 	private void addNewProperty(TableViewer tv, String fieldName) {
+		if (isPropertyAlreadyExists(fieldName))
+			return ;
 		isAnyUpdatePerformed = true;
 		SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
 		if (fieldName == null)
@@ -724,5 +717,15 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		}else{
 			return super.close();
 		}		
+	}
+
+	private void enableControlButtons() {
+		if (propertyList.size() >= 1) {
+			deleteButton.setEnabled(true);
+		} 
+		if (propertyList.size() >= 2) {
+			upButton.setEnabled(true);
+			downButton.setEnabled(true);
+		}
 	}
 }

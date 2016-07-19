@@ -25,6 +25,8 @@ public class ImagePathConstant {
 	public static final String DELETE_BUTTON = "/icons/delete.png";
 	public static final String MOVEUP_BUTTON = "/icons/up.png";
 	public static final String MOVEDOWN_BUTTON = "/icons/down.png";
+	public static final String SAVE_BUTTON = "/icons/save_o.png";
+	public static final String PULL_BUTTON = "/icons/pull_schema.png";
 	public static final String EDIT_BUTTON = "/icons/editImage.png";
 	public static final String APP_ICON = "/icons/app_icon.png";
 	public static final String UNCHECKALL_ICON = "/icons/uncheckall.png";
@@ -32,5 +34,26 @@ public class ImagePathConstant {
 	public static final String COMPONENT_WARN_ICON = "/icons/warn.png";
 	public static final String COMPONENT_ERROR_ICON = "/icons/error.png";
 	public static final String COMPONENT_UPDATE_ICON = "/icons/update.png";
+	
+	public static final String DATA_VIEWER_EXPORT="/icons/advicons/export.png";
+	public static final String DATA_VIEWER_FIND="/icons/advicons/lookup.png";
+	public static final String DATA_VIEWER_RELOAD="/icons/advicons/refresh.png";
+	public static final String DATA_VIEWER_FILTER="/icons/advicons/filter.png";
+	public static final String DATA_VIEWER_SWITCH_VIEW="/icons/advicons/switchview.png";
+	public static final String WARNING_ICON="/icons/advicons/warning.png";
+	public static final String TABLE_ICON = "/icons/advicons/table.png";
+	public static final String DESELECT_ALL_ICON = "/icons/advicons/deselectAll.png";
+	public static final String DESELECT_ICON = "/icons/advicons/deselect.png";
+	public static final String DOWN_ICON = "/icons/advicons/down.png";
+	public static final String UP_ICON = "/icons/advicons/up.png";
+	public static final String SELECT_ICON = "/icons/advicons/select.png";
+	public static final String SELECT_ALL_ICON = "/icons/advicons/selectAll.png";
+	
+	public static final String SORT_ASC="/icons/advicons/sort_asc.png";
+	public static final String SORT_DESC="/icons/advicons/sort_desc.png";
+	public static final String RESET_SORT="/icons/advicons/reset_sort.png";
+	public static final String FIND_DATA="/icons/advicons/lookup.png";
+	public static final String AUTO_ADJUST_COLUMNS = "/icons/advicons/autoadjustcolumns.png";
+	public static final String COPY_ICON =  "/icons/advicons/copy_icon.png";
 
 }

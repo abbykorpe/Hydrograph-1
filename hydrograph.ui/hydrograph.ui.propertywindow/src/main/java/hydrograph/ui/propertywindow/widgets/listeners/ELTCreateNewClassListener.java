@@ -61,7 +61,7 @@ public class ELTCreateNewClassListener implements IELTListener{
 			public void handleEvent(Event event) {
 				String comboValue = ((Combo) widgetList[0]).getText();
 				if (comboValue.equals(Messages.CUSTOM)) {
-					FilterOperationClassUtility.createNewClassWizard((Text) widgetList[1], widgetConfig);
+					FilterOperationClassUtility.INSTANCE.createNewClassWizard((Text) widgetList[1], widgetConfig);
 					if(helpers.get(HelperType.OPERATION_CLASS_DIALOG_OK_CONTROL) instanceof OperationClassDialog)
 					{
 						OperationClassDialog operationClassDialog=(OperationClassDialog)helpers.get(HelperType.OPERATION_CLASS_DIALOG_OK_CONTROL);

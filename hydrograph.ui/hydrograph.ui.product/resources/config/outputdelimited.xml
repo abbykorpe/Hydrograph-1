@@ -38,15 +38,20 @@
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="Path"
 			renderer="FILE_PATH_WIDGET" type="USER" showAsTooltip="TRUE" tooltipDataType="LINK"
 			usage="REQUIRED"  propertyHelpText="Displays the location of the file either\n Remote/Local. Allows only underscore ‘_’ and \nalphanumeric characters.">
-			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="delimiter"
 			value="|" renderer="DELIMETER_WIDGET" type="USER" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Specifies Delimiter present in the input file.">
+			usage="REQUIRED" propertyHelpText="Specify Delimiter present in the input file.">
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
-
+	
+		<tns:property dataType="string" name="quote" value="" renderer="QUOTE_WIDGET"
+ 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+ 			usage="OPTIONAL" propertyHelpText="Specifies Quote present in the input file.">
+ 		</tns:property>
+		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="overWrite" value="True"
 			renderer="OVERWRITE_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL" propertyHelpText="If ‘Overwrite’ property is true, the output location will be overwritten. Existing file / folder contents will be deleted.">
@@ -68,7 +73,7 @@
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="charset"
 			value="UTF-8" renderer="CHARACTER_SET_WIDGET" type="USER" showAsTooltip="FALSE"
 			tooltipDataType="NONE" usage="REQUIRED" propertyHelpText="Denotes the encoding system followed \nby the input file.">
-			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 			
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="strict" value="False"
@@ -79,7 +84,9 @@
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="runtime_properties"
 			renderer="RUNTIME_PROPERTIES_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time."/>
+			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time." >
+		<tns:validator>RUNTIME_PROPERTY_VALIDATOR</tns:validator>
+		</tns:property>
 		
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"

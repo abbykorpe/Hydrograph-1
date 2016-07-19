@@ -133,6 +133,9 @@ public abstract class Component extends Model {
 	private int componentLabelMargin;
 	 
 	private Map<String, Long> watcherTerminals;
+	
+	@XStreamOmitField
+	private boolean latestChangesInSchema=false;
 
 	@XStreamOmitField
 	private Map<String, PropertyToolTipInformation> tooltipInformation;
@@ -458,6 +461,14 @@ public abstract class Component extends Model {
 		return false;
 	}
 	
+	public boolean isLatestChangesInSchema() {
+		return latestChangesInSchema;
+	}
+
+	public void setLatestChangesInSchema(boolean latestChangesInSchema) {
+		this.latestChangesInSchema = latestChangesInSchema;
+	}
+
 	public void incrementLeftSidePorts(int newPortCount, int oldPortCount) {
 
 		for (int i = oldPortCount; i < newPortCount; i++) {
@@ -1058,6 +1069,9 @@ public abstract class Component extends Model {
 					else if (entry.getValue() instanceof OutputSubjobComponent) {
 						clonedHashMap.put(entry.getKey(), null);
 					} 
+					else if (entry.getValue() !=null && isWrapperType(entry.getValue().getClass())){
+						clonedHashMap.put(entry.getKey(), entry.getValue());
+					}
 					else  if(entry.getValue()!=null)
 					{   
 						IDataStructure c=(IDataStructure) entry.getValue();
@@ -1066,9 +1080,10 @@ public abstract class Component extends Model {
 				}
 
 			}
-		} catch (Exception e) {
+		} catch ( IllegalAccessException | InstantiationException e) {
 			logger.debug("Unable to clone Component ", e);
 		}
+		if(component!=null){
 		component.setType(getType());
 		component.setCategory(getCategory());
 		component.setParent(getParent());
@@ -1096,9 +1111,10 @@ public abstract class Component extends Model {
 		component.setInPortCount(leftPortCount);
 		component.setOutPortCount(rightPortCount);
 		component.setUnusedPortCount(bottomPortCount);
+		}
 		return component;
 	}
-
+	
 	/**
 	 * 
 	 * Set tooltip information
@@ -1429,4 +1445,12 @@ public abstract class Component extends Model {
 			properties.put(Component.Props.VALIDITY_STATUS.getValue(), Component.ValidityStatus.VALID.name());
 		return properties;
 	}	
+	
+	public static boolean isWrapperType(Class<?> clazz) {
+		if (clazz == Boolean.class || clazz == Character.class || clazz == Byte.class || clazz == Short.class
+				|| clazz == Integer.class || clazz == Long.class || clazz == Float.class || clazz == Double.class) {
+			return true;
+		}
+		return false;
+	}
 }

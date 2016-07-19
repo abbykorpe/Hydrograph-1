@@ -22,6 +22,8 @@ import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeTrueFalse;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.common.util.PathUtility;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
@@ -36,16 +38,25 @@ import hydrograph.ui.logging.factory.LogFactory;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
-
+/**
+ * 
+ * Converter for output type component.
+ *
+ */
 public abstract class OutputConverter extends Converter {
 
 	public OutputConverter(Component comp) {
 		super(comp);
 	}
-
+	
+	/** The Constant LOGGER. */
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
 
+	/*
+	 * prepare xml and adding In Socket. 
+	 */
 	@Override
 	public void prepareForXML() {
 		super.prepareForXML();
@@ -73,12 +84,20 @@ public abstract class OutputConverter extends Converter {
 		if (schema != null) {
 			if ( schema.getIsExternal()) {
 				TypeExternalSchema typeExternalSchema = new TypeExternalSchema();
-				typeExternalSchema.setUri(schema.getExternalSchemaPath());
+				if(PathUtility.INSTANCE.isAbsolute(schema.getExternalSchemaPath())
+						|| ParameterUtil.startsWithParameter(schema.getExternalSchemaPath(), Path.SEPARATOR)){
+					typeExternalSchema.setUri(schema.getExternalSchemaPath());
+				}
+				else{
+					typeExternalSchema.setUri("../"+schema.getExternalSchemaPath());
+				}
 				typeBaseRecord.setName(Constants.EXTERNAL_SCHEMA);
 				typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().add(typeExternalSchema);
-			} else{
+			}
+			else{
 				typeBaseRecord.setName(Constants.INTERNAL_SCHEMA);
-				typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().addAll(getFieldOrRecord(schema.getGridRow()));}
+				typeBaseRecord.getFieldOrRecordOrIncludeExternalSchema().addAll(getFieldOrRecord(schema.getGridRow()));
+			}
 		}
 		return typeBaseRecord;
 	}

@@ -14,9 +14,14 @@
  
 package hydrograph.ui.engine.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
+import hydrograph.engine.jaxb.operationstypes.Subjob;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.PathUtility;
 import hydrograph.ui.engine.converter.SubjobConverter;
-import hydrograph.ui.engine.helper.ConverterHelper;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -26,21 +31,21 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
-import hydrograph.engine.jaxb.operationstypes.Subjob;
-
 /**
- * Operation type sub graph converter
- * @author Bitwise
+ * Operation type sub graph converter,having both in and out sockets.
  *
+ * @author Bitwise
  */
 public class OperationSubJobConverter extends SubjobConverter {
 
+	/** The Constant logger. */
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OperationSubJobConverter.class);
 
+	/**
+	 * Instantiates a new operation sub job converter.
+	 *
+	 * @param component the component
+	 */
 	public OperationSubJobConverter(Component component) {
 		super(component);
 		this.baseComponent = new Subjob();
@@ -48,9 +53,9 @@ public class OperationSubJobConverter extends SubjobConverter {
 		this.properties = component.getProperties();
 	}
 
-	/*
+	/**
 	 * 
-	 *Prepare Operation type sub graph.
+	 * Generating XML for Component.
 	 */
 	@Override
 	public void prepareForXML() {
@@ -59,15 +64,24 @@ public class OperationSubJobConverter extends SubjobConverter {
 		Subjob subjob = (Subjob) baseComponent;
 		if (properties.get(Constants.JOB_PATH) != null) {
 			Subjob.Path path = new Subjob.Path();
-			String subJobFilePath = getSubJobAbsolutePath(((String) properties.get(Constants.JOB_PATH)).replace(
-					Constants.JOB_EXTENSION, Constants.XML_EXTENSION));
-			path.setUri(subJobFilePath);
-			subjob.setPath(path);
+			String subJobFile=((String)properties.get(Constants.JOB_PATH)).replace(Constants.JOB_EXTENSION, Constants.XML_EXTENSION);
+			if(PathUtility.INSTANCE.isAbsolute(subJobFile)){
+				path.setUri(subJobFile);
+			}
+			else{
+				path.setUri("../"+subJobFile);
+			}
+
+			subjob.setPath(path); 
 		}
 		subjob.setSubjobParameter(getRuntimeProperties());
 		 
 	}
  
+	/**
+	 * Adding out socket for operation subgraph component.
+	 * @return out socket list
+	 */
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
 		logger.debug("Generating TypeOperationsOutSocket data for : {}", properties.get(Constants.PARAM_NAME));
@@ -91,6 +105,10 @@ public class OperationSubJobConverter extends SubjobConverter {
 		return null;
 	}
 
+	/**
+	 * Adding In socket for operation type subgraph component.
+	 * @return in socket list
+	 */
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
 		logger.debug("Generating TypeBaseInSocket data for :{}", component.getProperties().get(Constants.PARAM_NAME));

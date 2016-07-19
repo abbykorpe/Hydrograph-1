@@ -74,7 +74,6 @@ public class DiscardUiConverter extends OutputUiConverter {
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(discardUI.getId());
 		uiComponent.setProperties(propertyMap);
-		validateComponentProperties(propertyMap);
 	}
 
 

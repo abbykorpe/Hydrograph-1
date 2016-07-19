@@ -22,14 +22,12 @@ import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Component;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
 
@@ -59,13 +57,14 @@ public class RemoveDebugHandler extends AbstractHandler{
 			if(editPart instanceof ComponentEditPart){
 				Component comp = ((ComponentEditPart)editPart).getCastedModel();
 				comp.clearWatcherMap();
+				setRemoveWatcherEnabled(false);
 			} else if(editPart instanceof PortEditPart){
 				((PortEditPart)editPart).getPortFigure().removeWatchColor();
 				((PortEditPart)editPart).getPortFigure().setWatched(false);
 				((PortEditPart)editPart).getCastedModel().setWatched(false);
 			}
 		}
-		((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
+		
 		return null;
 		
 	}

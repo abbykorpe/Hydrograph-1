@@ -37,10 +37,10 @@ import org.slf4j.Logger;
 public class TransformSchemaGridValidationRule implements IValidator {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(TransformSchemaGridValidationRule.class); 
 
-	private static final String DATA_TYPE_DOUBLE = "java.lang.Double";
-	private static final String DATA_TYPE_FLOAT = "java.lang.Float"; 
 	private static final String DATA_TYPE_DATE = "java.util.Date";
 	private static final String DATA_TYPE_BIG_DECIMAL = "java.math.BigDecimal";
+	private static final String SCALE_TYPE_NONE = "none";
+	private static final String REGULAR_EXPRESSION_FOR_NUMBER = "\\d+";
 
 	String errorMessage;
 	
@@ -95,11 +95,10 @@ public class TransformSchemaGridValidationRule implements IValidator {
 				return false;
 			}
 			
-			if(DATA_TYPE_DOUBLE.equalsIgnoreCase(gridRow.getDataTypeValue()) ||
-					DATA_TYPE_FLOAT.equalsIgnoreCase(gridRow.getDataTypeValue()) || 
-					DATA_TYPE_BIG_DECIMAL.equalsIgnoreCase(gridRow.getDataTypeValue())){
-				if(StringUtils.isBlank(gridRow.getScale())){
-					errorMessage = "Scale can not be blank";
+			if(DATA_TYPE_BIG_DECIMAL.equalsIgnoreCase(gridRow.getDataTypeValue())){
+				if(StringUtils.isBlank(gridRow.getScale()) || StringUtils.equalsIgnoreCase(gridRow.getScale(), "0") 
+						|| !(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))){
+					errorMessage = "Scale should be positive integer.";
 					return false;
 				}
 				try{
@@ -113,6 +112,18 @@ public class TransformSchemaGridValidationRule implements IValidator {
 			else if(DATA_TYPE_DATE.equalsIgnoreCase(gridRow.getDataTypeValue()) && 
 					StringUtils.isBlank(gridRow.getDateFormat())){
 				errorMessage = "Date format is mandatory";
+				return false;
+			}
+			
+			if (StringUtils.equalsIgnoreCase(DATA_TYPE_BIG_DECIMAL, gridRow.getDataTypeValue())
+					&& (StringUtils.isBlank(gridRow.getScaleTypeValue()) || StringUtils.equalsIgnoreCase(
+							SCALE_TYPE_NONE, gridRow.getScaleTypeValue()))){
+				errorMessage = "Scale type cannot be blank or none for Big Decimal data type";
+				return false;
+			}
+			
+			if(StringUtils.equalsIgnoreCase(DATA_TYPE_BIG_DECIMAL, gridRow.getDataTypeValue()) && (StringUtils.isBlank(gridRow.getPrecision()))){
+				errorMessage = "Precision cannot be blank or none for Big Decimal data type";
 				return false;
 			}
 			

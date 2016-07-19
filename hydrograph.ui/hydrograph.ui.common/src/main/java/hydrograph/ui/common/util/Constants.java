@@ -46,7 +46,6 @@ public class Constants {
 	public static final String ISO_8859_1 = "ISO-8859-1";
 	public static final String US_ASCII = "US-ASCII";
 	public static final String UTF_8 = "UTF-8";
-	public static final String IN_0 = "in0";
 	
 	public static final String TRUE = "True";
 	public static final String FALSE = "False";
@@ -74,6 +73,8 @@ public class Constants {
 	public static final String TRANSFORM = "TRANSFORM";
 	public static final String AGGREGATE = "AGGREGATE";
 	public static final String CUMULATE = "CUMULATE";
+	public static final String LOOKUP = "LOOKUP";
+	public static final String JOIN = "JOIN";
 	public static final String AGGREGATE_DISPLAYNAME = "Aggregate";
 	public static final String TRANSFORM_DISPLAYNAME = "Transform";
 	public static final String CUMULATE_DISPLAYNAME = "Cumulate";
@@ -87,8 +88,8 @@ public class Constants {
 	public static final String INPUT_SOCKET_TYPE = "in";
 	public static final String OUTPUT_SOCKET_TYPE = "out";
 	public static final String UNUSED_SOCKET_TYPE = "unused";
-	public static final String DUMMY_COMPONENT_CATEGORY = "DUMMY";
-	public static final String DUMMY_COMPONENT = "DummyComponent";
+	public static final String UNKNOWN_COMPONENT_CATEGORY = "UNKNOWN";
+	public static final String UNKNOWN_COMPONENT = "UnknownComponent";
 	
 	public static final String LOOKUP_CONFIG_FIELD = "hash_join";
 	public static final String LOOKUP_MAP_FIELD = "hash_join_map";
@@ -222,7 +223,7 @@ public class Constants {
 	
 	//Types of UI- Schema 
 	public static final String FIXEDWIDTH_GRID_ROW = "FixedWidth";
-	public static final String MIXEDSCHEMA_GRID_ROW = "MixedSchema";		
+	public static final String MIXEDSCHEMA_GRID_ROW = "MixedScheme";		
 	public static final String GENERATE_RECORD_GRID_ROW="GenerateRecord";
 	public static final String GENERIC_GRID_ROW="Generic";
 	public static final String PACKAGE = "package";
@@ -231,10 +232,14 @@ public class Constants {
 	public static final String EXTERNAL_SCHEMA = "External";
 	public static final String INTERNAL_SCHEMA = "Internal";
 
-	public static String SCHEMA_NOT_SYNC_MESSAGE="Schema Not In Sync";
+	public static String SCHEMA_NOT_SYNC_MESSAGE="Fields in schema and mapping are not in sync.";
 	public static String SYNC_WARNING="Sync Warning";
 	public static String SYNC_CONFIRM="Confirm";
-	public static String SYNC_CONFIRM_MESSAGE="Do you want to sync schema ?, It will override existing schema";
+	public static String SYNC_CONFIRM_MESSAGE="Do you want to sync schema? It will override existing schema.";
+	public static String SYNC_OUTPUT_FIELDS_CONFIRM_MESSAGE="Do you want to pull output fields from schema? It will over write existing Output fields.";
 	public static String CLICK_TO_FOCUS="Click to focus";
 
+	// Temporary property names of component 
+	public static String SCHEMA_FIELD_SEQUENCE = "schema_field_sequence";
+	public static String COPY_FROM_INPUT_PORT_PROPERTY = "Copy of ";
 }

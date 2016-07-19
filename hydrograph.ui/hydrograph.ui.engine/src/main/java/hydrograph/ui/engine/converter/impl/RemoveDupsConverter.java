@@ -91,9 +91,11 @@ public class RemoveDupsConverter extends StraightPullConverter {
 				TypeFieldName typeFieldName = new TypeFieldName();
 				typeFieldName.setName("");
 				fieldNameList.add(typeFieldName);
-				for (String fieldName : fieldValueSet) 
+				for (String fieldName : fieldValueSet){ 
 					parameterFieldNames.append(fieldName+ " ");
-					converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), ComponentXpathConstants.STRAIGHTPULL_PRIMARY_KEYS.value(),true);
+				}
+				converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), 
+						ComponentXpathConstants.STRAIGHTPULL_PRIMARY_KEYS.value(),true);
 				
 			}
 
@@ -139,10 +141,12 @@ public class RemoveDupsConverter extends StraightPullConverter {
 		logger.debug("Generating Retention Logic for ::{}", componentName);
 		String keepValue =(String) properties.get(PropertyNameConstants.RETENTION_LOGIC_KEEP.value());
 		Keep keep = new Keep();
-		if(StringUtils.isNotBlank(keepValue))
-		keep.setValue(KeepValue.fromValue(StringUtils.lowerCase(keepValue)));
-		else
-		keep.setValue(KeepValue.fromValue(StringUtils.lowerCase(Constants.FIRST)));	
+		if(StringUtils.isNotBlank(keepValue)){
+			keep.setValue(KeepValue.fromValue(StringUtils.lowerCase(keepValue)));
+		}
+		else{
+			keep.setValue(KeepValue.fromValue(StringUtils.lowerCase(Constants.FIRST)));
+		}
 		return keep;
 	}
 

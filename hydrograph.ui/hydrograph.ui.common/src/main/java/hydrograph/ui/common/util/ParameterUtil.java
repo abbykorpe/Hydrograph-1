@@ -16,6 +16,8 @@ package hydrograph.ui.common.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Utility class to check if String is parameter.
  * 
@@ -28,6 +30,12 @@ public class ParameterUtil {
 	private ParameterUtil(){}
 	
 	
+	/**
+	 * Checks whether given input is parameter or not.
+	 * 
+	 * @param input
+	 * @return
+	 */
 	public static boolean isParameter(String input) {
 		if (input != null) {
 			String regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}";
@@ -38,4 +46,36 @@ public class ParameterUtil {
 		}
 		return false;
 	}
+	
+	/**
+	 * Returns true if input string contains any parameter.
+	 *  
+	 * @param path
+	 * @param separator
+	 * @return
+	 */
+	public static boolean containsParameter(String path,char separator) {
+		String pathSegments[]=StringUtils.split(path, separator);
+		for (String input:pathSegments){
+			if(isParameter(input))
+				return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Returns true if input string starts with parameter.
+	 * 
+	 * @param path
+	 * @param separator
+	 * @return
+	 */
+	public static boolean startsWithParameter(String path,char separator) {
+		String pathSegments[]=StringUtils.split(path, separator);
+		if(isParameter(pathSegments[0])){
+				return true;
+		}
+		return false;
+	}
+	
 }

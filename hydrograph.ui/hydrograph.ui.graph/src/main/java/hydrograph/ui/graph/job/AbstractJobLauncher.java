@@ -18,6 +18,8 @@ import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -47,8 +49,8 @@ abstract public class AbstractJobLauncher {
 	 * @param job
 	 * @param gefCanvas
 	 */
-	abstract public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas);
-	abstract public void launchJobInDebug(String xmlPath, String debugXmlPath, String basePath, String paramFile, Job job, DefaultGEFCanvas gefCanvas, String uniqueJobID);
+	abstract public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList);
+	abstract public void launchJobInDebug(String xmlPath, String debugXmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList);
 	
 	/**
 	 * Enables locked resouces..like job canvas

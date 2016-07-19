@@ -29,10 +29,10 @@ public class MixedSchemeGridValidationRule implements IValidator {
 	private static final Logger logger = LogFactory.INSTANCE
 			.getLogger(SchemaGridValidationRule.class);
 
-	private static final String DATA_TYPE_DOUBLE = "java.lang.Double";
-	private static final String DATA_TYPE_FLOAT = "java.lang.Float";
 	private static final String DATA_TYPE_DATE = "java.util.Date";
 	private static final String DATA_TYPE_BIG_DECIMAL = "java.math.BigDecimal";
+	private static final String SCALE_TYPE_NONE = "none";
+	private static final String REGULAR_EXPRESSION_FOR_NUMBER = "\\d+";
 
 	String errorMessage;
 
@@ -85,12 +85,10 @@ public class MixedSchemeGridValidationRule implements IValidator {
 				return false;
 			}
 
-			if (DATA_TYPE_DOUBLE.equalsIgnoreCase(gridRow.getDataTypeValue())
-					|| DATA_TYPE_FLOAT.equalsIgnoreCase(gridRow
-							.getDataTypeValue())
-					|| DATA_TYPE_BIG_DECIMAL.equalsIgnoreCase(gridRow
+			if (DATA_TYPE_BIG_DECIMAL.equalsIgnoreCase(gridRow
 							.getDataTypeValue())) {
-				if (StringUtils.isBlank(gridRow.getScale())) {
+				if (StringUtils.isBlank(gridRow.getScale()) || StringUtils.equalsIgnoreCase(gridRow.getScale(), "0") 
+						|| !(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))) {
 					errorMessage = "Scale can not be blank";
 					return false;
 				}
@@ -107,7 +105,14 @@ public class MixedSchemeGridValidationRule implements IValidator {
 				errorMessage = "Date format is mandatory";
 				return false;
 			}
-
+			
+			if (StringUtils.equalsIgnoreCase(DATA_TYPE_BIG_DECIMAL, gridRow.getDataTypeValue())
+					&& (StringUtils.isBlank(gridRow.getScaleTypeValue()) || StringUtils.equalsIgnoreCase(
+							SCALE_TYPE_NONE, gridRow.getScaleTypeValue()))){
+				errorMessage = "Scale type cannot be blank or none for Big Decimal data type";
+				return false;
+			}
+			
 			if (mixedSchemeGrid) {
 				MixedSchemeGridRow mixedSchemeGridRow = (MixedSchemeGridRow) gridRow;
 				if (mixedSchemeGridRow.getLength().equals("0") || mixedSchemeGridRow.getLength().contains("-")) {
@@ -115,13 +120,13 @@ public class MixedSchemeGridValidationRule implements IValidator {
 					return false;
 				}
 				if (StringUtils.isBlank(mixedSchemeGridRow.getLength())
-						&& StringUtils.isBlank(mixedSchemeGridRow
+						&& StringUtils.isEmpty(mixedSchemeGridRow
 								.getDelimiter())) {
 					errorMessage = "Length Or Delimiter is mandatory";
 					return false;
 				}
-				if (StringUtils.isNotBlank(mixedSchemeGridRow.getLength())	
-						&& StringUtils.isNotBlank(mixedSchemeGridRow.getDelimiter())) {
+				if (StringUtils.isNotBlank(mixedSchemeGridRow.getLength())
+						&& StringUtils.isNotEmpty(mixedSchemeGridRow.getDelimiter())) {
 					errorMessage = "Either Length Or Delimiter should be given";
 					return false;
 				}

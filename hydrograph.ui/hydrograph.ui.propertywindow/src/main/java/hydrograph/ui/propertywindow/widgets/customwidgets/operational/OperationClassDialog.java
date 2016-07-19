@@ -18,6 +18,7 @@ import hydrograph.ui.common.component.config.Operations;
 import hydrograph.ui.common.component.config.TypeInfo;
 import hydrograph.ui.common.datastructures.tooltip.TootlTipErrorMessage;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
@@ -33,6 +34,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
 import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
@@ -100,14 +102,18 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	private Button cancelButton;
     private TransformDialog transformDialog;
 	private MappingSheetRow mappingSheetRow;
-
+    private Label errorLabel; 
+	private Integer windowButtonWidth = 30;
+	private Integer windowButtonHeight = 25;
+	private Integer macButtonWidth = 40;
+	private Integer macButtonHeight = 30;
 	private Composite buttonComposite;
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
 
 	public OperationClassDialog(Shell parentShell, String componentName, MappingSheetRow mappingSheetRow,
 			PropertyDialogButtonBar propertyDialogButtonBar, WidgetConfig widgetConfig,TransformDialog transformDialog ) {
 		super(parentShell);
-
+		
 		this.widgetConfig = widgetConfig;
 		this.componentName = componentName;
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
@@ -128,8 +134,6 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		container.setLayout(new GridLayout(1, false));
 
 		container.getShell().setText(Messages.OPERATION_CLASS);
-
-		
 
 		operationClassDialogButtonBar = new PropertyDialogButtonBar(container);
 
@@ -155,15 +159,15 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		AbstractELTWidget comboOfOperationClasses = new ELTDefaultCombo().defaultText(optionsOfComboOfOperationClasses)
 				.comboBoxWidth(90);
 
-		FilterOperationClassUtility.createOperationalClass(composite, operationClassDialogButtonBar,
+		FilterOperationClassUtility.INSTANCE.createOperationalClass(composite, operationClassDialogButtonBar,
 				comboOfOperationClasses, isParameterCheckbox, fileNameText, tootlTipErrorMessage, widgetConfig, this,
 				propertyDialogButtonBar, opeartionClassDialogButtonBar);
 		fileName = (Text) fileNameText.getSWTWidgetControl();
 		fileName.setData(PATH, mappingSheetRow.getOperationClassFullPath());
 		operationClasses = (Combo) comboOfOperationClasses.getSWTWidgetControl();
         
-		FilterOperationClassUtility.enableAndDisableButtons(true, false);
-		FilterOperationClassUtility.setComponentName(componentName);
+		FilterOperationClassUtility.INSTANCE.enableAndDisableButtons(true, false);
+		FilterOperationClassUtility.INSTANCE.setComponentName(componentName);
 		isParameterCheckBox = (Button) isParameterCheckbox.getSWTWidgetControl();
 		alphanumericDecorator = WidgetUtility.addDecorator(fileName, Messages.CHARACTERSET);
 		emptyDecorator = WidgetUtility.addDecorator(fileName, Messages.OperationClassBlank);
@@ -178,7 +182,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		Composite nameValueComposite = new Composite(container, SWT.None);
 		GridData gd_nameValueComposite = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
 		gd_nameValueComposite.widthHint = 526;
-		gd_nameValueComposite.heightHint = 251;
+		gd_nameValueComposite.heightHint = 220;
 		nameValueComposite.setLayoutData(gd_nameValueComposite);
 
 		nameValueComposite.setLayout(new GridLayout(1, false));
@@ -194,13 +198,15 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 				Messages.PROPERTY_NAME, Messages.PROPERTY_VALUE }, new ELTFilterContentProvider(),
 				new OperationLabelProvider());
 		nameValueTableViewer.setLabelProvider(new PropertyLabelProvider());
-		nameValueTableViewer.setCellModifier(new PropertyGridCellModifier(nameValueTableViewer,operationClassDialogButtonBar));
+		nameValueTableViewer.setCellModifier(new PropertyGridCellModifier(this,nameValueTableViewer,operationClassDialogButtonBar));
 		nameValueTableViewer.setInput(mappingSheetRow.getNameValueProperty());
 		table_2.getColumn(0).setWidth(252);
 		table_2.getColumn(1).setWidth(259);
 
-		Label addButton = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 360, 17, 20, 15 }, "", new Image(
-				null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		Button addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 360, 17, 20, 15 }, "");
+		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
+		addButton.setImage(addImage);
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		addButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -220,9 +226,10 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 
 		});
 
-		Label deleteButton = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 390, 17, 20, 15 }, "",
-				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
-
+		Button deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 390, 17, 20, 15 }, "");
+		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
+		deleteButton.setImage(deleteImage);
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		deleteButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -246,9 +253,10 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 
 		});
 
-		Label upButton = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 420, 17, 20, 15 }, "", new Image(
-				null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON));
-
+		Button upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 420, 17, 20, 15 }, "");
+		Image upImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON);
+		upButton.setImage(upImage);
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(upButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		upButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -265,8 +273,10 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 			}
 
 		});
-		Label downButton = widget.labelWidget(buttonComposite, SWT.CENTER, new int[] { 450, 17, 20, 15 }, "",
-				new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON));
+		Button downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 450, 17, 20, 15 }, "");
+		Image downImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON);
+		downButton.setImage(downImage);
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(downButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);	
 		downButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -286,6 +296,17 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		});
 
 		populateWidget();
+		Composite errorComposite=new Composite(container, SWT.NONE);
+		errorComposite.setLayout(new GridLayout(1,false));
+		GridData griddata=new GridData(SWT.TOP,SWT.TOP,false,false,1,1);
+		
+		errorComposite.setLayoutData(griddata);
+		
+		errorLabel=new Label(errorComposite,SWT.NONE);
+		errorLabel.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		errorLabel.setText(Messages.EmptyFiledNotification);
+		errorLabel.setVisible(false);
+		checkNameValueFieldBlankOrNot();
 		return container;
 	}
 
@@ -309,12 +330,12 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 			isParameterCheckBox.setSelection(mappingSheetRow.isClassParameter());
 			if (!StringUtils.equalsIgnoreCase(Messages.CUSTOM, mappingSheetRow.getComboBoxValue())) {
 				fileName.setEnabled(false);
-				FilterOperationClassUtility.enableAndDisableButtons(false, false);
+				FilterOperationClassUtility.INSTANCE.enableAndDisableButtons(false, false);
 				isParameterCheckBox.setEnabled(false);
 			} else {
 				isParameterCheckBox.setEnabled(true);
 				if (isParameterCheckBox.getSelection()) {
-					FilterOperationClassUtility.enableAndDisableButtons(true, true);
+					FilterOperationClassUtility.INSTANCE.enableAndDisableButtons(true, true);
 				}
 			}
 		} else {
@@ -442,7 +463,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(540, 460);
+		return new Point(540, 500);
 	}
 
 	
@@ -470,18 +491,50 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 
 	@Override
 	protected void okPressed() {
-
-		mappingSheetRow = new MappingSheetRow(mappingSheetRow.getInputFields(), mappingSheetRow.getOutputList(),
-				mappingSheetRow.getOperationID(), operationClasses.getText(), fileName.getText(),
-				mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),
-				mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData(PATH));
-		isOkPressed=true;
-		super.okPressed();
+        if(checkNameValueFieldBlankOrNot()) 
+        {
+        	mappingSheetRow = new MappingSheetRow(mappingSheetRow.getInputFields(), mappingSheetRow.getOutputList(),
+			mappingSheetRow.getOperationID(), operationClasses.getText(), fileName.getText(),
+			mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),
+			mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData(PATH));
+		    isOkPressed=true;
+		    super.okPressed();
+        }
+	}
+	
+	public  boolean checkNameValueFieldBlankOrNot()
+	{
+		if(!mappingSheetRow.getNameValueProperty().isEmpty())
+		{
+			for(NameValueProperty nameValueProperty:mappingSheetRow.getNameValueProperty())
+			{
+				if(StringUtils.isBlank(nameValueProperty.getPropertyName()) && StringUtils.isBlank(nameValueProperty.getPropertyValue()))
+				{
+					errorLabel.setText(Messages.EmptyFiledNotification);
+					errorLabel.setVisible(true);
+					return false;
+				}	
+				else if(StringUtils.isBlank(nameValueProperty.getPropertyName()))
+						{
+					errorLabel.setText(Messages.EmptyNameNotification);
+					errorLabel.setVisible(true);
+					return false;
+						}		
+				else if(StringUtils.isBlank(nameValueProperty.getPropertyValue()))
+				{
+			        errorLabel.setText(Messages.EmptyValueNotification+"                   ");
+			        errorLabel.setVisible(true);
+			        return true;
+				}	
+			}	
+		}
+		errorLabel.setVisible(false);
+	  return true;
 	}
 
 	@Override
 	protected void buttonPressed(int buttonId) {
-		if (buttonId == 3) {
+		if (buttonId == 3 && checkNameValueFieldBlankOrNot()) {
 			mappingSheetRow = new MappingSheetRow(mappingSheetRow.getInputFields(), mappingSheetRow.getOutputList(),
 					mappingSheetRow.getOperationID(), operationClasses.getText(), fileName.getText(),
 					mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),

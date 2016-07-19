@@ -63,7 +63,6 @@ public class InputParquetUiConverter extends InputUiConverter {
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 
 		uiComponent.setProperties(propertyMap);
-		validateComponentProperties(propertyMap);
 	}
 
 
@@ -85,7 +84,7 @@ public class InputParquetUiConverter extends InputUiConverter {
 	protected Object getSchema(TypeInputOutSocket outSocket) {
 		LOGGER.debug("Generating UI-Schema data for {}", componentName);
 		Schema schema = null;
-		List<GridRow> gridRow = new ArrayList<>();
+		List<GridRow> gridRowList = new ArrayList<>();
 		ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
 		if (outSocket.getSchema() != null
 				&& outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema().size() != 0) {
@@ -96,10 +95,11 @@ public class InputParquetUiConverter extends InputUiConverter {
 					if (((TypeExternalSchema) record).getUri() != null)
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
 				} else {
-					gridRow.add(converterUiHelper.getSchema(record));
-					schema.setGridRow(gridRow);
+					gridRowList.add(converterUiHelper.getSchema(record));
+					schema.setGridRow(gridRowList);
 					schema.setIsExternal(false);
 				}
+				saveComponentOutputSchema(outSocket.getId(),gridRowList);
 			}
 		} 
 		return schema;

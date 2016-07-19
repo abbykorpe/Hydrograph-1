@@ -39,6 +39,8 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -119,10 +121,8 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	protected Control createDialogArea(Composite parent) {
 		createPropertyDialogContainer(parent);
 		propertyDialogButtonBar = new PropertyDialogButtonBar(container);
-
 		propertyDialogBuilder = new PropertyDialogBuilder(container,propertyTree,componentProperties,propertyDialogButtonBar,component,this);
 		propertyDialogBuilder.buildPropertyWindow();
-
 		return container;
 	}
 
@@ -297,7 +297,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	
 	 protected Point getDefaultSize()
 	  {
-	    return getShell().computeSize(450, 560, true);
+	    return getShell().computeSize(450, 620, true);
 	  }
 	
 	@Override
@@ -345,7 +345,8 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		setCancelPressed(true);
 		boolean windowValidityStaus = Boolean.TRUE;
 		for (AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()) {
-			LinkedHashMap<String, Object> properties= customWidget.getProperties();
+			Map<String, Object> properties= customWidget.getEltComponenetProperties().getComponentConfigurationProperties();
+			
 			if (properties != null) {
 				windowValidityStaus = validateWidget(windowValidityStaus, customWidget,properties);
 			}
@@ -377,7 +378,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 			imagePath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.APP_ICON;
 			Image shellImage = new Image(newShell.getDisplay(), imagePath);
 			newShell.setImage(shellImage);
-		}catch(Exception e){
+		}catch(SWTError e){
 			logger.debug("Unable to access image" , e);
 		}
 	}
@@ -394,7 +395,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	}
 
 	
-	private boolean validateWidget(Boolean windowValidityStaus, AbstractWidget customWidget,LinkedHashMap<String, Object> properties) {
+	private boolean validateWidget(Boolean windowValidityStaus, AbstractWidget customWidget,Map<String, Object> properties) {
 		List<String> validators = ComponentCacheUtil.INSTANCE.getValidatorsForProperty(
 				(String) this.componentProperties.getComponentMiscellaneousProperty(Constants.COMPONENT_ORIGINAL_NAME), 
 				customWidget.getPropertyName());

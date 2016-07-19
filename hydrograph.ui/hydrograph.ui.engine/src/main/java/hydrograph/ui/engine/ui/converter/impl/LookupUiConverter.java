@@ -78,7 +78,7 @@ public class LookupUiConverter extends TransformUiConverter {
 
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.LOOKUP.value());
-		validateComponentProperties(propertyMap);
+		
 	}
 	
 
@@ -158,10 +158,11 @@ protected void getOutPort(TypeOperationsComponent operationsComponent) {
 			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
 				uiComponent.engageOutputPort(outSocket.getId());
 				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null
-						&& !outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty())
+						&& !outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()){
 					propertyMap.put(Constants.LOOKUP_MAP_FIELD, getLookupMappingGrid(outSocket));
+					createPassThroughAndMappingFieldsForSchemaPropagation(outSocket);
+					}
 			}
-
 		}			
 	}
 

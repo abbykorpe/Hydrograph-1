@@ -11,12 +11,11 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
+
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -30,8 +29,8 @@ import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
-import hydrograph.ui.propertywindow.widgets.customwidgets.lookupproperty.ELTLookupMapWizard;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
+import hydrograph.ui.propertywindow.widgets.dialogs.lookup.LookupMapDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -54,10 +53,9 @@ public class ELTLookupMapWidget extends AbstractWidget {
 
 	private String propertyName;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-	private ELTLookupMapWizard lookupMapWizard;
 	private LookupMappingGrid lookupMappingGrid;
 	private List<AbstractWidget> widgets;
-	
+
 	public ELTLookupMapWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propertyDialogButtonBar);
@@ -79,75 +77,78 @@ public class ELTLookupMapWidget extends AbstractWidget {
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
 		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
-		
+
 		final AbstractELTWidget eltDefaultButton = new ELTDefaultButton("Edit");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				getPropagatedSchema();
-				lookupMapWizard = new ELTLookupMapWizard(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(),
+
+				LookupMapDialog lookupMapDialog = new LookupMapDialog(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), getComponent(),
 						lookupMappingGrid,propertyDialogButtonBar);
-				lookupMapWizard.open();
-				Schema internalSchema=propagateInternalSchema();
+
+				lookupMapDialog.open();
+
+
+				propagateInternalSchema();
 				showHideErrorSymbol(widgets);
-				for(AbstractWidget widget:widgets)
-				{
-					if(widget instanceof ELTGenericSchemaGridWidget)
-					{
-						ELTGenericSchemaGridWidget eltGenericSchemaGridWidget =(ELTGenericSchemaGridWidget) widget;
-						if(internalSchema!=null )
-						eltGenericSchemaGridWidget.validateInternalSchemaPropogatedData(internalSchema);
-						
-					}	
-				}	
 			}
 		});
 		propagateInternalSchema();
 	}
-	
-	
+
+
 	private Schema propagateInternalSchema() {
-		if(lookupMappingGrid ==null)
+		if(lookupMappingGrid ==null){
 			return null;
-		
-			 Schema internalSchema = getSchemaForInternalPropagation();			 
-			 internalSchema.getGridRow().clear();
-			 
-			 
-			 List<String> finalPassThroughFields=new LinkedList<String>();
-			 Map<String, String> finalMapFields=new LinkedHashMap<String, String>();
-			 
-			Map<String,String> passThroughFieldsPortInfo = new LinkedHashMap<>();
-			Map<String,String> mapFieldsPortInfo = new LinkedHashMap<>();
-			 
-			 
-			 List<LookupMapProperty> lookupMapRows = lookupMappingGrid.clone().getLookupMapProperties();
-			 
-			 List<GridRow> outputSchemaGridRowList = new LinkedList<>();
-			 
-			 for(LookupMapProperty row : lookupMapRows){
-				 if(!ParameterUtil.isParameter(row.getSource_Field())){
-					 GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
-					 GridRow outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
+		}
+
+		Schema internalSchema = getSchemaForInternalPropagation();			 
+		internalSchema.getGridRow().clear();
 
 
-					 if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
-						 finalPassThroughFields.add(row.getOutput_Field());
-						 passThroughFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
-					 }else{
-						 finalMapFields.put(row.getSource_Field().split("\\.")[1], row.getOutput_Field());
-						 mapFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
-					 }
+		List<String> finalPassThroughFields=new LinkedList<String>();
+		Map<String, String> finalMapFields=new LinkedHashMap<String, String>();
 
-					 outputSchemaGridRowList.add(outputFieldSchema);
-				 }
-			 }
-			 
-			 addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(finalMapFields, finalPassThroughFields,passThroughFieldsPortInfo,mapFieldsPortInfo);
-			 
-			 
-			 internalSchema.getGridRow().addAll(outputSchemaGridRowList);
+		Map<String,String> passThroughFieldsPortInfo = new LinkedHashMap<>();
+		Map<String,String> mapFieldsPortInfo = new LinkedHashMap<>();
+
+
+		List<LookupMapProperty> lookupMapRows = lookupMappingGrid.clone().getLookupMapProperties();
+
+		List<GridRow> outputSchemaGridRowList = new LinkedList<>();
+
+		for(LookupMapProperty row : lookupMapRows){
+
+			if(!ParameterUtil.isParameter(row.getSource_Field())){
+				GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
+				GridRow outputFieldSchema = null;
+
+				if(inputFieldSchema==null){
+					outputFieldSchema = SchemaPropagationHelper.INSTANCE.createSchemaGridRow(row.getOutput_Field());
+				}else{
+					outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
+				}
+
+				if(row.getSource_Field().trim().length()>0){
+					if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
+						finalPassThroughFields.add(row.getOutput_Field());
+						passThroughFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+					}else{
+						finalMapFields.put(row.getSource_Field().split("\\.")[1], row.getOutput_Field());
+						mapFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+					}
+				}
+
+				outputSchemaGridRowList.add(outputFieldSchema);
+			}
+		}
+
+		addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(finalMapFields, finalPassThroughFields,passThroughFieldsPortInfo,mapFieldsPortInfo);
+
+
+		internalSchema.getGridRow().addAll(outputSchemaGridRowList);
 		return internalSchema;
 	}
 
@@ -164,57 +165,61 @@ public class ELTLookupMapWidget extends AbstractWidget {
 			schemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
 		}
 		getComponent().getProperties().put(Constants.SCHEMA_TO_PROPAGATE, schemaMap);
-			componentsOutputSchema.getPassthroughFields().clear();
-			componentsOutputSchema.getMapFields().clear();
-			componentsOutputSchema.getPassthroughFieldsPortInfo().clear();
-			componentsOutputSchema.getMapFieldsPortInfo().clear();
-		
+		componentsOutputSchema.getPassthroughFields().clear();
+		componentsOutputSchema.getMapFields().clear();
+		componentsOutputSchema.getPassthroughFieldsPortInfo().clear();
+		componentsOutputSchema.getMapFieldsPortInfo().clear();
+
 		componentsOutputSchema.getPassthroughFields().addAll(passThroughFields);
 		componentsOutputSchema.getMapFields().putAll(mapFields);
-		
+
 		for(String field : passThroughFieldsPortInfo.keySet()){
 			componentsOutputSchema.getPassthroughFieldsPortInfo().put(field, passThroughFieldsPortInfo.get(field));
 		}
-		
+
 		componentsOutputSchema.getMapFieldsPortInfo().putAll(mapFieldsPortInfo);
 	}	
-	
+
 	private GridRow getOutputFieldSchema(GridRow inputFieldSchema,
 			String output_Field) {
 		if(inputFieldSchema!=null)
 		{
-		GridRow gridRow = inputFieldSchema.copy();
-		gridRow.setFieldName(output_Field);
-		return gridRow.copy();
+			GridRow gridRow = inputFieldSchema.copy();
+			gridRow.setFieldName(output_Field);
+			return gridRow.copy();
 		}
 		return null;
 	}
 
 	private GridRow getInputFieldSchema(String source_Field) {		
+
 		String[] source = source_Field.split("\\.");
-		return getInputFieldSchema(source[1],source[0]);
-	
-		
+		if(source.length == 2){
+			return getInputFieldSchema(source[1],source[0]);
+		}else{
+			return null;
+		}
 	}
-	
+
 	private GridRow getInputFieldSchema(String fieldName,String linkNumber) {
 		ComponentsOutputSchema outputSchema = null;
 		//List<FixedWidthGridRow> fixedWidthGridRows = new LinkedList<>();
 		for (Link link : getComponent().getTargetConnections()) {
-			
+
 			if(linkNumber.equals(link.getTargetTerminal())){				
 				outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
-				if (outputSchema != null)
+				if (outputSchema != null){
 					for (GridRow row : outputSchema.getSchemaGridOutputFields(null)) {
 						if(row.getFieldName().equals(fieldName)){
 							return row.copy();
 						}
 					}
+				}
 			}
 		}
 		return null;
 	}
-	
+
 	private void getPropagatedSchema() {
 		List<List<FilterProperties>> sorceFieldList = SchemaPropagationHelper.INSTANCE
 				.sortedFiledNamesBySocketId(getComponent());
@@ -228,17 +233,17 @@ public class ELTLookupMapWidget extends AbstractWidget {
 		return property;
 	}
 
-	@Override
+	@Override  
 	public boolean isWidgetValid() {
-		return validateAgainstValidationRule(lookupMappingGrid);
+		return validateAgainstValidationRule(lookupMappingGrid); 
 	}
 
-	
+
 
 	@Override
 	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
 		widgets=widgetList;
-		
+
 	}
 
 }

@@ -113,7 +113,7 @@
 	<!--*******************base component starts********************** -->
 	<xs:complexType name="type-base-component">
 		<xs:attribute name="id" type="xs:string" use="required" />
-		<xs:attribute name="phase" type="xs:nonNegativeInteger" use="optional"
+		<xs:attribute name="phase" type="xs:string" use="optional"
 			default="0" />
 	</xs:complexType>
 

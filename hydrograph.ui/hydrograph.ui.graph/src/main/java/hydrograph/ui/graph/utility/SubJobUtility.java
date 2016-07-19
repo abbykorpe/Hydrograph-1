@@ -120,7 +120,7 @@ public class SubJobUtility {
 		if (file != null) {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			try {
-				out.write(getCurrentEditor().fromObjectToXML(container).getBytes());
+				out.write(CanvasUtils.INSTANCE.fromObjectToXML(container).getBytes());
 				if (file.exists())
 					file.setContents(new ByteArrayInputStream(out.toByteArray()), true, false, null);
 				else
@@ -228,8 +228,8 @@ public class SubJobUtility {
 
 		edComponentEditPart.getCastedModel().setSize(newSize);
 
-		String subJobFilePath = file.getFullPath().toOSString();
-		edComponentEditPart.getCastedModel().getProperties().put(Constants.PATH, subJobFilePath);
+		String subJobFilePath = file.getFullPath().toString();
+		edComponentEditPart.getCastedModel().getProperties().put(Constants.PATH, subJobFilePath.substring(1));
 		if (inPort != 0 && outPort != 0)
 			edComponentEditPart.getCastedModel().getProperties().put(Constants.TYPE, Constants.OPERATION);
 		if (inPort != 0 && outPort == 0)
@@ -323,7 +323,7 @@ public class SubJobUtility {
 	 * @param componentEditPart
 	 *            the component edit part
 	 */
-	public void updateSubgjobProperty(ComponentEditPart componentEditPart, String filePath,
+	public void updateSubjobProperty(ComponentEditPart componentEditPart, String filePath,
 			Component selectedSubjobComponent) {
 		IPath jobFileIPath = null;
 		Container container = null;
@@ -341,14 +341,14 @@ public class SubJobUtility {
 
 				if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
 					InputStream inp = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
-					container = (Container) getCurrentEditor().fromXMLToObject(inp);
-				} else if (isFileExistsOnLocalFileSystem(jobFileIPath))
-					container = (Container) getCurrentEditor().fromXMLToObject(
+					container = (Container)CanvasUtils.INSTANCE.fromXMLToObject(inp);
+				} else if (jobFileIPath !=null && isFileExistsOnLocalFileSystem(jobFileIPath))
+					container = (Container) CanvasUtils.INSTANCE.fromXMLToObject(
 							new FileInputStream(jobFileIPath.toFile()));
 
 				updateContainerAndSubjob(container, selectedSubjobComponent, jobFileIPath);
 
-			} catch (Exception e) {
+			} catch (CoreException | IOException e) {
 				logger.error("Cannot update subgrap-component's property..", e);
 				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", "Invalid graph file.");
 			}
@@ -387,17 +387,18 @@ public class SubJobUtility {
 	public void updateParametersInGrid(Component selectedSubjobComponent, IPath subJobJobFileIPath) {
 		Map<String, String> parameterPropertyMap = (Map<String, String>) selectedSubjobComponent.getProperties().get(
 				Constants.RUNTIME_PROPERTY_NAME);
-		if (parameterPropertyMap == null)
+		if (parameterPropertyMap == null){
 			parameterPropertyMap = new HashMap<String, String>();
-			String content = getCurrentEditor().getStringValueFromXMLFile(subJobJobFileIPath);
-				CanvasDataAdpater canvasDataAdpater = new CanvasDataAdpater(content);
-				canvasDataAdpater.fetchData();
-				for (String parameterName : canvasDataAdpater.getParameterList()) {
-					if (!parameterPropertyMap.containsKey(parameterName))
-						parameterPropertyMap.put(parameterName, "");
-				}
-				selectedSubjobComponent.getProperties().put(Constants.RUNTIME_PROPERTY_NAME, parameterPropertyMap);
 		}
+		String content = getCurrentEditor().getStringValueFromXMLFile(subJobJobFileIPath);
+		CanvasDataAdpater canvasDataAdpater = new CanvasDataAdpater(content);
+		canvasDataAdpater.fetchData();
+		for (String parameterName : canvasDataAdpater.getParameterList()) {
+			if (!parameterPropertyMap.containsKey(parameterName))
+				parameterPropertyMap.put(parameterName, "");
+		}
+		selectedSubjobComponent.getProperties().put(Constants.RUNTIME_PROPERTY_NAME, parameterPropertyMap);
+	}
 
 
 	
@@ -432,7 +433,7 @@ public class SubJobUtility {
 		}
 	}
 
-	public static boolean isFileExistsOnLocalFileSystem(IPath jobFilePath) throws Exception {
+	public static boolean isFileExistsOnLocalFileSystem(IPath jobFilePath){
 		if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists())
 			return true;
 		else if (jobFilePath.toFile().exists())
@@ -470,18 +471,20 @@ public class SubJobUtility {
 			try {
 				if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
 					InputStream inp = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
-					subJobContainer = (Container) getCurrentEditor().fromXMLToObject(inp);
+					subJobContainer = (Container) CanvasUtils.INSTANCE.fromXMLToObject(inp);
 				} else {
 					if (isFileExistsOnLocalFileSystem(jobFileIPath))
-						subJobContainer = (Container) getCurrentEditor().fromXMLToObject(
+						subJobContainer = (Container) CanvasUtils.INSTANCE.fromXMLToObject(
 								new FileInputStream(jobFileIPath.toFile()));
 				}
-				if (subJobContainer.getSubjobVersion() != versionStoredInSubjobComponent) {
+				if (subJobContainer != null && subJobComponent != null && subJobContainer.getSubjobVersion() != versionStoredInSubjobComponent) {
 					subJobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(),
 							Constants.UPDATE_AVAILABLE);
 				}
 
-			} catch (Exception exception) {
+
+			} catch (CoreException |IOException exception) {
+
 				logger.error("Exception occurred while updating Subjob version", exception);
 			}
 		}

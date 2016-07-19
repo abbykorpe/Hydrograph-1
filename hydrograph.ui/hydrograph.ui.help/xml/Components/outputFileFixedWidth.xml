@@ -16,6 +16,4 @@
 <toc label="Output File Fixed Width" link_to="xml\Components\components.xml#OutputFileFixedWidth"> 
 	<topic label="Properties"  href="html/Components/Output_File_Fixed_Width_Properties.html"> 
 	</topic>
- <topic href="html/Components/Output_File_Fixed_Width_Validations.html" label="Validations">
- </topic>
 </toc>

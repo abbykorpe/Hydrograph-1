@@ -14,6 +14,7 @@
 package hydrograph.ui.propertywindow.filemixedschema;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
@@ -22,6 +23,7 @@ import org.eclipse.swt.widgets.Table;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 public class MixedSchemeGridWidgetBuilder extends GridWidgetCommonBuilder{
@@ -65,18 +67,18 @@ public class MixedSchemeGridWidgetBuilder extends GridWidgetCommonBuilder{
 	}
 
 	@Override
-	public CellEditor[] createCellEditorList(Table table, int size) {
-		CellEditor[] cellEditor = createCellEditor(size);
-		addTextEditor(table, cellEditor, 0);
+	public CellEditor[] createCellEditorList(Table table,
+			Map<String, Integer> columns) {
+		CellEditor[] cellEditor = createCellEditor(columns.size());
+		addTextEditor(table,cellEditor, columns, (Messages.FIELDNAME));
 		addComboBox(table, cellEditor, getDataTypeKey(), 1);
-		addTextEditor(table, cellEditor, 2);
-		addTextEditor(table, cellEditor, 3);
-		addTextEditor(table, cellEditor, 4);
+		addTextEditor(table, cellEditor, columns, Messages.LENGTH);
+		addTextEditor(table, cellEditor, columns, Messages.DELIMITER);
+		addTextEditor(table, cellEditor, columns, Messages.SCALE);
 		addComboBox(table, cellEditor, getScaleTypeKey(), 5);
-		addTextEditor(table, cellEditor, 6);
-		addTextEditor(table, cellEditor, 7);
-		addTextEditor(table, cellEditor, 8);
-		
+		addTextEditor(table, cellEditor, columns, Messages.DATEFORMAT);
+		addTextEditor(table, cellEditor, columns, Messages.PRECISION);
+		addTextEditor(table, cellEditor, columns, Messages.FIELD_DESCRIPTION);
 		return cellEditor;
 	}
 

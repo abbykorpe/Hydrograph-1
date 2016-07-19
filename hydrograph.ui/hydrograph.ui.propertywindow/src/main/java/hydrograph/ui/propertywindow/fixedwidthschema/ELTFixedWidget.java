@@ -14,7 +14,6 @@
  
 package hydrograph.ui.propertywindow.fixedwidthschema;
 
-import java.util.ArrayList;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -24,9 +23,12 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.SchemaGridContentProvider;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
-import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTCellEditorIsNumericValidator;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -58,8 +60,18 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	}
 
 	@Override
-	protected String[] getPropertiesToShow() {
-		return new String[]{ FIELDNAME, DATATYPE, DATEFORMAT, PRECISION, SCALE, SCALE_TYPE, FIELD_DESCRIPTION, LENGTH };
+	protected Map<String, Integer> getPropertiesToShow() {
+		Map<String, Integer> columns = new HashMap<>();
+		columns.put(FIELDNAME, 0);
+		columns.put(DATATYPE, 1);
+		columns.put(LENGTH, 2);
+		columns.put(SCALE, 3);
+		columns.put(SCALE_TYPE, 4);
+		columns.put(DATEFORMAT, 5);
+		columns.put(PRECISION, 6);
+		columns.put(FIELD_DESCRIPTION, 7);
+		
+		return columns;
 	}
 	
 	@Override
@@ -82,20 +94,13 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	@Override
 	protected void addValidators() {
 		editors[0].setValidator(new ELTCellEditorFieldValidator(table, schemaGridRowList, fieldNameDecorator,isFieldNameAlphanumericDecorator,propertyDialogButtonBar));
-		editors[4].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator,propertyDialogButtonBar)); 
-		editors[7].setValidator(new ELTCellEditorIsNumericValidator(lengthDecorator,propertyDialogButtonBar)); 
 	}
 	//Adding the decorator to show error message when field name same.
 	@Override
 	protected void setDecorator() {
 		fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAMEERROR);
-		scaleDecorator = WidgetUtility.addDecorator(editors[4].getControl(),Messages.SCALEERROR);
-		lengthDecorator = WidgetUtility.addDecorator(editors[7].getControl(),Messages.LENGTHERROR);
 		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);
 		fieldNameDecorator.setMarginWidth(8);
-		scaleDecorator.setMarginWidth(8);
-		lengthDecorator.setMarginWidth(8);
-		isFieldNameAlphanumericDecorator.setMarginWidth(8);
 	}
 
 	@Override
@@ -112,5 +117,5 @@ public class ELTFixedWidget extends ELTSchemaGridWidget{
 	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
 	  attachListener();
 	}
-	
+
 }

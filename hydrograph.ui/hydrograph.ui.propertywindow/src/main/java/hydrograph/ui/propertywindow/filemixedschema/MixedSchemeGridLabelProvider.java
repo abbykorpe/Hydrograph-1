@@ -75,7 +75,7 @@ public class MixedSchemeGridLabelProvider implements ITableLabelProvider,ITableC
 
 	@Override
 	public Color getForeground(Object element, int columnIndex) {
-		return new Color(Display.getDefault(), new RGB(100, 0, 0));
+		return null;
 	}
 
 	@Override
@@ -116,9 +116,9 @@ public class MixedSchemeGridLabelProvider implements ITableLabelProvider,ITableC
 		case 1:
 			return GridWidgetCommonBuilder.getDataTypeKey()[mixedSchemeGridRow.getDataType().intValue()];   
 		case 2:
-			return mixedSchemeGridRow.getDateFormat();
+			return mixedSchemeGridRow.getLength().toString();
 		case 3:
-			return mixedSchemeGridRow.getPrecision(); 
+			return mixedSchemeGridRow.getDelimiter().toString();
 		case 4: 
 			return mixedSchemeGridRow.getScale().toString();
 		case 5:
@@ -131,11 +131,11 @@ public class MixedSchemeGridLabelProvider implements ITableLabelProvider,ITableC
 				return GridWidgetCommonBuilder.getScaleTypeKey()[0];
 			}
 		case 6: 
-			return mixedSchemeGridRow.getDescription();
+			return mixedSchemeGridRow.getDateFormat();
 		case 7: 
-			return mixedSchemeGridRow.getLength().toString();
+			return mixedSchemeGridRow.getPrecision(); 
 		case 8:
-			return mixedSchemeGridRow.getDelimiter().toString();
+			return mixedSchemeGridRow.getDescription();
 		}
 		return null;
 	}

@@ -63,10 +63,11 @@ public class ELTVerifyTextListener implements IELTListener{
 						txtDecorator.setDescriptionText(Messages.CHARACTERSET);
 						txtDecorator.show();
 						event.doit=false;
-						logger.debug(this+"::ELTVerifyTextListener :: !matchs.matches()::"+string);
-				}else
-					txtDecorator.hide();
-					logger.debug(this+"::ELTVerifyTextListener :: ELSE::"+string);
+						logger.trace("Pattern does not matches !matchs.matches() with :" + string);
+					}else{
+						txtDecorator.hide();
+						logger.trace("Pattern matches with :" + string);
+					}
 				}
 			};
 		return listener;

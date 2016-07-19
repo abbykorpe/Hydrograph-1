@@ -11,12 +11,12 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
@@ -28,14 +28,18 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
-
 
 /**
  * Creates the Property window for Runtime Properties
@@ -43,12 +47,15 @@ import org.slf4j.Logger;
  * @author Bitwise
  */
 public class ELTRuntimePropertiesWidget extends AbstractWidget {
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTRuntimePropertiesWidget.class);
+	private static final Logger logger = LogFactory.INSTANCE
+			.getLogger(ELTRuntimePropertiesWidget.class);
 	private Map<String, String> initialMap;
 	private String propertyName;
 	private Shell shell;
 	private RuntimeConfig runtimeConfig;
-	
+	private List<AbstractWidget> widgets;
+	protected ControlDecoration buttonDecorator;
+
 	/**
 	 * Instantiates a new ELT runtime properties widget.
 	 * 
@@ -59,17 +66,20 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 	 * @param propDialogButtonBar
 	 *            the property dialog button bar
 	 */
-	public ELTRuntimePropertiesWidget(ComponentConfigrationProperty componentConfigProp,
-			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propDialogButtonBar) {
+	public ELTRuntimePropertiesWidget(
+			ComponentConfigrationProperty componentConfigProp,
+			ComponentMiscellaneousProperties componentMiscProps,
+			PropertyDialogButtonBar propDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propDialogButtonBar);
 
 		this.propertyName = componentConfigProp.getPropertyName();
-		this.initialMap = (Map<String, String>) componentConfigProp.getPropertyValue();
-		
-		//since this window does all the validation 
-		//we can assume that it is valid always
+		this.initialMap = (Map<String, String>) componentConfigProp
+				.getPropertyValue();
+
+		// since this window does all the validation
+		// we can assume that it is valid always
 	}
-	
+
 	/**
 	 * @wbp.parser.entryPoint
 	 */
@@ -81,28 +91,43 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 		runtimeComposite.createContainerWidget();
 		shell = runtimeComposite.getContainerControl().getShell();
 		runtimeConfig = (RuntimeConfig) widgetConfig;
-		
-		ELTDefaultLable defaultLable1 = new ELTDefaultLable(runtimeConfig.getLabel()); 
+
+		ELTDefaultLable defaultLable1 = new ELTDefaultLable(
+				runtimeConfig.getLabel());
 		runtimeComposite.attachWidget(defaultLable1);
 		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
-		
+
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(Constants.EDIT);
-		
+
 		runtimeComposite.attachWidget(eltDefaultButton);
 
+		buttonDecorator = WidgetUtility.addDecorator(
+				(Control) eltDefaultButton.getSWTWidgetControl(),
+				Messages.bind(Messages.EmptyValueNotification, runtimeConfig.getLabel()));
+		buttonDecorator.setMarginWidth(3);
+		setDecoratorsVisibility();
+
 		try {
-			eltDefaultButton.attachListener(ListenerFactory.Listners.RUNTIME_BUTTON_CLICK.getListener(),
-					propertyDialogButtonBar, new ListenerHelper(this.getClass().getName(), this), eltDefaultButton.getSWTWidgetControl());
+			eltDefaultButton
+					.attachListener(
+							ListenerFactory.Listners.RUNTIME_BUTTON_CLICK
+									.getListener(),
+							propertyDialogButtonBar,
+							new ListenerHelper(this.getClass().getName(), this),
+							eltDefaultButton.getSWTWidgetControl());
 
 		} catch (Exception exception) {
-			logger.error("Error occured while attaching listener to Runtime Properties window", exception);
+			logger.error(
+					"Error occured while attaching listener to Runtime Properties window",
+					exception);
 		}
 	}
-	
+
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
 		LinkedHashMap<String, Object> tempPropertyMap = new LinkedHashMap<>();
 		tempPropertyMap.put(this.propertyName, this.initialMap);
+		setToolTipErrorMessage();
 		return tempPropertyMap;
 	}
 
@@ -113,21 +138,52 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 		if (getProperties().get(propertyName) == null) {
 			initialMap = new HashMap<String, String>();
 		}
-		
-		RuntimePropertyDialog runtimePropertyDialog = new RuntimePropertyDialog(shell,propertyDialogButtonBar,runtimeConfig.getWindowLabel());
-		runtimePropertyDialog.setRuntimeProperties(new LinkedHashMap<>(initialMap));
+
+		RuntimePropertyDialog runtimePropertyDialog = new RuntimePropertyDialog(
+				shell, propertyDialogButtonBar, runtimeConfig.getWindowLabel());
+		runtimePropertyDialog.setRuntimeProperties(new LinkedHashMap<>(
+				initialMap));
 		runtimePropertyDialog.open();
+
 		initialMap = runtimePropertyDialog.getRuntimeProperties();
+
+		if (runtimePropertyDialog.isOkPressed()) {
+
+			showHideErrorSymbol(widgets);
+		}
+
+		setDecoratorsVisibility();
+
 	}
 
 	@Override
 	public boolean isWidgetValid() {
-		return false;
+		return validateAgainstValidationRule(initialMap);
 	}
 
-	
-
 	@Override
-	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
+	public void addModifyListener(Property property,
+			ArrayList<AbstractWidget> widgetList) {
+		widgets = widgetList;
+	}
+
+	protected void setToolTipErrorMessage() {
+		String toolTipErrorMessage = null;
+
+		if (buttonDecorator.isVisible())
+			toolTipErrorMessage = buttonDecorator.getDescriptionText();
+
+		setToolTipMessage(toolTipErrorMessage);
+	}
+
+	protected void setDecoratorsVisibility() {
+
+		if (isWidgetValid()) {
+			buttonDecorator.show();
+		} else {
+
+			buttonDecorator.hide();
+		}
+
 	}
 }

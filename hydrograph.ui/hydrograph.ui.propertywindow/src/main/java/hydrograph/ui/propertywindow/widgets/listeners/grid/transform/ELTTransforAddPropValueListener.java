@@ -18,6 +18,7 @@ import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
@@ -50,7 +51,9 @@ public class ELTTransforAddPropValueListener extends GridWidgetCommonBuilder {
 	}
 
 	@Override
-	public CellEditor[] createCellEditorList(Table table, int size) {
+	public CellEditor[] createCellEditorList(Table table,
+			Map<String, Integer> columns) {
+		
 		return null;
 	}
 

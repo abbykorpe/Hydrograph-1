@@ -59,7 +59,7 @@ public abstract class AbstractJobLogger {
 	 */
 	protected String getLogStamp(){
 		String logStamp;
-		logStamp=JobLoggerUtils.getTimeStamp().toString() + " [" + fullJobName + "] - "; 
+		logStamp=JobLoggerUtils.getTimeStamp().toString() + " INFO " + fullJobName + " - "; 
 		return logStamp;
 	}
 	

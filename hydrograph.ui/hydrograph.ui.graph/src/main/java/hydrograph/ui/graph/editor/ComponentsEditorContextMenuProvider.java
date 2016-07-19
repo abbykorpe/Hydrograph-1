@@ -12,17 +12,24 @@
   ******************************************************************************/
 package hydrograph.ui.graph.editor;
 
+
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.action.debug.WatcherMenuAction;
 import hydrograph.ui.graph.action.subjob.SubMenuAction;
-
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.utility.SubJobUtility;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.actions.ActionFactory;
+
 
 
 /**
@@ -31,6 +38,12 @@ import org.eclipse.ui.actions.ActionFactory;
 public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 	/** The editor's action registry. */
 	private ActionRegistry actionRegistry;
+	private static final String team = "team.main";
+	private static final String replaceWith = "replaceWithMenu";
+	private static final String separator = "additions";
+	private static final String runAs = "org.eclipse.debug.ui.contextualLaunch.debug.submenu";
+	private static final String debugAs = "org.eclipse.debug.ui.contextualLaunch.run.submenu";
+	private static final String compareWith = "compareWithMenu";
 	
 	/**
 	 * Instantiate a new menu context provider for the specified EditPartViewer
@@ -45,6 +58,7 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 			throw new IllegalArgumentException();
 		}
 		actionRegistry = registry;
+		
 	}
 	
 	/**
@@ -55,8 +69,8 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 	public void buildContextMenu(IMenuManager menu) {
 		// Add standard action groups to the menu
 		GEFActionConstants.addStandardActionGroups(menu);
-		
-		IAction[] actions = new IAction[3];
+		 
+        IAction[] actions = new IAction[3];
 		actions[0] = getAction(Constants.SUBJOB_CREATE);
 	    actions[1] = getAction(Constants.SUBJOB_OPEN);
 	    actions[2] = getAction(Constants.SUBJOB_UPDATE);
@@ -69,6 +83,7 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
         IAction actionWatchRecords = getAction(Constants.WATCH_RECORD_ID);// action to view debug data
         IAction componentHelpAction=getAction(Constants.HELP_ID);
         IAction componentPropertiesAction=getAction(Constants.COMPONENT_PROPERTIES_ID);
+        
         
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, // target group id
 		getAction(ActionFactory.UNDO.getId())); // action to add
@@ -84,16 +99,37 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, actionWatchRecords);
 		menu.appendToGroup(GEFActionConstants.GROUP_REST,componentPropertiesAction);
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, componentHelpAction);
-		 
+		
+		
+
+
 		if(subJobMenu.getActiveOperationCount()== 0)
 	    subJobMenu.setEnabled(false);
 			 
 		if(watcherMenu.getActiveOperationCount()== 0){
 			watcherMenu.setEnabled(false);
 		}
-		
 	}
+	
 	private IAction getAction(String actionId) {
 		return actionRegistry.getAction(actionId);
+	}
+	
+	@Override
+	protected void doItemFill(IContributionItem ci, int index) {
+		
+		StructuredSelection s=(StructuredSelection)SubJobUtility.getCurrentEditor().getViewer().getSelection();
+			
+			if (s.getFirstElement() instanceof ComponentEditPart && (StringUtils.equalsIgnoreCase(ci.getId(),team)||
+				StringUtils.equalsIgnoreCase(ci.getId(),replaceWith)|| StringUtils.equalsIgnoreCase(ci.getId(),separator))){
+					return;
+			}
+	
+			if((StringUtils.equalsIgnoreCase(ci.getId(),runAs)||
+				StringUtils.equalsIgnoreCase(ci.getId(),debugAs)||
+				StringUtils.equalsIgnoreCase(ci.getId(),compareWith))){
+					return ;
+			}	
+		super.doItemFill(ci, index);
 	}
 }

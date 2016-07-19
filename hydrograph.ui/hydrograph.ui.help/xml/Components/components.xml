@@ -74,10 +74,22 @@
    <topic href="html/Components/Output_Hive_Text.html" label="Output Hive TextFile">
       <anchor id="outputHiveTextFile"/>
    </topic>
+   <topic href="html/Components/Normalize.html" label="Normalize">
+      <anchor id="Normalize"/>
+   </topic>
    <topic href="html/Components/Discard.html" label="Discard">
       <anchor id="Discard"/>
    </topic>
-   <topic href="html/Components/Normalize.html" label="Normalize">
-      <anchor id="Normalize"/>
+   <topic href="html/Components/Output_File_Mixed_Scheme.html" label="Output File Mixed Scheme">
+      <anchor id="OutputFileMixedScheme"/>
+   </topic>
+   <topic href="html/Components/Output_File_Parquet.html" label="Output File Parquet">
+      <anchor id="OutputFileParquet"/>
+   </topic>
+   <topic href="html/Components/Input_File_Parquet.html" label="Input File Parquet">
+      <anchor id="Input_File_Parquet"/>
+   </topic>
+   <topic href="html/Components/Input_File_Mixed_Scheme.html" label="Input File Mixed Scheme">
+      <anchor id="InputFileMixedScheme"/>
    </topic>
 </toc>

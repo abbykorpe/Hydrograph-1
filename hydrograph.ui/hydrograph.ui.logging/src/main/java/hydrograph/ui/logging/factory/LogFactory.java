@@ -16,6 +16,7 @@ package hydrograph.ui.logging.factory;
 
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.util.Loader;
 
 public class LogFactory {
@@ -57,7 +59,7 @@ public class LogFactory {
 	                lc.start();
             }
             loggers.debug("****Logger Configured Successfully****");
-        } catch(Exception exception){
+        } catch(MalformedURLException|JoranException exception){
         	loggers.error("Failed to configure the logger {}", exception);
         }
     }

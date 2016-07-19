@@ -370,6 +370,7 @@ public abstract class AbstractWidget {
 	}
 	public boolean validateAgainstValidationRule(Object object){
 		boolean componentHasRequiredValues = Boolean.FALSE;
+		ComponentCacheUtil.INSTANCE.getProperties(getComponent().getComponentName());
 		List<String> validators = ComponentCacheUtil.INSTANCE.getValidatorsForProperty(
 							getComponent().getComponentName(),getPropertyName());
 			IValidator validator = null;

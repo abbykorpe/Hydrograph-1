@@ -15,9 +15,9 @@
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/output_file_palette.png" canvasIconPath="/icons/output_file_canvas.png"
 		name="OFParquet" nameInPalette="File Parquet" defaultNamePrefix="OFParquet" 
-		description="This is OFParquet component."
+		description="Used to write a Parquet file."
 		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Parquet.html"
-		acronym="FPrqt">
+		acronym="OFPrq">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
@@ -30,15 +30,15 @@
 			usage="REQUIRED"/>
 		
 		<tns:property dataType="string" group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS"
-			name="schema" renderer="SCHEMA_WIDGET" type="USER" showAsTooltip="FALSE"
+			name="schema" renderer="HIVE_PARQUET_WIDGET" type="USER" showAsTooltip="FALSE"
 			tooltipDataType="NONE" usage="REQUIRED">
-			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>
+			<tns:validator>HIVE_PARQUET_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="Path"
 			renderer="FILE_PATH_WIDGET" type="USER" showAsTooltip="TRUE" tooltipDataType="LINK"
 			usage="REQUIRED">
-			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="overWrite" value="True"
@@ -49,7 +49,9 @@
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="runtime_properties"
 			renderer="RUNTIME_PROPERTIES_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL"/>
+			usage="OPTIONAL">
+		<tns:validator>RUNTIME_PROPERTY_VALIDATOR</tns:validator>
+		</tns:property>
 		
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"

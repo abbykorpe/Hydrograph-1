@@ -16,9 +16,9 @@
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/output_subjob_palette.png"
 		canvasIconPath="/icons/output_subjob_canvas.png" name="OutputSubjobComponent"
-		nameInPalette="Output Subjob" defaultNamePrefix="OutSubjob"
+		nameInPalette="Output Socket for subjob" defaultNamePrefix="OutSubjob"
 		description="Represents the out sockets for a subjob."
-		helpFilePath="/hydrograph.ui.help/html/Components/Dummy.html"  acronym="OSubJ">
+		helpFilePath="/hydrograph.ui.help/html/Components/Dummy.html"  acronym="OSubC">
 		<tns:category>SUBJOB</tns:category>
 
 		

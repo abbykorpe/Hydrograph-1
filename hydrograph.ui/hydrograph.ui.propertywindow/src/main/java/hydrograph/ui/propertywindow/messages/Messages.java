@@ -56,6 +56,16 @@ public class Messages extends NLS {
 	public static String FIELD_DESCRIPTION;
 	public static String RANGE_FROM;
 	public static String RANGE_TO;
+	public static String RANGE_FROM_GREATER_THAN_RANGE_TO;
+	public static String RANGE_FROM_LESS_THAN_MIN_PERMISSIBLE_VALUE;
+	public static String RANGE_TO_LESS_THAN_MIN_PERMISSIBLE_VALUE;
+	public static String RANGE_FROM_GREATER_THAN_MAX_PERMISSIBLE_VALUE;
+	public static String RANGE_TO_GREATER_THAN_MAX_PERMISSIBLE_VALUE;
+	public static String RANGE_FROM_DATE_INCORRECT_PATTERN;
+	public static String RANGE_TO_DATE_INCORRECT_PATTERN;
+	public static String FIELD_LENGTH_LESS_THAN_ZERO;
+	public static String FIELD_SCALE_LESS_THAN_ZERO;
+	public static String FIELD_SCALE_NOT_LESS_THAN_FIELD_LENGTH;
 	public static String DEFAULT_VALUE;
 	public static String FIELDNAMEERROR;
 	public static String FIELDPHASE;
@@ -115,6 +125,10 @@ public class Messages extends NLS {
 	public static String IMPORT_XML_DUPLICATE_FIELD_ERROR;
 	public static String EXPORT_XML_ERROR;
 	public static String EXPORT_XML_EMPTY_FILENAME;
+	public static String EXPORT_XML_IMPROPER_EXTENSION;
+	public static String IMPORT_XML_IMPROPER_EXTENSION;
+	public static String IMPORT_XML_INCORRECT_FILE;
+	public static String EXPORT_XML_INCORRECT_FILE;
 	public static String EXPORTED_SCHEMA_NOT_IN_SYNC;
 	public static String EXPORTED_SCHEMA_SYNC_ERROR;
 	public static String COPY_MENU_TEXT;
@@ -149,7 +163,7 @@ public class Messages extends NLS {
 	public static String TEXT_FIELD_SHOULD_MATCH;
 	public static String BROWSE_BUTTON_TEXT;
 	public static  String TRANSFORM_EDITOR ;
-	public static  String LATER;
+	public static  String MANUAL_SYNC;
 	public static  String SYNC_NOW;
 	public static  String MAPPING_SHEET;
 	public static  String PERVIOUS_VALUE;
@@ -160,12 +174,23 @@ public class Messages extends NLS {
 	public static String OutputFieldAlreadyExists;
 	public static String FieldNameAlreadyExists;
 	public static String ABSOLUTE_PATH_TEXT;
-
-
+	public static String SCALETYPE_MUST_NOT_BE_NONE;
+	public static String SCALE_SHOULD_BE_POSITIVE_INTEGER;
+	public static String SCALE_MUST_NOT_BE_BLANK;
+	public static String PRECISION_MUST_CONTAINS_NUMBER_ONLY_0_9;
+	public static String PRECISION_MUST_NOT_BE_BLANK;
+	public static String DATE_FORMAT_MUST_NOT_BE_BLANK;
+	public static String LENGTH_MUST_BE_AN_INTEGER_VALUE;
+	public static String LENGTH_MUST_NOT_BE_BLANK ;
+	public static String LENGTH_OR_DELIMITER_MUST_NOT_BE_BLANK;
+	public static String ONLY_SPECIFY_LENGTH_OR_DELIMITER;
+	public static String LENGTH_SHOULD_NOT_BE_ZERO;
+	public static String MAPPING_WINDOW_DUPLICATE_FIELD;
+	
 	public static String OPERATION_ID_PREFIX;
     public static String OPERATION_LIST_EMPTY;
     public static String PULL_BUTTON_LABEL;
-    public static String PULL_FROM_TRANSFORM;
+    public static String PULL_SCHEMA;
     public static String OPERATION_CONTROL;
     public static String SOURCE;
     public static String TARGET;
@@ -212,6 +237,14 @@ public class Messages extends NLS {
 	public static String LABEL_KEY_FIELDS;
 	public static String LABEL_SECONDARY_KEYS;
 	public static String LABEL_PARTITION_KEYS;
+	public static String SCHEMA_IS_UPTO_DATE_MESSAGE;
+	public static String FILE_NAME;
+	public static String SUBJOB_PATH;
+	
+	public static String HIVE_FIELD_DIALOG_ERROR;
+	public static String EMPTY_TARGET_FIELD_ERROR;
+	public static String PARTI_KEY_VALUE_DIALOG_NAME;
+	
 	
 	static {
 		// initialize resource bundle

@@ -12,14 +12,22 @@
  ******************************************************************************/
 package hydrograph.ui.propertywindow.widgets.dialogs.join;
 
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.JoinConfigProperty;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
+import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTJoinWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEditingSupport;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.utils.JoinMapDialogConstants;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
@@ -33,6 +41,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -44,6 +53,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -54,19 +64,26 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -80,6 +97,7 @@ import org.eclipse.swt.widgets.TableItem;
  *
  */
 public class JoinMapDialog extends Dialog {
+	private Component component;
 	private JoinMappingGrid joinMappingGrid;
 	private List<List<FilterProperties>> inputPorts;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
@@ -90,11 +108,12 @@ public class JoinMapDialog extends Dialog {
 	private JoinMappingGrid oldJoinMappingGrid;
 	private JoinMappingGrid newJoinMappingGrid;
 	private List<String> allInputFields;
+	private Button btnPull;
 	private Button btnDown;
 	private Button btnUp;
 	private Button btnDelete;
 	private Button btnAdd;
-
+	
 	private static final String PORT_ID_KEY = "PORT_ID";
 	private static final String NO_COPY="None";
 	private static final String INPUT_PORT_ID_PREFIX="in";
@@ -106,10 +125,13 @@ public class JoinMapDialog extends Dialog {
 	private static final String FIELD_TOOLTIP_MESSAGE_DUPLICATE_FIELDS="Duplicate field";
 	private static final String MAPPING_TABLE_ITEM_DELIMILATOR="#";
 	
-	private static final String ADD_BUTTON_TEXT="Add";
-	private static final String DELETE_BUTTON_TEXT="Delete";
-	private static final String UP_BUTTON_TEXT="Up";
-	private static final String DOWN_BUTTON_TEXT="Down";
+	
+	
+	private static final String PULL_TOOLTIP = "Pull schema";
+	private static final String ADD_TOOLTIP = "Add field";
+	private static final String DELETE_TOOLTIP = "Delete field";
+	private static final String UP_TOOLTIP = "Move field up";
+	private static final String DOWN_TOOLTIP = "Move field down";
 	
 	private static final String INPUT_TABLE_COLUMN_TEXT="Input Fields";
 	private static final String DIALOG_TITLE="Join Mapping Dialog";
@@ -122,17 +144,19 @@ public class JoinMapDialog extends Dialog {
 	 */@Deprecated
 	public JoinMapDialog(Shell parentShell) {
 		super(parentShell);
+	
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL
 				| SWT.RESIZE);
 	}
 
-	public JoinMapDialog(Shell parentShell, JoinMappingGrid joinPropertyGrid,
+	public JoinMapDialog(Shell parentShell, Component component, JoinMappingGrid joinPropertyGrid,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
+		
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL
 				| SWT.RESIZE);
 		this.joinMappingGrid = joinPropertyGrid;
-
+		this.component=component;
 		radioButtonMap = new LinkedHashMap<>();
 		inputPorts = new ArrayList<>();
 
@@ -151,13 +175,15 @@ public class JoinMapDialog extends Dialog {
 		container.setLayout(new GridLayout(1, false));
 		container.getShell().setText(DIALOG_TITLE);
 		
-		Composite composite = createOuterMostComposite(container);
+		SashForm composite = new SashForm(container, SWT.SMOOTH);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		createInputFieldExpandBarSection(composite);
 
 		creatFieldMappingSection(composite);
 
 		createCopyInputToOutputFieldSection(composite);
+		composite.setWeights(new int[] {215, 559, 116});
 
 		populateJoinMapDialog();
 		return container;
@@ -194,6 +220,9 @@ public class JoinMapDialog extends Dialog {
 				true, true, 1, 1));
 		scrolledComposite_2.setExpandHorizontal(true);
 		scrolledComposite_2.setExpandVertical(true);
+		scrolledComposite_2.setAlwaysShowScrollBars(false);
+		attachMouseScrollButtonListener(scrolledComposite_2);
+		
 
 		Composite composite_12 = new Composite(scrolledComposite_2, SWT.NONE);
 		composite_12.setLayout(new GridLayout(1, false));
@@ -233,26 +262,14 @@ public class JoinMapDialog extends Dialog {
 					List<FilterProperties> inputFieldList = inputPorts
 							.get((int) ((Button) e.widget).getData(PORT_ID_KEY));
 
-					LookupMapProperty property = null;
-
 					String inputPortID = INPUT_PORT_ID_PREFIX
 							+ ((Button) e.widget).getData(PORT_ID_KEY);
 
 					if (inputFieldList != null) {
-						mappingTableItemList.clear();
-						for (FilterProperties properties : inputFieldList) {
-
-							property = new LookupMapProperty();
-							property.setSource_Field(inputPortID + "."
-									+ properties.getPropertyname());
-							property.setOutput_Field(properties
-									.getPropertyname());
-							mappingTableItemList.add(property);
-						}
+						copyFieldsWhenCopyOfIsSelected(inputFieldList, inputPortID);
 						mappingTableViewer.refresh();
 
 					}
-
 				}
 			});
 		}
@@ -261,7 +278,36 @@ public class JoinMapDialog extends Dialog {
 		scrolledComposite_2.setMinSize(composite_12.computeSize(SWT.DEFAULT,
 				SWT.DEFAULT));
 	}
+	
+	private void attachMouseScrollButtonListener(final ScrolledComposite scrolledComposite){
+		scrolledComposite.addListener(SWT.MouseWheel, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				int wheelCount = event.count;
+				wheelCount = (int) Math.ceil(wheelCount / 3.0f);
+				while (wheelCount < 0) {
+					scrolledComposite.getVerticalBar().setIncrement(4);
+					wheelCount++;
+				}
 
+				while (wheelCount > 0) {
+					scrolledComposite.getVerticalBar().setIncrement(-4);
+					wheelCount--;
+				}
+			}
+		});
+	}
+
+	private void copyFieldsWhenCopyOfIsSelected(List<FilterProperties> inputFieldList, String inputPortID) {
+		mappingTableItemList.clear();
+		for (FilterProperties properties : inputFieldList) {
+			LookupMapProperty property = new LookupMapProperty();
+			property.setSource_Field(inputPortID + "." + properties.getPropertyname());
+			property.setOutput_Field(properties.getPropertyname());
+			mappingTableItemList.add(property);
+		}
+	}
+	
 	private void creatFieldMappingSection(Composite composite) {
 
 		Composite composite_2 = new Composite(composite, SWT.NONE);
@@ -380,19 +426,59 @@ public class JoinMapDialog extends Dialog {
 
 				String[] dropData = ((String) event.data).split(Pattern
 						.quote(MAPPING_TABLE_ITEM_DELIMILATOR));
-				for (String data : dropData) {
-					LookupMapProperty mappingTableItem = new LookupMapProperty();
-					mappingTableItem.setSource_Field(data);
-					mappingTableItem.setOutput_Field(data.split("\\.")[1]);
-					mappingTableItemList.add(mappingTableItem);
-
-					mappingTableViewer.refresh();
+				List<String> tempOutputFieldList = getOutputFieldList();
+				
+				if(getDuplicateDropAllowed()){
+					for (String data : dropData) {
+						dropItem(data);
+					}
+				}else{
+					for (String data : dropData) {
+						if(!tempOutputFieldList.contains(StringUtils.lowerCase(data.split("\\.")[1]))){
+							dropItem(data);
+						}
+						else{
+							WidgetUtility.errorMessage(Messages.MAPPING_WINDOW_DUPLICATE_FIELD);
+							break;
+						}
+					}
 				}
 				refreshButtonStatus();
 			}
 		});
 	}
 
+	private void dropItem(String data){
+		LookupMapProperty mappingTableItem = new LookupMapProperty();
+		mappingTableItem.setSource_Field(data);
+		mappingTableItem.setOutput_Field(data.split("\\.")[1]);
+		mappingTableItemList.add(mappingTableItem);
+		mappingTableViewer.refresh();
+	}
+	
+	private List<String> getOutputFieldList(){
+		List<String> outputFieldList = new LinkedList<>();
+		for(LookupMapProperty lookupMapProperty : mappingTableItemList){
+			outputFieldList.add(StringUtils.lowerCase(lookupMapProperty.getOutput_Field()));
+		}
+		return outputFieldList;
+	}
+
+	private boolean getDuplicateDropAllowed(){
+		List<JoinConfigProperty> configObject = (List) component.getProperties().get("join_config");
+			if(configObject == null || configObject.size() == 0){
+				return false;
+			}
+			else{
+				for(int i = 0 ; i<configObject.size(); i++){
+					if(configObject.get(i).getRecordRequired() == 0){
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+	
 	private void createOutputFieldColumnInMappingTable() {
 		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(
 				mappingTableViewer, SWT.NONE);
@@ -547,7 +633,7 @@ public class JoinMapDialog extends Dialog {
 		lblMappingView.setText("Output Mapping");
 
 		Composite composite_11 = new Composite(composite_4, SWT.NONE);
-		GridLayout gl_composite_11 = new GridLayout(4, false);
+		GridLayout gl_composite_11 = new GridLayout(5, false);
 		gl_composite_11.verticalSpacing = 0;
 		gl_composite_11.marginWidth = 0;
 		gl_composite_11.marginHeight = 0;
@@ -555,6 +641,8 @@ public class JoinMapDialog extends Dialog {
 		composite_11.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true,
 				true, 1, 1));
 
+		createPullButton(composite_11);
+		
 		createAddButton(composite_11);
 
 		createDeleteButton(composite_11);
@@ -563,10 +651,39 @@ public class JoinMapDialog extends Dialog {
 
 		createDownButton(composite_11);
 	}
+	
+	private void createPullButton(Composite composite_11) {
+		btnPull = new Button(composite_11, SWT.NONE);
+		Image pullButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.PULL_BUTTON);
+		btnPull.setImage(pullButtonImage);
+		btnPull.setToolTipText(PULL_TOOLTIP);
+		
+		btnPull.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Constants.SYNC_OUTPUT_FIELDS_CONFIRM_MESSAGE, MessageDialog.QUESTION, new String[] {"Ok", "Cancel" }, 0);
+				int dialogResult =dialog.open();
+				List<LookupMapProperty> pulledJoinMapProperties = null;
+				if(dialogResult == 0){
+					//syncTransformFieldsWithSchema();
+					Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+					pulledJoinMapProperties = SchemaSyncUtility.INSTANCE.pullJoinSchemaInMapping(schema, component);
+				}
+				mappingTableViewer.setInput(pulledJoinMapProperties);
+				mappingTableItemList = pulledJoinMapProperties;
+				mappingTableViewer.refresh(); 
+				component.setLatestChangesInSchema(false);
+				refreshButtonStatus();
+			}
+		});
+	}
 
 	private void createDownButton(Composite composite_11) {
 		btnDown = new Button(composite_11, SWT.NONE);
-		btnDown.setText(DOWN_BUTTON_TEXT);
+		btnDown.setToolTipText(DOWN_TOOLTIP);
+		Image downButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
+		btnDown.setImage(downButtonImage);
+		
 		btnDown.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -589,7 +706,9 @@ public class JoinMapDialog extends Dialog {
 
 	private void createUpButton(Composite composite_11) {
 		btnUp = new Button(composite_11, SWT.NONE);
-		btnUp.setText(UP_BUTTON_TEXT);
+		btnUp.setToolTipText(UP_TOOLTIP);
+		Image upButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
+		btnUp.setImage(upButtonImage);
 		btnUp.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -610,8 +729,12 @@ public class JoinMapDialog extends Dialog {
 	}
 
 	private void createDeleteButton(Composite composite_11) {
+		
 		btnDelete = new Button(composite_11, SWT.NONE);
-		btnDelete.setText(DELETE_BUTTON_TEXT);
+		btnDelete.setToolTipText(DELETE_TOOLTIP);
+		Image deleteButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
+		btnDelete.setImage(deleteButtonImage);
+
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -622,20 +745,16 @@ public class JoinMapDialog extends Dialog {
 					WidgetUtility.errorMessage("Select Rows to delete");
 				} else {
 					table.remove(indexs);
-					//TODO - Do not remove below(commented) code - kept for referance
-					//List<LookupMapProperty> mappingsToRemove = new ArrayList<>();
 					int itemsRemoved=0;
 					for (int index : indexs) {
-						//TODO - Do not remove below(commented) code - kept for referance 
-						/*LookupMapProperty parameter = mappingTableItemList
-								.get(index);
-						mappingsToRemove.add(parameter);*/
 						mappingTableItemList.remove(index-itemsRemoved);
+						if(index-itemsRemoved-1 != -1){
+							table.setSelection(index-itemsRemoved-1);
+						}else{
+							table.setSelection(0);
+						}
 						itemsRemoved++;
 					}
-					//TODO - Do not remove below(commented) code - kept for referance 
-					//mappingTableItemList.removeAll(mappingsToRemove);
-					mappingTableViewer.getTable().removeAll();
 					mappingTableViewer.refresh();
 				}
 				refreshButtonStatus();
@@ -645,7 +764,9 @@ public class JoinMapDialog extends Dialog {
 
 	private void createAddButton(Composite composite_11) {
 		btnAdd = new Button(composite_11, SWT.NONE);
-		btnAdd.setText(ADD_BUTTON_TEXT);
+		btnAdd.setToolTipText(ADD_TOOLTIP);
+		Image addButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
+		btnAdd.setImage(addButtonImage);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -660,18 +781,6 @@ public class JoinMapDialog extends Dialog {
 		});
 	}
 
-	private Composite createOuterMostComposite(Composite container) {
-		Composite composite = new Composite(container, SWT.NONE);
-		GridLayout gl_composite = new GridLayout(3, false);
-		gl_composite.verticalSpacing = 0;
-		gl_composite.marginWidth = 0;
-		gl_composite.marginHeight = 0;
-		composite.setLayout(gl_composite);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
-				1));
-		return composite;
-	}
-
 	private void createInputFieldExpandBarSection(Composite composite) {
 		Composite composite_1 = new Composite(composite, SWT.NONE);
 		GridLayout gl_composite_1 = new GridLayout(1, false);
@@ -682,24 +791,25 @@ public class JoinMapDialog extends Dialog {
 		composite_1.setLayout(gl_composite_1);
 		GridData gd_composite_1 = new GridData(SWT.FILL, SWT.FILL, false, true,
 				1, 1);
-		gd_composite_1.widthHint = 269;
+		gd_composite_1.widthHint = 276;
 		composite_1.setLayoutData(gd_composite_1);
 		composite_1.setBounds(0, 0, 64, 64);
 
-		ScrolledComposite scrolledComposite_1 = new ScrolledComposite(
-				composite_1, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		final ScrolledComposite scrolledComposite_1 = new ScrolledComposite(
+				composite_1, SWT.BORDER | SWT.V_SCROLL );
 		scrolledComposite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
 				true, true, 1, 1));
 		scrolledComposite_1.setExpandHorizontal(true);
 		scrolledComposite_1.setExpandVertical(true);
-
+		
 		Composite composite_7 = new Composite(scrolledComposite_1, SWT.NONE);
 		composite_7.setLayout(new GridLayout(1, false));
 
-		ExpandBar expandBar = new ExpandBar(composite_7, SWT.V_SCROLL);
+		final ExpandBar expandBar = new ExpandBar(composite_7, SWT.H_SCROLL);
 		expandBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 				1));
-
+		
+		expandBar.setBackground(new Color(null, 240, 240, 240));
 		populateInputFieldExpandBarSection(expandBar);
 
 		expandBar.getItem(0).setExpanded(true);
@@ -707,6 +817,17 @@ public class JoinMapDialog extends Dialog {
 		scrolledComposite_1.setContent(composite_7);
 		scrolledComposite_1.setMinSize(composite_7.computeSize(SWT.DEFAULT,
 				SWT.DEFAULT));
+		
+		
+		composite_7.addControlListener(new ControlAdapter() {
+			@Override
+			public void controlResized(ControlEvent e) {
+				
+				for(ExpandItem expandItem:expandBar.getItems()){
+					((TableColumn)expandItem.getData("TableColumn")).setWidth(scrolledComposite_1.getSize().x);
+				}
+			}
+		});
 	}
 
 	private void populateInputFieldExpandBarSection(ExpandBar expandBar) {
@@ -735,6 +856,7 @@ public class JoinMapDialog extends Dialog {
 				}
 
 			}
+			
 			addExpandItem(expandBar, inputPortFieldList, i);
 		}
 	}
@@ -743,23 +865,25 @@ public class JoinMapDialog extends Dialog {
 			List<FilterProperties> inputPortFieldList, int portNumber) {
 		ExpandItem xpndtmItem = new ExpandItem(expandBar, SWT.NONE);
 		xpndtmItem.setText(EXPAND_ITEM_TEXT_PREFIX + portNumber);
-
+		
 		Composite composite_13 = new Composite(expandBar, SWT.NONE);
 		xpndtmItem.setControl(composite_13);
 		composite_13.setLayout(new GridLayout(1, false));
 
 		TableViewer tableViewer_1 = new TableViewer(composite_13, SWT.BORDER
-				| SWT.FULL_SELECTION | SWT.MULTI);
+				| SWT.FULL_SELECTION | SWT.MULTI );
 		final Table table_1 = tableViewer_1.getTable();
 		table_1.setLinesVisible(true);
 		table_1.setHeaderVisible(true);
 		table_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tableViewer_1.setContentProvider(new ArrayContentProvider());
-
+		
+		
 		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(
 				tableViewer_1, SWT.NONE);
+		
 		TableColumn tblclmnInputFields = tableViewerColumn_2.getColumn();
-		tblclmnInputFields.setWidth(229);
+		
 		tblclmnInputFields.setText(INPUT_TABLE_COLUMN_TEXT);
 
 		tableViewerColumn_2.setLabelProvider(new ColumnLabelProvider() {
@@ -771,6 +895,7 @@ public class JoinMapDialog extends Dialog {
 		});
 
 		tableViewer_1.setInput(inputPortFieldList);
+		xpndtmItem.setData("TableColumn", table_1.getColumn(0));
 
 		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
 		final String portLabel = INPUT_PORT_ID_PREFIX + portNumber + ".";
@@ -785,8 +910,24 @@ public class JoinMapDialog extends Dialog {
 			}
 		});
 
-		xpndtmItem.setHeight(150);
+		xpndtmItem.setHeight(190);
+		xpndtmItem.setExpanded(true);
+		
+		table_1.addControlListener(new ControlListener() {
 
+			@Override
+			public void controlResized(ControlEvent e) {
+				Table table = (Table) e.widget;
+				Rectangle area = table.getClientArea();
+				int totalAreaWidth = area.width;
+				int diff = totalAreaWidth - (table.getColumn(0).getWidth());
+				table.getColumn(0).setWidth(diff + table.getColumn(0).getWidth());
+			}
+
+			@Override
+			public void controlMoved(ControlEvent e) {
+			}
+		});
 	}
 
 	private String addDelimeter(String portLabel, TableItem[] selectedTableItems) {
@@ -830,6 +971,13 @@ public class JoinMapDialog extends Dialog {
 		}
 		super.okPressed();
 	}
+	
+	@Override
+	protected void cancelPressed(){
+		joinMappingGrid.setLookupInputProperties(oldJoinMappingGrid.getLookupInputProperties());
+		joinMappingGrid.setLookupMapProperties(oldJoinMappingGrid.getLookupMapProperties());
+		super.cancelPressed();
+	}
 
 	private void populateJoinMapDialog() {
 
@@ -845,6 +993,10 @@ public class JoinMapDialog extends Dialog {
 			radioButtonMap.get(joinMappingGrid.getButtonText()).setSelection(
 					true);
 			mappingTableViewer.getTable().setEnabled(false);
+			String inputPortID=StringUtils.remove(joinMappingGrid.getButtonText(), Constants.COPY_FROM_INPUT_PORT_PROPERTY);
+			copyFieldsWhenCopyOfIsSelected(inputPorts.get(Integer.parseInt(StringUtils.remove(inputPortID, Constants.INPUT_SOCKET_TYPE))), inputPortID);
+			
+
 		} else {
 			radioButtonMap.get(NO_COPY).setSelection(true);
 		}

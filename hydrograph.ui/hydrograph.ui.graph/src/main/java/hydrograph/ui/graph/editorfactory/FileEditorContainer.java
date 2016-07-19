@@ -18,6 +18,7 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.ByteArrayInputStream;
@@ -59,7 +60,7 @@ public class FileEditorContainer implements IGenrateContainerData {
 		logger.debug("getEditorInput - Setting IFileEditor input");
 		IFile Ifile = ifileEditorInput.getFile();
 		this.eltGraphicalEditorInstance.setPartName(Ifile.getName());
-		return (Container) eltGraphicalEditorInstance.fromXMLToObject(Ifile.getContents());
+		return (Container)CanvasUtils.INSTANCE.fromXMLToObject(Ifile.getContents());
 	}
 
 	@Override

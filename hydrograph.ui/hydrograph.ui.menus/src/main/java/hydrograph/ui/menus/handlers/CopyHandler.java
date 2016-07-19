@@ -23,16 +23,30 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.jdt.internal.ui.refactoring.reorg.CopyToClipboardAction;
+import org.eclipse.ui.navigator.CommonNavigator;
 
-
-
+/**
+ * @author Bitwise
+ * Handler to Copy component from canvas and Project Explorer 
+ *
+ */
 public class CopyHandler extends AbstractHandler implements IHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		if(editor instanceof ELTGraphicalEditor)((ELTGraphicalEditor)editor).copySelection();
-		
+		IWorkbenchPart part = HandlerUtil.getActivePart(event);
+		if(part instanceof CommonNavigator){
+			CopyToClipboardAction action=new CopyToClipboardAction(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart().getSite());
+			action.run();
+		}
+
+		else if(part instanceof ELTGraphicalEditor){
+			IEditorPart editor = HandlerUtil.getActiveEditor(event);
+			((ELTGraphicalEditor)editor).copySelection();
+		}
 		return null;	
 	}
 }

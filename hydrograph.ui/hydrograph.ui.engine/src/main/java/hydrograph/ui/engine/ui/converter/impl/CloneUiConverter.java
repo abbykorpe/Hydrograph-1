@@ -62,7 +62,6 @@ public class CloneUiConverter extends StraightpullUiConverter {
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.CLONE.value());
 	
-		validateComponentProperties(propertyMap);
 	}
 
 	protected void getOutPort(TypeStraightPullComponent straightPullComponent) {

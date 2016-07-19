@@ -58,6 +58,7 @@ public class Container extends Model {
 	private long subjobVersion=1;
 	private Map<String,String> graphRuntimeProperties;
 	
+	
 	public Container(){
 		
 	}
@@ -68,7 +69,8 @@ public class Container extends Model {
 	 * @return true, if the component was added, false otherwise
 	 */
 	public boolean addChild(Component component) {
-			if (isIOSubjobAlreadyNotPresent(component.getComponentName()) && component != null
+		if(component != null){
+			if (isIOSubjobAlreadyNotPresent(component.getComponentName())
 				&& components.add(component)) {
 			component.setParent(this);
 			String compNewName = getDefaultNameForComponent(component.getPrefix());
@@ -94,6 +96,7 @@ public class Container extends Model {
 			updateSubjobVersion();
 			return true;
 			}
+		}
 		return false;
 	}
 
@@ -101,15 +104,17 @@ public class Container extends Model {
 	 * Add a subjob to this graph.
 	 * @return true, if the component was added, false otherwise
 	 */
-	public boolean addSubJobChild(Component component) {
-		if (isIOSubjobAlreadyNotPresent(component.getComponentName()) && component != null && components.add(component)) {
+	public boolean addSubJobChild(Component component){
+	if(component != null){
+		if (isIOSubjobAlreadyNotPresent(component.getComponentName()) && components.add(component)) {
 			component.setParent(this);
 			firePropertyChange(CHILD_ADDED_PROP, null, component);
 			updateSubjobVersion();
 			return true;
 		}
-		return false;
 	}
+		return false;
+}
 
 	
 	private boolean isIOSubjobAlreadyNotPresent(String ioSubjobComponentName) {
@@ -278,8 +283,9 @@ public class Container extends Model {
 	public boolean isCurrentGraphIsSubjob() {
 		for (Component component : getChildren()) {
 			if (StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB, component.getComponentName())
-					|| StringUtils.equalsIgnoreCase(Constants.OUTPUT_SUBJOB, component.getComponentName()))
+					|| StringUtils.equalsIgnoreCase(Constants.OUTPUT_SUBJOB, component.getComponentName())){
 				return true;
+			}
 		}
 		return false;
 	}
@@ -318,9 +324,9 @@ public class Container extends Model {
 	}
 
 	public Map<String, String> getGraphRuntimeProperties() {
-		if (graphRuntimeProperties == null)
+		if (graphRuntimeProperties == null){
 			graphRuntimeProperties = new LinkedHashMap<String, String>();
+		}
 		return graphRuntimeProperties;
 	}
-	
 }
