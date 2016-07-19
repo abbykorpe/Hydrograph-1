@@ -1225,21 +1225,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		
 		deleteDebugFiles();
 		enableRunningJobResource() ;
-		closeSocket();
 	}
-	
-	private void closeSocket()  {
-        int portPID;
-        try {
-              portPID = Integer.parseInt(DebugHelper.INSTANCE.getServicePortPID());
-              DebugHelper.INSTANCE.killPortProcess(portPID);
-        } catch (NumberFormatException e) {
-              logger.debug("Socket id is not correct");
-        } catch (IOException e) {
-              logger.debug("Socket is not closed.");
-        }
-  }
-
 	
 	private void deleteDebugFiles() {
 		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");
