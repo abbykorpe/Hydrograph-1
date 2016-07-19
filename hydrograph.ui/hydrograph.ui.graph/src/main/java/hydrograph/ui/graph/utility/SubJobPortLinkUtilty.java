@@ -57,7 +57,7 @@ public class SubJobPortLinkUtilty {
 						linkNew.setTarget(entry.getKey());
 						linkNew.setSource(inputSubComponent); 
 						if(entry.getKey() instanceof UnionallComponent){
-							linkNew.setTargetTerminal(Constants.IN_0);
+							linkNew.setTargetTerminal(Constants.FIXED_INSOCKET_ID);
 						}
 						else{
 							linkNew.setTargetTerminal(Constants.INPUT_SOCKET_TYPE + j);
