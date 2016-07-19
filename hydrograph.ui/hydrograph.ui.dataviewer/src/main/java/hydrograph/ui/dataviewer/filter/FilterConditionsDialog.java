@@ -173,7 +173,7 @@ public class FilterConditionsDialog extends Dialog {
 	 * @param parent
 	 */
 	@Override
-	protected Control createDialogArea(Composite parent) {
+	protected Control createDialogArea(final Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
 		parent.getShell().setText(Messages.DATA_VIEWER + " " + Messages.FILTER);
 		container.setLayout(new GridLayout(1, false));
@@ -190,6 +190,25 @@ public class FilterConditionsDialog extends Dialog {
 		
 		createRemoteTabItem(tabFolder, remoteTableViewer);
 		createLocalTabItem(tabFolder, localTableViewer);
+		
+		parent.getShell().setDefaultButton(remoteOkButton);
+		tabFolder.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				TabItem tabItem = (TabItem) e.item;
+				if (StringUtils.equalsIgnoreCase(tabItem.getText(),Messages.ORIGINAL_DATASET)) {
+					parent.getShell().setDefaultButton(remoteOkButton);
+				} else {
+					parent.getShell().setDefaultButton(localOkButton);
+				}
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// Do nothing
+			}
+		});
 		FilterHelper.INSTANCE.setDataViewerAdapter(dataViewerAdapter,this);
 		FilterHelper.INSTANCE.setDebugDataViewer(debugDataViewer);
 		return container;
