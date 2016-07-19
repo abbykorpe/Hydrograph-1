@@ -90,55 +90,52 @@ public class InputHiveTextFileConverter extends InputConverter {
 		
 	}
 	
-	private HivePartitionFilterType getPartitionFilter()
-	{
-		LinkedHashMap<String, Object> property = (LinkedHashMap<String, Object>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
-		List<String> fieldValueSet = new ArrayList<String>();
-		fieldValueSet.addAll(property.keySet());
-		
-		List<InputHivePartitionColumn> inputHivePartitionColumn=(List<InputHivePartitionColumn>)property.get(fieldValueSet.get(0));
-		HivePartitionFilterType hivePartitionFilterType = new HivePartitionFilterType();
-		List<PartitionColumn> partitionColumn = hivePartitionFilterType.getPartitionColumn();
-		
-		if(inputHivePartitionColumn!=null)
-		{
-			for(InputHivePartitionColumn partcol :inputHivePartitionColumn)
-			{
-			PartitionColumn pcol = new PartitionColumn();
+	private HivePartitionFilterType getPartitionFilter(){
+		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null){
+			LinkedHashMap<String, Object> property = (LinkedHashMap<String, Object>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
+			List<String> fieldValueSet = new ArrayList<String>();
+			fieldValueSet.addAll(property.keySet());
 			
-			pcol.setName(partcol.getName());
-			pcol.setValue(partcol.getValue());
-			if(partcol.getInputHivePartitionColumn()!=null)
-			  {
-				 addPartitionColumn(partcol,pcol);
-			  }
-			partitionColumn.add(pcol);
+			List<InputHivePartitionColumn> inputHivePartitionColumn=(List<InputHivePartitionColumn>)property.get(fieldValueSet.get(0));
+			HivePartitionFilterType hivePartitionFilterType = new HivePartitionFilterType();
+			List<PartitionColumn> partitionColumn = hivePartitionFilterType.getPartitionColumn();
+			
+			if(inputHivePartitionColumn!=null){
+				for(InputHivePartitionColumn partcol :inputHivePartitionColumn)
+				{
+					PartitionColumn pcol = new PartitionColumn();
+					pcol.setName(partcol.getName());
+					pcol.setValue(partcol.getValue());
+					if(partcol.getInputHivePartitionColumn()!=null){
+						 addPartitionColumn(partcol,pcol);
+					  }
+					partitionColumn.add(pcol);
+				}
 			}
+			return hivePartitionFilterType;
 		}
-		return hivePartitionFilterType;
+		return null;
 	}
 	
-	private void  addPartitionColumn(InputHivePartitionColumn partcol,PartitionColumn pcol)
-	{
+	private void addPartitionColumn(InputHivePartitionColumn partcol,PartitionColumn pcol){
 		InputHivePartitionColumn partitionColumn_rec=partcol.getInputHivePartitionColumn();
 		PartitionColumn partc = new PartitionColumn();
-		
 		partc.setName(partitionColumn_rec.getName());
 		partc.setValue(partitionColumn_rec.getValue());
 		pcol.setPartitionColumn(partc);
-		if(partitionColumn_rec.getInputHivePartitionColumn()!=null )
-		{
+		
+		if(partitionColumn_rec.getInputHivePartitionColumn()!=null){
 			if(partitionColumn_rec.getInputHivePartitionColumn().getValue()!="")
-			{
-		    addPartitionColumn(partitionColumn_rec,partc);
-			}
+				{
+			    addPartitionColumn(partitionColumn_rec,partc);
+				}
 		}
 	}
 	
 	/*
 	 * returns hiveType
 	 */
-	protected HiveType getHiveType(String propertyName) {
+	protected HiveType getHiveType(String propertyName){
 		logger.debug("Getting HypeType Value for {}={}", new Object[] {
 				propertyName, properties.get(propertyName) });
 		if (properties.get(propertyName) != null) {
@@ -154,7 +151,7 @@ public class InputHiveTextFileConverter extends InputConverter {
 	/*
 	 * returns hivePathType
 	 */
-	protected HivePathType getHivePathType(String propertyName) {
+	protected HivePathType getHivePathType(String propertyName){
 		logger.debug("Getting HypeType Value for {}={}", new Object[] {
 				propertyName, properties.get(propertyName) });
 		if (properties.get(propertyName) != null) {
@@ -170,40 +167,38 @@ public class InputHiveTextFileConverter extends InputConverter {
 	/*
 	 * returns HivePartitionFieldsType
 	 */
-	private HivePartitionFieldsType getPartitionKeys() {
-		//List<String> fieldValueSet = (List<String>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
-		LinkedHashMap<String, Object> property = (LinkedHashMap<String, Object>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
-		Set<String> fieldValueSet = new HashSet<String>();
-		fieldValueSet=(Set<String>) property.keySet();
-		
-		HivePartitionFieldsType hivePartitionFieldsType = new HivePartitionFieldsType();
-		PartitionFieldBasicType partitionFieldBasicType = new PartitionFieldBasicType();
-		hivePartitionFieldsType.setField(partitionFieldBasicType);
-
-		if (fieldValueSet != null) {
-		itr = fieldValueSet.iterator(); 
-		if(itr.hasNext())
+	private HivePartitionFieldsType getPartitionKeys(){
+		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null)
 		{
-		partitionFieldBasicType.setName((String)itr.next());
+			LinkedHashMap<String, Object> property = (LinkedHashMap<String, Object>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
+			Set<String> fieldValueSet = new HashSet<String>();
+			fieldValueSet=(Set<String>) property.keySet();
+			
+			HivePartitionFieldsType hivePartitionFieldsType = new HivePartitionFieldsType();
+			PartitionFieldBasicType partitionFieldBasicType = new PartitionFieldBasicType();
+			hivePartitionFieldsType.setField(partitionFieldBasicType);
+	
+			if (fieldValueSet != null){
+				itr = fieldValueSet.iterator(); 
+					if(itr.hasNext()){
+					partitionFieldBasicType.setName((String)itr.next());
+					}
+					if(itr.hasNext()){
+					addPartitionKey(partitionFieldBasicType);
+					}
+			}
+			return hivePartitionFieldsType;
 		}
-		if(itr.hasNext())
-		{
-		addPartitionKey(partitionFieldBasicType);
-		}
-		}
-		return hivePartitionFieldsType;
+		return null;
 	}
 	
-	private void addPartitionKey(PartitionFieldBasicType partfbasic)
-	{
-	PartitionFieldBasicType field = new PartitionFieldBasicType();
-	field.setName((String)itr.next());
-	partfbasic.setField(field);
-	if(itr.hasNext())
-	{
-	addPartitionKey(field);
-	}
-
+	private void addPartitionKey(PartitionFieldBasicType partfbasic){
+		PartitionFieldBasicType field = new PartitionFieldBasicType();
+		field.setName((String)itr.next());
+		partfbasic.setField(field);
+			if(itr.hasNext()){
+			addPartitionKey(field);
+			}
 	}
 	
 	@Override
