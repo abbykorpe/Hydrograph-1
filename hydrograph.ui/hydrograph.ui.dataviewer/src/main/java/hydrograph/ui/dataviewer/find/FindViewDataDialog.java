@@ -27,8 +27,6 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.TableCursor;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -44,7 +42,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -240,6 +237,7 @@ public class FindViewDataDialog extends Dialog{
 		btnNext.setBounds(81, 0, 78, 25);
 		btnNext.setText("Next");
 		btnNext.setEnabled(false);
+		parent.getShell().setDefaultButton(btnNext);
 		GridData gd_btnNext = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		btnNext.setLayoutData(gd_btnNext);
 		btnNext.addSelectionListener(new SelectionAdapter() {
@@ -541,7 +539,7 @@ public class FindViewDataDialog extends Dialog{
 		label.setText("String Not Found");		
 		label.setVisible(false);
 		
-		closeButton = createButton(parent, CLOSE, "Close", true);
+		closeButton = createButton(parent, CLOSE, "Close", false);
 		closeButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -557,24 +555,9 @@ public class FindViewDataDialog extends Dialog{
 			}
 			@Override
 			public void mouseDown(MouseEvent e) {}
-			
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {}
 		});
-		closeButton.addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent e) {}
-			@Override
-			public void focusGained(FocusEvent e) {
-				if(btnNext.isEnabled() ){
-					btnNext.setFocus();
-					btnNext.notifyListeners(SWT.Selection, new Event());
-				}else{
-					closeButton.setFocus();
-				}
-			}
-		});
-		
 	}
 
 	public int open(FindAction findAction) {
