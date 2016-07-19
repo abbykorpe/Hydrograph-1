@@ -33,15 +33,6 @@ public class TestHelperClass {
 	static Graph graph;
 	public static final String DEFAULT_ENCODING = "UTF-8";
 
-	public static Graph getGraph(String xmlContent) throws JAXBException {
-		context = JAXBContext.newInstance(Graph.class);
-
-		unmarshaller = context.createUnmarshaller();
-
-		return graph = (Graph) unmarshaller.unmarshal(new StringReader(xmlContent));
-
-	}
-
 	public static String getXMLStringFromPath(String path) {
 		File xmlFile = new File(path);
 		Scanner scan;
