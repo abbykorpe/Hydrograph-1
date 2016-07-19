@@ -117,6 +117,10 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 94.#689  [Vibhor Tyagi] Mixed Schema: Validation is not Displayed When Date Format is Left Blank
 95.#817  [Akhilesh Joshi]Clear Button on Filter Window: Record Count is not getting refreshed on Clearing the filter bug medium
 96.#...  [Vibhor Tyagi] MAC & Windows :Find Window Default Focus is not Set Properly
+97.#..   [Ashika Holkar] One should be able to copy the Content displayed on dataset information window
+98.#..   [Rahul Mahajan] Alignment fix on Run Configurations Settings window
+99.#..	 [Nitin Gupta] Fields in filter editor window like operators, field name shouldn’t be case sensitive. If I type ‘like’ in operator text box and move to other text box, it seems it doesn’t recognize the operator value. After I switch to any other field, the input fields like operators, field name should check the text value without considering their case and if they are correct they should be automatically converted to required case. i.e. if I type ‘like’ and switch to other field, the operator field should convert the value to ‘LIKE’
+100.#..  [Sonia Raheja] The Records information shown at the bottom of the data viewer window should be updated to display actual page size when its less than the one defined in preferences. This will probably happen on the last page of the result or when filter result returns records less than page size	
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
