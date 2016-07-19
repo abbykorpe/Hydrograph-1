@@ -41,6 +41,7 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -554,15 +555,18 @@ public class FilterConditionsDialog extends Dialog {
 								FilterHelper.INSTANCE.getConditionalOperatorSelectionListener(conditionsList, 
 										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton),
 								FilterHelper.INSTANCE.getConditionalOperatorModifyListener(conditionsList, 
-										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton));
+										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton),
+										FilterHelper.INSTANCE.getConditionalOperatorFocusListener());
 					}else{
 						combo = addComboInTable(tableViewer, item, CONDITIONAL_OPERATORS, CONDITIONAL_COMBO_PANE, 
 								CONDITIONAL_EDITOR,	cell.getColumnIndex(), new String[]{}, 
 								FilterHelper.INSTANCE.getConditionalOperatorSelectionListener(conditionsList, 
 										fieldsAndTypes, fieldNames, localOkButton, localApplyButton),
 								FilterHelper.INSTANCE.getConditionalOperatorModifyListener(conditionsList, 
-										fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
+										fieldsAndTypes, fieldNames, localOkButton, localApplyButton),
+								FilterHelper.INSTANCE.getConditionalOperatorFocusListener());
 					}
+					
 					
 					if(StringUtils.isNotBlank(dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
 						String fieldsName = dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName();
@@ -620,14 +624,16 @@ public class FilterConditionsDialog extends Dialog {
 								cell.getColumnIndex(), fieldNames, FilterHelper.INSTANCE.getFieldNameSelectionListener(tableViewer, 
 										conditionsList, fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton),
 										FilterHelper.INSTANCE.getFieldNameModifyListener(tableViewer, 
-												conditionsList, fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton));
+												conditionsList, fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton),
+												FilterHelper.INSTANCE.getConditionalOperatorFocusListener());
 					}
 					else {
 						combo = addComboInTable(tableViewer, item, FIELD_NAMES, FIELD_COMBO_PANE, FIELD_EDITOR,
 								cell.getColumnIndex(), fieldNames, FilterHelper.INSTANCE.getFieldNameSelectionListener(tableViewer, 
 										conditionsList, fieldsAndTypes, fieldNames, localOkButton, localApplyButton),
 										FilterHelper.INSTANCE.getFieldNameModifyListener(tableViewer, 
-												conditionsList, fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
+												conditionsList, fieldsAndTypes, fieldNames, localOkButton, localApplyButton),
+												FilterHelper.INSTANCE.getConditionalOperatorFocusListener());
 					}
 				
 					combo.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getFieldName());
@@ -673,7 +679,8 @@ public class FilterConditionsDialog extends Dialog {
 								FilterHelper.INSTANCE.getRelationalOpSelectionListener(conditionsList, 
 										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton),
 								FilterHelper.INSTANCE.getRelationalOpModifyListener(conditionsList, 
-										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton));
+										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton),
+										FilterHelper.INSTANCE.getConditionalOperatorFocusListener());
 					}
 					else{
 						combo = addComboInTable(tableViewer, item, RELATIONAL_OPERATORS, RELATIONAL_COMBO_PANE, RELATIONAL_EDITOR,
@@ -681,7 +688,8 @@ public class FilterConditionsDialog extends Dialog {
 								FilterHelper.INSTANCE.getRelationalOpSelectionListener(conditionsList, 
 										fieldsAndTypes, fieldNames, localOkButton, localApplyButton),
 								FilterHelper.INSTANCE.getRelationalOpModifyListener(conditionsList, 
-										fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
+										fieldsAndTypes, fieldNames, localOkButton, localApplyButton),
+										FilterHelper.INSTANCE.getConditionalOperatorFocusListener());
 					}
 					
 					combo.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getRelationalOperator());
@@ -877,7 +885,7 @@ public class FilterConditionsDialog extends Dialog {
 	
 	private CCombo addComboInTable(TableViewer tableViewer, TableItem tableItem, String comboName, String comboPaneName, 
 			String editorName, int columnIndex,	String[] relationalOperators, SelectionListener dropDownSelectionListener,
-			ModifyListener modifyListener) {
+			ModifyListener modifyListener,FocusListener focusListener) {
 		final Composite buttonPane = new Composite(tableViewer.getTable(), SWT.NONE);
 		buttonPane.setLayout(new FillLayout());
 		final CCombo combo = new CCombo(buttonPane, SWT.NONE);
@@ -887,6 +895,7 @@ public class FilterConditionsDialog extends Dialog {
 		tableItem.setData(comboPaneName, buttonPane);
 		combo.addSelectionListener(dropDownSelectionListener);
 		combo.addModifyListener(modifyListener);
+		combo.addFocusListener(focusListener);
 		new AutoCompleteField(combo, new CComboContentAdapter(), combo.getItems());
 		final TableEditor editor = new TableEditor(tableViewer.getTable());
 		editor.grabHorizontal = true;

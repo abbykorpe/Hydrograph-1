@@ -12,16 +12,12 @@
  ******************************************************************************/
 package hydrograph.ui.dataviewer.filter;
 
-import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.constants.Messages;
-import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
 import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.dataviewer.constants.StatusConstants;
-import hydrograph.ui.dataviewer.datastructures.StatusMessage;
-import java.io.IOException;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +38,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -272,6 +270,32 @@ public class FilterHelper {
 			}
 		};
 		return listener;
+	}
+	
+	/**
+	 * Returns focus-listener object
+	 * @return
+	 */
+	public FocusListener getConditionalOperatorFocusListener() {
+		FocusListener focusListener = new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (e.getSource() instanceof CCombo) {
+					CCombo source = (CCombo) e.getSource();
+					for (String option : source.getItems()) {
+						if (StringUtils.equalsIgnoreCase(source.getText(), option)) {
+							source.setText(option);
+							break;
+						}
+					}
+				}
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) { /* do nothing. */
+			}
+		};
+		return focusListener;
 	}
 	
 	private void processConditionalOperator(CCombo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes,
