@@ -156,7 +156,7 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private String debugFileLocation;
 	private String debugFileName;
-	private Double downlodedFileSize;
+	private double downlodedFileSize;
 
 	private ActionFactory actionFactory;
 
@@ -377,11 +377,11 @@ public class DebugDataViewer extends ApplicationWindow {
 		this.debugFileLocation = debugFileLocation;
 	}
 	
-	public void setDownloadedFileSize(Double downlodedFileSize) {
+	public void setDownloadedFileSize(double downlodedFileSize) {
 		this.downlodedFileSize = downlodedFileSize;
 	}
 	
-	public Double getDownloadedFileSize() {
+	public double getDownloadedFileSize() {
 		return downlodedFileSize;
 	}
 

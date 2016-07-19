@@ -56,7 +56,7 @@ public class DataViewerFileManager {
 
 	private String dataViewerFilePath;
 	private String dataViewerFileName;
-	private Double debugFileSizeInKB;
+	private double debugFileSizeInKB;
 	
 	
 	public DataViewerFileManager(JobDetails jobDetails) {
@@ -130,8 +130,8 @@ public class DataViewerFileManager {
 			}
 			
 			File debugFile = new File(dataViewerDebugFile);
-			Double debugFileSizeInByte = (double) debugFile.length();
-			Double debugFileSizeKB =(debugFileSizeInByte / 1024);
+			double debugFileSizeInByte = (double) debugFile.length();
+			double debugFileSizeKB =(debugFileSizeInByte / 1024);
 		    debugFileSizeInKB = new BigDecimal(debugFileSizeKB).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
 			 
 			 
@@ -192,7 +192,7 @@ public class DataViewerFileManager {
 		return dataViewerFileName;
 	}
 
-	public Double getDebugFileSize() {
+	public double getDebugFileSize() {
 		return debugFileSizeInKB;
 	}
 	private boolean isEmptyDebugCSVFile(String dataViewerFilePath, final String dataViewerFileh) {
