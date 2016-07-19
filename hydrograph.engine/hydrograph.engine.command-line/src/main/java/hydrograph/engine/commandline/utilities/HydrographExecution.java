@@ -14,16 +14,18 @@ package hydrograph.engine.commandline.utilities;
 
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hydrograph.engine.core.commandlineparser.CLIParser;
+
 import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.core.HydrographRuntimeService;
 import hydrograph.engine.core.props.PropertiesLoader;
 import hydrograph.engine.core.xmlparser.HydrographXMLInputService;
+import hydrograph.engine.core.xmlparser.XmlParsingUtils;
+import hydrograph.engine.core.xmlparser.parametersubstitution.CommandLineOptionsProcessor;
+import hydrograph.engine.utilities.GeneralUtilities;
 
 public class HydrographExecution {
 
@@ -45,32 +47,35 @@ public class HydrographExecution {
 
 	public static void main(String args[]) throws Exception {
 		
-		if(CLIParser.isArgumentOptionPresent(args, "help")){
-			CLIParser.printUsage();
-		}else
-		{
+		
+		if(GeneralUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_HELP)){
+			
+			CommandLineOptionsProcessor.printUsage();
+		}
+		else{
 		HydrographExecution execution = new HydrographExecution();
 		execution.run(args);
 		}
+		
 	}
 
 	public void run(String[] args) throws Exception {
 		hydrographJob = createHydrographJob(args);
 		bhsDebug = createHydrographDebugInfo(args);
 		initialization(args, hydrographJob, bhsDebug,
-				CLIParser.getJobId(args),
-				CLIParser.getBasePath(args));
+				XmlParsingUtils.getJobId(args),
+				XmlParsingUtils.getBasePath(args));
 		prepareToExecute();
 		finalExecute();
 	}
 
-	private HydrographJob createHydrographJob(String[] args) throws JAXBException, ParseException {
+	private HydrographJob createHydrographJob(String[] args) throws JAXBException {
 		LOG.info("Invoking input service");
 		return hydrographXmlInputService.parseHydrographJob(
 				propertiesLoader.getInputServiceProperties(), args);
 	}
 
-	private HydrographDebugInfo createHydrographDebugInfo(String[] args) throws JAXBException, ParseException {
+	private HydrographDebugInfo createHydrographDebugInfo(String[] args) throws JAXBException {
 		LOG.info("Invoking input service");
 		return hydrographXmlInputService.parseHydrographDebugInfo(
 				propertiesLoader.getInputServiceProperties(), args);
@@ -84,12 +89,12 @@ public class HydrographExecution {
 				bhsDebug, jobId,basePath);
 	}
 
-	private void prepareToExecute() throws ParseException {
+	private void prepareToExecute()  {
 		runtimeService.prepareToExecute();
 		LOG.info("Preparation completed. Now starting execution");
 	}
 
-	private void finalExecute() throws ParseException {
+	private void finalExecute()  {
 		try {
 			runtimeService.execute();
 		} finally {

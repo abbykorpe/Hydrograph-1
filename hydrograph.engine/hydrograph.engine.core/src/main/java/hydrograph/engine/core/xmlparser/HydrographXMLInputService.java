@@ -18,13 +18,11 @@ import java.util.Properties;
 
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import hydrograph.engine.core.commandlineparser.CLIParser;
 import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.core.HydrographInputService;
@@ -47,17 +45,18 @@ public class HydrographXMLInputService implements HydrographInputService {
 		hydrographJobGenerator = new HydrographJobGenerator();
 	}
 
-	public HydrographJob parseParameters(String[] args) throws JAXBException, ParseException {
+	public HydrographJob parseParameters(String[] args) throws JAXBException {
 		return parseHydrographJob(PropertiesLoader.getInstance()
 				.getRuntimeServiceProperties(), args);
 	}
 
 	@Override
 	public HydrographJob parseHydrographJob(Properties config, String[] args)
-			throws JAXBException, ParseException {
+			throws JAXBException {
 		HydrographJob hydrographJob = null;
 		this.config = config;
-		String path = CLIParser.getXmlPath(args, config);
+		//String path = CLIParser.getXmlPath(args, config);
+		String path=XmlParsingUtils.getXMLPath(args, config);
 		LOG.info("Parsing for graph file: " + path + " started");
 		ParameterSubstitutor parameterSubstitutor = new ParameterSubstitutor(
 				getUserParameters(args));
@@ -84,15 +83,15 @@ public class HydrographXMLInputService implements HydrographInputService {
 
 	@Override
 	public HydrographDebugInfo parseHydrographDebugInfo(Properties config, String[] args)
-			throws JAXBException, ParseException {
+			throws JAXBException {
 		HydrographDebugInfo hydrographDebugInfo = null;
 		this.config = config;
-		String path = CLIParser.getDebugXmlPath(args, config);
+		String path = XmlParsingUtils.getDebugXMLPath(args, config);
 		if (path != null) {
 			
-			if(CLIParser.getJobId(args)==null)
+			if(XmlParsingUtils.getJobId(args)==null)
 				throw new HydrographXMLInputServiceException("job id is required for Debugging");
-			if(CLIParser.getBasePath(args)==null)
+			if(XmlParsingUtils.getBasePath(args)==null)
 				throw new HydrographXMLInputServiceException("base path is required for Debugging");
 			LOG.info("Parsing for Debug graph file: " + path + " started");
 			ParameterSubstitutor parameterSubstitutor = new ParameterSubstitutor(
@@ -131,7 +130,7 @@ public class HydrographXMLInputService implements HydrographInputService {
 		return XmlUtilities.getXMLStringFromDocument(expandedXmlDocument);
 	}
 
-	private UserParameters getUserParameters(String[] args) throws ParseException {
+	private UserParameters getUserParameters(String[] args)   {
 		try {
 			return new UserParameters(args);
 		} catch (IOException e) {
