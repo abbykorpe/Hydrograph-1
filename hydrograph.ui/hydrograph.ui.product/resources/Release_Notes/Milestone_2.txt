@@ -120,7 +120,8 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 97.#..   [Ashika Holkar] One should be able to copy the Content displayed on dataset information window
 98.#..   [Rahul Mahajan] Alignment fix on Run Configurations Settings window
 99.#..	 [Nitin Gupta] Fields in filter editor window like operators, field name shouldn’t be case sensitive. If I type ‘like’ in operator text box and move to other text box, it seems it doesn’t recognize the operator value. After I switch to any other field, the input fields like operators, field name should check the text value without considering their case and if they are correct they should be automatically converted to required case. i.e. if I type ‘like’ and switch to other field, the operator field should convert the value to ‘LIKE’
-100.#..  [Sonia Raheja] The Records information shown at the bottom of the data viewer window should be updated to display actual page size when its less than the one defined in preferences. This will probably happen on the last page of the result or when filter result returns records less than page size	
+100.#..  [Sonia Raheja] The Records information shown at the bottom of the data viewer window should be updated to display actual page size when its less than the one defined in preferences. This will probably happen on the last page of the result or when filter result returns records less than page size
+101.#..  [Sonia Raheja,Shashank Karnik]Focus is not Set to 'OK' Button on Hitting 'Enter' Key	
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
