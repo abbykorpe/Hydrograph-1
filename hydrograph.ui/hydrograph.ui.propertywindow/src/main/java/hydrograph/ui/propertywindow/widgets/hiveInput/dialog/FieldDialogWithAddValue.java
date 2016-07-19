@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.collections.ListUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -22,10 +24,13 @@ import org.eclipse.swt.widgets.TableItem;
 public class FieldDialogWithAddValue extends FieldDialog {
 
 	private Map<String, List<InputHivePartitionColumn>> fieldsMap;
+	private PropertyDialogButtonBar propertyDialogButtonBar;
+	private boolean isAnyUpdatePerformed;
 	
-	public FieldDialogWithAddValue(Shell parentShell,
-			PropertyDialogButtonBar propertyDialogButtonBar) {
+	public FieldDialogWithAddValue(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar) {
+		
 		super(parentShell, propertyDialogButtonBar);
+		this.propertyDialogButtonBar=propertyDialogButtonBar;
 	}
 
 	
@@ -47,7 +52,7 @@ public class FieldDialogWithAddValue extends FieldDialog {
 				List<InputHivePartitionColumn> persitedList= new ArrayList<>();
 				if(!fieldsMap.isEmpty()){
 					
-					ArrayList arrayList = new ArrayList(fieldsMap.keySet());
+					ArrayList<String> arrayList = new ArrayList<>(fieldsMap.keySet());
 					if(null!=fieldsMap.get(arrayList.get(0)) && !fieldsMap.get(arrayList.get(0)).isEmpty()){
 						persitedList.addAll( fieldsMap.get(arrayList.get(0)));
 					}
@@ -68,6 +73,12 @@ public class FieldDialogWithAddValue extends FieldDialog {
 				addingValue.open();
 				
 				addingValue.setProperties(fieldsMap);
+				
+				if(persitedList.size()!=fieldsMap.get(fieldsMap.keySet().iterator().next().toString()).size()){
+					
+					isAnyUpdatePerformed=true;
+				}
+				
 				}else{
 					
 					if(createErrorDialog().open()==SWT.OK){}
@@ -102,10 +113,40 @@ public class FieldDialogWithAddValue extends FieldDialog {
 							new ArrayList<InputHivePartitionColumn>());
 				}
 			}
+		}else if(items.length!=fieldsMap.size()||isItemsNameChanged(items,fieldsMap.keySet())){
+			
+			List<InputHivePartitionColumn> incomingList = fieldsMap.get(fieldsMap.keySet().iterator().next().toString());
+			fieldsMap.clear();
+			
+			for (TableItem tableItem : items) {
+				fieldsMap.put((String) tableItem.getText(),
+						incomingList);
+			}
+			
 		}
+		
+			
+		if(isAnyUpdatePerformed){
+			propertyDialogButtonBar.enableApplyButton(true);
+		}
+		
 		super.okPressed();
 	}
 	
+	private boolean isItemsNameChanged(TableItem[] items, Set<String> keySet) {
+		
+		List<String> tempList = new ArrayList<>();
+		for (TableItem tableItem : items) {
+			tempList.add(tableItem.getText());
+		}
+		
+		if(!ListUtils.isEqualList(tempList, new ArrayList<>(keySet))){
+			return true;
+		}
+		return false;
+	}
+
+
 	public Map<String, List<InputHivePartitionColumn>> getFieldDialogRuntimeProperties(){
 		
 		return this.fieldsMap;
