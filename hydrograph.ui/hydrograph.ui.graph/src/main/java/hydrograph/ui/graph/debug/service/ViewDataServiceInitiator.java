@@ -17,6 +17,7 @@ import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.UnknownHostException;
@@ -35,7 +36,10 @@ public class ViewDataServiceInitiator {
 	private static final String DRIVER_CLASS = " hydrograph.server.debug.service.DebugService";
 	public static void startService(){	
 		try{
-			startServer();
+			String portId=DebugHelper.INSTANCE.getServicePortPID();
+			if(portId == null){
+				startServer();	
+			}
 		}catch(BindException bindException){
 			logger.error("Server is already started on port or is used by other process", bindException);
 		} catch (InterruptedException interruptedException) {
@@ -48,10 +52,9 @@ public class ViewDataServiceInitiator {
 	}
 
 	private static void startServer() throws InterruptedException, IOException {
-		if(OSValidator.isWindows()){
-			String command= "java -classpath " + getInstallationConfigPath().trim() + ";" + getInstallationPath() + DRIVER_CLASS;
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", command});
-			builder.start();
+		if(OSValidator.isWindows()){			
+			String command= "cmd /c start \"\" /min " + getInstallationConfigPath2() ;
+			Runtime.getRuntime().exec(command,null,new File(getServiceInstallationDir()));
 		}
 		else if(OSValidator.isMac()){
 			String command="java -cp " + getInstallationConfigPath().trim() + ":" + getInstallationPath() + DRIVER_CLASS;
@@ -84,4 +87,24 @@ public class ViewDataServiceInitiator {
 		
 		return path + "config/service/config" ;
 	}
+	private static String getInstallationConfigPath2()  {
+		String path = Platform.getInstallLocation().getURL().getPath();
+		if(StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/") && OSValidator.isWindows()){
+			path = StringUtils.substring(path, 1);
+		}
+		
+		return path + "config/service/startdebugservice.vbs" ;
+	}
+	
+	
+	private static String getServiceInstallationDir()  {
+		String path = Platform.getInstallLocation().getURL().getPath();
+		if(StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/") && OSValidator.isWindows()){
+			path = StringUtils.substring(path, 1);
+		}
+		
+		return path + "config/service" ;
+	}
+	
+	
 }
