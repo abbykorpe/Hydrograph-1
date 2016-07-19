@@ -9,6 +9,8 @@ Issues/Defects fixed:
 Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 1.#..   [Ashika Holkar] One should be able to copy the Content displayed on dataset information window
 2.#..   [Rahul Mahajan] Alignment fix on Run Configurations Settings window
+3.#..   [Sonia Raheja] The Records information shown at the bottom of the data viewer window should be updated to display actual page size when its less than
+the one defined in preferences. This will probably happen on the last page of the result or when filter result returns records less than page size
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
