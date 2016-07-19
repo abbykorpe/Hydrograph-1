@@ -159,7 +159,7 @@ public class RunConfigDialog extends Dialog {
 		lblDebug.setText("View Data");
 
 		final Button isDebugCheck = new Button(compositeRunMode, SWT.CHECK);
-		isDebugCheck.setBounds(190, 21, 81, 16);
+		isDebugCheck.setBounds(190, 21, 13, 16);
 		formToolkit.adapt(isDebugCheck, true, true);
 
 		final Label lblBasePath = new Label(compositeRunMode, SWT.NONE);
