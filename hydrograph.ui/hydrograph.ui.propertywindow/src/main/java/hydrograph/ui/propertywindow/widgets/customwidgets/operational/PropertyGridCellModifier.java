@@ -31,7 +31,8 @@ import org.eclipse.swt.widgets.Item;
 
 public class PropertyGridCellModifier implements ICellModifier {
 	private Viewer viewer;
-	TransformDialog transformDialog;	
+	TransformDialog transformDialog;
+	OperationClassDialog operationClassDialog; 
 	/** The Constant PROPERTY_NAME. */
 	private static final String PROPERTY_NAME = "Source";
 
@@ -52,7 +53,13 @@ public class PropertyGridCellModifier implements ICellModifier {
 		this.viewer = viewer;
 		this.propertyDialogButtonBar=propertyDialogButtonBar;
 	}
-
+    
+	public PropertyGridCellModifier(OperationClassDialog operationClassDialog,Viewer viewer,PropertyDialogButtonBar propertyDialogButtonBar) {
+		this.viewer = viewer;
+		this.propertyDialogButtonBar=propertyDialogButtonBar;
+		this.operationClassDialog=operationClassDialog;
+	}
+	
 	public PropertyGridCellModifier(TransformDialog transformDialogNew ,Viewer viewer) {
 		this.viewer = viewer;
 		this.transformDialog=transformDialogNew;
@@ -133,6 +140,10 @@ public class PropertyGridCellModifier implements ICellModifier {
 			if(propertyDialogButtonBar!=null ){
 				propertyDialogButtonBar.enableApplyButton(true);
 			}
+			if(operationClassDialog!=null)
+			{
+			operationClassDialog.checkNameValueFieldBlankOrNot();	
+			}	
 		}	
 		if(Messages.PROPERTY_VALUE.equals(property))
 		{	
@@ -140,6 +151,10 @@ public class PropertyGridCellModifier implements ICellModifier {
 			if(propertyDialogButtonBar!=null ){
 				propertyDialogButtonBar.enableApplyButton(true);
 			}
+			if(operationClassDialog!=null)
+			{
+			operationClassDialog.checkNameValueFieldBlankOrNot();	
+			}	
 		}
 
 

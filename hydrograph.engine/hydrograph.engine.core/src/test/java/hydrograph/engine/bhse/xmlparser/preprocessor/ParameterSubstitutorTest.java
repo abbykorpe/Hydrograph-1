@@ -41,9 +41,6 @@ public class ParameterSubstitutorTest {
 			} catch (IOException e) {
 				LOG.error("",e);
 				throw new RuntimeException(e);
-			} catch (ParseException e) {
-				LOG.error("",e);
-				throw new RuntimeException(e);
 			}
 
 			String xmlContents = parameterSubstitutor.substitute(XmlParsingUtils.getXMLStringFromPath(args[1]));

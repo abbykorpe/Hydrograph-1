@@ -14,9 +14,12 @@
  
 package hydrograph.ui.help.aboutDialog;
 
+import hydrograph.ui.help.Activator;
+
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.MenuManager;
@@ -65,6 +68,7 @@ import org.osgi.framework.Bundle;
  *
  */
 public class CustomAboutDialog extends TrayDialog {
+	private static final String ECLIPSE_BUILD_ID = "eclipse.buildId";
 	private final static int MAX_IMAGE_WIDTH_FOR_TEXT = 250;
 	private final static int TEXT_MARGIN = 5;
 
@@ -91,7 +95,7 @@ public class CustomAboutDialog extends TrayDialog {
 	 */
 	public CustomAboutDialog(Shell parentShell) {
 		super(parentShell);
-
+		setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL | SWT.WRAP); 
 		product = Platform.getProduct();
 
 		if (product != null) {
@@ -143,30 +147,6 @@ public class CustomAboutDialog extends TrayDialog {
 	}
 
 	/**
-	 * Add buttons to the dialog's button bar.
-	 * 
-	 * Subclasses should override.
-	 * 
-	 * @param parent
-	 *            the button bar composite
-	 */
-	//	    protected void createButtonsForButtonBar(Composite parent) {
-	//	        parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-	//
-	//	        createButton(parent, DETAILS_ID, WorkbenchMessages.AboutDialog_DetailsButton, false); 
-	//
-	//	        Label l = new Label(parent, SWT.NONE);
-	//	        l.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-	//	        GridLayout layout = (GridLayout) parent.getLayout();
-	//	        layout.numColumns++;
-	//	        layout.makeColumnsEqualWidth = false;
-	//
-	//	        Button b = createButton(parent, IDialogConstants.OK_ID,
-	//	                IDialogConstants.OK_LABEL, true);
-	//	        b.setFocus();
-	//	    }
-
-	/**
 	 * Creates and returns the contents of the upper part 
 	 * of the dialog (above the button bar).
 	 *
@@ -191,7 +171,11 @@ public class CustomAboutDialog extends TrayDialog {
 
 
 				if (aboutText != null) {
-					item = AboutTextManager.scan(aboutText);
+					String buildNumber = System.getProperty(ECLIPSE_BUILD_ID);
+					if(StringUtils.isBlank(buildNumber)){
+						buildNumber = Platform.getBundle(Activator.PLUGIN_ID).getVersion().toString();
+					}
+					item = AboutTextManager.scan(aboutText + "\n" + "Build Number: " + buildNumber);
 				}
 			}
 
@@ -426,7 +410,13 @@ public class CustomAboutDialog extends TrayDialog {
 	protected boolean isResizable() {
 		return true;
 	}
-
+	
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		// create OK and Cancel buttons by default
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+				true);
+	}
 }
 
 

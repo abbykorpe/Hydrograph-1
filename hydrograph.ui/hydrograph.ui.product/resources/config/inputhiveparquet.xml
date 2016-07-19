@@ -16,9 +16,9 @@
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd">
 	<tns:component paletteIconPath="/icons/hive_palette.png" canvasIconPath="/icons/hive_canvas.png"
 		name="IHiveParquet" nameInPalette="Hive Parquet" defaultNamePrefix="IHiveParquet" 
-		description="Reads parquet file as input and performs Hive job."
+		description="Used to read data from Hive tables stored in Parquet format."
 		helpFilePath="/hydrograph.ui.help/html/Components/Input_Hive_Parquet.html"
-		acronym="HPrqt">
+		acronym="IHPrq">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
@@ -39,29 +39,31 @@
 		<tns:property dataType="string" name="databaseName" value="" renderer="DATABASE_NAME_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Hive Database Name provided by the user">
-			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 			
 		<tns:property dataType="string" name="tableName" value="" renderer="TABLE_NAME_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Hive Table Name provided by the user">
-			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 			
 		<tns:property dataType="string" name="externalTablePath" value="" renderer="EXTERNAL_TABLE_PATH_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL" propertyHelpText="Displays the location of the file either Remote/Local."/>
 		
-		<tns:property dataType="string" name="partitionKeys" renderer="PARTITION_KEYS_WIDGET"
+		<tns:property dataType="string" name="partitionKeys" renderer="PARTITION_KEYS_WIDGET_INPUT_HIVE"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="OPTIONAL" propertyHelpText="Displays the user specific partition keys">
-			<tns:validator>KEY_FIELDS_VALIDATOR</tns:validator>
+			<tns:validator>HIVE_KEY_FIELDS_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="OPTIONAL" propertyHelpText="Used to override runtime \nHadoop configurations specific to \nthis component at run time."/>
-			
+			usage="OPTIONAL" propertyHelpText="Used to override runtime \nHadoop configurations specific to \nthis component at run time.">
+			<tns:validator>RUNTIME_PROPERTY_VALIDATOR</tns:validator>
+		</tns:property>
+		
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Specifies the execution sequence of \nthis component in the job flow.">

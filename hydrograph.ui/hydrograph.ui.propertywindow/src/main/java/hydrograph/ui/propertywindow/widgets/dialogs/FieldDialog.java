@@ -74,6 +74,8 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.slf4j.Logger;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 
 
 /**
@@ -126,7 +128,8 @@ public class FieldDialog extends Dialog {
 
 	// Add New Property After Validating old properties
 	private void addNewProperty(TableViewer tv, String fieldName) {
-
+		if (isPropertyAlreadyExists(fieldName))
+			return;
 		isAnyUpdatePerformed = true;
 		FilterProperties filter = new FilterProperties();
 		if (fieldName == null)
@@ -271,9 +274,9 @@ public class FieldDialog extends Dialog {
 		lblPropertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
 	}
 
-	private void addButtonPanel(Composite container) {
+	protected Composite addButtonPanel(Composite container) {
 		Composite composite_1 = new Composite(container, SWT.NONE);
-		composite_1.setLayout(new GridLayout(4, false));
+		composite_1.setLayout(new GridLayout(5, false));
 		ColumnLayoutData cld_composite_1 = new ColumnLayoutData();
 		cld_composite_1.horizontalAlignment = ColumnLayoutData.RIGHT;
 		cld_composite_1.heightHint = 28;
@@ -305,6 +308,7 @@ public class FieldDialog extends Dialog {
 		deleteButton.setEnabled(false);
 		upButton.setEnabled(false);
 		downButton.setEnabled(false);
+		return composite_1;
 	}
 
 	private void attachDownButtonListerner(Label downButton) {
@@ -440,13 +444,7 @@ public class FieldDialog extends Dialog {
 			public void mouseUp(MouseEvent e) {
 				targetTable.getParent().setFocus();
 				addNewProperty(targetTableViewer, null);
-				if (propertyList.size() >= 1) {
-					deleteButton.setEnabled(true);
-				} 
-				if (propertyList.size() >= 2) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				}
+				enableControlButons();
 			}
 
 		});
@@ -483,13 +481,7 @@ public class FieldDialog extends Dialog {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				addNewProperty(targetTableViewer, null);
-				if (propertyList.size() >= 1) {
-					deleteButton.setEnabled(true);
-				} 
-				if (propertyList.size() >= 2) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				}
+				enableControlButons();
 			}
 
 			@Override
@@ -550,15 +542,8 @@ public class FieldDialog extends Dialog {
 		dropTarget.addDropListener(new DropTargetAdapter() {
 			public void drop(DropTargetEvent event) {
 				for (String fieldName : getformatedData((String) event.data))
-					if (!isPropertyAlreadyExists(fieldName))
 						addNewProperty(targetTableViewer, fieldName);
-				if (propertyList.size() >= 1) {
-					deleteButton.setEnabled(true);
-				}
-				if (propertyList.size() >= 2) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				}
+				enableControlButons();
 			}
 		});
 
@@ -567,6 +552,14 @@ public class FieldDialog extends Dialog {
 	public void createSourceTable(Composite container) {
 
 		sourceTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
+		sourceTableViewer.addDoubleClickListener(new IDoubleClickListener() {
+			public void doubleClick(DoubleClickEvent event) {
+				if(sourceTable.getSelection().length==1){
+				addNewProperty(targetTableViewer, sourceTable.getSelection()[0].getText());
+				enableControlButons();
+				}
+			}
+		});
 		sourceTable = sourceTableViewer.getTable();
 		sourceTable.setLinesVisible(true);
 		sourceTable.setHeaderVisible(true);
@@ -768,5 +761,19 @@ public class FieldDialog extends Dialog {
 		}else{
 			return super.close();
 		}		
+	}
+
+	private void enableControlButons() {
+		if (propertyList.size() >= 1) {
+			deleteButton.setEnabled(true);
+		}
+		if (propertyList.size() >= 2) {
+			upButton.setEnabled(true);
+			downButton.setEnabled(true);
+		}
+	}
+	
+	protected TableViewer getTargetTableViewer() {
+		return targetTableViewer;
 	}
 }

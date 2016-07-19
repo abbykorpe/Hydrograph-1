@@ -1,3 +1,4 @@
+
 /********************************************************************************
  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +15,7 @@
  
 package hydrograph.ui.propertywindow.widgets.listeners.grid;
 
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTSelectionTaskListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
@@ -21,7 +23,7 @@ import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Widget;
 
@@ -41,7 +43,7 @@ public class ELTGridAddSelectionListener extends ELTSelectionTaskListener{
 	private int rowSequence=0;
 	@Override
 	public int getListenerType() {
-      return SWT.MouseUp;
+      return SWT.Selection;
 	}
 	
 	@Override
@@ -49,15 +51,18 @@ public class ELTGridAddSelectionListener extends ELTSelectionTaskListener{
 		propertyDialogButtonBar.enableApplyButton(true);
 		table=(Table)widgets[0];
 		table.getParent().getShell().setFocus();
-		((Label) widgets[1]).setEnabled(true);
+		((Button) widgets[1]).setEnabled(true);
 		ELTGridDetails eltGridDetails = (ELTGridDetails)helpers.get(HelperType.SCHEMA_GRID);
 		if (eltGridDetails.getGrids().size() >= 1) {
-			((Label) widgets[2]).setEnabled(true);
-			((Label) widgets[3]).setEnabled(true);
+			((Button) widgets[2]).setEnabled(true);
+			((Button) widgets[3]).setEnabled(true);
 		}
 		GridWidgetCommonBuilder gridCommonBuilder = eltGridDetails.getGridWidgetCommonBuilder();
 		gridCommonBuilder.setRowSequence(rowSequence);
 		gridCommonBuilder.createDefaultSchema(eltGridDetails.getGrids(), eltGridDetails.getTableViewer(), eltGridDetails.getLabel());
 		rowSequence++;
+		((Component)helpers.get(HelperType.COMPONENT)).setLatestChangesInSchema(true);
 	}
 }
+
+

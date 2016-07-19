@@ -20,12 +20,15 @@ import hydrograph.ui.propertywindow.filemixedschema.ELTMixedSchemeWidget;
 import hydrograph.ui.propertywindow.fixedwidthschema.ELTFixedWidget;
 import hydrograph.ui.propertywindow.fixedwidthschema.TransformSchemaWidget;
 import hydrograph.ui.propertywindow.generaterecords.schema.GenerateRecordsGridWidget;
+import hydrograph.ui.propertywindow.hivesparqueschema.HiveParqueSchemaWidget;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.DelimiterWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.DropDownWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.ELTBrowseWorkspaceWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTComponentBaseType;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTComponentNameWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTComponentType;
@@ -38,6 +41,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.ELTMatchValueWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTOperationClassWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTRetentionLogicWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTXmlPropertiesContainer;
+import hydrograph.ui.propertywindow.widgets.customwidgets.HiveInputSingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.SingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithLabelWidget;
@@ -68,11 +72,13 @@ public class WidgetFactory {
 	
 	public enum Widgets{
 		SCHEMA_WIDGET(ELTGenericSchemaGridWidget.class),
+		HIVE_PARQUET_WIDGET(HiveParqueSchemaWidget.class),
 		FIXED_WIDGET(ELTFixedWidget.class),
 		MIXED_SCHEME(ELTMixedSchemeWidget.class),		
 		TRANSFORM_SCHEMA_WIDGET(TransformSchemaWidget.class),
 		GENERATE_RECORDS_SCHEMA_WIDGET(GenerateRecordsGridWidget.class),
 		FILE_PATH_WIDGET(ELTFilePathWidget.class),
+		BROWSE_WORKSPACE_WIDGET(ELTBrowseWorkspaceWidget.class),
 		COMPONENT_NAME_WIDGET(ELTComponentNameWidget.class),
 		
 		COMPONENT_BASETYPE_WIDGET(ELTComponentBaseType.class),
@@ -87,7 +93,7 @@ public class WidgetFactory {
 		OVERWRITE_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getOverWriteWidgetConfig()),
 
 		TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET(TextBoxWithIsParameterCheckBoxWidget.class,WidgetHelper.INSTANCE.getSequenceFieldWidgetConfig()),
-		DELIMETER_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getDelimiterWidgetConfig()),
+		DELIMETER_WIDGET(DelimiterWidget.class, WidgetHelper.INSTANCE.getDelimiterWidgetConfig()),
 		PHASE_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getPhaseWidgetConfig()),
 		QUOTE_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getQuoteWidgetConfig()),
 		DATABASE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getDatabaseNameWidgetConfig()),
@@ -100,6 +106,7 @@ public class WidgetFactory {
 		COLUMN_NAME_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getColumnNameConfig()),
 		PARTITION_KEYS_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getPartitionKeysConfig()),
 		
+		PARTITION_KEYS_WIDGET_INPUT_HIVE(HiveInputSingleColumnWidget.class, WidgetHelper.INSTANCE.getPartitionKeysConfigInputHive()),
 		OPERATIONAL_CLASS_WIDGET(ELTOperationClassWidget.class, WidgetHelper.INSTANCE.getOperationClassForFilterWidgetConfig()),
 		RUNTIME_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class,WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.RUNTIME_PROPERTY_LABEL,Constants.RUNTIME_PROPERTIES_WINDOW_LABEL)),
 		SUBJOB_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class,WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.SUBJOB_PROPERTY_LABEL,Constants.SUBJOB_WINDOW_LABEL)),

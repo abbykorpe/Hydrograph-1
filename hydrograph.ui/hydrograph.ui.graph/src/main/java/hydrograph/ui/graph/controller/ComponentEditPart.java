@@ -19,7 +19,6 @@ import hydrograph.ui.common.component.config.Property;
 import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.LookupConfigProperty;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.figure.ComponentBorder;
 import hydrograph.ui.graph.figure.ComponentFigure;
@@ -28,7 +27,6 @@ import hydrograph.ui.graph.figure.PortFigure;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.ComponentLabel;
 import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.PortTypeEnum;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
 import hydrograph.ui.graph.propertywindow.ELTPropertyWindow;
 import hydrograph.ui.graph.utility.SubJobUtility;
@@ -128,7 +126,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			try {
 				AbstractEditPolicy editPolicy = (AbstractEditPolicy) Class.forName(generalPolicy.getValue()).newInstance();
 				installEditPolicy(generalPolicy.getName(), editPolicy);
-			} catch (Exception exception) {
+			} catch (ClassNotFoundException| InstantiationException | IllegalAccessException exception) {
 				logger.error("Failed to apply policies", exception);
 				throw exception;
 			}
@@ -328,7 +326,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 							+ getCastedModel().getSize().width);
 			if(eltPropertyWindow.isPropertyChanged() && Constants.SUBJOB_COMPONENT.equalsIgnoreCase(getCastedModel().getComponentName())){
 				SubJobUtility subJobUtility=new SubJobUtility();
-				subJobUtility.updateSubgjobProperty((ComponentEditPart)this,null,null);
+				subJobUtility.updateSubjobProperty((ComponentEditPart)this,null,null);
 			} 
 			if(eltPropertyWindow.isPropertyChanged())
 			{updateSubjobVersion();}
@@ -336,8 +334,11 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			
 			changePortSettings();
 			
-			if(!StringUtils.equals(Constants.UPDATE_AVAILABLE,currentStatus))
-			updateComponentStatus();			
+			adjustComponentLabelPosition();
+			
+			if(!StringUtils.equals(Constants.UPDATE_AVAILABLE,currentStatus)){
+				updateComponentStatus();			
+			}
 			refresh();
 			
 			adjustExistingPorts();
@@ -410,7 +411,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				adjustExistingPorts();
 				getCastedModel().incrementLeftSidePorts(newInPortCount, prevInPortCount);
 
-			}else if(prevInPortCount > newInPortCount){
+			}else{
 				//decrement the ports
 				List<String> portsToBeRemoved = populateInPortsToBeRemoved(prevInPortCount, newInPortCount);
 				getCastedModel().decrementPorts(portsToBeRemoved);
@@ -453,7 +454,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				adjustExistingPorts();
 				getCastedModel().incrementRightSidePorts(newOutPortCount, prevOutPortCount);
 
-			}else if(prevOutPortCount > newOutPortCount){
+			}else{
 				//decrement the ports
 				List<String> portsToBeRemoved = populateOutPortsToBeRemoved(prevOutPortCount, newOutPortCount);
 				getCastedModel().decrementPorts(portsToBeRemoved);
@@ -489,7 +490,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				getCastedModel().changeUnusedPortCount(newUnunsedPortCount);
 				adjustExistingPorts();
 				getCastedModel().incrementBottomSidePorts(newUnunsedPortCount, prevUnusedportCount);
-			}else if(prevUnusedportCount > newUnunsedPortCount){
+			}else{
 				//decrement the ports
 				List<String> portsToBeRemoved = populateUnusedPortsToBeRemoved(prevUnusedportCount, newUnunsedPortCount);
 				getCastedModel().decrementPorts(portsToBeRemoved);
@@ -626,6 +627,18 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		}
 		componentFigure.repaint();
 		
+	}
+	
+	private void adjustComponentLabelPosition(){
+		List<AbstractGraphicalEditPart> childrenEditParts = getChildren();
+		for(AbstractGraphicalEditPart part:childrenEditParts)
+		{
+			if(part instanceof ComponentLabelEditPart){ 
+				ComponentLabelEditPart componentLabelEditPart = (ComponentLabelEditPart) part;
+				componentLabelEditPart.adjustLabelFigure(getCastedModel().getLocation(), getCastedModel().getSize());
+				break;
+			}
+		}
 	}
 	
 	public void updateComponentStatus(){

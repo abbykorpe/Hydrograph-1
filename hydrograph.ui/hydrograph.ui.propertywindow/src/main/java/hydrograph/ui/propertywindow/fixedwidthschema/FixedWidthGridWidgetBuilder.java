@@ -17,9 +17,11 @@ package hydrograph.ui.propertywindow.fixedwidthschema;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
@@ -39,19 +41,6 @@ public class FixedWidthGridWidgetBuilder extends GridWidgetCommonBuilder {
 	
 	private FixedWidthGridWidgetBuilder() {}
 	
-	public CellEditor[] createCellEditorList(Table table,int size){
-		
-		CellEditor[] cellEditor = createCellEditor(size);
-		addTextEditor(table,cellEditor, 0);
-		addComboBox(table, cellEditor, getDataTypeKey(), 1);
-		addTextEditor(table, cellEditor, 2);
-		addTextEditor(table, cellEditor, 3);
-		addTextEditor(table, cellEditor, 4);
-		addComboBox(table, cellEditor, getScaleTypeKey(), 5);
-		addTextEditor(table, cellEditor, 6);
-		addTextEditor(table, cellEditor, 7);
-		return cellEditor;
-	}
 
 	/*
 	 * Table mouse click event.
@@ -88,5 +77,20 @@ public class FixedWidthGridWidgetBuilder extends GridWidgetCommonBuilder {
 			numberOfRows--;
 		}while(numberOfRows>=-1);
 		
+	}
+
+	@Override
+	public CellEditor[] createCellEditorList(Table table,
+			Map<String, Integer> columns) {
+		CellEditor[] cellEditor = createCellEditor(columns.size());
+		addTextEditor(table, cellEditor, columns, (Messages.FIELDNAME));
+		addComboBox(table, cellEditor, getDataTypeKey(), 1);
+		addTextEditor(table, cellEditor,columns, Messages.LENGTH);
+		addTextEditor(table, cellEditor, columns, Messages.SCALE);
+		addComboBox(table, cellEditor, getScaleTypeKey(), 4);
+		addTextEditor(table, cellEditor, columns, Messages.DATEFORMAT);
+		addTextEditor(table, cellEditor, columns, Messages.PRECISION);
+		addTextEditor(table, cellEditor, columns, Messages.FIELD_DESCRIPTION);
+		return cellEditor;
 	}
 }

@@ -326,7 +326,7 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 			public void widgetSelected(SelectionEvent e) {
 				logger.debug("ComponentTooltip.widgetSelected(): Link clicked");
 				super.widgetSelected(e);
-				boolean flag = FilterOperationClassUtility.openFileEditor(null,filePath);
+				boolean flag = FilterOperationClassUtility.INSTANCE.openFileEditor(null,filePath);
 				if (!flag) {
 					logger.debug("ComponentTooltip.widgetSelected(): Link clicked - error - File " + filePath + " Not Found");
 					WidgetUtility.errorMessage("File Not Found"); 

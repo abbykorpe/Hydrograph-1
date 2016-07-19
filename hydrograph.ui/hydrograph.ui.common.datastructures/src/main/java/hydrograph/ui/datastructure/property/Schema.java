@@ -20,6 +20,8 @@ import hydrograph.ui.common.cloneableinterface.IDataStructure;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 
 
 /**
@@ -29,16 +31,23 @@ import java.util.List;
  */
 
 public class Schema implements IDataStructure{
+	private static final String RELATIVE_PATH_PREFIX = "../";
 	private String externalSchemaPath;
 	private Boolean isExternal;
 	private List<GridRow> gridRow;
 	private List<GridRow> clonedGridRow;
    
+	public Schema(){
+		isExternal =false;
+	}
+	
 	public String getExternalSchemaPath() {
 		return externalSchemaPath;
 	}
 
 	public void setExternalSchemaPath(String externalSchemaPath) {
+		if(StringUtils.startsWith(externalSchemaPath, RELATIVE_PATH_PREFIX))
+			externalSchemaPath=StringUtils.replace(externalSchemaPath, RELATIVE_PATH_PREFIX,"");
 		this.externalSchemaPath = externalSchemaPath;
 	}
 
@@ -51,6 +60,8 @@ public class Schema implements IDataStructure{
 	}
 
 	public List<GridRow> getGridRow() {
+		if(gridRow==null)
+			gridRow=new ArrayList<>();
 		return gridRow;
 	}
 
@@ -87,6 +98,22 @@ public class Schema implements IDataStructure{
 		return "ExternalSchema [externalSchemaPath=" + externalSchemaPath
 				+ ", isExternalPath=" + isExternal + ", gridRow=" + gridRow
 				+ "]";
+	}
+	
+	/**
+	 * This method fetches single row from current schema rows. 
+	 * 
+	 * @param fieldName
+	 * @return gridRow
+	 */
+	public GridRow getGridRow(String fieldName) {
+		if (!getGridRow().isEmpty()) {
+			for (GridRow row : getGridRow()) {
+				if (StringUtils.equalsIgnoreCase(fieldName, row.getFieldName()))
+					return row.copy();
+			}
+		}
+		return null;
 	}
 	
 }

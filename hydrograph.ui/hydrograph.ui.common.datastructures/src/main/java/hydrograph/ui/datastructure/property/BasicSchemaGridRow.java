@@ -17,6 +17,12 @@ package hydrograph.ui.datastructure.property;
 /**
  * The Class BasicSchemaGridRow.
  * 
+ * BasicSchemaGridRow is the data-structure used for storing schema of below components
+ * 
+ * Input Components 	: IFDelimited, IHiveParquet, IHiveTextFile 
+ * Output Components 	: OFDelimited, OHiveParquet, OHiveTextFile  
+ * Transform Components : Aggregate, Cumulate, Join, Lookup, Transform, Normalize
+ * 
  * @author Bitwise
  */
 public class BasicSchemaGridRow extends GridRow {

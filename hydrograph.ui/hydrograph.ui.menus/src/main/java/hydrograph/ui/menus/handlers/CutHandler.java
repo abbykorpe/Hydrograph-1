@@ -14,10 +14,14 @@
  
 package hydrograph.ui.menus.handlers;
 
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.handlers.HandlerUtil;
 
 public class CutHandler extends AbstractHandler implements IHandler {
 
@@ -26,8 +30,11 @@ public class CutHandler extends AbstractHandler implements IHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		copy.execute(event);
-		cut.execute(event);
+		IWorkbenchPart part = HandlerUtil.getActivePart(event);
+		if(part instanceof ELTGraphicalEditor){
+			copy.execute(event);
+			cut.execute(event);
+		}
 		return null;
 	}
 

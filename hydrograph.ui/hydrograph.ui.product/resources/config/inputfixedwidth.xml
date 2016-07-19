@@ -17,7 +17,7 @@
 		name="IFixedWidth" nameInPalette="File Fixed Width" defaultNamePrefix="IFixedWidth" 
 		description="Used to read any Fixed Width text file."
 		helpFilePath="/hydrograph.ui.help/html/Components/Input_File_Fixed_Width.html"
-		acronym="Fxd">
+		acronym="IFxd">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
@@ -38,7 +38,7 @@
 		<tns:property dataType="string" name="Path" renderer="FILE_PATH_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
 			usage="REQUIRED" propertyHelpText="Displays the location of the file \neither Remote/Local. Allows only \nunderscore ‘_’ and alphanumeric characters.">
-			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		
@@ -51,7 +51,7 @@
 		<tns:property dataType="string" name="charset" value="UTF-8" renderer="CHARACTER_SET_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="REQUIRED" propertyHelpText="Denotes the encoding system \nfollowed by the input file.">
-			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="strict" value="False"
@@ -62,7 +62,9 @@
 		
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time."/>
+			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time.">
+		<tns:validator>RUNTIME_PROPERTY_VALIDATOR</tns:validator>
+		</tns:property>
 		
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"

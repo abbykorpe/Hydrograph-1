@@ -64,7 +64,7 @@ public class SortUiConverter extends StraightpullUiConverter {
 		container.getComponentNames().add(componentName);
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.SORT.value());
-		validateComponentProperties(propertyMap);
+		
 	}
 
 	private Map<String, String> getSecondaryKeys() {

@@ -104,7 +104,7 @@ public class UiConverterUtil {
 		Container container = new Container();
 
 		List<TypeBaseComponent> children = graph.getInputsOrOutputsOrStraightPulls();
-		if (children != null && !children.isEmpty()) {
+		if (children != null && !children.isEmpty()){
 			for (TypeBaseComponent typeBaseComponent : children) {
 				UiConverter uiConverter = UiConverterFactory.INSTANCE.getUiConverter(typeBaseComponent, container);
 				uiConverter.prepareUIXML();
@@ -113,8 +113,9 @@ public class UiConverterUtil {
 			}
 			createLinks();
 		}
+		ImportedSchemaPropagation.INSTANCE.initiateSchemaPropagationAfterImport(container);
 		genrateUIXML(container, jobFile, parameterFile);
-
+		
 	}
 
 	/**
@@ -131,7 +132,7 @@ public class UiConverterUtil {
 
 			}
 
-		} catch (Exception e) {
+		} catch (RuntimeException| SAXException| IOException e) {
 			LOGGER.error("Error occurred while loading classes from xml: ", e);
 		}
 
@@ -181,7 +182,7 @@ public class UiConverterUtil {
 			storeParameterData(parameterFile, jobXmlData);
 			jobFile.create(new ByteArrayInputStream(jobXmlData.getBytes()), true, null);
 
-		} catch (Exception e) {
+		} catch (CoreException e) {
 			LOGGER.error("Exception occurred while creating UI-XML", e);
 		} finally {
 			UIComponentRepo.INSTANCE.flusRepository();
@@ -204,7 +205,7 @@ public class UiConverterUtil {
 		jaxbContext = JAXBContext.newInstance(Graph.class);
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 		graph = (Graph) jaxbUnmarshaller.unmarshal(new ByteArrayInputStream(inputFileAsString.getBytes()));
-		if (graph != null) {
+		if (graph != null){
 			UIComponentRepo.INSTANCE.genrateComponentRepo(graph);
 		}
 		return graph;
@@ -230,8 +231,7 @@ public class UiConverterUtil {
 
 	private StringBuilder readFileContentInString(File inputFile) {
 		StringBuilder inputStringBuilder = new StringBuilder();
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(inputFile));
+		try(BufferedReader br= new BufferedReader(new FileReader(inputFile))){
 			String sCurrentLine = null;
 			while ((sCurrentLine = br.readLine()) != null) {
 				inputStringBuilder.append(sCurrentLine);
@@ -252,15 +252,17 @@ public class UiConverterUtil {
 		boolean isMultiplePortAllowed;
 		for (LinkingData linkingData : UIComponentRepo.INSTANCE.getComponentLinkList()) {
 			LOGGER.debug("Process links data for one to many port generation : {}", linkingData);
-			if (UIComponentRepo.INSTANCE.getComponentUiFactory().get(linkingData.getSourceComponentId()) != null) {
+			if (UIComponentRepo.INSTANCE.getComponentUiFactory().get(linkingData.getSourceComponentId()) != null){
 				isMultiplePortAllowed = UIComponentRepo.INSTANCE.getComponentUiFactory()
 						.get(linkingData.getSourceComponentId()).getPortDetails().get(0).isAllowMultipleLinks();
 				
-				if (isMultiplePortAllowed) {
-					if (linkingData.getSourceTerminal().contains("out"))
+				if (isMultiplePortAllowed){
+					if (linkingData.getSourceTerminal().contains("out")){
 						linkingData.setSourceTerminal(FIXED_OUTPUT_PORT);
-					else if (linkingData.getSourceTerminal().contains("unused"))
+					}
+					else if (linkingData.getSourceTerminal().contains("unused")){
 						linkingData.setSourceTerminal(FIXED_UNUSED_PORT);
+					}
 				}
 			}
 		}

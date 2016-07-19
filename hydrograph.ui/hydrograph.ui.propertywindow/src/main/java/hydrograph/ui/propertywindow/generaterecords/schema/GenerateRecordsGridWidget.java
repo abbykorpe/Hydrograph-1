@@ -15,6 +15,10 @@
 package hydrograph.ui.propertywindow.generaterecords.schema;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -23,7 +27,6 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.SchemaGridContentProvider;
-import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTCellEditorIsNumericValidator;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
@@ -56,8 +59,21 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 	 * @see hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget#getPropertiesToShow()
 	 */
 	@Override
-	protected String[] getPropertiesToShow() {
-		return new String[]{ FIELDNAME, DATATYPE, DATEFORMAT, PRECISION, SCALE, SCALE_TYPE, FIELD_DESCRIPTION, LENGTH, RANGE_FROM, RANGE_TO, DEFAULT_VALUE };
+	protected Map<String, Integer> getPropertiesToShow() {
+		Map<String, Integer> columns = new HashMap<>();
+		columns.put(FIELDNAME, 0);
+		columns.put(DATATYPE, 1);
+		columns.put(DATEFORMAT, 2);
+		columns.put(PRECISION, 3);
+		columns.put(SCALE, 4);
+		columns.put(SCALE_TYPE, 5);
+		columns.put(FIELD_DESCRIPTION, 6);
+		columns.put(LENGTH, 7);
+		columns.put(RANGE_FROM, 8);
+		columns.put(RANGE_TO, 9);
+		columns.put(DEFAULT_VALUE, 10);
+		return columns;
+		//return new String[]{ FIELDNAME, DATATYPE, DATEFORMAT, PRECISION, SCALE, SCALE_TYPE, FIELD_DESCRIPTION, LENGTH, RANGE_FROM, RANGE_TO, DEFAULT_VALUE };
 	}
 
 	/* (non-Javadoc)
@@ -96,10 +112,6 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 	protected void addValidators() {
 		
 		editors[0].setValidator(new ELTCellEditorFieldValidator(table, schemaGridRowList, fieldNameDecorator,isFieldNameAlphanumericDecorator,propertyDialogButtonBar));
-		editors[4].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator,propertyDialogButtonBar)); 
-		editors[7].setValidator(new ELTCellEditorIsNumericValidator(lengthDecorator,propertyDialogButtonBar)); 
-		
-
 	}
 
 	
@@ -108,10 +120,7 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 	 */
 	@Override
 	protected void setDecorator() {
-		
 		fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(), Messages.FIELDNAMEERROR);
-		scaleDecorator = WidgetUtility.addDecorator(editors[4].getControl(), Messages.SCALEERROR);
-		lengthDecorator = WidgetUtility.addDecorator(editors[7].getControl(), Messages.LENGTHERROR);
 		isFieldNameAlphanumericDecorator = WidgetUtility.addDecorator(editors[0].getControl(),
 				Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);
 	}
@@ -128,5 +137,4 @@ public class GenerateRecordsGridWidget extends ELTSchemaGridWidget {
 		attachListener();
 		
 	}
-
 }

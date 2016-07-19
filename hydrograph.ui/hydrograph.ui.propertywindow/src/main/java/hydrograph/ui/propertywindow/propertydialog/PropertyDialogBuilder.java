@@ -29,6 +29,8 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroup;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -140,7 +142,7 @@ public class PropertyDialogBuilder {
 					if (schemaWidget instanceof ELTSchemaGridWidget) {
 						ELTSchemaGridWidget eltSchemaGridWidget = (ELTSchemaGridWidget) schemaWidget;
 						if (!eltSchemaGridWidget.isExternal()) {
-							if (schemaWidget.getSchemaForInternalPropagation().getGridRow().size() != 0) {
+							if (!SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(component.getComponentName()) && schemaWidget.getSchemaForInternalPropagation().getGridRow().size() != 0) {
 								eltSchemaGridWidget.enableDisableButtons(schemaWidget.getSchemaForInternalPropagation()
 										.getGridRow().size());
 							} else {
@@ -255,7 +257,7 @@ public class PropertyDialogBuilder {
 
 		AbstractWidget widget = WidgetFactory.INSTANCE.getWidget(property.getPropertyRenderer(),componentConfigProp,
 				componentMiscellaneousProperties,propertyDialogButtonBar);
-		if(property.getPropertyName().equalsIgnoreCase("join_config"));
+		
 		widget.setEltComponenetProperties(eltComponenetProperties);
 		
 		widget.setSchemaForInternalPapogation(setSchemaForInternalPapogation);

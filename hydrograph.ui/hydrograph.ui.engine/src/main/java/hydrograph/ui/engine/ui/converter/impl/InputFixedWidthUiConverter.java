@@ -14,6 +14,12 @@
  
 package hydrograph.ui.engine.ui.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.inputtypes.TextFileFixedWidth;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -24,7 +30,6 @@ import hydrograph.ui.engine.ui.helper.ConverterUiHelper;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.components.IFixedWidth;
 import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GridRowLoader;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -32,16 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
-import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.inputtypes.TextFileFixedWidth;
 
 public class InputFixedWidthUiConverter extends InputUiConverter {
 
@@ -73,7 +69,6 @@ public class InputFixedWidthUiConverter extends InputUiConverter {
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(fileFixedWidth.getId());
 		uiComponent.setProperties(propertyMap);
-		validateComponentProperties(propertyMap);
 	}
 
 	private Object getCharSet() {
@@ -108,7 +103,7 @@ public class InputFixedWidthUiConverter extends InputUiConverter {
 	protected Object getSchema(TypeInputOutSocket outSocket) {
 		LOGGER.debug("Generating UI-Schema data for {}", componentName);
 		Schema schema =null;
-		List<GridRow> gridRow = new ArrayList<>();
+		List<GridRow> gridRowList = new ArrayList<>();
 		ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
 		if (outSocket.getSchema() != null
 				&& outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema().size() != 0) {
@@ -118,13 +113,14 @@ public class InputFixedWidthUiConverter extends InputUiConverter {
 					schema.setIsExternal(true);
 					if (((TypeExternalSchema) record).getUri() != null)
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
-					gridRow.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(), Constants.FIXEDWIDTH_GRID_ROW));
-					schema.setGridRow(gridRow);
+					gridRowList.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(), Constants.FIXEDWIDTH_GRID_ROW));
+					schema.setGridRow(gridRowList);
 				} else {
-					gridRow.add(converterUiHelper.getFixedWidthSchema(record));
-					schema.setGridRow(gridRow);
+					gridRowList.add(converterUiHelper.getFixedWidthSchema(record));
+					schema.setGridRow(gridRowList);
 					schema.setIsExternal(false);
 				}
+				saveComponentOutputSchema(outSocket.getId(),gridRowList);
 			}
 		} 
 		return schema;

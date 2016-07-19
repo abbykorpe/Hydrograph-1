@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 /**
  * @author Bitwise
  * 
- * This class is used to display XML content of dummy components on property window.
+ * This class is used to display XML content of Unknown components on property window.
  *  
  */
 public class XMLTextContainer {
@@ -41,14 +41,14 @@ public class XMLTextContainer {
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(XMLTextContainer.class);
 
 	/**
-	 * Launches the component property editor window for dummy components. It is used to display XML content of dummy
+	 * Launches the component property editor window for Unknown components. It is used to display XML content of Unknown
 	 * components on property window.
 	 * 
 	 * @return XML content of component. 
 	 */
 	
 	public String launchXMLTextContainerWindow() {
-		try {
+		try{
 			String xmlText = this.xmlText;
 			Shell shell = new Shell(Display.getDefault().getActiveShell(), SWT.WRAP | SWT.MAX | SWT.APPLICATION_MODAL);
 
@@ -85,7 +85,8 @@ public class XMLTextContainer {
 					shell.getDisplay().sleep();
 				}
 			}
-		} catch (Exception e) {
+		}catch(Exception e)
+		{
 			LOGGER.error("Error occurred while creating XML text container widget", e);
 		}
 		return getXmlText();

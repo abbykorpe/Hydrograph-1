@@ -13,7 +13,6 @@
 package hydrograph.engine.cascading.integration;
 
 import hydrograph.engine.cascading.assembly.generator.AssemblyGeneratorFactory;
-import hydrograph.engine.core.commandlineparser.CLIParser;
 import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.core.HydrographRuntimeService;
@@ -60,7 +59,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 	private FlowManipulationContext flowManipulationContext;
 	private static Logger LOG = LoggerFactory.getLogger(HydrographRuntime.class);
 
-	public void executeProcess(String[] args, HydrographJob hydrographJob) throws ParseException {
+	public void executeProcess(String[] args, HydrographJob hydrographJob)  {
 		this.args = args;
 		config = PropertiesLoader.getInstance();
 		LOG.info("Invoking initialize on runtime service");
@@ -142,20 +141,19 @@ public class HydrographRuntime implements HydrographRuntimeService {
 	}
 
 	@Override
-	public void prepareToExecute() throws ParseException {
+	public void prepareToExecute()  {
 		flowBuilder.buildFlow(runtimeContext);
 
-		if (CLIParser.isArgumentOptionPresent(args,
-				CLIParser.OPTION_DOT_PATH)) {
+		if (GeneralUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_DOT_PATH)) {
 			writeDotFiles();
 		}
 
 	}
 
 	@Override
-	public void execute() throws ParseException {
-		if (CLIParser.isArgumentOptionPresent(args,
-				CLIParser.OPTION_NO_EXECUTION)) {
+	public void execute()  {
+		if (GeneralUtilities.IsArgOptionPresent(args,
+				CommandLineOptionsProcessor.OPTION_NO_EXECUTION)) {
 			LOG.info(CommandLineOptionsProcessor.OPTION_NO_EXECUTION
 					+ " option is provided so skipping execution");
 			return;
@@ -177,15 +175,15 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		return runtimeContext.getCascadingFlows();
 	}
 
-	private void writeDotFiles() throws ParseException {
+	private void writeDotFiles()  {
 
 		
 		
-		String basePath = CLIParser.getDotFilePath(args);
+		String basePath = CommandLineOptionsProcessor.getDotPath(args);
 
 		if (basePath == null) {
 			throw new HydrographRuntimeException(
-					CLIParser.OPTION_DOT_PATH
+					CommandLineOptionsProcessor.OPTION_DOT_PATH
 							+ " option is provided but is not followed by path");
 		}
 		LOG.info("Dot files will be written under " + basePath);

@@ -81,7 +81,7 @@ public class LimitConverter extends StraightPullConverter {
 		for (Link link : component.getSourceConnections()) {
 			TypeStraightPullOutSocket outSocket = new TypeStraightPullOutSocket();
 			TypeOutSocketAsInSocket outSocketAsInsocket = new TypeOutSocketAsInSocket();
-			outSocketAsInsocket.setInSocketId(Constants.IN_0);
+			outSocketAsInsocket.setInSocketId(Constants.FIXED_INSOCKET_ID);
 			outSocketAsInsocket.getOtherAttributes();
 			outSocket.setCopyOfInsocket(outSocketAsInsocket);
 			outSocket.setId(link.getSource().getPort(link.getSourceTerminal()).getPortType() + link.getLinkNumber());

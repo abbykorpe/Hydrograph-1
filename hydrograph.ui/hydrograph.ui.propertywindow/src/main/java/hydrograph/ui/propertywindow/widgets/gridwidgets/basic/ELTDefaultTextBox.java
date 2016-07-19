@@ -14,6 +14,8 @@
  
 package hydrograph.ui.propertywindow.widgets.gridwidgets.basic;
 
+import hydrograph.ui.common.util.OSValidator;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -43,6 +45,15 @@ public class ELTDefaultTextBox extends AbstractELTWidget{
 	public void attachWidget(Composite container) {
 		defaultELTTextBox = new Text(container, SWT.BORDER);
 		GridData gd_defaultELTTextBox = new GridData(SWT.FILL, SWT.FILL, grabExcessSpace, false, 1, 1);
+		if (OSValidator.isMac()) {
+			gd_defaultELTTextBox.horizontalIndent=2;
+		}
+		else{
+			gd_defaultELTTextBox.horizontalIndent=-2;
+		}
+		
+		
+		
 		gd_defaultELTTextBox.widthHint = textboxWidth;
 		defaultELTTextBox.setLayoutData(gd_defaultELTTextBox);
 		defaultELTTextBox.setText(defaultTextMessage);

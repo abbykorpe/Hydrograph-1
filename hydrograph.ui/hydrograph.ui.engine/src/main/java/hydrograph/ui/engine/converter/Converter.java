@@ -72,8 +72,8 @@ public abstract class Converter {
 		componentName = (String) properties.get(Constants.PARAM_NAME);
 		baseComponent.setId(componentName);
 		try {
-			baseComponent.setPhase(new BigInteger((String) properties
-					.get(Constants.PARAM_PHASE)));
+			baseComponent.setPhase((String) properties
+					.get(Constants.PARAM_PHASE));
 		} catch (NullPointerException | NumberFormatException nfe) {
 			logger.error("Phase id Empty or Invalid for : {}, {}",
 					new Object[]{baseComponent.getId(), nfe});
@@ -199,12 +199,12 @@ public abstract class Converter {
 	protected String getSubJobAbsolutePath(String subJobPath) {
 		String absolutePath = subJobPath;
 		IPath ipath=new Path(subJobPath);
-		try {
+		try{
 			if (ResourcesPlugin.getWorkspace().getRoot().getFile(ipath).exists())
 				absolutePath= ResourcesPlugin.getWorkspace().getRoot().getFile(ipath).getLocation().toString();
 			else if (ipath.toFile().exists())
 				absolutePath= ipath.toFile().getAbsolutePath();
-		} catch (Exception exception) {
+		}catch(Exception exception){
 			logger.warn("Exception occurred while getting absolute path for "+subJobPath,exception);
 		}
 		return absolutePath;

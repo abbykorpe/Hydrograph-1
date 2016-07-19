@@ -9,12 +9,11 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License. -->
-
+ 
+ 
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Discard" link_to="xml\Components\components.xml#Discard"> 
 	<topic label="Properties"  href="html/Components/Discard_Properties.html"> 
 	</topic>
- <topic href="html/Components/Discard_Validations.html" label="Validations">
- </topic>
 </toc>

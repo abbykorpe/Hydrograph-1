@@ -14,8 +14,10 @@
  
 package hydrograph.ui.graph.figure;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.model.PortAlignmentEnum;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
@@ -61,6 +63,16 @@ public class PortFigure extends Figure {
 	 */
 	public PortFigure(Color portColor, int portSeq,
 			int totalPorts, String portTerminal, String labelOfPort, PortAlignmentEnum alignment) {
+		
+		if (alignment == null) {
+			if (StringUtils.contains(portTerminal, Constants.INPUT_SOCKET_TYPE))
+				alignment = PortAlignmentEnum.LEFT;
+			else if (StringUtils.contains(portTerminal, Constants.OUTPUT_SOCKET_TYPE))
+				alignment = PortAlignmentEnum.RIGHT;
+			else if (StringUtils.contains(portTerminal, Constants.UNUSED_SOCKET_TYPE))
+				alignment = PortAlignmentEnum.BOTTOM;
+		}
+		
 		this.portColor = portColor;
 		this.terminal = portTerminal;
 		this.anchor = new FixedConnectionAnchor(this, alignment.value(), totalPorts,
@@ -189,13 +201,14 @@ public class PortFigure extends Figure {
 		int sequence = terminal.charAt(terminal.length() - 1);
 		int var2 = portColor.hashCode();
 		int var3 = labelOfPort.hashCode();
-		int var4 = portAlignment.hashCode();
 		result = 31 * result + var1;
 		result = 31 * result + sequence;
 		result = 31 * result + var2;
 		result = 31 * result + var3;
-		result = 31 * result + var4;
-
+		if(portAlignment!=null){
+			int var4 = portAlignment.hashCode();
+			result = 31 * result + var4;
+			}
 		return result;
 
 	}

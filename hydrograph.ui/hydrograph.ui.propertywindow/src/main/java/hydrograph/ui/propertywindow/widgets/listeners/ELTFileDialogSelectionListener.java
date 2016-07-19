@@ -18,24 +18,18 @@ package hydrograph.ui.propertywindow.widgets.listeners;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 import java.io.File;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
@@ -81,19 +75,6 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 					String path = null;
 					FileDialog filedialog = new FileDialog(button.getShell(), SWT.None);
 					filedialog.setFileName(((Text) widgets[1]).getText());
-
-					if (StringUtils.equals(Constants.SUBJOB_COMPONENT, currentComponent.getComponentName())) {
-						filedialog.setFilterExtensions(filterFileExtensions);
-						path = filedialog.open();
-						if (StringUtils.isNotEmpty(path)) {
-							if (isFileExistsOnLocalFileSystem(new Path(path), ((Text) widgets[1]),propertyDialogButtonBar)) {
-								file = new File(path);
-								((Text) widgets[1]).setText(file.getAbsolutePath());
-								propertyDialogButtonBar.enableApplyButton(true);
-								txtDecorator.hide();
-							}
-						}
-					} else {
 						path = filedialog.open();
 						file = new File(path);
 						if (StringUtils.isNotEmpty(path)) {
@@ -102,34 +83,8 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 							txtDecorator.hide();
 						}
 					}
-				}
 			}
 		};
 		return listener;
 	}
-	
-	private boolean isFileExistsOnLocalFileSystem(IPath jobFilePath, Text textBox, PropertyDialogButtonBar propertyDialogButtonBar) {
-		jobFilePath=jobFilePath.removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH);
-		try {
-			if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists())
-				return true;
-			else if (jobFilePath.toFile().exists())
-				return true;
-		} catch (Exception exception) {
-			LOGGER.error("Error occured while cheking file on local file system", exception);
-		}
-		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.YES
-				| SWT.NO);
-		messageBox.setMessage(jobFilePath.lastSegment()+Messages.FILE_DOES_NOT_EXISTS);
-		messageBox.setText(jobFilePath.toString() +Messages.NOT_EXISTS);
-		int response = messageBox.open();
-		if (response == SWT.YES) {
-			jobFilePath=jobFilePath.removeFileExtension().addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH);
-			textBox.setText(jobFilePath.toString());
-			propertyDialogButtonBar.enableApplyButton(true);
-		}else
-			textBox.setText("");
-		return false;
-	}
-
 }

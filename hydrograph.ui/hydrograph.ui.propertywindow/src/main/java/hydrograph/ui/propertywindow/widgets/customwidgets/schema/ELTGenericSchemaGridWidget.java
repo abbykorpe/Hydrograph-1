@@ -14,7 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 
-import java.util.ArrayList;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -23,9 +22,12 @@ import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
-import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTCellEditorIsNumericValidator;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.schema.ELTCellEditorFieldValidator;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Class ELTGenericSchemaGridWidget.
@@ -51,8 +53,18 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 	}
 	
 	@Override
-	protected String[] getPropertiesToShow() {
-		return new String[]{ FIELDNAME, DATATYPE, DATEFORMAT, PRECISION, SCALE, SCALE_TYPE, FIELD_DESCRIPTION };
+	protected Map<String, Integer> getPropertiesToShow() {
+		Map<String, Integer> columns = new HashMap<>();
+		columns.put(FIELDNAME, 0);
+		columns.put(DATATYPE, 1);
+		columns.put(SCALE, 2);
+		columns.put(SCALE_TYPE, 3);
+		columns.put(DATEFORMAT, 4);
+		columns.put(PRECISION, 5);
+		columns.put(FIELD_DESCRIPTION, 6);
+		
+		return columns;
+		//sequence: FIELDNAME, DATATYPE, SCALE, SCALE_TYPE, DATEFORMAT, PRECISION, FIELD_DESCRIPTION
 	}
 
 	@Override
@@ -75,19 +87,16 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 
 	@Override
 	protected void addValidators() {
-		editors[0].setValidator(new ELTCellEditorFieldValidator(table, schemaGridRowList, fieldNameDecorator,isFieldNameAlphanumericDecorator,propertyDialogButtonBar));
-		editors[4].setValidator(new ELTCellEditorIsNumericValidator(scaleDecorator,propertyDialogButtonBar)); 
+	    editors[0].setValidator(new ELTCellEditorFieldValidator(table, schemaGridRowList, fieldNameDecorator,isFieldNameAlphanumericDecorator,propertyDialogButtonBar));
 	}
 	//Adding the decorator to show error message when field name same.
 	@Override
 	protected void setDecorator() {
 		fieldNameDecorator = WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAMEERROR);
 		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editors[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);	
-		scaleDecorator = WidgetUtility.addDecorator(editors[4].getControl(),Messages.SCALEERROR);
-		fieldNameDecorator.setMarginWidth(8);
-		scaleDecorator.setMarginWidth(8);
+	    fieldNameDecorator.setMarginWidth(8);
 		isFieldNameAlphanumericDecorator.setMarginWidth(8);
-
+	   
 	}
 
 	@Override
@@ -105,7 +114,7 @@ public class ELTGenericSchemaGridWidget extends ELTSchemaGridWidget {
 		showHideErrorSymbol(validateAgainstValidationRule(propogatedSchema));
 		
 	}
-  
+		
 	@Override
 	public void addModifyListener(final Property property,  ArrayList<AbstractWidget> widgetList) {
 	      attachListener();

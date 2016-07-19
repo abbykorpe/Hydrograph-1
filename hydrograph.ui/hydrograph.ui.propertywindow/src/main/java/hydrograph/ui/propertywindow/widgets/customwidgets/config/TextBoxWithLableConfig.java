@@ -21,15 +21,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.namespace.QName;
-
 
 public class TextBoxWithLableConfig implements WidgetConfig {
 	private String name;
+	private int characterLimit;
 	private List<Listners> listeners = new ArrayList<>();
 	private boolean grabExcessSpace = false;
 	private int widgetWidth=100;
 	private Map<String, String> otherAttributes = new HashMap<String, String>();
+	
 	public String getName() {
 		return name;
 	}
@@ -57,4 +57,11 @@ public class TextBoxWithLableConfig implements WidgetConfig {
 	public Map<String,String> getOtherAttributes() {
 		return otherAttributes;
 	}
+	public int getCharacterLimit() {
+		return characterLimit;
+	}
+	public void setCharacterLimit(int characterLimit) {
+		this.characterLimit = characterLimit;
+	}
+	
 }

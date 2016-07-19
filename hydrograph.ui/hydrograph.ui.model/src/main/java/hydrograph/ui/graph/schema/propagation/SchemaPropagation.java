@@ -146,9 +146,14 @@ public class SchemaPropagation {
 	}
 
 	private void setSchemaMapOfComponent(Component component, ComponentsOutputSchema componentsOutputSchema) {
+		LOGGER.debug("Storing Component-Output-Schema to component :"+component.getComponentLabel().getLabelContents());
 		if (!StringUtils.equals(Constants.SUBJOB_COMPONENT_CATEGORY, component.getCategory())) {
 			Map<String, ComponentsOutputSchema> newComponentsOutputSchemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
-			newComponentsOutputSchemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema);
+			if (componentsOutputSchema == null) {
+				newComponentsOutputSchemaMap.put(Constants.FIXED_OUTSOCKET_ID, new ComponentsOutputSchema());
+			} else {
+				newComponentsOutputSchemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema.copy());
+			}
 			component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, newComponentsOutputSchemaMap);
 			if(StringUtils.equalsIgnoreCase(component.getCategory(), Constants.OUTPUT)){
 				updateSchema(component,componentsOutputSchema);
@@ -166,7 +171,7 @@ public class SchemaPropagation {
 
 	private void setSchemaGridAsSchema(Component component, ComponentsOutputSchema componentsOutputSchema) {
 		Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
-		if(schema!=null && schema.getGridRow()!=null && !schema.getGridRow().isEmpty()){
+		if(schema!=null && !schema.getIsExternal() && schema.getGridRow()!=null && !schema.getGridRow().isEmpty()){
 		if(componentsOutputSchema==null)
 			return;
 		for (GridRow gridRow : schema.getGridRow())
@@ -228,14 +233,13 @@ public class SchemaPropagation {
 
 	private void propagatePassThroughAndMapFields(Link link) {
 		boolean toPropagate = false;
-		
 		ComponentsOutputSchema targetOutputSchema = getTargetComponentsOutputSchemaFromMap(link);
 		if (targetOutputSchema != null && !targetOutputSchema.getPassthroughFields().isEmpty()) {
-			targetOutputSchema.updatePassthroughFieldsSchema(getComponentsOutputSchema(link), link.getTargetTerminal());
+			targetOutputSchema.updatePassthroughFieldsSchema(getComponentsOutputSchema(link));
 			toPropagate = true;
 		}
 		if (targetOutputSchema != null && !targetOutputSchema.getMapFields().isEmpty()) {
-			targetOutputSchema.updateMapFieldsSchema(getComponentsOutputSchema(link), link.getTargetTerminal());
+			targetOutputSchema.updateMapFieldsSchema(getComponentsOutputSchema(link));
 			toPropagate = true;
 		}
 		if (toPropagate)

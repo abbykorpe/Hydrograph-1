@@ -16,7 +16,7 @@ package hydrograph.ui.datastructure.property;
 
 
 /**
- * This class is used as data structure for GenerateRecords component's Schema Grid
+ * GenerateRecordSchemaGridRow is the data-structure used for storing schema of Generate-Record component
  * 
  * @author Bitwise
  * 

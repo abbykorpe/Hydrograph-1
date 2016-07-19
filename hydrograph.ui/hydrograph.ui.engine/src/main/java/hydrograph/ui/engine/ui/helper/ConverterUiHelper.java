@@ -30,6 +30,7 @@ import java.util.Map.Entry;
 
 import javax.xml.namespace.QName;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
@@ -177,6 +178,9 @@ public class ConverterUiHelper {
 	 */
 	public List<GridRow> loadSchemaFromExternalFile(String externalSchemaFilePath,String schemaType) {
 		IPath filePath=new Path(externalSchemaFilePath);
+		if (!filePath.isAbsolute()) {
+			filePath = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath).getRawLocation();
+		}
 		GridRowLoader gridRowLoader=new GridRowLoader(schemaType, filePath.toFile());
 		return gridRowLoader.importGridRowsFromXML();
 	}

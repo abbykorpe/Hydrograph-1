@@ -23,6 +23,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.AccessibleEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -82,6 +83,19 @@ public class ComponentLabelEditPart extends AbstractGraphicalEditPart implements
 	@Override
 	protected void createEditPolicies() {
 		// TODO Auto-generated method stub
+		
+	}
+
+	
+	/**
+	 * Adjusts the position of the component label at center in case if port count is increased
+	 * 
+	 * @param component's position
+	 * @param component's size
+	 */
+	public void adjustLabelFigure(Point compLocation, Dimension compSize) {
+		Point p = new Point((compLocation.x + 1 +(compSize.width/2) - 50), (compLocation.y + 1));
+		getFigure().setLocation(p);
 		
 	}
 

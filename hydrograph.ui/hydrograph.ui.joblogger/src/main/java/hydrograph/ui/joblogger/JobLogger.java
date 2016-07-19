@@ -20,7 +20,7 @@ import hydrograph.ui.joblogger.logger.ConsoleLogger;
 import hydrograph.ui.joblogger.logger.FileLogger;
 import hydrograph.ui.joblogger.utils.JobLoggerUtils;
 import hydrograph.ui.logging.factory.LogFactory;
-
+import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,7 +129,10 @@ public class JobLogger {
 	 */
 	public void logMessage(String message){
 		for(AbstractJobLogger jobLogger: loggers){
-			jobLogger.log(message);
+			if(StringUtils.isNotBlank(message)){
+				message = StringUtils.trim(message);
+				jobLogger.log(message);
+			}
 			logger.debug("Logged message {} on {}", message, jobLogger.getClass().getName());
 		}
 	}

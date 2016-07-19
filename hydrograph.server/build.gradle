@@ -25,8 +25,8 @@ ext.c3p0Version= '0.9.2.1'
 ext.cascadingBindVersion= '1.0.0-wip-106'
 ext.optiqVersion= '0.4.12.4'
 
-archivesBaseName = 'elt-debug'
 group = 'hygrograph'
+archivesBaseName = 'hydrograph.server'
 
 buildscript {
   repositories {
@@ -78,66 +78,14 @@ dependencies {
 	compile group: 'org.antlr', name: 'antlr4-runtime', version: '4.5.1'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.7'	
 	compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
-
 		
 	compile group: 'cascading', name: 'lingual-hadoop2-mr1', version: '1.2.1', classifier:'jdbc'
  
-  //compile( group: 'org.apache.hadoop', name: 'hadoop-common', version: hadoopVersion )
-  compile( group: 'org.apache.hadoop', name: 'hadoop-client', version: hadoopVersion )  
-  testCompile( group: 'org.apache.hadoop', name: 'hadoop-mapreduce-client-core', version: hadoopVersion )
-  testCompile( group: 'org.apache.hadoop', name: 'hadoop-minicluster', version: hadoopVersion )
-  compile (group: 'org.apache.hadoop', name: 'hadoop-common', version: hadoopVersion) {  				
-		exclude group: 'javax.servlet', module: 'servlet-api'
-	}
-	compile (group: 'org.apache.hadoop', name: 'hadoop-hdfs', version: hadoopVersion) {
-		exclude group: 'javax.servlet', module: 'servlet-api'
-	}
-	
-		
-	compile group: 'com.sparkjava', name: 'spark-core', version: '1.1.1'	
+  	compile group: 'com.sparkjava', name: 'spark-core', version: '1.1.1'	
 	
 	testCompile 'junit:junit:4.11'  
   
-  compile group: 'net.sf.jopt-simple', name: 'jopt-simple', version: joptVersion
-  compile group: 'sqlline', name: 'sqlline', version: sqllineVersion
-  compile group: 'org.apache.ivy', name: 'ivy', version: ivyVersion
-  runtime group: 'jline', name: 'jline', version: jlineVersion
-
-  compile( group: 'net.hydromatic', name: 'optiq-core', version: optiqVersion, changing: true ) {
-    exclude group: 'xerces'
-    exclude group: 'xalan'
-    exclude group: 'org.apache.ant'
-    exclude group: 'org.jgrapht'
-    exclude group: 'org.mongodb'
-  }
-  compile group: 'javassist', name: 'javassist', version: javaassistVerion 
-
-  compile group: 'net.hydromatic', name: 'linq4j', version: linq4jVersion, changing: true
-  compile group: 'com.google.guava', name: 'guava', version: guavaVersion
-  compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonDatabindVersion
-  compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-guava', version: jacksonDatatypeGuavaVersion
-
-  compile group: 'commons-io', name: 'commons-io', version: commonsIoVersion
-  testCompile group: 'commons-io', name: 'commons-io', version: commonsIoVersion
-  
-  compile group: 'org.apache.commons', name: 'commons-lang3', version: commonsLangVersion
-
- // testCompile group: 'cascading', name: 'cascading-core', version: cascadingVersion, classifier: 'tests', changing: true
-  //testCompile group: 'cascading', name: 'cascading-platform', version: cascadingVersion, classifier: 'tests', changing: true
- // compile group: 'cascading', name: 'cascading-hadoop2-mr1', version: cascadingVersion
-
-  testRuntime group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
-  testRuntime group: 'org.slf4j', name: 'slf4j-log4j12', version: slf4jVersion
-  compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
-  testCompile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
-  testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version: slf4jVersion
-  
-  testRuntime group: 'log4j', name: 'log4j', version: log4jVersion
-  testCompile group: 'log4j', name: 'log4j', version: log4jVersion // for setting log level as a cli option
-  compile group: 'log4j', name: 'log4j', version: log4jVersion  
-  
-  testCompile group: 'com.mchange', name: 'c3p0', version: c3p0Version
-  
+ 	compile group: 'org.apache.hadoop', name: 'hadoop-minicluster', version: hadoopVersion
 }	
 	
 jar {
@@ -159,9 +107,7 @@ jar {
 //    from configurations.runtime
 //}
 	
-test {
-    exclude '**/DebugFileReaderTest*'
-}
+
 
 uploadArchives {  
     repositories {  

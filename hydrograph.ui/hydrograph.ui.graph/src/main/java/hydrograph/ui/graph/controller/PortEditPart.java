@@ -14,9 +14,12 @@
  
 package hydrograph.ui.graph.controller;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.figure.ComponentFigure;
 import hydrograph.ui.graph.figure.ELTColorConstants;
 import hydrograph.ui.graph.figure.PortFigure;
+import hydrograph.ui.graph.handler.RemoveDebugHandler;
+import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Port;
 import hydrograph.ui.graph.model.PortAlignmentEnum;
@@ -76,6 +79,15 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 	private Point getPortLocation(int totalPortsOfThisType, String type, int sequence, int height, int width, int margin, 
 			PortAlignmentEnum portAlignment){
 
+		if (portAlignment == null) {
+			if (StringUtils.equalsIgnoreCase(type,Constants.INPUT_SOCKET_TYPE))
+				portAlignment = PortAlignmentEnum.LEFT;
+			else if (StringUtils.equalsIgnoreCase(type,Constants.OUTPUT_SOCKET_TYPE))
+				portAlignment = PortAlignmentEnum.RIGHT;
+			else if (StringUtils.equalsIgnoreCase(type,Constants.UNUSED_SOCKET_TYPE))
+				portAlignment = PortAlignmentEnum.BOTTOM;
+		}
+		
 		Point p = null ;
 		int portOffsetFactor = totalPortsOfThisType+1;
 		int portHeightOffset=height/portOffsetFactor;
@@ -147,6 +159,9 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 				getCastedModel().setWatched(true);
 				getPortFigure().setWatched(true);
 				getPortFigure().repaint();
+			}
+			if((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler() != null){
+				((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
 			}
 		}
 		

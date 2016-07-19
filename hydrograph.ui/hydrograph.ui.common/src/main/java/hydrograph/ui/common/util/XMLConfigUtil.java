@@ -32,6 +32,7 @@ import java.util.List;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -95,7 +96,7 @@ public class XMLConfigUtil {
 				}
 				validateAndFillComponentConfigList(componentList);
 				return componentList;
-			}catch(Exception exception){
+			}catch(JAXBException | SAXException | IOException exception){
 				Status status = new Status(IStatus.ERROR,Activator.PLUGIN_ID, "XML read failed", exception);
 				StatusManager.getManager().handle(status, StatusManager.BLOCK);
 				logger.error(exception.getMessage());
@@ -166,7 +167,7 @@ public class XMLConfigUtil {
 					}
 				}
 				return policyConfig;
-			}catch(Exception exception){
+			}catch(JAXBException | SAXException | IOException  exception){
 				Status status = new Status(IStatus.ERROR,Activator.PLUGIN_ID, "XML read failed", exception);
 				StatusManager.getManager().handle(status, StatusManager.BLOCK);
 				logger.error(exception.getMessage());
@@ -215,7 +216,7 @@ public class XMLConfigUtil {
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public  boolean validateXMLSchema(String xsdPath, String xmlPath) throws Exception{
+	public  boolean validateXMLSchema(String xsdPath, String xmlPath) throws SAXException, IOException{
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Schema schema;
 		try {

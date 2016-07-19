@@ -17,35 +17,29 @@ import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.BindException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.UnknownHostException;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
 import org.slf4j.Logger;
 
-
-
 /**
- * The Class ViewDataServiceInitiator is used to start rest service in local mode @portNo#8004
- * @author vibhort
+ * The Class ViewDataServiceInitiator is used to start rest service in local mode
+ * @author Bitwise
  *
  */
 public class ViewDataServiceInitiator {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ViewDataServiceInitiator.class);
-	
-	public static void startService(){
-	
+	private static final String DRIVER_CLASS = " hydrograph.server.debug.service.DebugService";
+	public static void startService(){	
 		try{
-			int portNumber = Integer.parseInt(DebugHelper.INSTANCE.restServicePort());
-			ServerSocket serverSocket = new ServerSocket(portNumber, 1, InetAddress.getLocalHost());
-			if(!serverSocket.isClosed()){
-				startServer();
+			String portId=DebugHelper.INSTANCE.getServicePortPID();
+			if(portId == null){
+				startServer();	
 			}
-
 		}catch(BindException bindException){
 			logger.error("Server is already started on port or is used by other process", bindException);
 		} catch (InterruptedException interruptedException) {
@@ -58,13 +52,15 @@ public class ViewDataServiceInitiator {
 	}
 
 	private static void startServer() throws InterruptedException, IOException {
-		if(OSValidator.isWindows()){
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "start", "/b", "java","-jar", getInstallationPath()});
-			builder.start();
+		if(OSValidator.isWindows()){			
+			String command= "cmd /c start \"\" /min " + getInstallationConfigPath2() ;
+			Runtime.getRuntime().exec(command,null,new File(getServiceInstallationDir()));
 		}
 		else if(OSValidator.isMac()){
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"java", "-jar", getInstallationPath()});
-			builder.start();
+			String command="java -cp " + getInstallationConfigPath().trim() + ":" + getInstallationPath() + DRIVER_CLASS;
+            ProcessBuilder builder = new ProcessBuilder(new String[]{"bash", "-c", command});
+            builder.start();
+
 		}
 		else if(OSValidator.isUnix()){
 			new ProcessBuilder(new String[]{"java", "-jar", getInstallationPath()}).start();
@@ -82,4 +78,33 @@ public class ViewDataServiceInitiator {
 		
 		return path + "config/service/" + restServiceJar;
 	}
+	
+	private static String getInstallationConfigPath()  {
+		String path = Platform.getInstallLocation().getURL().getPath();
+		if(StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/") && OSValidator.isWindows()){
+			path = StringUtils.substring(path, 1);
+		}
+		
+		return path + "config/service/config" ;
+	}
+	private static String getInstallationConfigPath2()  {
+		String path = Platform.getInstallLocation().getURL().getPath();
+		if(StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/") && OSValidator.isWindows()){
+			path = StringUtils.substring(path, 1);
+		}
+		
+		return path + "config/service/startdebugservice.vbs" ;
+	}
+	
+	
+	private static String getServiceInstallationDir()  {
+		String path = Platform.getInstallLocation().getURL().getPath();
+		if(StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/") && OSValidator.isWindows()){
+			path = StringUtils.substring(path, 1);
+		}
+		
+		return path + "config/service" ;
+	}
+	
+	
 }

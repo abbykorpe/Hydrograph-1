@@ -19,6 +19,7 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
 -vm
 /Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home/jre/lib/jli/libjli.dylib</programArgsMac>
       <vmArgs>-Xms512m
+
 -Xmx1024m</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
@@ -27,10 +28,17 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
 
    <splash
       location="hydrograph.ui.perspective" />
-   <launcher>
+   <launcher name="hydrograph">
+      <macosx icon="icons/icons.icns"/>
       <solaris/>
       <win useIco="false">
-         <bmp/>
+         <bmp
+            winSmallHigh="icons/16x16.bmp"
+            winSmallLow="icons/16x16_8bit.bmp"
+            winMediumHigh="icons/32x32.bmp"
+            winMediumLow="icons/32x32_8bit.bmp"
+            winLargeHigh="icons/48x48.bmp"
+            winLargeLow="icons/48x48_8bit.bmp"/>
       </win>
    </launcher>
 
@@ -70,7 +78,7 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="org.apache.batik.css"/>
       <plugin id="org.apache.batik.util"/>
       <plugin id="org.apache.batik.util.gui"/>
-      <plugin id="org.apache.commons.beanutils"/>
+      <plugin id="org.apache.commons.beanutils" fragment=""/>
       <plugin id="org.apache.commons.el"/>
       <plugin id="org.apache.commons.logging"/>
       <plugin id="org.apache.jasper"/>
@@ -260,6 +268,8 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="3" />
+      <property name="eclipse.buildId" value="${unqualifiedVersion}.${buildQualifier}" />
    </configurations>
 
 </product>
+

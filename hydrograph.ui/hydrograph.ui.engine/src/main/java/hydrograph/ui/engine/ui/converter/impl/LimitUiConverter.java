@@ -72,7 +72,7 @@ public class LimitUiConverter extends StraightpullUiConverter {
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.LIMIT.value());
 	
-		validateComponentProperties(propertyMap);
+		
 	}
 
 	protected void getOutPort(TypeStraightPullComponent straightPullComponent) {

@@ -17,11 +17,13 @@ import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GeneralGridWidgetBuilder;
 import hydrograph.ui.propertywindow.widgets.utility.DataType;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.TableItem;
 
 /**
  * The Class MixedSchemeGridCellModifier.
@@ -65,18 +67,14 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 		}
 		if (ELTSchemaGridWidget.SCALE.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())||
-					DataType.DOUBLE_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())||
-					DataType.BIGDECIMAL_CLASS.equals(mixedSchemeGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.equals(mixedSchemeGridRow.getDataTypeValue()))
 				return true;
 			else 
 				return false; 	
 		}
 		if (ELTSchemaGridWidget.SCALE_TYPE.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(mixedSchemeGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -84,9 +82,7 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 		}
 		if (ELTSchemaGridWidget.PRECISION.equals(property))
 		{
-			if(DataType.FLOAT_CLASS.equals(mixedSchemeGridRow.getDataTypeValue()) 
-					||DataType.DOUBLE_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue())
-					||DataType.BIGDECIMAL_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue()))
+			if(DataType.BIGDECIMAL_CLASS.getValue().equals(mixedSchemeGridRow.getDataTypeValue()))
 				return true;
 			else {
 				return false; 	
@@ -132,10 +128,12 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 
 	@Override
 	public void modify(Object element, String property, Object value) {
+		Object object=null;
 		if (element instanceof Item)
-			element = ((Item) element).getData();
-
-		MixedSchemeGridRow mixedSchemeGridRow = (MixedSchemeGridRow) element;
+			{
+			object=((Item) element).getData();
+			}
+		MixedSchemeGridRow mixedSchemeGridRow = (MixedSchemeGridRow) object;
 		if (ELTSchemaGridWidget.FIELDNAME.equals(property))
 			mixedSchemeGridRow.setFieldName(((String) value).trim());
 		else if (ELTSchemaGridWidget.DATATYPE.equals(property)) {
@@ -143,7 +141,7 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 			{
 				mixedSchemeGridRow.setScaleType(2); 
 				mixedSchemeGridRow.setScaleTypeValue(GeneralGridWidgetBuilder.getScaleTypeValue()[2]);
-				mixedSchemeGridRow.setScale(String.valueOf(0));
+				mixedSchemeGridRow.setScale(String.valueOf(1));
 			}
 			mixedSchemeGridRow.setDataType((Integer) value);
 			mixedSchemeGridRow.setDataTypeValue(GeneralGridWidgetBuilder.getDataTypeValue()[(Integer)value]); 
@@ -164,7 +162,7 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 			mixedSchemeGridRow.setLength(((String) value).trim());
 		}
 		else if (ELTSchemaGridWidget.DELIMITER.equals(property)) {
-			mixedSchemeGridRow.setDelimiter(((String) value).trim());
+			mixedSchemeGridRow.setDelimiter(((String) value));
 		}		
 
 		if (isResetNeeded(mixedSchemeGridRow, property)){
@@ -174,8 +172,8 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 			mixedSchemeGridRow.setPrecision("");
 		}
 		resetDateFormat(mixedSchemeGridRow, property);
-
 		viewer.refresh();
+		SchemaRowValidation.INSTANCE.highlightInvalidRowWithRedColor(mixedSchemeGridRow,(TableItem)element,mixedSchemeWidget.getTable(), mixedSchemeWidget.getComponentType());
 		mixedSchemeWidget.showHideErrorSymbol(mixedSchemeWidget.isWidgetValid());
 	}
 	
@@ -196,6 +194,8 @@ public class MixedSchemeGridCellModifier implements ICellModifier{
 					||DataType.STRING_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
 					||DataType.SHORT_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
 					||DataType.BOOLEAN_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
+					||DataType.FLOAT_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
+					||DataType.DOUBLE_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())
 					||DataType.DATE_CLASS.equals(mixedSchemeGridRow.getDataTypeValue())){
 				return true;
 			}	

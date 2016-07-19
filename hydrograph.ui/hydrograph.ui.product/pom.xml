@@ -1,3 +1,15 @@
+<!--
+    Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -30,12 +42,14 @@
 				<executions>
 					<execution>
 						<id>materialize-products</id>
+						<phase>package</phase>
 						<goals>
 							<goal>materialize-products</goal>
 						</goals>
 					</execution>
 					<execution>
 						<id>archive-products</id>
+						<phase>verify</phase> 
 						<goals>
 							<goal>archive-products</goal>
 						</goals>
@@ -46,13 +60,13 @@
 						<product>
 							<id>hydrograph.ui.perspective.ID</id>
 							<rootFolders>
-								<macosx>ELTTool.app</macosx>
+								<macosx>Hydrograph.app</macosx>
 							</rootFolders>
 						</product>
 					</products>
 				</configuration>
-
 			</plugin>
+            
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.6</version>
@@ -110,7 +124,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\ELTTool.app\Contents\Eclipse</outputDirectory>
+							<outputDirectory>target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\Hydrograph.app\Contents\Eclipse</outputDirectory>
 							<resources>
 								<resource>
 									<directory>resources</directory>
@@ -125,7 +139,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\ELTTool.app</outputDirectory>
+							<outputDirectory>target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\Hydrograph.app</outputDirectory>
 							<resources>
 								<resource>
 									<directory>resources</directory>
@@ -133,33 +147,26 @@
 							</resources>
 						</configuration>
 					</execution>
+					<execution>
+						<id>copy-resources-6</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/products/hydrograph.ui.perspective.ID/macosx/cocoa/x86_64/Hydrograph.app/Contents/MacOS/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>target/products/hydrograph.ui.perspective.ID/macosx/cocoa/x86_64/Hydrograph.app/Contents/Eclipse/</directory>
+									<includes>
+                                     <include>hydrograph.ini</include>
+                                    </includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
-	<plugin>
-	<artifactId>maven-antrun-plugin</artifactId>
-	<version>1.7</version>
-	<executions>
-		<execution>
-			<phase>verify</phase>
-			<configuration>
-				<tasks>
-
-					<copy
-						todir="target/products/hydrograph.ui.perspective.ID/macosx/cocoa/x86_64/ELTTool.app/Contents/MacOS/">
-						<fileset
-							dir="target/products/hydrograph.ui.perspective.ID/macosx/cocoa/x86_64/ELTTool.app/Contents/Eclipse/">
-							<include name="eclipse.ini" />
-						</fileset>
-					</copy>
-
-				</tasks>
-			</configuration>
-			<goals>
-				<goal>run</goal>
-			</goals>
-		</execution>
-	</executions>
-</plugin>	 
 		</plugins>
 	</build>
 </project>

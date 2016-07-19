@@ -16,6 +16,9 @@ package hydrograph.ui.perspective;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPartService;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
@@ -23,6 +26,8 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.part.EditorPart;
+import hydrograph.ui.perspective.TitleBarPartListener;
 
 import theme.ThemeHelper;
 
@@ -32,16 +37,21 @@ import theme.ThemeHelper;
  * @author Bitwise
  */
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
-
+	
 	private static final String PERSPECTIVE_ID = "hydrograph.ui.perspective.ETLPerspective"; //$NON-NLS-1$
 	
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
     	IDE.registerAdapters();
     	 PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.ENABLE_DETACHED_VIEWS, false);
     	 configurer.setShowProgressIndicator(true);
+    	 configurer.setShowFastViewBars(true);
+    	 configurer.setShowStatusLine(true);
+    	 configurer.getWindow().getPartService().addPartListener(new TitleBarPartListener());
         return new ApplicationWorkbenchWindowAdvisor(configurer);
     }
 
+	
+	
 	public String getInitialWindowPerspectiveId() {
 		return PERSPECTIVE_ID;
 	}

@@ -35,15 +35,23 @@
 			renderer="COMPONENT_NAME_WIDGET" type="USER" group="GENERAL"
 			subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 
-		<tns:property dataType="string" name="path" renderer="FILE_PATH_WIDGET" type="USER"
+		<tns:property dataType="string" name="path" renderer="BROWSE_WORKSPACE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
 			usage="REQUIRED" propertyHelpText="Displays the location of the Subjob file \neither Remote/Local. Allows only underscore ‘_’ and \nalphanumeric characters.">
-			<tns:validator>FILE_EXISTS_VALIDATOR</tns:validator>
+			<tns:validator>FILE_EXISTS_VALIDATOR</tns:validator> 
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="runtime_properties"
 			renderer="SUBJOB_PROPERTIES_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL" propertyHelpText="Resolves parameters within components \nin a subjob."/>
-
+			usage="OPTIONAL" propertyHelpText="Resolves parameters within components \nin a subjob.">
+		<tns:validator>RUNTIME_PROPERTY_VALIDATOR</tns:validator>
+		</tns:property>
+			
+		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Specifies the execution sequence of \nthis component in the job flow.">
+			<tns:validator>INTEGER_VALIDATOR</tns:validator>
+		</tns:property>
+		
 	</tns:component>
 </tns:Config>

@@ -17,6 +17,7 @@ package hydrograph.ui.propertywindow.widgets.utility;
 import hydrograph.ui.propertywindow.messages.Messages;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -25,6 +26,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 
 
 /**
@@ -66,8 +68,9 @@ public abstract class GridWidgetCommonBuilder {
 	 *            the size
 	 * @return the cell editor[]
 	 */
-	public abstract CellEditor[] createCellEditorList(Table table,int size);
 	
+	public abstract CellEditor[] createCellEditorList(Table table,
+			Map<String, Integer> columns) ;
 	/**
 	 * Creates the cell editor.
 	 * 
@@ -79,7 +82,7 @@ public abstract class GridWidgetCommonBuilder {
 		CellEditor[] cellEditor = new CellEditor[size];
 		return cellEditor;
 	}
-	
+		
 	/**
 	 * Adds the text editor.
 	 * 
@@ -90,8 +93,14 @@ public abstract class GridWidgetCommonBuilder {
 	 * @param position
 	 *            the position
 	 */
-	protected void addTextEditor(Table table, CellEditor[] cellEditor, int position){
-		cellEditor[position]=new TextCellEditor(table);
+	protected void addTextEditor(Table table, CellEditor[] cellEditor, Map<String, Integer> columns, String columnsName){
+		
+		cellEditor[columns.get(columnsName)]=new TextCellEditor(table);
+		if(columnsName.equals(Messages.PRECISION) || columnsName.equals(Messages.SCALE)){
+ 			TextCellEditor editor = (TextCellEditor) cellEditor[columns.get(columnsName)];
+ 			Text txt = (Text) editor.getControl();
+ 			txt.setTextLimit(2);
+ 		}
 	}
 	
 	/**
@@ -239,4 +248,6 @@ public abstract class GridWidgetCommonBuilder {
 	public static String[] getScaleType(){
 		return scaleTypeList;
 	}
+
+	
 }

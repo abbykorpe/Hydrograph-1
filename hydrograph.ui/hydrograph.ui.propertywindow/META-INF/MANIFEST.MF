@@ -25,7 +25,8 @@ Require-Bundle: org.eclipse.core.runtime,
  hydrograph.ui.model;bundle-version="0.0.1",
  hydrograph.ui.validators;bundle-version="0.0.1",
  hydrograph.ui.logging;bundle-version="0.0.1",
- org.eclipse.jdt.core;bundle-version="3.7.3"
+ org.eclipse.jdt.core;bundle-version="3.7.3",
+ org.apache.commons.collections;bundle-version="3.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: hydrograph.ui.common.util,
@@ -43,11 +44,13 @@ Export-Package: hydrograph.ui.propertywindow,
  hydrograph.ui.propertywindow.property,
  hydrograph.ui.propertywindow.propertydialog,
  hydrograph.ui.propertywindow.runconfig,
+ hydrograph.ui.propertywindow.schema.propagation.helper,
  hydrograph.ui.propertywindow.utils,
  hydrograph.ui.propertywindow.widgets.customwidgets,
  hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty,
  hydrograph.ui.propertywindow.widgets.customwidgets.schema,
  hydrograph.ui.propertywindow.widgets.gridwidgets.basic,
  hydrograph.ui.propertywindow.widgets.gridwidgets.container,
+ hydrograph.ui.propertywindow.widgets.hiveInput.dialog,
  hydrograph.ui.propertywindow.widgets.listeners,
  hydrograph.ui.propertywindow.widgets.utility

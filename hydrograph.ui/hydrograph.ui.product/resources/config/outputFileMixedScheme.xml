@@ -15,9 +15,9 @@
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/output_file_palette.png" canvasIconPath="/icons/output_file_canvas.png"
 		name="OFMixedScheme" nameInPalette="File Mixed Scheme" defaultNamePrefix="OFMixedScheme" 
-		description="Used to write output in Mixed Scheme text format."
-		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Fixed_Width.html"
-		acronym="Mix">
+		description="Used to write files with combination of delimited and fixed width fields."
+		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Mixed_Scheme.html"
+		acronym="OMix">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
@@ -38,7 +38,7 @@
 		<tns:property dataType="string" name="Path" renderer="FILE_PATH_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
 			usage="REQUIRED" propertyHelpText="Displays the location of the file either Remote/Local. \nAllows only underscore ‘_’ and alphanumeric characters.">
-			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="overWrite" value="True"
@@ -56,7 +56,7 @@
 		<tns:property dataType="string" name="charset" value="UTF-8" renderer="CHARACTER_SET_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="REQUIRED" propertyHelpText="Denotes the encoding system \nfollowed by the input file.">
-			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="strict" value="False"
@@ -67,7 +67,9 @@
 		
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL" propertyHelpText="Used to override runtime \nHadoop configurations specific to this \ncomponent at run time."/>
+			usage="OPTIONAL" propertyHelpText="Used to override runtime \nHadoop configurations specific to this \ncomponent at run time.">
+		<tns:validator>RUNTIME_PROPERTY_VALIDATOR</tns:validator>
+		</tns:property>
 		
 		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"

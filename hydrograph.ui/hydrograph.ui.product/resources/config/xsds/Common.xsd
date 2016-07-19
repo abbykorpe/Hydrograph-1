@@ -20,7 +20,7 @@
 			<enumeration value="OUTPUT" />
 			<enumeration value="TRANSFORM" />
 			<enumeration value="STRAIGHTPULL" />
-			<enumeration value="DUMMY" />
+			<enumeration value="UNKNOWN" />
 			<enumeration value="SUBJOB" />
 		</restriction>
 	</simpleType>
@@ -47,10 +47,12 @@
 		<enumeration value="GENERATE_RECORDS_SCHEMA_WIDGET" />
 		<enumeration value="TRANSFORM_SCHEMA_WIDGET" />
 			<enumeration value="SCHEMA_WIDGET" />
+			<enumeration value="HIVE_PARQUET_WIDGET" />
 			<enumeration value="FIELD_SEQUENCE_WIDGET" />
 			<enumeration value="FIXED_WIDGET"/>
 			<enumeration value="RUNTIME_PROPERTIES_WIDGET" />
 			<enumeration value="FILE_PATH_WIDGET" />
+			<enumeration value="BROWSE_WORKSPACE_WIDGET" />
 			<enumeration value="CHARACTER_SET_WIDGET" />
 			<enumeration value="DELIMETER_WIDGET" />
 			<enumeration value="PHASE_WIDGET" />
@@ -90,6 +92,7 @@
 			<enumeration value="EXTERNAL_TABLE_PATH_WIDGET"/>
 			<enumeration value="MIXED_SCHEME"/>
 			<enumeration value="OVERWRITE_WIDGET"/>
+			<enumeration value="PARTITION_KEYS_WIDGET_INPUT_HIVE"/>
 		</restriction>
 	</simpleType>
 
@@ -172,6 +175,13 @@
 			 <annotation>
 		          <appinfo>
 		            <jaxb:typesafeEnumMember name="NonEmptyStringValidatorRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
+		<enumeration value="NON_BLANK_STRING_VALIDATOR">
+			 <annotation>
+		          <appinfo>
+		            <jaxb:typesafeEnumMember name="NonBlankStringValidatorRule" />
 		          </appinfo>
         	</annotation>
 		</enumeration>
@@ -263,6 +273,27 @@
 			 <annotation>
 		          <appinfo> 
 		            <jaxb:typesafeEnumMember name="TransformMappingValidationRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
+		<enumeration value="HIVE_PARQUET_VALIDATOR">
+			 <annotation>
+		          <appinfo> 
+		            <jaxb:typesafeEnumMember name="HiveParquetSchemaValidationRule" />
+		          </appinfo>
+	       	</annotation>
+		</enumeration>
+		<enumeration value="RUNTIME_PROPERTY_VALIDATOR">
+			 <annotation>
+		          <appinfo> 
+		            <jaxb:typesafeEnumMember name="RuntimePropertyValueValidationRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
+		<enumeration value="HIVE_KEY_FIELDS_VALIDATOR">
+			 <annotation>
+		          <appinfo> 
+		            <jaxb:typesafeEnumMember name="HiveKeyFieldsValidationRule" />
 		          </appinfo>
         	</annotation>
 		</enumeration>

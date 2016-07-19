@@ -46,12 +46,12 @@ public class OperationClassComboChangeListener implements IELTListener{
 			public void handleEvent(Event event) {
 				String comboValue = ((Combo) widgetList[0]).getText();
 				propertyDialogButtonBar.enableApplyButton(true);
-				if (Messages.CUSTOM.equalsIgnoreCase(comboValue) && !FilterOperationClassUtility.isCheckBoxSelected()) {
+				if (Messages.CUSTOM.equalsIgnoreCase(comboValue) && !FilterOperationClassUtility.INSTANCE.isCheckBoxSelected()) {
 					((Text) widgetList[1]).setText("");
 					((Text) widgetList[1]).setEnabled(true);
-					FilterOperationClassUtility.enableAndDisableButtons(true, false);
+					FilterOperationClassUtility.INSTANCE.enableAndDisableButtons(true, false);
 				} else {
-					if(FilterOperationClassUtility.isCheckBoxSelected())
+					if(FilterOperationClassUtility.INSTANCE.isCheckBoxSelected())
 					{
 						MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 						messageBox.setText(Messages.ERROR);
@@ -62,13 +62,13 @@ public class OperationClassComboChangeListener implements IELTListener{
 					}
 					else
 					{
-						FilterOperationClassUtility.setOperationClassNameInTextBox(comboValue, (Text)widgetList[1]);
+						FilterOperationClassUtility.INSTANCE.setOperationClassNameInTextBox(comboValue, (Text)widgetList[1]);
 						((Text) widgetList[1]).setEnabled(false);
-						FilterOperationClassUtility.enableAndDisableButtons(false, false);
+						FilterOperationClassUtility.INSTANCE.enableAndDisableButtons(false, false);
 						((Button) widgetList[2]).setEnabled(false);
 					}
 				}
-			}
+			} 
 		};
 		return listener;
 	}

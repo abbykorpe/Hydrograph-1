@@ -13,6 +13,12 @@
 
 package hydrograph.ui.datastructure.property;
 
+/**
+ * MixedSchemeGridRow is the data-structure used for storing schema of Mixed-Scheme components
+ * 
+ * @author Bitwise
+ *
+ */
 public class MixedSchemeGridRow extends FixedWidthGridRow{
 	//private String delimiter;
 	public String getDelimiter() {

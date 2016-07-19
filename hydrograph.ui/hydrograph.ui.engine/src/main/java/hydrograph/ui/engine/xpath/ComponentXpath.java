@@ -37,6 +37,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.slf4j.Logger;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -119,7 +120,7 @@ public class ComponentXpath {
 				parentNode = nodeList.item(i);
 				NodeList nNodeLst = (NodeList) nodeList.item(i);
 				for (int j = 0; j < nNodeLst.getLength(); j++) {
-					nNode = nNodeLst.item(i);
+					nNode = nNodeLst.item(j);
 					cloneNode = nNode.cloneNode(false);
 					cloneNode.setTextContent(entry.getValue().getNewNodeText());
 				}
@@ -135,7 +136,7 @@ public class ComponentXpath {
 					parentNode.removeChild(remove);
 				}
 
-		} catch (Exception exception) {
+		} catch (DOMException exception) {
 			LOGGER.error("Exception occured", exception);
 		}
 	}

@@ -62,7 +62,7 @@ public class RemoveDupsUiConverter extends StraightpullUiConverter {
 		container.getComponentNames().add(componentName);
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.REMOVE_DUPS.value());
-		validateComponentProperties(propertyMap);
+		
 	}
 
 	private Map<String, String> getSecondaryKeys() {

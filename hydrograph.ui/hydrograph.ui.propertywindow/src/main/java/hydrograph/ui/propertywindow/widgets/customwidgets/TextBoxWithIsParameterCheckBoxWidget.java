@@ -117,8 +117,9 @@ public class TextBoxWithIsParameterCheckBoxWidget extends TextBoxWithLabelWidget
 				if (isFieldNameExists(textBox.getText())) {
 					Point lastCursorPoint = textBox.getSelection();
 					String currentValue = textBox.getText();
-					if(StringUtils.isNotBlank(lastValue))
-					textBox.setText(lastValue);
+					if(StringUtils.isNotBlank(lastValue)){
+						textBox.setText(lastValue);
+					}
 					textBox.setSelection(lastCursorPoint);
 					txtDecorator.setDescriptionText(currentValue + " - already exists");
 					txtDecorator.show();
@@ -193,8 +194,8 @@ public class TextBoxWithIsParameterCheckBoxWidget extends TextBoxWithLabelWidget
 
 	private FixedWidthGridRow createSchemaForNewField(String fieldName) {
 		FixedWidthGridRow fixedWidthGridRow = SchemaPropagationHelper.INSTANCE.createFixedWidthGridRow(fieldName);
-		fixedWidthGridRow.setDataType(1);
-		fixedWidthGridRow.setDataTypeValue(Integer.class.getCanonicalName());
+		fixedWidthGridRow.setDataType(8);
+		fixedWidthGridRow.setDataTypeValue(Long.class.getCanonicalName());
 		return fixedWidthGridRow;
 	}
 

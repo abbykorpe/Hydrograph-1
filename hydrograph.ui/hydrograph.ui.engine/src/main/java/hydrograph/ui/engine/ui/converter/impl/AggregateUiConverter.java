@@ -73,7 +73,6 @@ public class AggregateUiConverter extends TransformUiConverter {
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.AGGREGATE.value());
 		
-		validateComponentProperties(propertyMap);
 	}
 
 	private Map<String, String> getSecondaryKeys() {

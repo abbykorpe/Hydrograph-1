@@ -37,7 +37,7 @@ public class JsonService {
 		runtime = new HydrographRuntime();
 	}
 
-	public void executeGraph(String[] args) throws JSONException, JAXBException, ParseException {
+	public void executeGraph(String[] args) throws JSONException, JAXBException {
 		hydrographJob = inputService.parseParameters(args);
 		LOG.info("Hydrograph job '" + hydrographJob.getJAXBObject().getName() + "' generated successfully!");
 
@@ -46,7 +46,7 @@ public class JsonService {
 				+ "' runtime processing completed successfully!");
 	}
 
-	public static void main(String[] args) throws JSONException, JAXBException, ParseException {
+	public static void main(String[] args) throws JSONException, JAXBException {
 		JsonService josJsonService = new JsonService();
 		JSONObject obj = new JSONObject();
 		JSONObject obj1 = new JSONObject();
@@ -65,7 +65,7 @@ public class JsonService {
 				+ "' runtime processing completed successfully!");
 	}
 
-	public String[] setArguments(JSONObject obj) throws JSONException, JAXBException, ParseException {
+	public String[] setArguments(JSONObject obj) throws JSONException, JAXBException {
 		StringBuffer sb = new StringBuffer();
 		String[] args = parse(obj, sb, null);
 		executeGraph(args);

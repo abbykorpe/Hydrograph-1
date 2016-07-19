@@ -1,25 +1,27 @@
 /********************************************************************************
-  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
-  * http://www.apache.org/licenses/LICENSE-2.0
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  ******************************************************************************/
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 
 package hydrograph.ui.graph.action.debug;
 
+import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.dataviewer.constants.MessageBoxText;
+import hydrograph.ui.dataviewer.filter.FilterConditions;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
-import hydrograph.ui.graph.debug.service.DebugDataWizard;
-import hydrograph.ui.graph.debug.service.DebugRestClient;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.handler.DebugHandler;
@@ -27,11 +29,14 @@ import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.CoreException;
@@ -42,86 +47,88 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
-import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.slf4j.Logger;
- 
+
 /**
  * The Class WatchRecordAction used to view data at watch points after job execution
+ * 
  * @author Bitwise
- *
+ * 
  */
 public class WatchRecordAction extends SelectionAction {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(WatchRecordAction.class);
 	private boolean isWatcher;
-	WatchRecordInner watchRecordInner = new WatchRecordInner();
-	 
-	
+	private WatchRecordInner watchRecordInner = new WatchRecordInner();
+
+	private static Map<String, DebugDataViewer> dataViewerMap;
+
 	public WatchRecordAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(true);
 	}
-
-
+	private Map<String, FilterConditions> watcherAndConditon =new LinkedHashMap<String, FilterConditions>();
 	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.WATCH_RECORD_TEXT);
 		setId(Constants.WATCH_RECORD_ID);
 		setEnabled(true);
+		dataViewerMap = new HashMap<>();
+		 
+		JobManager.INSTANCE.setDataViewerMap(dataViewerMap);
 	}
-	
-	private boolean createWatchCommand(List<Object> selectedObjects) throws CoreException  {
-		for(Object obj:selectedObjects){
-			if(obj instanceof LinkEditPart)	{
-				Link link = (Link)((LinkEditPart)obj).getModel();
+
+	private void createWatchCommand() throws CoreException {
+		List<Object> selectedObjects = getSelectedObjects();
+		for (Object obj : selectedObjects) {
+			if (obj instanceof LinkEditPart) {
+				Link link = (Link) ((LinkEditPart) obj).getModel();
 				String componentId = link.getSource().getComponentLabel().getLabelContents();
 				Component component = link.getSource();
-				if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
+				if (StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)) {
 					String str = DebugHelper.INSTANCE.getSubgraphComponent(component);
-					String[] str1 = StringUtils.split(str,".");
+					String[] str1 = StringUtils.split(str, ".");
 					String componentID = str1[0];
 					String socketId = str1[1];
-					watchRecordInner.setComponentId(link.getSource().getComponentLabel().getLabelContents()+"."+componentID);
+					watchRecordInner
+							.setComponentId(link.getSource().getComponentLabel().getLabelContents() + "." + componentID);
 					watchRecordInner.setSocketId(socketId);
-				}else{
+				} else {
 					watchRecordInner.setComponentId(componentId);
 					String socketId = link.getSourceTerminal();
 					watchRecordInner.setSocketId(socketId);
 				}
-				
+
 				isWatcher = checkWatcher(link.getSource(), link.getSourceTerminal());
-				return true;
-			}	
+			}
 		}
-		return false;
 	}
-	
+
 	private boolean checkWatcher(Component selectedComponent, String portName) {
-		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActiveEditor();
 		IPath path = new Path(editor.getTitleToolTip());
 		String currentJob = path.lastSegment().replace(Constants.JOB_EXTENSION, "");
 		watchRecordInner.setCurrentJob(currentJob);
-		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
+		GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor).getAdapter(GraphicalViewer.class);
 		String uniqueJobId = editor.getJobId();
 		watchRecordInner.setUniqueJobId(uniqueJobId);
-		 
+
 		for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator.hasNext();) {
 			EditPart editPart = (EditPart) iterator.next();
-			if(editPart instanceof ComponentEditPart) {
-				Component comp = ((ComponentEditPart)editPart).getCastedModel();
-				if(comp.equals(selectedComponent)){
+			if (editPart instanceof ComponentEditPart) {
+				Component comp = ((ComponentEditPart) editPart).getCastedModel();
+				if (comp.equals(selectedComponent)) {
 					List<PortEditPart> portEditParts = editPart.getChildren();
-					for(AbstractGraphicalEditPart part:portEditParts) {	
-						if(part instanceof PortEditPart){
-							String port_Name = ((PortEditPart)part).getCastedModel().getTerminal();
-							if(port_Name.equals(portName)){
-								return ((PortEditPart)part).getPortFigure().isWatched();
+					for (AbstractGraphicalEditPart part : portEditParts) {
+						if (part instanceof PortEditPart) {
+							String port_Name = ((PortEditPart) part).getCastedModel().getTerminal();
+							if (port_Name.equals(portName)) {
+								return ((PortEditPart) part).getPortFigure().isWatched();
 							}
 						}
 					}
@@ -130,189 +137,162 @@ public class WatchRecordAction extends SelectionAction {
 		}
 		return false;
 	}
-	
 
-	private void readViewDataInRemoteMode() {
-		JSONArray jsonArray = null;
-		String basePath = null,ipAddress = null,userID = null,password = null,port_no = null;
-		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
-		if(job!=null){
-			basePath = job.getBasePath();
-			ipAddress = job.getIpAddress();
-			userID = job.getUserId();
-			password = job.getPassword();
-			port_no = job.getPortNumber();
-		}
-		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
-		logger.info("Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}",
-				new Object[] { basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId() });
-		DebugRestClient debugRestClient = new DebugRestClient();
-			try {
-				jsonArray = debugRestClient.callRestService(ipAddress, port_no, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), userID, password);
-			} catch (IOException exception) {
-				logger.error("Connection failed", exception);
-				messageDialog(Messages.REMOTE_MODE_TEXT);
-				return;
-			}catch(JSONException exception){
-				logger.error("Service failed to response in JSON format", exception);
-				messageDialog(Messages.REMOTE_MODE_TEXT);
-				return;
-			}catch (Exception exception){
-				logger.error("Exception while calling rest service: ", exception);
-				messageDialog(Messages.REMOTE_MODE_TEXT);
-				return;
-		}
-		
-		if(jsonArray == null || jsonArray.length() == 0){
-			messageDialog(Messages.REMOTE_MODE_TEXT);
-		}else{
-			DebugDataWizard debugRemoteWizard = new DebugDataWizard(Display.getDefault().getActiveShell(), jsonArray, false);
-			debugRemoteWizard.open();
-		}
-	}
-	
-	private void readViewDataInLocalMode()   {
-		JSONArray jsonArray = null;
-		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());
-		if(job == null){
-			messageDialog(Messages.REMOTE_MODE_TEXT);
-			return;
-		}
-		String basePath = job.getBasePath();
-		String ipAddress = "localhost";//job.getIpAddress();
-		String userID = job.getUserId();
-		String password = job.getPassword();
-		String port = DebugHelper.INSTANCE.restServicePort();
-		
-		logger.debug("BasePath :{}", basePath);
-		logger.debug("jobid: {}", watchRecordInner.getUniqueJobId());
-		logger.debug("componetid: {} :{}", watchRecordInner.getComponentId());
-		logger.debug("socketid :{}", watchRecordInner.getSocketId());
-		
-		//logger.debug("BasePath :{}, jobid: {}, componetid: {}, socketid: {}",basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId());
-		DebugRestClient debugRestClient = new DebugRestClient();
-			try {
-				jsonArray = debugRestClient.callRestService(ipAddress, port, basePath, watchRecordInner.getUniqueJobId(), watchRecordInner.getComponentId(), watchRecordInner.getSocketId(), "userid", "password");
-			} catch (IOException exception) {
-				logger.error("Connection failed", exception);
-				messageDialog(Messages.REMOTE_MODE_TEXT);
-				return;
-			}catch(JSONException exception){
-				logger.error("Service failed to response in JSON format", exception);
-				messageDialog(Messages.REMOTE_MODE_TEXT);
-				return;
-			}catch (Exception exception){
-				logger.error("Exception while calling rest service: ", exception);
-				messageDialog(Messages.REMOTE_MODE_TEXT);
-				return;
-		}
-		
-		if(jsonArray == null || jsonArray.length() == 0){
-			messageDialog(Messages.REMOTE_MODE_TEXT);
-		}else{
-			DebugDataWizard debugRemoteWizard = new DebugDataWizard(Display.getDefault().getActiveShell(), jsonArray, false);
-			debugRemoteWizard.open();
-		}
-	}
-	
-	
-	private boolean isLocalDebugMode(){
-		logger.debug("getRunningMode: "+ JobManager.INSTANCE.isLocalMode());
-		return JobManager.INSTANCE.isLocalMode();
-	}
-	
-	private void messageDialog(String message){
-		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.APPLICATION_MODAL | SWT.OK);
-		messageBox.setText(Messages.DEBUG_ALERT_MESSAGE); 
-		messageBox.setMessage(message);
-		messageBox.open();
-	}
-	
 	@Override
 	protected boolean calculateEnabled() {
-		int count =0;
+		int count = 0;
 		List<Object> selectedObject = getSelectedObjects();
-		
+
 		try {
-			createWatchCommand(selectedObject);
+			createWatchCommand();
 		} catch (CoreException exception) {
 			logger.error(exception.getMessage(), exception);
 		}
-		
-		if(!selectedObject.isEmpty() && isWatcher){
-			for(Object obj : selectedObject){
-				if(obj instanceof LinkEditPart)	{
+
+		if (!selectedObject.isEmpty() && isWatcher) {
+			for (Object obj : selectedObject) {
+				if (obj instanceof LinkEditPart) {
 					count++;
 				}
 			}
 		}
-		
-		if(count == 1){
+
+		if (count == 1) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
-	
-	
-	
-	
+
 	@Override
-	public void run() {
-		super.run();
-		
-		 try {
-			createWatchCommand(getSelectedObjects());
+	public void run() {			
+		//Create watch command
+		try {
+			createWatchCommand();
 		} catch (CoreException e) {
-			e.printStackTrace();
+			logger.error("Unable to create watch command",e);
+			MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_CREATE_WATCH_RECORD);
+			return;
 		}
-		 
-		 if(!isWatcher){
-			 messageDialog(Messages.MESSAGES_BEFORE_CLOSE_WINDOW);
-		 }else{
-			 if(isLocalDebugMode()){
-					readViewDataInLocalMode();
-			 }else{
-					readViewDataInRemoteMode();
-			 }
-		 }
+		
+		// Check if job is executed in debug mode
+		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());		
+		if(job==null){
+			MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.FORGOT_TO_EXECUTE_DEBUG_JOB);
+			return;
+		}
+		
+		
+		//Create data viewer window name, if window exist reopen same window
+		String dataViewerWindowName = job.getLocalJobID().replace(".", "_") + "_" + watchRecordInner.getComponentId() + "_"
+				+ watchRecordInner.getSocketId();
+		if (dataViewerMap.keySet().contains(dataViewerWindowName)) {
+			Point originalWindowSize=dataViewerMap.get(dataViewerWindowName).getShell().getSize();
+			dataViewerMap.get(dataViewerWindowName).getShell().setActive();
+			dataViewerMap.get(dataViewerWindowName).getShell().setMaximized(true);
+			dataViewerMap.get(dataViewerWindowName).getShell().setSize(new Point(originalWindowSize.x, originalWindowSize.y));
+			return;
+		}
+		
+		// Check if watcher exist
+		if (!isWatcher) {
+			MessageBox.INSTANCE.showMessage(MessageBox.INFO, Messages.MESSAGES_BEFORE_CLOSE_WINDOW);
+			return;
+		}
+				
+		final JobDetails jobDetails = getJobDetails(job);
+
+		final String dataViewerWindowTitle = dataViewerWindowName;	
+
+		//Open data viewer window
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				DebugDataViewer window = new DebugDataViewer(jobDetails,dataViewerWindowTitle);
+				String watcherId=watchRecordInner.getComponentId()+watchRecordInner.getComponentId();
+				dataViewerMap.put(dataViewerWindowTitle, window);
+				window.setBlockOnOpen(true);
+				window.setDataViewerMap(dataViewerMap);
+				if(watcherAndConditon.containsKey(watcherId))
+				{
+					window.setConditions(watcherAndConditon.get(watcherId));
+					if(watcherAndConditon.get(watcherId).isOverWritten()){
+						window.setOverWritten(watcherAndConditon.get(watcherId).isOverWritten());
+					}
+				}
+				
+				window.open();
+				if(!window.getConditions().getRetainLocal()){
+					window.getConditions().setLocalCondition("");
+					window.getConditions().getLocalConditions().clear();
+					window.getConditions().getLocalGroupSelectionMap().clear();
+				}
+				if(!window.getConditions().getRetainRemote()){
+					window.getConditions().setRemoteCondition("");
+					window.getConditions().getRemoteConditions().clear();
+					window.getConditions().getRemoteGroupSelectionMap().clear();
+				}
+					
+				watcherAndConditon.put(watcherId,window.getConditions());
+			}
+		});
+	}
+
+	
+	private JobDetails getJobDetails(Job job) {
+		final JobDetails jobDetails = new JobDetails(
+				job.getHost(), 
+				job.getPortNumber(), 
+				job.getUserId(), 
+				job.getPassword(), 
+				job.getBasePath(),
+				watchRecordInner.getUniqueJobId(), 
+				watchRecordInner.getComponentId(), 
+				watchRecordInner.getSocketId(),
+				job.isRemoteMode());
+		return jobDetails;
 	}
 }
 
-
-class WatchRecordInner{
+class WatchRecordInner {
 	private String componentId;
 	private String socketId;
 	private String currentJob;
 	private String uniqueJobId;
 	
-	public WatchRecordInner() {
-		// TODO Auto-generated constructor stub
+	public WatchRecordInner() {		
 	}
-	
+
 	public String getUniqueJobId() {
 		return uniqueJobId;
 	}
+
 	public void setUniqueJobId(String uniqueJobId) {
 		this.uniqueJobId = uniqueJobId;
 	}
+
 	public String getComponentId() {
 		return componentId;
 	}
+
 	public void setComponentId(String componentId) {
 		this.componentId = componentId;
 	}
+
 	public String getSocketId() {
 		return socketId;
 	}
+
 	public void setSocketId(String socketId) {
 		this.socketId = socketId;
 	}
+
 	public String getCurrentJob() {
 		return currentJob;
 	}
+
 	public void setCurrentJob(String currentJob) {
 		this.currentJob = currentJob;
 	}
-	 
+
 }

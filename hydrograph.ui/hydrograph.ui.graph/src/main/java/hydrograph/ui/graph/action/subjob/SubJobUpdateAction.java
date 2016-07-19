@@ -121,7 +121,7 @@ public class SubJobUpdateAction extends SelectionAction {
 			if (StringUtils.equals(Constants.SUBJOB_COMPONENT, selectedSubjobComponent.getComponentName()) && selectedSubjobComponent.getProperties().get(Constants.PATH_PROPERTY_NAME)!=null) {
 				filePath=(String) selectedSubjobComponent.getProperties().get(Constants.PATH_PROPERTY_NAME);
 				SubJobUtility subJobUtility=new SubJobUtility();
-				subJobUtility.updateSubgjobProperty(null,filePath, selectedSubjobComponent);
+				subJobUtility.updateSubjobProperty(null,filePath, selectedSubjobComponent);
 				selectedSubjobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(), "VALID");
 				componentEditPart.changePortSettings();
 				componentEditPart.updateComponentStatus();
