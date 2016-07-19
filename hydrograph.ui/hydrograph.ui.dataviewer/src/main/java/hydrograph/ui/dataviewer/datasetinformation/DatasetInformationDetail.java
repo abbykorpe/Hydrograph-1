@@ -29,7 +29,16 @@ public class DatasetInformationDetail {
 	private String userName="";
 	private String localFilter="";
 	private String remoteFilter="";
+	private String acctualFileSize;
 	
+	public String getAcctualFileSize() {
+		return acctualFileSize;
+	}
+
+	public void setAcctualFileSize(String acctualFileSize) {
+		this.acctualFileSize = acctualFileSize;
+	}
+
 	public String getViewDataFilePath() {
 		return viewDataFilePath;
 	}

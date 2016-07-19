@@ -112,48 +112,40 @@ public class DatasetInformationDialog extends Dialog {
 		tbtmGeneral.setControl(scrolledComposite);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
-		
 	
-		
 		genralTabDatacomposite = new Composite(scrolledComposite, SWT.NONE);
 		genralTabDatacomposite.setLayout(new GridLayout(2, false));
 		
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.VIEW_DATA_FILE);
-		
 		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getViewDataFilePath());
 		
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.EDGE_NODE);
-		
 		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getEdgeNode());
 	
 		if(jobDetails.isRemote()){
 			createLabel(genralTabDatacomposite,DatasetInformationConstants.USERNAME);
-		
 			setLabelValue(genralTabDatacomposite,datasetInformationDetail.getUserName());
 		}
 		
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.LOCALCHUNKDATA);
-		
 		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getChunkFilePath());
 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.FILESIZE);
+        createLabel(genralTabDatacomposite,DatasetInformationConstants.ORIGINAL_FILE_SIZE);
+	    setLabelValue(genralTabDatacomposite,datasetInformationDetail.getAcctualFileSize());
 		
+		createLabel(genralTabDatacomposite,DatasetInformationConstants.FILESIZE);
 		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getSizeOfData());
 		
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.NOOFRECORDS);
-		
 		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getNoOfRecords());
 		
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.PAGESIZE);
-		
 		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getPageSize());
 		
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.DELIMETER);
-		
 		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getDelimeter());
 		
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.QUOTE);
-		
 		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getQuote());
 		
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.DOWNLOADED_FILTER_CONDITION);

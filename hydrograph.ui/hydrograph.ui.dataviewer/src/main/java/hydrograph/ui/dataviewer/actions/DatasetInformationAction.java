@@ -51,10 +51,12 @@ public class DatasetInformationAction extends Action {
 			DataViewerAdapter csvAdapter;
 			String debugFileLocation= new String();
 			String debugFileName="";
+			double downloadedFileSize;
 			JobDetails jobDetails = debugDataViewer.getJobDetails();
  	
 			debugFileLocation = debugDataViewer.getDebugFileLocation();
 			debugFileName = debugDataViewer.getDebugFileName();
+			downloadedFileSize = debugDataViewer.getDownloadedFileSize();
 			csvAdapter=debugDataViewer.getDataViewerAdapter();
 			viewDataPreferences=debugDataViewer.getViewDataPreferences();
   	
@@ -66,6 +68,7 @@ public class DatasetInformationAction extends Action {
 			datasetInformationDetail.setEdgeNode(jobDetails.getHost());
 			datasetInformationDetail.setNoOfRecords(Long.toString(csvAdapter.getRowCount()));
 			datasetInformationDetail.setPageSize(Integer.toString(viewDataPreferences.getPageSize()));
+			datasetInformationDetail.setAcctualFileSize(String.valueOf(downloadedFileSize));
 			datasetInformationDetail.setQuote(viewDataPreferences.getQuoteCharactor());
 			datasetInformationDetail.setViewDataFilePath(jobDetails.getBasepath());
 			datasetInformationDetail.setSizeOfData(Integer.toString(viewDataPreferences.getFileSize()));
