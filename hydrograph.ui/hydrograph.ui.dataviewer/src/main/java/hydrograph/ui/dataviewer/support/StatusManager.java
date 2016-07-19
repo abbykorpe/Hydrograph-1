@@ -101,7 +101,7 @@ public class StatusManager {
 		StringBuilder stringBuilder = new StringBuilder();
 		
 		stringBuilder.append(Messages.SHOWING_RECORDS_FROM + " " + (dataViewerAdapter.getOffset() + 1)
-				+ " to " + (dataViewerAdapter.getOffset() + dataViewerAdapter.getPageSize())
+				+ " to " + (dataViewerAdapter.getOffset() + dataViewerAdapter.getFileData().size())
 				+ STATUS_MESSAGE_SEPARATOR);
 		
 		
