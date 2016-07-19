@@ -285,6 +285,7 @@ public class FilterHelper {
 					for (String option : source.getItems()) {
 						if (StringUtils.equalsIgnoreCase(source.getText(), option)) {
 							source.setText(option);
+							break;
 						}
 					}
 				}
