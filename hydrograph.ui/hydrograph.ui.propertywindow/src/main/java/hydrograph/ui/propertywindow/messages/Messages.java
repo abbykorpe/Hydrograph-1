@@ -186,6 +186,7 @@ public class Messages extends NLS {
 	public static String ONLY_SPECIFY_LENGTH_OR_DELIMITER;
 	public static String LENGTH_SHOULD_NOT_BE_ZERO;
 	public static String MAPPING_WINDOW_DUPLICATE_FIELD;
+	public static String SCALE_MUST_BE_LESS_THAN_PRECISION;
 	
 	public static String OPERATION_ID_PREFIX;
     public static String OPERATION_LIST_EMPTY;
