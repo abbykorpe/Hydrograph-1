@@ -245,7 +245,7 @@ public class FilterConditionsDialog extends Dialog {
         
         remoteBtnAddGrp.setText(Messages.CREATE_GROUP);		
         remoteBtnAddGrp.setEnabled(false);
-        remoteBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer,clearGroupsRemote,remoteConditionsList, remoteBtnAddGrp,remoteGroupSelectionMap));
+        remoteBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer,clearGroupsRemote,remoteConditionsList, remoteBtnAddGrp,remoteGroupSelectionMap,true));
 		
 		Button retainButton = new Button(composite_3, SWT.CHECK);
 		retainButton.setText(Messages.RETAIN_REMOTE_FILTER);
@@ -282,7 +282,7 @@ public class FilterConditionsDialog extends Dialog {
 		addButtonTableViewerColumn.setLabelProvider(getAddButtonCellProvider(tableViewer, remoteConditionsList, remoteGroupSelectionMap));
 		
 		TableViewerColumn removeButtonTableViewerColumn = createTableColumns(tableViewer, "", 28);
-		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, remoteConditionsList,remoteBtnAddGrp,remoteGroupSelectionMap));
+		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, remoteConditionsList,remoteBtnAddGrp,remoteGroupSelectionMap,true));
 		
 		TableViewerColumn groupButtonTableViewerColumn = createTableColumns(tableViewer, "", 40);
 		groupButtonTableViewerColumn.setLabelProvider(getGroupCheckCellProvider(tableViewer, remoteConditionsList,remoteBtnAddGrp));
@@ -373,7 +373,7 @@ public class FilterConditionsDialog extends Dialog {
         
         localBtnAddGrp.setText(Messages.CREATE_GROUP);
         localBtnAddGrp.setEnabled(false);
-        localBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer, clearGroupsLocal,localConditionsList,localBtnAddGrp,localGroupSelectionMap));
+        localBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer, clearGroupsLocal,localConditionsList,localBtnAddGrp,localGroupSelectionMap,false));
         		
         		        
 		Button retainButton = new Button(composite_3, SWT.CHECK);
@@ -409,7 +409,7 @@ public class FilterConditionsDialog extends Dialog {
 		addButtonTableViewerColumn.setLabelProvider(getAddButtonCellProvider(tableViewer, localConditionsList,localGroupSelectionMap));
 		
 		TableViewerColumn removeButtonTableViewerColumn = createTableColumns(tableViewer, "", 28);
-		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, localConditionsList,localBtnAddGrp,localGroupSelectionMap));
+		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, localConditionsList,localBtnAddGrp,localGroupSelectionMap,false));
 		
 		TableViewerColumn groupButtonTableViewerColumn = createTableColumns(tableViewer, "", 40);
 		groupButtonTableViewerColumn.setLabelProvider(getGroupCheckCellProvider(tableViewer, localConditionsList,localBtnAddGrp));
@@ -769,7 +769,7 @@ public class FilterConditionsDialog extends Dialog {
 	}
 
 	private CellLabelProvider getRemoveButtonCellProvider(final TableViewer tableViewer, final List<Condition> conditionsList, 
-			final Button btnAddGrp, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap) {
+			final Button btnAddGrp, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap, final boolean isRemote) {
 		return new CellLabelProvider() {
 			
 			@Override
@@ -783,7 +783,7 @@ public class FilterConditionsDialog extends Dialog {
 					return;
 				}
 				addButtonInTable(tableViewer, item, REMOVE, REMOVE_BUTTON_PANE, REMOVE_EDITOR, cell.getColumnIndex(), 
-						removeButtonListener(tableViewer, conditionsList, dummyList,groupSelectionMap, btnAddGrp), 
+						removeButtonListener(tableViewer, conditionsList, dummyList,groupSelectionMap, btnAddGrp,isRemote), 
 						ImagePathConstant.DELETE_BUTTON);
 				item.addDisposeListener(new DisposeListener() {
 					
@@ -965,7 +965,7 @@ public class FilterConditionsDialog extends Dialog {
 	}
 	
 	private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer,final Button clearGroups,
-		final List<Condition> conditionsList,final Button btnAddGrp, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap) {
+		final List<Condition> conditionsList,final Button btnAddGrp, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap,final boolean isRemote) {
 		
 		SelectionListener listener = new SelectionListener() {
 			
@@ -975,7 +975,7 @@ public class FilterConditionsDialog extends Dialog {
 					FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
 				    dummyList.clear();
 				    dummyList.addAll(FilterHelper.INSTANCE.cloneList(conditionsList));
-				    redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap);
+				    redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap,isRemote);
 				   	clearGroups.setEnabled(true);		 
 				}
 			}
@@ -991,13 +991,13 @@ public class FilterConditionsDialog extends Dialog {
 	
 	
 	public void redrawAllColumns(TableViewer tableViewer, List<Condition> conditionsList, Button btnAddGrp, 
-			TreeMap<Integer, List<List<Integer>>> groupSelectionMap){
+			TreeMap<Integer, List<List<Integer>>> groupSelectionMap, boolean isRemote){
 		
 		TableViewerColumn addButtonTableViewerColumn = createTableColumns(tableViewer, "", 28);
 		addButtonTableViewerColumn.setLabelProvider(getAddButtonCellProvider(tableViewer, conditionsList,groupSelectionMap));
 		
 		TableViewerColumn removeButtonTableViewerColumn = createTableColumns(tableViewer, "", 28);
-		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, conditionsList,btnAddGrp,groupSelectionMap));
+		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, conditionsList,btnAddGrp,groupSelectionMap,isRemote));
 		
 		TableViewerColumn groupButtonTableViewerColumn = createTableColumns(tableViewer, "", 40);
 		groupButtonTableViewerColumn.setLabelProvider(getGroupCheckCellProvider(tableViewer, conditionsList,btnAddGrp));
@@ -1011,20 +1011,20 @@ public class FilterConditionsDialog extends Dialog {
 		
 		
 		TableViewerColumn relationalDropDownColumn = createTableColumns(tableViewer, Messages.RELATIONAL_OPERATOR, 120);
-		relationalDropDownColumn.setLabelProvider(getRelationalCellProvider(tableViewer, conditionsList, true));
+		relationalDropDownColumn.setLabelProvider(getRelationalCellProvider(tableViewer, conditionsList, isRemote));
 		
 		
 		TableViewerColumn fieldNameDropDownColumn = createTableColumns(tableViewer, Messages.FIELD_NAME, 150);
-		fieldNameDropDownColumn.setLabelProvider(getFieldNameCellProvider(tableViewer, conditionsList, true));
+		fieldNameDropDownColumn.setLabelProvider(getFieldNameCellProvider(tableViewer, conditionsList, isRemote));
 		
 		TableViewerColumn conditionalDropDownColumn = createTableColumns(tableViewer, Messages.CONDITIONAL_OPERATOR, 130);
-		conditionalDropDownColumn.setLabelProvider(getConditionalCellProvider(tableViewer, conditionsList, true));
+		conditionalDropDownColumn.setLabelProvider(getConditionalCellProvider(tableViewer, conditionsList, isRemote));
 		
 		TableViewerColumn value1TextBoxColumn = createTableColumns(tableViewer, Messages.VALUE1, 150);
-		value1TextBoxColumn.setLabelProvider(getValue1CellProvider(tableViewer, conditionsList, true));
+		value1TextBoxColumn.setLabelProvider(getValue1CellProvider(tableViewer, conditionsList, isRemote));
 		
 		TableViewerColumn valueTextBoxValue2Column = createTableColumns(tableViewer, Messages.VALUE2, 150);
-		valueTextBoxValue2Column.setLabelProvider(getValue2CellProvider(tableViewer, conditionsList, true));
+		valueTextBoxValue2Column.setLabelProvider(getValue2CellProvider(tableViewer, conditionsList, isRemote));
 		
 		btnAddGrp.setEnabled(false);
 		
@@ -1073,7 +1073,7 @@ public class FilterConditionsDialog extends Dialog {
 	}
 	
 	public SelectionListener removeButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList,
-			final List<Condition> dummyList, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap, final Button btnAddGrp) {
+			final List<Condition> dummyList, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap, final Button btnAddGrp,final boolean isRemote) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
@@ -1089,14 +1089,13 @@ public class FilterConditionsDialog extends Dialog {
 					
 					TableItem[] items = tableViewer.getTable().getItems();
 					items[removeIndex].dispose();
-					FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
-					redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap);
 					
 					if(isRemoveAllColumns){
 						FilterHelper.INSTANCE.reArrangeGroupColumns(groupSelectionMap);
-						FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
-						redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap);
 					}
+					
+					FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
+					redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap,isRemote);
 					
 				}
 				tableViewer.refresh();
@@ -1162,7 +1161,7 @@ public class FilterConditionsDialog extends Dialog {
 			   }
 				
 				FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
-				redrawAllColumns(tableViewer, conditionsList, btnAddGrp,groupSelectionMap);			
+				redrawAllColumns(tableViewer, conditionsList, btnAddGrp,groupSelectionMap,isRemote);			
 				clearGroups.setEnabled(false);
 			
 				
@@ -1219,7 +1218,7 @@ public class FilterConditionsDialog extends Dialog {
 				
 				 
 				FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
-				redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap);
+				redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap,isRemote);
 				((ReloadAction)debugDataViewer.getActionFactory().getAction(ReloadAction.class.getName())).run();
 				debugDataViewer.submitRecordCountJob();
 				cancelPressed();
