@@ -16,7 +16,8 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 6.#..   [Vibhor Tagi] MAC: Debug Service Need to Kill Implicitly When Tool is Closed/ Job Closed
 7.#797  [Nitin Gupta] Select Column: Sort Icon on Select Column Window is Not Properly Visible
 8.#873  [Prateem Tadas] Filter Window: OK Button is not getting enabled as validation call is not getting genrated if user add few rows in the downloaded Dataset and then delete them and add valid data filter window
-
+9.#875  [Shrirang Kumbhar]	Data Viewer Window: "Unable to fetch debug files" error window is getting displayed when user tries to run job in debug mode and click on cancel button located on Parameter file dialog window
+10.#807 [Shrirang Kumbhar] Data Viewer: Data Viewer Window is Getting Closed on Job Re-run Event of Different Job  
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

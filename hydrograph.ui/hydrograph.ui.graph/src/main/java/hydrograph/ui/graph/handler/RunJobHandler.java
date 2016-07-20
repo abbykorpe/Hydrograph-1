@@ -20,7 +20,6 @@ import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
-import hydrograph.ui.graph.utility.DataViewerUtility;
 
 import java.util.Map;
 
@@ -56,9 +55,7 @@ public class RunJobHandler{
 	 * Execute command to run the job.
 	 */ 
 	public Object execute(RunConfigDialog runConfigDialog) {
-		
-		DataViewerUtility.INSTANCE.closeDataViewerWindows();
-		
+				
 		((ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()).getViewer().deselectAll();
 		String consoleName = getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
 		String canvasName = consoleName;
