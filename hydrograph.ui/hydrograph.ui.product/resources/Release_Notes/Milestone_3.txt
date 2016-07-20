@@ -20,6 +20,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 10.#807 [Shrirang Kumbhar] Data Viewer: Data Viewer Window is Getting Closed on Job Re-run Event of Different Job  
 11.#..   [Vibhor Tyagi] MAC: Debug Service Need to Kill Implicitly When Tool is Closed/ Job Closed
 12.#864  [Vibhor Tyagi] Find: Find action is getting called when user keep clicking TAB from keyboard on data viewer window
+14.#826 [Akhilesh Joshi/Shrirang Kumbhar] View Data :Issue Reading Data from CSV and Display on Data Viewer 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
