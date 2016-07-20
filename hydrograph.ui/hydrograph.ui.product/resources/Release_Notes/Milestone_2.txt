@@ -128,7 +128,7 @@ Sr.No. <GitHub Issue #> - [fixed by] - description
 105.#852  [Prateem Tadas] Hive Component: ArrayIndexOutofBound Exception Thrown When user adds more than one partition key and tries to add partition values
 106.#854  [Prateem Tadas] Hive Parquet input file - Window name is not present when user clicks on add values button located under partition key
 107.#849  [Nikhil Deokar] Filter Window: Button sizes of the filter editor should be same for OK, Apply, Cancel, Clear	
-
+108.#866  [Kalyan Rajpoot] Parquet Schema : Validation is not Set on for Bigdecimal Type, When Scale is zero.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
