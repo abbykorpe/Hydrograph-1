@@ -177,19 +177,6 @@ public class DebugHelper {
 		return "";
 	}
 	
-	public void killPortProcess(int portPid) throws IOException{
-		if(OSValidator.isWindows()){
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "taskkill /F /PID " + portPid});
-			builder.start();
-		}
-		else if(OSValidator.isMac()){
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"kill -9 " + portPid});
-			builder.start();
-		}
-		else if(OSValidator.isUnix()){
-			new ProcessBuilder(new String[]{"kill -9 " + portPid}).start();
-		}
-	}
 	
 	/**
 	 * This function returns that watcher is added on selected port
