@@ -22,6 +22,7 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -30,6 +31,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Properties;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -175,19 +177,6 @@ public class DebugHelper {
 		return "";
 	}
 	
-	public void killPortProcess(int portPid) throws IOException{
-		if(OSValidator.isWindows()){
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "taskkill /F /PID " + portPid});
-			builder.start();
-		}
-		else if(OSValidator.isMac()){
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"kill -9 " + portPid});
-			builder.start();
-		}
-		else if(OSValidator.isUnix()){
-			new ProcessBuilder(new String[]{"kill -9 " + portPid}).start();
-		}
-	}
 	
 	/**
 	 * This function returns that watcher is added on selected port
