@@ -43,6 +43,8 @@ import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
+import hydrograph.ui.propertywindow.widgets.utility.MouseWheelScrollingOnComposite;
+
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -199,12 +201,14 @@ public class DatasetInformationDialog extends Dialog {
 		tableViewer.setLabelProvider(new DatasetLabelProvider());
 		tableViewer.setInput(gridRowList);
 		tableViewer.refresh();
-		
+			
 		scrolledComposite.setContent(genralTabDatacomposite);
 		scrolledComposite.setMinSize(genralTabDatacomposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		MouseWheelScrollingOnComposite.installMouseWheelScrollRecursively(scrolledComposite);
 		
 		scrolledComposite1.setContent(composite_3);
 		scrolledComposite1.setMinSize(composite_3.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		MouseWheelScrollingOnComposite.installMouseWheelScrollRecursively(scrolledComposite1);
 		
 		return container;
 	}
