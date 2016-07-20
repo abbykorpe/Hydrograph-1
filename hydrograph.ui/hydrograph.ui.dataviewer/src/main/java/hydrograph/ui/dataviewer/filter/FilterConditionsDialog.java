@@ -31,6 +31,7 @@ import java.util.TreeMap;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -254,25 +255,21 @@ public class FilterConditionsDialog extends Dialog {
 		Composite composite_4 = new Composite(composite, SWT.NONE);
 		composite_4.setLayout(new GridLayout(4, false));
 		composite_4.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-				
-						
-		remoteOkButton = new Button(composite_4, SWT.NONE);
-		remoteOkButton.setText(Messages.OK2);
+			
+		remoteOkButton = createButton(composite_4, Messages.OK2, true);
+		remoteOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(remoteConditionsList, fieldsAndTypes, 
+				remoteGroupSelectionMap,Messages.ORIGINAL,originalFilterConditions));
 		
-		remoteApplyButton = new Button(composite_4, SWT.NONE);
-		remoteApplyButton.setText(Messages.APPLY);
-		
-		Button btnCancel = new Button(composite_4, SWT.NONE);
-		btnCancel.setText(Messages.CANCEL2);
+		Button btnCancel = createButton(composite_4, Messages.CANCEL2, false);
 		btnCancel.addMouseListener(getCancelButtonListener());
 		
-		Button clearButton = new Button(composite_4, SWT.NONE);
-		clearButton.setText(Messages.CLEAR);
-		clearButton.addSelectionListener(getClearButtonListener(tableViewer, remoteConditionsList, dummyList, originalFilterConditions, true, retainButton, remoteGroupSelectionMap,remoteBtnAddGrp));
+		Button clearButton = createButton(composite_4, Messages.CLEAR, false);
+		clearButton.addSelectionListener(getClearButtonListener(tableViewer, remoteConditionsList, dummyList, originalFilterConditions, 
+				true, retainButton, remoteGroupSelectionMap,remoteBtnAddGrp));
 
+		remoteApplyButton = createButton(composite_4, Messages.APPLY, false);
 		remoteApplyButton.addSelectionListener(FilterHelper.INSTANCE.getRemoteApplyButtonListener(originalFilterConditions, 
-		remoteConditionsList, retainRemoteFilter));
-		remoteOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(remoteConditionsList, fieldsAndTypes,remoteGroupSelectionMap,Messages.ORIGINAL,originalFilterConditions));
+				remoteConditionsList, retainRemoteFilter));
 		
 		if(retainRemoteFilter.getRetainFilter() == true){
 			retainButton.setSelection(true);
@@ -316,6 +313,24 @@ public class FilterConditionsDialog extends Dialog {
 		tableViewer.setInput(remoteConditionsList);
 		tableViewer.refresh();
 		
+	}
+	
+	private Button createButton(Composite parent, String label,
+			boolean defaultButton) {
+		
+		((GridLayout) parent.getLayout()).numColumns++;
+		Button button = new Button(parent, SWT.NONE);
+		button.setText(label);
+		
+		if (defaultButton) {
+			Shell shell = parent.getShell();
+			if (shell != null) {
+				shell.setDefaultButton(button);
+			}
+		}
+		
+		setButtonLayoutData(button);
+		return button;
 	}
 
 	private MouseListener getCancelButtonListener() {
@@ -384,22 +399,20 @@ public class FilterConditionsDialog extends Dialog {
 		composite_4.setLayout(new GridLayout(4, false));
 		composite_4.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		
-		localOkButton = new Button(composite_4, SWT.NONE);
-		localOkButton.setText(Messages.OK2);
-		localOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(localConditionsList, fieldsAndTypes,localGroupSelectionMap, Messages.DOWNLOADED,originalFilterConditions));
+		localOkButton = createButton(composite_4, Messages.OK2, false);
+		localOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(localConditionsList, fieldsAndTypes, 
+				localGroupSelectionMap, Messages.DOWNLOADED,originalFilterConditions));
 		
-		localApplyButton = new Button(composite_4, SWT.NONE);
-		localApplyButton.setText(Messages.APPLY);
-		localApplyButton.addSelectionListener(FilterHelper.INSTANCE.getLocalApplyButtonListener(originalFilterConditions, 
-				localConditionsList, retainLocalFilter));
-		
-		Button btnCancel = new Button(composite_4, SWT.NONE);
-		btnCancel.setText(Messages.CANCEL2);
+		Button btnCancel = createButton(composite_4, Messages.CANCEL2, false);
 		btnCancel.addMouseListener(getCancelButtonListener());
 		
-		Button clearButton = new Button(composite_4, SWT.NONE);
-		clearButton.addSelectionListener(getClearButtonListener(tableViewer, localConditionsList,dummyList,originalFilterConditions,false,retainButton,localGroupSelectionMap, localBtnAddGrp));
-		clearButton.setText(Messages.CLEAR);
+		Button clearButton = createButton(composite_4, Messages.CLEAR, false);
+		clearButton.addSelectionListener(getClearButtonListener(tableViewer, localConditionsList, dummyList, originalFilterConditions, 
+				false,retainButton,localGroupSelectionMap, localBtnAddGrp));
+		
+		localApplyButton = createButton(composite_4, Messages.APPLY, false);
+		localApplyButton.addSelectionListener(FilterHelper.INSTANCE.getLocalApplyButtonListener(originalFilterConditions, 
+				localConditionsList, retainLocalFilter));
 		
 		if(retainLocalFilter.getRetainFilter() == true){
 			retainButton.setSelection(true);
