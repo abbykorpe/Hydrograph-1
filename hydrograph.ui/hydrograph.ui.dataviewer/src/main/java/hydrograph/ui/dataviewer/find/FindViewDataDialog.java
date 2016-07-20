@@ -540,9 +540,9 @@ public class FindViewDataDialog extends Dialog{
 		label.setVisible(false);
 		
 		closeButton = createButton(parent, CLOSE, "Close", false);
-		closeButton.addMouseListener(new MouseListener() {
+		closeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void mouseUp(MouseEvent e) {
+			public void widgetSelected(SelectionEvent e) {
 				clearTableItemBgColor(debugDataViewer);
 				if(debugDataViewer != null){
 					 debugDataViewer.setData("SELECTED_ROW_INDEX", null);
@@ -553,10 +553,6 @@ public class FindViewDataDialog extends Dialog{
 				clearStyledTextBgColor(unFormatedStyledText, textData);
 				close();
 			}
-			@Override
-			public void mouseDown(MouseEvent e) {}
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {}
 		});
 	}
 

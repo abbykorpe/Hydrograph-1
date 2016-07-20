@@ -147,10 +147,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
     public void dispose() {
 		super.dispose();
-		
 		try {
-			int portPID = Integer.parseInt(getServicePortPID());
-			killPortProcess(portPID);
+			killPortProcess();
 		} catch (IOException e) {
 			logger.debug("Socket is not closed.");
 		}
@@ -162,14 +160,17 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 			}*/
     }
 	
-	public void killPortProcess(int portPid) throws IOException{
-		int portNumber = Integer.parseInt(restServicePort());
+	public void killPortProcess() throws IOException{
 		if(OSValidator.isWindows()){
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "taskkill /F /PID " + portPid});
-			builder.start();
+			if(StringUtils.isNotBlank(getServicePortPID())){
+				int portPID = Integer.parseInt(getServicePortPID());
+				ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "taskkill /F /PID " + portPID});
+				builder.start();
+			}
 		}
 		else if(OSValidator.isMac()){
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"bash", "-c", "lsof -P | grep :" + portNumber + "| awk '{print $2}' | xargs kill -9"});
+			int portNumber = Integer.parseInt(restServicePort());
+			ProcessBuilder builder = new ProcessBuilder(new String[]{"bash", "-c", "lsof -P | grep :" + portNumber + " | awk '{print $2}' | xargs kill -9"});
 			builder.start();
 		}
 	}
