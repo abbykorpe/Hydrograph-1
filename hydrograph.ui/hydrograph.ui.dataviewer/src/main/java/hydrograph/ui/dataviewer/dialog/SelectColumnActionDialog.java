@@ -117,10 +117,7 @@ public class SelectColumnActionDialog extends Dialog {
 		lblAllColumns.setFont( new Font(shell.getDisplay(),allColumnFont[0]));
 		
 		sortAll = new Button(lblAndBtncomposite, SWT.NONE);
-		GridData gd_sortAll = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
-		gd_sortAll.widthHint = 18;
-		gd_sortAll.heightHint = 18;
-		sortAll.setLayoutData(gd_sortAll);
+		sortAll.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		new Label(allColumnsComposite, SWT.NONE);
 		sortAll.setImage(ascending);
 		
@@ -181,9 +178,7 @@ public class SelectColumnActionDialog extends Dialog {
 		
 		
 		sortSelected = new Button(composite, SWT.NONE);
-		GridData gd_sortSelected = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
-		gd_sortSelected.heightHint = 18;
-		gd_sortSelected.widthHint = 18;
+		GridData gd_sortSelected = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		sortSelected.setLayoutData(gd_sortSelected);
 		sortSelected.setImage(ascending);
 		new Label(selectColumnComposite, SWT.NONE);
