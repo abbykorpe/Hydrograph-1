@@ -22,7 +22,6 @@ import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.utility.CanvasUtils;
-import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
@@ -150,9 +149,7 @@ public class DebugHandler{
 	/*
 	 * execute method launch the job in debug mode.
 	 */
-	public Object execute(RunConfigDialog runConfigDialog){
-		DataViewerUtility.INSTANCE.closeDataViewerWindows();
-		
+	public Object execute(RunConfigDialog runConfigDialog){		
 		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 			try{
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);

@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
@@ -57,6 +58,25 @@ public class DataViewerUtility {
 			DebugDataViewer daDebugDataViewer = (DebugDataViewer) iterator.next();
 			daDebugDataViewer.close();			
 			iterator.remove();
+		}
+	}
+	
+	public void closeDataViewerWindows(Job job) {
+		List<DebugDataViewer> dataViewerList = new ArrayList<>(); 
+		dataViewerList.addAll(JobManager.INSTANCE.getDataViewerMap().values());
+				
+		JobManager.INSTANCE.getDataViewerMap().clear();		
+		Iterator<DebugDataViewer> iterator = dataViewerList.iterator();
+		while(iterator.hasNext()){
+			
+			DebugDataViewer daDebugDataViewer = (DebugDataViewer) iterator.next();
+			String windowName=(String) daDebugDataViewer.getDataViewerWindowTitle();
+			if(StringUtils.startsWith(windowName, job.getConsoleName().replace(".", "_"))){
+				daDebugDataViewer.close();	
+				JobManager.INSTANCE.getDataViewerMap().remove(windowName);
+				iterator.remove();
+			}
+			
 		}
 	}
 	

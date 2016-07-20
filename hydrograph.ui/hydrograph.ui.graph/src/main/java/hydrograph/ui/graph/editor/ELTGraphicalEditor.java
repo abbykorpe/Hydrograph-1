@@ -1038,8 +1038,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void doSaveAs() {
+		String jobId = getActiveProject() + "." + getJobName();
+		DataViewerUtility.INSTANCE.closeDataViewerWindows(JobManager.INSTANCE.getPreviouslyExecutedJobs().get(jobId));
 		
-		DataViewerUtility.INSTANCE.closeDataViewerWindows();		
 		deleteDebugFiles();
 		
 		Map<String, String> currentParameterMap = getCurrentParameterMap();
@@ -1221,8 +1222,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
 		
-		DataViewerUtility.INSTANCE.closeDataViewerWindows();
-		
+		String jobId = getActiveProject() + "." + getJobName();
+		DataViewerUtility.INSTANCE.closeDataViewerWindows(JobManager.INSTANCE
+				.getPreviouslyExecutedJobs().get(jobId));
+
 		deleteDebugFiles();
 		enableRunningJobResource() ;
 	}
