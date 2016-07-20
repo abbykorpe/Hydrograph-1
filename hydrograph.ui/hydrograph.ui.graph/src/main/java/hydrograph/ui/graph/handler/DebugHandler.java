@@ -15,8 +15,6 @@ package hydrograph.ui.graph.handler;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.graph.debugconverter.DebugConverter;
 import hydrograph.ui.graph.debugconverter.SchemaHelper;
@@ -30,15 +28,12 @@ import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -78,11 +73,9 @@ public class DebugHandler{
 	/** The current job name. */
 	private String currentJobName = null;
 	
-	private List<String> dataViewFileIds;
 	
-	
-	public DebugHandler(List<String> dataViewFileIds) {
-		this.dataViewFileIds = dataViewFileIds;
+	public DebugHandler() {
+		
 	}
 	
 	/**
@@ -224,11 +217,6 @@ public class DebugHandler{
 		job.setRemoteMode(runConfigDialog.isRemoteMode());
 		 
 		addDebugJob(currentJobName, job);
-		if(!dataViewFileIds.isEmpty()){
-			deletePreviousRunsDataviewCsvXmlFiles();
-			deletePreviousRunsBasePathDebugFiles(host, job.getPortNumber(), uniqueJobID, basePath, userId, clusterPassword);
-			dataViewFileIds.clear();
-		}
 		
 		JobManager.INSTANCE.executeJobInDebug(job, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
 		CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();	
@@ -238,62 +226,11 @@ public class DebugHandler{
 		return null;
 	}
 	
-	private void deletePreviousRunsDataviewCsvXmlFiles(){
-		String dataViewerDirectoryPath = Utils.INSTANCE.getDataViewerDebugFilePath();
-
-		IPath path = new Path(dataViewerDirectoryPath);
-		boolean deleted = false;
-		String dataViewerSchemaFilePathToBeDeleted = "";
-		if(path.toFile().isDirectory()){
-			String[] fileList = path.toFile().list();
-			for (String file: fileList){
-				for (String previousFileID: dataViewFileIds){
-					if(file.contains(previousFileID)){
-						if (OSValidator.isWindows()){
-							dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+ "\\" + file;
-						}else{
-							dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+ "/" + file;
-						}
-						path = new Path(dataViewerSchemaFilePathToBeDeleted);
-						if(path.toFile().exists()){
-							deleted = path.toFile().delete();
-							if(deleted){
-								logger.debug("Deleted Data Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
-							}else{
-								logger.warn("Unable to delete Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	private void deletePreviousRunsBasePathDebugFiles(String host, String port, String uniqJobId, String basePath, 
-			String userID, String password){
-		if(Utils.INSTANCE.isPurgeViewDataPrefSet()){
-			for(String previousFileID: dataViewFileIds){
-				try {
-					DebugServiceClient.INSTANCE.deleteBasePathFiles(host, port, previousFileID, basePath, userID, password);
-				} catch (NumberFormatException e) {
-					logger.warn("Unable to delete debug Base path file",e);
-				} catch (HttpException e) {
-					logger.warn("Unable to delete debug Base path file",e);
-				} catch (MalformedURLException e) {
-					logger.warn("Unable to delete debug Base path file",e);
-				} catch (IOException e) {
-					logger.warn("Unable to delete debug Base path file",e);
-				}
-			}
-		}
-	}
- 
 	private void exportSchemaFile(){
 		String validPath = null;
 		String filePath = null;
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		String jobId = editor.getJobId();
-		dataViewFileIds.add(jobId);
 		String path = Utils.INSTANCE.getDataViewerDebugFilePath();
 		if(StringUtils.isNotBlank(path)){
 			logger.debug("validating file path : {}", path);

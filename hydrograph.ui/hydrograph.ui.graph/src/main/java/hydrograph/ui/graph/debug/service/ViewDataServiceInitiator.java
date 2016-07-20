@@ -37,9 +37,9 @@ public class ViewDataServiceInitiator {
 	public static void startService(){	
 		try{
 			String portId=DebugHelper.INSTANCE.getServicePortPID();
-			if(portId == null){
+			if(StringUtils.isBlank(portId)){
 				startServer();	
-			}
+			}			
 		}catch(BindException bindException){
 			logger.error("Server is already started on port or is used by other process", bindException);
 		} catch (InterruptedException interruptedException) {
@@ -53,7 +53,7 @@ public class ViewDataServiceInitiator {
 
 	private static void startServer() throws InterruptedException, IOException {
 		if(OSValidator.isWindows()){			
-			String command= "cmd /c start \"\" /min " + getInstallationConfigPath2() ;
+			String command= "cmd /c start \"\" /min " + getDebugServiceLauncher() ;
 			Runtime.getRuntime().exec(command,null,new File(getServiceInstallationDir()));
 		}
 		else if(OSValidator.isMac()){
@@ -87,7 +87,7 @@ public class ViewDataServiceInitiator {
 		
 		return path + "config/service/config" ;
 	}
-	private static String getInstallationConfigPath2()  {
+	private static String getDebugServiceLauncher()  {
 		String path = Platform.getInstallLocation().getURL().getPath();
 		if(StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/") && OSValidator.isWindows()){
 			path = StringUtils.substring(path, 1);
