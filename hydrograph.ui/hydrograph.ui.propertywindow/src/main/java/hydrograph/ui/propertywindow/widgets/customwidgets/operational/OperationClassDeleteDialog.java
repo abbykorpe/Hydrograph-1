@@ -16,12 +16,12 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.propertywindow.widgets.customwidgets.mapping.tables.inputtable.TableContentProvider;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -32,6 +32,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.swt.widgets.Button;
 
 public class OperationClassDeleteDialog extends Dialog {
 
@@ -63,17 +64,37 @@ public class OperationClassDeleteDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.getShell().setText(DELETE_OPERATION);
+		
+		final Button selectAllCheckButton = new Button(container, SWT.CHECK);
+		GridData gd_btnCheckButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnCheckButton.widthHint = 190;
+		selectAllCheckButton.setLayoutData(gd_btnCheckButton);
+		selectAllCheckButton.setText("Select All");
+		selectAllCheckButton.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(selectAllCheckButton.getSelection())
+				{
+					checkboxTableViewer.setAllChecked(true);
+				}	
+				else
+				{
+					checkboxTableViewer.setAllChecked(false);
+				}
+			}
+		});
 		Composite composite = new Composite(container, SWT.NONE);
 		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_composite.heightHint = 204;
 		gd_composite.widthHint = 402;
 		composite.setLayoutData(gd_composite);
 
-		checkboxTableViewer = CheckboxTableViewer.newCheckList(composite, SWT.BORDER | SWT.FULL_SELECTION);
+		checkboxTableViewer = CheckboxTableViewer.newCheckList(composite, SWT.BORDER | SWT.FULL_SELECTION|SWT.MULTI);
 		table = checkboxTableViewer.getTable();
-		table.setBounds(0, 0, 238, 204);
+		table.setBounds(0, 0, 227, 204);
 		checkboxTableViewer.setContentProvider(new TableContentProvider());
-
+		
 		for (MappingSheetRow m : mappingSheetRowList) {
 			operationIdList.add(m.getOperationID());
 		}
@@ -103,8 +124,8 @@ public class OperationClassDeleteDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-
 		for (ExpandItem expandItem : expandBar.getItems()) {
+			
 			for (Object object : checkboxTableViewer.getCheckedElements()) {
 				if (expandItem.getText().equals(object.toString())) {
 					expandItem.setExpanded(false);
