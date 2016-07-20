@@ -13,7 +13,8 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 4.#..   [Sonia Raheja] The Records information shown at the bottom of the data viewer window should be updated to display actual page size when its less than
 		the one defined in preferences. This will probably happen on the last page of the result or when filter result returns records less than page size
 5.#...  [Vibhor Tyagi] MAC & Windows :Find Window Default Focus is not Set Properly
-6.#..   [Vibhor Tyagi] MAC: Debug Service Need to Kill Implicitly When Tool is Closed/ Job Closed
+6.#..   [Vibhor Tagi] MAC: Debug Service Need to Kill Implicitly When Tool is Closed/ Job Closed
+7.#797  [Nitin Gupta] Select Column: Sort Icon on Select Column Window is Not Properly Visible
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
