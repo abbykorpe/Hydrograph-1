@@ -80,7 +80,7 @@ public class SchemaHelper {
 							 for(AbstractGraphicalEditPart part : portEditPart){
 								 if(part instanceof PortEditPart){
 									 boolean isWatch = ((PortEditPart)part).getPortFigure().isWatched();
-									 if(isWatch){
+									 if(isWatch && link.getSourceTerminal().equals(((PortEditPart)part).getPortFigure().getTerminal())){
 										socketName = ((PortEditPart)part).getPortFigure().getTerminal();
 										componentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 										if(StringUtils.isNotBlank(schemaFilePath)){

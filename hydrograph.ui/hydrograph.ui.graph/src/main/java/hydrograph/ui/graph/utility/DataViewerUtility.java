@@ -62,10 +62,13 @@ public class DataViewerUtility {
 	}
 	
 	public void closeDataViewerWindows(Job job) {
+		if(job==null){
+			return;
+		}
+		
 		List<DebugDataViewer> dataViewerList = new ArrayList<>(); 
 		dataViewerList.addAll(JobManager.INSTANCE.getDataViewerMap().values());
 				
-		JobManager.INSTANCE.getDataViewerMap().clear();		
 		Iterator<DebugDataViewer> iterator = dataViewerList.iterator();
 		while(iterator.hasNext()){
 			
