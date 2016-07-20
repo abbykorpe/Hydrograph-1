@@ -14,10 +14,10 @@ package hydrograph.ui.dataviewer.filter;
 
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.dataviewer.actions.ReloadAction;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
-import hydrograph.ui.logging.factory.LogFactory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -44,6 +44,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
@@ -62,8 +63,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.slf4j.Logger;
-import hydrograph.ui.dataviewer.actions.ReloadAction;
 
 /**
  * Dialog for Data Viewer Filter conditions
@@ -173,7 +172,7 @@ public class FilterConditionsDialog extends Dialog {
 	 * @param parent
 	 */
 	@Override
-	protected Control createDialogArea(Composite parent) {
+	protected Control createDialogArea(final Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
 		parent.getShell().setText(Messages.DATA_VIEWER + " " + Messages.FILTER);
 		container.setLayout(new GridLayout(1, false));
@@ -190,6 +189,20 @@ public class FilterConditionsDialog extends Dialog {
 		
 		createRemoteTabItem(tabFolder, remoteTableViewer);
 		createLocalTabItem(tabFolder, localTableViewer);
+		parent.getShell().setDefaultButton(remoteOkButton);
+		 tabFolder.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                  TabItem tabItem = (TabItem) e.item;
+                  if (StringUtils.equalsIgnoreCase(tabItem.getText(),Messages.ORIGINAL_DATASET)) {
+                        parent.getShell().setDefaultButton(remoteOkButton);
+                  } else if(StringUtils.equalsIgnoreCase(tabItem.getText(),Messages.DOWNLOADED_DATASET)){
+                        parent.getShell().setDefaultButton(localOkButton);
+                  }
+            }
+      });
+
 		FilterHelper.INSTANCE.setDataViewerAdapter(dataViewerAdapter,this);
 		FilterHelper.INSTANCE.setDebugDataViewer(debugDataViewer);
 		return container;
