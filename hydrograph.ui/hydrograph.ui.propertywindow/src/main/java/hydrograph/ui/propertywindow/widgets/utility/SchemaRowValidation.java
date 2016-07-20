@@ -370,11 +370,20 @@ public class SchemaRowValidation{
 	
 	private boolean executeIfDataTypeIsBigDecimal(GridRow gridRow,
 			String componentType, TableItem tableItem){
+		
+		int Precision = 0 ;
+		int Scale = 0 ;
+		
+		if(!(gridRow.getPrecision().equals("")||gridRow.getScale().equals(""))){
+			Precision = Integer.parseInt(gridRow.getPrecision());
+			 Scale = Integer.parseInt(gridRow.getScale());
+		}
+		
 		if(StringUtils.containsIgnoreCase(componentType, HIVE)||StringUtils.containsIgnoreCase(componentType, PARQUET)){
 			if(StringUtils.isBlank(gridRow.getPrecision())|| StringUtils.isBlank(gridRow.getScale()) ||
 					StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), NONE)||
 					!(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))||!(gridRow.getPrecision().matches(REGULAR_EXPRESSION_FOR_NUMBER))
-					|| StringUtils.equalsIgnoreCase(gridRow.getScale(), "0")){
+					|| StringUtils.equalsIgnoreCase(gridRow.getScale(), "0") || Precision < Scale){
 				setRedColor(tableItem);
 				return true;
 			}else{

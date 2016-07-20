@@ -102,6 +102,13 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 	}
 	
 	private String setToolTipForBigDecimal(GridRow gridRow, String componentType){
+		int Precision = 0 ;
+		int Scale = 0 ;
+		
+		if(!(gridRow.getPrecision().equals("")||gridRow.getScale().equals(""))){
+			Precision = Integer.parseInt(gridRow.getPrecision());
+			 Scale = Integer.parseInt(gridRow.getScale());
+		}
 		
 		if(StringUtils.isBlank(gridRow.getPrecision())
 				&& (StringUtils.containsIgnoreCase(componentType, "hive")
@@ -117,7 +124,9 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 		}else if(StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(),"none")){
 			return Messages.SCALETYPE_MUST_NOT_BE_NONE;
 		}
-		
+		else if(Precision < Scale){
+			return Messages.SCALE_MUST_BE_LESS_THAN_PRECISION;
+		}
 		return "";
 	}
 	
