@@ -147,9 +147,11 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
     public void dispose() {
 		super.dispose();
-		
+		int portPID = 0;
 		try {
-			int portPID = Integer.parseInt(getServicePortPID());
+			if(StringUtils.isNotBlank(getServicePortPID())){
+				portPID = Integer.parseInt(getServicePortPID());
+			}
 			killPortProcess(portPID);
 		} catch (IOException e) {
 			logger.debug("Socket is not closed.");
