@@ -99,19 +99,14 @@ public class InputHiveTextFileConverter extends InputConverter {
 				if(!fieldValueSet.isEmpty()){
 				List<InputHivePartitionColumn> inputHivePartitionColumn=(List<InputHivePartitionColumn>)property.get(fieldValueSet.get(0));
 					if(!inputHivePartitionColumn.isEmpty()){
-						hiveTextfile.setPartitionFilter(getPartitionFilter());
+						hiveTextfile.setPartitionFilter(getPartitionFilter(inputHivePartitionColumn));
 					}
 				}
 		}
 	}
 	
-	private HivePartitionFilterType getPartitionFilter(){
-		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null){
-			LinkedHashMap<String, Object> property = (LinkedHashMap<String, Object>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
-			List<String> fieldValueSet = new ArrayList<String>();
-			fieldValueSet.addAll(property.keySet());
-			if(!fieldValueSet.isEmpty()){
-			List<InputHivePartitionColumn> inputHivePartitionColumn=(List<InputHivePartitionColumn>)property.get(fieldValueSet.get(0));
+	private HivePartitionFilterType getPartitionFilter(List<InputHivePartitionColumn> inputHivePartition_Column){
+			List<InputHivePartitionColumn> inputHivePartitionColumn=inputHivePartition_Column;
 			HivePartitionFilterType hivePartitionFilterType = new HivePartitionFilterType();
 			List<PartitionColumn> partitionColumn = hivePartitionFilterType.getPartitionColumn();
 			
@@ -128,9 +123,6 @@ public class InputHiveTextFileConverter extends InputConverter {
 				}
 			}
 			return hivePartitionFilterType;
-			}
-		}
-		return null;
 	}
 	
 	private void addPartitionColumn(InputHivePartitionColumn partcol,PartitionColumn pcol){
