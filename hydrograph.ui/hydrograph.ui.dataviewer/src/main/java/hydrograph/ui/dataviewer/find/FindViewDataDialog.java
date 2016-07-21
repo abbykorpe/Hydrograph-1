@@ -29,8 +29,6 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.TableCursor;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.ShellEvent;
@@ -378,6 +376,7 @@ public class FindViewDataDialog extends Dialog{
 		TableItem previousSelectedTableItem = null;
 		if(debugDataViewer.getData("SELECTED_ROW_INDEX")!=null){
 			previousSelectedTableItem = debugDataViewer.getTable().getItem((int) debugDataViewer.getData("SELECTED_ROW_INDEX"));
+			findColIndex++;
 		}
 		Table table = debugDataViewer.getTable();
 		TableItem[] tableItems = table.getItems();
@@ -403,7 +402,6 @@ public class FindViewDataDialog extends Dialog{
 					debugDataViewer.setData("SELECTED_ROW_INDEX", findRowIndex);
 					debugDataViewer.setData("SEELCTED_COLUMN_INDEX", findColIndex);
 					prevColSelection = findColIndex;
-					findColIndex++;
 					return;
 				}
 			}
