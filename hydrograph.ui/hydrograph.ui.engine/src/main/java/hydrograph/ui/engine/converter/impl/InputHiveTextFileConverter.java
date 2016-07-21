@@ -53,6 +53,7 @@ public class InputHiveTextFileConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputHiveTextFileConverter.class);
 	Iterator itr;
+	HiveTextFile hiveTextfile;
 
 	public InputHiveTextFileConverter(Component component) {
 		super(component);
@@ -65,7 +66,7 @@ public class InputHiveTextFileConverter extends InputConverter {
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		HiveTextFile hiveTextfile = (HiveTextFile) baseComponent;
+		hiveTextfile = (HiveTextFile) baseComponent;
 		hiveTextfile.setRuntimeProperties(getRuntimeProperties());
 
 		hiveTextfile.setDatabaseName(getHiveType(PropertyNameConstants.DATABASE_NAME.value()));
@@ -86,8 +87,22 @@ public class InputHiveTextFileConverter extends InputConverter {
 		}
 		hiveTextfile.setStrict(getBoolean(PropertyNameConstants.STRICT.value()));
 		hiveTextfile.setSafe(getBoolean(PropertyNameConstants.IS_SAFE.value()));
-		hiveTextfile.setPartitionFilter(getPartitionFilter());
-		
+		checkPartitionFilter();
+	}
+	
+	private void checkPartitionFilter()
+	{
+		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null){
+			LinkedHashMap<String, Object> property = (LinkedHashMap<String, Object>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
+			List<String> fieldValueSet = new ArrayList<String>();
+			fieldValueSet.addAll(property.keySet());
+				if(!fieldValueSet.isEmpty()){
+				List<InputHivePartitionColumn> inputHivePartitionColumn=(List<InputHivePartitionColumn>)property.get(fieldValueSet.get(0));
+					if(!inputHivePartitionColumn.isEmpty()){
+						hiveTextfile.setPartitionFilter(getPartitionFilter());
+					}
+				}
+		}
 	}
 	
 	private HivePartitionFilterType getPartitionFilter(){
@@ -95,7 +110,7 @@ public class InputHiveTextFileConverter extends InputConverter {
 			LinkedHashMap<String, Object> property = (LinkedHashMap<String, Object>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
 			List<String> fieldValueSet = new ArrayList<String>();
 			fieldValueSet.addAll(property.keySet());
-			
+			if(!fieldValueSet.isEmpty()){
 			List<InputHivePartitionColumn> inputHivePartitionColumn=(List<InputHivePartitionColumn>)property.get(fieldValueSet.get(0));
 			HivePartitionFilterType hivePartitionFilterType = new HivePartitionFilterType();
 			List<PartitionColumn> partitionColumn = hivePartitionFilterType.getPartitionColumn();
@@ -113,6 +128,7 @@ public class InputHiveTextFileConverter extends InputConverter {
 				}
 			}
 			return hivePartitionFilterType;
+			}
 		}
 		return null;
 	}

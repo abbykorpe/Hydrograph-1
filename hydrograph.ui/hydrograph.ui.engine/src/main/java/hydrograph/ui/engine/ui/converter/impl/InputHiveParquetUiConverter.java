@@ -13,6 +13,16 @@
 
 package hydrograph.ui.engine.ui.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFilterType;
+import hydrograph.engine.jaxb.ihiveparquet.PartitionColumn;
+import hydrograph.engine.jaxb.ihiveparquet.PartitionFieldBasicType;
+import hydrograph.engine.jaxb.inputtypes.ParquetHiveFile;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.InputHivePartitionColumn;
 import hydrograph.ui.datastructure.property.Schema;
@@ -33,18 +43,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
-import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.ihiveparquet.FieldBasicType;
-import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFieldsType;
-import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFilterType;
-import hydrograph.engine.jaxb.ihiveparquet.PartitionColumn;
-import hydrograph.engine.jaxb.ihiveparquet.PartitionFieldBasicType;
-import hydrograph.engine.jaxb.inputtypes.ParquetHiveFile;
 /**
  * The class InputHiveParquetUiConverter
  * 
@@ -94,84 +92,74 @@ public class InputHiveParquetUiConverter extends InputUiConverter {
 	/*
 	 * returns Partition keys list
 	 */
-	private LinkedHashMap<String, Object> getPartitionKeys() {
+	private LinkedHashMap<String, Object> getPartitionKeys(){
 		LOGGER.debug("Fetching Input Hive Parquet-Partition-Keys-Properties for -{}", componentName);
 		property = new LinkedHashMap<String, Object>();
 		parquetHive = (ParquetHiveFile) typeBaseComponent;
 		HivePartitionFieldsType typeHivePartitionFields = parquetHive.getPartitionKeys();
-		if (typeHivePartitionFields != null) {
-			if(typeHivePartitionFields.getField()!=null){
-			PartitionFieldBasicType partitionFieldBasicType = typeHivePartitionFields.getField();
-			property.put(partitionFieldBasicType.getName(),null);
-			if(partitionFieldBasicType.getField()!=null)
-			{
-				getKey(partitionFieldBasicType);
+			if (typeHivePartitionFields != null){
+					if(typeHivePartitionFields.getField()!=null){
+					PartitionFieldBasicType partitionFieldBasicType = typeHivePartitionFields.getField();
+					property.put(partitionFieldBasicType.getName(),null);
+						if(partitionFieldBasicType.getField()!=null){
+							getKey(partitionFieldBasicType);
+						}
+					}
 			}
-			}
-		}
 		
-		Set<String> keys=new HashSet<String>();
-		if(property!=null)
-		{
-		keys=property.keySet();
-		}
-		List <String>list= new ArrayList<String>();
-		list.addAll(keys);
-		List<InputHivePartitionColumn> inputHivePartitionColumn = new ArrayList<InputHivePartitionColumn>();
-
-		HivePartitionFilterType hivePartitionFilterType=parquetHive.getPartitionFilter();
-		List<PartitionColumn> partitionColumn=hivePartitionFilterType.getPartitionColumn();
-
-		if(partitionColumn!=null)
-		{
-			for(PartitionColumn pc:partitionColumn)
-			{
-				InputHivePartitionColumn inputHivePartitionColumn3 = new InputHivePartitionColumn();
-				inputHivePartitionColumn3.setName(pc.getName());
-				inputHivePartitionColumn3.setValue(pc.getValue());
-			if(pc.getPartitionColumn()!=null)
-			{	
-				addFilterKey(pc,inputHivePartitionColumn3);
+			Set<String> keys=new HashSet<String>();
+			if(property!=null){
+			keys=property.keySet();
 			}
-				inputHivePartitionColumn.add(inputHivePartitionColumn3);
-			}
-			
-		}
-		property.put(list.get(0),inputHivePartitionColumn);
-		
-		return property;
-		
-	}
+			List <String>list= new ArrayList<String>();
+			list.addAll(keys);
+			List<InputHivePartitionColumn> inputHivePartitionColumn = new ArrayList<InputHivePartitionColumn>();
 	
-	private void getKey(PartitionFieldBasicType partition)
-	{
-		PartitionFieldBasicType partitionFieldBasicType1 = partition.getField();
-		property.put(partitionFieldBasicType1.getName(),null);
-				if(partitionFieldBasicType1.getField()!=null)
-				{
-					getKey(partitionFieldBasicType1);
+			HivePartitionFilterType hivePartitionFilterType=parquetHive.getPartitionFilter();
+				if(hivePartitionFilterType!=null){
+				List<PartitionColumn> partitionColumn=hivePartitionFilterType.getPartitionColumn();
+		
+					if(partitionColumn!=null){
+						for(PartitionColumn pc:partitionColumn){
+							InputHivePartitionColumn inputHivePartitionColumn3 = new InputHivePartitionColumn();
+							inputHivePartitionColumn3.setName(pc.getName());
+							inputHivePartitionColumn3.setValue(pc.getValue());
+							if(pc.getPartitionColumn()!=null){	
+								addFilterKey(pc,inputHivePartitionColumn3);
+							}
+							inputHivePartitionColumn.add(inputHivePartitionColumn3);
+						}	
+					}
+				    property.put(list.get(0),inputHivePartitionColumn);
 				}
-	}
+		    return property;
+		}
+	
+		private void getKey(PartitionFieldBasicType partition){
+			PartitionFieldBasicType partitionFieldBasicType1 = partition.getField();
+			property.put(partitionFieldBasicType1.getName(),null);
+					if(partitionFieldBasicType1.getField()!=null){
+						getKey(partitionFieldBasicType1);
+					}
+		}
 	
 	private void addFilterKey(PartitionColumn partitionColumn1,InputHivePartitionColumn inputHivePartitionColumn1)
 	{
-		InputHivePartitionColumn inputHivePartitionColumn2 = new InputHivePartitionColumn();
+		   	InputHivePartitionColumn inputHivePartitionColumn2 = new InputHivePartitionColumn();
 			PartitionColumn partitionColumn2 = partitionColumn1.getPartitionColumn();
 			inputHivePartitionColumn2.setName(partitionColumn2.getName());
 		    inputHivePartitionColumn2.setValue(partitionColumn2.getValue());
 		    inputHivePartitionColumn1.setInputHivePartitionColumn(inputHivePartitionColumn2);
-			if(partitionColumn2.getPartitionColumn()!=null)
-			{
-				if(partitionColumn2.getPartitionColumn().getValue()!="")
-				{
-				addFilterKey(partitionColumn2,inputHivePartitionColumn2);
+				if(partitionColumn2.getPartitionColumn()!=null){
+						if(partitionColumn2.getPartitionColumn().getValue()!=""){
+						addFilterKey(partitionColumn2,inputHivePartitionColumn2);
+						}
 				}
-			}
 	}
 
 
 	@Override
-	protected Map<String, String> getRuntimeProperties() {
+	protected Map<String, String> getRuntimeProperties(){
 		LOGGER.debug("Generating Runtime Properties for -{}", componentName);
 		TreeMap<String, String> runtimeMap = null;
 		TypeProperties typeProperties = ((ParquetHiveFile) typeBaseComponent).getRuntimeProperties();
