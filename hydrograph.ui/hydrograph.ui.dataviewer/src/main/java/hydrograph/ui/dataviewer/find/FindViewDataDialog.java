@@ -353,7 +353,7 @@ public class FindViewDataDialog extends Dialog{
 	private void checkPageNo(){
 		if(dataViewer.getCurrentPage() != pageNo){
 			findRowIndex = 0;
-			findColIndex = 1;
+			findColIndex = 0;
 			formattedViewPrevLineIndex = 0;
 			formattedViewNextLineIndex = 0;
 			unFormattedViewPrevLineIndex = 0;
@@ -417,6 +417,9 @@ public class FindViewDataDialog extends Dialog{
 			previousSelectedTableItem = debugDataViewer.getTable().getItem((int) debugDataViewer.getData("SELECTED_ROW_INDEX"));
 			findColIndex -= 1;
 		}
+		if(findRowIndex <= 0){
+			findRowIndex = debugDataViewer.getTable().getItems().length - 1;
+		}
 		Table table = debugDataViewer.getTable();
 		TableItem[] tableItems = table.getItems();
 		for(; findRowIndex >=0; findRowIndex--){
@@ -467,7 +470,7 @@ public class FindViewDataDialog extends Dialog{
 		}
 		
 		findRowIndex = 0;
-		findColIndex = 1;
+		findColIndex = 0;
 	}
 	
 	  private void clearStyledTextBgColor(StyledText styledText, String textData){
