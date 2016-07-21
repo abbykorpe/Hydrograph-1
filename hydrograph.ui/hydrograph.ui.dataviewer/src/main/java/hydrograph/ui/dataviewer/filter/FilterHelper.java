@@ -75,6 +75,7 @@ public class FilterHelper {
 	private String filteredFileName = "";
 	private String localCondition = "";
 	private String remoteCondition;
+	private RetainFilter retainFilterObject=new RetainFilter();
 	
 	private FilterHelper() {
 	}
@@ -371,7 +372,8 @@ public class FilterHelper {
 	
 	
 	public SelectionListener getOkButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
-			final Map<Integer,List<List<Integer>>> groupSelectionMap, final String dataset,final FilterConditions originalFilterConditions) {
+			final Map<Integer,List<List<Integer>>> groupSelectionMap, final String dataset,final FilterConditions originalFilterConditions,
+			final RetainFilter retainRemoteFilter,final RetainFilter retainLocalFilter) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
@@ -466,20 +468,47 @@ public class FilterHelper {
 				m.appendTail(temp);
 				buffer = new StringBuffer(temp);
 				
-				if(dataset.equalsIgnoreCase(Messages.DOWNLOADED)){	
-					if(!originalFilterConditions.getRetainRemote()){
-						originalFilterConditions.setRemoteCondition("");
-						originalFilterConditions.getLocalConditions().clear();
-						filterConditionsDialog.getRemoteConditionsList().clear();
-						debugDataViewer.setRemoteCondition("");
-						remoteCondition="";
-					}
+				if (dataset.equalsIgnoreCase(Messages.DOWNLOADED)) {
 					localCondition=buffer.toString();
 					showLocalFilteredData(StringUtils.trim(buffer.toString()));
 					debugDataViewer.setLocalCondition(localCondition);
 				}
 				else{
-					if(!originalFilterConditions.getRetainLocal()){
+					if(!retainLocalFilter.getRetainFilter()){
+						if(!debugDataViewer.getLocalCondition().equals("")){
+						
+								MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.OK
+										| SWT.CANCEL);
+								messageBox.setText("Warning");
+								messageBox
+										.setMessage("Only original filtered data will be displayed As downloaded filters are not retained");
+								int response = messageBox.open();
+								if (response == SWT.OK) {
+
+								} else {
+									filterConditionsDialog.open();
+							}
+						}
+						}
+					else 
+						{
+							if(!debugDataViewer.getLocalCondition().equals("")){
+							MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
+							messageBox.setText("Warning");
+							messageBox
+									.setMessage("Downloaded filters over Original filtered data will be displayed as downloaded filters are retained");
+							int response = messageBox.open();
+							if (response == SWT.OK) {
+
+							} else {
+								filterConditionsDialog.open();
+							}
+						}else
+						{
+							retainLocalFilter.setRetainFilter(false);
+						}
+					}
+					if (!retainLocalFilter.getRetainFilter()) {
 						originalFilterConditions.setLocalCondition("");
 						originalFilterConditions.getLocalConditions().clear();
 						filterConditionsDialog.getLocalConditionsList().clear();
@@ -667,6 +696,7 @@ public class FilterHelper {
 			public void widgetSelected(SelectionEvent e) {
 				Button button = (Button)e.getSource();
 				retainFilter.setRetainFilter(button.getSelection());
+				retainFilterObject=retainFilter;
 			}
 			
 			@Override

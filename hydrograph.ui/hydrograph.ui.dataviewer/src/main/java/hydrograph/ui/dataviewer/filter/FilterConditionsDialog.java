@@ -265,7 +265,7 @@ public class FilterConditionsDialog extends Dialog {
 			
 		remoteOkButton = createButton(composite_4, Messages.OK2, true);
 		remoteOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(remoteConditionsList, fieldsAndTypes, 
-				remoteGroupSelectionMap,Messages.ORIGINAL,originalFilterConditions));
+				remoteGroupSelectionMap,Messages.ORIGINAL,originalFilterConditions,retainRemoteFilter,retainLocalFilter));
 		
 		Button btnCancel = createButton(composite_4, Messages.CANCEL2, false);
 		btnCancel.addMouseListener(getCancelButtonListener());
@@ -408,7 +408,7 @@ public class FilterConditionsDialog extends Dialog {
 		
 		localOkButton = createButton(composite_4, Messages.OK2, false);
 		localOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(localConditionsList, fieldsAndTypes, 
-				localGroupSelectionMap, Messages.DOWNLOADED,originalFilterConditions));
+				localGroupSelectionMap, Messages.DOWNLOADED,originalFilterConditions,retainRemoteFilter,retainLocalFilter));
 		
 		Button btnCancel = createButton(composite_4, Messages.CANCEL2, false);
 		btnCancel.addMouseListener(getCancelButtonListener());
