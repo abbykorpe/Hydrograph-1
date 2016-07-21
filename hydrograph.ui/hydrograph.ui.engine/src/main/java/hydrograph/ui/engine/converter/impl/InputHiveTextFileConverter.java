@@ -105,8 +105,7 @@ public class InputHiveTextFileConverter extends InputConverter {
 		}
 	}
 	
-	private HivePartitionFilterType getPartitionFilter(List<InputHivePartitionColumn> inputHivePartition_Column){
-			List<InputHivePartitionColumn> inputHivePartitionColumn=inputHivePartition_Column;
+	private HivePartitionFilterType getPartitionFilter(List<InputHivePartitionColumn> inputHivePartitionColumn){
 			HivePartitionFilterType hivePartitionFilterType = new HivePartitionFilterType();
 			List<PartitionColumn> partitionColumn = hivePartitionFilterType.getPartitionColumn();
 			
