@@ -31,7 +31,6 @@ import java.util.TreeMap;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -130,6 +129,10 @@ public class FilterConditionsDialog extends Dialog {
 	Button remoteBtnAddGrp;
 	Button localBtnAddGrp;
 	
+	/**
+	 * Set map of fields and their types respectively
+	 * @param fieldsAndTypes
+	 */
 	public void setFieldsAndTypes(Map<String, String> fieldsAndTypes) {
 		this.fieldsAndTypes = fieldsAndTypes;
 		fieldNames = (String[]) this.fieldsAndTypes.keySet().toArray(new String[this.fieldsAndTypes.size()]);
@@ -157,6 +160,10 @@ public class FilterConditionsDialog extends Dialog {
 		this.originalFilterConditions = new FilterConditions();
 	}
 
+	/**
+	 * Setup saved/applied filter conditions values before opening the window
+	 * @param filterConditions
+	 */
 	public void setFilterConditions(FilterConditions filterConditions) {
 		this.originalFilterConditions = filterConditions;
 		localConditionsList.addAll(FilterHelper.INSTANCE.cloneList(filterConditions.getLocalConditions()));
@@ -596,7 +603,9 @@ public class FilterConditionsDialog extends Dialog {
 					
 					if(StringUtils.isNotBlank(dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
 						String fieldsName = dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName();
-						combo.setItems(typeBasedConditionalOperators.get(fieldsAndTypes.get(fieldsName)));
+						if(fieldsAndTypes.containsKey(fieldsName)){
+							combo.setItems(typeBasedConditionalOperators.get(fieldsAndTypes.get(fieldsName)));
+						}
 					}
 					else{
 						combo.setItems(new String[]{});
@@ -622,7 +631,9 @@ public class FilterConditionsDialog extends Dialog {
 					CCombo combo = (CCombo) item.getData(CONDITIONAL_OPERATORS);
 					if(StringUtils.isNotBlank(dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
 						String fieldsName = dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName();
-						combo.setItems(typeBasedConditionalOperators.get(fieldsAndTypes.get(fieldsName)));
+						if(fieldsAndTypes.containsKey(fieldsName)){
+							combo.setItems(typeBasedConditionalOperators.get(fieldsAndTypes.get(fieldsName)));
+						}
 					}
 					else{
 						combo.setItems(new String[]{});
@@ -1003,6 +1014,14 @@ public class FilterConditionsDialog extends Dialog {
 
 	
 	
+	/**
+	 * Redraws the table in order to add or delete the grouping columns 
+	 * @param tableViewer
+	 * @param conditionsList
+	 * @param btnAddGrp
+	 * @param groupSelectionMap
+	 * @param isRemote
+	 */
 	public void redrawAllColumns(TableViewer tableViewer, List<Condition> conditionsList, Button btnAddGrp, 
 			TreeMap<Integer, List<List<Integer>>> groupSelectionMap, boolean isRemote){
 		
