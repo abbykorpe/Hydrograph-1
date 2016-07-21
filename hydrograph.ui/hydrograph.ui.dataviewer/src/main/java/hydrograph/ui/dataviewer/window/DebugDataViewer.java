@@ -303,7 +303,6 @@ public class DebugDataViewer extends ApplicationWindow {
 				
 				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(jobDetails);
 				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles(filterApplied,getConditions(),isOverWritten);
-				setOverWritten(false);
 
 
 				if (StatusConstants.ERROR == statusMessage.getReturnCode()) {

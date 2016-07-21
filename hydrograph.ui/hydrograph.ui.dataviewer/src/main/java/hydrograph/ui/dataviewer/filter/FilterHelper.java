@@ -71,8 +71,6 @@ public class FilterHelper {
 	private DebugDataViewer debugDataViewer;
 	private FilterConditionsDialog filterConditionsDialog;
 	private String SCHEMA_FILE_EXTENTION=".xml";
-	private String filteredFileLocation;
-	private String filteredFileName = "";
 	private String localCondition = "";
 	private String remoteCondition;
 	
@@ -371,7 +369,8 @@ public class FilterHelper {
 	
 	
 	public SelectionListener getOkButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
-			final Map<Integer,List<List<Integer>>> groupSelectionMap, final String dataset,final FilterConditions originalFilterConditions) {
+			final Map<Integer,List<List<Integer>>> groupSelectionMap, final String dataset,final FilterConditions originalFilterConditions,
+			final RetainFilter retainRemoteFilter,final RetainFilter retainLocalFilter) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
@@ -466,20 +465,37 @@ public class FilterHelper {
 				m.appendTail(temp);
 				buffer = new StringBuffer(temp);
 				
-				if(dataset.equalsIgnoreCase(Messages.DOWNLOADED)){	
-					if(!originalFilterConditions.getRetainRemote()){
-						originalFilterConditions.setRemoteCondition("");
-						originalFilterConditions.getLocalConditions().clear();
-						filterConditionsDialog.getRemoteConditionsList().clear();
-						debugDataViewer.setRemoteCondition("");
-						remoteCondition="";
-					}
+				if (dataset.equalsIgnoreCase(Messages.DOWNLOADED)){
 					localCondition=buffer.toString();
 					showLocalFilteredData(StringUtils.trim(buffer.toString()));
 					debugDataViewer.setLocalCondition(localCondition);
 				}
 				else{
-					if(!originalFilterConditions.getRetainLocal()){
+					if(!retainLocalFilter.getRetainFilter()){
+						if(!debugDataViewer.getLocalCondition().equals("")){
+							MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
+							messageBox.setText("Warning");
+							messageBox.setMessage(Messages.NOT_RETAINED);
+							int response = messageBox.open();
+							if (response != SWT.OK) {
+								filterConditionsDialog.open();
+							}
+						}
+					}
+					else{
+						if(!debugDataViewer.getLocalCondition().equals("")){
+							MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
+							messageBox.setText("Warning");
+							messageBox.setMessage(Messages.RETAINED);
+							int response = messageBox.open();
+							if (response != SWT.OK) {
+								filterConditionsDialog.open();
+							}
+						}else{
+							retainLocalFilter.setRetainFilter(false);
+						}
+					}
+					if (!retainLocalFilter.getRetainFilter()) {
 						originalFilterConditions.setLocalCondition("");
 						originalFilterConditions.getLocalConditions().clear();
 						filterConditionsDialog.getLocalConditionsList().clear();
