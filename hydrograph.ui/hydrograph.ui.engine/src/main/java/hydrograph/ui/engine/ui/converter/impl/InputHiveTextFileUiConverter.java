@@ -129,6 +129,7 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 		List<InputHivePartitionColumn> inputHivePartitionColumn = new ArrayList<InputHivePartitionColumn>();
 
 		HivePartitionFilterType hivePartitionFilterType=hiveTextfile.getPartitionFilter();
+        if(hivePartitionFilterType!=null){
 		List<PartitionColumn> partitionColumn=hivePartitionFilterType.getPartitionColumn();
 
 		if(partitionColumn!=null)
@@ -147,7 +148,7 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 			
 		}
 		property.put(list.get(0),inputHivePartitionColumn);
-		
+			}
 		return property;
 		
 	}
