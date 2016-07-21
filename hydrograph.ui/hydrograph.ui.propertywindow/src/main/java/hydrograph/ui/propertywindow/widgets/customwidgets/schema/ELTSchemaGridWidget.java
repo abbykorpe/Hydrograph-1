@@ -1588,12 +1588,14 @@ private boolean isSchemaInSync(){
 		
 		((Button)addButton.getSWTWidgetControl()).addSelectionListener(new SelectionListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {/*Do-Nothing*/}
+			public void widgetSelected(SelectionEvent e) {
+				scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,
+						SWT.DEFAULT));	
+			}
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,
-						SWT.DEFAULT));				
+				/*Do-Nothing*/
 			}
 		});
 		
