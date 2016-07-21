@@ -24,6 +24,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 14.#878 [Vibhor Tyagi] Find Window(View Data): Expected Functionality of the Button Not Met When Focus has Been Shifted to Other Button And Hitting 'Enter' key 
 15.#862 [Vibhor Tyagi] Find : User needs to click Previous button two times after clicking next button
 16.#732 [Vibhor Tyagi] View Data Filter: Search Values are Getting Skipped When User Switch to Other Page
+17.#898 [Rakesh Kanchalwar] Data Viewer : Filter : Getting "Argument can not be null" error message when user enter garbage value in field name, conditional operator and then try to delete same row
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
