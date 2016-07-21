@@ -478,7 +478,7 @@ public class FilterHelper {
 							messageBox.setMessage(Messages.NOT_RETAINED);
 							int response = messageBox.open();
 							if (response != SWT.OK) {
-								filterConditionsDialog.open();
+								return;
 							}
 						}
 					}
@@ -489,7 +489,7 @@ public class FilterHelper {
 							messageBox.setMessage(Messages.RETAINED);
 							int response = messageBox.open();
 							if (response != SWT.OK) {
-								filterConditionsDialog.open();
+								return;
 							}
 						}else{
 							retainLocalFilter.setRetainFilter(false);
