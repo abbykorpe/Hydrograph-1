@@ -1297,5 +1297,6 @@ public class FilterConditionsDialog extends Dialog {
 		
 		return remoteGroupSelectionMap;
 	}
+    
 }
 

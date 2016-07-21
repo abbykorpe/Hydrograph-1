@@ -104,6 +104,8 @@ public class Messages extends NLS{
 	public static String CREATE_GROUP;
 	public static String ADD_ROW_AT_END;
 	public static String ORIGINAL_DATASET;
+	public static String NOT_RETAINED;
+	public static String RETAINED;
 	
 	static {
 		// initialize resource bundle

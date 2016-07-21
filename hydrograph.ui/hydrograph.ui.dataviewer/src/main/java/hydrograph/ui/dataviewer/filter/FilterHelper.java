@@ -71,11 +71,8 @@ public class FilterHelper {
 	private DebugDataViewer debugDataViewer;
 	private FilterConditionsDialog filterConditionsDialog;
 	private String SCHEMA_FILE_EXTENTION=".xml";
-	private String filteredFileLocation;
-	private String filteredFileName = "";
 	private String localCondition = "";
 	private String remoteCondition;
-	private RetainFilter retainFilterObject=new RetainFilter();
 	
 	private FilterHelper() {
 	}
@@ -468,7 +465,7 @@ public class FilterHelper {
 				m.appendTail(temp);
 				buffer = new StringBuffer(temp);
 				
-				if (dataset.equalsIgnoreCase(Messages.DOWNLOADED)) {
+				if (dataset.equalsIgnoreCase(Messages.DOWNLOADED)){
 					localCondition=buffer.toString();
 					showLocalFilteredData(StringUtils.trim(buffer.toString()));
 					debugDataViewer.setLocalCondition(localCondition);
@@ -476,35 +473,25 @@ public class FilterHelper {
 				else{
 					if(!retainLocalFilter.getRetainFilter()){
 						if(!debugDataViewer.getLocalCondition().equals("")){
-						
-								MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.OK
-										| SWT.CANCEL);
-								messageBox.setText("Warning");
-								messageBox
-										.setMessage("Only original filtered data will be displayed As downloaded filters are not retained");
-								int response = messageBox.open();
-								if (response == SWT.OK) {
-
-								} else {
-									filterConditionsDialog.open();
-							}
-						}
-						}
-					else 
-						{
-							if(!debugDataViewer.getLocalCondition().equals("")){
 							MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
 							messageBox.setText("Warning");
-							messageBox
-									.setMessage("Downloaded filters over Original filtered data will be displayed as downloaded filters are retained");
+							messageBox.setMessage(Messages.NOT_RETAINED);
 							int response = messageBox.open();
-							if (response == SWT.OK) {
-
-							} else {
+							if (response != SWT.OK) {
 								filterConditionsDialog.open();
 							}
-						}else
-						{
+						}
+					}
+					else{
+						if(!debugDataViewer.getLocalCondition().equals("")){
+							MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
+							messageBox.setText("Warning");
+							messageBox.setMessage(Messages.RETAINED);
+							int response = messageBox.open();
+							if (response != SWT.OK) {
+								filterConditionsDialog.open();
+							}
+						}else{
 							retainLocalFilter.setRetainFilter(false);
 						}
 					}
@@ -696,7 +683,6 @@ public class FilterHelper {
 			public void widgetSelected(SelectionEvent e) {
 				Button button = (Button)e.getSource();
 				retainFilter.setRetainFilter(button.getSelection());
-				retainFilterObject=retainFilter;
 			}
 			
 			@Override
