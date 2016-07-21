@@ -58,7 +58,7 @@ public class FilterValidator {
 				logger.trace("Field name at {} is blank" + index);
 				return false;
 			}
-			if (FilterConstants.BETWEEN.equalsIgnoreCase(conditional)) {
+			if (FilterConstants.BETWEEN.equalsIgnoreCase(conditional)||StringUtils.equalsIgnoreCase(FilterConstants.BETWEEN_FIELD,conditional)) {
 				if (StringUtils.isBlank(value2)) {
 					logger.trace("Value 2 at {} is blank" + index);
 					return false;
@@ -96,7 +96,8 @@ public class FilterValidator {
 					return false;
 				}
 			}
-			if (condition.getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
+			if (condition.getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)||
+					StringUtils.equalsIgnoreCase(condition.getConditionalOperator(),FilterConstants.BETWEEN_FIELD)) {
 				if (StringUtils.isNotBlank(value2)) {
 					if (!validateDataBasedOnTypes(type, value2, condition.getConditionalOperator())) {
 						return false;
@@ -133,7 +134,8 @@ public class FilterValidator {
 					}
 				}
 			}
-			else if (FilterConstants.BETWEEN.equalsIgnoreCase(conditionalOperator)) {
+			else if (FilterConstants.BETWEEN.equalsIgnoreCase(conditionalOperator)
+					||StringUtils.equalsIgnoreCase(FilterConstants.BETWEEN_FIELD,conditionalOperator)) {
 				validate(type, value);
 			}
 			else{

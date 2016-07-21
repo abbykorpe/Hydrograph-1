@@ -563,7 +563,9 @@ public class FilterConditionsDialog extends Dialog {
 	}
 	
 	private void enableAndDisableValue2TextBox(final List<Condition> conditionsList, int index, Text text) {
-		if (conditionsList.get(index).getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
+		//if (conditionsList.get(index).getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
+				if(StringUtils.equalsIgnoreCase(conditionsList.get(index).getConditionalOperator(),FilterConstants.BETWEEN)
+						|| StringUtils.equalsIgnoreCase(conditionsList.get(index).getConditionalOperator(),FilterConstants.BETWEEN_FIELD)){
 			text.setVisible(true);
 		} else {
 			text.setVisible(false);

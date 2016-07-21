@@ -106,6 +106,7 @@ public class Messages extends NLS{
 	public static String ORIGINAL_DATASET;
 	public static String NOT_RETAINED;
 	public static String RETAINED;
+	public static String NO_MATCHING_RECORDS;
 	
 	static {
 		// initialize resource bundle
