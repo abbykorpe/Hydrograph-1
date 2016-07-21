@@ -27,7 +27,10 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 17.#898 [Rakesh Kanchalwar] Data Viewer : Filter : Getting "Argument can not be null" error message when user enter garbage value in field name, conditional operator and then try to delete same row
 18.#890 [Rushikesh Pawale] Import Engine XML feature not working
 19.#891 [Rushikesh Pawale] Hive partitionFilter feature getting considered as mandatory
->>>>>>> Issue fixed - partition key is not mandatory
+20.#826 [Akhilesh Joshi/Shrirang Kumbhar] View Data :Issue Reading Data from CSV and Display on Data Viewer
+21.#..  [Akhilesh Joshi] •	When we apply filter on Downloaded Dataset after applying filter on Original Dataset, and if we open dataset info window, under filter 
+		section it shows only recent filter i.e. Downloaded Dataset filter. Expected behavior is- dataset info window should display all the
+		 filters that are currently active on data viewer window
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
