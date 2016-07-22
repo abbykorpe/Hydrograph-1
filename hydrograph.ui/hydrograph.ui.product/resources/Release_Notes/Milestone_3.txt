@@ -34,6 +34,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 		 filters that are currently active on data viewer window
 22.#885 [Kalyan Rajpoot] Vertical scroll bar not present in schema structure details for Input file components
 23.#..  [Akhilesh Joshi] Sort issue with selected columns		 
+24.#901 [Prateem Tadas] Downloaded Dataset Filter: Records not Shown in View Data on Filtering Data 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
