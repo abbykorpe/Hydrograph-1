@@ -1762,6 +1762,14 @@ public class DebugDataViewer extends ApplicationWindow {
 	public TableCursor getTablecursor(){
 		return tableCursor;
 	}
+	/**
+	 * clear jumpTo text while applying filter.
+	 */
+	public void clearJumpToText(){
+		
+		statusManager.clearJumpToPageText();
+		
+	}
 }
 
 

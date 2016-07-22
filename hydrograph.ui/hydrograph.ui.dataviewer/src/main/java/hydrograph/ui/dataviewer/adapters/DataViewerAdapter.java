@@ -524,5 +524,13 @@ public class DataViewerAdapter {
 		this.columnList.clear();
 		this.columnList.addAll(columnList);
 	}
-
+	
+	/**
+	 * Reset offset value
+	 */
+  public void resetOffset(){
+	  
+	  this.offset= PreferenceConstants.INITIAL_OFFSET;
+	  
+  }
 }

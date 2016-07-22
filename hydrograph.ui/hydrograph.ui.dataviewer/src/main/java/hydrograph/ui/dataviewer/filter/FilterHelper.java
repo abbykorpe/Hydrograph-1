@@ -528,11 +528,15 @@ public class FilterHelper {
 	private void showLocalFilteredData(String buffer) {
 		try {
 			dataViewerAdapter.setFilterCondition(buffer);
+			dataViewerAdapter.resetOffset();
 			dataViewerAdapter.initializeTableData();
+			debugDataViewer.clearJumpToText();
 			debugDataViewer.submitRecordCountJob();
 			debugDataViewer.getDataViewLoader().updateDataViewLists();
 			debugDataViewer.getDataViewLoader().reloadloadViews();
+			
 			enableAndDisableNextButtonOfDataViewer();
+			
 		} catch (SQLException exception) {
 			logger.error("Error occuring while showing local filtered data",exception);
 		}
