@@ -48,7 +48,6 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
@@ -217,9 +216,9 @@ public class WatchRecordAction extends SelectionAction {
 		final String dataViewerWindowTitle = dataViewerWindowName;	
 
 		//Open data viewer window
-		Display.getDefault().asyncExec(new Runnable() {
+		/*Display.getDefault().asyncExec(new Runnable() {
 			@Override
-			public void run() {
+			public void run() {*/
 				DebugDataViewer window = new DebugDataViewer(jobDetails,dataViewerWindowTitle);
 				String watcherId=watchRecordInner.getComponentId()+watchRecordInner.getComponentId();
 				dataViewerMap.put(dataViewerWindowTitle, window);
@@ -243,11 +242,9 @@ public class WatchRecordAction extends SelectionAction {
 					window.getConditions().setRemoteCondition("");
 					window.getConditions().getRemoteConditions().clear();
 					window.getConditions().getRemoteGroupSelectionMap().clear();
-				}
 					
 				watcherAndConditon.put(watcherId,window.getConditions());
 			}
-		});
 	}
 
 	
