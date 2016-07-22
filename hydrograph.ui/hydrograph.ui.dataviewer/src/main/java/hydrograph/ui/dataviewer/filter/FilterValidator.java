@@ -65,6 +65,13 @@ public class FilterValidator {
 				}
 			}
 			
+			if (StringUtils.equalsIgnoreCase(FilterConstants.BETWEEN_FIELD,conditional)) {
+				if (StringUtils.isBlank(value2)) {
+					logger.trace("Value 2 at {} is blank" + index);
+					return false;
+				}
+			}
+			
 			if(index != 0 && !relationalList.contains(relationalOperator)){
 				logger.trace("Relational Operator at {} is incorrect", index);
 				return false;
@@ -79,18 +86,23 @@ public class FilterValidator {
 				logger.trace("operator at {} is incorrect", condition.getConditionalOperator());
 				return false;
 			}
-			
 			else {
 				if (condition.getConditionalOperator().contains(FIELD)) {
-					if (validateField(fieldsAndTypes, value1 ,fieldName)) {
+					if (StringUtils.equalsIgnoreCase(condition.getConditionalOperator(), FilterConstants.BETWEEN_FIELD)) {
+						if (validateField(fieldsAndTypes, value1, fieldName)
+								&& validateField(fieldsAndTypes, value2, fieldName)) {
+							return true;
+						} else {
+							return false;
+						}
+					}
+					else if (validateField(fieldsAndTypes, value1 ,fieldName)) {
 						return true;
 					}
 					else {
 						return false;
 					}
-					
 				}
-			
 				else if(StringUtils.isNotBlank(value1)){
 				if(!validateDataBasedOnTypes(type, value1, condition.getConditionalOperator())){
 					return false;

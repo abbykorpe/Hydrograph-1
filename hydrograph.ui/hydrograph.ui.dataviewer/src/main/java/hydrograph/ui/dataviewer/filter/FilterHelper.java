@@ -86,7 +86,8 @@ public class FilterHelper {
 				FilterConstants.NOT_EQUALS,FilterConstants.FIELD_NOT_EQUALS,
 				FilterConstants.EQUALS,FilterConstants.FIELD_EQUALS,
 				FilterConstants.IN, FilterConstants.NOT_IN,
-				FilterConstants.BETWEEN};
+				FilterConstants.BETWEEN,
+				FilterConstants.BETWEEN_FIELD};
 
 		typeBasedConditionalOperators.put(FilterConstants.TYPE_STRING, new String[]{FilterConstants.NOT_EQUALS, FilterConstants.EQUALS, 
 				FilterConstants.LIKE, FilterConstants.NOT_LIKE, FilterConstants.IN, FilterConstants.NOT_IN}); 
@@ -228,11 +229,7 @@ public class FilterHelper {
 				TableItem tableItem = getTableItem(source);
 				Text text = (Text) tableItem.getData(FilterConstants.VALUE2TEXTBOX);
 				String selectedValue = source.getItem(source.getSelectionIndex());
-				if (selectedValue.equalsIgnoreCase(FilterConstants.BETWEEN)) {
-					text.setVisible(true);
-				} else {
-					text.setVisible(false);
-				}
+				enableAndDisableValue2TextBox(selectedValue, text);
 				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 			@Override
@@ -258,16 +255,21 @@ public class FilterHelper {
 				Condition condition = (Condition) tableItem.getData();
 				if (tableItem.getData(FilterConstants.VALUE2TEXTBOX) != null) {
 					Text text = (Text) tableItem.getData(FilterConstants.VALUE2TEXTBOX);
-					if (condition.getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
-						text.setVisible(true);
-					} else {
-						text.setVisible(false);
-					}
+					enableAndDisableValue2TextBox(condition.getConditionalOperator(), text);
 				}
 				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 		};
 		return listener;
+	}
+	
+	private void enableAndDisableValue2TextBox(String condition, Text text) {
+		if(StringUtils.equalsIgnoreCase(condition,FilterConstants.BETWEEN)
+				|| StringUtils.equalsIgnoreCase(condition,FilterConstants.BETWEEN_FIELD)){
+			text.setVisible(true);
+		} else {
+			text.setVisible(false);
+		}
 	}
 	
 	/**
@@ -426,7 +428,8 @@ public class FilterHelper {
 					StringBuffer conditionString = new StringBuffer();
 					
 					Condition condition = conditionsList.get(item);
-					if (condition.getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
+					if(StringUtils.equalsIgnoreCase(condition.getConditionalOperator(), FilterConstants.BETWEEN)
+							|| StringUtils.equalsIgnoreCase(condition.getConditionalOperator(),FilterConstants.BETWEEN_FIELD)){
 						conditionString
 								.append(condition.getFieldName())
 								.append(FilterConstants.SINGLE_SPACE)
@@ -455,7 +458,7 @@ public class FilterHelper {
 				for (String item : actualStringList) {
 					buffer.append(item + FilterConstants.SINGLE_SPACE);
 				}
-				logger.debug("Query String : " + buffer);
+				
 				Pattern p = Pattern.compile("\\(Field\\)");
 				Matcher m = p.matcher(buffer);
 				StringBuffer temp = new StringBuffer();
@@ -465,7 +468,8 @@ public class FilterHelper {
 				m.appendTail(temp);
 				buffer = new StringBuffer(temp);
 				
-				if (dataset.equalsIgnoreCase(Messages.DOWNLOADED)){
+				logger.debug("Query String : " + buffer);
+				if(dataset.equalsIgnoreCase(Messages.DOWNLOADED)){	
 					localCondition=buffer.toString();
 					showLocalFilteredData(StringUtils.trim(buffer.toString()));
 					debugDataViewer.setLocalCondition(localCondition);

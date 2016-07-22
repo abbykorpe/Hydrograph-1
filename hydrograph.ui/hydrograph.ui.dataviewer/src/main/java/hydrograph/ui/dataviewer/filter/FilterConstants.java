@@ -52,6 +52,7 @@ public class FilterConstants {
 	public static final String NOT_LIKE = "NOT LIKE";
 	public static final String LIKE = "LIKE";
 	public static final String BETWEEN="BETWEEN";
+	public static final String BETWEEN_FIELD="BETWEEN(Field)";
 	
 	public static final String AND = "AND";
 	public static final String OR = "OR";
