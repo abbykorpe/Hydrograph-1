@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
+import cascading.pipe.assembly.Rename;
 import cascading.pipe.assembly.Retain;
 import cascading.scheme.Scheme;
 import cascading.tap.Tap;
@@ -29,7 +30,6 @@ import hydrograph.engine.assembly.entity.InputFileHiveTextEntity;
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
-import hydrograph.engine.cascading.assembly.InputFileHiveParquetAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.utilities.ComponentHelper;
@@ -152,7 +152,9 @@ public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 
 		pipe = new Pipe(ComponentHelper.getComponentName(getComponentType(hiveEntityBase),
 				hiveEntityBase.getComponentId(), hiveEntityBase.getOutSocketList().get(0).getSocketId()));
-		pipe = new Retain(pipe, new Fields(getFieldsFromSchemaFields()));
+		Fields outFields = new Fields(convertLowerCase(getFieldsFromSchemaFields()));
+		pipe = new Retain(pipe, outFields);
+		pipe = new Rename(pipe, outFields, new Fields(getFieldsFromSchemaFields()));
 
 		setHadoopProperties(hiveTap.getStepConfigDef());
 		setHadoopProperties(pipe.getStepConfigDef());
@@ -166,6 +168,15 @@ public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 		}
 
 		return fields;
+	}
+
+	protected String[] convertLowerCase(String[] fields) {
+		String[] convertedfields = new String[fields.length];
+		int i = 0;
+		for (String field : fields) {
+			convertedfields[i++] = field.toLowerCase();
+		}
+		return convertedfields;
 	}
 
 	private String getComponentType(HiveEntityBase hiveEntityBase2) {
