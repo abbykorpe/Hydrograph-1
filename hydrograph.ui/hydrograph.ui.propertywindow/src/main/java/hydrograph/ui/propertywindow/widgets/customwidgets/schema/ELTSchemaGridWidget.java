@@ -157,6 +157,7 @@ import org.xml.sax.SAXException;
  */
 public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
+	
 	private static Logger logger = LogFactory.INSTANCE.getLogger(ELTSchemaGridWidget.class);
 	private ColumnLayoutData compositeOfOutsideTable;
 	public static final String FIELDNAME = Messages.FIELDNAME;
@@ -173,6 +174,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String RANGE_TO = Messages.RANGE_TO;
 	public static final String DEFAULT_VALUE =Messages.DEFAULT_VALUE;
 	public static final String SCHEMA_TAB ="Schema";
+	private static final String TRANSFORM = "Transform";
 	public static final String OPERATION ="operation";
 	private static final int tableHeight=340;
 	private static final int tableWidth=360;
@@ -1494,8 +1496,15 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 private void syncInternallyPropagatedSchema(){
 	Schema schema =getSchemaForInternalPropagation();
+	if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),TRANSFORM))
+	{
+		schemaGridRowList = new ArrayList<>(schema.getGridRow());
+	}
+	else
+	{	
 	Set<GridRow> set = new HashSet<>(schema.getGridRow());
 	schemaGridRowList = new ArrayList<>(set);
+	}
 	ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
 	eLTDetails.setGrids(schemaGridRowList);
 	tableViewer.setInput(schemaGridRowList);
