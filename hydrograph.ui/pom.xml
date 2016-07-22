@@ -282,5 +282,6 @@
 	    <module>hydrograph.ui.validators</module>
 		<module>hydrograph.ui.dataviewer</module>
 		<module>hydrograph.ui.communication</module>
+		<module>hydrograph.ui.expression.editor</module>
 	</modules>
 </project>
