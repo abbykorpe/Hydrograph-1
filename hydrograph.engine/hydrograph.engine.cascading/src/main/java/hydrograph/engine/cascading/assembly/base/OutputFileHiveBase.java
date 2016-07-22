@@ -12,15 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.base;
 
-import hydrograph.engine.assembly.entity.OutputFileHiveParquetEntity;
-import hydrograph.engine.assembly.entity.OutputFileHiveTextEntity;
-import hydrograph.engine.assembly.entity.base.HiveEntityBase;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
-import hydrograph.engine.cascading.utilities.DataTypeCoerce;
-import hydrograph.engine.utilities.ComponentHelper;
-
-import java.lang.reflect.Type;
 import java.util.Arrays;
 
 import org.apache.hadoop.fs.Path;
@@ -33,6 +24,12 @@ import cascading.pipe.assembly.Rename;
 import cascading.scheme.Scheme;
 import cascading.tap.Tap;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.OutputFileHiveParquetEntity;
+import hydrograph.engine.assembly.entity.OutputFileHiveTextEntity;
+import hydrograph.engine.assembly.entity.base.HiveEntityBase;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseComponent<HiveEntityBase> {
 
