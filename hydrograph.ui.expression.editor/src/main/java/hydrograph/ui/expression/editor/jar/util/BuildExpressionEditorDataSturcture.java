@@ -1,10 +1,19 @@
 package hydrograph.ui.expression.editor.jar.util;
 
+import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.PathConstant;
 import hydrograph.ui.expression.editor.message.CustomMessageBox;
 import hydrograph.ui.expression.editor.repo.ClassRepo;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -23,7 +32,7 @@ public class BuildExpressionEditorDataSturcture {
 	public static final BuildExpressionEditorDataSturcture INSTANCE = new BuildExpressionEditorDataSturcture();
 	private Logger LOGGER = LogFactory.INSTANCE.getLogger(BuildExpressionEditorDataSturcture.class);
 
-	public void createClassRepo(String jarFileName,String Package) {
+	public void createClassRepo(String jarFileName, String Package) {
 		ClassRepo.INSTANCE.flusRepo();
 		try {
 			IPackageFragmentRoot iPackageFragmentRoot = getIPackageFragment(jarFileName);
@@ -31,61 +40,97 @@ public class BuildExpressionEditorDataSturcture {
 				IPackageFragment fragment = iPackageFragmentRoot.getPackageFragment(Package);
 				if (fragment != null) {
 					for (IClassFile element : fragment.getClassFiles()) {
-						ClassRepo.INSTANCE.addClass(element, false);
+						ClassRepo.INSTANCE.addClass(element,"","",false);
 					}
+
 				} else {
 					new CustomMessageBox(SWT.ERROR, Package + " Package not found in jar "
 							+ iPackageFragmentRoot.getElementName(), "ERROR").open();
 				}
 			}
 		} catch (JavaModelException e) {
-			LOGGER.error("Error occured while loading class from jar", e);
+			LOGGER.error("Error occurred while loading class from jar", e);
 		}
+		loadClassesFromSettingsFolder();
 	}
 
-	public void loadUserDefinedClassesInClassRepo(String jarFileName,String Package) {
+	public boolean loadUserDefinedClassesInClassRepo(String jarFileName, String packageName) {
 		IPackageFragmentRoot iPackageFragmentRoot = getIPackageFragment(jarFileName);
 		try {
 			if (iPackageFragmentRoot != null) {
-				IPackageFragment fragment = iPackageFragmentRoot.getPackageFragment(Package);
+				IPackageFragment fragment = iPackageFragmentRoot.getPackageFragment(packageName);
 				if (fragment != null) {
 					for (IClassFile element : fragment.getClassFiles()) {
-						ClassRepo.INSTANCE.addClass(element, true);
+						ClassRepo.INSTANCE.addClass(element,jarFileName,packageName, true);
 					}
+					return true;
 				} else {
 					LOGGER.warn("Package not found in jar " + iPackageFragmentRoot.getElementName(), "ERROR");
 				}
 			}
 		} catch (JavaModelException e) {
-			LOGGER.error("Error occured while loading class from jar", e);
+			LOGGER.error("Error occurred while loading class from jar", e);
 		}
+		return false;
 	}
-	
-	private IPackageFragmentRoot getIPackageFragment(String jarFileName) {
+
+	public IPackageFragmentRoot getIPackageFragment(String jarFileName) {
 		IProject iProject = getCurrentProject();
 		try {
 			IPackageFragmentRoot[] fragmentRoot = JavaCore.create(iProject).getAllPackageFragmentRoots();
 			for (IPackageFragmentRoot iPackageFragmentRoot : fragmentRoot) {
-				if (StringUtils.contains(iPackageFragmentRoot.getElementName(),jarFileName))
+				if (StringUtils.contains(iPackageFragmentRoot.getElementName(), jarFileName))
 					return iPackageFragmentRoot;
 			}
 		} catch (JavaModelException javaModelException) {
-			LOGGER.error("Error occurred while loading engines-transform jar",javaModelException);
+			LOGGER.error("Error occurred while loading engines-transform jar", javaModelException);
 		}
-		new CustomMessageBox(SWT.ERROR, "Error occurred while loading "+jarFileName+" file", "ERROR").open();
+		if(StringUtils.equals(jarFileName, Constants.JAR_FILE_NAME))
+			new CustomMessageBox(SWT.ERROR, "Error occurred while loading " + jarFileName + " file", "ERROR").open();
 		return null;
 	}
 
 	public IProject getCurrentProject() {
-		String path=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput().getToolTipText();
-		IPath iPath=new Path(path);
+		String path = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()
+				.getEditorInput().getToolTipText();
+		IPath iPath = new Path(path);
 		IProject[] iProject = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		for(IProject project:iProject){
-			if(StringUtils.equals(iPath.segment(0), project.getName())){
+		for (IProject project : iProject) {
+			if (StringUtils.equals(iPath.segment(0), project.getName())) {
 				return project;
 			}
 		}
 		return null;
+	}
+
+	public void refreshRepo(){
+		createClassRepo(Constants.JAR_FILE_NAME, Constants.PACKAGE_NAME);
+		loadClassesFromSettingsFolder();
+	}
+	
+	private void loadClassesFromSettingsFolder() {
+		Properties properties = new Properties();
+		IFolder folder=getCurrentProject().getFolder(PathConstant.PROJECTS_SETTINGS_FOLDER);
+		IFile file = folder.getFile(PathConstant.EXPRESSION_EDITOR_EXTERNAL_JARS_PROPERTIES_FILES);
+		try {
+			LOGGER.debug("Loading property file");
+			if (file.exists()) {
+				FileInputStream inStream = new FileInputStream(file.getLocation().toString());
+				properties.loadFromXML(inStream);
+				
+				for(Object key:properties.keySet()){
+					String jarFileName=StringUtils.trim(StringUtils.substringAfter((String)key, Constants.DASH));
+					String packageName=StringUtils.trim(StringUtils.substringBefore((String)key, Constants.DASH));
+					
+					if(StringUtils.isNotBlank(packageName) && StringUtils.isNotBlank(jarFileName)){
+						loadUserDefinedClassesInClassRepo(jarFileName,packageName );
+					}
+				}
+			}
+		} catch (IOException |RuntimeException exception) {
+			LOGGER.error("Exception occurred while loading jar files from projects setting folder",exception);
+		}
+
 	}
 
 }

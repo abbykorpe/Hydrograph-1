@@ -25,8 +25,9 @@ import org.eclipse.swt.widgets.Display;
 public class LaunchExpressionEditor {
 
 	public String launchExpressionEditor(List<String> selectedInputFields){
-		BuildExpressionEditorDataSturcture.INSTANCE.createClassRepo(Constants.JAR_FILE_NAME, "hydrograph.engine.transformation.standardfunctions");
+		BuildExpressionEditorDataSturcture.INSTANCE.createClassRepo(Constants.JAR_FILE_NAME, Constants.PACKAGE_NAME);
 		ExpressionEditorDialog expressionEditorDialog=new ExpressionEditorDialog(Display.getCurrent().getActiveShell(),tempData());
+		
 		expressionEditorDialog.open();
 		return "";
 	}

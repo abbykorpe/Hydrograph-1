@@ -18,18 +18,21 @@ import org.slf4j.Logger;
 
 public class ClassDetails {
 
+	private String displayName;
+	private String packageName="";
+	private String jarName="";
 	private String cName;
 	private String javaDoc;
 	private List<MethodDetails> methodList = new ArrayList<MethodDetails>();
 
-	public ClassDetails(IClassFile classFile, boolean isUserDefined) {
+	public ClassDetails(IClassFile classFile, String jarFileName, String packageName, boolean isUserDefined) {
 		Logger LOGGER = LogFactory.INSTANCE.getLogger(ClassDetails.class);
 		
-		intialize(classFile, isUserDefined);
 		LOGGER.debug("Extracting methods from "+cName);
 	
 		try {
 			this.javaDoc = classFile.getAttachedJavadoc(null);
+			intialize(classFile,jarFileName,packageName, isUserDefined);
 			for (IJavaElement iJavaElement : classFile.getChildren()) {
 				if (iJavaElement instanceof IType) {
 					IType iType = (IType) iJavaElement;
@@ -52,11 +55,29 @@ public class ClassDetails {
 		}
 	}
 
-	private void intialize(IClassFile classFile, boolean isUserDefined) {
+	private void intialize(IClassFile classFile, String jarFileName, String packageName, boolean isUserDefined) {
 		this.cName = StringUtils.removeEndIgnoreCase(classFile.getElementName(), Constants.CLASS_EXTENSION);
-		if(isUserDefined){
-			cName=cName+Constants.USER_DEFINED_SUFFIX;
+		displayName=cName;
+		if(StringUtils.isNotBlank(jarFileName)){
+			jarName=jarFileName;
 		}
+		if(StringUtils.isNotBlank(packageName)){
+			this.packageName=packageName;
+		}
+		if(StringUtils.isBlank(javaDoc)){
+			javaDoc=Constants.EMPTY_STRING;
+		}
+		if(isUserDefined){
+			displayName=cName+Constants.USER_DEFINED_SUFFIX;
+			updateJavaDoc(jarFileName, packageName);
+		}
+	}
+
+	private void updateJavaDoc(String jarFileName, String packageName) {
+		StringBuffer buffer=new StringBuffer();
+		buffer.append("\n\tJar File Name :: "+jarFileName);
+		buffer.append("\n\tPackage Name :: "+packageName);
+		javaDoc=buffer.toString()+"\n"+javaDoc;
 	}
 
 	private boolean isMethodDepricated(IMethod iMethod) throws JavaModelException {
@@ -68,8 +89,20 @@ public class ClassDetails {
 		return false;
 	}
 
+	public String getDisplayName(){
+		return displayName;
+	}
+	
 	public String getJavaDoc() {
 		return javaDoc;
+	}
+	
+	public String getJarName() {
+		return jarName;
+	}
+	
+	public String getPackageName() {
+		return packageName;
 	}
 
 	public String getcName() {

@@ -13,22 +13,16 @@
 
 package hydrograph.ui.expression.editor.buttons;
 
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.PathConstant;
 import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.message.CustomMessageBox;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Properties;
 
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionEvent;
@@ -39,7 +33,6 @@ import org.slf4j.Logger;
 
 public class OperatorToolCombo extends Combo {
 
-	private static final String OPERATOR_CONFIG_FILE = "resources/expression_operator.properties";
 	private Logger LOGGER = LogFactory.INSTANCE.getLogger(OperatorToolCombo.class);
 	private static final String ITEM_TEXT = "Operators";
 	private StyledText expressionEditor;
@@ -80,7 +73,7 @@ public class OperatorToolCombo extends Combo {
 		Properties properties=new Properties();
 		InputStream inStream;
 		try {
-			inStream = getPropertyFilePath();
+			inStream = ExpressionEditorUtil.INSTANCE.getPropertyFilePath(PathConstant.OPERATOR_CONFIG_FILE);
 			properties.load(inStream);
 			for(Object key:properties.keySet()){
 				if(key!=null && properties.get(key)!=null){
@@ -88,11 +81,10 @@ public class OperatorToolCombo extends Combo {
 				this.setData((String) key, (String)properties.get(key));
 				}
 			}
-		} catch (IOException ioException) {
-			LOGGER.error("Exception occurred while loading "+XMLConfigUtil.CONFIG_FILES_PATH+File.separatorChar+OPERATOR_CONFIG_FILE+" property file.");
+		} catch (IOException | RuntimeException exception ) {
+			LOGGER.error("Exception occurred while loading property file.",exception);
 			StringBuffer buffer=new StringBuffer();
 			buffer.append(Messages.OPERATOR_FILE_NOT_FOUND);
-			buffer.append(XMLConfigUtil.CONFIG_FILES_PATH+File.separatorChar+OPERATOR_CONFIG_FILE);
 			new CustomMessageBox(SWT.ICON_WARNING,buffer.toString() , Messages.WARNING).open();
 		}
 	}
@@ -101,9 +93,5 @@ public class OperatorToolCombo extends Combo {
 		// Allow subclassing 
 	}
 
-	private InputStream getPropertyFilePath() throws IOException{
-		URL location = FileLocator.find(Platform.getBundle(Constants.EXPRESSION_EDITOR_PLUGIN_ID), new Path(OPERATOR_CONFIG_FILE), null);
-		return location.openStream();
-	}
 	
 }

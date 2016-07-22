@@ -13,8 +13,15 @@
 
 package hydrograph.ui.expression.editor.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
 import hydrograph.ui.expression.editor.Constants;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceAdapter;
@@ -74,4 +81,8 @@ public class ExpressionEditorUtil {
 		return buffer.toString();
 	}
 	
+	public InputStream getPropertyFilePath(String fileName) throws IOException{
+		URL location = FileLocator.find(Platform.getBundle(Constants.EXPRESSION_EDITOR_PLUGIN_ID), new Path(fileName), null);
+		return location.openStream();
+	}
 }

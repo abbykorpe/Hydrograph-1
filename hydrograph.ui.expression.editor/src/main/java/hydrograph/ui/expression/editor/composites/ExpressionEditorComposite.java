@@ -105,8 +105,8 @@ public class ExpressionEditorComposite extends Composite {
 		Combo tltmOperators = new OperatorToolCombo(composite, SWT.READ_ONLY, expressionEditor);
 		Button tltmValidate = new ValidateExpressionToolButton(composite, SWT.NONE, expressionEditor);
 		Button tltmTest = new EvaluateExpressionToolButton(composite, SWT.NONE, expressionEditor);
-		Button tltmExport = new ExportExpressionToolButton(composite, SWT.NONE, expressionEditor);
-		Button tltmImport = new ImportExpressionToolButton(composite, SWT.NONE, expressionEditor);
+//		Button tltmExport = new ExportExpressionToolButton(composite, SWT.NONE, expressionEditor);
+//		Button tltmImport = new ImportExpressionToolButton(composite, SWT.NONE, expressionEditor);
 		
 	}
 	

@@ -13,9 +13,21 @@
 
 package hydrograph.ui.expression.editor.dialogs;
 
+import hydrograph.ui.expression.editor.PathConstant;
 import hydrograph.ui.expression.editor.composites.CategoriesDialogSourceComposite;
 import hydrograph.ui.expression.editor.composites.CategoriesDialogTargetComposite;
+import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
+import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
+
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -25,11 +37,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
 
 public class AddCategoreisDialog extends Dialog {
-
+	private CategoriesDialogTargetComposite categoriesDialogTargetComposite;
+	private CategoriesDialogSourceComposite categoriesDialogSourceComposite;
+	private Logger LOGGER = LogFactory.INSTANCE.getLogger(AddCategoreisDialog.class);
+	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -56,8 +71,8 @@ public class AddCategoreisDialog extends Dialog {
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		
-		CategoriesDialogSourceComposite categoriesDialogSourceComposite=new CategoriesDialogSourceComposite(sashForm, SWT.NONE);
-		CategoriesDialogTargetComposite categoriesDialogTargetComposite=new CategoriesDialogTargetComposite(sashForm, SWT.NONE);
+		categoriesDialogSourceComposite=new CategoriesDialogSourceComposite(sashForm, SWT.NONE);
+		categoriesDialogTargetComposite=new CategoriesDialogTargetComposite(sashForm, SWT.NONE);
 		
 		sashForm.setWeights(new int[] {1, 1});
 
@@ -82,7 +97,37 @@ public class AddCategoreisDialog extends Dialog {
 		return new Point(450, 300);
 	}
 	
+	@Override
+	protected void okPressed() {
+		if(createPropertyFileForSavingData()){
+			BuildExpressionEditorDataSturcture.INSTANCE.refreshRepo();
+		}
+		super.okPressed();
+	}
 	
+	
+	private boolean createPropertyFileForSavingData()  {
+		
+		IProject iProject=BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject();
+		IFolder iFolder=iProject.getFolder(PathConstant.PROJECTS_SETTINGS_FOLDER);
+		Properties properties=new Properties();
+		try {
+			if(!iFolder.exists()){
+				iFolder.create(true, true, new NullProgressMonitor());
+			}
+			for(String items:categoriesDialogTargetComposite.getTargetList().getItems()){
+				properties.setProperty(items,items );
+			}
+			
+			FileOutputStream file=new FileOutputStream(iFolder.getLocation().toString()+File.separator+PathConstant.EXPRESSION_EDITOR_EXTERNAL_JARS_PROPERTIES_FILES);
+			properties.storeToXML(file, "");
+			return true;
+		} catch (IOException | CoreException exception) {
+			LOGGER.error("Exception occurred while saving jar file path at projects setting folder",exception);
+		}
+		return false;
+	}
+
 	public static void main(String[] args) {
 		AddCategoreisDialog dialog=new AddCategoreisDialog(new Shell());
 		dialog.setShellStyle(SWT.MAX|SWT.MIN|SWT.CLOSE);

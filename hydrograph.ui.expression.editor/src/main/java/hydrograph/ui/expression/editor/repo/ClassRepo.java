@@ -14,8 +14,8 @@ public class ClassRepo {
 	
 	private ClassRepo(){/* Singleton */}
 
-	public void addClass(IClassFile classFile, boolean isUserDefined) {
-		classList.add(new ClassDetails(classFile,isUserDefined));
+	public void addClass(IClassFile classFile, String jarFileName, String packageName, boolean isUserDefined) {
+		classList.add(new ClassDetails(classFile, jarFileName, packageName,isUserDefined));
 	}
 
 	public List<ClassDetails> getClassList() {

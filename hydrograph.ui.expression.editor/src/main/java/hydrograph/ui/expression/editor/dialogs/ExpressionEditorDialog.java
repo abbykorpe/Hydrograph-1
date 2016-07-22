@@ -19,6 +19,7 @@ import hydrograph.ui.expression.editor.composites.CategoriesComposite;
 import hydrograph.ui.expression.editor.composites.DescriptionComposite;
 import hydrograph.ui.expression.editor.composites.ExpressionEditorComposite;
 import hydrograph.ui.expression.editor.composites.FunctionsComposite;
+import hydrograph.ui.expression.editor.repo.ClassRepo;
 
 import java.util.List;
 
@@ -50,11 +51,14 @@ public class ExpressionEditorDialog extends Dialog {
 	 * @param parentShell
 	 */
 	public ExpressionEditorDialog(Shell parentShell, List<String> selectedInputFields) {
+		
 		super(parentShell);
+		setShellStyle(SWT.CLOSE | SWT.MIN | SWT.MAX | SWT.RESIZE | SWT.APPLICATION_MODAL);
 		this.selectedInputFields=selectedInputFields;
-		setShellStyle(SWT.MAX|SWT.MIN|SWT.CLOSE);
 		javaLineStyler=new JavaLineStyler(selectedInputFields);
+	
 	}
+	
 
 	/**
 	 * Create contents of the dialog.
@@ -90,7 +94,7 @@ public class ExpressionEditorDialog extends Dialog {
 		
 		categoriesComposite=new CategoriesComposite(lowerSashForm, SWT.NONE);
 		functionsComposite=new FunctionsComposite(lowerSashForm,categoriesComposite,SWT.NONE);
-		descriptionComposite=new DescriptionComposite(lowerSashForm,functionsComposite, SWT.NONE);
+		descriptionComposite=new DescriptionComposite(lowerSashForm,functionsComposite,categoriesComposite, SWT.NONE);
 		
 		containerSashForm.setWeights(new int[] {1, 1});
 
@@ -116,11 +120,11 @@ public class ExpressionEditorDialog extends Dialog {
 	protected Point getInitialSize() {
 		return new Point(897, 477);
 	}
-
-public static void main(String[] args) {
-	ExpressionEditorDialog dialog=new ExpressionEditorDialog(new Shell(),null);
-	dialog.setShellStyle(SWT.MAX|SWT.MIN|SWT.CLOSE);
-	dialog.open();
-}
-
+	
+	public boolean close() {
+		ClassRepo.INSTANCE.flusRepo();
+		return super.close();
+	}
+	
+	
 }

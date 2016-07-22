@@ -17,6 +17,7 @@ import hydrograph.ui.expression.editor.dialogs.AddCategoreisDialog;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
@@ -33,12 +34,12 @@ public class CategoriesUpperComposite extends Composite {
 	/**
 	 * Create the composite.
 	 * @param parent
+	 * @param classNamelist 
 	 * @param style
 	 */
 	public CategoriesUpperComposite(Composite parent, int style) {
 		super(parent, style);
 		setLayout(new GridLayout(2, false));
-
 		Label lblCategories = new Label(this, SWT.NONE);
 		lblCategories.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblCategories.setText("Categories");
@@ -47,17 +48,17 @@ public class CategoriesUpperComposite extends Composite {
 		btnAddPackages.setText(ADD_CATEGORIES);
 		btnAddPackages.setVisible(true);
 		
-		addListnersToAddPackageButton();
-
+		addListnersToAddPackageButton(parent);
 	}
 
-	private void addListnersToAddPackageButton() {
+	private void addListnersToAddPackageButton(final Composite parent) {
 		btnAddPackages.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				AddCategoreisDialog addCategoreisDialog=new AddCategoreisDialog(Display.getCurrent().getActiveShell());
 				addCategoreisDialog.open();
+				((CategoriesComposite)parent).refreshList();
 			}
 			
 			@Override

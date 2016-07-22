@@ -83,6 +83,19 @@ public enum DataTypes {
 			// TODO Auto-generated method stub
 			return "boolean";
 		}
+	},
+	
+	Void("V") {
+		@Override
+		public String getDefaultValue() {
+			return "";
+		}
+
+		@Override
+		protected String getDataTypeName() {
+			// TODO Auto-generated method stub
+			return "void";
+		}
 	};
 
 	private final String value;

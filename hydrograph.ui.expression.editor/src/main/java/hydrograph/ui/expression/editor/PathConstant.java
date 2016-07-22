@@ -13,20 +13,10 @@
 
 package hydrograph.ui.expression.editor;
 
-public class Constants {
-
-	public static final String CLASS_EXTENSION = ".class";
-	public static final String USER_DEFINED_SUFFIX = " - user defined";
-	public static final String JAR_FILE_NAME = "hydrograph.engine.transformation";
-	public static final String PACKAGE_NAME = "hydrograph.engine.transformation.standardfunctions";
-	public static final String FIELD_SEPRATOR_FOR_DRAG_DROP = "#";
-	public static final String EXPRESSION_EDITOR_PLUGIN_ID = "hydrograph.ui.expression.editor";
-	public static final String EMPTY_STRING = "";
-	public static final String OPENING_BRACKET = "(";
-	public static final String SEMICOLON = ";";
-	public static final String COMMA = ", ";
-	public static final String DOT = ".";
-	public static final String CLOSING_BRACKET = ")";
-	public static final String DASH = "-";
-
+public class PathConstant {
+	public static final String OPERATOR_CONFIG_FILE = "resources/expression_operator.properties";
+	public static final String DELETE_BUTTON_IMAGE = "resources/icons/delete.png";
+	public static final String PROJECT_LIB_FOLDER = "lib";
+	public static final String EXPRESSION_EDITOR_EXTERNAL_JARS_PROPERTIES_FILES = "expression_Editor_externalJars.properties";
+	public static final String PROJECTS_SETTINGS_FOLDER = ".settings";
 }

@@ -29,9 +29,10 @@ public class DescriptionComposite extends Composite {
 	 * Create the composite.
 	 * @param parent
 	 * @param functionsComposite 
+	 * @param categoriesComposite 
 	 * @param style
 	 */
-	public DescriptionComposite(Composite parent, FunctionsComposite functionsComposite, int style) {
+	public DescriptionComposite(Composite parent, FunctionsComposite functionsComposite, CategoriesComposite categoriesComposite, int style) {
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
 		
@@ -45,12 +46,17 @@ public class DescriptionComposite extends Composite {
 		lblDescription.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1));
 		lblDescription.setText("Description");
 		
-		descriptionStyledText= new StyledText(this, SWT.BORDER);
+		descriptionStyledText= new StyledText(this, SWT.BORDER|SWT.V_SCROLL|SWT.H_SCROLL);
 		descriptionStyledText.setEditable(false);
 		descriptionStyledText.setBackground(new Color(null,255, 255, 225));
 		descriptionStyledText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		linkFunctionAndDescription(functionsComposite);
+		linkCategoriesAndDescription(categoriesComposite);
+	}
+
+	private void linkCategoriesAndDescription(CategoriesComposite categoriesComposite) {
+		categoriesComposite.setDescriptionStyledText(descriptionStyledText);
 	}
 
 	private void linkFunctionAndDescription(FunctionsComposite functionsComposite) {

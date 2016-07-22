@@ -1,5 +1,6 @@
 package hydrograph.ui.expression.editor.datastructure;
 
+import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.enums.DataTypes;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,19 +14,11 @@ import org.eclipse.swt.SWT;
  */
 public class MethodDetails {
 
-	private static final String EMPTY_STRING = "";
-	private static final String OPENING_BRACKET = "(";
-	private static final String SEMICOLON = ";";
-	private static final String COMMA = ", ";
-	private static final String DOT = ".";
-	private static final String CLOSING_BRACKET = ")";
-	private static final String DASH = "-";
-
 	String methodName;
 	String signature;
 	String returnType;
 	String placeHolder;
-	String javaDoc = EMPTY_STRING;
+	String javaDoc = Constants.EMPTY_STRING;
 
 	public MethodDetails(IMethod iMethod, String className, boolean isSourceAvailable) throws JavaModelException {
 		methodName = iMethod.getElementName();
@@ -45,7 +38,7 @@ public class MethodDetails {
 			buffer = buffer.delete(0, indexOfPlaceHolder + 4);
 			buffer = buffer.delete(buffer.indexOf("\n")+1, buffer.capacity());
 			if(StringUtils.contains(buffer.toString(),iMethod.getElementName())){
-				placeHolder = className + DOT + StringUtils.trim(buffer.toString());
+				placeHolder = className + Constants.DOT + StringUtils.trim(buffer.toString());
 			}
 			else
 				placeHolder = createDefaultPlaceHolder(iMethod, className);
@@ -55,19 +48,19 @@ public class MethodDetails {
 	}
 
 	private void createPlaceHolder(IMethod iMethod, String className) throws JavaModelException {
-		placeHolder = className + DOT + signature;
+		placeHolder = className + Constants.DOT + signature;
 		if (iMethod.getParameterNames() != null && iMethod.getParameterNames().length != 0) {
 
 		}
 	}
 
 	private String lastString(String field, String seperator) {
-		String result = EMPTY_STRING;
+		String result = Constants.EMPTY_STRING;
 		if (StringUtils.isNotBlank(field)) {
 			String[] strArray = StringUtils.split(field, seperator);
 			result = strArray[strArray.length - 1];
-			if (StringUtils.endsWith(result, SEMICOLON)) {
-				result = StringUtils.remove(result, SEMICOLON);
+			if (StringUtils.endsWith(result, Constants.SEMICOLON)) {
+				result = StringUtils.remove(result, Constants.SEMICOLON);
 			}
 		}
 		return result;
@@ -75,20 +68,20 @@ public class MethodDetails {
 
 	private String createSignature(IMethod iMethod) throws JavaModelException {
 		StringBuffer buffer = new StringBuffer();
-		returnType = DataTypes.getDataTypefromString(lastString(iMethod.getReturnType(), DOT));
-		buffer.append(iMethod.getElementName() + SWT.SPACE + OPENING_BRACKET);
+		returnType = DataTypes.getDataTypefromString(lastString(iMethod.getReturnType(), Constants.DOT));
+		buffer.append(iMethod.getElementName() + SWT.SPACE + Constants.OPENING_BRACKET);
 		if (iMethod.getParameters() != null && iMethod.getParameters().length > 0) {
 			for (int index = 0; index < iMethod.getParameters().length; index++) {
 				buffer.append(DataTypes.getDataTypefromString(lastString(
-						iMethod.getParameters()[index].getTypeSignature(), DOT)));
+						iMethod.getParameters()[index].getTypeSignature(), Constants.DOT)));
 				buffer.append(SWT.SPACE);
 				buffer.append(iMethod.getParameters()[index].getElementName());
 				if (index != iMethod.getParameters().length - 1)
-					buffer.append(COMMA);
+					buffer.append(Constants.COMMA);
 			}
 		}
-		buffer.append(CLOSING_BRACKET);
-		buffer.append(SWT.SPACE + DASH + SWT.SPACE + returnType);
+		buffer.append(Constants.CLOSING_BRACKET);
+		buffer.append(SWT.SPACE + Constants.DASH + SWT.SPACE + returnType);
 		return buffer.toString();
 	}
 
@@ -106,7 +99,7 @@ public class MethodDetails {
 		if (iMethod.getJavadocRange() != null) {
 			javaDoc = StringUtils.substring(source, 0, iMethod.getJavadocRange().getLength());
 			javaDoc = StringUtils.replaceEachRepeatedly(javaDoc, new String[] { "/*", "*/", "*" }, new String[] {
-					EMPTY_STRING, EMPTY_STRING, EMPTY_STRING });
+					Constants.EMPTY_STRING, Constants.EMPTY_STRING, Constants.EMPTY_STRING });
 		}
 		return javaDoc;
 	}
@@ -133,16 +126,16 @@ public class MethodDetails {
 
 	public String createDefaultPlaceHolder(IMethod iMethod, String className) throws JavaModelException {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append(className + DOT);
-		buffer.append(iMethod.getElementName()+ OPENING_BRACKET);
+		buffer.append(className + Constants.DOT);
+		buffer.append(iMethod.getElementName()+ Constants.OPENING_BRACKET);
 		if (iMethod.getParameterNames() != null && iMethod.getParameterNames() != null)
 			for (int index = 0; index < iMethod.getParameterNames().length; index++) {
 				buffer.append(iMethod.getParameterNames()[index]);
 				if (index != iMethod.getParameterTypes().length - 1) {
-					buffer.append(COMMA + SWT.SPACE);
+					buffer.append(Constants.COMMA + SWT.SPACE);
 				}
 			}
-		buffer.append(CLOSING_BRACKET);
+		buffer.append(Constants.CLOSING_BRACKET);
 		return StringUtils.trim(buffer.toString());
 	}
 
