@@ -21,6 +21,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.perspective.config.ELTPerspectiveConfig;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -30,6 +31,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.ui.css.swt.dom.WidgetElement;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
@@ -60,6 +62,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	private static final String WARNING_TITLE="Warning"; //$NON-NLS-1$
 	private static final String WARNING_MESSAGE="Current DPI setting is other than 100%. Recommended 100%.\nUpdate it from Control Panel -> Display settings.\n\nNote: DPI setting other than 100% may cause alignment issues."; //$NON-NLS-1$
 	private static final int DPI_COORDINATE=96;
+	private static final String DRIVER_CLASS = " hydrograph.server.debug.service.DebugService";
 	
 	public static final String SERVICE_JAR = "SERVICE_JAR";
 	public static final String PORT_NUMBER = "PORT_NO";
@@ -103,6 +106,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		IViewPart consoleView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(CONSOLE_ID);
 		ToolBarManager toobar = (ToolBarManager) consoleView.getViewSite().getActionBars().getToolBarManager();
 		setCSSID(toobar.getControl(),CONSOLE_TOOLBAR_CSS_ID);
+		
 		if (OSValidator.isWindows()) {
 			Point dpiCoordinates = PlatformUI.getWorkbench()
 					.getActiveWorkbenchWindow().getShell().getDisplay()
@@ -117,6 +121,33 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 			}
 		}
 		
+		try {
+			serviceInitiator();
+		} catch (IOException exception) {
+			logger.error("Failure in IO", exception);
+		}
+	}
+	
+	private void serviceInitiator() throws IOException{
+		if(OSValidator.isWindows()){		
+			String command = "java -cp " + getInstallationConfigPath().trim() + ";" +getInstallationPath() + DRIVER_CLASS;
+			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", command});
+			builder.start();
+		}
+		else if(OSValidator.isMac()){
+			logger.debug("On Mac Operating System....");
+			String command="java -cp " + getInstallationConfigPath().trim() + ":" + getInstallationPath() + DRIVER_CLASS;
+			System.out.println("Rest jar Path:::"+command);
+			logger.debug("command{}", command);
+            ProcessBuilder builder = new ProcessBuilder(new String[]{"bash", "-c", command});
+            builder.start();
+
+		}
+		else if(OSValidator.isUnix()){
+			new ProcessBuilder(new String[]{"java", "-jar", getInstallationPath()}).start();
+		}
+		else if(OSValidator.isSolaris()){
+		}
 	}
 	
 	private void setCSSID(Widget widget, String name) {
@@ -214,5 +245,40 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		}
 		
 		return portNumber;
+	}
+	
+	private String getRestServiceJar(){
+		String restServiceJar = null;
+		try {
+			FileReader fileReader = new FileReader(XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
+			Properties properties = new Properties();
+			properties.load(fileReader);
+			if(StringUtils.isNotBlank(properties.getProperty(SERVICE_JAR))){
+				restServiceJar = properties.getProperty(SERVICE_JAR);
+			}
+		} catch (FileNotFoundException e) {
+			logger.error("File not exists", e);
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+		return restServiceJar;
+	}
+	
+	private  String getInstallationPath()  {
+		String path = Platform.getInstallLocation().getURL().getPath();
+		String restServiceJar = getRestServiceJar();
+		if(StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/") && OSValidator.isWindows()){
+			path = StringUtils.substring(path, 1);
+		}
+		return path + "config/service/" + restServiceJar;
+	}
+	
+	private static String getInstallationConfigPath()  {
+		String path = Platform.getInstallLocation().getURL().getPath();
+		if(StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/") && OSValidator.isWindows()){
+			path = StringUtils.substring(path, 1);
+		}
+		
+		return path + "config/service/config" ;
 	}
 }

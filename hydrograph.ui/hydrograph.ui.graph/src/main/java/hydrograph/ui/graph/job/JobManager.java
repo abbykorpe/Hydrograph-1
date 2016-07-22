@@ -326,7 +326,7 @@ public class JobManager {
 			}).start();
 		} else {
 			setLocalMode(true);
-			ViewDataServiceInitiator.startService();
+			//ViewDataServiceInitiator.startService();
 			new Thread(new Runnable() {
 
 				@Override

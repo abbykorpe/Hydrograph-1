@@ -217,9 +217,9 @@ public class WatchRecordAction extends SelectionAction {
 		final String dataViewerWindowTitle = dataViewerWindowName;	
 
 		//Open data viewer window
-		Display.getDefault().asyncExec(new Runnable() {
+		/*Display.getDefault().asyncExec(new Runnable() {
 			@Override
-			public void run() {
+			public void run() {*/
 				DebugDataViewer window = new DebugDataViewer(jobDetails,dataViewerWindowTitle);
 				String watcherId=watchRecordInner.getComponentId()+watchRecordInner.getComponentId();
 				dataViewerMap.put(dataViewerWindowTitle, window);
@@ -243,11 +243,9 @@ public class WatchRecordAction extends SelectionAction {
 					window.getConditions().setRemoteCondition("");
 					window.getConditions().getRemoteConditions().clear();
 					window.getConditions().getRemoteGroupSelectionMap().clear();
-				}
 					
 				watcherAndConditon.put(watcherId,window.getConditions());
 			}
-		});
 	}
 
 	
