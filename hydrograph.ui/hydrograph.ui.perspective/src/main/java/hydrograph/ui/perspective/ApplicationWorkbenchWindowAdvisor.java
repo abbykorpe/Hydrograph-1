@@ -21,7 +21,6 @@ import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.perspective.config.ELTPerspectiveConfig;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
