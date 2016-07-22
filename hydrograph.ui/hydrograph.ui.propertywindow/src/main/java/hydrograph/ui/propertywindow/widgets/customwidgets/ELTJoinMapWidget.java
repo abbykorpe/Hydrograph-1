@@ -58,6 +58,9 @@ public class ELTJoinMapWidget extends AbstractWidget {
 	private JoinMappingGrid joinMappingGrid;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private List<AbstractWidget> widgets;
+	
+	private List<String> joinOutputFieldListSequence;
+	
 	public ELTJoinMapWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propertyDialogButtonBar);
@@ -68,6 +71,8 @@ public class ELTJoinMapWidget extends AbstractWidget {
 		} else {
 			joinMappingGrid = (JoinMappingGrid) componentConfigProp.getPropertyValue();
 		}
+		
+		joinOutputFieldListSequence = new LinkedList<>();
 	}
 
 	@Override
@@ -91,6 +96,9 @@ public class ELTJoinMapWidget extends AbstractWidget {
 				JoinMapDialog joinMapDialog = new JoinMapDialog(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), getComponent(),
 						joinMappingGrid,propertyDialogButtonBar);
 				joinMapDialog.open();
+				
+				joinOutputFieldListSequence.addAll(joinMapDialog.getOutputFieldListInSequence());
+				
 				propagateInternalSchema();
 				showHideErrorSymbol(widgets);
 			}
@@ -99,11 +107,23 @@ public class ELTJoinMapWidget extends AbstractWidget {
 		propagateInternalSchema();
 	}
 
+	private void synchSchemaWithJoinMapping(){
+		
+		if(joinOutputFieldListSequence.size() == 0){
+			return;
+		}
+		
+		List<GridRow> newGridRowList = new LinkedList<>();
+		for(String fieldName: joinOutputFieldListSequence){
+			newGridRowList.add(getSchemaForInternalPropagation().getGridRow(fieldName));
+		}
+		getSchemaForInternalPropagation().getGridRow().clear();
+		getSchemaForInternalPropagation().getGridRow().addAll(newGridRowList);		
+	}
 	
-	
-	private Schema propagateInternalSchema() {
+	private void propagateInternalSchema() {
 		if(joinMappingGrid ==null)
-			return null;
+			return;
 
 		Schema internalSchema = getSchemaForInternalPropagation();			 
 		internalSchema.getGridRow().clear();
@@ -122,6 +142,9 @@ public class ELTJoinMapWidget extends AbstractWidget {
 
 		for(LookupMapProperty row : lookupMapRows){
 			if(!ParameterUtil.isParameter(row.getSource_Field())){
+				if(row.getSource_Field()==null){
+					continue;
+				}
 				GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
 				GridRow outputFieldSchema = null;
 				if(inputFieldSchema==null){
@@ -129,7 +152,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 				}else{
 					outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
 				}
-
+				
 				if(row.getSource_Field().trim().length()>0){
 					if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
 						finalPassThroughFields.add(row.getOutput_Field());
@@ -147,8 +170,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 
 
 		internalSchema.getGridRow().addAll(outputSchemaGridRowList);
-		return internalSchema;
-
+		synchSchemaWithJoinMapping();
 	}
 	
 	private void addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(Map<String, String> mapFields,
