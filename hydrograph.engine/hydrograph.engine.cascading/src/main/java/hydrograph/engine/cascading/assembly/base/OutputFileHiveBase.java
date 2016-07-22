@@ -17,8 +17,10 @@ import hydrograph.engine.assembly.entity.OutputFileHiveTextEntity;
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
+import hydrograph.engine.cascading.utilities.DataTypeCoerce;
 import hydrograph.engine.utilities.ComponentHelper;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 
 import org.apache.hadoop.fs.Path;
@@ -27,8 +29,10 @@ import org.slf4j.LoggerFactory;
 
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
+import cascading.pipe.assembly.Rename;
 import cascading.scheme.Scheme;
 import cascading.tap.Tap;
+import cascading.tuple.Fields;
 
 public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseComponent<HiveEntityBase> {
 
@@ -38,7 +42,6 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 	private static final long serialVersionUID = 4184919036703029509L;
 	private Pipe tailPipe;
 	private FlowDef flowDef;
-
 	protected HiveEntityBase hiveEntityBase;
 	@SuppressWarnings("rawtypes")
 	protected Scheme scheme;
@@ -63,7 +66,6 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 	}
 
 	public abstract void castHiveEntityFromBase(HiveEntityBase hiveEntityBase);
-
 	/**
 	 * This method will create the table descriptor and scheme to write the data
 	 * to Hive Table. In this method, table descriptor and scheme will be
@@ -117,6 +119,7 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 		try {
 			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName(getComponentType(hiveEntityBase),
 					hiveEntityBase.getComponentId(), ""), tailPipe);
+			sinkPipe=new Rename(sinkPipe, new Fields(outputFields), new Fields(convertLowerCase(outputFields)));
 			setHadoopProperties(hiveTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 			flowDef = flowDef.addTailSink(sinkPipe, hiveTap);
@@ -125,6 +128,14 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 					+ e.getMessage(), e);
 			throw new RuntimeException(e);
 		}
+	}
+	protected String[] convertLowerCase(String[] fields) {
+		String[] convertedfields = new String[fields.length];
+		int i = 0;
+		for (String field : fields) {
+			convertedfields[i++] = field.toLowerCase();
+		}
+		return convertedfields;
 	}
 
 	private String getComponentType(HiveEntityBase hiveEntityBase2) {
@@ -139,4 +150,5 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 	public Path getHiveExternalTableLocationPath(String externalPath) {
 		return externalPath == null ? null : new Path(externalPath);
 	}
+	
 }

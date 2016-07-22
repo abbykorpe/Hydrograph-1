@@ -15,14 +15,6 @@
  */
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.OutputFileHiveTextEntity;
-import hydrograph.engine.assembly.entity.base.HiveEntityBase;
-import hydrograph.engine.cascading.assembly.base.OutputFileHiveBase;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
-import hydrograph.engine.cascading.scheme.hive.text.HiveTextTableDescriptor;
-import hydrograph.engine.cascading.utilities.DataTypeCoerce;
-
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
@@ -35,6 +27,13 @@ import cascading.tap.SinkMode;
 import cascading.tap.hive.HivePartitionTap;
 import cascading.tap.hive.HiveTap;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.OutputFileHiveTextEntity;
+import hydrograph.engine.assembly.entity.base.HiveEntityBase;
+import hydrograph.engine.cascading.assembly.base.OutputFileHiveBase;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
+import hydrograph.engine.cascading.scheme.hive.text.HiveTextTableDescriptor;
+import hydrograph.engine.cascading.utilities.DataTypeCoerce;
 
 /**
  * Hive Output File Component - records written as output into Hive Table
@@ -103,7 +102,7 @@ public class OutputFileHiveTextAssembly extends OutputFileHiveBase<OutputFileHiv
 				fieldsCreator
 						.hiveParquetDataTypeMapping(outputFileHiveTextEntity
 								.getFieldsList()),
-				outputFileHiveTextEntity.getPartitionKeys(),
+						outputFileHiveTextEntity.getPartitionKeys(),
 				outputFileHiveTextEntity.getDelimiter(), "",
 				getHiveExternalTableLocationPath(outputFileHiveTextEntity
 						.getExternalTablePathUri()));
@@ -146,8 +145,8 @@ public class OutputFileHiveTextAssembly extends OutputFileHiveBase<OutputFileHiv
 		String[] testField = new String[outputFields.length
 				- outputFileHiveTextEntity.getPartitionKeys().length];
 		int i = 0;
-		for (String inputfield : outputFields) {
-			if (!Arrays.asList(outputFileHiveTextEntity.getPartitionKeys())
+		for (String inputfield : convertLowerCase(outputFields)) {
+			if (!Arrays.asList(convertLowerCase(outputFileHiveTextEntity.getPartitionKeys()))
 					.contains(inputfield)) {
 				testField[i++] = inputfield;
 			}
