@@ -33,6 +33,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 		section it shows only recent filter i.e. Downloaded Dataset filter. Expected behavior is- dataset info window should display all the
 		 filters that are currently active on data viewer window
 22.#885 [Kalyan Rajpoot] Vertical scroll bar not present in schema structure details for Input file components
+23.#..  [Akhilesh Joshi] Sort issue with selected columns		 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
