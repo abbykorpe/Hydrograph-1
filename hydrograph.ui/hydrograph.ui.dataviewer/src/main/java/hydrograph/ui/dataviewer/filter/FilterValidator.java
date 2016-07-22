@@ -58,7 +58,14 @@ public class FilterValidator {
 				logger.trace("Field name at {} is blank" + index);
 				return false;
 			}
-			if (FilterConstants.BETWEEN.equalsIgnoreCase(conditional)||StringUtils.equalsIgnoreCase(FilterConstants.BETWEEN_FIELD,conditional)) {
+			if (FilterConstants.BETWEEN.equalsIgnoreCase(conditional)) {
+				if (StringUtils.isBlank(value2)) {
+					logger.trace("Value 2 at {} is blank" + index);
+					return false;
+				}
+			}
+			
+			if (StringUtils.equalsIgnoreCase(FilterConstants.BETWEEN_FIELD,conditional)) {
 				if (StringUtils.isBlank(value2)) {
 					logger.trace("Value 2 at {} is blank" + index);
 					return false;
@@ -79,25 +86,29 @@ public class FilterValidator {
 				logger.trace("operator at {} is incorrect", condition.getConditionalOperator());
 				return false;
 			}
-			
 			else {
 				if (condition.getConditionalOperator().contains(FIELD)) {
-					if (validateField(fieldsAndTypes, value1 ,fieldName)) {
+					if (StringUtils.equalsIgnoreCase(condition.getConditionalOperator(), FilterConstants.BETWEEN_FIELD)) {
+						if (validateField(fieldsAndTypes, value1, fieldName)
+								&& validateField(fieldsAndTypes, value2, fieldName)) {
+							return true;
+						} else {
+							return false;
+						}
+					}
+					else if (validateField(fieldsAndTypes, value1 ,fieldName)) {
 						return true;
 					}
 					else {
 						return false;
 					}
-					
 				}
-			
 				else if(StringUtils.isNotBlank(value1)){
 				if(!validateDataBasedOnTypes(type, value1, condition.getConditionalOperator())){
 					return false;
 				}
 			}
-			if (condition.getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)||
-					StringUtils.equalsIgnoreCase(condition.getConditionalOperator(),FilterConstants.BETWEEN_FIELD)) {
+			if (condition.getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
 				if (StringUtils.isNotBlank(value2)) {
 					if (!validateDataBasedOnTypes(type, value2, condition.getConditionalOperator())) {
 						return false;
@@ -134,8 +145,7 @@ public class FilterValidator {
 					}
 				}
 			}
-			else if (FilterConstants.BETWEEN.equalsIgnoreCase(conditionalOperator)
-					||StringUtils.equalsIgnoreCase(FilterConstants.BETWEEN_FIELD,conditionalOperator)) {
+			else if (FilterConstants.BETWEEN.equalsIgnoreCase(conditionalOperator)) {
 				validate(type, value);
 			}
 			else{

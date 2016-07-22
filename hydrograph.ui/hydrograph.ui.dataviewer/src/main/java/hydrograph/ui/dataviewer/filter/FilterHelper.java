@@ -459,7 +459,7 @@ public class FilterHelper {
 				for (String item : actualStringList) {
 					buffer.append(item + FilterConstants.SINGLE_SPACE);
 				}
-				logger.debug("Query String : " + buffer);
+				
 				Pattern p = Pattern.compile("\\(Field\\)");
 				Matcher m = p.matcher(buffer);
 				StringBuffer temp = new StringBuffer();
@@ -469,7 +469,8 @@ public class FilterHelper {
 				m.appendTail(temp);
 				buffer = new StringBuffer(temp);
 				
-				if (dataset.equalsIgnoreCase(Messages.DOWNLOADED)){
+				logger.debug("Query String : " + buffer);
+				if(dataset.equalsIgnoreCase(Messages.DOWNLOADED)){	
 					localCondition=buffer.toString();
 					showLocalFilteredData(StringUtils.trim(buffer.toString()));
 					debugDataViewer.setLocalCondition(localCondition);
