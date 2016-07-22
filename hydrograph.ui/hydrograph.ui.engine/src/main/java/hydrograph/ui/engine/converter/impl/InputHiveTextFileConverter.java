@@ -127,15 +127,18 @@ public class InputHiveTextFileConverter extends InputConverter {
 	private void addPartitionColumn(InputHivePartitionColumn partcol,PartitionColumn pcol){
 		InputHivePartitionColumn partitionColumn_rec=partcol.getInputHivePartitionColumn();
 		PartitionColumn partc = new PartitionColumn();
+		if(StringUtils.isNotBlank(partitionColumn_rec.getValue()))
+		{
 		partc.setName(partitionColumn_rec.getName());
 		partc.setValue(partitionColumn_rec.getValue());
 		pcol.setPartitionColumn(partc);
 		
 		if(partitionColumn_rec.getInputHivePartitionColumn()!=null){
-			if(partitionColumn_rec.getInputHivePartitionColumn().getValue()!="")
+			if(StringUtils.isNotBlank(partitionColumn_rec.getInputHivePartitionColumn().getValue()))
 				{
 			    addPartitionColumn(partitionColumn_rec,partc);
 				}
+		}
 		}
 	}
 	
