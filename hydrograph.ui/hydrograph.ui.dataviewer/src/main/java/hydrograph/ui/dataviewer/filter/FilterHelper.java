@@ -229,12 +229,7 @@ public class FilterHelper {
 				TableItem tableItem = getTableItem(source);
 				Text text = (Text) tableItem.getData(FilterConstants.VALUE2TEXTBOX);
 				String selectedValue = source.getItem(source.getSelectionIndex());
-				if (StringUtils.equalsIgnoreCase(selectedValue, FilterConstants.BETWEEN)
-						|| StringUtils.equalsIgnoreCase(selectedValue, FilterConstants.BETWEEN_FIELD)) {
-					text.setVisible(true);
-				} else {
-					text.setVisible(false);
-				}
+				enableAndDisableValue2TextBox(selectedValue, text);
 				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 			@Override
@@ -260,17 +255,21 @@ public class FilterHelper {
 				Condition condition = (Condition) tableItem.getData();
 				if (tableItem.getData(FilterConstants.VALUE2TEXTBOX) != null) {
 					Text text = (Text) tableItem.getData(FilterConstants.VALUE2TEXTBOX);
-					if(StringUtils.equalsIgnoreCase(condition.getConditionalOperator(),FilterConstants.BETWEEN)
-							|| StringUtils.equalsIgnoreCase(condition.getConditionalOperator(),FilterConstants.BETWEEN_FIELD)){
-						text.setVisible(true);
-					} else {
-						text.setVisible(false);
-					}
+					enableAndDisableValue2TextBox(condition.getConditionalOperator(), text);
 				}
 				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 		};
 		return listener;
+	}
+	
+	private void enableAndDisableValue2TextBox(String condition, Text text) {
+		if(StringUtils.equalsIgnoreCase(condition,FilterConstants.BETWEEN)
+				|| StringUtils.equalsIgnoreCase(condition,FilterConstants.BETWEEN_FIELD)){
+			text.setVisible(true);
+		} else {
+			text.setVisible(false);
+		}
 	}
 	
 	/**
