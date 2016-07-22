@@ -1,0 +1,479 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+ 
+apply plugin: 'java'
+sourceCompatibility = 1.7
+version = '1.0'
+def hydrographExecution='hydrograph.engine.commandline.utilities.HydrographExecution'
+
+repositories {
+    maven {
+        url "http://10.30.127.67:9091/artifactory/libs-release"
+    }
+}
+
+
+configurations {
+    sshAntTask
+}
+configurations {
+    compile
+}
+
+dependencies {
+    sshAntTask 'org.apache.ant:ant-jsch:1.9.4'
+}
+
+sourceSets {
+    main {
+        java.srcDir 'src'
+    }
+}
+
+//Reading build.properties file to get the configuration details require to run job. 
+Properties properties = new Properties()
+def buildProperty = project.projectDir.path + '/build.properties'
+File propertiesFile = new File(buildProperty)
+propertiesFile.withInputStream {
+    properties.load(propertiesFile.newDataInputStream())
+}
+
+ext.cascadingVersion = '3.1.0'
+ext.hadoopVersion = '2.6.0'
+ext.hiveVersion = '1.2.0'
+
+dependencies {
+
+    compile(group: 'hydrograph', name: 'hydrograph.engine.command-line', version: '0.1.8-SNAPSHOT')
+
+    compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
+}
+
+test {
+    testLogging.showStandardStreams = true
+}
+
+
+task scpJarFiles(dependsOn: ['build']) {
+
+    doLast {
+        println 'Copying library files...'
+
+        def jarFile
+        def jarName
+        def jarFiles = files {
+            file(project.libsDir.path).listFiles()
+        }
+
+        jarFiles.each {
+            File file ->
+                jarFile = file.absolutePath
+                jarName = file.name
+        	}
+
+        try {
+				scpToRemoteServer(jarFile, project.name+"/lib",username,host,password,properties.remoteDirectory)
+    	    } catch (Exception gradleException) {
+        	    println '#Gradle failed to execute task#'
+        	    gradleException.printStackTrace();
+        	}
+	
+	/* Code for moving jar files from project lib folder to remote */
+	
+	println 'Copying Other library files...'
+
+        def otherJarFile
+        def otherJarName
+		println project.projectDir.path
+        def otherJarFiles = files {
+			def path1 =project.projectDir.path+'/lib'
+            file(path1).listFiles()
+        }
+		
+	try {
+			otherJarFiles.each {
+            File file ->
+                otherJarFile = file.absolutePath
+				 println 'Copying ' + file.name
+               	scpToRemoteServer(otherJarFile, project.name+"/lib",username,host,password,properties.remoteDirectory)
+        	}
+      			
+    	    } catch (Exception gradleException) {
+        	    println '#Gradle failed to execute task#'
+        	    gradleException.printStackTrace();
+        	}
+    }
+}
+
+scpJarFiles.onlyIf {
+    project.hasProperty('host')
+    project.hasProperty('username')
+    project.hasProperty('password')
+}
+
+task scpJobXML() {
+ 		  doLast {
+    		    	println 'Copying XML files...'
+					scpToRemoteServer(jobXML,project.name+ "/" +getFilePath(jobXML),username,host,password,properties.remoteDirectory)
+
+    		        if(project.hasProperty('debugJobXML')){
+						scpToRemoteServer(debugJobXML,project.name+ "/" +getFilePath(debugJobXML),username,host,password,properties.remoteDirectory)
+            		}
+		    }
+}
+
+scpJobXML.onlyIf {
+    project.hasProperty('host')
+    project.hasProperty('username')
+    project.hasProperty('password')
+    project.hasProperty('jobXML');
+}
+
+task scpParameterFile() {
+    doLast {
+        println 'Copying Parameter files...'
+        try {
+            def parameterFiles = parameterFile.split(',');
+            for(int i = 0; i < parameterFiles.length; i++){
+                println 'copying parameter file: ' + parameterFiles[i];
+                if(!parameterFiles[i].trim().equals("")){
+ 					scpToRemoteServer( ""+parameterFiles[i]+"",""+project.name+"/param",username,host,password,properties.remoteDirectory)
+                  }
+            }
+        } catch (Exception gradleException) {
+            println '#Gradle failed to execute task#'
+            gradleException.printStackTrace();
+        }
+
+    }
+}
+
+scpParameterFile.onlyIf {
+    project.hasProperty('host')
+    project.hasProperty('username')
+    project.hasProperty('password')
+    project.hasProperty('parameterFile');
+}
+
+
+task executeRemoteJob() {
+    doLast {
+        println "Executing remote job..."
+        def jarFile
+        def jarName
+ 
+        def jarFiles = files {
+            file(project.libsDir.path).listFiles()
+        }
+
+        jarFiles.each {
+            File file ->
+                jarFile = file.absolutePath
+                jarName = file.name
+        }
+
+       def parameterFiles = parameterFile.split(',');
+       def unixParameterFileList = "";
+       
+       for(int i = 0; i < parameterFiles.length; i++){
+        	if(!parameterFiles[i].trim().equals("")){
+        		def unixParameterFileName = parameterFiles[i].substring(parameterFiles[i].replaceAll("\\\\","/").lastIndexOf("/") + 1);
+            	unixParameterFileList= unixParameterFileList +  "param/" + unixParameterFileName + ",";
+         	}
+        }
+
+		if(!unixParameterFileList.trim().equals("")){
+			unixParameterFileList=unixParameterFileList.substring(0, unixParameterFileList.length() - 1);
+		}
+
+        println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList
+		
+		def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList
+   		sshToRemoteServer(host,username,password,command)
+    }
+}
+
+executeRemoteJob.onlyIf {
+    project.hasProperty('host')
+    project.hasProperty('username')
+    project.hasProperty('password')
+    project.hasProperty('jobXML')
+    project.hasProperty('parameterFile');
+}
+
+
+task executeDebugRemoteJob() {
+
+    doLast {
+
+        println "Executing debug remote job..."
+
+        def jarFile
+        def jarName
+
+        def jarFiles = files {
+            file(project.libsDir.path).listFiles()
+        }
+
+        jarFiles.each {
+            File file ->
+                jarFile = file.absolutePath
+                jarName = file.name
+        }
+
+        def parameterFiles = parameterFile.split(',');
+        def unixParameterFileList = "";
+
+        for(int i = 0; i < parameterFiles.length; i++){
+        	if(!parameterFiles[i].trim().equals("")){
+        		def unixParameterFileName = parameterFiles[i].substring(parameterFiles[i].replaceAll("\\\\","/").lastIndexOf("/") + 1);
+            	unixParameterFileList= unixParameterFileList + "param/" + unixParameterFileName + ",";
+         	}
+        }
+		
+		if(!unixParameterFileList.trim().equals("")){
+			unixParameterFileList=unixParameterFileList.substring(0, unixParameterFileList.length() - 1);
+		}
+        
+        def debugXmlFileName = debugJobXML.substring(debugJobXML.lastIndexOf("/") + 1);
+        def jobId = jobId;
+        def basePath = basePath;
+        
+        println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList + " -debugxmlpath " + debugJobXML + " -jobid " + jobId + " -basepath " + basePath
+        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath
+		sshToRemoteServer(host,username,password,command)
+    }
+}
+
+task executeLocalJob(dependsOn: ['build', 'classes'], type: JavaExec) {
+
+    if(project.hasProperty('localjob')){
+
+        def mainClassName = hydrographExecution
+
+        def transformFiles = files { file(project.libsDir.path).listFiles() }
+
+		def otherJarFiles = files { file(project.projectDir.path+'/lib').listFiles() }
+
+        println 'Executing local job'
+        main = mainClassName
+        standardOutput = System.out
+        errorOutput = System.err
+        classpath += transformFiles +otherJarFiles+ configurations.compile
+        def argsArray = getArgsForRunJob()
+        args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'']
+
+    }
+}
+
+def getArgsForRunJob() {
+    def argsArray = new String[10]
+    if (project.hasProperty("jobXML")) {
+        argsArray[0] = "-xmlpath"
+        argsArray[1] = jobXML
+    }
+    if (project.hasProperty("parameterFile")) {
+        argsArray[2] = "-paramfiles"
+        argsArray[3] = parameterFile
+    }
+    return argsArray
+}
+
+executeLocalJob.onlyIf {
+    project.hasProperty('jobXML')
+    project.hasProperty('parameterFile')
+    project.hasProperty('localjob');
+}
+
+
+task executeDebugLocal (dependsOn: ['build', 'classes'], type: JavaExec) {
+
+    if(project.hasProperty('localjob')){
+        def mainClassName = hydrographExecution
+        def transformFiles = files { file(project.libsDir.path).listFiles() }
+
+        println 'Executing Debug local job'
+        main = mainClassName
+        standardOutput = System.out
+        errorOutput = System.err
+        classpath += transformFiles + configurations.compile
+        def argsArray = getArgsForDebugRunJob()
+        args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'',''+argsArray[4]+'',''+argsArray[5]+'',''+argsArray[6]+'',''+argsArray[7]+'',''+
+                argsArray[8]+'',''+argsArray[9]+'']
+
+    }
+}
+
+def getArgsForDebugRunJob() {
+    def argsArray = new String[10]
+    if (project.hasProperty("jobXML")) {
+        argsArray[0] = "-xmlpath"
+        argsArray[1] = jobXML
+        println jobXML
+    }
+
+    if (project.hasProperty("parameterFile")) {
+        argsArray[2] = "-paramfiles"
+        argsArray[3] = parameterFile
+    }
+
+    if(project.hasProperty("debugJobXML")){
+        argsArray[4] = "-debugxmlpath"
+        argsArray[5] = debugJobXML
+        println debugJobXML
+    }
+
+    if(project.hasProperty("jobId")){
+        argsArray[6] = "-jobid"
+        argsArray[7] = jobId
+        println jobId
+    }
+
+    if(project.hasProperty("basePath")){
+        argsArray[8] = "-basepath"
+        argsArray[9] = basePath
+        println basePath
+    }
+
+    return argsArray
+}
+
+
+task killRemoteJob() << {
+    if(jobprocessid !=null){
+        println "Gradle is Killing remote job"
+		def command="sh "+properties.runUtility+" -k " + jobprocessid
+        sshToRemoteServer(host,username,password,command)
+     }
+}
+
+killRemoteJob.onlyIf {
+    project.hasProperty('host')
+    project.hasProperty('username')
+    project.hasProperty('password')
+    project.hasProperty('jobprocessid');
+}
+
+task createDirectories(){
+	 doLast{
+         	println "Executing createDirectories..."
+ 			def  command="mkdir -p " +properties.remoteDirectory+"/{"+jobXML+","+moveJar+","+moveParameterFile+","+moveExternalSchemaFiles+","+moveSubJobFiles+"}"
+ 			sshToRemoteServer(host,username,password,command)
+		}
+}
+
+createDirectories.onlyIf {
+    project.hasProperty('host')
+    project.hasProperty('username')
+    project.hasProperty('password')
+    project.hasProperty('jobXML');
+}
+
+task scpSchemaFiles() {
+    doLast {
+    println 'Copying external schema files...'
+    def files=externalSchemaFiles;
+	def schemaFiles = files.split(",");
+	def sampleMap = [:]
+	schemaFiles.each {
+		def fileValue = "${it}"
+		def singleFile = fileValue.split("#");
+		sampleMap.put(singleFile[0],singleFile[1])
+	 }
+
+    sampleMap.each {
+       	scpToRemoteServer("${it.value}", getFilePath("${it.key}"),username,host,password,properties.remoteDirectory)
+      };
+    } 
+}
+ 
+scpSchemaFiles.onlyIf {
+    project.hasProperty('host')
+    project.hasProperty('username')
+    project.hasProperty('password')
+    project.hasProperty('externalSchemaFiles')
+}
+
+task scpSubJobFiles() {
+    doLast {
+    println 'Copying subjob files...'
+    def files=subJobFiles;
+	def schemaFiles = files.split(",");
+	def sampleMap = [:]
+	schemaFiles.each {
+		def fileValue = "${it}"
+		def singleFile = fileValue.split("#");
+		sampleMap.put(singleFile[0],singleFile[1])
+	 }
+
+    sampleMap.each {
+      	 scpToRemoteServer("${it.value}", getFilePath("${it.key}"),username,host,password,properties.remoteDirectory)
+      };
+    } 
+}
+
+def getFilePath(def path){
+	if(path.length() > 0 )
+		{
+		    def endIndex = path.lastIndexOf("/");
+		    if (endIndex != -1)  
+		    {
+		    	path = path.substring(0, endIndex);
+		    }
+		} 
+		return path  
+}
+
+
+def scpToRemoteServer(def fileToMove,def toDirectoryPath ,def username,def host,def password,def basePath){
+ 
+	        	ant.taskdef(
+    	            	name: 'scp',
+        	        	classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp',
+            	    	classpath: configurations.sshAntTask.asPath
+                	)
+     	
+          try {
+  		 	  	ant.scp(
+                   	 	file: fileToMove,
+                    	todir: ""+username+"@"+host+":"+basePath+ "/" +toDirectoryPath,
+                    	password: password,
+                    	trust: true,
+            	)
+            } catch (Exception gradleException) {
+            println '#Gradle failed to execute task#'
+            gradleException.printStackTrace();
+        }
+}
+
+def sshToRemoteServer(def host, def username, def password,def executeCommand ){
+
+   			ant.taskdef(
+               		name: 'sshexec',
+               		classname: 'org.apache.tools.ant.taskdefs.optional.ssh.SSHExec',
+               		classpath: configurations.sshAntTask.asPath)
+
+      try {
+            ant.sshexec(
+                    host: host,
+                    username: username,
+                    password: password,
+                    trust: true,
+                    command: executeCommand
+            )
+        } catch (Exception gradleException) {
+            println '#Gradle failed to execute task#'
+            gradleException.printStackTrace();
+        }
+
+}
