@@ -123,7 +123,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 		}else if(StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(),"none")){
 			return Messages.SCALETYPE_MUST_NOT_BE_NONE;
 		}
-		else if(precision < scale){
+		else if(precision <= scale){
 			return Messages.SCALE_MUST_BE_LESS_THAN_PRECISION;
 		}
 		return "";

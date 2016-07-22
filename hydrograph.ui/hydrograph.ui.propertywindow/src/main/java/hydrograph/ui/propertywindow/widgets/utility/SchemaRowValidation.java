@@ -382,7 +382,7 @@ public class SchemaRowValidation{
 			if(StringUtils.isBlank(gridRow.getPrecision())|| StringUtils.isBlank(gridRow.getScale()) ||
 					StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), NONE)||
 					!(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))||!(gridRow.getPrecision().matches(REGULAR_EXPRESSION_FOR_NUMBER))
-					|| StringUtils.equalsIgnoreCase(gridRow.getScale(), "0") || precision < scale){
+					|| precision <= scale){
 				setRedColor(tableItem);
 				return true;
 			}else{
