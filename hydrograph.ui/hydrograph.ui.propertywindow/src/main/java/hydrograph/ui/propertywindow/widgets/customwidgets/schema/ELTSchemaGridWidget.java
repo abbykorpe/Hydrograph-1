@@ -1494,8 +1494,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 private void syncInternallyPropagatedSchema(){
 	Schema schema =getSchemaForInternalPropagation();
-	Set<GridRow> set = new HashSet<>(schema.getGridRow());
-	schemaGridRowList = new ArrayList<>(set);
+	schemaGridRowList = new ArrayList<>(schema.getGridRow());
 	ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
 	eLTDetails.setGrids(schemaGridRowList);
 	tableViewer.setInput(schemaGridRowList);
