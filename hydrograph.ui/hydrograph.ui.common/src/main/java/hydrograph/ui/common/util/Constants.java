@@ -187,8 +187,6 @@ public class Constants {
 	public static final String ADD_WATCH_POINT_ID = "watchPointId";
 	public static final String WATCH_RECORD_ID = "watchRecordId";
 	public static final String REMOVE_WATCH_POINT_ID = "removeWatchPointId";
-	
-	
 	public static final String SOCKET_ID = "socketId";
 	public static final String JOB_ID = "jobId";
 	public static final String PORT_NO = ":8004";

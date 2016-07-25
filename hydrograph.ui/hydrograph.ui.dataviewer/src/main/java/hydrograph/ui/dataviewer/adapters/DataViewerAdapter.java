@@ -28,16 +28,21 @@ import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -119,9 +124,39 @@ public class DataViewerAdapter {
 	private void createConnection() throws ClassNotFoundException, SQLException {
 		Class.forName(AdapterConstants.CSV_DRIVER_CLASS);
 		Properties properties = new Properties();
-		properties.put("columnTypes",getDataTypeString().substring(0,getDataTypeString().length()-1));
+		properties.put("columnTypes",getType(databaseName));
 		connection = DriverManager.getConnection(AdapterConstants.CSV_DRIVER_CONNECTION_PREFIX + databaseName,properties);
 		statement = connection.createStatement();
+	}
+	
+	private StringBuffer getType(String databaseName) {
+		StringBuffer typeString = new StringBuffer();
+		String debugFileName = debugDataViewer.getDebugFileName();
+		String debugFileLocation = debugDataViewer.getDebugFileLocation();
+		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + debugFileName
+				+ SCHEMA_FILE_EXTENTION);
+		Map<String, String> fieldAndTypes = new HashMap<String, String>();
+		for (Field field : dataViewerFileSchema.getField()) {
+			fieldAndTypes.put(StringUtils.lowerCase(field.getName()), field.getType().value());
+		}
+		try(BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(databaseName + tableName + ".csv")))){
+			String firstLine = bufferedReader.readLine();
+			StringTokenizer stringTokenizer = new StringTokenizer(firstLine, ",");
+			int countTokens = stringTokenizer.countTokens();
+			for(int i=0 ; i < countTokens; i++){
+				String columnName = stringTokenizer.nextToken();
+				typeString.append(fieldAndTypes.get(StringUtils.lowerCase(columnName)));
+				if(i != countTokens-1){
+					typeString.append(",");
+				}
+			}
+			System.out.println(firstLine);
+			System.out.println(typeString);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return typeString;
 	}
 	
 	public void setFilterCondition(String filterCondition) {
