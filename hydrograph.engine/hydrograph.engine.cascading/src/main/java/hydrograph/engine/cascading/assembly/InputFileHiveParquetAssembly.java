@@ -38,13 +38,11 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 	 * 
 	 */
 	private static final long serialVersionUID = 2775585858902811182L;
-	private static Logger LOG = LoggerFactory
-			.getLogger(InputFileHiveParquetAssembly.class);
+	private static Logger LOG = LoggerFactory.getLogger(InputFileHiveParquetAssembly.class);
 	private HiveParquetTableDescriptor tableDesc;
 	private InputFileHiveParquetEntity inputFileHiveParquetEntity;
 
-	public InputFileHiveParquetAssembly(
-			InputFileHiveParquetEntity baseComponentEntity,
+	public InputFileHiveParquetAssembly(InputFileHiveParquetEntity baseComponentEntity,
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
@@ -57,18 +55,15 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 		// Parquet File format with Hive. Hence, the object of table descriptor
 		// is created in its respective assembly and not in its base class.
 
-		Configuration conf=new Configuration();
-		conf.addResource(new Path(HiveConfigurationMapping
-				.getHiveConf("path_to_hive_site_xml")));
-		
+		Configuration conf = new Configuration();
+		conf.addResource(new Path(HiveConfigurationMapping.getHiveConf("path_to_hive_site_xml")));
+
 		HiveTableDescriptor.Factory factory = new Factory(conf);
-		HiveTableDescriptor tb = factory.newInstance(
-				inputFileHiveParquetEntity.getDatabaseName(),
+		HiveTableDescriptor tb = factory.newInstance(inputFileHiveParquetEntity.getDatabaseName(),
 				inputFileHiveParquetEntity.getTableName());
 
-		tableDesc = new HiveParquetTableDescriptor(tb.getDatabaseName(),
-				tb.getTableName(), tb.getColumnNames(), tb.getColumnTypes(),
-				tb.getPartitionKeys(), getHiveExternalTableLocationPath());
+		tableDesc = new HiveParquetTableDescriptor(tb.getDatabaseName(), tb.getTableName(), tb.getColumnNames(),
+				tb.getColumnTypes(), tb.getPartitionKeys(), getHiveExternalTableLocationPath());
 		scheme = new HiveParquetScheme(tableDesc);
 		scheme.setSourceFields(tableDesc.toFields());
 		scheme.setSinkFields(tableDesc.toFields());
@@ -77,9 +72,8 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * hydrograph.engine.cascading.assembly.base.InputFileHiveBase#initializeHiveTap
-	 * ()
+	 * @see hydrograph.engine.cascading.assembly.base.InputFileHiveBase#
+	 * initializeHiveTap ()
 	 */
 	@Override
 	protected void initializeHiveTap() {
@@ -102,9 +96,8 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 
 	private void addPartitionFilter(HivePartitionTap hivePartitionTap) {
 		hivePartitionTap.addSourcePartitionFilter(
-				new Fields(inputFileHiveParquetEntity.getPartitionKeys()),
-				new RegexFilter(inputFileHiveParquetEntity
-						.getPartitionFilterRegex()));
+				new Fields(convertLowerCase(inputFileHiveParquetEntity.getPartitionKeys())),
+				new RegexFilter(inputFileHiveParquetEntity.getPartitionFilterRegex()));
 	}
 
 	/*

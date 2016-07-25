@@ -134,7 +134,7 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 
 	private void addPartitionFilter(HivePartitionTap hivePartitionTap) {
 		hivePartitionTap.addSourcePartitionFilter(new Fields(
-				inputHiveFileEntity.getPartitionKeys()), new RegexFilter(
+				convertLowerCase(inputHiveFileEntity.getPartitionKeys())), new RegexFilter(
 				inputHiveFileEntity.getPartitionFilterRegex()));
 	}
 
