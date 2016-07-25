@@ -893,6 +893,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		addImportExportButtons(containerControl);
 
 		populateWidgetExternalSchema();
+		scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,SWT.DEFAULT));
 	}
 	
 	private File getPath(){
@@ -962,6 +963,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.IMPORTED_SCHEMA);
 					showHideErrorSymbol(applySchemaValidationRule());
 				}
+				scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,SWT.DEFAULT));
 			}
 		});
 
