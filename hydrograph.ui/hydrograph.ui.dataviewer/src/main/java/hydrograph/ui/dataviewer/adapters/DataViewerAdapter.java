@@ -23,6 +23,7 @@ import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.datastructures.RowField;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
+import hydrograph.ui.dataviewer.filter.FilterHelper;
 import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -37,6 +38,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 /**
  * 
@@ -425,7 +428,7 @@ public class DataViewerAdapter {
 	 * @return {@link StatusMessage}
 	 */
 	public StatusMessage jumpToPage(long pageNumber) {
-
+		
 		if(getTotalNumberOfPages()==null){
 			return new StatusMessage(StatusConstants.ERROR, Messages.JUMP_To_PAGE_OPERATION_NOT_ALLOWED);
 		}
@@ -436,7 +439,7 @@ public class DataViewerAdapter {
 
 		Long numberOfRecords = getRowCount();
 		long tempOffset = adjustOffsetForJump(pageNumber, numberOfRecords);
-
+		
 		String sql = new ViewDataQueryBuilder(tableName).limit(pageSize).offset(offset).getQuery(filterCondition);
 		try (ResultSet results = statement.executeQuery(sql)) {
 			List<RowData> tempTableData = getRecords(results);
@@ -469,16 +472,30 @@ public class DataViewerAdapter {
 		long tempOffset = 0;
 		tempOffset = offset;
 		offset = (pageNumber * pageSize) - pageSize;
-
-		if (numberOfRecords != null) {
-			if (offset >= rowCount) {
-				offset = rowCount - pageSize;
-				if (offset < 0) {
-					offset = 0;
+		if (filterCondition!=null && !filterCondition.isEmpty()) {
+			if (StringUtils.equalsIgnoreCase(FilterHelper.INSTANCE.getRemoteCondition(), " ")) {
+				if (numberOfRecords != null) {
+					if (offset >= rowCount) {
+						offset = rowCount - pageSize;
+						if (offset < 0) {
+							offset = 0;
+						}
+					}
 				}
+			} else {
+				setOffset(pageNumber);
 			}
+		} else {
+			setOffset(pageNumber);
 		}
 		return tempOffset;
+	}
+
+	private void setOffset(long pageNumber) {
+		if(pageNumber>getTotalNumberOfPages())
+		{
+			offset = (getTotalNumberOfPages() * pageSize) - pageSize;
+		}
 	}
 
 	private List<RowData> getRecords(ResultSet results) throws SQLException {
