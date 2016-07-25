@@ -16,7 +16,6 @@ package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -30,7 +29,6 @@ import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
-import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.JoinMapDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
@@ -59,8 +57,6 @@ public class ELTJoinMapWidget extends AbstractWidget {
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private List<AbstractWidget> widgets;
 	
-	private List<String> joinOutputFieldListSequence;
-	
 	public ELTJoinMapWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propertyDialogButtonBar);
@@ -71,8 +67,6 @@ public class ELTJoinMapWidget extends AbstractWidget {
 		} else {
 			joinMappingGrid = (JoinMappingGrid) componentConfigProp.getPropertyValue();
 		}
-		
-		joinOutputFieldListSequence = new LinkedList<>();
 	}
 
 	@Override
@@ -95,10 +89,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 				
 				JoinMapDialog joinMapDialog = new JoinMapDialog(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), getComponent(),
 						joinMappingGrid,propertyDialogButtonBar);
-				joinMapDialog.open();
-				
-				joinOutputFieldListSequence.addAll(joinMapDialog.getOutputFieldListInSequence());
-				
+				joinMapDialog.open();				
 				propagateInternalSchema();
 				showHideErrorSymbol(widgets);
 			}
@@ -107,19 +98,6 @@ public class ELTJoinMapWidget extends AbstractWidget {
 		propagateInternalSchema();
 	}
 
-	private void synchSchemaWithJoinMapping(){
-		
-		if(joinOutputFieldListSequence.size() == 0){
-			return;
-		}
-		
-		List<GridRow> newGridRowList = new LinkedList<>();
-		for(String fieldName: joinOutputFieldListSequence){
-			newGridRowList.add(getSchemaForInternalPropagation().getGridRow(fieldName));
-		}
-		getSchemaForInternalPropagation().getGridRow().clear();
-		getSchemaForInternalPropagation().getGridRow().addAll(newGridRowList);		
-	}
 	
 	private void propagateInternalSchema() {
 		if(joinMappingGrid ==null)
@@ -154,12 +132,15 @@ public class ELTJoinMapWidget extends AbstractWidget {
 				}
 				
 				if(row.getSource_Field().trim().length()>0){
-					if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
-						finalPassThroughFields.add(row.getOutput_Field());
-						passThroughFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
-					}else{
-						finalMapFields.put(row.getSource_Field().split("\\.")[1], row.getOutput_Field());
-						mapFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+					String[] sourceField = row.getSource_Field().split("\\.");
+					if(sourceField.length==2){
+						if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
+							finalPassThroughFields.add(row.getOutput_Field());
+							passThroughFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+						}else{
+							finalMapFields.put(row.getSource_Field().split("\\.")[1], row.getOutput_Field());
+							mapFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+						}
 					}
 				}
 				outputSchemaGridRowList.add(outputFieldSchema);
@@ -170,7 +151,6 @@ public class ELTJoinMapWidget extends AbstractWidget {
 
 
 		internalSchema.getGridRow().addAll(outputSchemaGridRowList);
-		synchSchemaWithJoinMapping();
 	}
 	
 	private void addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(Map<String, String> mapFields,

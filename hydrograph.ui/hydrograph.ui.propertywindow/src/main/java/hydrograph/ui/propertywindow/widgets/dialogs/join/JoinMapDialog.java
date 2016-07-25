@@ -28,7 +28,6 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTJoinWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEditingSupport;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.utils.JoinMapDialogConstants;
-import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
@@ -42,7 +41,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -681,26 +679,14 @@ public class JoinMapDialog extends Dialog {
 						mappingTableItemList.add(row);
 					}else{
 						row=new LookupMapProperty();
+						row.setSource_Field("");
 						row.setOutput_Field(fieldName);
 						mappingTableItemList.add(row);
 					}
 				}
 				
-				mappingTableViewer.refresh(); 
+				mappingTableViewer.refresh(); 				
 				
-				/*MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Constants.SYNC_OUTPUT_FIELDS_CONFIRM_MESSAGE, MessageDialog.QUESTION, new String[] {"Ok", "Cancel" }, 0);
-				int dialogResult =dialog.open();
-				List<LookupMapProperty> pulledJoinMapProperties = null;
-				if(dialogResult == 0){
-					//syncTransformFieldsWithSchema();
-					Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
-					pulledJoinMapProperties = SchemaSyncUtility.INSTANCE.pullJoinSchemaInMapping(schema, component);
-				}
-				mappingTableViewer.setInput(pulledJoinMapProperties);
-				mappingTableItemList = pulledJoinMapProperties;
-				mappingTableViewer.refresh(); 
-				component.setLatestChangesInSchema(false);
-				refreshButtonStatus();*/
 			}
 
 			private List<String> getSchemaFieldList(Schema schema) {
@@ -1094,4 +1080,5 @@ public class JoinMapDialog extends Dialog {
 		}
 		return outputFieldList;
 	}
+	
 }

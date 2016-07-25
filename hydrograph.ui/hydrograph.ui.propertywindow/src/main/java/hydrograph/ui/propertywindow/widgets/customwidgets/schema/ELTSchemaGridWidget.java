@@ -75,12 +75,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -1526,15 +1524,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 private void syncInternallyPropagatedSchema(){
 	Schema schema =getSchemaForInternalPropagation();
-	if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),TRANSFORM))
-	{
-		schemaGridRowList = new ArrayList<>(schema.getGridRow());
-	}
-	else
-	{	
-		Set<GridRow> set = new LinkedHashSet<>(schema.getGridRow());
-		schemaGridRowList = new ArrayList<>(set);
-	}
+	schemaGridRowList.addAll(schema.getGridRow());
 	ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
 	eLTDetails.setGrids(schemaGridRowList);
 	tableViewer.setInput(schemaGridRowList);
