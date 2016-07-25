@@ -373,7 +373,7 @@ public class SchemaRowValidation{
 		
 		int precision = 0 , scale = 0 ;
 		
-		if(!(StringUtils.isBlank(gridRow.getPrecision()) || StringUtils.isBlank(gridRow.getScale()))){
+		if(StringUtils.isNotBlank(gridRow.getPrecision()) && StringUtils.isNotBlank(gridRow.getScale())){
 			precision = Integer.parseInt(gridRow.getPrecision());
 			scale = Integer.parseInt(gridRow.getScale());
 		}

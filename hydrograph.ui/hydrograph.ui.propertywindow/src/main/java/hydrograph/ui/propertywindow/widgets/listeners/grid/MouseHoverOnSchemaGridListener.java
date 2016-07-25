@@ -104,7 +104,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 	private String setToolTipForBigDecimal(GridRow gridRow, String componentType){
 		int precision = 0 , scale = 0;
 		
-		if(!(StringUtils.isBlank(gridRow.getPrecision()) || StringUtils.isBlank(gridRow.getScale()))){
+		if(StringUtils.isNotBlank(gridRow.getPrecision()) && StringUtils.isNotBlank(gridRow.getScale())){
 			precision = Integer.parseInt(gridRow.getPrecision());
 			scale = Integer.parseInt(gridRow.getScale());
 		}
@@ -118,7 +118,7 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 			return Messages.PRECISION_MUST_CONTAINS_NUMBER_ONLY_0_9;
 		}else if((StringUtils.isBlank(gridRow.getScale()))){
 			 return Messages.SCALE_MUST_NOT_BE_BLANK;
-		}else if(!(gridRow.getScale().matches("\\d+")) || StringUtils.equalsIgnoreCase(gridRow.getScale(), "0")){
+		}else if(!(gridRow.getScale().matches("\\d+")) || scale<0){
 			return Messages.SCALE_SHOULD_BE_POSITIVE_INTEGER;
 		}else if(StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(),"none")){
 			return Messages.SCALETYPE_MUST_NOT_BE_NONE;
