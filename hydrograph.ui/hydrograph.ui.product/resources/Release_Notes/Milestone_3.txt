@@ -36,6 +36,8 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 23.#..  [Akhilesh Joshi] Sort issue with selected columns		 
 24.#901 [Prateem Tadas] Downloaded Dataset Filter: Records not Shown in View Data on Filtering Data 
 25.#925 [Vibhor Tyagi]  Find Functionality: Focus is not shifting to the respective cell when user clicks on previous button
+26.#880 [Sonia Raheja]Data viewer window: Invalid messgae for the page count is getting displayed if fiter data set is not matched with data viewer window data
+27.#897 [Sonia Raheja]Filter: Record Count Range is Not Showed Properly On Filtering the Records
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
