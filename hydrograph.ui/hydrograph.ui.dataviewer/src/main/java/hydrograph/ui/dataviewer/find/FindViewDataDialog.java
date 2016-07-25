@@ -417,15 +417,14 @@ public class FindViewDataDialog extends Dialog{
 			previousSelectedTableItem = debugDataViewer.getTable().getItem((int) debugDataViewer.getData("SELECTED_ROW_INDEX"));
 			findColIndex -= 1;
 		}
-		if(findRowIndex <= 0){
+		if(findRowIndex < 0){
 			findRowIndex = debugDataViewer.getTable().getItems().length - 1;
 		}
 		Table table = debugDataViewer.getTable();
 		TableItem[] tableItems = table.getItems();
 		for(; findRowIndex >=0; findRowIndex--){
 			TableItem tableItem = tableItems[findRowIndex];
-			if(findColIndex < 0){ findColIndex = table.getColumnCount(); }
-			for( ; findColIndex >= 0 ;findColIndex--){
+			for( ; findColIndex > 0 ;findColIndex--){
 				if(StringUtils.containsIgnoreCase(tableItem.getText(findColIndex), findText.getText())){
 					if(prevColSelection > 0){
 						previousSelectedTableItem.setBackground(prevColSelection, Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
@@ -446,6 +445,7 @@ public class FindViewDataDialog extends Dialog{
 				}
 				
 			}
+			if(findColIndex <= 0){ findColIndex = table.getColumnCount();}
 			if(findRowIndex == 0){ findRowIndex = tableItems.length; }
 		}
 	}
