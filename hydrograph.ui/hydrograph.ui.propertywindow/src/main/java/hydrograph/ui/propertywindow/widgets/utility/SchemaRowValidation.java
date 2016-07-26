@@ -18,6 +18,8 @@ import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.widgets.listeners.grid.MouseHoverOnSchemaGridListener;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -29,8 +31,11 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.slf4j.Logger;
 
 public class SchemaRowValidation{
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(SchemaRowValidation.class);
+	
 	private static final String NONE = "none";
 	private static final String REGULAR_EXPRESSION_FOR_NUMBER = "\\d+";
 	private static final String PARQUET = "parquet";
@@ -374,8 +379,13 @@ public class SchemaRowValidation{
 		int precision = 0 , scale = 0 ;
 		
 		if(StringUtils.isNotBlank(gridRow.getPrecision()) && StringUtils.isNotBlank(gridRow.getScale())){
-			precision = Integer.parseInt(gridRow.getPrecision());
-			scale = Integer.parseInt(gridRow.getScale());
+			try{
+				precision = Integer.parseInt(gridRow.getPrecision());
+				scale = Integer.parseInt(gridRow.getScale());
+			}
+			catch(NumberFormatException exception){
+				logger.debug("Failed to parse the scale or precision", exception);
+			}
 		}
 		
 		if(StringUtils.containsIgnoreCase(componentType, HIVE)||StringUtils.containsIgnoreCase(componentType, PARQUET)){

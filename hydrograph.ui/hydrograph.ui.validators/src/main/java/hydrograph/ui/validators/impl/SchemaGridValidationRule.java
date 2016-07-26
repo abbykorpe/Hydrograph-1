@@ -100,8 +100,14 @@ public class SchemaGridValidationRule implements IValidator {
 			}
 			
 			if(StringUtils.isNotBlank(gridRow.getPrecision()) && StringUtils.isNotBlank(gridRow.getScale())){
-				precision = Integer.parseInt(gridRow.getPrecision());
-				scale = Integer.parseInt(gridRow.getScale());
+				try{
+					precision = Integer.parseInt(gridRow.getPrecision());
+					scale = Integer.parseInt(gridRow.getScale());
+				}
+				catch(NumberFormatException exception){
+					logger.debug("Failed to parse the scale or precision", exception);
+					return false;
+				}
 			}
 			
 			if(DATA_TYPE_BIG_DECIMAL.equalsIgnoreCase(gridRow.getDataTypeValue())){

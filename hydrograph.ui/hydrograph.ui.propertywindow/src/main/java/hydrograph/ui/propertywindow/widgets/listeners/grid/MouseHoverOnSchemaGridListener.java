@@ -18,12 +18,14 @@ import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.listeners.MouseActionListener;
+import hydrograph.ui.validators.impl.SchemaGridValidationRule;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -40,8 +42,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
+import org.slf4j.Logger;
 
 public class MouseHoverOnSchemaGridListener extends MouseActionListener{
+private static final Logger logger = LogFactory.INSTANCE.getLogger(MouseHoverOnSchemaGridListener.class);
 	
 	Table table=null;
 	private Shell tip=null;
@@ -105,8 +109,13 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 		int precision = 0 , scale = 0;
 		
 		if(StringUtils.isNotBlank(gridRow.getPrecision()) && StringUtils.isNotBlank(gridRow.getScale())){
-			precision = Integer.parseInt(gridRow.getPrecision());
-			scale = Integer.parseInt(gridRow.getScale());
+			try{
+				precision = Integer.parseInt(gridRow.getPrecision());
+				scale = Integer.parseInt(gridRow.getScale());
+			}
+			catch(NumberFormatException exception){
+				logger.debug("Failed to parse the scale or precision", exception);
+			}
 		}
 		
 		if(StringUtils.isBlank(gridRow.getPrecision())
