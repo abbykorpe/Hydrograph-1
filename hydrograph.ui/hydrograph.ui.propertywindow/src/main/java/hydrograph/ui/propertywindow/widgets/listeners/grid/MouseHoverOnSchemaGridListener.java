@@ -25,7 +25,6 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.listeners.MouseActionListener;
-import hydrograph.ui.validators.impl.SchemaGridValidationRule;
 
 import java.math.BigDecimal;
 import java.text.ParseException;

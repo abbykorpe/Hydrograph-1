@@ -19,7 +19,6 @@ import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.widgets.listeners.grid.MouseHoverOnSchemaGridListener;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
