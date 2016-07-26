@@ -114,13 +114,14 @@ private static final Logger logger = LogFactory.INSTANCE.getLogger(MouseHoverOnS
 			}
 			catch(NumberFormatException exception){
 				logger.debug("Failed to parse the scale or precision", exception);
+				return Messages.SCALE_MUST_NOT_BE_BLANK;
 			}
 		}
 		
 		if(StringUtils.isBlank(gridRow.getPrecision())
 				&& (StringUtils.containsIgnoreCase(componentType, "hive")
 						||StringUtils.containsIgnoreCase(componentType, "parquet"))){
-	    return Messages.PRECISION_MUST_NOT_BE_BLANK;
+			return Messages.PRECISION_MUST_NOT_BE_BLANK;
 	    }else if(!(gridRow.getPrecision().matches("\\d+")) &&
 	    		StringUtils.isNotBlank(gridRow.getPrecision())){
 			return Messages.PRECISION_MUST_CONTAINS_NUMBER_ONLY_0_9;

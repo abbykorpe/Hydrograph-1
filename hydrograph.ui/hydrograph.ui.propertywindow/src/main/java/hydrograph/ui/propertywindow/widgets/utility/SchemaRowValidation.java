@@ -384,6 +384,7 @@ public class SchemaRowValidation{
 			}
 			catch(NumberFormatException exception){
 				logger.debug("Failed to parse the scale or precision", exception);
+				return false;
 			}
 		}
 		
