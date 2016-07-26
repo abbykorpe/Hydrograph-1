@@ -122,6 +122,9 @@ public class ELTLookupMapWidget extends AbstractWidget {
 		for(LookupMapProperty row : lookupMapRows){
 
 			if(!ParameterUtil.isParameter(row.getSource_Field())){
+				if(row.getSource_Field()==null){
+					continue;
+				}
 				GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
 				GridRow outputFieldSchema = null;
 
