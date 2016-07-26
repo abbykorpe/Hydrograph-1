@@ -47,7 +47,7 @@ import org.slf4j.Logger;
 /**
  * Converter implementation for Input Hive TextFile component
  * 
- * @author eyy445 
+ * @author Bitwise 
  */
 public class InputHiveTextFileConverter extends InputConverter {
 

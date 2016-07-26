@@ -6,7 +6,7 @@ script:
 notifications: 
     email:
       recipients:
-      - accelero_ui_dev@bitwiseglobal.com  
+      - hydrograph_support@bitwiseglobal.com  
     on_success: always
     on_failure: always
 cache:
