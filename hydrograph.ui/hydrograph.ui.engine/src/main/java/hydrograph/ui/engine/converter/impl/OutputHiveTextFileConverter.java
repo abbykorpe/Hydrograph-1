@@ -38,7 +38,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 /**
  * Converter implementation for Output Hive TextFile component
- * 
+ * @author Bitwise
  */
 public class OutputHiveTextFileConverter extends OutputConverter {
 

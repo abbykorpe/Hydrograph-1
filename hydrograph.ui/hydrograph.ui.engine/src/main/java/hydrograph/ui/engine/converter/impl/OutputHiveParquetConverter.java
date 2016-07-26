@@ -41,7 +41,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 /**
  * Converter implementation for Output Hive Parquet component
- * 
+ * @author Bitwise
  */
 public class OutputHiveParquetConverter extends OutputConverter {
 

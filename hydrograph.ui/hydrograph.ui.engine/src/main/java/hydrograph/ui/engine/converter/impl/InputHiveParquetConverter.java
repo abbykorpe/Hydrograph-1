@@ -45,6 +45,7 @@ import org.slf4j.Logger;
 /**
  * Converter implementation for Input Hive Parquet component
  * 
+ * @author Bitwise
  */
 public class InputHiveParquetConverter extends InputConverter {
 
