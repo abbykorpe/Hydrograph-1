@@ -187,8 +187,7 @@ public class Constants {
 	public static final String ADD_WATCH_POINT_ID = "watchPointId";
 	public static final String WATCH_RECORD_ID = "watchRecordId";
 	public static final String REMOVE_WATCH_POINT_ID = "removeWatchPointId";
-	public static final String USER_ID = "userId";
-	public static final String PASSWORD = "password";
+	
 	public static final String BASE_PATH = "basePath";
 	public static final String COMPONENT_ID = "componentId";
 	public static final String SOCKET_ID = "socketId";

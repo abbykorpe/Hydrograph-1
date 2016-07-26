@@ -45,7 +45,6 @@ import org.slf4j.Logger;
 /**
  * Converter implementation for Input Hive Parquet component
  * 
- * @author eyy445 
  */
 public class InputHiveParquetConverter extends InputConverter {
 

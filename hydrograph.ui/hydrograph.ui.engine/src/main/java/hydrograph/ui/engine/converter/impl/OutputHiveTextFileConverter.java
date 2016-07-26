@@ -39,7 +39,6 @@ import org.slf4j.Logger;
 /**
  * Converter implementation for Output Hive TextFile component
  * 
- * @author eyy445 
  */
 public class OutputHiveTextFileConverter extends OutputConverter {
 

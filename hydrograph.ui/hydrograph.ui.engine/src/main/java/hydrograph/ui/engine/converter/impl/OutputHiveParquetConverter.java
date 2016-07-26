@@ -42,7 +42,6 @@ import org.slf4j.Logger;
 /**
  * Converter implementation for Output Hive Parquet component
  * 
- * @author eyy445 
  */
 public class OutputHiveParquetConverter extends OutputConverter {
 
