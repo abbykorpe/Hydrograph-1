@@ -39,6 +39,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 25.#925 [Vibhor Tyagi]  Find Functionality: Focus is not shifting to the respective cell when user clicks on previous button
 26.#880 [Sonia Raheja]Data viewer window: Invalid messgae for the page count is getting displayed if fiter data set is not matched with data viewer window data
 27.#897 [Sonia Raheja]Filter: Record Count Range is Not Showed Properly On Filtering the Records
+28.#930 [Vibhor Tyagi]  Select Columns: Sorting Icon is Getting Changed When There is No Field Present in All Columns/Selected Columns
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
