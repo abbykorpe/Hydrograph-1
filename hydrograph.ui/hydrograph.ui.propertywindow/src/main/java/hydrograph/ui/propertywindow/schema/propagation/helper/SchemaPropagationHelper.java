@@ -123,8 +123,8 @@ public class SchemaPropagationHelper {
 			schemaGrid.setScale("");
 			schemaGrid.setPrecision("");
 			schemaGrid.setDateFormat("");
-			schemaGrid.setScaleType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
-			schemaGrid.setScaleTypeValue(Messages.SCALE_TYPE_NONE);
+			//schemaGrid.setScaleType(Integer.valueOf(Constants.DEFAULT_INDEX_VALUE_FOR_COMBOBOX));
+			//schemaGrid.setScaleTypeValue(Messages.SCALE_TYPE_NONE);
 			
 		}
 		return schemaGrid;
