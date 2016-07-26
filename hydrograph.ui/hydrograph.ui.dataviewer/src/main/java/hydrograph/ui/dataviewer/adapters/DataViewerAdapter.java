@@ -56,6 +56,10 @@ import org.slf4j.Logger;
 public class DataViewerAdapter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(DataViewerAdapter.class);
+	private static final String CSV = ".csv";
+	private String SCHEMA_FILE_EXTENTION=".xml";
+	private static final String COLUMN_TYPES = "columnTypes";
+
 	private List<RowData> viewerData;
 
 	private String databaseName;
@@ -73,7 +77,6 @@ public class DataViewerAdapter {
 	private Map<String,Integer> allColumnsMap;
 	private String filterCondition;
 	private DebugDataViewer debugDataViewer;
-	private String SCHEMA_FILE_EXTENTION=".xml";
 
 	public DataViewerAdapter(String databaseName, String tableName, int PAGE_SIZE, long INITIAL_OFFSET, DebugDataViewer debugDataViewer) throws ClassNotFoundException, SQLException {
 		this.databaseName = databaseName;
@@ -124,7 +127,7 @@ public class DataViewerAdapter {
 	private void createConnection() throws ClassNotFoundException, SQLException {
 		Class.forName(AdapterConstants.CSV_DRIVER_CLASS);
 		Properties properties = new Properties();
-		properties.put("columnTypes",getType(databaseName));
+		properties.put(COLUMN_TYPES, getType(databaseName));
 		connection = DriverManager.getConnection(AdapterConstants.CSV_DRIVER_CONNECTION_PREFIX + databaseName,properties);
 		statement = connection.createStatement();
 	}
@@ -133,13 +136,13 @@ public class DataViewerAdapter {
 		StringBuffer typeString = new StringBuffer();
 		String debugFileName = debugDataViewer.getDebugFileName();
 		String debugFileLocation = debugDataViewer.getDebugFileLocation();
-		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + debugFileName
-				+ SCHEMA_FILE_EXTENTION);
+		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + 
+				debugFileName + SCHEMA_FILE_EXTENTION);
 		Map<String, String> fieldAndTypes = new HashMap<String, String>();
 		for (Field field : dataViewerFileSchema.getField()) {
 			fieldAndTypes.put(StringUtils.lowerCase(field.getName()), field.getType().value());
 		}
-		try(BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(databaseName + tableName + ".csv")))){
+		try(BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(databaseName + tableName + CSV)))){
 			String firstLine = bufferedReader.readLine();
 			StringTokenizer stringTokenizer = new StringTokenizer(firstLine, ",");
 			int countTokens = stringTokenizer.countTokens();
@@ -150,32 +153,15 @@ public class DataViewerAdapter {
 					typeString.append(",");
 				}
 			}
-			System.out.println(firstLine);
-			System.out.println(typeString);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Failed to read view data file column headers", e);
+			throw new RuntimeException("Failed to read view data file column headers");
 		}
 		return typeString;
 	}
 	
 	public void setFilterCondition(String filterCondition) {
 		this.filterCondition = filterCondition;
-	}
-	
-	private String getDataTypeString() {
-		String dataTypeString="";
-		String debugFileName = debugDataViewer.getDebugFileName();
-		String debugFileLocation = debugDataViewer.getDebugFileLocation();
-
-		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE
-				.getFieldsFromSchema(debugFileLocation + debugFileName
-						+ SCHEMA_FILE_EXTENTION);
-		for (Field field : dataViewerFileSchema.getField()) {
-			FieldDataTypes fieldDataTypes=field.getType();
-			dataTypeString=dataTypeString+fieldDataTypes.value().split("\\.")[2]+",";
-		}
-		return dataTypeString;
 	}
 	
 	/**
