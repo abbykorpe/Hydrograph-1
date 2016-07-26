@@ -26,7 +26,10 @@ import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.graph.model.Component;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -138,25 +141,102 @@ public class SchemaSyncUtility {
 	}
 	
 	/**
+	 * Push the schema from schema tab to Mapping in General tab
+	 *
+	 * @param component
+	 * @param schemaGridRowList
+	 */
+	public boolean isSyncRequired( Component component, List<GridRow> schemaGridRowList) {
+		if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()) ||
+		   Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName()) ||
+		   Constants.NORMALIZE.equalsIgnoreCase(component.getComponentName()) ||
+		   Constants.CUMULATE.equalsIgnoreCase(component.getComponentName()) ){
+				//pushSchemaToTransformMapping(component, schemaGridRowList);
+			return true;
+		}else if(Constants.LOOKUP.equalsIgnoreCase(component.getComponentName())){
+			//pushSchemaToLookupMapping( component, schemaGridRowList);
+			return true;
+		}else if(Constants.JOIN.equalsIgnoreCase(component.getComponentName())){
+			return isSyncRequiredInJoin(component, schemaGridRowList);
+		}else{
+			return false;
+		}
+	}
+	
+	private boolean isSyncRequiredInJoin(Component component,
+			List<GridRow> schemaGridRowList) {
+		JoinMappingGrid joinMappingGrid = (JoinMappingGrid) component.getProperties().get(JOIN_MAP);
+		
+		List<String> schemaFieldList = getSchemaFieldList(schemaGridRowList);
+		List<String> joinOutputFieldList = getOutputFieldsFromJoinMapping(joinMappingGrid);
+		
+		if(schemaFieldList == null && joinOutputFieldList == null){
+			return false;
+		}
+		
+		if(schemaFieldList.size()!=joinOutputFieldList.size()){
+			return true;
+		}
+		
+		for(int index=0;index<schemaFieldList.size();index++){
+			if(!StringUtils.equals(schemaFieldList.get(index), joinOutputFieldList.get(index))){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Push the schema from schema tab to Mapping in General tab for Lookup component
 	 *
 	 * @param component
 	 * @param schemaGridRowList
 	 */
 	public void pushSchemaToJoinMapping( Component component,
-			List<GridRow> schemaGridRowList) {
+			List<GridRow> schemaGridRowList) {		
 		JoinMappingGrid joinMappingGrid = (JoinMappingGrid) component.getProperties().get(JOIN_MAP);
-		List<String> joinMapOutputs = getOutputFieldsFromJoinMapping(joinMappingGrid);
-		List<LookupMapProperty> outputFieldsFromSchema = getComponentSchemaAsLookupMapProperty(schemaGridRowList);
-		List<LookupMapProperty> outputFieldsFromSchemaToRetain = getOutputFieldsFromSchemaToRetain(schemaGridRowList, joinMappingGrid.getLookupMapProperties());
 		
-		joinMappingGrid.setLookupMapProperties(outputFieldsFromSchemaToRetain);
-		for (LookupMapProperty l : outputFieldsFromSchema){
-			if(!joinMapOutputs.contains(l.getOutput_Field())){
-				joinMappingGrid.getLookupMapProperties().add(l);
+		List<LookupMapProperty> mappingTableItemListCopy=new LinkedList<>();
+		mappingTableItemListCopy.addAll(joinMappingGrid.getLookupMapProperties());
+		joinMappingGrid.getLookupMapProperties().clear();
+		
+		
+		List<String> schemaFieldList = getSchemaFieldList(schemaGridRowList);
+		if(schemaFieldList.size() == 0){
+			return;
+		}
+		
+		for(String fieldName:schemaFieldList){
+			LookupMapProperty row = getMappingTableItem(mappingTableItemListCopy,fieldName);
+			if(row!=null){
+				joinMappingGrid.getLookupMapProperties().add(row);
+			}else{
+				row=new LookupMapProperty();
+				row.setSource_Field("");
+				row.setOutput_Field(fieldName);
+				joinMappingGrid.getLookupMapProperties().add(row);
 			}
 		}
 	}
+	
+	private LookupMapProperty getMappingTableItem(List<LookupMapProperty> mappingTableItemListClone, String fieldName) {
+		for(LookupMapProperty row:mappingTableItemListClone){
+			if(StringUtils.equals(fieldName, row.getOutput_Field())){
+				return row;
+			}
+		}
+		return null;
+	}
+
+	public List<String> getSchemaFieldList(List<GridRow> schemaGridRowList) {
+		List<String> schemaFieldList = new LinkedList<>();
+		
+		for(GridRow gridRow: schemaGridRowList){
+			schemaFieldList.add(gridRow.getFieldName());
+		}
+		return schemaFieldList;
+	}
+	
 
 	/**
 	 * Push the schema from schema tab to Mapping in General tab for Lookup component

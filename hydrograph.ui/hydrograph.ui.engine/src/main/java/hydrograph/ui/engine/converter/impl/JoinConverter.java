@@ -13,6 +13,16 @@
 
 package hydrograph.ui.engine.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import hydrograph.engine.jaxb.commontypes.TypeInputField;
+import hydrograph.engine.jaxb.commontypes.TypeMapField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
+import hydrograph.engine.jaxb.join.TypeKeyFields;
+import hydrograph.engine.jaxb.operationstypes.Join;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
@@ -22,7 +32,6 @@ import hydrograph.ui.datastructure.property.OperationClassProperty;
 import hydrograph.ui.engine.constants.PortTypeConstant;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.TransformConverter;
-import hydrograph.ui.engine.helper.ConverterHelper;
 import hydrograph.ui.engine.xpath.ComponentXpathConstants;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
@@ -36,17 +45,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeFieldName;
-import hydrograph.engine.jaxb.commontypes.TypeInputField;
-import hydrograph.engine.jaxb.commontypes.TypeMapField;
-import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
-import hydrograph.engine.jaxb.join.TypeKeyFields;
-import hydrograph.engine.jaxb.operationstypes.Join;
 
 /**
  * @author Bitwise Converter implementation for Join component
@@ -100,7 +98,7 @@ public class JoinConverter extends TransformConverter {
 							fieldName.setName(key);
 							typeKeyField.getField().add(fieldName);
 						} else {
-							converterHelper.addParamTag(this.ID, key, 
+							converterHelper.addParamTag(ID, key, 
 								ComponentXpathConstants.JOIN_KEYS.value()
 								.replace("$inSocketId", keyFields.get(i).getPortIndex()), false);
 						}
@@ -113,7 +111,7 @@ public class JoinConverter extends TransformConverter {
 					for (String fieldName : keyList){ 
 						parameterFieldNames.append(fieldName+ " ");
 					}
-					converterHelper.addParamTag(this.ID, parameterFieldNames.toString(), 
+					converterHelper.addParamTag(ID, parameterFieldNames.toString(), 
 							ComponentXpathConstants.JOIN_KEYS.value().replace("$inSocketId", keyFields.get(i).getPortIndex()),true);
 					
 				}
@@ -233,7 +231,7 @@ public class JoinConverter extends TransformConverter {
 				for (LookupMapProperty lookupMapProperty : lookupMapProperties) {
 					
 					if(!ParameterUtil.isParameter(lookupMapProperty.getSource_Field())){
-						if(lookupMapProperty.getSource_Field()==null){
+						if(StringUtils.isBlank(lookupMapProperty.getSource_Field())){
 							continue;
 						}
 						String[] sourceNameValue = lookupMapProperty.getSource_Field().split(Pattern.quote("."));
@@ -255,7 +253,7 @@ public class JoinConverter extends TransformConverter {
 						
 						
 					}else{
-						converterHelper.addParamTag(this.ID, lookupMapProperty.getSource_Field(),
+						converterHelper.addParamTag(ID, lookupMapProperty.getSource_Field(),
 								ComponentXpathConstants.OPERATIONS_OUTSOCKET.value(), false);
 					}
 
@@ -269,7 +267,7 @@ public class JoinConverter extends TransformConverter {
 				passThroughFieldorMapFieldList.add(inputField);
 				for (LookupMapProperty lookupMapProperty : lookupMapProperties)
 					parameterFieldNames.append(lookupMapProperty.getOutput_Field() + " ");
-				converterHelper.addParamTag(this.ID, parameterFieldNames.toString(),
+				converterHelper.addParamTag(ID, parameterFieldNames.toString(),
 						ComponentXpathConstants.OPERATIONS_OUTSOCKET.value(), true);
 			}
 		}
