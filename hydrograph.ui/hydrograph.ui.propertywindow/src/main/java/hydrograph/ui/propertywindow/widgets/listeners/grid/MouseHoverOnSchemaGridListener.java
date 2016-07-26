@@ -110,11 +110,18 @@ private static final Logger logger = LogFactory.INSTANCE.getLogger(MouseHoverOnS
 		if(StringUtils.isNotBlank(gridRow.getPrecision()) && StringUtils.isNotBlank(gridRow.getScale())){
 			try{
 				precision = Integer.parseInt(gridRow.getPrecision());
+			}
+			catch(NumberFormatException exception){
+				logger.debug("Failed to parse the precision ", exception);
+				return Messages.PRECISION_MUST_CONTAINS_NUMBER_ONLY_0_9;
+			}
+			
+			try{
 				scale = Integer.parseInt(gridRow.getScale());
 			}
 			catch(NumberFormatException exception){
-				logger.debug("Failed to parse the scale or precision", exception);
-				return Messages.SCALE_MUST_NOT_BE_BLANK;
+				logger.debug("Failed to parse the scale ", exception);
+				return Messages.SCALE_MUST_CONTAINS_NUMBER_ONLY_0_9;
 			}
 		}
 		

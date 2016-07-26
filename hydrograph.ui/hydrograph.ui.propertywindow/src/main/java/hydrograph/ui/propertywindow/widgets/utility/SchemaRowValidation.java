@@ -380,10 +380,17 @@ public class SchemaRowValidation{
 		if(StringUtils.isNotBlank(gridRow.getPrecision()) && StringUtils.isNotBlank(gridRow.getScale())){
 			try{
 				precision = Integer.parseInt(gridRow.getPrecision());
+			}
+			catch(NumberFormatException exception){
+				logger.debug("Failed to parse the precision ", exception);
+				return false;
+			}
+			
+			try{
 				scale = Integer.parseInt(gridRow.getScale());
 			}
 			catch(NumberFormatException exception){
-				logger.debug("Failed to parse the scale or precision", exception);
+				logger.debug("Failed to parse the scale ", exception);
 				return false;
 			}
 		}
