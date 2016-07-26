@@ -330,7 +330,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private void propagateInternalSchema() {
 		if (schemaGridRowList != null) {
-			if (SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent()
+			if (SchemaSyncUtility.INSTANCE.isAutoSchemaSyncAllow(getComponent()
 					.getComponentName())) {
 
 				if (SchemaSyncUtility.INSTANCE.isSyncRequired(getComponent(),

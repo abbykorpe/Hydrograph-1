@@ -122,6 +122,16 @@ public class SchemaSyncUtility {
 	}
 
 	/**
+	 * Returns if auto schema sync is allowed for the component name passed as parameter.
+	 *
+	 * @param componentName
+	 * @return boolean value if schema sync is allowed
+	 */
+	public boolean isAutoSchemaSyncAllow(String componentName){
+		return Constants.JOIN.equalsIgnoreCase(componentName);
+	}
+	
+	/**
 	 * Push the schema from schema tab to Mapping in General tab
 	 *
 	 * @param component
