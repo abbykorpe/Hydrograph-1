@@ -18,6 +18,7 @@ import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -40,8 +41,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
+import org.slf4j.Logger;
 
 public class MouseHoverOnSchemaGridListener extends MouseActionListener{
+private static final Logger logger = LogFactory.INSTANCE.getLogger(MouseHoverOnSchemaGridListener.class);
 	
 	Table table=null;
 	private Shell tip=null;
@@ -104,21 +107,34 @@ public class MouseHoverOnSchemaGridListener extends MouseActionListener{
 	private String setToolTipForBigDecimal(GridRow gridRow, String componentType){
 		int precision = 0 , scale = 0;
 		
-		if(!(StringUtils.isBlank(gridRow.getPrecision()) || StringUtils.isBlank(gridRow.getScale()))){
-			precision = Integer.parseInt(gridRow.getPrecision());
-			scale = Integer.parseInt(gridRow.getScale());
+		if(StringUtils.isNotBlank(gridRow.getPrecision()) && StringUtils.isNotBlank(gridRow.getScale())){
+			try{
+				precision = Integer.parseInt(gridRow.getPrecision());
+			}
+			catch(NumberFormatException exception){
+				logger.debug("Failed to parse the precision ", exception);
+				return Messages.PRECISION_MUST_CONTAINS_NUMBER_ONLY_0_9;
+			}
+			
+			try{
+				scale = Integer.parseInt(gridRow.getScale());
+			}
+			catch(NumberFormatException exception){
+				logger.debug("Failed to parse the scale ", exception);
+				return Messages.SCALE_MUST_CONTAINS_NUMBER_ONLY_0_9;
+			}
 		}
 		
 		if(StringUtils.isBlank(gridRow.getPrecision())
 				&& (StringUtils.containsIgnoreCase(componentType, "hive")
 						||StringUtils.containsIgnoreCase(componentType, "parquet"))){
-	    return Messages.PRECISION_MUST_NOT_BE_BLANK;
+			return Messages.PRECISION_MUST_NOT_BE_BLANK;
 	    }else if(!(gridRow.getPrecision().matches("\\d+")) &&
 	    		StringUtils.isNotBlank(gridRow.getPrecision())){
 			return Messages.PRECISION_MUST_CONTAINS_NUMBER_ONLY_0_9;
 		}else if((StringUtils.isBlank(gridRow.getScale()))){
 			 return Messages.SCALE_MUST_NOT_BE_BLANK;
-		}else if(!(gridRow.getScale().matches("\\d+")) || StringUtils.equalsIgnoreCase(gridRow.getScale(), "0")){
+		}else if(!(gridRow.getScale().matches("\\d+")) || scale<0){
 			return Messages.SCALE_SHOULD_BE_POSITIVE_INTEGER;
 		}else if(StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(),"none")){
 			return Messages.SCALETYPE_MUST_NOT_BE_NONE;

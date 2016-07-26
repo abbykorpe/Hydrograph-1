@@ -71,6 +71,7 @@ public class SchemaGridValidationRule implements IValidator {
 
 	private boolean validateSchema(Schema schema, String propertyName) {
 		List<GridRow> gridRowList = (List<GridRow>) schema.getGridRow();
+		int precision = 0 , scale = 0;
 		
 		/*this list is used for checking duplicate names in the grid*/
 		List<String> uniqueNamesList = new ArrayList<>();
@@ -98,8 +99,26 @@ public class SchemaGridValidationRule implements IValidator {
 				return false;
 			}
 			
+			if(StringUtils.isNotBlank(gridRow.getPrecision()) && StringUtils.isNotBlank(gridRow.getScale())){
+				try{
+					precision = Integer.parseInt(gridRow.getPrecision());
+				}
+				catch(NumberFormatException exception){
+					logger.debug("Failed to parse the precision ", exception);
+					return false;
+				}
+				
+				try{
+					scale = Integer.parseInt(gridRow.getScale());
+				}
+				catch(NumberFormatException exception){
+					logger.debug("Failed to parse the scale ", exception);
+					return false;
+				}
+			}
+			
 			if(DATA_TYPE_BIG_DECIMAL.equalsIgnoreCase(gridRow.getDataTypeValue())){
-				if(StringUtils.isBlank(gridRow.getScale()) || StringUtils.equalsIgnoreCase(gridRow.getScale(), "0") 
+				if(StringUtils.isBlank(gridRow.getScale()) || scale<0 || precision<=scale 
 						|| !(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))){
 					errorMessage = "Scale should be positive integer.";
 					return false;
