@@ -37,6 +37,7 @@ import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -72,6 +73,14 @@ public class FilterHelper {
 	private FilterConditionsDialog filterConditionsDialog;
 	private String SCHEMA_FILE_EXTENTION=".xml";
 	private String localCondition = "";
+	public void setLocalCondition(String localCondition) {
+		this.localCondition = localCondition;
+	}
+
+	public void setRemoteCondition(String remoteCondition) {
+		this.remoteCondition = remoteCondition;
+	}
+
 	private String remoteCondition;
 	
 	private FilterHelper() {
@@ -104,7 +113,7 @@ public class FilterHelper {
 	}
 	
 	public  Listener getTextBoxValue1Listener(final List<Condition> conditionsList, 
-			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		Listener listener = new Listener() {
 			
 			@Override
@@ -114,14 +123,14 @@ public class FilterHelper {
 				Condition filterConditions = conditionsList.get(index);
 				filterConditions.setValue1(text.getText());
 				validateText(text, filterConditions.getFieldName(), fieldsAndTypes, filterConditions.getConditionalOperator());
-				toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+				toggleSaveDisplayButton(conditionsList, fieldsAndTypes, fieldNames, saveButton, displayButton);
 			}
 		};
 		return listener;
 	}
 	
 	public  Listener getTextBoxValue2Listener(final List<Condition> conditionsList, 
-			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		Listener listener = new Listener() {
 			
 			@Override
@@ -131,7 +140,7 @@ public class FilterHelper {
 				Condition filterConditions = conditionsList.get(index);
 				filterConditions.setValue2(text.getText());
 				validateText(text, filterConditions.getFieldName(), fieldsAndTypes,filterConditions.getConditionalOperator());
-				toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+				toggleSaveDisplayButton(conditionsList, fieldsAndTypes, fieldNames, saveButton, displayButton);
 			}
 		};
 		return listener;
@@ -144,20 +153,20 @@ public class FilterHelper {
 		return remoteCondition;
 	}
 	
-	private void toggleOkApplyButton(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
-			final String[] fieldNames, final Button okButton, final Button applyButton) {
+	private void toggleSaveDisplayButton(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
+			final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		if(FilterValidator.INSTANCE.isAllFilterConditionsValid(conditionsList, fieldsAndTypes, fieldNames)){
-			okButton.setEnabled(true);
-			applyButton.setEnabled(true);
+			saveButton.setEnabled(true);
+			displayButton.setEnabled(true);
 		}
 		else{
-			okButton.setEnabled(false);
-			applyButton.setEnabled(false);
+			saveButton.setEnabled(false);
+			displayButton.setEnabled(false);
 		}
 	}
 	
 	public SelectionListener getFieldNameSelectionListener(final TableViewer tableViewer, final List<Condition> conditionsList,
-			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
@@ -181,7 +190,7 @@ public class FilterHelper {
 					new AutoCompleteField(conditionalCombo, new CComboContentAdapter(), conditionalCombo.getItems());
 				}
 				validateCombo(source);
-				toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+				toggleSaveDisplayButton(conditionsList, fieldsAndTypes, fieldNames, saveButton, displayButton);
 			}
 
 			@Override
@@ -191,7 +200,7 @@ public class FilterHelper {
 	}
 	
 	public ModifyListener getFieldNameModifyListener(final TableViewer tableViewer, final List<Condition> conditionsList,
-			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		ModifyListener listener = new ModifyListener() {
 			
 			@Override
@@ -213,14 +222,14 @@ public class FilterHelper {
 					}
 				}
 				validateCombo(source);
-				toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+				toggleSaveDisplayButton(conditionsList, fieldsAndTypes, fieldNames, saveButton, displayButton);
 			}
 		};
 		return listener;
 	}
 	
 	public SelectionListener getConditionalOperatorSelectionListener(final List<Condition> conditionsList, 
-			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
@@ -230,7 +239,7 @@ public class FilterHelper {
 				Text text = (Text) tableItem.getData(FilterConstants.VALUE2TEXTBOX);
 				String selectedValue = source.getItem(source.getSelectionIndex());
 				enableAndDisableValue2TextBox(selectedValue, text);
-				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, saveButton, displayButton);
 			}
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {}
@@ -245,7 +254,7 @@ public class FilterHelper {
 	}
 	
 	public ModifyListener getConditionalOperatorModifyListener(final List<Condition> conditionsList, 
-			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		ModifyListener listener = new ModifyListener() {
 			
 			@Override
@@ -257,7 +266,7 @@ public class FilterHelper {
 					Text text = (Text) tableItem.getData(FilterConstants.VALUE2TEXTBOX);
 					enableAndDisableValue2TextBox(condition.getConditionalOperator(), text);
 				}
-				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, saveButton, displayButton);
 			}
 		};
 		return listener;
@@ -299,22 +308,22 @@ public class FilterHelper {
 	}
 	
 	private void processConditionalOperator(CCombo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes,
-			String[] fieldNames, Button okButton, Button applyButton){
+			String[] fieldNames, Button saveButton, Button displayButton){
 		int index = (int) source.getData(FilterConstants.ROW_INDEX);
 		Condition filterConditions = conditionsList.get(index);
 		filterConditions.setConditionalOperator(source.getText());
 		validateCombo(source);
-		toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+		toggleSaveDisplayButton(conditionsList, fieldsAndTypes, fieldNames, saveButton, displayButton);
 	}
 	
 	public SelectionListener getRelationalOpSelectionListener(final List<Condition> conditionsList,  
-			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				CCombo source = (CCombo) e.getSource();
-				processRelationalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+				processRelationalOperator(source, conditionsList, fieldsAndTypes, fieldNames, saveButton, displayButton);
 			}
 			
 			@Override
@@ -324,13 +333,13 @@ public class FilterHelper {
 	}
 	
 	public ModifyListener getRelationalOpModifyListener(final List<Condition> conditionsList,  
-			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button okButton, final Button applyButton) {
+			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		ModifyListener listener = new ModifyListener() {
 			
 			@Override
 			public void modifyText(ModifyEvent e) {
 				CCombo source = (CCombo) e.getSource();
-				processRelationalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+				processRelationalOperator(source, conditionsList, fieldsAndTypes, fieldNames, saveButton, displayButton);
 			}
 			
 		};
@@ -338,14 +347,14 @@ public class FilterHelper {
 	}
 	
 	private void processRelationalOperator(CCombo source, List<Condition> conditionsList, Map<String, String> fieldsAndTypes,
-			String[] fieldNames, Button okButton, Button applyButton){
+			String[] fieldNames, Button saveButton, Button displayButton){
 		int index = (int) source.getData(FilterConstants.ROW_INDEX);
 		Condition filterConditions = conditionsList.get(index);
 		filterConditions.setRelationalOperator(source.getText());
 		if(index != 0){
 			validateCombo(source);
 		}
-		toggleOkApplyButton(conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
+		toggleSaveDisplayButton(conditionsList, fieldsAndTypes, fieldNames, saveButton, displayButton);
 	}
 	
 	public SelectionListener addButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList, 
@@ -370,7 +379,7 @@ public class FilterHelper {
 	}
 	
 	
-	public SelectionListener getOkButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
+	public SelectionListener getSaveButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
 			final Map<Integer,List<List<Integer>>> groupSelectionMap, final String dataset,final FilterConditions originalFilterConditions,
 			final RetainFilter retainRemoteFilter,final RetainFilter retainLocalFilter) {
 		SelectionListener listener = new SelectionListener() {
@@ -642,18 +651,14 @@ public class FilterHelper {
 		return tempList;
 	}
 
-	public SelectionListener getRemoteApplyButtonListener(final FilterConditions originalFilterConditions,
-			final List<Condition> remoteConditionsList, final RetainFilter retainFilter) {
+	public SelectionListener getRemoteDisplayButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
+			final Map<Integer,List<List<Integer>>> groupSelectionMap,final StyledText styledTextRemote) {
 		SelectionListener listner = new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(retainFilter.getRetainFilter()){
-					originalFilterConditions.setRemoteConditions(remoteConditionsList);
-					originalFilterConditions.setRetainRemote(retainFilter.getRetainFilter());
-				}
-				Button button = (Button) e.widget;
-				button.setEnabled(false);
+				StringBuffer buffer = getCondition(conditionsList,fieldsAndTypes, groupSelectionMap);
+				styledTextRemote.setText(buffer.toString());
 			}
 			
 			@Override
@@ -663,26 +668,118 @@ public class FilterHelper {
 		return listner;
 	}
 
-	public SelectionListener getLocalApplyButtonListener(final FilterConditions originalFilterConditions,
-			final List<Condition> localConditionsList, final RetainFilter retainFilter) {
+	public SelectionListener getLocalDisplayButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
+			final Map<Integer,List<List<Integer>>> groupSelectionMap,final StyledText styledTextLocal) {
 		SelectionListener listner = new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(retainFilter.getRetainFilter()){
-					originalFilterConditions.setLocalConditions(localConditionsList);
-					originalFilterConditions.setRetainLocal(retainFilter.getRetainFilter());
-				}
-				Button button = (Button) e.widget;
-				button.setEnabled(false);
+				StringBuffer buffer = getCondition(conditionsList,fieldsAndTypes, groupSelectionMap);
+				styledTextLocal.setText(buffer.toString());
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		};
 		return listner;
 	}
+	
+	private StringBuffer getCondition(
+			final List<Condition> conditionsList,
+			final Map<String, String> fieldsAndTypes,
+			final Map<Integer, List<List<Integer>>> groupSelectionMap) {
+		List<String> actualStringList = new LinkedList<>();
+		for (int conditionIndex = 0; conditionIndex < conditionsList.size(); conditionIndex++) {
+			actualStringList.add(conditionIndex, String.valueOf((conditionIndex)));
+		}
+		logger.trace(actualStringList.toString());
+		//start adding brackets for grouping
+		Set<Integer> treeSet  = (Set<Integer>) groupSelectionMap.keySet();
+		if(treeSet.size() > 0){
+			for (Integer position : treeSet) {
+			List<List<Integer>> groupsInColumn = groupSelectionMap.get(position);
+				for (int groupIndex = 0; groupIndex < groupsInColumn.size(); groupIndex++) {
+					List<Integer> group = groupsInColumn.get(groupIndex);
+					//add opening bracket before first element in the group
+					if(!group.isEmpty()){
+					Integer firstItem = group.get(0);
+					Integer firstItemIndex = actualStringList.indexOf(String.valueOf(firstItem));
+					actualStringList.add(firstItemIndex, FilterConstants.OPEN_BRACKET);
+					//add closing bracket after last element in the group							
+					Integer lastItem = group.get(group.size()-1);
+					Integer lastItemIndex = actualStringList.indexOf(String.valueOf(lastItem));
+					actualStringList.add(lastItemIndex + 1, FilterConstants.CLOSE_BRACKET);
+					}
+				}
+			}
+		}
+		
+		//start adding relational operators
+		int indexOfRelational = 1;
+		//start from 2nd index
+		for (int item = 1; item < conditionsList.size(); item++) {
+			int indexOfItem = actualStringList.indexOf(String.valueOf(item));
+			while(true){
+				if((actualStringList.get(indexOfItem-1)).matches(FilterConstants.REGEX_DIGIT) 
+						||(actualStringList.get(indexOfItem-1)).equalsIgnoreCase(FilterConstants.CLOSE_BRACKET)){
+					actualStringList.add(indexOfItem, conditionsList.get(indexOfRelational).getRelationalOperator());
+					break;
+				}else{
+					indexOfItem = indexOfItem - 1;
+				}
+			}
+			indexOfRelational += 1;
+			logger.trace(actualStringList.toString());
+		}
+		
+		StringBuffer buffer = new StringBuffer();
+		for(int item = 0; item < conditionsList.size(); item++){
+			StringBuffer conditionString = new StringBuffer();
+			
+			Condition condition = conditionsList.get(item);
+			if(StringUtils.equalsIgnoreCase(condition.getConditionalOperator(), FilterConstants.BETWEEN)
+					|| StringUtils.equalsIgnoreCase(condition.getConditionalOperator(),FilterConstants.BETWEEN_FIELD)){
+				conditionString
+						.append(condition.getFieldName())
+						.append(FilterConstants.SINGLE_SPACE)
+						.append(condition.getConditionalOperator())
+						.append(FilterConstants.SINGLE_SPACE)
+						.append(getConditionValue(condition.getFieldName(), condition.getValue1(),
+								condition.getConditionalOperator(), fieldsAndTypes))
+						.append(FilterConstants.SINGLE_SPACE)
+						.append(FilterConstants.AND)
+						.append(FilterConstants.SINGLE_SPACE)
+						.append(getConditionValue(condition.getFieldName(), condition.getValue2(),
+								condition.getConditionalOperator(), fieldsAndTypes));
+			} else {
+				conditionString
+						.append(condition.getFieldName())
+						.append(FilterConstants.SINGLE_SPACE)
+						.append(condition.getConditionalOperator())
+						.append(FilterConstants.SINGLE_SPACE)
+						.append(getConditionValue(condition.getFieldName(), condition.getValue1(),
+								condition.getConditionalOperator(), fieldsAndTypes));
+			}
+			int index = actualStringList.indexOf(String.valueOf(item));
+			actualStringList.set(index, conditionString.toString());
+		}
+		
+		for (String item : actualStringList) {
+			buffer.append(item + FilterConstants.SINGLE_SPACE);
+		}
+		
+		Pattern p = Pattern.compile("\\(Field\\)");
+		Matcher m = p.matcher(buffer);
+		StringBuffer temp = new StringBuffer();
+		while(m.find()){
+			m.appendReplacement(temp, "");
+		}
+		m.appendTail(temp);
+		buffer = new StringBuffer(temp);
+		return buffer;
+	}
+	
 	
 	public SelectionListener getRetainButtonListener(final RetainFilter retainFilter) {
 		SelectionListener listner = new SelectionListener() {
