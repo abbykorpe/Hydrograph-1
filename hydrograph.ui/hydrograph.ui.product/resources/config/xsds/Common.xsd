@@ -47,7 +47,6 @@
 		<enumeration value="GENERATE_RECORDS_SCHEMA_WIDGET" />
 		<enumeration value="TRANSFORM_SCHEMA_WIDGET" />
 			<enumeration value="SCHEMA_WIDGET" />
-			<enumeration value="HIVE_PARQUET_WIDGET" />
 			<enumeration value="FIELD_SEQUENCE_WIDGET" />
 			<enumeration value="FIXED_WIDGET"/>
 			<enumeration value="RUNTIME_PROPERTIES_WIDGET" />
@@ -275,13 +274,6 @@
 		            <jaxb:typesafeEnumMember name="TransformMappingValidationRule" />
 		          </appinfo>
         	</annotation>
-		</enumeration>
-		<enumeration value="HIVE_PARQUET_VALIDATOR">
-			 <annotation>
-		          <appinfo> 
-		            <jaxb:typesafeEnumMember name="HiveParquetSchemaValidationRule" />
-		          </appinfo>
-	       	</annotation>
 		</enumeration>
 		<enumeration value="RUNTIME_PROPERTY_VALIDATOR">
 			 <annotation>
