@@ -19,6 +19,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.outputtypes.ParquetFile;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
@@ -85,6 +86,8 @@ public class OutputParquetUiConverter extends OutputUiConverter {
 					schema.setIsExternal(true);
 					if (((TypeExternalSchema) record).getUri() != null)
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
+					gridRow.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(),Constants.GENERIC_GRID_ROW));
+					schema.setGridRow(gridRow);
 				} else {
 					gridRow.add(converterUiHelper.getSchema(record));
 					schema.setGridRow(gridRow);
