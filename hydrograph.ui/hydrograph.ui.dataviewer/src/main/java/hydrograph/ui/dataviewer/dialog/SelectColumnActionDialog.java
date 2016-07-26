@@ -211,18 +211,19 @@ public class SelectColumnActionDialog extends Dialog {
 		sortAll.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
-				if(!isAllColumnsAsce){
-					Collections.sort(allColumns);
-					listAllComlumns.setItems(Arrays.copyOf(allColumns.toArray(),allColumns.toArray().length,String[].class));
-					isAllColumnsAsce = true;
-					sortAll.setImage(ascending);
-				}
-				else{
-					Collections.sort(allColumns,comparator);
-					listAllComlumns.setItems(Arrays.copyOf(allColumns.toArray(),allColumns.toArray().length,String[].class));
-					isAllColumnsAsce = false;
-					sortAll.setImage(descending);
+				if(allColumns.size() > 1){
+					if(!isAllColumnsAsce){
+						Collections.sort(allColumns);
+						listAllComlumns.setItems(Arrays.copyOf(allColumns.toArray(),allColumns.toArray().length,String[].class));
+						isAllColumnsAsce = true;
+						sortAll.setImage(ascending);
+					}
+					else{
+						Collections.sort(allColumns,comparator);
+						listAllComlumns.setItems(Arrays.copyOf(allColumns.toArray(),allColumns.toArray().length,String[].class));
+						isAllColumnsAsce = false;
+						sortAll.setImage(descending);
+					}
 				}
 			}
 		});
@@ -230,17 +231,19 @@ public class SelectColumnActionDialog extends Dialog {
 		sortSelected.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(!isSelectedColumnsAsce){
-					Collections.sort(selectedColumns);
-					listSelectedColumns.setItems(Arrays.copyOf(selectedColumns.toArray(),selectedColumns.toArray().length,String[].class));
-					sortSelected.setImage(ascending);
-					isSelectedColumnsAsce = true;
-				}
-				else{
-					Collections.sort(selectedColumns, comparator);
-					listSelectedColumns.setItems(Arrays.copyOf(selectedColumns.toArray(),selectedColumns.toArray().length,String[].class));
-					sortSelected.setImage(descending);
-					isSelectedColumnsAsce = false;
+				if(allColumns.size() > 1){
+					if(!isSelectedColumnsAsce){
+						Collections.sort(selectedColumns);
+						listSelectedColumns.setItems(Arrays.copyOf(selectedColumns.toArray(),selectedColumns.toArray().length,String[].class));
+						sortSelected.setImage(ascending);
+						isSelectedColumnsAsce = true;
+					}
+					else{
+						Collections.sort(selectedColumns, comparator);
+						listSelectedColumns.setItems(Arrays.copyOf(selectedColumns.toArray(),selectedColumns.toArray().length,String[].class));
+						sortSelected.setImage(descending);
+						isSelectedColumnsAsce = false;
+					}
 				}
 			}
 		});
