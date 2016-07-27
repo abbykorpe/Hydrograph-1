@@ -108,7 +108,7 @@ public class FieldDialog extends Dialog {
 	private TableViewerColumn tableViewerColumn;
 	private DragSource dragSource;
 	private DropTarget dropTarget;
-	private List<String> sourceFieldsList;
+	protected List<String> sourceFieldsList;
 
 	PropertyDialogButtonBar propertyDialogButtonBar;
 	private boolean closeDialog;

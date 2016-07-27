@@ -19,12 +19,15 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -46,6 +49,7 @@ public class FieldDialogWithAddValue extends FieldDialog {
 		this.propertyDialogButtonBar=propertyDialogButtonBar;
 	}
 
+	
 	
 	@Override
 	protected Composite addButtonPanel(final Composite container) {
@@ -118,6 +122,7 @@ public class FieldDialogWithAddValue extends FieldDialog {
 	@Override
 	protected void okPressed() {
 		TableItem[] items = getTargetTableViewer().getTable().getItems();
+		
 		if (fieldsMap != null && fieldsMap.isEmpty() && items.length > 0) {
 			if (items.length > 0) {
 
@@ -138,12 +143,54 @@ public class FieldDialogWithAddValue extends FieldDialog {
 			
 		}
 		
-			
 		if(isAnyUpdatePerformed){
 			propertyDialogButtonBar.enableApplyButton(true);
 		}
 		
+		boolean check_field=compare_fields(items);
+		if(!check_field)
+		{
+			
+		}
+		
 		super.okPressed();
+	}
+	
+	private boolean compare_fields(TableItem[] items)
+	{
+		List<String> source_field;
+		ListIterator<String> t_itr,s_itr;
+		boolean b=false;
+		
+		List<String> target_fields = new ArrayList<String>();
+		if(items.length > 0)
+		{
+			for (TableItem tableItem : items) {
+				target_fields.add((String) tableItem.getText());
+			}
+		}
+		
+		source_field = new ArrayList<String>(sourceFieldsList);
+		
+		t_itr=target_fields.listIterator(target_fields.size());
+		s_itr = source_field.listIterator(source_field.size());
+		
+		
+		while(t_itr.hasPrevious() & s_itr.hasPrevious())
+		{
+			if(StringUtils.equals(s_itr.previous(),t_itr.previous()))
+			{
+				b=true;
+			}
+			else
+			{
+				b=false;
+				break;
+			}
+		}
+		
+		return b;
+		
 	}
 	
 	private boolean isItemsNameChanged(TableItem[] items, Set<String> keySet) {
