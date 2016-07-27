@@ -113,12 +113,12 @@ public class SchemaSyncUtility {
 	 * @return boolean value if schema sync is allowed
 	 */
 	public boolean isSchemaSyncAllow(String componentName){
-		return Constants.TRANSFORM.equalsIgnoreCase(componentName)
-				|| Constants.AGGREGATE.equalsIgnoreCase(componentName) 
-				|| Constants.NORMALIZE.equalsIgnoreCase(componentName) 
-				|| Constants.CUMULATE.equalsIgnoreCase(componentName)
-				|| Constants.LOOKUP.equalsIgnoreCase(componentName)
-				|| Constants.JOIN.equalsIgnoreCase(componentName);
+		return StringUtils.equalsIgnoreCase(Constants.TRANSFORM, componentName) || 
+			   StringUtils.equalsIgnoreCase(Constants.AGGREGATE, componentName) ||
+			   StringUtils.equalsIgnoreCase(Constants.NORMALIZE, componentName) ||
+			   StringUtils.equalsIgnoreCase(Constants.CUMULATE, componentName) ||
+			   StringUtils.equalsIgnoreCase(Constants.LOOKUP, componentName) ||
+			   StringUtils.equalsIgnoreCase(Constants.JOIN, componentName);
 	}
 
 	/**
@@ -128,7 +128,8 @@ public class SchemaSyncUtility {
 	 * @return boolean value if schema sync is allowed
 	 */
 	public boolean isAutoSchemaSyncAllow(String componentName){
-		return Constants.JOIN.equalsIgnoreCase(componentName);
+		return StringUtils.equalsIgnoreCase(Constants.JOIN, componentName) || 
+				StringUtils.equalsIgnoreCase(Constants.LOOKUP, componentName) ;
 	}
 	
 	/**
@@ -138,41 +139,62 @@ public class SchemaSyncUtility {
 	 * @param schemaGridRowList
 	 */
 	public void pushSchemaToMapping( Component component, List<GridRow> schemaGridRowList) {
-		if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()) ||
-		   Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName()) ||
-		   Constants.NORMALIZE.equalsIgnoreCase(component.getComponentName()) ||
-		   Constants.CUMULATE.equalsIgnoreCase(component.getComponentName()) ){
-				pushSchemaToTransformMapping(component, schemaGridRowList);
-		}else if(Constants.LOOKUP.equalsIgnoreCase(component.getComponentName())){
+		if(StringUtils.equalsIgnoreCase(Constants.TRANSFORM, component.getComponentName()) ||
+				   StringUtils.equalsIgnoreCase(Constants.AGGREGATE, component.getComponentName()) ||
+				   StringUtils.equalsIgnoreCase(Constants.NORMALIZE, component.getComponentName()) ||
+				   StringUtils.equalsIgnoreCase(Constants.CUMULATE, component.getComponentName())){
+			pushSchemaToTransformMapping(component, schemaGridRowList);
+		}else if(StringUtils.equalsIgnoreCase(Constants.LOOKUP, component.getComponentName())){
 			pushSchemaToLookupMapping( component, schemaGridRowList);
-		}else if(Constants.JOIN.equalsIgnoreCase(component.getComponentName())){
+		}else if(StringUtils.equalsIgnoreCase(Constants.JOIN, component.getComponentName())){
 			pushSchemaToJoinMapping( component, schemaGridRowList);
 		}
 	}
 	
 	/**
-	 * Push the schema from schema tab to Mapping in General tab
+	 * Check if schema sync is required in schema tab 
 	 *
 	 * @param component
 	 * @param schemaGridRowList
 	 */
 	public boolean isSyncRequired( Component component, List<GridRow> schemaGridRowList) {
-		if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()) ||
-		   Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName()) ||
-		   Constants.NORMALIZE.equalsIgnoreCase(component.getComponentName()) ||
-		   Constants.CUMULATE.equalsIgnoreCase(component.getComponentName()) ){
-				//pushSchemaToTransformMapping(component, schemaGridRowList);
+		if(StringUtils.equalsIgnoreCase(Constants.TRANSFORM, component.getComponentName()) ||
+		   StringUtils.equalsIgnoreCase(Constants.AGGREGATE, component.getComponentName()) ||
+		   StringUtils.equalsIgnoreCase(Constants.NORMALIZE, component.getComponentName()) ||
+		   StringUtils.equalsIgnoreCase(Constants.CUMULATE, component.getComponentName())){
 			return true;
-		}else if(Constants.LOOKUP.equalsIgnoreCase(component.getComponentName())){
-			//pushSchemaToLookupMapping( component, schemaGridRowList);
-			return true;
-		}else if(Constants.JOIN.equalsIgnoreCase(component.getComponentName())){
+		}else if(StringUtils.equalsIgnoreCase(Constants.LOOKUP, component.getComponentName())){
+			return isSyncRequiredInLookup(component, schemaGridRowList);
+		}else if(StringUtils.equalsIgnoreCase(Constants.JOIN, component.getComponentName())){
 			return isSyncRequiredInJoin(component, schemaGridRowList);
 		}else{
 			return false;
 		}
 	}
 	
+	private boolean isSyncRequiredInLookup(Component component,
+			List<GridRow> schemaGridRowList) {
+		LookupMappingGrid lookupMappingGrid = (LookupMappingGrid) component.getProperties().get(LOOKUP_MAP);
+		
+		List<String> schemaFieldList = getSchemaFieldList(schemaGridRowList);
+		List<String> joinOutputFieldList = getOutputFieldsFromLookupMapping(lookupMappingGrid);
+		
+		if(schemaFieldList == null && joinOutputFieldList == null){
+			return false;
+		}
+		
+		if(schemaFieldList.size()!=joinOutputFieldList.size()){
+			return true;
+		}
+		
+		for(int index=0;index<schemaFieldList.size();index++){
+			if(!StringUtils.equals(schemaFieldList.get(index), joinOutputFieldList.get(index))){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private boolean isSyncRequiredInJoin(Component component,
 			List<GridRow> schemaGridRowList) {
 		JoinMappingGrid joinMappingGrid = (JoinMappingGrid) component.getProperties().get(JOIN_MAP);

@@ -1502,9 +1502,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		if (originalSchemaObject == null) {
 			originalSchemaObject = new Schema();
-			schema.setGridRow(schemaGridRowList);
-			schema.setIsExternal(false);
-			schema.setExternalSchemaPath("");
+			originalSchemaObject.setGridRow(schemaGridRowList);
+			originalSchemaObject.setIsExternal(false);
+			originalSchemaObject.setExternalSchemaPath("");
 		} else {
 			originalSchemaObject.getGridRow().clear();
 			originalSchemaObject.getGridRow().addAll(schemaGridRowList);
