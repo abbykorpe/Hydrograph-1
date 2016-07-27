@@ -185,6 +185,7 @@ public class DebugService implements PrivilegedAction<Object> {
 					FileNotFoundException {
 				FileSystem fs = FileSystem.get(conf);
 				FileStatus[] status = fs.listStatus(path);
+				File remoteFile = new File(remoteFileName);
 
 				OutputStream os = new FileOutputStream(remoteFileName);
 				try {
@@ -216,6 +217,7 @@ public class DebugService implements PrivilegedAction<Object> {
 							}
 						}
 						br.close();
+						remoteFile.setReadable(true,false);
 					}
 				} catch (Exception e) {
 					throw new RuntimeException(e);
