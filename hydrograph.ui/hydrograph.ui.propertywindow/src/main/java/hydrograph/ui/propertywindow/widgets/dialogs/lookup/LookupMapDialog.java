@@ -17,6 +17,7 @@ import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
 import hydrograph.ui.datastructure.property.Schema;
@@ -24,7 +25,6 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEditingSupport;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.utils.JoinMapDialogConstants;
-import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
@@ -36,7 +36,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -487,21 +486,52 @@ public class LookupMapDialog extends Dialog {
 		btnPull.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Constants.SYNC_OUTPUT_FIELDS_CONFIRM_MESSAGE, MessageDialog.QUESTION, new String[] {"Ok", "Cancel" }, 0);
-				int dialogResult =dialog.open();
-				List<LookupMapProperty> pulledLookupMapProperties = null;
-				if(dialogResult == 0){
-					//syncTransformFieldsWithSchema();
-					Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
-					pulledLookupMapProperties = SchemaSyncUtility.INSTANCE.pullLookupSchemaInMapping(schema, component);
-				}
-				mappingTableViewer.setInput(pulledLookupMapProperties);
-				mappingTableItemList = pulledLookupMapProperties;
+				
+				List<LookupMapProperty> tableMappingItemListClone=new LinkedList<>();
+				tableMappingItemListClone.addAll(mappingTableItemList);
+				mappingTableItemList.clear();
 				mappingTableViewer.refresh(); 
-				component.setLatestChangesInSchema(false);
-				refreshButtonStatus();
+				
+				Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+				List<String> schemaFieldList = getSchemaFieldList(schema);
+				if(schemaFieldList.size() == 0){
+					return;
+				}
+				
+				for(String fieldName:schemaFieldList){
+					LookupMapProperty row = getMappingTableItem(tableMappingItemListClone,fieldName);
+					if(row!=null){
+						mappingTableItemList.add(row);
+					}else{
+						row=new LookupMapProperty();
+						row.setSource_Field("");
+						row.setOutput_Field(fieldName);
+						mappingTableItemList.add(row);
+					}
+				}
+				
+				mappingTableViewer.refresh(); 
+			}
+			
+			private List<String> getSchemaFieldList(Schema schema) {
+				List<String> schemaFieldList = new LinkedList<>();
+				
+				for(GridRow gridRow: schema.getGridRow()){
+					schemaFieldList.add(gridRow.getFieldName());
+				}
+				return schemaFieldList;
 			}
 		});
+	}
+	
+	
+	private LookupMapProperty getMappingTableItem(List<LookupMapProperty> mappingTableItemListClone, String fieldName) {
+		for(LookupMapProperty row:mappingTableItemListClone){
+			if(StringUtils.equals(fieldName, row.getOutput_Field())){
+				return row;
+			}
+		}
+		return null;
 	}
 	
 	private void createDownButton(Composite composite_11) {

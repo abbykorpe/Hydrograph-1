@@ -231,7 +231,7 @@ public class SelectColumnActionDialog extends Dialog {
 		sortSelected.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(allColumns.size() > 1){
+				if(selectedColumns.size() > 1){
 					if(!isSelectedColumnsAsce){
 						Collections.sort(selectedColumns);
 						listSelectedColumns.setItems(Arrays.copyOf(selectedColumns.toArray(),selectedColumns.toArray().length,String[].class));
