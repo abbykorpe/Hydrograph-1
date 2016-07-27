@@ -660,21 +660,22 @@ public class JoinMapDialog extends Dialog {
 		btnPull.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//TODO - Need to fix
-				
-				List<LookupMapProperty> mappingTableItemListClone=new LinkedList<>();
-				mappingTableItemListClone.addAll(mappingTableItemList);
+				List<LookupMapProperty> mappingTableItemListCopy=new LinkedList<>();
+				mappingTableItemListCopy.addAll(mappingTableItemList);
 				mappingTableItemList.clear();
 				mappingTableViewer.refresh(); 
 				
 				Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+				if(schema==null){
+					return;
+				}
 				List<String> schemaFieldList = getSchemaFieldList(schema);
 				if(schemaFieldList.size() == 0){
 					return;
 				}
 				
 				for(String fieldName:schemaFieldList){
-					LookupMapProperty row = getMappingTableItem(mappingTableItemListClone,fieldName);
+					LookupMapProperty row = getMappingTableItem(mappingTableItemListCopy,fieldName);
 					if(row!=null){
 						mappingTableItemList.add(row);
 					}else{
@@ -1072,13 +1073,4 @@ public class JoinMapDialog extends Dialog {
 		}
 		
 	}
-	
-	public List<String> getOutputFieldListInSequence(){
-		List<String> outputFieldList = new LinkedList<>();
-		for(LookupMapProperty lookupMapProperty : mappingTableItemList){
-			outputFieldList.add(lookupMapProperty.getOutput_Field());
-		}
-		return outputFieldList;
-	}
-	
 }

@@ -24,17 +24,20 @@ import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
+import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.JoinMapDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -42,10 +45,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 
 
 public class ELTJoinMapWidget extends AbstractWidget {
@@ -91,13 +99,16 @@ public class ELTJoinMapWidget extends AbstractWidget {
 						joinMappingGrid,propertyDialogButtonBar);
 				joinMapDialog.open();				
 				propagateInternalSchema();
+				syncSchema();
 				showHideErrorSymbol(widgets);
+				
 			}
 		});
 		
 		propagateInternalSchema();
 	}
 
+	
 	
 	private void propagateInternalSchema() {
 		if(joinMappingGrid ==null)
@@ -120,7 +131,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 
 		for(LookupMapProperty row : lookupMapRows){
 			if(!ParameterUtil.isParameter(row.getSource_Field())){
-				if(row.getSource_Field()==null){
+				if(StringUtils.isBlank(row.getSource_Field())){
 					continue;
 				}
 				GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
@@ -134,12 +145,12 @@ public class ELTJoinMapWidget extends AbstractWidget {
 				if(row.getSource_Field().trim().length()>0){
 					String[] sourceField = row.getSource_Field().split("\\.");
 					if(sourceField.length==2){
-						if(row.getOutput_Field().equals(row.getSource_Field().split("\\.")[1])){
+						if(StringUtils.equals(row.getOutput_Field(), sourceField[1])){
 							finalPassThroughFields.add(row.getOutput_Field());
-							passThroughFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+							passThroughFieldsPortInfo.put(row.getOutput_Field(), sourceField[0]);
 						}else{
-							finalMapFields.put(row.getSource_Field().split("\\.")[1], row.getOutput_Field());
-							mapFieldsPortInfo.put(row.getOutput_Field(), row.getSource_Field().split("\\.")[0]);
+							finalMapFields.put(sourceField[1], row.getOutput_Field());
+							mapFieldsPortInfo.put(row.getOutput_Field(), sourceField[0]);
 						}
 					}
 				}
@@ -151,6 +162,42 @@ public class ELTJoinMapWidget extends AbstractWidget {
 
 
 		internalSchema.getGridRow().addAll(outputSchemaGridRowList);
+		
+	}
+	
+	private void syncSchema() {
+		if(isSyncRequired()){
+			MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.MANUAL_SYNC }, 0);
+			if (dialog.open() == 0) {
+				getSchemaGridWidget().updateSchemaWithPropogatedSchema();
+			}
+		}
+	}
+
+	private boolean isSyncRequired() {
+		Schema schema = (Schema) getComponent().getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+		
+		if(schema==null){
+			return true;
+		}
+		
+		List<String> schemaFieldList = SchemaSyncUtility.INSTANCE.getSchemaFieldList(schema.getGridRow());
+		List<String> joinOutputFieldList = SchemaSyncUtility.INSTANCE.getSchemaFieldList(getSchemaForInternalPropagation().getGridRow());
+		
+		if(schemaFieldList == null && joinOutputFieldList == null){
+			return false;
+		}
+		
+		if(schemaFieldList.size()!=joinOutputFieldList.size()){
+			return true;
+		}
+		
+		for(int index=0;index<schemaFieldList.size();index++){
+			if(!StringUtils.equals(schemaFieldList.get(index), joinOutputFieldList.get(index))){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private void addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(Map<String, String> mapFields,
@@ -204,14 +251,13 @@ public class ELTJoinMapWidget extends AbstractWidget {
 	
 	private GridRow getInputFieldSchema(String fieldName,String linkNumber) {
 		ComponentsOutputSchema outputSchema = null;
-		//List<FixedWidthGridRow> fixedWidthGridRows = new LinkedList<>();
 		for (Link link : getComponent().getTargetConnections()) {
 			
-			if(linkNumber.equals(link.getTargetTerminal())){				
+			if(StringUtils.equals(linkNumber, link.getTargetTerminal())){				
 				outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 				if (outputSchema != null)
 					for (GridRow row : outputSchema.getSchemaGridOutputFields(null)) {
-						if(row.getFieldName().equals(fieldName)){
+						if(StringUtils.equals(row.getFieldName(),fieldName)){
 							return row.copy();
 						}
 					}
@@ -245,4 +291,12 @@ public class ELTJoinMapWidget extends AbstractWidget {
 		
 	}
 	
+	private ELTSchemaGridWidget getSchemaGridWidget(){
+		for(AbstractWidget widget: widgets){
+			if(widget instanceof ELTSchemaGridWidget){
+				return (ELTSchemaGridWidget) widget;
+			}
+		}
+		return null;
+	}
 }
