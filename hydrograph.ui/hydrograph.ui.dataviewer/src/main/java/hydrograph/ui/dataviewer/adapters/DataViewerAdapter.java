@@ -133,7 +133,7 @@ public class DataViewerAdapter {
 		statement = connection.createStatement();
 	}
 	
-	private StringBuffer getType(String databaseName) throws IOException {
+	private String getType(String databaseName) throws IOException {
 		StringBuffer typeString = new StringBuffer();
 		String debugFileName = debugDataViewer.getDebugFileName();
 		String debugFileLocation = debugDataViewer.getDebugFileLocation();
@@ -150,7 +150,8 @@ public class DataViewerAdapter {
 			int countTokens = stringTokenizer.countTokens();
 			for(int i=0 ; i < countTokens; i++){
 				String columnName = stringTokenizer.nextToken();
-				typeString.append(fieldAndTypes.get(StringUtils.lowerCase(columnName)));
+				String typeName = fieldAndTypes.get(StringUtils.lowerCase(columnName));
+				typeString.append(StringUtils.substring(typeName, StringUtils.lastIndexOf(typeName, ".") + 1));
 				if(i != countTokens-1){
 					typeString.append(",");
 				}
@@ -159,7 +160,7 @@ public class DataViewerAdapter {
 			logger.error("Failed to read view data file column headers", ioException);
 			throw ioException;
 		}
-		return typeString;
+		return typeString.toString();
 	}
 	
 	public void setFilterCondition(String filterCondition) {
