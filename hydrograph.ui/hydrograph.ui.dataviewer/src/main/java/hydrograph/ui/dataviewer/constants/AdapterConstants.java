@@ -23,4 +23,7 @@ package hydrograph.ui.dataviewer.constants;
 public class AdapterConstants {
 	public static final String CSV_DRIVER_CLASS="org.relique.jdbc.csv.CsvDriver";
 	public static final String CSV_DRIVER_CONNECTION_PREFIX="jdbc:relique:csv:";
+	public static final String CSV = ".csv";
+	public static final String SCHEMA_FILE_EXTENTION=".xml";
+	public static final String COLUMN_TYPES = "columnTypes";
 }

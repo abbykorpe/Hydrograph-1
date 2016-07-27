@@ -120,7 +120,7 @@ public class ReloadAction extends Action {
 						}
 					}
 					
-				} catch (ClassNotFoundException | SQLException e1) {
+				} catch (ClassNotFoundException | SQLException | IOException exception) {
 					Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_RELOAD_DEBUG_FILE);
 					if(debugDataViewer.getDataViewerAdapter()!=null){
 						debugDataViewer.getDataViewerAdapter().closeConnection();
