@@ -386,8 +386,7 @@ public class FilterHelper {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//put number of elements in the list
-				//1 2 3 4 5
+			
 				StringBuffer buffer = getCondition(conditionsList, fieldsAndTypes, groupSelectionMap);
 				
 				logger.debug("Query String : " + buffer);
@@ -596,10 +595,11 @@ public class FilterHelper {
 		return listner;
 	}
 	
-	private StringBuffer getCondition(
-			final List<Condition> conditionsList,
-			final Map<String, String> fieldsAndTypes,
+	private StringBuffer getCondition(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
 			final Map<Integer, List<List<Integer>>> groupSelectionMap) {
+		
+		//put number of elements in the list
+		//1 2 3 4 5
 		List<String> actualStringList = new LinkedList<>();
 		for (int conditionIndex = 0; conditionIndex < conditionsList.size(); conditionIndex++) {
 			actualStringList.add(conditionIndex, String.valueOf((conditionIndex)));

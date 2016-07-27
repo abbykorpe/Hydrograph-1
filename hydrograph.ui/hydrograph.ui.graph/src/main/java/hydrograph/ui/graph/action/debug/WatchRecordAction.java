@@ -243,9 +243,8 @@ public class WatchRecordAction extends SelectionAction {
 					window.getConditions().setRemoteCondition("");
 					window.getConditions().getRemoteConditions().clear();
 					window.getConditions().getRemoteGroupSelectionMap().clear();
-					
-				watcherAndConditon.put(watcherId,window.getConditions());
 				}
+				watcherAndConditon.put(watcherId,window.getConditions());
 			}
 	}
 
