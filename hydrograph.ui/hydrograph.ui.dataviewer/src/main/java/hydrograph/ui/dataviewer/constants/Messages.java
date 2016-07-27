@@ -98,16 +98,20 @@ public class Messages extends NLS{
 	public static String CLEAR_GROUPS;
 	public static String DOWNLOADED_DATASET;
 	public static String CLEAR;
+	public static String CLEAR_TOOLTIP;
 	public static String CANCEL2;
+	public static String CANCEL2_TOOLTIP;
 	public static String APPLY;
 	public static String OK2;
+	public static String OK2_TOOLTIP;
 	public static String CREATE_GROUP;
 	public static String ADD_ROW_AT_END;
 	public static String ORIGINAL_DATASET;
 	public static String NOT_RETAINED;
 	public static String RETAINED;
 	public static String NO_MATCHING_RECORDS;
-	
+	public static String DISPLAY;
+	public static String DISPLAY_TOOLTIP;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

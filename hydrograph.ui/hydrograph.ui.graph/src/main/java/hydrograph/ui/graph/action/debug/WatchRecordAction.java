@@ -233,6 +233,7 @@ public class WatchRecordAction extends SelectionAction {
 				}
 				
 				window.open();
+				if(window.getConditions()!=null){
 				if(!window.getConditions().getRetainLocal()){
 					window.getConditions().setLocalCondition("");
 					window.getConditions().getLocalConditions().clear();
@@ -242,7 +243,7 @@ public class WatchRecordAction extends SelectionAction {
 					window.getConditions().setRemoteCondition("");
 					window.getConditions().getRemoteConditions().clear();
 					window.getConditions().getRemoteGroupSelectionMap().clear();
-					
+				}
 				watcherAndConditon.put(watcherId,window.getConditions());
 			}
 	}

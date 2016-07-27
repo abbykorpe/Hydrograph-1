@@ -74,6 +74,9 @@ public class FilterAction extends Action {
 			}
 			filterConditions.setOverWritten(debugDataViewer.isOverWritten());
 			debugDataViewer.setConditions(filterConditionsDialog.getOriginalFilterConditions());
+			FilterHelper.INSTANCE.setLocalCondition("");
+			FilterHelper.INSTANCE.setRemoteCondition("");
+			
 		} catch (ClassNotFoundException | SQLException e) {
 			logger.error("Error while setting debug data viewer and debug data viewer adaptor",e);
 		}

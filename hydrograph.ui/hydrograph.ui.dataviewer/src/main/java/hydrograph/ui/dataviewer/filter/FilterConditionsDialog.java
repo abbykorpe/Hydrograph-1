@@ -63,7 +63,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-
+import org.eclipse.swt.custom.StyledText;
 /**
  * Dialog for Data Viewer Filter conditions
  * @author Bitwise
@@ -122,13 +122,14 @@ public class FilterConditionsDialog extends Dialog {
 	private DataViewerAdapter dataViewerAdapter;
 	private DebugDataViewer debugDataViewer;
 
-	Button localOkButton;
-	Button localApplyButton;
-	Button remoteOkButton;
-	Button remoteApplyButton;
+	Button localSaveButton;
+	Button localDisplayButton;
+	Button remoteSaveButton;
+	Button remoteDisplayButton;
 	Button remoteBtnAddGrp;
 	Button localBtnAddGrp;
-	
+	StyledText styledTextLocal;
+	StyledText styledTextRemote;
 	/**
 	 * Set map of fields and their types respectively
 	 * @param fieldsAndTypes
@@ -172,8 +173,9 @@ public class FilterConditionsDialog extends Dialog {
 		retainRemoteFilter.setRetainFilter(filterConditions.getRetainRemote());
 		localGroupSelectionMap.putAll(filterConditions.getLocalGroupSelectionMap());
 		remoteGroupSelectionMap.putAll(filterConditions.getRemoteGroupSelectionMap());
-	
-	}
+		FilterHelper.INSTANCE.setRemoteCondition(filterConditions.getRemoteCondition());
+		FilterHelper.INSTANCE.setLocalCondition(filterConditions.getLocalCondition());
+	} 
 	
 	/**
 	 * Create contents of the dialog.
@@ -197,16 +199,16 @@ public class FilterConditionsDialog extends Dialog {
 		
 		createRemoteTabItem(tabFolder, remoteTableViewer);
 		createLocalTabItem(tabFolder, localTableViewer);
-		parent.getShell().setDefaultButton(remoteOkButton);
+		parent.getShell().setDefaultButton(remoteSaveButton);
 		 tabFolder.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
                   TabItem tabItem = (TabItem) e.item;
                   if (StringUtils.equalsIgnoreCase(tabItem.getText(),Messages.ORIGINAL_DATASET)) {
-                        parent.getShell().setDefaultButton(remoteOkButton);
+                        parent.getShell().setDefaultButton(remoteSaveButton);
                   } else if(StringUtils.equalsIgnoreCase(tabItem.getText(),Messages.DOWNLOADED_DATASET)){
-                        parent.getShell().setDefaultButton(localOkButton);
+                        parent.getShell().setDefaultButton(localSaveButton);
                   }
             }
       });
@@ -232,8 +234,24 @@ public class FilterConditionsDialog extends Dialog {
 		table.setHeaderVisible(true);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
+
+		Composite compositeStyledText = new Composite(composite, SWT.BORDER);
+		compositeStyledText.setLayout(new GridLayout(1, true));
+		GridData gd=new GridData(SWT.FILL, SWT.FILL, true, false, 0, 0);
+		compositeStyledText.setLayoutData(gd);
+		gd.heightHint = 39;
+		
+		styledTextRemote=new StyledText(compositeStyledText, SWT.NONE|SWT.V_SCROLL );
+		GridData gd_styledTextRemote=new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0);
+		styledTextRemote.setLayoutData(gd_styledTextRemote);
+		styledTextRemote.setText(debugDataViewer.getRemoteCondition());
+		styledTextRemote.setWordWrap(true);
+		styledTextRemote.setEditable(false);
+		
 		Composite composite_3 = new Composite(composite, SWT.NONE);
-		composite_3.setLayout(new GridLayout(4, false));
+		GridLayout gdComposite3 = new GridLayout(4, false);
+		gdComposite3.marginWidth=0;
+		composite_3.setLayout(gdComposite3);
         
         Button btnAddRowAt = new Button(composite_3, SWT.NONE);
         btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, remoteConditionsList, dummyList));
@@ -260,23 +278,32 @@ public class FilterConditionsDialog extends Dialog {
 		retainButton.addSelectionListener(FilterHelper.INSTANCE.getRetainButtonListener(retainRemoteFilter));
 		
 		Composite composite_4 = new Composite(composite, SWT.NONE);
-		composite_4.setLayout(new GridLayout(4, false));
-		composite_4.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-			
-		remoteOkButton = createButton(composite_4, Messages.OK2, true);
-		remoteOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(remoteConditionsList, fieldsAndTypes, 
-				remoteGroupSelectionMap,Messages.ORIGINAL,originalFilterConditions,retainRemoteFilter,retainLocalFilter));
+		GridLayout gd4 = new GridLayout(4, false);
+		gd4.marginWidth=0;
+		composite_4.setLayout(gd4);
+		composite_4.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, false, 1, 1));
 		
+		
+		
+		remoteSaveButton = createButton(composite_4, Messages.OK2, true);
+		remoteSaveButton.addSelectionListener(FilterHelper.INSTANCE.getSaveButtonListener(remoteConditionsList, fieldsAndTypes, 
+				remoteGroupSelectionMap,Messages.ORIGINAL,originalFilterConditions,retainRemoteFilter,retainLocalFilter));
+		remoteSaveButton.setToolTipText(Messages.OK2_TOOLTIP);
+
 		Button btnCancel = createButton(composite_4, Messages.CANCEL2, false);
 		btnCancel.addMouseListener(getCancelButtonListener());
+		btnCancel.setToolTipText(Messages.CANCEL2_TOOLTIP);
 		
 		Button clearButton = createButton(composite_4, Messages.CLEAR, false);
 		clearButton.addSelectionListener(getClearButtonListener(tableViewer, remoteConditionsList, dummyList, originalFilterConditions, 
 				true, retainButton, remoteGroupSelectionMap,remoteBtnAddGrp));
+		clearButton.setToolTipText(Messages.CLEAR_TOOLTIP);
+		
+		remoteDisplayButton = createButton(composite_4, Messages.DISPLAY, false);
+		remoteDisplayButton.addSelectionListener(FilterHelper.INSTANCE.getRemoteDisplayButtonListener(remoteConditionsList,fieldsAndTypes,
+				remoteGroupSelectionMap,styledTextRemote));
 
-		remoteApplyButton = createButton(composite_4, Messages.APPLY, false);
-		remoteApplyButton.addSelectionListener(FilterHelper.INSTANCE.getRemoteApplyButtonListener(originalFilterConditions, 
-				remoteConditionsList, retainRemoteFilter));
+		remoteDisplayButton.setToolTipText(Messages.DISPLAY_TOOLTIP);
 		
 		if(retainRemoteFilter.getRetainFilter() == true){
 			retainButton.setSelection(true);
@@ -325,7 +352,6 @@ public class FilterConditionsDialog extends Dialog {
 	private Button createButton(Composite parent, String label,
 			boolean defaultButton) {
 		
-		((GridLayout) parent.getLayout()).numColumns++;
 		Button button = new Button(parent, SWT.NONE);
 		button.setText(label);
 		
@@ -374,8 +400,26 @@ public class FilterConditionsDialog extends Dialog {
 		table.setHeaderVisible(true);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
+		
+		Composite compositeStyledText = new Composite(composite, SWT.BORDER);
+		compositeStyledText.setLayout(new GridLayout(1, true));
+		GridData gd=new GridData(SWT.FILL, SWT.FILL, true, false, 0, 0);
+		compositeStyledText.setLayoutData(gd);
+		gd.heightHint = 39;
+		
+		styledTextLocal=new StyledText(compositeStyledText, SWT.NONE|SWT.V_SCROLL );
+		GridData gd_styledTextLocal=new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0);
+		styledTextLocal.setLayoutData(gd_styledTextLocal);
+		styledTextLocal.setText(debugDataViewer.getLocalCondition());
+		styledTextLocal.setWordWrap(true);
+		styledTextLocal.setEditable(false);
+		
+		
+		
 		Composite composite_3 = new Composite(composite, SWT.NONE);
-		composite_3.setLayout(new GridLayout(4, false));
+		GridLayout gd3 = new GridLayout(4, false);
+		gd3.marginWidth=0;
+		composite_3.setLayout(gd3);
         
         Button btnAddRowAt = new Button(composite_3, SWT.NONE);
         btnAddRowAt.addSelectionListener(FilterHelper.INSTANCE.getAddAtEndListener(tableViewer, localConditionsList, dummyList));
@@ -403,24 +447,31 @@ public class FilterConditionsDialog extends Dialog {
 		retainButton.addSelectionListener(FilterHelper.INSTANCE.getRetainButtonListener(retainLocalFilter));
 		
 		Composite composite_4 = new Composite(composite, SWT.NONE);
-		composite_4.setLayout(new GridLayout(4, false));
-		composite_4.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		GridLayout gd4 = new GridLayout(4, false);
+		composite_4.setLayout(gd4);
+		gd4.marginWidth = 0;
+		composite_4.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, false, 0, 0));
 		
-		localOkButton = createButton(composite_4, Messages.OK2, false);
-		localOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(localConditionsList, fieldsAndTypes, 
+		
+		localSaveButton = createButton(composite_4, Messages.OK2, false);
+		localSaveButton.addSelectionListener(FilterHelper.INSTANCE.getSaveButtonListener(localConditionsList, fieldsAndTypes, 
 				localGroupSelectionMap, Messages.DOWNLOADED,originalFilterConditions,retainRemoteFilter,retainLocalFilter));
+		localSaveButton.setToolTipText(Messages.OK2_TOOLTIP);
 		
 		Button btnCancel = createButton(composite_4, Messages.CANCEL2, false);
 		btnCancel.addMouseListener(getCancelButtonListener());
+		btnCancel.setToolTipText(Messages.CANCEL2_TOOLTIP);
 		
 		Button clearButton = createButton(composite_4, Messages.CLEAR, false);
 		clearButton.addSelectionListener(getClearButtonListener(tableViewer, localConditionsList, dummyList, originalFilterConditions, 
 				false,retainButton,localGroupSelectionMap, localBtnAddGrp));
+		clearButton.setToolTipText(Messages.CLEAR_TOOLTIP);
 		
-		localApplyButton = createButton(composite_4, Messages.APPLY, false);
-		localApplyButton.addSelectionListener(FilterHelper.INSTANCE.getLocalApplyButtonListener(originalFilterConditions, 
-				localConditionsList, retainLocalFilter));
-		
+		localDisplayButton = createButton(composite_4, Messages.DISPLAY, false);
+		localDisplayButton.addSelectionListener(FilterHelper.INSTANCE.getLocalDisplayButtonListener(localConditionsList, fieldsAndTypes, 
+				localGroupSelectionMap,styledTextLocal));
+
+		localDisplayButton.setToolTipText(Messages.DISPLAY_TOOLTIP);
 		if(retainLocalFilter.getRetainFilter() == true){
 			retainButton.setSelection(true);
 		}
@@ -482,12 +533,12 @@ public class FilterConditionsDialog extends Dialog {
 					if(isRemote){
 						text = addTextBoxInTable(tableViewer, item, VALUE1_TEXT_BOX, VALUE1_TEXT_PANE, VALUE1_EDITOR, 
 								cell.getColumnIndex(),FilterHelper.INSTANCE.getTextBoxValue1Listener(conditionsList, 
-										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton));
+										fieldsAndTypes, fieldNames, remoteSaveButton, remoteDisplayButton));
 					}
 					else {
 						text = addTextBoxInTable(tableViewer, item, VALUE1_TEXT_BOX, VALUE1_TEXT_PANE, VALUE1_EDITOR, 
 								cell.getColumnIndex(),FilterHelper.INSTANCE.getTextBoxValue1Listener(conditionsList, 
-										fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
+										fieldsAndTypes, fieldNames, localSaveButton, localDisplayButton));
 					}
 					
 					text.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getValue1());
@@ -529,12 +580,12 @@ public class FilterConditionsDialog extends Dialog {
 					if(isRemote){
 						text = addTextBoxInTable(tableViewer, item, VALUE2_TEXT_BOX, VALUE2_TEXT_PANE, VALUE2_EDITOR, 
 								cell.getColumnIndex(),FilterHelper.INSTANCE.getTextBoxValue2Listener(conditionsList, 
-										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton));
+										fieldsAndTypes, fieldNames, remoteSaveButton, remoteDisplayButton));
 					}
 					else {
 						text = addTextBoxInTable(tableViewer, item, VALUE2_TEXT_BOX, VALUE2_TEXT_PANE, VALUE2_EDITOR, 
 								cell.getColumnIndex(),FilterHelper.INSTANCE.getTextBoxValue2Listener(conditionsList, 
-										fieldsAndTypes, fieldNames, localOkButton, localApplyButton));
+										fieldsAndTypes, fieldNames, localSaveButton, localDisplayButton));
 					}
 					text.setText((dummyList.get(tableViewer.getTable().indexOf(item))).getValue2());
 					enableAndDisableValue2TextBox(dummyList, tableViewer.getTable().indexOf(item), text);
@@ -587,17 +638,17 @@ public class FilterConditionsDialog extends Dialog {
 						combo = addComboInTable(tableViewer, item, CONDITIONAL_OPERATORS, CONDITIONAL_COMBO_PANE, 
 								CONDITIONAL_EDITOR,	cell.getColumnIndex(), new String[]{}, 
 								FilterHelper.INSTANCE.getConditionalOperatorSelectionListener(conditionsList, 
-										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton),
+										fieldsAndTypes, fieldNames, remoteSaveButton, remoteDisplayButton),
 								FilterHelper.INSTANCE.getConditionalOperatorModifyListener(conditionsList, 
-										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton),
+										fieldsAndTypes, fieldNames, remoteSaveButton, remoteDisplayButton),
 										FilterHelper.INSTANCE.getConditionalOperatorFocusListener());
 					}else{
 						combo = addComboInTable(tableViewer, item, CONDITIONAL_OPERATORS, CONDITIONAL_COMBO_PANE, 
 								CONDITIONAL_EDITOR,	cell.getColumnIndex(), new String[]{}, 
 								FilterHelper.INSTANCE.getConditionalOperatorSelectionListener(conditionsList, 
-										fieldsAndTypes, fieldNames, localOkButton, localApplyButton),
+										fieldsAndTypes, fieldNames, localSaveButton, localDisplayButton),
 								FilterHelper.INSTANCE.getConditionalOperatorModifyListener(conditionsList, 
-										fieldsAndTypes, fieldNames, localOkButton, localApplyButton),
+										fieldsAndTypes, fieldNames, localSaveButton, localDisplayButton),
 								FilterHelper.INSTANCE.getConditionalOperatorFocusListener());
 					}
 					
@@ -660,17 +711,17 @@ public class FilterConditionsDialog extends Dialog {
 					if(isRemote){
 						combo = addComboInTable(tableViewer, item, FIELD_NAMES, FIELD_COMBO_PANE, FIELD_EDITOR,
 								cell.getColumnIndex(), fieldNames, FilterHelper.INSTANCE.getFieldNameSelectionListener(tableViewer, 
-										conditionsList, fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton),
+										conditionsList, fieldsAndTypes, fieldNames, remoteSaveButton, remoteDisplayButton),
 										FilterHelper.INSTANCE.getFieldNameModifyListener(tableViewer, 
-												conditionsList, fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton),
+												conditionsList, fieldsAndTypes, fieldNames, remoteSaveButton, remoteDisplayButton),
 												FilterHelper.INSTANCE.getConditionalOperatorFocusListener());
 					}
 					else {
 						combo = addComboInTable(tableViewer, item, FIELD_NAMES, FIELD_COMBO_PANE, FIELD_EDITOR,
 								cell.getColumnIndex(), fieldNames, FilterHelper.INSTANCE.getFieldNameSelectionListener(tableViewer, 
-										conditionsList, fieldsAndTypes, fieldNames, localOkButton, localApplyButton),
+										conditionsList, fieldsAndTypes, fieldNames, localSaveButton, localDisplayButton),
 										FilterHelper.INSTANCE.getFieldNameModifyListener(tableViewer, 
-												conditionsList, fieldsAndTypes, fieldNames, localOkButton, localApplyButton),
+												conditionsList, fieldsAndTypes, fieldNames, localSaveButton, localDisplayButton),
 												FilterHelper.INSTANCE.getConditionalOperatorFocusListener());
 					}
 				
@@ -715,18 +766,18 @@ public class FilterConditionsDialog extends Dialog {
 						combo = addComboInTable(tableViewer, item, RELATIONAL_OPERATORS, RELATIONAL_COMBO_PANE, RELATIONAL_EDITOR,
 								cell.getColumnIndex(), relationalOperators,	
 								FilterHelper.INSTANCE.getRelationalOpSelectionListener(conditionsList, 
-										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton),
+										fieldsAndTypes, fieldNames, remoteSaveButton, remoteDisplayButton),
 								FilterHelper.INSTANCE.getRelationalOpModifyListener(conditionsList, 
-										fieldsAndTypes, fieldNames, remoteOkButton, remoteApplyButton),
+										fieldsAndTypes, fieldNames, remoteSaveButton, remoteDisplayButton),
 										FilterHelper.INSTANCE.getConditionalOperatorFocusListener());
 					}
 					else{
 						combo = addComboInTable(tableViewer, item, RELATIONAL_OPERATORS, RELATIONAL_COMBO_PANE, RELATIONAL_EDITOR,
 								cell.getColumnIndex(), relationalOperators,	
 								FilterHelper.INSTANCE.getRelationalOpSelectionListener(conditionsList, 
-										fieldsAndTypes, fieldNames, localOkButton, localApplyButton),
+										fieldsAndTypes, fieldNames, localSaveButton, localDisplayButton),
 								FilterHelper.INSTANCE.getRelationalOpModifyListener(conditionsList, 
-										fieldsAndTypes, fieldNames, localOkButton, localApplyButton),
+										fieldsAndTypes, fieldNames, localSaveButton, localDisplayButton),
 										FilterHelper.INSTANCE.getConditionalOperatorFocusListener());
 					}
 					
@@ -1232,6 +1283,7 @@ public class FilterConditionsDialog extends Dialog {
 					originalFilterConditions.setRemoteGroupSelectionMap(groupSelectionMap);
 					debugDataViewer.getDataViewerAdapter().setFilterCondition(debugDataViewer.getLocalCondition());
 					retainRemoteFilter.setRetainFilter(false);
+					FilterHelper.INSTANCE.setRemoteCondition("");
 					((ReloadAction)debugDataViewer.getActionFactory().getAction(ReloadAction.class.getName())).setIfFilterReset(true);
 				}else{
 					originalFilterConditions.setRetainLocal(false);
@@ -1241,6 +1293,7 @@ public class FilterConditionsDialog extends Dialog {
 					originalFilterConditions.setLocalGroupSelectionMap(groupSelectionMap);
 					debugDataViewer.getDataViewerAdapter().setFilterCondition(debugDataViewer.getRemoteCondition());
 					retainLocalFilter.setRetainFilter(false);
+					FilterHelper.INSTANCE.setLocalCondition("");
 				}
 				TableItem[] items = tableViewer.getTable().getItems();
 				tableViewer.refresh();
