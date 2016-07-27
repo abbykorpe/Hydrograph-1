@@ -870,17 +870,27 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		String METHOD_NAME = "doSave -";
 		logger.debug(METHOD_NAME);
 
-		firePropertyChange(PROP_DIRTY);
 		try {
+			if(container!=null)
+				ConverterUtil.INSTANCE.convertToXML(container, true, null, null);
+			else
+				ConverterUtil.INSTANCE.convertToXML(this.container, true, null, null);
+		firePropertyChange(PROP_DIRTY);
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(getEditorInput(), this);
 			genrateContainerData.storeContainerData();
 			
 			saveParameters();
 			updateMainGraphOnSavingSubjob();
-		} catch (CoreException | IOException ce) {
+		} catch (CoreException | IOException ce ) {
 			logger.error(METHOD_NAME , ce);
-			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n"+ce.getMessage());
+			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + ce.getMessage());
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			logger.error(METHOD_NAME, e);
+			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + e.getMessage());
+		} catch (RuntimeException re) {
+				logger.error(METHOD_NAME, re);
+				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + re.getMessage());
 		}	
 	}
 
@@ -1070,25 +1080,38 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 	public void saveJob(IFile file) {
-		if(file!=null){
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			try {
+		
+		try {
+			if(container!=null)
+				ConverterUtil.INSTANCE.convertToXML(container, true, null, null);
+			else
+				ConverterUtil.INSTANCE.convertToXML(this.container, true, null, null);		
+			if(file!=null){
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				createOutputStream(out);
+				
 				if (file.exists())
 					file.setContents(new ByteArrayInputStream(out.toByteArray()), true,	false, null);
 				else
 					file.create(new ByteArrayInputStream(out.toByteArray()),true, null);
+				
 				logger.info("Resetting EditorInput data from GraphicalEditorInput to FileEditorInput");
 				setInput(new FileEditorInput(file));
 				initializeGraphicalViewer();
 				genrateTargetXml(file,null,null);
 				getCommandStack().markSaveLocation();
-			} catch (CoreException  | IOException ce) {
-				logger.error("Failed to Save the file : ", ce);
-				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n"+ce.getMessage());
+				setDirty(false);
 			}
-			setDirty(false);
-		}
+		} catch (CoreException  | IOException ce) {
+				logger.error("Failed to Save the file : ", ce);
+				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + ce.getMessage());
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			logger.error("Failed to Save the file : ", e);
+			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + e.getMessage());
+		} catch (RuntimeException re ) {
+			logger.error("Failed to Save the file : ", re);
+			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + re.getMessage());
+		}	
 	}
 
 	@Override
