@@ -47,12 +47,10 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 
@@ -130,10 +128,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 		List<GridRow> outputSchemaGridRowList = new LinkedList<>();
 
 		for(LookupMapProperty row : lookupMapRows){
-			if(!ParameterUtil.isParameter(row.getSource_Field())){
-				if(StringUtils.isBlank(row.getSource_Field())){
-					continue;
-				}
+			if(!ParameterUtil.isParameter(row.getSource_Field())){				
 				GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());
 				GridRow outputFieldSchema = null;
 				if(inputFieldSchema==null){
@@ -142,18 +137,21 @@ public class ELTJoinMapWidget extends AbstractWidget {
 					outputFieldSchema = getOutputFieldSchema(inputFieldSchema,row.getOutput_Field());
 				}
 				
-				if(row.getSource_Field().trim().length()>0){
-					String[] sourceField = row.getSource_Field().split("\\.");
-					if(sourceField.length==2){
-						if(StringUtils.equals(row.getOutput_Field(), sourceField[1])){
-							finalPassThroughFields.add(row.getOutput_Field());
-							passThroughFieldsPortInfo.put(row.getOutput_Field(), sourceField[0]);
-						}else{
-							finalMapFields.put(sourceField[1], row.getOutput_Field());
-							mapFieldsPortInfo.put(row.getOutput_Field(), sourceField[0]);
+				if(!StringUtils.isBlank(row.getSource_Field())){
+					if(row.getSource_Field().trim().length()>0){
+						String[] sourceField = row.getSource_Field().split("\\.");
+						if(sourceField.length==2){
+							if(StringUtils.equals(row.getOutput_Field(), sourceField[1])){
+								finalPassThroughFields.add(row.getOutput_Field());
+								passThroughFieldsPortInfo.put(row.getOutput_Field(), sourceField[0]);
+							}else{
+								finalMapFields.put(sourceField[1], row.getOutput_Field());
+								mapFieldsPortInfo.put(row.getOutput_Field(), sourceField[0]);
+							}
 						}
 					}
 				}
+				
 				outputSchemaGridRowList.add(outputFieldSchema);
 			}
 		}
