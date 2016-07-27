@@ -19,6 +19,8 @@ import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -91,6 +93,11 @@ public class JoinMappingValidationRule implements IValidator{
 			return false;
 		}
 		
+		if(isOutputFieldInvalid(lookupMapProperties)){
+			errorMessage = "Invalid output fields in join mapping";
+			return false;
+		}
+		
 		return true;
 	}
 
@@ -123,6 +130,20 @@ public class JoinMappingValidationRule implements IValidator{
 		for(LookupMapProperty mapRow: mappingTableItemList){
 			if (!allInputFields.contains(mapRow
 					.getSource_Field()) && !ParameterUtil.isParameter(mapRow.getSource_Field())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isOutputFieldInvalid(List<LookupMapProperty> mappingTableItemList){
+		List<String> outputFieldList = new ArrayList<>();
+		for(LookupMapProperty mapRow: mappingTableItemList){
+			outputFieldList.add(mapRow.getOutput_Field());
+		}
+		
+		for(LookupMapProperty mapRow: mappingTableItemList){
+			if(Collections.frequency(outputFieldList, mapRow.getOutput_Field()) > 1){
 				return true;
 			}
 		}
