@@ -62,6 +62,7 @@ import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.viewloders.DataViewLoader;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -424,10 +425,10 @@ public class DebugDataViewer extends ApplicationWindow {
 			public void run() {
 				try {
 					initializeDataFileAdapter(filterApplied,getConditions());
-				} catch (ClassNotFoundException | SQLException e) {
+				} catch (ClassNotFoundException | SQLException | IOException exception) {
 					Utils.INSTANCE.showMessage(MessageBoxText.ERROR,
-							Messages.UNABLE_TO_LOAD_DEBUG_FILE + e.getMessage());
-					logger.error("Unable to load debug file", e);					
+							Messages.UNABLE_TO_LOAD_DEBUG_FILE + exception.getMessage());
+					logger.error("Unable to load debug file", exception);					
 
 					if (dataViewerAdapter != null) {
 						dataViewerAdapter.closeConnection();
@@ -565,7 +566,7 @@ public class DebugDataViewer extends ApplicationWindow {
 	}
 
 	private void initializeDataFileAdapter(boolean filterApplied, FilterConditions filterConditions) throws ClassNotFoundException,
-			SQLException {
+			SQLException, IOException{
 		
 		if(filterConditions!=null && filterApplied)
 		{

@@ -14,7 +14,6 @@
 package hydrograph.ui.dataviewer.adapters;
 
 import hydrograph.ui.common.schema.Field;
-import hydrograph.ui.common.schema.FieldDataTypes;
 import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.dataviewer.constants.AdapterConstants;
 import hydrograph.ui.dataviewer.constants.Messages;
@@ -31,6 +30,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -56,9 +56,6 @@ import org.slf4j.Logger;
 public class DataViewerAdapter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(DataViewerAdapter.class);
-	private static final String CSV = ".csv";
-	private String SCHEMA_FILE_EXTENTION=".xml";
-	private static final String COLUMN_TYPES = "columnTypes";
 
 	private List<RowData> viewerData;
 
@@ -78,7 +75,9 @@ public class DataViewerAdapter {
 	private String filterCondition;
 	private DebugDataViewer debugDataViewer;
 
-	public DataViewerAdapter(String databaseName, String tableName, int PAGE_SIZE, long INITIAL_OFFSET, DebugDataViewer debugDataViewer) throws ClassNotFoundException, SQLException {
+	public DataViewerAdapter(String databaseName, String tableName, int PAGE_SIZE, long INITIAL_OFFSET, 
+			DebugDataViewer debugDataViewer) 
+					throws ClassNotFoundException, SQLException, IOException {
 		this.databaseName = databaseName;
 		this.tableName = tableName;
 		viewerData = new LinkedList<>();
@@ -91,7 +90,9 @@ public class DataViewerAdapter {
 		initializeAdapter();
 	}
 	
-	public DataViewerAdapter(String databaseName, String tableName, int PAGE_SIZE, long INITIAL_OFFSET, DebugDataViewer debugDataViewer,String filterCondition) throws ClassNotFoundException, SQLException {
+	public DataViewerAdapter(String databaseName, String tableName, int PAGE_SIZE, long INITIAL_OFFSET, 
+			DebugDataViewer debugDataViewer,String filterCondition) 
+					throws ClassNotFoundException, SQLException, IOException {
 		this.databaseName = databaseName;
 		this.tableName = tableName;
 		viewerData = new LinkedList<>();
@@ -111,7 +112,7 @@ public class DataViewerAdapter {
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
 	 */
-	public void initializeAdapter() throws ClassNotFoundException, SQLException{
+	public void initializeAdapter() throws ClassNotFoundException, SQLException, IOException{
 		ResultSet resultSet = null;
 
 		createConnection();
@@ -124,25 +125,26 @@ public class DataViewerAdapter {
 		resultSet.close();
 	}
 
-	private void createConnection() throws ClassNotFoundException, SQLException {
+	private void createConnection() throws ClassNotFoundException, SQLException, IOException {
 		Class.forName(AdapterConstants.CSV_DRIVER_CLASS);
 		Properties properties = new Properties();
-		properties.put(COLUMN_TYPES, getType(databaseName));
+		properties.put(AdapterConstants.COLUMN_TYPES, getType(databaseName));
 		connection = DriverManager.getConnection(AdapterConstants.CSV_DRIVER_CONNECTION_PREFIX + databaseName,properties);
 		statement = connection.createStatement();
 	}
 	
-	private StringBuffer getType(String databaseName) {
+	private StringBuffer getType(String databaseName) throws IOException {
 		StringBuffer typeString = new StringBuffer();
 		String debugFileName = debugDataViewer.getDebugFileName();
 		String debugFileLocation = debugDataViewer.getDebugFileLocation();
 		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + 
-				debugFileName + SCHEMA_FILE_EXTENTION);
+				debugFileName + AdapterConstants.SCHEMA_FILE_EXTENTION);
 		Map<String, String> fieldAndTypes = new HashMap<String, String>();
 		for (Field field : dataViewerFileSchema.getField()) {
 			fieldAndTypes.put(StringUtils.lowerCase(field.getName()), field.getType().value());
 		}
-		try(BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(databaseName + tableName + CSV)))){
+		try(BufferedReader bufferedReader = new BufferedReader(new FileReader(
+				new File(databaseName + tableName + AdapterConstants.CSV)))){
 			String firstLine = bufferedReader.readLine();
 			StringTokenizer stringTokenizer = new StringTokenizer(firstLine, ",");
 			int countTokens = stringTokenizer.countTokens();
@@ -153,9 +155,9 @@ public class DataViewerAdapter {
 					typeString.append(",");
 				}
 			}
-		} catch (Exception e) {
-			logger.error("Failed to read view data file column headers", e);
-			throw new RuntimeException("Failed to read view data file column headers");
+		} catch (IOException ioException) {
+			logger.error("Failed to read view data file column headers", ioException);
+			throw ioException;
 		}
 		return typeString;
 	}
@@ -171,7 +173,7 @@ public class DataViewerAdapter {
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
 	 */
-	public void reinitializeAdapter(int pageSize,boolean resetRowCount) throws ClassNotFoundException, SQLException  {		
+	public void reinitializeAdapter(int pageSize,boolean resetRowCount) throws ClassNotFoundException, SQLException, IOException{		
 		this.pageSize = pageSize;
 		this.offset = PreferenceConstants.INITIAL_OFFSET;
 		if(resetRowCount){
