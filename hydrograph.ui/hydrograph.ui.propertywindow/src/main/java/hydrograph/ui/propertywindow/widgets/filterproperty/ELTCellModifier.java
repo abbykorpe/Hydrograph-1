@@ -99,7 +99,11 @@ public class ELTCellModifier implements ICellModifier{
 			}
 			else if(StringUtils.equals(Messages.INNER_OPERATION_OUTPUT_FIELD, property))
 			{		
+		    int indexOfSelectedField= transformDialog.getATMapping().getOutputFieldList().indexOf(filterProperties);
 			filterProperties.setPropertyname((String )value);	
+			if(indexOfSelectedField==-1)
+			transformDialog.getATMapping().getOutputFieldList().add(filterProperties);
+			
 			transformDialog.refreshOutputTable();
             transformDialog.showHideValidationMessage();
 		}

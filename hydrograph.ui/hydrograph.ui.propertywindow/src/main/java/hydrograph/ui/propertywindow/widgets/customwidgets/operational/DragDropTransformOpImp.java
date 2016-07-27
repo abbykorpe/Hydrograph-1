@@ -17,6 +17,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
+import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.propertywindow.widgets.utility.DragDropOperation;
 
 import java.util.List;
@@ -29,17 +30,15 @@ import org.eclipse.jface.viewers.TableViewer;
 public class DragDropTransformOpImp implements DragDropOperation {
 
 	private List listOfInputFields;
+	private List<NameValueProperty> mapAndPassThroughField;
 	private boolean isSingleColumn;
 	private TableViewer operationInputfieldtableviewer;
 	private List listOfOutputFields;
 	private TableViewer operationOutputFieldTableViewer;
 	private Map<String,List<FilterProperties>> outputFieldMap;
-	private List<NameValueProperty> mapAndPassThroughField;
-	private TableViewer outputFieldTableViewer;
-	private List<MappingSheetRow> mappingSheetRows;
 	private TransformDialog transformDialogNew;
 	
-	
+	private List outerOutputList;
 	
 	/**
 	 * @param transformDialogNew
@@ -53,7 +52,7 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	 * @param tableViewer
 	 * @param t
 	 */
-	public DragDropTransformOpImp(TransformDialog transformDialogNew,List<MappingSheetRow> mappingSheetRows,TableViewer outputFieldTableViewer,List<NameValueProperty> mapAndPassThroughField,Map<String,List<FilterProperties>> outputFieldMap,List listOfOutputFields,List listOfInputFields, boolean isSingleColumn,TableViewer tableViewer,TableViewer t) {
+	public DragDropTransformOpImp(TransformDialog transformDialogNew,Map<String,List<FilterProperties>> outputFieldMap,List listOfOutputFields,List listOfInputFields, boolean isSingleColumn,TableViewer tableViewer,TableViewer t,List outerOutputList) {
 		super();
 		this.listOfInputFields = listOfInputFields;
 		this.isSingleColumn = isSingleColumn;
@@ -61,19 +60,19 @@ public class DragDropTransformOpImp implements DragDropOperation {
 		this.listOfOutputFields=listOfOutputFields;
 		this.operationOutputFieldTableViewer=t;
 		this.outputFieldMap=outputFieldMap;
-		this.mapAndPassThroughField=mapAndPassThroughField;
-		this.outputFieldTableViewer=outputFieldTableViewer;
 		this.transformDialogNew=transformDialogNew;
-		this.mappingSheetRows=mappingSheetRows;
+		this.outerOutputList=outerOutputList;
 	}
 	
-	public DragDropTransformOpImp(TransformDialog transformDialogNew,List listOfFields, boolean isSingleColumn,TableViewer tableViewer) {
+	public DragDropTransformOpImp(TransformDialog transformDialogNew,TransformMapping transformMapping,List inputFields, boolean isSingleColumn,boolean isExpression,TableViewer tableViewer) {
 		super();
-		this.listOfInputFields = listOfFields;
+		this.mapAndPassThroughField = transformMapping.getMapAndPassthroughField();
+		this.listOfInputFields=inputFields;
 		this.isSingleColumn = isSingleColumn;
 		this.operationInputfieldtableviewer=tableViewer;
 		this.transformDialogNew=transformDialogNew;
 		
+		this.outerOutputList=transformMapping.getOutputFieldList();
 	}
 
 	
@@ -88,6 +87,7 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	        	{	
 	        		listOfInputFields.add(inputField);
 	        		listOfOutputFields.add(outputField); 	
+	        		outerOutputList.add(outputField);
 	        		transformDialogNew.refreshOutputTable();
 	        		}	
 	        	
@@ -98,16 +98,18 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	        	NameValueProperty field = new NameValueProperty();
 	        	field.setPropertyName(result);
 	        	field.setPropertyValue(result);
-	        	
-            		listOfInputFields.add(field);
+	        	mapAndPassThroughField.add(field);
+	        	field.getAttachFilterProperty().setPropertyname(field.getPropertyValue());
+	        		
+	        		outerOutputList.add(field.getAttachFilterProperty());
 	        		transformDialogNew.refreshOutputTable();
 	        
 	        }
 		 operationInputfieldtableviewer.refresh();
 		 transformDialogNew.showHideValidationMessage();
 		 transformDialogNew.getComponent().setLatestChangesInSchema(false);
-		
-	}
+		}
+	
 	
 	public Map<String,List<FilterProperties>> getOutputFieldList() {
 		return outputFieldMap;

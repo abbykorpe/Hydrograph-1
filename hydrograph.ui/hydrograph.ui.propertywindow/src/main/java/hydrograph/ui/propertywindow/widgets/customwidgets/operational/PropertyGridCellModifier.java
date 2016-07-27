@@ -15,6 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -115,7 +116,7 @@ public class PropertyGridCellModifier implements ICellModifier {
 	public void modify(Object element, String property, Object value) {
 		if (element instanceof Item)
 			element = ((Item) element).getData();
-
+		
 		NameValueProperty nameValueProperty = (NameValueProperty) element;
 		if (PROPERTY_NAME.equals(property)){
 			if(ParameterUtil.isParameter((String)value)){
@@ -129,7 +130,15 @@ public class PropertyGridCellModifier implements ICellModifier {
 			if(ParameterUtil.isParameter((String)value)){
 				nameValueProperty.setPropertyName((String)value);
 			}
+			
+			
 			nameValueProperty.setPropertyValue(((String) value).trim());
+			int indexOfSelectedField=transformDialog.getATMapping().getOutputFieldList().indexOf(nameValueProperty.getAttachFilterProperty());
+			nameValueProperty.getAttachFilterProperty().setPropertyname(((String) value).trim());
+			if(indexOfSelectedField==-1)
+			transformDialog.getATMapping().getOutputFieldList().add(nameValueProperty.getAttachFilterProperty());
+			
+			
 			transformDialog.refreshOutputTable();	
 			transformDialog.showHideValidationMessage();
 

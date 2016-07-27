@@ -18,15 +18,19 @@ public class NameValueProperty extends PropertyField{
 
 	private String propertyName;
 	private String propertyValue;
-
+	private FilterProperties attachFilterProperty;
 	public NameValueProperty() {
-		
-	}
+		attachFilterProperty=new FilterProperties();
+		}
 	
 	public String getPropertyValue() {
 		return propertyValue;
 	}
-
+     
+	public FilterProperties getAttachFilterProperty() {
+		return attachFilterProperty;
+	}
+	
 	public void setPropertyValue(String propertyValue) {
 		this.propertyValue = propertyValue;
 	}
@@ -78,9 +82,11 @@ public class NameValueProperty extends PropertyField{
 	
 	@Override
 	public NameValueProperty  clone(){
+		
 		NameValueProperty nameValueProperty=new NameValueProperty();
 	    nameValueProperty.setPropertyName(getPropertyName());
 	    nameValueProperty.setPropertyValue(getPropertyValue());
+	    nameValueProperty.getAttachFilterProperty().setPropertyname(nameValueProperty.getAttachFilterProperty().getPropertyname());
 		return nameValueProperty;
 	};
 

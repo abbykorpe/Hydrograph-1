@@ -124,7 +124,7 @@ public class TransformWidget extends AbstractWidget {
 				TransformDialog transformDialog=new TransformDialog(new Shell(),getComponent(),widgetConfig,transformMapping);
 				
 				transformDialog.open();
-                outputList = transformDialog.getValidatorOutputFields();
+                outputList = transformDialog.getFinalSortedList();
 				if(transformDialog.isCancelPressed())
 				{
 					transformMapping=oldATMappings;
