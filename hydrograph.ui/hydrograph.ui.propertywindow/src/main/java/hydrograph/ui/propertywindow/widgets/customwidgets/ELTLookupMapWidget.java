@@ -29,7 +29,6 @@ import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
-import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.lookup.LookupMapDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
@@ -43,6 +42,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -122,7 +122,7 @@ public class ELTLookupMapWidget extends AbstractWidget {
 		for(LookupMapProperty row : lookupMapRows){
 
 			if(!ParameterUtil.isParameter(row.getSource_Field())){
-				if(row.getSource_Field()==null){
+				if(StringUtils.isBlank(row.getSource_Field())){
 					continue;
 				}
 				GridRow inputFieldSchema = getInputFieldSchema(row.getSource_Field());

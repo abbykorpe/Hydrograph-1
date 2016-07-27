@@ -25,7 +25,6 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEditingSupport;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.utils.JoinMapDialogConstants;
-import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
@@ -37,7 +36,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -513,19 +511,6 @@ public class LookupMapDialog extends Dialog {
 				}
 				
 				mappingTableViewer.refresh(); 
-				/*MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_CONFIRM, null, Constants.SYNC_OUTPUT_FIELDS_CONFIRM_MESSAGE, MessageDialog.QUESTION, new String[] {"Ok", "Cancel" }, 0);
-				int dialogResult =dialog.open();
-				List<LookupMapProperty> pulledLookupMapProperties = null;
-				if(dialogResult == 0){
-					//syncTransformFieldsWithSchema();
-					Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
-					pulledLookupMapProperties = SchemaSyncUtility.INSTANCE.pullLookupSchemaInMapping(schema, component);
-				}
-				mappingTableViewer.setInput(pulledLookupMapProperties);
-				mappingTableItemList = pulledLookupMapProperties;
-				mappingTableViewer.refresh(); 
-				component.setLatestChangesInSchema(false);
-				refreshButtonStatus();*/
 			}
 			
 			private List<String> getSchemaFieldList(Schema schema) {
