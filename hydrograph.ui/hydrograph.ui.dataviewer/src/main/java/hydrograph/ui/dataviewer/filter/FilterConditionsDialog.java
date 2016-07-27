@@ -352,7 +352,6 @@ public class FilterConditionsDialog extends Dialog {
 	private Button createButton(Composite parent, String label,
 			boolean defaultButton) {
 		
-		//((GridLayout) parent.getLayout()).numColumns++;
 		Button button = new Button(parent, SWT.NONE);
 		button.setText(label);
 		

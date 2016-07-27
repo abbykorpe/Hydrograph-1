@@ -388,94 +388,7 @@ public class FilterHelper {
 			public void widgetSelected(SelectionEvent e) {
 				//put number of elements in the list
 				//1 2 3 4 5
-				List<String> actualStringList = new LinkedList<>();
-				for (int conditionIndex = 0; conditionIndex < conditionsList.size(); conditionIndex++) {
-					actualStringList.add(conditionIndex, String.valueOf((conditionIndex)));
-				}
-				logger.trace(actualStringList.toString());
-				//start adding brackets for grouping
-				Set<Integer> treeSet  = (Set<Integer>) groupSelectionMap.keySet();
-				if(treeSet.size() > 0){
-					for (Integer position : treeSet) {
-					List<List<Integer>> groupsInColumn = groupSelectionMap.get(position);
-						for (int groupIndex = 0; groupIndex < groupsInColumn.size(); groupIndex++) {
-							List<Integer> group = groupsInColumn.get(groupIndex);
-							//add opening bracket before first element in the group
-							if(!group.isEmpty()){
-							Integer firstItem = group.get(0);
-							Integer firstItemIndex = actualStringList.indexOf(String.valueOf(firstItem));
-							actualStringList.add(firstItemIndex, FilterConstants.OPEN_BRACKET);
-							//add closing bracket after last element in the group							
-							Integer lastItem = group.get(group.size()-1);
-							Integer lastItemIndex = actualStringList.indexOf(String.valueOf(lastItem));
-							actualStringList.add(lastItemIndex + 1, FilterConstants.CLOSE_BRACKET);
-							}
-						}
-					}
-				}
-				
-				//start adding relational operators
-				int indexOfRelational = 1;
-				//start from 2nd index
-				for (int item = 1; item < conditionsList.size(); item++) {
-					int indexOfItem = actualStringList.indexOf(String.valueOf(item));
-					while(true){
-						if((actualStringList.get(indexOfItem-1)).matches(FilterConstants.REGEX_DIGIT) 
-								||(actualStringList.get(indexOfItem-1)).equalsIgnoreCase(FilterConstants.CLOSE_BRACKET)){
-							actualStringList.add(indexOfItem, conditionsList.get(indexOfRelational).getRelationalOperator());
-							break;
-						}else{
-							indexOfItem = indexOfItem - 1;
-						}
-					}
-					indexOfRelational += 1;
-					logger.trace(actualStringList.toString());
-				}
-				
-				StringBuffer buffer = new StringBuffer();
-				for(int item = 0; item < conditionsList.size(); item++){
-					StringBuffer conditionString = new StringBuffer();
-					
-					Condition condition = conditionsList.get(item);
-					if(StringUtils.equalsIgnoreCase(condition.getConditionalOperator(), FilterConstants.BETWEEN)
-							|| StringUtils.equalsIgnoreCase(condition.getConditionalOperator(),FilterConstants.BETWEEN_FIELD)){
-						conditionString
-								.append(condition.getFieldName())
-								.append(FilterConstants.SINGLE_SPACE)
-								.append(condition.getConditionalOperator())
-								.append(FilterConstants.SINGLE_SPACE)
-								.append(getConditionValue(condition.getFieldName(), condition.getValue1(),
-										condition.getConditionalOperator(), fieldsAndTypes))
-								.append(FilterConstants.SINGLE_SPACE)
-								.append(FilterConstants.AND)
-								.append(FilterConstants.SINGLE_SPACE)
-								.append(getConditionValue(condition.getFieldName(), condition.getValue2(),
-										condition.getConditionalOperator(), fieldsAndTypes));
-					} else {
-						conditionString
-								.append(condition.getFieldName())
-								.append(FilterConstants.SINGLE_SPACE)
-								.append(condition.getConditionalOperator())
-								.append(FilterConstants.SINGLE_SPACE)
-								.append(getConditionValue(condition.getFieldName(), condition.getValue1(),
-										condition.getConditionalOperator(), fieldsAndTypes));
-					}
-					int index = actualStringList.indexOf(String.valueOf(item));
-					actualStringList.set(index, conditionString.toString());
-				}
-				
-				for (String item : actualStringList) {
-					buffer.append(item + FilterConstants.SINGLE_SPACE);
-				}
-				
-				Pattern p = Pattern.compile("\\(Field\\)");
-				Matcher m = p.matcher(buffer);
-				StringBuffer temp = new StringBuffer();
-				while(m.find()){
-					m.appendReplacement(temp, "");
-				}
-				m.appendTail(temp);
-				buffer = new StringBuffer(temp);
+				StringBuffer buffer = getCondition(conditionsList, fieldsAndTypes, groupSelectionMap);
 				
 				logger.debug("Query String : " + buffer);
 				if(dataset.equalsIgnoreCase(Messages.DOWNLOADED)){	
@@ -657,8 +570,7 @@ public class FilterHelper {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				StringBuffer buffer = getCondition(conditionsList,fieldsAndTypes, groupSelectionMap);
-				styledTextRemote.setText(buffer.toString());
+				styledTextRemote.setText(getCondition(conditionsList,fieldsAndTypes, groupSelectionMap).toString());
 			}
 			
 			@Override
@@ -674,8 +586,7 @@ public class FilterHelper {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				StringBuffer buffer = getCondition(conditionsList,fieldsAndTypes, groupSelectionMap);
-				styledTextLocal.setText(buffer.toString());
+				styledTextLocal.setText(getCondition(conditionsList,fieldsAndTypes, groupSelectionMap).toString());
 			}
 
 			@Override
