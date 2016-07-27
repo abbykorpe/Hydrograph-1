@@ -82,12 +82,12 @@ public class LookupMappingValidationRule implements IValidator{
 			}
 		}
 		
-		if(validateInputField(getAllInputFieldNames(lookupInputProperties), lookupMapProperties)){
+		if(isInputFieldValid(getAllInputFieldNames(lookupInputProperties), lookupMapProperties)){
 			errorMessage = "Invalid input fields in lookup mapping";
 			return false;
 		}
 		
-		if(validateOutputField(lookupMapProperties)){
+		if(isOutputFieldValid(lookupMapProperties)){
 			errorMessage = "Invalid output fields in lookup mapping";
 			return false;
 		}
@@ -120,7 +120,7 @@ public class LookupMappingValidationRule implements IValidator{
 		return inputFieldList;
 	}
 	
-	private boolean validateInputField(List<String> allInputFields,List<LookupMapProperty> mappingTableItemList){
+	private boolean isInputFieldValid(List<String> allInputFields,List<LookupMapProperty> mappingTableItemList){
 		for(LookupMapProperty mapRow: mappingTableItemList){
 			if (!allInputFields.contains(mapRow.getSource_Field()) ) {
 				return true;
@@ -129,7 +129,7 @@ public class LookupMappingValidationRule implements IValidator{
 		return false;
 	}
 	
-	private boolean validateOutputField(List<LookupMapProperty> mappingTableItemList){
+	private boolean isOutputFieldValid(List<LookupMapProperty> mappingTableItemList){
 		List<String> outputFieldList = new ArrayList<>();
 		for(LookupMapProperty mapRow: mappingTableItemList){
 			outputFieldList.add(mapRow.getOutput_Field());
