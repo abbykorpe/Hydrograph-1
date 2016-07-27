@@ -39,7 +39,7 @@ public class GraphPropertiesHandler extends AbstractHandler implements IHandler 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		RuntimePropertyDialog dialog = new RuntimePropertyDialog(Display.getCurrent().getActiveShell(), null,
-				getCurrentGraphName()+" - Graph Properties");
+				getCurrentGraphName()+" - Runtime Properties");
 		dialog.setRuntimeProperties(getCurrentGarphInstance().getGraphRuntimeProperties());
 		if(dialog.open()==0 && dialog.isOkPressedAfterUpdate()) 
 			SubJobUtility.getCurrentEditor().setDirty(true);
