@@ -84,12 +84,18 @@ public class ELTLookupMapWidget extends AbstractWidget {
 	private boolean isSyncRequired() {
 		Schema schema = (Schema) getComponent().getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
 		
-		if(schema==null){
+		List<String> lookupOutputFieldList = SchemaSyncUtility.INSTANCE.getSchemaFieldList(getSchemaForInternalPropagation().getGridRow());
+		
+		if(schema==null && lookupOutputFieldList.size()!=0){
 			return true;
 		}
 		
+		if(schema==null && lookupOutputFieldList.size()==0){
+			return false;
+		}
+		
 		List<String> schemaFieldList = SchemaSyncUtility.INSTANCE.getSchemaFieldList(schema.getGridRow());
-		List<String> lookupOutputFieldList = SchemaSyncUtility.INSTANCE.getSchemaFieldList(getSchemaForInternalPropagation().getGridRow());
+		
 		
 		if(schemaFieldList == null && lookupOutputFieldList == null){
 			return false;
