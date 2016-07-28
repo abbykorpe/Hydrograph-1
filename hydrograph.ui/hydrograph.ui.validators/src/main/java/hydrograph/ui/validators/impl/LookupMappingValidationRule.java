@@ -14,12 +14,14 @@
  
 package hydrograph.ui.validators.impl;
 
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.JoinMappingGrid;
-import hydrograph.ui.datastructure.property.LookupConfigProperty;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +30,8 @@ import org.apache.commons.lang.StringUtils;
 
 public class LookupMappingValidationRule implements IValidator{
 
+	private static final String INPUT_PORT0_ID = "in0";
+	private static final String INPUT_PORT1_ID = "in1";
 	private String errorMessage;
 	
 	@Override
@@ -51,11 +55,11 @@ public class LookupMappingValidationRule implements IValidator{
 		List<LookupMapProperty> lookupMapProperties = lookupMappingGrid.getLookupMapProperties();
 		if(lookupInputProperties == null || 
 				lookupInputProperties.isEmpty() || lookupInputProperties.size() < 2){
-			errorMessage = "Invalid input for join component"; 
+			errorMessage = "Invalid input for lookup component"; 
 			return false;
 		}
 		if(lookupMapProperties == null || lookupMapProperties.isEmpty()){
-			errorMessage = "Invalid output from join component"; 
+			errorMessage = "Invalid output from lookup component"; 
 			return false;
 		}
 		
@@ -78,11 +82,63 @@ public class LookupMappingValidationRule implements IValidator{
 				return false;
 			}
 		}
+		
+		if(isInputFieldInvalid(getAllInputFieldNames(lookupInputProperties), lookupMapProperties)){
+			errorMessage = "Invalid input fields in lookup mapping";
+			return false;
+		}
+		
+		if(isOutputFieldInvalid(lookupMapProperties)){
+			errorMessage = "Invalid output fields in lookup mapping";
+			return false;
+		}
+		
 		return true;
 	}
 
 	@Override
 	public String getErrorMessage() {
 		return errorMessage;
+	}
+	
+	private List<String> getAllInputFieldNames(List<List<FilterProperties>> lookupInputProperties){
+		List<FilterProperties> in0FieldList=lookupInputProperties.get(0);
+		List<FilterProperties> in1FieldList=lookupInputProperties.get(1);
+		
+		List<String> inputFieldList = new LinkedList<>();
+		
+		
+		for(FilterProperties in0Field: in0FieldList){
+			inputFieldList.add(INPUT_PORT0_ID + "."
+							+ in0Field.getPropertyname());
+		}
+		
+		for(FilterProperties in1Field: in1FieldList){
+			inputFieldList.add(INPUT_PORT1_ID + "."
+					+ in1Field.getPropertyname());
+		}
+		
+		return inputFieldList;
+	}
+	
+	private boolean isInputFieldInvalid(List<String> allInputFields,List<LookupMapProperty> mappingTableItemList){
+		for(LookupMapProperty mapRow: mappingTableItemList){
+			if (!allInputFields.contains(mapRow.getSource_Field()) && !ParameterUtil.isParameter(mapRow.getSource_Field())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isOutputFieldInvalid(List<LookupMapProperty> mappingTableItemList){
+		List<String> outputFieldList = new ArrayList<>();
+		for(LookupMapProperty mapRow: mappingTableItemList){
+			if(outputFieldList.contains(mapRow.getOutput_Field())){
+				return true;
+			}else{
+				outputFieldList.add(mapRow.getOutput_Field());
+			}
+		}
+		return false;
 	}
 }

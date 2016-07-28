@@ -19,6 +19,8 @@ import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +30,7 @@ import org.apache.commons.lang.StringUtils;
 
 public class JoinMappingValidationRule implements IValidator{
 
-	private static final String INPUT_PORT0_ID = "in0";
-	private static final String INPUT_PORT1_ID = "in1";
+	private static final String INPUT_PORT = "in";
 	private String errorMessage;
 	
 	@Override
@@ -91,6 +92,11 @@ public class JoinMappingValidationRule implements IValidator{
 			return false;
 		}
 		
+		if(isOutputFieldInvalid(lookupMapProperties)){
+			errorMessage = "Invalid output fields in join mapping";
+			return false;
+		}
+		
 		return true;
 	}
 
@@ -100,32 +106,38 @@ public class JoinMappingValidationRule implements IValidator{
 	}
 	
 	private List<String> getAllInputFieldNames(List<List<FilterProperties>> lookupInputProperties){
-		List<FilterProperties> in0FieldList=lookupInputProperties.get(0);
-		List<FilterProperties> in1FieldList=lookupInputProperties.get(1);
-		
 		List<String> inputFieldList = new LinkedList<>();
 		
-		
-		for(FilterProperties in0Field: in0FieldList){
-			inputFieldList.add(INPUT_PORT0_ID + "."
-							+ in0Field.getPropertyname());
-		}
-		
-		for(FilterProperties in1Field: in1FieldList){
-			inputFieldList.add(INPUT_PORT1_ID + "."
-					+ in1Field.getPropertyname());
+		for(int i=0; i < lookupInputProperties.size();i++){
+			List<FilterProperties> inputPortFieldList=lookupInputProperties.get(i);
+			for(FilterProperties inField: inputPortFieldList){
+				inputFieldList.add(INPUT_PORT + i + "." + inField.getPropertyname());
+			}
 		}
 		
 		return inputFieldList;
 	}
 	
-	private boolean hasInvalidInputFields(List<String> allInputFields,List<LookupMapProperty> mappingTableItemList){
+	private boolean hasInvalidInputFields(List<String> allInputFields, List<LookupMapProperty> mappingTableItemList){
 		for(LookupMapProperty mapRow: mappingTableItemList){
 			if (!allInputFields.contains(mapRow
 					.getSource_Field()) && !ParameterUtil.isParameter(mapRow.getSource_Field())) {
 				return true;
 			}
 		}
+		return false;
+	}
+	
+	private boolean isOutputFieldInvalid(List<LookupMapProperty> mappingTableItemList){
+		List<String> outputFieldList = new ArrayList<>();
+		for(LookupMapProperty mapRow: mappingTableItemList){
+			if(outputFieldList.contains(mapRow.getOutput_Field())){
+				return true;
+			}else{
+				outputFieldList.add(mapRow.getOutput_Field());
+			}
+		}
+		
 		return false;
 	}
 }
