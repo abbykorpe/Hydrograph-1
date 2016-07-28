@@ -20,6 +20,7 @@ import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -128,11 +129,11 @@ public class CategoriesDialogSourceComposite extends Composite {
 	}
 
 	private void loadComboJaraListFromBuildPath(Combo comboJarList) {
+		IProject iProject=BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject();
 		try {
-			IPackageFragmentRoot[] fragmentRoot = JavaCore.create(
-					BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject()).getAllPackageFragmentRoots();
+			IPackageFragmentRoot[] fragmentRoot = JavaCore.create(iProject).getAllPackageFragmentRoots();
 			for (IPackageFragmentRoot iPackageFragmentRoot : fragmentRoot) {
-				if (isJarPresentInLibFolder(iPackageFragmentRoot.getPath())) {
+				if (isJarPresentInLibFolder(iPackageFragmentRoot.getPath())|| iPackageFragmentRoot.getKind()==IPackageFragmentRoot.K_SOURCE) {
 					comboJarList.add(iPackageFragmentRoot.getElementName());
 					comboJarList.setData(String.valueOf(comboJarList.getItemCount() - 1), iPackageFragmentRoot);
 				}

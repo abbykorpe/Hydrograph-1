@@ -13,52 +13,94 @@
 
 package hydrograph.ui.expression.editor.composites;
 
+import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.datastructure.ClassDetails;
+import hydrograph.ui.expression.editor.datastructure.MethodDetails;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
+
+import java.util.ArrayList;
+
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 
 public class FunctionsUpperComposite extends Composite {
-
+	private static final String TITLE = "Functions";
 	private FunctionsComposite functionsComposite;
-	
+	private List methodList;
+	private Text searchTextBox;
+	private java.util.List<String> tempMethodList = new ArrayList<String>();
+
 	/**
 	 * Create the composite.
+	 * 
 	 * @param parent
 	 * @param style
 	 */
 	public FunctionsUpperComposite(Composite parent, int style) {
 		super(parent, style);
+		this.functionsComposite = (FunctionsComposite) parent;
 		setLayout(new GridLayout(2, false));
-		
-		
+
 		Label lblFunctions = new Label(this, SWT.NONE);
 		lblFunctions.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1));
-		lblFunctions.setText("Functions");
-		
+		lblFunctions.setText(TITLE);
 
-		this.functionsComposite=(FunctionsComposite) parent;		
+		createSearchTextBox(this);
 	}
 
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
 	}
+
+	public void setMethodList(List methodList) {
+		this.methodList = methodList;
+	}
+
+	private void createSearchTextBox(Composite headerComposite) {
+		searchTextBox = new Text(headerComposite, SWT.BORDER);
+		GridData gd_searchTextBox = new GridData(SWT.RIGHT, SWT.CENTER, true, true, 0, 0);
+		gd_searchTextBox.widthHint = 150;
+		searchTextBox.setLayoutData(gd_searchTextBox);
+		searchTextBox.setForeground(new Color(null, 128, 128, 128));
+		searchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
+		addListnersToSearchTextBox();
+		ExpressionEditorUtil.INSTANCE.addFocusListenerToSearchTextBox(searchTextBox);
+	}
+
+	private void addListnersToSearchTextBox() {
+		searchTextBox.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (!StringUtils.equals(Constants.DEFAULT_SEARCH_TEXT, searchTextBox.getText())) {
+					methodList.removeAll();
+					ClassDetails classDetails = (ClassDetails) methodList
+							.getData(CategoriesComposite.KEY_FOR_ACCESSING_CLASS_FROM_METHOD_LIST);
+					if (classDetails != null) {
+						for (MethodDetails methodDetails : classDetails.getMethodList()) {
+							if (StringUtils.containsIgnoreCase(methodDetails.getSignature(), searchTextBox.getText())) {
+								methodList.add(methodDetails.getSignature());
+								methodList.setData(String.valueOf(methodList.getItemCount() - 1), methodDetails);
+							}
+						}
+					}
+				}
+			}
+		});
+	}
+
+	public void refresh() {
+		searchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
+	}
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-//		Text searchText = new Text(this, SWT.NONE);
-//		GridData gd_searchText = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-//		gd_searchText.widthHint = 98;
-//		searchText.setLayoutData(gd_searchText);

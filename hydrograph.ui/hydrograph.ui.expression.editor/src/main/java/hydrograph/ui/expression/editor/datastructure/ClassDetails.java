@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 
 public class ClassDetails {
 
+	private boolean isUserDefined;
 	private String displayName;
 	private String packageName="";
 	private String jarName="";
@@ -51,7 +52,7 @@ public class ClassDetails {
 				}
 			}
 		} catch (JavaModelException e) {
-			LOGGER.error("Error occured while fetching methods from class"+cName);
+			LOGGER.error("Error occurred while fetching methods from class"+cName);
 		}
 	}
 
@@ -68,6 +69,7 @@ public class ClassDetails {
 			javaDoc=Constants.EMPTY_STRING;
 		}
 		if(isUserDefined){
+			isUserDefined=true;
 			displayName=cName+Constants.USER_DEFINED_SUFFIX;
 			updateJavaDoc(jarFileName, packageName);
 		}
@@ -113,4 +115,7 @@ public class ClassDetails {
 		return new ArrayList<MethodDetails>(methodList);
 	}
 
+	public boolean isUserDefined() {
+		return isUserDefined;
+	}
 }

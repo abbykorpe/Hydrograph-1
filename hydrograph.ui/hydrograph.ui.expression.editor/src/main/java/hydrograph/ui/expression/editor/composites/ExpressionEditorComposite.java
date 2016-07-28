@@ -81,7 +81,7 @@ public class ExpressionEditorComposite extends Composite {
 	}
 	
 	private void intializeEditor(StyledText expressionEditor, JavaLineStyler javaLineStyler) {
-		expressionEditor.setWordWrap(true);
+		expressionEditor.setWordWrap(false);
 		expressionEditor.addLineStyleListener(javaLineStyler);
 		expressionEditor.setFont(new Font(null,"Arial", 10, SWT.NORMAL));
 		addDropSupport();

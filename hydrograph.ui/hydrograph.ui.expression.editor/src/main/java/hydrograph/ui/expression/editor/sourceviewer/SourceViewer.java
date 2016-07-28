@@ -1,5 +1,6 @@
 package hydrograph.ui.expression.editor.sourceviewer;
 
+import hydrograph.ui.expression.editor.PathConstant;
 import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
 import hydrograph.ui.expression.editor.javasourceviewerconfiguration.HotKeyUtil;
 import hydrograph.ui.expression.editor.javasourceviewerconfiguration.HydrographJavaSourceViewerConfiguration;
@@ -10,9 +11,9 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -79,7 +80,8 @@ import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 
 public class SourceViewer extends ProjectionViewer {
 	   
-	    private IRegion viewerStartRegion, viewerEndRegion;
+	    private static final String HYDROGRAPH_COMPILATIONUNIT_PACKAGE = "hydrograph.compilationunit";
+		private IRegion viewerStartRegion, viewerEndRegion;
 	    private static int currentId = 0;
 	    private String filename;
 	    private SourceViewerDecorationSupport fSourceViewerDecorationSupport;
@@ -121,14 +123,15 @@ public class SourceViewer extends ProjectionViewer {
              IPackageFragmentRoot ipackageFragmentRoot=null;
              for(IPackageFragmentRoot tempIpackageFragmentRoot:ipackageFragmentRootList)
              {
-        	   if(tempIpackageFragmentRoot.getKind()==IPackageFragmentRoot.K_SOURCE)
+        	   if(tempIpackageFragmentRoot.getKind()==IPackageFragmentRoot.K_SOURCE 
+        		   && StringUtils.equals(PathConstant.TEMP_BUILD_PATH_SETTINGS_FOLDER,tempIpackageFragmentRoot.getPath().removeFirstSegments(1).toString()))
         	   {
         		   ipackageFragmentRoot=tempIpackageFragmentRoot;
         		   break;
         	   }   
              } 
               
-             IPackageFragment compilationUnitPackage=   ipackageFragmentRoot.createPackageFragment("hydrograph.compilationunit", true, new NullProgressMonitor());
+             IPackageFragment compilationUnitPackage=   ipackageFragmentRoot.createPackageFragment(HYDROGRAPH_COMPILATIONUNIT_PACKAGE, true, new NullProgressMonitor());
              compilatioUnit=   compilationUnitPackage.createCompilationUnit(filename,document.get(),true, new NullProgressMonitor());
             } 
 	        catch (Exception e) {
@@ -152,7 +155,8 @@ public class SourceViewer extends ProjectionViewer {
 	                                || (Character.toLowerCase(triggerKeyStroke.getNaturalKey()) == event.keyCode) || (Character
 	                                .toUpperCase(triggerKeyStroke.getNaturalKey()) == event.keyCode)) && ((triggerKeyStroke
 	                                .getModifierKeys() & event.stateMask) == triggerKeyStroke.getModifierKeys()))) {
-	                    doOperation(ISourceViewer.CONTENTASSIST_PROPOSALS);
+	                  
+	                	doOperation(ISourceViewer.CONTENTASSIST_PROPOSALS);
 	                    event.doit = false;
 	                    return;
 	                }
@@ -549,13 +553,14 @@ public class SourceViewer extends ProjectionViewer {
 	 public static SourceViewer createViewerWithVariables(Composite composite, int iz) {
 		   IDocument document = new Document();
 		   StringBuffer buff = new StringBuffer();
-	       buff.append("\n package hydrograph.engine.transformation.compilationunit;\n\n");
+	       buff.append("\n package "+HYDROGRAPH_COMPILATIONUNIT_PACKAGE+";\n\n");
 	       buff.append(getImports());
 	       buff.append("public class " + VIEWER_CLASS_NAME + currentId + " {\n\n\n");
 	       buff.append("\tpublic " + "String" +"myFunction(){\n");
 		   buff.append("\t\treturn \n"); 
 	       int length = buff.toString().length();
-	       String defaultValue = " "; 
+	       String defaultValue = " ";
+//	       buff.append(defaultValue + "\n\n\n\t\n");
 	       buff.append(defaultValue + "\n\n\n;\t\n}\n}");  
 	       document.set(buff.toString());
 	       return initializeViewer(composite,iz,true,document,length);
@@ -568,7 +573,7 @@ public class SourceViewer extends ProjectionViewer {
 	        InputStream codeStream = new ByteArrayInputStream(getDocument().get().getBytes());
 	        try {
 	           
-	                file = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject().getFile( "src/hydrograph/compilationunit"+ '/' + filename);
+	                file = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject().getFile( PathConstant.TEMP_BUILD_PATH_SETTINGS_FOLDER+"/hydrograph/compilationunit"+ '/' + filename);
 	                file.setContents(codeStream, true, false, null);
 	                initializeModel();
 	           }

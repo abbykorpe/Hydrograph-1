@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionEvent;
@@ -69,7 +70,6 @@ public class OperatorToolCombo extends Combo {
 	}
 	
 	private void loadDropDownItems() {
-		
 		Properties properties=new Properties();
 		InputStream inStream;
 		try {
@@ -77,8 +77,9 @@ public class OperatorToolCombo extends Combo {
 			properties.load(inStream);
 			for(Object key:properties.keySet()){
 				if(key!=null && properties.get(key)!=null){
-				this.add((String) key);
-				this.setData((String) key, (String)properties.get(key));
+					String operatorName=StringUtils.replaceChars((String) key, '_', SWT.SPACE);
+				this.add(operatorName);
+				this.setData(operatorName, (String)properties.get(key));
 				}
 			}
 		} catch (IOException | RuntimeException exception ) {

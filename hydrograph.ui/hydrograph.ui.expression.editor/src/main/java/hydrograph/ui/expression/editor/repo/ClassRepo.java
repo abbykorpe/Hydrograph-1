@@ -26,4 +26,8 @@ public class ClassRepo {
 		classList.clear();
 	}
 	
+	public void remove() {
+		
+	}
+	
 }

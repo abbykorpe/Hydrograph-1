@@ -42,6 +42,9 @@ public class LaunchExpressionEditor {
 		inputFields.add("Field5");
 		inputFields.add("Field6");
 		inputFields.add("Field7");
+		inputFields.add("Search");
+		inputFields.add("Searchaasdasd");
+		inputFields.add("asdsSearch");
 		return inputFields;
 	}
 	

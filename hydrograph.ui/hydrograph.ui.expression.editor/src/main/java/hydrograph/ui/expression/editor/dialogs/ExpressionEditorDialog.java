@@ -53,10 +53,9 @@ public class ExpressionEditorDialog extends Dialog {
 	public ExpressionEditorDialog(Shell parentShell, List<String> selectedInputFields) {
 		
 		super(parentShell);
-		setShellStyle(SWT.CLOSE | SWT.MIN | SWT.MAX | SWT.RESIZE | SWT.APPLICATION_MODAL);
+		setShellStyle(SWT.CLOSE | SWT.MIN | SWT.MAX | SWT.RESIZE );
 		this.selectedInputFields=selectedInputFields;
 		javaLineStyler=new JavaLineStyler(selectedInputFields);
-	
 	}
 	
 
@@ -98,9 +97,13 @@ public class ExpressionEditorDialog extends Dialog {
 		
 		containerSashForm.setWeights(new int[] {1, 1});
 
-		
-		
+		intializeWidgets();
 		return container;
+	}
+
+
+	private void intializeWidgets() {
+		expressionEditorTextBox.setFocus();
 	}
 
 	/**

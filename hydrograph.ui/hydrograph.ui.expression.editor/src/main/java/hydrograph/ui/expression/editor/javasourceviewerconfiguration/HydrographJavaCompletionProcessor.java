@@ -1,5 +1,6 @@
 package hydrograph.ui.expression.editor.javasourceviewerconfiguration;
 
+import hydrograph.ui.expression.editor.comparator.ProposalComparator;
 import hydrograph.ui.expression.editor.sourceviewer.SourceViewer;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.internal.core.SourceField;
 import org.eclipse.jdt.internal.ui.text.java.JavaCompletionProcessor;
 import org.eclipse.jdt.internal.ui.text.java.JavaCompletionProposal;
+import org.eclipse.jdt.internal.ui.text.java.LazyGenericTypeProposal;
 import org.eclipse.jdt.ui.text.java.CompletionProposalCollector;
 import org.eclipse.jdt.ui.text.java.ContentAssistInvocationContext;
 import org.eclipse.jdt.ui.text.java.JavaContentAssistInvocationContext;
@@ -67,6 +69,12 @@ public class HydrographJavaCompletionProcessor extends JavaCompletionProcessor{
                 }
             }
             
+            if (proposal instanceof LazyGenericTypeProposal) {
+            	LazyGenericTypeProposal javaProposal = ((LazyGenericTypeProposal) proposal);
+            	javaProposal.setReplacementString(javaProposal.getQualifiedTypeName());
+            	
+            }
+            
             if (proposal.getDisplayString().startsWith(SourceViewer.VIEWER_CLASS_NAME)) {
                 shouldRemove = true;
             }
@@ -93,9 +101,19 @@ public class HydrographJavaCompletionProcessor extends JavaCompletionProcessor{
             }
 
         });
-        return newProposals;
+		return newProposals;
+//        return filterHydroGraphProposals(proposals);
     }
 
+	private List<ICompletionProposal> filterHydroGraphProposals(List<ICompletionProposal> proposals){
+		List<ICompletionProposal> completionProposals=new ArrayList<ICompletionProposal>();
+		for(ICompletionProposal completionProposal:proposals){
+			if((completionProposal instanceof HydrographCompletionProposal)){
+				completionProposals.add(completionProposal);
+			}
+		}
+		return completionProposals;
+	}
 
 	@Override
     protected ContentAssistInvocationContext createContext(ITextViewer viewer, int offset) 

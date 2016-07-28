@@ -28,7 +28,7 @@ public class WordWrapToolCheckButton extends Button {
 		super(composite, style);
 		this.expressionEditor = expressionEditor;
 		setText(ITEM_TEXT);
-		setSelection(true);
+		setSelection(false);
 		this.addSelectionListener();
 	}
 

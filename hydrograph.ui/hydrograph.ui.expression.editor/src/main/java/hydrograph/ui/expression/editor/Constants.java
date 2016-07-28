@@ -28,5 +28,6 @@ public class Constants {
 	public static final String DOT = ".";
 	public static final String CLOSING_BRACKET = ")";
 	public static final String DASH = "-";
+	public static final String DEFAULT_SEARCH_TEXT = "Search";
 
 }

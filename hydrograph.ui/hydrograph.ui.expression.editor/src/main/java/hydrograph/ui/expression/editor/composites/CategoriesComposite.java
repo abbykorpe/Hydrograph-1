@@ -30,10 +30,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.List;
 
 public class CategoriesComposite extends Composite {
+	public static final String KEY_FOR_ACCESSING_CLASS_FROM_METHOD_LIST = "class";
 	private List classNamelist;
 	private List methodList;
 	private StyledText descriptionStyledText;
-
+	private FunctionsComposite functionsComposite;
+	private CategoriesUpperComposite categoriesUpperComposite;
 	/**
 	 * Create the composite.
 	 * 
@@ -44,7 +46,7 @@ public class CategoriesComposite extends Composite {
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
 
-		CategoriesUpperComposite categoriesUpperComposite = new CategoriesUpperComposite(this, SWT.BORDER);
+		categoriesUpperComposite = new CategoriesUpperComposite(this, SWT.BORDER);
 		categoriesUpperComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		classNamelist = new List(this, SWT.BORDER | SWT.V_SCROLL);
@@ -53,6 +55,7 @@ public class CategoriesComposite extends Composite {
 		loadClassesFromRepo();
 		addListnersToClassNameList(classNamelist);
 		addSelectionListnerToClassNameList();
+		categoriesUpperComposite.setClassNameList(classNamelist);
 	}
 
 	private void addSelectionListnerToClassNameList() {
@@ -94,7 +97,11 @@ public class CategoriesComposite extends Composite {
 					for (MethodDetails methodDetails : classDetails.getMethodList()) {
 						methodList.add(methodDetails.getSignature());
 						methodList.setData(String.valueOf(methodList.getItemCount() - 1), methodDetails);
+						methodList.setData(KEY_FOR_ACCESSING_CLASS_FROM_METHOD_LIST,classDetails);
 					}
+				}
+				if(functionsComposite!=null){
+					functionsComposite.refresh();
 				}
 			}
 
@@ -117,6 +124,7 @@ public class CategoriesComposite extends Composite {
 	}
 
 	public void refreshList() {
+		functionsComposite.refresh();
 		classNamelist.removeAll();
 		methodList.removeAll();
 		descriptionStyledText.setText(Constants.EMPTY_STRING);
@@ -125,5 +133,9 @@ public class CategoriesComposite extends Composite {
 
 	public void setDescriptionStyledText(StyledText descriptionStyledText) {
 		this.descriptionStyledText = descriptionStyledText;
+	}
+
+	public void setFunctionsComposite(FunctionsComposite functionsComposite) {
+		this.functionsComposite=functionsComposite;
 	}
 }

@@ -23,6 +23,8 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.DragSourceAdapter;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -35,6 +37,7 @@ public class FunctionsComposite extends Composite {
 	
 	private List methodList;
 	protected StyledText descriptionStyledText;
+	private FunctionsUpperComposite functionUppersComposite; 
 	
 	/**
 	 * Create the composite.
@@ -46,10 +49,10 @@ public class FunctionsComposite extends Composite {
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
 		
-		FunctionsUpperComposite composite = new FunctionsUpperComposite(this, SWT.BORDER);
+		functionUppersComposite = new FunctionsUpperComposite(this, SWT.BORDER);
 		GridData gd_composite = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_composite.heightHint = 35;
-		composite.setLayoutData(gd_composite);
+		functionUppersComposite.setLayoutData(gd_composite);
 		
 		methodList = new List(this, SWT.BORDER|SWT.V_SCROLL);
 		methodList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -57,7 +60,7 @@ public class FunctionsComposite extends Composite {
 		addDragSupport();
 	
 		linkFunctionAndClassComposite(categoriesComposite);
-		
+		functionUppersComposite.setMethodList(methodList);
 		addListnersToMethodList(methodList);
 	}
 
@@ -74,13 +77,17 @@ public class FunctionsComposite extends Composite {
 
 	private void linkFunctionAndClassComposite(CategoriesComposite categoriesComposite) {
 		categoriesComposite.setMethodList(methodList);
+		categoriesComposite.setFunctionsComposite(this);
 	}
 
 	private void addListnersToMethodList(final List methodsList) {
-		methodsList.addSelectionListener(new SelectionListener() {
+		methodsList.addMouseListener(new MouseListener() {
 			
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void mouseUp(MouseEvent e) {/* Do-Nothing*/	}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
 				MethodDetails methodDetails=(MethodDetails) methodsList.getData(String.valueOf(methodsList.getSelectionIndex()));
 				if (methodDetails != null && StringUtils.isNotBlank(methodDetails.getJavaDoc())) {
 					descriptionStyledText.setText(methodDetails.getJavaDoc());
@@ -90,8 +97,8 @@ public class FunctionsComposite extends Composite {
 			}
 			
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {/*Do -nothing */}
-		});
+			public void mouseDoubleClick(MouseEvent e) {/* Do-Nothing*/	}
+		}); 
 	}
 	
 	public void setDescriptionStyledText(StyledText descriptionStyledText){
@@ -101,6 +108,10 @@ public class FunctionsComposite extends Composite {
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
+	}
+	
+	public void refresh(){
+		functionUppersComposite.refresh();
 	}
 
 }

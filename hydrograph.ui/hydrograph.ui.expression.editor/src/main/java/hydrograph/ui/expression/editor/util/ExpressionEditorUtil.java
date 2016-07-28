@@ -13,12 +13,13 @@
 
 package hydrograph.ui.expression.editor.util;
 
+import hydrograph.ui.expression.editor.Constants;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import hydrograph.ui.expression.editor.Constants;
-
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -28,10 +29,13 @@ import org.eclipse.swt.dnd.DragSourceAdapter;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 
 public class ExpressionEditorUtil {
 
@@ -84,5 +88,25 @@ public class ExpressionEditorUtil {
 	public InputStream getPropertyFilePath(String fileName) throws IOException{
 		URL location = FileLocator.find(Platform.getBundle(Constants.EXPRESSION_EDITOR_PLUGIN_ID), new Path(fileName), null);
 		return location.openStream();
+	}
+	
+	public void addFocusListenerToSearchTextBox(final Text searchTextBox) {
+		searchTextBox.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(StringUtils.isBlank(searchTextBox.getText())){
+					searchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
+				}
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(StringUtils.equalsIgnoreCase(Constants.DEFAULT_SEARCH_TEXT, searchTextBox.getText())){
+					searchTextBox.setText(Constants.EMPTY_STRING);
+				}
+				
+			}
+		});
 	}
 }
