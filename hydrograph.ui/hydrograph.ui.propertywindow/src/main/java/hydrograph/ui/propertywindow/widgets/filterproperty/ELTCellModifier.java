@@ -79,15 +79,18 @@ public class ELTCellModifier implements ICellModifier{
 
 	@Override
 	public void modify(Object element, String property, Object value) {
-		final TableItem item=(TableItem) element;
 		if (element instanceof Item)
+		{	
 			element = ((Item) element).getData();
-
+		}
 		FilterProperties filterProperties = (FilterProperties) element;
 
 		if(StringUtils.equals(Constants.COMPONENT_NAME, property))
+		{
 			filterProperties.setPropertyname((String)value);
-		else if(StringUtils.equals(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD, property)){
+		}
+		else if(StringUtils.equals(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD, property))
+		{
 			filterProperties.setPropertyname((String)value);
 		}
 		else if(StringUtils.equals(Messages.INNER_OPERATION_INPUT_FIELD,property))

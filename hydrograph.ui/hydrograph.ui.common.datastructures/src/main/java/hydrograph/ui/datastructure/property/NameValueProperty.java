@@ -14,34 +14,69 @@
  
 package hydrograph.ui.datastructure.property;
 
+
+/**
+ * @author Bitwise
+ *
+ */
 public class NameValueProperty extends PropertyField{
 
 	private String propertyName;
 	private String propertyValue;
-	private FilterProperties attachFilterProperty;
-	public NameValueProperty() {
-		attachFilterProperty=new FilterProperties();
-		}
+	private FilterProperties filterProperty;
 	
-	public String getPropertyValue() {
-		return propertyValue;
-	}
-     
-	public FilterProperties getAttachFilterProperty() {
-		return attachFilterProperty;
+	public NameValueProperty() 
+	{
+		filterProperty=new FilterProperties();
 	}
 	
-	public void setPropertyValue(String propertyValue) {
-		this.propertyValue = propertyValue;
-	}
 	
-	public String getPropertyName() {
-		return propertyName;
-	}
 
+
+	/**
+	 * @param propertyName the propertyName to set
+	 */
 	public void setPropertyName(String propertyName) {
 		this.propertyName = propertyName;
 	}
+
+
+
+
+	/**
+	 * @return the propertyValue
+	 */
+	public String getPropertyValue() {
+		return propertyValue;
+	}
+
+
+
+
+	/**
+	 * @param propertyValue the propertyValue to set
+	 */
+	public void setPropertyValue(String propertyValue) {
+		this.propertyValue = propertyValue;
+	}
+
+
+
+
+	/**
+	 * @return the filterProperty
+	 */
+	public FilterProperties getFilterProperty() {
+		return filterProperty;
+	}
+ 
+	/**
+	 * @return the propertyName
+	 */
+	public String getPropertyName() {
+		return propertyName;
+	};
+
 
 	@Override
 	public String toString() {
@@ -50,6 +85,8 @@ public class NameValueProperty extends PropertyField{
 		builder.append(propertyName);
 		builder.append(", propertyValue=");
 		builder.append(propertyValue);
+		builder.append(", filterProperty=");
+		builder.append(filterProperty);
 		builder.append("]");
 		return builder.toString();
 	}
@@ -82,12 +119,12 @@ public class NameValueProperty extends PropertyField{
 	
 	@Override
 	public NameValueProperty  clone(){
-		
 		NameValueProperty nameValueProperty=new NameValueProperty();
-	    nameValueProperty.setPropertyName(getPropertyName());
-	    nameValueProperty.setPropertyValue(getPropertyValue());
-	    nameValueProperty.getAttachFilterProperty().setPropertyname(nameValueProperty.getAttachFilterProperty().getPropertyname());
+	    nameValueProperty.setPropertyName(propertyName);
+	    nameValueProperty.setPropertyValue(propertyValue);
+	    nameValueProperty.getFilterProperty().setPropertyname(nameValueProperty.getFilterProperty().getPropertyname());
 		return nameValueProperty;
-	};
+	}
+
 
 }

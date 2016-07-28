@@ -133,10 +133,10 @@ public class PropertyGridCellModifier implements ICellModifier {
 			
 			
 			nameValueProperty.setPropertyValue(((String) value).trim());
-			int indexOfSelectedField=transformDialog.getATMapping().getOutputFieldList().indexOf(nameValueProperty.getAttachFilterProperty());
-			nameValueProperty.getAttachFilterProperty().setPropertyname(((String) value).trim());
+			int indexOfSelectedField=transformDialog.getATMapping().getOutputFieldList().indexOf(nameValueProperty.getFilterProperty());
+			nameValueProperty.getFilterProperty().setPropertyname(((String) value).trim());
 			if(indexOfSelectedField==-1)
-			transformDialog.getATMapping().getOutputFieldList().add(nameValueProperty.getAttachFilterProperty());
+			transformDialog.getATMapping().getOutputFieldList().add(nameValueProperty.getFilterProperty());
 			
 			
 			transformDialog.refreshOutputTable();	

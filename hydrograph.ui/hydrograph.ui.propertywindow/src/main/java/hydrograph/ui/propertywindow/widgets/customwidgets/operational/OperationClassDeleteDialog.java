@@ -36,16 +36,20 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.swt.widgets.Button;
 
+/**
+ * @author Bitwise
+ *
+ */
 public class OperationClassDeleteDialog extends Dialog {
 
+	private static final String SELECT_ALL = "Select All";
 	private static final String DELETE_OPERATION = "Delete Operation";
 	private Table table;
 	private List<MappingSheetRow> mappingSheetRowList;
 	private List<String> operationIdList = new ArrayList<>();
-	List<String> checkedElements = new ArrayList<>();
 	private ExpandBar expandBar;
 	private CheckboxTableViewer checkboxTableViewer;
-    List<FilterProperties> outerOutputList;
+    private List<FilterProperties> outerOutputList;
 	/**
 	 * Create the dialog.
 	 * 
@@ -72,7 +76,7 @@ public class OperationClassDeleteDialog extends Dialog {
 		GridData gd_btnCheckButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_btnCheckButton.widthHint = 190;
 		selectAllCheckButton.setLayoutData(gd_btnCheckButton);
-		selectAllCheckButton.setText("Select All");
+		selectAllCheckButton.setText(SELECT_ALL);
 		selectAllCheckButton.addSelectionListener(new SelectionAdapter() {
 			
 			@Override

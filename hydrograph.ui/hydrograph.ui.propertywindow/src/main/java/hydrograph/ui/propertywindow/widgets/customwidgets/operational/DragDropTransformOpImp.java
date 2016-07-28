@@ -16,29 +16,26 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.NameValueProperty;
-import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.propertywindow.widgets.utility.DragDropOperation;
-
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.jface.viewers.TableViewer;
 
 
 
 public class DragDropTransformOpImp implements DragDropOperation {
 
-	private List listOfInputFields;
+	private List<FilterProperties> listOfInputFields;
 	private List<NameValueProperty> mapAndPassThroughField;
 	private boolean isSingleColumn;
 	private TableViewer operationInputfieldtableviewer;
-	private List listOfOutputFields;
+	private List<FilterProperties> listOfOutputFields;
 	private TableViewer operationOutputFieldTableViewer;
 	private Map<String,List<FilterProperties>> outputFieldMap;
 	private TransformDialog transformDialogNew;
 	
-	private List outerOutputList;
+	private List<FilterProperties> outerOutputList;
 	
 	/**
 	 * @param transformDialogNew
@@ -52,7 +49,7 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	 * @param tableViewer
 	 * @param t
 	 */
-	public DragDropTransformOpImp(TransformDialog transformDialogNew,Map<String,List<FilterProperties>> outputFieldMap,List listOfOutputFields,List listOfInputFields, boolean isSingleColumn,TableViewer tableViewer,TableViewer t,List outerOutputList) {
+	public DragDropTransformOpImp(TransformDialog transformDialogNew,Map<String,List<FilterProperties>> outputFieldMap,List<FilterProperties> listOfOutputFields,List<FilterProperties> listOfInputFields, boolean isSingleColumn,TableViewer tableViewer,TableViewer t,List<FilterProperties> outerOutputList) {
 		super();
 		this.listOfInputFields = listOfInputFields;
 		this.isSingleColumn = isSingleColumn;
@@ -64,14 +61,22 @@ public class DragDropTransformOpImp implements DragDropOperation {
 		this.outerOutputList=outerOutputList;
 	}
 	
-	public DragDropTransformOpImp(TransformDialog transformDialogNew,TransformMapping transformMapping,List inputFields, boolean isSingleColumn,boolean isExpression,TableViewer tableViewer) {
-		super();
+	/**
+	 * @param transformDialogNew
+	 * @param transformMapping
+	 * @param inputFields
+	 * @param isSingleColumn
+	 * @param isExpression
+	 * @param tableViewer
+	 */
+	public DragDropTransformOpImp(TransformDialog transformDialogNew,TransformMapping transformMapping,List<FilterProperties> inputFields, 
+			boolean isSingleColumn,boolean isExpression,TableViewer tableViewer) 
+	{
 		this.mapAndPassThroughField = transformMapping.getMapAndPassthroughField();
 		this.listOfInputFields=inputFields;
 		this.isSingleColumn = isSingleColumn;
 		this.operationInputfieldtableviewer=tableViewer;
 		this.transformDialogNew=transformDialogNew;
-		
 		this.outerOutputList=transformMapping.getOutputFieldList();
 	}
 
@@ -99,9 +104,9 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	        	field.setPropertyName(result);
 	        	field.setPropertyValue(result);
 	        	mapAndPassThroughField.add(field);
-	        	field.getAttachFilterProperty().setPropertyname(field.getPropertyValue());
+	        	field.getFilterProperty().setPropertyname(field.getPropertyValue());
 	        		
-	        		outerOutputList.add(field.getAttachFilterProperty());
+	        		outerOutputList.add(field.getFilterProperty());
 	        		transformDialogNew.refreshOutputTable();
 	        
 	        }
@@ -109,11 +114,15 @@ public class DragDropTransformOpImp implements DragDropOperation {
 		 transformDialogNew.showHideValidationMessage();
 		 transformDialogNew.getComponent().setLatestChangesInSchema(false);
 		}
-	
-	
-	public Map<String,List<FilterProperties>> getOutputFieldList() {
+
+	/**
+	 * @return the outputFieldMap
+	 */
+	public Map<String, List<FilterProperties>> getOutputFieldMap() {
 		return outputFieldMap;
 	}
+	
+	
 	
 
 }
