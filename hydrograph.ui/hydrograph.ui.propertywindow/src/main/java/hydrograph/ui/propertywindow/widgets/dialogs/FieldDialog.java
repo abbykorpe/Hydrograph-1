@@ -62,6 +62,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -116,6 +117,8 @@ public class FieldDialog extends Dialog {
 	private Label deleteButton;
 	private Label upButton;
 	private Label downButton;
+
+	protected Button okButton;
 	private static final String INFORMATION="Information";
 
 	public FieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
@@ -457,7 +460,7 @@ public class FieldDialog extends Dialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		okButton=createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
 	}
 
@@ -541,12 +544,17 @@ public class FieldDialog extends Dialog {
 		dropTarget.setTransfer(new Transfer[] { TextTransfer.getInstance() });
 		dropTarget.addDropListener(new DropTargetAdapter() {
 			public void drop(DropTargetEvent event) {
-				for (String fieldName : getformatedData((String) event.data))
-						addNewProperty(targetTableViewer, fieldName);
-				enableControlButons();
+				operationOnDrop(event);
 			}
+
 		});
 
+	}
+	
+	protected void operationOnDrop(DropTargetEvent event) {
+		for (String fieldName : getformatedData((String) event.data))
+				addNewProperty(targetTableViewer, fieldName);
+		enableControlButons();
 	}
 
 	public void createSourceTable(Composite container) {

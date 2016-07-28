@@ -19,7 +19,6 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -28,11 +27,15 @@ import java.util.Set;
 
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
@@ -42,6 +45,8 @@ public class FieldDialogWithAddValue extends FieldDialog {
 	private Map<String, List<InputHivePartitionColumn>> fieldsMap;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private boolean isAnyUpdatePerformed;
+	String Color;
+	private Color color;
 	
 	public FieldDialogWithAddValue(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar) {
 		
@@ -83,6 +88,7 @@ public class FieldDialogWithAddValue extends FieldDialog {
 					
 									
 					fieldsMap.put((String)tableItem.getText(),persitedList);
+						
 					
 				}
 				addingValue.setProperties(fieldsMap);
@@ -147,15 +153,51 @@ public class FieldDialogWithAddValue extends FieldDialog {
 			propertyDialogButtonBar.enableApplyButton(true);
 		}
 		
-		boolean check_field=compare_fields(items);
-		if(!check_field)
-		{
-			
+		
+		if(!compareAndChangeColor(items)){
+			int rc=Message_Dialog();
+			   if(rc==0)
+			   {
+				   super.okPressed();
+			   }
+			   else if(rc==1)
+			   {
+				   return;
+			   }
 		}
 		
 		super.okPressed();
+		
+	}
+
+
+
+	protected boolean compareAndChangeColor(TableItem[] items) {
+		boolean check_field=compare_fields(items);
+		if(!check_field)
+		{
+			Color = "red";
+			color = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+			for (TableItem tableItem : items) {
+				tableItem.setForeground(color);
+			}
+		}
+		return check_field;
 	}
 	
+	private int Message_Dialog()
+	{
+		String message="The partition fields should appear at the end of the schema in the same order. Please rearrange fields either in schema or in partition fields";
+		
+		MessageDialog dialog = new MessageDialog(Display.getCurrent().getActiveShell(), "Rearrange Fields", null,
+			    message, MessageDialog.ERROR, new String[] { "Rearrange Schema",
+			  "Rearrange Partition Fields" }, 0);
+			int result = dialog.open();
+			System.out.println(result);
+			return result;
+	}
+	
+	 
 	private boolean compare_fields(TableItem[] items)
 	{
 		List<String> source_field;
@@ -219,6 +261,12 @@ public class FieldDialogWithAddValue extends FieldDialog {
 		return messageBox;
 	}
 	
+	@Override
+	protected void operationOnDrop(DropTargetEvent event) {
+		super.operationOnDrop(event);
+		compareAndChangeColor(getTargetTableViewer().getTable().getItems());
+		
+	}
 	
 }
 
