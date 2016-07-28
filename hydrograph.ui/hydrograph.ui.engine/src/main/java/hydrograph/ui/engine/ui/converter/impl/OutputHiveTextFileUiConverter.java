@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 
@@ -73,8 +74,10 @@ public class OutputHiveTextFileUiConverter extends OutputUiConverter {
 		if (hiveTextfile.getTableName() != null){
 			propertyMap.put(PropertyNameConstants.TABLE_NAME.value(), (String)(hiveTextfile.getTableName().getValue()));
 			}
-		if (hiveTextfile.getExternalTablePath() != null){
+		if (hiveTextfile.getExternalTablePath() != null && StringUtils.isNotBlank(hiveTextfile.getExternalTablePath().getUri())){
 			propertyMap.put(PropertyNameConstants.EXTERNAL_TABLE_PATH.value(), (String)hiveTextfile.getExternalTablePath().getUri());
+		}else{
+			propertyMap.put(PropertyNameConstants.EXTERNAL_TABLE_PATH.value(),"");
 		}
 		propertyMap.put(PropertyNameConstants.PARTITION_KEYS.value(), getPartitionKeys());
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
